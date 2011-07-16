@@ -1,0 +1,64 @@
+Index a data resource catalogue using b+tree indices
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     [drcat] Basename for index files (Any string
+                                  from 2 to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+  [-standardname]      string     [$(dbname)] Standard database name (Any
+                                  string from 2 to 19 characters, matching
+                                  regular expression /[A-z][A-z0-9_]+/)
+  [-dbresource]        string     [drcatresource] Resource name (Any string
+                                  from 2 to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+   -directory          directory  [.] Database directory
+   -filenames          string     [DRCAT.dat] Wildcard database filename (Any
+                                  string)
+   -fields             menu       [*] Index fields (Values: id (ID); acc
+                                  (IDother); nam (Name); des (Description);
+                                  url (Server URL); cat (Category name); taxid
+                                  (Taxon id); edat (EDAM data term); efmt
+                                  (EDAM format term); eid (EDAM data id term);
+                                  etpc (EDAM topic term); xref (Link); qout
+                                  (Query output); qfmt (Query output format);
+                                  qin (Query input parameters); qurl (Query
+                                  URL); rest (Rest URL); soap (SOAP URL))
+   -[no]compressed     boolean    [Y] Compressed index files
+   -outfile            outfile    [*.dbxresource] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -exclude            string     Wildcard filename(s) to exclude (Any string)
+   -indexoutdir        outdir     [.] Index file output directory
+
+   Associated qualifiers:
+
+   "-directory" associated qualifiers
+   -extension          string     Default file extension
+
+   "-indexoutdir" associated qualifiers
+   -extension          string     Default file extension
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+

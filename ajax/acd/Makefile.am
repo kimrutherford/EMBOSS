@@ -16,9 +16,9 @@ if !ESYSTEMLIBS
 EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib
 endif
 
-INCLUDES = -I$(top_srcdir)/plplot -I$(top_srcdir)/ajax/pcre \
+AM_CPPFLAGS = -I$(top_srcdir)/ajax/core \
+-I$(top_srcdir)/plplot -I$(top_srcdir)/ajax/pcre \
 $(EXTRA_INCLUDES) \
--I$(top_srcdir)/ajax/core \
 -I$(top_srcdir)/ajax/graphics \
 -I$(top_srcdir)/ajax/ensembl \
 -I$(top_srcdir)/ajax/ajaxdb
@@ -29,7 +29,7 @@ include_HEADERS = ajacd.h
 
 libacd_la_SOURCES = $(ACDSRC)
 
-VERS_INF = -version-info 6:3:0
+VERS_INF = -version-info 6:4:0
 
 if ISCYGWIN
 LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LDACD)

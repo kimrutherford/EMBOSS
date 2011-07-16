@@ -1,4 +1,4 @@
-<b>Here is a sample session with maskseq</b>
+Here is a sample session with <b>maskseq</b>
 <p>
 Mask off bases 10 to 12 from a sequence 'prot.fasta' and write to the new sequence file 'prot2.seq': 
 <p>

@@ -1,27 +1,77 @@
-#include Efeatures.gff
+# Updated to EMBL/GenBank/DDBJ FTv5.0 by Peter Rice 17th Jan 2003
+# Updated to EMBL/GenBank/DDBJ FTv6.2 by Peter Rice 27th Jan 2005
+# New in 6.2 is alternate mandatory qualifiers, shown by m rather than M
+# where e.g. /citation or /compare is used for a conflict
 
-Finished
-	/Note
-similarity
-	/Note
-	/Target
-sequence
-	/Note
-	/Sequence
+#include Efeatures.embl
 
-Clone
-	/Note
-Oligo
-	/Note
-Clone_right_end
-	/note
-	/clone
-Clone_left_end
-	/note
-	/clone
-#intron
-#	/sequence
-#exon
-#	/sequence
-#cds
-#	/sequence
+#EMBL: misc_feature
+
+located_sequence_feature = SO:0000110
+
+#EMBL: mat_peptide
+
+mature_peptide = SO:0000419
+
+# EMBL: misc_binding
+
+binding_site = SO:0000409
+
+# EMBL: misc_difference
+
+sequence_difference = SO:0000413
+sequence_conflict = SO:0001085
+
+# EMBL: misc_RNA
+
+transcript =SO:0000673
+
+# EMBL: misc_signal
+
+regulatory_region = SO:0005836
+
+# EMBL: mod_base
+
+modified_base_site = SO:0000305
+
+# EMBL: oriT
+
+origin_of_transfer = SO:0000724
+
+# EMBL: polyA_signal
+
+polyA_signal_sequence = SO:0000551
+
+# EMBL: prim_transcript
+
+primary_transcript = SO:0000185
+
+# EMBL: RBS
+
+ribosome_entry_site = SO:0000139
+
+# EMBL: sig_peptide
+
+signal_peptide = SO:0000418
+
+# EMBL: source
+
+#databank_entry = SO:2000061
+
+# EMBL: variation
+
+sequence_variant = SO:0000109
+
+# EMBL: 3'UTR
+
+three_prime_UTR = SO:0000205
+
+# EMBL: 5'UTR
+
+five_prime_UTR = SO:0000204
+
+# EMBL: -
+
+region = SO:0000001
+
+misc_difference = SO:0000001

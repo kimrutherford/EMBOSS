@@ -23,7 +23,7 @@
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>align</td>
 <td>Output alignment file name</td>
-<td>Alignment output file</td>
+<td>(default -aformat simple)</td>
 <td><i>&lt;*&gt;</i>.aligncopy</td>
 </tr>
 

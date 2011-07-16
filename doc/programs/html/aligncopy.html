@@ -89,7 +89,7 @@ a time.
         Many examples illustrating different behaviours is good.
  -->
 
-<b>Here is a sample session with aligncopy</b>
+Here is a sample session with <b>aligncopy</b>
 <p>
 
 <p>
@@ -113,11 +113,12 @@ Output alignment [globins.aligncopy]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Reads and writes alignments
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     File containing a sequence alignment.
   [-outfile]           align      [*.aligncopy] Output alignment file name
+                                  (default -aformat simple)
 
    Additional (Optional) qualifiers:
    -name               string     Name of the alignment (Any string)
@@ -201,7 +202,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>align</td>
 <td>Output alignment file name</td>
-<td>Alignment output file</td>
+<td>(default -aformat simple)</td>
 <td><i>&lt;*&gt;</i>.aligncopy</td>
 </tr>
 
@@ -564,7 +565,36 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-<b>aligncopy</b> reads any normal sequence USAs.
+<b>aligncopy</b> reads aligned nucleotide or protein sequences.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
 
 <p>
 
@@ -643,20 +673,21 @@ The output is a standard EMBOSS alignment file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-aformat xxx</b>, where 'xxx' is replaced by
+command-line qualifier <tt>-aformat xxx</tt>, where 'xxx' is replaced by
 the name of the required format.  Some of the alignment formats can cope
 with an unlimited number of sequences, while others are only for pairs
 of sequences.  
 
 <p>
 
-The available multiple alignment format names are: unknown, multiple,
-simple, fasta, msf, trace, srs
+The available multiple alignment format names are: multiple, simple,
+fasta, msf, clustal, mega, meganon, nexus,, nexusnon, phylip,
+phylipnon, selex, treecon, tcoffee, debug, srs.
 
 <p>
 
 The available pairwise alignment format names are: pair, markx0, markx1,
-markx2, markx3, markx10, srspair, score
+markx2, markx3, markx10, match, sam, bam, score, srspair
 
 <p>
 
@@ -678,7 +709,7 @@ for further information on alignment formats.
 <pre>
 ########################################
 # Program: aligncopy
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: aligncopy
 #    -sequences ../../data/globins.msf
 # Align_format: simple
@@ -980,6 +1011,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
 <td><a href="listor.html">listor</a></td>
 <td>Write a list file of the logical OR of two sets of sequences</td>
 </tr>
@@ -1062,6 +1098,11 @@ None.
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>

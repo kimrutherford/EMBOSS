@@ -1,0 +1,43 @@
+application: cacheensembl [
+  documentation: "Generates server cache file for an Ensembl server"
+  groups: "Data resources"
+  gui: "no"
+  relations: "EDAM:0000091 topic Data handling"
+  relations: "EDAM:0000516 operation Data retrieval (database annotation)"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: servername [
+    standard: "Y"
+    information: "Server name"
+    knowntype: "emboss server name"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    additional: "Y"
+    default: "stdout"
+    knowntype: "cacheensembl output"
+    relations: "EDAM:0000969 data Text"
+  ]
+
+  outfile: cachefile [
+    parameter: "Y"
+    default:   "server.$(servername)"
+    information: "Server cache output file"
+    knowntype: "emboss server cache file"
+    relations: "EDAM:0000969 data Text"
+  ]
+
+endsection: output

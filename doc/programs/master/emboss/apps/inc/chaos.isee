@@ -38,11 +38,6 @@
 </tr>
 
 <tr>
-<td><a href="sirna.html">sirna</a></td>
-<td>Finds siRNA duplexes in mRNA</td>
-</tr>
-
-<tr>
 <td><a href="wordcount.html">wordcount</a></td>
 <td>Count and extract unique words in molecular sequence(s)</td>
 </tr>

@@ -50,7 +50,7 @@ Created octanol.ps
 Command line arguments
 
 Draw a White-Wimley protein hydropathy plot
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
@@ -58,7 +58,7 @@ Version: EMBOSS:6.3.0
   [-graph]             xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers:
    -datafile           datafile   [Ewhite-wimley.dat] White-Wimley data file
@@ -116,7 +116,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   octanol reads any protein sequence USA.
+   octanol reads a single protein sequence.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -232,6 +249,24 @@ SQ   SEQUENCE   348 AA;  38893 MW;  6F4F6FCBA34265B2 CRC64;
 //
 
 Output file format
+
+   The output is to the specified graphics device.
+
+   The results can be output in one of several formats by using the
+   command-line qualifier -graph xxx, where 'xxx' is replaced by the name
+   of the required device. Support depends on the availability of
+   third-party software packages.
+
+   The device names that output to a file are: ps (postscript), cps
+   (colourps), png, gif, pdf, svg, hpgl, hp7470, hp7580, das, data.
+
+   The other available device names are: meta, x11 (xwindows), tek
+   (tek4107t), tekt (tektronix), xterm, text.
+
+   Output can be turned off by specifying none (null).
+
+   See: http://emboss.sf.net/docs/themes/GraphicsDevices.html for further
+   information on supported devices.
 
    octanol draws a graph showing the free energy calcuated over a sliding
    window.
@@ -349,23 +384,14 @@ Known bugs
 See also
 
    Program name     Description
-   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
-                    sequence
-   backtranseq      Back-translate a protein sequence to a nucleotide sequence
    charge           Draw a protein charge plot
-   checktrans       Reports STOP codons and ORF statistics of a protein
-   compseq          Calculate the composition of unique words in sequences
-   emowse           Search protein sequences by digest fragment molecular weight
-   freak            Generate residue/base frequency table or plot
+   hmoment          Calculate and plot hydrophobic moment for protein sequence(s)
    iep              Calculate the isoelectric point of proteins
-   mwcontam         Find weights common to multiple molecular weights files
-   mwfilter         Filter noisy data from molecular weights file
    pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepstats         Calculates statistics of protein properties
    pepwindow        Draw a hydropathy plot for a protein sequence
    pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
                     alignment
-   wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)
 

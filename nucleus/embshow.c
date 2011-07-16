@@ -1449,6 +1449,7 @@ static void showFillSeq(const EmbPShow thys,
 	    }
 
 	ajListstrPushAppend(lines, line1);
+        line1 = NULL;
 	ajStrDel(&line);
 
     }
@@ -1466,6 +1467,7 @@ static void showFillSeq(const EmbPShow thys,
 	    embShowColourRange(&line, info->highlight, pos);
 
 	ajListstrPushAppend(lines, line);
+        line = NULL;
     }
 
     /* optional number at right */
@@ -1497,9 +1499,11 @@ static void showFillSeq(const EmbPShow thys,
     {
 	showMargin(thys, lines);
 	ajListstrPushAppend(lines, line2);
+        line2 = NULL;
 	ajListstrPushAppend(lines, ajFmtStr("\n"));
 	showMargin(thys, lines);
 	ajListstrPushAppend(lines, line3);
+        line3 = NULL;
 	ajListstrPushAppend(lines, ajFmtStr("\n"));
     }
 
@@ -1540,7 +1544,7 @@ static void showFillBlank(const EmbPShow thys,
 
     ajStrAssignC(&line, "\n");
     ajListstrPushAppend(lines, line);
-
+    line = NULL;
     return;
 }
 
@@ -1590,7 +1594,7 @@ static void showFillTicks(const EmbPShow thys,
 
     showMargin(thys, lines);
     ajListstrPushAppend(lines, line);
-
+    line = NULL;
     /* end the output ticks line */
     ajListstrPushAppend(lines, ajFmtStr("\n"));
 
@@ -1642,7 +1646,7 @@ static void showFillTicknum(const EmbPShow thys,
 	ajFmtPrintAppS(&line, "%-10d", i);
 
     ajListstrPushAppend(lines, line);
-
+    line = NULL;
     /* end the output line */
     ajListstrPushAppend(lines, ajFmtStr("\n"));
 
@@ -1698,6 +1702,7 @@ static void showFillComp(const EmbPShow thys,
     /* get the complement */
     ajSeqstrComplement(&line);
     ajListstrPushAppend(lines, line);
+    line = NULL;
 
     /* optional number at right */
     if(info->number)
@@ -1750,7 +1755,7 @@ static void showFillTran(const EmbPShow thys,
     AjPSeq tran   = NULL;
     AjPSeq seq    = NULL; /* local copy of sequence for translating ranges */
     AjPStr temp = NULL;
-    AjPStr sajb =NULL;	  /* peptide expanded to 3-let code or by 2 spaces */
+    AjPStr tmpaa =NULL;	  /* peptide expanded to 3-let code or by 2 spaces */
     AjPStr transeq =NULL; /* sequence copy for editing */
     ajint frame;
     ajuint framepad = 0; /* no. of spaces to pad to the correct frame pos */
@@ -1797,16 +1802,16 @@ static void showFillTran(const EmbPShow thys,
 	    /* expand to fill line or change to three-letter code */
 	    if(info->threeletter)
 	    {
-		sajb = embPropProt1to3(tran,framepad);
-		ajSeqAssignSeqS(tran, sajb);
+		tmpaa = embPropProt1to3(tran,framepad);
+		ajSeqAssignSeqS(tran, tmpaa);
 	    }
 	    else
 	    {
 		/* pad with 2 spaces after every residue */
-		sajb = embPropProtGaps(tran,framepad);
-		ajSeqAssignSeqS(tran,sajb);
+		tmpaa = embPropProtGaps(tran,framepad);
+		ajSeqAssignSeqS(tran,tmpaa);
 	    }
-	    ajStrDel(&sajb);
+	    ajStrDel(&tmpaa);
 
 	    /*
 	    **  now put in spaces to align the translation to the
@@ -1943,21 +1948,21 @@ static void showFillTran(const EmbPShow thys,
 	    if(info->threeletter)
 	    {
 		if(info->frame > 0)
-                    sajb = embPropProt1to3(tran,framepad);
+                    tmpaa = embPropProt1to3(tran,framepad);
                 else
-                    sajb = embPropProt1to3Rev(tran,framepad);
+                    tmpaa = embPropProt1to3Rev(tran,framepad);
 
-		ajSeqAssignSeqS(tran,sajb );
+		ajSeqAssignSeqS(tran,tmpaa);
 	    }
 	    else
 	    {
-		sajb = embPropProtGaps(tran,framepad);
+		tmpaa = embPropProtGaps(tran,framepad);
 
 		/* pad with 2 spaces after every residue */
-		ajSeqAssignSeqS(tran,sajb );
+		ajSeqAssignSeqS(tran,tmpaa);
 	    }
 
-	    ajStrDel(&sajb);
+	    ajStrDel(&tmpaa);
 	/* store the resulting translation in our descriptor structure */
             info->transeq = tran;
 	}
@@ -2000,6 +2005,7 @@ static void showFillTran(const EmbPShow thys,
 
     /* put the translation line on the output list */
     ajListstrPushAppend(lines, line);
+    line = NULL;
 
     /* optional number at right */
     if(info->number)
@@ -2091,7 +2097,7 @@ static void showFillREupright(const EmbPShow thys,
     EmbPShowREsite s = NULL;		/* site node structure */
     AjPStr tick = NULL;			/* tick "|" string */
     ajint ln;
-    AjPStr sajb = NULL;
+    void* sajb = NULL;
 
     linelist = ajListstrNew();
     baseline = ajStrNew();
@@ -2193,6 +2199,8 @@ static void showFillREupright(const EmbPShow thys,
 		}
 
 		ajListstrPushAppend(linelist, line);
+                line = NULL;
+
 		/* end 'iteration' through lines */
 	    }
 
@@ -2203,6 +2211,7 @@ static void showFillREupright(const EmbPShow thys,
 		newline=ajStrNew();
 		showOverPrint(&newline, cut, s->name);
 		ajListstrPushAppend(linelist, newline);
+                newline = NULL;
 	    }
 	}
     }
@@ -2219,6 +2228,7 @@ static void showFillREupright(const EmbPShow thys,
 
     /* put base line at start of lines list */
     ajListstrPush(linelist, baseline);
+    baseline = NULL;
 
     /*
     **  reverse the order of the lines if we are in the forward sense as
@@ -2238,13 +2248,14 @@ static void showFillREupright(const EmbPShow thys,
 	/* put the translation line */
 	/* on the output list */
 	ajListstrPushAppend(lines, line);
+        line = NULL;
 	/* end the output line */
 	ajListstrPushAppend(lines, ajFmtStr("\n"));
     }
 
     ajListIterDel(&liter);
 
-    while(ajListstrPop(linelist,&sajb));
+    while(ajListPop(linelist,&sajb));
 
     ajListstrFree(&linelist);
     ajStrDel(&tick);
@@ -2324,7 +2335,7 @@ static void showFillREflat(const EmbPShow thys,
     EmbPMatMatch m = NULL;		/* restriction enzyme match struct */
     AjIList miter;			/* iterator for matches list */
     ajuint ln;
-    AjPStr sajb = NULL;
+    void* sajb = NULL;
     ajuint width;
 
     width = last - pos + 1;
@@ -2695,6 +2706,8 @@ static void showFillREflat(const EmbPShow thys,
 
 		ajListstrPushAppend(linelist, line);
 		ajListstrPushAppend(linelist, line2);
+                line = NULL;
+                line2 = NULL;
 		/* end 'iteration' through lines */
 	    }
 
@@ -2717,6 +2730,8 @@ static void showFillREflat(const EmbPShow thys,
 		showOverPrint(&line2, start-pos, namestr);
 		ajListstrPushAppend(linelist, line);
 		ajListstrPushAppend(linelist, line2);
+                line = NULL;
+                line2 = NULL;
 	    }
 
 	    ajStrDel(&namestr);
@@ -2755,13 +2770,14 @@ static void showFillREflat(const EmbPShow thys,
 
 	showMargin(thys, lines);
 	ajListstrPushAppend(lines, line);
+        line = NULL;
 	ajListstrPushAppend(lines, ajFmtStr("\n"));
     }
 
     ajListIterDel(&liter);
 
 
-    while(ajListstrPop(linelist,&sajb));
+    while(ajListPop(linelist,&sajb));
 
     ajListstrFree(&linelist);
 
@@ -2809,7 +2825,7 @@ static void showFillFT(const EmbPShow thys,
     AjBool freespace;		/* flag for found a free space to
 				   print in */
     ajuint ln;
-    AjPStr sajb = NULL;
+    void* sajb = NULL;
 
     ajuint width;
 
@@ -2824,28 +2840,6 @@ static void showFillFT(const EmbPShow thys,
     */
     if(!info->feat)
 	return;
-
-
-    /* reminder of the AjSFeature structure for handy reference
-    **
-    **
-    **  AjEFeatClass      Class ;
-    **  AjPFeattable      Owner ;
-    **  AjPFeatVocFeat    Source ;
-    **  AjPFeatVocFeat    Type ;
-    **  ajint             Start ;
-    **  ajint             End;
-    **  ajint             Start2;
-    **  ajint             End2;
-    **  AjPStr            Score ;
-    **  AjPList           Tags ;  a.k.a. the [group] field tag-values of GFF2
-    **  AjPStr            Comment ;
-    **  AjEFeatStrand     Strand ;
-    **  AjEFeatFrame      Frame ;
-    **  AjPStr            desc ;
-    **  ajint             Flags;
-    **
-    */
 
 
     /* iterate through the features */
@@ -2985,6 +2979,8 @@ static void showFillFT(const EmbPShow thys,
 
 		ajListstrPushAppend(linelist, line);
 		ajListstrPushAppend(linelist, line2);
+                line = NULL;
+                line2 = NULL;
 		/* end 'iteration' through lines */
 	    }
 
@@ -3005,6 +3001,8 @@ static void showFillFT(const EmbPShow thys,
 		showOverPrint(&line2, namestart-pos, namestr);
 		ajListstrPushAppend(linelist, line);
 		ajListstrPushAppend(linelist, line2);
+                line = NULL;
+                line2 = NULL;
 	    }
 
 	    ajStrDel(&namestr);
@@ -3037,7 +3035,7 @@ static void showFillFT(const EmbPShow thys,
 	** put the translation line on the output list
 	*/
 	ajListstrPushAppend(lines, line);
-
+        line = NULL;
 	/* end output line */
 	ajListstrPushAppend(lines, ajFmtStr("\n"));
     }
@@ -3045,7 +3043,7 @@ static void showFillFT(const EmbPShow thys,
     ajListIterDel(&liter);
 
 
-    while(ajListstrPop(linelist,&sajb));
+    while(ajListPop(linelist,&sajb));
 
     ajListstrFree(&linelist);
 
@@ -3086,7 +3084,7 @@ static void showFillNote(const EmbPShow thys,
 				   /* that position in the string */
     AjBool freespace;		/* flag for found a free space to print in */
     ajint ln;
-    AjPStr sajb = NULL;
+    void* sajb = NULL;
 
     ajuint count;		/* count of annotation region */
     ajuint rstart;
@@ -3219,6 +3217,8 @@ static void showFillNote(const EmbPShow thys,
 
 		ajListstrPushAppend(linelist, line);
 		ajListstrPushAppend(linelist, line2);
+                line = NULL;
+                line2 = NULL;
 		/* end 'iteration' through lines */
 	    }
 
@@ -3241,6 +3241,8 @@ static void showFillNote(const EmbPShow thys,
 		showOverPrint(&line2, namestart-pos, namestr);
 		ajListstrPushAppend(linelist, line);
 		ajListstrPushAppend(linelist, line2);
+                line = NULL;
+                line2 = NULL;
 	    }
 
 	    ajStrDel(&namestr);
@@ -3272,14 +3274,14 @@ static void showFillNote(const EmbPShow thys,
 	** put the translation line on the output list
 	*/
 	ajListstrPushAppend(lines, line);
-
+        line = NULL;
 	/* end output line */
 	ajListstrPushAppend(lines, ajFmtStr("\n"));
     }
     ajListIterDel(&liter);
 
 
-    while(ajListstrPop(linelist,&sajb));
+    while(ajListPop(linelist,&sajb));
 
     ajListstrFree(&linelist);
 

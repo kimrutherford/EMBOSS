@@ -1,12 +1,12 @@
 application: infobase
 [
   documentation: "Return information on a given nucleotide base"
-  groups: "Information"
+  groups: "Data retrieval:Chemistry data"
   gui: "yes"
   batch: "yes"
   cpu: "low"
-  relations: "/edam/topic/0000154 Small molecules analysis"
-  relations: "/edam/operation/0002123 Small molecule property calculation"
+    relations: "EDAM:0000154 topic Small molecules"
+    relations: "EDAM:0002123 operation Small molecule property processing"
 ]
 
 
@@ -26,7 +26,7 @@ section: input
     help: "Enter IUPAC nucleotide base codes, e.g. A, C, G, T, R, Y etc."
     knowntype: "nucleotide codes"
     default: "ABCDGHKMNRSTUVWXY"
-    relations:  "/edam/data/0001007 Nucleotide code"                         
+    relations: "EDAM:0001007 identifier Nucleotide code"
   ]
 
 endsection: input
@@ -78,7 +78,7 @@ section: output
   [
     parameter: "Y"
     knowntype: "infobase output"
-    relations:  "/edam/data/0000911 Nucleotide base"                  
+    relations: "EDAM:0000911 data Nucleotide base annotation"
   ]
   
 

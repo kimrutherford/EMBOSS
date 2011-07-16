@@ -413,7 +413,7 @@ public static int getSeqAttr(String fc, JembossParams mysettings)
       {
         setCursor(cbusy);
       
-        String fc = AjaxUtil.getFileOrDatabaseForAjax(fileOrEntryName,
+        String fc = Util.getFileOrDatabaseForAjax(fileOrEntryName,
                     BuildProgramMenu.getDatabaseList(),
                     null,withSoap);
       

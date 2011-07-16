@@ -1,14 +1,14 @@
 Finds inverted repeats in nucleotide sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
-   -gap                integer    [12] Gap penalty (Any integer value)
-   -threshold          integer    [50] Minimum score threshold (Any integer
-                                  value)
-   -match              integer    [3] Match score (Any integer value)
-   -mismatch           integer    [-4] Mismatch score (Any integer value)
+   -gap                integer    [12] Gap penalty (Integer 0 or more)
+   -threshold          integer    [50] Minimum score threshold (Integer 0 or
+                                  more)
+   -match              integer    [3] Match score (Integer 0 or more)
+   -mismatch           integer    [-4] Mismatch score (Integer up to 0)
   [-outfile]           outfile    [*.einverted] Sanger Centre program inverted
                                   output file
   [-outseq]            seqout     [<sequence>.<format>] The sequence of the
@@ -17,9 +17,8 @@ Version: EMBOSS:6.3.0
 
    Additional (Optional) qualifiers:
    -maxrepeat          integer    [2000] Maximum separation between the start
-                                  of repeat and the end of the inverted repeat
-                                  (the default is 2000 bases). (Any integer
-                                  value)
+                                  of repeat and the end of the inverted
+                                  repeat. (Integer 0 or more)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:

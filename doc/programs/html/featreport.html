@@ -67,7 +67,7 @@ standard report output.
         Many examples illustrating different behaviours is good.
  -->
 
-<b>Here is a sample session with featreport</b>
+Here is a sample session with <b>featreport</b>
 <p>
 
 <p>
@@ -76,7 +76,7 @@ standard report output.
 % <b>featreport </b>
 Reads and writes a feature table
 Input sequence: <b>paamir.fasta</b>
-Input features: <b>paamir.gff</b>
+Input feature table: <b>paamir.gff</b>
 Output report [x13776.featreport]: <b>test.out</b>
 
 </pre></td></tr></table><p>
@@ -92,13 +92,14 @@ Output report [x13776.featreport]: <b>test.out</b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Reads and writes a feature table
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
                                   reference (input USA)
   [-features]          features   (no help text) features value
   [-outfile]           report     [*.featreport] Output report file name
+                                  (default -rformat gff)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -194,7 +195,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat gff)</td>
 <td><i>&lt;*&gt;</i>.featreport</td>
 </tr>
 
@@ -606,7 +607,45 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-<b>featreport</b> reads any normal sequence USAs and features UFOs.
+<b>featreport</b> reads any nucleotide or protein sequences with features.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA')
+with associated feature information.
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the command-line qualifier
+<tt>-sformat xxx</tt>, where 'xxx' is replaced by the name of the
+required format.  The available format names are: text, html, xml (uniprotxml),
+obo, embl (swissprot)
+
+<p> Where the sequence format has no feature information, a second
+file can be read to load the feature data. The file is specified with
+the qualifier <tt>-ufo xxx</tt> and the feature format is specified with
+the qualifier <tt>-fformat xxx</tt>
+
+<p>
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
+See:
+<A href="http://emboss.sf.net/docs/themes/FeatureFormats.html">
+http://emboss.sf.net/docs/themes/FeatureFormats.html</A>
+for further information on feature formats.
 
 <p>
 
@@ -683,20 +722,31 @@ PAAMIR	EMBL	conflict	1281	1281	0.000	+	.	Sequence "PAAMIR.10" ; FeatFlags "0x40"
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
 
-        If you wish to include the standard description of the avalable
-	report formats, use:
-        #include file="inc/reportformats.ihtml"
-   -->
+<p>
 
-<b>featreport</b> 
-outputs a report format file.
+The output is a standard EMBOSS report file. 
 
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+<p>
+By default the report is in 'gff' feature format.
 
 <p>
 
@@ -708,19 +758,19 @@ outputs a report format file.
 <pre>
 ##gff-version 3
 ##sequence-region PAAMIR 1 2167
-#!Date 2010-01-15
+#!Date 2011-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.3.0
-PAAMIR	EMBL	databank_entry	1	2167	0.000	+	.	ID="PAAMIR.1";db_xref="taxon:287";organism="Pseudomonas aeruginosa";strain="PAC";isolate="PAC 1";map="38 min"
-PAAMIR	EMBL	CDS	1289	1879	0.000	+	0	ID="PAAMIR.2";db_xref="SWISS-PROT:P10932";note="aliphatic amidase regulator, positive regulator of amiE";transl_table=11;gene="amiR";protein_id="CAA32023.1";translation="MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDEREAHQHLSREAMKRREPILKIAQELLGNEPSA"
-PAAMIR	EMBL	CDS	135	1292	0.000	+	0	ID="PAAMIR.3";db_xref="SWISS-PROT:P27017";note="negative regulator of amiR";transl_table=11;gene="amiC";protein_id="CAA32024.1";translation="MGSHQERPLIGLLFSETGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLSSRIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
-PAAMIR	EMBL	promoter	8	24	0.000	+	.	ID="PAAMIR.4";note="proposed rpoN-dependent promoter"
-PAAMIR	EMBL	promoter	65	81	0.000	+	.	ID="PAAMIR.5";note="proposed rpoN-dependent promoter"
-PAAMIR	EMBL	ribosome_entry_site	121	126	0.000	+	.	ID="PAAMIR.6";note="proposed Shine-Dalgarno sequence"
-PAAMIR	EMBL	sequence_feature	912	1167	0.000	+	.	ID="PAAMIR.7";note="ClaI fragment deleted in pSW36, constitutive phenotype";replace="";gene="amiC"
-PAAMIR	EMBL	sequence_feature	1	1	0.000	+	.	ID="PAAMIR.8";featflags="0x40";note="last base of an XhoI site"
-PAAMIR	EMBL	sequence_feature	648	653	0.000	+	.	ID="PAAMIR.9";note="end of 658bp XhoI fragment, deletion in pSW3 causes constitutive expression of amiE"
-PAAMIR	EMBL	sequence_conflict	1281	1281	0.000	+	.	ID="PAAMIR.10";featflags="0x40";replace="g";citation=[3]
+#!Source-version EMBOSS 6.4.0.0
+PAAMIR	EMBL	databank_entry	1	2167	.	+	.	ID=PAAMIR.1;db_xref=taxon:287;organism=Pseudomonas aeruginosa;strain=PAC;isolate=PAC 1;map=38 min
+PAAMIR	EMBL	CDS	1289	1879	.	+	0	ID=PAAMIR.2;db_xref=SWISS-PROT:P10932;note=aliphatic amidase regulator%2C positive regulator of amiE;transl_table=11;gene=amiR;protein_id=CAA32023.1;translation=MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDEREAHQHLSREAMKRREPILKIAQELLGNEPSA
+PAAMIR	EMBL	CDS	135	1292	.	+	0	ID=PAAMIR.3;db_xref=SWISS-PROT:P27017;note=negative regulator of amiR;transl_table=11;gene=amiC;protein_id=CAA32024.1;translation=MGSHQERPLIGLLFSETGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLSSRIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP
+PAAMIR	EMBL	promoter	8	24	.	+	.	ID=PAAMIR.4;note=proposed rpoN-dependent promoter
+PAAMIR	EMBL	promoter	65	81	.	+	.	ID=PAAMIR.5;note=proposed rpoN-dependent promoter
+PAAMIR	EMBL	ribosome_entry_site	121	126	.	+	.	ID=PAAMIR.6;note=proposed Shine-Dalgarno sequence
+PAAMIR	EMBL	sequence_variant	912	1167	.	+	.	ID=PAAMIR.7;note=ClaI fragment deleted in pSW36%2C constitutive phenotype;replace=;gene=amiC
+PAAMIR	EMBL	sequence_feature	1	1	.	+	.	ID=PAAMIR.8;note=last base of an XhoI site
+PAAMIR	EMBL	sequence_feature	648	653	.	+	.	ID=PAAMIR.9;note=end of 658bp XhoI fragment%2C deletion in pSW3 causes constitutive expression of amiE
+PAAMIR	EMBL	sequence_conflict	1281	1281	.	+	.	ID=PAAMIR.10;replace=g;citation=[3]
 </pre>
 </td></tr></table><p>
 
@@ -913,6 +963,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
 <td><a href="listor.html">listor</a></td>
 <td>Write a list file of the logical OR of two sets of sequences</td>
 </tr>
@@ -995,6 +1050,11 @@ None.
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>

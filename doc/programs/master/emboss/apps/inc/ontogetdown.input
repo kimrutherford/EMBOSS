@@ -1,0 +1,17 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>Database entry: edam:0000850</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+[Term]
+id: EDAM:0000850
+name: Sequence set
+namespace: data
+def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
+comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
+subset: data
+is_a: EDAM:0002955 ! Sequence report
+
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,95 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="drfinddata.html">drfinddata</a></td>
+<td>Find public databases by data type</td>
+</tr>
+
+<tr>
+<td><a href="drfindformat.html">drfindformat</a></td>
+<td>Find public databases by format</td>
+</tr>
+
+<tr>
+<td><a href="drfindid.html">drfindid</a></td>
+<td>Find public databases by identifier</td>
+</tr>
+
+<tr>
+<td><a href="drfindresource.html">drfindresource</a></td>
+<td>Find public databases by resource</td>
+</tr>
+
+<tr>
+<td><a href="edamdef.html">edamdef</a></td>
+<td>Find EDAM ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="edamhasinput.html">edamhasinput</a></td>
+<td>Find EDAM ontology terms by has_input relation</td>
+</tr>
+
+<tr>
+<td><a href="edamhasoutput.html">edamhasoutput</a></td>
+<td>Find EDAM ontology terms by has_output relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisformat.html">edamisformat</a></td>
+<td>Find EDAM ontology terms by is_format_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisid.html">edamisid</a></td>
+<td>Find EDAM ontology terms by is_identifier_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamname.html">edamname</a></td>
+<td>Find EDAM ontology terms by name</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs with similar function to a specified program</td>
+</tr>
+
+<tr>
+<td><a href="tfm.html">tfm</a></td>
+<td>Displays full documentation for an application</td>
+</tr>
+
+<tr>
+<td><a href="wossdata.html">wossdata</a></td>
+<td>Finds programs by EDAM data</td>
+</tr>
+
+<tr>
+<td><a href="wossinput.html">wossinput</a></td>
+<td>Finds programs by EDAM input data</td>
+</tr>
+
+<tr>
+<td><a href="wossname.html">wossname</a></td>
+<td>Finds programs by keywords in their short description</td>
+</tr>
+
+<tr>
+<td><a href="wossoperation.html">wossoperation</a></td>
+<td>Finds programs by EDAM operation</td>
+</tr>
+
+<tr>
+<td><a href="wossparam.html">wossparam</a></td>
+<td>Finds programs by EDAM parameter</td>
+</tr>
+
+<tr>
+<td><a href="wosstopic.html">wosstopic</a></td>
+<td>Finds programs by EDAM topic</td>
+</tr>
+
+</table>

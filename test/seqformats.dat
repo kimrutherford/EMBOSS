@@ -1,0 +1,211 @@
+# Tests for sequence formats
+# Input data is from the BioPython project Tests directory
+#
+# Initial version BioPython 1.52 December 2009
+#
+# run qatest.pl with -testfile=(this file) and with
+# setenv EMBOSS_OUTDIRECTORY to specify location of results
+
+#################
+# Ace 3 files
+#################
+
+ID ace1
+AP seqret
+CL Ace/consed_sample.ace -sf acedb -out test.out -osf acedb
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI test.out
+FC = 0
+//
+
+
+ID ace2
+AP seqret
+CL Ace/contig1.ace -sf acedb -out test.out -osf acedb
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI test.out
+FC = 0
+//
+
+
+ID ace3
+AP seqret
+CL Ace/seq.cap.ace -sf acedb -out test.out -osf acedb
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI test.out
+FC = 0
+//
+
+######################################################
+# Fasta 3 files + 1 alignment + fasta markx10 outputs
+######################################################
+
+ID fasta1
+AP seqret
+CL -auto ../Fasta/f001 -sf ncbi -out test.out -osf ncbi
+FI stderr
+FC = 0
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI test.out
+FC = 0
+//
+
+
+
+ID fasta1f
+AP seqret
+CL -auto ../Fasta/f001 -sf fasta -out test.out -osf fasta
+FI stderr
+FC = 0
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI test.out
+FC = 0
+//
+
+
+
+ID fasta2
+AP seqret
+CL -auto ../Fasta/f002 -sf ncbi -out test.out -osf ncbi
+FI stderr
+FC = 0
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI test.out
+FC = 0
+//
+
+
+
+ID fasta2f
+AP seqret
+CL -auto ../Fasta/f002 -sf fasta -out test.out -osf fasta
+FI stderr
+FC = 0
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI test.out
+FC = 0
+//
+
+
+ID fasta3
+AP seqret
+CL -auto ../Fasta/f003 -sf ncbi -out test.out -osf ncbi
+FI stderr
+FC = 0
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI test.out
+FC = 0
+//
+
+
+
+ID fasta3f
+AP seqret
+CL -auto ../Fasta/f003 -sf fasta -out test.out -osf fasta
+FI stderr
+FC = 0
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI test.out
+FC = 0
+//
+
+
+
+ID fasta4
+AP seqret
+CL -auto ../Fasta/fa01 -sf ncbi -out test.out -osf ncbi
+FI stderr
+FC = 0
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI test.out
+FC = 0
+//
+
+
+
+ID fasta4f
+AP seqret
+CL -auto ../Fasta/fa01 -sf fasta -out test.out -osf fasta
+FI stderr
+FC = 0
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI test.out
+FC = 0
+//
+
+##########################
+# SwissProt 16 files
+##########################
+
+##########################
+# EMBL 6 files
+##########################
+
+#########################################
+# GenBank 16 gb, 2 faa 1 ffn 1 fna 1 seq
+#########################################
+
+# UniGene 3 data
+
+# Stockholm 2 sth
+
+# PDB 1 pdb
+
+# Nucleic 7 files
+
+# Amino 4 pro
+
+# Clustalw 6 aln
+
+# NBRF 5 pir
+
+# Nexus 2 nex
+
+# Phylip 7 phy 1 tree
+
+# Saf 1 saf
+
+# GFF 4 fna 1 gbk
+
+# IntelliGenetics 3 txt
+
+# Entrez 41 xml
+
+# Emboss 11 output files
+
+# Quality 57 fastq 1 qual 1 fasta
+
+
+# CodonUsage 1 txt (fasta format)
+
+# BioSQL 2 sql
+
+# Blast 76 bt* (no bt008 ... README says 'too big') 8 xml

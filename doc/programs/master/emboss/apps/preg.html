@@ -53,7 +53,9 @@ preg
 </H2>
 
 
-<b>preg</b> reads any protein sequence USA.
+<b>preg</b> reads one or more protein sequences.
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
 
 <p>
 
@@ -64,6 +66,10 @@ preg
     Output file format
 </H2>
 
+<!--#include file="inc/reportformats.ihtml" -->
+
+<p>
+By default, the report is in 'seqtable' format.
 
 <!--#include file="inc/preg.output" -->
 
@@ -228,17 +234,6 @@ Always returns 0.
 None.
 
 <!--#include file="inc/preg.isee" -->
-<p>
-
-Other EMBOSS programs allow you to search for simple patterns and may be
-easier for the user who has never used regular expressions before:
-
-<p>
-<ul>
-<li><a href="fuzznuc.html">fuzznuc</a>  - Nucleic acid pattern search
-<li><a href="fuzzpro.html">fuzzpro</a>  - Protein pattern search
-<li><a href="fuzztran.html">fuzztran</a> - Protein pattern search after translation
-</ul>
 
 <H2>
     Author(s)

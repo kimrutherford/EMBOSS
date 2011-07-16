@@ -47,7 +47,7 @@ Output alignment [hba_human.prophet]:
 Command line arguments
 
 Scan one or more sequences with a Gribskov or Henikoff profile
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -58,6 +58,7 @@ Version: EMBOSS:6.3.0
    -gapextend          float      [1.0] Gap extension coefficient (Number from
                                   0.000 to 100.000)
   [-outfile]           align      [*.prophet] Output alignment file name
+                                  (default -aformat simple)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -110,8 +111,25 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   prophet reads a GRIBSKOV or a HENIKOFF profile produced by prophecy and
-   searches one or more sequence USAs.
+   prophet reads one or more nucleotide or protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats. prophet also reads a GRIBSKOV or a
+   HENIKOFF profile produced by prophecy.
 
   Input files for usage example
 
@@ -317,13 +335,33 @@ FLASVATVLASKYRELGYQG
 
 Output file format
 
+   The output is a standard EMBOSS alignment file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -aformat xxx, where 'xxx' is replaced by the
+   name of the required format. Some of the alignment formats can cope
+   with an unlimited number of sequences, while others are only for pairs
+   of sequences.
+
+   The available multiple alignment format names are: multiple, simple,
+   fasta, msf, clustal, mega, meganon, nexus,, nexusnon, phylip,
+   phylipnon, selex, treecon, tcoffee, debug, srs.
+
+   The available pairwise alignment format names are: pair, markx0,
+   markx1, markx2, markx3, markx10, match, sam, bam, score, srspair
+
+   See: http://emboss.sf.net/docs/themes/AlignFormats.html for further
+   information on alignment formats.
+
+   By default the output is in 'simple' format.
+
   Output files for usage example
 
   File: hba_human.prophet
 
 ########################################
 # Program: prophet
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: prophet
 #    -sequence "tsw:h*"
 #    -infile ../../data/globins.gribskov

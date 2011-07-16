@@ -1,0 +1,13 @@
+Here is a sample session with <b>edamhasinput</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>edamhasinput sequence </b>
+Find EDAM ontology terms by has_input relation
+Obo output file [edamhasinput.obo]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

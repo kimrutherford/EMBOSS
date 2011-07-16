@@ -1,8 +1,8 @@
 application: treetypedisplay [
   documentation: "Test of graphics"
   groups: "Test"
-  relations: "/edam/topic/0000220 File handling"
-  relations: "/edam/operation/0000336 File debugging"
+    relations: "EDAM:0000220 topic File handling"
+    relations: "EDAM:0000336 operation File debugging"
 ]
 
 section: output [
@@ -12,7 +12,7 @@ section: output [
 
   graph: graph [
     standard: "Y"
-    relations: "/edam/data/0002142 EMBOSS graph"                                   
+    relations: "EDAM:0002142 data EMBOSS graph"
   ]
 
 endsection: output

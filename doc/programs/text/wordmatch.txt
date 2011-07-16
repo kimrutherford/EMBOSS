@@ -39,7 +39,7 @@ Second features output [HBB_HUMAN.gff]:
 Command line arguments
 
 Finds regions of identity (exact matches) of two sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqset     Sequence set filename and optional format,
@@ -48,6 +48,7 @@ Version: EMBOSS:6.3.0
                                   reference (input USA)
    -wordsize           integer    [4] Word size (Integer 2 or more)
   [-outfile]           align      [*.wordmatch] Output alignment file name
+                                  (default -aformat match)
   [-aoutfeat]          featout    [unknown.gff] Output features UFO
   [-boutfeat]          featout    [unknown.gff] Output features UFO
 
@@ -142,8 +143,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   wordmatch reads any two sequence USAs of the same type (DNA or
-   protein).
+   wordmatch reads two sets of nucleotide or protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -376,14 +393,31 @@ Output file format
    with an unlimited number of sequences, while others are only for pairs
    of sequences.
 
-   The available multiple alignment format names are: unknown, multiple,
-   simple, fasta, msf, trace, srs
+   The available multiple alignment format names are: multiple, simple,
+   fasta, msf, clustal, mega, meganon, nexus,, nexusnon, phylip,
+   phylipnon, selex, treecon, tcoffee, debug, srs.
 
    The available pairwise alignment format names are: pair, markx0,
-   markx1, markx2, markx3, markx10, srspair, score
+   markx1, markx2, markx3, markx10, match, sam, bam, score, srspair
 
    See: http://emboss.sf.net/docs/themes/AlignFormats.html for further
    information on alignment formats.
+
+   By default the output is in 'match' format.
+
+   The matches in each set of input sequences are written as feature
+   files.
+
+   The output is a standard EMBOSS feature file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -offormat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: gff
+   (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+   (nbrf), swissprot (swiss, sw), dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/FeatureFormats.html for further
+   information on feature formats.
 
   Output files for usage example
 
@@ -391,7 +425,7 @@ Output file format
 
 ########################################
 # Program: wordmatch
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: wordmatch
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -417,34 +451,34 @@ Output file format
 
 ##gff-version 3
 ##sequence-region HBA_HUMAN 1 142
-#!Date 2010-01-15
+#!Date 2011-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.3.0
+#!Source-version EMBOSS 6.4.0.0
 HBA_HUMAN       wordmatch       polypeptide_region      15      18      1.000
-+       .       ID="HBA_HUMAN.1";note="HBB_HUMAN"
++       .       ID=HBA_HUMAN.1;note=HBB_HUMAN
 HBA_HUMAN       wordmatch       polypeptide_region      59      63      1.000
-+       .       ID="HBA_HUMAN.2";note="HBB_HUMAN"
++       .       ID=HBA_HUMAN.2;note=HBB_HUMAN
 HBA_HUMAN       wordmatch       polypeptide_region      117     120     1.000
-+       .       ID="HBA_HUMAN.3";note="HBB_HUMAN"
++       .       ID=HBA_HUMAN.3;note=HBB_HUMAN
 
   File: HBB_HUMAN.gff
 
 ##gff-version 3
 ##sequence-region HBB_HUMAN 1 147
-#!Date 2010-01-15
+#!Date 2011-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.3.0
+#!Source-version EMBOSS 6.4.0.0
 HBB_HUMAN       wordmatch       polypeptide_region      16      19      1.000
-+       .       ID="HBB_HUMAN.1";note="HBA_HUMAN"
++       .       ID=HBB_HUMAN.1;note=HBA_HUMAN
 HBB_HUMAN       wordmatch       polypeptide_region      64      68      1.000
-+       .       ID="HBB_HUMAN.2";note="HBA_HUMAN"
++       .       ID=HBB_HUMAN.2;note=HBA_HUMAN
 HBB_HUMAN       wordmatch       polypeptide_region      122     125     1.000
-+       .       ID="HBB_HUMAN.3";note="HBA_HUMAN"
++       .       ID=HBB_HUMAN.3;note=HBA_HUMAN
 
   File: wordmatch.log
 
-Small sequence/file for constructing target patterns: <null>
-Large sequence/file to be scanned for patterns: <null>
+Small sequence/file for constructing target patterns: tsw:hba_human
+Large sequence/file to be scanned for patterns: tsw:hbb_human
 Number of sequences in the patterns file: 1
 Pattern/word length: 4
 Number of patterns/words found: 139
@@ -480,7 +514,7 @@ Data files
 
 Notes
 
-   wormatch will only report identical regions that are at least as long
+   wordmatch will only report identical regions that are at least as long
    as the specified wordsize.
 
 References

@@ -66,7 +66,7 @@ Messenger RNA nucleotide output sequence(s) (optional) [x03487.mrna]:
 Command line arguments
 
 Extract CDS, mRNA and translations from feature tables
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
@@ -172,8 +172,33 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   coderet reads one or more nucleic sequence USAs having CDS, mRNA or
+   coderet reads one or more nucleic sequences having CDS, mRNA or
    translation headings in their feature tables.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA')
+   with associated feature information.
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: text, html, xml (uniprotxml),
+   obo, embl (swissprot)
+
+   Where the sequence format has no feature information, a second file can
+   be read to load the feature data. The file is specified with the
+   qualifier -ufo xxx and the feature format is specified with the
+   qualifier -fformat xxx
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
+
+   See: http://emboss.sf.net/docs/themes/FeatureFormats.html for further
+   information on feature formats.
 
   Input files for usage example
 
@@ -366,6 +391,18 @@ SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
 
 Output file format
 
+   The output is a standard EMBOSS sequence file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -osformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   excel, feattable, motif, nametable, regions, seqtable, simple, srs,
+   table, tagseq.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
+
    The output is a sequence file containing any CDS, mRNA and protein
    translation sequences as specified by the feature table of the
    sequence(s).
@@ -514,20 +551,26 @@ Known bugs
 See also
 
    Program name     Description
+   abiview          Display the trace in an ABI sequencer file
    backtranambig    Back-translate a protein sequence to ambiguous nucleotide
                     sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
-   extractfeat      Extract features from sequence(s)
-   maskfeat         Write a sequence with masked features
+   checktrans       Reports STOP codons and ORF statistics of a protein
+   entret           Retrieves sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
+   infoalign        Display basic information about a multiple sequence alignment
+   infoseq          Display basic information about sequences
    plotorf          Plot potential open reading frames in a nucleotide sequence
    prettyseq        Write a nucleotide sequence and its translation to file
    remap            Display restriction enzyme binding sites in a nucleotide sequence
-   showfeat         Display features of a sequence in pretty format
+   seqxref          Retrieve all database cross-references for a sequence entry
+   seqxrefget       Retrieve all cross-referenced data for a sequence entry
+   showalign        Display a multiple sequence alignment in pretty format
    showorf          Display a nucleotide sequence and translation in pretty format
    showseq          Displays sequences with features in pretty format
    sixpack          Display a DNA sequence with 6-frame translation and ORFs
    transeq          Translate nucleic acid sequences
-   twofeat          Finds neighbouring pairs of features in sequence(s)
+   whichdb          Search all sequence databases for an entry and retrieve it
 
 Author(s)
 

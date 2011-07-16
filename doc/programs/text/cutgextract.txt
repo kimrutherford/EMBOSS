@@ -47,7 +47,7 @@ General log output file [outfile.cutgextract]:
 Command line arguments
 
 Extract codon usage tables from CUTG database
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-directory]         dirlist    [.] Codon usage directories
@@ -107,15 +107,15 @@ Output file format
 
   File: outfile.cutgextract
 
-Writing EDictyostelium_discoideum.cut CDS: 7
 Writing EAphrodite_aculeata.cut CDS: 1
-Writing EAedes_aegypti.cut CDS: 23
 Writing EAnadara_trapezia.cut CDS: 2
-Writing EAedes_albopictus.cut CDS: 2
 Writing EAcanthocheilonema_viteae.cut CDS: 2
+Writing EAedes_aegypti.cut CDS: 23
+Writing EDictyostelium_discoideum.cut CDS: 7
 Writing EAmblyomma_americanum.cut CDS: 2
-Writing EAstacus_astacus.cut CDS: 3
 Writing EAedes_atropalpus.cut CDS: 1
+Writing EAedes_albopictus.cut CDS: 2
+Writing EAstacus_astacus.cut CDS: 3
 
 Data files
 

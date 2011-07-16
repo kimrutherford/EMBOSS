@@ -4957,7 +4957,7 @@ static AjBool AlignNumbering(AjPPdbfile pdbfile, AjPFile flog, ajuint lim,
 				   object is True) */
     AjPStr  *seq=NULL;		/* Pointer to seq1 or seq2 */
     AjPStr  seqbit=NULL;	/* Subsequence of seq (real copy) */    
-    ajint   lenseqbit=0;        /* Length of seqbit */
+    ajlong   lenseqbit=0;        /* Length of seqbit */
     
 
     ajint   *nres1=NULL;	/* No. residues for seq1/arr1 */
@@ -5000,7 +5000,7 @@ static AjBool AlignNumbering(AjPPdbfile pdbfile, AjPFile flog, ajuint lim,
     AjPStr   bit=NULL;	        /* Temp. string for a bit of sequence */
     ajuint   nmismatches=0;	/* No. of mismatches between ATOM and SEQRES 
 				   sequence */
-    ajint    loc=0;		/* Location of ATOM sequence in SEQRES sequence
+    ajlong    loc=0L;		/* Location of ATOM sequence in SEQRES sequence
 				   (if applicable) */
     ajint    len=0;		/* Length of seqres sequence from Pdbfile 
 				   object*/
@@ -5429,7 +5429,7 @@ static AjBool AlignNumbering(AjPPdbfile pdbfile, AjPFile flog, ajuint lim,
 			   assign residue numbers 'by hand' */
 
 			for(k=0;k<nres[i];k++)
-			    ajIntPut(&idx[i], k, k+loc+1);
+			  ajIntPut(&idx[i], k, k+(ajint)loc+1);
 		    
 			if(x==0)
 			    pdbfile->resn1ok[i]=ajTrue;
@@ -5515,14 +5515,14 @@ static AjBool AlignNumbering(AjPPdbfile pdbfile, AjPFile flog, ajuint lim,
 		   without gaps, and where the SEQRES sequence does not
 		   have extra N-terminal residues relative to ATOM
 		   (such cases are caught in STEP 2) */
-		if((loc=ajStrFindS(seq[i],pdbfile->seqres[i])) !=-1)
+		if((loc = ajStrFindS(seq[i],pdbfile->seqres[i])) !=-1)
 		{
 		    /* SEQRES is substring of ATOM sequence - correct for
 		       residues missing from SEQRES sequence and assign 
 		       residue numbers 'by hand' */
 		    
 		    /* N-terminal insertion needed*/
-		    if(loc!=0)
+		    if(loc != 0)
 		    {
 			ajFmtPrintF(flog, "%-15s%d (%c) %d\n", "MISSNTERM", 
 				    i+1, ajChararrGet(pdbfile->chid, i), 

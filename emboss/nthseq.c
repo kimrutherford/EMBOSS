@@ -53,13 +53,10 @@ int main(int argc, char **argv)
 	    break;
 
     if(count != n)
-    {
-	ajSeqoutClose(seqout);
-	ajFatal("No such sequence - only %d sequences were input.", count);
-	embExitBad();
-    }
+	ajErr("No such sequence - only %d sequences were input.", count);
+    else
+        ajSeqoutWriteSeq(seqout, seq);
 
-    ajSeqoutWriteSeq(seqout, seq);
     ajSeqoutClose(seqout);
 
     ajSeqallDel(&seqall);
@@ -67,5 +64,6 @@ int main(int argc, char **argv)
     ajSeqoutDel(&seqout);
 
     embExit();
+
     return 0;
 }

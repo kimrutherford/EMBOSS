@@ -1,11 +1,12 @@
 Regular expression search of protein sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
   [-pattern]           regexp     Any regular expression pattern is accepted)
-  [-outfile]           report     [*.preg] Output report file name
+  [-outfile]           report     [*.preg] Output report file name (default
+                                  -rformat seqtable)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)

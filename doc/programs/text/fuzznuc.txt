@@ -1,3 +1,5 @@
+   HTML>
+
                                    fuzznuc
 
 
@@ -86,7 +88,7 @@ Output report [l46634.fuzznuc]:
 Command line arguments
 
 Search for patterns in nucleotide sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -120,7 +122,8 @@ Version: EMBOSS:6.3.0
                                   A period ends the pattern. (Optional in
                                   fuzznuc).
                                   For example, [CG](5)TG{A}N(1,5)C
-  [-outfile]           report     [*.fuzznuc] Output report file name
+  [-outfile]           report     [*.fuzznuc] Output report file name (default
+                                  -rformat seqtable)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -182,7 +185,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   fuzznuc reads in normal nucleic acid sequence USAs.
+   fuzznuc reads in one or more nucleotide sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -340,8 +360,9 @@ Output file format
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
-   genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
 
    See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
    information on report formats.
@@ -354,7 +375,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern AAGCTT
@@ -374,9 +395,9 @@ Output file format
 #
 #=======================================
 
-  Start     End  Strand Pattern_name Mismatch Sequence
-      1       6       + pattern             . aagctt
-   1267    1272       + pattern             . aagctt
+  Start     End  Strand Pattern         Mismatch Sequence
+      1       6       + pattern: AAGCTT        . aagctt
+   1267    1272       + pattern: AAGCTT        . aagctt
 
 #---------------------------------------
 #---------------------------------------
@@ -394,7 +415,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nucseq.pat
@@ -414,9 +435,11 @@ Output file format
 #
 #=======================================
 
-  Start     End  Strand Pattern_name Mismatch Sequence
-    429     448       + targetseq           . cggccctaaccctagcccta
-    491     510       + targetseq           . cggccctaaccctagcccta
+  Start     End  Strand Pattern                             Mismatch Sequence
+    429     448       + targetseq: cg(2)c(3)taaccctagc(3)ta        . cggccctaacc
+ctagcccta
+    491     510       + targetseq: cg(2)c(3)taaccctagc(3)ta        . cggccctaacc
+ctagcccta
 
 #---------------------------------------
 #---------------------------------------
@@ -434,7 +457,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: fuzznuc
 #    -pname test
 #    -sequence tembl:L46634
@@ -456,20 +479,20 @@ Output file format
 #
 #=======================================
 
-  Start     End  Strand Pattern_name Mismatch Sequence
-    429     438       + test1               . cggccctaac
-    491     500       + test1               . cggccctaac
-    535     544       + test1               . cggccctaac
-    605     614       + test1               . cggccctaac
-    631     640       + test1               . cggccctaac
-    695     704       + test1               . cggccctaac
-    721     730       + test1               . cggccctaac
-    753     762       + test1               . cggccctaac
-    293     302       + test2               . cctagcccta
-    439     448       + test2               . cctagcccta
-    469     478       + test2               . cctagcccta
-    501     510       + test2               . cctagcccta
-    801     810       + test2               . cctagcccta
+  Start     End  Strand Pattern              Mismatch Sequence
+    429     438       + test1: cg(2)c(3)taac        . cggccctaac
+    491     500       + test1: cg(2)c(3)taac        . cggccctaac
+    535     544       + test1: cg(2)c(3)taac        . cggccctaac
+    605     614       + test1: cg(2)c(3)taac        . cggccctaac
+    631     640       + test1: cg(2)c(3)taac        . cggccctaac
+    695     704       + test1: cg(2)c(3)taac        . cggccctaac
+    721     730       + test1: cg(2)c(3)taac        . cggccctaac
+    753     762       + test1: cg(2)c(3)taac        . cggccctaac
+    293     302       + test2: cctagc(3)ta          . cctagcccta
+    439     448       + test2: cctagc(3)ta          . cctagcccta
+    469     478       + test2: cctagc(3)ta          . cctagcccta
+    501     510       + test2: cctagc(3)ta          . cctagcccta
+    801     810       + test2: cctagc(3)ta          . cctagcccta
 
 #---------------------------------------
 #---------------------------------------
@@ -487,7 +510,7 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nuc.pat
@@ -509,26 +532,37 @@ Output file format
 #
 #=======================================
 
-  Start     End  Strand Pattern_name Mismatch Sequence
-    429     448       + pat1                . cggccctaaccctagcccta
-    491     510       + pat1                . cggccctaaccctagcccta
-    429     448       + pat2                . cggccctaaccctagcccta
-    491     510       + pat2                . cggccctaaccctagcccta
-    535     554       + pat2                1 cggccctaaccctaacccta
-    605     624       + pat2                1 cggccctaaccctaacccta
-    631     650       + pat2                1 cggccctaaccctaacccta
-    695     714       + pat2                1 cggccctaaccctaacccta
-    721     740       + pat2                1 cggccctaaccctaacccta
-    753     772       + pat2                1 cggccctaaccctaacccta
-    791     810       + pat2                1 cggcccgaaccctagcccta
-    753     764       + pat3                . cggccctaaccc
-    721     732       + pat3                . cggccctaaccc
-    695     706       + pat3                . cggccctaaccc
-    631     642       + pat3                . cggccctaaccc
-    605     616       + pat3                . cggccctaaccc
-    535     546       + pat3                . cggccctaaccc
-    491     502       + pat3                . cggccctaaccc
-    429     440       + pat3                . cggccctaaccc
+  Start     End  Strand Pattern                        Mismatch Sequence
+    429     448       + pat1: cggccctaaccctagcccta            . cggccctaaccctagc
+ccta
+    491     510       + pat1: cggccctaaccctagcccta            . cggccctaaccctagc
+ccta
+    429     448       + pat2: cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagc
+ccta
+    491     510       + pat2: cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagc
+ccta
+    535     554       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaac
+ccta
+    605     624       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaac
+ccta
+    631     650       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaac
+ccta
+    695     714       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaac
+ccta
+    721     740       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaac
+ccta
+    753     772       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaac
+ccta
+    791     810       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggcccgaaccctagc
+ccta
+    753     764       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
+    721     732       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
+    695     706       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
+    631     642       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
+    605     616       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
+    535     546       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
+    491     502       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
+    429     440       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
 
 #---------------------------------------
 #---------------------------------------
@@ -570,38 +604,29 @@ Known bugs
 
 See also
 
-   Program name     Description
-   dreg             Regular expression search of nucleotide sequence(s)
-   fuzztran         Search for patterns in protein sequences (translated)
-   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
-                    sequences
-
-   Other EMBOSS programs allow you to search for regular expression
-   patterns but may be less easy for the user who has never used regular
-   expressions before:
-
-     * dreg - Regular expression search of a nucleotide sequence
-     * preg - Regular expression search of a protein sequence
+                    Program name                      Description
+                    dreg         Regular expression search of nucleotide sequence(s)
+                    fuzztran     Search for patterns in protein sequences (translated)
 
 Author(s)
 
-   Alan Bleasby
-   European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
+   Alan             Bleasby
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
-   Please report all bugs to the EMBOSS bug team
-   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 
-   Written (2000) - Alan Bleasby
-   '-usa' added (13 March 2001) - Gary Williams
+                    Written (2000) - Alan Bleasby
+                    '-usa' added (13 March 2001) - Gary Williams
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

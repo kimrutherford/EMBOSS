@@ -73,7 +73,7 @@ Finds neighbouring pairs of features in sequence(s)
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with twofeat</b>
+Here is a sample session with <b>twofeat</b>
 <p>
 Without the -twoout option the output report contains just one feature for every pair of features found. 
 <p>
@@ -119,7 +119,7 @@ Output report [x65923.twofeat]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Finds neighbouring pairs of features in sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -156,7 +156,8 @@ Version: EMBOSS:6.3.0
    -maxrange           integer    [0] If this is less than or equal to
                                   'minrange', then no min or max range is
                                   specified (Any integer value)
-  [-outfile]           report     [*.twofeat] Output report file name
+  [-outfile]           report     [*.twofeat] Output report file name (default
+                                  -rformat table)
 
    Additional (Optional) qualifiers (* if not always prompted):
    -asource            string     [*] By default any feature source in the
@@ -460,7 +461,7 @@ If you wish to allow more than one type, separate their names with the character
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat table)</td>
 <td><i>&lt;*&gt;</i>.twofeat</td>
 </tr>
 
@@ -963,8 +964,45 @@ You can allow any or no overlaps, specify that they must or must not overlap, th
     Input file format
 </H2>
 
-<b>twofeat</b> reads any normal sequence USAs.
+<p>
 
+The input is a standard EMBOSS sequence query (also known as a 'USA')
+with associated feature information.
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the command-line qualifier
+<tt>-sformat xxx</tt>, where 'xxx' is replaced by the name of the
+required format.  The available format names are: text, html, xml (uniprotxml),
+obo, embl (swissprot)
+
+<p> Where the sequence format has no feature information, a second
+file can be read to load the feature data. The file is specified with
+the qualifier <tt>-ufo xxx</tt> and the feature format is specified with
+the qualifier <tt>-fformat xxx</tt>
+
+<p>
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
+See:
+<A href="http://emboss.sf.net/docs/themes/FeatureFormats.html">
+http://emboss.sf.net/docs/themes/FeatureFormats.html</A>
+for further information on feature formats.
+
+<p>
+<b>twofeat</b> reads two sequence inputs with feature information.
 <p>
 
 
@@ -1072,10 +1110,11 @@ The output is a standard EMBOSS report file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
 
 <p>
 
@@ -1087,7 +1126,7 @@ for further information on report formats.
 <p>
 
 <b>twofeat</b> 
-outputs a report format file. The default format is <b>table</b>
+outputs a report format file. The default format is 'table'.
 
 
 <p>
@@ -1100,7 +1139,7 @@ outputs a report format file. The default format is <b>table</b>
 <pre>
 ########################################
 # Program: twofeat
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: twofeat
 #    [-sequence] tembl:x65923
 #    -atype polyA_signal
@@ -1139,11 +1178,11 @@ outputs a report format file. The default format is <b>table</b>
 <pre>
 ##gff-version 3
 ##sequence-region X65923 1 518
-#!Date 2010-01-15
+#!Date 2011-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.3.0
-X65923	EMBL	polyA_signal_sequence	484	489	0.000	+	.	ID="X65923.6"
-X65923	EMBL	polyA_site	509	509	0.000	+	.	ID="X65923.7";featflags="0x40"
+#!Source-version EMBOSS 6.4.0.0
+X65923	EMBL	polyA_signal_sequence	484	489	.	+	.	ID=X65923.6
+X65923	EMBL	polyA_site	509	509	.	+	.	ID=X65923.7
 </pre>
 </td></tr></table><p>
 
@@ -1196,11 +1235,6 @@ This does no affect the results.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th>
 <th>Description</th></tr>
-<tr>
-<td><a href="coderet.html">coderet</a></td>
-<td>Extract CDS, mRNA and translations from feature tables</td>
-</tr>
-
 <tr>
 <td><a href="extractfeat.html">extractfeat</a></td>
 <td>Extract features from sequence(s)</td>

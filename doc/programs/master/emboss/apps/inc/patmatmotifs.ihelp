@@ -1,10 +1,11 @@
 Scan a protein sequence with motifs from the PROSITE database
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
                                   format, or reference (input USA)
   [-outfile]           report     [*.patmatmotifs] Output report file name
+                                  (default -rformat dbmotif)
 
    Additional (Optional) qualifiers:
    -full               boolean    [N] Provide full documentation for matching

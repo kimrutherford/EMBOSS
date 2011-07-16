@@ -1,5 +1,5 @@
 Report restriction enzyme cleavage sites in a nucleotide sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -31,12 +31,13 @@ Version: EMBOSS:6.3.0
                                   HinfI
                                   PpiI (Any string)
   [-outfile]           report     [*.restrict] Output report file name
+                                  (default -rformat table)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -datafile           datafile   Restriction enzyme data file (optional)
    -mfile              datafile   [Emethylsites.dat] Restriction enzyme
-                                  methylation data file (optional)
+                                  methylation data file
    -min                integer    [1] This sets the minimum number of cuts for
                                   any restriction enzyme that will be
                                   considered. Any enzymes that cut fewer times

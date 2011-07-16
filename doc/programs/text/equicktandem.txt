@@ -57,7 +57,7 @@ Output report [l46634.qtan]:
 Command line arguments
 
 Finds tandem repeats in nucleotide sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -66,6 +66,7 @@ Version: EMBOSS:6.3.0
                                   value)
    -threshold          integer    [20] Threshold score (Any integer value)
   [-outfile]           report     [*.equicktandem] Output report file name
+                                  (default -rformat table)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -126,7 +127,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   The input for equicktandem is a nucleotide sequence USA.
+   equicktandem reads a single nucleotide sequence.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -208,8 +226,9 @@ Output file format
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
-   genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
 
    See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
    information on report formats.
@@ -222,7 +241,7 @@ Output file format
 
 ########################################
 # Program: equicktandem
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: equicktandem
 #    -noorigfile
 #    -sequence tembl:L46634

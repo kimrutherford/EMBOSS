@@ -1,12 +1,12 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-The SwissProt annotation marks the true leucine zipper motif as from 253 to 274. The leucine zipper is a special case of a coiled-coil region. <p><h3>File: gcn4_yeast.pepcoil </h3>
+The SwissProt annotation marks the true leucine zipper motif as from 253 to 274. The leucine zipper is a special case of a coiled-coil region. <p><h3>File: gcn4_yeast.pepcoil</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: pepcoil
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: pepcoil
 #    -sequence tsw:gcn4_yeast
 # Report_format: motif

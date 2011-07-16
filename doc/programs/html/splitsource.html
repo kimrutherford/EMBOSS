@@ -48,52 +48,17 @@ IT IS DONE FOR YOU.
     Description
 </H2>
 
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-  -->
-
-**************** 
-EDIT HERE
-**************** 
-
-
-
-
-
-
-
-
-
-
-
-
+<b>splitsource</b> splits a synthetic sequence into original source
+sequences by processing the "source" features in the feature table.
 
 <H2>
     Algorithm
 </H2>
 
-<!-- 
-        Algorithms
-	  Pseudocode/Vague description/Handwaving/web links to useful pages
-  -->
-
-**************** 
-EDIT HERE
-**************** 
-
-
-
-
-
-
-
-
-
-
+The "source" feature annotated the origin of a sequence
+region. Synthetic sequences are characterized by having two or more
+"source" features each describing one of the original sequence
+fragments.
 
 
 
@@ -106,7 +71,7 @@ EDIT HERE
         Many examples illustrating different behaviours is good.
  -->
 
-<b>Here is a sample session with splitsource</b>
+Here is a sample session with <b>splitsource</b>
 <p>
 Split a sequence into original subsequences 
 <p>
@@ -131,7 +96,7 @@ output sequence(s) [a01139.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Split sequence(s) into original source sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -566,14 +531,32 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
+<p>
 
-<b>splitsource</b> reads any normal sequence USAs.
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -650,21 +633,26 @@ SQ   Sequence 279 BP; 76 A; 66 C; 68 G; 69 T; 0 other;
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
+<p>
 
-        If you wish to include the standard description of the avalable
-	report formats, use:
-        #include file="inc/reportformats.ihtml"
-   -->
+The output is a standard EMBOSS sequence file. 
 
-<b>splitsource</b> 
-outputs a graph to the specified graphics device. 
-outputs a report format file. The default format is ...
+<p>
 
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
 
 <p>
 
@@ -693,34 +681,7 @@ gaagaatacctgcagtag
     Data files
 </H2>
 
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-
-        #include file="inc/localfiles.ihtml"
-   -->
-
-**************** 
-EDIT HERE
-**************** 
-
-
-
-
-
-
-
-
-
-
-
-
-
+None.
 
 <H2>
     Notes
@@ -906,6 +867,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
 <td><a href="listor.html">listor</a></td>
 <td>Write a list file of the logical OR of two sets of sequences</td>
 </tr>
@@ -991,6 +957,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
+</tr>
+
+<tr>
 <td><a href="seqret.html">seqret</a></td>
 <td>Reads and writes (returns) sequences</td>
 </tr>
@@ -1073,139 +1044,13 @@ None.
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-e.g. one of:
-Alan Bleasby 
+
+Peter Rice
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 <p>
 Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
-Bernd Jagla formerly at:
-<br>
-Cellular Biochemistry and Biophysics Program, Rockefeller
-Research Laboratories, Memorial Sloan-Kettering Cancer Center, 1275 York
-Avenue, Box 251,New York, NY 10021.
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
-David Martin  
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.Gos Micklem formerly at:
-<br>
-Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.Gary Williams formerly at:
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
-Jon Ison
-<br>
-European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
-Ian Longden formerly at:
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.                      
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
-Mark Faller formerly at:
-<br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
-Michael K. Schuster and Martin Grabner formerly at:
-<br>
-Austrian National EMBnet node.
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.Michael Schmitz formerly at:
-<br>
-Lawrence Berkeley Labs, USA
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.Nicolas Tourasse formerly at:
-<br>
-Biotechnology Center of Oslo
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.Peter Rice
-<br>
-European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.Richard Durbin
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.                      
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.Richard Bruskiewich formerly at:
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.                      
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.Rodrigo Lopez
-<br>
-European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.Sinead O'Leary formerly at:
-<br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
-
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
-Tim Carver formerly at:
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.Thomas Laurent formerly at:
-<br>
-Lion Bioscience Ltd,
-     Compass House,
-     80-82 Newmarket Road,
-     Cambridge,
-     CB5 8DZ,
-     UK
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.Val Curwen formerly at:
-<br>
-Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK. 
-
-<p>
-Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
-   -->
-
-**************** 
-EDIT HERE
-**************** 
-
-
-
-
-
-
-
-
-
-
 
 <H2>
     History

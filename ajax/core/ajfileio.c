@@ -23,7 +23,7 @@
 
 #include "ajax.h"
 
-
+#include <errno.h>
 
 static void   filebuffLineAdd(AjPFilebuff thys, const AjPStr line);
 
@@ -196,7 +196,7 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
     ipos  = 0;
     
     if(!file->fp)
-	ajWarn("ajFileGets file not found");
+	ajWarn("ajReadlinePos file not found");
     
     *Ppos = file->Filepos;
 
@@ -279,7 +279,12 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
 		return ajFalse;
 	    }
 	    else
-		ajFatal("Error reading from file '%S'\n", ajFileGetNameS(file));
+            {
+		ajFatal("Error reading from file '%S' ferror:%d %d: %s\n",
+                        ajFileGetNameS(file),
+                        ferror(file->fp),
+                        errno, strerror(errno));
+            }
 	}
 
 	ilen += jlen;
@@ -307,7 +312,9 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
               ipos, isize, ajStrGetRes(file>Buff));*/
 	}
 	else
-	    buff = NULL;
+	{
+            buff = NULL;
+        }
     }
     
     MAJSTRSETVALIDLEN(&file->Buff, ilen);
@@ -603,7 +610,7 @@ size_t ajReadbinInt(AjPFile file, ajint *Pi)
 
     ret = fread(Pi, 4, 1, file->fp);
 
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     ajByteRevLen4(Pi);
 #endif
     
@@ -631,7 +638,7 @@ size_t ajReadbinIntEndian(AjPFile file, ajint *Pi)
     
     ret = fread(Pi, 4, 1, file->fp);
 
-#ifdef LENDIAN
+#ifndef WORDS_BIGENDIAN
     ajByteRevLen4(Pi);
 #endif
 
@@ -682,7 +689,7 @@ size_t ajReadbinInt2(AjPFile file, ajshort *Pi2)
 
     ret = fread(Pi2, 2, 1, file->fp);
 
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     ajByteRevLen2(Pi2);
 #endif
     
@@ -709,7 +716,7 @@ size_t ajReadbinInt2Endian(AjPFile file, ajshort *Pi2)
 
     ret = fread(Pi2, 2, 1, file->fp);
 
-#ifdef LENDIAN
+#ifndef WORDS_BIGENDIAN
     ajByteRevLen2(Pi2);
 #endif
     
@@ -760,7 +767,7 @@ size_t ajReadbinInt4(AjPFile file, ajint *Pi4)
 
     ret = fread(Pi4, 4, 1, file->fp);
 
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     ajByteRevLen4(Pi4);
 #endif
     
@@ -787,7 +794,7 @@ size_t ajReadbinInt4Endian(AjPFile file, ajint *Pi4)
 
     ret = fread(Pi4, 4, 1, file->fp);
 
-#ifdef LENDIAN
+#ifndef WORDS_BIGENDIAN
     ajByteRevLen4(Pi4);
 #endif
 
@@ -838,7 +845,7 @@ size_t ajReadbinInt8(AjPFile file, ajlong *Pi8)
 
     ret = fread(Pi8, 8, 1, file->fp);
 
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     ajByteRevLen8(Pi8);
 #endif
     
@@ -865,7 +872,7 @@ size_t ajReadbinInt8Endian(AjPFile file, ajlong *Pi8)
 
     ret = fread(Pi8, 8, 1, file->fp);
 
-#ifdef LENDIAN
+#ifndef WORDS_BIGENDIAN
     ajByteRevLen8(Pi8);
 #endif
     
@@ -913,13 +920,13 @@ size_t ajReadbinInt8Local(AjPFile file, ajlong *Pi8)
 size_t ajReadbinUint(AjPFile file, ajuint *Pu)
 {
     size_t ret;
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     ajint val2;
 #endif
 
     ret = fread(Pu, 4, 1, file->fp);
 
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     val2 = *Pu;
     ajByteRevLen4(&val2);
     *Pu = val2;
@@ -945,13 +952,13 @@ size_t ajReadbinUint(AjPFile file, ajuint *Pu)
 size_t ajReadbinUintEndian(AjPFile file, ajuint *Pu)
 {
     ajuint ret;
-#ifdef LENDIAN
+#ifndef WORDS_BIGENDIAN
     ajint val2;
 #endif
 
     ret = fread(Pu, 4, 1, file->fp);
 
-#ifdef LENDIAN
+#ifndef WORDS_BIGENDIAN
     val2 = *Pu;
     ajByteRevLen4(&val2);
     *Pu = val2;
@@ -1001,13 +1008,13 @@ size_t ajReadbinUintLocal(AjPFile file, ajuint *Pu)
 size_t ajReadbinUint2(AjPFile file, ajushort *Pu2)
 {
     size_t ret;
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     ajshort val2;
 #endif
 
     ret = fread(Pu2, 2, 1, file->fp);
 
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     val2 = *Pu2;
     ajByteRevLen2(&val2);
     *Pu2 = val2;
@@ -1033,13 +1040,13 @@ size_t ajReadbinUint2(AjPFile file, ajushort *Pu2)
 size_t ajReadbinUint2Endian(AjPFile file, ajushort *Pu2)
 {
     size_t ret;
-#ifdef LENDIAN
+#ifndef WORDS_BIGENDIAN
     ajshort val2;
 #endif
 
     ret = fread(Pu2, 2, 1, file->fp);
 
-#ifdef LENDIAN
+#ifndef WORDS_BIGENDIAN
     val2 = *Pu2;
     ajByteRevLen2(&val2);
     *Pu2 = val2;
@@ -1089,13 +1096,13 @@ size_t ajReadbinUint2Local(AjPFile file, ajushort *Pu2)
 size_t ajReadbinUint4(AjPFile file, ajuint *Pu4)
 {
     size_t ret;
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     ajint val2;
 #endif
 
     ret = fread(Pu4, 4, 1, file->fp);
 
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     val2 = *Pu4;
     ajByteRevLen4(&val2);
     *Pu4 = val2;
@@ -1121,13 +1128,13 @@ size_t ajReadbinUint4(AjPFile file, ajuint *Pu4)
 size_t ajReadbinUint4Endian(AjPFile file, ajuint *Pu4)
 {
     size_t ret;
-#ifdef LENDIAN
+#ifndef WORDS_BIGENDIAN
     ajint val2;
 #endif
 
     ret = fread(Pu4, 4, 1, file->fp);
 
-#ifdef LENDIAN
+#ifndef WORDS_BIGENDIAN
     val2 = *Pu4;
     ajByteRevLen4(&val2);
     *Pu4 = val2;
@@ -1177,13 +1184,13 @@ size_t ajReadbinUint4Local(AjPFile file, ajuint *Pu4)
 size_t ajReadbinUint8(AjPFile file, ajulong *Pu8)
 {
     size_t ret;
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     ajlong val2;
 #endif
 
     ret = fread(Pu8, 8, 1, file->fp);
 
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     val2 = *Pu8;
     ajByteRevLen8(&val2);
     *Pu8 = val2;
@@ -1209,14 +1216,14 @@ size_t ajReadbinUint8(AjPFile file, ajulong *Pu8)
 size_t ajReadbinUint8Endian(AjPFile file, ajulong *Pu8)
 {
     size_t ret;
-#ifdef LENDIAN
+#ifndef WORDS_BIGENDIAN
     ajlong val2;
 #endif
 
     ret = fread(Pu8, 8, 1, file->fp);
 
-#ifdef LENDIAN
-    val2 = *Pu8;
+#ifndef WORDS_BIGENDIAN
+    val2 = (ajlong) *Pu8;
     ajByteRevLen8(&val2);
     *Pu8 = val2;
 #endif
@@ -1424,7 +1431,7 @@ size_t ajWritebinChar(AjPFile file, const char* txt, size_t len)
 
 size_t ajWritebinInt2(AjPFile file, ajshort i2)
 {
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     short j;
 
     j = i2;
@@ -1463,7 +1470,7 @@ __deprecated ajint ajFileWriteInt2(AjPFile thys, ajshort i)
 
 size_t ajWritebinInt4(AjPFile file, ajint i4)
 {
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     ajint j;
 
     j = i4;
@@ -1502,7 +1509,7 @@ __deprecated ajint ajFileWriteInt4(AjPFile thys, ajint i)
 
 size_t ajWritebinInt8(AjPFile file, ajlong i8)
 {
-#ifdef BENDIAN
+#ifdef WORDS_BIGENDIAN
     ajlong j;
 
     j = i8;
@@ -1531,7 +1538,8 @@ size_t ajWritebinNewline(AjPFile file)
     size_t ret;
 
 #ifdef WIN32
-    ret = fwrite("\r\n", 1, 2, file->fp);
+    /*ret = fwrite("\r\n", 1, 2, file->fp);*/
+    ret = fwrite("\n", 1, 1, file->fp);
 #else
     ret = fwrite("\n", 1, 1, file->fp);
 #endif
@@ -1576,7 +1584,8 @@ size_t ajWritebinStr(AjPFile file, const AjPStr str, size_t len)
     {
         if((j-i) < 20)
             k = j-i;
-        fwrite("\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", k, 1, file->fp);
+        fwrite("\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
+               k, 1, file->fp);
     }
 
     return ret;
@@ -1655,7 +1664,9 @@ AjBool ajWritelineNewline(AjPFile file, const AjPStr line)
         return ajFalse;
 
 #ifdef WIN32
-    if(!fwrite("\r\n", 1, 2, file->fp))
+    /*if(!fwrite("\r\n", 1, 2, file->fp))
+      return ajFalse;*/
+    if(!fwrite("\n", 1, 1, file->fp))
         return ajFalse;
 #else
     if(!fwrite("\n", 1, 1, file->fp))
@@ -1838,8 +1849,11 @@ AjBool ajBuffreadLinePos(AjPFilebuff buff, AjPStr* Pdest, ajlong* Ppos)
 	    }
 	}
 	else
-	    ajFatal("Error reading from file '%S'\n",
+        {
+	    ajWarn("Error reading from file '%S'",
 		    ajFileGetNameS(buff->File));
+            return ajFalse;
+        }
     }
     
     if(buff->Nobuff)

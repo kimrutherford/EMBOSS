@@ -1,8 +1,8 @@
 application: showdb [
   documentation: "Displays information on configured databases"
-  groups: "Display, Information"
-  relations: "/edam/topic/0000088 Literature and documentation"
-  relations: "/edam/operation/0000516 Database information retrieval"
+  groups: "Data resources"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000516 operation Data retrieval (database annotation)"
 ]
 
 section: input [
@@ -16,7 +16,7 @@ section: input [
     information: "Name of a single database to give information
                   on"
     knowntype: "emboss database name"
-    relations:  "/edam/data/0001056 Database name"                          
+    relations: "EDAM:0001056 identifier Database name"
   ]
 
 endsection: input
@@ -31,28 +31,77 @@ section: additional [
     default: "N"
     information: "Format output as an HTML table"
     outputmodifier: "Y"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: protein [
     additional: "Y"
     default: "Y"
     information: "Display protein databases"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: nucleic [
     additional: "Y"
     default: "Y"
-    information: "Display nucleic acid databases"
-    relations: "/edam/data/0002135 Toggle"                                     
+    information: "Display nucleotide databases"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: sequence [
+    additional: "Y"
+    default: "Y"
+    information: "Display general sequence databases"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: feature [
+    additional: "Y"
+    default: "Y"
+    information: "Display feature annotation databases"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: text [
+    additional: "Y"
+    default: "Y"
+    information: "Display text databases"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: taxonomy [
+    additional: "Y"
+    default: "Y"
+    information: "Display taxonomy databases"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: resource [
+    additional: "Y"
+    default: "Y"
+    information: "Display resource databases"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: assembly [
+    additional: "Y"
+    default: "Y"
+    information: "Display sequence assembly databases"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: obo [
+    additional: "Y"
+    default: "Y"
+    information: "Display obo bio-ontology databases"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: full [
     additional: "Y"
     default: "N"
     information: "Display all columns"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: methods [
@@ -61,7 +110,7 @@ section: additional [
     information: "Display 'methods' column"
     help: "This displays the access methods that can be used on this
            database, for all, query or ID access"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: fields [
@@ -70,7 +119,7 @@ section: additional [
     information: "Display 'fields' column"
     help: "This displays the search fields that can be used on this
            database, other than the standard 'id' or 'acc' fields."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: defined [
@@ -79,14 +128,14 @@ section: additional [
     information: "Display 'defined' column"
     help: "This displays a short name for the file containing the
            database definition"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: release [
     additional: "Y"
     default: "$(full)"
     information: "Display 'release' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: additional
@@ -105,43 +154,43 @@ section: advanced [
            '-nohead -notype -noid -noquery -noall' \
            to get only the comment output, you can specify \
            '-only -comment'"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: heading [
     default: "@(!$(only))"
     information: "Display column headings"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: type [
     default: "@(!$(only))"
     information: "Display 'type' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: id [
     default: "@(!$(only))"
     information: "Display 'id' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: query [
     default: "@(!$(only))"
     information: "Display 'qry' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: all [
     default: "@(!$(only))"
     information: "Display 'all' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: comment [
     default: "@(!$(only))"
     information: "Display 'comment' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -155,7 +204,7 @@ section: output [
     additional: "Y"
     default: "stdout"
     knowntype: "showdb output"
-    relations:  "/edam/data/0000957 Database metadata"                         
+    relations: "EDAM:0000957 data Database metadata"
   ]
 
 endsection: output

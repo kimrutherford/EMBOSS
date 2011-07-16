@@ -1,11 +1,12 @@
 All-against-all word comparison of a sequence set
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     Sequence set filename and optional format,
                                   or reference (input USA)
    -wordsize           integer    [4] Word size (Integer 2 or more)
   [-outfile]           align      [*.seqmatchall] Output alignment file name
+                                  (default -aformat match)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)

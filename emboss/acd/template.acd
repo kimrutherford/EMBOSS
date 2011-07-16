@@ -1,0 +1,65 @@
+application: 
+[
+  documentation: ""
+  groups: ""
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
+  relations: "EDAM: topic "
+  relations: "EDAM: operation "
+]
+
+
+
+
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+endsection: input
+
+
+
+
+
+section: required 
+[
+  information: "Required section"
+  type: "page"
+]
+endsection: required
+
+
+
+
+
+section: additional
+[
+  information: "Additional section"
+  type: "page"
+]
+endsection: additional
+
+
+
+
+
+section: advanced
+[
+  information: "Advanced section"
+  type: "page"
+]
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+endsection: output

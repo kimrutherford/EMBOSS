@@ -1,0 +1,71 @@
+application: dbxcompress [
+  groups: "Utils:Database indexing"
+  documentation: "Compress an uncompressed dbx index"
+  gui: "no"
+  batch: "no"
+  cpu: "medium"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000228 operation Data index analysis"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: dbname [
+    parameter: "Y"
+    maxlength: "19"
+    minlength: "2"
+    information: "EMBOSS database name"
+    knowntype: "emboss database name"
+    pattern: "[A-z][A-z0-9_]+"
+    relations: "EDAM:0001056 identifier Database name"
+  ]
+
+  string: field [
+    parameter: "y"
+    information: "EMBOSS database field"
+    knowntype: "emboss database field"
+    default: ""
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  directory: indexdir [
+    default: ""
+    information: "Index directory (optional)"
+    knowntype: "emboss database index"
+    relations: "EDAM:0001049 identifier Directory name"
+    nullok: "Y"
+    nulldefault: "Y"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    standard: "y"
+    name: "$(dbname)"
+    knowntype: "dbxcompress output"
+    relations: "EDAM:0000969 data Text"
+  ]
+
+endsection: output

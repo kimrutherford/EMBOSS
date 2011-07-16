@@ -323,22 +323,24 @@ void ajMemSetZero(void* ptr, size_t count, size_t nbytes)
 ** Frees memory using 'free' and zeroes the pointer. Ignores NULL
 ** (uninitialised) pointers.
 **
-** @param [u] ptr [void*] Pointer to memory previously allocated with 'malloc'
+** @param [u] ptr [void**] Pointer to memory previously allocated with 'malloc'
 ** @@
 ******************************************************************************/
 
-void ajMemFree(void* ptr)
+void ajMemFree(void** ptr)
 {
-    if(ptr)
-    {
-	free(ptr);
-	ptr = NULL;
+    if(!ptr)
+        return;
+    if(!*ptr)
+        return;
+        
+    free(*ptr);
+    *ptr = NULL;
 
 #ifdef AJ_SAVESTATS
-	memCount--;
-	memFree++;
+    memCount--;
+    memFree++;
 #endif
-    }
 
     return;
 }

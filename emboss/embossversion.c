@@ -42,12 +42,15 @@ int main(int argc, char **argv)
     full = ajAcdGetBoolean("full");
     outfile = ajAcdGetOutfile("outfile");
 
+    tmpstr = ajStrNewRes(128);
+
     if (!full) {
-	ajFmtPrintF(outfile,"%s\n", VERSION);
+        ajStrAssignS(&tmpstr, ajNamValueVersion());
+	if (!ajStrGetLen(tmpstr))
+	    ajStrAssignC(&tmpstr, "(unknown)");
+	ajFmtPrintF(outfile, "%S\n", tmpstr);
     }
     else {
-	tmpstr = ajStrNewRes(128);
-
         ajStrAssignS(&tmpstr, ajNamValuePackage());
 	if (!ajStrGetLen(tmpstr))
 	    ajStrAssignC(&tmpstr, "(unknown)");
@@ -77,6 +80,14 @@ int main(int argc, char **argv)
 	if (!ajStrGetLen(tmpstr))
 	    ajStrAssignC(&tmpstr, "(unknown)");
 	ajFmtPrintF(outfile, "BaseDirectory: %S\n", tmpstr);
+	    
+	if (!ajNamGetValueC("standard", &tmpstr))
+	    ajStrAssignC(&tmpstr, "(default)");
+	ajFmtPrintF(outfile, "Emboss_Standard: %S\n", tmpstr);
+	    
+	if (!ajNamGetValueC("userdir", &tmpstr))
+	    ajStrAssignC(&tmpstr, "(default)");
+	ajFmtPrintF(outfile, "Emboss_UserDir: %S\n", tmpstr);
 	    
 	if (!ajNamGetValueC("acdroot", &tmpstr))
 	    ajStrAssignC(&tmpstr, "(default)");
@@ -140,6 +151,7 @@ int main(int argc, char **argv)
 	    
     }
 
+    ajStrDel(&tmpstr);
     ajFileClose(&outfile);
 
     embExit();

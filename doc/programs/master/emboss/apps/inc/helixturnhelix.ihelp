@@ -1,10 +1,11 @@
 Identify nucleic acid-binding motifs in protein sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
   [-outfile]           report     [*.helixturnhelix] Output report file name
+                                  (default -rformat motif)
 
    Additional (Optional) qualifiers:
    -mean               float      [238.71] Mean value (Number from 1.000 to

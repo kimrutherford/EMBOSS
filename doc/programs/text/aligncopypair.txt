@@ -16,7 +16,7 @@ Function
 Description
 
    aligncopypair reads a set of aligned sequences and reports the
-   alignment one pair ar a time using any of the standard EMBOSS alignment
+   alignment one pair at a time using any of the standard EMBOSS alignment
    formats.
 
 Usage
@@ -36,11 +36,12 @@ Output alignment [globins.aligncopypair]:
 Command line arguments
 
 Reads and writes pairs from alignments
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     File containing a sequence alignment.
   [-outfile]           align      [*.aligncopypair] Output alignment file name
+                                  (default -aformat simple)
 
    Additional (Optional) qualifiers:
    -name               string     Name of the alignment (Any string)
@@ -99,7 +100,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   aligncopypair reads any normal sequence USAs.
+   aligncopypair reads aligned nucleotide or protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -166,11 +184,12 @@ Output file format
    with an unlimited number of sequences, while others are only for pairs
    of sequences.
 
-   The available multiple alignment format names are: unknown, multiple,
-   simple, fasta, msf, trace, srs
+   The available multiple alignment format names are: multiple, simple,
+   fasta, msf, clustal, mega, meganon, nexus,, nexusnon, phylip,
+   phylipnon, selex, treecon, tcoffee, debug, srs.
 
    The available pairwise alignment format names are: pair, markx0,
-   markx1, markx2, markx3, markx10, srspair, score
+   markx1, markx2, markx3, markx10, match, sam, bam, score, srspair
 
    See: http://emboss.sf.net/docs/themes/AlignFormats.html for further
    information on alignment formats.
@@ -181,7 +200,7 @@ Output file format
 
 ########################################
 # Program: aligncopypair
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: aligncopypair
 #    -sequences ../../data/globins.msf
 # Align_format: simple
@@ -355,6 +374,7 @@ See also
    extractseq       Extract regions from a sequence
    featcopy         Reads and writes a feature table
    featreport       Reads and writes a feature table
+   feattext         Return a feature table original text
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
@@ -375,6 +395,7 @@ See also
    nthseqset        Reads and writes (returns) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
+   seqcount         Reads and counts sequences
    seqret           Reads and writes (returns) sequences
    seqretsetall     Reads and writes (returns) many sets of sequences
    seqretsplit      Reads sequences and writes them to individual files

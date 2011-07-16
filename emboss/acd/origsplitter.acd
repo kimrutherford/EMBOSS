@@ -2,8 +2,8 @@ application: origsplitter [
   documentation: "Split a sequence into (overlapping) smaller
                   sequences"
   groups: "Edit"
-  relations: "/edam/topic/0000156 Sequence editing"
-  relations: "/edam/operation/0000369 Sequence cutting"
+    relations: "EDAM:0000156 topic Sequence editing"
+    relations: "EDAM:0000369 operation Sequence cutting"
 ]
 
 section: input [
@@ -14,9 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "any"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -31,7 +29,7 @@ section: additional [
     minimum: "1"
     default: "10000"
     information: "Size to split at"
-    relations: "/edam/data/0001249 Sequence length"
+    relations: "EDAM:0001249 data Sequence length"
   ]
 
   integer: overlap [
@@ -40,7 +38,7 @@ section: additional [
     maximum: "@($(size)-1)"
     default: "0"
     information: "Overlap between split sequences"
-    relations: "/edam/data/0001249 Sequence length"
+    relations: "EDAM:0001249 data Sequence length"
   ]
 
 endsection: additional
@@ -53,7 +51,7 @@ section: advanced [
   boolean: addoverlap [
     default: "N"
     information: "Add overlap to size"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -65,9 +63,7 @@ section: output [
 
   seqoutall: outseq [
     parameter: "Y"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: output

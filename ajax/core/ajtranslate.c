@@ -1267,7 +1267,8 @@ void ajTrnSeqAltRevSeq(const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep)
 ** @rename ajTrnSeqAltRevSeq
 */
 
-__deprecated void ajTrnAltRevSeq(const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep)
+__deprecated void ajTrnAltRevSeq(const AjPTrn trnObj, const AjPSeq seq,
+                                 AjPStr *pep)
 {
     ajTrnSeqAltRevSeq(trnObj, seq, pep);
     return;
@@ -1345,8 +1346,10 @@ void ajTrnSeqFrameC(const AjPTrn trnObj,
 ** @rename ajTrnSeqFrameC
 */
 
-__deprecated void ajTrnCFrame(const AjPTrn trnObj, const char *seq, ajint len, ajint frame,
-		 AjPStr *pep)
+__deprecated void ajTrnCFrame(const AjPTrn trnObj, const char *seq,
+                              ajint len, ajint frame,
+                              AjPStr *pep)
+    
 {
 
     ajTrnSeqFrameC(trnObj, seq, len, frame, pep);
@@ -1469,8 +1472,8 @@ void ajTrnSeqFrameSeq(const AjPTrn trnObj, const AjPSeq seq, ajint frame,
 ** @rename ajTrnSeqFrameSeq
 */
 
-__deprecated void ajTrnSeqFrame(const AjPTrn trnObj, const AjPSeq seq, ajint frame,
-		   AjPStr *pep)
+__deprecated void ajTrnSeqFrame(const AjPTrn trnObj, const AjPSeq seq,
+                                ajint frame, AjPStr *pep)
 {
     ajTrnSeqFrameSeq(trnObj, seq, frame, pep);
     return;
@@ -1943,7 +1946,7 @@ __deprecated AjPStr ajTrnGetFileName(const AjPTrn thys)
 const AjPStr ajTrnName(ajint trnFileNameInt)
 {
     const AjPStr ret = NULL;
-    AjPStr unknown = NULL;
+    static AjPStr unknown = NULL;
     AjPFile indexf = NULL;
     AjPStr indexfname = NULL;
     AjPStr line = NULL;
@@ -1952,15 +1955,12 @@ const AjPStr ajTrnName(ajint trnFileNameInt)
     AjPStr tok2 = NULL;
     AjPStrTok handle = NULL;
 
-    if(!unknown)
-	unknown = ajStrNewC("unknown");
-
     if(!trnCodes)
     {
 	if(!indexfname)
 	    indexfname = ajStrNewC("EGC.index");
 
-	trnCodes = ajTablestrNewLen(20);
+	trnCodes = ajTablestrNew(20);
 
 	indexf = ajDatafileNewInNameS(indexfname);
 
@@ -1986,9 +1986,8 @@ const AjPStr ajTrnName(ajint trnFileNameInt)
     }
 
     ajFmtPrintS(&tmpstr, "%d", trnFileNameInt);
-    ret = (AjPStr) ajTableFetch(trnCodes, tmpstr);
+    ret = ajTableFetchS(trnCodes, tmpstr);
 
-    ajStrDel(&unknown);
     ajStrDel(&indexfname);
     ajStrDel(&tok1);
     ajStrDel(&tok2);
@@ -1998,6 +1997,9 @@ const AjPStr ajTrnName(ajint trnFileNameInt)
 
     if(ret)
 	return ret;
+
+    if(!unknown)
+	unknown = ajStrNewC("unknown");
 
     return unknown;
 }

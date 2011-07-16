@@ -240,6 +240,7 @@ public class ResultsMenuBar extends JMenuBar
     //Font size selection
     String sizes[] = {"10", "12", "14", "16", "18"};
     final JComboBox fntSize = new JComboBox(sizes);
+    fntSize.setToolTipText("font size");
     Font fnt = fed.getFont();
     fntSize.setSelectedItem(Integer.toString(fnt.getSize()));
     fntSize.setPreferredSize(fntSize.getMinimumSize());
@@ -267,7 +268,7 @@ public class ResultsMenuBar extends JMenuBar
     String styles[] = {"Plain","Bold","Italic"};
     final JComboBox cbFonts = new JComboBox(styles);
     cbFonts.setMaximumSize(cbFonts.getPreferredSize());
-    cbFonts.setToolTipText("Available styles");
+    cbFonts.setToolTipText("font style");
     cbFonts.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -466,7 +467,7 @@ public class ResultsMenuBar extends JMenuBar
     //Font size selection
     String sizes[] = {"10", "12", "14", "16", "18"};
     final JComboBox fntSize = new JComboBox(sizes);
-    fntSize.setToolTipText("Font size");
+    fntSize.setToolTipText("font size");
     fntSize.setSelectedItem("12");
     fntSize.setPreferredSize(fntSize.getMinimumSize());
     fntSize.setMaximumSize(fntSize.getMinimumSize());
@@ -499,7 +500,7 @@ public class ResultsMenuBar extends JMenuBar
     String styles[] = {"Plain","Bold","Italic"};
     final JComboBox cbFonts = new JComboBox(styles);
     cbFonts.setMaximumSize(cbFonts.getPreferredSize());
-    cbFonts.setToolTipText("Available font styles");
+    cbFonts.setToolTipText("font style");
     cbFonts.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)

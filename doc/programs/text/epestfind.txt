@@ -133,7 +133,7 @@ Created epestfind.ps
 Command line arguments
 
 Finds PEST motifs as potential proteolytic cleavage sites
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence USA to be analysed.
@@ -147,7 +147,7 @@ Version: EMBOSS:6.3.0
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers:
    -mwdata             datafile   [Emolwt.dat] Molecular weights data file
@@ -223,7 +223,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   epestfind reads any normal protein sequence USA.
+   epestfind reads a single protein sequence.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -278,7 +295,23 @@ SQ   SEQUENCE   477 AA;  53194 MW;  8B5334A77DB9467B CRC64;
 
 Output file format
 
-   epestfind outputs a graph to the specified graphics device.
+   The output is to the specified graphics device.
+
+   The results can be output in one of several formats by using the
+   command-line qualifier -graph xxx, where 'xxx' is replaced by the name
+   of the required device. Support depends on the availability of
+   third-party software packages.
+
+   The device names that output to a file are: ps (postscript), cps
+   (colourps), png, gif, pdf, svg, hpgl, hp7470, hp7580, das, data.
+
+   The other available device names are: meta, x11 (xwindows), tek
+   (tek4107t), tekt (tektronix), xterm, text.
+
+   Output can be turned off by specifying none (null).
+
+   See: http://emboss.sf.net/docs/themes/GraphicsDevices.html for further
+   information on supported devices.
 
   Output files for usage example
 
@@ -511,16 +544,11 @@ See also
 
    Program name     Description
    antigenic        Finds antigenic sites in proteins
-   digest           Reports on protein proteolytic enzyme or reagent cleavage sites
    fuzzpro          Search for patterns in protein sequences
    fuzztran         Search for patterns in protein sequences (translated)
-   helixturnhelix   Identify nucleic acid-binding motifs in protein
-                    sequences
-   oddcomp          Identify proteins with specified sequence word composition
    patmatdb         Searches protein sequences with a sequence motif
    patmatmotifs     Scan a protein sequence with motifs from the PROSITE
                     database
-   pepcoil          Predicts coiled coil regions in protein sequences
    preg             Regular expression search of protein sequence(s)
    pscan            Scans protein sequence(s) with fingerprints from the PRINTS
                     database

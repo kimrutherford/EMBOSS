@@ -1,0 +1,304 @@
+                                  edamisid
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Find EDAM ontology terms by is_identifier_of relation
+
+Description
+
+   edamisid searches the is_identifier_of relations of EDAM terms and
+   returns matching terms. The input is read from the installed EDAM
+   database. The ontology term output can be written to screen, to file,
+   or passed to another program. A wide range of standard ontology term
+   formats may be specified for input and output.
+
+   Optionally the search can be restricted to specified EDAM namespaces.
+
+Usage
+
+   Here is a sample session with edamisid
+
+
+% edamisid sequence
+Find EDAM ontology terms by is_identifier_of relation
+Obo output file [edamisid.obo]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Find EDAM ontology terms by is_identifier_of relation
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-identifier]        string     Identifier(s) to search for in ontology (Any
+                                  string)
+  [-outfile]           outobo     [*.edamisid] Output ontology term file name
+
+   Additional (Optional) qualifiers:
+   -namespace          menu       [*] By default all terms are returned.
+                                  Searches can be limited to one or a few
+                                  namespaces. (Values: data (Data entity);
+                                  entity (Biological entity); format (Data
+                                  format); identifier (Identifier); operation
+                                  (Bioinformatics operation); resource (Data
+                                  resource); topic (Field of bioinformatics
+                                  study))
+
+   Advanced (Unprompted) qualifiers:
+   -sensitive          boolean    [N] By default, the query keywords are
+                                  matched against the EDAM term names (and
+                                  synonyms) only. This option also matches the
+                                  keywords against the EDAM term definitions
+                                  and will therefore (typically) report more
+                                  matches.
+   -subclasses         boolean    [N] Extend the query matches to include all
+                                  terms which are specialisations (EDAM
+                                  sub-classes) of the matched type.
+   -obsolete           boolean    [N] The default behaviour is to not use or
+                                  return obsolete terms. This option if set
+                                  will include all terms.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Ontology term output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   edamisid queries the EDAM ontology.
+
+Output file format
+
+   The output is a standard EMBOSS ontology term file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -oformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: obo,
+   brief, list, html, xml, json, excel.
+
+   See: http://emboss.sf.net/docs/themes/OntologyFormats.html for further
+   information on ontology formats.
+
+  Output files for usage example
+
+  File: edamisid.obo
+
+[Term]
+id: EDAM:0001063
+name: Sequence identifier
+namespace: identifier
+def: An identifier of molecular sequence(s) or entries from a molecular sequence
+ database.
+subset: identifier
+is_a: EDAM:0000976 ! Identifier (typed)
+relationship: is_identifier_of EDAM:0002044 ! Sequence
+
+[Term]
+id: EDAM:0001094
+name: Sequence type
+namespace: data
+def: A label (text token) describing a type of molecular sequence.
+comment: Sequence type might reflect the molecule (protein, nucleic acid etc) or
+ the sequence itself (gapped, ambiguous etc).
+subset: data
+is_a: EDAM:0002100 ! Type
+is_a: EDAM:0002534 ! Sequence parameter
+relationship: is_identifier_of EDAM:0002044 ! Sequence
+relationship: is_identifier_of EDAM:0000849 ! Sequence record
+
+[Term]
+id: EDAM:0001066
+name: Sequence alignment ID
+namespace: identifier
+def: Identifier of a molecular sequence alignment, for example a record from an
+alignment database.
+subset: identifier
+is_a: EDAM:0000976 ! Identifier (typed)
+is_a: EDAM:0002091 ! Accession
+relationship: is_identifier_of EDAM:0000863 ! Sequence alignment
+
+[Term]
+id: EDAM:0001099
+name: UniProt accession (extended)
+namespace: identifier
+def: Accession number of a UniProt (protein sequence) database entry. May contai
+n version or isoform number.
+subset: identifier
+regex: "[A-NR-Z][0-9][A-Z][A-Z0-9][A-Z0-9][0-9]" "[OPQ][0-9][A-Z0-9][A-Z0-9][A-Z
+0-9][0-9]" "[A-NR-Z][0-9][A-Z][A-Z0-9][A-Z0-9][0-9].[0-9]+" "[OPQ][0-9][A-Z0-9][
+A-Z0-9][A-Z0-9][0-9].[0-9]+" "[A-NR-Z][0-9][A-Z][A-Z0-9][A-Z0-9][0-9]-[0
+is_a: EDAM:0003021 ! UniProt accession
+relationship: is_identifier_of EDAM:0001208 ! Protein sequence
+relationship: is_identifier_of EDAM:0000849 ! Sequence record
+
+[Term]
+id: EDAM:0002621
+name: TAIR accession (protein)
+namespace: identifier
+def: Identifier of a protein sequence from the TAIR database.
+subset: identifier
+regex: "AASequence:[0-9]{10}"
+is_a: EDAM:0001096 ! Sequence identifier (protein)
+
+
+  [Part of this file has been deleted for brevity]
+
+
+[Term]
+id: EDAM:0001115
+name: Sequence profile ID
+namespace: identifier
+def: Identifier of a sequence profile.
+comment: A sequence profile typically represents a sequence alignment.
+subset: identifier
+is_a: EDAM:0000976 ! Identifier (typed)
+is_a: EDAM:0002091 ! Accession
+relationship: is_identifier_of EDAM:0001354 ! Sequence profile
+
+[Term]
+id: EDAM:0001096
+name: Sequence accession (protein)
+namespace: identifier
+def: Accession number of a protein sequence database entry.
+subset: identifier
+synonym: "Protein sequence accession number" EXACT []
+is_a: EDAM:0001093 ! Sequence accession
+relationship: is_identifier_of EDAM:0002976 ! Protein sequence
+
+[Term]
+id: EDAM:0001097
+name: Sequence accession (nucleic acid)
+namespace: identifier
+def: Accession number of a nucleotide sequence database entry.
+subset: identifier
+synonym: "Nucleotide sequence accession number" EXACT []
+is_a: EDAM:0001093 ! Sequence accession
+relationship: is_identifier_of EDAM:0002977 ! Nucleotide sequence
+
+[Term]
+id: EDAM:0001064
+name: Sequence set ID
+namespace: identifier
+def: An identifier of a set of molecular sequence(s).
+subset: identifier
+is_a: EDAM:0000976 ! Identifier (typed)
+is_a: EDAM:0002091 ! Accession
+relationship: is_identifier_of EDAM:0000850 ! Sequence set
+
+[Term]
+id: EDAM:0001112
+name: Sequence cluster ID
+namespace: identifier
+def: An identifier of a cluster of molecular sequence(s).
+subset: identifier
+is_a: EDAM:0001064 ! Sequence set ID
+relationship: is_identifier_of EDAM:0001235 ! Sequence cluster
+
+
+Data files
+
+   The EDAM Ontology is included in EMBOSS as local database edam.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                     Program name                      Description
+                    drfinddata      Find public databases by data type
+                    drfindformat    Find public databases by format
+                    drfindid        Find public databases by identifier
+                    drfindresource  Find public databases by resource
+                    edamdef         Find EDAM ontology terms by definition
+                    edamhasinput    Find EDAM ontology terms by has_input relation
+                    edamhasoutput   Find EDAM ontology terms by has_output relation
+                    edamisformat    Find EDAM ontology terms by is_format_of relation
+                    edamname        Find EDAM ontology terms by name
+                    godef           Find GO ontology terms by definition
+                    goname          Find GO ontology terms by name
+                    ontoget         Get ontology term(s)
+                    ontogetcommon   Get common ancestor for terms
+                    ontogetdown     Get ontology term(s) by parent id
+   ontogetobsolete  Get ontology ontology terms
+                    ontogetroot     Get ontology root terms by child identifier
+                    ontogetsibs     Get ontology term(s) by id with common parent
+                    ontogetup       Get ontology term(s) by id of child
+                    ontoisobsolete  Report whether an ontology term id is obsolete
+                    ontotext        Get ontology term(s) original full text
+                    wossdata        Finds programs by EDAM data
+                    wossinput       Finds programs by EDAM input data
+                    wossoperation   Finds programs by EDAM operation
+                    wossoutput      Finds programs by EDAM output data
+                    wossparam       Finds programs by EDAM parameter
+                    wosstopic       Finds programs by EDAM topic
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

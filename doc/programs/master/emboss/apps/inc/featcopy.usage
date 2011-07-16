@@ -1,4 +1,4 @@
-<b>Here is a sample session with featcopy</b>
+Here is a sample session with <b>featcopy</b>
 <p>
 
 <p>
@@ -6,8 +6,8 @@
 
 % <b>featcopy </b>
 Reads and writes a feature table
-Input features: <b>paamir.gff3</b>
-Features output [paamir.gff]: <b></b>
+Input feature table: <b>paamir.gff3</b>
+Features output [x13776.gff]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

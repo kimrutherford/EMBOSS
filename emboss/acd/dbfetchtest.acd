@@ -1,0 +1,36 @@
+application: dbfetchtest [
+  documentation: "Generates server cache file for WSDbfetch data sources"
+  groups: "Display, Information"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: servername [
+    default: "dbfetch"
+    information: "Name of the ws/dbfetch server defined in EMBOSS resource files"
+    parameter: "Y"
+  ]
+  
+  boolean: runtestqueries [
+    additional: "Y"
+    default: "N"
+    information: "Make calls using example identifiers"
+  ]
+
+endsection: input
+
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    additional: "Y"
+    default: "stdout"
+  ]
+
+endsection: output

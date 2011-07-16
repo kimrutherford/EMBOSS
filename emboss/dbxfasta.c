@@ -43,6 +43,10 @@ static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
 				  ajint idtype, const AjPStr line);
 static AjPRegexp dbxfasta_getExpr(const AjPStr idformat, ajint *type);
 
+EmbPBtreeField accfield = NULL;
+EmbPBtreeField svfield = NULL;
+EmbPBtreeField desfield = NULL;
+
 
 
 
@@ -60,6 +64,7 @@ int main(int argc, char **argv)
     AjPStr dbrs     = NULL;
     AjPStr release  = NULL;
     AjPStr datestr  = NULL;
+    AjBool compressed;
 
     AjPStr directory;
     AjPStr indexdir;
@@ -107,8 +112,11 @@ int main(int argc, char **argv)
     dbrs       = ajAcdGetString("dbresource");
     release    = ajAcdGetString("release");
     datestr    = ajAcdGetString("date");
+    compressed = ajAcdGetBoolean("compressed");
 
     entry = embBtreeEntryNew();
+    if(compressed)
+        embBtreeEntrySetCompressed(entry);
     tmpstr = ajStrNew();
     
     idobj   = ajBtreeIdNew();
@@ -120,9 +128,37 @@ int main(int argc, char **argv)
     embBtreeSetDbInfo(entry,dbname,dbrs,datestr,release,dbtype,directory,
 		      indexdir);
 
+    for(i=0; i< nfields; i++)
+    {
+        if(ajStrMatchC(fieldarray[i], "acc"))
+        {
+            accfield = embBtreeGetFieldS(entry, fieldarray[i]);
+            if(compressed)
+                embBtreeFieldSetCompressed(accfield);
+        }
+        else if(ajStrMatchC(fieldarray[i], "sv"))
+        {
+            svfield = embBtreeGetFieldS(entry, fieldarray[i]);
+            if(compressed)
+                embBtreeFieldSetCompressed(svfield);
+        }
+        else if(ajStrMatchC(fieldarray[i], "des"))
+        {
+            desfield = embBtreeGetFieldS(entry, fieldarray[i]);
+            if(compressed)
+                embBtreeFieldSetCompressed(desfield);
+        }
+        else if(!ajStrMatchC(fieldarray[i], "id"))
+            ajErr("Unknown field '%S' specified for indexing", fieldarray[i]);
+    }
+
     embBtreeGetRsInfo(entry);
 
     nfiles = embBtreeGetFiles(entry,directory,filename,exclude);
+    if(!nfiles)
+        ajDie("No input files in '%S' matched filename '%S'",
+              directory, filename);
+
     embBtreeWriteEntryFile(entry);
 
     embBtreeOpenCaches(entry);
@@ -173,38 +209,38 @@ int main(int argc, char **argv)
 		ajBtreeHybInsertId(entry->idcache,hyb);
 	    }
 
-	    if(entry->do_accession)
-                while(ajListPop(entry->ac,(void **)&word))
+	    if(accfield)
+                while(ajListPop(accfield->data,(void **)&word))
                 {
 		    ajStrFmtLower(&word);
                     ajStrAssignS(&hyb->key1,word);
                     hyb->dbno = i;
 		    hyb->offset = entry->fpos;
 		    hyb->dups = 0;
-		    ajBtreeHybInsertId(entry->accache,hyb);
+		    ajBtreeHybInsertId(accfield->cache,hyb);
 		    ajStrDel(&word);
                 }
 
-	    if(entry->do_sv)
-                while(ajListPop(entry->sv,(void **)&word))
+	    if(svfield)
+                while(ajListPop(svfield->data,(void **)&word))
                 {
 		    ajStrFmtLower(&word);
                     ajStrAssignS(&hyb->key1,word);
                     hyb->dbno = i;
 		    hyb->offset = entry->fpos;
 		    hyb->dups = 0;
-		    ajBtreeHybInsertId(entry->svcache,hyb);
+		    ajBtreeHybInsertId(svfield->cache,hyb);
 		    ajStrDel(&word);
                 }
 
-	    if(entry->do_description)
-                while(ajListPop(entry->de,(void **)&word))
+	    if(desfield)
+                while(ajListPop(desfield->data,(void **)&word))
                 {
 		    ajStrFmtLower(&word);
 		    ajStrAssignS(&priobj->id,entry->id);
                     ajStrAssignS(&priobj->keyword,word);
                     priobj->treeblock = 0;
-                    ajBtreeInsertKeyword(entry->decache, priobj);
+                    ajBtreeInsertKeyword(desfield->cache, priobj);
 		    ajStrDel(&word);
                 }
 	}
@@ -485,30 +521,30 @@ static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
 
     ajStrFmtLower(&entry->id);
 
-    if(entry->do_accession && ajStrGetLen(ac))
+    if(accfield && ajStrGetLen(ac))
     {
 	str = ajStrNew();
 	ajStrAssignS(&str,ac);
-	ajListPush(entry->ac,(void *)str);
+	ajListPush(accfield->data,(void *)str);
     }
 
     if(ajStrGetLen(gi))
 	ajStrAssignS(&sv,gi);
 
-    if(entry->do_sv && ajStrGetLen(sv))
+    if(svfield && ajStrGetLen(sv))
     {
 	str = ajStrNew();
 	ajStrAssignS(&str,sv);
-	ajListPush(entry->ac,(void *)str);
+	ajListPush(svfield->data,(void *)str);
     }
     
-    if(entry->do_description && ajStrGetLen(de))
+    if(desfield && ajStrGetLen(de))
 	while(ajRegExec(dbxfasta_wrdexp,de))
 	{
 	    ajRegSubI(dbxfasta_wrdexp, 1, &tmpfd);
 	    str = ajStrNew();
 	    ajStrAssignS(&str,tmpfd);
-	    ajListPush(entry->de,(void *)str);
+	    ajListPush(desfield->data,(void *)str);
 	    ajRegPost(dbxfasta_wrdexp, &de);
 	}
 

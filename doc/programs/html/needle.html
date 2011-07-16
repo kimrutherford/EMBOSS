@@ -66,7 +66,7 @@ Needleman-Wunsch global alignment of two sequences
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with needle</b>
+Here is a sample session with <b>needle</b>
 <p>
 
 <p>
@@ -88,7 +88,7 @@ Output alignment [hba_human.needle]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Needleman-Wunsch global alignment of two sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -119,6 +119,7 @@ Version: EMBOSS:6.3.0
                                   penalty to control gap scoring. (Floating
                                   point number from 0.0 to 10.0)
   [-outfile]           align      [*.needle] Output alignment file name
+                                  (default -aformat srspair)
 
    Additional (Optional) qualifiers:
    -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -262,7 +263,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>align</td>
 <td>Output alignment file name</td>
-<td>Alignment output file</td>
+<td>(default -aformat srspair)</td>
 <td><i>&lt;*&gt;</i>.needle</td>
 </tr>
 
@@ -736,7 +737,36 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>needle</b> reads any 2 sequence USAs of the same type (DNA or protein).
+<b>needle</b> reads in two nucleotide or protein sequences. The second
+input can be more than one sequence to align to the first input
+sequence.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -978,20 +1008,21 @@ The output is a standard EMBOSS alignment file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-aformat xxx</b>, where 'xxx' is replaced by
+command-line qualifier <tt>-aformat xxx</tt>, where 'xxx' is replaced by
 the name of the required format.  Some of the alignment formats can cope
 with an unlimited number of sequences, while others are only for pairs
 of sequences.  
 
 <p>
 
-The available multiple alignment format names are: unknown, multiple,
-simple, fasta, msf, trace, srs
+The available multiple alignment format names are: multiple, simple,
+fasta, msf, clustal, mega, meganon, nexus,, nexusnon, phylip,
+phylipnon, selex, treecon, tcoffee, debug, srs.
 
 <p>
 
 The available pairwise alignment format names are: pair, markx0, markx1,
-markx2, markx3, markx10, srspair, score
+markx2, markx3, markx10, match, sam, bam, score, srspair
 
 <p>
 
@@ -1008,12 +1039,12 @@ for further information on alignment formats.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hba_human.needle </h3>
+<p><h3>File: hba_human.needle</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: needle
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: needle
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human

@@ -383,14 +383,18 @@ public class SectionPanel
           pan2.add(selectMatrix);
           pan2.add(Box.createHorizontalGlue());
         }
-        else if(att.startsWith("infile"))
+        else if(att.startsWith("infile") || att.startsWith("features"))
         {
           String info = parseAcd.getInfoParamValue(nf);
+          
+          if(info.length()==0)
+              info = att;
+          
           Box b = FileChooser.simpleFileChooser(info, textf[h]);
           pan.add(b);
         }
         else if(att.startsWith("dirlist") || att.startsWith("string") ||
-                att.startsWith("infile")  || att.startsWith("regexp") ||
+                att.startsWith("regexp") ||
                 att.startsWith("featout") )
         {
           if(parseAcd.isDefaultParamValueStr(nf)) 
@@ -416,7 +420,13 @@ public class SectionPanel
         {
           new SetOutFileCard(pan,textf[h],labelColor,sectionPane);
         }
-        else if(att.startsWith("outfile") || att.startsWith("datafile"))
+        else if(att.startsWith("outfile") ||
+                att.startsWith("datafile") ||
+                att.startsWith("outobo") ||
+                att.startsWith("outtext") ||
+                att.startsWith("outtaxon") ||
+                att.startsWith("outresource") ||
+                att.startsWith("outurl"))
         {
           if(parseAcd.isDefaultParamValueStr(nf))
             if( !(parseAcd.getDefaultParamValueStr(nf).startsWith("@") ||
@@ -436,17 +446,23 @@ public class SectionPanel
         {
           inSeq[h] = new SetInFileCard(sectionPane,h,db,
                               "Multiple Sequence Filename",
-                              appName,inSeqAttr,true,mysettings);
+                              appName,inSeqAttr,true,mysettings,att);
           pan.add(inSeq[h]);
         }
-        else if(att.startsWith("sequence") || att.startsWith("seqall"))
+        else if(att.startsWith("sequence") ||
+                att.startsWith("seqall") ||
+                att.startsWith("obo") ||
+                att.startsWith("text") ||
+                att.startsWith("taxon") ||
+                att.startsWith("resource") ||
+                att.startsWith("url"))
         {
           String tit = parseAcd.getInfoParamValue(nf);
-          if(tit.equals(""))
+          if(att.startsWith("seq") && tit.equals(""))
             tit = "Sequence Filename";
 
           inSeq[h] = new SetInFileCard(sectionPane,h,db,tit,
-                                appName,inSeqAttr,true,mysettings);
+                                appName,inSeqAttr,true,mysettings,att);
           pan.add(inSeq[h]);
         }
         else if(att.startsWith("filelist"))
@@ -802,7 +818,7 @@ public class SectionPanel
                 fname = sifc.getSequence(1);
               else
                 fname = sifc.getFileChosen();
-              fc = AjaxUtil.getFileOrDatabaseForAjax(fname,db,f,withSoap);
+              fc = Util.getFileOrDatabaseForAjax(fname,db,f,withSoap);
             }
             else                                     // Cut-n-Paste
             {
@@ -1118,7 +1134,8 @@ public class SectionPanel
               att.startsWith("string")  || att.startsWith("seqout") ||
               att.startsWith("outfile") || att.startsWith("matrix") ||
               att.startsWith("infile")  || att.startsWith("regexp") ||
-              att.startsWith("codon")   || att.startsWith("dirlist") )
+              att.startsWith("codon")   || att.startsWith("dirlist") ||
+              att.startsWith("features"))
       {
 
         if( (type.startsWith("add") || type.startsWith("stand")) 

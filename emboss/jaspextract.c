@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 
     directory = ajAcdGetDirectoryName("directory");
 
-    mtable = ajTablestrNewLen(PFMNUMGUESS);
+    mtable = ajTablestrNew(PFMNUMGUESS);
     jdirlist = ajListNew();
     
     jaspextract_openoutdirs();
@@ -429,7 +429,7 @@ static void jaspextract_writematrixfile(const AjPTable mtable,
     AjPStr key    = NULL;
     AjPStr fname  = NULL;
     AjPStr dest   = NULL;
-    AjPStr value  = NULL;
+    const AjPStr value  = NULL;
     
     AjPFile outf = NULL;
     
@@ -457,7 +457,7 @@ static void jaspextract_writematrixfile(const AjPTable mtable,
         q = strrchr(p,(int)'.');
         ajStrAssignSubC(&key,p,0,q-p-1);
         
-        value = (AjPStr) ajTableFetch(mtable, (const void *)key);
+        value = ajTableFetchS(mtable, key);
 
         if(value)
             ajFmtPrintF(outf,"%S",value);

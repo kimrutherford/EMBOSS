@@ -1,0 +1,752 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: showserver
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+showserver
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Displays information on configured servers
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<p><b>showserver</b> displays a table with the names, contents and access methods of the sequence servers configured for your EMBOSS installation.</p>
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>showserver</b>
+<p>
+Display information on the currently available servers: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showserver </b>
+Displays information on configured servers
+
+# Name            Scope                      Type                       ID  Qry All Count Cachefile                                                 URL                                              Comment
+# =============== ========================== ========================== ==  === === ===== ================================================== ================================================ =======
+biomart           sequence                   Sequence                   OK  -   -     158 /homes/pmr/local/share/EMBOSS/server.biomart        http://www.biomart.org:80/biomart/martservice    
+ensembl           sequence                   Sequence                   OK  -   -     125 /homes/pmr/local/share/EMBOSS/server.ensembl        mysql://anonymous@ensembldb.ensembl.org:5306/    Public Ensembl MySQL instance, use for small-scale queries only.
+ensemblgenomes    sequence                   Sequence                   OK  -   -     441 /homes/pmr/local/share/EMBOSS/server.ensemblgenomes mysql://anonymous@mysql.ebi.ac.uk:4157/          Public Ensembl Genomes MySQL instance, use for small-scale queries only.
+das               sequence features          Sequence Features          OK  -   -    1222 /homes/pmr/local/share/EMBOSS/server.dasregistry    http://www.dasregistry.org/das/                  DAS sequence/feature sources listed on the DAS registry
+tdas              sequence features          Sequence Features          OK  -   -    1222 /homes/pmr/.embossdata/qatests.server.dasregistry         http://www.dasregistry.org/das/                  sequence/feature sources listed on dasregistry.org
+tensembldasserver sequence features          Sequence Features          OK  -   -     220 /homes/pmr/.embossdata/qatests.server.ensembldasserver    http://www.ensembl.org/das/                      sequence/feature sources on ensembl das server
+dbfetch           sequence features text obo Sequence Features Text Obo OK  -   -      45 /homes/pmr/local/share/EMBOSS/server.dbfetch        http://www.ebi.ac.uk/Tools/dbfetch/              EBI dbfetch webservices(REST)
+dkfz              sequence features text obo Sequence Features Text Obo OK  OK  OK      1 /homes/pmr/local/share/EMBOSS/server.dkfz           http://www.dkfz.de/menu/cgi-bin/srs7.1.3.1/wgetz SRS from DKFZ Heidelberg
+tdbfetch          sequence features text obo Sequence Features Text Obo OK  -   -      45 /homes/pmr/.embossdata/qatests.server.tdbfetch            http://www.ebi.ac.uk/Tools/dbfetch/              EBI dbfetch webservices(REST)
+twsdbfetch        sequence features text obo Sequence Features Text Obo OK  -   -      45 /homes/pmr/.embossdata/qatests.server.twsdbfetch          http://www.ebi.ac.uk/ws/services/WSDbfetchDoclit EBI dbfetch webservices(SOAP)
+wsdbfetch         sequence features text obo Sequence Features Text Obo OK  -   -      45 /homes/pmr/local/share/EMBOSS/server.wsdbfetch      http://www.ebi.ac.uk/ws/services/WSDbfetchDoclit EBI dbfetch webservices(SOAP)
+ebeye             text                       Text                       OK  OK  -      62 /homes/pmr/local/share/EMBOSS/server.ebeye          http://www.ebi.ac.uk/ebisearch/service.ebi       EB-eye text search service that allows searching across EBI public databases
+tebeye            text                       Text                       OK  OK  -      62 /homes/pmr/.embossdata/qatests.server.ebeye               http://www.ebi.ac.uk/ebisearch/service.ebi       EBI ebeye webservices
+entrez            text                       Unknown                    OK  OK  -      47 /homes/pmr/local/share/EMBOSS/server.entrez                                                          
+mrs               text                       Unknown                    OK  OK  -      33 /homes/pmr/local/share/EMBOSS/server.mrs            http://mrs.cmbi.ru.nl/mrs-5/search               
+mrs3              text                       Unknown                    OK  OK  -      33 /homes/pmr/local/share/EMBOSS/server.mrs3           http://mrs.cmbi.ru.nl/mrs-3/plain.do             
+mrs4              text                       Unknown                    OK  OK  -      33 /homes/pmr/local/share/EMBOSS/server.mrs4           http://mrs.cmbi.ru.nl/mrs-web/plain.do           
+srs               text                       Unknown                    OK  OK  OK     21 /homes/pmr/local/share/EMBOSS/server.srs            http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz       SRS from EBI
+
+</pre></td></tr></table><p>
+<p>
+<p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Displays information on configured servers
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -server             string     Name of a single server to give information
+                                  on (Any string)
+   -showtypes          menu       [*] Show type(s) (Values: Protein (Protein
+                                  sequences); Nucleic (Nucleotide sequences);
+                                  Sequence (Any sequence data); Protfeatures
+                                  (Protein features); Nucfeatures (Nucleotide
+                                  features); Features (Any feature table
+                                  data); Obo (OBO ontology data); Resource
+                                  (Data resource); Taxonomy (Taxonomy data);
+                                  Assembly (Assembled short read data); Text
+                                  (text data); Html (HTML text data); Xml (XML
+                                  text data); Unknown (Unspecified datatype
+                                  to be defined for each database))
+   -html               boolean    [N] Format output as an HTML table
+   -full               boolean    [N] Display all columns
+   -methods            boolean    [$(full)] This displays the access methods
+                                  that can be used on this server, for all,
+                                  query or ID access
+   -[no]count          boolean    [Y] Display 'count' column
+   -[no]cachefile      boolean    [Y] Display 'cachefile' column
+   -[no]url            boolean    [Y] Display 'URL' column
+   -fields             boolean    [$(full)] This displays the search fields
+                                  that can be used on this server, other than
+                                  the standard 'id' or 'acc' fields.
+   -defined            boolean    [$(full)] This displays a short name for the
+                                  file containing the server definition
+   -serverversion      boolean    [$(full)] Display 'version' column
+   -sortby             menu       [type] Sort by (Values: defined (Definition
+                                  file short name); type (Datatype))
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers:
+   -only               toggle     [N] This is a way of shortening the command
+                                  line if you only want a few standard columns
+                                  to be displayed. Instead of specifying:
+                                  '-nohead -notype -noid -noquery -noall'
+                                  to get only the comment output, you can
+                                  specify
+                                  '-only -comment'
+   -heading            boolean    [@(!$(only))] Display column headings
+   -scope              boolean    [@(!$(only))] Display 'scope' column
+   -type               boolean    [@(!$(only))] Display 'type' column
+   -id                 boolean    [@(!$(only))] Display 'id' column
+   -query              boolean    [@(!$(only))] Display 'qry' column
+   -all                boolean    [@(!$(only))] Display 'all' column
+   -comment            boolean    [@(!$(only))] Display 'comment' column
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-server</td>
+<td>string</td>
+<td>Name of a single server to give information on</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-showtypes</td>
+<td>list</td>
+<td>Show type(s)</td>
+<td><table><tr><td>Protein</td> <td><i>(Protein sequences)</i></td></tr><tr><td>Nucleic</td> <td><i>(Nucleotide sequences)</i></td></tr><tr><td>Sequence</td> <td><i>(Any sequence data)</i></td></tr><tr><td>Protfeatures</td> <td><i>(Protein features)</i></td></tr><tr><td>Nucfeatures</td> <td><i>(Nucleotide features)</i></td></tr><tr><td>Features</td> <td><i>(Any feature table data)</i></td></tr><tr><td>Obo</td> <td><i>(OBO ontology data)</i></td></tr><tr><td>Resource</td> <td><i>(Data resource)</i></td></tr><tr><td>Taxonomy</td> <td><i>(Taxonomy data)</i></td></tr><tr><td>Assembly</td> <td><i>(Assembled short read data)</i></td></tr><tr><td>Text</td> <td><i>(text data)</i></td></tr><tr><td>Html</td> <td><i>(HTML text data)</i></td></tr><tr><td>Xml</td> <td><i>(XML text data)</i></td></tr><tr><td>Unknown</td> <td><i>(Unspecified datatype to be defined for each database)</i></td></tr></table></td>
+<td>*</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-html</td>
+<td>boolean</td>
+<td>Format output as an HTML table</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-full</td>
+<td>boolean</td>
+<td>Display all columns</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-methods</td>
+<td>boolean</td>
+<td>This displays the access methods that can be used on this server, for all, query or ID access</td>
+<td>Boolean value Yes/No</td>
+<td>$(full)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]count</td>
+<td>boolean</td>
+<td>Display 'count' column</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]cachefile</td>
+<td>boolean</td>
+<td>Display 'cachefile' column</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]url</td>
+<td>boolean</td>
+<td>Display 'URL' column</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-fields</td>
+<td>boolean</td>
+<td>This displays the search fields that can be used on this server, other than the standard 'id' or 'acc' fields.</td>
+<td>Boolean value Yes/No</td>
+<td>$(full)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-defined</td>
+<td>boolean</td>
+<td>This displays a short name for the file containing the server definition</td>
+<td>Boolean value Yes/No</td>
+<td>$(full)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-serverversion</td>
+<td>boolean</td>
+<td>Display 'version' column</td>
+<td>Boolean value Yes/No</td>
+<td>$(full)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-sortby</td>
+<td>list</td>
+<td>Sort by</td>
+<td><table><tr><td>defined</td> <td><i>(Definition file short name)</i></td></tr><tr><td>type</td> <td><i>(Datatype)</i></td></tr></table></td>
+<td>type</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-outfile</td>
+<td>outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-only</td>
+<td>toggle</td>
+<td>This is a way of shortening the command line if you only want a few standard columns to be displayed. Instead of specifying:
+'-nohead -notype -noid -noquery -noall'
+to get only the comment output, you can specify
+'-only -comment'</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-heading</td>
+<td>boolean</td>
+<td>Display column headings</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-scope</td>
+<td>boolean</td>
+<td>Display 'scope' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-type</td>
+<td>boolean</td>
+<td>Display 'type' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-id</td>
+<td>boolean</td>
+<td>Display 'id' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-query</td>
+<td>boolean</td>
+<td>Display 'qry' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-all</td>
+<td>boolean</td>
+<td>Display 'all' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-comment</td>
+<td>boolean</td>
+<td>Display 'comment' column</td>
+<td>Boolean value Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<b>showserver</b> examines the database servers defined for this
+EMBOSS installation and for the current user.
+
+<p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+
+<p>
+
+The output is a simple text table.
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="cachedas.html">cachedas</a></td>
+<td>Generates server cache file for DAS servers or for the DAS registry</td>
+</tr>
+
+<tr>
+<td><a href="cachedbfetch.html">cachedbfetch</a></td>
+<td>Generates server cache file for Dbfetch/WSDbfetch data sources</td>
+</tr>
+
+<tr>
+<td><a href="cacheebeyesearch.html">cacheebeyesearch</a></td>
+<td>Generates server cache file for EB-eye search domains</td>
+</tr>
+
+<tr>
+<td><a href="cacheensembl.html">cacheensembl</a></td>
+<td>Generates server cache file for an Ensembl server</td>
+</tr>
+
+<tr>
+<td><a href="dbtell.html">dbtell</a></td>
+<td>Display information about a public database</td>
+</tr>
+
+<tr>
+<td><a href="servertell.html">servertell</a></td>
+<td>Display information about a public server</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on configured databases</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

@@ -113,7 +113,7 @@ unsigned char ajSysCastItouc(ajint v);
 void          ajSysExit(void);
 AjBool        ajSysFileUnlinkC(const char* s);
 AjBool        ajSysFileUnlinkS(const AjPStr s);
-FILE*         ajSysFdFromSocket(struct AJSOCKET sock, const char *mode);
+FILE*         ajSysFdFromSocket(const struct AJSOCKET sock, const char *mode);
 AjBool        ajSysFileRmrfC(const char *path);
 AjBool        ajSysFileWhich(AjPStr *Pfilename);
 AjBool        ajSysFileWhichEnv(AjPStr *Pfilename, char * const env[]);
@@ -148,11 +148,12 @@ ajint         ajSysExecPathC(const char* cl);
 ajint         ajSysExecPathS(const AjPStr clstr);
 ajint         ajSysExecEnvC(const char* cls, char * const env[]);
 ajint         ajSysExecEnvS(const AjPStr clstr, char * const env[]);
-ajint         ajSysExecProgArgEnvNowaitC(const char *prog, char * const arg[],
-                                         char * const env[]);
-ajint         ajSysExecProgArgEnvNowaitS(const AjPStr progstr,
-                                         char * const arg[],
-                                         char * const env[]);
+ajint         ajSysExecprogNowaitC(const char *prog,
+                                   char * const arg[],
+                                   char * const env[]);
+ajint         ajSysExecprogNowaitS(const AjPStr progstr,
+                                   char * const arg[],
+                                   char * const env[]);
 ajint         ajSysExecOutnameC(const char* cl, const char* outfnametxt);
 ajint         ajSysExecOutnameS(const AjPStr clstr, const AjPStr outfname);
 ajint         ajSysExecOutnameAppendC(const char* cl,
@@ -183,6 +184,12 @@ char          *ajSysGetHomedir(void);
 */
 
 
+__deprecated ajint         ajSysExecProgArgEnvNowaitC(const char *prog,
+                                                      char * const arg[],
+                                                      char * const env[]);
+__deprecated ajint         ajSysExecProgArgEnvNowaitS(const AjPStr progstr,
+                                                      char * const arg[],
+                                                      char * const env[]);
 __deprecated void          ajSystem(const AjPStr cl);
 __deprecated void          ajSystemEnv(const AjPStr cl, char * const env[]);
 __deprecated void          ajSystemOut(const AjPStr cl, const AjPStr outfname);

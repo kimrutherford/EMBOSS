@@ -1,0 +1,13 @@
+Here is a sample session with <b>taxget</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>taxget ttax:9606 </b>
+Get taxon(s)
+Taxon output file [9606.tax]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

@@ -1,0 +1,220 @@
+                                  dbxreport
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Validate index and report internals for dbx databases
+
+Description
+
+   dbxreport reports statistics for the index fields of a database.
+
+Algorithm
+
+   The index directory is, by default, the index directory af an installed
+   database.
+
+   dbxreport reads the index file, reporting on the file name, the number
+   of index terms, the depth of the index tree, statistics of internal
+   page types and the free space in an uncompressed index.
+
+Usage
+
+   Here is a sample session with dbxreport
+
+
+% dbxreport -indexdir .
+Validate index and report internals for dbx databases
+EMBOSS database name: embl
+Index fields [id]: id,acc
+Output file [embl.dbxreport]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Validate index and report internals for dbx databases
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     EMBOSS database name (Any string from 2 to
+                                  19 characters, matching regular expression
+                                  /[A-z][A-z0-9_]+/)
+  [-fields]            string     [id] A list of index fields separated by
+                                  spaces or commas. (Any string)
+   -outfile            outfile    [*.dbxreport] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -indexdir           directory  Index directory (optional)
+   -fullreport         boolean    [N] Write full details to debug file
+
+   Associated qualifiers:
+
+   "-indexdir" associated qualifiers
+   -extension          string     Default file extension
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   dbxreport reads index files created by any of the EMBOSS 'dbx' indexing
+   applications.
+
+Output file format
+
+   The output is a text report of index statistics.
+
+  Output files for usage example
+
+  File: embl.dbxreport
+
+Index 'id' (.xid)
+ compressed:  Yes (Compressed)
+  cachesize:  100 (Size of cache)
+   pagesize: 2048 (Page size)
+  pagecount:    3 (Page count)
+      order:   71 (Tree order)
+     sorder:   99 (Order of secondary tree)
+      level:    0 (Level of tree)
+     slevel:    0 (Level of secondary tree)
+       fill:   46 (Entries per bucket)
+      sfill:  101 (Entries per secondary bucket)
+    kwlimit:   15 (Max key size)
+      count:    6 (Unique entries in index)
+  fullcount:    6 (Total entries in index)
+Identifier index 'id' index found with 3 pages
+      COUNT: 6
+   COUNTALL: 6
+       root: 1
+     bucket: 2
+...       keys: 1
+...      bkeys: 6
+...   total_size: 2143
+...    freespace: 5823, 94.8 of uncompressed
+      FOUND: 6
+   FOUNDALL: 6
+Index 'acc' (.xac)
+ compressed:  Yes (Compressed)
+  cachesize:  100 (Size of cache)
+   pagesize: 2048 (Page size)
+  pagecount:    6 (Page count)
+      order:   71 (Tree order)
+     sorder:   99 (Order of secondary tree)
+      level:    0 (Level of tree)
+     slevel:    0 (Level of secondary tree)
+       fill:   46 (Entries per bucket)
+      sfill:  101 (Entries per secondary bucket)
+    kwlimit:   15 (Max key size)
+      count:    7 (Unique entries in index)
+  fullcount:    9 (Total entries in index)
+Identifier index 'acc' index found with 6 pages
+      COUNT: 7
+   COUNTALL: 9
+       root: 1
+    numroot: 1
+     bucket: 2
+  numbucket: 2
+...       keys: 2
+...      bkeys: 7
+...      bdups: 1
+...      bxtra: 2
+...      nkeys: 3 (0)
+...   total_size: 2496
+...    freespace: 11764, 95.7 of uncompressed
+      FOUND: 7
+   FOUNDALL: 9
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                      Description
+                    dbiblast      Index a BLAST database
+                    dbifasta      Index a fasta file database
+                    dbiflat       Index a flat file database
+                    dbigcg        Index a GCG formatted database
+                    dbxcompress   Compress an uncompressed dbx index
+                    dbxedam       Index the EDAM ontology using b+tree indices
+                    dbxfasta      Index a fasta file database using b+tree indices
+                    dbxflat       Index a flat file database using b+tree indices
+                    dbxgcg        Index a GCG formatted database using b+tree indices
+                    dbxobo        Index an obo ontology using b+tree indices
+                    dbxresource   Index a data resource catalogue using b+tree indices
+                    dbxstat       Dump statistics for dbx databases
+                    dbxtax        Index NCBI taxonomy using b+tree indices
+   dbxuncompress    Uncompress a compressed dbx index
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

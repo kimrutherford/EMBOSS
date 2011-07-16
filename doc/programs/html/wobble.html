@@ -56,7 +56,7 @@ as a horizontal line across the plots.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with wobble</b>
+Here is a sample session with <b>wobble</b>
 <p>
 Here is a sample session with wobble. The example sequence is from Pseudomonas aeruginosa, which has a high G+C content and a very biased third codon position (if it can be G or C, it usually is). 
 <p>
@@ -83,7 +83,7 @@ Created wobble.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Plot third base position variability in a nucleotide sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -91,7 +91,7 @@ Version: EMBOSS:6.3.0
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
   [-outfile]           outfile    [*.wobble] Output file name
 
    Additional (Optional) qualifiers:
@@ -177,7 +177,7 @@ Version: EMBOSS:6.3.0
 <td>-graph</td>
 <td>xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -523,7 +523,34 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>wobble</b> reads a normal nucleic acid sequence USA.
+<b>wobble</b> reads a single nucleotide sequence.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -648,7 +675,39 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
     Output file format
 </H2>
 
-<b>wobble</b> plots a set of six graphs, one for each frame.
+<p>
+
+The output is to the specified graphics device.
+
+<p>
+
+The results can be output in one of several formats by using the
+command-line qualifier <b>-graph xxx</b>, where 'xxx' is replaced by
+the name of the required device. Support depends on the availability
+of third-party software packages.
+
+<p>
+The device names that output to a file are:
+ps (postscript), cps (colourps), png, gif, pdf, svg, hpgl, hp7470,
+hp7580, das, data.
+
+<p> The other available device names are: meta, x11 (xwindows), tek
+(tek4107t), tekt (tektronix), xterm, text.
+
+<p>
+Output can be turned off by specifying none (null).
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/GraphicsDevices.html">
+http://emboss.sf.net/docs/themes/GraphicsDevices.html</A>
+for further information on supported devices.
+
+<p>
+<p>
+<b>wobble</b> reports the GC content to a file and plots a set of six
+graphs, one for each frame.
 
 <p>
 
@@ -701,7 +760,7 @@ times the window length.
 <p>
 
 "Specifying ACG&T is meaningless" - When you use the option
-<b>-bases</b> to specify the bases to look for, it is pointless to
+<tt>-bases</tt> to specify the bases to look for, it is pointless to
 specify looking for all the possible bases as these should add to 100%
 all the time. 
 
@@ -729,6 +788,11 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th>
 <th>Description</th></tr>
+<tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
 <tr>
 <td><a href="getorf.html">getorf</a></td>
 <td>Finds and extracts open reading frames (ORFs)</td>

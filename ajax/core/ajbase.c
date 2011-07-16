@@ -122,7 +122,8 @@ static AjBool residueInit(void);
 ** @nam5rule AlphaToBin Converts to binary code type
 **
 ** @argrule Alpha base [ajint] Alphabetic character as an integer
-** @argrule Compare base2 [ajint] Comparison alphabetic character as a character
+** @argrule Compare base2 [ajint] Comparison alphabetic character as a
+**                                character
 **
 ** @valrule Compare [float] Probability bases are the same
 ** @valrule ToBin [ajint] Binary code in range 0 to 31
@@ -357,7 +358,7 @@ __deprecated char ajAZToBinC(char c)
 
 
 
-/* @func ajBaseAlphacharComp ***************************************************
+/* @func ajBaseAlphacharComp **************************************************
 **
 ** Complements a nucleotide base.
 **
@@ -515,7 +516,7 @@ AjBool ajBaseExistsBin(ajint base)
 
 
 
-/* @func ajBaseExistsChar ******************************************************
+/* @func ajBaseExistsChar *****************************************************
 **
 ** Tests whether a base code exists
 **
@@ -600,7 +601,7 @@ __deprecated const AjPStr ajBaseCodes(ajint ibase)
 
 
 
-/* @func ajBaseGetMnemonic *****************************************************
+/* @func ajBaseGetMnemonic ****************************************************
 **
 ** Returns a string of matching base codes
 **
@@ -1024,7 +1025,7 @@ AjBool ajResidueExistsBin(ajint base)
 
 
 
-/* @func ajResidueExistsChar ***************************************************
+/* @func ajResidueExistsChar **************************************************
 **
 ** Tests whether a residue code exists
 **

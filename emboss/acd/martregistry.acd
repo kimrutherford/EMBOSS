@@ -2,9 +2,9 @@ application: martregistry [
   documentation: "Show Biomart registries listed
                   on a host"
   groups: "Edit"
-  relations: "/edam/topic/0000088 Literature and documentation"
-  relations: "/edam/topic/0000091 Database and file management"
-  relations: "/edam/operation/0000516 Database information retrieval"
+    relations: "EDAM:0000088 topic Literature and documentation"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000516 operation Database information retrieval"
 ]
 
 section: input [
@@ -16,20 +16,20 @@ section: input [
     standard: "Y"
     default: "www.biomart.org"
     information: "Host location"
-    relations: "/edam/data/0001047 URI"
+    relations: "EDAM:0001047 data URI"
   ]
 
   string: path [
     standard: "Y"
     default: "/biomart/martservice"
     information: "Path to martservice"
-    relations: "/edam/data/0001049 Directory name"
+    relations: "EDAM:0001049 identifier Directory name"
   ]
 
   integer: port [
     default: "80"
     information: "Port on host"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: input
@@ -42,7 +42,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     information: "Mart registry output file"
-    relations: "/edam/data/0000969 Free text"
+    relations: "EDAM:0000969 data Text"
   ]
 
 endsection: output

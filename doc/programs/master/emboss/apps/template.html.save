@@ -124,7 +124,11 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-<b>ProgramNameToBeReplaced</b> reads any normal sequence USAs.
+<b>ProgramNameToBeReplaced</b>
+
+**************** 
+EDIT HERE
+**************** 
 
 <p>
 
@@ -150,9 +154,10 @@ IT IS DONE FOR YOU.
    -->
 
 <b>ProgramNameToBeReplaced</b> 
-outputs a graph to the specified graphics device. 
-outputs a report format file. The default format is ...
 
+**************** 
+EDIT HERE
+**************** 
 
 <p>
 

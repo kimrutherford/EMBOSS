@@ -1,0 +1,34 @@
+application: seqcount [
+  documentation: "Reads and counts sequences"
+  groups: "Edit"
+  relations: "EDAM:0000091 topic Data handling"
+  relations: "EDAM:0000090 topic Data retrieval"  
+  relations: "EDAM:0001813 operation Sequence retrieval"  
+  relations: "EDAM:0002121 operation Sequence file processing"  
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence [
+    parameter: "Y"
+    type: "gapany"
+    relations: "EDAM:0000849 data Sequence record" 
+  ]
+
+endsection: input
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    knowntype: "seqcount output"
+    relations: "EDAM:0000969 data Text"
+  ]
+
+endsection: output

@@ -51,16 +51,18 @@ typedef struct AjSListNode {
 **
 ** @attr First [AjPListNode] first node
 ** @attr Last [AjPListNode] dummy last node
+** @attr Deldata [(void*)] Value destructor, or NULL if not an object
 ** @attr Count [ajuint] Number of nodes
-** @attr Type [AjEnum] List type (any, string, etc.)
+** @attr Use [ajuint] Reference count
 ** @@
 ******************************************************************************/
 
 typedef struct AjSList {
-  AjPListNode First;
-  AjPListNode Last;
-  ajuint Count;
-  AjEnum Type;
+    AjPListNode First;
+    AjPListNode Last;
+    void (*Deldata)(void **data);
+    ajuint Count;
+    ajuint Use;
 } AjOList;
 
 #define AjPList AjOList*
@@ -99,6 +101,7 @@ typedef struct AjSIList {
 ** Prototype definitions
 */
 
+AjPList     ajListNewRef(AjPList list);
 AjPList     ajListNewListref(const AjPList list);
 void        ajListExit (void);
 AjBool      ajListPeekFirst (const AjPList thys, void** x);

@@ -1,0 +1,13 @@
+Here is a sample session with <b>drfinddata</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>drfinddata virus </b>
+Find public databases by data type
+Data resource output file [drfinddata.drcat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

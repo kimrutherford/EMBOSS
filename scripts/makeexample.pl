@@ -17,7 +17,6 @@
 # to create the example usage, input and output files.
 
 use File::Basename;
-
 %rotations = ("density" => "90<",
 	      "dotmatcher" => "90<",
 	      "pepwheel" => "90>",
@@ -81,11 +80,14 @@ $MaxLines = 100;
 
 # names of test databases
 @testdbs = (
-	    'tsw',
-	    'tswnew',
-	    'twp',
-	    'tembl',
-	    'tpir',
+    'tsw',
+    'tswnew',
+    'twp',
+    'tembl',
+    'tpir',
+    'tedam',
+    'ttax',
+    'tdrcat'
 	    );
 
 # colours for backgrounds of usage examples, input and output files
@@ -192,7 +194,7 @@ foreach $dotest (@dirs) {
         if ($line =~ /^CL\s+(.+)/) {$commandline .= "$1 ";}
         if ($line =~ /^UC\s+(.+)/) {$usagecomment .= "$1 ";}
         if ($line =~ /^IC\s+(.+)/) {$inputcomment .= "$1 ";}
-        if ($line =~ /^FI\s+(.+)/) {push(@outfiles, "$dir/$1");}
+        if ($line =~ /^FI\s+(\S+)/) {push(@outfiles, "$dir/$1");}
         if ($line =~ /^FK\s+(.+)/) {$hasoutkeystrokes = $1;}
         if ($line =~ /^DI\s+(.+)/) {push(@outfiles, "$dir/$1");$savedir = $1;}
         if ($line =~ /^DF\s+(.+)/) {$outdirfiles{$savedir} .= "$1 ";
@@ -298,7 +300,9 @@ foreach $dotest (@dirs) {
 	    print "CL f=$f\n";
         }
 # deal with '@' in list files
-        $f =~ s/\@//;
+        $f =~ s/\@//g;
+# deal with '*' in quotes
+        $f =~ s/[*]/\\*/g;
 # check to see if this is an output file existing in the -ex directory
         if (grep /^$f$/, @outfiles) {
             next;
@@ -314,7 +318,9 @@ foreach $dotest (@dirs) {
             }
         }
 	else {
-	    push @inusas, $f; 
+	    if($f !~ /^pseudocap:/) {
+		push @inusas, $f; 
+	    }
         }
     }
 
@@ -331,7 +337,7 @@ foreach $dotest (@dirs) {
 # deal with '@' in list files
             $f =~ s/\@//;
 # check to see if this is an output file existing in the -ex directory
-            if (grep /^$f$/, @outfiles) {
+            if (($f !~ /[*]/) && grep /^$f$/, @outfiles) {
                 next;
             }
 # check to see if it is a real file (not a directory)
@@ -386,6 +392,7 @@ foreach $dotest (@dirs) {
 	chomp $f;
 	@d = split (/\:/, $f);
 	foreach $d (@d) {
+	    if ($d =~ /^[\{]/) {next;}
 	    if ($d =~ /\*/) {next;}
 	    if ($d =~ /[\[]/ && $d !~ /[\[].*[\]]/ ) {next}
 	    if (grep /^$d$/, @testdbs) {
@@ -393,6 +400,21 @@ foreach $dotest (@dirs) {
 		if (! grep /$d/, @testdbsoutput) {
 		    if ($d eq "tembl") {
 			$type = "nucleic acid";
+		    }
+		    elsif ($d eq "tedam") {
+			$type = "obo";
+		    }
+		    elsif ($d eq "edam") {
+			$type = "obo";
+		    }
+		    elsif ($d eq "tobo") {
+			$type = "obo";
+		    }
+		    elsif ($d eq "tdrcat") {
+			$type = "resource";
+		    }
+		    elsif ($d eq "ttax") {
+			$type = "taxonomy";
 		    }
 		    else {
 			$type = "protein";
@@ -411,7 +433,7 @@ foreach $dotest (@dirs) {
 
 # example count
     if ($count == 1) {
-	$USAGE .= qq|<b>Here is a sample session with $application</b>\n$p\n|;
+	$USAGE .= qq|Here is a sample session with <b>$application</b>\n$p\n|;
     }
     else {
 	$USAGE .= qq|$p\n<b>Example $count</b>\n$p\n|;
@@ -600,7 +622,7 @@ test $dotest hasn't used ", $#answers+1, " answers\n";
 		$pname = $1;
 		$giffile = $file;
 		$giffile =~ s/\.[a-z]*ps2?/.gif/;
-		$rotate = "-90<";
+		$rotate = "90<";
 		if(defined($rotations{$pname})){
 		    $rotate = $rotations{$pname};
 #		    print STDERR "rotate '$rotate'\n";
@@ -798,21 +820,23 @@ sub writeUsage {
 
     my $out = "$incdir/$application.usage";
     open (OUT, "> $out") || die "Can't open $out";
+    $usage =~ s/\/data1\/[Uu]sers\/pmr\/local/\/homes\/pmr\/local/go;
+    $usage =~ s/\/data1\/[Uu]sers\/pmr\/devemboss/\/homes\/user/go;
     $usage =~ s/\/homes\/pmr\/devemboss/\/homes\/user/go;
     $usage =~ s/(Guide tree +file created: +)\[[A-Z0-9]+\]/$1\[12345678A]/go;
     $usage =~ s/(GCG-Alignment file created +)\[[A-Z0-9]+\]/$1\[12345678A]/go;
     $usage =~ s/domainalign\-[0-9]+[.][0-9]+/domainalign-1234567890.1234/go;
     $usage =~ s/domainrep\-[0-9]+[.][0-9]+[.]/domainrep-1234567890.1234./go;
-    $usage =~ s/domainrep\-[0-9]+[.][0-9]+ /domainrep-1234567890.1234 /go;
-    $usage =~ s/pdbplus\-[0-9]+[.][0-9]+ /pdbplus-1234567890.1234 /go;
+    $usage =~ s/domainrep\-[0-9]+[.][0-9]+/domainrep-1234567890.1234/go;
+    $usage =~ s/pdbplus\-[0-9]+[.][0-9]+/pdbplus-1234567890.1234/go;
     $usage =~ s/seqalign\-[0-9]+[.][0-9]+[.]/seqalign-1234567890.1234./go;
     $usage =~ s/seqsearch\-[0-9]+[.][0-9]+[.]/seqsearch-1234567890.1234./go;
     $usage =~ s/hmmalign\-[0-9]+[.][0-9]+/hmmalign-1234567890.1234/go;
     $usage =~ s/ehmmalign\-[0-9]+[.][0-9]+/ehmmalign-1234567890.1234/go;
     $usage =~ s/hmmpfam\-[0-9]+[.][0-9]+/hmmpfam-1234567890.1234/go;
     $usage =~ s/ehmmpfam\-[0-9]+[.][0-9]+/ehmmpfam-1234567890.1234/go;
-    $usage =~ s/Localtime: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/Localtime: Thu Jul 15 12:00:00 2010/gom;
-    $usage =~ s/SUBMITTED iprscan-\d+-\d+/SUBMITTED-iprscan-20100715-12345678/go;
+    $usage =~ s/Localtime: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/Localtime: Fri Jul 15 12:00:00 2011/gom;
+    $usage =~ s/SUBMITTED iprscan-\d+-\d+/SUBMITTED-iprscan-20110715-12345678/go;
     print OUT $usage;
     close(OUT);
     chmod 0664, $out;	# rw-rw-r--
@@ -829,7 +853,7 @@ sub writeInput {
 
     my $out = "$incdir/$application.input";
     open (OUT, "> $out") || die "Can't open $out";
-    $input =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 20[01][0-9]/DATE  Thu Jul 15 12:00:00 2010/go;
+    $input =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 20[01][0-9]/DATE  Fri Jul 15 12:00:00 2011/go;
     print OUT $input;
     close(OUT);
     chmod 0664, $out;	# rw-rw-r--
@@ -846,22 +870,28 @@ sub writeOutput {
 
     my $out = "$incdir/$application.output";
     open (OUT, "> $out") || die "Can't open $out";
+    $output =~ s/caissa/emboss4.ebi.ac.uk/go;
+    $output =~ s/\/data1\/[Uu]sers\/pmr\/local/\/homes\/pmr\/local/go;
+    $output =~ s/\/data1\/[Uu]sers\/pmr\/devemboss/\/homes\/user/go;
     $output =~ s/\/homes\/pmr\/devemboss/\/homes\/user/go;
-    $output =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 20[01][0-9]/DATE  Thu Jul 15 12:00:00 2010/go;
-    $output =~ s/CreationDate: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/CreationDate: Thu Jul 15 12:00:00 2010/gom;
-    $output =~ s/Rundate: ... ... +\d+ 2[0-9][0-9][0-9] [0-9:]+$/Rundate: Thu Jul 15 2010 12:00:00/gom;
-    $output =~ s/Localtime: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/Localtime: Thu Jul 15 12:00:00 2010/gom;
-    $output =~ s/\#\#date 2[0-9][0-9][0-9][-][0-9][0-9][-][0-9][0-9]$/\#\#date 2010-01-15/gom;
+    $output =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 20[01][0-9]/DATE  Fri Jul 15 12:00:00 2011/go;
+    $output =~ s/CreationDate: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/CreationDate: Fri Jul 15 12:00:00 2011/gom;
+    $output =~ s/Rundate: ... ... +\d+ 2[0-9][0-9][0-9] [0-9:]+$/Rundate: Fri Jul 15 2011 12:00:00/gom;
+    $output =~ s/Localtime: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/Localtime: Fri Jul 15 12:00:00 2011/gom;
+    $output =~ s/\#\#date 2[0-9][0-9][0-9][-][0-9][0-9][-][0-9][0-9]$/\#\#date 2011-07-15/gom;
     $output =~ s/domainalign\-[0-9]+[.][0-9]+[.]/domainalign-1234567890.1234./go;
     $output =~ s/domainrep\-[0-9]+[.][0-9]+[.]/domainrep-1234567890.1234./go;
     $output =~ s/seqalign\-[0-9]+[.][0-9]+[.]/seqalign-1234567890.1234./go;
     $output =~ s/seqsearch\-[0-9]+[.][0-9]+[.]/seqsearch-1234567890.1234./go;
     $output =~ s/hmmalign\-[0-9]+[.][0-9]+/hmmalign-1234567890.1234/go;
     $output =~ s/hmmpfam\-[0-9]+[.][0-9]+/hmmpfam-1234567890.1234/go;
-    $output =~ s/Time 0\.00[1-5][0-9][0-9][0-9] secs\./Time 0.001999 secs./go;
-    $output =~ s/\%\%Creator: (\S+ [\d.]+) 2[0-9][0-9][0-9]\/[0-9[0-9]\/[0-9[0-9]/Creator: $1 2010\/01\/15/go;
+    $output =~ s/Time 0\.00[0-5][0-9][0-9][0-9] secs\./Time 0.001999 secs./go;
+    $output =~ s/Time  0\.[0-9][0-9] secs\./Time  0.50 secs./go;
+    $output =~ s/Time  [1-5]\.[0-9][0-9] secs\./Time  1.50 secs./go;
+    $output =~ s/Time 1[0-9]\.[0-9][0-9] secs\./Time 11.50 secs./go;
+    $output =~ s/\%\%Creator: (\S+ [\d.]+) 2[0-9][0-9][0-9]\/[0-9[0-9]\/[0-9[0-9]/Creator: $1 2011\/07\/15/go;
     $output =~ s/mse\.msf MSF: 120 Type: N \d+\/\d+\/\d+ CompCheck: 2784/mse.msf MSF: 120 Type: N 15\/07\/10 CompCheck: 2784/go;
-    $output =~ s/   \d+-[A-Z][a-z][a-z]-2[01][0-9][0-9]   /   15-Jul-2010   /go;
+    $output =~ s/   \d+-[A-Z][a-z][a-z]-2[01][0-9][0-9]   /   15-Jul-2011   /go;
     print OUT $output;
     close(OUT);
     chmod 0664, $out;	# rw-rw-r--
@@ -887,7 +917,19 @@ sub displayEntry {
     }
 
 # if the USA has a single ':', use entret, else it is a file and we use seqret
-    if ($usa !~ /\:\:/ && $usa =~ /\S\:/) {
+    if ($usa =~ /T?EDAM\:/i) {
+	system ("ontoget $usa z.z -obsolete -auto");
+    }
+    elsif ($usa =~ /T?TAX(-nam)?\:/i) {
+	system ("taxget $usa z.z -auto");
+    }
+    elsif ($usa =~ /T?DRCAT\:/i) {
+	system ("drget $usa z.z -auto");
+    }
+    elsif ($usa =~ /srs\:unilib\:/i) {
+	system ("textget $usa z.z -auto");
+    }
+    elsif ($usa !~ /\:\:/ && $usa =~ /\S\:/) {
 	system ("entret $usa z.z -auto");
     }
     elsif ($usa =~ /\:\:/) {
@@ -918,7 +960,7 @@ sub displayFile {
     my @lines;
     my $count;
 
-#print "In displayFile($file)\n";
+#print STDERR "In displayFile($file)\n";
 
 # if the 'file name' contains 'http:' then ignore it :-)
     if ($file =~ /http\:/) {

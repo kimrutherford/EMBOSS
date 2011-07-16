@@ -41,6 +41,15 @@
 #define DEFAULT_BIOMART_MART_PATH "/biomart/martservice"
 #define DEFAULT_BIOMART_MART_PORT 80
 
+#define MART_REGENTRY 1
+#define MART_DSENTRY  2
+#define MART_ATTENTRY 4
+#define MART_FILENTRY 8
+#define MART_CONENTRY 16
+
+
+
+
 static const char* martNucTerms[] =
 {
     "3utr", "5utr", "cdna", "coding", "gene_exon", "gene_flank",
@@ -83,6 +92,13 @@ static AjBool martMatchFilter(const AjPStr name,
 static const char *martGetVirtualSchema(const AjPStr dataset);
 static void martSpacesToHex(AjPStr *s);
 static int martAttributePageCompar(const void *a, const void *b);
+static AjBool martWriteCacheEntry(AjPMartquery mq, AjPFilebuff buff,
+                                  ajint type);
+static AjBool martReadCacheEntry(AjPMartquery mq, AjPFilebuff *buff,
+                                 ajint type);
+static AjBool martVerifyOrCreateCacheDir(AjPStr dir);
+static void martEncodeHname(AjPStr *hname, const AjPStr host,
+                            const AjPStr path, ajuint port);
 
 
 
@@ -124,351 +140,6 @@ static const char *dataset_schemas[] =
     "phytozome_clusters", "zome_mart",
     NULL, NULL
 };
-
-
-
-
-/* @func ajStrUrlNew *********************************************************
-**
-** Initialise a URL components object
-**
-** @return [AjPUrl] URL Components
-******************************************************************************/
-
-AjPUrl ajStrUrlNew(void)
-{
-    AjPUrl ret = NULL;
-
-    AJNEW0(ret);
-    
-    ret->Method   = ajStrNew();
-    ret->Host     = ajStrNew();
-    ret->Port     = ajStrNew();
-    ret->Absolute = ajStrNew();
-    ret->Relative = ajStrNew();
-    ret->Fragment = ajStrNew();
-    ret->Username = ajStrNew();
-    ret->Password = ajStrNew();
-
-    return ret;
-}
-
-
-
-
-/* @func ajStrUrlDel *********************************************************
-**
-** Delete URL components object
-**
-** @param [u] thys [AjPUrl*] URL components object
-** @return [void]
-******************************************************************************/
-
-void ajStrUrlDel(AjPUrl *thys)
-{
-    AjPUrl pthis = NULL;
-
-    if(!thys)
-        return;
-
-    if(!*thys)
-        return;
-
-    pthis = *thys;
-
-    ajStrDel(&pthis->Method);
-    ajStrDel(&pthis->Host);
-    ajStrDel(&pthis->Port);
-    ajStrDel(&pthis->Absolute);
-    ajStrDel(&pthis->Relative);
-    ajStrDel(&pthis->Fragment);
-    ajStrDel(&pthis->Username);
-    ajStrDel(&pthis->Password);
-
-    AJFREE(pthis);
-    
-    *thys = NULL;
-    
-    return;
-}
-
-
-
-
-/* @func ajStrUrlParseC ******************************************************
-**
-** Parse an IPV4/6 URL into its components
-**
-** @param [u] parts [AjPUrl*] URL components object
-** @param [u] url [const char*] URL
-** @return [void]
-******************************************************************************/
-
-void ajStrUrlParseC(AjPUrl *parts, const char *url)
-{
-    char *ucopy = NULL;
-    char *p = NULL;
-    char *post = NULL;
-
-    char *dest = NULL;
-    char *src  = NULL;
-    
-    AjPUrl comp = NULL;
-    
-    char *pmethod = NULL;
-    char *phost   = NULL;
-    char *pabs    = NULL;
-    char *prel    = NULL;
-    
-    if(!parts || !url)
-        return;
-    
-    if(!*parts)
-        return;
-    
-    ucopy = ajCharNewC(url);
-
-    post = ucopy;
-    comp = *parts;
-    
-    /* Get any fragment */
-    if ((p = strchr(ucopy, '#')))
-    {
-	*p++ = '\0';
-        ajStrAssignC(&comp->Fragment,p);
-    }
-
-    if((p = strchr(ucopy, ' ')))
-        *p++ = '\0';
-
-
-    for(p = ucopy; *p; ++p)
-    {
-	if (isspace((int) *p))
-        {
-            dest = p;
-            src  = p+1;
-            
-	    while ((*dest++ = *src++));
-
-	    p = p-1;
-	}
-
-	if (*p == '/' || *p == '#' || *p == '?')
-	    break;
-
-	if (*p == ':')
-        {
-		*p = '\0';
-                pmethod = post;
-		post = p+1;
-
-                if(ajCharPrefixCaseC(pmethod,"URL"))
-                    pmethod = NULL;
-                else
-                    break;
-	}
-    }
-
-    p = post;
-
-    if(*p == '/')
-    {
-	if(p[1] == '/')
-        {
-	    phost = p+2;		/* There is a host   */
-	    *p = '\0';
-	    p = strchr(phost,'/');	/* Find end of host */
-
-	    if(p)
-            {
-	        *p=0;			/* and terminate it */
-	        pabs = p+1;		/* Path found */
-	    }
-	}
-        else
-	    pabs = p+1;		/* Path found but not host */
-    }
-    else
-        prel = (*post) ? post : NULL;
-
-
-    if(pmethod)
-        ajStrAssignC(&comp->Method,pmethod);
-
-    if(phost)
-        ajStrAssignC(&comp->Host,phost);
-
-    if(pabs)
-        ajStrAssignC(&comp->Absolute,pabs);
-
-    if(prel)
-        ajStrAssignC(&comp->Relative,prel);
-
-    AJFREE(ucopy);
-
-    return;
-}
-
-
-
-
-/* @func ajStrUrlSplitPort ***************************************************
-**
-** Separate any port from a host specification (IPV4/6)
-**
-** @param [u] urli [AjPUrl] URL components object
-** @return [void]
-******************************************************************************/
-
-void ajStrUrlSplitPort(AjPUrl urli)
-{
-    const char *p   = NULL;
-    const char *end = NULL;
-    const char *start = NULL;
-    
-    ajint len;
-
-    if(!(len = ajStrGetLen(urli->Host)))
-        return;
-
-    end = (start = ajStrGetPtr(urli->Host)) + len - 1;
-
-    p = end;
-
-    if(!isdigit((int) *p))
-        return;
-
-    while(isdigit((int) *p) && p != start)
-        --p;
-
-    if(p == start)
-        return;
-
-    if(*p != ':')
-        return;
-    
-    ajStrAssignC(&urli->Port,p+1);
-
-    ajStrAssignSubC(&urli->Host,start,0,p-start-1);
-    
-    return;
-}
-
-
-
-
-/* @func ajStrUrlSplitUsername ************************************************
-**
-** Separate any username[:password] from a host specification (IPV4/6)
-**
-** @param [u] urli [AjPUrl] URL components object
-** @return [void]
-******************************************************************************/
-
-void ajStrUrlSplitUsername(AjPUrl urli)
-{
-    const char *p   = NULL;
-    const char *end = NULL;
-    AjPStr userpass = NULL;
-    AjPStr host = NULL;
-    
-    ajint len;
-
-    if(!ajStrGetLen(urli->Host))
-        return;
-
-    if(!(end = strchr(ajStrGetPtr(urli->Host), (int)'@')))
-        return;
-
-    p = ajStrGetPtr(urli->Host);
-    len = end - p;
-
-    if(!len)
-        return;
-    
-    userpass = ajStrNew();
-    ajStrAssignSubC(&userpass, p, 0, end - p - 1);
-    
-    host = ajStrNew();
-    ajStrAssignC(&host,end + 1);
-    ajStrAssignS(&urli->Host,host);
-
-    
-
-    if(!(end = strchr(ajStrGetPtr(userpass), (int)':')))
-    {
-        ajStrAssignS(&urli->Username,userpass);
-        ajStrDel(&userpass);
-        ajStrDel(&host);
-
-        return;
-    }
-
-    p = ajStrGetPtr(userpass);
-    len = end - p;
-
-    if(!len)
-        ajWarn("ajStrUrlSplitUsername: Missing username in URL [%S@%S]",
-               userpass,host);
-    else
-        ajStrAssignSubC(&urli->Username,p,0,len - 1);
-
-    ajStrAssignC(&urli->Password, end + 1);
-
-    ajStrDel(&userpass);
-    ajStrDel(&host);
-
-    return;
-}
-
-
-
-
-/* @func ajMartHttpUrl ***************************************************
-**
-** Returns the components of a URL (IPV4/6)
-** An equivalent for seqHttpUrl().
-**
-** @param [r] qry [const AjPSeqQuery] Query object
-** @param [w] iport [ajint*] Port
-** @param [w] host [AjPStr*] Host name
-** @param [w] urlget [AjPStr*] URL for the HTTP header GET
-** @return [AjBool] ajTrue if the URL was parsed
-** @@
-******************************************************************************/
-
-AjBool ajMartHttpUrl(const AjPSeqQuery qry, ajint* iport, AjPStr* host,
-                     AjPStr* urlget)
-{
-    AjPStr url = NULL;
-    AjPUrl uo = NULL;
-    
-    url = ajStrNew();
-
-    if(!ajNamDbGetUrl(qry->DbName, &url))
-    {
-	ajErr("no URL defined for database %S", qry->DbName);
-
-	return ajFalse;
-    }
-
-    uo = ajStrUrlNew();
-    
-    ajStrUrlParseC(&uo, ajStrGetPtr(url));
-    ajStrUrlSplitPort(uo);
-    
-    ajStrAssignS(host,uo->Host);
-    ajFmtPrintS(urlget,"/%S",uo->Absolute);
-
-    if(ajStrGetLen(uo->Port))
-        ajStrToInt(uo->Port,iport);
-
-    ajStrDel(&url);
-    ajStrUrlDel(&uo);
-
-    return ajTrue;
-}
 
 
 
@@ -524,7 +195,10 @@ AjPMartquery ajMartqueryNew(void)
     ret->Regpath  = ajStrNew();
     ret->Marthost = ajStrNew();
     ret->Martpath = ajStrNew();
+    ret->Cachedir = ajStrNew();
     ret->Query    = ajStrNew();
+    ret->Mart     = ajStrNew();
+    ret->Dsname   = ajStrNew();
     ret->Loc      = ajMartLocNew();
 
     ret->Dataset = ajMartDatasetNew();
@@ -536,6 +210,8 @@ AjPMartquery ajMartqueryNew(void)
     ret->Regport  =  80;
     ret->Martport  = 80;
 
+    ret->Cacheflag = 0;
+    
     return ret;
 }
 
@@ -574,6 +250,9 @@ void ajMartqueryDel(AjPMartquery *thys)
     ajStrDel(&pthis->Regpath);
     ajStrDel(&pthis->Marthost);
     ajStrDel(&pthis->Martpath);
+    ajStrDel(&pthis->Cachedir);
+    ajStrDel(&pthis->Mart);
+    ajStrDel(&pthis->Dsname);
     ajStrDel(&pthis->Query);
 
     AJFREE(pthis);
@@ -596,13 +275,13 @@ void ajMartqueryDel(AjPMartquery *thys)
 
 void ajMartquerySeqinFree(AjPSeqin thys)
 {
-    AjPSeqQuery qry = NULL;
+    AjPQuery qry = NULL;
     AjPMartquery mq = NULL;
 
     if(!thys)
         return;
 
-    qry = thys->Query;
+    qry = thys->Input->Query;
 
     if(!qry)
         return;
@@ -1085,7 +764,7 @@ static void martRegistryElementstart(void *userData, const XML_Char *name,
                "RegistryURLPointer,MartDBLocation\n"
                "or MartURLLocation. Got %s instead",name);
 
-    t = ajTablestrNewLen(REGTABGUESS);
+    t = ajTablestrNew(REGTABGUESS);
 
     for(i = 0; atts[i]; i += 2)
     {
@@ -1217,7 +896,7 @@ AjBool ajMartregistryParse(AjPSeqin seqin)
     int done;
     size_t len;
 
-    buff = seqin->Filebuff;
+    buff = seqin->Input->Filebuff;
     
     if(!buff)
         return ajFalse;
@@ -1248,7 +927,9 @@ AjBool ajMartregistryParse(AjPSeqin seqin)
         ajBuffreadLine(buff,&line);
         done = ajFilebuffIsEmpty(buff);
         len = ajStrGetLen(line);
-        
+
+        ajDebug("XML_Parse: '%S'", line);
+
         if(!XML_Parse(parser, line->Ptr, len, done))
         {
             ajWarn("ajMartregistryParse: %s at line %d\n",
@@ -1284,25 +965,16 @@ AjBool ajMartregistryParse(AjPSeqin seqin)
 
 AjBool ajMartGetRegistry(AjPSeqin seqin)
 {
-    AjPStr httpver   = NULL;
-    AjPStr proxyname = NULL;
-    AjPSeqQuery qry  = NULL;
+    AjPQuery qry  = NULL;
     
     AjPStr get = NULL;
     
     AjPMartquery mq = NULL;
     
-    ajint proxyport = 0;
+    AjBool force_write = ajFalse;
+    ajuint httpcode = 0;
 
-    FILE *fp = NULL;
-    struct AJTIMEOUT timo;
-    
-
-    httpver   = ajStrNew();
-    proxyname = ajStrNew();
-    get       = ajStrNew();
-
-    qry = seqin->Query;
+    qry = seqin->Input->Query;
 
     if(!qry)
         return ajFalse;
@@ -1311,62 +983,51 @@ AjBool ajMartGetRegistry(AjPSeqin seqin)
 
     if(!mq)
         return ajFalse;
-    
-    ajSeqHttpVersion(qry, &httpver);
 
-    if(ajSeqHttpProxy(qry, &proxyport, &proxyname))
-        ajFmtPrintS(&get, "GET http://%S:%d%S?type=registry HTTP/%S\r\n",
-                    mq->Reghost, mq->Regport, mq->Regpath, httpver);
-    else
-        ajFmtPrintS(&get, "GET %S?type=registry HTTP/%S\r\n", mq->Regpath,
-                    httpver);
+    /* First check whether registry is in the cache */
 
-
-    if(ajStrGetLen(proxyname))
-        fp = ajSeqHttpGetProxy(qry, proxyname, proxyport,
-                               mq->Reghost, mq->Regport, get);
-    else
-        fp = ajSeqHttpGet(qry, mq->Reghost, mq->Regport, get);
-
-    if(!fp)
+    if(ajStrGetLen(mq->Cachedir) && (mq->Cacheflag & MART_CACHE_RD))
     {
-        ajWarn("ajMartGetregistry: Cannot open fp\n");
-        
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-        
-	return ajFalse;
+        /* Try a cache read */
+        if(!martReadCacheEntry(mq, &seqin->Input->Filebuff, MART_REGENTRY))
+        {
+            if(mq->Cacheflag & MART_CACHE_WTIFEMPTY)
+                force_write = ajTrue;
+            else
+                force_write = ajFalse;
+        }
+        else
+            return ajTrue;
     }
 
- 
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
+    get       = ajStrNew();
+    
+    
+    ajFmtPrintS(&get, "%S?type=registry\r\n", mq->Regpath);
 
-    if(!seqin->Filebuff)
+    seqin->Input->Filebuff = ajHttpRead(qry->DbHttpVer, qry->DbName,
+                                            qry->DbProxy,
+                                            mq->Reghost, mq->Regport, get);
+
+    if(!seqin->Input->Filebuff)
+	return ajFalse;
+
+    httpcode = ajFilebuffHtmlNoheader(seqin->Input->Filebuff);
+    if(httpcode)
     {
-	ajErr("socket buffer attach failed for host '%S'",
-	      mq->Reghost);
-
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-
+        ajWarn("ajMartGetregistry HTTP code %u from '%S'",
+               httpcode, get);
         return ajFalse;
     }
 
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
+    if((ajStrGetLen(mq->Cachedir) && (mq->Cacheflag & MART_CACHE_WT)) ||
+       force_write)
+    {
+        /* Write to cache */
+        martWriteCacheEntry(mq, seqin->Input->Filebuff, MART_REGENTRY);
+    }
     
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
-    
-    ajFilebuffHtmlNoheader(seqin->Filebuff);
-
     ajStrDel(&get);
-    ajStrDel(&httpver);
-    ajStrDel(&proxyname);
     
     return ajTrue;
 }
@@ -1391,7 +1052,7 @@ static AjPTable martGetMarttable(const AjPSeqin seqin, const AjPStr mart)
     ajuint nurls = 0;
     ajuint i = 0;
     AjPStr key   = NULL;
-    AjPStr value = NULL;
+    const AjPStr value = NULL;
     
     if(!seqin)
         return NULL;
@@ -1409,7 +1070,7 @@ static AjPTable martGetMarttable(const AjPSeqin seqin, const AjPStr mart)
     for(i=0; i < nurls; ++i)
     {
         t = loc->Urls[i];
-        value = ajTableFetch(t,(void *)key);
+        value = ajTableFetchS(t, key);
 
         if(ajStrMatchCaseS(value,mart))
             break;
@@ -1440,27 +1101,20 @@ AjBool ajMartGetDatasets(AjPSeqin seqin, const AjPStr mart)
     AjPTable marttab = NULL;
 
     AjPStr spmart = NULL;
-    AjPStr khost  = NULL;
-    AjPStr kpath  = NULL;
-    AjPStr kport  = NULL;
-    AjPStr host   = NULL;
-    AjPStr path   = NULL;
-    AjPStr port   = NULL;
+    const AjPStr host   = NULL;
+    const AjPStr path   = NULL;
+    const AjPStr port   = NULL;
     
     ajuint iport    = 0;
-    ajint proxyport = 0;
     
-    AjPStr httpver   = NULL;
-    AjPStr proxyname = NULL;
     AjPStr get       = NULL;
 
     AjPMartquery mq = NULL;
-    AjPSeqQuery qry = NULL;
+    AjPQuery qry = NULL;
     
-    FILE *fp = NULL;
-    struct AJTIMEOUT timo;
-    
-    
+    AjBool force_write = ajFalse;
+    ajuint httpcode = 0;
+
     marttab = martGetMarttable(seqin, mart);
     
     if(!marttab)
@@ -1469,17 +1123,9 @@ AjBool ajMartGetDatasets(AjPSeqin seqin, const AjPStr mart)
         return ajFalse;
     }
 
-    khost = ajStrNewC("host");
-    kpath = ajStrNewC("path");
-    kport = ajStrNewC("port");
-    
-    host = ajTableFetch(marttab,(void *)khost);
-    path = ajTableFetch(marttab,(void *)kpath);
-    port = ajTableFetch(marttab,(void *)kport);
-
-    ajStrDel(&khost);
-    ajStrDel(&kpath);
-    ajStrDel(&kport);
+    host = ajTableFetchC(marttab, "host");
+    path = ajTableFetchC(marttab, "path");
+    port = ajTableFetchC(marttab, "port");
 
     if(!host || !path || !port)
     {
@@ -1505,88 +1151,72 @@ AjBool ajMartGetDatasets(AjPSeqin seqin, const AjPStr mart)
     ** such a mart is used.
     */
 
-    qry = seqin->Query;
+    qry = seqin->Input->Query;
     mq  = ajMartGetMartqueryPtr(seqin);
 
     ajStrAssignS(&mq->Marthost, host);
     ajStrAssignS(&mq->Martpath, path);
     mq->Martport = iport;
 
+
+    ajStrAssignS(&mq->Mart, mart);
+    
+    /* First check whether dataset is in the cache */
+
+    if(ajStrGetLen(mq->Cachedir) && (mq->Cacheflag & MART_CACHE_RD))
+    {
+        /* Try a cache read */
+        if(!martReadCacheEntry(mq, &seqin->Input->Filebuff, MART_DSENTRY))
+        {
+            if(mq->Cacheflag & MART_CACHE_WTIFEMPTY)
+                force_write = ajTrue;
+            else
+                force_write = ajFalse;
+        }
+        else
+            return ajTrue;
+    }
+    
     /*
     ** Do the GET request
     */
     
-    httpver   = ajStrNew();
-    proxyname = ajStrNew();
     get       = ajStrNew();
     spmart    = ajStrNew();
     
     
-    ajSeqHttpVersion(qry, &httpver);
 
     ajStrAssignS(&spmart,mart);
     martSpacesToHex(&spmart);
 
-    if(ajSeqHttpProxy(qry, &proxyport, &proxyname))
-        ajFmtPrintS(&get, "GET http://%S:%S%S?type=datasets&mart=%S "
-                    "HTTP/%S\r\n",
-                    host, port, path, spmart, httpver);
-    else
-    ajFmtPrintS(&get, "GET %S?type=datasets&mart=%S HTTP/%S\r\n", path, spmart,
-                httpver);
-
-    ajStrDel(&spmart);
+    ajFmtPrintS(&get, "%S?type=datasets&mart=%S", path, spmart);
     
-    if(ajStrGetLen(proxyname))
-        fp = ajSeqHttpGetProxy(qry, proxyname, proxyport,
-                               host, iport, get);
-    else
-        fp = ajSeqHttpGet(qry, host, iport, get);
+    ajFilebuffDel(&seqin->Input->Filebuff);
+    
+    seqin->Input->Filebuff = ajHttpRead(qry->DbHttpVer, qry->DbName,
+                                        qry->DbProxy,
+                                        host, iport, get);
 
-    if(!fp)
-    {
-        ajWarn("ajMartGetdatasets: Cannot open fp\n");
-        
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-        
+    if(!seqin->Input->Filebuff)
 	return ajFalse;
-    }
 
-
-    /*
-    ** The Filebuff needs deleting. It likely is non-NULL
-    ** from previous use by (e.g.) a registry query.
-    */
-    
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
-
-    if(!seqin->Filebuff)
+    httpcode = ajFilebuffHtmlNoheader(seqin->Input->Filebuff);
+    if(httpcode)
     {
-	ajErr("ajMartGetdatasets: socket buffer attach failed for host '%S'",
-	      host);
-
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-
+        ajWarn("ajMartGetdatasets: HTTP code %u from '%S'",
+               httpcode, get);
         return ajFalse;
     }
 
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
-    
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
-
-    ajFilebuffHtmlNoheader(seqin->Filebuff);
+    if((ajStrGetLen(mq->Cachedir) && (mq->Cacheflag & MART_CACHE_WT)) ||
+       force_write)
+    {
+        /* Write to cache */
+        martWriteCacheEntry(mq, seqin->Input->Filebuff, MART_DSENTRY);
+    }
 
     ajStrDel(&get);
-    ajStrDel(&httpver);
-    ajStrDel(&proxyname);
+    ajStrDel(&spmart);
     
     return ajTrue;
 }
@@ -1782,7 +1412,7 @@ static AjBool martParseTabbedDataset(AjPSeqin seqin)
     if(!mq)
         return ajFalse;
 
-    buff  = seqin->Filebuff;
+    buff  = seqin->Input->Filebuff;
     line  = ajStrNew();
     token = ajStrNew();
 
@@ -1793,7 +1423,7 @@ static AjBool martParseTabbedDataset(AjPSeqin seqin)
         if(ajStrGetLen(line) < 10)
             continue;
 
-        table = ajTablestrNewLen(REGTABGUESS);
+        table = ajTablestrNew(REGTABGUESS);
         
         pos = 0;
 
@@ -1917,7 +1547,7 @@ AjBool ajMartdatasetParse(AjPSeqin seqin)
 {
     AjBool ret = ajTrue;
     
-    if(!martBuffIsXML(seqin->Filebuff))
+    if(!martBuffIsXML(seqin->Input->Filebuff))
         ret = martParseTabbedDataset(seqin);
     else
         ajFatal("Looks like the new Biomart XML format for datasets "
@@ -1940,21 +1570,17 @@ AjBool ajMartdatasetParse(AjPSeqin seqin)
 
 AjBool ajMartGetAttributes(AjPSeqin seqin, const AjPStr dataset)
 {
-    ajint proxyport = 0;
-    
-    AjPStr httpver   = NULL;
-    AjPStr proxyname = NULL;
     AjPStr get       = NULL;
 
     AjPMartquery mq = NULL;
-    AjPSeqQuery qry = NULL;
+    AjPQuery qry = NULL;
 
     const char *vschema = NULL;
     
-    FILE *fp = NULL;
-    struct AJTIMEOUT timo;
-    
-    qry = seqin->Query;
+    AjBool force_write = ajFalse;
+    ajuint httpcode = 0;
+
+    qry = seqin->Input->Query;
     mq  = ajMartGetMartqueryPtr(seqin);
 
     if(!mq)
@@ -1969,82 +1595,55 @@ AjBool ajMartGetAttributes(AjPSeqin seqin, const AjPStr dataset)
     }
     
 
-    /*
-    ** Do the GET request
-    */
+    ajStrAssignS(&mq->Dsname, dataset);
     
-    httpver   = ajStrNew();
-    proxyname = ajStrNew();
-    get       = ajStrNew();
+    /* First check whether registry is in the cache */
 
-    
-    ajSeqHttpVersion(qry, &httpver);
+    if(ajStrGetLen(mq->Cachedir) && (mq->Cacheflag & MART_CACHE_RD))
+    {
+        /* Try a cache read */
+        if(!martReadCacheEntry(mq, &seqin->Input->Filebuff, MART_ATTENTRY))
+        {
+            if(mq->Cacheflag & MART_CACHE_WTIFEMPTY)
+                force_write = ajTrue;
+            else
+                force_write = ajFalse;
+        }
+        else
+            return ajTrue;
+    }
 
 
     vschema = martGetVirtualSchema(dataset);
     
-    if(ajSeqHttpProxy(qry, &proxyport, &proxyname))
-        ajFmtPrintS(&get, "GET http://%S:%u%S?type=attributes&dataset=%S"
-                    "&virtualSchema=%s"
-                    " HTTP/%S\r\n",
-                    mq->Marthost, mq->Martport, mq->Martpath, dataset,
-                    vschema, httpver);
-    else
-        ajFmtPrintS(&get, "GET %S?type=attributes&dataset=%S&virtualSchema=%s"
-                    " HTTP/%S\r\n",
-                    mq->Martpath, dataset, vschema, httpver);
+    ajFmtPrintS(&get, "%S?type=attributes&dataset=%S&virtualSchema=%s",
+                        mq->Martpath, dataset, vschema);
 
+    ajFilebuffDel(&seqin->Input->Filebuff);
 
-    if(ajStrGetLen(proxyname))
-        fp = ajSeqHttpGetProxy(qry, proxyname, proxyport,
-                               mq->Marthost, mq->Martport, get);
-    else
-        fp = ajSeqHttpGet(qry, mq->Marthost, mq->Martport, get);
+    seqin->Input->Filebuff = ajHttpRead(qry->DbHttpVer, qry->DbName,
+                                        qry->DbProxy,
+                                        mq->Marthost, mq->Martport, get);
 
-    if(!fp)
-    {
-        ajWarn("ajMartGetAttributes: Cannot open fp\n");
-        
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-        
+    if(!seqin->Input->Filebuff)
 	return ajFalse;
-    }
 
-    /*
-    ** The Filebuff needs deleting. It likely is non-NULL
-    ** from previous use by (e.g.) a dataset query.
-    */
-    
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
-
-    if(!seqin->Filebuff)
+    httpcode = ajFilebuffHtmlNoheader(seqin->Input->Filebuff);
+    if(httpcode)
     {
-	ajErr("ajMartGetAttributes: socket buffer attach failed for host '%S'",
-	      mq->Marthost);
-
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-
+        ajWarn("ajMartGetAttributes: HTTP code %u from '%S'",
+               httpcode, get);
         return ajFalse;
     }
 
-
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
-    
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
- 
-    ajFilebuffHtmlNoheader(seqin->Filebuff);
+    if((ajStrGetLen(mq->Cachedir) && (mq->Cacheflag & MART_CACHE_WT)) ||
+       force_write)
+    {
+        /* Write to cache */
+        martWriteCacheEntry(mq, seqin->Input->Filebuff, MART_ATTENTRY);
+    }
 
     ajStrDel(&get);
-    ajStrDel(&httpver);
-    ajStrDel(&proxyname);
     
     return ajTrue;
 }
@@ -2142,21 +1741,16 @@ AjBool ajMartGetAttributesRetry(AjPSeqin seqin, const AjPStr dataset)
 AjBool ajMartGetAttributesSchema(AjPSeqin seqin, const AjPStr dataset,
                                  const AjPStr schema)
 {
-    ajint proxyport = 0;
-    
-    AjPStr httpver   = NULL;
-    AjPStr proxyname = NULL;
     AjPStr get       = NULL;
 
     AjPMartquery mq = NULL;
-    AjPSeqQuery qry = NULL;
+    AjPQuery qry = NULL;
 
     const char *vschema = NULL;
     
-    FILE *fp = NULL;
-    struct AJTIMEOUT timo;
-    
-    qry = seqin->Query;
+    ajuint httpcode = 0;
+
+    qry = seqin->Input->Query;
     mq  = ajMartGetMartqueryPtr(seqin);
 
     if(!mq)
@@ -2172,83 +1766,33 @@ AjBool ajMartGetAttributesSchema(AjPSeqin seqin, const AjPStr dataset,
     }
     
 
-    /*
-    ** Do the GET request
-    */
-    
-    httpver   = ajStrNew();
-    proxyname = ajStrNew();
     get       = ajStrNew();
-
     
-    ajSeqHttpVersion(qry, &httpver);
-
 
     vschema = ajStrGetPtr(schema);
     
-    if(ajSeqHttpProxy(qry, &proxyport, &proxyname))
-        ajFmtPrintS(&get, "GET http://%S:%u%S?type=attributes&dataset=%S"
-                    "&virtualSchema=%s"
-                    " HTTP/%S\r\n",
-                    mq->Marthost, mq->Martport, mq->Martpath, dataset,
-                    vschema, httpver);
-    else
-        ajFmtPrintS(&get, "GET %S?type=attributes&dataset=%S&virtualSchema=%s"
-                    " HTTP/%S\r\n",
-                    mq->Martpath, dataset, vschema, httpver);
+    ajFmtPrintS(&get, "%S?type=attributes&dataset=%S&virtualSchema=%s",
+                        mq->Martpath, dataset, vschema);
 
+    ajFilebuffDel(&seqin->Input->Filebuff);
 
-    if(ajStrGetLen(proxyname))
-        fp = ajSeqHttpGetProxy(qry, proxyname, proxyport,
-                               mq->Marthost, mq->Martport, get);
-    else
-        fp = ajSeqHttpGet(qry, mq->Marthost, mq->Martport, get);
+    seqin->Input->Filebuff = ajHttpRead(qry->DbHttpVer, qry->DbName,
+					qry->DbProxy,
+					mq->Marthost, mq->Martport, get);
 
-    if(!fp)
-    {
-        ajWarn("ajMartGetAttributesSchema: Cannot open fp\n");
-        
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-        
+    if(!seqin->Input->Filebuff)
 	return ajFalse;
-    }
 
-    /*
-    ** The Filebuff needs deleting. It likely is non-NULL
-    ** from previous use by (e.g.) a dataset query.
-    */
-    
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
+    httpcode = ajFilebuffHtmlNoheader(seqin->Input->Filebuff);
 
-    if(!seqin->Filebuff)
+    if(httpcode)
     {
-	ajErr("ajMartGetAttributesSchema: socket buffer attach failed for "
-              "host '%S'",
-	      mq->Marthost);
-
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-
+        ajWarn("ajMartGetAttributesSchema: HTTP code %u from '%S'",
+               httpcode, get);
         return ajFalse;
     }
 
-
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
-    
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
- 
-    ajFilebuffHtmlNoheader(seqin->Filebuff);
-
     ajStrDel(&get);
-    ajStrDel(&httpver);
-    ajStrDel(&proxyname);
     
     return ajTrue;
 }
@@ -2359,7 +1903,7 @@ static AjBool martParseTabbedAttributes(AjPSeqin seqin)
     if(!mq)
         return ajFalse;
     
-    buff  = seqin->Filebuff;
+    buff  = seqin->Input->Filebuff;
     line  = ajStrNew();
     token = ajStrNew();
 
@@ -2370,6 +1914,7 @@ static AjBool martParseTabbedAttributes(AjPSeqin seqin)
 
     while(ajBuffreadLine(buff,&line))
     {
+        ajDebug("martParseTabbedAttributes '%S'", line);
         if(ajStrGetLen(line) < 10)
             continue;
 
@@ -2382,7 +1927,7 @@ static AjBool martParseTabbedAttributes(AjPSeqin seqin)
 
     while(ajListPop(ulist, (void **)&tline))
     {
-        table = ajTablestrNewLen(REGTABGUESS);
+        table = ajTablestrNew(REGTABGUESS);
 
         pos = 0;
         
@@ -2514,7 +2059,7 @@ AjBool ajMartattributesParse(AjPSeqin seqin)
 {
     AjBool ret = ajTrue;
     
-    if(!martBuffIsXML(seqin->Filebuff))
+    if(!martBuffIsXML(seqin->Input->Filebuff))
     {
         ret = martParseTabbedAttributes(seqin);
     }
@@ -2539,21 +2084,17 @@ AjBool ajMartattributesParse(AjPSeqin seqin)
 
 AjBool ajMartGetFilters(AjPSeqin seqin, const AjPStr dataset)
 {
-    ajint proxyport = 0;
-    
-    AjPStr httpver   = NULL;
-    AjPStr proxyname = NULL;
     AjPStr get       = NULL;
 
     AjPMartquery mq = NULL;
-    AjPSeqQuery qry = NULL;
+    AjPQuery qry = NULL;
 
     const char *vschema = NULL;
     
-    FILE *fp = NULL;
-    struct AJTIMEOUT timo;
-    
-    qry = seqin->Query;
+    AjBool force_write = ajFalse;
+    ajuint httpcode = 0;
+
+    qry = seqin->Input->Query;
     mq  = ajMartGetMartqueryPtr(seqin);
     
     if(!mq)
@@ -2567,83 +2108,61 @@ AjBool ajMartGetFilters(AjPSeqin seqin, const AjPStr dataset)
         return ajFalse;
     }
     
+    ajStrAssignS(&mq->Dsname, dataset);
+    
+    /* First check whether registry is in the cache */
+
+    if(ajStrGetLen(mq->Cachedir) && (mq->Cacheflag & MART_CACHE_RD))
+    {
+        /* Try a cache read */
+        if(!martReadCacheEntry(mq, &seqin->Input->Filebuff, MART_FILENTRY))
+        {
+            if(mq->Cacheflag & MART_CACHE_WTIFEMPTY)
+                force_write = ajTrue;
+            else
+                force_write = ajFalse;
+        }
+        else
+            return ajTrue;
+    }
 
     /*
     ** Do the GET request
     */
     
-    httpver   = ajStrNew();
-    proxyname = ajStrNew();
     get       = ajStrNew();
 
-    
-    ajSeqHttpVersion(qry, &httpver);
-
     vschema = martGetVirtualSchema(dataset);
+
+    ajFmtPrintS(&get, "%S?type=filters&dataset=%S&virtualSchema=%s",
+                    mq->Martpath, dataset, vschema);
+
+    ajFilebuffDel(&seqin->Input->Filebuff);
+
+    seqin->Input->Filebuff = ajHttpRead(qry->DbHttpVer, qry->DbName,
+                                        qry->DbProxy,
+                                        mq->Marthost, mq->Martport, get);
     
-    if(ajSeqHttpProxy(qry, &proxyport, &proxyname))
-        ajFmtPrintS(&get, "GET http://%S:%u%S?type=filters&dataset=%S"
-                    "&virtualSchema=%s"
-                    " HTTP/%S\r\n",
-                    mq->Marthost, mq->Martport, mq->Martpath, dataset,
-                    vschema, httpver);
-    else
-        ajFmtPrintS(&get, "GET %S?type=filters&dataset=%S&virtualSchema=%s"
-                    " HTTP/%S\r\n",
-                    mq->Martpath, dataset, vschema, httpver);
-
-
-    if(ajStrGetLen(proxyname))
-        fp = ajSeqHttpGetProxy(qry, proxyname, proxyport,
-                               mq->Marthost, mq->Martport, get);
-    else
-        fp = ajSeqHttpGet(qry, mq->Marthost, mq->Martport, get);
-
-    if(!fp)
-    {
-        ajWarn("ajMartGetFilters: Cannot open fp\n");
-        
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-        
+    if(!seqin->Input->Filebuff)
 	return ajFalse;
-    }
 
+    httpcode = ajFilebuffHtmlNoheader(seqin->Input->Filebuff);
 
-    /*
-    ** The Filebuff needs deleting. It likely is non-NULL
-    ** from previous use by (e.g.) a dataset query.
-    */
-    
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
-
-    if(!seqin->Filebuff)
+    if(httpcode)
     {
-	ajErr("ajMartGetFilters: socket buffer attach failed for host '%S'",
-	      mq->Marthost);
-
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-
+        ajWarn("ajMartGetFilters: HTTP code %u from '%S'",
+               httpcode, get);
         return ajFalse;
     }
 
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
-    
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
- 
-    ajFilebuffHtmlNoheader(seqin->Filebuff);
-
+    if((ajStrGetLen(mq->Cachedir) && (mq->Cacheflag & MART_CACHE_WT)) ||
+       force_write)
+    {
+        /* Write to cache */
+        martWriteCacheEntry(mq, seqin->Input->Filebuff, MART_FILENTRY);
+    }
 
     ajStrDel(&get);
-    ajStrDel(&httpver);
-    ajStrDel(&proxyname);
     
     return ajTrue;
 }
@@ -2664,21 +2183,15 @@ AjBool ajMartGetFilters(AjPSeqin seqin, const AjPStr dataset)
 AjBool ajMartGetFiltersSchema(AjPSeqin seqin, const AjPStr dataset,
                               const AjPStr schema)
 {
-    ajint proxyport = 0;
-    
-    AjPStr httpver   = NULL;
-    AjPStr proxyname = NULL;
     AjPStr get       = NULL;
-
     AjPMartquery mq = NULL;
-    AjPSeqQuery qry = NULL;
+    AjPQuery qry = NULL;
 
     const char *vschema = NULL;
     
-    FILE *fp = NULL;
-    struct AJTIMEOUT timo;
-    
-    qry = seqin->Query;
+    ajuint httpcode = 0;
+
+    qry = seqin->Input->Query;
     mq  = ajMartGetMartqueryPtr(seqin);
     
     if(!mq)
@@ -2692,84 +2205,37 @@ AjBool ajMartGetFiltersSchema(AjPSeqin seqin, const AjPStr dataset,
 
         return ajFalse;
     }
-    
 
     /*
     ** Do the GET request
     */
     
-    httpver   = ajStrNew();
-    proxyname = ajStrNew();
     get       = ajStrNew();
-
-    
-    ajSeqHttpVersion(qry, &httpver);
 
     vschema = ajStrGetPtr(schema);
     
-    if(ajSeqHttpProxy(qry, &proxyport, &proxyname))
-        ajFmtPrintS(&get, "GET http://%S:%u%S?type=filters&dataset=%S"
-                    "&virtualSchema=%s"
-                    " HTTP/%S\r\n",
-                    mq->Marthost, mq->Martport, mq->Martpath, dataset,
-                    vschema, httpver);
-    else
-        ajFmtPrintS(&get, "GET %S?type=filters&dataset=%S&virtualSchema=%s"
-                    " HTTP/%S\r\n",
-                    mq->Martpath, dataset, vschema, httpver);
+    ajFmtPrintS(&get, "GET %S?type=filters&dataset=%S&virtualSchema=%s",
+	        mq->Martpath, dataset, vschema);
 
 
-    if(ajStrGetLen(proxyname))
-        fp = ajSeqHttpGetProxy(qry, proxyname, proxyport,
-                               mq->Marthost, mq->Martport, get);
-    else
-        fp = ajSeqHttpGet(qry, mq->Marthost, mq->Martport, get);
+    ajFilebuffDel(&seqin->Input->Filebuff);
 
-    if(!fp)
-    {
-        ajWarn("ajMartGetFiltersSchema: Cannot open fp\n");
-        
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-        
-	return ajFalse;
-    }
-
-
-    /*
-    ** The Filebuff needs deleting. It likely is non-NULL
-    ** from previous use by (e.g.) a dataset query.
-    */
+    seqin->Input->Filebuff = ajHttpRead(qry->DbHttpVer, qry->DbName,
+                                        qry->DbProxy,
+                                        mq->Marthost, mq->Martport, get);
     
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
+    if(!seqin->Input->Filebuff)
+	return ajFalse;
 
-    if(!seqin->Filebuff)
+    httpcode = ajFilebuffHtmlNoheader(seqin->Input->Filebuff);
+    if(httpcode)
     {
-	ajErr("ajMartGetFiltersSchema: socket buffer attach failed for "
-              "host '%S'", mq->Marthost);
-
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-
+        ajWarn("ajMartGetFiltersSchema: HTTP code %u from '%S'",
+               httpcode, get);
         return ajFalse;
     }
 
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
-    
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
- 
-    ajFilebuffHtmlNoheader(seqin->Filebuff);
-
-
     ajStrDel(&get);
-    ajStrDel(&httpver);
-    ajStrDel(&proxyname);
     
     return ajTrue;
 }
@@ -2878,7 +2344,7 @@ static AjBool martParseTabbedFilters(AjPSeqin seqin)
     if(!mq)
         return ajFalse;
     
-    buff  = seqin->Filebuff;
+    buff  = seqin->Input->Filebuff;
     line  = ajStrNew();
     token = ajStrNew();
     
@@ -2886,10 +2352,11 @@ static AjBool martParseTabbedFilters(AjPSeqin seqin)
 
     while(ajBuffreadLine(buff,&line))
     {
+        ajDebug("martParseTabbedFilters '%S'", line);
         if(ajStrGetLen(line) < 10)
             continue;
 
-        table = ajTablestrNewLen(REGTABGUESS);
+        table = ajTablestrNew(REGTABGUESS);
 
         pos = 0;
         
@@ -3020,7 +2487,7 @@ AjBool ajMartfiltersParse(AjPSeqin seqin)
 {
     AjBool ret = ajTrue;
     
-    if(!martBuffIsXML(seqin->Filebuff))
+    if(!martBuffIsXML(seqin->Input->Filebuff))
         ret = martParseTabbedFilters(seqin);
     else
         ajFatal("Looks like the new Biomart XML format for filters "
@@ -3043,18 +2510,14 @@ AjBool ajMartfiltersParse(AjPSeqin seqin)
 
 AjBool ajMartFilterMatch(AjPTable atab, const AjPMartFilter filt)
 {
-    AjPStr tablekey  = NULL;
-    AjPStr columnkey = NULL;
-    AjPStr namekey   = NULL;
-    AjPStr nameval   = NULL;
-    
     AjPStr filterkey = NULL;
     AjPStr filterval = NULL;
     
-    AjPStr atableval  = NULL;
-    AjPStr acolumnval = NULL;
-    AjPStr ftableval  = NULL;
-    AjPStr fcolumnval = NULL;
+    const AjPStr atableval  = NULL;
+    const AjPStr acolumnval = NULL;
+    const AjPStr ftableval  = NULL;
+    const AjPStr fcolumnval = NULL;
+    const AjPStr nameval = NULL;
 
     AjPTable ftab = NULL;
     AjBool firstval = ajTrue;
@@ -3064,17 +2527,14 @@ AjBool ajMartFilterMatch(AjPTable atab, const AjPMartFilter filt)
     ajuint nf = 0;
     
     
-    columnkey = ajStrNewC("columnName");
-    tablekey  = ajStrNewC("tableName");
-    namekey   = ajStrNewC("name");
     filterkey = ajStrNewC("filters");
 
     filterval = ajStrNew();
     
     firstval = ajTrue;
 
-    atableval  = ajTableFetch(atab,(void *)tablekey);
-    acolumnval = ajTableFetch(atab,(void *)columnkey);
+    atableval  = ajTableFetchC(atab, "tableName");
+    acolumnval = ajTableFetchC(atab, "columnName");
 
     nf = filt->Nfilters;
     
@@ -3082,14 +2542,14 @@ AjBool ajMartFilterMatch(AjPTable atab, const AjPMartFilter filt)
     {
         ftab = filt->Filters[i];
         
-        ftableval  = ajTableFetch(ftab,(void *)tablekey);
-        fcolumnval = ajTableFetch(ftab,(void *)columnkey);
+        ftableval  = ajTableFetchC(ftab, "tableName");
+        fcolumnval = ajTableFetchC(ftab, "columnName");
 
         if(!ajStrMatchS(atableval,ftableval) ||
            !ajStrMatchS(acolumnval,fcolumnval))
             continue;
 
-        nameval  = ajTableFetch(ftab,(void *)namekey);
+        nameval  = ajTableFetchC(ftab, "name");
 
         if(firstval)
         {
@@ -3102,10 +2562,6 @@ AjBool ajMartFilterMatch(AjPTable atab, const AjPMartFilter filt)
     }
 
     ajTablePut(atab, (void *)filterkey, (void *)filterval);
-
-    ajStrDel(&columnkey);
-    ajStrDel(&tablekey);
-    ajStrDel(&namekey);
 
     return ajTrue;
 }
@@ -3270,7 +2726,9 @@ static AjBool martHttpEncode(AjPStr *str)
     
     if(!str)
         return ajFalse;
-    
+
+    ajDebug("martHttpEncode '%S'\n", *str);
+
     p = ajStrGetPtr(*str);
 
     tstr = ajStrNew();
@@ -3294,6 +2752,8 @@ static AjBool martHttpEncode(AjPStr *str)
 
     ajStrDel(&tstr);
     
+    ajDebug("    result %3B '%S'\n", ret, *str);
+
     return ret;
 }
 
@@ -3310,19 +2770,14 @@ static AjBool martHttpEncode(AjPStr *str)
 
 AjBool ajMartSendQuery(AjPSeqin seqin)
 {
-    ajint proxyport = 0;
-    
-    AjPStr httpver   = NULL;
-    AjPStr proxyname = NULL;
     AjPStr get       = NULL;
 
     AjPMartquery mq = NULL;
-    AjPSeqQuery qry = NULL;
+    AjPQuery qry = NULL;
 
-    FILE *fp = NULL;
-    struct AJTIMEOUT timo;
-    
-    qry = seqin->Query;
+    ajuint httpcode = 0;
+
+    qry = seqin->Input->Query;
     mq  = ajMartGetMartqueryPtr(seqin);
     
     if(!mq)
@@ -3349,75 +2804,28 @@ AjBool ajMartSendQuery(AjPSeqin seqin)
     ** Do the GET request
     */
     
-    httpver   = ajStrNew();
-    proxyname = ajStrNew();
     get       = ajStrNew();
 
+    ajFmtPrintS(&get, "%S?query=%S", mq->Martpath, mq->Query);
     
-    ajSeqHttpVersion(qry, &httpver);
+    ajFilebuffDel(&seqin->Input->Filebuff);
 
-
-    if(ajSeqHttpProxy(qry, &proxyport, &proxyname))
-        ajFmtPrintS(&get, "GET http://%S:%u%S?query=%S "
-                    "HTTP/%S\r\n",
-                    mq->Marthost, mq->Martport, mq->Martpath, mq->Query,
-                    httpver);
-    else
-        ajFmtPrintS(&get, "GET %S?query=%S HTTP/%S\r\n",
-                    mq->Martpath, mq->Query, httpver);
-
-
-    if(ajStrGetLen(proxyname))
-        fp = ajSeqHttpGetProxy(qry, proxyname, proxyport,
-                               mq->Marthost, mq->Martport, get);
-    else
-        fp = ajSeqHttpGet(qry, mq->Marthost, mq->Martport, get);
-
-    if(!fp)
-    {
-        ajWarn("ajMartSendQuery: Cannot open fp\n");
-        
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-        
+    seqin->Input->Filebuff = ajHttpRead(qry->DbHttpVer, qry->DbName,
+                                        qry->DbProxy,
+                                        mq->Marthost, mq->Martport, get);
+    
+    if(!seqin->Input->Filebuff)
 	return ajFalse;
-    }
-
-
-    /*
-    ** The Filebuff needs deleting. It likely is non-NULL
-    ** from previous use by (e.g.) a dataset query.
-    */
-    
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
-
-    if(!seqin->Filebuff)
+ 
+    httpcode = ajFilebuffHtmlNoheader(seqin->Input->Filebuff);
+    if(httpcode)
     {
-	ajErr("ajMartSendQuery: socket buffer attach failed for host '%S'",
-	      mq->Marthost);
-
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-
+        ajWarn("ajMartSendQuery: HTTP code %u from '%S'",
+               httpcode, get);
         return ajFalse;
     }
 
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
-    
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
- 
-    ajFilebuffHtmlNoheader(seqin->Filebuff);
-
-
     ajStrDel(&get);
-    ajStrDel(&httpver);
-    ajStrDel(&proxyname);
     
     return ajTrue;
 }
@@ -3863,16 +3271,13 @@ static AjBool martMatchAttribute(const AjPStr name, const AjPMartAttribute atts)
     ajuint i;
     ajuint n;
     AjBool ret = ajFalse;
-    AjPStr key = NULL;
-    AjPStr val = NULL;
+    const AjPStr val = NULL;
     
     n = atts->Natts;
 
-    key = ajStrNewC("name");
-    
     for(i = 0; i < n; ++i)
     {
-        val = ajTableFetch(atts->Attributes[i],(void *)key);
+        val = ajTableFetchC(atts->Attributes[i], "name");
 
         if(ajStrMatchS(val, name))
         {
@@ -3880,8 +3285,6 @@ static AjBool martMatchAttribute(const AjPStr name, const AjPMartAttribute atts)
             break;
         }
     }
-
-    ajStrDel(&key);
 
     return ret;
 }
@@ -3903,16 +3306,13 @@ static AjBool martMatchFilter(const AjPStr name, const AjPMartFilter filts)
     ajuint i;
     ajuint n;
     AjBool ret = ajFalse;
-    AjPStr key = NULL;
-    AjPStr val = NULL;
+    const AjPStr val = NULL;
     
     n = filts->Nfilters;
 
-    key = ajStrNewC("name");
-    
     for(i = 0; i < n; ++i)
     {
-        val = ajTableFetch(filts->Filters[i],(void *)key);
+        val = ajTableFetchC(filts->Filters[i], "name");
 
         if(ajStrMatchS(val, name))
         {
@@ -3920,9 +3320,6 @@ static AjBool martMatchFilter(const AjPStr name, const AjPMartFilter filts)
             break;
         }
     }
-
-    ajStrDel(&key);
-
 
     return ret;
 }
@@ -3941,12 +3338,12 @@ static AjBool martMatchFilter(const AjPStr name, const AjPMartFilter filts)
 
 void ajMartAttachMartquery(AjPSeqin seqin, AjPMartquery mq)
 {
-    AjPSeqQuery qry = NULL;
+    AjPQuery qry = NULL;
 
     if(!seqin)
         return;
 
-    qry = seqin->Query;
+    qry = seqin->Input->Query;
 
     if(!qry)
         return;
@@ -3969,13 +3366,13 @@ void ajMartAttachMartquery(AjPSeqin seqin, AjPMartquery mq)
 
 AjPMartquery ajMartGetMartqueryPtr(const AjPSeqin seqin)
 {
-    AjPSeqQuery qry = NULL;
+    AjPQuery qry = NULL;
     AjPMartquery mq = NULL;
 
     if(!seqin)
         return NULL;
 
-    qry = seqin->Query;
+    qry = seqin->Input->Query;
 
     if(!qry)
         return NULL;
@@ -4639,21 +4036,17 @@ AjBool ajMartCheckQinfo(AjPSeqin seqin, AjPMartqinfo qinfo)
 
 AjBool ajMartGetConfiguration(AjPSeqin seqin, const AjPStr dataset)
 {
-    ajint proxyport = 0;
-    
-    AjPStr httpver   = NULL;
-    AjPStr proxyname = NULL;
     AjPStr get       = NULL;
 
     AjPMartquery mq = NULL;
-    AjPSeqQuery qry = NULL;
+    AjPQuery qry = NULL;
 
     const char *vschema = NULL;
     
-    FILE *fp = NULL;
-    struct AJTIMEOUT timo;
-    
-    qry = seqin->Query;
+    AjBool force_write = ajFalse;
+    ajuint httpcode = 0;
+   
+    qry = seqin->Input->Query;
     mq  = ajMartGetMartqueryPtr(seqin);
 
     if(!mq)
@@ -4667,86 +4060,61 @@ AjBool ajMartGetConfiguration(AjPSeqin seqin, const AjPStr dataset)
         return ajFalse;
     }
     
+    ajStrAssignS(&mq->Dsname, dataset);
+    
+    /* First check whether registry is in the cache */
+
+    if(ajStrGetLen(mq->Cachedir) && (mq->Cacheflag & MART_CACHE_RD))
+    {
+        /* Try a cache read */
+        if(!martReadCacheEntry(mq, &seqin->Input->Filebuff, MART_CONENTRY))
+        {
+            if(mq->Cacheflag & MART_CACHE_WTIFEMPTY)
+                force_write = ajTrue;
+            else
+                force_write = ajFalse;
+        }
+        else
+            return ajTrue;
+    }
 
     /*
     ** Do the GET request
     */
     
-    httpver   = ajStrNew();
-    proxyname = ajStrNew();
     get       = ajStrNew();
-
-    
-    ajSeqHttpVersion(qry, &httpver);
 
 
     vschema = martGetVirtualSchema(dataset);
     
-    if(ajSeqHttpProxy(qry, &proxyport, &proxyname))
-        ajFmtPrintS(&get, "GET http://%S:%u%S?type=configuration&dataset=%S"
-                    "&virtualSchema=%s"
-                    " HTTP/%S\r\n",
-                    mq->Marthost, mq->Martport, mq->Martpath, dataset,
-                    vschema, httpver);
-    else
-        ajFmtPrintS(&get, "GET %S?type=configuration&dataset=%S"
-                    "&virtualSchema=%s"
-                    " HTTP/%S\r\n",
-                    mq->Martpath, dataset, vschema, httpver);
+    ajFmtPrintS(&get, "%S?type=configuration&dataset=%S"
+		"&virtualSchema=%s", mq->Martpath, dataset, vschema);
 
+    ajFilebuffDel(&seqin->Input->Filebuff);
 
-    if(ajStrGetLen(proxyname))
-        fp = ajSeqHttpGetProxy(qry, proxyname, proxyport,
-                               mq->Marthost, mq->Martport, get);
-    else
-        fp = ajSeqHttpGet(qry, mq->Marthost, mq->Martport, get);
-
-    if(!fp)
-    {
-        ajWarn("ajMartGetConfiguration: Cannot open fp\n");
-        
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-        
-	return ajFalse;
-    }
-
-
-    /*
-    ** The Filebuff needs deleting. It likely is non-NULL
-    ** from previous use by (e.g.) a dataset query.
-    */
+    seqin->Input->Filebuff = ajHttpRead(qry->DbHttpVer, qry->DbName,
+                                        qry->DbProxy,
+                                        mq->Marthost, mq->Martport, get);
     
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
+    if(!seqin->Input->Filebuff)
+	return ajFalse;
 
-    if(!seqin->Filebuff)
+    httpcode = ajFilebuffHtmlNoheader(seqin->Input->Filebuff);
+    if(httpcode)
     {
-	ajErr("ajMartGetConfiguration: socket buffer attach failed for "
-              "host '%S'",
-	      mq->Marthost);
-
-        ajStrDel(&get);
-        ajStrDel(&httpver);
-        ajStrDel(&proxyname);
-
+        ajWarn("ajMartGetConfiguration: HTTP code %u from '%S'",
+               httpcode, get);
         return ajFalse;
     }
 
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
-    
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
-
-    ajFilebuffHtmlNoheader(seqin->Filebuff);
-
+    if((ajStrGetLen(mq->Cachedir) && (mq->Cacheflag & MART_CACHE_WT)) ||
+       force_write)
+    {
+        /* Write to cache */
+        martWriteCacheEntry(mq, seqin->Input->Filebuff, MART_CONENTRY);
+    }
 
     ajStrDel(&get);
-    ajStrDel(&httpver);
-    ajStrDel(&proxyname);
     
     return ajTrue;
 }
@@ -4776,7 +4144,7 @@ AjBool ajMartconfigurationParse(AjPSeqin seqin)
         return ajFalse;
 
     pmq->Config = ajDomImplementationCreateDocument(NULL,NULL,NULL);
-    if(!ajDomReadFilebuff(pmq->Config, seqin->Filebuff))
+    if(!ajDomReadFilebuff(pmq->Config, seqin->Input->Filebuff))
         ret = ajTrue;
     
     return ret;
@@ -4799,20 +4167,14 @@ static int martAttributePageCompar(const void *a, const void *b)
     const AjPTable t1;
     const AjPTable t2;
 
-    AjPStr key = NULL;
-
-    AjPStr v1 = NULL;
-    AjPStr v2 = NULL;
+    const AjPStr v1 = NULL;
+    const AjPStr v2 = NULL;
     
     t1 = *((AjPTable const *) a);
     t2 = *((AjPTable const *) b);
     
-    key = ajStrNewC("page");
-
-    v1 = ajTableFetch(t1,(void *)key);
-    v2 = ajTableFetch(t2,(void *)key);
-
-    ajStrDel(&key);
+    v1 = ajTableFetchC(t1, "page");
+    v2 = ajTableFetchC(t2, "page");
 
     return strcmp(v1->Ptr,v2->Ptr);
 }
@@ -4921,14 +4283,10 @@ AjBool ajMartNameIsProtC(const char *name)
 
 AjBool ajMartTableNameIsNuc(const AjPTable t)
 {
-    AjPStr key    = NULL;
-    AjPStr value  = NULL;
+    const AjPStr value  = NULL;
     const char *p = NULL;
     
-    key   = ajStrNewC("name");
-    value = ajTableFetch(t,(void *)key);
-
-    ajStrDel(&key);
+    value = ajTableFetchC(t, "name");
 
     if(value)
     {
@@ -4955,15 +4313,11 @@ AjBool ajMartTableNameIsNuc(const AjPTable t)
 
 AjBool ajMartTableNameIsProt(const AjPTable t)
 {
-    AjPStr key    = NULL;
-    AjPStr value  = NULL;
+    const AjPStr value  = NULL;
     const char *p = NULL;
     
-    key   = ajStrNewC("name");
-    value = ajTableFetch(t,(void *)key);
+    value = ajTableFetchC(t, "name");
 
-    ajStrDel(&key);
-    
     if(value)
     {
         p = ajStrGetPtr(value);
@@ -5002,15 +4356,15 @@ AjPStr* ajMartCheckHeader(AjPSeqin seqin, AjPMartqinfo qinfo)
 
     AjPStr keyname  = NULL;
     AjPStr keydname = NULL;
-    AjPStr value    = NULL;
+    const AjPStr value    = NULL;
 
     AjPStrTok handle = NULL;
     AjPStr token     = NULL;
     
     
-    ajuint nfields = 0;
+    ajulong nfields = 0;
     
-    ajuint i;
+    ajulong i;
     ajuint j;
     
     mq = ajMartGetMartqueryPtr(seqin);
@@ -5028,7 +4382,7 @@ AjPStr* ajMartCheckHeader(AjPSeqin seqin, AjPMartqinfo qinfo)
     if(!att)
         return NULL;
     
-    buff = seqin->Filebuff;
+    buff = seqin->Input->Filebuff;
     
     if(!buff)
         return NULL;
@@ -5062,11 +4416,11 @@ AjPStr* ajMartCheckHeader(AjPSeqin seqin, AjPMartqinfo qinfo)
         
         for(j = 0; j < att->Natts; ++j)
         {
-            value = ajTableFetch(att->Attributes[j],(void *)keydname);
+            value = ajTableFetchS(att->Attributes[j], keydname);
 
             if(ajStrMatchS(value,token))
             {
-                value = ajTableFetch(att->Attributes[j],(void *)keyname);
+                value = ajTableFetchS(att->Attributes[j], keyname);
                 ajStrAssignS(&ret[i],value);
                 break;
             }
@@ -5084,4 +4438,714 @@ AjPStr* ajMartCheckHeader(AjPSeqin seqin, AjPMartqinfo qinfo)
     ajStrTokenDel(&handle);
     
     return ret;
+}
+
+
+
+
+/* @funcstatic martVerifyOrCreateCacheDir ************************************
+**
+** Check whether cache directory exists, try to create it if not.
+**
+** @param [u]  dir [AjPStr] directory
+** @return [AjBool] true on success
+******************************************************************************/
+
+static AjBool martVerifyOrCreateCacheDir(AjPStr dir)
+{
+    if(!ajFilenameExistsDir(dir))
+        if(!ajSysCommandMakedirS(dir))
+            return ajFalse;
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic martEncodeHname ***********************************************
+**
+** Encode host/path/port into a suitable name for a directory
+**
+** @param [w] str [AjPStr*] Encoded directory name
+** @param [r] host [const AjPStr] Host
+** @param [r] path [const AjPStr] Path
+** @param [r] port [ajuint] Port
+** @return [void]
+******************************************************************************/
+
+static void martEncodeHname(AjPStr *str, const AjPStr host, const AjPStr path,
+                            ajuint port)
+{
+    AjPStr ho = NULL;
+    AjPStr pa = NULL;
+
+    ho = ajStrNew();
+    pa = ajStrNew();
+
+
+    ajStrAssignS(&ho, host);
+    ajStrAssignS(&pa, path);
+
+    ajStrExchangeKK(&ho,'.','%');
+    ajStrExchangeKK(&pa,'/','^');
+
+    ajFmtPrintS(str,"%S+%S+%u",ho,pa,port);
+    
+    ajStrDel(&ho);
+    ajStrDel(&pa);
+
+    return;
+}
+
+
+
+
+/* @func ajMartDecodeHname ***************************************************
+**
+** Decode directory name into host/path/port
+**
+** @param [r] dir [const AjPStr] Encoded directory name
+** @param [w] host [AjPStr*] Host
+** @param [w] path [AjPStr*] Path
+** @param [w] port [ajuint*] Port
+** @return [void]
+******************************************************************************/
+
+void ajMartDecodeHname(const AjPStr dir, AjPStr *host, AjPStr *path,
+                       ajuint *port)
+{
+    AjPStr str = NULL;
+    AjPStrTok handle = NULL;
+
+    str = ajStrNew();
+
+    handle = ajStrTokenNewC(dir, "+");    
+
+    if(!ajStrTokenNextParse(&handle, &str))
+    {
+        ajErr("ajMartDecodeHname: Bad directory name [%S]",dir);
+        return;
+    }
+
+    ajStrExchangeKK(&str,'%','.');
+    ajStrAssignS(host,str);
+
+    if(!ajStrTokenNextParse(&handle, &str))
+    {
+        ajErr("ajMartDecodeHname: Bad directory name [%S]",dir);
+        return;
+    }
+
+    ajStrExchangeKK(&str,'^','/');
+    ajStrAssignS(path,str);
+
+    if(!ajStrTokenNextParse(&handle, &str))
+    {
+        ajErr("ajMartDecodeHname: Bad directory name [%S]",dir);
+        return;
+    }
+
+    ajStrToUint(str,port);
+    
+    ajStrDel(&str);
+    ajStrTokenDel(&handle);
+
+    return;
+}
+
+
+
+
+/* @funcstatic martWriteCacheEntry ********************************************
+**
+** Write buffer to cache file
+**
+** @param [u] mq [AjPMartquery] Query object containing host & cache info
+** @param [u] buff [AjPFilebuff] File buffer
+** @param [r] type [ajint] Type of information held in the file buffer
+** @return [AjBool] true on success
+******************************************************************************/
+
+static AjBool martWriteCacheEntry(AjPMartquery mq, AjPFilebuff buff, ajint type)
+{
+    AjPStr dir   = NULL;
+    AjPStr hname = NULL;
+    AjPStr fname = NULL;
+    AjPStr line  = NULL;
+    
+    AjPFile outf = NULL;
+    
+    if(!martVerifyOrCreateCacheDir(mq->Cachedir))
+    {
+        ajErr("Unable to create requested cache directory [%S]",
+              mq->Cachedir);
+        return ajFalse;
+    }
+
+
+    hname = ajStrNew();
+    dir   = ajStrNew();
+    
+    switch(type)
+    {
+        case MART_REGENTRY:
+            martEncodeHname(&hname,mq->Reghost,mq->Regpath,mq->Regport);
+            
+            ajFmtPrintS(&dir,"%S%c%S",mq->Cachedir,SLASH_CHAR,
+                        hname);
+
+            ajStrDel(&hname);
+            
+            if(!martVerifyOrCreateCacheDir(dir))
+            {
+                ajErr("Unable to create requested cache directory [%S]",
+                      dir);
+
+                ajStrDel(&dir);
+
+                return ajFalse;
+            }
+
+            fname = ajStrNew();
+
+            ajFmtPrintS(&fname,"%S%cRegistry",dir,SLASH_CHAR);
+            ajStrDel(&dir);
+
+            if(!(outf = ajFileNewOutNameS(fname)))
+            {
+                ajErr("Unable to open registry cache file for write [%S]",
+                      fname);
+
+                ajStrDel(&fname);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&fname);
+
+            line = ajStrNew();
+
+            while(ajBuffreadLine(buff,&line))
+                ajFmtPrintF(outf,"%S",line);
+
+            ajFileClose(&outf);
+            ajStrDel(&line);
+
+            ajFilebuffReset(buff);
+            
+            break;
+
+        case MART_DSENTRY:
+            martEncodeHname(&hname,mq->Marthost,mq->Martpath,mq->Martport);
+            
+            ajFmtPrintS(&dir,"%S%c%S",mq->Cachedir,SLASH_CHAR,
+                        hname);
+
+            /* Create server directory if necessary */
+            
+            if(!martVerifyOrCreateCacheDir(dir))
+            {
+                ajErr("Unable to create requested cache directory [%S]",
+                      dir);
+
+                ajStrDel(&hname);
+                ajStrDel(&dir);
+
+                return ajFalse;
+            }
+
+            /* Create mart directory if necessary */
+            ajFmtPrintS(&dir,"%S%c%S%ceMART_%S",mq->Cachedir,SLASH_CHAR,
+                        hname,SLASH_CHAR,mq->Mart);
+
+            if(!martVerifyOrCreateCacheDir(dir))
+            {
+                ajErr("Unable to create requested cache directory [%S]",
+                      dir);
+
+                ajStrDel(&hname);
+                ajStrDel(&dir);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&hname);
+            fname = ajStrNew();
+
+            ajFmtPrintS(&fname,"%S%cDatasets",dir,SLASH_CHAR);
+            ajStrDel(&dir);
+
+            if(!(outf = ajFileNewOutNameS(fname)))
+            {
+                ajErr("Unable to open registry cache file for write [%S]",
+                      fname);
+
+                ajStrDel(&fname);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&fname);
+
+            line = ajStrNew();
+
+            while(ajBuffreadLine(buff,&line))
+                ajFmtPrintF(outf,"%S",line);
+
+            ajFileClose(&outf);
+            ajStrDel(&line);
+
+            ajFilebuffReset(buff);
+            
+            break;
+
+        case MART_ATTENTRY:
+            martEncodeHname(&hname,mq->Marthost,mq->Martpath,mq->Martport);
+
+            ajFmtPrintS(&dir,"%S%cDatasets",mq->Cachedir,SLASH_CHAR);
+
+            /* Create Datasets directory if necessary */
+            
+            if(!martVerifyOrCreateCacheDir(dir))
+            {
+                ajErr("Unable to create requested cache directory [%S]",
+                      dir);
+
+                ajStrDel(&hname);
+                ajStrDel(&dir);
+
+                return ajFalse;
+            }
+            
+            /* Create host directory if necessary */
+
+            ajFmtPrintS(&dir,"%S%cDatasets%c%S",mq->Cachedir,SLASH_CHAR,
+                        SLASH_CHAR,hname);
+            
+            if(!martVerifyOrCreateCacheDir(dir))
+            {
+                ajErr("Unable to create requested cache directory [%S]",
+                      dir);
+
+                ajStrDel(&hname);
+                ajStrDel(&dir);
+
+                return ajFalse;
+            }
+
+            /* Create dataset host directory if necessary */
+            ajFmtPrintS(&dir,"%S%cDatasets%c%S%c%S",mq->Cachedir,
+                        SLASH_CHAR, SLASH_CHAR,
+                        hname, SLASH_CHAR, mq->Dsname);
+
+            if(!martVerifyOrCreateCacheDir(dir))
+            {
+                ajErr("Unable to create requested cache directory [%S]",
+                      dir);
+
+                ajStrDel(&hname);
+                ajStrDel(&dir);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&hname);
+            fname = ajStrNew();
+
+            ajFmtPrintS(&fname,"%S%cAttributes",dir,SLASH_CHAR);
+            ajStrDel(&dir);
+
+            if(!(outf = ajFileNewOutNameS(fname)))
+            {
+                ajErr("Unable to open registry cache file for write [%S]",
+                      fname);
+
+                ajStrDel(&fname);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&fname);
+
+            line = ajStrNew();
+
+            while(ajBuffreadLine(buff,&line))
+                ajFmtPrintF(outf,"%S",line);
+
+            ajFileClose(&outf);
+            ajStrDel(&line);
+
+            ajFilebuffReset(buff);
+            
+            break;
+
+         case MART_FILENTRY:
+            martEncodeHname(&hname,mq->Marthost,mq->Martpath,mq->Martport);
+
+            ajFmtPrintS(&dir,"%S%cDatasets",mq->Cachedir,SLASH_CHAR);
+
+            /* Create Datasets directory if necessary */
+            
+            if(!martVerifyOrCreateCacheDir(dir))
+            {
+                ajErr("Unable to create requested cache directory [%S]",
+                      dir);
+
+                ajStrDel(&hname);
+                ajStrDel(&dir);
+
+                return ajFalse;
+            }
+            
+            /* Create host directory if necessary */
+
+            ajFmtPrintS(&dir,"%S%cDatasets%c%S",mq->Cachedir,SLASH_CHAR,
+                        SLASH_CHAR,hname);
+            
+            if(!martVerifyOrCreateCacheDir(dir))
+            {
+                ajErr("Unable to create requested cache directory [%S]",
+                      dir);
+
+                ajStrDel(&hname);
+                ajStrDel(&dir);
+
+                return ajFalse;
+            }
+
+            /* Create dataset host directory if necessary */
+            ajFmtPrintS(&dir,"%S%cDatasets%c%S%c%S",mq->Cachedir,
+                        SLASH_CHAR, SLASH_CHAR,
+                        hname, SLASH_CHAR, mq->Dsname);
+
+            if(!martVerifyOrCreateCacheDir(dir))
+            {
+                ajErr("Unable to create requested cache directory [%S]",
+                      dir);
+
+                ajStrDel(&hname);
+                ajStrDel(&dir);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&hname);
+            fname = ajStrNew();
+
+            ajFmtPrintS(&fname,"%S%cFilters",dir,SLASH_CHAR);
+            ajStrDel(&dir);
+
+            if(!(outf = ajFileNewOutNameS(fname)))
+            {
+                ajErr("Unable to open registry cache file for write [%S]",
+                      fname);
+
+                ajStrDel(&fname);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&fname);
+
+            line = ajStrNew();
+
+            while(ajBuffreadLine(buff,&line))
+                ajFmtPrintF(outf,"%S",line);
+
+            ajFileClose(&outf);
+            ajStrDel(&line);
+
+            ajFilebuffReset(buff);
+            
+            break;
+
+         case MART_CONENTRY:
+            martEncodeHname(&hname,mq->Marthost,mq->Martpath,mq->Martport);
+
+            ajFmtPrintS(&dir,"%S%cDatasets",mq->Cachedir,SLASH_CHAR);
+
+            /* Create Datasets directory if necessary */
+            
+            if(!martVerifyOrCreateCacheDir(dir))
+            {
+                ajErr("Unable to create requested cache directory [%S]",
+                      dir);
+
+                ajStrDel(&hname);
+                ajStrDel(&dir);
+
+                return ajFalse;
+            }
+            
+            /* Create host directory if necessary */
+
+            ajFmtPrintS(&dir,"%S%cDatasets%c%S",mq->Cachedir,SLASH_CHAR,
+                        SLASH_CHAR,hname);
+            
+            if(!martVerifyOrCreateCacheDir(dir))
+            {
+                ajErr("Unable to create requested cache directory [%S]",
+                      dir);
+
+                ajStrDel(&hname);
+                ajStrDel(&dir);
+
+                return ajFalse;
+            }
+
+            /* Create dataset host directory if necessary */
+            ajFmtPrintS(&dir,"%S%cDatasets%c%S%c%S",mq->Cachedir,
+                        SLASH_CHAR, SLASH_CHAR,
+                        hname, SLASH_CHAR, mq->Dsname);
+
+            if(!martVerifyOrCreateCacheDir(dir))
+            {
+                ajErr("Unable to create requested cache directory [%S]",
+                      dir);
+
+                ajStrDel(&hname);
+                ajStrDel(&dir);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&hname);
+            fname = ajStrNew();
+
+            ajFmtPrintS(&fname,"%S%cConfiguration",dir,SLASH_CHAR);
+            ajStrDel(&dir);
+
+            if(!(outf = ajFileNewOutNameS(fname)))
+            {
+                ajErr("Unable to open registry cache file for write [%S]",
+                      fname);
+
+                ajStrDel(&fname);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&fname);
+
+            line = ajStrNew();
+
+            while(ajBuffreadLine(buff,&line))
+                ajFmtPrintF(outf,"%S",line);
+
+            ajFileClose(&outf);
+            ajStrDel(&line);
+
+            ajFilebuffReset(buff);
+            
+            break;
+
+        default:
+            ajStrDel(&hname);
+            ajStrDel(&dir);
+            break;
+    }
+    
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic martReadCacheEntry ********************************************
+**
+** Read cache file into file buffer
+**
+** @param [u] mq [AjPMartquery] Query object containing host & cache info
+** @param [u] buff [AjPFilebuff*] File buffer
+** @param [r] type [ajint] Type of information held in the file buffer
+** @return [AjBool] true on success
+******************************************************************************/
+
+static AjBool martReadCacheEntry(AjPMartquery mq, AjPFilebuff *buff,
+                                 ajint type)
+{
+    AjPStr hname = NULL;
+    AjPStr fname = NULL;
+    AjPStr line  = NULL;
+    
+    AjPFile inf = NULL;
+    
+    hname = ajStrNew();
+    fname = ajStrNew();
+
+    switch(type)
+    {
+        case MART_REGENTRY:
+            martEncodeHname(&hname,mq->Reghost,mq->Regpath,mq->Regport);
+            
+            ajFmtPrintS(&fname,"%S%c%S%cRegistry",mq->Cachedir,SLASH_CHAR,
+                        hname,SLASH_CHAR);
+
+            ajStrDel(&hname);
+            
+            if(!(inf = ajFileNewInNameS(fname)))
+            {
+                ajStrDel(&fname);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&fname);
+
+            line = ajStrNew();
+
+            ajFilebuffDel(buff);
+            *buff = ajFilebuffNewNofile();
+            
+            while(ajReadline(inf,&line))
+                ajFilebuffLoadS(*buff,line);
+            
+            ajFileClose(&inf);
+            ajStrDel(&line);
+
+            ajFilebuffReset(*buff);
+
+            break;
+
+        case MART_DSENTRY:
+            martEncodeHname(&hname,mq->Marthost,mq->Martpath,mq->Martport);
+            
+            ajFmtPrintS(&fname,"%S%c%S%ceMART_%S%cDatasets",mq->Cachedir,
+                        SLASH_CHAR,hname,SLASH_CHAR,mq->Mart,SLASH_CHAR);
+
+            ajStrDel(&hname);
+            
+            if(!(inf = ajFileNewInNameS(fname)))
+            {
+                ajStrDel(&fname);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&fname);
+
+            line = ajStrNew();
+
+            ajFilebuffDel(buff);
+            *buff = ajFilebuffNewNofile();
+            
+            while(ajReadline(inf,&line))
+                ajFilebuffLoadS(*buff,line);
+            
+            ajFileClose(&inf);
+            ajStrDel(&line);
+
+            ajFilebuffReset(*buff);
+
+            break;
+
+        case MART_ATTENTRY:
+            martEncodeHname(&hname,mq->Marthost,mq->Martpath,mq->Martport);
+            
+            ajFmtPrintS(&fname,"%S%cDatasets%c%S%c%S%cAttributes",mq->Cachedir,
+                        SLASH_CHAR, SLASH_CHAR, hname, SLASH_CHAR, mq->Dsname,
+                        SLASH_CHAR);
+
+            ajStrDel(&hname);
+            
+            if(!(inf = ajFileNewInNameS(fname)))
+            {
+                ajStrDel(&fname);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&fname);
+
+            line = ajStrNew();
+
+            ajFilebuffDel(buff);
+            *buff = ajFilebuffNewNofile();
+            
+            while(ajReadline(inf,&line))
+                ajFilebuffLoadS(*buff,line);
+            
+            ajFileClose(&inf);
+            ajStrDel(&line);
+
+            ajFilebuffReset(*buff);
+
+            break;
+
+        case MART_FILENTRY:
+            martEncodeHname(&hname,mq->Marthost,mq->Martpath,mq->Martport);
+            
+            ajFmtPrintS(&fname,"%S%cDatasets%c%S%c%S%cFilters",mq->Cachedir,
+                        SLASH_CHAR, SLASH_CHAR, hname, SLASH_CHAR, mq->Dsname,
+                        SLASH_CHAR);
+
+            ajStrDel(&hname);
+            
+            if(!(inf = ajFileNewInNameS(fname)))
+            {
+                ajStrDel(&fname);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&fname);
+
+            line = ajStrNew();
+
+            ajFilebuffDel(buff);
+            *buff = ajFilebuffNewNofile();
+            
+            while(ajReadline(inf,&line))
+                ajFilebuffLoadS(*buff,line);
+            
+            ajFileClose(&inf);
+            ajStrDel(&line);
+
+            ajFilebuffReset(*buff);
+
+            break;
+
+        case MART_CONENTRY:
+            martEncodeHname(&hname,mq->Marthost,mq->Martpath,mq->Martport);
+            
+            ajFmtPrintS(&fname,"%S%cDatasets%c%S%c%S%cConfiguration",
+                        mq->Cachedir, SLASH_CHAR, SLASH_CHAR, hname,
+                        SLASH_CHAR, mq->Dsname, SLASH_CHAR);
+
+            ajStrDel(&hname);
+            
+            if(!(inf = ajFileNewInNameS(fname)))
+            {
+                ajStrDel(&fname);
+
+                return ajFalse;
+            }
+
+            ajStrDel(&fname);
+
+            line = ajStrNew();
+
+            ajFilebuffDel(buff);
+            *buff = ajFilebuffNewNofile();
+            
+            while(ajReadline(inf,&line))
+                ajFilebuffLoadS(*buff,line);
+            
+            ajFileClose(&inf);
+            ajStrDel(&line);
+
+            ajFilebuffReset(*buff);
+
+            break;
+
+        default:
+            ajStrDel(&hname);
+            ajStrDel(&fname);
+            break;
+    }
+    
+
+    return ajTrue;
 }

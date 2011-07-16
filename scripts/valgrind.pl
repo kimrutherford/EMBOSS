@@ -10,15 +10,18 @@
 # Valgrind requires EMBOSS built without shared libraries
 
 %precommands = (
+		"dbxcompress-qa1" => "cp ../../qa/dbxuncompress-keep/*de .",
+		"dbxreport-qa1" => "cp ../../qa/dbxflat-ex-keep/embl.*ac .;cp ../../qa/dbxflat-ex-keep/embl.*id .",
+		"dbxuncompress-qa1" => "cp ../../qa/dbxflat-all-keep/*de .",
 		"domainalign-qa1" => "mkdir daf",
 		"seqnr-qa1" => "mkdir hitsnr;mkdir hitsred",
 		"sigscanlig-qa1" => "mkdir lhf;mkdir aln;mkdir results",
 		"ehmmindex-qa1" => "cp ../../qa/ehmmcalibrate-ex2-keep/myhmmso .",
-		"ohmmindex-qa1" => "cp ../../qa/ohmm-own-keep/myhmms .",
+		"ohmmindex-qa1" => "cp ../../qa/ohmm-own-keep4/myhmms .",
 		"ohmmcalibrate-qa1" => "cp ../../qa/ohmmbuild-ex-keep/globin.hmm .",
 
-		"ohmmcalibrate-qa2" => "cp ../../qa/ohmm-own-keep/myhmms .",
-		"ohmmcalibrate-qa3" => "cp ../../qa/ohmm-own-keep/myhmms .",
+		"ohmmcalibrate-qa2" => "cp ../../qa/ohmm-own-keep4/myhmms .",
+		"ohmmcalibrate-qa3" => "cp ../../qa/ohmm-own-keep4/myhmms .",
 		"intconv-qa1" => "cp ../../qa/intconv-check/stdin .",
 		"fdnamove-qa1" => "cp ../../data/fmove.in ./stdin",
 		"fdolmove-qa1" => "cp ../../data/fmove.in ./stdin",
@@ -44,12 +47,15 @@ sub usage() {
    -wild                   all tests matching wildcard testname
    -all                    all tests in testfile
    -block=n                set block number, tests running in blocks of 10
+   -keep                   keep test directory on success
 ";
 }
 
 sub runtest ($) {
     my ($name) = @_;
-    print "Run valgrind test $name\n";
+    if($dorunning) {
+	print "\nRun valgrind test $name\n";
+    }
     my $defbytes = 0;
     my $posbytes = 0;
     my $rembytes = 0;
@@ -70,7 +76,9 @@ sub runtest ($) {
 	else {
 	    $myvalgpath = $valgpath;
 	}
+	if($dorunning) {
 	    print "Running valgrind $valgopts $myvalgpath$tests{$name}\n";
+	}
 
 	eval {
 	    ($startuser, $startsys, $startuserc, $startsysc) = times();
@@ -85,12 +93,15 @@ sub runtest ($) {
 	    mkdir ("$name", 0777);
 	    chdir $name;
 	    if(defined($precommands{$name})) {
-		system ("$precommands{$name}");
+		@pc = split(/;/,"$precommands{$name}");
+		foreach $pc (@pc) {
+		    system ("$pc");
+		}
 	    }
 	    if(-e "stdin") { $infile = "< stdin" }
 	    $status = 0;
 	    alarm($timeout);
-	    $sysstat = system ("EMBOSSRC=../.. ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;valgrind $valgopts $myvalgpath$tests{$name} $infile 9> ../valgrind/$name.valgrind" );
+	    $sysstat = system ("EMBOSSRC=../.. ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;valgrind $valgopts $myvalgpath$tests{$name} $infile 9> ../valgrind/$name.valgrind 2> stderr > stdout" );
 	    alarm(0);
 	    $status = $sysstat >> 8;
 	    ($enduser, $endsys, $enduserc, $endsysc) =times();
@@ -112,11 +123,13 @@ sub runtest ($) {
 	    return -1;
 	}
 	else {
-	    printf STDERR
-		"Valgrind time $name total: %d user: %d sys: %d CPU user: %d sys: %d\n",
-		$endtime-$starttime,
-		$enduser-$startuser, $endsys-$startsys,
-		$enduserc-$startuserc, $endsysc-$startsysc;
+	    if($dorunning) {
+		printf STDERR
+		    "Valgrind time $name total: %d user: %d sys: %d CPU user: %d sys: %d\n",
+		    $endtime-$starttime,
+		    $enduser-$startuser, $endsys-$startsys,
+		    $enduserc-$startuserc, $endsysc-$startsysc;
+	    }
 	}
 
 	open (TEST, "valgrind/$name.valgrind") ||
@@ -190,6 +203,7 @@ $dowild=0;
 $dolist=0;
 $doall = 0;
 $dokeep=0;
+$dorunning = 1;
 foreach $test (@ARGV) {
     if ($test =~ /^-(.*)/) {
 	$arg=$1;
@@ -202,6 +216,7 @@ foreach $test (@ARGV) {
 	elsif ($arg eq "wild") {$dowild=1;}
 	elsif ($arg eq "all") {$doall=1;}
 	elsif ($arg eq "keep") {$dokeep=1;}
+	elsif ($arg eq "quiet") {$dorunning = 0;}
 	elsif ($arg =~ /block=(\d+)/) {
 	    $block=$1;
 	    $i=0;
@@ -246,7 +261,7 @@ if($dowild) {
     }
 }
 
-$valgopts = "--suppressions=../../valgrind.supp --leak-check=full --show-reachable=yes --num-callers=15 --verbose --log-fd=9 --error-limit=no --leak-resolution=high --track-fds=yes";
+$valgopts = "--suppressions=../../valgrind.supp --track-origins=yes --leak-check=full --show-reachable=yes --num-callers=15 --verbose --log-fd=9 --error-limit=no --leak-resolution=high --track-fds=yes";
 ## --leak-check=full       Test for memory leaks at end
 ## --show-reachable=yes   Show allocated memory still reachable
 ## --num-callers=15       Backtrace 15 functions - use more if needed

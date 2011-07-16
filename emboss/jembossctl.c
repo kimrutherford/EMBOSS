@@ -1111,7 +1111,7 @@ static AjBool jembossctl_do_batch(char *buf, int uid, int gid)
 	    exit(-1);
 	}
 
-	ajSysExecProgArgEnvNowaitC(ajStrGetPtr(prog),argp,envp);
+	ajSysExecprogNowaitS(prog,argp,envp);
     }
 
 
@@ -1519,7 +1519,7 @@ static AjBool jembossctl_do_fork(char *buf, int uid, int gid)
 	    exit(-1);
 	}
 
-	ajSysExecProgArgEnvNowaitC(ajStrGetPtr(prog),argp,envp);
+	ajSysExecprogNowaitS(prog,argp,envp);
     }
 
 
@@ -2341,7 +2341,7 @@ static AjBool jembossctl_do_deletedir(char *buf, int uid, int gid)
     }
 
     ajSysCommandRemovedirS(dir);
-    if(!ajFilenameExists(dir))
+    if(ajFilenameExists(dir))
     {
 	fprintf(stderr,"system error (delete directory)\n");
 	ajStrDel(&cmnd);
@@ -4030,8 +4030,8 @@ static AjBool jembossctl_GetSeqFromUsa(const AjPStr thys, AjPSeq *seq)
     ajNamInit("emboss");
 
     seqin = ajSeqinNew();
-    seqin->multi = ajFalse;
-    seqin->Text  = ajFalse;
+    seqin->Input->Multi = ajFalse;
+    seqin->Input->Text  = ajFalse;
 
     ajSeqinUsa (&seqin, thys);
     ok = ajSeqRead(*seq, seqin);
@@ -4063,8 +4063,8 @@ static AjBool jembossctl_GetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq)
     ajNamInit("emboss");
 
     seqin = ajSeqinNew();
-    seqin->multi = ajTrue;
-    seqin->Text  = ajFalse;
+    seqin->Input->Multi = ajTrue;
+    seqin->Input->Text  = ajFalse;
 
     ajSeqinUsa (&seqin, thys);
     ok = ajSeqsetRead(*seq, seqin);

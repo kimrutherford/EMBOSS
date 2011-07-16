@@ -1,0 +1,13 @@
+Here is a sample session with <b>drtext</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>drtext drcat:uniprot </b>
+Get data resource entries complete text
+Full text output file [uniprot.drtext]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

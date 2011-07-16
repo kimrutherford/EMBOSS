@@ -1,0 +1,26 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>Database entry: "edam:{0000108,0000110}"</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+[Term]
+id: EDAM:0000110
+name: Transcription
+namespace: topic
+def: The study of the transcription of DNA into mRNA and transcription regulation including transcription factors and regulatory motifs, elements or regions in DNA sequences.
+comment: This includes promoters, enhancers, silencers and boundary elements / insulators.
+subset: topic
+xref: BioCatalogue:Transcription Factors
+is_a: EDAM:0000197 ! Gene expression and regulation
+
+[Term]
+id: EDAM:0000108
+name: Translation
+namespace: topic
+def: The study of the translation of mRNA into protein.
+subset: topic
+is_a: EDAM:0000197 ! Gene expression and regulation
+
+</pre>
+</td></tr></table><p>

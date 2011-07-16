@@ -58,7 +58,7 @@ Created plotcon.ps
 Command line arguments
 
 Plot conservation of a sequence alignment
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     File containing a sequence alignment
@@ -69,7 +69,7 @@ Version: EMBOSS:6.3.0
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers:
    -scorefile          matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]

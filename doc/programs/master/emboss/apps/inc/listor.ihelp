@@ -1,5 +1,5 @@
 Write a list file of the logical OR of two sets of sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-firstsequences]    seqset     Sequence set filename and optional format,
@@ -20,11 +20,11 @@ Version: EMBOSS:6.3.0
                                   set or the other, but not in both
                                   NOT - gives those which occur in the first
                                   set except for those that also occur in the
-                                  second (Values: O (OR - merger of both
-                                  sets); A (AND - only those in both sets); X
-                                  (XOR - only those not in both sets); N (NOT
-                                  - those of the first set that are not in the
-                                  second))
+                                  second (Values: OR (OR - merger of both
+                                  sets); AND (AND - only those in both sets);
+                                  XOR (XOR - only those not in both sets); NOT
+                                  (NOT - those of the first set that are not
+                                  in the second))
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:

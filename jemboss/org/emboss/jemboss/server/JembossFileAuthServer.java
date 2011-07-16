@@ -21,7 +21,6 @@
 package org.emboss.jemboss.server;
 
 import org.emboss.jemboss.JembossParams;
-import org.emboss.jemboss.parser.Ajax;
 
 import java.util.*;
 

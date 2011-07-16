@@ -48,7 +48,7 @@ Shuffles a set of sequences maintaining composition
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with shuffleseq</b>
+Here is a sample session with <b>shuffleseq</b>
 <p>
 This makes two randomised copies of the input sequence: 
 <p>
@@ -72,7 +72,7 @@ output sequence(s) [l48662.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Shuffles a set of sequences maintaining composition
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -497,7 +497,34 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>shuffleseq</b> reads one or more sequence USAs.
+<b>shuffleseq</b> reads one or more nucleotide or protein sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 
 <a name="input.1"></a>
@@ -563,11 +590,32 @@ SQ   Sequence 366 BP; 100 A; 90 C; 85 G; 89 T; 2 other;
     Output file format
 </H2>
 
+<p>
 
+The output is a standard EMBOSS sequence file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
+
+<p>
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: l48662.fasta </h3>
+<p><h3>File: l48662.fasta</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;L48662 L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody heavy chain mRNA.

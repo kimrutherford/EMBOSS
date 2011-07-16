@@ -1,0 +1,37 @@
+application: cacheebeyesearch [
+  documentation: "Generates server cache file for EB-eye search domains"
+  groups: "Data resources"
+  gui: "no"
+  relations: "EDAM:0000091 topic Data handling"
+  relations: "EDAM:0000516 operation Data retrieval (database annotation)"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+endsection: input
+
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    additional: "Y"
+    default: "stdout"
+    knowntype: "cacheebeyesearch output"
+    relations: "EDAM:0000969 data Text"
+  ]
+
+  outfile: cachefile [
+    parameter: "Y"
+    default:   "server.$(servername)"
+    information: "Server cache output file"
+    knowntype: "emboss server cache file"
+    relations: "EDAM:0000969 data Text"
+  ]
+
+endsection: output

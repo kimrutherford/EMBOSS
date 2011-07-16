@@ -30,6 +30,10 @@ Finds programs with similar function to a specified program
 Program to search for: matcher
 
 SEE ALSO
+domainalign  Generate alignments (DAF file) for nodes in a DCF file
+domainrep    Reorder DCF file to identify representative structures
+oalistat     Statistics for multiple alignment files
+seqalign     Extend alignments (DAF file) with sequences (DHF file)
 seqmatchall  All-against-all word comparison of a sequence set
 supermatcher Calculate approximate local pair-wise alignments of larger sequence
 s
@@ -42,7 +46,7 @@ wordmatch    Finds regions of identity (exact matches) of two sequences
 Command line arguments
 
 Finds programs with similar function to a specified program
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-search]            string     Enter the name of an EMBOSS program (Any
@@ -204,29 +208,15 @@ Known bugs
 
 See also
 
-                   Program name                            Description
-                   abiview      Display the trace in an ABI sequencer file
-                   cirdna       Draws circular maps of DNA constructs
-                   infoalign    Display basic information about a multiple sequence alignment
-                   infobase     Return information on a given nucleotide base
-                   inforesidue  Return information on a given amino acid residue
-                   infoseq      Display basic information about sequences
-                   lindna       Draws linear maps of DNA constructs
-                   pepnet       Draw a helical net for a protein sequence
-                   pepwheel     Draw a helical wheel diagram for a protein sequence
-                   prettyplot   Draw a sequence alignment with pretty formatting
-                   prettyseq    Write a nucleotide sequence and its translation to file
-                   remap        Display restriction enzyme binding sites in a nucleotide sequence
-                   showalign    Display a multiple sequence alignment in pretty format
-                   showdb       Displays information on configured databases
-                   showfeat     Display features of a sequence in pretty format
-                   showpep      Displays protein sequences with features in pretty format
-                   showseq      Displays sequences with features in pretty format
-                   sixpack      Display a DNA sequence with 6-frame translation and ORFs
-                   textsearch   Search the textual description of sequence(s)
-                   tfm          Displays full documentation for an application
-                   whichdb      Search all sequence databases for an entry and retrieve it
-                   wossname     Finds programs by keywords in their short description
+                    Program name                       Description
+                    tfm           Displays full documentation for an application
+                    wossdata      Finds programs by EDAM data
+                    wossinput     Finds programs by EDAM input data
+                    wossname      Finds programs by keywords in their short description
+   wossoperation    Finds programs by EDAM operation
+                    wossoutput    Finds programs by EDAM output data
+                    wossparam     Finds programs by EDAM parameter
+                    wosstopic     Finds programs by EDAM topic
 
 Author(s)
 

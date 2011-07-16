@@ -1,9 +1,10 @@
 Reads and writes pairs from alignments
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     File containing a sequence alignment.
   [-outfile]           align      [*.aligncopypair] Output alignment file name
+                                  (default -aformat simple)
 
    Additional (Optional) qualifiers:
    -name               string     Name of the alignment (Any string)

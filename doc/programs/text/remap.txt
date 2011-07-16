@@ -105,7 +105,7 @@ Output file [j01636.remap]:
 Command line arguments
 
 Display restriction enzyme binding sites in a nucleotide sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -447,7 +447,7 @@ RP   1146-1282
      cagcccgccc atggtaacca ccggcagagc ggtcgac                               7477
 //
 
-   You can specifiy a file of ranges to display in uppercase by giving the
+   You can specify a file of ranges to display in uppercase by giving the
    '-uppercase' qualifier the value '@' followed by the name of the file
    containing the ranges. (eg: '-upper @myfile').
 
@@ -471,7 +471,7 @@ RP   1146-1282
 67   10348   interesting region
 
 
-   You can specifiy a file of ranges to highlight in a different colour
+   You can specify a file of ranges to highlight in a different colour
    when outputting in HTML format (using the '-html' qualifier) by giving
    the '-highlight' qualifier the value '@' followed by the name of the
    file containing the ranges. (eg: '-highlight @myfile').
@@ -483,9 +483,7 @@ RP   1146-1282
    construct, (where 'xxx' is the name of the colour).
 
    The standard names of HTML font colours are given in:
-   http://http://www.w3.org/TR/REC-html40/types.html and
-   http://www.ausmall.com.au/freegraf/ncolour2.htm and
-   http://mindprod.com/htmlcolours.html (amongst other places).
+   http://http://www.w3.org/TR/REC-html40/types.html#h-6.5
 
    An example highlight range file is:
      __________________________________________________________________
@@ -541,7 +539,7 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 
 # No. of cutting enzymes which do not match the
-# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria
 
 0
 
@@ -600,7 +598,7 @@ HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI
 
 
 # No. of cutting enzymes which do not match the
-# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria
 
 0
 
@@ -673,7 +671,7 @@ MaeII     NotI
 
 
 # No. of cutting enzymes which do not match the
-# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria
 
 0
 
@@ -738,7 +736,7 @@ HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI
 
 
 # No. of cutting enzymes which do not match the
-# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria
 
 0
 
@@ -912,9 +910,12 @@ See also
    backtranambig    Back-translate a protein sequence to ambiguous nucleotide
                     sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   checktrans       Reports STOP codons and ORF statistics of a protein
    cirdna           Draws circular maps of DNA constructs
    coderet          Extract CDS, mRNA and translations from feature tables
+   iep              Calculate the isoelectric point of proteins
    lindna           Draws linear maps of DNA constructs
+   pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepnet           Draw a helical net for a protein sequence
    pepwheel         Draw a helical wheel diagram for a protein sequence
    plotorf          Plot potential open reading frames in a nucleotide sequence
@@ -926,9 +927,6 @@ See also
    restover         Find restriction enzymes producing a specific overhang
    restrict         Report restriction enzyme cleavage sites in a nucleotide
                     sequence
-   seealso          Finds programs with similar function to a specified program
-   showalign        Display a multiple sequence alignment in pretty format
-   showdb           Displays information on configured databases
    showfeat         Display features of a sequence in pretty format
    showorf          Display a nucleotide sequence and translation in pretty format
    showpep          Displays protein sequences with features in pretty format
@@ -936,7 +934,6 @@ See also
    silent           Find restriction sites to insert (mutate) with no translation
                     change
    sixpack          Display a DNA sequence with 6-frame translation and ORFs
-   textsearch       Search the textual description of sequence(s)
    transeq          Translate nucleic acid sequences
 
 Author(s)

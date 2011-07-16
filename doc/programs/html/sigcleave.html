@@ -54,7 +54,7 @@ Algorithm
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with sigcleave</b>
+Here is a sample session with <b>sigcleave</b>
 <p>
 
 <p>
@@ -77,7 +77,7 @@ Output report [ach2_drome.sig]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Reports on signal cleavage sites in a protein sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -86,6 +86,7 @@ Version: EMBOSS:6.3.0
                                   predicted cleavage site (Number from 0.000
                                   to 100.000)
   [-outfile]           report     [*.sigcleave] Output report file name
+                                  (default -rformat motif)
 
    Additional (Optional) qualifiers:
    -prokaryote         boolean    Specifies the sequence is prokaryotic and
@@ -175,7 +176,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat motif)</td>
 <td><i>&lt;*&gt;</i>.sigcleave</td>
 </tr>
 
@@ -521,7 +522,34 @@ Version: EMBOSS:6.3.0
 </H2>
 
 
-<b>sigcleave</b> reads one or more protein sequence USAs.
+<b>sigcleave</b> reads one or more protein sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -654,10 +682,11 @@ The output is a standard EMBOSS report file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
 
 <p>
 
@@ -670,7 +699,7 @@ for further information on report formats.
 
 <p>
 
-By default <b>sigcleave</b> writes a 'motif' report file.
+By default the output is in 'motif' format.
 
 <p>
 
@@ -682,7 +711,7 @@ By default <b>sigcleave</b> writes a 'motif' report file.
 <pre>
 ########################################
 # Program: sigcleave
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: sigcleave
 #    -sequence tsw:ach2_drome
 # Report_format: motif
@@ -921,11 +950,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="digest.html">digest</a></td>
-<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
-</tr>
-
-<tr>
 <td><a href="epestfind.html">epestfind</a></td>
 <td>Finds PEST motifs as potential proteolytic cleavage sites</td>
 </tr>
@@ -941,16 +965,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Identify nucleic acid-binding motifs in protein sequences</td>
-</tr>
-
-<tr>
-<td><a href="oddcomp.html">oddcomp</a></td>
-<td>Identify proteins with specified sequence word composition</td>
-</tr>
-
-<tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
 <td>Searches protein sequences with a sequence motif</td>
 </tr>
@@ -961,11 +975,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions in protein sequences</td>
-</tr>
-
-<tr>
 <td><a href="preg.html">preg</a></td>
 <td>Regular expression search of protein sequence(s)</td>
 </tr>
@@ -973,6 +982,11 @@ None.
 <tr>
 <td><a href="pscan.html">pscan</a></td>
 <td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
+</tr>
+
+<tr>
+<td><a href="tmap.html">tmap</a></td>
+<td>Predict and plot transmembrane segments in protein sequences</td>
 </tr>
 
 </table>

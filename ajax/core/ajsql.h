@@ -342,6 +342,8 @@ void ajVoidDel(AjPVoid *thys);
 
 void *ajVoidGet(const AjPVoid thys, ajuint elem);
 
+ajuint ajVoidLen(const AjPVoid thys);
+
 AjBool ajVoidPut(AjPVoid *thys, ajuint elem, void *v);
 
 /*

@@ -1,19 +1,33 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensassembly_h
-#define ensassembly_h
+#ifndef ENSASSEMBLY_H
+#define ENSASSEMBLY_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ajax.h"
 
+AJ_BEGIN_DECLS
 
 
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
 
 /* @data EnsPAssembly *********************************************************
 **
-** Ensembl Assembly.
+** Ensembl Assembly
+**
 ** An Ensembl Assembly object encapsulates assembly information how an
 ** assembled Ensembl Sequence Region is assembled from a particular
 ** component Ensembl Sequence Region.
@@ -22,18 +36,18 @@ extern "C"
 ** @alias EnsOAssembly
 **
 ** @attr Use [ajuint] Use counter
-** @attr AssembledSeqregionId [ajuint] Assembled Ensembl Sequence Region
-**                                     identifier
+** @attr AssembledIdentifier [ajuint] Assembled Ensembl Sequence Region
+** identifier
 ** @attr AssembledStart [ajuint] Assembled Ensembl Sequence Region
-**                               start coordinate
+** start coordinate
 ** @attr AssembledEnd [ajuint] Assembled Ensembl Sequence Region
-**                             end coordinate
-** @attr ComponentSeqregionId [ajuint] Component Ensembl Sequence Region
-**                                     identifier
+** end coordinate
+** @attr ComponentIdentifier [ajuint] Component Ensembl Sequence Region
+** identifier
 ** @attr ComponentStart [ajuint] Component Ensembl Sequence Region
-**                               start coordinate
+** start coordinate
 ** @attr ComponentEnd [ajuint] Component Ensembl Sequence Region
-**                             end coordinate
+** end coordinate
 ** @attr Orientation [ajint] Relative orientation
 ** @@
 ******************************************************************************/
@@ -41,10 +55,10 @@ extern "C"
 typedef struct EnsSAssembly
 {
     ajuint Use;
-    ajuint AssembledSeqregionId;
+    ajuint AssembledIdentifier;
     ajuint AssembledStart;
     ajuint AssembledEnd;
-    ajuint ComponentSeqregionId;
+    ajuint ComponentIdentifier;
     ajuint ComponentStart;
     ajuint ComponentEnd;
     ajint Orientation;
@@ -55,43 +69,47 @@ typedef struct EnsSAssembly
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
 
 /* Ensembl Assembly */
 
-EnsPAssembly ensAssemblyNew(ajuint asmsrid,
-                            ajuint asmstart,
-                            ajuint asmend,
-                            ajuint cmpsrid,
-                            ajuint cmpstart,
-                            ajuint cmpend,
-                            ajint orientation);
+EnsPAssembly ensAssemblyNewCpy(const EnsPAssembly assembly);
 
-EnsPAssembly ensAssemblyNewObj(const EnsPAssembly object);
+EnsPAssembly ensAssemblyNewIni(ajuint asmsrid,
+                               ajuint asmstart,
+                               ajuint asmend,
+                               ajuint cmpsrid,
+                               ajuint cmpstart,
+                               ajuint cmpend,
+                               ajint orientation);
 
 EnsPAssembly ensAssemblyNewRef(EnsPAssembly assembly);
 
 void ensAssemblyDel(EnsPAssembly* Passembly);
 
-ajuint ensAssemblyGetAssembledSeqregionId(const EnsPAssembly assembly);
+ajuint ensAssemblyGetAssembledEnd(const EnsPAssembly assembly);
+
+ajuint ensAssemblyGetAssembledIdentifier(const EnsPAssembly assembly);
 
 ajuint ensAssemblyGetAssembledStart(const EnsPAssembly assembly);
 
-ajuint ensAssemblyGetAssembledEnd(const EnsPAssembly assembly);
+ajuint ensAssemblyGetComponentEnd(const EnsPAssembly assembly);
 
-ajuint ensAssemblyGetComponentSeqregionId(const EnsPAssembly assembly);
+ajuint ensAssemblyGetComponentIdentifier(const EnsPAssembly assembly);
 
 ajuint ensAssemblyGetComponentStart(const EnsPAssembly assembly);
-
-ajuint ensAssemblyGetComponentEnd(const EnsPAssembly assembly);
 
 ajint ensAssemblyGetOrientation(const EnsPAssembly assembly);
 
 AjBool ensAssemblyTrace(const EnsPAssembly assembly, ajuint level);
 
-ajulong ensAssemblyGetMemsize(const EnsPAssembly assembly);
+size_t ensAssemblyCalculateMemsize(const EnsPAssembly assembly);
 
 /*
 ** End of prototype definitions
@@ -100,8 +118,6 @@ ajulong ensAssemblyGetMemsize(const EnsPAssembly assembly);
 
 
 
-#endif /* ensassembly_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSASSEMBLY_H */

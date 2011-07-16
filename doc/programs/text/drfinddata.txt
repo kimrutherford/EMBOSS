@@ -1,0 +1,217 @@
+                                 drfinddata
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Find public databases by data type
+
+Description
+
+   drfinddata searches the Data Resource Catalogue to find entries with
+   EDAM data terms matching a query string.
+
+Algorithm
+
+   The first search is of the EDAM ontology data namespace, using the term
+   names and their synonynms. All child terms are automatically included
+   in the set of matches inless the -nosubclasses qualifier is used.
+
+   The -sensitive qualifier also searches the definition strings.
+
+   The set of EDAM terms are then compared to entries in the Data Resource
+   Catalogue, searching the 'edat' EDAM data index.
+
+Usage
+
+   Here is a sample session with drfinddata
+
+
+% drfinddata virus
+Find public databases by data type
+Data resource output file [drfinddata.drcat]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Find public databases by data type
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-query]             string     List of EDAM data keywords (Any string)
+  [-outfile]           outresource [*.drfinddata] Output data resource file
+                                  name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -sensitive          boolean    [N] By default, the query keywords are
+                                  matched against the EDAM term names (and
+                                  synonyms) only. This option also matches the
+                                  keywords against the EDAM term definitions
+                                  and will therefore (typically) report more
+                                  matches.
+   -[no]subclasses     boolean    [Y] Extend the query matches to include all
+                                  terms which are specialisations (EDAM
+                                  sub-classes) of the matched type.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Data resource output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   None.
+
+Output file format
+
+   The output is a standard EMBOSS resource file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -oformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: drcat,
+   basic, wsbasic, list.
+
+   See: http://emboss.sf.net/docs/themes/ResourceFormats.html for further
+   information on resource formats.
+
+  Output files for usage example
+
+  File: drfinddata.drcat
+
+ID      DPVweb
+Name    DPVweb database of plant viruses
+Desc    Information about viruses, viroids and satellites of plants, fungi and p
+rotozoa, with some additional data on related animal viruses.
+URL     http://www.dpvweb.net/
+Taxon   10239 | Viruses
+EDAMtpc 0000781 | Virus
+EDAMtpc 0000780 | Plant
+EDAMdat 0002307 | Virus annotation
+EDAMdat 0002308 | Virus annotation (taxonomy)
+EDAMid  0002733 | Genus name (virus)
+EDAMid  0002734 | Family name (virus)
+EDAMid  0002836 | DPVweb ID
+EDAMfmt 0002331 | HTML
+Query    Virus annotation | HTML | DPVweb ID | http://www.dpvweb.net/dpv/showdpv
+.php?dpvno=%s
+Query    Virus annotation (taxonomy) | HTML | Family name (virus) | http://www.d
+pvweb.net/notes/showfamily.php?family=%s
+Query    Virus annotation (taxonomy) | HTML | Genus name (virus) | http://www.dp
+vweb.net/notes/showgenus.php?genus=%s
+Example DPVweb ID | 1
+Example Family name (virus) | Alphaflexiviridae
+Example Genus name (virus) | Alfamovirus
+
+ID      RNAVirusDB
+Name    RNA virus genome database (RNAVirusDB)
+Desc    RNA virus genome database.
+URL     http://tree.bio.ed.ac.uk/rnavirusdb
+Taxon   10239 | Viruses
+EDAMtpc 0000781 | Virus
+EDAMtpc 0000643 | Genomes
+EDAMdat 0002307 | Virus annotation
+EDAMid  0002784 | RNAVirusDB ID
+EDAMfmt 0002331 | HTML
+Query    Virus annotation | HTML | RNAVirusDB ID | http://tree.bio.ed.ac.uk/rnav
+irusdb/virus.php?id=%s
+Example RNAVirusDB ID | 56486
+
+
+Data files
+
+   The Data Resource Catalogue is included in EMBOSS as local database
+   drcat. The EDAM Ontology is included in EMBOSS as local database edam.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                     Program name                       Description
+                    drfindformat   Find public databases by format
+                    drfindid       Find public databases by identifier
+   drfindresource   Find public databases by resource
+                    drget          Get data resource entries
+                    drtext         Get data resource entries complete text
+                    edamdef        Find EDAM ontology terms by definition
+                    edamhasinput   Find EDAM ontology terms by has_input relation
+                    edamhasoutput  Find EDAM ontology terms by has_output relation
+                    edamisformat   Find EDAM ontology terms by is_format_of relation
+                    edamisid       Find EDAM ontology terms by is_identifier_of relation
+                    edamname       Find EDAM ontology terms by name
+                    wossdata       Finds programs by EDAM data
+                    wossinput      Finds programs by EDAM input data
+                    wossoperation  Finds programs by EDAM operation
+                    wossoutput     Finds programs by EDAM output data
+                    wossparam      Finds programs by EDAM parameter
+                    wosstopic      Finds programs by EDAM topic
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

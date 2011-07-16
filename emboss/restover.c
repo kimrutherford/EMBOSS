@@ -25,7 +25,7 @@
 #include <limits.h>
 
 #define ENZDATA "REBASE/embossre.enz"
-#define EQUDATA "embossre.equ"
+#define EQUDATA "REBASE/embossre.equ"
 
 
 #define EQUGUESS 3500	  /* Estimate of number of equivalent names */
@@ -125,7 +125,7 @@ int main(int argc, char **argv)
     if(single)
 	max = min = 1;
 
-    table = ajTablestrNewLen(EQUGUESS);
+    table = ajTablestrNew(EQUGUESS);
     l = ajListNew();
 
     if(threeprime)
@@ -253,7 +253,7 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
     ajint last = 0;
     AjPStr overhead = NULL;
 
-    AjPStr value = NULL;
+    const AjPStr value = NULL;
 
     ajint i;
     ajint c = 0;
@@ -330,7 +330,7 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 
 	if(limit)
 	{
-	    value=ajTableFetch(table,m->cod);
+	    value=ajTableFetchS(table,m->cod);
 	    if(value)
 		ajStrAssignS(&m->cod,value);
 	}

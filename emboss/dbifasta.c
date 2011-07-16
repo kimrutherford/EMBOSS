@@ -81,6 +81,7 @@ static AjPRegexp dbifasta_getExpr(const AjPStr idformat, ajuint *type);
 static AjPStr rline  = NULL;
 static EmbPEntry dbifastaEntry = NULL;
 static AjPRegexp dbifastaWrdexp = NULL;
+static AjPRegexp dbifastaIdexp = NULL;
 
 static AjPStr dbifastaTmpAc  = NULL;
 static AjPStr dbifastaTmpSv  = NULL;
@@ -221,7 +222,8 @@ int main(int argc, char **argv)
     ajListSort(listInputFiles, ajStrVcmp);
     nfiles = ajListToarray(listInputFiles, &inputFiles);
     if(!nfiles)
-	ajFatal("No files selected");
+        ajDie("No input files in '%S' matched filename '%S'",
+              directory, filename);
 
     embDbiLogHeader(logfile, dbname, release, datestr,
 		     indexdir, maxindex);
@@ -399,6 +401,7 @@ int main(int argc, char **argv)
     ajListFree(&idlist);
     ajListstrFreeData(&listInputFiles);
     AJFREE(entryIds);
+    ajRegFree(&dbifastaIdexp);
     ajRegFree(&dbifastaWrdexp);
     ajRegFree(&regIdExp);
 
@@ -525,10 +528,12 @@ static AjPRegexp dbifasta_getExpr(const AjPStr idformat, ajuint *type)
 {
     AjPRegexp retexp = NULL;
 
+    dbifastaIdexp   = ajRegCompC("^>([A-Za-z0-9_-]+:)?([.A-Za-z0-9_-]+)");
+
     if(ajStrMatchC(idformat,"simple"))
     {
 	*type = FASTATYPE_SIMPLE;
-	retexp   = ajRegCompC("^>([.A-Za-z0-9_-]+)");
+	retexp   = ajRegCompC("^>([A-Za-z0-9_-]+:)?([.A-Za-z0-9_-]+)");
     }
     else if(ajStrMatchC(idformat,"idacc"))
     {
@@ -585,7 +590,7 @@ static AjPRegexp dbifasta_getExpr(const AjPStr idformat, ajuint *type)
 ** @param [w] maxFieldLen [ajint*] Maximum field token length
 ** @param [w] countfield [ajuint*] Number of tokens for each field
 ** @param [u] idexp [AjPRegexp] regular expression
-** @param [r] type [ajuint] type of id line
+** @param [r] usertype [ajuint] user-defined type of id line
 ** @param [u] alistfile [AjPFile*] field data files array
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
 ** @param [r] fields [AjPStr const *] Field names to be indexed
@@ -596,17 +601,19 @@ static AjPRegexp dbifasta_getExpr(const AjPStr idformat, ajuint *type)
 static AjBool dbifasta_ParseFasta(AjPFile libr, ajint* dpos,
 				  ajint* maxFieldLen, ajuint* countfield,
 				  AjPRegexp idexp,
-				  ajuint type, AjPFile* alistfile,
+				  ajuint usertype, AjPFile* alistfile,
 				  AjBool systemsort, AjPStr const * fields)
 {
     char* fd;
-    ajint ipos;
+    ajlong ipos;
     static AjPStr tstr = NULL;
     static ajint numFields;
     static ajint accfield = -1;
     static ajint desfield = -1;
     static ajint svnfield = -1;
     static AjBool reset = AJTRUE;
+
+    ajuint type = usertype;
 
     if(!fields)
     {
@@ -641,13 +648,26 @@ static AjBool dbifasta_ParseFasta(AjPFile libr, ajint* dpos,
     if(!tstr)
 	tstr = ajStrNew();
 
-    *dpos = ajFileResetPos(libr);
+    *dpos = (ajint) ajFileResetPos(libr); /* Lossy cast */
+
     ajReadline(libr, &rline);
+
+    if(!ajStrGetLen(rline))
+        return ajFalse;
+
     if(!ajRegExec(idexp,rline))
     {
 	ajStrDelStatic(&dbifastaTmpAc);
-	ajDebug("Invalid ID line [%S]",rline);
-	return ajFalse;
+        type = FASTATYPE_SIMPLE;
+        idexp = dbifastaIdexp;
+
+        if(!ajRegExec(idexp, rline))
+        {
+            ajFatal("Unrecognised ID line format: %S", rline);
+            return ajFalse;
+        }
+
+	ajWarn("Invalid ID line for selected format: %S", rline);
     }
 
     /*
@@ -665,7 +685,7 @@ static AjBool dbifasta_ParseFasta(AjPFile libr, ajint* dpos,
     switch(type)
     {
     case FASTATYPE_SIMPLE:
-	ajRegSubI(idexp,1,&id);
+	ajRegSubI(idexp,2,&id);
 	ajStrAssignS(&dbifastaTmpAc,id);
 	ajRegPost(idexp, &dbifastaTmpDes);
 	break;

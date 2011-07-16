@@ -292,7 +292,8 @@ int main(int argc, char **argv)
     ajListSort(listInputFiles, ajStrVcmp);
     nfiles = ajListToarray(listInputFiles, &inputFiles);
     if(!nfiles)
-	ajFatal("No files selected");
+        ajDie("No input files in '%S' matched filename '%S'",
+              directory, filename);
 
     embDbiLogHeader(logfile, dbname, release, datestr,
 		     indexdir, maxindex);
@@ -535,12 +536,12 @@ static EmbPEntry dbigcg_nextentry(AjPFile libr, AjPFile libs,
 				  ajuint* maxidlen, ajuint* countfield,
 				  AjPFile elistfile, AjPFile* alistfile)
 {
-    ajint ir;
-    ajint is = 0;
+    ajlong ir;
+    ajlong is = 0L;
     AjPStr id = NULL;
-    AjPStr tmpline2 = NULL;
     char* token;
     char *p;
+    char *q;
     ajint i;
     static ajint nfields;
     ajint ifield;
@@ -572,31 +573,38 @@ static EmbPEntry dbigcg_nextentry(AjPFile libr, AjPFile libs,
 			 countfield, &id))
 	return NULL;
 
-    ajDebug("id '%S' ir:%d is:%d nfields: %d\n",
+    ajDebug("id '%S' ir:%Ld is:%Ld nfields: %d\n",
 	    id, ir, is, nfields);
 
-    ajStrAssignC(&tmpline2,ajStrGetPtr(id));
+    p = ajCharNewS(id);
 
     if(ajStrSuffixC(id,"_0") ||
        ajStrSuffixC(id,"_00") ||
        ajStrSuffixC(id,"_000") ||
        ajStrSuffixC(id,"_0000"))
     {
-	p  = strrchr(ajStrGetPtr(tmpline2),'_');
-	*p = '\0';
+        q = strrchr(p, '_');
+	*q = '\0';
     }
 
     if(ajStrGetLen(id) > *maxidlen)
 	*maxidlen = ajStrGetLen(id);
 
     if(systemsort)
-	ajFmtPrintF(elistfile, "%s %d %d %d\n", ajStrGetPtr(tmpline2),
+    {
+      ajDebug("write tmp '%s' ir '%Lu' is '%Lu' div %u\n",
+	      p, ir, is, (ajuint) (ifile+1));
+
+	ajFmtPrintF(elistfile, "%s %Lu %Lu %d\n",
+		    p,
 		    ir, is, ifile+1);
+        ajCharDel(&p);
+    }
     else
     {
-	dbigcgEntry->entry   = ajCharNewS(tmpline2);
-	dbigcgEntry->rpos    = ir;
-	dbigcgEntry->spos    = is;
+	dbigcgEntry->entry   = p;
+	dbigcgEntry->rpos    = (ajuint) ir; /* Lossy cast */
+	dbigcgEntry->spos    = (ajuint) is; /* Lossy cast */
 	dbigcgEntry->filenum = ifile+1;
 
 	/* field tokens as list, then move to dbigcgEntry->field */
@@ -619,7 +627,6 @@ static EmbPEntry dbigcg_nextentry(AjPFile libr, AjPFile libs,
     }
 
     ajStrDel(&id);
-    ajStrDel(&tmpline2);
 
     return dbigcgEntry;
 }
@@ -725,7 +732,7 @@ static ajint dbigcg_gcggetent(const AjPStr idformat,
 	return 0;
 
     if(!dbigcg_getent_rexp)
-	dbigcg_getent_rexp = ajRegCompC("^>>>>([^ \t\n]+)");
+	dbigcg_getent_rexp = ajRegCompC("^>>>>([^ \t\r\n]+)");
 
     if(!dbigcg_getent_sexp)
 	dbigcg_getent_sexp =
@@ -881,7 +888,7 @@ static ajint dbigcg_pirgetent(const AjPStr idformat,
 	return 0;
 
     if(!dbigcg_embl_pirexp)
-	dbigcg_embl_pirexp = ajRegCompC("^>..;([^ \t\n]+)");
+	dbigcg_embl_pirexp = ajRegCompC("^>..;([^ \t\r\n]+)");
 
     /* skip to seqid first line */
     while(ajStrGetCharFirst(sline)!='>')
@@ -980,8 +987,8 @@ static ajint dbigcg_gcgappent(AjPFile libr, AjPFile libs,
     AjBool isend;
     const char *p;
     char *q;
-    ajint rpos;
-    ajint spos;
+    ajlong rpos;
+    ajlong spos;
 
     /*
     ** keep reading until the end of entry is reached
@@ -1101,7 +1108,7 @@ static AjBool dbigcg_ParseEmbl(AjPFile libr,
     AjPStr tmpacnum = NULL;
     char* fd;
     ajint lineType;
-    ajint rpos;
+    ajlong rpos;
     AjPStr rline = NULL;
     static ajint numFields;
     static ajint accfield = -1;
@@ -1363,7 +1370,7 @@ static AjBool dbigcg_ParseGenbank(AjPFile libr,
     static AjPRegexp phrexp = NULL;
     static AjPRegexp taxexp = NULL;
     static AjPRegexp verexp = NULL;
-    ajint rpos = 0;
+    ajlong rpos = 0L;
     static AjPStr tmpstr  = NULL;
     static AjPStr tmpline = NULL;
     static AjPStr rline   = NULL;
@@ -1633,7 +1640,7 @@ static AjBool dbigcg_ParsePir(AjPFile libr,
 			      ajint* maxFieldLen, ajuint* countfield,
 			      AjPStr* id)
 {
-    ajint rpos;
+    ajlong rpos;
     AjPStr tmpstr  = NULL;
     AjPStr tmpline = NULL;
     AjPStr rline   = NULL;

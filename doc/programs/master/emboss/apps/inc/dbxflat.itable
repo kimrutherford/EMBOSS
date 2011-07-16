@@ -60,6 +60,14 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td>-[no]compressed</td>
+<td>boolean</td>
+<td>Compressed index files</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>-outfile</td>
 <td>outfile</td>
 <td>General log output file</td>
@@ -101,6 +109,14 @@
 <td>Wildcard filename(s) to exclude</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-statistics</td>
+<td>boolean</td>
+<td>Report I/O statistics for each input file</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

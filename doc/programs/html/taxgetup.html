@@ -1,0 +1,701 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: taxgetup
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+taxgetup
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Get parents of taxon(s)
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>taxgetup</b> reads in one or more taxons, and reports the parent taxon. The taxon input may be a literal sequence or read from a database, file, file of taxon names, or even the command-line or the output of another programs. The taxon output can be written to screen, to file, or passed to another program. A wide range of standard taxon formats may be specified for input and output.
+
+
+<H2>
+    Algorithm
+</H2>
+
+The NCBI taxonomy records the parent of each taxon, up to a known top level 1.
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>taxgetup</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>taxgetup ttax:9606 -oformat excel </b>
+Get parents of taxon(s)
+Taxon output file [9606.excel]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>taxgetup ttax:9606 -hidden -oformat excel </b>
+Get parents of taxon(s)
+Taxon output file [9606.excel]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Get parents of taxon(s)
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-taxons]            taxon      Taxon filename and optional format, or
+                                  reference (input query)
+  [-outfile]           outtaxon   (no help text) outtaxon value
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -hidden             boolean    [N] Show taxons hidden in GenBank
+
+   Associated qualifiers:
+
+   "-taxons" associated qualifiers
+   -iformat1           string     Input taxonomy format
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Taxonomy output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-taxons]<br>(Parameter 1)</td>
+<td>taxon</td>
+<td>Taxon filename and optional format, or reference (input query)</td>
+<td>NCBI taxonomy entries</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>outtaxon</td>
+<td>(no help text) outtaxon value</td>
+<td>NCBI taxonomy entries</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-hidden</td>
+<td>boolean</td>
+<td>Show taxons hidden in GenBank</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-taxons" associated taxon qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iformat1<br>-iformat_taxons</td>
+<td>string</td>
+<td>Input taxonomy format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -idbname1<br>-idbname_taxons</td>
+<td>string</td>
+<td>User-provided database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outtaxon qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -oformat2<br>-oformat_outfile</td>
+<td>string</td>
+<td>Taxonomy output format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<p>
+
+The input is a standard EMBOSS taxonomy query.
+
+<p>
+
+The expected source of taxonomy information is the NCBI Taxonomy
+database "taxon" which is available as a standard database in all
+EMBOSS installations.
+
+<p>
+
+Data can also be read from taxonomy output in "ncbi" format written by an
+EMBOSS application.
+
+<p>
+See:
+<A href="http://emboss.sf.net/docs/themes/TaxonFormats.html">
+http://emboss.sf.net/docs/themes/TaxonFormats.html</A>
+for further information on taxon formats.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'ttax:9606' is a sequence entry in the example taxonomy database 'ttax'
+<p>
+<p><h3>Database entry: ttax:9606</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+id: 9606
+parent: 9605
+rank: species
+emblprefix: HS
+division: 5
+divflag: 1
+gencode: 1
+gcflag: 1
+mitocode: 2
+mgcflag 1
+hidden: 1
+nosequence: 1
+scientific name: Homo sapiens
+authority: Homo sapiens Linnaeus, 1758
+genbank common name: human
+common name: man
+
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Output file format
+</H2>
+
+The output is a standard EMBOSS taxon file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-oformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: 
+ncbi, ebi, tax, excel.
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/TaxonFormats.html">
+http://emboss.sf.net/docs/themes/TaxonFormats.html</A>
+for further information on taxon formats.
+
+<p>
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 9606.excel</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+9605	207598	genus	N	Homo
+9604	314295	family	N	Hominidae
+9526	314293	parvorder	N	Catarrhini
+376913	9443	suborder	N	Haplorrhini
+9443	314146	order	N	Primates
+314146	9347	superorder	N	Euarchontoglires
+9347	32525	no rank	N	Eutheria
+40674	32524	class	N	Mammalia
+117571	117570	no rank	N	Euteleostomi
+7742	89593	no rank	N	Vertebrata
+89593	7711	subphylum	N	Craniata
+7711	33511	phylum	N	Chordata
+33208	33154	kingdom	N	Metazoa
+2759	131567	superkingdom	N	Eukaryota
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: 9606.excel</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+9605	207598	genus	N	Homo
+207598	9604	subfamily	Y	Homininae
+9604	314295	family	N	Hominidae
+314295	9526	superfamily	Y	Hominoidea
+9526	314293	parvorder	N	Catarrhini
+314293	376913	infraorder	Y	Simiiformes
+376913	9443	suborder	N	Haplorrhini
+9443	314146	order	N	Primates
+314146	9347	superorder	N	Euarchontoglires
+9347	32525	no rank	N	Eutheria
+32525	40674	no rank	Y	Theria
+40674	32524	class	N	Mammalia
+32524	32523	no rank	Y	Amniota
+32523	8287	no rank	Y	Tetrapoda
+8287	117571	no rank	Y	Sarcopterygii
+117571	117570	no rank	N	Euteleostomi
+117570	7776	no rank	Y	Teleostomi
+7776	7742	superclass	Y	Gnathostomata
+7742	89593	no rank	N	Vertebrata
+89593	7711	subphylum	N	Craniata
+7711	33511	phylum	N	Chordata
+33511	33316	no rank	Y	Deuterostomia
+33316	33213	no rank	Y	Coelomata
+33213	6072	no rank	Y	Bilateria
+6072	33208	no rank	Y	Eumetazoa
+33208	33154	kingdom	N	Metazoa
+33154	2759	no rank	Y	Fungi/Metazoa group
+2759	131567	superkingdom	N	Eukaryota
+131567	1	no rank	Y	cellular organisms
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+The NCBI Taxonomy Ontology is included in EMBOSS as local
+database <b>taxon</b>.
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="taxget.html">taxget</a></td>
+<td>Get taxon(s)</td>
+</tr>
+
+<tr>
+<td><a href="taxgetdown.html">taxgetdown</a></td>
+<td>Get descendants of taxon(s)</td>
+</tr>
+
+<tr>
+<td><a href="taxgetrank.html">taxgetrank</a></td>
+<td>Get parents of taxon(s)</td>
+</tr>
+
+<tr>
+<td><a href="taxgetspecies.html">taxgetspecies</a></td>
+<td>Get all species under taxon(s)</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

@@ -37,14 +37,19 @@ subdir = doc/programs/text
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
+	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
 	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pngdriver.m4 \
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
+	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
 	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
 	$(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = $(top_builddir)/ajax/core/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 SOURCES =
@@ -83,16 +88,24 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+AXIS2C_CFLAGS = @AXIS2C_CFLAGS@
+AXIS2C_CPPFLAGS = @AXIS2C_CPPFLAGS@
+AXIS2C_LDFLAGS = @AXIS2C_LDFLAGS@
+AXIS2C_LIBS = @AXIS2C_LIBS@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+CXXDEPMODE = @CXXDEPMODE@
+CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
-DEVWARNINGS = @DEVWARNINGS@
 DEVWARN_CFLAGS = @DEVWARN_CFLAGS@
+DLLTOOL = @DLLTOOL@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -124,9 +137,11 @@ LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
+MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
 MYSQL_CFLAGS = @MYSQL_CFLAGS@
 MYSQL_CONFIG = @MYSQL_CONFIG@
+MYSQL_CPPFLAGS = @MYSQL_CPPFLAGS@
 MYSQL_LDFLAGS = @MYSQL_LDFLAGS@
 MYSQL_VERSION = @MYSQL_VERSION@
 NEEDAJAX = @NEEDAJAX@
@@ -151,8 +166,12 @@ PCRE_MINOR = @PCRE_MINOR@
 PCRE_POSIXLIB_VERSION = @PCRE_POSIXLIB_VERSION@
 PCRE_VERSION = @PCRE_VERSION@
 PG_CONFIG = @PG_CONFIG@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 POSTGRESQL_CFLAGS = @POSTGRESQL_CFLAGS@
+POSTGRESQL_CPPFLAGS = @POSTGRESQL_CPPFLAGS@
 POSTGRESQL_LDFLAGS = @POSTGRESQL_LDFLAGS@
 POSTGRESQL_VERSION = @POSTGRESQL_VERSION@
 RANLIB = @RANLIB@
@@ -161,7 +180,6 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
-WARNINGS = @WARNINGS@
 WARN_CFLAGS = @WARN_CFLAGS@
 XLIB = @XLIB@
 XMKMF = @XMKMF@
@@ -173,7 +191,9 @@ abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
+ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -208,7 +228,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -229,22 +248,32 @@ pkgdata_DATA = aaindexextract.txt abiview.txt acdc.txt acdlog.txt \
 	aligncopy.txt aligncopypair.txt antigenic.txt \
 	backtranambig.txt backtranseq.txt banana.txt biosed.txt \
 	btwisted.txt \
-	cai.txt chaos.txt charge.txt checktrans.txt chips.txt \
+	cai.txt cachedas.txt cachedbfetch.txt \
+	cacheebeyesearch.txt cacheensembl.txt \
+	chaos.txt charge.txt checktrans.txt chips.txt \
 	cirdna.txt codcmp.txt codcopy.txt coderet.txt complex.txt \
-	compseq.txt cons.txt consambig.txt cpgplot.txt cpgreport.txt cusp.txt \
-	cutgextract.txt cutseq.txt \
+	compseq.txt cons.txt consambig.txt cpgplot.txt cpgreport.txt \
+	cusp.txt cutgextract.txt cutseq.txt \
 	dan.txt dbiblast.txt dbifasta.txt dbiflat.txt dbigcg.txt \
-	dbxfasta.txt dbxflat.txt dbxgcg.txt degapseq.txt density.txt \
-	descseq.txt diffseq.txt digest.txt distmat.txt \
+	dbtell.txt dbxcompress.txt dbxedam.txt dbxfasta.txt dbxflat.txt \
+	dbxgcg.txt dbxobo.txt dbxreport.txt \
+	dbxresource.txt dbxstat.txt dbxtax.txt dbxuncompress.txt \
+	degapseq.txt density.txt descseq.txt \
+	diffseq.txt distmat.txt \
 	dotmatcher.txt dotpath.txt dottup.txt dreg.txt \
+	drfinddata.txt drfindformat.txt drfindid.txt \
+	drfindresource.txt drget.txt drtext.txt \
+	edamdef.txt edamhasinput.txt \
+	edamhasoutput.txt edamisformat.txt edamisid.txt \
+	edamname.txt \
 	edialign.txt einverted.txt embossdata.txt embossversion.txt \
-	emma.txt emowse.txt entret.txt epestfind.txt eprimer3.txt \
+	emma.txt emowse.txt entret.txt epestfind.txt \
+	eprimer3.txt eprimer32.txt \
 	equicktandem.txt est2genome.txt etandem.txt extractalign.txt \
 	extractfeat.txt extractseq.txt \
-	featcopy.txt featreport.txt \
-	findkm.txt freak.txt fuzznuc.txt fuzzpro.txt \
-	fuzztran.txt \
-	garnier.txt geecee.txt getorf.txt \
+	featcopy.txt featreport.txt feattext.txt \
+	findkm.txt freak.txt fuzznuc.txt fuzzpro.txt fuzztran.txt \
+	garnier.txt geecee.txt getorf.txt godef.txt goname.txt \
 	helixturnhelix.txt hmoment.txt \
 	iep.txt infoalign.txt infobase.txt inforesidue.txt \
 	infoseq.txt isochore.txt \
@@ -256,33 +285,42 @@ pkgdata2_DATA = lindna.txt listor.txt \
 	maskseq.txt matcher.txt megamerger.txt merger.txt msbar.txt \
 	mwcontam.txt mwfilter.txt \
 	needle.txt needleall.txt newcpgreport.txt newcpgseek.txt newseq.txt \
-	nohtml.txt noreturn.txt notseq.txt nospace.txt notab.txt \
-	nthseq.txt nthseqset.txt \
+	nohtml.txt noreturn.txt nospace.txt notab.txt \
+	notseq.txt nthseq.txt nthseqset.txt \
 	octanol.txt oddcomp.txt \
+	ontocount.txt ontoget.txt ontogetcommon.txt \
+	ontogetdown.txt ontogetobsolete.txt ontogetroot.txt \
+	ontogetsibs.txt ontogetup.txt ontoisobsolete.txt ontotext.txt \
 	palindrome.txt pasteseq.txt patmatdb.txt patmatmotifs.txt \
-	pepcoil.txt pepinfo.txt pepnet.txt pepstats.txt pepwheel.txt \
+	pepcoil.txt pepdigest.txt pepinfo.txt \
+	pepnet.txt pepstats.txt pepwheel.txt \
 	pepwindow.txt pepwindowall.txt plotcon.txt plotorf.txt \
 	polydot.txt preg.txt prettyplot.txt prettyseq.txt \
 	primersearch.txt printsextract.txt profit.txt prophecy.txt \
 	prophet.txt prosextract.txt pscan.txt psiphi.txt \
 	rebaseextract.txt recoder.txt redata.txt remap.txt \
 	restover.txt restrict.txt revseq.txt \
-	seealso.txt seqmatchall.txt \
-	seqret.txt seqretsetall.txt seqretsplit.txt \
+	seealso.txt seqcount.txt seqmatchall.txt \
+	seqret.txt seqretsetall.txt seqretsplit.txt seqxref.txt \
+	seqxrefget.txt servertell.txt \
 	showalign.txt showdb.txt showfeat.txt showorf.txt \
-	showpep.txt showseq.txt shuffleseq.txt sigcleave.txt silent.txt \
-	sirna.txt \
-	SITE-DIRECTED.txt \
+	showpep.txt showseq.txt showserver.txt \
+	shuffleseq.txt sigcleave.txt silent.txt sirna.txt \
 	sixpack.txt sizeseq.txt skipredundant.txt \
 	skipseq.txt splitsource.txt splitter.txt stretcher.txt \
 	stssearch.txt supermatcher.txt syco.txt \
-	tcode.txt textsearch.txt tfextract.txt tfm.txt tfscan.txt \
+	taxget.txt taxgetdown.txt taxgetrank.txt \
+	taxgetspecies.txt taxgetup.txt \
+	tcode.txt textget.txt textsearch.txt \
+	tfextract.txt tfm.txt tfscan.txt \
 	tmap.txt tranalign.txt transeq.txt trimest.txt trimseq.txt \
 	trimspace.txt twofeat.txt \
-	union.txt \
+	union.txt urlget.txt \
 	vectorstrip.txt \
 	water.txt whichdb.txt wobble.txt wordcount.txt \
-	wordfinder.txt wordmatch.txt wossname.txt \
+	wordfinder.txt wordmatch.txt wossdata.txt wossinput.txt \
+	wossname.txt wossoperation.txt wossoutput.txt \
+	wossparam.txt wosstopic.txt \
 	yank.txt
 
 pkgdata2dir = $(prefix)/share/$(PACKAGE)/doc/programs/text

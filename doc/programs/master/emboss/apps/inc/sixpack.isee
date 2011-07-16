@@ -18,6 +18,11 @@
 </tr>
 
 <tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
 <td><a href="cirdna.html">cirdna</a></td>
 <td>Draws circular maps of DNA constructs</td>
 </tr>
@@ -33,6 +38,11 @@
 </tr>
 
 <tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculate the isoelectric point of proteins</td>
+</tr>
+
+<tr>
 <td><a href="lindna.html">lindna</a></td>
 <td>Draws linear maps of DNA constructs</td>
 </tr>
@@ -40,6 +50,11 @@
 <tr>
 <td><a href="marscan.html">marscan</a></td>
 <td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plot amino acid properties of a protein sequence in parallel</td>
 </tr>
 
 <tr>
@@ -73,21 +88,6 @@
 </tr>
 
 <tr>
-<td><a href="seealso.html">seealso</a></td>
-<td>Finds programs with similar function to a specified program</td>
-</tr>
-
-<tr>
-<td><a href="showalign.html">showalign</a></td>
-<td>Display a multiple sequence alignment in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showdb.html">showdb</a></td>
-<td>Displays information on configured databases</td>
-</tr>
-
-<tr>
 <td><a href="showfeat.html">showfeat</a></td>
 <td>Display features of a sequence in pretty format</td>
 </tr>
@@ -115,11 +115,6 @@
 <tr>
 <td><a href="tcode.html">tcode</a></td>
 <td>Identify protein-coding regions using Fickett TESTCODE statistic</td>
-</tr>
-
-<tr>
-<td><a href="textsearch.html">textsearch</a></td>
-<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>

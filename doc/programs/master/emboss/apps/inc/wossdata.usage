@@ -1,0 +1,27 @@
+Here is a sample session with <b>wossdata</b>
+<p>
+Search for programs with 'codon' in their input, output or parameters 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>wossdata codon </b>
+Finds programs by EDAM data
+
+SEARCH FOR DATA 'CODON'
+backtranseq Back-translate a protein sequence to a nucleotide sequence
+cai         Calculate codon adaptation index
+chips       Calculates Nc codon usage statistic
+codcmp      Codon usage table comparison
+codcopy     Copy and reformat a codon usage table
+cusp        Create a codon usage table from nucleotide sequence(s)
+cutgextract Extract codon usage tables from CUTG database
+makenucseq  Create random nucleotide sequences
+syco        Draw synonymous codon usage statistic plot for a nucleotide sequence
+tcode       Identify protein-coding regions using Fickett TESTCODE statistic
+
+
+</pre></td></tr></table><p>
+<p>
+<p>

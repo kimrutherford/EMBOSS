@@ -1,9 +1,9 @@
 application: acdrelations 
 [
   documentation: "Add relations: attribute to ACD files"
-  groups: "Acd"
-  relations: "/edam/topic/0000220 File handling"
-  relations: "/edam/operation/0000335 File reformatting"
+  groups: "Acd, Data retrieval:Tool data"
+    relations: "EDAM:0000220 topic File handling"
+    relations: "EDAM:0000335 operation File reformatting"
 ]
 
 
@@ -16,26 +16,44 @@ section: input
   type: "page"
 ]
 
+list: mode 
+[
+    parameter: "Y"
+    default: "1"
+    minimum: "1"
+    maximum: "1"
+    values: "1: Simple reformat relations: attributes,
+             2: Rewrite relations: attributes using data files"
+    delimiter: ","
+    codedelimiter: ":"
+    header: "Mode of operation"
+    information: "Select mode"
+    relations: "EDAM:0002527 data Parameter or primitive"
+]
+
   dirlist: indir
   [
     parameter: "Y"
-    information: "ACD file input directory"
+    information: "EMBOSS ACD file directories"
     default: "acdin"
     extension: "acd"
+    knowntype: "acd file"
   ]
 
   datafile: inedamfile 
   [
-    parameter: "Y"
-    information: "EDAM relations: file"
+    standard: "@($mode=='2')"
+    information: "EDAM relations data file"
     default: "edamtoacd.dat"
+    knowntype: "EDAM relations"
   ]
 
   infile: intypefile 
   [
-    parameter: "Y"
-    information: "EMBOSS knowntypes.standard file"
+    standard: "@($mode=='2')"
+    information: "EMBOSS known types file"
     default: "/homes/jison/emboss/emboss/emboss/acd/knowntypes.standard"
+    knowntype: "EMBOSS knowntypes"
   ]
 
 endsection: input
@@ -49,6 +67,7 @@ section: required
   information: "Required section"
   type: "page"
 ]
+
 endsection: required
 
 
@@ -74,9 +93,9 @@ section: output
   outdir: outdir 
   [
     parameter: "Y"
-    information: "ACD file output directory"
-    extension: "acd"
+    information: "EMBOSS ACD file output directory"
     default: "acdout"
+    knowntype: "acd file"
   ]
 
 endsection: output

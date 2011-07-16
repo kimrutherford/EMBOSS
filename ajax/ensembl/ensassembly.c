@@ -1,10 +1,10 @@
-/******************************************************************************
-** @source Ensembl Assembly functions
+/* @source Ensembl Assembly functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.7 $
+** @modified $Date: 2011/02/26 11:57:21 $ by $Author: mks $
+** @version $Revision: 1.18 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -33,6 +33,20 @@
 
 
 /* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== global variables ========================== */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
 /* ========================== private data ============================ */
 /* ==================================================================== */
 
@@ -40,7 +54,28 @@
 
 
 /* ==================================================================== */
+/* ======================== private constants ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== private variables ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
 /* ======================== private functions ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ===================== All functions by section ===================== */
 /* ==================================================================== */
 
 
@@ -55,11 +90,9 @@
 
 
 
-/* @datasection [EnsPAssembly] Assembly ***************************************
+/* @datasection [EnsPAssembly] Ensembl Assembly *******************************
 **
-** Functions for manipulating Ensembl Assembly objects
-**
-** @nam2rule Assembly
+** @nam2rule Assembly Functions for manipulating Ensembl Assembly objects
 **
 ******************************************************************************/
 
@@ -74,16 +107,23 @@
 ** NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPAssembly]
-** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the reference counter
 **
-** @argrule Obj object [const EnsPAssembly] Ensembl Assembly
-** @argrule Ref object [EnsPAssembly] Ensembl Assembly
+** @argrule Cpy assembly [const EnsPAssembly] Ensembl Assembly
+** @argrule Ini asmsrid [ajuint] Assembled Ensembl Sequence Region identifier
+** @argrule Ini asmstart [ajuint] Assembled Sequence Region start coordinate
+** @argrule Ini asmend [ajuint] Assembled Sequence Region end coordinate
+** @argrule Ini cmpsrid [ajuint] Component Ensembl Sequence Region identifier
+** @argrule Ini cmpstart [ajuint] Component Sequence Region start coordinate
+** @argrule Ini cmpend [ajuint] Component Sequence Region end coordinate
+** @argrule Ini orientation [ajint] Relative orientation
+** @argrule Ref assembly [EnsPAssembly] Ensembl Assembly
 **
-** @valrule * [EnsPAssembly] Ensembl Assembly
+** @valrule * [EnsPAssembly] Ensembl Assembly or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -91,9 +131,44 @@
 
 
 
-/* @func ensAssemblyNew *******************************************************
+/* @func ensAssemblyNewCpy ****************************************************
 **
-** Default constructor for an Ensembl Assembly.
+** Object-based constructor function, which returns an independent object.
+**
+** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
+**
+** @return [EnsPAssembly] Ensembl Assembly or NULL
+** @@
+******************************************************************************/
+
+EnsPAssembly ensAssemblyNewCpy(const EnsPAssembly assembly)
+{
+    EnsPAssembly pthis = NULL;
+
+    if(!assembly)
+        return NULL;
+
+    AJNEW0(pthis);
+
+    pthis->Use = 1;
+
+    pthis->AssembledIdentifier = assembly->AssembledIdentifier;
+    pthis->AssembledStart      = assembly->AssembledStart;
+    pthis->AssembledEnd        = assembly->AssembledEnd;
+    pthis->ComponentIdentifier = assembly->ComponentIdentifier;
+    pthis->ComponentStart      = assembly->ComponentStart;
+    pthis->ComponentEnd        = assembly->ComponentEnd;
+    pthis->Orientation         = assembly->Orientation;
+
+    return pthis;
+}
+
+
+
+
+/* @func ensAssemblyNewIni ****************************************************
+**
+** Constructor for an Ensembl Assembly with initial values.
 **
 ** @param [r] asmsrid [ajuint] Assembled Ensembl Sequence Region identifier
 ** @param [r] asmstart [ajuint] Assembled Sequence Region start coordinate
@@ -107,13 +182,13 @@
 ** @@
 ******************************************************************************/
 
-EnsPAssembly ensAssemblyNew(ajuint asmsrid,
-                            ajuint asmstart,
-                            ajuint asmend,
-                            ajuint cmpsrid,
-                            ajuint cmpstart,
-                            ajuint cmpend,
-                            ajint orientation)
+EnsPAssembly ensAssemblyNewIni(ajuint asmsrid,
+                               ajuint asmstart,
+                               ajuint asmend,
+                               ajuint cmpsrid,
+                               ajuint cmpstart,
+                               ajuint cmpend,
+                               ajint orientation)
 {
     EnsPAssembly assembly = NULL;
 
@@ -127,48 +202,13 @@ EnsPAssembly ensAssemblyNew(ajuint asmsrid,
 
     assembly->Use = 1;
 
-    assembly->AssembledSeqregionId = asmsrid;
-    assembly->AssembledStart       = asmstart;
-    assembly->AssembledEnd         = asmend;
-    assembly->ComponentSeqregionId = cmpsrid;
-    assembly->ComponentStart       = cmpstart;
-    assembly->ComponentEnd         = cmpend;
-    assembly->Orientation          = orientation;
-
-    return assembly;
-}
-
-
-
-
-/* @func ensAssemblyNewObj ****************************************************
-**
-** Object-based constructor function, which returns an independent object.
-**
-** @param [r] object [const EnsPAssembly] Ensembl Assembly
-**
-** @return [EnsPAssembly] Ensembl Assembly or NULL
-** @@
-******************************************************************************/
-
-EnsPAssembly ensAssemblyNewObj(const EnsPAssembly object)
-{
-    EnsPAssembly assembly = NULL;
-
-    if(!object)
-        return NULL;
-
-    AJNEW0(assembly);
-
-    assembly->Use = 1;
-
-    assembly->AssembledSeqregionId = object->AssembledSeqregionId;
-    assembly->AssembledStart       = object->AssembledStart;
-    assembly->AssembledEnd         = object->AssembledEnd;
-    assembly->ComponentSeqregionId = object->ComponentSeqregionId;
-    assembly->ComponentStart       = object->ComponentStart;
-    assembly->ComponentEnd         = object->ComponentEnd;
-    assembly->Orientation          = object->Orientation;
+    assembly->AssembledIdentifier = asmsrid;
+    assembly->AssembledStart      = asmstart;
+    assembly->AssembledEnd        = asmend;
+    assembly->ComponentIdentifier = cmpsrid;
+    assembly->ComponentStart      = cmpstart;
+    assembly->ComponentEnd        = cmpend;
+    assembly->Orientation         = orientation;
 
     return assembly;
 }
@@ -203,14 +243,13 @@ EnsPAssembly ensAssemblyNewRef(EnsPAssembly assembly)
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Assembly.
+** memory allocated for an Ensembl Assembly object.
 **
 ** @fdata [EnsPAssembly]
-** @fnote None
 **
-** @nam3rule Del Destroy (free) an Assembly object
+** @nam3rule Del Destroy (free) an Ensembl Assembly object
 **
-** @argrule * Passembly [EnsPAssembly*] Assembly object address
+** @argrule * Passembly [EnsPAssembly*] Ensembl Assembly object address
 **
 ** @valrule * [void]
 **
@@ -251,7 +290,9 @@ void ensAssemblyDel(EnsPAssembly* Passembly)
         return;
     }
 
-    AJFREE(*Passembly);
+    AJFREE(pthis);
+
+    *Passembly = NULL;
 
     return;
 }
@@ -264,80 +305,34 @@ void ensAssemblyDel(EnsPAssembly* Passembly)
 ** Functions for returning elements of an Ensembl Assembly object.
 **
 ** @fdata [EnsPAssembly]
-** @fnote None
 **
 ** @nam3rule Get Return Assembly attribute(s)
-** @nam4rule GetAssembledSeqregionId Return the assembled
-**                                   Ensembl Sequence Region identifier
-** @nam4rule GetAssembledStart Return the assembled
-**                             Ensembl Sequence Region start
-** @nam4rule GetAssembledEnd Return the assembled
-**                           Ensembl Sequence Region end
-** @nam4rule GetComponentSeqregionId Return the component
-**                                   Ensembl Sequence Region identifier
-** @nam4rule GetComponentStart Return the component
-**                             Ensembl Sequence Region start
-** @nam4rule GetComponentEnd Return the component
-**                           Ensembl Sequence Region end
-** @nam4rule GetOrientation Return the relative orientation of assembled
-**                          and component Ensembl Sequence Regions
+** @nam4rule Assembled Return assembled Sequence Region members
+** @nam5rule Identifier Return the assembled
+** Ensembl Sequence Region identifier
+** @nam5rule Start Return the assembled
+** Ensembl Sequence Region start
+** @nam5rule End Return the assembled
+** Ensembl Sequence Region end
+** @nam4rule Component Return component Seuqence Region members
+** @nam4rule Identifier Return the component
+** Ensembl Sequence Region identifier
+** @nam4rule Start Return the component
+** Ensembl Sequence Region start
+** @nam4rule End Return the component
+** Ensembl Sequence Region end
+** @nam4rule Orientation Return the relative orientation of assembled
+** and component Ensembl Sequence Regions
 **
 ** @argrule * assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @valrule AssembledSeqregionId [ajuint] Ensembl Analysis Adaptor
-** @valrule AssembledStart [ajuint] SQL database-internal identifier
-** @valrule AssembledEnd [ajuint] Creation date
-** @valrule ComponentSeqregionId [ajuint] Name
-** @valrule ComponentStart [ajuint] Database name
-** @valrule ComponentEnd [ajuint] Database version
-** @valrule Orientation [ajint] Database file
+** @valrule Identifier [ajuint] Ensembl Sequence Region identifier or 0
+** @valrule Start [ajuint] Start or 0
+** @valrule End [ajuint] End or 0
+** @valrule Orientation [ajint] Orientation or 0
 **
 ** @fcategory use
 ******************************************************************************/
-
-
-
-
-/* @func ensAssemblyGetAssembledSeqregionId ***********************************
-**
-** Get the assembled Ensembl Sequence Region identifier element of an
-** Ensembl Assembly.
-**
-** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
-**
-** @return [ajuint] Assembled Ensembl Sequence Region identifier
-** @@
-******************************************************************************/
-
-ajuint ensAssemblyGetAssembledSeqregionId(const EnsPAssembly assembly)
-{
-    if(!assembly)
-        return 0;
-
-    return assembly->AssembledSeqregionId;
-}
-
-
-
-
-/* @func ensAssemblyGetAssembledStart *****************************************
-**
-** Get the assembled Ensembl Sequence Region start element of an
-** Ensembl Assembly.
-**
-** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
-**
-** @return [ajuint] Assembled Ensembl Sequence Region start
-** @@
-******************************************************************************/
-
-ajuint ensAssemblyGetAssembledStart(const EnsPAssembly assembly)
-{
-    if(!assembly)
-        return 0;
-
-    return assembly->AssembledStart;
-}
 
 
 
@@ -349,7 +344,7 @@ ajuint ensAssemblyGetAssembledStart(const EnsPAssembly assembly)
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @return [ajuint] Assembled Ensembl Sequence Region end
+** @return [ajuint] Assembled Ensembl Sequence Region end or 0
 ** @@
 ******************************************************************************/
 
@@ -364,45 +359,45 @@ ajuint ensAssemblyGetAssembledEnd(const EnsPAssembly assembly)
 
 
 
-/* @func ensAssemblyGetComponentSeqregionId ***********************************
+/* @func ensAssemblyGetAssembledIdentifier ************************************
 **
-** Get the component Ensembl Sequence Region identifier element of an
+** Get the assembled Ensembl Sequence Region identifier element of an
 ** Ensembl Assembly.
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @return [ajuint] Component Ensembl Sequence Region identifier
+** @return [ajuint] Assembled Ensembl Sequence Region identifier or 0
 ** @@
 ******************************************************************************/
 
-ajuint ensAssemblyGetComponentSeqregionId(const EnsPAssembly assembly)
+ajuint ensAssemblyGetAssembledIdentifier(const EnsPAssembly assembly)
 {
     if(!assembly)
         return 0;
 
-    return assembly->ComponentSeqregionId;
+    return assembly->AssembledIdentifier;
 }
 
 
 
 
-/* @func ensAssemblyGetComponentStart *****************************************
+/* @func ensAssemblyGetAssembledStart *****************************************
 **
-** Get the component Ensembl Sequence Region start element of an
+** Get the assembled Ensembl Sequence Region start element of an
 ** Ensembl Assembly.
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @return [ajuint] Component Ensembl Sequence Region start
+** @return [ajuint] Assembled Ensembl Sequence Region start or 0
 ** @@
 ******************************************************************************/
 
-ajuint ensAssemblyGetComponentStart(const EnsPAssembly assembly)
+ajuint ensAssemblyGetAssembledStart(const EnsPAssembly assembly)
 {
     if(!assembly)
         return 0;
 
-    return assembly->ComponentStart;
+    return assembly->AssembledStart;
 }
 
 
@@ -415,7 +410,7 @@ ajuint ensAssemblyGetComponentStart(const EnsPAssembly assembly)
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @return [ajuint] Component Ensembl Sequence Region end
+** @return [ajuint] Component Ensembl Sequence Region end or 0
 ** @@
 ******************************************************************************/
 
@@ -430,6 +425,50 @@ ajuint ensAssemblyGetComponentEnd(const EnsPAssembly assembly)
 
 
 
+/* @func ensAssemblyGetComponentIdentifier ************************************
+**
+** Get the component Ensembl Sequence Region identifier element of an
+** Ensembl Assembly.
+**
+** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
+**
+** @return [ajuint] Component Ensembl Sequence Region identifier or 0
+** @@
+******************************************************************************/
+
+ajuint ensAssemblyGetComponentIdentifier(const EnsPAssembly assembly)
+{
+    if(!assembly)
+        return 0;
+
+    return assembly->ComponentIdentifier;
+}
+
+
+
+
+/* @func ensAssemblyGetComponentStart *****************************************
+**
+** Get the component Ensembl Sequence Region start element of an
+** Ensembl Assembly.
+**
+** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
+**
+** @return [ajuint] Component Ensembl Sequence Region start or 0
+** @@
+******************************************************************************/
+
+ajuint ensAssemblyGetComponentStart(const EnsPAssembly assembly)
+{
+    if(!assembly)
+        return 0;
+
+    return assembly->ComponentStart;
+}
+
+
+
+
 /* @func ensAssemblyGetOrientation ********************************************
 **
 ** Get the releative orientation of assembled and component
@@ -437,7 +476,7 @@ ajuint ensAssemblyGetComponentEnd(const EnsPAssembly assembly)
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @return [ajint] Orientation
+** @return [ajint] Orientation or 0
 ** @@
 ******************************************************************************/
 
@@ -457,6 +496,7 @@ ajint ensAssemblyGetOrientation(const EnsPAssembly assembly)
 ** Functions for reporting of an Ensembl Assembly object.
 **
 ** @fdata [EnsPAssembly]
+**
 ** @nam3rule Trace Report Ensembl Assembly elements to debug file
 **
 ** @argrule Trace assembly [const EnsPAssembly] Ensembl Assembly
@@ -494,19 +534,19 @@ AjBool ensAssemblyTrace(const EnsPAssembly assembly, ajuint level)
 
     ajDebug("%SensAssemblyTrace %p\n"
             "%S  Use %u\n"
-            "%S  AssembledSeqregionId %u\n"
+            "%S  AssembledIdentifier %u\n"
             "%S  AssembledStart %u\n"
             "%S  AssembledEnd %u\n"
-            "%S  ComponentSeqregionId %u\n"
+            "%S  ComponentIdentifier %u\n"
             "%S  ComponentStart %u\n"
             "%S  ComponentEnd %u\n"
             "%S  Orientation %d\n",
             indent, assembly,
             indent, assembly->Use,
-            indent, assembly->AssembledSeqregionId,
+            indent, assembly->AssembledIdentifier,
             indent, assembly->AssembledStart,
             indent, assembly->AssembledEnd,
-            indent, assembly->ComponentSeqregionId,
+            indent, assembly->ComponentIdentifier,
             indent, assembly->ComponentStart,
             indent, assembly->ComponentEnd,
             indent, assembly->Orientation);
@@ -519,19 +559,38 @@ AjBool ensAssemblyTrace(const EnsPAssembly assembly, ajuint level)
 
 
 
-/* @func ensAssemblyGetMemsize ************************************************
+/* @section calculate *********************************************************
 **
-** Get the memory size in bytes of an Ensembl Assembly.
+** Functions for calculating values of an Ensembl Assembly object.
+**
+** @fdata [EnsPAssembly]
+**
+** @nam3rule Calculate Calculate Ensembl Assembly values
+** @nam4rule Memsize Calculate the memory size in bytes
+**
+** @argrule * assembly [const EnsPAssembly] Ensembl Assembly
+**
+** @valrule Memsize [size_t] Memory size in bytes or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensAssemblyCalculateMemsize ******************************************
+**
+** Calculate the memory size in bytes of an Ensembl Assembly.
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @return [ajulong] Memory size
+** @return [size_t] Memory size in bytes or 0
 ** @@
 ******************************************************************************/
 
-ajulong ensAssemblyGetMemsize(const EnsPAssembly assembly)
+size_t ensAssemblyCalculateMemsize(const EnsPAssembly assembly)
 {
-    ajulong size = 0;
+    size_t size = 0;
 
     if(!assembly)
         return 0;

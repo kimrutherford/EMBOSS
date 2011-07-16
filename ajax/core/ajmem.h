@@ -28,7 +28,7 @@ void *ajMemCalloc(size_t count, size_t nbytes,
 	const char *file, ajint line, AjBool nofail);
 void *ajMemCallocZero(size_t count, size_t nbytes,
 	const char *file, ajint line, AjBool nofail);
-void ajMemFree(void *ptr);
+void ajMemFree(void **ptr);
 void *ajMemResize(void *ptr, size_t nbytes,
 	const char *file, ajint line, AjBool nofail);
 void *ajMemResizeZero(void *ptr, size_t oldbytes, size_t nbytes,
@@ -68,7 +68,7 @@ __deprecated void *ajMemCalloc0(size_t count, size_t nbytes,
 #define AJSET0(p) (ajMemSetZero((p), (size_t)1, sizeof *(p)))
 #define AJCSET0(p,c) (ajMemSetZero((p), (size_t)c, sizeof *(p)))
 
-#define AJFREE(ptr) ((void)(ajMemFree(ptr), (ptr) = 0))
+#define AJFREE(ptr) ((void)(ajMemFree((void**)&ptr)))
 #define AJRESIZE(ptr, nbytes) 	((ptr) = ajMemResize((ptr), \
 	(nbytes), __FILE__, __LINE__, AJFALSE))
 #define AJRESIZE0(ptr, oldbytes, nbytes)  ((ptr) = ajMemResizeZero((ptr), \

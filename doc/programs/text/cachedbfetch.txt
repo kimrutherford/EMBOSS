@@ -1,0 +1,412 @@
+                                cachedbfetch
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Generates server cache file for Dbfetch/WSDbfetch data sources
+
+Description
+
+   Contacts the EBI dbfetch service to find the available databases and
+   saves definitions for them to a server cache file.
+
+Usage
+
+   Here is a sample session with cachedbfetch
+
+
+% cachedbfetch -servername tdbfetch -auto -cachefile ~/.embossdata/qatests.serve
+r.tdbfetch
+Warning: No dbtype found supporting format emblxml-1.2
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format emblxml
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format insdxml
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format emblxml-1.2
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format emblxml
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format emblxml-1.2
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format emblxml
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format insdxml
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format emblxml-1.2
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format csv
+Warning: No dbtype found supporting format tab
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format tab
+Warning: No dbtype found for db HGNC
+Warning: No dbtype found supporting format hgbase
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format interpro
+Warning: No dbtype found supporting format interproxml
+Warning: No dbtype found for db InterPro
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format iprmc
+Warning: No dbtype found supporting format iprmctab
+Warning: No dbtype found supporting format iprmcxml
+Warning: No dbtype found for db IPRMC
+Warning: No dbtype found supporting format iprmc
+Warning: No dbtype found supporting format iprmctab
+Warning: No dbtype found supporting format iprmcxml
+Warning: No dbtype found for db IPRMC UniParc
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format livelists
+Warning: No dbtype found for db LiveLists
+Warning: No dbtype found supporting format bibtex
+Warning: No dbtype found supporting format endnote
+Warning: No dbtype found supporting format isi
+Warning: No dbtype found supporting format medlinefull
+Warning: No dbtype found supporting format medlineref
+Warning: No dbtype found supporting format medlinexml
+Warning: No dbtype found supporting format modsxml
+Warning: No dbtype found supporting format ris
+Warning: No dbtype found supporting format wordbibxml
+Warning: No dbtype found for db MEDLINE
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format nrl1
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format nrl2
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format nrl1
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format nrl2
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format mmcif
+Warning: No dbtype found supporting format pdbml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format resid
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format sgtxml
+Warning: No dbtype found supporting format taxonomy
+Warning: No dbtype found supporting format enataxonomyxml
+Warning: No dbtype found supporting format uniprottaxonomyrdfxml
+Warning: No dbtype found for db Taxonomy
+Warning: No dbtype found supporting format tracexml
+Warning: No dbtype found supporting format uniparc
+Warning: No dbtype found supporting format uniprotrdfxml
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format uniprotrdfxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format uniprotrdfxml
+Warning: No dbtype found supporting format uniref100
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format uniprotrdfxml
+Warning: No dbtype found supporting format uniref50
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format uniprotrdfxml
+Warning: No dbtype found supporting format uniref90
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Generates server cache file for Dbfetch/WSDbfetch data sources
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-servername]        string     [dbfetch] Name of the ws/dbfetch server
+                                  defined in EMBOSS resource files (Any
+                                  string)
+  [-cachefile]         outfile    [server.$(servername)] Server cache output
+                                  file
+
+   Additional (Optional) qualifiers:
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   "-cachefile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   cachedbfetch contacts the EBI dbfetch server for details of available
+   databases.
+
+Output file format
+
+   cachedbfetch writes a server cache file which can be saved in the
+   user's .embossdata directory or, for a system administrator, stored in
+   the site-wide share/EMBOSS/ directory.
+
+  Output files for usage example
+
+  File: qatests.server.tdbfetch
+
+# qatests.server.tdbfetch 2011-07-15 12:00:00
+
+DB edam [
+  method: dbfetch
+  hasacc: N
+  format: "obo"
+  type: "text, obo"
+  example: "0000352, 0001223"
+  comment: "EMBRACE Data and Methods (EDAM) Ontology."
+]
+
+DB embl [
+  method: dbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "M10051, K00650, D87894, AJ242600, HSINSR, HSFOS, ROD894, LOP242600,
+J00231.1, K00650.1, D87894.1, AJ242600.1"
+  comment: "EMBL Nucleotide Sequence Database, Europe's primary nucleotide seque
+nce resource. The main sources of the DNA and RNA sequences in the database are
+submissions from individual researchers, genome sequencing projects and patent a
+pplications."
+]
+
+DB emblcds [
+  method: dbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "AAA59452, AAA59452.1"
+  comment: "EMBLCDS is a database of nucleotide sequences of the CDS (coding seq
+uence) features, as annotated in EMBL database. EMBLCDS record contains the nucl
+eotide sequence of the CDS region, accompanying annotation from the parent nucle
+otide entry and the additional automatically generated annotation."
+]
+
+DB emblcon [
+  method: dbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "CH003588, CH003588.1"
+  comment: "The EMBLCON database division represents complete genomes and other
+long sequences constructed from segment entries."
+]
+
+DB emblconexp [
+  method: dbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "AL672111, AL672111.1"
+  comment: "The EMBLCON database division represents complete genomes and other
+long sequences constructed from segment entries. Expanded entries including the
+complete sequence."
+]
+
+DB emblsva [
+  method: dbfetch
+  hasacc: N
+
+
+  [Part of this file has been deleted for brevity]
+
+  format: "fasta, gff3, uniprot, uniprotxml"
+  type: "text, features, sequence"
+  example: "P06213, P29306, P68255, INSR_HUMAN, 1433X_MAIZE, 1433T_RAT"
+  comment: "The UniProt Knowledgebase (UniProtKB) is the central access point fo
+r extensive curated protein information, including function, classification, and
+ cross-references. Search UniProtKB to retrieve aEURoeeverything that is knownaE
+UR about a particular sequence."
+]
+
+DB uniref100 [
+  method: dbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "UniRef100_P06213"
+  comment: "The UniProt Reference Clusters (UniRef) databases combine closely re
+lated sequences into a single record to speed searches. There are three differen
+t non-redundant databases with different sequence identity cut-offs. In UniRef10
+0, UniRef90 and UniRef50 databases no pair of sequences in the representative se
+t has >100%, >90% or >50% mutual sequence identity. The three UniRef databases a
+llow the user to choose between a fast search and a truly comprehensive one."
+]
+
+DB uniref50 [
+  method: dbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "UniRef50_P06213"
+  comment: "The UniProt Reference Clusters (UniRef) databases combine closely re
+lated sequences into a single record to speed searches. There are three differen
+t non-redundant databases with different sequence identity cut-offs. In UniRef10
+0, UniRef90 and UniRef50 databases no pair of sequences in the representative se
+t has >100%, >90% or >50% mutual sequence identity. The three UniRef databases a
+llow the user to choose between a fast search and a truly comprehensive one."
+]
+
+DB uniref90 [
+  method: dbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "UniRef90_P06213"
+  comment: "The UniProt Reference Clusters (UniRef) databases combine closely re
+lated sequences into a single record to speed searches. There are three differen
+t non-redundant databases with different sequence identity cut-offs. In UniRef10
+0, UniRef90 and UniRef50 databases no pair of sequences in the representative se
+t has >100%, >90% or >50% mutual sequence identity. The three UniRef databases a
+llow the user to choose between a fast search and a truly comprehensive one."
+]
+
+DB unisave [
+  method: dbfetch
+  hasacc: N
+  format: "fasta, uniprot"
+  type: "text, features, sequence"
+  example: "P06213, P06213.157, P06213.3, INSR_HUMAN"
+  comment: "The UniProtKB Sequence/Annotation Version Archive (UniSave) is a rep
+ository of UniProtKB/Swiss-Prot and UniProtKB/TrEMBL entry versions."
+]
+
+DB uspto_prt [
+  method: dbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "AAA00053, I02590, AAA00053.1"
+  comment: "Protein sequences appearing in patents from the United States Patent
+ and Trademark Office (USPTO)."
+]
+
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   cachedas         Generates server cache file for DAS servers or for the DAS
+                    registry
+   cacheebeyesearch Generates server cache file for EB-eye search domains
+   cacheensembl     Generates server cache file for an Ensembl server
+   dbtell           Display information about a public database
+   servertell       Display information about a public server
+   showdb           Displays information on configured databases
+   showserver       Displays information on configured servers
+
+Author(s)
+
+   Peter Rice
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

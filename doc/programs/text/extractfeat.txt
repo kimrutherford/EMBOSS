@@ -64,7 +64,7 @@ output sequence [x65921.fasta]:
    the tembl database:
 
 
-% extractfeat 'tembl:*'  -type exon -before 5 -after -5
+% extractfeat "tembl:*"  -type exon -before 5 -after -5
 Extract features from sequence(s)
 output sequence [h45989.fasta]:
 
@@ -88,9 +88,10 @@ output sequence [x65921.fasta]:
    To write out the 7 residues around all phosphorylated serine residues
 
 
-% extractfeat 'tsw:*' -type MOD_RES -value 'phosphoserine*' -before 3 -after -4
+% extractfeat "tsw:*" -type MOD_RES -value "phosphoserine*" -before 3 -after -4
 Extract features from sequence(s)
 output sequence [12s1_arath.fasta]:
+ajSeqxrefNewDbS '1-I' 'FT025'
 
 
    Go to the output files for this example
@@ -98,7 +99,7 @@ output sequence [12s1_arath.fasta]:
 Command line arguments
 
 Extract features from sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -723,8 +724,8 @@ Notes
 
    By default every feature in the feature table is extracted. -type will
    set the specific feature type to extract. See
-   http://www.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature
-   types and see Appendix A of the Swissprot user manual in
+   http://www.ebi.ac.uk/embl/WebFeindex.html for a list of the EMBL
+   feature types and see Appendix A of the Swissprot user manual in
    http://www.uniprot.org/manual/sequence_annotation for a list of the
    Swissprot feature types.
 
@@ -808,7 +809,6 @@ See also
    aligncopypair    Reads and writes pairs from alignments
    biosed           Replace or delete sequence sections
    codcopy          Copy and reformat a codon usage table
-   coderet          Extract CDS, mRNA and translations from feature tables
    cutseq           Removes a section from a sequence
    degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
    descseq          Alter the name or description of a sequence
@@ -817,6 +817,7 @@ See also
    extractseq       Extract regions from a sequence
    featcopy         Reads and writes a feature table
    featreport       Reads and writes a feature table
+   feattext         Return a feature table original text
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
@@ -837,6 +838,7 @@ See also
    nthseqset        Reads and writes (returns) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
+   seqcount         Reads and counts sequences
    seqret           Reads and writes (returns) sequences
    seqretsetall     Reads and writes (returns) many sets of sequences
    seqretsplit      Reads sequences and writes them to individual files

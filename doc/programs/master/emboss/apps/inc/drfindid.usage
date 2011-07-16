@@ -1,0 +1,13 @@
+Here is a sample session with <b>drfindid</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>drfindid protein </b>
+Find public databases by identifier
+Data resource output file [drfindid.drcat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

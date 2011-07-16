@@ -28,6 +28,11 @@
 </tr>
 
 <tr>
+<td><a href="einverted.html">einverted</a></td>
+<td>Finds inverted repeats in nucleotide sequences</td>
+</tr>
+
+<tr>
 <td><a href="freak.html">freak</a></td>
 <td>Generate residue/base frequency table or plot</td>
 </tr>

@@ -120,6 +120,7 @@ AjPReport    ajReportNew (void);
 AjBool       ajReportOpen (AjPReport thys, const AjPStr name);
 void         ajReportPrintFormat (AjPFile outf, AjBool full);
 void         ajReportPrintbookFormat (AjPFile outf);
+void         ajReportPrinthtmlFormat (AjPFile outf);
 void         ajReportPrintwikiFormat (AjPFile outf);
 const AjPStr ajReportGetSeqnameSeq (const AjPReport thys, const AjPSeq seq);
 void         ajReportAppendHeaderS (AjPReport thys, const AjPStr header);

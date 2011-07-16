@@ -1,8 +1,10 @@
 application: btwisted [
   documentation: "Calculate the twisting in a B-DNA sequence"
-  groups: "Nucleic:Composition"
-  relations: "/edam/topic/0000097 Nucleic acid structure analysis"
-  relations: "/edam/operation/0000262 Nucleic acid structural property calculation"
+  groups: "Nucleic:Properties, Nucleic:Composition, Nucleic:2D structure"
+  relations: "EDAM:0000097 topic Nucleic acid structure"
+  relations: "EDAM:0000094 topic Nucleic acid physicochemistry"
+  relations: "EDAM:0000157 topic Sequence composition"
+  relations: "EDAM:0000262 operation Nucleic acid property calculation"
 ]
 
 section: input [
@@ -13,22 +15,21 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "PureDNA"
-    relations: "/edam/data/0000848 Sequence"                            
-    relations: "/edam/data/0000849 Sequence record"                 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   datafile: angledata [
     default: "Eangles.dat"
     information: "DNA base pair twist angle data file"
     knowntype: "base pair twist angles"
-    relations:  "/edam/data/0001589 DNA base pair twist angle data"                 
+    relations: "EDAM:0001589 data DNA base pair twist angle data"
   ]
 
   datafile: energydata [
     default: "Eenergy.dat"
     information: "DNA base pair stacking energies data file"
     knowntype: "base pair stacking energies"
-    relations:  "/edam/data/0001588 DNA base pair stacking energies data"           
+    relations: "EDAM:0001588 data DNA base pair stacking energies data"
   ]
 
 endsection: input
@@ -41,7 +42,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "btwisted output"
-    relations:  "/edam/data/0000913 Nucleic acid structural property"                    
+    relations: "EDAM:0000912 data Nucleic acid property"
   ]
 
 endsection: output

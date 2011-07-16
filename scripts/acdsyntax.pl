@@ -79,15 +79,15 @@ $itable = 0;
 	   "ACD Application Qualifiers" => "QUALS",
 	   "ACD Default attributes" => "DEFATTR",
 	   "ACD Calculated attributes" => "CALCATTR",
-	   "sequence input formats" => "SEQINPUT",
-	   "sequence output formats" => "SEQOUTPUT",
-	   "Sequence Types" => "SEQTYPE",
-	   "sequence access methods" => "SEQACCESS",
+	   "Sequence input formats" => "SEQINPUT",
+	   "Sequence output formats" => "SEQOUTPUT",
+	   "Sequence types" => "SEQTYPE",
+	   "Sequence access methods" => "SEQACCESS",
 	   "Database attributes" => "DBATTR",
 	   "Resource attributes" => "RESATTR",
-	   "alignment output formats" => "ALIGNOUTPUT",
-	   "report output formats" => "REPORTOUTPUT",
-	   "Graphics Devices" => "GRAPHDEV",
+	   "Alignment output formats" => "ALIGNOUTPUT",
+	   "Report output formats" => "REPORTOUTPUT",
+	   "Graphics devices" => "GRAPHDEV",
 	   "Other" => "OTHER"
 	   );
 
@@ -1104,9 +1104,10 @@ open (GETGROUPS, "$basedir/emboss/acd/groups.standard")
 
 while (<GETGROUPS>) {
     if (/^[\#]/) {next}
-    if (/^(\S+)\s+(.*)/) {
-	$group=$1;
-	$comment = $2;
+    if (/^(\S+)\s+(\S+)\s+(.*)/) {
+#	$gterm=$1;
+	$group=$2;
+	$comment = $3;
 	if ($group =~ /([^:]+):(.*)/) {
 	    $gtop = $1;
 	    $gname = $2;

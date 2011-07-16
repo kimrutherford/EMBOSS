@@ -1,5 +1,5 @@
 /******************************************************************************
-** @source AJAX SEQDB (database) functions
+** @Source AJAX SEQDB (database) functions
 **
 ** These functions control all aspects of AJAX sequence database access
 **
@@ -27,6 +27,7 @@
 ******************************************************************************/
 
 #include "ajax.h"
+#include "ajdas.h"
 #include "ajseqdb.h"
 #include "ajmart.h"
 #include "ensembl.h"
@@ -51,9 +52,12 @@
 #include <signal.h>
 
 
+
+
+
+
 static AjPRegexp seqBlastDivExp = NULL;
 static AjPRegexp seqCdDivExp = NULL;
-static AjPRegexp seqRegHttpProxy = NULL;
 static AjPRegexp seqRegHttpUrl = NULL;
 
 static AjPRegexp seqRegGcgId = NULL;
@@ -227,7 +231,7 @@ typedef struct SeqSCdHit
 ** @attr AnnOffset [ajuint] Data file offset (see DivCode)
 ** @attr SeqOffset [ajuint] Sequence file offset (if any) (see DivCode)
 ** @attr EntryName [AjPStr] Entry ID - the file is sorted by these
-** @attr DivCode [short] Division file record
+** @attr DivCode [ajushort] Division file record
 ** @attr Padding [char[6]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
@@ -237,7 +241,7 @@ typedef struct SeqSCdIdx
     ajuint AnnOffset;
     ajuint SeqOffset;
     AjPStr EntryName;
-    short DivCode;
+    ajushort DivCode;
     char Padding[6];
 } SeqOCdIdx;
 
@@ -304,11 +308,10 @@ typedef struct SeqSCdTrg
 ** @attr TopAmb [ajuint] BLAST table ambiguities offset
 ** @attr TopSrc [ajuint] BLAST table FASTA source offset
 ** @attr Size [ajuint] BLAST database size
-** @attr List [AjPList] list of entries
 ** @attr Skip [AjBool*] skip file(s) in division.lkp
 ** @attr idxLine [SeqPCdIdx] entryname.idx input line
 ** @attr Samefile [AjBool] true if the same file is passed to
-                           ajFilebuffReopenFile
+**                         ajFilebuffReopenFile
 ** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
@@ -347,7 +350,6 @@ typedef struct SeqSCdQry
     ajuint TopSrc;
     ajuint Size;
 
-    AjPList List;
     AjBool* Skip;
     SeqPCdIdx idxLine;
     AjBool Samefile;
@@ -366,27 +368,17 @@ typedef struct SeqSCdQry
 ** @alias SeqSEmbossQry
 ** @alias SeqOEmbossQry
 **
-** @attr do_id  [AjBool] If true, test ID
-** @attr do_ac  [AjBool] If true, test accession
-** @attr do_kw  [AjBool] If true, test keyword
-** @attr do_de  [AjBool] If true, test description
-** @attr do_sv  [AjBool] If true, test seqversion
-** @attr do_tx  [AjBool] If true, test text
 ** @attr idcache [AjPBtcache] ID cache
-** @attr accache [AjPBtcache] accession cache
-** @attr svcache [AjPBtcache] seqversion cache
-** @attr kwcache [AjPBtcache] keyword cache
-** @attr txcache [AjPBtcache] text cache
-** @attr decache [AjPBtcache] description cache
+** @attr Caches [AjPList] Caches for each query field
 ** @attr files [AjPStr*] database filenames
 ** @attr reffiles [AjPStr*] database reference filenames
+** @attr Skip [AjBool*] files numbers to exclude
+** @attr List [AjPList] List of files
+** @attr libs [AjPFile] Primary (database source) file
+** @attr libr [AjPFile] Secondary (database bibliographic source) file
 ** @attr div [ajuint] division number of currently open database file
 ** @attr nentries [ajint] number of entries in the filename array(s)
 **                        -1 when done
-** @attr libs [AjPFile] Primary (database source) file
-** @attr libr [AjPFile] Secondary (database bibliographic source) file
-** @attr List [AjPList] List of files
-** @attr Skip [AjBool*] files numbers to exclude
 ** @attr Samefile [AjBool] true if the same file is passed to
 **                         ajFilebuffReopenFile
 ** @attr Padding [char[4]] Padding to alignment boundary
@@ -395,31 +387,21 @@ typedef struct SeqSCdQry
 
 typedef struct SeqSEmbossQry
 {
-    AjBool do_id;
-    AjBool do_ac;
-    AjBool do_kw;
-    AjBool do_de;
-    AjBool do_sv;
-    AjBool do_tx;
-
     AjPBtcache idcache;
-    AjPBtcache accache;
-    AjPBtcache svcache;
-    AjPBtcache kwcache;
-    AjPBtcache txcache;
-    AjPBtcache decache;
+    AjPList Caches;
 
     AjPStr *files;
     AjPStr *reffiles;
+    AjBool *Skip;
+
+    AjPList List;
+
+    AjPFile libs;
+    AjPFile libr;
 
     ajuint div;
     ajint nentries;
-    
-    AjPFile libs;
-    AjPFile libr;
-    
-    AjPList List;
-    AjBool *Skip;
+
     AjBool Samefile;
     char Padding[4];
 } SeqOEmbossQry;
@@ -430,39 +412,52 @@ typedef struct SeqSEmbossQry
 
 
 
+/* @const SeqEEnsemblType *****************************************************
+**
+** Ensembl Object Type enumeration
+**
+******************************************************************************/
+
+typedef enum SeqOEnsemblType
+{
+    seqEEnsemblTypeNULL,
+    seqEEnsemblTypeExon,
+    seqEEnsemblTypeGene,
+    seqEEnsemblTypeTranscript,
+    seqEEnsemblTypeTranslation
+} SeqEEnsemblType;
+
+
+
+
 /* @datastatic SeqPEnsembl ****************************************************
 **
-** Ensembl record structure
+** Ensembl query structure
 **
 ** @alias SeqSEnsembl
 ** @alias SeqOEnsembl
 **
-** @attr StableIdentifiers [AjPList] AJAX List of stable identifier
-**                                   AJAX Strings
-** @attr Database [AjPStr] The database name parsed from the USA
+** @attr Stableidentifiers [AjPList] AJAX List of AJAX String
+**                                   (Ensembl stable identifier) objects
 ** @attr Alias [AjPStr] Species alias parsed from the USA
-** @attr Identifier [AjPStr] Ensembl stable identifier
-** @attr Species [const AjPStr] Species resolved from an alias
-** @attr ObjectType [AjPStr] The Ensembl object type as encoded by stable
-**                           the stable identifier schema:
-**                             E: Exon
-**                             G: Gene
-**                             P: Translation
-**                             T: Transcript
-** @attr Sequence [AjPSeq] AJAX Sequence object to pass into seqReadEnsembl
+** @attr Database [AjPStr] The database name parsed from the USA
+** @attr Wildquery [AjPStr] AJAX Query Field Wild Query representing
+** @attr Species [AjPStr] Species resolved from an alias
+** Ensembl stable identifier
+** @attr Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @attr EnsemblType [SeqEEnsemblType] Ensembl Object Type enumeration
 ** @@
 ******************************************************************************/
 
 typedef struct SeqSEnsembl
 {
-    AjPList StableIdentifiers;
-    AjPStr Database;
+    AjPList Stableidentifiers;
     AjPStr Alias;
-    AjPStr Identifier;
-    const AjPStr Species;
-    AjPStr ObjectType;
-    AjPSeq Sequence;
-    EnsPDatabaseadaptor DatabaseAdaptor;
+    AjPStr Database;
+    AjPStr Wildquery;
+    AjPStr Species;
+    EnsPDatabaseadaptor Databaseadaptor;
+    SeqEEnsemblType EnsemblType;
 } SeqOEnsembl;
 
 #define SeqPEnsembl SeqOEnsembl*
@@ -470,107 +465,88 @@ typedef struct SeqSEnsembl
 
 
 
-static AjBool     seqAccessApp(AjPSeqin seqin);
 static AjBool     seqAccessBlast(AjPSeqin seqin);
 /* static AjBool     seqAccessCmd(AjPSeqin seqin);*/ /* not implemented */
-static AjBool     seqAccessDbfetch(AjPSeqin seqin);
-static AjBool     seqAccessDirect(AjPSeqin seqin);
-static AjBool     seqAccessEmblcd(AjPSeqin seqin);
-static AjBool     seqAccessEmboss(AjPSeqin seqin);
+static AjBool     seqAccessDAS(AjPSeqin seqin);
 static AjBool     seqAccessEmbossGcg(AjPSeqin seqin);
 static AjBool     seqAccessEnsembl(AjPSeqin seqin);
-static AjBool     seqAccessEntrez(AjPSeqin seqin);
-static AjBool     seqAccessFreeEmblcd(void* qry);
-static AjBool     seqAccessFreeEmboss(void* qry);
 static AjBool     seqAccessGcg(AjPSeqin seqin);
 static AjBool     seqAccessMart(AjPSeqin seqin);
-static AjBool     seqAccessMrs(AjPSeqin seqin);
-static AjBool     seqAccessMrs3(AjPSeqin seqin);
 /* static AjBool     seqAccessNbrf(AjPSeqin seqin); */ /* obsolete */
-static AjBool     seqAccessSeqhound(AjPSeqin seqin);
 static AjBool     seqAccessSql(AjPSeqin seqin);
-static AjBool     seqAccessSrs(AjPSeqin seqin);
-static AjBool     seqAccessSrsfasta(AjPSeqin seqin);
-static AjBool     seqAccessSrswww(AjPSeqin seqin);
-static AjBool     seqAccessUrl(AjPSeqin seqin);
 
-static AjBool     seqBlastOpen(AjPSeqQuery qry, AjBool next);
-static ajuint     seqCdDivNext(AjPSeqQuery qry);
+static AjBool     seqBlastOpen(AjPQuery qry, AjBool next);
+static ajuint     seqCdDivNext(AjPQuery qry);
 static void       seqCdIdxDel(SeqPCdIdx* pthys);
 static void       seqCdTrgDel(SeqPCdTrg* pthys);
 static AjBool     seqBlastAll(AjPSeqin seqin);
 static AjPFile    seqBlastFileOpen(const AjPStr dir, const AjPStr name);
 static AjBool     seqBlastLoadBuff(AjPSeqin seqin);
-static AjBool     seqBlastQryClose(AjPSeqQuery qry);
-static AjBool     seqBlastQryNext(AjPSeqQuery qry);
+static AjBool     seqBlastQryClose(AjPQuery qry);
+static AjBool     seqBlastQryNext(AjPQuery qry);
 static AjBool     seqBlastReadTable(AjPSeqin seqin,
-				    AjPStr* hline, AjPStr* seq);
+                                    AjPStr* hline, AjPStr* seq);
 static void       seqBlastStripNcbi(AjPStr* line);
 
-static AjBool     seqCdAll(AjPSeqin seqin);
 static int        seqCdEntryCmp(const void* a, const void* b);
 static void       seqCdEntryDel(void** pentry, void* cl);
 static void       seqCdFileClose(SeqPCdFile *thys);
 static SeqPCdFile seqCdFileOpen(const AjPStr dir, const char* name,
-				AjPStr* fullname);
+                                AjPStr* fullname);
 static ajint      seqCdFileSeek(SeqPCdFile fil, ajuint ipos);
 static void       seqCdIdxLine(SeqPCdIdx idxLine,  ajuint ipos,
-			       SeqPCdFile fp);
+                               SeqPCdFile fp);
 static char*      seqCdIdxName(ajuint ipos, SeqPCdFile fp);
-static AjBool     seqCdIdxQuery(AjPSeqQuery qry);
+static AjBool     seqCdIdxQuery(AjPQuery qry, const AjPStr idqry);
 static ajuint     seqCdIdxSearch(SeqPCdIdx idxLine, const AjPStr entry,
-				 SeqPCdFile fp);
-static AjBool     seqCdQryClose(AjPSeqQuery qry);
-static AjBool     seqCdQryEntry(AjPSeqQuery qry);
-static AjBool     seqCdQryFile(AjPSeqQuery qry);
-static AjBool     seqCdQryOpen(AjPSeqQuery qry);
-static AjBool     seqCdQryNext(AjPSeqQuery qry);
-static AjBool     seqCdQryQuery(AjPSeqQuery qry);
-static AjBool     seqCdQryReuse(AjPSeqQuery qry);
+                                 SeqPCdFile fp);
+static AjBool     seqCdQryClose(AjPQuery qry);
+static AjBool     seqCdQryEntry(AjPQuery qry);
+static AjBool     seqCdQryFile(AjPQuery qry);
+static AjBool     seqCdQryOpen(AjPQuery qry);
+static AjBool     seqCdQryNext(AjPQuery qry);
+static AjBool     seqCdQryQuery(AjPQuery qry);
+static AjBool     seqCdQryReuse(AjPQuery qry);
 static AjBool     seqCdReadHeader(SeqPCdFile fp);
 static AjBool     seqCdTrgClose(SeqPCdFile *trgfil, SeqPCdFile *hitfil);
-static ajuint     seqCdTrgFind(AjPSeqQuery qry, const char* indexname,
-			       const AjPStr qrystring);
+static ajuint     seqCdTrgFind(AjPQuery qry, const char* indexname,
+                               const AjPStr qrystring);
 static void       seqCdTrgLine(SeqPCdTrg trgLine, ajuint ipos,
-			       SeqPCdFile fp);
+                               SeqPCdFile fp);
 static char*      seqCdTrgName(ajuint ipos, SeqPCdFile fp);
 static AjBool     seqCdTrgOpen(const AjPStr dir, const char* name,
-			       SeqPCdFile *trgfil, SeqPCdFile *hitfil);
-static AjBool     seqCdTrgQuery(AjPSeqQuery qry);
+                               SeqPCdFile *trgfil, SeqPCdFile *hitfil);
+static AjBool     seqCdTrgQuery(AjPQuery qry, const AjPStr field,
+                                const AjPStr wildqry);
 static ajuint     seqCdTrgSearch(SeqPCdTrg trgLine, const AjPStr name,
-				SeqPCdFile fp);
+                                 SeqPCdFile fp);
 
-static AjBool     seqEmbossAll(AjPSeqin seqin);
-static AjBool 	  seqEmbossGcgAll(AjPSeqin seqin);
+static AjBool     seqEmbossGcgAll(AjPSeqin seqin);
 static void       seqEmbossGcgLoadBuff(AjPSeqin seqin);
 static AjBool     seqEmbossGcgReadRef(AjPSeqin seqin);
 static AjBool     seqEmbossGcgReadSeq(AjPSeqin seqin);
-#if 0
-static void	  seqEmbossOpenCache(AjPSeqQuery qry, const char *ext,
-				     AjPBtcache *cache);
-#endif
-static void       seqEmbossOpenSecCache(AjPSeqQuery qry, const char *ext,
-					AjPBtcache *cache);
-static AjBool     seqEmbossQryOpen(AjPSeqQuery qry);
-static AjBool     seqEmbossQryClose(AjPSeqQuery qry);
-static AjBool     seqEmbossQryEntry(AjPSeqQuery qry);
-static AjBool     seqEmbossQryNext(AjPSeqQuery qry);
-static AjBool     seqEmbossQryQuery(AjPSeqQuery qry);
-static AjBool     seqEmbossQryReuse(AjPSeqQuery qry);
 
-static AjBool     seqEntrezQryNext(AjPSeqQuery qry, AjPSeqin seqin);
+static AjBool     seqEmbossOpenCache(AjPQuery qry, const char *ext,
+                                     AjPBtcache *cache);
+static AjBool     seqEmbossQryClose(AjPQuery qry);
+static AjBool     seqEmbossQryEntry(AjPQuery qry);
+static AjBool     seqEmbossQryNext(AjPQuery qry);
+static AjBool     seqEmbossQryOpen(AjPQuery qry);
+static AjBool     seqEmbossQryQuery(AjPQuery qry);
+static AjBool     seqEmbossQryReuse(AjPQuery qry);
+
+static void       seqEnsemblDel(SeqPEnsembl* Pse);
+static AjBool     seqEnsemblQryFirst(AjPQuery qry);
+static AjBool     seqEnsemblQryFirstExon(AjPQuery qry);
+static AjBool     seqEnsemblQryFirstGeneric(AjPQuery qry);
+static AjBool     seqEnsemblQryFirstTranscript(AjPQuery qry);
+static AjBool     seqEnsemblQryFirstTranslation(AjPQuery qry);
+
 static AjBool     seqGcgAll(AjPSeqin seqin);
 static void       seqGcgBinDecode(AjPStr *pthis, ajuint rdlen);
 static void       seqGcgLoadBuff(AjPSeqin seqin);
 static AjBool     seqGcgReadRef(AjPSeqin seqin);
 static AjBool     seqGcgReadSeq(AjPSeqin seqin);
-static AjBool     seqHttpUrl(const AjPSeqQuery qry,
-			     ajint* iport, AjPStr* host, AjPStr* urlget);
-static AjBool     seqSeqhoundQryNext(AjPSeqQuery qry, AjPSeqin seqin);
-static FILE*      seqHttpSend(const AjPSeqQuery qry, struct AJSOCKET sock,
-                              const AjPStr host, ajint iport,
-                              const AjPStr get);
-static void       seqSocketTimeout(int sig);
 
 
 
@@ -583,102 +559,63 @@ static void       seqSocketTimeout(int sig);
 
 static AjOSeqAccess seqAccess[] =
 {
-  /* Name      AccessFunction   FreeFunction
-     Description
-     Alias    Entry    Query    All      Chunk */
-    {"dbfetch", seqAccessDbfetch, NULL,
-     "retrieve in text format from EBI dbfetch REST services",
-     AJFALSE, AJTRUE,  AJFALSE, AJFALSE, AJFALSE
-    },
-    {"emboss",  seqAccessEmboss, seqAccessFreeEmboss,
-     "dbx program indexed",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
-    },
-    {"emblcd", 	 seqAccessEmblcd, seqAccessFreeEmblcd,
-     "use EMBL-CD index from dbi programs or Staden",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
-    },
-    {"entrez",	 seqAccessEntrez, NULL,
-     "use NCBI Entrez services",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
-    },
-    {"seqhound",  seqAccessSeqhound, NULL,
-     "use BluePrint seqhound services",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
-    },
-    {"mrs",	 seqAccessMrs, NULL,
-     "retrieve in text format from CMBI MRS server (MRS2 syntax)",
-     AJFALSE, AJTRUE,  AJFALSE,  AJFALSE, AJFALSE
-    },
-    {"mrs3",	 seqAccessMrs3, NULL,
-     "retrieve in text format from CMBI MRS3 server",
-     AJFALSE, AJTRUE,  AJFALSE, AJFALSE, AJFALSE
-    },
-    {"srs",	 seqAccessSrs, NULL,
-     "retrieve in text format from a local SRS installation",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
-    },
-    {"srsfasta",	 seqAccessSrsfasta, NULL,
-     "retrieve in FASTA format from a local SRS installation",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
-    },
-    {"srswww",	 seqAccessSrswww, NULL,
-     "retrieve in text format from an SRS webserver",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
-    },
-    {"url",	 seqAccessUrl, NULL,
-     "retrieve a URL from a remote webserver",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
-    },
-    {"app",	 seqAccessApp, NULL,
-     "call an external application",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
-    },
-    {"external",	 seqAccessApp, NULL,
-     "call an external application",
-     AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
-    },
-    /* {"asis",	 ajSeqAccessAsis, NULL,
+    /* Name      AccessFunction   FreeFunction
+       Qlink,   Description
+       Alias    Entry    Query    All      Chunk */
+/*
+  {"dbfetch", seqAccessDbfetch, NULL,
+  "retrieve in text format from EBI dbfetch REST services",
+  AJFALSE, AJTRUE,  AJFALSE, AJFALSE, AJFALSE
+  },
+*/
+    /* {"asis",  ajTextAccessAsis, NULL,
        "",
        AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE
        }, */        /* called by seqUsaProcess */
-    /* {"file",	 ajSeqAccessFile, NULL,
+    /* {"file",  ajTextAccessFile, NULL,
        "",
-       AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE 
+       AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE
        }, */        /* called by seqUsaProcess */
-    /* {"offset",	 ajSeqAccessOffset, NULL,
+    /* {"offset",        ajTextAccessOffset, NULL,
        "",
        AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE
        }, */    /* called by seqUsaProcess */
-    {"direct",	 seqAccessDirect, NULL,
-     "reading the original files unindexed",
+
+    {"gcg",      seqAccessGcg, NULL,
+     "|&!^=",  "emboss dbigcg indexed",
      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
     },
-    {"gcg",	 seqAccessGcg, NULL,
-     "emboss dbigcg indexed",
+    {"embossgcg",        seqAccessEmbossGcg, NULL,
+     "|&!^=", "emboss dbxgcg indexed",
      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
     },
-    {"embossgcg",	 seqAccessEmbossGcg, NULL,
-     "emboss dbxgcg indexed",
+    {"blast",    seqAccessBlast, NULL,
+     "",      "blast database format version 2 or 3",
      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
     },
-    {"blast",	 seqAccessBlast, NULL,
-     "blast database format version 2 or 3",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
-    },
-    {"biomart",	 seqAccessMart, NULL,
-     "retrieve a single entry from a BioMart server",
+    {"biomart",  seqAccessMart, NULL,
+     "",      "retrieve a single entry from a BioMart server",
      AJFALSE, AJTRUE,  AJFALSE,  AJFALSE, AJFALSE
     },
-    {"sql",	 seqAccessSql, NULL,
-     "retrieve from a SQL server",
+    {"sql",      seqAccessSql, NULL,
+     "",      "retrieve from a SQL server",
      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE
     },
     {"ensembl",  seqAccessEnsembl, NULL,
-     "retrieve a single entry from an Ensembl Database server",
+     "",      "retrieve a single entry from an Ensembl Database server",
      AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE
     },
-    {NULL, NULL, NULL, NULL, AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE},
+    {"ensemblgenomes", seqAccessEnsembl, NULL,
+     "",      "retrieve a single entry from an Ensemblgenomes Database server",
+     AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE
+    },
+    {"das",      seqAccessDAS, NULL,
+     "|",      "retrieve sequence entries from a DAS source",
+     AJFALSE, AJTRUE,  AJFALSE,  AJFALSE, AJFALSE
+    },
+    {NULL, NULL, NULL,
+     NULL, NULL,
+     AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE},
 
 /* after the NULL access method, and so unreachable.
 ** seqhound requires a username and password which it prompts for
@@ -704,34 +641,15 @@ void ajSeqdbInit(void)
     AjPTable table;
     ajuint i = 0;
 
-    table = ajSeqtableGetDb();
+    table = ajSeqaccessGetDb();
 
     while(seqAccess[i].Name)
     {
         ajCallTableRegister(table, seqAccess[i].Name, (void*) &seqAccess[i]);
-	i++;
+        i++;
     }
 
     return;
-}
-
-
-
-
-/* @func ajSeqMethod **********************************************************
-**
-** Sets the access function for a named method for sequence reading.
-**
-** @param [r] method [const AjPStr] Method required.
-** @return [AjPSeqAccess] Access function to use
-** @category new [AjPSeqAccess] returns a copy of a known access
-**                method definition.
-** @@
-******************************************************************************/
-
-AjPSeqAccess ajSeqMethod(const AjPStr method)
-{
-    return ajCallTableGetS(ajSeqtableGetDb(),method);
 }
 
 
@@ -762,266 +680,6 @@ AjPSeqAccess ajSeqMethod(const AjPStr method)
 
 
 
-/* @funcstatic seqAccessEmblcd ************************************************
-**
-** Reads a sequence using EMBL CD-ROM index files.
-**
-** @param [u] seqin [AjPSeqin] Sequence input, including query data.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqAccessEmblcd(AjPSeqin seqin)
-{
-    AjBool retval = ajFalse;
-
-    AjPSeqQuery qry;
-    SeqPCdQry qryd;
-
-    qry = seqin->Query;
-    qryd = qry->QryData;
-
-    ajDebug("seqAccessEmblcd type %d\n", qry->Type);
-
-    if(qry->Type == QRY_ALL)
-	return seqCdAll(seqin);
-
-    /* we need to search the index files and return a query */
-
-    if(qry->QryData)
-    {				        /* reuse unfinished query data */
-	if(!seqCdQryReuse(qry))		/* oops, we're finished        */
-	    return ajFalse;
-    }
-    else
-    {				        /* starting out, set up query */
-	seqin->Single = ajTrue;
-
-	if(!seqCdQryOpen(qry))
-	{
-	    ajWarn("seqCdQry failed");
-
-	    return ajFalse;
-	}
-
-	qryd = qry->QryData;
-
-	/* binary search for the entryname we need */
-
-	if(qry->Type == QRY_ENTRY)
-	{
-	    ajDebug("entry id: '%S' acc: '%S' gi: '%S' hasacc:%B\n",
-		    qry->Id, qry->Acc, qry->Gi, qry->HasAcc);
-	    if(!seqCdQryEntry(qry))
-	    {
-		ajDebug("EMBLCD Entry failed\n");
-
-		if(ajStrGetLen(qry->Id))
-		    ajDebug("Database Entry id-'%S' not found\n", qry->Id);
-		else if(ajStrGetLen(qry->Gi))
-		    ajDebug("Database Entry gi-'%S' not found\n", qry->Gi);
-		else if (qry->HasAcc && ajStrGetLen(qry->Acc))
-		    ajDebug("Database Entry acc-'%S' not found\n", qry->Acc);
-		else
-		    ajDebug("Database Entry '%S' not found\n", qry->Id);
-	    }
-	}
-
-	if(qry->Type == QRY_QUERY)
-	{
-	    ajDebug("query id: '%S' acc: '%S' gi: '%S' hasacc:%B\n",
-		    qry->Id, qry->Acc, qry->Gi, qry->HasAcc);
-
-	    if(!seqCdQryQuery(qry))
-	    {
-		ajDebug("EMBLCD Query failed\n");
-
-		if(ajStrGetLen(qry->Id))
-		    ajDebug("Database Query '%S' not found\n", qry->Id);
-		else if(ajStrGetLen(qry->Acc))
-		    ajDebug("Database Query '%S' not found\n", qry->Acc);
-		else if(ajStrGetLen(qry->Sv))
-		    ajDebug("Database Query 'sv:%S' not found\n", qry->Sv);
-		else if(ajStrGetLen(qry->Gi))
-		    ajDebug("Database Query 'gi:%S' not found\n", qry->Gi);
-		else if(ajStrGetLen(qry->Des))
-		    ajDebug("Database Query 'des:%S' not found\n", qry->Des);
-		else if(ajStrGetLen(qry->Key))
-		    ajDebug("Database Query 'key:%S' not found\n", qry->Key);
-		else if(ajStrGetLen(qry->Org))
-		    ajDebug("Database Query 'org:%S' not found\n", qry->Org);
-		else
-		    ajDebug("Database Query '%S' not found\n", qry->Id);
-	    }
-	}
-    }
-
-    if(ajListGetLength(qryd->List))
-    {
-	retval = seqCdQryNext(qry);
-
-	if(retval)
-        {
-            if(qryd->Samefile)
-                ajFilebuffClear(seqin->Filebuff, -1);
-            else
-                ajFilebuffReopenFile(&seqin->Filebuff, qryd->libr);
-        }
-    }
-
-    if(!ajListGetLength(qryd->List)) /* could have been emptied by code above */
-    {
-	seqCdQryClose(qry);
-
-	/* AJB addition */
-        /*
-	 * This was for the old code where seqsets had different
-         * memory handling ... and the reason for the multi
-         * flag in the first place. So far this seems
-         * unnecessary for the revised code but is left here
-         * for a while as a reminder and 'just in case'
-	 */
-	if((qry->Type == QRY_ENTRY) && !seqin->multi)
-	{
-	    AJFREE(qry->QryData);
-	    qryd = NULL;
-	}
-    }
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    return retval;
-}
-
-
-
-
-/* @funcstatic seqAccessFreeEmblcd ********************************************
-**
-** Frees data specific to reading EMBL CD-ROM index files.
-**
-** @param [r] qry [void*] query data specific to EMBLCD
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqAccessFreeEmblcd(void* qry)
-{
-    SeqPCdQry qryd;
-    AjPSeqQuery query;
-    AjBool retval = ajTrue;
-
-    ajDebug("seqAccessFreeEmblcd\n");
-
-    query = (AjPSeqQuery) qry;
-    qryd = query->QryData;
-    qryd->libr=0;
-    qryd->libs=0;
-
-    ajListFreeData(&qryd->List);
-
-    seqCdQryClose(query);
-
-    return retval;
-}
-
-
-
-
-/* @funcstatic seqCdAll *******************************************************
-**
-** Reads the EMBLCD division lookup file and opens a list of all the
-** database files for plain reading.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqCdAll(AjPSeqin seqin)
-{
-    AjPStr divfile = NULL;
-    SeqPCdFile dfp;
-    AjPList list;
-    AjPSeqQuery qry;
-
-    ajint i;
-    short j;
-    ajint nameSize;
-    char *name;
-    AjPStr fullName = NULL;
-
-    qry = seqin->Query;
-
-    if(!ajStrGetLen(qry->IndexDir))
-    {
-	ajDebug("no indexdir defined for database %S\n", qry->DbName);
-	ajErr("no indexdir defined for database %S", qry->DbName);
-
-	return ajFalse;
-    }
-
-    ajDebug("EMBLCD All index directory '%S'\n", qry->IndexDir);
-
-    dfp = seqCdFileOpen(qry->IndexDir, "division.lkp", &divfile);
-    ajStrDel(&divfile);
-
-    if(!dfp)
-    {
-	ajWarn("Cannot open division file for database '%S'",
-	       qry->DbName);
-
-	return ajFalse;
-    }
-
-    nameSize = dfp->RecSize - 2;
-    name = ajCharNewRes(nameSize+1);
-
-    list = ajListstrNew();
-
-    seqCdFileSeek(dfp, 0);
-
-    for(i=0; i < (ajint) dfp->Header->NRecords; i++)
-    {
-	ajReadbinInt2(dfp->File, &j);
-	ajReadbinCharTrim(dfp->File, nameSize, name);
-	fullName = ajStrNewC(name);
-	ajFilenameReplacePathS(&fullName, qry->Directory);
-
-	/* test exclusion list and add file if OK */
-
-	if(ajFilenameTestInclude(fullName, qry->Exclude, qry->Filename))
-	{
-	    ajDebug("qrybufflist add '%S'\n", fullName);
-	    ajListstrPushAppend(list, fullName);
-	    fullName = NULL;
-	}
-	else
-	{
-	    ajDebug("qrybufflist *delete* '%S'\n", fullName);
-	    ajStrDel(&fullName);
-	}
-    }
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewListinList(list);
-    fullName = NULL;
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    seqCdFileClose(&dfp);
-    ajStrDelStatic(&divfile);
-    ajCharDel(&name);
-
-    if(!qry->CaseId)
-	qry->QryDone = ajTrue;
-
-    return ajTrue;
-}
-
-
-
-
 /* @funcstatic seqBlastFileOpen ***********************************************
 **
 ** Opens a named BLAST index file.
@@ -1039,7 +697,7 @@ static AjPFile seqBlastFileOpen(const AjPStr dir, const AjPStr name)
     thys = ajFileNewInNamePathS(name, dir);
 
     if(!thys)
-	return NULL;
+        return NULL;
 
     ajDebug("seqBlastFileOpen '%F'\n", thys);
 
@@ -1061,7 +719,7 @@ static AjPFile seqBlastFileOpen(const AjPStr dir, const AjPStr name)
 ******************************************************************************/
 
 static SeqPCdFile seqCdFileOpen(const AjPStr dir, const char* name,
-				AjPStr* fullname)
+                                AjPStr* fullname)
 {
     SeqPCdFile thys = NULL;
 
@@ -1072,9 +730,9 @@ static SeqPCdFile seqCdFileOpen(const AjPStr dir, const char* name,
 
     if(!thys->File)
     {
-	AJFREE(thys);
+        AJFREE(thys);
 
-	return NULL;
+        return NULL;
     }
 
 
@@ -1084,10 +742,10 @@ static SeqPCdFile seqCdFileOpen(const AjPStr dir, const char* name,
     thys->NRecords = thys->Header->NRecords;
     thys->RecSize = thys->Header->RecSize;
 
-    ajStrAssignS(fullname, ajFileGetNameS(thys->File));
+    ajStrAssignS(fullname, ajFileGetPrintnameS(thys->File));
 
     ajDebug("seqCdFileOpen '%F' NRecords: %d RecSize: %d\n",
-	    thys->File, thys->NRecords, thys->RecSize);
+            thys->File, thys->NRecords, thys->RecSize);
 
 
     return thys;
@@ -1116,8 +774,8 @@ static ajint seqCdFileSeek(SeqPCdFile fil, ajuint ipos)
     ret = ajFileSeek(fil->File, jpos, 0);
 
     /*
-       ajDebug("seqCdFileSeek rec %u pos %u tell %Ld returns %d\n",
-       ipos, jpos, ajFileResetPos(fil->File), ret);
+      ajDebug("seqCdFileSeek rec %u pos %u tell %Ld returns %d\n",
+      ipos, jpos, ajFileResetPos(fil->File), ret);
     */
 
     return ret;
@@ -1168,7 +826,7 @@ static void seqCdFileClose(SeqPCdFile* pthis)
 ******************************************************************************/
 
 static ajuint seqCdIdxSearch(SeqPCdIdx idxLine, const AjPStr entry,
-			    SeqPCdFile fil)
+                             SeqPCdFile fil)
 {
     AjPStr entrystr = NULL;
     ajint ihi;
@@ -1181,34 +839,34 @@ static ajuint seqCdIdxSearch(SeqPCdIdx idxLine, const AjPStr entry,
     ajStrFmtUpper(&entrystr);
 
     ajDebug("seqCdIdxSearch (entry '%S') records: %d\n",
-	    entrystr, fil->NRecords);
+            entrystr, fil->NRecords);
 
     if(fil->NRecords < 1)
-	return -1;
+        return -1;
 
     ilo = 0;
     ihi = fil->NRecords - 1;
 
     while(ilo <= ihi)
     {
-	ipos = (ilo + ihi)/2;
-	name = seqCdIdxName(ipos, fil);
-	icmp = ajStrCmpC(entrystr, name);
-	ajDebug("idx test %u '%s' %2d (+/- %u)\n", ipos, name, icmp, ihi-ilo);
+        ipos = (ilo + ihi)/2;
+        name = seqCdIdxName(ipos, fil);
+        icmp = ajStrCmpC(entrystr, name);
+        ajDebug("idx test %u '%s' %2d (+/- %u)\n", ipos, name, icmp, ihi-ilo);
 
-	if(!icmp)
+        if(!icmp)
             break;
 
-	if(icmp < 0)
-	    ihi = ipos-1;
-	else
-	    ilo = ipos+1;
+        if(icmp < 0)
+            ihi = ipos-1;
+        else
+            ilo = ipos+1;
     }
 
     ajStrDel(&entrystr);
 
     if(icmp)
-	return -1;
+        return -1;
 
     seqCdIdxLine(idxLine, ipos, fil);
 
@@ -1223,21 +881,21 @@ static ajuint seqCdIdxSearch(SeqPCdIdx idxLine, const AjPStr entry,
 ** Binary search of an EMBL CD-ROM index file for entries matching a
 ** wildcard entry name.
 **
-** @param [u] qry [AjPSeqQuery] Sequence query object.
+** @param [u] qry [AjPQuery] Sequence query object.
+** @param [r] idqry [const AjPStr] ID Query
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-static AjBool seqCdIdxQuery(AjPSeqQuery qry)
+static AjBool seqCdIdxQuery(AjPQuery qry, const AjPStr idqry)
 {
     SeqPCdQry qryd;
 
     AjPList list;
     SeqPCdIdx idxLine;
-    AjPStr idname;
     SeqPCdFile fil;
 
-    AjPStr idstr  = NULL;
+    AjPStr idstr = NULL;
     AjPStr idpref = NULL;
     ajint ihi;
     ajint ilo;
@@ -1256,19 +914,18 @@ static AjBool seqCdIdxQuery(AjPSeqQuery qry)
     SeqPCdEntry entry;
 
     qryd    = qry->QryData;
-    list    = qryd->List;
+    list    = qry->ResultsList;
     idxLine = qryd->idxLine;
-    idname  = qry->Id;
     fil     = qryd->ifp;
 
-    ajStrAssignS(&idstr,idname);
+    ajStrAssignS(&idstr,idqry);
     ajStrFmtUpper(&idstr);
     ajStrAssignS(&idpref, idstr);
 
     ajStrRemoveWild(&idpref);
 
     ajDebug("seqCdIdxQuery (wild '%S' prefix '%S')\n",
-	    idstr, idpref);
+            idstr, idpref);
 
     jlo = ilo = 0;
     khi = jhi = ihi = fil->NRecords-1;
@@ -1277,139 +934,139 @@ static AjBool seqCdIdxQuery(AjPSeqQuery qry)
     first = ajTrue;
 
     if(ilen)
-    {			       /* find first entry with this prefix */
-	while(ilo <= ihi)
-	{
-	    ipos = (ilo + ihi)/2;
-	    name = seqCdIdxName(ipos, fil);
-	    name[ilen] = '\0';
-	    icmp = ajStrCmpC(idpref, name); /* test prefix */
-	    ajDebug("idx test %d '%s' %2d (+/- %d)\n",
-		    ipos, name, icmp, ihi-ilo);
+    {                          /* find first entry with this prefix */
+        while(ilo <= ihi)
+        {
+            ipos = (ilo + ihi)/2;
+            name = seqCdIdxName(ipos, fil);
+            name[ilen] = '\0';
+            icmp = ajStrCmpC(idpref, name); /* test prefix */
+            ajDebug("idx test %d '%s' %2d (+/- %d)\n",
+                    ipos, name, icmp, ihi-ilo);
 
-	    if(!icmp)
-	    {			     /* hit prefix - test for first */
-		ajDebug("idx hit %d\n", ipos);
+            if(!icmp)
+            {                        /* hit prefix - test for first */
+                ajDebug("idx hit %d\n", ipos);
 
-		if(first)
-		{
-		    jhi = ihi;
-		    first = ajFalse;
-		    khi = ipos;
-		}
+                if(first)
+                {
+                    jhi = ihi;
+                    first = ajFalse;
+                    khi = ipos;
+                }
 
-		jlo = ipos;
-	    }
+                jlo = ipos;
+            }
 
-	    if(icmp > 0)
-		ilo = ipos+1;
-	    else
-		ihi = ipos-1;
-	}
+            if(icmp > 0)
+                ilo = ipos+1;
+            else
+                ihi = ipos-1;
+        }
 
-	if(first)
-	{			  /* failed to find any with prefix */
-	    ajStrDel(&idstr);
-	    ajStrDel(&idpref);
+        if(first)
+        {                         /* failed to find any with prefix */
+            ajStrDel(&idstr);
+            ajStrDel(&idpref);
 
-	    return ajFalse;
-	}
+            return ajFalse;
+        }
 
-	ajDebug("first pass: ipos %d jlo %d jhi %d\n", ipos, jlo, jhi);
+        ajDebug("first pass: ipos %d jlo %d jhi %d\n", ipos, jlo, jhi);
 
-	/* now search below for last */
+        /* now search below for last */
 
-	ilo = jlo+1;
-	ihi = jhi;
+        ilo = jlo+1;
+        ihi = jhi;
 
-	while(ilo <= ihi)
-	{
-	    ipos = (ilo + ihi)/2;
-	    name = seqCdIdxName(ipos, fil);
-	    name[ilen] = '\0';
-	    icmp = ajStrCmpC(idpref, name);
-	    ajDebug("idx test %d '%s' %2d (+/- %d)\n",
-		    ipos, name, icmp, ihi-ilo);
+        while(ilo <= ihi)
+        {
+            ipos = (ilo + ihi)/2;
+            name = seqCdIdxName(ipos, fil);
+            name[ilen] = '\0';
+            icmp = ajStrCmpC(idpref, name);
+            ajDebug("idx test %d '%s' %2d (+/- %d)\n",
+                    ipos, name, icmp, ihi-ilo);
 
-	    if(!icmp)
-	    {				/* hit prefix */
-		ajDebug("idx hit %d\n", ipos);
-		khi = ipos;
-	    }
+            if(!icmp)
+            {                           /* hit prefix */
+                ajDebug("idx hit %d\n", ipos);
+                khi = ipos;
+            }
 
-	    if(icmp < 0)
-		ihi = ipos-1;
-	    else
-		ilo = ipos+1;
-	}
+            if(icmp < 0)
+                ihi = ipos-1;
+            else
+                ilo = ipos+1;
+        }
 
-	ajDebug("second pass: ipos %d jlo %d khi %d\n",
-		ipos, jlo, khi);
+        ajDebug("second pass: ipos %d jlo %d khi %d\n",
+                ipos, jlo, khi);
 
-	name = seqCdIdxName(jlo, fil);
-	ajDebug("first  %d '%s'\n", jlo, name);
-	name = seqCdIdxName(khi, fil);
-	ajDebug(" last  %d '%s'\n", khi, name);
+        name = seqCdIdxName(jlo, fil);
+        ajDebug("first  %d '%s'\n", jlo, name);
+        name = seqCdIdxName(khi, fil);
+        ajDebug(" last  %d '%s'\n", khi, name);
     }
 
     for(i=jlo; i < (khi+1); i++)
     {
-	seqCdIdxLine(idxLine, i, fil);
+        seqCdIdxLine(idxLine, i, fil);
 
-	if(ajStrMatchWildS(idxLine->EntryName, idstr))
-	{
-	    if(!qryd->Skip[idxLine->DivCode-1])
-	    {
-		if(ifail)
-		{
-		    ajDebug("FAIL: %d entries\n", ifail);
-		    ifail=0;
-		}
+        if(ajStrMatchWildS(idxLine->EntryName, idstr))
+        {
+            if(!qryd->Skip[idxLine->DivCode-1])
+            {
+                if(ifail)
+                {
+                    ajDebug("FAIL: %d entries\n", ifail);
+                    ifail=0;
+                }
 
-		if(iskip)
-		{
-		    ajDebug("SKIP: %d entries\n", iskip);
-		    iskip=0;
-		}
+                if(iskip)
+                {
+                    ajDebug("SKIP: %d entries\n", iskip);
+                    iskip=0;
+                }
 
-		ajDebug("  OK: '%S'\n", idxLine->EntryName);
-		AJNEW0(entry);
-		entry->div = idxLine->DivCode;
-		entry->annoff = idxLine->AnnOffset;
-		entry->seqoff = idxLine->SeqOffset;
-		ajListPushAppend(list, (void*)entry);
-	    }
-	    else
-	    {
-		ajDebug("SKIP: '%S' [file %d]\n",
-			idxLine->EntryName, idxLine->DivCode);
-		iskip++;
-	    }
-	}
-	else
-	{
-	    ++ifail;
-	    /* ajDebug("FAIL: '%S' '%S'\n", idxLine->EntryName, idstr);*/
-	}
+                ajDebug("  OK: '%S'\n", idxLine->EntryName);
+                AJNEW0(entry);
+                entry->div = idxLine->DivCode;
+                entry->annoff = idxLine->AnnOffset;
+                entry->seqoff = idxLine->SeqOffset;
+                ajListPushAppend(list, (void*)entry);
+            }
+            else
+            {
+                ajDebug("SKIP: '%S' [file %d]\n",
+                        idxLine->EntryName, idxLine->DivCode);
+                iskip++;
+            }
+        }
+        else
+        {
+            ++ifail;
+            /* ajDebug("FAIL: '%S' '%S'\n", idxLine->EntryName, idstr);*/
+        }
     }
 
     if(ifail)
     {
-	ajDebug("FAIL: %d entries\n", ifail);
-	ifail=0;
+        ajDebug("FAIL: %d entries\n", ifail);
+        ifail=0;
     }
 
     if(iskip)
     {
-	ajDebug("SKIP: %d entries\n", iskip);
-	ifail=0;
+        ajDebug("SKIP: %d entries\n", iskip);
+        ifail=0;
     }
 
     ajStrDel(&idstr);
     ajStrDel(&idpref);
 
     if(ajListGetLength(list))
-	return ajTrue;
+        return ajTrue;
 
     return ajFalse;
 }
@@ -1430,7 +1087,7 @@ static AjBool seqCdIdxQuery(AjPSeqQuery qry)
 ******************************************************************************/
 
 static ajuint seqCdTrgSearch(SeqPCdTrg trgLine, const AjPStr entry,
-			     SeqPCdFile fp)
+                             SeqPCdFile fp)
 {
     AjPStr entrystr = NULL;
     ajint ihi;
@@ -1444,7 +1101,7 @@ static ajuint seqCdTrgSearch(SeqPCdTrg trgLine, const AjPStr entry,
     ajStrFmtUpper(&entrystr);
 
     if(fp->NRecords < 1)
-      return -1;
+        return -1;
 
     ilo  = 0;
     ihi  = fp->NRecords;
@@ -1458,26 +1115,26 @@ static ajuint seqCdTrgSearch(SeqPCdTrg trgLine, const AjPStr entry,
 
     while(icmp)
     {
-	if(icmp < 0)
-	    ihi = ipos;
-	else
-	    ilo = ipos;
+        if(icmp < 0)
+            ihi = ipos;
+        else
+            ilo = ipos;
 
-	itry = (ilo + ihi)/2;
+        itry = (ilo + ihi)/2;
 
-	if(itry == ipos)
-	{
-	    ajDebug("'%S' not found in .trg\n", entrystr);
-	    ajStrDel(&entrystr);
+        if(itry == ipos)
+        {
+            ajDebug("'%S' not found in .trg\n", entrystr);
+            ajStrDel(&entrystr);
 
-	    return -1;
-	}
+            return -1;
+        }
 
-	ipos = itry;
-	name = seqCdTrgName(ipos, fp);
-	icmp = ajStrCmpC(entrystr, name);
-	ajDebug("trg testb %d '%s' %2d (+/- %d)\n",
-		 ipos, name, icmp, ihi-ilo);
+        ipos = itry;
+        name = seqCdTrgName(ipos, fp);
+        icmp = ajStrCmpC(entrystr, name);
+        ajDebug("trg testb %d '%s' %2d (+/- %d)\n",
+                ipos, name, icmp, ihi-ilo);
     }
 
     seqCdTrgLine(trgLine, ipos, fp);
@@ -1485,7 +1142,7 @@ static ajuint seqCdTrgSearch(SeqPCdTrg trgLine, const AjPStr entry,
     ajStrDel(&entrystr);
 
     if(!trgLine->NHits)
-	return -1;
+        return -1;
 
     ajDebug("found in .trg at record %d\n", ipos);
 
@@ -1515,10 +1172,10 @@ static char* seqCdIdxName(ajuint ipos, SeqPCdFile fil)
 
     if(seqCdMaxNameSize < nameSize)
     {
-	seqCdMaxNameSize = nameSize;
-	if(seqCdName)
-	    ajCharDel(&seqCdName);
-	seqCdName = ajCharNewRes(seqCdMaxNameSize+1);
+        seqCdMaxNameSize = nameSize;
+        if(seqCdName)
+            ajCharDel(&seqCdName);
+        seqCdName = ajCharNewRes(seqCdMaxNameSize+1);
     }
 
     seqCdFileSeek(fil, ipos);
@@ -1547,14 +1204,17 @@ static void seqCdIdxLine(SeqPCdIdx idxLine, ajuint ipos, SeqPCdFile fil)
 
     nameSize = fil->RecSize-10;
 
+    ajDebug("seqCdIdxLine nameSize: %u max: %u ipos: %u '%F'\n",
+            nameSize, seqCdMaxNameSize, ipos, fil->File);
+
     if(seqCdMaxNameSize < nameSize)
     {
-	seqCdMaxNameSize = nameSize;
+        seqCdMaxNameSize = nameSize;
 
-	if(seqCdName)
-	    ajCharDel(&seqCdName);
+        if(seqCdName)
+            ajCharDel(&seqCdName);
 
-	seqCdName = ajCharNewRes(seqCdMaxNameSize+1);
+        seqCdName = ajCharNewRes(seqCdMaxNameSize+1);
     }
 
     seqCdFileSeek(fil, ipos);
@@ -1564,8 +1224,11 @@ static void seqCdIdxLine(SeqPCdIdx idxLine, ajuint ipos, SeqPCdFile fil)
 
     ajReadbinUint(fil->File, &idxLine->AnnOffset);
     ajReadbinUint(fil->File, &idxLine->SeqOffset);
-    ajReadbinInt2(fil->File, &idxLine->DivCode);
+    ajReadbinUint2(fil->File, &idxLine->DivCode);
 
+    ajDebug("read ann: %u seq: %u div: %u\n",
+            idxLine->AnnOffset, idxLine->SeqOffset,
+            (ajuint) idxLine->DivCode);
     return;
 }
 
@@ -1591,12 +1254,12 @@ static char* seqCdTrgName(ajuint ipos, SeqPCdFile fil)
 
     if(seqCdMaxNameSize < nameSize)
     {
-	seqCdMaxNameSize = nameSize;
+        seqCdMaxNameSize = nameSize;
 
-	if(seqCdName)
-	    ajCharDel(&seqCdName);
+        if(seqCdName)
+            ajCharDel(&seqCdName);
 
-	seqCdName = ajCharNewRes(seqCdMaxNameSize+1);
+        seqCdName = ajCharNewRes(seqCdMaxNameSize+1);
     }
 
     seqCdFileSeek(fil, ipos);
@@ -1605,7 +1268,7 @@ static char* seqCdTrgName(ajuint ipos, SeqPCdFile fil)
     ajReadbinCharTrim(fil->File, nameSize, seqCdName);
 
     ajDebug("seqCdTrgName maxNameSize:%d nameSize:%d name '%s'\n",
-	    seqCdMaxNameSize, nameSize, seqCdName);
+            seqCdMaxNameSize, nameSize, seqCdName);
 
     return seqCdName;
 }
@@ -1632,12 +1295,12 @@ static void seqCdTrgLine(SeqPCdTrg trgLine, ajuint ipos, SeqPCdFile fil)
 
     if(seqCdMaxNameSize < nameSize)
     {
-	seqCdMaxNameSize = nameSize;
+        seqCdMaxNameSize = nameSize;
 
-	if(seqCdName)
-	    ajCharDel(&seqCdName);
+        if(seqCdName)
+            ajCharDel(&seqCdName);
 
-	seqCdName = ajCharNewRes(seqCdMaxNameSize+1);
+        seqCdName = ajCharNewRes(seqCdMaxNameSize+1);
     }
 
     seqCdFileSeek(fil, ipos);
@@ -1649,7 +1312,7 @@ static void seqCdTrgLine(SeqPCdTrg trgLine, ajuint ipos, SeqPCdFile fil)
     ajStrAssignC(&trgLine->Target,seqCdName);
 
     ajDebug("seqCdTrgLine %d nHits %d firstHit %d target '%S'\n",
-	    ipos, trgLine->NHits, trgLine->FirstHit, trgLine->Target);
+            ipos, trgLine->NHits, trgLine->FirstHit, trgLine->Target);
 
     return;
 }
@@ -1687,7 +1350,7 @@ static AjBool seqCdReadHeader(SeqPCdFile fil)
     ajReadbinCharTrim(fil->File, 4, date);
 
     for(i=1;i<4;i++)
-	header->Date[i] = date[i];
+        header->Date[i] = date[i];
 
     header->RelYear  = header->Date[1];
     header->RelMonth = header->Date[2];
@@ -1695,8 +1358,8 @@ static AjBool seqCdReadHeader(SeqPCdFile fil)
 
     ajDebug("seqCdReadHeader file %F\n", fil->File);
     ajDebug("  FileSize: %d NRecords: %hd recsize: %d idsize: %d\n",
-	    header->FileSize, header->NRecords,
-	    header->RecSize, header->IdSize);
+            header->FileSize, header->NRecords,
+            header->RecSize, header->IdSize);
 
     return ajTrue;
 }
@@ -1717,17 +1380,20 @@ static AjBool seqCdReadHeader(SeqPCdFile fil)
 ******************************************************************************/
 
 static AjBool seqCdTrgOpen(const AjPStr dir, const char* name,
-			   SeqPCdFile* trgfil, SeqPCdFile* hitfil)
+                           SeqPCdFile* trgfil, SeqPCdFile* hitfil)
 {
     AjPStr tmpname  = NULL;
     AjPStr fullname = NULL;
+
+    ajDebug("seqCdTrgOpen dir '%S' name '%s'\n",
+            dir, name);
 
     ajFmtPrintS(&tmpname, "%s.trg",name);
     *trgfil = seqCdFileOpen(dir, ajStrGetPtr(tmpname), &fullname);
     ajStrDel(&tmpname);
 
     if(!*trgfil)
-	return ajFalse;
+        return ajFalse;
 
     ajFmtPrintS(&tmpname, "%s.hit",name);
     *hitfil = seqCdFileOpen(dir, ajStrGetPtr(tmpname), &fullname);
@@ -1735,7 +1401,7 @@ static AjBool seqCdTrgOpen(const AjPStr dir, const char* name,
     ajStrDel(&fullname);
 
     if(!*hitfil)
-	return ajFalse;
+        return ajFalse;
 
     return ajTrue;
 }
@@ -1764,1426 +1430,11 @@ static AjBool seqCdTrgClose(SeqPCdFile* ptrgfil, SeqPCdFile* phitfil)
 
 
 
-/*=============================================================================
-** Entrez indexed database access
-**===========================================================================*/
-
-
-
-
-/* @section Entrez Database Indexing ****************************************
-**
-** These functions manage the SeqHound remote web API access methods.
-**
-******************************************************************************/
-
-
-
-
-/* @funcstatic seqAccessEntrez ************************************************
-**
-** Reads sequence(s) using Entrez. Sends a query to a remote Entrez
-** web server. Opens a file using the results and returns to the caller to
-** read the data.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqAccessEntrez(AjPSeqin seqin)
-{
-    AjPStr host      = NULL;
-    AjPStr urlsearch = NULL;
-    AjPStr get       = NULL;
-    AjPStr proxyName = NULL;		/* host for proxy access.*/
-    AjPStr httpver   = NULL;		/* HTTP version for GET */
-    ajint iport;
-    ajint proxyPort;
-    AjPStr searchdb = NULL;
-    FILE *fp;
-    AjPSeqQuery qry;
-    AjPStr gilist=NULL;
-    AjPStr giline=NULL;
-    AjPFile gifile=NULL;
-    AjPStr tmpstr=NULL;
-    const AjPStr cpystr=NULL;
-    ajint numgi=0;
-    ajint icount=0;
-    AjBool ret = AJFALSE;
-
-    if (!seqRegEntrezCount)
-      seqRegEntrezCount = ajRegCompC("<Count>(\\d+)</Count>");
-
-    if (!seqRegEntrezId)
-	seqRegEntrezId = ajRegCompC("<Id>(\\d+)</Id>");
-
-    if (!seqRegGi)
-	seqRegGi = ajRegCompC("(\\d+)");
-
-    qry = seqin->Query;
-
-    if (!qry->QryData)
-    {
-	seqin->Single = ajTrue;
-
-	iport     = 80;
-	proxyPort = 0;			/* port for proxy access */
-
-	if(!ajNamDbGetDbalias(qry->DbName, &searchdb))
-	    ajStrAssignS(&searchdb, qry->DbName);
-
-	ajDebug("seqAccessEntrez %S:%S\n", searchdb, qry->Id);
-
-	/* eutils.ncbi.nlm.nih.gov official address
-	   gives an error with valgrind */
-	ajStrAssignC(&host, "www.ncbi.nlm.nih.gov");
-	iport = 80;
-
-	ajStrAssignC(&urlsearch, "/entrez/eutils/esearch.fcgi");
-
-	ajSeqHttpVersion(qry, &httpver);
-
-	if(ajSeqHttpProxy(qry, &proxyPort, &proxyName))
-	    ajFmtPrintS(&get, "GET http://%S:%d%S?",
-			host, iport, urlsearch);
-	else
-	    ajFmtPrintS(&get, "GET %S?", urlsearch);
-	ajStrDel(&urlsearch);
-
-	ajStrAppendC(&get, "tool=emboss&email=pmr@ebi.ac.uk&retmax=1000");
-
-	if(ajStrPrefixCaseC(qry->DbType, "N"))
-	    ajStrAppendC(&get, "&db=nucleotide");
-	else
-	    ajStrAppendC(&get, "&db=protein");
-
-	if(ajStrGetLen(qry->Id))
-	{
-	    ajFmtPrintAppS(&get, "&term=%S",
-			   qry->Id);
-	}
-	else if(qry->HasAcc && ajStrGetLen(qry->Acc))
-	    ajFmtPrintAppS(&get, "&term=%S[accn]",
-			   qry->Acc);
-	else if(ajStrGetLen(qry->Gi))
-	    ajStrAssignS(&gilist,qry->Gi);
-	else if(ajStrGetLen(qry->Sv))
-	{
-	    cpystr = ajSeqtestIsSeqversion(qry->Sv);
-
-	    if (cpystr)
-		ajFmtPrintAppS(&get,"&term=%S[accn]",
-			       cpystr);
-	    else
-		ajWarn("Entrez invalid Seqversion '%S'", qry->Sv);
-
-	    cpystr = NULL;
-	}
-	else if(ajStrGetLen(qry->Des))
-	{
-	    ajStrAssignS(&tmpstr, qry->Des);
-	    ajStrExchangeKK(&tmpstr, ' ', '+');
-	    ajFmtPrintAppS(&get, "&term=%S[titl]",
-			   tmpstr);
-	    ajStrDel(&tmpstr);
-	}
-	else if(ajStrGetLen(qry->Org))
-	{
-	    ajStrAssignS(&tmpstr, qry->Org);
-	    ajStrExchangeKK(&tmpstr, ' ', '+');
-	    ajFmtPrintAppS(&get, "&term=%S[orgn]",
-			   tmpstr);
-	    ajStrDel(&tmpstr);
-	}
-	else if(ajStrGetLen(qry->Key))
-	{
-	    ajStrAssignS(&tmpstr, qry->Key);
-	    ajStrExchangeKK(&tmpstr, ' ', '+');
-	    ajFmtPrintAppS(&get, "&term=%S[kywd]",
-			   tmpstr);
-	    ajStrDel(&tmpstr);
-	}
-	else
-	    ajFmtPrintAppS(&get, "+%S",
-			   searchdb);
-	ajStrDel(&searchdb);
-
-	if (!ajStrGetLen(gilist))
-	{
-	    /*
-	     ** search to find list of GIs
-	     ** use GI list to retrieve genbank entries
-	     */
-
-	    ajDebug("searching with Entrez url '%S'\n", get);
-
-	    ajFmtPrintAppS(&get, " HTTP/%S\n", httpver);
-
-	    ajStrAssignS(&seqin->Db, qry->DbName);
-
-	    /* finally we have set the GET command */
-	    ajDebug("host '%S' port %d get '%S'\n", host, iport, get);
-
-	    if(ajStrGetLen(proxyName))
-		fp = ajSeqHttpGetProxy(qry, proxyName, proxyPort,
-                                       host, iport, get);
-	    else
-		fp = ajSeqHttpGet(qry, host, iport, get);
-
-	    ajStrDel(&get);
-	    ajStrDel(&host);
-	    ajStrDel(&proxyName);
-	    ajStrDel(&httpver);
-
-	    if(!fp)
-		return ajFalse;
-
-#ifndef WIN32
-	    signal(SIGALRM, seqSocketTimeout);
-	    alarm(180);	    /* allow 180 seconds to read from the socket */
-#endif
-
-	    /*
-	     ** read out list of GI numbers
-	     ** use to build new query
-	     ** return genbank format results
-	     */
-
-	    ajDebug("GI list returned\n");
-	    gifile = ajFileNewFromCfile(fp);
-
-	    while (ajReadlineTrim(gifile, &giline))
-            {
-		ajDebug("+%S\n", giline);
-
-		if(!ajStrGetLen(giline))
-                    break;
-	    }
-
-	    numgi=0;
-
-	    while (ajReadlineTrim(gifile, &giline))
-            {
-		ajStrTrimWhite(&giline);
-		ajDebug("-%S\n", giline);
-
-		if (!icount && ajRegExec(seqRegEntrezCount,giline))
-		{
-		    ajRegSubI(seqRegEntrezCount, 1, &tmpstr);
-		    ajStrToInt(tmpstr, &icount);
-
-		    if(!icount)
-		    {
-			ajStrDel(&giline);
-			ajStrDel(&gilist);
-			ajStrDel(&tmpstr);
-			ajFileClose(&gifile);
-
-			return ajFalse;
-		    }
-		}
-
-		if (ajRegExec(seqRegEntrezId, giline))
-		{
-		    ajRegSubI(seqRegEntrezId, 1, &tmpstr);
-
-		    if (numgi)
-			ajStrAppendK(&gilist, '+');
-
-		    ajStrAppendS(&gilist, tmpstr);
-		    numgi++;
-		}
-	    }
-
-	    ajFileClose(&gifile);
-	    ajStrDel(&giline);
-	}
-
-	if (!ajStrGetLen(gilist))
-	    return ajFalse;
-
-	ajStrAssignS((AjPStr*) &qry->QryData, gilist);
-    }
-
-    ajDebug("seqAccessEntrez ready '%S' '%S'\n",
-	    gilist, (AjPStr) qry->QryData);
-
-    if(seqEntrezQryNext(qry, seqin))
-    {
-	ret =  ajTrue;
-	ajDebug("seqAccessEntrez after QryNext '%S' '%S'\n",
-		gilist, (AjPStr) qry->QryData);
-    }
-    else
-    {
-	ajStrDel((AjPStr*) &qry->QryData);
-    }
-
-    ajStrDel(&gilist);
-    ajStrDel(&giline);
-    ajStrDel(&get);
-    ajStrDel(&host);
-    ajStrDel(&tmpstr);
-    ajStrDel(&httpver);
-
-    return ret;
-}
-
-
-
-
-/* @funcstatic seqEntrezQryNext *********************************************
-**
-** Processes next GI in list and sets up file buffer with a genbank entry
-**
-** @param [u] qry [AjPSeqQuery] Query data
-** @param [u] seqin [AjPSeqin] Sequence input, including query data.
-** @return [AjBool] ajTrue if we can continue,
-**                  ajFalse if all is done.
-** @@
-******************************************************************************/
-
-static AjBool seqEntrezQryNext(AjPSeqQuery qry, AjPSeqin seqin)
-{
-    AjPStr host      = NULL;
-    AjPStr urlfetch  = NULL;
-    AjPStr get       = NULL;
-    AjPStr proxyName = NULL;		/* host for proxy access.*/
-    AjPStr httpver   = NULL;		/* HTTP version for GET */
-    ajint iport;
-    ajint proxyPort;
-    AjPStr gilist = NULL;
-    FILE *sfp;
-    AjPStr gistr = NULL;
-    AjPStr tmpstr=NULL;
-    AjPStr seqline=NULL;
-
-    if (!seqRegGi)
-	seqRegGi = ajRegCompC("(\\d+)");
-
-    iport     = 80;
-    proxyPort = 0;			/* port for proxy access */
-
-    gilist = qry->QryData;
-    ajStrAssignC(&urlfetch, "/entrez/eutils/efetch.fcgi");
-
-    /* eutils.ncbi.nlm.nih.gov official address
-     gives an error with valgrind */
-    ajStrAssignC(&host, "www.ncbi.nlm.nih.gov");
-    iport = 80;
-
-    if (!gilist)
-    {
-	ajDebug("seqEntrezQryNext null gilist\n");
-
-	return ajFalse;
-    }
-
-    if(!ajRegExec(seqRegGi, gilist))
-    {
-	ajDebug("seqEntrezQryNext no match gilist '%S'\n", gilist);
-	ajStrDel((AjPStr*)&qry->QryData);
-
-	return ajFalse;
-    }
-
-    ajRegSubI(seqRegGi, 1, &gistr);
-    ajRegPost(seqRegGi, &tmpstr);
-    ajStrAssignS((AjPStr*)&qry->QryData, tmpstr);
-    ajDebug("seqEntrezQryNext next gi '%S'\n", gistr);
-
-    ajSeqHttpVersion(qry, &httpver);
-
-    if(ajSeqHttpProxy(qry, &proxyPort, &proxyName))
-	ajFmtPrintS(&get,
-		    "GET http://%S:%d%S?", host, iport, urlfetch);
-    else
-	ajFmtPrintS(&get, "GET %S?", urlfetch);
-
-    ajStrDel(&urlfetch);
-
-    ajStrAppendC(&get, "tool=emboss&email=pmr@ebi.ac.uk&retmax=1000");
-
-    if(ajStrPrefixCaseC(qry->DbType, "N"))
-	ajStrAppendC(&get, "&db=nucleotide&retmode=text&rettype=gb");
-    else
-	ajStrAppendC(&get, "&db=protein&retmode=text&rettype=gp");
-
-    ajFmtPrintAppS(&get, "&id=%S", gistr);
-    ajFmtPrintAppS(&get, " HTTP/%S\n", httpver);
-
-    ajStrDel(&gistr);
-    ajStrDel(&httpver);
-
-    if(ajStrGetLen(proxyName))
-	sfp = ajSeqHttpGetProxy(qry, proxyName, proxyPort, host, iport, get);
-    else
-	sfp = ajSeqHttpGet(qry, host, iport, get);
-
-    if(!sfp)
-	return ajFalse;
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(sfp);
-
-    if(!seqin->Filebuff)
-    {
-	ajDebug("socket buffer attach failed\n");
-	ajErr("socket buffer attach failed for database '%S'",
-	      qry->DbName);
-	return ajFalse;
-    }
-
-    ajFilebuffLoadAll(seqin->Filebuff);
-    ajFilebuffHtmlStrip(seqin->Filebuff);
-
-#ifndef WIN32
-    alarm(0);
-#endif
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    ajStrDel(&host);
-    ajStrDel(&get);
-    ajStrDel(&proxyName);
-    ajStrDel(&tmpstr);
-    ajStrDel(&seqline);
-
-    if(!qry->CaseId)
-	qry->QryDone = ajTrue;
-
-    return ajTrue;
-}
-
-
-
-
-/*=============================================================================
-** SeqHound indexed database access
-**===========================================================================*/
-
-
-
-
-/* @section SeqHound Database Indexing ****************************************
-**
-** These functions manage the SeqHound remote web API access methods.
-**
-******************************************************************************/
-
-
-
-
-/* @funcstatic seqAccessSeqhound **********************************************
-**
-** Reads sequence(s) using Seqhound. Sends a query to a remote Seqhound
-** web server. Uses the query to construct a list of GenInfo Identifiers
-** (GI numbers). Uses these to return full entries in Genbank format.
-** Opens a file using the results and returns to the caller to
-** read the data.
-**
-** Seqhound access currently does not allow query by description or keyword
-**  - but this may be included in SeqHound in the near future.
-**
-** Taxonomy queries require a numeric taxon ID. In future, a way to use
-** taxon names may be added.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqAccessSeqhound(AjPSeqin seqin)
-{
-    AjPStr host      = NULL;
-    AjPStr urlget    = NULL;
-    AjPStr get       = NULL;
-    AjPStr proxyName = NULL;		/* host for proxy access.*/
-    AjPStr httpver   = NULL;		/* HTTP version for GET */
-    ajint iport;
-    ajint proxyPort;
-    AjPStr gilist = NULL;
-    FILE *fp;
-    AjPFile gifile = NULL;
-    AjPStr giline = NULL;
-    AjPSeqQuery qry;
-    ajint numgi = 0;
-    const AjPStr cpystr = NULL;
-    AjBool ret = AJFALSE;
-
-    qry = seqin->Query;
-
-    if (!qry->QryData)
-    {
-	seqin->Single = ajTrue;
-
-	/* new query - build a GI list */
-	iport     = 80;
-	proxyPort = 0;			/* port for proxy access */
-
-	if(!ajNamDbGetDbalias(qry->DbName, &qry->DbAlias))
-	    ajStrAssignS(&qry->DbAlias, qry->DbName);
-	ajDebug("seqAccessSeqhound %S:%S\n", qry->DbAlias, qry->Id);
-
-	if(!seqHttpUrl(qry, &iport, &host, &urlget))
-	{
-	    ajStrDel(&host);
-	    ajStrDel(&urlget);
-
-	    return ajFalse;
-	}
-
-	ajSeqHttpVersion(qry, &httpver);
-
-	if(ajSeqHttpProxy(qry, &proxyPort, &proxyName))
-	    ajFmtPrintS(&get, "GET http://%S:%d%S?",
-			host, iport, urlget);
-	else
-	    ajFmtPrintS(&get, "GET %S?", urlget);
-
-	ajStrDel(&urlget);
-
-	/* Id FindNameList&pname= */
-	if(ajStrGetLen(qry->Id))
-	    ajFmtPrintAppS(&get, "fnct=SeqHoundFindNameList&pname=%S",
-			   qry->Id);
-	/* Acc FindAccList&pnacc= */
-	else if(qry->HasAcc && ajStrGetLen(qry->Acc))
-	    ajFmtPrintAppS(&get, "fnct=SeqHoundFindAccList&pacc=%S",
-			   qry->Acc);
-	/* Gi Use directly! */
-	else if(ajStrGetLen(qry->Gi))
-	    ajStrAssignS(&gilist,qry->Gi);
-	/* Sv trim to Acc */
-	else if(ajStrGetLen(qry->Sv))
-	{
-	    cpystr = ajSeqtestIsSeqversion(qry->Sv);
-
-	    if (cpystr)
-		ajFmtPrintAppS(&get,"fnct=SeqHoundFindAccList&pacc=%S",
-			       cpystr);
-	    else
-		ajWarn("SeqHound invalid Seqversion '%S'", qry->Sv);
-	}
-	/* Des not yet available - will have Lucene soon */
-	else if(ajStrGetLen(qry->Des))
-	{
-	    ajWarn("SeqHound search by description not yet available\n");
-	    /*ajFmtPrintAppS(&get, "fnct=SeqHoundFindDesList&pdes=%S",
-	      qry->Des);*/
-	}
-	/* Tax need to find taxid [Protein|DNA]FromTaxIDList&taxid= */
-	else if(ajStrGetLen(qry->Org))
-	{
-	    if(ajStrPrefixCaseC(qry->DbType, "N"))
-		ajFmtPrintAppS(&get, "SeqHoundDNAFromTaxIDList&taxid=%S",
-			       qry->Org);
-	    else
-		ajFmtPrintAppS(&get, "SeqHoundProteinFromTaxIDList&taxid=%S",
-			       qry->Org);
-	}
-	/* Key not yet available - will have Lucene soon */
-	else if(ajStrGetLen(qry->Key))
-	{
-	    ajWarn("SeqHound search by keyword not yet available\n");
-	    /*ajFmtPrintAppS(&get, "fnct=SeqHoundFindKeyList&pkey=%S",
-	      qry->Key);*/
-	}
-	/* whole database = maybe taxid=1 or 0 (root)? */
-	else
-	    ajFmtPrintAppS(&get, "+%S",
-			   qry->DbAlias);
-
-	if (!ajStrGetLen(gilist))  /*  could be set directly for GI search */
-	{
-	    /*
-	     ** search to find list of GIs
-	     ** use GI list to retrieve genbank entries
-	     */
-
-	    ajDebug("searching with SeqHound url '%S'\n", get);
-
-	    ajFmtPrintAppS(&get, " HTTP/%S\n", httpver);
-	    ajStrDel(&httpver);
-
-	    ajStrAssignS(&seqin->Db, qry->DbName);
-
-	    /* finally we have set the GET command */
-	    ajDebug("host '%S' port %d get '%S'\n", host, iport, get);
-
-	    if(ajStrGetLen(proxyName))
-		fp = ajSeqHttpGetProxy(qry, proxyName, proxyPort,
-                                       host, iport, get);
-	    else
-		fp = ajSeqHttpGet(qry, host, iport, get);
-
-	    if(!fp)
-	    {
-		ajStrDel(&host);
-		ajStrDel(&get);
-
-		return ajFalse;
-	    }
-
-#ifndef WIN32
-	    signal(SIGALRM, seqSocketTimeout);
-	    alarm(180);	    /* allow 180 seconds to read from the socket */
-#endif
-
-	    /*
-	     ** read out list of GI numbers
-	     ** use to build new query
-	     ** return genbank format results
-	     */
-
-	    ajDebug("GI list returned\n");
-	    gifile = ajFileNewFromCfile(fp);
-
-	    while (ajReadlineTrim(gifile, &giline))
-            {
-		ajDebug("+%S\n", giline);
-
-		if(!ajStrGetLen(giline))
-                    break;
-	    }
-
-	    ajReadlineTrim(gifile, &giline);
-	    ajDebug("=%S\n", giline);
-	    ajStrTrimWhite(&giline);
-
-	    if (!ajStrMatchC(giline, "SEQHOUND_OK"))
-	    {
-		ajDebug("SeqHound returned code '%S'", giline);
-		ajStrDel(&get);
-		ajStrDel(&host);
-		ajStrDel(&giline);
-		ajFileClose(&gifile);
-
-		return ajFalse;
-	    }
-
-	    numgi=0;
-
-	    while (ajReadlineTrim(gifile, &giline))
-            {
-		ajStrTrimWhite(&giline);
-		ajDebug("-%S\n", giline);
-
-		if (numgi)
-		    ajStrAppendK(&gilist, '+');
-		else
-		    if (ajStrMatchC(giline, "(null)"))
-		    {
-			ajDebug("SeqHound found no entries");
-			ajStrDel(&get);
-			ajStrDel(&host);
-			ajStrDel(&giline);
-			ajFileClose(&gifile);
-
-			return ajFalse;
-		    }
-
-		ajStrAppendS(&gilist, giline);
-		numgi++;
-	    }
-
-	    ajFileClose(&gifile);
-	    ajStrDel(&giline);
-	}
-
-	if (!ajStrGetLen(gilist))
-	{
-	    ajStrDel(&get);
-	    ajStrDel(&host);
-
-	    return ajFalse;
-	}
-
-	ajDebug("seqAccessSeqhound QryData '%S' <= '%S'\n",
-	       (AjPStr) qry->QryData, gilist);
-	ajStrAssignS((AjPStr*) &qry->QryData, gilist);
-    }
-
-    ajDebug("seqAccessSeqhound ready '%S' '%S'\n",
-	    gilist, (AjPStr) qry->QryData);
-
-    if(seqSeqhoundQryNext(qry, seqin))
-    {
-	ret = ajTrue;
-	ajDebug("seqAccessSeqhound after QryNext '%S' '%S'\n",
-		gilist, (AjPStr) qry->QryData);
-    }
-
-    ajStrDel(&gilist);
-    ajStrDel(&host);
-    ajStrDel(&urlget);
-    ajStrDel(&get);
-    ajStrDel(&httpver);
-    ajStrDel(&proxyName);
-
-    return ret;
-}
-
-
-
-
-/* @funcstatic seqSeqhoundQryNext *********************************************
-**
-** Processes next GI in list and sets up file buffer with a genbank entry
-**
-** @param [u] qry [AjPSeqQuery] Query data
-** @param [u] seqin [AjPSeqin] Sequence input, including query data.
-** @return [AjBool] ajTrue if we can continue,
-**                  ajFalse if all is done.
-** @@
-******************************************************************************/
-
-static AjBool seqSeqhoundQryNext(AjPSeqQuery qry, AjPSeqin seqin)
-{
-    AjPStr host      = NULL;
-    AjPStr urlget    = NULL;
-    AjPStr get       = NULL;
-    AjPStr proxyName = NULL;		/* host for proxy access.*/
-    AjPStr httpver   = NULL;		/* HTTP version for GET */
-    ajint iport;
-    ajint proxyPort;
-    AjPStr gilist = NULL;
-    FILE *fp;
-    AjPStr giline = NULL;
-    AjPStr gistr = NULL;
-    AjPStr tmpstr=NULL;
-
-    if (!seqRegGi)
-	seqRegGi = ajRegCompC("(\\d+)");
-
-    iport     = 80;
-    proxyPort = 0;			/* port for proxy access */
-
-    gilist = qry->QryData;
-
-    if (!gilist)
-    {
-	ajDebug("seqSeqhoundQryNext null gilist\n");
-	ajDebug("seqSeqhoundQryNext failed: null gilist '%S' QryData '%S'\n",
-		gilist, (AjPStr) qry->QryData);
-
-	return ajFalse;
-    }
-
-    if(!ajRegExec(seqRegGi, gilist))
-    {
-	ajDebug("seqSeqhoundQryNext no match gilist '%S'\n", gilist);
-	ajStrDel((AjPStr*)&qry->QryData);
-	ajDebug("seqSeqhoundQryNext failed: no match "
-		"gilist '%S' QryData '%S'\n",
-		gilist, (AjPStr) qry->QryData);
-
-	return ajFalse;
-    }
-
-    ajRegSubI(seqRegGi, 1, &gistr);
-    ajRegPost(seqRegGi, &tmpstr);
-    ajStrAssignS((AjPStr*)&qry->QryData, tmpstr);
-    ajStrDel(&tmpstr);
-
-    ajDebug("seqSeqhoundQryNext next gi '%S'\n", gistr);
-
-    if(!seqHttpUrl(qry, &iport, &host, &urlget))
-    {
-	ajStrDel(&gistr);
-	ajStrDel(&host);
-	ajStrDel(&urlget);
-	ajDebug("seqSeqhoundQryNext failed: seqHttpUrl failed "
-		"gilist '%S' QryData '%S'\n",
-		gilist, (AjPStr) qry->QryData);
-
-	return ajFalse;
-    }
-
-    ajSeqHttpVersion(qry, &httpver);
-
-    if(ajSeqHttpProxy(qry, &proxyPort, &proxyName))
-	ajFmtPrintS(&get, "GET http://%S:%d%S?",
-		    host, iport, urlget);
-    else
-	ajFmtPrintS(&get, "GET %S?", urlget);
-
-    if(ajStrGetLen(proxyName))
-	ajFmtPrintS(&get, "GET http://%S:%d%S?",
-		    host, iport, urlget);
-    else
-	ajFmtPrintS(&get, "GET %S?", urlget);
-
-    ajStrDel(&urlget);
-
-    ajFmtPrintAppS(&get, "fnct=SeqHoundGetGenBankff&gi=%S", gistr);
-    ajFmtPrintAppS(&get, " HTTP/%S\n", httpver);
-    ajStrDel(&httpver);
-    ajStrDel(&gistr);
-
-    if(ajStrGetLen(proxyName))
-	fp = ajSeqHttpGetProxy(qry, proxyName, proxyPort, host, iport, get);
-    else
-	fp = ajSeqHttpGet(qry, host, iport, get);
-
-    if(!fp)
-    {
-	ajDebug("seqSeqhoundQryNext failed: ajSeqHttpGet* failed "
-		"gilist '%S' QryData '%S'",
-		gilist, (AjPStr) qry->QryData);
-
-	return ajFalse;
-    }
-
-    ajStrDel(&host);
-    ajStrDel(&get);
-    ajStrDel(&proxyName);
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
-
-    if(!seqin->Filebuff)
-    {
-	ajDebug("socket buffer attach failed\n");
-	ajErr("socket buffer attach failed for database '%S'", qry->DbName);
-
-	return ajFalse;
-    }
-
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-#ifndef WIN32
-    alarm(0);
-#endif
-
-    ajFilebuffHtmlStrip(seqin->Filebuff);
-    ajBuffreadLine(seqin->Filebuff, &giline);
-    ajStrTrimWhite(&giline);
-
-    if (!ajStrMatchC(giline, "SEQHOUND_OK"))
-    {
-	ajStrDel(&giline);
-	ajFilebuffReset(seqin->Filebuff);
-	ajDebug("seqSeqhoundQryNext failed: SEQHOUND_OK not found "
-		"gilist '%S' QryData '%S'\n",
-		gilist, (AjPStr) qry->QryData);
-
-	return ajFalse;
-    }
-
-    ajFilebuffClear(seqin->Filebuff, 0);
-    ajFilebuffTraceTitle(seqin->Filebuff, "Genbank data");
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    ajStrDel(&giline);
-
-    if(!qry->CaseId)
-	qry->QryDone = ajTrue;
-
-    ajDebug("seqSeqhoundQryNext success: null gilist '%S' QryData '%S'\n",
-	    gilist, (AjPStr) qry->QryData);
-
-    if (!ajStrGetLen((AjPStr)qry->QryData))
-	ajStrDel((AjPStr*)&qry->QryData);
-	
-    return ajTrue;
-}
-
-
-
-
-/*=============================================================================
-** SRS indexed database access
-**===========================================================================*/
-
-
-
-
-/* @section SRS Database Indexing *********************************************
-**
-** These functions manage the SRS (getz) index access methods.
-**
-******************************************************************************/
-
-
-
-
-/* @funcstatic seqAccessSrs ***************************************************
-**
-** Reads sequence(s) using SRS. Opens a file using the results of an SRS
-** query and returns to the caller to read the data.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqAccessSrs(AjPSeqin seqin)
-{
-    AjPSeqQuery qry;
-
-    qry = seqin->Query;
-
-    if(!ajNamDbGetDbalias(qry->DbName, &qry->DbAlias))
-	ajStrAssignS(&qry->DbAlias, qry->DbName);
-
-    if(!ajStrGetLen(qry->Application))
-	ajStrAssignC(&qry->Application, "getz");
-
-    ajDebug("seqAccessSrs %S:%S\n", qry->DbAlias, qry->Id);
-
-    if(ajStrGetLen(qry->Id))
-    {
-	ajFmtPrintS(&seqin->Filename, "%S -e '[%S-id:%S]",
-		    qry->Application, qry->DbAlias, qry->Id);
-
-	if(qry->HasAcc && ajStrMatchS(qry->Id, qry->Acc)) /* or accnumber */
-	    ajFmtPrintAppS(&seqin->Filename, "|[%S-acc:%S]'|",
-			   qry->DbAlias, qry->Id);
-	else				/* just the ID query */
-	    ajFmtPrintAppS(&seqin->Filename, "'|",
-			   qry->DbAlias, qry->Id);
-    }
-    else if(qry->HasAcc && ajStrGetLen(qry->Acc))
-	ajFmtPrintS(&seqin->Filename, "%S -e '[%S-acc:%S]'|",
-		    qry->Application, qry->DbAlias, qry->Acc);
-    else if(ajStrGetLen(qry->Gi))   /* a few SRS servers support GI as 'gid'*/
-	ajFmtPrintS(&seqin->Filename,"%S -e '[%S-gid:%S]'|",
-		    qry->Application, qry->DbAlias, qry->Gi);
-    else if(ajStrGetLen(qry->Sv))
-	ajFmtPrintS(&seqin->Filename,"%S -e '[%S-sv:%S]'|",
-		    qry->Application, qry->DbAlias, qry->Sv);
-    else if(ajStrGetLen(qry->Des))
-	ajFmtPrintS(&seqin->Filename, "%S -e '[%S-des:%S]'|",
-		    qry->Application, qry->DbAlias, qry->Des);
-    else if(ajStrGetLen(qry->Org))
-	ajFmtPrintS(&seqin->Filename, "%S -e '[%S-org:%S]'|",
-		    qry->Application, qry->DbAlias, qry->Org);
-    else if(ajStrGetLen(qry->Key))
-	ajFmtPrintS(&seqin->Filename, "%S -e '[%S-key:%S]'|",
-		    qry->Application, qry->DbAlias, qry->Key);
-    else
-	ajFmtPrintS(&seqin->Filename, "%S -e '%S'|",
-		    qry->Application, qry->DbAlias);
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewNameS(seqin->Filename);
-
-    if(!seqin->Filebuff)
-    {
-	ajDebug("unable to open file '%S'\n", seqin->Filename);
-
-	return ajFalse;
-    }
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    if(!qry->CaseId)
-	qry->QryDone = ajTrue;
-
-    return ajTrue;
-}
-
-
-
-
-/* @funcstatic seqAccessSrsfasta **********************************************
-**
-** Reads sequence(s) using SRS. Opens a file using the results of an SRS
-** query with FASTA format sequence output and returns to the caller to
-** read the data.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqAccessSrsfasta(AjPSeqin seqin)
-{
-    AjPSeqQuery qry;
-
-    qry = seqin->Query;
-
-    if(!ajNamDbGetDbalias(qry->DbName, &qry->DbAlias))
-	ajStrAssignS(&qry->DbAlias, qry->DbName);
-
-    if(!ajStrGetLen(qry->Application))
-	ajStrAssignC(&qry->Application, "getz");
-
-    ajDebug("seqAccessSrsfasta %S:%S\n", qry->DbAlias, qry->Id);
-
-    if(ajStrGetLen(qry->Id))
-    {
-	ajFmtPrintS(&seqin->Filename, "%S -d -sf fasta '[%S-id:%S]",
-		    qry->Application, qry->DbAlias, qry->Id);
-
-	if(qry->HasAcc && ajStrMatchS(qry->Id, qry->Acc))
-	    ajFmtPrintAppS(&seqin->Filename, "|[%S-acc:%S]'|",
-			   qry->DbAlias, qry->Id);
-	else				/* just the ID query */
-	    ajFmtPrintAppS(&seqin->Filename, "'|",
-			   qry->DbAlias, qry->Id);
-    }
-    else if(qry->HasAcc && ajStrGetLen(qry->Acc))
-	ajFmtPrintS(&seqin->Filename, "%S -d -sf fasta '[%S-acc:%S]'|",
-		    qry->Application, qry->DbAlias, qry->Acc);
-    else if(ajStrGetLen(qry->Gi))
-    {
-        ajFmtPrintS(&seqin->Filename, "%S -d -sf fasta '[%S-gi:%S]'|",
-		    qry->Application, qry->DbAlias, qry->Gi);
-    }
-    else if(ajStrGetLen(qry->Sv))
-    {
-        ajFmtPrintS(&seqin->Filename, "%S -d -sf fasta '[%S-sv:%S]'|",
-		    qry->Application, qry->DbAlias, qry->Sv);
-    }
-    else if(ajStrGetLen(qry->Des))
-	ajFmtPrintS(&seqin->Filename, "%S -d -sf fasta '[%S-des:%S]'|",
-		    qry->Application, qry->DbAlias, qry->Des);
-    else if(ajStrGetLen(qry->Org))
-	ajFmtPrintS(&seqin->Filename, "%S -d -sf fasta '[%S-org:%S]'|",
-		    qry->Application, qry->DbAlias, qry->Org);
-    else if(ajStrGetLen(qry->Key))
-	ajFmtPrintS(&seqin->Filename, "%S -d -sf fasta '[%S-key:%S]'|",
-		    qry->Application, qry->DbAlias, qry->Key);
-    else
-	ajFmtPrintS(&seqin->Filename, "%S -d -sf fasta '%S'|",
-		    qry->Application, qry->DbAlias);
-
-    ajDebug("searching with SRS command '%S'\n", seqin->Filename);
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewNameS(seqin->Filename);
-
-    if(!seqin->Filebuff)
-    {
-	ajDebug("unable to open file '%S'\n", seqin->Filename);
-
-	return ajFalse;
-    }
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    if(!qry->CaseId)
-	qry->QryDone = ajTrue;
-
-    return ajTrue;
-}
-
-
-
-
-/* @funcstatic seqAccessSrswww ************************************************
-**
-** Reads sequence(s) using SRS. Sends a query to a remote SRS web server.
-** Opens a file using the results and returns to the caller to
-** read the data.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqAccessSrswww(AjPSeqin seqin)
-{
-    AjPStr host      = NULL;
-    AjPStr urlget    = NULL;
-    AjPStr get       = NULL;
-    AjPStr proxyName = NULL;		/* host for proxy access.*/
-    AjPStr httpver   = NULL;		/* HTTP version for GET */
-    ajint iport;
-    ajint proxyPort;
-    FILE *fp;
-    AjPSeqQuery qry;
-    struct AJTIMEOUT timo;
-    AjPStr qrycount = NULL;
-    AjPStr qryfield = NULL;
-    const char* qrycount5 = "-newId+-fun+PageEntries+-bv+1+-lv+1+-bl+1+-ll+1+-ascii";
-    const char* qrycount6 = "-page+qResult+-bv+1+-lv+1+"
-        "-view+%2a%20Names%20only%20%2a+-ascii";
-    AjBool doproxy = ajFalse;
-    AjPFile countfile = NULL;
-    AjPStr countline = NULL;
-    AjPStr countstr = NULL;
-    ajint foundpos;
-    ajint istart;
-    ajint entrypos;
-    const char* cp;
-    ajuint chunkentries = 3;
-    ajuint firstentry;
-    ajuint lastentry;
-
-    seqin->ChunkEntries = ajTrue;
-    qry = seqin->Query;
-
-    iport     = 80;
-    proxyPort = 0;			/* port for proxy access */
-
-    doproxy = ajSeqHttpProxy(qry, &proxyPort, &proxyName);
-
-    if(!ajNamDbGetDbalias(qry->DbName, &qry->DbAlias))
-	ajStrAssignS(&qry->DbAlias, qry->DbName);
-
-    ajDebug("seqAccessSrswww %S:%S %u/%u\n",
-           qry->DbAlias, qry->Id, qry->CountEntries, qry->TotalEntries);
-
-    if(!seqHttpUrl(qry, &iport, &host, &urlget))
-    {
-	ajStrDel(&host);
-	ajStrDel(&urlget);
-
-	return ajFalse;
-    }
-
-    if(ajStrGetLen(qry->Id))
-    {
-        ajFmtPrintS(&qryfield, "+[%S-id:%S]",
-                    qry->DbAlias, qry->Id);
-        if(qry->HasAcc && ajStrMatchS(qry->Id, qry->Acc))
-            ajFmtPrintAppS(&qryfield, "|[%S-acc:%S]",
-                           qry->DbAlias, qry->Id);
-    }
-    else if(qry->HasAcc && ajStrGetLen(qry->Acc))
-        ajFmtPrintS(&qryfield, "+[%S-acc:%S]",
-                    qry->DbAlias, qry->Acc);
-    else if(ajStrGetLen(qry->Gi))
-        ajFmtPrintS(&qryfield,"+[%S-gid:%S]",
-                    qry->DbAlias, qry->Gi);
-    else if(ajStrGetLen(qry->Sv))
-            ajFmtPrintAppS(&qryfield,"+[%S-sv:%S]",
-                           qry->DbAlias, qry->Sv);
-    else if(ajStrGetLen(qry->Des))
-	ajFmtPrintAppS(&qryfield, "+[%S-des:%S]",
-		       qry->DbAlias, qry->Des);
-    else if(ajStrGetLen(qry->Org))
-	ajFmtPrintAppS(&qryfield, "+[%S-org:%S]",
-		       qry->DbAlias, qry->Org);
-    else if(ajStrGetLen(qry->Key))
-	ajFmtPrintAppS(&qryfield, "+[%S-key:%S]",
-		       qry->DbAlias, qry->Key);
-    else
-	ajFmtPrintAppS(&qryfield, "+%S",
-		       qry->DbAlias);
-
-    ajDebug("searching with SRS url '%S'\n", qryfield);
-
-    ajSeqHttpVersion(qry, &httpver);
-
-    if(!qry->TotalEntries)
-    {
-            /*
-    ** Can count the entries first with:
-    **
-    ** query string above for 5.x or any higher version
-    ** and looking for [Ff]ound...[0-9]+...entries
-    */
-
-        if(ajStrGetCharFirst(qry->ServerVer) == '5')
-            ajStrAssignC(&qrycount, qrycount5);
-        else
-            ajStrAssignC(&qrycount, qrycount6);
-
-        if(doproxy)
-            ajFmtPrintS(&get, "GET http://%S:%d%S?%S",
-                        host, iport, urlget, qrycount);
-        else        
-            ajFmtPrintS(&get, "GET %S?%S", urlget, qrycount);
-
-        ajStrDel(&qrycount);
-
-        ajStrAppendS(&get, qryfield);
-
-        ajFmtPrintAppS(&get, " HTTP/%S\n", httpver);
-
-        ajDebug("count with: proxy:%B '%S' %d %S\n",
-                doproxy, host, iport, get); 
-
-        if(doproxy)
-            fp = ajSeqHttpGetProxy(qry, proxyName, proxyPort, host, iport, get);
-        else
-            fp = ajSeqHttpGet(qry, host, iport, get);
-
-        ajStrDel(&get);
-
-        countfile = ajFileNewFromCfile(fp);
-        while(ajReadline(countfile, &countline))
-        {
-            foundpos = ajStrFindC(countline, "ound");
-            ajDebug("countline:%S", countline);
-            if(foundpos < 1)
-                continue;
-            istart = foundpos + 4;
-            entrypos = ajStrFindC(countline, "entries");
-            if(entrypos < istart)
-                continue;
-
-            ajStrAssignSubS(&countstr, countline, istart, entrypos);
-            ajDebug("countstr: '%S'\n", countstr);
-            cp = ajStrGetPtr(countstr);
-            qry->TotalEntries = 0;
-            while (*cp)
-            {
-                if(isdigit((int)*cp))
-                    qry->TotalEntries = 10*qry->TotalEntries +
-                        (int) (*cp - '0');
-                cp++;
-            }
-            ajDebug("nentries: %d\n", qry->TotalEntries);
-            break;
-        }
-
-        ajFileClose(&countfile);
-        ajStrDel(&countline);
-        ajStrDel(&countstr);
-        if(!qry->TotalEntries)
-        {
-            ajStrDel(&host);
-            ajStrDel(&urlget);
-            ajStrDel(&httpver);
-            ajStrDel(&qryfield);
-            ajDebug("No entries found\n");
-            return ajFalse;
-        }
-    }
-    
-    /* now fetch the entries in chunks */
-
-    firstentry = qry->CountEntries+1;
-    lastentry = qry->CountEntries+chunkentries;
-    if(lastentry > qry->TotalEntries)
-        chunkentries = qry->TotalEntries - qry->CountEntries;
-
-    qry->CountEntries += chunkentries;
-
-    if(doproxy)
-	ajFmtPrintS(&get, "GET http://%S:%d%S?-e+-ascii+-bv+%u+-lv+%u",
-		    host, iport, urlget, firstentry, chunkentries);
-    else
-	ajFmtPrintS(&get, "GET %S?-e+-ascii+-bv+%u+-lv+%u",
-                    urlget, firstentry, chunkentries);
-    ajStrAppendS(&get, qryfield);
-
-    ajStrDel(&urlget);
-    ajStrDel(&qryfield);
-
-    ajFmtPrintAppS(&get, " HTTP/%S\n", httpver);
-    ajStrDel(&httpver);
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    /* finally we have set the GET command */
-
-    ajDebug("host '%S' port %d get '%S'\n", host, iport, get);
-
-    if(doproxy)
-	fp = ajSeqHttpGetProxy(qry, proxyName, proxyPort, host, iport, get);
-    else
-	fp = ajSeqHttpGet(qry, host, iport, get);
-
-    ajStrDel(&proxyName);
-    ajStrDel(&host);
-    ajStrDel(&get);
-
-    if(!fp)
-	return ajFalse;
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
-
-    if(!seqin->Filebuff)
-    {
-	ajDebug("socket buffer attach failed\n");
-	ajErr("socket buffer attach failed for database '%S'", qry->DbName);
-
-	return ajFalse;
-    }
-
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
-    
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
-
-    ajFilebuffHtmlStrip(seqin->Filebuff);
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    if(!qry->CaseId)
-	qry->QryDone = ajTrue;
-
-    return ajTrue;
-}
-
-
-
-
-/* ==========================================================================
-** EMBOSS B+tree database access
-** ==========================================================================
-*/
-
-
-
-
 /* @section B+tree Database Indexing *****************************************
 **
 ** These functions manage the B+tree index access methods.
 **
 ******************************************************************************/
-
-
-
-
-/* @funcstatic seqAccessEmboss ************************************************
-**
-** Reads a sequence using EMBOSS B+tree index files.
-**
-** @param [u] seqin [AjPSeqin] Sequence input, including query data.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqAccessEmboss(AjPSeqin seqin)
-{
-    AjBool retval = ajFalse;
-
-    AjPSeqQuery qry;
-    SeqPEmbossQry qryd = NULL;
-
-    
-    qry = seqin->Query;
-    qryd = qry->QryData;
-    ajDebug("seqAccessEmboss type %d\n", qry->Type);
-
-    if(!ajNamDbGetDbalias(qry->DbName, &qry->DbAlias))
-	ajStrAssignS(&qry->DbAlias, qry->DbName);
-    
-    if(qry->Type == QRY_ALL)
-	return seqEmbossAll(seqin);
-
-
-    if(!qry->QryData)
-    {
-	seqEmbossQryOpen(qry);
-
-	qryd = qry->QryData;
-	seqin->Single = ajTrue;
-	
-	if(qry->Type == QRY_ENTRY)
-	{
-	    if(!seqEmbossQryEntry(qry))
-	    {
-		ajDebug("B+tree Entry failed\n");
-
-		if(qryd->do_id)
-		    ajDebug("Database entry id:'%S' not found\n",qry->Id);
-		else if(qryd->do_sv)
-		    ajDebug("Database entry gi:'%S' not found\n",qry->Gi);
-		else if(qryd->do_ac)
-		    ajDebug("Database entry acc:'%S' not found\n",qry->Acc);
-		else
-		    ajDebug("Database entry '%S' not found\n",qry->Id);
-	    }
-	}
-
-	if(qry->Type == QRY_QUERY)
-	{
-	    if(!seqEmbossQryQuery(qry))
-	    {
-		ajDebug("EMBOSS B+tree Query failed\n");
-
-		if(ajStrGetLen(qry->Id))
-		    ajDebug("Database Query '%S' not found\n", qry->Id);
-		else if(qry->HasAcc && ajStrGetLen(qry->Acc))
-		    ajDebug("Database Query acc:'%S' not found\n", qry->Acc);
-		else if(ajStrGetLen(qry->Sv))
-		    ajDebug("Database Query 'sv:%S' not found\n", qry->Sv);
-		else if(ajStrGetLen(qry->Gi))
-		    ajDebug("Database Query 'gi:%S' not found\n", qry->Gi);
-		else if(ajStrGetLen(qry->Des))
-		    ajDebug("Database Query 'des:%S' not found\n", qry->Des);
-		else if(ajStrGetLen(qry->Key))
-		    ajDebug("Database Query 'key:%S' not found\n", qry->Key);
-		else if(ajStrGetLen(qry->Org))
-		    ajDebug("Database Query 'org:%S' not found\n", qry->Org);
-		else
-		    ajDebug("Database Query '%S' not found\n", qry->Id);
-	    }
-	}
-    }
-    else if(!seqEmbossQryReuse(qry))
-	return ajFalse;
- 
-
-    if(ajListGetLength(qryd->List))
-    {
-	retval = seqEmbossQryNext(qry);
-
-	if(retval)
-        {
-            if(qryd->Samefile)
-                ajFilebuffClear(seqin->Filebuff, -1);
-            else
-                ajFilebuffReopenFile(&seqin->Filebuff, qryd->libs);
-        }
-    }
-
-    if(!ajListGetLength(qryd->List)) /* could have been emptied by code above */
-    {
-	seqEmbossQryClose(qry);
-
-	/* AJB addition */
-        /*
-	 * This was for the old code where seqsets had different
-         * memory handling ... and the reason for the multi
-         * flag in the first place. So far this seems
-         * unnecessary for the revised code but is left here
-         * for a while as a reminder and 'just in case'
-	 */
-	if((qry->Type == QRY_ENTRY) && !seqin->multi)
-	{
-	    AJFREE(qry->QryData);
-	    qryd = NULL;
-	}
-    }
-
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    return retval;
-}
-
-
-
-
-/* @funcstatic seqAccessFreeEmboss ********************************************
-**
-** Frees data specific to reading EMBOSS B+tree index files.
-**
-** @param [r] qry [void*] query data specific to EMBLCD
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqAccessFreeEmboss(void* qry)
-{
-    AjPSeqQuery query;
-    SeqPEmbossQry qryd;
-    AjBool retval = ajTrue;
-
-    ajDebug("seqAccessFreeEmboss\n");
-
-    query = (AjPSeqQuery) qry;
-    qryd = query->QryData;
-    qryd->nentries = -1;
-
-    seqEmbossQryClose(query);
-
-    return retval;
-}
 
 
 
@@ -3194,35 +1445,35 @@ static AjBool seqAccessFreeEmboss(void* qry)
 **
 ** Clears qryData structure when finished.
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if reusable,
 **                  ajFalse if finished.
 ** @@
 ******************************************************************************/
 
-static AjBool seqEmbossQryReuse(AjPSeqQuery qry)
+static AjBool seqEmbossQryReuse(AjPQuery qry)
 {
     SeqPEmbossQry qryd;
 
     qryd = qry->QryData;
 
     if(!qry || !qryd)
-	return ajFalse;
+        return ajFalse;
 
 
-    if(!qryd->List)
+    if(!qry->ResultsList)
     {
-	ajDebug("seqEmbossQryReuse: query data all finished\n");
-	AJFREE(qry->QryData);
-	qryd = NULL;
+        ajDebug("seqEmbossQryReuse: query data all finished\n");
+        AJFREE(qry->QryData);
+        qryd = NULL;
 
-	return ajFalse;
+        return ajFalse;
     }
     else
     {
-	ajDebug("seqEmbossQryReuse: reusing data from previous call %x\n",
-		qry->QryData);
-	/*ajListTrace(qryd->List);*/
+        ajDebug("seqEmbossQryReuse: reusing data from previous call %x\n",
+                qry->QryData);
+        /*ajListTrace(qry->ResultsList);*/
     }
 
 
@@ -3239,382 +1490,125 @@ static AjBool seqEmbossQryReuse(AjPSeqQuery qry)
 **
 ** Open caches (etc) for B+tree search
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
 ******************************************************************************/
 
-static AjBool seqEmbossQryOpen(AjPSeqQuery qry)
+static AjBool seqEmbossQryOpen(AjPQuery qry)
 {
     SeqPEmbossQry qryd;
-    AjPStr baseindex = NULL;
     ajint i;
     AjPStr name     = NULL;
-    
-    baseindex = ajStrNew();
+    AjIList iter = NULL;
+    AjPQueryField field = NULL;
+    AjPBtcache cache = NULL;
 
     qry->QryData = AJNEW0(qryd);
     qryd = qry->QryData;
     qryd->div = -1;
     qryd->nentries = -1;
-    
-    qryd->List = ajListNew();
 
-
-    if(ajStrGetLen(qry->Id))
-    {
-	ajStrFmtLower(&qry->Id);
-	qryd->do_id = ajTrue;
-    }
-    
-    if(qry->HasAcc && ajStrGetLen(qry->Acc))
-    {
-	ajStrFmtLower(&qry->Acc);
-	qryd->do_ac = ajTrue;
-    }
-    
-    if(ajStrGetLen(qry->Des))
-    {
-	ajStrFmtLower(&qry->Des);
-	qryd->do_id = ajTrue;
-	qryd->do_de = ajTrue;
-    }
-
-    if(ajStrGetLen(qry->Key))
-    {
-	ajStrFmtLower(&qry->Key);
-	qryd->do_id = ajTrue;
-	qryd->do_kw = ajTrue;
-    }
-
-    if(ajStrGetLen(qry->Org))
-    {
-	ajStrFmtLower(&qry->Org);
-	qryd->do_id = ajTrue;
-	qryd->do_tx = ajTrue;
-    }
-
-    if(ajStrGetLen(qry->Sv) || ajStrGetLen(qry->Gi))
-    {
-	if(ajStrGetLen(qry->Sv))
-	   ajStrFmtLower(&qry->Sv);
-
-	if(ajStrGetLen(qry->Gi))
-	    ajStrFmtLower(&qry->Gi);
-
-	qryd->do_sv = ajTrue;
-    }
-    
-
+    qryd->Caches = ajListNew();
 
     if(!ajStrGetLen(qry->IndexDir))
     {
-	ajDebug("no indexdir defined for database '%S'\n", qry->DbName);
-	ajErr("no indexdir defined for database '%S'", qry->DbName);
-	return ajFalse;
+        ajDebug("no indexdir defined for database '%S'\n", qry->DbName);
+        ajErr("no indexdir defined for database '%S'", qry->DbName);
+        return ajFalse;
     }
 
-    ajDebug("directory '%S' entry '%S' acc '%S' hasacc:%B\n",
-	    qry->IndexDir, qry->Id, qry->Acc, qry->HasAcc);
+    if(!seqEmbossOpenCache(qry,"id",&qryd->idcache))
+        return ajFalse;
 
-
-    if(qryd->do_id)
-        seqEmbossOpenSecCache(qry,ID_EXTENSION,&qryd->idcache);
-
-    if(qryd->do_ac)
-	seqEmbossOpenSecCache(qry,AC_EXTENSION,&qryd->accache);
-
-    if(qryd->do_sv)
-	seqEmbossOpenSecCache(qry,SV_EXTENSION,&qryd->svcache);
-
-    if(qryd->do_kw)
+    iter = ajListIterNewread(qry->QueryFields);
+    while(!ajListIterDone(iter))
     {
-	if(!qryd->idcache)
-	    seqEmbossOpenSecCache(qry,ID_EXTENSION,&qryd->idcache);
+        field = ajListIterGet(iter);
 
-	seqEmbossOpenSecCache(qry,KW_EXTENSION,&qryd->kwcache);
+        ajStrFmtLower(&field->Wildquery);
+        if(!seqEmbossOpenCache(qry, MAJSTRGETPTR(field->Field), &cache))
+            return ajFalse;
+        ajListPushAppend(qryd->Caches, cache);
+        cache = NULL;
     }
-
-    if(qryd->do_de)
-    {
-	if(!qryd->idcache)
-	    seqEmbossOpenSecCache(qry,ID_EXTENSION,&qryd->idcache);	
-
-	seqEmbossOpenSecCache(qry,DE_EXTENSION,&qryd->decache);
-    }
-
-    if(qryd->do_tx)
-    {
-	if(!qryd->idcache)
-	    seqEmbossOpenSecCache(qry,ID_EXTENSION,&qryd->idcache);	
-
-	seqEmbossOpenSecCache(qry,TX_EXTENSION,&qryd->txcache);
-    }
+    ajListIterDel(&iter);
 
 
+    ajDebug("directory '%S'fields: %u hasacc:%B\n",
+            qry->IndexDir, ajListGetLength(qry->QueryFields), qry->HasAcc);
 
 
     if(ajStrGetLen(qry->Exclude) && qryd->nentries >= 0)
     {
-	AJCNEW0(qryd->Skip,qryd->nentries);
-	name     = ajStrNew();
-	
-	for(i=0; i < qryd->nentries; ++i)
-	{
-	    ajStrAssignS(&name,qryd->files[i]);
+        AJCNEW0(qryd->Skip,qryd->nentries);
+        name     = ajStrNew();
 
-	    if(!ajFilenameTestInclude(name, qry->Exclude, qry->Filename))
-		qryd->Skip[i] = ajTrue;
-	}
+        for(i=0; i < qryd->nentries; ++i)
+        {
+            ajStrAssignS(&name,qryd->files[i]);
 
-	ajStrDel(&name);
+            if(!ajFilenameTestInclude(name, qry->Exclude, qry->Filename))
+                qryd->Skip[i] = ajTrue;
+        }
+
+        ajStrDel(&name);
     }
 
-    ajStrDel(&baseindex);
-    
     return ajTrue;
 }
 
 
 
 
-#if 0
 /* @funcstatic seqEmbossOpenCache ********************************************
 **
 ** Create primary B+tree index cache
 **
-** @param [u] qry [AjPSeqQuery] Query data
-** @param [r] ext [const char *] Index file extension
-** @param [w] cache [AjPBtcache *] cache
-** @return [void]
+** @param [u] qry [AjPQuery] Query data
+** @param [r] ext [const char*] Index file extension
+** @param [w] cache [AjPBtcache*] cache
+** @return [AjBool] True on success
 ** @@
 ******************************************************************************/
 
-static void seqEmbossOpenCache(AjPSeqQuery qry, const char *ext,
-			       AjPBtcache *cache)
+static AjBool seqEmbossOpenCache(AjPQuery qry, const char *ext,
+                                 AjPBtcache *cache)
 {
     SeqPEmbossQry qryd;
-    ajint order     = 0;
-    ajint fill      = 0;
-    ajint pagesize  = 0;
-    ajint cachesize = 0;
-    ajint level     = 0;
-    ajint sorder    = 0;
-    ajint sfill     = 0;
-    ajlong count    = 0L;
-    ajint kwlimit   = 0;
-    
+    AjPStr indexextname = NULL;
+
     AjPBtpage page   = NULL;
 
     qryd = qry->QryData;
 
-    ajBtreeReadParams(ajStrGetPtr(qry->DbAlias),ext,ajStrGetPtr(qry->IndexDir),
-		      &order, &fill,
-		      &pagesize, &level,
-		      &cachesize, &sorder,
-		      &sfill, &count, &kwlimit);
-    
-    if(qryd->nentries == -1)
-	qryd->nentries = ajBtreeReadEntries(ajStrGetPtr(qry->DbAlias),
-					    ajStrGetPtr(qry->IndexDir),
-					    ajStrGetPtr(qry->Directory),
-					    &qryd->files,&qryd->reffiles);
+    indexextname = ajStrNewS(ajBtreeFieldGetExtensionC(ext));
 
-    *cache = ajBtreeCacheNewC(ajStrGetPtr(qry->DbAlias),ext,
-			      ajStrGetPtr(qry->IndexDir),"r",
-			      pagesize,order,fill,level,
-			      cachesize);
+    *cache = ajBtreeCacheNewReadS(qry->DbAlias,indexextname,
+                                  qry->IndexDir);
+    ajStrDel(&indexextname);
 
     if(!*cache)
     {
-	qryd->nentries = -1;
+        qryd->nentries = -1;
 
-	return;
+        return ajFalse;
     }
-    
-    page = ajBtreeCacheRead(*cache,0L);
-    page->dirty = BT_LOCK;
-    
-    return;
-}
-#endif
 
-
-
-
-/* @funcstatic seqEmbossOpenSecCache *****************************************
-**
-** Create double (secondary) B+tree index cache
-**
-** @param [u] qry [AjPSeqQuery] Query data
-** @param [r] ext [const char *] Index file extension
-** @param [w] cache [AjPBtcache *] cache
-** @return [void]
-** @@
-******************************************************************************/
-
-static void seqEmbossOpenSecCache(AjPSeqQuery qry, const char *ext,
-				  AjPBtcache *cache)
-{
-    SeqPEmbossQry qryd;
-    ajint order     = 0;
-    ajint fill      = 0;
-    ajint pagesize  = 0;
-    ajint cachesize = 0;
-    ajint level     = 0;
-    ajint sorder    = 0;
-    ajint sfill     = 0;
-    ajlong count    = 0L;
-    ajint kwlimit   = 0;
-    
-    AjPBtpage page   = NULL;
-
-    qryd = qry->QryData;
-
-    ajBtreeReadParams(ajStrGetPtr(qry->DbAlias),ext,ajStrGetPtr(qry->IndexDir),
-		      &order, &fill,
-		      &pagesize, &level,
-		      &cachesize, &sorder,
-		      &sfill, &count, &kwlimit);
-    
     if(qryd->nentries == -1)
-	qryd->nentries = ajBtreeReadEntries(ajStrGetPtr(qry->DbAlias),
-					    ajStrGetPtr(qry->IndexDir),
-					    ajStrGetPtr(qry->Directory),
-					    &qryd->files,&qryd->reffiles);
-    
-    
-    *cache = ajBtreeSecCacheNewC(ajStrGetPtr(qry->DbAlias),ext,
-				 ajStrGetPtr(qry->IndexDir),"r",
-				 pagesize,order,fill,level,
-				 cachesize,sorder,0,sfill,count,kwlimit);
+        qryd->nentries = ajBtreeReadEntriesS(qry->DbAlias,
+                                             qry->IndexDir,
+                                             qry->Directory,
+                                             &qryd->files,
+                                             &qryd->reffiles);
 
-    if(!*cache)
-    {
-	qryd->nentries = -1;
-
-	return;
-    }
-    
     page = ajBtreeCacheRead(*cache,0L);
     page->dirty = BT_LOCK;
-    
-    return;
-}
 
-
-
-
-/* @funcstatic seqEmbossAll **************************************************
-**
-** Reads the B+tree entry file and opens a list of all the
-** database files for plain reading.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqEmbossAll(AjPSeqin seqin)
-{
-    AjPList list;
-    AjPSeqQuery qry;
-/*    AjPStrTok handle = NULL;
-    AjPStr wildname = NULL;*/
-    AjPStr name = NULL;
-/*    AjBool del = ajFalse;*/
-    
-    ajint i;
-    
-    AjPStr *filestrings = NULL;
-    AjPStr *reffilestrings = NULL;
-    
-    qry = seqin->Query;
-
-    if(!ajStrGetLen(qry->IndexDir))
-    {
-	ajDebug("no indexdir defined for database %S\n", qry->DbName);
-	ajErr("no indexdir defined for database %S", qry->DbName);
-
-	return ajFalse;
-    }
-
-    ajDebug("B+tree All index directory '%S'\n", qry->IndexDir);
-
-
-    ajBtreeReadEntries(qry->DbAlias->Ptr,qry->IndexDir->Ptr,
-		       qry->Directory->Ptr,
-		       &filestrings,&reffilestrings);
-
-
-    list = ajListstrNew();
-/*    wildname = ajStrNew();*/
-    name     = ajStrNew();
-    
-    i = 0;
-    while(filestrings[i])
-    {
-
-	ajStrAssignS(&name,filestrings[i]);
-
-	if(ajFilenameTestInclude(name, qry->Exclude, qry->Filename))
-	{
-	    ajDebug("qrybufflist add '%S'\n", name);
-	    ajListstrPushAppend(list, name);
-	    name = NULL;
-	}
-	else
-	{
-	    ajDebug("qrybufflist *delete* '%S'\n", name);
-	    ajStrDel(&name);
-	}
-
-/*
-	if(qry->Exclude)
-	{
-	    ajStrAssignS(&name,filestrings[i]);
-	    ajFilenameTrimPath(&name);
-	    del = ajFalse;
-	    
-	    handle = ajStrTokenNewC(qry->Exclude," \n");
-	    while(ajStrTokenNextParseC(&handle," \n",&wildname))
-		if(ajStrMatchWildS(name,wildname))
-		{
-		    del = ajTrue;
-		    break;
-		}
-	    ajStrTokenDel(&handle);
-
-	    if(del)
-		ajStrDel(&filestrings[i]);
-	    else
-		ajListstrPushAppend(list, filestrings[i]);		
-	}
-	else
-	    ajListstrPushAppend(list, filestrings[i]);
-*/
-
-	ajStrDel(&filestrings[i]);
-	++i;
-    }
-
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewListinList(list);
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    if(!qry->CaseId)
-	qry->QryDone = ajTrue;
-
-    ajStrDel(&name);
-/*    ajStrDel(&wildname);*/
-    AJFREE(filestrings);
-    AJFREE(reffilestrings);
-    
     return ajTrue;
 }
+
 
 
 
@@ -3623,71 +1617,76 @@ static AjBool seqEmbossAll(AjPSeqin seqin)
 **
 ** Queries for a single entry in a B+tree index
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if can continue,
 **                  ajFalse if all is done.
 ** @@
 ******************************************************************************/
 
-static AjBool seqEmbossQryEntry(AjPSeqQuery qry)
+static AjBool seqEmbossQryEntry(AjPQuery qry)
 {
     AjPBtId entry  = NULL;
     SeqPEmbossQry qryd;
-    
-    ajDebug("entry id: '%S' acc: '%S' hasacc:%B\n",
-	    qry->Id, qry->Acc, qry->HasAcc);
+    const AjPList fdlist;
+    const AjPList cachelist;
+    AjIList iter;
+    AjIList icache;
+    AjPBtcache cache;
+    AjPQueryField fd;
+
+    ajDebug("seqEmbossQryEntry fields: %u hasacc:%B\n",
+            ajListGetLength(qry->QueryFields), qry->HasAcc);
 
     qryd = qry->QryData;
 
+    fdlist = ajQueryGetallFields(qry);
+    cachelist = qryd->Caches;
 
-    if(qryd->do_id && qryd->idcache)
+    iter= ajListIterNewread(fdlist);
+    icache = ajListIterNewread(cachelist);
+    while(!ajListIterDone(iter))
     {
-	    entry = ajBtreeIdFromKey(qryd->idcache,ajStrGetPtr(qry->Id));
+        fd = ajListIterGet(iter);
+        cache = ajListIterGet(icache);
 
-	    if(entry)
-	    {
-		if(!entry->dups)
-		    ajListPushAppend(qryd->List,(void *)entry);
-		else
-		    ajBtreeHybLeafList(qryd->idcache,entry->offset,
-				       entry->id,qryd->List);
-	    }
-    }
-    
+        ajDebug("qry type:%d field '%S' wild '%S'\n",
+                fd->Link, fd->Field, fd->Wildquery);
 
-    if((qryd->do_ac && !entry) && (qryd->do_ac && qryd->accache))
-    {
-	    entry = ajBtreeIdFromKey(qryd->accache,ajStrGetPtr(qry->Acc));
+        if((fd->Link == AJQLINK_ELSE) && ajListGetLength(qry->ResultsList))
+            continue;
 
-	    if(entry)
-	    {
-		if(!entry->dups)
-		    ajListPushAppend(qryd->List,(void *)entry);
-		else
-		    ajBtreeHybLeafList(qryd->accache,entry->offset,
-				       entry->id,qryd->List);
-	    }
-    }
+        if(ajBtreeCacheIsSecondary(cache))
+        {
 
-    if((qryd->do_sv && !entry) && (qryd->do_sv && qryd->svcache))
-    {
-	    entry = ajBtreeIdFromKey(qryd->svcache,ajStrGetPtr(qry->Gi));
-
-	    if(entry)
-	    {
-		if(!entry->dups)
-		    ajListPushAppend(qryd->List,(void *)entry);
-		else
-		    ajBtreeHybLeafList(qryd->svcache,entry->offset,
-				       entry->id,qryd->List);
-	    }
+        }
+        else
+        {
+            entry = ajBtreeIdFromKey(cache,fd->Wildquery);
+            ajDebug("id '%S' entry: %p\n", fd->Wildquery, entry);
+            if(entry)
+            {
+                ajDebug("entry id: '%S' dups: %u offset: %Ld\n",
+                        entry->id, entry->dups, entry->offset);
+                if(!entry->dups)
+                    ajListPushAppend(qry->ResultsList,(void *)entry);
+                else
+                {
+                    ajBtreeHybLeafList(cache,entry->offset,
+                                       entry->id,qry->ResultsList);
+                    ajBtreeIdDel(&entry);
+                }
+            }
+        }
     }
 
-    if(!ajListGetLength(qryd->List))
-	return ajFalse;
+    ajListIterDel(&iter);
+    ajListIterDel(&icache);
+
+    if(!ajListGetLength(qry->ResultsList))
+        return ajFalse;
 
     if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+        qry->QryDone = ajTrue;
 
     return ajTrue;
 }
@@ -3699,12 +1698,12 @@ static AjBool seqEmbossQryEntry(AjPSeqQuery qry)
 **
 ** Processes the next query for a B+tree index
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if successful
 ** @@
 ******************************************************************************/
 
-static AjBool seqEmbossQryNext(AjPSeqQuery qry)
+static AjBool seqEmbossQryNext(AjPQuery qry)
 {
     AjPBtId entry;
     SeqPEmbossQry qryd;
@@ -3714,84 +1713,84 @@ static AjBool seqEmbossQryNext(AjPSeqQuery qry)
 
     qryd = qry->QryData;
 
-    if(!ajListGetLength(qryd->List))
-	return ajFalse;
+    if(!ajListGetLength(qry->ResultsList))
+        return ajFalse;
 
-    /*ajListTrace(qryd->List);*/
+    /*ajListTrace(qry->ResultsList);*/
 
 
     if(!qryd->Skip)
     {
-	ajListPop(qryd->List, &item);
-	entry = (AjPBtId) item;
+        ajListPop(qry->ResultsList, &item);
+        entry = (AjPBtId) item;
     }
     else
     {
-	ok = ajFalse;
+        ok = ajFalse;
 
-	while(!ok)
-	{
-	    ajListPop(qryd->List, &item);
-	    entry = (AjPBtId) item;
+        while(!ok)
+        {
+            ajListPop(qry->ResultsList, &item);
+            entry = (AjPBtId) item;
 
-	    if(!qryd->Skip[entry->dbno])
-		ok = ajTrue;
-	    else
-	    {
-		ajBtreeIdDel(&entry);
+            if(!qryd->Skip[entry->dbno])
+                ok = ajTrue;
+            else
+            {
+                ajBtreeIdDel(&entry);
 
-		if(!ajListGetLength(qryd->List))
-		    return ajFalse;
-	    }
-	}
+                if(!ajListGetLength(qry->ResultsList))
+                    return ajFalse;
+            }
+        }
     }
 
     qryd->Samefile = ajTrue;
 
     if(entry->dbno != qryd->div)
     {
-	qryd->Samefile = ajFalse;
-	qryd->div = entry->dbno;
-	ajFileClose(&qryd->libs);
+        qryd->Samefile = ajFalse;
+        qryd->div = entry->dbno;
+        ajFileClose(&qryd->libs);
 
-	if(qryd->reffiles)
-	    ajFileClose(&qryd->libr);
+        if(qryd->reffiles)
+            ajFileClose(&qryd->libr);
     }
 
     if(!qryd->libs)
     {
-	qryd->libs = ajFileNewInNameS(qryd->files[entry->dbno]);
+        qryd->libs = ajFileNewInNameS(qryd->files[entry->dbno]);
 
-	if(!qryd->libs)
-	{
-	    ajBtreeIdDel(&entry);
+        if(!qryd->libs)
+        {
+            ajBtreeIdDel(&entry);
 
-	    return ajFalse;
-	}
+            return ajFalse;
+        }
     }
-	
+
     if(qryd->reffiles && !qryd->libr)
     {
-	ajFileClose(&qryd->libr);
-	qryd->libr = ajFileNewInNameS(qryd->reffiles[entry->dbno]);
+        ajFileClose(&qryd->libr);
+        qryd->libr = ajFileNewInNameS(qryd->reffiles[entry->dbno]);
 
-	if(!qryd->libr)
-	{
-	    ajBtreeIdDel(&entry);
+        if(!qryd->libr)
+        {
+            ajBtreeIdDel(&entry);
 
-	    return ajFalse;
-	}
+            return ajFalse;
+        }
     }
-    
-    
-    ajFileSeek(qryd->libs, entry->offset, 0);
+
+
+    ajFileSeek(qryd->libs, (ajlong) entry->offset, 0);
     if(qryd->reffiles)
-	ajFileSeek(qryd->libr, entry->refoffset, 0);
+        ajFileSeek(qryd->libr, (ajlong) entry->refoffset, 0);
 
     ajBtreeIdDel(&entry);
 
     if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+        qry->QryDone = ajTrue;
 
     return ajTrue;
 }
@@ -3803,88 +1802,63 @@ static AjBool seqEmbossQryNext(AjPSeqQuery qry)
 **
 ** Closes query data for a B+tree index
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
 ******************************************************************************/
 
-static AjBool seqEmbossQryClose(AjPSeqQuery qry)
+static AjBool seqEmbossQryClose(AjPQuery qry)
 {
     SeqPEmbossQry qryd;
+    void* item;
     ajint i;
 
     if(!qry)
-	return ajFalse;
+        return ajFalse;
+
+    if(!qry->QryData)
+        return ajFalse;
 
     ajDebug("seqEmbossQryClose clean up qryd\n");
 
     qryd = qry->QryData;
 
-    if(qryd->do_id && qryd->idcache)
+    while(ajListGetLength(qryd->Caches))
     {
-	ajBtreeFreeSecArray(qryd->idcache);
-	ajBtreeCacheDel(&qryd->idcache);
+        ajListPop(qryd->Caches, &item);
+        ajBtreeCacheDel((AjPBtcache*) &item);
     }
-    
+    ajListFree(&qryd->Caches);
+    ajBtreeCacheDel(&qryd->idcache);
 
-    if(qryd->do_ac && qryd->accache)
-    {
-	ajBtreeFreeSecArray(qryd->accache);	
-	ajBtreeCacheDel(&qryd->accache);
-    }
-    
-
-    if(qryd->do_sv && qryd->svcache)
-    {
-	ajBtreeFreeSecArray(qryd->svcache);	
-	ajBtreeCacheDel(&qryd->svcache);
-    }
-
-
-    if(qryd->do_kw && qryd->kwcache)
-	ajBtreeCacheDel(&qryd->kwcache);
-
-    if(qryd->do_de && qryd->decache)
-	ajBtreeCacheDel(&qryd->decache);
-
-    if(qryd->do_tx && qryd->txcache)
-	ajBtreeCacheDel(&qryd->txcache);
-	
-    qryd->do_id = ajFalse;
-    qryd->do_ac = ajFalse;
-    qryd->do_sv = ajFalse;
-    qryd->do_kw = ajFalse;
-    qryd->do_de = ajFalse;
-    qryd->do_tx = ajFalse;
-
-    ajListFree(&qryd->List);
+    ajListFree(&qry->ResultsList);
 
     if(qryd->Skip)
     {
-	AJFREE(qryd->Skip);
-	qryd->Skip = NULL;
+        AJFREE(qryd->Skip);
+        qryd->Skip = NULL;
     }
 
     if(qryd->files)
     {
-	i = 0;
+        i = 0;
 
-	while(qryd->files[i])
-	{
-	    ajStrDel(&qryd->files[i]);
+        while(qryd->files[i])
+        {
+            ajStrDel(&qryd->files[i]);
 
-	    if(qryd->reffiles)
-		ajStrDel(&qryd->reffiles[i]);
+            if(qryd->reffiles)
+                ajStrDel(&qryd->reffiles[i]);
 
-	    ++i;
-	}
+            ++i;
+        }
 
-	AJFREE(qryd->files);
+        AJFREE(qryd->files);
     }
 
     if(qryd->reffiles)
-	AJFREE(qryd->reffiles);
+        AJFREE(qryd->reffiles);
 
     qryd->files = NULL;
     qryd->reffiles = NULL;
@@ -3902,176 +1876,199 @@ static AjBool seqEmbossQryClose(AjPSeqQuery qry)
 **
 ** Queries for one or more entries in an EMBOSS B+tree index
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
 ******************************************************************************/
 
-static AjBool seqEmbossQryQuery(AjPSeqQuery qry)
+static AjBool seqEmbossQryQuery(AjPQuery qry)
 {
     SeqPEmbossQry qryd;
     AjPBtId   id   = NULL;
 
-    AjPBtPri pri   = NULL;
     AjPList  tlist = NULL;
     AjPStr   kwid  = NULL;
+    ajulong treeblock = 0L;
+    const AjPList fdlist;
+    const AjPList cachelist;
+    AjIList iter;
+    AjIList icache;
+    AjPBtcache cache;
+    AjPQueryField fd;
 
-    
+    AjPBtId newhit;
+    AjPBtId *allhits = NULL;
+    AjPTable newtable = NULL;
+
+    ajuint i;
+    ajuint lasthits = 0;
+    ajuint fdhits = 0;
+
     if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+        qry->QryDone = ajTrue;
 
     qryd = qry->QryData;
 
+    cachelist = qryd->Caches;
 
-    if(qryd->do_kw && qryd->kwcache)
+    ajTableSetDestroy(qry->ResultsTable, NULL, ajBtreeIdDelVoid);
+    ajTableSettypeUser(qry->ResultsTable, ajBtreeIdCmp, ajBtreeIdHash);
+
+    fdlist = ajQueryGetallFields(qry);
+
+    iter = ajListIterNewread(fdlist);
+    icache = ajListIterNewread(cachelist);
+    while(!ajListIterDone(iter))
     {
-	if(!qry->Wild)
-	{
-	    pri = ajBtreePriFromKeyword(qryd->kwcache, ajStrGetPtr(qry->Key));
+        fd = ajListIterGet(iter);
+        cache = ajListIterGet(icache);
 
-	    if(pri)
-	    {
-		tlist = ajBtreeSecLeafList(qryd->kwcache, pri->treeblock);
+        ajDebug("field '%S' query: '%S'\n", fd->Field, fd->Wildquery);
 
-		while(ajListPop(tlist,(void **)&kwid))
-		{
-		    ajStrFmtLower(&kwid);
-		    id = ajBtreeIdFromKey(qryd->idcache,ajStrGetPtr(kwid));
+        if((fd->Link == AJQLINK_ELSE) && (lasthits > 0))
+        {
+            continue;
+        }
 
-		    if(id)
-		    {
-			if(!id->dups)
-			    ajListPushAppend(qryd->List,(void *)id);
-			else
-			    ajBtreeHybLeafList(qryd->idcache,id->offset,
-					       id->id,qryd->List);
-		    }
+        /* is this a primary or secondary key (check the cache)? */
 
-		    ajStrDel(&kwid);
-		}
+        if(ajBtreeCacheIsSecondary(cache))
+        {
+            if(!qry->Wild)
+            {
+                if(ajBtreePriFindKeywordLen(cache, fd->Wildquery,
+                                            &treeblock))
+                {
+                    tlist = ajBtreeSecLeafList(cache, treeblock);
+                    ajDebug("ajBtreeSecLeafList(%Ld)  results:%u\n",
+                            treeblock, ajListGetLength(tlist));
 
-		ajListFree(&tlist);
-		ajBtreePriDel(&pri);
-	    }
+                    while(ajListPop(tlist,(void **)&kwid))
+                    {
+                        ajStrFmtLower(&kwid);
+                        id = ajBtreeIdFromKey(qryd->idcache, kwid);
+                        ajDebug("ajBtreeIdFromKey id:%x\n",
+                                id);
 
-	    return ajTrue;
-	}
-	else
-	{
-	    ajBtreeListFromKeywordW(qryd->kwcache,qry->Key->Ptr,
-				    qryd->idcache, qryd->List);
-	    return ajTrue;
-	}
+                        if(id)
+                        {
+                            if(!id->dups)
+                                ajListPushAppend(qry->ResultsList,(void *)id);
+                            else
+                            {
+                                ajBtreeHybLeafList(qryd->idcache,id->offset,
+                                                   id->id,qry->ResultsList);
+                                ajBtreeIdDel(&id);
+                            }
+                        }
+
+                        ajStrDel(&kwid);
+                    }
+
+                    ajListFree(&tlist);
+                }
+
+                ajListIterDel(&iter);
+                ajListIterDel(&icache);
+                return ajTrue;
+            }
+            else
+            {
+                ajBtreeListFromKeywordW(cache,fd->Wildquery,
+                                        qryd->idcache, qry->ResultsList);
+                ajListIterDel(&iter);
+                ajListIterDel(&icache);
+                return ajTrue;
+            }
+        }
+        else
+        {
+            ajBtreeListFromKeyW(cache,fd->Wildquery,qry->ResultsList);
+            ajDebug("ajBtreeListFromKeyW results:%u\n",
+                    ajListGetLength(qry->ResultsList));
+        }
+
+        fdhits = ajListGetLength(qry->ResultsList);
+
+        switch(fd->Link)
+        {
+            case AJQLINK_INIT:
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                    ajTablePutClean(qry->ResultsTable, newhit, newhit,
+                                    NULL, ajBtreeIdDelVoid);
+                break;
+
+            case AJQLINK_OR:
+                newtable = ajTableNewFunctionLen(fdhits,
+                                                 ajBtreeIdCmp, ajBtreeIdHash,
+                                                 NULL, ajBtreeIdDelVoid);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                    ajTablePutClean(newtable, newhit, newhit,
+                                    NULL, ajBtreeIdDelVoid);
+
+                ajTableMergeOr(qry->ResultsTable, newtable);
+                ajTableDel(&newtable);
+                break;
+
+            case AJQLINK_AND:
+                newtable = ajTableNewFunctionLen(fdhits,
+                                                 ajBtreeIdCmp, ajBtreeIdHash,
+                                                 NULL, ajBtreeIdDelVoid);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                    ajTablePutClean(newtable, newhit, newhit,
+                                    NULL, ajBtreeIdDelVoid);
+
+                ajTableMergeAnd(qry->ResultsTable, newtable);
+                ajTableDel(&newtable);
+                break;
+
+            case AJQLINK_EOR:
+            case AJQLINK_ELSE:
+                newtable = ajTableNewFunctionLen(fdhits,
+                                                 ajBtreeIdCmp, ajBtreeIdHash,
+                                                 NULL, ajBtreeIdDelVoid);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                    ajTablePutClean(newtable, newhit, newhit,
+                                    NULL, ajBtreeIdDelVoid);
+
+                ajTableMergeEor(qry->ResultsTable, newtable);
+                ajTableDel(&newtable);
+                break;
+
+            case AJQLINK_NOT:
+                newtable = ajTableNewFunctionLen(fdhits,
+                                                 ajBtreeIdCmp, ajBtreeIdHash,
+                                                 NULL, ajBtreeIdDelVoid);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                    ajTablePutClean(newtable, newhit, newhit,
+                                    NULL, ajBtreeIdDelVoid);
+
+                ajTableMergeNot(qry->ResultsTable, newtable);
+                ajTableDel(&newtable);
+                break;
+
+            default:
+                ajErr("Unexpected query link operator number '%u'",
+                      fd->Link);
+                break;
+        }
+
+        lasthits = fdhits;
     }
 
+    ajListIterDel(&iter);
+    ajListIterDel(&icache);
+    ajTableToarrayValues(qry->ResultsTable, (void***)&allhits);
+    for(i=0; allhits[i]; i++)
+        ajListPushAppend(qry->ResultsList, (void*) allhits[i]);
 
-    if(qryd->do_de && qryd->decache)
-    {
-	if(!qry->Wild)
-	{
-	    pri = ajBtreePriFromKeyword(qryd->decache, ajStrGetPtr(qry->Des));
+    AJFREE(allhits);
 
-	    if(pri)
-	    {
-		tlist = ajBtreeSecLeafList(qryd->decache, pri->treeblock);
+    ajTableClear(qry->ResultsTable);
 
-		while(ajListPop(tlist,(void **)&kwid))
-		{
-		    ajStrFmtLower(&kwid);
-		    id = ajBtreeIdFromKey(qryd->idcache,ajStrGetPtr(kwid));
-
-		    if(id)
-		    {
-			if(!id->dups)
-			    ajListPushAppend(qryd->List,(void *)id);
-			else
-			    ajBtreeHybLeafList(qryd->idcache,id->offset,
-					       id->id,qryd->List);
-		    }
-
-		    ajStrDel(&kwid);
-		}
-
-		ajListFree(&tlist);
-		ajBtreePriDel(&pri);
-	    }
-
-	    return ajTrue;
-	}
-	else
-	{
-	    ajBtreeListFromKeywordW(qryd->decache,qry->Des->Ptr,
-				    qryd->idcache, qryd->List);
-	    return ajTrue;
-	}
-    }
-    
-
-    if(qryd->do_tx && qryd->txcache)
-    {
-	if(!qry->Wild)
-	{
-	    pri = ajBtreePriFromKeyword(qryd->txcache, ajStrGetPtr(qry->Org));
-
-	    if(pri)
-	    {
-		tlist = ajBtreeSecLeafList(qryd->txcache, pri->treeblock);
-
-		while(ajListPop(tlist,(void **)&kwid))
-		{
-		    ajStrFmtLower(&kwid);
-		    id = ajBtreeIdFromKey(qryd->idcache,ajStrGetPtr(kwid));
-
-		    if(id)
-		    {
-			if(!id->dups)
-			    ajListPushAppend(qryd->List,(void *)id);
-			else
-			    ajBtreeHybLeafList(qryd->idcache,id->offset,
-					       id->id,qryd->List);
-		    }
-
-		    ajStrDel(&kwid);
-		}
-
-		ajListFree(&tlist);
-		ajBtreePriDel(&pri);
-	    }
-
-	    return ajTrue;
-	}
-	else
-	{
-	    ajBtreeListFromKeywordW(qryd->txcache,qry->Org->Ptr,
-				    qryd->idcache, qryd->List);
-	    return ajTrue;
-	}
-    }
-
-
-    if(qryd->do_id && qryd->idcache)
-    {
-	ajBtreeListFromKeyW(qryd->idcache,qry->Id->Ptr,qryd->List);
-
-	if(ajListGetLength(qryd->List))
-	    return ajTrue;
-    }
-
-    if(qryd->do_ac && qryd->accache)
-    {
-	ajBtreeListFromKeyW(qryd->accache,qry->Acc->Ptr,qryd->List);
-
-	if(ajListGetLength(qryd->List))
-	    return ajTrue;
-    }
-
-    if(qryd->do_sv && qryd->svcache)
-    {
-	ajBtreeListFromKeyW(qryd->svcache,qry->Sv->Ptr,qryd->List);
-
-	return ajTrue;
-    }
+    if(ajListGetLength(qry->ResultsList))
+        return ajTrue;
 
     return ajFalse;
 }
@@ -4090,7 +2087,7 @@ static AjBool seqEmbossQryQuery(AjPSeqQuery qry)
 
 /* @funcstatic seqAccessEmbossGcg ********************************************
 **
-** Reads sequence(s) from a GCG formatted database, using EMBLCD index
+** Reads sequence(s) from a GCG formatted database, using B+tree index
 ** files. Returns with the file pointer set to the position in the
 ** sequence file.
 **
@@ -4103,63 +2100,70 @@ static AjBool seqAccessEmbossGcg(AjPSeqin seqin)
 {
     AjBool retval = ajFalse;
 
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPEmbossQry qryd = NULL;
 
-    
-    qry = seqin->Query;
+
+    qry = seqin->Input->Query;
     qryd = qry->QryData;
-    ajDebug("seqAccessEmbossGcg type %d\n", qry->Type);
+    ajDebug("seqAccessEmbossGcg type %d\n", qry->QueryType);
 
     if(!ajNamDbGetDbalias(qry->DbName, &qry->DbAlias))
-	ajStrAssignS(&qry->DbAlias, qry->DbName);
+        ajStrAssignS(&qry->DbAlias, qry->DbName);
 
-    if(qry->Type == QRY_ALL)
-	return seqEmbossGcgAll(seqin);
+    if(qry->QueryType == AJQUERY_ALL)
+        return seqEmbossGcgAll(seqin);
 
 
     if(!qry->QryData)
     {
-	seqEmbossQryOpen(qry);
+        if(!seqEmbossQryOpen(qry))
+            return ajFalse;
 
-	qryd = qry->QryData;
-	seqin->Single = ajTrue;
-	ajFilebuffDel(&seqin->Filebuff);
-	seqin->Filebuff = ajFilebuffNewNofile();
-	
-	if(qry->Type == QRY_ENTRY)
-	{
-	    if(!seqEmbossQryEntry(qry))
-		ajDebug("embossgcg B+tree Entry failed\n");
-	}
+        qryd = qry->QryData;
+        seqin->Input->Single = ajTrue;
+        ajFilebuffDel(&seqin->Input->Filebuff);
+        seqin->Input->Filebuff = ajFilebuffNewNofile();
 
-	if(qry->Type == QRY_QUERY)
-	{
-	    if(!seqEmbossQryQuery(qry))
-		ajDebug("embossgcg B+tree Query failed\n");
-	}
+        if(qry->QueryType == AJQUERY_ENTRY)
+        {
+            if(!seqEmbossQryEntry(qry))
+                ajDebug("embossgcg B+tree Entry failed\n");
+        }
+
+        if(qry->QueryType == AJQUERY_QUERY)
+        {
+            if(!seqEmbossQryQuery(qry))
+                ajDebug("embossgcg B+tree Query failed\n");
+        }
     }
-    else if(!seqEmbossQryReuse(qry))
-	return ajFalse;
-    
-
-    if(ajListGetLength(qryd->List))
+    else
     {
-	retval = seqEmbossQryNext(qry);
-
-	if(retval)
-	    seqEmbossGcgLoadBuff(seqin);
+        if(!seqEmbossQryReuse(qry))
+        {
+            seqEmbossQryClose(qry);
+            return ajFalse;
+        }
+        ajFilebuffClear(seqin->Input->Filebuff, -1);
     }
 
-    if(!ajListGetLength(qryd->List)) /* could have been emptied by code above */
+    if(ajListGetLength(qry->ResultsList))
     {
-	seqEmbossQryClose(qry);
-	ajFileClose(&qryd->libs);
-	ajFileClose(&qryd->libr);
+        retval = seqEmbossQryNext(qry);
+
+        if(retval)
+        {
+            seqEmbossGcgLoadBuff(seqin);
+            ajStrAssignS(&seqin->Input->Db, qry->DbName);
+        }
     }
 
-    if(retval)
-	ajStrAssignS(&seqin->Db, qry->DbName);
+    if(!ajListGetLength(qry->ResultsList)) /* could be emptied by code above */
+    {
+        seqEmbossQryClose(qry);
+        ajFileClose(&qryd->libs);
+        ajFileClose(&qryd->libr);
+    }
 
     return retval;
 }
@@ -4178,18 +2182,18 @@ static AjBool seqAccessEmbossGcg(AjPSeqin seqin)
 
 static AjBool seqEmbossGcgAll(AjPSeqin seqin)
 {
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPEmbossQry qryd;
     static ajint i   = 0;
     AjPStr name      = NULL;
     AjBool ok        = ajFalse;
 /*
-    AjPStrTok handle = NULL;
-    AjPStr wildname  = NULL;
-    AjBool found     = ajFalse;
+  AjPStrTok handle = NULL;
+  AjPStr wildname  = NULL;
+  AjBool found     = ajFalse;
 */
-    
-    qry = seqin->Query;
+
+    qry = seqin->Input->Query;
     qryd = qry->QryData;
 
     ajDebug("seqEmbossGcgAll\n");
@@ -4197,112 +2201,112 @@ static AjBool seqEmbossGcgAll(AjPSeqin seqin)
 
     if(!qry->QryData)
     {
-	ajDebug("seqEmbossGcgAll initialising\n");
+        ajDebug("seqEmbossGcgAll initialising\n");
 
-	qry->QryData = AJNEW0(qryd);
-	qryd = qry->QryData;
-	i = -1;
-	ajBtreeReadEntries(qry->DbAlias->Ptr,qry->IndexDir->Ptr,
-			   qry->Directory->Ptr,
-			   &qryd->files,&qryd->reffiles);
+        qry->QryData = AJNEW0(qryd);
+        qryd = qry->QryData;
+        i = -1;
+        ajBtreeReadEntriesS(qry->DbAlias,qry->IndexDir,
+                            qry->Directory,
+                            &qryd->files,&qryd->reffiles);
 
-	seqin->Single = ajTrue;
+        seqin->Input->Single = ajTrue;
     }
 
     qryd = qry->QryData;
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewNofile();
+    ajFilebuffDel(&seqin->Input->Filebuff);
+    seqin->Input->Filebuff = ajFilebuffNewNofile();
 
     if(!qryd->libs)
     {
-	while(!ok && qryd->files[++i])
-	{
-	    ajStrAssignS(&name,qryd->files[i]);
-	    if(ajFilenameTestInclude(name, qry->Exclude, qry->Filename))
-		ok = ajTrue;
-	}
+        while(!ok && qryd->files[++i])
+        {
+            ajStrAssignS(&name,qryd->files[i]);
+            if(ajFilenameTestInclude(name, qry->Exclude, qry->Filename))
+                ok = ajTrue;
+        }
 
-	ajStrDel(&name);
+        ajStrDel(&name);
 
-/*	if(qry->Exclude)
-	{
-	    ok = ajFalse;
-	    wildname = ajStrNew();
-	    name     = ajStrNew();
-	    while(!ok)
-	    {
-		ajStrAssignS(&name,qryd->files[i]);
-		ajFilenameTrimPath(&name);
-		handle = ajStrTokenNewC(qry->Exclude," \n");
-		found = ajFalse;
-		while(ajStrTokenNextParseC(&handle," \n",&wildname))
-		    if(ajStrMatchWildS(name,wildname))
-		    {
-			found = ajTrue;
-			break;
-		    }
-		ajStrTokenDel(&handle);
-		if(!found)
-		    ok = ajTrue;
-		else
-		{
-		    ++i;
-		    if(!qryd->files[i])
-			ok = ajTrue;
-		}
-	    }
+/*      if(qry->Exclude)
+        {
+        ok = ajFalse;
+        wildname = ajStrNew();
+        name     = ajStrNew();
+        while(!ok)
+        {
+        ajStrAssignS(&name,qryd->files[i]);
+        ajFilenameTrimPath(&name);
+        handle = ajStrTokenNewC(qry->Exclude," \n");
+        found = ajFalse;
+        while(ajStrTokenNextParseC(&handle," \n",&wildname))
+        if(ajStrMatchWildS(name,wildname))
+        {
+        found = ajTrue;
+        break;
+        }
+        ajStrTokenDel(&handle);
+        if(!found)
+        ok = ajTrue;
+        else
+        {
+        ++i;
+        if(!qryd->files[i])
+        ok = ajTrue;
+        }
+        }
 
-	    ajStrDel(&wildname);
-	    ajStrDel(&name);
-	}
+        ajStrDel(&wildname);
+        ajStrDel(&name);
+        }
 */
 
-	if(!qryd->files[i])
-	{
-	    ajDebug("seqEmbossGcgAll finished\n");
-	    i=0;
+        if(!qryd->files[i])
+        {
+            ajDebug("seqEmbossGcgAll finished\n");
+            i=0;
 
-	    while(qryd->files[i])
-	    {
-		ajStrDel(&qryd->files[i]);
-		ajStrDel(&qryd->reffiles[i]);
-		++i;
-	    }
+            while(qryd->files[i])
+            {
+                ajStrDel(&qryd->files[i]);
+                ajStrDel(&qryd->reffiles[i]);
+                ++i;
+            }
 
-	    AJFREE(qryd->files);
-	    AJFREE(qryd->reffiles);
-	    
-	    AJFREE(qry->QryData);
-	    qry->QryData = NULL;
+            AJFREE(qryd->files);
+            AJFREE(qryd->reffiles);
 
-	    return ajFalse;
-	}
+            AJFREE(qry->QryData);
+            qry->QryData = NULL;
 
-
-	qryd->libs = ajFileNewInNameS(qryd->files[i]);
-
-	if(!qryd->libs)
-	{
-	    ajDebug("seqEmbossGcgAll: cannot open sequence file\n");
-
-	    return ajFalse;
-	}
+            return ajFalse;
+        }
 
 
-	qryd->libr = ajFileNewInNameS(qryd->reffiles[i]);
+        qryd->libs = ajFileNewInNameS(qryd->files[i]);
 
-	if(!qryd->libr)
-	{
-	    ajDebug("seqEmbossGcgAll: cannot open reference file\n");
+        if(!qryd->libs)
+        {
+            ajDebug("seqEmbossGcgAll: cannot open sequence file\n");
 
-	    return ajFalse;
-	}
+            return ajFalse;
+        }
+
+
+        qryd->libr = ajFileNewInNameS(qryd->reffiles[i]);
+
+        if(!qryd->libr)
+        {
+            ajDebug("seqEmbossGcgAll: cannot open reference file\n");
+
+            return ajFalse;
+        }
     }
 
     seqEmbossGcgLoadBuff(seqin);
 
     if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+        qry->QryDone = ajTrue;
 
     return ajTrue;
 }
@@ -4322,16 +2326,16 @@ static AjBool seqEmbossGcgAll(AjPSeqin seqin)
 
 static void seqEmbossGcgLoadBuff(AjPSeqin seqin)
 {
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPEmbossQry qryd;
 
-    qry  = seqin->Query;
+    qry  = seqin->Input->Query;
     qryd = qry->QryData;
 
     ajDebug("seqEmbossGcgLoadBuff\n");
 
     if(!qry->QryData)
-	ajFatal("seqEmbossGcgLoadBuff Query Data not initialised");
+        ajFatal("seqEmbossGcgLoadBuff Query Data not initialised");
 
     /* copy all the ref data */
 
@@ -4340,10 +2344,10 @@ static void seqEmbossGcgLoadBuff(AjPSeqin seqin)
     /* write the sequence (do we care about the format?) */
     seqEmbossGcgReadSeq(seqin);
 
-    /* ajFilebuffTraceFull(seqin->Filebuff, 9999, 100); */
+    /* ajFilebuffTraceFull(seqin->Input->Filebuff, 9999, 100); */
 
     if(!qryd->libr)
-	ajFileClose(&qryd->libs);
+        ajFileClose(&qryd->libs);
 
     return;
 }
@@ -4363,7 +2367,7 @@ static void seqEmbossGcgLoadBuff(AjPSeqin seqin)
 static AjBool seqEmbossGcgReadRef(AjPSeqin seqin)
 {
     AjPStr line = NULL;
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPEmbossQry qryd;
     ajlong rpos;
     AjPStr id       = NULL;
@@ -4373,101 +2377,101 @@ static AjBool seqEmbossGcgReadRef(AjPSeqin seqin)
     AjBool testcontinue    = ajFalse;
     char *p = NULL;
 
-    qry  = seqin->Query;
+    qry  = seqin->Input->Query;
     qryd = qry->QryData;
 
     if(!seqRegGcgRefId)
-	seqRegGcgRefId =ajRegCompC("^>...([^ \n]+)");
+        seqRegGcgRefId =ajRegCompC("^>...([^ \n]+)");
 
     if(!seqRegGcgSplit)
-	seqRegGcgSplit =ajRegCompC("_0+$");
+        seqRegGcgSplit =ajRegCompC("_0+$");
 
-    if(!ajReadline(qryd->libr, &line))	/* end of file */
-	return ajFalse;
+    if(!ajReadline(qryd->libr, &line))  /* end of file */
+        return ajFalse;
 
-    if(ajStrGetCharFirst(line) != '>')	/* not start of entry */
-	ajFatal("seqGcgReadRef bad entry start:\n'%S'", line);
+    if(ajStrGetCharFirst(line) != '>')  /* not start of entry */
+        ajFatal("seqGcgReadRef bad entry start:\n'%S'", line);
 
-    if(ajStrGetCharPos(line, 3) == ';')	/* PIR entry */
-	ispir = ajTrue;
+    if(ajStrGetCharPos(line, 3) == ';') /* PIR entry */
+        ispir = ajTrue;
 
     if(ispir)
-	ajFilebuffLoadS(seqin->Filebuff, line);
+        ajFilebuffLoadS(seqin->Input->Filebuff, line);
 
 
     if(ajRegExec(seqRegGcgRefId, line))
     {
-	continued = ajFalse;
-	ajRegSubI(seqRegGcgRefId, 1, &id);
+        continued = ajFalse;
+        ajRegSubI(seqRegGcgRefId, 1, &id);
 
-	if(ajRegExec(seqRegGcgSplit,id))
-	{
-	    continued = ajTrue;
-	    p = ajStrGetuniquePtr(&id);
-	    p = strrchr(p,(ajint)'_');
-	    *(++p)='\0';
-	    ajStrSetValid(&id);
-	}
+        if(ajRegExec(seqRegGcgSplit,id))
+        {
+            continued = ajTrue;
+            p = ajStrGetuniquePtr(&id);
+            p = strrchr(p,(ajint)'_');
+            *(++p)='\0';
+            ajStrSetValid(&id);
+        }
     }
     else
     {
-	ajDebug("seqEmbossGcgReadRef bad ID line\n'%S'\n", line);
-	ajFatal("seqEmbossGcgReadRef bad ID line\n'%S'\n", line);
+        ajDebug("seqEmbossGcgReadRef bad ID line\n'%S'\n", line);
+        ajFatal("seqEmbossGcgReadRef bad ID line\n'%S'\n", line);
     }
 
 
 
-    if(!ajReadline(qryd->libr, &line))	/* blank desc line */
+    if(!ajReadline(qryd->libr, &line))  /* blank desc line */
 
-	return ajFalse;
+        return ajFalse;
 
     if(ispir)
-	ajFilebuffLoadS(seqin->Filebuff, line);
+        ajFilebuffLoadS(seqin->Input->Filebuff, line);
 
 
     rpos = ajFileResetPos(qryd->libr);
 
     while(ajReadline(qryd->libr, &line))
     {
-					/* end of file */
-	if(ajStrGetCharFirst(line) == '>')
-	{				/* start of next entry */
-	    /* skip over split entries so it can be used for "all" */
+        /* end of file */
+        if(ajStrGetCharFirst(line) == '>')
+        {                               /* start of next entry */
+            /* skip over split entries so it can be used for "all" */
 
-	    if(continued)
-	    {
-		testcontinue=ajTrue;
-		ajRegExec(seqRegGcgRefId, line);
-		ajRegSubI(seqRegGcgRefId, 1, &idc);
+            if(continued)
+            {
+                testcontinue=ajTrue;
+                ajRegExec(seqRegGcgRefId, line);
+                ajRegSubI(seqRegGcgRefId, 1, &idc);
 
-		if(!ajStrPrefixS(idc,id))
-		{
-		    ajFileSeek(qryd->libr, rpos, 0);
-		    ajStrDel(&line);
-		    ajStrDel(&id);
-		    ajStrDel(&idc);
+                if(!ajStrPrefixS(idc,id))
+                {
+                    ajFileSeek(qryd->libr, rpos, 0);
+                    ajStrDel(&line);
+                    ajStrDel(&id);
+                    ajStrDel(&idc);
 
-		    return ajTrue;
-		}
-	    }
-	    else
-	    {
-		ajFileSeek(qryd->libr, rpos, 0);
-		ajStrDel(&line);
-		ajStrDel(&id);
-		ajStrDel(&idc);
+                    return ajTrue;
+                }
+            }
+            else
+            {
+                ajFileSeek(qryd->libr, rpos, 0);
+                ajStrDel(&line);
+                ajStrDel(&id);
+                ajStrDel(&idc);
 
-		return ajTrue;
-	    }
-	}
-	rpos = ajFileResetPos(qryd->libr);
+                return ajTrue;
+            }
+        }
+        rpos = ajFileResetPos(qryd->libr);
 
 
-	if(!testcontinue)
-	{
-	    ajStrExchangeCC(&line, ". .", "..");
-	    ajFilebuffLoadS(seqin->Filebuff, line);
-	}
+        if(!testcontinue)
+        {
+            ajStrExchangeCC(&line, ". .", "..");
+            ajFilebuffLoadS(seqin->Input->Filebuff, line);
+        }
     }
 
 
@@ -4497,7 +2501,7 @@ static AjBool seqEmbossGcgReadRef(AjPSeqin seqin)
 static AjBool seqEmbossGcgReadSeq(AjPSeqin seqin)
 {
     AjPStr line = NULL;
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPEmbossQry qryd;
     AjPStr gcgtype    = NULL;
     AjPStr tmpstr     = NULL;
@@ -4515,66 +2519,66 @@ static AjBool seqEmbossGcgReadSeq(AjPSeqin seqin)
     AjBool continued = ajFalse;
 
 
-    qry  = seqin->Query;
+    qry  = seqin->Input->Query;
     qryd = qry->QryData;
 
     if(!seqRegGcgId)
     {
-	seqRegGcgId =ajRegCompC("^>...([^ ]+) +(Dummy Header|[^ ]+) +"
-				"([^ ]+) +([^ ]+) +([0-9]+)");
-	seqRegGcgId2=ajRegCompC("^>[PF]1;([^ ]+)");
+        seqRegGcgId =ajRegCompC("^>...([^ ]+) +(Dummy Header|[^ ]+) +"
+                                "([^ ]+) +([^ ]+) +([0-9]+)");
+        seqRegGcgId2=ajRegCompC("^>[PF]1;([^ ]+)");
     }
 
     if(!seqRegGcgSplit)
-	seqRegGcgSplit =ajRegCompC("_0+$");
+        seqRegGcgSplit =ajRegCompC("_0+$");
 
     ajDebug("seqEmbossGcgReadSeq pos: %Ld\n", ajFileResetPos(qryd->libs));
 
-    if(!ajReadline(qryd->libs, &line))	/* end of file */
-	return ajFalse;
+    if(!ajReadline(qryd->libs, &line))  /* end of file */
+        return ajFalse;
 
     ajDebug("test ID line\n'%S'\n", line);
 
     if(ajRegExec(seqRegGcgId, line))
     {
-	continued = ajFalse;
-	ajRegSubI(seqRegGcgId, 3, &gcgtype);
-	ajRegSubI(seqRegGcgId, 5, &tmpstr);
-	ajRegSubI(seqRegGcgId, 1, &id);
+        continued = ajFalse;
+        ajRegSubI(seqRegGcgId, 3, &gcgtype);
+        ajRegSubI(seqRegGcgId, 5, &tmpstr);
+        ajRegSubI(seqRegGcgId, 1, &id);
 
-	if(ajRegExec(seqRegGcgSplit, id))
-	{
-	    continued = ajTrue;
-	    p = ajStrGetuniquePtr(&id);
-	    p = strrchr(p,(ajint)'_');
-	    *(++p)='\0';
-	    ajStrSetValid(&id);
+        if(ajRegExec(seqRegGcgSplit, id))
+        {
+            continued = ajTrue;
+            p = ajStrGetuniquePtr(&id);
+            p = strrchr(p,(ajint)'_');
+            *(++p)='\0';
+            ajStrSetValid(&id);
 
-	    if(!contseq)
-		contseq = ajStrNew();
+            if(!contseq)
+                contseq = ajStrNew();
 
-	    if(!dstr)
-		dstr = ajStrNew();
-	}
+            if(!dstr)
+                dstr = ajStrNew();
+        }
 
-	ajStrToInt(tmpstr, &gcglen);
+        ajStrToInt(tmpstr, &gcglen);
     }
     else if(ajRegExec(seqRegGcgId2, line))
     {
-	ajStrAssignC(&gcgtype, "ASCII");
-	ajRegSubI(seqRegGcgId, 1, &tmpstr);
-	ispir = ajTrue;
+        ajStrAssignC(&gcgtype, "ASCII");
+        ajRegSubI(seqRegGcgId, 1, &tmpstr);
+        ispir = ajTrue;
     }
     else
     {
-	ajDebug("seqEmbossGcgReadSeq bad ID line\n'%S'\n", line);
-	ajFatal("seqEmbossGcgReadSeq bad ID line\n'%S'\n", line);
+        ajDebug("seqEmbossGcgReadSeq bad ID line\n'%S'\n", line);
+        ajFatal("seqEmbossGcgReadSeq bad ID line\n'%S'\n", line);
 
-	return ajFalse;
+        return ajFalse;
     }
 
-    if(!ajReadline(qryd->libs, &line))	/* desc line */
-	return ajFalse;
+    if(!ajReadline(qryd->libs, &line))  /* desc line */
+        return ajFalse;
 
     /*
     ** need to pick up the length and type, and read to the end of sequence
@@ -4584,114 +2588,114 @@ static AjBool seqEmbossGcgReadSeq(AjPSeqin seqin)
 
     if(ispir)
     {
-	spos = ajFileResetPos(qryd->libs);
+        spos = ajFileResetPos(qryd->libs);
 
-	while(ajReadline(qryd->libs, &line))
-	{				/* end of file */
-	    if(ajStrGetCharFirst(line) == '>')
-	    {				/* start of next entry */
-		ajFileSeek(qryd->libs, spos, 0);
-		break;
-	    }
+        while(ajReadline(qryd->libs, &line))
+        {                               /* end of file */
+            if(ajStrGetCharFirst(line) == '>')
+            {                           /* start of next entry */
+                ajFileSeek(qryd->libs, spos, 0);
+                break;
+            }
 
-	    spos = ajFileResetPos(qryd->libs);
-	    ajFilebuffLoadS(seqin->Filebuff, line);
-	}
+            spos = ajFileResetPos(qryd->libs);
+            ajFilebuffLoadS(seqin->Input->Filebuff, line);
+        }
     }
     else
     {
-	ajStrSetRes(&seqin->Inseq, gcglen+3);
-	rblock = gcglen;
+        ajStrSetRes(&seqin->Inseq, gcglen+3);
+        rblock = gcglen;
 
-	if(ajStrGetCharFirst(gcgtype) == '2')
-	    rblock = (rblock+3)/4;
+        if(ajStrGetCharFirst(gcgtype) == '2')
+            rblock = (rblock+3)/4;
 
-	if(!ajReadbinBinary(qryd->libs, rblock, 1,
+        if(!ajReadbinBinary(qryd->libs, rblock, 1,
                             ajStrGetuniquePtr(&seqin->Inseq)))
-	    ajFatal("error reading file %F", qryd->libs);
+            ajFatal("error reading file %F", qryd->libs);
 
-	/* convert 2bit to ascii */
-	if(ajStrGetCharFirst(gcgtype) == '2')
-	    seqGcgBinDecode(&seqin->Inseq, gcglen);
-	else if(ajStrGetCharFirst(gcgtype) == 'A')
-	{
-	    /* are seq chars OK? */
-	    ajStrSetValidLen(&seqin->Inseq, gcglen);
-	}
-	else
-	{
-	    ajRegSubI(seqRegGcgId, 1, &tmpstr);
-	    ajFatal("Unknown GCG entry type '%S', entry name '%S'",
-		    gcgtype, tmpstr);
-	}
+        /* convert 2bit to ascii */
+        if(ajStrGetCharFirst(gcgtype) == '2')
+            seqGcgBinDecode(&seqin->Inseq, gcglen);
+        else if(ajStrGetCharFirst(gcgtype) == 'A')
+        {
+            /* are seq chars OK? */
+            ajStrSetValidLen(&seqin->Inseq, gcglen);
+        }
+        else
+        {
+            ajRegSubI(seqRegGcgId, 1, &tmpstr);
+            ajFatal("Unknown GCG entry type '%S', entry name '%S'",
+                    gcgtype, tmpstr);
+        }
 
-	if(!ajReadline(qryd->libs, &line)) /* newline at end */
-	    ajFatal("error reading file %F", qryd->libs);
+        if(!ajReadline(qryd->libs, &line)) /* newline at end */
+            ajFatal("error reading file %F", qryd->libs);
 
-	if(continued)
-	{
-	    spos = ajFileResetPos(qryd->libs);
+        if(continued)
+        {
+            spos = ajFileResetPos(qryd->libs);
 
-	    while(ajReadline(qryd->libs,&line))
-	    {
-		ajRegExec(seqRegGcgId, line);
-		ajRegSubI(seqRegGcgId, 5, &tmpstr);
-		ajRegSubI(seqRegGcgId, 1, &idc);
+            while(ajReadline(qryd->libs,&line))
+            {
+                ajRegExec(seqRegGcgId, line);
+                ajRegSubI(seqRegGcgId, 5, &tmpstr);
+                ajRegSubI(seqRegGcgId, 1, &idc);
 
-		if(!ajStrPrefixS(idc,id))
-		{
-		    ajFileSeek(qryd->libs, spos, 0);
-		    break;
-		}
+                if(!ajStrPrefixS(idc,id))
+                {
+                    ajFileSeek(qryd->libs, spos, 0);
+                    break;
+                }
 
-		ajStrToInt(tmpstr, &gcglen);
+                ajStrToInt(tmpstr, &gcglen);
 
-		if(!ajReadline(qryd->libs, &dstr)) /* desc line */
-		    return ajFalse;
+                if(!ajReadline(qryd->libs, &dstr)) /* desc line */
+                    return ajFalse;
 
-		ajStrSetRes(&contseq, gcglen+3);
+                ajStrSetRes(&contseq, gcglen+3);
 
-		rblock = gcglen;
-		if(ajStrGetCharFirst(gcgtype) == '2')
-		    rblock = (rblock+3)/4;
+                rblock = gcglen;
+                if(ajStrGetCharFirst(gcgtype) == '2')
+                    rblock = (rblock+3)/4;
 
-		if(!ajReadbinBinary(qryd->libs, rblock, 1,
+                if(!ajReadbinBinary(qryd->libs, rblock, 1,
                                     ajStrGetuniquePtr(&contseq)))
-		    ajFatal("error reading file %F", qryd->libs);
+                    ajFatal("error reading file %F", qryd->libs);
 
-		/* convert 2bit to ascii */
-		if(ajStrGetCharFirst(gcgtype) == '2')
-		    seqGcgBinDecode(&contseq, gcglen);
-		else if(ajStrGetCharFirst(gcgtype) == 'A')
-		{
-		    /* are seq chars OK? */
-		    ajStrSetValidLen(&contseq, gcglen);
-		}
-		else
-		{
-		    ajRegSubI(seqRegGcgId, 1, &tmpstr);
-		    ajFatal("Unknown GCG entry: name '%S'",
-			    tmpstr);
-		}
+                /* convert 2bit to ascii */
+                if(ajStrGetCharFirst(gcgtype) == '2')
+                    seqGcgBinDecode(&contseq, gcglen);
+                else if(ajStrGetCharFirst(gcgtype) == 'A')
+                {
+                    /* are seq chars OK? */
+                    ajStrSetValidLen(&contseq, gcglen);
+                }
+                else
+                {
+                    ajRegSubI(seqRegGcgId, 1, &tmpstr);
+                    ajFatal("Unknown GCG entry: name '%S'",
+                            tmpstr);
+                }
 
-		if(!ajReadline(qryd->libs, &line)) /* newline at end */
-		    ajFatal("error reading file %F", qryd->libs);
+                if(!ajReadline(qryd->libs, &line)) /* newline at end */
+                    ajFatal("error reading file %F", qryd->libs);
 
-		if(!seqRegGcgCont)
-		    seqRegGcgCont = ajRegCompC("^([^ ]+) +([^ ]+) +([^ ]+) +"
-					       "([^ ]+) +([^ ]+) +([^ ]+) "
+                if(!seqRegGcgCont)
+                    seqRegGcgCont = ajRegCompC("^([^ ]+) +([^ ]+) +([^ ]+) +"
+                                               "([^ ]+) +([^ ]+) +([^ ]+) "
                                                "+([^ ]+) +"
-					       "([^ ]+) +([0-9]+)");
-		
-		ajRegExec(seqRegGcgCont, dstr);
-		ajRegSubI(seqRegGcgCont, 9, &tmpstr);
-		ajStrToInt(tmpstr, &pos);
-		seqin->Inseq->Len = pos-1;
+                                               "([^ ]+) +([0-9]+)");
 
-		ajStrAppendS(&seqin->Inseq,contseq);
-		spos = ajFileResetPos(qryd->libs);
-	    }
-	}
+                ajRegExec(seqRegGcgCont, dstr);
+                ajRegSubI(seqRegGcgCont, 9, &tmpstr);
+                ajStrToInt(tmpstr, &pos);
+                seqin->Inseq->Len = pos-1;
+
+                ajStrAppendS(&seqin->Inseq,contseq);
+                spos = ajFileResetPos(qryd->libs);
+            }
+        }
     }
 
     ajStrDel(&gcgtype);
@@ -4714,45 +2718,44 @@ static AjBool seqEmbossGcgReadSeq(AjPSeqin seqin)
 **
 ** Clears qryData structure when finished.
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
 ******************************************************************************/
 
-static AjBool seqCdQryReuse(AjPSeqQuery qry)
+static AjBool seqCdQryReuse(AjPQuery qry)
 {
     SeqPCdQry qryd;
 
     qryd = qry->QryData;
 
     if(!qry || !qryd)
-	return ajFalse;
+        return ajFalse;
 
 
-    /*    ajDebug("qryd->list  %x\n",qryd->List);*/
-    if(!qryd->List)
+    /*    ajDebug("qry->ResultsList  %x\n",qry->ResultsList);*/
+    if(!qry->ResultsList)
     {
-	ajDebug("query data all finished\n");
-	AJFREE(qry->QryData);
-	qryd = NULL;
+        ajDebug("query data all finished\n");
+        AJFREE(qry->QryData);
+        qryd = NULL;
 
-	return ajFalse;
+        return ajFalse;
     }
     else
     {
-	ajDebug("reusing data from previous call %x\n", qry->QryData);
-	ajDebug("listlen  %d\n", ajListGetLength(qryd->List));
-	ajDebug("divfile '%S'\n", qryd->divfile);
-	ajDebug("idxfile '%S'\n", qryd->idxfile);
-	ajDebug("datfile '%S'\n", qryd->datfile);
-	ajDebug("seqfile '%S'\n", qryd->seqfile);
-	ajDebug("name    '%s'\n", qryd->name);
-	ajDebug("nameSize %d\n",  qryd->nameSize);
-	ajDebug("div      %d\n",  qryd->div);
-	ajDebug("maxdiv   %d\n",  qryd->maxdiv);
-	ajDebug("qryd->List length %d\n", ajListGetLength(qryd->List));
-	/*ajListTrace(qryd->List);*/
+        ajDebug("reusing data from previous call %x\n", qry->QryData);
+        ajDebug("listlen  %d\n", ajListGetLength(qry->ResultsList));
+        ajDebug("divfile '%S'\n", qryd->divfile);
+        ajDebug("idxfile '%S'\n", qryd->idxfile);
+        ajDebug("datfile '%S'\n", qryd->datfile);
+        ajDebug("seqfile '%S'\n", qryd->seqfile);
+        ajDebug("name    '%s'\n", qryd->name);
+        ajDebug("nameSize %d\n",  qryd->nameSize);
+        ajDebug("div      %d\n",  qryd->div);
+        ajDebug("maxdiv   %d\n",  qryd->maxdiv);
+        /*ajListTrace(qry->ResultsList);*/
     }
 
     return ajTrue;
@@ -4765,13 +2768,13 @@ static AjBool seqCdQryReuse(AjPSeqQuery qry)
 **
 ** Opens everything for a new CD query
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
 ******************************************************************************/
 
-static AjBool seqCdQryOpen(AjPSeqQuery qry)
+static AjBool seqCdQryOpen(AjPQuery qry)
 {
     SeqPCdQry qryd;
 
@@ -4782,34 +2785,33 @@ static AjBool seqCdQryOpen(AjPSeqQuery qry)
 
     if(!ajStrGetLen(qry->IndexDir))
     {
-	ajDebug("no indexdir defined for database '%S'\n", qry->DbName);
-	ajErr("no indexdir defined for database '%S'", qry->DbName);
+        ajDebug("no indexdir defined for database '%S'\n", qry->DbName);
+        ajErr("no indexdir defined for database '%S'", qry->DbName);
 
-	return ajFalse;
+        return ajFalse;
     }
 
-    ajDebug("directory '%S' entry '%S' acc '%S' hasacc:%B\n",
-	    qry->IndexDir, qry->Id, qry->Acc, qry->HasAcc);
+    ajDebug("directory '%S' fields: %u hasacc:%B\n",
+            qry->IndexDir, ajListGetLength(qry->QueryFields), qry->HasAcc);
 
     qry->QryData = AJNEW0(qryd);
-    qryd->List = ajListNew();
     AJNEW0(qryd->idxLine);
     AJNEW0(qryd->trgLine);
     qryd->dfp = seqCdFileOpen(qry->IndexDir, "division.lkp", &qryd->divfile);
 
     if(!qryd->dfp)
     {
-	ajWarn("Cannot open division file '%S' for database '%S'",
-	       qryd->divfile, qry->DbName);
+        ajWarn("Cannot open division file '%S' for database '%S'",
+               qryd->divfile, qry->DbName);
 
-	return ajFalse;
+        return ajFalse;
     }
 
 
     qryd->nameSize = qryd->dfp->RecSize - 2;
     qryd->maxdiv   = qryd->dfp->NRecords;
     ajDebug("nameSize: %d maxdiv: %d\n",
-	    qryd->nameSize, qryd->maxdiv);
+            qryd->nameSize, qryd->maxdiv);
     qryd->name = ajCharNewRes(qryd->nameSize+1);
     name = ajCharNewRes(qryd->nameSize+1);
     AJCNEW0(qryd->Skip, qryd->maxdiv);
@@ -4817,23 +2819,23 @@ static AjBool seqCdQryOpen(AjPSeqQuery qry)
 
     for(i=0; i < qryd->maxdiv; i++)
     {
-	ajReadbinInt2(qryd->dfp->File, &j);
-	ajReadbinCharTrim(qryd->dfp->File, qryd->nameSize, name);
+        ajReadbinInt2(qryd->dfp->File, &j);
+        ajReadbinCharTrim(qryd->dfp->File, qryd->nameSize, name);
 
-	ajStrAssignC(&fullName, name);
-	ajFilenameReplacePathS(&fullName, qry->Directory);
+        ajStrAssignC(&fullName, name);
+        ajFilenameReplacePathS(&fullName, qry->Directory);
 
-	if(!ajFilenameTestInclude(fullName, qry->Exclude, qry->Filename))
-	    qryd->Skip[i] = ajTrue;
+        if(!ajFilenameTestInclude(fullName, qry->Exclude, qry->Filename))
+            qryd->Skip[i] = ajTrue;
     }
 
     qryd->ifp = seqCdFileOpen(qry->IndexDir, "entrynam.idx", &qryd->idxfile);
 
     if(!qryd->ifp)
     {
-	ajErr("Cannot open index file '%S'", qryd->idxfile);
+        ajErr("Cannot open index file '%S'", qryd->idxfile);
 
-	return ajFalse;
+        return ajFalse;
     }
 
     ajStrDel(&fullName);
@@ -4849,322 +2851,185 @@ static AjBool seqCdQryOpen(AjPSeqQuery qry)
 **
 ** Queries for a single entry in an EMBLCD index
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
 ******************************************************************************/
 
-static AjBool seqCdQryEntry(AjPSeqQuery qry)
+static AjBool seqCdQryEntry(AjPQuery qry)
 {
     SeqPCdEntry entry = NULL;
     ajint ipos = -1;
     ajint trghit;
     SeqPCdQry qryd;
+    const AjPList fdlist;
+    AjIList iter;
+    AjPQueryField fd;
+    AjPStr qrystr = NULL;
+    ajuint i;
+    ajuint ii;
+    ajint j;
 
-    ajDebug("entry id: '%S' acc: '%S' hasacc:%B\n",
-	    qry->Id, qry->Acc, qry->HasAcc);
+    const char* embossfields[] = {
+        "id", "acc",   "sv",    "org",   "key",     "des", "gi", NULL
+    };
+    const char* emblcdfields[] = {
+        NULL, "acnum", "seqvn", "taxon", "keyword", "des", "gi", NULL
+    };
+
+    fdlist = ajQueryGetallFields(qry);
+
+    ajQueryGetQuery(qry, &qrystr);
+
+    ajDebug("seqCdQryEntry %S hasacc:%B\n",
+            qrystr , qry->HasAcc);
+    ajStrDel(&qrystr);
 
     qryd = qry->QryData;
+    iter= ajListIterNewread(fdlist);
 
-    if(ajStrGetLen(qry->Id))
-    {					/* search by ID */
-	ipos = seqCdIdxSearch(qryd->idxLine, qry->Id, qryd->ifp);
-
-	if(ipos >= 0)
-	{
-	    if(!qryd->Skip[qryd->idxLine->DivCode-1])
-	    {
-		AJNEW0(entry);
-		entry->div = qryd->idxLine->DivCode;
-		entry->annoff = qryd->idxLine->AnnOffset;
-		entry->seqoff = qryd->idxLine->SeqOffset;
-		ajListPushAppend(qryd->List, (void*)entry);
-	    }
-	    else
-		ajDebug("SKIP: '%S' [file %d]\n",
-			qry->Id, qryd->idxLine->DivCode);
-	}
-    }
-
-    if(ipos < 0 &&		     /* if needed, search by accnum */
-       qry->HasAcc &&
-       ajStrGetLen(qry->Acc) &&
-       seqCdTrgOpen(qry->IndexDir, "acnum",
-		    &qryd->trgfp, &qryd->hitfp))
+    while(!ajListIterDone(iter))
     {
-	trghit = seqCdTrgSearch(qryd->trgLine, qry->Acc, qryd->trgfp);
+        fd = ajListIterGet(iter);
+        ajDebug("query link: %u field '%S' wild '%S'\n",
+                fd->Link, fd->Field, fd->Wildquery);
 
-	if(trghit >= 0)
-	{
-	    ajint i;
-	    ajint j;
-	    seqCdFileSeek(qryd->hitfp, qryd->trgLine->FirstHit-1);
-	    ajDebug("acnum First: %d Count: %d\n",
-		    qryd->trgLine->FirstHit, qryd->trgLine->NHits);
-	    ipos = qryd->trgLine->FirstHit;
+        if((fd->Link == AJQLINK_ELSE) && ajListGetLength(qry->ResultsList))
+            continue;
 
-	    for(i = 0; i < (ajint) qryd->trgLine->NHits; i++)
-	    {
-		ajReadbinInt(qryd->hitfp->File, &j);
-		j--;
-		ajDebug("hitlist[%d] entry = %d\n", i, j);
-		seqCdIdxLine(qryd->idxLine, j, qryd->ifp);
+        for(i=0; embossfields[i]; i++)
+        {
+            ajDebug("test field[%u] '%S' = '%s'\n",
+                    i, fd->Field, emblcdfields[i]);
+            if(ajStrMatchC(fd->Field, embossfields[i]))
+            {
+                ajDebug("match field[%u] '%S' = '%s'\n",
+                        i, fd->Field, emblcdfields[i]);
+                if(!emblcdfields[i]) /* ID index */
+                {
+                    ipos = seqCdIdxSearch(qryd->idxLine,
+                                          fd->Wildquery, qryd->ifp);
 
-		if(!qryd->Skip[qryd->idxLine->DivCode-1])
-		{
-		    AJNEW0(entry);
-		    entry->div = qryd->idxLine->DivCode;
-		    entry->annoff = qryd->idxLine->AnnOffset;
-		    entry->seqoff = qryd->idxLine->SeqOffset;
-		    ajListPushAppend(qryd->List, (void*)entry);
-		}
-		else
-		    ajDebug("SKIP: accnum '%S' [file %d]\n",
-			    qry->Acc, qryd->idxLine->DivCode);
-	    }
-	}
+                    if(ipos >= 0)
+                    {
+                        if(!qryd->Skip[qryd->idxLine->DivCode-1])
+                        {
+                            AJNEW0(entry);
+                            entry->div = qryd->idxLine->DivCode;
+                            entry->annoff = qryd->idxLine->AnnOffset;
+                            entry->seqoff = qryd->idxLine->SeqOffset;
+                            ajListPushAppend(qry->ResultsList, (void*)entry);
+                        }
+                        else
+                            ajDebug("SKIP: '%S' [file %d]\n",
+                                    fd->Wildquery, qryd->idxLine->DivCode);
+                    }
+                }
+                else            /* target/hit index */
+                {
+                    if(seqCdTrgOpen(qry->IndexDir, emblcdfields[i],
+                                    &qryd->trgfp, &qryd->hitfp))
+                    {
+                        trghit = seqCdTrgSearch(qryd->trgLine,
+                                                fd->Wildquery, qryd->trgfp);
 
-	seqCdTrgClose(&qryd->trgfp, &qryd->hitfp);
-	ajStrDel(&qryd->trgLine->Target);
+                        if(trghit >= 0)
+                        {
+                            seqCdFileSeek(qryd->hitfp,
+                                          qryd->trgLine->FirstHit-1);
+                            ajDebug("%s First: %d Count: %d\n",
+                                    emblcdfields[i],
+                                    qryd->trgLine->FirstHit,
+                                    qryd->trgLine->NHits);
+                            ipos = qryd->trgLine->FirstHit;
+
+                            for(ii = 0; ii < qryd->trgLine->NHits; ii++)
+                            {
+                                ajReadbinInt(qryd->hitfp->File, &j);
+                                j--;
+                                ajDebug("hitlist[%u] entry = %d\n", ii, j);
+                                seqCdIdxLine(qryd->idxLine, j, qryd->ifp);
+
+                                if(!qryd->Skip[qryd->idxLine->DivCode-1])
+                                {
+                                    AJNEW0(entry);
+                                    entry->div = qryd->idxLine->DivCode;
+                                    entry->annoff = qryd->idxLine->AnnOffset;
+                                    entry->seqoff = qryd->idxLine->SeqOffset;
+                                    ajListPushAppend(qry->ResultsList,
+                                                     (void*)entry);
+                                }
+                                else
+                                    ajDebug("SKIP: %s '%S' [file %d]\n",
+                                            emblcdfields[i],
+                                            fd->Wildquery,
+                                            qryd->idxLine->DivCode);
+                            }
+                        }
+
+                        seqCdTrgClose(&qryd->trgfp, &qryd->hitfp);
+                        ajStrDel(&qryd->trgLine->Target);
+                    }
+                }
+                break;
+            }
+        }
+        if(!embossfields[i])
+        {
+            if(seqCdTrgOpen(qry->IndexDir, MAJSTRGETPTR(fd->Field),
+                            &qryd->trgfp, &qryd->hitfp))
+            {
+                trghit = seqCdTrgSearch(qryd->trgLine,
+                                        fd->Wildquery, qryd->trgfp);
+
+                if(trghit >= 0)
+                {
+                    seqCdFileSeek(qryd->hitfp,
+                                  qryd->trgLine->FirstHit-1);
+                    ajDebug("%s First: %d Count: %d\n",
+                            fd->Field, qryd->trgLine->FirstHit,
+                            qryd->trgLine->NHits);
+                    ipos = qryd->trgLine->FirstHit;
+
+                    for(ii = 0; ii < qryd->trgLine->NHits; ii++)
+                    {
+                        ajReadbinInt(qryd->hitfp->File, &j);
+                        j--;
+                        ajDebug("hitlist[%u] entry = %d\n", ii, j);
+                        seqCdIdxLine(qryd->idxLine, j, qryd->ifp);
+
+                        if(!qryd->Skip[qryd->idxLine->DivCode-1])
+                        {
+                            AJNEW0(entry);
+                            entry->div = qryd->idxLine->DivCode;
+                            entry->annoff = qryd->idxLine->AnnOffset;
+                            entry->seqoff = qryd->idxLine->SeqOffset;
+                            ajListPushAppend(qry->ResultsList, (void*)entry);
+                        }
+                        else
+                            ajDebug("SKIP: %S '%S' [file %d]\n",
+                                    fd->Field,
+                                    fd->Wildquery,
+                                    qryd->idxLine->DivCode);
+                    }
+                }
+
+                seqCdTrgClose(&qryd->trgfp, &qryd->hitfp);
+                ajStrDel(&qryd->trgLine->Target);
+            }
+        }
     }
 
-    /*
-     ** if needed, search by SeqVersion
-     */
-
-    if(ipos < 0 &&
-       ajStrGetLen(qry->Sv) &&
-       seqCdTrgOpen(qry->IndexDir, "seqvn",
-		    &qryd->trgfp, &qryd->hitfp))
-    {
-	trghit = seqCdTrgSearch(qryd->trgLine, qry->Sv, qryd->trgfp);
-
-	if(trghit >= 0)
-	{
-	    ajint i;
-	    ajint j;
-	    seqCdFileSeek(qryd->hitfp, qryd->trgLine->FirstHit-1);
-	    ajDebug("seqvn First: %d Count: %d\n",
-		    qryd->trgLine->FirstHit, qryd->trgLine->NHits);
-	    ipos = qryd->trgLine->FirstHit;
-
-	    for(i = 0; i < (ajint) qryd->trgLine->NHits; i++)
-	    {
-		ajReadbinInt(qryd->hitfp->File, &j);
-		j--;
-		ajDebug("hitlist[%d] entry = %d\n", i, j);
-		seqCdIdxLine(qryd->idxLine, j, qryd->ifp);
-
-		if(!qryd->Skip[qryd->idxLine->DivCode-1])
-		{
-		    AJNEW0(entry);
-		    entry->div = qryd->idxLine->DivCode;
-		    entry->annoff = qryd->idxLine->AnnOffset;
-		    entry->seqoff = qryd->idxLine->SeqOffset;
-		    ajListPushAppend(qryd->List, (void*)entry);
-		}
-		else
-		    ajDebug("SKIP: seqvn '%S' [file %d]\n",
-			    qry->Sv, qryd->idxLine->DivCode);
-	    }
-	}
-
-	seqCdTrgClose(&qryd->trgfp, &qryd->hitfp);
-	ajStrDel(&qryd->trgLine->Target);
-    }
-
-    /*
-     ** if needed, search by SeqVersion
-     */
-
-    if(ipos < 0 &&
-       ajStrGetLen(qry->Gi) &&
-       seqCdTrgOpen(qry->IndexDir, "gi",
-		    &qryd->trgfp, &qryd->hitfp))
-    {
-	trghit = seqCdTrgSearch(qryd->trgLine, qry->Gi, qryd->trgfp);
-
-	if(trghit >= 0)
-	{
-	    ajint i;
-	    ajint j;
-
-	    seqCdFileSeek(qryd->hitfp, qryd->trgLine->FirstHit-1);
-	    ajDebug("seqvn First: %d Count: %d\n",
-		    qryd->trgLine->FirstHit, qryd->trgLine->NHits);
-	    ipos = qryd->trgLine->FirstHit;
-
-	    for(i = 0; i < (ajint) qryd->trgLine->NHits; i++)
-	    {
-		ajReadbinInt(qryd->hitfp->File, &j);
-		j--;
-		ajDebug("hitlist[%d] entry = %d\n", i, j);
-		seqCdIdxLine(qryd->idxLine, j, qryd->ifp);
-
-		if(!qryd->Skip[qryd->idxLine->DivCode-1])
-		{
-		    AJNEW0(entry);
-		    entry->div = qryd->idxLine->DivCode;
-		    entry->annoff = qryd->idxLine->AnnOffset;
-		    entry->seqoff = qryd->idxLine->SeqOffset;
-		    ajListPushAppend(qryd->List, (void*)entry);
-		}
-		else
-		    ajDebug("SKIP: seqvn '%S' [file %d]\n",
-			    qry->Gi, qryd->idxLine->DivCode);
-	    }
-	}
-
-	seqCdTrgClose(&qryd->trgfp, &qryd->hitfp);
-	ajStrDel(&qryd->trgLine->Target);
-    }
-
-    /*
-     ** if needed, search by Description
-     */
-
-    if(ipos < 0 &&
-       ajStrGetLen(qry->Des) &&
-       seqCdTrgOpen(qry->IndexDir, "des",
-		    &qryd->trgfp, &qryd->hitfp))
-    {
-	trghit = seqCdTrgSearch(qryd->trgLine, qry->Des, qryd->trgfp);
-	if(trghit >= 0)
-	{
-	    ajint i;
-	    ajint j;
-
-	    seqCdFileSeek(qryd->hitfp, qryd->trgLine->FirstHit-1);
-	    ajDebug("des First: %d Count: %d\n",
-		    qryd->trgLine->FirstHit, qryd->trgLine->NHits);
-	    ipos = qryd->trgLine->FirstHit;
-
-	    for(i = 0; i < (ajint) qryd->trgLine->NHits; i++)
-	    {
-		ajReadbinInt(qryd->hitfp->File, &j);
-		j--;
-		ajDebug("hitlist[%d] entry = %d\n", i, j);
-		seqCdIdxLine(qryd->idxLine, j, qryd->ifp);
-
-		if(!qryd->Skip[qryd->idxLine->DivCode-1])
-		{
-		    AJNEW0(entry);
-		    entry->div = qryd->idxLine->DivCode;
-		    entry->annoff = qryd->idxLine->AnnOffset;
-		    entry->seqoff = qryd->idxLine->SeqOffset;
-		    ajListPushAppend(qryd->List, (void*)entry);
-		}
-		else
-		    ajDebug("SKIP: des '%S' [file %d]\n",
-			    qry->Des, qryd->idxLine->DivCode);
-	    }
-	}
-
-	seqCdTrgClose(&qryd->trgfp, &qryd->hitfp);
-	ajStrDel(&qryd->trgLine->Target);
-    }
-
-    /*
-     ** if needed, search by Keyword
-     */
-
-    if(ipos < 0 &&
-       ajStrGetLen(qry->Key) &&
-       seqCdTrgOpen(qry->IndexDir, "keyword",
-		    &qryd->trgfp, &qryd->hitfp))
-    {
-	trghit = seqCdTrgSearch(qryd->trgLine, qry->Key, qryd->trgfp);
-
-	if(trghit >= 0)
-	{
-	    ajint i;
-	    ajint j;
-
-	    seqCdFileSeek(qryd->hitfp, qryd->trgLine->FirstHit-1);
-	    ajDebug("key First: %d Count: %d\n",
-		    qryd->trgLine->FirstHit, qryd->trgLine->NHits);
-	    ipos = qryd->trgLine->FirstHit;
-
-	    for(i = 0; i < (ajint) qryd->trgLine->NHits; i++)
-	    {
-		ajReadbinInt(qryd->hitfp->File, &j);
-		j--;
-		ajDebug("hitlist[%d] entry = %d\n", i, j);
-		seqCdIdxLine(qryd->idxLine, j, qryd->ifp);
-
-		if(!qryd->Skip[qryd->idxLine->DivCode-1])
-		{
-		    AJNEW0(entry);
-		    entry->div = qryd->idxLine->DivCode;
-		    entry->annoff = qryd->idxLine->AnnOffset;
-		    entry->seqoff = qryd->idxLine->SeqOffset;
-		    ajListPushAppend(qryd->List, (void*)entry);
-		}
-		else
-		    ajDebug("SKIP: key '%S' [file %d]\n",
-			    qry->Key, qryd->idxLine->DivCode);
-	    }
-	}
-
-	seqCdTrgClose(&qryd->trgfp, &qryd->hitfp);
-	ajStrDel(&qryd->trgLine->Target);
-    }
-
-    /*
-     ** if needed, search by Taxonomy
-     */
-
-    if(ipos < 0 &&
-       ajStrGetLen(qry->Org) &&
-       seqCdTrgOpen(qry->IndexDir, "taxon",
-		    &qryd->trgfp, &qryd->hitfp))
-    {
-	trghit = seqCdTrgSearch(qryd->trgLine, qry->Org, qryd->trgfp);
-
-	if(trghit >= 0)
-	{
-	    ajint i;
-	    ajint j;
-
-	    seqCdFileSeek(qryd->hitfp, qryd->trgLine->FirstHit-1);
-	    ajDebug("tax First: %d Count: %d\n",
-		    qryd->trgLine->FirstHit, qryd->trgLine->NHits);
-	    ipos = qryd->trgLine->FirstHit;
-
-	    for(i = 0; i < (ajint) qryd->trgLine->NHits; i++)
-	    {
-		ajReadbinInt(qryd->hitfp->File, &j);
-		j--;
-		ajDebug("hitlist[%d] entry = %d\n", i, j);
-		seqCdIdxLine(qryd->idxLine, j, qryd->ifp);
-
-		if(!qryd->Skip[qryd->idxLine->DivCode-1])
-		{
-		    AJNEW0(entry);
-		    entry->div = qryd->idxLine->DivCode;
-		    entry->annoff = qryd->idxLine->AnnOffset;
-		    entry->seqoff = qryd->idxLine->SeqOffset;
-		    ajListPushAppend(qryd->List, (void*)entry);
-		}
-		else
-		    ajDebug("SKIP: tax '%S' [file %d]\n",
-			    qry->Org, qryd->idxLine->DivCode);
-	    }
-	}
-
-	seqCdTrgClose(&qryd->trgfp, &qryd->hitfp);
-	ajStrDel(&qryd->trgLine->Target);
-    }
-
+    ajListIterDel(&iter);
     if(ipos < 0)
-	return ajFalse;
+        return ajFalse;
 
-    if(!ajListGetLength(qryd->List))
-	return ajFalse;
+    if(!ajListGetLength(qry->ResultsList))
+        return ajFalse;
 
     if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+        qry->QryDone = ajTrue;
 
     return ajTrue;
 }
@@ -5176,44 +3041,166 @@ static AjBool seqCdQryEntry(AjPSeqQuery qry)
 **
 ** Queries for one or more entries in an EMBLCD index
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
 ******************************************************************************/
 
-static AjBool seqCdQryQuery(AjPSeqQuery qry)
+static AjBool seqCdQryQuery(AjPQuery qry)
 {
-    SeqPCdQry qryd;
+    AjIList iter = NULL;
+    AjPQueryField field = NULL;
+
+    SeqPCdEntry newhit;
+    SeqPCdEntry *allhits = NULL;
+    ajulong** keys = NULL;
+
+    AjPTable newtable = NULL;
+
+    ajuint i;
+    ajuint lasthits = 0;
+    ajuint fdhits = 0;
+
+    ajulong *ikey = NULL;
+
+    ajuint ishift = sizeof(ajulong)/2;
 
     if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+        qry->QryDone = ajTrue;
 
-    if(ajStrGetLen(qry->Id))
-	if(seqCdIdxQuery(qry))
-	{
-	    qryd = qry->QryData;
-	    ajListSortUnique(qryd->List, seqCdEntryCmp, seqCdEntryDel);
+    ajTableSettypeUlong(qry->ResultsTable);
+    ajTableSetDestroyboth(qry->ResultsTable);
 
-	    return ajTrue;
-	}
+    iter = ajListIterNewread(qry->QueryFields);
 
-    if(ajStrGetLen(qry->Acc) ||
-       ajStrGetLen(qry->Sv) ||
-       ajStrGetLen(qry->Gi) ||
-       ajStrGetLen(qry->Des) ||
-       ajStrGetLen(qry->Key) ||
-       ajStrGetLen(qry->Org))
+    while(!ajListIterDone(iter))
     {
-	if(!seqCdTrgQuery(qry))
-	    return ajFalse;
+        field = ajListIterGet(iter);
 
-	qryd = qry->QryData;
-	ajListSortUnique(qryd->List, seqCdEntryCmp, seqCdEntryDel);
+        if((field->Link == AJQLINK_ELSE) && (lasthits > 0))
+        {
+            ajDebug("ELSE: lasthits:%u skip\n", lasthits);
+            continue;
+        }
 
-	return ajTrue;
+        if(ajStrMatchC(field->Field, "id"))
+            seqCdIdxQuery(qry, field->Wildquery);
+        else
+            seqCdTrgQuery(qry, field->Field, field->Wildquery);
+
+        fdhits = ajListGetLength(qry->ResultsList);
+
+        ajDebug("seqCdQryQuery hits: %u link: %u\n",
+                fdhits, field->Link);
+
+        switch(field->Link)
+        {
+            case AJQLINK_INIT:
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                {
+                    AJNEW(ikey);
+                    *ikey = (((ajulong)newhit->div) << ishift) +
+                        (ajulong)newhit->annoff;
+                    ajTablePutClean(qry->ResultsTable, ikey, newhit,
+                                    ajMemFree, ajMemFree);
+                    ikey = NULL;
+                }
+
+                break;
+
+            case AJQLINK_OR:
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                {
+                    AJNEW(ikey);
+                    *ikey = (((ajulong)newhit->div) << ishift) +
+                        (ajulong)newhit->annoff;
+                    ajTablePutClean(qry->ResultsTable, ikey, newhit,
+                                    ajMemFree, ajMemFree);
+                    ikey = NULL;
+                }
+                break;
+
+            case AJQLINK_AND:
+                newtable = ajTableulongNew(fdhits);
+                ajTableSetDestroyboth(newtable);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                {
+                    AJNEW(ikey);
+                    *ikey = (((ajulong)newhit->div) << ishift) +
+                        (ajulong)newhit->annoff;
+                    ajTablePutClean(newtable, ikey, newhit,
+                                    ajMemFree, ajMemFree);
+                    ikey = NULL;
+                }
+                ajTableMergeAnd(qry->ResultsTable, newtable);
+                ajTableDelValdel(&newtable, ajMemFree);
+                break;
+
+            case AJQLINK_EOR:
+            case AJQLINK_ELSE:
+                newtable = ajTableulongNew(fdhits);
+                ajTableSetDestroyboth(newtable);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                {
+                    AJNEW(ikey);
+                    *ikey = (((ajulong)newhit->div) << ishift) + newhit->annoff;
+                    ajTablePutClean(newtable, ikey, newhit,
+                                    ajMemFree, ajMemFree);
+                    ikey = NULL;
+                }
+
+                ajTableMergeEor(qry->ResultsTable, newtable);
+                ajTableDelValdel(&newtable, ajMemFree);
+                break;
+
+            case AJQLINK_NOT:
+                newtable = ajTableulongNew(fdhits);
+                ajTableSetDestroyboth(newtable);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                {
+                    AJNEW(ikey);
+                    *ikey = (((ajulong)newhit->div) << ishift) + newhit->annoff;
+                    ajTablePutClean(newtable, ikey, newhit,
+                                    ajMemFree, ajMemFree);
+                    ikey = NULL;
+                }
+                ajTableMergeNot(qry->ResultsTable, newtable);
+                ajTableDelValdel(&newtable, ajMemFree);
+                break;
+
+            default:
+                ajErr("Unexpected query link operator number '%u'",
+                      field->Link);
+                break;
+        }
+
+        lasthits = fdhits;
     }
 
+    ajListIterDel(&iter);
+
+    ajTableToarrayKeysValues(qry->ResultsTable, (void***) &keys,
+                             (void***)&allhits);
+    for(i=0; allhits[i]; i++)
+    {
+        AJFREE(keys[i]);
+        ajListPushAppend(qry->ResultsList, (void*) allhits[i]);
+    }
+    AJFREE(keys);
+
+    ajDebug("ajListSortUnique len:%u\n",
+            ajListGetLength(qry->ResultsList));
+    ajListSortUnique(qry->ResultsList,
+                     seqCdEntryCmp, seqCdEntryDel);
+
+    AJFREE(allhits);
+
+    ajDebug("seqCdQryQuery clear results table\n");
+    ajTableClear(qry->ResultsTable);
+
+    if(ajListGetLength(qry->ResultsList))
+        return ajTrue;
 
     return ajFalse;
 }
@@ -5240,12 +3227,12 @@ static int seqCdEntryCmp(const void* pa, const void* pb)
     b = *(SeqPCdEntry const *) pb;
 
     /*
-    ajDebug("seqCdEntryCmp %x %d %d : %x %d %d\n",
-	     a, a->div, a->annoff,
-	     b, b->div, b->annoff);
+      ajDebug("seqCdEntryCmp %x %d %d : %x %d %d\n",
+      a, a->div, a->annoff,
+      b, b->div, b->annoff);
     */
     if(a->div != b->div)
-	return (a->div - b->div);
+        return (a->div - b->div);
 
     return (a->annoff - b->annoff);
 }
@@ -5278,12 +3265,12 @@ static void seqCdEntryDel(void** pentry, void* cl)
 **
 ** Processes the next query for an EMBLCD index
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if successful
 ** @@
 ******************************************************************************/
 
-static AjBool seqCdQryNext(AjPSeqQuery qry)
+static AjBool seqCdQryNext(AjPQuery qry)
 {
     SeqPCdEntry entry;
     SeqPCdQry qryd;
@@ -5291,49 +3278,49 @@ static AjBool seqCdQryNext(AjPSeqQuery qry)
 
     qryd = qry->QryData;
 
-    if(!ajListGetLength(qryd->List))
-	return ajFalse;
+    if(!ajListGetLength(qry->ResultsList))
+        return ajFalse;
 
-    ajDebug("qryd->List (b) length %d\n", ajListGetLength(qryd->List));
-    /*ajListTrace(qryd->List);*/
-    ajListPop(qryd->List, &item);
+    ajDebug("qry->ResultsList (b) length %d\n",
+            ajListGetLength(qry->ResultsList));
+    /*ajListTrace(qry->ResultsList);*/
+    ajListPop(qry->ResultsList, &item);
     entry = (SeqPCdEntry) item;
 
     /*
-    ajDebug("entry: %x div: %d (%d) ann: %d seq: %d\n",
-	    entry, entry->div, qryd->div, entry->annoff, entry->seqoff);
+      ajDebug("entry: %x div: %d (%d) ann: %d seq: %d\n",
+      entry, entry->div, qryd->div, entry->annoff, entry->seqoff);
     */
     qryd->idnum = entry->annoff - 1;
 
     /*
-    ajDebug("idnum: %d\n", qryd->idnum);
+      ajDebug("idnum: %d\n", qryd->idnum);
     */
     qryd->Samefile = ajTrue;
 
     if(entry->div != qryd->div)
     {
-	qryd->Samefile = ajFalse;
-	qryd->div = entry->div;
-	/*ajDebug("div: %d\n", qryd->div);*/
+        qryd->Samefile = ajFalse;
+        qryd->div = entry->div;
+        /*ajDebug("div: %d\n", qryd->div);*/
 
-	if(!seqCdQryFile(qry))
-	    return ajFalse;
+        if(!seqCdQryFile(qry))
+            return ajFalse;
     }
 
-    /*
     ajDebug("Offsets(cd) %d %d\n", entry->annoff, entry->seqoff);
     ajDebug("libr %x\n", qryd->libr);
     ajDebug("libr %F\n", qryd->libr);
-    */
+
     ajFileSeek(qryd->libr, entry->annoff,0);
 
     if(qryd->libs)
-	ajFileSeek(qryd->libs, entry->seqoff,0);
+        ajFileSeek(qryd->libs, entry->seqoff,0);
 
     AJFREE(entry);
 
     if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+        qry->QryDone = ajTrue;
 
     return ajTrue;
 }
@@ -5345,12 +3332,12 @@ static AjBool seqCdQryNext(AjPSeqQuery qry)
 **
 ** Processes the next query for an EMBLCD index for a Blast index
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if successful
 ** @@
 ******************************************************************************/
 
-static AjBool seqBlastQryNext(AjPSeqQuery qry)
+static AjBool seqBlastQryNext(AjPQuery qry)
 {
     SeqPCdEntry entry;
     SeqPCdQry qryd;
@@ -5358,38 +3345,38 @@ static AjBool seqBlastQryNext(AjPSeqQuery qry)
 
     qryd = qry->QryData;
 
-    if(!ajListGetLength(qryd->List))
-	return ajFalse;
+    if(!ajListGetLength(qry->ResultsList))
+        return ajFalse;
 
-    ajDebug("seqBlastQryNext qryd %x qryd->List (c) length: %d\n",
-	    qryd, ajListGetLength(qryd->List));
+    ajDebug("seqBlastQryNext qryd %x qry->ResultsList (c) length: %d\n",
+            qryd, ajListGetLength(qry->ResultsList));
 
-    /* ajListTrace(qryd->List);*/
+    /* ajListTrace(qry->ResultsList);*/
 
-    ajListPop(qryd->List, &item);
+    ajListPop(qry->ResultsList, &item);
     entry = (SeqPCdEntry) item;
 
     ajDebug("entry: %X div: %d (%d) ann: %d seq: %d\n",
-	    entry, entry->div, qryd->div, entry->annoff, entry->seqoff);
+            entry, entry->div, qryd->div, entry->annoff, entry->seqoff);
 
     if(entry->div != qryd->div)
     {
-	qryd->div = entry->div;
-	seqBlastOpen(qry, ajFalse);	/* replaces qry->QryData */
-	qryd = qry->QryData;
+        qryd->div = entry->div;
+        seqBlastOpen(qry, ajFalse);     /* replaces qry->QryData */
+        qryd = qry->QryData;
     }
 
     qryd->idnum = entry->annoff - 1;
 
     ajDebug("Offsets (blast) %d %d [%d] qryd: %x\n",
-	    entry->annoff, entry->seqoff, qryd->idnum, qryd);
+            entry->annoff, entry->seqoff, qryd->idnum, qryd);
 
     /* entry->annoff as qryd->idnum sets table position */
 
     AJFREE(entry);
 
     if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+        qry->QryDone = ajTrue;
 
     return ajTrue;
 }
@@ -5401,12 +3388,12 @@ static AjBool seqBlastQryNext(AjPSeqQuery qry)
 **
 ** Closes query data for an EMBLCD index
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if all is done
 ** @@
 ******************************************************************************/
 
-static AjBool seqCdQryClose(AjPSeqQuery qry)
+static AjBool seqCdQryClose(AjPQuery qry)
 {
     SeqPCdQry qryd = NULL;
 
@@ -5415,7 +3402,7 @@ static AjBool seqCdQryClose(AjPSeqQuery qry)
     qryd = qry->QryData;
 
     if(!qryd)
-	return ajTrue;
+        return ajTrue;
 
     ajCharDel(&qryd->name);
     ajStrDel(&qryd->divfile);
@@ -5432,12 +3419,11 @@ static AjBool seqCdQryClose(AjPSeqQuery qry)
     seqCdFileClose(&qryd->dfp);
     /* defined in a buffer, cleared there */
     /*
-    ajFileClose(&qryd->libr);
-    ajFileClose(&qryd->libs);
+      ajFileClose(&qryd->libr);
+      ajFileClose(&qryd->libs);
     */
     qryd->libr=0;
     qryd->libs=0;
-    ajListFree(&qryd->List);
     AJFREE(qryd->trgLine);
     AJFREE(qryd->idxLine);
     AJFREE(qryd->Skip);
@@ -5454,13 +3440,13 @@ static AjBool seqCdQryClose(AjPSeqQuery qry)
 **
 ** Closes query data for an EMBLCD blastdb index
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
 ** @@
 ******************************************************************************/
 
-static AjBool seqBlastQryClose(AjPSeqQuery qry)
+static AjBool seqBlastQryClose(AjPQuery qry)
 {
     SeqPCdQry qryd;
 
@@ -5486,7 +3472,6 @@ static AjBool seqBlastQryClose(AjPSeqQuery qry)
     ajFileClose(&qryd->libt);
     ajFileClose(&qryd->libf);
 
-    ajListFree(&qryd->List);
     AJFREE(qryd->trgLine);
     AJFREE(qryd->idxLine);
     AJFREE(qryd->Skip);
@@ -5522,78 +3507,83 @@ static AjBool seqBlastQryClose(AjPSeqQuery qry)
 static AjBool seqAccessGcg(AjPSeqin seqin)
 {
     AjBool retval = ajFalse;
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPCdQry qryd;
 
-    ajDebug("seqAccessGcg type %d\n", seqin->Query->Type);
+    ajDebug("seqAccessGcg type %d\n", seqin->Input->Query->QueryType);
 
-    qry  = seqin->Query;
+    qry  = seqin->Input->Query;
     qryd = qry->QryData;
 
-    if(qry->Type == QRY_ALL)
+    if(qry->QueryType == AJQUERY_ALL)
     {
-      retval = seqGcgAll(seqin);
+        retval = seqGcgAll(seqin);
 
-      return retval;
+        return retval;
     }
 
     /* we need to search the index files and return a query */
 
     if(qry->QryData)
-    {				     /* reuse unfinished query data */
-	if(!seqCdQryReuse(qry))
-	    return ajFalse;
+    {                                /* reuse unfinished query data */
+        if(!seqCdQryReuse(qry))
+            return ajFalse;
     }
     else
     {
-	seqin->Single = ajTrue;
+        seqin->Input->Single = ajTrue;
 
-	if(!seqCdQryOpen(qry))
-	    ajFatal("seqCdQryOpen failed");
+        if(!seqCdQryOpen(qry))
+        {
+            ajWarn("Failed to open index for database '%S'",
+                   qry->DbName);
 
-	qryd = qry->QryData;
-	ajFilebuffDel(&seqin->Filebuff);
-	seqin->Filebuff = ajFilebuffNewNofile();
+            return ajFalse;
+        }
 
-	/* binary search for the entryname we need */
+        qryd = qry->QryData;
+        ajFilebuffDel(&seqin->Input->Filebuff);
+        seqin->Input->Filebuff = ajFilebuffNewNofile();
 
-	if(qry->Type == QRY_ENTRY)
-	{
-	    ajDebug("entry id: '%S' acc: '%S' hasacc:%B\n",
-		    qry->Id, qry->Acc, qry->HasAcc);
+        /* binary search for the entryname we need */
 
-	    if(!seqCdQryEntry(qry))
-		ajDebug("GCG Entry failed\n");
-	}
+        if(qry->QueryType == AJQUERY_ENTRY)
+        {
+            ajDebug("entry fields: %u hasacc:%B\n",
+                    ajListGetLength(qry->QueryFields), qry->HasAcc);
 
-	if(qry->Type == QRY_QUERY)
-	{
-	    ajDebug("query id: '%S' acc: '%S' hasacc:%B\n",
-		    qry->Id, qry->Acc, qry->HasAcc);
-	    if(!seqCdQryQuery(qry))
-		ajDebug("GCG Query failed\n");
-	}
+            if(!seqCdQryEntry(qry))
+                ajDebug("GCG Entry failed\n");
+        }
 
-	AJFREE(qryd->trgLine);
+        if(qry->QueryType == AJQUERY_QUERY)
+        {
+            ajDebug("query fields: %u hasacc:%B\n",
+                    ajListGetLength(qry->QueryFields), qry->HasAcc);
+            if(!seqCdQryQuery(qry))
+                ajDebug("GCG Query failed\n");
+        }
+
+        AJFREE(qryd->trgLine);
     }
 
-    if(ajListGetLength(qryd->List))
+    if(ajListGetLength(qry->ResultsList))
     {
-	retval = seqCdQryNext(qry);
+        retval = seqCdQryNext(qry);
 
-	if(retval)
-	    seqGcgLoadBuff(seqin);
+        if(retval)
+            seqGcgLoadBuff(seqin);
     }
 
-    if(!ajListGetLength(qryd->List))
+    if(!ajListGetLength(qry->ResultsList))
     {
-	ajFileClose(&qryd->libr);
-	ajFileClose(&qryd->libs);
-	seqCdQryClose(qry);
+        ajFileClose(&qryd->libr);
+        ajFileClose(&qryd->libs);
+        seqCdQryClose(qry);
     }
 
     if(retval)
-	ajStrAssignS(&seqin->Db, qry->DbName);
+        ajStrAssignS(&seqin->Input->Db, qry->DbName);
 
     return retval;
 }
@@ -5613,14 +3603,14 @@ static AjBool seqAccessGcg(AjPSeqin seqin)
 
 static void seqGcgLoadBuff(AjPSeqin seqin)
 {
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPCdQry qryd;
 
-    qry  = seqin->Query;
+    qry  = seqin->Input->Query;
     qryd = qry->QryData;
 
     if(!qry->QryData)
-	ajFatal("seqGcgLoadBuff Query Data not initialised");
+        ajFatal("seqGcgLoadBuff Query Data not initialised");
 
     /* copy all the ref data */
 
@@ -5629,12 +3619,12 @@ static void seqGcgLoadBuff(AjPSeqin seqin)
     /* write the sequence (do we care about the format?) */
     seqGcgReadSeq(seqin);
 
-    /* ajFilebuffTraceFull(seqin->Filebuff, 9999, 100); */
+    /* ajFilebuffTraceFull(seqin->Input->Filebuff, 9999, 100); */
 
     if(!qryd->libr)
     {
-      ajFileClose(&qryd->libs);
-      ajDebug("seqGcgLoadBuff: closed files\n");
+        ajFileClose(&qryd->libs);
+        ajDebug("seqGcgLoadBuff: closed files\n");
     }
 
     return;
@@ -5655,7 +3645,7 @@ static void seqGcgLoadBuff(AjPSeqin seqin)
 static AjBool seqGcgReadRef(AjPSeqin seqin)
 {
     AjPStr line = NULL;
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPCdQry qryd;
     ajlong rpos;
     AjPStr id       = NULL;
@@ -5665,99 +3655,99 @@ static AjBool seqGcgReadRef(AjPSeqin seqin)
     AjBool testcontinue    = ajFalse;
     char *p = NULL;
 
-    qry  = seqin->Query;
+    qry  = seqin->Input->Query;
     qryd = qry->QryData;
 
     if(!seqRegGcgRefId)
-	seqRegGcgRefId =ajRegCompC("^>...([^ \n]+)");
+        seqRegGcgRefId =ajRegCompC("^>...([^ \n]+)");
 
     if(!seqRegGcgSplit)
-	seqRegGcgSplit =ajRegCompC("_0+$");
+        seqRegGcgSplit =ajRegCompC("_0+$");
 
-    if(!ajReadline(qryd->libr, &line))	/* end of file */
-	return ajFalse;
+    if(!ajReadline(qryd->libr, &line))  /* end of file */
+        return ajFalse;
 
-    if(ajStrGetCharFirst(line) != '>')	/* not start of entry */
-	ajFatal("seqGcgReadRef bad entry start:\n'%S'", line);
+    if(ajStrGetCharFirst(line) != '>')  /* not start of entry */
+        ajFatal("seqGcgReadRef bad entry start:\n'%S'", line);
 
-    if(ajStrGetCharPos(line, 3) == ';')	/* PIR entry */
-	ispir = ajTrue;
+    if(ajStrGetCharPos(line, 3) == ';') /* PIR entry */
+        ispir = ajTrue;
 
     if(ispir)
-	ajFilebuffLoadS(seqin->Filebuff, line);
+        ajFilebuffLoadS(seqin->Input->Filebuff, line);
 
     if(ajRegExec(seqRegGcgRefId, line))
     {
-	continued = ajFalse;
-	ajRegSubI(seqRegGcgRefId, 1, &id);
+        continued = ajFalse;
+        ajRegSubI(seqRegGcgRefId, 1, &id);
 
-	if(ajRegExec(seqRegGcgSplit, id))
-	{
-	    continued = ajTrue;
-	    p = ajStrGetuniquePtr(&id);
-	    p = strrchr(p,(ajint)'_');
-	    *(++p)='\0';
-	    ajStrSetValid(&id);
-	}
+        if(ajRegExec(seqRegGcgSplit, id))
+        {
+            continued = ajTrue;
+            p = ajStrGetuniquePtr(&id);
+            p = strrchr(p,(ajint)'_');
+            *(++p)='\0';
+            ajStrSetValid(&id);
+        }
     }
     else
     {
-	ajDebug("seqGcgReadRef bad ID line\n'%S'\n", line);
-	ajFatal("seqGcgReadRef bad ID line\n'%S'\n", line);
+        ajDebug("seqGcgReadRef bad ID line\n'%S'\n", line);
+        ajFatal("seqGcgReadRef bad ID line\n'%S'\n", line);
     }
 
-    if(!ajReadline(qryd->libr, &line))	/* blank desc line */
+    if(!ajReadline(qryd->libr, &line))  /* blank desc line */
     {
-      ajStrDel(&id);
+        ajStrDel(&id);
 
-      return ajFalse;
+        return ajFalse;
     }
 
     if(ispir)
-	ajFilebuffLoadS(seqin->Filebuff, line);
+        ajFilebuffLoadS(seqin->Input->Filebuff, line);
 
     rpos = ajFileResetPos(qryd->libr);
 
     while(ajReadline(qryd->libr, &line))
-    {					/* end of file */
-	if(ajStrGetCharFirst(line) == '>')
-	{				/* start of next entry */
-	    /* skip over split entries so it can be used for "all" */
+    {                                   /* end of file */
+        if(ajStrGetCharFirst(line) == '>')
+        {                               /* start of next entry */
+            /* skip over split entries so it can be used for "all" */
 
-	    if(continued)
-	    {
-		testcontinue=ajTrue;
-		ajRegExec(seqRegGcgRefId, line);
-		ajRegSubI(seqRegGcgRefId, 1, &idc);
+            if(continued)
+            {
+                testcontinue=ajTrue;
+                ajRegExec(seqRegGcgRefId, line);
+                ajRegSubI(seqRegGcgRefId, 1, &idc);
 
-		if(!ajStrPrefixS(idc,id))
-		{
-		    ajFileSeek(qryd->libr, rpos, 0);
-		    ajStrDel(&line);
-		    ajStrDel(&id);
-		    ajStrDel(&idc);
+                if(!ajStrPrefixS(idc,id))
+                {
+                    ajFileSeek(qryd->libr, rpos, 0);
+                    ajStrDel(&line);
+                    ajStrDel(&id);
+                    ajStrDel(&idc);
 
-		    return ajTrue;
-		}
-	    }
-	    else
-	    {
-		ajFileSeek(qryd->libr, rpos, 0);
-		ajStrDel(&line);
-		ajStrDel(&id);
-		ajStrDel(&idc);
+                    return ajTrue;
+                }
+            }
+            else
+            {
+                ajFileSeek(qryd->libr, rpos, 0);
+                ajStrDel(&line);
+                ajStrDel(&id);
+                ajStrDel(&idc);
 
-		return ajTrue;
-	    }
-	}
+                return ajTrue;
+            }
+        }
 
-	rpos = ajFileResetPos(qryd->libr);
+        rpos = ajFileResetPos(qryd->libr);
 
-	if(!testcontinue)
-	{
-	    ajStrExchangeCC(&line, ". .", "..");
-	    ajFilebuffLoadS(seqin->Filebuff, line);
-	}
+        if(!testcontinue)
+        {
+            ajStrExchangeCC(&line, ". .", "..");
+            ajFilebuffLoadS(seqin->Input->Filebuff, line);
+        }
     }
 
 
@@ -5788,7 +3778,7 @@ static AjBool seqGcgReadRef(AjPSeqin seqin)
 static AjBool seqGcgReadSeq(AjPSeqin seqin)
 {
     AjPStr line = NULL;
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPCdQry qryd;
     AjPStr gcgtype    = NULL;
     AjPStr tmpstr     = NULL;
@@ -5806,66 +3796,66 @@ static AjBool seqGcgReadSeq(AjPSeqin seqin)
     AjBool continued = ajFalse;
 
 
-    qry  = seqin->Query;
+    qry  = seqin->Input->Query;
     qryd = qry->QryData;
 
     if(!seqRegGcgId)
     {
-	seqRegGcgId =ajRegCompC("^>...([^ ]+) +([^ ]+) +(Dummy Header|[^ ]+)"
-				" +([^ ]+) +([0-9]+)");
-	seqRegGcgId2=ajRegCompC("^>[PF]1;([^ ]+)");
+        seqRegGcgId =ajRegCompC("^>...([^ ]+) +([^ ]+) +(Dummy Header|[^ ]+)"
+                                " +([^ ]+) +([0-9]+)");
+        seqRegGcgId2=ajRegCompC("^>[PF]1;([^ ]+)");
     }
 
     if(!seqRegGcgSplit)
-	seqRegGcgSplit =ajRegCompC("_0+$");
+        seqRegGcgSplit =ajRegCompC("_0+$");
 
     ajDebug("seqGcgReadSeq pos: %Ld\n", ajFileResetPos(qryd->libs));
 
-    if(!ajReadline(qryd->libs, &line))	/* end of file */
-	return ajFalse;
+    if(!ajReadline(qryd->libs, &line))  /* end of file */
+        return ajFalse;
 
     ajDebug("test ID line\n'%S'\n", line);
 
     if(ajRegExec(seqRegGcgId, line))
     {
-	continued = ajFalse;
-	ajRegSubI(seqRegGcgId, 3, &gcgtype);
-	ajRegSubI(seqRegGcgId, 5, &tmpstr);
-	ajRegSubI(seqRegGcgId, 1, &id);
+        continued = ajFalse;
+        ajRegSubI(seqRegGcgId, 3, &gcgtype);
+        ajRegSubI(seqRegGcgId, 5, &tmpstr);
+        ajRegSubI(seqRegGcgId, 1, &id);
 
-	if(ajRegExec(seqRegGcgSplit, id))
-	{
-	    continued = ajTrue;
-	    p = ajStrGetuniquePtr(&id);
-	    p = strrchr(p,(ajint)'_');
-	    *(++p)='\0';
-	    ajStrSetValid(&id);
+        if(ajRegExec(seqRegGcgSplit, id))
+        {
+            continued = ajTrue;
+            p = ajStrGetuniquePtr(&id);
+            p = strrchr(p,(ajint)'_');
+            *(++p)='\0';
+            ajStrSetValid(&id);
 
-	    if(!contseq)
-		contseq = ajStrNew();
+            if(!contseq)
+                contseq = ajStrNew();
 
-	    if(!dstr)
-		dstr = ajStrNew();
-	}
+            if(!dstr)
+                dstr = ajStrNew();
+        }
 
-	ajStrToInt(tmpstr, &gcglen);
+        ajStrToInt(tmpstr, &gcglen);
     }
     else if(ajRegExec(seqRegGcgId2, line))
     {
-	ajStrAssignC(&gcgtype, "ASCII");
-	ajRegSubI(seqRegGcgId, 1, &tmpstr);
-	ispir = ajTrue;
+        ajStrAssignC(&gcgtype, "ASCII");
+        ajRegSubI(seqRegGcgId, 1, &tmpstr);
+        ispir = ajTrue;
     }
     else
     {
-	ajDebug("seqGcgReadSeq bad ID line\n'%S'\n", line);
-	ajFatal("seqGcgReadSeq bad ID line\n'%S'\n", line);
+        ajDebug("seqGcgReadSeq bad ID line\n'%S'\n", line);
+        ajFatal("seqGcgReadSeq bad ID line\n'%S'\n", line);
 
-	return ajFalse;
+        return ajFalse;
     }
 
-    if(!ajReadline(qryd->libs, &line))	/* desc line */
-	return ajFalse;
+    if(!ajReadline(qryd->libs, &line))  /* desc line */
+        return ajFalse;
 
     /*
     ** need to pick up the length and type, and read to the end of sequence
@@ -5875,114 +3865,114 @@ static AjBool seqGcgReadSeq(AjPSeqin seqin)
 
     if(ispir)
     {
-	spos = ajFileResetPos(qryd->libs);
+        spos = ajFileResetPos(qryd->libs);
 
-	while(ajReadline(qryd->libs, &line))
-	{				/* end of file */
-	    if(ajStrGetCharFirst(line) == '>')
-	    {				/* start of next entry */
-		ajFileSeek(qryd->libs, spos, 0);
-		break;
-	    }
+        while(ajReadline(qryd->libs, &line))
+        {                               /* end of file */
+            if(ajStrGetCharFirst(line) == '>')
+            {                           /* start of next entry */
+                ajFileSeek(qryd->libs, spos, 0);
+                break;
+            }
 
-	    spos = ajFileResetPos(qryd->libs);
-	    ajFilebuffLoadS(seqin->Filebuff, line);
-	}
+            spos = ajFileResetPos(qryd->libs);
+            ajFilebuffLoadS(seqin->Input->Filebuff, line);
+        }
     }
     else
     {
-	ajStrSetRes(&seqin->Inseq, gcglen+3);
-	rblock = gcglen;
+        ajStrSetRes(&seqin->Inseq, gcglen+3);
+        rblock = gcglen;
 
-	if(ajStrGetCharFirst(gcgtype) == '2')
-	    rblock = (rblock+3)/4;
+        if(ajStrGetCharFirst(gcgtype) == '2')
+            rblock = (rblock+3)/4;
 
-	if(!ajReadbinBinary(qryd->libs, rblock, 1,
+        if(!ajReadbinBinary(qryd->libs, rblock, 1,
                             ajStrGetuniquePtr(&seqin->Inseq)))
-	    ajFatal("error reading file %F", qryd->libs);
+            ajFatal("error reading file %F", qryd->libs);
 
-	/* convert 2bit to ascii */
-	if(ajStrGetCharFirst(gcgtype) == '2')
-	    seqGcgBinDecode(&seqin->Inseq, gcglen);
-	else if(ajStrGetCharFirst(gcgtype) == 'A')
-	{
-	    /* are seq chars OK? */
-	    ajStrSetValidLen(&seqin->Inseq, gcglen);
-	}
-	else
-	{
-	    ajRegSubI(seqRegGcgId, 1, &tmpstr);
-	    ajFatal("Unknown GCG entry type '%S', entry name '%S'",
-		    gcgtype, tmpstr);
-	}
+        /* convert 2bit to ascii */
+        if(ajStrGetCharFirst(gcgtype) == '2')
+            seqGcgBinDecode(&seqin->Inseq, gcglen);
+        else if(ajStrGetCharFirst(gcgtype) == 'A')
+        {
+            /* are seq chars OK? */
+            ajStrSetValidLen(&seqin->Inseq, gcglen);
+        }
+        else
+        {
+            ajRegSubI(seqRegGcgId, 1, &tmpstr);
+            ajFatal("Unknown GCG entry type '%S', entry name '%S'",
+                    gcgtype, tmpstr);
+        }
 
-	if(!ajReadline(qryd->libs, &line)) /* newline at end */
-	    ajFatal("error reading file %F", qryd->libs);
+        if(!ajReadline(qryd->libs, &line)) /* newline at end */
+            ajFatal("error reading file %F", qryd->libs);
 
-	if(continued)
-	{
-	    spos = ajFileResetPos(qryd->libs);
+        if(continued)
+        {
+            spos = ajFileResetPos(qryd->libs);
 
-	    while(ajReadline(qryd->libs,&line))
-	    {
-		ajRegExec(seqRegGcgId, line);
-		ajRegSubI(seqRegGcgId, 5, &tmpstr);
-		ajRegSubI(seqRegGcgId, 1, &idc);
+            while(ajReadline(qryd->libs,&line))
+            {
+                ajRegExec(seqRegGcgId, line);
+                ajRegSubI(seqRegGcgId, 5, &tmpstr);
+                ajRegSubI(seqRegGcgId, 1, &idc);
 
-		if(!ajStrPrefixS(idc,id))
-		{
-		    ajFileSeek(qryd->libs, spos, 0);
-		    break;
-		}
+                if(!ajStrPrefixS(idc,id))
+                {
+                    ajFileSeek(qryd->libs, spos, 0);
+                    break;
+                }
 
-		ajStrToInt(tmpstr, &gcglen);
+                ajStrToInt(tmpstr, &gcglen);
 
-		if(!ajReadline(qryd->libs, &dstr)) /* desc line */
-		    return ajFalse;
+                if(!ajReadline(qryd->libs, &dstr)) /* desc line */
+                    return ajFalse;
 
-		ajStrSetRes(&contseq, gcglen+3);
+                ajStrSetRes(&contseq, gcglen+3);
 
-		rblock = gcglen;
-		if(ajStrGetCharFirst(gcgtype) == '2')
-		    rblock = (rblock+3)/4;
+                rblock = gcglen;
+                if(ajStrGetCharFirst(gcgtype) == '2')
+                    rblock = (rblock+3)/4;
 
-		if(!ajReadbinBinary(qryd->libs, rblock, 1,
+                if(!ajReadbinBinary(qryd->libs, rblock, 1,
                                     ajStrGetuniquePtr(&contseq)))
-		    ajFatal("error reading file %F", qryd->libs);
+                    ajFatal("error reading file %F", qryd->libs);
 
-		/* convert 2bit to ascii */
-		if(ajStrGetCharFirst(gcgtype) == '2')
-		    seqGcgBinDecode(&contseq, gcglen);
-		else if(ajStrGetCharFirst(gcgtype) == 'A')
-		{
-		    /* are seq chars OK? */
-		    ajStrSetValidLen(&contseq, gcglen);
-		}
-		else
-		{
-		    ajRegSubI(seqRegGcgId, 1, &tmpstr);
-		    ajFatal("Unknown GCG entry: name '%S'",
-			    tmpstr);
-		}
+                /* convert 2bit to ascii */
+                if(ajStrGetCharFirst(gcgtype) == '2')
+                    seqGcgBinDecode(&contseq, gcglen);
+                else if(ajStrGetCharFirst(gcgtype) == 'A')
+                {
+                    /* are seq chars OK? */
+                    ajStrSetValidLen(&contseq, gcglen);
+                }
+                else
+                {
+                    ajRegSubI(seqRegGcgId, 1, &tmpstr);
+                    ajFatal("Unknown GCG entry: name '%S'",
+                            tmpstr);
+                }
 
-		if(!ajReadline(qryd->libs, &line)) /* newline at end */
-		    ajFatal("error reading file %F", qryd->libs);
+                if(!ajReadline(qryd->libs, &line)) /* newline at end */
+                    ajFatal("error reading file %F", qryd->libs);
 
-		if(!seqRegGcgCont)
-		    seqRegGcgCont = ajRegCompC("^([^ ]+) +([^ ]+) +([^ ]+) +"
-					       "([^ ]+) +([^ ]+) +([^ ]+) "
+                if(!seqRegGcgCont)
+                    seqRegGcgCont = ajRegCompC("^([^ ]+) +([^ ]+) +([^ ]+) +"
+                                               "([^ ]+) +([^ ]+) +([^ ]+) "
                                                "+([^ ]+) +"
-					       "([^ ]+) +([0-9]+)");
+                                               "([^ ]+) +([0-9]+)");
 
-		ajRegExec(seqRegGcgCont, dstr);
-		ajRegSubI(seqRegGcgCont, 9, &tmpstr);
-		ajStrToInt(tmpstr, &pos);
-		seqin->Inseq->Len = pos-1;
+                ajRegExec(seqRegGcgCont, dstr);
+                ajRegSubI(seqRegGcgCont, 9, &tmpstr);
+                ajStrToInt(tmpstr, &pos);
+                seqin->Inseq->Len = pos-1;
 
-		ajStrAppendS(&seqin->Inseq,contseq);
-		spos = ajFileResetPos(qryd->libs);
-	    }
-	}
+                ajStrAppendS(&seqin->Inseq,contseq);
+                spos = ajFileResetPos(qryd->libs);
+            }
+        }
     }
 
     ajStrDel(&line);
@@ -6025,17 +4015,17 @@ static void seqGcgBinDecode(AjPStr *pthis, ajuint sqlen)
     cp = start + 4*rdlen;
 
     ajDebug("seqp:%x start:%x cp:%x sqlen:%d len:%d size:%d (seqp-start):%d\n",
-	    seqp, start, cp, sqlen,
-	    ajStrGetLen(*pthis), ajStrGetRes(*pthis),
-	    (seqp - start));
+            seqp, start, cp, sqlen,
+            ajStrGetLen(*pthis), ajStrGetRes(*pthis),
+            (seqp - start));
 
     while(seqp > start)
     {
-	stmp = *--seqp;
-	*--cp = gcgbton[stmp&3];
-	*--cp = gcgbton[(stmp >>= 2)&3];
-	*--cp = gcgbton[(stmp >>= 2)&3];
-	*--cp = gcgbton[(stmp >>= 2)&3];
+        stmp = *--seqp;
+        *--cp = gcgbton[stmp&3];
+        *--cp = gcgbton[(stmp >>= 2)&3];
+        *--cp = gcgbton[(stmp >>= 2)&3];
+        *--cp = gcgbton[(stmp >>= 2)&3];
     }
 
     start[sqlen] = '\0';
@@ -6058,58 +4048,58 @@ static void seqGcgBinDecode(AjPStr *pthis, ajuint sqlen)
 
 static AjBool seqGcgAll(AjPSeqin seqin)
 {
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPCdQry qryd;
 
-    qry = seqin->Query;
+    qry = seqin->Input->Query;
     qryd = qry->QryData;
 
     ajDebug("seqGcgAll\n");
 
     if(!qry->QryData)
     {
-	ajDebug("seqGcgAll initialising\n");
-	seqin->Single = ajTrue;
+        ajDebug("seqGcgAll initialising\n");
+        seqin->Input->Single = ajTrue;
 
-	if(!seqCdQryOpen(qry))
-	{
-	    ajErr("seqGcgAll failed");
+        if(!seqCdQryOpen(qry))
+        {
+            ajErr("seqGcgAll failed");
 
-	    return ajFalse;
-	}
+            return ajFalse;
+        }
     }
 
     qryd = qry->QryData;
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewNofile();
+    ajFilebuffDel(&seqin->Input->Filebuff);
+    seqin->Input->Filebuff = ajFilebuffNewNofile();
 
     if(!qryd->libr)
     {
-	if(!seqCdDivNext(qry))
-	{
-	    seqCdQryClose(qry);
-	    ajDebug("seqGcgAll finished\n");
+        if(!seqCdDivNext(qry))
+        {
+            seqCdQryClose(qry);
+            ajDebug("seqGcgAll finished\n");
 
-	    return ajFalse;
-	}
+            return ajFalse;
+        }
 
-	if(!seqCdQryFile(qry))
-	{
-	    ajErr("seqGcgAll out of data");
+        if(!seqCdQryFile(qry))
+        {
+            ajErr("seqGcgAll out of data");
 
-	    return ajFalse;
-	}
+            return ajFalse;
+        }
 
-	ajDebug("seqCdQryOpen processing file %2d '%F'\n", qryd->div,
-		qryd->libr);
-	if(qryd->libs)
-	    ajDebug("               sequence file    '%F'\n", qryd->libs);
+        ajDebug("seqCdQryOpen processing file %2d '%F'\n", qryd->div,
+                qryd->libr);
+        if(qryd->libs)
+            ajDebug("               sequence file    '%F'\n", qryd->libs);
     }
 
     seqGcgLoadBuff(seqin);
 
     if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+        qry->QryDone = ajTrue;
 
     return ajTrue;
 }
@@ -6139,89 +4129,89 @@ static AjBool seqGcgAll(AjPSeqin seqin)
 static AjBool seqAccessBlast(AjPSeqin seqin)
 {
     AjBool retval = ajFalse;
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPCdQry qryd;
 
-    ajDebug("seqAccessBlast type %d\n", seqin->Query->Type);
+    ajDebug("seqAccessBlast type %d\n", seqin->Input->Query->QueryType);
 
-    qry  = seqin->Query;
+    qry  = seqin->Input->Query;
     qryd = qry->QryData;
 
-    if(qry->Type == QRY_ALL)
-	return seqBlastAll(seqin);
+    if(qry->QueryType == AJQUERY_ALL)
+        return seqBlastAll(seqin);
 
     /* we need to search the index files and return a query */
 
     if(qry->QryData)
-    {				     /* reuse unfinished query data */
-	if(!seqCdQryReuse(qry))
-	    return ajFalse;
+    {                                /* reuse unfinished query data */
+        if(!seqCdQryReuse(qry))
+            return ajFalse;
     }
     else
     {
-	seqin->Single = ajTrue;
+        seqin->Input->Single = ajTrue;
 
-	if(!seqCdQryOpen(qry))		/* open the table file */
-	{
-	    ajErr("seqCdQryOpen failed");
+        if(!seqCdQryOpen(qry))          /* open the table file */
+        {
+            ajErr("seqCdQryOpen failed");
 
-	    return ajFalse;
-	}
+            return ajFalse;
+        }
 
-	qryd = qry->QryData;
-	ajFilebuffDel(&seqin->Filebuff);
-	seqin->Filebuff = ajFilebuffNewNofile();
+        qryd = qry->QryData;
+        ajFilebuffDel(&seqin->Input->Filebuff);
+        seqin->Input->Filebuff = ajFilebuffNewNofile();
 
-	/* binary search for the entryname we need */
+        /* binary search for the entryname we need */
 
-	if(qry->Type == QRY_ENTRY)
-	{
-	    ajDebug("entry id: '%S' acc: '%S' hasacc:%B\n",
-		    qry->Id, qry->Acc, qry->HasAcc);
+        if(qry->QueryType == AJQUERY_ENTRY)
+        {
+            ajDebug("entry fields: %u hasacc:%B\n",
+                    ajListGetLength(qry->QueryFields), qry->HasAcc);
 
-	    if(!seqCdQryEntry(qry))
-	    {
-		ajDebug("BLAST Entry failed\n");
-	    }
-	}
+            if(!seqCdQryEntry(qry))
+            {
+                ajDebug("BLAST Entry failed\n");
+            }
+        }
 
-	if(qry->Type == QRY_QUERY)
-	{
-	    ajDebug("query id: '%S' acc: '%S' hasacc:%B\n",
-		    qry->Id, qry->Acc, qry->HasAcc);
+        if(qry->QueryType == AJQUERY_QUERY)
+        {
+            ajDebug("query fields: %u hasacc:%B\n",
+                    ajListGetLength(qry->QueryFields), qry->HasAcc);
 
-	    if(!seqCdQryQuery(qry))
-	    {
-		ajDebug("BLAST Query failed\n");
-	    }
-	}
+            if(!seqCdQryQuery(qry))
+            {
+                ajDebug("BLAST Query failed\n");
+            }
+        }
     }
 
-    if(ajListGetLength(qryd->List))
+    if(ajListGetLength(qry->ResultsList))
     {
-	retval = seqBlastQryNext(qry);	/* changes qry->QryData */
-	qryd = qry->QryData;
+        retval = seqBlastQryNext(qry);  /* changes qry->QryData */
+        qryd = qry->QryData;
 
-	if(retval)
-	    seqBlastLoadBuff(seqin);
+        if(retval)
+            seqBlastLoadBuff(seqin);
     }
 
-    if(!ajListGetLength(qryd->List))
+    if(!ajListGetLength(qry->ResultsList))
     {
-	ajFileClose(&qryd->libr);
-	ajFileClose(&qryd->libs);
-	ajFileClose(&qryd->libt);
-	ajFileClose(&qryd->libf);
-	seqCdQryClose(qry);
+        ajFileClose(&qryd->libr);
+        ajFileClose(&qryd->libs);
+        ajFileClose(&qryd->libt);
+        ajFileClose(&qryd->libf);
+        seqCdQryClose(qry);
 
-	if((qry->Type == QRY_ENTRY) && !seqin->multi)
-	{
-	    AJFREE(qry->QryData);
-	    qryd = NULL;
-	}
+        if((qry->QueryType == AJQUERY_ENTRY) && !seqin->Input->Multi)
+        {
+            AJFREE(qry->QryData);
+            qryd = NULL;
+        }
     }
 
-    ajStrAssignS(&seqin->Db, qry->DbName);
+    ajStrAssignS(&seqin->Input->Db, qry->DbName);
 
     return retval;
 }
@@ -6234,13 +4224,13 @@ static AjBool seqAccessBlast(AjPSeqin seqin)
 ** Opens a blast database. The query object can specify protein or DNA type.
 ** The blast version (1 or 2) is derived from the table file name.
 **
-** @param [u] qry [AjPSeqQuery] Sequence query object
+** @param [u] qry [AjPQuery] Sequence query object
 ** @param [r] next [AjBool] Skip to next file (when reading all entries)
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool seqBlastOpen(AjPSeqQuery qry, AjBool next)
+static AjBool seqBlastOpen(AjPQuery qry, AjBool next)
 {
     static const char* seqext[] = {"bsq", "csq", "psq", "nsq"};
     static const char* hdrext[] = {"ahd", "nhd", "phr", "nhr"};
@@ -6252,37 +4242,37 @@ static AjBool seqBlastOpen(AjPSeqQuery qry, AjBool next)
     ajint rdtmp  = 0;
     ajint rdtmp2 = 0;
 
-    ajint DbType;			/* database type indicator */
-    ajint DbFormat;	                /* (version) indicator */
-    ajint TitleLen;			/* length of database title */
-    ajint DateLen;		        /* length of database date string */
-    ajint LineLen;			/* length of database lines */
-    ajint HeaderLen;		        /* bytes before tables start */
-    ajint Size;			        /* number of database entries */
-    ajint CompLen;		        /* length of compressed seq file */
-    ajint MaxSeqLen;			/* max. entry length */
-    ajint TotLen;	                /* bases or residues in database */
-    ajint CleanCount;			/* count of cleaned 8mers */
-    AjPStr Title=NULL;			/* database title */
-    AjPStr Date=NULL;			/* database date */
+    ajint DbType;                       /* database type indicator */
+    ajint DbFormat;                     /* (version) indicator */
+    ajint TitleLen;                     /* length of database title */
+    ajint DateLen;                      /* length of database date string */
+    ajint LineLen;                      /* length of database lines */
+    ajint HeaderLen;                    /* bytes before tables start */
+    ajint Size;                         /* number of database entries */
+    ajint CompLen;                      /* length of compressed seq file */
+    ajint MaxSeqLen;                    /* max. entry length */
+    ajint TotLen;                       /* bases or residues in database */
+    ajint CleanCount;                   /* count of cleaned 8mers */
+    AjPStr Title=NULL;                  /* database title */
+    AjPStr Date=NULL;                   /* database date */
 
     SeqPCdQry qryd;
 
     if(!seqBlastDivExp)
-	seqBlastDivExp = ajRegCompC("^([^ ]+)( +([^ ]+))?");
+        seqBlastDivExp = ajRegCompC("^([^ ]+)( +([^ ]+))?");
 
     if(!qry->QryData)
-	if(!seqCdQryOpen(qry))
-	{
-	    ajErr("Blast database open failed");
+        if(!seqCdQryOpen(qry))
+        {
+            ajErr("Blast database open failed");
 
-	    return ajFalse;
-	}
+            return ajFalse;
+        }
 
 
     if(next)
-	if(!seqCdDivNext(qry)) /* set qryd->div to next (included) file */
-	    return ajFalse;
+        if(!seqCdDivNext(qry)) /* set qryd->div to next (included) file */
+            return ajFalse;
 
     qryd = qry->QryData;
 
@@ -6296,13 +4286,13 @@ static AjBool seqBlastOpen(AjPSeqQuery qry, AjBool next)
     ajReadbinCharTrim(qryd->dfp->File, qryd->nameSize, qryd->name);
 
     ajDebug("div: %d namesize: %d name '%s'\n",
-	    qryd->div, qryd->nameSize, qryd->name);
+            qryd->div, qryd->nameSize, qryd->name);
 
     if(!ajRegExecC(seqBlastDivExp, qryd->name))
     {
-	ajWarn("index division file error '%s'", qryd->name);
+        ajWarn("index division file error '%s'", qryd->name);
 
-	return ajFalse;
+        return ajFalse;
     }
 
 
@@ -6311,20 +4301,20 @@ static AjBool seqBlastOpen(AjPSeqQuery qry, AjBool next)
     ajDebug("File(s) '%S' '%S'\n", qryd->datfile, qryd->seqfile);
 
     ajDebug("seqBlastOpen next: %B '%S' '%s'\n",
-	    next, qryd->datfile, qryd->name);
+            next, qryd->datfile, qryd->name);
 
     if(ajStrGetCharLast(qryd->datfile) == 'b')
-	qryd->type = 0;			/* *tb : blast1 */
+        qryd->type = 0;                 /* *tb : blast1 */
     else
     {
-	qryd->type = 2;			/* *in : blast2 */
-	isblast2 = ajTrue;
+        qryd->type = 2;                 /* *in : blast2 */
+        isblast2 = ajTrue;
     }
 
     if(ajStrMatchCaseC(qry->DbType, "N"))
     {
-	qryd->type += 1;
-	isdna = ajTrue;
+        qryd->type += 1;
+        isdna = ajTrue;
     }
 
     ajStrAssignS(&qryd->srcfile, qryd->datfile);
@@ -6358,31 +4348,31 @@ static AjBool seqBlastOpen(AjPSeqQuery qry, AjBool next)
     ajReadbinIntEndian(qryd->libt, &TitleLen);
 
     if(isblast2)
-	rdtmp = TitleLen;
+        rdtmp = TitleLen;
     else
-	rdtmp = TitleLen + ((TitleLen%4 !=0 ) ? 4-(TitleLen%4) : 0);
+        rdtmp = TitleLen + ((TitleLen%4 !=0 ) ? 4-(TitleLen%4) : 0);
 
     ajStrAssignResC(&Title, rdtmp+1, "");
     ajDebug("IsBlast2: %B title_len: %d rdtmp: %d title_str: '%S'\n",
-	    isblast2, TitleLen, rdtmp, Title);
+            isblast2, TitleLen, rdtmp, Title);
     ajStrTrace(Title);
 
     if(rdtmp)
     {
-	if(!ajReadbinBinary(qryd->libt,
-		       (size_t)rdtmp, (size_t)1, ajStrGetuniquePtr(&Title)))
-	    ajFatal("error reading file %F", qryd->libt);
+        if(!ajReadbinBinary(qryd->libt,
+                            (size_t)rdtmp, (size_t)1, ajStrGetuniquePtr(&Title)))
+            ajFatal("error reading file %F", qryd->libt);
     }
     else
-	ajStrAssignClear(&Title);
+        ajStrAssignClear(&Title);
 
     if(isblast2)
-	ajStrSetValidLen(&Title, TitleLen);
+        ajStrSetValidLen(&Title, TitleLen);
     else
-	ajStrSetValidLen(&Title, TitleLen-1);
+        ajStrSetValidLen(&Title, TitleLen-1);
 
     ajDebug("title_len: %d rdtmp: %d title_str: '%S'\n",
-	    TitleLen, rdtmp, Title);
+            TitleLen, rdtmp, Title);
 
     HeaderLen += 4 + rdtmp;
 
@@ -6390,31 +4380,31 @@ static AjBool seqBlastOpen(AjPSeqQuery qry, AjBool next)
 
     if(isblast2)
     {
-	ajReadbinIntEndian(qryd->libt, &DateLen);
-	rdtmp2 = DateLen;
-	ajStrAssignResC(&Date, rdtmp2+1, "");
+        ajReadbinIntEndian(qryd->libt, &DateLen);
+        rdtmp2 = DateLen;
+        ajStrAssignResC(&Date, rdtmp2+1, "");
 
-	if(!ajReadbinBinary(qryd->libt,
-		       (size_t)rdtmp2,(size_t)1,ajStrGetuniquePtr(&Date)))
-	    ajFatal("error reading file %F", qryd->libt);
-	ajStrSetValidLen(&Date, DateLen);
-	ajStrSetValid(&Date);
-	DateLen = ajStrGetLen(Date);
-	ajDebug("datelen: %d rdtmp: %d date_str: '%S'\n",
-		DateLen, rdtmp2, Date);
-	HeaderLen += 4 + rdtmp2;
+        if(!ajReadbinBinary(qryd->libt,
+                            (size_t)rdtmp2,(size_t)1,ajStrGetuniquePtr(&Date)))
+            ajFatal("error reading file %F", qryd->libt);
+        ajStrSetValidLen(&Date, DateLen);
+        ajStrSetValid(&Date);
+        DateLen = ajStrGetLen(Date);
+        ajDebug("datelen: %d rdtmp: %d date_str: '%S'\n",
+                DateLen, rdtmp2, Date);
+        HeaderLen += 4 + rdtmp2;
     }
 
     /* read the rest of the header (different for protein and DNA) */
 
     if(isdna && !isblast2)
     {
-	/* length of source lines */
-	ajReadbinIntEndian(qryd->libt, &LineLen);
-	HeaderLen += 4;
+        /* length of source lines */
+        ajReadbinIntEndian(qryd->libt, &LineLen);
+        HeaderLen += 4;
     }
     else
-	LineLen = 0;
+        LineLen = 0;
 
     /* all formats have the next 3 */
 
@@ -6424,67 +4414,67 @@ static AjBool seqBlastOpen(AjPSeqQuery qry, AjBool next)
 
     if(!isdna)
     {
-	/* mad, but they are the other way for DNA */
-	ajReadbinIntEndian(qryd->libt, &TotLen);
-	ajReadbinIntEndian(qryd->libt, &MaxSeqLen);
+        /* mad, but they are the other way for DNA */
+        ajReadbinIntEndian(qryd->libt, &TotLen);
+        ajReadbinIntEndian(qryd->libt, &MaxSeqLen);
     }
     else
     {
-	ajReadbinIntEndian(qryd->libt, &MaxSeqLen);
-	ajReadbinIntEndian(qryd->libt, &TotLen);
+        ajReadbinIntEndian(qryd->libt, &MaxSeqLen);
+        ajReadbinIntEndian(qryd->libt, &TotLen);
     }
 
     HeaderLen += 12;
 
     if(isdna && !isblast2)
     {
-	/* Blast 1.4 DNA only */
-	/* compressed db length */
-	ajReadbinIntEndian(qryd->libt, &CompLen);
-	/* count of nt's cleaned */
-	ajReadbinIntEndian(qryd->libt, &CleanCount);
-	HeaderLen += 8;
+        /* Blast 1.4 DNA only */
+        /* compressed db length */
+        ajReadbinIntEndian(qryd->libt, &CompLen);
+        /* count of nt's cleaned */
+        ajReadbinIntEndian(qryd->libt, &CleanCount);
+        HeaderLen += 8;
     }
     else
     {
-	CompLen = 0;
-	CleanCount = 0;
+        CompLen = 0;
+        CleanCount = 0;
     }
 
     ajDebug(" size: %u, totlen: %d maxseqlen: %u\n",
-	    Size, TotLen, MaxSeqLen);
+            Size, TotLen, MaxSeqLen);
     ajDebug(" linelen: %u, complen: %d cleancount: %d\n",
-	    LineLen, CompLen, CleanCount);
+            LineLen, CompLen, CleanCount);
 
     /* Now for the tables of offsets. Again maddeningly different in each */
 
     if(isblast2)
-    {					/* NCBI BLAST 2.x */
-	qryd->TopHdr = HeaderLen;	/* header first */
-	qryd->TopCmp = qryd->TopHdr + (Size+1) * 4;
+    {                                   /* NCBI BLAST 2.x */
+        qryd->TopHdr = HeaderLen;       /* header first */
+        qryd->TopCmp = qryd->TopHdr + (Size+1) * 4;
 
-	if(isdna)
-	    qryd->TopAmb = qryd->TopCmp + (Size+1) * 4; /* DNA only */
-	else
-	    qryd->TopAmb = 0;
+        if(isdna)
+            qryd->TopAmb = qryd->TopCmp + (Size+1) * 4; /* DNA only */
+        else
+            qryd->TopAmb = 0;
     }
     else
-    {				     /* NCBI BLAST 1.x and WU-BLAST */
-	qryd->TopCmp = HeaderLen + CleanCount*4;
+    {                                /* NCBI BLAST 1.x and WU-BLAST */
+        qryd->TopCmp = HeaderLen + CleanCount*4;
 
-	if(isdna)
-	{
-	    /* DNA, if FASTA file used */
-	    qryd->TopSrc = qryd->TopCmp + (Size+1) * 4;
-	    qryd->TopHdr = qryd->TopSrc + (Size+1) * 4;
-	    qryd->TopAmb = qryd->TopHdr + (Size+1) * 4; /* DNA */
-	}
-	else
-	{
-	    qryd->TopSrc = 0;
-	    qryd->TopHdr = qryd->TopCmp + (Size+1) * 4;
-	    qryd->TopAmb = 0;
-	}
+        if(isdna)
+        {
+            /* DNA, if FASTA file used */
+            qryd->TopSrc = qryd->TopCmp + (Size+1) * 4;
+            qryd->TopHdr = qryd->TopSrc + (Size+1) * 4;
+            qryd->TopAmb = qryd->TopHdr + (Size+1) * 4; /* DNA */
+        }
+        else
+        {
+            qryd->TopSrc = 0;
+            qryd->TopHdr = qryd->TopCmp + (Size+1) * 4;
+            qryd->TopAmb = 0;
+        }
     }
 
     ajDebug("table file csq    starts at %d\n", qryd->TopCmp);
@@ -6506,12 +4496,12 @@ static AjBool seqBlastOpen(AjPSeqQuery qry, AjBool next)
 ** Sets the division count to the next included file. We need the division
 ** file to be already open.
 **
-** @param [u] qry [AjPSeqQuery] sequence query object.
+** @param [u] qry [AjPQuery] sequence query object.
 ** @return [ajuint] File number (starting at 1) or zero if all files are done.
 ** @@
 ******************************************************************************/
 
-static ajuint seqCdDivNext(AjPSeqQuery qry)
+static ajuint seqCdDivNext(AjPQuery qry)
 {
     SeqPCdQry qryd;
     AjPStr fullName = NULL;
@@ -6520,17 +4510,17 @@ static ajuint seqCdDivNext(AjPSeqQuery qry)
     qryd = qry->QryData;
 
     ajDebug("seqCdDivNext div: %d dfp: %x nameSize: %d name '%s'\n",
-	    qryd->div, qryd->maxdiv, qryd->nameSize, qryd->name);
+            qryd->div, qryd->maxdiv, qryd->nameSize, qryd->name);
 
     for(i=qryd->div; i < qryd->maxdiv; i++)
         if(!qryd->Skip[i])
-	{
-	    qryd->div = i+1;
-	    ajDebug("next file is %d '%S'\n", qryd->div, fullName);
-	    return qryd->div;
-	}
-	else
-	    ajDebug("skip %d  '%S'\n", (i+1), fullName);
+        {
+            qryd->div = i+1;
+            ajDebug("next file is %d '%S'\n", qryd->div, fullName);
+            return qryd->div;
+        }
+        else
+            ajDebug("skip %d  '%S'\n", (i+1), fullName);
 
     return 0;
 }
@@ -6553,14 +4543,14 @@ static AjBool seqBlastLoadBuff(AjPSeqin seqin)
     AjBool ret;
     AjPStr hdrstr = NULL;
     AjPStr seqstr = NULL;
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPCdQry qryd;
 
-    qry  = seqin->Query;
+    qry  = seqin->Input->Query;
     qryd = qry->QryData;
 
     if(!qry->QryData)
-	ajFatal("seqBlastLoadBuff Query Data not initialised");
+        ajFatal("seqBlastLoadBuff Query Data not initialised");
 
     ajDebug("seqBlastLoadBuff libt: %F %d\n", qryd->libt, qryd->idnum);
 
@@ -6587,71 +4577,71 @@ static AjBool seqBlastLoadBuff(AjPSeqin seqin)
 
 static AjBool seqBlastAll(AjPSeqin seqin)
 {
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPCdQry qryd;
 
-    qry  = seqin->Query;
+    qry  = seqin->Input->Query;
     qryd = qry->QryData;
 
     ajDebug("seqBlastAll\n");
 
     if(!qry->QryData)
     {
-	ajDebug("seqBlastAll initialising\n");
-	seqin->Single = ajTrue;
+        ajDebug("seqBlastAll initialising\n");
+        seqin->Input->Single = ajTrue;
 
-	if(!seqBlastOpen(qry, ajTrue))	/* replaces qry->QryData */
-	    ajFatal("seqBlastAll failed");
+        if(!seqBlastOpen(qry, ajTrue))  /* replaces qry->QryData */
+            ajFatal("seqBlastAll failed");
 
-	qryd = qry->QryData;
-	ajFilebuffDel(&seqin->Filebuff);
-	seqin->Filebuff = ajFilebuffNewNofile();
-	qryd->idnum = 0;
+        qryd = qry->QryData;
+        ajFilebuffDel(&seqin->Input->Filebuff);
+        seqin->Input->Filebuff = ajFilebuffNewNofile();
+        qryd->idnum = 0;
     }
     else
-	qryd = qry->QryData;
+        qryd = qry->QryData;
 
     if(!qryd->libr)
     {
-	ajDebug("seqBlastAll finished\n");
-	seqBlastQryClose(qry);
+        ajDebug("seqBlastAll finished\n");
+        seqBlastQryClose(qry);
 
-	return ajFalse;
+        return ajFalse;
     }
 
     if(!seqBlastLoadBuff(seqin))
     {
-	if(!seqBlastOpen(qry, ajTrue))	/* try the next file */
-	{
-	    seqBlastQryClose(qry);
+        if(!seqBlastOpen(qry, ajTrue))  /* try the next file */
+        {
+            seqBlastQryClose(qry);
 
-	    return ajFalse;
-	}
-
-	qryd = qry->QryData;
-	qryd->idnum = 0;
-
-	if(!qryd->libr)
-	{
-	    seqBlastQryClose(qry);
-	    ajDebug("seqBlastAll finished\n");
-
-	    return ajFalse;
+            return ajFalse;
         }
 
-	if(!seqBlastLoadBuff(seqin))
-	{
-	    seqBlastQryClose(qry);
+        qryd = qry->QryData;
+        qryd->idnum = 0;
 
-	    return ajFalse;
-	}
+        if(!qryd->libr)
+        {
+            seqBlastQryClose(qry);
+            ajDebug("seqBlastAll finished\n");
+
+            return ajFalse;
+        }
+
+        if(!seqBlastLoadBuff(seqin))
+        {
+            seqBlastQryClose(qry);
+
+            return ajFalse;
+        }
     }
 
     qryd->idnum++;
-    ajStrAssignS(&seqin->Db, qry->DbName);
+    ajStrAssignS(&seqin->Input->Db, qry->DbName);
 
     if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+        qry->QryDone = ajTrue;
 
     return ajTrue;
 }
@@ -6663,18 +4653,18 @@ static AjBool seqBlastAll(AjPSeqin seqin)
 **
 ** Opens a specific file number for an EMBLCD index
 **
-** @param [u] qry [AjPSeqQuery] Query data
+** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool seqCdQryFile(AjPSeqQuery qry)
+static AjBool seqCdQryFile(AjPQuery qry)
 {
     SeqPCdQry qryd;
     short j;
 
     if(!seqCdDivExp)
-	seqCdDivExp = ajRegCompC("^([^ ]+)( +([^ ]+))?");
+        seqCdDivExp = ajRegCompC("^([^ ]+)( +([^ ]+))?");
 
     ajDebug("seqCdQryFile qry %x\n",qry);
     qryd = qry->QryData;
@@ -6689,14 +4679,14 @@ static AjBool seqCdQryFile(AjPSeqQuery qry)
 
     ajReadbinChar(qryd->dfp->File, qryd->nameSize, qryd->name);
     ajDebug("DivCode: %d, code: %2hd '%s'\n",
-	    qryd->div, j, qryd->name);
+            qryd->div, j, qryd->name);
 
     /**ajCharFmtLower(qryd->name);**/
     if(!ajRegExecC(seqCdDivExp, qryd->name))
     {
-	ajErr("index division file error '%S'", qryd->name);
+        ajErr("index division file error '%S'", qryd->name);
 
-	return ajFalse;
+        return ajFalse;
     }
 
     ajRegSubI(seqCdDivExp, 1, &qryd->datfile);
@@ -6708,27 +4698,27 @@ static AjBool seqCdQryFile(AjPSeqQuery qry)
 
     if(!qryd->libr)
     {
-	ajDebug("Cannot open database file '%S'\n", qryd->datfile);
-	ajErr("Cannot open database file '%S'", qryd->datfile);
+        ajDebug("Cannot open database file '%S'\n", qryd->datfile);
+        ajErr("Cannot open database file '%S'", qryd->datfile);
 
-	return ajFalse;
+        return ajFalse;
     }
 
     if(ajStrGetLen(qryd->seqfile))
     {
-	ajFileClose(&qryd->libs);
-	qryd->libs = ajFileNewInNamePathS(qryd->seqfile, qry->Directory);
+        ajFileClose(&qryd->libs);
+        qryd->libs = ajFileNewInNamePathS(qryd->seqfile, qry->Directory);
 
-	if(!qryd->libs)
-	{
-	    ajDebug("Cannot open sequence file '%S'\n", qryd->seqfile);
-	    ajErr("Cannot open sequence file '%S'", qryd->seqfile);
+        if(!qryd->libs)
+        {
+            ajDebug("Cannot open sequence file '%S'\n", qryd->seqfile);
+            ajErr("Cannot open sequence file '%S'", qryd->seqfile);
 
-	    return ajFalse;
-	}
+            return ajFalse;
+        }
     }
     else
-	qryd->libs = NULL;
+        qryd->libs = NULL;
 
     return ajTrue;
 }
@@ -6736,130 +4726,11 @@ static AjBool seqCdQryFile(AjPSeqQuery qry)
 
 
 
-/* @section Remote URL Database Access ****************************************
-**
-** These functions manage the remote URL database access methods.
-**
-******************************************************************************/
-
-
-
-
-/* @funcstatic seqAccessDbfetch ***********************************************
-**
-** Reads sequence(s) using EBI's dbfetch REST services.
-**
-** Dbfetch is accessed as a simple URL.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqAccessDbfetch(AjPSeqin seqin)
-{
-    AjPStr host      = NULL;
-    AjPStr urlget    = NULL;
-    AjPStr get       = NULL;
-    AjPStr proxyName = NULL;		/* host for proxy access.*/
-    AjPStr httpver   = NULL;	      /* HTTP version 1.0, 1.1, ... */
-    ajint iport;
-    ajint proxyPort;
-    FILE *fp;
-    AjPSeqQuery qry;
-    AjPStr searchdb = NULL;
-    AjPStr qryid = NULL;
-    struct AJTIMEOUT timo;
-    
-    iport = 80;
-    proxyPort = 0;			/* port for proxy access */
-    qry = seqin->Query;
-
-    if(!ajNamDbGetDbalias(qry->DbName, &searchdb))
-	ajStrAssignS(&searchdb, qry->DbName);
-
-    ajDebug("seqAccessDbfetch %S:%S\n", qry->DbAlias, qry->Id);
-
-    if(!seqHttpUrl(qry, &iport, &host, &urlget))
-    {
-	ajStrDel(&host);
-	ajStrDel(&urlget);
-
-	return ajFalse;
-    }
-
-    ajSeqHttpVersion(qry, &httpver);
-
-    if(ajStrGetLen(qry->Id))
-	ajStrAssignS(&qryid, qry->Id);
-    else if(qry->HasAcc && ajStrGetLen(qry->Acc))
-	ajStrAssignS(&qryid, qry->Acc);
-    else
-	return ajFalse;
-
-    if(ajSeqHttpProxy(qry, &proxyPort, &proxyName))
-	ajFmtPrintS(&get, "GET http://%S:%d%S?db=%S&id=%S&style=raw\n",
-		    host, iport, urlget, searchdb, qryid);
-    else
-	ajFmtPrintS(&get, "GET %S?db=%S&id=%S&style=raw\n",
-		    urlget, searchdb, qryid);
-
-    /* finally we have set the GET command */
-    ajDebug("host '%S' port %d get '%S'\n", host, iport, get);
-
-    if(ajStrGetLen(proxyName))
-	fp = ajSeqHttpGetProxy(qry, proxyName, proxyPort, host, iport, get);
-    else
-	fp = ajSeqHttpGet(qry, host, iport, get);
-
-    if(!fp)
-	return ajFalse;
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
-
-    if(!seqin->Filebuff)
-    {
-	ajDebug("socket buffer attach failed\n");
-	ajErr("socket buffer attach failed for database '%S'", qry->DbName);
-
-	return ajFalse;
-    }
-
-    ajDebug("Ready to read errno %d msg '%s'\n",
-	    errno, ajMessGetSysmessageC());
-
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
-
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
-
-    ajFilebuffHtmlStrip(seqin->Filebuff);
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    ajStrDel(&host);
-    ajStrDel(&urlget);
-    ajStrDel(&get);
-    ajStrDel(&proxyName);
-    ajStrDel(&httpver);
-
-    if(!qry->CaseId)
-	qry->QryDone = ajTrue;
-
-    return ajTrue;
-}
-
-
-
-
-/* @funcstatic seqAccessMart ***************************************************
+/* @funcstatic seqAccessMart **************************************************
 **
 ** Reads sequence(s) using BioMart
 **
-** BioMart is accessed as a URL containging the server and post
+** BioMart is accessed as a URL containing the server and post
 **
 ** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
@@ -6870,11 +4741,8 @@ static AjBool seqAccessMart(AjPSeqin seqin)
 {
     AjPStr host      = NULL;
     AjPStr path      = NULL;
-    AjPStr get       = NULL;
-    AjPStr proxyName = NULL;		/* host for proxy access.*/
-    AjPStr httpver   = NULL;	      /* HTTP version 1.0, 1.1, ... */
     ajint iport;
-    AjPSeqQuery qry;
+    AjPQuery qry;
     AjPStr searchdb = NULL;
 
     AjPMartquery mq = NULL;
@@ -6885,15 +4753,16 @@ static AjBool seqAccessMart(AjPSeqin seqin)
 
     AjPStr atts    = NULL;
     AjPStr filts   = NULL;
-    AjPStr key1 = NULL;
-    AjPStr key2 = NULL;
-    AjPStr value1 = NULL;
-    AjPStr value2 = NULL;
+    const AjPStr value1 = NULL;
+    const AjPStr value2 = NULL;
     AjPStr dbid = NULL;
 
     AjBool dodebug = AJFALSE;
 
     ajuint i;
+
+    AjIList iter = NULL;
+    AjPQueryField field = NULL;
 
     /*
     ** need to separate the server host, port and address
@@ -6910,20 +4779,40 @@ static AjBool seqAccessMart(AjPSeqin seqin)
     */
 
     iport = 80;
-    qry = seqin->Query;
+    qry = seqin->Input->Query;
 
-    if(!ajNamDbGetDbalias(qry->DbName, &searchdb))
-	ajStrAssignS(&searchdb, qry->DbName);
+    if(!ajListGetLength(qry->QueryFields))
+        return ajFalse;
 
-    ajDebug("seqAccessMart %S:%S\n", qry->DbAlias, qry->Id);
-
-    if(!ajMartHttpUrl(qry, &iport, &host, &path))
+    if(ajStrGetLen(qry->SvrName))
     {
-	ajStrDel(&host);
-	ajStrDel(&path);
+        ajNamSvrGetdbAttrC(qry->SvrName, qry->DbName, "sequence",
+                           &seqin->DbSequence);
+        if(!ajNamSvrGetdbAttrC(qry->SvrName, qry->DbName,
+                               "dbalias", &searchdb))
+            ajStrAssignS(&searchdb, qry->DbName);
+    }
+    else if(!ajNamDbGetDbalias(qry->DbName, &searchdb))
+    {
+        ajNamDbGetAttrC(qry->DbName, "sequence",
+                        &seqin->DbSequence);
+        ajStrAssignS(&searchdb, qry->DbName);
+    }
+
+    ajDebug("seqAccessMart %S fields: %u field: '%S' returns: '%S' "
+            "identifier: '%S' accession: '%S' sequence: '%S'\n",
+            qry->DbAlias,
+            ajListGetLength(qry->QueryFields),
+            qry->DbFields, qry->DbReturn,
+            qry->DbIdentifier, qry->DbAccession, seqin->DbSequence);
+
+    if(!ajHttpQueryUrl(qry, &iport, &host, &path))
+    {
+        ajStrDel(&host);
+        ajStrDel(&path);
         ajStrDel(&searchdb);
-        
-	return ajFalse;
+
+        return ajFalse;
     }
 
     mq    = ajMartqueryNew();
@@ -6940,19 +4829,16 @@ static AjBool seqAccessMart(AjPSeqin seqin)
         ajMartGetFilters(seqin, searchdb);
         ajMartfiltersParse(seqin);
 
-        key1  = ajStrNewC("name");
-        key2  = ajStrNewC("displayName");
-    
         pmq = ajMartGetMartqueryPtr(seqin);
         filt = pmq->Filters;
 
         /* match to the database definition, try to find standard terms */
-    
+
         ajDebug("Filters\n=======\n");
         for(i=0; i < filt->Nfilters; ++i)
         {
-            value1 = ajTableFetch(filt->Filters[i],(void *)key1);
-            value2 = ajTableFetch(filt->Filters[i],(void *)key2);
+            value1 = ajTableFetchC(filt->Filters[i], "name");
+            value2 = ajTableFetchC(filt->Filters[i], "value");
             ajDebug("%-40S %S\n",value1,value2);
             if(ajStrMatchCaseS(value1, qry->DbIdentifier))
                 ajDebug("matched identifier '%S'\n", qry->DbIdentifier);
@@ -6975,13 +4861,13 @@ static AjBool seqAccessMart(AjPSeqin seqin)
         ajDebug("Attributes\n=========\n");
         for(i=0; i < att->Natts; ++i)
         {
-            value1 = ajTableFetch(att->Attributes[i],(void *)key1);
-            value2 = ajTableFetch(att->Attributes[i],(void *)key2);
+            value1 = ajTableFetchC(att->Attributes[i], "name");
+            value2 = ajTableFetchC(att->Attributes[i], "value");
             ajDebug("%-40S %S\n",value1,value2);
-            if(ajStrMatchCaseS(value1, qry->DbSequence))
-                ajDebug("matched sequence '%S'\n", qry->DbSequence);
+            if(ajStrMatchCaseS(value1, seqin->DbSequence))
+                ajDebug("matched sequence '%S'\n", seqin->DbSequence);
         }
-    
+
     }
 
     /* do the query, retrieve the attributes */
@@ -6998,7 +4884,17 @@ static AjBool seqAccessMart(AjPSeqin seqin)
     ** and have '%' as the RDBMS wildcard for '*'
     */
 
-    dbid = ajStrNewS(qry->Id);
+    iter = ajListIterNewread(qry->QueryFields);
+    while(!ajListIterDone(iter))
+    {
+        field = ajListIterGet(iter);
+        if(ajStrMatchC(field->Field, "id"))
+            dbid = ajStrNewS(field->Wildquery);
+    }
+    ajListIterDel(&iter);
+    if(!ajStrGetLen(dbid))
+        return ajFalse;
+
     ajStrFmtUpper(&dbid);
 
     ajFmtPrintS(&filts, "%S=\"%S\"", qry->DbIdentifier, dbid);
@@ -7011,7 +4907,7 @@ static AjBool seqAccessMart(AjPSeqin seqin)
     if(ajStrGetLen(qry->DbReturn))
         ajFmtPrintAppS(&atts, ",%S", qry->DbReturn);
 
-    ajFmtPrintAppS(&atts, ",%S", qry->DbSequence);
+    ajFmtPrintAppS(&atts, ",%S", seqin->DbSequence);
 
     qinfo = ajMartQinfoNew(1);
 
@@ -7041,11 +4937,11 @@ static AjBool seqAccessMart(AjPSeqin seqin)
     */
     ajMartSetQueryHeader(qinfo,ajFalse);
 
-    
+
     ajMartSetQueryDatasetName(qinfo,searchdb,0);
 
     ajMartSetQueryDatasetInterfaceC(qinfo,"default",0);
-    
+
     ajMartCheckQinfo(seqin,qinfo);
 
     ajMartMakeQueryXml(qinfo,seqin);
@@ -7054,19 +4950,16 @@ static AjBool seqAccessMart(AjPSeqin seqin)
 
     if(!ajMartSendQuery(seqin))
         ajWarn("Query Failed");
-    
+
     ajStrDel(&host);
     ajStrDel(&path);
-    ajStrDel(&get);
-    ajStrDel(&proxyName);
-    ajStrDel(&httpver);
     ajStrDel(&searchdb);
     ajStrDel(&dbid);
     ajStrDel(&filts);
     ajStrDel(&atts);
-    
+
     if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+        qry->QryDone = ajTrue;
 
     ajMartQinfoDel(&qinfo);
     ajMartquerySeqinFree(seqin);
@@ -7077,247 +4970,89 @@ static AjBool seqAccessMart(AjPSeqin seqin)
 
 
 
-/* @funcstatic seqAccessMrs ***********************************************
+/* @funcstatic seqAccessDAS ***************************************************
 **
-** Reads sequence(s) using CMBI Nijmegen's Maarten's Retrieval System.
-**
-** MRS is accessed as a simple URL.
+** Sequence access method for DAS sources
 **
 ** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-static AjBool seqAccessMrs(AjPSeqin seqin)
+static AjBool seqAccessDAS(AjPSeqin seqin)
 {
-    AjPStr host      = NULL;
-    AjPStr urlget    = NULL;
-    AjPStr get       = NULL;
-    AjPStr proxyName = NULL;		/* host for proxy access.*/
-    AjPStr httpver   = NULL;	      /* HTTP version 1.0, 1.1, ... */
-    ajint iport;
-    ajint proxyPort;
-    FILE *fp;
-    AjPSeqQuery qry;
-    AjPStr searchdb = NULL;
-    AjPStr qryid = NULL;
-    struct AJTIMEOUT timo;
-    
-    iport = 80;
-    proxyPort = 0;			/* port for proxy access */
-    qry = seqin->Query;
+    AjPStr host         = NULL;
+    AjPStr path         = NULL;
+    AjIList iter        = NULL;
+    AjPQueryField field = NULL;
+    AjPStr segments     = NULL;
+    AjPQuery qry;
+    AjBool ret = ajTrue;
+    ajint port = 80;
 
-    if(!ajNamDbGetDbalias(qry->DbName, &searchdb))
-	ajStrAssignS(&searchdb, qry->DbName);
 
-    ajDebug("seqAccessMrs %S:%S\n", qry->DbAlias, qry->Id);
+    qry = seqin->Input->Query;
 
-    if(!seqHttpUrl(qry, &iport, &host, &urlget))
+    if(qry->QryDone)
+        return ajFalse;
+
+    if(!ajHttpQueryUrl(qry, &port, &host, &path))
     {
-	ajStrDel(&host);
-	ajStrDel(&urlget);
+        ajStrDel(&host);
+        ajStrDel(&path);
 
-	return ajFalse;
+        return ajFalse;
     }
 
-    ajSeqHttpVersion(qry, &httpver);
+    if(ajStrGetCharLast(path)!='/')
+        ajStrAppendK(&path,'/');
 
-    if(ajSeqHttpProxy(qry, &proxyPort, &proxyName))
-	ajFmtPrintS(&get, "GET http://%S:%d%S",
-		    host, iport, urlget);
+    segments = ajStrNew();
+
+    iter = ajListIterNewread(qry->QueryFields);
+
+    while(!ajListIterDone(iter))
+    {
+        field = ajListIterGet(iter);
+
+        if(ajStrMatchCaseC(field->Field, "segment") ||
+           ajStrMatchCaseC(field->Field, "id"))
+        {
+            if(!ajStrGetLen(segments))
+                ajFmtPrintS(&segments,"segment=%S",
+                            field->Wildquery);
+            else
+                ajFmtPrintS(&segments,"%S;segment=%S",
+                            segments,field->Wildquery);
+
+            /* TODO: segment specific start,end positions */
+            if(seqin->End > 0)
+                ajFmtPrintS(&segments,"%S:%u,%u",
+                            segments,seqin->Begin,seqin->End);
+        }
+    }
+
+    ajFmtPrintS(&path,"%Ssequence?%S",path, segments);
+
+    ajFilebuffDel(&seqin->Input->Filebuff);
+    seqin->Input->Filebuff = ajHttpRead(qry->DbHttpVer, qry->DbName,
+                                        qry->DbProxy,
+                                        host, port, path);
+
+    if(seqin->Input->Filebuff)
+        ajFilebuffHtmlNoheader(seqin->Input->Filebuff);
     else
-	ajFmtPrintS(&get, "GET %S",
-		    urlget);
+        ret = ajFalse;
 
-    ajFmtPrintAppS(&get,
-		   "?db=%S",
-		   searchdb, qryid);
-
-    if(ajStrGetLen(qry->Id))
-	ajFmtPrintAppS(&get,
-		       "&query=id:%S",
-		       qry->Id);
-    else if(qry->HasAcc && ajStrGetLen(qry->Acc))
-    {
-    	ajFmtPrintAppS(&get,
-		       "&query=ac:%S",
-		       qry->Acc);
-	return ajFalse;
-    }
-
-    ajFmtPrintAppS(&get,
-		   "&format=entry&exp=1&save_to=text/plain",
-		   searchdb, qryid);
-
-    ajFmtPrintAppS(&get, " HTTP/%S\n", httpver);
-
-    /* finally we have set the GET command */
-    ajDebug("host '%S' port %d get '%S'\n", host, iport, get);
-
-    if(ajStrGetLen(proxyName))
-	fp = ajSeqHttpGetProxy(qry, proxyName, proxyPort, host, iport, get);
-    else
-	fp = ajSeqHttpGet(qry, host, iport, get);
-
-    if(!fp)
-	return ajFalse;
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
-
-    if(!seqin->Filebuff)
-    {
-	ajDebug("socket buffer attach failed\n");
-	ajErr("socket buffer attach failed for database '%S'", qry->DbName);
-
-	return ajFalse;
-    }
-
-    ajDebug("Ready to read errno %d msg '%s'\n",
-	    errno, ajMessGetSysmessageC());
-
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
-
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
-
-    ajFilebuffHtmlStrip(seqin->Filebuff);
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
+    qry->QryDone = ajTrue;
 
     ajStrDel(&host);
-    ajStrDel(&urlget);
-    ajStrDel(&get);
-    ajStrDel(&proxyName);
-    ajStrDel(&httpver);
+    ajStrDel(&path);
+    ajStrDel(&segments);
 
-    if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+    ajListIterDel(&iter);
 
-    return ajTrue;
-}
-
-
-
-
-/* @funcstatic seqAccessMrs3 ***********************************************
-**
-** Reads sequence(s) using CMBI Nijmegen's Maarten's Retrieval System.
-**
-** MRS is accessed as a simple URL.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqAccessMrs3(AjPSeqin seqin)
-{
-    AjPStr host      = NULL;
-    AjPStr urlget    = NULL;
-    AjPStr get       = NULL;
-    AjPStr proxyName = NULL;		/* host for proxy access.*/
-    AjPStr httpver   = NULL;	      /* HTTP version 1.0, 1.1, ... */
-    ajint iport;
-    ajint proxyPort;
-    FILE *fp;
-    AjPSeqQuery qry;
-    AjPStr searchdb = NULL;
-    AjPStr qryid = NULL;
-    struct AJTIMEOUT timo;
-    
-    iport = 80;
-    proxyPort = 0;			/* port for proxy access */
-    qry = seqin->Query;
-
-    if(!ajNamDbGetDbalias(qry->DbName, &searchdb))
-	ajStrAssignS(&searchdb, qry->DbName);
-
-    ajDebug("seqAccessMrs %S:%S\n", qry->DbAlias, qry->Id);
-
-    if(!seqHttpUrl(qry, &iport, &host, &urlget))
-    {
-	ajStrDel(&host);
-	ajStrDel(&urlget);
-
-	return ajFalse;
-    }
-
-    ajSeqHttpVersion(qry, &httpver);
-
-    if(ajSeqHttpProxy(qry, &proxyPort, &proxyName))
-	ajFmtPrintS(&get, "GET http://%S:%d%S",
-		    host, iport, urlget);
-    else
-	ajFmtPrintS(&get, "GET %S",
-		    urlget);
-
-    ajFmtPrintAppS(&get,
-		   "?db=%S",
-		   searchdb, qryid);
-
-    if(ajStrGetLen(qry->Id))
-	ajFmtPrintAppS(&get,
-		       "&id=%S",
-		       qry->Id);
-    else if(qry->HasAcc && ajStrGetLen(qry->Acc))
-    {
-    	ajFmtPrintAppS(&get,
-		       "&ac=%S",
-		       qry->Acc);
-	return ajFalse;
-    }
-
-    ajFmtPrintAppS(&get, " HTTP/%S\n", httpver);
-
-    /* finally we have set the GET command */
-    ajDebug("host '%S' port %d get '%S'\n", host, iport, get);
-
-    if(ajStrGetLen(proxyName))
-	fp = ajSeqHttpGetProxy(qry, proxyName, proxyPort, host, iport, get);
-    else
-	fp = ajSeqHttpGet(qry, host, iport, get);
-
-    if(!fp)
-	return ajFalse;
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
-
-    if(!seqin->Filebuff)
-    {
-	ajDebug("socket buffer attach failed\n");
-	ajErr("socket buffer attach failed for database '%S'", qry->DbName);
-
-	return ajFalse;
-    }
-
-    ajDebug("Ready to read errno %d msg '%s'\n",
-	    errno, ajMessGetSysmessageC());
-
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
-    
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
-
-    ajFilebuffHtmlStrip(seqin->Filebuff);
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    ajStrDel(&host);
-    ajStrDel(&urlget);
-    ajStrDel(&get);
-    ajStrDel(&proxyName);
-    ajStrDel(&httpver);
-
-    if(!qry->CaseId)
-	qry->QryDone = ajTrue;
-
-    return ajTrue;
+    return ret;
 }
 
 
@@ -7339,13 +5074,13 @@ static AjBool seqAccessSql(AjPSeqin seqin)
 {
     AjPStr password   = NULL;
     AjPStr socketfile = NULL;
-    
+
     ajint iport;
-    AjPSeqQuery qry;
+    AjPQuery qry;
     AjPStr searchtab = NULL;
 
     AjPStr url = NULL;
-    AjPUrl uo  = NULL;
+    AjPUrlref uo  = NULL;
     AjPStr sql = NULL;
 
     AjESqlconnectionClient client;
@@ -7358,35 +5093,50 @@ static AjBool seqAccessSql(AjPSeqin seqin)
     AjPStr tabstr = NULL;
     AjPStr str    = NULL;
     AjPStr comp   = NULL;
-    
+
+    const AjPStr qryId = NULL;
+
 #if !defined(HAVE_MYSQL) && !defined(HAVE_POSTGRESQL)
     ajWarn("Cannot use access method SQL without mysql or postgresql");
     return ajFalse;
 #endif
-    
+
     iport = 3306;
 
-    qry = seqin->Query;
+    qry = seqin->Input->Query;
 
-    if(!ajNamDbGetDbalias(qry->DbName, &searchtab))
-	ajStrAssignS(&searchtab, qry->DbName);
+    if(ajStrGetLen(qry->SvrName))
+    {
+        ajNamSvrGetdbAttrC(qry->SvrName, qry->DbName, "sequence",
+                           &seqin->DbSequence);
+        if(!ajNamSvrGetdbAttrC(qry->SvrName, qry->DbName,
+                               "dbalias", &searchtab))
+            ajStrAssignS(&searchtab, qry->DbName);
+    }
+    else if(!ajNamDbGetDbalias(qry->DbName, &searchtab))
+    {
+        ajNamDbGetAttrC(qry->DbName, "sequence",
+                        &seqin->DbSequence);
+        ajStrAssignS(&searchtab, qry->DbName);
+    }
 
-    ajDebug("seqAccessSql %S:%S\n", qry->DbAlias, qry->Id);
+    ajDebug("seqAccessSql %S fields: %u\n",
+            qry->DbAlias, ajListGetLength(qry->QueryFields));
 
     url = ajStrNew();
 
     if(!ajNamDbGetUrl(qry->DbName, &url))
     {
-	ajErr("no URL defined for database %S", qry->DbName);
+        ajErr("no URL defined for database %S", qry->DbName);
 
-	return ajFalse;
+        return ajFalse;
     }
 
-    uo = ajStrUrlNew();
-    
-    ajStrUrlParseC(&uo, ajStrGetPtr(url));
-    ajStrUrlSplitPort(uo);
-    ajStrUrlSplitUsername(uo);
+    uo = ajHttpUrlrefNew();
+
+    ajHttpUrlrefParseC(&uo, ajStrGetPtr(url));
+    ajHttpUrlrefSplitPort(uo);
+    ajHttpUrlrefSplitUsername(uo);
 
     if(ajStrMatchCaseC(uo->Method,"mysql"))
         client = ajESqlconnectionClientMySQL;
@@ -7397,38 +5147,40 @@ static AjBool seqAccessSql(AjPSeqin seqin)
 
     if(!ajStrGetLen(uo->Port))
         ajFmtPrintS(&uo->Port,"%d",iport);
-    
+
     if(ajStrGetLen(uo->Password))
     {
         password = ajStrNew();
         ajStrAssignS(&password,uo->Password);
     }
-    
+
     connection = ajSqlconnectionNewData(client,uo->Username,password,
                                         uo->Host,uo->Port,socketfile,
                                         uo->Absolute);
 
     ajStrDel(&password);
-    
+
     if(!connection)
         ajErr("Could not connect to SQL database server");
 
 
     sql  = ajStrNew();
     comp = ajStrNew();
-    
-    if(qry->Type == QRY_ENTRY)
-        ajFmtPrintS(&comp,"='%S'",qry->Id);
-    else if(qry->Type == QRY_QUERY)
+
+    qryId = ajQueryGetId(qry);
+
+    if(qry->QueryType == AJQUERY_ENTRY)
+        ajFmtPrintS(&comp,"='%S'",qryId);
+    else if(qry->QueryType == AJQUERY_QUERY)
     {
-        ajFmtPrintS(&comp," LIKE '%S'",qry->Id);
+        ajFmtPrintS(&comp," LIKE '%S'",qryId);
         ajStrExchangeKK(&comp,'*','%');
         ajStrExchangeKK(&comp,'?','_');
     }
-    else if(qry->Type == QRY_ALL)
+    else if(qry->QueryType == AJQUERY_ALL)
         comp = ajStrNewC(" LIKE '%'");
-    
-    ajFmtPrintS(&sql,"SELECT %S,%S",qry->DbSequence,qry->DbIdentifier);
+
+    ajFmtPrintS(&sql,"SELECT %S,%S",seqin->DbSequence, qry->DbIdentifier);
 
     if(ajStrGetLen(qry->DbReturn))
         ajFmtPrintAppS(&sql, ",%S", qry->DbReturn);
@@ -7443,17 +5195,17 @@ static AjBool seqAccessSql(AjPSeqin seqin)
 
     ajDebug("SQL = %S\n",sql);
     ajStrDel(&comp);
-    
+
     statement = ajSqlstatementNewRun(connection,sql);
     if(!statement)
-        ajErr("Could not execute SQLstatement [%S]");
-    
+        ajErr("Could not execute SQL statement [%S]", sql);
+
     iter = ajSqlrowiterNew(statement);
 
     tabstr = ajStrNew();
-    
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewNofile();
+
+    ajFilebuffDel(&seqin->Input->Filebuff);
+    seqin->Input->Filebuff = ajFilebuffNewNofile();
 
 
     while(!ajSqlrowiterDone(iter))
@@ -7471,582 +5223,26 @@ static AjBool seqAccessSql(AjPSeqin seqin)
         while(ajSqlcolumnToStr(row,&str))
             ajFmtPrintAppS(&tabstr, "\t%S",str);
 
-        ajFilebuffLoadS(seqin->Filebuff,tabstr);
+        ajFilebuffLoadS(seqin->Input->Filebuff,tabstr);
     }
-    
+
     if(!qry->CaseId)
-	qry->QryDone = ajTrue;
-    
+        qry->QryDone = ajTrue;
+
     ajSqlrowiterDel(&iter);
     ajSqlstatementDel(&statement);
     ajSqlconnectionDel(&connection);
 
     ajStrDel(&url);
-    ajStrUrlDel(&uo);
+    ajHttpUrlrefDel(&uo);
     ajStrDel(&searchtab);
     ajStrDel(&tabstr);
     ajStrDel(&str);
     ajStrDel(&sql);
-    
-    return ajTrue;
-}
-
-
-
-
-/* @funcstatic seqAccessUrl ***************************************************
-**
-** Reads sequence(s) using a remote URL. Reads the results into a buffer
-** and strips out HTML before returning to the caller.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-static AjBool seqAccessUrl(AjPSeqin seqin)
-{
-    AjPStr host      = NULL;
-    AjPStr urlget    = NULL;
-    AjPStr get       = NULL;
-    AjPStr proxyName = NULL;		/* host for proxy access.*/
-    AjPStr httpver   = NULL;	      /* HTTP version 1.0, 1.1, ... */
-    ajint iport;
-    ajint proxyPort;
-    FILE *fp;
-    AjPSeqQuery qry;
-    struct AJTIMEOUT timo;
-    
-    iport = 80;
-    proxyPort = 0;			/* port for proxy access */
-    qry = seqin->Query;
-
-    if(!seqHttpUrl(qry, &iport, &host, &urlget))
-    {
-	ajStrDel(&host);
-	ajStrDel(&urlget);
-
-	return ajFalse;
-    }
-
-    ajSeqHttpVersion(qry, &httpver);
-
-    if(ajSeqHttpProxy(qry, &proxyPort, &proxyName))
-	ajFmtPrintS(&get, "GET http://%S:%d%S HTTP/%S\n",
-		    host, iport, urlget, httpver);
-    else
-	ajFmtPrintS(&get, "GET %S HTTP/%S\n", urlget, httpver);
-
-    /* replace %s in the "GET" command  with the ID */
-    ajStrExchangeCS(&get, "%s", qry->Id);
-
-    /* finally we have set the GET command */
-    ajDebug("host '%S' port %d get '%S'\n", host, iport, get);
-
-    if(ajStrGetLen(proxyName))
-	fp = ajSeqHttpGetProxy(qry, proxyName, proxyPort, host, iport, get);
-    else
-	fp = ajSeqHttpGet(qry, host, iport, get);
-
-    if(!fp)
-	return ajFalse;
-
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewFromCfile(fp);
-
-    if(!seqin->Filebuff)
-    {
-	ajDebug("socket buffer attach failed\n");
-	ajErr("socket buffer attach failed for database '%S'", qry->DbName);
-
-	return ajFalse;
-    }
-
-    ajDebug("Ready to read errno %d msg '%s'\n",
-	    errno, ajMessGetSysmessageC());
-
-    timo.seconds = 180;
-    ajSysTimeoutSet(&timo);
-
-    ajFilebuffLoadAll(seqin->Filebuff);
-
-    ajSysTimeoutUnset(&timo);
-
-    ajFilebuffHtmlStrip(seqin->Filebuff);
-
-    ajStrAssignS(&seqin->Db, qry->DbName);
-
-    ajStrDel(&host);
-    ajStrDel(&urlget);
-    ajStrDel(&get);
-    ajStrDel(&proxyName);
-    ajStrDel(&httpver);
-
-    if(!qry->CaseId)
-	qry->QryDone = ajTrue;
 
     return ajTrue;
 }
 
-
-
-
-/* @funcstatic seqSocketTimeout ***********************************************
-**
-** Fatal error if a socket read hangs
-**
-** @param [r] sig [int] Signal code - always SIGALRM but required by the
-**                      signal call
-** @return [void]
-** @@
-******************************************************************************/
-
-static void seqSocketTimeout(int sig)
-{
-    (void) sig;
-
-    ajDie("Socket read timeout");
-
-    return;
-}
-
-
-
-
-/* @funcstatic seqHttpUrl *****************************************************
-**
-** Returns the components of a URL
-**
-** @param [r] qry [const AjPSeqQuery] Query object
-** @param [w] iport [ajint*] Port
-** @param [w] host [AjPStr*] Host name
-** @param [w] urlget [AjPStr*] URL for the HTTP header GET
-** @return [AjBool] ajTrue if the URL was parsed
-** @@
-******************************************************************************/
-
-static AjBool seqHttpUrl(const AjPSeqQuery qry, ajint* iport, AjPStr* host,
-			 AjPStr* urlget)
-{
-    AjPStr url              = NULL;
-    AjPStr portstr          = NULL;
-
-    if(!seqRegHttpUrl)
-	seqRegHttpUrl = ajRegCompC("^http://([a-z0-9.-]+)(:[0-9]+)?(.*)");
-
-    if(!ajNamDbGetUrl(qry->DbName, &url))
-    {
-	ajErr("no URL defined for database %S", qry->DbName);
-
-	return ajFalse;
-    }
-
-    if(!ajRegExec(seqRegHttpUrl, url))
-    {
-	ajErr("invalid URL '%S' for database '%S'", url, qry->DbName);
-
-	return ajFalse;
-    }
-    
-    ajDebug("seqHttpUrl db: '%S' url: '%S'\n", qry->DbName, url);
-    ajRegSubI(seqRegHttpUrl, 1, host);
-    ajRegSubI(seqRegHttpUrl, 2, &portstr);
-
-    if(ajStrGetLen(portstr))
-    {
-	ajStrCutStart(&portstr, 1);
-	ajStrToInt(portstr, iport);
-    }
-
-    ajRegSubI(seqRegHttpUrl, 3, urlget);
-    ajStrDel(&portstr);
-    ajStrDel(&url);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ajSeqHttpProxy ******************************************************
-**
-** Returns a proxy definition (if any)
-**
-** @param [r] qry [const AjPSeqQuery] Query object
-** @param [w] proxyport [ajint*] Proxy port
-** @param [w] proxyname [AjPStr*] Proxy name
-** @return [AjBool] ajTrue is a proxy was defined
-** @@
-******************************************************************************/
-
-AjBool ajSeqHttpProxy(const AjPSeqQuery qry, ajint* proxyport,
-                      AjPStr* proxyname)
-{
-    AjPStr proxyStr          = NULL;
-    AjPStr proxy             = NULL;
-
-    if(!seqRegHttpProxy)
-	seqRegHttpProxy = ajRegCompC("^([a-z0-9.-]+):([0-9]+)$");
-
-    ajNamGetValueC("proxy", &proxy);
-
-    if(ajStrGetLen(qry->DbProxy))
-	ajStrAssignS(&proxy, qry->DbProxy);
-
-    if(ajStrMatchC(proxy, ":"))
-	ajStrAssignClear(&proxy);
-
-    if(ajRegExec(seqRegHttpProxy, proxy))
-    {
-	ajRegSubI(seqRegHttpProxy, 1, proxyname);
-	ajRegSubI(seqRegHttpProxy, 2, &proxyStr);
-	ajStrToInt(proxyStr, proxyport);
-	ajStrDel(&proxyStr);
-	ajStrDel(&proxy);
-
-	return ajTrue;
-    }
-
-    ajStrDel(proxyname);
-    *proxyport = 0;
-    ajStrDel(&proxy);
-
-    return ajFalse;
-}
-
-
-
-
-/* @func ajSeqHttpVersion ****************************************************
-**
-** Returns the HTTP version
-**
-** @param [r] qry [const AjPSeqQuery] Query object
-** @param [w] httpver [AjPStr*] HTTP version
-** @return [AjBool] ajTrue if a version was defined
-** @@
-******************************************************************************/
-
-AjBool ajSeqHttpVersion(const AjPSeqQuery qry, AjPStr* httpver)
-{
-    ajNamGetValueC("httpversion", httpver);
-    ajDebug("httpver getValueC '%S'\n", *httpver);
-
-    if(ajStrGetLen(qry->DbHttpVer))
-	ajStrAssignS(httpver, qry->DbHttpVer);
-
-    ajDebug("httpver after qry '%S'\n", *httpver);
-
-    if(!ajStrGetLen(*httpver))
-    {
-	ajStrAssignC(httpver, "1.1");
-
-	return ajFalse;
-    }
-
-    if(!ajStrIsFloat(*httpver))
-    {
-	ajWarn("Invalid HTTPVERSION '%S', reset to 1.1", *httpver);
-	ajStrAssignC(httpver, "1.1");
-
-	return ajFalse;
-    }
-
-    ajDebug("httpver final '%S'\n", *httpver);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ajSeqHttpGet ********************************************************
-**
-** Opens an HTTP connection
-**
-** @param [r] qry [const AjPSeqQuery] Query object
-** @param [r] host [const AjPStr] Host name
-** @param [r] iport [ajint] Port
-** @param [r] get [const AjPStr] GET string
-** @return [FILE*] Open file on success, NULL on failure
-** @@
-******************************************************************************/
-
-FILE* ajSeqHttpGet(const AjPSeqQuery qry, const AjPStr host, ajint iport,
-                   const AjPStr get)
-{
-    FILE* fp;
-    struct addrinfo hints;
-    struct addrinfo *add;
-    struct addrinfo *addinit;
-
-    AjPStr portstr = NULL;
-
-    const char *phost = NULL;
-    const char *pport = NULL;
-
-    struct AJSOCKET sock;
-    
-    AjPStr errstr = NULL;
-    int ret;
-
-    phost = ajStrGetPtr(host);
-    ajDebug("ajSeqHttpGet db: '%S' host '%s' get: '%S'\n",
-	    qry->DbName, phost, get);
-
-    memset(&hints,0,sizeof(hints));
-
-    hints.ai_socktype = SOCK_STREAM;
-
-    portstr = ajStrNew();
-    ajFmtPrintS(&portstr,"%d",iport);
-    pport =  ajStrGetPtr(portstr);
-    
-    ret = getaddrinfo(phost, pport, &hints, &addinit);
-
-    ajStrDel(&portstr);
-    
-    if(ret)
-    {
-	ajErr("[%s] Failed to find host '%S' for database '%S'",
-	      gai_strerror(ret), host, qry->DbName);
-
-	return NULL;
-    }
-
-    sock.sock = AJBADSOCK;
-    
-    for(add = addinit; add; add = add->ai_next)
-    {
-        sock.sock = ajSysFuncSocket(add->ai_family, add->ai_socktype,
-                                    add->ai_protocol);
-
-        if(sock.sock == AJBADSOCK)
-            continue;
-
-        if(connect(sock.sock, add->ai_addr, add->ai_addrlen))
-        {
-            ajSysSocketclose(sock);
-            sock.sock = AJBADSOCK;
-            continue;
-        }
-
-        break;
-    }
-
-    freeaddrinfo(addinit);
-    
-    if(sock.sock == AJBADSOCK)
-    {
-	ajDebug("Socket connect failed\n");
-	ajFmtPrintS(&errstr, "socket connect failed for database '%S'",
-		    qry->DbName);
-	ajErr("%S", errstr);
-	perror(ajStrGetPtr(errstr));
-	ajStrDel(&errstr);
-
-	return NULL;
-    }
-
-    fp = seqHttpSend(qry, sock, host, iport, get);
-
-    return fp;
-}
-
-
-
-
-/* @func ajSeqHttpGetProxy ***************************************************
-**
-** Opens an HTTP connection via a proxy
-**
-** @param [r] qry [const AjPSeqQuery] Query object
-** @param [r] proxyname [const AjPStr] Proxy name
-** @param [r] proxyport [ajint] Proxy port
-** @param [r] host [const AjPStr] Host name
-** @param [r] iport [ajint] Port
-** @param [r] get [const AjPStr] GET string
-** @return [FILE*] Open file on success, NULL on failure
-** @@
-******************************************************************************/
-
-FILE* ajSeqHttpGetProxy(const AjPSeqQuery qry, const AjPStr proxyname,
-                        ajint proxyport, const AjPStr host, ajint iport,
-                        const AjPStr get)
-{
-    FILE* fp;
-    struct addrinfo hints;
-    struct addrinfo *add;
-    struct addrinfo *addinit;
-
-    AjPStr portstr = NULL;
-
-    const char *phost = NULL;
-    const char *pport = NULL;
-
-    struct AJSOCKET sock;
-    
-    AjPStr errstr = NULL;
-    int ret;
-
-    phost = ajStrGetPtr(proxyname);
-    ajDebug("ajSeqHttpGetProxy db: '%S' host '%s' get: '%S'\n",
-	    qry->DbName, phost, get);
-
-    memset(&hints,0,sizeof(hints));
-
-    hints.ai_socktype = SOCK_STREAM;
-
-    portstr = ajStrNew();
-    ajFmtPrintS(&portstr,"%d",proxyport);
-    pport =  ajStrGetPtr(portstr);
-    
-    ret = getaddrinfo(phost, pport, &hints, &addinit);
-
-    ajStrDel(&portstr);
-    
-    if(ret)
-    {
-	ajErr("[%s] Failed to find host '%S' for database '%S'",
-	      gai_strerror(ret), host, qry->DbName);
-
-	return NULL;
-    }
-
-    sock.sock = AJBADSOCK;
-    
-    for(add = addinit; add; add = add->ai_next)
-    {
-        sock.sock = ajSysFuncSocket(add->ai_family, add->ai_socktype,
-                                    add->ai_protocol);
-
-        if(sock.sock == AJBADSOCK)
-            continue;
-
-        if(connect(sock.sock, add->ai_addr, add->ai_addrlen))
-        {
-            ajSysSocketclose(sock);
-            sock.sock = AJBADSOCK;
-            continue;
-        }
-
-        break;
-    }
-
-    freeaddrinfo(addinit);
-    
-    if(sock.sock == AJBADSOCK)
-    {
-	ajDebug("Socket connect failed\n");
-	ajFmtPrintS(&errstr, "socket connect failed for database '%S'",
-		    qry->DbName);
-	ajErr("%S", errstr);
-	perror(ajStrGetPtr(errstr));
-	ajStrDel(&errstr);
-
-	return NULL;
-    }
-
-
-    fp = seqHttpSend(qry, sock, host, iport, get);
-
-    return fp;
-}
-
-
-
-
-/* @funcstatic seqHttpSend **************************************************
-**
-** Send HTTP GET request to an open socket
-**
-** @param [r] qry [const AjPSeqQuery] Query object
-** @param [u] sock [struct AJSOCKET] Socket structure
-** @param [r] host [const AjPStr] Host name for Host header line
-** @param [r] iport [ajint] Port for Host header line
-** @param [r] get [const AjPStr] GET string
-** @return [FILE*] Open file on success, NULL on failure
-** @@
-******************************************************************************/
-
-static FILE* seqHttpSend(const AjPSeqQuery qry,
-                         struct AJSOCKET sock,
-                         const AjPStr host, ajint iport,
-                         const AjPStr get)
-{
-    FILE* fp       = NULL;
-    AjPStr gethead = NULL;
-
-    ajuint isendlen;
-
-    ajDebug("seqHttpSend: Sending to socket\n");
-
-    gethead = ajStrNew();
-    
-    isendlen = send(sock.sock, ajStrGetPtr(get), ajStrGetLen(get), 0);
-
-    if(isendlen != ajStrGetLen(get))
-	ajErr("send failure, expected %d bytes returned %d : %s\n",
-	      ajStrGetLen(get), isendlen, ajMessGetSysmessageC());
-
-    ajDebug("sending: '%S'\n", get);
-    ajDebug("send for GET errno %d msg '%s'\n",
-	    errno, ajMessGetSysmessageC());
-
-    /*
-       ajFmtPrintS(&gethead, "Accept: \n");
-       ajDebug("sending: '%S'\n", gethead);
-       send(sock.sock, ajStrGetPtr(gethead), ajStrGetLen(gethead), 0);
-       
-    */
-
-    ajFmtPrintS(&gethead, "User-Agent: EMBOSS/%S (%S)\r\n",
-                ajNamValueVersion(), ajNamValueSystem());
-    isendlen = send(sock.sock, ajStrGetPtr(gethead), ajStrGetLen(gethead), 0);
-
-    if(isendlen != ajStrGetLen(gethead))
-	ajErr("send failure, expected %d bytes returned %d : %s\n",
-	      ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
-    ajDebug("sending: '%S'\n", gethead);
-
-
-    
-    ajFmtPrintS(&gethead, "Host: %S:%d\r\n", host, iport);
-    isendlen =  send(sock.sock, ajStrGetPtr(gethead), ajStrGetLen(gethead), 0);
-
-    if(isendlen != ajStrGetLen(gethead))
-	ajErr("send failure, expected %d bytes returned %d : %s\n",
-	      ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
-    ajDebug("sending: '%S'\n", gethead);
-    ajDebug("send for host errno %d msg '%s'\n",
-	    errno, ajMessGetSysmessageC());
-
-    
-    ajFmtPrintS(&gethead, "\r\n");
-    isendlen =  send(sock.sock, ajStrGetPtr(gethead), ajStrGetLen(gethead), 0);
-
-    if(isendlen != ajStrGetLen(gethead))
-	ajErr("send failure, expected %d bytes returned %d : %s\n",
-	      ajStrGetLen(gethead), isendlen, ajMessGetSysmessageC());
-    ajDebug("sending: '%S'\n", gethead);
-    ajDebug("send for blankline errno %d msg '%s'\n",
-	    errno, ajMessGetSysmessageC());
-
-    ajStrDel(&gethead);
-
-
-    fp = ajSysFdFromSocket(sock, "r");
-    
-    if(!fp)
-    {
-	ajDebug("seqHttpSend socket open failed\n");
-	ajErr("seqHttpSend: socket open failed for database '%S'", qry->DbName);
-
-	return NULL;
-    }
-
-    return fp;
-}
 
 
 
@@ -8073,36 +5269,20 @@ static FILE* seqHttpSend(const AjPSeqQuery qry,
 
 static AjBool seqAccessEnsembl(AjPSeqin seqin)
 {
-    AjBool failure = AJFALSE;
-
-    AjPList dbas        = NULL;
-    AjPList identifiers = NULL;
-
-    AjPRegexp rp = NULL;
-
     AjPSeq seq = NULL;
 
-    AjPSeqQuery qry = NULL;
+    AjPQuery qry = NULL;
 
-    AjPStr urlstr     = NULL;
-    AjPStr prefix     = NULL;
-    AjPStr expression = NULL;
-    AjPStr identifier = NULL;
+    AjPStr stableidentifier = NULL;
 
-    AjPStrTok token = NULL;
+    EnsPExon        exon        = NULL;
+    EnsPExonadaptor exonadaptor = NULL;
 
-    EnsPDatabaseconnection dbc = NULL;
+    EnsPTranscript        transcript        = NULL;
+    EnsPTranscriptadaptor transcriptadaptor = NULL;
 
-    EnsPDatabaseadaptor dba = NULL;
-
-    EnsPExon exon      = NULL;
-    EnsPExonadaptor ea = NULL;
-
-    EnsPTranscript transcript = NULL;
-    EnsPTranscriptadaptor tca = NULL;
-
-    EnsPTranslation translation = NULL;
-    EnsPTranslationadaptor tla  = NULL;
+    EnsPTranslation        translation        = NULL;
+    EnsPTranslationadaptor translationadaptor = NULL;
 
     SeqPEnsembl se = NULL;
 
@@ -8113,429 +5293,27 @@ static AjBool seqAccessEnsembl(AjPSeqin seqin)
             "  seqin %p\n",
             seqin);
 
-    ensSeqinTrace(seqin, 1);
+    ensTraceSeqin(seqin, 1);
 
-    /* The seqRead function seems to insist on a file buffer. */
+    /* The seqRead function insists on a file buffer. */
 
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewNofile();
+    /* ajFilebuffDel(&seqin->Input->Filebuff); */
+    if(seqin->Input->Filebuff == NULL)
+        seqin->Input->Filebuff = ajFilebuffNewNofile();
 
-    qry = seqin->Query;
+    qry = seqin->Input->Query;
 
-    /*
-    ** If an Ensembl-specific set has not been set, this is the first query.
-    ** This information would also be available from the QryDone member of
-    ** the AJAX Sequence Input structure.
-    */
-
-    if(!qry->QryData)
-    {
-        ensInit();
-
-        AJNEW0(se);
-
-        se->StableIdentifiers = ajListstrNew();
-
-        se->Database   = ajStrNew();
-        se->Alias      = ajStrNew();
-        se->Identifier = ajStrNew();
-        se->Species    = (AjPStr) NULL;
-        se->ObjectType = ajStrNew();
-
-        se->DatabaseAdaptor = (EnsPDatabaseadaptor) NULL;
-
-        qry->QryData = (void *) se;
-
-        /*
-        ** Establish an Ensembl Database Connection from the URL associated
-        ** with the EMBOSS Sequence Database definition.
-        */
-
-        urlstr = ajStrNew();
-
-        if(!ajNamDbGetUrl(qry->DbName, &urlstr))
-        {
-            ajErr("seqAccessEnsembl could not get a URL for "
-                  "Ensembl database '%S'.", qry->DbName);
-
-            ajStrDel(&urlstr);
-
+    if(qry->QryDone == ajFalse)
+        if(seqEnsemblQryFirst(qry) == ajFalse)
             return ajFalse;
-        }
-
-        ajDebug("seqAccessEnsembl got URL '%S'.\n", urlstr);
-
-        dbc = ensDatabaseconnectionNewUrl(urlstr);
-
-        ajStrDel(&urlstr);
-
-        /* Load the Ensembl Registry from the Ensembl Database Connection. */
-
-        ensRegistryLoadFromServer(dbc);
-
-        ensDatabaseconnectionDel(&dbc);
-
-        /* Parse the USA into database:alias:identifier tokens. */
-
-        token = ajStrTokenNewC(seqin->Usa, ":");
-
-        if(ajStrTokenNextParseNoskip(&token, &se->Database) &&
-           ajStrTokenNextParseNoskip(&token, &se->Alias) &&
-           ajStrTokenNextParseNoskip(&token, &se->Identifier))
-        {
-            ajDebug("seqAccessEnsembl parsed the USA '%S' into:\n"
-                    "  database '%S'\n"
-                    "  alias '%S'\n"
-                    "  identifier '%S'\n",
-                    seqin->Usa,
-                    se->Database,
-                    se->Alias,
-                    se->Identifier);
-
-            /* Check that both database strings do match. */
-
-            if(!ajStrMatchS(se->Database, qry->DbName))
-            {
-                ajWarn("seqAccessEnsembl parsed database string '%S', which "
-                       "does not match the AJAX Sequence Query database name "
-                       "'%S'.", se->Database, qry->DbName);
-
-                failure = ajTrue;
-            }
-
-            /* Resolve the alias into a valid species name. */
-
-            se->Species = ensRegistryGetSpecies(se->Alias);
-
-            if(!se->Species)
-            {
-                ajWarn("seqAccessEnsembl could not resolve alias string '%S' "
-                       "into a valid species name.", se->Alias);
-
-                failure = ajTrue;
-            }
-
-            /*
-            ** Override the Identifier and Accession number of the
-            ** AJAX Sequence Query object to remove the species alias.
-            ** The AJAX seqread module checks the returned sequences based on
-            ** Identifier and Accession members.
-            */
-
-            ajStrAssignS(&qry->Id,  se->Identifier);
-            ajStrAssignS(&qry->Acc, se->Identifier);
-        }
-        else
-        {
-            ajWarn("seqAccessEnsembl could not parse USA '%S' into "
-                   "database:alias:identifier tokens.",
-                   seqin->Usa);
-
-            failure = ajTrue;
-        }
-
-        ajStrTokenDel(&token);
-
-        if(failure)
-            return ajFalse;
-
-        /* Find out which Ensembl Database Adaptor group to use. */
-
-        dbas = ajListNew();
-
-        ensRegistryGetAllDatabaseadaptors(ensEDatabaseadaptorGroupNULL,
-                                          se->Species,
-                                          dbas);
-
-        while(ajListPop(dbas, (void **) &dba))
-        {
-            /* Only match the identifier against Core-style databases. */
-
-            /*
-              ajDebug("seqAccessEnsembl got Ensembl Database Adaptor "
-              "of group %d.\n",
-              ensDatabaseadaptorGetGroup(dba));
-            */
-
-            switch(ensDatabaseadaptorGetGroup(dba))
-            {
-                case ensEDatabaseadaptorGroupCore:
-
-                    prefix = ensRegistryGetStableidentifierprefix(dba);
-
-                    /* "^%S([EGTP])[0-9]{11,11}" */
-
-                    expression = ajFmtStr("^%S([EGTP])", prefix);
-
-                    break;
-
-                case ensEDatabaseadaptorGroupVega:
-
-                    prefix = ensRegistryGetStableidentifierprefix(dba);
-
-                    /* "^OTT...([EGTP])[0-9]{11,11}" */
-
-                    expression = ajStrNewC("^OTT...([EGTP])");
-
-                    break;
-
-                case ensEDatabaseadaptorGroupOtherFeatures:
-
-                    prefix = ensRegistryGetStableidentifierprefix(dba);
-
-                    /* "^%SEST([EGTP])[0-9]{11,11}" */
-
-                    expression = ajFmtStr("^%SEST([EGTP])", prefix);
-
-                    break;
-
-                case ensEDatabaseadaptorGroupCopyDNA:
-
-                    break;
-
-                default:
-
-                    continue;
-            }
-
-            if(!expression)
-                continue;
-
-            ajDebug("seqAccessEnsembl will test expression '%S' against "
-                    "identifier '%S'.\n", expression, se->Identifier);
-
-            rp = ajRegCompC(ajStrGetPtr(expression));
-
-            if(ajRegExec(rp, se->Identifier))
-            {
-                ajRegSubI(rp, 1, &se->ObjectType);
-
-                ajDebug("seqAccessEnsembl concluded object type '%S' from "
-                        "identifier '%S'.\n", se->ObjectType, se->Identifier);
-
-                se->DatabaseAdaptor = dba;
-            }
-
-            ajRegFree(&rp);
-
-            ajStrDel(&expression);
-        }
-
-        ajListFree(&dbas);
-
-        /* Query the Ensembl database based on the Ensembl Object type. */
-
-        if(ajStrMatchC(se->ObjectType, "E"))
-        {
-            /* This is a stable Ensembl Exon identifier. */
-
-            ea = ensRegistryGetExonadaptor(se->DatabaseAdaptor);
-
-            switch(qry->Type)
-            {
-                case QRY_ENTRY:
-
-                    ajDebug("seqAccessEnsembl got Sequence Query type "
-                            "'entry'.\n");
-
-                    ajListPushAppend(se->StableIdentifiers,
-                                     ajStrNewS(se->Identifier));
-
-                    break;
-
-                case QRY_QUERY:
-
-                    ajDebug("seqAccessEnsembl got Sequence Query type "
-                            "'query'.\n");
-
-                    identifiers = ajListNew();
-
-                    ensExonadaptorFetchAllStableIdentifiers(ea,
-                                                            identifiers);
-
-                    while(ajListPop(identifiers, (void **) &identifier))
-                    {
-                        if(ajStrMatchWildS(identifier, se->Identifier))
-                            ajListPushAppend(se->StableIdentifiers,
-                                             (void *) identifier);
-                        else
-                            ajStrDel(&identifier);
-                    }
-
-                    ajListFree(&identifiers);
-
-                    break;
-
-                case QRY_ALL:
-
-                    ajDebug("seqAccessEnsembl got Sequence Query type "
-                            "'all'.\n");
-
-                    ensExonadaptorFetchAllStableIdentifiers(
-                        ea,
-                        se->StableIdentifiers);
-
-                    break;
-
-                default:
-
-                    ajDebug("seqAccessEnsembl got an unexpected "
-                            "AJAX Sequence Query type %d.\n",
-                            qry->Type);
-            }
-        }
-
-        if(ajStrMatchC(se->ObjectType, "G"))
-        {
-            /* This is a gene identifier. */
-
-        }
-
-        if(ajStrMatchC(se->ObjectType, "T"))
-        {
-            /* This is a stable Ensembl Transcript identifier. */
-
-            tca = ensRegistryGetTranscriptadaptor(se->DatabaseAdaptor);
-
-            switch(qry->Type)
-            {
-                case QRY_ENTRY:
-
-                    ajDebug("seqAccessEnsembl got Sequence Query type "
-                            "'entry'.\n");
-
-                    ajListPushAppend(se->StableIdentifiers,
-                                     ajStrNewS(se->Identifier));
-
-                    break;
-
-                case QRY_QUERY:
-
-                    ajDebug("seqAccessEnsembl got Sequence Query type "
-                            "'query'.\n");
-
-                    identifiers = ajListNew();
-
-                    ensTranscriptadaptorFetchAllStableIdentifiers(tca,
-                                                                  identifiers);
-
-                    while(ajListPop(identifiers, (void **) &identifier))
-                    {
-                        if(ajStrMatchWildS(identifier, se->Identifier))
-                            ajListPushAppend(se->StableIdentifiers,
-                                             (void *) identifier);
-                        else
-                            ajStrDel(&identifier);
-                    }
-
-                    ajListFree(&identifiers);
-
-                    break;
-
-                case QRY_ALL:
-
-                    ajDebug("seqAccessEnsembl got Sequence Query type "
-                            "'all'.\n");
-
-                    ensTranscriptadaptorFetchAllStableIdentifiers(
-                        tca,
-                        se->StableIdentifiers);
-
-                    break;
-
-                default:
-
-                    ajDebug("seqAccessEnsembl got an unexpected "
-                            "AJAX Sequence Query type %d.\n",
-                            qry->Type);
-            }
-        }
-
-        if(ajStrMatchC(se->ObjectType, "P"))
-        {
-            /* This is a translation identifier. */
-
-            tla = ensRegistryGetTranslationadaptor(se->DatabaseAdaptor);
-
-            switch(qry->Type)
-            {
-                case QRY_ENTRY:
-
-                    ajDebug("seqAccessEnsembl got Sequence Query type "
-                            "'entry'.\n");
-
-                    ajListPushAppend(se->StableIdentifiers,
-                                     ajStrNewS(se->Identifier));
-
-                    break;
-
-                case QRY_QUERY:
-
-                    ajDebug("seqAccessEnsembl got Sequence Query type "
-                            "'query'.\n");
-
-                    identifiers = ajListNew();
-
-                    ensTranslationadaptorFetchAllStableIdentifiers(tla,
-                                                                   identifiers);
-
-                    while(ajListPop(identifiers, (void **) &identifier))
-                    {
-                        if(ajStrMatchWildS(identifier, se->Identifier))
-                            ajListPushAppend(se->StableIdentifiers,
-                                             (void *) identifier);
-                        else
-                            ajStrDel(&identifier);
-                    }
-
-                    ajListFree(&identifiers);
-
-                    break;
-
-                case QRY_ALL:
-
-                    ajDebug("seqAccessEnsembl got Sequence Query type "
-                            "'all'.\n");
-
-                    ensTranslationadaptorFetchAllStableIdentifiers(
-                        tla,
-                        se->StableIdentifiers);
-
-                    break;
-
-                default:
-
-                    ajDebug("seqAccessEnsembl got an unexpected "
-                            "AJAX Sequence Query type %d.\n",
-                            qry->Type);
-            }
-        }
-
-        /* The query has finished at this stage. */
-
-        qry->TotalEntries = ajListGetLength(se->StableIdentifiers);
-
-        qry->QryDone = ajTrue;
-
-        ajDebug("seqAccessEnsembl finished the query stage with %u %s.\n",
-                qry->TotalEntries,
-                (qry->TotalEntries == 1) ? "entry" : "entries");
-    }
 
     se = (SeqPEnsembl) qry->QryData;
 
-    /* Finish if no more stable identifiers are on the AJAX List. */
+    /* Finish if no more identifiers are on the AJAX List. */
 
-    if(!ajListGetLength(se->StableIdentifiers))
+    if(ajListGetLength(se->Stableidentifiers) == 0)
     {
-        ajListFree(&se->StableIdentifiers);
-
-        ajStrDel(&se->Database);
-        ajStrDel(&se->Alias);
-        ajStrDel(&se->Identifier);
-        ajStrDel(&se->ObjectType);
-
-        AJFREE(se);
+        seqEnsemblDel(&se);
 
         qry->QryData = NULL;
 
@@ -8547,88 +5325,96 @@ static AjBool seqAccessEnsembl(AjPSeqin seqin)
     ** stable Ensembl identifiers.
     */
 
-    ajDebug("seqAccessEnsembl retrieval stage for object type '%S'.\n",
-            se->ObjectType);
-
-    if(ajStrMatchC(se->ObjectType, "E"))
+    switch(se->EnsemblType)
     {
-        /* This is a stable Ensembl Exon identifier. */
+        case seqEEnsemblTypeExon:
 
-        ea = ensRegistryGetExonadaptor(se->DatabaseAdaptor);
+            exonadaptor = ensRegistryGetExonadaptor(
+                se->Databaseadaptor);
 
-        ajListPop(se->StableIdentifiers, (void **) &identifier);
+            ajListstrPop(se->Stableidentifiers, &stableidentifier);
 
-        if(identifier)
-        {
-            ensExonadaptorFetchByStableIdentifier(
-                ea,
-                identifier,
-                0,
-                &exon);
+            if(stableidentifier)
+            {
+                ensExonadaptorFetchByStableidentifier(
+                    exonadaptor,
+                    stableidentifier,
+                    0,
+                    &exon);
 
-            ajStrDel(&identifier);
-        }
+                ajStrDel(&stableidentifier);
+            }
 
-        if(exon)
-        {
-            ensExonFetchSequenceSeq(exon, &seq);
+            if(exon)
+            {
+                ensExonFetchSequenceSliceSeq(exon, &seq);
 
-            ensExonDel(&exon);
-        }
-    }
+                ensExonDel(&exon);
+            }
 
-    if(ajStrMatchC(se->ObjectType, "P"))
-    {
-        /* This is a stable Ensembl Translation identifier. */
+            break;
 
-        tla = ensRegistryGetTranslationadaptor(se->DatabaseAdaptor);
+        case seqEEnsemblTypeTranslation:
 
-        ajListPop(se->StableIdentifiers, (void **) &identifier);
+            translationadaptor = ensRegistryGetTranslationadaptor(
+                se->Databaseadaptor);
 
-        if(identifier)
-        {
-            ensTranslationadaptorFetchByStableIdentifier(
-                tla,
-                identifier,
-                0,
-                &translation);
+            ajListstrPop(se->Stableidentifiers, &stableidentifier);
 
-            ajStrDel(&identifier);
-        }
+            if(stableidentifier)
+            {
+                ensTranslationadaptorFetchByStableidentifier(
+                    translationadaptor,
+                    stableidentifier,
+                    0,
+                    &translation);
 
-        if(translation)
-        {
-            ensTranslationFetchSequenceSeq(translation, &seq);
+                ajStrDel(&stableidentifier);
+            }
 
-            ensTranslationDel(&translation);
-        }
-    }
+            if(translation)
+            {
+                ensTranslationFetchSequenceSeq(translation, &seq);
 
-    if(ajStrMatchC(se->ObjectType, "T"))
-    {
-        /* This is a stable Ensembl Transcript identifier. */
+                ensTranslationDel(&translation);
+            }
 
-        tca = ensRegistryGetTranscriptadaptor(se->DatabaseAdaptor);
+            break;
 
-        ajListPop(se->StableIdentifiers, (void **) &identifier);
+        case seqEEnsemblTypeTranscript:
 
-        if(identifier)
-        {
-            ensTranscriptadaptorFetchByStableIdentifier(
-                tca,
-                identifier,
-                0,
-                &transcript);
+            transcriptadaptor = ensRegistryGetTranscriptadaptor(
+                se->Databaseadaptor);
 
-            ajStrDel(&identifier);
-        }
+            ajListstrPop(se->Stableidentifiers, &stableidentifier);
 
-        if(transcript)
-        {
-            ensTranscriptFetchSequenceSeq(transcript, &seq);
+            ajDebug("seqAccessEnsembl got Transcript stable identifier '%S'\n",
+                    stableidentifier);
 
-            ensTranscriptDel(&transcript);
-        }
+            if(stableidentifier)
+            {
+                ensTranscriptadaptorFetchByStableidentifier(
+                    transcriptadaptor,
+                    stableidentifier,
+                    0,
+                    &transcript);
+
+                ajStrDel(&stableidentifier);
+            }
+
+            if(transcript)
+            {
+                ensTranscriptFetchSequenceTranscriptSeq(transcript, &seq);
+
+                ensTranscriptDel(&transcript);
+            }
+
+            break;
+
+        default:
+
+            ajDebug("seqAccessEnsembl got unexpected "
+                    "Ensembl Object Type %u.\n", se->EnsemblType);
     }
 
     if(seq)
@@ -8639,11 +5425,12 @@ static AjBool seqAccessEnsembl(AjPSeqin seqin)
         ** Sequence Reading module.
         */
 
-        if(seqin->Data)
-            ajSeqDel((AjPSeq *) &seqin->Data);
+        if(seqin->SeqData)
+            ajSeqDel((AjPSeq*) &seqin->SeqData);
 
-        seqin->Data = (void *) seq;
-        seqin->Count++;
+        seqin->SeqData = (void*) seq;
+
+        seqin->Input->Count++;
     }
 
     return ajTrue;
@@ -8652,93 +5439,283 @@ static AjBool seqAccessEnsembl(AjPSeqin seqin)
 
 
 
-/* @section Application Database Access ***************************************
+/* @funcstatic seqEnsemblDel **************************************************
 **
-** These functions manage the application database access methods.
+** Default destructor for an Ensembl Attribute.
 **
-******************************************************************************/
-
-
-
-
-/* @funcstatic seqAccessApp ***************************************************
-**
-** Reads sequence data using an application which can accept a specification
-** in the form "database:entry" such as Erik Sonnhammer's 'efetch'.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
+** @param [u] Pse [SeqPEnsembl*] Ensembl attribute
+** @return [void]
 ** @@
 ******************************************************************************/
 
-static AjBool seqAccessApp(AjPSeqin seqin)
+static void seqEnsemblDel(SeqPEnsembl* Pse)
 {
-    static AjPStr pipename = NULL;
-    AjPSeqQuery qry;
+    SeqPEnsembl pthis = NULL;
 
-    qry = seqin->Query;
+    if(!Pse)
+        return;
 
-    if(!ajStrGetLen(qry->Application))
+    if(!*Pse)
+        return;
+
+    pthis = *Pse;
+
+    ajListstrFreeData(&pthis->Stableidentifiers);
+
+    ajStrDel(&pthis->Alias);
+    ajStrDel(&pthis->Database);
+    ajStrDel(&pthis->Species);
+    ajStrDel(&pthis->Wildquery);
+
+    AJFREE(pthis);
+
+    *Pse = NULL;
+
+    return;
+}
+
+
+
+
+/* @funcstatic seqEnsemblQryFirst *********************************************
+**
+** Runs the first AJAX Query for an Ensembl Object.
+**
+** @param [u] qry [AjPQuery] AJAX Query
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+static AjBool seqEnsemblQryFirst(AjPQuery qry)
+{
+    AjBool result = AJFALSE;
+
+    AjIList iter = NULL;
+
+    AjPQueryField queryfield = NULL;
+
+    AjPStr urlstr = NULL;
+
+    EnsEDatabaseadaptorGroup dbag = ensEDatabaseadaptorGroupCore;
+
+    EnsPDatabaseconnection dbc = NULL;
+
+    SeqPEnsembl se = NULL;
+
+    if(!qry)
+        return ajFalse;
+
+#if AJFALSE
+    ajDebug("seqEnsemblQryFirst\n"
+            "  qry %p\n",
+            qry);
+#endif
+
+    ensInit();
+
+    if((qry->SvrName != NULL) && (ajStrGetLen(qry->SvrName) > 0))
     {
-	ajErr("APP access: application not defined for %S", qry->DbName);
+        /*
+        ** Since the AJAX Query object supplied a server name, use it to
+        ** load the Ensembl Registry from AJAX data structures.
+        ** If this fails return failure also up-stream.
+        */
 
-	return ajFalse;
+        ajDebug("seqEnsemblQryFirst got AJAX server name '%S'.\n",
+                qry->SvrName);
+
+        if(ensRegistryLoadServername(qry->SvrName) == ajFalse)
+            return ajFalse;
     }
-
-    ajDebug("seqAccessApp '%S' dbname '%S'\n", qry->Application, qry->DbName);
-
-    if(ajStrMatchWildC(qry->Application, "*%s*"))
+    else if((qry->DbName != NULL) && (ajStrGetLen(qry->DbName) > 0))
     {
-	if(ajStrGetLen(qry->Id))
-	    ajFmtPrintS(&pipename, ajStrGetPtr(qry->Application),
-			ajStrGetPtr(qry->Id));
-	else if(qry->HasAcc && ajStrGetLen(qry->Acc))
-	    ajFmtPrintS(&pipename, ajStrGetPtr(qry->Application),
-			ajStrGetPtr(qry->Acc));
-	else
-	    ajFmtPrintS(&pipename, ajStrGetPtr(qry->Application),
-			"*");
+        /*
+        ** Since the AJAX Query object supplied a database name, use it to
+        ** get the AJAX Sequence Database "url" attribute to establish an
+        ** Ensembl Database Connection and subsequntly load the
+        ** Ensembl Registry.
+        */
 
-	ajStrAppendC(&pipename, " |");
+        ajDebug("seqEnsemblQryFirst got AJAX database name '%S'.\n",
+                qry->DbName);
+
+        urlstr = ajStrNew();
+
+        if(!ajNamDbGetUrl(qry->DbName, &urlstr))
+        {
+            ajErr("seqEnsemblQryFirst could not get a URL for "
+                  "Ensembl database '%S'.", qry->DbName);
+
+            ajStrDel(&urlstr);
+
+            return ajFalse;
+        }
+
+        ajDebug("seqEnsemblQryFirst got URL '%S'.\n", urlstr);
+
+        dbc = ensDatabaseconnectionNewUrl(urlstr);
+
+        ajStrDel(&urlstr);
+
+        ensRegistryLoadDatabaseconnection(dbc);
+
+        ensDatabaseconnectionDel(&dbc);
     }
     else
     {
-	if(ajStrGetLen(qry->Id))
-	    ajFmtPrintS(&pipename, "%S %S:%S|",
-			qry->Application, qry->DbName, qry->Id);
-	else if(qry->HasAcc && ajStrGetLen(qry->Acc))
-	    ajFmtPrintS(&pipename, "%S %S:%S|",
-			qry->Application, qry->DbName, qry->Acc);
- 	else
-	    ajFmtPrintS(&pipename, "%S %S:*|",
-			qry->Application, qry->DbName);
+        ajDebug("seqEnsemblQryFirst got neither an "
+                "AJAX server nor AJAX database name.\n");
+
+        return ajFalse;
     }
 
-    if(!ajStrGetLen(pipename))
+    AJNEW0(se);
+
+    se->Stableidentifiers = ajListstrNew();
+    se->Alias             = ajStrNewS(qry->DbName);
+    se->Database          = ajStrNew();
+    se->Species           = ajStrNewS(qry->DbName);
+    se->Wildquery         = ajStrNew();
+    se->Databaseadaptor   = (EnsPDatabaseadaptor) NULL;
+    se->EnsemblType       = seqEEnsemblTypeNULL;
+
+    qry->QryData = (void *) se;
+
+    /*
+    ** The identifier is supplied via an AJAX Query Field object of
+    ** field code "id".
+    */
+
+    iter = ajListIterNewread(qry->QueryFields);
+
+    while(!ajListIterDone(iter))
     {
-	ajErr("APP access: bad query format");
+        queryfield = (AjPQueryField) ajListIterGet(iter);
 
-	return ajFalse;
+        if(ajStrMatchC(queryfield->Field, "id"))
+        {
+            /* Ensembl stable identifier */
+
+            ajStrAssignS(&se->Wildquery, queryfield->Wildquery);
+
+            seqEnsemblQryFirstGeneric(qry);
+        }
+
+        if(ajStrMatchC(queryfield->Field, "eid"))
+        {
+            /* Ensembl Exon identifier */
+
+            ajStrAssignS(&se->Wildquery, queryfield->Wildquery);
+
+            se->EnsemblType = seqEEnsemblTypeExon;
+        }
+
+        if(ajStrMatchC(queryfield->Field, "pid"))
+        {
+            /* Ensembl Translation identifier */
+
+            ajStrAssignS(&se->Wildquery, queryfield->Wildquery);
+
+            se->EnsemblType = seqEEnsemblTypeTranslation;
+        }
+
+        if(ajStrMatchC(queryfield->Field, "tid"))
+        {
+            /* Ensembl Transcript identifier */
+
+            ajStrAssignS(&se->Wildquery, queryfield->Wildquery);
+
+            se->EnsemblType = seqEEnsemblTypeTranscript;
+        }
+
+        if(ajStrMatchC(queryfield->Field, "grp"))
+        {
+            /* Ensembl Database Adaptor Group */
+
+            dbag = ensDatabaseadaptorGroupFromStr(queryfield->Wildquery);
+
+            if(dbag == ensEDatabaseadaptorGroupNULL)
+            {
+                ajWarn("seqEnsemblQryFirst found an invalid "
+                       "Ensembl Database Adaptor Group value '%S' "
+                       "in the AJAX Query Field '%S'.\n",
+                       queryfield->Wildquery, queryfield->Field);
+
+                ajListIterDel(&iter);
+
+                seqEnsemblDel(&se);
+
+                qry->QryData = NULL;
+
+                return ajFalse;
+            }
+        }
     }
 
+    ajListIterDel(&iter);
 
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewNameS(pipename);
+    se->Databaseadaptor = ensRegistryGetDatabaseadaptor(dbag, se->Species);
 
-    if(!seqin->Filebuff)
+    if(se->Databaseadaptor == NULL)
     {
-	ajErr("unable to open file '%S'", pipename);
-	ajStrDel(&pipename);
+        ajWarn("seqEnsemblQryFirst could not get an "
+               "Ensembl Database Adaptor for species name '%S'.\n",
+               se->Species);
 
-	return ajFalse;
+        seqEnsemblDel(&se);
+
+        qry->QryData = NULL;
+
+        return ajFalse;
     }
 
-    ajStrAssignS(&seqin->Db, qry->DbName);
+    /* Query the Ensembl database based on the Ensembl Object type. */
 
-    ajStrDel(&pipename);
+    switch(se->EnsemblType)
+    {
+        case seqEEnsemblTypeExon:
 
-    if(!qry->CaseId)
-	qry->QryDone = ajTrue;
+            result = seqEnsemblQryFirstExon(qry);
+
+            break;
+
+        case seqEEnsemblTypeTranscript:
+
+            result = seqEnsemblQryFirstTranscript(qry);
+
+            break;
+
+        case seqEEnsemblTypeTranslation:
+
+            result = seqEnsemblQryFirstTranslation(qry);
+
+            break;
+
+        default:
+
+            ajDebug("seqEnsemblQryFirst got an unexpected "
+                    "Ensembl Object Type %d.\n", se->EnsemblType);
+
+            result = ajFalse;
+    }
+
+    if(result == ajFalse)
+    {
+        seqEnsemblDel(&se);
+
+        qry->QryData = NULL;
+
+        return ajFalse;
+    }
+
+    /* The query stage has finished at this point. */
+
+    qry->TotalEntries = ajListGetLength(se->Stableidentifiers);
+
+    qry->QryDone = ajTrue;
+
+    ajDebug("seqEnsemblQryFirst finished the query stage with %u %s.\n",
+            qry->TotalEntries, (qry->TotalEntries == 1) ? "entry" : "entries");
 
     return ajTrue;
 }
@@ -8746,59 +5723,507 @@ static AjBool seqAccessApp(AjPSeqin seqin)
 
 
 
-/* @section File Direct Access ************************************************
+/* @funcstatic seqEnsemblQryFirstExon *****************************************
 **
-** These functions manage the sequence file direct access methods.
+** Runs the first AJAX Query for an Ensembl Exon.
 **
-******************************************************************************/
-
-
-
-
-/* @funcstatic seqAccessDirect ************************************************
-**
-** Reads a sequence from a database which may have multiple files.
-** The sequence input object holds a directory name and a (wildcard)
-** file specification.
-**
-** Can also use exclude definitions for files in the directory.
-**
-** @param [u] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
+** @param [u] qry [AjPQuery] AJAX Query
+** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool seqAccessDirect(AjPSeqin seqin)
+static AjBool seqEnsemblQryFirstExon(AjPQuery qry)
 {
-    AjPSeqQuery qry;
+    AjPList stableidentifiers = NULL;
 
-    ajDebug("seqAccessDirect %S\n", seqin->Query->DbName);
+    AjPStr stableidentifier = NULL;
 
-    qry = seqin->Query;
+    EnsPExonadaptor exonadaptor = NULL;
 
-    if(!ajStrGetLen(qry->Filename))
+    SeqPEnsembl se = NULL;
+
+    if(!qry)
+        return ajFalse;
+
+#if AJFALSE
+    ajDebug("seqEnsemblQryFirstExon\n"
+            "  qry %p\n",
+            qry);
+#endif
+
+    se = (SeqPEnsembl) qry->QryData;
+
+    exonadaptor = ensRegistryGetExonadaptor(se->Databaseadaptor);
+
+    switch(qry->QueryType)
     {
-	ajErr("DIRECT access: filename not specified");
+        case AJQUERY_ENTRY:
 
-	return ajFalse;
+            ajDebug("seqEnsemblQryFirstExon got Sequence Query type "
+                    "'entry'.\n");
+
+            ajListstrPushAppend(se->Stableidentifiers,
+                                ajStrNewS(se->Wildquery));
+
+            break;
+
+        case AJQUERY_QUERY:
+
+            ajDebug("seqEnsemblQryFirstExon got Sequence Query type "
+                    "'query'.\n");
+
+            stableidentifiers = ajListstrNew();
+
+            ensExonadaptorRetrieveAllStableidentifiers(exonadaptor,
+                                                       stableidentifiers);
+
+            while(ajListstrPop(stableidentifiers, &stableidentifier))
+            {
+                if(ajStrMatchWildS(stableidentifier, se->Wildquery))
+                    ajListstrPushAppend(se->Stableidentifiers,
+                                        ajStrNewS(stableidentifier));
+
+                ajStrDel(&stableidentifier);
+            }
+
+            ajListstrFreeData(&stableidentifiers);
+
+            break;
+
+        case AJQUERY_ALL:
+
+            ajDebug("seqEnsemblQryFirstExon got Sequence Query type "
+                    "'all'.\n");
+
+            ensExonadaptorRetrieveAllStableidentifiers(
+                exonadaptor,
+                se->Stableidentifiers);
+
+            break;
+
+        default:
+
+            ajDebug("seqEnsemblQryFirstExon got an unexpected "
+                    "AJAX Sequence Query type %d.\n",
+                    qry->QueryType);
     }
 
-    ajDebug("Try to open %S%S\n", qry->Directory, qry->Filename);
+    return ajTrue;
+}
 
-    ajFilebuffDel(&seqin->Filebuff);
-    seqin->Filebuff = ajFilebuffNewPathWildExclude(qry->Directory,
-                                                   qry->Filename,
-                                                   qry->Exclude);
-    if(!seqin->Filebuff)
+
+
+
+/* @funcstatic seqEnsemblQryFirstGeneric **************************************
+**
+** Runs the first AJAX Query for a generic Ensembl Object.
+**
+** @param [u] qry [AjPQuery] AJAX Query
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+static AjBool seqEnsemblQryFirstGeneric(AjPQuery qry)
+{
+    AjPList dbas = NULL;
+
+    AjPRegexp rp = NULL;
+
+    AjPStr expression = NULL;
+    AjPStr prefix     = NULL;
+    AjPStr type       = NULL;
+
+    EnsPDatabaseadaptor dba = NULL;
+
+    EnsPExon        exon        = NULL;
+    EnsPExonadaptor exonadaptor = NULL;
+
+    EnsPTranscript        transcript        = NULL;
+    EnsPTranscriptadaptor transcriptadaptor = NULL;
+
+    EnsPTranslation        translation        = NULL;
+    EnsPTranslationadaptor translationadaptor = NULL;
+
+    SeqPEnsembl se = NULL;
+
+    if(!qry)
+        return ajFalse;
+
+#if AJFALSE
+    ajDebug("seqEnsemblQryFirstGeneric\n"
+            "  qry %p\n",
+            qry);
+#endif
+
+    se = (SeqPEnsembl) qry->QryData;
+
+    /* Find out which Ensembl Database Adaptor group to use. */
+
+    dbas = ajListNew();
+
+    ensRegistryGetAllDatabaseadaptors(ensEDatabaseadaptorGroupNULL,
+                                      se->Species,
+                                      dbas);
+
+    while(ajListPop(dbas, (void **) &dba))
     {
-	ajDebug("DIRECT access: unable to open file '%S/%S'\n",
-		qry->Directory, qry->Filename);
+        switch(ensDatabaseadaptorGetGroup(dba))
+        {
+            case ensEDatabaseadaptorGroupCore:
 
-	return ajFalse;
+                prefix = ensRegistryGetStableidentifierprefix(dba);
+
+                /* "^%S([EGTP])[0-9]{11,11}" */
+
+                if(prefix)
+                    expression = ajFmtStr("^%S([EGTP])", prefix);
+
+                break;
+
+            case ensEDatabaseadaptorGroupVega:
+
+                prefix = ensRegistryGetStableidentifierprefix(dba);
+
+                /* "^OTT...([EGTP])[0-9]{11,11}" */
+
+                if(prefix)
+                    expression = ajStrNewC("^OTT...([EGTP])");
+
+                break;
+
+            case ensEDatabaseadaptorGroupOtherFeatures:
+
+                prefix = ensRegistryGetStableidentifierprefix(dba);
+
+                /* "^%SEST([EGTP])[0-9]{11,11}" */
+
+                if(prefix)
+                    expression = ajFmtStr("^%SEST([EGTP])", prefix);
+
+                break;
+
+            case ensEDatabaseadaptorGroupCopyDNA:
+
+                break;
+
+            default:
+
+                continue;
+        }
+
+        if(!expression)
+            continue;
+
+        ajDebug("seqEnsemblQryFirstGeneric will test expression '%S' against "
+                "identifier '%S'.\n", expression, se->Wildquery);
+
+        rp = ajRegCompC(ajStrGetPtr(expression));
+
+        if(ajRegExec(rp, se->Wildquery))
+        {
+            type = ajStrNew();
+
+            ajRegSubI(rp, 1, &type);
+
+            if(ajStrMatchC(type, "E"))
+                se->EnsemblType = seqEEnsemblTypeExon;
+            else if(ajStrMatchC(type, "P"))
+                se->EnsemblType = seqEEnsemblTypeTranslation;
+            else if(ajStrMatchC(type, "T"))
+                se->EnsemblType = seqEEnsemblTypeTranscript;
+
+            ajStrDel(&type);
+        }
+
+        ajRegFree(&rp);
+
+        ajStrDel(&expression);
     }
 
-    ajStrAssignS(&seqin->Db, qry->DbName);
-    ajStrAssignS(&seqin->Filename, qry->Filename);
+    ajListFree(&dbas);
+
+    if(se->EnsemblType == seqEEnsemblTypeNULL)
+    {
+        /*
+        ** An Ensembl Object type could not be established.
+        ** For AJAX Sequence Queries of type ENTRY it is possible to
+        ** test whether this is a stable identifier of any Ensembl
+        ** *Core* Object type.
+        */
+
+        if(qry->QueryType == AJQUERY_ENTRY)
+        {
+            /* Only use the Ensembl Database Adaptor Group Core. */
+
+            se->Databaseadaptor = ensRegistryGetDatabaseadaptor(
+                ensEDatabaseadaptorGroupCore,
+                se->Species);
+
+            /* Check if this is an Ensembl Exon. */
+
+            if(se->EnsemblType == seqEEnsemblTypeNULL)
+            {
+                exonadaptor = ensRegistryGetExonadaptor(
+                    se->Databaseadaptor);
+
+                ensExonadaptorFetchByStableidentifier(
+                    exonadaptor,
+                    se->Wildquery,
+                    0,
+                    &exon);
+
+                if(exon != NULL)
+                {
+                    /*
+                      ajListstrPushAppend(se->Stableidentifiers,
+                      ajStrNewS(se->Wildquery));
+                    */
+                    se->EnsemblType = seqEEnsemblTypeExon;
+                }
+
+                ensExonDel(&exon);
+            }
+
+            /* Check if this is an Ensembl Transcript. */
+
+            if(se->EnsemblType == seqEEnsemblTypeNULL)
+            {
+                transcriptadaptor = ensRegistryGetTranscriptadaptor(
+                    se->Databaseadaptor);
+
+                ensTranscriptadaptorFetchByStableidentifier(
+                    transcriptadaptor,
+                    se->Wildquery,
+                    0,
+                    &transcript);
+
+                if(transcript != NULL)
+                {
+                    /*
+                      ajListstrPushAppend(se->Stableidentifiers,
+                      ajStrNewS(se->Wildquery));
+                    */
+                    se->EnsemblType = seqEEnsemblTypeTranscript;
+                }
+
+                ensTranscriptDel(&transcript);
+            }
+
+            /* Check if this is an Ensembl Translation. */
+
+            if(se->EnsemblType == seqEEnsemblTypeNULL)
+            {
+                translationadaptor = ensRegistryGetTranslationadaptor(
+                    se->Databaseadaptor);
+
+                ensTranslationadaptorFetchByStableidentifier(
+                    translationadaptor,
+                    se->Wildquery,
+                    0,
+                    &translation);
+
+                if(translation != NULL)
+                {
+                    /*
+                      ajListstrPushAppend(se->Stableidentifiers,
+                      ajStrNewS(se->Wildquery));
+                    */
+                    se->EnsemblType = seqEEnsemblTypeTranslation;
+                }
+
+                ensTranslationDel(&translation);
+            }
+        }
+        else
+            ajWarn("Since this species does not seem to have a "
+                   "stable identifier schema defined in the 'meta' "
+                   "table or the identifier type could not be "
+                   "established, only queries for single entries can "
+                   "be matched against Exons, Transcripts or "
+                   "Translations.");
+    }
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic seqEnsemblQryFirstTranscript ***********************************
+**
+** Runs the first AJAX Query for an Ensembl Transcript.
+**
+** @param [u] qry [AjPQuery] AJAX Query
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+static AjBool seqEnsemblQryFirstTranscript(AjPQuery qry)
+{
+    AjPList stableidentifiers = NULL;
+
+    AjPStr stableidentifier = NULL;
+
+    EnsPTranscriptadaptor transcriptadaptor = NULL;
+
+    SeqPEnsembl se = NULL;
+
+    if(!qry)
+        return ajFalse;
+
+#if AJFALSE
+    ajDebug("seqEnsemblQryFirstTranscript\n"
+            "  qry %p\n",
+            qry);
+#endif
+
+    se = (SeqPEnsembl) qry->QryData;
+
+    transcriptadaptor = ensRegistryGetTranscriptadaptor(se->Databaseadaptor);
+
+    switch(qry->QueryType)
+    {
+        case AJQUERY_ENTRY:
+
+            ajDebug("seqEnsemblQryFirstTranscript got Sequence Query type "
+                    "'entry'.\n");
+
+            ajListstrPushAppend(se->Stableidentifiers,
+                                ajStrNewS(se->Wildquery));
+
+            break;
+
+        case AJQUERY_QUERY:
+
+            ajDebug("seqEnsemblQryFirstTranscript got Sequence Query type "
+                    "'query'.\n");
+
+            stableidentifiers = ajListstrNew();
+
+            ensTranscriptadaptorRetrieveAllStableidentifiers(
+                transcriptadaptor,
+                stableidentifiers);
+
+            while(ajListstrPop(stableidentifiers, &stableidentifier))
+            {
+                if(ajStrMatchWildS(stableidentifier, se->Wildquery))
+                    ajListstrPushAppend(se->Stableidentifiers,
+                                        ajStrNewS(stableidentifier));
+
+                ajStrDel(&stableidentifier);
+            }
+
+            ajListstrFreeData(&stableidentifiers);
+
+            break;
+
+        case AJQUERY_ALL:
+
+            ajDebug("seqEnsemblQryFirstTranscript got Sequence Query type "
+                    "'all'.\n");
+
+            ensTranscriptadaptorRetrieveAllStableidentifiers(
+                transcriptadaptor,
+                se->Stableidentifiers);
+
+            break;
+
+        default:
+
+            ajDebug("seqEnsemblQryFirstTranscript got an unexpected "
+                    "AJAX Sequence Query type %d.\n",
+                    qry->QueryType);
+    }
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic seqEnsemblQryFirstTranslation **********************************
+**
+** Runs the first AJAX Query for an Ensembl Translation.
+**
+** @param [u] qry [AjPQuery] AJAX Query
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+static AjBool seqEnsemblQryFirstTranslation(AjPQuery qry)
+{
+    AjPList stableidentifiers = NULL;
+
+    AjPStr stableidentifier = NULL;
+
+    EnsPTranslationadaptor translationadaptor = NULL;
+
+    SeqPEnsembl se = NULL;
+
+    if(!qry)
+        return ajFalse;
+
+    ajDebug("seqEnsemblQryFirstTranslation\n"
+            "  qry %p\n",
+            qry);
+
+    se = (SeqPEnsembl) qry->QryData;
+
+    translationadaptor = ensRegistryGetTranslationadaptor(se->Databaseadaptor);
+
+    switch(qry->QueryType)
+    {
+        case AJQUERY_ENTRY:
+
+            ajDebug("seqEnsemblQryFirstTranslation got Sequence Query type "
+                    "'entry'.\n");
+
+            ajListstrPushAppend(se->Stableidentifiers,
+                                ajStrNewS(se->Wildquery));
+
+            break;
+
+        case AJQUERY_QUERY:
+
+            ajDebug("seqEnsemblQryFirstTranslation got Sequence Query type "
+                    "'query'.\n");
+
+            stableidentifiers = ajListstrNew();
+
+            ensTranslationadaptorRetrieveAllStableidentifiers(
+                translationadaptor,
+                stableidentifiers);
+
+            while(ajListstrPop(stableidentifiers, &stableidentifier))
+            {
+                if(ajStrMatchWildS(stableidentifier, se->Wildquery))
+                    ajListstrPushAppend(se->Stableidentifiers,
+                                        ajStrNewS(stableidentifier));
+
+                ajStrDel(&stableidentifier);
+            }
+
+            ajListstrFreeData(&stableidentifiers);
+
+            break;
+
+        case AJQUERY_ALL:
+
+            ajDebug("seqEnsemblQryFirstTranslation got Sequence Query type "
+                    "'all'.\n");
+
+            ensTranslationadaptorRetrieveAllStableidentifiers(
+                translationadaptor,
+                se->Stableidentifiers);
+
+            break;
+
+        default:
+
+            ajDebug("seqEnsemblQryFirstTranslation got an unexpected "
+                    "AJAX Sequence Query type %d.\n",
+                    qry->QueryType);
+    }
 
     return ajTrue;
 }
@@ -8820,7 +6245,7 @@ static AjBool seqAccessDirect(AjPSeqin seqin)
 ******************************************************************************/
 
 static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
-				AjPStr* sline)
+                                AjPStr* sline)
 {
     ajint ipos;
     ajint start;
@@ -8858,7 +6283,7 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
     ajint nsentinels;
     char* seq = NULL;
     unsigned char nt_magic_byte;
-    AjPSeqQuery qry;
+    AjPQuery qry;
     SeqPCdQry qryd;
 
     nbpn       = 2;
@@ -8867,7 +6292,7 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 
     nt_magic_byte = 0xfc;
 
-    qry  = seqin->Query;
+    qry  = seqin->Input->Query;
     qryd = qry->QryData;
     ipos = qryd->idnum;
 
@@ -8876,9 +6301,9 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 
     if(qryd->idnum >= qryd->Size)
     {
-	ajDebug("beyond end of database\n");
+        ajDebug("beyond end of database\n");
 
-	return ajFalse;
+        return ajFalse;
     }
 
     /* find the table record and read the positions we want */
@@ -8895,31 +6320,31 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
     ajDebug("hdr read i: %d value: %d\n", qryd->idnum, end);
 
     if(end)
-	hsize = end - start;
+        hsize = end - start;
     else
-	hsize = qryd->Size - start;
+        hsize = qryd->Size - start;
 
     ajStrAssignResC(hline, hsize+1, "");
 
     ajDebug("type: %d hsize: %d start: %d end: %d dbSize: %d\n",
-	    qryd->type, hsize, start, end, qryd->Size);
+            qryd->type, hsize, start, end, qryd->Size);
 
     ajFileSeek(qryd->libr, start, 0);
 
     if(!ajReadbinBinary(qryd->libr, hsize, 1, ajStrGetuniquePtr(hline)))
-	ajFatal("error reading file %F", qryd->libr);
+        ajFatal("error reading file %F", qryd->libr);
 
     ajStrSetValidLen(hline, hsize);
 
 
     if(qryd->type >= 2)
-	seqBlastStripNcbi(hline);	/* trim the gnl| prefix */
+        seqBlastStripNcbi(hline);       /* trim the gnl| prefix */
     /* The above now just adds a > */
 
-    ajFilebuffClear(seqin->Filebuff, -1); /* delete all lines */
+    ajFilebuffClear(seqin->Input->Filebuff, -1); /* delete all lines */
 
     ajDebug("Load FASTA file with '%S'\n", *hline);
-    ajFilebuffLoadS(seqin->Filebuff, *hline);
+    ajFilebuffLoadS(seqin->Input->Filebuff, *hline);
 
     ajDebug("\n** Blast Sequence Reading **\n");
 
@@ -8931,372 +6356,372 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
     ajDebug("seq read i: %d   end: %d\n", qryd->idnum, end);
 
     if(qryd->type == 1 && qryd->libf)
-    {					/* BLAST 1 FASTA file */
-	ajFileSeek(qryd->libt, qryd->TopSrc + 4*(qryd->idnum), 0);
-	ajDebug("src reading at %d\n", ajFileResetPos(qryd->libt));
-	ajReadbinIntEndian(qryd->libt, &fstart);
-	ajDebug("src read i: %d fstart: %d\n", qryd->idnum, fstart);
-	ajReadbinIntEndian(qryd->libt, &fend);
-	ajDebug("src read i: %d   fend: %d\n", qryd->idnum, fend);
+    {                                   /* BLAST 1 FASTA file */
+        ajFileSeek(qryd->libt, qryd->TopSrc + 4*(qryd->idnum), 0);
+        ajDebug("src reading at %d\n", ajFileResetPos(qryd->libt));
+        ajReadbinIntEndian(qryd->libt, &fstart);
+        ajDebug("src read i: %d fstart: %d\n", qryd->idnum, fstart);
+        ajReadbinIntEndian(qryd->libt, &fend);
+        ajDebug("src read i: %d   fend: %d\n", qryd->idnum, fend);
     }
 
     if(qryd->type == 3)
-    {					/* BLAST 2 DNA ambiguities */
-	ajFileSeek(qryd->libt, qryd->TopAmb + 4*(qryd->idnum), 0);
-	ajDebug("amb reading at %d\n", ajFileResetPos(qryd->libt));
+    {                                   /* BLAST 2 DNA ambiguities */
+        ajFileSeek(qryd->libt, qryd->TopAmb + 4*(qryd->idnum), 0);
+        ajDebug("amb reading at %d\n", ajFileResetPos(qryd->libt));
         ajReadbinIntEndian(qryd->libt, &astart);
-	ajDebug("amb read i: %d astart: %d\n", qryd->idnum, astart);
+        ajDebug("amb read i: %d astart: %d\n", qryd->idnum, astart);
     }
 
     switch(qryd->type)
     {
-    case 0:				/* protein 1 */
-    case 2:				/* protein 2 */
-	ajDebug("reading protein sequence file\n");
-	if(qryd->type == 2)
-	    btoa = aa_btoa2;
-	else
-	    btoa = aa_btoa;
+        case 0:                             /* protein 1 */
+        case 2:                             /* protein 2 */
+            ajDebug("reading protein sequence file\n");
+            if(qryd->type == 2)
+                btoa = aa_btoa2;
+            else
+                btoa = aa_btoa;
 
-	spos = start;
-	ajFileSeek(qryd->libs,spos-1,0);
+            spos = start;
+            ajFileSeek(qryd->libs,spos-1,0);
 
-	seq_len = end - start - 1;
-	ajDebug("seq_len: %d spos: %d %x\n", seq_len, spos, spos);
+            seq_len = end - start - 1;
+            ajDebug("seq_len: %d spos: %d %x\n", seq_len, spos, spos);
 
-	ajStrAssignResC(sline, seq_len+1, "");
+            ajStrAssignResC(sline, seq_len+1, "");
 
-        /* skip the null byte */
-	if(!ajReadbinBinary(qryd->libs, 1, 1, &tmpbyte))
-	    ajFatal("error reading file %F", qryd->libs);
-
-	if(tmpbyte)
-	    ajErr(" phase error: %d:%d found\n",qryd->idnum,(ajint)tmpbyte);
-
-	if((tmp=ajReadbinBinary(qryd->libs,(size_t)seq_len,(size_t)1,
-			   ajStrGetuniquePtr(sline))) != (size_t)seq_len)
-	{
-	    ajErr(" could not read sequence record (a): %d %d != %d\n",
-		  start,tmp,seq_len);
-	    ajErr(" error reading seq at %d\n",start);
-
-	    return ajFalse;
-	}
-
-	if(btoa[(ajint)ajStrGetCharLast(*sline)] =='*')
-	{				/* skip * at end */
-	    seqcnt = seq_len-1;
-	    ajStrCutEnd(sline, 1);
-	}
-	else
-            seqcnt=seq_len;
-
-	seq = ajStrGetuniquePtr(sline);
-	sptr = seq+seqcnt;
-
-	while(--sptr >= seq)
-	    *sptr = btoa[(ajint)*sptr];
-
-	ajStrSetValidLen(sline, seqcnt);
-	ajDebug("Read sequence %d %d\n'%S'\n", seqcnt, ajStrGetLen(*sline),
-		*sline);
-	ajStrAssignS(&seqin->Inseq, *sline);
-
-	return ajTrue;
-
-
-    case 3:				/* DNA 2 */
-	ajDebug("reading blast2 DNA file\n");
-	ajFileSeek(qryd->libs,start,0);
-	spos = (start)/(char_bit/nbpn);
-	c_len = astart - start;	/* we have ambiguities in the nsq file */
-	seq_len = c_len*4;
-
-	ajDebug("c_len %d spos %d seq_len %d\n",
-		c_len, spos, seq_len);
-
-	ajStrAssignResC(sline, seq_len+1, "");
-
-	seq = ajStrGetuniquePtr(sline);
-
-	/* read the sequence here */
-
-	seqcnt = c_len;
-
-	if((tmp=ajReadbinBinary(qryd->libs,(size_t)seqcnt,(size_t)1,
-			   ajStrGetuniquePtr(sline))) != (size_t)seqcnt)
-	{
-	    ajErr(" could not read sequence record (c): %d %d != %d: %d\n",
-		  qryd->idnum,tmp,seqcnt,*seq);
-
-	    exit(0);
-	}
-
-	sptr = seq + seqcnt;
-
-	/* the last byte is either '0' (no remainder) or the last 1-3
-	   chars and the remainder */
-
-	c_pad = *(sptr-1);
-	c_pad &= 0x3;		       /* get the last (low) 2 bits */
-	seq_len -= (4 - c_pad);	/* if the last 2 bits are 0, its a NULL byte */
-	ajDebug("(a) c_pad %d seq_len %d seqcnt %d\n",
-		c_pad, seq_len, seqcnt);
-
-	/*
-	 ** point to the last packed byte and to the end of the array
-	 ** seqcnt is the exact number of bytes read tptr points to the
-	 ** destination, use multiple of 4 to simplify math sptr points
-	 ** to the source, note that the last byte will be read 4 cycles
-	 ** before it is written
-	 */
-
-	tptr = seq + 4*seqcnt;
-	s_chunk = seqcnt/8;
-
-	ajDebug("sptr +%d tptr +%d s_chunk %d\n",
-		sptr-seq, tptr-seq, s_chunk);
-
-	/* do we need this first section or is it just for parallel code? */
-
-	while(s_chunk-- > 0)
-	{
-	    stmp = *--sptr;
-	    *--tptr = bases[(stmp&3) +1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    stmp = *--sptr;
-	    *--tptr = bases[(stmp&3) +1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    stmp = *--sptr;
-	    *--tptr = bases[(stmp&3) +1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    stmp = *--sptr;
-	    *--tptr = bases[(stmp&3) +1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    stmp = *--sptr;
-	    *--tptr = bases[(stmp&3) +1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    stmp = *--sptr;
-	    *--tptr = bases[(stmp&3) +1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    stmp = *--sptr;
-	    *--tptr = bases[(stmp&3) +1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    stmp = *--sptr;
-	    *--tptr = bases[(stmp&3) +1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	}
-
-	ajDebug("after: sptr +%d tptr +%d\n",
-		sptr-seq, tptr-seq);
-
-	while(tptr>seq)
-	{
-	    stmp = *--sptr;
-	    *--tptr = bases[(stmp&3) +1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	    *--tptr = bases[((stmp >>= 2)&3)+1];
-	}
-
-	if(astart < end)
-	{				/* read ambiguities */
-	    a_len = end - astart;
-	    apos = astart;
-	    ajDebug("Read ambiguities: a_len %d apos: %d\n", a_len, apos);
-	    ajFileSeek(qryd->libs,apos,0);
-	    ajReadbinUintEndian(qryd->libs, &iamb);
-	    ajDebug("iamb %d\n", iamb);
-
-	    for(i=0;i<(ajint)iamb;i++)
-	    {
-		ajReadbinUintEndian(qryd->libs, &ui);
-		bc = (ui & 0xF0000000);
-		bc >>=28;
-		bn = (ui & 0x0F000000);
-		bn >>=24;
-		ip = (ui & 0x00FFFFFF);
-
-		ajDebug("amb[%3d] %x %5d %x %2d %8x %10d\n",
-			i, ip, ip, bc, bc, bn, bn, ui, ui);
-
-		for(j=0; j<= (ajint)bn; j++)
-		    seq[ip+j] = abases[bc];
-	    }
-	}
-	else
-	    a_len = 0;
-
-	ajStrSetValidLen(sline, seq_len);
-	ajStrAssignS(&seqin->Inseq, *sline);
-
-	return ajTrue;
-
-
-    case 1:
-	if(qryd->libf)
-	{			   /* we have the FASTA source file */
-	    seq_len = fend - fstart;
-	    ajStrAssignResC(sline, seq_len+1, "");
-	    ajDebug("reading FASTA file\n");
-	    ajFileSeek(qryd->libf,fstart,0);
-
-	    while(ajReadlineTrim(qryd->libf, &rdline))
-	    {				/* line + newline + 1 */
-		ajDebug("Read: '%S'\n", rdline);
-
-		if(ajStrGetCharFirst(rdline) == '>') /* the FASTA line */
-		    break;
-
-		ajStrAppendS(sline, rdline);
-	    }
-
-	    ajStrAssignS(&seqin->Inseq, *sline);
-
-	    return ajTrue;
-	}
-	else
-	{			 /* DNA Blast 1.4 from the csq file */
-
-	    /*
-	     ** Start and End offsets are in bases which are compressed
-	     ** so we need to convert them to bytes for the file offsets
-	     */
-
-	    ajDebug("reading blast 1.4 compressed DNA file\n");
-	    spos = (start)/(char_bit/nbpn);
-	    ajFileSeek(qryd->libs,spos-1,0);
-
-	    c_len = end/(char_bit/nbpn) - start/(char_bit/nbpn);
-	    c_len -= nsentinels;      /* trim first 2 (magic) bytes */
-
-	    seq_len = c_len*(char_bit/nbpn);
-	    c_pad = start & ((char_bit/nbpn)-1);
-
-	    if(c_pad != 0)
-		seq_len -= ((char_bit/nbpn) - c_pad);
-
-	    ajDebug("c_len %d c_pad %d spos %d seq_len %d\n",
-		    c_len, c_pad, spos, seq_len);
-
-	    ajStrAssignResC(sline, seq_len+1, "");
-
-	    if(!ajReadbinBinary(qryd->libs, (size_t)1, (size_t)1,
-			   &tmpbyte))	/* skip the null byte */
-		ajFatal("error reading file %F", qryd->libs);
-
-	    if(tmpbyte != nt_magic_byte)
-	    {
-		ajDebug(" phase error: %d:%d (%d/%d) found\n",
-			qryd->idnum,seq_len,(ajint)tmpbyte,
-			(ajint)nt_magic_byte);
-		ajDebug(" error reading seq at %d\n",start);
-		ajErr(" phase error: %d:%d (%d/%d) found\n",
-		      qryd->idnum,seq_len,(ajint)tmpbyte,(ajint)nt_magic_byte);
-		ajErr(" error reading seq at %d\n",start);
-
-		return ajFalse;
-	    }
-
-	    seqcnt=(seq_len+3)/4;
-
-	    if(seqcnt==0)
-		seqcnt++;
-
-	    if((tmp=ajReadbinBinary(qryd->libs,(size_t)seqcnt,(size_t)1,
-			       ajStrGetuniquePtr(sline))) != (size_t)seqcnt)
-	    {
-		ajDebug(
-			" could not read sequence record (e): %S %d %d"
-			" != %d: %d\n",
-			*sline,start,tmp,seqcnt,*seq);
-		ajDebug(" error reading seq at %d\n",start);
-		ajErr(
-		      " could not read sequence record (f): %S %d %d"
-		      " != %d: %d\n",
-		      *sline,start,tmp,seqcnt,*seq);
-		ajErr(" error reading seq at %d\n",start);
-
-		return ajFalse;
-	    }
-
-	    /* skip the null byte */
-	    if(!ajReadbinBinary(qryd->libs, (size_t)1, (size_t)1, &tmpbyte))
-		ajFatal("error reading file %F", qryd->libs);
-
-	    if(tmpbyte != nt_magic_byte)
-	    {
-		ajDebug(" phase2 error: %d:%d (%d/%d) next \n",
-			qryd->idnum,seqcnt,(ajint)tmpbyte,
-			(ajint)nt_magic_byte);
-		ajDebug(" error reading seq at %d\n",start);
-		ajErr(" phase2 error: %d:%d (%d/%d) next ",
-		      qryd->idnum,seqcnt,(ajint)tmpbyte,(ajint)nt_magic_byte);
-		ajErr(" error reading seq at %d\n",start);
-
-		return ajFalse;
-	    }
-
-	    /*
-	     ** point to the last packed byte and to the end of the array
-	     ** seqcnt is the exact number of bytes read
-	     ** tptr points to the destination, use multiple of 4 to simplify
-	     ** math
-	     ** sptr points to the source, note that the last byte will be
-	     ** read 4 cycles before it is written
-	     */
-
-	    seq = ajStrGetuniquePtr(sline);
-
-	    sptr = seq + seqcnt;
-	    tptr = seq + 4*seqcnt;
-
-	    while(sptr>seq)
-	    {
-		stmp = *--sptr;
-		*--tptr = bases[(stmp&3) +1];
-		*--tptr = bases[((stmp >>= 2)&3)+1];
-		*--tptr = bases[((stmp >>= 2)&3)+1];
-		*--tptr = bases[((stmp >>= 2)&3)+1];
-	    }
-
-	    if(seqcnt*4 >= seq_len)
-	    {				/* there was enough room */
-		seq[seq_len]= '\0';
-		ajDebug("enough room: seqlen %d\n",seq_len);
-	    }
-	    else
-	    {				/* not enough room */
-		seq[seqcnt*4]='\0';
-		seq_len -= 4*seqcnt;
-		ajDebug("not enough room: seqcnt: %d partial seqlen %d\n",
-			seqcnt, seq_len);
-	    }
-
-	    ajStrSetValidLen(sline, seq_len);
-	    ajStrAssignS(&seqin->Inseq, *sline);
-
-	    return ajTrue;
-	}
-
-    default:
-	ajErr("Unknown blast database type %d", qryd->type);
+            /* skip the null byte */
+            if(!ajReadbinBinary(qryd->libs, 1, 1, &tmpbyte))
+                ajFatal("error reading file %F", qryd->libs);
+
+            if(tmpbyte)
+                ajErr(" phase error: %d:%d found\n",qryd->idnum,(ajint)tmpbyte);
+
+            if((tmp=ajReadbinBinary(qryd->libs,(size_t)seq_len,(size_t)1,
+                                    ajStrGetuniquePtr(sline))) != (size_t)seq_len)
+            {
+                ajErr(" could not read sequence record (a): %d %d != %d\n",
+                      start,tmp,seq_len);
+                ajErr(" error reading seq at %d\n",start);
+
+                return ajFalse;
+            }
+
+            if(btoa[(ajint)ajStrGetCharLast(*sline)] =='*')
+            {                               /* skip * at end */
+                seqcnt = seq_len-1;
+                ajStrCutEnd(sline, 1);
+            }
+            else
+                seqcnt=seq_len;
+
+            seq = ajStrGetuniquePtr(sline);
+            sptr = seq+seqcnt;
+
+            while(--sptr >= seq)
+                *sptr = btoa[(ajint)*sptr];
+
+            ajStrSetValidLen(sline, seqcnt);
+            ajDebug("Read sequence %d %d\n'%S'\n", seqcnt, ajStrGetLen(*sline),
+                    *sline);
+            ajStrAssignS(&seqin->Inseq, *sline);
+
+            return ajTrue;
+
+
+        case 3:                             /* DNA 2 */
+            ajDebug("reading blast2 DNA file\n");
+            ajFileSeek(qryd->libs,start,0);
+            spos = (start)/(char_bit/nbpn);
+            c_len = astart - start; /* we have ambiguities in the nsq file */
+            seq_len = c_len*4;
+
+            ajDebug("c_len %d spos %d seq_len %d\n",
+                    c_len, spos, seq_len);
+
+            ajStrAssignResC(sline, seq_len+1, "");
+
+            seq = ajStrGetuniquePtr(sline);
+
+            /* read the sequence here */
+
+            seqcnt = c_len;
+
+            if((tmp=ajReadbinBinary(qryd->libs,(size_t)seqcnt,(size_t)1,
+                                    ajStrGetuniquePtr(sline))) != (size_t)seqcnt)
+            {
+                ajErr(" could not read sequence record (c): %d %d != %d: %d\n",
+                      qryd->idnum,tmp,seqcnt,*seq);
+
+                exit(0);
+            }
+
+            sptr = seq + seqcnt;
+
+            /* the last byte is either '0' (no remainder) or the last 1-3
+               chars and the remainder */
+
+            c_pad = *(sptr-1);
+            c_pad &= 0x3;                  /* get the last (low) 2 bits */
+            seq_len -= (4 - c_pad); /* if the last 2 bits are 0, its a NULL byte */
+            ajDebug("(a) c_pad %d seq_len %d seqcnt %d\n",
+                    c_pad, seq_len, seqcnt);
+
+            /*
+            ** point to the last packed byte and to the end of the array
+            ** seqcnt is the exact number of bytes read tptr points to the
+            ** destination, use multiple of 4 to simplify math sptr points
+            ** to the source, note that the last byte will be read 4 cycles
+            ** before it is written
+            */
+
+            tptr = seq + 4*seqcnt;
+            s_chunk = seqcnt/8;
+
+            ajDebug("sptr +%d tptr +%d s_chunk %d\n",
+                    sptr-seq, tptr-seq, s_chunk);
+
+            /* do we need this first section or is it just for parallel code? */
+
+            while(s_chunk-- > 0)
+            {
+                stmp = *--sptr;
+                *--tptr = bases[(stmp&3) +1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                stmp = *--sptr;
+                *--tptr = bases[(stmp&3) +1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                stmp = *--sptr;
+                *--tptr = bases[(stmp&3) +1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                stmp = *--sptr;
+                *--tptr = bases[(stmp&3) +1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                stmp = *--sptr;
+                *--tptr = bases[(stmp&3) +1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                stmp = *--sptr;
+                *--tptr = bases[(stmp&3) +1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                stmp = *--sptr;
+                *--tptr = bases[(stmp&3) +1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                stmp = *--sptr;
+                *--tptr = bases[(stmp&3) +1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+            }
+
+            ajDebug("after: sptr +%d tptr +%d\n",
+                    sptr-seq, tptr-seq);
+
+            while(tptr>seq)
+            {
+                stmp = *--sptr;
+                *--tptr = bases[(stmp&3) +1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+                *--tptr = bases[((stmp >>= 2)&3)+1];
+            }
+
+            if(astart < end)
+            {                               /* read ambiguities */
+                a_len = end - astart;
+                apos = astart;
+                ajDebug("Read ambiguities: a_len %d apos: %d\n", a_len, apos);
+                ajFileSeek(qryd->libs,apos,0);
+                ajReadbinUintEndian(qryd->libs, &iamb);
+                ajDebug("iamb %d\n", iamb);
+
+                for(i=0;i<(ajint)iamb;i++)
+                {
+                    ajReadbinUintEndian(qryd->libs, &ui);
+                    bc = (ui & 0xF0000000);
+                    bc >>=28;
+                    bn = (ui & 0x0F000000);
+                    bn >>=24;
+                    ip = (ui & 0x00FFFFFF);
+
+                    ajDebug("amb[%3d] %x %5d %x %2d %8x %10d\n",
+                            i, ip, ip, bc, bc, bn, bn, ui, ui);
+
+                    for(j=0; j<= (ajint)bn; j++)
+                        seq[ip+j] = abases[bc];
+                }
+            }
+            else
+                a_len = 0;
+
+            ajStrSetValidLen(sline, seq_len);
+            ajStrAssignS(&seqin->Inseq, *sline);
+
+            return ajTrue;
+
+
+        case 1:
+            if(qryd->libf)
+            {                          /* we have the FASTA source file */
+                seq_len = fend - fstart;
+                ajStrAssignResC(sline, seq_len+1, "");
+                ajDebug("reading FASTA file\n");
+                ajFileSeek(qryd->libf,fstart,0);
+
+                while(ajReadlineTrim(qryd->libf, &rdline))
+                {                           /* line + newline + 1 */
+                    ajDebug("Read: '%S'\n", rdline);
+
+                    if(ajStrGetCharFirst(rdline) == '>') /* the FASTA line */
+                        break;
+
+                    ajStrAppendS(sline, rdline);
+                }
+
+                ajStrAssignS(&seqin->Inseq, *sline);
+
+                return ajTrue;
+            }
+            else
+            {                        /* DNA Blast 1.4 from the csq file */
+
+                /*
+                ** Start and End offsets are in bases which are compressed
+                ** so we need to convert them to bytes for the file offsets
+                */
+
+                ajDebug("reading blast 1.4 compressed DNA file\n");
+                spos = (start)/(char_bit/nbpn);
+                ajFileSeek(qryd->libs,spos-1,0);
+
+                c_len = end/(char_bit/nbpn) - start/(char_bit/nbpn);
+                c_len -= nsentinels;      /* trim first 2 (magic) bytes */
+
+                seq_len = c_len*(char_bit/nbpn);
+                c_pad = start & ((char_bit/nbpn)-1);
+
+                if(c_pad != 0)
+                    seq_len -= ((char_bit/nbpn) - c_pad);
+
+                ajDebug("c_len %d c_pad %d spos %d seq_len %d\n",
+                        c_len, c_pad, spos, seq_len);
+
+                ajStrAssignResC(sline, seq_len+1, "");
+
+                if(!ajReadbinBinary(qryd->libs, (size_t)1, (size_t)1,
+                                    &tmpbyte))   /* skip the null byte */
+                    ajFatal("error reading file %F", qryd->libs);
+
+                if(tmpbyte != nt_magic_byte)
+                {
+                    ajDebug(" phase error: %d:%d (%d/%d) found\n",
+                            qryd->idnum,seq_len,(ajint)tmpbyte,
+                            (ajint)nt_magic_byte);
+                    ajDebug(" error reading seq at %d\n",start);
+                    ajErr(" phase error: %d:%d (%d/%d) found\n",
+                          qryd->idnum,seq_len,(ajint)tmpbyte,(ajint)nt_magic_byte);
+                    ajErr(" error reading seq at %d\n",start);
+
+                    return ajFalse;
+                }
+
+                seqcnt=(seq_len+3)/4;
+
+                if(seqcnt==0)
+                    seqcnt++;
+
+                if((tmp=ajReadbinBinary(qryd->libs,(size_t)seqcnt,(size_t)1,
+                                        ajStrGetuniquePtr(sline))) != (size_t)seqcnt)
+                {
+                    ajDebug(
+                        " could not read sequence record (e): %S %d %d"
+                        " != %d: %d\n",
+                        *sline,start,tmp,seqcnt,*seq);
+                    ajDebug(" error reading seq at %d\n",start);
+                    ajErr(
+                        " could not read sequence record (f): %S %d %d"
+                        " != %d: %d\n",
+                        *sline,start,tmp,seqcnt,*seq);
+                    ajErr(" error reading seq at %d\n",start);
+
+                    return ajFalse;
+                }
+
+                /* skip the null byte */
+                if(!ajReadbinBinary(qryd->libs, (size_t)1, (size_t)1, &tmpbyte))
+                    ajFatal("error reading file %F", qryd->libs);
+
+                if(tmpbyte != nt_magic_byte)
+                {
+                    ajDebug(" phase2 error: %d:%d (%d/%d) next \n",
+                            qryd->idnum,seqcnt,(ajint)tmpbyte,
+                            (ajint)nt_magic_byte);
+                    ajDebug(" error reading seq at %d\n",start);
+                    ajErr(" phase2 error: %d:%d (%d/%d) next ",
+                          qryd->idnum,seqcnt,(ajint)tmpbyte,(ajint)nt_magic_byte);
+                    ajErr(" error reading seq at %d\n",start);
+
+                    return ajFalse;
+                }
+
+                /*
+                ** point to the last packed byte and to the end of the array
+                ** seqcnt is the exact number of bytes read
+                ** tptr points to the destination, use multiple of 4 to simplify
+                ** math
+                ** sptr points to the source, note that the last byte will be
+                ** read 4 cycles before it is written
+                */
+
+                seq = ajStrGetuniquePtr(sline);
+
+                sptr = seq + seqcnt;
+                tptr = seq + 4*seqcnt;
+
+                while(sptr>seq)
+                {
+                    stmp = *--sptr;
+                    *--tptr = bases[(stmp&3) +1];
+                    *--tptr = bases[((stmp >>= 2)&3)+1];
+                    *--tptr = bases[((stmp >>= 2)&3)+1];
+                    *--tptr = bases[((stmp >>= 2)&3)+1];
+                }
+
+                if(seqcnt*4 >= seq_len)
+                {                           /* there was enough room */
+                    seq[seq_len]= '\0';
+                    ajDebug("enough room: seqlen %d\n",seq_len);
+                }
+                else
+                {                           /* not enough room */
+                    seq[seqcnt*4]='\0';
+                    seq_len -= 4*seqcnt;
+                    ajDebug("not enough room: seqcnt: %d partial seqlen %d\n",
+                            seqcnt, seq_len);
+                }
+
+                ajStrSetValidLen(sline, seq_len);
+                ajStrAssignS(&seqin->Inseq, *sline);
+
+                return ajTrue;
+            }
+
+        default:
+            ajErr("Unknown blast database type %d", qryd->type);
     }
 
     return ajFalse;
@@ -9341,36 +6766,39 @@ static void seqBlastStripNcbi(AjPStr* line)
 ** Where more than one query field is defined (usually acc and sv) it
 ** can test all and append to a single list.
 **
-** @param [u] qry [AjPSeqQuery] Sequence query object.
+** @param [u] qry [AjPQuery] Sequence query object.
+** @param [r] field [const AjPStr] Query field
+** @param [r] wildqry [const AjPStr] Query string
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-static AjBool seqCdTrgQuery(AjPSeqQuery qry)
+static AjBool seqCdTrgQuery(AjPQuery qry, const AjPStr field,
+                            const AjPStr wildqry)
 {
     ajint ret=0;
 
-    if(ajStrGetLen(qry->Org))
-	ret += seqCdTrgFind(qry, "taxon", qry->Org);
+    if(ajStrMatchC(field, "org"))
+        ret += seqCdTrgFind(qry, "taxon", wildqry);
 
-    if(ajStrGetLen(qry->Key))
-	ret += seqCdTrgFind(qry, "keyword", qry->Key);
+    if(ajStrMatchC(field, "key"))
+        ret += seqCdTrgFind(qry, "keyword", wildqry);
 
-    if(ajStrGetLen(qry->Des))
-	ret += seqCdTrgFind(qry, "des", qry->Des);
+    if(ajStrMatchC(field, "des"))
+        ret += seqCdTrgFind(qry, "des", wildqry);
 
-    if(ajStrGetLen(qry->Sv))
-	ret += seqCdTrgFind(qry, "seqvn", qry->Sv);
+    if(ajStrMatchC(field, "sv"))
+        ret += seqCdTrgFind(qry, "seqvn", wildqry);
 
-    if(ajStrGetLen(qry->Gi))
-	ret += seqCdTrgFind(qry, "gi", qry->Gi);
+    if(ajStrMatchC(field, "gi"))
+        ret += seqCdTrgFind(qry, "gi", wildqry);
 
-    if(qry->HasAcc && ajStrGetLen(qry->Acc))
-	ret += seqCdTrgFind(qry, "acnum", qry->Acc);
+    if(qry->HasAcc && ajStrMatchC(field, "acc"))
+        ret += seqCdTrgFind(qry, "acnum", wildqry);
 
 
     if(ret)
-	return ajTrue;
+        return ajTrue;
 
     return ajFalse;
 }
@@ -9386,15 +6814,15 @@ static AjBool seqCdTrgQuery(AjPSeqQuery qry)
 ** Where more than one query field is defined (usually acc and sv) it
 ** can test all and append to a single list.
 **
-** @param [u] qry [AjPSeqQuery] Sequence query object.
+** @param [u] qry [AjPQuery] Sequence query object.
 ** @param [r] indexname [const char*] Index name.
 ** @param [r] queryName [const AjPStr] Query string.
 ** @return [ajuint] Number of matches found
 ** @@
 ******************************************************************************/
 
-static ajuint seqCdTrgFind(AjPSeqQuery qry, const char* indexname,
-			   const AjPStr queryName)
+static ajuint seqCdTrgFind(AjPQuery qry, const char* indexname,
+                           const AjPStr queryName)
 {
     SeqPCdQry wild;
     AjPList   l;
@@ -9430,7 +6858,7 @@ static ajuint seqCdTrgFind(AjPSeqQuery qry, const char* indexname,
 
 
     wild    = qry->QryData;
-    l       = wild->List;
+    l       = qry->ResultsList;
     trgline = wild->trgLine;
     idxline = wild->idxLine;
     idxfp   = wild->ifp;
@@ -9440,7 +6868,7 @@ static ajuint seqCdTrgFind(AjPSeqQuery qry, const char* indexname,
 
 
     if(!seqCdTrgOpen(qry->IndexDir, indexname, &trgfp, &hitfp))
-	return 0;
+        return 0;
 
     /* fdstr is the original query string, in uppercase */
 
@@ -9453,7 +6881,7 @@ static ajuint seqCdTrgFind(AjPSeqQuery qry, const char* indexname,
     ajStrRemoveWild(&fdprefix);
 
     ajDebug("queryName '%S' fdstr '%S' fdprefix '%S'\n",
-	    queryName, fdstr, fdprefix);
+            queryName, fdstr, fdprefix);
 
     b = b2 = 0;
     t = t2 = t3 = trgfp->NRecords - 1;
@@ -9463,87 +6891,87 @@ static ajuint seqCdTrgFind(AjPSeqQuery qry, const char* indexname,
 
     if(prefixlen)
     {
-	/*
-	 ** (1a) we have a prefix (no wildcard at the start)
-	 ** look for the prefix fdprefix
-	 ** Set range of records that match (will be consecutive of course)
-	 ** from first match
-	 */
+        /*
+        ** (1a) we have a prefix (no wildcard at the start)
+        ** look for the prefix fdprefix
+        ** Set range of records that match (will be consecutive of course)
+        ** from first match
+        */
 
-	while(b<=t)
-	{
-	    pos = (t+b)/2;
-	    name = seqCdTrgName(pos,trgfp);
-	    name[prefixlen]='\0';      /* truncate to prefix length */
-	    cmp = ajStrCmpC(fdprefix,name);
-	    /*	    match = ajStrMatchWildC(fdstr,name);*/
-	    ajDebug(" trg testc %d '%s' '%S' %B (+/- %d)\n",
-		    pos,name,fdprefix,cmp, t-b);
-	    if(!cmp)
-	    {
-		ajDebug(" trg hit %d\n",pos);
+        while(b<=t)
+        {
+            pos = (t+b)/2;
+            name = seqCdTrgName(pos,trgfp);
+            name[prefixlen]='\0';      /* truncate to prefix length */
+            cmp = ajStrCmpC(fdprefix,name);
+            /*      match = ajStrMatchWildC(fdstr,name);*/
+            ajDebug(" trg testc %d '%s' '%S' %B (+/- %d)\n",
+                    pos,name,fdprefix,cmp, t-b);
+            if(!cmp)
+            {
+                ajDebug(" trg hit %d\n",pos);
 
-		if(first)
-		{
-		    first = ajFalse;
-		    t2 = t;
-		    t3 = pos;
-		}
+                if(first)
+                {
+                    first = ajFalse;
+                    t2 = t;
+                    t3 = pos;
+                }
 
-		b2 = pos;
-	    }
+                b2 = pos;
+            }
 
-	    if(cmp>0)
-		b = pos+1;
-	    else
-		t = pos-1;
-	}
+            if(cmp>0)
+                b = pos+1;
+            else
+                t = pos-1;
+        }
 
-	if(first)
-	{
-	    ajStrDel(&fdprefix);
-	    ajStrDel(&fdstr);
-	    seqCdTrgClose(&trgfp,&hitfp);
+        if(first)
+        {
+            ajStrDel(&fdprefix);
+            ajStrDel(&fdstr);
+            seqCdTrgClose(&trgfp,&hitfp);
 
-	    return ajFalse;
-	}
+            return ajFalse;
+        }
 
-	ajDebug("first pass: pos:%d b2:%d t2:%d\n",pos,b2,t2);
+        ajDebug("first pass: pos:%d b2:%d t2:%d\n",pos,b2,t2);
 
-	/*
-	 ** (1b) Process below
-	 */
+        /*
+        ** (1b) Process below
+        */
 
-	b = b2-1;
-	t = t2;
+        b = b2-1;
+        t = t2;
 
-	while(b<=t)
-	{
-	    pos = (t+b)/2;
-	    name = seqCdTrgName(pos,trgfp);
-	    name[prefixlen]='\0';
-	    cmp = ajStrCmpC(fdprefix,name);
-	    /* match = ajStrMatchWildC(fdstr,name); */
-	    ajDebug(" trg testd %d '%s' '%S' %B (+/- %d)\n",
-		    pos,name,fdprefix,cmp,t-b);
+        while(b<=t)
+        {
+            pos = (t+b)/2;
+            name = seqCdTrgName(pos,trgfp);
+            name[prefixlen]='\0';
+            cmp = ajStrCmpC(fdprefix,name);
+            /* match = ajStrMatchWildC(fdstr,name); */
+            ajDebug(" trg testd %d '%s' '%S' %B (+/- %d)\n",
+                    pos,name,fdprefix,cmp,t-b);
 
-	    if(!cmp)
-	    {
-		ajDebug(" trg hit %d\n",pos);
-		t3 = pos;
-	    }
+            if(!cmp)
+            {
+                ajDebug(" trg hit %d\n",pos);
+                t3 = pos;
+            }
 
-	    if(cmp<0)
-		t = pos-1;
-	    else
-		b = pos+1;
-	}
+            if(cmp<0)
+                t = pos-1;
+            else
+                b = pos+1;
+        }
 
-	ajDebug("second pass: pos:%d b2:%d t3:%d\n",pos,b2,t3);
-	name = seqCdTrgName(b2,trgfp);
-	ajDebug("first %d '%s'\n",b2,name);
-	name = seqCdTrgName(t3,trgfp);
-	ajDebug("last %d '%s'\n",t3,name);
+        ajDebug("second pass: pos:%d b2:%d t3:%d\n",pos,b2,t3);
+        name = seqCdTrgName(b2,trgfp);
+        ajDebug("first %d '%s'\n",b2,name);
+        name = seqCdTrgName(t3,trgfp);
+        ajDebug("last %d '%s'\n",t3,name);
     }
 
 
@@ -9552,40 +6980,40 @@ static ajuint seqCdTrgFind(AjPSeqQuery qry, const char* indexname,
 
     for(i=start;i<(end+1);++i)
     {
-	name = seqCdTrgName(i,trgfp);
-	match = ajCharMatchWildC(name, ajStrGetPtr(fdstr));
+        name = seqCdTrgName(i,trgfp);
+        match = ajCharMatchWildC(name, ajStrGetPtr(fdstr));
 
-	ajDebug("third pass: match:%B i:%d name '%s' queryName '%S'\n",
-		match, i, name, fdstr);
+        ajDebug("third pass: match:%B i:%d name '%s' queryName '%S'\n",
+                match, i, name, fdstr);
 
-	if(!match)
+        if(!match)
             continue;
 
-	seqCdTrgLine(trgline, i, trgfp);
-	seqCdFileSeek(hitfp,trgline->FirstHit-1);
-	ajDebug("Query First: %d Count: %d\n",
-		trgline->FirstHit, trgline->NHits);
-	pos = trgline->FirstHit;
+        seqCdTrgLine(trgline, i, trgfp);
+        seqCdFileSeek(hitfp,trgline->FirstHit-1);
+        ajDebug("Query First: %d Count: %d\n",
+                trgline->FirstHit, trgline->NHits);
+        pos = trgline->FirstHit;
 
-	for(j=0;j<(ajint)trgline->NHits;++j)
-	{
-	    ajReadbinInt(hitfp->File, &k);
-	    --k;
-	    ajDebug("hitlist[%d] entry = %d\n",j,k);
-	    seqCdIdxLine(idxline,k,idxfp);
+        for(j=0;j<(ajint)trgline->NHits;++j)
+        {
+            ajReadbinInt(hitfp->File, &k);
+            --k;
+            ajDebug("hitlist[%d] entry = %d\n",j,k);
+            seqCdIdxLine(idxline,k,idxfp);
 
-	    if(!skip[idxline->DivCode-1])
-	    {
-		AJNEW0(entry);
-		entry->div = idxline->DivCode;
-		entry->annoff = idxline->AnnOffset;
-		entry->seqoff = idxline->SeqOffset;
-		ajListPushAppend(l,(void*)entry);
-	    }
-	    else
-		ajDebug("SKIP: token '%S' [file %d]\n",
-			queryName,idxline->DivCode);
-	}
+            if(!skip[idxline->DivCode-1])
+            {
+                AJNEW0(entry);
+                entry->div = idxline->DivCode;
+                entry->annoff = idxline->AnnOffset;
+                entry->seqoff = idxline->SeqOffset;
+                ajListPushAppend(l,(void*)entry);
+            }
+            else
+                ajDebug("SKIP: token '%S' [file %d]\n",
+                        queryName,idxline->DivCode);
+        }
     }
 
     seqCdTrgClose(&trgfp, &hitfp);
@@ -9601,7 +7029,7 @@ static ajuint seqCdTrgFind(AjPSeqQuery qry, const char* indexname,
 
 
 
-/* @func ajSeqPrintAccess *****************************************************
+/* @func ajSeqdbPrintAccess ***************************************************
 **
 ** Reports the internal data structures
 **
@@ -9611,22 +7039,22 @@ static ajuint seqCdTrgFind(AjPSeqQuery qry, const char* indexname,
 ** @@
 ******************************************************************************/
 
-void ajSeqPrintAccess(AjPFile outf, AjBool full)
+void ajSeqdbPrintAccess(AjPFile outf, AjBool full)
 {
     ajint i = 0;
 
     ajFmtPrintF(outf, "\n");
-    ajFmtPrintF(outf, "# sequence access methods\n");
+    ajFmtPrintF(outf, "# Sequence access methods\n");
     ajFmtPrintF(outf, "# Name       Alias Entry Query   All Description\n");
     ajFmtPrintF(outf, "\n");
     ajFmtPrintF(outf, "method {\n");
 
     for(i=0; seqAccess[i].Name; i++)
-	if(full || !seqAccess[i].Alias)
-	    ajFmtPrintF(outf, "  %-10s %5B %5B %5B %5B \"%s\"\n",
-			seqAccess[i].Name, seqAccess[i].Alias,
-			seqAccess[i].Entry, seqAccess[i].Query,
-			seqAccess[i].All, seqAccess[i].Desc);
+        if(full || !seqAccess[i].Alias)
+            ajFmtPrintF(outf, "  %-10s %5B %5B %5B %5B \"%s\"\n",
+                        seqAccess[i].Name, seqAccess[i].Alias,
+                        seqAccess[i].Entry, seqAccess[i].Query,
+                        seqAccess[i].All, seqAccess[i].Desc);
 
     ajFmtPrintF(outf, "}\n\n");
 
@@ -9694,11 +7122,8 @@ static void seqCdTrgDel(SeqPCdTrg* pthys)
 
 void ajSeqDbExit(void)
 {
-    AjPTable table = NULL;
-
     ajRegFree(&seqCdDivExp);
     ajRegFree(&seqBlastDivExp);
-    ajRegFree(&seqRegHttpProxy);
     ajRegFree(&seqRegHttpUrl);
     ajCharDel(&seqCdName);
     ajRegFree(&seqRegGcgId);
@@ -9710,9 +7135,6 @@ void ajSeqDbExit(void)
     ajRegFree(&seqRegGcgRefId);
 
     ajRegFree(&seqRegGi);
-
-    table = ajSeqtableGetDb();
-    ajCallTableDel(&table);
 
     ensExit();
 

@@ -48,7 +48,7 @@ Finds inverted repeats in nucleotide sequence(s)
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with palindrome</b>
+Here is a sample session with <b>palindrome</b>
 <p>
 
 <p>
@@ -75,7 +75,7 @@ Report overlapping matches [Y]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Finds inverted repeats in nucleotide sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -462,7 +462,34 @@ Version: EMBOSS:6.3.0
 </H2>
 
 
-<b>palindrome</b> reads normal nucleotide sequence USAs.
+<b>palindrome</b> reads one or more nucleotide sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -587,6 +614,9 @@ FT                   /note="thymidylate synthase mRNA and introns"
     Output file format
 </H2>
 
+<b>palindrome</b> writes a text report of the alignment.
+
+<p>
 
 
 <a name="output.1"></a>

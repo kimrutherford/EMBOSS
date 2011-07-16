@@ -50,7 +50,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-outfile</td>
 <td>outfile</td>
-<td>Output file name</td>
+<td>Tool metadata output file</td>
 <td>Output file</td>
 <td>stdout</td>
 </tr>
@@ -66,7 +66,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-groups</td>
 <td>boolean</td>
-<td>If you use this option, then only the group names will output to the file</td>
+<td>If you use this option, then only the group names will be output to the file</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>

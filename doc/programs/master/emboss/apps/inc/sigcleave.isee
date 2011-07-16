@@ -8,11 +8,6 @@
 </tr>
 
 <tr>
-<td><a href="digest.html">digest</a></td>
-<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
-</tr>
-
-<tr>
 <td><a href="epestfind.html">epestfind</a></td>
 <td>Finds PEST motifs as potential proteolytic cleavage sites</td>
 </tr>
@@ -28,16 +23,6 @@
 </tr>
 
 <tr>
-<td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Identify nucleic acid-binding motifs in protein sequences</td>
-</tr>
-
-<tr>
-<td><a href="oddcomp.html">oddcomp</a></td>
-<td>Identify proteins with specified sequence word composition</td>
-</tr>
-
-<tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
 <td>Searches protein sequences with a sequence motif</td>
 </tr>
@@ -48,11 +33,6 @@
 </tr>
 
 <tr>
-<td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions in protein sequences</td>
-</tr>
-
-<tr>
 <td><a href="preg.html">preg</a></td>
 <td>Regular expression search of protein sequence(s)</td>
 </tr>
@@ -60,6 +40,11 @@
 <tr>
 <td><a href="pscan.html">pscan</a></td>
 <td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
+</tr>
+
+<tr>
+<td><a href="tmap.html">tmap</a></td>
+<td>Predict and plot transmembrane segments in protein sequences</td>
 </tr>
 
 </table>

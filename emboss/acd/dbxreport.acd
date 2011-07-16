@@ -1,11 +1,11 @@
 application: dbxreport [
   groups: "Utils:Database indexing"
   documentation: "Validate index and report internals for dbx databases"
-  gui: "yes"
+  gui: "no"
   batch: "no"
   cpu: "medium"
-  relations: "/edam/topic/0000091 Database and file management"
-  relations: "/edam/operation/0000228 Database index analysis"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000228 operation Data index analysis"
 ]
 
 section: input [
@@ -17,30 +17,28 @@ section: input [
     parameter: "Y"
     maxlength: "19"
     minlength: "2"
-    information: "Basename for index files"
+    information: "EMBOSS database name"
     knowntype: "emboss database name"
     pattern: "[A-z][A-z0-9_]+"
-    relations:  "/edam/data/0001056 Database name"                          
+    relations: "EDAM:0001056 identifier Database name"
+  ]
+
+  string: fields [
+    parameter: "y"
+    default: "id"
+    information: "Index fields"
+    knowntype: "emboss database field"
+    help: "A list of index fields separated by spaces or commas."
+    relations: "EDAM:0002219 identifier Database field name"
   ]
 
   directory: indexdir [
-    standard: "y"
-    default: "."
-    information: "Index directory"
+    default: ""
+    information: "Index directory (optional)"
     knowntype: "emboss database index"
-    relations:  "/edam/data/0001049 Directory name"                                 
-  ]
-
-  list: idtype [
-    standard: "y"
-    information: "Index type"
-    values: "id:ID index; ac:Accession index; sv:Version/GI Index;
-             kw:Keyword index; de:Description index; tx:Taxonomy Index;
-             all:All index files"
-    maximum: "6"
-    minimum: "1"
-    default: "all"
-    relations: "/edam/data/0001773 Tool-specific parameter"                                
+    relations: "EDAM:0001049 identifier Directory name"
+    nullok: "Y"
+    nulldefault: "Y"
   ]
 
 endsection: input
@@ -57,11 +55,11 @@ section: advanced [
   type: "page"
 ]
 
-boolean: fullreport [
-  information: "Write full details to debug file"
-  default: "N"
-    relations: "/edam/data/0002135 Toggle"                                     
-]
+  boolean: fullreport [
+    information: "Write full details to debug file"
+    default: "N"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
 
 
 endsection: advanced
@@ -73,8 +71,9 @@ section: output [
 
   outfile: outfile [
     standard: "y"
+    name: "$(dbname)"
     knowntype: "dbxreport output"
-    relations:  "/edam/data/0000955 Database index"
+    relations: "EDAM:0000969 data Text"
   ]
 
 endsection: output

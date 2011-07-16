@@ -47,7 +47,7 @@ regular expression and writes a report file with the matches.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with dreg</b>
+Here is a sample session with <b>dreg</b>
 <p>
 
 <p>
@@ -69,13 +69,14 @@ Output report [x13776.dreg]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Regular expression search of nucleotide sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
   [-pattern]           regexp     Any regular expression pattern is accepted)
-  [-outfile]           report     [*.dreg] Output report file name
+  [-outfile]           report     [*.dreg] Output report file name (default
+                                  -rformat seqtable)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -167,7 +168,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat seqtable)</td>
 <td><i>&lt;*&gt;</i>.dreg</td>
 </tr>
 
@@ -659,10 +660,11 @@ The output is a standard EMBOSS report file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
 
 <p>
 
@@ -684,7 +686,7 @@ By default <b>dreg</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: dreg
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: dreg
 #    -sequence tembl:x13776
 #    -pattern ggtacc
@@ -701,8 +703,8 @@ By default <b>dreg</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End  Strand Pattern_name Sequence
-      1       6       + regex        ggtacc
+  Start     End  Strand Pattern       Sequence
+      1       6       + regex: GGTACC ggtacc
 
 #---------------------------------------
 #---------------------------------------
@@ -1708,22 +1710,8 @@ None.
 <td>Search for patterns in protein sequences (translated)</td>
 </tr>
 
-<tr>
-<td><a href="marscan.html">marscan</a></td>
-<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
-</tr>
-
 </table>
 
-<p>
-Other EMBOSS programs allow you to search for simple patterns and may be
-easier for the user who has never used regular expressions before:
-
-<ul>
-<li><a href="fuzznuc.html">fuzznuc</a>  - Nucleic acid pattern search
-<li><a href="fuzzpro.html">fuzzpro</a>  - Protein pattern search
-<li><a href="fuzztran.html">fuzztran</a> - Protein pattern search after translation
-</ul>
 
 <H2>
     Author(s)

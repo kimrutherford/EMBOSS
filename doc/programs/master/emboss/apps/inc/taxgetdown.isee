@@ -1,0 +1,25 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="taxget.html">taxget</a></td>
+<td>Get taxon(s)</td>
+</tr>
+
+<tr>
+<td><a href="taxgetrank.html">taxgetrank</a></td>
+<td>Get parents of taxon(s)</td>
+</tr>
+
+<tr>
+<td><a href="taxgetspecies.html">taxgetspecies</a></td>
+<td>Get all species under taxon(s)</td>
+</tr>
+
+<tr>
+<td><a href="taxgetup.html">taxgetup</a></td>
+<td>Get parents of taxon(s)</td>
+</tr>
+
+</table>

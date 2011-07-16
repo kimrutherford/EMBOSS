@@ -65,7 +65,7 @@ IT IS DONE FOR YOU.
         Many examples illustrating different behaviours is good.
  -->
 
-<b>Here is a sample session with density</b>
+Here is a sample session with <b>density</b>
 <p>
 
 <p>
@@ -118,16 +118,17 @@ Created density.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Draw a nucleic acid density plot
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
-*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Density
-                                  graph (ps, hpgl, hp7470, hp7580, meta, cps,
-                                  x11, tek, tekt, none, data, xterm, png, gif,
-                                  pdf, svg, pdf, svg)
-*  -outfile            report     [*.density] Output report file name
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tek, tekt, none, data, xterm, png, gif, pdf,
+                                  svg)
+*  -outfile            report     [*.density] Output report file name (default
+                                  -rformat table)
 
    Additional (Optional) qualifiers:
    -window             integer    [100] Window length (Integer 1 or more)
@@ -221,8 +222,8 @@ Version: EMBOSS:6.3.0
 <tr bgcolor="#FFFFCC">
 <td>-graph</td>
 <td>xygraph</td>
-<td>Density graph</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -230,7 +231,7 @@ Version: EMBOSS:6.3.0
 <td>-outfile</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat table)</td>
 <td><i>&lt;*&gt;</i>.density</td>
 </tr>
 
@@ -663,15 +664,35 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
+<b>density</b> reads one or more nucleotide sequences.
 
-<b>density</b> reads any normal sequence USAs.
+<p>
+<p>
 
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 <p>
 
 
@@ -823,7 +844,7 @@ outputs a graph to the specified graphics device.
 <pre>
 ########################################
 # Program: density
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: density
 #    [-seqall] tembl:x13776
 # Report_format: table
@@ -1101,11 +1122,6 @@ None.
 <tr>
 <td><a href="isochore.html">isochore</a></td>
 <td>Plots isochores in DNA sequences</td>
-</tr>
-
-<tr>
-<td><a href="sirna.html">sirna</a></td>
-<td>Finds siRNA duplexes in mRNA</td>
 </tr>
 
 <tr>

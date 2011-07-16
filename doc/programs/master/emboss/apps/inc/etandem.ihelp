@@ -1,5 +1,5 @@
 Finds tandem repeats in a nucleotide sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -8,7 +8,8 @@ Version: EMBOSS:6.3.0
                                   higher)
    -maxrepeat          integer    [Same as -minrepeat] Maximum repeat size
                                   (Integer, same as -minrepeat or higher)
-  [-outfile]           report     [*.etandem] Output report file name
+  [-outfile]           report     [*.etandem] Output report file name (default
+                                  -rformat table)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:

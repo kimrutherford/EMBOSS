@@ -1,14 +1,9 @@
-# === Based on the GFF standard 2.0 ===
+# === Based on the GFF standard 3.0 and EMBL ===
 # Note: GFF includes EMBL/Genbank/DDBJ feature keys and tags
 
-# === EMBL/GenBank/DDBJ feature tags ===
+# Tags from GFF3 standard ... includes embl tags
 
-#include Etags.embl
+#include Etags.gff3
 
-# Tags from GFF3 standard
-
-Target QTEXT note
-
-Sequence QTEXT note
 
 # === end of GFF tags

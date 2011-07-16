@@ -1,8 +1,8 @@
 application: union [
   documentation: "Concatenate multiple sequences into a single sequence"
   groups: "Edit"
-  relations: "/edam/topic/0000156 Sequence editing"
-  relations: "/edam/operation/0000232 Sequence merging"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000232 operation Sequence merging"
 ]
 
 section: input [
@@ -13,16 +13,14 @@ section: input [
   boolean: feature [
     default: "N"
     information: "Use feature information"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
     features: "$(feature)"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -35,13 +33,13 @@ section: advanced [
   boolean: source [
     default: "N"
     information: "Create source features"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: findoverlap [
     default: "N"
     information: "Look for overlaps when joining"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -54,8 +52,7 @@ section: output [
   seqout: outseq [
     parameter: "Y"
     features: "$(feature)"
-    relations: "/edam/data/0000848 Sequence"        
-    relations: "/edam/data/0000849 Sequence record"                                     
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   outfile: overlapfile [
@@ -65,7 +62,7 @@ section: output [
     extension: "overlaps"
     nullok: "Y"
     nulldefault: "Y"
-    relations: "/edam/data/0000850 Sequence set"
+    relations: "EDAM:0000850 data Sequence set"
   ]
 
 endsection: output

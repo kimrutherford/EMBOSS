@@ -48,7 +48,7 @@ Write a nucleotide sequence and its translation to file
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with prettyseq</b>
+Here is a sample session with <b>prettyseq</b>
 <p>
 
 <p>
@@ -71,7 +71,7 @@ Output file [x13776.prettyseq]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Write a nucleotide sequence and its translation to file
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -471,7 +471,34 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>prettyseq</b> reads any nucleic acid sequence USA.
+<b>prettyseq</b> reads one or more nucleotide sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -595,7 +622,7 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 <p>
 
 
-You can specifiy a file of ranges to extract by giving the '-range'
+You can specify a file of ranges to extract by giving the '-range'
 qualifier the value '@' followed by the name of the file containing
 the ranges. (eg: '-range @myfile').
 
@@ -642,7 +669,7 @@ An example range file is:
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: x13776.prettyseq </h3>
+<p><h3>File: x13776.prettyseq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 PRETTYSEQ of X13776 from 1 to 2167
@@ -867,6 +894,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
 <td><a href="cirdna.html">cirdna</a></td>
 <td>Draws circular maps of DNA constructs</td>
 </tr>
@@ -877,8 +909,18 @@ None.
 </tr>
 
 <tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculate the isoelectric point of proteins</td>
+</tr>
+
+<tr>
 <td><a href="lindna.html">lindna</a></td>
 <td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plot amino acid properties of a protein sequence in parallel</td>
 </tr>
 
 <tr>
@@ -907,21 +949,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="seealso.html">seealso</a></td>
-<td>Finds programs with similar function to a specified program</td>
-</tr>
-
-<tr>
-<td><a href="showalign.html">showalign</a></td>
-<td>Display a multiple sequence alignment in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showdb.html">showdb</a></td>
-<td>Displays information on configured databases</td>
-</tr>
-
-<tr>
 <td><a href="showfeat.html">showfeat</a></td>
 <td>Display features of a sequence in pretty format</td>
 </tr>
@@ -944,11 +971,6 @@ None.
 <tr>
 <td><a href="sixpack.html">sixpack</a></td>
 <td>Display a DNA sequence with 6-frame translation and ORFs</td>
-</tr>
-
-<tr>
-<td><a href="textsearch.html">textsearch</a></td>
-<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>

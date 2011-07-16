@@ -52,7 +52,7 @@ int main(int argc, char **argv)
     seqall    = ajAcdGetSeqall("sequence");
     firstonly = ajAcdGetBoolean("firstonly");
 
-    table = ajTablestrNewCaseLen(1000); /* 1000 sequences. Number not critical */
+    table = ajTablestrNewCase(1000); /* 1000 sequences. Number not critical */
 
     while(ajSeqallNext(seqall, &seq))
     {
@@ -100,7 +100,7 @@ static AjPStr seqretsplit_Name(AjPTable table, AjPSeq seq)
 
     ajint i;
 
-    if(ajTableFetch(table, ajSeqGetNameS(seq)))
+    if(ajTableMatchS(table, ajSeqGetNameS(seq)))
     {
 	nseq++;
 	ajDebug("seqretsplit_Name test nseq:%d name '%S'\n",
@@ -110,7 +110,7 @@ static AjPStr seqretsplit_Name(AjPTable table, AjPSeq seq)
 	{
 	    ajFmtPrintS(&newname, "%S.%03d", ajSeqGetNameS(seq), i);
 
-	    if(!ajTableFetch(table, newname))
+	    if(!ajTableMatchS(table, newname))
 	    {
 		ajStrAssignS(&oldname, ajSeqGetNameS(seq));
 		ajSeqAssignNameS(seq, newname);

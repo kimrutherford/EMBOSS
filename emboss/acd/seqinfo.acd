@@ -1,8 +1,8 @@
 application: seqinfo [
   documentation: "Returns sequence information"
   groups: "Test"
-  relations: "/edam/topic/0000155 Sequence retrieval"
-  relations: "/edam/operation/0000229 Sequence description"
+    relations: "EDAM:0000155 topic Sequence retrieval"
+    relations: "EDAM:0000229 operation Sequence description"
 ]
 
 section: input [
@@ -13,9 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -29,7 +27,7 @@ section: output [
     parameter: "Y"
     default: "stdout"
     knowntype: "seqinfo output"
-    relations: "/edam/data/0000969 Free text"                                      
+    relations: "EDAM:0000969 data Text"
   ]
 
 endsection: output

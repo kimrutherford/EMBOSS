@@ -1,8 +1,8 @@
 application: textsearch [
   documentation: "Search the textual description of sequence(s)"
-  groups: "Display, Information"
-  relations: "/edam/topic/0000155 Sequence retrieval"
-  relations: "/edam/operation/0000345 Sequence retrieval by keyword"
+  groups: "Data retrieval:Text data"
+    relations: "EDAM:0000090 topic Data retrieval"
+    relations: "EDAM:0000345 operation Sequence retrieval (by keyword)"
 ]
 
 section: input [
@@ -13,9 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -34,7 +32,7 @@ section: required [
            human|mouse \
            will find text with either 'human' OR 'mouse' in the text"
     knowntype: "regular expression"
-    relations:  "/edam/data/0001352 Regular expression"                             
+    relations: "EDAM:0001352 data Regular expression"
   ]
 
 endsection: required
@@ -48,7 +46,7 @@ section: additional [
     additional: "Y"
     default: "N"
     information: "Do a case-sensitive search"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: additional
@@ -63,7 +61,7 @@ section: output [
     default: "N"
     information: "Format output as an HTML table"
     outputmodifier: "Y"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: only [
@@ -74,43 +72,43 @@ section: output [
            '-nohead -noname -nousa -noacc -nodesc' \
            to get only the name output, you can specify \
            '-only -name'"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: heading [
     default: "@(!$(only))"
     information: "Display column headings"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: usa [
     default: "@(!$(only))"
     information: "Display the USA of the sequence"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: accession [
     default: "@(!$(only))"
     information: "Display 'accession' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: name [
     default: "@(!$(only))"
     information: "Display 'name' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: description [
     default: "@(!$(only))"
     information: "Display 'description' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "textsearch output"
-    relations:  "/edam/data/0000855 Sequence annotation"                         
+    relations: "EDAM:0000855 data Sequence metadata"
   ]
 
 endsection: output

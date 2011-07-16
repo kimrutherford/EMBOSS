@@ -1,5 +1,5 @@
 Processes the PROSITE motif database for use by patmatmotifs
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-prositedir]        directory  PROSITE database directory

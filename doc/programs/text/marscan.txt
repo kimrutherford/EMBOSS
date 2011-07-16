@@ -59,7 +59,7 @@ Output report [u01317.marscan]:
 Command line arguments
 
 Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -70,7 +70,8 @@ Version: EMBOSS:6.3.0
                                   format. The MRS consists of two recognition
                                   sites, one of 8 bp and one of 16 bp on
                                   either sense strand of the genomic DNA,
-                                  within 200 bp of each other.
+                                  within 200 bp of each other. (default
+                                  -rformat gff)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -247,8 +248,9 @@ Output file format
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
-   genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
 
    See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
    information on report formats.
@@ -261,30 +263,30 @@ Output file format
 
 ##gff-version 3
 ##sequence-region U01317 1 65963
-#!Date 2010-01-15
+#!Date 2011-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.3.0
-U01317  marscan regulatory_region       2242    2458    0.000   +       .
-ID="U01317.1";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 2451";
-note="*end8bp 2458";note="*start16bp 2242";note="*end16bp 2257"
-U01317  marscan regulatory_region       17654   17730   0.000   +       .
-ID="U01317.2";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 17723"
-;note="*end8bp 17730";note="*start16bp 17654";note="*end16bp 17669"
-U01317  marscan regulatory_region       40956   41123   0.000   +       .
-ID="U01317.3";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 40956"
-;note="*end8bp 40963";note="*start16bp 41108";note="*end16bp 41123"
-U01317  marscan regulatory_region       42232   42248   0.000   +       .
-ID="U01317.4";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 42232"
-;note="*end8bp 42239";note="*start16bp 42233";note="*end16bp 42248"
-U01317  marscan regulatory_region       47834   47966   0.000   +       .
-ID="U01317.5";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 47959"
-;note="*end8bp 47966";note="*start16bp 47834";note="*end16bp 47849"
-U01317  marscan regulatory_region       65112   65146   0.000   +       .
-ID="U01317.6";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 65139"
-;note="*end8bp 65146";note="*start16bp 65112";note="*end16bp 65127"
-U01317  marscan regulatory_region       65947   65963   0.000   +       .
-ID="U01317.7";note="*type MAR/SAR recognition site (MRS)";note="*start8bp 65947"
-;note="*end8bp 65954";note="*start16bp 65948";note="*end16bp 65963"
+#!Source-version EMBOSS 6.4.0.0
+U01317  marscan regulatory_region       2242    2458    .       +       .
+ID=U01317.1;note=*type MAR/SAR recognition site (MRS);note=*start8bp 2451;note=*
+end8bp 2458;note=*start16bp 2242;note=*end16bp 2257
+U01317  marscan regulatory_region       17654   17730   .       +       .
+ID=U01317.2;note=*type MAR/SAR recognition site (MRS);note=*start8bp 17723;note=
+*end8bp 17730;note=*start16bp 17654;note=*end16bp 17669
+U01317  marscan regulatory_region       40956   41123   .       +       .
+ID=U01317.3;note=*type MAR/SAR recognition site (MRS);note=*start8bp 40956;note=
+*end8bp 40963;note=*start16bp 41108;note=*end16bp 41123
+U01317  marscan regulatory_region       42232   42248   .       +       .
+ID=U01317.4;note=*type MAR/SAR recognition site (MRS);note=*start8bp 42232;note=
+*end8bp 42239;note=*start16bp 42233;note=*end16bp 42248
+U01317  marscan regulatory_region       47834   47966   .       +       .
+ID=U01317.5;note=*type MAR/SAR recognition site (MRS);note=*start8bp 47959;note=
+*end8bp 47966;note=*start16bp 47834;note=*end16bp 47849
+U01317  marscan regulatory_region       65112   65146   .       +       .
+ID=U01317.6;note=*type MAR/SAR recognition site (MRS);note=*start8bp 65139;note=
+*end8bp 65146;note=*start16bp 65112;note=*end16bp 65127
+U01317  marscan regulatory_region       65947   65963   .       +       .
+ID=U01317.7;note=*type MAR/SAR recognition site (MRS);note=*start8bp 65947;note=
+*end8bp 65954;note=*start16bp 65948;note=*end16bp 65963
 
 Data files
 
@@ -365,16 +367,18 @@ Known bugs
 See also
 
    Program name     Description
-   dreg             Regular expression search of nucleotide sequence(s)
-   fuzznuc          Search for patterns in nucleotide sequences
-   fuzztran         Search for patterns in protein sequences (translated)
+   checktrans       Reports STOP codons and ORF statistics of a protein
    getorf           Finds and extracts open reading frames (ORFs)
+   jaspscan         Scans DNA sequences for transcription factors
    plotorf          Plot potential open reading frames in a nucleotide sequence
    showorf          Display a nucleotide sequence and translation in pretty format
+   sirna            Finds siRNA duplexes in mRNA
    sixpack          Display a DNA sequence with 6-frame translation and ORFs
    syco             Draw synonymous codon usage statistic plot for a nucleotide
                     sequence
    tcode            Identify protein-coding regions using Fickett TESTCODE statistic
+   tfscan           Identify transcription factor binding sites in DNA sequences
+   trimest          Remove poly-A tails from nucleotide sequences
    wobble           Plot third base position variability in a nucleotide sequence
 
 Author(s)

@@ -54,11 +54,11 @@ Primer3 picks primers for PCR reactions, considering as criteria:
 
 <UL>
 <LI>oligonucleotide melting temperature, size, GC content,
-  and primer-dimer possibilities,
+  and primer-dimer possibilities
 
-<LI>PCR product size,
+<LI>PCR product size
 
-<LI>positional constraints within the source sequence, and
+<LI>positional constraints within the source sequence
 
 <LI>miscellaneous other constraints.
 </UL>
@@ -94,7 +94,7 @@ of possible vector contaminants and cloning artifacts coupled
 with database searches using blast, fasta, or other similarity
 searching program to screen for vector contaminants and possible
 repeats.  Repbase (J. Jurka, A.F.A. Smit, C. Pethiyagoda, and
-others, 1995-1996, ftp://ftp.ncbi.nih.gov/repository/repbase)
+others, 1995-1996, ftp://ncbi.nlm.nih.gov/repository/repbase)
 is an excellent source of repeat sequences and pointers to the
 literature.  eprimer3 now allows you to screen candidate oligos
 against a Mispriming Library (or a Mishyb Library in the case
@@ -142,7 +142,7 @@ Try setting the '-explainflag' option.
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with eprimer3</b>
+Here is a sample session with <b>eprimer3</b>
 <p>
 
 <p>
@@ -162,7 +162,7 @@ Picks PCR primers and hybridization oligos
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Picks PCR primers and hybridization oligos
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     The sequence from which to choose primers.
@@ -1529,7 +1529,34 @@ The scoring system is as for the Maximum Complementarity argument. In the exampl
     Input file format
 </H2>
 
-<b>eprimer3</b> reads a normal nucleic acid sequence USA.
+<b>eprimer3</b> reads one or more nucleotide sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -1842,6 +1869,11 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th>
 <th>Description</th></tr>
+<tr>
+<td><a href="eprimer32.html">eprimer32</a></td>
+<td>Picks PCR primers and hybridization oligos</td>
+</tr>
+
 <tr>
 <td><a href="primersearch.html">primersearch</a></td>
 <td>Search DNA sequences for matches with primer pairs</td>

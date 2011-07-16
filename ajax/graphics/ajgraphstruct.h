@@ -47,9 +47,16 @@ typedef struct AjSGraphobj {
 **
 ** @attr x [float*] x coordinates
 ** @attr y [float*] y coordinates
+** @attr Dataobj [AjPGraphobj] First graph object - links to rest
+** @attr title [AjPStr] Plot title
+** @attr subtitle [AjPStr] Plot subtitle
+** @attr xaxis [AjPStr] Plot x axis title
+** @attr yaxis [AjPStr] Plot y axis title
+** @attr gtype [AjPStr] Graph type: 2D, Tick etc
 ** @attr xcalc [AjBool] if x calculated then delete after
 ** @attr ycalc [AjBool] as with x. So we do not delete data if it was
 **                      passed as a ptr
+** @attr truescale [AjBool] if true xy scale has been set
 ** @attr numofpoints [ajuint] Number of points in x and y
 ** @attr numofobjects [ajuint] Number of graph objects starting at Obj
 ** @attr minX [float] Lowest x value
@@ -60,22 +67,24 @@ typedef struct AjSGraphobj {
 ** @attr tmaxX [float] Last x value to plot
 ** @attr tminY [float] First y value to plot
 ** @attr tmaxY [float] Last y value to plot
-** @attr title [AjPStr] Plot title
-** @attr subtitle [AjPStr] Plot subtitle
-** @attr xaxis [AjPStr] Plot x axis title
-** @attr yaxis [AjPStr] Plot y axis title
-** @attr gtype [AjPStr] Graph type: 2D, Tick etc
 ** @attr colour [ajint] See AjEGraphColour for plplot colours
 ** @attr lineType [ajint] Line type for plplot
-** @attr Dataobj [AjPGraphobj] First graph object - links to rest
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSGraphdata {
   float *x;
   float *y;
+  AjPGraphobj Dataobj;
+  AjPStr title;
+  AjPStr subtitle;
+  AjPStr xaxis;
+  AjPStr yaxis;
+  AjPStr gtype;
   AjBool xcalc;
   AjBool ycalc;
+  AjBool truescale;
   ajuint numofpoints;
   ajuint numofobjects;
   float minX;
@@ -86,14 +95,9 @@ typedef struct AjSGraphdata {
   float tmaxX;
   float tminY;
   float tmaxY;
-  AjPStr title;
-  AjPStr subtitle;
-  AjPStr xaxis;
-  AjPStr yaxis;
-  AjPStr gtype;
   ajint colour;
   ajint lineType;
-  AjPGraphobj Dataobj;
+  char Padding[4];
 } AjOGraphdata;
 #define AjPGraphdata AjOGraphdata*
 

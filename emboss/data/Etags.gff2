@@ -3,6 +3,11 @@
 
 #include Etags.embl
 
+Target QTEXT note
+Sequence QTEXT note
+
+comment QTEXT
+
 # GFF allows multiple values up to a semicolon.
 # we could define ANY for these special cases
 # and LIMITED for those where we know the format

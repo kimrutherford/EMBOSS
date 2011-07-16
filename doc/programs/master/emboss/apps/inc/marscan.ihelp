@@ -1,5 +1,5 @@
 Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -10,7 +10,8 @@ Version: EMBOSS:6.3.0
                                   format. The MRS consists of two recognition
                                   sites, one of 8 bp and one of 16 bp on
                                   either sense strand of the genomic DNA,
-                                  within 200 bp of each other.
+                                  within 200 bp of each other. (default
+                                  -rformat gff)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)

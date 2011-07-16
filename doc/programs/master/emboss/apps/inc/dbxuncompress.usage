@@ -1,0 +1,13 @@
+Here is a sample session with <b>dbxuncompress</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbxuncompress embl -indexdir . -field des </b>
+Uncompress a compressed dbx index
+Output file [embl.dbxuncompress]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

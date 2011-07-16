@@ -1,10 +1,10 @@
 application: helixturnhelix [
   documentation: "Identify nucleic acid-binding motifs in protein sequences"
-  groups: "Protein:2D Structure, Protein:Motifs"
-  relations: "/edam/topic/0000149 Protein-nucleic acid interactions"
-  relations: "/edam/topic/0000178 Protein secondary structure prediction"
-  relations: "/edam/operation/0000268 Protein super-secondary structure prediction"
-  relations: "/edam/operation/0000420 Protein-nucleic acid binding prediction"
+  groups: "Protein:2D Structure, Protein:Domains"
+  relations: "EDAM:0000178 topic Protein secondary structure prediction"
+  relations: "EDAM:0000736 topic Protein domains"
+  relations: "EDAM:0000268 operation Protein super-secondary structure prediction"
+  relations: "EDAM:0000420 operation Protein-nucleic acid binding prediction"
 ]
 
 section: input [
@@ -15,9 +15,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
-    relations: "/edam/data/0001218 Unambiguous pure protein sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0002886 data Sequence record (protein)"
   ]
 
 endsection: input
@@ -33,7 +31,7 @@ section: additional [
     maximum: "10000."
     default: "238.71"
     information: "Mean value"
-    relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   float: sd [
@@ -42,7 +40,7 @@ section: additional [
     maximum: "10000."
     default: "293.61"
     information: "Standard Deviation value"
-    relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   float: minsd [
@@ -51,13 +49,13 @@ section: additional [
     maximum: "100."
     default: "2.5"
     information: "Minimum SD"
-    relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: eightyseven [
     additional: "Y"
     information: "Use the old (1987) weight data"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: additional
@@ -73,7 +71,8 @@ section: output [
     rextension: "hth"
     taglist: "int:pos=Maximum_score_at
               float:sd=Standard_deviations"
-    relations: "/edam/data/0001328 Protein-nucleic acid binding site report"                                       
+    relations: "EDAM:0001328 data Protein features
+                (nucleic acid binding sites)"
   ]
 
 endsection: output

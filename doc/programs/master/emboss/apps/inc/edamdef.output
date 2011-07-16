@@ -1,0 +1,226 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: edamdef.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0002001
+name: simple
+namespace: format
+def: EMBOSS simple multiple alignment format.
+subset: format
+is_a: EDAM:0002554 ! Alignment format (text)
+is_a: EDAM:0002330 ! Text
+
+[Term]
+id: EDAM:0000498
+name: Multiple sequence alignment (consensus)
+namespace: operation
+def: Align two or more molecular sequences using multiple methods to achieve higher quality.
+subset: operation
+is_a: EDAM:0000492 ! Multiple sequence alignment
+
+[Term]
+id: EDAM:0001234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002977 ! Nucleic acid sequence
+
+[Term]
+id: EDAM:0000863
+name: Sequence alignment
+namespace: data
+def: Alignment of multiple molecular sequences.
+subset: data
+is_a: EDAM:0001916 ! Alignment
+relationship: in_topic EDAM:0000182 ! Sequence alignment
+
+[Term]
+id: EDAM:0001961
+name: stockholm
+namespace: format
+def: Stockholm multiple sequence alignment format (used by Pfam and Rfam).
+subset: format
+spec: http://en.wikipedia.org/wiki/Stockholm_format
+is_a: EDAM:0002330 ! Text
+is_a: EDAM:0002554 ! Alignment format (text)
+is_a: EDAM:0002330 ! Text
+
+[Term]
+id: EDAM:0000434
+name: Integrated gene prediction
+namespace: operation
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+name: Sequence alignment (nucleic acid)
+namespace: data
+def: Alignment of multiple nucleotide sequences.
+subset: data
+is_a: EDAM:0000863 ! Sequence alignment
+is_a: EDAM:0002084 ! Nucleic acid report
+
+[Term]
+id: EDAM:0000467
+name: Protein secondary structure prediction (integrated)
+namespace: operation
+def: Predict secondary structure of protein sequence(s) using multiple methods to achieve better predictions.
+subset: operation
+is_a: EDAM:0000267 ! Protein secondary structure prediction
+
+[Term]
+id: EDAM:0000928
+name: Gene expression profile
+namespace: data
+def: Data quantifying the level of expression of (typically) multiple genes, derived for example from microarray experiments.
+subset: data
+synonym: "Gene expression pattern" EXACT []
+is_a: EDAM:0002541 ! Gene expression data
+relationship: in_topic EDAM:0000197 ! Gene expression and regulation
+
+[Term]
+id: EDAM:0001391
+name: hmmer-aln
+namespace: format
+def: FASTA-style format for multiple sequences aligned by HMMER package to an HMM.
+subset: format
+is_a: EDAM:0002554 ! Alignment format (text)
+is_a: EDAM:0002330 ! Text
+
+[Term]
+id: EDAM:0000520
+name: PCR primer design (for conserved primers)
+namespace: operation
+def: Design primers that are conserved across multiple genomes or species.
+subset: operation
+is_a: EDAM:0000308 ! PCR primer design
+
+[Term]
+id: EDAM:0001392
+name: dialign
+namespace: format
+def: Multiple sequences aligned by DIALIGN package.
+subset: format
+is_a: EDAM:0002554 ! Alignment format (text)
+is_a: EDAM:0002330 ! Text
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: edamdef.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0002001
+name: simple
+namespace: format
+def: EMBOSS simple multiple alignment format.
+subset: format
+is_a: EDAM:0002554 ! Alignment format (text)
+is_a: EDAM:0002330 ! Text
+
+[Term]
+id: EDAM:0000498
+name: Multiple sequence alignment (consensus)
+namespace: operation
+def: Align two or more molecular sequences using multiple methods to achieve higher quality.
+subset: operation
+is_a: EDAM:0000492 ! Multiple sequence alignment
+
+[Term]
+id: EDAM:0001234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002977 ! Nucleic acid sequence
+
+[Term]
+id: EDAM:0001240
+name: PCR primers
+namespace: data
+def: Oligonucleotide primer(s) for PCR and DNA amplification, for example a minimal primer set.
+subset: data
+is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+
+[Term]
+id: EDAM:0001246
+name: Sequence cluster (nucleic acid)
+namespace: data
+def: A cluster of nucleotide sequences.
+comment: The sequences are typically related, for example a family of sequences.
+subset: data
+synonym: "Nucleotide sequence cluster" EXACT []
+is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+is_a: EDAM:0001235 ! Sequence cluster
+
+[Term]
+id: EDAM:0002198
+name: Gene cluster
+namespace: data
+def: A cluster of similar genes.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+def: Data quantifying the level of expression of (typically) multiple genes, derived for example from microarray experiments.
+subset: data
+synonym: "Gene expression pattern" EXACT []
+is_a: EDAM:0002541 ! Gene expression data
+relationship: in_topic EDAM:0000197 ! Gene expression and regulation
+
+[Term]
+id: EDAM:0002535
+name: Sequence tag profile
+namespace: data
+def: Output from a serial analysis of gene expression (SAGE), massively parallel signature sequencing (MPSS) or sequencing by synthesis (SBS) experiment.  In all cases this is a list of short sequence tags and the number of times it is observed.
+comment: SAGE, MPSS and SBS experiments are usually performed to study gene expression.  The sequence tags are typically subsequently annotated (after a database search) with the mRNA (and therefore gene) the tag was extracted from.
+subset: data
+synonym: "Sequencing-based expression profile" EXACT []
+is_a: EDAM:0002028 ! Experimental data
+is_a: EDAM:0000928 ! Gene expression profile
+
+[Term]
+id: EDAM:0000936
+name: Sequence tag profile (with gene assignment)
+namespace: data
+def: Tag to gene assignments (tag mapping) of SAGE, MPSS and SBS data. Typically this is the sequencing-based expression profile annotated with gene identifiers.
+subset: data
+is_a: EDAM:0002535 ! Sequence tag profile
+
+[Term]
+id: EDAM:0001391
+name: hmmer-aln
+namespace: format
+def: FASTA-style format for multiple sequences aligned by HMMER package to an HMM.
+subset: format
+is_a: EDAM:0002554 ! Alignment format (text)
+is_a: EDAM:0002330 ! Text
+
+[Term]
+id: EDAM:0000520
+name: PCR primer design (for conserved primers)
+namespace: operation
+def: Design primers that are conserved across multiple genomes or species.
+subset: operation
+is_a: EDAM:0000308 ! PCR primer design
+
+[Term]
+id: EDAM:0001392
+name: dialign
+namespace: format
+def: Multiple sequences aligned by DIALIGN package.
+subset: format
+is_a: EDAM:0002554 ! Alignment format (text)
+is_a: EDAM:0002330 ! Text
+
+</pre>
+</td></tr></table><p>

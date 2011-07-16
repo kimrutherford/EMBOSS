@@ -1,4 +1,4 @@
-<b>Here is a sample session with entret</b>
+Here is a sample session with <b>entret</b>
 <p>
 
 <p>
@@ -6,7 +6,7 @@
 
 % <b>entret tembl:x65923 </b>
 Retrieves sequence entries from flatfile databases and files
-Full text of a sequence database entry output file [x65923.entret]: <b></b>
+Full text output file [x65923.entret]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

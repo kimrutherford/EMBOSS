@@ -195,7 +195,7 @@ AjBool ajSqlInit(void)
 
 
 
-/* @section exiting ****************************************************
+/* @section exiting ***********************************************************
 **
 ** @fdata [none]
 ** @fcategory internals
@@ -279,6 +279,7 @@ void ajSqlExit(void)
 ** @param [r] host [const AjPStr] SQL server hostname or IP address
 ** @param [r] port [const AjPStr] SQL server port number
 ** @param [r] socketfile [const AjPStr] SQL server UNIX socket file name
+**                   MySQL: Absolute path to the socket file.
 ** @param [r] database [const AjPStr] SQL database name
 ** @param [r] debug [AjBool] Debug mode
 **
@@ -496,6 +497,11 @@ static AjPSqlconnection sqlconnectionPostgresqlNewData(
     ** krbsrvname:      Kerberos5 service name.
     ** service:         Service name to use for additional parameters.
     */
+
+    /*
+    ** FIXME: sslmode should probably be configurable
+    */
+    ajFmtPrintAppS(&conninfo, "sslmode = 'disable'");
 
     ajStrDel(&safeinfo);
 
@@ -880,7 +886,7 @@ void ajSqlconnectionDel(AjPSqlconnection *Psqlc)
 
 
 
-/* @section Cast *********************************************************
+/* @section Cast **************************************************************
 **
 ** Functions for returning elements of an AJAX SQL Connection object.
 **
@@ -908,11 +914,13 @@ void ajSqlconnectionDel(AjPSqlconnection *Psqlc)
 
 
 
-/* @func ajSqlconnectionEscapeC **********************************************
+/* @func ajSqlconnectionEscapeC ***********************************************
 **
-** Escape an AJAX String based on an AJAX SQL Connection.
-** The caller is responsible for deleting the C-type char string at the
-** returned address.
+** Escape special characters in an AJAX String for use in an SQL statement,
+** taking into account the current character set of the AJAX SQL Connection
+** and return a C-type character string.
+**
+** The caller is responsible for deleting the escaped C-type character string.
 **
 ** @param [r] sqlc [const AjPSqlconnection] AJAX SQL Connection
 ** @param [w] Ptxt [char**] Address of the (new) SQL-escaped C-type string
@@ -935,7 +943,7 @@ AjBool ajSqlconnectionEscapeC(const AjPSqlconnection sqlc,
 
 #if defined(HAVE_MYSQL) || defined(HAVE_POSTGRESQL)
 
-    ajuint length = 0;
+    size_t length = 0;
 
 #endif /* defined(HAVE_MYSQL) || defined(HAVE_POSTGRESQL) */
 
@@ -959,24 +967,17 @@ AjBool ajSqlconnectionEscapeC(const AjPSqlconnection sqlc,
             ** characters long.
             */
 
-            /*
-            ** FIXME: Type mismatch between ajuint and ajulong.
-            ** Since MySQL mysql_real_escape_string function uses the
-            ** unsigned long data type, it is necessary to test, whether the
-            ** maximum unsigned integer value (UINT_MAX) has been exceeded.
-            ** This can only be resolved by changing ajStr functions to
-            ** use ajulong.
-            */
-
             length = ajStrGetLen(str);
 
+            if(length >= LONG_MAX)
+                ajFatal("ajSqlconnectionEscapeC exceeded the maximum length.");
+            
             *Ptxt = ajCharNewRes(2 * length + 1);
 
-            length = (ajuint)
-                mysql_real_escape_string((MYSQL *) sqlc->Pconnection,
-                                         *Ptxt,
-                                         ajStrGetPtr(str),
-                                         (unsigned long) length);
+            length = mysql_real_escape_string((MYSQL *) sqlc->Pconnection,
+                                              *Ptxt,
+                                              ajStrGetPtr(str),
+                                              length);
 
 #else
 
@@ -998,25 +999,18 @@ AjBool ajSqlconnectionEscapeC(const AjPSqlconnection sqlc,
             ** characters long.
             */
 
-            /*
-            ** FIXME: Type mismatch between ajuint and size_t.
-            ** Since the PostgeSQL PQescapeStringConn function uses size_t,
-            ** it is necessary to test, whether the maximum unsigned integer
-            ** value (UINT_MAX) has been exceeded.
-            ** This can only be resolved by changing ajStr functions to
-            ** use ajulong.
-            */
-
             length = ajStrGetLen(str);
 
+            if(length >= LONG_MAX)
+                ajFatal("ajSqlconnectionEscapeC exceeded the maximum length.");
+            
             *Ptxt = ajCharNewRes(2 * length + 1);
 
-            length = (ajuint)
-                PQescapeStringConn((PGconn *) sqlc->Pconnection,
-                                   *Ptxt,
-                                   ajStrGetPtr(str),
-                                   (size_t) length,
-                                   &error);
+            length = PQescapeStringConn((PGconn *) sqlc->Pconnection,
+                                        *Ptxt,
+                                        ajStrGetPtr(str),
+                                        length,
+                                        &error);
 
             if(error)
                 ajDebug("ajSqlconnectionEscapeC PostgreSQL client encountered "
@@ -1048,11 +1042,13 @@ AjBool ajSqlconnectionEscapeC(const AjPSqlconnection sqlc,
 
 
 
-/* @func ajSqlconnectionEscapeS **********************************************
+/* @func ajSqlconnectionEscapeS ***********************************************
 **
-** Escape an AJAX String based on an AJAX SQL Connection.
-** The caller is responsible for deleting the AJAX String at the returned
-** address.
+** Escape special characters in an AJAX String for use in an SQL statement,
+** taking into account the current character set of the AJAX SQL Connection
+** and return an AJAX String.
+**
+** The caller is responsible for deleting the escaped AJAX String.
 **
 ** @param [r] sqlc [const AjPSqlconnection] AJAX SQL Connection
 ** @param [w] Pstr [AjPStr*] Address of the (new) SQL-escaped AJAX String
@@ -1206,18 +1202,18 @@ AjBool ajSqlconnectionTrace(const AjPSqlconnection sqlc, ajuint level)
 
 
 
-/* @section Misc *********************************************************
+/* @section Misc **************************************************************
 **
 ** Functions for returning a AJAX SQL Connection Client enumeration
 **
 ** @fdata [AjESqlconnectionClient]
 **
-** @nam4rule From  AJAX SQL Connection Client qery
+** @nam4rule From  AJAX SQL Connection Client query
 ** @nam5rule Str   String object query
 **
 ** @argrule  Str   client  [const AjPStr] Client name
 **
-** @valrule * [AjESqlconnectionClient] AJAX SQL Connection Client enumration
+** @valrule * [AjESqlconnectionClient] AJAX SQL Connection Client enumeration
 **
 ** @fcategory misc
 ******************************************************************************/
@@ -2725,7 +2721,7 @@ AjPVoid ajSqlrowGetValues(const AjPSqlrow sqlr)
 
 
 
-/* @datasection [AjPSqlrow] AJAX SQL Column *****************************
+/* @datasection [AjPSqlrow] AJAX SQL Column ***********************************
 **
 ** Functions for manipulating AJAX SQL Row Columns
 **
@@ -2807,7 +2803,7 @@ AjBool ajSqlcolumnRewind(AjPSqlrow sqlr)
 ** @@
 ******************************************************************************/
 
-AjBool ajSqlcolumnGetValue( AjPSqlrow sqlr,
+AjBool ajSqlcolumnGetValue(AjPSqlrow sqlr,
                             void **Pvalue, ajulong *Plength)
 {
     if(!sqlr)
@@ -3124,7 +3120,7 @@ AjBool ajSqlcolumnToStr(AjPSqlrow sqlr, AjPStr *Pvalue)
         if(length > UINT_MAX)
             return ajFalse;
 
-        ajStrAssignLenC(Pvalue, (char *) value, (ajuint) length);
+        ajStrAssignLenC(Pvalue, (char *) value, (size_t) length);
 
         return ajTrue;
     }
@@ -3624,14 +3620,13 @@ AjBool ajSqlcolumnNumberToStr(const AjPSqlrow sqlr, ajuint column,
 
     if(ajSqlcolumnNumberGetValue(sqlr, column, &value, &length))
     {
-
         if(value == NULL)
             return ajFalse;
 
         if(length > UINT_MAX)
             return ajFalse;
 
-        ajStrAssignLenC(Pvalue, (char *) value, (ajuint) length);
+        ajStrAssignLenC(Pvalue, (char *) value, (size_t) length);
 
         return ajTrue;
     }
@@ -3850,7 +3845,7 @@ AjBool ajSqlcolumnNumberIsDefined(const AjPSqlrow sqlr, ajuint column)
 
 
 
-/* @section constructors *******************************************************
+/* @section constructors ******************************************************
 **
 ** @fdata [AjPVoid]
 ** @fcategory new
@@ -3898,7 +3893,7 @@ AjPVoid ajVoidNew(void)
 
 
 
-/* @func ajVoidNewRes **********************************************************
+/* @func ajVoidNewRes *********************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -3951,7 +3946,7 @@ AjPVoid ajVoidNewRes(ajuint size)
 
 
 
-/* @func ajVoidDel *********************************************************
+/* @func ajVoidDel ************************************************************
 **
 ** Default destructor for AJAX Pointer arrays.
 **
@@ -3988,18 +3983,20 @@ void ajVoidDel(AjPVoid *thys)
 
 
 
-/* @section Cast *********************************************************
+/* @section Cast **************************************************************
 **
 ** Functions for returning elements of an AJAX SQL Connection object.
 **
 ** @fdata [AjPVoid]
 **
 ** @nam3rule Get Return AJAX SQL Connection elements
-*
+** @nam3rule Len Return the length
+**
 ** @argrule * thys [const AjPVoid] AJAX void pointer array
 ** @argrule Get elem [ajuint] Element number
 **
-** @valrule * [void*] Void array
+** @valrule Get [void*] Void array
+** @valrule Len [ajuint] Length
 **
 ** @fcategory cast
 ******************************************************************************/
@@ -4027,6 +4024,23 @@ void* ajVoidGet(const AjPVoid thys, ajuint elem)
         ajErr("Attempt to access bad Pointer array index %d\n", elem);
 
     return thys->Ptr[elem];
+}
+
+
+
+
+/* @func ajVoidLen ************************************************************
+**
+** Get length of dynamic 1d AJAX Pointer Array.
+**
+** @param [r] thys [const AjPVoid] AJAX Pointer Array
+** @return [ajuint] length
+** @@
+******************************************************************************/
+
+ajuint ajVoidLen(const AjPVoid thys)
+{
+    return thys->Len;
 }
 
 

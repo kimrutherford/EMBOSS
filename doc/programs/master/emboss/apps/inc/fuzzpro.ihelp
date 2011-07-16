@@ -1,5 +1,5 @@
 Search for patterns in protein sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -33,7 +33,8 @@ Version: EMBOSS:6.3.0
                                   A period ends the pattern. (Optional in
                                   fuzzpro).
                                   For example, [DE](2)HS{P}X(2)PX(2,4)C
-  [-outfile]           report     [*.fuzzpro] Output report file name
+  [-outfile]           report     [*.fuzzpro] Output report file name (default
+                                  -rformat seqtable)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)

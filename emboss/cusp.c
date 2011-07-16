@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     ccnt   = 0;
     substr = ajStrNew();
     codon  = ajCodNewCodenum(0);
-    ajCodSetNameS(codon, ajFileGetNameS(outf));
+    ajCodSetNameS(codon, ajFileGetPrintnameS(outf));
 
     while(ajSeqallNext(seqall, &seq))
     {

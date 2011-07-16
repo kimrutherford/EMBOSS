@@ -1,0 +1,32 @@
+Here is a sample session with <b>dbtell</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbtell tsw </b>
+Display information about a public database
+
+# tsw is defined in special
+# access levels id: Yes query: Yes all: Yes
+
+DBNAME tsw [
+   format:         "swiss"
+   method:         "emblcd"
+   type:           "Protein"
+   comment:        "Swissprot native format with EMBL CD-ROM index"
+   directory:      "/homes/pmr/local/share/EMBOSS/test/swiss"
+   field:          "id"
+   field:          "acc"
+   field:          "sv"
+   field:          "des"
+   field:          "org"
+   field:          "key"
+   release:        "36"
+   edamdat:        "0001230 UniProt protein sequence record"
+   taxon:          "1 all"
+]
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><p>

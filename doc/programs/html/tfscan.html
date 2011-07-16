@@ -64,7 +64,7 @@ entry.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with tfscan</b>
+Here is a sample session with <b>tfscan</b>
 <p>
 
 <p>
@@ -96,7 +96,7 @@ Output report [k00650.tfscan]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Identify transcription factor binding sites in DNA sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -106,7 +106,8 @@ Version: EMBOSS:6.3.0
                                   (other); C (Custom))
 *  -custom             datafile   Transfac database data file (optional)
    -mismatch           integer    [0] Number of mismatches (Integer 0 or more)
-  [-outfile]           report     [*.tfscan] Output report file name
+  [-outfile]           report     [*.tfscan] Output report file name (default
+                                  -rformat seqtable)
 
    Additional (Optional) qualifiers:
    -minlength          integer    [1] Display matches equal to or above this
@@ -213,7 +214,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat seqtable)</td>
 <td><i>&lt;*&gt;</i>.tfscan</td>
 </tr>
 
@@ -558,7 +559,34 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>tfscan</b> reads normal nucleic acid sequence USAs.
+<b>tfscan</b> reads one or more nucleotide sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -683,6 +711,32 @@ CC   and human c-fos proto-oncogenes that causes complete divergence of
     Output file format
 </H2>
 
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+<p>
+By default the output is in 'seqtable' format.
+
+<p>
 
 
 <a name="output.1"></a>
@@ -692,7 +746,7 @@ CC   and human c-fos proto-oncogenes that causes complete divergence of
 <pre>
 ########################################
 # Program: tfscan
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: tfscan
 #    -sequence tembl:k00650
 #    -menu v
@@ -891,6 +945,11 @@ None.
 <tr>
 <td><a href="jaspscan.html">jaspscan</a></td>
 <td>Scans DNA sequences for transcription factors</td>
+</tr>
+
+<tr>
+<td><a href="marscan.html">marscan</a></td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 </table>

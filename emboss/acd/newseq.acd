@@ -1,8 +1,8 @@
 application: newseq [
   documentation: "Create a sequence file from a typed-in sequence"
   groups: "Edit"
-  relations: "/edam/topic/0000156 Sequence editing"
-  relations: "/edam/operation/0000230 Sequence generation"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000230 operation Sequence generation"
 ]
 
 section: input [
@@ -17,7 +17,7 @@ section: input [
            you will use to identify the sequence. It should have no (or few)
            punctuation characters in it."
     knowntype: "name"
-    relations:  "/edam/data/0002154 Sequence name"
+    relations: "EDAM:0002154 identifier Sequence name"
   ]
 
   string: description [
@@ -25,7 +25,7 @@ section: input [
     information: "Description of the sequence"
     help: "Enter any description of the sequence that you require."
     knowntype: "string"
-    relations:  "/edam/data/0000969 Free text"                                 
+    relations: "EDAM:0000969 data Text"
   ]
 
   list: type [
@@ -38,7 +38,7 @@ section: input [
     delimiter: ","
     codedelimiter: ":"
     information: "Type of sequence"
-    relations: "/edam/data/0001094 Sequence type name"                                
+    relations: "EDAM:0001094 data Sequence type"
   ]
 
   string: sequence [
@@ -52,7 +52,7 @@ section: input [
            you will not be able to press the RETURN/ENTER key until you have
            deleted a few characters."
     knowntype: "sequence"
-    relations:  "/edam/data/0000848 Sequence"                                       
+    relations: "EDAM:0000848 data Raw sequence"
   ]
 
 endsection: input
@@ -65,8 +65,7 @@ section: output [
   seqout: outseq [
     parameter: "Y"
     type: "@(@($(type) == P) ? gapprotein : gapnucleotide)"
-    relations: "/edam/data/0000848 Sequence"                                            
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: output

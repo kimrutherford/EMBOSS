@@ -2,6 +2,7 @@
 **
 ** B+ Tree Indexing plus Disc Cache.
 ** Copyright (c) 2003 Alan Bleasby
+**     subsequently heavily modified by Peter Rice
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
@@ -19,131 +20,394 @@
 ******************************************************************************/
 
 #include "ajax.h"
+#include <errno.h>
+
+#ifdef WIN32
+#define fileno _fileno
+#define ftruncate _chsize_s
+#endif
+
+#if defined (AJ_IRIXLF)
+#define usestat64 1
+#endif
+
+#define AJINDEX_DEBUG 1
+
+static AjBool btreeDoRootSync = AJFALSE;
+
+static ajulong   statCallSync = 0L;
+static ajulong   statCallRootSync = 0L;
+static ajulong   statCallSplitRoot = 0L;
+static ajulong   statCallSplitPriRoot = 0L;
+static ajulong   statCallSplitSecRoot = 0L;
+static ajulong   statCallSplitHybRoot = 0L;
+static ajulong   statCallSplitNumRoot = 0L;
+static ajulong   statCallSplitLeaf = 0L;
+static ajulong   statCallSplitPriLeaf = 0L;
+static ajulong   statCallSplitSecLeaf = 0L;
+static ajulong   statCallSplitHybLeaf = 0L;
+static ajulong   statCallSplitNumLeaf = 0L;
+static ajulong   statCallReorderBuckets = 0L;
+static ajulong   statCallReorderPriBuckets = 0L;
+static ajulong   statCallReorderSecBuckets = 0L;
+static ajulong   statCallReorderHybBuckets = 0L;
+static ajulong   statCallReorderNumBuckets = 0L;
+static ajulong   statSyncLocked = 0L;
+static ajulong   statSyncWrite = 0L;
+static ajulong   statRootSyncLocked = 0L;
+static ajulong   statRootSyncUnlocked = 0L;
+static ajuint    statRootSyncMaxUnlocked = 0;
+static ajuint    statRootSyncMaxLocked = 0;
+
+static AjPStr*   statSaveSecId = NULL;
+static ajuint    statSaveSecIdNext = 0;
+static ajuint    statSaveSecIdMax = 0;
+
+static AjPBtId*  statSaveBtreeId = NULL;
+static ajuint    statSaveBtreeIdNext = 0;
+static ajuint    statSaveBtreeIdMax = 0;
+
+static AjPBtPri* statSaveBtreePri = NULL;
+static ajuint    statSaveBtreePriNext = 0;
+static ajuint    statSaveBtreePriMax = 0;
+
+/* bucket cache */
+static AjPBucket* statSaveBucket = NULL;
+static AjPBucket* statSaveBucketEmpty = NULL;
+static ajuint     statSaveBucketNext = 0;
+static ajuint     statSaveBucketMax = 0;
+static ajuint     statSaveBucketEmptyNext = 0;
+static ajuint     statSaveBucketEmptyMax = 0;
+
+/* primary bucket cache */
+static AjPPriBucket* statSavePriBucket = NULL;
+static AjPPriBucket* statSavePriBucketEmpty = NULL;
+static ajuint        statSavePriBucketNext = 0;
+static ajuint        statSavePriBucketMax = 0;
+static ajuint        statSavePriBucketEmptyNext = 0;
+static ajuint        statSavePriBucketEmptyMax = 0;
+
+/* secondary bucket cache */
+static AjPSecBucket* statSaveSecBucket = NULL;
+static AjPSecBucket* statSaveSecBucketEmpty = NULL;
+static ajuint        statSaveSecBucketNext = 0;
+static ajuint        statSaveSecBucketMax = 0;
+static ajuint        statSaveSecBucketEmptyNext = 0;
+static ajuint        statSaveSecBucketEmptyMax = 0;
+
+/* number bucket cache */
+static AjPNumBucket* statSaveNumBucket = NULL;
+static ajuint        statSaveNumBucketNext = 0;
+static ajuint        statSaveNumBucketMax = 0;
+
+static ajulong statCountAllocPriArrayNew = 0;
+static ajulong statCountAllocPriArrayReuse = 0;
+static ajulong statCountAllocPriArrayDel = 0;
+static ajulong statCountAllocPriArrayFree = 0;
+
+static ajulong statCountAllocSecArrayNew = 0;
+static ajulong statCountAllocSecArrayReuse = 0;
+static ajulong statCountAllocSecArrayDel = 0;
+static ajulong statCountAllocSecArrayFree = 0;
+
+static char const **btreeNodetypeNames = NULL;
+
+/* @datastatic BtreeSField ****************************************************
+**
+** Index field data
+**
+** @alias BtreeOField
+** @alias BtreePField
+**
+** @attr Name [AjPStr] Name
+** @attr Extension [AjPStr] Extension
+** @attr Secondary [AjBool] True for primary/secondary ID index
+**                          False for Identifier/fileposition index
+** @attr Len [ajuint] Index field maximum length
+**
+******************************************************************************/
+
+typedef struct BtreeSField
+{
+    AjPStr Name;
+    AjPStr Extension;
+    AjBool Secondary;
+    ajuint Len;
+} BtreeOField;
+#define BtreePField BtreeOField*
 
 
-static AjPBtpage  btreeCacheLocate(const AjPBtcache cache, ajlong page);
-static AjPBtpage  btreeCacheLruUnlink(AjPBtcache cache);
-static void       btreeCacheUnlink(AjPBtcache cache, AjPBtpage cpage);
-static void       btreeCacheDestage(AjPBtcache cache, AjPBtpage cpage);
-static AjPBtpage  btreePageNew(AjPBtcache cache);
-static void       btreeCacheFetch(AjPBtcache cache, AjPBtpage cpage,
-				  ajlong pageno);
-static void       btreeCacheMruAdd(AjPBtcache cache, AjPBtpage cpage);
-static AjPBtpage  btreeCacheControl(AjPBtcache cache, ajlong pageno,
-				    AjBool isread);
-static AjPBtpage  btreeFindINode(AjPBtcache cache, AjPBtpage page,
-				 const char *item);
-static AjPBtpage  btreeSecFindINode(AjPBtcache cache, AjPBtpage page,
-				    const char *item);
+/* @datastatic BtreeSFielddef *************************************************
+**
+** Known index fields
+**
+** @alias BtreeOFielddef
+** @alias BtreePFielddef
+**
+** @attr Name [const char*] Name
+** @attr Extension [const char*] Extension
+** @attr Secondary [AjBool] True for primary/secondary ID index
+**                          False for Identifier/fileposition index
+** @attr Len [ajuint] Index field maximum length
+**
+******************************************************************************/
+
+typedef struct BtreeSFielddef
+{
+    const char* Name;
+    const char* Extension;
+    AjBool Secondary;
+    ajuint Len;
+} BtreeOFielddef;
+#define BtreePFielddef BtreeOFielddef*
+
+BtreeOFielddef btreeFields[] = {
+    {"acc",  "xac", AJFALSE, 15},
+    {"id",   "xid", AJFALSE, 15},
+    {"sv",   "xsv", AJFALSE, 15},
+    {"up",   "xup", AJFALSE, 8},
+    {"spc",  "xspc", AJFALSE, 15},
+    {"nam",  "xnm", AJTRUE,  15},
+    {"key",  "xkw", AJTRUE,  15},
+    {"des",  "xde", AJTRUE,  15},
+    {"org",  "xtx", AJTRUE,  15},
+    {"isa",  "xis", AJTRUE,  15},
+    {"xref", "xrf", AJTRUE,  15},
+    {"ns",   "xns", AJTRUE,  15},
+    {NULL,   NULL,  AJFALSE, 0}
+    
+};
+
+static AjPTable btreeFieldsTable = NULL;
+static AjPStr   btreeFieldnameTmp = NULL;
+
+static AjBool btreeDoExtra = AJFALSE;
+
+static AjPBtpage    btreeCacheLocate(AjPBtcache cache, ajulong page);
+static AjPBtpage    btreeCacheLruUnlink(AjPBtcache cache);
+static void         btreeCacheUnlink(AjPBtcache cache, AjPBtpage cpage);
+static void         btreeCacheDestage(AjPBtcache cache, AjPBtpage cpage);
+static void         btreeCacheWriteCompress(AjPBtcache cache, AjPBtpage cpage,
+                                            ajulong pagepos, ajuint pagesize);
+static void         btreeCacheWriteUncompress(AjPBtcache cache,
+                                              AjPBtpage cpage,
+                                              ajulong pagepos);
+static ajulong      btreeCacheCompress(AjPBtcache thys);
+static ajulong      btreeCacheUncompress(AjPBtcache thys);
+static ajulong      btreePageposCompress(ajulong oldpos,
+                                         ajulong const* newpagepos,
+                                         ajuint pagesize, const char* desc);
+static ajulong      btreePageposUncompress(ajulong oldpos,
+                                           const AjPTable newpagetable,
+                                           const char* desc);
+static AjPBtpage    btreePageNew(AjPBtcache cache);
+static AjBool       btreePageUncompress(AjPBtpage page,
+                                        const AjPTable newpagetable,
+                                        ajuint pagesize);
+static void         btreePageUncompressBucket(AjPBtpage page,
+                                              const AjPTable newpagetable);
+static void         btreePageUncompressNode(AjPBtpage page,
+                                            const AjPTable newpagetable,
+                                            ajuint pagesize);
+static void         btreePageUncompressNumbucket(AjPBtpage page,
+                                                 const AjPTable newpagetable);
+static void         btreePageUncompressNumnode(AjPBtpage page,
+                                               const AjPTable newpagetable,
+                                               ajuint pagesize);
+static void         btreePageUncompressPribucket(AjPBtpage page,
+                                                 const AjPTable newpagetable);
+static void         btreePageUncompressSecbucket(AjPBtpage page,
+                                                 const AjPTable newpagetable);
+static AjBool       btreePageCompress(AjPBtpage page,
+                                      ajulong const* newpagepos,
+                                      ajuint pagesize);
+static void         btreePageCompressBucket(AjPBtpage page,
+                                            ajulong const * newpagepos,
+                                            ajuint pagesize);
+static void         btreePageCompressNode(AjPBtpage page,
+                                          ajulong const* newpagepos,
+                                          ajuint pagesize);
+static void         btreePageCompressNumbucket(AjPBtpage page,
+                                               ajulong const* newpagepos,
+                                               ajuint pagesize);
+static void         btreePageCompressNumnode(AjPBtpage page,
+                                             ajulong const* newpagepos,
+                                             ajuint pagesize);
+static void         btreePageCompressPribucket(AjPBtpage page,
+                                               ajulong const* newpagepo,
+                                               ajuint pagesizes);
+static void         btreePageCompressSecbucket(AjPBtpage page,
+                                               ajulong const* newpagepos,
+                                               ajuint pagesize);
+static ajuint       btreePageGetSizeBucket(const AjPBtpage page);
+static ajuint       btreePageGetSizeNode(const AjPBtpage page);
+static ajuint       btreePageGetSizeNumbucket(const AjPBtpage page);
+static ajuint       btreePageGetSizeNumnode(const AjPBtpage page);
+static ajuint       btreePageGetSizePribucket(const AjPBtpage page);
+static ajuint       btreePageGetSizeSecbucket(const AjPBtpage page);
+
+static void         btreeCacheFetch(AjPBtcache cache, AjPBtpage cpage,
+                                    ajulong pagepos);
+static void         btreeCacheMruAdd(AjPBtcache cache, AjPBtpage cpage);
+static AjPBtpage    btreeCacheControl(AjPBtcache cache, ajulong pagepos,
+                                      AjBool isread);
+static AjPBtpage    btreeFindINode(AjPBtcache cache, AjPBtpage page,
+                                   const AjPStr item);
+static AjPBtpage    btreeSecFindINode(AjPBtcache cache, AjPBtpage page,
+                                      const AjPStr item);
 
 
-static AjPBtpage  btreePageFromKey(AjPBtcache cache, unsigned char *buf,
-				   const char *item);
-static AjPBtpage  btreeSecPageFromKey(AjPBtcache cache, unsigned char *buf,
-				      const char *item);
-static ajint      btreeNumInBucket(AjPBtcache cache, ajlong pageno);
-static AjPBucket  btreeReadBucket(AjPBtcache cache, ajlong pageno);
-static void       btreeWriteBucket(AjPBtcache cache, const AjPBucket bucket,
-				   ajlong pageno);
-static void       btreeAddToBucket(AjPBtcache cache, ajlong pageno,
-				   const AjPBtId id);
-static void 	  btreeBucketDel(AjPBucket *thys);
-static AjBool     btreeReorderBuckets(AjPBtcache cache, AjPBtpage page);
-static void       btreeGetKeys(AjPBtcache cache, unsigned char *buf,
-			       AjPStr **keys, ajlong **ptrs);
-static ajint      btreeIdCompare(const void *a, const void *b);
-static AjPBucket  btreeBucketNew(ajint n);
-static void       btreeWriteNode(AjPBtcache cache, AjPBtpage page,
-				 AjPStr const *keys, const ajlong *ptrs,
-				 ajint nkeys);
-static AjBool     btreeNodeIsFull(const AjPBtcache cache, AjPBtpage page);
-static AjBool     btreeNodeIsFullSec(const AjPBtcache cache, AjPBtpage page);
-static void       btreeInsertNonFull(AjPBtcache cache, AjPBtpage page,
-				     const AjPStr key, ajlong less,
-				     ajlong greater);
-static void       btreeSplitRoot(AjPBtcache cache);
-static void       btreeInsertKey(AjPBtcache cache, AjPBtpage page,
-				 const AjPStr key, ajlong less,
-				 ajlong greater);
+static AjPBtpage    btreePageFromKey(AjPBtcache cache, unsigned char *buf,
+                                     const AjPStr item);
+static AjPBtpage    btreeSecPageFromKey(AjPBtcache cache, unsigned char *buf,
+                                        const AjPStr item);
+static ajuint       btreeNumInBucket(AjPBtcache cache, ajulong pagepos);
+static AjPBtId      btreeBucketFindDupId(AjPBtcache cache, ajulong pagepos,
+                                       const AjPStr id, ajuint* ientry);
+static ajulong      btreeBucketIdlist(AjPBtcache cache, ajulong pagepos,
+                                      AjPList idlist);
+static AjPBucket    btreeReadBucket(AjPBtcache cache, ajulong pagepos);
+static void         btreeWriteBucket(AjPBtcache cache, const AjPBucket bucket,
+                                     ajulong pagepos);
+static void         btreeWriteBucketEmpty(AjPBtcache cache, ajulong pagepos);
+static void         btreeWriteBucketId(AjPBtcache cache, ajulong pagepos,
+                                       const AjPBtId btid, ajuint ientry);
+static void         btreeAddToBucket(AjPBtcache cache, ajulong pagepos,
+                                     const AjPBtId id);
+static void         btreeAddToBucketFull(AjPBtcache cache, ajulong pagepos,
+                                         const AjPBtId id);
+static void 	    btreeBucketDel(AjPBucket *thys);
+static void         btreeBucketFree(AjPBucket *thys);
+static AjBool       btreeReorderBuckets(AjPBtcache cache, AjPBtpage page);
+static void         btreeGetKeys(AjPBtcache cache, unsigned char *buf,
+                                 AjPStr **keys, ajulong **ptrs);
+static ajuint       btreeGetPointers(AjPBtcache cache, unsigned char *buf,
+                                     ajulong **ptrs);
+static ajulong      btreeGetBlockC(AjPBtcache cache, unsigned char *buf,
+                                   const char* ckey);
+static ajulong      btreeGetBlockN(AjPBtcache cache, unsigned char *buf,
+                                   ajulong numkey);
+static ajulong      btreeGetBlockS(AjPBtcache cache, unsigned char *buf,
+                                   const AjPStr key);
+static ajulong      btreeGetBlockFirstC(AjPBtcache cache, unsigned char *buf,
+                                        const char* ckey, ajuint clen);
+static ajulong      btreeGetBlockFirstN(AjPBtcache cache, unsigned char *buf,
+                                        ajulong numkey);
+static ajulong      btreeGetBlockFirstS(AjPBtcache cache, unsigned char *buf,
+                                        const AjPStr key);
+static void         btreeIdFree(AjPBtId *thys);
+static ajint        btreeIdCompare(const void *a, const void *b);
+static AjPBucket    btreeBucketNew(ajuint n);
+static void         btreeWriteNode(AjPBtcache cache, AjPBtpage page,
+                                   AjPStr const *keys, const ajulong *ptrs,
+                                   ajuint nkeys);
+static void         btreeWriteNodeSingle(AjPBtcache cache, AjPBtpage spage,
+                                         const AjPStr key, ajulong lptr,
+                                         ajulong rptr);
+static AjBool       btreeNodeIsFull(const AjPBtcache cache, AjPBtpage page);
+static AjBool       btreeNodeIsFullSec(const AjPBtcache cache, AjPBtpage page);
+static void         btreeInsertNonFull(AjPBtcache cache, AjPBtpage page,
+                                       const AjPStr key, ajulong less,
+                                       ajulong greater);
+static void         btreeSplitRoot(AjPBtcache cache);
+static void         btreeInsertKey(AjPBtcache cache, AjPBtpage page,
+                                   const AjPStr key, ajulong less,
+                                   ajulong greater);
 
-static ajlong     btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
-				   const char *key);
-static void       btreeKeyShift(AjPBtcache cache, AjPBtpage tpage);
+static ajulong      btreeInsertShiftS(AjPBtcache cache, AjPBtpage *retpage,
+                                      const AjPStr key);
+static void         btreeKeyShift(AjPBtcache cache, AjPBtpage tpage);
 
 
 #if 0
-static AjPBtpage  btreeTraverseLeaves(AjPBtcache cache, AjPBtpage thys);
-static void       btreeJoinLeaves(AjPBtcache cache);
+static AjPBtpage    btreeTraverseLeaves(AjPBtcache cache, AjPBtpage thys);
+static void         btreeJoinLeaves(AjPBtcache cache);
 #endif
 
 
-static AjPBtpage  btreeFindINodeW(AjPBtcache cache, AjPBtpage page,
-				  const char *item);
-static AjPBtpage  btreePageFromKeyW(AjPBtcache cache, unsigned char *buf,
-				    const char *key);
-static void       btreeReadLeaf(AjPBtcache cache, AjPBtpage page,
-				AjPList list);
-static void       btreeReadPriLeaf(AjPBtcache cache, AjPBtpage page,
-				   AjPList list);
-static AjPBtpage  btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage);
-static AjPBtpage  btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage);
+static AjPBtpage    btreeFindINodeW(AjPBtcache cache, AjPBtpage page,
+                                    const AjPStr item);
+static AjPBtpage    btreePageFromKeyW(AjPBtcache cache, unsigned char *buf,
+                                      const AjPStr key);
+static void         btreeReadLeaf(AjPBtcache cache, AjPBtpage page,
+                                  AjPList list);
+static void         btreeReadPriLeaf(AjPBtcache cache, AjPBtpage page,
+                                     AjPList list);
+static AjPBtpage    btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage);
+static AjPBtpage    btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage);
 
 
 
 
-static AjPPriBucket  btreePriBucketNew(ajint n);
-static void          btreePriBucketDel(AjPPriBucket *thys);
-static AjPPriBucket  btreeReadPriBucket(AjPBtcache cache, ajlong pageno);
-static void          btreeWritePriBucket(AjPBtcache cache,
-					 const AjPPriBucket bucket,
-					 ajlong pageno);
-static void          btreeAddToPriBucket(AjPBtcache cache, ajlong pageno,
-					 const AjPBtPri pri);
-static ajint         btreeNumInPriBucket(AjPBtcache cache, ajlong pageno);
-static ajint         btreeKeywordCompare(const void *a, const void *b);
-static AjBool        btreeReorderPriBuckets(AjPBtcache cache,
-					    AjPBtpage leaf);
+static void         btreePriFree(AjPBtPri *thys);
+static AjPPriBucket btreePriBucketNew(ajuint n);
+static void         btreePriBucketDel(AjPPriBucket *thys);
+static void         btreePriBucketFree(AjPPriBucket *thys);
+static ajulong      btreePriBucketIdlist(AjPBtcache cache, ajulong pagepos,
+                                         AjPList idlist);
+static AjBool       btreePriBucketFindId(AjPBtcache cache, ajulong pagepos,
+                                         const AjPStr id, ajulong* treeblock);
+static AjPPriBucket btreeReadPriBucket(AjPBtcache cache, ajulong pagepos);
+static void         btreeWritePriBucket(AjPBtcache cache,
+                                        const AjPPriBucket bucket,
+                                        ajulong pagepos);
+static void         btreeWritePriBucketEmpty(AjPBtcache cache, ajulong pagepos);
+static void         btreeAddToPriBucket(AjPBtcache cache, ajulong pagepos,
+                                        const AjPBtPri pri);
+static void         btreeAddToPriBucketFull(AjPBtcache cache, ajulong pagepos,
+                                            const AjPBtPri pri);
+static ajuint       btreeNumInPriBucket(AjPBtcache cache, ajulong pagepos);
+static ajint        btreeKeywordCompare(const void *a, const void *b);
+static AjBool       btreeReorderPriBuckets(AjPBtcache cache,
+                                           AjPBtpage leaf);
 
 
 
 
+static AjBool        btreeSecBucketFindId(AjPBtcache cache, ajulong pagepos,
+                                          const AjPStr id);
+static ajulong       btreeSecBucketIdlist(AjPBtcache cache, ajulong pagepos,
+                                          AjPList idlist);
+static AjPSecBucket  btreeReadSecBucket(AjPBtcache cache, ajulong pagepos);
 static void          btreeWriteSecBucket(AjPBtcache cache,
 					 const AjPSecBucket bucket,
-					 ajlong pageno);
-static AjPSecBucket  btreeReadSecBucket(AjPBtcache cache, ajlong pageno);
+					 ajulong pagepos);
 static ajint         btreeKeywordIdCompare(const void *a, const void *b);
 static AjPBtpage     btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage);
 
-static AjPSecBucket  btreeSecBucketNew(ajint n);
+static AjPSecBucket  btreeSecBucketNew(ajuint n, ajuint idlen);
 static void          btreeSecBucketDel(AjPSecBucket *thys);
+static void          btreeSecBucketFree(AjPSecBucket *thys);
 static void          btreeSecLeftLeaf(AjPBtcache cache, AjPBtKeyWild wild);
 static AjBool        btreeSecNextLeafList(AjPBtcache cache, AjPBtKeyWild wild);
 static void          btreeReadAllSecLeaves(AjPBtcache cache, AjPList list);
 
-static void          btreeAddToSecBucket(AjPBtcache cache, ajlong pageno,
+static void          btreeAddToSecBucket(AjPBtcache cache, ajulong pagepos,
 					 const AjPStr id);
+static void          btreeAddToSecBucketFull(AjPBtcache cache, ajulong pagepos,
+                                             const AjPStr id);
 static AjBool        btreeReorderSecBuckets(AjPBtcache cache, AjPBtpage leaf);
 #if 0
 static               void btreeInsertIdOnly(AjPBtcache cache,
 					    const AjPBtPri pri);
 #endif
 static void          btreeSplitRootSec(AjPBtcache cache);
-static ajint         btreeNumInSecBucket(AjPBtcache cache, ajlong pageno);
+static ajuint        btreeNumInSecBucket(AjPBtcache cache, ajulong pagepos);
 static void          btreeInsertKeySec(AjPBtcache cache, AjPBtpage page,
-			               const AjPStr key, ajlong less,
-			               ajlong greater);
-static ajlong        btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
-				         const char *key);
+			               const AjPStr key, ajulong less,
+			               ajulong greater);
+static ajulong       btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
+				         const AjPStr key);
 static void          btreeKeyShiftSec(AjPBtcache cache, AjPBtpage tpage);
 static void          btreeInsertNonFullSec(AjPBtcache cache, AjPBtpage page,
-				           const AjPStr key, ajlong less,
-				           ajlong greater);
+				           const AjPStr key, ajulong less,
+				           ajulong greater);
 
 static void          btreeStrDel(void** pentry, void* cl);
 static void          btreeIdDelFromList(void** pentry, void* cl);
-static void          btreeKeyFullSearch(AjPBtcache cache, const char *key,
+static void          btreeKeyFullSearch(AjPBtcache cache, const AjPStr key,
 					AjPList idlist);
-static void          btreeKeywordFullSearch(AjPBtcache cache, const char *key,
+static void          btreeKeywordFullSearch(AjPBtcache cache, const AjPStr key,
 					    AjPBtcache idcache,
 					    AjPList idlist);
 static ajint         btreeOffsetCompare(const void *a, const void *b);
@@ -157,160 +421,542 @@ static void          btreeDeallocSecArray(AjPBtcache cache, AjPBtMem node);
 
 
 
-static void          btreeAddToHybBucket(AjPBtcache cache, ajlong pageno,
+static void          btreeAddToHybBucket(AjPBtcache cache, ajulong pagepos,
 					 const AjPBtHybrid id);
+static void          btreeAddToHybBucketFull(AjPBtcache cache, ajulong pagepos,
+                                             const AjPBtHybrid id);
 static AjPBtpage     btreeHybFindINode(AjPBtcache cache, AjPBtpage page,
-				       const char *item);
+				       const AjPStr item);
 static AjPBtpage     btreeHybPageFromKey(AjPBtcache cache,
-					 unsigned char *buf, const char *key);
-static ajlong        btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
-					 const char *key);
+					 unsigned char *buf, const AjPStr key);
+static ajulong       btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
+					 const AjPStr key);
 static AjBool        btreeHybReorderBuckets(AjPBtcache cache, AjPBtpage leaf);
 static AjPBtpage     btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage);
 static void          btreeHybInsertKey(AjPBtcache cache, AjPBtpage page,
-				       const AjPStr key, ajlong less,
-				       ajlong greater);
+				       const AjPStr key, ajulong less,
+				       ajulong greater);
 static void          btreeHybSplitRoot(AjPBtcache cache);
 static void          btreeHybDupInsert(AjPBtcache cache, const AjPBtHybrid hyb,
 				       AjPBtId btid);
+static ajulong       btreeHybBucketIdlist(AjPBtcache cache, ajulong pagepos,
+                                          AjPList idlist);
+static ajulong       btreeHybBucketIdlistAll(AjPBtcache cache, ajulong pagepos,
+                                             AjPList idlist);
+
 static void          btreeGetNumKeys(AjPBtcache cache, unsigned char *buf,
-				     ajlong **keys, ajlong **ptrs);
+				     ajulong **keys, ajulong **ptrs);
+static void          btreeGetNumPointers(AjPBtcache cache, unsigned char *buf,
+                                         ajulong **ptrs);
 static void          btreeWriteNumNode(AjPBtcache cache, AjPBtpage spage,
-				       const ajlong *keys, const ajlong *ptrs,
-				       ajint nkeys);
-static AjPNumBucket  btreeReadNumBucket(AjPBtcache cache, ajlong pageno);
+				       const ajulong *keys, const ajulong *ptrs,
+				       ajuint nkeys);
+static ajulong       btreeNumBucketIdlist(AjPBtcache cache, ajulong pagepos,
+                                          AjPList idlist);
+static ajulong       btreeNumBucketBtidlist(AjPBtcache cache, ajulong pagepos,
+                                            const AjPStr idname,
+                                            AjPList idlist);
+static AjPNumBucket  btreeReadNumBucket(AjPBtcache cache, ajulong pagepos);
+static void          btreeWriteNumBucket(AjPBtcache cache,
+                                         const AjPNumBucket bucket,
+                                         ajulong pagepos);
+static void          btreeWriteNumBucketEmpty(AjPBtcache cache,
+                                              ajulong pagepos);
 static void          btreeNumBucketDel(AjPNumBucket *thys);
-static void          btreeAddToNumBucket(AjPBtcache cache, ajlong pageno,
+static void          btreeNumBucketFree(AjPNumBucket *thys);
+static void          btreeAddToNumBucket(AjPBtcache cache, ajulong pagepos,
 					 const AjPBtNumId num);
 static AjPBtpage     btreeNumFindINode(AjPBtcache cache, AjPBtpage page,
-				       const ajlong item);
+				       ajulong item);
 static AjPBtpage     btreeNumPageFromKey(AjPBtcache cache, unsigned char *buf,
-					 const ajlong key);
-static ajint         btreeNumInNumBucket(AjPBtcache cache, ajlong pageno);
+					 ajulong key);
+static ajuint        btreeNumInNumBucket(AjPBtcache cache, ajulong pagepos);
 static AjBool        btreeReorderNumBuckets(AjPBtcache cache, AjPBtpage leaf);
-static AjPNumBucket  btreeNumBucketNew(ajint n);
+static AjPNumBucket  btreeNumBucketNew(ajuint n);
 static ajint         btreeNumIdCompare(const void *a, const void *b);
 static AjBool        btreeNumNodeIsFull(const AjPBtcache cache,
 					AjPBtpage page);
 static void          btreeNumInsertNonFull(AjPBtcache cache, AjPBtpage page,
-					   const ajlong key, ajlong less,
-					   ajlong greater);
+					   ajulong key, ajulong less,
+					   ajulong greater);
 static void          btreeNumInsertKey(AjPBtcache cache, AjPBtpage page,
-				       const ajlong key, ajlong less,
-				       ajlong greater);
+				       ajulong key, ajulong less,
+				       ajulong greater);
 static void          btreeNumSplitRoot(AjPBtcache cache);
 static void          btreeNumKeyShift(AjPBtcache cache, AjPBtpage tpage);
-static ajlong        btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
-					 ajlong key);
+static ajulong       btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
+					 ajulong key);
 static AjPBtpage     btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage);
 
 
-static ajlong        btreeFindHybBalanceOne(AjPBtcache cache, ajlong thisNode,
-                                            ajlong leftNode, ajlong rightNode,
-                                            ajlong lAnchor, ajlong rAnchor,
+static ajulong       btreeFindHybBalanceOne(AjPBtcache cache, ajulong thisNode,
+                                            ajulong leftNode, ajulong rightNode,
+                                            ajulong lAnchor, ajulong rAnchor,
                                             const AjPBtHybrid hyb);
-static void          btreeFindHybMinOne(AjPBtcache cache, ajlong pageno,
-                                        const char *key);
+static void          btreeFindHybMinOne(AjPBtcache cache, ajulong pagepos,
+                                        const AjPStr key);
 
-static AjBool        btreeRemoveHybEntryOne(AjPBtcache cache,ajlong pageno,
+static AjBool        btreeRemoveHybEntryOne(AjPBtcache cache,ajulong pagepos,
                                             const AjPBtHybrid hyb);
 
 static void          btreeAdjustHybBucketsOne(AjPBtcache cache,
                                               AjPBtpage leaf);
 
-static ajlong        btreeRebalanceHybOne(AjPBtcache cache, ajlong thisNode,
-                                          ajlong leftNode, ajlong rightNode,
-                                          ajlong lAnchor, ajlong rAnchor);
+static ajulong       btreeRebalanceHybOne(AjPBtcache cache, ajulong thisNode,
+                                          ajulong leftNode, ajulong rightNode,
+                                          ajulong lAnchor, ajulong rAnchor);
 
-static ajlong        btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
-                                      ajlong balanceNode, ajlong anchorNode);
+static ajulong       btreeShiftHybOne(AjPBtcache cache, ajulong thisNode,
+                                      ajulong balanceNode, ajulong anchorNode);
 
-static ajlong        btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
-                                      ajlong mergeNode, ajlong anchorNode);
+static ajulong       btreeMergeHybOne(AjPBtcache cache, ajulong thisNode,
+                                      ajulong mergeNode, ajulong anchorNode);
 
-static ajlong        btreeCollapseRootHybOne(AjPBtcache cache, ajlong pageno);
+static ajulong       btreeCollapseRootHybOne(AjPBtcache cache, ajulong pagepos);
 
 static AjBool        btreeDeleteHybIdTwo(AjPBtcache cache,
                                          const AjPBtHybrid hyb,
                                          AjPBtId did);
 
-static ajlong btreeFindHybBalanceTwo(AjPBtcache cache, ajlong thisNode,
-                                     ajlong leftNode, ajlong rightNode,
-                                     ajlong lAnchor, ajlong rAnchor,
-                                     const ajlong key);
+static ajulong       btreeFindHybBalanceTwo(AjPBtcache cache, ajulong thisNode,
+                                            ajulong leftNode, ajulong rightNode,
+                                            ajulong lAnchor, ajulong rAnchor,
+                                            ajulong key);
 
-static void   btreeFindHybMinTwo(AjPBtcache cache, ajlong pageno,
-                                 const ajlong key);
+static void          btreeFindHybMinTwo(AjPBtcache cache, ajulong pagepos,
+                                        ajulong key);
 
-static AjBool btreeRemoveHybEntryTwo(AjPBtcache cache, ajlong pageno,
-                                     const ajlong key);
+static AjBool        btreeRemoveHybEntryTwo(AjPBtcache cache, ajulong pagepos,
+                                            ajulong key);
 
-static void   btreeAdjustHybBucketsTwo(AjPBtcache cache, AjPBtpage leaf);
+static void          btreeAdjustHybBucketsTwo(AjPBtcache cache, AjPBtpage leaf);
 
-static ajlong btreeRebalanceHybTwo(AjPBtcache cache, ajlong thisNode,
-                                   ajlong leftNode, ajlong rightNode,
-                                   ajlong lAnchor, ajlong rAnchor);
+static ajulong       btreeRebalanceHybTwo(AjPBtcache cache, ajulong thisNode,
+                                          ajulong leftNode, ajulong rightNode,
+                                          ajulong lAnchor, ajulong rAnchor);
 
-static ajlong btreeShiftHybTwo(AjPBtcache cache, ajlong thisNode,
-                               ajlong balanceNode, ajlong anchorNode);
+static ajulong       btreeShiftHybTwo(AjPBtcache cache, ajulong thisNode,
+                                      ajulong balanceNode, ajulong anchorNode);
 
-static ajlong btreeMergeHybTwo(AjPBtcache cache, ajlong thisNode,
-                               ajlong mergeNode, ajlong anchorNode);
+static ajulong       btreeMergeHybTwo(AjPBtcache cache, ajulong thisNode,
+                                      ajulong mergeNode, ajulong anchorNode);
 
-static ajlong btreeCollapseRootHybTwo(AjPBtcache cache, ajlong pageno);
+static ajulong       btreeCollapseRootHybTwo(AjPBtcache cache, ajulong pagepos);
 
-static ajlong btreeFindPriBalanceTwo(AjPBtcache cache, ajlong thisNode,
-                                     ajlong leftNode, ajlong rightNode,
-                                     ajlong lAnchor, ajlong rAnchor,
-                                     const AjPBtPri pri);
+static ajulong       btreeFindPriBalanceTwo(AjPBtcache cache, ajulong thisNode,
+                                            ajulong leftNode, ajulong rightNode,
+                                            ajulong lAnchor, ajulong rAnchor,
+                                            const AjPBtPri pri);
 
-static void btreeFindPriMinTwo(AjPBtcache cache, ajlong pageno,
-                               const char *key);
+static void          btreeFindPriMinTwo(AjPBtcache cache, ajulong pagepos,
+                                        const AjPStr key);
 
-static AjBool btreeRemovePriEntryTwo(AjPBtcache cache, ajlong pageno,
-                                     const AjPBtPri pri);
+static AjBool        btreeRemovePriEntryTwo(AjPBtcache cache, ajulong pagepos,
+                                            const AjPBtPri pri);
 
-static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf);
+static void          btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf);
 
-static ajlong btreeRebalancePriTwo(AjPBtcache cache, ajlong thisNode,
-                                   ajlong leftNode, ajlong rightNode,
-                                   ajlong lAnchor, ajlong rAnchor);
+static ajulong       btreeRebalancePriTwo(AjPBtcache cache, ajulong thisNode,
+                                          ajulong leftNode, ajulong rightNode,
+                                          ajulong lAnchor, ajulong rAnchor);
 
-static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
-                               ajlong balanceNode, ajlong anchorNode);
+static ajulong       btreeShiftPriTwo(AjPBtcache cache, ajulong thisNode,
+                                      ajulong balanceNode, ajulong anchorNode);
 
-static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
-                               ajlong mergeNode, ajlong anchorNode);
+static ajulong       btreeMergePriTwo(AjPBtcache cache, ajulong thisNode,
+                                      ajulong mergeNode, ajulong anchorNode);
 
-static ajlong btreeCollapseRootPriTwo(AjPBtcache cache, ajlong pageno);
+static ajulong       btreeCollapseRootPriTwo(AjPBtcache cache, ajulong pagepos);
 
 
-static ajlong btreeFindPriBalanceOne(AjPBtcache cache, ajlong thisNode,
-                                     ajlong leftNode, ajlong rightNode,
-                                     ajlong lAnchor, ajlong rAnchor,
-                                     const AjPBtPri pri);
+static ajulong       btreeFindPriBalanceOne(AjPBtcache cache, ajulong thisNode,
+                                            ajulong leftNode, ajulong rightNode,
+                                            ajulong lAnchor, ajulong rAnchor,
+                                            const AjPBtPri pri);
 
-static void btreeFindPriMinOne(AjPBtcache cache, ajlong pageno,
-                               const char *key);
+static void          btreeFindPriMinOne(AjPBtcache cache, ajulong pagepos,
+                                        const AjPStr key);
 
-static AjBool btreeRemovePriEntryOne(AjPBtcache cache, ajlong pageno,
-                                     const AjPBtPri pri);
+static AjBool        btreeRemovePriEntryOne(AjPBtcache cache, ajulong pagepos,
+                                            const AjPBtPri pri);
 
-static void btreeAdjustPriBucketsOne(AjPBtcache cache, AjPBtpage leaf);
+static void          btreeAdjustPriBucketsOne(AjPBtcache cache, AjPBtpage leaf);
 
-static ajlong btreeRebalancePriOne(AjPBtcache cache, ajlong thisNode,
-                                   ajlong leftNode, ajlong rightNode,
-                                   ajlong lAnchor, ajlong rAnchor);
+static ajulong       btreeRebalancePriOne(AjPBtcache cache, ajulong thisNode,
+                                          ajulong leftNode, ajulong rightNode,
+                                          ajulong lAnchor, ajulong rAnchor);
 
-static ajlong btreeShiftPriOne(AjPBtcache cache, ajlong thisNode,
-                               ajlong balanceNode, ajlong anchorNode);
+static ajulong       btreeShiftPriOne(AjPBtcache cache, ajulong thisNode,
+                                      ajulong balanceNode, ajulong anchorNode);
 
-static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
-                               ajlong mergeNode, ajlong anchorNode);
+static ajulong       btreeMergePriOne(AjPBtcache cache, ajulong thisNode,
+                                      ajulong mergeNode, ajulong anchorNode);
 
-static ajlong btreeCollapseRootPriOne(AjPBtcache cache, ajlong pageno);
+static ajulong       btreeCollapseRootPriOne(AjPBtcache cache, ajulong pagepos);
 
-static AjBool btreeIsSecEmpty(AjPBtcache cache);
+static AjBool        btreeIsSecEmpty(AjPBtcache cache);
+
+static AjBool        btreeBucketSplitCalc(ajuint totalkeys, ajuint totalbuckets,
+                                          ajuint maxbucketsize,
+                                          ajuint *leftbuckets, ajuint *leftmax,
+                                          ajuint *leftkeys,
+                                          ajuint *rightbuckets,
+                                          ajuint *rightmax,
+                                          ajuint *rightkeys);
+static AjBool        btreeBucketCalc(ajuint totalkeys, ajuint totalbuckets,
+                                    ajuint maxbucketsize,
+                                    ajuint *newbuckets, ajuint *newmax);
+static const char*   btreeNodetype(const unsigned char* buf);
+static void          btreeDumpNumnode(AjPBtcache cache, const AjPBtpage page);
+static AjBool        btreeCheckNode(AjPBtcache cache, const AjPBtpage page);
+static AjBool        btreeCheckNumnode(AjPBtcache cache, const AjPBtpage page);
+static AjBool        btreeCheckNodeHeader(AjPBtcache cache,
+                                          const AjPBtpage page,
+                                          const char* type);
+static void          btreeNocacheFetch(const AjPBtcache cache, AjPBtpage cpage,
+                                       ajulong pagepos);
+static void          btreePageClear(AjPBtcache cache, AjPBtpage page);
+static void          btreePageSetfree(AjPBtcache cache, ajulong pagepos);
+static void          btreeFieldInit(void);
+static BtreePField   btreeFieldNewField(const BtreePFielddef field);
+static BtreePField   btreeFieldNewC(const char* nametxt);
+static BtreePField   btreeFieldNewS(const AjPStr name);
+static void          btreeFieldDel(BtreePField *Pfield);
+static void          btreeFieldMapDel(void** key, void** value, void* cl);
+
+
+
+
+/* @funcstatic btreeFieldInit *************************************************
+**
+** Initialises the table for named fields
+**
+** @return [void]
+******************************************************************************/
+
+static void btreeFieldInit(void)
+{
+    ajuint i;
+    BtreePField field = NULL;
+
+    if(btreeFieldsTable)
+        return;
+
+    btreeFieldsTable = ajTablestrNewConst(30);
+
+    for(i=0; btreeFields[i].Name; i++)
+    {
+        field = btreeFieldNewField(&btreeFields[i]);
+        ajTablePut(btreeFieldsTable,
+                   field->Name,
+                   (void*) field);
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeFieldNewC *************************************************
+**
+** Construct a new named field with default values
+**
+** @param [r] nametxt [const char*] Field name
+** @return [BtreePField] New field object
+******************************************************************************/
+
+static BtreePField btreeFieldNewC(const char* nametxt)
+{
+    BtreePField ret;
+    ajuint ilen;
+
+    ilen = strlen(nametxt);
+
+    AJNEW0(ret);
+
+    ret->Name = ajStrNewC(nametxt);
+    ret->Extension = ajStrNewRes(ilen+2);
+    ajStrAssignK(&ret->Extension, 'x');
+    ajStrAppendC(&ret->Extension, nametxt);
+    ret->Secondary = ajTrue;
+    ret->Len = 15;
+
+    return ret;
+}
+
+
+
+
+/* @funcstatic btreeFieldNewS *************************************************
+**
+** Construct a new named field with default values
+**
+** @param [r] name [const AjPStr] Field name
+** @return [BtreePField] New field object
+******************************************************************************/
+
+static BtreePField btreeFieldNewS(const AjPStr name)
+{
+    BtreePField ret;
+    ajuint ilen;
+
+    ilen = MAJSTRGETLEN(name);
+
+    AJNEW0(ret);
+
+    ret->Name = ajStrNewS(name);
+    ret->Extension = ajStrNewRes(ilen+2);
+    ajStrAssignK(&ret->Extension, 'x');
+    ajStrAppendS(&ret->Extension, name);
+    ret->Secondary = ajTrue;
+    ret->Len = 15;
+
+    return ret;
+}
+
+
+
+
+/* @funcstatic btreeFieldNewField *********************************************
+**
+** Construct copy of a known field
+**
+** @param [r] field [const BtreePFielddef] Source field
+** @return [BtreePField] New field object
+******************************************************************************/
+
+static BtreePField btreeFieldNewField(const BtreePFielddef field)
+{
+    BtreePField ret = NULL;
+
+    AJNEW0(ret);
+
+    ret->Name = ajStrNewC(field->Name);
+    ret->Extension = ajStrNewC(field->Extension);
+    ret->Secondary = field->Secondary;
+    ret->Len = field->Len;
+
+    return ret;
+}
+
+
+
+
+/* @funcstatic btreeFieldDel **************************************************
+**
+** Destructor for a named field
+**
+** @param [d] Pfield [BtreePField*] Field object
+** @return [void]
+******************************************************************************/
+
+static void btreeFieldDel(BtreePField *Pfield)
+{
+    BtreePField field = *Pfield;
+
+    ajStrDel(&field->Name);
+    ajStrDel(&field->Extension);
+    AJFREE(field);
+    *Pfield = NULL;
+    
+    return;
+}
+
+
+
+
+/* @funcstatic btreeFieldMapDel ************************************************
+**
+** Deletes entries from the MSF internal table. Called for each entry in turn.
+**
+** @param [d] key [void**] Standard argument, table key.
+** @param [d] value [void**] Standard argument, table data item.
+** @param [r] cl [void*] Standard argument, usually NULL
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeFieldMapDel(void** key, void** value, void* cl)
+{
+    BtreePField field;
+
+    (void) cl;
+
+    field = (BtreePField) *value;
+
+    btreeFieldDel(&field);
+
+    *key = NULL;
+    *value = NULL;
+
+    return;
+}
+
+
+
+
+/* @func ajBtreeFieldGetLenC **************************************************
+**
+** Returns the default indexed name length for a named field
+**
+** @param [r] nametxt [const char*] Field name
+** @return [ajuint] Field name length
+******************************************************************************/
+
+ajuint ajBtreeFieldGetLenC(const char* nametxt)
+{
+    ajuint ret = 15;
+    const BtreePField field;
+
+    btreeFieldInit();
+
+    field = ajTableFetchC(btreeFieldsTable, nametxt);
+
+    if(field)
+        return field->Len;
+
+    return ret;
+}
+
+
+
+
+/* @func ajBtreeFieldGetLenS **************************************************
+**
+** Returns the default indexed name length for a named field
+**
+** @param [r] name [const AjPStr] Field name
+** @return [ajuint] Field name length
+******************************************************************************/
+
+ajuint ajBtreeFieldGetLenS(const AjPStr name)
+{
+    ajuint ret = 15;
+    const BtreePField field;
+
+    btreeFieldInit();
+
+    field = ajTableFetchS(btreeFieldsTable, name);
+
+    if(field)
+        return field->Len;
+
+    return ret;
+}
+
+
+
+
+/* @func ajBtreeFieldGetExtensionC ********************************************
+**
+** Returns the default index file extension for a named field
+**
+** @param [r] nametxt [const char*] Field name
+** @return [const AjPStr] Filename extension
+******************************************************************************/
+
+const AjPStr ajBtreeFieldGetExtensionC(const char* nametxt)
+{
+    const BtreePField field;
+    BtreePField newfield;
+
+    btreeFieldInit();
+
+    field = ajTableFetchC(btreeFieldsTable, nametxt);
+    if(field)
+        return field->Extension;
+        
+    newfield = btreeFieldNewC(nametxt);
+    ajTablePut(btreeFieldsTable,
+               newfield->Name,
+               (void*) newfield);
+
+    return newfield->Extension;
+}
+
+
+
+
+/* @func ajBtreeFieldGetExtensionS ********************************************
+**
+** Returns the default index file extension for a named field
+**
+** @param [r] name [const AjPStr] Field name
+** @return [const AjPStr] Filename extension
+******************************************************************************/
+
+const AjPStr ajBtreeFieldGetExtensionS(const AjPStr name)
+{
+    const BtreePField field;
+    BtreePField newfield;
+
+    btreeFieldInit();
+
+    field = ajTableFetchS(btreeFieldsTable, name);
+    if(field)
+        return field->Extension;
+
+    newfield = btreeFieldNewS(name);
+    ajTablePut(btreeFieldsTable,
+               newfield->Name,
+               (void*) newfield);
+
+    return newfield->Extension;
+}
+
+
+
+
+/* @func ajBtreeFieldGetSecondaryC ********************************************
+**
+** Returns whether a named field uses a secondary index
+**
+** @param [r] nametxt [const char*] Field name
+** @return [AjBool] True for a secondary index where indexed terms treturn IDs
+**                  False for an ID index where terms return file positions.
+******************************************************************************/
+
+AjBool ajBtreeFieldGetSecondaryC(const char* nametxt)
+{
+    AjBool ret = ajTrue;
+    const BtreePField field;
+
+    btreeFieldInit();
+
+    ajStrAssignC(&btreeFieldnameTmp, nametxt);
+    field = ajTableFetchC(btreeFieldsTable, nametxt);
+    if(field)
+        return field->Secondary;
+
+    return ret;
+}
+
+
+
+
+/* @func ajBtreeFieldGetSecondaryS ********************************************
+**
+** Returns whether a named field uses a secondary index
+**
+** @param [r] name [const AjPStr] Field name
+** @return [AjBool] True for a secondary index where indexed terms treturn IDs
+**                  False for an ID index where terms return file positions.
+******************************************************************************/
+
+AjBool ajBtreeFieldGetSecondaryS(const AjPStr name)
+{
+    AjBool ret = ajTrue;
+    const BtreePField field;
+
+    btreeFieldInit();
+    
+    field = ajTableFetchS(btreeFieldsTable, name);
+    if(field)
+        return field->Secondary;
+
+    return ret;
+}
 
 
 
@@ -319,68 +965,98 @@ static AjBool btreeIsSecEmpty(AjPBtcache cache);
 **
 ** Open a b+tree index file and initialise a cache object
 **
-** @param [r] file [const char *] name of file
-** @param [r] ext [const char *] extension of file
-** @param [r] idir [const char *] index file directory
+** @param [r] filetxt [const char *] name of file
+** @param [r] exttxt [const char *] extension of file
+** @param [r] idirtxt [const char *] index file directory
 ** @param [r] mode [const char *] opening mode
-** @param [r] pagesize [ajint] pagesize
-** @param [r] order [ajint] Tree order
-** @param [r] fill [ajint] Number of entries per bucket
-** @param [r] level [ajint] level of tree
-** @param [r] cachesize [ajint] size of cache
+** @param [r] compressed [AjBool] Compressed index flag
+** @param [r] kwlimit [ajuint] Max key size
+** @param [r] pagesize [ajuint] pagesize
+** @param [r] cachesize [ajuint] size of cache
+** @param [r] pagecount [ajulong] page count
+** @param [r] order [ajuint] Tree order
+** @param [r] fill [ajuint] Number of entries per bucket
+** @param [r] level [ajuint] level of tree
+** @param [r] sorder [ajuint] order of secondary tree
+** @param [r] sfill [ajuint] Number of entries per secondary bucket
+** @param [r] count [ajulong] Number of entries in the index
+** @param [r] countall [ajulong] Number of total entries in the index
 **
 ** @return [AjPBtcache] initialised disc block cache structure
 ** @@
 ******************************************************************************/
 
-AjPBtcache ajBtreeCacheNewC(const char *file, const char *ext,
-			    const char *idir, const char *mode,
-			    ajint pagesize, ajint order, ajint fill,
-			    ajint level, ajint cachesize)
+AjPBtcache ajBtreeCacheNewC(const char *filetxt, const char *exttxt,
+			    const char *idirtxt, const char *mode,
+			    AjBool compressed, ajuint kwlimit,
+                            ajuint pagesize, ajuint cachesize,
+                            ajulong pagecount,
+                            ajuint order, ajuint fill, ajuint level,
+                            ajuint sorder, ajuint sfill,
+                            ajulong count, ajulong countall)
 {
     FILE *fp;
     AjPBtcache cache = NULL;
-#if 0
-#if defined (HAVE64) && !defined(WIN32) && !defined(_OSF_SOURCE) && !defined(_AIX) && !defined(__hpux) && !defined(__ppc__) && !defined(__FreeBSD__)
+#if defined (usestat64)
     struct stat64 buf;
 #else
     struct stat buf;
 #endif
-#endif
 
-    ajlong filelen = 0L;
+    ajulong filelen = 0L;
+    AjBool douncompress = ajFalse;
 
-    AjPStr fn = NULL;
+    AJNEW0(cache);
 
-    fn = ajStrNew();
-    ajFmtPrintS(&fn,"%s/%s.%s",idir,file,ext);
+    cache->filename = ajStrNew();
+
+    if(!*idirtxt)
+        ajFmtPrintS(&cache->filename,"%s.%s",filetxt,exttxt);
+    else if(idirtxt[strlen(idirtxt)-1] == SLASH_CHAR)
+        ajFmtPrintS(&cache->filename,"%s%s.%s",idirtxt,filetxt,exttxt);
+    else
+        ajFmtPrintS(&cache->filename,"%s%s%s.%s",idirtxt,SLASH_STRING,
+		    filetxt,exttxt);
     
-    fp = fopen(fn->Ptr,mode);
+    fp = fopen(MAJSTRGETPTR(cache->filename),mode);
 
     if(!fp)
 	return NULL;
 
 
-    /* Commented out pending database updating */
-#if 0
-    if(strcmp(mode,"r"))
+    if(ajCharMatchC(mode, "rb")) /* read-only */
     {
-#if defined (HAVE64) && !defined(WIN32) && !defined(_OSF_SOURCE) && !defined(_AIX) && !defined(__hpux) && !defined(__ppc__) && !defined(__FreeBSD__)
-	if(!stat64(fn->Ptr, &buf))
+#if defined (usestat64)
+	if(!stat64(MAJSTRGETPTR(cache->filename), &buf))
 #else
-	    if(!stat(fn->Ptr, &buf))
+        if(!stat(MAJSTRGETPTR(cache->filename), &buf))
 #endif
-		filelen = buf.st_size;
-    }
-#endif    
+            filelen = buf.st_size;
 
-    AJNEW0(cache);
+        cache->readonly = ajTrue;
+    }
+    else if(ajCharMatchC(mode, "rb+")) /* update */
+    {
+#if defined (usestat64)
+	if(!stat64(MAJSTRGETPTR(cache->filename), &buf))
+#else
+        if(!stat(MAJSTRGETPTR(cache->filename), &buf))
+#endif
+            filelen = buf.st_size;
+        if(compressed)
+            douncompress = ajTrue;
+    }
+    else if(!ajCharMatchC(mode, "wb+")) /* create */
+    {
+        ajWarn("ajBtreeCacheNewC unknown mode '%s'", mode);
+    }
+    
+    cache->pagetable = ajTableulongNewConst(cachesize);
 
     cache->listLength = 0;
 
     cache->lru   = NULL;
     cache->mru   = NULL;
-    cache->count = 0L;
     cache->fp    = fp;
     
     cache->replace    = ajStrNew();
@@ -391,13 +1067,23 @@ AjPBtcache ajBtreeCacheNewC(const char *file, const char *ext,
     else
 	cache->pagesize = BT_PAGESIZE;
 
-    cache->totsize   = 0L;
     cache->level     = level;
 
     cache->order      = order;
     cache->nperbucket = fill;
     cache->totsize    = filelen;
+    cache->filesize    = filelen;
+    cache->pagecount  = pagecount;
     cache->cachesize  = cachesize;
+    cache->extendsize = (ajulong) cache->pagesize * (ajulong) cache->cachesize;
+    cache->sorder = sorder;
+    cache->slevel = 0;
+    cache->snperbucket = sfill;
+    cache->countunique = count;
+    cache->countall = countall;
+    cache->kwlimit = kwlimit;
+    cache->compressed = compressed;
+
 
     cache->bmem = NULL;
     cache->tmem = NULL;
@@ -405,8 +1091,120 @@ AjPBtcache ajBtreeCacheNewC(const char *file, const char *ext,
     cache->bsmem = NULL;
     cache->tsmem = NULL;
 
+    if(douncompress)
+        btreeCacheUncompress(cache);
 
-    ajStrDel(&fn);
+    return cache;
+}
+
+
+
+
+/* @func ajBtreeCacheNewS **************************************************
+**
+** Open a b+tree index file and initialise a cache object
+**
+** @param [r] file [const AjPStr] name of file
+** @param [r] ext [const AjPStr] extension of file
+** @param [r] idir [const AjPStr] index file directory
+** @param [r] mode [const char *] opening mode
+** @param [r] compressed [AjBool] Compressed index flag
+** @param [r] kwlimit [ajuint] Max key size
+** @param [r] pagesize [ajuint] pagesize
+** @param [r] cachesize [ajuint] size of cache
+** @param [r] pagecount [ajulong] page count
+** @param [r] order [ajuint] Tree order
+** @param [r] fill [ajuint] Number of entries per bucket
+** @param [r] level [ajuint] level of tree
+** @param [r] sorder [ajuint] order of secondary tree
+** @param [r] sfill [ajuint] Number of entries per secondary bucket
+** @param [r] count [ajulong] Number of entries in the index
+** @param [r] countall [ajulong] Number of total entries in the index
+**
+** @return [AjPBtcache] initialised disc block cache structure
+** @@
+******************************************************************************/
+
+AjPBtcache ajBtreeCacheNewS(const AjPStr file, const AjPStr ext,
+			    const AjPStr idir, const char *mode,
+                            AjBool compressed, ajuint kwlimit,
+                            ajuint pagesize, ajuint cachesize,
+                            ajulong pagecount,
+                            ajuint order, ajuint fill, ajuint level,
+                            ajuint sorder, ajuint sfill,
+                            ajulong count, ajulong countall)
+{
+    return ajBtreeCacheNewC(MAJSTRGETPTR(file), MAJSTRGETPTR(ext),
+                            MAJSTRGETPTR(idir), mode,
+                            compressed, kwlimit, pagesize, cachesize,
+                            pagecount, order, fill, level,
+                            sorder, sfill,
+                            count, countall);
+}
+
+
+
+
+/* @func ajBtreeCacheNewReadC *************************************************
+**
+** Open an existing b+tree index file and initialise a cache object
+**
+** @param [r] filetxt [const char *] name of file
+** @param [r] exttxt [const char *] extension of file
+** @param [r] idirtxt [const char *] index file directory
+**
+** @return [AjPBtcache] initialised disc block cache structure
+** @@
+******************************************************************************/
+
+AjPBtcache ajBtreeCacheNewReadC(const char *filetxt, const char *exttxt,
+                                const char *idirtxt)
+{
+    AjPBtcache cache = NULL;
+
+    ajuint pagesize;
+    ajuint cachesize;
+    ajuint order;
+    ajuint sorder;
+    ajuint fill;
+    ajuint sfill;
+    ajuint level;
+    ajulong pagecount;
+    ajulong count;
+    ajulong countall;
+    ajuint kwlimit;
+    AjBool secondary = ajTrue;
+    AjBool compressed = ajFalse;
+    
+/* first read the parameter file */
+   
+    if(!ajBtreeReadParamsC(filetxt, exttxt, idirtxt,
+                           &secondary, &compressed,
+                           &kwlimit, &pagesize, &cachesize, &pagecount,
+                           &order, &fill, &level,
+                           &sorder, &sfill,
+                           &count, &countall))
+    {
+         return ajFalse;
+    }
+
+    if(secondary)
+        cache = ajBtreeSecCacheNewC(filetxt, exttxt, idirtxt, "rb",
+                                    compressed, kwlimit,
+                                    pagesize, cachesize, pagecount,
+                                    order, fill, level,
+                                    sorder, sfill,
+                                    count, countall);
+    else
+        cache = ajBtreeCacheNewC(filetxt, exttxt, idirtxt, "rb",
+                                 compressed, kwlimit,
+                                 pagesize, cachesize, pagecount,
+                                 order, fill, level,
+                                 sorder, sfill,
+                                 count, countall);
+
+    if(cache)
+        cache->secondary = secondary;
     
     return cache;
 }
@@ -414,7 +1212,118 @@ AjPBtcache ajBtreeCacheNewC(const char *file, const char *ext,
 
 
 
-/* @funcstatic btreePageNew ***********************************************
+/* @func ajBtreeCacheNewReadS *************************************************
+**
+** Open an existing b+tree index file and initialise a cache object
+**
+** @param [r] file [const AjPStr] name of file
+** @param [r] ext  [const AjPStr] extension of file
+** @param [r] idir [const AjPStr] index file directory
+**
+** @return [AjPBtcache] initialised disc block cache structure
+** @@
+******************************************************************************/
+
+AjPBtcache ajBtreeCacheNewReadS(const AjPStr file, const AjPStr ext,
+                                const AjPStr idir)
+{
+    return ajBtreeCacheNewReadC(MAJSTRGETPTR(file), MAJSTRGETPTR(ext),
+                                MAJSTRGETPTR(idir));
+}
+
+
+
+
+/* @func ajBtreeCacheNewUpdateC ***********************************************
+**
+** Open an existing b+tree index file for update and initialise a cache object
+**
+** @param [r] filetxt [const char *] name of file
+** @param [r] exttxt [const char *] extension of file
+** @param [r] idirtxt [const char *] index file directory
+**
+** @return [AjPBtcache] initialised disc block cache structure
+** @@
+******************************************************************************/
+
+AjPBtcache ajBtreeCacheNewUpdateC(const char *filetxt, const char *exttxt,
+                                  const char *idirtxt)
+{
+    AjPBtcache cache = NULL;
+
+    ajuint pagesize;
+    ajuint cachesize;
+    ajuint order;
+    ajuint sorder;
+    ajuint fill;
+    ajuint sfill;
+    ajuint level;
+    ajulong pagecount;
+    ajulong count;
+    ajulong countall;
+    ajuint kwlimit;
+    AjBool secondary = ajTrue;
+    AjBool compressed = ajFalse;
+    
+/* first read the parameter file */
+   
+    if(!ajBtreeReadParamsC(filetxt, exttxt, idirtxt,
+                           &secondary, &compressed,
+                           &kwlimit, &pagesize, &cachesize, &pagecount,
+                           &order, &fill, &level,
+                           &sorder, &sfill,
+                           &count, &countall))
+    {
+         return ajFalse;
+    }
+
+    if(secondary)
+        cache = ajBtreeSecCacheNewC(filetxt, exttxt, idirtxt, "rb+",
+                                    compressed, kwlimit,
+                                    pagesize, cachesize, pagecount,
+                                    order, fill, level,
+                                    sorder, sfill,
+                                    count, countall);
+    else
+        cache = ajBtreeCacheNewC(filetxt, exttxt, idirtxt, "rb+",
+                                 compressed, kwlimit,
+                                 pagesize, cachesize, pagecount,
+                                 order, fill, level,
+                                 sorder, sfill,
+                                 count, countall);
+
+    if(cache)
+        cache->secondary = secondary;
+    
+    return cache;
+}
+
+
+
+
+/* @func ajBtreeCacheNewUpdateS ***********************************************
+**
+** Open an existing b+tree index file for update and initialise a cache object
+**
+** @param [r] file [const AjPStr] name of file
+** @param [r] ext  [const AjPStr] extension of file
+** @param [r] idir [const AjPStr] index file directory
+**
+** @return [AjPBtcache] initialised disc block cache structure
+** @@
+******************************************************************************/
+
+AjPBtcache ajBtreeCacheNewUpdateS(const AjPStr file, const AjPStr ext,
+                                  const AjPStr idir)
+{
+    return ajBtreeCacheNewUpdateC(MAJSTRGETPTR(file), MAJSTRGETPTR(ext),
+                                  MAJSTRGETPTR(idir));
+}
+
+
+
+
+/* @funcstatic btreePageNew ***************************************************
 **
 ** Construct a cache page object
 **
@@ -448,29 +1357,54 @@ static AjPBtpage btreePageNew(AjPBtcache cache)
 **
 ** Construct a bucket object
 **
-** @param [r] n [ajint] Number of IDs
+** @param [r] n [ajuint] Number of IDs
 **
 ** @return [AjPBucket] initialised disc block cache structure
 ** @@
 ******************************************************************************/
 
-static AjPBucket btreeBucketNew(ajint n)
+static AjPBucket btreeBucketNew(ajuint n)
 {
     AjPBucket bucket = NULL;
-    ajint i;
+    ajuint i;
 
     /* ajDebug("In btreeBucketNew\n"); */
     
-    AJNEW0(bucket);
-
     if(n)
     {
-	AJCNEW0(bucket->Ids,n);
-	AJCNEW0(bucket->keylen,n);
+        if(statSaveBucketNext)
+        {
+            bucket = statSaveBucket[--statSaveBucketNext];
+            for(i=0;i<bucket->Maxentries;++i)
+                ajStrAssignClear(&bucket->Ids[i]->id);
+            if(n > bucket->Maxentries)
+            {
+                AJCRESIZE0(bucket->keylen,bucket->Maxentries,n);
+                AJCRESIZE0(bucket->Ids,bucket->Maxentries,n);
+                for(i=bucket->Maxentries;i<n;++i)
+                    bucket->Ids[i] = ajBtreeIdNew();
+                bucket->Maxentries = n;
+            }
+        }
+        else
+        {
+            AJNEW0(bucket);
+            AJCNEW0(bucket->Ids,n);
+            AJCNEW0(bucket->keylen,n);
+            for(i=0;i<n;++i)
+                bucket->Ids[i] = ajBtreeIdNew();
+            bucket->Maxentries = n;
+            
+        }
+        
     }
-    
-    for(i=0;i<n;++i)
-	bucket->Ids[i] = ajBtreeIdNew();
+    else 
+    {
+        if(statSaveBucketEmptyNext)
+            bucket = statSaveBucketEmpty[--statSaveBucketEmptyNext];
+        else
+            AJNEW0(bucket);
+    }
 
     bucket->NodeType = BT_BUCKET;
     bucket->Nentries = n;
@@ -486,24 +1420,40 @@ static AjPBucket btreeBucketNew(ajint n)
 **
 ** Search for a page in the cache
 **
-** @param [r] cache [const AjPBtcache] cache structure
-** @param [r] page [ajlong] page number to locate
+** @param [u] cache [AjPBtcache] cache structure
+** @param [r] page [ajulong] page number to locate
 **
 ** @return [AjPBtpage]	pointer to page or NULL if not found
 ** @@
 ******************************************************************************/
 
-static AjPBtpage btreeCacheLocate(const AjPBtcache cache, ajlong page)
+static AjPBtpage btreeCacheLocate(AjPBtcache cache, ajulong page)
 {
     AjPBtpage cpage = NULL;
 
-    /* ajDebug("In btreeCacheLocate\n"); */
+    /*ajDebug("In btreeCacheLocate %Lu\n", page);*/
     
-    for(cpage = cache->mru; cpage; cpage = cpage->prev)
-	if(cpage->pageno == page)
+
+    cpage = ajTableFetchmodV(cache->pagetable, (const void*) &page);
+
+    if(!cpage)
+        return NULL;
+
+    cache->cachehits++;
+
+    return cpage;
+    
+/*
+  for(cpage = cache->mru; cpage; cpage = cpage->prev)
+	if(cpage->pagepos == page)
+        {
+            cache->cachehits++;
 	    return cpage;
+        }
 
     return NULL;
+*/
+
 }
 
 
@@ -523,6 +1473,8 @@ static AjPBtpage btreeCacheLocate(const AjPBtcache cache, ajlong page)
 static void btreeCacheUnlink(AjPBtcache cache, AjPBtpage cpage)
 {
     /* ajDebug("In btreeCacheUnlink\n"); */
+
+    ajTableRemove(cache->pagetable, (void*) &cpage->pagepos);
 
     if(cache->mru == cpage)
     {
@@ -566,7 +1518,11 @@ static void btreeCacheUnlink(AjPBtcache cache, AjPBtpage cpage)
 
 static void btreeCacheMruAdd(AjPBtcache cache, AjPBtpage cpage)
 {
+
     /* ajDebug("In btreeCacheMruAdd\n"); */
+
+    ajTablePut(cache->pagetable,
+               (void*) &cpage->pagepos, (void*) cpage);
 
     cpage->prev = cache->mru;
     cpage->next = NULL;
@@ -604,12 +1560,15 @@ static AjPBtpage btreeCacheLruUnlink(AjPBtcache cache)
     if(cache->lru->dirty != BT_LOCK)
     {
 	if(!cache->lru)
-	    ajFatal("btreeCacheLruUnlink: No pages nodes found");
+	    ajFatal("btreeCacheLruUnlink: No pages nodes found in cache %S",
+                    cache->filename);
 
 	ret = cache->lru;
 	ret->next->prev = NULL;
 	cache->lru = ret->next;
-	return ret;
+        ajTableRemove(cache->pagetable, (void*) &ret->pagepos);
+
+        return ret;
     }
     
     for(ret=cache->lru; ret; ret=ret->next)
@@ -617,7 +1576,9 @@ static AjPBtpage btreeCacheLruUnlink(AjPBtcache cache)
 	    break;
 
     if(!ret)
-	ajFatal("Too many locked cache pages. Try increasing cachesize");
+	ajFatal("Too many locked cache page in cache %S. "
+                "Try increasing cachesize (%u)",
+                cache->filename, cache->cachesize);
 
     btreeCacheUnlink(cache,ret);
     
@@ -627,7 +1588,7 @@ static AjPBtpage btreeCacheLruUnlink(AjPBtcache cache)
 
 
 
-/* @funcstatic btreeCacheDestage *****************************************
+/* @funcstatic btreeCacheDestage **********************************************
 **
 ** Destage a cache page
 **
@@ -640,27 +1601,43 @@ static AjPBtpage btreeCacheLruUnlink(AjPBtcache cache)
 
 static void btreeCacheDestage(AjPBtcache cache, AjPBtpage cpage)
 {
-    ajint written = 0;
-    ajint retries = 0;
+    ajuint written = 0;
+    ajuint retries = 0;
 
     /* ajDebug("In btreeCacheDestage\n");*/
 
-    if(fseek(cache->fp,cpage->pageno,SEEK_SET)==-1)
+/* no speedup from extending the file */
+/*
+//  while(cache->totsize > cache->filesize)
+//    {
+//        cache->filesize += cache->extendsize;
+//        fseek(cache->fp,(cache->filesize-1L),SEEK_SET);
+//        fwrite("", 1, 1, cache->fp);
+//    }
+*/
+
+    if(fseek(cache->fp, cpage->pagepos,SEEK_SET))
+    {
+        ajWarn("fseek %Lu failed for cache '%S' %d: '%s'",
+               cpage->pagepos, cache->filename, errno, strerror(errno));
 	fseek(cache->fp,0L,SEEK_END);
-    
+    }
+
     while(written != cache->pagesize && retries != BT_MAXRETRIES)
     {
 	written += fwrite((void *)cpage->buf,1,cache->pagesize-written,
 			  cache->fp);
 	++retries;
     }
-    
+
     if(retries == BT_MAXRETRIES)
-	ajFatal("Maximum retries (%d) reached in btreeCacheDestage",
-		BT_MAXRETRIES);
+	ajFatal("Maximum retries (%u) reached in btreeCacheDestage "
+                "cache %S error: '%s'",
+		BT_MAXRETRIES, cache->filename, strerror(ferror(cache->fp)));
 
     cpage->dirty = BT_CLEAN;
     
+    cache->writes++;
 
     return;
 }
@@ -668,41 +1645,45 @@ static void btreeCacheDestage(AjPBtcache cache, AjPBtpage cpage)
 
 
 
-/* @funcstatic btreeCacheFetch *****************************************
+/* @funcstatic btreeCacheFetch ************************************************
 **
 ** Fetch a cache page from disc
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [w] cpage [AjPBtpage] cache page 
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeCacheFetch(AjPBtcache cache, AjPBtpage cpage,
-			    ajlong pageno)
+			    ajulong pagepos)
 {
-    ajint sum = 0;
-    ajint retries = 0;
+    ajuint sum = 0;
+    ajuint retries = 0;
 
     /* ajDebug("In btreeCacheFetch\n"); */
     
-    if(fseek(cache->fp,pageno,SEEK_SET))
-	ajFatal("Seek error in ajBtreeCachefetch");
-    
+    if(fseek(cache->fp,pagepos,SEEK_SET))
+	ajFatal("Seek error '%s' in ajBtreeCachefetch file %S",
+                strerror(ferror(cache->fp)), cache->filename);
+
     while(sum != cache->pagesize && retries != BT_MAXRETRIES)
     {
-	sum += fread((void *)cpage->buf,1,cache->pagesize-sum,
+	sum += fread((void *)(cpage->buf+sum),1,cache->pagesize-sum,
 		     cache->fp);
+
 	++retries;
     }
     
     if(retries == BT_MAXRETRIES)
-	ajFatal("Maximum retries (%d) reached in btreeCacheFetch for page %Ld",
-		BT_MAXRETRIES,pageno);
+	ajFatal("Maximum retries (%u) reached in btreeCacheFetch for page %Lu"
+                " cache '%S'",
+		BT_MAXRETRIES,pagepos, cache->filename);
 
-    cpage->pageno = pageno;
+    cpage->pagepos = pagepos;
+    cache->reads++;
     
     return;
 }
@@ -710,69 +1691,454 @@ static void btreeCacheFetch(AjPBtcache cache, AjPBtpage cpage,
 
 
 
-/* @func ajBtreeCacheDel **************************************************
+/* @funcstatic btreeCacheWriteCompress ****************************************
 **
-** Close a b+tree cache
+** Write a compressed cache page
 **
-** @param [w] thys [AjPBtcache*] list of files to read
+** @param [u] cache [AjPBtcache] cache
+** @param [u] cpage [AjPBtpage] cache page
+** @param [r] pagepos [ajulong] Cache file position
+** @param [r] pagesize [ajuint] Compressed page size
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajBtreeCacheDel(AjPBtcache *thys)
+static void btreeCacheWriteCompress(AjPBtcache cache, AjPBtpage cpage,
+                                    ajulong pagepos, ajuint pagesize)
 {
-    AjPBtcache pthis = *thys;
-    AjPBtpage  page  = NULL;
-    AjPBtpage  temp  = NULL;
+    ajuint written = 0;
+    ajuint retries = 0;
 
-    /* ajDebug("In ajBtreeCacheDel\n"); */
-    
-    for(page=pthis->lru;page;page=temp)
+    /* ajDebug("In btreeCacheWriteCompress\n");*/
+
+    if(fseek(cache->fp, pagepos,SEEK_SET))
     {
-	temp = page->next;
-	AJFREE(page->buf);
-	AJFREE(page);
+        ajWarn("fseek %Lu failed for cache '%S' %d: '%s'",
+               pagepos, cache->filename, errno, strerror(errno));
+	fseek(cache->fp,0L,SEEK_END);
     }
 
-    ajStrDel(&pthis->replace);
-    
-    fclose(pthis->fp);
+    while(written != pagesize && retries != BT_MAXRETRIES)
+    {
+	written += fwrite((void *)cpage->buf,1,pagesize-written,
+			  cache->fp);
+	++retries;
+    }
 
-    AJFREE(pthis);
-    *thys = NULL;
-    
+    if(retries == BT_MAXRETRIES)
+	ajFatal("Maximum retries (%u) reached in btreeCacheWriteCompress "
+                "cache %S error: '%s'",
+		BT_MAXRETRIES, cache->filename, strerror(ferror(cache->fp)));
+
     return;
 }
 
 
 
 
-/* @funcstatic btreeCacheControl ******************************************
+/* @funcstatic btreeCacheWriteUncompress **************************************
+**
+** Rewrite an uncompressed cache page
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [u] cpage [AjPBtpage] cache page
+** @param [r] pagepos [ajulong] Cache file position
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeCacheWriteUncompress(AjPBtcache cache, AjPBtpage cpage,
+                                      ajulong pagepos)
+{
+    ajuint written = 0;
+    ajuint retries = 0;
+
+    /* ajDebug("In btreeCacheWriteCompress\n");*/
+
+    if(fseek(cache->fp, pagepos,SEEK_SET))
+    {
+        ajWarn("fseek %Lu failed for cache '%S' %d: '%s'",
+               pagepos, cache->filename, errno, strerror(errno));
+	fseek(cache->fp,0L,SEEK_END);
+    }
+
+    while(written != cache->pagesize && retries != BT_MAXRETRIES)
+    {
+	written += fwrite((void *)cpage->buf,1,cache->pagesize-written,
+			  cache->fp);
+	++retries;
+    }
+
+    if(retries == BT_MAXRETRIES)
+	ajFatal("Maximum retries (%u) reached in btreeCacheWriteUncompress "
+                "cache %S error: '%s'",
+		BT_MAXRETRIES, cache->filename, strerror(ferror(cache->fp)));
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeCacheCompress *********************************************
+**
+** Compress a b+tree cache on closing
+**
+** @param [u] thys [AjPBtcache] Expanded cache to be compressed
+**
+** @return [ajulong] File size after compression
+** @@
+******************************************************************************/
+
+static ajulong btreeCacheCompress(AjPBtcache thys)
+{
+    ajulong* newpagepos  = NULL;
+    ajuint*  newpagesize = NULL;
+    ajulong pagecount = 0;
+    AjPBtpage page = NULL;
+    ajulong i;
+    /* ajuint j; */
+    /* ajuint icnt; */
+    ajuint freepages = 0;
+    ajulong newsize = 0L;
+    ajulong oldpos = 0L;
+
+    page = btreePageNew(thys);
+    pagecount = ajBtreeGetPagecount(thys);
+    AJCNEW(newpagepos, pagecount);
+    AJCNEW(newpagesize, pagecount);
+
+    for(i=0; i < pagecount; i++)
+    {
+        btreeCacheFetch(thys, page, oldpos);
+        oldpos += thys->pagesize;
+
+        newpagepos[i] = newsize;
+        newpagesize[i] = ajBtreePageGetSize(page);
+        newsize += newpagesize[i];
+
+        /*
+        buf = page->buf;
+
+        icnt=0;
+
+        for(j=newpagesize[i]; j < thys->pagesize; j++)
+        {
+            if(buf[j])
+                icnt++;
+        }
+
+        if(icnt)
+            ajWarn("Page %S %u at %Lu has %u non-zero bytes (%s)",
+                   thys->filename, i, page->pagepos,
+                   icnt, btreeNodetype(buf));
+        */
+    }
+
+    newsize += thys->pagesize - newpagesize[pagecount-1];
+    newpagesize[pagecount-1] = thys->pagesize;
+
+    oldpos = 0L;
+
+    for(i=0; i < pagecount; i++)
+    {
+        btreeCacheFetch(thys, page, oldpos);
+        oldpos += thys->pagesize;
+
+        if(!btreePageCompress(page, newpagepos, thys->pagesize))
+        {
+            freepages++;
+            continue;
+        }
+
+        btreeCacheWriteCompress(thys, page, newpagepos[i], newpagesize[i]);
+    }
+
+    thys->filesize = newsize;
+    AJFREE(newpagepos);
+    AJFREE(newpagesize);
+    AJFREE(page->buf);
+    AJFREE(page);
+
+    return newsize;
+}
+
+
+
+
+/* @funcstatic btreeCacheUncompress *******************************************
+**
+** Uncompress a b+tree cache on opening
+**
+** @param [u] thys [AjPBtcache] Compressed cache to be expanded
+**
+** @return [ajulong] File size compressed
+** @@
+*******************************************************************************/
+
+static ajulong btreeCacheUncompress(AjPBtcache thys)
+{
+    ajuint  oldpagesize;
+    AjPBtpage page = NULL;
+    ajulong i;
+    ajuint icnt;
+    ajuint freepages = 0;
+    ajulong newsize = 0L;
+    ajulong oldpos = 0L;
+    ajulong newpos = 0L;
+    unsigned char* buf = NULL;
+    ajulong oldsize;
+    AjPTable newpostable;
+    ajulong *oldpagepos = NULL;
+    ajulong *newpagepos = NULL;
+
+    ajDebug("btreeCacheUncompress %S size: %Lu pages: %Lu",
+            thys->filename, thys->totsize, thys->pagecount);
+
+    AJCNEW0(oldpagepos, thys->pagecount);
+    AJCNEW0(newpagepos, thys->pagecount);
+    oldsize = thys->totsize;
+    page = btreePageNew(thys);
+    newpostable = ajTableulongNewConst((ajint) thys->pagecount);
+    oldpos = 0L;
+
+    for(i=0; i < thys->pagecount; i++)
+    {
+        btreeCacheFetch(thys, page, oldpos);
+        oldpagesize = ajBtreePageGetSize(page);
+
+        oldpagepos[i] = oldpos;
+        newpagepos[i] = newpos;
+        ajTablePut(newpostable, (void*) &oldpagepos[i],
+                   (void*) &newpagepos[i]);
+        buf = page->buf;
+
+        oldpos += oldpagesize;
+        newpos += thys->pagesize;
+   }
+
+    thys->totsize = (ajulong) thys->pagesize * thys->pagecount;
+
+    oldpos = 0L;
+    newpos = 0L;
+    for(i=thys->pagecount; i > 0; i--)
+    {
+        btreeCacheFetch(thys, page, oldpagepos[i-1]);
+
+        if(!btreePageUncompress(page, newpostable, thys->pagesize))
+        {
+            freepages++;
+            continue;
+        }
+
+        oldpagesize = ajBtreePageGetSize(page);
+        icnt=thys->pagesize - oldpagesize;
+        if(icnt)
+            memset(buf+oldpagesize, 0, icnt);
+        
+        btreeCacheWriteUncompress(thys, page, (i-1)*thys->pagesize);
+
+    }
+
+    thys->filesize = newsize;
+
+    AJFREE(oldpagepos);
+    AJFREE(newpagepos);
+
+    ajTableFree(&newpostable);
+
+    AJFREE(page->buf);
+    AJFREE(page);
+
+    return oldsize;
+}
+
+
+
+
+/* @func ajBtreeCacheDel ******************************************************
+**
+** Close a b+tree cache
+**
+** @param [w] Pthis [AjPBtcache*] Cache object
+**
+** @return [ajulong] Index file size
+** @@
+******************************************************************************/
+
+ajulong ajBtreeCacheDel(AjPBtcache *Pthis)
+{
+    AjPBtcache thys;
+    AjPBtpage  page  = NULL;
+    AjPBtpage  temp  = NULL;
+    ajulong ret = 0L;
+
+    if(!Pthis || !*Pthis) return ret;
+    thys = *Pthis;
+
+    /* ajDebug("In ajBtreeCacheDel\n"); */
+
+    /* clear the dirty / locked pages */
+
+    if(!thys->readonly)
+        ajBtreeCacheSync(thys, 0L);
+
+    if(thys->bmem)
+        ajBtreeFreePriArray(thys);
+    if(thys->bsmem)
+        ajBtreeFreeSecArray(thys);
+
+    /* tidy up clean (read not written or locked) cached pages */
+
+    for(page=thys->lru;page;page=temp)
+    {
+	temp = page->next;
+        ajTableRemove(thys->pagetable, (void*) &page->pagepos);
+	AJFREE(page->buf);
+	AJFREE(page);
+    }
+
+    if(!thys->readonly)
+    {
+        /* Ubuntu warns if ftruncate return is not used */
+        if(ftruncate(fileno(thys->fp), thys->totsize) == -1)
+        {
+        }
+
+        if(thys->compressed)
+        {
+            ret = btreeCacheCompress(thys);
+            /* Ubuntu warns if ftruncate return is not used */
+            if(ftruncate(fileno(thys->fp), ret) == -1)
+            {
+            }
+        }
+    }
+    else
+        ret = thys->totsize;
+
+    ajStrDel(&thys->filename);
+    ajStrDel(&thys->replace);
+
+    fclose(thys->fp);
+
+    ajTableFree(&thys->pagetable);
+
+    AJFREE(*Pthis);
+    *Pthis = NULL;
+    
+    return ret;
+}
+
+
+
+
+/* @func ajBtreeCacheIsSecondary *********************************************
+**
+** Test whether a cache is a secondary index
+**
+** @param [r] thys [const AjPBtcache] Cache object
+**
+** @return [AjBool] True if cache is secondary
+******************************************************************************/
+
+AjBool ajBtreeCacheIsSecondary(const AjPBtcache thys)
+{
+    return thys->secondary;
+}
+
+
+
+
+/* @func ajBtreeCacheStatsOut *************************************************
+**
+** Cache statistics for writing a new index
+**
+** @param [u] outf [AjPFile] output file file
+** @param [r] cache [const AjPBtcache] cache object
+** @param [u] Pcache [ajulong*] Number of cache reads to date
+** @param [u] Preads [ajulong*] Number of disk reads to date
+** @param [u] Pwrites [ajulong*] Number of disk writes to date
+** @param [u] Psize [ajulong*] Number of cache pages to date
+**
+** @return [void]
+**
+******************************************************************************/
+
+void ajBtreeCacheStatsOut(AjPFile outf, const AjPBtcache cache,
+                          ajulong* Pcache, ajulong* Preads,
+                          ajulong* Pwrites, ajulong* Psize)
+{
+    ajulong lread;
+    ajulong lcache;
+    ajulong lwrite;
+    ajulong lnew;
+    ajulong lpages;
+
+    ajlong lrewrite;
+
+    if(!cache) return;
+
+    lpages = cache->totsize / (ajulong) cache->pagesize;
+    lcache = cache->cachehits - *Pcache;
+    lread = cache->reads - *Preads;
+    lwrite = cache->writes - *Pwrites;
+    if(lpages > *Psize)
+        lnew = lpages - *Psize;
+    else
+        lnew = 0L;
+
+    /*
+    ** writes counts those committed to disk
+    ** newpages counts growth in index size
+    ** pending writes may give a negative count for rewrites
+    */
+    lrewrite = (ajlong)lwrite - (ajlong)lnew;
+
+    ajFmtPrintF(outf,
+                "ajBtreeCacheStatsOut '%S' cached: %Lu reads: %8Lu "
+                "writes: %8Lu rewrite: %8Ld pages: %8Lu\n",
+                cache->filename,  lcache,  lread, lwrite, lrewrite, lnew);
+
+    *Pcache = cache->cachehits;
+    *Preads = cache->reads;
+    *Pwrites = cache->writes;
+    *Psize = lpages;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeCacheControl **********************************************
 **
 ** Master control function for cache read/write
 **
 ** @param [w] cache [AjPBtcache] name of file
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 ** @param [r] isread [AjBool] is this a read operation?
 **
 ** @return [AjPBtpage] disc cache page pointer
 ** @@
 ******************************************************************************/
 
-static AjPBtpage btreeCacheControl(AjPBtcache cache, ajlong pageno,
+static AjPBtpage btreeCacheControl(AjPBtcache cache, ajulong pagepos,
 				    AjBool isread)
 {
     AjPBtpage ret      = NULL;
-    ajlong lendian     = 0L;
-    unsigned char *buf = NULL;    
 
     /* ajDebug("In btreeCacheControl\n"); */
-    
-    ret = btreeCacheLocate(cache,pageno);
-    
+
+    if(pagepos < cache->totsize)
+        ret = btreeCacheLocate(cache,pagepos);
+
     if(ret)
+    {
 	btreeCacheUnlink(cache,ret);
+    }
     else
     {
 	if(cache->listLength == cache->cachesize)
@@ -782,22 +2148,21 @@ static AjPBtpage btreeCacheControl(AjPBtcache cache, ajlong pageno,
 	    if(ret->dirty == BT_DIRTY)
 		btreeCacheDestage(cache,ret);
 
-	    if(isread || pageno!=cache->totsize)
-		btreeCacheFetch(cache,ret,pageno);
+	    if(isread || pagepos!=cache->totsize)
+		btreeCacheFetch(cache,ret,pagepos);
+            else
+                btreePageClear(cache, ret);
 	}
 	else
 	{
 	    ret = btreePageNew(cache);
-	    buf = ret->buf;
-	    lendian = pageno;
-	    SBT_BLOCKNUMBER(buf,lendian);
 
-	    if(isread || pageno!=cache->totsize)
-		btreeCacheFetch(cache,ret,pageno);
+	    if(isread || pagepos!=cache->totsize)
+		btreeCacheFetch(cache,ret,pagepos);
 	}
 
 	if(!isread)
-	    ret->pageno = pageno;
+	    ret->pagepos = pagepos;
 	else
 	    ret->dirty = BT_CLEAN;
     }
@@ -810,24 +2175,24 @@ static AjPBtpage btreeCacheControl(AjPBtcache cache, ajlong pageno,
 
 
 
-/* @func ajBtreeCacheRead ******************************************
+/* @func ajBtreeCacheRead *****************************************************
 **
 ** Get a pointer to a disc cache page
 **
 ** @param [w] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
 ** @return [AjPBtpage] disc cache page pointer
 ** @@
 ******************************************************************************/
 
-AjPBtpage ajBtreeCacheRead(AjPBtcache cache, ajlong pageno)
+AjPBtpage ajBtreeCacheRead(AjPBtcache cache, ajulong pagepos)
 {
     AjPBtpage ret = NULL;
 
     /* ajDebug("In ajBtreeCacheRead\n"); */
 
-    ret = btreeCacheControl(cache,pageno,BT_READ);
+    ret = btreeCacheControl(cache,pagepos,BT_READ);
 
     return ret;
 }
@@ -840,24 +2205,130 @@ AjPBtpage ajBtreeCacheRead(AjPBtcache cache, ajlong pageno)
 ** Sync all dirty cache pages
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] rootpage [ajlong] root page
+** @param [r] rootpage [ajulong] root page
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajBtreeCacheSync(AjPBtcache cache, ajlong rootpage)
+void ajBtreeCacheSync(AjPBtcache cache, ajulong rootpage)
 {
     AjPBtpage page = NULL;
+    ajuint numlocked = 0;
+    ajuint numwrite = 0;
 
     /* ajDebug("In ajBtreeCacheSync\n");*/
 
-    for(page=cache->lru;page;page=page->next)
-	if(page->dirty == BT_DIRTY || page->dirty == BT_LOCK)
-	    btreeCacheDestage(cache,page);
+    if(!cache->mru) /* cache unused*/
+        return;
 
+    statCallSync++;
+
+    for(page=cache->lru;page;page=page->next)
+    {
+	if(page->dirty)         /* BT_LOCK or BT_DIRTY */
+	{
+            numwrite++;
+            if(page->dirty == BT_LOCK)
+                numlocked++;
+            btreeCacheDestage(cache,page);
+        }
+    }
+
+    if(rootpage)
+    {
+        if(numlocked > 2)
+            ajWarn("CacheSync cache '%S' root: %Lu locked: %u",
+                   cache->filename, rootpage, numlocked);
+    }
+    else
+    {
+        if(numlocked > 1)
+            ajWarn("CacheSync cache '%S' root: zero locked: %u",
+                   cache->filename, numlocked);
+    }
+    
+                
     page = btreeCacheLocate(cache,rootpage);
     page->dirty = BT_LOCK;
+    page->lockfor = 1001;
+
+    if(rootpage)
+    {
+        page = btreeCacheLocate(cache,0L);
+        page->dirty = BT_LOCK;
+        page->lockfor = 1002;
+    }
+
+    statSyncLocked += numlocked;
+    statSyncWrite += numwrite;
+    return;
+}
+
+
+
+
+/* @func ajBtreeCacheRootSync *********************************************
+**
+** Reset locked pages to dirty and relock the specified secondary root page.
+**
+** Pages will be written only when they are removed from the cache.
+**
+** This function clears all locks.
+** The caller must relock the root page (zero) if needed.
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] rootpage [ajulong] secondary (locked) root page
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajBtreeCacheRootSync(AjPBtcache cache, ajulong rootpage)
+{
+    AjPBtpage page = NULL;
+    ajuint numlocked = 0;
+    ajuint numunlocked = 0;
+
+    /*ajDebug("In ajBtreeCacheRootSync '%S' rootpage:%Lu\n",
+      cache->filename, rootpage);*/
+
+    statCallRootSync++;
+
+    for(page=cache->lru;page;page=page->next)
+    {
+        if(page->dirty == BT_LOCK)
+        {
+            numlocked++;
+            if(page->pagepos)
+            {
+                if(page->pagepos != rootpage)
+                {
+                    numunlocked++;
+                    page->dirty = BT_DIRTY;
+                    ajWarn("ajBtreeCacheRootSync locked '%Lu' lockfor: %u",
+                            page->pagepos, page->lockfor);
+#if AJINDEX_DEBUG                    
+                    ajDebug("ajBtreeCacheRootSync locked '%Lu' lockfor: %u\n",
+                            page->pagepos, page->lockfor);
+#endif
+                }
+            }
+        }
+    }
+    
+    if(numunlocked > statRootSyncMaxUnlocked)
+        statRootSyncMaxUnlocked = numunlocked;
+
+    if(numlocked > statRootSyncMaxLocked)
+        statRootSyncMaxLocked = numlocked;
+
+    statRootSyncLocked += numlocked;
+    statRootSyncUnlocked += numunlocked;
+
+    page = btreeCacheLocate(cache,rootpage);
+    page->dirty = BT_LOCK;      /* (re)lock the secondary root page */
+    page->lockfor = 1011;
 
     return;
 }
@@ -870,19 +2341,202 @@ void ajBtreeCacheSync(AjPBtcache cache, ajlong rootpage)
 ** Get a pointer to a disc cache page for writing
 **
 ** @param [w] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
 ** @return [AjPBtpage] disc cache page pointer
 ** @@
 ******************************************************************************/
 
-AjPBtpage ajBtreeCacheWrite(AjPBtcache cache, ajlong pageno)
+AjPBtpage ajBtreeCacheWrite(AjPBtcache cache, ajulong pagepos)
 {
     AjPBtpage ret = NULL;
 
-    /* ajDebug("In ajBtreeCacheWrite\n");*/
+#if AJINDEX_DEBUG
+    ajDebug("ajBtreeCacheWrite %Lu\n", pagepos);
+#endif
 
-    ret = btreeCacheControl(cache,pageno,BT_WRITE);
+    ret = btreeCacheControl(cache,pagepos,BT_WRITE);
+
+    return ret;
+}
+
+
+
+
+/* @func ajBtreeCacheWriteBucket ******************************************
+**
+** Get a pointer to a disc cache page for writing
+**
+** @param [w] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+**
+** @return [AjPBtpage] disc cache page pointer
+** @@
+******************************************************************************/
+
+AjPBtpage ajBtreeCacheWriteBucket(AjPBtcache cache, ajulong pagepos)
+{
+    AjPBtpage ret = NULL;
+
+    /* ajDebug("In ajBtreeCacheWriteBucket\n");*/
+
+    ret = btreeCacheControl(cache,pagepos,BT_WRITE);
+
+    return ret;
+}
+
+
+
+
+/* @func ajBtreeCacheWriteNode ******************************************
+**
+** Get a pointer to a disc cache page for writing a node
+**
+** @param [w] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+**
+** @return [AjPBtpage] disc cache page pointer
+** @@
+******************************************************************************/
+
+AjPBtpage ajBtreeCacheWriteNode(AjPBtcache cache, ajulong pagepos)
+{
+    AjPBtpage ret = NULL;
+
+    /* ajDebug("In ajBtreeCacheWriteNode\n");*/
+
+    ret = btreeCacheControl(cache,pagepos,BT_WRITE);
+
+    return ret;
+}
+
+
+
+
+/* @func ajBtreeCacheWriteBucketnew *******************************************
+**
+** Get a pointer to a new disc cache page for writing a bucket.
+**
+** Clears the page.
+**
+** @param [w] cache [AjPBtcache] cache
+**
+** @return [AjPBtpage] disc cache page pointer
+** @@
+******************************************************************************/
+
+AjPBtpage ajBtreeCacheWriteBucketnew(AjPBtcache cache)
+{
+    AjPBtpage ret = NULL;
+    unsigned char *p;
+
+#if AJINDEX_DEBUG
+    ajDebug("ajBtreeCacheWriteBucketnew pagepos:%Lu\n", cache->totsize);
+#endif
+
+    ret = btreeCacheControl(cache,cache->totsize,BT_WRITE);
+    p = ret->buf;
+    AJCSET0(p, cache->pagesize); /* clear buffer to zeros */
+/*
+    ret->next = NULL;
+    ret->prev = NULL;
+*/
+    ret->dirty = BT_CLEAN;
+
+    ret->pagepos = cache->totsize;
+
+    cache->totsize += cache->pagesize;
+    cache->pagecount++;
+
+    return ret;
+}
+
+
+
+
+/* @func ajBtreeCacheWriteNodenew *********************************************
+**
+** Get a pointer to a new disc cache page for writing a node
+**
+** Clears the page and sets the block number.
+**
+** @param [w] cache [AjPBtcache] cache
+**
+** @return [AjPBtpage] disc cache page pointer
+** @@
+******************************************************************************/
+
+AjPBtpage ajBtreeCacheWriteNodenew(AjPBtcache cache)
+{
+    AjPBtpage ret = NULL;
+    unsigned char *p;
+
+#if AJINDEX_DEBUG
+    ajDebug("ajBtreeCacheWriteNodenew pagepos:%Lu\n", cache->totsize);
+#endif
+
+    ret = btreeCacheControl(cache,cache->totsize,BT_WRITE);
+    p = ret->buf;
+    AJCSET0(p, cache->pagesize); /* clear buffer to zeros */
+/*
+    ret->next = NULL;
+    ret->prev = NULL;
+*/
+    ret->dirty = BT_CLEAN;
+
+    ret->pagepos = cache->totsize;
+
+    SBT_BLOCKNUMBER(p,ret->pagepos);
+
+    cache->totsize += cache->pagesize;
+    cache->pagecount++;
+
+    return ret;
+}
+
+
+
+
+/* @func ajBtreeCacheWriteOverflownew *****************************************
+**
+** Get a pointer to a new disc cache page for writing an overflow node
+**
+** Clears the page and sets the block number and nodetype
+**
+** @param [w] cache [AjPBtcache] cache
+**
+** @return [AjPBtpage] disc cache page pointer
+** @@
+******************************************************************************/
+
+AjPBtpage ajBtreeCacheWriteOverflownew(AjPBtcache cache)
+{
+    AjPBtpage ret = NULL;
+    unsigned char *p;
+    ajuint v;
+
+#if AJINDEX_DEBUG
+    ajDebug("ajBtreeCacheWriteOverflownew pagepos:%Lu\n", cache->totsize);
+#endif
+
+    ret = btreeCacheControl(cache,cache->totsize,BT_WRITE);
+    p = ret->buf;
+    AJCSET0(p, cache->pagesize); /* clear buffer to zeros */
+/*
+    ret->next = NULL;
+    ret->prev = NULL;
+*/
+    ret->dirty = BT_CLEAN;
+
+    ret->pagepos = cache->totsize;
+
+    SBT_BLOCKNUMBER(p,ret->pagepos);
+
+    v = BT_OVERFLOW;
+    SBT_NODETYPE(p,v);
+
+    cache->totsize += cache->pagesize;
+    cache->pagecount++;
 
     return ret;
 }
@@ -897,31 +2551,35 @@ AjPBtpage ajBtreeCacheWrite(AjPBtcache cache, ajlong pageno)
 ** The root node is at block 0L
 **
 ** @param [w] cache [AjPBtcache] cache
-** @param [r] rootpage [ajlong] root block
+** @param [r] rootpage [ajulong] root block
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajBtreeCreateRootNode(AjPBtcache cache, ajlong rootpage)
+void ajBtreeCreateRootNode(AjPBtcache cache, ajulong rootpage)
 {
     AjPBtpage page = NULL;
     unsigned char *p;
-    ajint nodetype;
-    ajlong blocknumber;
-    ajint nkeys;
-    ajint totlen;
-    ajlong left;
-    ajlong right;
-    ajlong overflow;
-    ajlong prev;
+    ajuint nodetype;
+    ajulong blocknumber;
+    ajuint nkeys;
+    ajuint totlen;
+    ajulong left;
+    ajulong right;
+    ajulong overflow;
+    ajulong prev;
 
-    /* ajDebug("In ajBtreeCreateRootNode\n"); */
+#if AJINDEX_DEBUG
+    ajDebug("ajBtreeCreateRootNode %Lu\n", rootpage); 
+#endif
 
-    page = ajBtreeCacheWrite(cache,rootpage);
+    if(rootpage == cache->totsize)
+        page = ajBtreeCacheWriteNodenew(cache);
+    else
+        page = ajBtreeCacheWrite(cache,rootpage);
 
-    page->pageno    = rootpage;
-    cache->totsize += cache->pagesize;
+    page->pagepos    = rootpage;
     
     p = page->buf;
 
@@ -945,8 +2603,11 @@ void ajBtreeCreateRootNode(AjPBtcache cache, ajlong rootpage)
     SBT_OVERFLOW(p,overflow);
 
     page->dirty = BT_DIRTY;
-    ajBtreeCacheSync(cache,rootpage);
+
+    if(btreeDoRootSync)
+        ajBtreeCacheRootSync(cache,rootpage);
     page->dirty = BT_LOCK;
+    page->lockfor = 1021;
 
     return;
 }
@@ -959,13 +2620,13 @@ void ajBtreeCreateRootNode(AjPBtcache cache, ajlong rootpage)
 ** Find the node that should contain a new key for insertion
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const char*] key to search for 
+** @param [r] key [const AjPStr] key to search for 
 **
 ** @return [AjPBtpage] leaf node where item should be inserted
 ** @@
 ******************************************************************************/
 
-AjPBtpage ajBtreeFindInsert(AjPBtcache cache, const char *key)
+AjPBtpage ajBtreeFindInsert(AjPBtcache cache, const AjPStr key)
 {
     AjPBtpage root = NULL;
     AjPBtpage ret  = NULL;
@@ -976,7 +2637,8 @@ AjPBtpage ajBtreeFindInsert(AjPBtcache cache, const char *key)
     root = btreeCacheLocate(cache,0L);
 
     if(!root)
-	ajFatal("The PRI root cache page has been unlocked\n");
+	ajFatal("The PRI root cache page in %S has been unlocked\n",
+                cache->filename);
     
     if(!cache->level)
 	return root;
@@ -995,21 +2657,21 @@ AjPBtpage ajBtreeFindInsert(AjPBtcache cache, const char *key)
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] page
-** @param [r] item [const char*] key to search for 
+** @param [r] item [const AjPStr] key to search for 
 **
 ** @return [AjPBtpage] leaf node where item should be inserted
 ** @@
 ******************************************************************************/
 
 static AjPBtpage btreeFindINode(AjPBtcache cache, AjPBtpage page,
-				 const char *item)
+				 const AjPStr item)
 {
     AjPBtpage ret = NULL;
     AjPBtpage pg  = NULL;
 
     unsigned char *buf = NULL;
-    ajint status       = 0;
-    ajint ival         = 0;
+    ajuint status       = 0;
+    ajuint ival         = 0;
 
     /* ajDebug("In btreeFindINode\n"); */
     
@@ -1021,11 +2683,12 @@ static AjPBtpage btreeFindINode(AjPBtcache cache, AjPBtpage page,
     {
 	status = ret->dirty;
 	ret->dirty = BT_LOCK;	/* Lock in case of lots of overflow pages */
+        ret->lockfor = 1031;
 	pg = btreePageFromKey(cache,buf,item);
 	ret->dirty = status;
 	ret = btreeFindINode(cache,pg,item);
     }
-    
+
     return ret;
 }
 
@@ -1038,21 +2701,21 @@ static AjPBtpage btreeFindINode(AjPBtcache cache, AjPBtpage page,
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] page
-** @param [r] item [const char*] key to search for 
+** @param [r] item [const AjPStr] key to search for 
 **
 ** @return [AjPBtpage] leaf node where item should be inserted
 ** @@
 ******************************************************************************/
 
 static AjPBtpage btreeSecFindINode(AjPBtcache cache, AjPBtpage page,
-				 const char *item)
+                                   const AjPStr item)
 {
     AjPBtpage ret = NULL;
     AjPBtpage pg  = NULL;
 
     unsigned char *buf = NULL;
-    ajint status       = 0;
-    ajint ival         = 0;
+    ajuint status       = 0;
+    ajuint ival         = 0;
 
     /* ajDebug("In btreeSecFindINode\n"); */
     
@@ -1064,6 +2727,7 @@ static AjPBtpage btreeSecFindINode(AjPBtcache cache, AjPBtpage page,
     {
 	status = ret->dirty;
 	ret->dirty = BT_LOCK;	/* Lock in case of lots of overflow pages */
+        ret->lockfor = 1041;
 	pg = btreeSecPageFromKey(cache,buf,item);
 	ret->dirty = status;
 	ret = btreeSecFindINode(cache,pg,item);
@@ -1081,62 +2745,22 @@ static AjPBtpage btreeSecFindINode(AjPBtcache cache, AjPBtpage page,
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] buf [unsigned char *] page buffer
-** @param [r] key [const char *] key to search for 
+** @param [r] key [const AjPStr] key to search for 
 **
 ** @return [AjPBtpage] pointer to a page
 ** @@
 ******************************************************************************/
 
 static AjPBtpage btreePageFromKey(AjPBtcache cache, unsigned char *buf,
-				   const char *key)
+				   const AjPStr key)
 {
-    unsigned char *rootbuf = NULL;
-    ajint nkeys = 0;
-    ajint order = 0;
-    ajint i;
-    
-    ajlong blockno = 0L;
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong blockno = 0L;
     AjPBtpage page = NULL;
     
     /* ajDebug("In btreePageFromKey\n"); */
-    
-    rootbuf = buf;
 
-
-    GBT_NKEYS(rootbuf,&nkeys);
-    order = cache->order;
-
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-    btreeGetKeys(cache,rootbuf,&karray,&parray);
-    i = 0;
-
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
-	++i;
-
-    if(i==nkeys)
-    {
-	if(strcmp(key,karray[i-1]->Ptr)<0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
-
-    page =  ajBtreeCacheRead(cache,blockno);
+    blockno = btreeGetBlockS(cache,buf,key);
+    page = ajBtreeCacheRead(cache,blockno);
 
     return page;
 }
@@ -1150,59 +2774,21 @@ static AjPBtpage btreePageFromKey(AjPBtcache cache, unsigned char *buf,
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] buf [unsigned char *] page buffer
-** @param [r] key [const char *] key to search for 
+** @param [r] key [const AjPStr] key to search for 
 **
 ** @return [AjPBtpage] pointer to a page
 ** @@
 ******************************************************************************/
 
 static AjPBtpage btreeSecPageFromKey(AjPBtcache cache, unsigned char *buf,
-				     const char *key)
+				     const AjPStr key)
 {
-    unsigned char *rootbuf = NULL;
-    ajint nkeys = 0;
-    ajint order = 0;
-    ajint i;
-    
-    ajlong blockno = 0L;
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong blockno = 0L;
     AjPBtpage page = NULL;
     
     /* ajDebug("In btreePageFromKey\n"); */
     
-    rootbuf = buf;
-
-
-    GBT_NKEYS(rootbuf,&nkeys);
-    order = cache->sorder;
-
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-    btreeGetKeys(cache,rootbuf,&karray,&parray);
-    i = 0;
-
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
-	++i;
-
-    if(i==nkeys)
-    {
-	if(strcmp(key,karray[i-1]->Ptr)<0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    blockno = btreeGetBlockS(cache, buf, key);
 
     page =  ajBtreeCacheRead(cache,blockno);
 
@@ -1227,20 +2813,29 @@ AjPBtId ajBtreeIdNew(void)
 
     /* ajDebug("In ajBtreeIdNew\n"); */
 
-    AJNEW0(Id);
-    Id->id = ajStrNew();
+    if(statSaveBtreeIdNext)
+    {
+        Id = statSaveBtreeId[--statSaveBtreeIdNext];
+        MAJSTRASSIGNCLEAR(&Id->id);
+    }
+    else
+    {
+        AJNEW0(Id);
+        Id->id = ajStrNew();
+    }
+
     Id->dbno = 0;
     Id->dups = 0;
     Id->offset = 0L;
     Id->refoffset = 0L;
-    
+
     return Id;
 }
 
 
 
 
-/* @func ajBtreeIdDel *********************************************
+/* @func ajBtreeIdDel *********************************************************
 **
 ** Destructor for index bucket ID information
 **
@@ -1252,20 +2847,197 @@ AjPBtId ajBtreeIdNew(void)
 
 void ajBtreeIdDel(AjPBtId *thys)
 {
-    AjPBtId Id = NULL;
+    ajuint newmax;
 
     /* ajDebug("In ajBtreeIdDel\n"); */
+
+    if(!statSaveBtreeId)
+    {
+        statSaveBtreeIdMax = 2048;
+        AJCNEW0(statSaveBtreeId, statSaveBtreeIdMax);
+        statSaveBtreeIdNext = 0;
+    }
+
+    if(!thys || !*thys)
+	return;
+
+    if(statSaveBtreeIdNext >= statSaveBtreeIdMax) 
+    {
+        newmax = statSaveBtreeIdMax + statSaveBtreeIdMax;
+        AJCRESIZE0(statSaveBtreeId,statSaveBtreeIdMax,newmax);
+        statSaveBtreeIdMax = newmax;
+    }
+    
+    statSaveBtreeId[statSaveBtreeIdNext++] = *thys;
+    
+    *thys = NULL;
+
+    return;
+}
+
+
+
+
+/* @func ajBtreeIdDelVoid *****************************************************
+**
+** Destructor for index bucket ID information
+**
+** @param [w] voidarg [void**] Index ID object, passed as void for use by
+**                             list and table destructors.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajBtreeIdDelVoid(void **voidarg)
+{
+    AjPBtId *thys = (AjPBtId *)voidarg;
+
+    ajBtreeIdDel(thys);
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeIdFree *********************************************
+**
+** Destructor for index bucket ID information
+**
+** @param [w] thys [AjPBtId*] index ID object
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeIdFree(AjPBtId *thys)
+{
+    AjPBtId Id = NULL;
+
+    /* ajDebug("In ajBtreeIdFree\n"); */
 
     if(!thys || !*thys)
 	return;
 
     Id = *thys;
-    
+
     ajStrDel(&Id->id);
     AJFREE(Id);
     *thys = NULL;
 
     return;
+}
+
+
+
+
+/* @funcstatic btreeBucketIdlist ***********************************************
+**
+** Copies all IDs into a list
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+** @param [u] idlist [AjPList] list to hold IDs
+**
+** @return [ajulong] Overflow
+** @@
+******************************************************************************/
+
+static ajulong btreeBucketIdlist(AjPBtcache cache, ajulong pagepos,
+                                 AjPList idlist)
+{
+    AjPBtpage page      = NULL;
+    AjPBtpage lpage     = NULL;
+    unsigned char *buf  = NULL;
+    unsigned char *kptr = NULL;
+    AjPBtId id          = NULL;
+    
+    unsigned char *idptr = NULL;
+    
+    ajuint  nodetype  = 0;
+    ajuint  nentries  = 0;
+    ajulong overflow  = 0L;
+    ajulong pageoverflow = 0L;
+    ajuint  dirtysave = 0;
+    
+    ajuint  i;
+    ajuint  len = 0;
+    ajuint idlen;
+
+    /* ajDebug("In btreeBucketIdlist\n"); */
+    
+    if(!pagepos)
+	ajFatal("BucketIdlist: cannot read bucket from root page cache %S",
+                cache->filename);
+
+    page  = ajBtreeCacheRead(cache,pagepos);
+    lpage = page;
+    dirtysave = lpage->dirty;
+    lpage->dirty = BT_LOCK;     /* reset on return */
+    lpage->lockfor = 1051;
+
+    buf = lpage->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_BUCKET)
+	ajFatal("BucketIdlist: NodeType mismatch. "
+                "Not bucket (%u) cache %S",
+                nodetype, cache->filename);
+    
+    GBT_BUCKNENTRIES(buf,&nentries);
+    if(nentries > cache->nperbucket)
+	ajFatal("BucketIdlist: Bucket too full page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->nperbucket, cache->filename);
+    
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    pageoverflow = overflow;
+    
+    kptr  = PBT_BUCKKEYLEN(buf);
+    idptr = kptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;++i)
+    {
+	BT_GETAJUINT(kptr,&len);
+        idlen = len - BT_DDOFFROFF-1;
+
+	if((idptr-buf+1) + len > cache->pagesize)	/* overflow */
+	{
+	    /* ajDebug("HybBucketIdlist: Overflow\n"); */
+	    page  = ajBtreeCacheRead(cache,overflow);
+	    buf = page->buf;
+	    GBT_BUCKNODETYPE(buf,&nodetype);
+	    if(nodetype != BT_BUCKET)
+		ajFatal("BucketIdlist: NodeType mismatch. "
+                        "Not bucket (%u) cache %S",
+			nodetype, cache->filename);
+	    GBT_BUCKOVERFLOW(buf,&overflow);
+	    /* overflow bucket ids start at the keylen position */
+	    idptr = PBT_BUCKKEYLEN(buf);
+	}
+
+	id = ajBtreeIdNew();
+        
+	/* Fill ID objects */
+	ajStrAssignLenC(&id->id,(const char *)idptr,idlen);
+	idptr += (idlen + 1);
+	BT_GETAJUINT(idptr,&id->dbno);
+	idptr += sizeof(ajuint);
+	BT_GETAJUINT(idptr,&id->dups);
+	idptr += sizeof(ajuint);	
+	BT_GETAJULONG(idptr,&id->offset);
+	idptr += sizeof(ajulong);
+	BT_GETAJULONG(idptr,&id->refoffset);
+	idptr += sizeof(ajulong);
+
+	kptr += sizeof(ajuint);
+        ajListPushAppend(idlist, id);
+    }
+
+    lpage->dirty = dirtysave;
+    
+    return pageoverflow;
 }
 
 
@@ -1277,13 +3049,13 @@ void ajBtreeIdDel(AjPBtId *thys)
 ** Creates one empty key slot for possible addition
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
 ** @return [AjPBucket] bucket
 ** @@
 ******************************************************************************/
 
-static AjPBucket btreeReadBucket(AjPBtcache cache, ajlong pageno)
+static AjPBucket btreeReadBucket(AjPBtcache cache, ajulong pagepos)
 {
     AjPBucket bucket    = NULL;
     AjPBtpage page      = NULL;
@@ -1294,90 +3066,326 @@ static AjPBucket btreeReadBucket(AjPBtcache cache, ajlong pageno)
     
     unsigned char *idptr = NULL;
     
-    ajint  nodetype  = 0;
-    ajint  nentries  = 0;
-    ajlong overflow  = 0L;
-    ajint  dirtysave = 0;
+    ajuint nodetype  = 0;
+    ajuint  nentries  = 0;
+    ajulong overflow  = 0L;
+    ajuint  dirtysave = 0;
     
-    ajint  i;
-    ajint  len = 0;
+    ajuint  i;
+    ajuint  len = 0;
+    ajuint idlen;
     
     /* ajDebug("In btreeReadBucket\n"); */
     
-    if(!pageno)
+    if(!pagepos)
 	ajFatal("BucketRead: cannot read bucket from root page");
 
-    page  = ajBtreeCacheRead(cache,pageno);
+    page  = ajBtreeCacheRead(cache,pagepos);
     lpage = page;
     dirtysave = lpage->dirty;
     lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1061;
 
     buf = lpage->buf;
 
     GBT_BUCKNODETYPE(buf,&nodetype);
 
     if(nodetype != BT_BUCKET)
-	ajFatal("ReadBucket: NodeType mismatch. Not bucket (%d)", nodetype);
+	ajFatal("ReadBucket: NodeType mismatch. Not bucket (%u)", nodetype);
     
     GBT_BUCKNENTRIES(buf,&nentries);
 
     if(nentries > cache->nperbucket)
-	ajFatal("ReadBucket: Bucket too full\n");
+	ajFatal("ReadBucket: Bucket too full page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->nperbucket, cache->filename);
     
 
     GBT_BUCKOVERFLOW(buf,&overflow);
 
-    AJNEW0(bucket);
-    bucket->NodeType = nodetype;
+    bucket = btreeBucketNew(cache->nperbucket);
     bucket->Nentries = nentries;
-    bucket->Overflow = overflow;
-    
-    AJCNEW0(bucket->keylen, nentries+1);
-    AJCNEW0(bucket->Ids, nentries+1);
-
     
     kptr  = PBT_BUCKKEYLEN(buf);
-    idptr = kptr + (nentries * sizeof(ajint));
+    idptr = kptr + (nentries * sizeof(ajuint));
 
     for(i=0;i<nentries;++i)
     {
-	BT_GETAJINT(kptr,&len);
+	BT_GETAJUINT(kptr,&len);
+        idlen = len - BT_DDOFFROFF-1;
 
 	if((idptr-buf+1) + len > cache->pagesize)	/* overflow */
 	{
+#if AJINDEX_DEBUG
 	    ajDebug("ReadBucket: Overflow\n");
+#endif
 	    page  = ajBtreeCacheRead(cache,overflow);
 	    buf = page->buf;
 	    GBT_BUCKNODETYPE(buf,&nodetype);
 	    if(nodetype != BT_BUCKET)
-		ajFatal("ReadBucket: NodeType mismatch. Not bucket (%d)",
+		ajFatal("ReadBucket: NodeType mismatch. Not bucket (%u)",
 			nodetype);
 	    GBT_BUCKOVERFLOW(buf,&overflow);
 	    /* overflow bucket ids start at the keylen position */
 	    idptr = PBT_BUCKKEYLEN(buf);
 	}
 
-	bucket->Ids[i] = ajBtreeIdNew();
 	id = bucket->Ids[i];
 
 	/* Fill ID objects */
-	ajStrAssignC(&id->id,(const char *)idptr);
-	idptr += (strlen((const char *)idptr) + 1);
+	ajStrAssignLenC(&id->id,(const char *)idptr, idlen);
+	idptr += (idlen + 1);
 	BT_GETAJUINT(idptr,&id->dbno);
-	idptr += sizeof(ajint);
+	idptr += sizeof(ajuint);
 	BT_GETAJUINT(idptr,&id->dups);
-	idptr += sizeof(ajint);	
-	BT_GETAJLONG(idptr,&id->offset);
-	idptr += sizeof(ajlong);
-	BT_GETAJLONG(idptr,&id->refoffset);
-	idptr += sizeof(ajlong);
+	idptr += sizeof(ajuint);	
+	BT_GETAJULONG(idptr,&id->offset);
+	idptr += sizeof(ajulong);
+	BT_GETAJULONG(idptr,&id->refoffset);
+	idptr += sizeof(ajulong);
 
-	kptr += sizeof(ajint);
+	kptr += sizeof(ajuint);
     }
 
     lpage->dirty = dirtysave;
     
     return bucket;
+}
+
+
+
+
+/* @funcstatic btreeBucketFindDupId ********************************************
+**
+** Tests for an ID in a bucket.
+** If found, returns the ID and its count in the bucket.
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+** @param [r] id [const AjPStr] id to search for
+** @param [w] ientry [ajuint*] entry number matched
+**
+** @return [AjPBtId] ID found
+** @@
+******************************************************************************/
+
+static AjPBtId btreeBucketFindDupId(AjPBtcache cache, ajulong pagepos,
+                                   const AjPStr id, ajuint* ientry)
+{
+    AjPBtId bid = NULL;
+    AjPBtpage page      = NULL;
+    AjPBtpage lpage     = NULL;
+    unsigned char *buf  = NULL;
+    unsigned char *lbuf  = NULL;
+    unsigned char *kptr = NULL;
+    
+    unsigned char *idptr = NULL;
+    
+    ajuint  nodetype  = 0;
+    ajuint  nentries  = 0;
+    ajulong overflow  = 0L;
+    ajuint  dirtysave = 0;
+
+    ajuint  i;
+    ajuint  len = 0;
+    ajuint  idlen;
+    
+    /* ajDebug("In btreeBucketFindId\n"); */
+    
+    if(!pagepos)
+	ajFatal("BucketFindDupId: cannot read bucket from root page cache %S",
+                cache->filename);
+
+    page  = ajBtreeCacheRead(cache,pagepos);
+    lpage = page;
+    dirtysave = lpage->dirty;
+    lpage->dirty = BT_LOCK;     /* reset on return */
+    lpage->lockfor = 1071;
+
+    buf = lpage->buf;
+    lbuf = buf;
+
+    GBT_BUCKNODETYPE(lbuf,&nodetype);
+    if(nodetype != BT_BUCKET)
+	ajFatal("BucketFindDupId: NodeType mismatch. "
+                "Not bucket (%u) cache %S",
+                nodetype, cache->filename);
+    
+    GBT_BUCKNENTRIES(lbuf,&nentries);
+    if(nentries > cache->nperbucket)
+	ajFatal("BucketFindDupId: Bucket too full page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->nperbucket, cache->filename);
+    
+
+    GBT_BUCKOVERFLOW(lbuf,&overflow);
+    
+    kptr  = PBT_BUCKKEYLEN(buf);
+    idptr = kptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;++i)
+    {
+	BT_GETAJUINT(kptr,&len);
+	if((idptr-buf+1) + len > cache->pagesize)	/* overflow */
+	{
+	    /* ajDebug("BucketFindId: Overflow\n"); */
+	    page  = ajBtreeCacheRead(cache,overflow);
+	    buf = page->buf;
+	    GBT_BUCKNODETYPE(buf,&nodetype);
+	    if(nodetype != BT_BUCKET)
+		ajFatal("BucketFindId: NodeType mismatch. "
+                        "Not bucket (%u) cache %S",
+			nodetype, cache->filename);
+	    GBT_BUCKOVERFLOW(buf,&overflow);
+	    /* overflow bucket ids start at the keylen position */
+	    idptr = PBT_BUCKKEYLEN(buf);
+	}
+
+	if(!MAJSTRCMPC(id,(const char*)idptr))
+        {
+            bid = ajBtreeIdNew();
+            idlen = len - BT_DDOFFROFF - 1;
+            ajStrAssignLenC(&bid->id,(const char *)idptr, idlen);
+            idptr += (idlen + 1);
+            BT_GETAJUINT(idptr,&bid->dbno);
+            idptr += sizeof(ajuint);
+            BT_GETAJUINT(idptr,&bid->dups);
+            idptr += sizeof(ajuint);	
+            BT_GETAJULONG(idptr,&bid->offset);
+            idptr += sizeof(ajulong);
+            BT_GETAJULONG(idptr,&bid->refoffset);
+            idptr += sizeof(ajulong);
+            *ientry = i;
+            lpage->dirty = dirtysave;
+            return bid;
+        }
+/* Step through ID object data */
+	idptr += len;
+        kptr += sizeof(ajuint);
+    }
+
+    lpage->dirty = dirtysave;
+
+    *ientry = nentries;
+    return NULL;
+}
+
+
+
+
+/* @funcstatic btreeWriteBucketId *********************************************
+**
+** Tests for an ID in a bucket.
+** If found, returns the ID and its count in the bucket.
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+** @param [r] btid [const AjPBtId] Bucket id to update
+** @param [r] ientry [ajuint] entry number for this ID
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeWriteBucketId(AjPBtcache cache, ajulong pagepos,
+                                const AjPBtId btid, ajuint ientry)
+{
+    AjPBtpage page      = NULL;
+    AjPBtpage lpage     = NULL;
+    unsigned char *buf  = NULL;
+    unsigned char *lbuf = NULL;
+    unsigned char *kptr = NULL;
+    
+    unsigned char *idptr = NULL;
+    
+    ajuint  nodetype  = 0;
+    ajuint  nentries  = 0;
+    ajulong overflow  = 0L;
+
+    ajuint  i;
+    ajuint  len = 0;
+    ajuint  idlen;
+    ajuint  v;
+    ajulong lv;
+    
+    /* ajDebug("In btreeWriteBucketId\n"); */
+    
+    if(!pagepos)
+	ajFatal("WriteBucketId: cannot read bucket from root page cache %S",
+                cache->filename);
+
+    page  = ajBtreeCacheRead(cache,pagepos);
+    lpage = page;
+    lpage->dirty = BT_LOCK;     /* reset on return */
+    lpage->lockfor = 1081;
+
+    buf = lpage->buf;
+    lbuf= buf;
+
+    GBT_BUCKNODETYPE(lbuf,&nodetype);
+    if(nodetype != BT_BUCKET)
+	ajFatal("WriteBucketId: NodeType mismatch. "
+                "Not bucket (%u) cache %S",
+                nodetype, cache->filename);
+    
+    GBT_BUCKNENTRIES(lbuf,&nentries);
+    if(nentries > cache->nperbucket)
+	ajFatal("WriteBucketId: Bucket too full page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->nperbucket, cache->filename);
+    
+
+    GBT_BUCKOVERFLOW(lbuf,&overflow);
+    
+    kptr  = PBT_BUCKKEYLEN(lbuf);
+    idptr = kptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<ientry;++i)
+    {
+	BT_GETAJUINT(kptr,&len);
+	if((idptr-buf+1) + len > cache->pagesize)	/* overflow */
+	{
+	    /* ajDebug("BucketFindId: Overflow\n"); */
+	    page  = ajBtreeCacheRead(cache,overflow);
+	    buf = page->buf;
+	    GBT_BUCKNODETYPE(buf,&nodetype);
+	    if(nodetype != BT_BUCKET)
+		ajFatal("WriteBucketId: NodeType mismatch. "
+                        "Not bucket (%u) cache %S",
+			nodetype, cache->filename);
+	    GBT_BUCKOVERFLOW(buf,&overflow);
+	    /* overflow bucket ids start at the keylen position */
+	    idptr = PBT_BUCKKEYLEN(buf);
+	}
+
+/* Step through ID object data */
+	idptr += len;
+        kptr += sizeof(ajuint);
+    }
+
+    BT_GETAJUINT(kptr,&len);
+    idlen = len - BT_DDOFFROFF - 1;
+    idptr += (idlen + 1);
+
+    v = btid->dbno;
+    BT_SETAJUINT(idptr,v);
+    idptr += sizeof(ajuint);
+
+    v = btid->dups;
+    BT_SETAJUINT(idptr,v);
+    idptr += sizeof(ajuint);	
+
+    lv = btid->offset;
+    BT_SETAJULONG(idptr,lv);
+    idptr += sizeof(ajulong);
+
+    lv = btid->refoffset;
+    BT_SETAJULONG(idptr,lv);
+    idptr += sizeof(ajulong);
+
+    lpage->dirty = BT_DIRTY;
+
+    return;
 }
 
 
@@ -1389,47 +3397,41 @@ static AjPBucket btreeReadBucket(AjPBtcache cache, ajlong pageno)
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [r] bucket [const AjPBucket] bucket
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeWriteBucket(AjPBtcache cache, const AjPBucket bucket,
-			     ajlong pageno)
+			     ajulong pagepos)
 {
     AjPBtpage page      = NULL;
     AjPBtpage lpage     = NULL;
     unsigned char *buf  = NULL;
     unsigned char *lbuf = NULL;
-    ajint   v   = 0;
-    ajint   i   = 0;
-    ajint   len = 0;
-    ajlong lv   = 0L;
+    ajuint  uv  = 0;
+    ajuint   v   = 0;
+    ajuint  i   = 0;
+    ajuint   len = 0;
+    ajulong lv   = 0L;
     AjPBtId id  = NULL;
 
-    ajint  nentries = 0;
-    ajlong overflow = 0L;
+    ajuint nentries = 0;
+    ajulong overflow = 0L;
     unsigned char *keyptr = NULL;
     unsigned char *lptr   = NULL;
-    ajlong   pno = 0L;
-    
-    /* ajDebug("In btreeWriteBucket\n"); */
 
-    if(pageno == cache->totsize)	/* Create a new page */
+    /* ajuint unused = 0;*/
+
+    if(pagepos == cache->totsize)	/* Create a new page */
     {
-	pno = pageno;
-	page = ajBtreeCacheWrite(cache,pageno);
-	page->pageno = cache->totsize;
-	cache->totsize += cache->pagesize;
+	page = ajBtreeCacheWriteBucketnew(cache);
 	buf = page->buf;
-	overflow = 0L;
-	lv = overflow;
-	SBT_BUCKOVERFLOW(buf,lv);
     }
     else
     {
-	page = ajBtreeCacheRead(cache,pageno);
+	page = ajBtreeCacheRead(cache,pagepos);
 	buf = page->buf;
 	GBT_BUCKOVERFLOW(buf,&overflow);
     }
@@ -1439,6 +3441,7 @@ static void btreeWriteBucket(AjPBtcache cache, const AjPBucket bucket,
 
     lbuf = buf;
     page->dirty = BT_LOCK;
+    page->lockfor = 1091;
     lpage = page;
 
     nentries = bucket->Nentries;
@@ -1447,23 +3450,25 @@ static void btreeWriteBucket(AjPBtcache cache, const AjPBucket bucket,
 
     /* Write out key lengths */
     keyptr = PBT_BUCKKEYLEN(lbuf);
+
     for(i=0;i<nentries;++i)
     {
-	if((ajint)((keyptr-lbuf+1)+sizeof(ajint)) > cache->pagesize)
-	    ajFatal("BucketWrite: Bucket cannot hold more than %d keys",
+	if((ajuint)((keyptr-lbuf+1)+sizeof(ajuint)) > cache->pagesize)
+	    ajFatal("BucketWrite: Bucket cannot hold more than %u keys",
 		    i-1);
 
 	id = bucket->Ids[i];
 	/* Need to alter this if bucket ID structure changes */
 	len = BT_BUCKIDLEN(id->id);
         v = len;
-	BT_SETAJINT(keyptr,v);
-	keyptr += sizeof(ajint);
+	BT_SETAJUINT(keyptr,v);
+	keyptr += sizeof(ajuint);
     }
 
 
     /* Write out IDs using overflow if necessary */
     lptr = keyptr;
+
     for(i=0;i<nentries;++i)
     {
 	id = bucket->Ids[i];
@@ -1472,22 +3477,12 @@ static void btreeWriteBucket(AjPBtcache cache, const AjPBucket bucket,
         /* overflow */        
 	if((lptr-buf+1) + (len+1+BT_DDOFFROFF) > (ajuint) cache->pagesize)
 	{
-    	    ajDebug("WriteBucket: Overflow\n");
 	    if(!overflow)		/* No overflow buckets yet */
 	    {
-		pno = cache->totsize;
-                lv = pno;
-		SBT_BUCKOVERFLOW(buf,lv);
-		page = ajBtreeCacheWrite(cache,pno);
-		page->pageno = cache->totsize;
-		cache->totsize += cache->pagesize;
+                page = ajBtreeCacheWriteBucketnew(cache);
 		buf = page->buf;
 		v = BT_BUCKET;
 		SBT_BUCKNODETYPE(buf,v);
-		v = 0;
-		SBT_BUCKNENTRIES(buf,v);
-		lv = 0L;
-		SBT_BUCKOVERFLOW(buf,lv);
 	    }
 	    else
 	    {
@@ -1497,31 +3492,104 @@ static void btreeWriteBucket(AjPBtcache cache, const AjPBucket bucket,
 	    }
 
 	    page->dirty = BT_DIRTY;
+
 	    lptr = PBT_BUCKKEYLEN(buf);	    
 	}
 	
 	sprintf((char *)lptr,"%s",ajStrGetPtr(id->id));
 	lptr += (ajStrGetLen(id->id) + 1);
-        v = id->dbno;
-	BT_SETAJINT(lptr,v);
-	lptr += sizeof(ajint);
-        v = id->dups;
-	BT_SETAJINT(lptr,v);
-	lptr += sizeof(ajint);
+        uv = id->dbno;
+	BT_SETAJUINT(lptr,uv);
+	lptr += sizeof(ajuint);
+        uv = id->dups;
+	BT_SETAJUINT(lptr,uv);
+	lptr += sizeof(ajuint);
         lv = id->offset;
-	BT_SETAJLONG(lptr,lv);
-	lptr += sizeof(ajlong);
+	BT_SETAJULONG(lptr,lv);
+	lptr += sizeof(ajulong);
         lv = id->refoffset;
-	BT_SETAJLONG(lptr,lv);
-	lptr += sizeof(ajlong);
-	
-
+	BT_SETAJULONG(lptr,lv);
+	lptr += sizeof(ajulong);
     }
 
     lv = 0L;
     SBT_BUCKOVERFLOW(buf,lv);
-    
+
+    /*
+    unused = cache->pagesize - (lptr - buf);
+    if(unused > cache->pagesize)
+        ajFatal("unused %u for pagesize %u", unused, cache->pagesize);
+    if(unused > 0)
+        memset(lptr, 0, unused);
+    */
+
     lpage->dirty = BT_DIRTY;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeWriteBucketEmpty *******************************************
+**
+** Write empty index bucket object to the cache given a disc page number
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeWriteBucketEmpty(AjPBtcache cache, ajulong pagepos)
+{
+    AjPBtpage page      = NULL;
+    unsigned char *buf  = NULL;
+    ajuint   v   = 0;
+    ajulong lv   = 0L;
+
+    ajuint  nentries = 0;
+    ajulong overflow = 0L;
+
+    /* ajuint unused = 0; */
+
+    /* ajDebug("In btreeWriteBucketEmpty\n"); */
+
+    if(pagepos == cache->totsize)	/* Create a new page */
+    {
+	page = ajBtreeCacheWriteBucketnew(cache);
+	buf = page->buf;
+	overflow = 0L;
+	lv = overflow;
+	SBT_BUCKOVERFLOW(buf,lv);
+    }
+    else
+    {
+	page = ajBtreeCacheRead(cache,pagepos);
+	buf = page->buf;
+	GBT_BUCKOVERFLOW(buf,&overflow);
+    }
+    
+    v = BT_BUCKET;
+    SBT_BUCKNODETYPE(buf,v);
+
+    nentries = 0;
+    v = nentries;
+    SBT_BUCKNENTRIES(buf,v);
+
+    lv = 0L;
+    SBT_BUCKOVERFLOW(buf,lv);
+
+    /*
+    unused = cache->pagesize - (lptr - buf);
+    if(unused > cache->pagesize)
+        ajFatal("unused %u for pagesize %u", unused, cache->pagesize);
+    if(unused > 0)
+        memset(lptr, 0, unused);
+    */
+
+    page->dirty = BT_DIRTY;
 
     return;
 }
@@ -1542,19 +3610,87 @@ static void btreeWriteBucket(AjPBtcache cache, const AjPBucket bucket,
 static void btreeBucketDel(AjPBucket *thys)
 {
     AjPBucket pthis = NULL;
-    ajint n;
-    ajint i;
-    
+    ajuint newmax;
+
     /* ajDebug("In btreeBucketDel\n"); */
 
     if(!thys || !*thys)
 	return;
 
+ 
     pthis = *thys;
-    n = pthis->Nentries;
+
+    if(!statSaveBucket)
+    {
+        statSaveBucketMax=2048;
+        statSaveBucketNext=0;
+        AJCNEW0(statSaveBucket,statSaveBucketMax);
+    }
+    
+    if(!statSaveBucketEmpty)
+    {
+        statSaveBucketEmptyMax=2048;
+        statSaveBucketEmptyNext=0;
+        AJCNEW0(statSaveBucketEmpty,statSaveBucketEmptyMax);
+    }
+    
+    if(pthis->Maxentries)
+    {
+        if(statSaveBucketNext >= statSaveBucketMax)
+        {
+            newmax = statSaveBucketMax + statSaveBucketMax;
+            AJCRESIZE0(statSaveBucket,statSaveBucketMax,newmax);
+            statSaveBucketMax = newmax;
+        }
+        
+        statSaveBucket[statSaveBucketNext++] = pthis;
+    }
+    else
+    {
+        if(statSaveBucketEmptyNext >= statSaveBucketEmptyMax)
+        {
+            newmax = statSaveBucketEmptyMax + statSaveBucketEmptyMax;
+            AJCRESIZE0(statSaveBucketEmpty,statSaveBucketEmptyMax,newmax);
+            statSaveBucketEmptyMax = newmax;
+        }
+        statSaveBucketEmpty[statSaveBucketEmptyNext++] = pthis;
+    }
+    
+    *thys = NULL;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeBucketFree *********************************************
+**
+** Delete a keyword primary bucket object
+**
+** @param [w] thys [AjPBucket*] bucket
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeBucketFree(AjPBucket *thys)
+{
+    AjPBucket pthis = NULL;
+    ajuint n;
+    ajuint i;
+    
+    /*ajDebug("In btreeBucketFree\n"); */
+
+    if(!thys || !*thys)
+	return;
+
+    pthis = *thys;
+
+    n = pthis->Maxentries;
 
     for(i=0;i<n;++i)
-	ajBtreeIdDel(&pthis->Ids[i]);
+	btreeIdFree(&pthis->Ids[i]);
     
     AJFREE(pthis->keylen);
     AJFREE(pthis->Ids);
@@ -1575,29 +3711,139 @@ static void btreeBucketDel(AjPBucket *thys)
 ** Only called if there is room in the bucket
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number of bucket
+** @param [r] pagepos [ajulong] page number of bucket
 ** @param [r] id [const AjPBtId] ID info
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void btreeAddToBucket(AjPBtcache cache, ajlong pageno,
+static void btreeAddToBucket(AjPBtcache cache, ajulong pagepos,
 			     const AjPBtId id)
+{
+    unsigned char *buf  = NULL;
+    unsigned char *kptr = NULL;
+    unsigned char *src  = NULL;
+    unsigned char *dest = NULL;
+
+    unsigned char *lastptr = NULL;
+    unsigned char *endptr  = NULL;
+    
+    ajuint nentries = 0;
+    ajuint nodetype = 0;
+    ajuint idlen    = 0;
+    
+    ajuint sum = 0;
+    ajuint len = 0;
+    ajuint i;
+    ajuint v;
+    ajuint uv;
+    ajulong lv;
+    
+    AjPBtpage page = NULL;
+    static ajuint calls = 0;
+    static ajuint overflowcalls=0;
+   
+    calls++;
+
+    page = ajBtreeCacheRead(cache,pagepos);
+    buf  = page->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_BUCKET)
+        ajFatal("Wrong nodetype in AddToBucket cache %S", cache->filename);
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    if(nentries == cache->snperbucket)
+        ajFatal("Bucket too full in AddToBucket page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->snperbucket, cache->filename);    
+
+    kptr = PBT_BUCKKEYLEN(buf);
+    src  = kptr + (nentries * sizeof(ajuint));
+
+    sum = 0;
+    for(i=0;i<nentries;++i)
+    {
+        BT_GETAJUINT(kptr,&len);
+        sum += len;
+        kptr += sizeof(ajuint);
+    }
+    /*sum += nentries;*/
+    
+    endptr  = src + sum - 1;
+    idlen   = MAJSTRGETLEN(id->id);
+    lastptr = endptr + sizeof(ajuint) + BT_DDOFFROFF + idlen + 1;
+    if((ajuint) (lastptr - buf) >= cache->pagesize)
+    {
+        overflowcalls++;
+        ajWarn("\nOverflow in AddToBucket nentries:%u fails %u/%u cache %S",
+               nentries, overflowcalls,calls, cache->filename);
+        btreeAddToBucketFull(cache,pagepos,id);
+        return;
+    }
+    
+    dest = src + sizeof(ajuint);
+    memmove((void *)dest, (void *)src, sum);
+
+    v = BT_BUCKIDLEN(id->id);
+    BT_SETAJUINT(src,v);
+
+    endptr += sizeof(ajuint) + 1;
+    strcpy((char *)endptr,MAJSTRGETPTR(id->id));
+    endptr += (MAJSTRGETLEN(id->id) + 1);
+    uv = id->dbno;
+    BT_SETAJUINT(endptr,uv);
+    endptr += sizeof(ajuint);
+    uv = id->dups;
+    BT_SETAJUINT(endptr,uv);
+    endptr += sizeof(ajuint);
+    lv = id->offset;
+    BT_SETAJULONG(endptr,lv);
+    endptr += sizeof(ajulong);
+    lv = id->refoffset;
+    BT_SETAJULONG(endptr,lv);
+    endptr += sizeof(ajulong);
+
+    v = nentries + 1;
+    SBT_BUCKNENTRIES(buf,v);
+
+    page->dirty = BT_DIRTY;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeAddToBucketFull *******************************************
+**
+** Add an ID to a bucket
+** Only called if there is room in the bucket
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number of bucket
+** @param [r] id [const AjPBtId] ID info
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeAddToBucketFull(AjPBtcache cache, ajulong pagepos,
+                                 const AjPBtId id)
 {
     AjPBucket bucket = NULL;
     AjPBtId   destid = NULL;
     
-    ajint nentries;
+    ajuint nentries;
     
     /* ajDebug("In btreeAddToBucket\n"); */
 
-    bucket   = btreeReadBucket(cache,pageno);
+    bucket   = btreeReadBucket(cache,pagepos);
     nentries = bucket->Nentries;
 
 
     /* Reading a bucket always gives one extra ID position */
-    bucket->Ids[nentries] = ajBtreeIdNew();
     destid = bucket->Ids[nentries];
 
     ajStrAssignS(&destid->id,id->id);
@@ -1608,7 +3854,7 @@ static void btreeAddToBucket(AjPBtcache cache, ajlong pageno,
     
     ++bucket->Nentries;
 
-    btreeWriteBucket(cache,bucket,pageno);
+    btreeWriteBucket(cache,bucket,pagepos);
 
     btreeBucketDel(&bucket);
     
@@ -1623,32 +3869,32 @@ static void btreeAddToBucket(AjPBtcache cache, ajlong pageno,
 ** Return number of entries in a bucket
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
-** @return [ajint] Number of entries in bucket
+** @return [ajuint] Number of entries in bucket
 ** @@
 ******************************************************************************/
 
-static ajint btreeNumInBucket(AjPBtcache cache, ajlong pageno)
+static ajuint btreeNumInBucket(AjPBtcache cache, ajulong pagepos)
 {
     AjPBtpage page     = NULL;
     unsigned char *buf = NULL;
-    ajint  nodetype    = 0;
-    ajint  nentries    = 0;
+    ajuint nodetype    = 0;
+    ajuint nentries    = 0;
     
     /* ajDebug("In btreeNumInBucket\n"); */
     
-    if(!pageno)
+    if(!pagepos)
 	ajFatal("NumInBucket: Attempt to read bucket from root page\n");
 
-    page  = ajBtreeCacheRead(cache,pageno);
+    page  = ajBtreeCacheRead(cache,pagepos);
 
     buf = page->buf;
 
     GBT_BUCKNODETYPE(buf,&nodetype);
 
     if(nodetype != BT_BUCKET)
-	ajFatal("ReadBucket: NodeType mismatch. Not bucket (%d)", nodetype);
+	ajFatal("ReadBucket: NodeType mismatch. Not bucket (%u)", nodetype);
     
     GBT_BUCKNENTRIES(buf,&nentries);
 
@@ -1658,7 +3904,7 @@ static ajint btreeNumInBucket(AjPBtcache cache, ajlong pageno)
 
 
 
-/* @funcstatic btreeReorderBuckets *****************************************
+/* @funcstatic btreeReorderBuckets ********************************************
 **
 ** Re-order leaf buckets
 ** Must only be called if one of the buckets is full
@@ -1672,126 +3918,98 @@ static ajint btreeNumInBucket(AjPBtcache cache, ajlong pageno)
 
 static AjBool btreeReorderBuckets(AjPBtcache cache, AjPBtpage leaf)
 {
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
     unsigned char *lbuf = NULL;
-    AjPBucket *buckets  = NULL;
-    AjPStr *keys        = NULL;
-    ajlong *ptrs        = NULL;
-    ajlong *overflows   = NULL;
+
+    AjPBtMem arrays1 = NULL;
+    AjPBtMem arrays2 = NULL;
+    ajulong *ptrs        = NULL;
+    AjPStr *newkeys     = NULL;
+    ajulong *newptrs     = NULL;
+    ajulong *overflows   = NULL;
     
-    ajint i = 0;
-    ajint j = 0;
+    ajuint i = 0;
     
-    ajint order;
-    ajint bentries      = 0;
-    ajint totalkeys     = 0;
-    ajint nperbucket    = 0;
-    ajint maxnperbucket = 0;
-    ajint count         = 0;
-    ajint totkeylen     = 0;
-    ajint keylimit      = 0;
-    ajint bucketn       = 0;
-    ajint bucketlimit   = 0;
-    ajint nodetype      = 0;
+    ajuint order;
+    ajuint totalkeys     = 0;
+    ajuint maxnperbucket = 0;
+    ajuint count         = 0;
+    ajuint totkeylen     = 0;
+    ajuint keylimit      = 0;
+    ajuint bucketlimit   = 0;
+    ajuint nodetype      = 0;
     
     AjPList idlist    = NULL;
-    ajint   dirtysave = 0;
+    ajuint  dirtysave = 0;
     AjPBtId bid       = NULL;
     AjPBucket cbucket = NULL;
     AjPBtId cid       = NULL;
-
-    ajint   v = 0;
+    ajuint iold = 0;
     
+#if AJINDEX_DEBUG
+    ajDebug("btreeReorderBuckets %Lu\n", leaf->pagepos);
+#endif
+    ++statCallReorderBuckets;
+
     /* ajDebug("In btreeReorderBuckets\n"); */
 
     dirtysave = leaf->dirty;
 
     leaf->dirty = BT_LOCK;
+    leaf->lockfor = 1101;
     lbuf = leaf->buf;
 
     GBT_NODETYPE(lbuf,&nodetype);
 
-    order = cache->order;
-    nperbucket = cache->nperbucket;
-    
+    order = cache->order;    
 
     /* Read keys/ptrs */
-    AJCNEW0(keys,order);
-    AJCNEW0(ptrs,order);
-    AJCNEW0(overflows,order);
-    
-    for(i=0;i<order;++i)
-	keys[i] = ajStrNew();
+    arrays1 = btreeAllocPriArray(cache);
+    ptrs = arrays1->parray;
 
-    btreeGetKeys(cache,lbuf,&keys,&ptrs);
+    ptrs = arrays1->parray;
+
+    btreeGetPointers(cache,lbuf,&ptrs);
 
     GBT_NKEYS(lbuf,&nkeys);
 
 
     if(!nkeys)
-	ajFatal("BucketReorder: Attempt to reorder empty leaf");
+	ajFatal("ReorderBuckets: Attempt to reorder empty leaf");
 
+    keylimit = nkeys + 1;
     for(i=0;i<nkeys;++i)
 	totalkeys += btreeNumInBucket(cache,ptrs[i]);
 
     totalkeys += btreeNumInBucket(cache,ptrs[i]);
 
-    /* Set the number of entries per bucket to approximately half full */
-    maxnperbucket = nperbucket >> 1;
+    btreeBucketCalc(totalkeys, keylimit, cache->nperbucket,
+                    &bucketlimit, &maxnperbucket);
 
-    if(!maxnperbucket)
-	++maxnperbucket;
-
-    /* Work out the number of new buckets needed */
-    bucketn = (totalkeys / maxnperbucket);
-
-    if(totalkeys % maxnperbucket)
-	++bucketn;
-    
-    if(bucketn > order)
+    if(bucketlimit >= order)
     {
-	for(i=0;i<order;++i)
-	    ajStrDel(&keys[i]);
-
-	AJFREE(keys);
-	AJFREE(ptrs);
-	AJFREE(overflows);
+        btreeDeallocPriArray(cache, arrays1);
 	
 	leaf->dirty = dirtysave;
 	return ajFalse;
     }
     
-
-    /* Read buckets */
-    AJCNEW0(buckets,nkeys+1);
-    keylimit = nkeys + 1;
+    arrays2 = btreeAllocPriArray(cache);
+    newkeys = arrays2->karray;
+    newptrs = arrays2->parray;
+    overflows = arrays2->overflows;
     
-    for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadBucket(cache,ptrs[i]);
-
-
     /* Read IDs from all buckets and push to list and sort (increasing id) */
     idlist  = ajListNew();
     
     for(i=0;i<keylimit;++i)
-    {
-	overflows[i] = buckets[i]->Overflow;
-	bentries = buckets[i]->Nentries;
-
-	for(j=0;j<bentries;++j)
-	    ajListPush(idlist,(void *)buckets[i]->Ids[j]);
-	
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->Ids);
-	AJFREE(buckets[i]);
-    }
+	overflows[i] = btreeBucketIdlist(cache,ptrs[i],idlist);
 
     ajListSort(idlist,btreeIdCompare);
-    AJFREE(buckets);
+
 
     cbucket = btreeBucketNew(maxnperbucket);
-    bucketlimit = bucketn - 1;
-    
+    iold=0;
     for(i=0;i<bucketlimit;++i)
     {
 	cbucket->Overflow = overflows[i];
@@ -1818,14 +4036,15 @@ static AjBool btreeReorderBuckets(AjPBtcache cache, AjPBtpage leaf)
 
 
 	ajListPeek(idlist,(void **)&bid);
-	ajStrAssignS(&keys[i],bid->id);
+	ajStrAssignS(&newkeys[i],bid->id);
 
 	totkeylen += ajStrGetLen(bid->id);
 
-	if(!ptrs[i])
-	    ptrs[i] = cache->totsize;
-
-	btreeWriteBucket(cache,cbucket,ptrs[i]);
+	if((iold < order) && ptrs[iold])
+            newptrs[i] = ptrs[iold++];
+        else
+	    newptrs[i] = cache->totsize;
+	btreeWriteBucket(cache,cbucket,newptrs[i]);
     }
 
 
@@ -1850,36 +4069,40 @@ static AjBool btreeReorderBuckets(AjPBtcache cache, AjPBtpage leaf)
 	ajBtreeIdDel(&bid);
     }
     
-    
-    if(!ptrs[i])
-	ptrs[i] = cache->totsize;
+    if((iold < order) && ptrs[iold])
+        newptrs[i] = ptrs[iold++];
+    else
+        newptrs[i] = cache->totsize;
+     btreeWriteBucket(cache,cbucket,newptrs[i]);
 
-    btreeWriteBucket(cache,cbucket,ptrs[i]);
-
-    cbucket->Nentries = maxnperbucket;
     btreeBucketDel(&cbucket);
+
+#if AJINDEX_DEBUG
+    if(iold < keylimit)
+        ajDebug("btreeReorderBuckets '%S' %u -> %u",
+                cache->filename, keylimit, iold);
+#endif
+
+    for(i = iold+1; i <= keylimit; i++)
+    {
+        btreePageSetfree(cache, ptrs[i]);
+    }
 
     /* Now write out a modified leaf with new keys/ptrs */
 
-    nkeys = bucketn - 1;
-    v = nkeys;
-    SBT_NKEYS(lbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(lbuf,v);
-
-    btreeWriteNode(cache,leaf,keys,ptrs,nkeys);
+    nkeys = bucketlimit;
+    btreeWriteNode(cache,leaf,newkeys,newptrs,nkeys);
 
     leaf->dirty = BT_DIRTY;
 
     if(nodetype == BT_ROOT)
+    {
 	leaf->dirty = BT_LOCK;
-    
-    for(i=0;i<order;++i)
-	ajStrDel(&keys[i]);
-    AJFREE(keys);
-    AJFREE(ptrs);
-    AJFREE(overflows);
-    
+        leaf->lockfor = 1102;
+    }
+
+    btreeDeallocPriArray(cache, arrays1);
+    btreeDeallocPriArray(cache, arrays2);
 
     btreeBucketDel(&cbucket);
     ajListFree(&idlist);
@@ -1890,7 +4113,7 @@ static AjBool btreeReorderBuckets(AjPBtcache cache, AjPBtpage leaf)
 
 
 
-/* @funcstatic btreeNodeIsFull *****************************************
+/* @funcstatic btreeNodeIsFull ************************************************
 **
 ** Tests whether a node is full of keys
 **
@@ -1904,7 +4127,7 @@ static AjBool btreeReorderBuckets(AjPBtcache cache, AjPBtpage leaf)
 static AjBool btreeNodeIsFull(const AjPBtcache cache, AjPBtpage page)
 {
     unsigned char *buf = NULL;
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
 
     /* ajDebug("In btreeNodeIsFull\n"); */
 
@@ -1915,6 +4138,122 @@ static AjBool btreeNodeIsFull(const AjPBtcache cache, AjPBtpage page)
 	return ajTrue;
 
     return ajFalse;
+}
+
+
+
+
+
+/* @func ajBtreeDumpKeywords **************************************************
+**
+** Read the leaves of a secondary keywords tree
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] dmin [ajuint] minimum number of times the key should appear
+** @param [r] dmax [ajuint] maximum number of times the key should appear
+** @param [u] outf [AjPFile] output file
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajBtreeDumpKeywords(AjPBtcache cache,
+                         ajuint dmin, ajuint dmax, AjPFile outf)
+{
+    ajulong *parray;
+    AjPBtpage page;
+    unsigned char *buf;
+    ajuint nodetype;
+    ajuint i;
+    ajuint j;
+    ajuint kdups;
+    
+    AjPPriBucket bucket;
+    ajuint nkeys;
+    ajulong right;
+    AjPBtMem array = NULL;
+    AjPList tlist  = NULL;
+    ajuint dirtysave = 0;
+    ajulong totkeys = 0L;
+    ajulong totdups = 0L;
+
+    if(!cache->secondary)
+    {
+        ajBtreeDumpHybKeys(cache, dmin, dmax, outf);
+        return;
+    }
+
+    array = btreeAllocPriArray(cache);
+    parray = array->parray;
+
+    page = ajBtreeCacheRead(cache, 0);
+    buf = page->buf;
+    dirtysave  = page->dirty;
+    page->dirty = BT_LOCK;
+    page->lockfor = 1111;
+
+    btreeGetPointers(cache,buf,&parray);
+    GBT_NODETYPE(buf,&nodetype);
+
+    while(nodetype != BT_LEAF && cache->level != 0)
+    {
+        page->dirty = dirtysave;
+	page = ajBtreeCacheRead(cache,parray[0]);
+        dirtysave  =page->dirty;
+        page->dirty = BT_LOCK;
+        page->lockfor = 1112;
+	buf = page->buf;
+	btreeGetPointers(cache,buf,&parray);
+	GBT_NODETYPE(buf,&nodetype);
+    }
+
+    do
+    {
+	GBT_NKEYS(buf,&nkeys);
+	for(i=0;i<=nkeys;++i)
+	{
+	    bucket = btreeReadPriBucket(cache,parray[i]);
+	    for(j=0;j<bucket->Nentries;++j)
+	    {
+                totkeys++;
+
+		tlist = ajBtreeSecLeafList(cache, bucket->codes[j]->treeblock);
+                kdups = ajListGetLength(tlist);
+                totdups += kdups;
+
+		ajListstrFreeData(&tlist);
+
+                if(kdups < dmin)
+                    continue;
+                if(dmax && kdups > dmax)
+                    continue;
+                ajFmtPrintF(outf,"%10d %S\n",
+                            kdups, bucket->codes[j]->keyword);
+	    }
+	    btreePriBucketDel(&bucket);
+	}
+
+	right = 0L;
+	if(cache->level)
+	{
+	    GBT_RIGHT(buf,&right);
+	    if(right)
+	    {
+                page->dirty = dirtysave;
+		page = ajBtreeCacheRead(cache,right);
+                dirtysave  =page->dirty;
+                page->dirty = BT_LOCK;
+                page->lockfor = 1113;
+		buf = page->buf;
+		btreeGetPointers(cache,buf,&parray);
+	    }
+	}
+    } while(right);
+
+    btreeDeallocPriArray(cache,array);
+    
+    ajFmtPrintF(outf,"\nTotal keywords: %Lu IDs: %Lu\n", totkeys, totdups);
+    return;
 }
 
 
@@ -1934,7 +4273,7 @@ static AjBool btreeNodeIsFull(const AjPBtcache cache, AjPBtpage page)
 static AjBool btreeNodeIsFullSec(const AjPBtcache cache, AjPBtpage page)
 {
     unsigned char *buf = NULL;
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
 
     /* ajDebug("In btreeNodeIsFull\n"); */
 
@@ -1957,43 +4296,42 @@ static AjBool btreeNodeIsFullSec(const AjPBtcache cache, AjPBtpage page)
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] original page
 ** @param [r] key [const AjPStr] key to insert
-** @param [r] less [ajlong] less-than pointer
-** @param [r] greater [ajlong] greater-than pointer
+** @param [r] less [ajulong] less-than pointer
+** @param [r] greater [ajulong] greater-than pointer
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeInsertNonFull(AjPBtcache cache, AjPBtpage page,
-			       const AjPStr key, ajlong less, ajlong greater)
+			       const AjPStr key,
+                               ajulong less, ajulong greater)
 {
     unsigned char *buf = NULL;
-    AjPStr *karray     = NULL;
-    ajlong *parray     = NULL;
-    ajint nkeys  = 0;
-    ajint order  = 0;
-    ajint ipos   = 0;
-    ajint i;
-    ajint count  = 0;
 
-    ajlong lv = 0L;
-    ajint  v  = 0;
-    
+    AjPStr *karray     = NULL;
+    ajulong *parray     = NULL;
+    AjPBtMem arrays1 = NULL;
+
+    ajuint nkeys  = 0;
+    ajuint ipos   = 0;
+    ajuint i;
+    ajint  ii;
+    ajuint count  = 0;
+
+    ajulong lv = 0L;
 
     AjPBtpage ppage = NULL;
-    ajlong pageno   = 0L;
+    ajulong pagepos   = 0L;
 
-    ajint nodetype = 0;
+    ajuint nodetype = 0;
     
     /* ajDebug("In btreeInsertNonFull\n"); */
 
-    order = cache->order;
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
+    arrays1 = btreeAllocPriArray(cache);
+    karray = arrays1->karray;
+    parray = arrays1->parray;
+ 
     buf = page->buf;
     GBT_NKEYS(buf,&nkeys);
     GBT_NODETYPE(buf,&nodetype);
@@ -2002,7 +4340,7 @@ static void btreeInsertNonFull(AjPBtcache cache, AjPBtpage page,
 
     i = 0;
 
-    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr) >= 0)
+    while(i!=nkeys && MAJSTRCMPS(key,karray[i]) >= 0)
 	++i;
 
     ipos = i;
@@ -2020,10 +4358,10 @@ static void btreeInsertNonFull(AjPBtcache cache, AjPBtpage page,
     {
 	parray[nkeys+1] = parray[nkeys];
 
-	for(i=nkeys-1; count>0; --count, --i)
+	for(ii=nkeys-1; count>0; --count, --ii)
 	{
-	    ajStrAssignS(&karray[i+1],karray[i]);
-	    parray[i+1] = parray[i];
+	    ajStrAssignS(&karray[ii+1],karray[ii]);
+	    parray[ii+1] = parray[ii];
 	}
 
 	ajStrAssignS(&karray[ipos],key);
@@ -2032,31 +4370,26 @@ static void btreeInsertNonFull(AjPBtcache cache, AjPBtpage page,
     }
 
     ++nkeys;
-    v = nkeys;
-    SBT_NKEYS(buf,v);
-
     btreeWriteNode(cache,page,karray,parray,nkeys);
 
     if(nodetype == BT_ROOT)
+    {
 	page->dirty = BT_LOCK;
-
-    pageno = page->pageno;
+        page->lockfor = 1121;
+    }
+    
+    pagepos = page->pagepos;
     ppage = ajBtreeCacheRead(cache,less);
-    lv = pageno;
+    lv = pagepos;
     SBT_PREV(ppage->buf,lv);
     ppage->dirty = BT_DIRTY;
+
     ppage = ajBtreeCacheRead(cache,greater);
-    lv = pageno;
+    lv = pagepos;
     SBT_PREV(ppage->buf,lv);
     ppage->dirty = BT_DIRTY;
     
-
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    btreeDeallocPriArray(cache,arrays1);
 
     if(nodetype != BT_ROOT)
 	btreeKeyShift(cache,page);
@@ -2074,55 +4407,57 @@ static void btreeInsertNonFull(AjPBtcache cache, AjPBtpage page,
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] original page
 ** @param [r] key [const AjPStr] key to insert
-** @param [r] less [ajlong] less-than pointer
-** @param [r] greater [ajlong] greater-than pointer
+** @param [r] less [ajulong] less-than pointer
+** @param [r] greater [ajulong] greater-than pointer
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeInsertKey(AjPBtcache cache, AjPBtpage page,
-			   const AjPStr key, ajlong less, ajlong greater)
+			   const AjPStr key, ajulong less, ajulong greater)
 {
     unsigned char *lbuf = NULL;
     unsigned char *rbuf = NULL;
     unsigned char *tbuf = NULL;
+
     AjPStr *karray      = NULL;
-    ajlong *parray      = NULL;
+    ajulong *parray      = NULL;
     AjPStr *tkarray     = NULL;
-    ajlong *tparray     = NULL;
-    ajint nkeys    = 0;
-    ajint order    = 0;
-    ajint keypos   = 0;
-    ajint rkeyno   = 0;
+    ajulong *tparray     = NULL;
+    AjPBtMem savekeyarrays = NULL;
+    AjPBtMem arrays2 = NULL;
+
+    ajuint nkeys    = 0;
+    ajuint order    = 0;
+    ajuint keypos   = 0;
+    ajuint rkeyno   = 0;
     
-    ajint i = 0;
-    ajint n = 0;
+    ajuint i = 0;
+    ajuint n = 0;
     
-    ajint nodetype  = 0;
+    ajuint nodetype  = 0;
     AjPBtpage ipage = NULL;
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage tpage = NULL;
 
-    ajlong blockno  = 0L;
-    ajlong rblockno = 0L;
-    ajlong lblockno = 0L;
-    ajlong ibn      = 0L;
+    ajulong blockno  = 0L;
+    ajulong rblockno = 0L;
+    ajulong lblockno = 0L;
+    ajulong ibn      = 0L;
     
 
     AjPStr mediankey  = NULL;
-    ajlong medianless = 0L;
-    ajlong mediangtr  = 0L;
-    ajlong overflow   = 0L;
-    ajlong prev       = 0L;
-    ajint  totlen     = 0;
+    ajulong medianless = 0L;
+    ajulong mediangtr  = 0L;
+    ajulong overflow   = 0L;
+    ajulong prev       = 0L;
+    ajuint totlen     = 0;
     
-    ajlong lv = 0L;
-    ajint  v  = 0;
+    ajulong lv = 0L;
+    ajuint  v  = 0;
     
-    /* ajDebug("In btreeInsertKey\n"); */
-
     if(!btreeNodeIsFull(cache,page))
     {
 	btreeInsertNonFull(cache,page,key,less,greater);
@@ -2133,51 +4468,30 @@ static void btreeInsertKey(AjPBtcache cache, AjPBtpage page,
     lbuf = page->buf;
     GBT_NODETYPE(lbuf,&nodetype);
     page->dirty = BT_LOCK;
+    page->lockfor = 1131;
 
     if(nodetype == BT_ROOT)
     {
-	AJCNEW0(karray,order);
-	AJCNEW0(parray,order);
-
-	for(i=0;i<order;++i)
-	    karray[i] = ajStrNew();
-
 	btreeSplitRoot(cache);
 
-	if(page->pageno)
+	if(page->pagepos)
 	    page->dirty = BT_DIRTY;
-
-	btreeGetKeys(cache,lbuf,&karray,&parray);
-
-	if(strcmp(key->Ptr,karray[0]->Ptr)<0)
-	    blockno = parray[0];
-	else
-	    blockno = parray[1];
+        
+        blockno = btreeGetBlockFirstS(cache,lbuf,key);
 
 	ipage = ajBtreeCacheRead(cache,blockno);
 	btreeInsertNonFull(cache,ipage,key,less,greater);
-
-	for(i=0;i<order;++i)
-	    ajStrDel(&karray[i]);
-
-        AJFREE(karray);
-	AJFREE(parray);
 
 	return;
     }
 
 
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-    AJCNEW0(tkarray,order);
-    AJCNEW0(tparray,order);
-    mediankey = ajStrNew();
-    
-    for(i=0;i<order;++i)
-    {
-	tkarray[i] = ajStrNew();
-	karray[i]  = ajStrNew();
-    }
+    savekeyarrays = btreeAllocPriArray(cache);
+    arrays2 = btreeAllocPriArray(cache);
+    karray = savekeyarrays->karray;
+    parray = savekeyarrays->parray;
+    tkarray = arrays2->karray;
+    tparray = arrays2->parray;
     
     lpage = page;
     lbuf = lpage->buf;
@@ -2186,13 +4500,10 @@ static void btreeInsertKey(AjPBtcache cache, AjPBtpage page,
 
     GBT_BLOCKNUMBER(lbuf,&lblockno);
     rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
+    rpage = ajBtreeCacheWriteNodenew(cache);
     rpage->dirty = BT_LOCK;
-    rpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
+    rpage->lockfor = 1132;
     rbuf = rpage->buf;
-    lv = rblockno;
-    SBT_BLOCKNUMBER(rbuf,lv);
 
     
     GBT_PREV(lbuf,&prev);
@@ -2205,7 +4516,7 @@ static void btreeInsertKey(AjPBtcache cache, AjPBtpage page,
     if(!(nkeys % 2))
 	--keypos;
 
-    ajStrAssignS(&mediankey,karray[keypos]);
+    mediankey = ajStrNewS(karray[keypos]);
     medianless = lblockno;
     mediangtr  = rblockno;
 
@@ -2262,6 +4573,7 @@ static void btreeInsertKey(AjPBtcache cache, AjPBtpage page,
     v = rkeyno;
     SBT_NKEYS(rbuf,v);
     rpage->dirty = BT_DIRTY;
+
     btreeWriteNode(cache,rpage,tkarray,tparray,rkeyno);
 
     for(i=0;i<rkeyno+1;++i)
@@ -2276,24 +4588,15 @@ static void btreeInsertKey(AjPBtcache cache, AjPBtpage page,
 
     ibn = rblockno;
 
-    if(strcmp(key->Ptr,mediankey->Ptr)<0)
+    if(MAJSTRCMPS(key,mediankey)<0)
 	ibn = lblockno;
 
     ipage = ajBtreeCacheRead(cache,ibn);
     
     btreeInsertNonFull(cache,ipage,key,less,greater);
 
-
-    for(i=0;i<order;++i)
-    {
-	ajStrDel(&karray[i]);
-	ajStrDel(&tkarray[i]);
-    }
-
-    AJFREE(karray);
-    AJFREE(tkarray);
-    AJFREE(parray);
-    AJFREE(tparray);
+    btreeDeallocPriArray(cache, savekeyarrays);
+    btreeDeallocPriArray(cache, arrays2);
 
     ipage = ajBtreeCacheRead(cache,prev);
 
@@ -2323,57 +4626,59 @@ static void btreeSplitRoot(AjPBtcache cache)
     AjPBtpage lpage    = NULL;
     AjPBtpage tpage    = NULL;
 
+    AjPBtMem arrays1 = NULL;
+    AjPBtMem arrays2 = NULL;
     AjPStr *karray     = NULL;
     AjPStr *tkarray    = NULL;
-    ajlong *parray     = NULL;
-    ajlong *tparray    = NULL;
+    ajulong *parray     = NULL;
+    ajulong *tparray    = NULL;
 
-    ajint order     = 0;
-    ajint nkeys     = 0;
-    ajint keypos    = 0;
+    ajuint order     = 0;
+    ajuint nkeys     = 0;
+    ajuint keypos    = 0;
     
-    ajlong rblockno = 0L;
-    ajlong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong lblockno = 0L;
     
     AjPStr key = NULL;
-    ajint  i;
+    ajuint  i;
+    ajuint  j;
 
     unsigned char *rootbuf = NULL;
     unsigned char *rbuf    = NULL;
     unsigned char *lbuf    = NULL;
     unsigned char *tbuf    = NULL;
     
-    ajint nodetype  = 0;
-    ajlong overflow = 0L;
-    ajlong zero     = 0L;
-    ajint totlen    = 0;
-    ajint rkeyno    = 0;
-    ajint n         = 0;
+    ajuint nodetype  = 0;
+    ajulong overflow = 0L;
+    ajulong zero     = 0L;
+    ajuint rkeyno    = 0;
 
-    ajlong lv = 0L;
-    ajint  v  = 0;
+    ajulong lv = 0L;
+    ajuint  v  = 0;
     
-    
+#if AJINDEX_DEBUG
+    ajDebug("btreeSplitRoot zero\n");
+#endif
+    ++statCallSplitRoot;
+
     /* ajDebug("In btreeSplitRoot\n"); */
 
     order = cache->order;
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-    AJCNEW0(tkarray,order);
-    AJCNEW0(tparray,order);
-    key = ajStrNew();
 
-    for(i=0;i<order;++i)
-    {
-	karray[i]  = ajStrNew();
-	tkarray[i] = ajStrNew();
-    }
-    
+    arrays1 = btreeAllocPriArray(cache);
+    arrays2 = btreeAllocPriArray(cache);
+    karray = arrays1->karray;
+    parray = arrays1->parray;
+    tkarray = arrays2->karray;
+    tparray = arrays2->parray;
+
+    key = ajStrNew();
 
     rootpage = btreeCacheLocate(cache,0L);
 
     if(!rootpage)
-	ajFatal("Root page has been unlocked 1");
+	ajFatal("Root page has been unlocked 1 cache %S", cache->filename);
     
     rootbuf = rootpage->buf;
 
@@ -2386,20 +4691,12 @@ static void btreeSplitRoot(AjPBtcache cache)
 
 
     rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
+    rpage = ajBtreeCacheWriteNodenew(cache);
     rpage->dirty = BT_LOCK;
-    rpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
+    rpage->lockfor = 1141;
 
     lblockno = cache->totsize;
-    lpage = ajBtreeCacheWrite(cache,lblockno);
-    lpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
-
-    lv = rblockno;
-    SBT_BLOCKNUMBER(rpage->buf,lv);
-    lv = lblockno;
-    SBT_BLOCKNUMBER(lpage->buf,lv);
+    lpage = ajBtreeCacheWriteNodenew(cache);
 
     if(!cache->level)
     {
@@ -2414,18 +4711,11 @@ static void btreeSplitRoot(AjPBtcache cache)
     }
 
     btreeGetKeys(cache,rootbuf,&karray,&parray);
-
-    /* Get key for root node and write new root node */
-    ajStrAssignS(&tkarray[0],karray[keypos]);
-    tparray[0] = lblockno;
-    tparray[1] = rblockno;
     
+    btreeWriteNodeSingle(cache,rootpage,karray[keypos],lblockno,rblockno);
 
-    n = 1;
-    v = n;
-    SBT_NKEYS(rootbuf,v);
-    btreeWriteNode(cache,rootpage,tkarray,tparray,1);
     rootpage->dirty = BT_LOCK;
+    rootpage->lockfor = 1142;
 
     rbuf = rpage->buf;
     lbuf = lpage->buf;
@@ -2441,31 +4731,23 @@ static void btreeSplitRoot(AjPBtcache cache)
     SBT_NODETYPE(lbuf,v);
     lv = overflow;
     SBT_OVERFLOW(rbuf,lv);
-    lv = overflow;
+    lv = zero;
     SBT_PREV(rbuf,lv);
     lv = overflow;
     SBT_OVERFLOW(lbuf,lv);
-    lv = overflow;
+    lv = zero;
     SBT_PREV(lbuf,lv);
-
-    totlen = 0;
 
     for(i=0;i<keypos;++i)
     {
 	ajStrAssignS(&tkarray[i],karray[i]);
-	totlen += ajStrGetLen(karray[i]);
 	tparray[i] = parray[i];
     }
 
     tparray[i] = parray[i];
-    v = totlen;
-    SBT_TOTLEN(lbuf,v);
-    n = i;
-    v = n;
-    SBT_NKEYS(lbuf,v);
-    btreeWriteNode(cache,lpage,tkarray,tparray,i);
+    btreeWriteNode(cache,lpage,tkarray,tparray,keypos);
 
-    for(i=0;i<n+1;++i)
+    for(i=0;i<=keypos;++i)
     {
 	tpage = ajBtreeCacheRead(cache,tparray[i]);
 	tbuf = tpage->buf;
@@ -2474,21 +4756,18 @@ static void btreeSplitRoot(AjPBtcache cache)
 	tpage->dirty = BT_DIRTY;
     }
 
-    totlen = 0;
+    j = 0;
 
     for(i=keypos+1;i<nkeys;++i)
     {
-	ajStrAssignS(&tkarray[i-(keypos+1)],karray[i]);
-	totlen += ajStrGetLen(karray[i]);
-	tparray[i-(keypos+1)] = parray[i];
+	ajStrAssignS(&tkarray[j],karray[i]);
+	tparray[j++] = parray[i];
     }
-    tparray[i-(keypos+1)] = parray[i];
-    v = totlen;
-    SBT_TOTLEN(rbuf,v);
+
+    tparray[j] = parray[i];
     rkeyno = (nkeys-keypos) - 1;
-    v = rkeyno;
-    SBT_NKEYS(rbuf,v);
     rpage->dirty = BT_DIRTY;
+
     btreeWriteNode(cache,rpage,tkarray,tparray,rkeyno);
 
     for(i=0;i<rkeyno+1;++i)
@@ -2507,12 +4786,10 @@ static void btreeSplitRoot(AjPBtcache cache)
 	ajStrDel(&tkarray[i]);
     }
 
+    btreeDeallocPriArray(cache,arrays1);
+    btreeDeallocPriArray(cache,arrays2);
     ++cache->level;
 
-    AJFREE(tkarray);
-    AJFREE(tparray);
-    AJFREE(karray);
-    AJFREE(parray);
     ajStrDel(&key);
     
     return;
@@ -2528,33 +4805,31 @@ static void btreeSplitRoot(AjPBtcache cache)
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] buf [unsigned char *] page buffer
 ** @param [w] keys [AjPStr **] keys
-** @param [w] ptrs [ajlong**] ptrs
+** @param [w] ptrs [ajulong**] ptrs
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeGetKeys(AjPBtcache cache, unsigned char *buf,
-			 AjPStr **keys, ajlong **ptrs)
+			 AjPStr **keys, ajulong **ptrs)
 {
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
     
-    ajint  m;
+    ajuint  nkeys;
     unsigned char *lenptr = NULL;
     unsigned char *keyptr = NULL;
     unsigned char *tbuf   = NULL;
 
-    ajint    i;
-    ajint    ival = 0;
+    ajuint    i;
+    ajuint    ival = 0;
     
-    ajint    len;
-    ajint    pagesize = 0;
-    ajlong   overflow = 0L;
+    ajuint    len;
+    ajuint    pagesize = 0;
+    ajulong   overflow = 0L;
 
     AjPBtpage page = NULL;
-
-    /* ajDebug("In btreeGetKeys\n"); */
 
     karray = *keys;
     parray = *ptrs;
@@ -2563,29 +4838,33 @@ static void btreeGetKeys(AjPBtcache cache, unsigned char *buf,
 
     pagesize = cache->pagesize;
     
-    GBT_NKEYS(tbuf,&m);
-    if(!m)
-	ajFatal("GetKeys: No keys in node");
+    GBT_NKEYS(tbuf,&ival);
+    nkeys = ival;
+    if(!nkeys)
+	ajFatal("GetKeys: No keys in node cache %S", cache->filename);
 
     lenptr =  PBT_KEYLEN(tbuf);
-    keyptr = lenptr + m * sizeof(ajint);
+    keyptr = lenptr + nkeys * sizeof(ajuint);
 
 
-    for(i=0; i<m; ++i)
+    for(i=0; i<nkeys; ++i)
     {
-	BT_GETAJINT(lenptr,&ival);
+	BT_GETAJUINT(lenptr,&ival);
 	len = ival+1;
 	
-	if((ajint)((keyptr-tbuf+1) + len + sizeof(ajlong)) > pagesize)
+	if((ajuint)((keyptr-tbuf+1) + len + sizeof(ajulong)) > pagesize)
 	{
+#if AJINDEX_DEBUG
     	    ajDebug("GetKeys: Overflow\n");
+#endif
 	    GBT_OVERFLOW(tbuf,&overflow);
 	    page = ajBtreeCacheRead(cache,overflow);
 	    tbuf = page->buf;
 	    GBT_NODETYPE(tbuf,&ival);
 
 	    if(ival != BT_OVERFLOW)
-		ajFatal("Overflow node expected but not found");
+		ajFatal("Overflow node expected but not found for cache %S",
+                        cache->filename);
 	    /*
 	     ** The length pointer is restricted to the initial page.
 	     ** The keyptr in overflow pages starts at the Key Lengths
@@ -2597,22 +4876,22 @@ static void btreeGetKeys(AjPBtcache cache, unsigned char *buf,
 	ajStrAssignC(&karray[i],(const char *)keyptr);
 	keyptr += len;
 
-	BT_GETAJLONG(keyptr,&parray[i]);
-	keyptr += sizeof(ajlong);
-	lenptr += sizeof(ajint);
+	BT_GETAJULONG(keyptr,&parray[i]);
+	keyptr += sizeof(ajulong);
+	lenptr += sizeof(ajuint);
     }
     
 
-    if((ajint)((keyptr-tbuf+1) + sizeof(ajlong)) > pagesize)
+    if((ajuint)((keyptr-tbuf+1) + sizeof(ajulong)) > pagesize)
     {
-	ajDebug("GetKeys: Overflow\n");
 	GBT_OVERFLOW(tbuf,&overflow);
 	page = ajBtreeCacheRead(cache,overflow);
 	tbuf = page->buf;
 	GBT_NODETYPE(tbuf,&ival);
 
 	if(ival != BT_OVERFLOW)
-	    ajFatal("Overflow node expected but not found");
+	    ajFatal("Overflow node expected but not found at end for cache %S",
+                    cache->filename);
 	/*
 	 ** The length pointer is restricted to the initial page.
 	 ** The keyptr in overflow pages starts at the Key Lengths
@@ -2621,9 +4900,431 @@ static void btreeGetKeys(AjPBtcache cache, unsigned char *buf,
 	keyptr = PBT_KEYLEN(tbuf);
     }
     
-    BT_GETAJLONG(keyptr,&parray[i]);
+    BT_GETAJULONG(keyptr,&parray[i]);
 
     return;
+}
+
+
+
+
+/* @funcstatic btreeGetPointers *********************************************
+**
+** Get Pointers from an internal node
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [u] buf [unsigned char *] page buffer
+** @param [w] ptrs [ajulong**] ptrs
+**
+** @return [ajuint] Number of pointers
+** @@
+******************************************************************************/
+
+static ajuint btreeGetPointers(AjPBtcache cache, unsigned char *buf,
+                               ajulong **ptrs)
+{
+    ajulong *parray = NULL;
+    
+    ajuint  nkeys;
+    unsigned char *lenptr = NULL;
+    unsigned char *keyptr = NULL;
+    unsigned char *tbuf   = NULL;
+
+    ajuint    i;
+    ajuint    ival = 0;
+    
+    ajuint    len;
+    ajuint    pagesize = 0;
+    ajulong   overflow = 0L;
+    AjPBtpage page = NULL;
+
+    parray = *ptrs;
+    
+    tbuf    = buf;
+
+    pagesize = cache->pagesize;
+    
+    GBT_NKEYS(tbuf,&ival);
+    nkeys = ival;
+    if(!nkeys)
+	ajFatal("btreeGetPointers: No keys in node cache %S",
+                cache->filename);
+
+    lenptr =  PBT_KEYLEN(tbuf);
+    keyptr = lenptr + nkeys * sizeof(ajuint);
+
+    GBT_NODETYPE(tbuf,&ival);
+
+    for(i=0; i<nkeys; ++i)
+    {
+	BT_GETAJUINT(lenptr,&ival);
+	len = ival+1;
+	
+	if((ajuint)((keyptr-tbuf+1) + len + sizeof(ajulong)) > pagesize)
+	{
+	    GBT_OVERFLOW(tbuf,&overflow);
+	    page = ajBtreeCacheRead(cache,overflow);
+	    tbuf = page->buf;
+	    GBT_NODETYPE(tbuf,&ival);
+	    if(ival != BT_OVERFLOW)
+		ajFatal("Overflow node expected but not found cache %S",
+                        cache->filename);
+	    /*
+	     ** The length pointer is restricted to the initial page.
+	     ** The keyptr in overflow pages starts at the Key Lengths
+	     ** position!
+	     */
+	    keyptr = PBT_KEYLEN(tbuf);
+	}
+
+	keyptr += len;
+
+	BT_GETAJULONG(keyptr,&parray[i]);
+	keyptr += sizeof(ajulong);
+	lenptr += sizeof(ajuint);
+    }
+    
+
+    if((ajuint)((keyptr-tbuf+1) + sizeof(ajulong)) > pagesize)
+    {
+	/* ajDebug("GetPointers: Overflow\n"); */
+	GBT_OVERFLOW(tbuf,&overflow);
+	page = ajBtreeCacheRead(cache,overflow);
+	tbuf = page->buf;
+	GBT_NODETYPE(tbuf,&ival);
+	if(ival != BT_OVERFLOW)
+	    ajFatal("Overflow node expected but not found cache %S",
+                    cache->filename);
+	/*
+	 ** The length pointer is restricted to the initial page.
+	 ** The keyptr in overflow pages starts at the Key Lengths
+	 ** position!
+	 */
+	keyptr = PBT_KEYLEN(tbuf);
+    }
+    
+    BT_GETAJULONG(keyptr,&parray[i]);
+
+    return i;
+}
+
+
+
+
+
+/* @funcstatic btreeGetBlockC **********************************************
+**
+** Get Block number matching a key
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [u] buf [unsigned char *] page buffer
+** @param [r] ckey [const char*] key
+**
+** @return [ajulong] Block number
+** @@
+******************************************************************************/
+
+static ajulong btreeGetBlockC(AjPBtcache cache, unsigned char *buf,
+                              const char* ckey)
+{
+    ajulong blockno = 0L;
+
+    ajuint m;
+    unsigned char *lenptr = NULL;
+    unsigned char *keyptr = NULL;
+    unsigned char *tbuf   = NULL;
+
+    ajuint    i;
+    ajuint    ival = 0;
+    ajuint    len;
+    ajuint    pagesize = 0;
+    ajulong   overflow = 0L;
+    
+    AjPBtpage page = NULL;
+
+    tbuf    = buf;
+
+    pagesize = cache->pagesize;
+
+    GBT_NKEYS(tbuf,&m);
+    if(!m)
+	ajFatal("btreeGetBlockC: No keys in node cache %S",
+                cache->filename);
+
+    lenptr =  PBT_KEYLEN(tbuf);
+    keyptr = lenptr + m * sizeof(ajuint);
+
+    for(i=0; i<m; ++i)
+    {
+	BT_GETAJUINT(lenptr,&ival);
+	len = ival+1;
+	
+	if((ajuint)((keyptr-tbuf+1) + len + sizeof(ajulong)) > pagesize)
+	{
+    	    /* ajDebug("btreeGetBlockC: Overflow\n"); */
+	    GBT_OVERFLOW(tbuf,&overflow);
+	    page = ajBtreeCacheRead(cache,overflow);
+	    tbuf = page->buf;
+	    GBT_NODETYPE(tbuf,&ival);
+	    if(ival != BT_OVERFLOW)
+		ajFatal("Overflow node expected but not found cache %S",
+                        cache->filename);
+	    /*
+	     ** The length pointer is restricted to the initial page.
+	     ** The keyptr in overflow pages starts at the Key Lengths
+	     ** position!
+	     */
+	    keyptr = PBT_KEYLEN(tbuf);
+	}
+
+        if(strcmp((const char*)keyptr, ckey) > 0)
+        {
+            keyptr += len;
+
+            BT_GETAJULONG(keyptr,&blockno);
+            return blockno;
+        }
+
+        keyptr += len;
+	keyptr += sizeof(ajulong);
+	lenptr += sizeof(ajuint);
+    }
+    
+
+    if((ajuint)((keyptr-tbuf+1) + sizeof(ajulong)) > pagesize)
+    {
+	/* ajDebug("btreeGetBlockC: Overflow\n"); */
+	GBT_OVERFLOW(tbuf,&overflow);
+	page = ajBtreeCacheRead(cache,overflow);
+	tbuf = page->buf;
+	GBT_NODETYPE(tbuf,&ival);
+	if(ival != BT_OVERFLOW)
+	    ajFatal("Overflow node expected but not found cache %S",
+                    cache->filename);
+	/*
+	 ** The length pointer is restricted to the initial page.
+	 ** The keyptr in overflow pages starts at the Key Lengths
+	 ** position!
+	 */
+	keyptr = PBT_KEYLEN(tbuf);
+    }
+    
+    BT_GETAJULONG(keyptr,&blockno);
+    
+    return blockno;
+}
+
+
+
+
+/* @funcstatic btreeGetBlockN **********************************************
+**
+** Get Block number matching a numeric key
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [u] buf [unsigned char *] page buffer
+** @param [r] numkey [ajulong] key
+**
+** @return [ajulong] Block number
+** @@
+******************************************************************************/
+
+static ajulong btreeGetBlockN(AjPBtcache cache, unsigned char *buf,
+                              ajulong numkey)
+{
+    ajulong blockno = 0L;
+
+    ajuint m;
+    unsigned char *pptr = NULL;
+    unsigned char *kptr = NULL;
+
+    ajuint    i;
+    ajulong   kval = 0L;
+
+    GBT_NKEYS(buf,&m);
+    if(!m)
+	ajFatal("btreeGetBlockN: No keys in node cache %S", cache->filename);
+
+    kptr = PBT_KEYLEN(buf);
+    pptr = kptr + m * sizeof(ajulong);
+
+    for(i=0; i<m; ++i)
+    {
+	BT_GETAJULONG(kptr,&kval);
+	
+        if(kval > numkey)
+        {
+            BT_GETAJULONG(pptr,&blockno);
+            return blockno;
+        }
+
+	kptr += sizeof(ajulong);
+	pptr += sizeof(ajulong);
+    }
+    
+
+    BT_GETAJULONG(pptr,&blockno);
+
+    return blockno;
+}
+
+
+
+
+/* @funcstatic btreeGetBlockFirstN *****************************************
+**
+** Get Block number of first block if more than numeric key
+** or second block
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [u] buf [unsigned char *] page buffer
+** @param [r] numkey [ajulong] key
+**
+** @return [ajulong] Block number
+** @@
+******************************************************************************/
+
+static ajulong btreeGetBlockFirstN(AjPBtcache cache, unsigned char *buf,
+                                   ajulong numkey)
+{
+    ajulong blockno = 0L;
+
+    ajuint m;
+    unsigned char *pptr = NULL;
+    unsigned char *kptr = NULL;
+
+    ajulong   kval = 0L;
+    
+    GBT_NKEYS(buf,&m);
+    if(!m)
+	ajFatal("btreeGetBlockFirstN: No keys in node cache %S",
+                cache->filename);
+
+    kptr = PBT_KEYLEN(buf);
+    pptr = kptr + m * sizeof(ajulong);
+
+    BT_GETAJULONG(kptr,&kval);
+	
+    if(kval > numkey)
+    {
+        BT_GETAJULONG(pptr,&blockno);
+        return blockno;
+    }
+
+    kptr += sizeof(ajulong);
+    pptr += sizeof(ajulong);
+    
+
+    BT_GETAJULONG(pptr,&blockno);
+
+    return blockno;
+}
+
+
+
+
+/* @funcstatic btreeGetBlockS *************************************************
+**
+** Get Block number matching a key
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [u] buf [unsigned char *] page buffer
+** @param [r] key [const AjPStr] key
+**
+** @return [ajulong] Block number
+** @@
+******************************************************************************/
+
+static ajulong btreeGetBlockS(AjPBtcache cache, unsigned char *buf,
+                             const AjPStr key)
+{
+    return btreeGetBlockC(cache, buf, MAJSTRGETPTR(key));
+}
+
+
+
+
+/* @funcstatic btreeGetBlockFirstC ********************************************
+**
+** Get Block number of first block if more than key
+** or second block
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [u] buf [unsigned char *] page buffer
+** @param [r] ckey [const char*] key
+** @param [r] clen [ajuint] Maximum length of key to test (e.g. for wildcards)
+**                         or zero to test full key
+**
+** @return [ajulong] Block number
+** @@
+******************************************************************************/
+
+static ajulong btreeGetBlockFirstC(AjPBtcache cache, unsigned char *buf,
+                                  const char* ckey, ajuint clen)
+{
+    ajulong blockno = 0L;
+
+    ajuint m;
+    unsigned char *lenptr = NULL;
+    unsigned char *keyptr = NULL;
+    unsigned char *tbuf   = NULL;
+
+    ajuint    ival = 0;
+    ajuint    len;
+    ajuint    klen = 0;
+    
+    tbuf    = buf;
+
+    GBT_NKEYS(tbuf,&m);
+    if(!m)
+	ajFatal("btreeGetBlockFirstC: No keys in node cache %S",
+                cache->filename);
+
+    lenptr =  PBT_KEYLEN(tbuf);
+    keyptr = lenptr + m * sizeof(ajuint);
+
+    BT_GETAJUINT(lenptr,&ival);
+    len = ival+1;
+    klen = ival;
+    if(clen && (klen > clen))
+        klen = clen;
+	
+    if(strncmp((const char*)keyptr, ckey, klen) > 0)
+    {
+        keyptr += len;
+        
+        BT_GETAJULONG(keyptr,&blockno);
+        return blockno;
+    }
+
+    keyptr += len;
+    keyptr += sizeof(ajulong);
+    lenptr += sizeof(ajuint);
+    
+    BT_GETAJULONG(keyptr,&blockno);
+
+    return blockno;
+}
+
+
+
+
+/* @funcstatic btreeGetBlockFirstS ********************************************
+**
+** Get Block number matching a key
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [u] buf [unsigned char *] page buffer
+** @param [r] key [const AjPStr] key
+**
+** @return [ajulong] Block number
+** @@
+******************************************************************************/
+
+static ajulong btreeGetBlockFirstS(AjPBtcache cache, unsigned char *buf,
+                                  const AjPStr key)
+{
+    return btreeGetBlockFirstC(cache, buf, MAJSTRGETPTR(key),0);
 }
 
 
@@ -2642,8 +5343,8 @@ static void btreeGetKeys(AjPBtcache cache, unsigned char *buf,
 
 static ajint btreeIdCompare(const void *a, const void *b)
 {
-    return strcmp((*(AjPBtId const *)a)->id->Ptr,
-		  (*(AjPBtId const *)b)->id->Ptr);
+    return MAJSTRCMPS((*(AjPBtId const *)a)->id,
+                      (*(AjPBtId const *)b)->id);
 }
 
 
@@ -2662,9 +5363,10 @@ static ajint btreeIdCompare(const void *a, const void *b)
 
 static ajint btreeNumIdCompare(const void *a, const void *b)
 {
-  ajlong val;
+    ajlong val;
 
-    val = (*(AjPBtNumId const *)a)->offset - (*(AjPBtNumId const *)b)->offset;
+    val = (ajlong) ((*(AjPBtNumId const *)a)->offset -
+                    (*(AjPBtNumId const *)b)->offset);
 
     if(!val)
       return 0;
@@ -2682,8 +5384,8 @@ static ajint btreeNumIdCompare(const void *a, const void *b)
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] spage [AjPBtpage] buffer
 ** @param [r] keys [AjPStr const *] keys
-** @param [r] ptrs [const ajlong*] page pointers
-** @param [r] nkeys [ajint] number of keys
+** @param [r] ptrs [const ajulong*] page pointers
+** @param [r] nkeys [ajuint] number of keys
 
 **
 ** @return [void]
@@ -2691,7 +5393,8 @@ static ajint btreeNumIdCompare(const void *a, const void *b)
 ******************************************************************************/
 
 static void btreeWriteNode(AjPBtcache cache, AjPBtpage spage,
-			   AjPStr const *keys, const ajlong *ptrs, ajint nkeys)
+			   AjPStr const *keys, const ajulong *ptrs,
+                           ajuint nkeys)
 {
     unsigned char *lbuf   = NULL;
     unsigned char *tbuf   = NULL;
@@ -2699,15 +5402,16 @@ static void btreeWriteNode(AjPBtcache cache, AjPBtpage spage,
     unsigned char *keyptr = NULL;
     AjPBtpage page        = NULL;
     
-    ajlong   overflow = 0L;
-    ajlong   blockno  = 0L;
+    ajulong   overflow = 0L;
+    ajulong   blockno  = 0L;
 
-    ajint    i;
-    ajint    len;
-    ajint    v  = 0;
-    ajlong   lv = 0L;
+    ajuint   i;
+    ajuint   len;
+    ajuint    v  = 0;
+    ajulong   lv = 0L;
+    ajuint totlen = 0;
 
-    /* ajDebug("In btreeWriteNode\n"); */
+    /* ajuint unused = 0; */
 
     lbuf = spage->buf;
     tbuf = lbuf;
@@ -2717,43 +5421,41 @@ static void btreeWriteNode(AjPBtcache cache, AjPBtpage spage,
     SBT_NKEYS(lbuf,v);
     
     lenptr = PBT_KEYLEN(lbuf);
-    keyptr = lenptr + nkeys * sizeof(ajint);
+    keyptr = lenptr + nkeys * sizeof(ajuint);
 
     for(i=0;i<nkeys;++i)
     {
-	if((lenptr-lbuf+1) > cache->pagesize)
+	if((ajuint) (lenptr-lbuf+1) > cache->pagesize)
 	    ajFatal("WriteNode: Too many key lengths for available pagesize");
 
 	len = ajStrGetLen(keys[i]);
 	v = len;
-	BT_SETAJINT(lenptr,v);
-	lenptr += sizeof(ajint);
+	BT_SETAJUINT(lenptr,v);
+        totlen += len;
+	lenptr += sizeof(ajuint);
     }
 
+    v = totlen;
+    SBT_TOTLEN(lbuf,v);
 
     GBT_OVERFLOW(lbuf,&overflow);
+    GBT_BLOCKNUMBER(lbuf, &blockno);
 
     for(i=0;i<nkeys;++i)
     {
 	len = ajStrGetLen(keys[i]) + 1;
-	if((ajint)((keyptr-tbuf+1) + len + sizeof(ajlong)) > cache->pagesize)
+	if((ajuint)((keyptr-tbuf+1) + len + sizeof(ajulong)) > cache->pagesize)
 	{
-	    ajDebug("WriteNode: Overflow\n");
-
 	    if(!overflow)		/* No overflow buckets yet */
 	    {
 		page->dirty = BT_DIRTY;
 		blockno = cache->totsize;
 		lv = blockno;
 		SBT_OVERFLOW(tbuf,lv);
-		page = ajBtreeCacheWrite(cache,blockno);
-		page->pageno = cache->totsize;
-		cache->totsize += cache->pagesize;
+		page = ajBtreeCacheWriteNodenew(cache);
 		tbuf = page->buf;
 		v = BT_OVERFLOW;
 		SBT_NODETYPE(tbuf,v);
-		lv = 0L;
-		SBT_OVERFLOW(tbuf,lv);
 		lv = blockno;
 		SBT_BLOCKNUMBER(tbuf,lv);
 	    }
@@ -2772,16 +5474,15 @@ static void btreeWriteNode(AjPBtcache cache, AjPBtpage spage,
 	sprintf((char *)keyptr,"%s",ajStrGetPtr(keys[i]));
 	keyptr += len;
 	lv = ptrs[i];
-	BT_SETAJLONG(keyptr,lv);
-	keyptr += sizeof(ajlong);
+	BT_SETAJULONG(keyptr,lv);
+	keyptr += sizeof(ajulong);
     }
     
 
 
 
-    if((ajint)((keyptr-tbuf+1) + sizeof(ajlong)) > cache->pagesize)
+    if((ajuint)((keyptr-tbuf+1) + sizeof(ajulong)) > cache->pagesize)
     {
-	ajDebug("WriteNode: Overflow\n");
 	page->dirty = BT_DIRTY;
 
 	if(!overflow)			/* No overflow buckets yet */
@@ -2789,14 +5490,10 @@ static void btreeWriteNode(AjPBtcache cache, AjPBtpage spage,
 	    blockno = cache->totsize;
 	    lv = blockno;
 	    SBT_OVERFLOW(tbuf,lv);
-	    page = ajBtreeCacheWrite(cache,blockno);
-	    page->pageno = cache->totsize;
-	    cache->totsize += cache->pagesize;
+	    page = ajBtreeCacheWriteNodenew(cache);
 	    tbuf = page->buf;
 	    v = BT_OVERFLOW;
 	    SBT_NODETYPE(tbuf,v);
-	    lv = blockno;
-	    SBT_BLOCKNUMBER(tbuf,lv);
 	}
 	else
 	{
@@ -2813,7 +5510,153 @@ static void btreeWriteNode(AjPBtcache cache, AjPBtpage spage,
     SBT_OVERFLOW(tbuf,overflow);
 
     lv = ptrs[i];
-    BT_SETAJLONG(keyptr,lv);
+    BT_SETAJULONG(keyptr,lv);
+    keyptr += sizeof(ajulong);
+
+    /*
+    unused = cache->pagesize - (keyptr - lbuf);
+    if(unused > cache->pagesize)
+        ajFatal("unused %u for pagesize %u", unused, cache->pagesize);
+    if(unused > 0)
+        memset(keyptr, 0, unused);
+    */
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeWriteNodeSingle *******************************************
+**
+** Write an internal node with a single key
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [u] spage [AjPBtpage] buffer
+** @param [r] key [const AjPStr] key
+** @param [r] lptr [ajulong] left page pointer
+** @param [r] rptr [ajulong] right page pointer
+
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeWriteNodeSingle(AjPBtcache cache, AjPBtpage spage,
+                                 const AjPStr key, ajulong lptr,
+                                 ajulong rptr)
+{
+    unsigned char *lbuf   = NULL;
+    unsigned char *tbuf   = NULL;
+    unsigned char *lenptr = NULL;
+    unsigned char *keyptr = NULL;
+    AjPBtpage page        = NULL;
+    
+    ajulong   overflow = 0L;
+    ajulong   blockno  = 0L;
+
+    ajuint   len;
+    ajuint    v  = 0;
+    ajulong   lv = 0L;
+
+    ajuint nkeys = 1;
+
+    /* ajuint unused = 1; */
+
+    /* ajDebug("In btreeWriteNodeSingle\n"); */
+
+    lbuf = spage->buf;
+    tbuf = lbuf;
+    page = spage;
+
+    v = 1;
+    SBT_NKEYS(lbuf,v);
+    lenptr = PBT_KEYLEN(lbuf);
+    keyptr = lenptr + nkeys * sizeof(ajuint);
+
+    if((ajuint) (lenptr-lbuf+1) > cache->pagesize)
+        ajFatal("WriteNode: Too many key lengths for available pagesize "
+                "cache %S", cache->pagesize);
+    len = MAJSTRGETLEN(key);
+    v = len;
+    BT_SETAJUINT(lenptr,v);
+    lenptr += sizeof(ajuint);
+    v = len;
+    SBT_TOTLEN(lbuf,v);
+
+    GBT_OVERFLOW(lbuf,&overflow);
+
+    len = MAJSTRGETLEN(key) + 1;
+    if((ajuint)((keyptr-tbuf+1) + len + sizeof(ajulong)) > cache->pagesize)
+    {
+        /* ajDebug("WriteNode: Overflow\n"); */
+        ajWarn("WriteNodeSingle: Overflow at start in page %Lu\n",
+                   page->pagepos);
+        if(!overflow)		/* No overflow buckets yet */
+        {
+            page->dirty = BT_DIRTY;
+	    blockno = cache->totsize;
+	    lv = blockno;
+            SBT_OVERFLOW(tbuf,lv);
+            page = ajBtreeCacheWriteOverflownew(cache);
+            tbuf = page->buf;
+        }
+        else
+        {
+            page = ajBtreeCacheRead(cache,overflow);
+            tbuf = page->buf;
+            GBT_OVERFLOW(tbuf,&overflow);
+        }
+        keyptr = PBT_KEYLEN(tbuf);
+        page->dirty = BT_DIRTY;
+    }
+
+
+    sprintf((char *)keyptr,"%s",MAJSTRGETPTR(key));
+    keyptr += len;
+    lv = lptr;
+    BT_SETAJULONG(keyptr,lv);
+    keyptr += sizeof(ajulong);
+    
+
+    if((ajuint)((keyptr-tbuf+1) + sizeof(ajulong)) > cache->pagesize)
+    {
+	/* ajDebug("WriteNode: Overflow\n"); */
+        page->dirty = BT_DIRTY;
+	if(!overflow)			/* No overflow buckets yet */
+	{
+            ajWarn("WriteNodeSingle: Overflow at end in page %Lu\n",
+                   page->pagepos);
+	    blockno = cache->totsize;
+	    lv = blockno;
+	    SBT_OVERFLOW(tbuf,lv);
+	    page = ajBtreeCacheWriteOverflownew(cache);
+	    tbuf = page->buf;
+	}
+	else
+	{
+	    page = ajBtreeCacheRead(cache,overflow);
+	    tbuf = page->buf;
+	}
+	keyptr = PBT_KEYLEN(tbuf);
+    }
+    
+    overflow = 0L;
+    SBT_OVERFLOW(tbuf,overflow);
+
+    lv = rptr;
+    BT_SETAJULONG(keyptr,lv);
+    keyptr += sizeof(ajulong);
+
+    /*
+    unused = cache->pagesize - (keyptr - tbuf);
+    if(unused > cache->pagesize)
+        ajFatal("unused %u for pagesize %u", unused, cache->pagesize);
+    if(unused > 0)
+        memset(keyptr, 0, unused);
+    */
+
+    page->dirty = BT_DIRTY;
 
     return;
 }
@@ -2836,24 +5679,18 @@ void ajBtreeInsertId(AjPBtcache cache, const AjPBtId id)
 {
     AjPBtpage spage   = NULL;
     AjPStr key        = NULL;
-    const char *ckey  = NULL;
     AjPBucket lbucket = NULL;
     AjPBucket rbucket = NULL;
-    ajlong lblockno = 0L;
-    ajlong rblockno = 0L;
-    ajlong blockno  = 0L;
-    ajlong shift    = 0L;
+    ajulong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong blockno  = 0L;
+    ajulong shift    = 0L;
 
-    ajint nkeys = 0;
-    ajint order = 0;
+    ajuint nkeys = 0;
 
-    ajint nodetype = 0;
+    ajuint nodetype = 0;
  
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
-    
-    ajint i;
-    ajint n;
+    ajuint n;
     
     unsigned char *buf = NULL;
 
@@ -2871,19 +5708,11 @@ void ajBtreeInsertId(AjPBtcache cache, const AjPBtId id)
 	return;
     }
 
-    ckey = ajStrGetPtr(key);
-    spage = ajBtreeFindInsert(cache,ckey);
+    spage = ajBtreeFindInsert(cache,key);
     buf = spage->buf;
 
     GBT_NKEYS(buf,&nkeys);
     GBT_NODETYPE(buf,&nodetype);
-    
-    order = cache->order;
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
     
     if(!nkeys)
     {
@@ -2896,46 +5725,24 @@ void ajBtreeInsertId(AjPBtcache cache, const AjPBtId id)
 	rblockno = cache->totsize;
 	btreeWriteBucket(cache,rbucket,rblockno);	
 
-	parray[0] = lblockno;
-	parray[1] = rblockno;
-	ajStrAssignS(karray,key);
-	
-	btreeWriteNode(cache,spage,karray,parray,1);
+	btreeWriteNodeSingle(cache,spage,key,lblockno, rblockno);
 
 	btreeBucketDel(&lbucket);
 	btreeBucketDel(&rbucket);
 
 	btreeAddToBucket(cache,rblockno,id);
+        ++cache->countunique;
+        ++cache->countall;
 
-	for(i=0;i<order;++i)
-	    ajStrDel(&karray[i]);
-
-	AJFREE(karray);
-	AJFREE(parray);
-	ajStrDel(&key);
+        ajStrDel(&key);
 
 	return;
     }
     
-    btreeGetKeys(cache,buf,&karray,&parray);
-
-    i=0;
-
-    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-	++i;
-
-    if(i==nkeys)
-    {
-	if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
+    blockno = btreeGetBlockS(cache, buf, key);
 
     if(nodetype != BT_ROOT)
-	if((shift = btreeInsertShift(cache,&spage,key->Ptr)))
+	if((shift = btreeInsertShiftS(cache,&spage,key)))
 	    blockno = shift;
 
     buf = spage->buf;
@@ -2946,62 +5753,24 @@ void ajBtreeInsertId(AjPBtcache cache, const AjPBtId id)
     {
 	if(btreeReorderBuckets(cache,spage))
 	{
-	    GBT_NKEYS(buf,&nkeys);	    
-	    btreeGetKeys(cache,buf,&karray,&parray);
-
-	    i=0;
-
-	    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-		++i;
-
-	    if(i==nkeys)
-	    {
-		if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-		    blockno = parray[i-1];
-		else
-		    blockno = parray[i];
-	    }
-	    else
-		blockno = parray[i];
+            blockno = btreeGetBlockS(cache, buf, key);
 	}
 	else
 	{
 	    btreeSplitLeaf(cache,spage);
-	    spage = ajBtreeFindInsert(cache,ckey);
+	    spage = ajBtreeFindInsert(cache,key);
 	    buf = spage->buf;
 
-	    btreeGetKeys(cache,buf,&karray,&parray);
-
-	    GBT_NKEYS(buf,&nkeys);
-
-	    i=0;
-
-	    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-		++i;
-
-	    if(i==nkeys)
-	    {
-		if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-		    blockno = parray[i-1];
-		else
-		    blockno = parray[i];
-	    }
-	    else
-		blockno = parray[i];
-
+            blockno = btreeGetBlockS(cache, buf, key);
 	}
     }
 
 
     btreeAddToBucket(cache,blockno,id);
 
-    ++cache->count;
+    ++cache->countunique;
+    ++cache->countall;
 
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
     ajStrDel(&key);
 
     return;
@@ -3010,67 +5779,47 @@ void ajBtreeInsertId(AjPBtcache cache, const AjPBtId id)
 
 
 
-/* @func ajBtreeIdFromKey ************************************************
+/* @func ajBtreeIdFromKey ****************************************************
 **
 ** Get an ID structure from a leaf node given a key
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const char *] key
+** @param [r] key [const AjPStr] key
 **
 ** @return [AjPBtId] pointer to an ID structure or NULL if not found
 ** @@
 ******************************************************************************/
 
-AjPBtId ajBtreeIdFromKey(AjPBtcache cache, const char *key)
+AjPBtId ajBtreeIdFromKey(AjPBtcache cache, const AjPStr key)
 {
     AjPBtpage page   = NULL;
     AjPBucket bucket = NULL;
     AjPBtId   id     = NULL;
     AjPBtId   tid    = NULL;
     
-    AjPStr *karray  = NULL;
-    ajlong *parray  = NULL;
-    
     unsigned char *buf = NULL;
 
-    ajint nentries = 0;
-    ajint nkeys    = 0;
-    ajint order    = 0;
+    ajuint nentries = 0;
     
-    ajint i;
-    
-    ajlong blockno = 0L;
+    ajuint i;
+
+    ajulong blockno = 0L;
     AjBool found   = ajFalse;
+
+    AjPStr keystr = NULL;
 
     /* ajDebug("In ajBtreeIdFromKey\n"); */
 
-    page = ajBtreeFindInsert(cache,key);
+    if(!cache->countunique && !cache->countall)
+        return NULL;
+
+    keystr = ajStrNewS(key);
+    ajStrFmtQuery(&keystr);
+
+    page = ajBtreeFindInsert(cache,keystr);
     buf = page->buf;
-    order = cache->order;
 
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-    btreeGetKeys(cache,buf,&karray,&parray);
-
-    GBT_NKEYS(buf,&nkeys);
-
-    i=0;
-
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
-	++i;
-    
-    if(i==nkeys)
-    {
-	if(strcmp(key,karray[i-1]->Ptr)<0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
+    blockno = btreeGetBlockS(cache,buf,keystr);
 
     bucket = btreeReadBucket(cache,blockno);
     
@@ -3079,7 +5828,7 @@ AjPBtId ajBtreeIdFromKey(AjPBtcache cache, const char *key)
     found = ajFalse;
 
     for(i=0;i<nentries;++i)
-	if(!strcmp(key,bucket->Ids[i]->id->Ptr))
+	if(!MAJSTRCMPS(bucket->Ids[i]->id, keystr))
 	{
 	    found = ajTrue;
 	    break;
@@ -3097,12 +5846,7 @@ AjPBtId ajBtreeIdFromKey(AjPBtcache cache, const char *key)
     }
 
     btreeBucketDel(&bucket);
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    ajStrDel(&keystr);
 
     if(!found)
 	return NULL;
@@ -3113,40 +5857,51 @@ AjPBtId ajBtreeIdFromKey(AjPBtcache cache, const char *key)
 
 
 
-/* @func ajBtreeWriteParams ************************************************
+/* @func ajBtreeWriteParamsC ************************************************
 **
 ** Write B+ tree parameters to file
 **
 ** @param [r] cache [const AjPBtcache] cache
-** @param [r] fn [const char *] file name
-** @param [r] ext [const char *] index file extension name
-** @param [r] idir [const char *] index file directory
+** @param [r] fntxt [const char *] file name
+** @param [r] exttxt [const char *] index file extension name
+** @param [r] idirtxt [const char *] index file directory
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajBtreeWriteParams(const AjPBtcache cache, const char *fn,
-			const char *ext, const char *idir)
+void ajBtreeWriteParamsC(const AjPBtcache cache, const char *fntxt,
+			 const char *exttxt, const char *idirtxt)
 {
     AjPStr  fname = NULL;
     AjPFile outf  = NULL;
 
-    fname = ajStrNew();
-    ajFmtPrintS(&fname,"%s/%s.p%s",idir,fn,ext);
+    fname = ajStrNewRes(128);
+
+    if(!*idirtxt)
+      ajFmtPrintS(&fname,"%s.p%s",fntxt,exttxt);
+    else
+      ajFmtPrintS(&fname,"%s%s%s.p%s",idirtxt,SLASH_STRING,fntxt,exttxt);
 
     if(!(outf = ajFileNewOutNameS(fname)))
 	ajFatal("Cannot open param file %S\n",fname);
 
-    ajFmtPrintF(outf,"Order     %d\n",cache->order);
-    ajFmtPrintF(outf,"Fill      %d\n",cache->nperbucket);
-    ajFmtPrintF(outf,"Pagesize  %d\n",cache->pagesize);
-    ajFmtPrintF(outf,"Level     %d\n",cache->level);
-    ajFmtPrintF(outf,"Cachesize %d\n",cache->cachesize);
-    ajFmtPrintF(outf,"Order2    %d\n",cache->sorder);
-    ajFmtPrintF(outf,"Fill2     %d\n",cache->snperbucket);
-    ajFmtPrintF(outf,"Count     %d\n",cache->count);
-    ajFmtPrintF(outf,"Kwlimit   %d\n",cache->kwlimit);
+    if(cache->secondary)
+        ajFmtPrintF(outf,"Type      %s\n","Secondary");
+    else
+        ajFmtPrintF(outf,"Type      %s\n","Identifier");
+    ajFmtPrintF(outf,"Compress  %B\n",cache->compressed);
+    ajFmtPrintF(outf,"Pages     %Lu\n",cache->pagecount);
+    ajFmtPrintF(outf,"Order     %u\n",cache->order);
+    ajFmtPrintF(outf,"Fill      %u\n",cache->nperbucket);
+    ajFmtPrintF(outf,"Pagesize  %u\n",cache->pagesize);
+    ajFmtPrintF(outf,"Level     %u\n",cache->level);
+    ajFmtPrintF(outf,"Cachesize %u\n",cache->cachesize);
+    ajFmtPrintF(outf,"Order2    %u\n",cache->sorder);
+    ajFmtPrintF(outf,"Fill2     %u\n",cache->snperbucket);
+    ajFmtPrintF(outf,"Count     %Lu\n",cache->countunique);
+    ajFmtPrintF(outf,"Fullcount %Lu\n",cache->countall);
+    ajFmtPrintF(outf,"Kwlimit   %u\n",cache->kwlimit);
 
     ajFileClose(&outf);
     ajStrDel(&fname);
@@ -3157,86 +5912,262 @@ void ajBtreeWriteParams(const AjPBtcache cache, const char *fn,
 
 
 
-/* @func ajBtreeReadParams ************************************************
+/* @obsolete ajBtreeWriteParams
+** @rename ajBtreeWriteParamsC
+*/
+__deprecated void ajBtreeWriteParams(const AjPBtcache cache, const char *fn,
+			const char *ext, const char *idir)
+{
+    ajBtreeWriteParamsC(cache, fn, ext, idir);
+    return;
+}
+
+
+
+
+/* @func ajBtreeWriteParamsS ************************************************
 **
-** Read B+ tree parameters from file
+** Write B+ tree parameters to file
 **
-** @param [r] fn [const char *] file
-** @param [r] ext [const char *] file extension
-** @param [r] idir [const char *] index directory
-** @param [w] order [ajint*] tree order
-** @param [w] nperbucket [ajint*] bucket fill
-** @param [w] pagesize [ajint*] size of pages
-** @param [w] level [ajint*] depth of tree (0 = root leaf)
-** @param [w] cachesize [ajint*] cachesize
-** @param [w] sorder [ajint*] secondary tree order
-** @param [w] snperbucket [ajint*] secondary bucket fill
-** @param [w] count [ajlong*] number of primary keywords in the index
-** @param [w] kwlimit [ajint*] maximum length of a keyword
+** @param [r] cache [const AjPBtcache] cache
+** @param [r] fn [const AjPStr] file name
+** @param [r] ext [const AjPStr] index file extension name
+** @param [r] idir [const AjPStr] index file directory
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajBtreeReadParams(const char *fn, const char *ext,
-		       const char *idir, ajint *order,
-		       ajint *nperbucket, ajint *pagesize, ajint *level,
-		       ajint *cachesize, ajint *sorder,
-		       ajint *snperbucket, ajlong *count, ajint *kwlimit)
+void ajBtreeWriteParamsS(const AjPBtcache cache, const AjPStr fn,
+                         const AjPStr ext, const AjPStr idir)
+{
+    AjPStr  fname = NULL;
+    AjPFile outf  = NULL;
+
+    fname = ajStrNewRes(128);
+
+    if(ajStrGetLen(idir))
+      ajFmtPrintS(&fname,"%S%s%S.p%S",idir,SLASH_STRING,fn,ext);
+    else
+        ajFmtPrintS(&fname,"%S.p%S",fn,ext);
+
+    if(!(outf = ajFileNewOutNameS(fname)))
+	ajFatal("Cannot open param file %S\n",fname);
+
+    if(cache->secondary)
+        ajFmtPrintF(outf,"Type      %s\n","Secondary");
+    else
+        ajFmtPrintF(outf,"Type      %s\n","Identifier");
+    ajFmtPrintF(outf,"Compress  %B\n",cache->compressed);
+    ajFmtPrintF(outf,"Pages     %u\n",cache->pagecount);
+    ajFmtPrintF(outf,"Order     %u\n",cache->order);
+    ajFmtPrintF(outf,"Fill      %u\n",cache->nperbucket);
+    ajFmtPrintF(outf,"Pagesize  %u\n",cache->pagesize);
+    ajFmtPrintF(outf,"Level     %u\n",cache->level);
+    ajFmtPrintF(outf,"Cachesize %u\n",cache->cachesize);
+    ajFmtPrintF(outf,"Order2    %u\n",cache->sorder);
+    ajFmtPrintF(outf,"Fill2     %u\n",cache->snperbucket);
+    ajFmtPrintF(outf,"Count     %Lu\n",cache->countunique);
+    ajFmtPrintF(outf,"Fullcount %Lu\n",cache->countall);
+    ajFmtPrintF(outf,"Kwlimit   %u\n",cache->kwlimit);
+
+    ajFileClose(&outf);
+    ajStrDel(&fname);
+
+    return;
+}
+
+
+
+
+/* @func ajBtreeReadParamsC ************************************************
+**
+** Read B+ tree parameters from file
+**
+** @param [r] filetxt [const char *] file
+** @param [r] exttxt [const char *] file extension
+** @param [r] idirtxt [const char *] index directory
+** @param [w] secondary [AjBool*] true for a secondary index
+** @param [w] compressed [AjBool*] true for a compressed index
+** @param [w] kwlimit [ajuint*] maximum length of a keyword
+** @param [w] pagesize [ajuint*] size of pages
+** @param [w] cachesize [ajuint*] cachesize
+** @param [w] pagecount [ajulong*] page count
+** @param [w] order [ajuint*] tree order
+** @param [w] nperbucket [ajuint*] bucket fill
+** @param [w] level [ajuint*] depth of tree (0 = root leaf)
+** @param [w] sorder [ajuint*] secondary tree order
+** @param [w] snperbucket [ajuint*] secondary bucket fill
+** @param [w] count [ajulong*] number of primary keywords in the index
+** @param [w] countall [ajulong*] number of total keywords in the index
+**
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+AjBool ajBtreeReadParamsC(const char *filetxt, const char *exttxt,
+                          const char *idirtxt,
+                          AjBool *secondary, AjBool *compressed,
+                          ajuint *kwlimit,
+                          ajuint *pagesize, ajuint *cachesize,
+                          ajulong *pagecount,
+                          ajuint *order, ajuint *nperbucket, ajuint *level,
+                          ajuint *sorder, ajuint *snperbucket,
+                          ajulong *count, ajulong *countall)
 {
     AjPStr fname = NULL;
     AjPStr line  = NULL;
     AjPFile inf  = NULL;
-    
+    AjPStr type = NULL;
+    AjBool setsecond = ajFalse;
+
+    *countall = 0L;
+    *compressed = ajFalse;
+    *pagecount = 0L;
+
     line  = ajStrNew();
 
     fname = ajStrNew();
-    ajFmtPrintS(&fname,"%s/%s.p%s",idir,fn,ext);
+
+    if(!*idirtxt)
+        ajFmtPrintS(&fname,"%s.p%s",filetxt,exttxt);
+    else if(idirtxt[strlen(idirtxt)-1] == SLASH_CHAR)
+        ajFmtPrintS(&fname,"%s%s.p%s",idirtxt,filetxt,exttxt);
+    else
+      ajFmtPrintS(&fname,"%s%s%s.p%s",idirtxt,SLASH_STRING,filetxt,exttxt);
     
     if(!(inf = ajFileNewInNameS(fname)))
-	ajFatal("Cannot open param file %S\n",fname);
+    {
+	ajErr("Cannot open param file %S %d: '%s'\n",
+              fname, errno, strerror(errno));
+        return ajFalse;
+    }
 
     while(ajReadlineTrim(inf,&line))
     {
-	if(ajStrPrefixC(line,"Order2"))
+	if(ajStrPrefixC(line,"Order2 "))
 	{
-	    ajFmtScanS(line,"%*s%d",sorder);
+	    ajFmtScanS(line,"%*s%u",sorder);
 	    continue;
 	}
 
-	if(ajStrPrefixC(line,"Fill2"))
+	if(ajStrPrefixC(line,"Fill2 "))
 	{
-	    ajFmtScanS(line,"%*s%d",snperbucket);
+	    ajFmtScanS(line,"%*s%u",snperbucket);
 	    continue;
 	}
 
-	if(ajStrPrefixC(line,"Order"))
-	    ajFmtScanS(line,"%*s%d",order);
+	if(ajStrPrefixC(line,"Type "))
+        {
+	    ajFmtScanS(line,"%*s%S",&type);
+            if(ajStrMatchC(type, "Secondary"))
+                *secondary = ajTrue;
+            else if(ajStrMatchC(type, "Identifier"))
+                *secondary = ajFalse;
+            else
+                ajErr("param file %S unknown Type value '%S'",
+                      fname, type);
+            setsecond = ajTrue;
+        }
 
-	if(ajStrPrefixC(line,"Fill"))
-	    ajFmtScanS(line,"%*s%d",nperbucket);
+	if(ajStrPrefixC(line,"Compress "))
+	    ajFmtScanS(line,"%*s%b",compressed);
 
-	if(ajStrPrefixC(line,"Pagesize"))
-	    ajFmtScanS(line,"%*s%d",pagesize);
+	if(ajStrPrefixC(line,"Pages "))
+	    ajFmtScanS(line,"%*s%Lu",pagecount);
 
-	if(ajStrPrefixC(line,"Level"))
-	    ajFmtScanS(line,"%*s%d",level);
+	if(ajStrPrefixC(line,"Order "))
+	    ajFmtScanS(line,"%*s%u",order);
 
-	if(ajStrPrefixC(line,"Cachesize"))
-	    ajFmtScanS(line,"%*s%d",cachesize);
+	if(ajStrPrefixC(line,"Fill "))
+	    ajFmtScanS(line,"%*s%u",nperbucket);
 
-	if(ajStrPrefixC(line,"Count"))
-	    ajFmtScanS(line,"%*s%Ld",count);
+	if(ajStrPrefixC(line,"Pagesize "))
+	    ajFmtScanS(line,"%*s%u",pagesize);
 
-	if(ajStrPrefixC(line,"Kwlimit"))
-	    ajFmtScanS(line,"%*s%d",kwlimit);
+	if(ajStrPrefixC(line,"Level "))
+	    ajFmtScanS(line,"%*s%u",level);
+
+	if(ajStrPrefixC(line,"Cachesize "))
+	    ajFmtScanS(line,"%*s%u",cachesize);
+
+	if(ajStrPrefixC(line,"Count "))
+	    ajFmtScanS(line,"%*s%Lu",count);
+
+	if(ajStrPrefixC(line,"Fullcount ")) /* new index files only */
+	    ajFmtScanS(line,"%*s%Lu",countall);
+
+	if(ajStrPrefixC(line,"Kwlimit "))
+	    ajFmtScanS(line,"%*s%u",kwlimit);
+    }
+    if(!setsecond)
+    {
+        *secondary = ajBtreeFieldGetSecondaryC(exttxt);
+    }
+
+    if(!*pagecount && !*compressed)
+    {
+        if(!*idirtxt)
+            ajFmtPrintS(&fname,"%s.%s",filetxt,exttxt);
+        else if(idirtxt[strlen(idirtxt)-1] == SLASH_CHAR)
+            ajFmtPrintS(&fname,"%s%s.%s",idirtxt,filetxt,exttxt);
+        else
+	    ajFmtPrintS(&fname,"%s%s%s.%s",
+			idirtxt,SLASH_STRING, filetxt,exttxt);
+        *pagecount = ajFilenameGetSize(fname) / *pagesize;
     }
 
     ajFileClose(&inf);
     ajStrDel(&fname);
     ajStrDel(&line);
+    ajStrDel(&type);
     
-    return;
+    return ajTrue;
+}
+
+
+
+
+/* @func ajBtreeReadParamsS ************************************************
+**
+** Read B+ tree parameters from file
+**
+** @param [r] file [const AjPStr] file
+** @param [r] ext [const AjPStr] file extension
+** @param [r] idir [const AjPStr] index directory
+** @param [w] secondary [AjBool*] true for a secondary index
+** @param [w] compressed [AjBool*] true for a compressed index
+** @param [w] kwlimit [ajuint*] maximum length of a keyword
+** @param [w] pagesize [ajuint*] size of pages
+** @param [w] cachesize [ajuint*] cachesize
+** @param [w] pagecount [ajulong*] page count
+** @param [w] order [ajuint*] tree order
+** @param [w] nperbucket [ajuint*] bucket fill
+** @param [w] level [ajuint*] depth of tree (0 = root leaf)
+** @param [w] sorder [ajuint*] secondary tree order
+** @param [w] snperbucket [ajuint*] secondary bucket fill
+** @param [w] count [ajulong*] number of primary keywords in the index
+** @param [w] countall [ajulong*] number of total keywords in the index
+**
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+AjBool ajBtreeReadParamsS(const AjPStr file, const AjPStr ext,
+                          const AjPStr idir,
+                          AjBool *secondary, AjBool *compressed,
+                          ajuint *kwlimit,
+                          ajuint *pagesize, ajuint *cachesize,
+                          ajulong *pagecount,
+                          ajuint *order, ajuint *nperbucket, ajuint *level,
+                          ajuint *sorder, ajuint *snperbucket,
+                          ajulong *count, ajulong *countall)
+{
+    return ajBtreeReadParamsC(MAJSTRGETPTR(file), MAJSTRGETPTR(ext),
+                              MAJSTRGETPTR(idir), secondary, compressed,
+                              kwlimit, pagesize, cachesize, pagecount, order,
+                              nperbucket, level, sorder, snperbucket,
+                              count, countall);
 }
 
 
@@ -3255,25 +6186,24 @@ void ajBtreeReadParams(const char *fn, const char *ext,
 
 static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 {
-    ajint nkeys     = 0;
-    ajint order     = 0;
-    ajint totalkeys = 0;
-    ajint bentries  = 0;
-    ajint keylimit  = 0;
-    ajint nodetype  = 0;
+    ajuint nkeys     = 0;
+    ajuint order     = 0;
+    ajuint totalkeys = 0;
+    ajuint keylimit  = 0;
+    ajuint nodetype  = 0;
 
-    ajint rootnodetype  = 0;
+    ajuint rootnodetype  = 0;
     
-    ajint i;
-    ajint j;
+    ajuint i;
+    ajuint j;
     
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage page  = NULL;
     
     AjPStr mediankey  = NULL;
-    ajlong mediangtr  = 0L;
-    ajlong medianless = 0L;
+    ajulong mediangtr  = 0L;
+    ajulong medianless = 0L;
     
 
     AjPBtId bid = NULL;
@@ -3285,46 +6215,55 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 
     AjPList idlist = NULL;
 
-    AjPBucket *buckets = NULL;
     AjPBucket cbucket  = NULL;
     
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    AjPBtMem arrays1 = NULL;
+    AjPBtMem arrays2 = NULL;
+    ajulong *parray = NULL;
+    AjPStr *newkarray = NULL;
+    ajulong *newparray = NULL;
     
-    ajint keypos = 0;
-    ajint lno    = 0;
-    ajint rno    = 0;
+    ajuint lno    = 0;
+    ajuint rno    = 0;
 
-    ajint bucketlimit   = 0;
-    ajint maxnperbucket = 0;
-    ajint nperbucket    = 0;
-    ajint bucketn       = 0;
-    ajint count         = 0;
-    ajint totkeylen     = 0;
+    ajuint lbucketlimit   = 0;
+    ajuint rbucketlimit   = 0;
+    ajuint lmaxnperbucket = 0;
+    ajuint rmaxnperbucket = 0;
+    ajuint nperbucket    = 0;
+    ajuint count         = 0;
     
-    ajlong lblockno = 0L;
-    ajlong rblockno = 0L;
-    ajlong prev     = 0L;
-    ajlong overflow = 0L;
-    ajlong prevsave = 0L;
+    ajulong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong prev     = 0L;
+    ajulong overflow = 0L;
+    ajulong prevsave = 0L;
 
-    ajlong zero = 0L;
-    ajlong join = 0L;
+    ajulong zero = 0L;
+    ajulong join = 0L;
     
-    ajlong lv = 0L;
-    ajint  v  = 0;
-    
+    ajulong lv = 0L;
+    ajuint  v  = 0;
+    ajuint iold = 0;
+
+#if AJINDEX_DEBUG
+    ajDebug("btreeSplitLeaf %Lu\n", spage->pagepos);
+#endif
+    ++statCallSplitLeaf;
+
     /* ajDebug("In btreeSplitLeaf\n"); */
 
     order = cache->order;
     nperbucket = cache->nperbucket;
 
     mediankey = ajStrNew();
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
     
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
+    arrays1 = btreeAllocPriArray(cache);
+    parray = arrays1->parray;
+
+    arrays2 = btreeAllocPriArray(cache);
+    newkarray = arrays2->karray;
+    newparray = arrays2->parray;
 
     buf = spage->buf;
     lbuf = buf;
@@ -3336,29 +6275,26 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     {
 	/* ajDebug("Splitting root node\n"); */
 	lblockno = cache->totsize;
-	lpage = ajBtreeCacheWrite(cache,lblockno);
-	lpage->pageno = cache->totsize;
-	cache->totsize += cache->pagesize;
+	lpage = ajBtreeCacheWriteNodenew(cache);
 	lbuf = lpage->buf;
 	lv = prev;
 	SBT_PREV(lbuf,lv);
     }
     else
     {
-	lblockno = spage->pageno;
 	lpage = spage;
     }
 
+    lblockno = lpage->pagepos;
     lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1151;
 
 
     rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
-    rpage->pageno = cache->totsize;
+    rpage = ajBtreeCacheWriteNodenew(cache);
     rpage->dirty = BT_LOCK;
-    cache->totsize += cache->pagesize;
+    rpage->lockfor = 1152;
     rbuf = rpage->buf;
-
 
     if(rootnodetype == BT_ROOT)
     {
@@ -3380,58 +6316,34 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     SBT_RIGHT(lbuf,lv);
 
 
-    btreeGetKeys(cache,buf,&karray,&parray);
+    btreeGetPointers(cache,buf,&parray);
 
 
     keylimit = nkeys+1;
-    AJCNEW0(buckets,keylimit);
-
-    for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadBucket(cache,parray[i]);
 
     idlist = ajListNew();
 
     for(i=0;i<keylimit;++i)
-    {
-	bentries = buckets[i]->Nentries;
-	for(j=0;j<bentries;++j)
-	    ajListPush(idlist,(void *)buckets[i]->Ids[j]);
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->Ids);
-	AJFREE(buckets[i]);
-    }
+	btreeBucketIdlist(cache,parray[i],idlist);
 
     ajListSort(idlist,btreeIdCompare);
-    AJFREE(buckets);
-
 
     totalkeys = ajListGetLength(idlist);
 
-    keypos = totalkeys / 2;
+    btreeBucketSplitCalc(totalkeys, keylimit, nperbucket,
+                         &lbucketlimit,&lmaxnperbucket,&lno,
+                         &rbucketlimit,&rmaxnperbucket,&rno);
 
-    lno = keypos;
-    rno = totalkeys - lno;
+    cbucket = btreeBucketNew(cache->nperbucket);
 
-    maxnperbucket = nperbucket >> 1;
-    ++maxnperbucket;
-
-    cbucket = btreeBucketNew(maxnperbucket);
-
-    bucketn = lno / maxnperbucket;
-
-    if(lno % maxnperbucket)
-	++bucketn;
-
-    bucketlimit = bucketn - 1;
-
-
-    totkeylen = 0;
     count = 0;
-    for(i=0;i<bucketlimit;++i)
+    iold = 0;
+
+    for(i=0;i<lbucketlimit;++i)
     {
 	cbucket->Nentries = 0;
 
-	for(j=0;j<maxnperbucket;++j)
+	for(j=0;j<lmaxnperbucket;++j)
 	{
 	    ajListPop(idlist,(void **)&bid);
 	    
@@ -3450,13 +6362,14 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 
 	ajListPeek(idlist,(void **)&bid);
 	
-	ajStrAssignS(&karray[i],bid->id);
-	totkeylen += ajStrGetLen(bid->id);
+	ajStrAssignS(&newkarray[i],bid->id);
 
-	if(!parray[i])
-	    parray[i] = cache->totsize;
+	if((iold < order) && parray[iold])
+            newparray[i] = parray[iold++];
+        else
+	    newparray[i] = cache->totsize;
 
-	btreeWriteBucket(cache,cbucket,parray[i]);
+	btreeWriteBucket(cache,cbucket,newparray[i]);
     }
 
     cbucket->Nentries = 0;
@@ -3480,16 +6393,13 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 	ajBtreeIdDel(&bid);
     }
 
-    if(!parray[i])
-	parray[i] = cache->totsize;
+    if((iold < order) && parray[iold])
+        newparray[i] = parray[iold++];
+    else
+        newparray[i] = cache->totsize;
+    btreeWriteBucket(cache,cbucket,newparray[i]);
 
-    btreeWriteBucket(cache,cbucket,parray[i]);
-
-    nkeys = bucketn - 1;
-    v = nkeys;
-    SBT_NKEYS(lbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(lbuf,v);
+    nkeys = lbucketlimit;
     nodetype = BT_LEAF;
     v = nodetype;
     SBT_NODETYPE(lbuf,v);
@@ -3497,22 +6407,16 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 
     GBT_PREV(lbuf,&prevsave);
 
-    btreeWriteNode(cache,lpage,karray,parray,nkeys);
+    btreeWriteNode(cache,lpage,newkarray,newparray,nkeys);
 
     ajListPeek(idlist,(void **)&bid);
     ajStrAssignS(&mediankey,bid->id);
 
-    totkeylen = 0;
-    bucketn = rno / maxnperbucket;
-    if(rno % maxnperbucket)
-	++bucketn;
-    bucketlimit = bucketn - 1;
-
-    for(i=0;i<bucketlimit;++i)
+    for(i=0;i<rbucketlimit;++i)
     {
 	cbucket->Nentries = 0;
 
-	for(j=0;j<maxnperbucket;++j)
+	for(j=0;j<rmaxnperbucket;++j)
 	{
 	    ajListPop(idlist,(void **)&bid);
 	    
@@ -3529,11 +6433,13 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 	}
 
 	ajListPeek(idlist,(void **)&bid);
-	ajStrAssignS(&karray[i],bid->id);
-	totkeylen += ajStrGetLen(bid->id);
+	ajStrAssignS(&newkarray[i],bid->id);
 
-	parray[i] = cache->totsize;
-	btreeWriteBucket(cache,cbucket,parray[i]);
+        if((iold < order) && parray[iold])
+            newparray[i] = parray[iold++];
+        else
+            newparray[i] = cache->totsize;
+	btreeWriteBucket(cache,cbucket,newparray[i]);
     }
 
     cbucket->Nentries = 0;
@@ -3555,15 +6461,14 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 	ajBtreeIdDel(&bid);
     }
     
-    parray[i] = cache->totsize;
-    btreeWriteBucket(cache,cbucket,parray[i]);
+    if((iold < order) && parray[iold])
+        newparray[i] = parray[iold++];
+    else
+        newparray[i] = cache->totsize;
+    btreeWriteBucket(cache,cbucket,newparray[i]);
 
-    nkeys = bucketn - 1;
+    nkeys = rbucketlimit;
 
-    v = nkeys;
-    SBT_NKEYS(rbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(rbuf,v);
     nodetype = BT_LEAF;
     v = nodetype;
     SBT_NODETYPE(rbuf,v);
@@ -3572,10 +6477,9 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     lv = overflow;
     SBT_OVERFLOW(rbuf,lv);
 
-    btreeWriteNode(cache,rpage,karray,parray,nkeys);
+    btreeWriteNode(cache,rpage,newkarray,newparray,nkeys);
     rpage->dirty = BT_DIRTY;
 
-    cbucket->Nentries = maxnperbucket;
     btreeBucketDel(&cbucket);
     ajListFree(&idlist);
 
@@ -3584,33 +6488,21 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     medianless = lblockno;
     mediangtr  = rblockno;
 
+    btreeDeallocPriArray(cache,arrays1);
+    btreeDeallocPriArray(cache,arrays2);
 
     if(rootnodetype == BT_ROOT)
     {
-	ajStrAssignS(&karray[0],mediankey);
-	parray[0]=lblockno;
-	parray[1]=rblockno;
-	nkeys = 1;
-	btreeWriteNode(cache,spage,karray,parray,nkeys);	
+	btreeWriteNodeSingle(cache,spage,mediankey,lblockno,rblockno);	
 	spage->dirty = BT_LOCK;
+        spage->lockfor = 1153;
 
-	for(i=0;i<order;++i)
-	    ajStrDel(&karray[i]);
-
-	AJFREE(karray);
-	AJFREE(parray);
 	ajStrDel(&mediankey);
 	++cache->level;
 
 	return spage;
     }
 
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
 
     page = ajBtreeCacheRead(cache,prevsave);
     btreeInsertKey(cache,page,mediankey,medianless,mediangtr);
@@ -3624,20 +6516,20 @@ static AjPBtpage btreeSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 
 
 
-/* @funcstatic btreeInsertShift ********************************************
+/* @funcstatic btreeInsertShiftS ********************************************
 **
 ** Rebalance buckets on insertion
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] retpage [AjPBtpage*] page
-** @param [r] key [const char *] key
+** @param [r] key [const AjPStr] key
 **
-** @return [ajlong] bucket block or 0L if shift not possible
+** @return [ajulong] bucket block or 0L if shift not possible
 ** @@
 ******************************************************************************/
 
-static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
-			       const char *key)
+static ajulong btreeInsertShiftS(AjPBtcache cache, AjPBtpage *retpage,
+                                 const AjPStr key)
 {
     unsigned char *tbuf = NULL;
     unsigned char *pbuf = NULL;
@@ -3647,30 +6539,34 @@ static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
     AjPBtpage spage = NULL;
     AjPBtpage tpage = NULL;
 
-    ajint tkeys = 0;
-    ajint pkeys = 0;
-    ajint skeys = 0;
-    ajint order = 0;
+    ajuint tkeys = 0;
+    ajuint pkeys = 0;
+    ajuint skeys = 0;
+    ajuint order = 0;
     
-    ajint i;
-    ajint n;
+    ajint ii;
+    ajuint i;
+    ajuint n;
     
-    ajlong parent  = 0L;
-    ajlong blockno = 0L;
+    ajulong parent  = 0L;
+    ajulong blockno = 0L;
     
+    AjPBtMem arrays1 = NULL;
+    AjPBtMem arrays2 = NULL;
+    AjPBtMem arrays3 = NULL;
     AjPStr *kTarray = NULL;
     AjPStr *kParray = NULL;
     AjPStr *kSarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pParray = NULL;
-    ajlong *pSarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pParray = NULL;
+    ajulong *pSarray = NULL;
 
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
 
-    ajint ppos    = 0;
-    ajint pkeypos = 0;
-    ajint minsize = 0;
+    ajuint ppos    = 0;
+    ajuint pkeypos = 0;
+    ajuint minsize = 0;
     
     /* ajDebug("In btreeInsertShift\n"); */
 
@@ -3697,34 +6593,30 @@ static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
     GBT_NKEYS(pbuf,&pkeys);
     
     
+    arrays1 = btreeAllocPriArray(cache);
+    kParray = arrays1->karray;
+    pParray = arrays1->parray;
 
+    arrays2 = btreeAllocPriArray(cache);
+    kSarray = arrays2->karray;
+    pSarray = arrays2->parray;
 
-    AJCNEW0(kParray,order);
-    AJCNEW0(pParray,order);
-    AJCNEW0(kSarray,order);
-    AJCNEW0(pSarray,order);
-    AJCNEW0(kTarray,order);
-    AJCNEW0(pTarray,order);
+    arrays3 = btreeAllocPriArray(cache);
+    kTarray = arrays3->karray;
+    pTarray = arrays3->parray;
     
-    for(i=0;i<order;++i)
-    {
-	kSarray[i] = ajStrNew();
-	kParray[i] = ajStrNew();
-	kTarray[i] = ajStrNew();
-    }
-
     btreeGetKeys(cache,pbuf,&kParray,&pParray);
 
     i=0;
 
-    while(i!=pkeys && strcmp(key,kParray[i]->Ptr)>=0)
+    while(i!=pkeys && MAJSTRCMPS(kParray[i],key)<=0)
 	++i;
 
     pkeypos = i;
     
     if(i==pkeys)
     {
-	if(strcmp(key,kParray[i-1]->Ptr)<0)
+	if(MAJSTRCMPS(kParray[i-1],key)>0)
 	    ppos = i-1;
 	else
 	    ppos = i;
@@ -3749,7 +6641,7 @@ static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 
 	i = 0;
 
-	while(pParray[i] != tpage->pageno)
+	while(pParray[i] != tpage->pagepos)
 	    ++i;
 
 	--i;
@@ -3775,17 +6667,20 @@ static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
 
-	if(!ppage->pageno)
+	if(!ppage->pagepos)
+        {
 	    ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1161;
+        }
 
 	i = 0;
 
-	while(i!=pkeys && strcmp(key,kParray[i]->Ptr)>=0)
+	while(i!=pkeys && MAJSTRCMPS(kParray[i],key)<=0)
 	    ++i;
 
 	if(i==pkeys)
 	{
-	    if(strcmp(key,kParray[i-1]->Ptr)<0)
+	    if(MAJSTRCMPS(kParray[i-1],key)>0)
 		blockno = pParray[i-1];
 	    else
 		blockno = pParray[i];
@@ -3793,7 +6688,7 @@ static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	else
 	    blockno = pParray[i];
 
-	if(blockno == spage->pageno)
+	if(blockno == spage->pagepos)
 	{
 	    *retpage = spage;
 	    karray = kSarray;
@@ -3810,12 +6705,12 @@ static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 
 	i = 0;
 
-	while(i!=n && strcmp(key,karray[i]->Ptr)>=0)
+	while(i!=n && MAJSTRCMPS(karray[i],key)<=0)
 	    ++i;
 
 	if(i==n)
 	{
-	    if(strcmp(key,karray[i-1]->Ptr)<0)
+	    if(MAJSTRCMPS(karray[i-1],key)>0)
 		blockno = parray[i-1];
 	    else
 		blockno = parray[i];
@@ -3823,21 +6718,11 @@ static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	else
 	    blockno = parray[i];
 
-	for(i=0;i<order;++i)
-	{
-	    ajStrDel(&kTarray[i]);
-	    ajStrDel(&kParray[i]);
-	    ajStrDel(&kSarray[i]);
-	}
+        btreeDeallocPriArray(cache,arrays1);
+        btreeDeallocPriArray(cache,arrays2);
+        btreeDeallocPriArray(cache,arrays3);
 
-	AJFREE(kTarray);
-	AJFREE(kSarray);
-	AJFREE(kParray);
-	AJFREE(pTarray);
-	AJFREE(pSarray);
-	AJFREE(pParray);
-
-	/* ajDebug("... returns blockno (a) %Ld\n",blockno); */
+	/* ajDebug("... returns blockno (a) %Lu\n",blockno); */
 
 	return blockno;
     }
@@ -3860,16 +6745,16 @@ static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 
 	i = 0;
 
-	while(pParray[i] != tpage->pageno)
+	while(pParray[i] != tpage->pagepos)
 	    ++i;
 
 	pkeypos = i;
 	
 	pSarray[skeys+1] = pSarray[skeys];
-	for(i=skeys-1;i>-1;--i)
+	for(ii=skeys-1;ii>-1;--ii)
 	{
-	    ajStrAssignS(&kSarray[i+1],kSarray[i]);
-	    pSarray[i+1] = pSarray[i];
+	    ajStrAssignS(&kSarray[ii+1],kSarray[ii]);
+	    pSarray[ii+1] = pSarray[ii];
 	}
 	ajStrAssignS(&kSarray[0],kParray[pkeypos]);
 	pSarray[0] = pTarray[tkeys];
@@ -3881,17 +6766,20 @@ static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	btreeWriteNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
-	if(!ppage->pageno)
+	if(!ppage->pagepos)
+        {
 	    ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1162;
+        }
 
 	i = 0;
 
-	while(i!=pkeys && strcmp(key,kParray[i]->Ptr)>=0)
+	while(i!=pkeys && MAJSTRCMPS(kParray[i],key)<=0)
 	    ++i;
 
 	if(i==pkeys)
 	{
-	    if(strcmp(key,kParray[i-1]->Ptr)<0)
+	    if(MAJSTRCMPS(kParray[i-1],key)>0)
 		blockno = pParray[i-1];
 	    else
 		blockno = pParray[i];
@@ -3899,7 +6787,7 @@ static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	else
 	    blockno = pParray[i];
 
-	if(blockno == spage->pageno)
+	if(blockno == spage->pagepos)
 	{
 	    *retpage = spage;
 	    karray = kSarray;
@@ -3915,12 +6803,12 @@ static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	
 	i = 0;
 
-	while(i!=n && strcmp(key,karray[i]->Ptr)>=0)
+	while(i!=n && MAJSTRCMPS(karray[i],key)<=0)
 	    ++i;
 
 	if(i==n)
 	{
-	    if(strcmp(key,karray[i-1]->Ptr)<0)
+	    if(MAJSTRCMPS(karray[i-1],key)>0)
 		blockno = parray[i-1];
 	    else
 		blockno = parray[i];
@@ -3928,38 +6816,19 @@ static ajlong btreeInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	else
 	    blockno = parray[i];
 
-	for(i=0;i<order;++i)
-	{
-	    ajStrDel(&kTarray[i]);
-	    ajStrDel(&kParray[i]);
-	    ajStrDel(&kSarray[i]);
-	}
-	AJFREE(kTarray);
-	AJFREE(kSarray);
-	AJFREE(kParray);
-	AJFREE(pTarray);
-	AJFREE(pSarray);
-	AJFREE(pParray);
+        btreeDeallocPriArray(cache,arrays1);
+        btreeDeallocPriArray(cache,arrays2);
+        btreeDeallocPriArray(cache,arrays3);
 
-	/* ajDebug("... returns blockno (b) %Ld\n",blockno); */
+	/* ajDebug("... returns blockno (b) %Lu\n",blockno); */
 	
 	return blockno;
     }
 
 
-    for(i=0;i<order;++i)
-    {
-	ajStrDel(&kTarray[i]);
-	ajStrDel(&kParray[i]);
-	ajStrDel(&kSarray[i]);
-    }
-
-    AJFREE(kTarray);
-    AJFREE(kSarray);
-    AJFREE(kParray);
-    AJFREE(pTarray);
-    AJFREE(pSarray);
-    AJFREE(pParray);
+    btreeDeallocPriArray(cache,arrays1);
+    btreeDeallocPriArray(cache,arrays2);
+    btreeDeallocPriArray(cache,arrays3);
 
     /* ajDebug("... returns 0L\n"); */
 
@@ -3991,26 +6860,30 @@ static void btreeKeyShift(AjPBtcache cache, AjPBtpage tpage)
     AjPBtpage spage = NULL;
     AjPBtpage page  = NULL;
 
-    ajint tkeys = 0;
-    ajint pkeys = 0;
-    ajint skeys = 0;
-    ajint order = 0;
+    ajuint tkeys = 0;
+    ajuint pkeys = 0;
+    ajuint skeys = 0;
+    ajuint order = 0;
+
+    ajuint i;
+    ajint  ii;
+
+    ajulong parent  = 0L;
     
-    ajint i;
-    
-    ajlong parent  = 0L;
-    
+    AjPBtMem Parrays = NULL;
+    AjPBtMem Sarrays = NULL;
+    AjPBtMem Tarrays = NULL;
     AjPStr *kTarray = NULL;
     AjPStr *kParray = NULL;
     AjPStr *kSarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pParray = NULL;
-    ajlong *pSarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pParray = NULL;
+    ajulong *pSarray = NULL;
 
-    ajint pkeypos = 0;
-    ajint minsize = 0;
+    ajuint pkeypos = 0;
+    ajuint minsize = 0;
 
-    ajlong lv = 0L;
+    ajulong lv = 0L;
     
     /* ajDebug("In btreeKeyShift\n"); */
     
@@ -4032,22 +6905,17 @@ static void btreeKeyShift(AjPBtcache cache, AjPBtpage tpage)
     ppage = ajBtreeCacheRead(cache,parent);
     pbuf = ppage->buf;
     GBT_NKEYS(pbuf,&pkeys);
-    
 
-    AJCNEW0(kParray,order);
-    AJCNEW0(pParray,order);
-    AJCNEW0(kSarray,order);
-    AJCNEW0(pSarray,order);
-    AJCNEW0(kTarray,order);
-    AJCNEW0(pTarray,order);
+    Parrays = btreeAllocPriArray(cache);
+    Sarrays = btreeAllocPriArray(cache);
+    Tarrays = btreeAllocPriArray(cache);
+    kParray = Parrays->karray;
+    pParray = Parrays->parray;
+    kSarray = Sarrays->karray;
+    pSarray = Sarrays->parray;
+    kTarray = Tarrays->karray;
+    pTarray = Tarrays->parray;
     
-    for(i=0;i<order;++i)
-    {
-	kSarray[i] = ajStrNew();
-	kParray[i] = ajStrNew();
-	kTarray[i] = ajStrNew();
-    }
-
     btreeGetKeys(cache,tbuf,&kTarray,&pTarray);
     GBT_NKEYS(tbuf,&tkeys);
 
@@ -4055,7 +6923,7 @@ static void btreeKeyShift(AjPBtcache cache, AjPBtpage tpage)
 
     i=0;
 
-    while(pParray[i] != tpage->pageno)
+    while(pParray[i] != tpage->pagepos)
 	++i;
 
     if(i) /* There is another leaf to the left */
@@ -4090,28 +6958,21 @@ static void btreeKeyShift(AjPBtcache cache, AjPBtpage tpage)
 	btreeWriteNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
-	if(!ppage->pageno)
+	if(!ppage->pagepos)
+        {
 	    ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1171;
+        }
 
 	page = ajBtreeCacheRead(cache,pSarray[skeys]);
 	buf = page->buf;
-	lv = spage->pageno;
+	lv = spage->pagepos;
 	SBT_PREV(buf,lv);
 	page->dirty = BT_DIRTY;
 
-
-	for(i=0;i<order;++i)
-	{
-	    ajStrDel(&kTarray[i]);
-	    ajStrDel(&kParray[i]);
-	    ajStrDel(&kSarray[i]);
-	}
-	AJFREE(kTarray);
-	AJFREE(kSarray);
-	AJFREE(kParray);
-	AJFREE(pTarray);
-	AJFREE(pSarray);
-	AJFREE(pParray);
+        btreeDeallocPriArray(cache,Parrays);
+        btreeDeallocPriArray(cache,Sarrays);
+        btreeDeallocPriArray(cache,Tarrays);
 
 	return;
     }
@@ -4134,10 +6995,10 @@ static void btreeKeyShift(AjPBtcache cache, AjPBtpage tpage)
 
 	pSarray[skeys+1] = pSarray[skeys];
 
-	for(i=skeys-1;i>-1;--i)
+	for(ii=skeys-1;ii>-1;--ii)
 	{
-	    ajStrAssignS(&kSarray[i+1],kSarray[i]);
-	    pSarray[i+1] = pSarray[i];
+	    ajStrAssignS(&kSarray[ii+1],kSarray[ii]);
+	    pSarray[ii+1] = pSarray[ii];
 	}
 
 	ajStrAssignS(&kSarray[0],kParray[pkeypos]);
@@ -4150,46 +7011,28 @@ static void btreeKeyShift(AjPBtcache cache, AjPBtpage tpage)
 	btreeWriteNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
-	if(!ppage->pageno)
+	if(!ppage->pagepos)
+        {
 	    ppage->dirty = BT_LOCK;
-
+            ppage->lockfor = 1172;
+        }
+        
 	page = ajBtreeCacheRead(cache,pSarray[0]);
 	buf = page->buf;
-	lv = spage->pageno;
+	lv = spage->pagepos;
 	SBT_PREV(buf,lv);
 	page->dirty = BT_DIRTY;
 
-	for(i=0;i<order;++i)
-	{
-	    ajStrDel(&kTarray[i]);
-	    ajStrDel(&kParray[i]);
-	    ajStrDel(&kSarray[i]);
-	}
-
-	AJFREE(kTarray);
-	AJFREE(kSarray);
-	AJFREE(kParray);
-	AJFREE(pTarray);
-	AJFREE(pSarray);
-	AJFREE(pParray);
-
+        btreeDeallocPriArray(cache,Parrays);
+        btreeDeallocPriArray(cache,Sarrays);
+        btreeDeallocPriArray(cache,Tarrays);
+        
 	return;
     }
 
-
-    for(i=0;i<order;++i)
-    {
-	ajStrDel(&kTarray[i]);
-	ajStrDel(&kParray[i]);
-	ajStrDel(&kSarray[i]);
-    }
-
-    AJFREE(kTarray);
-    AJFREE(kSarray);
-    AJFREE(kParray);
-    AJFREE(pTarray);
-    AJFREE(pSarray);
-    AJFREE(pParray);
+    btreeDeallocPriArray(cache,Parrays);
+    btreeDeallocPriArray(cache,Sarrays);
+    btreeDeallocPriArray(cache,Tarrays);
 
     return;
 }
@@ -4213,17 +7056,17 @@ static AjPBtpage btreeTraverseLeaves(AjPBtcache cache, AjPBtpage thys)
 {
     AjPBtpage page = NULL;
     
-    ajlong pageno = 0L;
-    ajlong prev   = 0L;
+    ajulong pagepos = 0L;
+    ajulong prev   = 0L;
     
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    AjPBtMem arrays = NULL;
+    ajulong *parray = NULL;
 
-    ajint nodetype = 0;
-    ajint nkeys    = 0;
-    ajint apos     = 0;
-    ajint order    = 0;
-    ajint i;
+    ajuint nodetype = 0;
+    ajuint nkeys    = 0;
+    ajuint apos     = 0;
+    ajuint order    = 0;
+    ajuint i;
 
     unsigned char *buf = NULL;    
 
@@ -4231,13 +7074,10 @@ static AjPBtpage btreeTraverseLeaves(AjPBtcache cache, AjPBtpage thys)
 	return NULL;
 
     order = cache->order;
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
+    arrays = btreeAllocPriArray(cache);
+    parray = arrays->Parray;
 
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-    pageno = thys->pageno;
+    pagepos = thys->pagepos;
     buf = thys->buf;
     GBT_PREV(buf,&prev);
 
@@ -4245,58 +7085,50 @@ static AjPBtpage btreeTraverseLeaves(AjPBtcache cache, AjPBtpage thys)
     buf = page->buf;
     GBT_NKEYS(buf,&nkeys);
     GBT_NODETYPE(buf,&nodetype);
-    btreeGetKeys(cache,buf,&karray,&parray);
+    btreeGetPointers(cache,buf,&parray);
 
     apos = 0;
 
-    while(parray[apos] != pageno)
+    while(parray[apos] != pagepos)
 	++apos;
 
     while(apos == nkeys)
     {
 	if(nodetype == BT_ROOT)
 	{
-	    for(i=0;i<order;++i)
-		ajStrDel(&karray[i]);
-
-	    AJFREE(karray);
-	    AJFREE(parray);
+            btreeDeallocPriArray(cache,arrays);
 
 	    return NULL;
 	}
 
 	GBT_PREV(buf,&prev);
-	pageno = page->pageno;
+	pagepos = page->pagepos;
 	page = ajBtreeCacheRead(cache,prev);
 	buf = page->buf;
 	GBT_NKEYS(buf,&nkeys);
 	GBT_NODETYPE(buf,&nodetype);
-	btreeGetKeys(cache,buf,&karray,&parray);
+	btreeGetPointers(cache,buf,&parray);
 
 	apos = 0;
 
-	while(parray[apos] != pageno)
+	while(parray[apos] != pagepos)
 	    ++apos;
     }
 
     page = ajBtreeCacheRead(cache,parray[apos+1]);
     buf = page->buf;
     GBT_NODETYPE(buf,&nodetype);
-    btreeGetKeys(cache,buf,&karray,&parray);
+    btreeGetPointers(cache,buf,&parray);
     
     while(nodetype != BT_LEAF)
     {
 	page = ajBtreeCacheRead(cache,parray[0]);
 	buf = page->buf;
-	btreeGetKeys(cache,buf,&karray,&parray);
+	btreeGetPointers(cache,buf,&parray);
 	GBT_NODETYPE(buf,&nodetype);
     }
 
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    btreeDeallocPriArray(cache,arrays);
 
     return page;
 }
@@ -4322,32 +7154,28 @@ static void btreeJoinLeaves(AjPBtcache cache)
     AjPBtpage page     = NULL;
     AjPBtpage newpage  = NULL;
     
-    ajint nodetype = 0;
-    ajint order    = 0;
-    ajint i;
+    ajuint nodetype = 0;
+    ajuint order    = 0;
+    ajuint i;
 
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    AjPBtMem arrays = NULL;
+    ajulong *parray = NULL;
 
-    ajlong left    = 0L;
-    ajlong right   = 0L;
+    ajulong left    = 0L;
+    ajulong right   = 0L;
 
-    ajlong lv = 0L;
+    ajulong lv = 0L;
     
     if(!cache->level)
 	return;
 
     order = cache->order;
-
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
+    arrays = btreeAllocPriArray(cache);
+    parray = arrays->Parray;
 
     page = btreeCacheLocate(cache,0L);
     buf = page->buf;
-    btreeGetKeys(cache,buf,&karray,&parray);
+    btreeGetPointers(cache,buf,&parray);
     GBT_NODETYPE(buf,&nodetype);
 
     while(nodetype != BT_LEAF)
@@ -4363,11 +7191,11 @@ static void btreeJoinLeaves(AjPBtcache cache)
     
     while((newpage = btreeTraverseLeaves(cache,page)))
     {
-	right = newpage->pageno;
+	right = newpage->pagepos;
 	lv = right;
 	SBT_RIGHT(buf,lv);
 	page->dirty = BT_DIRTY;
-	left = page->pageno;
+	left = page->pagepos;
 	buf = newpage->buf;
 	lv = left;
 	SBT_LEFT(buf,lv);
@@ -4378,11 +7206,7 @@ static void btreeJoinLeaves(AjPBtcache cache)
     SBT_RIGHT(buf,right);
     page->dirty = BT_DIRTY;
 
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    btreeDeallocPriArray(cache,arrays);
 
     return;
 }
@@ -4426,31 +7250,31 @@ AjPBtWild ajBtreeWildNew(AjPBtcache cache, const AjPStr wild)
 **
 ** Destroy a wildcard search object
 **
-** @param [u] thys [AjPBtWild*] b+ tree wildcard structure
+** @param [u] Pthis [AjPBtWild*] b+ tree wildcard structure
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajBtreeWildDel(AjPBtWild *thys)
+void ajBtreeWildDel(AjPBtWild *Pthis)
 {
-    AjPBtWild pthis = NULL;
+    AjPBtWild thys = NULL;
     AjPBtId   id    = NULL;
     
-    pthis = *thys;
-
-    if(!thys || !pthis)
+    if(!Pthis || !*Pthis)
 	return;
 
-    ajStrDel(&pthis->id);
+    thys = *Pthis;
 
-    while(ajListPop(pthis->list,(void **)&id))
+    ajStrDel(&thys->id);
+
+    while(ajListPop(thys->list,(void **)&id))
 	ajBtreeIdDel(&id);
 
-    ajListFree(&pthis->list);
+    ajListFree(&thys->list);
 
-    *thys = NULL;
-    AJFREE(pthis);
+    AJFREE(thys);
+    *Pthis = NULL;
 
     return;
 }
@@ -4477,7 +7301,7 @@ AjPBtKeyWild ajBtreeKeyWildNew(AjPBtcache cache, const AjPStr wild)
 
     AJNEW0(thys);
 
-    thys->keyword = ajStrNewC(wild->Ptr);
+    thys->keyword = ajStrNewS(wild);
     ajStrTrimC(&thys->keyword,"*"); /* Need to revisit this */
 
     thys->list   = ajListNew();
@@ -4495,35 +7319,35 @@ AjPBtKeyWild ajBtreeKeyWildNew(AjPBtcache cache, const AjPStr wild)
 **
 ** Destroy a wildcard keyword search object
 **
-** @param [u] thys [AjPBtKeyWild*] b+ tree wildcard keyword structure
+** @param [u] Pthis [AjPBtKeyWild*] b+ tree wildcard keyword structure
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajBtreeKeyWildDel(AjPBtKeyWild *thys)
+void ajBtreeKeyWildDel(AjPBtKeyWild *Pthis)
 {
-    AjPBtKeyWild pthis = NULL;
+    AjPBtKeyWild thys = NULL;
     AjPStr id = NULL;
     AjPBtPri pri = NULL;
     
-    pthis = *thys;
-
-    if(!thys || !pthis)
+    if(!Pthis || !*Pthis)
 	return;
 
-    ajStrDel(&pthis->keyword);
+    thys = *Pthis;
 
-    while(ajListPop(pthis->idlist,(void **)&id))
+    ajStrDel(&thys->keyword);
+
+    while(ajListPop(thys->idlist,(void **)&id))
 	ajStrDel(&id);
 
-    while(ajListPop(pthis->list,(void **)&pri))
+    while(ajListPop(thys->list,(void **)&pri))
 	ajBtreePriDel(&pri);
 
-    ajListFree(&pthis->list);
+    ajListFree(&thys->list);
 
-    *thys = NULL;
-    AJFREE(pthis);
+    AJFREE(thys);
+    *Pthis = NULL;
 
     return;
 }
@@ -4536,13 +7360,13 @@ void ajBtreeKeyWildDel(AjPBtKeyWild *thys)
 ** Find the node that should contain a key (wild)
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const char*] key to search for 
+** @param [r] key [const AjPStr] key to search for 
 **
 ** @return [AjPBtpage] leaf node where item should be inserted
 ** @@
 ******************************************************************************/
 
-AjPBtpage ajBtreeFindInsertW(AjPBtcache cache, const char *key)
+AjPBtpage ajBtreeFindInsertW(AjPBtcache cache, const AjPStr key)
 {
     AjPBtpage root = NULL;
     AjPBtpage ret  = NULL;
@@ -4569,22 +7393,22 @@ AjPBtpage ajBtreeFindInsertW(AjPBtcache cache, const char *key)
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] page
-** @param [r] item [const char*] key to search for 
+** @param [r] item [const AjPStr] key to search for 
 **
 ** @return [AjPBtpage] leaf node where item should be inserted
 ** @@
 ******************************************************************************/
 
 static AjPBtpage btreeFindINodeW(AjPBtcache cache, AjPBtpage page,
-				  const char *item)
+				  const AjPStr item)
 {
     AjPBtpage ret = NULL;
     AjPBtpage pg  = NULL;
 
     unsigned char *buf = NULL;
 
-    ajint status = 0;
-    ajint ival   = 0;
+    ajuint status = 0;
+    ajuint ival   = 0;
 
     /* ajDebug("In btreeFindINodeW\n"); */
     
@@ -4596,6 +7420,7 @@ static AjPBtpage btreeFindINodeW(AjPBtcache cache, AjPBtpage page,
     {
 	status = ret->dirty;
 	ret->dirty = BT_LOCK;	/* Lock in case of lots of overflow pages */
+        ret->lockfor = 1181;
 	pg = btreePageFromKeyW(cache,buf,item);
 	ret->dirty = status;
 	ret = btreeFindINodeW(cache,pg,item);
@@ -4613,23 +7438,16 @@ static AjPBtpage btreeFindINodeW(AjPBtcache cache, AjPBtpage page,
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] buf [unsigned char *] page buffer
-** @param [r] key [const char *] key to search for 
+** @param [r] key [const AjPStr] key to search for 
 **
 ** @return [AjPBtpage] pointer to a page
 ** @@
 ******************************************************************************/
 
 static AjPBtpage btreePageFromKeyW(AjPBtcache cache, unsigned char *buf,
-				    const char *key)
+				    const AjPStr key)
 {
-    ajint nkeys  = 0;
-    ajint keylen = 0;
-    ajint order  = 0;
-    ajint i;
-    
-    ajlong blockno = 0L;
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong blockno = 0L;
     AjPBtpage page = NULL;
 
     unsigned char *rootbuf = NULL;
@@ -4638,39 +7456,7 @@ static AjPBtpage btreePageFromKeyW(AjPBtcache cache, unsigned char *buf,
     
     rootbuf = buf;
 
-    GBT_NKEYS(rootbuf,&nkeys);
-    order = cache->order;
-
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-    keylen = strlen(key);
-
-    btreeGetKeys(cache,rootbuf,&karray,&parray);
-
-    i = 0;
-
-    while(i!=nkeys && strncmp(key,karray[i]->Ptr,keylen)>0)
-	++i;
-
-    if(i==nkeys)
-    {
-	if(strncmp(key,karray[i-1]->Ptr,keylen)<=0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
-
+    blockno = btreeGetBlockS(cache,rootbuf,key);
     page =  ajBtreeCacheRead(cache,blockno);
 
     return page;
@@ -4694,74 +7480,38 @@ static AjPBtpage btreePageFromKeyW(AjPBtcache cache, unsigned char *buf,
 static void btreeReadLeaf(AjPBtcache cache, AjPBtpage page, AjPList list)
 {
     unsigned char *buf = NULL;
-    AjPStr *karray     = NULL;
-    ajlong *parray     = NULL;
+    AjPBtMem arrays    = NULL;
+    ajulong *parray     = NULL;
 
-    ajint keylimit = 0;
-    ajint order    = 0;
-    ajint nkeys    = 0;
-    ajint bentries = 0;
+    ajuint keylimit = 0;
+    ajuint nkeys    = 0;
 
-    ajint i;
-    ajint j;
+    ajuint i;
     
-    AjPBucket *buckets = NULL;
-
     /* ajDebug("In ReadLeaf\n"); */
     
     buf = page->buf;
-    order = cache->order;
 
     GBT_NKEYS(buf,&nkeys);
 
     if(!nkeys)
         return;
 
-    AJCNEW0(parray,order);
-    AJCNEW0(karray,order);
+    arrays = btreeAllocPriArray(cache);
+    parray = arrays->parray;
 
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-    btreeGetKeys(cache,buf,&karray,&parray);
+    btreeGetPointers(cache,buf,&parray);
 
     GBT_NKEYS(buf,&nkeys);
     
     keylimit = nkeys+1;
-    AJCNEW0(buckets,keylimit);
 
     for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadBucket(cache,parray[i]);
-    
-    for(i=0;i<keylimit;++i)
-    {
-	bentries = buckets[i]->Nentries;
-
-	for(j=0;j<bentries;++j)
-	{
-	    if(!buckets[i]->Ids[j]->dups)
-		ajListPush(list,(void *)buckets[i]->Ids[j]);
-	    else
-	    {
-		ajBtreeHybLeafList(cache,buckets[i]->Ids[j]->offset,
-				   buckets[i]->Ids[j]->id,list);
-		ajBtreeIdDel(&buckets[i]->Ids[j]);
-	    }
-	}
-	
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->Ids);
-	AJFREE(buckets[i]);
-    }
+	btreeHybBucketIdlistAll(cache,parray[i],list);
 
     ajListSort(list,btreeIdCompare);
-    AJFREE(buckets);
 
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    btreeDeallocPriArray(cache,arrays);
 
     return;
 }
@@ -4785,19 +7535,16 @@ AjPBtId ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild)
 
     AjPBtId id     = NULL;
     AjPBtpage page = NULL;
-    char *key      = NULL;
+    const AjPStr key = NULL;
     AjPList list   = NULL;
     AjBool found   = ajFalse;
 
-    ajlong pageno = 0L;
-    ajint keylen  = 0;
+    ajulong pagepos = 0L;
 
     unsigned char *buf = NULL;    
 
-    key  = wild->id->Ptr;
+    key  = wild->id;
     list = wild->list;
-
-    keylen = strlen(key);
 
     found = ajFalse;
     
@@ -4805,7 +7552,8 @@ AjPBtId ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild)
     {
 	page = ajBtreeFindInsertW(cache,key);
 	page->dirty = BT_LOCK;
-	wild->pageno = page->pageno;
+        page->lockfor = 1191;
+	wild->pagepos = page->pagepos;
 	
 	btreeReadLeaf(cache,page,list);
 
@@ -4816,7 +7564,7 @@ AjPBtId ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild)
 
 	while(ajListPop(list,(void **)&id))
 	{
-	    if(!strncmp(id->id->Ptr,key,keylen))
+	    if(ajStrPrefixS(id->id,key))
 	    {
 		found = ajTrue;
 		break;
@@ -4831,15 +7579,16 @@ AjPBtId ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild)
 	if(!found)	/* Check the next leaf just in case key==internal */
 	{
 	    buf = page->buf;
-	    GBT_RIGHT(buf,&pageno);
+	    GBT_RIGHT(buf,&pagepos);
 
-	    if(!pageno)
+	    if(!pagepos)
 		return NULL;
 
-	    page = ajBtreeCacheRead(cache,pageno);
-	    wild->pageno = pageno;
+	    page = ajBtreeCacheRead(cache,pagepos);
+	    wild->pagepos = pagepos;
 	    page->dirty = BT_LOCK;
-	    
+            page->lockfor = 1192;
+
 	    btreeReadLeaf(cache,page,list);	
 	    
 	    page->dirty = BT_CLEAN;
@@ -4851,7 +7600,7 @@ AjPBtId ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild)
 
 	    while(ajListPop(list,(void **)&id))
 	    {
-		if(!strncmp(id->id->Ptr,key,keylen))
+		if(ajStrPrefixS(id->id,key))
 		{
 		    found = ajTrue;
 		    break;
@@ -4871,16 +7620,17 @@ AjPBtId ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild)
 
     if(!ajListGetLength(list))
     {
-	page = ajBtreeCacheRead(cache,wild->pageno); 
+	page = ajBtreeCacheRead(cache,wild->pagepos); 
 	buf = page->buf;
-	GBT_RIGHT(buf,&pageno);
+	GBT_RIGHT(buf,&pagepos);
 
-	if(!pageno)
+	if(!pagepos)
 	    return NULL;
 
-	page = ajBtreeCacheRead(cache,pageno);
-	wild->pageno = pageno;
+	page = ajBtreeCacheRead(cache,pagepos);
+	wild->pagepos = pagepos;
 	page->dirty = BT_LOCK;
+        page->lockfor = 1193;
 
 	btreeReadLeaf(cache,page,list);	
 
@@ -4894,7 +7644,7 @@ AjPBtId ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild)
 
     while(ajListPop(list,(void **)&id))
     {
-	if(!strncmp(id->id->Ptr,key,keylen))
+	if(ajStrPrefixS(id->id,key))
 	{
 	    found = ajTrue;
 	    break;
@@ -4913,19 +7663,19 @@ AjPBtId ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild)
 
 
 
-/* @func ajBtreeListFromKeyW ********************************************
+/* @func ajBtreeListFromKeyW **************************************************
 **
 ** Wildcard retrieval of entries
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const char *] Wildcard key
+** @param [r] key [const AjPStr] Wildcard key
 ** @param [u] idlist [AjPList] list of matching AjPBtIds
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
+void ajBtreeListFromKeyW(AjPBtcache cache, const AjPStr key, AjPList idlist)
 {
 
     AjPBtId id     = NULL;
@@ -4933,46 +7683,59 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
     AjPList list   = NULL;
     AjBool found   = ajFalse;
 
-    ajlong pripageno = 0L;
-    ajlong right = 0L;
+    ajulong pripagepos = 0L;
+    ajulong right = 0L;
     
-    ajint keylen  = 0;
-
     unsigned char *buf = NULL;    
     AjBool finished = ajFalse;
 
     AjPStr prefix = NULL;
+    AjPStr keystr = NULL;
     
     char *p;
-    
-    prefix = ajStrNew();
-    
+    char *cp;
 
-    p = strpbrk(key,"*?");
+    ajDebug("ajBtreeListFromKeyW '%S' list: %u\n", key, ajListGetLength(list));
+
+    if(!cache->countunique && !cache->countall)
+        return;
+
+    keystr = ajStrNewS(key);
+    ajStrFmtQuery(&keystr);
+
+    if(MAJSTRGETLEN(keystr) > cache->kwlimit)
+        ajStrTruncateLen(&keystr, cache->kwlimit);
+    
+    cp = MAJSTRGETPTR(keystr);
+    p = strpbrk(cp,"*?");
 
     if(p)
     {
-	if(p-key)
-	    ajStrAssignSubC(&prefix,key,0,p-key-1);
+	if(p-cp)
+	    ajStrAssignSubS(&prefix,keystr,0,p-cp-1);
 	else
 	{
+	    btreeKeyFullSearch(cache,keystr,idlist);
+            ajStrDel(&keystr);
 	    ajStrDel(&prefix);
-	    btreeKeyFullSearch(cache,key,idlist);
-
 	    return;
 	}
     }
     else
-	ajStrAssignC(&prefix,key);
-    
+	ajStrAssignS(&prefix,keystr);
+
+    ajStrFmtQuery(&prefix);
+    if(MAJSTRGETLEN(prefix) > cache->kwlimit)
+        ajStrTruncateLen(&prefix, cache->kwlimit);
 
     list = ajListNew();
-    keylen = ajStrGetLen(prefix);
+
     found = ajFalse;
-    
-    page = ajBtreeFindInsertW(cache,prefix->Ptr);
+
+    page = ajBtreeFindInsertW(cache,prefix);
     page->dirty = BT_LOCK;
-    pripageno = page->pageno;
+    page->lockfor = 1201;
+    pripagepos = page->pagepos;
     
     btreeReadLeaf(cache,page,list);
     page->dirty = BT_CLEAN;
@@ -4980,7 +7743,7 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
 
     while(ajListPop(list,(void **)&id))
     {
-	if(!strncmp(id->id->Ptr,prefix->Ptr,keylen))
+	if(ajStrPrefixS(id->id,prefix))
 	{
 	    found = ajTrue;
 	    break;
@@ -4997,6 +7760,7 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
 
 	if(!right)
 	{
+            ajStrDel(&keystr);
 	    ajStrDel(&prefix);
 	    ajListFree(&list);
 
@@ -5004,15 +7768,17 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
 	}
 
 	page = ajBtreeCacheRead(cache,right);
-	pripageno = right;
+	pripagepos = right;
 	page->dirty = BT_LOCK;
-	    
+        page->lockfor = 1202;
+
 	btreeReadLeaf(cache,page,list);	
 	    
 	page->dirty = BT_CLEAN;
 	    
 	if(!ajListGetLength(list))
 	{
+            ajStrDel(&keystr);
 	    ajStrDel(&prefix);
 	    ajListFree(&list);
 
@@ -5024,7 +7790,7 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
 
 	while(ajListPop(list,(void **)&id))
 	{
-	    if(!strncmp(id->id->Ptr,prefix->Ptr,keylen))
+	    if(ajStrPrefixS(id->id,prefix))
 	    {
 		found = ajTrue;
 		break;
@@ -5037,6 +7803,7 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
     
     if(!found)
     {
+        ajStrDel(&keystr);
 	ajStrDel(&prefix);
 	ajListFree(&list);
 
@@ -5049,14 +7816,17 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
     
     while(!finished)
     {
-	if(ajStrMatchWildC(id->id,key))
+	if(ajStrMatchWildS(id->id,keystr))
+        {
 	    ajListPush(idlist,(void *)id);
+            id = NULL;
+        }
 	else
 	    ajBtreeIdDel(&id);
 	
 	if(!ajListGetLength(list))
 	{
-	    page = ajBtreeCacheRead(cache,pripageno);
+	    page = ajBtreeCacheRead(cache,pripagepos);
 	    buf = page->buf;
 	    GBT_RIGHT(buf,&right);
 
@@ -5068,8 +7838,9 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
 
 	    page = ajBtreeCacheRead(cache,right);
 	    page->dirty = BT_LOCK;
+            page->lockfor = 1203;
 	    buf = page->buf;
-	    pripageno = right;
+	    pripagepos = right;
 	    
 	    btreeReadLeaf(cache,page,list);	
 	    
@@ -5084,7 +7855,7 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
 
 	ajListPop(list,(void **)&id);
 
-	if(strncmp(id->id->Ptr,prefix->Ptr,keylen))
+	if(!ajStrPrefixS(id->id,prefix))
 	{
 	    finished = ajTrue;
 	    ajBtreeIdDel(&id);
@@ -5096,9 +7867,10 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
     ajListFree(&list);
 
     ajListSortTwoUnique(idlist,btreeDbnoCompare,btreeOffsetCompare,
-		 btreeIdDelFromList);
+                        btreeIdDelFromList);
 
     ajStrDel(&prefix);
+    ajStrDel(&keystr);
 
     return;
 }
@@ -5112,27 +7884,26 @@ void ajBtreeListFromKeyW(AjPBtcache cache, const char *key, AjPList idlist)
 ** wildcard searches with keys beginning with '?' or '*'
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const char *] Wildcard key
+** @param [r] key [const AjPStr] Wildcard key
 ** @param [u] idlist [AjPList] list of matching AjPBtIds
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void btreeKeyFullSearch(AjPBtcache cache, const char *key,
+static void btreeKeyFullSearch(AjPBtcache cache, const AjPStr key,
 			       AjPList idlist)
 {
     AjPBtId id     = NULL;
     AjPBtpage root = NULL;
     AjPBtpage page = NULL;
-    ajlong right   = 0L;
-    ajint  order   = 0;
-    ajint nodetype = 0;
+    ajulong right   = 0L;
+    ajuint nodetype = 0;
     
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    AjPBtMem arrays = NULL;
+    ajulong *parray = NULL;
+
     AjPList list   = NULL;
-    ajint i;
     
     unsigned char *buf = NULL;    
 
@@ -5144,30 +7915,23 @@ static void btreeKeyFullSearch(AjPBtcache cache, const char *key,
     buf = root->buf;
     GBT_NODETYPE(buf,&nodetype);
     
-    order = cache->order;
-
-    AJCNEW0(parray,order);
-    AJCNEW0(karray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-
     if(cache->level)
     {
+        arrays = btreeAllocPriArray(cache);
+        parray = arrays->parray;
 	while(nodetype != BT_LEAF)
 	{
-	    btreeGetKeys(cache,buf,&karray,&parray);
+	    btreeGetPointers(cache,buf,&parray);
 	    page = ajBtreeCacheRead(cache, parray[0]);
 	    buf = page->buf;
 	    GBT_NODETYPE(buf,&nodetype);
 	    page->dirty = BT_CLEAN;
 	}
 
-	btreeGetKeys(cache,buf,&karray,&parray);
+        btreeDeallocPriArray(cache,arrays);
     }
 
-    right = -1L;
+    right = 99L;
 
     while(right)
     {
@@ -5175,7 +7939,7 @@ static void btreeKeyFullSearch(AjPBtcache cache, const char *key,
 
 	while(ajListPop(list,(void **)&id))
 	{
-	    if(ajStrMatchWildC(id->id,key))
+	    if(ajStrMatchWildS(id->id,key))
 		ajListPushAppend(idlist,(void *)id);
 	    else
 		ajBtreeIdDel(&id);
@@ -5192,15 +7956,9 @@ static void btreeKeyFullSearch(AjPBtcache cache, const char *key,
     
 
     ajListSortTwoUnique(idlist,btreeDbnoCompare,btreeOffsetCompare,
-		  btreeIdDelFromList);
+                        btreeIdDelFromList);
 
     ajListFree(&list);
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
 
     return;
 }
@@ -5224,54 +7982,24 @@ AjBool ajBtreeReplaceId(AjPBtcache cache, const AjPBtId rid)
     AjPBtpage page   = NULL;
     AjPBucket bucket = NULL;
     AjPBtId   id     = NULL;
-    char *key        = NULL;
-    
-    AjPStr *karray  = NULL;
-    ajlong *parray  = NULL;
+    const AjPStr key = NULL;
     
     unsigned char *buf = NULL;
 
-    ajint nentries = 0;
-    ajint nkeys    = 0;
-    ajint order    = 0;
+    ajuint nentries = 0;
     
-    ajint i;
-    
-    ajlong blockno = 0L;
+    ajuint i;
+
+    ajulong blockno = 0L;
     AjBool found   = ajFalse;
 
 
-    key = rid->id->Ptr;
+    key = rid->id;
 
     page = ajBtreeFindInsert(cache,key);
     buf = page->buf;
-    order = cache->order;
 
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-    btreeGetKeys(cache,buf,&karray,&parray);
-
-    GBT_NKEYS(buf,&nkeys);
-
-    i=0;
-
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
-	++i;
-    
-    if(i==nkeys)
-    {
-	if(strcmp(key,karray[i-1]->Ptr)<0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
-
+    blockno = btreeGetBlockS(cache,buf,key);
     bucket = btreeReadBucket(cache,blockno);
     
     nentries = bucket->Nentries;
@@ -5280,7 +8008,7 @@ AjBool ajBtreeReplaceId(AjPBtcache cache, const AjPBtId rid)
 
     for(i=0;i<nentries;++i)
     {
-	if(!strcmp(key,bucket->Ids[i]->id->Ptr))
+	if(ajStrMatchS(key,bucket->Ids[i]->id))
 	{
 	    found = ajTrue;
 	    break;
@@ -5298,15 +8026,6 @@ AjBool ajBtreeReplaceId(AjPBtcache cache, const AjPBtId rid)
 
     btreeBucketDel(&bucket);
 
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
-
-    if(!found)
-	return ajFalse;
-
     return ajTrue;
 }
 
@@ -5322,15 +8041,14 @@ AjBool ajBtreeReplaceId(AjPBtcache cache, const AjPBtId rid)
 ** @param [r] directory [const char*] file directory
 ** @param [w] seqfiles [AjPStr**] sequence file names
 ** @param [w] reffiles [AjPStr**] reference file names (if any)
-
 **
-** @return [ajint] number of entries
+** @return [ajuint] number of entries
 ** @@
 ******************************************************************************/
 
-ajint ajBtreeReadEntries(const char *filename, const char *indexdir,
-			 const char *directory,
-			 AjPStr **seqfiles, AjPStr **reffiles)
+ajuint ajBtreeReadEntries(const char *filename, const char *indexdir,
+                          const char *directory,
+                          AjPStr **seqfiles, AjPStr **reffiles)
 {
     AjPStr line = NULL;
     AjPStr fn   = NULL;
@@ -5345,7 +8063,7 @@ ajint ajBtreeReadEntries(const char *filename, const char *indexdir,
     
     AjPFile inf   = NULL;
     char p;
-    ajint entries = 0;
+    ajuint entries = 0;
     
     AjBool do_ref = ajFalse;
 
@@ -5358,10 +8076,14 @@ ajint ajBtreeReadEntries(const char *filename, const char *indexdir,
     trefname = ajStrNew();
     
     fn = ajStrNew();
-    ajFmtPrintS(&fn,"%s/%s",indexdir,filename);
-    
+
+    if(!*indexdir)
+        ajFmtPrintS(&fn, "%s", filename);
+    else
+        ajFmtPrintS(&fn, "%s%s%s", indexdir, SLASH_STRING, filename);
+
     ajStrAppendC(&fn,".ent");
-    
+
     inf = ajFileNewInNameS(fn);
 
     if(!inf)
@@ -5369,7 +8091,7 @@ ajint ajBtreeReadEntries(const char *filename, const char *indexdir,
 
     while(ajReadlineTrim(inf, &line))
     {
-	p = *(line->Ptr);
+	p = ajStrGetCharFirst(line);
 
 	if(p == '#' || !ajStrGetLen(line))
 	    continue;
@@ -5387,7 +8109,7 @@ ajint ajBtreeReadEntries(const char *filename, const char *indexdir,
 	{
 	    seqname = ajStrNew();
 	    ajFmtScanS(line,"%S",&tseqname);
-	    ajFmtPrintS(&seqname,"%s/%S",directory,tseqname);
+	    ajFmtPrintS(&seqname,"%s%s%S",directory,SLASH_STRING,tseqname);
 	    ajListPushAppend(list,(void *)seqname);
 	}
 
@@ -5401,8 +8123,127 @@ ajint ajBtreeReadEntries(const char *filename, const char *indexdir,
 	    seqname = ajStrNew();
 	    refname = ajStrNew();
 	    ajFmtScanS(line,"%S%S",&tseqname,&trefname);
-	    ajFmtPrintS(&seqname,"%s/%S",directory,tseqname);
-	    ajFmtPrintS(&refname,"%s/%S",directory,trefname);
+	    ajFmtPrintS(&seqname,"%s%s%S",directory,SLASH_STRING,tseqname);
+	    ajFmtPrintS(&refname,"%s%s%S",directory,SLASH_STRING,trefname);
+	    ajListPushAppend(list,(void *)seqname);
+	    ajListPushAppend(reflist,(void *)refname);
+	}
+
+	ajListToarray(list,(void ***)&(*seqfiles));
+	ajListToarray(reflist,(void ***)&(*reffiles));
+	entries = ajListGetLength(list);
+    }
+    
+    
+    ajListFree(&list);
+    ajListFree(&reflist);
+    ajStrDel(&line);
+    ajStrDel(&fn);
+
+    ajStrDel(&tseqname);
+    ajStrDel(&trefname);
+    
+
+    ajFileClose(&inf);
+
+    return entries;
+}
+
+
+
+
+/* @func ajBtreeReadEntriesS **************************************************
+**
+** Read B+ tree entries from file
+**
+** @param [r] filename [const AjPStr] file name
+** @param [r] indexdir [const AjPStr] index file directory
+** @param [r] directory [const AjPStr] file directory
+** @param [w] seqfiles [AjPStr**] sequence file names
+** @param [w] reffiles [AjPStr**] reference file names (if any)
+
+**
+** @return [ajuint] number of entries
+** @@
+******************************************************************************/
+
+ajuint ajBtreeReadEntriesS(const AjPStr filename, const AjPStr indexdir,
+                           const AjPStr directory,
+                           AjPStr **seqfiles, AjPStr **reffiles)
+{
+    AjPStr line = NULL;
+    AjPStr fn   = NULL;
+    
+    AjPList list;
+    AjPList reflist;
+
+    AjPStr seqname = NULL;
+    AjPStr refname = NULL;
+    AjPStr tseqname = NULL;
+    AjPStr trefname = NULL;
+    
+    AjPFile inf   = NULL;
+    char p;
+    ajuint entries = 0;
+    
+    AjBool do_ref = ajFalse;
+
+
+    line    = ajStrNew();
+    list    = ajListNew();
+    reflist = ajListNew();
+
+    tseqname = ajStrNew();
+    trefname = ajStrNew();
+    
+    fn = ajStrNew();
+
+    if(!ajStrGetLen(indexdir))
+        ajFmtPrintS(&fn,"%S.ent",filename);
+    else
+        ajFmtPrintS(&fn,"%S%s%S.ent",indexdir,SLASH_STRING,filename);
+    
+    inf = ajFileNewInNameS(fn);
+
+    if(!inf)
+	ajFatal("Cannot open database entries file %S", fn);
+
+    while(ajReadlineTrim(inf, &line))
+    {
+	p = ajStrGetCharFirst(line);
+
+	if(p == '#' || !ajStrGetLen(line))
+	    continue;
+
+	if(ajStrPrefixC(line,"Dual"))
+	    do_ref = ajTrue;
+
+	break;
+    }
+    
+
+    if(!do_ref)
+    {
+	while(ajReadlineTrim(inf, &line))
+	{
+	    seqname = ajStrNew();
+	    ajFmtScanS(line,"%S",&tseqname);
+	    ajFmtPrintS(&seqname,"%S%s%S",directory,SLASH_STRING,tseqname);
+	    ajListPushAppend(list,(void *)seqname);
+	}
+
+	ajListToarray(list,(void ***)&(*seqfiles));
+	entries = ajListGetLength(list);
+    }
+    else
+    {
+	while(ajReadlineTrim(inf, &line))
+	{
+	    seqname = ajStrNew();
+	    refname = ajStrNew();
+	    ajFmtScanS(line,"%S%S",&tseqname,&trefname);
+	    ajFmtPrintS(&seqname,"%S%s%S",directory,SLASH_STRING,tseqname);
+	    ajFmtPrintS(&refname,"%S%s%S",directory,SLASH_STRING,trefname);
 	    ajListPushAppend(list,(void *)seqname);
 	    ajListPushAppend(reflist,(void *)refname);
 	}
@@ -5447,54 +8288,24 @@ void ajBtreeInsertDupId(AjPBtcache cache, AjPBtId id)
     AjPBucket bucket = NULL;
     AjPBtId   tid    = NULL;
     
-    AjPStr *karray  = NULL;
-    ajlong *parray  = NULL;
-    
     unsigned char *buf = NULL;
 
-    ajint nentries = 0;
-    ajint nkeys    = 0;
-    ajint order    = 0;
+    ajuint nentries = 0;
     
-    ajint i;
+    ajuint i;
     
-    ajlong blockno = 0L;
+    ajulong blockno = 0L;
     AjBool found   = ajFalse;
 
     AjPStr oldkey = NULL;
 
-    page = ajBtreeFindInsert(cache,id->id->Ptr);
+    page = ajBtreeFindInsert(cache,id->id);
 
     buf = page->buf;
-    order = cache->order;
 
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-    if(cache->count)
+    if(cache->countunique)
     {
-	btreeGetKeys(cache,buf,&karray,&parray);
-
-	GBT_NKEYS(buf,&nkeys);
-
-	i=0;
-
-	while(i!=nkeys && strcmp(id->id->Ptr,karray[i]->Ptr)>=0)
-	    ++i;
-    
-	if(i==nkeys)
-	{
-	    if(strcmp(id->id->Ptr,karray[i-1]->Ptr)<0)
-		blockno = parray[i-1];
-	    else
-		blockno = parray[i];
-	}
-	else
-	    blockno = parray[i];
-
+	blockno = btreeGetBlockS(cache,buf,id->id);
 	bucket = btreeReadBucket(cache,blockno);
     
 	nentries = bucket->Nentries;
@@ -5502,7 +8313,7 @@ void ajBtreeInsertDupId(AjPBtcache cache, AjPBtId id)
 	found = ajFalse;
 
 	for(i=0;i<nentries;++i)
-	    if(!strcmp(id->id->Ptr,bucket->Ids[i]->id->Ptr))
+	    if(ajStrMatchS(id->id,bucket->Ids[i]->id))
 	    {
 		found = ajTrue;
 		break;
@@ -5510,12 +8321,12 @@ void ajBtreeInsertDupId(AjPBtcache cache, AjPBtId id)
 
 	if(found)
 	{
-	    oldkey = ajStrNewC(id->id->Ptr);
+	    oldkey = ajStrNewS(id->id);
 	    tid = bucket->Ids[i];
 	    ++tid->dups;
 	    btreeWriteBucket(cache,bucket,blockno);
-	    ajWarn("Dealing with a duplicate ID (%s)\n",id->id->Ptr);
-	    ajFmtPrintS(&id->id,"%S%c%d",oldkey,'\1',tid->dups);
+	    ajWarn("Dealing with a duplicate ID (%S)\n",id->id);
+	    ajFmtPrintS(&id->id,"%S%c%u",oldkey,'\1',tid->dups);
 	    ajStrDel(&oldkey);
 	}
 
@@ -5523,15 +8334,7 @@ void ajBtreeInsertDupId(AjPBtcache cache, AjPBtId id)
     }
     
 
-    ajBtreeInsertId(cache,id);
-
-    ++cache->count;
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    ajBtreeInsertId(cache,id);  /* increements counts */
 
     return;
 }
@@ -5544,18 +8347,18 @@ void ajBtreeInsertDupId(AjPBtcache cache, AjPBtId id)
 ** Write B+ tree parameters to file
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const char *] key
+** @param [r] key [const AjPStr] key
 **
 ** @return [AjPList] list of matching AjPBtIds or NULL
 ** @@
 ******************************************************************************/
 
-AjPList ajBtreeDupFromKey(AjPBtcache cache, const char *key)
+AjPList ajBtreeDupFromKey(AjPBtcache cache, const AjPStr key)
 {
     AjPList list = NULL;
     AjPBtId id   = NULL;
-    ajint i;
-    ajint dups;
+    ajuint i;
+    ajuint dups;
     
     AjPStr dupkey = NULL;
     AjPStr okey   = NULL;
@@ -5577,8 +8380,8 @@ AjPList ajBtreeDupFromKey(AjPBtcache cache, const char *key)
 
 	for(i=0;i<dups;++i)
 	{
-	    ajFmtPrintS(&dupkey,"%S%c%d",okey,'\1',i+1);
-	    id = ajBtreeIdFromKey(cache,dupkey->Ptr);
+	    ajFmtPrintS(&dupkey,"%S%c%u",okey,'\1',i+1);
+	    id = ajBtreeIdFromKey(cache,dupkey);
 
 	    if(!id)
 		ajFatal("DupFromKey: Id not found\n");
@@ -5601,30 +8404,60 @@ AjPList ajBtreeDupFromKey(AjPBtcache cache, const char *key)
 **
 ** Construct a primary keyword bucket object
 **
-** @param [r] n [ajint] Number of IDs
+** @param [r] n [ajuint] Number of IDs
 **
 ** @return [AjPPriBucket] initialised disc block cache structure
 ** @@
 ******************************************************************************/
 
-static AjPPriBucket btreePriBucketNew(ajint n)
+static AjPPriBucket btreePriBucketNew(ajuint n)
 {
     AjPPriBucket bucket = NULL;
-    ajint i;
+    ajuint i;
 
-    /* ajDebug("In btreePriBucketNew\n"); */
+    /*ajDebug("In btreePriBucketNew %u statsave: %u empty: %u\n",
+      n, statSavePriBucketNext, statSavePriBucketEmptyNext);*/
     
-    AJNEW0(bucket);
 
     if(n)
     {
-	AJCNEW0(bucket->codes,n);
-	AJCNEW0(bucket->keylen,n);
+        if(statSavePriBucketNext)
+        {
+            bucket = statSavePriBucket[--statSavePriBucketNext];
+            for(i=0;i<bucket->Maxentries;++i)
+            {
+                ajStrAssignClear(&bucket->codes[i]->id);
+                ajStrAssignClear(&bucket->codes[i]->keyword);
+                bucket->codes[i]->treeblock = 0L;
+            }
+            if(n > bucket->Maxentries)
+            {
+                AJCRESIZE0(bucket->keylen,bucket->Maxentries,n);
+                AJCRESIZE0(bucket->codes,bucket->Maxentries,n);
+                for(i=bucket->Maxentries;i<n;++i)
+                    bucket->codes[i] = ajBtreePriNew();
+                bucket->Maxentries = n;
+            }
+        }
+        else
+        {
+            AJNEW0(bucket);
+            AJCNEW0(bucket->codes,n);
+            AJCNEW0(bucket->keylen,n);
+            for(i=0;i<n;++i)
+                bucket->codes[i] = ajBtreePriNew();
+            bucket->Maxentries = n;
+        }
+        
     }
-    
-    for(i=0;i<n;++i)
-	bucket->codes[i] = ajBtreePriNew();
-
+    else 
+    {
+        if(statSavePriBucketEmptyNext)
+            bucket = statSavePriBucketEmpty[--statSavePriBucketEmptyNext];
+        else
+            AJNEW0(bucket);
+    }
+        
     bucket->NodeType = BT_PRIBUCKET;
     bucket->Nentries = n;
     bucket->Overflow = 0L;
@@ -5648,21 +8481,88 @@ static AjPPriBucket btreePriBucketNew(ajint n)
 static void btreePriBucketDel(AjPPriBucket *thys)
 {
     AjPPriBucket pthis = NULL;
-    ajint n;
-    ajint i;
+    ajuint newmax;
     
-    /* ajDebug("In btreePriBucketDel\n"); */
+    if(!thys || !*thys)
+	return;
+
+    pthis = *thys;
+
+    /*ajDebug("In btreePriBucketDel maxentries: %u savepribucket %u empty %u\n",
+            pthis->Maxentries, statSavePriBucketNext,
+            statSavePriBucketEmptyNext);*/
+
+    if(!statSavePriBucket)
+    {
+        statSavePriBucketMax=2048;
+        statSavePriBucketNext=0;
+        AJCNEW0(statSavePriBucket,statSavePriBucketMax);
+    }
+    
+    if(!statSavePriBucketEmpty)
+    {
+        statSavePriBucketEmptyMax=2048;
+        statSavePriBucketEmptyNext=0;
+        AJCNEW0(statSavePriBucketEmpty,statSavePriBucketEmptyMax);
+    }
+    
+    if(pthis->Maxentries)
+    {
+        if(statSavePriBucketNext >= statSavePriBucketMax)
+        {
+            newmax = statSavePriBucketMax + statSavePriBucketMax;
+            AJCRESIZE0(statSavePriBucket,statSavePriBucketMax,newmax);
+            statSavePriBucketMax = newmax;
+        }
+        
+        statSavePriBucket[statSavePriBucketNext++] = pthis;
+    }
+    else
+    {
+        if(statSavePriBucketEmptyNext >= statSavePriBucketEmptyMax)
+        {
+            newmax = statSavePriBucketEmptyMax + statSavePriBucketEmptyMax;
+            AJCRESIZE0(statSavePriBucketEmpty,statSavePriBucketEmptyMax,newmax);
+            statSavePriBucketEmptyMax = newmax;
+        }
+        statSavePriBucketEmpty[statSavePriBucketEmptyNext++] = pthis;
+    }
+
+    *thys = NULL;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreePriBucketFree *********************************************
+**
+** Delete a keyword primary bucket object
+**
+** @param [w] thys [AjPPriBucket*] bucket
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePriBucketFree(AjPPriBucket *thys)
+{
+    AjPPriBucket pthis = NULL;
+    ajuint n;
+    ajuint i;
 
     if(!thys || !*thys)
 	return;
 
     pthis = *thys;
-    n = pthis->Nentries;
+    n = pthis->Maxentries;
+
+    /*ajDebug("In btreePriBucketFree %u\n",pthis->Maxentries);*/
 
     for(i=0;i<n;++i)
-	ajBtreePriDel(&pthis->codes[i]);
+	btreePriFree(&pthis->codes[i]);
     
-
     AJFREE(pthis->keylen);
     AJFREE(pthis->codes);
     
@@ -5691,11 +8591,21 @@ AjPBtPri ajBtreePriNew(void)
 
     /* ajDebug("In ajBtreePriNew\n"); */
 
-    AJNEW0(pri);
-    pri->keyword   = ajStrNew();
-    pri->treeblock = 0L;
-    pri->id        = ajStrNew();
-
+    if(statSaveBtreePriNext)
+    {
+        pri = statSaveBtreePri[--statSaveBtreePriNext];
+        MAJSTRASSIGNCLEAR(&pri->id);
+        MAJSTRASSIGNCLEAR(&pri->keyword);
+        pri->treeblock = 0L;
+    }
+    else
+    {
+        AJNEW0(pri);
+        pri->keyword   = ajStrNew();
+        pri->id        = ajStrNew();
+        pri->treeblock = 0L;
+    }
+    
     return pri;
 }
 
@@ -5714,21 +8624,165 @@ AjPBtPri ajBtreePriNew(void)
 
 void ajBtreePriDel(AjPBtPri *thys)
 {
-    AjPBtPri pri = NULL;
+    ajuint newmax;
 
     /* ajDebug("In ajBtreePriDel\n"); */
 
+    if(!statSaveBtreePri)
+    {
+        statSaveBtreePriMax = 2048;
+        AJCNEW0(statSaveBtreePri, statSaveBtreePriMax);
+        statSaveBtreePriNext = 0;
+    }
+
     if(!thys || !*thys)
 	return;
+    
+    if(statSaveBtreePriNext >= statSaveBtreePriMax) 
+    {
+        newmax = statSaveBtreePriMax + statSaveBtreePriMax;
+        AJCRESIZE0(statSaveBtreePri,statSaveBtreePriMax,newmax);
+        statSaveBtreePriMax = newmax;
+    }
+    
+    statSaveBtreePri[statSaveBtreePriNext++] = *thys;
+    
+    *thys = NULL;
 
+    return;
+}
+
+
+
+
+/* @funcstatic btreePriFree *********************************************
+**
+** Destructor for index primary bucket information
+**
+** @param [w] thys [AjPBtPri*] index keyword primary object
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePriFree(AjPBtPri *thys)
+{
+    AjPBtPri pri = NULL;
+
+    if(!thys || !*thys)
+	return;
     pri = *thys;
     
-    ajStrDel(&pri->keyword);
+    /*ajDebug("In ajBtreePriFree id '%S' key '%S'\n",
+      pri->id, pri->keyword);*/
+
     ajStrDel(&pri->id);
+    ajStrDel(&pri->keyword);
     AJFREE(pri);
     *thys = NULL;
 
     return;
+}
+
+
+
+
+/* @funcstatic btreePriBucketIdlist *******************************************
+**
+** Copies all primary keys into a list
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+** @param [u] idlist [AjPList] list to hold keys
+**
+** @return [ajulong] Overflow
+** @@
+******************************************************************************/
+
+static ajulong btreePriBucketIdlist(AjPBtcache cache, ajulong pagepos,
+                                   AjPList idlist)
+{
+    AjPBtpage page      = NULL;
+    AjPBtpage lpage     = NULL;
+    unsigned char *buf  = NULL;
+    unsigned char *kptr = NULL;
+    AjPBtPri pri        = NULL;
+    
+    unsigned char *codeptr = NULL;
+    
+    ajuint  nodetype  = 0;
+    ajuint  nentries  = 0;
+    ajulong overflow  = 0L;
+    ajulong pageoverflow = 0L;
+    ajuint  dirtysave = 0;
+    
+    ajuint  i;
+    ajuint  len  = 0;
+    ajuint idlen = 0;
+    
+    /* ajDebug("In btreePriBucketIdlist\n"); */
+    
+    if(!pagepos)
+	ajFatal("PriBucketIdlist: cannot read bucket from root page cache %S",
+                cache->filename);
+
+    page  = ajBtreeCacheRead(cache,pagepos);
+    lpage = page;
+    dirtysave = lpage->dirty;
+    lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1211;
+
+    buf = lpage->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_PRIBUCKET)
+	ajFatal("PriBucketIdlist: NodeType mismatch. "
+                "Not primary bucket (%u) cache %S",
+		nodetype, cache->filename);
+    
+    GBT_BUCKNENTRIES(buf,&nentries);
+    
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    pageoverflow = overflow;
+    
+    kptr  = PBT_BUCKKEYLEN(buf);
+    codeptr = kptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;++i)
+    {
+	BT_GETAJUINT(kptr,&len);
+        idlen = len - sizeof(ajulong) - 1;
+	if((codeptr-buf+1) + len > cache->pagesize)	/* overflow */
+	{
+	    /* ajDebug("ReadPriBucket: Overflow\n"); */
+	    page  = ajBtreeCacheRead(cache,overflow);
+	    buf = page->buf;
+	    GBT_BUCKNODETYPE(buf,&nodetype);
+	    if(nodetype != BT_PRIBUCKET)
+		ajFatal("PriBucketIdlist: NodeType mismatch. Not primary "
+			"bucket (%u) cache %S",
+                        nodetype, cache->filename);
+	    GBT_BUCKOVERFLOW(buf,&overflow);
+	    /* overflow bucket ids start at the keylen position */
+	    codeptr = PBT_BUCKKEYLEN(buf);
+	}
+
+	pri = ajBtreePriNew();
+
+	/* Fill ID objects */
+	ajStrAssignLenC(&pri->keyword,(const char *)codeptr,idlen);
+	codeptr += (idlen + 1);
+	BT_GETAJULONG(codeptr,&pri->treeblock);
+	codeptr += sizeof(ajulong);
+
+	kptr += sizeof(ajuint);
+        ajListPushAppend(idlist, pri);
+    }
+
+    lpage->dirty = dirtysave;
+    
+    return pageoverflow;
 }
 
 
@@ -5740,13 +8794,13 @@ void ajBtreePriDel(AjPBtPri *thys)
 ** Creates one empty key slot for possible addition
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
 ** @return [AjPPriBucket] bucket
 ** @@
 ******************************************************************************/
 
-static AjPPriBucket btreeReadPriBucket(AjPBtcache cache, ajlong pageno)
+static AjPPriBucket btreeReadPriBucket(AjPBtcache cache, ajulong pagepos)
 {
     AjPPriBucket bucket = NULL;
     AjPBtpage page      = NULL;
@@ -5757,82 +8811,83 @@ static AjPPriBucket btreeReadPriBucket(AjPBtcache cache, ajlong pageno)
     
     unsigned char *codeptr = NULL;
     
-    ajint  nodetype  = 0;
-    ajint  nentries  = 0;
-    ajlong overflow  = 0L;
-    ajint  dirtysave = 0;
+    ajuint  nodetype  = 0;
+    ajuint  nentries  = 0;
+    ajulong overflow  = 0L;
+    ajuint  dirtysave = 0;
     
-    ajint  i;
-    ajint  len  = 0;
+    ajuint  i;
+    ajuint  len  = 0;
     
     /* ajDebug("In btreeReadPriBucket\n"); */
     
-    if(!pageno)
-	ajFatal("PriBucketRead: cannot read bucket from root page");
+    if(!pagepos)
+	ajFatal("PriBucketRead: cannot read bucket from root page cache %S",
+                cache->filename);
 
-    page  = ajBtreeCacheRead(cache,pageno);
+    page  = ajBtreeCacheRead(cache,pagepos);
     lpage = page;
     dirtysave = lpage->dirty;
     lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1221;
 
     buf = lpage->buf;
 
     GBT_BUCKNODETYPE(buf,&nodetype);
 
     if(nodetype != BT_PRIBUCKET)
-	ajFatal("PriReadBucket: NodeType mismatch. Not primary bucket (%d)",
-		nodetype);
+	ajFatal("PriReadBucket: NodeType mismatch. "
+                "Not primary bucket (%u) page %Lu cache %S",
+		nodetype, pagepos, cache->filename);
     
     GBT_BUCKNENTRIES(buf,&nentries);
 
     if(nentries > cache->nperbucket)
-	ajFatal("PriReadBucket: Bucket too full\n");
+	ajFatal("PriReadBucket: Bucket too full page: %Lu "
+                "entries: %u max: %u page %Lu cache %S",
+                pagepos, nentries, cache->nperbucket,
+                pagepos, cache->filename);
     
 
     GBT_BUCKOVERFLOW(buf,&overflow);
 
-    AJNEW0(bucket);
-    bucket->NodeType = nodetype;
+    bucket = btreePriBucketNew(cache->nperbucket);
     bucket->Nentries = nentries;
-    bucket->Overflow = overflow;
-    
-    AJCNEW0(bucket->keylen, nentries+1);
-    AJCNEW0(bucket->codes, nentries+1);
-
     
     kptr  = PBT_BUCKKEYLEN(buf);
-    codeptr = kptr + (nentries * sizeof(ajint));
+    codeptr = kptr + (nentries * sizeof(ajuint));
 
     for(i=0;i<nentries;++i)
     {
-	BT_GETAJINT(kptr,&len);
+	BT_GETAJUINT(kptr,&len);
 
 	if((codeptr-buf+1) + len > cache->pagesize)	/* overflow */
 	{
+#if AJINDEX_DEBUG
 	    ajDebug("PriReadBucket: Overflow\n");
+#endif
 	    page  = ajBtreeCacheRead(cache,overflow);
 	    buf = page->buf;
 	    GBT_BUCKNODETYPE(buf,&nodetype);
 
 	    if(nodetype != BT_PRIBUCKET)
 		ajFatal("PriReadBucket: NodeType mismatch. Not primary "
-			"bucket (%d)",nodetype);
+			"bucket (%u) page %Lu", nodetype, pagepos);
 
 	    GBT_BUCKOVERFLOW(buf,&overflow);
 	    /* overflow bucket ids start at the keylen position */
 	    codeptr = PBT_BUCKKEYLEN(buf);
 	}
 
-	bucket->codes[i] = ajBtreePriNew();
 	pri = bucket->codes[i];
 
 	/* Fill ID objects */
 	ajStrAssignC(&pri->keyword,(const char *)codeptr);
 	codeptr += (strlen((const char *)codeptr) + 1);
-	BT_GETAJLONG(codeptr,&pri->treeblock);
-	codeptr += sizeof(ajlong);
+	BT_GETAJULONG(codeptr,&pri->treeblock);
+	codeptr += sizeof(ajulong);
 
-	kptr += sizeof(ajint);
+	kptr += sizeof(ajuint);
     }
 
     lpage->dirty = dirtysave;
@@ -5850,14 +8905,14 @@ static AjPPriBucket btreeReadPriBucket(AjPBtcache cache, ajlong pageno)
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [r] bucket [const AjPPriBucket] bucket
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeWritePriBucket(AjPBtcache cache, const AjPPriBucket bucket,
-				ajlong pageno)
+				ajulong pagepos)
 {
     AjPBtpage page  = NULL;
     AjPBtpage lpage = NULL;
@@ -5865,36 +8920,34 @@ static void btreeWritePriBucket(AjPBtcache cache, const AjPPriBucket bucket,
     unsigned char *buf  = NULL;
     unsigned char *lbuf = NULL;
 
-    ajint  v   = 0;
-    ajint  i   = 0;
-    ajint  len = 0;
-    ajlong lv  = 0L;
-    ajlong pno = 0L;
+    ajuint  v   = 0;
+    ajuint i   = 0;
+    ajuint len = 0;
+    ajulong lv  = 0L;
+    ajulong pno = 0L;
 
     AjPBtPri pri    = NULL;
-    ajint  nentries = 0;
-    ajlong overflow = 0L;
+    ajuint nentries = 0;
+    ajulong overflow = 0L;
 
     unsigned char *keyptr = NULL;
     unsigned char *lptr   = NULL;
 
-    
+    /* ajuint unused = 0; */
+
+
     /* ajDebug("In btreeWritePriBucket\n"); */
 
-    if(pageno == cache->totsize)	/* Create a new page */
+    if(pagepos == cache->totsize)	/* Create a new page */
     {
-	pno = pageno;
-	page = ajBtreeCacheWrite(cache,pageno);
-	page->pageno = cache->totsize;
-	cache->totsize += cache->pagesize;
+	pno = pagepos;
+	page = ajBtreeCacheWriteNodenew(cache);
 	buf = page->buf;
-	overflow = 0L;
-	lv = overflow;
-	SBT_BUCKOVERFLOW(buf,lv);
+        overflow = 0L;
     }
     else
     {
-	page = ajBtreeCacheRead(cache,pageno);
+	page = ajBtreeCacheRead(cache,pagepos);
 	buf = page->buf;
 	GBT_BUCKOVERFLOW(buf,&overflow);
     }
@@ -5904,6 +8957,7 @@ static void btreeWritePriBucket(AjPBtcache cache, const AjPPriBucket bucket,
 
     lbuf = buf;
     page->dirty = BT_LOCK;
+    page->lockfor = 1231;
     lpage = page;
 
     nentries = bucket->Nentries;
@@ -5915,16 +8969,16 @@ static void btreeWritePriBucket(AjPBtcache cache, const AjPPriBucket bucket,
 
     for(i=0;i<nentries;++i)
     {
-	if((ajint)((keyptr-lbuf+1)+sizeof(ajint)) > cache->pagesize)
-	    ajFatal("PriBucketWrite: Bucket cannot hold more than %d keys",
+	if((ajuint)((keyptr-lbuf+1)+sizeof(ajuint)) > cache->pagesize)
+	    ajFatal("PriBucketWrite: Bucket cannot hold more than %u keys",
 		    i-1);
 
 	pri = bucket->codes[i];
 	/* Need to alter this if bucket primary keyword structure changes */
 	len = BT_BUCKPRILEN(pri->keyword);
         v = len;
-	BT_SETAJINT(keyptr,v);
-	keyptr += sizeof(ajint);
+	BT_SETAJUINT(keyptr,v);
+	keyptr += sizeof(ajuint);
     }
 
 
@@ -5937,23 +8991,17 @@ static void btreeWritePriBucket(AjPBtcache cache, const AjPPriBucket bucket,
 
 	if((lptr-buf+1)+len > cache->pagesize) /* overflow */
 	{
-    	    ajDebug("WritePriBucket: Overflow\n");
+    	    /*ajDebug("WritePriBucket: Overflow\n");*/
 
 	    if(!overflow)		/* No overflow buckets yet */
 	    {
 		pno = cache->totsize;
                 lv = pno;
 		SBT_BUCKOVERFLOW(buf,lv);
-		page = ajBtreeCacheWrite(cache,pno);
-		page->pageno = cache->totsize;
-		cache->totsize += cache->pagesize;
-		buf = page->buf;
+		page = ajBtreeCacheWriteNodenew(cache);
+                buf = page->buf;
 		v = BT_PRIBUCKET;
 		SBT_BUCKNODETYPE(buf,v);
-		v = 0;
-		SBT_BUCKNENTRIES(buf,v);
-		lv = 0L;
-		SBT_BUCKOVERFLOW(buf,lv);
 	    }
 	    else
 	    {
@@ -5963,20 +9011,103 @@ static void btreeWritePriBucket(AjPBtcache cache, const AjPPriBucket bucket,
 	    }
 
 	    page->dirty = BT_DIRTY;
+
 	    lptr = PBT_BUCKKEYLEN(buf);	    
 	}
 	
 	sprintf((char *)lptr,"%s",ajStrGetPtr(pri->keyword));
 	lptr += (ajStrGetLen(pri->keyword) + 1);
         lv = pri->treeblock;
-	BT_SETAJLONG(lptr,lv);
-	lptr += sizeof(ajlong);
+	BT_SETAJULONG(lptr,lv);
+	lptr += sizeof(ajulong);
     }
 
     lv = 0L;
     SBT_BUCKOVERFLOW(buf,lv);
-    
+
+    /*
+    unused = cache->pagesize - (lptr - buf);
+    if(unused > cache->pagesize)
+        ajFatal("unused %u for pagesize %u", unused, cache->pagesize);
+    if(unused > 0)
+        memset(lptr, 0, unused);
+    */
+
     lpage->dirty = BT_DIRTY;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeWritePriBucketEmpty ****************************************
+**
+** Write empty primary keyword index bucket object to the cache given a
+** disc page number
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeWritePriBucketEmpty(AjPBtcache cache, ajulong pagepos)
+{
+    AjPBtpage page  = NULL;
+    AjPBtpage lpage = NULL;
+
+    unsigned char *buf  = NULL;
+
+    ajuint  v   = 0;
+    ajulong lv  = 0L;
+
+    ajulong overflow = 0L;
+
+    /* ajuint unused = 0; */
+
+    /* ajDebug("In btreeWritePriBucketEmpty\n"); */
+
+    if(pagepos == cache->totsize)	/* Create a new page */
+    {
+	page = ajBtreeCacheWriteBucketnew(cache);
+	buf = page->buf;
+	overflow = 0L;
+	lv = overflow;
+	SBT_BUCKOVERFLOW(buf,lv);
+    }
+    else
+    {
+	page = ajBtreeCacheRead(cache,pagepos);
+	buf = page->buf;
+	GBT_BUCKOVERFLOW(buf,&overflow);
+    }
+
+    v = BT_PRIBUCKET;
+    SBT_BUCKNODETYPE(buf,v);
+
+    page->dirty = BT_LOCK;      /* cleared at end */
+    page->lockfor = 1241;
+    lpage = page;
+
+    v = 0;
+    SBT_BUCKNENTRIES(buf,v);
+
+    lv = 0L;
+    SBT_BUCKOVERFLOW(buf,lv);
+
+/*
+    lptr = PBT_BUCKKEYLEN(buf);  
+
+    unused = cache->pagesize - (lptr - buf);
+    if(unused > cache->pagesize)
+        ajFatal("unused %u for pagesize %u", unused, cache->pagesize);
+    if(unused > 0)
+        memset(lptr, 0, unused);
+    */
+
+    lpage->dirty = BT_DIRTY;    /* clear the lock */
 
     return;
 }
@@ -5990,30 +9121,181 @@ static void btreeWritePriBucket(AjPBtcache cache, const AjPPriBucket bucket,
 ** Only called if there is room in the bucket
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number of bucket
+** @param [r] pagepos [ajulong] page number of bucket
 ** @param [r] pri [const AjPBtPri] ID info
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void btreeAddToPriBucket(AjPBtcache cache, ajlong pageno,
+static void btreeAddToPriBucket(AjPBtcache cache, ajulong pagepos,
 				const AjPBtPri pri)
+{
+    unsigned char *buf  = NULL;
+    unsigned char *kptr = NULL;
+    unsigned char *src  = NULL;
+    unsigned char *dest = NULL;
+
+    unsigned char *lastptr = NULL;
+    unsigned char *endptr  = NULL;
+    
+    ajuint nentries = 0;
+    ajuint nodetype = 0;
+    ajuint idlen    = 0;
+
+    ajuint sum = 0;
+    ajuint len = 0;
+    ajuint i;
+    ajuint v;
+    ajulong lv;
+    
+    ajulong secrootpage = 0L;
+    ajulong right       = 0L;
+    ajulong treeblock  = 0L;
+
+    AjPBtpage page = NULL;
+    static ajuint calls = 0;
+    static ajuint overflowcalls=0;
+
+    calls++;
+
+    treeblock = pri->treeblock;
+
+    /* See if secondary tree exists, if not then create it */
+    if(!pri->treeblock)
+    {
+	secrootpage = cache->totsize;
+
+	ajBtreeCreateRootNode(cache,secrootpage);
+	cache->secrootblock = secrootpage;
+	page = ajBtreeCacheWrite(cache,secrootpage);
+	page->dirty = BT_LOCK;
+        page->lockfor = 1251;
+
+        if(btreeDoRootSync)
+            ajBtreeCacheRootSync(cache,secrootpage);
+
+	treeblock = secrootpage;
+        buf = page->buf;
+	cache->slevel = 0;
+    }
+    else
+    {
+	cache->secrootblock = pri->treeblock;
+	page = ajBtreeCacheWrite(cache,cache->secrootblock);
+	page->dirty = BT_LOCK;
+        page->lockfor = 1252;
+	buf = page->buf;
+	GBT_RIGHT(buf, &right);
+	cache->slevel = (ajuint) right;
+    }
+
+    ajBtreeSecInsertId(cache, pri->id);
+
+    right = (ajulong) cache->slevel;
+    
+    SBT_RIGHT(buf, right);
+    page->dirty = BT_DIRTY;
+    
+    /* add to the PriBucket page */
+
+
+    page = ajBtreeCacheRead(cache,pagepos);
+    buf  = page->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+
+    if(nodetype != BT_PRIBUCKET)
+        ajFatal("Wrong nodetype in AddToPriBucket cache %S",
+                cache->filename);
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+
+    if(nentries >= cache->nperbucket)
+        ajFatal("Bucket too full in AddToPriBucket page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->nperbucket,
+                cache->filename);    
+
+    kptr = PBT_BUCKKEYLEN(buf);
+    src  = kptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;++i)
+    {
+        BT_GETAJUINT(kptr,&len);
+        sum += len;
+        kptr += sizeof(ajuint);
+    }
+
+    endptr  = src + sum - 1;
+    idlen   = MAJSTRGETLEN(pri->keyword);
+    lastptr = endptr + sizeof(ajulong) + idlen + 1;
+
+    if((ajuint) (lastptr - buf) >= cache->pagesize)
+    {
+        overflowcalls++;
+
+        ajWarn("\nOverflow in AddToPriBucket nentries:%u fails %u/%u cache %S",
+               nentries, overflowcalls, calls, cache->filename);
+
+        btreeAddToPriBucketFull(cache,pagepos,pri);
+        return;
+    }
+    
+    dest = src + sizeof(ajuint);
+    memmove((void *)dest, (void *)src, sum);
+
+    v = BT_BUCKPRILEN(pri->keyword);
+    BT_SETAJUINT(src,v);
+
+    endptr += sizeof(ajuint) + 1;
+    strcpy((char *)endptr,MAJSTRGETPTR(pri->keyword));
+
+    endptr += idlen + 1;
+    lv = treeblock;
+    BT_SETAJULONG(endptr,lv);
+    endptr += sizeof(ajulong);
+
+    v = nentries + 1;
+    SBT_BUCKNENTRIES(buf,v);
+
+    page->dirty = BT_DIRTY;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeAddToPriBucketFull ****************************************
+**
+** Add a keyword ID to a primary bucket
+** Only called if there is room in the bucket
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number of bucket
+** @param [r] pri [const AjPBtPri] ID info
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeAddToPriBucketFull(AjPBtcache cache, ajulong pagepos,
+                                    const AjPBtPri pri)
 {
     AjPPriBucket bucket  = NULL;
     AjPBtPri     dest    = NULL;
     AjPBtpage    page    = NULL;
-    AjPBtpage    pripage = NULL;
     
-    ajint nentries;
-    ajlong secrootpage = 0L;
-    ajlong right       = 0L;
+    ajuint nentries;
+    ajulong secrootpage = 0L;
+    ajulong right       = 0L;
 
     unsigned char *buf;
     
     /* ajDebug("In btreeAddToPriBucket\n"); */
 
-    bucket   = btreeReadPriBucket(cache,pageno);
+    bucket   = btreeReadPriBucket(cache,pagepos);
     nentries = bucket->Nentries;
 
 
@@ -6035,43 +9317,40 @@ static void btreeAddToPriBucket(AjPBtcache cache, ajlong pageno,
 	ajBtreeCreateRootNode(cache,secrootpage);
 	cache->secrootblock = secrootpage;
 	page = ajBtreeCacheWrite(cache,secrootpage);
-	page->dirty = BT_DIRTY;
-	ajBtreeCacheSync(cache,secrootpage);
 	page->dirty = BT_LOCK;
+        page->lockfor = 1261;
+        if(btreeDoRootSync)
+            ajBtreeCacheRootSync(cache,secrootpage);
 	dest->treeblock = secrootpage;
 	buf = page->buf;
 	cache->slevel = 0;
 
-	/* Relock the primary root page as a CacheSync unlocks all */ 
-	pripage = btreeCacheLocate(cache,0L);
-	pripage->dirty = BT_LOCK;
-
-	/* ajDebug("Created 2ry tree at block %d\n",(ajint)secrootpage); */
+	/* ajDebug("Created 2ry tree at block %u\n",(ajuint)secrootpage); */
     }
     else
     {
 	cache->secrootblock = pri->treeblock;
 	page = ajBtreeCacheWrite(cache,cache->secrootblock);
 	page->dirty = BT_LOCK;
+        page->lockfor = 1262;
 	buf = page->buf;
 	GBT_RIGHT(buf, &right);
-	cache->slevel = (ajint) right;
+	cache->slevel = (ajuint) right;
     }
 
-    ajBtreeInsertSecId(cache, pri->id);
+    ajBtreeSecInsertId(cache, pri->id);
 
-    right = (ajlong) cache->slevel;
+    right = (ajulong) cache->slevel;
     
     SBT_RIGHT(buf, right);
     page->dirty = BT_DIRTY;
     
 
 
-
     
     ++bucket->Nentries;
 
-    btreeWritePriBucket(cache,bucket,pageno);
+    btreeWritePriBucket(cache,bucket,pagepos);
 
     btreePriBucketDel(&bucket);
     
@@ -6086,33 +9365,33 @@ static void btreeAddToPriBucket(AjPBtcache cache, ajlong pageno,
 ** Return number of entries in a primary keyword bucket
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
-** @return [ajint] Number of entries in bucket
+** @return [ajuint] Number of entries in bucket
 ** @@
 ******************************************************************************/
 
-static ajint btreeNumInPriBucket(AjPBtcache cache, ajlong pageno)
+static ajuint btreeNumInPriBucket(AjPBtcache cache, ajulong pagepos)
 {
     AjPBtpage page     = NULL;
     unsigned char *buf = NULL;
 
-    ajint  nodetype = 0;
-    ajint  nentries = 0;
+    ajuint  nodetype = 0;
+    ajuint nentries = 0;
     
     /* ajDebug("In btreeNumInPriBucket\n"); */
     
-    if(!pageno)
+    if(!pagepos)
 	ajFatal("NumInPriBucket: Attempt to read bucket from root page\n");
 
-    page  = ajBtreeCacheRead(cache,pageno);
+    page  = ajBtreeCacheRead(cache,pagepos);
 
     buf = page->buf;
 
     GBT_BUCKNODETYPE(buf,&nodetype);
 
     if(nodetype != BT_PRIBUCKET)
-	ajFatal("PriReadBucket: NodeType mismatch. Not primary bucket (%d)",
+	ajFatal("PriReadBucket: NodeType mismatch. Not primary bucket (%u)",
 		nodetype);
     
     GBT_BUCKNENTRIES(buf,&nentries);
@@ -6136,8 +9415,8 @@ static ajint btreeNumInPriBucket(AjPBtcache cache, ajlong pageno)
 
 static ajint btreeKeywordCompare(const void *a, const void *b)
 {
-    return strcmp((*(AjPBtPri const *)a)->keyword->Ptr,
-		  (*(AjPBtPri const *)b)->keyword->Ptr);
+    return MAJSTRCMPS((*(AjPBtPri const *)a)->keyword,
+                      (*(AjPBtPri const *)b)->keyword);
 }
 
 
@@ -6156,134 +9435,101 @@ static ajint btreeKeywordCompare(const void *a, const void *b)
 ******************************************************************************/
 static AjBool btreeReorderPriBuckets(AjPBtcache cache, AjPBtpage leaf)
 {
-    ajint nkeys = 0;
-    AjPPriBucket *buckets = NULL;
+    ajuint nkeys = 0;
     unsigned char *lbuf   = NULL;
 
-    AjPStr *keys      = NULL;
-    ajlong *ptrs      = NULL;
-    ajlong *overflows = NULL;
+    ajulong *ptrs      = NULL;
+    AjPStr *newkeys      = NULL;
+    ajulong *newptrs      = NULL;
+    ajulong *overflows = NULL;
+    AjPBtMem arrays1 = NULL;
+    AjPBtMem arrays2 = NULL;
     
-    ajint i = 0;
-    ajint j = 0;
+    ajuint i = 0;
     
-    ajint order;
-    ajint bentries      = 0;
-    ajint totalkeys     = 0;
-    ajint nperbucket    = 0;
-    ajint maxnperbucket = 0;
-    ajint count         = 0;
-    ajint totkeylen     = 0;
-    ajint keylimit      = 0;
-    ajint bucketn       = 0;
-    ajint bucketlimit   = 0;
-    ajint nodetype      = 0;
-    ajint dirtysave     = 0;    
+    ajuint order;
+    ajuint totalkeys     = 0;
+    ajuint maxnperbucket = 0;
+    ajuint count         = 0;
+    ajuint keylimit      = 0;
+    ajuint bucketlimit   = 0;
+    ajuint nodetype      = 0;
+    ajuint dirtysave     = 0;    
 
     AjPList idlist       = NULL;
     AjPBtPri bid         = NULL;
     AjPPriBucket cbucket = NULL;
     AjPBtPri cid         = NULL;
 
-    ajint v = 0;
+    ajuint iold = 0;
     
+#if AJINDEX_DEBUG
+    ajDebug("btreeReorderPriBuckets %Lu\n", leaf->pagepos);
+#endif
+    ++statCallReorderPriBuckets;
+
     /* ajDebug("In btreeReorderPriBuckets\n"); */
 
     dirtysave = leaf->dirty;
 
     leaf->dirty = BT_LOCK;
+    leaf->lockfor = 1271;
     lbuf = leaf->buf;
 
     GBT_NODETYPE(lbuf,&nodetype);
 
     order = cache->order;
-    nperbucket = cache->nperbucket;
     
-
     /* Read keys/ptrs */
-    AJCNEW0(keys,order);
-    AJCNEW0(ptrs,order);
-    AJCNEW0(overflows,order);
+    arrays1 = btreeAllocPriArray(cache);
+    ptrs = arrays1->parray;
+    arrays2 = btreeAllocPriArray(cache);
+    newkeys = arrays2->karray;
+    newptrs = arrays2->parray;
+    overflows = arrays2->overflows;
     
-    for(i=0;i<order;++i)
-	keys[i] = ajStrNew();
-
-    btreeGetKeys(cache,lbuf,&keys,&ptrs);
+    btreeGetPointers(cache,lbuf,&ptrs);
 
     GBT_NKEYS(lbuf,&nkeys);
-
+    keylimit = nkeys + 1;
 
     if(!nkeys)
-	ajFatal("PriBucketReorder: Attempt to reorder empty leaf");
+	ajFatal("ReorderPriBuckets: Attempt to reorder empty leaf");
 
     for(i=0;i<nkeys;++i)
 	totalkeys += btreeNumInPriBucket(cache,ptrs[i]);
-
     totalkeys += btreeNumInPriBucket(cache,ptrs[i]);
 
-    /* Set the number of entries per bucket to approximately half full */
-    maxnperbucket = nperbucket >> 1;
+    btreeBucketCalc(totalkeys, keylimit, cache->nperbucket,
+                    &bucketlimit, &maxnperbucket);
 
-    if(!maxnperbucket)
-	++maxnperbucket;
-
-    /* Work out the number of new buckets needed */
-    bucketn = (totalkeys / maxnperbucket);
-
-    if(totalkeys % maxnperbucket)
-	++bucketn;
-    
-    if(bucketn > order)
+    if(bucketlimit >= order)
     {
-	for(i=0;i<order;++i)
-	    ajStrDel(&keys[i]);
-
-	AJFREE(keys);
-	AJFREE(ptrs);
-	AJFREE(overflows);
-	
+        btreeDeallocPriArray(cache,arrays1);
+        btreeDeallocPriArray(cache,arrays2);
 	leaf->dirty = dirtysave;
+
 	return ajFalse;
     }
     
-
-    /* Read buckets */
-    AJCNEW0(buckets,nkeys+1);
-    keylimit = nkeys + 1;
-
-    
-    for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadPriBucket(cache,ptrs[i]);
-
 
     /* Read IDs from all buckets and push to list and sort (increasing kw) */
     idlist  = ajListNew();
     
     for(i=0;i<keylimit;++i)
-    {
-	overflows[i] = buckets[i]->Overflow;
-	bentries = buckets[i]->Nentries;
+        overflows[i] = btreePriBucketIdlist(cache,ptrs[i],idlist);
 
-	for(j=0;j<bentries;++j)
-	    ajListPush(idlist,(void *)buckets[i]->codes[j]);
-	
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->codes);
-	AJFREE(buckets[i]);
-    }
     ajListSort(idlist,btreeKeywordCompare);
-    AJFREE(buckets);
 
-    cbucket = btreePriBucketNew(maxnperbucket);
-    bucketlimit = bucketn - 1;
+    cbucket = btreePriBucketNew(cache->nperbucket);
     
+    iold = 0;
     for(i=0;i<bucketlimit;++i)
     {
 	cbucket->Overflow = overflows[i];
 	cbucket->Nentries = 0;
 
-	count = 0;
-
+        count = 0;
 	while(count!=maxnperbucket)
 	{
 	    ajListPop(idlist,(void **)&bid);
@@ -6300,13 +9546,13 @@ static AjBool btreeReorderPriBuckets(AjPBtcache cache, AjPBtpage leaf)
 
 
 	ajListPeek(idlist,(void **)&bid);
-	ajStrAssignS(&keys[i],bid->keyword);
+	ajStrAssignS(&newkeys[i],bid->keyword);
 
-	totkeylen += ajStrGetLen(bid->keyword);
-
-	if(!ptrs[i])
-	    ptrs[i] = cache->totsize;
-	btreeWritePriBucket(cache,cbucket,ptrs[i]);
+	if((iold < order) && ptrs[iold])
+            newptrs[i] = ptrs[iold++];
+        else
+	    newptrs[i] = cache->totsize;
+	btreeWritePriBucket(cache,cbucket,newptrs[i]);
     }
 
 
@@ -6329,38 +9575,40 @@ static AjBool btreeReorderPriBuckets(AjPBtcache cache, AjPBtpage leaf)
     }
     
     
-    if(!ptrs[i])
-	ptrs[i] = cache->totsize;
+    if((iold < order) && ptrs[iold])
+        newptrs[i] = ptrs[iold++];
+    else
+        newptrs[i] = cache->totsize;
+    btreeWritePriBucket(cache,cbucket,newptrs[i]);
 
-    btreeWritePriBucket(cache,cbucket,ptrs[i]);
-
-    cbucket->Nentries = maxnperbucket;
     btreePriBucketDel(&cbucket);
+
+#if AJINDEX_DEBUG
+    if(bucketlimit <= keylimit)
+        ajDebug("btreeReorderPriBuckets '%S' %u -> %u",
+                cache->filename, keylimit, bucketlimit);
+#endif
+
+    for(i = bucketlimit + 1; i <= keylimit; i++)
+    {
+        btreePageSetfree(cache, ptrs[i]);
+    }
 
     /* Now write out a modified leaf with new keys/ptrs */
 
-    nkeys = bucketn - 1;
-    v = nkeys;
-    SBT_NKEYS(lbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(lbuf,v);
-
-    btreeWriteNode(cache,leaf,keys,ptrs,nkeys);
-
+    nkeys = bucketlimit;
+    btreeWriteNode(cache,leaf,newkeys,newptrs,nkeys);
     leaf->dirty = BT_DIRTY;
 
     if(nodetype == BT_ROOT)
+    {
 	leaf->dirty = BT_LOCK;
+        leaf->lockfor = 1272;
+    }
     
-    for(i=0;i<order;++i)
-	ajStrDel(&keys[i]);
+    btreeDeallocPriArray(cache,arrays1);
+    btreeDeallocPriArray(cache,arrays2);
 
-    AJFREE(keys);
-    AJFREE(ptrs);
-    AJFREE(overflows);
-    
-
-    btreePriBucketDel(&cbucket);
     ajListFree(&idlist);
 
     return ajTrue;
@@ -6374,148 +9622,114 @@ static AjBool btreeReorderPriBuckets(AjPBtcache cache, AjPBtpage leaf)
 ** Insert a keyword structure into the tree
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pri [const AjPBtPri] Id object
+** @param [u] pri [AjPBtPri] Id object
 **
-** @return [void] pointer to a page
+** @return [AjBool] True if keyword and ID combination was inserted
+**                  False if keyword exists alraedy for ID
 ** @@
 ******************************************************************************/
 
-void ajBtreeInsertKeyword(AjPBtcache cache, const AjPBtPri pri)
+AjBool ajBtreeInsertKeyword(AjPBtcache cache, AjPBtPri pri)
 {
     AjPBtpage spage   = NULL;
     AjPBtpage page    = NULL;
     AjPStr key        = NULL;
-    const char *ckey  = NULL;
-    ajlong lblockno = 0L;
-    ajlong rblockno = 0L;
-    ajlong blockno  = 0L;
-    ajlong shift    = 0L;
+    ajulong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong blockno  = 0L;
+    ajulong shift    = 0L;
 
-    ajint nkeys = 0;
-    ajint order = 0;
+    ajuint nkeys = 0;
 
-    ajint nodetype = 0;
-    ajlong right   = 0L;
+    ajuint nodetype = 0;
+    ajulong right   = 0L;
     
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
-    
-    ajint i;
-    ajint n;
-
-    AjPPriBucket lbucket = NULL;
-    AjPPriBucket rbucket = NULL;
+    ajuint n;
+    ajuint savedirty;
     unsigned char *buf   = NULL;
 
-    AjPBtPri exists = NULL;
+    ajulong treeblock = 0L;
+    AjBool newid = ajTrue;
 
-    
-    /* ajDebug("In ajBtreeInsertKeyword %S %S\n",pri->keyword,pri->id); */
+#if AJINDEX_DEBUG
+    /*ajDebug("btreeInsertKeyword '%S' '%S'\n", pri->keyword, pri->id);*/
+#endif
+
+    if(!MAJSTRGETLEN(pri->keyword))
+	return ajFalse;
+
+    ajStrFmtQuery(&pri->id);
+    ajStrFmtQuery(&pri->keyword);
+
+    if(MAJSTRGETLEN(pri->keyword) > cache->kwlimit)
+        ajStrTruncateLen(&pri->keyword, cache->kwlimit);
 
     /* Only insert a primary key if that key doesn't exist */
-    exists = ajBtreePriFromKeyword(cache,MAJSTRGETPTR(pri->keyword));
-    if(exists)
+    if(ajBtreePriFindKeyword(cache,pri->keyword,
+                             &treeblock))
     {
-	cache->secrootblock = exists->treeblock;
-	page = ajBtreeCacheWrite(cache,cache->secrootblock);
+	cache->secrootblock = treeblock;
+	page = ajBtreeCacheWriteNode(cache,cache->secrootblock);
+        savedirty = page->dirty;
 	page->dirty = BT_LOCK;
+        page->lockfor = 1281;
 	buf = page->buf;
 	GBT_RIGHT(buf,&right);
-	cache->slevel = (ajint) right;
-	ajBtreeInsertSecId(cache,pri->id);
-	right = (ajlong) cache->slevel;
-	SBT_RIGHT(buf,right);
-	page->dirty = BT_DIRTY;
-	
-	ajBtreePriDel(&exists);
+	cache->slevel = (ajuint) right;
+	if(ajBtreeSecInsertId(cache,pri->id))
+        {
+            ++cache->countall;
+            right = (ajulong) cache->slevel;
+            SBT_RIGHT(buf,right);
+            page->dirty = BT_DIRTY;
 
-	return;
-    }
-    /* ajDebug("Keyword doesn't exist\n"); */
-    
-    key = ajStrNew();
-    
-
-    ajStrAssignS(&key,pri->keyword);
-
-    if(!ajStrGetLen(key))
-    {
-	ajStrDel(&key);
-
-	return;
+        }
+        else
+        {
+            newid = ajFalse;
+            page->dirty = savedirty;
+        }
+        
+	return newid;
     }
 
-    ckey = ajStrGetPtr(key);
-    spage = ajBtreeFindInsert(cache,ckey);
+    key = ajStrNewS(pri->keyword);
+
+    spage = ajBtreeFindInsert(cache,key);
     buf = spage->buf;
 
     GBT_NKEYS(buf,&nkeys);
     GBT_NODETYPE(buf,&nodetype);
     
-    order = cache->order;
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-    
     if(!nkeys)
     {
-	lbucket  = btreePriBucketNew(0);
-	rbucket  = btreePriBucketNew(0);
-
 	lblockno = cache->totsize;
-	btreeWritePriBucket(cache,lbucket,lblockno);
+	btreeWritePriBucketEmpty(cache,lblockno);
 
 	rblockno = cache->totsize;
-	btreeWritePriBucket(cache,rbucket,rblockno);	
+	btreeWritePriBucketEmpty(cache,rblockno);	
 
-	parray[0] = lblockno;
-	parray[1] = rblockno;
-	ajStrAssignS(karray,key);
-	
-	btreeWriteNode(cache,spage,karray,parray,1);
+	btreeWriteNodeSingle(cache,spage,key,lblockno,rblockno);
 
 	GBT_BLOCKNUMBER(buf,&blockno);
 
 	if(!blockno)
-	    spage->dirty = BT_LOCK;
-
-	btreePriBucketDel(&lbucket);
-	btreePriBucketDel(&rbucket);
+        {
+	    spage->dirty = BT_LOCK; /* root page */
+            spage->lockfor = 1282;
+        }
 
 	btreeAddToPriBucket(cache,rblockno,pri);
-	++cache->count;
+	++cache->countunique;
+	++cache->countall;
 
-	for(i=0;i<order;++i)
-	    ajStrDel(&karray[i]);
-
-	AJFREE(karray);
-	AJFREE(parray);
-	ajStrDel(&key);
-
-	return;
+        ajStrDel(&key);
+	return ajTrue;
     }
     
-    btreeGetKeys(cache,buf,&karray,&parray);
-
-    i=0;
-
-    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-	++i;
-
-    if(i==nkeys)
-    {
-	if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
-
+    blockno = btreeGetBlockS(cache,buf,key);
     if(nodetype != BT_ROOT)
-	if((shift = btreeInsertShift(cache,&spage,key->Ptr)))
+	if((shift = btreeInsertShiftS(cache,&spage,key)))
 	    blockno = shift;
 
     buf = spage->buf;
@@ -6526,188 +9740,224 @@ void ajBtreeInsertKeyword(AjPBtcache cache, const AjPBtPri pri)
     {
 	if(btreeReorderPriBuckets(cache,spage))
 	{
-	    GBT_NKEYS(buf,&nkeys);	    
-	    btreeGetKeys(cache,buf,&karray,&parray);
-
-	    i=0;
-
-	    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-		++i;
-
-	    if(i==nkeys)
-	    {
-		if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-		    blockno = parray[i-1];
-		else
-		    blockno = parray[i];
-	    }
-	    else
-		blockno = parray[i];
+            blockno = btreeGetBlockS(cache,buf,key);
 	}
 	else
 	{
 	    btreeSplitPriLeaf(cache,spage);
-	    spage = ajBtreeFindInsert(cache,ckey);
+	    spage = ajBtreeFindInsert(cache,key);
 	    buf = spage->buf;
 
-	    btreeGetKeys(cache,buf,&karray,&parray);
-	    GBT_NKEYS(buf,&nkeys);
-
-	    i=0;
-
-	    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-		++i;
-
-	    if(i==nkeys)
-	    {
-		if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-		    blockno = parray[i-1];
-		else
-		    blockno = parray[i];
-	    }
-	    else
-		blockno = parray[i];
-
-/*
-	    spage = ajBtreeCacheRead(cache,blockno);
-	    buf = spage->buf;
-	    btreeGetKeys(cache,buf,&karray,&parray);
-	    GBT_NKEYS(buf,&nkeys);
-	    i=0;
-	    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-		++i;
-	    if(i==nkeys)
-	    {
-		if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-		    blockno = parray[i-1];
-		else
-		    blockno = parray[i];
-	    }
-	    else
-		blockno = parray[i];
-*/
+            blockno = btreeGetBlockS(cache,buf,key);
 	}
     }
 
     btreeAddToPriBucket(cache,blockno,pri);
-    ++cache->count;
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    ++cache->countunique;
+    ++cache->countall;
 
     ajStrDel(&key);
 
-    return;
+    return ajTrue;
 }
 
 
 
 
-/* @func ajBtreePriFromKeyword **********************************************
+/* @func ajBtreePriFindKeyword **********************************************
 **
 ** Get Pri structure matching a keyword
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const char *] key
+** @param [r] key [const AjPStr] key
+** @param [w] treeblock [ajulong*] Tree block number for id
 **
-** @return [AjPBtPri] pointer to an Pri structure or NULL if not found
+** @return [AjBool] ajTrue if found
 ** @@
 ******************************************************************************/
 
-AjPBtPri ajBtreePriFromKeyword(AjPBtcache cache, const char *key)
+AjBool ajBtreePriFindKeyword(AjPBtcache cache, const AjPStr key,
+                             ajulong* treeblock)
 {
     AjPBtpage page      = NULL;
-    AjPPriBucket bucket = NULL;
-    AjPBtPri  pri       = NULL;
-    AjPBtPri  tpri      = NULL;
-    
-    AjPStr *karray  = NULL;
-    ajlong *parray  = NULL;
     
     unsigned char *buf = NULL;
 
-    ajint nentries = 0;
-    ajint nkeys    = 0;
-    ajint order    = 0;
-    
-    ajint i;
-    
-    ajlong blockno = 0L;
-    AjBool found   = ajFalse;
+    ajulong blockno = 0L;
 
-
-    /* ajDebug("ajBtreePriFromKeyword\n"); */
+    /*ajDebug("ajBtreePriFindKeyword '%s'\n", ckey);*/
     
 
-    if(!cache->count)
-	return NULL;
+    if(!cache->countunique)
+	return ajFalse;
 
     page = ajBtreeFindInsert(cache,key);
 
     buf = page->buf;
-    order = cache->order;
 
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
+    blockno = btreeGetBlockS(cache, buf, key);
 
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
+    return btreePriBucketFindId(cache,blockno,key,treeblock);
+}
 
-    btreeGetKeys(cache,buf,&karray,&parray);
+
+
+
+/* @func ajBtreePriFindKeywordLen ********************************************
+**
+** Get Pri structure matching a keyword truncated to maximum indexed length
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] key [const AjPStr] key
+** @param [w] treeblock [ajulong*] Tree block number for id
+**
+** @return [AjBool] ajTrue if found
+** @@
+******************************************************************************/
+
+AjBool ajBtreePriFindKeywordLen(AjPBtcache cache, const AjPStr key,
+                                ajulong* treeblock)
+{
+    AjBool ret = ajFalse;
+
+    AjPBtpage page      = NULL;
+    unsigned char *buf = NULL;
+    ajulong blockno = 0L;
+
+    AjPStr keystr = NULL;
+    const AjPStr keytest = key;
+
+#if AJINDEX_DEBUG
+    ajDebug("ajBtreePriFindKeywordLen '%S'\n", key);
+#endif
+
+    keystr = ajStrNewS(key);
+    ajStrFmtQuery(&keystr);
+    if(MAJSTRGETLEN(keystr) > cache->kwlimit)
+        ajStrTruncateLen(&keystr, cache->kwlimit);
+    keytest = keystr;
+
+    if(!cache->countunique)
+	return ajFalse;
+
+    page = ajBtreeFindInsert(cache,keytest);
+
+    buf = page->buf;
+
+    blockno = btreeGetBlockS(cache, buf, keytest);
+
+    ret = btreePriBucketFindId(cache,blockno,keytest,treeblock);
+
+    ajStrDel(&keystr);
+
+    return ret;
+}
+
+
+
+
+/* @funcstatic btreePriBucketFindId *******************************************
+**
+** Tests for an ID in a primary bucket
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+** @param [r] id [const AjPStr] id to search for
+** @param [w] treeblock [ajulong*] Tree block number for id
+**
+** @return [AjBool] ajTrue if found
+** @@
+******************************************************************************/
+
+static AjBool btreePriBucketFindId(AjPBtcache cache, ajulong pagepos,
+                                   const AjPStr id, ajulong* treeblock)
+{
+    AjPBtpage page      = NULL;
+    AjPBtpage lpage     = NULL;
+    unsigned char *buf  = NULL;
+    unsigned char *kptr = NULL;
     
-    GBT_NKEYS(buf,&nkeys);
-
-    i=0;
-
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
-	++i;
+    unsigned char *codeptr = NULL;
     
-    if(i==nkeys)
-    {
-	if(strcmp(key,karray[i-1]->Ptr)<0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
-
-    bucket = btreeReadPriBucket(cache,blockno);
+    ajuint  nodetype  = 0;
+    ajuint  nentries  = 0;
+    ajulong overflow  = 0L;
+    ajuint  dirtysave = 0;
     
-    nentries = bucket->Nentries;
+    ajuint  i;
+    ajuint  len  = 0;
+    ajuint idlen = 0;
+    
+    /* ajDebug("In btreePriBucketFindId\n"); */
+    
+    if(!pagepos)
+	ajFatal("PriBucketFindId: cannot read bucket from root page cache %S",
+                cache->filename);
 
-    found = ajFalse;
+    page  = ajBtreeCacheRead(cache,pagepos);
+    lpage = page;
+    dirtysave = lpage->dirty;
+    lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1291;
+
+    buf = lpage->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_PRIBUCKET)
+	ajFatal("PriBucketFindId: NodeType mismatch. "
+                "Not primary bucket (%u) cache %S",
+		nodetype, cache->filename);
+    
+    GBT_BUCKNENTRIES(buf,&nentries);
+    if(nentries > cache->nperbucket)
+	ajFatal("PriBucketFindId: Bucket too full  page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->nperbucket,
+                cache->filename);
+    
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    
+    kptr  = PBT_BUCKKEYLEN(buf);
+    codeptr = kptr + (nentries * sizeof(ajuint));
 
     for(i=0;i<nentries;++i)
-	if(!strcmp(key,bucket->codes[i]->keyword->Ptr))
+    {
+	BT_GETAJUINT(kptr,&len);
+        idlen = len - sizeof(ajulong) - 1;
+	if((codeptr-buf+1) + len > cache->pagesize)	/* overflow */
 	{
-	    found = ajTrue;
-	    break;
+	    /* ajDebug("PriBucketFindId: Overflow\n"); */
+	    page  = ajBtreeCacheRead(cache,overflow);
+	    buf = page->buf;
+	    GBT_BUCKNODETYPE(buf,&nodetype);
+	    if(nodetype != BT_PRIBUCKET)
+		ajFatal("PriBucketFindId: NodeType mismatch. "
+                        "Not primary bucket (%u) cache %S",
+                        nodetype, cache->filename);
+	    GBT_BUCKOVERFLOW(buf,&overflow);
+	    /* overflow bucket ids start at the keylen position */
+	    codeptr = PBT_BUCKKEYLEN(buf);
 	}
 
-    if(found)
-    {
-	pri  = ajBtreePriNew();
-	tpri = bucket->codes[i];
-	ajStrAssignS(&pri->keyword,tpri->keyword);
-	pri->treeblock = tpri->treeblock;
+	/* Fill ID objects */
+	if(ajStrMatchC(id, (const char *)codeptr))
+        {
+            codeptr += (idlen + 1);
+            BT_GETAJULONG(codeptr,treeblock);
+            lpage->dirty = dirtysave;
+            return ajTrue;
+        }
+        
+	codeptr += (idlen + 1);
+	codeptr += sizeof(ajulong);
+
+	kptr += sizeof(ajuint);
     }
 
-    btreePriBucketDel(&bucket);
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
-
-    if(!found)
-	return NULL;
-
-    return pri;
+    lpage->dirty = dirtysave;
+    
+    return ajFalse;
 }
 
 
@@ -6726,25 +9976,24 @@ AjPBtPri ajBtreePriFromKeyword(AjPBtcache cache, const char *key)
 
 static AjPBtpage btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage)
 {
-    ajint nkeys     = 0;
-    ajint order     = 0;
-    ajint totalkeys = 0;
-    ajint bentries  = 0;
-    ajint keylimit  = 0;
-    ajint nodetype  = 0;
+    ajuint nkeys     = 0;
+    ajuint order     = 0;
+    ajuint totalkeys = 0;
+    ajuint keylimit  = 0;
+    ajuint nodetype  = 0;
 
-    ajint rootnodetype = 0;
+    ajuint rootnodetype = 0;
     
-    ajint i;
-    ajint j;
+    ajuint i;
+    ajuint j;
     
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage page  = NULL;
     
     AjPStr mediankey  = NULL;
-    ajlong mediangtr  = 0L;
-    ajlong medianless = 0L;
+    ajulong mediangtr  = 0L;
+    ajulong medianless = 0L;
     
 
     AjPBtPri bid       = NULL;
@@ -6755,46 +10004,55 @@ static AjPBtpage btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage)
 
     AjPList idlist = NULL;
 
-    AjPPriBucket *buckets = NULL;
     AjPPriBucket cbucket  = NULL;
     
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
+    AjPStr *newkarray = NULL;
+    ajulong *newparray = NULL;
+    AjPBtMem arrays = NULL;
+    AjPBtMem newarrays = NULL;
     
-    ajint keypos = 0;
-    ajint lno    = 0;
-    ajint rno    = 0;
+    ajuint lno    = 0;
+    ajuint rno    = 0;
 
-    ajint bucketlimit   = 0;
-    ajint maxnperbucket = 0;
-    ajint nperbucket    = 0;
-    ajint bucketn       = 0;
-    ajint count         = 0;
-    ajint totkeylen     = 0;
+    ajuint lbucketlimit   = 0;
+    ajuint rbucketlimit   = 0;
+    ajuint lmaxnperbucket = 0;
+    ajuint rmaxnperbucket = 0;
+    ajuint nperbucket    = 0;
+    ajuint count         = 0;
     
-    ajlong lblockno = 0L;
-    ajlong rblockno = 0L;
-    ajlong prev     = 0L;
-    ajlong overflow = 0L;
-    ajlong prevsave = 0L;
+    ajulong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong prev     = 0L;
+    ajulong overflow = 0L;
+    ajulong prevsave = 0L;
     
-    ajlong zero = 0L;
-    ajlong join = 0L;
+    ajulong zero = 0L;
+    ajulong join = 0L;
     
-    ajlong lv = 0L;
-    ajint  v  = 0;
+    ajulong lv = 0L;
+    ajuint  v  = 0;
+
+    ajuint iold = 0;
     
+#if AJINDEX_DEBUG
+    ajDebug("btreeSplitPriLeaf %Lu\n", spage->pagepos);
+#endif
+    ++statCallSplitPriLeaf;
+
     /* ajDebug("In btreeSplitPriLeaf\n"); */
 
     order = cache->order;
     nperbucket = cache->nperbucket;
 
     mediankey = ajStrNew();
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-    
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
+    arrays = btreeAllocPriArray(cache);
+    parray = arrays->parray;
+
+    newarrays = btreeAllocPriArray(cache);
+    newkarray = newarrays->karray;
+    newparray = newarrays->parray;
 
     buf = spage->buf;
     lbuf = buf;
@@ -6805,27 +10063,25 @@ static AjPBtpage btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage)
     if(rootnodetype == BT_ROOT)
     {
 	lblockno = cache->totsize;
-	lpage = ajBtreeCacheWrite(cache,lblockno);
-	lpage->pageno = cache->totsize;
-	cache->totsize += cache->pagesize;
+	lpage = ajBtreeCacheWriteNodenew(cache);
 	lbuf = lpage->buf;
 	lv = prev;
 	SBT_PREV(lbuf,lv);
     }
     else
     {
-	lblockno = spage->pageno;
+	lblockno = spage->pagepos;
 	lpage = spage;
     }
 
     lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1301;
 
     rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
-    rpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
+    rpage = ajBtreeCacheWriteNodenew(cache);
     rbuf = rpage->buf;
     rpage->dirty = BT_LOCK;
+    rpage->lockfor = 1302;
 
     if(rootnodetype == BT_ROOT)
     {
@@ -6847,58 +10103,33 @@ static AjPBtpage btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage)
     SBT_RIGHT(lbuf,lv);
 
 
-    btreeGetKeys(cache,buf,&karray,&parray);
+    btreeGetPointers(cache,buf,&parray);
 
 
     keylimit = nkeys+1;
-    AJCNEW0(buckets,keylimit);
-    for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadPriBucket(cache,parray[i]);
-
     idlist = ajListNew();
 
     for(i=0;i<keylimit;++i)
-    {
-	bentries = buckets[i]->Nentries;
-
-	for(j=0;j<bentries;++j)
-	    ajListPush(idlist,(void *)buckets[i]->codes[j]);
-
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->codes);
-	AJFREE(buckets[i]);
-    }
+	btreePriBucketIdlist(cache,parray[i],idlist);
 
     ajListSort(idlist,btreeKeywordCompare);
-    AJFREE(buckets);
-
 
     totalkeys = ajListGetLength(idlist);
 
-    keypos = totalkeys / 2;
+    btreeBucketSplitCalc(totalkeys, keylimit, nperbucket,
+                         &lbucketlimit,&lmaxnperbucket,&lno,
+                         &rbucketlimit,&rmaxnperbucket,&rno);
 
-    lno = keypos;
-    rno = totalkeys - lno;
+    cbucket = btreePriBucketNew(cache->nperbucket);
 
-    maxnperbucket = nperbucket >> 1;
-    ++maxnperbucket;
-
-    cbucket = btreePriBucketNew(maxnperbucket);
-
-    bucketn = lno / maxnperbucket;
-    if(lno % maxnperbucket)
-	++bucketn;
-    bucketlimit = bucketn - 1;
-
-
-    totkeylen = 0;
     count = 0;
+    iold = 0;
 
-    for(i=0;i<bucketlimit;++i)
+    for(i=0;i<lbucketlimit;++i)
     {
 	cbucket->Nentries = 0;
 
-	for(j=0;j<maxnperbucket;++j)
+	for(j=0;j<lmaxnperbucket;++j)
 	{
 	    ajListPop(idlist,(void **)&bid);
 	    
@@ -6914,12 +10145,13 @@ static AjPBtpage btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage)
 
 	ajListPeek(idlist,(void **)&bid);
 	
-	ajStrAssignS(&karray[i],bid->keyword);
-	totkeylen += ajStrGetLen(bid->keyword);
+	ajStrAssignS(&newkarray[i],bid->keyword);
 
-	if(!parray[i])
-	    parray[i] = cache->totsize;
-	btreeWritePriBucket(cache,cbucket,parray[i]);
+	if((iold < order) && parray[iold])
+            newparray[i] = parray[iold++];
+        else
+	    newparray[i] = cache->totsize;
+	btreeWritePriBucket(cache,cbucket,newparray[i]);
     }
 
     cbucket->Nentries = 0;
@@ -6939,37 +10171,30 @@ static AjPBtpage btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage)
 	ajBtreePriDel(&bid);
     }
 
-    if(!parray[i])
-	parray[i] = cache->totsize;
+    if((iold < order) && parray[iold])
+        newparray[i] = parray[iold++];
+    else
+        newparray[i] = cache->totsize;
+    btreeWritePriBucket(cache,cbucket,newparray[i]);
 
-    btreeWritePriBucket(cache,cbucket,parray[i]);
-
-    nkeys = bucketn - 1;
-    v = nkeys;
-    SBT_NKEYS(lbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(lbuf,v);
+    nkeys = lbucketlimit;
     nodetype = BT_LEAF;
     v = nodetype;
     SBT_NODETYPE(lbuf,v);
+
     GBT_PREV(lbuf,&prevsave);
     lpage->dirty = BT_DIRTY;
-    btreeWriteNode(cache,lpage,karray,parray,nkeys);
+
+    btreeWriteNode(cache,lpage,newkarray,newparray,nkeys);
 
     ajListPeek(idlist,(void **)&bid);
     ajStrAssignS(&mediankey,bid->keyword);
 
-    totkeylen = 0;
-    bucketn = rno / maxnperbucket;
-    if(rno % maxnperbucket)
-	++bucketn;
-    bucketlimit = bucketn - 1;
-
-    for(i=0;i<bucketlimit;++i)
+    for(i=0;i<rbucketlimit;++i)
     {
 	cbucket->Nentries = 0;
 
-	for(j=0;j<maxnperbucket;++j)
+	for(j=0;j<rmaxnperbucket;++j)
 	{
 	    ajListPop(idlist,(void **)&bid);
 	    
@@ -6983,11 +10208,13 @@ static AjPBtpage btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage)
 	}
 
 	ajListPeek(idlist,(void **)&bid);
-	ajStrAssignS(&karray[i],bid->keyword);
-	totkeylen += ajStrGetLen(bid->keyword);
+	ajStrAssignS(&newkarray[i],bid->keyword);
 
-	parray[i] = cache->totsize;
-	btreeWritePriBucket(cache,cbucket,parray[i]);
+	if((iold < order) && parray[iold])
+            newparray[i] = parray[iold++];
+        else
+	    newparray[i] = cache->totsize;
+	btreeWritePriBucket(cache,cbucket,newparray[i]);
     }
 
     cbucket->Nentries = 0;
@@ -7005,27 +10232,27 @@ static AjPBtpage btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage)
 	ajBtreePriDel(&bid);
     }
     
-    parray[i] = cache->totsize;
-    btreeWritePriBucket(cache,cbucket,parray[i]);
+    if((iold < order) && parray[iold])
+        newparray[i] = parray[iold++];
+    else
+        newparray[i] = cache->totsize;
+    btreeWritePriBucket(cache,cbucket,newparray[i]);
 
-    nkeys = bucketn - 1;
+    nkeys = rbucketlimit;
 
     v = nkeys;
-    SBT_NKEYS(rbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(rbuf,v);
     nodetype = BT_LEAF;
     v = nodetype;
     SBT_NODETYPE(rbuf,v);
+
     lv = prevsave;
     SBT_PREV(rbuf,lv);
     lv = overflow;
     SBT_OVERFLOW(rbuf,lv);
     
-    btreeWriteNode(cache,rpage,karray,parray,nkeys);
+    btreeWriteNode(cache,rpage,newkarray,newparray,nkeys);
     rpage->dirty = BT_DIRTY;
 
-    cbucket->Nentries = maxnperbucket;
     btreePriBucketDel(&cbucket);
     ajListFree(&idlist);
 
@@ -7034,34 +10261,19 @@ static AjPBtpage btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage)
     medianless = lblockno;
     mediangtr  = rblockno;
 
+    btreeDeallocPriArray(cache,arrays);
+    btreeDeallocPriArray(cache,newarrays);
 
     if(rootnodetype == BT_ROOT)
     {
-	ajStrAssignS(&karray[0],mediankey);
-	parray[0]=lblockno;
-	parray[1]=rblockno;
-	nkeys = 1;
-	spage->dirty = BT_DIRTY;
-	btreeWriteNode(cache,spage,karray,parray,nkeys);	
+	btreeWriteNodeSingle(cache,spage,mediankey,lblockno,rblockno);	
 	spage->dirty = BT_LOCK;
-
-	for(i=0;i<order;++i)
-	    ajStrDel(&karray[i]);
-
-	AJFREE(karray);
-	AJFREE(parray);
+        spage->lockfor = 1303;
 	ajStrDel(&mediankey);
 	++cache->level;
 
 	return spage;
     }
-
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
 
     page = ajBtreeCacheRead(cache,prevsave);
     btreeInsertKey(cache,page,mediankey,medianless,mediangtr);
@@ -7075,19 +10287,229 @@ static AjPBtpage btreeSplitPriLeaf(AjPBtcache cache, AjPBtpage spage)
 
 
 
+/* @funcstatic btreeSecBucketFindId *******************************************
+**
+** Tests for an ID in a secondary bucket
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+** @param [r] id [const AjPStr] id to search for
+**
+** @return [AjBool] ajTrue if found
+** @@
+******************************************************************************/
+
+static AjBool btreeSecBucketFindId(AjPBtcache cache, ajulong pagepos,
+                                   const AjPStr id)
+{
+    AjPBtpage page  = NULL;
+    AjPBtpage lpage = NULL;
+
+    unsigned char *buf  = NULL;
+    unsigned char *kptr = NULL;
+    
+    unsigned char *codeptr = NULL;
+    
+    ajuint  nodetype = 0;
+    ajuint  nentries = 0;
+    ajulong overflow = 0L;
+    ajuint  dirtysave = 0;
+    
+    ajuint  i;
+    ajuint  len  = 0;
+    
+    /* ajDebug("In btreeSecBucketFindId\n"); */
+
+    /* Put in test here for secondary root page read
+       instead of !pagepos - done */
+
+    if(pagepos == cache->secrootblock)
+	ajFatal("SecBucketFindId: cannot read bucket from root page cache %S",
+                cache->filename);
+
+    page  = ajBtreeCacheRead(cache,pagepos);
+    lpage = page;
+    dirtysave = lpage->dirty;
+    lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1311;
+
+    buf = lpage->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_SECBUCKET)
+	ajFatal("SecBucketFindId: NodeType mismatch. "
+                "Not secondary bucket (%u) page %Lu cache %S",
+		nodetype, pagepos, cache->filename);
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    if(nentries > cache->snperbucket)
+	ajFatal("SecBucketFindId: Bucket too full page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->snperbucket,
+                cache->filename);
+    
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+
+    kptr  = PBT_BUCKKEYLEN(buf);
+    codeptr = kptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;++i)
+    {
+	BT_GETAJUINT(kptr,&len);
+	if((codeptr-buf+1) + len > cache->pagesize)	/* overflow */
+	{
+	    /* ajDebug("SecBucketFindId: Overflow\n"); */
+	    page  = ajBtreeCacheRead(cache,overflow);
+	    buf = page->buf;
+	    GBT_BUCKNODETYPE(buf,&nodetype);
+	    if(nodetype != BT_SECBUCKET)
+		ajFatal("SecBucketFindId: NodeType mismatch. "
+                        "Not secondary bucket (%u) page: %Lu cache %S",
+                        nodetype, pagepos, cache->filename);
+	    GBT_BUCKOVERFLOW(buf,&overflow);
+	    /* overflow bucket ids start at the keylen position */
+	    codeptr = PBT_BUCKKEYLEN(buf);
+	}
+
+	/* Fill ID objects */
+        if(ajStrMatchC(id, (const char *)codeptr))
+        {
+            lpage->dirty = dirtysave;
+            return ajTrue;
+        }
+        
+	codeptr += len;
+
+	kptr += sizeof(ajuint);
+    }
+
+    lpage->dirty = dirtysave;
+    
+    return ajFalse;
+}
+
+
+
+
+/* @funcstatic btreeSecBucketIdlist *******************************************
+**
+** Copies all secondary IDs into a list
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+** @param [u] idlist [AjPList] list to hold secondary ID strings
+**
+** @return [ajulong] Overflow
+** @@
+******************************************************************************/
+
+static ajulong btreeSecBucketIdlist(AjPBtcache cache, ajulong pagepos,
+                                   AjPList idlist)
+{
+    AjPStr tmpstr = NULL;
+    
+    AjPBtpage page  = NULL;
+    AjPBtpage lpage = NULL;
+
+    unsigned char *buf  = NULL;
+    unsigned char *kptr = NULL;
+    
+    unsigned char *codeptr = NULL;
+    
+    ajuint  nodetype = 0;
+    ajuint  nentries = 0;
+    ajulong overflow = 0L;
+    ajulong pageoverflow = 0L;
+    ajuint  dirtysave = 0;
+    
+    ajuint  i;
+    ajuint  len  = 0;
+    
+    /* Put in test here for secondary root page read
+       instead of !pagepos - done*/
+
+    if(pagepos == cache->secrootblock)
+	ajFatal("SecBucketIdlist: cannot read bucket from root page cache %S",
+                cache->filename);
+
+    page  = ajBtreeCacheRead(cache,pagepos);
+    lpage = page;
+    dirtysave = lpage->dirty;
+    lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1321;
+
+    buf = lpage->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_SECBUCKET)
+	ajFatal("SecBucketIdlist: NodeType mismatch. "
+                "Not secondary bucket (%u) cache %S",
+		nodetype, cache->filename);
+    
+    GBT_BUCKNENTRIES(buf,&nentries);
+    if(nentries > cache->snperbucket)
+	ajFatal("SecBucketIdlist: Bucket too page: %Lu "
+                "entries: %u max: %u full cache %S",
+                pagepos, nentries, cache->snperbucket, cache->filename);
+    
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    pageoverflow = overflow;
+    
+    kptr  = PBT_BUCKKEYLEN(buf);
+    codeptr = kptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;++i)
+    {
+	BT_GETAJUINT(kptr,&len);
+	if((codeptr-buf+1) + len > cache->pagesize)	/* overflow */
+	{
+	    page  = ajBtreeCacheRead(cache,overflow);
+	    buf = page->buf;
+	    GBT_BUCKNODETYPE(buf,&nodetype);
+	    if(nodetype != BT_SECBUCKET)
+		ajFatal("SecBucketIdlist: NodeType mismatch. "
+                        "Not secondary bucket (%u) cache %S",
+                        nodetype, cache->filename);
+	    GBT_BUCKOVERFLOW(buf,&overflow);
+	    /* overflow bucket ids start at the keylen position */
+	    codeptr = PBT_BUCKKEYLEN(buf);
+	}
+
+	/* Fill ID objects */
+        if(statSaveSecIdNext)
+            tmpstr = statSaveSecId[--statSaveSecIdNext];
+	ajStrAssignLenC(&tmpstr,(const char *)codeptr, len-1);
+        /*ajStrFmtLower(&tmpstr);*/ /* already lowercase */
+        ajListPushAppend(idlist, tmpstr);
+        tmpstr = NULL;
+	codeptr += len;
+
+	kptr += sizeof(ajuint);
+    }
+
+    lpage->dirty = dirtysave;
+    
+    return pageoverflow;
+}
+
+
+
+
 /* @funcstatic btreeReadSecBucket *********************************************
 **
 ** Constructor for keyword index secondary bucket given a disc page number
 ** Creates one empty key slot for possible addition
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
 ** @return [AjPSecBucket] bucket
 ** @@
 ******************************************************************************/
 
-static AjPSecBucket btreeReadSecBucket(AjPBtcache cache, ajlong pageno)
+static AjPSecBucket btreeReadSecBucket(AjPBtcache cache, ajulong pagepos)
 {
     AjPSecBucket bucket = NULL;
 
@@ -7099,82 +10521,80 @@ static AjPSecBucket btreeReadSecBucket(AjPBtcache cache, ajlong pageno)
     
     unsigned char *codeptr = NULL;
     
-    ajint  nodetype = 0;
-    ajint  nentries = 0;
-    ajlong overflow = 0L;
-    ajint  dirtysave = 0;
+    ajuint  nodetype = 0;
+    ajuint nentries = 0;
+    ajulong overflow = 0L;
+    ajuint  dirtysave = 0;
     
-    ajint  i;
-    ajint  len  = 0;
+    ajuint  i;
+    ajuint  len  = 0;
     
     /* ajDebug("In btreeReadSecBucket\n"); */
 
-    /* Put in test here for secondary root page read instead of !pageno */
-#if 0    
-    if(!pageno)
-	ajFatal("SecBucketRead: cannot read bucket from root page");
-#endif
+    if(pagepos == cache->secrootblock)
+	ajFatal("btreeReadSecBucket: cannot read bucket from "
+                "root page cache %S",
+                cache->filename);
 
-    page  = ajBtreeCacheRead(cache,pageno);
+    page  = ajBtreeCacheRead(cache,pagepos);
     lpage = page;
     dirtysave = lpage->dirty;
     lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1331;
 
     buf = lpage->buf;
 
     GBT_BUCKNODETYPE(buf,&nodetype);
 
     if(nodetype != BT_SECBUCKET)
-	ajFatal("SecReadBucket: NodeType mismatch. Not secondary bucket (%d)",
-		nodetype);
+	ajFatal("SecReadBucket: NodeType mismatch. "
+                "Not secondary bucket (%u) cache %S",
+		nodetype, cache->filename);
     
     GBT_BUCKNENTRIES(buf,&nentries);
 
     if(nentries > cache->snperbucket)
-	ajFatal("SecReadBucket: Bucket too full\n");
+	ajFatal("SecReadBucket: Bucket too full page: %Lu "
+                "entries: %u max: %u secondary: %B cache %S\n",
+                pagepos, nentries, cache->snperbucket,
+                cache->secondary, cache->filename);
     
 
     GBT_BUCKOVERFLOW(buf,&overflow);
 
-    AJNEW0(bucket);
-    bucket->NodeType = nodetype;
+    bucket = btreeSecBucketNew(cache->snperbucket,cache->kwlimit);
     bucket->Nentries = nentries;
-    bucket->Overflow = overflow;
-    
-    AJCNEW0(bucket->keylen, nentries+1);
-    AJCNEW0(bucket->ids, nentries+1);
 
-    
     kptr  = PBT_BUCKKEYLEN(buf);
-    codeptr = kptr + (nentries * sizeof(ajint));
+    codeptr = kptr + (nentries * sizeof(ajuint));
 
     for(i=0;i<nentries;++i)
     {
-	BT_GETAJINT(kptr,&len);
+	BT_GETAJUINT(kptr,&len);
 
 	if((codeptr-buf+1) + len > cache->pagesize)	/* overflow */
 	{
+#if AJINDEX_DEBUG
 	    ajDebug("SecReadBucket: Overflow\n");
+#endif
 	    page  = ajBtreeCacheRead(cache,overflow);
 	    buf = page->buf;
 	    GBT_BUCKNODETYPE(buf,&nodetype);
 
 	    if(nodetype != BT_SECBUCKET)
 		ajFatal("SecReadBucket: NodeType mismatch. Not secondary "
-			"bucket (%d)",nodetype);
+			"bucket (%u)",nodetype);
 
 	    GBT_BUCKOVERFLOW(buf,&overflow);
 	    /* overflow bucket ids start at the keylen position */
 	    codeptr = PBT_BUCKKEYLEN(buf);
 	}
 
-	bucket->ids[i] = ajStrNew();
-
 	/* Fill ID objects */
-	ajStrAssignC(&bucket->ids[i],(const char *)codeptr);
-	codeptr += (strlen((const char *)codeptr) + 1);
+	ajStrAssignLenC(&bucket->SecIds[i],(const char *)codeptr,len-1);
+	codeptr += len;
 
-	kptr += sizeof(ajint);
+	kptr += sizeof(ajuint);
     }
 
     lpage->dirty = dirtysave;
@@ -7192,14 +10612,14 @@ static AjPSecBucket btreeReadSecBucket(AjPBtcache cache, ajlong pageno)
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [r] bucket [const AjPSecBucket] bucket
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeWriteSecBucket(AjPBtcache cache, const AjPSecBucket bucket,
-				ajlong pageno)
+				ajulong pagepos)
 {
     AjPBtpage page  = NULL;
     AjPBtpage lpage = NULL;
@@ -7207,34 +10627,32 @@ static void btreeWriteSecBucket(AjPBtcache cache, const AjPSecBucket bucket,
     unsigned char *buf  = NULL;
     unsigned char *lbuf = NULL;
 
-    ajint  v   = 0;
-    ajint  i   = 0;
-    ajint  len = 0;
-    ajlong lv  = 0L;
+    ajuint  v   = 0;
+    ajuint i   = 0;
+    ajuint len = 0;
+    ajulong lv  = 0L;
 
     AjPStr sec = NULL;
-    ajint  nentries = 0;
-    ajlong overflow = 0L;
+    ajuint nentries = 0;
+    ajulong overflow = 0L;
     unsigned char *keyptr = NULL;
     unsigned char *lptr   = NULL;
-    ajlong   pno = 0L;
-    
+    ajulong   pno = 0L;
+
+    /* ajuint unused = 0; */
+
     /* ajDebug("In btreeWriteSecBucket\n"); */
 
-    if(pageno == cache->totsize)	/* Create a new page */
+    if(pagepos == cache->totsize)	/* Create a new page */
     {
-	pno = pageno;
-	page = ajBtreeCacheWrite(cache,pageno);
-	page->pageno = cache->totsize;
-	cache->totsize += cache->pagesize;
+	pno = pagepos;
+	page = ajBtreeCacheWriteBucketnew(cache);
 	buf = page->buf;
 	overflow = 0L;
-	lv = overflow;
-	SBT_BUCKOVERFLOW(buf,lv);
     }
     else
     {
-	page = ajBtreeCacheRead(cache,pageno);
+	page = ajBtreeCacheRead(cache,pagepos);
 	buf = page->buf;
 	GBT_BUCKOVERFLOW(buf,&overflow);
     }
@@ -7244,6 +10662,7 @@ static void btreeWriteSecBucket(AjPBtcache cache, const AjPSecBucket bucket,
 
     lbuf = buf;
     page->dirty = BT_LOCK;
+    page->lockfor = 1341;
     lpage = page;
 
     nentries = bucket->Nentries;
@@ -7255,16 +10674,16 @@ static void btreeWriteSecBucket(AjPBtcache cache, const AjPSecBucket bucket,
 
     for(i=0;i<nentries;++i)
     {
-	if((ajint)((keyptr-lbuf+1)+sizeof(ajint)) > cache->pagesize)
-	    ajFatal("SecBucketWrite: Bucket cannot hold more than %d keys",
+	if((ajuint)((keyptr-lbuf+1)+sizeof(ajuint)) > cache->pagesize)
+	    ajFatal("btreeWriteSecBucket: Bucket cannot hold more than %u keys",
 		    i-1);
 
-	sec = bucket->ids[i];
+	sec = bucket->SecIds[i];
 	/* Need to alter this if bucket primary keyword structure changes */
 	len = BT_BUCKSECLEN(sec);
         v = len;
-	BT_SETAJINT(keyptr,v);
-	keyptr += sizeof(ajint);
+	BT_SETAJUINT(keyptr,v);
+	keyptr += sizeof(ajuint);
     }
 
 
@@ -7273,28 +10692,24 @@ static void btreeWriteSecBucket(AjPBtcache cache, const AjPSecBucket bucket,
 
     for(i=0;i<nentries;++i)
     {
-	sec = bucket->ids[i];
+	sec = bucket->SecIds[i];
 	len = BT_BUCKSECLEN(sec);
 
 	if((lptr-buf+1)+len > cache->pagesize) /* overflow */
 	{
-    	    ajDebug("WriteSecBucket: Overflow\n");
+#if AJINDEX_DEBUG
+    	    ajDebug("btreeWriteSecBucket: Overflow\n");
+#endif
 
 	    if(!overflow)		/* No overflow buckets yet */
 	    {
 		pno = cache->totsize;
                 lv = pno;
 		SBT_BUCKOVERFLOW(buf,lv);
-		page = ajBtreeCacheWrite(cache,pno);
-		page->pageno = cache->totsize;
-		cache->totsize += cache->pagesize;
+		page = ajBtreeCacheWriteBucketnew(cache);
 		buf = page->buf;
 		v = BT_SECBUCKET;
 		SBT_BUCKNODETYPE(buf,v);
-		v = 0;
-		SBT_BUCKNENTRIES(buf,v);
-		lv = 0L;
-		SBT_BUCKOVERFLOW(buf,lv);
 	    }
 	    else
 	    {
@@ -7304,17 +10719,98 @@ static void btreeWriteSecBucket(AjPBtcache cache, const AjPSecBucket bucket,
 	    }
 
 	    page->dirty = BT_DIRTY;
+
 	    lptr = PBT_BUCKKEYLEN(buf);	    
 	}
 	
-	sprintf((char *)lptr,"%s",ajStrGetPtr(sec));
-	lptr += (ajStrGetLen(sec) + 1);
+	sprintf((char *)lptr,"%s",MAJSTRGETPTR(sec));
+	lptr += len;
     }
 
     lv = 0L;
     SBT_BUCKOVERFLOW(buf,lv);
-    
+
+    /*
+    unused = cache->pagesize - (lptr - buf);
+    if(unused > cache->pagesize)
+        ajFatal("unused %u for pagesize %u", unused, cache->pagesize);
+    if(unused > 0)
+        memset(lptr, 0, unused);
+    */
+
     lpage->dirty = BT_DIRTY;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeWriteSecBucketEmpty ***************************************
+**
+** Write empty secondary keyword index bucket object to the cache given a
+** disc page number
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeWriteSecBucketEmpty(AjPBtcache cache, ajulong pagepos)
+{
+    AjPBtpage page  = NULL;
+    AjPBtpage lpage = NULL;
+
+    unsigned char *buf  = NULL;
+
+    ajuint  v   = 0;
+    ajulong lv  = 0L;
+
+    ajulong overflow = 0L;
+
+    /* ajuint unused = 0; */
+
+    if(pagepos == cache->totsize)	/* Create a new page */
+    {
+	page = ajBtreeCacheWriteBucketnew(cache);
+	buf = page->buf;
+	overflow = 0L;
+	lv = overflow;
+	SBT_BUCKOVERFLOW(buf,lv);
+    }
+    else
+    {
+	page = ajBtreeCacheRead(cache,pagepos);
+	buf = page->buf;
+	GBT_BUCKOVERFLOW(buf,&overflow);
+    }
+
+    v = BT_SECBUCKET;
+    SBT_BUCKNODETYPE(buf,v);
+
+    page->dirty = BT_LOCK;      /* cleared at end */
+    page->lockfor = 1351;
+    lpage = page;
+
+    v = 0;
+    SBT_BUCKNENTRIES(buf,v);
+
+    lv = 0L;
+    SBT_BUCKOVERFLOW(buf,lv);
+
+    /*    
+    lptr = PBT_BUCKKEYLEN(buf);  
+
+    unused = cache->pagesize - (lptr - buf);
+    if(unused > cache->pagesize)
+        ajFatal("unused %u for pagesize %u", unused, cache->pagesize);
+    if(unused > 0)
+        memset(lptr, 0, unused);
+    */
+
+    lpage->dirty = BT_DIRTY;    /* clear the lock */
 
     return;
 }
@@ -7326,72 +10822,96 @@ static void btreeWriteSecBucket(AjPBtcache cache, const AjPSecBucket bucket,
 **
 ** Open a b+tree index file and initialise a cache object for keyword index
 **
-** @param [r] file [const char *] name of file
-** @param [r] ext [const char *] extension of file
-** @param [r] idir [const char *] index file directory
+** @param [r] filetxt [const char *] name of file
+** @param [r] exttxt [const char *] extension of file
+** @param [r] idirtxt [const char *] index file directory
 ** @param [r] mode [const char *] opening mode
-** @param [r] pagesize [ajint] pagesize
-** @param [r] order [ajint] Tree order
-** @param [r] fill [ajint] Number of entries per bucket
-** @param [r] level [ajint] level of tree
-** @param [r] cachesize [ajint] size of cache
-** @param [r] sorder [ajint] order of secondary tree
-** @param [r] slevel [ajint] level of secondary tree
-** @param [r] sfill [ajint] Number of entries per secondary bucket
-** @param [r] count [ajlong] Number of entries in the index
-** @param [r] kwlimit [ajint] Max key size
+** @param [r] compressed [AjBool] Compressed index flag
+** @param [r] kwlimit [ajuint] Max key size
+** @param [r] pagesize [ajuint] pagesize
+** @param [r] cachesize [ajuint] size of cache
+** @param [r] pagecount [ajulong] page count
+** @param [r] order [ajuint] Tree order
+** @param [r] fill [ajuint] Number of entries per bucket
+** @param [r] level [ajuint] level of tree
+** @param [r] sorder [ajuint] order of secondary tree
+** @param [r] sfill [ajuint] Number of entries per secondary bucket
+** @param [r] count [ajulong] Number of entries in the index
+** @param [r] countall [ajulong] Number of total entries in the index
 **
 ** @return [AjPBtcache] initialised disc block cache structure
 ** @@
 ******************************************************************************/
 
-AjPBtcache ajBtreeSecCacheNewC(const char *file, const char *ext,
-			       const char *idir, const char *mode,
-			       ajint pagesize, ajint order, ajint fill,
-			       ajint level, ajint cachesize,
-			       ajint sorder, ajint slevel, ajint sfill,
-			       ajlong count, ajint kwlimit)
+AjPBtcache ajBtreeSecCacheNewC(const char *filetxt, const char *exttxt,
+			       const char *idirtxt, const char *mode,
+                               AjBool compressed, ajuint kwlimit,
+                               ajuint pagesize, ajuint cachesize,
+                               ajulong pagecount,
+                               ajuint order, ajuint fill, ajuint level,
+			       ajuint sorder, ajuint sfill,
+			       ajulong count, ajulong countall)
 {
     FILE *fp;
     AjPBtcache cache = NULL;
-#if 0
-#if defined (HAVE64) && !defined(WIN32) && !defined(_OSF_SOURCE) && !defined(_AIX) && !defined(__hpux) && !defined(__ppc__) && !defined(__FreeBSD__)
+#if defined (usestat64)
     struct stat64 buf;
 #else
     struct stat buf;
 #endif
-#endif
-    ajlong filelen = 0L;
+    ajulong filelen = 0L;
+    AjBool douncompress = ajFalse;
 
-    AjPStr fn = NULL;
+    AJNEW0(cache);
 
-    fn = ajStrNew();
-    ajFmtPrintS(&fn,"%s/%s.%s",idir,file,ext);
+    cache->filename = ajStrNew();
+    if(!*idirtxt)
+        ajFmtPrintS(&cache->filename,"%s.%s",filetxt,exttxt);
+    else if(idirtxt[strlen(idirtxt)-1] == SLASH_CHAR)
+        ajFmtPrintS(&cache->filename,"%s%s.%s",idirtxt,filetxt,exttxt);
+    else
+        ajFmtPrintS(&cache->filename,"%s%s%s.%s",
+		    idirtxt,SLASH_STRING,filetxt,exttxt);
     
-    fp = fopen(fn->Ptr,mode);
+    fp = fopen(MAJSTRGETPTR(cache->filename),mode);
     if(!fp)
 	return NULL;
 
     /* Commented out pending database updating */
-#if 0
-    if(strcmp(mode,"r"))
+    if(ajCharMatchC(mode, "rb"))
     {
-#if defined (HAVE64) && !defined(WIN32) && !defined(_OSF_SOURCE) && !defined(_AIX) && !defined(__hpux) && !defined(__ppc__) && !defined(__FreeBSD__)
-	if(!stat64(fn->Ptr, &buf))
+#if defined (usestat64)
+	if(!stat64(MAJSTRGETPTR(cache->filename), &buf))
 #else
-	    if(!stat(fn->Ptr, &buf))
+        if(!stat(MAJSTRGETPTR(cache->filename), &buf))
 #endif
-		filelen = buf.st_size;
-    }
-#endif
+            filelen = buf.st_size;
 
-    AJNEW0(cache);
+        cache->readonly = ajTrue;
+    }
+    else if(ajCharMatchC(mode, "rb+"))
+    {
+#if defined (usestat64)
+	if(!stat64(MAJSTRGETPTR(cache->filename), &buf))
+#else
+        if(!stat(MAJSTRGETPTR(cache->filename), &buf))
+#endif
+            filelen = buf.st_size;
+        if(compressed)
+            douncompress = ajTrue;
+    }
+    else if(!ajCharMatchC(mode, "wb+")) /* create */
+    {
+        ajWarn("ajBtreeSecCacheNewC unknown mode '%s'", mode);
+    }
+    
+
+    cache->pagetable = ajTablelongNewConst(cachesize);
 
     cache->listLength = 0;
 
     cache->lru   = NULL;
     cache->mru   = NULL;
-    cache->count = 0L;
     cache->fp    = fp;
     
     cache->replace    = ajStrNew();
@@ -7402,29 +10922,81 @@ AjPBtcache ajBtreeSecCacheNewC(const char *file, const char *ext,
     else
 	cache->pagesize = BT_PAGESIZE;
 
-    cache->totsize   = 0L;
     cache->level     = level;
 
     cache->order      = order;
     cache->nperbucket = fill;
     cache->totsize    = filelen;
+    cache->pagecount = pagecount;
     cache->cachesize  = cachesize;
+    cache->filesize  = filelen;
+    cache->extendsize = (ajulong) cache->pagesize * (ajulong) cache->cachesize;
 
     cache->sorder = sorder;
-    cache->slevel = slevel;
+    cache->slevel = 0;
     cache->snperbucket = sfill;
-    cache->count = count;
+    cache->countunique = count;
+    cache->countall = countall;
     cache->kwlimit = kwlimit;
+    cache->compressed = compressed;
 
     cache->bmem = NULL;
     cache->tmem = NULL;
 
     cache->bsmem = NULL;
     cache->tsmem = NULL;
+
+    cache->secondary = ajTrue;
     
-    ajStrDel(&fn);
-    
+    if(douncompress)
+        btreeCacheUncompress(cache);
+
     return cache;
+}
+
+
+
+
+/* @func ajBtreeSecCacheNewS ************************************************
+**
+** Open a b+tree index file and initialise a cache object for keyword index
+**
+** @param [r] file [const AjPStr] name of file
+** @param [r] ext [const AjPStr] extension of file
+** @param [r] idir [const AjPStr] index file directory
+** @param [r] mode [const char *] opening mode
+** @param [r] compressed [AjBool] Compressed index flag
+** @param [r] kwlimit [ajuint] Max key size
+** @param [r] pagesize [ajuint] pagesize
+** @param [r] cachesize [ajuint] size of cache
+** @param [r] pagecount [ajulong] page count
+** @param [r] order [ajuint] Tree order
+** @param [r] fill [ajuint] Number of entries per bucket
+** @param [r] level [ajuint] level of tree
+** @param [r] sorder [ajuint] order of secondary tree
+** @param [r] sfill [ajuint] Number of entries per secondary bucket
+** @param [r] count [ajulong] Number of entries in the index
+** @param [r] countall [ajulong] Number of total entries in the index
+**
+** @return [AjPBtcache] initialised disc block cache structure
+** @@
+******************************************************************************/
+
+AjPBtcache ajBtreeSecCacheNewS(const AjPStr file, const AjPStr ext,
+			       const AjPStr idir, const char *mode,
+                               AjBool compressed, ajuint kwlimit,
+                               ajuint pagesize, ajuint cachesize,
+                               ajulong pagecount,
+                               ajuint order, ajuint fill, ajuint level,
+			       ajuint sorder, ajuint sfill,
+			       ajulong count, ajulong countall)
+{
+    return ajBtreeSecCacheNewC(MAJSTRGETPTR(file), MAJSTRGETPTR(ext),
+                               MAJSTRGETPTR(idir), mode,
+                               compressed, kwlimit, pagesize, cachesize,
+                               pagecount, order, fill, level,
+                               sorder, sfill,
+                               count, countall);
 }
 
 
@@ -7443,25 +11015,24 @@ AjPBtcache ajBtreeSecCacheNewC(const char *file, const char *ext,
 
 static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
 {
-    ajint nkeys     = 0;
-    ajint order     = 0;
-    ajint totalkeys = 0;
-    ajint bentries  = 0;
-    ajint keylimit  = 0;
-    ajint nodetype  = 0;
+    ajuint nkeys     = 0;
+    ajuint order     = 0;
+    ajuint totalkeys = 0;
+    ajuint keylimit  = 0;
+    ajuint nodetype  = 0;
 
-    ajint rootnodetype = 0;
+    ajuint rootnodetype = 0;
     
-    ajint i;
-    ajint j;
+    ajuint i;
+    ajuint j;
     
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage page  = NULL;
     
     AjPStr mediankey  = NULL;
-    ajlong mediangtr  = 0L;
-    ajlong medianless = 0L;
+    ajulong mediangtr  = 0L;
+    ajulong medianless = 0L;
 
     AjPStr bid = NULL;
 
@@ -7471,45 +11042,61 @@ static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
 
     AjPList idlist = NULL;
 
-    AjPSecBucket *buckets = NULL;
     AjPSecBucket cbucket  = NULL;
     
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
+    AjPBtMem arrays = NULL;
+    AjPBtMem newarrays = NULL;
+    AjPStr *newkarray = NULL;
+    ajulong *newparray = NULL;
     
-    ajint keypos = 0;
-    ajint lno    = 0;
-    ajint rno    = 0;
+    ajuint lno    = 0;
+    ajuint rno    = 0;
 
-    ajint bucketlimit   = 0;
-    ajint maxnperbucket = 0;
-    ajint nperbucket    = 0;
-    ajint bucketn       = 0;
-    ajint count         = 0;
-    ajint totkeylen     = 0;
+    ajuint lbucketlimit   = 0;
+    ajuint rbucketlimit   = 0;
+    ajuint lmaxnperbucket = 0;
+    ajuint rmaxnperbucket = 0;
+    ajuint nperbucket    = 0;
+    ajuint count         = 0;
     
-    ajlong lblockno = 0L;
-    ajlong rblockno = 0L;
-    ajlong overflow = 0L;
-    ajlong prevsave = 0L;
+    ajulong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong overflow = 0L;
+    ajulong prevsave = 0L;
     
-    ajlong zero = 0L;
-    ajlong join = 0L;
+    ajulong zero = 0L;
+    ajulong join = 0L;
     
-    ajlong lv = 0L;
-    ajint  v  = 0;
+    ajulong lv = 0L;
+    ajuint  v  = 0;
+    ajuint newmax;
+    ajuint iold=0;
     
+#if AJINDEX_DEBUG
+    ajDebug("btreeSplitSecLeaf %Lu\n", spage->pagepos);
+#endif
+    ++statCallSplitSecLeaf;
+
     /* ajDebug("In btreeSplitSecLeaf\n"); */
+
+    if(!statSaveSecId)
+    {
+        statSaveSecIdMax = 2048;
+        AJCNEW0(statSaveSecId, statSaveSecIdMax);
+        statSaveSecIdNext = 0;
+    }
 
     order = cache->sorder;
     nperbucket = cache->snperbucket;
 
     mediankey = ajStrNew();
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-    
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
+
+    arrays = btreeAllocSecArray(cache);
+    parray = arrays->parray;
+    newarrays = btreeAllocSecArray(cache);
+    newkarray = newarrays->karray;
+    newparray = newarrays->parray;
 
     buf = spage->buf;
     lbuf = buf;
@@ -7520,27 +11107,25 @@ static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
     if(rootnodetype == BT_ROOT)
     {
 	lblockno = cache->totsize;
-	lpage = ajBtreeCacheWrite(cache,lblockno);
-	lpage->pageno = cache->totsize;
-	cache->totsize += cache->pagesize;
+	lpage = ajBtreeCacheWriteNodenew(cache);
 	lbuf = lpage->buf;
 	lv = cache->secrootblock;
 	SBT_PREV(lbuf,lv);
     }
     else
     {
-	lblockno = spage->pageno;
+	lblockno = spage->pagepos;
 	lpage = spage;
     }
 
     lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1361;
 
     rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
-    rpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
+    rpage = ajBtreeCacheWriteNodenew(cache);
     rbuf = rpage->buf;
     rpage->dirty = BT_LOCK;
+    rpage->lockfor = 1362;
 
     if(rootnodetype == BT_ROOT)
     {
@@ -7562,81 +11147,63 @@ static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
     SBT_RIGHT(lbuf,lv);
 
 
-    btreeGetKeys(cache,buf,&karray,&parray);
+    btreeGetPointers(cache,buf,&parray);
 
 
     keylimit = nkeys+1;
-    AJCNEW0(buckets,keylimit);
-
-    for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadSecBucket(cache,parray[i]);
-
+    
     idlist = ajListNew();
 
     for(i=0;i<keylimit;++i)
-    {
-	bentries = buckets[i]->Nentries;
-
-	for(j=0;j<bentries;++j)
-	    ajListPush(idlist,(void *)buckets[i]->ids[j]);
-
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->ids);
-	AJFREE(buckets[i]);
-    }
+        btreeSecBucketIdlist(cache, parray[i], idlist);
 
     ajListSort(idlist,btreeKeywordIdCompare);
-    AJFREE(buckets);
 
 
     totalkeys = ajListGetLength(idlist);
 
-    keypos = totalkeys / 2;
+    btreeBucketSplitCalc(totalkeys, keylimit, nperbucket,
+                         &lbucketlimit,&lmaxnperbucket,&lno,
+                         &rbucketlimit,&rmaxnperbucket,&rno);
 
-    lno = keypos;
-    rno = totalkeys - lno;
+    cbucket = btreeSecBucketNew(cache->snperbucket,cache->kwlimit);
 
-    maxnperbucket = nperbucket >> 1;
-    ++maxnperbucket;
-
-    cbucket = btreeSecBucketNew(maxnperbucket);
-
-    bucketn = lno / maxnperbucket;
-
-    if(lno % maxnperbucket)
-	++bucketn;
-
-    bucketlimit = bucketn - 1;
-
-
-    totkeylen = 0;
     count = 0;
+    iold=0;
 
-    for(i=0;i<bucketlimit;++i)
+    for(i=0;i<lbucketlimit;++i)
     {
 	cbucket->Nentries = 0;
 
-	for(j=0;j<maxnperbucket;++j)
+	for(j=0;j<lmaxnperbucket;++j)
 	{
 	    ajListPop(idlist,(void **)&bid);
 	    
 
-	    ajStrAssignS(&cbucket->ids[j],bid);
+	    ajStrAssignS(&cbucket->SecIds[j],bid);
 
 	    cbucket->keylen[j] = BT_BUCKSECLEN(bid);
 	    ++count;
 	    ++cbucket->Nentries;
-	    ajStrDel(&bid);
+            if(statSaveSecIdNext >= statSaveSecIdMax) 
+            {
+                newmax = statSaveSecIdMax + statSaveSecIdMax;
+                AJCRESIZE0(statSaveSecId,statSaveSecIdMax,newmax);
+                statSaveSecIdMax = newmax;
+            }
+            statSaveSecId[statSaveSecIdNext++] = bid;
+            bid = NULL;
 	}
+
 	ajListPeek(idlist,(void **)&bid);
 	
-	ajStrAssignS(&karray[i],bid);
-	totkeylen += ajStrGetLen(bid);
+	ajStrAssignS(&newkarray[i],bid);
 
-	if(!parray[i])
-	    parray[i] = cache->totsize;
-
-	btreeWriteSecBucket(cache,cbucket,parray[i]);
+	if((iold < order) && parray[iold])
+            newparray[i] = parray[iold++];
+        else
+	    newparray[i] = cache->totsize;
+	btreeWriteSecBucket(cache,cbucket,newparray[i]);
     }
 
     cbucket->Nentries = 0;
@@ -7647,7 +11214,7 @@ static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
     {
 	ajListPop(idlist,(void **)&bid);
 
-	ajStrAssignS(&cbucket->ids[j],bid);
+	ajStrAssignS(&cbucket->SecIds[j],bid);
 	++j;
 	++count;
 
@@ -7656,44 +11223,37 @@ static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
 	ajStrDel(&bid);
     }
 
-    if(!parray[i])
-	parray[i] = cache->totsize;
+    if((iold < order) && parray[iold])
+        newparray[i] = parray[iold++];
+    else
+        newparray[i] = cache->totsize;
 
-    btreeWriteSecBucket(cache,cbucket,parray[i]);
+    btreeWriteSecBucket(cache,cbucket,newparray[i]);
 
-    nkeys = bucketn - 1;
-    v = nkeys;
-    SBT_NKEYS(lbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(lbuf,v);
+    nkeys = lbucketlimit;
+
     nodetype = BT_LEAF;
     v = nodetype;
     SBT_NODETYPE(lbuf,v);
+
     GBT_PREV(lbuf,&prevsave);
     lpage->dirty = BT_DIRTY;
-    btreeWriteNode(cache,lpage,karray,parray,nkeys);
+
+    btreeWriteNode(cache,lpage,newkarray,newparray,nkeys);
 
     ajListPeek(idlist,(void **)&bid);
     ajStrAssignS(&mediankey,bid);
 
-    totkeylen = 0;
-    bucketn = rno / maxnperbucket;
-
-    if(rno % maxnperbucket)
-	++bucketn;
-
-    bucketlimit = bucketn - 1;
-
-    for(i=0;i<bucketlimit;++i)
+    for(i=0;i<rbucketlimit;++i)
     {
 	cbucket->Nentries = 0;
 
-	for(j=0;j<maxnperbucket;++j)
+	for(j=0;j<rmaxnperbucket;++j)
 	{
 	    ajListPop(idlist,(void **)&bid);
 	    
 
-	    ajStrAssignS(&cbucket->ids[j],bid);
+	    ajStrAssignS(&cbucket->SecIds[j],bid);
 
 	    cbucket->keylen[j] = BT_BUCKSECLEN(bid);
 	    ++cbucket->Nentries;
@@ -7701,11 +11261,14 @@ static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
 	}
 
 	ajListPeek(idlist,(void **)&bid);
-	ajStrAssignS(&karray[i],bid);
-	totkeylen += ajStrGetLen(bid);
+	ajStrAssignS(&newkarray[i],bid);
 
-	parray[i] = cache->totsize;
-	btreeWriteSecBucket(cache,cbucket,parray[i]);
+	if((iold < order) && parray[iold])
+            newparray[i] = parray[iold++];
+        else
+            newparray[i] = cache->totsize;
+
+	btreeWriteSecBucket(cache,cbucket,newparray[i]);
     }
 
     cbucket->Nentries = 0;
@@ -7714,7 +11277,7 @@ static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
 
     while(ajListPop(idlist,(void**)&bid))
     {
-	ajStrAssignS(&cbucket->ids[j],bid);
+	ajStrAssignS(&cbucket->SecIds[j],bid);
 	++j;
 
 
@@ -7722,27 +11285,26 @@ static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
 	ajStrDel(&bid);
     }
     
-    parray[i] = cache->totsize;
-    btreeWriteSecBucket(cache,cbucket,parray[i]);
+    if((iold < order) && parray[iold])
+        newparray[i] = parray[iold++];
+    else
+        newparray[i] = cache->totsize;
+    btreeWriteSecBucket(cache,cbucket,newparray[i]);
 
-    nkeys = bucketn - 1;
+    nkeys = rbucketlimit;
 
-    v = nkeys;
-    SBT_NKEYS(rbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(rbuf,v);
     nodetype = BT_LEAF;
     v = nodetype;
     SBT_NODETYPE(rbuf,v);
+
     lv = prevsave;
     SBT_PREV(rbuf,lv);
     lv = overflow;
     SBT_OVERFLOW(rbuf,lv);
     
-    btreeWriteNode(cache,rpage,karray,parray,nkeys);
+    btreeWriteNode(cache,rpage,newkarray,newparray,nkeys);
     rpage->dirty = BT_DIRTY;
 
-    cbucket->Nentries = maxnperbucket;
     btreeSecBucketDel(&cbucket);
     ajListFree(&idlist);
 
@@ -7751,36 +11313,26 @@ static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
     medianless = lblockno;
     mediangtr  = rblockno;
 
+    btreeDeallocSecArray(cache,arrays);
+    btreeDeallocSecArray(cache,newarrays);
 
     if(rootnodetype == BT_ROOT)
     {
-	ajStrAssignS(&karray[0],mediankey);
-	parray[0]=lblockno;
-	parray[1]=rblockno;
-	nkeys = 1;
 	spage->dirty = BT_DIRTY;
-	btreeWriteNode(cache,spage,karray,parray,nkeys);	
+
+	btreeWriteNodeSingle(cache,spage,mediankey,lblockno,rblockno);	
 
 	++cache->slevel;
 	lv = cache->slevel;
 	SBT_RIGHT(buf,lv);
 	spage->dirty = BT_LOCK;
+        spage->lockfor = 1363;
 
-	for(i=0;i<order;++i)
-	    ajStrDel(&karray[i]);
-
-	AJFREE(karray);
-	AJFREE(parray);
 	ajStrDel(&mediankey);
 
 	return spage;
     }
 
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-    AJFREE(karray);
-    AJFREE(parray);
 
     page = ajBtreeCacheRead(cache,prevsave);
     btreeInsertKeySec(cache,page,mediankey,medianless,mediangtr);
@@ -7807,8 +11359,8 @@ static AjPBtpage btreeSplitSecLeaf(AjPBtcache cache, AjPBtpage spage)
 
 static ajint btreeKeywordIdCompare(const void *a, const void *b)
 {
-    return strcmp((*(AjPStr const *)a)->Ptr,
-		  (*(AjPStr const *)b)->Ptr);
+    return MAJSTRCMPS((*(AjPStr const *)a),
+                      (*(AjPStr const *)b));
 }
 
 
@@ -7818,30 +11370,56 @@ static ajint btreeKeywordIdCompare(const void *a, const void *b)
 **
 ** Construct a primary keyword secondary bucket object
 **
-** @param [r] n [ajint] Number of IDs
+** @param [r] n [ajuint] Number of IDs
+** @param [r] idlen [ajuint] Maximum size of IDs
 **
 ** @return [AjPSecBucket] initialised disc block cache structure
 ** @@
 ******************************************************************************/
 
-static AjPSecBucket btreeSecBucketNew(ajint n)
+static AjPSecBucket btreeSecBucketNew(ajuint n, ajuint idlen)
 {
     AjPSecBucket bucket = NULL;
-    ajint i;
+    ajuint i;
 
     /* ajDebug("In btreeSecBucketNew\n"); */
     
-    AJNEW0(bucket);
-
     if(n)
     {
-	AJCNEW0(bucket->ids,n);
-	AJCNEW0(bucket->keylen,n);
+        if(statSaveSecBucketNext)
+        {
+            bucket = statSaveSecBucket[--statSaveSecBucketNext];
+            for(i=0;i<bucket->Maxentries;++i)
+                MAJSTRASSIGNCLEAR(&bucket->SecIds[i]);
+            if(n > bucket->Maxentries)
+            {
+                AJCRESIZE0(bucket->keylen,bucket->Maxentries,n);
+                AJCRESIZE0(bucket->SecIds,bucket->Maxentries,n);
+                for(i=bucket->Maxentries;i<n;++i)
+                    bucket->SecIds[i] = ajStrNewRes(idlen+1);
+                bucket->Maxentries = n;
+            }
+            
+        }
+        else
+        {
+            AJNEW0(bucket);
+
+            AJCNEW0(bucket->SecIds,n);
+            AJCNEW0(bucket->keylen,n);
+            for(i=0;i<n;++i)
+                bucket->SecIds[i] = ajStrNewRes(idlen+1);
+            bucket->Maxentries = n;
+        }
+    }
+    else 
+    {
+        if(statSaveSecBucketEmptyNext)
+            bucket = statSaveSecBucketEmpty[--statSaveSecBucketEmptyNext];
+        else            
+            AJNEW0(bucket);
     }
     
-    for(i=0;i<n;++i)
-	bucket->ids[i] = ajStrNew();
-
     bucket->NodeType = BT_SECBUCKET;
     bucket->Nentries = n;
     bucket->Overflow = 0L;
@@ -7865,8 +11443,7 @@ static AjPSecBucket btreeSecBucketNew(ajint n)
 static void btreeSecBucketDel(AjPSecBucket *thys)
 {
     AjPSecBucket pthis = NULL;
-    ajint n;
-    ajint i;
+    ajuint newmax;
     
     /* ajDebug("In btreeSecBucketDel\n"); */
 
@@ -7874,13 +11451,98 @@ static void btreeSecBucketDel(AjPSecBucket *thys)
 	return;
 
     pthis = *thys;
-    n = pthis->Nentries;
+
+    if(!statSaveSecBucket)
+    {
+        statSaveSecBucketMax=2048;
+        statSaveSecBucketNext=0;
+        AJCNEW0(statSaveSecBucket,statSaveSecBucketMax);
+    }
+    
+    if(!statSaveSecBucketEmpty)
+    {
+        statSaveSecBucketEmptyMax=2048;
+        statSaveSecBucketEmptyNext=0;
+        AJCNEW0(statSaveSecBucketEmpty,statSaveSecBucketEmptyMax);
+    }
+    
+
+    /*
+    statCountSecBucketDel++;
+    statCountSecBucket--;
+    if(pthis->Nentries > statMaxSecBucket)
+      statMaxSecBucket = pthis->Nentries;
+    */
+
+    if(pthis->Maxentries)
+    {
+        /*statReusedSecBucket++;
+          statUsedSecBucket--;*/
+        if(statSaveSecBucketNext >= statSaveSecBucketMax)
+        {
+            newmax = statSaveSecBucketMax + statSaveSecBucketMax;
+            AJCRESIZE0(statSaveSecBucket,statSaveSecBucketMax,newmax);
+            statSaveSecBucketMax = newmax;
+        }
+        
+        statSaveSecBucket[statSaveSecBucketNext++] = pthis;
+        /*if(ajListGetLength(statListSecBucket) > statMaxFreeSecBucket)
+          statMaxFreeSecBucket = ajListGetLength(statListSecBucket);*/
+    }
+    else
+    {
+        if(statSaveSecBucketEmptyNext >= statSaveSecBucketEmptyMax)
+        {
+            newmax = statSaveSecBucketEmptyMax + statSaveSecBucketEmptyMax;
+            AJCRESIZE0(statSaveSecBucketEmpty,statSaveSecBucketEmptyMax,newmax);
+            statSaveSecBucketEmptyMax = newmax;
+        }
+        statSaveSecBucketEmpty[statSaveSecBucketEmptyNext++] = pthis;
+        /*statReusedSecBucketEmpty++;
+          statUsedSecBucketEmpty--;*/
+        /*if(ajListGetLength(statListSecBucketEmpty) > statMaxFreeSecBucketEmpty)
+          statMaxFreeSecBucketEmpty = ajListGetLength(statListSecBucketEmpty);*/
+    }
+    
+    pthis = NULL;
+
+    *thys = NULL;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeSecBucketFree *********************************************
+**
+** Delete a keyword primary bucket object
+**
+** @param [w] thys [AjPSecBucket*] bucket
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeSecBucketFree(AjPSecBucket *thys)
+{
+    AjPSecBucket pthis = NULL;
+    ajuint n;
+    ajuint i;
+    
+    /* ajDebug("In btreeSecBucketFree\n"); */
+
+    if(!thys || !*thys)
+	return;
+
+    pthis = *thys;
+    n = pthis->Maxentries;
 
     for(i=0;i<n;++i)
-	ajStrDel(&pthis->ids[i]);
+	ajStrDel(&pthis->SecIds[i]);
     
     AJFREE(pthis->keylen);
-    AJFREE(pthis->ids);
+    AJFREE(pthis->SecIds);
     
     AJFREE(pthis);
 
@@ -7892,139 +11554,74 @@ static void btreeSecBucketDel(AjPSecBucket *thys)
 
 
 
-/* @func ajBtreeInsertSecId *********************************************
+/* @func ajBtreeSecInsertId *********************************************
 **
 ** Insert a secondary ID into the tree
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [r] id [const AjPStr] Id
 **
-** @return [void] pointer to a page
+** @return [AjBool] True if ID was inserted
+**                  False if ID already exists
 ** @@
 ******************************************************************************/
 
-void ajBtreeInsertSecId(AjPBtcache cache, const AjPStr id)
+AjBool ajBtreeSecInsertId(AjPBtcache cache, const AjPStr id)
 {
     AjPBtpage spage  = NULL;
-    AjPStr key       = NULL; /* Don't really need this ... use id instead */
-    const char *ckey = NULL;
 
-    AjPSecBucket lbucket = NULL;
-    AjPSecBucket rbucket = NULL;
+    ajulong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong blockno  = 0L;
+    ajulong shift    = 0L;
 
-    ajlong lblockno = 0L;
-    ajlong rblockno = 0L;
-    ajlong blockno  = 0L;
-    ajlong shift    = 0L;
+    ajuint nkeys = 0;
 
-    ajint nkeys = 0;
-    ajint order = 0;
-
-    ajint nodetype = 0;
+    ajuint nodetype = 0;
     
     unsigned char *buf = NULL;
  
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
-    
-    ajint i;
-    ajint n;
+    ajuint n;
 
     AjBool exists  = ajFalse;
-
     
-    /* ajDebug("In ajBtreeInsertSecId\n"); */
+    /* ajDebug("In ajBtreeSecInsertId\n"); */
 
+
+    if(!MAJSTRGETLEN(id))
+        return ajFalse;
 
     /* Only insert an ID if it doesn't exist */
-    exists = ajBtreeSecFromId(cache,MAJSTRGETPTR(id));
+    exists = ajBtreeSecFindId(cache,id);
 
     if(exists)
-    {
-	/* ajDebug("ID already in tree\n"); */
-	return;
-    }
+	return ajFalse;
     
-    key = ajStrNew();
-    
-
-    ajStrAssignS(&key,id);
-    if(!ajStrGetLen(key))
-    {
-	/* ajDebug("ID is NULL\n"); */
-	ajStrDel(&key);
-
-	return;
-    }
-
-    ckey = ajStrGetPtr(key);
-    /* ajDebug("ckey = %s\n",ckey); */
-    spage = ajBtreeSecFindInsert(cache,ckey);
+    spage = ajBtreeSecFindInsert(cache,id);
     buf = spage->buf;
 
     GBT_NKEYS(buf,&nkeys);
     GBT_NODETYPE(buf,&nodetype);
     
-    order = cache->sorder;
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-    /* ajDebug("NKEYS=%d\n",nkeys); */
-    
     if(!nkeys)
     {
-	lbucket  = btreeSecBucketNew(0);
-	rbucket  = btreeSecBucketNew(0);
-
 	lblockno = cache->totsize;
-	btreeWriteSecBucket(cache,lbucket,lblockno);
+	btreeWriteSecBucketEmpty(cache,lblockno);
 
 	rblockno = cache->totsize;
-	btreeWriteSecBucket(cache,rbucket,rblockno);	
+	btreeWriteSecBucketEmpty(cache,rblockno);	
 
-	parray[0] = lblockno;
-	parray[1] = rblockno;
-	ajStrAssignS(karray,key);
-	
-	btreeWriteNode(cache,spage,karray,parray,1);
+	btreeWriteNodeSingle(cache,spage,id,lblockno,rblockno);
 
-	btreeSecBucketDel(&lbucket);
-	btreeSecBucketDel(&rbucket);
+	btreeAddToSecBucket(cache,rblockno,id);
 
-	btreeAddToSecBucket(cache,rblockno,key);
-
-	for(i=0;i<order;++i)
-	    ajStrDel(&karray[i]);
-
-	AJFREE(karray);
-	AJFREE(parray);
-	ajStrDel(&key);
-
-	return;
+	return ajTrue;
     }
     
-    btreeGetKeys(cache,buf,&karray,&parray);
-
-    i=0;
-
-    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-	++i;
-
-    if(i==nkeys)
-    {
-	if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
-
+    blockno = btreeGetBlockS(cache,buf,id);
+    
     if(nodetype != BT_ROOT)
-	if((shift = btreeInsertShiftSec(cache,&spage,key->Ptr)))
+	if((shift = btreeInsertShiftSec(cache,&spage,id)))
 	    blockno = shift;
 
     buf = spage->buf;
@@ -8035,122 +11632,52 @@ void ajBtreeInsertSecId(AjPBtcache cache, const AjPStr id)
     {
 	if(btreeReorderSecBuckets(cache,spage))
 	{
-	    GBT_NKEYS(buf,&nkeys);	    
-	    btreeGetKeys(cache,buf,&karray,&parray);
-
-	    i=0;
-
-	    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-		++i;
-
-	    if(i==nkeys)
-	    {
-		if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-		    blockno = parray[i-1];
-		else
-		    blockno = parray[i];
-	    }
-	    else
-		blockno = parray[i];
+            blockno = btreeGetBlockS(cache,buf,id);
 	}
 	else
 	{
 	    btreeSplitSecLeaf(cache,spage);
 	    
-	    spage = ajBtreeSecFindInsert(cache,ckey);
+	    spage = ajBtreeSecFindInsert(cache,id);
 	    buf = spage->buf;
 
-	    btreeGetKeys(cache,buf,&karray,&parray);
-
-	    GBT_NKEYS(buf,&nkeys);
-
-	    i=0;
-
-	    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-		++i;
-
-	    if(i==nkeys)
-	    {
-		if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-		    blockno = parray[i-1];
-		else
-		    blockno = parray[i];
-	    }
-	    else
-		blockno = parray[i];
-
-/*
-	    spage = ajBtreeCacheRead(cache,blockno);
-	    buf = spage->buf;
-	    btreeGetKeys(cache,buf,&karray,&parray);
-	    GBT_NKEYS(buf,&nkeys);
-	    i=0;
-	    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-		++i;
-	    if(i==nkeys)
-	    {
-		if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-		    blockno = parray[i-1];
-		else
-		    blockno = parray[i];
-	    }
-	    else
-		blockno = parray[i];
-*/
+            blockno = btreeGetBlockS(cache,buf,id);
 	}
     }
 
 
-    btreeAddToSecBucket(cache,blockno,key);
+    btreeAddToSecBucket(cache,blockno,id);
 
-    ++cache->count;
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
-    ajStrDel(&key);
-
-    return;
+    return ajTrue;
 }
 
 
 
 
-/* @func ajBtreeSecFromId **********************************************
+/* @func ajBtreeSecFindId *****************************************************
 **
 ** See whether ID already exists in the tree
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const char *] key
+** @param [r] key [const AjPStr] key
 **
 ** @return [AjBool] true if ID already added
 ** @@
 ******************************************************************************/
 
-AjBool ajBtreeSecFromId(AjPBtcache cache, const char *key)
+AjBool ajBtreeSecFindId(AjPBtcache cache, const AjPStr key)
 {
     AjPBtpage page      = NULL;
-    AjPSecBucket bucket = NULL;
-    
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
-    
     unsigned char *buf = NULL;
 
-    ajint nentries = 0;
-    ajint nkeys    = 0;
-    ajint order    = 0;
+    ajuint nkeys    = 0;
     
-    ajint i;
-    
-    ajlong blockno = 0L;
+    ajulong blockno = 0L;
     AjBool found   = ajFalse;
 
-    /* ajDebug("In ajBtreeSecFromId %d\n",cache->count); */
+    /* ajDebug("In ajBtreeSecFindId %u\n",cache->count); */
 
-    if(!cache->count)
+    if(!cache->countunique)
 	return ajFalse;
     
     page = ajBtreeSecFindInsert(cache,key);
@@ -8160,51 +11687,8 @@ AjBool ajBtreeSecFromId(AjPBtcache cache, const char *key)
     if(!nkeys)
 	return ajFalse;
     
-    order = cache->sorder;
-
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-    btreeGetKeys(cache,buf,&karray,&parray);
-
-    i=0;
-
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
-	++i;
-    
-    if(i==nkeys)
-    {
-	if(strcmp(key,karray[i-1]->Ptr)<0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
-
-    bucket = btreeReadSecBucket(cache,blockno);
-    
-    nentries = bucket->Nentries;
-
-    found = ajFalse;
-
-    for(i=0;i<nentries;++i)
-	if(!strcmp(key,bucket->ids[i]->Ptr))
-	{
-	    found = ajTrue;
-	    break;
-	}
-
-    btreeSecBucketDel(&bucket);
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    blockno = btreeGetBlockS(cache,buf,key);
+    found = btreeSecBucketFindId(cache, blockno, key);
 
     return found;
 }
@@ -8217,13 +11701,13 @@ AjBool ajBtreeSecFromId(AjPBtcache cache, const char *key)
 ** Find the node that should contain a new key for insertion
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const char*] key to search for 
+** @param [r] key [const AjPStr] key to search for 
 **
 ** @return [AjPBtpage] leaf node where item should be inserted
 ** @@
 ******************************************************************************/
 
-AjPBtpage ajBtreeSecFindInsert(AjPBtcache cache, const char *key)
+AjPBtpage ajBtreeSecFindInsert(AjPBtcache cache, const AjPStr key)
 {
     AjPBtpage root = NULL;
     AjPBtpage ret  = NULL;
@@ -8233,7 +11717,7 @@ AjPBtpage ajBtreeSecFindInsert(AjPBtcache cache, const char *key)
     /* The root node should always be in the cache (BT_LOCKed) */
     root = btreeCacheLocate(cache,cache->secrootblock);
 
-    /* ajDebug("cache->slevel = %d root=%d\n",cache->slevel,(ajint)root); */
+    /* ajDebug("cache->slevel = %u root=%u\n",cache->slevel,(ajuint)root); */
     
 
     if(!cache->slevel)
@@ -8252,35 +11736,35 @@ AjPBtpage ajBtreeSecFindInsert(AjPBtcache cache, const char *key)
 ** Return number of entries in a secondary id bucket
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
-** @return [ajint] Number of entries in bucket
+** @return [ajuint] Number of entries in bucket
 ** @@
 ******************************************************************************/
 
-static ajint btreeNumInSecBucket(AjPBtcache cache, ajlong pageno)
+static ajuint btreeNumInSecBucket(AjPBtcache cache, ajulong pagepos)
 {
     unsigned char *buf = NULL;
 
     AjPBtpage page = NULL;
-    ajint nodetype = 0;
-    ajint nentries = 0;
+    ajuint  nodetype = 0;
+    ajuint nentries = 0;
     
     /* ajDebug("In btreeNumInPriBucket\n"); */
 
         
-    if(pageno == cache->secrootblock)
+    if(pagepos == cache->secrootblock)
 	ajFatal("NumInSecBucket: Attempt to read bucket from root page\n");
 
 
-    page  = ajBtreeCacheRead(cache,pageno);
+    page  = ajBtreeCacheRead(cache,pagepos);
 
     buf = page->buf;
 
     GBT_BUCKNODETYPE(buf,&nodetype);
 
     if(nodetype != BT_SECBUCKET)
-	ajFatal("SecReadBucket: NodeType mismatch. Not secondary bucket (%d)",
+	ajFatal("SecReadBucket: NodeType mismatch. Not secondary bucket (%u)",
 		nodetype);
     
     GBT_BUCKNENTRIES(buf,&nentries);
@@ -8297,33 +11781,129 @@ static ajint btreeNumInSecBucket(AjPBtcache cache, ajlong pageno)
 ** Only called if there is room in the bucket
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number of bucket
+** @param [r] pagepos [ajulong] page number of bucket
 ** @param [r] id [const AjPStr] ID
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void btreeAddToSecBucket(AjPBtcache cache, ajlong pageno,
+static void btreeAddToSecBucket(AjPBtcache cache, ajulong pagepos,
 				const AjPStr id)
 {
+    unsigned char *buf  = NULL;
+    unsigned char *kptr = NULL;
+    unsigned char *src  = NULL;
+    unsigned char *dest = NULL;
+
+    unsigned char *lastptr = NULL;
+    unsigned char *endptr  = NULL;
+    
+    ajuint nentries = 0;
+    ajuint nodetype = 0;
+    ajuint idlen    = 0;
+    
+    ajuint sum = 0;
+    ajuint len = 0;
+    ajuint i;
+
+    ajuint v;
+    
+    AjPBtpage page = NULL;
+    static ajuint calls = 0;
+    static ajuint overflowcalls=0;
+   
+    calls++;
+    page = ajBtreeCacheRead(cache,pagepos);
+    buf  = page->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_SECBUCKET)
+        ajFatal("Wrong nodetype in AddToSecBucket cache %S",
+                cache->filename);
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    if(nentries >= cache->snperbucket)
+        ajFatal("Bucket too full in AddToSecBucket page %Lu %u %u cache %S",
+                pagepos, nentries, cache->snperbucket, cache->filename);    
+
+    kptr = PBT_BUCKKEYLEN(buf);
+    src  = kptr + (nentries * sizeof(ajuint));
+
+    sum = 0;
+    for(i=0;i<nentries;++i)
+    {
+        BT_GETAJUINT(kptr,&len);
+        sum += len;
+        kptr += sizeof(ajuint);
+    }
+    /*sum += nentries;*/
+    
+    endptr  = src + sum - 1;
+    idlen   = MAJSTRGETLEN(id);
+    lastptr = endptr + sizeof(ajuint) + idlen + 1;
+    if((ajuint) (lastptr - buf) >= cache->pagesize)
+    {
+        overflowcalls++;
+        ajWarn("\nOverflow in AddToSecBucket nentries:%u fails %u/%u '%S' "
+               "cache %S",
+               nentries, overflowcalls,calls, id, cache->filename);
+        btreeAddToSecBucketFull(cache,pagepos,id);
+        return;
+    }
+    
+    dest = src + sizeof(ajuint);
+    memmove((void *)dest, (void *)src, sum);
+
+    v = idlen+1;
+    BT_SETAJUINT(src,v);
+
+    endptr += sizeof(ajuint) + 1;
+    strcpy((char *)endptr,MAJSTRGETPTR(id));
+
+    v = nentries + 1;
+    SBT_BUCKNENTRIES(buf,v);
+
+    page->dirty = BT_DIRTY;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeAddToSecBucketFull ****************************************
+**
+** Add a keyword ID to a secondary bucket
+** Only called if there is room in the bucket
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number of bucket
+** @param [r] id [const AjPStr] ID
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeAddToSecBucketFull(AjPBtcache cache, ajulong pagepos,
+                                    const AjPStr id)
+{
     AjPSecBucket bucket = NULL;
-    ajint nentries;
+    ajuint nentries;
     
     /* ajDebug("In btreeAddToSecBucket\n"); */
 
-    bucket   = btreeReadSecBucket(cache,pageno);
+    bucket   = btreeReadSecBucket(cache,pagepos);
     nentries = bucket->Nentries;
 
 
     /* Reading a bucket always gives one extra ID position */
-    bucket->ids[nentries] = ajStrNew();
 
-    ajStrAssignS(&bucket->ids[nentries],id);
+    ajStrAssignS(&bucket->SecIds[nentries],id);
 
     ++bucket->Nentries;
 
-    btreeWriteSecBucket(cache,bucket,pageno);
+    btreeWriteSecBucket(cache,bucket,pagepos);
 
     btreeSecBucketDel(&bucket);
     
@@ -8347,126 +11927,114 @@ static void btreeAddToSecBucket(AjPBtcache cache, ajlong pageno,
 
 static AjBool btreeReorderSecBuckets(AjPBtcache cache, AjPBtpage leaf)
 {
-    ajint nkeys = 0;
-    AjPSecBucket *buckets = NULL;
+    ajuint nkeys = 0;
     AjPSecBucket cbucket  = NULL;
     unsigned char *lbuf   = NULL;
 
-    AjPStr *keys = NULL;
-    ajlong *ptrs = NULL;
+    AjPBtMem arrays1 = NULL;
+    AjPBtMem arrays2 = NULL;
+    AjPStr *newkeys = NULL;
+    ajulong *newptrs = NULL;
+    ajulong *ptrs = NULL;
+    ajulong *overflows = NULL;
 
-    ajlong *overflows = NULL;
+    ajuint i = 0;
     
-    ajint i = 0;
-    ajint j = 0;
-    
-    ajint order;
-    ajint bentries      = 0;
-    ajint totalkeys     = 0;
-    ajint nperbucket    = 0;
-    ajint maxnperbucket = 0;
-    ajint count         = 0;
-    ajint totkeylen     = 0;
-    ajint keylimit      = 0;
-    ajint bucketn       = 0;
-    ajint bucketlimit   = 0;
-    ajint nodetype      = 0;
+    ajuint order;
+    ajuint totalkeys     = 0;
+    ajuint maxnperbucket = 0;
+    ajuint count         = 0;
+    ajuint keylimit      = 0;
+    ajuint bucketlimit   = 0;
+    ajuint nodetype      = 0;
     
     AjPList idlist  = NULL;
-    ajint dirtysave = 0;
+    ajuint dirtysave = 0;
     AjPStr bid      = NULL;
 
 
-    ajint v = 0;
+    ajuint newmax;
+    ajuint iold = 0;
     
+#if AJINDEX_DEBUG
+    ajDebug("btreeReorderSecBuckets %Lu\n", leaf->pagepos);
+#endif
+    ++statCallReorderSecBuckets;
+
     /* ajDebug("In btreeReorderSecBuckets\n"); */
+
+    if(!statSaveSecId)
+    {
+        statSaveSecIdMax = 2048;
+        AJCNEW0(statSaveSecId, statSaveSecIdMax);
+        statSaveSecIdNext = 0;
+    }
 
     dirtysave = leaf->dirty;
 
     leaf->dirty = BT_LOCK;
+    leaf->lockfor = 1371;
     lbuf = leaf->buf;
 
     GBT_NODETYPE(lbuf,&nodetype);
 
     order = cache->sorder;
-    nperbucket = cache->snperbucket;
-    
 
     /* Read keys/ptrs */
-    AJCNEW0(keys,order);
-    AJCNEW0(ptrs,order);
-    AJCNEW0(overflows,order);
-    
-    for(i=0;i<order;++i)
-	keys[i] = ajStrNew();
+    arrays1 = btreeAllocSecArray(cache);
+    ptrs = arrays1->parray;
+    arrays2 = btreeAllocSecArray(cache);
+    newkeys = arrays2->karray;
+    newptrs = arrays2->parray;
+    overflows = arrays2->overflows;
+    btreeGetPointers(cache,lbuf,&ptrs);
 
-    btreeGetKeys(cache,lbuf,&keys,&ptrs);
 
     GBT_NKEYS(lbuf,&nkeys);
 
 
     if(!nkeys)
-	ajFatal("SecBucketReorder: Attempt to reorder empty leaf");
+	ajFatal("ReorderSecBuckets: Attempt to reorder empty lea cache %Sf",
+                cache->filename);
 
+    if(nkeys > order)
+    {
+        ajErr("ReorderSecBuckets: nkeys %u > order %u cache %S",
+              nkeys, order, cache->filename);
+        ajUtilCatch();
+    }
+    
     for(i=0;i<nkeys;++i)
 	totalkeys += btreeNumInSecBucket(cache,ptrs[i]);
 
     totalkeys += btreeNumInSecBucket(cache,ptrs[i]);
 
-    /* Set the number of entries per bucket to approximately half full */
-    maxnperbucket = nperbucket >> 1;
+    keylimit = nkeys + 1;
 
-    if(!maxnperbucket)
-	++maxnperbucket;
+    btreeBucketCalc(totalkeys, keylimit, cache->snperbucket,
+                    &bucketlimit, &maxnperbucket);
 
-    /* Work out the number of new buckets needed */
-    bucketn = (totalkeys / maxnperbucket);
-    if(totalkeys % maxnperbucket)
-	++bucketn;
-    
-    if(bucketn > order)
+    if(bucketlimit >= order)
     {
-	for(i=0;i<order;++i)
-	    ajStrDel(&keys[i]);
-
-	AJFREE(keys);
-	AJFREE(ptrs);
-	AJFREE(overflows);
-	
+        btreeDeallocSecArray(cache,arrays1);
+        btreeDeallocSecArray(cache,arrays2);
 	leaf->dirty = dirtysave;
 
 	return ajFalse;
     }
     
 
-    /* Read buckets */
-    AJCNEW0(buckets,nkeys+1);
-    keylimit = nkeys + 1;
-
-    
-    for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadSecBucket(cache,ptrs[i]);
-
-
     /* Read IDs from all buckets and push to list and sort (increasing kw) */
     idlist  = ajListNew();
     
     for(i=0;i<keylimit;++i)
-    {
-	overflows[i] = buckets[i]->Overflow;
-	bentries = buckets[i]->Nentries;
-	for(j=0;j<bentries;++j)
-	    ajListPush(idlist,(void *)buckets[i]->ids[j]);
-	
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->ids);
-	AJFREE(buckets[i]);
-    }
-    ajListSort(idlist,btreeKeywordIdCompare);
-    AJFREE(buckets);
+	overflows[i] = btreeSecBucketIdlist(cache,ptrs[i],idlist);
 
-    cbucket = btreeSecBucketNew(maxnperbucket);
-    bucketlimit = bucketn - 1;
+
+    ajListSort(idlist,btreeKeywordIdCompare);
+
+    cbucket = btreeSecBucketNew(cache->snperbucket,cache->kwlimit);
+    iold = 0;
     
     for(i=0;i<bucketlimit;++i)
     {
@@ -8474,29 +12042,34 @@ static AjBool btreeReorderSecBuckets(AjPBtcache cache, AjPBtpage leaf)
 	cbucket->Nentries = 0;
 
 	count = 0;
-
 	while(count!=maxnperbucket)
 	{
 	    ajListPop(idlist,(void **)&bid);
 	    
-	    ajStrAssignS(&cbucket->ids[count],bid);
+	    ajStrAssignS(&cbucket->SecIds[count],bid);
 
 	    cbucket->keylen[count] = BT_BUCKSECLEN(bid);
 	    ++cbucket->Nentries;
 	    ++count;
-	    ajStrDel(&bid);
+            if(statSaveSecIdNext >= statSaveSecIdMax) 
+            {
+                newmax = statSaveSecIdMax + statSaveSecIdMax;
+                AJCRESIZE0(statSaveSecId,statSaveSecIdMax,newmax);
+                statSaveSecIdMax = newmax;
+            }
+            statSaveSecId[statSaveSecIdNext++] = bid;
+            bid = NULL;
 	}
 
 
 	ajListPeek(idlist,(void **)&bid);
-	ajStrAssignS(&keys[i],bid);
+	ajStrAssignS(&newkeys[i],bid);
 
-	totkeylen += ajStrGetLen(bid);
-
-	if(!ptrs[i])
-	    ptrs[i] = cache->totsize;
-
-	btreeWriteSecBucket(cache,cbucket,ptrs[i]);
+	if((iold < order) && ptrs[iold])
+            newptrs[i]=ptrs[iold++];
+        else
+	    newptrs[i] = cache->totsize;
+	btreeWriteSecBucket(cache,cbucket,newptrs[i]);
     }
 
 
@@ -8509,46 +12082,47 @@ static AjBool btreeReorderSecBuckets(AjPBtcache cache, AjPBtpage leaf)
 
     while(ajListPop(idlist,(void **)&bid))
     {
-	ajStrAssignS(&cbucket->ids[count],bid);
+	ajStrAssignS(&cbucket->SecIds[count],bid);
 
 	++cbucket->Nentries;
 	++count;
 	ajStrDel(&bid);
     }
     
-    
-    if(!ptrs[i])
-	ptrs[i] = cache->totsize;
+    if((iold < order) && ptrs[iold])
+        newptrs[i]=ptrs[iold++];
+    else
+        newptrs[i] = cache->totsize;
+    btreeWriteSecBucket(cache,cbucket,newptrs[i]);
 
-    btreeWriteSecBucket(cache,cbucket,ptrs[i]);
-
-    cbucket->Nentries = maxnperbucket;
     btreeSecBucketDel(&cbucket);
+
+#if AJINDEX_DEBUG
+    if(bucketlimit <= keylimit)
+        ajDebug("btreeReorderSecBuckets '%S' %u -> %u",
+                cache->filename, keylimit, bucketlimit);
+#endif
+
+    for(i = bucketlimit + 1; i <= keylimit; i++)
+    {
+        btreePageSetfree(cache, ptrs[i]);
+    }
 
     /* Now write out a modified leaf with new keys/ptrs */
 
-    nkeys = bucketn - 1;
-    v = nkeys;
-    SBT_NKEYS(lbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(lbuf,v);
-
-    btreeWriteNode(cache,leaf,keys,ptrs,nkeys);
-
+    nkeys = bucketlimit;
+    btreeWriteNode(cache,leaf,newkeys,newptrs,nkeys);
     leaf->dirty = BT_DIRTY;
 
     if(nodetype == BT_ROOT)
+    {
 	leaf->dirty = BT_LOCK;
-    
-    for(i=0;i<order;++i)
-	ajStrDel(&keys[i]);
+        leaf->lockfor = 1372;
+    }
 
-    AJFREE(keys);
-    AJFREE(ptrs);
-    AJFREE(overflows);
-    
+    btreeDeallocSecArray(cache,arrays1);
+    btreeDeallocSecArray(cache,arrays2);
 
-    btreeSecBucketDel(&cbucket);
     ajListFree(&idlist);
 
     return ajTrue;
@@ -8574,7 +12148,7 @@ static void btreeInsertIdOnly(AjPBtcache cache, const AjPBtPri pri)
     unsigned char *buf;
     AjPBtpage page = NULL;
 
-    ajlong right = 0L;
+    ajulong right = 0L;
 
     /* ajDebug("In btreeInsertIdOnly\n"); */
     
@@ -8585,15 +12159,16 @@ static void btreeInsertIdOnly(AjPBtcache cache, const AjPBtPri pri)
     }
     
     cache->secrootblock = pri->treeblock;
-    page = ajBtreeCacheWrite(cache,cache->secrootblock);
+    page = ajBtreeCacheWriteNode(cache,cache->secrootblock);
     page->dirty = BT_LOCK;
+    page->lockfor = 1381;
     buf = page->buf;
     GBT_RIGHT(buf, &right);
-    cache->slevel = (ajint) right;
+    cache->slevel = (ajuint) right;
 
-    ajBtreeInsertSecId(cache, pri->id);
+    ajBtreeSecInsertId(cache, pri->id);
 
-    right = (ajlong) cache->slevel;
+    right = (ajulong) cache->slevel;
     SBT_RIGHT(buf, right);
     page->dirty = BT_DIRTY;
 
@@ -8606,7 +12181,7 @@ static void btreeInsertIdOnly(AjPBtcache cache, const AjPBtPri pri)
 
 /* @funcstatic btreeSplitRootSec *****************************************
 **
-** Split s secondary root node
+** Split a secondary root node
 **
 ** @param [u] cache [AjPBtcache] cache
 **
@@ -8621,54 +12196,56 @@ static void btreeSplitRootSec(AjPBtcache cache)
     AjPBtpage lpage    = NULL;
     AjPBtpage tpage    = NULL;
 
+    AjPBtMem arrays = NULL;
+    AjPBtMem tarrays = NULL;
     AjPStr *karray  = NULL;
     AjPStr *tkarray = NULL;
-    ajlong *parray  = NULL;
-    ajlong *tparray = NULL;
+    ajulong *parray  = NULL;
+    ajulong *tparray = NULL;
 
-    ajint order  = 0;
-    ajint nkeys  = 0;
-    ajint keypos = 0;
+    ajuint order  = 0;
+    ajuint nkeys  = 0;
+    ajuint keypos = 0;
     
-    ajlong rblockno = 0L;
-    ajlong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong lblockno = 0L;
 
-    ajlong right;
+    ajulong right;
     
     AjPStr key = NULL;
-    ajint  i;
+    ajuint i;
 
     unsigned char *rootbuf = NULL;
     unsigned char *rbuf    = NULL;
     unsigned char *lbuf    = NULL;
     unsigned char *tbuf    = NULL;
     
-    ajint nodetype  = 0;
-    ajlong overflow = 0L;
-    ajlong zero     = 0L;
-    ajint totlen    = 0;
-    ajint rkeyno    = 0;
-    ajint n         = 0;
+    ajuint nodetype  = 0;
+    ajulong overflow = 0L;
+    ajulong zero     = 0L;
+    ajuint totlen    = 0;
+    ajuint rkeyno    = 0;
+    ajuint n         = 0;
 
-    ajlong lv = 0L;
-    ajint  v  = 0;
+    ajulong lv = 0L;
+    ajuint  v  = 0;
     
     
+#if AJINDEX_DEBUG
+    ajDebug("btreeSplitRootSec %Lu\n", cache->secrootblock);
+#endif
+    ++statCallSplitSecRoot;
+
     /* ajDebug("In btreeSplitRootSec\n"); */
 
     order = cache->sorder;
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-    AJCNEW0(tkarray,order);
-    AJCNEW0(tparray,order);
-    key = ajStrNew();
 
-    for(i=0;i<order;++i)
-    {
-	karray[i]  = ajStrNew();
-	tkarray[i] = ajStrNew();
-    }
-    
+    arrays = btreeAllocSecArray(cache);
+    tarrays = btreeAllocSecArray(cache);
+    karray = arrays->karray;
+    parray = arrays->parray;
+    tkarray = tarrays->karray;
+    tparray = tarrays->parray;
 
     rootpage = btreeCacheLocate(cache,cache->secrootblock);
     rootbuf = rootpage->buf;
@@ -8682,20 +12259,12 @@ static void btreeSplitRootSec(AjPBtcache cache)
 
 
     rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
-    rpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
+    rpage = ajBtreeCacheWriteNodenew(cache);
     rpage->dirty = BT_LOCK;
-    
-    lblockno = cache->totsize;
-    lpage = ajBtreeCacheWrite(cache,lblockno);
-    lpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
+    rpage->lockfor = 1391;
 
-    lv = rblockno;
-    SBT_BLOCKNUMBER(rpage->buf,lv);
-    lv = lblockno;
-    SBT_BLOCKNUMBER(lpage->buf,lv);
+    lblockno = cache->totsize;
+    lpage = ajBtreeCacheWriteNodenew(cache);
 
     /* Comment this next block out after the beta test */
     if(!cache->slevel)
@@ -8724,10 +12293,11 @@ static void btreeSplitRootSec(AjPBtcache cache)
     v = n;
     SBT_NKEYS(rootbuf,v);
     btreeWriteNode(cache,rootpage,tkarray,tparray,1);
-    right = (ajlong)(cache->slevel + 1);
+    right = (ajulong)(cache->slevel + 1);
     SBT_RIGHT(rootbuf,right);
 
     rootpage->dirty = BT_LOCK;
+    rootpage->lockfor = 1392;
 
     rbuf = rpage->buf;
     lbuf = lpage->buf;
@@ -8760,14 +12330,10 @@ static void btreeSplitRootSec(AjPBtcache cache)
     }
 
     tparray[i] = parray[i];
-    v = totlen;
-    SBT_TOTLEN(lbuf,v);
     n = i;
-    v = n;
-    SBT_NKEYS(lbuf,v);
-    btreeWriteNode(cache,lpage,tkarray,tparray,i);
+    btreeWriteNode(cache,lpage,tkarray,tparray,n);
 
-    for(i=0;i<n+1;++i)
+    for(i=0;i<=n;++i)
     {
 	tpage = ajBtreeCacheRead(cache,tparray[i]);
 	tbuf = tpage->buf;
@@ -8787,12 +12353,9 @@ static void btreeSplitRootSec(AjPBtcache cache)
 
     tparray[i-(keypos+1)] = parray[i];
 
-    v = totlen;
-    SBT_TOTLEN(rbuf,v);
     rkeyno = (nkeys-keypos) - 1;
-    v = rkeyno;
-    SBT_NKEYS(rbuf,v);
     rpage->dirty = BT_DIRTY;
+
     btreeWriteNode(cache,rpage,tkarray,tparray,rkeyno);
 
     for(i=0;i<rkeyno+1;++i)
@@ -8807,17 +12370,9 @@ static void btreeSplitRootSec(AjPBtcache cache)
 
     ++cache->slevel;
 
-    for(i=0;i<order;++i)
-    {
-	ajStrDel(&karray[i]);
-	ajStrDel(&tkarray[i]);
-    }
+    btreeDeallocSecArray(cache,arrays);
+    btreeDeallocSecArray(cache,tarrays);
 
-
-    AJFREE(tkarray);
-    AJFREE(tparray);
-    AJFREE(karray);
-    AJFREE(parray);
     ajStrDel(&key);
     
     return;
@@ -8833,53 +12388,55 @@ static void btreeSplitRootSec(AjPBtcache cache)
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] original page
 ** @param [r] key [const AjPStr] key to insert
-** @param [r] less [ajlong] less-than pointer
-** @param [r] greater [ajlong] greater-than pointer
+** @param [r] less [ajulong] less-than pointer
+** @param [r] greater [ajulong] greater-than pointer
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeInsertKeySec(AjPBtcache cache, AjPBtpage page,
-			      const AjPStr key, ajlong less, ajlong greater)
+			      const AjPStr key, ajulong less, ajulong greater)
 {
     unsigned char *lbuf = NULL;
     unsigned char *rbuf = NULL;
     unsigned char *tbuf = NULL;
 
     AjPStr *karray  = NULL;
-    ajlong *parray  = NULL;
+    ajulong *parray  = NULL;
     AjPStr *tkarray = NULL;
-    ajlong *tparray = NULL;
+    ajulong *tparray = NULL;
+    AjPBtMem savekeyarrays = NULL;
+    AjPBtMem tarrays = NULL;
 
-    ajint nkeys  = 0;
-    ajint order  = 0;
-    ajint keypos = 0;
-    ajint rkeyno = 0;
+    ajuint nkeys  = 0;
+    ajuint order  = 0;
+    ajuint keypos = 0;
+    ajuint rkeyno = 0;
     
-    ajint i = 0;
-    ajint n = 0;
+    ajuint i = 0;
+    ajuint n = 0;
     
-    ajint nodetype = 0;
+    ajuint nodetype = 0;
     AjPBtpage ipage = NULL;
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage tpage = NULL;
 
-    ajlong blockno  = 0L;
-    ajlong rblockno = 0L;
-    ajlong lblockno = 0L;
-    ajlong ibn      = 0L;
+    ajulong blockno  = 0L;
+    ajulong rblockno = 0L;
+    ajulong lblockno = 0L;
+    ajulong ibn      = 0L;
     
     AjPStr mediankey  = NULL;
-    ajlong medianless = 0L;
-    ajlong mediangtr  = 0L;
-    ajlong overflow   = 0L;
-    ajlong prev       = 0L;
-    ajint  totlen     = 0;
+    ajulong medianless = 0L;
+    ajulong mediangtr  = 0L;
+    ajulong overflow   = 0L;
+    ajulong prev       = 0L;
+    ajuint  totlen     = 0;
     
-    ajlong lv = 0L;
-    ajint  v  = 0;
+    ajulong lv = 0L;
+    ajuint  v  = 0;
     
     /* ajDebug("In btreeInsertKeySec\n"); */
 
@@ -8894,64 +12451,40 @@ static void btreeInsertKeySec(AjPBtcache cache, AjPBtpage page,
     lbuf = page->buf;
     GBT_NODETYPE(lbuf,&nodetype);
     page->dirty = BT_LOCK;
+    page->lockfor = 1401;
     
     if(nodetype == BT_ROOT)
     {
-	AJCNEW0(karray,order);
-	AJCNEW0(parray,order);
-	for(i=0;i<order;++i)
-	    karray[i] = ajStrNew();
 	btreeSplitRootSec(cache);
 	page->dirty = BT_DIRTY;
 	
-	btreeGetKeys(cache,lbuf,&karray,&parray);
-
-	if(strcmp(key->Ptr,karray[0]->Ptr)<0)
-	    blockno = parray[0];
-	else
-	    blockno = parray[1];
+	blockno = btreeGetBlockFirstS(cache,lbuf,key);
 
 	ipage = ajBtreeCacheRead(cache,blockno);
 	btreeInsertNonFullSec(cache,ipage,key,less,greater);
 
-	for(i=0;i<order;++i)
-	    ajStrDel(&karray[i]);
-
-	AJFREE(karray);
-	AJFREE(parray);
-
 	return;
     }
 
+    savekeyarrays = btreeAllocSecArray(cache);
+    tarrays = btreeAllocSecArray(cache);
+    karray = savekeyarrays->karray;
+    parray = savekeyarrays->parray;
+    tkarray = tarrays->karray;
+    tparray = tarrays->parray;
 
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-    AJCNEW0(tkarray,order);
-    AJCNEW0(tparray,order);
-    mediankey = ajStrNew();
-    
-    for(i=0;i<order;++i)
-    {
-	tkarray[i] = ajStrNew();
-	karray[i]  = ajStrNew();
-    }
-    
     lpage = page;
     lbuf = lpage->buf;
     
     btreeGetKeys(cache,lbuf,&karray,&parray);
 
     GBT_BLOCKNUMBER(lbuf,&lblockno);
+
     rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
-    rpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
+    rpage = ajBtreeCacheWriteNodenew(cache);
     rbuf = rpage->buf;
     rpage->dirty = BT_LOCK;
-    
-    lv = rblockno;
-    SBT_BLOCKNUMBER(rbuf,lv);
-
+    rpage->lockfor = 1402;
     
     GBT_PREV(lbuf,&prev);
     lv = prev;
@@ -8963,7 +12496,7 @@ static void btreeInsertKeySec(AjPBtcache cache, AjPBtpage page,
     if(!(nkeys % 2))
 	--keypos;
 
-    ajStrAssignS(&mediankey,karray[keypos]);
+    mediankey = ajStrNewS(karray[keypos]);
     medianless = lblockno;
     mediangtr  = rblockno;
 
@@ -8985,12 +12518,8 @@ static void btreeInsertKeySec(AjPBtcache cache, AjPBtpage page,
     }
 
     tparray[i] = parray[i];
-    v = totlen;
-    SBT_TOTLEN(lbuf,v);
     n = i;
-    v = n;
-    SBT_NKEYS(lbuf,v);
-    btreeWriteNode(cache,lpage,tkarray,tparray,i);
+    btreeWriteNode(cache,lpage,tkarray,tparray,n);
 
 
 
@@ -9014,12 +12543,9 @@ static void btreeInsertKeySec(AjPBtcache cache, AjPBtpage page,
     }
 
     tparray[i-(keypos+1)] = parray[i];
-    v = totlen;
-    SBT_TOTLEN(rbuf,v);
     rkeyno = (nkeys-keypos) - 1;
-    v = rkeyno;
-    SBT_NKEYS(rbuf,v);
     rpage->dirty = BT_DIRTY;
+
     btreeWriteNode(cache,rpage,tkarray,tparray,rkeyno);
 
 
@@ -9035,7 +12561,7 @@ static void btreeInsertKeySec(AjPBtcache cache, AjPBtpage page,
 
     ibn = rblockno;
 
-    if(strcmp(key->Ptr,mediankey->Ptr)<0)
+    if(MAJSTRCMPS(key,mediankey)<0)
 	ibn = lblockno;
 
     ipage = ajBtreeCacheRead(cache,ibn);
@@ -9043,20 +12569,13 @@ static void btreeInsertKeySec(AjPBtcache cache, AjPBtpage page,
     btreeInsertNonFullSec(cache,ipage,key,less,greater);
 
 
-    for(i=0;i<order;++i)
-    {
-	ajStrDel(&karray[i]);
-	ajStrDel(&tkarray[i]);
-    }
-
-    AJFREE(karray);
-    AJFREE(tkarray);
-    AJFREE(parray);
-    AJFREE(tparray);
 
     ipage = ajBtreeCacheRead(cache,prev);
 
     btreeInsertKeySec(cache,ipage,mediankey,medianless,mediangtr);
+    btreeDeallocSecArray(cache,savekeyarrays); /* mediankey points here */
+    btreeDeallocSecArray(cache,tarrays);
+
     ajStrDel(&mediankey);
 
     return;
@@ -9071,14 +12590,14 @@ static void btreeInsertKeySec(AjPBtcache cache, AjPBtpage page,
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] retpage [AjPBtpage*] page
-** @param [r] key [const char *] key
+** @param [r] key [const AjPStr] key
 **
-** @return [ajlong] bucket block or 0L if shift not possible
+** @return [ajulong] bucket block or 0L if shift not possible
 ** @@
 ******************************************************************************/
 
-static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
-				  const char *key)
+static ajulong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
+                                   const AjPStr key)
 {
     unsigned char *tbuf = NULL;
     unsigned char *pbuf = NULL;
@@ -9088,30 +12607,35 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
     AjPBtpage spage = NULL;
     AjPBtpage tpage = NULL;
 
-    ajint tkeys = 0;
-    ajint pkeys = 0;
-    ajint skeys = 0;
-    ajint order = 0;
+    ajuint tkeys = 0;
+    ajuint pkeys = 0;
+    ajuint skeys = 0;
+    ajuint order = 0;
     
-    ajint i;
-    ajint n;
+    ajuint i;
+    ajuint n;
+    ajint ii;
     
-    ajlong parent  = 0L;
-    ajlong blockno = 0L;
+    ajulong parent  = 0L;
+    ajulong blockno = 0L;
+    
+    AjPBtMem arrays1 = NULL;
+    AjPBtMem arrays2 = NULL;
+    AjPBtMem arrays3 = NULL;
     
     AjPStr *kTarray = NULL;
     AjPStr *kParray = NULL;
     AjPStr *kSarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pParray = NULL;
-    ajlong *pSarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pParray = NULL;
+    ajulong *pSarray = NULL;
 
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
 
-    ajint ppos    = 0;
-    ajint pkeypos = 0;
-    ajint minsize = 0;
+    ajuint ppos    = 0;
+    ajuint pkeypos = 0;
+    ajuint minsize = 0;
     
     /* ajDebug("In btreeInsertShiftSec\n"); */
 
@@ -9137,32 +12661,30 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
     pbuf = ppage->buf;
     GBT_NKEYS(pbuf,&pkeys);
     
-    AJCNEW0(kParray,order);
-    AJCNEW0(pParray,order);
-    AJCNEW0(kSarray,order);
-    AJCNEW0(pSarray,order);
-    AJCNEW0(kTarray,order);
-    AJCNEW0(pTarray,order);
-    
-    for(i=0;i<order;++i)
-    {
-	kSarray[i] = ajStrNew();
-	kParray[i] = ajStrNew();
-	kTarray[i] = ajStrNew();
-    }
+    arrays1 = btreeAllocSecArray(cache);
+    kParray = arrays1->karray;
+    pParray = arrays1->parray;
 
+    arrays2 = btreeAllocSecArray(cache);
+    kSarray = arrays2->karray;
+    pSarray = arrays2->parray;
+
+    arrays3 = btreeAllocSecArray(cache);
+    kTarray = arrays3->karray;
+    pTarray = arrays3->parray;
+    
     btreeGetKeys(cache,pbuf,&kParray,&pParray);
 
     i=0;
 
-    while(i!=pkeys && strcmp(key,kParray[i]->Ptr)>=0)
+    while(i!=pkeys && MAJSTRCMPS(key,kParray[i])>=0)
 	++i;
 
     pkeypos = i;
     
     if(i==pkeys)
     {
-	if(strcmp(key,kParray[i-1]->Ptr)<0)
+	if(MAJSTRCMPS(key,kParray[i-1])<0)
 	    ppos = i-1;
 	else
 	    ppos = i;
@@ -9187,7 +12709,7 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 
 	i = 0;
 
-	while(pParray[i] != tpage->pageno)
+	while(pParray[i] != tpage->pagepos)
 	    ++i;
 
 	--i;
@@ -9213,17 +12735,20 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
 
-	if(ppage->pageno == cache->secrootblock)
+	if(ppage->pagepos == cache->secrootblock)
+        {
 	    ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1411;
+        }
 
 	i = 0;
 
-	while(i!=pkeys && strcmp(key,kParray[i]->Ptr)>=0)
+	while(i!=pkeys && MAJSTRCMPS(key,kParray[i])>=0)
 	    ++i;
 
 	if(i==pkeys)
 	{
-	    if(strcmp(key,kParray[i-1]->Ptr)<0)
+	    if(MAJSTRCMPS(key,kParray[i-1])<0)
 		blockno = pParray[i-1];
 	    else
 		blockno = pParray[i];
@@ -9231,7 +12756,7 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 	else
 	    blockno = pParray[i];
 
-	if(blockno == spage->pageno)
+	if(blockno == spage->pagepos)
 	{
 	    *retpage = spage;
 	    karray = kSarray;
@@ -9248,12 +12773,12 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 
 	i = 0;
 
-	while(i!=n && strcmp(key,karray[i]->Ptr)>=0)
+	while(i!=n && MAJSTRCMPS(key,karray[i])>=0)
 	    ++i;
 
 	if(i==n)
 	{
-	    if(strcmp(key,karray[i-1]->Ptr)<0)
+	    if(MAJSTRCMPS(key,karray[i-1])<0)
 		blockno = parray[i-1];
 	    else
 		blockno = parray[i];
@@ -9261,19 +12786,9 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 	else
 	    blockno = parray[i];
 
-	for(i=0;i<order;++i)
-	{
-	    ajStrDel(&kTarray[i]);
-	    ajStrDel(&kParray[i]);
-	    ajStrDel(&kSarray[i]);
-	}
-
-	AJFREE(kTarray);
-	AJFREE(kSarray);
-	AJFREE(kParray);
-	AJFREE(pTarray);
-	AJFREE(pSarray);
-	AJFREE(pParray);
+        btreeDeallocSecArray(cache,arrays1);
+        btreeDeallocSecArray(cache,arrays2);
+        btreeDeallocSecArray(cache,arrays3);
 
 	return blockno;
     }
@@ -9296,17 +12811,17 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 
 	i = 0;
 
-	while(pParray[i] != tpage->pageno)
+	while(pParray[i] != tpage->pagepos)
 	    ++i;
 
 	pkeypos = i;
 	
 	pSarray[skeys+1] = pSarray[skeys];
 
-	for(i=skeys-1;i>-1;--i)
+	for(ii=skeys-1;ii>-1;--ii)
 	{
-	    ajStrAssignS(&kSarray[i+1],kSarray[i]);
-	    pSarray[i+1] = pSarray[i];
+	    ajStrAssignS(&kSarray[ii+1],kSarray[ii]);
+	    pSarray[ii+1] = pSarray[ii];
 	}
 
 	ajStrAssignS(&kSarray[0],kParray[pkeypos]);
@@ -9320,17 +12835,20 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
 
-	if(ppage->pageno == cache->secrootblock)
+	if(ppage->pagepos == cache->secrootblock)
+        {
 	    ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1412;
+        }
 
 	i = 0;
 
-	while(i!=pkeys && strcmp(key,kParray[i]->Ptr)>=0)
+	while(i!=pkeys && MAJSTRCMPS(key,kParray[i])>=0)
 	    ++i;
 
 	if(i==pkeys)
 	{
-	    if(strcmp(key,kParray[i-1]->Ptr)<0)
+	    if(MAJSTRCMPS(key,kParray[i-1])<0)
 		blockno = pParray[i-1];
 	    else
 		blockno = pParray[i];
@@ -9338,7 +12856,7 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 	else
 	    blockno = pParray[i];
 
-	if(blockno == spage->pageno)
+	if(blockno == spage->pagepos)
 	{
 	    *retpage = spage;
 	    karray = kSarray;
@@ -9354,12 +12872,12 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 	
 	i = 0;
 
-	while(i!=n && strcmp(key,karray[i]->Ptr)>=0)
+	while(i!=n && MAJSTRCMPS(key,karray[i])>=0)
 	    ++i;
 
 	if(i==n)
 	{
-	    if(strcmp(key,karray[i-1]->Ptr)<0)
+	    if(MAJSTRCMPS(key,karray[i-1])<0)
 		blockno = parray[i-1];
 	    else
 		blockno = parray[i];
@@ -9367,37 +12885,16 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 	else
 	    blockno = parray[i];
 
-	for(i=0;i<order;++i)
-	{
-	    ajStrDel(&kTarray[i]);
-	    ajStrDel(&kParray[i]);
-	    ajStrDel(&kSarray[i]);
-	}
-
-	AJFREE(kTarray);
-	AJFREE(kSarray);
-	AJFREE(kParray);
-	AJFREE(pTarray);
-	AJFREE(pSarray);
-	AJFREE(pParray);
+        btreeDeallocSecArray(cache,arrays1);
+        btreeDeallocSecArray(cache,arrays2);
+        btreeDeallocSecArray(cache,arrays3);
 
 	return blockno;
     }
 
-
-    for(i=0;i<order;++i)
-    {
-	ajStrDel(&kTarray[i]);
-	ajStrDel(&kParray[i]);
-	ajStrDel(&kSarray[i]);
-    }
-
-    AJFREE(kTarray);
-    AJFREE(kSarray);
-    AJFREE(kParray);
-    AJFREE(pTarray);
-    AJFREE(pSarray);
-    AJFREE(pParray);
+    btreeDeallocSecArray(cache,arrays1);
+    btreeDeallocSecArray(cache,arrays2);
+    btreeDeallocSecArray(cache,arrays3);
 
     return 0L;
 }
@@ -9412,45 +12909,42 @@ static ajlong btreeInsertShiftSec(AjPBtcache cache, AjPBtpage *retpage,
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] original page
 ** @param [r] key [const AjPStr] key to insert
-** @param [r] less [ajlong] less-than pointer
-** @param [r] greater [ajlong] greater-than pointer
+** @param [r] less [ajulong] less-than pointer
+** @param [r] greater [ajulong] greater-than pointer
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeInsertNonFullSec(AjPBtcache cache, AjPBtpage page,
-				  const AjPStr key, ajlong less,
-				  ajlong greater)
+				  const AjPStr key, ajulong less,
+				  ajulong greater)
 {
     unsigned char *buf = NULL;
 
+    AjPBtMem arrays = NULL;
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
 
-    ajint nkeys = 0;
-    ajint order = 0;
-    ajint ipos  = 0;
-    ajint i;
-    ajint count = 0;
+    ajuint nkeys = 0;
+    ajuint ipos  = 0;
+    ajuint i;
+    ajuint count = 0;
 
-    ajlong lv = 0L;
-    ajint  v  = 0;
+    ajulong lv = 0L;
+    ajuint  v  = 0;
     
 
     AjPBtpage ppage = NULL;
-    ajlong pageno   = 0L;
+    ajulong pagepos   = 0L;
 
-    ajint nodetype = 0;
+    ajuint nodetype = 0;
     
     /* ajDebug("In btreeInsertNonFullSec\n"); */
 
-    order = cache->sorder;
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
+    arrays = btreeAllocSecArray(cache);
+    karray = arrays->karray;
+    parray = arrays->parray;
 
     buf = page->buf;
     GBT_NKEYS(buf,&nkeys);
@@ -9460,7 +12954,7 @@ static void btreeInsertNonFullSec(AjPBtcache cache, AjPBtpage page,
 
     i = 0;
 
-    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr) >= 0)
+    while(i!=nkeys && MAJSTRCMPS(key,karray[i]) >= 0)
 	++i;
 
     ipos = i;
@@ -9496,24 +12990,23 @@ static void btreeInsertNonFullSec(AjPBtcache cache, AjPBtpage page,
     btreeWriteNode(cache,page,karray,parray,nkeys);
 
     if(nodetype == BT_ROOT)
+    {
 	page->dirty = BT_LOCK;
+        page->lockfor = 1421;
+    }
 
-    pageno = page->pageno;
+    pagepos = page->pagepos;
     ppage = ajBtreeCacheRead(cache,less);
-    lv = pageno;
+    lv = pagepos;
     SBT_PREV(ppage->buf,lv);
     ppage->dirty = BT_DIRTY;
+
     ppage = ajBtreeCacheRead(cache,greater);
-    lv = pageno;
+    lv = pagepos;
     SBT_PREV(ppage->buf,lv);
     ppage->dirty = BT_DIRTY;
-    
 
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-    AJFREE(karray);
-    AJFREE(parray);
+    btreeDeallocSecArray(cache,arrays);
 
     if(nodetype != BT_ROOT)
 	btreeKeyShiftSec(cache,page);
@@ -9546,26 +13039,30 @@ static void btreeKeyShiftSec(AjPBtcache cache, AjPBtpage tpage)
     AjPBtpage spage = NULL;
     AjPBtpage page  = NULL;
 
-    ajint tkeys = 0;
-    ajint pkeys = 0;
-    ajint skeys = 0;
-    ajint order = 0;
+    ajuint tkeys = 0;
+    ajuint pkeys = 0;
+    ajuint skeys = 0;
+    ajuint order = 0;
     
-    ajint i;
+    ajuint i;
+    ajint ii;
     
-    ajlong parent = 0L;
+    ajulong parent = 0L;
     
+    AjPBtMem Parrays = NULL;
+    AjPBtMem Sarrays = NULL;
+    AjPBtMem Tarrays = NULL;
     AjPStr *kTarray = NULL;
     AjPStr *kParray = NULL;
     AjPStr *kSarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pParray = NULL;
-    ajlong *pSarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pParray = NULL;
+    ajulong *pSarray = NULL;
 
-    ajint pkeypos = 0;
-    ajint minsize = 0;
+    ajuint pkeypos = 0;
+    ajuint minsize = 0;
 
-    ajlong lv = 0L;
+    ajulong lv = 0L;
     
     /* ajDebug("In btreeKeyShiftSec\n"); */
     
@@ -9588,20 +13085,15 @@ static void btreeKeyShiftSec(AjPBtcache cache, AjPBtpage tpage)
     pbuf = ppage->buf;
     GBT_NKEYS(pbuf,&pkeys);
     
-
-    AJCNEW0(kParray,order);
-    AJCNEW0(pParray,order);
-    AJCNEW0(kSarray,order);
-    AJCNEW0(pSarray,order);
-    AJCNEW0(kTarray,order);
-    AJCNEW0(pTarray,order);
-    
-    for(i=0;i<order;++i)
-    {
-	kSarray[i] = ajStrNew();
-	kParray[i] = ajStrNew();
-	kTarray[i] = ajStrNew();
-    }
+    Parrays = btreeAllocSecArray(cache);
+    Sarrays = btreeAllocSecArray(cache);
+    Tarrays = btreeAllocSecArray(cache);
+    kParray = Parrays->karray;
+    pParray = Parrays->parray;
+    kSarray = Sarrays->karray;
+    pSarray = Sarrays->parray;
+    kTarray = Tarrays->karray;
+    pTarray = Tarrays->parray;
 
     btreeGetKeys(cache,tbuf,&kTarray,&pTarray);
     GBT_NKEYS(tbuf,&tkeys);
@@ -9611,7 +13103,7 @@ static void btreeKeyShiftSec(AjPBtcache cache, AjPBtpage tpage)
 
     i=0;
 
-    while(pParray[i] != tpage->pageno)
+    while(pParray[i] != tpage->pagepos)
 	++i;
 
     if(i) /* There is another leaf to the left */
@@ -9647,29 +13139,22 @@ static void btreeKeyShiftSec(AjPBtcache cache, AjPBtpage tpage)
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
 
-	if(ppage->pageno == cache->secrootblock)
+	if(ppage->pagepos == cache->secrootblock)
+        {
 	    ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1431;
+        }
 
 	page = ajBtreeCacheRead(cache,pSarray[skeys]);
 	buf = page->buf;
-	lv = spage->pageno;
+	lv = spage->pagepos;
 	SBT_PREV(buf,lv);
 	page->dirty = BT_DIRTY;
 
 
-	for(i=0;i<order;++i)
-	{
-	    ajStrDel(&kTarray[i]);
-	    ajStrDel(&kParray[i]);
-	    ajStrDel(&kSarray[i]);
-	}
-
-	AJFREE(kTarray);
-	AJFREE(kSarray);
-	AJFREE(kParray);
-	AJFREE(pTarray);
-	AJFREE(pSarray);
-	AJFREE(pParray);
+        btreeDeallocSecArray(cache,Parrays);
+        btreeDeallocSecArray(cache,Sarrays);
+        btreeDeallocSecArray(cache,Tarrays);
 
 	return;
     }
@@ -9692,10 +13177,10 @@ static void btreeKeyShiftSec(AjPBtcache cache, AjPBtpage tpage)
 
 	pSarray[skeys+1] = pSarray[skeys];
 
-	for(i=skeys-1;i>-1;--i)
+	for(ii=skeys-1;ii>-1;--ii)
 	{
-	    ajStrAssignS(&kSarray[i+1],kSarray[i]);
-	    pSarray[i+1] = pSarray[i];
+	    ajStrAssignS(&kSarray[ii+1],kSarray[ii]);
+	    pSarray[ii+1] = pSarray[ii];
 	}
 
 	ajStrAssignS(&kSarray[0],kParray[pkeypos]);
@@ -9709,46 +13194,29 @@ static void btreeKeyShiftSec(AjPBtcache cache, AjPBtpage tpage)
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
 
-	if(ppage->pageno == cache->secrootblock)
+	if(ppage->pagepos == cache->secrootblock)
+        {
 	    ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1432;
+        }
 
 	page = ajBtreeCacheRead(cache,pSarray[0]);
 	buf = page->buf;
-	lv = spage->pageno;
+	lv = spage->pagepos;
 	SBT_PREV(buf,lv);
 	page->dirty = BT_DIRTY;
 
-	for(i=0;i<order;++i)
-	{
-	    ajStrDel(&kTarray[i]);
-	    ajStrDel(&kParray[i]);
-	    ajStrDel(&kSarray[i]);
-	}
 
-	AJFREE(kTarray);
-	AJFREE(kSarray);
-	AJFREE(kParray);
-	AJFREE(pTarray);
-	AJFREE(pSarray);
-	AJFREE(pParray);
+        btreeDeallocSecArray(cache,Parrays);
+        btreeDeallocSecArray(cache,Sarrays);
+        btreeDeallocSecArray(cache,Tarrays);
 
 	return;
     }
 
-
-    for(i=0;i<order;++i)
-    {
-	ajStrDel(&kTarray[i]);
-	ajStrDel(&kParray[i]);
-	ajStrDel(&kSarray[i]);
-    }
-
-    AJFREE(kTarray);
-    AJFREE(kSarray);
-    AJFREE(kParray);
-    AJFREE(pTarray);
-    AJFREE(pSarray);
-    AJFREE(pParray);
+    btreeDeallocSecArray(cache,Parrays);
+    btreeDeallocSecArray(cache,Sarrays);
+    btreeDeallocSecArray(cache,Tarrays);
 
     return;
 }
@@ -9781,67 +13249,64 @@ void ajBtreeLockTest(AjPBtcache cache)
 
 
 
-/* @func ajBtreeSecLeafList ********************************************
+/* @func ajBtreeSecLeafList **************************************************
 **
 ** Read the leaves of a secondary tree
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] rootblock [ajlong] root page of secondary tree
+** @param [r] rootblock [ajulong] root page of secondary tree
 **
 ** @return [AjPList] List of IDs matching a keyword
 ** @@
 ******************************************************************************/
 
-AjPList ajBtreeSecLeafList(AjPBtcache cache, ajlong rootblock)
+AjPList ajBtreeSecLeafList(AjPBtcache cache, ajulong rootblock)
 {
     AjPList list;
-    ajint order;
-    AjPStr *karray;
-    ajlong *parray;
+
+    AjPBtMem arrays = NULL;
+    ajulong *parray;
+
     AjPBtpage page;
     unsigned char *buf;
-    ajint nodetype;
-    ajint i;
-    ajint j;
-    ajint k;
-    ajlong level = 0L;
+    ajuint nodetype;
+    ajuint j;
+    ajuint k;
+    ajulong level = 0L;
     
     AjPSecBucket bucket;
-    ajint nkeys;
+    ajuint nkeys;
     AjPStr id = NULL;
-    ajlong right;
+    ajulong right;
 
     list = ajListNew();
 
-    order = cache->sorder;
-
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
+    arrays = btreeAllocSecArray(cache);
+    parray = arrays->parray;
     
     page = ajBtreeCacheRead(cache,rootblock);
     buf = page->buf;
 
     GBT_RIGHT(buf,&level);
-    cache->slevel = (ajint)level;
+    cache->slevel = (ajuint)level;
     
-    btreeGetKeys(cache,buf,&karray,&parray);
+    btreeGetPointers(cache,buf,&parray);
     GBT_NODETYPE(buf,&nodetype);
 
     while(nodetype != BT_LEAF && cache->slevel!=0)
     {
 	page = ajBtreeCacheRead(cache,parray[0]);
 	buf = page->buf;
-	btreeGetKeys(cache,buf,&karray,&parray);
+	btreeGetPointers(cache,buf,&parray);
 	GBT_NODETYPE(buf,&nodetype);
     }
 
     do
     {
 	GBT_NKEYS(buf,&nkeys);
+
+        page->dirty = BT_LOCK;
+        page->lockfor = 9901;
 
 	for(j=0;j<nkeys+1;++j)
 	{
@@ -9850,13 +13315,14 @@ AjPList ajBtreeSecLeafList(AjPBtcache cache, ajlong rootblock)
 	    for(k=0;k<bucket->Nentries;++k)
 	    {
 		id = ajStrNew();
-		ajStrAssignS(&id,bucket->ids[k]);
+		ajStrAssignS(&id,bucket->SecIds[k]);
 		ajListPush(list, (void *)id);
 	    }
 
 	    btreeSecBucketDel(&bucket);
 	}
 
+        page->dirty = BT_CLEAN;
 	right = 0L;
 
 	if(cache->slevel)
@@ -9867,19 +13333,13 @@ AjPList ajBtreeSecLeafList(AjPBtcache cache, ajlong rootblock)
 	    {
 		page = ajBtreeCacheRead(cache,right);	    
 		buf = page->buf;
-		btreeGetKeys(cache,buf,&karray,&parray);
+		btreeGetPointers(cache,buf,&parray);
 	    }
 	}
 	
     } while(right);
 
-
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    btreeDeallocSecArray(cache,arrays);
 
     return list;
 }
@@ -9892,34 +13352,31 @@ AjPList ajBtreeSecLeafList(AjPBtcache cache, ajlong rootblock)
 ** Test routine: test for ID within a secondary tree
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] rootblock [ajlong] root page of secondary tree
-** @param [r] id [const char *] test ID
+** @param [r] rootblock [ajulong] root page of secondary tree
+** @param [r] id [const AjPStr] test ID
 **
 ** @return [AjBool] true if ID found
 ** @@
 ******************************************************************************/
 
-AjBool ajBtreeVerifyId(AjPBtcache cache, ajlong rootblock, const char *id)
+AjBool ajBtreeVerifyId(AjPBtcache cache, ajulong rootblock, const AjPStr id)
 {
     AjPBtpage page;
     AjPBtpage spage;
-    AjPSecBucket bucket;
-    AjPStr *karray;
-    ajlong *parray;
-    ajint order;
-    ajint i;
-    ajint nkeys;
     unsigned char *buf;
-    ajlong blockno;
+    ajulong blockno;
     AjBool found;
-    ajlong right;
+    ajulong right;
+    ajuint dirtysave;
 
     cache->secrootblock = rootblock;
     page = ajBtreeCacheRead(cache,rootblock);
+    dirtysave = page->dirty;
     page->dirty = BT_LOCK;
+    page->lockfor = 1441;
     buf = page->buf;
     GBT_RIGHT(buf,&right);
-    cache->slevel = (ajint)right;
+    cache->slevel = (ajuint)right;
     
     spage = ajBtreeSecFindInsert(cache,id);
 
@@ -9928,51 +13385,12 @@ AjBool ajBtreeVerifyId(AjPBtcache cache, ajlong rootblock, const char *id)
     
     buf = spage->buf;
     
-    order = cache->sorder;
-    AJCNEW0(karray,order);
-    AJCNEW0(parray,order);
+    blockno = btreeGetBlockS(cache,buf,id);
 
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
+    found = btreeSecBucketFindId(cache, blockno, id);
 
-    GBT_NKEYS(buf,&nkeys);
-
-
-    btreeGetKeys(cache,buf,&karray,&parray);
-
-    i=0;
-
-    while(i!=nkeys && strcmp(id,karray[i]->Ptr)>=0)
-	++i;
-
-    if(i==nkeys)
-    {
-	if(strcmp(id,karray[i-1]->Ptr)<0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
-
-    bucket = btreeReadSecBucket(cache,blockno);
-
-    found = ajFalse;
-
-    for(i=0;i<bucket->Nentries;++i)
-	if(!strcmp(id,bucket->ids[i]->Ptr))
-	{
-	    found = ajTrue;
-	    break;
-	}
-
-    btreeSecBucketDel(&bucket);
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    cache->secrootblock = 0L;
+    page->dirty = dirtysave;
 
     return found;
 }
@@ -9998,21 +13416,22 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
 
     AjPBtPri pri   = NULL;
     AjPBtpage page = NULL;
-    char *key      = NULL;
+    AjPStr key      = NULL;
     AjPList list   = NULL;
     AjBool found   = ajFalse;
     AjPBtId btid   = NULL;
     AjPStr  id     = NULL;
     
-    ajlong pageno = 0L;
-    ajint keylen  = 0;
+    ajulong pagepos = 0L;
 
     unsigned char *buf = NULL;    
 
-    key  = wild->keyword->Ptr;
+    key  = ajStrNewS(wild->keyword);
+    ajStrFmtQuery(&key);
+    if(MAJSTRGETLEN(key) > cache->kwlimit)
+        ajStrTruncateLen(&key, cache->kwlimit);
+    
     list = wild->list;
-
-    keylen = strlen(key);
 
     found = ajFalse;
     
@@ -10020,18 +13439,22 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
     {
 	page = ajBtreeFindInsertW(cache,key);
 	page->dirty = BT_LOCK;
-	wild->pageno = page->pageno;
+        page->lockfor = 1451;
+	wild->pagepos = page->pagepos;
 	
 	btreeReadPriLeaf(cache,page,list);
 
 	page->dirty = BT_CLEAN;
 	
 	if(!ajListGetLength(list))
+        {
+            ajStrDel(&key);
 	    return NULL;
+        }
 
 	while(ajListPop(list,(void **)&pri))
 	{
-	    if(!strncmp(pri->keyword->Ptr,key,keylen))
+	    if(ajStrPrefixS(pri->keyword,key))
 	    {
 		found = ajTrue;
 		break;
@@ -10051,27 +13474,34 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
 	else /* Check the next leaf just in case key==internal */
 	{
 	    buf = page->buf;
-	    GBT_RIGHT(buf,&pageno);
+	    GBT_RIGHT(buf,&pagepos);
 
-	    if(!pageno)
+	    if(!pagepos)
+            {
+                ajStrDel(&key);
 		return NULL;
+            }
 
-	    page = ajBtreeCacheRead(cache,pageno);
-	    wild->pageno = pageno;
+	    page = ajBtreeCacheRead(cache,pagepos);
+	    wild->pagepos = pagepos;
 	    page->dirty = BT_LOCK;
+            page->lockfor = 1452;
 	    
 	    btreeReadPriLeaf(cache,page,list);	
 	    
 	    page->dirty = BT_CLEAN;
 	    
 	    if(!ajListGetLength(list))
+            {
+                ajStrDel(&key);
 		return NULL;
-	    
+	    }
+
 	    found = ajFalse;
 
 	    while(ajListPop(list,(void **)&pri))
 	    {
-		if(!strncmp(pri->keyword->Ptr,key,keylen))
+		if(ajStrPrefixS(pri->keyword,key))
 		{
 		    found = ajTrue;
 		    break;
@@ -10081,7 +13511,10 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
 	    }
 
 	    if(!found)
+            {
+                ajStrDel(&key);
 		return NULL;
+            }
 
 	    cache->secrootblock = pri->treeblock;
 	    btreeSecLeftLeaf(cache, wild);
@@ -10094,8 +13527,9 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
     if(ajListGetLength(wild->idlist))
     {
 	ajListPop(wild->idlist,(void **)&id);
-	btid = ajBtreeIdFromKey(idcache,id->Ptr);
+	btid = ajBtreeIdFromKey(idcache,id);
 	ajStrDel(&id);
+        ajStrDel(&key);
 
 	return btid;
     }
@@ -10104,12 +13538,14 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
 	if(ajListGetLength(wild->idlist))
 	{
 	    ajListPop(wild->idlist,(void **)&id);
-	    btid = ajBtreeIdFromKey(idcache,id->Ptr);
+	    btid = ajBtreeIdFromKey(idcache,id);
 	    ajStrDel(&id);
+            ajStrDel(&key);
 
 	    return btid;
 	}
 
+        ajStrDel(&key);
 	return NULL;
     }
     
@@ -10118,30 +13554,35 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
 
     if(!ajListGetLength(list))
     {
-	page = ajBtreeCacheRead(cache,wild->pageno); 
+	page = ajBtreeCacheRead(cache,wild->pagepos); 
 	buf = page->buf;
-	GBT_RIGHT(buf,&pageno);
+	GBT_RIGHT(buf,&pagepos);
 
-	if(!pageno)
-	    return NULL;
+	if(!pagepos)
+        {
+            ajStrDel(&key);
+            return NULL;
+        }
 
-	page = ajBtreeCacheRead(cache,pageno);
-	wild->pageno = pageno;
+	page = ajBtreeCacheRead(cache,pagepos);
+	wild->pagepos = pagepos;
 	page->dirty = BT_LOCK;
+        page->lockfor = 1453;
 
 	btreeReadPriLeaf(cache,page,list);	
 
 	page->dirty = BT_CLEAN;
 	
 	if(!ajListGetLength(list))
+        {
+            ajStrDel(&key);
 	    return NULL;
+        }
     }
-    
-
 
     while(ajListPop(list,(void **)&pri))
     {
-	if(!strncmp(pri->keyword->Ptr,key,keylen))
+	if(ajStrPrefixS(pri->keyword,key))
 	{
 	    found = ajTrue;
 	    break;
@@ -10149,8 +13590,9 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
 
 	ajBtreePriDel(&pri);
     }
-    
-    
+
+    ajStrDel(&key);
+
     if(!found)
 	return NULL;
 
@@ -10160,7 +13602,7 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
     if(ajListGetLength(wild->idlist))
     {
 	ajListPop(wild->idlist,(void **)&id);
-	btid = ajBtreeIdFromKey(idcache,id->Ptr);
+	btid = ajBtreeIdFromKey(idcache,id);
 	ajStrDel(&id);
     }
     else
@@ -10177,7 +13619,7 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
 ** Wildcard retrieval of keyword index entries
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const char *] key
+** @param [r] key [const AjPStr] key
 ** @param [u] idcache [AjPBtcache] id cache
 ** @param [u] btidlist [AjPList] List of matching AjPBtId entries
 **
@@ -10185,7 +13627,7 @@ AjPBtId ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
 ** @@
 ******************************************************************************/
 
-void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
+void ajBtreeListFromKeywordW(AjPBtcache cache, const AjPStr key,
 			     AjPBtcache idcache, AjPList btidlist)
 {
     AjPBtPri pri     = NULL;
@@ -10199,27 +13641,28 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
     AjBool found     = ajFalse;
     AjBool finished  = ajFalse;
     
-    ajlong pripagenosave = 0L;
-    ajlong pageno        = 0L;
-    ajlong right         = 0L;
+    ajulong pripagepossave = 0L;
+    ajulong pagepos        = 0L;
+    ajulong right         = 0L;
     
-    ajint keylen  = 0;
-
     unsigned char *buf = NULL;    
 
     AjPStr prefix = NULL;
     
     char *p;
+    char *cp;
     
+    ajDebug("ajBtreeListFromKeywordW '%S' list: %u\n",
+            key, ajListGetLength(btidlist));
 
     prefix = ajStrNew();
-    
-    p = strpbrk(key,"*?");
+    cp = MAJSTRGETPTR(key);
+    p = strpbrk(cp,"*?");
 
     if(p)
     {
-	if(p-key)
-	    ajStrAssignSubC(&prefix,key,0,p-key-1);
+	if(p-cp)
+	    ajStrAssignSubS(&prefix,key,0,p-cp-1);
 	else
 	{
 	    ajStrDel(&prefix);
@@ -10229,17 +13672,19 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 	}
     }
     else
-	ajStrAssignC(&prefix,key);
+	ajStrAssignS(&prefix,key);
     
+    ajDebug("ajBtreeListFromKeywordW prefix '%S' list: %u\n",
+            prefix, ajListGetLength(btidlist));
 
     prilist  = ajListNew();
     
-    keylen  = ajStrGetLen(prefix);
     found   = ajFalse;
     
-    page = ajBtreeFindInsertW(cache,prefix->Ptr);
+    page = ajBtreeFindInsertW(cache,prefix);
     page->dirty = BT_LOCK;
-    pripagenosave = page->pageno;
+    page->lockfor = 1461;
+    pripagepossave = page->pagepos;
     btreeReadPriLeaf(cache,page,prilist);
     page->dirty = BT_CLEAN;
 
@@ -10254,7 +13699,7 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 
     while(ajListPop(prilist,(void **)&pri))
     {
-	if(!strncmp(pri->keyword->Ptr,prefix->Ptr,keylen))
+	if(ajStrPrefixS(pri->keyword,prefix))
 	{
 	    found = ajTrue;
 	    break;
@@ -10266,18 +13711,19 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
     if(!found)	/* check next leaf in case key == internal */
     {
 	buf = page->buf;
-	GBT_RIGHT(buf,&pageno);
+	GBT_RIGHT(buf,&pagepos);
 
-	if(!pageno)
+	if(!pagepos)
 	{
 	    ajStrDel(&prefix);
 	    ajListFree(&prilist);
 
 	    return;
 	}
-	page = ajBtreeCacheRead(cache,pageno);
+	page = ajBtreeCacheRead(cache,pagepos);
 	page->dirty = BT_LOCK;
-	pripagenosave = pageno;
+        page->lockfor = 1462;
+	pripagepossave = pagepos;
 	btreeReadPriLeaf(cache,page,prilist);
 	page->dirty = BT_CLEAN;
 
@@ -10291,7 +13737,7 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 
 	while(ajListPop(prilist,(void **)&pri))
 	{
-	    if(!strncmp(pri->keyword->Ptr,prefix->Ptr,keylen))
+	    if(ajStrPrefixS(pri->keyword,prefix))
 	    {
 		found = ajTrue;
 		break;
@@ -10314,7 +13760,7 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 
     while(!finished)
     {
-	if(ajStrMatchWildC(pri->keyword,key))
+	if(ajStrMatchWildS(pri->keyword,key))
 	{
 	    cache->secrootblock = pri->treeblock;
 	    btreeReadAllSecLeaves(cache,strlist);
@@ -10324,7 +13770,7 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 
 	if(!ajListGetLength(prilist))
 	{
-	    page = ajBtreeCacheRead(cache,pripagenosave);
+	    page = ajBtreeCacheRead(cache,pripagepossave);
 
 	    buf = page->buf;
 	    GBT_RIGHT(buf,&right);
@@ -10336,9 +13782,10 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 	    }
 	    
 	    page->dirty = BT_LOCK;
+            page->lockfor = 1463;
 	    btreeReadPriLeaf(cache,page,prilist);
 	    page->dirty = BT_CLEAN;
-	    pripagenosave = right;	    
+	    pripagepossave = right;	    
 
 	    if(!ajListGetLength(prilist))
 	    {
@@ -10350,7 +13797,7 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 
 	ajListPop(prilist,(void **)&pri);
 
-	if(strncmp(pri->keyword->Ptr,prefix->Ptr,keylen))
+	if(!ajStrPrefixS(pri->keyword,prefix))
 	{
 	    ajBtreePriDel(&pri);
 	    finished = ajTrue;
@@ -10370,8 +13817,18 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 
 	while(ajListPop(strlist,(void **)&id))
 	{
-	    btid = ajBtreeIdFromKey(idcache,id->Ptr);
-	    ajListPushAppend(btidlist,(void *)btid);
+	    btid = ajBtreeIdFromKey(idcache,id);
+            if(btid)
+            {
+                ajDebug("ajBtreeIdFromKey id: %S btid: '%S'\n",
+                        id, btid->id);
+                ajListPushAppend(btidlist,(void *)btid);
+            }
+            else
+            {
+                ajDebug("ajBtreeIdFromKey id: %S not found\n",
+                        id);
+            }
 	    ajStrDel(&id);
 	}
     }
@@ -10392,7 +13849,7 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 ** wildcard searches with keys beginning with '?' or '*'
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const char *] Wildcard key
+** @param [r] key [const AjPStr] Wildcard key
 ** @param [u] idcache [AjPBtcache] id index cache
 ** @param [u] idlist [AjPList] list of matching AjPBtIds
 **
@@ -10400,24 +13857,22 @@ void ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
 ** @@
 ******************************************************************************/
 
-static void btreeKeywordFullSearch(AjPBtcache cache, const char *key,
+static void btreeKeywordFullSearch(AjPBtcache cache, const AjPStr key,
 				   AjPBtcache idcache, AjPList idlist)
 {
     AjPBtPri pri   = NULL;
     AjPBtpage root = NULL;
     AjPBtpage page = NULL;
     AjPBtId btid   = NULL;
-    ajlong right   = 0L;
-    ajint  order   = 0;
-    ajint nodetype = 0;
+    ajulong right   = 0L;
+    ajuint nodetype = 0;
     
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    AjPBtMem arrays = NULL;
+    ajulong *parray = NULL;
+
     AjPList list   = NULL;
     AjPList strlist = NULL;
     AjPStr id = NULL;
-    
-    ajint i;
     
     unsigned char *buf = NULL;    
 
@@ -10430,29 +13885,22 @@ static void btreeKeywordFullSearch(AjPBtcache cache, const char *key,
     buf = root->buf;
     GBT_NODETYPE(buf,&nodetype);
     
-    order = cache->order;
-
-    AJCNEW0(parray,order);
-    AJCNEW0(karray,order);
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-
     if(cache->level)
     {
+        arrays = btreeAllocPriArray(cache);
+        parray = arrays->parray;
 	while(nodetype != BT_LEAF)
 	{
-	    btreeGetKeys(cache,buf,&karray,&parray);
+	    btreeGetPointers(cache,buf,&parray);
 	    page = ajBtreeCacheRead(cache, parray[0]);
 	    buf = page->buf;
 	    GBT_NODETYPE(buf,&nodetype);
 	    page->dirty = BT_CLEAN;
 	}
-
-	btreeGetKeys(cache,buf,&karray,&parray);
+        btreeDeallocPriArray(cache,arrays);
     }
 
-    right = -1L;
+    right = 99L;
 
     while(right)
     {
@@ -10460,7 +13908,7 @@ static void btreeKeywordFullSearch(AjPBtcache cache, const char *key,
 
 	while(ajListPop(list,(void **)&pri))
 	{
-	    if(ajStrMatchWildC(pri->keyword,key))
+	    if(ajStrMatchWildS(pri->keyword,key))
 	    {
 		cache->secrootblock = pri->treeblock;
 		btreeReadAllSecLeaves(cache,strlist);
@@ -10486,7 +13934,7 @@ static void btreeKeywordFullSearch(AjPBtcache cache, const char *key,
 
 	while(ajListPop(strlist,(void **)&id))
 	{
-	    btid = ajBtreeIdFromKey(idcache,id->Ptr);
+	    btid = ajBtreeIdFromKey(idcache,id);
 	    ajListPushAppend(idlist,(void *)btid);
 	    ajStrDel(&id);
 	}
@@ -10496,12 +13944,6 @@ static void btreeKeywordFullSearch(AjPBtcache cache, const char *key,
     ajListFree(&strlist);
 
     ajListFree(&list);
-
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
 
     return;
 }
@@ -10524,59 +13966,33 @@ static void btreeKeywordFullSearch(AjPBtcache cache, const char *key,
 static void btreeReadPriLeaf(AjPBtcache cache, AjPBtpage page, AjPList list)
 {
     unsigned char *buf = NULL;
-    AjPStr *karray     = NULL;
-    ajlong *parray     = NULL;
+    AjPBtMem arrays    = NULL;
+    ajulong *parray     = NULL;
 
-    ajint keylimit = 0;
-    ajint order    = 0;
-    ajint nkeys    = 0;
-    ajint bentries = 0;
+    ajuint keylimit = 0;
+    ajuint nkeys    = 0;
     
-    ajint i;
-    ajint j;
+    ajuint i;
     
-    AjPPriBucket *buckets = NULL;
-
     /* ajDebug("In ReadPriLeaf\n"); */
     
     buf = page->buf;
-    order = cache->order;
 
-    AJCNEW0(parray,order);
-    AJCNEW0(karray,order);
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
+    arrays = btreeAllocPriArray(cache);
+    parray = arrays->parray;
 
-    btreeGetKeys(cache,buf,&karray,&parray);
+    btreeGetPointers(cache,buf,&parray);
 
     GBT_NKEYS(buf,&nkeys);
     
     keylimit = nkeys+1;
-    AJCNEW0(buckets,keylimit);
 
     for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadPriBucket(cache,parray[i]);
-    
-    for(i=0;i<keylimit;++i)
-    {
-	bentries = buckets[i]->Nentries;
-
-	for(j=0;j<bentries;++j)
-	    ajListPush(list,(void *)buckets[i]->codes[j]);
-
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->codes);
-	AJFREE(buckets[i]);
-    }
+	btreePriBucketIdlist(cache,parray[i],list);
 
     ajListSort(list,btreeKeywordCompare);
-    AJFREE(buckets);
 
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    btreeDeallocPriArray(cache,arrays);
 
     return;
 }
@@ -10600,42 +14016,32 @@ static void btreeSecLeftLeaf(AjPBtcache cache, AjPBtKeyWild wild)
 {
     AjPBtpage root = NULL;
     AjPBtpage page = NULL;
-    ajlong right = 0L;
-    ajint order;
-    ajint nodetype = 0;
-    ajint nkeys = 0;
-    ajint keylimit = 0;
-    ajint bentries = 0;
+    ajulong right = 0L;
+    ajuint nodetype = 0;
+    ajuint nkeys = 0;
+    ajuint keylimit = 0;
     
-    ajint i;
-    ajint j;
+    ajuint i;
     
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    AjPBtMem arrays = NULL;
+    ajulong *parray = NULL;
     
     unsigned char *buf;
     
-    AjPSecBucket *buckets = NULL;
-
 
     root = ajBtreeCacheRead(cache, cache->secrootblock);
     root->dirty = BT_LOCK;
-    
+    root->lockfor = 1471;
+   
     buf = root->buf;
     GBT_RIGHT(buf,&right);
-    cache->slevel = (ajint) right;
+    cache->slevel = (ajuint) right;
     GBT_NODETYPE(buf,&nodetype);
     
-    order = cache->sorder;
+    arrays = btreeAllocSecArray(cache);
+    parray = arrays->parray;
 
-    AJCNEW0(parray,order);
-    AJCNEW0(karray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-    btreeGetKeys(cache,buf,&karray,&parray);
-
+    btreeGetPointers(cache,buf,&parray);
 
     GBT_NODETYPE(buf,&nodetype);
 
@@ -10643,18 +14049,18 @@ static void btreeSecLeftLeaf(AjPBtcache cache, AjPBtKeyWild wild)
     {
 	while(nodetype != BT_LEAF)
 	{
-	    btreeGetKeys(cache,buf,&karray,&parray);
+	    btreeGetPointers(cache,buf,&parray);
 	    page =ajBtreeCacheRead(cache, parray[0]);
 	    buf = page->buf;
 	    GBT_NODETYPE(buf,&nodetype);
 	    page->dirty = BT_CLEAN;
 	}
 
-	wild->secpageno = parray[0];
-	btreeGetKeys(cache,buf,&karray,&parray);
+	wild->secpagepos = parray[0];
+	btreeGetPointers(cache,buf,&parray);
     }
     else
-	wild->secpageno = cache->secrootblock;
+	wild->secpagepos = cache->secrootblock;
     
 
 
@@ -10662,35 +14068,16 @@ static void btreeSecLeftLeaf(AjPBtcache cache, AjPBtKeyWild wild)
 	
 
     keylimit = nkeys+1;
-    AJCNEW0(buckets,keylimit);
-
     for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadSecBucket(cache,parray[i]);
+	btreeSecBucketIdlist(cache,parray[i],wild->idlist);
 
-    for(i=0;i<keylimit;++i)
-    {
-	bentries = buckets[i]->Nentries;
-
-	for(j=0;j<bentries;++j)
-	{
-	    ajStrFmtLower(&buckets[i]->ids[j]);
-	    ajListPush(wild->idlist,(void *)buckets[i]->ids[j]);
-	}
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->ids);
-	AJFREE(buckets[i]);
-    }
     ajListSort(wild->idlist,ajStrVcmp);
     
-    AJFREE(buckets);
-
     root->dirty = BT_CLEAN;
     
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
+    btreeDeallocSecArray(cache,arrays);
 
-    AJFREE(karray);
-    AJFREE(parray);
+    cache->secrootblock = 0L;
 
     return;
 }
@@ -10714,25 +14101,19 @@ static AjBool btreeSecNextLeafList(AjPBtcache cache, AjPBtKeyWild wild)
 {
     AjPBtpage page = NULL;
     unsigned char *buf;
-    ajlong right = 0L;
-    ajint order;
-    ajint nkeys = 0;
-    ajint keylimit = 0;
-    ajint bentries = 0;
-    ajint i;
-    ajint j;
+    ajulong right = 0L;
+    ajuint nkeys = 0;
+    ajuint keylimit = 0;
+    ajuint i;
     
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    AjPBtMem arrays = NULL;
+    ajulong *parray = NULL;
 
-    AjPSecBucket *buckets = NULL;
-    
-
-    if(cache->secrootblock == wild->secpageno)
+    if(cache->secrootblock == wild->secpagepos)
 	return ajFalse;
 
     
-    page = ajBtreeCacheRead(cache,wild->secpageno);
+    page = ajBtreeCacheRead(cache,wild->secpagepos);
     buf = page->buf;
     GBT_RIGHT(buf,&right);
     page->dirty = BT_CLEAN;
@@ -10741,48 +14122,23 @@ static AjBool btreeSecNextLeafList(AjPBtcache cache, AjPBtKeyWild wild)
 	return ajFalse;
 
     page = ajBtreeCacheRead(cache,right);
-    wild->secpageno = right;
+    wild->secpagepos = right;
 
-    order = cache->sorder;
+    arrays = btreeAllocSecArray(cache);
+    parray = arrays->parray;
 
-    AJCNEW0(parray,order);
-    AJCNEW0(karray,order);
-
-    for(i=0;i<order;++i)
-	karray[i] = ajStrNew();
-
-    btreeGetKeys(cache,buf,&karray,&parray);
+    btreeGetPointers(cache,buf,&parray);
     GBT_NKEYS(buf,&nkeys);
 
     keylimit = nkeys + 1;
     
-    AJCNEW0(buckets,keylimit);
-    
     for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadSecBucket(cache,parray[i]);
+	btreeSecBucketIdlist(cache,parray[i],wild->idlist);
     
-    for(i=0;i<keylimit;++i)
-    {
-	bentries = buckets[i]->Nentries;
-
-	for(j=0;j<bentries;++j)
-	    ajListPush(wild->idlist,(void *)buckets[i]->ids[j]);
-
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->ids);
-	AJFREE(buckets[i]);
-    }
-
     ajListSort(wild->idlist,ajStrVcmp);
-    AJFREE(buckets);
     
-    for(i=0;i<order;++i)
-	ajStrDel(&karray[i]);
+    btreeDeallocSecArray(cache,arrays);
 
-    AJFREE(karray);
-    AJFREE(parray);
-
-    
     return ajTrue;
 }
 
@@ -10804,124 +14160,79 @@ static void btreeReadAllSecLeaves(AjPBtcache cache, AjPList list)
 {
     AjPBtpage root = NULL;
     AjPBtpage page = NULL;
-    ajlong right = 0L;
-    ajint order;
-    ajint nodetype = 0;
-    ajint nkeys = 0;
-    ajint keylimit = 0;
-    ajint bentries = 0;
+    ajulong right = 0L;
+    ajuint nodetype = 0;
+    ajuint nkeys = 0;
+    ajuint keylimit = 0;
     
-    ajint i;
-    ajint j;
+    ajuint i;
     
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    AjPBtMem arrays = NULL;
+    ajulong *parray = NULL;
     
     unsigned char *buf;
     
-    AjPSecBucket *buckets = NULL;
-
-    ajlong secpageno = 0L;
+    ajulong secpagepos = 0L;
     
 
     root = ajBtreeCacheRead(cache,cache->secrootblock);
     root->dirty = BT_LOCK;
+    root->lockfor = 1481;
     buf = root->buf;
     GBT_RIGHT(buf,&right);
-    cache->slevel = right;
+    cache->slevel = (ajuint) right;
     GBT_NODETYPE(buf,&nodetype);
 
-    order = cache->sorder;
-    AJCNEW0(parray,order);
-    AJCNEW0(karray,order);
-
-    for(i=0;i < order;++i)
-	karray[i] = ajStrNew();
+    arrays = btreeAllocSecArray(cache);
+    parray = arrays->parray;
 
     if(cache->slevel)
     {
 	while(nodetype != BT_LEAF)
 	{
-	    btreeGetKeys(cache,buf,&karray,&parray);
+	    btreeGetPointers(cache,buf,&parray);
 	    page = ajBtreeCacheRead(cache,parray[0]);
 	    buf = page->buf;
 	    GBT_NODETYPE(buf,&nodetype);
 	    page->dirty = BT_CLEAN;
 	}
 
-	secpageno = parray[0];
+	secpagepos = parray[0];
     }
     else
-	secpageno = cache->secrootblock;
+	secpagepos = cache->secrootblock;
 
 
-    btreeGetKeys(cache,buf,&karray,&parray);
+    btreeGetPointers(cache,buf,&parray);
 
     GBT_NKEYS(buf,&nkeys);
     keylimit = nkeys + 1;
-    AJCNEW0(buckets,keylimit);
 
     for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadSecBucket(cache,parray[i]);
-
-    for(i=0; i < keylimit;++i)
-    {
-	bentries = buckets[i]->Nentries;
-
-	for(j=0;j < bentries;++j)
-	{
-	    ajStrFmtLower(&buckets[i]->ids[j]);
-	    ajListPush(list,(void *)buckets[i]->ids[j]);
-	}
-
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->ids);
-	AJFREE(buckets[i]);
-    }
-
-    AJFREE(buckets);
-
+	btreeSecBucketIdlist(cache,parray[i],list);
 
     if(cache->sorder)
     {
-	page = ajBtreeCacheRead(cache,secpageno);
+	page = ajBtreeCacheRead(cache,secpagepos);
 	buf  = page->buf;
 	GBT_RIGHT(buf,&right);
 	page->dirty = BT_CLEAN;
     }
 
 
-    while(right && secpageno != cache->secrootblock)
+    while(right && secpagepos != cache->secrootblock)
     {
-	secpageno = right;
-	page = ajBtreeCacheRead(cache,secpageno);
+	secpagepos = right;
+	page = ajBtreeCacheRead(cache,secpagepos);
 	page->dirty = BT_LOCK;
+        page->lockfor = 1482;
 	buf = page->buf;
 
-	btreeGetKeys(cache,buf,&karray,&parray);
+	btreeGetPointers(cache,buf,&parray);
 	GBT_NKEYS(buf,&nkeys);
 	keylimit = nkeys + 1;
-	AJCNEW0(buckets,keylimit);
-
-	for(i=0;i<keylimit;++i)
-	    buckets[i] = btreeReadSecBucket(cache,parray[i]);
-	
 	for(i=0; i < keylimit;++i)
-	{
-	    bentries = buckets[i]->Nentries;
-
-	    for(j=0;j < bentries;++j)
-	    {
-		ajStrFmtLower(&buckets[i]->ids[j]);
-		ajListPush(list,(void *)buckets[i]->ids[j]);
-	    }
-
-	    AJFREE(buckets[i]->keylen);
-	    AJFREE(buckets[i]->ids);
-	    AJFREE(buckets[i]);
-	}
-
-	AJFREE(buckets);
+            btreeSecBucketIdlist(cache,parray[i],list);
 
 	GBT_RIGHT(buf,&right);
 	page->dirty = BT_CLEAN;
@@ -10930,11 +14241,7 @@ static void btreeReadAllSecLeaves(AjPBtcache cache, AjPList list)
 
     root->dirty = BT_CLEAN;
 
-    for(i=0;i < order;++i)
-	ajStrDel(&karray[i]);
-
-    AJFREE(karray);
-    AJFREE(parray);
+    btreeDeallocSecArray(cache,arrays);
 
     return;
 }
@@ -10946,19 +14253,19 @@ static void btreeReadAllSecLeaves(AjPBtcache cache, AjPList list)
 **
 ** Deletes an AjPStr entry from a list
 **
-** @param [r] pentry [void**] Address of an AjPStr object
+** @param [r] Pstr [void**] Address of an AjPStr object
 ** @param [r] cl [void*] Standard unused argument, usually NULL.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void btreeStrDel(void** pentry, void* cl)
+static void btreeStrDel(void** Pstr, void* cl)
 {
     AjPStr str = NULL;
 
     (void) cl;				/* make it used */
 
-    str = *((AjPStr *)pentry);
+    str = *((AjPStr *)Pstr);
     ajStrDel(&str);
 
     return;
@@ -10984,6 +14291,8 @@ static void btreeIdDelFromList(void** pentry, void* cl)
     (void) cl;				/* make it used */
 
     id = *((AjPBtId *)pentry);
+
+    ajDebug("btreeIdDelFromList '%S'\n", id->id);
     ajBtreeIdDel(&id);
 
     return;
@@ -11005,9 +14314,10 @@ static void btreeIdDelFromList(void** pentry, void* cl)
 
 static ajint btreeOffsetCompare(const void *a, const void *b)
 {
-  ajlong val;
+    ajlong val;
 
-    val = (*(AjPBtId const *)a)->offset - (*(AjPBtId const *)b)->offset;
+    val = (ajlong) ((*(AjPBtId const *)a)->offset -
+                    (*(AjPBtId const *)b)->offset);
 
     if(!val)
       return 0;
@@ -11031,8 +14341,8 @@ static ajint btreeOffsetCompare(const void *a, const void *b)
 
 static ajint btreeDbnoCompare(const void *a, const void *b)
 {
-    return (*(AjPBtId const *)a)->dbno -
-		  (*(AjPBtId const *)b)->dbno;
+    return (ajuint) (*(AjPBtId const *)a)->dbno -
+           (ajuint) (*(AjPBtId const *)b)->dbno;
 }
 
 
@@ -11071,26 +14381,26 @@ AjPBtHybrid ajBtreeHybNew(void)
 **
 ** Destructor for index bucket ID information
 **
-** @param [w] thys [AjPBtHybrid*] index ID object
+** @param [w] Pthis [AjPBtHybrid*] index ID object
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajBtreeHybDel(AjPBtHybrid *thys)
+void ajBtreeHybDel(AjPBtHybrid *Pthis)
 {
     AjPBtHybrid Id = NULL;
 
     /* ajDebug("In ajBtreeIdDel\n"); */
 
-    if(!thys || !*thys)
+    if(!Pthis || !*Pthis)
 	return;
 
-    Id = *thys;
+    Id = *Pthis;
     
     ajStrDel(&Id->key1);
     AJFREE(Id);
-    *thys = NULL;
+    *Pthis = NULL;
 
     return;
 }
@@ -11111,14 +14421,17 @@ void ajBtreeHybDel(AjPBtHybrid *thys)
 static AjPBtMem btreeAllocPriArray(AjPBtcache cache)
 {
     AjPBtMem node = NULL;
-    ajint i;
-    ajint limit;
+    ajuint i;
+    ajuint limit;
     AjPBtMem p = NULL;
+    ajuint klen;
 
     limit = cache->order;
 
     if(!cache->bmem)
     {
+        statCountAllocPriArrayNew++;
+
         AJNEW0(node);
         cache->bmem = node;
         cache->tmem = node;
@@ -11129,14 +14442,17 @@ static AjPBtMem btreeAllocPriArray(AjPBtcache cache)
         AJCNEW0(node->parray,limit);
         AJCNEW0(node->overflows,limit);
 
+        klen = cache->kwlimit+1;
         for(i=0;i<limit;++i)
-            node->karray[i] = ajStrNew();
+            node->karray[i] = ajStrNewRes(klen);
 
         return node;
     }
 
     if(!cache->bmem->used)
     {
+        statCountAllocPriArrayReuse++;
+
         cache->bmem->used = ajTrue;
 
         if(cache->bmem->next)
@@ -11153,16 +14469,18 @@ static AjPBtMem btreeAllocPriArray(AjPBtcache cache)
             cache->bmem = p;
             cache->bmem->prev = NULL;
 
-	    memset(cache->tmem->parray,0,sizeof(ajlong)*limit);
+	    memset(cache->tmem->parray,0,sizeof(ajulong)*limit);
 	    
 	    return cache->tmem;
         }
 
-	memset(cache->bmem->parray,0,sizeof(ajlong)*limit);
+	memset(cache->bmem->parray,0,sizeof(ajulong)*limit);
 	
         return cache->bmem;
     }
 
+
+    statCountAllocPriArrayNew++;
 
     AJNEW0(node);
     node->used = ajTrue;
@@ -11175,8 +14493,9 @@ static AjPBtMem btreeAllocPriArray(AjPBtcache cache)
     AJCNEW0(node->parray,limit);
     AJCNEW0(node->overflows,limit);
 
+    klen = cache->kwlimit+1;
     for(i=0;i<limit;++i)
-        node->karray[i] = ajStrNew();
+        node->karray[i] = ajStrNewRes(klen);
 
     return node;
 }
@@ -11197,6 +14516,8 @@ static AjPBtMem btreeAllocPriArray(AjPBtcache cache)
 
 static void btreeDeallocPriArray(AjPBtcache cache, AjPBtMem node)
 {
+    statCountAllocPriArrayDel++;
+
     node->used = ajFalse;
 
     if(!node->prev)
@@ -11233,14 +14554,17 @@ static void btreeDeallocPriArray(AjPBtcache cache, AjPBtMem node)
 static AjPBtMem btreeAllocSecArray(AjPBtcache cache)
 {
     AjPBtMem node = NULL;
-    ajint i;
-    ajint limit;
+    ajuint i;
+    ajuint limit;
     AjPBtMem p = NULL;
+    ajuint klen;
 
     limit = cache->sorder;
 
     if(!cache->bsmem)
     {
+        statCountAllocSecArrayNew++;
+
         AJNEW0(node);
         cache->bsmem = node;
         cache->tsmem = node;
@@ -11251,14 +14575,17 @@ static AjPBtMem btreeAllocSecArray(AjPBtcache cache)
         AJCNEW0(node->parray,limit);
         AJCNEW0(node->overflows,limit);
 
+        klen = cache->kwlimit + 1;
         for(i=0;i<limit;++i)
-            node->karray[i] = ajStrNew();
+            node->karray[i] = ajStrNewRes(klen);
 
         return node;
     }
 
     if(!cache->bsmem->used)
     {
+        statCountAllocSecArrayReuse++;
+
         cache->bsmem->used = ajTrue;
 
         if(cache->bsmem->next)
@@ -11275,15 +14602,17 @@ static AjPBtMem btreeAllocSecArray(AjPBtcache cache)
             cache->bsmem = p;
             cache->bsmem->prev = NULL;
 
-	    memset(cache->tsmem->parray,0,sizeof(ajlong)*limit);
+	    memset(cache->tsmem->parray,0,sizeof(ajulong)*limit);
 
 	    return cache->tsmem;
         }
 
-	memset(cache->bsmem->parray,0,sizeof(ajlong)*limit);
+	memset(cache->bsmem->parray,0,sizeof(ajulong)*limit);
 
         return cache->bsmem;
     }
+
+    statCountAllocSecArrayNew++;
 
     AJNEW0(node);
     node->used = ajTrue;
@@ -11296,8 +14625,9 @@ static AjPBtMem btreeAllocSecArray(AjPBtcache cache)
     AJCNEW0(node->parray,limit);
     AJCNEW0(node->overflows,limit);
 
+    klen = cache->kwlimit + 1;
     for(i=0;i<limit;++i)
-        node->karray[i] = ajStrNew();
+        node->karray[i] = ajStrNewRes(klen);
 
     return node;
 }
@@ -11347,29 +14677,140 @@ static void btreeDeallocSecArray(AjPBtcache cache, AjPBtMem node)
 ** Only called if there is room in the bucket
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number of bucket
+** @param [r] pagepos [ajulong] page number of bucket
 ** @param [r] hyb [const AjPBtHybrid] ID info
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void btreeAddToHybBucket(AjPBtcache cache, ajlong pageno,
+static void btreeAddToHybBucket(AjPBtcache cache, ajulong pagepos,
 				const AjPBtHybrid hyb)
+{
+    unsigned char *buf  = NULL;
+    unsigned char *kptr = NULL;
+    unsigned char *src  = NULL;
+    unsigned char *dest = NULL;
+
+    unsigned char *lastptr = NULL;
+    unsigned char *endptr  = NULL;
+    
+    ajuint nentries = 0;
+    ajuint nodetype = 0;
+    ajuint idlen    = 0;
+    
+    ajuint sum = 0;
+    ajuint len = 0;
+    ajuint i;
+    ajuint v;
+    ajuint uv;
+    ajulong lv;
+    
+    AjPBtpage page = NULL;
+    static ajuint calls = 0;
+    static ajuint overflowcalls=0;
+   
+    calls++;
+
+    page = ajBtreeCacheRead(cache,pagepos);
+    buf  = page->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_BUCKET)
+        ajFatal("Wrong nodetype in AddToHybBucket cache %S", cache->filename);
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    if(nentries == cache->snperbucket)
+        ajFatal("Bucket too full in AddToHybBucket page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->snperbucket, cache->filename);
+
+    kptr = PBT_BUCKKEYLEN(buf);
+    src  = kptr + (nentries * sizeof(ajuint));
+
+    sum = 0;
+    for(i=0;i<nentries;++i)
+    {
+        BT_GETAJUINT(kptr,&len);
+        sum += len;
+        kptr += sizeof(ajuint);
+    }
+    /*sum += nentries;*/
+    
+    endptr  = src + sum - 1;
+    idlen   = MAJSTRGETLEN(hyb->key1);
+    lastptr = endptr + sizeof(ajuint) + BT_DDOFFROFF + idlen + 1;
+    if((ajuint) (lastptr - buf) >= cache->pagesize)
+    {
+        overflowcalls++;
+        ajWarn("\nOverflow in AddToHybBucket nentries:%u fails %u/%u '%S' "
+               "cache %S",
+               nentries, overflowcalls,calls, hyb->key1, cache->filename);
+        btreeAddToHybBucketFull(cache,pagepos,hyb);
+        return;
+    }
+    
+    dest = src + sizeof(ajuint);
+    memmove((void *)dest, (void *)src, sum);
+
+    v = BT_BUCKIDLEN(hyb->key1);
+    BT_SETAJUINT(src,v);
+
+    endptr += sizeof(ajuint) + 1;
+    strcpy((char *)endptr,MAJSTRGETPTR(hyb->key1));
+    endptr += (MAJSTRGETLEN(hyb->key1) + 1);
+    uv = hyb->dbno;
+    BT_SETAJUINT(endptr,uv);
+    endptr += sizeof(ajuint);
+    uv = hyb->dups;
+    BT_SETAJUINT(endptr,uv);
+    endptr += sizeof(ajuint);
+    lv = hyb->offset;
+    BT_SETAJULONG(endptr,lv);
+    endptr += sizeof(ajulong);
+    lv = hyb->refoffset;
+    BT_SETAJULONG(endptr,lv);
+    endptr += sizeof(ajulong);
+
+    v = nentries + 1;
+    SBT_BUCKNENTRIES(buf,v);
+
+    page->dirty = BT_DIRTY;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeAddToHybBucketFull ***************************************
+**
+** Add an ID to a bucket
+** Only called if there is room in the bucket
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number of bucket
+** @param [r] hyb [const AjPBtHybrid] ID info
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeAddToHybBucketFull(AjPBtcache cache, ajulong pagepos,
+                                    const AjPBtHybrid hyb)
 {
     AjPBucket bucket = NULL;
     AjPBtId   destid = NULL;
     
-    ajint nentries;
+    ajuint nentries;
     
     /* ajDebug("In btreeAddToHybBucket\n"); */
 
-    bucket   = btreeReadBucket(cache,pageno);
+    bucket   = btreeReadBucket(cache,pagepos);
     nentries = bucket->Nentries;
 
 
     /* Reading a bucket always gives one extra ID position */
-    bucket->Ids[nentries] = ajBtreeIdNew();
     destid = bucket->Ids[nentries];
 
     ajStrAssignS(&destid->id,hyb->key1);
@@ -11380,7 +14821,7 @@ static void btreeAddToHybBucket(AjPBtcache cache, ajlong pageno,
     
     ++bucket->Nentries;
 
-    btreeWriteBucket(cache,bucket,pageno);
+    btreeWriteBucket(cache,bucket,pagepos);
 
     btreeBucketDel(&bucket);
     
@@ -11395,13 +14836,13 @@ static void btreeAddToHybBucket(AjPBtcache cache, ajlong pageno,
 ** Find the node that should contain a new key for insertion
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const char*] key to search for 
+** @param [r] key [const AjPStr] key to search for 
 **
 ** @return [AjPBtpage] leaf node where item should be inserted
 ** @@
 ******************************************************************************/
 
-AjPBtpage ajBtreeHybFindInsert(AjPBtcache cache, const char *key)
+AjPBtpage ajBtreeHybFindInsert(AjPBtcache cache, const AjPStr key)
 {
     AjPBtpage root = NULL;
     AjPBtpage ret  = NULL;
@@ -11431,24 +14872,27 @@ AjPBtpage ajBtreeHybFindInsert(AjPBtcache cache, const char *key)
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] page
-** @param [r] item [const char*] key to search for 
+** @param [r] item [const AjPStr] key to search for 
 **
 ** @return [AjPBtpage] leaf node where item should be inserted
 ** @@
 ******************************************************************************/
 
 static AjPBtpage btreeHybFindINode(AjPBtcache cache, AjPBtpage page,
-				 const char *item)
+                                   const AjPStr item)
 {
     AjPBtpage ret = NULL;
     AjPBtpage pg  = NULL;
 
     unsigned char *buf = NULL;
-    ajint status       = 0;
-    ajint ival         = 0;
+    ajuint status       = 0;
+    ajuint ival         = 0;
 
-    /* ajDebug("In btreeHybFindINode\n"); */
-    
+#if AJINDEX_DEBUG
+    ajDebug("In btreeHybFindINode %Lu dirty:%u lockfor:%u\n",
+            page->pagepos, page->dirty, page->lockfor);
+#endif
+
     ret = page;
     buf = page->buf;
     GBT_NODETYPE(buf,&ival);
@@ -11457,9 +14901,14 @@ static AjPBtpage btreeHybFindINode(AjPBtcache cache, AjPBtpage page,
     {
 	status = ret->dirty;
 	ret->dirty = BT_LOCK;	/* Lock in case of lots of overflow pages */
+        ret->lockfor = 1491;
 	pg = btreeHybPageFromKey(cache,buf,item);
 	ret->dirty = status;
 	ret = btreeHybFindINode(cache,pg,item);
+#if AJINDEX_DEBUG
+        ajDebug("btreeHybFindINode (%Lu) %Lu -> %Lu level:%u\n",
+                page->pagepos, pg->pagepos, ret->pagepos, cache->level);
+#endif
     }
     
     return ret;
@@ -11474,54 +14923,21 @@ static AjPBtpage btreeHybFindINode(AjPBtcache cache, AjPBtpage page,
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] buf [unsigned char *] page buffer
-** @param [r] key [const char *] key to search for 
+** @param [r] key [const AjPStr] key to search for 
 **
 ** @return [AjPBtpage] pointer to a page
 ** @@
 ******************************************************************************/
 
 static AjPBtpage btreeHybPageFromKey(AjPBtcache cache, unsigned char *buf,
-				     const char *key)
+				     const AjPStr key)
 {
-    unsigned char *rootbuf = NULL;
-    ajint nkeys = 0;
-    ajint i;
-    
-    ajlong blockno = 0L;
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong blockno = 0L;
     AjPBtpage page = NULL;
-    AjPBtMem arrays = NULL;
     
     /* ajDebug("In btreeHybPageFromKey\n"); */
     
-    rootbuf = buf;
-
-
-    GBT_NKEYS(rootbuf,&nkeys);
-
-    arrays = btreeAllocPriArray(cache);
-    karray = arrays->karray;
-    parray = arrays->parray;
-
-    btreeGetKeys(cache,rootbuf,&karray,&parray);
-
-    i = 0;
-
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
-	++i;
-
-    if(i==nkeys)
-    {
-	if(strcmp(key,karray[i-1]->Ptr)<0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
-
-    btreeDeallocPriArray(cache,arrays);
+    blockno = btreeGetBlockS(cache,buf,key);
 
     page =  ajBtreeCacheRead(cache,blockno);
 
@@ -11537,14 +14953,14 @@ static AjPBtpage btreeHybPageFromKey(AjPBtcache cache, unsigned char *buf,
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] retpage [AjPBtpage*] page
-** @param [r] key [const char *] key
+** @param [r] key [const AjPStr] key
 **
-** @return [ajlong] bucket block or 0L if shift not possible
+** @return [ajulong] bucket block or 0L if shift not possible
 ** @@
 ******************************************************************************/
 
-static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
-				  const char *key)
+static ajulong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
+                                   const AjPStr key)
 {
     unsigned char *tbuf = NULL;
     unsigned char *pbuf = NULL;
@@ -11554,44 +14970,47 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
     AjPBtpage spage = NULL;
     AjPBtpage tpage = NULL;
 
-    ajint tkeys = 0;
-    ajint pkeys = 0;
-    ajint skeys = 0;
-    ajint order = 0;
+    ajuint tkeys = 0;
+    ajuint pkeys = 0;
+    ajuint skeys = 0;
+    ajuint order = 0;
     
-    ajint i;
-    ajint n;
-    
-    ajlong parent  = 0L;
-    ajlong blockno = 0L;
+    ajuint i;
+    ajuint n;
+    ajint ii;
+
+    ajulong parent  = 0L;
+    ajulong blockno = 0L;
     
     AjPStr *kTarray = NULL;
     AjPStr *kParray = NULL;
     AjPStr *kSarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pParray = NULL;
-    ajlong *pSarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pParray = NULL;
+    ajulong *pSarray = NULL;
 
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
 
-    ajint ppos    = 0;
-    ajint pkeypos = 0;
-    ajint minsize = 0;
+    ajuint ppos    = 0;
+    ajuint pkeypos = 0;
+    ajuint minsize = 0;
 
     AjPBtMem arrays1 = NULL;
     AjPBtMem arrays2 = NULL;
     AjPBtMem arrays3 = NULL;
     
-    /* ajDebug("In btreeHybInsertShift\n"); */
-
-
     tpage = *retpage;
 
     tbuf = tpage->buf;
 
     GBT_PREV(tbuf,&parent);
     GBT_NKEYS(tbuf,&tkeys);
+
+#if AJINDEX_DEBUG
+    ajDebug("btreeHybInsertShift %Lu parent: %Lu '%S'\n",
+            (*retpage)->pagepos, parent, key);
+#endif
 
     order = cache->order;
     minsize = order / 2;
@@ -11625,14 +15044,14 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 
     i=0;
 
-    while(i!=pkeys && strcmp(key,kParray[i]->Ptr)>=0)
+    while(i!=pkeys && MAJSTRCMPS(key,kParray[i])>=0)
 	++i;
 
     pkeypos = i;
     
     if(i==pkeys)
     {
-	if(strcmp(key,kParray[i-1]->Ptr)<0)
+	if(MAJSTRCMPS(key,kParray[i-1])<0)
 	    ppos = i-1;
 	else
 	    ppos = i;
@@ -11641,6 +15060,12 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	ppos = i;
 
     
+#if AJINDEX_DEBUG
+    ajDebug("    InsertShift tpage: %Lu ppage: %Lu ppos: %u i: %u "
+            "skeys: %u order: %u\n",
+            tpage->pagepos, ppage->pagepos, ppos, i, skeys, order);
+#endif
+
     if(ppos) /* There is another leaf to the left */
     {
 	spage = ajBtreeCacheRead(cache,pParray[ppos-1]);
@@ -11650,6 +15075,11 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 
     if(i && skeys != order-1) /* There is space in the left leaf */
     {
+
+#if AJINDEX_DEBUG
+    ajDebug("    InsertShift left leaf\n");
+#endif
+
 	/* ajDebug("Left shift\n"); */
 	btreeGetKeys(cache,tbuf,&kTarray,&pTarray);
 	if(skeys)
@@ -11657,7 +15087,7 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 
 	i = 0;
 
-	while(pParray[i] != tpage->pageno)
+	while(pParray[i] != tpage->pagepos)
 	    ++i;
 	--i;
 
@@ -11680,17 +15110,20 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
 
-	if(!ppage->pageno)
+	if(!ppage->pagepos)
+        {
 	    ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1501;
+        }
 
 	i = 0;
 
-	while(i!=pkeys && strcmp(key,kParray[i]->Ptr)>=0)
+	while(i!=pkeys && MAJSTRCMPS(key,kParray[i])>=0)
 	    ++i;
 
 	if(i==pkeys)
 	{
-	    if(strcmp(key,kParray[i-1]->Ptr)<0)
+	    if(MAJSTRCMPS(key,kParray[i-1])<0)
 		blockno = pParray[i-1];
 	    else
 		blockno = pParray[i];
@@ -11698,7 +15131,7 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	else
 	    blockno = pParray[i];
 
-	if(blockno == spage->pageno)
+	if(blockno == spage->pagepos)
 	{
 	    *retpage = spage;
 	    karray = kSarray;
@@ -11715,12 +15148,12 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 
 	i = 0;
 
-	while(i!=n && strcmp(key,karray[i]->Ptr)>=0)
+	while(i!=n && MAJSTRCMPS(key,karray[i])>=0)
 	    ++i;
 
 	if(i==n)
 	{
-	    if(strcmp(key,karray[i-1]->Ptr)<0)
+	    if(MAJSTRCMPS(key,karray[i-1])<0)
 		blockno = parray[i-1];
 	    else
 		blockno = parray[i];
@@ -11732,7 +15165,7 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	btreeDeallocPriArray(cache,arrays2);
 	btreeDeallocPriArray(cache,arrays3);
 
-	/* ajDebug("... returns blockno (a) %Ld\n",blockno); */
+	/* ajDebug("... returns blockno (a) %Lu\n",blockno); */
 
 	return blockno;
     }
@@ -11743,29 +15176,54 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	spage = ajBtreeCacheRead(cache,pParray[ppos+1]);
 	sbuf = spage->buf;
 	GBT_NKEYS(sbuf,&skeys);
+
+#if AJINDEX_DEBUG
+        ajDebug("    InsertShift right, new spage: %Lu skeys: %u\n",
+                spage->pagepos, skeys);
+#endif
+
     }
 
+
+#if AJINDEX_DEBUG
+    ajDebug("    InsertShift test again tpage: %Lu ppage: %Lu spage: %Lu "
+            "ppos: %u i: %u skeys: %u order: %u\n",
+            tpage->pagepos, ppage->pagepos, spage->pagepos,
+            ppos, i, skeys, order);
+#endif
 
     /* Space in the right leaf */
     if(ppos != pkeys && skeys != order-1)
     {
+
+#if AJINDEX_DEBUG
+        ajDebug("    InsertShift right leaf tpage: %Lu\n", tpage->pagepos);
+#endif
+
 	/* ajDebug("Right shift\n"); */
 	btreeGetKeys(cache,tbuf,&kTarray,&pTarray);
 	btreeGetKeys(cache,sbuf,&kSarray,&pSarray);
 
 	i = 0;
 
-	while(pParray[i] != tpage->pageno)
-	    ++i;
+	while(pParray[i] != tpage->pagepos) /* fails here */
+        {
 
+#if AJINDEX_DEBUG
+            ajDebug("    InsertShift right pParray[%u] %Lu\n",
+                    i, pParray[i]);
+#endif
+	    ++i;
+        }
+        
 	pkeypos = i;
 	
 	pSarray[skeys+1] = pSarray[skeys];
 
-	for(i=skeys-1;i>-1;--i)
+	for(ii=skeys-1;ii>-1;--ii)
 	{
-	    ajStrAssignS(&kSarray[i+1],kSarray[i]);
-	    pSarray[i+1] = pSarray[i];
+	    ajStrAssignS(&kSarray[ii+1],kSarray[ii]);
+	    pSarray[ii+1] = pSarray[ii];
 	}
 
 	ajStrAssignS(&kSarray[0],kParray[pkeypos]);
@@ -11779,17 +15237,20 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	btreeWriteNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNode(cache,ppage,kParray,pParray,pkeys);
 
-	if(!ppage->pageno)
-	    ppage->dirty = BT_LOCK;
+	if(!ppage->pagepos)
+	{
+            ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1502;
+        }
 
 	i = 0;
 
-	while(i!=pkeys && strcmp(key,kParray[i]->Ptr)>=0)
+	while(i!=pkeys && MAJSTRCMPS(key,kParray[i])>=0)
 	    ++i;
 
 	if(i==pkeys)
 	{
-	    if(strcmp(key,kParray[i-1]->Ptr)<0)
+	    if(MAJSTRCMPS(key,kParray[i-1])<0)
 		blockno = pParray[i-1];
 	    else
 		blockno = pParray[i];
@@ -11797,7 +15258,7 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	else
 	    blockno = pParray[i];
 
-	if(blockno == spage->pageno)
+	if(blockno == spage->pagepos)
 	{
 	    *retpage = spage;
 	    karray = kSarray;
@@ -11813,12 +15274,12 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	
 	i = 0;
 
-	while(i!=n && strcmp(key,karray[i]->Ptr)>=0)
+	while(i!=n && MAJSTRCMPS(key,karray[i])>=0)
 	    ++i;
 
 	if(i==n)
 	{
-	    if(strcmp(key,karray[i-1]->Ptr)<0)
+	    if(MAJSTRCMPS(key,karray[i-1])<0)
 		blockno = parray[i-1];
 	    else
 		blockno = parray[i];
@@ -11830,7 +15291,7 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	btreeDeallocPriArray(cache,arrays2);
 	btreeDeallocPriArray(cache,arrays3);
 
-	/* ajDebug("... returns blockno (b) %Ld\n",blockno); */
+	/* ajDebug("... returns blockno (b) %Lu\n",blockno); */
 	
 	return blockno;
     }
@@ -11839,6 +15300,11 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
     btreeDeallocPriArray(cache,arrays1);
     btreeDeallocPriArray(cache,arrays2);
     btreeDeallocPriArray(cache,arrays3);
+
+
+#if AJINDEX_DEBUG
+    ajDebug("    InsertShift returning zero ...\n");
+#endif
 
     /* ajDebug("... returns 0L\n"); */
 
@@ -11862,120 +15328,100 @@ static ajlong btreeHybInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 
 static AjBool btreeHybReorderBuckets(AjPBtcache cache, AjPBtpage leaf)
 {
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
     unsigned char *lbuf = NULL;
-    AjPBucket *buckets  = NULL;
-    AjPStr *keys        = NULL;
-    ajlong *ptrs        = NULL;
-    ajlong *overflows   = NULL;
-    AjPBtMem arrays     = NULL;
 
-    ajint i = 0;
-    ajint j = 0;
+    ajulong *ptrs        = NULL;
+    ajulong *overflows   = NULL;
+    AjPStr *newkeys     = NULL;
+    ajulong *newptrs     = NULL;
+    AjPBtMem arrays     = NULL;
+    AjPBtMem newarrays  = NULL;
+
+    ajuint i = 0;
     
-    ajint order;
-    ajint bentries      = 0;
-    ajint totalkeys     = 0;
-    ajint nperbucket    = 0;
-    ajint maxnperbucket = 0;
-    ajint count         = 0;
-    ajint totkeylen     = 0;
-    ajint keylimit      = 0;
-    ajint bucketn       = 0;
-    ajint bucketlimit   = 0;
-    ajint nodetype      = 0;
+    ajuint order;
+    ajuint totalkeys     = 0;
+    ajuint maxnperbucket = 0;
+    ajuint count         = 0;
+    ajuint keylimit      = 0;
+    ajuint bucketlimit   = 0;
+    ajuint nodetype      = 0;
     
     AjPList idlist    = NULL;
-    ajint   dirtysave = 0;
+    ajuint  dirtysave = 0;
     AjPBtId bid       = NULL;
     AjPBucket cbucket = NULL;
     AjPBtId cid       = NULL;
 
-    ajint   v = 0;
-    
+    ajuint iold = 0;
+
+#if AJINDEX_DEBUG
+    ajDebug("btreeHybReorderBuckets %Lu\n", leaf->pagepos);
+#endif
+    ++statCallReorderHybBuckets;
+
     /* ajDebug("In btreeHybReorderBuckets\n"); */
 
     dirtysave = leaf->dirty;
 
     leaf->dirty = BT_LOCK;
+    leaf->lockfor = 1511;
     lbuf = leaf->buf;
 
     GBT_NODETYPE(lbuf,&nodetype);
 
     order = cache->order;
-    nperbucket = cache->nperbucket;
     
 
     /* Read keys/ptrs */
     arrays    = btreeAllocPriArray(cache);
-    keys      = arrays->karray;
     ptrs      = arrays->parray;
-    overflows = arrays->overflows;
+    newarrays    = btreeAllocPriArray(cache);
+    newkeys      = newarrays->karray;
+    newptrs      = newarrays->parray;
+    overflows = newarrays->overflows;
 
-    btreeGetKeys(cache,lbuf,&keys,&ptrs);
+    btreeGetPointers(cache,lbuf,&ptrs);
 
     GBT_NKEYS(lbuf,&nkeys);
 
 
     if(!nkeys)
-	ajFatal("BucketReorder: Attempt to reorder empty leaf");
+	ajFatal("HybReorderBuckets: Attempt to reorder empty leaf");
 
     for(i=0;i<nkeys;++i)
 	totalkeys += btreeNumInBucket(cache,ptrs[i]);
 
     totalkeys += btreeNumInBucket(cache,ptrs[i]);
 
-    /* Set the number of entries per bucket to approximately half full */
-    maxnperbucket = nperbucket >> 1;
+    keylimit = nkeys + 1;
 
-    if(!maxnperbucket)
-	++maxnperbucket;
+    btreeBucketCalc(totalkeys, keylimit, cache->nperbucket,
+                    &bucketlimit, &maxnperbucket);
 
-    /* Work out the number of new buckets needed */
-    bucketn = (totalkeys / maxnperbucket);
 
-    if(totalkeys % maxnperbucket)
-	++bucketn;
-    
-    if(bucketn > order)
+    if(bucketlimit >= order)
     {
 	btreeDeallocPriArray(cache,arrays);
-	leaf->dirty = dirtysave;
+	btreeDeallocPriArray(cache,newarrays);
 
+	leaf->dirty = dirtysave;
 	return ajFalse;
     }
-    
 
     /* Read buckets */
-    AJCNEW0(buckets,nkeys+1);
-    keylimit = nkeys + 1;
-    
-    for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadBucket(cache,ptrs[i]);
 
-
-    /* Read IDs from all buckets and push to list and sort (increasing id) */
     idlist  = ajListNew();
-    
-    for(i=0;i<keylimit;++i)
-    {
-	overflows[i] = buckets[i]->Overflow;
-	bentries = buckets[i]->Nentries;
 
-	for(j=0;j<bentries;++j)
-	    ajListPush(idlist,(void *)buckets[i]->Ids[j]);
-	
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->Ids);
-	AJFREE(buckets[i]);
-    }
+    for(i=0;i<keylimit;++i)
+	overflows[i] = btreeHybBucketIdlist(cache,ptrs[i],idlist);
 
     ajListSort(idlist,btreeIdCompare);
-    AJFREE(buckets);
 
-    cbucket = btreeBucketNew(maxnperbucket);
-    bucketlimit = bucketn - 1;
-    
+    cbucket = btreeBucketNew(cache->nperbucket);
+
+    iold = 0;
     for(i=0;i<bucketlimit;++i)
     {
 	cbucket->Overflow = overflows[i];
@@ -12002,14 +15448,13 @@ static AjBool btreeHybReorderBuckets(AjPBtcache cache, AjPBtpage leaf)
 
 
 	ajListPeek(idlist,(void **)&bid);
-	ajStrAssignS(&keys[i],bid->id);
+	ajStrAssignS(&newkeys[i],bid->id);
 
-	totkeylen += ajStrGetLen(bid->id);
-
-	if(!ptrs[i])
-	    ptrs[i] = cache->totsize;
-
-	btreeWriteBucket(cache,cbucket,ptrs[i]);
+	if((iold < order) && ptrs[iold])
+            newptrs[i] = ptrs[iold++];
+        else
+	    newptrs[i] = cache->totsize;
+	btreeWriteBucket(cache,cbucket,newptrs[i]);
     }
 
 
@@ -12035,32 +15480,31 @@ static AjBool btreeHybReorderBuckets(AjPBtcache cache, AjPBtpage leaf)
     }
     
     
-    if(!ptrs[i])
-	ptrs[i] = cache->totsize;
+    if((iold < order) && ptrs[iold])
+        newptrs[i] = ptrs[iold++];
+    else
+        newptrs[i] = cache->totsize;
+    btreeWriteBucket(cache,cbucket,newptrs[i]);
 
-    btreeWriteBucket(cache,cbucket,ptrs[i]);
-
-    cbucket->Nentries = maxnperbucket;
     btreeBucketDel(&cbucket);
 
     /* Now write out a modified leaf with new keys/ptrs */
 
-    nkeys = bucketn - 1;
-    v = nkeys;
-    SBT_NKEYS(lbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(lbuf,v);
+    nkeys = bucketlimit;
 
-    btreeWriteNode(cache,leaf,keys,ptrs,nkeys);
+    btreeWriteNode(cache,leaf,newkeys,newptrs,nkeys);
 
     leaf->dirty = BT_DIRTY;
 
     if(nodetype == BT_ROOT)
+    {
 	leaf->dirty = BT_LOCK;
+        leaf->lockfor = 1512;
+    }
 
     btreeDeallocPriArray(cache,arrays);
+    btreeDeallocPriArray(cache,newarrays);
     
-    btreeBucketDel(&cbucket);
     ajListFree(&idlist);
 
     return ajTrue;
@@ -12082,25 +15526,24 @@ static AjBool btreeHybReorderBuckets(AjPBtcache cache, AjPBtpage leaf)
 
 static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 {
-    ajint nkeys     = 0;
-    ajint order     = 0;
-    ajint totalkeys = 0;
-    ajint bentries  = 0;
-    ajint keylimit  = 0;
-    ajint nodetype  = 0;
+    ajuint nkeys     = 0;
+    ajuint order     = 0;
+    ajuint totalkeys = 0;
+    ajuint keylimit  = 0;
+    ajuint nodetype  = 0;
 
-    ajint rootnodetype  = 0;
+    ajuint rootnodetype  = 0;
     
-    ajint i;
-    ajint j;
+    ajuint i;
+    ajuint j;
     
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage page  = NULL;
     
     AjPStr mediankey  = NULL;
-    ajlong mediangtr  = 0L;
-    ajlong medianless = 0L;
+    ajulong mediangtr  = 0L;
+    ajulong medianless = 0L;
     
 
     AjPBtId bid = NULL;
@@ -12112,85 +15555,100 @@ static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 
     AjPList idlist = NULL;
 
-    AjPBucket *buckets = NULL;
     AjPBucket cbucket  = NULL;
     
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
+    AjPStr *newkarray  = NULL;
+    ajulong *newparray  = NULL;
     AjPBtMem arrays     = NULL;
+    AjPBtMem newarrays = NULL;
     
-    ajint keypos = 0;
-    ajint lno    = 0;
-    ajint rno    = 0;
+    ajuint lno    = 0;
+    ajuint rno    = 0;
 
-    ajint bucketlimit   = 0;
-    ajint maxnperbucket = 0;
-    ajint nperbucket    = 0;
-    ajint bucketn       = 0;
-    ajint count         = 0;
-    ajint totkeylen     = 0;
+    ajuint lbucketlimit   = 0;
+    ajuint lmaxnperbucket = 0;
+    ajuint rbucketlimit   = 0;
+    ajuint rmaxnperbucket = 0;
+    ajuint count         = 0;
     
-    ajlong lblockno = 0L;
-    ajlong rblockno = 0L;
-    ajlong prev     = 0L;
-    ajlong overflow = 0L;
-    ajlong prevsave = 0L;
+    ajulong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong prev     = 0L;
+    ajulong overflow = 0L;
+    ajulong prevsave = 0L;
 
-    ajlong zero = 0L;
-    ajlong join = 0L;
+    ajulong zero = 0L;
+    ajulong join = 0L;
     
-    ajlong lv = 0L;
-    ajint  v  = 0;
+    ajulong lv = 0L;
+    ajuint  v  = 0;
     
-    /* ajDebug("In btreeHybSplitLeaf\n"); */
+    ajuint iold=0;
+
+#if AJINDEX_DEBUG
+    ajDebug("btreeHybSplitLeaf %Lu\n", spage->pagepos);
+#endif
+    ++statCallSplitHybLeaf;
+
+    /*ajDebug("In btreeHybSplitLeaf page:%Lu\n", spage->pagepos);*/
 
     order = cache->order;
-    nperbucket = cache->nperbucket;
-
-    mediankey = ajStrNew();
 
     arrays    = btreeAllocPriArray(cache);
-    karray    = arrays->karray;
     parray    = arrays->parray;
 
+    newarrays    = btreeAllocPriArray(cache);
+    newkarray    = newarrays->karray;
+    newparray    = newarrays->parray;
 
     buf = spage->buf;
     lbuf = buf;
 
     GBT_NKEYS(buf,&nkeys);
+    GBT_NODETYPE(buf,&rootnodetype);
+
+    /*ajDebug("btreeHybSplitLeaf start page %Lu nkeys:%u\n",
+      spage->pagepos,  nkeys);*/
 
     for(i=nkeys+1; i<order; ++i)
 	parray[i] = 0L;
 
-    GBT_NODETYPE(buf,&rootnodetype);
-
     if(rootnodetype == BT_ROOT)
     {
-	/* ajDebug("Splitting root node\n"); */
+#if AJINDEX_DEBUG
+        ajDebug("    splitting root node %Lu new %Lu\n",
+                spage->pagepos, cache->totsize);
+#endif
 	lblockno = cache->totsize;
-	lpage = ajBtreeCacheWrite(cache,lblockno);
-	lpage->pageno = cache->totsize;
-	cache->totsize += cache->pagesize;
+	lpage = ajBtreeCacheWriteNodenew(cache);
 	lbuf = lpage->buf;
 	lv = prev;
 	SBT_PREV(lbuf,lv);
     }
     else
     {
-	lblockno = spage->pageno;
+	lblockno = spage->pagepos;
 	lpage = spage;
+#if AJINDEX_DEBUG
+        ajDebug("    keeping lpage %Lu\n", lpage->pagepos);
+#endif
     }
 
     lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1521;
 
+
+#if AJINDEX_DEBUG
+        ajDebug("    new right node %Lu\n",
+                cache->totsize);
+#endif
 
     rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
-    rpage->pageno = cache->totsize;
+    rpage = ajBtreeCacheWriteNodenew(cache);
     rpage->dirty = BT_LOCK;
-    cache->totsize += cache->pagesize;
+    rpage->lockfor = 1522;
     rbuf = rpage->buf;
-
 
     if(rootnodetype == BT_ROOT)
     {
@@ -12212,60 +15670,34 @@ static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     SBT_RIGHT(lbuf,lv);
 
 
-    btreeGetKeys(cache,buf,&karray,&parray);
-
+    btreeGetPointers(cache,buf,&parray);
 
     keylimit = nkeys+1;
-    AJCNEW0(buckets,keylimit);
-
-    for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadBucket(cache,parray[i]);
 
     idlist = ajListNew();
 
     for(i=0;i<keylimit;++i)
-    {
-	bentries = buckets[i]->Nentries;
-
-	for(j=0;j<bentries;++j)
-	    ajListPush(idlist,(void *)buckets[i]->Ids[j]);
-
-	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->Ids);
-	AJFREE(buckets[i]);
-    }
+        btreeBucketIdlist(cache,parray[i],idlist);
+    
     ajListSort(idlist,btreeIdCompare);
-    AJFREE(buckets);
-
 
     totalkeys = ajListGetLength(idlist);
 
-    keypos = totalkeys / 2;
+    btreeBucketSplitCalc(totalkeys, keylimit,
+                         cache->nperbucket,
+                         &lbucketlimit,&lmaxnperbucket,&lno,
+                         &rbucketlimit,&rmaxnperbucket,&rno);
 
-    lno = keypos;
-    rno = totalkeys - lno;
+    cbucket = btreeBucketNew(cache->nperbucket);
 
-    maxnperbucket = nperbucket >> 1;
-    ++maxnperbucket;
-
-    cbucket = btreeBucketNew(maxnperbucket);
-
-    bucketn = lno / maxnperbucket;
-
-    if(lno % maxnperbucket)
-	++bucketn;
-
-    bucketlimit = bucketn - 1;
-
-
-    totkeylen = 0;
     count = 0;
+    iold=0;
 
-    for(i=0;i<bucketlimit;++i)
+    for(i=0;i<lbucketlimit;++i)
     {
 	cbucket->Nentries = 0;
 
-	for(j=0;j<maxnperbucket;++j)
+	for(j=0;j<lmaxnperbucket;++j)
 	{
 	    ajListPop(idlist,(void **)&bid);
 	    
@@ -12284,13 +15716,13 @@ static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 
 	ajListPeek(idlist,(void **)&bid);
 	
-	ajStrAssignS(&karray[i],bid->id);
-	totkeylen += ajStrGetLen(bid->id);
+	ajStrAssignS(&newkarray[i],bid->id);
 
-	if(!parray[i])
-	    parray[i] = cache->totsize;
-
-	btreeWriteBucket(cache,cbucket,parray[i]);
+	if(iold < keylimit)
+            newparray[i] = parray[iold++];
+        else
+	    newparray[i] = cache->totsize;
+	btreeWriteBucket(cache,cbucket,newparray[i]);
     }
 
     cbucket->Nentries = 0;
@@ -12314,40 +15746,33 @@ static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 	ajBtreeIdDel(&bid);
     }
 
-    if(!parray[i])
-	parray[i] = cache->totsize;
+    if(iold < keylimit)
+        newparray[i] = parray[iold++];
+    else
+        newparray[i] = cache->totsize;
+    btreeWriteBucket(cache,cbucket,newparray[i]);
 
-    btreeWriteBucket(cache,cbucket,parray[i]);
+    nkeys = lbucketlimit;
 
-    nkeys = bucketn - 1;
-    v = nkeys;
-    SBT_NKEYS(lbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(lbuf,v);
     nodetype = BT_LEAF;
     v = nodetype;
     SBT_NODETYPE(lbuf,v);
     lpage->dirty = BT_DIRTY;
 
     GBT_PREV(lbuf,&prevsave);
-
-    btreeWriteNode(cache,lpage,karray,parray,nkeys);
+#if AJINDEX_DEBUG
+    ajDebug("    lpage %Lu prevsave %Lu\n",
+            lpage->pagepos, prevsave);
+#endif
+    btreeWriteNode(cache,lpage,newkarray,newparray,nkeys);
 
     ajListPeek(idlist,(void **)&bid);
-    ajStrAssignS(&mediankey,bid->id);
+    mediankey = ajStrNewS(bid->id);
 
-    totkeylen = 0;
-    bucketn = rno / maxnperbucket;
-
-    if(rno % maxnperbucket)
-	++bucketn;
-
-    bucketlimit = bucketn - 1;
-
-    for(i=0;i<bucketlimit;++i)
+    for(i=0;i<rbucketlimit;++i)
     {
 	cbucket->Nentries = 0;
-	for(j=0;j<maxnperbucket;++j)
+	for(j=0;j<rmaxnperbucket;++j)
 	{
 	    ajListPop(idlist,(void **)&bid);
 	    
@@ -12364,11 +15789,13 @@ static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 	}
 
 	ajListPeek(idlist,(void **)&bid);
-	ajStrAssignS(&karray[i],bid->id);
-	totkeylen += ajStrGetLen(bid->id);
+	ajStrAssignS(&newkarray[i],bid->id);
 
-	parray[i] = cache->totsize;
-	btreeWriteBucket(cache,cbucket,parray[i]);
+	if(iold < keylimit)
+            newparray[i] = parray[iold++];
+        else
+            newparray[i] = cache->totsize;
+	btreeWriteBucket(cache,cbucket,newparray[i]);
     }
 
     cbucket->Nentries = 0;
@@ -12390,15 +15817,14 @@ static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 	ajBtreeIdDel(&bid);
     }
     
-    parray[i] = cache->totsize;
-    btreeWriteBucket(cache,cbucket,parray[i]);
+    if(iold < keylimit)
+        newparray[i] = parray[iold++];
+    else
+        newparray[i] = cache->totsize;
+    btreeWriteBucket(cache,cbucket,newparray[i]);
 
-    nkeys = bucketn - 1;
+    nkeys = rbucketlimit;
 
-    v = nkeys;
-    SBT_NKEYS(rbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(rbuf,v);
     nodetype = BT_LEAF;
     v = nodetype;
     SBT_NODETYPE(rbuf,v);
@@ -12407,10 +15833,13 @@ static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     lv = overflow;
     SBT_OVERFLOW(rbuf,lv);
 
-    btreeWriteNode(cache,rpage,karray,parray,nkeys);
+#if AJINDEX_DEBUG
+    ajDebug("    right %Lu prev: %Lu\n",
+            rpage->pagepos, prevsave);
+#endif
+    btreeWriteNode(cache,rpage,newkarray,newparray,nkeys);
     rpage->dirty = BT_DIRTY;
 
-    cbucket->Nentries = maxnperbucket;
     btreeBucketDel(&cbucket);
     ajListFree(&idlist);
 
@@ -12419,17 +15848,18 @@ static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     medianless = lblockno;
     mediangtr  = rblockno;
 
+    btreeDeallocPriArray(cache,arrays);
+    btreeDeallocPriArray(cache,newarrays);
 
     if(rootnodetype == BT_ROOT)
     {
-	ajStrAssignS(&karray[0],mediankey);
-	parray[0]=lblockno;
-	parray[1]=rblockno;
-	nkeys = 1;
-	btreeWriteNode(cache,spage,karray,parray,nkeys);	
+#if AJINDEX_DEBUG
+        ajDebug("    rootnode new node for mediankey '%S' %Lu\n",
+                mediankey, spage->pagepos);
+#endif
+	btreeWriteNodeSingle(cache,spage,mediankey,lblockno,rblockno);	
 	spage->dirty = BT_LOCK;
-
-	btreeDeallocPriArray(cache,arrays);
+        spage->lockfor = 1523;
 
 	ajStrDel(&mediankey);
 	++cache->level;
@@ -12437,8 +15867,6 @@ static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 	return spage;
     }
 
-
-    btreeDeallocPriArray(cache,arrays);
 
     page = ajBtreeCacheRead(cache,prevsave);
     btreeHybInsertKey(cache,page,mediankey,medianless,mediangtr);
@@ -12459,57 +15887,55 @@ static AjPBtpage btreeHybSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] original page
 ** @param [r] key [const AjPStr] key to insert
-** @param [r] less [ajlong] less-than pointer
-** @param [r] greater [ajlong] greater-than pointer
+** @param [r] less [ajulong] less-than pointer
+** @param [r] greater [ajulong] greater-than pointer
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeHybInsertKey(AjPBtcache cache, AjPBtpage page,
-			      const AjPStr key, ajlong less, ajlong greater)
+			      const AjPStr key, ajulong less, ajulong greater)
 {
     unsigned char *lbuf = NULL;
     unsigned char *rbuf = NULL;
     unsigned char *tbuf = NULL;
     AjPStr *karray      = NULL;
-    ajlong *parray      = NULL;
+    ajulong *parray      = NULL;
     AjPStr *tkarray     = NULL;
-    ajlong *tparray     = NULL;
+    ajulong *tparray     = NULL;
 
     AjPBtMem arrays1    = NULL;
     AjPBtMem arrays2    = NULL;
 
-    ajint nkeys    = 0;
-    ajint order    = 0;
-    ajint keypos   = 0;
-    ajint rkeyno   = 0;
+    ajuint nkeys    = 0;
+    ajuint order    = 0;
+    ajuint keypos   = 0;
+    ajuint rkeyno   = 0;
     
-    ajint i = 0;
-    ajint n = 0;
+    ajuint i = 0;
+    ajuint n = 0;
     
-    ajint nodetype  = 0;
+    ajuint nodetype  = 0;
     AjPBtpage ipage = NULL;
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage tpage = NULL;
 
-    ajlong blockno  = 0L;
-    ajlong rblockno = 0L;
-    ajlong lblockno = 0L;
-    ajlong ibn      = 0L;
+    ajulong blockno  = 0L;
+    ajulong rblockno = 0L;
+    ajulong lblockno = 0L;
+    ajulong ibn      = 0L;
 
     AjPStr mediankey  = NULL;
-    ajlong medianless = 0L;
-    ajlong mediangtr  = 0L;
-    ajlong overflow   = 0L;
-    ajlong prev       = 0L;
-    ajint  totlen     = 0;
+    ajulong medianless = 0L;
+    ajulong mediangtr  = 0L;
+    ajulong overflow   = 0L;
+    ajulong prev       = 0L;
+    ajuint totlen     = 0;
     
-    ajlong lv = 0L;
-    ajint  v  = 0;
-    
-    /* ajDebug("In btreeHybInsertKey\n"); */
+    ajulong lv = 0L;
+    ajuint  v  = 0;
 
     if(!btreeNodeIsFull(cache,page))
     {
@@ -12522,6 +15948,7 @@ static void btreeHybInsertKey(AjPBtcache cache, AjPBtpage page,
     lbuf = page->buf;
     GBT_NODETYPE(lbuf,&nodetype);
     page->dirty = BT_LOCK;
+    page->lockfor = 1531;
 
     if(nodetype == BT_ROOT)
     {
@@ -12531,12 +15958,12 @@ static void btreeHybInsertKey(AjPBtcache cache, AjPBtpage page,
 
 	btreeHybSplitRoot(cache);
 
-	if(page->pageno)
+	if(page->pagepos)
 	    page->dirty = BT_DIRTY;
 
 	btreeGetKeys(cache,lbuf,&karray,&parray);
 
-	if(strcmp(key->Ptr,karray[0]->Ptr)<0)
+	if(MAJSTRCMPS(key,karray[0])<0)
 	    blockno = parray[0];
 	else
 	    blockno = parray[1];
@@ -12566,16 +15993,14 @@ static void btreeHybInsertKey(AjPBtcache cache, AjPBtpage page,
     btreeGetKeys(cache,lbuf,&karray,&parray);
 
     GBT_BLOCKNUMBER(lbuf,&lblockno);
-    rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
-    rpage->dirty = BT_LOCK;
-    rpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
-    rbuf = rpage->buf;
-    lv = rblockno;
-    SBT_BLOCKNUMBER(rbuf,lv);
 
-    
+    rblockno = cache->totsize;
+    rpage = ajBtreeCacheWriteNodenew(cache);
+    rpage->dirty = BT_LOCK;
+    rpage->lockfor = 1532;
+    rbuf = rpage->buf;
+
+
     GBT_PREV(lbuf,&prev);
     lv = prev;
     SBT_PREV(rbuf,lv);
@@ -12615,6 +16040,7 @@ static void btreeHybInsertKey(AjPBtcache cache, AjPBtpage page,
     SBT_NKEYS(lbuf,v);
     btreeWriteNode(cache,lpage,tkarray,tparray,i);
     lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1533;
 
 
     for(i=0;i<n+1;++i)
@@ -12642,8 +16068,10 @@ static void btreeHybInsertKey(AjPBtcache cache, AjPBtpage page,
     v = rkeyno;
     SBT_NKEYS(rbuf,v);
     rpage->dirty = BT_DIRTY;
+
     btreeWriteNode(cache,rpage,tkarray,tparray,rkeyno);
     rpage->dirty = BT_LOCK;
+    rpage->lockfor = 1534;
 
     for(i=0;i<rkeyno+1;++i)
     {
@@ -12657,7 +16085,7 @@ static void btreeHybInsertKey(AjPBtcache cache, AjPBtpage page,
 
     ibn = rblockno;
 
-    if(strcmp(key->Ptr,mediankey->Ptr)<0)
+    if(MAJSTRCMPS(key,mediankey)<0)
 	ibn = lblockno;
 
     lpage->dirty = BT_DIRTY;
@@ -12701,37 +16129,41 @@ static void btreeHybSplitRoot(AjPBtcache cache)
 
     AjPStr *karray     = NULL;
     AjPStr *tkarray    = NULL;
-    ajlong *parray     = NULL;
-    ajlong *tparray    = NULL;
+    ajulong *parray     = NULL;
+    ajulong *tparray    = NULL;
     AjPBtMem arrays1   = NULL;
     AjPBtMem arrays2   = NULL;
 
-    ajint order     = 0;
-    ajint nkeys     = 0;
-    ajint keypos    = 0;
+    ajuint order     = 0;
+    ajuint nkeys     = 0;
+    ajuint keypos    = 0;
     
-    ajlong rblockno = 0L;
-    ajlong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong lblockno = 0L;
     
     AjPStr key = NULL;
-    ajint  i;
+    ajuint  i;
+    ajuint  j;
 
     unsigned char *rootbuf = NULL;
     unsigned char *rbuf    = NULL;
     unsigned char *lbuf    = NULL;
     unsigned char *tbuf    = NULL;
     
-    ajint nodetype  = 0;
-    ajlong overflow = 0L;
-    ajlong zero     = 0L;
-    ajint totlen    = 0;
-    ajint rkeyno    = 0;
-    ajint n         = 0;
+    ajuint nodetype  = 0;
+    ajulong overflow = 0L;
+    ajulong zero     = 0L;
+    ajuint rkeyno    = 0;
 
-    ajlong lv = 0L;
-    ajint  v  = 0;
+    ajulong lv = 0L;
+    ajuint  v  = 0;
     
     
+#if AJINDEX_DEBUG
+    ajDebug("btreeHybSplitRoot zero\n");
+#endif
+    ++statCallSplitHybRoot;
+
     /* ajDebug("In btreeHybSplitRoot\n"); */
 
     order = cache->order;
@@ -12760,20 +16192,12 @@ static void btreeHybSplitRoot(AjPBtcache cache)
 
 
     rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
+    rpage = ajBtreeCacheWriteNodenew(cache);
     rpage->dirty = BT_LOCK;
-    rpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
+    rpage->lockfor = 1541;
 
     lblockno = cache->totsize;
-    lpage = ajBtreeCacheWrite(cache,lblockno);
-    lpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
-
-    lv = rblockno;
-    SBT_BLOCKNUMBER(rpage->buf,lv);
-    lv = lblockno;
-    SBT_BLOCKNUMBER(lpage->buf,lv);
+    lpage = ajBtreeCacheWriteNodenew(cache);
 
     if(!cache->level)
     {
@@ -12789,17 +16213,11 @@ static void btreeHybSplitRoot(AjPBtcache cache)
 
     btreeGetKeys(cache,rootbuf,&karray,&parray);
 
-    /* Get key for root node and write new root node */
-    ajStrAssignS(&tkarray[0],karray[keypos]);
-    tparray[0] = lblockno;
-    tparray[1] = rblockno;
-    
+    /* write new root node */
 
-    n = 1;
-    v = n;
-    SBT_NKEYS(rootbuf,v);
-    btreeWriteNode(cache,rootpage,tkarray,tparray,1);
+    btreeWriteNodeSingle(cache,rootpage,karray[keypos],lblockno,rblockno);
     rootpage->dirty = BT_LOCK;
+    rootpage->lockfor = 1542;
 
     rbuf = rpage->buf;
     lbuf = lpage->buf;
@@ -12822,57 +16240,53 @@ static void btreeHybSplitRoot(AjPBtcache cache)
     lv = overflow;
     SBT_PREV(lbuf,lv);
 
-    totlen = 0;
-
     for(i=0;i<keypos;++i)
     {
 	ajStrAssignS(&tkarray[i],karray[i]);
-	totlen += ajStrGetLen(karray[i]);
 	tparray[i] = parray[i];
     }
 
     tparray[i] = parray[i];
-    v = totlen;
-    SBT_TOTLEN(lbuf,v);
-    n = i;
-    v = n;
-    SBT_NKEYS(lbuf,v);
-    btreeWriteNode(cache,lpage,tkarray,tparray,i);
+    btreeWriteNode(cache,lpage,tkarray,tparray,keypos);
 
-    for(i=0;i<n+1;++i)
+    for(i=0;i<=keypos;++i)
     {
 	tpage = ajBtreeCacheRead(cache,tparray[i]);
 	tbuf = tpage->buf;
 	lv = lblockno;
 	SBT_PREV(tbuf,lv);
 	tpage->dirty = BT_DIRTY;
+#if AJINDEX_DEBUG
+        ajDebug("    new lpage %Lu prev %Lu\n",
+                tpage->pagepos, lblockno);
+#endif
     }
 
-    totlen = 0;
+    j=0;
 
     for(i=keypos+1;i<nkeys;++i)
     {
-	ajStrAssignS(&tkarray[i-(keypos+1)],karray[i]);
-	totlen += ajStrGetLen(karray[i]);
-	tparray[i-(keypos+1)] = parray[i];
+	ajStrAssignS(&tkarray[j],karray[i]);
+	tparray[j++] = parray[i];
     }
 
-    tparray[i-(keypos+1)] = parray[i];
-    v = totlen;
-    SBT_TOTLEN(rbuf,v);
+    tparray[j] = parray[i];
     rkeyno = (nkeys-keypos) - 1;
-    v = rkeyno;
-    SBT_NKEYS(rbuf,v);
     rpage->dirty = BT_DIRTY;
+
     btreeWriteNode(cache,rpage,tkarray,tparray,rkeyno);
 
-    for(i=0;i<rkeyno+1;++i)
+    for(i=0;i<=rkeyno;++i)
     {
 	tpage = ajBtreeCacheRead(cache,tparray[i]);
 	tbuf = tpage->buf;
 	lv = rblockno;
 	SBT_PREV(tbuf,lv);
 	tpage->dirty = BT_DIRTY;
+#if AJINDEX_DEBUG
+        ajDebug("    new rpage %Lu prev %Lu\n",
+                tpage->pagepos, rblockno);
+#endif
     }
 
 
@@ -12889,96 +16303,69 @@ static void btreeHybSplitRoot(AjPBtcache cache)
 
 
 
-/* @func ajBtreeHybInsertId *********************************************
+/* @func ajBtreeHybInsertId ***************************************************
 **
 ** Insert an ID structure into the tree
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] hyb [const AjPBtHybrid] Id object
+** @param [u] hyb [AjPBtHybrid] Id object
 **
 ** @return [void] pointer to a page
 ** @@
 ******************************************************************************/
 
-void ajBtreeHybInsertId(AjPBtcache cache, const AjPBtHybrid hyb)
+void ajBtreeHybInsertId(AjPBtcache cache, AjPBtHybrid hyb)
 {
     AjPBtpage spage   = NULL;
-    AjPStr key        = NULL;
-    const char *ckey  = NULL;
-    AjPBucket lbucket = NULL;
-    AjPBucket rbucket = NULL;
-    AjPBucket bucket  = NULL;
-    ajlong lblockno = 0L;
-    ajlong rblockno = 0L;
-    ajlong blockno  = 0L;
-    ajlong shift    = 0L;
+    ajulong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong blockno  = 0L;
+    ajulong shift    = 0L;
 
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
 
-    ajint nodetype = 0;
-    ajint nentries = 0;
+    ajuint nodetype = 0;
     
-    AjPStr *karray = NULL;
-    ajlong *parray = NULL;
-    AjPBtMem arrays = NULL;
-    AjBool found = ajFalse;
     AjPBtId btid = NULL;
     
-    ajint i;
-    ajint n;
-    
+    ajuint n;
+    ajuint ientry;
+
     unsigned char *buf = NULL;
+
+#if AJINDEX_DEBUG
+    ajDebug("btreeHybInsertId '%S'\n", hyb->key1);
+#endif
 
     /* ajDebug("In ajBtreeHybInsertId\n"); */
 
-    key = ajStrNew();
-    
-
-    ajStrAssignS(&key,hyb->key1);
-
-    if(!ajStrGetLen(key))
-    {
-	ajStrDel(&key);
-
+    if(!MAJSTRGETLEN(hyb->key1))
 	return;
-    }
 
-    ckey = ajStrGetPtr(key);
-    spage = ajBtreeHybFindInsert(cache,ckey);
+    ajStrFmtQuery(&hyb->key1);
+
+    if(MAJSTRGETLEN(hyb->key1) > cache->kwlimit)
+        ajStrTruncateLen(&hyb->key1, cache->kwlimit);
+
+    spage = ajBtreeHybFindInsert(cache,hyb->key1);
     buf = spage->buf;
 
     GBT_NKEYS(buf,&nkeys);
     GBT_NODETYPE(buf,&nodetype);
     
-    arrays = btreeAllocPriArray(cache);
-    karray = arrays->karray;
-    parray = arrays->parray;
-    
     if(!nkeys)
     {
-	lbucket  = btreeBucketNew(0);
-	rbucket  = btreeBucketNew(0);
-
 	lblockno = cache->totsize;
-	btreeWriteBucket(cache,lbucket,lblockno);
+	btreeWriteBucketEmpty(cache,lblockno);
 
 	rblockno = cache->totsize;
-	btreeWriteBucket(cache,rbucket,rblockno);	
+	btreeWriteBucketEmpty(cache,rblockno);	
 
-	parray[0] = lblockno;
-	parray[1] = rblockno;
-	ajStrAssignS(karray,key);
-	
-	btreeWriteNode(cache,spage,karray,parray,1);
-
-	btreeBucketDel(&lbucket);
-	btreeBucketDel(&rbucket);
+	btreeWriteNodeSingle(cache,spage,hyb->key1,lblockno,rblockno);
 
 	btreeAddToHybBucket(cache,rblockno,hyb);
-
-	btreeDeallocPriArray(cache,arrays);
-
-	ajStrDel(&key);
+        ++cache->countunique;
+        ++cache->countall;
 
 	return;
     }
@@ -12986,58 +16373,23 @@ void ajBtreeHybInsertId(AjPBtcache cache, const AjPBtHybrid hyb)
 
     /* Search to see whether entry exists */
     
-    btreeGetKeys(cache,buf,&karray,&parray);
+    blockno = btreeGetBlockS(cache,buf,hyb->key1);
 
-    i=0;
+    btid = btreeBucketFindDupId(cache,blockno,hyb->key1,&ientry);
 
-    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-	++i;
-
-    if(i==nkeys)
+    if(btid)
     {
-	if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
-
-
-    bucket = btreeReadBucket(cache,blockno);
-    
-    nentries = bucket->Nentries;
-    
-    found = ajFalse;
-
-    for(i=0;i<nentries;++i)
-	if(!strcmp(hyb->key1->Ptr,bucket->Ids[i]->id->Ptr))
-	{
-	    found = ajTrue;
-	    break;
-	}
-    
-
-    if(found)
-    {
-	btid = bucket->Ids[i];
+        ++cache->countall;
 
 	btreeHybDupInsert(cache,hyb,btid);
+        btreeWriteBucketId(cache,blockno,btid,ientry);
+        ajBtreeIdDel(&btid);
 
-	btreeWriteBucket(cache,bucket,blockno);
-	btreeBucketDel(&bucket);
-
-	btreeDeallocPriArray(cache,arrays);
-
-	ajStrDel(&key);
-	
 	return;
     }
-    else
-	btreeBucketDel(&bucket);
 
     if(nodetype != BT_ROOT)
-	if((shift = btreeHybInsertShift(cache,&spage,key->Ptr)))
+	if((shift = btreeHybInsertShift(cache,&spage,hyb->key1)))
 	    blockno = shift;
 
     buf = spage->buf;
@@ -13048,60 +16400,23 @@ void ajBtreeHybInsertId(AjPBtcache cache, const AjPBtHybrid hyb)
     {
 	if(btreeHybReorderBuckets(cache,spage))
 	{
-	    GBT_NKEYS(buf,&nkeys);	    
-	    btreeGetKeys(cache,buf,&karray,&parray);
-
-	    i=0;
-
-	    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-		++i;
-
-	    if(i==nkeys)
-	    {
-		if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-		    blockno = parray[i-1];
-		else
-		    blockno = parray[i];
-	    }
-	    else
-		blockno = parray[i];
+            blockno = btreeGetBlockS(cache,buf,hyb->key1);
 	}
 	else
 	{
 	    btreeHybSplitLeaf(cache,spage);
-	    spage  = ajBtreeHybFindInsert(cache,ckey);
+	    spage  = ajBtreeHybFindInsert(cache,hyb->key1);
 	    buf = spage->buf;
 
-	    btreeGetKeys(cache,buf,&karray,&parray);
-
-	    GBT_NKEYS(buf,&nkeys);
-
-	    i=0;
-
-	    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
-		++i;
-
-	    if(i==nkeys)
-	    {
-		if(strcmp(key->Ptr,karray[i-1]->Ptr)<0)
-		    blockno = parray[i-1];
-		else
-		    blockno = parray[i];
-	    }
-	    else
-		blockno = parray[i];
-
+            blockno = btreeGetBlockS(cache,buf,hyb->key1);
 	}
     }
 
 
     btreeAddToHybBucket(cache,blockno,hyb);
 
-    ++cache->count;
-
-    btreeDeallocPriArray(cache,arrays);
-
-    ajStrDel(&key);
+    ++cache->countunique;
+    ++cache->countall;
 
     return;
 }
@@ -13126,17 +16441,18 @@ static void btreeHybDupInsert(AjPBtcache cache, const AjPBtHybrid hyb,
 {
     AjPBtpage page;
     AjPBtpage rpage;
-    ajlong secrootpage = 0L;
+    ajulong secrootpage = 0L;
     unsigned char *buf;
-    ajlong right = 0L;
+    ajulong right = 0L;
     AjPBtNumId num = NULL;
+    AjOBtNumId numobj = {0L, 0L, 0, ""};
 
     /* ajDebug("In btreeHybDupInsert\n"); */
 
     if(!btid->dups)
     {
 	btid->dups = 1;
-	AJNEW0(num);
+	num = &numobj;
 	
 	num->offset    = btid->offset;
 	num->refoffset = btid->refoffset;
@@ -13148,13 +16464,17 @@ static void btreeHybDupInsert(AjPBtcache cache, const AjPBtHybrid hyb,
 
 	ajBtreeCreateRootNode(cache,secrootpage);
 	cache->secrootblock = secrootpage;
-	page = ajBtreeCacheWrite(cache,secrootpage);
+	page = ajBtreeCacheWriteNode(cache,secrootpage);
 	page->dirty = BT_DIRTY;
-	ajBtreeCacheSync(cache,secrootpage);
+
+        if(btreeDoRootSync)
+            ajBtreeCacheRootSync(cache,secrootpage);
 	page->dirty = BT_LOCK;
-	
+	page->lockfor = 1551;
+
 	rpage = btreeCacheLocate(cache, 0L);
 	rpage->dirty = BT_LOCK;
+        rpage->lockfor = 1552;
 
 	cache->slevel = 0;
 
@@ -13167,20 +16487,19 @@ static void btreeHybDupInsert(AjPBtcache cache, const AjPBtHybrid hyb,
 	ajBtreeInsertNum(cache,num,page);
 	++btid->dups;
 
-	AJFREE(num);
-
 	return;
     }
     else
     {
 	cache->secrootblock = btid->offset;
-	page = ajBtreeCacheWrite(cache,cache->secrootblock);
+	page = ajBtreeCacheWriteNode(cache,cache->secrootblock);
 	page->dirty = BT_LOCK;
+        page->lockfor = 1553;
 	buf = page->buf;
 	GBT_RIGHT(buf,&right);
-	cache->slevel = (ajint) right;
+	cache->slevel = (ajuint) right;
 
-	AJNEW0(num);
+	num = &numobj;
 	
 	num->offset    = hyb->offset;
 	num->refoffset = hyb->refoffset;
@@ -13188,8 +16507,6 @@ static void btreeHybDupInsert(AjPBtcache cache, const AjPBtHybrid hyb,
 	
 	ajBtreeInsertNum(cache,num,page);
 
-	AJFREE(num);
-	
 	++btid->dups;
     }
     
@@ -13202,28 +16519,258 @@ static void btreeHybDupInsert(AjPBtcache cache, const AjPBtHybrid hyb,
 
 
 
+/* @funcstatic btreeHybBucketIdlist ********************************************
+**
+** Copies all hybrid IDs into a list
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+** @param [u] idlist [AjPList] list to hold hybrid IDs
+**
+** @return [ajulong] Overflow
+** @@
+******************************************************************************/
+
+static ajulong btreeHybBucketIdlist(AjPBtcache cache, ajulong pagepos,
+                                    AjPList idlist)
+{
+    AjPBtpage page      = NULL;
+    AjPBtpage lpage     = NULL;
+    unsigned char *buf  = NULL;
+    unsigned char *kptr = NULL;
+    AjPBtId id          = NULL;
+    
+    unsigned char *idptr = NULL;
+    
+    ajuint  nodetype  = 0;
+    ajuint  nentries  = 0;
+    ajulong overflow  = 0L;
+    ajulong pageoverflow = 0L;
+    ajuint  dirtysave = 0;
+    
+    ajuint  i;
+    ajuint  len = 0;
+    ajuint idlen;
+
+    /* ajDebug("In btreeHybBucketIdlist\n"); */
+    
+    if(!pagepos)
+	ajFatal("HybBucketIdlist: cannot read bucket from root page cache %S",
+                cache->filename);
+
+    page  = ajBtreeCacheRead(cache,pagepos);
+    lpage = page;
+    dirtysave = lpage->dirty;
+    lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1561;
+
+    buf = lpage->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_BUCKET)
+	ajFatal("HybBucketIdlist: NodeType mismatch. "
+                "Not bucket (%u) cache %S",
+                nodetype, cache->filename);
+    
+    GBT_BUCKNENTRIES(buf,&nentries);
+    if(nentries > cache->nperbucket)
+	ajFatal("HybBucketIdlist: Bucket too full page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->nperbucket, cache->filename);
+    
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    pageoverflow = overflow;
+    
+    kptr  = PBT_BUCKKEYLEN(buf);
+    idptr = kptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;++i)
+    {
+	BT_GETAJUINT(kptr,&len);
+        idlen = len - BT_DDOFFROFF-1;
+
+	if((idptr-buf+1) + len > cache->pagesize)	/* overflow */
+	{
+	    /* ajDebug("HybBucketIdlist: Overflow\n"); */
+	    page  = ajBtreeCacheRead(cache,overflow);
+	    buf = page->buf;
+	    GBT_BUCKNODETYPE(buf,&nodetype);
+	    if(nodetype != BT_BUCKET)
+		ajFatal("HybBucketIdlist: NodeType mismatch. "
+                        "Not bucket (%u) cache %S",
+			nodetype, cache->filename);
+	    GBT_BUCKOVERFLOW(buf,&overflow);
+	    /* overflow bucket ids start at the keylen position */
+	    idptr = PBT_BUCKKEYLEN(buf);
+	}
+
+	id = ajBtreeIdNew();
+        
+	/* Fill ID objects */
+	ajStrAssignLenC(&id->id,(const char *)idptr,idlen);
+	idptr += (idlen + 1);
+	BT_GETAJUINT(idptr,&id->dbno);
+	idptr += sizeof(ajuint);
+	BT_GETAJUINT(idptr,&id->dups);
+	idptr += sizeof(ajuint);	
+	BT_GETAJULONG(idptr,&id->offset);
+	idptr += sizeof(ajulong);
+	BT_GETAJULONG(idptr,&id->refoffset);
+	idptr += sizeof(ajulong);
+
+	kptr += sizeof(ajuint);
+        ajListPushAppend(idlist, id);
+    }
+
+    lpage->dirty = dirtysave;
+    
+    return pageoverflow;
+}
+
+
+
+
+/* @funcstatic btreeHybBucketIdlistAll *****************************************
+**
+** Copies all hybrid IDs into a list, following duplicates
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+** @param [u] idlist [AjPList] list to hold hybrid IDs
+**
+** @return [ajulong] Overflow
+** @@
+******************************************************************************/
+
+static ajulong btreeHybBucketIdlistAll(AjPBtcache cache, ajulong pagepos,
+                                       AjPList idlist)
+{
+    AjPBtpage page      = NULL;
+    AjPBtpage lpage     = NULL;
+    unsigned char *buf  = NULL;
+    unsigned char *kptr = NULL;
+    AjPBtId id          = NULL;
+    
+    unsigned char *idptr = NULL;
+    
+    ajuint  nodetype  = 0;
+    ajuint  nentries  = 0;
+    ajulong overflow  = 0L;
+    ajulong pageoverflow = 0L;
+    ajuint  dirtysave = 0;
+    
+    ajuint  i;
+    ajuint  len = 0;
+    ajuint idlen;
+
+    /* ajDebug("In btreeHybBucketIdlist\n"); */
+    
+    if(!pagepos)
+	ajFatal("HybBucketIdlist: cannot read bucket from root page cache %S",
+                cache->filename);
+
+    page  = ajBtreeCacheRead(cache,pagepos);
+    lpage = page;
+    dirtysave = lpage->dirty;
+    lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1561;
+
+    buf = lpage->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_BUCKET)
+	ajFatal("HybBucketIdlist: NodeType mismatch. "
+                "Not bucket (%u) cache %S",
+                nodetype, cache->filename);
+    
+    GBT_BUCKNENTRIES(buf,&nentries);
+    if(nentries > cache->nperbucket)
+	ajFatal("HybBucketIdlist: Bucket too full page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->nperbucket, cache->filename);
+    
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    pageoverflow = overflow;
+    
+    kptr  = PBT_BUCKKEYLEN(buf);
+    idptr = kptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;++i)
+    {
+	BT_GETAJUINT(kptr,&len);
+        idlen = len - BT_DDOFFROFF-1;
+
+	if((idptr-buf+1) + len > cache->pagesize)	/* overflow */
+	{
+	    /* ajDebug("HybBucketIdlist: Overflow\n"); */
+	    page  = ajBtreeCacheRead(cache,overflow);
+	    buf = page->buf;
+	    GBT_BUCKNODETYPE(buf,&nodetype);
+	    if(nodetype != BT_BUCKET)
+		ajFatal("HybBucketIdlist: NodeType mismatch. "
+                        "Not bucket (%u) cache %S",
+			nodetype, cache->filename);
+	    GBT_BUCKOVERFLOW(buf,&overflow);
+	    /* overflow bucket ids start at the keylen position */
+	    idptr = PBT_BUCKKEYLEN(buf);
+	}
+
+	id = ajBtreeIdNew();
+        
+	/* Fill ID objects */
+	ajStrAssignLenC(&id->id,(const char *)idptr,idlen);
+	idptr += (idlen + 1);
+	BT_GETAJUINT(idptr,&id->dbno);
+	idptr += sizeof(ajuint);
+	BT_GETAJUINT(idptr,&id->dups);
+	idptr += sizeof(ajuint);	
+	BT_GETAJULONG(idptr,&id->offset);
+	idptr += sizeof(ajulong);
+	BT_GETAJULONG(idptr,&id->refoffset);
+	idptr += sizeof(ajulong);
+
+	kptr += sizeof(ajuint);
+        if(!id->dups)
+            ajListPushAppend(idlist, id);
+        else
+        {
+            ajBtreeHybLeafList(cache,id->offset,id->id,idlist);
+            ajBtreeIdDel(&id);
+        }
+    }
+
+    lpage->dirty = dirtysave;
+    
+    return pageoverflow;
+}
+
+
+
+
 /* @funcstatic btreeGetNumKeys *********************************************
 **
 ** Get Keys and Pointers from an internal node
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] buf [unsigned char *] page buffer
-** @param [w] keys [ajlong **] keys
-** @param [w] ptrs [ajlong**] ptrs
+** @param [w] keys [ajulong **] keys
+** @param [w] ptrs [ajulong**] ptrs
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeGetNumKeys(AjPBtcache cache, unsigned char *buf,
-			    ajlong **keys, ajlong **ptrs)
+			    ajulong **keys, ajulong **ptrs)
 {
-    ajlong *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *karray = NULL;
+    ajulong *parray = NULL;
     
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
     unsigned char *pptr = NULL;
-    ajint    i;
+    ajuint    i;
 
     /* ajDebug("In btreeGetNumKeys\n"); */
 
@@ -13240,17 +16787,62 @@ static void btreeGetNumKeys(AjPBtcache cache, unsigned char *buf,
 
     for(i=0;i<nkeys;++i)
     {
-	BT_GETAJLONG(pptr,&karray[i]);
-	pptr += sizeof(ajlong);
+	BT_GETAJULONG(pptr,&karray[i]);
+	pptr += sizeof(ajulong);
     }
 
     for(i=0;i<nkeys;++i)
     {
-	BT_GETAJLONG(pptr,&parray[i]);
-	pptr += sizeof(ajlong);
+	BT_GETAJULONG(pptr,&parray[i]);
+	pptr += sizeof(ajulong);
     }
     
-    BT_GETAJLONG(pptr,&parray[i]);
+    BT_GETAJULONG(pptr,&parray[i]);
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeGetNumPointers *********************************************
+**
+** Get Pointers from an internal numeric node
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [u] buf [unsigned char *] page buffer
+** @param [w] ptrs [ajulong**] ptrs
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeGetNumPointers(AjPBtcache cache, unsigned char *buf,
+                                ajulong **ptrs)
+{
+    ajulong *parray = NULL;
+    
+    ajuint nkeys = 0;
+    unsigned char *pptr = NULL;
+    ajuint    i;
+
+    (void) cache;			/* make it used */
+
+    parray = *ptrs;
+
+    pptr = PBT_KEYLEN(buf);
+    GBT_NKEYS(buf,&nkeys);
+    if(!nkeys)
+	ajFatal("GetNumKeys: No keys in node cache %S", cache->filename);
+
+    pptr += nkeys*sizeof(ajulong);
+    for(i=0;i<nkeys;++i)
+    {
+	BT_GETAJULONG(pptr,&parray[i]);
+	pptr += sizeof(ajulong);
+    }
+    
+    BT_GETAJULONG(pptr,&parray[i]);
 
     return;
 }
@@ -13264,9 +16856,9 @@ static void btreeGetNumKeys(AjPBtcache cache, unsigned char *buf,
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] spage [AjPBtpage] buffer
-** @param [r] keys [const ajlong *] keys
-** @param [r] ptrs [const ajlong*] page pointers
-** @param [r] nkeys [ajint] number of keys
+** @param [r] keys [const ajulong *] keys
+** @param [r] ptrs [const ajulong*] page pointers
+** @param [r] nkeys [ajuint] number of keys
 
 **
 ** @return [void]
@@ -13274,55 +16866,146 @@ static void btreeGetNumKeys(AjPBtcache cache, unsigned char *buf,
 ******************************************************************************/
 
 static void btreeWriteNumNode(AjPBtcache cache, AjPBtpage spage,
-			      const ajlong *keys, const ajlong *ptrs,
-			      ajint nkeys)
+			      const ajulong *keys, const ajulong *ptrs,
+			      ajuint nkeys)
 {
     unsigned char *pptr   = NULL;
     unsigned char *buf;
     
-    ajint tnkeys = 0;
+    ajuint tnkeys = 0;
+    ajuint totlen = 0;
 
-    ajlong aspace   = 0L;
-    ajlong lv       = 0L;
-    ajlong overflow = 0L;
-    ajint i;
+    ajulong aspace   = 0L;
+    ajulong lv       = 0L;
+    ajulong overflow = 0L;
+    ajuint i;
 
+    /* ajuint unused = 0; */
 
-    /* ajDebug("In btreeWriteNumNode\n"); */
+#if AJINDEX_DEBUG
+    ajDebug("btreeWriteNumNode %Lu nkeys:%u\n", spage->pagepos, nkeys);
+#endif
 
     buf = spage->buf;
 
     tnkeys = nkeys;
     SBT_NKEYS(buf,tnkeys);
+    totlen = 0;
+    SBT_TOTLEN(buf, totlen);
 
     pptr = PBT_KEYLEN(buf);
-    aspace = 2 * nkeys * sizeof(ajlong) + sizeof(ajlong);
+    aspace = 2 * nkeys * sizeof(ajulong) + sizeof(ajulong);
 
-    if((pptr+aspace)-buf > cache->pagesize)
+    if((ajuint) ((pptr+aspace)-buf) > cache->pagesize)
 	ajFatal("WriteNumNode: too many keys for available pagesize");
 
     for(i=0;i<nkeys;++i)
     {
 	lv = keys[i];
-	BT_SETAJLONG(pptr,lv);
-	pptr += sizeof(ajlong);
+	BT_SETAJULONG(pptr,lv);
+	pptr += sizeof(ajulong);
     }
 
     for(i=0;i<nkeys;++i)
     {
 	lv = ptrs[i];
-	BT_SETAJLONG(pptr,lv);
-	pptr += sizeof(ajlong);
+	BT_SETAJULONG(pptr,lv);
+	pptr += sizeof(ajulong);
     }
     
     lv = ptrs[i];
-    BT_SETAJLONG(pptr,lv);
+    BT_SETAJULONG(pptr,lv);
+    pptr += sizeof(ajulong);
 
-    spage->dirty = BT_DIRTY;
+    /*
+    unused = cache->pagesize - (pptr - buf);
+    if(unused > cache->pagesize)
+        ajFatal("unused %u for pagesize %u", unused, cache->pagesize);
+    if(unused > 0)
+        memset(pptr, 0, unused);
+    */
 
     overflow = 0L;
     SBT_OVERFLOW(buf,overflow);
 
+    spage->dirty = BT_DIRTY;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeWriteNumNodeSingle ***************************************
+**
+** Write an internal numeric node with a single key
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [u] spage [AjPBtpage] buffer
+** @param [r] numkey [ajulong] key
+** @param [r] lptr [ajulong] left page pointer
+** @param [r] rptr [ajulong] rightpage pointer
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeWriteNumNodeSingle(AjPBtcache cache, AjPBtpage spage,
+                                    ajulong numkey, ajulong lptr,
+                                    ajulong rptr)
+{
+    unsigned char *pptr   = NULL;
+    unsigned char *buf;
+    
+    ajuint tnkeys = 0;
+    ajuint totlen = 0;
+
+    ajulong aspace   = 0L;
+    ajulong lv       = 0L;
+    ajulong overflow = 0L;
+
+    /* ajuint unused = 0; */
+
+    /* ajDebug("In btreeWriteNumNode\n"); */
+
+    buf = spage->buf;
+
+    tnkeys = 1;
+    SBT_NKEYS(buf,tnkeys);
+    totlen = 0;
+    SBT_TOTLEN(buf,totlen);
+
+    pptr = PBT_KEYLEN(buf);
+    aspace = 2 * sizeof(ajulong) + sizeof(ajulong);
+    if((ajuint) ((pptr+aspace)-buf) > cache->pagesize)
+	ajFatal("WriteNumNodeSingle: "
+                "too many keys for available pagesize cache %S",
+                cache->filename);
+
+    lv = numkey;
+    BT_SETAJULONG(pptr,lv);
+    pptr += sizeof(ajulong);
+
+    lv = lptr;
+    BT_SETAJULONG(pptr,lv);
+    pptr += sizeof(ajulong);
+    
+    lv = rptr;
+    BT_SETAJULONG(pptr,lv);
+    pptr += sizeof(ajulong);
+
+    overflow = 0L;
+    SBT_OVERFLOW(buf,overflow);
+
+    /*
+    unused = cache->pagesize - (pptr - buf);
+    if(unused > cache->pagesize)
+        ajFatal("unused %u for pagesize %u", unused, cache->pagesize);
+    if(unused > 0)
+        memset(pptr, 0, unused);
+    */
+
+    spage->dirty = BT_DIRTY;    /* test in caller */
 
     return;
 }
@@ -13336,47 +17019,47 @@ static void btreeWriteNumNode(AjPBtcache cache, AjPBtpage spage,
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [r] bucket [const AjPNumBucket] bucket
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeWriteNumBucket(AjPBtcache cache, const AjPNumBucket bucket,
-			     ajlong pageno)
+                                ajulong pagepos)
 {
     AjPBtpage page      = NULL;
     unsigned char *buf  = NULL;
     unsigned char *pptr = NULL;
 
-    ajint   v   = 0;
-    ajint   i   = 0;
-    ajlong lv   = 0L;
-    ajint  nentries = 0;
-    ajlong overflow = 0L;
+    ajuint  uv  = 0;
+    ajuint   v   = 0;
+    ajuint  i   = 0;
+    ajulong lv   = 0L;
+    ajuint nentries = 0;
+    ajulong overflow = 0L;
+
+    /* ajuint unused = 0; */
 
     /* ajDebug("In btreeWriteNumBucket\n"); */
 
-    if(pageno == cache->totsize)
+    if(pagepos == cache->totsize)
     {
-	page = ajBtreeCacheWrite(cache,pageno);
-	page->pageno = cache->totsize;
-	cache->totsize += cache->pagesize;
+	page = ajBtreeCacheWriteBucketnew(cache);
 	buf = page->buf;
 	overflow = 0L;
-	lv = overflow;
-	SBT_BUCKOVERFLOW(buf,lv);
     }
     else
     {
-	page = ajBtreeCacheRead(cache,pageno);
+	page = ajBtreeCacheRead(cache,pagepos);
 	buf = page->buf;
 	GBT_BUCKOVERFLOW(buf,&overflow);
     }
 
-    v = BT_BUCKET;
+    v = BT_NUMBUCKET;
     SBT_BUCKNODETYPE(buf,v);
     page->dirty = BT_LOCK;
+    page->lockfor = 1571;
 
     nentries = bucket->Nentries;
     v = nentries;
@@ -13387,21 +17070,256 @@ static void btreeWriteNumBucket(AjPBtcache cache, const AjPNumBucket bucket,
     for(i=0;i<nentries;++i)
     {
 	lv = bucket->NumId[i]->offset;
-	BT_SETAJLONG(pptr,lv);
-	pptr += sizeof(ajlong);
+	BT_SETAJULONG(pptr,lv);
+	pptr += sizeof(ajulong);
 	lv = bucket->NumId[i]->refoffset;
-	BT_SETAJLONG(pptr,lv);
-	pptr += sizeof(ajlong);
-	v = bucket->NumId[i]->dbno;
-	BT_SETAJINT(pptr,v);
-	pptr += sizeof(ajint);
+	BT_SETAJULONG(pptr,lv);
+	pptr += sizeof(ajulong);
+	uv = bucket->NumId[i]->dbno;
+	BT_SETAJUINT(pptr,uv);
+	pptr += sizeof(ajuint);
     }
     
     lv = 0L;
     SBT_BUCKOVERFLOW(buf,lv);
+
+    /*
+    unused = cache->pagesize - (pptr - buf);
+    if(unused > cache->pagesize)
+        ajFatal("unused %u for pagesize %u", unused, cache->pagesize);
+    if(unused > 0)
+        memset(pptr, 0, unused);
+    */
+
     page->dirty = BT_DIRTY;
 
     return;
+}
+
+
+
+
+/* @funcstatic btreeWriteNumBucketEmpty ***************************************
+**
+** Write empty index numeric bucket object to the cache given a disc page number
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeWriteNumBucketEmpty(AjPBtcache cache, ajulong pagepos)
+{
+    AjPBtpage page      = NULL;
+    unsigned char *buf  = NULL;
+
+    ajuint   v   = 0;
+    ajulong lv   = 0L;
+    ajulong overflow = 0L;
+
+    /* ajuint unused = 0; */
+
+    /* ajDebug("In btreeWriteNumBucket\n"); */
+
+    if(pagepos == cache->totsize)
+    {
+	page = ajBtreeCacheWriteBucketnew(cache);
+	buf = page->buf;
+	overflow = 0L;
+	lv = overflow;
+	SBT_BUCKOVERFLOW(buf,lv);
+    }
+    else
+    {
+	page = ajBtreeCacheRead(cache,pagepos);
+	buf = page->buf;
+	GBT_BUCKOVERFLOW(buf,&overflow);
+    }
+
+    v = BT_NUMBUCKET;
+    SBT_BUCKNODETYPE(buf,v);
+    page->dirty = BT_LOCK;      /* clear at end */
+    page->lockfor = 1581;
+
+    v = 0;
+    SBT_BUCKNENTRIES(buf,v);
+    
+    lv = 0L;
+    SBT_BUCKOVERFLOW(buf,lv);
+    /*
+    lptr = PBT_BUCKKEYLEN(buf);
+
+
+    unused = cache->pagesize - (lptr - buf);
+    if(unused > cache->pagesize)
+        ajFatal("unused %u for pagesize %u", unused, cache->pagesize);
+    if(unused > 0)
+        memset(lptr, 0, unused);
+    */
+
+    page->dirty = BT_DIRTY;     /* clear the lock */
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeNumBucketIdlist *******************************************
+**
+** Copies all numeric IDs into a list
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+** @param [u] idlist [AjPList] list to hold numeric ID strings
+**
+** @return [ajulong] Overflow
+** @@
+******************************************************************************/
+
+static ajulong btreeNumBucketIdlist(AjPBtcache cache, ajulong pagepos,
+                                    AjPList idlist)
+{
+    AjPBtNumId num      = NULL;
+    AjPBtpage page      = NULL;
+    unsigned char *buf  = NULL;
+    unsigned char *pptr = NULL;
+    ajuint  nodetype  = 0;
+    ajuint  nentries  = 0;
+    ajulong overflow  = 0L;
+    ajulong pageoverflow = 0L;
+    ajuint  dirtysave = 0;
+    
+    ajuint  i;
+    
+    /* ajDebug("In btreeNumBucketIdlist\n"); */
+
+    if(pagepos == cache->secrootblock)
+	ajFatal("NumBucketIdlist: cannot read bucket from root page cache %S",
+                cache->filename);
+
+    page = ajBtreeCacheRead(cache,pagepos);
+    dirtysave = page->dirty;
+    page->dirty = BT_LOCK;
+    page->lockfor = 1591;
+    buf = page->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_NUMBUCKET && nodetype != BT_BUCKET)
+	ajFatal("NumBucketIdlist: Nodetype mismatch. "
+                "Not bucket (%u) cache %S",
+                nodetype, cache->filename);
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    if(nentries > cache->snperbucket)
+	ajFatal("NumBucketIdlist: Bucket too full page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->snperbucket, cache->filename);
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    pageoverflow = overflow;
+
+    pptr = PBT_BUCKKEYLEN(buf);
+
+    for(i=0;i<nentries;++i)
+    {
+        AJNEW0(num);
+	BT_GETAJULONG(pptr,&num->offset);
+	pptr += sizeof(ajulong);
+	BT_GETAJULONG(pptr,&num->refoffset);
+	pptr += sizeof(ajulong);
+	BT_GETAJUINT(pptr,&num->dbno);
+	pptr += sizeof(ajuint);
+        ajListPushAppend(idlist, num);
+        num = NULL;
+    }
+    
+    page->dirty = dirtysave;
+
+    return pageoverflow;
+}
+
+
+
+
+/* @funcstatic btreeNumBucketBtidlist ******************************************
+**
+** Copies all numeric IDs into a list of btree Ids
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] page number
+** @param [r] idname [const AjPStr] id name
+** @param [u] idlist [AjPList] list to hold numeric ID strings
+**
+** @return [ajulong] Overflow
+** @@
+******************************************************************************/
+
+static ajulong btreeNumBucketBtidlist(AjPBtcache cache, ajulong pagepos,
+                                      const AjPStr idname, AjPList idlist)
+{
+    AjPBtId btid      = NULL;
+    AjPBtpage page      = NULL;
+    unsigned char *buf  = NULL;
+    unsigned char *pptr = NULL;
+    ajuint  nodetype  = 0;
+    ajuint  nentries  = 0;
+    ajulong overflow  = 0L;
+    ajulong pageoverflow = 0L;
+    ajuint  dirtysave = 0;
+    
+    ajuint  i;
+    
+    /* ajDebug("In btreeNumBucketIdlist\n"); */
+
+    if(pagepos == cache->secrootblock)
+	ajFatal("NumBucketBtidlist: cannot read bucket "
+                "from root page cache %S",
+                cache->filename);
+
+    page = ajBtreeCacheRead(cache,pagepos);
+    dirtysave = page->dirty;
+    page->dirty = BT_LOCK;
+    page->lockfor = 1601;
+    buf = page->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_NUMBUCKET && nodetype != BT_BUCKET)
+	ajFatal("NumBucketBtidlist: Nodetype mismatch. "
+                "Not bucket (%u) cache %S",
+                nodetype, cache->filename);
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    if(nentries > cache->snperbucket)
+	ajFatal("NumBucketBtidlist: Bucket too full page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->snperbucket,
+                cache->filename);
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    pageoverflow = overflow;
+
+    pptr = PBT_BUCKKEYLEN(buf);
+
+    for(i=0;i<nentries;++i)
+    {
+        btid = ajBtreeIdNew();
+        ajStrAssignS(&btid->id,idname);
+	BT_GETAJULONG(pptr,&btid->offset);
+	pptr += sizeof(ajulong);
+	BT_GETAJULONG(pptr,&btid->refoffset);
+	pptr += sizeof(ajulong);
+	BT_GETAJUINT(pptr,&btid->dbno);
+	pptr += sizeof(ajuint);
+        ajListPushAppend(idlist, btid);
+        btid = NULL;
+    }
+    
+    page->dirty = dirtysave;
+
+    return pageoverflow;
 }
 
 
@@ -13413,68 +17331,65 @@ static void btreeWriteNumBucket(AjPBtcache cache, const AjPNumBucket bucket,
 ** Creates one empty key slot for possible addition
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
 ** @return [AjPNumBucket] bucket
 ** @@
 ******************************************************************************/
 
-static AjPNumBucket btreeReadNumBucket(AjPBtcache cache, ajlong pageno)
+static AjPNumBucket btreeReadNumBucket(AjPBtcache cache, ajulong pagepos)
 {
     AjPNumBucket bucket    = NULL;
     AjPBtpage page      = NULL;
     unsigned char *buf  = NULL;
     unsigned char *pptr = NULL;
-    ajint  nodetype  = 0;
-    ajint  nentries  = 0;
-    ajlong overflow  = 0L;
-    ajint  dirtysave = 0;
+    ajuint  nodetype  = 0;
+    ajuint nentries  = 0;
+    ajulong overflow  = 0L;
+    ajuint  dirtysave = 0;
     
-    ajint  i;
+    ajuint  i;
     
     /* ajDebug("In btreeReadNumBucket\n"); */
 
-    if(pageno == cache->secrootblock)
+    if(pagepos == cache->secrootblock)
 	ajFatal("ReadNumBucket: cannot read bucket from a root page");
 
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
     dirtysave = page->dirty;
     page->dirty = BT_LOCK;
+    page->lockfor = 1611;
     buf = page->buf;
 
     GBT_BUCKNODETYPE(buf,&nodetype);
 
-    if(nodetype != BT_BUCKET)
-	ajFatal("ReadNumBucket: Nodetype mismatch. Not bucket (%d)",nodetype);
+    if(nodetype != BT_NUMBUCKET && nodetype !=  BT_BUCKET)
+	ajFatal("ReadNumBucket: Nodetype mismatch. Not bucket (%u) cache %S",
+                nodetype, cache->filename);
 
     GBT_BUCKNENTRIES(buf,&nentries);
 
     if(nentries > cache->snperbucket)
-	ajFatal("ReadNumBucket: Bucket too full");
+	ajFatal("ReadNumBucket: Bucket too full page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->snperbucket,
+                cache->filename);
 
     GBT_BUCKOVERFLOW(buf,&overflow);
 
-    AJNEW0(bucket);
-    bucket->NodeType = nodetype;
+    bucket = btreeNumBucketNew(cache->snperbucket);
     bucket->Nentries = nentries;
-    bucket->Overflow = overflow;
-
-    AJCNEW0(bucket->NumId,nentries+1);
-
-    for(i=0;i<nentries;++i)
-	AJNEW0(bucket->NumId[i]);
-    
 
     pptr = PBT_BUCKKEYLEN(buf);
 
     for(i=0;i<nentries;++i)
     {
-	BT_GETAJLONG(pptr,&bucket->NumId[i]->offset);
-	pptr += sizeof(ajlong);
-	BT_GETAJLONG(pptr,&bucket->NumId[i]->refoffset);
-	pptr += sizeof(ajlong);
-	BT_GETAJINT(pptr,&bucket->NumId[i]->dbno);
-	pptr += sizeof(ajint);
+	BT_GETAJULONG(pptr,&bucket->NumId[i]->offset);
+	pptr += sizeof(ajulong);
+	BT_GETAJULONG(pptr,&bucket->NumId[i]->refoffset);
+	pptr += sizeof(ajulong);
+	BT_GETAJUINT(pptr,&bucket->NumId[i]->dbno);
+	pptr += sizeof(ajuint);
     }
     
     page->dirty = dirtysave;
@@ -13498,8 +17413,7 @@ static AjPNumBucket btreeReadNumBucket(AjPBtcache cache, ajlong pageno)
 static void btreeNumBucketDel(AjPNumBucket *thys)
 {
     AjPNumBucket pthis = NULL;
-    int i;
-    
+    ajuint newmax;
     
     /* ajDebug("In btreeNumBucketDel\n"); */
 
@@ -13508,11 +17422,57 @@ static void btreeNumBucketDel(AjPNumBucket *thys)
 
     pthis = *thys;
 
+    if(!statSaveNumBucket)
+    {
+        statSaveNumBucketMax=2048;
+        statSaveNumBucketNext=0;
+        AJCNEW0(statSaveNumBucket,statSaveNumBucketMax);
+    }
+    
+    if(statSaveNumBucketNext >= statSaveNumBucketMax)
+    {
+        newmax = statSaveNumBucketMax + statSaveNumBucketMax;
+        AJCRESIZE0(statSaveNumBucket,statSaveNumBucketMax,newmax);
+        statSaveNumBucketMax = newmax;
+    }
+        
+    statSaveNumBucket[statSaveNumBucketNext++] = pthis;
+ 
+    *thys = NULL;
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreeNumBucketFree *********************************************
+**
+** Delete a bucket object
+**
+** @param [w] thys [AjPNumBucket*] bucket
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeNumBucketFree(AjPNumBucket *thys)
+{
+    AjPNumBucket pthis = NULL;
+    ajuint i;
+    
+    
+    /* ajDebug("In btreeNumBucketFree\n"); */
+
+    if(!thys || !*thys)
+	return;
+
+    pthis = *thys;
+
     if(pthis->NumId)
     {
-	for(i=0;i<pthis->Nentries;++i)
+	for(i=0;i<pthis->Maxentries;++i)
 	    AJFREE(pthis->NumId[i]);
-
 	AJFREE(pthis->NumId);
     }
 
@@ -13531,13 +17491,13 @@ static void btreeNumBucketDel(AjPNumBucket *thys)
 ** Find the node that should contain a new key for insertion
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] key [const ajlong] key to search for 
+** @param [r] key [const ajulong] key to search for 
 **
 ** @return [AjPBtpage] leaf node where item should be inserted
 ** @@
 ******************************************************************************/
 
-AjPBtpage ajBtreeNumFindInsert(AjPBtcache cache, const ajlong key)
+AjPBtpage ajBtreeNumFindInsert(AjPBtcache cache, const ajulong key)
 {
     AjPBtpage root = NULL;
     AjPBtpage ret  = NULL;
@@ -13547,7 +17507,7 @@ AjPBtpage ajBtreeNumFindInsert(AjPBtcache cache, const ajlong key)
     /* The root node should always be in the cache (BT_LOCKed) */
     root = btreeCacheLocate(cache,cache->secrootblock);
 
-    /* ajDebug("cache->slevel = %d root=%d\n",cache->slevel,(ajint)root); */
+    /* ajDebug("cache->slevel = %u root=%u\n",cache->slevel,(ajuint)root); */
     
 
     if(!cache->slevel)
@@ -13567,21 +17527,21 @@ AjPBtpage ajBtreeNumFindInsert(AjPBtcache cache, const ajlong key)
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] page
-** @param [r] item [const ajlong] key to search for 
+** @param [r] item [ajulong] key to search for 
 **
 ** @return [AjPBtpage] leaf node where item should be inserted
 ** @@
 ******************************************************************************/
 
 static AjPBtpage btreeNumFindINode(AjPBtcache cache, AjPBtpage page,
-				   const ajlong item)
+				   ajulong item)
 {
     AjPBtpage ret = NULL;
     AjPBtpage pg  = NULL;
 
     unsigned char *buf = NULL;
-    ajint status       = 0;
-    ajint ival         = 0;
+    ajuint status       = 0;
+    ajuint ival         = 0;
 
     /* ajDebug("In btreeNumFindINode\n"); */
     
@@ -13593,6 +17553,7 @@ static AjPBtpage btreeNumFindINode(AjPBtcache cache, AjPBtpage page,
     {
 	status = ret->dirty;
 	ret->dirty = BT_LOCK;	/* Lock in case of lots of overflow pages */
+        ret->lockfor = 1621;
 	pg = btreeNumPageFromKey(cache,buf,item);
 	ret->dirty = status;
 	ret = btreeNumFindINode(cache,pg,item);
@@ -13610,22 +17571,22 @@ static AjPBtpage btreeNumFindINode(AjPBtcache cache, AjPBtpage page,
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] buf [unsigned char *] page buffer
-** @param [r] key [const ajlong] key to search for 
+** @param [r] key [ajulong] key to search for 
 **
 ** @return [AjPBtpage] pointer to a page
 ** @@
 ******************************************************************************/
 
 static AjPBtpage btreeNumPageFromKey(AjPBtcache cache, unsigned char *buf,
-				     const ajlong key)
+				     ajulong key)
 {
     unsigned char *rootbuf = NULL;
-    ajint nkeys = 0;
-    ajint i;
+    ajuint nkeys = 0;
+    ajuint i;
     
-    ajlong blockno = 0L;
-    ajlong *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong blockno = 0L;
+    ajulong *karray = NULL;
+    ajulong *parray = NULL;
     AjPBtpage page = NULL;
     AjPBtMem array = NULL;
 
@@ -13673,41 +17634,81 @@ static AjPBtpage btreeNumPageFromKey(AjPBtcache cache, unsigned char *buf,
 ** Only called if there is room in the bucket
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number of bucket
+** @param [r] pagepos [ajulong] page number of bucket
 ** @param [r] num [const AjPBtNumId] ID info
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void btreeAddToNumBucket(AjPBtcache cache, ajlong pageno,
+static void btreeAddToNumBucket(AjPBtcache cache, ajulong pagepos,
 				const AjPBtNumId num)
 {
-    AjPNumBucket bucket = NULL;
-    ajint nentries;
+    AjPBtpage page      = NULL;
+    unsigned char *buf  = NULL;
+    unsigned char *pptr = NULL;
+    ajuint  nodetype  = 0;
+    ajuint  nentries  = 0;
+    ajulong overflow  = 0L;
+
+    ajulong lv = 0L;
+    ajuint uv = 0;
+
+    ajuint  i;
+
+    /* ajDebug("In btreeReadNumBucket\n"); */
+
+    if(pagepos == cache->secrootblock)
+	ajFatal("AddToNumBucket: cannot read bucket from root page cache %S",
+                cache->filename);
+
+    page = ajBtreeCacheRead(cache,pagepos);
+
+    page->dirty = BT_LOCK;      /* reset at end */
+    page->lockfor = 1631;
+    buf = page->buf;
+
+    GBT_BUCKNODETYPE(buf,&nodetype);
+    if(nodetype != BT_NUMBUCKET)
+	ajFatal("AddToNumBucket: Nodetype mismatch. "
+                "Not bucket (%u) cache %S",
+                nodetype, cache->filename);
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    if(nentries > cache->snperbucket)
+	ajFatal("AddToNumBucket: Bucket too full page: %Lu "
+                "entries: %u max: %u cache %S",
+                pagepos, nentries, cache->snperbucket, cache->filename);
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+
+    pptr = PBT_BUCKKEYLEN(buf);
+
+    for(i=0;i<nentries;++i)
+    {
+        pptr += sizeof(ajulong);
+        pptr += sizeof(ajulong);
+	pptr += sizeof(ajuint);
+    }
     
-    /* ajDebug("In btreeAddToNumBucket\n"); */
+    lv = num->offset;
+    BT_SETAJULONG(pptr,lv);
+    pptr += sizeof(ajulong);
+    lv = num->refoffset;
+    BT_SETAJULONG(pptr,lv);
+    pptr += sizeof(ajulong);
+    uv = num->dbno;
+    BT_SETAJUINT(pptr,uv);
+    pptr += sizeof(ajuint);
 
-    bucket   = btreeReadNumBucket(cache,pageno);
+    nentries++;
+    SBT_BUCKNENTRIES(buf,nentries);
 
-    nentries = bucket->Nentries;
+    page->dirty = BT_DIRTY;
 
-    /* Reading a bucket always gives one extra ID position */
-
-    AJNEW0(bucket->NumId[nentries]);
-    bucket->NumId[nentries]->offset    = num->offset;
-    bucket->NumId[nentries]->refoffset = num->refoffset;
-    bucket->NumId[nentries]->dbno      = num->dbno;
-
-    
-    ++bucket->Nentries;
-
-    btreeWriteNumBucket(cache,bucket,pageno);
-
-    btreeNumBucketDel(&bucket);
-    
     return;
 }
+
 
 
 
@@ -13717,33 +17718,34 @@ static void btreeAddToNumBucket(AjPBtcache cache, ajlong pageno,
 ** Return number of entries in a bucket
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number
+** @param [r] pagepos [ajulong] page number
 **
-** @return [ajint] Number of entries in bucket
+** @return [ajuint] Number of entries in bucket
 ** @@
 ******************************************************************************/
 
-static ajint btreeNumInNumBucket(AjPBtcache cache, ajlong pageno)
+static ajuint btreeNumInNumBucket(AjPBtcache cache, ajulong pagepos)
 {
     AjPBtpage page     = NULL;
     unsigned char *buf = NULL;
-    ajint  nodetype    = 0;
-    ajint  nentries    = 0;
+    ajuint  nodetype    = 0;
+    ajuint nentries    = 0;
     
     /* ajDebug("In btreeNumInNumBucket\n"); */
     
-    if(pageno == cache->secrootblock)
+    if(pagepos == cache->secrootblock)
 	ajFatal("NumInNumBucket: Attempt to read bucket from root page\n");
 
-    page  = ajBtreeCacheRead(cache,pageno);
+    page  = ajBtreeCacheRead(cache,pagepos);
 
     buf = page->buf;
 
     GBT_BUCKNODETYPE(buf,&nodetype);
 
-    if(nodetype != BT_BUCKET)
-	ajFatal("NumInNumBucket: NodeType mismatch. Not bucket (%d)",
-		nodetype);
+    if(nodetype != BT_NUMBUCKET)
+	ajFatal("NumInNumBucket: NodeType mismatch. Not numbucket (%u) "
+                "for cache '%S'",
+		nodetype, cache->filename);
     
     GBT_BUCKNENTRIES(buf,&nentries);
 
@@ -13757,30 +17759,48 @@ static ajint btreeNumInNumBucket(AjPBtcache cache, ajlong pageno)
 **
 ** Construct a bucket object
 **
-** @param [r] n [ajint] Number of IDs
+** @param [r] n [ajuint] Number of IDs
 **
 ** @return [AjPNumBucket] initialised disc block cache structure
 ** @@
 ******************************************************************************/
 
-static AjPNumBucket btreeNumBucketNew(ajint n)
+static AjPNumBucket btreeNumBucketNew(ajuint n)
 {
     AjPNumBucket bucket = NULL;
-    ajint i;
+    ajuint i;
 
     /* ajDebug("In btreeNumBucketNew\n"); */
-    
-    AJNEW0(bucket);
-
-    if(n)
+    if(statSaveNumBucketNext)
     {
-	AJCNEW0(bucket->NumId,n+1);
+       bucket = statSaveNumBucket[--statSaveNumBucketNext];
+       for(i=0;i<bucket->Maxentries;++i)
+       {
+           bucket->NumId[i]->offset = 0L;
+           bucket->NumId[i]->refoffset = 0L;
+           bucket->NumId[i]->dbno = 0;
+       }
+       if(n > bucket->Maxentries)
+       {
+           if(bucket->Maxentries)
+               AJCRESIZE0(bucket->NumId,bucket->Maxentries+1,n+1);
+           else
+               AJCNEW0(bucket->NumId,n+1);
+           for(i=bucket->Maxentries;i<n;++i)
+               AJNEW0(bucket->NumId[i]);
+           bucket->Maxentries = n;
+       }
+   }
+   else
+   {
+       AJNEW0(bucket);
+       AJCNEW0(bucket->NumId,n+1);
+       for(i=0;i<n;++i)
+           AJNEW0(bucket->NumId[i]);
+       bucket->Maxentries = n;
+   }
 
-	for(i=0;i<n;++i)
-	    AJNEW0(bucket->NumId[i]);
-    }
-
-    bucket->NodeType = BT_BUCKET;
+    bucket->NodeType = BT_NUMBUCKET;
     bucket->Nentries = n;
     bucket->Overflow = 0L;
     
@@ -13804,42 +17824,45 @@ static AjPNumBucket btreeNumBucketNew(ajint n)
 
 static AjBool btreeReorderNumBuckets(AjPBtcache cache, AjPBtpage leaf)
 {
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
     unsigned char *lbuf = NULL;
 
-    ajlong *keys        = NULL;
-    ajlong *ptrs        = NULL;
+    AjPBtMem array = NULL;
+    AjPBtMem newarray = NULL;
+    ajulong *ptrs        = NULL;
+    ajulong *newkeys        = NULL;
+    ajulong *newptrs        = NULL;
 
-    AjPNumBucket *buckets  = NULL;
+    ajuint i = 0;
     
-    ajint i = 0;
-    ajint j = 0;
-    
-    ajint order;
-    ajint bentries      = 0;
-    ajint totalkeys     = 0;
-    ajint nperbucket    = 0;
-    ajint maxnperbucket = 0;
-    ajint count         = 0;
-    ajint keylimit      = 0;
-    ajint bucketn       = 0;
-    ajint bucketlimit   = 0;
-    ajint nodetype      = 0;
+    ajuint order;
+    ajuint totalkeys     = 0;
+    ajuint nperbucket    = 0;
+    ajuint maxnperbucket = 0;
+    ajuint count         = 0;
+    ajuint keylimit      = 0;
+    ajuint bucketlimit   = 0;
+    ajuint nodetype      = 0;
     
     AjPList idlist    = NULL;
-    ajint   dirtysave = 0;
+    ajuint   dirtysave = 0;
     AjPBtNumId bid       = NULL;
     AjPNumBucket cbucket = NULL;
     AjPBtNumId cid       = NULL;
 
-    ajint   v = 0;
-    AjPBtMem array = NULL;
+    ajuint   iold = 0;
     
+#if AJINDEX_DEBUG
+    ajDebug("btreeReorderNumBuckets %Lu\n", leaf->pagepos);
+#endif
+    ++statCallReorderNumBuckets;
+
     /* ajDebug("In btreeReorderNumBuckets\n"); */
 
     dirtysave = leaf->dirty;
 
     leaf->dirty = BT_LOCK;
+    leaf->lockfor = 1641;
     lbuf = leaf->buf;
 
     GBT_NODETYPE(lbuf,&nodetype);
@@ -13849,74 +17872,59 @@ static AjBool btreeReorderNumBuckets(AjPBtcache cache, AjPBtpage leaf)
     
 
     array = btreeAllocSecArray(cache);
-    keys  = array->overflows;
     ptrs  = array->parray;
 
     /* Read keys/ptrs */
 
-    btreeGetNumKeys(cache,lbuf,&keys,&ptrs);
+    btreeGetNumPointers(cache,lbuf,&ptrs);
 
     GBT_NKEYS(lbuf,&nkeys);
+    keylimit = nkeys + 1;
 
 
     if(!nkeys)
-	ajFatal("NumBucketReorder: Attempt to reorder empty leaf");
+	ajFatal("ReorderNumBuckets: Attempt to reorder empty leaf");
 
     for(i=0;i<nkeys;++i)
 	totalkeys += btreeNumInNumBucket(cache,ptrs[i]);
 
     totalkeys += btreeNumInNumBucket(cache,ptrs[i]);
 
-    /* Set the number of entries per bucket to approximately half full */
-    maxnperbucket = nperbucket >> 1;
+    btreeBucketCalc(totalkeys, keylimit, nperbucket,
+                    &bucketlimit, &maxnperbucket);
 
-    if(!maxnperbucket)
-	++maxnperbucket;
-
-    /* Work out the number of new buckets needed */
-    bucketn = (totalkeys / maxnperbucket);
-
-    if(totalkeys % maxnperbucket)
-	++bucketn;
-    
-    if(bucketn > order)
+#if AJINDEX_DEBUG
+    ajDebug("   bucketlimit:%u order: %u\n", bucketlimit, order);
+#endif
+    if(bucketlimit >= order)
     {
 	btreeDeallocSecArray(cache,array);
 	
 	leaf->dirty = dirtysave;
 
+#if AJINDEX_DEBUG
+    ajDebug("   return ajFalse\n");
+#endif
 	return ajFalse;
     }
     
 
-    /* Read buckets */
-    AJCNEW0(buckets,nkeys+1);
-    keylimit = nkeys + 1;
-    
-    for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadNumBucket(cache,ptrs[i]);
+    newarray = btreeAllocSecArray(cache);
+    newkeys  = newarray->overflows;
+    newptrs  = newarray->parray;
 
+    /* Read buckets */
+    
+    idlist  = ajListNew();
 
     /* Read IDs from all buckets and push to list and sort (increasing id) */
-    idlist  = ajListNew();
-    
     for(i=0;i<keylimit;++i)
-    {
-	bentries = buckets[i]->Nentries;
+	btreeNumBucketIdlist(cache,ptrs[i],idlist);
 
-	for(j=0;j<bentries;++j)
-	    ajListPush(idlist,(void *)buckets[i]->NumId[j]);
-	
-
-	AJFREE(buckets[i]->NumId);
-	AJFREE(buckets[i]);
-    }
     ajListSort(idlist,btreeNumIdCompare);
-    AJFREE(buckets);
 
     cbucket = btreeNumBucketNew(maxnperbucket);
-    bucketlimit = bucketn - 1;
-    
+    iold = 0;
     for(i=0;i<bucketlimit;++i)
     {
 	cbucket->Nentries = 0;
@@ -13939,12 +17947,13 @@ static AjBool btreeReorderNumBuckets(AjPBtcache cache, AjPBtpage leaf)
 
 
 	ajListPeek(idlist,(void **)&bid);
-	keys[i] = bid->offset;
+	newkeys[i] = bid->offset;
 
-	if(!ptrs[i])
-	    ptrs[i] = cache->totsize;
-
-	btreeWriteNumBucket(cache,cbucket,ptrs[i]);
+	if((iold < order) && ptrs[iold])
+            newptrs[i] = ptrs[iold++];
+        else
+	    newptrs[i] = cache->totsize;
+	btreeWriteNumBucket(cache,cbucket,newptrs[i]);
     }
 
 
@@ -13966,30 +17975,47 @@ static AjBool btreeReorderNumBuckets(AjPBtcache cache, AjPBtpage leaf)
 	AJFREE(bid);
     }
     
-    
-    if(!ptrs[i])
-	ptrs[i] = cache->totsize;
+    if((iold < order) && ptrs[iold])
+        newptrs[i] = ptrs[iold++];
+    else
+        newptrs[i] = cache->totsize;
+    btreeWriteNumBucket(cache,cbucket,newptrs[i]);
 
-    btreeWriteNumBucket(cache,cbucket,ptrs[i]);
-
-    cbucket->Nentries = maxnperbucket;
     btreeNumBucketDel(&cbucket);
+
+#if AJINDEX_DEBUG
+    if(iold < keylimit)
+        ajDebug("btreeReorderNumBuckets '%S' %u -> %u",
+                cache->filename, keylimit, iold);
+#endif
+
+    for(i = iold+1; i <= keylimit; i++)
+    {
+        btreePageSetfree(cache, ptrs[i]);
+    }
 
     /* Now write out a modified leaf with new keys/ptrs */
 
-    nkeys = bucketn - 1;
-    v = nkeys;
-    SBT_NKEYS(lbuf,v);
+    nkeys = bucketlimit;
 
-    btreeWriteNumNode(cache,leaf,keys,ptrs,nkeys);
+    btreeWriteNumNode(cache,leaf,newkeys,newptrs,nkeys);
 
     leaf->dirty = BT_DIRTY;
+
     if(nodetype == BT_ROOT)
+    {
 	leaf->dirty = BT_LOCK;
-    
+        leaf->lockfor = 1642;
+    }
+
     btreeDeallocSecArray(cache,array);
+    btreeDeallocSecArray(cache,newarray);
 
     ajListFree(&idlist);
+
+#if AJINDEX_DEBUG
+    ajDebug("   return ajTrue\n");
+#endif
 
     return ajTrue;
 }
@@ -14011,7 +18037,7 @@ static AjBool btreeReorderNumBuckets(AjPBtcache cache, AjPBtpage leaf)
 static AjBool btreeNumNodeIsFull(const AjPBtcache cache, AjPBtpage page)
 {
     unsigned char *buf = NULL;
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
 
     /* ajDebug("In btreeNumNodeIsFull\n"); */
 
@@ -14033,34 +18059,34 @@ static AjBool btreeNumNodeIsFull(const AjPBtcache cache, AjPBtpage page)
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] original page
-** @param [r] key [const ajlong] key to insert
-** @param [r] less [ajlong] less-than pointer
-** @param [r] greater [ajlong] greater-than pointer
+** @param [r] key [ajulong] key to insert
+** @param [r] less [ajulong] less-than pointer
+** @param [r] greater [ajulong] greater-than pointer
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeNumInsertNonFull(AjPBtcache cache, AjPBtpage page,
-				  const ajlong key, ajlong less,
-				  ajlong greater)
+				  ajulong key, ajulong less,
+				  ajulong greater)
 {
     unsigned char *buf = NULL;
-    ajlong *karray     = NULL;
-    ajlong *parray     = NULL;
-    ajint nkeys  = 0;
-    ajint ipos   = 0;
-    ajint i;
-    ajint count  = 0;
+    ajulong *karray     = NULL;
+    ajulong *parray     = NULL;
+    ajuint nkeys  = 0;
+    ajuint ipos   = 0;
+    ajuint i;
+    ajuint count  = 0;
 
-    ajlong lv = 0L;
-    ajint  v  = 0;
+    ajulong lv = 0L;
+    ajuint  v  = 0;
     AjPBtMem array = NULL;    
 
     AjPBtpage ppage = NULL;
-    ajlong pageno   = 0L;
+    ajulong pagepos   = 0L;
 
-    ajint nodetype = 0;
+    ajuint nodetype = 0;
     
     /* ajDebug("In btreeNumInsertNonFull\n"); */
 
@@ -14112,18 +18138,21 @@ static void btreeNumInsertNonFull(AjPBtcache cache, AjPBtpage page,
 
     btreeWriteNumNode(cache,page,karray,parray,nkeys);
     if(nodetype == BT_ROOT)
+    {
 	page->dirty = BT_LOCK;
+        page->lockfor = 1651;
+    }
 
-    pageno = page->pageno;
+    pagepos = page->pagepos;
     ppage = ajBtreeCacheRead(cache,less);
-    lv = pageno;
+    lv = pagepos;
     SBT_PREV(ppage->buf,lv);
     ppage->dirty = BT_DIRTY;
+
     ppage = ajBtreeCacheRead(cache,greater);
-    lv = pageno;
+    lv = pagepos;
     SBT_PREV(ppage->buf,lv);
     ppage->dirty = BT_DIRTY;
-    
 
     btreeDeallocSecArray(cache,array);
 
@@ -14142,52 +18171,52 @@ static void btreeNumInsertNonFull(AjPBtcache cache, AjPBtpage page,
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] page [AjPBtpage] original page
-** @param [r] key [const ajlong] key to insert
-** @param [r] less [ajlong] less-than pointer
-** @param [r] greater [ajlong] greater-than pointer
+** @param [r] key [ajulong] key to insert
+** @param [r] less [ajulong] less-than pointer
+** @param [r] greater [ajulong] greater-than pointer
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void btreeNumInsertKey(AjPBtcache cache, AjPBtpage page,
-			      const ajlong key, ajlong less, ajlong greater)
+			      ajulong key, ajulong less, ajulong greater)
 {
     unsigned char *lbuf = NULL;
     unsigned char *rbuf = NULL;
     unsigned char *tbuf = NULL;
-    ajlong *karray      = NULL;
-    ajlong *parray      = NULL;
-    ajlong *tkarray     = NULL;
-    ajlong *tparray     = NULL;
-    ajint nkeys    = 0;
-    ajint order    = 0;
-    ajint keypos   = 0;
-    ajint rkeyno   = 0;
+    ajulong *narray      = NULL;
+    ajulong *parray      = NULL;
+    ajulong *tnarray     = NULL;
+    ajulong *tparray     = NULL;
+    ajuint nkeys    = 0;
+    ajuint order    = 0;
+    ajuint keypos   = 0;
+    ajuint rkeyno   = 0;
     
-    ajint i = 0;
-    ajint n = 0;
+    ajuint i = 0;
+    ajuint n = 0;
     
-    ajint nodetype  = 0;
+    ajuint nodetype  = 0;
     AjPBtpage ipage = NULL;
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage tpage = NULL;
 
-    ajlong blockno  = 0L;
-    ajlong rblockno = 0L;
-    ajlong lblockno = 0L;
-    ajlong ibn      = 0L;
+    ajulong blockno  = 0L;
+    ajulong rblockno = 0L;
+    ajulong lblockno = 0L;
+    ajulong ibn      = 0L;
 
-    ajlong mediankey  = 0L;
-    ajlong medianless = 0L;
-    ajlong mediangtr  = 0L;
-    ajlong overflow   = 0L;
-    ajlong prev       = 0L;
+    ajulong mediankey  = 0L;
+    ajulong medianless = 0L;
+    ajulong mediangtr  = 0L;
+    ajulong overflow   = 0L;
+    ajulong prev       = 0L;
     
-    ajlong lv = 0L;
-    ajint  v  = 0;
-    AjPBtMem array  = NULL;    
+    ajulong lv = 0L;
+    ajuint  v  = 0;
+    AjPBtMem savekeyarray  = NULL;    
     AjPBtMem array2 = NULL;    
     
     /* ajDebug("In btreeNumInsertKey\n"); */
@@ -14202,57 +18231,45 @@ static void btreeNumInsertKey(AjPBtcache cache, AjPBtpage page,
     lbuf = page->buf;
     GBT_NODETYPE(lbuf,&nodetype);
     page->dirty = BT_LOCK;
+    page->lockfor = 1661;
 
     if(nodetype == BT_ROOT)
     {
-	array = btreeAllocSecArray(cache);
-	karray  = array->overflows;
-	parray  = array->parray;
-
 	btreeNumSplitRoot(cache);
 
-	if(page->pageno)
+	if(page->pagepos)
 	    page->dirty = BT_DIRTY;
 
-	btreeGetNumKeys(cache,lbuf,&karray,&parray);
-
-	if(key < karray[0])
-	    blockno = parray[0];
-	else
-	    blockno = parray[1];
+        blockno = btreeGetBlockFirstN(cache,lbuf,key);
 
 	ipage = ajBtreeCacheRead(cache,blockno);
 	btreeNumInsertNonFull(cache,ipage,key,less,greater);
-
-	btreeDeallocSecArray(cache,array);
 
 	return;
     }
 
 
-    array = btreeAllocSecArray(cache);
-    karray  = array->overflows;
-    parray  = array->parray;
+    savekeyarray = btreeAllocSecArray(cache);
+    narray  = savekeyarray->overflows;
+    parray  = savekeyarray->parray;
     
     array2 = btreeAllocSecArray(cache);
-    tkarray  = array2->overflows;
+    tnarray  = array2->overflows;
     tparray  = array2->parray;
 
     
     lpage = page;
     lbuf = lpage->buf;
     
-    btreeGetNumKeys(cache,lbuf,&karray,&parray);
+    btreeGetNumKeys(cache,lbuf,&narray,&parray);
 
     GBT_BLOCKNUMBER(lbuf,&lblockno);
+
     rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
+    rpage = ajBtreeCacheWriteNodenew(cache);
     rpage->dirty = BT_LOCK;
-    rpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
+    rpage->lockfor = 1662;
     rbuf = rpage->buf;
-    lv = rblockno;
-    SBT_BLOCKNUMBER(rbuf,lv);
 
     
     GBT_PREV(lbuf,&prev);
@@ -14265,7 +18282,7 @@ static void btreeNumInsertKey(AjPBtcache cache, AjPBtpage page,
     if(!(nkeys % 2))
 	--keypos;
 
-    mediankey = karray[keypos];
+    mediankey = narray[keypos];
     medianless = lblockno;
     mediangtr  = rblockno;
 
@@ -14279,17 +18296,15 @@ static void btreeNumInsertKey(AjPBtcache cache, AjPBtpage page,
 
     for(i=0;i<keypos;++i)
     {
-	tkarray[i] = karray[i];
+	tnarray[i] = narray[i];
 	tparray[i] = parray[i];
     }
 
     tparray[i] = parray[i];
 
-    n = i;
-    v = n;
-    SBT_NKEYS(lbuf,v);
-    btreeWriteNumNode(cache,lpage,tkarray,tparray,i);
+    btreeWriteNumNode(cache,lpage,tnarray,tparray,i);
     lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1663;
 
 
     for(i=0;i<n+1;++i)
@@ -14304,7 +18319,7 @@ static void btreeNumInsertKey(AjPBtcache cache, AjPBtpage page,
 
     for(i=keypos+1;i<nkeys;++i)
     {
-	tkarray[i-(keypos+1)] = karray[i];
+	tnarray[i-(keypos+1)] = narray[i];
 	tparray[i-(keypos+1)] = parray[i];
     }
 
@@ -14314,8 +18329,10 @@ static void btreeNumInsertKey(AjPBtcache cache, AjPBtpage page,
     v = rkeyno;
     SBT_NKEYS(rbuf,v);
     rpage->dirty = BT_DIRTY;
-    btreeWriteNumNode(cache,rpage,tkarray,tparray,rkeyno);
+
+    btreeWriteNumNode(cache,rpage,tnarray,tparray,rkeyno);
     rpage->dirty = BT_LOCK;
+    rpage->lockfor = 1664;
 
     for(i=0;i<rkeyno+1;++i)
     {
@@ -14326,6 +18343,7 @@ static void btreeNumInsertKey(AjPBtcache cache, AjPBtpage page,
 	tpage->dirty = BT_DIRTY;
     }
 
+    btreeDeallocSecArray(cache,array2);
 
     ibn = rblockno;
     if(key < mediankey)
@@ -14338,13 +18356,11 @@ static void btreeNumInsertKey(AjPBtcache cache, AjPBtpage page,
     
     btreeNumInsertNonFull(cache,ipage,key,less,greater);
 
-
-    btreeDeallocSecArray(cache,array);
-    btreeDeallocSecArray(cache,array2);
-
     ipage = ajBtreeCacheRead(cache,prev);
 
     btreeNumInsertKey(cache,ipage,mediankey,medianless,mediangtr);
+
+    btreeDeallocSecArray(cache,savekeyarray);
 
     return;
 }
@@ -14369,40 +18385,45 @@ static void btreeNumSplitRoot(AjPBtcache cache)
     AjPBtpage lpage    = NULL;
     AjPBtpage tpage    = NULL;
 
-    ajlong *karray  = NULL;
-    ajlong *tkarray = NULL;
-    ajlong *parray  = NULL;
-    ajlong *tparray = NULL;
+    ajulong *karray  = NULL;
+    ajulong *tkarray = NULL;
+    ajulong *parray  = NULL;
+    ajulong *tparray = NULL;
 
-    ajint order  = 0;
-    ajint nkeys  = 0;
-    ajint keypos = 0;
+    ajuint order  = 0;
+    ajuint nkeys  = 0;
+    ajuint keypos = 0;
     
-    ajlong rblockno = 0L;
-    ajlong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong lblockno = 0L;
 
-    ajlong right;
+    ajulong right;
     
-    ajint  i;
+    ajuint i;
 
     unsigned char *rootbuf = NULL;
     unsigned char *rbuf    = NULL;
     unsigned char *lbuf    = NULL;
     unsigned char *tbuf    = NULL;
     
-    ajint nodetype  = 0;
-    ajlong overflow = 0L;
-    ajlong zero     = 0L;
-    ajint rkeyno    = 0;
-    ajint n         = 0;
+    ajuint nodetype  = 0;
+    ajulong overflow = 0L;
+    ajulong zero     = 0L;
+    ajuint rkeyno   = 0;
+    ajuint n        = 0;
 
-    ajlong lv = 0L;
-    ajint  v  = 0;
+    ajulong lv = 0L;
+    ajuint  v  = 0;
 
     AjPBtMem array  = NULL;    
     AjPBtMem array2 = NULL;    
     
     
+#if AJINDEX_DEBUG
+    ajDebug("btreeNumSplitRoot %Lu\n", cache->secrootblock);
+#endif
+    ++statCallSplitNumRoot;
+
     /* ajDebug("In btreeNumSplitRoot\n"); */
 
     order = cache->sorder;
@@ -14428,25 +18449,18 @@ static void btreeNumSplitRoot(AjPBtcache cache)
 
 
     rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
-    rpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
+    rpage = ajBtreeCacheWriteNodenew(cache);
     rpage->dirty = BT_LOCK;
-    
-    lblockno = cache->totsize;
-    lpage = ajBtreeCacheWrite(cache,lblockno);
-    lpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
+    rpage->lockfor = 1671;
 
-    lv = rblockno;
-    SBT_BLOCKNUMBER(rpage->buf,lv);
-    lv = lblockno;
-    SBT_BLOCKNUMBER(lpage->buf,lv);
+    lblockno = cache->totsize;
+    lpage = ajBtreeCacheWriteNodenew(cache);
+
 
     /* Comment this next block out after the beta test */
     if(!cache->slevel)
     {
-	fprintf(stderr,"btreeSplitRootSec: Shouldn't get here\n");
+	fprintf(stderr,"btreeNumSplitRoot: Shouldn't get here\n");
 	exit(0);
 	lv = zero;
 	SBT_LEFT(lpage->buf,lv);
@@ -14470,10 +18484,11 @@ static void btreeNumSplitRoot(AjPBtcache cache)
     v = n;
     SBT_NKEYS(rootbuf,v);
     btreeWriteNumNode(cache,rootpage,tkarray,tparray,1);
-    right = (ajlong)(cache->slevel + 1);
+    right = (ajulong)(cache->slevel + 1);
     SBT_RIGHT(rootbuf,right);
 
     rootpage->dirty = BT_LOCK;
+    rootpage->lockfor = 1672;
 
     rbuf = rpage->buf;
     lbuf = lpage->buf;
@@ -14530,6 +18545,7 @@ static void btreeNumSplitRoot(AjPBtcache cache)
     v = rkeyno;
     SBT_NKEYS(rbuf,v);
     rpage->dirty = BT_DIRTY;
+
     btreeWriteNumNode(cache,rpage,tkarray,tparray,rkeyno);
 
     for(i=0;i<rkeyno+1;++i)
@@ -14575,30 +18591,30 @@ static void btreeNumKeyShift(AjPBtcache cache, AjPBtpage tpage)
     AjPBtpage spage = NULL;
     AjPBtpage page  = NULL;
 
-    ajint tkeys = 0;
-    ajint pkeys = 0;
-    ajint skeys = 0;
-    ajint order = 0;
+    ajuint tkeys = 0;
+    ajuint pkeys = 0;
+    ajuint skeys = 0;
+    ajuint order = 0;
     
-    ajint i;
+    ajuint i;
+    ajint ii;
+
+    ajulong parent  = 0L;
     
-    ajlong parent  = 0L;
-    
-    ajlong *kTarray = NULL;
-    ajlong *kParray = NULL;
-    ajlong *kSarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pParray = NULL;
-    ajlong *pSarray = NULL;
-
-    ajint pkeypos = 0;
-    ajint minsize = 0;
-
-    ajlong lv = 0L;
-
     AjPBtMem array  = NULL;    
     AjPBtMem array2 = NULL;    
     AjPBtMem array3 = NULL;    
+    ajulong *kTarray = NULL;
+    ajulong *kParray = NULL;
+    ajulong *kSarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pParray = NULL;
+    ajulong *pSarray = NULL;
+
+    ajuint pkeypos = 0;
+    ajuint minsize = 0;
+
+    ajulong lv = 0L;
     
     /* ajDebug("In btreeNumKeyShift\n"); */
     
@@ -14642,7 +18658,7 @@ static void btreeNumKeyShift(AjPBtcache cache, AjPBtpage tpage)
 
     i=0;
 
-    while(pParray[i] != tpage->pageno)
+    while(pParray[i] != tpage->pagepos)
 	++i;
 
     if(i) /* There is another leaf to the left */
@@ -14677,15 +18693,17 @@ static void btreeNumKeyShift(AjPBtcache cache, AjPBtpage tpage)
 	btreeWriteNumNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNumNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNumNode(cache,ppage,kParray,pParray,pkeys);
-	if(ppage->pageno == cache->secrootblock)
+	if(ppage->pagepos == cache->secrootblock)
+        {
 	    ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1681;
+        }
 
 	page = ajBtreeCacheRead(cache,pSarray[skeys]);
 	buf = page->buf;
-	lv = spage->pageno;
+	lv = spage->pagepos;
 	SBT_PREV(buf,lv);
 	page->dirty = BT_DIRTY;
-
 
 	btreeDeallocSecArray(cache,array);
 	btreeDeallocSecArray(cache,array2);
@@ -14712,10 +18730,10 @@ static void btreeNumKeyShift(AjPBtcache cache, AjPBtpage tpage)
 
 	pSarray[skeys+1] = pSarray[skeys];
 
-	for(i=skeys-1;i>-1;--i)
+	for(ii=skeys-1;ii>-1;--ii)
 	{
-	    kSarray[i+1] = kSarray[i];
-	    pSarray[i+1] = pSarray[i];
+	    kSarray[ii+1] = kSarray[ii];
+	    pSarray[ii+1] = pSarray[ii];
 	}
 
 	kSarray[0] = kParray[pkeypos];
@@ -14729,12 +18747,15 @@ static void btreeNumKeyShift(AjPBtcache cache, AjPBtpage tpage)
 	btreeWriteNumNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNumNode(cache,ppage,kParray,pParray,pkeys);
 
-	if(ppage->pageno == cache->secrootblock)
+	if(ppage->pagepos == cache->secrootblock)
+        {
 	    ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1682;
+        }
 
 	page = ajBtreeCacheRead(cache,pSarray[0]);
 	buf = page->buf;
-	lv = spage->pageno;
+	lv = spage->pagepos;
 	SBT_PREV(buf,lv);
 	page->dirty = BT_DIRTY;
 
@@ -14762,14 +18783,14 @@ static void btreeNumKeyShift(AjPBtcache cache, AjPBtpage tpage)
 **
 ** @param [u] cache [AjPBtcache] cache
 ** @param [u] retpage [AjPBtpage*] page
-** @param [r] key [ajlong] key
+** @param [r] key [ajulong] key
 **
-** @return [ajlong] bucket block or 0L if shift not possible
+** @return [ajulong] bucket block or 0L if shift not possible
 ** @@
 ******************************************************************************/
 
-static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
-				  ajlong key)
+static ajulong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
+                                   ajulong key)
 {
     unsigned char *tbuf = NULL;
     unsigned char *pbuf = NULL;
@@ -14779,30 +18800,31 @@ static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
     AjPBtpage spage = NULL;
     AjPBtpage tpage = NULL;
 
-    ajint tkeys = 0;
-    ajint pkeys = 0;
-    ajint skeys = 0;
-    ajint order = 0;
+    ajuint tkeys = 0;
+    ajuint pkeys = 0;
+    ajuint skeys = 0;
+    ajuint order = 0;
     
-    ajint i;
-    ajint n;
+    ajuint i;
+    ajuint n;
+    ajint ii;
     
-    ajlong parent  = 0L;
-    ajlong blockno = 0L;
+    ajulong parent  = 0L;
+    ajulong blockno = 0L;
     
-    ajlong *kTarray = NULL;
-    ajlong *kParray = NULL;
-    ajlong *kSarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pParray = NULL;
-    ajlong *pSarray = NULL;
+    ajulong *kTarray = NULL;
+    ajulong *kParray = NULL;
+    ajulong *kSarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pParray = NULL;
+    ajulong *pSarray = NULL;
 
-    ajlong *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *karray = NULL;
+    ajulong *parray = NULL;
 
-    ajint ppos    = 0;
-    ajint pkeypos = 0;
-    ajint minsize = 0;
+    ajuint ppos    = 0;
+    ajuint pkeypos = 0;
+    ajuint minsize = 0;
 
     AjPBtMem array  = NULL;    
     AjPBtMem array2 = NULL;    
@@ -14887,7 +18909,7 @@ static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 
 	i = 0;
 
-	while(pParray[i] != tpage->pageno)
+	while(pParray[i] != tpage->pagepos)
 	    ++i;
 
 	--i;
@@ -14912,8 +18934,11 @@ static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	btreeWriteNumNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNumNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNumNode(cache,ppage,kParray,pParray,pkeys);
-	if(ppage->pageno == cache->secrootblock)
+	if(ppage->pagepos == cache->secrootblock)
+        {
 	    ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1691;
+       }
 
 	i = 0;
 
@@ -14930,7 +18955,7 @@ static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	else
 	    blockno = pParray[i];
 
-	if(blockno == spage->pageno)
+	if(blockno == spage->pagepos)
 	{
 	    *retpage = spage;
 	    karray = kSarray;
@@ -14964,7 +18989,7 @@ static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	btreeDeallocSecArray(cache,array2);
 	btreeDeallocSecArray(cache,array3);
 
-	/* ajDebug("... returns blockno (a) %Ld\n",blockno); */
+	/* ajDebug("... returns blockno (a) %Lu\n",blockno); */
 
 	return blockno;
     }
@@ -14987,17 +19012,17 @@ static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 
 	i = 0;
 
-	while(pParray[i] != tpage->pageno)
+	while(pParray[i] != tpage->pagepos)
 	    ++i;
 
 	pkeypos = i;
 	
 	pSarray[skeys+1] = pSarray[skeys];
 
-	for(i=skeys-1;i>-1;--i)
+	for(ii=skeys-1;ii>-1;--ii)
 	{
-	    kSarray[i+1] = kSarray[i];
-	    pSarray[i+1] = pSarray[i];
+	    kSarray[ii+1] = kSarray[ii];
+	    pSarray[ii+1] = pSarray[ii];
 	}
 
 	kSarray[0] = kParray[pkeypos];
@@ -15010,8 +19035,11 @@ static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	btreeWriteNumNode(cache,spage,kSarray,pSarray,skeys);
 	btreeWriteNumNode(cache,tpage,kTarray,pTarray,tkeys);
 	btreeWriteNumNode(cache,ppage,kParray,pParray,pkeys);
-	if(ppage->pageno == cache->secrootblock)
-	    ppage->dirty = BT_LOCK;
+	if(ppage->pagepos == cache->secrootblock)
+        {
+            ppage->dirty = BT_LOCK;
+            ppage->lockfor = 1692;
+        }
 
 	i = 0;
 
@@ -15028,7 +19056,7 @@ static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	else
 	    blockno = pParray[i];
 
-	if(blockno == spage->pageno)
+	if(blockno == spage->pagepos)
 	{
 	    *retpage = spage;
 	    karray = kSarray;
@@ -15061,7 +19089,7 @@ static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 	btreeDeallocSecArray(cache,array2);
 	btreeDeallocSecArray(cache,array3);
 
-	/* ajDebug("... returns blockno (b) %Ld\n",blockno); */
+	/* ajDebug("... returns blockno (b) %Lu\n",blockno); */
 	
 	return blockno;
     }
@@ -15094,84 +19122,47 @@ static ajlong btreeNumInsertShift(AjPBtcache cache, AjPBtpage *retpage,
 void ajBtreeInsertNum(AjPBtcache cache, const AjPBtNumId num, AjPBtpage page)
 {
     unsigned char *buf = NULL;
-    AjPBtMem array = NULL;
-    ajlong key;
+    ajulong numkey;
     AjPBtpage spage  = NULL;
-    ajint nkeys = 0;
-    ajint nodetype = 0;
-    ajlong *karray = NULL;
-    ajlong *parray = NULL;
-    AjPNumBucket lbucket = NULL;
-    AjPNumBucket rbucket = NULL;
-    ajlong lblockno;
-    ajlong rblockno;
-    ajlong blockno;
-    ajlong shift;
-    ajint n;
-    ajint i;
+    ajuint nkeys = 0;
+    ajuint nodetype = 0;
+
+    ajulong lblockno;
+    ajulong rblockno;
+    ajulong blockno;
+    ajulong shift;
+    ajuint n;
 
     /* ajDebug("In ajBtreeInsertNum\n"); */
 
     (void) page;			/* make it used */
 
-    key = num->offset;
+    numkey = num->offset;
 
-    spage = ajBtreeNumFindInsert(cache,key);
+    spage = ajBtreeNumFindInsert(cache,numkey);
     buf = spage->buf;
 
     GBT_NKEYS(buf,&nkeys);
     GBT_NODETYPE(buf,&nodetype);
 
-    array = btreeAllocSecArray(cache);
-    karray = array->overflows;
-    parray = array->parray;
-
     if(!nkeys)
     {
-	lbucket = btreeNumBucketNew(0);
-	rbucket = btreeNumBucketNew(0);
-
 	lblockno = cache->totsize;
-	btreeWriteNumBucket(cache,lbucket,lblockno);
+	btreeWriteNumBucketEmpty(cache,lblockno);
 	rblockno = cache->totsize;
-	btreeWriteNumBucket(cache,rbucket,rblockno);
+	btreeWriteNumBucketEmpty(cache,rblockno);
 
-	parray[0] = lblockno;
-	parray[1] = rblockno;
-	karray[0] = key;
-
-	btreeWriteNumNode(cache,spage,karray,parray,1);
-
-	btreeNumBucketDel(&lbucket);
-	btreeNumBucketDel(&rbucket);
+	btreeWriteNumNodeSingle(cache,spage,numkey,lblockno,rblockno);
 
 	btreeAddToNumBucket(cache,rblockno,num);
-
-	btreeDeallocSecArray(cache,array);
 
 	return;
     }
 
-
-    btreeGetNumKeys(cache,buf,&karray,&parray);
-
-    i=0;
-
-    while(i != nkeys && key >= karray[i])
-	++i;
-
-    if(i==nkeys)
-    {
-	if(key < karray[i-1])
-	    blockno = parray[i-1];
-	else
-	    blockno = parray[i];
-    }
-    else
-	blockno = parray[i];
+    blockno = btreeGetBlockN(cache,buf,numkey);
 
     if(nodetype != BT_ROOT)
-	if((shift = btreeNumInsertShift(cache,&spage,key)))
+	if((shift = btreeNumInsertShift(cache,&spage,numkey)))
 	    blockno = shift;
 
 
@@ -15182,55 +19173,19 @@ void ajBtreeInsertNum(AjPBtcache cache, const AjPBtNumId num, AjPBtpage page)
     {
 	if(btreeReorderNumBuckets(cache,spage))
 	{
-	    GBT_NKEYS(buf,&nkeys);
-	    btreeGetNumKeys(cache,buf,&karray,&parray);
-
-	    i=0;
-
-	    while(i != nkeys && key >= karray[i])
-		++i;
-
-	    if(i==nkeys)
-	    {
-		if(key < karray[i-1])
-		    blockno = parray[i-1];
-		else
-		    blockno = parray[i];
-	    }
-	    else
-		blockno = parray[i];
+            blockno = btreeGetBlockN(cache,buf,numkey);
 	}
 	else
 	{
 	    btreeNumSplitLeaf(cache,spage);
-	    spage = ajBtreeNumFindInsert(cache,key);
+	    spage = ajBtreeNumFindInsert(cache,numkey);
 	    buf = spage->buf;
 
-	    btreeGetNumKeys(cache,buf,&karray,&parray);
-	    GBT_NKEYS(buf,&nkeys);
-	
-	    i=0;
-
-	    while(i != nkeys && key >= karray[i])
-		++i;
-
-	    if(i==nkeys)
-	    {
-		if(key < karray[i-1])
-		    blockno = parray[i-1];
-		else
-		    blockno = parray[i];
-	    }
-	    else
-		blockno = parray[i];
+	    blockno = btreeGetBlockN(cache,buf,numkey);
 	}
     }
 
     btreeAddToNumBucket(cache,blockno,num);
-
-    btreeDeallocSecArray(cache,array);
-
-    ++cache->count;
 
     return;
 }
@@ -15251,24 +19206,24 @@ void ajBtreeInsertNum(AjPBtcache cache, const AjPBtNumId num, AjPBtpage page)
 
 static AjPBtpage btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 {
-    ajint nkeys     = 0;
-    ajint totalkeys = 0;
-    ajint bentries  = 0;
-    ajint keylimit  = 0;
-    ajint nodetype  = 0;
+    ajuint nkeys     = 0;
+    ajuint totalkeys = 0;
+    ajuint keylimit  = 0;
+    ajuint order     = 0;
+    ajuint nodetype  = 0;
 
-    ajint rootnodetype = 0;
+    ajuint rootnodetype = 0;
     
-    ajint i;
-    ajint j;
+    ajuint i;
+    ajuint j;
     
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage page  = NULL;
     
-    ajlong mediankey  = 0L;
-    ajlong mediangtr  = 0L;
-    ajlong medianless = 0L;
+    ajulong mediankey  = 0L;
+    ajulong mediangtr  = 0L;
+    ajulong medianless = 0L;
 
     AjPBtNumId bid = NULL;
 
@@ -15278,43 +19233,54 @@ static AjPBtpage btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 
     AjPList idlist = NULL;
 
-    AjPNumBucket *buckets = NULL;
     AjPNumBucket cbucket  = NULL;
     
-    ajlong *karray = NULL;
-    ajlong *parray = NULL;
-    
-    ajint keypos = 0;
-    ajint lno    = 0;
-    ajint rno    = 0;
-
-    ajint bucketlimit   = 0;
-    ajint maxnperbucket = 0;
-    ajint nperbucket    = 0;
-    ajint bucketn       = 0;
-    ajint count         = 0;
-    
-    ajlong lblockno = 0L;
-    ajlong rblockno = 0L;
-    ajlong overflow = 0L;
-    ajlong prevsave = 0L;
-    
-    ajlong zero = 0L;
-    ajlong join = 0L;
-    
-    ajlong lv = 0L;
-    ajint  v  = 0;
-
     AjPBtMem array = NULL;
+    AjPBtMem newarray = NULL;
+    ajulong *newnarray = NULL;
+    ajulong *parray = NULL;
+    ajulong *newparray = NULL;
     
+    ajuint lno    = 0;
+    ajuint rno    = 0;
+
+    ajuint lbucketlimit   = 0;
+    ajuint rbucketlimit   = 0;
+    ajuint lmaxnperbucket = 0;
+    ajuint rmaxnperbucket = 0;
+    ajuint nperbucket    = 0;
+    ajuint count         = 0;
     
+    ajulong lblockno = 0L;
+    ajulong rblockno = 0L;
+    ajulong overflow = 0L;
+    ajulong prevsave = 0L;
+    
+    ajulong zero = 0L;
+    ajulong join = 0L;
+
+    ajuint iold = 0;
+
+    ajulong lv = 0L;
+    ajuint  v  = 0;
+
+    
+#if AJINDEX_DEBUG
+    ajDebug("btreeNumSplitLeaf %Lu dirty:%u lockfor:%u\n",
+            spage->pagepos, spage->dirty, spage->lockfor);
+#endif
+    ++statCallSplitNumLeaf;
+
     /* ajDebug("In btreeNumSplitLeaf\n"); */
 
     nperbucket = cache->snperbucket;
+    order = cache->sorder;
 
     array = btreeAllocSecArray(cache);
-    karray = array->overflows;
     parray = array->parray;
+    newarray = btreeAllocSecArray(cache);
+    newparray = newarray->parray;
+    newnarray = newarray->overflows;
 
     buf = spage->buf;
     lbuf = buf;
@@ -15322,31 +19288,36 @@ static AjPBtpage btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     GBT_NKEYS(buf,&nkeys);
     GBT_NODETYPE(buf,&rootnodetype);
 
+#if AJINDEX_DEBUG
+    ajDebug("    nkeys:%u nodetype:%u\n", nkeys, rootnodetype);
+#endif
+
     if(rootnodetype == BT_ROOT)
     {
-	/* ajDebug("Root leaf splitting\n"); */
+#if AJINDEX_DEBUG
+	ajDebug("   Root leaf splitting page:%Lu secroot:%Lu\n",
+                cache->totsize, cache->secrootblock);
+#endif
 	lblockno = cache->totsize;
-	lpage = ajBtreeCacheWrite(cache,lblockno);
-	lpage->pageno = cache->totsize;
-	cache->totsize += cache->pagesize;
+	lpage = ajBtreeCacheWriteNodenew(cache);
 	lbuf = lpage->buf;
 	lv = cache->secrootblock;
 	SBT_PREV(lbuf,lv);
     }
     else
     {
-	lblockno = spage->pageno;
+	lblockno = spage->pagepos;
 	lpage = spage;
     }
 
     lpage->dirty = BT_LOCK;
+    lpage->lockfor = 1701;
 
     rblockno = cache->totsize;
-    rpage = ajBtreeCacheWrite(cache,rblockno);
-    rpage->pageno = cache->totsize;
-    cache->totsize += cache->pagesize;
+    rpage = ajBtreeCacheWriteNodenew(cache);
     rbuf = rpage->buf;
     rpage->dirty = BT_LOCK;
+    rpage->lockfor = 1702;
 
     if(rootnodetype == BT_ROOT)
     {
@@ -15368,58 +19339,32 @@ static AjPBtpage btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     SBT_RIGHT(lbuf,lv);
 
 
-    btreeGetNumKeys(cache,buf,&karray,&parray);
+    btreeGetNumPointers(cache,buf,&parray);
 
 
     keylimit = nkeys+1;
-    AJCNEW0(buckets,keylimit);
-
-    for(i=0;i<keylimit;++i)
-	buckets[i] = btreeReadNumBucket(cache,parray[i]);
-
     idlist = ajListNew();
-
     for(i=0;i<keylimit;++i)
-    {
-	bentries = buckets[i]->Nentries;
-
-	for(j=0;j<bentries;++j)
-	    ajListPush(idlist,(void *)buckets[i]->NumId[j]);
-
-	AJFREE(buckets[i]->NumId);
-	AJFREE(buckets[i]);
-    }
-
-
+	btreeNumBucketIdlist(cache,parray[i], idlist);
 
     ajListSort(idlist,btreeNumIdCompare);
-    AJFREE(buckets);
 
     totalkeys = ajListGetLength(idlist);
 
-    keypos = totalkeys / 2;
+    btreeBucketSplitCalc(totalkeys, keylimit, nperbucket,
+                         &lbucketlimit,&lmaxnperbucket,&lno,
+                         &rbucketlimit,&rmaxnperbucket,&rno);
 
-    lno = keypos;
-    rno = totalkeys - lno;
-
-    maxnperbucket = nperbucket >> 1;
-    ++maxnperbucket;
-
-    cbucket = btreeNumBucketNew(maxnperbucket);
-
-    bucketn = lno / maxnperbucket;
-    if(lno % maxnperbucket)
-	++bucketn;
-    bucketlimit = bucketn - 1;
-
+    cbucket = btreeNumBucketNew(cache->snperbucket);
 
     count = 0;
+    iold = 0;
 
-    for(i=0;i<bucketlimit;++i)
+    for(i=0;i<lbucketlimit;++i)
     {
 	cbucket->Nentries = 0;
 
-	for(j=0;j<maxnperbucket;++j)
+	for(j=0;j<lmaxnperbucket;++j)
 	{
 	    ajListPop(idlist,(void **)&bid);
 
@@ -15431,14 +19376,17 @@ static AjPBtpage btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 	    ++cbucket->Nentries;
 	    AJFREE(bid);
 	}
+
 	ajListPeek(idlist,(void **)&bid);
 
-	karray[i] = bid->offset;
+	newnarray[i] = bid->offset;
 
-	if(!parray[i])
-	    parray[i] = cache->totsize;
+        if((iold < order) && parray[iold])
+            newparray[i] = parray[iold++];
+        else
+            newparray[i] = cache->totsize;
 
-	btreeWriteNumBucket(cache,cbucket,parray[i]);
+	btreeWriteNumBucket(cache,cbucket,newparray[i]);
     }
 
     cbucket->Nentries = 0;
@@ -15461,35 +19409,30 @@ static AjPBtpage btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 	AJFREE(bid);
     }
 
-    if(!parray[i])
-	parray[i] = cache->totsize;
+    if((iold < order) && parray[iold])
+        newparray[i] = parray[iold++];
+    else
+        newparray[i] = cache->totsize;
 
-    btreeWriteNumBucket(cache,cbucket,parray[i]);
+    btreeWriteNumBucket(cache,cbucket,newparray[i]);
 
-    nkeys = bucketn - 1;
-    v = nkeys;
-    SBT_NKEYS(lbuf,v);
+    nkeys = lbucketlimit;
     nodetype = BT_LEAF;
     v = nodetype;
     SBT_NODETYPE(lbuf,v);
     GBT_PREV(lbuf,&prevsave);
     lpage->dirty = BT_DIRTY;
-    btreeWriteNumNode(cache,lpage,karray,parray,nkeys);
+
+    btreeWriteNumNode(cache,lpage,newnarray,newparray,nkeys);
 
     ajListPeek(idlist,(void **)&bid);
     mediankey = bid->offset;
 
-    bucketn = rno / maxnperbucket;
-
-    if(rno % maxnperbucket)
-	++bucketn;
-    bucketlimit = bucketn - 1;
-
-    for(i=0;i<bucketlimit;++i)
+    for(i=0;i<rbucketlimit;++i)
     {
 	cbucket->Nentries = 0;
 
-	for(j=0;j<maxnperbucket;++j)
+	for(j=0;j<rmaxnperbucket;++j)
 	{
 	    ajListPop(idlist,(void **)&bid);
 	    
@@ -15502,10 +19445,14 @@ static AjPBtpage btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 	}
 
 	ajListPeek(idlist,(void **)&bid);
-	karray[i] = bid->offset;
+	newnarray[i] = bid->offset;
 
-	parray[i] = cache->totsize;
-	btreeWriteNumBucket(cache,cbucket,parray[i]);
+        if((iold < order) && parray[iold])
+            newparray[i] = parray[iold++];
+        else
+            newparray[i] = cache->totsize;
+
+	btreeWriteNumBucket(cache,cbucket,newparray[i]);
     }
 
     cbucket->Nentries = 0;
@@ -15524,13 +19471,18 @@ static AjPBtpage btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 	AJFREE(bid);
     }
     
-    parray[i] = cache->totsize;
-    btreeWriteNumBucket(cache,cbucket,parray[i]);
+    if((iold < order) && parray[iold])
+        newparray[i] = parray[iold++];
+    else
+        newparray[i] = cache->totsize;
 
-    nkeys = bucketn - 1;
+    btreeWriteNumBucket(cache,cbucket,newparray[i]);
 
-    v = nkeys;
-    SBT_NKEYS(rbuf,v);
+#if AJINDEX_DEBUG
+    ajDebug("end of NumSplitLeaf i:%u iold:%u, order:%u\n", i, iold, order);
+#endif
+    nkeys = rbucketlimit;
+
     nodetype = BT_LEAF;
     v = nodetype;
     SBT_NODETYPE(rbuf,v);
@@ -15539,10 +19491,9 @@ static AjPBtpage btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage)
     lv = overflow;
     SBT_OVERFLOW(rbuf,lv);
     
-    btreeWriteNumNode(cache,rpage,karray,parray,nkeys);
+    btreeWriteNumNode(cache,rpage,newnarray,newparray,nkeys);
     rpage->dirty = BT_DIRTY;
 
-    cbucket->Nentries = maxnperbucket;
     btreeNumBucketDel(&cbucket);
     ajListFree(&idlist);
 
@@ -15554,24 +19505,22 @@ static AjPBtpage btreeNumSplitLeaf(AjPBtcache cache, AjPBtpage spage)
 
     if(rootnodetype == BT_ROOT)
     {
-	karray[0] = mediankey;
-	parray[0]=lblockno;
-	parray[1]=rblockno;
-	nkeys = 1;
 	spage->dirty = BT_DIRTY;
-	btreeWriteNumNode(cache,spage,karray,parray,nkeys);	
-
+	btreeWriteNumNodeSingle(cache,spage,mediankey,lblockno,rblockno);	
 	++cache->slevel;
 	lv = cache->slevel;
 	SBT_RIGHT(buf,lv);
 	spage->dirty = BT_LOCK;
+        spage->lockfor = 1703;
 
 	btreeDeallocSecArray(cache,array);
+        btreeDeallocSecArray(cache,newarray);
 
 	return spage;
     }
 
     btreeDeallocSecArray(cache,array);
+    btreeDeallocSecArray(cache,newarray);
 
 
     page = ajBtreeCacheRead(cache,prevsave);
@@ -15600,7 +19549,7 @@ void ajBtreeFreePriArray(AjPBtcache cache)
 {
     AjPBtMem p;
     AjPBtMem next;
-    ajint i;
+    ajuint i;
 
     /* ajDebug("In ajBtreeFreePriArray\n"); */
     
@@ -15608,11 +19557,12 @@ void ajBtreeFreePriArray(AjPBtcache cache)
 	return;
 
     p = cache->bmem;
-    next = p->next;
     
-    while(next)
+    while(p)
     {
-	AJFREE(p->parray);
+        next = p->next;
+
+        AJFREE(p->parray);
 	AJFREE(p->overflows);
 
 	for(i=0;i<cache->order;++i)
@@ -15621,19 +19571,9 @@ void ajBtreeFreePriArray(AjPBtcache cache)
 	AJFREE(p->karray);
 	AJFREE(p);
 	p = next;
-	next = p->next;
     }
     
 
-    AJFREE(p->parray);
-    AJFREE(p->overflows);
-
-    for(i=0;i<cache->order;++i)
-	ajStrDel(&p->karray[i]);
-
-    AJFREE(p->karray);
-    AJFREE(p);
-    
     cache->bmem = NULL;
     cache->tmem = NULL;
 
@@ -15657,7 +19597,7 @@ void ajBtreeFreeSecArray(AjPBtcache cache)
 {
     AjPBtMem p;
     AjPBtMem next;
-    ajint i;
+    ajuint i;
 
     /* ajDebug("In ajBtreeFreeSecArray\n"); */
     
@@ -15665,10 +19605,11 @@ void ajBtreeFreeSecArray(AjPBtcache cache)
 	return;
 
     p = cache->bsmem;
-    next = p->next;
     
-    while(next)
+    while(p)
     {
+        next = p->next;
+
 	AJFREE(p->parray);
 	AJFREE(p->overflows);
 
@@ -15679,18 +19620,8 @@ void ajBtreeFreeSecArray(AjPBtcache cache)
 	AJFREE(p);
 	
 	p = next;
-	next = p->next;
     }
     
-
-    AJFREE(p->parray);
-    AJFREE(p->overflows);
-
-    for(i=0;i<cache->sorder;++i)
-	ajStrDel(&p->karray[i]);
-
-    AJFREE(p->karray);
-    AJFREE(p);
 
     cache->bsmem = NULL;
     cache->tsmem = NULL;
@@ -15706,7 +19637,7 @@ void ajBtreeFreeSecArray(AjPBtcache cache)
 ** Read the leaves of a secondary hybrid tree
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] rootblock [ajlong] root page of secondary tree
+** @param [r] rootblock [ajulong] root page of secondary tree
 ** @param [r] idname [const AjPStr] id name
 ** @param [u] list [AjPList] list to add BtIDs to
 **
@@ -15714,43 +19645,39 @@ void ajBtreeFreeSecArray(AjPBtcache cache)
 ** @@
 ******************************************************************************/
 
-void ajBtreeHybLeafList(AjPBtcache cache, ajlong rootblock,
+void ajBtreeHybLeafList(AjPBtcache cache, ajulong rootblock,
 			const AjPStr idname, AjPList list)
 {
-    AjPBtId id = NULL;
-    
-    ajlong *karray;
-    ajlong *parray;
+    AjPBtMem array = NULL;
+    ajulong *parray;
+
     AjPBtpage page;
     unsigned char *buf;
-    ajint nodetype;
-    ajint i;
-    ajint j;
-    ajlong level = 0L;
+
+    ajuint nodetype;
+    ajuint i;
+    ajulong level = 0L;
     
-    AjPNumBucket bucket;
-    ajint nkeys;
-    ajlong right;
-    AjPBtMem array = NULL;
+    ajuint nkeys;
+    ajulong right;
 
     array = btreeAllocSecArray(cache);
-    karray = array->overflows;
     parray = array->parray;
 
     page = ajBtreeCacheRead(cache, rootblock);
     buf = page->buf;
 
     GBT_RIGHT(buf,&level);
-    cache->slevel = (ajint) level;
+    cache->slevel = (ajuint) level;
 
-    btreeGetNumKeys(cache,buf,&karray,&parray);
+    btreeGetNumPointers(cache,buf,&parray);
     GBT_NODETYPE(buf,&nodetype);
 
     while(nodetype != BT_LEAF && cache->slevel != 0)
     {
 	page = ajBtreeCacheRead(cache,parray[0]);
 	buf = page->buf;
-	btreeGetNumKeys(cache,buf,&karray,&parray);
+	btreeGetNumPointers(cache,buf,&parray);
 	GBT_NODETYPE(buf,&nodetype);
     }
 
@@ -15759,20 +19686,7 @@ void ajBtreeHybLeafList(AjPBtcache cache, ajlong rootblock,
 	GBT_NKEYS(buf,&nkeys);
 
 	for(i=0;i<nkeys+1;++i)
-	{
-	    bucket = btreeReadNumBucket(cache,parray[i]);
-
-	    for(j=0;j<bucket->Nentries;++j)
-	    {
-		id = ajBtreeIdNew();
-		ajStrAssignS(&id->id,idname);
-		id->offset = bucket->NumId[j]->offset;
-		id->refoffset = bucket->NumId[j]->refoffset;
-		id->dbno = bucket->NumId[j]->dbno;
-		ajListPush(list, (void*)id);
-	    }
-	    btreeNumBucketDel(&bucket);
-	}
+	    btreeNumBucketBtidlist(cache,parray[i],idname,list);
 
 	right = 0L;
 	if(cache->slevel)
@@ -15783,7 +19697,7 @@ void ajBtreeHybLeafList(AjPBtcache cache, ajlong rootblock,
 	    {
 		page = ajBtreeCacheRead(cache,right);
 		buf = page->buf;
-		btreeGetNumKeys(cache,buf,&karray,&parray);
+		btreeGetNumPointers(cache,buf,&parray);
 	    }
 	}
     } while(right);
@@ -15796,34 +19710,43 @@ void ajBtreeHybLeafList(AjPBtcache cache, ajlong rootblock,
 
 
 
-/* @func ajBtreeDumpHybKeys ********************************************
+/* @func ajBtreeDumpHybKeys ***************************************************
 **
 ** Read the leaves of a primary hybrid tree (requested by EBI services)
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] dmin [ajint] minimum number of times the key should appear
-** @param [r] dmax [ajint] maximum number of times the key should appear
+** @param [r] dmin [ajuint] minimum number of times the key should appear
+** @param [r] dmax [ajuint] maximum number of times the key should appear
 ** @param [u] outf [AjPFile] output file
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajBtreeDumpHybKeys(AjPBtcache cache, ajint dmin, ajint dmax, AjPFile outf)
+void ajBtreeDumpHybKeys(AjPBtcache cache, ajuint dmin, ajuint dmax,
+                        AjPFile outf)
 {
+    AjPBtMem array = NULL;
     AjPStr *karray;
-    ajlong *parray;
+    ajulong *parray;
+
     AjPBtpage page;
     unsigned char *buf;
-    ajint nodetype;
-    ajint i;
-    ajint j;
-    ajint dups;
+
+    ajuint nodetype;
+    ajuint i;
+    ajuint j;
+    ajuint dups;
     
     AjPBucket bucket;
-    ajint nkeys;
-    ajlong right;
-    AjPBtMem array = NULL;
+    ajuint nkeys;
+    ajulong right;
+
+    if(cache->secondary)
+    {
+        ajBtreeDumpKeywords(cache, dmin, dmax, outf);
+        return;
+    }
 
     array = btreeAllocPriArray(cache);
     karray = array->karray;
@@ -15846,8 +19769,7 @@ void ajBtreeDumpHybKeys(AjPBtcache cache, ajint dmin, ajint dmax, AjPFile outf)
     do
     {
 	GBT_NKEYS(buf,&nkeys);
-
-	for(i=0;i<nkeys+1;++i)
+	for(i=0;i<=nkeys;++i)
 	{
 	    bucket = btreeReadBucket(cache,parray[i]);
 
@@ -15861,12 +19783,11 @@ void ajBtreeDumpHybKeys(AjPBtcache cache, ajint dmin, ajint dmax, AjPFile outf)
 		if(dups < dmin)
 		    continue;
 
-		if(dups > dmax && dmax)
+		if(dmax && dups > dmax)
 		    continue;
 
-		ajFmtPrintF(outf,"%S %d\n",
-			    bucket->Ids[j]->id,
-			    dups);
+		ajFmtPrintF(outf,"%10d %S\n",
+			    dups, bucket->Ids[j]->id);
 	    }
 
 	    btreeBucketDel(&bucket);
@@ -15913,26 +19834,25 @@ AjBool ajBtreeDeleteHybId(AjPBtcache cache, const AjPBtHybrid hyb)
     AjPBtpage rootpage = NULL;
     AjPBtpage spage   = NULL;
     AjPStr key        = NULL;
-    const char *ckey  = NULL;
     AjPBucket bucket  = NULL;
-    ajlong blockno  = 0L;
+    ajulong blockno  = 0L;
 
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
 
-    ajint nodetype = 0;
-    ajint nentries = 0;
+    ajuint nodetype = 0;
+    ajuint nentries = 0;
     
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
     AjPBtMem arrays = NULL;
     AjBool found = ajFalse;
-    ajint dups = 0;
+    ajuint dups = 0;
     
-    ajint i;
+    ajuint i;
     
     unsigned char *buf = NULL;
     AjPBtId did = NULL;
-    ajlong  secrootpage = 0L;
+    ajulong  secrootpage = 0L;
     AjBool ret = ajFalse;
     
     /* ajDebug("In ajBtreeDeleteHybId\n"); */
@@ -15949,8 +19869,7 @@ AjBool ajBtreeDeleteHybId(AjPBtcache cache, const AjPBtHybrid hyb)
 	return ajFalse;
     }
 
-    ckey = ajStrGetPtr(key);
-    spage = ajBtreeHybFindInsert(cache,ckey);
+    spage = ajBtreeHybFindInsert(cache,key);
     buf = spage->buf;
 
     GBT_NKEYS(buf,&nkeys);
@@ -15975,7 +19894,7 @@ AjBool ajBtreeDeleteHybId(AjPBtcache cache, const AjPBtHybrid hyb)
 
     i=0;
 
-    while(i!=nkeys && strcmp(key->Ptr,karray[i]->Ptr)>=0)
+    while(i!=nkeys && MAJSTRCMPS(key,karray[i])>=0)
 	++i;
 
     blockno = parray[i];
@@ -15988,7 +19907,7 @@ AjBool ajBtreeDeleteHybId(AjPBtcache cache, const AjPBtHybrid hyb)
     found = ajFalse;
 
     for(i=0;i<nentries;++i)
-	if(!strcmp(hyb->key1->Ptr,bucket->Ids[i]->id->Ptr))
+	if(ajStrMatchS(hyb->key1,bucket->Ids[i]->id))
 	{
 	    found = ajTrue;
 	    break;
@@ -16016,7 +19935,8 @@ AjBool ajBtreeDeleteHybId(AjPBtcache cache, const AjPBtHybrid hyb)
             ajFatal("Rootpage has been unlocked (ajBtreeDeleteHybId)");
     
         rootpage->dirty = BT_LOCK;
-    
+        rootpage->lockfor = 1711;
+
         btreeFindHybBalanceOne(cache,0L,BTNO_NODE,BTNO_NODE,BTNO_NODE,
                                BTNO_NODE,hyb);
 
@@ -16054,56 +19974,56 @@ AjBool ajBtreeDeleteHybId(AjPBtcache cache, const AjPBtHybrid hyb)
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] Current node
-** @param [r] leftNode [ajlong] Node to left
-** @param [r] rightNode [ajlong] Node to right
-** @param [r] lAnchor [ajlong] Left anchor
-** @param [r] rAnchor [ajlong] Right anchor
+** @param [r] thisNode [ajulong] Current node
+** @param [r] leftNode [ajulong] Node to left
+** @param [r] rightNode [ajulong] Node to right
+** @param [r] lAnchor [ajulong] Left anchor
+** @param [r] rAnchor [ajulong] Right anchor
 ** @param [r] hyb [const AjPBtHybrid] hyb
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeFindHybBalanceOne(AjPBtcache cache, ajlong thisNode,
-                                     ajlong leftNode, ajlong rightNode,
-                                     ajlong lAnchor, ajlong rAnchor,
-                                     const AjPBtHybrid hyb)
+static ajulong btreeFindHybBalanceOne(AjPBtcache cache, ajulong thisNode,
+                                      ajulong leftNode, ajulong rightNode,
+                                      ajulong lAnchor, ajulong rAnchor,
+                                      const AjPBtHybrid hyb)
 {
     unsigned char *buf  = NULL;
     unsigned char *buf1 = NULL;
     
-    ajlong nextNode   = BTNO_NODE;
-    ajlong nextLeft   = BTNO_NODE;
-    ajlong nextRight  = BTNO_NODE;
-    ajlong nextAncL   = BTNO_NODE;
-    ajlong nextAncR   = BTNO_NODE;
-    ajlong done       = 0L;
+    ajulong nextNode   = BTNO_NODE;
+    ajulong nextLeft   = BTNO_NODE;
+    ajulong nextRight  = BTNO_NODE;
+    ajulong nextAncL   = BTNO_NODE;
+    ajulong nextAncR   = BTNO_NODE;
+    ajulong done       = 0L;
     
-    ajint  nkeys      = 0;
-    ajint  order      = 0;
-    ajint  minkeys    = 0;
-    ajint  i;
-    ajint  nodetype   = 0;
+    ajuint  nkeys      = 0;
+    ajuint  order      = 0;
+    ajuint  minkeys    = 0;
+    ajuint  i;
+    ajuint   nodetype   = 0;
 
-    ajint n1keys      = 0;
+    ajuint n1keys      = 0;
     
     AjPBtpage page  = NULL;
     AjPBtpage page1 = NULL;
 
-    ajlong balanceNode = 0L;
-    ajlong blockno     = 0L;
-    ajlong ptrSave     = 0L;
+    ajulong balanceNode = 0L;
+    ajulong blockno     = 0L;
+    ajulong ptrSave     = 0L;
 
     AjPStr *karray  = NULL;
-    ajlong *parray  = NULL;
+    ajulong *parray  = NULL;
     AjPStr *k1array = NULL;
-    ajlong *p1array = NULL;
+    ajulong *p1array = NULL;
 
     AjPBtMem arrays  = NULL;
     AjPBtMem arrays1 = NULL;
     
-    char *key = NULL;
+    const AjPStr key = NULL;
     AjBool existed = ajFalse;
     
     /* ajDebug("In btreeFindBalance\n"); */
@@ -16115,6 +20035,7 @@ static ajlong btreeFindHybBalanceOne(AjPBtcache cache, ajlong thisNode,
         /* Needs altering for secondary tree          */
 	page = btreeCacheLocate(cache,thisNode);
 	page->dirty = BT_LOCK;
+        page->lockfor = 1721;
     }
 
     cache->deleted = ajFalse;
@@ -16136,7 +20057,7 @@ static ajlong btreeFindHybBalanceOne(AjPBtcache cache, ajlong thisNode,
     if(nkeys >= minkeys)
 	balanceNode = BTNO_BALANCE;
     else
-	balanceNode = page->pageno;
+	balanceNode = page->pagepos;
 
     arrays  = btreeAllocPriArray(cache);
     arrays1 = btreeAllocPriArray(cache);
@@ -16147,13 +20068,13 @@ static ajlong btreeFindHybBalanceOne(AjPBtcache cache, ajlong thisNode,
     k1array = arrays1->karray;
     p1array = arrays1->parray;
 
-    key = hyb->key1->Ptr;
+    key = hyb->key1;
 
     btreeGetKeys(cache,buf,&karray,&parray);
 
     i=0;
 
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
+    while(i!=nkeys && MAJSTRCMPS(key,karray[i])>=0)
 	++i;
 
     blockno = parray[i];
@@ -16220,7 +20141,7 @@ static ajlong btreeFindHybBalanceOne(AjPBtcache cache, ajlong thisNode,
 	{
 	    i=0;
 
-	    while(i!=nkeys && strcmp(key,karray[i]->Ptr))
+	    while(i!=nkeys && MAJSTRCMPS(key,karray[i]))
 		++i;
 
 	    if(i!=nkeys)
@@ -16241,6 +20162,7 @@ static ajlong btreeFindHybBalanceOne(AjPBtcache cache, ajlong thisNode,
 	{
 	    page = btreeCacheLocate(cache,thisNode);
 	    page->dirty = BT_LOCK;
+            page->lockfor = 1722;
 	}
 	buf = page->buf;
 
@@ -16259,7 +20181,7 @@ static ajlong btreeFindHybBalanceOne(AjPBtcache cache, ajlong thisNode,
 	    if(nkeys >= minkeys || (nodetype==BT_ROOT && !cache->level))
 		balanceNode = BTNO_BALANCE;
 	    else
-		balanceNode = page->pageno;
+		balanceNode = page->pagepos;
 	}
     }
 
@@ -16287,25 +20209,25 @@ static ajlong btreeFindHybBalanceOne(AjPBtcache cache, ajlong thisNode,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page
-** @param [r] key [const char *] key
+** @param [r] pagepos [ajulong] page
+** @param [r] key [const AjPStr] key
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void btreeFindHybMinOne(AjPBtcache cache, ajlong pageno,
-                               const char *key)
+static void btreeFindHybMinOne(AjPBtcache cache, ajulong pagepos,
+                               const AjPStr key)
 {
     AjPBtpage page   = NULL;
     AjPBucket bucket = NULL;
     AjPStr *karray   = NULL;
-    ajlong *parray   = NULL;
+    ajulong *parray   = NULL;
 
-    ajint nkeys    = 0;
-    ajint nodetype = 0;
-    ajint nentries = 0;
-    ajint i;
+    ajuint nkeys     = 0;
+    ajuint  nodetype = 0;
+    ajuint nentries  = 0;
+    ajuint i;
     AjPBtMem arrays = NULL;
     
     unsigned char *buf = NULL;
@@ -16316,7 +20238,7 @@ static void btreeFindHybMinOne(AjPBtcache cache, ajlong pageno,
     karray = arrays->karray;
     parray = arrays->parray;
 
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
     buf  = page->buf;
     GBT_NODETYPE(buf,&nodetype);
     GBT_NKEYS(buf,&nkeys);
@@ -16342,25 +20264,25 @@ static void btreeFindHybMinOne(AjPBtcache cache, ajlong pageno,
         /* Check for empty bucket - shouldn't happen */
         /* Checking solely out of interest */
 	if(nentries<1)	
-	    ajFatal("FindHybMinOne: Too few entries in bucket Nkeys=%d\n",
+	    ajFatal("FindHybMinOne: Too few entries in bucket Nkeys=%u\n",
                     nkeys);
 
 
         /* Find lowest value key in the bucket and store in cache */
         ajStrAssignS(&cache->replace,bucket->Ids[0]->id);
-	if(!strcmp(cache->replace->Ptr,key))
+	if(!MAJSTRCMPS(cache->replace,key))
 	    ajStrAssignS(&cache->replace,bucket->Ids[1]->id);
 
 	for(i=1;i<nentries;++i)
-	    if(strcmp(bucket->Ids[i]->id->Ptr,cache->replace->Ptr)<0 &&
-	       strcmp(bucket->Ids[i]->id->Ptr,key))
+	    if(MAJSTRCMPS(bucket->Ids[i]->id,cache->replace)<0 &&
+	       MAJSTRCMPS(bucket->Ids[i]->id,key))
 		ajStrAssignS(&cache->replace,bucket->Ids[i]->id);
 	btreeBucketDel(&bucket);
     }
     else
     {
-	pageno = parray[0];
-	btreeFindHybMinOne(cache,pageno,key);
+	pagepos = parray[0];
+	btreeFindHybMinOne(cache,pagepos,key);
 	
     }
 
@@ -16380,42 +20302,43 @@ static void btreeFindHybMinOne(AjPBtcache cache, ajlong pageno,
 ** Deletion software
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] leaf node page
+** @param [r] pagepos [ajulong] leaf node page
 ** @param [r] hyb [const AjPBtHybrid] hyb
 **
 ** @return [AjBool] True if found (and deleted)
 ** @@
 ******************************************************************************/
 
-static AjBool btreeRemoveHybEntryOne(AjPBtcache cache, ajlong pageno,
+static AjBool btreeRemoveHybEntryOne(AjPBtcache cache, ajulong pagepos,
                                      const AjPBtHybrid hyb)
 {
     AjPBtpage page   = NULL;
     AjPBucket bucket = NULL;
     
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
-    ajlong blockno = 0L;
+    ajulong *parray = NULL;
+    ajulong blockno = 0L;
     
-    ajint nkeys    = 0;
-    ajint nentries = 0;
-    ajint i;
+    ajuint nkeys    = 0;
+    ajuint nentries = 0;
+    ajuint i;
 
-    ajint dirtysave = 0;
+    ajuint dirtysave = 0;
     
     AjBool found = ajFalse;
-    char   *key  = NULL;
+    const AjPStr key  = NULL;
 
     unsigned char *buf = NULL;
     AjPBtMem arrays = NULL;
     
     /* ajDebug("In btreeRemoveHybEntryOne\n"); */
 
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
     buf = page->buf;
     dirtysave = page->dirty;
     page->dirty = BT_LOCK;
-    
+    page->lockfor = 1731;
+
     GBT_NKEYS(buf,&nkeys);
 
     if(!nkeys)
@@ -16428,11 +20351,11 @@ static AjBool btreeRemoveHybEntryOne(AjPBtcache cache, ajlong pageno,
 
     btreeGetKeys(cache,buf,&karray,&parray);
     
-    key = hyb->key1->Ptr;
+    key = hyb->key1;
 
     i=0;
 
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
+    while(i!=nkeys && MAJSTRCMPS(key,karray[i])>=0)
 	++i;
 
     blockno = parray[i];
@@ -16443,7 +20366,7 @@ static AjBool btreeRemoveHybEntryOne(AjPBtcache cache, ajlong pageno,
     found = ajFalse;
 
     for(i=0;i<nentries;++i)
-	if(!strcmp(key,bucket->Ids[i]->id->Ptr))
+	if(!MAJSTRCMPS(key,bucket->Ids[i]->id))
 	{
 	    found = ajTrue;
 	    break;
@@ -16504,45 +20427,46 @@ static AjBool btreeRemoveHybEntryOne(AjPBtcache cache, ajlong pageno,
 
 static void btreeAdjustHybBucketsOne(AjPBtcache cache, AjPBtpage leaf)
 {
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
     unsigned char *lbuf = NULL;
     AjPBucket *buckets  = NULL;
+
+    AjPBtMem arrays = NULL;    
     AjPStr *keys        = NULL;
-    ajlong *ptrs        = NULL;
-    ajlong *overflows   = NULL;
+    ajulong *ptrs        = NULL;
+    ajulong *overflows   = NULL;
     
-    ajint i = 0;
-    ajint j = 0;
+    ajuint i = 0;
+    ajuint j = 0;
     
-    ajint order;
-    ajint bentries      = 0;
-    ajint totalkeys     = 0;
-    ajint nperbucket    = 0;
-    ajint maxnperbucket = 0;
-    ajint count         = 0;
-    ajint totkeylen     = 0;
-    ajint keylimit      = 0;
-    ajint bucketn       = 0;
-    ajint bucketlimit   = 0;
-    ajint nodetype      = 0;
-    ajint nids          = 0;
-    ajint totnids       = 0;
+    ajuint order;
+    ajuint bentries      = 0;
+    ajuint totalkeys     = 0;
+    ajuint nperbucket    = 0;
+    ajuint maxnperbucket = 0;
+    ajuint count         = 0;
+    ajuint totkeylen     = 0;
+    ajuint keylimit      = 0;
+    ajuint bucketn       = 0;
+    ajuint bucketlimit   = 0;
+    ajuint nodetype      = 0;
+    ajuint nids          = 0;
+    ajuint totnids       = 0;
     
     AjPList idlist    = NULL;
-    ajint   dirtysave = 0;
+    ajuint  dirtysave = 0;
     AjPBtId bid       = NULL;
     AjPBucket cbucket = NULL;
     AjPBtId cid       = NULL;
 
-    AjPBtMem arrays = NULL;    
-
-    ajint v = 0;
+    ajuint v = 0;
     
     /* ajDebug("In btreeAdjustHybBucketsOne\n"); */
 
     dirtysave = leaf->dirty;
 
     leaf->dirty = BT_LOCK;
+    leaf->lockfor = 1741;
     lbuf = leaf->buf;
 
     GBT_NKEYS(lbuf,&nkeys);
@@ -16565,9 +20489,7 @@ static void btreeAdjustHybBucketsOne(AjPBtcache cache, AjPBtpage leaf)
     arrays = btreeAllocPriArray(cache);
     keys = arrays->karray;
     ptrs = arrays->parray;
-
-    AJCNEW0(overflows,order);
-    
+    overflows = arrays->overflows;
 
     btreeGetKeys(cache,lbuf,&keys,&ptrs);
 
@@ -16583,7 +20505,7 @@ static void btreeAdjustHybBucketsOne(AjPBtcache cache, AjPBtpage leaf)
     if(!maxnperbucket)
 	++maxnperbucket;
 
-    if(!leaf->pageno)
+    if(!leaf->pagepos)
 	maxnperbucket = nperbucket;
 
     /* Work out the number of new buckets needed */
@@ -16602,7 +20524,7 @@ static void btreeAdjustHybBucketsOne(AjPBtcache cache, AjPBtpage leaf)
         if(totalkeys % maxnperbucket)
             ++bucketn;
     }
-    
+
     /* Read buckets */
     AJCNEW0(buckets,nkeys+1);
     keylimit = nkeys + 1;
@@ -16644,7 +20566,6 @@ static void btreeAdjustHybBucketsOne(AjPBtcache cache, AjPBtpage leaf)
 
         btreeDeallocPriArray(cache,arrays);
 
-	AJFREE(overflows);
 	ajListFree(&idlist);
 	leaf->dirty = BT_DIRTY;
 
@@ -16770,20 +20691,17 @@ static void btreeAdjustHybBucketsOne(AjPBtcache cache, AjPBtpage leaf)
     /* Now write out a modified leaf with new keys/ptrs */
 
     nkeys = bucketn - 1;
-    v = nkeys;
-    SBT_NKEYS(lbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(lbuf,v);
 
     btreeWriteNode(cache,leaf,keys,ptrs,nkeys);
 
     leaf->dirty = dirtysave;
     if(nodetype == BT_ROOT)
+    {
 	leaf->dirty = BT_LOCK;
+        leaf->lockfor = 1742;
+    }
 
     btreeDeallocPriArray(cache,arrays);
-
-    AJFREE(overflows);
 
     btreeBucketDel(&cbucket);
     ajListFree(&idlist);
@@ -16801,39 +20719,39 @@ static void btreeAdjustHybBucketsOne(AjPBtcache cache, AjPBtpage leaf)
 ** Deletion software
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] Node to rebalance
-** @param [r] leftNode [ajlong] left node
-** @param [r] rightNode [ajlong] right node
-** @param [r] lAnchor [ajlong] left anchor
-** @param [r] rAnchor [ajlong] right anchor
+** @param [r] thisNode [ajulong] Node to rebalance
+** @param [r] leftNode [ajulong] left node
+** @param [r] rightNode [ajulong] right node
+** @param [r] lAnchor [ajulong] left anchor
+** @param [r] rAnchor [ajulong] right anchor
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeRebalanceHybOne(AjPBtcache cache, ajlong thisNode,
-                                   ajlong leftNode, ajlong rightNode,
-                                   ajlong lAnchor, ajlong rAnchor)
+static ajulong btreeRebalanceHybOne(AjPBtcache cache, ajulong thisNode,
+                                    ajulong leftNode, ajulong rightNode,
+                                    ajulong lAnchor, ajulong rAnchor)
 {
     unsigned char *lbuf = NULL;
     unsigned char *rbuf = NULL;
     unsigned char *tbuf = NULL;
 
-    ajlong anchorNode   = 0L;
-    ajlong balanceNode  = 0L;
-    ajlong mergeNode    = 0L;
-    ajlong done         = 0L;
-    ajlong parent       = 0L;
+    ajulong anchorNode   = 0L;
+    ajulong balanceNode  = 0L;
+    ajulong mergeNode    = 0L;
+    ajulong done         = 0L;
+    ajulong parent       = 0L;
     
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage tpage = NULL;
     
-    ajint lnkeys  = 0;
-    ajint rnkeys  = 0;
-    ajint size    = 0;
-    ajint order   = 0;
-    ajint minsize = 0;
+    ajuint lnkeys  = 0;
+    ajuint rnkeys  = 0;
+    ajuint size    = 0;
+    ajuint order   = 0;
+    ajuint minsize = 0;
 
     AjBool leftok  = ajFalse;
     AjBool rightok = ajFalse;
@@ -16941,16 +20859,16 @@ static ajlong btreeRebalanceHybOne(AjPBtcache cache, ajlong thisNode,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] master node
-** @param [r] balanceNode [ajlong] balance node
-** @param [r] anchorNode [ajlong] anchor node
+** @param [r] thisNode [ajulong] master node
+** @param [r] balanceNode [ajulong] balance node
+** @param [r] anchorNode [ajulong] anchor node
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
-                               ajlong balanceNode, ajlong anchorNode)
+static ajulong btreeShiftHybOne(AjPBtcache cache, ajulong thisNode,
+                                ajulong balanceNode, ajulong anchorNode)
 {
     unsigned char *tbuf = NULL;
     unsigned char *abuf = NULL;
@@ -16960,14 +20878,15 @@ static ajlong btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
     AjPStr *kTarray = NULL;
     AjPStr *kAarray = NULL;
     AjPStr *kBarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pAarray = NULL;
-    ajlong *pBarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pAarray = NULL;
+    ajulong *pBarray = NULL;
     
-    ajint  nAkeys = 0;
-    ajint  nBkeys = 0;
-    ajint  nTkeys = 0;
-    ajint  i;
+    ajuint  nAkeys = 0;
+    ajuint  nBkeys = 0;
+    ajuint  nTkeys = 0;
+    ajuint  i;
+    ajint ii;
     
     AjPBtpage pageA = NULL;
     AjPBtpage pageB = NULL;
@@ -16976,11 +20895,11 @@ static ajlong btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
     
     AjPBtpage leftpage = NULL;
 
-    ajint  anchorPos   = 0;
-    ajlong prev        = 0L;
-    ajint  nodetype    = 0;
+    ajuint anchorPos   = 0;
+    ajulong prev        = 0L;
+    ajuint  nodetype    = 0;
 
-    ajlong lv = 0L;
+    ajulong lv = 0L;
     
     AjPBtMem arraysA = NULL;    
     AjPBtMem arraysB = NULL;    
@@ -17004,12 +20923,15 @@ static ajlong btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
 
     pageA = ajBtreeCacheRead(cache,anchorNode);
     pageA->dirty = BT_LOCK;
+    pageA->lockfor = 1751;
     abuf = pageA->buf;
     pageB = ajBtreeCacheRead(cache,balanceNode);
     pageB->dirty = BT_LOCK;
+    pageB->lockfor = 1752;
     bbuf = pageB->buf;
     pageT = ajBtreeCacheRead(cache,thisNode);
     pageT->dirty = BT_LOCK;
+    pageT->lockfor = 1753;
     tbuf = pageT->buf;
 
     GBT_NKEYS(abuf,&nAkeys);
@@ -17020,7 +20942,7 @@ static ajlong btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
     btreeGetKeys(cache,bbuf,&kBarray,&pBarray);
     btreeGetKeys(cache,tbuf,&kTarray,&pTarray);
     
-    if(strcmp(kTarray[nTkeys-1]->Ptr,kBarray[nBkeys-1]->Ptr)<0)
+    if(MAJSTRCMPS(kTarray[nTkeys-1],kBarray[nBkeys-1])<0)
 	leftpage = pageT;
     else
 	leftpage = pageB;
@@ -17031,7 +20953,7 @@ static ajlong btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
 	/* Find anchor key position */
 	i=0;
 
-	while(i!=nAkeys && strcmp(kTarray[nTkeys-1]->Ptr,kAarray[i]->Ptr)>=0)
+	while(i!=nAkeys && MAJSTRCMPS(kTarray[nTkeys-1],kAarray[i])>=0)
 	    ++i;
 
 	anchorPos = i;
@@ -17065,7 +20987,7 @@ static ajlong btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
 	/* Find anchor key position */
 	i=0;
 
-	while(i!=nAkeys && strcmp(kBarray[nBkeys-1]->Ptr,kAarray[i]->Ptr)>=0)
+	while(i!=nAkeys && MAJSTRCMPS(kBarray[nBkeys-1],kAarray[i])>=0)
 	    ++i;
 
 	anchorPos = i;
@@ -17073,10 +20995,10 @@ static ajlong btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
 	/* Move down anchor key to thisNode */
 	pTarray[nTkeys+1] = pTarray[nTkeys];
 
-	for(i=nTkeys-1;i>-1;--i)
+	for(ii=nTkeys-1;ii>-1;--ii)
 	{
-	    ajStrAssignS(&kTarray[i+1],kTarray[i]);
-	    pTarray[i+1] = pTarray[i];
+	    ajStrAssignS(&kTarray[ii+1],kTarray[ii]);
+	    pTarray[ii+1] = pTarray[ii];
 	}
 
 	ajStrAssignS(&kTarray[0],kAarray[anchorPos]);
@@ -17087,10 +21009,10 @@ static ajlong btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
 	{
 	    pTarray[nTkeys+1] = pTarray[nTkeys];
 
-	    for(i=nTkeys-1;i>-1;--i)
+	    for(ii=nTkeys-1;ii>-1;--ii)
 	    {
-		ajStrAssignS(&kTarray[i+1],kTarray[i]);
-		pTarray[i+1] = pTarray[i];
+		ajStrAssignS(&kTarray[ii+1],kTarray[ii]);
+		pTarray[ii+1] = pTarray[ii];
 	    }
 
 	    ajStrAssignS(&kTarray[0],kBarray[nBkeys-1]);
@@ -17115,7 +21037,7 @@ static ajlong btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
     
 
     /* Adjust PREV pointers for thisNode */
-    prev = pageT->pageno;
+    prev = pageT->pagepos;
 
     for(i=0;i<nTkeys+1;++i)
     {
@@ -17136,7 +21058,10 @@ static ajlong btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
     btreeWriteNode(cache,pageT,kTarray,pTarray,nTkeys);
 
     if(!anchorNode)
+    {
 	pageA->dirty = BT_LOCK;
+        pageA->lockfor = 1754;
+    }
 
     btreeDeallocPriArray(cache,arraysA);
     btreeDeallocPriArray(cache,arraysB);
@@ -17155,16 +21080,16 @@ static ajlong btreeShiftHybOne(AjPBtcache cache, ajlong thisNode,
 ** Deletion software
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] master node
-** @param [r] mergeNode [ajlong] merge node
-** @param [r] anchorNode [ajlong] anchor node
+** @param [r] thisNode [ajulong] master node
+** @param [r] mergeNode [ajulong] merge node
+** @param [r] anchorNode [ajulong] anchor node
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
-                               ajlong mergeNode, ajlong anchorNode)
+static ajulong btreeMergeHybOne(AjPBtcache cache, ajulong thisNode,
+                                ajulong mergeNode, ajulong anchorNode)
 {
     unsigned char *tbuf = NULL;
     unsigned char *abuf = NULL;
@@ -17174,24 +21099,26 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
     AjPStr *kTarray = NULL;
     AjPStr *kAarray = NULL;
     AjPStr *kNarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pAarray = NULL;
-    ajlong *pNarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pAarray = NULL;
+    ajulong *pNarray = NULL;
 
-    ajlong thisprev  = 0L;
-    ajlong mergeprev = 0L;
+    ajulong thisprev  = 0L;
+    ajulong mergeprev = 0L;
     
     
-    ajint  nAkeys = 0;
-    ajint  nNkeys = 0;
-    ajint  nTkeys = 0;
-    ajint  count  = 0;
-    ajint  i;
-    ajint  nodetype = 0;
+    ajuint  nAkeys = 0;
+    ajuint  nNkeys = 0;
+    ajuint  nTkeys = 0;
+    ajuint  count  = 0;
+    ajuint  i;
+    ajint ii;
+
+    ajuint   nodetype = 0;
     
-    ajint saveA = 0;
-    ajint saveN = 0;
-    ajint saveT = 0;
+    ajuint saveA = 0;
+    ajuint saveN = 0;
+    ajuint saveT = 0;
     
     AjPBtpage pageA = NULL;
     AjPBtpage pageN = NULL;
@@ -17200,10 +21127,10 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
     
     AjPBtpage leftpage = NULL;
 
-    ajint  anchorPos = 0;
-    ajlong prev      = 0L;
+    ajuint anchorPos = 0;
+    ajulong prev      = 0L;
 
-    ajlong lv = 0L;
+    ajulong lv = 0L;
 
     AjPBtMem arraysA = NULL;    
     AjPBtMem arraysN = NULL;    
@@ -17216,14 +21143,17 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
     pageA = ajBtreeCacheRead(cache,anchorNode);
     saveA = pageA->dirty;
     pageA->dirty = BT_LOCK;
+    pageA->lockfor = 1761;
     abuf = pageA->buf;
     pageN = ajBtreeCacheRead(cache,mergeNode);
     saveN = pageN->dirty;
     pageN->dirty = BT_LOCK;
+    pageN->lockfor = 1762;
     nbuf = pageN->buf;
     pageT = ajBtreeCacheRead(cache,thisNode);
     saveT = pageT->dirty;
     pageT->dirty = BT_LOCK;
+    pageT->lockfor = 1763;
     tbuf = pageT->buf;
 
     GBT_PREV(tbuf,&thisprev);
@@ -17265,7 +21195,7 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
     btreeGetKeys(cache,nbuf,&kNarray,&pNarray);
     btreeGetKeys(cache,tbuf,&kTarray,&pTarray);
 
-    if(strcmp(kTarray[nTkeys-1]->Ptr,kNarray[nNkeys-1]->Ptr)<0)
+    if(MAJSTRCMPS(kTarray[nTkeys-1],kNarray[nNkeys-1])<0)
 	leftpage = pageT;
     else
 	leftpage = pageN;
@@ -17276,7 +21206,7 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
 	/* Find anchor key position */
 	i=0;
 
-	while(i!=nAkeys && strcmp(kTarray[nTkeys-1]->Ptr,kAarray[i]->Ptr)>=0)
+	while(i!=nAkeys && MAJSTRCMPS(kTarray[nTkeys-1],kAarray[i])>=0)
 	    ++i;
 
 	anchorPos = i;
@@ -17284,10 +21214,10 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
 	/* Move down anchor key to neighbour Node */
 	pNarray[nNkeys+1] = pNarray[nNkeys];
 
-	for(i=nNkeys-1;i>-1;--i)
+	for(ii=nNkeys-1;ii>-1;--ii)
 	{
-	    ajStrAssignS(&kNarray[i+1],kNarray[i]);
-	    pNarray[i+1] = pNarray[i];
+	    ajStrAssignS(&kNarray[ii+1],kNarray[ii]);
+	    pNarray[ii+1] = pNarray[ii];
 	}
 	ajStrAssignS(&kNarray[0],kAarray[anchorPos]);
 	++nNkeys;
@@ -17317,10 +21247,10 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
 	{
 	    pNarray[nNkeys+1] = pNarray[nNkeys];
 
-	    for(i=nNkeys-1;i>-1;--i)
+	    for(ii=nNkeys-1;ii>-1;--ii)
 	    {
-		ajStrAssignS(&kNarray[i+1],kNarray[i]);
-		pNarray[i+1] = pNarray[i];
+		ajStrAssignS(&kNarray[ii+1],kNarray[ii]);
+		pNarray[ii+1] = pNarray[ii];
 	    }
 
 	    ajStrAssignS(&kNarray[0],kTarray[nTkeys-1]);
@@ -17337,7 +21267,7 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
 	/* Find anchor key position */
 	i=0;
 
-	while(i!=nAkeys && strcmp(kNarray[nNkeys-1]->Ptr,kAarray[i]->Ptr)>=0)
+	while(i!=nAkeys && MAJSTRCMPS(kNarray[nNkeys-1],kAarray[i])>=0)
 	    ++i;
 
 	anchorPos = i;
@@ -17377,7 +21307,7 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
     
     
     /* Adjust PREV pointers for neighbour Node */
-    prev = pageN->pageno;
+    prev = pageN->pagepos;
 
     for(i=0;i<nNkeys+1;++i)
     {
@@ -17398,7 +21328,10 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
     btreeWriteNode(cache,pageN,kNarray,pNarray,nNkeys);
 
     if(!anchorNode)
+    {
 	pageA->dirty = BT_LOCK;
+        pageA->lockfor = 1764;
+    }
 
     btreeDeallocPriArray(cache,arraysA);
     btreeDeallocPriArray(cache,arraysN);
@@ -17420,28 +21353,28 @@ static ajlong btreeMergeHybOne(AjPBtcache cache, ajlong thisNode,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number to make new root
+** @param [r] pagepos [ajulong] page number to make new root
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeCollapseRootHybOne(AjPBtcache cache, ajlong pageno)
+static ajulong btreeCollapseRootHybOne(AjPBtcache cache, ajulong pagepos)
 {
     unsigned char *buf  = NULL;
     unsigned char *lbuf = NULL;
 
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
 
     AjPBtpage rootpage = NULL;
     AjPBtpage page     = NULL;
     
-    ajint nodetype = 0;
-    ajint nkeys    = 0;
-    ajint i;
+    ajuint nodetype = 0;
+    ajuint nkeys    = 0;
+    ajuint i;
 
-    ajlong prev = 0L;
+    ajulong prev = 0L;
     AjPBtMem arrays = NULL;
     
     /* ajDebug("In btreeCollapseRootHybOne\n"); */
@@ -17451,7 +21384,7 @@ static ajlong btreeCollapseRootHybOne(AjPBtcache cache, ajlong pageno)
 
     rootpage = btreeCacheLocate(cache,0L);
     buf = rootpage->buf;
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
 
 
     arrays = btreeAllocPriArray(cache);
@@ -17459,19 +21392,20 @@ static ajlong btreeCollapseRootHybOne(AjPBtcache cache, ajlong pageno)
     parray = arrays->parray;
 
     /*
-    ** Swap pageno values to make root the child and child the root
+    ** Swap pagepos values to make root the child and child the root
     ** Update node types and mark the original root as a clean page
     */
 
-    /* At this point page->pageno could be added to a free list */
+    /* At this point page->pagepos could be added to a free list */
 
-    rootpage->pageno = page->pageno;
+    rootpage->pagepos = page->pagepos;
     rootpage->dirty = BT_CLEAN;
     nodetype = BT_INTERNAL;
     SBT_NODETYPE(buf,nodetype);
 
-    page->pageno = 0;
-    page->dirty  = BT_LOCK;
+    page->pagepos = 0;
+    page->dirty = BT_LOCK;
+    page->lockfor = 1771;
     buf = page->buf;
     nodetype = BT_ROOT;
     SBT_NODETYPE(buf,nodetype);
@@ -17523,19 +21457,19 @@ static AjBool btreeDeleteHybIdTwo(AjPBtcache cache, const AjPBtHybrid hyb,
     AjPBtpage rpage = NULL;
     AjPBtpage page  = NULL;
 
-    ajlong sval = 0L;
-    ajlong key  = 0L;
-    ajlong *karray = NULL;
-    ajlong *parray = NULL;
-    ajlong blockno = 0L;
+    ajulong sval = 0L;
+    ajulong key  = 0L;
+    ajulong *karray = NULL;
+    ajulong *parray = NULL;
+    ajulong blockno = 0L;
     
     unsigned char *rbuf = NULL;
     unsigned char *buf  = NULL;
 
-    ajint nkeys    = 0;
-    ajint nentries = 0;
+    ajuint nkeys    = 0;
+    ajuint nentries = 0;
     
-    ajint i;
+    ajuint i;
 
     AjBool found = ajFalse;
     
@@ -17544,12 +21478,13 @@ static AjBool btreeDeleteHybIdTwo(AjPBtcache cache, const AjPBtHybrid hyb,
     
     AjPBtMem array = NULL;
     
-    rpage = ajBtreeCacheWrite(cache,cache->secrootblock);
+    rpage = ajBtreeCacheWriteNode(cache,cache->secrootblock);
 
     rpage->dirty = BT_LOCK;
+    rpage->lockfor = 1781;
     rbuf = rpage->buf;
     GBT_RIGHT(rbuf,&sval);
-    cache->slevel = (ajint) sval;
+    cache->slevel = (ajuint) sval;
 
     key  = hyb->offset;
 
@@ -17611,7 +21546,7 @@ static AjBool btreeDeleteHybIdTwo(AjPBtcache cache, const AjPBtHybrid hyb,
 
     if(!cache->deleted)
     {
-        ajWarn("btreeDeleteHybIdTwo: entry %Ld not deleted",key);
+        ajWarn("btreeDeleteHybIdTwo: entry %Lu not deleted",key);
         rpage->dirty = BT_CLEAN;
         btreeDeallocSecArray(cache,array);
 
@@ -17669,55 +21604,54 @@ static AjBool btreeDeleteHybIdTwo(AjPBtcache cache, const AjPBtHybrid hyb,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] Current node
-** @param [r] leftNode [ajlong] Node to left
-** @param [r] rightNode [ajlong] Node to right
-** @param [r] lAnchor [ajlong] Left anchor
-** @param [r] rAnchor [ajlong] Right anchor
-** @param [r] key [const ajlong] key
+** @param [r] thisNode [ajulong] Current node
+** @param [r] leftNode [ajulong] Node to left
+** @param [r] rightNode [ajulong] Node to right
+** @param [r] lAnchor [ajulong] Left anchor
+** @param [r] rAnchor [ajulong] Right anchor
+** @param [r] key [ajulong] key
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeFindHybBalanceTwo(AjPBtcache cache, ajlong thisNode,
-                                     ajlong leftNode, ajlong rightNode,
-                                     ajlong lAnchor, ajlong rAnchor,
-                                     const ajlong key)
+static ajulong btreeFindHybBalanceTwo(AjPBtcache cache, ajulong thisNode,
+                                      ajulong leftNode, ajulong rightNode,
+                                      ajulong lAnchor, ajulong rAnchor,
+                                      ajulong key)
 {
     unsigned char *buf  = NULL;
     unsigned char *buf1 = NULL;
     
-    ajlong nextNode   = BTNO_NODE;
-    ajlong nextLeft   = BTNO_NODE;
-    ajlong nextRight  = BTNO_NODE;
-    ajlong nextAncL   = BTNO_NODE;
-    ajlong nextAncR   = BTNO_NODE;
-    ajlong done       = 0L;
+    ajulong nextNode   = BTNO_NODE;
+    ajulong nextLeft   = BTNO_NODE;
+    ajulong nextRight  = BTNO_NODE;
+    ajulong nextAncL   = BTNO_NODE;
+    ajulong nextAncR   = BTNO_NODE;
+    ajulong done       = 0L;
     
-    ajint  nkeys      = 0;
-    ajint  order      = 0;
-    ajint  minkeys    = 0;
-    ajint  i;
-    ajint  nodetype   = 0;
+    ajuint  nkeys      = 0;
+    ajuint  order      = 0;
+    ajuint  minkeys    = 0;
+    ajuint  i;
+    ajuint   nodetype   = 0;
 
-    ajint n1keys      = 0;
+    ajuint n1keys      = 0;
     
     AjPBtpage page  = NULL;
     AjPBtpage page1 = NULL;
 
-    ajlong balanceNode = 0L;
-    ajlong blockno     = 0L;
-    ajlong ptrSave     = 0L;
-
-    ajlong *karray  = NULL;
-    ajlong *parray  = NULL;
-    ajlong *k1array = NULL;
-    ajlong *p1array = NULL;
+    ajulong balanceNode = 0L;
+    ajulong blockno     = 0L;
+    ajulong ptrSave     = 0L;
 
     AjPBtMem arrays  = NULL;
     AjPBtMem arrays1 = NULL;
-    
+    ajulong *karray  = NULL;
+    ajulong *parray  = NULL;
+    ajulong *k1array = NULL;
+    ajulong *p1array = NULL;
+
     AjBool existed = ajFalse;
     
     /* ajDebug("In btreeFindHybBalanceTwo\n"); */
@@ -17728,6 +21662,7 @@ static ajlong btreeFindHybBalanceTwo(AjPBtcache cache, ajlong thisNode,
     {   /* It's the root node of the primary hyb tree */
 	page = btreeCacheLocate(cache,thisNode);
 	page->dirty = BT_LOCK;
+        page->lockfor = 1791;
     }
 
     cache->deleted = ajFalse;
@@ -17749,7 +21684,7 @@ static ajlong btreeFindHybBalanceTwo(AjPBtcache cache, ajlong thisNode,
     if(nkeys >= minkeys)
 	balanceNode = BTNO_BALANCE;
     else
-	balanceNode = page->pageno;
+	balanceNode = page->pagepos;
 
     arrays  = btreeAllocSecArray(cache);
     arrays1 = btreeAllocSecArray(cache);
@@ -17852,6 +21787,7 @@ static ajlong btreeFindHybBalanceTwo(AjPBtcache cache, ajlong thisNode,
 	{
 	    page = btreeCacheLocate(cache,thisNode);
 	    page->dirty = BT_LOCK;
+            page->lockfor = 1792;
 	}
 	buf = page->buf;
 
@@ -17870,7 +21806,7 @@ static ajlong btreeFindHybBalanceTwo(AjPBtcache cache, ajlong thisNode,
 	    if(nkeys >= minkeys || (nodetype==BT_ROOT && !cache->slevel))
 		balanceNode = BTNO_BALANCE;
 	    else
-		balanceNode = page->pageno;
+		balanceNode = page->pagepos;
 	}
     }
 
@@ -17898,27 +21834,26 @@ static ajlong btreeFindHybBalanceTwo(AjPBtcache cache, ajlong thisNode,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page
-** @param [r] key [const ajlong] key
+** @param [r] pagepos [ajulong] page
+** @param [r] key [ajulong] key
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void btreeFindHybMinTwo(AjPBtcache cache, ajlong pageno,
-                               const ajlong key)
+static void btreeFindHybMinTwo(AjPBtcache cache, ajulong pagepos,
+                               ajulong key)
 {
     AjPBtpage page   = NULL;
 
-    ajlong *karray   = NULL;
-    ajlong *parray   = NULL;
-
-    ajint nkeys    = 0;
-    ajint nodetype = 0;
-    ajint nentries = 0;
-    ajint i;
-
     AjPBtMem arrays = NULL;
+    ajulong *karray   = NULL;
+    ajulong *parray   = NULL;
+
+    ajuint nkeys    = 0;
+    ajuint nodetype = 0;
+    ajuint nentries = 0;
+    ajuint i;
 
     AjPNumBucket bucket = NULL;
     
@@ -17930,7 +21865,7 @@ static void btreeFindHybMinTwo(AjPBtcache cache, ajlong pageno,
     karray = arrays->overflows;
     parray = arrays->parray;
 
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
     buf  = page->buf;
     GBT_NODETYPE(buf,&nodetype);
     GBT_NKEYS(buf,&nkeys);
@@ -17956,7 +21891,7 @@ static void btreeFindHybMinTwo(AjPBtcache cache, ajlong pageno,
         /* Check for empty bucket - shouldn't happen */
         /* Checking solely out of interest */
 	if(nentries<1)	
-	    ajFatal("FindHybMinTwo: Too few entries in bucket Nkeys=%d\n",
+	    ajFatal("FindHybMinTwo: Too few entries in bucket Nkeys=%u\n",
                     nkeys);
 
 
@@ -17975,8 +21910,8 @@ static void btreeFindHybMinTwo(AjPBtcache cache, ajlong pageno,
     }
     else
     {
-	pageno = parray[0];
-	btreeFindHybMinTwo(cache,pageno,key);
+	pagepos = parray[0];
+	btreeFindHybMinTwo(cache,pagepos,key);
 	
     }
 
@@ -17996,28 +21931,28 @@ static void btreeFindHybMinTwo(AjPBtcache cache, ajlong pageno,
 ** Deletion software
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] leaf node page
-** @param [r] key [const ajlong] key
+** @param [r] pagepos [ajulong] leaf node page
+** @param [r] key [ajulong] key
 **
 ** @return [AjBool] True if found (and deleted)
 ** @@
 ******************************************************************************/
 
-static AjBool btreeRemoveHybEntryTwo(AjPBtcache cache, ajlong pageno,
-                                     const ajlong key)
+static AjBool btreeRemoveHybEntryTwo(AjPBtcache cache, ajulong pagepos,
+                                     ajulong key)
 {
     AjPBtpage page   = NULL;
     AjPNumBucket bucket = NULL;
     
-    ajlong *karray = NULL;
-    ajlong *parray = NULL;
-    ajlong blockno = 0L;
+    ajulong *karray = NULL;
+    ajulong *parray = NULL;
+    ajulong blockno = 0L;
     
-    ajint nkeys    = 0;
-    ajint nentries = 0;
-    ajint i;
+    ajuint nkeys    = 0;
+    ajuint nentries = 0;
+    ajuint i;
 
-    ajint dirtysave = 0;
+    ajuint dirtysave = 0;
     
     AjBool found = ajFalse;
 
@@ -18026,11 +21961,12 @@ static AjBool btreeRemoveHybEntryTwo(AjPBtcache cache, ajlong pageno,
     
     /* ajDebug("In btreeRemoveHybEntryTwo\n"); */
 
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
     buf = page->buf;
     dirtysave = page->dirty;
     page->dirty = BT_LOCK;
-    
+    page->lockfor = 1801;
+   
     GBT_NKEYS(buf,&nkeys);
 
     if(!nkeys)
@@ -18115,44 +22051,47 @@ static AjBool btreeRemoveHybEntryTwo(AjPBtcache cache, ajlong pageno,
 
 static void btreeAdjustHybBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 {
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
     unsigned char *lbuf = NULL;
     AjPNumBucket *buckets  = NULL;
-    ajlong *keys           = NULL;
-    ajlong *ptrs           = NULL;
-    ajlong *overflows      = NULL;
+
+    AjPBtMem arrays = NULL;    
+    AjPBtMem overarrays = NULL;    
+
+    ajulong *keys           = NULL;
+    ajulong *ptrs           = NULL;
+    ajulong *overflows      = NULL;
     
-    ajint i = 0;
-    ajint j = 0;
+    ajuint i = 0;
+    ajuint j = 0;
     
-    ajint order;
-    ajint bentries      = 0;
-    ajint totalkeys     = 0;
-    ajint nperbucket    = 0;
-    ajint maxnperbucket = 0;
-    ajint count         = 0;
-    ajint keylimit      = 0;
-    ajint bucketn       = 0;
-    ajint bucketlimit   = 0;
-    ajint nodetype      = 0;
-    ajint nids          = 0;
-    ajint totnids       = 0;
+    ajuint order;
+    ajuint bentries      = 0;
+    ajuint totalkeys     = 0;
+    ajuint nperbucket    = 0;
+    ajuint maxnperbucket = 0;
+    ajuint count         = 0;
+    ajuint keylimit      = 0;
+    ajuint bucketn       = 0;
+    ajuint bucketlimit   = 0;
+    ajuint nodetype      = 0;
+    ajuint nids          = 0;
+    ajuint totnids       = 0;
     
     AjPList idlist    = NULL;
-    ajint   dirtysave = 0;
+    ajuint   dirtysave = 0;
     AjPBtNumId bid       = NULL;
     AjPNumBucket cbucket = NULL;
     AjPBtNumId cid       = NULL;
 
-    AjPBtMem arrays = NULL;    
-
-    ajint v = 0;
+    ajuint v = 0;
     
     /* ajDebug("In btreeAdjustHybBucketsTwo\n"); */
 
     dirtysave = leaf->dirty;
 
     leaf->dirty = BT_LOCK;
+    leaf->lockfor = 1811;
     lbuf = leaf->buf;
 
     GBT_NKEYS(lbuf,&nkeys);
@@ -18176,7 +22115,8 @@ static void btreeAdjustHybBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
     keys = arrays->overflows;
     ptrs = arrays->parray;
 
-    AJCNEW0(overflows,order);
+    overarrays = btreeAllocSecArray(cache);
+    overflows = overarrays->overflows;
     
 
     btreeGetNumKeys(cache,lbuf,&keys,&ptrs);
@@ -18194,7 +22134,7 @@ static void btreeAdjustHybBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
     if(!maxnperbucket)
 	++maxnperbucket;
 
-    if(!leaf->pageno)
+    if(!leaf->pagepos)
 	maxnperbucket = nperbucket;
 
     /* Work out the number of new buckets needed */
@@ -18253,8 +22193,8 @@ static void btreeAdjustHybBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 	SBT_NKEYS(lbuf,v);
 
         btreeDeallocSecArray(cache,arrays);
+        btreeDeallocSecArray(cache,overarrays);
 
-	AJFREE(overflows);
 	ajListFree(&idlist);
 	leaf->dirty = BT_DIRTY;
 
@@ -18376,11 +22316,13 @@ static void btreeAdjustHybBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 
     leaf->dirty = dirtysave;
     if(nodetype == BT_ROOT)
+    {
 	leaf->dirty = BT_LOCK;
-
+        leaf->lockfor = 1812;
+    }
+    
     btreeDeallocSecArray(cache,arrays);
-
-    AJFREE(overflows);
+    btreeDeallocSecArray(cache,overarrays);
 
     btreeNumBucketDel(&cbucket);
     ajListFree(&idlist);
@@ -18398,39 +22340,39 @@ static void btreeAdjustHybBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 ** Deletion software
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] Node to rebalance
-** @param [r] leftNode [ajlong] left node
-** @param [r] rightNode [ajlong] right node
-** @param [r] lAnchor [ajlong] left anchor
-** @param [r] rAnchor [ajlong] right anchor
+** @param [r] thisNode [ajulong] Node to rebalance
+** @param [r] leftNode [ajulong] left node
+** @param [r] rightNode [ajulong] right node
+** @param [r] lAnchor [ajulong] left anchor
+** @param [r] rAnchor [ajulong] right anchor
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeRebalanceHybTwo(AjPBtcache cache, ajlong thisNode,
-                                   ajlong leftNode, ajlong rightNode,
-                                   ajlong lAnchor, ajlong rAnchor)
+static ajulong btreeRebalanceHybTwo(AjPBtcache cache, ajulong thisNode,
+                                   ajulong leftNode, ajulong rightNode,
+                                   ajulong lAnchor, ajulong rAnchor)
 {
     unsigned char *lbuf = NULL;
     unsigned char *rbuf = NULL;
     unsigned char *tbuf = NULL;
 
-    ajlong anchorNode   = 0L;
-    ajlong balanceNode  = 0L;
-    ajlong mergeNode    = 0L;
-    ajlong done         = 0L;
-    ajlong parent       = 0L;
+    ajulong anchorNode   = 0L;
+    ajulong balanceNode  = 0L;
+    ajulong mergeNode    = 0L;
+    ajulong done         = 0L;
+    ajulong parent       = 0L;
     
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage tpage = NULL;
     
-    ajint lnkeys  = 0;
-    ajint rnkeys  = 0;
-    ajint size    = 0;
-    ajint order   = 0;
-    ajint minsize = 0;
+    ajuint lnkeys  = 0;
+    ajuint rnkeys  = 0;
+    ajuint size    = 0;
+    ajuint order   = 0;
+    ajuint minsize = 0;
 
     AjBool leftok  = ajFalse;
     AjBool rightok = ajFalse;
@@ -18538,34 +22480,35 @@ static ajlong btreeRebalanceHybTwo(AjPBtcache cache, ajlong thisNode,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] master node
-** @param [r] balanceNode [ajlong] balance node
-** @param [r] anchorNode [ajlong] anchor node
+** @param [r] thisNode [ajulong] master node
+** @param [r] balanceNode [ajulong] balance node
+** @param [r] anchorNode [ajulong] anchor node
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeShiftHybTwo(AjPBtcache cache, ajlong thisNode,
-                               ajlong balanceNode, ajlong anchorNode)
+static ajulong btreeShiftHybTwo(AjPBtcache cache, ajulong thisNode,
+                                ajulong balanceNode, ajulong anchorNode)
 {
     unsigned char *tbuf = NULL;
     unsigned char *abuf = NULL;
     unsigned char *bbuf = NULL;
     unsigned char *buf  = NULL;
     
-    ajlong *kTarray = NULL;
-    ajlong *kAarray = NULL;
-    ajlong *kBarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pAarray = NULL;
-    ajlong *pBarray = NULL;
+    ajulong *kTarray = NULL;
+    ajulong *kAarray = NULL;
+    ajulong *kBarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pAarray = NULL;
+    ajulong *pBarray = NULL;
     
-    ajint  nAkeys = 0;
-    ajint  nBkeys = 0;
-    ajint  nTkeys = 0;
-    ajint  i;
-    
+    ajuint  nAkeys = 0;
+    ajuint  nBkeys = 0;
+    ajuint  nTkeys = 0;
+    ajuint  i;
+    ajint  ii;
+
     AjPBtpage pageA = NULL;
     AjPBtpage pageB = NULL;
     AjPBtpage pageT = NULL;
@@ -18573,11 +22516,11 @@ static ajlong btreeShiftHybTwo(AjPBtcache cache, ajlong thisNode,
     
     AjPBtpage leftpage = NULL;
 
-    ajint  anchorPos   = 0;
-    ajlong prev        = 0L;
-    ajint  nodetype    = 0;
+    ajuint anchorPos   = 0;
+    ajulong prev        = 0L;
+    ajuint  nodetype    = 0;
 
-    ajlong lv = 0L;
+    ajulong lv = 0L;
     
     AjPBtMem arraysA = NULL;    
     AjPBtMem arraysB = NULL;    
@@ -18601,12 +22544,15 @@ static ajlong btreeShiftHybTwo(AjPBtcache cache, ajlong thisNode,
 
     pageA = ajBtreeCacheRead(cache,anchorNode);
     pageA->dirty = BT_LOCK;
+    pageA->lockfor = 1821;
     abuf = pageA->buf;
     pageB = ajBtreeCacheRead(cache,balanceNode);
     pageB->dirty = BT_LOCK;
+    pageB->lockfor = 1822;
     bbuf = pageB->buf;
     pageT = ajBtreeCacheRead(cache,thisNode);
     pageT->dirty = BT_LOCK;
+    pageT->lockfor = 1823;
     tbuf = pageT->buf;
 
     GBT_NKEYS(abuf,&nAkeys);
@@ -18671,10 +22617,10 @@ static ajlong btreeShiftHybTwo(AjPBtcache cache, ajlong thisNode,
 	/* Move down anchor key to thisNode */
 	pTarray[nTkeys+1] = pTarray[nTkeys];
 
-	for(i=nTkeys-1;i>-1;--i)
+	for(ii=nTkeys-1;ii>-1;--ii)
 	{
-            kTarray[i+1] = kTarray[i];
-	    pTarray[i+1] = pTarray[i];
+            kTarray[ii+1] = kTarray[ii];
+	    pTarray[ii+1] = pTarray[ii];
 	}
 
         kTarray[0] = kAarray[anchorPos];
@@ -18685,10 +22631,10 @@ static ajlong btreeShiftHybTwo(AjPBtcache cache, ajlong thisNode,
 	{
 	    pTarray[nTkeys+1] = pTarray[nTkeys];
 
-	    for(i=nTkeys-1;i>-1;--i)
+	    for(ii=nTkeys-1;ii>-1;--ii)
 	    {
-                kTarray[i+1] = kTarray[i];
-		pTarray[i+1] = pTarray[i];
+                kTarray[ii+1] = kTarray[ii];
+		pTarray[ii+1] = pTarray[ii];
 	    }
 
             kTarray[0] = kBarray[nBkeys-1];
@@ -18713,7 +22659,7 @@ static ajlong btreeShiftHybTwo(AjPBtcache cache, ajlong thisNode,
     
 
     /* Adjust PREV pointers for thisNode */
-    prev = pageT->pageno;
+    prev = pageT->pagepos;
 
     for(i=0;i<nTkeys+1;++i)
     {
@@ -18734,7 +22680,10 @@ static ajlong btreeShiftHybTwo(AjPBtcache cache, ajlong thisNode,
     btreeWriteNumNode(cache,pageT,kTarray,pTarray,nTkeys);
 
     if(anchorNode == cache->secrootblock)
+    {
 	pageA->dirty = BT_LOCK;
+        pageA->lockfor = 1824;
+    }
 
     btreeDeallocSecArray(cache,arraysA);
     btreeDeallocSecArray(cache,arraysB);
@@ -18753,43 +22702,49 @@ static ajlong btreeShiftHybTwo(AjPBtcache cache, ajlong thisNode,
 ** Deletion software
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] master node
-** @param [r] mergeNode [ajlong] merge node
-** @param [r] anchorNode [ajlong] anchor node
+** @param [r] thisNode [ajulong] master node
+** @param [r] mergeNode [ajulong] merge node
+** @param [r] anchorNode [ajulong] anchor node
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeMergeHybTwo(AjPBtcache cache, ajlong thisNode,
-                               ajlong mergeNode, ajlong anchorNode)
+static ajulong btreeMergeHybTwo(AjPBtcache cache, ajulong thisNode,
+                                ajulong mergeNode, ajulong anchorNode)
 {
     unsigned char *tbuf = NULL;
     unsigned char *abuf = NULL;
     unsigned char *nbuf = NULL;
     unsigned char *buf  = NULL;
     
-    ajlong *kTarray = NULL;
-    ajlong *kAarray = NULL;
-    ajlong *kNarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pAarray = NULL;
-    ajlong *pNarray = NULL;
+    AjPBtMem arraysA = NULL;    
+    AjPBtMem arraysN = NULL;    
+    AjPBtMem arraysT = NULL;    
 
-    ajlong thisprev  = 0L;
-    ajlong mergeprev = 0L;
+    ajulong *kTarray = NULL;
+    ajulong *kAarray = NULL;
+    ajulong *kNarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pAarray = NULL;
+    ajulong *pNarray = NULL;
+
+    ajulong thisprev  = 0L;
+    ajulong mergeprev = 0L;
     
     
-    ajint  nAkeys = 0;
-    ajint  nNkeys = 0;
-    ajint  nTkeys = 0;
-    ajint  count  = 0;
-    ajint  i;
-    ajint  nodetype = 0;
+    ajuint  nAkeys = 0;
+    ajuint  nNkeys = 0;
+    ajuint  nTkeys = 0;
+    ajuint  count  = 0;
+    ajuint  i;
+    ajint ii;
+
+    ajuint   nodetype = 0;
     
-    ajint saveA = 0;
-    ajint saveN = 0;
-    ajint saveT = 0;
+    ajuint saveA = 0;
+    ajuint saveN = 0;
+    ajuint saveT = 0;
     
     AjPBtpage pageA = NULL;
     AjPBtpage pageN = NULL;
@@ -18798,31 +22753,30 @@ static ajlong btreeMergeHybTwo(AjPBtcache cache, ajlong thisNode,
     
     AjPBtpage leftpage = NULL;
 
-    ajint  anchorPos = 0;
-    ajlong prev      = 0L;
+    ajuint anchorPos = 0;
+    ajulong prev      = 0L;
 
-    ajlong lv = 0L;
-
-    AjPBtMem arraysA = NULL;    
-    AjPBtMem arraysN = NULL;    
-    AjPBtMem arraysT = NULL;    
+    ajulong lv = 0L;
 
     AjBool collapse = ajFalse;
-    ajlong csrb     = 0L;
+    ajulong csrb     = 0L;
     
     /* ajDebug("In btreeMergeHybTwo\n"); */
 
     pageA = ajBtreeCacheRead(cache,anchorNode);
     saveA = pageA->dirty;
     pageA->dirty = BT_LOCK;
+    pageA->lockfor = 1831;
     abuf = pageA->buf;
     pageN = ajBtreeCacheRead(cache,mergeNode);
     saveN = pageN->dirty;
     pageN->dirty = BT_LOCK;
+    pageN->lockfor = 1832;
     nbuf = pageN->buf;
     pageT = ajBtreeCacheRead(cache,thisNode);
     saveT = pageT->dirty;
     pageT->dirty = BT_LOCK;
+    pageT->lockfor = 1833;
     tbuf = pageT->buf;
 
     GBT_PREV(tbuf,&thisprev);
@@ -18885,10 +22839,10 @@ static ajlong btreeMergeHybTwo(AjPBtcache cache, ajlong thisNode,
 	/* Move down anchor key to neighbour Node */
 	pNarray[nNkeys+1] = pNarray[nNkeys];
 
-	for(i=nNkeys-1;i>-1;--i)
+	for(ii=nNkeys-1;ii>-1;--ii)
 	{
-	    kNarray[i+1] = kNarray[i];
-	    pNarray[i+1] = pNarray[i];
+	    kNarray[ii+1] = kNarray[ii];
+	    pNarray[ii+1] = pNarray[ii];
 	}
 
 	kNarray[0] = kAarray[anchorPos];
@@ -18918,10 +22872,10 @@ static ajlong btreeMergeHybTwo(AjPBtcache cache, ajlong thisNode,
 	{
 	    pNarray[nNkeys+1] = pNarray[nNkeys];
 
-	    for(i=nNkeys-1;i>-1;--i)
+	    for(ii=nNkeys-1;ii>-1;--ii)
 	    {
-		kNarray[i+1] = kNarray[i];
-		pNarray[i+1] = pNarray[i];
+		kNarray[ii+1] = kNarray[ii];
+		pNarray[ii+1] = pNarray[ii];
 	    }
 
 	    kNarray[0] = kTarray[nTkeys-1];
@@ -18978,7 +22932,7 @@ static ajlong btreeMergeHybTwo(AjPBtcache cache, ajlong thisNode,
     
     
     /* Adjust PREV pointers for neighbour Node */
-    prev = pageN->pageno;
+    prev = pageN->pagepos;
 
     for(i=0;i<nNkeys+1;++i)
     {
@@ -18999,7 +22953,10 @@ static ajlong btreeMergeHybTwo(AjPBtcache cache, ajlong thisNode,
     btreeWriteNumNode(cache,pageN,kNarray,pNarray,nNkeys);
 
     if(anchorNode == csrb)
+    {
 	pageA->dirty = BT_LOCK;
+        pageA->lockfor = 1834;
+    }
 
     btreeDeallocSecArray(cache,arraysA);
     btreeDeallocSecArray(cache,arraysN);
@@ -19021,28 +22978,28 @@ static ajlong btreeMergeHybTwo(AjPBtcache cache, ajlong thisNode,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number to make new root
+** @param [r] pagepos [ajulong] page number to make new root
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeCollapseRootHybTwo(AjPBtcache cache, ajlong pageno)
+static ajulong btreeCollapseRootHybTwo(AjPBtcache cache, ajulong pagepos)
 {
     unsigned char *buf  = NULL;
     unsigned char *lbuf = NULL;
 
-    ajlong *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *karray = NULL;
+    ajulong *parray = NULL;
 
     AjPBtpage rootpage = NULL;
     AjPBtpage page     = NULL;
     
-    ajint nodetype = 0;
-    ajint nkeys    = 0;
-    ajint i;
+    ajuint nodetype = 0;
+    ajuint nkeys    = 0;
+    ajuint i;
 
-    ajlong prev = 0L;
+    ajulong prev = 0L;
     AjPBtMem arrays = NULL;
     
     /* ajDebug("In btreeCollapseRootHybTwo\n"); */
@@ -19052,7 +23009,7 @@ static ajlong btreeCollapseRootHybTwo(AjPBtcache cache, ajlong pageno)
 
     rootpage = btreeCacheLocate(cache,cache->secrootblock);
     buf = rootpage->buf;
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
 
 
     arrays = btreeAllocSecArray(cache);
@@ -19060,19 +23017,20 @@ static ajlong btreeCollapseRootHybTwo(AjPBtcache cache, ajlong pageno)
     parray = arrays->parray;
 
     /*
-    ** Swap pageno values to make root the child and child the root
+    ** Swap pagepos values to make root the child and child the root
     ** Update node types and mark the original root as a clean page
     */
 
-    /* At this point page->pageno could be added to a free list */
+    /* At this point page->pagepos could be added to a free list */
 
-    rootpage->pageno = page->pageno;
+    rootpage->pagepos = page->pagepos;
     rootpage->dirty = BT_CLEAN;
     nodetype = BT_INTERNAL;
     SBT_NODETYPE(buf,nodetype);
 
-    page->pageno = cache->secrootblock;
-    page->dirty  = BT_LOCK;
+    page->pagepos = cache->secrootblock;
+    page->dirty = BT_LOCK;
+    page->lockfor = 1841;
     buf = page->buf;
     nodetype = BT_ROOT;
     SBT_NODETYPE(buf,nodetype);
@@ -19098,7 +23056,7 @@ static ajlong btreeCollapseRootHybTwo(AjPBtcache cache, ajlong pageno)
 
     btreeDeallocSecArray(cache,arrays);
 
-    cache->secrootblock = pageno;
+    cache->secrootblock = pagepos;
     
     return 0L;
 }
@@ -19125,34 +23083,31 @@ AjBool ajBtreeDeletePriId(AjPBtcache cache, const AjPBtPri pri)
     AjPBtpage spage    = NULL;
     AjPBtpage page     = NULL;
     AjPStr key         = NULL;
-    const char *ckey   = NULL;
-    const char *cid    = NULL;
     AjPSecBucket bucket  = NULL;
-    ajlong blockno  = 0L;
+    ajulong blockno  = 0L;
 
-    ajint nkeys = 0;
-    ajlong slevel = 0L;
+    ajuint nkeys = 0;
+    ajulong slevel = 0L;
 
-    ajint nentries = 0;
+    ajuint nentries = 0;
     
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
     AjPBtMem arrays = NULL;
     AjBool found = ajFalse;
-    AjPBtPri exists = NULL;
     
     
-    ajint i;
+    ajuint i;
     
     unsigned char *buf = NULL;
-    ajlong  secrootpage = 0L;
+    ajulong  secrootpage = 0L;
 
     AjBool empty = ajFalse;
     AjBool ret   = ajFalse;
 
     AjPBtpage prirootpage = NULL;
     
-
+    ajulong treeblock = 0L;
     
     /* ajDebug("In ajBtreeDeletePriId\n"); */
 
@@ -19168,22 +23123,16 @@ AjBool ajBtreeDeletePriId(AjPBtcache cache, const AjPBtPri pri)
 	return ajFalse;
     }
 
-    ckey = ajStrGetPtr(key);
-
-
-    exists = ajBtreePriFromKeyword(cache,ckey);
-
-    if(!exists)
+    if(!ajBtreePriFindKeyword(cache,key,&treeblock))
     {
-        ajBtreePriDel(&exists);
         ajStrDel(&key);
         ajWarn("DeletePriId: Keyword %S not found",pri->keyword);
 
         return ajFalse;
     }
 
-    secrootpage = exists->treeblock;
-    cache->secrootblock = exists->treeblock;
+    secrootpage = treeblock;
+    cache->secrootblock = treeblock;
     
     arrays = btreeAllocSecArray(cache);
     karray = arrays->karray;
@@ -19191,14 +23140,13 @@ AjBool ajBtreeDeletePriId(AjPBtcache cache, const AjPBtPri pri)
     
     page = ajBtreeCacheRead(cache,secrootpage);
     page->dirty = BT_LOCK;
+    page->lockfor = 1851;
     buf = page->buf;
 
     GBT_RIGHT(buf,&slevel);
-    cache->slevel = (ajint)slevel;
+    cache->slevel = (ajuint)slevel;
 
-    cid = ajStrGetPtr(pri->id);
-
-    spage = ajBtreeSecFindInsert(cache,cid);
+    spage = ajBtreeSecFindInsert(cache,pri->id);
     buf = spage->buf;
 
     btreeGetKeys(cache,buf,&karray,&parray);
@@ -19219,7 +23167,7 @@ AjBool ajBtreeDeletePriId(AjPBtcache cache, const AjPBtPri pri)
 
     i=0;
 
-    while(i!=nkeys && strcmp(cid,karray[i]->Ptr)>=0)
+    while(i!=nkeys && MAJSTRCMPS(pri->id,karray[i])>=0)
         ++i;
 
     blockno = parray[i];
@@ -19231,7 +23179,7 @@ AjBool ajBtreeDeletePriId(AjPBtcache cache, const AjPBtPri pri)
     found = ajFalse;
 
     for(i=0;i<nentries;++i)
-	if(!strcmp(cid,bucket->ids[i]->Ptr))
+	if(ajStrMatchS(pri->id,bucket->SecIds[i]))
 	{
 	    found = ajTrue;
 	    break;
@@ -19261,10 +23209,11 @@ AjBool ajBtreeDeletePriId(AjPBtcache cache, const AjPBtPri pri)
     if(!rootpage)
         ajFatal("DeletePriId: secondary root page became unlocked");
     rootpage->dirty = BT_LOCK;
+    rootpage->lockfor = 1852;
     buf = rootpage->buf;
 
     GBT_RIGHT(buf,&slevel);
-    cache->slevel = (ajint)slevel;
+    cache->slevel = (ajuint)slevel;
 
     btreeFindPriBalanceTwo(cache,secrootpage,BTNO_NODE,BTNO_NODE,BTNO_NODE,
                            BTNO_NODE,pri);
@@ -19314,56 +23263,56 @@ AjBool ajBtreeDeletePriId(AjPBtcache cache, const AjPBtPri pri)
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] Current node
-** @param [r] leftNode [ajlong] Node to left
-** @param [r] rightNode [ajlong] Node to right
-** @param [r] lAnchor [ajlong] Left anchor
-** @param [r] rAnchor [ajlong] Right anchor
+** @param [r] thisNode [ajulong] Current node
+** @param [r] leftNode [ajulong] Node to left
+** @param [r] rightNode [ajulong] Node to right
+** @param [r] lAnchor [ajulong] Left anchor
+** @param [r] rAnchor [ajulong] Right anchor
 ** @param [r] pri [const AjPBtPri] pri
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeFindPriBalanceTwo(AjPBtcache cache, ajlong thisNode,
-                                     ajlong leftNode, ajlong rightNode,
-                                     ajlong lAnchor, ajlong rAnchor,
-                                     const AjPBtPri pri)
+static ajulong btreeFindPriBalanceTwo(AjPBtcache cache, ajulong thisNode,
+                                      ajulong leftNode, ajulong rightNode,
+                                      ajulong lAnchor, ajulong rAnchor,
+                                      const AjPBtPri pri)
 {
     unsigned char *buf  = NULL;
     unsigned char *buf1 = NULL;
     
-    ajlong nextNode   = BTNO_NODE;
-    ajlong nextLeft   = BTNO_NODE;
-    ajlong nextRight  = BTNO_NODE;
-    ajlong nextAncL   = BTNO_NODE;
-    ajlong nextAncR   = BTNO_NODE;
-    ajlong done       = 0L;
+    ajulong nextNode   = BTNO_NODE;
+    ajulong nextLeft   = BTNO_NODE;
+    ajulong nextRight  = BTNO_NODE;
+    ajulong nextAncL   = BTNO_NODE;
+    ajulong nextAncR   = BTNO_NODE;
+    ajulong done       = 0L;
     
-    ajint  nkeys      = 0;
-    ajint  order      = 0;
-    ajint  minkeys    = 0;
-    ajint  i;
-    ajint  nodetype   = 0;
+    ajuint  nkeys      = 0;
+    ajuint  order      = 0;
+    ajuint  minkeys    = 0;
+    ajuint  i;
+    ajuint  nodetype   = 0;
 
-    ajint n1keys      = 0;
+    ajuint n1keys      = 0;
     
     AjPBtpage page  = NULL;
     AjPBtpage page1 = NULL;
 
-    ajlong balanceNode = 0L;
-    ajlong blockno     = 0L;
-    ajlong ptrSave     = 0L;
+    ajulong balanceNode = 0L;
+    ajulong blockno     = 0L;
+    ajulong ptrSave     = 0L;
 
     AjPStr *karray  = NULL;
-    ajlong *parray  = NULL;
+    ajulong *parray  = NULL;
     AjPStr *k1array = NULL;
-    ajlong *p1array = NULL;
+    ajulong *p1array = NULL;
 
     AjPBtMem arrays  = NULL;
     AjPBtMem arrays1 = NULL;
     
-    char *key = NULL;
+    const AjPStr key = NULL;
     AjBool existed = ajFalse;
     
     /* ajDebug("In btreeFindPriBalanceTwo\n"); */
@@ -19374,6 +23323,7 @@ static ajlong btreeFindPriBalanceTwo(AjPBtcache cache, ajlong thisNode,
     {
 	page = btreeCacheLocate(cache,thisNode);
 	page->dirty = BT_LOCK;
+        page->lockfor = 1861;
     }
 
     cache->deleted = ajFalse;
@@ -19394,7 +23344,7 @@ static ajlong btreeFindPriBalanceTwo(AjPBtcache cache, ajlong thisNode,
     if(nkeys >= minkeys)
 	balanceNode = BTNO_BALANCE;
     else
-	balanceNode = page->pageno;
+	balanceNode = page->pagepos;
 
     arrays  = btreeAllocSecArray(cache);
     arrays1 = btreeAllocSecArray(cache);
@@ -19405,13 +23355,13 @@ static ajlong btreeFindPriBalanceTwo(AjPBtcache cache, ajlong thisNode,
     k1array = arrays1->karray;
     p1array = arrays1->parray;
 
-    key = pri->id->Ptr;
+    key = pri->id;
 
     btreeGetKeys(cache,buf,&karray,&parray);
 
     i=0;
 
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
+    while(i!=nkeys && MAJSTRCMPS(key,karray[i])>=0)
 	++i;
 
     blockno = parray[i];
@@ -19478,7 +23428,7 @@ static ajlong btreeFindPriBalanceTwo(AjPBtcache cache, ajlong thisNode,
 	{
 	    i=0;
 
-	    while(i!=nkeys && strcmp(key,karray[i]->Ptr))
+	    while(i!=nkeys && MAJSTRCMPS(key,karray[i]))
 		++i;
 
 	    if(i!=nkeys)
@@ -19499,6 +23449,7 @@ static ajlong btreeFindPriBalanceTwo(AjPBtcache cache, ajlong thisNode,
 	{
 	    page = btreeCacheLocate(cache,thisNode);
 	    page->dirty = BT_LOCK;
+            page->lockfor = 1862;
 	}
 	buf = page->buf;
 
@@ -19516,7 +23467,7 @@ static ajlong btreeFindPriBalanceTwo(AjPBtcache cache, ajlong thisNode,
 	    if(nkeys >= minkeys || (nodetype==BT_ROOT && !cache->slevel))
 		balanceNode = BTNO_BALANCE;
 	    else
-		balanceNode = page->pageno;
+		balanceNode = page->pagepos;
 	}
     }
 
@@ -19543,25 +23494,25 @@ static ajlong btreeFindPriBalanceTwo(AjPBtcache cache, ajlong thisNode,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page
-** @param [r] key [const char *] key
+** @param [r] pagepos [ajulong] page
+** @param [r] key [const AjPStr] key
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void btreeFindPriMinTwo(AjPBtcache cache, ajlong pageno,
-                               const char *key)
+static void btreeFindPriMinTwo(AjPBtcache cache, ajulong pagepos,
+                               const AjPStr key)
 {
     AjPBtpage page   = NULL;
     AjPSecBucket bucket = NULL;
     AjPStr *karray   = NULL;
-    ajlong *parray   = NULL;
+    ajulong *parray   = NULL;
 
-    ajint nkeys    = 0;
-    ajint nodetype = 0;
-    ajint nentries = 0;
-    ajint i;
+    ajuint nkeys    = 0;
+    ajuint nodetype = 0;
+    ajuint nentries = 0;
+    ajuint i;
     AjPBtMem arrays = NULL;
     
     unsigned char *buf = NULL;
@@ -19572,7 +23523,7 @@ static void btreeFindPriMinTwo(AjPBtcache cache, ajlong pageno,
     karray = arrays->karray;
     parray = arrays->parray;
 
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
     buf  = page->buf;
     GBT_NODETYPE(buf,&nodetype);
     GBT_NKEYS(buf,&nkeys);
@@ -19598,27 +23549,27 @@ static void btreeFindPriMinTwo(AjPBtcache cache, ajlong pageno,
         /* Check for empty bucket - shouldn't happen */
         /* Checking solely out of interest */
 	if(nentries<1)	
-	    ajFatal("FindPriMinTwo: Too few entries in bucket Nkeys=%d\n",
+	    ajFatal("FindPriMinTwo: Too few entries in bucket Nkeys=%u\n",
                     nkeys);
 
 
         /* Find lowest value key in the bucket and store in cache */
-        ajStrAssignS(&cache->replace,bucket->ids[0]);
+        ajStrAssignS(&cache->replace,bucket->SecIds[0]);
 
-	if(!strcmp(cache->replace->Ptr,key))
-	    ajStrAssignS(&cache->replace,bucket->ids[1]);
+	if(!MAJSTRCMPS(cache->replace,key))
+	    ajStrAssignS(&cache->replace,bucket->SecIds[1]);
 
 	for(i=1;i<nentries;++i)
-	    if(strcmp(bucket->ids[i]->Ptr,cache->replace->Ptr)<0 &&
-	       strcmp(bucket->ids[i]->Ptr,key))
-		ajStrAssignS(&cache->replace,bucket->ids[i]);
+	    if(MAJSTRCMPS(bucket->SecIds[i],cache->replace)<0 &&
+	       MAJSTRCMPS(bucket->SecIds[i],key))
+		ajStrAssignS(&cache->replace,bucket->SecIds[i]);
 
 	btreeSecBucketDel(&bucket);
     }
     else
     {
-	pageno = parray[0];
-	btreeFindPriMinTwo(cache,pageno,key);
+	pagepos = parray[0];
+	btreeFindPriMinTwo(cache,pagepos,key);
 	
     }
 
@@ -19638,42 +23589,43 @@ static void btreeFindPriMinTwo(AjPBtcache cache, ajlong pageno,
 ** Deletion software
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] leaf node page
+** @param [r] pagepos [ajulong] leaf node page
 ** @param [r] pri [const AjPBtPri] pri
 **
 ** @return [AjBool] True if found (and deleted)
 ** @@
 ******************************************************************************/
 
-static AjBool btreeRemovePriEntryTwo(AjPBtcache cache, ajlong pageno,
+static AjBool btreeRemovePriEntryTwo(AjPBtcache cache, ajulong pagepos,
                                      const AjPBtPri pri)
 {
     AjPBtpage page   = NULL;
     AjPSecBucket bucket = NULL;
     
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
-    ajlong blockno = 0L;
+    ajulong *parray = NULL;
+    ajulong blockno = 0L;
     
-    ajint nkeys    = 0;
-    ajint nentries = 0;
-    ajint i;
+    ajuint nkeys    = 0;
+    ajuint nentries = 0;
+    ajuint i;
 
-    ajint dirtysave = 0;
+    ajuint dirtysave = 0;
     
     AjBool found = ajFalse;
-    char   *key  = NULL;
+    const AjPStr key  = NULL;
 
     unsigned char *buf = NULL;
     AjPBtMem arrays = NULL;
     
     /* ajDebug("In btreeRemovePriEntryTwo\n"); */
 
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
     buf = page->buf;
     dirtysave = page->dirty;
     page->dirty = BT_LOCK;
-    
+    page->lockfor = 1871;
+  
     GBT_NKEYS(buf,&nkeys);
 
     if(!nkeys)
@@ -19686,11 +23638,11 @@ static AjBool btreeRemovePriEntryTwo(AjPBtcache cache, ajlong pageno,
 
     btreeGetKeys(cache,buf,&karray,&parray);
     
-    key = pri->id->Ptr;
+    key = pri->id;
 
     i=0;
 
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
+    while(i!=nkeys && MAJSTRCMPS(key,karray[i])>=0)
 	++i;
 
     blockno = parray[i];
@@ -19702,7 +23654,7 @@ static AjBool btreeRemovePriEntryTwo(AjPBtcache cache, ajlong pageno,
     found = ajFalse;
 
     for(i=0;i<nentries;++i)
-	if(!strcmp(key,bucket->ids[i]->Ptr))
+	if(!MAJSTRCMPS(key,bucket->SecIds[i]))
 	{
 	    found = ajTrue;
 	    break;
@@ -19715,12 +23667,12 @@ static AjBool btreeRemovePriEntryTwo(AjPBtcache cache, ajlong pageno,
 	if(nentries == 1)
 	{
 	    bucket->Nentries = 0;
-	    AJFREE(bucket->ids[0]);
+	    AJFREE(bucket->SecIds[0]);
 	}
 	else
 	{
-	    AJFREE(bucket->ids[i]);
-	    bucket->ids[i] = bucket->ids[nentries-1];
+	    AJFREE(bucket->SecIds[i]);
+	    bucket->SecIds[i] = bucket->SecIds[nentries-1];
 	    --bucket->Nentries;
 	}
 
@@ -19760,45 +23712,47 @@ static AjBool btreeRemovePriEntryTwo(AjPBtcache cache, ajlong pageno,
 
 static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 {
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
     unsigned char *lbuf = NULL;
     AjPSecBucket *buckets  = NULL;
+
+    AjPBtMem arrays = NULL;    
+    AjPBtMem newarrays = NULL;    
     AjPStr *keys        = NULL;
-    ajlong *ptrs        = NULL;
-    ajlong *overflows   = NULL;
+    ajulong *ptrs        = NULL;
+    ajulong *overflows   = NULL;
     
-    ajint i = 0;
-    ajint j = 0;
+    ajuint i = 0;
+    ajuint j = 0;
     
-    ajint order;
-    ajint bentries      = 0;
-    ajint totalkeys     = 0;
-    ajint nperbucket    = 0;
-    ajint maxnperbucket = 0;
-    ajint count         = 0;
-    ajint totkeylen     = 0;
-    ajint keylimit      = 0;
-    ajint bucketn       = 0;
-    ajint bucketlimit   = 0;
-    ajint nodetype      = 0;
-    ajint nids          = 0;
-    ajint totnids       = 0;
+    ajuint order;
+    ajuint bentries      = 0;
+    ajuint totalkeys     = 0;
+    ajuint nperbucket    = 0;
+    ajuint maxnperbucket = 0;
+    ajuint count         = 0;
+    ajuint totkeylen     = 0;
+    ajuint keylimit      = 0;
+    ajuint bucketn       = 0;
+    ajuint bucketlimit   = 0;
+    ajuint nodetype      = 0;
+    ajuint nids          = 0;
+    ajuint totnids       = 0;
     
     AjPList idlist    = NULL;
-    ajint   dirtysave = 0;
+    ajuint   dirtysave = 0;
     AjPStr bid       = NULL;
     AjPSecBucket cbucket = NULL;
     AjPStr cid       = NULL;
 
-    AjPBtMem arrays = NULL;    
-
-    ajint v = 0;
+    ajuint v = 0;
     
     /* ajDebug("In btreeAdjustPriBucketsTwo\n"); */
 
     dirtysave = leaf->dirty;
 
     leaf->dirty = BT_LOCK;
+    leaf->lockfor = 1881;
     lbuf = leaf->buf;
 
     GBT_NKEYS(lbuf,&nkeys);
@@ -19820,13 +23774,9 @@ static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
     /* Read keys/ptrs */
 
     arrays = btreeAllocSecArray(cache);
-    keys = arrays->karray;
     ptrs = arrays->parray;
 
-    AJCNEW0(overflows,order);
-    
-
-    btreeGetKeys(cache,lbuf,&keys,&ptrs);
+    btreeGetPointers(cache,lbuf,&ptrs);
 
 
     for(i=0;i<nkeys;++i)
@@ -19841,7 +23791,7 @@ static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
     if(!maxnperbucket)
 	++maxnperbucket;
 
-    if(!leaf->pageno)
+    if(!leaf->pagepos)
 	maxnperbucket = nperbucket;
 
     /* Work out the number of new buckets needed */
@@ -19870,6 +23820,10 @@ static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 	buckets[i] = btreeReadSecBucket(cache,ptrs[i]);
 
 
+    newarrays = btreeAllocSecArray(cache);
+    keys = newarrays->karray;
+    overflows = newarrays->overflows;
+    
     /* Read IDs from all buckets and push to list and sort (increasing id) */
     idlist  = ajListNew();
 
@@ -19879,10 +23833,10 @@ static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 	bentries = buckets[i]->Nentries;
 
 	for(j=0;j<bentries;++j)
-	    ajListPush(idlist,(void *)buckets[i]->ids[j]);
+	    ajListPush(idlist,(void *)buckets[i]->SecIds[j]);
 	
 	AJFREE(buckets[i]->keylen);
-	AJFREE(buckets[i]->ids);
+	AJFREE(buckets[i]->SecIds);
 	AJFREE(buckets[i]);
     }
 
@@ -19890,7 +23844,7 @@ static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
     ajListSort(idlist,ajStrVcmp);
     AJFREE(buckets);
 
-    cbucket = btreeSecBucketNew(maxnperbucket);
+    cbucket = btreeSecBucketNew(maxnperbucket,cache->kwlimit);
     bucketlimit = bucketn - 1;
 
     totnids = 0;
@@ -19903,8 +23857,8 @@ static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 	SBT_NKEYS(lbuf,v);
 
         btreeDeallocSecArray(cache,arrays);
+        btreeDeallocSecArray(cache,newarrays);
 
-	AJFREE(overflows);
 	ajListFree(&idlist);
 	leaf->dirty = BT_DIRTY;
 
@@ -19924,7 +23878,7 @@ static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 	{
 	    ajListPop(idlist,(void **)&bid);
 	    
-	    cid = cbucket->ids[count];
+	    cid = cbucket->SecIds[count];
 	    ajStrAssignS(&cid,bid);
 	    
 	    cbucket->keylen[count] = BT_BUCKSECLEN(bid);
@@ -19963,7 +23917,7 @@ static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 	    {
 		ajListPop(idlist,(void **)&bid);
 
-		cid = cbucket->ids[count];
+		cid = cbucket->SecIds[count];
 		ajStrAssignS(&cid,bid);
 		
 		cbucket->keylen[count] = BT_BUCKSECLEN(bid);
@@ -19995,7 +23949,7 @@ static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 
 	while(ajListPop(idlist,(void **)&bid))
 	{
-	    cid = cbucket->ids[count];
+	    cid = cbucket->SecIds[count];
 	    ajStrAssignS(&cid,bid);
 	    
 	    ++cbucket->Nentries;
@@ -20017,20 +23971,17 @@ static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
     /* Now write out a modified leaf with new keys/ptrs */
 
     nkeys = bucketn - 1;
-    v = nkeys;
-    SBT_NKEYS(lbuf,v);
-    v = totkeylen;
-    SBT_TOTLEN(lbuf,v);
-
     btreeWriteNode(cache,leaf,keys,ptrs,nkeys);
 
     leaf->dirty = dirtysave;
     if(nodetype == BT_ROOT)
+    {
 	leaf->dirty = BT_LOCK;
+        leaf->lockfor = 1882;
+    }
 
     btreeDeallocSecArray(cache,arrays);
-
-    AJFREE(overflows);
+    btreeDeallocSecArray(cache,newarrays);
 
     btreeSecBucketDel(&cbucket);
     ajListFree(&idlist);
@@ -20048,39 +23999,39 @@ static void btreeAdjustPriBucketsTwo(AjPBtcache cache, AjPBtpage leaf)
 ** Deletion software
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] Node to rebalance
-** @param [r] leftNode [ajlong] left node
-** @param [r] rightNode [ajlong] right node
-** @param [r] lAnchor [ajlong] left anchor
-** @param [r] rAnchor [ajlong] right anchor
+** @param [r] thisNode [ajulong] Node to rebalance
+** @param [r] leftNode [ajulong] left node
+** @param [r] rightNode [ajulong] right node
+** @param [r] lAnchor [ajulong] left anchor
+** @param [r] rAnchor [ajulong] right anchor
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeRebalancePriTwo(AjPBtcache cache, ajlong thisNode,
-                                   ajlong leftNode, ajlong rightNode,
-                                   ajlong lAnchor, ajlong rAnchor)
+static ajulong btreeRebalancePriTwo(AjPBtcache cache, ajulong thisNode,
+                                   ajulong leftNode, ajulong rightNode,
+                                   ajulong lAnchor, ajulong rAnchor)
 {
     unsigned char *lbuf = NULL;
     unsigned char *rbuf = NULL;
     unsigned char *tbuf = NULL;
 
-    ajlong anchorNode   = 0L;
-    ajlong balanceNode  = 0L;
-    ajlong mergeNode    = 0L;
-    ajlong done         = 0L;
-    ajlong parent       = 0L;
+    ajulong anchorNode   = 0L;
+    ajulong balanceNode  = 0L;
+    ajulong mergeNode    = 0L;
+    ajulong done         = 0L;
+    ajulong parent       = 0L;
     
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage tpage = NULL;
     
-    ajint lnkeys  = 0;
-    ajint rnkeys  = 0;
-    ajint size    = 0;
-    ajint order   = 0;
-    ajint minsize = 0;
+    ajuint lnkeys  = 0;
+    ajuint rnkeys  = 0;
+    ajuint size    = 0;
+    ajuint order   = 0;
+    ajuint minsize = 0;
 
     AjBool leftok  = ajFalse;
     AjBool rightok = ajFalse;
@@ -20187,16 +24138,16 @@ static ajlong btreeRebalancePriTwo(AjPBtcache cache, ajlong thisNode,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] master node
-** @param [r] balanceNode [ajlong] balance node
-** @param [r] anchorNode [ajlong] anchor node
+** @param [r] thisNode [ajulong] master node
+** @param [r] balanceNode [ajulong] balance node
+** @param [r] anchorNode [ajulong] anchor node
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
-                               ajlong balanceNode, ajlong anchorNode)
+static ajulong btreeShiftPriTwo(AjPBtcache cache, ajulong thisNode,
+                               ajulong balanceNode, ajulong anchorNode)
 {
     unsigned char *tbuf = NULL;
     unsigned char *abuf = NULL;
@@ -20206,15 +24157,16 @@ static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
     AjPStr *kTarray = NULL;
     AjPStr *kAarray = NULL;
     AjPStr *kBarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pAarray = NULL;
-    ajlong *pBarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pAarray = NULL;
+    ajulong *pBarray = NULL;
     
-    ajint  nAkeys = 0;
-    ajint  nBkeys = 0;
-    ajint  nTkeys = 0;
-    ajint  i;
-    
+    ajuint  nAkeys = 0;
+    ajuint  nBkeys = 0;
+    ajuint  nTkeys = 0;
+    ajuint  i;
+    ajint ii;
+
     AjPBtpage pageA = NULL;
     AjPBtpage pageB = NULL;
     AjPBtpage pageT = NULL;
@@ -20222,11 +24174,11 @@ static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
     
     AjPBtpage leftpage = NULL;
 
-    ajint  anchorPos   = 0;
-    ajlong prev        = 0L;
-    ajint  nodetype    = 0;
+    ajuint anchorPos   = 0;
+    ajulong prev        = 0L;
+    ajuint  nodetype    = 0;
 
-    ajlong lv = 0L;
+    ajulong lv = 0L;
     
     AjPBtMem arraysA = NULL;    
     AjPBtMem arraysB = NULL;    
@@ -20250,12 +24202,15 @@ static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
 
     pageA = ajBtreeCacheRead(cache,anchorNode);
     pageA->dirty = BT_LOCK;
+    pageA->lockfor = 1891;
     abuf = pageA->buf;
     pageB = ajBtreeCacheRead(cache,balanceNode);
     pageB->dirty = BT_LOCK;
+    pageB->lockfor = 1892;
     bbuf = pageB->buf;
     pageT = ajBtreeCacheRead(cache,thisNode);
     pageT->dirty = BT_LOCK;
+    pageT->lockfor = 1893;
     tbuf = pageT->buf;
 
     GBT_NKEYS(abuf,&nAkeys);
@@ -20266,7 +24221,7 @@ static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
     btreeGetKeys(cache,bbuf,&kBarray,&pBarray);
     btreeGetKeys(cache,tbuf,&kTarray,&pTarray);
     
-    if(strcmp(kTarray[nTkeys-1]->Ptr,kBarray[nBkeys-1]->Ptr)<0)
+    if(MAJSTRCMPS(kTarray[nTkeys-1],kBarray[nBkeys-1])<0)
 	leftpage = pageT;
     else
 	leftpage = pageB;
@@ -20277,7 +24232,7 @@ static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
 	/* Find anchor key position */
 	i=0;
 
-	while(i!=nAkeys && strcmp(kTarray[nTkeys-1]->Ptr,kAarray[i]->Ptr)>=0)
+	while(i!=nAkeys && MAJSTRCMPS(kTarray[nTkeys-1],kAarray[i])>=0)
 	    ++i;
 
 	anchorPos = i;
@@ -20312,7 +24267,7 @@ static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
 	/* Find anchor key position */
 	i=0;
 
-	while(i!=nAkeys && strcmp(kBarray[nBkeys-1]->Ptr,kAarray[i]->Ptr)>=0)
+	while(i!=nAkeys && MAJSTRCMPS(kBarray[nBkeys-1],kAarray[i])>=0)
 	    ++i;
 
 	anchorPos = i;
@@ -20320,10 +24275,10 @@ static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
 	/* Move down anchor key to thisNode */
 	pTarray[nTkeys+1] = pTarray[nTkeys];
 
-	for(i=nTkeys-1;i>-1;--i)
+	for(ii=nTkeys-1;ii>-1;--ii)
 	{
-	    ajStrAssignS(&kTarray[i+1],kTarray[i]);
-	    pTarray[i+1] = pTarray[i];
+	    ajStrAssignS(&kTarray[ii+1],kTarray[ii]);
+	    pTarray[ii+1] = pTarray[ii];
 	}
 
 	ajStrAssignS(&kTarray[0],kAarray[anchorPos]);
@@ -20334,10 +24289,10 @@ static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
 	{
 	    pTarray[nTkeys+1] = pTarray[nTkeys];
 
-	    for(i=nTkeys-1;i>-1;--i)
+	    for(ii=nTkeys-1;ii>-1;--ii)
 	    {
-		ajStrAssignS(&kTarray[i+1],kTarray[i]);
-		pTarray[i+1] = pTarray[i];
+		ajStrAssignS(&kTarray[ii+1],kTarray[ii]);
+		pTarray[ii+1] = pTarray[ii];
 	    }
 	    ajStrAssignS(&kTarray[0],kBarray[nBkeys-1]);
 	    pTarray[1] = pBarray[nBkeys];
@@ -20360,7 +24315,7 @@ static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
     
 
     /* Adjust PREV pointers for thisNode */
-    prev = pageT->pageno;
+    prev = pageT->pagepos;
 
     for(i=0;i<nTkeys+1;++i)
     {
@@ -20381,7 +24336,10 @@ static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
     btreeWriteNode(cache,pageT,kTarray,pTarray,nTkeys);
 
     if(anchorNode == cache->secrootblock)
+    {
 	pageA->dirty = BT_LOCK;
+        pageA->lockfor = 1894;
+    }
 
     btreeDeallocSecArray(cache,arraysA);
     btreeDeallocSecArray(cache,arraysB);
@@ -20400,16 +24358,16 @@ static ajlong btreeShiftPriTwo(AjPBtcache cache, ajlong thisNode,
 ** Deletion software
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] master node
-** @param [r] mergeNode [ajlong] merge node
-** @param [r] anchorNode [ajlong] anchor node
+** @param [r] thisNode [ajulong] master node
+** @param [r] mergeNode [ajulong] merge node
+** @param [r] anchorNode [ajulong] anchor node
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
-                               ajlong mergeNode, ajlong anchorNode)
+static ajulong btreeMergePriTwo(AjPBtcache cache, ajulong thisNode,
+                                ajulong mergeNode, ajulong anchorNode)
 {
     unsigned char *tbuf = NULL;
     unsigned char *abuf = NULL;
@@ -20419,24 +24377,26 @@ static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
     AjPStr *kTarray = NULL;
     AjPStr *kAarray = NULL;
     AjPStr *kNarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pAarray = NULL;
-    ajlong *pNarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pAarray = NULL;
+    ajulong *pNarray = NULL;
 
-    ajlong thisprev  = 0L;
-    ajlong mergeprev = 0L;
+    ajulong thisprev  = 0L;
+    ajulong mergeprev = 0L;
     
     
-    ajint  nAkeys = 0;
-    ajint  nNkeys = 0;
-    ajint  nTkeys = 0;
-    ajint  count  = 0;
-    ajint  i;
-    ajint  nodetype = 0;
+    ajuint  nAkeys = 0;
+    ajuint  nNkeys = 0;
+    ajuint  nTkeys = 0;
+    ajuint  count  = 0;
+    ajuint  i;
+    ajint ii;
+
+    ajuint   nodetype = 0;
     
-    ajint saveA = 0;
-    ajint saveN = 0;
-    ajint saveT = 0;
+    ajuint saveA = 0;
+    ajuint saveN = 0;
+    ajuint saveT = 0;
     
     AjPBtpage pageA = NULL;
     AjPBtpage pageN = NULL;
@@ -20445,31 +24405,34 @@ static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
     
     AjPBtpage leftpage = NULL;
 
-    ajint  anchorPos = 0;
-    ajlong prev      = 0L;
+    ajuint anchorPos = 0;
+    ajulong prev      = 0L;
 
-    ajlong lv = 0L;
+    ajulong lv = 0L;
 
     AjPBtMem arraysA = NULL;    
     AjPBtMem arraysN = NULL;    
     AjPBtMem arraysT = NULL;    
 
     AjBool collapse = ajFalse;
-    ajlong csrb = 0L;
+    ajulong csrb = 0L;
     
     /* ajDebug("In btreeMergePriTwo\n"); */
 
     pageA = ajBtreeCacheRead(cache,anchorNode);
     saveA = pageA->dirty;
     pageA->dirty = BT_LOCK;
+    pageA->lockfor = 1901;
     abuf = pageA->buf;
     pageN = ajBtreeCacheRead(cache,mergeNode);
     saveN = pageN->dirty;
     pageN->dirty = BT_LOCK;
+    pageN->lockfor = 1902;
     nbuf = pageN->buf;
     pageT = ajBtreeCacheRead(cache,thisNode);
     saveT = pageT->dirty;
     pageT->dirty = BT_LOCK;
+    pageT->lockfor = 1903;
     tbuf = pageT->buf;
 
     GBT_PREV(tbuf,&thisprev);
@@ -20513,7 +24476,7 @@ static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
     btreeGetKeys(cache,nbuf,&kNarray,&pNarray);
     btreeGetKeys(cache,tbuf,&kTarray,&pTarray);
 
-    if(strcmp(kTarray[nTkeys-1]->Ptr,kNarray[nNkeys-1]->Ptr)<0)
+    if(MAJSTRCMPS(kTarray[nTkeys-1],kNarray[nNkeys-1])<0)
 	leftpage = pageT;
     else
 	leftpage = pageN;
@@ -20524,7 +24487,7 @@ static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
 	/* Find anchor key position */
 	i=0;
 
-	while(i!=nAkeys && strcmp(kTarray[nTkeys-1]->Ptr,kAarray[i]->Ptr)>=0)
+	while(i!=nAkeys && MAJSTRCMPS(kTarray[nTkeys-1],kAarray[i])>=0)
 	    ++i;
 
 	anchorPos = i;
@@ -20532,10 +24495,10 @@ static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
 	/* Move down anchor key to neighbour Node */
 	pNarray[nNkeys+1] = pNarray[nNkeys];
 
-	for(i=nNkeys-1;i>-1;--i)
+	for(ii=nNkeys-1;ii>-1;--ii)
 	{
-	    ajStrAssignS(&kNarray[i+1],kNarray[i]);
-	    pNarray[i+1] = pNarray[i];
+	    ajStrAssignS(&kNarray[ii+1],kNarray[ii]);
+	    pNarray[ii+1] = pNarray[ii];
 	}
 
 	ajStrAssignS(&kNarray[0],kAarray[anchorPos]);
@@ -20564,10 +24527,10 @@ static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
 	{
 	    pNarray[nNkeys+1] = pNarray[nNkeys];
 
-	    for(i=nNkeys-1;i>-1;--i)
+	    for(ii=nNkeys-1;ii>-1;--ii)
 	    {
-		ajStrAssignS(&kNarray[i+1],kNarray[i]);
-		pNarray[i+1] = pNarray[i];
+		ajStrAssignS(&kNarray[ii+1],kNarray[ii]);
+		pNarray[ii+1] = pNarray[ii];
 	    }
 
 	    ajStrAssignS(&kNarray[0],kTarray[nTkeys-1]);
@@ -20584,7 +24547,7 @@ static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
 	/* Find anchor key position */
 	i=0;
 
-	while(i!=nAkeys && strcmp(kNarray[nNkeys-1]->Ptr,kAarray[i]->Ptr)>=0)
+	while(i!=nAkeys && MAJSTRCMPS(kNarray[nNkeys-1],kAarray[i])>=0)
 	    ++i;
 
 	anchorPos = i;
@@ -20623,7 +24586,7 @@ static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
     
     
     /* Adjust PREV pointers for neighbour Node */
-    prev = pageN->pageno;
+    prev = pageN->pagepos;
 
     for(i=0;i<nNkeys+1;++i)
     {
@@ -20644,7 +24607,10 @@ static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
     btreeWriteNode(cache,pageN,kNarray,pNarray,nNkeys);
 
     if(anchorNode == cache->secrootblock)
+    {
 	pageA->dirty = BT_LOCK;
+        pageA->lockfor = 1904;
+    }
 
     btreeDeallocSecArray(cache,arraysA);
     btreeDeallocSecArray(cache,arraysN);
@@ -20666,28 +24632,28 @@ static ajlong btreeMergePriTwo(AjPBtcache cache, ajlong thisNode,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number to make new root
+** @param [r] pagepos [ajulong] page number to make new root
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeCollapseRootPriTwo(AjPBtcache cache, ajlong pageno)
+static ajulong btreeCollapseRootPriTwo(AjPBtcache cache, ajulong pagepos)
 {
     unsigned char *buf  = NULL;
     unsigned char *lbuf = NULL;
 
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
 
     AjPBtpage rootpage = NULL;
     AjPBtpage page     = NULL;
     
-    ajint nodetype = 0;
-    ajint nkeys    = 0;
-    ajint i;
+    ajuint nodetype = 0;
+    ajuint nkeys    = 0;
+    ajuint i;
 
-    ajlong prev = 0L;
+    ajulong prev = 0L;
     AjPBtMem arrays = NULL;
     
     /* ajDebug("In btreeCollapseRootPriTwo\n"); */
@@ -20697,7 +24663,7 @@ static ajlong btreeCollapseRootPriTwo(AjPBtcache cache, ajlong pageno)
 
     rootpage = btreeCacheLocate(cache,cache->secrootblock);
     buf = rootpage->buf;
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
 
 
     arrays = btreeAllocSecArray(cache);
@@ -20705,19 +24671,20 @@ static ajlong btreeCollapseRootPriTwo(AjPBtcache cache, ajlong pageno)
     parray = arrays->parray;
 
     /*
-    ** Swap pageno values to make root the child and child the root
+    ** Swap pagepos values to make root the child and child the root
     ** Update node types and mark the original root as a clean page
     */
 
-    /* At this point page->pageno could be added to a free list */
+    /* At this point page->pagepos could be added to a free list */
 
-    rootpage->pageno = page->pageno;
+    rootpage->pagepos = page->pagepos;
     rootpage->dirty = BT_CLEAN;
     nodetype = BT_INTERNAL;
     SBT_NODETYPE(buf,nodetype);
 
-    page->pageno = cache->secrootblock;
-    page->dirty  = BT_LOCK;
+    page->pagepos = cache->secrootblock;
+    page->dirty = BT_LOCK;
+    page->lockfor = 1911;
     buf = page->buf;
     nodetype = BT_ROOT;
     SBT_NODETYPE(buf,nodetype);
@@ -20756,56 +24723,56 @@ static ajlong btreeCollapseRootPriTwo(AjPBtcache cache, ajlong pageno)
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] Current node
-** @param [r] leftNode [ajlong] Node to left
-** @param [r] rightNode [ajlong] Node to right
-** @param [r] lAnchor [ajlong] Left anchor
-** @param [r] rAnchor [ajlong] Right anchor
+** @param [r] thisNode [ajulong] Current node
+** @param [r] leftNode [ajulong] Node to left
+** @param [r] rightNode [ajulong] Node to right
+** @param [r] lAnchor [ajulong] Left anchor
+** @param [r] rAnchor [ajulong] Right anchor
 ** @param [r] pri [const AjPBtPri] pri
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeFindPriBalanceOne(AjPBtcache cache, ajlong thisNode,
-                                     ajlong leftNode, ajlong rightNode,
-                                     ajlong lAnchor, ajlong rAnchor,
-                                     const AjPBtPri pri)
+static ajulong btreeFindPriBalanceOne(AjPBtcache cache, ajulong thisNode,
+                                      ajulong leftNode, ajulong rightNode,
+                                      ajulong lAnchor, ajulong rAnchor,
+                                      const AjPBtPri pri)
 {
     unsigned char *buf  = NULL;
     unsigned char *buf1 = NULL;
     
-    ajlong nextNode   = BTNO_NODE;
-    ajlong nextLeft   = BTNO_NODE;
-    ajlong nextRight  = BTNO_NODE;
-    ajlong nextAncL   = BTNO_NODE;
-    ajlong nextAncR   = BTNO_NODE;
-    ajlong done       = 0L;
+    ajulong nextNode   = BTNO_NODE;
+    ajulong nextLeft   = BTNO_NODE;
+    ajulong nextRight  = BTNO_NODE;
+    ajulong nextAncL   = BTNO_NODE;
+    ajulong nextAncR   = BTNO_NODE;
+    ajulong done       = 0L;
     
-    ajint  nkeys      = 0;
-    ajint  order      = 0;
-    ajint  minkeys    = 0;
-    ajint  i;
-    ajint  nodetype   = 0;
+    ajuint  nkeys      = 0;
+    ajuint  order      = 0;
+    ajuint  minkeys    = 0;
+    ajuint  i;
+    ajuint  nodetype   = 0;
 
-    ajint n1keys      = 0;
+    ajuint n1keys      = 0;
     
     AjPBtpage page  = NULL;
     AjPBtpage page1 = NULL;
 
-    ajlong balanceNode = 0L;
-    ajlong blockno     = 0L;
-    ajlong ptrSave     = 0L;
+    ajulong balanceNode = 0L;
+    ajulong blockno     = 0L;
+    ajulong ptrSave     = 0L;
 
     AjPStr *karray  = NULL;
-    ajlong *parray  = NULL;
+    ajulong *parray  = NULL;
     AjPStr *k1array = NULL;
-    ajlong *p1array = NULL;
+    ajulong *p1array = NULL;
 
     AjPBtMem arrays  = NULL;
     AjPBtMem arrays1 = NULL;
     
-    char *key = NULL;
+    const AjPStr key = NULL;
     AjBool existed = ajFalse;
     
     /* ajDebug("In btreeFindPriBalanceOne\n"); */
@@ -20817,6 +24784,7 @@ static ajlong btreeFindPriBalanceOne(AjPBtcache cache, ajlong thisNode,
         /* Needs altering for secondary tree          */
 	page = btreeCacheLocate(cache,thisNode);
 	page->dirty = BT_LOCK;
+        page->lockfor = 1921;
     }
 
     cache->deleted = ajFalse;
@@ -20838,7 +24806,7 @@ static ajlong btreeFindPriBalanceOne(AjPBtcache cache, ajlong thisNode,
     if(nkeys >= minkeys)
 	balanceNode = BTNO_BALANCE;
     else
-	balanceNode = page->pageno;
+	balanceNode = page->pagepos;
 
     arrays  = btreeAllocPriArray(cache);
     arrays1 = btreeAllocPriArray(cache);
@@ -20849,13 +24817,13 @@ static ajlong btreeFindPriBalanceOne(AjPBtcache cache, ajlong thisNode,
     k1array = arrays1->karray;
     p1array = arrays1->parray;
 
-    key = pri->keyword->Ptr;
+    key = pri->keyword;
 
     btreeGetKeys(cache,buf,&karray,&parray);
 
     i=0;
 
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
+    while(i!=nkeys && MAJSTRCMPS(key,karray[i])>=0)
 	++i;
 
     blockno = parray[i];
@@ -20922,7 +24890,7 @@ static ajlong btreeFindPriBalanceOne(AjPBtcache cache, ajlong thisNode,
 	{
 	    i=0;
 
-	    while(i!=nkeys && strcmp(key,karray[i]->Ptr))
+	    while(i!=nkeys && MAJSTRCMPS(key,karray[i]))
 		++i;
 
 	    if(i!=nkeys)
@@ -20943,6 +24911,7 @@ static ajlong btreeFindPriBalanceOne(AjPBtcache cache, ajlong thisNode,
 	{
 	    page = btreeCacheLocate(cache,thisNode);
 	    page->dirty = BT_LOCK;
+            page->lockfor = 1922;
 	}
 	buf = page->buf;
 
@@ -20960,7 +24929,7 @@ static ajlong btreeFindPriBalanceOne(AjPBtcache cache, ajlong thisNode,
 	    if(nkeys >= minkeys || (nodetype==BT_ROOT && !cache->level))
 		balanceNode = BTNO_BALANCE;
 	    else
-		balanceNode = page->pageno;
+		balanceNode = page->pagepos;
 	}
     }
 
@@ -20988,25 +24957,25 @@ static ajlong btreeFindPriBalanceOne(AjPBtcache cache, ajlong thisNode,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page
-** @param [r] key [const char *] key
+** @param [r] pagepos [ajulong] page
+** @param [r] key [const AjPStr] key
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void btreeFindPriMinOne(AjPBtcache cache, ajlong pageno,
-                               const char *key)
+static void btreeFindPriMinOne(AjPBtcache cache, ajulong pagepos,
+                               const AjPStr key)
 {
     AjPBtpage page   = NULL;
     AjPPriBucket bucket = NULL;
     AjPStr *karray   = NULL;
-    ajlong *parray   = NULL;
+    ajulong *parray   = NULL;
 
-    ajint nkeys    = 0;
-    ajint nodetype = 0;
-    ajint nentries = 0;
-    ajint i;
+    ajuint nkeys    = 0;
+    ajuint nodetype = 0;
+    ajuint nentries = 0;
+    ajuint i;
     AjPBtMem arrays = NULL;
     
     unsigned char *buf = NULL;
@@ -21017,7 +24986,7 @@ static void btreeFindPriMinOne(AjPBtcache cache, ajlong pageno,
     karray = arrays->karray;
     parray = arrays->parray;
 
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
     buf  = page->buf;
     GBT_NODETYPE(buf,&nodetype);
     GBT_NKEYS(buf,&nkeys);
@@ -21043,26 +25012,26 @@ static void btreeFindPriMinOne(AjPBtcache cache, ajlong pageno,
         /* Check for empty bucket - shouldn't happen */
         /* Checking solely out of interest */
 	if(nentries<1)	
-	    ajFatal("FindPriMinOne: Too few entries in bucket Nkeys=%d\n",
+	    ajFatal("FindPriMinOne: Too few entries in bucket Nkeys=%u\n",
                     nkeys);
 
 
         /* Find lowest value key in the bucket and store in cache */
         ajStrAssignS(&cache->replace,bucket->codes[0]->keyword);
 
-	if(!strcmp(cache->replace->Ptr,key))
+	if(!MAJSTRCMPS(cache->replace,key))
 	    ajStrAssignS(&cache->replace,bucket->codes[1]->keyword);
 
 	for(i=1;i<nentries;++i)
-	    if(strcmp(bucket->codes[i]->keyword->Ptr,cache->replace->Ptr)<0 &&
-	       strcmp(bucket->codes[i]->keyword->Ptr,key))
+	    if(MAJSTRCMPS(bucket->codes[i]->keyword,cache->replace)<0 &&
+	       MAJSTRCMPS(bucket->codes[i]->keyword,key))
 		ajStrAssignS(&cache->replace,bucket->codes[i]->keyword);
 	btreePriBucketDel(&bucket);
     }
     else
     {
-	pageno = parray[0];
-	btreeFindPriMinOne(cache,pageno,key);
+	pagepos = parray[0];
+	btreeFindPriMinOne(cache,pagepos,key);
 	
     }
 
@@ -21082,42 +25051,43 @@ static void btreeFindPriMinOne(AjPBtcache cache, ajlong pageno,
 ** Deletion software
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] leaf node page
+** @param [r] pagepos [ajulong] leaf node page
 ** @param [r] pri [const AjPBtPri] keyword object
 **
 ** @return [AjBool] True if found (and deleted)
 ** @@
 ******************************************************************************/
 
-static AjBool btreeRemovePriEntryOne(AjPBtcache cache, ajlong pageno,
+static AjBool btreeRemovePriEntryOne(AjPBtcache cache, ajulong pagepos,
                                      const AjPBtPri pri)
 {
     AjPBtpage page   = NULL;
     AjPPriBucket bucket = NULL;
     
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
-    ajlong blockno = 0L;
+    ajulong *parray = NULL;
+    ajulong blockno = 0L;
     
-    ajint nkeys    = 0;
-    ajint nentries = 0;
-    ajint i;
+    ajuint nkeys    = 0;
+    ajuint nentries = 0;
+    ajuint i;
 
-    ajint dirtysave = 0;
+    ajuint dirtysave = 0;
     
     AjBool found = ajFalse;
-    char   *key  = NULL;
+    const AjPStr key  = NULL;
 
     unsigned char *buf = NULL;
     AjPBtMem arrays = NULL;
     
     /* ajDebug("In btreeRemovePriEntryOne\n"); */
 
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
     buf = page->buf;
     dirtysave = page->dirty;
     page->dirty = BT_LOCK;
-    
+    page->lockfor = 1931;
+  
     GBT_NKEYS(buf,&nkeys);
 
     if(!nkeys)
@@ -21130,11 +25100,11 @@ static AjBool btreeRemovePriEntryOne(AjPBtcache cache, ajlong pageno,
 
     btreeGetKeys(cache,buf,&karray,&parray);
     
-    key = pri->keyword->Ptr;
+    key = pri->keyword;
 
     i=0;
 
-    while(i!=nkeys && strcmp(key,karray[i]->Ptr)>=0)
+    while(i!=nkeys && MAJSTRCMPS(key,karray[i])>=0)
 	++i;
 
     blockno = parray[i];
@@ -21146,7 +25116,7 @@ static AjBool btreeRemovePriEntryOne(AjPBtcache cache, ajlong pageno,
     found = ajFalse;
 
     for(i=0;i<nentries;++i)
-	if(!strcmp(key,bucket->codes[i]->keyword->Ptr))
+	if(!MAJSTRCMPS(key,bucket->codes[i]->keyword))
 	{
 	    found = ajTrue;
 	    break;
@@ -21204,45 +25174,47 @@ static AjBool btreeRemovePriEntryOne(AjPBtcache cache, ajlong pageno,
 
 static void btreeAdjustPriBucketsOne(AjPBtcache cache, AjPBtpage leaf)
 {
-    ajint nkeys = 0;
+    ajuint nkeys = 0;
     unsigned char *lbuf = NULL;
     AjPPriBucket *buckets  = NULL;
+
+    AjPBtMem arrays = NULL;    
+
     AjPStr *keys        = NULL;
-    ajlong *ptrs        = NULL;
-    ajlong *overflows   = NULL;
+    ajulong *ptrs        = NULL;
+    ajulong *overflows   = NULL;
     
-    ajint i = 0;
-    ajint j = 0;
+    ajuint i = 0;
+    ajuint j = 0;
     
-    ajint order;
-    ajint bentries      = 0;
-    ajint totalkeys     = 0;
-    ajint nperbucket    = 0;
-    ajint maxnperbucket = 0;
-    ajint count         = 0;
-    ajint totkeylen     = 0;
-    ajint keylimit      = 0;
-    ajint bucketn       = 0;
-    ajint bucketlimit   = 0;
-    ajint nodetype      = 0;
-    ajint nids          = 0;
-    ajint totnids       = 0;
+    ajuint order;
+    ajuint bentries      = 0;
+    ajuint totalkeys     = 0;
+    ajuint nperbucket    = 0;
+    ajuint maxnperbucket = 0;
+    ajuint count         = 0;
+    ajuint totkeylen     = 0;
+    ajuint keylimit      = 0;
+    ajuint bucketn       = 0;
+    ajuint bucketlimit   = 0;
+    ajuint nodetype      = 0;
+    ajuint nids          = 0;
+    ajuint totnids       = 0;
     
     AjPList idlist    = NULL;
-    ajint   dirtysave = 0;
+    ajuint   dirtysave = 0;
     AjPBtPri bid       = NULL;
     AjPPriBucket cbucket = NULL;
     AjPBtPri cid       = NULL;
 
-    AjPBtMem arrays = NULL;    
-
-    ajint v = 0;
+    ajuint v = 0;
     
     /* ajDebug("In btreeAdjustPriBucketsOne\n"); */
 
     dirtysave = leaf->dirty;
 
     leaf->dirty = BT_LOCK;
+    leaf->lockfor = 1941;
     lbuf = leaf->buf;
 
     GBT_NKEYS(lbuf,&nkeys);
@@ -21264,11 +25236,9 @@ static void btreeAdjustPriBucketsOne(AjPBtcache cache, AjPBtpage leaf)
     arrays = btreeAllocPriArray(cache);
     keys = arrays->karray;
     ptrs = arrays->parray;
+    overflows = arrays->overflows;
 
-    AJCNEW0(overflows,order);
-    
-
-    btreeGetKeys(cache,lbuf,&keys,&ptrs);
+    btreeGetPointers(cache,lbuf,&ptrs);
 
 
     for(i=0;i<nkeys;++i)
@@ -21283,7 +25253,7 @@ static void btreeAdjustPriBucketsOne(AjPBtcache cache, AjPBtpage leaf)
     if(!maxnperbucket)
 	++maxnperbucket;
 
-    if(!leaf->pageno)
+    if(!leaf->pagepos)
 	maxnperbucket = nperbucket;
 
     /* Work out the number of new buckets needed */
@@ -21345,7 +25315,6 @@ static void btreeAdjustPriBucketsOne(AjPBtcache cache, AjPBtpage leaf)
 
         btreeDeallocPriArray(cache,arrays);
 
-	AJFREE(overflows);
 	ajListFree(&idlist);
 	leaf->dirty = BT_DIRTY;
 
@@ -21470,11 +25439,12 @@ static void btreeAdjustPriBucketsOne(AjPBtcache cache, AjPBtpage leaf)
     leaf->dirty = dirtysave;
 
     if(nodetype == BT_ROOT)
+    {
 	leaf->dirty = BT_LOCK;
+        leaf->lockfor = 1942;
+    }
 
     btreeDeallocPriArray(cache,arrays);
-
-    AJFREE(overflows);
 
     btreePriBucketDel(&cbucket);
     ajListFree(&idlist);
@@ -21492,39 +25462,39 @@ static void btreeAdjustPriBucketsOne(AjPBtcache cache, AjPBtpage leaf)
 ** Deletion software
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] Node to rebalance
-** @param [r] leftNode [ajlong] left node
-** @param [r] rightNode [ajlong] right node
-** @param [r] lAnchor [ajlong] left anchor
-** @param [r] rAnchor [ajlong] right anchor
+** @param [r] thisNode [ajulong] Node to rebalance
+** @param [r] leftNode [ajulong] left node
+** @param [r] rightNode [ajulong] right node
+** @param [r] lAnchor [ajulong] left anchor
+** @param [r] rAnchor [ajulong] right anchor
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeRebalancePriOne(AjPBtcache cache, ajlong thisNode,
-                                   ajlong leftNode, ajlong rightNode,
-                                   ajlong lAnchor, ajlong rAnchor)
+static ajulong btreeRebalancePriOne(AjPBtcache cache, ajulong thisNode,
+                                    ajulong leftNode, ajulong rightNode,
+                                    ajulong lAnchor, ajulong rAnchor)
 {
     unsigned char *lbuf = NULL;
     unsigned char *rbuf = NULL;
     unsigned char *tbuf = NULL;
 
-    ajlong anchorNode   = 0L;
-    ajlong balanceNode  = 0L;
-    ajlong mergeNode    = 0L;
-    ajlong done         = 0L;
-    ajlong parent       = 0L;
+    ajulong anchorNode   = 0L;
+    ajulong balanceNode  = 0L;
+    ajulong mergeNode    = 0L;
+    ajulong done         = 0L;
+    ajulong parent       = 0L;
     
     AjPBtpage lpage = NULL;
     AjPBtpage rpage = NULL;
     AjPBtpage tpage = NULL;
     
-    ajint lnkeys  = 0;
-    ajint rnkeys  = 0;
-    ajint size    = 0;
-    ajint order   = 0;
-    ajint minsize = 0;
+    ajuint lnkeys  = 0;
+    ajuint rnkeys  = 0;
+    ajuint size    = 0;
+    ajuint order   = 0;
+    ajuint minsize = 0;
 
     AjBool leftok  = ajFalse;
     AjBool rightok = ajFalse;
@@ -21633,33 +25603,38 @@ static ajlong btreeRebalancePriOne(AjPBtcache cache, ajlong thisNode,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] master node
-** @param [r] balanceNode [ajlong] balance node
-** @param [r] anchorNode [ajlong] anchor node
+** @param [r] thisNode [ajulong] master node
+** @param [r] balanceNode [ajulong] balance node
+** @param [r] anchorNode [ajulong] anchor node
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeShiftPriOne(AjPBtcache cache, ajlong thisNode,
-                               ajlong balanceNode, ajlong anchorNode)
+static ajulong btreeShiftPriOne(AjPBtcache cache, ajulong thisNode,
+                               ajulong balanceNode, ajulong anchorNode)
 {
     unsigned char *tbuf = NULL;
     unsigned char *abuf = NULL;
     unsigned char *bbuf = NULL;
     unsigned char *buf  = NULL;
     
+    AjPBtMem arraysA = NULL;    
+    AjPBtMem arraysB = NULL;    
+    AjPBtMem arraysT = NULL;    
+
     AjPStr *kTarray = NULL;
     AjPStr *kAarray = NULL;
     AjPStr *kBarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pAarray = NULL;
-    ajlong *pBarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pAarray = NULL;
+    ajulong *pBarray = NULL;
     
-    ajint  nAkeys = 0;
-    ajint  nBkeys = 0;
-    ajint  nTkeys = 0;
-    ajint  i;
+    ajuint  nAkeys = 0;
+    ajuint  nBkeys = 0;
+    ajuint  nTkeys = 0;
+    ajuint  i;
+    ajint   ii;
     
     AjPBtpage pageA = NULL;
     AjPBtpage pageB = NULL;
@@ -21668,15 +25643,11 @@ static ajlong btreeShiftPriOne(AjPBtcache cache, ajlong thisNode,
     
     AjPBtpage leftpage = NULL;
 
-    ajint  anchorPos   = 0;
-    ajlong prev        = 0L;
-    ajint  nodetype    = 0;
+    ajuint anchorPos   = 0;
+    ajulong prev        = 0L;
+    ajuint  nodetype    = 0;
 
-    ajlong lv = 0L;
-    
-    AjPBtMem arraysA = NULL;    
-    AjPBtMem arraysB = NULL;    
-    AjPBtMem arraysT = NULL;    
+    ajulong lv = 0L;
 
     /* ajDebug("In btreeShiftPriOne\n"); */
 
@@ -21696,12 +25667,15 @@ static ajlong btreeShiftPriOne(AjPBtcache cache, ajlong thisNode,
 
     pageA = ajBtreeCacheRead(cache,anchorNode);
     pageA->dirty = BT_LOCK;
+    pageA->lockfor = 1951;
     abuf = pageA->buf;
     pageB = ajBtreeCacheRead(cache,balanceNode);
     pageB->dirty = BT_LOCK;
+    pageB->lockfor = 1952;
     bbuf = pageB->buf;
     pageT = ajBtreeCacheRead(cache,thisNode);
     pageT->dirty = BT_LOCK;
+    pageT->lockfor = 1953;
     tbuf = pageT->buf;
 
     GBT_NKEYS(abuf,&nAkeys);
@@ -21712,7 +25686,7 @@ static ajlong btreeShiftPriOne(AjPBtcache cache, ajlong thisNode,
     btreeGetKeys(cache,bbuf,&kBarray,&pBarray);
     btreeGetKeys(cache,tbuf,&kTarray,&pTarray);
     
-    if(strcmp(kTarray[nTkeys-1]->Ptr,kBarray[nBkeys-1]->Ptr)<0)
+    if(MAJSTRCMPS(kTarray[nTkeys-1],kBarray[nBkeys-1])<0)
 	leftpage = pageT;
     else
 	leftpage = pageB;
@@ -21723,7 +25697,7 @@ static ajlong btreeShiftPriOne(AjPBtcache cache, ajlong thisNode,
 	/* Find anchor key position */
 	i=0;
 
-	while(i!=nAkeys && strcmp(kTarray[nTkeys-1]->Ptr,kAarray[i]->Ptr)>=0)
+	while(i!=nAkeys && MAJSTRCMPS(kTarray[nTkeys-1],kAarray[i])>=0)
 	    ++i;
 
 	anchorPos = i;
@@ -21758,7 +25732,7 @@ static ajlong btreeShiftPriOne(AjPBtcache cache, ajlong thisNode,
 	/* Find anchor key position */
 	i=0;
 
-	while(i!=nAkeys && strcmp(kBarray[nBkeys-1]->Ptr,kAarray[i]->Ptr)>=0)
+	while(i!=nAkeys && MAJSTRCMPS(kBarray[nBkeys-1],kAarray[i])>=0)
 	    ++i;
 
 	anchorPos = i;
@@ -21766,10 +25740,10 @@ static ajlong btreeShiftPriOne(AjPBtcache cache, ajlong thisNode,
 	/* Move down anchor key to thisNode */
 	pTarray[nTkeys+1] = pTarray[nTkeys];
 
-	for(i=nTkeys-1;i>-1;--i)
+	for(ii=nTkeys-1;ii>-1;--ii)
 	{
-	    ajStrAssignS(&kTarray[i+1],kTarray[i]);
-	    pTarray[i+1] = pTarray[i];
+	    ajStrAssignS(&kTarray[ii+1],kTarray[ii]);
+	    pTarray[ii+1] = pTarray[ii];
 	}
 
 	ajStrAssignS(&kTarray[0],kAarray[anchorPos]);
@@ -21780,10 +25754,10 @@ static ajlong btreeShiftPriOne(AjPBtcache cache, ajlong thisNode,
 	{
 	    pTarray[nTkeys+1] = pTarray[nTkeys];
 
-	    for(i=nTkeys-1;i>-1;--i)
+	    for(ii=nTkeys-1;ii>-1;--ii)
 	    {
-		ajStrAssignS(&kTarray[i+1],kTarray[i]);
-		pTarray[i+1] = pTarray[i];
+		ajStrAssignS(&kTarray[ii+1],kTarray[ii]);
+		pTarray[ii+1] = pTarray[ii];
 	    }
 
 	    ajStrAssignS(&kTarray[0],kBarray[nBkeys-1]);
@@ -21808,7 +25782,7 @@ static ajlong btreeShiftPriOne(AjPBtcache cache, ajlong thisNode,
     
 
     /* Adjust PREV pointers for thisNode */
-    prev = pageT->pageno;
+    prev = pageT->pagepos;
 
     for(i=0;i<nTkeys+1;++i)
     {
@@ -21828,7 +25802,10 @@ static ajlong btreeShiftPriOne(AjPBtcache cache, ajlong thisNode,
     btreeWriteNode(cache,pageT,kTarray,pTarray,nTkeys);
 
     if(!anchorNode)
+    {
 	pageA->dirty = BT_LOCK;
+        pageA->lockfor = 1954;
+    }
 
     btreeDeallocPriArray(cache,arraysA);
     btreeDeallocPriArray(cache,arraysB);
@@ -21847,16 +25824,16 @@ static ajlong btreeShiftPriOne(AjPBtcache cache, ajlong thisNode,
 ** Deletion software
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] thisNode [ajlong] master node
-** @param [r] mergeNode [ajlong] merge node
-** @param [r] anchorNode [ajlong] anchor node
+** @param [r] thisNode [ajulong] master node
+** @param [r] mergeNode [ajulong] merge node
+** @param [r] anchorNode [ajulong] anchor node
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
-                               ajlong mergeNode, ajlong anchorNode)
+static ajulong btreeMergePriOne(AjPBtcache cache, ajulong thisNode,
+                                ajulong mergeNode, ajulong anchorNode)
 {
     unsigned char *tbuf = NULL;
     unsigned char *abuf = NULL;
@@ -21866,24 +25843,26 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
     AjPStr *kTarray = NULL;
     AjPStr *kAarray = NULL;
     AjPStr *kNarray = NULL;
-    ajlong *pTarray = NULL;
-    ajlong *pAarray = NULL;
-    ajlong *pNarray = NULL;
+    ajulong *pTarray = NULL;
+    ajulong *pAarray = NULL;
+    ajulong *pNarray = NULL;
 
-    ajlong thisprev  = 0L;
-    ajlong mergeprev = 0L;
+    ajulong thisprev  = 0L;
+    ajulong mergeprev = 0L;
     
     
-    ajint  nAkeys = 0;
-    ajint  nNkeys = 0;
-    ajint  nTkeys = 0;
-    ajint  count  = 0;
-    ajint  i;
-    ajint  nodetype = 0;
+    ajuint  nAkeys = 0;
+    ajuint  nNkeys = 0;
+    ajuint  nTkeys = 0;
+    ajuint  count  = 0;
+    ajuint  i;
+    ajint   ii;
+
+    ajuint   nodetype = 0;
     
-    ajint saveA = 0;
-    ajint saveN = 0;
-    ajint saveT = 0;
+    ajuint saveA = 0;
+    ajuint saveN = 0;
+    ajuint saveT = 0;
     
     AjPBtpage pageA = NULL;
     AjPBtpage pageN = NULL;
@@ -21892,10 +25871,10 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
     
     AjPBtpage leftpage = NULL;
 
-    ajint  anchorPos = 0;
-    ajlong prev      = 0L;
+    ajuint anchorPos = 0;
+    ajulong prev      = 0L;
 
-    ajlong lv = 0L;
+    ajulong lv = 0L;
 
     AjPBtMem arraysA = NULL;    
     AjPBtMem arraysN = NULL;    
@@ -21908,14 +25887,17 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
     pageA = ajBtreeCacheRead(cache,anchorNode);
     saveA = pageA->dirty;
     pageA->dirty = BT_LOCK;
+    pageA->lockfor = 1961;
     abuf = pageA->buf;
     pageN = ajBtreeCacheRead(cache,mergeNode);
     saveN = pageN->dirty;
     pageN->dirty = BT_LOCK;
+    pageN->lockfor = 1962;
     nbuf = pageN->buf;
     pageT = ajBtreeCacheRead(cache,thisNode);
     saveT = pageT->dirty;
     pageT->dirty = BT_LOCK;
+    pageT->lockfor = 1963;
     tbuf = pageT->buf;
 
     GBT_PREV(tbuf,&thisprev);
@@ -21958,7 +25940,7 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
     btreeGetKeys(cache,nbuf,&kNarray,&pNarray);
     btreeGetKeys(cache,tbuf,&kTarray,&pTarray);
 
-    if(strcmp(kTarray[nTkeys-1]->Ptr,kNarray[nNkeys-1]->Ptr)<0)
+    if(MAJSTRCMPS(kTarray[nTkeys-1],kNarray[nNkeys-1])<0)
 	leftpage = pageT;
     else
 	leftpage = pageN;
@@ -21969,7 +25951,7 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
 	/* Find anchor key position */
 	i=0;
 
-	while(i!=nAkeys && strcmp(kTarray[nTkeys-1]->Ptr,kAarray[i]->Ptr)>=0)
+	while(i!=nAkeys && MAJSTRCMPS(kTarray[nTkeys-1],kAarray[i])>=0)
 	    ++i;
 
 	anchorPos = i;
@@ -21977,10 +25959,10 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
 	/* Move down anchor key to neighbour Node */
 	pNarray[nNkeys+1] = pNarray[nNkeys];
 
-	for(i=nNkeys-1;i>-1;--i)
+	for(ii=nNkeys-1;ii>-1;--ii)
 	{
-	    ajStrAssignS(&kNarray[i+1],kNarray[i]);
-	    pNarray[i+1] = pNarray[i];
+	    ajStrAssignS(&kNarray[ii+1],kNarray[ii]);
+	    pNarray[ii+1] = pNarray[ii];
 	}
 
 	ajStrAssignS(&kNarray[0],kAarray[anchorPos]);
@@ -22011,10 +25993,10 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
 	{
 	    pNarray[nNkeys+1] = pNarray[nNkeys];
 
-	    for(i=nNkeys-1;i>-1;--i)
+	    for(ii=nNkeys-1;ii>-1;--ii)
 	    {
-		ajStrAssignS(&kNarray[i+1],kNarray[i]);
-		pNarray[i+1] = pNarray[i];
+		ajStrAssignS(&kNarray[ii+1],kNarray[ii]);
+		pNarray[ii+1] = pNarray[ii];
 	    }
 
 	    ajStrAssignS(&kNarray[0],kTarray[nTkeys-1]);
@@ -22031,7 +26013,7 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
 	/* Find anchor key position */
 	i=0;
 
-	while(i!=nAkeys && strcmp(kNarray[nNkeys-1]->Ptr,kAarray[i]->Ptr)>=0)
+	while(i!=nAkeys && MAJSTRCMPS(kNarray[nNkeys-1],kAarray[i])>=0)
 	    ++i;
 
 	anchorPos = i;
@@ -22071,7 +26053,7 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
     
     
     /* Adjust PREV pointers for neighbour Node */
-    prev = pageN->pageno;
+    prev = pageN->pagepos;
 
     for(i=0;i<nNkeys+1;++i)
     {
@@ -22092,7 +26074,10 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
     btreeWriteNode(cache,pageN,kNarray,pNarray,nNkeys);
 
     if(!anchorNode)
+    {
 	pageA->dirty = BT_LOCK;
+        pageA->lockfor = 1964;
+    }
 
     btreeDeallocPriArray(cache,arraysA);
     btreeDeallocPriArray(cache,arraysN);
@@ -22114,28 +26099,28 @@ static ajlong btreeMergePriOne(AjPBtcache cache, ajlong thisNode,
 ** Deletion software.
 **
 ** @param [u] cache [AjPBtcache] cache
-** @param [r] pageno [ajlong] page number to make new root
+** @param [r] pagepos [ajulong] page number to make new root
 **
-** @return [ajlong] page number or BTNO_NODE
+** @return [ajulong] page number or BTNO_NODE
 ** @@
 ******************************************************************************/
 
-static ajlong btreeCollapseRootPriOne(AjPBtcache cache, ajlong pageno)
+static ajulong btreeCollapseRootPriOne(AjPBtcache cache, ajulong pagepos)
 {
     unsigned char *buf  = NULL;
     unsigned char *lbuf = NULL;
 
     AjPStr *karray = NULL;
-    ajlong *parray = NULL;
+    ajulong *parray = NULL;
 
     AjPBtpage rootpage = NULL;
     AjPBtpage page     = NULL;
     
-    ajint nodetype = 0;
-    ajint nkeys    = 0;
-    ajint i;
+    ajuint nodetype = 0;
+    ajuint nkeys    = 0;
+    ajuint i;
 
-    ajlong prev = 0L;
+    ajulong prev = 0L;
     AjPBtMem arrays = NULL;
     
     /* ajDebug("In btreeCollapseRootPriOne\n"); */
@@ -22145,7 +26130,7 @@ static ajlong btreeCollapseRootPriOne(AjPBtcache cache, ajlong pageno)
 
     rootpage = btreeCacheLocate(cache,0L);
     buf = rootpage->buf;
-    page = ajBtreeCacheRead(cache,pageno);
+    page = ajBtreeCacheRead(cache,pagepos);
 
 
     arrays = btreeAllocPriArray(cache);
@@ -22153,19 +26138,20 @@ static ajlong btreeCollapseRootPriOne(AjPBtcache cache, ajlong pageno)
     parray = arrays->parray;
 
     /*
-    ** Swap pageno values to make root the child and child the root
+    ** Swap pagepos values to make root the child and child the root
     ** Update node types and mark the original root as a clean page
     */
 
-    /* At this point page->pageno could be added to a free list */
+    /* At this point page->pagepos could be added to a free list */
 
-    rootpage->pageno = page->pageno;
+    rootpage->pagepos = page->pagepos;
     rootpage->dirty = BT_CLEAN;
     nodetype = BT_INTERNAL;
     SBT_NODETYPE(buf,nodetype);
 
-    page->pageno = 0;
-    page->dirty  = BT_LOCK;
+    page->pagepos = 0;
+    page->dirty = BT_LOCK;
+    page->lockfor = 1971;
     buf = page->buf;
     nodetype = BT_ROOT;
     SBT_NODETYPE(buf,nodetype);
@@ -22197,7 +26183,7 @@ static ajlong btreeCollapseRootPriOne(AjPBtcache cache, ajlong pageno)
 
 
 
-/* @funcstatic btreeIsSecEmpty ****************************************
+/* @funcstatic btreeIsSecEmpty ************************************************
 **
 ** Tests whether a secondary tree is empty
 **
@@ -22215,10 +26201,10 @@ static AjBool btreeIsSecEmpty(AjPBtcache cache)
     AjPSecBucket bucket = NULL;
     unsigned char *buf  = NULL;
     AjPStr *karray  = NULL;
-    ajlong *parray  = NULL;
+    ajulong *parray  = NULL;
     AjPBtMem arrays = NULL;
-    ajint nkeys = 0;
-    ajint tkeys = 0;
+    ajuint nkeys = 0;
+    ajuint tkeys = 0;
 
     if(cache->slevel)
         return ajFalse;
@@ -22263,3 +26249,2966 @@ static AjBool btreeIsSecEmpty(AjPBtcache cache)
 
     return ajTrue;
 }
+
+
+
+
+/* @funcstatic btreeNodetype *************************************************
+**
+** Returns a name for the nodetype of a buffer
+**
+** @param [r] buf [const unsigned char*] buffer
+** @return [const char*] Name of nodetype
+** @@
+******************************************************************************/
+
+static const char* btreeNodetype(const unsigned char* buf)
+{
+    static AjBool called = AJFALSE;
+
+    ajuint nodetype;
+
+    if(!called)
+    {
+        AJCNEW0(btreeNodetypeNames, 512);
+        btreeNodetypeNames[BT_FREEPAGE]  = "free";
+        btreeNodetypeNames[BT_ROOT]      = "root";
+        btreeNodetypeNames[BT_INTERNAL]  = "internal";
+        btreeNodetypeNames[BT_LEAF]      = "leaf";
+        btreeNodetypeNames[BT_BUCKET]    = "bucket";
+        btreeNodetypeNames[BT_OVERFLOW]  = "overflow";
+        btreeNodetypeNames[BT_PRIBUCKET] = "pribucket";
+        btreeNodetypeNames[BT_SECBUCKET] = "secbucket";
+        btreeNodetypeNames[BT_NUMBUCKET] = "numbucket";
+        called = ajTrue;
+    }
+
+    GBT_NODETYPE(buf, &nodetype);
+
+    if(nodetype >= 256)
+        return "unknown";
+    if(!btreeNodetypeNames[nodetype])
+        return "unknown";
+    if(nodetype == BT_OVERFLOW)
+    {
+        ajWarn("Overflow page found");
+        ajUtilCatch();
+    }
+    
+
+    return btreeNodetypeNames[nodetype];
+}
+
+
+
+
+/* @func ajBtreeGetPagecount **************************************************
+**
+** Returns the number of pages in a tree index
+**
+** @param [r] cache [const AjPBtcache] cache
+**
+** @return [ajulong] number of pages in a tree index
+** @@
+******************************************************************************/
+
+ajulong ajBtreeGetPagecount(const AjPBtcache cache)
+{
+    if(!cache->pagesize)
+        return cache->totsize/(ajulong) BT_PAGESIZE;
+
+    return cache->totsize/(ajulong) cache->pagesize;
+}
+
+
+
+
+/* @func ajBtreeGetPagesize **************************************************
+**
+** Returns the page size a tree index
+**
+** @param [r] cache [const AjPBtcache] cache
+**
+** @return [ajuint] Page size of a tree index
+** @@
+******************************************************************************/
+
+ajuint ajBtreeGetPagesize(const AjPBtcache cache)
+{
+    return cache->pagesize;
+}
+
+
+
+
+/* @func ajBtreeGetTotsize **************************************************
+**
+** Returns the number of bytes in a tree index
+**
+** @param [r] cache [const AjPBtcache] cache
+**
+** @return [ajulong] number of bytes in a tree index
+** @@
+******************************************************************************/
+
+ajulong ajBtreeGetTotsize(const AjPBtcache cache)
+{
+    return cache->totsize;
+}
+
+
+
+
+/* @func ajBtreePageGetTypename ********************************************
+**
+** Returns the node type name of a tree index page
+**
+** @param [r] page [const AjPBtpage] Page
+**
+** @return [const char*] Name of page type
+** @@
+******************************************************************************/
+
+const char* ajBtreePageGetTypename(const AjPBtpage page)
+{
+    return btreeNodetype(page->buf);
+}
+
+
+
+
+/* @func ajBtreeStatNode *******************************************************
+**
+** Returns number of keys, overflow pages visited and free space unused
+** for a b+ tree node page
+**
+** @param [w] cache [AjPBtcache] cache
+** @param [r] page [const AjPBtpage] Page
+** @param [r] full [AjBool] If true, write detailed debug report
+** @param [w] nkeys [ajuint*] Number of keys
+** @param [w] overflows [ajuint*] Number of overflow pages
+** @param [w] freespace [ajuint*] Unused space in this page
+** @param [u] refs [ajulong*] References to pages
+** @param [r] newpostable [const AjPTable] Page numbers for page offsets
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+AjBool ajBtreeStatNode(AjPBtcache cache, const AjPBtpage page, AjBool full,
+                       ajuint* nkeys, ajuint* overflows,
+                       ajuint* freespace, ajulong* refs,
+                       const AjPTable newpostable)
+{
+    ajuint i;
+    ajuint m;
+
+    ajuint nodetype;
+    ajuint klen;
+    const AjPBtpage bpage;
+    unsigned char *tbuf;
+    ajuint freebytes;
+
+    ajuint    pagesize = 0;
+    ajulong   overflow = 0L;
+    ajulong blockno;
+    ajuint totlen;
+    ajulong left;
+    ajulong right;
+    ajulong prev;
+    unsigned char *lenptr = NULL;
+    unsigned char *keyptr = NULL;
+    ajulong lv;
+    unsigned char* kp;
+
+    pagesize = cache->pagesize;
+
+    bpage = page;
+    tbuf = bpage->buf;
+    GBT_TOTLEN(tbuf,&totlen);
+
+    if(!totlen)
+      return ajBtreeStatNumnode(cache, page, full,
+                                nkeys, overflows, freespace, refs,
+                                newpostable);
+    
+    btreeCheckNode(cache, page);
+
+    GBT_NKEYS(tbuf,&m);
+    *nkeys = m;
+    *overflows = 0;
+    *freespace = 0;
+
+    GBT_OVERFLOW(tbuf,&overflow);
+
+    GBT_LEFT(tbuf,&left);
+    GBT_RIGHT(tbuf,&right);
+    GBT_PREV(tbuf,&prev);
+    GBT_BLOCKNUMBER(tbuf,&blockno);
+
+    if(full)
+        ajDebug("\n"
+                "StatNode      %12Lu totlen:%u '%s'\n"
+                "         left:%12Lu  right:%12Lu  prev:%12Lu\n"
+                "        block:%12Lu   over:%12Lu\n",
+                page->pagepos, totlen, btreeNodetype(tbuf),
+                left, right, prev, blockno, overflow);
+    if(full)
+        ajDebug("\nStatNode      %12Lu      pointer (%u)\n",
+                page->pagepos, m);
+    if(full)
+        ajDebug("--------      ------------      -------\n");
+
+    lenptr =  PBT_KEYLEN(tbuf);
+    keyptr = lenptr + m * sizeof(ajuint);
+
+    for(i=0;i<m;i++)
+    {
+	BT_GETAJUINT(lenptr,&klen);
+
+	if((ajuint)((keyptr-tbuf+2) + klen + sizeof(ajulong)) > pagesize)
+	{
+            freebytes = pagesize - (keyptr-tbuf);
+            *freespace += freebytes;
+            (*overflows)++;
+    	    /* ajDebug("btreeStatNode: Overflow\n"); */
+	    bpage = ajBtreeCacheRead(cache,overflow);
+	    tbuf = bpage->buf;
+	    GBT_NODETYPE(tbuf,&nodetype);
+
+	    if(nodetype != BT_OVERFLOW)
+		ajFatal("StatNode Overflow node %Lu expected but not found "
+                        "cache %S page %Lu "
+                        "pagepos:%Lu key:%u/%u free:%u keyptr:%x lenptr:%x "
+                        "tbuf:%x klen:%u old nodetype '%s' newnodetype '%s' "
+                        "blockno:%Lu totlen:%u left:%Lu right:%Lu prev:%Lu",
+                        overflow, cache->filename,
+                        page->pagepos, page->pagepos/pagesize,
+                        i, m, freebytes,
+                        keyptr, lenptr, tbuf, klen,
+                        btreeNodetype(page->buf), btreeNodetype(tbuf),
+                        blockno,totlen, left, right, prev);
+
+            GBT_BLOCKNUMBER(tbuf,&blockno);
+            GBT_TOTLEN(tbuf,&totlen);
+            GBT_LEFT(tbuf,&left);
+            GBT_RIGHT(tbuf,&right);
+            GBT_PREV(tbuf,&prev);
+
+	    /*
+	     ** The length pointer is restricted to the initial page.
+	     ** The keyptr in overflow pages starts at the Key Lengths
+	     ** position!
+	     */
+            keyptr = PBT_KEYLEN(tbuf);
+	}
+
+        kp = keyptr;
+        keyptr += klen+1;
+        BT_GETAJULONG(keyptr,&lv);
+        ++refs[*ajTableulongFetch(newpostable, &lv)];
+	keyptr += sizeof(ajulong);
+
+        if(full)
+            ajDebug("StatNode      %12Lu %12Lu '%*s'\n",
+                    page->pagepos, lv, klen, kp);
+
+	lenptr += sizeof(ajuint);
+    }
+
+    BT_GETAJULONG(keyptr,&lv);
+    keyptr += sizeof(ajulong);
+    ++refs[*ajTableulongFetch(newpostable, &lv)];
+
+    if(full)
+        ajDebug("StatNode      %12Lu %12Lu '<end>'\n",
+                page->pagepos, lv);
+
+    *freespace += pagesize - (keyptr-tbuf);
+
+    if(full)
+        ajDebug("StatNode      %12Lu keys:%6u over:%6u free:%6u\n",
+                page->pagepos, *nkeys, *overflows, *freespace);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ajBtreeStatNumnode ****************************************************
+**
+** Returns number of keys, overflow pages visited and free space unused
+** for a b+ tree numeric node page
+**
+** @param [w] cache [AjPBtcache] cache
+** @param [r] page [const AjPBtpage] Page
+** @param [r] full [AjBool] If true, write detailed debug report
+** @param [w] nkeys [ajuint*] Number of keys
+** @param [w] overflows [ajuint*] Number of overflow pages
+** @param [w] freespace [ajuint*] Unused space in this page
+** @param [u] refs [ajulong*] References to pages
+** @param [r] newpostable [const AjPTable] Page numbers for page offsets
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+AjBool ajBtreeStatNumnode(AjPBtcache cache, const AjPBtpage page, AjBool full,
+                          ajuint* nkeys, ajuint* overflows,
+                          ajuint* freespace, ajulong *refs,
+                          const AjPTable newpostable)
+{
+    ajuint i;
+    ajuint m;
+    const AjPBtpage bpage;
+    unsigned char *tbuf;
+
+    ajuint   pagesize = 0;
+    ajulong   overflow = 0L;
+    ajulong blockno;
+    ajuint totlen;
+    ajulong left;
+    ajulong right;
+    ajulong prev;
+    unsigned char *keyptr = NULL;
+    unsigned char *valptr = NULL;
+    ajulong lv;
+    ajulong lk;
+
+    btreeCheckNumnode(cache, page);
+
+    pagesize = cache->pagesize;
+
+    bpage = page;
+    tbuf = bpage->buf;
+    GBT_TOTLEN(tbuf,&totlen);
+    
+    GBT_NKEYS(tbuf,&m);
+    *nkeys = m;
+    *overflows = 0;
+    *freespace = 0;
+
+    GBT_LEFT(tbuf,&left);
+    GBT_RIGHT(tbuf,&right);
+    GBT_BLOCKNUMBER(tbuf,&blockno);
+    GBT_PREV(tbuf,&prev);
+    GBT_OVERFLOW(tbuf,&overflow);
+
+    if(full)
+        btreeDumpNumnode(cache, page);
+
+    keyptr =  PBT_KEYLEN(tbuf);
+    valptr = keyptr + m * sizeof(ajulong);
+    for(i=0;i<m;i++)
+    {
+        BT_GETAJULONG(valptr,&lv);
+        ++refs[*ajTableulongFetch(newpostable, &lv)];
+        BT_GETAJULONG(keyptr,&lk);
+        keyptr += sizeof(ajulong);
+	valptr += sizeof(ajulong);
+    }
+    BT_GETAJULONG(valptr,&lv);
+    valptr += sizeof(ajulong);
+    ++refs[*ajTableulongFetch(newpostable, &lv)];
+    *freespace += pagesize - (valptr-tbuf);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic btreeDumpNumnode ************************************************
+**
+** Writes a numeric node page to the debug file
+**
+** @param [w] cache [AjPBtcache] cache
+** @param [r] page [const AjPBtpage] Page
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeDumpNumnode(AjPBtcache cache, const AjPBtpage page)
+{
+    ajuint i;
+    ajuint m;
+    const AjPBtpage bpage;
+    unsigned char *tbuf;
+
+    ajulong   overflow = 0L;
+    ajulong blockno;
+    ajuint totlen;
+    ajulong left;
+    ajulong right;
+    ajulong prev;
+    unsigned char *keyptr = NULL;
+    unsigned char *valptr = NULL;
+    ajulong lv;
+    ajulong lk;
+
+    (void) cache;
+    
+    bpage = page;
+    tbuf = bpage->buf;
+    GBT_TOTLEN(tbuf,&totlen);
+    
+    GBT_NKEYS(tbuf,&m);
+
+    GBT_LEFT(tbuf,&left);
+    GBT_RIGHT(tbuf,&right);
+    GBT_BLOCKNUMBER(tbuf,&blockno);
+    GBT_PREV(tbuf,&prev);
+    GBT_OVERFLOW(tbuf,&overflow);
+
+    ajDebug("\n"
+                "DumpNumNode   %12Lu totlen:%u\n"
+                "         left:%12Lu  right:%12Lu  prev:%12Lu\n"
+                "        block:%12Lu   over:%12Lu\n",
+                page->pagepos, totlen, left, right, prev, blockno, overflow);
+    ajDebug("\nDumpNumnode   %12Lu   pageoffset (%u)\n",
+                page->pagepos, m);
+    ajDebug("-----------   ------------ ------------ -------\n");
+
+
+    keyptr =  PBT_KEYLEN(tbuf);
+    valptr = keyptr + m * sizeof(ajulong);
+
+    for(i=0;i<m;i++)
+    {
+        BT_GETAJULONG(valptr,&lv);
+        BT_GETAJULONG(keyptr,&lk);
+        ajDebug("DumpNumnode   %12Lu %12Lu %Lu\n", page->pagepos, lv, lk);
+	keyptr += sizeof(ajulong);
+	valptr += sizeof(ajulong);
+    }
+
+    BT_GETAJULONG(valptr,&lv);
+    ajDebug("DumpNumnode   %12Lu %12Lu '<end>'\n", page->pagepos, lv);
+    ajDebug("DumpNumnode   %12Lu keys:%6u\n",
+                page->pagepos, m);
+    return;
+}
+
+
+
+
+/* @func ajBtreeStatBucket *****************************************************
+**
+** Returns number of keys, overflow pages visited and free space unused
+** for a b+ tree bucket page
+**
+** @param [w] cache [AjPBtcache] cache
+** @param [r] page [const AjPBtpage] Page
+** @param [r] full [AjBool] If true, write detailed debug report
+** @param [w] nentries [ajuint*] Number of entries
+** @param [w] ndups [ajuint*] Number of entries with duplicates
+** @param [w] nextra [ajuint*] Number of extra entries as duplicates
+** @param [w] overflows [ajuint*] Number of overflow pages
+** @param [w] freespace [ajuint*] Unused space in this page
+** @param [u] refs [ajulong*] References to pages
+** @param [r] newpostable [const AjPTable] Page numbers for page offsets
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+AjBool ajBtreeStatBucket(AjPBtcache cache, const AjPBtpage page, AjBool full,
+                         ajuint* nentries, ajuint *ndups, ajuint *nextra,
+                         ajuint* overflows, ajuint* freespace, ajulong* refs,
+                         const AjPTable newpostable)
+{
+    ajuint i;
+    ajuint m;
+    ajuint nodetype;
+    ajuint klen;
+    const AjPBtpage bpage;
+    unsigned char *tbuf;
+    ajuint freebytes;
+
+    ajuint   pagesize = 0;
+    ajulong   overflow = 0L;
+    unsigned char *idptr = NULL;
+    unsigned char *keyptr = NULL;
+    unsigned char *kp = NULL;
+
+    ajuint uv;
+    ajuint uv2;
+    ajulong lv;
+    ajulong lv2;
+    ajuint idlen;
+
+    pagesize = cache->pagesize;
+
+    bpage = page;
+    tbuf = bpage->buf;
+
+    GBT_BUCKNENTRIES(tbuf,&m);
+    *nentries = m;
+    *overflows = 0;
+    *freespace = 0;
+    *ndups = 0;
+    *nextra = 0;
+
+    GBT_BUCKOVERFLOW(tbuf,&overflow);
+
+    keyptr = PBT_BUCKKEYLEN(tbuf);
+    idptr = keyptr + (m * sizeof(ajuint));
+
+    if(full)
+        ajDebug("\n"
+                "StatBucket     %12Lu over:%12Lu\n",
+                page->pagepos, overflow);
+   if(full)
+       ajDebug("\nStatBucket     %12Lu   dbno   dups       offset    "
+               "refoffset (%u)\n",
+               page->pagepos, m);
+    if(full)
+        ajDebug("----------                    ----   ----       ------    "
+                "---------\n");
+    for(i=0;i<m;i++)
+    {
+	BT_GETAJUINT(keyptr,&klen);
+        idlen = klen - BT_DDOFFROFF;
+
+	if((idptr-tbuf+2) + klen > cache->pagesize)	/* overflow */
+	{
+            freebytes = pagesize - (idptr-tbuf);
+            *freespace += freebytes;
+            (*overflows)++;
+    	    /* ajDebug("btreeStatNode: Overflow\n"); */
+	    GBT_BUCKOVERFLOW(tbuf,&overflow);
+	    bpage = ajBtreeCacheRead(cache,overflow);
+	    tbuf = bpage->buf;
+	    GBT_BUCKNODETYPE(tbuf,&nodetype);
+	    if(nodetype != BT_OVERFLOW)
+		ajFatal("StatBucket Overflow node %Lu expected but not found "
+                        "for cache '%S'",
+                        overflow, cache->filename);
+	    /* overflow bucket ids start at the keylen position */
+	    idptr = PBT_BUCKKEYLEN(tbuf);
+	}
+        kp = idptr;
+	idptr += idlen;
+        BT_GETAJUINT(idptr, &uv);
+        idptr += sizeof(ajuint);
+	BT_GETAJUINT(idptr,&uv2);
+        if(uv2)
+        {
+            (*ndups)++;
+            *nextra += uv2;
+        }
+	idptr += sizeof(ajuint);	
+	BT_GETAJULONG(idptr,&lv);
+        if(uv2)
+            ++refs[*ajTableulongFetch(newpostable, &lv)];
+	idptr += sizeof(ajulong);
+	BT_GETAJULONG(idptr,&lv2);
+	idptr += sizeof(ajulong);
+        
+        if(full)
+            ajDebug("#StatBucket    %12Lu %6u %6u %12Lu %12Lu '%*s'\n",
+                    page->pagepos, uv, uv2, lv, lv2, idlen-1, kp);
+
+	keyptr += sizeof(ajuint);
+    }
+    *freespace += pagesize - (idptr-tbuf);
+    *nextra -= *ndups;
+    if(full)
+        ajDebug("StatBucket     %12Lu keys:%6u over:%6u free:%6u\n",
+                page->pagepos, *nentries, *overflows, *freespace);
+    return ajTrue;
+}
+
+
+
+
+/* @func ajBtreeStatNumbucket **************************************************
+**
+** Returns number of keys, overflow pages visited and free space unused
+** for a b+ tree secondary bucket page
+**
+** @param [w] cache [AjPBtcache] cache
+** @param [r] page [const AjPBtpage] Page
+** @param [r] full [AjBool] If true, write detailed debug report
+** @param [w] nentries [ajuint*] Number of entries
+** @param [w] overflows [ajuint*] Number of overflow pages
+** @param [w] freespace [ajuint*] Unused space in this page
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+AjBool ajBtreeStatNumbucket(AjPBtcache cache, const AjPBtpage page, AjBool full,
+                            ajuint* nentries, ajuint* overflows,
+                            ajuint* freespace)
+{
+    ajuint i;
+    ajuint m;
+    const AjPBtpage bpage;
+    unsigned char *tbuf;
+
+    ajulong lv;
+    ajulong lv2;
+    ajuint v;
+    ajuint   pagesize = 0;
+    ajulong   overflow = 0L;
+    unsigned char *keyptr = NULL;
+
+    pagesize = cache->pagesize;
+
+    bpage = page;
+    tbuf = bpage->buf;
+    GBT_BUCKNENTRIES(tbuf,&m);
+    *nentries = m;
+    *overflows = 0;
+    *freespace = 0;
+
+    GBT_BUCKOVERFLOW(tbuf,&overflow);
+
+    keyptr = PBT_BUCKKEYLEN(tbuf);
+
+    if(full)
+        ajDebug("\n"
+                "StatNumBucket  %12Lu over:%12Lu\n",
+                page->pagepos, overflow);
+    if(full)
+        ajDebug("\nStatNumbucket  %12Lu       offset    "
+                "refoffset         dbno (%u)\n",
+                page->pagepos, m);
+    if(full)
+        ajDebug("-------------  ------------      -------   "
+                "----------         ----\n");
+    for(i=0;i<m;i++)
+    {
+        BT_GETAJULONG(keyptr,&lv);
+	keyptr += sizeof(ajulong);
+        BT_GETAJULONG(keyptr,&lv2);
+	keyptr += sizeof(ajulong);
+        BT_GETAJUINT(keyptr,&v);
+	keyptr += sizeof(ajuint);
+        if(full)
+            ajDebug("#StatNumbucket              %12Lu %12Lu %12u\n",
+                    lv, lv2, v);
+    }
+    *freespace += pagesize - (keyptr-tbuf);
+    if(full)
+        ajDebug("StatNumbucket  %12Lu keys:%6u over:%6u free:%6u\n",
+                page->pagepos, *nentries, *overflows, *freespace);
+    
+    return ajTrue;
+}
+
+
+
+
+/* @func ajBtreeStatPribucket **************************************************
+**
+** Returns number of keys, overflow pages visited and free space unused
+** for a b+ tree primary bucket page
+**
+** @param [w] cache [AjPBtcache] cache
+** @param [r] page [const AjPBtpage] Page
+** @param [r] full [AjBool] If true, write detailed debug report
+** @param [w] nentries [ajuint*] Number of entries
+** @param [w] overflows [ajuint*] Number of overflow pages
+** @param [w] freespace [ajuint*] Unused space in this page
+** @param [u] refs [ajulong*] References to pages
+** @param [r] newpostable [const AjPTable] Page numbers for page offsets
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+AjBool ajBtreeStatPribucket(AjPBtcache cache, const AjPBtpage page, AjBool full,
+                            ajuint* nentries, ajuint* overflows,
+                            ajuint* freespace, ajulong *refs,
+                            const AjPTable newpostable)
+{
+    ajuint i;
+    ajuint m;
+    ajuint nodetype;
+    ajuint klen;
+    const AjPBtpage bpage;
+    unsigned char *tbuf;
+    ajuint freebytes;
+
+    ajuint   pagesize = 0;
+    ajulong   overflow = 0L;
+    unsigned char *idptr = NULL;
+    unsigned char *keyptr = NULL;
+
+    unsigned char* lp;
+    ajulong lv;
+
+    pagesize = cache->pagesize;
+
+    bpage = page;
+    tbuf = bpage->buf;
+    GBT_BUCKNENTRIES(tbuf,&m);
+    *nentries = m;
+    *overflows = 0;
+    *freespace = 0;
+
+    GBT_BUCKOVERFLOW(tbuf,&overflow);
+
+    keyptr = PBT_BUCKKEYLEN(tbuf);
+    idptr = keyptr + (m * sizeof(ajuint));
+
+    if(full)
+        ajDebug("\n"
+                "StatPribucket  %12Lu over:%12Lu\n",
+                page->pagepos, overflow);
+    if(full)
+        ajDebug("\nStatPribucket  %12Lu (%u)\n",
+                page->pagepos, m);
+    if(full)
+        ajDebug("-------------  ------------      -------\n");
+    for(i=0;i<m;i++)
+    {
+	BT_GETAJUINT(keyptr,&klen);
+
+	if((idptr-tbuf+2) + klen > cache->pagesize)	/* overflow */
+	{
+            freebytes = pagesize - (idptr-tbuf);
+            *freespace += freebytes;
+            (*overflows)++;
+    	    /* ajDebug("btreeStatNode: Overflow\n"); */
+	    GBT_BUCKOVERFLOW(tbuf,&overflow);
+	    bpage = ajBtreeCacheRead(cache,overflow);
+	    tbuf = bpage->buf;
+	    GBT_BUCKNODETYPE(tbuf,&nodetype);
+	    if(nodetype != BT_OVERFLOW)
+		ajFatal("StatPribucket Overflow node %Lu expected but not found",
+                        overflow, cache->filename);
+	    /* overflow bucket ids start at the keylen position */
+	    idptr = PBT_BUCKKEYLEN(tbuf);
+	}
+
+        lp = idptr+ klen-8;
+        BT_GETAJULONG(lp,&lv);
+        ++refs[*ajTableulongFetch(newpostable, &lv)];
+        if(full)
+            ajDebug("#StatPribucket %12Lu %12Lu '%*s'\n",
+                    page->pagepos, lv, klen-9, idptr);
+	idptr += klen;    /* string */
+	keyptr += sizeof(ajuint);
+    }
+    *freespace += pagesize - (idptr-tbuf);
+    if(full)
+        ajDebug("StatPribucket  %12Lu keys:%6u over:%6u free:%6u\n",
+                page->pagepos, *nentries, *overflows, *freespace);    
+    return ajTrue;
+}
+
+
+
+
+/* @func ajBtreeStatSecbucket **************************************************
+**
+** Returns number of keys, overflow pages visited and free space unused
+** for a b+ tree numeric bucket page
+**
+** @param [w] cache [AjPBtcache] cache
+** @param [r] page [const AjPBtpage] Page
+** @param [r] full [AjBool] If true, write detailed debug report
+** @param [w] nentries [ajuint*] Number of entries
+** @param [w] overflows [ajuint*] Number of overflow pages
+** @param [w] freespace [ajuint*] Unused space in this page
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+AjBool ajBtreeStatSecbucket(AjPBtcache cache, const AjPBtpage page, AjBool full,
+                            ajuint* nentries, ajuint* overflows,
+                            ajuint* freespace)
+{
+    ajuint i;
+    ajuint m;
+    ajuint nodetype;
+    ajuint klen;
+    const AjPBtpage bpage;
+    unsigned char *tbuf;
+    ajuint freebytes;
+
+    ajuint   pagesize = 0;
+    ajulong   overflow = 0L;
+    unsigned char *idptr = NULL;
+    unsigned char *keyptr = NULL;
+
+    pagesize = cache->pagesize;
+
+    bpage = page;
+    tbuf = bpage->buf;
+    GBT_BUCKNENTRIES(tbuf,&m);
+    *nentries = m;
+    *overflows = 0;
+    *freespace = 0;
+
+    GBT_BUCKOVERFLOW(tbuf,&overflow);
+
+    keyptr = PBT_BUCKKEYLEN(tbuf);
+    idptr = keyptr + (m * sizeof(ajuint));
+
+    if(full)
+        ajDebug("\n"
+                "StatSecbucket  %12Lu over:%12Lu\n",
+                page->pagepos, overflow);
+    ajDebug("\nStatSecbucket  %12Lu (%u)\n",
+            page->pagepos, m);
+    if(full)
+        ajDebug("-------------  ------------      -------\n");
+    for(i=0;i<m;i++)
+    {
+	BT_GETAJUINT(keyptr,&klen);
+
+	if((idptr-tbuf+2) + klen > cache->pagesize)	/* overflow */
+	{
+            freebytes = pagesize - (idptr-tbuf);
+            *freespace += freebytes;
+            (*overflows)++;
+    	    /* ajDebug("btreeStatNode: Overflow\n"); */
+	    GBT_BUCKOVERFLOW(tbuf,&overflow);
+	    bpage = ajBtreeCacheRead(cache,overflow);
+	    tbuf = bpage->buf;
+            GBT_BUCKNODETYPE(tbuf,&nodetype);
+	    if(nodetype != BT_OVERFLOW)
+		ajFatal("StatSecbucket Overflow node %Lu expected "
+                        "but not found",
+                        overflow, cache->filename);
+	    /* overflow bucket ids start at the keylen position */
+	    idptr = PBT_BUCKKEYLEN(tbuf);
+	}
+
+        ajDebug("#StatSecbucket %12Lu '%*s'\n",
+                page->pagepos, klen-1, idptr);
+	idptr += klen;    /* string */
+
+	keyptr += sizeof(ajuint);
+    }
+    *freespace += pagesize - (idptr-tbuf);
+    if(full)
+        ajDebug("StatSecbucket  %12Lu keys:%6u over:%6u free:%6u\n",
+                page->pagepos, *nentries, *overflows, *freespace);
+    
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic btreeBucketSplitCalc ********************************************
+**
+** Calculate new bucket sizes to split a node.
+** Make sure all existing buckets are reused.
+**
+** @param [r] totalkeys [ajuint] Total number of keys in all buckets
+** @param [r] totalbuckets [ajuint] Total number of current buckets
+** @param [r] maxbucketsize [ajuint] Maximum number of keys in a buckets
+** @param [w] leftbuckets [ajuint*] Number of left node buckets
+** @param [w] leftmax [ajuint*] Maximum number of keys per left node bucket
+** @param [w] leftkeys [ajuint*] Maximum number of keys under left node
+** @param [w] rightbuckets [ajuint*] Number of right node buckets
+** @param [w] rightmax [ajuint*] Maximum number of keys per right node bucket
+** @param [w] rightkeys [ajuint*] Maximum number of keys under right node
+** @return [AjBool] True if calculated value reused all buckets
+**                  False if increased to use all buckets
+** @@
+******************************************************************************/
+
+static AjBool btreeBucketSplitCalc(ajuint totalkeys, ajuint totalbuckets,
+                                   ajuint maxbucketsize,
+                                   ajuint *leftbuckets, ajuint *leftmax,
+                                   ajuint *leftkeys,
+                                   ajuint *rightbuckets, ajuint *rightmax,
+                                   ajuint *rightkeys)
+{
+    ajuint lbuckets;
+    ajuint rbuckets;
+    ajuint lmax;
+    ajuint rmax;
+    ajuint lkeys;
+    ajuint rkeys;
+
+    ajuint lmax2;
+    ajuint rmax2;
+    ajuint lbuckets1;
+    ajuint rbuckets1;
+    ajuint lbuckets2;
+    ajuint rbuckets2;
+
+    ajuint bucketn;
+    ajuint lrest;
+    ajuint rrest;
+
+    AjBool ret = ajTrue;
+
+    /* from the original keys and buckets */
+
+    lkeys = totalkeys/2;
+    rkeys = totalkeys - lkeys;
+
+    lbuckets = totalbuckets/2;
+    rbuckets = totalbuckets - lbuckets;
+
+    lmax = lkeys/lbuckets;
+    if(!(lkeys % lbuckets))
+        lmax--;
+    if(!lmax) lmax = 1;
+
+    bucketn = lkeys/lmax;
+    if(lkeys % lmax)
+        bucketn++;
+    lbuckets1 = bucketn - 1;
+    
+    rmax = rkeys/rbuckets;
+    if(!(rkeys % rbuckets))
+        rmax--;
+    if(!rmax) rmax = 1;
+    
+    bucketn = rkeys/rmax;
+    if(rkeys % rmax)
+        bucketn++;
+    rbuckets1 = bucketn - 1;
+
+    /* minimum space required */
+
+    lmax2 = maxbucketsize/2;
+    lmax2++;
+
+    bucketn = lkeys/lmax2;
+    if(lkeys % lmax2)
+        bucketn++;
+    lbuckets2 = bucketn - 1;
+
+    rmax2 = maxbucketsize/2;
+    rmax2++;
+
+    bucketn = rkeys/rmax2;
+    if(rkeys % rmax2)
+        bucketn++;
+    rbuckets2 = bucketn - 1;
+
+    *leftkeys = lkeys;
+    *rightkeys = rkeys;
+
+    if((rbuckets2 + lbuckets2) < totalbuckets)
+    {
+        *leftmax = lmax;
+        *leftbuckets = lbuckets1;
+        *rightmax = rmax;
+        *rightbuckets = rbuckets1;
+        ret = ajFalse;
+    }
+    else
+    {
+        *leftmax = lmax2;
+        *leftbuckets = lbuckets2;
+        *rightmax = rmax2;
+        *rightbuckets = rbuckets2;
+    }
+    lrest = (*leftkeys) - (*leftbuckets)*(*leftmax);
+    rrest = (*rightkeys) - (*rightbuckets)*(*rightmax);
+
+#if AJINDEX_DEBUG
+    ajDebug("btreeBucketSplitCalc totalkeys:%u totalbuckets:%u "
+            "maxbucketsize:%u => %u*%u + %u (%u) "
+            "%u*%u + %u (%u)\n",
+            totalkeys, totalbuckets, maxbucketsize,
+            *leftbuckets, *leftmax, lrest, *leftkeys,
+            *rightbuckets, *rightmax, rrest, *rightkeys);
+#endif
+
+    if(lrest < 1 || lrest > (*leftmax))
+        ajFatal("Bad btreeBucketSplitCalc lrest:%u", lrest);
+    if(rrest < 1 || rrest > (*rightmax))
+        ajFatal("Bad btreeBucketSplitCalc rrest:%u", rrest);
+
+    return ret;
+}
+
+
+
+
+/* @funcstatic btreeBucketCalc ************************************************
+**
+** Calculate new bucket sizes to split a node.
+** Make sure all existing buckets are reused.
+**
+** @param [r] totalkeys [ajuint] Total number of keys in all buckets
+** @param [r] totalbuckets [ajuint] Total number of current buckets
+** @param [r] maxbucketsize [ajuint] Maximum number of keys in a buckets
+** @param [w] newbuckets [ajuint*] Number of new buckets
+** @param [w] newmax [ajuint*] Maximum number of keys per new bucket
+** @return [AjBool] True if calculated value reused all buckets
+**                  False if increased to use all buckets
+** @@
+******************************************************************************/
+
+static AjBool btreeBucketCalc(ajuint totalkeys, ajuint totalbuckets,
+                              ajuint maxbucketsize,
+                              ajuint *newbuckets, ajuint *newmax)
+{
+    ajuint bmax;
+    ajuint bmax2;
+
+    ajuint buckets1;
+    ajuint buckets2;
+
+    ajuint bucketn;
+    ajuint rest;
+
+    AjBool ret = ajTrue;
+
+    /* from the original keys and buckets */
+
+    if(!totalbuckets)
+        ajFatal("btreeBucketCalc zero buckets keys:%u", totalkeys);
+    bmax = totalkeys/totalbuckets;
+    if(!(totalkeys % totalbuckets))
+        bmax--;
+    if(!bmax) bmax = 1;
+
+    bucketn = totalkeys/bmax;
+    if(totalkeys % bmax)
+        bucketn++;
+    buckets1 = bucketn - 1;
+
+    /* minimum space required */
+
+    bmax2 = maxbucketsize/2;
+    if(!bmax2)
+        ++bmax2;
+
+    bucketn = totalkeys/bmax2;
+    if(totalkeys % bmax2)
+        bucketn++;
+    buckets2 = bucketn - 1;
+
+
+    if(buckets2 < totalbuckets)
+    {
+        *newmax = bmax;
+        *newbuckets = buckets1;
+        ret = ajFalse;
+    }
+    else
+    {
+        *newmax = bmax2;
+        *newbuckets = buckets2;
+    }
+    rest = (totalkeys) - (*newbuckets)*(*newmax);
+
+#if AJINDEX_DEBUG
+    ajDebug("btreeBucketCalc totalkeys:%u totalbuckets:%u "
+            "maxbucketsize:%u => %u*%u + %u ret:%B\n",
+            totalkeys, totalbuckets, maxbucketsize,
+            *newbuckets, *newmax, rest, ret);
+#endif
+
+    if(rest < 1 || rest > (*newmax))
+        ajFatal("Bad ajBtreeBucketCalc rest:%u", rest);
+
+    return ret;
+}
+
+
+
+
+/* @funcstatic btreePageposCompress *******************************************
+**
+** Return the new start position of a compressed 
+**
+** @param [r] oldpos [ajulong] Page position
+** @param [r] newpagepos [ajulong const*] Array of new page positions
+** @param [r] pagesize [ajuint] Full page size
+** @param [r] where [const char*] Location in index for reporting in
+**                                warning message.
+** @return [ajulong] New page start position
+** @@
+******************************************************************************/
+
+static ajulong btreePageposCompress(ajulong oldpos,
+                                    ajulong const* newpagepos,
+                                    ajuint pagesize, const char* where)
+{
+    if(oldpos % pagesize)
+        ajWarn("oldpos %Lu pagesize %u (%s)", oldpos, pagesize, where);
+    return newpagepos[oldpos/pagesize];
+}
+
+
+
+
+/* @funcstatic btreePageposUncompress *****************************************
+**
+** Return the new start position of a compressed 
+**
+** @param [r] oldpos [ajulong] Page position
+** @param [r] newpostable [const AjPTable] Array of new page positions
+** @param [r] where [const char*] Location in index for reporting in
+**                                warning message.
+** @return [ajulong] new start position
+** @@
+******************************************************************************/
+
+static ajulong btreePageposUncompress(ajulong oldpos,
+                                      const AjPTable newpostable,
+                                      const char* where)
+{
+    const ajulong *newpos;
+
+    ajDebug("btreePageposUncompress oldpos %Lu table size:%u\n",
+            oldpos, ajTableGetLength(newpostable));
+
+    newpos =  ajTableulongFetch(newpostable, &oldpos);
+
+    if(!newpos)
+        ajWarn("oldpos %Lu not found (%s)", oldpos, where);
+    else
+        ajDebug("btreePageposUncompress oldpos %Lu newpos %Lu\n",
+                oldpos, *newpos);
+
+    return *newpos;
+}
+
+
+
+
+/* @funcstatic btreePageUncompress ********************************************
+**
+** Uncompress a cache page using a table of new positions for pages
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpostable [const AjPTable] Table of new page positions
+** @param [r] pagesize [ajuint] Full page size
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+static AjBool btreePageUncompress(AjPBtpage page,
+                                  const AjPTable newpostable,
+                                  ajuint pagesize)
+{
+    const unsigned char* buf = page->buf;
+    ajuint nodetype;
+
+    GBT_NODETYPE(buf, &nodetype);
+
+    ajDebug("btreePageUncompress %Lu (%s)\n",
+            page->pagepos, btreeNodetype(buf));
+
+    switch (nodetype) 
+    {
+        case BT_FREEPAGE:       /* no need to save the page */
+            return ajFalse;
+        case BT_ROOT:
+        case BT_INTERNAL:
+        case BT_LEAF:
+            btreePageUncompressNode(page, newpostable, pagesize);
+            return ajTrue;
+        case BT_BUCKET:
+            btreePageUncompressBucket(page, newpostable);
+            return ajTrue;
+        case BT_OVERFLOW:
+            ajErr("Overflow page type %u in btreePageCompress", nodetype);
+            return ajTrue;
+        case BT_PRIBUCKET:
+            btreePageUncompressPribucket(page, newpostable);
+            return ajTrue;
+        case BT_SECBUCKET:
+            btreePageUncompressSecbucket(page, newpostable);
+            return ajTrue;
+        case BT_NUMBUCKET:
+            btreePageUncompressNumbucket(page, newpostable);
+            return ajTrue;
+        default:
+            ajErr("Unknown page type %u in btreePageUncompress", nodetype);
+            break;
+    }
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic btreePageUncompressBucket **************************************
+**
+** Uncompress a bucket cache page using an array of new positions for
+** uncompressed pages
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpostable [const AjPTable] Table of new page positions
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageUncompressBucket(AjPBtpage page,
+                                      const AjPTable newpostable)
+{
+    unsigned char* buf = page->buf;
+    ajulong   overflow = 0L;
+    unsigned char *idptr = NULL;
+    unsigned char *keyptr = NULL;
+    ajulong lv;
+    ajuint klen;
+    ajuint idlen;
+    ajuint nentries;
+    ajuint dups;
+    ajuint i;
+
+    buf = page->buf;
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    if(overflow)
+    {
+        overflow = btreePageposUncompress(overflow, newpostable,
+                                          "Bucket overflow");
+        SBT_BUCKOVERFLOW(buf, overflow);
+    }
+
+    keyptr = PBT_BUCKKEYLEN(buf);
+    idptr = keyptr + (nentries* sizeof(ajuint));
+
+    /*
+    ** ajulong values in bucket are offset and refoffset in files for dups=1
+    ** but for dups > 1 offset is the secondary root page for the duplicates
+    */
+
+    for(i=0;i<nentries;i++)
+    {
+	BT_GETAJUINT(keyptr,&klen);
+        idlen = klen - BT_DDOFFROFF;
+
+	idptr += idlen + sizeof(ajuint);
+	BT_GETAJUINT(idptr,&dups);
+        idptr += sizeof(ajuint);
+
+        if(dups)
+        {
+            BT_GETAJULONG(idptr,&lv);
+            lv = btreePageposUncompress(lv, newpostable,
+                                        "Bucket dup offset (secrootblock)");
+            BT_SETAJULONG(idptr, lv);
+        }
+
+        idptr += sizeof(ajulong) + sizeof(ajulong);
+	keyptr += sizeof(ajuint);
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageUncompressNode ****************************************
+**
+** Uncompress a node cache page using a table of new positions
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpostable [const AjPTable] Table of new page positions
+** @param [r] pagesize [ajuint] Full page size
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageUncompressNode(AjPBtpage page,
+                                    const AjPTable newpostable,
+                                    ajuint pagesize)
+{
+    unsigned char* buf = page->buf;
+    ajuint nkeys = 0;
+    ajulong overflow = 0L;
+    unsigned char *lenptr = NULL;
+    unsigned char *keyptr = NULL;
+
+    ajuint klen;
+    ajuint totlen;
+    ajuint i;
+    ajulong blockno;
+    ajulong left;
+    ajulong right;
+    ajulong prev;
+    ajulong lv;
+
+    buf = page->buf;
+
+    GBT_TOTLEN(buf,&totlen);
+    if(!totlen)
+    {
+        btreePageUncompressNumnode(page, newpostable, pagesize);
+        return;
+    }
+
+    GBT_NKEYS(buf,&nkeys);
+    GBT_OVERFLOW(buf,&overflow);
+
+    if(overflow)
+    {
+        overflow = btreePageposUncompress(overflow, newpostable,
+                                          "Node overflow");
+        SBT_OVERFLOW(buf, overflow);
+    }
+    
+    GBT_LEFT(buf,&left);
+
+    if(left)
+    {
+        left = btreePageposUncompress(left, newpostable,
+                                      "Node left");
+        SBT_LEFT(buf, left);
+    }
+    
+    GBT_RIGHT(buf,&right);
+
+    if(right >= pagesize)
+    {
+        right = btreePageposUncompress(right, newpostable,
+                                       "Node right");
+        SBT_RIGHT(buf, right);
+    }
+    
+    GBT_PREV(buf,&prev);
+
+    if(prev)
+    {
+        prev = btreePageposUncompress(prev, newpostable,
+                                      "Node prev");
+        SBT_PREV(buf, prev);
+    }
+    
+    GBT_BLOCKNUMBER(buf,&blockno);
+    if(blockno)
+    {
+        blockno = btreePageposUncompress(blockno, newpostable,
+                                         "Node blockno");
+        SBT_BLOCKNUMBER(buf, blockno);
+    }
+    
+    lenptr = PBT_KEYLEN(buf);
+    keyptr = lenptr + nkeys * sizeof(ajuint);
+
+    for(i=0;i<nkeys;i++)
+    {
+	BT_GETAJUINT(lenptr,&klen);
+        keyptr += klen + 1;
+        BT_GETAJULONG(keyptr,&lv); /* pagepos for key */
+
+        if(lv)
+        {
+            lv = btreePageposUncompress(lv, newpostable,
+                                        "Node keypos");
+            BT_SETAJULONG(keyptr, lv);
+        }
+
+        keyptr += sizeof(ajulong);
+	lenptr += sizeof(ajuint);
+    }
+
+    BT_GETAJULONG(keyptr,&lv); /* pagepos after last key */
+
+    if(lv)
+    {
+        lv = btreePageposUncompress(lv, newpostable,
+                                    "Node last keypos");
+        BT_SETAJULONG(keyptr, lv);
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageUncompressNumbucket ***********************************
+**
+** Uncompress a numeric bucket cache page using a table of new positions
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpostable [const AjPTable] Table of new page positions
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageUncompressNumbucket(AjPBtpage page,
+                                         const AjPTable newpostable)
+{
+    unsigned char* buf = page->buf;
+    ajulong   overflow = 0L;
+
+    buf = page->buf;
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    if(overflow)
+    {
+        overflow = btreePageposUncompress(overflow, newpostable,
+                                          "Numbucket overflow");
+        SBT_BUCKOVERFLOW(buf, overflow);
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageUncompressNumnode ************************************
+**
+** uncompress a numeric node cache page using a table of new positions
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpostable [const AjPTable] Table of new page positions
+** @param [r] pagesize [ajuint] Full page size
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageUncompressNumnode(AjPBtpage page,
+                                       const AjPTable newpostable,
+                                       ajuint pagesize)
+{
+    unsigned char* buf = page->buf;
+    ajuint nkeys;
+    ajulong   overflow = 0L;
+    unsigned char *keyptr = NULL;
+    unsigned char *valptr = NULL;
+    ajuint i;
+    ajulong blockno;
+    ajulong left;
+    ajulong right;
+    ajulong prev;
+    ajulong lv;
+
+    buf = page->buf;
+
+    GBT_NKEYS(buf,&nkeys);
+    GBT_OVERFLOW(buf,&overflow);
+    if(overflow)
+    {
+        overflow = btreePageposUncompress(overflow, newpostable,
+                                          "Numnode overflow");
+        SBT_OVERFLOW(buf, overflow);
+    }
+
+    GBT_LEFT(buf,&left);
+
+    if(left)
+    {
+        left = btreePageposUncompress(left, newpostable,
+                                      "Numnode left");
+        SBT_LEFT(buf, left);
+    }
+    
+    GBT_RIGHT(buf,&right);
+
+    if(right >= pagesize)
+    {
+        right = btreePageposUncompress(right, newpostable,
+                                       "Numnode right");
+        SBT_RIGHT(buf, right);
+    }
+    
+    GBT_PREV(buf,&prev);
+
+    if(prev)
+    {
+        prev = btreePageposUncompress(prev, newpostable,
+                                      "Numnode prev");
+        SBT_PREV(buf, prev);
+    }
+    
+    GBT_BLOCKNUMBER(buf,&blockno);
+    if(blockno)
+    {
+        prev = btreePageposUncompress(blockno, newpostable,
+                                      "Numnode blockno");
+        SBT_BLOCKNUMBER(buf, blockno);
+    }
+    
+    keyptr =  PBT_KEYLEN(buf);
+    valptr = keyptr + nkeys * sizeof(ajulong);
+
+    for(i = 0; i < nkeys; i++)
+    {
+        BT_GETAJULONG(valptr,&lv); /* pagepos for key */
+
+        if(lv)
+        {
+            lv = btreePageposUncompress(lv, newpostable,
+                                        "Numnode keypos");
+            BT_SETAJULONG(valptr, lv);
+        }
+
+        valptr += sizeof(ajulong);
+    }
+
+    BT_GETAJULONG(valptr,&lv); /* pagepos after last key */
+
+    if(lv)
+    {
+        lv = btreePageposUncompress(lv, newpostable,
+                                    "Numnode last keypos");
+        BT_SETAJULONG(valptr, lv);
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageUncompressPribucket ***********************************
+**
+** Uncompress a primary bucket cache page using a table of new positions
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpostable [const AjPTable] Table of new page positions
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageUncompressPribucket(AjPBtpage page,
+                                         const AjPTable newpostable)
+{
+    unsigned char* buf = page->buf;
+    ajuint nentries;
+    ajulong overflow = 0L;
+    unsigned char *idptr = NULL;
+    unsigned char *keyptr = NULL;
+    ajuint klen;
+    ajuint i;
+    ajulong lv;
+    unsigned char * lp = NULL;
+
+    buf = page->buf;
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    if(overflow)
+    {
+        overflow = btreePageposUncompress(overflow, newpostable,
+                                          "PriBucket overflow");
+        SBT_BUCKOVERFLOW(buf, overflow);
+    }
+
+    keyptr = PBT_BUCKKEYLEN(buf);
+    idptr = keyptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;i++)
+    {
+	BT_GETAJUINT(keyptr,&klen);
+	idptr += klen;
+        lp = idptr - 8;
+        BT_GETAJULONG(lp,&lv);
+
+        if(lv)
+        {
+            lv = btreePageposUncompress(lv, newpostable,
+                                        "PriBucket keypos");
+            BT_SETAJULONG(lp, lv);
+        }
+
+	keyptr += sizeof(ajuint);
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageUncompressSecbucket ***********************************
+**
+** Uncompress a secondary bucket cache page using a table of new positions
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpostable [const AjPTable] Table of new page positions
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageUncompressSecbucket(AjPBtpage page,
+                                         const AjPTable newpostable)
+{
+    unsigned char* buf = page->buf;
+    ajulong   overflow = 0L;
+ 
+    buf = page->buf;
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    if(overflow)
+    {
+        overflow = btreePageposUncompress(overflow, newpostable,
+                                          "SecBucket overflow");
+        SBT_BUCKOVERFLOW(buf, overflow);
+    }
+
+    /* bucket contains only ID strings */
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageCompress ********************************************
+**
+** Compress a cache page using an array of new positions for uncompressed pages
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpagepos [ajulong const*] Array of new page positions
+** @param [r] pagesize [ajuint] Full page size
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+static AjBool btreePageCompress(AjPBtpage page,
+                                ajulong const* newpagepos,
+                                ajuint pagesize)
+{
+    const unsigned char* buf = page->buf;
+    ajuint nodetype;
+
+    GBT_NODETYPE(buf, &nodetype);
+    switch (nodetype) 
+    {
+        case BT_FREEPAGE:       /* no need to save the page */
+            return ajFalse;
+        case BT_ROOT:
+        case BT_INTERNAL:
+        case BT_LEAF:
+            btreePageCompressNode(page, newpagepos, pagesize);
+            return ajTrue;
+        case BT_BUCKET:
+            btreePageCompressBucket(page, newpagepos, pagesize);
+            return ajTrue;
+        case BT_OVERFLOW:
+            ajErr("Overflow page type %u in btreePageCompress", nodetype);
+            return ajTrue;
+        case BT_PRIBUCKET:
+            btreePageCompressPribucket(page, newpagepos, pagesize);
+            return ajTrue;
+        case BT_SECBUCKET:
+            btreePageCompressSecbucket(page, newpagepos, pagesize);
+            return ajTrue;
+        case BT_NUMBUCKET:
+            btreePageCompressNumbucket(page, newpagepos, pagesize);
+            return ajTrue;
+        default:
+            ajErr("Unknown page type %u in btreePageCompress", nodetype);
+            break;
+    }
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic btreePageCompressBucket ****************************************
+**
+** Compress a bucket cache page using an array of new positions for
+** uncompressed pages
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpagepos [ajulong const*] Array of new page positions
+** @param [r] pagesize [ajuint] Full page size
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageCompressBucket(AjPBtpage page,
+                                    ajulong const* newpagepos,
+                                    ajuint pagesize)
+{
+    unsigned char* buf = page->buf;
+    ajulong   overflow = 0L;
+    unsigned char *idptr = NULL;
+    unsigned char *keyptr = NULL;
+    ajulong lv;
+    ajuint klen;
+    ajuint idlen;
+    ajuint nentries;
+    ajuint dups;
+    ajuint i;
+
+    buf = page->buf;
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    if(overflow)
+    {
+        overflow = btreePageposCompress(overflow, newpagepos, pagesize,
+                                        "Bucket overflow");
+        SBT_BUCKOVERFLOW(buf, overflow);
+    }
+
+    keyptr = PBT_BUCKKEYLEN(buf);
+    idptr = keyptr + (nentries* sizeof(ajuint));
+
+    /*
+    ** ajulong values in bucket are offset and refoffset in files for dups=1
+    ** but for dups > 1 offset is the secondary root page for the duplicates
+    */
+
+    for(i=0;i<nentries;i++)
+    {
+	BT_GETAJUINT(keyptr,&klen);
+        idlen = klen - BT_DDOFFROFF;
+
+	idptr += idlen + sizeof(ajuint);
+	BT_GETAJUINT(idptr,&dups);
+        idptr += sizeof(ajuint);
+
+        if(dups)
+        {
+            BT_GETAJULONG(idptr,&lv);
+            lv = btreePageposCompress(lv, newpagepos, pagesize,
+                                      "Bucket dup offset (secrootblock)");
+            BT_SETAJULONG(idptr, lv);
+        }
+
+        idptr += sizeof(ajulong) + sizeof(ajulong);
+	keyptr += sizeof(ajuint);
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageCompressNode ******************************************
+**
+** Compress a node cache page using an array of new positions for
+** uncompressed pages
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpagepos [ajulong const*] Array of new page positions
+** @param [r] pagesize [ajuint] Full page size
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageCompressNode(AjPBtpage page,
+                                  ajulong const* newpagepos,
+                                  ajuint pagesize)
+{
+    unsigned char* buf = page->buf;
+    ajuint nkeys = 0;
+    ajulong overflow = 0L;
+    unsigned char *lenptr = NULL;
+    unsigned char *keyptr = NULL;
+
+    ajuint klen;
+    ajuint totlen;
+    ajuint i;
+    ajulong blockno;
+    ajulong left;
+    ajulong right;
+    ajulong prev;
+    ajulong lv;
+
+    buf = page->buf;
+
+    GBT_TOTLEN(buf,&totlen);
+
+    if(!totlen)
+    {
+        btreePageCompressNumnode(page, newpagepos, pagesize);
+        return;
+    }
+
+    GBT_NKEYS(buf,&nkeys);
+    GBT_OVERFLOW(buf,&overflow);
+
+    if(overflow)
+    {
+        overflow = btreePageposCompress(overflow, newpagepos, pagesize,
+                                        "Node overflow");
+        SBT_OVERFLOW(buf, overflow);
+    }
+    
+    GBT_LEFT(buf,&left);
+
+    if(left)
+    {
+        left = btreePageposCompress(left, newpagepos, pagesize,
+                                    "Node left");
+        SBT_LEFT(buf, left);
+    }
+    
+    GBT_RIGHT(buf,&right);
+
+    if(right >= pagesize)
+    {
+        right = btreePageposCompress(right, newpagepos, pagesize,
+                                     "Node right");
+        SBT_RIGHT(buf, right);
+    }
+    
+    GBT_PREV(buf,&prev);
+
+    if(prev)
+    {
+        prev = btreePageposCompress(prev, newpagepos, pagesize,
+                                    "Node prev");
+        SBT_PREV(buf, prev);
+    }
+    
+    GBT_BLOCKNUMBER(buf,&blockno);
+    if(blockno)
+    {
+        blockno = btreePageposCompress(blockno, newpagepos, pagesize,
+                                       "Node blockno");
+        SBT_BLOCKNUMBER(buf, blockno);
+    }
+    
+    lenptr = PBT_KEYLEN(buf);
+    keyptr = lenptr + nkeys * sizeof(ajuint);
+
+    for(i=0;i<nkeys;i++)
+    {
+	BT_GETAJUINT(lenptr,&klen);
+        keyptr += klen + 1;
+        BT_GETAJULONG(keyptr,&lv); /* pagepos for key */
+
+        if(lv)
+        {
+            lv = btreePageposCompress(lv, newpagepos, pagesize,
+                                      "Node keypos");
+            BT_SETAJULONG(keyptr, lv);
+        }
+
+        keyptr += sizeof(ajulong);
+	lenptr += sizeof(ajuint);
+    }
+
+    BT_GETAJULONG(keyptr,&lv); /* pagepos after last key */
+
+    if(lv)
+    {
+        lv = btreePageposCompress(lv, newpagepos, pagesize,
+                                  "Node last keypos");
+        BT_SETAJULONG(keyptr, lv);
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageCompressNumbucket *************************************
+**
+** Compress a numeric bucket cache page using an array of new
+** positions for uncompressed pages
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpagepos [ajulong const*] Array of new page positions
+** @param [r] pagesize [ajuint] Full page size
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageCompressNumbucket(AjPBtpage page,
+                                       ajulong const* newpagepos,
+                                       ajuint pagesize)
+{
+    unsigned char* buf = page->buf;
+    ajulong   overflow = 0L;
+
+    buf = page->buf;
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    if(overflow)
+    {
+        overflow = btreePageposCompress(overflow, newpagepos, pagesize,
+                                        "Numbucket overflow");
+        SBT_BUCKOVERFLOW(buf, overflow);
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageCompressNumnode **************************************
+**
+** Compress a numeric node cache page using an array of new
+** positions for uncompressed pages
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpagepos [ajulong const*] Array of new page positions
+** @param [r] pagesize [ajuint] Full page size
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageCompressNumnode(AjPBtpage page,
+                                     ajulong const* newpagepos,
+                                     ajuint pagesize)
+{
+    unsigned char* buf = page->buf;
+    ajuint nkeys;
+    ajulong   overflow = 0L;
+    unsigned char *keyptr = NULL;
+    unsigned char *valptr = NULL;
+    ajuint i;
+    ajulong blockno;
+    ajulong left;
+    ajulong right;
+    ajulong prev;
+    ajulong lv;
+
+    buf = page->buf;
+
+    GBT_NKEYS(buf,&nkeys);
+    GBT_OVERFLOW(buf,&overflow);
+    if(overflow)
+    {
+        overflow = btreePageposCompress(overflow, newpagepos, pagesize,
+                                        "Numnode overflow");
+        SBT_OVERFLOW(buf, overflow);
+    }
+
+    GBT_LEFT(buf,&left);
+
+    if(left)
+    {
+        left = btreePageposCompress(left, newpagepos, pagesize,
+                                    "Numnode left");
+        SBT_LEFT(buf, left);
+    }
+    
+    GBT_RIGHT(buf,&right);
+
+    if(right >= pagesize)
+    {
+        right = btreePageposCompress(right, newpagepos, pagesize,
+                                     "Numnode right");
+        SBT_RIGHT(buf, right);
+    }
+    
+    GBT_PREV(buf,&prev);
+
+    if(prev)
+    {
+        prev = btreePageposCompress(prev, newpagepos, pagesize,
+                                    "Numnode prev");
+        SBT_PREV(buf, prev);
+    }
+    
+    GBT_BLOCKNUMBER(buf,&blockno);
+    if(blockno)
+    {
+        blockno = btreePageposCompress(blockno, newpagepos, pagesize,
+                                       "Numnode blockno");
+        SBT_BLOCKNUMBER(buf, blockno);
+    }
+    
+    keyptr =  PBT_KEYLEN(buf);
+    valptr = keyptr + nkeys * sizeof(ajulong);
+
+    for(i = 0; i < nkeys; i++)
+    {
+        BT_GETAJULONG(valptr,&lv); /* pagepos for key */
+
+        if(lv)
+        {
+            lv = btreePageposCompress(lv, newpagepos, pagesize,
+                                      "Numnode keypos");
+            BT_SETAJULONG(valptr, lv);
+        }
+
+        valptr += sizeof(ajulong);
+    }
+
+    BT_GETAJULONG(valptr,&lv); /* pagepos after last key */
+
+    if(lv)
+    {
+        lv = btreePageposCompress(lv, newpagepos, pagesize,
+                                  "Numnode last keypos");
+        BT_SETAJULONG(valptr, lv);
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageCompressPribucket *************************************
+**
+** Compress a primary bucket cache page using an array of new
+** positions for uncompressed pages
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpagepos [ajulong const*] Array of new page positions
+** @param [r] pagesize [ajuint] Full page size
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageCompressPribucket(AjPBtpage page,
+                                       ajulong const* newpagepos,
+                                       ajuint pagesize)
+{
+    unsigned char* buf = page->buf;
+    ajuint nentries;
+    ajulong overflow = 0L;
+    unsigned char *idptr = NULL;
+    unsigned char *keyptr = NULL;
+    ajuint klen;
+    ajuint i;
+    ajulong lv;
+    unsigned char * lp = NULL;
+
+    buf = page->buf;
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    if(overflow)
+    {
+        overflow = btreePageposCompress(overflow, newpagepos, pagesize,
+                                        "PriBucket overflow");
+        SBT_BUCKOVERFLOW(buf, overflow);
+    }
+
+    keyptr = PBT_BUCKKEYLEN(buf);
+    idptr = keyptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;i++)
+    {
+	BT_GETAJUINT(keyptr,&klen);
+	idptr += klen;
+        lp = idptr - 8;
+        BT_GETAJULONG(lp,&lv);
+
+        if(lv)
+        {
+            lv = btreePageposCompress(lv, newpagepos, pagesize,
+                                        "PriBucket keypos");
+            BT_SETAJULONG(lp, lv);
+        }
+
+	keyptr += sizeof(ajuint);
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageCompressSecbucket *************************************
+**
+** Compress a secondary bucket cache page using an array of new
+** positions for uncompressed pages
+**
+** @param [u] page [AjPBtpage] Page
+** @param [r] newpagepos [ajulong const*] Array of new page positions
+** @param [r] pagesize [ajuint] Full page size
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageCompressSecbucket(AjPBtpage page,
+                                       ajulong const* newpagepos,
+                                       ajuint pagesize)
+{
+    unsigned char* buf = page->buf;
+    ajulong   overflow = 0L;
+ 
+    buf = page->buf;
+
+    GBT_BUCKOVERFLOW(buf,&overflow);
+    if(overflow)
+    {
+        overflow = btreePageposCompress(overflow, newpagepos, pagesize,
+                                        "SecBucket overflow");
+        SBT_BUCKOVERFLOW(buf, overflow);
+    }
+
+    /* bucket contains only ID strings */
+
+    return;
+}
+
+
+
+
+/* @func ajBtreePageGetSize ***************************************************
+**
+** Return the used size of a cache page
+**
+** @param [r] page [const AjPBtpage] Page
+** @return [ajuint] Used page size
+** @@
+******************************************************************************/
+
+ajuint ajBtreePageGetSize(const AjPBtpage page)
+{
+    const unsigned char* buf = page->buf;
+    ajuint nodetype;
+
+    GBT_NODETYPE(buf, &nodetype);
+    switch (nodetype) 
+    {
+        case BT_FREEPAGE:       /* no need to save the page */
+            return 0;
+        case BT_ROOT:
+        case BT_INTERNAL:
+        case BT_LEAF:
+            return btreePageGetSizeNode(page);
+        case BT_BUCKET:
+            return btreePageGetSizeBucket(page);
+        case BT_OVERFLOW:
+            ajErr("Overflow page type %u in btreePageGetSize", nodetype);
+            return 0;
+        case BT_PRIBUCKET:
+            return btreePageGetSizePribucket(page);
+        case BT_SECBUCKET:
+            return btreePageGetSizeSecbucket(page);
+        case BT_NUMBUCKET:
+            return btreePageGetSizeNumbucket(page);
+        default:
+            ajErr("Unknown page type %u in btreePageGetSize", nodetype);
+            break;
+    }
+    return 0;
+}
+
+
+
+
+/* @funcstatic btreePageGetSizeBucket *****************************************
+**
+** Return the used size of a bucket cache page
+**
+** @param [r] page [const AjPBtpage] Page
+** @return [ajuint] Used page size
+** @@
+******************************************************************************/
+
+static ajuint btreePageGetSizeBucket(const AjPBtpage page)
+{
+    const unsigned char* buf = page->buf;
+    ajuint nentries;
+    ajulong   overflow = 0L;
+    const unsigned char *idptr = NULL;
+    const unsigned char *keyptr = NULL;
+    ajuint klen;
+    ajuint idlen;
+    ajuint i;
+
+    buf = page->buf;
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    GBT_BUCKOVERFLOW(buf,&overflow);
+
+    keyptr = PBT_BUCKKEYLEN(buf);
+    idptr = keyptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;i++)
+    {
+	BT_GETAJUINT(keyptr,&klen);
+        idlen = klen - BT_DDOFFROFF;
+	idptr += (idlen + sizeof(ajuint) + sizeof(ajuint) +
+                  sizeof(ajulong) + sizeof(ajulong));
+	keyptr += sizeof(ajuint);
+    }
+
+    return (idptr-buf);
+}
+
+
+
+
+/* @funcstatic btreePageGetSizeNode *******************************************
+**
+** Return the used size of a node cache page
+**
+** @param [r] page [const AjPBtpage] Page
+** @return [ajuint] Used page size
+** @@
+******************************************************************************/
+
+static ajuint btreePageGetSizeNode(const AjPBtpage page)
+{
+    const unsigned char* buf = page->buf;
+    ajuint nkeys = 0;
+    ajulong overflow = 0L;
+    const unsigned char *lenptr = NULL;
+    const unsigned char *keyptr = NULL;
+
+    ajuint klen;
+    ajuint totlen;
+    ajuint i;
+
+    buf = page->buf;
+
+    GBT_TOTLEN(buf,&totlen);
+    if(!totlen)
+      return btreePageGetSizeNumnode(page);
+
+    GBT_NKEYS(buf,&nkeys);
+    GBT_OVERFLOW(buf,&overflow);
+
+    lenptr = PBT_KEYLEN(buf);
+    keyptr = lenptr + nkeys * sizeof(ajuint);
+
+    for(i=0;i<nkeys;i++)
+    {
+	BT_GETAJUINT(lenptr,&klen);
+        keyptr += klen + 1 + sizeof(ajulong);
+	lenptr += sizeof(ajuint);
+    }
+
+    keyptr += sizeof(ajulong);
+
+    return (keyptr-buf);
+}
+
+
+
+
+/* @funcstatic btreePageGetSizeNumbucket **************************************
+**
+** Return the used size of a numeric bucket cache page
+**
+** @param [r] page [const AjPBtpage] Page
+** @return [ajuint] Used page size
+** @@
+******************************************************************************/
+
+static ajuint btreePageGetSizeNumbucket(const AjPBtpage page)
+{
+    const unsigned char* buf = page->buf;
+    ajuint nentries;
+    ajulong   overflow = 0L;
+    const unsigned char *keyptr = NULL;
+
+    buf = page->buf;
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    GBT_BUCKOVERFLOW(buf,&overflow);
+
+    keyptr = PBT_BUCKKEYLEN(buf);
+
+    keyptr += nentries * (sizeof(ajlong) + sizeof(ajlong) + sizeof(ajuint));
+
+    return (keyptr-buf);
+}
+
+
+
+
+/* @funcstatic btreePageGetSizeNumnode ****************************************
+**
+** Return the used size of a numeric node cache page
+**
+** @param [r] page [const AjPBtpage] Page
+** @return [ajuint] Used page size
+** @@
+******************************************************************************/
+
+static ajuint btreePageGetSizeNumnode(const AjPBtpage page)
+{
+    const unsigned char* buf = page->buf;
+    ajuint nkeys;
+    ajulong   overflow = 0L;
+    const unsigned char *keyptr = NULL;
+    const unsigned char *valptr = NULL;
+
+    buf = page->buf;
+
+    GBT_NKEYS(buf,&nkeys);
+    GBT_OVERFLOW(buf,&overflow);
+
+    keyptr =  PBT_KEYLEN(buf);
+    valptr = keyptr + nkeys * sizeof(ajulong) +
+        nkeys * sizeof(ajulong) + sizeof(ajulong);
+
+    return (valptr-buf);
+}
+
+
+
+
+/* @funcstatic btreePageGetSizePribucket **************************************
+**
+** Return the used size of a primary bucket cache page
+**
+** @param [r] page [const AjPBtpage] Page
+** @return [ajuint] Used page size
+** @@
+******************************************************************************/
+
+static ajuint btreePageGetSizePribucket(const AjPBtpage page)
+{
+    const unsigned char* buf = page->buf;
+    ajuint nentries;
+    ajulong overflow = 0L;
+    const unsigned char *idptr = NULL;
+    const unsigned char *keyptr = NULL;
+    ajuint klen;
+    ajuint i;
+
+    buf = page->buf;
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    GBT_BUCKOVERFLOW(buf,&overflow);
+
+    keyptr = PBT_BUCKKEYLEN(buf);
+    idptr = keyptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;i++)
+    {
+	BT_GETAJUINT(keyptr,&klen);
+	idptr += klen;
+	keyptr += sizeof(ajuint);
+    }
+
+    return (idptr-buf);
+}
+
+
+
+
+/* @funcstatic btreePageGetSizeSecbucket **************************************
+**
+** Return the used size of a secondary bucket cache page
+**
+** @param [r] page [const AjPBtpage] Page
+** @return [ajuint] Used page size
+** @@
+******************************************************************************/
+
+static ajuint btreePageGetSizeSecbucket(const AjPBtpage page)
+{
+    const unsigned char* buf = page->buf;
+    ajuint nentries;
+    ajulong   overflow = 0L;
+    const unsigned char *idptr = NULL;
+    const unsigned char *keyptr = NULL;
+    ajuint klen;
+    ajuint i;
+
+    buf = page->buf;
+
+    GBT_BUCKNENTRIES(buf,&nentries);
+    GBT_BUCKOVERFLOW(buf,&overflow);
+
+    keyptr = PBT_BUCKKEYLEN(buf);
+    idptr = keyptr + (nentries * sizeof(ajuint));
+
+    for(i=0;i<nentries;i++)
+    {
+	BT_GETAJUINT(keyptr,&klen);
+	idptr += klen;
+	keyptr += sizeof(ajuint);
+    }
+
+    return (idptr-buf);
+}
+
+
+
+
+/* @funcstatic btreeCheckNode *************************************************
+**
+** Checks consistency of a node page
+**
+** @param [w] cache [AjPBtcache] cache
+** @param [r] page [const AjPBtpage] Page
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+static AjBool btreeCheckNode(AjPBtcache cache, const AjPBtpage page)
+{
+    ajuint i;
+    ajuint m;
+    ajuint nodetype;
+    ajuint klen;
+    const AjPBtpage bpage;
+    unsigned char *tbuf;
+    ajuint freebytes;
+
+    ajuint   pagesize = 0;
+    ajulong   overflow = 0L;
+    ajulong blockno;
+    ajuint totlen;
+    ajulong left;
+    ajulong right;
+    ajulong prev;
+    unsigned char *lenptr = NULL;
+    unsigned char *keyptr = NULL;
+    ajulong lv;
+    AjBool ret = ajTrue;
+    AjPBtpage ncpage = NULL;
+
+    if(!btreeCheckNodeHeader(cache, page, "node"))
+        ret = ajFalse;
+
+    pagesize = cache->pagesize;
+
+    bpage = page;
+    tbuf = bpage->buf;
+    GBT_TOTLEN(tbuf,&totlen);
+    
+    GBT_NKEYS(tbuf,&m);
+
+    GBT_LEFT(tbuf,&left);
+    GBT_RIGHT(tbuf,&right);
+    GBT_BLOCKNUMBER(tbuf,&blockno);
+    GBT_PREV(tbuf,&prev);
+    GBT_OVERFLOW(tbuf,&overflow);
+
+
+    lenptr =  PBT_KEYLEN(tbuf);
+    keyptr = lenptr + m * sizeof(ajuint);
+
+    AJNEW0(ncpage);
+
+    for(i=0;i<m;i++)
+    {
+	BT_GETAJUINT(lenptr,&klen);
+
+	if((ajuint)((keyptr-tbuf+2) + klen + sizeof(ajulong)) > pagesize)
+	{
+            freebytes = pagesize - (keyptr-tbuf);
+    	    /* ajDebug("btreeStatNode: Overflow\n"); */
+	    btreeNocacheFetch(cache, ncpage, overflow);
+	    tbuf = bpage->buf;
+	    GBT_NODETYPE(tbuf,&nodetype);
+	    if(nodetype != BT_OVERFLOW)
+		ajFatal("btreeCheckNode "
+                        "Overflow node %Lu expected but not found "
+                        "cache %S page %Lu "
+                        "pagepos:%Lu key:%u/%u free:%u keyptr:%x lenptr:%x "
+                        "tbuf:%x klen:%u old nodetype '%s' newnodetype '%s' "
+                        "blockno:%Lu totlen:%u left:%Lu right:%Lu prev:%Lu",
+                        overflow, cache->filename,
+                        page->pagepos, page->pagepos/pagesize,
+                        i, m, freebytes,
+                        keyptr, lenptr, tbuf, klen,
+                        btreeNodetype(page->buf), btreeNodetype(tbuf),
+                        blockno,totlen, left, right, prev);
+
+            GBT_BLOCKNUMBER(tbuf,&blockno);
+            GBT_TOTLEN(tbuf,&totlen);
+            GBT_LEFT(tbuf,&left);
+            GBT_RIGHT(tbuf,&right);
+            GBT_PREV(tbuf,&prev);
+
+	    /*
+	     ** The length pointer is restricted to the initial page.
+	     ** The keyptr in overflow pages starts at the Key Lengths
+	     ** position!
+	     */
+            keyptr = PBT_KEYLEN(tbuf);
+	}
+
+        keyptr += klen+1;
+        BT_GETAJULONG(keyptr,&lv);
+	keyptr += sizeof(ajulong);
+        lenptr += sizeof(ajuint);
+    }
+
+    BT_GETAJULONG(keyptr,&lv);
+    AJFREE(ncpage);
+
+    return ret;
+}
+
+
+
+
+/* @funcstatic btreeCheckNumnode **********************************************
+**
+** Checks consistency of a numeric node page
+**
+** @param [w] cache [AjPBtcache] cache
+** @param [r] page [const AjPBtpage] Page
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+static AjBool btreeCheckNumnode(AjPBtcache cache, const AjPBtpage page)
+{
+    ajuint i;
+    ajuint m;
+    const AjPBtpage bpage;
+    unsigned char *tbuf;
+
+    ajulong   overflow = 0L;
+    ajulong blockno;
+    ajuint totlen;
+    ajulong left;
+    ajulong right;
+    ajulong prev;
+    unsigned char *keyptr = NULL;
+    unsigned char *valptr = NULL;
+    ajulong lv;
+    ajulong lk;
+    ajulong lastk = 0L;
+
+    AjBool ok = ajTrue;
+    AjBool ret = ajTrue;
+
+    if(!btreeDoExtra)
+        return ret;
+
+    bpage = page;
+    tbuf = bpage->buf;
+    GBT_TOTLEN(tbuf,&totlen);
+    
+    GBT_NKEYS(tbuf,&m);
+
+    GBT_LEFT(tbuf,&left);
+    GBT_RIGHT(tbuf,&right);
+    GBT_BLOCKNUMBER(tbuf,&blockno);
+    GBT_PREV(tbuf,&prev);
+    GBT_OVERFLOW(tbuf,&overflow);
+
+    if(!btreeCheckNodeHeader(cache, page, "numnode"))
+        ret = ajFalse;
+
+    keyptr =  PBT_KEYLEN(tbuf);
+    valptr = keyptr + m*sizeof(ajulong);
+    for(i=0;i<m;i++)
+    {
+        BT_GETAJULONG(valptr,&lv);
+        BT_GETAJULONG(keyptr,&lk);
+
+        if(lk <= lastk)
+        {
+            ok = ajFalse;
+            ajWarn("numnode:%Lu lk[%u] %12Lu <= %12Lu in %S",
+                   page->pagepos, i, lk, lastk,
+                   cache->filename);
+        }
+        lastk = lk;
+        
+	keyptr += sizeof(ajulong);
+	valptr += sizeof(ajulong);
+    }
+
+    BT_GETAJULONG(valptr,&lv);
+
+    if(!ok)
+    {
+        ret = ajFalse;
+        btreeDumpNumnode(cache, page);
+    }
+    
+    return ret;
+}
+
+
+
+
+/* @funcstatic btreeCheckNodeHeader *******************************************
+**
+** Checks consistency of any node header
+**
+** @param [w] cache [AjPBtcache] cache
+** @param [r] page [const AjPBtpage] Page
+** @param [r] type [const char*] Node type
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+static AjBool btreeCheckNodeHeader(AjPBtcache cache, const AjPBtpage page,
+                                   const char* type)
+{
+    ajuint nkeys;
+    unsigned char *tbuf;
+
+    ajulong   overflow = 0L;
+    ajulong blockno;
+    ajuint totlen;
+    ajulong left;
+    ajulong right;
+    ajulong prev;
+    const char* nodetype;
+
+    AjBool ret = ajTrue;
+    
+    tbuf = page->buf;
+    nodetype = btreeNodetype(tbuf);
+
+    GBT_TOTLEN(tbuf,&totlen);
+    
+    GBT_NKEYS(tbuf,&nkeys);
+
+    GBT_LEFT(tbuf,&left);
+    GBT_RIGHT(tbuf,&right);
+    GBT_BLOCKNUMBER(tbuf,&blockno);
+    GBT_PREV(tbuf,&prev);
+    GBT_OVERFLOW(tbuf,&overflow);
+
+    if(!strcmp(type, "node"))
+    {
+        if(!strcmp(nodetype, "numbucket"))
+        {
+            ret = ajFalse;
+            ajWarn("%s:%Lu expected non-numeric node in %S",
+                   nodetype,
+                   cache->filename);
+        }
+    }
+    else if(!strcmp(type, "numnode"))
+    {
+        if(strcmp(nodetype, "numbucket"))
+        {
+            ret = ajFalse;
+            ajWarn("%s:%Lu expected numeric node in %S",
+                   nodetype,
+                   cache->filename);
+        }
+    }
+    else
+    {
+        ret = ajFalse;
+        ajWarn("%s:%Lu expected '%s' in %S",
+               nodetype, type,
+               cache->filename);
+    }
+
+    if(nkeys >= cache->sorder)
+    {
+        ret = ajFalse;
+        ajWarn("%s:%Lu nkeys: %u order:%u sorder:%u in %S",
+               nodetype, page->pagepos, nkeys,
+               cache->order, cache->sorder,
+               cache->filename);
+
+    }
+/*    
+    if(nkeys > cache->order)
+    {
+        ret = ajFalse;
+        ajWarn("%s:%Lu nkeys: %u order:%u",
+               nodetype, page->pagepos, nkeys,
+               cache->order, cache->sorder);
+
+    }
+*/
+    if((blockno != page->pagepos))
+    {
+        ret = ajFalse;
+        ajWarn("%s:%Lu blockno: %Lu in %S",
+               nodetype, page->pagepos, blockno,
+               cache->filename);
+    }
+
+    return ret;
+}
+
+
+
+
+/* @funcstatic btreeNocacheFetch *****************************************
+**
+** Fetch a cache page from disc
+**
+** @param [r] cache [const AjPBtcache] cache
+** @param [w] cpage [AjPBtpage] cache page 
+** @param [r] pagepos [ajulong] page number
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreeNocacheFetch(const AjPBtcache cache, AjPBtpage cpage,
+                              ajulong pagepos)
+{
+    ajuint sum = 0;
+    ajuint retries = 0;
+
+    /* ajDebug("In btreeNoCacheFetch\n"); */
+    
+    if(fseek(cache->fp,pagepos,SEEK_SET))
+	ajFatal("Seek error '%s' in btreeNocacheFetch file %S",
+                strerror(ferror(cache->fp)), cache->filename);
+    
+    while(sum != cache->pagesize && retries != BT_MAXRETRIES)
+    {
+	sum += fread((void *)cpage->buf,1,cache->pagesize-sum,
+		     cache->fp);
+	++retries;
+    }
+    
+    if(retries == BT_MAXRETRIES)
+	ajFatal("Maximum retries (%u) reached in btreeCacheFetch for page %Lu",
+		BT_MAXRETRIES,pagepos);
+
+    cpage->pagepos = pagepos;
+    
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageSetfree ***********************************************
+**
+** Clear a cache page and set as free
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [r] pagepos [ajulong] Pahge number
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageSetfree(AjPBtcache cache, ajulong pagepos)
+{
+    AjPBtpage page = NULL;
+    unsigned char *p;
+    ajuint nodetype;
+
+    page = ajBtreeCacheRead(cache,pagepos);
+    p = page->buf;
+    AJCSET0(p, cache->pagesize); /* clear buffer to zeros */
+
+    page->next = NULL;
+    page->prev = NULL;
+    nodetype = BT_FREEPAGE;
+    SBT_NODETYPE(p,nodetype);
+    page->dirty = BT_DIRTY;
+    
+    return;
+}
+
+
+
+
+/* @funcstatic btreePageClear *************************************************
+**
+** Clear a cache page
+**
+** @param [u] cache [AjPBtcache] cache
+** @param [u] page [AjPBtpage] Page
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void btreePageClear(AjPBtcache cache, AjPBtpage page)
+{
+    unsigned char *p;
+
+    p = page->buf;
+    AJCSET0(p, cache->pagesize); /* clear buffer to zeros */
+
+    page->next = NULL;
+    page->prev = NULL;
+    page->dirty = BT_CLEAN;
+
+    return;
+}
+
+
+
+
+/* @func ajBtreeExit **********************************************************
+**
+** Cleans up B+tree indexing internal memory
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajBtreeExit(void)
+{
+    void *tmpfree = NULL;
+    
+    ajDebug("ajBtreeExit\n");
+
+    ajDebug("sync calls: %Lu Lock:%Lu Write: %Lu\n",
+            statCallSync, statSyncLocked, statSyncWrite);
+
+    ajDebug("Rootsync calls: %Lu Lock:%Lu (max %u) Unlock: %Lu (max %u)\n",
+            statCallRootSync, statRootSyncLocked, statRootSyncMaxLocked,
+            statRootSyncUnlocked, statRootSyncMaxUnlocked);
+
+    ajDebug("   statSaveBucketNext: %u\n", statSaveBucketNext);
+    while(statSaveBucketNext)
+        btreeBucketFree(&statSaveBucket[--statSaveBucketNext]);
+    AJFREE(statSaveBucket);
+    statSaveBucketMax=0;
+    statSaveBucketNext=0;
+
+    ajDebug("   statSaveBucketEmptyNext: %u\n", statSaveBucketEmptyNext);
+    while(statSaveBucketEmptyNext)
+        btreeBucketFree(&statSaveBucketEmpty[--statSaveBucketEmptyNext]);
+    AJFREE(statSaveBucketEmpty);
+    statSaveBucketEmptyMax=0;
+    statSaveBucketEmptyNext=0;
+
+    ajDebug("   statSavePriBucketNext: %u\n", statSavePriBucketNext);
+    while(statSavePriBucketNext)
+        btreePriBucketFree(&statSavePriBucket[--statSavePriBucketNext]);
+    AJFREE(statSavePriBucket);
+    statSavePriBucketMax=0;
+    statSavePriBucketNext=0;
+
+    ajDebug("   statSavePriBucketEmptyNext: %u\n", statSavePriBucketEmptyNext);
+    while(statSavePriBucketEmptyNext)
+        btreePriBucketFree(&statSavePriBucketEmpty[--statSavePriBucketEmptyNext]);
+    AJFREE(statSavePriBucketEmpty);
+    statSavePriBucketEmptyMax=0;
+    statSavePriBucketEmptyNext=0;
+
+    ajDebug("   statSaveSecBucketNext: %u\n", statSaveSecBucketNext);
+    while(statSaveSecBucketNext)
+        btreeSecBucketFree(&statSaveSecBucket[--statSaveSecBucketNext]);
+    AJFREE(statSaveSecBucket);
+    statSaveSecBucketMax=0;
+    statSaveSecBucketNext=0;
+
+    ajDebug("   statSaveSecBucketEmptyNext: %u\n", statSaveSecBucketEmptyNext);
+    while(statSaveSecBucketEmptyNext)
+        btreeSecBucketFree(&statSaveSecBucketEmpty[--statSaveSecBucketEmptyNext]);
+    AJFREE(statSaveSecBucketEmpty);
+    statSaveSecBucketEmptyMax=0;
+    statSaveSecBucketEmptyNext=0;
+
+    ajDebug("   statSaveNumBucketNext: %u\n", statSaveNumBucketNext);
+    while(statSaveNumBucketNext)
+        btreeNumBucketFree(&statSaveNumBucket[--statSaveNumBucketNext]);
+    AJFREE(statSaveNumBucket);
+    statSaveNumBucketMax=0;
+    statSaveNumBucketNext=0;
+
+    ajDebug("   statSaveSecIdNext: %u\n", statSaveSecIdNext);
+    while(statSaveSecIdNext)
+        ajStrDel(&statSaveSecId[--statSaveSecIdNext]);
+    AJFREE(statSaveSecId);
+    statSaveSecIdMax=0;
+    statSaveSecIdNext=0;
+
+    ajDebug("   statSaveBtreeIdNext: %u\n", statSaveBtreeIdNext);
+    while(statSaveBtreeIdNext)
+        btreeIdFree(&statSaveBtreeId[--statSaveBtreeIdNext]);
+    AJFREE(statSaveBtreeId);
+    statSaveBtreeIdMax=0;
+    statSaveBtreeIdNext=0;
+
+    ajDebug("   statSaveBtreePriNext: %u\n", statSaveBtreePriNext);
+    while(statSaveBtreePriNext)
+        btreePriFree(&statSaveBtreePri[--statSaveBtreePriNext]);
+    AJFREE(statSaveBtreePri);
+    statSaveBtreePriMax=0;
+    statSaveBtreePriNext=0;
+
+    ajDebug("Primary Arrays: New:%Lu Reuse:%Lu Delete:%Lu Free:%Lu\n",
+                statCountAllocPriArrayNew, statCountAllocPriArrayReuse,
+                statCountAllocPriArrayDel, statCountAllocPriArrayFree);
+
+    ajDebug("Secondary Arrays: New:%Lu Reuse:%Lu Delete:%Lu Free:%Lu\n",
+                statCountAllocSecArrayNew, statCountAllocSecArrayReuse,
+                statCountAllocSecArrayDel, statCountAllocSecArrayFree);
+
+    ajDebug("Split root:%Lu Pri:%Lu Sec:%Lu Hyb:%Lu Num:%Lu\n",
+            statCallSplitRoot,statCallSplitPriRoot,statCallSplitSecRoot,
+            statCallSplitHybRoot,statCallSplitNumRoot);
+
+    ajDebug("Split leaf:%Lu Pri:%Lu Sec:%Lu Hyb:%Lu Num:%Lu\n",
+            statCallSplitLeaf,statCallSplitPriLeaf,statCallSplitSecLeaf,
+            statCallSplitHybLeaf,statCallSplitNumLeaf);
+
+    ajDebug("Split reorder:%Lu Pri:%Lu Sec:%Lu Hyb:%Lu Num:%Lu\n",
+            statCallReorderBuckets,
+            statCallReorderPriBuckets,statCallReorderSecBuckets,
+            statCallReorderHybBuckets,statCallReorderNumBuckets);
+
+    ajStrDel(&btreeFieldnameTmp);
+    ajTableMapDel(btreeFieldsTable, btreeFieldMapDel, NULL);
+    ajTableFree(&btreeFieldsTable);
+
+    tmpfree = (void *) btreeNodetypeNames;
+    AJFREE(tmpfree);
+    btreeNodetypeNames = NULL;
+    
+    return;
+}
+
+
+
+
+/* @func ajBtreeIdCmp *********************************************************
+**
+** Comparison function for sorting B+tree ID objects by database file number
+** and offset.
+**
+** Using the file and position allows unique identifiers to be
+** compared with other primary keys such bas accession number.
+**
+** @param [r] x [const void*] Standard argument. Item value.
+** @param [r] y [const void*] Standard argument. Comparison item value.
+** @return [ajint] Comparison result. Zero if equal, non-zero if different.
+** @@
+******************************************************************************/
+
+ajint ajBtreeIdCmp(const void* x, const void* y)
+{
+    const AjPBtId idx;
+    const AjPBtId idy;
+
+    idx = (const AjPBtId) x;
+    idy = (const AjPBtId) y;
+
+    if(idx->dbno > idy->dbno)
+        return 1;
+
+    if(idx->dbno < idy->dbno)
+        return -1;
+
+    if(idx->offset > idy->offset)
+        return 1;
+
+    if(idx->offset < idy->offset)
+        return -1;
+
+    return 0;
+}
+
+
+
+
+/* @func ajBtreeIdHash *******************************************************
+**
+** Hash function for a table with a B+tree primary key
+**
+** @param [r] key [const void*] Standard argument. Table key.
+** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
+** @return [ajuint] Hash value in range 0 to hashsize-1
+** @@
+******************************************************************************/
+
+ajuint ajBtreeIdHash(const void* key, ajuint hashsize)
+{
+    const AjPBtId id;
+    ajuint hash;
+    ajulong ia;
+
+    id = (const AjPBtId) key;
+
+     if(!key)
+        return 0;
+
+    if(!hashsize)
+        return 0;
+
+    ia = id->offset + (ajulong) id->dbno;
+
+    hash = (ia >> 2) % hashsize;
+
+    return hash;
+}
+
+
+    

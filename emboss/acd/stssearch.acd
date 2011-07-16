@@ -2,9 +2,10 @@ application: stssearch [
   documentation: "Search a DNA database for matches with a
                   set of STS primers"
   groups: "Nucleic:Primers"
-  relations: "/edam/topic/0000195 Polymerase chain reaction"
-  relations: "/edam/topic/0000090 Database search and retrieval"
-  relations: "/edam/operation/0000354 Sequence database search by sequence (primer sequences)"
+    relations: "EDAM:0000195 topic Polymerase chain reaction"
+    relations: "EDAM:0000090 topic Data retrieval"
+    relations: "EDAM:0000354 operation Sequence database search
+                (by sequence for primer sequences)"
 ]
 
 section: input [
@@ -15,16 +16,14 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "dna"
-    relations: "/edam/data/0001215 Pure DNA sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
   ]
 
   infile: infile [
     parameter: "Y"
     information: "Primer pairs file"
     knowntype: "primer pairs"
-    relations:  "/edam/data/0000850 Sequence set"  
+    relations: "EDAM:0000850 data Sequence set"
   ]
 
 endsection: input
@@ -37,7 +36,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "stssearch output"
-    relations:  "/edam/data/0000922 Primer report"                                 
+    relations: "EDAM:0000922 data Nucleic acid features (primers)"
   ]
 
 endsection: output

@@ -79,8 +79,8 @@ int main(int argc, char **argv)
 
     for(i=0; i < locs->Nurls; ++i)
     {
-        value1 = ajTableFetch(locs->Urls[i],(void *)key1);
-        value2 = ajTableFetch(locs->Urls[i],(void *)key2);
+        value1 = ajTableFetchS(locs->Urls[i], key1);
+        value2 = ajTableFetchS(locs->Urls[i], key2);
         ajFmtPrintF(outf,"%-40S %S\n",value1,value2);
     }
     

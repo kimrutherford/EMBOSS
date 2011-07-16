@@ -64,7 +64,7 @@ planes around it.</p>
     Usage
 </H2>
 
-<b>Here is a sample session with psiphi</b>
+Here is a sample session with <b>psiphi</b>
 <p>
 
 <p>
@@ -87,7 +87,7 @@ Output report [1hmp_a.psiphi]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Calculates phi and psi torsion angles from protein coordinates
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Clean protein structure coordinates file
@@ -100,7 +100,8 @@ Version: EMBOSS:6.3.0
    -finishresiduenumber integer    [1] Last residue in chain for which torsion
                                   angles should be calculated (1 = last
                                   residue) (Any integer value)
-  [-outfile]           report     [*.psiphi] Output report file name
+  [-outfile]           report     [*.psiphi] Output report file name (default
+                                  -rformat table)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -188,7 +189,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat table)</td>
 <td><i>&lt;*&gt;</i>.psiphi</td>
 </tr>
 
@@ -545,10 +546,11 @@ The output is a standard EMBOSS report file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
 
 <p>
 
@@ -566,12 +568,12 @@ By default <b>psiphi</b> writes a 'table' format report file.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: 1hmp_a.psiphi </h3>
+<p><h3>File: 1hmp_a.psiphi</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: psiphi
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: psiphi
 #    [-infile] ../../data/1hmp_a.ccf
 #    -chainnumber 1

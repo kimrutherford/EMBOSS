@@ -48,7 +48,9 @@ Algorithm
     Input file format
 </H2>
 
-<b>freak</b> reads normal sequence USAs.
+<b>freak</b> reads one or more nucleotide or protein sequences.
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
 
 <p>
 <!--#include file="inc/freak.input" -->
@@ -57,10 +59,15 @@ Algorithm
     Output file format
 </H2>
 
+If <tt>-plot</tt> is specified, graphics output is produced.
+
+<!--#include file="inc/graphicsdevices.ihtml" -->
+
+<p>
 <!--#include file="inc/freak.output" -->
 <p>
 
-The ouput consists of a title line and then two columns containing the
+The output consists of a title line and then two columns containing the
 position of the start of the window and then the frequency in that
 window of the bases or residues being searched for. 
 

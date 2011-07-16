@@ -1,5 +1,5 @@
 Replace tabs with spaces in an ASCII text file
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ASCII text file

@@ -1,0 +1,37 @@
+Here is a sample session with <b>dbxresource</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbxresource drcat </b>
+Index a data resource catalogue using b+tree indices
+Standard database name [drcat]: <b>drcat</b>
+Resource name [drcatresource]: <b>drcatresource</b>
+Database directory [.]: <b></b>
+Wildcard database filename [DRCAT.dat]: <b>DRCAT.dat</b>
+        id : ID
+       acc : IDother
+       nam : Name
+       des : Description
+       url : Server URL
+       cat : Category name
+     taxid : Taxon id
+      edat : EDAM data term
+      efmt : EDAM format term
+       eid : EDAM data id term
+      etpc : EDAM topic term
+      xref : Link
+      qout : Query output
+      qfmt : Query output format
+       qin : Query input parameters
+      qurl : Query URL
+      rest : Rest URL
+      soap : SOAP URL
+Index fields [*]: <b></b>
+Compressed index files [Y]: <b></b>
+General log output file [outfile.dbxresource]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

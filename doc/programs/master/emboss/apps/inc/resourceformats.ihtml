@@ -1,0 +1,18 @@
+<p>
+
+The output is a standard EMBOSS resource file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-oformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: 
+drcat, basic, wsbasic, list.
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ResourceFormats.html">
+http://emboss.sf.net/docs/themes/ResourceFormats.html</A>
+for further information on resource formats.
+
+<p>

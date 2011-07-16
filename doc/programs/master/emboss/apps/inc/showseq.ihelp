@@ -1,5 +1,5 @@
 Displays sequences with features in pretty format
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) nucleotide sequence(s) filename and
@@ -231,7 +231,7 @@ Version: EMBOSS:6.3.0
 
    Advanced (Unprompted) qualifiers:
    -mfile              datafile   [Emethylsites.dat] Restriction enzyme
-                                  methylation data file (optional)
+                                  methylation data file
    -flatreformat       boolean    [N] This changes the output format to one
                                   where the recognition site is indicated by a
                                   row of '===' characters and the cut site is

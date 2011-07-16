@@ -53,7 +53,7 @@ Algorithm
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with hmoment</b>
+Here is a sample session with <b>hmoment</b>
 <p>
 
 <p>
@@ -75,7 +75,7 @@ Output file [hbb_human.hmoment]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Calculate and plot hydrophobic moment for protein sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Protein sequence(s) filename and optional
@@ -83,7 +83,7 @@ Version: EMBOSS:6.3.0
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 *  -outfile            outfile    [*.hmoment] Output file name
 
    Additional (Optional) qualifiers:
@@ -174,7 +174,7 @@ Version: EMBOSS:6.3.0
 <td>-graph</td>
 <td>xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -551,7 +551,34 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>hmoment</b> reads in a protein sequence USA.
+<b>hmoment</b> reads one or protein sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -678,6 +705,38 @@ SQ   SEQUENCE   147 AA;  15998 MW;  A31F6D621C6556A1 CRC64;
 With the '-plot' option <b>hmoment</b> displays a graphical plot of the
 hydrophobic moment of the specified alpha helix angle. With the '-plot -double'
 options it also displays the beta-sheet hydrophobic moment.
+
+<p>
+<p>
+
+The output is to the specified graphics device.
+
+<p>
+
+The results can be output in one of several formats by using the
+command-line qualifier <b>-graph xxx</b>, where 'xxx' is replaced by
+the name of the required device. Support depends on the availability
+of third-party software packages.
+
+<p>
+The device names that output to a file are:
+ps (postscript), cps (colourps), png, gif, pdf, svg, hpgl, hp7470,
+hp7580, das, data.
+
+<p> The other available device names are: meta, x11 (xwindows), tek
+(tek4107t), tekt (tektronix), xterm, text.
+
+<p>
+Output can be turned off by specifying none (null).
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/GraphicsDevices.html">
+http://emboss.sf.net/docs/themes/GraphicsDevices.html</A>
+for further information on supported devices.
+
+<p>
 
 <p>
 
@@ -862,33 +921,38 @@ None.
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
-<td><a href="garnier.html">garnier</a></td>
-<td>Predicts protein secondary structure using GOR method</td>
+<td><a href="charge.html">charge</a></td>
+<td>Draw a protein charge plot</td>
 </tr>
 
 <tr>
-<td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Identify nucleic acid-binding motifs in protein sequences</td>
+<td><a href="iep.html">iep</a></td>
+<td>Calculate the isoelectric point of proteins</td>
 </tr>
 
 <tr>
-<td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions in protein sequences</td>
+<td><a href="octanol.html">octanol</a></td>
+<td>Draw a White-Wimley protein hydropathy plot</td>
 </tr>
 
 <tr>
-<td><a href="pepnet.html">pepnet</a></td>
-<td>Draw a helical net for a protein sequence</td>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plot amino acid properties of a protein sequence in parallel</td>
 </tr>
 
 <tr>
-<td><a href="pepwheel.html">pepwheel</a></td>
-<td>Draw a helical wheel diagram for a protein sequence</td>
+<td><a href="pepstats.html">pepstats</a></td>
+<td>Calculates statistics of protein properties</td>
 </tr>
 
 <tr>
-<td><a href="tmap.html">tmap</a></td>
-<td>Predict and plot transmembrane segments in protein sequences</td>
+<td><a href="pepwindow.html">pepwindow</a></td>
+<td>Draw a hydropathy plot for a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepwindowall.html">pepwindowall</a></td>
+<td>Draw Kyte-Doolittle hydropathy plot for a protein alignment</td>
 </tr>
 
 </table>

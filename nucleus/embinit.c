@@ -18,6 +18,35 @@
 #include "emboss.h"
 
 
+static void initDball(void);
+
+
+
+
+/* @funcstatic initDball ******************************************************
+**
+** Initialises database access functions for all datatypes
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void initDball (void)
+{
+    ajTextdbInit();
+    ajSeqdbInit();
+    ajFeatdbInit();
+    ajObodbInit();
+    ajAssemdbInit();
+    ajTaxdbInit();
+    ajUrldbInit();
+    ajVardbInit();
+    ajResourcedbInit();
+
+    return;
+}
+
+
 
 
 /* @func embInit **************************************************************
@@ -38,7 +67,7 @@
 
 void  embInit (const char *pgm, ajint argc, char * const argv[])
 {
-    ajSeqdbInit();
+    initDball();
     ajNamInit("emboss");
 
     ajAcdInit (pgm, argc, argv);
@@ -69,7 +98,7 @@ void  embInit (const char *pgm, ajint argc, char * const argv[])
 void embInitP (const char *pgm, ajint argc, char * const argv[],
                const char *package)
 {
-    ajSeqdbInit();
+    initDball();
     ajNamInit("emboss");
 
     ajAcdInitPV (pgm, argc, argv, package, "");
@@ -101,7 +130,7 @@ void embInitP (const char *pgm, ajint argc, char * const argv[],
 void embInitPV (const char *pgm, ajint argc, char * const argv[],
                const char *package, const char *packversion)
 {
-    ajSeqdbInit();
+    initDball();
     ajNamInit("emboss");
 
     ajAcdInitPV (pgm, argc, argv, package, packversion);

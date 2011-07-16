@@ -1799,6 +1799,8 @@ void embPatBYPInit(const AjPStr pat, ajuint len, EmbPPatBYPNode offset,
 	}
     }
 
+    buf[len-1] = len;
+
     return;
 }
 
@@ -1893,7 +1895,7 @@ ajuint embPatBYPSearch(const AjPStr str, const AjPStr name,
 	    if(--count<0)
 		break;
 
-    if(count>=0)
+    if(count>=0 && (!carboxyl || (carboxyl && i==slen)))
     {
 	embPatPushHit(l,name,0,plen,begin,mm-count);
 	count = 1;
@@ -3796,13 +3798,13 @@ void embPatRestrictPreferred(AjPList l, const AjPTable t)
 {
     AjIList iter   = NULL;
     EmbPMatMatch m = NULL;
-    AjPStr value   = NULL;
+    const AjPStr value   = NULL;
 
     iter = ajListIterNewread(l);
 
     while((m = (EmbPMatMatch)ajListIterGet(iter)))
     {
-	value = ajTableFetch(t,m->cod);
+	value = ajTableFetchS(t,m->cod);
 
 	if(value)
 	    ajStrAssignS(&m->cod,value);
@@ -4225,13 +4227,20 @@ ajuint embPatRestrictMatch(const AjPSeq seq, ajuint begin, ajuint end,
     ajuint plen;
     ajuint i;
     ajuint hits;
-    ajuint ne;
+    ajuint ne = 0;
 
     const char *cp;
     char *p;
     char *q;
 
+    if(enzymes)
+    {
+        ne = ajArrCommaList(enzymes,&ea);
 
+        if(!ne)
+            return 0;
+    }
+    
     name   = ajStrNew();
     substr = ajStrNew();
     revstr = ajStrNew();
@@ -4243,14 +4252,10 @@ ajuint embPatRestrictMatch(const AjPSeq seq, ajuint begin, ajuint end,
     if(methyl)
         methlist = patRestrictReadMethyl(methfile);
     
-    ne = 0;
-
     if(!enzymes)
 	isall = ajTrue;
     else
     {
-	ne = ajArrCommaList(enzymes,&ea);
-
 	for(i=0;i<ne;++i)
 	{
 	    ajStrRemoveWhite(&ea[i]);
@@ -4264,7 +4269,7 @@ ajuint embPatRestrictMatch(const AjPSeq seq, ajuint begin, ajuint end,
     }
 
 
-
+    
     ajFileSeek(enzfile,0L,0);
     ajStrAssignS(&name,ajSeqGetNameS(seq));
     strand = ajSeqGetSeqS(seq);
@@ -4354,6 +4359,7 @@ ajuint embPatRestrictMatch(const AjPSeq seq, ajuint begin, ajuint end,
 	    for(i=0;i<ne;++i)
 		if(ajStrMatchCaseS(ea[i],enz->cod))
 		    break;
+
 	    if(i==ne)
 		continue;
 	}

@@ -1,8 +1,9 @@
 application: pepcoil [
   documentation: "Predicts coiled coil regions in protein sequences"
-  groups: "Protein:2D Structure, Protein:Motifs"
-  relations: "/edam/topic/0000178 Protein secondary structure prediction"
-  relations: "/edam/operation/0000268 Protein super-secondary structure prediction"
+  groups: "Protein:2D Structure, Protein:Domains"
+    relations: "EDAM:0000178 topic Protein secondary structure prediction"
+    relations: "EDAM:0000736 topic Protein domains"
+    relations: "EDAM:0000268 operation Protein super-secondary structure prediction"
 ]
 
 section: input [
@@ -13,9 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
-    relations: "/edam/data/0001218 Unambiguous pure protein sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0002886 data Sequence record (protein)"
   ]
 
 endsection: input
@@ -31,7 +30,7 @@ section: required [
     maximum: "28"
     default: "28"
     information: "Window size"
-    relations: "/edam/data/0001251 Window size"
+    relations: "EDAM:0001251 data Window size"
   ]
 
 endsection: required
@@ -44,27 +43,27 @@ section: output [
   boolean: coil [
     default: "Y"
     information: "Report coiled coil regions"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: frame [
     default: "$(coil)"
     information: "Show coil frameshifts"
     expected: "Yes if -coil is true"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: other [
     default: "N"
     information: "Report non coiled coil regions"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   report: outfile [
     parameter: "Y"
     rformat: "motif"
     taglist: "float:Probability str:Predict int:pos=Max_coil_pos str:Frames"
-    relations: "/edam/data/0000877 Protein super-secondary structure"                                       
+    relations: "EDAM:0000877 data Protein structure report (super-secondary)"
   ]
 
 endsection: output

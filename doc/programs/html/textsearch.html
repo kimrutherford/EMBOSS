@@ -64,7 +64,7 @@ sequence annotation.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with textsearch</b>
+Here is a sample session with <b>textsearch</b>
 <p>
 Search for 'lactose': 
 <p>
@@ -72,9 +72,10 @@ Search for 'lactose':
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>textsearch 'tsw:*' 'lactose' </b>
+% <b>textsearch "tsw:*" "lactose" </b>
 Search the textual description of sequence(s)
 Output file [12s1_arath.textsearch]: <b></b>
+ajSeqxrefNewDbS '1-I' 'FT025'
 
 </pre></td></tr></table><p>
 <p>
@@ -88,7 +89,7 @@ Search for 'lactose' or 'permease' in E.coli proteins:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>textsearch 'tsw:*_ecoli' 'lactose | permease' </b>
+% <b>textsearch "tsw:*_ecoli" "lactose | permease" </b>
 Search the textual description of sequence(s)
 Output file [bgal_ecoli.textsearch]: <b></b>
 
@@ -104,7 +105,7 @@ Output a search for 'lacz' formatted with HTML to a file:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>textsearch 'tembl:*' 'lacz' -html -outfile embl.lacz.html </b>
+% <b>textsearch "tembl:*" "lacz" -html -outfile embl.lacz.html </b>
 Search the textual description of sequence(s)
 
 </pre></td></tr></table><p>
@@ -118,7 +119,7 @@ Search the textual description of sequence(s)
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Search the textual description of sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -547,7 +548,34 @@ to get only the name output, you can specify
 </H2>
 
 
-<b>textsearch</b> reads one or more normal sequence USAs.
+<b>textsearch</b> reads one or more nucleotide or protein sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -680,113 +708,23 @@ None.
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
-<td><a href="abiview.html">abiview</a></td>
-<td>Display the trace in an ABI sequencer file</td>
+<td><a href="drtext.html">drtext</a></td>
+<td>Get data resource entries complete text</td>
 </tr>
 
 <tr>
-<td><a href="cirdna.html">cirdna</a></td>
-<td>Draws circular maps of DNA constructs</td>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
-<td><a href="infoalign.html">infoalign</a></td>
-<td>Display basic information about a multiple sequence alignment</td>
+<td><a href="ontotext.html">ontotext</a></td>
+<td>Get ontology term(s) original full text</td>
 </tr>
 
 <tr>
-<td><a href="infobase.html">infobase</a></td>
-<td>Return information on a given nucleotide base</td>
-</tr>
-
-<tr>
-<td><a href="inforesidue.html">inforesidue</a></td>
-<td>Return information on a given amino acid residue</td>
-</tr>
-
-<tr>
-<td><a href="infoseq.html">infoseq</a></td>
-<td>Display basic information about sequences</td>
-</tr>
-
-<tr>
-<td><a href="lindna.html">lindna</a></td>
-<td>Draws linear maps of DNA constructs</td>
-</tr>
-
-<tr>
-<td><a href="pepnet.html">pepnet</a></td>
-<td>Draw a helical net for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="pepwheel.html">pepwheel</a></td>
-<td>Draw a helical wheel diagram for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="prettyplot.html">prettyplot</a></td>
-<td>Draw a sequence alignment with pretty formatting</td>
-</tr>
-
-<tr>
-<td><a href="prettyseq.html">prettyseq</a></td>
-<td>Write a nucleotide sequence and its translation to file</td>
-</tr>
-
-<tr>
-<td><a href="remap.html">remap</a></td>
-<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
-</tr>
-
-<tr>
-<td><a href="seealso.html">seealso</a></td>
-<td>Finds programs with similar function to a specified program</td>
-</tr>
-
-<tr>
-<td><a href="showalign.html">showalign</a></td>
-<td>Display a multiple sequence alignment in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showdb.html">showdb</a></td>
-<td>Displays information on configured databases</td>
-</tr>
-
-<tr>
-<td><a href="showfeat.html">showfeat</a></td>
-<td>Display features of a sequence in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showpep.html">showpep</a></td>
-<td>Displays protein sequences with features in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showseq.html">showseq</a></td>
-<td>Displays sequences with features in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="sixpack.html">sixpack</a></td>
-<td>Display a DNA sequence with 6-frame translation and ORFs</td>
-</tr>
-
-<tr>
-<td><a href="tfm.html">tfm</a></td>
-<td>Displays full documentation for an application</td>
-</tr>
-
-<tr>
-<td><a href="whichdb.html">whichdb</a></td>
-<td>Search all sequence databases for an entry and retrieve it</td>
-</tr>
-
-<tr>
-<td><a href="wossname.html">wossname</a></td>
-<td>Finds programs by keywords in their short description</td>
+<td><a href="textget.html">textget</a></td>
+<td>Get text data entries</td>
 </tr>
 
 </table>

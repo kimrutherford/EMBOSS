@@ -1,8 +1,9 @@
 application: pepstats [
   documentation: "Calculates statistics of protein properties"
-  groups: "Protein:Composition"
-  relations: "/edam/topic/0000123 Protein physicochemical properties"
-  relations: "/edam/operation/0000250 Protein physicochemical property calculation"
+  groups: "Protein:Composition, Protein:Properties"
+    relations: "EDAM:0000123 topic Protein physicochemistry"
+    relations: "EDAM:0000157 topic Sequence composition"
+    relations: "EDAM:0000250 operation Protein property calculation"
 ]
 
 section: input [
@@ -13,9 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "protein"
-    relations: "/edam/data/0001219 Pure protein sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0002886 data Sequence record (protein)"
   ]
 
   datafile: aadata [
@@ -23,7 +22,7 @@ section: input [
     help: "Amino acid properties"
     default: "Eamino.dat"
     knowntype: "amino acid properties"
-    relations:  "/edam/data/0001502 Amino acid chemical classes data"               
+    relations: "EDAM:0001502 data Amino acid index (chemical classes)"
   ]
 
   datafile: mwdata [
@@ -31,7 +30,7 @@ section: input [
     help: "Molecular weight data for amino acids"
     default: "Emolwt.dat"
     knowntype: "molecular weights"
-    relations:  "/edam/data/0001505 Amino acid molecular weight data"               
+    relations: "EDAM:0001505 data Amino acid index (molecular weight)"
   ]
 
 endsection: input
@@ -44,13 +43,13 @@ section: advanced [
   boolean: termini [
     default: "Y"
     information: "Include charge at N and C terminus"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: mono [
     default: "N"
     information: "Use monoisotopic weights"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -64,7 +63,7 @@ section: output [
     parameter: "Y"
     knowntype: "pepstats output"
     information: "Pepstats program output file"
-    relations:  "/edam/data/0000897 Protein physicochemical property"                
+    relations: "EDAM:0000897 data Protein property"
   ]
 
 endsection: output

@@ -1,18 +1,23 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef enscache_h
-#define enscache_h
+#ifndef ENSCACHE_H
+#define ENSCACHE_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ajax.h"
-#include "enstable.h"
+
+AJ_BEGIN_DECLS
 
 
 
 
-/* EnsECacheType **************************************************************
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+/* @const EnsECacheType *******************************************************
 **
 ** Ensembl Cache Type enumeration.
 **
@@ -28,6 +33,10 @@ typedef enum EnsOCacheType
 
 
 
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
 /* @data EnsPCache ************************************************************
 **
 ** Ensembl Cache.
@@ -40,20 +49,20 @@ typedef enum EnsOCacheType
 ** @attr Table [AjPTable] AJAX Table implementing lookup functionality
 ** @attr Reference [(void**)] Object-specific referencing function
 ** @attr Delete [(void*)] Object-specific deletion function
-** @attr Size [(ajulong*)] Object-specific memory sizing function
+** @attr Size [(size_t*)] Object-specific memory sizing function
 ** @attr Read [(void**)] Object-specific reading function
 ** @attr Write [(AjBool*)] Object-specific writing function
 ** @attr Type [EnsECacheType] Ensembl Cache type
 ** @attr Synchron [AjBool] ajTrue: Immediately write-back value data
 **                         ajFalse: Write-back value data later
-** @cc Cache limits
-** @attr Bytes [ajulong] Current number of cached bytes
-** @attr MaxBytes [ajulong] Maximum number of allowed bytes
-** @attr MaxSize [ajulong] Maximum memory size of an object
-** @cc Cache size
+** @cc Memory limits
+** @attr Bytes [size_t] Current number of cached bytes
+** @attr MaxBytes [size_t] Maximum number of allowed bytes
+** @attr MaxSize [size_t] Maximum memory size of an object
+** @cc Counter limits
 ** @attr Count [ajuint] Current number of cached entry
 ** @attr MaxCount [ajuint] Maximum number of allowed entries
-** @cc Cache performance statistics
+** @cc Performance statistics
 ** @attr Dropped [ajuint] Number of entries dropped by the LRU algorithm
 ** @attr Removed [ajuint] Number of entries explicitly removed
 ** @attr Stored [ajuint] Number of entries currently stored
@@ -67,16 +76,16 @@ typedef struct EnsSCache
     AjPStr Label;
     AjPList List;
     AjPTable Table;
-    void* (*Reference)(void *);
-    void (*Delete)(void **);
-    ajulong (*Size)(const void *);
-    void* (*Read)(const void *key);
-    AjBool (*Write)(const void *);
+    void* (*Reference)(void* value);
+    void (*Delete)(void** Pvalue);
+    size_t (*Size)(const void* value);
+    void* (*Read)(const void* key);
+    AjBool (*Write)(const void* value);
     EnsECacheType Type;
     AjBool Synchron;
-    ajulong Bytes;
-    ajulong MaxBytes;
-    ajulong MaxSize;
+    size_t Bytes;
+    size_t MaxBytes;
+    size_t MaxSize;
     ajuint Count;
     ajuint MaxCount;
     ajuint Dropped;
@@ -91,35 +100,39 @@ typedef struct EnsSCache
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
 
 /* Ensembl Cache */
 
-EnsPCache ensCacheNew(EnsECacheType type,
-                      ajulong maxbytes,
+EnsPCache ensCacheNew(const EnsECacheType type,
+                      size_t maxbytes,
                       ajuint maxcount,
-                      ajulong maxsize,
+                      size_t maxsize,
                       void* Freference(void* value),
-                      void Fdelete(void** value),
-                      ajulong Fsize(const void* value),
+                      void Fdelete(void** Pvalue),
+                      size_t Fsize(const void* value),
                       void* Fread(const void* key),
                       AjBool Fwrite(const void* value),
                       AjBool synchron,
-                      const char *label);
+                      const char* label);
 
 void ensCacheDel(EnsPCache* Pcache);
 
-void *ensCacheFetch(EnsPCache cache, void *key);
+AjBool ensCacheTrace(const EnsPCache cache, ajuint level);
 
-AjBool ensCacheStore(EnsPCache cache, void* key, void** value);
+AjBool ensCacheFetch(EnsPCache cache, void* key, void** Pvalue);
 
 AjBool ensCacheRemove(EnsPCache cache, const void* key);
 
-AjBool ensCacheSynchronise(EnsPCache cache);
+AjBool ensCacheStore(EnsPCache cache, void* key, void** Pvalue);
 
-AjBool ensCacheTrace(const EnsPCache cache, ajuint level);
+AjBool ensCacheSynchronise(EnsPCache cache);
 
 /*
 ** End of prototype definitions
@@ -128,8 +141,6 @@ AjBool ensCacheTrace(const EnsPCache cache, ajuint level);
 
 
 
-#endif /* enscache_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSCACHE_H */

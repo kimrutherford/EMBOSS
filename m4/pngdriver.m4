@@ -24,19 +24,17 @@ AC_DEFUN([CHECK_PNGDRIVER],
 #
 # Handle user hints
 #
-[AC_MSG_CHECKING(if png driver is wanted)
+[AC_MSG_CHECKING([if png driver is wanted])
 AC_ARG_WITH([pngdriver],
     [AS_HELP_STRING([--with-pngdriver=@<:@DIR@:>@],
-        [root directory path of png/gd/zlib installation (defaults to /usr)])]
-    [AS_HELP_STRING([--without-pngdriver],
-        [to disable pngdriver usage completely])],
+        [root directory path of png/gd/zlib installation (defaults to /usr)])],
 [if test "$withval" != no ; then
-  AC_MSG_RESULT(yes)
+  AC_MSG_RESULT([yes])
   ALT_HOME="$withval"
 else
-  AC_MSG_RESULT(no)
+  AC_MSG_RESULT([no])
 fi], [
-AC_MSG_RESULT(yes)
+AC_MSG_RESULT([yes])
 ALT_HOME=/usr
 ])
 
@@ -60,13 +58,15 @@ then
         CPPFLAGS="$CPPFLAGS -I$ALT_HOME/include"
 
 	  ICCHECK=0
-	  if test "`uname`" = "SunOS"; then
+	  case $host_os in
+          solaris*)
 	        AC_CHECK_LIB(iconv, libiconv_close, ICCHECK=1, ICCHECK=0, -L${ALT_HOME}/lib -liconv)
-	if test $ICCHECK = "1" ; then
-	        LDFLAGS="${LDFLAGS} -L${ALT_HOME}/lib -liconv"
-	fi
-	    LDFLAGS="$LDFLAGS -R$ALT_HOME/lib"
-          fi
+	           if test $ICCHECK = "1" ; then
+	               LDFLAGS="${LDFLAGS} -L${ALT_HOME}/lib -liconv"
+	           fi
+	        LDFLAGS="$LDFLAGS -R$ALT_HOME/lib"
+                ;;
+          esac
 
 
 
@@ -107,11 +107,13 @@ then
 		  LIBS="$LIBS -liconv"
 	  fi
         
-	  if test "`uname`" = "SunOS"; then
-	    LDFLAGS="$LDFLAGS -R$ALT_HOME/lib"
-          fi
+          case $host_os in
+          solaris*)
+	      LDFLAGS="$LDFLAGS -R$ALT_HOME/lib"
+              ;;
+          esac
 
-	  AC_DEFINE(PLD_png)
+	  AC_DEFINE([PLD_png], [1], [Define to 1 is PNG support is available])
 	  AM_CONDITIONAL(AMPNG, true)
 	  echo PNG libraries found
 	    if test $ALT_HOME = "/usr" ; then

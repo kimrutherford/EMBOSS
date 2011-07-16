@@ -1,0 +1,145 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dbget
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+dbget
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/dbget.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>dbget</b> retrieve database entries for a named database, data type and data identifier.  A list of hyperlinks is written to the screen and to file and the data iteself is written to a specified directory. Valid database, datatypes and data identifiers are listed in the catalogue of public databases in the EMBOSS data file db.dat.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/dbget.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/dbget.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/dbget.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<p>
+<!--#include file="inc/dbget.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+<p>The output file (that is written to screen) consists of a simple list of hyperlinks to the data.
+<p>The data itself (written to the specified directory) is in whatever format provided by the database, typically HTML.
+
+
+<p>
+<!--#include file="inc/dbget.output" -->
+
+<H2>
+    Data files
+</H2>
+<p>The EMBOSS database information file (<kbd>db.dat</kbd>) must be installed in the EMBOSS data directory and indexed. This is done automatically for typical installations.</p>
+        
+<H2>
+    Notes
+</H2>
+<p>The names of the queryable databases and the retrievable datatypes are listed in the catalogue of public databases in the EMBOSS data file db.dat.  Data identifiers (e.g. a sequence accession number) are used to specify the data to retrieve.  Datatatype names are terms from the 'data' branch of the EDAM ontology (http://edamontology.sourceforge.net/). The types of data identifier are listed under the 'Data identifier' branch of the EDAM.  For example values, see the EMBOSS data file db.dat.</p>
+
+<ul>
+<li>If you're unsure of the available databases use <b>dbfind</b>.  
+<li>If you're unsure of the available retrievable datatypes for a given database, use <b>dbtellquery</b>.  
+<li>If you're unsure of the data identifier(s) that are used for a given query (database/datatype) use <b>dbtellquery</b>.  
+<li>If you have a database name but are not sure its valid, use <b>isdbname</b>.
+<li>If you have a datatype name but are not sure its valid, use <b>isdbdata</b>.
+<li>If you have a data identifier but are unsure of its type, use <b>idtell</b>.
+</ul>
+
+
+<H2>
+    References
+</H2>
+
+  
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/dbget.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/jison.address" -->
+
+
+
+<p>
+
+This application was modified by 
+<!--#include file="inc/jison.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/dbget.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/dbget.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,116 @@
+application: dbxtax [
+  documentation: "Index NCBI taxonomy using b+tree indices"
+  groups: "Utils:Database indexing"
+  gui: "no"
+  batch: "yes"
+  cpu: "medium"
+  relations: "EDAM:0000091 topic Data handling"
+  relations: "EDAM:0000227 operation Data indexing"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: dbname [
+    parameter: "Y"
+    default: "taxon"
+    maxlength: "19"
+    minlength: "2"
+    information: "Basename for index files"
+    knowntype: "emboss database name"
+    pattern: "[A-z][A-z0-9_]+"
+    relations:  "EDAM:0001056 identifier Database name"                          
+  ]
+
+  string: dbresource [
+    parameter: "Y"
+    default: "taxresource"
+    maxlength: "19"
+    minlength: "2"
+    information: "Resource name"
+    knowntype: "emboss resource name"
+    pattern: "[A-z][A-z0-9_]+"
+    relations:  "EDAM:0002527 data Parameter or primitive"                          
+  ]
+
+  directory: directory [
+    standard: "Y"
+    default: "."
+    information: "Database directory"
+    knowntype: "emboss database directory"
+    relations:  "EDAM:0001049 identifier Directory name"
+  ]
+
+endsection: input
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  list: fields [
+    standard: "Y"
+    information: "Index fields"
+    values: "id:ID;acc:Synonym;tax:Scientific name;rnk:Rank;up:Parent;
+             gc:Genetics code;mgc:Mitochondrial genetic code"
+    minimum: "1"
+    maximum: "7"
+    default: "*"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: compressed [
+    standard: "Y"
+    default: "Y"
+    information: "Compressed index files"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+endsection: required
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  string: release [
+    default: "0.0"
+    maxlength: "9"
+    information: "Release number"
+    knowntype: "emboss database release"
+    relations:  "EDAM:0001670 data Database version information"    
+  ]
+
+  string: date [
+    default: "00/00/00"
+    valid: "Date string dd/mm/yy"
+    information: "Index date"
+    pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
+    knowntype: "date"
+    relations:  "EDAM:0002156 data Date"   
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outdir: indexoutdir [
+    default: "."
+    information: "Index file output directory"
+    knowntype: "emboss database index"
+    relations:  "EDAM:0001049 identifier Directory name"
+  ]
+
+  outfile: outfile [
+    standard: "Y"
+    knowntype: "log"
+    information: "General log output file"
+    relations:  "EDAM:0001678 data Tool log"
+  ]
+
+endsection: output

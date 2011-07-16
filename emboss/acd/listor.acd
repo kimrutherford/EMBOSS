@@ -2,8 +2,8 @@ application: listor [
   documentation: "Write a list file of the logical OR of two
                   sets of sequences"
   groups: "Edit"
-  relations: "/edam/topic/0000220 File handling"
-  relations: "/edam/operation/0002120 Listfile handling"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0002120 operation Listfile processing"
 ]
 
 section: input [
@@ -15,18 +15,14 @@ section: input [
     parameter: "Y"
     type: "gapany"
     aligned: "N"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   seqset: secondsequences [
     parameter: "Y"
     type: "gapany"
     aligned: "N"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -42,9 +38,9 @@ section: additional [
     minimum: "1"
     maximum: "1"
     header: "Logical operator to combine sequence lists"
-    values: "O:OR - merger of both sets, A:AND - only those in both
-             sets, X:XOR - only those not in both sets, N:NOT - those of the
-             first set that are not in the second"
+    values: "OR:OR - merger of both sets, AND:AND - only those in both sets,
+             XOR:XOR - only those not in both sets,
+             NOT:NOT - those of the first set that are not in the second"
     delimiter: ","
     codedelimiter: ":"
     information: "Enter the logical operator to combine the
@@ -57,7 +53,7 @@ section: additional [
            not in both \
            NOT - gives those which occur in the first set except for those
            that also occur in the second"
-    relations: "/edam/data/0002133 Logical operator"                                
+    relations: "EDAM:0002133 identifier Logical operator"
   ]
 
 endsection: additional
@@ -74,7 +70,7 @@ section: output [
     help: "The list of sequence names will be written to this list
            file"
     information: "List of USAs output file"
-    relations: "/edam/data/0001111 EMBOSS listfile"                                      
+    relations: "EDAM:0001111 data EMBOSS listfile"
   ]
 
 endsection: output

@@ -145,7 +145,7 @@ calculation.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with banana</b>
+Here is a sample session with <b>banana</b>
 <p>
 
 <p>
@@ -191,7 +191,7 @@ Created banana9.dat
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Plot bending and curvature data for B-DNA
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -199,7 +199,7 @@ Version: EMBOSS:6.3.0
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers:
    -anglesfile         datafile   [Eangles_tri.dat] DNA base trimer roll
@@ -285,7 +285,7 @@ Version: EMBOSS:6.3.0
 <td>-graph</td>
 <td>graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -634,8 +634,29 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
+<b>banana</b> reads a single nucleotide sequences.
 
-Any DNA sequence USA.
+<p>
+<p>
+
+The output is a standard EMBOSS sequence file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
 
 <p>
 
@@ -750,6 +771,37 @@ default name 'banana.profile'.
 The graphical display shows the sequence together with the local local
 bending (solid line) and macroscopic curvature (dotted line). 
 
+<p>
+<p>
+
+The output is to the specified graphics device.
+
+<p>
+
+The results can be output in one of several formats by using the
+command-line qualifier <b>-graph xxx</b>, where 'xxx' is replaced by
+the name of the required device. Support depends on the availability
+of third-party software packages.
+
+<p>
+The device names that output to a file are:
+ps (postscript), cps (colourps), png, gif, pdf, svg, hpgl, hp7470,
+hp7580, das, data.
+
+<p> The other available device names are: meta, x11 (xwindows), tek
+(tek4107t), tekt (tektronix), xterm, text.
+
+<p>
+Output can be turned off by specifying none (null).
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/GraphicsDevices.html">
+http://emboss.sf.net/docs/themes/GraphicsDevices.html</A>
+for further information on supported devices.
+
+<p>
 <p>
 
 <a name="output.1"></a>
@@ -873,7 +925,7 @@ a       0.0      0.0
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##Maintitle Bending and curvature plot of tembl-id:U68037
-##Subtitle Fri 15 Jan 2010 12:00:00
+##Subtitle Fri 15 Jul 2011 12:00:00
 ##Graphic
 ##Screen x1 -1.000000 y1 0.000000 x2 60.000000 y2 80.000000
 Text3 x1 3.000000 y1 56.099998 colour 0 size 9.600000 a
@@ -2050,6 +2102,11 @@ None.
 <tr>
 <td><a href="density.html">density</a></td>
 <td>Draw a nucleic acid density plot</td>
+</tr>
+
+<tr>
+<td><a href="einverted.html">einverted</a></td>
+<td>Finds inverted repeats in nucleotide sequences</td>
 </tr>
 
 <tr>

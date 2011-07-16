@@ -1,4 +1,4 @@
-/****************************************************************************
+/******************************************************************************
 ** 
 ** @source ajdmx.c 
 **
@@ -1800,11 +1800,11 @@ AjPScophit ajDmxScophitReadFasta(AjPFile inf)
 ** # XX
 ** # SI   64391
 ** # XX
-** d1f0ia1    1 AATPHLDAVEQTLRQVSPGLEGDVWERTSGNKLDGSAADPSDWLLQTP-GCWGDDKC     50
-** d1f0ia2    1 -----------------------------NVPV---------IAVG-GLG---VGIK     15
+** d1f0ia1    1 AATPHLDAVEQTLRQVSPGLEGDVWERTSGNKLDGSAADPSDWLLQTP-GCWGDDKC    50
+** d1f0ia2    1 -----------------------------NVPV---------IAVG-GLG---VGIK    15
 ** 
-** d1f0ia1   51 A-------------------------------D-RVGTKRLLAKMTENIGNATRTVD     75
-** d1f0ia2   16 DVDPKSTFRPDLPTASDTKCVVGLHDNTNADRDYDTV-NPEESALRALVASAKGHIE     65
+** d1f0ia1   51 A-------------------------------D-RVGTKRLLAKMTENIGNATRTVD    75
+** d1f0ia2   16 DVDPKSTFRPDLPTASDTKCVVGLHDNTNADRDYDTV-NPEESALRALVASAKGHIE    65
 **
 **
 ** 

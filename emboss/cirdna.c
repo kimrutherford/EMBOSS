@@ -326,7 +326,7 @@ int main(int argc, char **argv)
     posrange = 0;
     GapGroup = 3*ajAcdGetFloat("gapgroup");
 
-    ajGraphAppendTitleS(graph, ajFileGetNameS(infile));
+    ajGraphAppendTitleS(graph, ajFileGetPrintnameS(infile));
 
     /* open the window in which the graphics will be drawn */
     ajGraphOpenMm(graph, &Width, &Height);

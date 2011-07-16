@@ -29,6 +29,17 @@
 **
 **  Email jison@ebi.ac.uk.
 **  
+**  acdrelations reads ACD files and writes exact copies but (depending on the
+**  mode it is run in) with relations: attributes either modified (mode 1) or
+**  added (mode 2).
+**  Mode 1
+**  relations: lines in this format:
+**  relations: "/edam/data/0001773 Tool-specific parameter"
+**  are replaced with this format:
+**  relations: "EDAM:0001773 data Tool-specific parameter"
+**
+**
+**  Mode 2
 **  acdrelations reads ACD files and writes exact copies but with a relations:
 **  attribute added to each data definition.  Any existing relations: attributes
 **  are replaced.  Text for relations: is from the EDAM ontology.
@@ -220,7 +231,11 @@ static void acdrelations_readtypefile
             (AjPFile inf, 
 	     PKtype *P);
 
-static void acdrelations_procacdfile
+static void acdrelations_procacdfile1
+            (AjPFile inf, 
+	     AjPFile outf);
+
+static void acdrelations_procacdfile2
             (AjPFile inf, 
 	     AjPFile outf, 
 	     PEdam P,
@@ -253,7 +268,9 @@ int main(ajint argc, char **argv)
   /* Variable declarations */
   AjPFile   inf_edam   = NULL;  /* Name of EDAM data (input) file   */
   AjPFile   acdoutf    = NULL;  /* Name of ACD (output) file        */
-  
+  AjPStr    mode       = NULL;
+    
+  ajint     modei;
   AjPList   acdinlist  = NULL;  /* List of ACD file names (input)   */
   AjPFile   acdinf     = NULL;  /* Name of ACD (input) file         */
   AjPStr    acdname    = NULL;  /* Name of current acd file         */
@@ -267,21 +284,27 @@ int main(ajint argc, char **argv)
 
   
   /* Read data from acd. */
-  embInitP("acdrelations",argc,argv,"MYEMBOSS");
+/*  embInitP("acdrelations",argc,argv,"MYEMBOSS"); */
+  embInit("acdrelations",argc,argv);
     
   /* ACD data handling */
+  mode = ajAcdGetListSingle("mode");
   inf_edam   = ajAcdGetDatafile("inedamfile");
   inf_ktype  = ajAcdGetInfile("intypefile");
   acdinlist  = ajAcdGetDirlist("indir");  
   acdoutdir  = ajAcdGetOutdir("outdir");
-  
-  /* Read data file */  
-  edam  = acdrelations_EdamNew();
-  ktype = acdrelations_KtypeNew();
-    
-  acdrelations_readdatfile(inf_edam, &edam);
-  acdrelations_readtypefile(inf_ktype, &ktype);
 
+  ajStrToInt(mode, &modei);
+    
+  /* Read data file */  
+  if(modei==2)
+  {
+      edam  = acdrelations_EdamNew();
+      ktype = acdrelations_KtypeNew();
+      acdrelations_readdatfile(inf_edam, &edam);
+      acdrelations_readtypefile(inf_ktype, &ktype);
+  }
+  
 
   /*  Main application loop. Process each ACD file in turn.  */
   while(ajListPop(acdinlist,(void **)&acdname))
@@ -294,19 +317,32 @@ int main(ajint argc, char **argv)
       if(!(acdoutf = ajFileNewOutNameDirS(acdname, acdoutdir)))
           ajFatal("Cannot open output ACD file %S\n", acdname);
 
-      acdrelations_procacdfile(acdinf, acdoutf, edam, ktype);
+      if(modei==1)
+          acdrelations_procacdfile1(acdinf, acdoutf);
+      else if(modei==2)
+          acdrelations_procacdfile2(acdinf, acdoutf, edam, ktype);
+      else
+          ajFatal("Unknown mode");
       
       ajFileClose(&acdinf);
       ajFileClose(&acdoutf);
   }
   
   /* Clean up and exit */
-  ajFileClose(&inf_edam);
-  ajFileClose(&inf_ktype);
+  ajStrDel(&mode);
+
+  if(modei==2)
+  {
+      ajFileClose(&inf_edam);
+      ajFileClose(&inf_ktype);
+      acdrelations_EdamDel(&edam);
+      acdrelations_KtypeDel(&ktype);
+  }
+  
   ajListFree(&acdinlist);
   ajDiroutDel(&acdoutdir);
+  
 
-  acdrelations_EdamDel(&edam);
 
   ajExit();
   return 0;
@@ -503,10 +539,95 @@ static void acdrelations_readtypefile
 
 
 
-/* @funcstatic acdrelations_procacdfile ***************************************
+/* @funcstatic acdrelations_procacdfile1 ***************************************
+**
+** Process ACD file and write new ACD file with relations: attributes in new
+** format (mode '1' operation).
+**
+** @param [u] inf  [AjPFile] ACD input file
+** @param [u] outf [AjPFile] ACD output file
+** @return [void] 
+** @@
+******************************************************************************/
+static void acdrelations_procacdfile1
+            (AjPFile inf, 
+	     AjPFile outf)
+{
+  AjPStr    line      = NULL;
+  AjPStr    tmp       = NULL;
+  AjPStr    tok       = NULL;
+  AjPStr    id        = NULL;
+  AjPStr    name      = NULL;
+  AjPStr    namespace = NULL;
+  AjPStrTok parse     = NULL;
+  ajint     pos;
+  
+  
+  /* Allocate memory */
+  line        = ajStrNew();
+  tmp         = ajStrNew();
+  tok         = ajStrNew();
+  id          = ajStrNew();
+  name        = ajStrNew();
+  namespace   = ajStrNew();
+
+  
+  /*  Read next line */
+  while(ajReadline(inf,&line))
+  {
+      ajFmtScanS(line, "%S", &tok);
+      
+      /* Write reformatted relations: line */
+      if(ajStrMatchC(tok, "relations:"))
+      {
+          /* Tokenise line segment (from after "relations:") by '"', ' ' and '/' 
+             Discard unwanted tokens */
+          pos = ajStrFindAnyK(line, ':');
+          ajStrAssignC(&tmp, line->Ptr+pos);
+          
+          parse = ajStrTokenNewC(tmp, "\" /");
+          ajStrTokenNextParse(&parse, &tok);
+          ajStrTokenNextParse(&parse, &tok); 
+          
+          /* Get namespace and id tokens */
+          ajStrTokenNextParse(&parse, &namespace);
+          ajStrTokenNextParse(&parse, &id);           
+
+          /* Get rest of string (name)
+             Strip whitespace at start and trailing " from name. */
+          ajStrTokenRestParse(&parse, &name);
+          ajStrRemoveWhiteExcess(&name);
+          ajStrRemoveSetC(&name, "\"\n");
+          ajStrTokenDel(&parse);
+                        
+          /* Position of last '/' and last '"' characters respectively. */
+          ajFmtPrintF(outf, "    relations: \"EDAM:%S %S %S\"\n", id, namespace, name);
+      }
+
+      /* Write other lines out as-is */
+      else
+          ajFmtPrintF(outf, "%S", line);          
+  }
+
+
+  /* Free memory */
+  ajStrDel(&line);
+  ajStrDel(&tmp);
+  ajStrDel(&tok);
+  ajStrDel(&id);
+  ajStrDel(&name);
+  ajStrDel(&namespace);
+
+  return;
+}
+
+
+
+
+/* @funcstatic acdrelations_procacdfile2 ***************************************
 **
 ** Process ACD file and write new ACD file with new relations: attributes
-** added (replaced if necessary).
+** added (replaced if necessary) using mode '2' operation.
 **
 ** @param [u] inf  [AjPFile] ACD input file
 ** @param [u] outf [AjPFile] ACD output file
@@ -515,7 +636,7 @@ static void acdrelations_readtypefile
 ** @return [void] 
 ** @@
 ******************************************************************************/
-static void acdrelations_procacdfile
+static void acdrelations_procacdfile2
             (AjPFile inf, 
 	     AjPFile outf, 
 	     PEdam P,
@@ -694,8 +815,6 @@ static void acdrelations_writerelations
                             if(ajStrMatchS(P->dat[i]->acdattr[j], strarr[k]))
                             {
                                 nmatch++;
-                                /* ajFmtPrint("Found match %d:  %S:%S\n", nmatch, P->dat[i]->acdattr[j], strarr[k]); */
-                                
                                 break;
                             }
                     }

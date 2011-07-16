@@ -22,7 +22,9 @@ nthseqset
 
 
 <p><b>nthseqset</b> writes to file a single sequence alignment (set)
-  from an input stream of sequence sets. The sequence set is specified by number, which is the order it appears in the input file. The output file name may be specified.</p>
+from an input stream of sequence sets. The sequence set is specified
+by number, which is the order it appears in the input file. The output
+file name may be specified.</p>
 
 <H2>
     Usage
@@ -49,7 +51,9 @@ nthseqset
     Input file format
 </H2>
 
-<b>nthseqset</b> reads a a normal sequence USA.
+<b>nthseqset</b> reads one or more nucleotiode or protein sequences.
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
 
 <p>
 
@@ -60,11 +64,14 @@ nthseqset
 </H2>
 
 
-The output is the specified ordinal sequence from the input USA.
+<!--#include file="inc/seqformats.ihtml" -->
+
+<p>
+The output is the specified ordinal sequence set from the input USA.
 
 <p>
 
-In the example, the second sequence from the input file will be written
+In the example, the second sequence set from the input file will be written
 out to the specified output file. 
 
 <p>

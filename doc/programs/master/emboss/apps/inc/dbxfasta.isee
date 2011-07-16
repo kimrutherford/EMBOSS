@@ -23,6 +23,16 @@
 </tr>
 
 <tr>
+<td><a href="dbxcompress.html">dbxcompress</a></td>
+<td>Compress an uncompressed dbx index</td>
+</tr>
+
+<tr>
+<td><a href="dbxedam.html">dbxedam</a></td>
+<td>Index the EDAM ontology using b+tree indices</td>
+</tr>
+
+<tr>
 <td><a href="dbxflat.html">dbxflat</a></td>
 <td>Index a flat file database using b+tree indices</td>
 </tr>
@@ -30,6 +40,36 @@
 <tr>
 <td><a href="dbxgcg.html">dbxgcg</a></td>
 <td>Index a GCG formatted database using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxobo.html">dbxobo</a></td>
+<td>Index an obo ontology using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxreport.html">dbxreport</a></td>
+<td>Validate index and report internals for dbx databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxresource.html">dbxresource</a></td>
+<td>Index a data resource catalogue using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxstat.html">dbxstat</a></td>
+<td>Dump statistics for dbx databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxtax.html">dbxtax</a></td>
+<td>Index NCBI taxonomy using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxuncompress.html">dbxuncompress</a></td>
+<td>Uncompress a compressed dbx index</td>
 </tr>
 
 </table>

@@ -53,7 +53,7 @@ Algorithm
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with listor</b>
+Here is a sample session with <b>listor</b>
 <p>
 Write the logical OR of two lists: 
 <p>
@@ -124,7 +124,7 @@ List of USAs output file [file1.list]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Write a list file of the logical OR of two sets of sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-firstsequences]    seqset     Sequence set filename and optional format,
@@ -145,11 +145,11 @@ Version: EMBOSS:6.3.0
                                   set or the other, but not in both
                                   NOT - gives those which occur in the first
                                   set except for those that also occur in the
-                                  second (Values: O (OR - merger of both
-                                  sets); A (AND - only those in both sets); X
-                                  (XOR - only those not in both sets); N (NOT
-                                  - those of the first set that are not in the
-                                  second))
+                                  second (Values: OR (OR - merger of both
+                                  sets); AND (AND - only those in both sets);
+                                  XOR (XOR - only those not in both sets); NOT
+                                  (NOT - those of the first set that are not
+                                  in the second))
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -258,7 +258,7 @@ OR - gives all that occur in one set or the other
 AND - gives only those which occur in both sets
 XOR - gives those which only occur in one set or the other, but not in both
 NOT - gives those which occur in the first set except for those that also occur in the second</td>
-<td><table><tr><td>O</td> <td><i>(OR - merger of both sets)</i></td></tr><tr><td>A</td> <td><i>(AND - only those in both sets)</i></td></tr><tr><td>X</td> <td><i>(XOR - only those not in both sets)</i></td></tr><tr><td>N</td> <td><i>(NOT - those of the first set that are not in the second)</i></td></tr></table></td>
+<td><table><tr><td>OR</td> <td><i>(OR - merger of both sets)</i></td></tr><tr><td>AND</td> <td><i>(AND - only those in both sets)</i></td></tr><tr><td>XOR</td> <td><i>(XOR - only those not in both sets)</i></td></tr><tr><td>NOT</td> <td><i>(NOT - those of the first set that are not in the second)</i></td></tr></table></td>
 <td>OR</td>
 </tr>
 
@@ -666,7 +666,7 @@ gcgcggcgcgcgtgcgtcgttgctggggccc
     Output file format
 </H2>
 
-The ouput is simply a list of the USAs (format and sequence
+The output is simply a list of the USAs (format and sequence
 specification) resulting from the required logical union of the two sets
 of input sequence. 
 
@@ -842,6 +842,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
 <td><a href="makenucseq.html">makenucseq</a></td>
 <td>Create random nucleotide sequences</td>
 </tr>
@@ -919,6 +924,11 @@ None.
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>

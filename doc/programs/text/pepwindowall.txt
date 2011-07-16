@@ -15,20 +15,20 @@ Function
 
 Description
 
-   pepwindow draws a set of superimposed Kyte & Doolittle hydropathy plots
-   for a set of protein sequences.
+   pepwindowall draws a set of superimposed Kyte & Doolittle hydropathy
+   plots for a set of alignedprotein sequences.
 
 Algorithm
 
-   pepwindow calculates hydropathy in windows of a specified size over the
-   input sequences.
+   pepwindowall calculates hydropathy in windows of a specified size over
+   the input sequences.
 
 Usage
 
    Here is a sample session with pepwindowall
 
 
-% pepwindowall globins.msf -gxtitle='Base Number' -gytitle='hydropathy'
+% pepwindowall globins.msf -gxtitle="Base Number" -gytitle="hydropathy"
 Draw Kyte-Doolittle hydropathy plot for a protein alignment
 Graph type [x11]: cps
 
@@ -41,14 +41,14 @@ Created pepwindowall.ps
 Command line arguments
 
 Draw Kyte-Doolittle hydropathy plot for a protein alignment
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     File containing a sequence alignment
   [-graph]             xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers:
    -datafile           datafile   [Enakai.dat] AAINDEX entry data file
@@ -104,8 +104,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   pepwindowall reads any protein sequence USA for one or more aligned
-   sequences.
+   pepwindowall reads aligned protein sequence.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -164,7 +180,23 @@ LGB2_LUPLU IVIKKEMNDAA~~~
 
 Output file format
 
-   An image is displayed on the specified graphics device.
+   The output is to the specified graphics device.
+
+   The results can be output in one of several formats by using the
+   command-line qualifier -graph xxx, where 'xxx' is replaced by the name
+   of the required device. Support depends on the availability of
+   third-party software packages.
+
+   The device names that output to a file are: ps (postscript), cps
+   (colourps), png, gif, pdf, svg, hpgl, hp7470, hp7580, das, data.
+
+   The other available device names are: meta, x11 (xwindows), tek
+   (tek4107t), tekt (tektronix), xterm, text.
+
+   Output can be turned off by specifying none (null).
+
+   See: http://emboss.sf.net/docs/themes/GraphicsDevices.html for further
+   information on supported devices.
 
   Output files for usage example
 
@@ -174,7 +206,7 @@ Output file format
 
 Data files
 
-   pepwindow reads the Kyte-Doolittle hydropathy data from the file
+   pepwindowall reads the Kyte-Doolittle hydropathy data from the file
    'Enakai.dat'
 
    EMBOSS data files are distributed with the application and stored in
@@ -235,7 +267,7 @@ Notes
 
    In calculating hydropathy, pepwindowall can use any of the amino acid
    parameters from the database of "Nakai et al." which are now included
-   in the database AAINDEX. Before running pepwindow, you must first
+   in the database AAINDEX. Before running pepwindowall, you must first
    extract the required data files from AAINDEX (see "Data Files"
    section).
 
@@ -268,42 +300,33 @@ Known bugs
 
 See also
 
-   Program name     Description
-   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
-                    sequence
-   backtranseq      Back-translate a protein sequence to a nucleotide sequence
-   charge           Draw a protein charge plot
-   checktrans       Reports STOP codons and ORF statistics of a protein
-   compseq          Calculate the composition of unique words in sequences
-   emowse           Search protein sequences by digest fragment molecular weight
-   freak            Generate residue/base frequency table or plot
-   iep              Calculate the isoelectric point of proteins
-   mwcontam         Find weights common to multiple molecular weights files
-   mwfilter         Filter noisy data from molecular weights file
-   octanol          Draw a White-Wimley protein hydropathy plot
-   pepinfo          Plot amino acid properties of a protein sequence in parallel
-   pepstats         Calculates statistics of protein properties
-   pepwindow        Draw a hydropathy plot for a protein sequence
-   wordcount        Count and extract unique words in molecular sequence(s)
+                    Program name                          Description
+                    charge       Draw a protein charge plot
+                    hmoment      Calculate and plot hydrophobic moment for protein sequence(s)
+                    iep          Calculate the isoelectric point of proteins
+                    octanol      Draw a White-Wimley protein hydropathy plot
+                    pepinfo      Plot amino acid properties of a protein sequence in parallel
+                    pepstats     Calculates statistics of protein properties
+                    pepwindow    Draw a hydropathy plot for a protein sequence
 
 Author(s)
 
-   Ian Longden formerly at:
-   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
-   CB10 1SA, UK.
+   Ian              Longden formerly at:
+   Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+                    CB10 1SA, UK.
 
-   Please report all bugs to the EMBOSS bug team
-   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 
-   Completed 4th June 1999.
+                    Completed 4th June 1999.
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

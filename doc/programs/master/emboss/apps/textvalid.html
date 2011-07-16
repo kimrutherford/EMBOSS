@@ -1,0 +1,139 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: textvalid
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+textvalid
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/textvalid.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>textvalid</b> reads a formatted ASCII text file of data, identifies the type of content (data) and validates the file format.  An informative message about the format and validity is written to screen.  A report file is written on any errors or issues that were detected with the formatting.</p>
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/textvalid.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/textvalid.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/textvalid.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<p>
+<!--#include file="inc/textvalid.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+<p>The first line has the general format:
+<tt>"FileName:FileType:FileFormat:(in)valid"</tt>
+Where <tt>FileName</tt> is the name of the file, <tt>FileType</tt> is the type of content ('sequence record', 'Sequence alignment' etc.) and <tt>FileFormat</tt> is the format ('fasta-like sequence format', 'clustal alignment format' etc.).  <tt>Unknown</tt> might be given instead of <tt>FileType</tt> or <tt>FileFormat</tt> if this cannot be ascertained.  <tt>invalid</tt> or <tt>valid</tt> is given depending on whether formattting errors were detected.<p>
+
+<p>Subsequent lines contain informative message about formatting errors detected during parsing.</p>
+
+
+<p>
+<!--#include file="inc/textvalid.output" -->
+
+<H2>
+    Data files
+</H2>
+
+        
+<H2>
+    Notes
+</H2>
+<p>Optionally, the type of content (data) of the input file may be specified.  This will help textvalid to identify and validate the file format.  If the content type is known it should always be specified.
+
+
+<H2>
+    References
+</H2>
+
+  
+
+<H2>
+    Warnings
+</H2>
+
+<p>The identification and validation of text file formats is a difficult problem owing to the diversity of available formats, poorly defined formats, lack of adherance to and evolution of the formats.  It is therefore not always possible to identify, for a given file, the format and errors in formatting.</p> 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/textvalid.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/jison.address" -->
+
+
+
+<p>
+
+This application was modified by 
+<!--#include file="inc/jison.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/textvalid.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/textvalid.comment" -->
+
+</BODY>
+</HTML>
+

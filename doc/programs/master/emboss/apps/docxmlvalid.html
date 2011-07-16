@@ -1,0 +1,138 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: docxmlvalid
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+docxmlvalid
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/docxmlvalid.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>docxmlwell</b> reads an XML file and checks it for well-formedness.  It also validates it against either a supplied DTD, XSD schema or Relax-NG schema.  An informative message about the well-formedness and validity is written to screen.  A report file is written containing any errors that were detected during validation.</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/docxmlvalid.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/docxmlvalid.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/docxmlvalid.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<p>
+<!--#include file="inc/docxmlvalid.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+
+
+<p>
+<!--#include file="inc/docxmlvalid.output" -->
+
+<H2>
+    Data files
+</H2>
+
+        
+<H2>
+    Notes
+</H2>
+<p><b>docxmlvalid</b> calls <b>xmlstarlet</b> to perform the validation.  For more information see http://xmlstar.sourceforge.net/.</p>
+
+
+<H2>
+    References
+</H2>
+
+  
+
+<H2>
+    Warnings
+</H2>
+
+<p><b>docxmlvalid</b> calls <b>xmlstarlet</b> which itself relies no the <tt>libxml</tt> library.  XML Schemas are not fully supported due to its incomplete support in <tt>libxml</tt> (see http://xmlsoft.org)</p>
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/docxmlvalid.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/jison.address" -->
+
+
+
+<p>
+
+This application was modified by 
+<!--#include file="inc/jison.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/docxmlvalid.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/docxmlvalid.comment" -->
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,79 @@
+application: ontocount [
+  documentation: "Count ontology term(s)"
+  groups: "Ontology"
+    relations: "EDAM:0000089 topic Ontologies"
+    relations: "EDAM:0002224 operation Data retrieval (ontology concept)"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+  obo: oboterms [
+     default: ""
+     parameter: "Y"
+     relations: "EDAM:0001087 identifier Ontology term ID"
+  ]
+
+
+endsection: input
+
+
+
+
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+endsection: additional
+
+
+
+
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: subclasses [
+    default: "N"
+    information: "Include subclasses of hits"
+    help: "Extend the query matches to include all terms which are
+           specialisations (sub-classes) of the matched terms."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+
+  boolean: obsolete [
+    default: "N"
+    information: "Include obsolete terms"
+    help: "The default behaviour is to not use or return obsolete terms.
+           This option if set will include all terms."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+
+endsection: advanced
+
+
+
+
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    parameter: "Y"
+    default: "stdout"
+    knowntype: "ontocount output"
+    relations: "EDAM:0002223 data Ontology metadata"
+  ]
+
+endsection: output
+
+

@@ -1,16 +1,28 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef enssequence_h
-#define enssequence_h
+#ifndef ENSSEQUENCE_H
+#define ENSSEQUENCE_H
 
-#include "enscache.h"
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
+
 #include "ensslice.h"
 
+AJ_BEGIN_DECLS
 
 
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
 
 /* @data EnsPSequenceadaptor **************************************************
 **
@@ -35,6 +47,10 @@ typedef struct EnsSSequenceadaptor
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
@@ -49,47 +65,47 @@ EnsPSequenceadaptor ensSequenceadaptorNew(
 
 void ensSequenceadaptorDel(EnsPSequenceadaptor* Psa);
 
-AjBool ensSequenceadaptorFetchSubStrBySeqregion(const EnsPSequenceadaptor sa,
-                                                EnsPSeqregion sr,
-                                                ajuint start,
-                                                ajuint length,
-                                                AjPStr *Psequence);
+AjBool ensSequenceadaptorFetchSeqregionAllSeq(EnsPSequenceadaptor sa,
+                                              const EnsPSeqregion sr,
+                                              AjPSeq* Psequence);
 
-AjBool ensSequenceadaptorFetchStrBySeqregion(const EnsPSequenceadaptor sa,
-                                             EnsPSeqregion sr,
-                                             AjPStr *Psequence);
+AjBool ensSequenceadaptorFetchSeqregionAllStr(EnsPSequenceadaptor sa,
+                                              const EnsPSeqregion sr,
+                                              AjPStr* Psequence);
 
-AjBool ensSequenceadaptorFetchSubSeqBySeqregion(const EnsPSequenceadaptor sa,
-                                                EnsPSeqregion sr,
-                                                ajuint start,
-                                                ajuint length,
-                                                AjPSeq *Psequence);
+AjBool ensSequenceadaptorFetchSeqregionSubSeq(EnsPSequenceadaptor sa,
+                                              const EnsPSeqregion sr,
+                                              ajuint start,
+                                              ajuint length,
+                                              AjPSeq* Psequence);
 
-AjBool ensSequenceadaptorFetchSeqBySeqregion(const EnsPSequenceadaptor sa,
-                                             EnsPSeqregion sr,
-                                             AjPSeq *Psequence);
+AjBool ensSequenceadaptorFetchSeqregionSubStr(EnsPSequenceadaptor sa,
+                                              const EnsPSeqregion sr,
+                                              ajuint start,
+                                              ajuint length,
+                                              AjPStr* Psequence);
 
-AjBool ensSequenceadaptorFetchSubStrBySlice(const EnsPSequenceadaptor sa,
-                                            EnsPSlice slice,
-                                            ajint start,
-                                            ajint end,
-                                            ajint strand,
-                                            AjPStr *Psequence);
+AjBool ensSequenceadaptorFetchSliceAllSeq(EnsPSequenceadaptor sa,
+                                          EnsPSlice slice,
+                                          AjPSeq* Psequence);
 
-AjBool ensSequenceadaptorFetchStrBySlice(const EnsPSequenceadaptor sa,
-                                         EnsPSlice slice,
-                                         AjPStr *Psequence);
+AjBool ensSequenceadaptorFetchSliceAllStr(EnsPSequenceadaptor sa,
+                                          EnsPSlice slice,
+                                          AjPStr* Psequence);
 
-AjBool ensSequenceadaptorFetchSubSeqBySlice(const EnsPSequenceadaptor sa,
-                                            EnsPSlice slice,
-                                            ajint start,
-                                            ajint end,
-                                            ajint strand,
-                                            AjPSeq *Psequence);
+AjBool ensSequenceadaptorFetchSliceSubSeq(EnsPSequenceadaptor sa,
+                                          EnsPSlice slice,
+                                          ajint start,
+                                          ajint end,
+                                          ajint strand,
+                                          AjPSeq* Psequence);
 
-AjBool ensSequenceadaptorFetchSeqBySlice(const EnsPSequenceadaptor sa,
-                                         EnsPSlice slice,
-                                         AjPSeq *Psequence);
+AjBool ensSequenceadaptorFetchSliceSubStr(EnsPSequenceadaptor sa,
+                                          EnsPSlice slice,
+                                          ajint start,
+                                          ajint end,
+                                          ajint strand,
+                                          AjPStr* Psequence);
 
 /*
 ** End of prototype definitions
@@ -98,8 +114,6 @@ AjBool ensSequenceadaptorFetchSeqBySlice(const EnsPSequenceadaptor sa,
 
 
 
-#endif /* enssequence_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSSEQUENCE_H */

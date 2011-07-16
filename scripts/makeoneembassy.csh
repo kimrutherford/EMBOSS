@@ -27,6 +27,11 @@ echo "make NUCLEUS"
 make install |& egrep '^[^ =\[]*:' |& grep -v '^libtool: '
 cd ../embassy/$pack/src
 if ($pack == 'vienna') then
+  echo "make libovienna"
+  make liboviennarna.la |& egrep '^[^ =\[]*:' |& grep -v '^libtool: '
+  make install-libLTLIBRARIES
+endif
+if ($pack == 'vienna2') then
   echo "make libvienna"
   make libviennarna.la |& egrep '^[^ =\[]*:' |& grep -v '^libtool: '
   make install-libLTLIBRARIES

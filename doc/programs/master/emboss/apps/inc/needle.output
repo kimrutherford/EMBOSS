@@ -1,12 +1,12 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hba_human.needle </h3>
+<p><h3>File: hba_human.needle</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: needle
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: needle
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human

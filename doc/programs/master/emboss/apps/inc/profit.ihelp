@@ -1,5 +1,5 @@
 Scan one or more sequences with a simple frequency matrix
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Profile or weight matrix file

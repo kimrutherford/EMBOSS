@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: fuzzpro
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: fuzzpro
 #    -sequence "tsw:*"
 #    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"
@@ -24,8 +24,8 @@
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-     53      63 pattern             . YVGDEAQSKRG
+  Start     End Pattern                                       Mismatch Sequence
+     53      63 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -39,8 +39,8 @@
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-     53      63 pattern             . YVGDEAQSKRG
+  Start     End Pattern                                       Mismatch Sequence
+     53      63 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -67,8 +67,8 @@
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-     55      65 pattern             . YVGDEAQSKRG
+  Start     End Pattern                                       Mismatch Sequence
+     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -82,8 +82,8 @@
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-     55      65 pattern             . YVGDEAQSKRG
+  Start     End Pattern                                       Mismatch Sequence
+     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -97,8 +97,8 @@
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-     55      65 pattern             . YVGDEAQSKRG
+  Start     End Pattern                                       Mismatch Sequence
+     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------

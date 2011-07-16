@@ -37,12 +37,13 @@ Output report [laci_ecoli.hth]:
 Command line arguments
 
 Identify nucleic acid-binding motifs in protein sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
   [-outfile]           report     [*.helixturnhelix] Output report file name
+                                  (default -rformat motif)
 
    Additional (Optional) qualifiers:
    -mean               float      [238.71] Mean value (Number from 1.000 to
@@ -105,7 +106,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   helixturnhelix reads one or more protein sequence USAs.
+   helixturnhelix reads one or more protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -227,8 +245,9 @@ Output file format
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
-   genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
 
    See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
    information on report formats.
@@ -241,7 +260,7 @@ Output file format
 
 ########################################
 # Program: helixturnhelix
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: helixturnhelix
 #    -sequence tsw:laci_ecoli
 # Report_format: motif
@@ -392,52 +411,37 @@ Known bugs
 
 See also
 
-   Program name     Description
-   antigenic        Finds antigenic sites in proteins
-   digest           Reports on protein proteolytic enzyme or reagent cleavage sites
-   epestfind        Finds PEST motifs as potential proteolytic cleavage sites
-   fuzzpro          Search for patterns in protein sequences
-   fuzztran         Search for patterns in protein sequences (translated)
-   garnier          Predicts protein secondary structure using GOR method
-   hmoment          Calculate and plot hydrophobic moment for protein sequence(s)
-   oddcomp          Identify proteins with specified sequence word composition
-   patmatdb         Searches protein sequences with a sequence motif
-   patmatmotifs     Scan a protein sequence with motifs from the PROSITE
-                    database
-   pepcoil          Predicts coiled coil regions in protein sequences
-   pepnet           Draw a helical net for a protein sequence
-   pepwheel         Draw a helical wheel diagram for a protein sequence
-   preg             Regular expression search of protein sequence(s)
-   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
-                    database
-   sigcleave        Reports on signal cleavage sites in a protein sequence
-   tmap             Predict and plot transmembrane segments in protein sequences
+                    Program name                      Description
+                    garnier      Predicts protein secondary structure using GOR method
+                    pepcoil      Predicts coiled coil regions in protein sequences
+                    pepnet       Draw a helical net for a protein sequence
+                    pepwheel     Draw a helical wheel diagram for a protein sequence
 
 Author(s)
 
-   Alan Bleasby
-   European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
+   Alan             Bleasby
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
-   Please report all bugs to the EMBOSS bug team
-   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
-   Original program "HELIXTURNHELIX" (EGCG 1990) by Peter Rice
-   European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
+                    Original program "HELIXTURNHELIX" (EGCG 1990) by Peter Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
-   Please report all bugs to the EMBOSS bug team
-   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 
-   Completed 11th March 1999
+                    Completed 11th March 1999
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

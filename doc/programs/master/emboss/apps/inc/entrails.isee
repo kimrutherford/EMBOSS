@@ -1,0 +1,15 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="embossdata.html">embossdata</a></td>
+<td>Find and retrieve EMBOSS data files</td>
+</tr>
+
+<tr>
+<td><a href="embossversion.html">embossversion</a></td>
+<td>Reports the current EMBOSS version number</td>
+</tr>
+
+</table>

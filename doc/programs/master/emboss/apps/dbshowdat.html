@@ -1,0 +1,146 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dbshowdat
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+dbshowdat
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/dbshowdat.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>dbshowdat</b> displays on-screen information on the possible queries of public databases that return the specified data type. Optionally the information is written to an output file in plain text or HTML.</p>
+
+<p>The catalogue of public databases in the EMBOSS data file <kbd>db.dat</kbd> is used. </p>
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/dbshowdat.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/dbshowdat.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/dbshowdat.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<p>
+<!--#include file="inc/dbshowdat.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+<p>The output file (plain text format) is an excerpt of and (by default) in the same format as the EMBOSS data file <kbd>db.dat</kbd>. The format of the file is explained in comments at the top of that file.</p>
+
+
+<p><b>dbshowdat</b> will report information from the EMBOSS data file db.dat including (fields from db.dat are in parentheses): the recommended or official unique identifier ('ID'), the full (verbose english) name ('Name'), URL of the database server ('URL') and description of valid queries ('Query').</p>
+
+<p>If the -html qualifier is specified, then the output will be tabulated in a web page suitable for viewing in any browser.</p>
+
+
+
+<p>
+<!--#include file="inc/dbshowdat.output" -->
+
+<H2>
+    Data files
+</H2>
+<p>The EMBOSS database information file (<kbd>db.dat</kbd>) must be installed in the EMBOSS data directory and indexed. This is done automatically for typical installations.</p>
+        
+<H2>
+    Notes
+</H2>
+
+<p>Optionally the ID of the database and data identifier used in the query may be specified. 
+
+<H2>
+    References
+</H2>
+
+  
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/dbshowdat.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/jison.address" -->
+
+
+
+<p>
+
+This application was modified by 
+<!--#include file="inc/jison.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/dbshowdat.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/dbshowdat.comment" -->
+
+</BODY>
+</HTML>
+

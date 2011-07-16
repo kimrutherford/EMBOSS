@@ -1,8 +1,8 @@
 application: garnier [
   documentation: "Predicts protein secondary structure using GOR method"
   groups: "Protein:2D Structure"
-  relations: "/edam/topic/0000178 Protein secondary structure prediction"
-  relations: "/edam/operation/0000267 Protein secondary structure prediction"
+    relations: "EDAM:0000178 topic Protein secondary structure prediction"
+    relations: "EDAM:0000267 operation Protein secondary structure prediction"
 ]
 
 section: input [
@@ -13,9 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "PureProtein"
-    relations: "/edam/data/0001218 Unambiguous pure protein sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0002886 data Sequence record (protein)"
   ]
 
 endsection: input
@@ -38,7 +36,7 @@ section: advanced [
            weights for the helix and sheet (extend) terms. So, idc=0 says
            don't use the decision constant offsets, and idc=1 to 6 indicates
            that various combinations of dch,dcs offsets should be used."
-    relations: "/edam/data/0001773 Tool-specific parameter"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -52,7 +50,7 @@ section: output [
     parameter: "Y"
     rformat: "tagseq"
     taglist: "str:garnier"
-    relations: "/edam/data/0000876 Protein secondary structure"                                       
+    relations: "EDAM:0000876 data Protein features (secondary structure)"
   ]
 
 endsection: output

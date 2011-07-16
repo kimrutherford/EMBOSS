@@ -1,0 +1,60 @@
+ID   Z12345; SV 1; linear; genomic DNA; STD; PRO; 100 BP.
+XX
+AC   Z12345;
+XX
+DT   01-APR-2009 (Rel. 1, Created)
+DT   15-JUL-2009 (Rel. 8, Last updated, Version 14)
+XX
+DE   Testing EMBL feature locations, types and tags
+XX
+KW   testing.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (01-APR-2009) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EBI, Hinxton, United Kingdom.
+XX
+CC   Data kindly reviewed (04-SEP-2009) by Rice P. M.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..100
+FT                   /organism="Lorem ipsum"
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:287"
+FT   CDS             20..61
+FT                   /transl_table=11
+FT                   /gene="genE"
+FT                   /note="simple location"
+FT                   /translation="MVVVRERARALCV"
+FT   CDS             complement(8..91)
+FT                   /transl_table=11
+FT                   /gene="genF"
+FT                   /note="simple location"
+FT                   /translation="MVVVEGRFLPSHTQRARSLSHHHHGGG"
+FT   CDS             join(20..25,50..61)
+FT                   /transl_table=11
+FT                   /gene="genG"
+FT                   /note="join location"
+FT                   /translation="MVLCV"
+FT   CDS             join(complement(80..91),complement(8..19))
+FT                   /transl_table=11
+FT                   /gene="genF"
+FT                   /note="join complements location"
+FT                   /translation="MVVVGGG"
+FT   CDS             complement(join(8..19,80..91))
+FT                   /transl_table=11
+FT                   /gene="genF"
+FT                   /note="complement of join location"
+FT                   /translation="MVVVGGG"
+XX
+SQ   Sequence 100 BP; 28 A; 20 C; 29 G; 23 T; 0 other;
+     cagtcagtca accaccacca tggtggtggt gagagagaga gcgcgcgcgc tgtgtgtgtg        60
+     aaggaaggaa ccttccttcc accaccacca ttttaatttt                             100
+//

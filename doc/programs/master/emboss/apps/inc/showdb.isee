@@ -3,113 +3,38 @@
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
-<td><a href="abiview.html">abiview</a></td>
-<td>Display the trace in an ABI sequencer file</td>
+<td><a href="cachedas.html">cachedas</a></td>
+<td>Generates server cache file for DAS servers or for the DAS registry</td>
 </tr>
 
 <tr>
-<td><a href="cirdna.html">cirdna</a></td>
-<td>Draws circular maps of DNA constructs</td>
+<td><a href="cachedbfetch.html">cachedbfetch</a></td>
+<td>Generates server cache file for Dbfetch/WSDbfetch data sources</td>
 </tr>
 
 <tr>
-<td><a href="infoalign.html">infoalign</a></td>
-<td>Display basic information about a multiple sequence alignment</td>
+<td><a href="cacheebeyesearch.html">cacheebeyesearch</a></td>
+<td>Generates server cache file for EB-eye search domains</td>
 </tr>
 
 <tr>
-<td><a href="infobase.html">infobase</a></td>
-<td>Return information on a given nucleotide base</td>
+<td><a href="cacheensembl.html">cacheensembl</a></td>
+<td>Generates server cache file for an Ensembl server</td>
 </tr>
 
 <tr>
-<td><a href="inforesidue.html">inforesidue</a></td>
-<td>Return information on a given amino acid residue</td>
+<td><a href="dbtell.html">dbtell</a></td>
+<td>Display information about a public database</td>
 </tr>
 
 <tr>
-<td><a href="infoseq.html">infoseq</a></td>
-<td>Display basic information about sequences</td>
+<td><a href="servertell.html">servertell</a></td>
+<td>Display information about a public server</td>
 </tr>
 
 <tr>
-<td><a href="lindna.html">lindna</a></td>
-<td>Draws linear maps of DNA constructs</td>
-</tr>
-
-<tr>
-<td><a href="pepnet.html">pepnet</a></td>
-<td>Draw a helical net for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="pepwheel.html">pepwheel</a></td>
-<td>Draw a helical wheel diagram for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="prettyplot.html">prettyplot</a></td>
-<td>Draw a sequence alignment with pretty formatting</td>
-</tr>
-
-<tr>
-<td><a href="prettyseq.html">prettyseq</a></td>
-<td>Write a nucleotide sequence and its translation to file</td>
-</tr>
-
-<tr>
-<td><a href="remap.html">remap</a></td>
-<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
-</tr>
-
-<tr>
-<td><a href="seealso.html">seealso</a></td>
-<td>Finds programs with similar function to a specified program</td>
-</tr>
-
-<tr>
-<td><a href="showalign.html">showalign</a></td>
-<td>Display a multiple sequence alignment in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showfeat.html">showfeat</a></td>
-<td>Display features of a sequence in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showpep.html">showpep</a></td>
-<td>Displays protein sequences with features in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showseq.html">showseq</a></td>
-<td>Displays sequences with features in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="sixpack.html">sixpack</a></td>
-<td>Display a DNA sequence with 6-frame translation and ORFs</td>
-</tr>
-
-<tr>
-<td><a href="textsearch.html">textsearch</a></td>
-<td>Search the textual description of sequence(s)</td>
-</tr>
-
-<tr>
-<td><a href="tfm.html">tfm</a></td>
-<td>Displays full documentation for an application</td>
-</tr>
-
-<tr>
-<td><a href="whichdb.html">whichdb</a></td>
-<td>Search all sequence databases for an entry and retrieve it</td>
-</tr>
-
-<tr>
-<td><a href="wossname.html">wossname</a></td>
-<td>Finds programs by keywords in their short description</td>
+<td><a href="showserver.html">showserver</a></td>
+<td>Displays information on configured servers</td>
 </tr>
 
 </table>

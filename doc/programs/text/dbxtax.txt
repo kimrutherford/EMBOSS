@@ -1,0 +1,300 @@
+                                   dbxtax
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Index NCBI taxonomy using b+tree indices
+
+Description
+
+   dbxflat indexes NCBI taxonomy files, and builds EMBOSS B+tree format
+   index files.
+
+   These indexes allow access of flat files larger than 2Gb.
+
+Usage
+
+   Here is a sample session with dbxtax
+
+
+% dbxtax
+Index NCBI taxonomy using b+tree indices
+Basename for index files [taxon]:
+Resource name [taxresource]:
+Database directory [.]: taxonomy
+        id : ID
+       acc : Synonym
+       tax : Scientific name
+       rnk : Rank
+        up : Parent
+        gc : Genetics code
+       mgc : Mitochondrial genetic code
+Index fields [*]:
+Compressed index files [Y]:
+General log output file [outfile.dbxtax]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Index NCBI taxonomy using b+tree indices
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     [taxon] Basename for index files (Any string
+                                  from 2 to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+  [-dbresource]        string     [taxresource] Resource name (Any string from
+                                  2 to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+   -directory          directory  [.] Database directory
+   -fields             menu       [*] Index fields (Values: id (ID); acc
+                                  (Synonym); tax (Scientific name); rnk
+                                  (Rank); up (Parent); gc (Genetics code); mgc
+                                  (Mitochondrial genetic code))
+   -[no]compressed     boolean    [Y] Compressed index files
+   -outfile            outfile    [*.dbxtax] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -indexoutdir        outdir     [.] Index file output directory
+
+   Associated qualifiers:
+
+   "-directory" associated qualifiers
+   -extension          string     Default file extension
+
+   "-indexoutdir" associated qualifiers
+   -extension          string     Default file extension
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   dbxtax reads and indexes the NCBI taxonomy nodes.dmp, names.dmp,
+   division.dmp, gencode.dmp,and merged.dmp files.
+
+Output file format
+
+   dbxtax creates one summary file for the database and two files for each
+   field indexed.
+
+     * dbalias.ent is the master file containing the names of the files
+       that have been indexed. It is an ASCII file. This file also
+       contains the database release and date information.
+     * dbalias.xid is the B+tree index file for the ID names. It is a
+       binary file.
+     * dbalias.pxid is an ASCII file containing information regarding the
+       structure of the ID name index.
+       Output files for usage example
+       File: outfile.dbxtax
+
+Processing directory: /homes/user/test/data/taxonomy/
+Processing file: nodes.dmp entries: 41 (41) time: 0.0s (0.0s)
+Total time: 0.0s
+
+       File: taxon.ent
+
+# Number of files: 1
+# Release: 0.0
+# Date:    00/00/00
+Dual filename database
+nodes.dmp names.dmp
+
+       File: taxon.pxac
+
+Type      Identifier
+Compress  Yes
+Pages     3
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     1
+Fullcount 1
+Kwlimit   15
+
+       File: taxon.pxgc
+
+Type      Secondary
+Compress  Yes
+Pages     6
+Order     132
+Fill      65
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     169
+Count     1
+Fullcount 41
+Kwlimit   2
+
+       File: taxon.pxid
+
+Type      Identifier
+Compress  Yes
+Pages     3
+Order     99
+Fill      56
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     41
+Fullcount 41
+Kwlimit   7
+
+       File: taxon.pxmgc
+
+Type      Secondary
+Compress  Yes
+Pages     12
+Order     132
+Fill      65
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     169
+Count     3
+Fullcount 39
+Kwlimit   2
+
+       File: taxon.pxtax
+
+Type      Identifier
+Compress  Yes
+Pages     19
+Order     16
+Fill      14
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     86
+Fullcount 90
+Kwlimit   110
+
+       File: taxon.pxrnk
+
+Type      Secondary
+Compress  Yes
+Pages     54
+Order     68
+Fill      45
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     169
+Count     17
+Fullcount 41
+Kwlimit   16
+
+       File: taxon.pxup
+
+Type      Identifier
+Compress  Yes
+Pages     15
+Order     99
+Fill      56
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     33
+Fullcount 41
+Kwlimit   7
+
+       File: taxon.xac
+       This file contains non-printing characters and so cannot be
+       displayed here.
+       File: taxon.xgc
+       This file contains non-printing characters and so cannot be
+       displayed here.
+       File: taxon.xid
+       This file contains non-printing characters and so cannot be
+       displayed here.
+       File: taxon.xmgc
+       This file contains non-printing characters and so cannot be
+       displayed here.
+       File: taxon.xtax
+       This file contains non-printing characters and so cannot be
+       displayed here.
+       File: taxon.xrnk
+       This file contains non-printing characters and so cannot be
+       displayed here.
+       File: taxon.xup
+       This file contains non-printing characters and so cannot be
+       displayed here.
+       Data files None.
+    Notes None.
+    References None.
+    Warnings None.
+    Diagnostic Error Messages None.
+    Exit status It always exits with status 0.
+    Known bugs None.
+    See also
+
+       Program name                       Description
+       dbiblast      Index a BLAST database
+       dbifasta      Index a fasta file database
+       dbiflat       Index a flat file database
+       dbigcg        Index a GCG formatted database
+       dbxcompress   Compress an uncompressed dbx index
+       dbxedam       Index the EDAM ontology using b+tree indices
+       dbxfasta      Index a fasta file database using b+tree indices
+       dbxflat       Index a flat file database using b+tree indices
+       dbxgcg        Index a GCG formatted database using b+tree indices
+       dbxobo        Index an obo ontology using b+tree indices
+       dbxreport     Validate index and report internals for dbx databases
+       dbxresource   Index a data resource catalogue using b+tree indices
+       dbxstat       Dump statistics for dbx databases
+       dbxuncompress Uncompress a compressed dbx index
+    Author(s) Peter Rice
+       European Bioinformatics Institute, Wellcome Trust Genome Campus,
+       Hinxton, Cambridge CB10 1SD, UK
+       Please report all bugs to the EMBOSS bug team
+       (emboss-bug (c) emboss.open-bio.org) not to the original author.
+       History
+    Target users This program is intended to be used by administrators
+       responsible for software and database installation and maintenance.
+    Comments None

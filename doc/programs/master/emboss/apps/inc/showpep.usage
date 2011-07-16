@@ -1,4 +1,4 @@
-<b>Here is a sample session with showpep</b>
+Here is a sample session with <b>showpep</b>
 <p>
 
 <p>
@@ -120,7 +120,7 @@ Make selected regions uppercase. (Use '-slower' to force the rest of the sequenc
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -slower -upper '17-17,22-22' </b>
+% <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -slower -upper "17-17,22-22" </b>
 Displays protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
@@ -136,7 +136,7 @@ Add your own annotation to the display:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 2 -send 120 -annotation '6-25 binding site 17-17 SNP 22-22 SNP' </b>
+% <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 2 -send 120 -annotation "6-25 binding site 17-17 SNP 22-22 SNP" </b>
 Displays protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 

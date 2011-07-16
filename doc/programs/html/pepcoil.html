@@ -51,7 +51,7 @@ Predicts coiled coil regions in protein sequences
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with pepcoil</b>
+Here is a sample session with <b>pepcoil</b>
 <p>
 
 <p>
@@ -75,13 +75,14 @@ Output report [gcn4_yeast.pepcoil]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Predicts coiled coil regions in protein sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
    -window             integer    [28] Window size (Integer from 7 to 28)
-  [-outfile]           report     [*.pepcoil] Output report file name
+  [-outfile]           report     [*.pepcoil] Output report file name (default
+                                  -rformat motif)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -174,7 +175,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat motif)</td>
 <td><i>&lt;*&gt;</i>.pepcoil</td>
 </tr>
 
@@ -535,7 +536,34 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>pepcoil</b> reads in a protein sequence USA.
+<b>pepcoil</b> reads one or more protein sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 
 <a name="input.1"></a>
@@ -658,16 +686,40 @@ SQ   SEQUENCE   281 AA;  31310 MW;  2ED1B8E35D509578 CRC64;
     Output file format
 </H2>
 
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+<p>
+By default the report is in 'motif' format.
 
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-The SwissProt annotation marks the true leucine zipper motif as from 253 to 274. The leucine zipper is a special case of a coiled-coil region. <p><h3>File: gcn4_yeast.pepcoil </h3>
+The SwissProt annotation marks the true leucine zipper motif as from 253 to 274. The leucine zipper is a special case of a coiled-coil region. <p><h3>File: gcn4_yeast.pepcoil</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: pepcoil
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: pepcoil
 #    -sequence tsw:gcn4_yeast
 # Report_format: motif
@@ -759,31 +811,6 @@ None.
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
-<td><a href="antigenic.html">antigenic</a></td>
-<td>Finds antigenic sites in proteins</td>
-</tr>
-
-<tr>
-<td><a href="digest.html">digest</a></td>
-<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
-</tr>
-
-<tr>
-<td><a href="epestfind.html">epestfind</a></td>
-<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
-</tr>
-
-<tr>
-<td><a href="fuzzpro.html">fuzzpro</a></td>
-<td>Search for patterns in protein sequences</td>
-</tr>
-
-<tr>
-<td><a href="fuzztran.html">fuzztran</a></td>
-<td>Search for patterns in protein sequences (translated)</td>
-</tr>
-
-<tr>
 <td><a href="garnier.html">garnier</a></td>
 <td>Predicts protein secondary structure using GOR method</td>
 </tr>
@@ -794,26 +821,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="hmoment.html">hmoment</a></td>
-<td>Calculate and plot hydrophobic moment for protein sequence(s)</td>
-</tr>
-
-<tr>
-<td><a href="oddcomp.html">oddcomp</a></td>
-<td>Identify proteins with specified sequence word composition</td>
-</tr>
-
-<tr>
-<td><a href="patmatdb.html">patmatdb</a></td>
-<td>Searches protein sequences with a sequence motif</td>
-</tr>
-
-<tr>
-<td><a href="patmatmotifs.html">patmatmotifs</a></td>
-<td>Scan a protein sequence with motifs from the PROSITE database</td>
-</tr>
-
-<tr>
 <td><a href="pepnet.html">pepnet</a></td>
 <td>Draw a helical net for a protein sequence</td>
 </tr>
@@ -821,26 +828,6 @@ None.
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
 <td>Draw a helical wheel diagram for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="preg.html">preg</a></td>
-<td>Regular expression search of protein sequence(s)</td>
-</tr>
-
-<tr>
-<td><a href="pscan.html">pscan</a></td>
-<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
-</tr>
-
-<tr>
-<td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports on signal cleavage sites in a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="tmap.html">tmap</a></td>
-<td>Predict and plot transmembrane segments in protein sequences</td>
 </tr>
 
 </table>

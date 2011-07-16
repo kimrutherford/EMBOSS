@@ -1,0 +1,131 @@
+Here is a sample session with <b>taxgetrank</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>taxgetrank ttax:9606 -oformat excel </b>
+Get parents of taxon(s)
+Taxonomic rank(s)
+           kingdom : Kingdom
+            phylum : Phylum
+             class : Class
+             order : Order
+            family : Family
+             genus : Genus
+           species : Species
+             tribe : Tribe
+          varietas : varietas
+     species group : Species group
+  species subgroup : Species subgroup
+           no rank : None
+      superkingdom : Superkingdom
+       superphylum : Superphylum
+        superclass : Superclass
+        superorder : Superorder
+       superfamily : Superfamily
+        subkingdom : Subkingdom
+         subphylum : Subphylum
+          subclass : Subclass
+          suborder : Suborder
+         subfamily : Subfamily
+          subgenus : Subgenus
+        subspecies : Subspecies
+          subtribe : Subtribe
+        infraclass : Infraclass
+        infraorder : Infraorder
+         parvorder : Parvorder
+Find taxons at rank [kingdom,phylum,class,order,family,genus,species]: <b></b>
+Taxon output file [9606.excel]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>taxgetrank ttax:9606 -oformat excel </b>
+Get parents of taxon(s)
+Taxonomic rank(s)
+           kingdom : Kingdom
+            phylum : Phylum
+             class : Class
+             order : Order
+            family : Family
+             genus : Genus
+           species : Species
+             tribe : Tribe
+          varietas : varietas
+     species group : Species group
+  species subgroup : Species subgroup
+           no rank : None
+      superkingdom : Superkingdom
+       superphylum : Superphylum
+        superclass : Superclass
+        superorder : Superorder
+       superfamily : Superfamily
+        subkingdom : Subkingdom
+         subphylum : Subphylum
+          subclass : Subclass
+          suborder : Suborder
+         subfamily : Subfamily
+          subgenus : Subgenus
+        subspecies : Subspecies
+          subtribe : Subtribe
+        infraclass : Infraclass
+        infraorder : Infraorder
+         parvorder : Parvorder
+Find taxons at rank [kingdom,phylum,class,order,family,genus,species]: <b>*</b>
+Taxon output file [9606.excel]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>taxgetrank ttax:9606 -oformat excel -hidden </b>
+Get parents of taxon(s)
+Taxonomic rank(s)
+           kingdom : Kingdom
+            phylum : Phylum
+             class : Class
+             order : Order
+            family : Family
+             genus : Genus
+           species : Species
+             tribe : Tribe
+          varietas : varietas
+     species group : Species group
+  species subgroup : Species subgroup
+           no rank : None
+      superkingdom : Superkingdom
+       superphylum : Superphylum
+        superclass : Superclass
+        superorder : Superorder
+       superfamily : Superfamily
+        subkingdom : Subkingdom
+         subphylum : Subphylum
+          subclass : Subclass
+          suborder : Suborder
+         subfamily : Subfamily
+          subgenus : Subgenus
+        subspecies : Subspecies
+          subtribe : Subtribe
+        infraclass : Infraclass
+        infraorder : Infraorder
+         parvorder : Parvorder
+Find taxons at rank [kingdom,phylum,class,order,family,genus,species]: <b>*</b>
+Taxon output file [9606.excel]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>

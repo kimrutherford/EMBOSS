@@ -1,9 +1,10 @@
 application: abiview [
   documentation: "Display the trace in an ABI sequencer file"
-  groups: "Display"
-  relations: "/edam/topic/0000102 Sequencing"
-  relations: "/edam/operation/0000337 Visualisation and rendering"
-  relations: "/edam/operation/0000564 Sequence visualisation"
+  groups: "Data retrieval:Sequence data, Display"
+    relations: "EDAM:0000092 topic Data rendering and visualisation"
+    relations: "EDAM:0000090 topic Data retrieval"
+    relations: "EDAM:0000337 operation Plotting and rendering"
+    relations: "EDAM:0000564 operation Sequence rendering"
 ]
 
 section: input [
@@ -17,8 +18,8 @@ section: input [
     binary: "Y"
     knowntype: "abi trace"
     information: "ABI sequencing trace file"
-    relations: "/edam/data/0000924 Sequence trace"
-    relations: "/edam/data/0001207 Nucleotide sequence"
+    relations: "EDAM:0000924 data Sequence trace"
+    relations: "EDAM:0001207 format nucleotide"
   ]
 
 endsection: input
@@ -31,14 +32,13 @@ section: output [
   seqout: outseq [
     parameter: "Y"
     type: "dna"
-    relations: "/edam/data/0001215 Pure DNA sequence"                                   
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
   ]
 
   xygraph: graph [
     standard: "Y"
     gxtitle: "Residue Position"
-    relations: "/edam/data/0002168 Sequence trace image"                                   
+    relations: "EDAM:0002168 data Sequence trace image"
   ]
 
   integer: startbase [
@@ -46,7 +46,7 @@ section: output [
     default: "0"
     minimum: "0"
     information: "First base to report or display"
-    relations: "/edam/data/0001016 Sequence position"                                     
+    relations: "EDAM:0001016 data Sequence position"
   ]
 
   integer: endbase [
@@ -56,34 +56,34 @@ section: output [
     help: "Last sequence base to report or display. If the default is
            set to zero then the value of this is taken as the maximum number
            of bases."
-    relations: "/edam/data/0001016 Sequence position"                                     
+    relations: "EDAM:0001016 data Sequence position"
   ]
 
   boolean: separate [
     default: "N"
     information: "Separate the trace graphs for the 4 bases"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: yticks [
     additional: "Y"
     default: "N"
     information: "Display y-axis ticks"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: sequence [
     additional: "Y"
     default: "Y"
     information: "Display the sequence on the graph"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: window [
     additional: "Y"
     default: "40"
     information: "Sequence display window size"
-    relations: "/edam/data/0001251 Window size"
+    relations: "EDAM:0001251 data Window size"
   ]
 
   string: bases [
@@ -92,7 +92,7 @@ section: output [
     information: "Base graphs to be displayed"
     pattern: "[GATC]+"
     knowntype: "nucleotide codes"
-    relations:  "/edam/data/0001007 Nucleotide code"                         
+    relations: "EDAM:0001007 identifier Nucleotide code"
   ]
 
 endsection: output

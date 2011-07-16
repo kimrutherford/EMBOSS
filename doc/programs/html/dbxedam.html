@@ -1,0 +1,1008 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: dbxedam
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+dbxedam
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Index the EDAM ontology using b+tree indices
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+<b>dbxedam</b> indexes the EDAM ontology in OBO format, and builds
+EMBOSS B+tree format index files. These indexes allow access of flat
+files larger than 2Gb.
+
+<p>
+These indexes allow access of flat files larger than 2Gb.
+
+<p>
+Related application <b>dbxobo</b> can also index the EDAM input
+file. <b>dbxedam</b> provides additional index fields for
+EDAM-specific namespaces and relations.
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>dbxedam</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbxedam </b>
+Index the EDAM ontology using b+tree indices
+Basename for index files [edam]: <b></b>
+Standard database name [edam]: <b></b>
+Resource name [edamresource]: <b></b>
+Database directory [.]: <b></b>
+Wildcard database filename [EDAM*.obo]: <b></b>
+        id : ID
+       acc : Synonym
+       nam : Name
+       isa : Parent
+       des : Description
+        ns : Namespace
+     hasin : has_input
+    hasout : has_output
+      isid : is_identifier_of
+     isfmt : is_format_of
+Index fields [*]: <b></b>
+Compressed index files [Y]: <b></b>
+General log output file [outfile.dbxedam]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Index the EDAM ontology using b+tree indices
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     [edam] Basename for index files (Any string
+                                  from 2 to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+  [-standardname]      string     [$(dbname)] Standard database name (Any
+                                  string from 2 to 19 characters, matching
+                                  regular expression /[A-z][A-z0-9_]+/)
+  [-dbresource]        string     [edamresource] Resource name (Any string
+                                  from 2 to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+   -directory          directory  [.] Database directory
+   -filenames          string     [EDAM*.obo] Wildcard database filename (Any
+                                  string)
+   -fields             menu       [*] Index fields (Values: id (ID); acc
+                                  (Synonym); nam (Name); isa (Parent); des
+                                  (Description); ns (Namespace); hasin
+                                  (has_input); hasout (has_output); isid
+                                  (is_identifier_of); isfmt (is_format_of))
+   -[no]compressed     boolean    [Y] Compressed index files
+   -outfile            outfile    [*.dbxedam] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -exclude            string     Wildcard filename(s) to exclude (Any string)
+   -indexoutdir        outdir     [.] Index file output directory
+
+   Associated qualifiers:
+
+   "-directory" associated qualifiers
+   -extension          string     Default file extension
+
+   "-indexoutdir" associated qualifiers
+   -extension          string     Default file extension
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-dbname]<br>(Parameter 1)</td>
+<td>string</td>
+<td>Basename for index files</td>
+<td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td>edam</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-standardname]<br>(Parameter 2)</td>
+<td>string</td>
+<td>Standard database name</td>
+<td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td>$(dbname)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-dbresource]<br>(Parameter 3)</td>
+<td>string</td>
+<td>Resource name</td>
+<td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td>edamresource</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-directory</td>
+<td>directory</td>
+<td>Database directory</td>
+<td>Directory</td>
+<td>.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-filenames</td>
+<td>string</td>
+<td>Wildcard database filename</td>
+<td>Any string</td>
+<td>EDAM*.obo</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-fields</td>
+<td>list</td>
+<td>Index fields</td>
+<td><table><tr><td>id</td> <td><i>(ID)</i></td></tr><tr><td>acc</td> <td><i>(Synonym)</i></td></tr><tr><td>nam</td> <td><i>(Name)</i></td></tr><tr><td>isa</td> <td><i>(Parent)</i></td></tr><tr><td>des</td> <td><i>(Description)</i></td></tr><tr><td>ns</td> <td><i>(Namespace)</i></td></tr><tr><td>hasin</td> <td><i>(has_input)</i></td></tr><tr><td>hasout</td> <td><i>(has_output)</i></td></tr><tr><td>isid</td> <td><i>(is_identifier_of)</i></td></tr><tr><td>isfmt</td> <td><i>(is_format_of)</i></td></tr></table></td>
+<td>*</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]compressed</td>
+<td>boolean</td>
+<td>Compressed index files</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-outfile</td>
+<td>outfile</td>
+<td>General log output file</td>
+<td>Output file</td>
+<td><i>&lt;*&gt;</i>.dbxedam</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-release</td>
+<td>string</td>
+<td>Release number</td>
+<td>Any string up to 9 characters</td>
+<td>0.0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-date</td>
+<td>string</td>
+<td>Index date</td>
+<td>Date string dd/mm/yy</td>
+<td>00/00/00</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-exclude</td>
+<td>string</td>
+<td>Wildcard filename(s) to exclude</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-indexoutdir</td>
+<td>outdir</td>
+<td>Index file output directory</td>
+<td>Output directory</td>
+<td>.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-directory" associated directory qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -extension</td>
+<td>string</td>
+<td>Default file extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -extension</td>
+<td>string</td>
+<td>Default file extension</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>dbxedam</b> reads and indexes the EDAM ontology file in OBO format.
+
+
+<p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+        #include file="inc/reportformats.ihtml"
+   -->
+
+<b>dbxedam</b> creates one summary file for the database and two files
+for each field indexed.
+
+<p>
+
+<ul>
+
+<li>dbalias.ent is the master file containing the names of the files
+that have been indexed. It is an ASCII file. This file also contains
+the database release and date information.
+
+<li>dbalias.xid is the B+tree index file for the ID names. It is a binary
+file.
+
+<li>dbalias.pxid is an ASCII file containing information regarding the
+structure of the ID name index.
+
+</ul>
+
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: outfile.dbxedam</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Processing directory: /homes/user/test/data/
+Processing file: EDAM.obo entries: 144 (144) time: 0.0s (0.0s)
+Total time: 0.0s
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.ent</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Number of files: 1
+# Release: 0.0
+# Date:    00/00/00
+Single filename database
+EDAM.obo
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxac</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Identifier
+Compress  Yes
+Pages     4
+Order     87
+Fill      75
+Pagesize  8192
+Level     0
+Cachesize 100
+Order2    406
+Fill2     408
+Count     153
+Fullcount 153
+Kwlimit   80
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxde</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     1556
+Order     93
+Fill      69
+Pagesize  4096
+Level     0
+Cachesize 100
+Order2    144
+Fill2     204
+Count     515
+Fullcount 1611
+Kwlimit   30
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxhasin</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     12
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     3
+Fullcount 3
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxhasout</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     15
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     4
+Fullcount 7
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Identifier
+Compress  Yes
+Pages     7
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     144
+Fullcount 144
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxis</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     229
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     75
+Fullcount 230
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxisfmt</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     24
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     7
+Fullcount 20
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxisid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     6
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     1
+Fullcount 1
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxnm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     622
+Order     60
+Fill      41
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     204
+Fullcount 425
+Kwlimit   20
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxns</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     21
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     6
+Fullcount 144
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.xac</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xde</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xhasin</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xhasout</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xis</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xisfmt</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xisid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xnm</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xns</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+
+        #include file="inc/localfiles.ihtml"
+   -->
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="dbiblast.html">dbiblast</a></td>
+<td>Index a BLAST database</td>
+</tr>
+
+<tr>
+<td><a href="dbifasta.html">dbifasta</a></td>
+<td>Index a fasta file database</td>
+</tr>
+
+<tr>
+<td><a href="dbiflat.html">dbiflat</a></td>
+<td>Index a flat file database</td>
+</tr>
+
+<tr>
+<td><a href="dbigcg.html">dbigcg</a></td>
+<td>Index a GCG formatted database</td>
+</tr>
+
+<tr>
+<td><a href="dbxcompress.html">dbxcompress</a></td>
+<td>Compress an uncompressed dbx index</td>
+</tr>
+
+<tr>
+<td><a href="dbxfasta.html">dbxfasta</a></td>
+<td>Index a fasta file database using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxflat.html">dbxflat</a></td>
+<td>Index a flat file database using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxgcg.html">dbxgcg</a></td>
+<td>Index a GCG formatted database using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxobo.html">dbxobo</a></td>
+<td>Index an obo ontology using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxreport.html">dbxreport</a></td>
+<td>Validate index and report internals for dbx databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxresource.html">dbxresource</a></td>
+<td>Index a data resource catalogue using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxstat.html">dbxstat</a></td>
+<td>Dump statistics for dbx databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxtax.html">dbxtax</a></td>
+<td>Index NCBI taxonomy using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxuncompress.html">dbxuncompress</a></td>
+<td>Uncompress a compressed dbx index</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

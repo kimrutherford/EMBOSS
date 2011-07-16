@@ -1,10 +1,10 @@
-/******************************************************************************
-** @source Ensembl Analysis functions
+/* @source Ensembl Analysis functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.14 $
+** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
+** @version $Revision: 1.40 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -24,11 +24,25 @@
 ******************************************************************************/
 
 /* ==================================================================== */
-/* ========================== include files =========================== */
+/* ========================== Include files =========================== */
 /* ==================================================================== */
 
 #include "ensanalysis.h"
-#include "ensbaseadaptor.h"
+#include "enstable.h"
+
+
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== global variables ========================== */
+/* ==================================================================== */
 
 
 
@@ -41,31 +55,140 @@
 
 
 /* ==================================================================== */
+/* ======================== private constants ========================= */
+/* ==================================================================== */
+
+/* @conststatic analysisadaptorTables *****************************************
+**
+** Array of Ensembl Analysis Adaptor SQL table names
+**
+******************************************************************************/
+
+static const char* const analysisadaptorTables[] =
+{
+    "analysis",
+    "analysis_description",
+    (const char*) NULL
+};
+
+
+
+
+/* @conststatic analysisadaptorColumns ****************************************
+**
+** Array of Ensembl Analysis Adaptor SQL column names
+**
+******************************************************************************/
+
+static const char* const analysisadaptorColumns[] =
+{
+    "analysis.analysis_id",
+    "analysis.created",
+    "analysis.logic_name",
+    "analysis.db",
+    "analysis.db_version",
+    "analysis.db_file",
+    "analysis.program",
+    "analysis.program_version",
+    "analysis.program_file",
+    "analysis.parameters",
+    "analysis.module",
+    "analysis.module_version",
+    "analysis.gff_source",
+    "analysis.gff_feature",
+    "analysis_description.description",
+    "analysis_description.display_label",
+    "analysis_description.displayable",
+    "analysis_description.web_data",
+    (const char*) NULL
+};
+
+
+
+
+/* @conststatic analysisadaptorLeftjoin ***************************************
+**
+** Array of Ensembl Analysis Adaptor SQL left join conditions
+**
+******************************************************************************/
+
+static EnsOBaseadaptorLeftjoin analysisadaptorLeftjoin[] =
+{
+    {
+        "analysis_description",
+        "analysis.analysis_id = analysis_description.analysis_id"
+    },
+    {(const char*) NULL, (const char*) NULL}
+};
+
+
+
+
+/* @conststatic analysisadaptorFeatureClasses *********************************
+**
+** Correlation of Ensembl data object types and SQL table names
+**
+******************************************************************************/
+
+static const char* const analysisadaptorFeatureClasses[] =
+{
+    "AffyFeature", "affy_feature",
+    "Densityfeature", "density_type", /* density_type.analysis_id */
+    "Dnaalignfeature", "dna_align_feature",
+    "Gene", "gene",
+    "Markerfeature", "marker_feature",
+    "Predictiontranscript", "prediction_transcript",
+    "OligoFeature", "oligo_feature",
+    "Proteinalignfeature", "protein_align_feature",
+    "Proteinfeature", "protein_feature",
+    "QtlFeature", "qtl_feature",
+    "Repeatfeature", "repeat_feature",
+    "Simplefeature", "simple_feature",
+    (const char*) NULL, (const char*) NULL
+};
+
+
+
+
+/* ==================================================================== */
+/* ======================== private variables ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-static AjBool analysisadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
-                                           const AjPStr statement,
-                                           EnsPAssemblymapper am,
-                                           EnsPSlice slice,
-                                           AjPList analyses);
-
-static AjBool analysisadaptorCacheInsert(EnsPAnalysisadaptor aa,
-                                         EnsPAnalysis *Panalysis);
+static AjBool analysisadaptorFetchAllbyStatement(
+    EnsPDatabaseadaptor dba,
+    const AjPStr statement,
+    EnsPAssemblymapper am,
+    EnsPSlice slice,
+    AjPList analyses);
 
 static AjBool analysisadaptorCacheInit(EnsPAnalysisadaptor aa);
 
-static void analysisadaptorCacheClearIdentifier(void **key,
-                                                void **value,
-                                                void *cl);
+static AjBool analysisadaptorCacheInsert(EnsPAnalysisadaptor aa,
+                                         EnsPAnalysis* Panalysis);
 
-static void analysisadaptorCacheClearName(void **key,
-                                          void **value,
-                                          void *cl);
+static void analysisadaptorCacheClearIdentifier(void** key,
+                                                void** value,
+                                                void* cl);
 
-static AjBool analysisadaptorCacheExit(EnsPAnalysisadaptor aa);
+static void analysisadaptorCacheClearName(void** key,
+                                          void** value,
+                                          void* cl);
 
-static void analysisadaptorFetchAll(const void *key, void **value, void *cl);
+static void analysisadaptorFetchAll(const void* key, void** value, void* cl);
+
+
+
+
+/* ==================================================================== */
+/* ===================== All functions by section ===================== */
+/* ==================================================================== */
 
 
 
@@ -79,13 +202,13 @@ static void analysisadaptorFetchAll(const void *key, void **value, void *cl);
 
 
 
-/* @datasection [EnsPAnalysis] Analysis ***************************************
+/* @datasection [EnsPAnalysis] Ensembl Analysis *******************************
 **
-** Functions for manipulating Ensembl Analysis objects
+** @nam2rule Analysis Functions for manipulating Ensembl Analysis objects
 **
-** @cc Bio::EnsEMBL::Analysis CVS Revision: 1.27
-**
-** @nam2rule Analysis
+** @cc Bio::EnsEMBL::Analysis
+** @cc CVS Revision: 1.30
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -96,40 +219,40 @@ static void analysisadaptorFetchAll(const void *key, void **value, void *cl);
 **
 ** All constructors return a new Ensembl Analysis by pointer.
 ** It is the responsibility of the user to first destroy any previous
-** Analysis. The target pointer does not need to be initialised to
-** NULL, but it is good programming practice to do so anyway.
+** Ensembl Analysis.
+** The target pointer does not need to be initialised to NULL, but it is good
+** programming practice to do so anyway.
 **
 ** @fdata [EnsPAnalysis]
-** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewData Constructor with data values
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the reference counter
 **
-** @argrule Obj object [const EnsPAnalysis] Ensembl Analysis
-** @argrule Ref object [EnsPAnalysis] Ensembl Analysis
-** @argrule Data aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
-** @argrule Data identifier [ajuint] SQL database-internal identifier
-** @argrule Data cdate [AjPStr] Creation date
-** @argrule Data name [AjPStr] Name
-** @argrule Data databasename [AjPStr] Database name
-** @argrule Data databaseversion [AjPStr] Database version
-** @argrule Data databasefile [AjPStr] Database file
-** @argrule Data programname [AjPStr] Program name
-** @argrule Data programversion [AjPStr] Program version
-** @argrule Data programfile [AjPStr] Program file
-** @argrule Data parameters [AjPStr] Parameters
-** @argrule Data modulename [AjPStr] Module name
-** @argrule Data moduleversion [AjPStr] Module version
-** @argrule Data gffsource [AjPStr] GFF source
-** @argrule Data gfffeature [AjPStr] GFF feature
-** @argrule Data description [AjPStr] Description
-** @argrule Data displaylabel [AjPStr] Display label
-** @argrule Data displayable [AjBool] Displayable element
-** @argrule Data webdata [AjPStr] Web data
+** @argrule Cpy analysis [const EnsPAnalysis] Ensembl Analysis
+** @argrule Ini aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @argrule Ini identifier [ajuint] SQL database-internal identifier
+** @argrule Ini cdate [AjPStr] Creation date
+** @argrule Ini name [AjPStr] Name
+** @argrule Ini databasename [AjPStr] Database name
+** @argrule Ini databaseversion [AjPStr] Database version
+** @argrule Ini databasefile [AjPStr] Database file
+** @argrule Ini programname [AjPStr] Program name
+** @argrule Ini programversion [AjPStr] Program version
+** @argrule Ini programfile [AjPStr] Program file
+** @argrule Ini parameters [AjPStr] Parameters
+** @argrule Ini modulename [AjPStr] Module name
+** @argrule Ini moduleversion [AjPStr] Module version
+** @argrule Ini gffsource [AjPStr] GFF source
+** @argrule Ini gfffeature [AjPStr] GFF feature
+** @argrule Ini description [AjPStr] Description
+** @argrule Ini displaylabel [AjPStr] Display label
+** @argrule Ini webdata [AjPStr] Web data
+** @argrule Ini displayable [AjBool] Displayable element
+** @argrule Ref analysis [EnsPAnalysis] Ensembl Analysis
 **
-** @valrule * [EnsPAnalysis] Ensembl Analysis
+** @valrule * [EnsPAnalysis] Ensembl Analysis or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -137,9 +260,90 @@ static void analysisadaptorFetchAll(const void *key, void **value, void *cl);
 
 
 
-/* @func ensAnalysisNewData ***************************************************
+/* @func ensAnalysisNewCpy ****************************************************
 **
-** Default constructor for an Ensembl Analysis.
+** Object-based constructor function, which returns an independent object.
+**
+** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
+**
+** @return [EnsPAnalysis] Ensembl Analysis or NULL
+** @@
+******************************************************************************/
+
+EnsPAnalysis ensAnalysisNewCpy(const EnsPAnalysis analysis)
+{
+    EnsPAnalysis pthis = NULL;
+
+    if(!analysis)
+        return NULL;
+
+    AJNEW0(pthis);
+
+    pthis->Use = 1;
+
+    pthis->Identifier = analysis->Identifier;
+
+    pthis->Adaptor = analysis->Adaptor;
+
+    if(analysis->DateCreation)
+        pthis->DateCreation = ajStrNewRef(analysis->DateCreation);
+
+    if(analysis->Name)
+        pthis->Name = ajStrNewRef(analysis->Name);
+
+    if(analysis->Databasename)
+        pthis->Databasename = ajStrNewRef(analysis->Databasename);
+
+    if(analysis->Databaseversion)
+        pthis->Databaseversion = ajStrNewRef(analysis->Databaseversion);
+
+    if(analysis->Databasefile)
+        pthis->Databasefile = ajStrNewRef(analysis->Databasefile);
+
+    if(analysis->Programname)
+        pthis->Programname = ajStrNewRef(analysis->Programname);
+
+    if(analysis->Programversion)
+        pthis->Programversion = ajStrNewRef(analysis->Programversion);
+
+    if(analysis->Programfile)
+        pthis->Programfile = ajStrNewRef(analysis->Programfile);
+
+    if(analysis->Parameters)
+        pthis->Parameters = ajStrNewRef(analysis->Parameters);
+
+    if(analysis->Modulename)
+        pthis->Modulename = ajStrNewRef(analysis->Modulename);
+
+    if(analysis->Moduleversion)
+        pthis->Moduleversion = ajStrNewRef(analysis->Moduleversion);
+
+    if(analysis->Gffsource)
+        pthis->Gffsource = ajStrNewRef(analysis->Gffsource);
+
+    if(analysis->Gfffeature)
+        pthis->Gfffeature = ajStrNewRef(analysis->Gfffeature);
+
+    if(analysis->Description)
+        pthis->Description = ajStrNewRef(analysis->Description);
+
+    if(analysis->Displaylabel)
+        pthis->Displaylabel = ajStrNewRef(analysis->Displaylabel);
+
+    if(analysis->Webdata)
+        pthis->Webdata = ajStrNewRef(analysis->Webdata);
+
+    pthis->Displayable = analysis->Displayable;
+
+    return pthis;
+}
+
+
+
+
+/* @func ensAnalysisNewIni ****************************************************
+**
+** Constructor for an Ensembl Analysis object with initial values.
 **
 ** @cc Bio::EnsEMBL::Storable::new
 ** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
@@ -160,32 +364,32 @@ static void analysisadaptorFetchAll(const void *key, void **value, void *cl);
 ** @param [u] gfffeature [AjPStr] GFF feature
 ** @param [u] description [AjPStr] Description
 ** @param [u] displaylabel [AjPStr] Display label
-** @param [r] displayable [AjBool] Displayable element
 ** @param [u] webdata [AjPStr] Web data
+** @param [r] displayable [AjBool] Displayable element
 **
 ** @return [EnsPAnalysis] Ensembl Analysis or NULL
 ** @@
 ******************************************************************************/
 
-EnsPAnalysis ensAnalysisNewData(EnsPAnalysisadaptor aa,
-                                ajuint identifier,
-                                AjPStr cdate,
-                                AjPStr name,
-                                AjPStr databasename,
-                                AjPStr databaseversion,
-                                AjPStr databasefile,
-                                AjPStr programname,
-                                AjPStr programversion,
-                                AjPStr programfile,
-                                AjPStr parameters,
-                                AjPStr modulename,
-                                AjPStr moduleversion,
-                                AjPStr gffsource,
-                                AjPStr gfffeature,
-                                AjPStr description,
-                                AjPStr displaylabel,
-                                AjBool displayable,
-                                AjPStr webdata)
+EnsPAnalysis ensAnalysisNewIni(EnsPAnalysisadaptor aa,
+                               ajuint identifier,
+                               AjPStr cdate,
+                               AjPStr name,
+                               AjPStr databasename,
+                               AjPStr databaseversion,
+                               AjPStr databasefile,
+                               AjPStr programname,
+                               AjPStr programversion,
+                               AjPStr programfile,
+                               AjPStr parameters,
+                               AjPStr modulename,
+                               AjPStr moduleversion,
+                               AjPStr gffsource,
+                               AjPStr gfffeature,
+                               AjPStr description,
+                               AjPStr displaylabel,
+                               AjPStr webdata,
+                               AjBool displayable)
 {
     EnsPAnalysis analysis = NULL;
 
@@ -201,135 +405,54 @@ EnsPAnalysis ensAnalysisNewData(EnsPAnalysisadaptor aa,
     analysis->Adaptor = aa;
 
     if(cdate)
-        analysis->CreationDate = ajStrNewRef(cdate);
+        analysis->DateCreation = ajStrNewRef(cdate);
 
     if(name)
         analysis->Name = ajStrNewRef(name);
 
     if(databasename)
-        analysis->DatabaseName = ajStrNewRef(databasename);
+        analysis->Databasename = ajStrNewRef(databasename);
 
     if(databaseversion)
-        analysis->DatabaseVersion = ajStrNewRef(databaseversion);
+        analysis->Databaseversion = ajStrNewRef(databaseversion);
 
     if(databasefile)
-        analysis->DatabaseFile = ajStrNewRef(databasefile);
+        analysis->Databasefile = ajStrNewRef(databasefile);
 
     if(programname)
-        analysis->ProgramName = ajStrNewRef(programname);
+        analysis->Programname = ajStrNewRef(programname);
 
     if(programversion)
-        analysis->ProgramVersion = ajStrNewRef(programversion);
+        analysis->Programversion = ajStrNewRef(programversion);
 
     if(programfile)
-        analysis->ProgramFile = ajStrNewRef(programfile);
+        analysis->Programfile = ajStrNewRef(programfile);
 
     if(parameters)
         analysis->Parameters = ajStrNewRef(parameters);
 
     if(modulename)
-        analysis->ModuleName = ajStrNewRef(modulename);
+        analysis->Modulename = ajStrNewRef(modulename);
 
     if(moduleversion)
-        analysis->ModuleVersion = ajStrNewRef(moduleversion);
+        analysis->Moduleversion = ajStrNewRef(moduleversion);
 
     if(gffsource)
-        analysis->GFFSource = ajStrNewRef(gffsource);
+        analysis->Gffsource = ajStrNewRef(gffsource);
 
     if(gfffeature)
-        analysis->GFFFeature = ajStrNewRef(gfffeature);
+        analysis->Gfffeature = ajStrNewRef(gfffeature);
 
     if(description)
         analysis->Description = ajStrNewRef(description);
 
     if(displaylabel)
-        analysis->DisplayLabel = ajStrNewRef(displaylabel);
+        analysis->Displaylabel = ajStrNewRef(displaylabel);
 
     analysis->Displayable = displayable;
 
     if(webdata)
-        analysis->WebData = ajStrNewRef(webdata);
-
-    return analysis;
-}
-
-
-
-
-/* @func ensAnalysisNewObj ****************************************************
-**
-** Object-based constructor function, which returns an independent object.
-**
-** @param [r] object [const EnsPAnalysis] Ensembl Analysis
-**
-** @return [EnsPAnalysis] Ensembl Analysis or NULL
-** @@
-******************************************************************************/
-
-EnsPAnalysis ensAnalysisNewObj(const EnsPAnalysis object)
-{
-    EnsPAnalysis analysis = NULL;
-
-    if(!object)
-        return NULL;
-
-    AJNEW0(analysis);
-
-    analysis->Use = 1;
-
-    analysis->Identifier = object->Identifier;
-
-    analysis->Adaptor = object->Adaptor;
-
-    if(object->CreationDate)
-        analysis->CreationDate = ajStrNewRef(object->CreationDate);
-
-    if(object->Name)
-        analysis->Name = ajStrNewRef(object->Name);
-
-    if(object->DatabaseName)
-        analysis->DatabaseName = ajStrNewRef(object->DatabaseName);
-
-    if(object->DatabaseVersion)
-        analysis->DatabaseVersion = ajStrNewRef(object->DatabaseVersion);
-
-    if(object->DatabaseFile)
-        analysis->DatabaseFile = ajStrNewRef(object->DatabaseFile);
-
-    if(object->ProgramName)
-        analysis->ProgramName = ajStrNewRef(object->ProgramName);
-
-    if(object->ProgramVersion)
-        analysis->ProgramVersion = ajStrNewRef(object->ProgramVersion);
-
-    if(object->ProgramFile)
-        analysis->ProgramFile = ajStrNewRef(object->ProgramFile);
-
-    if(object->Parameters)
-        analysis->Parameters = ajStrNewRef(object->Parameters);
-
-    if(object->ModuleName)
-        analysis->ModuleName = ajStrNewRef(object->ModuleName);
-
-    if(object->ModuleVersion)
-        analysis->ModuleVersion = ajStrNewRef(object->ModuleVersion);
-
-    if(object->GFFSource)
-        analysis->GFFSource = ajStrNewRef(object->GFFSource);
-
-    if(object->GFFFeature)
-        analysis->GFFFeature = ajStrNewRef(object->GFFFeature);
-
-    if(object->Description)
-        analysis->Description = ajStrNewRef(object->Description);
-
-    if(object->DisplayLabel)
-        analysis->DisplayLabel = ajStrNewRef(object->DisplayLabel);
-
-    analysis->Displayable = object->Displayable;
-
-    if(object->WebData)
-        analysis->WebData = ajStrNewRef(object->WebData);
+        analysis->Webdata = ajStrNewRef(webdata);
 
     return analysis;
 }
@@ -364,10 +487,9 @@ EnsPAnalysis ensAnalysisNewRef(EnsPAnalysis analysis)
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Analysis.
+** memory allocated for an Ensembl Analysis object.
 **
 ** @fdata [EnsPAnalysis]
-** @fnote None
 **
 ** @nam3rule Del Destroy (free) an Ensembl Analysis object
 **
@@ -385,7 +507,7 @@ EnsPAnalysis ensAnalysisNewRef(EnsPAnalysis analysis)
 **
 ** Default destructor for an Ensembl Analysis.
 **
-** @param [d] Panalysis [EnsPAnalysis*] Ensembl Analysis address
+** @param [d] Panalysis [EnsPAnalysis*] Ensembl Analysis object address
 **
 ** @return [void]
 ** @@
@@ -421,22 +543,22 @@ void ensAnalysisDel(EnsPAnalysis* Panalysis)
         return;
     }
 
-    ajStrDel(&pthis->CreationDate);
+    ajStrDel(&pthis->DateCreation);
     ajStrDel(&pthis->Name);
-    ajStrDel(&pthis->DatabaseName);
-    ajStrDel(&pthis->DatabaseVersion);
-    ajStrDel(&pthis->DatabaseFile);
-    ajStrDel(&pthis->ProgramName);
-    ajStrDel(&pthis->ProgramVersion);
-    ajStrDel(&pthis->ProgramFile);
+    ajStrDel(&pthis->Databasename);
+    ajStrDel(&pthis->Databaseversion);
+    ajStrDel(&pthis->Databasefile);
+    ajStrDel(&pthis->Programname);
+    ajStrDel(&pthis->Programversion);
+    ajStrDel(&pthis->Programfile);
     ajStrDel(&pthis->Parameters);
-    ajStrDel(&pthis->ModuleName);
-    ajStrDel(&pthis->ModuleVersion);
-    ajStrDel(&pthis->GFFSource);
-    ajStrDel(&pthis->GFFFeature);
+    ajStrDel(&pthis->Modulename);
+    ajStrDel(&pthis->Moduleversion);
+    ajStrDel(&pthis->Gffsource);
+    ajStrDel(&pthis->Gfffeature);
     ajStrDel(&pthis->Description);
-    ajStrDel(&pthis->DisplayLabel);
-    ajStrDel(&pthis->WebData);
+    ajStrDel(&pthis->Displaylabel);
+    ajStrDel(&pthis->Webdata);
 
     AJFREE(pthis);
 
@@ -453,51 +575,50 @@ void ensAnalysisDel(EnsPAnalysis* Panalysis)
 ** Functions for returning elements of an Ensembl Analysis object.
 **
 ** @fdata [EnsPAnalysis]
-** @fnote None
 **
-** @nam3rule Get Return Analysis attribute(s)
-** @nam4rule GetAdaptor Return the Ensembl Analysis Adaptor
-** @nam4rule GetIdentifier Return the SQL database-internal identifier
-** @nam4rule GetCreationdate Return the creation date
-** @nam4rule GetName Return the name
-** @nam4rule GetDatabasename Return the database name
-** @nam4rule GetDatabaseversion Return the database version
-** @nam4rule GetDatabasefile Return the database file
-** @nam4rule GetProgramname Return the program name
-** @nam4rule GetProgramversion Return the program version
-** @nam4rule GetProgramfile Return the program file
-** @nam4rule GetParameters Return the parameters
-** @nam4rule GetModulename Return the module name
-** @nam4rule GetModuleversion Return the module version
-** @nam4rule GetGffsource Return the GFF source
-** @nam4rule GetGfffeature Return the GFF feature
-** @nam4rule GetDescription Return the description
-** @nam4rule GetDisplaylabel Return the display label
-** @nam4rule GetMemsize Return the memory size used
-** @nam4rule GetWebdata Return the web data
-** @nam4rule GetDisplayable Return the displayable element
+** @nam3rule Get Return Ensembl Analysis attribute(s)
+** @nam4rule Adaptor Return the Ensembl Analysis Adaptor
+** @nam4rule Databasefile Return the database file
+** @nam4rule Databasename Return the database name
+** @nam4rule Databaseversion Return the database version
+** @nam4rule Date Return a date
+** @nam5rule Creation Return the date of creation
+** @nam4rule Description Return the description
+** @nam4rule Displayable Return the displayable element
+** @nam4rule Displaylabel Return the display label
+** @nam4rule Gfffeature Return the GFF feature
+** @nam4rule Gffsource Return the GFF source
+** @nam4rule Identifier Return the SQL database-internal identifier
+** @nam4rule Modulename Return the module name
+** @nam4rule Moduleversion Return the module version
+** @nam4rule Name Return the name
+** @nam4rule Parameters Return the parameters
+** @nam4rule Programfile Return the program file
+** @nam4rule Programname Return the program name
+** @nam4rule Programversion Return the program version
+** @nam4rule Webdata Return the web data
 **
-** @argrule * analysis [const EnsPAnalysis] Analysis
+** @argrule * analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @valrule Adaptor [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
-** @valrule Identifier [ajuint] SQL database-internal identifier
-** @valrule Creationdate [const AjPStr] Creation date
-** @valrule Name [const AjPStr] Name
-** @valrule Databasename [const AjPStr] Database name
-** @valrule Databaseversion [const AjPStr] Database version
-** @valrule Databasefile [const AjPStr] Database file
-** @valrule Programname [const AjPStr] Program name
-** @valrule Programversion [const AjPStr] Program version
-** @valrule Programfile [const AjPStr] Program file
-** @valrule Parameters [const AjPStr] Parameters
-** @valrule Modulename [const AjPStr] Module name
-** @valrule Moduleversion [const AjPStr] Module version
-** @valrule Gffsource [const AjPStr] GFF source
-** @valrule Gfffeature [const AjPStr] GFF feature
-** @valrule Description [const AjPStr] Description
-** @valrule Displaylabel [const AjPStr] Display label
-** @valrule Webdata [const AjPStr] Web data
-** @valrule Displayable [AjBool] Displayable element
+** @valrule Adaptor [EnsPAnalysisadaptor] Ensembl Analysis Adaptor or NULL
+** @valrule Databasefile [const AjPStr] Database file or NULL
+** @valrule Databasename [const AjPStr] Database name or NULL
+** @valrule Databaseversion [const AjPStr] Database version or NULL
+** @valrule DateCreation [const AjPStr] Creation date or NULL
+** @valrule Description [const AjPStr] Description or NULL
+** @valrule Displayable [AjBool] Displayable element or ajFalse
+** @valrule Displaylabel [const AjPStr] Display label or NULL
+** @valrule Gfffeature [const AjPStr] GFF feature or NULL
+** @valrule Gffsource [const AjPStr] GFF source or NULL
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Modulename [const AjPStr] Module name or NULL
+** @valrule Moduleversion [const AjPStr] Module version or NULL
+** @valrule Name [const AjPStr] Name or NULL
+** @valrule Parameters [const AjPStr] Parameters or NULL
+** @valrule Programfile [const AjPStr] Program file or NULL
+** @valrule Programname [const AjPStr] Program name or NULL
+** @valrule Programversion [const AjPStr] Program version or NULL
+** @valrule Webdata [const AjPStr] Web data or NULL
 **
 ** @fcategory use
 ******************************************************************************/
@@ -512,7 +633,7 @@ void ensAnalysisDel(EnsPAnalysis* Panalysis)
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @return [EnsPAnalysisadaptor] Ensembl Analysis Adaptor or NULL
 ** @@
 ******************************************************************************/
 
@@ -527,23 +648,23 @@ EnsPAnalysisadaptor ensAnalysisGetAdaptor(const EnsPAnalysis analysis)
 
 
 
-/* @func ensAnalysisGetCreationdate *******************************************
+/* @func ensAnalysisGetDatabasefile *******************************************
 **
-** Get the creation date element of an Ensembl Analysis.
+** Get the database file element of an Ensembl Analysis.
 **
-** @cc Bio::EnsEMBL::Analysis::created
+** @cc Bio::EnsEMBL::Analysis::db_file
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Creation date
+** @return [const AjPStr] Database file or NULL
 ** @@
 ******************************************************************************/
 
-const AjPStr ensAnalysisGetCreationdate(const EnsPAnalysis analysis)
+const AjPStr ensAnalysisGetDatabasefile(const EnsPAnalysis analysis)
 {
     if(!analysis)
         return NULL;
 
-    return analysis->CreationDate;
+    return analysis->Databasefile;
 }
 
 
@@ -556,7 +677,7 @@ const AjPStr ensAnalysisGetCreationdate(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::db
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Database name
+** @return [const AjPStr] Database name or NULL
 ** @@
 ******************************************************************************/
 
@@ -565,29 +686,7 @@ const AjPStr ensAnalysisGetDatabasename(const EnsPAnalysis analysis)
     if(!analysis)
         return NULL;
 
-    return analysis->DatabaseName;
-}
-
-
-
-
-/* @func ensAnalysisGetDatabasefile *******************************************
-**
-** Get the database file element of an Ensembl Analysis.
-**
-** @cc Bio::EnsEMBL::Analysis::db_file
-** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
-**
-** @return [const AjPStr] Database file
-** @@
-******************************************************************************/
-
-const AjPStr ensAnalysisGetDatabasefile(const EnsPAnalysis analysis)
-{
-    if(!analysis)
-        return NULL;
-
-    return analysis->DatabaseFile;
+    return analysis->Databasename;
 }
 
 
@@ -600,7 +699,7 @@ const AjPStr ensAnalysisGetDatabasefile(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::db_version
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Database version
+** @return [const AjPStr] Database version or NULL
 ** @@
 ******************************************************************************/
 
@@ -609,7 +708,29 @@ const AjPStr ensAnalysisGetDatabaseversion(const EnsPAnalysis analysis)
     if(!analysis)
         return NULL;
 
-    return analysis->DatabaseVersion;
+    return analysis->Databaseversion;
+}
+
+
+
+
+/* @func ensAnalysisGetDateCreation *******************************************
+**
+** Get the date of creation element of an Ensembl Analysis.
+**
+** @cc Bio::EnsEMBL::Analysis::created
+** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
+**
+** @return [const AjPStr] Creation date or NULL
+** @@
+******************************************************************************/
+
+const AjPStr ensAnalysisGetDateCreation(const EnsPAnalysis analysis)
+{
+    if(!analysis)
+        return NULL;
+
+    return analysis->DateCreation;
 }
 
 
@@ -622,7 +743,7 @@ const AjPStr ensAnalysisGetDatabaseversion(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::description
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Description
+** @return [const AjPStr] Description or NULL
 ** @@
 ******************************************************************************/
 
@@ -644,7 +765,7 @@ const AjPStr ensAnalysisGetDescription(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::displayable
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [AjBool] Displayable element
+** @return [AjBool] Displayable flag or ajFalse
 ** @@
 ******************************************************************************/
 
@@ -666,7 +787,7 @@ AjBool ensAnalysisGetDisplayable(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::display_label
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Display label
+** @return [const AjPStr] Display label or NULL
 ** @@
 ******************************************************************************/
 
@@ -675,7 +796,7 @@ const AjPStr ensAnalysisGetDisplaylabel(const EnsPAnalysis analysis)
     if(!analysis)
         return NULL;
 
-    return analysis->DisplayLabel;
+    return analysis->Displaylabel;
 }
 
 
@@ -688,7 +809,7 @@ const AjPStr ensAnalysisGetDisplaylabel(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::gff_feature
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] GFF feature
+** @return [const AjPStr] GFF feature or NULL
 ** @@
 ******************************************************************************/
 
@@ -697,7 +818,7 @@ const AjPStr ensAnalysisGetGfffeature(const EnsPAnalysis analysis)
     if(!analysis)
         return NULL;
 
-    return analysis->GFFFeature;
+    return analysis->Gfffeature;
 }
 
 
@@ -710,7 +831,7 @@ const AjPStr ensAnalysisGetGfffeature(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::gff_source
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] GFF source
+** @return [const AjPStr] GFF source or NULL
 ** @@
 ******************************************************************************/
 
@@ -719,7 +840,7 @@ const AjPStr ensAnalysisGetGffsource(const EnsPAnalysis analysis)
     if(!analysis)
         return NULL;
 
-    return analysis->GFFSource;
+    return analysis->Gffsource;
 }
 
 
@@ -732,7 +853,7 @@ const AjPStr ensAnalysisGetGffsource(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [ajuint] Internal database identifier
+** @return [ajuint] SQL database-internal identifier or 0
 ** @@
 ******************************************************************************/
 
@@ -747,143 +868,6 @@ ajuint ensAnalysisGetIdentifier(const EnsPAnalysis analysis)
 
 
 
-/* @func ensAnalysisGetMemsize ************************************************
-**
-** Get the memory size in bytes of an Ensembl Analysis.
-**
-** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
-**
-** @return [ajulong] Memory size
-** @@
-******************************************************************************/
-
-ajulong ensAnalysisGetMemsize(const EnsPAnalysis analysis)
-{
-    ajulong size = 0;
-
-    if(!analysis)
-        return 0;
-
-    size += sizeof (EnsOAnalysis);
-
-    if(analysis->CreationDate)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->CreationDate);
-    }
-
-    if(analysis->Name)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->Name);
-    }
-
-    if(analysis->DatabaseName)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->DatabaseName);
-    }
-
-    if(analysis->DatabaseVersion)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->DatabaseVersion);
-    }
-
-    if(analysis->DatabaseFile)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->DatabaseFile);
-    }
-
-    if(analysis->ProgramName)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->ProgramName);
-    }
-
-    if(analysis->ProgramVersion)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->ProgramVersion);
-    }
-
-    if(analysis->ProgramFile)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->ProgramFile);
-    }
-
-    if(analysis->Parameters)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->Parameters);
-    }
-
-    if(analysis->ModuleName)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->ModuleName);
-    }
-
-    if(analysis->ModuleVersion)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->ModuleVersion);
-    }
-
-    if(analysis->GFFSource)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->GFFSource);
-    }
-
-    if(analysis->GFFFeature)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->GFFFeature);
-    }
-
-    if(analysis->Description)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->Description);
-    }
-
-    if(analysis->DisplayLabel)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->DisplayLabel);
-    }
-
-    if(analysis->WebData)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(analysis->WebData);
-    }
-
-    return size;
-}
-
-
-
-
 /* @func ensAnalysisGetModulename *********************************************
 **
 ** Get the module name element of an Ensembl Analysis.
@@ -891,7 +875,7 @@ ajulong ensAnalysisGetMemsize(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::module
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Module name
+** @return [const AjPStr] Module name or NULL
 ** @@
 ******************************************************************************/
 
@@ -900,7 +884,7 @@ const AjPStr ensAnalysisGetModulename(const EnsPAnalysis analysis)
     if(!analysis)
         return NULL;
 
-    return analysis->ModuleName;
+    return analysis->Modulename;
 }
 
 
@@ -913,7 +897,7 @@ const AjPStr ensAnalysisGetModulename(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::module_version
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Module version
+** @return [const AjPStr] Module version or NULL
 ** @@
 ******************************************************************************/
 
@@ -922,7 +906,7 @@ const AjPStr ensAnalysisGetModuleversion(const EnsPAnalysis analysis)
     if(!analysis)
         return NULL;
 
-    return analysis->ModuleVersion;
+    return analysis->Moduleversion;
 }
 
 
@@ -935,7 +919,7 @@ const AjPStr ensAnalysisGetModuleversion(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::logic_name
 ** @param  [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Name
+** @return [const AjPStr] Name or NULL
 ** @@
 ******************************************************************************/
 
@@ -957,7 +941,7 @@ const AjPStr ensAnalysisGetName(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::parameters
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Parameters
+** @return [const AjPStr] Parameters or NULL
 ** @@
 ******************************************************************************/
 
@@ -979,7 +963,7 @@ const AjPStr ensAnalysisGetParameters(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::program_file
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Program file
+** @return [const AjPStr] Program file or NULL
 ** @@
 ******************************************************************************/
 
@@ -988,7 +972,7 @@ const AjPStr ensAnalysisGetProgramfile(const EnsPAnalysis analysis)
     if(!analysis)
         return NULL;
 
-    return analysis->ProgramFile;
+    return analysis->Programfile;
 }
 
 
@@ -1001,7 +985,7 @@ const AjPStr ensAnalysisGetProgramfile(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::program
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Program name
+** @return [const AjPStr] Program name or NULL
 ** @@
 ******************************************************************************/
 
@@ -1010,7 +994,7 @@ const AjPStr ensAnalysisGetProgramname(const EnsPAnalysis analysis)
     if(!analysis)
         return NULL;
 
-    return analysis->ProgramName;
+    return analysis->Programname;
 }
 
 
@@ -1023,7 +1007,7 @@ const AjPStr ensAnalysisGetProgramname(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::program_version
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Program version
+** @return [const AjPStr] Program version or NULL
 ** @@
 ******************************************************************************/
 
@@ -1032,7 +1016,7 @@ const AjPStr ensAnalysisGetProgramversion(const EnsPAnalysis analysis)
     if(!analysis)
         return NULL;
 
-    return analysis->ProgramVersion;
+    return analysis->Programversion;
 }
 
 
@@ -1046,7 +1030,7 @@ const AjPStr ensAnalysisGetProgramversion(const EnsPAnalysis analysis)
 ** @cc Bio::EnsEMBL::Analysis::web_data
 ** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @return [const AjPStr] Web data
+** @return [const AjPStr] Web data or NULL
 ** @@
 ******************************************************************************/
 
@@ -1055,7 +1039,7 @@ const AjPStr ensAnalysisGetWebdata(const EnsPAnalysis analysis)
     if(!analysis)
         return NULL;
 
-    return analysis->WebData;
+    return analysis->Webdata;
 }
 
 
@@ -1066,30 +1050,49 @@ const AjPStr ensAnalysisGetWebdata(const EnsPAnalysis analysis)
 ** Functions for assigning elements of an Ensembl Analysis object.
 **
 ** @fdata [EnsPAnalysis]
-** @fnote None
 **
 ** @nam3rule Set Set one element of an Ensembl Analysis
-** @nam4rule SetAdaptor Set the Ensembl Analysis Adaptor
-** @nam4rule SetIdentifier Set the SQL database-internal identifier
-** @nam4rule SetCreationdate Set the creation date
-** @nam4rule SetName Set the name
-** @nam4rule SetDatabasename Set the database name
-** @nam4rule SetDatabaseversion Set the database version
-** @nam4rule SetDatabasefile Set the database file
-** @nam4rule SetProgramname Set the program name
-** @nam4rule SetProgramversion Set the program version
-** @nam4rule SetProgramfile Set the program file
-** @nam4rule SetParameters Set the parameters
-** @nam4rule SetModulename Set the module name
-** @nam4rule SetModuleversion Set the module version
-** @nam4rule SetGffsource Set the GFF source
-** @nam4rule SetGfffeature Set the GFF feature
-** @nam4rule SetDescription Set the description
-** @nam4rule SetDisplaylabel Set the display label
-** @nam4rule SetWebdata Set the web data
-** @nam4rule SetDisplayable Set the displayable element
+** @nam4rule Adaptor Set the Ensembl Analysis Adaptor
+** @nam4rule Databasefile Set the database file
+** @nam4rule Databasename Set the database name
+** @nam4rule Databaseversion Set the database version
+** @nam4rule Date Set a date
+** @nam5rule Creation Set the date of creation
+** @nam4rule Description Set the description
+** @nam4rule Displayable Set the displayable element
+** @nam4rule Displaylabel Set the display label
+** @nam4rule Gfffeature Set the GFF feature
+** @nam4rule Gffsource Set the GFF source
+** @nam4rule Identifier Set the SQL database-internal identifier
+** @nam4rule Modulename Set the module name
+** @nam4rule Moduleversion Set the module version
+** @nam4rule Name Set the name
+** @nam4rule Parameters Set the parameters
+** @nam4rule Programfile Set the program file
+** @nam4rule Programname Set the program name
+** @nam4rule Programversion Set the program version
+** @nam4rule Webdata Set the web data
 **
 ** @argrule * analysis [EnsPAnalysis] Ensembl Analysis object
+** @argrule Adaptor aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @argrule Databasefile databasefile [AjPStr] Database file
+** @argrule Databasename databasename [AjPStr] Database name
+** @argrule Databaseversion databaseversion [AjPStr] Database version
+** @argrule DateCreation cdate [AjPStr] Creation date
+** @argrule Description description [AjPStr] Description
+** @argrule Displayable displayable [AjBool] Displayable element
+** @argrule Displaylabel displaylabel [AjPStr] Display label
+** @argrule Gfffeature gfffeature [AjPStr] GFF feature
+** @argrule Gffsource gffsource [AjPStr] GFF source
+** @argrule Identifier identifier [ajuint] SQL database-internal identifier
+** @argrule Modulename modulename [AjPStr] Module name
+** @argrule Moduleversion moduleversion [AjPStr] Module version
+** @argrule Name name [AjPStr] Name
+** @argrule Parameters parameters [AjPStr] Parameters
+** @argrule Programfile programfile [AjPStr] Program file
+** @argrule Programname programname [AjPStr] Program name
+** @argrule Programversion programversion [AjPStr] Program version
+** @argrule Webdata webdata [AjPStr] Web data
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -1125,26 +1128,27 @@ AjBool ensAnalysisSetAdaptor(EnsPAnalysis analysis,
 
 
 
-/* @func ensAnalysisSetCreationdate *******************************************
+/* @func ensAnalysisSetDatabasefile *******************************************
 **
-** Set the creation date element of an Ensembl Analysis.
+** Set the database file element of an Ensembl Analysis.
 **
-** @cc Bio::EnsEMBL::Analysis::created
+** @cc Bio::EnsEMBL::Analysis::db_file
 ** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
-** @param [u] cdate [AjPStr] Creation date
+** @param [u] databasefile [AjPStr] Database file
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisSetCreationdate(EnsPAnalysis analysis, AjPStr cdate)
+AjBool ensAnalysisSetDatabasefile(EnsPAnalysis analysis,
+                                  AjPStr databasefile)
 {
     if(!analysis)
         return ajFalse;
 
-    ajStrDel(&analysis->CreationDate);
+    ajStrDel(&analysis->Databasefile);
 
-    analysis->CreationDate = ajStrNewRef(cdate);
+    analysis->Databasefile = ajStrNewRef(databasefile);
 
     return ajTrue;
 }
@@ -1164,41 +1168,15 @@ AjBool ensAnalysisSetCreationdate(EnsPAnalysis analysis, AjPStr cdate)
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisSetDatabasename(EnsPAnalysis analysis, AjPStr databasename)
+AjBool ensAnalysisSetDatabasename(EnsPAnalysis analysis,
+                                  AjPStr databasename)
 {
     if(!analysis)
         return ajFalse;
 
-    ajStrDel(&analysis->DatabaseName);
+    ajStrDel(&analysis->Databasename);
 
-    analysis->DatabaseName = ajStrNewRef(databasename);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensAnalysisSetDatabasefile *******************************************
-**
-** Set the database file element of an Ensembl Analysis.
-**
-** @cc Bio::EnsEMBL::Analysis::db_file
-** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
-** @param [u] databasefile [AjPStr] Database file
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensAnalysisSetDatabasefile(EnsPAnalysis analysis, AjPStr databasefile)
-{
-    if(!analysis)
-        return ajFalse;
-
-    ajStrDel(&analysis->DatabaseFile);
-
-    analysis->DatabaseFile = ajStrNewRef(databasefile);
+    analysis->Databasename = ajStrNewRef(databasename);
 
     return ajTrue;
 }
@@ -1224,9 +1202,37 @@ AjBool ensAnalysisSetDatabaseversion(EnsPAnalysis analysis,
     if(!analysis)
         return ajFalse;
 
-    ajStrDel(&analysis->DatabaseVersion);
+    ajStrDel(&analysis->Databaseversion);
 
-    analysis->DatabaseVersion = ajStrNewRef(databaseversion);
+    analysis->Databaseversion = ajStrNewRef(databaseversion);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensAnalysisSetDateCreation *******************************************
+**
+** Set the date of creation element of an Ensembl Analysis.
+**
+** @cc Bio::EnsEMBL::Analysis::created
+** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
+** @param [u] cdate [AjPStr] Creation date
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAnalysisSetDateCreation(EnsPAnalysis analysis,
+                                  AjPStr cdate)
+{
+    if(!analysis)
+        return ajFalse;
+
+    ajStrDel(&analysis->DateCreation);
+
+    analysis->DateCreation = ajStrNewRef(cdate);
 
     return ajTrue;
 }
@@ -1246,7 +1252,8 @@ AjBool ensAnalysisSetDatabaseversion(EnsPAnalysis analysis,
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisSetDescription(EnsPAnalysis analysis, AjPStr description)
+AjBool ensAnalysisSetDescription(EnsPAnalysis analysis,
+                                 AjPStr description)
 {
     if(!analysis)
         return ajFalse;
@@ -1273,7 +1280,8 @@ AjBool ensAnalysisSetDescription(EnsPAnalysis analysis, AjPStr description)
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisSetDisplayable(EnsPAnalysis analysis, AjBool displayable)
+AjBool ensAnalysisSetDisplayable(EnsPAnalysis analysis,
+                                 AjBool displayable)
 {
     if(!analysis)
         return ajFalse;
@@ -1298,14 +1306,71 @@ AjBool ensAnalysisSetDisplayable(EnsPAnalysis analysis, AjBool displayable)
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisSetDisplaylabel(EnsPAnalysis analysis, AjPStr displaylabel)
+AjBool ensAnalysisSetDisplaylabel(EnsPAnalysis analysis,
+                                  AjPStr displaylabel)
 {
     if(!analysis)
         return ajFalse;
 
-    ajStrDel(&analysis->DisplayLabel);
+    ajStrDel(&analysis->Displaylabel);
 
-    analysis->DisplayLabel = ajStrNewRef(displaylabel);
+    analysis->Displaylabel = ajStrNewRef(displaylabel);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensAnalysisSetGfffeature *********************************************
+**
+** Set the GFF feature element of an Ensembl Analysis.
+**
+** @cc Bio::EnsEMBL::Analysis::gff_feature
+** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
+** @param [u] gfffeature [AjPStr] GFF feature
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAnalysisSetGfffeature(EnsPAnalysis analysis,
+                                AjPStr gfffeature)
+{
+    if(!analysis)
+        return ajFalse;
+
+    ajStrDel(&analysis->Gfffeature);
+
+    analysis->Gfffeature = ajStrNewRef(gfffeature);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensAnalysisSetGffsource **********************************************
+**
+** Set the GFF source element of an Ensembl Analysis.
+**
+** @cc Bio::EnsEMBL::Analysis::gff_source
+** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
+** @param [u] gffsource [AjPStr] GFF source
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAnalysisSetGffsource(EnsPAnalysis analysis,
+                               AjPStr gffsource)
+{
+    if(!analysis)
+        return ajFalse;
+
+    ajStrDel(&analysis->Gffsource);
+
+    analysis->Gffsource = ajStrNewRef(gffsource);
 
     return ajTrue;
 }
@@ -1325,7 +1390,8 @@ AjBool ensAnalysisSetDisplaylabel(EnsPAnalysis analysis, AjPStr displaylabel)
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisSetIdentifier(EnsPAnalysis analysis, ajuint identifier)
+AjBool ensAnalysisSetIdentifier(EnsPAnalysis analysis,
+                                ajuint identifier)
 {
     if(!analysis)
         return ajFalse;
@@ -1350,14 +1416,15 @@ AjBool ensAnalysisSetIdentifier(EnsPAnalysis analysis, ajuint identifier)
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisSetModulename(EnsPAnalysis analysis, AjPStr modulename)
+AjBool ensAnalysisSetModulename(EnsPAnalysis analysis,
+                                AjPStr modulename)
 {
     if(!analysis)
         return ajFalse;
 
-    ajStrDel(&analysis->ModuleName);
+    ajStrDel(&analysis->Modulename);
 
-    analysis->ModuleName = ajStrNewRef(modulename);
+    analysis->Modulename = ajStrNewRef(modulename);
 
     return ajTrue;
 }
@@ -1383,9 +1450,9 @@ AjBool ensAnalysisSetModuleversion(EnsPAnalysis analysis,
     if(!analysis)
         return ajFalse;
 
-    ajStrDel(&analysis->ModuleVersion);
+    ajStrDel(&analysis->Moduleversion);
 
-    analysis->ModuleVersion = ajStrNewRef(moduleversion);
+    analysis->Moduleversion = ajStrNewRef(moduleversion);
 
     return ajTrue;
 }
@@ -1405,7 +1472,8 @@ AjBool ensAnalysisSetModuleversion(EnsPAnalysis analysis,
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisSetName(EnsPAnalysis analysis, AjPStr name)
+AjBool ensAnalysisSetName(EnsPAnalysis analysis,
+                          AjPStr name)
 {
     if(!analysis)
         return ajFalse;
@@ -1432,7 +1500,8 @@ AjBool ensAnalysisSetName(EnsPAnalysis analysis, AjPStr name)
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisSetParameters(EnsPAnalysis analysis, AjPStr parameters)
+AjBool ensAnalysisSetParameters(EnsPAnalysis analysis,
+                                AjPStr parameters)
 {
     if(!analysis)
         return ajFalse;
@@ -1459,14 +1528,15 @@ AjBool ensAnalysisSetParameters(EnsPAnalysis analysis, AjPStr parameters)
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisSetProgramfile(EnsPAnalysis analysis, AjPStr programfile)
+AjBool ensAnalysisSetProgramfile(EnsPAnalysis analysis,
+                                 AjPStr programfile)
 {
     if(!analysis)
         return ajFalse;
 
-    ajStrDel(&analysis->ProgramFile);
+    ajStrDel(&analysis->Programfile);
 
-    analysis->ProgramFile = ajStrNewRef(programfile);
+    analysis->Programfile = ajStrNewRef(programfile);
 
     return ajTrue;
 }
@@ -1486,14 +1556,15 @@ AjBool ensAnalysisSetProgramfile(EnsPAnalysis analysis, AjPStr programfile)
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisSetProgramname(EnsPAnalysis analysis, AjPStr programname)
+AjBool ensAnalysisSetProgramname(EnsPAnalysis analysis,
+                                 AjPStr programname)
 {
     if(!analysis)
         return ajFalse;
 
-    ajStrDel(&analysis->ProgramName);
+    ajStrDel(&analysis->Programname);
 
-    analysis->ProgramName = ajStrNewRef(programname);
+    analysis->Programname = ajStrNewRef(programname);
 
     return ajTrue;
 }
@@ -1519,63 +1590,9 @@ AjBool ensAnalysisSetProgramversion(EnsPAnalysis analysis,
     if(!analysis)
         return ajFalse;
 
-    ajStrDel(&analysis->ProgramVersion);
+    ajStrDel(&analysis->Programversion);
 
-    analysis->ProgramVersion = ajStrNewRef(programversion);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensAnalysisSetGfffeature *********************************************
-**
-** Set the GFF feature element of an Ensembl Analysis.
-**
-** @cc Bio::EnsEMBL::Analysis::gff_feature
-** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
-** @param [u] gfffeature [AjPStr] GFF feature
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensAnalysisSetGfffeature(EnsPAnalysis analysis, AjPStr gfffeature)
-{
-    if(!analysis)
-        return ajFalse;
-
-    ajStrDel(&analysis->GFFFeature);
-
-    analysis->GFFFeature = ajStrNewRef(gfffeature);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensAnalysisSetGffsource **********************************************
-**
-** Set the GFF source element of an Ensembl Analysis.
-**
-** @cc Bio::EnsEMBL::Analysis::gff_source
-** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
-** @param [u] gffsource [AjPStr] GFF source
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensAnalysisSetGffsource(EnsPAnalysis analysis, AjPStr gffsource)
-{
-    if(!analysis)
-        return ajFalse;
-
-    ajStrDel(&analysis->GFFSource);
-
-    analysis->GFFSource = ajStrNewRef(gffsource);
+    analysis->Programversion = ajStrNewRef(programversion);
 
     return ajTrue;
 }
@@ -1595,14 +1612,15 @@ AjBool ensAnalysisSetGffsource(EnsPAnalysis analysis, AjPStr gffsource)
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisSetWebdata(EnsPAnalysis analysis, AjPStr webdata)
+AjBool ensAnalysisSetWebdata(EnsPAnalysis analysis,
+                             AjPStr webdata)
 {
     if(!analysis)
         return ajFalse;
 
-    ajStrDel(&analysis->WebData);
+    ajStrDel(&analysis->Webdata);
 
-    analysis->WebData = ajStrNewRef(webdata);
+    analysis->Webdata = ajStrNewRef(webdata);
 
     return ajTrue;
 }
@@ -1615,6 +1633,7 @@ AjBool ensAnalysisSetWebdata(EnsPAnalysis analysis, AjPStr webdata)
 ** Functions for reporting of an Ensembl Analysis object.
 **
 ** @fdata [EnsPAnalysis]
+**
 ** @nam3rule Trace Report Ensembl Analysis elements to debug file.
 **
 ** @argrule Trace analysis [const EnsPAnalysis] Ensembl Analysis
@@ -1654,44 +1673,44 @@ AjBool ensAnalysisTrace(const EnsPAnalysis analysis, ajuint level)
             "%S  Use %u\n"
             "%S  Identifier %u\n"
             "%S  Adaptor %p\n"
-            "%S  CreationDate '%S'\n"
+            "%S  DateCreation '%S'\n"
             "%S  Name '%S'\n"
-            "%S  DatabaseName '%S'\n"
-            "%S  DatabaseVersion '%S'\n"
-            "%S  DatabaseFile '%S'\n"
-            "%S  ProgramName '%S'\n"
-            "%S  ProgramVersion '%S'\n"
-            "%S  ProgramFile '%S'\n"
+            "%S  Databasename '%S'\n"
+            "%S  Databaseversion '%S'\n"
+            "%S  Databasefile '%S'\n"
+            "%S  Programname '%S'\n"
+            "%S  Programversion '%S'\n"
+            "%S  Programfile '%S'\n"
             "%S  Parameters '%S'\n"
-            "%S  ModuleName '%S'\n"
-            "%S  ModuleVersion '%S'\n"
-            "%S  GFFSource '%S'\n"
-            "%S  GFFFeature '%S'\n"
+            "%S  Modulename '%S'\n"
+            "%S  Moduleversion '%S'\n"
+            "%S  Gffsource '%S'\n"
+            "%S  Gfffeature '%S'\n"
             "%S  Description %p\n"
-            "%S  DisplayLabel '%S'\n"
+            "%S  Displaylabel '%S'\n"
             "%S  Displayable '%B'\n"
-            "%S  WebData %p\n",
+            "%S  Webdata %p\n",
             indent, analysis,
             indent, analysis->Use,
             indent, analysis->Identifier,
             indent, analysis->Adaptor,
-            indent, analysis->CreationDate,
+            indent, analysis->DateCreation,
             indent, analysis->Name,
-            indent, analysis->DatabaseName,
-            indent, analysis->DatabaseVersion,
-            indent, analysis->DatabaseFile,
-            indent, analysis->ProgramName,
-            indent, analysis->ProgramVersion,
-            indent, analysis->ProgramFile,
+            indent, analysis->Databasename,
+            indent, analysis->Databaseversion,
+            indent, analysis->Databasefile,
+            indent, analysis->Programname,
+            indent, analysis->Programversion,
+            indent, analysis->Programfile,
             indent, analysis->Parameters,
-            indent, analysis->ModuleName,
-            indent, analysis->ModuleVersion,
-            indent, analysis->GFFSource,
-            indent, analysis->GFFFeature,
+            indent, analysis->Modulename,
+            indent, analysis->Moduleversion,
+            indent, analysis->Gffsource,
+            indent, analysis->Gfffeature,
             indent, analysis->Description,
-            indent, analysis->DisplayLabel,
+            indent, analysis->Displaylabel,
             indent, analysis->Displayable,
-            indent, analysis->WebData);
+            indent, analysis->Webdata);
 
     ajStrDel(&indent);
 
@@ -1701,19 +1720,172 @@ AjBool ensAnalysisTrace(const EnsPAnalysis analysis, ajuint level)
 
 
 
+/* @section calculate *********************************************************
+**
+** Functions for calculating values of an Ensembl Analysis object.
+**
+** @fdata [EnsPAnalysis]
+**
+** @nam3rule Calculate Calculate Ensembl Analysis values
+** @nam4rule Memsize Calculate the memory size in bytes
+**
+** @argrule * analysis [const EnsPAnalysis] Ensembl Analysis
+**
+** @valrule Memsize [size_t] Memory size in bytes or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensAnalysisCalculateMemsize ******************************************
+**
+** Get the memory size in bytes of an Ensembl Analysis.
+**
+** @param [r] analysis [const EnsPAnalysis] Ensembl Analysis
+**
+** @return [size_t] Memory size in bytes or 0
+** @@
+******************************************************************************/
+
+size_t ensAnalysisCalculateMemsize(const EnsPAnalysis analysis)
+{
+    size_t size = 0;
+
+    if(!analysis)
+        return 0;
+
+    size += sizeof (EnsOAnalysis);
+
+    if(analysis->DateCreation)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->DateCreation);
+    }
+
+    if(analysis->Name)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Name);
+    }
+
+    if(analysis->Databasename)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Databasename);
+    }
+
+    if(analysis->Databaseversion)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Databaseversion);
+    }
+
+    if(analysis->Databasefile)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Databasefile);
+    }
+
+    if(analysis->Programname)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Programname);
+    }
+
+    if(analysis->Programversion)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Programversion);
+    }
+
+    if(analysis->Programfile)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Programfile);
+    }
+
+    if(analysis->Parameters)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Parameters);
+    }
+
+    if(analysis->Modulename)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Modulename);
+    }
+
+    if(analysis->Moduleversion)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Moduleversion);
+    }
+
+    if(analysis->Gffsource)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Gffsource);
+    }
+
+    if(analysis->Gfffeature)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Gfffeature);
+    }
+
+    if(analysis->Description)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Description);
+    }
+
+    if(analysis->Displaylabel)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Displaylabel);
+    }
+
+    if(analysis->Webdata)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(analysis->Webdata);
+    }
+
+    return size;
+}
+
+
+
+
 /* @section testing properties ************************************************
 **
 ** @fdata [EnsPAnalysis]
-** @fnote None
 **
-** @nam3rule Is Test Analysis property
-** @nam4rule IsDatabase Analysis is based on a database
-**
-** @suffix
+** @nam3rule Is Test an Ensembl Analysis property
+** @nam4rule Database Ensembl Analysis is based on a database
 **
 ** @argrule Is analysis [const EnsPAnalysis] Ensembl Analysis
 **
-** @valrule * [AjBool] Analysis boolean property
+** @valrule * [AjBool] Ensembl Analysis boolean property
 **
 ** @fcategory use
 ******************************************************************************/
@@ -1738,7 +1910,7 @@ AjBool ensAnalysisIsDatabase(const EnsPAnalysis analysis)
     if(!analysis)
         return ajFalse;
 
-    if(analysis->DatabaseName && ajStrGetLen(analysis->DatabaseName))
+    if(analysis->Databasename && ajStrGetLen(analysis->Databasename))
         return ajTrue;
     else
         return ajFalse;
@@ -1749,16 +1921,16 @@ AjBool ensAnalysisIsDatabase(const EnsPAnalysis analysis)
 
 /* @section comparison ********************************************************
 **
-** Functions for comparing Ensembl Analyses
+** Functions for comparing Ensembl Analysis objects
 **
 ** @fdata [EnsPAnalysis]
 **
-** @nam3rule  Match Compare two Ensembl Analyses.
+** @nam3rule  Match Compare two Ensembl Analysis objects
 **
 ** @argrule * analysis1 [const EnsPAnalysis] Ensembl Analysis
 ** @argrule * analysis2 [const EnsPAnalysis] Ensembl Analysis
 **
-** @valrule * [AjBool] True on success
+** @valrule * [AjBool] ajTrue if the Ensembl Analysis objects are equal
 **
 ** @fcategory use
 ******************************************************************************/
@@ -1768,13 +1940,13 @@ AjBool ensAnalysisIsDatabase(const EnsPAnalysis analysis)
 
 /* @func ensAnalysisMatch *****************************************************
 **
-** Test for matching two Ensembl Analyses.
+** Test for matching two Ensembl Analysis objects.
 **
 ** @cc Bio::EnsEMBL::Analysis::compare
 ** @param [r] analysis1 [const EnsPAnalysis] First Ensembl Analysis
 ** @param [r] analysis2 [const EnsPAnalysis] Second Ensembl Analysis
 **
-** @return [AjBool] ajTrue if the Ensembl Analyses are equal
+** @return [AjBool] ajTrue if the Ensembl Analysis objects are equal
 ** @@
 ** The comparison is based on an initial pointer equality test and if that
 ** fails, a case-insensitive string comparison of the name and version elements
@@ -1800,42 +1972,52 @@ AjBool ensAnalysisMatch(const EnsPAnalysis analysis1,
     if(analysis1 == analysis2)
         return ajTrue;
 
-    if(!ajStrMatchCaseS(analysis1->Name, analysis2->Name))
+    if(!ajStrMatchCaseS(analysis1->Name,
+                        analysis2->Name))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(analysis1->DatabaseName, analysis2->DatabaseName))
+    if(!ajStrMatchCaseS(analysis1->Databasename,
+                        analysis2->Databasename))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(analysis1->DatabaseVersion,
-                        analysis2->DatabaseVersion))
+    if(!ajStrMatchCaseS(analysis1->Databaseversion,
+                        analysis2->Databaseversion))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(analysis1->DatabaseFile, analysis2->DatabaseFile))
+    if(!ajStrMatchCaseS(analysis1->Databasefile,
+                        analysis2->Databasefile))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(analysis1->ProgramName, analysis2->ProgramName))
+    if(!ajStrMatchCaseS(analysis1->Programname,
+                        analysis2->Programname))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(analysis1->ProgramVersion,
-                        analysis2->ProgramVersion))
+    if(!ajStrMatchCaseS(analysis1->Programversion,
+                        analysis2->Programversion))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(analysis1->ProgramFile, analysis2->ProgramFile))
+    if(!ajStrMatchCaseS(analysis1->Programfile,
+                        analysis2->Programfile))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(analysis1->Parameters, analysis2->Parameters))
+    if(!ajStrMatchCaseS(analysis1->Parameters,
+                        analysis2->Parameters))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(analysis1->ModuleName, analysis2->ModuleName))
+    if(!ajStrMatchCaseS(analysis1->Modulename,
+                        analysis2->Modulename))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(analysis1->ModuleVersion, analysis2->ModuleVersion))
+    if(!ajStrMatchCaseS(analysis1->Moduleversion,
+                        analysis2->Moduleversion))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(analysis1->GFFSource, analysis2->GFFSource))
+    if(!ajStrMatchCaseS(analysis1->Gffsource,
+                        analysis2->Gffsource))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(analysis1->GFFFeature, analysis2->GFFFeature))
+    if(!ajStrMatchCaseS(analysis1->Gfffeature,
+                        analysis2->Gfffeature))
         return ajFalse;
 
     return ajTrue;
@@ -1844,83 +2026,42 @@ AjBool ensAnalysisMatch(const EnsPAnalysis analysis1,
 
 
 
-/* @datasection [EnsPAnalysisadaptor] Analysis Adaptor ************************
+/* @datasection [EnsPAnalysisadaptor] Ensembl Analysis Adaptor ****************
 **
-** Functions for manipulating Ensembl Analysis Adaptor objects
+** @nam2rule Analysisadaptor Functions for manipulating
+** Ensembl Analysis Adaptor objects
 **
-** @cc Bio::EnsEMBL::DBSQL::AnalysisAdaptor CVS Revision: 1.66
-**
-** @nam2rule Analysisadaptor
+** @cc Bio::EnsEMBL::DBSQL::AnalysisAdaptor
+** @cc CVS Revision: 1.72
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
-static const char *analysisadaptorTables[] =
-{
-    "analysis",
-    "analysis_description",
-    NULL
-};
-
-static const char *analysisadaptorColumns[] =
-{
-    "analysis.analysis_id",
-    "analysis.created",
-    "analysis.logic_name",
-    "analysis.db",
-    "analysis.db_version",
-    "analysis.db_file",
-    "analysis.program",
-    "analysis.program_version",
-    "analysis.program_file",
-    "analysis.parameters",
-    "analysis.module",
-    "analysis.module_version",
-    "analysis.gff_source",
-    "analysis.gff_feature",
-    "analysis_description.description",
-    "analysis_description.display_label",
-    "analysis_description.displayable",
-    "analysis_description.web_data",
-    NULL
-};
-
-static EnsOBaseadaptorLeftJoin analysisadaptorLeftJoin[] =
-{
-    {
-        "analysis_description",
-        "analysis.analysis_id = analysis_description.analysis_id"
-    },
-    {NULL, NULL}
-};
-
-static const char *analysisadaptorDefaultCondition = NULL;
-
-static const char *analysisadaptorFinalCondition = NULL;
 
 
 
-
-/* @funcstatic analysisadaptorFetchAllBySQL ***********************************
+/* @funcstatic analysisadaptorFetchAllbyStatement *****************************
 **
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Analysis objects.
 **
 ** @cc Bio::EnsEMBL::DBSQL::AnalysisAdaptor::_objFromHashref
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
-** @param [u] analyses [AjPList] AJAX List of Ensembl Analyses
+** @param [u] analyses [AjPList] AJAX List of Ensembl Analysis objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool analysisadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
-                                           const AjPStr statement,
-                                           EnsPAssemblymapper am,
-                                           EnsPSlice slice,
-                                           AjPList analyses)
+static AjBool analysisadaptorFetchAllbyStatement(
+    EnsPDatabaseadaptor dba,
+    const AjPStr statement,
+    EnsPAssemblymapper am,
+    EnsPSlice slice,
+    AjPList analyses)
 {
     ajuint identifier = 0;
 
@@ -1950,8 +2091,8 @@ static AjBool analysisadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
 
-    if(ajDebugTest("analysisadaptorFetchAllBySQL"))
-        ajDebug("analysisadaptorFetchAllBySQL\n"
+    if(ajDebugTest("analysisadaptorFetchAllbyStatement"))
+        ajDebug("analysisadaptorFetchAllbyStatement\n"
                 "  dba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
@@ -2020,27 +2161,27 @@ static AjBool analysisadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
         ajSqlcolumnToBool(sqlr, &displayable);
         ajSqlcolumnToStr(sqlr, &webdata);
 
-        analysis = ensAnalysisNewData(aa,
-                                      identifier,
-                                      cdate,
-                                      name,
-                                      databasename,
-                                      databaseversion,
-                                      databasefile,
-                                      programname,
-                                      programversion,
-                                      programfile,
-                                      parameters,
-                                      modulename,
-                                      moduleversion,
-                                      gffsource,
-                                      gfffeature,
-                                      description,
-                                      displaylabel,
-                                      displayable,
-                                      webdata);
+        analysis = ensAnalysisNewIni(aa,
+                                     identifier,
+                                     cdate,
+                                     name,
+                                     databasename,
+                                     databaseversion,
+                                     databasefile,
+                                     programname,
+                                     programversion,
+                                     programfile,
+                                     parameters,
+                                     modulename,
+                                     moduleversion,
+                                     gffsource,
+                                     gfffeature,
+                                     description,
+                                     displaylabel,
+                                     webdata,
+                                     displayable);
 
-        ajListPushAppend(analyses, (void *) analysis);
+        ajListPushAppend(analyses, (void*) analysis);
 
         ajStrDel(&cdate);
         ajStrDel(&name);
@@ -2070,253 +2211,21 @@ static AjBool analysisadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 
 
 
-/* @funcstatic analysisadaptorCacheInsert *************************************
-**
-** Insert an Ensembl Analysis into the Analysis Adaptor-internal cache.
-** If an Analysis with the same name element is already present in the
-** adaptor cache, the Analysis is deleted and a pointer to the cached Analysis
-** is returned.
-**
-** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
-** @param [u] Panalysis [EnsPAnalysis*] Ensembl Analysis address
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-static AjBool analysisadaptorCacheInsert(EnsPAnalysisadaptor aa,
-                                         EnsPAnalysis *Panalysis)
-{
-    ajuint *Pidentifier = NULL;
-
-    EnsPAnalysis analysis1 = NULL;
-    EnsPAnalysis analysis2 = NULL;
-
-    if(!aa)
-        return ajFalse;
-
-    if(!aa->CacheByIdentifier)
-        return ajFalse;
-
-    if(!aa->CacheByName)
-        return ajFalse;
-
-    if(!Panalysis)
-        return ajFalse;
-
-    if(!*Panalysis)
-        return ajFalse;
-
-    /* Search the identifer cache. */
-
-    analysis1 = (EnsPAnalysis) ajTableFetch(
-        aa->CacheByIdentifier,
-        (const void *) &((*Panalysis)->Identifier));
-
-    /* Search the name cache. */
-
-    analysis2 = (EnsPAnalysis) ajTableFetch(
-        aa->CacheByName,
-        (const void *) (*Panalysis)->Name);
-
-    if((!analysis1) && (!analysis2))
-    {
-        /* Insert into the identifier cache. */
-
-        AJNEW0(Pidentifier);
-
-        *Pidentifier = (*Panalysis)->Identifier;
-
-        ajTablePut(aa->CacheByIdentifier,
-                   (void *) Pidentifier,
-                   (void *) ensAnalysisNewRef(*Panalysis));
-
-        /* Insert into the name cache. */
-
-        ajTablePut(aa->CacheByName,
-                   (void *) ajStrNewS((*Panalysis)->Name),
-                   (void *) ensAnalysisNewRef(*Panalysis));
-    }
-
-    if(analysis1 && analysis2 && (analysis1 == analysis2))
-    {
-        ajDebug("analysisadaptorCacheInsert replaced Analysis %p with "
-                "one already cached %p.\n",
-                *Panalysis, analysis1);
-
-        ensAnalysisDel(Panalysis);
-
-        ensAnalysisNewRef(analysis1);
-
-        Panalysis = &analysis1;
-    }
-
-    if(analysis1 && analysis2 && (analysis1 != analysis2))
-        ajDebug("analysisadaptorCacheInsert detected Analyses in the "
-                "identifier and name cache with identical names "
-                "('%S' and '%S') but different addresses (%p and %p).\n",
-                analysis1->Name, analysis2->Name, analysis1, analysis2);
-
-    if(analysis1 && (!analysis2))
-        ajDebug("analysisadaptorCacheInsert detected an Ensembl Analysis "
-                "in the identifier, but not in the name cache.\n");
-
-    if((!analysis1) && analysis2)
-        ajDebug("analysisadaptorCacheInsert detected an Ensembl Analysis "
-                "in the name, but not in the identifier cache.\n");
-
-    return ajTrue;
-}
-
-
-
-
-#if AJFALSE
-/* @funcstatic analysisadaptorCacheRemove *************************************
-**
-** Remove an Ensembl Analysis from the Analysis Adaptor-internal cache.
-**
-** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
-** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-static AjBool analysisadaptorCacheRemove(EnsPAnalysisadaptor aa,
-                                         EnsPAnalysis analysis)
-{
-    ajuint *Pidentifier = NULL;
-
-    AjPStr key = NULL;
-
-    EnsPAnalysis analysis1 = NULL;
-    EnsPAnalysis analysis2 = NULL;
-
-    if(!aa)
-        return ajFalse;
-
-    if(!analysis)
-        return ajFalse;
-
-    /* Remove the table nodes. */
-
-    analysis1 = (EnsPAnalysis)
-        ajTableRemoveKey(aa->CacheByIdentifier,
-                         (const void *) &analysis->Identifier,
-                         (void **) &Pidentifier);
-
-    analysis2 = (EnsPAnalysis)
-        ajTableRemoveKey(aa->CacheByName,
-                         (const void *) analysis->Name,
-                         (void **) &key);
-
-    if(analysis1 && (!analysis2))
-        ajWarn("analysisadaptorCacheRemove could remove Analysis with "
-               "identifier %u and name '%S' only from the identifier cache.\n",
-               analysis->Identifier,
-               analysis->Name);
-
-    if((!analysis1) && analysis2)
-        ajWarn("analysisadaptorCacheRemove could remove Analysis with "
-               "identifier %u and name '%S' only from the name cache.\n",
-               analysis->Identifier,
-               analysis->Name);
-
-    /* Delete the keys. */
-
-    AJFREE(Pidentifier);
-
-    ajStrDel(&key);
-
-    /* Delete (or at least de-reference) the Ensembl Analyses. */
-
-    ensAnalysisDel(&analysis1);
-    ensAnalysisDel(&analysis2);
-
-    return ajTrue;
-}
-
-#endif
-
-
-
-
-/* @funcstatic analysisadaptorCacheInit ***************************************
-**
-** Initialise the internal Analysis cache of an Ensembl Analysis Adaptor.
-**
-** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-static AjBool analysisadaptorCacheInit(EnsPAnalysisadaptor aa)
-{
-    AjPList analyses = NULL;
-
-    EnsPAnalysis analysis = NULL;
-
-    if(ajDebugTest("analysisadaptorCacheInit"))
-        ajDebug("analysisadaptorCacheInit\n"
-                "  aa %p\n",
-                aa);
-
-    if(!aa)
-        return ajFalse;
-
-    if(aa->CacheByIdentifier)
-        return ajFalse;
-    else
-        aa->CacheByIdentifier =
-            ajTableNewFunctionLen(0, ensTableCmpUint, ensTableHashUint);
-
-    if(aa->CacheByName)
-        return ajFalse;
-    else
-        aa->CacheByName = ajTablestrNewCaseLen(0);
-
-    analyses = ajListNew();
-
-    ensBaseadaptorGenericFetch(aa->Adaptor,
-                               (const AjPStr) NULL,
-                               (EnsPAssemblymapper) NULL,
-                               (EnsPSlice) NULL,
-                               analyses);
-
-    while(ajListPop(analyses, (void **) &analysis))
-    {
-        analysisadaptorCacheInsert(aa, &analysis);
-
-        /* Both caches hold internal references to the Analysis objects. */
-
-        ensAnalysisDel(&analysis);
-    }
-
-    ajListFree(&analyses);
-
-    return ajTrue;
-}
-
-
-
-
 /* @section constructors ******************************************************
 **
 ** All constructors return a new Ensembl Analysis Adaptor by pointer.
 ** It is the responsibility of the user to first destroy any previous
-** Analysis Adaptor. The target pointer does not need to be initialised to
-** NULL, but it is good programming practice to do so anyway.
+** Ensembl Analysis Adaptor.
+** The target pointer does not need to be initialised to NULL, but it is good
+** programming practice to do so anyway.
 **
 ** @fdata [EnsPAnalysisadaptor]
-** @fnote None
 **
 ** @nam3rule New Constructor
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @valrule * [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @valrule * [EnsPAnalysisadaptor] Ensembl Analysis Adaptor or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -2342,7 +2251,7 @@ static AjBool analysisadaptorCacheInit(EnsPAnalysisadaptor aa)
 ** @cc Bio::EnsEMBL::DBSQL::AnalysisAdaptor::new
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @return [EnsPAnalysisadaptor] Ensembl Analyis Adaptor or NULL
+** @return [EnsPAnalysisadaptor] Ensembl Analysis Adaptor or NULL
 ** @@
 ******************************************************************************/
 
@@ -2365,19 +2274,21 @@ EnsPAnalysisadaptor ensAnalysisadaptorNew(
         dba,
         analysisadaptorTables,
         analysisadaptorColumns,
-        analysisadaptorLeftJoin,
-        analysisadaptorDefaultCondition,
-        analysisadaptorFinalCondition,
-        analysisadaptorFetchAllBySQL);
+        analysisadaptorLeftjoin,
+        (const char*) NULL,
+        (const char*) NULL,
+        analysisadaptorFetchAllbyStatement);
 
     /*
     ** NOTE: The cache cannot be initialised here because the
-    ** analysisadaptorCacheInit function calls ensBaseadaptorGenericFetch,
-    ** which calls analysisadaptorFetchAllBySQL, which calls
-    ** ensRegistryGetAnalysisadaptor. At that point, however, the Analysis
-    ** Adaptor has not been stored in the Registry. Therefore, each
-    ** ensAnalysisadaptorFetch function has to test the presence of the
-    ** adaptor-internal cache and eventually initialise before accessing it.
+    ** analysisadaptorCacheInit function calls
+    ** ensBaseadaptorFetchAllbyConstraint,
+    ** which calls analysisadaptorFetchAllbyStatement, which calls
+    ** ensRegistryGetAnalysisadaptor. At that point, however,
+    ** the Ensembl Analysis Adaptor has not been stored in the Registry.
+    ** Therefore, each ensAnalysisadaptorFetch function has to test the
+    ** presence of the adaptor-internal cache and eventually initialise
+    ** before accessing it.
     **
     **  analysisadaptorCacheInit(aa);
     */
@@ -2388,11 +2299,263 @@ EnsPAnalysisadaptor ensAnalysisadaptorNew(
 
 
 
+/* @section cache *************************************************************
+**
+** Functions for maintaining the Ensembl Analysis Adaptor-internal cache of
+** Ensembl Analysis objects.
+**
+** @fdata [EnsPAnalysisadaptor]
+**
+** @nam3rule Cache Process an Ensembl Analysis Adaptor-internal cache
+** @nam4rule Clear Clear the Ensembl Analysis Adaptor-internal cache
+**
+** @argrule * aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+**
+** @valrule * [AjBool] True on success, ajFalse otherwise
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @funcstatic analysisadaptorCacheInit ***************************************
+**
+** Initialise the internal Ensembl Analysis cache of an
+** Ensembl Analysis Adaptor.
+**
+** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool analysisadaptorCacheInit(EnsPAnalysisadaptor aa)
+{
+    AjPList analyses = NULL;
+
+    EnsPAnalysis analysis = NULL;
+
+    if(ajDebugTest("analysisadaptorCacheInit"))
+        ajDebug("analysisadaptorCacheInit\n"
+                "  aa %p\n",
+                aa);
+
+    if(!aa)
+        return ajFalse;
+
+    if(aa->CacheByIdentifier)
+        return ajFalse;
+    else
+        aa->CacheByIdentifier = ensTableuintNewLen(0);
+
+    if(aa->CacheByName)
+        return ajFalse;
+    else
+        aa->CacheByName = ensTablestrNewLen(0);
+
+    analyses = ajListNew();
+
+    ensBaseadaptorFetchAllbyConstraint(aa->Adaptor,
+                                       (const AjPStr) NULL,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       analyses);
+
+    while(ajListPop(analyses, (void**) &analysis))
+    {
+        analysisadaptorCacheInsert(aa, &analysis);
+
+        /*
+        ** Both caches hold internal references to the
+        ** Ensembl Analysis objects.
+        */
+
+        ensAnalysisDel(&analysis);
+    }
+
+    ajListFree(&analyses);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic analysisadaptorCacheInsert *************************************
+**
+** Insert an Ensembl Analysis into the Ensembl Analysis Adaptor-internal cache.
+** If an Ensembl Analysis with the same name element is already present in the
+** Ensembl Analysis Adaptor-internal cache, the Ensembl Analysis is deleted and
+** a pointer to the cached Ensembl Analysis is returned.
+**
+** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @param [u] Panalysis [EnsPAnalysis*] Ensembl Analysis address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool analysisadaptorCacheInsert(EnsPAnalysisadaptor aa,
+                                         EnsPAnalysis* Panalysis)
+{
+    ajuint* Pidentifier = NULL;
+
+    EnsPAnalysis analysis1 = NULL;
+    EnsPAnalysis analysis2 = NULL;
+
+    if(!aa)
+        return ajFalse;
+
+    if(!aa->CacheByIdentifier)
+        return ajFalse;
+
+    if(!aa->CacheByName)
+        return ajFalse;
+
+    if(!Panalysis)
+        return ajFalse;
+
+    if(!*Panalysis)
+        return ajFalse;
+
+    /* Search the identifer cache. */
+
+    analysis1 = (EnsPAnalysis) ajTableFetchmodV(
+        aa->CacheByIdentifier,
+        (const void*) &((*Panalysis)->Identifier));
+
+    /* Search the name cache. */
+
+    analysis2 = (EnsPAnalysis) ajTableFetchmodV(
+        aa->CacheByName,
+        (const void*) (*Panalysis)->Name);
+
+    if((!analysis1) && (!analysis2))
+    {
+        /* Insert into the identifier cache. */
+
+        AJNEW0(Pidentifier);
+
+        *Pidentifier = (*Panalysis)->Identifier;
+
+        ajTablePut(aa->CacheByIdentifier,
+                   (void*) Pidentifier,
+                   (void*) ensAnalysisNewRef(*Panalysis));
+
+        /* Insert into the name cache. */
+
+        ajTablePut(aa->CacheByName,
+                   (void*) ajStrNewS((*Panalysis)->Name),
+                   (void*) ensAnalysisNewRef(*Panalysis));
+    }
+
+    if(analysis1 && analysis2 && (analysis1 == analysis2))
+    {
+        ajDebug("analysisadaptorCacheInsert replaced Ensembl Analysis %p "
+                "with one already cached %p.\n",
+                *Panalysis, analysis1);
+
+        ensAnalysisDel(Panalysis);
+
+        ensAnalysisNewRef(analysis1);
+
+        Panalysis = &analysis1;
+    }
+
+    if(analysis1 && analysis2 && (analysis1 != analysis2))
+        ajDebug("analysisadaptorCacheInsert detected Ensembl Analysis objects "
+                "in the identifier and name cache with identical names "
+                "('%S' and '%S') but different addresses (%p and %p).\n",
+                analysis1->Name, analysis2->Name, analysis1, analysis2);
+
+    if(analysis1 && (!analysis2))
+        ajDebug("analysisadaptorCacheInsert detected an Ensembl Analysis "
+                "in the identifier, but not in the name cache.\n");
+
+    if((!analysis1) && analysis2)
+        ajDebug("analysisadaptorCacheInsert detected an Ensembl Analysis "
+                "in the name, but not in the identifier cache.\n");
+
+    return ajTrue;
+}
+
+
+
+
+#if AJFALSE
+/* @funcstatic analysisadaptorCacheRemove *************************************
+**
+** Remove an Ensembl Analysis from the Ensembl Analysis Adaptor-internal cache.
+**
+** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool analysisadaptorCacheRemove(EnsPAnalysisadaptor aa,
+                                         EnsPAnalysis analysis)
+{
+    ajuint* Pidentifier = NULL;
+
+    AjPStr key = NULL;
+
+    EnsPAnalysis analysis1 = NULL;
+    EnsPAnalysis analysis2 = NULL;
+
+    if(!aa)
+        return ajFalse;
+
+    if(!analysis)
+        return ajFalse;
+
+    /* Remove the table nodes. */
+
+    analysis1 = (EnsPAnalysis)
+        ajTableRemoveKey(aa->CacheByIdentifier,
+                         (const void*) &analysis->Identifier,
+                         (void**) &Pidentifier);
+
+    analysis2 = (EnsPAnalysis)
+        ajTableRemoveKey(aa->CacheByName,
+                         (const void*) analysis->Name,
+                         (void**) &key);
+
+    if(analysis1 && (!analysis2))
+        ajWarn("analysisadaptorCacheRemove could remove Ensembl Analysis with "
+               "identifier %u and name '%S' only from the identifier cache.\n",
+               analysis->Identifier,
+               analysis->Name);
+
+    if((!analysis1) && analysis2)
+        ajWarn("analysisadaptorCacheRemove could remove Ensembl Analysis with "
+               "identifier %u and name '%S' only from the name cache.\n",
+               analysis->Identifier,
+               analysis->Name);
+
+    AJFREE(Pidentifier);
+
+    ajStrDel(&key);
+
+    ensAnalysisDel(&analysis1);
+    ensAnalysisDel(&analysis2);
+
+    return ajTrue;
+}
+
+#endif
+
+
+
+
 /* @funcstatic analysisadaptorCacheClearIdentifier ****************************
 **
-** An ajTableMapDel 'apply' function to clear the Ensembl Analysis
-** Adaptor-internal Analysis cache. This function deletes the unsigned integer
-** identifier key and the Ensembl Analysis value data.
+** An ajTableMapDel "apply" function to clear the Ensembl Analysis
+** Adaptor-internal Ensembl Analysis cache.
+** This function deletes the AJAX unsigned integer (identifier) key and
+** the Ensembl Analysis value data.
 **
 ** @param [u] key [void**] AJAX unsigned integer key data address
 ** @param [u] value [void**] Ensembl Analysis value data address
@@ -2403,9 +2566,9 @@ EnsPAnalysisadaptor ensAnalysisadaptorNew(
 ** @@
 ******************************************************************************/
 
-static void analysisadaptorCacheClearIdentifier(void **key,
-                                                void **value,
-                                                void *cl)
+static void analysisadaptorCacheClearIdentifier(void** key,
+                                                void** value,
+                                                void* cl)
 {
     if(!key)
         return;
@@ -2423,7 +2586,10 @@ static void analysisadaptorCacheClearIdentifier(void **key,
 
     AJFREE(*key);
 
-    ensAnalysisDel((EnsPAnalysis *) value);
+    ensAnalysisDel((EnsPAnalysis*) value);
+
+    *key   = NULL;
+    *value = NULL;
 
     return;
 }
@@ -2433,9 +2599,10 @@ static void analysisadaptorCacheClearIdentifier(void **key,
 
 /* @funcstatic analysisadaptorCacheClearName **********************************
 **
-** An ajTableMapDel 'apply' function to clear the Ensembl Analysis
-** Adaptor-internal Analysis cache. This function deletes the
-** AJAX String key data and the Ensembl Analysis value data.
+** An ajTableMapDel "apply" function to clear the Ensembl Analysis
+** Adaptor-internal Ensembl Analysis cache.
+** This function deletes the AJAX String (name) key data and
+** the Ensembl Analysis value data.
 **
 ** @param [u] key [void**] AJAX String key data address
 ** @param [u] value [void**] Ensembl Analysis value data address
@@ -2446,9 +2613,9 @@ static void analysisadaptorCacheClearIdentifier(void **key,
 ** @@
 ******************************************************************************/
 
-static void analysisadaptorCacheClearName(void **key,
-                                          void **value,
-                                          void *cl)
+static void analysisadaptorCacheClearName(void** key,
+                                          void** value,
+                                          void* cl)
 {
     if(!key)
         return;
@@ -2464,9 +2631,12 @@ static void analysisadaptorCacheClearName(void **key,
 
     (void) cl;
 
-    ajStrDel((AjPStr *) key);
+    ajStrDel((AjPStr*) key);
 
-    ensAnalysisDel((EnsPAnalysis *) value);
+    ensAnalysisDel((EnsPAnalysis*) value);
+
+    *key   = NULL;
+    *value = NULL;
 
     return;
 }
@@ -2474,9 +2644,10 @@ static void analysisadaptorCacheClearName(void **key,
 
 
 
-/* @funcstatic analysisadaptorCacheExit ***************************************
+/* @func ensAnalysisadaptorCacheClear *****************************************
 **
-** Clears the internal Analysis cache of an Ensembl Analysis Adaptor.
+** Clear the Ensembl Analysis Adaptor-internal cache of
+** Ensembl Analysis objects.
 **
 ** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
 **
@@ -2484,7 +2655,7 @@ static void analysisadaptorCacheClearName(void **key,
 ** @@
 ******************************************************************************/
 
-static AjBool analysisadaptorCacheExit(EnsPAnalysisadaptor aa)
+AjBool ensAnalysisadaptorCacheClear(EnsPAnalysisadaptor aa)
 {
     if(!aa)
         return ajFalse;
@@ -2514,15 +2685,14 @@ static AjBool analysisadaptorCacheExit(EnsPAnalysisadaptor aa)
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Analysis Adaptor.
+** memory allocated for an Ensembl Analysis Adaptor object.
 **
 ** @fdata [EnsPAnalysisadaptor]
-** @fnote None
 **
 ** @nam3rule Del Destroy (free) an Ensembl Analysis Adaptor object.
 **
-** @argrule * Paa [EnsPAnalysisadaptor*] Ensembl Analysis Adaptor
-**                                       object address
+** @argrule * Paa [EnsPAnalysisadaptor*]
+** Ensembl Analysis Adaptor object address
 **
 ** @valrule * [void]
 **
@@ -2532,9 +2702,10 @@ static AjBool analysisadaptorCacheExit(EnsPAnalysisadaptor aa)
 
 
 
-/* @func ensAnalysisadaptorDel *********************************************
+/* @func ensAnalysisadaptorDel ************************************************
 **
 ** Default destructor for an Ensembl Analysis Adaptor.
+**
 ** This function also clears the internal caches.
 **
 ** Ensembl Object Adaptors are singleton objects that are registered in the
@@ -2543,7 +2714,8 @@ static AjBool analysisadaptorCacheExit(EnsPAnalysisadaptor aa)
 ** destroyed directly. Upon exit, the Ensembl Registry will call this function
 ** if required.
 **
-** @param [d] Paa [EnsPAnalysisadaptor*] Ensembl Analysis Adaptor address
+** @param [d] Paa [EnsPAnalysisadaptor*] Ensembl Analysis Adaptor
+** object address
 **
 ** @return [void]
 ** @@
@@ -2561,7 +2733,7 @@ void ensAnalysisadaptorDel(EnsPAnalysisadaptor* Paa)
 
     pthis = *Paa;
 
-    analysisadaptorCacheExit(pthis);
+    ensAnalysisadaptorCacheClear(pthis);
 
     ensBaseadaptorDel(&pthis->Adaptor);
 
@@ -2580,14 +2752,16 @@ void ensAnalysisadaptorDel(EnsPAnalysisadaptor* Paa)
 ** Functions for returning elements of an Ensembl Analysis Adaptor object.
 **
 ** @fdata [EnsPAnalysisadaptor]
-** @fnote None
 **
 ** @nam3rule Get Return Ensembl Analysis Adaptor attribute(s)
-** @nam4rule GetAdaptor Return the Ensembl Base Adaptor
+** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
+** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 **
 ** @argrule * aa [const EnsPAnalysisadaptor] Ensembl Analysis Adaptor
 **
-** @valrule Adaptor [EnsPBaseadaptor] Ensembl Base Adaptor
+** @valrule Baseadaptor [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** or NULL
 **
 ** @fcategory use
 ******************************************************************************/
@@ -2601,7 +2775,7 @@ void ensAnalysisadaptorDel(EnsPAnalysisadaptor* Paa)
 **
 ** @param [r] aa [const EnsPAnalysisadaptor] Ensembl Analysis Adaptor
 **
-** @return [EnsPBaseadaptor] Ensembl Base Adaptor
+** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
 ** @@
 ******************************************************************************/
 
@@ -2623,7 +2797,7 @@ EnsPBaseadaptor ensAnalysisadaptorGetBaseadaptor(
 **
 ** @param [r] aa [const EnsPAnalysisadaptor] Ensembl Analysis Adaptor
 **
-** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
 ** @@
 ******************************************************************************/
 
@@ -2641,21 +2815,28 @@ EnsPDatabaseadaptor ensAnalysisadaptorGetDatabaseadaptor(
 
 /* @section object retrieval **************************************************
 **
-** Functions for retrieving Ensembl Analysis objects from an
-** Ensembl Core database.
+** Functions for fetching Ensembl Analysis objects from an
+** Ensembl SQL database.
 **
 ** @fdata [EnsPAnalysisadaptor]
-** @fnote None
 **
-** @nam3rule Fetch Retrieve Ensembl Analysis object(s)
-** @nam4rule FetchAll Retrieve all Ensembl Analysis objects
-** @nam5rule FetchAllBy Retrieve all Ensembl Analysis objects
-**                      matching a criterion
-** @nam4rule FetchBy Retrieve one Ensembl Analysis object
-**                   matching a criterion
+** @nam3rule Fetch Fetch Ensembl Analysis object(s)
+** @nam4rule All Fetch all Ensembl Analysis objects
+** @nam4rule Allby Fetch all Ensembl Analysis objects matching a criterion
+** @nam5rule Featureclass Fetch all by Feature class
+** @nam4rule By Fetch one Ensembl Analysis object matching a criterion
+** @nam5rule Identifier Fetch by an SQL database internal identifier
+** @nam5rule Name Fetch by a name
 **
 ** @argrule * aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
-** @argrule FetchAll [AjPList] AJAX List of Ensembl Analysis objects
+** @argrule All analyses [AjPList] AJAX List of Ensembl Analysis objects
+** @argrule AllbyFeatureclass class [const AjPStr] Ensembl Feature class
+** @argrule AllbyFeatureclass analyses [AjPList]
+** AJAX List of Ensembl Analysis objects
+** @argrule ByIdentifier identifier [ajuint] SQL database-internal identifier
+** @argrule ByIdentifier Panalysis [EnsPAnalysis*] Ensembl Analysis address
+** @argrule ByName name [const AjPStr] Ensembl Analysis name
+** @argrule ByName Panalysis [EnsPAnalysis*] Ensembl Analysis address
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -2667,20 +2848,20 @@ EnsPDatabaseadaptor ensAnalysisadaptorGetDatabaseadaptor(
 
 /* @funcstatic analysisadaptorFetchAll ****************************************
 **
-** An ajTableMap 'apply' function to return all Analysis objects from the
-** Ensembl Analysis Adaptor-internal cache.
+** An ajTableMap "apply" function to return all Ensembl Analysis objects from
+** the Ensembl Analysis Adaptor-internal cache.
 **
-** @param [u] key [const void *] AJAX unsigned integer key data address
+** @param [u] key [const void*] AJAX unsigned integer key data address
 ** @param [u] value [void**] Ensembl Analysis value data address
-** @param [u] cl [void*] AJAX List of Ensembl Analysis objects,
-**                       passed in via ajTableMap
+** @param [u] cl [void*]
+** AJAX List of Ensembl Analysis objects, passed in via ajTableMap
 ** @see ajTableMap
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void analysisadaptorFetchAll(const void *key, void **value, void *cl)
+static void analysisadaptorFetchAll(const void* key, void** value, void* cl)
 {
     if(!key)
         return;
@@ -2695,7 +2876,7 @@ static void analysisadaptorFetchAll(const void *key, void **value, void *cl)
         return;
 
     ajListPushAppend((AjPList) cl,
-                     (void *) ensAnalysisNewRef(*((EnsPAnalysis *) value)));
+                     (void*) ensAnalysisNewRef(*((EnsPAnalysis*) value)));
 
     return;
 }
@@ -2705,14 +2886,14 @@ static void analysisadaptorFetchAll(const void *key, void **value, void *cl)
 
 /* @func ensAnalysisadaptorFetchAll *******************************************
 **
-** Fetch all Ensembl Analyses.
+** Fetch all Ensembl Analysis objects.
 **
-** The caller is responsible for deleting the Ensembl Analyses before
-** deleting the AJAX List.
+** The caller is responsible for deleting the Ensembl Analysis objects before
+** deleting the AJAX List object.
 **
 ** @cc Bio::EnsEMBL::DBSQL::AnalysisAdaptor::fetch_all
-** @param [r] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
-** @param [u] analyses [AjPList] AJAX List of Ensembl Analyses
+** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @param [u] analyses [AjPList] AJAX List of Ensembl Analysis objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -2732,7 +2913,7 @@ AjBool ensAnalysisadaptorFetchAll(EnsPAnalysisadaptor aa,
 
     ajTableMap(aa->CacheByIdentifier,
                analysisadaptorFetchAll,
-               (void *) analyses);
+               (void*) analyses);
 
     return ajTrue;
 }
@@ -2740,232 +2921,26 @@ AjBool ensAnalysisadaptorFetchAll(EnsPAnalysisadaptor aa,
 
 
 
-/* @func ensAnalysisadaptorFetchByIdentifier **********************************
+/* @func ensAnalysisadaptorFetchAllbyFeatureclass *****************************
 **
-** Fetch an Ensembl Analysis by its SQL database-internal identifier.
-** The caller is responsible for deleting the Ensembl Analysis.
-**
-** @cc Bio::EnsEMBL::DBSQL::AnalysisAdaptor::fetch_by_dbID
-** @param [r] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
-** @param [r] identifier [ajuint] SQL database-internal identifier
-** @param [wP] Panalysis [EnsPAnalysis*] Ensembl Analysis address
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensAnalysisadaptorFetchByIdentifier(EnsPAnalysisadaptor aa,
-                                           ajuint identifier,
-                                           EnsPAnalysis *Panalysis)
-{
-    AjPList analyses = NULL;
-
-    AjPStr constraint = NULL;
-
-    EnsPAnalysis analysis = NULL;
-
-    if(!aa)
-        return ajFalse;
-
-    if(!identifier)
-        return ajFalse;
-
-    if(!Panalysis)
-        return ajFalse;
-
-    /*
-    ** Initally, search the identifier cache.
-    ** For any object returned by the AJAX Table the reference counter needs
-    ** to be incremented manually.
-    */
-
-    if(!aa->CacheByIdentifier)
-        analysisadaptorCacheInit(aa);
-
-    *Panalysis = (EnsPAnalysis)
-        ajTableFetch(aa->CacheByIdentifier, (const void *) &identifier);
-
-    if(*Panalysis)
-    {
-        ensAnalysisNewRef(*Panalysis);
-
-        return ajTrue;
-    }
-
-    /* For a cache miss re-query the database. */
-
-    constraint = ajFmtStr("analysis.analysis_id = %u", identifier);
-
-    analyses = ajListNew();
-
-    ensBaseadaptorGenericFetch(aa->Adaptor,
-                               constraint,
-                               (EnsPAssemblymapper) NULL,
-                               (EnsPSlice) NULL,
-                               analyses);
-
-    if(ajListGetLength(analyses) > 1)
-        ajWarn("ensAnalysisadaptorFetchByIdentifier got more than one "
-               "Ensembl Analysis for (PRIMARY KEY) identifier %u.\n",
-               identifier);
-
-    ajListPop(analyses, (void **) Panalysis);
-
-    analysisadaptorCacheInsert(aa, Panalysis);
-
-    while(ajListPop(analyses, (void **) &analysis))
-    {
-        analysisadaptorCacheInsert(aa, &analysis);
-
-        ensAnalysisDel(&analysis);
-    }
-
-    ajListFree(&analyses);
-
-    ajStrDel(&constraint);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensAnalysisadaptorFetchByName ****************************************
-**
-** Fetch an Ensembl Analysis by its name.
-** The caller is responsible for deleting the Ensembl Analysis.
-**
-** @cc Bio::EnsEMBL::DBSQL::AnalysisAdaptor::fetch_by_logic_name
-** @param [r] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
-** @param [r] name [const AjPStr] Ensembl Analysis name
-** @param [wP] Panalysis [EnsPAnalysis*] Ensembl Analysis address
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensAnalysisadaptorFetchByName(EnsPAnalysisadaptor aa,
-                                     const AjPStr name,
-                                     EnsPAnalysis *Panalysis)
-{
-    char *txtname = NULL;
-
-    AjPList analyses = NULL;
-
-    AjPStr constraint = NULL;
-
-    EnsPAnalysis analysis = NULL;
-
-    if(!aa)
-        return ajFalse;
-
-    if((!name) && (!ajStrGetLen(name)))
-        return ajFalse;
-
-    if(!Panalysis)
-        return ajFalse;
-
-    /*
-    ** Initally, search the name cache.
-    ** For any object returned by the AJAX Table the reference counter needs
-    ** to be incremented manually.
-    */
-
-    if(!aa->CacheByName)
-        analysisadaptorCacheInit(aa);
-
-    *Panalysis = (EnsPAnalysis)
-        ajTableFetch(aa->CacheByName, (const void *) name);
-
-    if(*Panalysis)
-    {
-        ensAnalysisNewRef(*Panalysis);
-
-        return ajTrue;
-    }
-
-    /* In case of a cache miss, re-query the database. */
-
-    ensBaseadaptorEscapeC(aa->Adaptor, &txtname, name);
-
-    constraint = ajFmtStr("analysis.logic_name = '%s'", txtname);
-
-    ajCharDel(&txtname);
-
-    analyses = ajListNew();
-
-    ensBaseadaptorGenericFetch(aa->Adaptor,
-                               constraint,
-                               (EnsPAssemblymapper) NULL,
-                               (EnsPSlice) NULL,
-                               analyses);
-
-    if(ajListGetLength(analyses) > 1)
-        ajWarn("ensAnalysisadaptorFetchByName got more than one "
-               "Ensembl Analysis for (UNIQUE) name '%S'.\n",
-               name);
-
-    ajListPop(analyses, (void **) Panalysis);
-
-    analysisadaptorCacheInsert(aa, Panalysis);
-
-    while(ajListPop(analyses, (void **) &analysis))
-    {
-        analysisadaptorCacheInsert(aa, &analysis);
-
-        ensAnalysisDel(&analysis);
-    }
-
-    ajListFree(&analyses);
-
-    ajStrDel(&constraint);
-
-    return ajTrue;
-}
-
-
-
-
-static const char* analysisadaptorFeatureClasses[] =
-{
-    "AffyFeature", "affy_feature",
-    "Densityfeature", "density_type", /* density_type.analysis_id */
-    "DnaAlignFeature", "dna_align_feature",
-    "Gene", "gene",
-    "Markerfeature", "marker_feature",
-    "Predictiontranscript", "prediction_transcript",
-    "OligoFeature", "oligo_feature",
-    "Proteinalignfeature", "protein_align_feature",
-    "Proteinfeature", "protein_feature",
-    "QtlFeature", "qtl_feature",
-    "Repeatfeature", "repeat_feature",
-    "Simplefeature", "simple_feature",
-    NULL, NULL
-};
-
-
-
-
-/* @func ensAnalysisadaptorFetchAllByFeatureclass *****************************
-**
-** Fetch all Ensembl Analyses referenced by an Ensembl Feature Class.
+** Fetch all Ensembl Analysis objects referenced by an Ensembl Feature class.
 **
 ** Please see the analysisadaptorFeatureClasses array for a list of valid
-** Feature classes that reference Analyses.
+** Feature classes that reference Ensembl Analysis objects.
 **
-** The caller is responsible for deleting the Ensembl Analyses before
+** The caller is responsible for deleting the Ensembl Analysis objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::AnalysisAdaptor::fetch_all_by_feature_class
-** @param [r] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
 ** @param [r] class [const AjPStr] Ensembl Feature class
-** @param [u] analyses [AjPList] AJAX List of Ensembl Analyses
+** @param [u] analyses [AjPList] AJAX List of Ensembl Analysis objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensAnalysisadaptorFetchAllByFeatureclass(EnsPAnalysisadaptor aa,
+AjBool ensAnalysisadaptorFetchAllbyFeatureclass(EnsPAnalysisadaptor aa,
                                                 const AjPStr class,
                                                 AjPList analyses)
 {
@@ -2986,7 +2961,7 @@ AjBool ensAnalysisadaptorFetchAllByFeatureclass(EnsPAnalysisadaptor aa,
     if(!aa)
         return ajFalse;
 
-    if((!class) && (!ajStrGetLen(class)))
+    if(!(class && ajStrGetLen(class)))
         return ajFalse;
 
     if(!analyses)
@@ -3022,9 +2997,9 @@ AjBool ensAnalysisadaptorFetchAllByFeatureclass(EnsPAnalysisadaptor aa,
                                                 &analysis);
 
             if(analysis)
-                ajListPushAppend(analyses, (void *) analysis);
+                ajListPushAppend(analyses, (void*) analysis);
             else
-                ajWarn("ensAnalysisadaptorFetchAllByFeatureclass found "
+                ajWarn("ensAnalysisadaptorFetchAllbyFeatureclass found "
                        "Ensembl Analysis identifier %u in the '%s' table, "
                        "which is not referenced in the 'analysis' table.\n",
                        identifier,
@@ -3039,12 +3014,198 @@ AjBool ensAnalysisadaptorFetchAllByFeatureclass(EnsPAnalysisadaptor aa,
     }
     else
     {
-        ajDebug("ensAnalysisadaptorFetchAllByFeatureclass got invalid "
+        ajDebug("ensAnalysisadaptorFetchAllbyFeatureclass got invalid "
                 "Feature class '%S'\n",
                 class);
 
         return ajFalse;
     }
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensAnalysisadaptorFetchByIdentifier **********************************
+**
+** Fetch an Ensembl Analysis by its SQL database-internal identifier.
+** The caller is responsible for deleting the Ensembl Analysis.
+**
+** @cc Bio::EnsEMBL::DBSQL::AnalysisAdaptor::fetch_by_dbID
+** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @param [r] identifier [ajuint] SQL database-internal identifier
+** @param [wP] Panalysis [EnsPAnalysis*] Ensembl Analysis address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAnalysisadaptorFetchByIdentifier(EnsPAnalysisadaptor aa,
+                                           ajuint identifier,
+                                           EnsPAnalysis* Panalysis)
+{
+    AjPList analyses = NULL;
+
+    AjPStr constraint = NULL;
+
+    EnsPAnalysis analysis = NULL;
+
+    if(!aa)
+        return ajFalse;
+
+    if(!identifier)
+        return ajFalse;
+
+    if(!Panalysis)
+        return ajFalse;
+
+    /*
+    ** Initially, search the identifier cache.
+    ** For any object returned by the AJAX Table the reference counter needs
+    ** to be incremented manually.
+    */
+
+    if(!aa->CacheByIdentifier)
+        analysisadaptorCacheInit(aa);
+
+    *Panalysis = (EnsPAnalysis) ajTableFetchmodV(aa->CacheByIdentifier,
+                                                 (const void*) &identifier);
+
+    if(*Panalysis)
+    {
+        ensAnalysisNewRef(*Panalysis);
+
+        return ajTrue;
+    }
+
+    /* For a cache miss re-query the database. */
+
+    constraint = ajFmtStr("analysis.analysis_id = %u", identifier);
+
+    analyses = ajListNew();
+
+    ensBaseadaptorFetchAllbyConstraint(aa->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       analyses);
+
+    if(ajListGetLength(analyses) > 1)
+        ajWarn("ensAnalysisadaptorFetchByIdentifier got more than one "
+               "Ensembl Analysis for (PRIMARY KEY) identifier %u.\n",
+               identifier);
+
+    ajListPop(analyses, (void**) Panalysis);
+
+    analysisadaptorCacheInsert(aa, Panalysis);
+
+    while(ajListPop(analyses, (void**) &analysis))
+    {
+        analysisadaptorCacheInsert(aa, &analysis);
+
+        ensAnalysisDel(&analysis);
+    }
+
+    ajListFree(&analyses);
+
+    ajStrDel(&constraint);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensAnalysisadaptorFetchByName ****************************************
+**
+** Fetch an Ensembl Analysis by its name.
+** The caller is responsible for deleting the Ensembl Analysis.
+**
+** @cc Bio::EnsEMBL::DBSQL::AnalysisAdaptor::fetch_by_logic_name
+** @param [u] aa [EnsPAnalysisadaptor] Ensembl Analysis Adaptor
+** @param [r] name [const AjPStr] Ensembl Analysis name
+** @param [wP] Panalysis [EnsPAnalysis*] Ensembl Analysis address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAnalysisadaptorFetchByName(EnsPAnalysisadaptor aa,
+                                     const AjPStr name,
+                                     EnsPAnalysis* Panalysis)
+{
+    char* txtname = NULL;
+
+    AjPList analyses = NULL;
+
+    AjPStr constraint = NULL;
+
+    EnsPAnalysis analysis = NULL;
+
+    if(!aa)
+        return ajFalse;
+
+    if(!(name && ajStrGetLen(name)))
+        return ajFalse;
+
+    if(!Panalysis)
+        return ajFalse;
+
+    /*
+    ** Initially, search the name cache.
+    ** For any object returned by the AJAX Table the reference counter needs
+    ** to be incremented manually.
+    */
+
+    if(!aa->CacheByName)
+        analysisadaptorCacheInit(aa);
+
+    *Panalysis = (EnsPAnalysis) ajTableFetchmodV(aa->CacheByName,
+                                                 (const void*) name);
+
+    if(*Panalysis)
+    {
+        ensAnalysisNewRef(*Panalysis);
+
+        return ajTrue;
+    }
+
+    /* In case of a cache miss, re-query the database. */
+
+    ensBaseadaptorEscapeC(aa->Adaptor, &txtname, name);
+
+    constraint = ajFmtStr("analysis.logic_name = '%s'", txtname);
+
+    ajCharDel(&txtname);
+
+    analyses = ajListNew();
+
+    ensBaseadaptorFetchAllbyConstraint(aa->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       analyses);
+
+    if(ajListGetLength(analyses) > 1)
+        ajWarn("ensAnalysisadaptorFetchByName got more than one "
+               "Ensembl Analysis for (UNIQUE) name '%S'.\n",
+               name);
+
+    ajListPop(analyses, (void**) Panalysis);
+
+    analysisadaptorCacheInsert(aa, Panalysis);
+
+    while(ajListPop(analyses, (void**) &analysis))
+    {
+        analysisadaptorCacheInsert(aa, &analysis);
+
+        ensAnalysisDel(&analysis);
+    }
+
+    ajListFree(&analyses);
+
+    ajStrDel(&constraint);
 
     return ajTrue;
 }

@@ -5,8 +5,8 @@ application: nospace
   gui: "yes"
   batch: "yes"
   cpu: "low"
-  relations: "/edam/topic/0000220 File handling"
-  relations: "/edam/operation/0000335 File reformatting"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000335 operation File reformatting"
 ]
 
 
@@ -24,7 +24,7 @@ infile: infile
     parameter: "Y"
     knowntype: "ascii text"
     information: "ASCII text file"
-    relations:  "/edam/data/0000969 Free text"                                 
+    relations: "EDAM:0000969 data Text"
 ]
 
 endsection: input
@@ -58,7 +58,7 @@ section: additional
     default: "all"
     minimum: "1"
     maximum: "1"
-    relations: "/edam/data/0001773 Tool-specific parameter"                                
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
   
 
@@ -90,7 +90,7 @@ outfile: outfile
     parameter: "Y"
     knowntype: "ascii text"
     information: "ASCII text output file"
-    relations:  "/edam/data/0000969 Free text"                                 
+    relations: "EDAM:0000969 data Text"
 ]
 
 endsection: output

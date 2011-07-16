@@ -48,7 +48,7 @@ Create a codon usage table from nucleotide sequence(s)
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with cusp</b>
+Here is a sample session with <b>cusp</b>
 <p>
 This example uses only one input sequence. The normal use would be to use a set of coding sequences as the input. 
 <p>
@@ -72,7 +72,7 @@ Output file [x13776.cusp]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Create a codon usage table from nucleotide sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -611,7 +611,7 @@ TGA    *     1.000     2.591      1
 </pre>
 </td></tr></table><p>
 
-<p>The example shown reads a single CDS from Pseudomonas aeruginosa which has a very high GC content ands a strong coding bias, as shown by the codons for Alanine where those ending with <tt>G</tt> or <tt>C</tt> are used almost exclusively.</p>
+<p>The example shown reads a single CDS from Pseudomonas aeruginosa which has a very high GC content and a strong coding bias, as shown by the codons for Alanine where those ending with <tt>G</tt> or <tt>C</tt> are used almost exclusively.</p>
 
 <p>The columns are as follows: i. "Codon" (sequence of the codon).  ii. "AA" (the encoded amino acid).  iii.  "Fraction" (the proportion of usage of the codon among its redundant set, i.e. the set of codons which code for this codon's amino acid).  iv.  "Frequency" (the expected number of codons, given the input sequence(s), per 1000 bases). This will be an extrapolation if the sequence is shorter than 1000 bases. v. "Number" (the observed number of codons in the input sequences).</p>
 
@@ -717,6 +717,11 @@ None.
 <tr>
 <td><a href="codcmp.html">codcmp</a></td>
 <td>Codon usage table comparison</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Copy and reformat a codon usage table</td>
 </tr>
 
 <tr>

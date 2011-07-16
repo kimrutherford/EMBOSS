@@ -47,7 +47,7 @@ the default of 1 base shows all possible open reading frames.</p>
  The nucleic acid sequence is read in.
  The required genetic code is read in from the EGC* data files.
  The three forward and three reverse translations are created.
- The name and description are written to the ouput display file.
+ The name and description are written to the output display file.
  Any required regions to be changed to upper case are changed.
  Any required regions to be highlighted in HTML colour tags are changed.
  The reverse sense sequence is placed below the forward sequence.
@@ -80,7 +80,9 @@ the default of 1 base shows all possible open reading frames.</p>
     Input file format
 </H2>
 
-<b>sixpack</b> reads any normal sequence USAs.
+<b>sixpack</b> reads a single nucleotide sequence.
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
 
 <p>
 
@@ -90,6 +92,11 @@ the default of 1 base shows all possible open reading frames.</p>
     Output file format
 </H2>
 
+<b>sixpack</b> writes a text report and an ORF sequence file.
+
+<!--#include file="inc/seqformats.ihtml" -->
+
+<p>
 <!--#include file="inc/sixpack.output" -->
 
 <H2>

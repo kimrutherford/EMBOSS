@@ -115,7 +115,7 @@ Output file [vtest.edialign]:
 Command line arguments
 
 Local multiple alignment of sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     Sequence set filename and optional format,
@@ -211,9 +211,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   edialign reads any normal sequence USAs. You must give as input at
-   least two sequences. You can use proteins as well as nucleic acids, but
-   you can't mix them.
+   edialign reads nucleotide or protein sequences to be aligned.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -233,13 +248,31 @@ Output file format
 
    edialign produces two output files with a multiple sequence alignment.
    The first one is a file in DIALIGN format and the second one is a
-   sequence file in any format you choose (by default fastA). Capital
-   letters denote aligned residues, i.e. residues involved in at least one
-   of the "diagonals" in the alignment. Lower-case letters denote residues
-   not belonging to any of these selected "diagonals". They are not
-   considered to be aligned by DIALIGN. Thus, if a lower-case letter is
-   standing in the same column with other letters, this is pure chance ;
-   these residues are not considered to be homologous.
+   sequence file in any format you choose (by default fastA).
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
+
+   Capital letters denote aligned residues, i.e. residues involved in at
+   least one of the "diagonals" in the alignment. Lower-case letters
+   denote residues not belonging to any of these selected "diagonals".
+   They are not considered to be aligned by DIALIGN. Thus, if a lower-case
+   letter is standing in the same column with other letters, this is pure
+   chance ; these residues are not considered to be homologous.
 
    Numbers below the alignment reflect the degree of local similarity
    among sequences. More precisely, they represent the sum of weights of

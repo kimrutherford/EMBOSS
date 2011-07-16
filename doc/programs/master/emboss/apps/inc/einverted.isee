@@ -3,6 +3,16 @@
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
+<td><a href="banana.html">banana</a></td>
+<td>Plot bending and curvature data for B-DNA</td>
+</tr>
+
+<tr>
+<td><a href="btwisted.html">btwisted</a></td>
+<td>Calculate the twisting in a B-DNA sequence</td>
+</tr>
+
+<tr>
 <td><a href="equicktandem.html">equicktandem</a></td>
 <td>Finds tandem repeats in nucleotide sequences</td>
 </tr>
@@ -15,6 +25,11 @@
 <tr>
 <td><a href="palindrome.html">palindrome</a></td>
 <td>Finds inverted repeats in nucleotide sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="sirna.html">sirna</a></td>
+<td>Finds siRNA duplexes in mRNA</td>
 </tr>
 
 </table>

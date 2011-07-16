@@ -72,7 +72,7 @@ typedef void (*Fmt_S) (const char *fmt, const char **pos, VALIST ap, int width,
 **
 ** @attr buf [char*] buffer to write
 ** @attr bp [char*] next position in buffer
-** @attr size [ajint] size of buffer from malloc
+** @attr size [size_t] size of buffer from malloc
 ** @attr fixed [AjBool] if ajTrue, cannot reallocate
 ** @@
 ******************************************************************************/
@@ -81,7 +81,7 @@ typedef struct FmtSBuf
 {
     char* buf;
     char* bp;
-    ajint size;
+    size_t size;
     AjBool fixed;
 } FmtOBuf;
 
@@ -362,9 +362,9 @@ static void cvt_d(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 static void cvt_u(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 		  const ajuint* flags, ajint width, ajint precision)
 {
-    unsigned long m = 0;
+    unsigned long val = 0;
 #if defined(HAVE64)
-    ajulong  hm = 0;
+    ajulong  hval = 0;
 #endif
     char buf[43];
     char *p;
@@ -374,35 +374,45 @@ static void cvt_u(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
     p = buf + sizeof buf;
 
     if(flags['l'])
-	m  = va_arg(VA_V(ap), unsigned long);
-    else if(flags['h'])
-	/* ANSI C converts short to int */
-	m  = va_arg(VA_V(ap), unsigned int);
+    {
+	val  = va_arg(VA_V(ap), unsigned long);
+#if defined(HAVE64)
+	hval = val;
+#endif
+    }
     else if(flags['L'])
     {
 #if defined(HAVE64)
-	hm = va_arg(VA_V(ap), ajulong);
+	hval = (ajulong) va_arg(VA_V(ap), ajulong);
+        val = hval;
 #else
-	m  = (unsigned long) va_arg(VA_V(ap), ajulong);
-	/*ajDebug("Warning: Use of %%L on 32 bit model");*/
+	val = (unsigned long) va_arg(VA_V(ap), ajulong);
+	/*ajDebug("Warning: Use of %%Lu on 32 bit model");*/
+#endif
+    }
+    else if(flags['h'])
+    {	/* ANSI C converts short to int */
+	val = (unsigned long) va_arg(VA_V(ap), unsigned int);
+#if defined(HAVE64)
+	hval = val;
 #endif
     }
     else
     {
-	m  = va_arg(VA_V(ap), unsigned int);
+	val = (unsigned long) va_arg(VA_V(ap), unsigned int);
 #if defined(HAVE64)
-	hm = m;
+	hval = val;
 #endif
     }
 
 #if !defined(HAVE64)
     do
-	*--p = ajSysCastItoc(m%10 + '0');
-    while((m /= 10) > 0);
+	*--p = ajSysCastItoc(val%10 + '0');
+    while((val /= (ajulong)10) > 0);
 #else
     do
-	*--p = ajSysCastItoc((int)(hm%(ajulong)10 + '0'));
-    while((hm /= (ajulong)10) > 0);
+	*--p = ajSysCastItoc((int)(hval%(ajulong)10 + '0'));
+    while((hval /= (ajulong)10) > 0);
 #endif
     ajFmtPutd(p, (buf + sizeof buf) - p, put, cl, flags,
 	      width, precision);
@@ -950,7 +960,7 @@ static void cvt_uF(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
     fil = va_arg(VA_V(ap), AjPFile);
 
     if(fil && fil->Name)
-	ajFmtPuts(fil->Name->Ptr, fil->Name->Len, put, cl, flags,
+	ajFmtPuts(fil->Printname->Ptr, fil->Printname->Len, put, cl, flags,
 		  width, precision);
     else
 	ajFmtPuts("<null>", 6, put, cl, flags,
@@ -1058,14 +1068,22 @@ static const char *Fmt_flags = "-+ 0#";
 **
 ** @param [r] c [int] Character to be written
 ** @param [u] cl [void*] Output file - will be cast to FILE* internally
-** @return [ajint] 0 on success
+** @return [ajint] Character written
 ******************************************************************************/
 
 static ajint fmtOutC(int c, void* cl)
 {
     FILE *f = cl;
+    ajint ret;
 
-    return putc(c, f);
+    ret = putc(c, f);
+
+#ifdef WIN32
+    /*    if((char) c == '\n')
+	  putc((int) '\r', f);*/
+#endif
+
+    return ret;
 }
 
 
@@ -1078,7 +1096,7 @@ static ajint fmtOutC(int c, void* cl)
 **
 ** @param [r] c [int] Character to be written
 ** @param [u] cl [void*] Output file - will be cast to FmtPBuf internally
-** @return [ajint] 0 on success
+** @return [ajint] Character written
 ******************************************************************************/
 
 static ajint fmtInsert(int c, void* cl)
@@ -1111,7 +1129,7 @@ static ajint fmtInsert(int c, void* cl)
 **
 ** @param [r] c [ajint] Character to be written
 ** @param [u] cl [void*] Output file - will be cast to FmtPBuf internally
-** @return [ajint] 0 on success
+** @return [ajint] kCharacter written
 ******************************************************************************/
 
 static ajint fmtAppend(ajint c, void* cl)
@@ -1306,7 +1324,7 @@ void ajFmtError(const char* fmt, ...)
 
 /* @func ajFmtVError  *********************************************************
 **
-** format and emit the "..." arguments according to fmt;writes to stderr.
+** format and emit the "..." arguments according to fmt. Writes to stderr.
 **
 ** @param [r] fmt [const char*] Format string.
 ** @param [v] ap [va_list] Variable length argument list
@@ -1671,7 +1689,7 @@ AjPStr ajFmtPrintAppS(AjPStr* pthis, const char* fmt, ...)
 **
 ** @param [w] pbuf [char**] char string to be written to.
 ** @param [r] pos [ajint] position in buffer to start writing
-** @param [u] size [ajuint*] allocated size of the buffer
+** @param [u] size [size_t*] allocated size of the buffer
 ** @param [r] fmt [const char*] Format string.
 ** @param [v] ap [va_list] Variable length argument list.
 **
@@ -1680,7 +1698,7 @@ AjPStr ajFmtPrintAppS(AjPStr* pthis, const char* fmt, ...)
 ** @@
 ******************************************************************************/
 
-ajint ajFmtVfmtStrCL(char **pbuf, ajint pos, ajuint* size,
+ajint ajFmtVfmtStrCL(char **pbuf, ajint pos, size_t* size,
 		     const char* fmt, va_list ap)
 {
     FmtOBuf cl;
@@ -2527,7 +2545,7 @@ static void scvt_d(const char *fmt, const char **pos, VALIST ap, ajint width,
 #if defined(HAVE64)
 		hn = sc_long(ajStrGetPtr(t));
 #else
-		val = hval;
+		val = (long *) hval;
 		sscanf(ajStrGetPtr(t),"%ld",&n);
 		hn = n;
 		/*ajDebug("Warning: Use of %%Ld on a 32 bit model");*/
@@ -3251,7 +3269,7 @@ static void scvt_c(const char *fmt, const char **pos, VALIST ap, ajint width,
 
 /* @funcstatic scvt_b *********************************************************
 **
-** Conversion for %B to load a boolean (YyNnTtFf)
+** Conversion for %b to load a boolean (YyNnTtFf)
 **
 ** @param [r] fmt [const char*] Format string at conv char position
 ** @param [w] pos [const char**] Input string current position

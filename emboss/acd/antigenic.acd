@@ -1,8 +1,8 @@
 application: antigenic [
   documentation: "Finds antigenic sites in proteins"
   groups: "Protein:Motifs"
-  relations: "/edam/topic/0000201 Immunological analysis"
-  relations: "/edam/operation/0000416 Epitope mapping"
+    relations: "EDAM:0000158 topic Sequence motifs"
+    relations: "EDAM:0000416 operation Epitope mapping"
 ]
 
 section: input [
@@ -13,9 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "proteinstandard"
-    relations: "/edam/data/0001219 Pure protein sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0002886 data Sequence record (protein)"
   ]
 
 endsection: input
@@ -31,7 +29,7 @@ section: required [
     maximum: "50"
     default: "6"
     information: "Minimum length of antigenic region"
-    relations: "/edam/data/0001249 Sequence length"                                     
+    relations: "EDAM:0001249 data Sequence length"
   ]
 
 endsection: required
@@ -46,7 +44,7 @@ section: output [
     rformat: "motif"
     multiple: "Y"
     taglist: "int:pos=Max_score_pos"
-    relations: "/edam/data/0001534 Peptide immunogenicity report"                                       
+    relations: "EDAM:0001534 data Peptide immunogenicity report"
   ]
 
 endsection: output

@@ -13,16 +13,6 @@
 </tr>
 
 <tr>
-<td><a href="charge.html">charge</a></td>
-<td>Draw a protein charge plot</td>
-</tr>
-
-<tr>
-<td><a href="checktrans.html">checktrans</a></td>
-<td>Reports STOP codons and ORF statistics of a protein</td>
-</tr>
-
-<tr>
 <td><a href="compseq.html">compseq</a></td>
 <td>Calculate the composition of unique words in sequences</td>
 </tr>
@@ -38,18 +28,18 @@
 </tr>
 
 <tr>
-<td><a href="iep.html">iep</a></td>
-<td>Calculate the isoelectric point of proteins</td>
-</tr>
-
-<tr>
 <td><a href="mwcontam.html">mwcontam</a></td>
 <td>Find weights common to multiple molecular weights files</td>
 </tr>
 
 <tr>
-<td><a href="octanol.html">octanol</a></td>
-<td>Draw a White-Wimley protein hydropathy plot</td>
+<td><a href="oddcomp.html">oddcomp</a></td>
+<td>Identify proteins with specified sequence word composition</td>
+</tr>
+
+<tr>
+<td><a href="pepdigest.html">pepdigest</a></td>
+<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
@@ -60,16 +50,6 @@
 <tr>
 <td><a href="pepstats.html">pepstats</a></td>
 <td>Calculates statistics of protein properties</td>
-</tr>
-
-<tr>
-<td><a href="pepwindow.html">pepwindow</a></td>
-<td>Draw a hydropathy plot for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="pepwindowall.html">pepwindowall</a></td>
-<td>Draw Kyte-Doolittle hydropathy plot for a protein alignment</td>
 </tr>
 
 <tr>

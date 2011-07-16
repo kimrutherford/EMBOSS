@@ -1,0 +1,99 @@
+application: textvalid
+[
+  documentation: "Check a plain text format is valid"
+  groups: "Utils:Misc"
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
+  relations: "EDAM:0000220 topic File handling"
+  relations: "EDAM:0000336 operation File debugging"
+]
+
+
+
+
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+infile: infile 
+[
+    parameter: "Y"
+    knowntype: "ascii text"
+    information: "ASCII text file"
+    relations: "EDAM:0000969 data Text"
+]
+
+endsection: input
+
+
+
+
+
+section: required 
+[
+  information: "Required section"
+  type: "page"
+]
+endsection: required
+
+
+
+
+
+section: additional
+[
+  information: "Additional section"
+  type: "page"
+]
+
+list: type
+[
+    additional: "Y"
+    header: "File content"
+    # Values are taken from EDAM "format" branch.  More could be added in time.
+    values: "S:Sequence record, F:Sequence feature annotation, A:Sequence alignment"
+    minimum: 1
+    maximum: 1
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Enter the type of file content"
+    help: "If you know the type of file content then specify it using this option.  This will help textvalid to identify and validate the file format."
+    relations: "EDAM:0002527 data Parameter or primitive"
+]
+
+endsection: additional
+
+
+
+
+
+section: advanced
+[
+  information: "Advanced section"
+  type: "page"
+]
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+
+outfile: logfile 
+[
+    standard: "Y"
+    knowntype: "log"
+    information: "General log output file"
+    relations:  "/edam/data/0001678 Tool log"
+]
+
+endsection: output

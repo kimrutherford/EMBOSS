@@ -2,8 +2,8 @@
 application: maskambignuc [
   documentation: "Masks all ambiguity characters in nucleotide sequences with N"
   groups: "Edit"
-  relations: "/edam/topic/0000156 Sequence editing"
-  relations: "/edam/operation/0000368 Sequence masking"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000368 operation Sequence masking"
 ]
 
 section: input [
@@ -13,16 +13,14 @@ section: input [
 
   boolean: feature [
     information: "Use feature information"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   seqall: sequence [
     parameter: "Y"
     type: "gapnucleotidesimple"
     features: "$(feature)"
-    relations: "/edam/data/0001207 Nucleotide sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
   ]
 
 endsection: input
@@ -42,9 +40,7 @@ section: output [
   seqoutall: outseq [
     parameter: "Y"
     features: "$(feature)"
-    relations: "/edam/data/0001207 Nucleotide sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
   ]
 
 endsection: output

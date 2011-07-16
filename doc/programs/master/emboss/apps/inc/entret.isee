@@ -3,6 +3,11 @@
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Display the trace in an ABI sequencer file</td>
+</tr>
+
+<tr>
 <td><a href="aligncopy.html">aligncopy</a></td>
 <td>Reads and writes alignments</td>
 </tr>
@@ -23,6 +28,11 @@
 </tr>
 
 <tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
 <td><a href="cutseq.html">cutseq</a></td>
 <td>Removes a section from a sequence</td>
 </tr>
@@ -35,6 +45,11 @@
 <tr>
 <td><a href="descseq.html">descseq</a></td>
 <td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="drtext.html">drtext</a></td>
+<td>Get data resource entries complete text</td>
 </tr>
 
 <tr>
@@ -60,6 +75,21 @@
 <tr>
 <td><a href="featreport.html">featreport</a></td>
 <td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Display basic information about sequences</td>
 </tr>
 
 <tr>
@@ -138,6 +168,11 @@
 </tr>
 
 <tr>
+<td><a href="ontotext.html">ontotext</a></td>
+<td>Get ontology term(s) original full text</td>
+</tr>
+
+<tr>
 <td><a href="pasteseq.html">pasteseq</a></td>
 <td>Insert one sequence into another</td>
 </tr>
@@ -145,6 +180,11 @@
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>
@@ -160,6 +200,21 @@
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
 <td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="seqxref.html">seqxref</a></td>
+<td>Retrieve all database cross-references for a sequence entry</td>
+</tr>
+
+<tr>
+<td><a href="seqxrefget.html">seqxrefget</a></td>
+<td>Retrieve all cross-referenced data for a sequence entry</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
@@ -188,6 +243,16 @@
 </tr>
 
 <tr>
+<td><a href="textget.html">textget</a></td>
+<td>Get text data entries</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search the textual description of sequence(s)</td>
+</tr>
+
+<tr>
 <td><a href="trimest.html">trimest</a></td>
 <td>Remove poly-A tails from nucleotide sequences</td>
 </tr>
@@ -210,6 +275,11 @@
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
 <td>Removes vectors from the ends of nucleotide sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="whichdb.html">whichdb</a></td>
+<td>Search all sequence databases for an entry and retrieve it</td>
 </tr>
 
 <tr>

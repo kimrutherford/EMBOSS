@@ -44,7 +44,7 @@ protein output sequence(s) [v00294.orf]:
 Command line arguments
 
 Finds and extracts open reading frames (ORFs)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -169,7 +169,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   getorf reads any nucleic acid sequence USA.
+   getorf reads one or more nucleotide sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -273,6 +290,31 @@ SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
 //
 
 Output file format
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA')
+   with associated feature information.
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: text, html, xml (uniprotxml),
+   obo, embl (swissprot)
+
+   Where the sequence format has no feature information, a second file can
+   be read to load the feature data. The file is specified with the
+   qualifier -ufo xxx and the feature format is specified with the
+   qualifier -fformat xxx
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
+
+   See: http://emboss.sf.net/docs/themes/FeatureFormats.html for further
+   information on feature formats.
 
    The output is a sequence file containing predicted open reading frames
    longer than the minimum size, which defaults to 30 bases (i.e. 10 amino
@@ -493,6 +535,7 @@ Known bugs
 See also
 
    Program name     Description
+   checktrans       Reports STOP codons and ORF statistics of a protein
    marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
                     sequences
    plotorf          Plot potential open reading frames in a nucleotide sequence

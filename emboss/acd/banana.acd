@@ -1,8 +1,10 @@
 application: banana [
   documentation: "Plot bending and curvature data for B-DNA"
-  groups: "Nucleic:Composition"
-  relations: "/edam/topic/0000097 Nucleic acid structure analysis"
-  relations: "/edam/operation/0000461 Nucleic acid curvature calculation"
+  groups: "Nucleic:Properties, Nucleic:Composition, Nucleic:2D structure"
+  relations: "EDAM:0000097 topic Nucleic acid structure"
+  relations: "EDAM:0000094 topic Nucleic acid physicochemistry"
+  relations: "EDAM:0000157 topic Sequence composition"
+  relations: "EDAM:0000461 operation Nucleic acid curvature calculation"
 ]
 
 section: input [
@@ -13,8 +15,8 @@ section: input [
   sequence: sequence [
     parameter: "y"
     type: "puredna"
-    relations: "/edam/data/0001214 Unambiguous pure DNA sequence"                       
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0001214 format unambiguous pure dna"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   datafile: anglesfile [
@@ -22,7 +24,7 @@ section: input [
     information: "DNA base trimer roll angles data file"
     default: "Eangles_tri.dat"
     knowntype: "base trimer roll angles"
-    relations:  "/edam/data/0001590 DNA base trimer roll angles data"               
+    relations: "EDAM:0001590 data DNA base trimer roll angles data"
   ]
 
 endsection: input
@@ -36,7 +38,7 @@ section: output [
     standard: "Y"
     gdesc: "Bending and curvature plot"
     nullok: "Y"
-    relations:  "/edam/data/0000913 Nucleic acid structural property"
+    relations: "EDAM:0000912 data Nucleic acid property"
   ]
 
   integer: residuesperline [
@@ -44,7 +46,7 @@ section: output [
     default: "50"
     information: "Number of residues to be displayed on each
                   line"
-    relations: "/edam/data/0001249 Sequence length"                                     
+    relations: "EDAM:0001249 data Sequence length"
   ]
 
   outfile: outfile [
@@ -52,7 +54,7 @@ section: output [
     default: "banana.profile"
     knowntype: "banana output"
     nullok: "Y"
-    relations:  "/edam/data/0000913 Nucleic acid structural property"                    
+    relations: "EDAM:0000912 data Nucleic acid property"
   ]
 
 endsection: output

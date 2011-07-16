@@ -92,6 +92,7 @@ int main(int argc, char **argv)
     AjPStr    equstr2 = NULL;
     AjPStr    hstr1   = NULL;
     AjPStr    hstr2   = NULL;
+    const AjPStr htest = NULL;
     
     AjBool isproto = ajFalse;
     char c;
@@ -109,7 +110,7 @@ int main(int argc, char **argv)
     equ1 = ajListNew();
     equ2 = ajListNew();
 
-    hassuptable = ajTablestrNewLen(SUPGUESS);
+    hassuptable = ajTablestrNew(SUPGUESS);
     
 
     pfname = ajStrNewC(DATANAME);
@@ -128,7 +129,7 @@ int main(int argc, char **argv)
     {
 	ajStrAssignC(&pfname,DATANAME4);
 	oute = ajDatafileNewOutNameS(pfname);
-	ptable = ajTablestrNewLen(EQUGUESS);
+	ptable = ajTablestrNew(EQUGUESS);
 	isostr = ajStrNew();
     }
     ajStrDel(&pfname);
@@ -254,7 +255,7 @@ int main(int argc, char **argv)
 		handle = ajStrTokenNewC(isostr,"\t\n>,");
 	        ajStrTokenNextParse(&handle, &token);
 
-		if((value=ajTableFetch(ptable,(const void *)token)))
+		if((value=ajTableFetchmodS(ptable, token)))
 		    if(ajStrMatchS(value,pattern))
 		    {
 			equstr1 = ajStrNew();
@@ -368,10 +369,10 @@ int main(int argc, char **argv)
 	{
 	    ajListPop(equ2,(void **)&equstr2);
 
-	    if(!(hstr2=ajTableFetch(hassuptable,(const void *)equstr2)))
+	    if(!(htest=ajTableFetchS(hassuptable, equstr2)))
 		ajFatal("Expected supplier value not found for '%S' (enzyme '%S')",
 			equstr1,equstr2);
-	    if(ajStrMatchC(hstr2,"N"))
+	    if(ajStrMatchC(htest,"N"))
 		ajStrAppendC(&equstr2,"*");
 
 	    ajFmtPrintF(oute,"%S %S\n",equstr1,equstr2);

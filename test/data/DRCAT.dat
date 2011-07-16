@@ -1,0 +1,2199 @@
+ID      3did
+Name    3DID database of 3D interacting domains
+Desc    A collection of domain-domain interactions in proteins for which high-resolution three-dimensional structures are known.
+URL     http://3did.irbbarcelona.org/
+Taxon   1 | all
+EDAMtpc 0000719 | Protein-protein interaction
+EDAMdat 0002377 | Domain annotation
+EDAMdat 0002359 | Domain-domain interaction
+EDAMdat 0002378 | Domain-motif interaction
+EDAMdat 0002360 | Domain-domain interaction (indirect)
+EDAMid  0001138 | Pfam accession number
+EDAMid  0002757 | Pfam domain name
+EDAMid  0001116 | ELM ID
+EDAMfmt 0002331 | HTML
+Query    Domain annotation | HTML | Pfam domain name | http://3did.irbbarcelona.org/cgi-bin/query_domain_cgi.pl?draw=graph&domain=%s
+Query    Domain annotation | HTML | Pfam accession number | http://3did.irbbarcelona.org/cgi-bin/query_pfamID_cgi.pl?draw=graph&id=%s
+Query    Domain-domain interaction | HTML | Pfam domain name;Pfam domain name | http://3did.irbbarcelona.org/cgi-bin/query_interaction_cgi.pl?domain1=%s1&db=Pfam&domain2=%s2
+Query    Domain-domain interaction (indirect) | HTML | Pfam domain name;Pfam domain name | http://3did.irbbarcelona.org/cgi-bin/query_path_cgi.pl?domain1=%s1&domain2=%s2
+Query    Domain annotation | HTML | ELM ID | http://3did.irbbarcelona.org/cgi-bin/query_peptide_cgi.pl?draw=graph&peptide=%s
+Query    Domain-motif interaction | HTML | Pfam domain name;ELM ID | http://3did.irbbarcelona.org//cgi-bin/query_dmi_cgi.pl?domain=%s1&ddb=%&peptide=%s2&mdb=ELM
+Example Pfam domain name | SH3_1
+Example Pfam accession number | PF00018
+Example Pfam domain name | Ank
+Example Pfam domain name | SH3_1
+Example Pfam domain name | SH2
+Example Pfam domain name | efhand
+Example ELM ID | LIG_SH3_1
+Example ELM ID | LIG_SH3_1
+
+
+ID      abcdb
+Name    Archaeal and bacterial ABC transporter database (ABCdb)
+Desc    Archaeal and bacterial ABC transporter database.
+URL     http://www-abcdb.biotoul.fr
+Taxon   2 | Bacteria
+Taxon   2157 | Archaea
+EDAMtpc 0000820 | Membrane protein
+
+ID      anu_2dpage
+Acc     DB-0002
+Name    Australian National University 2-DE database (ANU-2DPAGE)
+Desc    2-DE PAGE database.
+URL     http://semele.anu.edu.au
+Cat     2D gel databases
+Taxon   1 | all
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit Uniprot accession number
+Query    2D PAGE annotation | HTML | UniProt accession number | http://semele.anu.edu.au/cgi-bin/get-2d-entry?%s
+Example UniProt accession number | P02930
+Example UniProt accession number | Q9SIB9
+
+
+ID      apidb
+IDalt   EuPathDB
+Acc     DB-0153
+Name    Apicomplexan database resources (ApiDB)
+Desc    A portal for accessing genomic-scale datasets associated with the eukaryotic pathogens (Cryptosporidium, Giardia, Leishmania, Plasmodium, Toxoplasma, Trichomonas and Trypanosoma).
+URL     http://eupathdb.org/eupathdb/
+URLrest http://eupathdb.org/eupathdb/serviceList.jsp
+Cat     Not available
+Taxon   5794 | Apicomplexa
+EDAMtpc 0002821 | Unicellular eukaryote
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000783 | Pathogen
+EDAMdat 0000916 | Gene annotation
+EDAMid  0001026 | Gene symbol
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit Gene symbol
+Xref    SP_FT None
+Query    Gene annotation | HTML | Gene symbol | http:www.eupathdb.org/gene/%s
+Example Gene symbol | cgd1_1090
+
+
+ID      apidb_cryptodb
+IDalt   CryptoDB
+Name    Cryptosporidium genome resources (CryptoDB)
+Desc    Genomic-scale dataset associated with the eukaryotic pathogens Cryptosporidium.
+URL     http://cryptodb.org/cryptodb/
+URLrest http://eupathdb.org/eupathdb/serviceList.jsp
+Cat     Not available
+Taxon   5806 | Cryptosporidium
+EDAMtpc 0002821 | Unicellular eukaryote
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000783 | Pathogen
+EDAMdat 0000916 | Gene annotation
+EDAMid  0002295 | Gene ID
+EDAMfmt 0002331 | HTML
+Xref    SP_FT None
+Query    Gene annotation | HTML | Gene ID | http://cryptodb.org/gene/%s
+
+
+ID      apidb_giardiadb
+IDalt   GiardiaDB
+Name    Giardia genome resources (GiardiaDB)
+Desc    Genomic-scale datasets for the eukaryotic pathogen Giardia.
+URL     http://giardiadb.org/giardiadb/
+URLrest http://eupathdb.org/eupathdb/serviceList.jsp
+Cat     Not available
+Taxon   5740 | Giardia
+EDAMtpc 0002821 | Unicellular eukaryote
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000783 | Pathogen
+EDAMdat 0000916 | Gene annotation
+EDAMid  0002295 | Gene ID
+EDAMfmt 0002331 | HTML
+Xref    SP_FT None
+Query    Gene annotation | HTML | Gene ID | http://giardiadb.org/gene/%s
+
+
+ID      apidb_plasmodb
+IDalt   PlasmoDB
+Name    Plasmodium genome resources (PlasmoDB)
+Desc    Genomic-scale dataset associated with the eukaryotic pathogens Plasmodium.
+URL     http://plasmodb.org/plasmo/
+URLrest http://eupathdb.org/eupathdb/serviceList.jsp
+Cat     Not available
+Taxon   5820 | Plasmodium
+EDAMtpc 0002821 | Unicellular eukaryote
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000783 | Pathogen
+EDAMdat 0000916 | Gene annotation
+EDAMid  0002295 | Gene ID
+EDAMfmt 0002331 | HTML
+Xref    SP_FT None
+Query    Gene annotation | HTML | Gene ID | http://plasmodb.org/gene/%s
+
+
+ID      apidb_toxodb
+IDalt   ToxoDB
+Name    Toxoplasma genome resources (ToxoDB)
+Desc    Genomic-scale datasets associated with the eukaryotic pathogens Toxoplasma.
+URL     http://toxodb.org/toxo/
+URLrest http://eupathdb.org/eupathdb/serviceList.jsp
+Cat     Not available
+Taxon   5810 | Toxoplasma
+EDAMtpc 0002821 | Unicellular eukaryote
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000783 | Pathogen
+EDAMdat 0000916 | Gene annotation
+EDAMid  0002295 | Gene ID
+EDAMfmt 0002331 | HTML
+Xref    SP_FT None
+Query    Gene annotation | HTML | Gene ID | http://toxodb.org/gene/%s
+
+
+ID      apidb_trichdb
+IDalt   TrichDB
+Name    Trichomonas genome resources (TrichDB)
+Desc    Genomic-scale datasets associated with the eukaryotic Trichomonas.
+URL     http://trichdb.org/trichdb/
+URLrest http://eupathdb.org/eupathdb/serviceList.jsp
+Cat     Not available
+Taxon   5721 | Trichomonas
+EDAMtpc 0002821 | Unicellular eukaryote
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000783 | Pathogen
+EDAMdat 0000916 | Gene annotation
+EDAMid  0002295 | Gene ID
+EDAMfmt 0002331 | HTML
+Xref    SP_FT None
+Query    Gene annotation | HTML | Gene ID | http://trichdb.org/gene/%s
+
+
+ID      apidb_tritrypdb
+IDalt   TritrypDB
+Name    Kinetoplastid genome resources (TritrypDB)
+Desc    Kinetoplastid genome resources.
+URL     http://tritrypdb.org/tritrypdb/
+URLrest http://eupathdb.org/eupathdb/serviceList.jsp
+Cat     Not available
+Taxon   5653 | Kinetoplastida
+EDAMtpc 0002821 | Unicellular eukaryote
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000783 | Pathogen
+EDAMdat 0000916 | Gene annotation
+EDAMid  0002295 | Gene ID
+EDAMfmt 0002331 | HTML
+Xref    SP_FT None
+Query    Gene annotation | HTML | Gene ID | http://tritrypdb.org/gene/%s
+
+
+ID      arrayexpress
+Acc     DB-0004
+Name    ArrayExpress repository for microarray data
+Desc    A public archive for functional genomics data compliant with MIAME- and MINSEQE requirements in accordance with compliant data in accordance with MGED recommendations. Includes gene-indexed expression profiles.
+URL     http://www.ebi.ac.uk/arrayexpress/
+Cat     Gene expression databases
+Taxon   1 | all
+EDAMtpc 0000197 | Gene expression and regulation
+EDAMtpc 0000203 | Gene expression profiling
+EDAMtpc 0000200 | Microarrays
+EDAMdat 0000931 | Microarray experiment annotation
+EDAMdat 0000929 | Gene expression annotation
+EDAMid  0000989 | Protein identifier
+EDAMid  0001144 | ArrayExpress accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit Protein identifier
+Query    Gene expression annotation {ArrayExpress gene expression summary} | HTML | Protein identifier | http://www.ebi.ac.uk/arrayexpress/genes/uniprot/%s
+Query    Microarray experimental data {ArrayExpress entry} | HTML | ArrayExpress accession number | http://www.ebi.ac.uk/microarray-as/ae/browse.html?keywords=%s
+Example Protein identifier | P15455
+Example ArrayExpress accession number | E-MEXP-700
+
+
+ID      astd
+Name    Alternative splicing and transcript diversity (ASTD) database
+Desc    Alternative splicing and transcript diversity.
+URL     http://www.ebi.ac.uk/astd/
+Taxon   1 | all
+EDAMtpc 0000630 | Gene structure
+EDAMdat 0002397 | Gene features (exon)
+EDAMdat 0000896 | Protein annotation
+EDAMdat 0002399 | Transcript annotation
+EDAMdat 0000916 | Gene annotation
+EDAMdat 0001312 | Gene features (promoter)
+EDAMdat 0002397 | Gene features (exon)
+EDAMdat 0002754 | Gene features (intron)
+EDAMdat 0001302 | Nucleic acid features (PolyA signal)
+EDAMid  0002367 | ASTD ID
+EDAMid  0002368 | ASTD ID (exon)
+EDAMid  0002369 | ASTD ID (intron)
+EDAMid  0002370 | ASTD ID (polya)
+EDAMid  0002371 | ASTD ID (tss)
+EDAMid  0001033 | Gene ID (Ensembl)
+EDAMid  0002398 | Protein ID (Ensembl)
+EDAMfmt 0001927 | embl
+EDAMfmt 0002305 | gff
+EDAMfmt 0002306 | gtf
+EDAMfmt 0001929 | fasta
+EDAMfmt 0002331 | HTML
+Query    Gene annotation | HTML | Gene ID (Ensembl) | http://www.ebi.ac.uk/astd/geneview.html?acc=%s
+Query    Gene annotation | embl | Gene ID (Ensembl) | http://www.ebi.ac.uk/astd/geneview.html?acc=%s&export=embl
+Query    Gene annotation | fasta | Gene ID (Ensembl) | http://www.ebi.ac.uk/astd/geneview.html?acc=%s&export=fasta
+Query    Gene annotation | gff | Gene ID (Ensembl) | http://www.ebi.ac.uk/astd/geneview.html?acc=%s&export=gff
+Query    Gene annotation | gtf | Gene ID (Ensembl) | http://www.ebi.ac.uk/astd/geneview.html?acc=%s&export=gtf
+Query    Transcript annotation | HTML | ASTD ID | http://www.ebi.ac.uk/astd/transview.html?acc=%s
+Query    Transcript annotation | embl | ASTD ID | http://www.ebi.ac.uk/astd/transview.html?acc=%s&export=embl
+Query    Transcript annotation | gff | ASTD ID | http://www.ebi.ac.uk/astd/transview.html?acc=%s&export=gff
+Query    Transcript annotation | gtf | ASTD ID | http://www.ebi.ac.uk/astd/transview.html?acc=%s&export=gtf
+Query    Protein annotation | HTML | Protein ID (Ensembl) | http://www.ebi.ac.uk/astd/peptideview.html?acc=%s
+Query    Protein annotation | fasta | Protein ID (Ensembl) | http://www.ebi.ac.uk/astd/peptideview.html?acc=%s&export=fasta
+Query    Gene features (exon) | HTML | ASTD ID (exon);ASTD ID | http://www.ebi.ac.uk/astd/featureview.html?acc=%s1&trans=%s2
+Query    Gene features (intron) | HTML | ASTD ID (intron);ASTD ID | http://www.ebi.ac.uk/astd/featureview.html?acc=%s1&trans=%s2
+Query    Gene features (promoter) {TSS} | HTML | ASTD ID (tss);ASTD ID | http://www.ebi.ac.uk/astd/featureview.html?acc=%s1&trans=%s2
+Query    Nucleic acid features (PolyA signal) | HTML | ASTD ID (polya) | http://www.ebi.ac.uk/astd/featureview.html?acc=%s
+Example ASTD ID | TRAN00000134394
+Example Gene ID (Ensembl) | ENSG00000148680
+Example Protein ID (Ensembl) | PEPT00000029170
+Example Transcript ID (Ensembl) | ENST00000229239
+
+
+ID      bgee
+Acc     DB-0133
+Name    Bgee database for gene expression evolution
+Desc    Bgee is a database to retrieve and compare gene expression patterns between animal species.  Bgee first maps heterogeneous expression data (currently EST, Affymetrix, and in situ hybridization data) on anatomical and developmental ontologies.  Then, in order to perform automated cross species comparisons, homology relationships across anatomical ontologies, and comparison criteria between developmental ontologies, are designed.
+URL     http://bgee.unil.ch
+Cat     Gene expression databases
+Taxon   1 | all
+EDAMtpc 0000623 | Gene family or system
+EDAMtpc 0000197 | Gene expression and regulation
+EDAMtpc 0000203 | Gene expression profiling
+EDAMdat 0000929 | Gene expression annotation
+EDAMdat 0000928 | Gene expression profile
+EDAMdat 0000916 | Gene annotation
+EDAMdat 0002579 | Gene expression annotation (expressed genes)
+EDAMid  0001099 | UniProt accession number
+EDAMid  0001033 | Gene ID (Ensembl)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit UniProt accession number
+Query    Gene annotation | HTML | UniProt accession number | http://bgee.unil.ch/bgee/bgee?uniprot_id=%s
+Query    Gene annotation | HTML | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=gene&action=expression&gene_id=%s
+Query    Gene expression profile | HTML | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=gene&action=expression&gene_id=%s
+Query    Gene expression annotation | HTML | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=expression&action=data&gene_id=%s
+Query    Gene expression annotation (expressed genes) {Bgee ID file} | Text | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=expression&action=genes&search_by=1&organ_children=on&gene_organ_stage_information=on&attribut_list=species_name&attribut_list=gene_name&attribut_list=gene_id&gene_id=%s&display_type=tsv
+Query    Gene expression annotation (expressed genes) {Bgee ID file with expression data} | Text | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=expression&action=genes&search_by=1&organ_children=on&gene_organ_stage_information=on&attribut_list=species_name&attribut_list=gene_name&attribut_list=gene_id&gene_id=%s&display_type=tsv&gene_information=2
+Query    Gene expression annotation (expressed genes) {Bgee ID file with expression data count} | Text | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=expression&action=genes&search_by=1&organ_children=on&gene_organ_stage_information=on&attribut_list=species_name&attribut_list=gene_name&attribut_list=gene_id&gene_id=%s&display_type=tsv&gene_information=1
+Query    Gene expression annotation (expressed genes) {Bgee ID file} | HTML | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=expression&action=genes&search_by=1&organ_children=on&gene_organ_stage_information=on&attribut_list=species_name&attribut_list=gene_name&attribut_list=gene_id&gene_id=%s
+Query    Gene expression annotation (expressed genes) {Bgee ID file with expression data} | HTML | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=expression&action=genes&search_by=1&organ_children=on&gene_organ_stage_information=on&attribut_list=species_name&attribut_list=gene_name&attribut_list=gene_id&gene_id=%s&gene_information=2
+Query    Gene expression annotation (expressed genes) {Bgee ID file with expression data count} | HTML | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=expression&action=genes&search_by=1&organ_children=on&gene_organ_stage_information=on&attribut_list=species_name&attribut_list=gene_name&attribut_list=gene_id&gene_id=%s&gene_information=1
+Example Gene ID (Ensembl) | ENSG00000091831
+Example UniProt accession number | P32234
+
+
+ID      bindingdb
+Acc     DB-0127
+Name    BindingDB database of measured binding affinities
+Desc    Database of measured binding affinities, focusing chiefly on the interactions of protein considered to be drug-targets with small, drug-like molecules.
+URL     http://www.bindingdb.org/
+URLlink http://www.bindingdb.org/bind/SearchTemplates.jsp
+Cat     Other
+Taxon   1 | all
+EDAMtpc 0000717 | Protein-ligand interaction
+EDAMtpc 0000620 | Drugs and targets
+EDAMdat 0002301 | SMILES string
+EDAMdat 0000962 | Small molecule annotation
+EDAMdat 0002402 | Protein-drug interaction annotation
+EDAMdat 0000857 | Sequence database hits
+EDAMdat 0002726 | Inhibitor annotation
+EDAMid  0001208 | Protein sequence
+EDAMid  0001127 | PDB ID
+EDAMid  0001187 | PubMed unique identifier
+EDAMid  0001099 | UniProt accession number
+EDAMid  0002301 | SMILES string
+EDAMid  0002580 | BindingDB Monomer ID
+EDAMid  0001009 | Protein name
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit UniProt accession number
+Query    Protein-drug interaction annotation | HTML | UniProt accession number | http://www.bindingdb.org/uniprot/%s
+Query    Inhibitor annotation | HTML | Protein name {BindingDB target name} | http://www.bindingdb.org/jsp/dbsearch/PrimarySearch_ki.jsp?tag=tg&kiunit=nM&icunit=nM&column=ki&submit=Search&energyterm=kJ%2Fmole&target=%s
+Query    Compound annotation {ITC data} | HTML | Protein name {BindingDB target name} | http://www.bindingdb.org/jsp/dbsearch/PrimarySearch_itc.jsp?tag=tg&column=delta_G0&energyterm=kJ%2Fmole&startPg=0&Increment=50&submit=Search&target=%s
+Query    Sequence database hits {BindingDB entries} | HTML | Protein sequence | http://www.bindingdb.org/bind/blastResult.jsp?DATASOURCE=protein&Search=B2&blastSeq=%s
+Query    Compound annotation | HTML | BindingDB Monomer ID | http://www.bindingdb.org/bind/chemsearch/marvin/MolStructure.jsp?monomerid=%s
+Query    Compound annotation | HTML | SMILES string | http://www.bindingdb.org/bind/searchby_smiles.jsp?SearchType=4&submit=Search&smilesStr=%s
+Query    Protein-drug interaction annotation | HTML | PDB ID | http://www.bindingdb.org/jsp/dbsearch/PrimarySearch_pdbids.jsp?pdbids_submit=Search&pdbids=%s
+Query    Protein-drug interaction annotation | HTML | PubMed unique identifier | http://www.bindingdb.org/jsp/dbsearch/PrimarySearch_pubmed.jsp?pubmed_submit=Search&pubmed=%s
+Example UniProt accession number | Q29005
+Example Protein name | ABL
+Example Protein name | Ab N1G9
+Example Protein sequence | VKCGSRRERCGYRLVRRQRSADEQLHCAGKAKRSGGHAPRVRELLLD
+Example BindingDB Monomer ID | 100
+Example SMILES string | CC%28C%29C1%28C%29SC%28Nc2ccccc2C%28F%29%28F%29F%29%3DNC1%3DO+%7Cc%3A18%7C
+Example PDB ID | 1OKZ
+Example PubMed unique identifier | 17408953
+
+
+ID      bipa
+Name    BIPA database for interaction between protein and nucleic acid
+Desc    Protein-nucleic acid interactions, with various features of protein-nuleic acid interfaces.
+URL     http://www-cryst.bioc.cam.ac.uk/bipa
+Taxon   1 | all
+EDAMtpc 0000718 | Protein-nucleic acid interaction
+EDAMdat 0001567 | Protein-nucleic acid interaction
+EDAMdat 0002358 | Protein domain-nucleic acid interaction
+EDAMid  0001042 | SCOP sunid
+EDAMid  0001127 | PDB ID
+EDAMfmt 0002331 | HTML
+Query    Protein-nucleic acid interaction | HTML | PDB ID | http://mordred.bioc.cam.ac.uk/bipa/structures/%s
+Query    Protein domain-nucleic acid interaction | HTML | SCOP sunid | http://mordred.bioc.cam.ac.uk/bipa/scops/%s
+Example PDB ID | 10MH
+Example SCOP sunid | 120412
+
+
+ID      brenda
+Acc     DB-0131
+Name    BRENDA comprehensive enzyme information system
+Desc    Comprehensive enzyme information.
+URL     http://www.brenda-enzymes.org
+URLsoap http://www.brenda-enzymes.org/soap2
+Cat     Enzyme and pathway databases
+Taxon   1 | all
+EDAMtpc 0000821 | Enzymes
+EDAMdat 0001509 | Enzyme annotation
+EDAMid  0001099 | UniProt accession number
+EDAMid  0001011 | EC number
+EDAMid  0002593 | BRENDA organism ID
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit EC number;BRENDA organism ID
+Query    Enzyme annotation {BRENDA entry} | HTML | EC number | http://www.brenda-enzymes.org/php/result_flat.php4?ecno=%s
+Query    Enzyme annotation {BRENDA entry} | HTML | EC number;BRENDA organism ID | http://www.brenda-enzymes.org/php/result_flat.php4?ecno=%s1&&OrganismID=&s3&ShowAll=True
+Query    Enzyme annotation {BRENDA entry} | HTML | EC number;UniProt accession number;BRENDA organism ID | http://www.brenda-enzymes.org/php/result_flat.php4?ecno=%s1&UniProtAcc=%s2&OrganismID=&s3&ShowAll=True
+Example EC number | 1.1.5.82
+Example EC number;UniProt accession number | 1.1.5.82;P15719
+Example EC number;UniProt accession number;BRENDA organism ID | 1.1.5.82;P15719;4577
+
+
+ID      cath
+Name    CATH protein structure classification database
+Desc    CATH is a hierarchical classification of protein domain structures, which clusters proteins at four major levels: Class (C), Architecture (A), Topology (T) and Homologous superfamily (H). The boundaries and assignments for each protein domain are determined using a combination of automated and manual procedures which include computational techniques, empirical and statistical evidence, literature review and expert analysis.
+URL     http://www.cathdb.info/
+URLsoap http://api.cathdb.info/api/soap/dataservices/wsdl
+Taxon   1 | all
+EDAMtpc 0000736 | Protein domains
+EDAMtpc 0000703 | CATH domain structure
+EDAMtpc 0000164 | Sequence clustering
+EDAMdat 0000901 | Protein features (domain composition)
+EDAMdat 0001553 | CATH node
+EDAMdat 0001762 | CATH domain report
+EDAMid  0001040 | CATH domain ID
+EDAMid  0001008 | Polypeptide chain ID
+EDAMid  0001127 | PDB ID
+EDAMid  0001043 | CATH node ID
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Query    CATH domain report | HTML | CATH domain ID | http://www.cathdb.info/domain/%s
+Query    CATH domain report | XML | CATH domain ID | http://www.cathdb.info/domain/%s?view=xml
+Query    Protein features (domain composition) {CATH chain} | HTML | Polypeptide chain ID | http://www.cathdb.info/chain/%s
+Query    Protein features (domain composition) {Pdb} | HTML | PDB ID | http://www.cathdb.info/pdb/%s
+Query    Protein features (domain composition) {Pdb} | XML | PDB ID | http://www.cathdb.info/pdb/%s?view=xml
+Query    CATH node | HTML | CATH node ID | http://www.cathdb.info/cathnode/%s
+Example CATH domain ID | 1cukA01
+Example Polypeptide chain ID | 1cukA
+Example PDB ID | 1cuk
+Example CATH node ID | 1.10.10.10
+
+
+ID      cdd
+Name    Conserved domain database (CDD)
+Desc    A collection of multiple sequence alignments for ancient domains and full-length proteins.
+URL     http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml
+Cat     Not available
+Taxon   1 | all
+EDAMtpc 0000741 | Protein sequence alignment
+EDAMtpc 0000164 | Sequence clustering
+EDAMtpc 0000736 | Protein domains
+EDAMdat 0000901 | Protein features (domain composition)
+EDAMdat 0001382 | Sequence alignment (multiple)
+EDAMdat 0000907 | Protein family annotation
+EDAMid  0002714 | CDD PSSM-ID
+EDAMid  0002666 | CDD ID
+EDAMid  0002327 | GI number (protein)
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    SP_FT None
+Query    Sequence alignment (multiple) {Conserved Domain Summary} | HTML | CDD ID | http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=%s
+Query    Sequence alignment (multiple) {Conserved Domain Summary} | HTML | CDD PSSM-ID | http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=%s
+Query    Protein family annotation {Conserved Domain Document Summary} | HTML | CDD ID | http://www.ncbi.nlm.nih.gov/sites/cdd?term=%s[Accn]
+Query    Protein family annotation {Conserved Domain Document Summary} | HTML | CDD PSSM-ID | http://www.ncbi.nlm.nih.gov/cdd/%s
+Query    Protein family annotation {Conserved Domain description} | XML | CDD PSSM-ID | http://www.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=cdd&id=%s&retmode=xml
+Query    Protein features (domain composition) {Conserved Domain annotation} | HTML | Sequence accession number (protein) | http://www.ncbi.nlm.nih.gov/Structure/cdd/wrpsb.cgi?seqinput=%s
+Query    Protein features (domain composition) {Conserved Domain annotation} | HTML | GI number (protein) | http://www.ncbi.nlm.nih.gov/Structure/cdd/wrpsb.cgi?seqinput=%s
+Query    Protein features (domain composition) {Conserved Domain annotation} | XML | Sequence accession number (protein) | http://www.ncbi.nlm.nih.gov/Structure/cdd/wrpsb.cgi?seqinput=%s&output=xml
+Query    Protein features (domain composition) {Conserved Domain annotation} | XML | GI number (protein) | http://www.ncbi.nlm.nih.gov/Structure/cdd/wrpsb.cgi?seqinput=%s&output=xml
+Example CDD PSSM-ID | 153083
+Example CDD ID | cd00576
+Example Sequence accession number (protein) | P26675
+Example GI number (protein) | 76800652
+
+
+ID      cellcycledb
+Name    Cell cycle database (CellCycleDB)
+Desc    A collection of genes and proteins involved in human and yeast cell cycle.
+URL     http://www.itb.cnr.it/cellcycle/index.html
+Taxon   4932 | Saccharomyces cerevisiae
+Taxon   9606 | Homo sapiens
+EDAMtpc 0000635 | Specific protein
+EDAMtpc 0000612 | Cell cycle and development
+EDAMtpc 0000782 | Fungal
+EDAMdat 0000896 | Protein annotation
+EDAMdat 0000916 | Gene annotation
+EDAMid  0002764 | Protein name (UniProt)
+EDAMid  0002300 | Gene name (NCBI)
+EDAMfmt 0002331 | HTML
+Query    Gene annotation | HTML | Gene name (NCBI) | http://www.itb.cnr.it/cellcycle/gene_rep.php?gene_name=%s
+Query    Protein annotation | HTML | Protein name (UniProt) | http://www.itb.cnr.it/cellcycle/protein_rep.php?protein_name=%s
+Example Gene name (NCBI) | CCND1
+Example Protein name (UniProt) | P53
+
+
+ID      cmr
+Acc     DB-0009
+Name    Comprehensive microbial genome resource (CMR)
+Desc    Information on all of the publicly available, complete prokaryotic genomes.  Common data types across all genomes in the CMR make searches more meaningful, and cross genome analysis highlight differences and similarities between the genomes.
+URL     http://cmr.tigr.org/
+Cat     Genome annotation databases
+Taxon   2 | Bacteria
+EDAMtpc 0001811 | Prokaryote
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000622 | Genomics
+EDAMdat 0000916 | Gene annotation
+EDAMdat 0002711 | Genome metadata
+EDAMid  0001099 | UniProt accession number
+EDAMid  0001179 | NCBI taxonomy ID
+EDAMid  0002292 | GenBank identifier
+EDAMid  0002774 | Gene ID (JCVI)
+EDAMid  0002786 | NCBI Genome Project ID
+EDAMfmt 0002331 | HTML
+Xref    SP_implicit None
+Query    Gene annotation | HTML | Gene ID (JCVI) | http://cmr.jcvi.org/cgi-bin/CMR/shared/GenePage.cgi?locus=%s
+Query    Gene annotation | HTML | GenBank identifier | http://cmr.jcvi.org/cgi-bin/CMR/shared/GenePage.cgi?type=SP&acc=%s
+Query    Gene annotation | HTML | UniProt accession number | http://cmr.jcvi.org/cgi-bin/CMR/shared/GenePage.cgi?type=protein_id&acc=%s
+Query    Genome metadata {CMR genome page} | HTML | NCBI taxonomy ID | http://cmr.jcvi.org/cgi-bin/CMR/GenomePage.cgi?taxon_id=%s
+Query    Genome metadata {CMR genome page} | HTML | NCBI Genome Project ID | http://cmr.jcvi.org/cgi-bin/CMR/GenomePage.cgi?ncbi_project_id=%s
+Example Gene ID (JCVI) | BA_0001
+Example GenBank identifier | AAP24059.1
+Example UniProt accession number | Q81W35
+Example NCBI taxonomy ID | 198094
+Example NCBI Genome Project ID | 309
+
+
+ID      cogeme
+Name    Phytopathogenic fungi and oomycete EST database (COGEME)
+Desc    Phytopathogenic fungi and oomycete EST database.
+URL     http://cogeme.ex.ac.uk/
+Taxon   4751 | Fungi
+EDAMtpc 0000655 | mRNA, EST or cDNA
+EDAMtpc 0000783 | Pathogen
+EDAMtpc 0000782 | Fungal
+EDAMdat 0000849 | Sequence record
+EDAMid  0002729 | COGEME EST ID
+EDAMid  0002730 | COGEME unisequence ID
+EDAMfmt 0002331 | HTML
+Query    Sequence record {Unisequence} | HTML | COGEME unisequence ID | http://cogeme.ex.ac.uk/cgi-bin/uni.pl?uni=x
+Query    Sequence record {EST} | HTML | COGEME EST ID | http://cogeme.ex.ac.uk/cgi-bin/est.pl?est=x
+Example COGEME EST ID | Bg13901527
+Example COGEME unisequence ID | BgCon[0123]
+
+
+ID      compluyeast_2dpage
+Acc     DB-0010
+Name    COMPLUYEAST-2DPAGE database
+Desc    A two-dimensional polyacrilamide gel electrophoresis federated database.
+URL     http://compluyeast2dpage.dacya.ucm.es/
+Cat     2D gel databases
+Taxon   4932 | Saccharomyces cerevisiae
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001099 | UniProt accession number
+EDAMid  0000989 | Protein identifier
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    2D PAGE annotation | HTML | UniProt accession number | http://compluyeast2dpage.dacya.ucm.es/cgi-bin/2d//2d.cgi?ac=%s
+Query    2D PAGE annotation | HTML | Protein identifier | http://compluyeast2dpage.dacya.ucm.es/cgi-bin/2d//2d.cgi?ac=%s
+Example UniProt accession number | P83784
+Example Protein identifier | CAP6_CANAL
+
+
+ID      conoserver
+Acc     DB-0156
+Name    Cone snail toxin database (ConoServer)
+Desc    Conotoxin peptide sequences and structures.
+URL     http://www.conoserver.org/
+Cat     Organism-specific databases
+Taxon   6490 | Conus
+EDAMtpc 0000621 | Organism
+EDAMtpc 0002661 | Toxins and targets
+EDAMdat 0000896 | Protein annotation
+EDAMid  0002804 | Protein ID (ConoServer)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein annotation | HTML | Protein ID (ConoServer) | http://www.conoserver.org/?page=card&table=protein&id=%s
+Example Protein ID (ConoServer) | 3271
+
+
+ID      cornea_2dpage
+Acc     DB-0011
+Name    Human cornea 2-DE database (Cornea-2DPAGE)
+Desc    Two-dimensional polyacrylamide gel electrophoresis federated database.
+URL     http://www.cornea-proteomics.com/
+Cat     2D gel databases
+Taxon   9606 | Homo sapiens
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    2D PAGE annotation | HTML | UniProt accession number | http://www.daimi.au.dk/cgi-jje/2d/2d.cgi#%s
+Query    2D PAGE annotation | Text | UniProt accession number | http://www.daimi.au.dk/cgi-jje/2d/2d.cgi?ac=%s&format=text&database=cornea
+Example UniProt accession number | P02647
+
+
+ID      corum
+Name    CORUM comprehensive resource of mammalian protein complexes
+Desc    The CORUM database provides a resource of manually annotated protein complexes from mammalian organisms. Annotation includes protein complex function, localization, subunit composition, literature references and more. All information is obtained from individual experiments published in scientific articles, data from high-throughput experiments is excluded.
+URL     http://mips.gsf.de/genre/proj/corum
+Taxon   40674 | Mammalia
+EDAMtpc 0000719 | Protein-protein interaction
+EDAMtpc 0000140 | Protein targeting and localization
+EDAMdat 0002712 | Protein complex annotation
+EDAMid  0002713 | Protein ID (CORUM)
+EDAMfmt 0002331 | HTML
+Query    Protein complex annotation | HTML | Protein ID (CORUM) | http://mips.helmholtz-muenchen.de/genre/proj/corum/complexdetails.html?id=%s
+Example Protein ID (CORUM) | 178
+
+
+ID      cuticledb
+Name    Structural proteins of the arthropod cuticle (CuticleDB)
+Desc    A relational database containing all structural proteins of Arthropod cuticle identified to date. Many come from direct sequencing of proteins isolated from cuticle and from sequences from cDNAs that share common features with these authentic cuticular proteins. It also includes proteins from the Drosophila melanogaster and the Anopheles gambiae genomes, that have been predicted to be cuticular proteins, based on a Pfam motif responsible for chitin binding in Arthropod cuticle.
+URL     http://biophysics.biol.uoa.gr/cuticleDB/
+Taxon   6656 | Arthropoda
+EDAMtpc 0000635 | Specific protein
+EDAMdat 0000896 | Protein annotation
+EDAMid  0002715 | Protein ID (CuticleDB)
+EDAMfmt 0002331 | HTML
+Query    Protein annotation | HTML | Protein ID (CuticleDB) | http://bioinformatics.biol.uoa.gr/cuticleDB/protview.jsp?id=%s
+Example Protein ID (CuticleDB) | 639
+
+
+ID      dbest
+Name    dbEST database of EST sequences
+Desc    dbEST is a division of GenBank that contains sequence data and other information on "single-pass" cDNA sequences, or "Expressed Sequence Tags", from a number of organisms.
+URL     http://www.ncbi.nlm.nih.gov/dbEST/
+Cat     Not available
+Taxon   1 | all
+EDAMtpc 0000655 | mRNA, EST or cDNA
+EDAMdat 0000849 | Sequence record
+EDAMid  0002314 | GI number
+EDAMid  0001105 | dbEST accession
+EDAMfmt 0002310 | fasta-html
+EDAMfmt 0002532 | genbank-html
+EDAMfmt 0002331 | HTML
+Xref    SP_FT None
+Query    Sequence record | genbank-html | dbEST accession | http://www.ncbi.nlm.nih.gov/nucest/%s?report=genbank
+Query    Sequence record | HTML {est} | dbEST accession | http://www.ncbi.nlm.nih.gov/nucest/%s?report=est
+Query    Sequence record | HTML {docsum} | dbEST accession | http://www.ncbi.nlm.nih.gov/nucest/%s?report=docsum
+Query    Sequence record | fasta-html | dbEST accession | http://www.ncbi.nlm.nih.gov/nucest/%s?report=fasta
+Query    Sequence record | genbank-html | dbEST accession | http://www.ncbi.nlm.nih.gov/nucest/%s?report=genbank
+Query    Sequence record | genbank-html | GI number | http://www.ncbi.nlm.nih.gov/nucest/%s?report=genbank
+Query    Sequence record | HTML {est} | GI number | http://www.ncbi.nlm.nih.gov/nucest/%s?report=est
+Query    Sequence record | HTML {docsum} | GI number | http://www.ncbi.nlm.nih.gov/nucest/%s?report=docsum
+Query    Sequence record | fasta-html | GI number | http://www.ncbi.nlm.nih.gov/nucest/%s?report=fasta
+Query    Sequence record | genbank-html | GI number | http://www.ncbi.nlm.nih.gov/nucest/%s?report=genbank
+Example dbEST accession | f12345
+
+
+ID      dima
+Name    DIMA domain interaction map
+Desc    Functional and physical interactions among conserved protein-domains, including experimental data and computational predictions.
+URL     http://mips.gsf.de/genre/proj/dtest/index.html
+Taxon   1 | all
+EDAMtpc 0000719 | Protein-protein interaction
+EDAMdat 0002359 | Domain-domain interaction
+EDAMid  0001138 | Pfam accession number
+EDAMfmt 0002331 | HTML
+Query    Domain-domain interaction | HTML | Pfam accession number | http://webclu.bio.wzw.tum.de/dima/DomQuery?domain=%s
+Example DomQuery domain | PF00419
+
+
+ID      dip
+Acc     DB-0016
+Name    Database of interacting proteins (DIP)
+Desc    The DIP database catalogs experimentally determined interactions between proteins. It combines information from a variety of sources to create a single, consistent set of protein-protein interactions. The data stored within the DIP database were curated, both, manually by expert curators and also automatically using computational approaches that utilize the the knowledge about the protein-protein interaction networks extracted from the most reliable, core subset of the DIP data.
+URL     http://dip.doe-mbi.ucla.edu/
+Cat     Protein-protein interaction databases
+Taxon   1 | all
+EDAMtpc 0000719 | Protein-protein interaction
+EDAMdat 0001565 | Protein-protein interaction
+EDAMid  0002616 | DIP ID
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein-protein interaction {DIP entry} | HTML | DIP ID | http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?PK=84
+Example DIP ID | 84
+
+
+ID      disprot
+Acc     DB-0017
+Name    Database of protein disorder (DisProt)
+Desc    A curated database that provides information about proteins that lack fixed 3D structure in their putatively native states, either in their entirety or in part.
+URL     http://www.disprot.org/
+Cat     3D structure databases
+Taxon   1 | all
+EDAMtpc 0000698 | Protein tertiary structure
+EDAMdat 0002722 | Disordered protein annotation
+EDAMid  0002723 | Protein ID (DisProt)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    DisProt entry | HTML | Protein ID (DisProt) | http://www.disprot.org/protein.php?id=%s
+Example Protein ID (DisProt) | DP00001
+
+
+ID      dosac_cobs_2dpage
+Acc     DB-0018
+Name    DOSAC-COBS 2D-PAGE database
+Desc    Two-dimensional polyacrylamide gel electrophoresis federated database.
+URL     http://www.dosac.unipa.it/2d/
+Cat     2D gel databases
+Taxon   1 | all
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    2D PAGE annotation | HTML | UniProt accession number | http://www.dosac.unipa.it/cgi-bin/2d/2d.cgi?ac=O43818
+Example UniProt accession number | O43818
+
+
+ID      ecid
+Name    E Coli predicted protein interactions database (EcID)
+Desc    Results of running an "in silico 2 hybrid system" for all the possible pairs among E. coli proteins.
+URL     http://www.pdg.cnb.uam.es/i2h/info.html
+Taxon   562 | Escherichia coli
+EDAMtpc 0000719 | Protein-protein interaction
+EDAMdat 0000896 | Protein annotation
+EDAMdat 0001565 | Protein-protein interaction
+EDAMdat 0002093 | Data reference
+EDAMid  0001026 | Gene symbol
+EDAMid  0000989 | Protein identifier
+EDAMid  0002802 | Protein ID (EcID)
+EDAMfmt 0002331 | HTML
+Query    Data reference {Protein sequence ID table} | HTML | Protein identifier | http://ecid.bioinfo.cnio.es/Php/PreQuery.php?busca=%s
+Query    Protein-protein interaction {Predictions Mode} | HTML | Protein identifier;Protein ID (EcID);Gene symbol | http://ecid.bioinfo.cnio.es/Php/Summary.php?view=pred&ID=%s1&seq=%s2&gn=%s3
+Query    Protein-protein interaction {Experimental Mode} | HTML | Protein identifier;Protein ID (EcID);Gene symbol | http://ecid.bioinfo.cnio.es/Php/Summary.php?ID=%s1&seq=%s2&gn=%s3&view=exp
+Query    Protein annotation | HTML | Protein identifier;Protein ID (EcID);Gene symbol | http://ecid.bioinfo.cnio.es/Php/ProtInfo.php?busca=%s1seq=%s2&gn=%s3
+Example Protein identifier | NRDD_ECOLI
+Example Protein identifier;Protein ID (EcID);Gene symbol | NRDD_ECOLI;1639;nrdD
+
+
+ID      eco2dbase
+IDalt   2DBase-Ecoli
+IDalt   EC-2D-GEL
+Acc     DB-0115
+Name    2D-PAGE database of Escherichia coli
+Desc    This Database currently contains 12 gels consisting of 1185 protein spots information in which 723 proteins where identified and annotated. Individual protein spots in the existing gels can be displayed, queried, analysed and compared in a tabular format based on varios functional categories enabling quick and subsequent analysis.
+URL     http://2dbase.techfak.uni-bielefeld.de/cgi-bin/2d/2d.cgi
+Cat     2D gel databases
+Taxon   562 | Escherichia coli
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    2D PAGE annotation {ECO2DBASE entry} | HTML | UniProt accession number | http://2dbase.techfak.uni-bielefeld.de/cgi-bin/2d/2d.cgi?%s
+Example UniProt accession number | P02930
+Example UniProt accession number | P52697
+
+
+ID      elm
+Name    Eukaryotic linear motif resource (ELM)
+Desc    A resource for predicting functional sites in eukaryotic proteins. Putative functional sites are identified by patterns (regular expressions). To improve the predictive power, context-based rules and logical filters are applied to reduce the amount of false positives.
+URL     http://elm.eu.org/
+Taxon   1 | all
+EDAMtpc 0000158 | Sequence motifs
+EDAMtpc 0000748 | Protein functional sites
+EDAMtpc 0000158 | Sequence motifs
+EDAMdat 0001298 | Sequence motif report
+EDAMid  0002705 | GO term ID (cellular compartment)
+EDAMid  0002291 | UniProt ID
+EDAMid  0000848 | Sequence
+EDAMid  0001868 | Taxon
+EDAMfmt 0002331 | HTML
+Query    Sequence motif report {ELM report} | HTML | UniProt ID | http://elm.eu.org/basicELM/cgimodel.py?fun=Submit&swissprotId=%s
+Query    Sequence motif report {ELM report} | HTML | UniProt ID;Taxon;GO term ID (cellular compartment) | http://elm.eu.org/basicELM/cgimodel.py?fun=Submit&swissprotId=%s1&userSpecies=%s2&userCC=%s3
+Query    ELM report | HTML | Sequence | http://elm.eu.org/basicELM/cgimodel.py?fun=Submit&sequence=%s
+Example UniProt ID;Taxon;GO term ID (cellular compartment) | src_human;10116;GO:0005634
+Example UniProt ID | src_human
+Example Sequence | MGSNKSKPKDASQRRRSLEPAENVHGAGGGAFPASQTPSKPASADGHRGPSAAFAPAAAEPKLFGGFNSSDTVTSPQRAGPLAGGVTTFVALYDYESRTETDLSFKKGERLQIVNNTEGDWWLAHSLSTGQTGYIPSNYVAPSDSIQAEEWYFGKITRRESERLLLNAENPRGTFLVRESETTKGAYCLSVSDFDNAKGLNVKHYKIRKLDSGGFYITSRTQFNSLQQLVAYYSKHADGLCHRLTTVCPTSKPQTQGLAKDAWEIPRESLRLEVKLGQGCFGEVWMGTWNGTTRVAIKTLKPGTMSPEAFLQEAQVMKKLRHEKLVQLYAVVSEEPIYIVTEYMSKGSLLDFLKGETGKYLRLPQLVDMAAQIASGMAYVERMNYVHRDLRAANILVGENLVCKVADFGLARLIEDNEYTARQGAKFPIKWTAPEAALYGRFTIKSDVWSFGILLTELTTKGRVPYPGMVNREVLDQVERGYRMPCPPECPESLHDLMCQCWRKEPEERPTFEYLQAFLEDYFTSTEPQYQPGENL
+
+
+ID      ensembl
+Acc     DB-0023
+Name    Ensembl eukaryotic genome annotation project
+Desc    Genome databases for vertebrates and other eukaryotic species.
+URL     http://www.ensembl.org/
+Cat     Genome annotation databases
+Taxon   33208 | Metazoa
+EDAMtpc 0000643 | Genome
+EDAMtpc 0002818 | Eukaryote
+EDAMtpc 0000643 | Genome
+EDAMdat 0000849 | Sequence record
+EDAMdat 0000916 | Gene annotation
+EDAMid  0001033 | Gene ID (Ensembl)
+EDAMid  0002725 | Transcript ID (Ensembl)
+EDAMfmt 0001929 | fasta
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Xref    SP_FT None
+Query    Gene annotation | HTML | Gene ID (Ensembl) | http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=%s
+Query    Sequence record | fasta | Gene ID (Ensembl);Transcript ID (Ensembl) | http://www.ensembl.org/Homo_sapiens/Gene/Export?db=core;g=%s1;output=fasta;r=13:31787617-31871809;strand=feature;t=%s2;time=1244110856.85314;st=cdna;st=coding;st=peptide;st=utr5;st=utr3;st=exons;st=introns;genomic=unmasked;_format=Text
+Example Gene ID (Ensembl);Transcript ID (Ensembl) | ENSG00000139618;ENST00000380152
+
+
+ID      enzyme
+Acc     DB-0024
+Name    Enzyme nomenclature database (ENZYME)
+Desc    A repository of information relative to the nomenclature of enzymes. It is primarily based on the recommendations of the Nomenclature Committee of the International Union of Biochemistry and Molecular Biology (IUBMB) and it describes each type of characterized enzyme for which an EC (Enzyme Commission) number has been provided.
+URL     http://www.expasy.org/enzyme/
+Cat     Enzyme and pathway databases
+Taxon   1 | all
+EDAMtpc 0000821 | Enzymes
+EDAMtpc 0002811 | Nomenclature
+EDAMdat 0001509 | Enzyme annotation
+EDAMid  0001011 | EC number
+EDAMfmt 0002331 | HTML
+Xref    SP_implicit None
+Query    Enzyme annotation | Text | EC number | http://www.expasy.ch/enzyme/%s.txt
+Query    Enzyme annotation | HTML | EC number | http://www.expasy.ch/enzyme/%s
+Example EC number | 1.5.99.11
+
+
+ID      eric
+Name    Enteropathogen resource integration center (ERIC)
+Desc    Annotated enterobacterial genome and associated information.
+URL     http://www.ericbrc.org/portal/eric/
+Cat     Not available
+Taxon   543 | Enterobacteriaceae
+EDAMtpc 0001811 | Prokaryote
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000783 | Pathogen
+Xref    SP_FT None
+
+
+ID      fusiondb
+Name    FusionDB database of bacterial and archaeal gene fusion events
+Desc    A database of bacterial and archaeal gene fusion events.
+URL     http://www.igs.cnrs-mrs.fr/FusionDB/
+Taxon   2 | Bacteria
+Taxon   2157 | Archaea
+EDAMtpc 0000630 | Gene structure
+
+
+ID      gene3d
+Acc     DB-0029
+Name    Gene3D structural and functional annotation of protein families
+Desc    Gene3D structural and functional annotation of protein families incorporates several different sources including CATH, DRUGBANK, PFAM etc.
+URL     http://cathwww.biochem.ucl.ac.uk:8080/Gene3D/
+URLlink http://gene3d.biochem.ucl.ac.uk/Gene3D/linking
+URLsoap http://funcnet.eu/
+Cat     Family and domain databases
+Taxon   1 | all
+EDAMtpc 0000724 | Protein families
+EDAMdat 0000907 | Protein family annotation
+EDAMid  0001040 | CATH domain ID
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein family annotation {Gene3D entry} | HTML | CATH node ID (family) | http://gene3d.biochem.ucl.ac.uk/Gene3D/cathLink?family=%s
+Query    Protein family annotation {Gene3D entry} | HTML | CATH domain ID | http://gene3d.biochem.ucl.ac.uk/Gene3D/cathLink?domain_id=%s
+Example CATH node ID (family) | 2.10.10.10
+Example CATH domain ID | 1cukA00
+
+
+ID      genecards
+Acc     DB-0030
+Name    GeneCards database of human genes, protein and diseases
+Desc    GeneCards is a searchable, integrated database of human genes that provides concise genomic, proteomic, transcriptomic, genetic and functional information on all known and predicted human genes. Information featured in GeneCards includes orthologies, disease relationships, mutations and SNPs, gene expression, gene function, pathways, protein-protein interactions, related drugs & compounds and direct links to cutting edge research reagents and tools such as antibodies, recombinant proteins, clones, expression assays and RNAi reagents.
+URL     http://www.genecards.org/
+Cat     Human genes and diseases database
+Taxon   9606 | Homo sapiens
+EDAMtpc 0000803 | Genes
+EDAMtpc 0000586 | Proteins
+EDAMtpc 0000803 | Human disease
+EDAMtpc 0000719 | Protein-protein interaction
+EDAMtpc 0000602 | Pathways, networks and models
+EDAMtpc 0000199 | Mutation and polymorphism
+EDAMtpc 0000643 | Genome
+EDAMdat 0000916 | Gene annotation
+EDAMid  0001099 | UniProt accession number
+EDAMid  0001026 | Gene symbol
+EDAMid  0002298 | Gene ID (HGNC)
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    SP_explicit None
+Query    Gene annotation | HTML | Gene symbol | http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s
+Query    Gene annotation | HTML | UniProt accesion number | http://www.genecards.org/cgi-bin/carddisp.pl?id=%s
+Query    Gene annotation | HTML | EntrezGene id | http://www.genecards.org/cgi-bin/carddisp.pl?id=%s
+Query    Gene annotation | HTML | Ensembl id | http://www.genecards.org/cgi-bin/carddisp.pl?id=%s
+Query    Gene annotation | HTML | Gene ID (HGNC) | http://www.genecards.org/cgi-bin/carddisp.pl?id=%s
+Query    Gene annotation | XML | Gene symbol | http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s&format=xmlByFunction
+Example Gene symbol | CASP3
+Example Gene ID (HGNC) | 2041
+
+
+ID      genedb
+Name    GeneDB database from Sanger Institute Pathogen Sequencing Units
+Desc    Sequence data and annotation/curation for the whole range of organisms sequenced by the PSU (Sanger Institute Pathogen Sequencing Units).
+URL     http://www.genedb.org/
+Taxon   1 | all
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000783 | Pathogen
+EDAMdat 0000916 | Gene annotation
+EDAMid  0001026 | Gene symbol
+EDAMfmt 0002331 | HTML
+Xref    SP_FT None
+Query    Gene annotation | HTML | Gene symbol | http://www.genedb.org/gene/%s
+Example Gene symbol | ECA4014
+
+
+ID      genefarm
+Acc     DB-0032
+Name    GeneFarm annotation of Arabidopsis thaliana gene and protein families
+Desc    Structural and functionnal annotation of plant gene and protein families by a network of experts.
+URL     http://urgi.versailles.inra.fr/Genefarm/index.htpl
+Cat     Organism-specific databases
+Taxon   3702 | Arabidopsis thaliana
+EDAMtpc 0000724 | Protein families
+EDAMtpc 0000780 | Plant
+EDAMtpc 0000621 | Organism
+EDAMdat 0000916 | Gene annotation
+EDAMdat 0000907 | Protein family annotation
+EDAMid  0002295 | Gene ID
+EDAMid  0002731 | Protein family ID (GeneFarm)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Gene annotation | HTML | Gene ID | http://urgi.versailles.inra.fr/Genefarm/Gene/display_gene.htpl?GENE_ID=%s
+Query    Protein family annotation | HTML | Protein family ID (GeneFarm) | http://urgi.versailles.inra.fr/Genefarm/Family/display_family.htpl?FAM_ID=%s
+Example Protein family ID (GeneFarm) | 59
+Example Gene ID | 907
+
+
+ID      geneid
+Acc     DB-0118
+Name    GeneID database of genes from NCBI RefSeq genomes
+Desc    Database of genes from NCBI RefSeq genomes
+URL     http://www.ncbi.nlm.nih.gov/sites/entrez?db=gene
+Cat     Genome annotation databases
+Taxon   1 | all
+EDAMtpc 0000623 | Gene family or system
+EDAMtpc 0000643 | Genome
+EDAMdat 0001025 | Gene identifier
+EDAMid  0002581 | GO term name
+EDAMid  0001176 | GO term ID
+EDAMid  0001026 | Gene symbol
+EDAMid  0001045 | Species name
+EDAMid  0001011 | EC number
+EDAMid  0000987 | Chromosome name
+EDAMid  0001097 | Sequence accession number (nucleic acid)
+EDAMid  0000968 | Keyword
+EDAMid  0001187 | PubMed unique identifier
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Xref    SP_FT None
+Query    Gene identifier {GeneID gene list} | HTML | Keyword | http://www.ncbi.nlm.nih.gov/sites/entrez?db=gene&term=%s
+Query    Gene identifier {GeneID gene list} | HTML | Sequence accession number (nucleic acid) | http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term=%s[accn]
+Query    Gene identifier {GeneID gene list} | HTML | Gene symbol | http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term=%s[sym]
+Query    Gene identifier {GeneID gene list} | HTML | PubMed unique identifier | http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term=%s[PMID]
+Query    Gene identifier {GeneID gene list} | HTML | GO term name | http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term="%s"[GO]
+Query    Gene identifier {GeneID gene list} | HTML | GO term ID | http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term="%s"[GO]
+Query    Gene identifier {GeneID gene list} | HTML | Chromosome name;Species name | http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term=%s1[CHR]+AND+%s2[ORGN]
+Query    Gene identifier {GeneID gene list} | HTML | EC number | http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term=%s[EC]
+Example Keyword | haem
+Example Sequence accession number (nucleic acid) | M11313
+Example Gene symbol | BRCA1
+Example PubMed unique identifier | 11331580
+Example GO term name | cell+adhesion
+Example Chromosome name | Y
+Example Species name | human
+Example EC number | 1.9.3.1
+
+
+ID      glycosuitedb
+Acc     DB-0036
+Name    GlycoSuiteDB glycan database
+Desc    An annotated and curated relational database of glycan structures.
+URL     http://glycosuitedb.expasy.org/
+Cat     PTM databases
+Taxon   1 | all
+EDAMtpc 0000152 | Carbohydrates
+EDAMdat 0002313 | Carbohydrate structure annotation
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Carbohydrate structure annotation {GlycoSuiteDB entry} | HTML | Uniprot accession number | http://glycosuitedb.expasy.org/glycosuite/results?prot_swissprot=%s;results_index=protein;ig_hist=1
+Example Uniprot accession number | P02763
+
+
+ID      goa
+IDalt   GOA-UniProt
+Name    Gene ontology annotation database for UniProt (GOA-UniProt)
+Desc    Gene Ontology (GO) annotations to proteins in the UniProt Knowledgebase (UniProtKB) and International Protein Index (IPI).
+URL     http://www.ebi.ac.uk/goa
+Taxon   1 | all
+EDAMtpc 0000644 | Proteome
+EDAMtpc 0000219 | Annotation
+EDAMdat 0001716 | GO term
+EDAMdat 0002093 | Data reference
+EDAMid  0001009 | Protein name
+EDAMid  0000989 | Protein identifier
+EDAMid  0001176 | GO term ID
+EDAMid  0002582 | GO term name (biological process)
+EDAMfmt 0002331 | HTML
+Xref    SP_FT None
+Xref    EMBL_explicit None
+Query    Data reference {GOA-UniProt protein entry} | HTML | Protein name | http://www.ebi.ac.uk/QuickGO/GSearch?q=%s&what=Protein
+Query    Data reference {GOA-UniProt protein entry} | HTML | Protein identifier | http://www.ebi.ac.uk/QuickGO/GSearch?q=%s&what=Protein
+Query    GO term | HTML | GO term ID | http://www.ebi.ac.uk/QuickGO/GSearch?q=%s&what=GO
+Query    GO term | HTML | GO term name (biological process) | http://www.ebi.ac.uk/QuickGO/GSearch?q=%s&what=GO
+Example GO term name (biological process) | apoptosis
+Example GO term ID | GO:0006915
+Example Protein name | tropomyosin
+Example Protein identifier | P06727
+
+
+ID      gpcrdb
+Acc     DB-0038
+Name    Information system for G protein-coupled receptors (GPCRs)
+Desc    GPCR family profiles, mutation data (in various formats), ligand binding data, sequence annotations and cross-references to other databases.
+URL     http://www.gpcr.org/7tm/
+Cat     Protein family/group databases
+Taxon   2759 | Eukaryota
+EDAMtpc 0000820 | Membrane
+EDAMtpc 0000717 | Protein-ligand interaction
+EDAMdat 0002401 | Membrane protein annotation
+EDAMid  0001131 | Protein family name
+EDAMfmt 0002331 | HTML
+Xref    SP_implicit None
+Query    Membrane protein annotation {GPCRDB entry} | HTML | Protein family name | http://www.gpcr.org/7tm/proteins/%s
+Example Protein family name | a1kyp5_petma
+CCxref  All Swiss-Prot entries that contains a CC line of the type "-!- SIMILARITY: Belongs to the G-protein coupled receptor ..."
+
+
+ID      gramene
+Acc     DB-0039
+Name    Gramene database for comparative grass genomics
+Desc    Gramene adds value to public data sets of grass genomes and helps to compare, identify and understand genes, pathways and phenotypes from different grass species.
+URL     http://www.gramene.org/
+Cat     Organism-specific databases
+Taxon   4479 | Poaceae
+EDAMtpc 0000797 | Comparative genomics
+EDAMtpc 0000625 | Genotype and phenotype
+EDAMtpc 0000621 | Organism
+EDAMtpc 0000602 | Pathways, networks and models
+EDAMdat 0000896 | Protein annotation
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein annotation {Gramene entry} | HTML | Sequence accession number (protein) | http://www.gramene.org//db/protein/protein_search?acc=%s
+Example Sequence accession number (protein) | P93436
+
+
+ID      hamap
+Acc     DB-004
+Name    High-quality automated and manual annotation of microbial proteomes (HAMAP)
+Desc    A system, based on manual protein annotation, that identifies and semi-automatically annotates proteins that are part of well-conserved families or subfamilies: the HAMAP families. HAMAP is based on manually created family rules and is applied to bacterial, archaeal and plastid-encoded proteins.
+URL     http://www.expasy.org/sprot/hamap/
+Cat     Family and domain databases
+Taxon   1 | all
+EDAMtpc 0000644 | Proteome
+EDAMtpc 0000644 | Proteome
+EDAMtpc 0000724 | Protein families
+EDAMdat 0000896 | Protein annotation
+EDAMdat 0000849 | Sequence record
+EDAMid  0002291 | UniProt ID
+EDAMid  0002766 | HAMAP ID
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002188 | uniprot
+Xref    SP_explicit None
+Query    UniProt ID {HAMAP family members} | Text | HAMAP ID | http://www.uniprot.org/uniprot/?query=hamap+MF_%s&format=tab&columns=id
+Query    Sequence record {HAMAP family sequences} | uniprot | HAMAP ID | http://www.uniprot.org/uniprot/?query=hamap+MF_%s&format=txt
+Query    Protein annotation {HAMAP family rules} | HTML | HAMAP ID | http://www.expasy.org/unirule/MF_%s
+Query    Protein annotation {HAMAP family rules} | Text | HAMAP ID | http://www.expasy.org/unirule/MF_%s.txt
+Example HAMAP ID | 00314
+Status  Referenced
+
+ID      intact
+Acc     DB-0051
+Name    IntAct protein interaction database and analysis system
+Desc    Protein interaction database and analysis system.
+URL     http://www.ebi.ac.uk/intact/
+Cat     Protein-protein interaction databases
+Taxon   1 | all
+EDAMtpc 0000719 | Protein-protein interaction
+EDAMdat 0000906 | Protein interaction annotation
+EDAMid  0001130 | IntAct accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein interaction annotation {IntAct entry} | HTML | IntAct accession number | http://www.ebi.ac.uk/intact/binary-search/faces/search.xhtml?query=%s
+Example IntAct accession number | None
+
+
+ID      interpro
+Acc     DB-0052
+Name    InterPro integrated database of protein families, domains, regions, repeats and functional sites
+Desc    Protein families, domains, regions, repeats and sites in which identifiable features found in known proteins can be applied to new protein sequences.
+URL     http://www.ebi.ac.uk/interpro/
+Cat     Family and domain databases
+Taxon   1 | all
+EDAMtpc 0000724 | Protein families
+EDAMtpc 0000748 | Protein functional sites
+EDAMtpc 0000641 | Repeat sequences
+EDAMdat 0001355 | Protein signature data
+EDAMid  0001133 | InterPro accession
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Xref    SP_FT None
+Xref    EMBL_explicit None
+Query    Protein signature data | HTML | InterPro accession | http://www.ebi.ac.uk/interpro/IEntry?ac=%s
+Example InterPro accession | IPR000059
+
+
+ID      ipi
+Acc     DB-0132
+Name    International protein index (IPI)
+Desc    Provides a top level guide to the main databases that describe the proteomes of higher eukaryotic organisms. IPI effectively maintains a database of cross references between the primary data sources, provides minimally redundant yet maximally complete sets of proteins for featured species (one sequence per transcript) and maintains stable identifiers (with incremental versioning) to allow the tracking of sequences in IPI between IPI releases.
+URL     http://www.ebi.ac.uk/IPI
+Cat     Sequence databases
+Taxon   1 | all
+EDAMtpc 0000644 | Proteome
+EDAMdat 0000849 | Sequence record
+EDAMid  0002384 | IPI protein ID
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Sequence record {IPI entry} | HTML | IPI protein ID | http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=%s
+Example IPI protein ID | IPI00177866
+Status  Referenced
+
+ID      lgicdb
+Name    Ligand-gated ion channel database (LGICdb)
+Desc    Nucleic and proteic sequences of the subunits. Multiple sequence alignments can be generated, and some phylogenetic studies of the superfamilies are provided. Finally, the atomic coordinates of subunits, or portion of subunits, are provided when available.
+URL     http://www.ebi.ac.uk/compneur-srv/LGICdb/LGICdb.php
+Taxon   1 | all
+EDAMtpc 0000182 | Sequence alignment
+EDAMtpc 0000084 | Phylogenetics
+EDAMdat 0002401 | Membrane protein annotation
+EDAMid  0002797 | Protein ID (LGICdb)
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Query    Membrane protein annotation {Ligand-Gated Ion Channel database entry} | HTML | Protein ID (LGICdb) | http://www.ebi.ac.uk/compneur-srv/LGICdb/HTML/%s.php
+Query    Membrane protein annotation {Ligand-Gated Ion Channel database entry} | XML | Protein ID (LGICdb) | http://www.ebi.ac.uk/compneur-srv/LGICdb/XML/%s.xml
+Example Protein ID (LGICdb) | 5HT3Arano
+
+
+ID      merops
+Acc     DB-0059
+Name    MEROPS peptidase database
+Desc    Information resource for peptidases (also termed proteases, proteinases and proteolytic enzymes) and the proteins that inhibit them. Information includes the classification and nomenclature of the peptidase and links to supplementary pages showing sequence identifiers, the structure if known, literature references and more.
+URL     http://merops.sanger.ac.uk/
+Cat     Protein family/group databases
+Taxon   1 | all
+EDAMtpc 0000821 | Enzymes
+EDAMtpc 0002811 | Nomenclature
+EDAMdat 0000896 | Protein annotation
+EDAMid  0002629 | Enzyme ID (MEROPS)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein annotation {MEROPS page} | HTML | Clan | http://merops.sanger.ac.uk/cgi-bin/merops.cgi?id=%s;action=summary
+Query    Protein annotation {MEROPS page} | HTML | Family | http://merops.sanger.ac.uk/cgi-bin/merops.cgi?id=%s;action=summary
+Query    Protein annotation {MEROPS page} | HTML | Enzyme ID (MEROPS) | http://merops.sanger.ac.uk/cgi-bin/merops.cgi?id=%s;action=summary
+Example Enzyme ID (MEROPS) | A01.001
+
+
+ID      mint
+Acc     DB-0158
+Name    Molecular interaction Database (MINT)
+Desc    Experimentally verified protein-protein interactions mined from the scientific literature by expert curators.
+URL     http://mint.bio.uniroma2.it/mint/
+Taxon   1 | all
+EDAMtpc 0000719 | Protein-protein interaction
+EDAMdat 0001565 | Protein-protein interaction
+EDAMid  0002615 | MINT ID
+EDAMfmt 0002331 | HTML
+Query    Protein-protein interaction {MINT interaction} | HTML | MINT ID | http://mint.bio.uniroma2.it/mint/search/interaction.do?ac=MINT-%s
+Example MINT ID | 3979570
+Status  Not referenced
+
+ID      nmpdr
+Acc     DB-0125
+Name    National microbial pathogen
+Desc    Curated annotations in an environment for comparative analysis of genomes and biological subsystems, with an emphasis on the food-borne pathogens Campylobacter, Listeria, Staphylococcus, Streptococcus, and Vibrio as well as the STD pathogens Chlamydiaceae, Haemophilus, Mycoplasma, Neisseria, Treponema, and Ureaplasma.
+URL     http://www.nmpdr.org
+URLlink http://www.nmpdr.org/FIG/wiki/view.cgi/FIG/LinkingToTheGenomeViewer
+Cat     Genome annotation databases
+Taxon   2 | Bacteria
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000783 | Pathogen
+EDAMtpc 0000797 | Comparative genomics
+EDAMdat 0000916 | Gene annotation
+EDAMid  0001179 | NCBI taxonomy ID
+EDAMid  0002737 | FIG ID
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Xref    SP_FT None
+Query    Genome annotation | HTML | NCBI taxonomy ID | http://www.nmpdr.org/linkin.cgi?genome=%s
+Query    Gene annotation {Protein encoding gene or other feature} | HTML | FIG ID | http://www.nmpdr.org/linkin.cgi?id=%s
+Example NCBI taxonomy ID | 83333.1
+Example FIG ID | 83333.1.peg.123
+Example FIG ID | 83333.1.rna.1
+
+
+ID      ogp
+Acc     DB-0067
+Name    Oxford glycoProteomics 2-DE database (OGP)
+Desc    Two-dimensional polyacrylamide gel electrophoresis database.
+URL     http://proteomewww.bioch.ox.ac.uk/2d/2d.html
+Cat     2D gel databases
+Taxon   1 | all
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    2D PAGE annotation {OGP entry} | HTML | UniProt accession number | http://proteomewww.glycob.ox.ac.uk/cgi-bin/2d-search-ac?%s
+Example UniProt accession number | P04406
+
+
+ID      oma
+Acc     DB-0137
+Name    Identification of orthologs from complete genome data (OMA database)
+Desc    Identification of orthologs from complete genome data.
+URL     http://www.omabrowser.org
+Cat     Phylogenomic databases
+Taxon   1 | all
+EDAMtpc 0000722 | Nucleic acid classification
+EDAMtpc 0000084 | Phylogenetics
+EDAMtpc 0000194 | Phylogenomics
+EDAMdat 0002093 | Data reference
+EDAMid  0000989 | Protein identifier
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Data reference | HTML | Protein identifier | http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayGroup&p1=%s
+Example SERC3_HUMAN | Protein identifier
+
+
+ID      panther
+Acc     DB-0069
+Name    Protein analysis through evolutionary relationships (PANTHER)
+Desc    Classifies genes by their functions, using published scientific experimental evidence and evolutionary relationships to predict function even in the absence of direct experimental evidence. Proteins are classified by expert biologists into families and subfamilies of shared function, which are then categorized by molecular function and biological process ontology terms. PANTHER includes "PANTHER Genes" (genes, transcripts and proteins in Human, Mouse, Rat, and Drosophila melanogaster), PANTHER Families (Protein families and subfamilies and associated data such as phylogenetic trees, multiple sequence alignments and HMMs), "PANTHER Pathways" (expert-curated signaling and metabolic pathways mapped to protein sequences in PANTHER Library) and "PANTHER Ontologies".
+URL     http://www.pantherdb.org/
+Cat     Family and domain databases
+Cat     Protein sequence classification database
+Taxon   1 | all
+EDAMtpc 0000602 | Pathways, networks and models
+EDAMtpc 0000724 | Protein families
+EDAMtpc 0000623 | Gene family or system
+EDAMtpc 0000084 | Phylogenetics
+EDAMdat 0000946 | Pathway or network annotation
+EDAMdat 0000907 | Protein family annotation
+EDAMid  0001161 | Pathway ID (Panther)
+EDAMid  0002783 | Protein family ID (PANTHER)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein family annotation {PANTHER Family} | HTML | Protein family ID (PANTHER) | http://www.pantherdb.org/panther/family.do?clsAccession=%s
+Query    Biological pathway | HTML | Pathway ID (Panther) | http://www.pantherdb.org/pathway/pathwayDiagram.jsp?catAccession=%s
+Example Protein family ID (PANTHER) | PTHR12649:SF6
+Example Pathway ID (Panther) | P00002
+
+
+ID      pathema
+Name    Pathema: a clade-specific bioinformatics resource
+Desc    Genome database for six clades of Category A-C pathogens — Bacillus anthracis, Clostridium botulinum, Burkholderia mallei, Burkholderia pseudomallei, Clostridium perfringens, Entamoeba histolytica.
+URL     http://www.jcvi.org/cms/research/projects/pathema/overview/
+Cat     Not available
+Taxon   1 | all
+EDAMtpc 0001811 | Prokaryote
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000783 | Pathogen
+Xref    SP_FT None
+
+ID      pathoplant
+Name    PathoPlant database of plant-pathogen interactions and Arabidopsis expression
+Desc    Plant-pathogen interactions and components of signal transduction pathways related to plant pathogenesis. Also harbors gene expression data from Arabidopsis thaliana microarray experiments to enable searching for specific genes regulated upon pathogen infection or elicitor treatment.
+URL     http://www.pathoplant.de
+Taxon   1 | all
+EDAMtpc 0000197 | Gene expression and regulation
+EDAMtpc 0000780 | Plant
+EDAMtpc 0000754 | Signalling pathways
+EDAMtpc 0000780 | Plant
+EDAMtpc 0000783 | Pathogen
+
+
+ID      peptideatlas
+Acc     DB-0071
+Name    PeptideAtlas peptide database
+Desc    A multi-organism compendium of peptides identified in a large set of tandem mass spectrometry proteomics experiments. Mass spectrometer output files are collected for human, mouse, yeast, and several other organisms, and searched using the latest search engines and protein sequences.
+URL     http://www.peptideatlas.org
+Cat     Proteomic databases
+Cat     Peptide identification database
+Cat     Mass spectrometry database
+Taxon   1 | all
+EDAMtpc 0000613 | Peptides (general)
+EDAMtpc 0000767 | Peptide identification
+EDAMdat 0000896 | Protein annotation
+EDAMdat 0000767 | Peptide identification
+EDAMdat 0002536 | Mass spectrometry experimental data
+EDAMid  0002291 | UniProt ID
+EDAMid  0002384 | IPI protein ID
+EDAMid  0002398 | Protein ID (Ensembl)
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    SP_explicit None
+Query    Peptide identification | HTML | Protein ID (Ensembl) | https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptides?row_limit=5000 <https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptides?row_limit=5000&atlas_build_id=182&display_options=ShowMappings%2CShowModifications&organism_id=2&biosequence_name_constraint=ENSP00000374576&QUERY_NAME=AT_GetPep tides&apply_action=QUERY>&atlas_build_id=182&display_options=ShowMappings%2CShowModifications&organism_id=2&biosequence_name_constraint=%s&QUERY_NAME=AT_GetPeptides&apply_action=QUERY
+Query    Peptide identification | XML | Protein ID (Ensembl) | https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptides?row_limit=5000 <https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptides?row_limit=5000&atlas_build_id=182&display_options=ShowMappings%2CShowModifications&organism_id=2&biosequence_name_constraint=ENSP00000374576&QUERY_NAME=AT_GetPeptides&apply_action=QUERY&output_mode=xml>&atlas_build_id=182&display_options=ShowMappings%2CShowModifications&organism_id=2&biosequence_name_constraint=%s&QUERY_NAME=AT_GetPeptides&apply_action=QUERY&output_mode=xml
+Query    Peptide identification | Text | Protein ID (Ensembl) | https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptides?row_limit=5000 <https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptides?row_limit=5000&atlas_build_id=182&display_options=ShowMappings%2CShowModifications&organism_id=2&biosequence_name_constraint=ENSP00000374576&QUERY_NAME=AT_GetPeptides&apply_action=QUERY&output_mode=xml>&atlas_build_id=182&display_options=ShowMappings%2CShowModifications&organism_id=2&biosequence_name_constraint=%s&QUERY_NAME=AT_GetPeptides&apply_action=QUERY&output_mode=tsv
+Query    Mass spectrometry experimental data {Recommended transitions for human protein} | HTML | Protein ID (Ensembl) | https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/ViewMRMList?protein_name_constraint=%s&atlas_build_id=182&consensus_library_id=9&action=QUERY> &atlas_build_id=182&consensus_library_id=9&action=QUERY
+Query    Protein annotation {ptideAtlas entry} | HTML | IPI protein ID | https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetProtein?atlas_build_id=242&protein_name=%s&action=QUERY
+Example Protein ID (Ensembl) | ENSP00000374576
+Example IPI protein ID | IPI00795032
+
+
+ID      peroxibase
+Acc     DB-0072
+Name    PeroxiBase peroxidase family database
+Desc    Sequences from peroxidase superfamilies with annotation on putative functions and transcription regulation.
+URL     http://peroxibase.isb-sib.ch/index.php
+Cat     Protein family/group databases
+Taxon   1 | all
+EDAMtpc 0000635 | Specific protein
+EDAMdat 0000896 | Protein annotation
+EDAMid  0002792 | Protein ID (PeroxiBase)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein annotation {PeroxiBase entry} | HTML | Protein ID (PeroxiBase) | http://peroxibase.isb-sib.ch/listing.php?action=view&id=%s
+Example Protein ID (PeroxiBase) | 6846
+
+
+ID      pfam
+Acc     DB-0073
+Name    Pfam protein domain database
+Desc    Large collection of protein families, each represented by multiple sequence alignments and hidden Markov models (HMMs).
+URL     http://pfam.sanger.ac.uk/
+Cat     Family and domain databases
+Taxon   1 | all
+EDAMtpc 0000741 | Protein sequence alignment
+EDAMtpc 0000188 | Sequence profiles and HMMs
+EDAMtpc 0000724 | Protein families
+EDAMtpc 0000736 | Protein domains
+EDAMdat 0000907 | Protein family annotation
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMid  0001138 | Pfam accession number
+EDAMid  0001179 | NCBI taxonomy ID
+EDAMid  0002758 | Pfam clan ID
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Xref    SP_FT None
+Query    Protein family annotation {Pfam entry} | HTML | Sequence accession number (protein) | http://pfam.sanger.ac.uk/protein/acc=%s
+Query    Protein family annotation {Pfam entry} | HTML | Pfam accession number | http://pfam.sanger.ac.uk/family?acc=%s
+Query    Protein family annotation {Pfam entry} | HTML | Pfam clan ID | http://pfam.sanger.ac.uk/clan?acc=%s
+Query    Protein family annotation {Pfam entry} | HTML | NCBI taxonomy ID | http://pfam.sanger.ac.uk/proteome?taxId=%s
+Example Sequence accession number (protein) | VAV_HUMAN
+Example Pfam accession number | PF07388
+Example Pfam clan ID | CL0247
+Example NCBI taxonomy ID | 349163
+
+
+ID      phci_2dpage
+Acc     DB-0075
+Name    Parasite host cell interaction 2D-PAGE database (PHCI-2DPAGE)
+Desc    Two-dimensional polyacrylamide gel electrophoresis database.
+URL     http://www.gram.au.dk/2d/2d.html
+Cat     2D gel databases
+Taxon   1 | all
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    2D PAGE annotation | HTML | UniProt accession number | http://www.gram.au.dk/cgi-bin/get-2d-entry?%s
+Example UniProt accession number | P17821
+
+ID      phi_base
+Name    PHI-base pathogen host interactions database
+Desc    Curated molecular and biological information on genes proven to affect the outcome of pathogen-host interactions. Information is also given on the target sites of some anti-infective chemistries.
+URL     http://www.phibase.org
+Taxon   1 | all
+EDAMtpc 0000623 | Gene family or system
+EDAMtpc 0000783 | Pathogen
+Status  Not referenced
+
+ID      phosphoelm
+Name    PhosphoELM database of S/T/Y phosphorylation sites
+Desc    Experimentally verified phosphorylation sites in eukaryotic proteins.
+URL     http://phospho.elm.eu.org/
+Taxon   1 | all
+EDAMtpc 0000751 | Phosphorylation
+EDAMdat 0002762 ! Sequence motif annotation
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMid  0002775 | Kinase name
+EDAMid  0001009 | Protein name
+EDAMfmt 0002331 | HTML
+Query    Sequence motif annotation {Phospho-ELM report} | HTML | Protein name {Substrate} | http://phospho.elm.eu.org/cgimodel.py?fun=Search&substrate=%s
+Query    Sequence motif annotation {Phospho-ELM report} | HTML | Sequence accession number (protein) | http://phospho.elm.eu.org/cgimodel.py?fun=Search&accession=%s
+Query    Sequence motif annotation {Phospho-ELM report} | HTML | Kinase name | http://phospho.elm.eu.org/cgimodel.py?fun=Search&kinase=%s
+Example Kinase | Abl2
+Example Sequence accession number (protein) | Q9H0E9
+Example Protein name {Substrate} | Src substrate cortactin
+
+
+ID      phosphosite
+Acc     DB-0123
+Name    Phosphorylation site database
+Desc    A curated, sequence-oriented protein database dedicated to in vivo phosphorylation sites. Information in PhosphoSite version 1.0 includes the phosphorylated residue and its surrounding sequence, orthologous sites in other species, the location within domains and motifs, links to other online resources and literature references.
+URL     http://www.phosphosite.org
+Cat     PTM databases
+Taxon   1 | all
+EDAMtpc 0000751 | Phosphorylation
+EDAMdat 0002762 ! Sequence motif annotation
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Sequence motif annotation {PhosphoSite entry} | HTML | UniProt accession number | http://www.phosphosite.org/uniprotAccAction.do?id=%s
+Example UniProt accession number | Q92844
+
+
+ID      pir
+Acc     DB-0078
+Name    Protein sequence database of the Protein Information Resource (PIR)
+Desc    Integrated protein informatics resource for genomic, proteomic and systems biology research.
+URL     http://pir.georgetown.edu/
+Cat     Sequence databases
+Taxon   1 | all
+EDAMtpc 0000639 | Protein sequences
+EDAMdat 0002201 | Sequence record full
+EDAMid  0000989 | Protein identifier
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Xref    SP_FT None
+Query    Sequence record full | HTML | Protein identifier | http://pir.georgetown.edu/cgi-bin/nbrfget?uid=%s
+Example Protein identifier | S12345
+
+ID      pirsf
+Acc     DB-0079
+Name    PIRSF whole-protein classification database
+Desc    Non-overlapping clustering of UniProtKB sequences into a hierarchical order to reflect their evolutionary relationships. The PIRSF classification system is based on whole proteins rather than on the component domains therefore, it allows annotation of generic biochemical and specific biological functions, as well as classification of proteins without well-defined domains.
+URL     http://pir.georgetown.edu/pirsf/
+Cat     Family and domain databases
+Taxon   1 | all
+EDAMtpc 0000164 | Sequence clustering
+EDAMtpc 0000724 | Protein families
+EDAMdat 0000907 | Protein family annotation
+EDAMid  0001136 | PIRSF ID
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein family annotation {PIRSF entry} | HTML | PIRSF ID | http://pir.georgetown.edu/cgi-bin/ipcSF?id=%s
+Example PIRSF ID | SF000186
+
+
+ID      pmap_cutdb
+Acc     DB-0138
+Name    PMAP-CutDB proteolytic event database
+Desc    Curated proteolytic events and pathways from the literature.
+URL     http://www.proteolysis.org/
+Cat     Other
+Taxon   1 | all
+EDAMtpc 0000602 | Pathways, networks and models
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Unknown | HTML | UniProt accession number | http://substrate.burnham.org/lookup/uniprot/%s
+
+
+ID      pptasedb
+Acc     DB-0081
+Name    Prokaryotic protein phosphatase database (PptaseDB)
+Desc    Prokaryotic protein phosphatases.
+URL     http://vigen.biochem.vt.edu/p3d/p3d.htm
+Cat     Protein family/group databases
+Taxon   2 | Bacteria
+EDAMtpc 0000635 | Specific protein
+EDAMdat 0000896 | Protein annotation
+EDAMid  0000842 | Identifier
+EDAMid  0000989 | Protein identifier
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein annotation {PptaseDB entry} | HTML | Protein identifier | http://vigen.biochem.vt.edu/p3d/p3d2.cfm?extf=accession&extref=%s
+Example Protein identifier | None
+
+
+ID      pride
+Acc     DB-0130
+Name    PRIDE proteomics identifications database
+Desc    Standards compliant, public data repository for proteomics data, protein and peptide identifications together with the evidence supporting these identifications.
+URL     http://www.ebi.ac.uk/pride
+URLrest http://www.ebi.ac.uk/pride/prideMartWebService.do
+Cat     Proteomic databases
+Taxon   1 | all
+EDAMtpc 0000767 | Peptide identification
+EDAMtpc 0000121 | Proteomics
+EDAMdat 0002536 | Experimental data (proteomics)
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Experimental data (proteomics) {PRIDE entry} | HTML | Sequence accession number (protein) | http://www.ebi.ac.uk/pride/searchSummary.do?queryTypeSelected=identification%20accession%20number&identificationAccessionNumber=%s
+Example Sequence accession number (protein) | P29375
+
+
+ID      prints
+Acc     DB-0082
+Name    PRINTS protein motif fingerprint database
+Desc    A compendium of protein fingerprints, or group of conserved motifs used to characterise a protein family.
+URL     http://umber.sbs.man.ac.uk/dbbrowser/PRINTS/
+Cat     Family and domain databases
+Taxon   1 | all
+EDAMtpc 0000724 | Protein families
+EDAMtpc 0000748 | Protein functional sites
+EDAMtpc 0000158 | Sequence motifs
+EDAMdat 0001355 | Protein signature data
+EDAMid  0001137 | PRINTS code
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein signature data {PRINTS entry} | HTML | PRINTS code | http://www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?display_opts=Prints&category=None&queryform=false&prints_accn=pr00018
+Example PRINTS code | pr00018
+
+
+ID      prodom
+Acc     DB-0083
+Name    ProDom protein domain database
+Desc    A comprehensive set of protein domain families automatically generated from the UniProt Knowledge Database.
+URL     http://prodom.prabi.fr/prodom/current/html/home.php
+Cat     Family and domain databases
+Taxon   1 | all
+EDAMtpc 0000724 | Protein families
+EDAMtpc 0000736 | Protein domains
+EDAMdat 0000872 | Phylogenetic tree
+EDAMdat 0001281 | Sequence signature map
+EDAMdat 0000907 | Protein family annotation
+EDAMdat 0001382 | Sequence alignment (multiple)
+EDAMid  0001142 | ProDom accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein family annotation {ProDom entry} | HTML | ProDom accession number | http://prodom.prabi.fr/prodom/current/cgi-bin/request.pl?question=DBEN&query=%s
+Query    Sequence alignment (multiple) {ProDom family alignment} | HTML | ProDom accession number | http://prodom.prabi.fr/prodom/2006.1/cgi-bin/request.pl?db_ent1=%s&wanted=align
+Query    Phylogenetic tree | HTML | ProDom accession number | http://prodom.prabi.fr/prodom/2006.1/cgi-bin/request.pl?db_ent1=%s&wanted=tree
+Query    Sequence signature map {ProDom domain image} | HTML | ProDom accession number | http://prodom.prabi.fr/prodom/2006.1/cgi-bin/request.pl?CG=0&question=DBLI&query=%s
+Query    Sequence alignment (multiple) {ProDom family alignment} | Text | ProDom accession number | http://prodom.prabi.fr/prodom/2006.1/cgi-bin/request.pl?db_ent0=%s
+Example ProDom accession number | PD000023
+
+
+ID      protonet
+Acc     DB-0085
+Name    ProtoNet automatic hierarchical classification of proteins
+Desc    Automatic hierarchical classification of protein sequences.
+URL     http://www.protonet.cs.huji.ac.il/
+Cat     Other
+Taxon   1 | all
+EDAMtpc 0000724 | Protein families
+EDAMdat 0000907 | Protein family annotation
+EDAMid  0002291 | UniProt ID
+EDAMfmt 0001978 | dasgff
+EDAMfmt 0002331 | HTML
+Xref    SP_implicit None
+Query    Protein family annotation {ProtoNet entry} | HTML | UniProt ID | http://www.protonet.cs.huji.ac.il/sp.php?prot=%s
+Query    Protein family annotation {ProtoNet entry} | dasgff | UniProt ID | http://www.protonet.cs.huji.ac.il/das/protonet/features?segment=%s
+Example UniProt ID | P01011
+CCxref  All UniProtKB entries
+
+
+ID      reactome
+Acc     DB-0088
+Name    Reactome knowledgebase of biological pathways
+Desc    Curated knowledgebase of biological pathways and processes.
+URL     http://www.reactome.org/
+URLlink http://www.reactome.org/referring2GK.html
+URLsoap http://www.reactome.org/download/index.html
+Cat     Enzyme and pathway databases
+Taxon   1 | all
+EDAMtpc 0000602 | Pathways, networks and models
+EDAMdat 0000946 | Pathway or network annotation
+EDAMdat 0000896 | Protein annotation
+EDAMid  0000989 | Protein identifier
+EDAMid  0001099 | UniProt accession number
+EDAMid  0001027 | Gene ID (NCBI)
+EDAMid  0001011 | EC number
+EDAMid  0001174 | ChEBI ID
+EDAMid  0001056 | Database name
+EDAMid  0000990 | Compound ID (KEGG)
+EDAMid  0001155 | Pathway ID (reactome)
+EDAMid  0001176 | GO term ID
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    SP_explicit None
+Query    Pathway or network annotation | HTML | Pathway ID (reactome) | http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&ID=%s&ZOOM=2
+Query    Pathway or network annotation | XML | Pathway ID (reactome) | http://www.reactome.org/cgi-bin/sbml_export?DB=gk_current&ID=%s
+Query    Protein annotation {Reactome entry} | HTML | Database name;Protein identifier | http://www.reactome.org/cgi-bin/link?SOURCE=%s1&ID=%s2
+Query    Protein annotation {Reactome entry} | HTML | UniProt accession number | http://www.reactome.org/cgi-bin/link?SOURCE=UNIPROT&ID=%s
+Query    Protein annotation {Reactome entry] | HTML | ChEBI ID | http://www.reactome.org/cgi-bin/link?SOURCE=CHEBI&ID=%s
+Query    Protein annotation {Reactome entry} | HTML | Compound ID (KEGG) | http://www.reactome.org/cgi-bin/link?SOURCE=COMPOUND&ID=%s
+Query    Protein annotation {Reactome entry} | HTML | GO term ID | http://www.reactome.org/cgi-bin/link?SOURCE=GO&ID=%s
+Query    Protein annotation {Reactome entry} | HTML | EC number | http://www.reactome.org/cgi-bin/link?SOURCE=EC&ID=%s
+Query    Protein annotation {Reactome entry} | HTML | Gene ID (NCBI) | http://www.reactome.org/cgi-bin/link?SOURCE=Entrez+Gene&ID=%s
+Query    Protein annotation {Reactome entry} | HTML | Pathway ID (reactome) | http://www.reactome.org/cgi-bin/link?SOURCE=Reactome&ID=%s
+Example UniProt accession number | P30304
+Example ChEBI ID | 15422
+Example Compound ID (KEGG) | C00002
+Example GO term ID | 0030060
+Example EC number | 1.1.1.37
+Example Gene ID (NCBI) | 4171
+Example Pathway ID (reactome) | REACT_1
+
+
+ID      rebase
+Acc     DB-0089
+Name    REBASE restriction enzymes and methylases database
+Desc    Restriction enzymes and methylases database.
+URL     http://rebase.neb.com/
+Cat     Protein family/group databases
+Taxon   1 | all
+EDAMtpc 0000821 | Enzymes
+EDAMdat 0001509 | Enzyme annotation
+EDAMid  0001012 | Enzyme name
+EDAMid  0002325 | REBASE enzyme number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Enzyme annotation | HTML | Enzyme name | http://rebase.neb.com/rebase/enz/%s.html
+Query    Enzyme annotation | HTML | REBASE enzyme number | http://rebase.neb.com/rebase/enz/%s.html
+Example Enzyme name | EcoRI
+Example REBASE enzyme number | 993
+
+
+ID      redidb
+Name    RNA editing database (REDIdb)
+Desc    Sequences post-transcriptionally modified by RNA editing from primary databases and literature. All editing information such as substitutions, insertions and deletions occurring in a wide range of organisms is stored.
+URL     http://biologia.unical.it/py_script/overview.html
+Taxon   1 | all
+EDAMtpc 0000630 | Gene structure
+EDAMdat 0002043 | Sequence record lite
+EDAMdat 0000596 | Sequence alignment
+EDAMid  0002781 | REDIdb ID
+EDAMfmt 0002310 | fasta-html
+EDAMfmt 0002331 | HTML
+Query    Sequence record lite {REDIdb entry} | HTML | REDIdb ID | http://biologia.unical.it/py_script/cgi-bin/retrieve.py?query=%s
+Query    Sequence record lite {REDIdb fasta} | fasta-html | REDIdb ID | http://biologia.unical.it/py_script/cgi-bin/fasta.py?query=%s
+Query    Sequence alignment {REDIdb overview} | HTML | REDIdb ID | http://biologia.unical.it/py_script/cgi-bin/display.py?query=%s
+Query    Sequence alignment {REDIdb alignment} | HTML | REDIdb ID | http://biologia.unical.it/py_script/cgi-bin/align.py?query=%s
+Example REDIdb ID  | EDI_000000002
+
+
+ID      refseq
+Acc     DB-0117
+Name    NCBI reference sequences
+Desc    A comprehensive, integrated, non-redundant, well-annotated set of sequences, including genomic DNA, transcripts, and proteins. Provides a stable reference for genome annotation, gene identification and characterization, mutation and polymorphism analysis (especially RefSeqGene records), expression studies, and comparative analyses.
+URL     http://www.ncbi.nlm.nih.gov/RefSeq/
+Cat     Sequence databases
+Taxon   1 | all
+EDAMtpc 0000584 | Sequence analysis
+EDAMtpc 0000797 | Comparative genomics
+EDAMdat 0000849 | Sequence record
+EDAMid  0000989 | Protein identifier
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Sequence record {RefSeq entry} | HTML | Protein identifier | http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&id=%s
+Example Protein identifier | S12345
+
+
+ID      reproduction_2dpage
+IDalt   REPRODUCTION2DPAGE
+Acc     DB-0090
+Name    REPRODUCTION-2DPAGE database
+Desc    REPRODUCTION-2DPAGE 2D gel protein database.
+URL     http://reprod.njmu.edu.cn/cgi-bin/2d/2d.cgi
+Cat     2D gel databases
+Taxon   1 | all
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    2D PAGE annotation | HTML | Sequence accession number (protein) | http://reprod.njmu.edu.cn/cgi-bin/2d/2d.cgi?ac=%s&format=text
+Query    2D PAGE annotation | Text | Sequence accession number (protein) | http://reprod.njmu.edu.cn/cgi-bin/2d/2d.cgi?ac=%s
+Example Sequence accession number (protein) | P00352
+
+
+ID      resid
+Name    RESID database of protein modifications
+Desc    A comprehensive collection of annotations and structures for protein modifications including amino-terminal, carboxyl-terminal and peptide chain cross-link post-translational modifications.
+URL     http://www.ebi.ac.uk/RESID/
+Taxon   1 | all
+EDAMtpc 0000601 | Protein modifications
+EDAMdat 0002191 | Protein modification annotation
+EDAMid  0002619 | RESID ID
+EDAMfmt 0002331 | HTML
+Query    Protein modification annotation {RESID entry} | XML | RESID ID | http://www.ebi.ac.uk/ontology-lookup/RESIDService?resid_id=%s
+Example RESID ID | AA0002
+
+
+ID      rfam
+IDalt   RFam
+Name    RNA families database of alignments and CMs
+Desc    Collection of multiple sequence alignments and covariance models covering many common non-coding RNA families. The main use of Rfam is as a source of RNA multiple alignments with consensus secondary structure annotation in a consistent format.
+URL     http://rfam.sanger.ac.uk/
+Cat     Not available
+Taxon   1 | all
+EDAMtpc 0000740 | Nucleic acid sequence alignment
+EDAMtpc 0000697 | RNA structure and alignment
+EDAMdat 0002354 | RNA family annotation
+EDAMid  0002356 | RFAM accession
+EDAMid  0002357 | RFAM name
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    SP_FT None
+Xref    EMBL_explicit None
+Query    RNA family | HTML | RFAM accession | http://rfam.sanger.ac.uk/family?acc=%s
+Query    RNA family | HTML | RFAM name | http://rfam.sanger.ac.uk/family?acc=%s
+Query    RNA family | XML | RFAM accession | http://rfam.sanger.ac.uk/family?acc=%s&output=xml
+Query    RNA family | XML | RFAM name | http://rfam.sanger.ac.uk/family?acc=%s&output=xml
+Example RFAM accession | RF00522
+Example RFAM name | PreQ1
+
+
+ID      sabio_rk
+Name    Database for biochemical reactions and their kinetics.
+Desc    Biochemical pathways and reaction kinetics.
+URL     http://sabio.villa-bosch.de/SABIORK
+Taxon   1 | all
+EDAMtpc 0000602 | Pathways, networks and models
+EDAMdat 0002093 | Data reference
+EDAMdat 0002024 | Enzyme kinetics data
+EDAMdat 0000908 | Reaction annotation
+EDAMid  0002309 | Reaction ID (SABIO-RK)
+EDAMid  0002648 | Reaction kinetics ID (SABIO-RK)
+EDAMid  0001011 | EC number
+EDAMfmt 0002331 | HTML
+Query    Reaction annotation {SABIO-RK reaction} | HTML | SABIO-RK reaction ID | http://sabio.h-its.org/index2.jsp?reac=%s
+Query    Enzyme kinetics data {SABIO-RK Kinetic Record} | HTML | Reaction kinetics ID (SABIO-RK) | http://sabio.h-its.org/kineticLawEntry.jsp?kinlawid=%s
+Query    Data reference {SABIO-RK EC code} | HTML | EC number | http://sabio.h-its.org/index2.jsp?EC=%s
+Example SABIO-RK reaction ID | 75
+Example Reaction kinetics ID (SABIO-RK) | 5046
+Example EC number | 2.1.1.45
+
+ID      scop
+Name    Structural classification of proteins (SCOP) database
+Desc    The SCOP database, created by manual inspection and abetted by a battery of automated methods, aims to provide a detailed and comprehensive description of the structural and evolutionary relationships between all proteins whose structure is known. As such, it provides a broad survey of all known protein folds, detailed information about the close relatives of any particular protein, and a framework for future research and classification.
+URL     http://scop.mrc-lmb.cam.ac.uk/scop
+Taxon   1 | all
+EDAMtpc 0000736 | Protein domains
+EDAMdat 0001554 | SCOP node
+EDAMdat 0002093 | Data reference
+EDAMid  0001042 | SCOP sunid
+EDAMid  0001127 | PDB ID
+EDAMid  0000968 | Keyword
+EDAMfmt 0002331 | HTML
+Query    SCOP node | HTML | SCOP sunid | http://scop.mrc-lmb.cam.ac.uk/scop/search.cgi?sunid=%s
+Query    Data reference {PDB Entry search} | HTML | PDB ID | http://scop.mrc-lmb.cam.ac.uk/scop/search.cgi?pdb=%s
+Query    Data reference | HTML | Keyword | http://scop.mrc-lmb.cam.ac.uk/scop/search.cgi?key=%s
+Example SCOP sunid | 47718
+Example PDB ID | 1djh
+Example Keyword | immunoglobulin
+
+
+ID      scowl
+Name    Structural characterization of water, ligands and proteins (SCOWL)
+Desc    PDB interface interactions at atom, residue and domain level. The database contains protein interfaces and residue-residue interactions formed by structural units and interacting solvent.
+URL     http://www.scowlp.org
+Taxon   1 | all
+EDAMtpc 0000587 | Protein interaction
+EDAMdat 0002359 | Domain-domain interaction
+EDAMid  0001127 | PDB ID
+EDAMid  0001042 | SCOP sunid
+EDAMfmt 0002331 | HTML
+Query    Domain-domain interaction | HTML | PDB ID | http://www.scowlp.org/scowlp/Pdb.action?show=&pdbId=%s
+Query    Domain-domain interaction | HTML | SCOP sunid {SCOP family id} | http://www.scowlp.org/scowlp/Search.action?childs=&currentChoice=SCOP_FAMILY%s
+Example PDB ID | 1fxk
+Example SCOP sunid | 2381635
+
+
+ID      selectome
+Name    Selectome database of positive selection
+Desc    Database of positive selection based on a rigorous branch-site specific likelihood test.
+URL     http://bioinfo.unil.ch/selectome/
+Taxon   1 | all
+EDAMtpc 0000084 | Phylogenetics
+EDAMtpc 0000623 | Gene family or system
+EDAMdat 0000872 | Phylogenetic tree
+EDAMdat 0002093 | Data reference
+EDAMid  0001131 | Protein family name
+EDAMid  0000968 | Keyword
+EDAMid  0000989 | Protein identifier
+EDAMid  0001127 | PDB ID
+EDAMfmt 0002331 | HTML
+Query    Phylogenetic tree {Selectome entry} | HTML | Selectome identifier;Protein family name;Taxon | http://bioinfo.unil.ch/cgi-bin/selectome/subfamily.cgi?ac=%s1&sub=%s2&taxon=%s3
+Query    Selectome family | HTML | Selectome identifier | http://bioinfo.unil.ch/cgi-bin/selectome/getFamily.cgi?query=%s
+Query    Data reference {Selectome Xref} | HTML | Protein identifier {Cross-reference} | http://bioinfo.unil.ch/cgi-bin/selectome/getXref.cgi?query=%s
+Query    Data reference {Selectome Xref} | HTML | PDB ID {Cross-reference} | http://bioinfo.unil.ch/cgi-bin/selectome/getXref.cgi?query=%s
+Query    Data reference {Selectome genes} | HTML | Keyword | http://bioinfo.unil.ch/cgi-bin/selectome/getGene.cgi?query=%s
+Query    Data reference {Selectome gene family} | HTML | Keyword | http://bioinfo.unil.ch/cgi-bin/selectome/getGeneFamily.cgi?query=%s
+Example Selectome identifier | TF105041
+Example Selectome identifier;Protein family name;Taxon | TF105041;1;v
+Example PDB ID | 1HCL
+Example Protein identifier | P24941
+Example Keyword | kidney
+Example Keyword | Ascc3_F2
+Example Keyword | BRCA2
+
+
+ID      smart
+Acc     DB-0097
+Name    Simple modular architecture research tool (SMART)
+Desc    SMART protein domain database.
+URL     http://smart.embl.de/
+Cat     Family and domain databases
+Taxon   1 | all
+EDAMtpc 0000724 | Protein families
+EDAMtpc 0000736 | Protein domains
+EDAMdat 0002377 | Domain annotation
+EDAMid  0001139 | SMART accession number
+EDAMid  0002782 | SMART domain name
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Domain annotation {SMART entry} | HTML | SMART domain name | http://smart.embl.de/smart/do_annotation.pl?DOMAIN=%s&BLAST=DUMMY
+Query    Domain annotation {SMART entry} | HTML | SMART accession number | http://smart.embl.de/smart/do_annotation.pl?DOMAIN=%s&BLAST=DUMMY
+Example SMART domain name | KISc
+Example SMART accession number | SM00129
+
+
+ID      smr
+Acc     DB-0098
+Name    A database of annotated 3D protein structure models
+Desc    Annotated three-dimensional comparative protein structure models generated by the fully automated homology-modelling pipeline SWISS-MODEL.
+URL     http://swissmodel.expasy.org/repository/
+Cat     3D structure databases
+Taxon   1 | all
+EDAMtpc 0000698 | Protein tertiary structure
+EDAMdat 0001460 | Protein tertiary structure
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Protein tertiary structure {SMR entry} | HTML | UniProt accession number | http://swissmodel.expasy.org/repository/smr.php?sptr_ac=%s
+Example UniProt accession number | P01009
+
+
+ID      spliceaid
+Name    SpliceAid database of strictly experimentally assessed target RNA sequences in humans
+Desc    Experimental RNA target motifs bound by splicing proteins in humans.
+URL     http://www.introni.it/splicing.html
+Taxon   9606 | Homo sapiens
+EDAMtpc 0000630 | Gene structure
+EDAMtpc 0000747 | Nucleic acid functional sites
+EDAMtpc 0000114 | RNA splicing
+EDAMtpc 0000748 | Protein functional sites
+EDAMtpc 0000158 | Sequence motifs
+EDAMdat 0000896 | Protein annotation
+EDAMid  0001009 | Protein name
+EDAMfmt 0002331 | HTML
+Query    Protein annotation | HTML | Protein name | http://193.206.120.228/cgi-bin/SpliceAid.pl?Protein_name=%s
+Example Protein name | 9G8
+
+
+ID      string
+Acc     DB-0141
+Name    STRING protein-protein interaction database
+Desc    Known and predicted protein-protein interactions.
+URL     http://string-db.org/
+Taxon   1 | all
+EDAMtpc 0000719 | Protein-protein interaction
+EDAMdat 0001663 | Protein-protein interaction network annotation
+EDAMid  0002302 | STRING ID
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Query    Protein-protein interaction network map | HTML | STRING ID | http://string-db.org/version_8_3/newstring_cgi/show_network_section.pl?identifier=%s&all_channels_on=1&interactive=no&network_flavor=evidence&targetmode=proteins
+Query    Protein-protein interaction network map | XML | STRING ID | http://string-db.org/api/psi-mi/interactions?identifier=%s
+Example STRING ID | 9606.ENSP00000359866
+
+
+ID      swiss_2dpage
+Acc     DB-0101
+Name    Two-dimensional polyacrylamide gel electrophoresis database (SWISS-2DPAGE)
+Desc    Data on proteins identified on various 2-D PAGE and SDS-PAGE reference maps.
+URL     http://www.expasy.org/ch2d/
+URLlink http://www.expasy.org/expasy_urls.html#ch2d
+Cat     2D gel databases
+Taxon   1 | all
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMdat 0002372 | 2D PAGE spot annotation
+EDAMid  0000989 | Protein identifier
+EDAMid  0002374 | Spot serial number
+EDAMid  0001099 | UniProt accession number
+EDAMid  0002791 | Reference map name (SWISS-2DPAGE)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    2D PAGE annotation | HTML | Protein identifier | http://www.expasy.org/swiss-2dpage/%s
+Query    2D PAGE annotation | HTML | UniProt accession number | http://www.expasy.org/swiss-2dpage/%s
+Query    2D PAGE annotation | Text | UniProt accession number | http://www.expasy.org/swiss-2dpage/format=raw&extract&ac=%s
+Query    2D PAGE spot annotation | HTML | Spot serial number | http://www.expasy.org/swiss-2dpage/spot=%s
+Query    2D PAGE spot annotation {SWISS-2DPAGE protein list} | HTML | Reference map name (SWISS-2DPAGE) | http://www.expasy.org/swiss-2dpage/map=%s
+Query    2D PAGE annotation {SWISS-2DPAGE reference map} | HTML | Reference map name (SWISS-2DPAGE) | http://www.expasy.org/swiss-2dpage/viewer&ac=all&map=%s
+Query    2D PAGE spot annotation | HTML | Spot serial number | http://www.expasy.org/swiss-2dpage/spot=%s
+Example ULAD_HUMAN
+Example UniProt accession number | P01009
+Example Spot serial number | 2D-0017PD
+Example Reference map name (SWISS-2DPAGE) | LIVER_HUMAN
+
+
+ID      tigr
+Acc     DB-0103
+Name    The bacterial database(s) of The Institute of Genome Research
+Desc    The TIGR bacterial Genome Annotation Database.
+Cat     Genome annotation databases
+Taxon   2 | Bacteria
+Taxon   2157 | Archaea
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000780 | Plant
+Xref    SP_explicit None
+
+
+ID      tigrfam
+Acc     DB-0104
+Name    A protein family database
+Desc    Protein families based on hidden Markov models (HMMs).
+URL     http://www.tigr.org/TIGRFAMs/
+Cat     Family and domain databases
+Taxon   1 | all
+EDAMtpc 0000724 | Protein families
+EDAMtpc 0000188 | Sequence profiles and HMMs
+EDAMdat 0002788 | Sequence profile annotation
+EDAMid  0001141 | TIGRFam ID
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Sequence profile annotation {TIGRFAM entry} | HTML | TIGRFam ID | http://cmr.jcvi.org/cgi-bin/CMR/HmmReport.cgi?hmm_acc=%s
+Example TIGRFam ID | TIGR01920
+
+
+ID      topdb
+Name    Topology of transmembrane proteins
+Desc    Transmembrane protein datasets containing experimentally derived topology information.
+URL     http://topdb.enzim.hu
+Taxon   1 | all
+EDAMtpc 0000820 | Membrane protein
+EDAMdat 0002401 | Membrane protein annotation
+EDAMid  0002789 | Protein ID (TopDB)
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Query    Membrane protein annotation {TOPDB entry} | HTML | Protein ID (TopDB) | http://topdb.enzim.hu/?m=show&tab=HTML&id=%s
+Query    Membrane protein annotation {TOPDB entry} | HTML {graphic} | Protein ID (TopDB) | http://topdb.enzim.hu/?m=show&tab=Graph&id=%s
+Query    Membrane protein annotation {TOPDB entry} | HTML {flash} | Protein ID (TopDB) | http://topdb.enzim.hu/?m=show&tab=Flash&id=%s
+Query    Membrane protein annotation {TOPDB entry} | XML | Protein ID (TopDB) | http://topdb.enzim.hu/?m=show&tab=XML&id=%s
+Example Protein ID (TopDB) | AP00085
+
+
+ID      transdab
+Name    Database of transglutaminase substrate proteins
+Desc    Database of transglutaminase substrate proteins.
+URL     http://genomics.dote.hu/wiki
+Taxon   1 | all
+EDAMtpc 0000635 | Specific protein
+EDAMdat 0000896 | Protein annotation
+EDAMid  0001009 | Protein name
+EDAMfmt 0002331 | HTML
+Query    Protein annotation | HTML | Protein name | http://genomics.dote.hu/wiki/index.php/%s
+Example Protein name | Histone_H1_%28kinase%29
+
+
+ID      uniparc
+Name    UniProt Archive
+Desc    Part of UniProt project - a non-redundant archive of protein sequences extracted from public databases UniProtKB/Swiss-Prot, UniProtKB/TrEMBL, PIR-PSD, EMBL, EMBL WGS, Ensembl, IPI, PDB, PIR-PSD, RefSeq, FlyBase, WormBase, H-Invitational Database, TROME database, European Patent Office proteins, United States Patent and Trademark Office proteins (USPTO) and Japan Patent Office proteins.
+URL     http://www.uniprot.org/
+Taxon   1 | all
+EDAMtpc 0000639 | Protein sequences
+EDAMdat 0000849 | Sequence record
+EDAMid  0002392 | UniParc accession
+EDAMfmt 0002331 | HTML
+Xref    SP_FT None
+Query    Sequence record {UniParc entry} | HTML | UniParc accession | http://www.uniprot.org/uniparc/%s
+Example UniParc accession | UPI0000000001
+
+
+ID      uniprot
+IDalt   UniProtKB
+Name    Universal protein resource
+Desc    A comprehensive, high-quality and freely accessible resource of protein sequence and functional information.
+URL     http://www.uniprot.org/
+Taxon   1 | all
+EDAMtpc 0000639 | Protein sequences
+EDAMdat 0002201 | Sequence record full
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0001929 | fasta
+EDAMfmt 0002376 | RDF
+EDAMfmt 0002188 | uniprot
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    SP_FT None
+Query    Sequence record full | HTML | UniProt accession number | http://www.uniprot.org/uniprot/%s
+Query    Sequence record full | uniprot | UniProt accession number | http://www.uniprot.org/uniprot/%s.txt
+Query    Sequence record full | XML | UniProt accession number | http://www.uniprot.org/uniprot/%s.xml
+Query    Sequence record full | RDF | UniProt accession number | http://www.uniprot.org/uniprot/%s.rdf
+Query    Sequence record full | fasta | UniProt accession number | http://www.uniprot.org/uniprot/%s.fasta
+Example UniProt accession number | P12345
+
+ID      uniprotkb_swiss_prot
+IDalt   SwissProt
+Name    Universal protein resource knowledge base / Swiss-Prot
+Desc    Section of the UniProt knowledgebase, containing annotated records, which include curator-evaluated computational analysis, as well as, information extracted from the literature
+URL     http://www.uniprot.org
+Taxon   1 | all
+EDAMtpc 0000639 | Protein sequences
+EDAMdat 0001230 | UniProt protein sequence record
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0001929 | fasta
+EDAMfmt 0002376 | RDF
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    SP_FT None
+Xref    EMBL_explicit None
+Query    UniProt protein sequence record | HTML | UniProt accession number | http://www.uniprot.org/uniprot/%s
+Query    UniProt protein sequence record | Text | UniProt accession number | http://www.uniprot.org/uniprot/%s.txt
+Query    UniProt protein sequence record | XML | UniProt accession number | http://www.uniprot.org/uniprot/%s.xml
+Query    UniProt protein sequence record | RDF | UniProt accession number | http://www.uniprot.org/uniprot/%s.rdf
+Query    UniProt protein sequence record | fasta | UniProt accession number | http://www.uniprot.org/uniprot/%s.fasta
+Example UniProt accession number | P12345
+
+
+ID      uniprotkb_trembl
+IDalt   TrEMBL
+Name    Universal protein resource knowledge base / Swiss-Prot
+Desc    Section of the UniProt knowledgebase, containing computationally analysed records waiting for full manual annotation
+URL     http://www.uniprot.org/
+Taxon   1 | all
+EDAMtpc 0000639 | Protein sequences
+EDAMdat 0001230 | UniProt protein sequence record
+EDAMid  0001099 | UniProt accession number
+EDAMfmt 0001929 | fasta
+EDAMfmt 0002376 | RDF
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    SP_FT None
+Query    UniProt protein sequence record | HTML | UniProt accession number | http://www.uniprot.org/uniprot/%s
+Query    UniProt protein sequence record | Text | UniProt accession number | http://www.uniprot.org/uniprot/%s.txt
+Query    UniProt protein sequence record | XML | UniProt accession number | http://www.uniprot.org/uniprot/%s.xml
+Query    UniProt protein sequence record | RDF | UniProt accession number | http://www.uniprot.org/uniprot/%s.rdf
+Query    UniProt protein sequence record | fasta | UniProt accession number | http://www.uniprot.org/uniprot/%s.fasta
+Example UniProt accession number | Q00177
+
+
+ID      uniref
+Name    Non-redundant reference (UniRef) databases
+Desc    Clustered sets of sequences from UniProt Knowledgebase (including splice variants and isoforms) and selected UniParc records, in order to obtain complete coverage of sequence space at several resolutions while hiding redundant sequences (but not their descriptions) from view.
+URL     http://www.uniprot.org/help/uniref
+Cat     Other
+Taxon   1 | all
+EDAMtpc 0000164 | Sequence clustering
+EDAMdat 0001245 | Sequence cluster (protein)
+EDAMid  0002347 | Sequence cluster ID (UniRef100)
+EDAMid  0002348 | Sequence cluster ID (UniRef90)
+EDAMid  0002349 | Sequence cluster ID (UniRef50)
+EDAMfmt 0001929 | fasta
+EDAMfmt 0002376 | RDF
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    SP_implicit None
+Query    Sequence cluster (protein) | HTML | Sequence cluster ID (UniRef100) | http://www.uniprot.org/uniref/UniRef100_%s
+Query    Sequence cluster (protein) | XML | Sequence cluster ID (UniRef100) | http://www.uniprot.org/uniref/UniRef100_%s.xml
+Query    Sequence cluster (protein) | RDF | Sequence cluster ID (UniRef100) | http://www.uniprot.org/uniref/UniRef100_%s.rdf
+Query    Sequence cluster (protein) | fasta | Sequence cluster ID (UniRef100) | http://www.uniprot.org/uniref/UniRef100_%s.fasta
+Query    Sequence cluster (protein) | HTML | Sequence cluster ID (UniRef90) | http://www.uniprot.org/uniref/UniRef90_%s
+Query    Sequence cluster (protein) | XML | Sequence cluster ID (UniRef90) | http://www.uniprot.org/uniref/UniRef90_%s.xml
+Query    Sequence cluster (protein) | RDF | Sequence cluster ID (UniRef90) | http://www.uniprot.org/uniref/UniRef90_%s.rdf
+Query    Sequence cluster (protein) | fasta | Sequence cluster ID (UniRef90) | http://www.uniprot.org/uniref/UniRef90_%s.fasta
+Query    Sequence cluster (protein) | HTML | Sequence cluster ID (UniRef50) | http://www.uniprot.org/uniref/UniRef50_%s
+Query    Sequence cluster (protein) | XML | Sequence cluster ID (UniRef50) | http://www.uniprot.org/uniref/UniRef50_%s.xml
+Query    Sequence cluster (protein) | RDF | Sequence cluster ID (UniRef50) | http://www.uniprot.org/uniref/UniRef50_%s.rdf
+Query    Sequence cluster (protein) | fasta | Sequence cluster ID (UniRef50) | http://www.uniprot.org/uniref/UniRef50_%s.fasta
+Example Sequence cluster ID (UniRef100) | P02930
+Example Sequence cluster ID (UniRef90) | P02930
+Example Sequence cluster ID (UniRef50) | P02930
+CCxref  All Swiss-Prot and TrEMBL (UniProt knowledgebase) entries
+
+
+ID      vectorbase
+Acc     DB-0120
+Name    Invertebrate vectors of human pathogens
+Desc    Invertebrate vectors of human pathogens.
+URL     http://www.vectorbase.org/
+URLlink http://neuron.cse.nd.edu/vectorbase/index.php/Website_redirects
+Cat     Genome annotation databases
+Taxon   1 | all
+EDAMtpc 0000783 | Pathogen
+EDAMdat 0002399 | Transcript annotation
+EDAMdat 0000895 | Peptide annotation
+EDAMdat 0000916 | Gene annotation
+EDAMid  0002759 | Gene ID (VectorBase)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Gene annotation {VectorBase entry} | HTML | Gene ID (VectorBase) | http://www.vectorbase.org/Genome/BRCGene/?feature=%s
+Query    Peptide annotation {VectorBase peptide page} | HTML | Gene ID (VectorBase) | http://www.vectorbase.org/Genome/BRCGene/?feature=%s-PA
+Query    Transcript annotation | HTML | Gene ID (VectorBase) | http://www.vectorbase.org/Genome/BRCGene/?feature=%s-RA
+Example Gene ID (VectorBase) | AGAP005025
+
+
+ID      world_2dpage
+Acc     DB-0121
+Name    The world-2DPAGE database
+Desc    A public repository, standards compliant, for proteomics image data published in the literature.
+URL     http://world-2dpage.expasy.org/repository/
+Cat     2D gel databases
+Taxon   1 | all
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Query    Unknown | HTML | Sequence accession number (protein) | world-2dpage.expasy.org/repository/%s
+Status  Referenced
+
+ID      world_2dpage_0003_
+IDalt   0003
+Name    World-wide gel-based proteomics database (0003) for Arabidopsis thaliana leaf proteome
+Desc    World-wide gel-based proteomics database (0003) for Arabidopsis thaliana leaf proteome.
+URL     http://www.expasy.org/world-2dpage/
+Taxon   3702 | Arabidopsis thaliana
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMtpc 0000780 | Plant
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMfmt 0002331 | HTML
+Query    2D PAGE annotation | HTML | Sequence accession number (protein) | http://world-2dpage.expasy.org/repository/ac=%s&database=0003
+Example Sequence accession number (protein) | O65719
+
+
+ID      world_2dpage_0004_
+IDalt   0004
+Name    World-wide gel-based proteomics database (0004) for mature rat olfactory bulb
+Desc    World-wide gel-based proteomics database (0004) for mature rat olfactory bulb.
+URL     http://www.expasy.org/world-2dpage/
+Taxon   10114 | Rattus
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMfmt 0002331 | HTML
+Query    2D PAGE annotation | HTML | Sequence accession number (protein) | http://world-2dpage.expasy.org/repository/ac=%s&database=0004
+Example Sequence accession number (protein) | A7VJC3
+Status  Not referenced
+
+ID      world_2dpage_0005_
+IDalt   0005
+Name    World-wide gel-based proteomics database (0005) for Botrytis cinerea mycelium cultured in carboxymethyl cellulose
+Desc    World-wide gel-based proteomics database (0005) for Botrytis cinerea mycelium cultured in carboxymethyl cellulose.
+URL     http://www.expasy.org/world-2dpage/
+Taxon   33196 | Botrytis
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMfmt 0002331 | HTML
+Query    2D PAGE annotation | HTML | Sequence accession number (protein) | http://world-2dpage.expasy.org/repository/ac=%s&database=0005
+Example Sequence accession number (protein) | A6RHV6
+
+
+ID      world_2dpage_0006_
+IDalt   0006
+Name    World-wide gel-based proteomics database (0006) for hemolymph proteome of the honeybee
+Desc    World-wide gel-based proteomics database (0006) for hemolymph proteome of the honeybee.
+URL     http://www.expasy.org/world-2dpage/
+Taxon   7460 | Apis mellifera
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMfmt 0002331 | HTML
+Query    2D PAGE annotation | HTML | Sequence accession number (protein) | http://world-2dpage.expasy.org/repository/ac=%s&database=0006
+Example Sequence accession number (protein) | AAP49283.1
+
+
+ID      world_2dpage_cgl14067_2dpage_
+IDalt   CGL14067-2DPAGE
+Name    World-wide gel-based proteomics database (CGL14067-2DPAGE)
+Desc    World-wide gel-based proteomics database (CGL14067-2DPAGE)
+URL     http://www.expasy.org/world-2dpage/
+Taxon   1 | all
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMfmt 0002331 | HTML
+Query    2D PAGE annotation | HTML | Sequence accession number (protein) | http://world-2dpage.expasy.org/repository/ac=%s&database=cgl14067-2dpage
+Example Sequence accession number (protein) | O31139
+
+
+ID      world_2dpage_nibr_2d_page_
+IDalt   NIBR 2D-PAGE
+Name    World-wide gel-based proteomics database (NIBR 2D-PAGE)
+Desc    World-wide gel-based proteomics database (NIBR 2D-PAGE)
+URL     http://www.expasy.org/world-2dpage/
+Taxon   1 | all
+EDAMtpc 0000133 | Two-dimensional gel electrophoresis
+EDAMdat 0002364 | 2D PAGE annotation
+EDAMid  0001096 | Sequence accession number (protein)
+EDAMfmt 0002331 | HTML
+Query    2D PAGE annotation | HTML | Sequence accession number (protein) | http://world-2dpage.expasy.org/repository/ac=%s&database=nibr_2d-page
+Example Sequence accession number (protein) | O54520
+
+
+ID      wormbase
+Acc     DB-0110
+Name    Caenorhabditis elegans genome database
+Desc    Caenorhabditis elegans genome database
+URL     http://www.wormbase.org/
+Cat     Organism-specific databases
+Taxon   6239 | Caenorhabditis elegans
+EDAMtpc 0002819 | Invertebrate
+EDAMtpc 0000643 | Genome
+EDAMtpc 0000621 | Organism
+EDAMdat 0000916 | Gene annotation
+EDAMid  0001026 | Gene symbol
+EDAMid  0002295 | Gene ID
+EDAMid  0000989 | Protein identifier
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit None
+Xref    SP_FT None
+Query    Gene annotation | HTML | Gene symbol | http://www.wormbase.org/db/gene/gene?name=%s
+Query    Gene annotation | HTML | Gene ID | http://www.wormbase.org/db/gene/gene?name=%s
+Query    Gene annotation | HTML | Protein identifier | http://www.wormbase.org/db/gene/gene?name=%s
+Example Gene symbol | unc-26
+Example Gene ID | R13A5.9
+Example Protein identifier | CE02711
+
+
+ID      yeastract
+Name    Transcriptional regulators database
+Desc    A curated repository of more than 34469 regulatory associations between transcription factors (TF) and target genes in Saccharomyces cerevisiae, based on more than 1000 bibliographic references. It also includes the description of 291 specific DNA binding sites for more than a hundred characterized TFs.
+URL     http://www.yeastract.com
+Taxon   4932 | Saccharomyces cerevisiae
+EDAMtpc 0002846 | Gene regulatory networks
+EDAMtpc 0000747 | Nucleic acid functional sites
+EDAMtpc 0000110 | Transcription and translation
+EDAMtpc 0000811 | Transcription factor and binding site
+EDAMtpc 0000782 | Fungal
+EDAMdat 0000896 | Protein annotation
+EDAMdat 0002147 | Transcription factor annotation
+EDAMdat 0000916 | Gene annotation
+EDAMdat 0002765 | Ontological annotation
+EDAMdat 0000929 | Gene expression annotation
+EDAMid  0002755 | Transcription factor name
+EDAMid  0001009 | Protein name
+EDAMid  0001807 | ORF name
+EDAMid  0002299 | Gene name
+EDAMid  0001209 | Consensus sequence
+EDAMfmt 0002331 | HTML
+Query    Gene annotation | HTML | ORF name | http://www.yeastract.com/view.php?existing=locus&orfname=%s
+Query    Protein annotation | HTML | ORF name | http://www.yeastract.com/view.php?existing=locus&orfname=%s
+Query    Ontological annotation {GO information} | HTML | ORF name | http://www.yeastract.com/view.php?existing=go&orfname=%s
+Query    Gene annotation | HTML | Gene name | http://www.yeastract.com/view.php?existing=locus&orfname=%s
+Query    Protein annotation | HTML | Gene name | http://www.yeastract.com/view.php?existing=locus&orfname=%s
+Query    Ontological annotation {GO information} | HTML | Gene name | http://www.yeastract.com/view.php?existing=go&orfname=%s
+Query    Gene annotation | HTML | Protein name | http://www.yeastract.com/view.php?existing=locus&orfname=%s
+Query    Protein annotation | HTML | Protein name | http://www.yeastract.com/view.php?existing=locus&orfname=%s
+Query    Ontological annotation {GO information} | HTML | Protein name | http://www.yeastract.com/view.php?existing=go&orfname=%s
+Query    Gene expression annotation {Regulation reference} | HTML | Transcription factor name;Gene name {target gene} | http://www.yeastract.com/view.php?existing=regulation&proteinname=%s1&orfname=%s2
+Query    Gene expression annotation {Regulation reference} | HTML | Transcription factor name;ORF name {target ORF} | http://www.yeastract.com/view.php?existing=regulation&proteinname=%s1&orfname=%s2
+Query    Transcription factor annotation {TF binding site reference} | HTML | Transcription factor name;Consensus sequence | http://www.yeastract.com/view.php?existing=consensus&proteinname=%s1&consensus=%s2
+Query    Transcription factor annotation {Documented regulators of a given set of genes} | HTML | Genes | http://www.yeastract.com/findregulators.php?type=doc&genes=%s
+Query    Gene annotation {Documented target genes of a given set of TFs} | HTML | Transcription factor name | http://www.yeastract.com/findregulated.php?type=doc&tfs=%s
+Example Transcription factor name | Nrg1p
+
+

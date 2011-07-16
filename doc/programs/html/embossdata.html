@@ -47,7 +47,7 @@ Find and retrieve EMBOSS data files
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with embossdata</b>
+Here is a sample session with <b>embossdata</b>
 <p>
 Display the directories searched for EMBOSS data files: 
 <p>
@@ -67,8 +67,8 @@ Data file name: <b></b>
 .                                                            Exists
 .embossdata                                                  Does not exist
 /homes/pmr                                                   Exists
-/homes/pmr/.embossdata                                       Does not exist
-/homes/pmr/local/share/EMBOSS/data/                          Exists
+/homes/pmr/.embossdata                                       Exists
+/homes/pmr/local/share/EMBOSS/data/                    Exists
 
 </pre></td></tr></table><p>
 <p>
@@ -90,6 +90,7 @@ Data file name: <b></b>
 
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
 
+  DRCAT.dat
   EBLOSUM30
   EBLOSUM35
   EBLOSUM40
@@ -106,6 +107,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   EBLOSUM85
   EBLOSUM90
   EBLOSUMN
+  EDAM.obo
   EDNAFULL
   EDNAMAT
   EDNASIMPLE
@@ -195,12 +197,10 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   Eenergy.dat
   Efeatures.embl
   Efeatures.emboss
-  Efeatures.gff
   Efeatures.gff2
   Efeatures.gff2protein
   Efeatures.gff3
   Efeatures.gff3protein
-  Efeatures.gffprotein
   Efeatures.pir
   Efeatures.protein
   Efeatures.refseqp
@@ -229,10 +229,10 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   Esig.pro
   Etags.embl
   Etags.emboss
-  Etags.gff
+  Etags.gff2
+  Etags.gff2protein
   Etags.gff3
   Etags.gff3protein
-  Etags.gffprotein
   Etags.pir
   Etags.protein
   Etags.refseqp
@@ -245,7 +245,6 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   Matrices.proteinstructure
   SSSUB
   edialignmat
-  embossre.equ
   tffungi
   tfinsect
   tfother
@@ -256,8 +255,87 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   tp400_trans
 
 
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/REBASE
+
+  embossre.enz
+  embossre.equ
+  embossre.ref
+  embossre.sup
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PBM_HOMEO
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_SPLICE
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_CNE
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/TAXONOMY
+
+  division.dmp
+  gencode.dmp
+  merged.dmp
+  names.dmp
+  nodes.dmp
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PBM_HLH
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_FAM
+
+  dummyfile
+  matrix_list.txt
+
+
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PHYLOFACTS
 
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PBM
+
+  dummyfile
+  matrix_list.txt
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/OBO
+
+  evidence_code.obo
+  gene_ontology.1_2.obo
+  pathway.obo
+  ro.obo
+  so.obo
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_CORE
+
+  MA0070.1.pfm
+  MA0071.1.pfm
+  MA0072.1.pfm
+  MA0073.1.pfm
+  MA0074.1.pfm
+  MA0075.1.pfm
+  MA0076.1.pfm
+  MA0077.1.pfm
+  MA0078.1.pfm
+  MA0079.1.pfm
+  MA0079.2.pfm
   dummyfile
   matrix_list.txt
 
@@ -270,100 +348,6 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_POLII
 
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/AAINDEX
 
-  alts910101
-  andn920101
-  argp820101
-  argp820102
-  argp820103
-  aurr980101
-  aurr980102
-  aurr980103
-  aurr980104
-  aurr980105
-  aurr980106
-  aurr980107
-  aurr980108
-  aurr980109
-  aurr980110
-  aurr980111
-  aurr980112
-  aurr980113
-  aurr980114
-  aurr980115
-  aurr980116
-  aurr980117
-  aurr980118
-  aurr980119
-  aurr980120
-  avbf000101
-  avbf000102
-  avbf000103
-  avbf000104
-  avbf000105
-  avbf000106
-  avbf000107
-  avbf000108
-  avbf000109
-  azae970101
-  azae970102
-  baek050101
-  basu010101
-  basu050101
-  basu050102
-  basu050103
-  begf750101
-  begf750102
-  begf750103
-  bens940101
-  bens940102
-  bens940103
-  bens940104
-  betm990101
-  bhar880101
-  bigc670101
-  biov880101
-  biov880102
-  blaj010101
-  blam930101
-  blas910101
-  bonm030101
-  bonm030102
-  bonm030103
-  bonm030104
-  bonm030105
-  bonm030106
-  broc820101
-  broc820102
-  brys930101
-  bulh740101
-  bulh740102
-  buna790101
-  buna790102
-  buna790103
-  bura740101
-  bura740102
-  casg920101
-  cedj970101
-  cedj970102
-  cedj970103
-  cedj970104
-  cedj970105
-  cham810101
-  cham820101
-  cham820102
-  cham830101
-  cham830102
-  cham830103
-  cham830104
-  cham830105
-  cham830106
-  cham830107
-  cham830108
-  choc750101
-  choc760101
-  choc760102
-  choc760103
-  choc760104
   chop780101
   chop780201
   chop780202
@@ -381,587 +365,8 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/AAINDEX
   chop780214
   chop780215
   chop780216
-  cidh920101
-  cidh920102
-  cidh920103
-  cidh920104
-  cidh920105
-  cohe430101
-  corj870101
-  corj870102
-  corj870103
-  corj870104
-  corj870105
-  corj870106
-  corj870107
-  corj870108
-  cosi940101
-  cowr900101
-  craj730101
-  craj730102
-  craj730103
-  crog050101
-  csem940101
-  dawd720101
-  daym780101
-  daym780201
-  daym780301
-  daym780302
-  desm900101
-  desm900102
-  digm050101
-  dosz010101
-  dosz010102
-  dosz010103
-  dosz010104
   dummyfile
-  eisd840101
-  eisd860101
-  eisd860102
-  eisd860103
-  engd860101
-  fasg760101
-  fasg760102
-  fasg760103
-  fasg760104
-  fasg760105
-  fasg890101
-  fauj830101
-  fauj880101
-  fauj880102
-  fauj880103
-  fauj880104
-  fauj880105
-  fauj880106
-  fauj880107
-  fauj880108
-  fauj880109
-  fauj880110
-  fauj880111
-  fauj880112
-  fauj880113
-  fend850101
-  fina770101
-  fina910101
-  fina910102
-  fina910103
-  fina910104
-  fitw660101
-  fodm020101
-  fuks010101
-  fuks010102
-  fuks010103
-  fuks010104
-  fuks010105
-  fuks010106
-  fuks010107
-  fuks010108
-  fuks010109
-  fuks010110
-  fuks010111
-  fuks010112
-  garj730101
-  geim800101
-  geim800102
-  geim800103
-  geim800104
-  geim800105
-  geim800106
-  geim800107
-  geim800108
-  geim800109
-  geim800110
-  geim800111
-  geod900101
-  geor030101
-  geor030102
-  geor030103
-  geor030104
-  geor030105
-  geor030106
-  geor030107
-  geor030108
-  geor030109
-  giag010101
-  goda950101
-  gold730101
-  gold730102
-  gong920101
-  grar740101
-  grar740102
-  grar740103
-  grar740104
-  guod860101
-  guyh850101
-  guyh850102
-  guyh850103
-  guyh850104
-  guyh850105
-  hary940101
-  hens920101
-  hens920102
-  hens920103
-  hens920104
-  hopa770101
-  hopt810101
-  hutj700101
-  hutj700102
-  hutj700103
-  isoy800101
-  isoy800102
-  isoy800103
-  isoy800104
-  isoy800105
-  isoy800106
-  isoy800107
-  isoy800108
-  jacr890101
-  janj780101
-  janj780102
-  janj780103
-  janj790101
-  janj790102
-  johm930101
-  jond750101
-  jond750102
-  jond920101
-  jond920102
-  jond920103
-  jond940101
-  jukt750101
-  junj780101
-  jurd980101
-  kanm000101
-  kanm800101
-  kanm800102
-  kanm800103
-  kanm800104
-  kapo950101
-  karp850101
-  karp850102
-  karp850103
-  keso980101
-  keso980102
-  khag800101
-  kida850101
-  kimc930101
-  klep840101
-  koep990101
-  koep990102
-  kola920101
-  kola930101
-  kosj950101
-  kosj950102
-  kosj950103
-  kosj950104
-  kosj950105
-  kosj950106
-  kosj950107
-  kosj950108
-  kosj950109
-  kosj950110
-  kosj950111
-  kosj950112
-  kosj950113
-  kosj950114
-  kosj950115
-  kriw710101
-  kriw790101
-  kriw790102
-  kriw790103
-  kuhl950101
-  kums000101
-  kums000102
-  kums000103
-  kums000104
   kytj820101
-  lawe840101
-  levj860101
-  levm760101
-  levm760102
-  levm760103
-  levm760104
-  levm760105
-  levm760106
-  levm760107
-  levm780101
-  levm780102
-  levm780103
-  levm780104
-  levm780105
-  levm780106
-  lewp710101
-  lifs790101
-  lifs790102
-  lifs790103
-  link010101
-  liwa970101
-  lutr910101
-  lutr910102
-  lutr910103
-  lutr910104
-  lutr910105
-  lutr910106
-  lutr910107
-  lutr910108
-  lutr910109
-  manp780101
-  maxf760101
-  maxf760102
-  maxf760103
-  maxf760104
-  maxf760105
-  maxf760106
-  mcla710101
-  mcla720101
-  mcmt640101
-  meej800101
-  meej800102
-  meej810101
-  meej810102
-  mehp950101
-  mehp950102
-  mehp950103
-  meih800101
-  meih800102
-  meih800103
-  micc010101
-  mirl960101
-  mits020101
-  miys850101
-  miys850102
-  miys850103
-  miys930101
-  miys960101
-  miys960102
-  miys960103
-  miys990101
-  miys990102
-  miys990103
-  miys990104
-  miys990105
-  miys990106
-  miys990107
-  miyt790101
-  mohr870101
-  monm990101
-  monm990201
-  moog990101
-  muet010101
-  muet020101
-  muet020102
-  munv940101
-  munv940102
-  munv940103
-  munv940104
-  munv940105
-  nadh010101
-  nadh010102
-  nadh010103
-  nadh010104
-  nadh010105
-  nadh010106
-  nadh010107
-  nagk730101
-  nagk730102
-  nagk730103
-  nakh900101
-  nakh900102
-  nakh900103
-  nakh900104
-  nakh900105
-  nakh900106
-  nakh900107
-  nakh900108
-  nakh900109
-  nakh900110
-  nakh900111
-  nakh900112
-  nakh900113
-  nakh920101
-  nakh920102
-  nakh920103
-  nakh920104
-  nakh920105
-  nakh920106
-  nakh920107
-  nakh920108
-  naod960101
-  ngpc000101
-  niek910101
-  niek910102
-  nisk800101
-  nisk860101
-  nozy710101
-  ogak980101
-  olsk800101
-  onek900101
-  onek900102
-  oobm770101
-  oobm770102
-  oobm770103
-  oobm770104
-  oobm770105
-  oobm850101
-  oobm850102
-  oobm850103
-  oobm850104
-  oobm850105
-  ovej920101
-  ovej920102
-  ovej920103
-  ovej920104
-  ovej920105
-  palj810101
-  palj810102
-  palj810103
-  palj810104
-  palj810105
-  palj810106
-  palj810107
-  palj810108
-  palj810109
-  palj810110
-  palj810111
-  palj810112
-  palj810113
-  palj810114
-  palj810115
-  palj810116
-  parb960101
-  parb960102
-  parj860101
-  pars000101
-  pars000102
-  pliv810101
-  ponj960101
-  ponp800101
-  ponp800102
-  ponp800103
-  ponp800104
-  ponp800105
-  ponp800106
-  ponp800107
-  ponp800108
-  ponp930101
-  pram820101
-  pram820102
-  pram820103
-  pram900101
-  pram900102
-  pram900103
-  pram900104
-  prla000101
-  prla000102
-  ptio830101
-  ptio830102
-  punt030101
-  punt030102
-  qian880101
-  qian880102
-  qian880103
-  qian880104
-  qian880105
-  qian880106
-  qian880107
-  qian880108
-  qian880109
-  qian880110
-  qian880111
-  qian880112
-  qian880113
-  qian880114
-  qian880115
-  qian880116
-  qian880117
-  qian880118
-  qian880119
-  qian880120
-  qian880121
-  qian880122
-  qian880123
-  qian880124
-  qian880125
-  qian880126
-  qian880127
-  qian880128
-  qian880129
-  qian880130
-  qian880131
-  qian880132
-  qian880133
-  qian880134
-  qian880135
-  qian880136
-  qian880137
-  qian880138
-  qian880139
-  qu_c930101
-  qu_c930102
-  qu_c930103
-  quib020101
-  racs770101
-  racs770102
-  racs770103
-  racs820101
-  racs820102
-  racs820103
-  racs820104
-  racs820105
-  racs820106
-  racs820107
-  racs820108
-  racs820109
-  racs820110
-  racs820111
-  racs820112
-  racs820113
-  racs820114
-  rada880101
-  rada880102
-  rada880103
-  rada880104
-  rada880105
-  rada880106
-  rada880107
-  rada880108
-  ricj880101
-  ricj880102
-  ricj880103
-  ricj880104
-  ricj880105
-  ricj880106
-  ricj880107
-  ricj880108
-  ricj880109
-  ricj880110
-  ricj880111
-  ricj880112
-  ricj880113
-  ricj880114
-  ricj880115
-  ricj880116
-  ricj880117
-  rier950101
-  risj880101
-  robb760101
-  robb760102
-  robb760103
-  robb760104
-  robb760105
-  robb760106
-  robb760107
-  robb760108
-  robb760109
-  robb760110
-  robb760111
-  robb760112
-  robb760113
-  robb790101
-  robb790102
-  rosg850101
-  rosg850102
-  rosm880101
-  rosm880102
-  rosm880103
-  rosm880104
-  rosm880105
-  rusr970101
-  rusr970102
-  rusr970103
-  simk990101
-  simk990102
-  simk990103
-  simk990104
-  simk990105
-  simz760101
-  skoj000101
-  skoj000102
-  skoj970101
-  snep660101
-  snep660102
-  snep660103
-  snep660104
-  suem840101
-  suem840102
-  suym030101
-  swer830101
-  takk010101
-  tans760101
-  tans760102
-  tans770101
-  tans770102
-  tans770103
-  tans770104
-  tans770105
-  tans770106
-  tans770107
-  tans770108
-  tans770109
-  tans770110
-  thop960101
-  tobd000101
-  tobd000102
-  tsaj990101
-  tsaj990102
-  tude900101
-  vasm830101
-  vasm830102
-  vasm830103
-  velv850101
-  venm980101
-  vent840101
-  vheg790101
-  vinm940101
-  vinm940102
-  vinm940103
-  vinm940104
-  vogg950101
-  warp780101
-  weba780101
-  weil970101
-  weil970102
-  werd780101
-  werd780102
-  werd780103
-  werd780104
-  wilm950101
-  wilm950102
-  wilm950103
-  wilm950104
-  wimw960101
-  woec730101
-  wolr790101
-  wolr810101
-  wols870101
-  wols870102
-  wols870103
-  yanj020101
-  yutk870101
-  yutk870102
-  yutk870103
-  yutk870104
-  zasb820101
-  zhac000101
-  zhac000102
-  zhac000103
-  zhac000104
-  zhac000105
-  zhac000106
-  zhoh040101
-  zhoh040102
-  zhoh040103
-  zimj680101
-  zimj680102
-  zimj680103
-  zimj680104
-  zimj680105
-
-
-DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PBM_HLH
-
-  dummyfile
-  matrix_list.txt
 
 
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
@@ -1227,62 +632,6 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
   Ezebrafish.cut
   Ezma.cut
 
-
-DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_SPLICE
-
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_FAM
-
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_CORE
-
-  MA0070.1.pfm
-  MA0071.1.pfm
-  MA0072.1.pfm
-  MA0073.1.pfm
-  MA0074.1.pfm
-  MA0075.1.pfm
-  MA0076.1.pfm
-  MA0077.1.pfm
-  MA0078.1.pfm
-  MA0079.1.pfm
-  MA0079.2.pfm
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/pmr/local/share/EMBOSS/data/REBASE
-
-  dummyfile
-  embossre.enz
-  embossre.equ
-  embossre.ref
-  embossre.sup
-
-
-DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PBM
-
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_PBM_HOMEO
-
-  dummyfile
-  matrix_list.txt
-
-
-DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_CNE
-
-  dummyfile
-  matrix_list.txt
-
 </pre></td></tr></table><p>
 <p>
 <p>
@@ -1324,7 +673,7 @@ File ./EPAM60                                                     Does not exist
 File .embossdata/EPAM60                                           Does not exist
 File /homes/pmr/EPAM60                                            Does not exist
 File /homes/pmr/.embossdata/EPAM60                                Does not exist
-File /homes/pmr/local/share/EMBOSS/data/EPAM60                    Exists
+File /homes/pmr/local/share/EMBOSS/data/EPAM60              Exists
 
 </pre></td></tr></table><p>
 <p>
@@ -1337,7 +686,7 @@ File /homes/pmr/local/share/EMBOSS/data/EPAM60                    Exists
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Find and retrieve EMBOSS data files
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-filename]          string     This specifies the name of the file that
@@ -1648,7 +997,7 @@ No data files are read by this program.
 <h3> -filename option </h3>
 Name of data file to search for or copy into the current directory from the EMBOSS standard data directory. The name of the file is not altered when it is fetched. (Any string is accepted).
 
-<h3>-outfile option</h3>
+<h3> -outfile option</h3>
 Name of file containing the results of searching the data directories.    By default this is written to the screen (<tt>stdout</tt>).
 
 <h3> -reject option </h3>

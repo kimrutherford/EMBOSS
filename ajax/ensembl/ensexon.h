@@ -1,16 +1,35 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensexon_h
-#define ensexon_h
+#ifndef ENSEXON_H
+#define ENSEXON_H
 
-#include "ensdata.h"
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
+
 #include "ensfeature.h"
 
+AJ_BEGIN_DECLS
 
 
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
 
 /*
 ** Prototype definitions
@@ -18,19 +37,19 @@ extern "C"
 
 /* Ensembl Exon */
 
-EnsPExon ensExonNew(EnsPExonadaptor ea,
-                    ajuint identifier,
-                    EnsPFeature feature,
-                    ajint sphase,
-                    ajint ephase,
-                    AjBool current,
-                    AjBool constitutive,
-                    AjPStr stableid,
-                    ajuint version,
-                    AjPStr cdate,
-                    AjPStr mdate);
+EnsPExon ensExonNewCpy(const EnsPExon object);
 
-EnsPExon ensExonNewObj(const EnsPExon object);
+EnsPExon ensExonNewIni(EnsPExonadaptor ea,
+                       ajuint identifier,
+                       EnsPFeature feature,
+                       ajint sphase,
+                       ajint ephase,
+                       AjBool current,
+                       AjBool constitutive,
+                       AjPStr stableid,
+                       ajuint version,
+                       AjPStr cdate,
+                       AjPStr mdate);
 
 EnsPExon ensExonNewRef(EnsPExon exon);
 
@@ -38,83 +57,107 @@ void ensExonDel(EnsPExon* Pexon);
 
 EnsPExonadaptor ensExonGetAdaptor(const EnsPExon exon);
 
-ajuint ensExonGetIdentifier(const EnsPExon exon);
-
-EnsPFeature ensExonGetFeature(const EnsPExon exon);
-
-ajint ensExonGetStartPhase(const EnsPExon exon);
-
-ajint ensExonGetEndPhase(const EnsPExon exon);
+AjBool ensExonGetConstitutive(const EnsPExon exon);
 
 AjBool ensExonGetCurrent(const EnsPExon exon);
 
-AjBool ensExonGetConstitutive(const EnsPExon exon);
+AjPStr ensExonGetDateCreation(const EnsPExon exon);
 
-AjPStr ensExonGetStableIdentifier(const EnsPExon exon);
+AjPStr ensExonGetDateModification(const EnsPExon exon);
+
+EnsPFeature ensExonGetFeature(const EnsPExon exon);
+
+ajuint ensExonGetIdentifier(const EnsPExon exon);
+
+ajint ensExonGetPhaseEnd(const EnsPExon exon);
+
+ajint ensExonGetPhaseStart(const EnsPExon exon);
+
+AjPStr ensExonGetStableidentifier(const EnsPExon exon);
 
 ajuint ensExonGetVersion(const EnsPExon exon);
 
-AjPStr ensExonGetCreationDate(const EnsPExon exon);
-
-AjPStr ensExonGetModificationDate(const EnsPExon exon);
-
-const AjPList ensExonGetSupportingfeatures(EnsPExon exon);
+const AjPList ensExonLoadSupportingfeatures(EnsPExon exon);
 
 AjBool ensExonSetAdaptor(EnsPExon exon, EnsPExonadaptor ea);
 
-AjBool ensExonSetIdentifier(EnsPExon exon, ajuint identifier);
-
-AjBool ensExonSetFeature(EnsPExon exon, EnsPFeature feature);
-
-AjBool ensExonSetStartPhase(EnsPExon exon, ajint sphase);
-
-AjBool ensExonSetEndPhase(EnsPExon exon, ajint ephase);
+AjBool ensExonSetConstitutive(EnsPExon exon, AjBool constitutive);
 
 AjBool ensExonSetCurrent(EnsPExon exon, AjBool current);
 
-AjBool ensExonSetConstitutive(EnsPExon exon, AjBool constitutive);
+AjBool ensExonSetDateCreation(EnsPExon exon, AjPStr cdate);
 
-AjBool ensExonSetStableIdentifier(EnsPExon exon, AjPStr stableid);
+AjBool ensExonSetDateModification(EnsPExon exon, AjPStr mdate);
+
+AjBool ensExonSetFeature(EnsPExon exon, EnsPFeature feature);
+
+AjBool ensExonSetIdentifier(EnsPExon exon, ajuint identifier);
+
+AjBool ensExonSetPhaseEnd(EnsPExon exon, ajint ephase);
+
+AjBool ensExonSetPhaseStart(EnsPExon exon, ajint sphase);
+
+AjBool ensExonSetStableidentifier(EnsPExon exon, AjPStr stableid);
 
 AjBool ensExonSetVersion(EnsPExon exon, ajuint version);
 
-AjBool ensExonSetCreationDate(EnsPExon exon, AjPStr cdate);
-
-AjBool ensExonSetModificationDate(EnsPExon exon, AjPStr mdate);
-
 AjBool ensExonTrace(const EnsPExon exon, ajuint level);
 
-ajint ensExonGetFrame(const EnsPExon exon);
+ajint ensExonCalculateFrame(const EnsPExon exon);
 
-ajulong ensExonGetMemsize(const EnsPExon exon);
+size_t ensExonCalculateMemsize(const EnsPExon exon);
 
-EnsPExon ensExonTransform(EnsPExon exon, const AjPStr csname,
-                          const AjPStr csversion);
+ajint ensExonCalculateSliceCodingEnd(EnsPExon exon,
+                                     EnsPTranscript transcript,
+                                     EnsPTranslation translation);
+
+ajint ensExonCalculateSliceCodingStart(EnsPExon exon,
+                                       EnsPTranscript transcript,
+                                       EnsPTranslation translation);
+
+ajuint ensExonCalculateTranscriptCodingEnd(EnsPExon exon,
+                                           EnsPTranscript transcript,
+                                           EnsPTranslation translation);
+
+ajuint ensExonCalculateTranscriptCodingStart(EnsPExon exon,
+                                             EnsPTranscript transcript,
+                                             EnsPTranslation translation);
+
+ajuint ensExonCalculateTranscriptStart(EnsPExon exon,
+                                       EnsPTranscript transcript);
+
+ajuint ensExonCalculateTranscriptEnd(EnsPExon exon,
+                                     EnsPTranscript transcript);
 
 EnsPExon ensExonTransfer(EnsPExon exon, EnsPSlice slice);
 
-AjBool ensExonFetchDisplayIdentifier(const EnsPExon exon, AjPStr* Pidentifier);
+EnsPExon ensExonTransform(EnsPExon exon,
+                          const AjPStr csname,
+                          const AjPStr csversion);
 
-AjBool ensExonFetchSequenceStr(EnsPExon exon, AjPStr* Psequence);
+AjBool ensExonFetchDisplayidentifier(const EnsPExon exon, AjPStr* Pidentifier);
 
-AjBool ensExonFetchSequenceSeq(EnsPExon exon, AjPSeq* Psequence);
+AjBool ensExonFetchSequenceSliceSeq(EnsPExon exon, AjPSeq* Psequence);
 
-ajuint ensExonGetTranscriptStart(EnsPExon exon, EnsPTranscript transcript);
+AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence);
 
-ajuint ensExonGetTranscriptEnd(EnsPExon exon, EnsPTranscript transcript);
+AjBool ensExonFetchSequenceTranslationSeq(EnsPExon exon,
+                                          EnsPTranscript transcript,
+                                          EnsPTranslation translation,
+                                          AjPSeq* Psequence);
 
-ajuint ensExonGetTranscriptCodingStart(EnsPExon exon,
-                                       EnsPTranscript transcript);
+AjBool ensExonFetchSequenceTranslationStr(EnsPExon exon,
+                                          EnsPTranscript transcript,
+                                          EnsPTranslation translation,
+                                          AjPStr* Psequence);
 
-ajuint ensExonGetTranscriptCodingEnd(EnsPExon exon, EnsPTranscript transcript);
+AjBool ensExonMatch(const EnsPExon exon1, const EnsPExon exon2);
 
-ajuint ensExonGetSliceCodingStart(EnsPExon exon, EnsPTranscript transcript);
+AjBool ensExonSimilarity(const EnsPExon exon1, const EnsPExon exon2);
 
-ajuint ensExonGetSliceCodingEnd(EnsPExon exon, EnsPTranscript transcript);
+AjBool ensListExonSortStartAscending(AjPList exons);
 
-AjBool ensExonSortByStartAscending(AjPList exons);
-
-AjBool ensExonSortByStartDescending(AjPList exons);
+AjBool ensListExonSortStartDescending(AjPList exons);
 
 /* Ensembl Exon Adaptor */
 
@@ -124,51 +167,46 @@ EnsPExonadaptor ensRegistryGetExonadaptor(
 EnsPExonadaptor ensExonadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensExonadaptorDel(EnsPExonadaptor *Pea);
+void ensExonadaptorDel(EnsPExonadaptor* Pea);
 
-EnsPFeatureadaptor ensExonadaptorGetFeatureadaptor(
-    const EnsPExonadaptor ea);
+EnsPDatabaseadaptor ensExonadaptorGetDatabaseadaptor(EnsPExonadaptor ea);
 
-EnsPDatabaseadaptor ensExonadaptorGetDatabaseadaptor(
-    const EnsPExonadaptor ea);
+EnsPFeatureadaptor ensExonadaptorGetFeatureadaptor(EnsPExonadaptor ea);
 
-AjBool ensExonadaptorFetchAll(const EnsPExonadaptor ea, AjPList exons);
+AjBool ensExonadaptorFetchAll(EnsPExonadaptor ea,
+                              AjPList exons);
 
-AjBool ensExonadaptorFetchAllBySlice(const EnsPExonadaptor ea,
+AjBool ensExonadaptorFetchAllbySlice(EnsPExonadaptor ea,
                                      EnsPSlice slice,
+                                     const AjPStr constraint,
                                      AjPList exons);
 
-AjBool ensExonadaptorFetchAllBySliceConstraint(const EnsPExonadaptor ea,
-                                               EnsPSlice slice,
-                                               const AjPStr constraint,
-                                               AjPList exons);
-
-AjBool ensExonadaptorFetchByIdentifier(const EnsPExonadaptor ea,
-                                       ajuint identifier,
-                                       EnsPExon *Pexon);
-
-AjBool ensExonadaptorFetchByStableIdentifier(const EnsPExonadaptor ea,
-                                             const AjPStr stableid,
-                                             ajuint version,
-                                             EnsPExon *Pexon);
-
-AjBool ensExonadaptorFetchAllByStableIdentifier(const EnsPExonadaptor ea,
+AjBool ensExonadaptorFetchAllbyStableidentifier(EnsPExonadaptor ea,
                                                 const AjPStr stableid,
                                                 AjPList exons);
 
-AjBool ensExonadaptorFetchAllByTranscript(const EnsPExonadaptor ea,
+AjBool ensExonadaptorFetchAllbyTranscript(EnsPExonadaptor ea,
                                           const EnsPTranscript transcript,
                                           AjPList exons);
 
-AjBool ensExonadaptorFetchAllIdentifiers(const EnsPExonadaptor ea,
-                                         AjPList identifiers);
+AjBool ensExonadaptorFetchByIdentifier(EnsPExonadaptor ea,
+                                       ajuint identifier,
+                                       EnsPExon* Pexon);
 
-AjBool ensExonadaptorFetchAllStableIdentifiers(const EnsPExonadaptor ea,
-                                               AjPList identifiers);
+AjBool ensExonadaptorFetchByStableidentifier(EnsPExonadaptor ea,
+                                             const AjPStr stableid,
+                                             ajuint version,
+                                             EnsPExon* Pexon);
+
+AjBool ensExonadaptorRetrieveAllIdentifiers(EnsPExonadaptor ea,
+                                            AjPList identifiers);
+
+AjBool ensExonadaptorRetrieveAllStableidentifiers(EnsPExonadaptor ea,
+                                                  AjPList identifiers);
 
 /* Ensembl Supporting Feature Adaptor */
 
-AjBool ensSupportingfeatureadaptorFetchAllByExon(EnsPDatabaseadaptor dba,
+AjBool ensSupportingfeatureadaptorFetchAllbyExon(EnsPDatabaseadaptor dba,
                                                  EnsPExon exon,
                                                  AjPList bafs);
 
@@ -179,8 +217,6 @@ AjBool ensSupportingfeatureadaptorFetchAllByExon(EnsPDatabaseadaptor dba,
 
 
 
-#endif /* ensexon_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSEXON_H */

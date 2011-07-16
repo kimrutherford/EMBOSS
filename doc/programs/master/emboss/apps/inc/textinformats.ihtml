@@ -1,0 +1,31 @@
+<p>
+
+The input is a standard EMBOSS text query.
+
+<p>
+
+The major text sources defined as standard in EMBOSS installations are
+non-standard types on the srs server and databases with a "text" query
+in the Data Resource Catalogue database DRCAT.
+
+<p>
+
+Data can also be read from text output in any supported text format
+written by an EMBOSS or third-party application. The text format is
+needed to identify the start and end of a single "entry" within a
+larger text file.
+
+<p>
+The input format can be specified by using the command-line qualifier
+<tt>-format xxx</tt>, where 'xxx' is replaced by the name of the
+required format.  The available format names are: text, html, xml (uniprotxml),
+obo, embl (swissprot)
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/TextFormats.html">
+http://emboss.sf.net/docs/themes/TextFormats.html</A>
+for further information on text formats.
+
+<p>

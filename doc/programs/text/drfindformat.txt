@@ -1,0 +1,325 @@
+                                drfindformat
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Find public databases by format
+
+Description
+
+   drfindformat searches the Data Resource Catalogue to find entries with
+   EDAM format terms matching a query string.
+
+Algorithm
+
+   The first search is of the EDAM ontology format namespace, using the
+   term names and their synonynms. All child terms are automatically
+   included in the set of matches inless the -nosubclasses qualifier is
+   used.
+
+   The -sensitive qualifier also searches the definition strings.
+
+   The set of EDAM terms are then compared to entries in the Data Resource
+   Catalogue, searching the 'efmt' EDAM format index.
+
+Usage
+
+   Here is a sample session with drfindformat
+
+
+% drfindformat fasta
+Find public databases by format
+Data resource output file [drfindformat.drcat]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Find public databases by format
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-query]             string     List of EDAM data keywords (Any string)
+  [-outfile]           outresource [*.drfindformat] Output data resource file
+                                  name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -sensitive          boolean    [N] By default, the query keywords are
+                                  matched against the EDAM term names (and
+                                  synonyms) only. This option also matches the
+                                  keywords against the EDAM term definitions
+                                  and will therefore (typically) report more
+                                  matches.
+   -[no]subclasses     boolean    [Y] Extend the query matches to include all
+                                  terms which are specialisations (EDAM
+                                  sub-classes) of the matched type.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Data resource output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   None.
+
+Output file format
+
+   The output is a standard EMBOSS resource file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -oformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: drcat,
+   basic, wsbasic, list.
+
+   See: http://emboss.sf.net/docs/themes/ResourceFormats.html for further
+   information on resource formats.
+
+  Output files for usage example
+
+  File: drfindformat.drcat
+
+ID      dbEST
+Name    dbEST database of EST sequences
+Desc    dbEST is a division of GenBank that contains sequence data and other inf
+ormation on "single-pass" cDNA sequences, or "Expressed Sequence Tags", from a n
+umber of organisms.
+URL     http://www.ncbi.nlm.nih.gov/dbEST/
+Cat     Not available
+Taxon   1 | all
+EDAMtpc 0000655 | mRNA, EST or cDNA
+EDAMdat 0000849 | Sequence record
+EDAMid  0002314 | GI number
+EDAMid  0001105 | dbEST accession
+EDAMfmt 0002310 | FASTA-HTML
+EDAMfmt 0002532 | GenBank-HTML
+EDAMfmt 0002331 | HTML
+Xref    SP_FT | None
+Query    Sequence record | GenBank-HTML | dbEST accession | http://www.ncbi.nlm.
+nih.gov/nucest/%s?report=genbank
+Query    Sequence record | HTML {est} | dbEST accession | http://www.ncbi.nlm.ni
+h.gov/nucest/%s?report=est
+Query    Sequence record | HTML {docsum} | dbEST accession | http://www.ncbi.nlm
+.nih.gov/nucest/%s?report=docsum
+Query    Sequence record | FASTA-HTML | dbEST accession | http://www.ncbi.nlm.ni
+h.gov/nucest/%s?report=fasta
+Query    Sequence record | GenBank-HTML | dbEST accession | http://www.ncbi.nlm.
+nih.gov/nucest/%s?report=genbank
+Query    Sequence record | GenBank-HTML | GI number | http://www.ncbi.nlm.nih.go
+v/nucest/%s?report=genbank
+Query    Sequence record | HTML {est} | GI number | http://www.ncbi.nlm.nih.gov/
+nucest/%s?report=est
+Query    Sequence record | HTML {docsum} | GI number | http://www.ncbi.nlm.nih.g
+ov/nucest/%s?report=docsum
+Query    Sequence record | FASTA-HTML | GI number | http://www.ncbi.nlm.nih.gov/
+nucest/%s?report=fasta
+Query    Sequence record | GenBank-HTML | GI number | http://www.ncbi.nlm.nih.go
+v/nucest/%s?report=genbank
+Example dbEST accession | f12345
+Example GI number | 706694
+
+ID      REDIdb
+Name    RNA editing database (REDIdb)
+Desc    Sequences post-transcriptionally modified by RNA editing from primary da
+tabases and literature. All editing information such as substitutions, insertion
+s and deletions occurring in a wide range of organisms is stored.
+URL     http://biologia.unical.it/py_script/overview.html
+Taxon   1 | all
+EDAMtpc 0000630 | Gene structure
+EDAMdat 0002043 | Sequence record lite
+EDAMdat 0001383 | Sequence alignment (nucleic acid)
+EDAMid  0002781 | REDIdb ID
+EDAMfmt 0002310 | FASTA-HTML
+EDAMfmt 0002331 | HTML
+Query    Sequence record lite {REDIdb entry} | HTML | REDIdb ID | http://biologi
+a.unical.it/py_script/cgi-bin/retrieve.py?query=%s
+Query    Sequence record lite {REDIdb fasta} | FASTA-HTML | REDIdb ID | http://b
+iologia.unical.it/py_script/cgi-bin/fasta.py?query=%s
+Query    Sequence alignment (nucleic acid) {REDIdb overview} | HTML | REDIdb ID
+| http://biologia.unical.it/py_script/cgi-bin/display.py?query=%s
+Query    Sequence alignment (nucleic acid) {REDIdb alignment} | HTML | REDIdb ID
+ | http://biologia.unical.it/py_script/cgi-bin/align.py?query=%s
+Example REDIdb ID  | EDI_000000002
+
+ID      UniRef
+Name    Non-redundant reference (UniRef) databases
+Desc    Clustered sets of sequences from UniProt Knowledgebase (including splice
+ variants and isoforms) and selected UniParc records, in order to obtain complet
+e coverage of sequence space at several resolutions while hiding redundant seque
+nces (but not their descriptions) from view.
+URL     http://www.uniprot.org/help/uniref
+Cat     Other
+Taxon   1 | all
+
+
+  [Part of this file has been deleted for brevity]
+
+Xref    SP_FT | None
+Query    Sequence record full | HTML | UniProt accession | http://www.uniprot.or
+g/uniprot/%s
+Query    Sequence record full | uniprot | UniProt accession | http://www.uniprot
+.org/uniprot/%s.txt
+Query    Sequence record full | XML | UniProt accession | http://www.uniprot.org
+/uniprot/%s.xml
+Query    Sequence record full | RDF | UniProt accession | http://www.uniprot.org
+/uniprot/%s.rdf
+Query    Sequence record full | FASTA format | UniProt accession | http://www.un
+iprot.org/uniprot/%s.fasta
+Example UniProt accession | P12345
+
+ID      Ensembl
+Acc     DB-0023
+Name    Ensembl eukaryotic genome annotation project
+Desc    Genome databases for vertebrates and other eukaryotic species.
+URL     http://www.ensembl.org/
+Cat     Genome annotation databases
+Taxon   33208 | Metazoa
+EDAMtpc 0000643 | Genomes
+EDAMtpc 0002818 | Eukaryote
+EDAMtpc 0000643 | Genomes
+EDAMdat 0000849 | Sequence record
+EDAMdat 0000916 | Gene annotation
+EDAMid  0001033 | Gene ID (Ensembl)
+EDAMid  0002725 | Transcript ID (Ensembl)
+EDAMfmt 0001929 | FASTA format
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit | Transcript ID (Ensembl);Protein ID (Ensembl);Gene ID (Ense
+mbl)
+Xref    SP_FT | None
+Query    Gene annotation | HTML | Gene ID (Ensembl) | http://www.ensembl.org/Hom
+o_sapiens/Gene/Summary?g=%s
+Query    Sequence record | FASTA format | Gene ID (Ensembl);Transcript ID (Ensem
+bl) | http://www.ensembl.org/Homo_sapiens/Gene/Export?db=core;g=%s1;output=fasta
+;r=13:31787617-31871809;strand=feature;t=%s2;time=1244110856.85314;st=cdna;st=co
+ding;st=peptide;st=utr5;st=utr3;st=exons;st=introns;genomic=unmasked;_format=Tex
+t
+Example Gene ID (Ensembl);Transcript ID (Ensembl) | ENSG00000139618;ENST00000380
+152
+
+ID      UniProtKB/Swiss-Prot
+IDalt   SwissProt
+Name    Universal protein resource knowledge base / Swiss-Prot
+Desc    Section of the UniProt knowledgebase, containing annotated records, whic
+h include curator-evaluated computational analysis, as well as, information extr
+acted from the literature
+URL     http://www.uniprot.org
+Taxon   1 | all
+EDAMtpc 0000639 | Protein sequences
+EDAMdat 0002201 | Sequence record full
+EDAMid  0003021 | UniProt accession
+EDAMfmt 0001929 | FASTA format
+EDAMfmt 0002376 | RDF
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    EMBL_explicit | UniProt accession
+Query    Sequence record full | HTML | UniProt accession | http://www.uniprot.or
+g/uniprot/%s
+Query    Sequence record full | Text | UniProt accession | http://www.uniprot.or
+g/uniprot/%s.txt
+Query    Sequence record full | XML | UniProt accession | http://www.uniprot.org
+/uniprot/%s.xml
+Query    Sequence record full | RDF | UniProt accession | http://www.uniprot.org
+/uniprot/%s.rdf
+Query    Sequence record full | FASTA format | UniProt accession | http://www.un
+iprot.org/uniprot/%s.fasta
+Example UniProt accession | P12345
+
+
+Data files
+
+   The Data Resource Catalogue is included in EMBOSS as local database
+   drcat. The EDAM Ontology is included in EMBOSS as local database edam.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                     Program name                       Description
+                    drfinddata     Find public databases by data type
+                    drfindid       Find public databases by identifier
+   drfindresource   Find public databases by resource
+                    drget          Get data resource entries
+                    drtext         Get data resource entries complete text
+                    edamdef        Find EDAM ontology terms by definition
+                    edamhasinput   Find EDAM ontology terms by has_input relation
+                    edamhasoutput  Find EDAM ontology terms by has_output relation
+                    edamisformat   Find EDAM ontology terms by is_format_of relation
+                    edamisid       Find EDAM ontology terms by is_identifier_of relation
+                    edamname       Find EDAM ontology terms by name
+                    wossdata       Finds programs by EDAM data
+                    wossinput      Finds programs by EDAM input data
+                    wossoperation  Finds programs by EDAM operation
+                    wossoutput     Finds programs by EDAM output data
+                    wossparam      Finds programs by EDAM parameter
+                    wosstopic      Finds programs by EDAM topic
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

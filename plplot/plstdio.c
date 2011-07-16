@@ -1,4 +1,4 @@
-/* $Id: plstdio.c,v 1.2 2007/07/11 14:19:38 ajb Exp $
+/* $Id: plstdio.c,v 1.3 2010/10/06 16:02:49 rice Exp $
 
    Standardized I/O handler for PLplot.
 
@@ -37,7 +37,7 @@ void
 plio_fwrite(void *buf, size_t size, size_t nmemb, FILE *stream)
 {
 /*  size_t bytes; */
-
+  int iw;
   dbug_enter("plio_fwrite");
 
   /* Exit if there is nothing to write */
@@ -46,7 +46,7 @@ plio_fwrite(void *buf, size_t size, size_t nmemb, FILE *stream)
   /* Clear the error flag for this steam */
   clearerr(stream);
 
-  /* bytes = */ fwrite(buf, size, nmemb, stream);
+  /* bytes = */ iw = fwrite(buf, size, nmemb, stream);
   
   if(ferror(stream)) {
     /* Perhaps we can add a flag (global or per output stream)
@@ -67,6 +67,7 @@ void
 plio_fread(void *buf, size_t size, size_t nmemb, FILE *stream)
 {
 /*  size_t bytes; */
+  int ir;
 
   dbug_enter("plio_fread");
 
@@ -79,7 +80,7 @@ plio_fread(void *buf, size_t size, size_t nmemb, FILE *stream)
   /* Clear the error flag for this steam */
   clearerr(stream);
 
-  /* bytes = */ fread(buf, size, nmemb, stream);
+  /* bytes = */ ir = fread(buf, size, nmemb, stream);
 
   if(ferror(stream)) {
     /* The read resulted in an error */

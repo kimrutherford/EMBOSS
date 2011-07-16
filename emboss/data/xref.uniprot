@@ -1,0 +1,143 @@
+# UniProt cross-references
+#
+# See UniProt knowledgebase file dbxref.txt
+# example URLs using primary reference (%s)
+# or accession number (%u)
+
+#30,000,000
+InterPro IPR022549; DUF3627
+
+GO | | GO:0033644; C:host cell membrane
+
+EMBL DQ643392; ABF82032.1
+
+NCBI_TaxID 345201; 
+
+Pfam PF12299; DUF3627
+PROSITE PS51301; KILA_N
+RefSeq YP_654574.1; NC_008187.1
+GeneID 4156251; -
+Gene3D G3DSA:3.40.30.10; Thioredoxin_fold
+SUPFAM SSF56112; Kinase_like
+KEGG tpv:TP04_0437; -
+ProteinModelPortal Q91G65; -
+GenomeReviews CT485782_GR; AT1G22300
+TIGRFAMs TIGR00231; small_GTP
+ProtClustDB CLSP2511638; -
+SMART SM00554; FAS1
+OMA FDVARTG; -
+HOGENOM HBG611720; -
+SMR Q91G65; 7-100
+PRINTS PR00138; MATRIXIN
+PANTHER PTHR18860; 14-3-3
+BioCyc MetaCyc:MONOMER-12429; -
+STRING P32234; -
+eggNOG inNOG05410; -
+HAMAP MF_00807; ACC_deaminase
+GeneTree EMGT00050000006238; -
+
+FTId PRO_0000377938; 
+
+NMPDR fig|7227.3.peg.4742; -
+PIRSF PIRSF000868; 14-3-3
+EnsemblBacteria EBMYCT00000015323; EBMYCP00000015158
+OrthoDB EOG4W6MBJ; -
+UniGene Les.3896; -
+PhylomeDB P32234; -
+HOVERGEN HBG050423; -
+Ensembl ENSBTAT00000022411; ENSBTAP00000022411
+IPI IPI00524493; -
+EnsemblMetazoa FBtr0087976; FBpp0087084
+CTD 36288; -
+PIR T03040; T03040
+ProDom PD000328; MHC_II_b_N
+HSSP Q9CQJ4; 2CKL
+EnsemblPlants AT1G22300.1; AT1G22300.1
+InParanoid P32234; -
+TIGR BOV_A0688; -
+PRIDE P48347; -
+FlyBase FBgn0010339; 128up
+Bgee P32234; -
+Genevestigator P48347; -
+ArrayExpress P81928; -
+EuPathDB PlasmoDB:PFL1385c; -
+EnsemblFungi SPAC922.03-1; SPAC922.03-1
+UCSC M117.2.2; c. elegans
+NextBio 797758; -
+HGNC HGNC:12849; YWHAB
+PDB 2E9Q; X-ray
+PDBsum 2E9Q; -
+CAZy GH32; Glycoside Hydrolase Family 32
+MEROPS I21.001; -
+VectorBase AAEL006885; Aedes aegypti
+EnsemblProtists DDB0232938; DDB0232938
+euHCVdb M62321; -
+Gramene P49106; -
+BRENDA 2.1.3.1; 4086
+MGI MGI:1891917; Ywhab
+WormBase M117.2; CE06200
+GermOnline CG8340; Drosophila melanogaster
+IntAct P32234; 4
+CleanEx HS_YWHAB; -
+RGD 61998; Ywhab
+TAIR At1g22300; -
+MINT MINT-843420; -
+PhosphoSite P31946; -
+ZFIN ZDB-GENE-030131-6583; ywhaba
+GenoList BSU26800; -
+GeneCards GC20P040256; -
+neXtProt NX_P31946; -
+Xenbase XB-GENE-1006026; ywhab
+REBASE 2622; I-SceIII
+MIM 601289; gene
+PharmGKB PA37438; -
+DIP DIP-27044N; -
+H-InvDB HIX0015846; -
+HPA CAB003759; -
+dictyBase DDB_G0269138; fttB
+Reactome REACT_11061; Signalling by NGF
+CGD CAL0001346; BMH1
+CYGD YOR014w; -
+SGD S000005540; RTS1
+TCDB 4.C.1.1.7; proposed fatty acid transporter (FAT) family
+LegioList lpp0929; -
+PseudoCAP PA1024; -
+DrugBank DB01381; Ginkgo biloba
+PeptideAtlas P62258; -
+GeneDB_Spombe SPAC922.03; -
+Pathway_Interaction_DB a6b1_a6b4_integrin_pathway; a6b1 and a6b4 Integrin signaling
+EcoGene EG10986; tag
+EchoBASE EB0979; -
+TubercuList Rv0954; -
+Orphanet 179; Chorioretinopathy, Birdshot type
+AGD ACL127W; -
+Allergome 2681; Ses i 6
+PeroxiBase 4935; Di1CysPrx
+GeneFarm 4048; -
+World-2DPAGE 0020:Q20655; -
+PMAP-CutDB P62258; -
+Leproma ML1795; -
+REPRODUCTION-2DPAGE IPI00216318; -
+SWISS-2DPAGE P31947; -
+ArachnoServer AS000014; U3-ctenitoxin-Asp1a
+ProMEX P46077; -
+ConoServer 3552; Bromoheptapeptide Im
+UCD-2DPAGE Q9CQV8; -
+MaizeGDB 65832; -
+DisProt DP00028; -
+OGP P31946; -
+PhosSite P36683; -
+ECO2DBASE H021.1; 6TH EDITION
+PHCI-2DPAGE Q9Z8U5; -
+BindingDB Q29005; -
+GlycoSuiteDB P11171; -
+DOSAC-COBS-2DPAGE P63104; -
+Aarhus/Ghent-2DPAGE 9109; IEF
+COMPLUYEAST-2DPAGE O42766; -
+Siena-2DPAGE P31937; -
+2DBase-Ecoli P52697; -
+ANU-2DPAGE Q9SIB9; -
+Cornea-2DPAGE P31946; -
+PMMA-2DPAGE P63101; -
+PptaseDB P3D0409136; -
+Rat-heart-2DPAGE P62738; -

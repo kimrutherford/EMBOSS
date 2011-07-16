@@ -1,0 +1,113 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: edamisid.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0001063
+name: Sequence identifier
+namespace: identifier
+def: An identifier of molecular sequence(s) or entries from a molecular sequence database.
+subset: identifier
+is_a: EDAM:0000976 ! Identifier (typed)
+relationship: is_identifier_of EDAM:0002044 ! Sequence
+
+[Term]
+id: EDAM:0001094
+name: Sequence type
+namespace: data
+def: A label (text token) describing a type of molecular sequence.
+comment: Sequence type might reflect the molecule (protein, nucleic acid etc) or the sequence itself (gapped, ambiguous etc).
+subset: data
+is_a: EDAM:0002100 ! Type
+is_a: EDAM:0002534 ! Sequence parameter
+relationship: is_identifier_of EDAM:0002044 ! Sequence
+relationship: is_identifier_of EDAM:0000849 ! Sequence record
+
+[Term]
+id: EDAM:0001066
+name: Sequence alignment ID
+namespace: identifier
+def: Identifier of a molecular sequence alignment, for example a record from an alignment database.
+subset: identifier
+is_a: EDAM:0000976 ! Identifier (typed)
+is_a: EDAM:0002091 ! Accession
+relationship: is_identifier_of EDAM:0000863 ! Sequence alignment
+
+[Term]
+id: EDAM:0001099
+name: UniProt accession (extended)
+namespace: identifier
+def: Accession number of a UniProt (protein sequence) database entry. May contain version or isoform number.
+subset: identifier
+regex: "[A-NR-Z][0-9][A-Z][A-Z0-9][A-Z0-9][0-9]" "[OPQ][0-9][A-Z0-9][A-Z0-9][A-Z0-9][0-9]" "[A-NR-Z][0-9][A-Z][A-Z0-9][A-Z0-9][0-9].[0-9]+" "[OPQ][0-9][A-Z0-9][A-Z0-9][A-Z0-9][0-9].[0-9]+" "[A-NR-Z][0-9][A-Z][A-Z0-9][A-Z0-9][0-9]-[0
+is_a: EDAM:0003021 ! UniProt accession
+relationship: is_identifier_of EDAM:0001208 ! Protein sequence
+relationship: is_identifier_of EDAM:0000849 ! Sequence record
+
+[Term]
+id: EDAM:0002621
+name: TAIR accession (protein)
+namespace: identifier
+def: Identifier of a protein sequence from the TAIR database.
+subset: identifier
+regex: "AASequence:[0-9]{10}"
+is_a: EDAM:0001096 ! Sequence identifier (protein)
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+
+[Term]
+id: EDAM:0001115
+name: Sequence profile ID
+namespace: identifier
+def: Identifier of a sequence profile.
+comment: A sequence profile typically represents a sequence alignment.
+subset: identifier
+is_a: EDAM:0000976 ! Identifier (typed)
+is_a: EDAM:0002091 ! Accession
+relationship: is_identifier_of EDAM:0001354 ! Sequence profile
+
+[Term]
+id: EDAM:0001096
+name: Sequence accession (protein)
+namespace: identifier
+def: Accession number of a protein sequence database entry.
+subset: identifier
+synonym: "Protein sequence accession number" EXACT []
+is_a: EDAM:0001093 ! Sequence accession
+relationship: is_identifier_of EDAM:0002976 ! Protein sequence
+
+[Term]
+id: EDAM:0001097
+name: Sequence accession (nucleic acid)
+namespace: identifier
+def: Accession number of a nucleotide sequence database entry.
+subset: identifier
+synonym: "Nucleotide sequence accession number" EXACT []
+is_a: EDAM:0001093 ! Sequence accession
+relationship: is_identifier_of EDAM:0002977 ! Nucleotide sequence
+
+[Term]
+id: EDAM:0001064
+name: Sequence set ID
+namespace: identifier
+def: An identifier of a set of molecular sequence(s).
+subset: identifier
+is_a: EDAM:0000976 ! Identifier (typed)
+is_a: EDAM:0002091 ! Accession
+relationship: is_identifier_of EDAM:0000850 ! Sequence set
+
+[Term]
+id: EDAM:0001112
+name: Sequence cluster ID
+namespace: identifier
+def: An identifier of a cluster of molecular sequence(s).
+subset: identifier
+is_a: EDAM:0001064 ! Sequence set ID
+relationship: is_identifier_of EDAM:0001235 ! Sequence cluster
+
+</pre>
+</td></tr></table><p>

@@ -66,7 +66,7 @@ Many-to-many pairwise alignments of two sequence sets
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with needleall</b>
+Here is a sample session with <b>needleall</b>
 <p>
 
 <p>
@@ -111,7 +111,7 @@ Illumina_Small_RNA_sequencing_primer FC12044_91407_8_200_139_74 38 (42.0)
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Many-to-many pairwise alignments of two sequence sets
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqset     Sequence set filename and optional format,
@@ -142,6 +142,7 @@ Version: EMBOSS:6.3.0
                                   penalty to control gap scoring. (Floating
                                   point number from 0.0 to 10.0)
   [-outfile]           align      [*.needleall] Output alignment file name
+                                  (default -aformat score)
 
    Additional (Optional) qualifiers:
    -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -292,7 +293,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>align</td>
 <td>Output alignment file name</td>
-<td>Alignment output file</td>
+<td>(default -aformat score)</td>
 <td><i>&lt;*&gt;</i>.needleall</td>
 </tr>
 
@@ -795,7 +796,37 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>needleall</b> reads any 2 sequence USAs of the same type (DNA or protein).
+<b>needleall</b> reads in two nucleotide or protein sequences
+inputs. Both can be one or more sequences. All sequences in the first
+ionput are aligned to all sequences in the second input.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -987,20 +1018,21 @@ The output is a standard EMBOSS alignment file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-aformat xxx</b>, where 'xxx' is replaced by
+command-line qualifier <tt>-aformat xxx</tt>, where 'xxx' is replaced by
 the name of the required format.  Some of the alignment formats can cope
 with an unlimited number of sequences, while others are only for pairs
 of sequences.  
 
 <p>
 
-The available multiple alignment format names are: unknown, multiple,
-simple, fasta, msf, trace, srs
+The available multiple alignment format names are: multiple, simple,
+fasta, msf, clustal, mega, meganon, nexus,, nexusnon, phylip,
+phylipnon, selex, treecon, tcoffee, debug, srs.
 
 <p>
 
 The available pairwise alignment format names are: pair, markx0, markx1,
-markx2, markx3, markx10, srspair, score
+markx2, markx3, markx10, match, sam, bam, score, srspair
 
 <p>
 
@@ -1239,7 +1271,7 @@ use water and needle for accurate alignment of reasonably short
 sequences.
 
 <p>
-The first input sequence USA is loaded completely into memory. When
+The first input sequence set is loaded completely into memory. When
 comparing large numbers (or lengths) of sequences, the smallest set
 should be the first input to make the most efficient use of memory.
 <p>

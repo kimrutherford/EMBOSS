@@ -43,15 +43,16 @@ Created tmap.ps
 Command line arguments
 
 Predict and plot transmembrane segments in protein sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
-  [-sequences]         seqset     File containing a sequence alignment
+  [-sequences]         seqset     File containing a protein sequence alignment
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
-  [-outfile]           report     [*.tmap] Output report file name
+                                  svg)
+  [-outfile]           report     [*.tmap] Output report file name (default
+                                  -rformat seqtable)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -116,7 +117,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   tmap reads a protein sequence USA for one or more aligned sequences.
+   tmap reads a set of aligned protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -166,13 +184,45 @@ OPSD_XENLA VSPA
 
 Output file format
 
+   The output is to the specified graphics device.
+
+   The results can be output in one of several formats by using the
+   command-line qualifier -graph xxx, where 'xxx' is replaced by the name
+   of the required device. Support depends on the availability of
+   third-party software packages.
+
+   The device names that output to a file are: ps (postscript), cps
+   (colourps), png, gif, pdf, svg, hpgl, hp7470, hp7580, das, data.
+
+   The other available device names are: meta, x11 (xwindows), tek
+   (tek4107t), tekt (tektronix), xterm, text.
+
+   Output can be turned off by specifying none (null).
+
+   See: http://emboss.sf.net/docs/themes/GraphicsDevices.html for further
+   information on supported devices.
+
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   By default the output is in 'seqtable' format.
+
   Output files for usage example
 
   File: tmap.res
 
 ########################################
 # Program: tmap
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: tmap
 #    [-sequences] ../../data/opsd.msf
 #    -outfile tmap.res
@@ -304,37 +354,31 @@ Known bugs
 
 See also
 
-   Program name     Description
-   garnier          Predicts protein secondary structure using GOR method
-   helixturnhelix   Identify nucleic acid-binding motifs in protein
-                    sequences
-   hmoment          Calculate and plot hydrophobic moment for protein sequence(s)
-   pepcoil          Predicts coiled coil regions in protein sequences
-   pepnet           Draw a helical net for a protein sequence
-   pepwheel         Draw a helical wheel diagram for a protein sequence
+                    Program name                      Description
+                    sigcleave    Reports on signal cleavage sites in a protein sequence
 
 Author(s)
 
-   Original program by Bengt Persson and Patrick Argos.
+                    Original program by Bengt Persson and Patrick Argos.
 
-   This application was modified for inclusion in EMBOSS by Ian Longden
-   formerly at:
-   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
-   CB10 1SA, UK.
+                    This application was modified for inclusion in EMBOSS by Ian Longden
+                    formerly at:
+   Sanger           Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+                    CB10 1SA, UK.
 
-   Please report all bugs to the EMBOSS bug team
-   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 
-   Completed 17th June 1999.
+                    Completed 17th June 1999.
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   The graph y axis is not labelled. It is some kind of score, but we aer
-   not sure exactly how to describe it.
+                    The graph y axis is not labelled. It is some kind of score, but we aer
+                    not sure exactly how to describe it.

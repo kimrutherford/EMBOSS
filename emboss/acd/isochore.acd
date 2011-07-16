@@ -1,8 +1,8 @@
 application: isochore [
   documentation: "Plots isochores in DNA sequences"
   groups: "Nucleic:Composition"
-  relations: "/edam/topic/0000157 Sequence composition"
-  relations: "/edam/operation/0000430 CpG island and isochores identification"
+    relations: "EDAM:0000157 topic Sequence composition"
+    relations: "EDAM:0000430 operation CpG island and isochores detection"
 ]
 
 section: input [
@@ -13,8 +13,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "/edam/data/0001215 Pure DNA sequence"                          
-    relations: "/edam/data/0000849 Sequence record"          
+    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
   ]
 
 endsection: input
@@ -33,7 +32,7 @@ section: additional [
     trueminimum: "Y"
     information: "Window size"
     warnrange: "N"                                  
-    relations: "/edam/data/0001251 Window size"
+    relations: "EDAM:0001251 data Window size"
   ]
 
   integer: shift [
@@ -45,7 +44,7 @@ section: additional [
     failrange: "N"
     trueminimum: "Y"  
     warnrange: "N"                                  
-    relations: "/edam/data/0002141 Window step size"
+    relations: "EDAM:0002141 data Window step size"
   ]
 
 endsection: additional
@@ -59,12 +58,14 @@ section: output [
     parameter: "Y"
     extension: "iso"
     knowntype: "isochore output"
-    relations:  "/edam/data/0001304 CpG island and isochore report"                      
+    relations: "EDAM:0001304 data Sequence composition
+                (CpG island and isochore)"
   ]
 
   xygraph: graph [
     standard: "Y"
-    relations: "/edam/data/0001304 CpG island and isochore report"                                   
+    relations: "EDAM:0001304 data Sequence composition
+                (CpG island and isochore)"
   ]
 
 endsection: output

@@ -3,11 +3,6 @@
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
-<td><a href="coderet.html">coderet</a></td>
-<td>Extract CDS, mRNA and translations from feature tables</td>
-</tr>
-
-<tr>
 <td><a href="extractfeat.html">extractfeat</a></td>
 <td>Extract features from sequence(s)</td>
 </tr>

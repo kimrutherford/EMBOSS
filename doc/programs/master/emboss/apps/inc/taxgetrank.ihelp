@@ -1,0 +1,58 @@
+Get parents of taxon(s)
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-taxons]            taxon      Taxon filename and optional format, or
+                                  reference (input query)
+  [-rank]              menu       [kingdom,phylum,class,order,family,genus,species]
+                                  Multiple ranks can be specified, or '*' for
+                                  all (Values: kingdom (Kingdom); phylum
+                                  (Phylum); class (Class); order (Order);
+                                  family (Family); genus (Genus); species
+                                  (Species); tribe (Tribe); varietas
+                                  (varietas); species group (Species group);
+                                  species subgroup (Species subgroup); no rank
+                                  (None); superkingdom (Superkingdom);
+                                  superphylum (Superphylum); superclass
+                                  (Superclass); superorder (Superorder);
+                                  superfamily (Superfamily); subkingdom
+                                  (Subkingdom); subphylum (Subphylum);
+                                  subclass (Subclass); suborder (Suborder);
+                                  subfamily (Subfamily); subgenus (Subgenus);
+                                  subspecies (Subspecies); subtribe
+                                  (Subtribe); infraclass (Infraclass);
+                                  infraorder (Infraorder); parvorder
+                                  (Parvorder))
+  [-outfile]           outtaxon   (no help text) outtaxon value
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -hidden             boolean    [N] Show taxons hidden in GenBank
+
+   Associated qualifiers:
+
+   "-taxons" associated qualifiers
+   -iformat1           string     Input taxonomy format
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+   -oformat3           string     Taxonomy output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+

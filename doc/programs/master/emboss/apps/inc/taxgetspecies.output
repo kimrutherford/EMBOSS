@@ -1,0 +1,20 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 9604.excel</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+9600	9599	species	Y	Pongo pygmaeus
+9601	9599	species	Y	Pongo abelii
+9603	9599	species	Y	Pongo sp.
+502961	9599	species	Y	Pongo abelii x pygmaeus
+499232	9592	species	Y	Gorilla beringei
+9593	9592	species	Y	Gorilla gorilla
+9597	9596	species	Y	Pan paniscus
+9598	9596	species	Y	Pan troglodytes
+317028	9596	species	Y	Pan sp. WO2005014654
+445518	9596	species	Y	Pan sp. WO2007026120
+741158	9605	species	Y	Homo sp. Altai
+9606	9605	species	Y	Homo sapiens
+</pre>
+</td></tr></table><p>

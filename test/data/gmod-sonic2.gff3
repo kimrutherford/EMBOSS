@@ -1,0 +1,12 @@
+##gff-version 3
+#
+#The ID is really only important for linking features together. If a
+#feature does not have any subparts, then it does not formally need an
+#ID. Thus, we could simplify this by removing all the exon IDs:
+#
+ctg123	.	mRNA	1300	9000	.	+	.	ID=mrna0001;Name=sonichedgehog
+ctg123	.	exon	1300	1500	.	+	.	Parent=mrna0001
+ctg123	.	exon	1050	1500	.	+	.	Parent=mrna0001
+ctg123	.	exon	3000	3902	.	+	.	Parent=mrna0001
+ctg123	.	exon	5000	5500	.	+	.	Parent=mrna0001
+ctg123	.	exon	7000	9000	.	+	.	Parent=mrna0001

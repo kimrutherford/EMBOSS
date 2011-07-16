@@ -41,7 +41,7 @@ REBASE database proto file: proto
 Command line arguments
 
 Process the REBASE database for use by restriction enzyme applications
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     REBASE database withrefm file

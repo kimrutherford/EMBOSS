@@ -1,0 +1,703 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: cacheebeyesearch
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+cacheebeyesearch
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Generates server cache file for EB-eye search domains
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+Contacts the EBI wsebeyesearch service to find the available databases and
+saves definitions for them to a server cache file.
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>cacheebeyesearch</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cacheebeyesearch -cachefile ~/.embossdata/qatests.server.ebeye -auto </b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Generates server cache file for EB-eye search domains
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-cachefile]         outfile    [server.$(servername)] Server cache output
+                                  file
+
+   Additional (Optional) qualifiers:
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   "-cachefile" associated qualifiers
+   -odirectory1        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-cachefile]<br>(Parameter 1)</td>
+<td>outfile</td>
+<td>Server cache output file</td>
+<td>Output file</td>
+<td>server.$(servername)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-outfile</td>
+<td>outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-cachefile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory1<br>-odirectory_cachefile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>cacheebeyesearch</b>contacts the EBI wsebeyesearch service for details of
+available databases.
+
+<p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+        #include file="inc/reportformats.ihtml"
+   -->
+
+<b>cacheebeyesearch</b> writes a server cache file which can be saved in the
+user's .embossdata directory or, for a system administrator, stored in
+the site-wide share/EMBOSS/ directory.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: qatests.server.ebeye</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# qatests.server.ebeye 2011-07-15 12:00:00
+
+DB toucan [
+  method: ebeye
+  dbalias: 2can
+  fields: "description, domain_source, id, name"
+  return: "description, domain_source, id, name"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB arrayexpress_repository [
+  method: ebeye
+  dbalias: arrayexpress-repository
+  fields: "acc, authors, biomaterial-characteristics, description, domain_source, experimentalfactors-factorvalues, id, keywords, name, release_date"
+  return: "acc, authors, biomaterial-characteristics, description, domain_source, experimentalfactors-factorvalues, id, keywords, name, release_date"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB astd [
+  method: ebeye
+  dbalias: astd
+  fields: "creation_date, description, exon, id, intron, keywords, last_modification_date, name, nonsense-mediated_decay, polya_site, protein, transcription_start_site, tss_cluster"
+  return: "description, exon, id, intron, keywords, last_modification_date, name, nonsense-mediated_decay, polya_site, protein, transcription_start_site, tss_cluster"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB atlas_experiments [
+  method: ebeye
+  dbalias: atlas-experiments
+  fields: "creation_date, description, domain_source, id, last_modification_date, name"
+  return: "description, domain_source, id, last_modification_date, name"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB atlas_genes [
+  method: ebeye
+  dbalias: atlas-genes
+  fields: "cell_line, cell_type, cint_jgi_v1, cint_jgi_v2, compound, creation_date, description, developmental_stage, disease, disease_state, domain_source, ensfamily_description, entrezgene, flybase_gene_id, flybase_transcript_id, flybasename_gene, flybasename_transcript, goterm, hgnc_automatic_gene_name, hgnc_curated_gene_name, hgnc_symbol, id, id_noversion, infect, interproterm, last_modification_date, mgi_description, mgi_symbol, mirbase_accession, mirbase_gene_database, mirbase_gene_database_id, mirbase_id, mirbase_pubmedid, name, number_of_experiments, organism_part, otherconditions, phenotype, rgd, rgd_symbol, sgd_gene, sgd_transcript, symbol, synonym, tair_locus, tair_locus_model"
+  return: "cell_line, cell_type, cint_jgi_v1, cint_jgi_v2, compound, creation_date, description, developmental_stage, disease, disease_state, domain_source, ensfamily_description, entrezgene, flybase_gene_id, flybase_transcript_id, flybasename_gene, flybasename_transcript, goterm, hgnc_automatic_gene_name, hgnc_curated_gene_name, hgnc_symbol, id, id_noversion, infect, interproterm, last_modification_date, mgi_description, mgi_symbol, mirbase_accession, mirbase_gene_database, mirbase_gene_database_id, mirbase_id, mirbase_pubmedid, name, number_of_experiments, organism_part, otherconditions, phenotype, rgd, rgd_symbol, sgd_gene, sgd_transcript, symbol, synonym, tair_locus, tair_locus_model"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB biocatalogue [
+  method: ebeye
+  dbalias: biocatalogue
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+  fields: "acronym, anamorph, blast_name, common_name, domain_source, equivalent_name, genbank_acronym, genbank_anamorph, genbank_common_name, genbank_synonym, gene_code, id, in_part, includes, misnomer, misspelling, name, rank, synonym, teleomorph"
+  return: "acronym, anamorph, blast_name, common_name, domain_source, equivalent_name, genbank_acronym, genbank_anamorph, genbank_common_name, genbank_synonym, gene_code, id, in_part, includes, misnomer, misspelling, name, rank, synonym, teleomorph"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB uniparc [
+  method: ebeye
+  dbalias: uniparc
+  fields: "domain_source, id, uniprotkb_exclusion"
+  return: "domain_source, id, uniprotkb_exclusion"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB uniprot [
+  method: ebeye
+  dbalias: uniprot
+  fields: "acc, creation_date, dbRefProp_EMBL_protein_sequence_ID, dbRefProp_EcoGene_gene_designation, dbRefProp_EnsemblBacteria_protein_sequence_ID, dbRefProp_EnsemblFungi_protein_sequence_ID, dbRefProp_EnsemblMetazoa_protein_sequence_ID, dbRefProp_EnsemblPlants_protein_sequence_ID, dbRefProp_EnsemblProtists_protein_sequence_ID, dbRefProp_Ensembl_protein_sequence_ID, dbRefProp_FlyBase_gene_designation, dbRefProp_GeneFarm_family_ID, dbRefProp_GenomeReviews_gene_designation, dbRefProp_HGNC_gene_designation, dbRefProp_MGI_gene_designation, dbRefProp_RGD_gene_designation, dbRefProp_SGD_gene_designation, dbRefProp_WormBase_gene_designation, dbRefProp_WormBase_protein_sequence_ID, dbRefProp_ZFIN_gene_designation, dbRefProp_dictyBase_gene_designation, descAltName, descRecName, descSubName, description, domain_source, gene_ORF_name, gene_ordered_locus_name, gene_primary_name, gene_synonym_name, id, keywords, last_modification_date, organelle, organism_host_species, organism_lineage, organism_scientific_name, organism_species, protein_existence, references, sequence_fragment, sequence_last_modif_date, sequence_length, status"
+  return: "acc, creation_date, dbRefProp_EMBL_protein_sequence_ID, dbRefProp_EcoGene_gene_designation, dbRefProp_EnsemblBacteria_protein_sequence_ID, dbRefProp_EnsemblFungi_protein_sequence_ID, dbRefProp_EnsemblMetazoa_protein_sequence_ID, dbRefProp_EnsemblPlants_protein_sequence_ID, dbRefProp_EnsemblProtists_protein_sequence_ID, dbRefProp_Ensembl_protein_sequence_ID, dbRefProp_FlyBase_gene_designation, dbRefProp_GeneFarm_family_ID, dbRefProp_GenomeReviews_gene_designation, dbRefProp_HGNC_gene_designation, dbRefProp_MGI_gene_designation, dbRefProp_RGD_gene_designation, dbRefProp_SGD_gene_designation, dbRefProp_WormBase_gene_designation, dbRefProp_WormBase_protein_sequence_ID, dbRefProp_ZFIN_gene_designation, dbRefProp_dictyBase_gene_designation, descAltName, descRecName, descSubName, description, domain_source, gene_ORF_name, gene_ordered_locus_name, gene_primary_name, gene_synonym_name, id, keywords, last_modification_date, organelle, organism_host_species, organism_lineage, organism_scientific_name, organism_species, protein_existence, references, sequence_fragment, sequence_last_modif_date, sequence_length, status"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB uniref100 [
+  method: ebeye
+  dbalias: uniref100
+  fields: "dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
+  return: "domain_source, entry_common_taxon, id, last_modification_date, name"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB uniref50 [
+  method: ebeye
+  dbalias: uniref50
+  fields: "dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
+  return: "domain_source, entry_common_taxon, id, last_modification_date, name"
+  format: "text"
+  hasaccession: "N"
+]
+
+DB uniref90 [
+  method: ebeye
+  dbalias: uniref90
+  fields: "dbref_protein_name, dbref_source_organism, dbref_uniprotkb_id, domain_source, entry_common_taxon, id, last_modification_date, name"
+  return: "domain_source, entry_common_taxon, id, last_modification_date, name"
+  format: "text"
+  hasaccession: "N"
+]
+
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+
+        #include file="inc/localfiles.ihtml"
+   -->
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="cachedas.html">cachedas</a></td>
+<td>Generates server cache file for DAS servers or for the DAS registry</td>
+</tr>
+
+<tr>
+<td><a href="cachedbfetch.html">cachedbfetch</a></td>
+<td>Generates server cache file for Dbfetch/WSDbfetch data sources</td>
+</tr>
+
+<tr>
+<td><a href="cacheensembl.html">cacheensembl</a></td>
+<td>Generates server cache file for an Ensembl server</td>
+</tr>
+
+<tr>
+<td><a href="dbtell.html">dbtell</a></td>
+<td>Display information about a public database</td>
+</tr>
+
+<tr>
+<td><a href="servertell.html">servertell</a></td>
+<td>Display information about a public server</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on configured databases</td>
+</tr>
+
+<tr>
+<td><a href="showserver.html">showserver</a></td>
+<td>Displays information on configured servers</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

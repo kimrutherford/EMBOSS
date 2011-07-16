@@ -7,8 +7,12 @@ extern "C"
 #define ajindex_h
 
 
-#define BT_PAGESIZE BUFSIZ      /* Default cache page size       */
+#define BT_PAGESIZE BUFSIZ      /* Default cache page size
+                                **  use C default buffer size */
+#define BT_CACHESIZE 100
+
 #define BT_MAXRETRIES	100	/* Maximum number of read/write attempts */
+#define BT_KWLIMIT     15
 
 #define BT_LOCK  2
 #define BT_DIRTY 1
@@ -25,6 +29,8 @@ extern "C"
 #define BT_OVERFLOW 16
 #define BT_PRIBUCKET 32
 #define BT_SECBUCKET 64
+#define BT_NUMBUCKET 128
+#define BT_FREEPAGE 256
 
 #define BTNO_BALANCE 100L
 #define BTNO_NODE    100L
@@ -44,16 +50,16 @@ extern "C"
  *  Length of integers after the ID string in a primary bucket 
  *  i.e. dbno + dups + offset + refoffset
  */
-#define BT_DDOFFROFF (sizeof(ajint) + sizeof(ajint) + sizeof(ajlong) +  \
-                      sizeof(ajlong))
+#define BT_DDOFFROFF (sizeof(ajuint) + sizeof(ajuint) + sizeof(ajulong) +  \
+                      sizeof(ajulong))
 
 /*
  *  Preamble before key lengths in an internal node
  * i.e. nodetype+blocknumber+nkeys+totlen+left+right+overflow+prev
  */
-#define BT_NODEPREAMBLE (sizeof(ajint) + sizeof(ajlong) + sizeof(ajint) + \
-    sizeof(ajint) + sizeof(ajlong) + sizeof(ajlong) + sizeof(ajlong) + \
-                         sizeof(ajlong))
+#define BT_NODEPREAMBLE (sizeof(ajuint) + sizeof(ajulong) + sizeof(ajuint) + \
+    sizeof(ajuint) + sizeof(ajulong) + sizeof(ajulong) + sizeof(ajulong) + \
+                         sizeof(ajulong))
 
 /*
  *  This is the length of extra pointer required in primary index
@@ -63,39 +69,39 @@ extern "C"
  *  This is because there is one more pointer than the
  *  value of 'order' in a B+ tree.
  */
-#define BT_PTRLEN sizeof(ajlong)
+#define BT_PTRLEN sizeof(ajulong)
 
 
 /*
  *  Length of extra space, on top of a key string, taken up by a
- *  key in an internal node. This is an ajint holding the length
- *  of a string plus the length of a block pointer (ajlong)
+ *  key in an internal node. This is an ajuint holding the length
+ *  of a string plus the length of a block pointer (ajulong)
  */
-#define BT_IDKEYEXTRA (sizeof(ajint) + sizeof(ajlong))
+#define BT_IDKEYEXTRA (sizeof(ajuint) + sizeof(ajulong))
 
 
 /*
  *  Preamble before key lengths in an id bucket
  *  i.e. nodetype+nentries+overflow
  */
-#define BT_BUCKPREAMBLE (sizeof(ajint) + sizeof(ajint) + sizeof(ajlong))
+#define BT_BUCKPREAMBLE (sizeof(ajuint) + sizeof(ajuint) + sizeof(ajulong))
 
 
 /*
  *  Size of a key in a key length table block in an internal node or bucket
  */
-#define BT_KEYLENENTRY sizeof(ajint)
+#define BT_KEYLENENTRY sizeof(ajuint)
 
 /*
  *  Size of an offset key
  */
-#define BT_OFFKEYLEN sizeof(ajlong)
+#define BT_OFFKEYLEN sizeof(ajulong)
 
 /*
  *  Length of integers per entry in a num bucket 
  *  i.e. dbno + offset + refoffset
  */
-#define BT_DOFFROFF (sizeof(ajint) + sizeof(ajlong) + sizeof(ajlong))
+#define BT_DOFFROFF (sizeof(ajuint) + sizeof(ajulong) + sizeof(ajulong))
 
 
 
@@ -104,27 +110,27 @@ extern "C"
 **
 ** Btree node
 **
-** @attr BlockOffset [ajlong] Offset within main index
-** @attr Nkeys [ajint] Number of keys filled
-** @attr TotLen [ajint] Total length of keys
-** @attr Left [ajlong] Left Sibling
-** @attr Right [ajlong] Right Sibling
-** @attr Overflow [ajlong] Offset to overflow block
-** @attr PrevNode [ajlong] Previous node
-** @attr NodeType [ajint] Root, Internal or Leaf
+** @attr BlockOffset [ajulong] Offset within main index
+** @attr Nkeys [ajuint] Number of keys filled
+** @attr TotLen [ajuint] Total length of keys
+** @attr Left [ajulong] Left Sibling
+** @attr Right [ajulong] Right Sibling
+** @attr Overflow [ajulong] Offset to overflow block
+** @attr PrevNode [ajulong] Previous node
+** @attr NodeType [ajuint] Root, Internal or Leaf
 ** @attr Padding [char[4]] Padding to alignment boundary
 *****************************************************************************/
 
 typedef struct AjSBtNode
 {
-    ajlong BlockOffset;
-    ajint  Nkeys;
-    ajint  TotLen;
-    ajlong Left;
-    ajlong Right;
-    ajlong Overflow;
-    ajlong PrevNode;
-    ajint  NodeType;
+    ajulong BlockOffset;
+    ajuint  Nkeys;
+    ajuint  TotLen;
+    ajulong Left;
+    ajulong Right;
+    ajulong Overflow;
+    ajulong PrevNode;
+    ajuint  NodeType;
     char Padding[4];
 } AjOBtNode;
 #define AjPBtNode AjOBtNode*
@@ -139,8 +145,8 @@ typedef struct AjSBtNode
 ** @attr next [struct AjSBtMem*] next node
 ** @attr prev [struct AjSBtMem*] previous node
 ** @attr karray [AjPStr*] key array (primary trees)
-** @attr parray [ajlong*] pointer arrays (primary and secondary trees)
-** @attr overflows [ajlong*] overflows (primary) and keys (secondary)
+** @attr parray [ajulong*] pointer arrays (primary and secondary trees)
+** @attr overflows [ajulong*] overflows (primary) and keys (secondary)
 ** @attr used [AjBool] node in use
 ** @attr Padding [char[4]] Padding to alignment boundary
 *****************************************************************************/
@@ -150,8 +156,8 @@ typedef struct AjSBtMem
     struct AjSBtMem *next;
     struct AjSBtMem *prev;
     AjPStr *karray;
-    ajlong *parray;
-    ajlong *overflows;
+    ajulong *parray;
+    ajulong *overflows;
     AjBool used;
     char Padding[4];
 } AjOBtMem;
@@ -167,8 +173,8 @@ typedef struct AjSBtMem
 ** @attr id [AjPStr] Unique ID
 ** @attr dbno [ajuint] Database file number
 ** @attr dups [ajuint] Duplicates
-** @attr offset [ajlong] Offset within database file (ftello)
-** @attr refoffset [ajlong] Offset within reference database file (ftello)
+** @attr offset [ajulong] Offset within database file (ftello)
+** @attr refoffset [ajulong] Offset within reference database file (ftello)
 ******************************************************************************/
 
 typedef struct AjSBtId
@@ -176,8 +182,8 @@ typedef struct AjSBtId
     AjPStr id;
     ajuint  dbno;
     ajuint  dups;
-    ajlong offset;
-    ajlong refoffset;
+    ajulong offset;
+    ajulong refoffset;
 } AjOBtId;
 #define AjPBtId AjOBtId*
 
@@ -189,7 +195,7 @@ typedef struct AjSBtId
 ** Btree wildcard
 **
 ** @attr id [AjPStr] Wildcard ID
-** @attr pageno [ajlong] Page number of leaf
+** @attr pagepos [ajulong] Page number of leaf
 ** @attr list [AjPList] list of AjPBtIds
 ** @attr first [AjBool] true for first search
 ** @attr Padding [char[4]] Padding to alignment boundary
@@ -198,7 +204,7 @@ typedef struct AjSBtId
 typedef struct AjSBtWild
 {
     AjPStr id;
-    ajlong pageno;
+    ajulong pagepos;
     AjPList list;
     AjBool first;
     char Padding[4];
@@ -212,21 +218,23 @@ typedef struct AjSBtWild
 **
 ** Bucket structure on disc
 **
-** Key, file number, ftell ID, subkey page (char*, ajint, ajlong, ajlong)
+** Key, file number, ftell ID, subkey page (char*, ajuint, ajulong, ajulong)
 **
-** @attr NodeType [ajint] Node type
-** @attr Nentries [ajint] Number of entries
-** @attr Overflow [ajlong] Offset to overflow block
-** @attr keylen [ajint*] key lengths
+** @attr NodeType [ajuint] Node type
+** @attr Maxentries [ajuint] Number of entries available
+** @attr Nentries [ajuint] Number of entries
+** @attr Overflow [ajulong] Offset to overflow block
+** @attr keylen [ajuint*] key lengths
 ** @attr Ids [AjPBtId*] Ids
 ******************************************************************************/
 
 typedef struct AjSBucket
 {
-    ajint    NodeType;
-    ajint    Nentries;
-    ajlong   Overflow;
-    ajint    *keylen;
+    ajuint   NodeType;
+    ajuint   Maxentries;
+    ajuint   Nentries;
+    ajulong  Overflow;
+    ajuint  *keylen;
     AjPBtId *Ids;
 } AjOBucket;
 #define AjPBucket AjOBucket*
@@ -238,17 +246,17 @@ typedef struct AjSBucket
 **
 ** Btree ID
 **
-** @attr offset [ajlong] Offset within database file (ftello)
-** @attr refoffset [ajlong] Offset within reference database file (ftello)
-** @attr dbno [ajint] Database file number
+** @attr offset [ajulong] Offset within database file (ftello)
+** @attr refoffset [ajulong] Offset within reference database file (ftello)
+** @attr dbno [ajuint] Database file number
 ** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
 
 typedef struct AjSBtNumId
 {
-    ajlong offset;
-    ajlong refoffset;
-    ajint  dbno;
+    ajulong offset;
+    ajulong refoffset;
+    ajuint  dbno;
     char Padding[4];
 } AjOBtNumId;
 #define AjPBtNumId AjOBtNumId*
@@ -260,19 +268,21 @@ typedef struct AjSBtNumId
 **
 ** Offset bucket structure on disc
 **
-** Key, file number, ftell ID, subkey page (char*, ajint, ajlong, ajlong)
+** Key, file number, ftell ID, subkey page (char*, ajuint, ajulong, ajulong)
 **
-** @attr NodeType [ajint] Node type
-** @attr Nentries [ajint] Number of entries
-** @attr Overflow [ajlong] Offset to overflow block
+** @attr NodeType [ajuint] Node type
+** @attr Maxentries [ajuint] Number of entries available
+** @attr Nentries [ajuint] Number of entries
+** @attr Overflow [ajulong] Offset to overflow block
 ** @attr NumId [AjPBtNumId*] secondary tree IDs
 ******************************************************************************/
 
 typedef struct AjSNumBucket
 {
-    ajint    NodeType;
-    ajint    Nentries;
-    ajlong   Overflow;
+    ajuint   NodeType;
+    ajuint   Maxentries;
+    ajuint   Nentries;
+    ajulong  Overflow;
     AjPBtNumId *NumId;
 } AjONumBucket;
 #define AjPNumBucket AjONumBucket*
@@ -282,36 +292,45 @@ typedef struct AjSNumBucket
 
 /* Database file name structure
 **
-** ajint        order			Order of B+tree
-** ajint        m			Max entries per bucket
-** ajint	NFiles			Number of Indexed files
-** ajint        TotalLen                Total length if dir/name entries
+** ajuint        order			Order of B+tree
+** ajuint        m			Max entries per bucket
+** ajuint	NFiles			Number of Indexed files
+** ajuint        TotalLen                Total length if dir/name entries
 ** Directory/FileName pairs
 */
 
-#if defined(LENDIAN)
-#define BT_GETAJINT(p,v) (memcpy((void*)v,(void*)p,sizeof(ajint)))
-#define BT_GETAJUINT(p,v) (memcpy((void*)v,(void*)p,sizeof(ajuint)))
-#define BT_GETAJLONG(p,v) (memcpy((void*)v,(void*)p,sizeof(ajlong)))
-#define BT_SETAJINT(p,v) (memcpy((void*)p,(void*)&v,sizeof(ajint)))
-#define BT_SETAJLONG(p,v) (memcpy((void*)p,(void*)&v,sizeof(ajlong)))
+#if !defined(WORDS_BIGENDIAN)
+#define BT_GETAJINT(p,v) (memcpy((void*)v,(const void*)p,sizeof(ajint)))
+#define BT_GETAJUINT(p,v) (memcpy((void*)v,(const void*)p,sizeof(ajuint)))
+#define BT_GETAJLONG(p,v) (memcpy((void*)v,(const void*)p,sizeof(ajlong)))
+#define BT_GETAJULONG(p,v) (memcpy((void*)v,(const void*)p,sizeof(ajulong)))
+#define BT_SETAJINT(p,v) (memcpy((void*)p,(const void*)&v,sizeof(ajint)))
+#define BT_SETAJUINT(p,v) (memcpy((void*)p,(const void*)&v,sizeof(ajuint)))
+#define BT_SETAJLONG(p,v) (memcpy((void*)p,(const void*)&v,sizeof(ajlong)))
+#define BT_SETAJULONG(p,v) (memcpy((void*)p,(const void*)&v,sizeof(ajulong)))
 #else
-#define BT_GETAJINT(p,v) memcpy((void*)v,(void*)p,sizeof(ajint)); \
+#define BT_GETAJINT(p,v) memcpy((void*)v,(const void*)p,sizeof(ajint)); \
                          ajByteRevInt(v)
-#define BT_GETAJUINT(p,v) memcpy((void*)v,(void*)p,sizeof(ajuint)); \
+#define BT_GETAJUINT(p,v) memcpy((void*)v,(const void*)p,sizeof(ajuint)); \
                          ajByteRevUint(v)
-#define BT_GETAJLONG(p,v) memcpy((void*)v,(void*)p,sizeof(ajlong)); \
+#define BT_GETAJLONG(p,v) memcpy((void*)v,(const void*)p,sizeof(ajlong)); \
                           ajByteRevLong(v)
+#define BT_GETAJULONG(p,v) memcpy((void*)v,(const void*)p,sizeof(ajulong)); \
+                          ajByteRevUlong(v)
 #define BT_SETAJINT(p,v)  ajByteRevInt(&v); \
-                          memcpy((void*)p,(void*)&v,sizeof(ajint))
+                          memcpy((void*)p,(const void*)&v,sizeof(ajint))
+#define BT_SETAJUINT(p,v) ajByteRevUint(&v); \
+                          memcpy((void*)p,(const void*)&v,sizeof(ajuint))
 #define BT_SETAJLONG(p,v) ajByteRevLong(&v); \
-                          memcpy((void*)p,(void*)&v,sizeof(ajlong))
+                          memcpy((void*)p,(const void*)&v,sizeof(ajlong))
+#define BT_SETAJULONG(p,v) ajByteRevUlong(&v); \
+                          memcpy((void*)p,(const void*)&v,sizeof(ajulong))
 #endif
 
 
-#define BT_BUCKIDLEN(str) (ajStrGetLen(str) + 1 + sizeof(ajint) + \
-			   sizeof(ajint) + sizeof(ajlong) + \
-			   sizeof(ajlong))
+#define BT_BUCKIDLEN(str) (ajStrGetLen(str) + 1 + sizeof(ajuint) + \
+			   sizeof(ajuint) + sizeof(ajulong) + \
+			   sizeof(ajulong))
 
 
 /*
@@ -319,33 +338,39 @@ typedef struct AjSNumBucket
 */
 
 #define PBT_BUCKNODETYPE(p) p
-#define PBT_BUCKNENTRIES(p) (p + sizeof(ajint))
-#define PBT_BUCKOVERFLOW(p) (p + sizeof(ajint) + sizeof(ajint))
-#define PBT_BUCKKEYLEN(p) (p + sizeof(ajint) + sizeof(ajint) + sizeof(ajlong))
-#define BT_BUCKPRILEN(str) (ajStrGetLen(str) + 1 + sizeof(ajlong))
+#define PBT_BUCKNENTRIES(p) (p + sizeof(ajuint))
+#define PBT_BUCKOVERFLOW(p) (p + sizeof(ajuint) + sizeof(ajuint))
+#define PBT_BUCKKEYLEN(p) (p + sizeof(ajuint) + sizeof(ajuint) + sizeof(ajulong))
+#define BT_BUCKPRILEN(str) (ajStrGetLen(str) + 1 + sizeof(ajulong))
 #define BT_BUCKSECLEN(str) (ajStrGetLen(str) +1)
 
 /*
 ** Macros to return a page entry value within a bucket
 */
 
-#if defined(LENDIAN)
-#define GBT_BUCKNODETYPE(p,v) (memcpy((void*)v,(void*)PBT_BUCKNODETYPE(p), \
-				      sizeof(ajint)))
-#define GBT_BUCKNENTRIES(p,v) (memcpy((void*)v,(void*)PBT_BUCKNENTRIES(p), \
-				      sizeof(ajint)))
-#define GBT_BUCKOVERFLOW(p,v) (memcpy((void*)v,(void*)PBT_BUCKOVERFLOW(p), \
-				      sizeof(ajlong)))
+#if !defined(WORDS_BIGENDIAN)
+#define GBT_BUCKNODETYPE(p,v) (memcpy((void*)v, \
+                                      (const void*)PBT_BUCKNODETYPE(p), \
+				      sizeof(ajuint)))
+#define GBT_BUCKNENTRIES(p,v) (memcpy((void*)v, \
+                                      (const void*)PBT_BUCKNENTRIES(p), \
+				      sizeof(ajuint)))
+#define GBT_BUCKOVERFLOW(p,v) (memcpy((void*)v, \
+                                      (const void*)PBT_BUCKOVERFLOW(p), \
+				      sizeof(ajulong)))
 #else
-#define GBT_BUCKNODETYPE(p,v) memcpy((void*)v,(void*)PBT_BUCKNODETYPE(p), \
-				      sizeof(ajint)); \
-                              ajByteRevInt(v)
-#define GBT_BUCKNENTRIES(p,v) memcpy((void*)v,(void*)PBT_BUCKNENTRIES(p), \
-                                      sizeof(ajint)); \
-                              ajByteRevInt(v)
-#define GBT_BUCKOVERFLOW(p,v) memcpy((void*)v,(void*)PBT_BUCKOVERFLOW(p), \
-				      sizeof(ajlong)); \
-                              ajByteRevLong(v)
+#define GBT_BUCKNODETYPE(p,v) memcpy((void*)v, \
+                                     (const void*)PBT_BUCKNODETYPE(p),  \
+				      sizeof(ajuint)); \
+                              ajByteRevUint(v)
+#define GBT_BUCKNENTRIES(p,v) memcpy((void*)v, \
+                                     (const void*)PBT_BUCKNENTRIES(p),  \
+                                     sizeof(ajuint));                    \
+                              ajByteRevUint(v)
+#define GBT_BUCKOVERFLOW(p,v) memcpy((void*)v, \
+                                     (const void*)PBT_BUCKOVERFLOW(p),  \
+				      sizeof(ajulong)); \
+                              ajByteRevUlong(v)
 #endif
 
 
@@ -353,23 +378,23 @@ typedef struct AjSNumBucket
 ** Macros to set a page entry value within an internal/leaf node
 */
 
-#if defined(LENDIAN)
+#if !defined(WORDS_BIGENDIAN)
 #define SBT_BUCKNODETYPE(p,v) (memcpy((void*)PBT_BUCKNODETYPE(p), \
-				      (const void*)&v,sizeof(ajint)))
+				      (const void*)&v,sizeof(ajuint)))
 #define SBT_BUCKNENTRIES(p,v) (memcpy((void*)PBT_BUCKNENTRIES(p), \
-				      (const void*)&v,sizeof(ajint)))
+				      (const void*)&v,sizeof(ajuint)))
 #define SBT_BUCKOVERFLOW(p,v) (memcpy((void*)PBT_BUCKOVERFLOW(p), \
-				      (const void*)&v,sizeof(ajlong)))
+				      (const void*)&v,sizeof(ajulong)))
 #else
-#define SBT_BUCKNODETYPE(p,v) ajByteRevInt(&v); \
+#define SBT_BUCKNODETYPE(p,v) ajByteRevUint(&v); \
                               memcpy((void*)PBT_BUCKNODETYPE(p), \
-				      (const void*)&v,sizeof(ajint))
-#define SBT_BUCKNENTRIES(p,v) ajByteRevInt(&v); \
+				      (const void*)&v,sizeof(ajuint))
+#define SBT_BUCKNENTRIES(p,v) ajByteRevUint(&v); \
                               memcpy((void*)PBT_BUCKNENTRIES(p), \
-				     (const void*)&v,sizeof(ajint))
-#define SBT_BUCKOVERFLOW(p,v) ajByteRevLong(&v); \
+				     (const void*)&v,sizeof(ajuint))
+#define SBT_BUCKOVERFLOW(p,v) ajByteRevUlong(&v); \
                               memcpy((void*)PBT_BUCKOVERFLOW(p), \
-				     (const void*)&v,sizeof(ajlong))
+				     (const void*)&v,sizeof(ajulong))
 #endif
 
 /*
@@ -377,69 +402,69 @@ typedef struct AjSNumBucket
 */
 
 #define PBT_NODETYPE(p) p
-#define PBT_BLOCKNUMBER(p) (p + sizeof(ajint))
-#define PBT_NKEYS(p) (p + sizeof(ajint) + sizeof(ajlong))
-#define PBT_TOTLEN(p) (p+sizeof(ajint)+sizeof(ajlong)+sizeof(ajint))
-#define PBT_LEFT(p) (p+sizeof(ajint)+sizeof(ajlong)+sizeof(ajint) \
-		     +sizeof(ajint))
-#define PBT_RIGHT(p) (p+sizeof(ajint)+sizeof(ajlong)+sizeof(ajint) \
-		      +sizeof(ajint)+sizeof(ajlong))
-#define PBT_OVERFLOW(p) (p+sizeof(ajint)+sizeof(ajlong)+sizeof(ajint) \
-		         +sizeof(ajint)+sizeof(ajlong)+sizeof(ajlong))
-#define PBT_PREV(p) (p+sizeof(ajint)+sizeof(ajlong)+sizeof(ajint) \
-		     +sizeof(ajint)+sizeof(ajlong)+sizeof(ajlong) \
-		     +sizeof(ajlong))
-#define PBT_KEYLEN(p) (p+sizeof(ajint)+sizeof(ajlong)+sizeof(ajint) \
-		       +sizeof(ajint)+sizeof(ajlong)+sizeof(ajlong) \
-		       +sizeof(ajlong)+sizeof(ajlong))
+#define PBT_BLOCKNUMBER(p) (p + sizeof(ajuint))
+#define PBT_NKEYS(p) (p + sizeof(ajuint) + sizeof(ajulong))
+#define PBT_TOTLEN(p) (p+sizeof(ajuint)+sizeof(ajulong)+sizeof(ajuint))
+#define PBT_LEFT(p) (p+sizeof(ajuint)+sizeof(ajulong)+sizeof(ajuint) \
+		     +sizeof(ajuint))
+#define PBT_RIGHT(p) (p+sizeof(ajuint)+sizeof(ajulong)+sizeof(ajuint) \
+		      +sizeof(ajuint)+sizeof(ajulong))
+#define PBT_OVERFLOW(p) (p+sizeof(ajuint)+sizeof(ajulong)+sizeof(ajuint) \
+		         +sizeof(ajuint)+sizeof(ajulong)+sizeof(ajulong))
+#define PBT_PREV(p) (p+sizeof(ajuint)+sizeof(ajulong)+sizeof(ajuint) \
+		     +sizeof(ajuint)+sizeof(ajulong)+sizeof(ajulong) \
+		     +sizeof(ajulong))
+#define PBT_KEYLEN(p) (p+sizeof(ajuint)+sizeof(ajulong)+sizeof(ajuint) \
+		       +sizeof(ajuint)+sizeof(ajulong)+sizeof(ajulong) \
+		       +sizeof(ajulong)+sizeof(ajulong))
 
 /*
 ** Macros to return a page entry value within an internal/leaf node
 */
 
-#if defined(LENDIAN)
-#define GBT_NODETYPE(p,v) (memcpy((void*)v,(void*)PBT_NODETYPE(p), \
-				  sizeof(ajint)))
-#define GBT_BLOCKNUMBER(p,v) (memcpy((void*)v,(void*)PBT_BLOCKNUMBER(p), \
-				     sizeof(ajlong)))
-#define GBT_NKEYS(p,v) (memcpy((void*)v,(void*)PBT_NKEYS(p), \
-			       sizeof(ajint)))
-#define GBT_TOTLEN(p,v) (memcpy((void*)v,(void*)PBT_TOTLEN(p), \
-			       sizeof(ajint)))
-#define GBT_LEFT(p,v) (memcpy((void*)v,(void*)PBT_LEFT(p), \
-			      sizeof(ajlong)))
-#define GBT_RIGHT(p,v) (memcpy((void*)v,(void*)PBT_RIGHT(p), \
-			       sizeof(ajlong)))
-#define GBT_PREV(p,v) (memcpy((void*)v,(void*)PBT_PREV(p), \
-			      sizeof(ajlong)))
-#define GBT_OVERFLOW(p,v) (memcpy((void*)v,(void*)PBT_OVERFLOW(p), \
-				  sizeof(ajlong)))
+#if !defined(WORDS_BIGENDIAN)
+#define GBT_NODETYPE(p,v) (memcpy((void*)v,(const void*)PBT_NODETYPE(p), \
+				  sizeof(ajuint)))
+#define GBT_BLOCKNUMBER(p,v) (memcpy((void*)v,(const void*)PBT_BLOCKNUMBER(p), \
+				     sizeof(ajulong)))
+#define GBT_NKEYS(p,v) (memcpy((void*)v,(const void*)PBT_NKEYS(p), \
+			       sizeof(ajuint)))
+#define GBT_TOTLEN(p,v) (memcpy((void*)v,(const void*)PBT_TOTLEN(p), \
+			       sizeof(ajuint)))
+#define GBT_LEFT(p,v) (memcpy((void*)v,(const void*)PBT_LEFT(p), \
+			      sizeof(ajulong)))
+#define GBT_RIGHT(p,v) (memcpy((void*)v,(const void*)PBT_RIGHT(p), \
+			       sizeof(ajulong)))
+#define GBT_PREV(p,v) (memcpy((void*)v,(const void*)PBT_PREV(p), \
+			      sizeof(ajulong)))
+#define GBT_OVERFLOW(p,v) (memcpy((void*)v,(const void*)PBT_OVERFLOW(p), \
+				  sizeof(ajulong)))
 #else
-#define GBT_NODETYPE(p,v) memcpy((void*)v,(void*)PBT_NODETYPE(p), \
-				 sizeof(ajint)); \
-                          ajByteRevInt(v)
-#define GBT_BLOCKNUMBER(p,v) memcpy((void*)v,(void*)PBT_BLOCKNUMBER(p), \
-				     sizeof(ajlong)); \
-                             ajByteRevLong(v)
-#define GBT_NKEYS(p,v) memcpy((void*)v,(void*)PBT_NKEYS(p), \
-			       sizeof(ajint)); \
-                       ajByteRevInt(v)
-#define GBT_TOTLEN(p,v) memcpy((void*)v,(void*)PBT_TOTLEN(p), \
-			       sizeof(ajint)); \
-                        ajByteRevInt(v)
-#define GBT_LEFT(p,v) memcpy((void*)v,(void*)PBT_LEFT(p), \
-                             sizeof(ajlong)); \
-                      ajByteRevLong(v)
+#define GBT_NODETYPE(p,v) memcpy((void*)v,(const void*)PBT_NODETYPE(p), \
+				 sizeof(ajuint)); \
+                          ajByteRevUint(v)
+#define GBT_BLOCKNUMBER(p,v) memcpy((void*)v,(const void*)PBT_BLOCKNUMBER(p), \
+				     sizeof(ajulong)); \
+                             ajByteRevUlong(v)
+#define GBT_NKEYS(p,v) memcpy((void*)v,(const void*)PBT_NKEYS(p), \
+			       sizeof(ajuint)); \
+                       ajByteRevUint(v)
+#define GBT_TOTLEN(p,v) memcpy((void*)v,(const void*)PBT_TOTLEN(p), \
+			       sizeof(ajuint)); \
+                        ajByteRevUint(v)
+#define GBT_LEFT(p,v) memcpy((void*)v,(const void*)PBT_LEFT(p), \
+                             sizeof(ajulong)); \
+                      ajByteRevUlong(v)
 
-#define GBT_RIGHT(p,v) memcpy((void*)v,(void*)PBT_RIGHT(p), \
-			      sizeof(ajlong)); \
-                       ajByteRevLong(v)
-#define GBT_PREV(p,v) memcpy((void*)v,(void*)PBT_PREV(p), \
-			      sizeof(ajlong)); \
-                      ajByteRevLong(v)
-#define GBT_OVERFLOW(p,v) memcpy((void*)v,(void*)PBT_OVERFLOW(p), \
-				  sizeof(ajlong)); \
-                          ajByteRevLong(v)
+#define GBT_RIGHT(p,v) memcpy((void*)v,(const void*)PBT_RIGHT(p), \
+			      sizeof(ajulong)); \
+                       ajByteRevUlong(v)
+#define GBT_PREV(p,v) memcpy((void*)v,(const void*)PBT_PREV(p), \
+			      sizeof(ajulong)); \
+                      ajByteRevUlong(v)
+#define GBT_OVERFLOW(p,v) memcpy((void*)v,(const void*)PBT_OVERFLOW(p), \
+				  sizeof(ajulong)); \
+                          ajByteRevUlong(v)
 #endif
 
 
@@ -447,48 +472,48 @@ typedef struct AjSNumBucket
 ** Macros to set a page entry value within an internal/leaf node
 */
 
-#if defined(LENDIAN)
+#if !defined(WORDS_BIGENDIAN)
 #define SBT_NODETYPE(p,v) (memcpy((void*)PBT_NODETYPE(p),(const void*)&v, \
-				  sizeof(ajint)))
+				  sizeof(ajuint)))
 #define SBT_BLOCKNUMBER(p,v) (memcpy((void*)PBT_BLOCKNUMBER(p), \
-				     (const void*)&v,sizeof(ajlong)))
+				     (const void*)&v,sizeof(ajulong)))
 #define SBT_NKEYS(p,v) (memcpy((void*)PBT_NKEYS(p),(const void*)&v, \
-			       sizeof(ajint)))
+			       sizeof(ajuint)))
 #define SBT_TOTLEN(p,v) (memcpy((void*)PBT_TOTLEN(p),(const void*)&v, \
-				sizeof(ajint)))
+				sizeof(ajuint)))
 #define SBT_LEFT(p,v) (memcpy((void*)PBT_LEFT(p), \
-			      (const void*)&v,sizeof(ajlong)))
+			      (const void*)&v,sizeof(ajulong)))
 #define SBT_RIGHT(p,v) (memcpy((void*)PBT_RIGHT(p), \
-			       (const void*)&v,sizeof(ajlong)))
+			       (const void*)&v,sizeof(ajulong)))
 #define SBT_PREV(p,v) (memcpy((void*)PBT_PREV(p), \
-			      (const void*)&v,sizeof(ajlong)))
+			      (const void*)&v,sizeof(ajulong)))
 #define SBT_OVERFLOW(p,v) (memcpy((void*)PBT_OVERFLOW(p), \
-				  (const void*)&v,sizeof(ajlong)))
+				  (const void*)&v,sizeof(ajulong)))
 #else
-#define SBT_NODETYPE(p,v) ajByteRevInt(&v); \
+#define SBT_NODETYPE(p,v) ajByteRevUint(&v); \
                           memcpy((void*)PBT_NODETYPE(p),(const void*)&v, \
-				  sizeof(ajint))
-#define SBT_BLOCKNUMBER(p,v) ajByteRevLong(&v); \
+				  sizeof(ajuint))
+#define SBT_BLOCKNUMBER(p,v) ajByteRevUlong(&v); \
                              memcpy((void*)PBT_BLOCKNUMBER(p), \
-				     (const void*)&v,sizeof(ajlong))
-#define SBT_NKEYS(p,v) ajByteRevInt(&v); \
+				     (const void*)&v,sizeof(ajulong))
+#define SBT_NKEYS(p,v) ajByteRevUint(&v); \
                        memcpy((void*)PBT_NKEYS(p),(const void*)&v, \
-			       sizeof(ajint))
-#define SBT_TOTLEN(p,v) ajByteRevInt(&v); \
+			       sizeof(ajuint))
+#define SBT_TOTLEN(p,v) ajByteRevUint(&v); \
                         memcpy((void*)PBT_TOTLEN(p),(const void*)&v, \
-				sizeof(ajint))
-#define SBT_LEFT(p,v) ajByteRevLong(&v); \
+				sizeof(ajuint))
+#define SBT_LEFT(p,v) ajByteRevUlong(&v); \
                       memcpy((void*)PBT_LEFT(p), \
-			      (const void*)&v,sizeof(ajlong))
-#define SBT_RIGHT(p,v) ajByteRevLong(&v); \
+			      (const void*)&v,sizeof(ajulong))
+#define SBT_RIGHT(p,v) ajByteRevUlong(&v); \
                        memcpy((void*)PBT_RIGHT(p), \
-			       (const void*)&v,sizeof(ajlong))
-#define SBT_PREV(p,v) ajByteRevLong(&v); \
+			       (const void*)&v,sizeof(ajulong))
+#define SBT_PREV(p,v) ajByteRevUlong(&v); \
                       memcpy((void*)PBT_PREV(p), \
-			      (const void*)&v,sizeof(ajlong))
-#define SBT_OVERFLOW(p,v) ajByteRevLong(&v); \
+			      (const void*)&v,sizeof(ajulong))
+#define SBT_OVERFLOW(p,v) ajByteRevUlong(&v); \
                           memcpy((void*)PBT_OVERFLOW(p), \
-				 (const void*)&v,sizeof(ajlong))
+				 (const void*)&v,sizeof(ajulong))
 #endif
 
 
@@ -498,22 +523,22 @@ typedef struct AjSNumBucket
 **
 ** Btree page
 **
-** @attr pageno [ajlong] Page number
+** @attr pagepos [ajulong] Page number
 ** @attr next [struct AjSBtpage*] Next page
 ** @attr prev [struct AjSBtpage*] Previous page
 ** @attr buf [unsigned char*] Buffer
-** @attr dirty [ajint] BT_DIRTY if page needs to be written to disc
-** @attr Padding [char[4]] Padding to alignment boundary
+** @attr dirty [ajuint] BT_DIRTY if page needs to be written to disc
+** @attr lockfor [ajuint] Reason for last setting of dirty as BT_LOCK
 ******************************************************************************/
 
 typedef struct AjSBtpage
 {
-    ajlong pageno;
+    ajulong pagepos;
     struct AjSBtpage *next;
     struct AjSBtpage *prev;
     unsigned char *buf;
-    ajint  dirty;
-    char Padding[4];
+    ajuint  dirty;
+    ajuint  lockfor;
 } AjOBtpage;
 #define AjPBtpage AjOBtpage*
 
@@ -522,60 +547,82 @@ typedef struct AjSBtpage
 
 /* @data AjPBtcache ***************************************************
 **
-** B tree cache
+** B+ tree cache
 **
 ** @attr fp [FILE*] Tree index file pointer
-** @attr totsize [ajlong] Tree index length
+** @attr filename [AjPStr] Filename
 ** @attr lru [AjPBtpage] Least recently used cache page
 ** @attr mru [AjPBtpage] Most recently used cache page
-** @attr pagesize [ajint] Size of cache pages
-** @attr listLength [ajint] Number of pages in cache
-** @attr order [ajint] Order of primary tree
-** @attr level [ajint] Depth of primary tree
-** @attr cachesize [ajint] Maximum number of pages to cache
-** @attr nperbucket [ajint] Number of entries in a primary bucket
-** @attr replace [AjPStr] Replacement ID
-** @attr numreplace [ajlong] Replacement numeric ID
-** @attr count [ajlong] Number of entries indexed
-** @attr deleted [AjBool] Deletion flag
-** @attr slevel [ajint] Depth of secondary tree
-** @attr sorder [ajint] Order of secondary tree
-** @attr snperbucket [ajint] Number of entries in a secondary bucket
-** @attr secrootblock [ajlong] Secondary tree root block
 ** @attr bmem [AjPBtMem] Primary array allocation MRU bottom
 ** @attr tmem [AjPBtMem] Primary array allocation MRU top
 ** @attr bsmem [AjPBtMem] Secondary array allocation MRU bottom
 ** @attr tsmem [AjPBtMem] Secondary array allocation MRU top
-** @attr kwlimit [ajint] Max length of secondary key
-** @attr Padding [char[4]] Padding to alignment boundary
+** @attr replace [AjPStr] Replacement ID
+** @attr pagetable [AjPTable] Table of cached pages
+** @attr totsize [ajulong] Tree index total length
+** @attr filesize [ajulong] Tree index length after any compression
+** @attr extendsize [ajulong] Tree index extension block length
+** @attr pagecount [ajulong] Tree index number of pages
+** @attr secrootblock [ajulong] Secondary tree root block
+** @attr numreplace [ajulong] Replacement numeric ID
+** @attr countunique [ajulong] Number of unique tokens indexed
+** @attr countall [ajulong] Number of total tokens indexed
+** @attr cachehits [ajulong] Number of cached page reads
+** @attr reads [ajulong] Number of physical reads from disk
+** @attr writes [ajulong] Number of physical writes to disk
+** @attr pagesize [ajuint] Size of cache pages
+** @attr listLength [ajuint] Number of pages in cache
+** @attr order [ajuint] Order of primary tree
+** @attr level [ajuint] Depth of primary tree
+** @attr cachesize [ajuint] Maximum number of pages to cache
+** @attr nperbucket [ajuint] Number of entries in a primary bucket
+** @attr slevel [ajuint] Depth of secondary tree
+** @attr sorder [ajuint] Order of secondary tree
+** @attr snperbucket [ajuint] Number of entries in a secondary bucket
+** @attr kwlimit [ajuint] Max length of secondary key
+** @attr secondary [AjBool] Secondary index
+** @attr readonly [AjBool] Read only flag
+** @attr deleted [AjBool] Deletion flag
+** @attr compressed [AjBool] Index is compressed
 ******************************************************************************/
 
 typedef struct AjSBtCache
 {
     FILE *fp;
-    ajlong totsize;
+    AjPStr filename;
     AjPBtpage lru;
     AjPBtpage mru;
-    ajint pagesize;
-    ajint listLength;
-    ajint order;
-    ajint level;
-    ajint cachesize;
-    ajint nperbucket;
-    AjPStr replace;
-    ajlong numreplace;
-    ajlong count;
-    AjBool deleted;
-    ajint slevel;
-    ajint sorder;
-    ajint snperbucket;
-    ajlong secrootblock;
     AjPBtMem bmem;
     AjPBtMem tmem;
     AjPBtMem bsmem;
     AjPBtMem tsmem;
-    ajint  kwlimit;
-    char Padding[4];
+    AjPStr replace;
+    AjPTable pagetable;
+    ajulong totsize;
+    ajulong filesize;
+    ajulong extendsize;
+    ajulong pagecount;
+    ajulong secrootblock;
+    ajulong numreplace;
+    ajulong countunique;
+    ajulong countall;
+    ajulong cachehits;
+    ajulong reads;
+    ajulong writes;
+    ajuint pagesize;
+    ajuint listLength;
+    ajuint order;
+    ajuint level;
+    ajuint cachesize;
+    ajuint nperbucket;
+    ajuint slevel;
+    ajuint sorder;
+    ajuint snperbucket;
+    ajuint kwlimit;
+    AjBool secondary;
+    AjBool readonly;
+    AjBool deleted;
+    AjBool compressed;
 } AjOBtcache;
 #define AjPBtcache AjOBtcache*
 
@@ -587,14 +634,14 @@ typedef struct AjSBtCache
 ** Btree primary keyword
 **
 ** @attr keyword [AjPStr] keyword
-** @attr treeblock [ajlong] disc block of secondary tree
+** @attr treeblock [ajulong] disc block of secondary tree
 ** @attr id [AjPStr] Id string
 ******************************************************************************/
 
 typedef struct AjSBtPri
 {
     AjPStr keyword;
-    ajlong treeblock;
+    ajulong treeblock;
     AjPStr id;
 } AjOBtPri;
 #define AjPBtPri AjOBtPri*
@@ -606,19 +653,21 @@ typedef struct AjSBtPri
 **
 ** Keyword primary bucket structure on disc
 **
-** @attr NodeType [ajint] Node type
-** @attr Nentries [ajint] Number of entries
-** @attr Overflow [ajlong] Offset to overflow block
-** @attr keylen [ajint*] key lengths
+** @attr NodeType [ajuint] Node type
+** @attr Maxentries [ajuint] Number of entries available
+** @attr Nentries [ajuint] Number of entries
+** @attr Overflow [ajulong] Offset to overflow block
+** @attr keylen [ajuint*] key lengths
 ** @attr codes [AjPBtPri*] Primary keywords
 ******************************************************************************/
 
 typedef struct AjSPriBucket
 {
-    ajint    NodeType;
-    ajint    Nentries;
-    ajlong   Overflow;
-    ajint    *keylen;
+    ajuint    NodeType;
+    ajuint   Maxentries;
+    ajuint   Nentries;
+    ajulong   Overflow;
+    ajuint   *keylen;
     AjPBtPri *codes;
 } AjOPriBucket;
 #define AjPPriBucket AjOPriBucket*
@@ -630,20 +679,22 @@ typedef struct AjSPriBucket
 **
 ** Keyword secondary bucket structure on disc
 **
-** @attr NodeType [ajint] Node type
-** @attr Nentries [ajint] Number of entries
-** @attr Overflow [ajlong] Offset to overflow block
-** @attr keylen [ajint*] key lengths
-** @attr ids [AjPStr*] Ids
+** @attr NodeType [ajuint] Node type
+** @attr Maxentries [ajuint] Number of entries available
+** @attr Nentries [ajuint] Number of entries
+** @attr Overflow [ajulong] Offset to overflow block
+** @attr keylen [ajuint*] key lengths
+** @attr SecIds [AjPStr*] Ids
 ******************************************************************************/
 
 typedef struct AjSSecBucket
 {
-    ajint    NodeType;
-    ajint    Nentries;
-    ajlong   Overflow;
-    ajint    *keylen;
-    AjPStr   *ids;
+    ajuint    NodeType;
+    ajuint   Maxentries;
+    ajuint   Nentries;
+    ajulong   Overflow;
+    ajuint   *keylen;
+    AjPStr   *SecIds;
 } AjOSecBucket;
 #define AjPSecBucket AjOSecBucket*
 
@@ -655,11 +706,11 @@ typedef struct AjSSecBucket
 ** Btree keyword wildcard object
 **
 ** @attr keyword [AjPStr] Wildcard keyword
-** @attr pageno [ajlong] Page number of primary tree leaf
+** @attr pagepos [ajulong] Page number of primary tree leaf
 ** @attr list [AjPList] list of AjPBtPris
 ** @attr cache [AjPBtcache] cache for secondary tree
 ** @attr idlist [AjPList] list of AjPStr IDs
-** @attr secpageno [ajlong] Page number of secondary tree leaf
+** @attr secpagepos [ajulong] Page number of secondary tree leaf
 ** @attr first [AjBool] true for first search
 ** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
@@ -667,11 +718,11 @@ typedef struct AjSSecBucket
 typedef struct AjSBtKeyWild
 {
     AjPStr keyword;
-    ajlong pageno;
+    ajulong pagepos;
     AjPList list;
     AjPBtcache cache;
     AjPList idlist;
-    ajlong secpageno;
+    ajulong secpagepos;
     AjBool first;
     char Padding[4];
 } AjOBtKeyWild;
@@ -685,21 +736,21 @@ typedef struct AjSBtKeyWild
 ** Btree ID
 **
 ** @attr key1 [AjPStr] Unique ID
-** @attr dbno [ajint] Database file number
-** @attr dups [ajint] Duplicates
-** @attr offset [ajlong] Offset within database file (ftello)
-** @attr refoffset [ajlong] Offset within reference database file (ftello)
-** @attr treeblock [ajlong] Secondary tree root page
+** @attr dbno [ajuint] Database file number
+** @attr dups [ajuint] Duplicates
+** @attr offset [ajulong] Offset within database file (ftello)
+** @attr refoffset [ajulong] Offset within reference database file (ftello)
+** @attr treeblock [ajulong] Secondary tree root page
 ******************************************************************************/
 
 typedef struct AjSBtHybrid
 {
     AjPStr key1;
-    ajint  dbno;
-    ajint  dups;
-    ajlong offset;
-    ajlong refoffset;
-    ajlong treeblock;
+    ajuint  dbno;
+    ajuint  dups;
+    ajulong offset;
+    ajulong refoffset;
+    ajulong treeblock;
 } AjOBtHybrid;
 #define AjPBtHybrid AjOBtHybrid*
 
@@ -710,100 +761,215 @@ typedef struct AjSBtHybrid
 ** Prototype definitions
 */
 
-AjPBtcache ajBtreeCacheNewC(const char *file, const char *ext,
-			    const char *idir, const char *mode,
-			    ajint pagesize, ajint order, ajint fill,
-			    ajint level, ajint cachesize);
-AjPBtpage  ajBtreeCacheRead(AjPBtcache cache, ajlong pageno);
-AjPBtpage  ajBtreeCacheWrite(AjPBtcache cache, ajlong pageno);
-void       ajBtreeCreateRootNode(AjPBtcache cache, ajlong rootpage);
-AjPBtpage  ajBtreeFindInsert(AjPBtcache cache, const char *key);
+ajuint       ajBtreeFieldGetLenC(const char* nametxt);
+ajuint       ajBtreeFieldGetLenS(const AjPStr name);
+const AjPStr ajBtreeFieldGetExtensionC(const char *nametxt);
+const AjPStr ajBtreeFieldGetExtensionS(const AjPStr name);
+AjBool       ajBtreeFieldGetSecondaryC(const char *nametxt);
+AjBool       ajBtreeFieldGetSecondaryS(const AjPStr name);
+AjBool       ajBtreeCacheIsSecondary(const AjPBtcache thys);
+AjPBtcache   ajBtreeCacheNewC(const char *file, const char *ext,
+                              const char *idir, const char *mode,
+                              AjBool compressed, ajuint kwlimit,
+                              ajuint pagesize, ajuint cachesize,
+                              ajulong pagecount,
+                              ajuint order, ajuint fill, ajuint level,
+                              ajuint sorder, ajuint sfill,
+                              ajulong count, ajulong countall);
+AjPBtcache   ajBtreeCacheNewS(const AjPStr file, const AjPStr ext,
+                              const AjPStr idir, const char *mode,
+                              AjBool compressed, ajuint kwlimit,
+                              ajuint pagesize, ajuint cachesize,
+                              ajulong pagecount,
+                              ajuint order, ajuint fill, ajuint level,
+                              ajuint sorder, ajuint sfill,
+                              ajulong count, ajulong countall);
+AjPBtcache   ajBtreeCacheNewReadC(const char *filetxt, const char *exttxt,
+                                  const char *idirtxt);
+AjPBtcache   ajBtreeCacheNewReadS(const AjPStr file, const AjPStr ext,
+                                  const AjPStr idir);
+AjPBtcache   ajBtreeCacheNewUpdateC(const char *filetxt, const char *exttxt,
+                                    const char *idirtxt);
+AjPBtcache   ajBtreeCacheNewUpdateS(const AjPStr file, const AjPStr ext,
+                                    const AjPStr idir);
+AjPBtpage    ajBtreeCacheRead(AjPBtcache cache, ajulong pagepos);
+AjPBtpage    ajBtreeCacheWrite(AjPBtcache cache, ajulong pagepos);
+AjPBtpage    ajBtreeCacheWriteBucket(AjPBtcache cache, ajulong pagepos);
+AjPBtpage    ajBtreeCacheWriteNode(AjPBtcache cache, ajulong pagepos);
+AjPBtpage    ajBtreeCacheWriteBucketnew(AjPBtcache cache);
+AjPBtpage    ajBtreeCacheWriteNodenew(AjPBtcache cache);
+AjPBtpage    ajBtreeCacheWriteOverflownew(AjPBtcache cache);
+void         ajBtreeCreateRootNode(AjPBtcache cache, ajulong rootpage);
+AjPBtpage    ajBtreeFindInsert(AjPBtcache cache, const AjPStr key);
 
-void     ajBtreeCacheDel(AjPBtcache *thys);
-void     ajBtreeInsertId(AjPBtcache cache, const AjPBtId id);
-void     ajBtreeIdDel(AjPBtId *thys);
-AjPBtId  ajBtreeIdNew(void);
-AjPBtId  ajBtreeIdFromKey(AjPBtcache cache, const char *key);
-void     ajBtreeWriteParams(const AjPBtcache cache, const char *fn,
-			    const char *ext, const char *idir);
-void     ajBtreeReadParams(const char *fn, const char *ext,
-			   const char *idir, ajint *order,
-			   ajint *nperbucket, ajint *pagesize, ajint *level,
-			   ajint *cachesize, ajint *sorder,
-			   ajint *snperbucket, ajlong *count, ajint *kwlimit);
-void     ajBtreeCacheSync(AjPBtcache cache, ajlong rootpage);
+ajulong      ajBtreeCacheDel(AjPBtcache *thys);
+void         ajBtreeInsertId(AjPBtcache cache, const AjPBtId id);
+void         ajBtreeIdDel(AjPBtId *thys);
+void         ajBtreeIdDelVoid(void **voidarg);
+AjPBtId      ajBtreeIdNew(void);
+AjPBtId      ajBtreeIdFromKey(AjPBtcache cache, const AjPStr key);
+void         ajBtreeWriteParamsC(const AjPBtcache cache, const char *fntxt,
+                                 const char *exttxt, const char *idirtxt);
+void         ajBtreeWriteParamsS(const AjPBtcache cache, const AjPStr fn,
+                                 const AjPStr ext, const AjPStr idir);
+AjBool       ajBtreeReadParamsC(const char *fn, const char *ext,
+                                const char *idir,
+                                AjBool *secondary, AjBool *compressed,
+                                ajuint *kwlimit,
+                                ajuint *pagesize, ajuint *cachesize,
+                                ajulong *pagecount,
+                                ajuint *order, ajuint *nperbucket,
+                                ajuint *level,
+                                ajuint *sorder, ajuint *snperbucket,
+                                ajulong *count, ajulong *countall);
+AjBool       ajBtreeReadParamsS(const AjPStr fn, const AjPStr ext,
+                                const AjPStr idir,
+                                AjBool *secondary, AjBool *compressed,
+                                ajuint *kwlimit,
+                                ajuint *pagesize, ajuint *cachesize,
+                                ajulong *pagecount,
+                                ajuint *order, ajuint *nperbucket,
+                                ajuint *level,
+                                ajuint *sorder, ajuint *snperbucket,
+                                ajulong *count, ajulong *countall);
+void         ajBtreeCacheSync(AjPBtcache cache, ajulong rootpage);
+void         ajBtreeCacheRootSync(AjPBtcache cache, ajulong rootpage);
 
 AjPBtWild    ajBtreeWildNew(AjPBtcache cache, const AjPStr wild);
 AjPBtKeyWild ajBtreeKeyWildNew(AjPBtcache cache, const AjPStr wild);
 void         ajBtreeWildDel(AjPBtWild *thys);
 void         ajBtreeKeyWildDel(AjPBtKeyWild *thys);
 
-AjPBtpage  ajBtreeFindInsertW(AjPBtcache cache, const char *key);
-AjPBtId    ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild);
-void       ajBtreeListFromKeyW(AjPBtcache cache, const char *key,
-			       AjPList idlist);
-AjPBtId    ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
-				 AjPBtcache idcache);
-void       ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
-				   AjPBtcache idcache, AjPList btidlist);
+AjPBtpage    ajBtreeFindInsertW(AjPBtcache cache, const AjPStr key);
+AjPBtId      ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild);
+void         ajBtreeListFromKeyW(AjPBtcache cache, const AjPStr key,
+                                 AjPList idlist);
+AjPBtId      ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
+                                   AjPBtcache idcache);
+void         ajBtreeListFromKeywordW(AjPBtcache cache, const AjPStr key,
+                                     AjPBtcache idcache, AjPList btidlist);
 
-AjBool     ajBtreeReplaceId(AjPBtcache cache, const AjPBtId rid);
+AjBool       ajBtreeReplaceId(AjPBtcache cache, const AjPBtId rid);
 
-ajint      ajBtreeReadEntries(const char *filename, const char *indexdir,
-			      const char *directory,
-			      AjPStr **seqfiles, AjPStr **reffiles);
-void       ajBtreeInsertDupId(AjPBtcache cache, AjPBtId id);
-AjPList    ajBtreeDupFromKey(AjPBtcache cache, const char *key);
-
-
-
-
-AjPBtPri   ajBtreePriNew(void);
-void       ajBtreePriDel(AjPBtPri *thys);
-AjPBtPri   ajBtreePriFromKeyword(AjPBtcache cache, const char *key);
-
-AjPBtcache ajBtreeSecCacheNewC(const char *file, const char *ext,
-			       const char *idir, const char *mode,
-			       ajint pagesize, ajint order, ajint fill,
-			       ajint level, ajint cachesize,
-			       ajint sorder, ajint slevel, ajint sfill,
-			       ajlong count, ajint kwlimit);
-AjPBtpage  ajBtreeSecFindInsert(AjPBtcache cache, const char *key);
-void       ajBtreeInsertSecId(AjPBtcache cache, const AjPStr id);
-AjBool     ajBtreeSecFromId(AjPBtcache cache, const char *key);
-
-AjPList    ajBtreeSecLeafList(AjPBtcache cache, ajlong rootblock);
-AjBool     ajBtreeVerifyId(AjPBtcache cache, ajlong rootblock, const char *id);
-
-void       ajBtreeInsertKeyword(AjPBtcache cache, const AjPBtPri pri);
-
-void       ajBtreeLockTest(AjPBtcache cache);
+ajuint       ajBtreeReadEntries(const char *filename, const char *indexdir,
+                                const char *directory,
+                                AjPStr **seqfiles, AjPStr **reffiles);
+ajuint       ajBtreeReadEntriesS(const AjPStr filename, const AjPStr indexdir,
+                                 const AjPStr directory,
+                                 AjPStr **seqfiles, AjPStr **reffiles);
+void         ajBtreeInsertDupId(AjPBtcache cache, AjPBtId id);
+AjPList      ajBtreeDupFromKey(AjPBtcache cache, const AjPStr key);
 
 
 
-AjPBtpage   ajBtreeHybFindInsert(AjPBtcache cache, const char *key);
-AjPBtpage   ajBtreeNumFindInsert(AjPBtcache cache, const ajlong key);
 
-void        ajBtreeInsertNum(AjPBtcache cache, const AjPBtNumId num,
-			     AjPBtpage page);
-void        ajBtreeHybInsertId(AjPBtcache cache, const AjPBtHybrid hyb);
-AjPBtHybrid ajBtreeHybNew(void);
-void        ajBtreeHybDel(AjPBtHybrid *thys);
-void        ajBtreeFreePriArray(AjPBtcache cache);
-void        ajBtreeFreeSecArray(AjPBtcache cache);
-void 	    ajBtreeHybLeafList(AjPBtcache cache, ajlong rootblock,
-			       const AjPStr idname, AjPList list);
+AjPBtPri     ajBtreePriNew(void);
+void         ajBtreePriDel(AjPBtPri *thys);
+AjBool       ajBtreePriFindKeyword(AjPBtcache cache, const AjPStr key,
+                                   ajulong *treeblock);
+AjBool       ajBtreePriFindKeywordLen(AjPBtcache cache, const AjPStr key,
+                                      ajulong *treeblock);
 
-void        ajBtreeDumpHybKeys(AjPBtcache cache, ajint dmin, ajint dmax,
-			       AjPFile outf);
+AjPBtcache   ajBtreeSecCacheNewC(const char *file, const char *ext,
+                                 const char *idir, const char *mode,
+                                 AjBool compressed, ajuint kwlimit,
+                                 ajuint pagesize, ajuint cachesize,
+                                 ajulong pagecount,
+                                 ajuint order, ajuint fill, ajuint level,
+                                 ajuint sorder, ajuint sfill,
+                                 ajulong count, ajulong countall);
+AjPBtcache   ajBtreeSecCacheNewS(const AjPStr file, const AjPStr ext,
+                                 const AjPStr idir, const char *mode,
+                                 AjBool compressed, ajuint kwlimit,
+                                 ajuint pagesize, ajuint cachesize,
+                                 ajulong pagecount,
+                                 ajuint order, ajuint fill, ajuint level,
+                                 ajuint sorder, ajuint sfill,
+                                 ajulong count, ajulong countall);
+AjPBtpage    ajBtreeSecFindInsert(AjPBtcache cache, const AjPStr key);
+AjBool       ajBtreeSecInsertId(AjPBtcache cache, const AjPStr id);
+AjBool       ajBtreeSecFindId(AjPBtcache cache, const AjPStr key);
 
-AjBool ajBtreeDeleteHybId(AjPBtcache cache, const AjPBtHybrid hyb);
-AjBool ajBtreeDeletePriId(AjPBtcache cache, const AjPBtPri pri);
+AjPList      ajBtreeSecLeafList(AjPBtcache cache, ajulong rootblock);
+AjBool       ajBtreeVerifyId(AjPBtcache cache, ajulong rootblock,
+                             const AjPStr id);
+
+void         ajBtreeDumpKeywords(AjPBtcache cache,
+                               ajuint dmin, ajuint dmax, AjPFile outf);
+AjBool       ajBtreeInsertKeyword(AjPBtcache cache, AjPBtPri pri);
+
+void         ajBtreeLockTest(AjPBtcache cache);
+
+
+
+AjPBtpage    ajBtreeHybFindInsert(AjPBtcache cache, const AjPStr key);
+AjPBtpage    ajBtreeNumFindInsert(AjPBtcache cache, const ajulong key);
+
+void         ajBtreeInsertNum(AjPBtcache cache, const AjPBtNumId num,
+                              AjPBtpage page);
+void         ajBtreeHybInsertId(AjPBtcache cache, AjPBtHybrid hyb);
+AjPBtHybrid  ajBtreeHybNew(void);
+void         ajBtreeHybDel(AjPBtHybrid *thys);
+void         ajBtreeFreePriArray(AjPBtcache cache);
+void         ajBtreeFreeSecArray(AjPBtcache cache);
+void 	     ajBtreeHybLeafList(AjPBtcache cache, ajulong rootblock,
+                                const AjPStr idname, AjPList list);
+
+void         ajBtreeDumpHybKeys(AjPBtcache cache, ajuint dmin, ajuint dmax,
+                                AjPFile outf);
+
+AjBool       ajBtreeDeleteHybId(AjPBtcache cache, const AjPBtHybrid hyb);
+AjBool       ajBtreeDeletePriId(AjPBtcache cache, const AjPBtPri pri);
     
+void         ajBtreeExit(void);
+
+ajulong      ajBtreeGetPagecount(const AjPBtcache cache);
+ajuint       ajBtreeGetPagesize(const AjPBtcache cache);
+ajulong      ajBtreeGetTotsize(const AjPBtcache cache);
+ajuint       ajBtreePageGetSize(const AjPBtpage page);
+const char*  ajBtreePageGetTypename(const AjPBtpage page);
+AjBool       ajBtreeStatBucket(AjPBtcache cache,
+                               const AjPBtpage page, AjBool full,
+                               ajuint* nkeys, ajuint* ndups, ajuint* nextra,
+                               ajuint* overflows, ajuint* freespace,
+                               ajulong *refs, const AjPTable newpostable);
+AjBool       ajBtreeStatNumbucket(AjPBtcache cache,
+                                  const AjPBtpage page, AjBool full,
+                                  ajuint* nkeys, ajuint* overflows,
+                                  ajuint* freespace);
+AjBool       ajBtreeStatPribucket(AjPBtcache cache,
+                                  const AjPBtpage page, AjBool full,
+                                  ajuint* nkeys, ajuint* overflows,
+                                  ajuint* freespace, ajulong *refs,
+                                  const AjPTable newpostable);
+AjBool       ajBtreeStatSecbucket(AjPBtcache cache,
+                                  const AjPBtpage page, AjBool full,
+                                  ajuint* nkeys, ajuint* overflows,
+                                  ajuint* freespace);
+AjBool       ajBtreeStatNode(AjPBtcache cache,
+                             const AjPBtpage page, AjBool full,
+                             ajuint* nkeys, ajuint* overflows,
+                             ajuint* freespace, ajulong* refs,
+                             const AjPTable newpostable);
+AjBool       ajBtreeStatNumnode(AjPBtcache cache,
+                                const AjPBtpage page, AjBool full,
+                                ajuint* nkeys, ajuint* overflows,
+                                ajuint* freespace, ajulong* refs,
+                                const AjPTable newpostable);
+
+void         ajBtreeCacheStatsOut(AjPFile outf, const AjPBtcache cache,
+                                  ajulong *Pcache, ajulong* Preads,
+                                  ajulong* Pwrites, ajulong *Psize);
+
+ajint        ajBtreeIdCmp(const void *x, const void *y);
+ajuint       ajBtreeIdHash(const void *x, ajuint hashsize);
+
 
 /*
 ** End of prototype definitions
 */
+__deprecated void     ajBtreeWriteParams(const AjPBtcache cache, const char *fn,
+                                         const char *ext, const char *idir);
 
 #endif
 

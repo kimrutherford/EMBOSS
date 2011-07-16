@@ -1,5 +1,5 @@
 Displays information on configured databases
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:
@@ -7,7 +7,14 @@ Version: EMBOSS:6.3.0
                                   information on (Any string)
    -html               boolean    [N] Format output as an HTML table
    -[no]protein        boolean    [Y] Display protein databases
-   -[no]nucleic        boolean    [Y] Display nucleic acid databases
+   -[no]nucleic        boolean    [Y] Display nucleotide databases
+   -[no]sequence       boolean    [Y] Display general sequence databases
+   -[no]feature        boolean    [Y] Display feature annotation databases
+   -[no]text           boolean    [Y] Display text databases
+   -[no]taxonomy       boolean    [Y] Display taxonomy databases
+   -[no]resource       boolean    [Y] Display resource databases
+   -[no]assembly       boolean    [Y] Display sequence assembly databases
+   -[no]obo            boolean    [Y] Display obo bio-ontology databases
    -full               boolean    [N] Display all columns
    -methods            boolean    [$(full)] This displays the access methods
                                   that can be used on this database, for all,

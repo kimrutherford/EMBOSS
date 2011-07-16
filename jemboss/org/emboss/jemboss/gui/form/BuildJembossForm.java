@@ -868,7 +868,9 @@ public class BuildJembossForm implements ActionListener
       if ( att.startsWith("dirlist") || att.startsWith("featout") ||
            att.startsWith("string")  || att.startsWith("seqout")  ||
            att.startsWith("outfile") || att.startsWith("codon")   ||
-           att.startsWith("regexp")  )
+           att.startsWith("outobo")  || att.startsWith("outresource") ||
+           att.startsWith("outtext") || att.startsWith("outtaxon") ||
+           att.startsWith("outurl")  || att.startsWith("regexp")  )
       {
         if(!(textf[h].getText()).equals("") && textf[h].isVisible()
                                             && textf[h].isEnabled()) 
@@ -993,6 +995,13 @@ public class BuildJembossForm implements ActionListener
               lval += ",";
             }
           }
+          
+          if(sel.length == 0)
+          {
+              options.concat(parseAcd.getDefaultParamValueStr(j));
+              lval = parseAcd.getDefaultParamValueStr(j);
+          }
+          
           optionsA.add(lval);
         }
         else if (fieldOption[h].isVisible() 
@@ -1053,7 +1062,7 @@ public class BuildJembossForm implements ActionListener
         } 
       }
       else if ( att.startsWith("infile") || att.startsWith("datafile") ||
-                att.startsWith("matrix") )
+                att.startsWith("matrix") || att.startsWith("features"))
       {
         if(!(textf[h].getText()).equals("") && textf[h].isVisible()
                                             && textf[h].isEnabled())
@@ -1090,7 +1099,12 @@ public class BuildJembossForm implements ActionListener
         }
       }
       else if ( att.startsWith("seqset") || att.startsWith("seqall") ||
-                att.startsWith("sequence") )
+                att.startsWith("sequence") ||
+                att.startsWith("obo") ||
+                att.startsWith("text") ||
+                att.startsWith("taxon") ||
+                att.startsWith("resource") ||
+                att.startsWith("url"))
       {
         int seq = h+1;
         if(inSeq[h].isFileName())                     // file or database
@@ -1098,12 +1112,7 @@ public class BuildJembossForm implements ActionListener
           String fn = new String(inSeq[h].getFileChosen());
           
           fn = fn.trim();
-          if((fn.indexOf(":")>-1) && (fn.indexOf(":\\") < 0))  //remove spaces
-          {                                                    //from db entries
-            int n;
-            while((n = fn.indexOf(" ")) > -1)
-              fn = new String(fn.substring(0,n) + fn.substring(n+1));
-          }
+
           optionsA.add("-" + val);
           optionsA.add(fn);
           
@@ -1205,9 +1214,12 @@ public class BuildJembossForm implements ActionListener
           }
         }
 
-        options = options.concat(inSeqAttr[h].getInputSeqAttr(seq));
-        optionsA.addAll(inSeqAttr[h].getInputSeqAttrA(seq));
-
+        if(inSeqAttr[h] != null)
+        {
+            options = options.concat(inSeqAttr[h].getInputSeqAttr(seq));
+            optionsA.addAll(inSeqAttr[h].getInputSeqAttrA(seq));
+        }
+        
       } 
     }
 

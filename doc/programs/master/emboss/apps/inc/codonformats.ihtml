@@ -1,0 +1,11 @@
+<p>
+
+The output is a standard EMBOSS codon usage query.
+
+<p>
+The output format can be specified by using the command-line
+qualifier <tt>-oformat xxx</tt>, where 'xxx' is replaced by the name of
+the required format.  The available format names are: emboss, cut,
+gcg, cutg, cutgaa, spsum, cherry, transterm, codehop, staden and
+numstaden.
+

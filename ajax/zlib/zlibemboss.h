@@ -1,3 +1,7 @@
+#ifndef WIN32
+#include "config.h"
+#endif
+
 #ifndef ELIBSOURCES
 #define ELIBSOURCES
 #endif

@@ -1,0 +1,2286 @@
+# server.biomart 2011-06-23 15:34:00
+
+# URL defines the biomart server address
+# dbalias defines the dataset
+
+# the mart itself is not defined
+
+# for sequence marts, takes the most common sequence attributes
+
+DBNAME oanatinus_gene_ensembl_cdna [
+# Example: seqret biomart:oanatinus_gene_ensembl_cdna:ENSOANG00000008281
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "oanatinus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME oanatinus_gene_ensembl_coding [
+# Example: seqret biomart:oanatinus_gene_ensembl_coding:ENSOANG00000008281
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "oanatinus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME oanatinus_gene_ensembl_peptide [
+# Example: seqret biomart:oanatinus_gene_ensembl_peptide:ENSOANG00000008281
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "oanatinus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME tguttata_gene_ensembl_cdna [
+# Example: seqret biomart:tguttata_gene_ensembl_cdna:ENSTGUG00000013256
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "tguttata_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME tguttata_gene_ensembl_coding [
+# Example: seqret biomart:tguttata_gene_ensembl_coding:ENSTGUG00000013256
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "tguttata_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME tguttata_gene_ensembl_peptide [
+# Example: seqret biomart:tguttata_gene_ensembl_coding:ENSTGUG00000013256
+# Returns peptide ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "tguttata_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_peptide_id"
+]
+
+
+
+
+DBNAME cporcellus_gene_ensembl_cdna [
+# Example: seqret biomart:cporcellus_gene_ensembl_cdna:ENSCPOG00000005742
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "cporcellus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME cporcellus_gene_ensembl_coding [
+# Example: seqret biomart:cporcellus_gene_ensembl_coding:ENSCPOG00000005742
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "cporcellus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME cporcellus_gene_ensembl_peptide [
+# Example: seqret biomart:cporcellus_gene_ensembl_peptide:ENSCPOG00000005742
+# Returns peptide and transcript IDs as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "cporcellus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_peptide_id,ensembl_transcript_id"
+]
+
+
+
+
+DBNAME gaculeatus_gene_ensembl_cdna [
+# Example: seqret biomart:gaculeatus_gene_ensembl_cdna:ENSOANG00000008281
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "gaculeatus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME gaculeatus_gene_ensembl_coding [
+# Example: seqret biomart:gaculeatus_gene_ensembl_coding:ENSGACG00000002861
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "gaculeatus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME gaculeatus_gene_ensembl_peptide [
+# Example: seqret biomart:gaculeatus_gene_ensembl_peptide:ENSGACG00000002861
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "gaculeatus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME lafricana_gene_ensembl_cdna [
+# Example: seqret biomart:lafricana_gene_ensembl_cdna:ENSLAFG00000016762
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "lafricana_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME lafricana_gene_ensembl_coding [
+# Example: seqret biomart:lafricana_gene_ensembl_coding:ENSLAFG00000016762
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "lafricana_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME lafricana_gene_ensembl_peptide [
+# Example: seqret biomart:lafricana_gene_ensembl_peptide:ENSLAFG00000016762
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "lafricana_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME celegans_gene_ensembl_cdna [
+# Example: seqret biomart:celegenas_gene_ensembl_cdna:T13A10.13
+# Returns transcript ID as well as the identifier
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "celegans_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME celegans_gene_ensembl_coding [
+# Example: seqret biomart:celegenas_gene_ensembl_cdna:T13A10.13
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "celegans_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME celegans_gene_ensembl_peptide [
+# Example: seqret biomart:celegenas_gene_ensembl_peptide:T13A10.13
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "celegans_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME mlucifugus_gene_ensembl_cdna [
+# Example: seqret biomart:mlucifugus_gene_ensembl_cdna:ENSMLUG00000001320
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mlucifugus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME mlucifugus_gene_ensembl_coding [
+# Example: seqret biomart:mlucifugus_gene_ensembl_coding:ENSMLUG00000001320
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mlucifugus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME mlucifugus_gene_ensembl_peptide [
+# Example: seqret biomart:mlucifugus_gene_ensembl_peptide:ENSMLUG00000001320
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mlucifugus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME hsapiens_gene_ensembl_cdna [
+# Example: seqret biomart:hsapiens_gene_ensembl_cdna:ENSG00000128617
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "hsapiens_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME hsapiens_gene_ensembl_coding [
+# Example: seqret biomart:hsapiens_gene_ensembl_coding:ENSG00000128617
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "hsapiens_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME hsapiens_gene_ensembl_peptide [
+# Example: seqret biomart:hsapiens_gene_ensembl_peptide:ENSG00000128617
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "hsapiens_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME choffmanni_gene_ensembl_cdna [
+# Example: seqret biomart:choffmanni_gene_ensembl_cdna:ENSCHOG00000007102
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "choffmanni_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME choffmanni_gene_ensembl_coding [
+# Example: seqret biomart:choffmanni_gene_ensembl_coding:ENSCHOG00000007102
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "choffmanni_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME choffmanni_gene_ensembl_peptide [
+# Example: seqret biomart:choffmanni_gene_ensembl_peptide:ENSCHOG00000007102
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "choffmanni_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME csavignyi_gene_ensembl_cdna [
+# Example: seqret biomart:csavignyi_gene_ensembl_cdna:ENSCSAVG00000000614
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "csavignyi_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME csavignyi_gene_ensembl_coding [
+# Example: seqret biomart:csavignyi_gene_ensembl_coding:ENSCSAVG00000000614
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "csavignyi_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME csavignyi_gene_ensembl_peptide [
+# Example: seqret biomart:csavignyi_gene_ensembl_peptide:ENSCSAVG00000000614
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "csavignyi_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME fcatus_gene_ensembl_cdna [
+# Example: seqret biomart:fcatus_gene_ensembl_cdna:ENSFCAG00000015313
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "fcatus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME fcatus_gene_ensembl_coding [
+# Example: seqret biomart:fcatus_gene_ensembl_coding:ENSFCAG00000015313
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "fcatus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME fcatus_gene_ensembl_peptide [
+# Example: seqret biomart:fcatus_gene_ensembl_peptide:ENSFCAG00000015313
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "fcatus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME rnorvegicus_gene_ensembl_cdna [
+# Example: seqret biomart:rnorvegicus_gene_ensembl_cdna:ENSRNOG00000037261
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "rnorvegicus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME rnorvegicus_gene_ensembl_coding [
+# Example: seqret biomart:rnorvegicus_gene_ensembl_coding:ENSRNOG00000037261
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "rnorvegicus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME rnorvegicus_gene_ensembl_peptide [
+# Example: seqret biomart:rnorvegicus_gene_ensembl_peptide:ENSRNOG00000037261
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "rnorvegicus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME ggallus_gene_ensembl_cdna [
+# Example: seqret biomart:ggallus_gene_ensembl_cdna:ENSGALG00000004924
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ggallus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME ggallus_gene_ensembl_coding [
+# Example: seqret biomart:ggallus_gene_ensembl_coding:ENSGALG00000004924
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ggallus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME ggallus_gene_ensembl_peptide [
+# Example: seqret biomart:ggallus_gene_ensembl_peptide:ENSGALG00000004924
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ggallus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME tbelangeri_gene_ensembl_cdna [
+# Example: seqret biomart:tbelangeri_gene_ensembl_cdna:ENSTBEG00000001769
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "tbelangeri_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME tbelangeri_gene_ensembl_coding [
+# Example: seqret biomart:tbelangeri_gene_ensembl_coding:ENSTBEG00000001769
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "tbelangeri_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME tbelangeri_gene_ensembl_peptide [
+# Example: seqret biomart:tbelangeri_gene_ensembl_peptide:ENSTBEG00000001769
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "tbelangeri_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME xtropicalis_gene_ensembl_cdna [
+# Example: seqret biomart:xtropicalis_gene_ensembl_cdna:ENSXETG00000017493
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "xtropicalis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME xtropicalis_gene_ensembl_coding [
+# Example: seqret biomart:xtropicalis_gene_ensembl_coding:ENSXETG00000017493
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "xtropicalis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME xtropicalis_gene_ensembl_peptide [
+# Example: seqret biomart:xtropicalis_gene_ensembl_peptide:ENSXETG00000017493
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "xtropicalis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME ecaballus_gene_ensembl_cdna [
+# Example: seqret biomart:ecaballus_gene_ensembl_cdna:ENSECAG00000018684
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ecaballus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME ecaballus_gene_ensembl_coding [
+# Example: seqret biomart:ecaballus_gene_ensembl_coding:ENSECAG00000018684
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ecaballus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME ecaballus_gene_ensembl_peptide [
+# Example: seqret biomart:ecaballus_gene_ensembl_peptide:ENSECAG00000018684
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ecaballus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME cjacchus_gene_ensembl_cdna [
+# Example: seqret biomart:cjacchus_gene_ensembl_cdna:ENSCJAG00000014412
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "cjacchus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME cjacchus_gene_ensembl_coding [
+# Example: seqret biomart:cjacchus_gene_ensembl_coding:ENSCJAG00000014412
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "cjacchus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME cjacchus_gene_ensembl_peptide [
+# Example: seqret biomart:cjacchus_gene_ensembl_peptide:ENSCJAG00000014412
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "cjacchus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME pabelii_gene_ensembl_cdna [
+# Example: seqret biomart:pabelii_gene_ensembl_cdna:ENSPPYG00000000069
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "pabelii_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME pabelii_gene_ensembl_coding [
+# Example: seqret biomart:pabelii_gene_ensembl_coding:ENSPPYG00000000069
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "pabelii_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME pabelii_gene_ensembl_peptide [
+# Example: seqret biomart:pabelii_gene_ensembl_peptide:ENSPPYG00000000069
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "pabelii_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME drerio_gene_ensembl_cdna [
+# Example: seqret biomart:drerio_gene_ensembl_cdna:ENSDARG00000058787
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "drerio_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME drerio_gene_ensembl_coding [
+# Example: seqret biomart:drerio_gene_ensembl_coding:ENSDARG00000058787
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "drerio_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME drerio_gene_ensembl_peptide [
+# Example: seqret biomart:drerio_gene_ensembl_peptide:ENSDARG00000058787
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "drerio_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME stridecemlineatus_gene_ensembl_cdna [
+# Example: seqret biomart:stridecemlineatus_gene_ensembl_cdna:ENSSTOG00000002889
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "stridecemlineatus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME stridecemlineatus_gene_ensembl_coding [
+# Example: seqret biomart:stridecemlineatus_gene_ensembl_coding:ENSSTOG00000002889
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "stridecemlineatus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME stridecemlineatus_gene_ensembl_peptide [
+# Example: seqret biomart:stridecemlineatus_gene_ensembl_peptide:ENSSTOG00000002889
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "stridecemlineatus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME tnigroviridis_gene_ensembl_cdna [
+# Example: seqret biomart:tnigroviridis_gene_ensembl_cdna:ENSTNIG00000003074
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "tnigroviridis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME tnigroviridis_gene_ensembl_coding [
+# Example: seqret biomart:tnigroviridis_gene_ensembl_coding:ENSTNIG00000003074
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "tnigroviridis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME tnigroviridis_gene_ensembl_peptide [
+# Example: seqret biomart:tnigroviridis_gene_ensembl_peptide:ENSTNIG00000003074
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "tnigroviridis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME ttruncatus_gene_ensembl_cdna [
+# Example: seqret biomart:ttruncatus_gene_ensembl_cdna:ENSTTRG00000004153
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ttruncatus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME ttruncatus_gene_ensembl_coding [
+# Example: seqret biomart:ttruncatus_gene_ensembl_coding:ENSTTRG00000004153
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ttruncatus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME ttruncatus_gene_ensembl_peptide [
+# Example: seqret biomart:ttruncatus_gene_ensembl_peptide:ENSTTRG00000004153
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ttruncatus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME scerevisiae_transcript_ensembl_peptide [
+# Example: seqret biomart:scerevisiae_transcript_ensembl_peptide:YBR020W
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "scerevisiae_gene_ensembl"
+  identifier: "ensembl_transcript_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: ""
+]
+
+
+
+
+DBNAME amelanoleuca_gene_ensembl_cdna [
+# Example: seqret biomart:amelanoleuca_gene_ensembl_cdna:ENSAMEG00000016262
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "amelanoleuca_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME amelanoleuca_gene_ensembl_coding [
+# Example: seqret biomart:amelanoleuca_gene_ensembl_coding:ENSAMEG00000016262
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "amelanoleuca_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME amelanoleuca_gene_ensembl_peptide [
+# Example: seqret biomart:amelanoleuca_gene_ensembl_peptide:ENSAMEG00000016262
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "amelanoleuca_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME mmulatta_gene_ensembl_cdna [
+# Example: seqret biomart:mmulatta_gene_ensembl_cdna:ENSMMUG00000013751
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mmulatta_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME mmulatta_gene_ensembl_coding [
+# Example: seqret biomart:mmulatta_gene_ensembl_coding:ENSMMUG00000013751
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mmulatta_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME mmulatta_gene_ensembl_peptide [
+# Example: seqret biomart:mmulatta_gene_ensembl_peptide:ENSMMUG00000013751
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mmulatta_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME pvampyrus_gene_ensembl_cdna [
+# Example: seqret biomart:pvampyrus_gene_ensembl_cdna:ENSPVAG00000004434
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "pvampyrus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME pvampyrus_gene_ensembl_coding [
+# Example: seqret biomart:pvampyrus_gene_ensembl_coding:ENSPVAG00000004434
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "pvampyrus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME pvampyrus_gene_ensembl_peptide [
+# Example: seqret biomart:pvampyrus_gene_ensembl_peptide:ENSPVAG00000004434
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "pvampyrus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME mdomestica_gene_ensembl_cdna [
+# Example: seqret biomart:mdomestica_gene_ensembl_cdna:ENSMODG00000018859
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mdomestica_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME mdomestica_gene_ensembl_coding [
+# Example: seqret biomart:mdomestica_gene_ensembl_coding:ENSMODG00000018859
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mdomestica_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME mdomestica_gene_ensembl_peptide [
+# Example: seqret biomart:mdomestica_gene_ensembl_peptide:ENSMODG00000018859
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mdomestica_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME vpacos_gene_ensembl_cdna [
+# Example: seqret biomart:vpacos_gene_ensembl_cdna:ENSVPAG00000003637
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "vpacos_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME vpacos_gene_ensembl_coding [
+# Example: seqret biomart:vpacos_gene_ensembl_coding:ENSVPAG00000003637
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "vpacos_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME vpacos_gene_ensembl_peptide [
+# Example: seqret biomart:vpacos_gene_ensembl_peptide:ENSVPAG00000003637
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "vpacos_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME acarolinensis_gene_ensembl_cdna [
+# Example: seqret biomart:acarolinensis_gene_ensembl_cdna:ENSACAG00000016065
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "acarolinensis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME acarolinensis_gene_ensembl_coding [
+# Example: seqret biomart:acarolinensis_gene_ensembl_coding:ENSACAG00000016065
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "acarolinensis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME acarolinensis_gene_ensembl_peptide [
+# Example: seqret biomart:acarolinensis_gene_ensembl_peptide:ENSACAG00000016065
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "acarolinensis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME tsyrichta_gene_ensembl_cdna [
+# Example: seqret biomart:tsyrichta_gene_ensembl_cdna:ENSTSYG00000001848
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "tsyrichta_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME tsyrichta_gene_ensembl_coding [
+# Example: seqret biomart:tsyrichta_gene_ensembl_coding:ENSTSYG00000001848
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "tsyrichta_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME tsyrichta_gene_ensembl_peptide [
+# Example: seqret biomart:tsyrichta_gene_ensembl_peptide:ENSTSYG00000001848
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "tsyrichta_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME ogarnettii_gene_ensembl_cdna [
+# Example: seqret biomart:ogarnettii_gene_ensembl_cdna:ENSOGAG00000002058
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ogarnettii_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME ogarnettii_gene_ensembl_coding [
+# Example: seqret biomart:ogarnettii_gene_ensembl_coding:ENSOGAG00000002058
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ogarnettii_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME ogarnettii_gene_ensembl_peptide [
+# Example: seqret biomart:ogarnettii_gene_ensembl_peptide:ENSOGAG00000002058
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ogarnettii_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME trubripes_gene_ensembl_cdna [
+# Example: seqret biomart:trubripes_gene_ensembl_cdna:ENSTRUG00000011365
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "trubripes_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME trubripes_gene_ensembl_coding [
+# Example: seqret biomart:trubripes_gene_ensembl_coding:ENSTRUG00000011365
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "trubripes_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME trubripes_gene_ensembl_peptide [
+# Example: seqret biomart:trubripes_gene_ensembl_peptide:ENSTRUG00000011365
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "trubripes_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME dmelanogaster_transcript_ensembl_peptide [
+# Example: seqret biomart:dmelanogaster_transcript_ensembl_peptide:FBtr0075338
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "dmelanogaster_gene_ensembl"
+  identifier: "ensembl_transcript_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: ""
+]
+
+
+
+
+DBNAME eeuropaeus_gene_ensembl_cdna [
+# Example: seqret biomart:eeuropaeus_gene_ensembl_cdna:ENSEEUG00000005466
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "eeuropaeus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME eeuropaeus_gene_ensembl_coding [
+# Example: seqret biomart:eeuropaeus_gene_ensembl_coding:ENSEEUG00000005466
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "eeuropaeus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME eeuropaeus_gene_ensembl_peptide [
+# Example: seqret biomart:eeuropaeus_gene_ensembl_peptide:ENSEEUG00000005466
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "eeuropaeus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME mmurinus_gene_ensembl_cdna [
+# Example: seqret biomart:mmurinus_gene_ensembl_cdna:ENSMICG00000003465
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mmurinus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME mmurinus_gene_ensembl_coding [
+# Example: seqret biomart:mmurinus_gene_ensembl_coding:ENSMICG00000003465
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mmurinus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME mmurinus_gene_ensembl_peptide [
+# Example: seqret biomart:mmurinus_gene_ensembl_peptide:ENSMICG00000003465
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mmurinus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME olatipes_gene_ensembl_cdna [
+# Example: seqret biomart:olatipes_gene_ensembl_cdna:ENSORLG00000000827
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "olatipes_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME olatipes_gene_ensembl_coding [
+# Example: seqret biomart:olatipes_gene_ensembl_coding:ENSORLG00000000827
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "olatipes_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME olatipes_gene_ensembl_peptide [
+# Example: seqret biomart:olatipes_gene_ensembl_peptide:ENSORLG00000000827
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "olatipes_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME etelfairi_gene_ensembl_cdna [
+# Example: seqret biomart:etelfairi_gene_ensembl_cdna:ENSETEG00000017780
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "etelfairi_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME etelfairi_gene_ensembl_coding [
+# Example: seqret biomart:etelfairi_gene_ensembl_coding:ENSETEG00000017780
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "etelfairi_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME etelfairi_gene_ensembl_peptide [
+# Example: seqret biomart:etelfairi_gene_ensembl_peptide:ENSETEG00000017780
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "etelfairi_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME cintestinalis_gene_ensembl_cdna [
+# Example: seqret biomart:cintestinalis_gene_ensembl_cdna:ENSCING00000001265
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "cintestinalis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME cintestinalis_gene_ensembl_coding [
+# Example: seqret biomart:cintestinalis_gene_ensembl_coding:ENSCING00000001265
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "cintestinalis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME cintestinalis_gene_ensembl_peptide [
+# Example: seqret biomart:cintestinalis_gene_ensembl_peptide:ENSCING00000001265
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "cintestinalis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME ptroglodytes_gene_ensembl_cdna [
+# Example: seqret biomart:ptroglodytes_gene_ensembl_cdna:ENSPTRG00000002165
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ptroglodytes_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME ptroglodytes_gene_ensembl_coding [
+# Example: seqret biomart:ptroglodytes_gene_ensembl_coding:ENSPTRG00000002165
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ptroglodytes_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME ptroglodytes_gene_ensembl_peptide [
+# Example: seqret biomart:ptroglodytes_gene_ensembl_peptide:ENSPTRG00000002165
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ptroglodytes_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME oprinceps_gene_ensembl_cdna [
+# Example: seqret biomart:oprinceps_gene_ensembl_cdna:ENSOPRG00000008794
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "oprinceps_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME oprinceps_gene_ensembl_coding [
+# Example: seqret biomart:oprinceps_gene_ensembl_coding:ENSOPRG00000008794
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "oprinceps_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME oprinceps_gene_ensembl_peptide [
+# Example: seqret biomart:oprinceps_gene_ensembl_peptide:ENSOPRG00000008794
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "oprinceps_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME ggorilla_gene_ensembl_cdna [
+# Example: seqret biomart:ggorilla_gene_ensembl_cdna:ENSGGOG00000016636
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ggorilla_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME ggorilla_gene_ensembl_coding [
+# Example: seqret biomart:ggorilla_gene_ensembl_coding:ENSGGOG00000016636
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ggorilla_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME ggorilla_gene_ensembl_peptide [
+# Example: seqret biomart:ggorilla_gene_ensembl_peptide:ENSGGOG00000016636
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ggorilla_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME dordii_gene_ensembl_cdna [
+# Example: seqret biomart:dordii_gene_ensembl_cdna:ENSDORG00000007833
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "dordii_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME dordii_gene_ensembl_coding [
+# Example: seqret biomart:dordii_gene_ensembl_coding:ENSDORG00000007833
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "dordii_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME dordii_gene_ensembl_peptide [
+# Example: seqret biomart:dordii_gene_ensembl_peptide:ENSDORG00000007833
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "dordii_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME nleucogenys_gene_ensembl_cdna [
+# Example: seqret biomart:nleucogenys_gene_ensembl_cdna:ENSNLEG00000002362
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "nleucogenys_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME nleucogenys_gene_ensembl_coding [
+# Example: seqret biomart:nleucogenys_gene_ensembl_coding:ENSNLEG00000002362
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "nleucogenys_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME nleucogenys_gene_ensembl_peptide [
+# Example: seqret biomart:nleucogenys_gene_ensembl_peptide:ENSNLEG00000002362
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "nleucogenys_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME sscrofa_gene_ensembl_cdna [
+# Example: seqret biomart:sscrofa_gene_ensembl_cdna:ENSSSCG00000010358
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "sscrofa_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME sscrofa_gene_ensembl_coding [
+# Example: seqret biomart:sscrofa_gene_ensembl_coding:ENSSSCG00000010358
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "sscrofa_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME sscrofa_gene_ensembl_peptide [
+# Example: seqret biomart:sscrofa_gene_ensembl_peptide:ENSSSCG00000010358
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "sscrofa_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME mmusculus_gene_ensembl_cdna [
+# Example: seqret biomart:mmusculus_gene_ensembl_cdna:ENSMUSG00000026525
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mmusculus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME mmusculus_gene_ensembl_coding [
+# Example: seqret biomart:mmusculus_gene_ensembl_coding:ENSMUSG00000026525
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mmusculus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME mmusculus_gene_ensembl_peptide [
+# Example: seqret biomart:mmusculus_gene_ensembl_peptide:ENSMUSG00000026525
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mmusculus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME ocuniculus_gene_ensembl_cdna [
+# Example: seqret biomart:ocuniculus_gene_ensembl_cdna:ENSOCUG00000007707
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ocuniculus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME ocuniculus_gene_ensembl_coding [
+# Example: seqret biomart:ocuniculus_gene_ensembl_coding:ENSOCUG00000007707
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ocuniculus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME ocuniculus_gene_ensembl_peptide [
+# Example: seqret biomart:ocuniculus_gene_ensembl_peptide:ENSOCUG00000007707
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "ocuniculus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME mgallopavo_gene_ensembl_cdna [
+# Example: seqret biomart:mgallopavo_gene_ensembl_cdna:ENSMGAG00000011545
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mgallopavo_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME mgallopavo_gene_ensembl_coding [
+# Example: seqret biomart:mgallopavo_gene_ensembl_coding:ENSMGAG00000011545
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mgallopavo_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME mgallopavo_gene_ensembl_peptide [
+# Example: seqret biomart:mgallopavo_gene_ensembl_peptide:ENSMGAG00000011545
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mgallopavo_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME saraneus_gene_ensembl_cdna [
+# Example: seqret biomart:saraneus_gene_ensembl_cdna:ENSSARG00000012550
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "saraneus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME saraneus_gene_ensembl_coding [
+# Example: seqret biomart:saraneus_gene_ensembl_coding:ENSSARG00000012550
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "saraneus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME saraneus_gene_ensembl_peptide [
+# Example: seqret biomart:saraneus_gene_ensembl_peptide:ENSSARG00000012550
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "saraneus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME dnovemcinctus_gene_ensembl_cdna [
+# Example: seqret biomart:dnovemcinctus_gene_ensembl_cdna:ENSDNOG00000005328
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "dnovemcinctus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME dnovemcinctus_gene_ensembl_coding [
+# Example: seqret biomart:dnovemcinctus_gene_ensembl_coding:ENSDNOG00000005328
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "dnovemcinctus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME dnovemcinctus_gene_ensembl_peptide [
+# Example: seqret biomart:dnovemcinctus_gene_ensembl_peptide:ENSDNOG00000005328
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "dnovemcinctus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME pcapensis_gene_ensembl_cdna [
+# Example: seqret biomart:pcapensis_gene_ensembl_cdna:ENSPCAG00000002674
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "pcapensis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME pcapensis_gene_ensembl_coding [
+# Example: seqret biomart:pcapensis_gene_ensembl_coding:ENSPCAG00000002674
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "pcapensis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME pcapensis_gene_ensembl_peptide [
+# Example: seqret biomart:pcapensis_gene_ensembl_peptide:ENSPCAG00000002674
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "pcapensis_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME btaurus_gene_ensembl_cdna [
+# Example: seqret biomart:btaurus_gene_ensembl_cdna:ENSBTAG00000020299
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "btaurus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME btaurus_gene_ensembl_coding [
+# Example: seqret biomart:btaurus_gene_ensembl_coding:ENSBTAG00000020299
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "btaurus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME btaurus_gene_ensembl_peptide [
+# Example: seqret biomart:btaurus_gene_ensembl_peptide:ENSBTAG00000020299
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "btaurus_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME meugenii_gene_ensembl_cdna [
+# Example: seqret biomart:meugenii_gene_ensembl_cdna:ENSMEUG00000011959
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "meugenii_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME meugenii_gene_ensembl_coding [
+# Example: seqret biomart:meugenii_gene_ensembl_coding:ENSMEUG00000011959
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "meugenii_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME meugenii_gene_ensembl_peptide [
+# Example: seqret biomart:meugenii_gene_ensembl_peptide:ENSMEUG00000011959
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "meugenii_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+
+
+DBNAME cfamiliaris_gene_ensembl_cdna [
+# Example: seqret biomart:cfamiliaris_gene_ensembl_cdna:ENSCAFG00000001626
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "cfamiliaris_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "cdna"
+  return: ""
+]
+
+DBNAME cfamiliaris_gene_ensembl_coding [
+# Example: seqret biomart:cfamiliaris_gene_ensembl_coding:ENSCAFG00000001626
+  type: "Nucleotide"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "cfamiliaris_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "coding"
+  return: ""
+]
+
+DBNAME cfamiliaris_gene_ensembl_peptide [
+# Example: seqret biomart:cfamiliaris_gene_ensembl_peptide:ENSCAFG00000001626
+# Returns transcript ID as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "cfamiliaris_gene_ensembl"
+  identifier: "ensembl_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "ensembl_transcript_id"
+]
+
+
+# Vega database examples returning descriptions
+
+
+DBNAME hsapiens_gene_vega_peptide [
+# Example: seqret biomart:hsapiens_gene_vega_peptide:OTTHUMG00000023680
+# Returns transcript ID and description as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "hsapiens_gene_vega"
+  identifier: "vega_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "vega_transcript_id,description"
+]
+
+
+
+
+DBNAME mmusculus_gene_vega_peptide [
+# Example: seqret biomart:mmusculus_gene_vega_peptide:OTTMUSG00000015970
+# Returns transcript ID and description as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "mmusculus_gene_vega"
+  identifier: "vega_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "vega_transcript_id,description"
+]
+
+
+
+
+DBNAME drerio_gene_vega_peptide [
+# Example: seqret biomart:drerio_gene_vega_peptide:OTTDARG00000008479
+# Returns transcript ID and description as well as the identifier
+  type: "Protein"
+  format: "biomart"
+  url: 	  "http://www.biomart.org:80/biomart/martservice"
+  dbalias: "drerio_gene_vega"
+  identifier: "vega_gene_id"
+  hasaccession: "N"
+  field: ""
+  sequence: "peptide"
+  return: "vega_transcript_id,description"
+]
+
+
+
+

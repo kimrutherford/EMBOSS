@@ -1,0 +1,139 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: isdbdata
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+isdbdata
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/isdbdata.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p><b>isdbdata</b> checks whether a supplied string is the name of a known data type or data identifier according to the EDAM ontology.  An informative message is written to screen.  Optionally it will write to file the EDAM term statement with a name that matches the supplied string.</p>
+<p>Only the EDAM 'data' branch (data type or identifier) is checked.  The EDAM ontology in the EMBOSS data file <kbd>edam.obo</kbd> is used.</p>
+
+
+
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/isdbdata.usage" -->
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/isdbdata.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/isdbdata.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+<p>
+<!--#include file="inc/isdbdata.input" -->
+
+
+<H2>
+    Output file format
+</H2>
+
+<p>If an output file is specified, the entire OBO term statement from the EDAM ontology will be written to file in OBO plain text format as used by the EMBOSS data file <kbd>edam.obo</kbd> and explained at http://www.geneontology.org/GO.format.obo-1_2.shtml.</p>
+
+
+
+<p>
+<!--#include file="inc/isdbdata.output" -->
+
+<H2>
+    Data files
+</H2>
+<p>The EDAM ontology (<kbd>edam.obo</kbd>) must be installed in the EMBOSS data directory and indexed. This is done automatically for typical installations.</p>
+        
+<H2>
+    Notes
+</H2>
+
+
+
+<H2>
+    References
+</H2>
+
+  
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<!--#include file="inc/isdbdata.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/jison.address" -->
+
+
+
+<p>
+
+This application was modified by 
+<!--#include file="inc/jison.address" -->
+
+<H2>
+    History
+</H2>
+
+<!--#include file="inc/isdbdata.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/isdbdata.comment" -->
+
+</BODY>
+</HTML>
+

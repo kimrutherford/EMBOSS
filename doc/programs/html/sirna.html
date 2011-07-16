@@ -93,7 +93,7 @@ for each input sequence:
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with sirna</b>
+Here is a sample session with <b>sirna</b>
 <p>
 
 <p>
@@ -135,7 +135,7 @@ output sequence(s) [x65923.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Finds siRNA duplexes in mRNA
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -155,6 +155,7 @@ Version: EMBOSS:6.3.0
                                   report with the first two bases in
                                   brackets. These first two bases do not form
                                   part of the siRNA probe to be ordered.
+                                  (default -rformat table)
   [-outseq]            seqoutall  [<sequence>.<format>] This is a file of the
                                   sequences of the 23 base regions that the
                                   siRNAs are selected from. You may use it to
@@ -290,7 +291,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>The output is a table of the forward and reverse parts of the 21 base siRNA duplex. Both the forward and reverse sequences are written 5' to 3', ready to be ordered. The last two bases have been replaced by 'dTdT'. The starting position of the 23 base region and the %GC content is also given. If you wish to see the complete 23 base sequence, then either look at the sequence in the other output file, or use the qualifier '-context' which will display the 23 bases of the forward sequence in this report with the first two bases in brackets. These first two bases do not form part of the siRNA probe to be ordered.</td>
-<td>Report output file</td>
+<td>(default -rformat table)</td>
 <td><i>&lt;*&gt;</i>.sirna</td>
 </tr>
 
@@ -759,7 +760,33 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>sirna</b> reads any normal sequence USAs.
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
 
 <p>
 
@@ -869,10 +896,11 @@ The output is a standard EMBOSS report file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
 
 <p>
 
@@ -885,7 +913,7 @@ for further information on report formats.
 <p>
 
 <b>sirna</b> 
-outputs a report format file. The default format is 'table'
+outputs a report format file. The default format is 'table'.
 
 <p>
 
@@ -897,7 +925,7 @@ outputs a report format file. The default format is 'table'
 <pre>
 ########################################
 # Program: sirna
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: sirna
 #    -sequence tembl:x65923
 # Report_format: table
@@ -1120,7 +1148,7 @@ taaaaaagccacttagttcagtc
 <pre>
 ########################################
 # Program: sirna
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: sirna
 #    -context
 #    -sequence tembl:x65923
@@ -1360,38 +1388,18 @@ None.
 </tr>
 
 <tr>
-<td><a href="chaos.html">chaos</a></td>
-<td>Draw a chaos game representation plot for a nucleotide sequence</td>
+<td><a href="einverted.html">einverted</a></td>
+<td>Finds inverted repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
-<td><a href="compseq.html">compseq</a></td>
-<td>Calculate the composition of unique words in sequences</td>
+<td><a href="marscan.html">marscan</a></td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>
-<td><a href="dan.html">dan</a></td>
-<td>Calculates nucleic acid melting temperature</td>
-</tr>
-
-<tr>
-<td><a href="density.html">density</a></td>
-<td>Draw a nucleic acid density plot</td>
-</tr>
-
-<tr>
-<td><a href="freak.html">freak</a></td>
-<td>Generate residue/base frequency table or plot</td>
-</tr>
-
-<tr>
-<td><a href="isochore.html">isochore</a></td>
-<td>Plots isochores in DNA sequences</td>
-</tr>
-
-<tr>
-<td><a href="wordcount.html">wordcount</a></td>
-<td>Count and extract unique words in molecular sequence(s)</td>
+<td><a href="trimest.html">trimest</a></td>
+<td>Remove poly-A tails from nucleotide sequences</td>
 </tr>
 
 </table>

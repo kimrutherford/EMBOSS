@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     AjBool    ignorebz    = ajTrue;
     ajulong   count       = 0;
     AjPStr    dispseq     = NULL;
-    AjPStr    ajb         = NULL;
+    const AjPStr ajb      = NULL;
     ajulong   total       = 0;
     ajulong   other       = 0;
     AjBool    otherflag; 
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
     /* Output some documentation to the results file */
     ajFmtPrintF(outfile, "#\n# Output from 'oddcomp'\n#\n");
     ajFmtPrintF(outfile, "# The Expected frequencies are taken from the "
-		"file: %s\n", ajFileGetNameC(compdata));
+		"file: %s\n", ajFileGetPrintnameC(compdata));
 
     /* read the required frequencies into a table */
     oddcomp_readexpfreq(&exptable, compdata, &word);
@@ -172,10 +172,10 @@ int main(int argc, char **argv)
 	    **  to it
 	    */
 	    embNmerInt2prot(&dispseq, word, count, ignorebz);
-	    ajb=ajTableFetch(exptable, dispseq);
+	    ajb=ajTableFetchS(exptable, dispseq);
 
 	    if(ajb)
-		ajStrToLong( ajb, &exp_freq);
+		ajStrToLong(ajb, &exp_freq);
 	    else
 		exp_freq = 0;
 
@@ -366,7 +366,7 @@ static ajint oddcomp_readexpfreq(AjPTable *exptable, AjPFile compdata,
 
     /* initialise the hash table - use case-insensitive comparison */
 
-    *exptable = ajTablestrNewCaseLen(350);
+    *exptable = ajTablestrNewCase(350);
 
 
 

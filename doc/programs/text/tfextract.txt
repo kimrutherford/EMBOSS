@@ -38,7 +38,7 @@ Transfac database sites file: site.dat
 Command line arguments
 
 Process TRANSFAC transcription factor database for use by tfscan
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Transfac database sites file

@@ -31,9 +31,376 @@ static AjPStr embindexPrefix    = NULL;
 static AjPStr embindexFormat    = NULL;
 static AjPStrTok embindexHandle = NULL;
 
+static AjPBtPri indexPriobj = NULL;
+static AjPBtHybrid indexHyb = NULL;
 
 static AjPFile btreeCreateFile(const AjPStr idirectory, const AjPStr dbname,
 			       const char *add);
+
+
+
+
+/* @func embBtreeIndexEntry ***************************************************
+**
+** Add a term to an index entry cache
+**
+** @param [u] entry [EmbPBtreeEntry] Entry with id
+** @param [r] dbno [ajuint] Database number for an identifier index field
+** @return [void]
+** @@
+******************************************************************************/
+
+void embBtreeIndexEntry(EmbPBtreeEntry entry,
+                        ajuint dbno)
+{
+    if(!indexHyb)
+        indexHyb = ajBtreeHybNew();
+
+    if(entry->do_id)
+    {
+        if(ajStrGetLen(entry->id) > entry->idlen)
+        {
+            if(ajStrGetLen(entry->id) > entry->idmaxlen)
+            {
+                ajWarn("id '%S' too long (%u), truncating to idlen %d",
+                       entry->id, ajStrGetLen(entry->id), entry->idlen);
+                entry->idmaxlen = ajStrGetLen(entry->id);
+                ajStrAssignS(&entry->maxid, entry->id);
+            }
+            entry->idtruncate++;
+            ajStrTruncateLen(&entry->id,entry->idlen);
+        }
+    
+        ajStrAssignS(&indexHyb->key1,entry->id);
+        indexHyb->dbno = dbno;
+        indexHyb->offset = entry->fpos;
+        indexHyb->refoffset = entry->reffpos;
+        indexHyb->dups = 0;
+        ajBtreeHybInsertId(entry->idcache,indexHyb);
+    }
+
+    return;
+}
+
+
+
+
+/* @func embBtreeIndexField **************************************************
+**
+** Add a term to an index field cache
+**
+** @param [u] field [EmbPBtreeField] Field with list of data
+** @param [r] entry [const EmbPBtreeEntry] Entry with id
+** @param [r] dbno [ajuint] Database number for an identifier index field
+** @return [void]
+** @@
+******************************************************************************/
+
+void embBtreeIndexField(EmbPBtreeField field,
+                        const EmbPBtreeEntry entry,
+                        ajuint dbno)
+{
+    AjPStr word = NULL;
+
+    if(!indexPriobj)
+        indexPriobj = ajBtreePriNew();
+    if(!indexHyb)
+        indexHyb = ajBtreeHybNew();
+
+    while(ajListPop(field->data,(void **)&word))
+    {
+        if(ajStrGetLen(word) > field->len)
+        {
+            if(ajStrGetLen(word) > field->maxlen)
+            {
+                ajWarn("%S field token '%S' too long (%u), "
+                       "truncating to %Slen %d",
+                       field->name, word, ajStrGetLen(word),
+                       field->name, field->len);
+                field->maxlen = ajStrGetLen(word);
+                ajStrAssignS(&field->maxkey, word);
+            }
+            field->truncate++;
+            ajStrTruncateLen(&word,field->len);
+        }
+
+        if(field->secondary)
+        {
+            ajStrAssignS(&indexPriobj->id,entry->id);
+            ajStrAssignS(&indexPriobj->keyword,word);
+            indexPriobj->treeblock = 0;
+            ajBtreeInsertKeyword(field->cache, indexPriobj);
+        }
+        else 
+        {
+            ajStrAssignS(&indexHyb->key1,word);
+            indexHyb->dbno = dbno;
+            indexHyb->offset = entry->fpos;
+            indexHyb->refoffset = entry->reffpos;
+            indexHyb->dups = 0;
+            ajBtreeHybInsertId(field->cache,indexHyb);
+        }
+        ajStrDel(&word);
+    }
+
+    return;
+}
+
+
+
+
+/* @func embBtreeParseEntry ***************************************************
+**
+** Parse an entry ID from an input record
+**
+** @param [r]readline [const AjPStr] INput record
+** @param [u] regexp [AjPRegexp] Regular expression to extract tokens
+** @param [u] entry [EmbPBtreeEntry] Entry
+** @return [void]
+** @@
+******************************************************************************/
+
+void embBtreeParseEntry(const AjPStr readline, AjPRegexp regexp,
+                        EmbPBtreeEntry entry)
+{
+    if(ajRegExec(regexp, readline))
+    {
+        ajRegSubI(regexp, 1, &entry->id);
+    }
+
+    return;
+}
+
+
+
+
+/* @func embBtreeParseField ***************************************************
+**
+** Parse field tokens from an input record, iterating over a
+** regular expression.
+**
+** @param [r]readline [const AjPStr] Input record
+** @param [u] regexp [AjPRegexp] Regular expression to extract tokens
+** @param [u] field [EmbPBtreeField] Field
+** @return [void]
+** @@
+******************************************************************************/
+
+void embBtreeParseField(const AjPStr readline, AjPRegexp regexp,
+                        EmbPBtreeField field)
+{
+    AjPStr tmpstr = NULL;
+    AjPStr tmpfd = NULL;
+
+    ajStrAssignS(&tmpstr,readline);
+
+    while(ajRegExec(regexp, tmpstr))
+    {
+        ajRegSubI(regexp, 1, &tmpfd);
+        ajRegPost(regexp, &tmpstr);
+
+        if(!ajStrGetLen(tmpfd))
+            continue;
+
+        ajListPush(field->data,ajStrNewS(tmpfd));
+        ajDebug("++%S '%S'\n", field->name, tmpfd);
+    }
+
+    ajStrDel(&tmpstr);
+    ajStrDel(&tmpfd);
+
+    return;
+}
+
+
+
+
+/* @func embBtreeParseFieldSecond *********************************************
+**
+** Parse field tokens from an input record using the first and second
+** matches to a regular expression.
+**
+** @param [r]readline [const AjPStr] Input record
+** @param [u] regexp [AjPRegexp] Regular expression to extract tokens
+** @param [u] field [EmbPBtreeField] Field
+** @return [void]
+** @@
+******************************************************************************/
+
+void embBtreeParseFieldSecond(const AjPStr readline, AjPRegexp regexp,
+                              EmbPBtreeField field)
+{
+    AjPStr tmpfd = NULL;
+
+    if(ajRegExec(regexp, readline))
+    {
+        ajRegSubI(regexp, 1, &tmpfd);
+
+        if(ajStrGetLen(tmpfd))
+        {
+            ajListPush(field->data,ajStrNewS(tmpfd));
+            ajDebug("++%S '%S'\n", field->name, tmpfd);
+        }
+
+        ajRegSubI(regexp,2, &tmpfd);
+
+        if(ajStrGetLen(tmpfd))
+        {
+            ajListPush(field->data,ajStrNewS(tmpfd));
+            ajDebug("++%S '%S'\n", field->name, tmpfd);
+        }
+    }
+
+    ajStrDel(&tmpfd);
+
+    return;
+}
+
+
+
+
+/* @func embBtreeParseFieldThird **********************************************
+**
+** Parse field tokens from an input record using the first and third
+** matches to a regular expression.
+**
+** @param [r]readline [const AjPStr] Input record
+** @param [u] regexp [AjPRegexp] Regular expression to extract tokens
+** @param [u] field [EmbPBtreeField] Field
+** @return [void]
+** @@
+******************************************************************************/
+
+void embBtreeParseFieldThird(const AjPStr readline, AjPRegexp regexp,
+                             EmbPBtreeField field)
+{
+    AjPStr tmpfd = NULL;
+
+    if(ajRegExec(regexp, readline))
+    {
+        ajRegSubI(regexp, 1, &tmpfd);
+
+        if(ajStrGetLen(tmpfd))
+        {
+            ajListPush(field->data,ajStrNewS(tmpfd));
+            ajDebug("++%S '%S'\n", field->name, tmpfd);
+        }
+
+        ajRegSubI(regexp, 3, &tmpfd);
+
+        if(ajStrGetLen(tmpfd))
+        {
+            ajListPush(field->data,ajStrNewS(tmpfd));
+            ajDebug("++%S '%S'\n", field->name, tmpfd);
+        }
+    }
+
+    ajStrDel(&tmpfd);
+
+    return;
+}
+
+
+
+
+/* @func embBtreeParseFieldTrim ***********************************************
+**
+** Parse field tokens from an input record and trim any trailing whitespace,
+** iterating over a regular expression.
+**
+** @param [r]readline [const AjPStr] Input record
+** @param [u] regexp [AjPRegexp] Regular expression to extract tokens
+** @param [u] field [EmbPBtreeField] Field
+** @return [void]
+** @@
+******************************************************************************/
+
+void embBtreeParseFieldTrim(const AjPStr readline, AjPRegexp regexp,
+                            EmbPBtreeField field)
+{
+    AjPStr tmpstr = NULL;
+    AjPStr tmpfd = NULL;
+
+    ajStrAssignS(&tmpstr,readline);
+
+    while(ajRegExec(regexp, tmpstr))
+    {
+        ajRegSubI(regexp, 1, &tmpfd);
+        ajRegPost(regexp, &tmpstr);
+
+        ajStrTrimWhiteEnd(&tmpfd);
+        if(!ajStrGetLen(tmpfd))
+            continue;
+
+        ajListPush(field->data,ajStrNewS(tmpfd));
+        ajDebug("++%S '%S'\n", field->name, tmpfd);
+    }
+
+    ajStrDel(&tmpstr);
+    ajStrDel(&tmpfd);
+
+    return;
+}
+
+
+
+
+/* @func embBtreeReportEntry **************************************************
+**
+** Report on indexing of entries
+**
+** @param [u] outf [AjPFile] Output file
+** @param [r] entry [const EmbPBtreeEntry] Entry
+**
+** @return [void]
+******************************************************************************/
+
+void embBtreeReportEntry(AjPFile outf, const EmbPBtreeEntry entry)
+{
+    if(entry->idmaxlen > entry->idlen)
+    {
+        ajFmtPrintF(outf,
+                    "Entry idlen %u truncated %u IDs. "
+                    "Maximum ID length was %u.",
+                    entry->idlen, entry->idtruncate, entry->idmaxlen);
+
+        ajWarn("Entry idlen truncated %u IDs. Maximum ID length was %u.",
+               entry->idtruncate, entry->idmaxlen);
+    }
+
+    return;
+}
+
+
+
+
+/* @func embBtreeReportField **************************************************
+**
+** Report on indexing of field
+**
+** @param [u] outf [AjPFile] Output file
+** @param [r] field [const EmbPBtreeField] Field
+**
+** @return [void]
+******************************************************************************/
+
+void embBtreeReportField(AjPFile outf, const EmbPBtreeField field)
+{
+    if(field->maxlen > field->len)
+    {
+        ajFmtPrintF(outf,
+                    "Field %S %Slen %u truncated %u terms. "
+                    "Maximum %S term length was %u for '%S'.\n",
+                    field->name, field->name, field->len, field->truncate,
+                    field->name, field->maxlen, field->maxkey);
+        ajWarn("Field %S %Slen %u truncated %u terms. "
+               "Maximum %S term length was %u for '%S'.",
+               field->name, field->name, field->len, field->truncate,
+               field->name, field->maxlen, field->maxkey);
+    }
+
+    return;
+}
 
 
 
@@ -305,8 +672,9 @@ void embBtreeEmblDE(const AjPStr deline, AjPList delist, ajuint maxlen)
 
     while(ajStrTokenNextParse(&handle,&token))
     {
-	ajStrTrimEndC(&token,".");
 	ajStrTrimWhite(&token);
+	ajStrTrimEndC(&token,".,:'\"");
+	ajStrTrimStartC(&token,"'\"");
 
 	if(ajStrGetLen(token))
 	{
@@ -777,8 +1145,11 @@ static AjPFile btreeCreateFile(const AjPStr idirectory, const AjPStr dbname,
 
     filename = ajStrNew();
 
-    ajFmtPrintS(&filename,"%S%s%S%s",idirectory,SLASH_STRING,dbname,add);
-    
+    if(!ajStrGetLen(idirectory))
+        ajFmtPrintS(&filename,"%S%s",dbname,add);
+    else
+        ajFmtPrintS(&filename,"%S%s%S%s",idirectory,SLASH_STRING,dbname,add);
+
     fp =  ajFileNewOutNameS(filename);
 
     ajStrDel(&filename);
@@ -804,11 +1175,6 @@ EmbPBtreeEntry embBtreeEntryNew(void)
     AJNEW0(thys);
 
     thys->do_id          = ajFalse;
-    thys->do_accession   = ajFalse;
-    thys->do_sv          = ajFalse;
-    thys->do_keyword     = ajFalse;
-    thys->do_taxonomy    = ajFalse;
-    thys->do_description = ajFalse;
 
     thys->dbname  = ajStrNew();
     thys->dbrs    = ajStrNew();
@@ -818,16 +1184,13 @@ EmbPBtreeEntry embBtreeEntryNew(void)
 
     thys->directory  = ajStrNew();
     thys->idirectory = ajStrNew();
+    thys->idextension = ajStrNew();
+    thys->maxid       = ajStrNew();
     
     thys->files    = ajListNew();
     thys->reffiles = ajListNew();
 
     thys->id = ajStrNew();
-    thys->ac = ajListNew();
-    thys->de = ajListNew();
-    thys->sv = ajListNew();
-    thys->kw = ajListNew();
-    thys->tx = ajListNew();
 
     return thys;
 }
@@ -847,11 +1210,14 @@ EmbPBtreeEntry embBtreeEntryNew(void)
 void embBtreeEntryDel(EmbPBtreeEntry* thys)
 {
     EmbPBtreeEntry pthis;
+    EmbPBtreeField field;
     AjPStr tmpstr = NULL;
     
     pthis = *thys;
 
     ajStrDel(&pthis->dbname);
+    ajStrDel(&pthis->idextension);
+    ajStrDel(&pthis->maxid);
     ajStrDel(&pthis->dbrs);
     ajStrDel(&pthis->date);
     ajStrDel(&pthis->release);
@@ -871,12 +1237,12 @@ void embBtreeEntryDel(EmbPBtreeEntry* thys)
 
     ajListFree(&pthis->reffiles);
 
+    while(ajListPop(pthis->fields,(void **)&field))
+	embBtreeFieldDel(&field);
+
+    ajListFree(&pthis->fields);
+
     ajStrDel(&pthis->id);
-    ajListFree(&pthis->ac);
-    ajListFree(&pthis->de);
-    ajListFree(&pthis->sv);
-    ajListFree(&pthis->kw);
-    ajListFree(&pthis->tx);
 
     *thys = NULL;
     AJFREE(pthis);
@@ -887,7 +1253,27 @@ void embBtreeEntryDel(EmbPBtreeEntry* thys)
 
 
 
-/* @func embBtreeSetFields ***********************************************
+/* @func embBtreeEntrySetCompressed *******************************************
+**
+** Set database entry to be compressed on writing
+**
+** @param [u] entry [EmbPBtreeEntry] Database entry information
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void embBtreeEntrySetCompressed(EmbPBtreeEntry entry)
+{
+    entry->compressed = ajTrue;
+
+    return;
+}
+
+
+
+
+/* @func embBtreeSetFields ****************************************************
 **
 ** Set database fields to index
 **
@@ -901,33 +1287,24 @@ void embBtreeEntryDel(EmbPBtreeEntry* thys)
 ajuint embBtreeSetFields(EmbPBtreeEntry entry, AjPStr const *fields)
 {
     ajuint nfields;
-
+    EmbPBtreeField field = NULL;
 
     nfields = 0;
+
+    if(!entry->fields)
+        entry->fields = ajListNew();
 
     while(fields[nfields])
     {
 	if(ajStrMatchCaseC(fields[nfields], "id"))
 	    entry->do_id = ajTrue;
 
-	else if(ajStrMatchCaseC(fields[nfields], "acc"))
-	    entry->do_accession = ajTrue;
-
-	else if(ajStrMatchCaseC(fields[nfields], "sv"))
-	    entry->do_sv = ajTrue;
-
-	else if(ajStrMatchCaseC(fields[nfields], "des"))
-	    entry->do_description = ajTrue;
-
-	else if(ajStrMatchCaseC(fields[nfields], "key"))
-	    entry->do_keyword = ajTrue;
-
-	else if(ajStrMatchCaseC(fields[nfields], "org"))
-	    entry->do_taxonomy = ajTrue;
-
 	else
-	    ajWarn("Parsing unknown field '%S': ignored",
-		   fields[nfields]);
+        {
+            field = embBtreeFieldNewS(fields[nfields]);
+            ajListPushAppend(entry->fields, field);
+            field = NULL;
+        }
 	++nfields;
     }
     
@@ -961,6 +1338,7 @@ void embBtreeSetDbInfo(EmbPBtreeEntry entry, const AjPStr name,
 		       const AjPStr idirectory)
 {
     ajStrAssignS(&entry->dbname, name);
+    ajStrAssignC(&entry->idextension, "xid");
     ajStrAssignS(&entry->date, date);
     ajStrAssignS(&entry->release, release);
     ajStrAssignS(&entry->dbtype, type);
@@ -970,6 +1348,86 @@ void embBtreeSetDbInfo(EmbPBtreeEntry entry, const AjPStr name,
     ajStrAssignS(&entry->idirectory,idirectory);
 
     return;
+}
+
+
+
+
+/* @func embBtreeGetFieldC ***********************************************
+**
+** Set database fields to index
+**
+** @param [w] entry [EmbPBtreeEntry] Database entry information
+** @param [r] nametxt [const char*] Field name
+**
+** @return [EmbPBtreeField] Btree index field definition
+** @@
+******************************************************************************/
+
+EmbPBtreeField embBtreeGetFieldC(EmbPBtreeEntry entry, const char * nametxt)
+{
+    EmbPBtreeField ret = NULL;
+    EmbPBtreeField field = NULL;
+
+    AjIList iter;
+
+    if(!ajListGetLength(entry->fields))
+        return NULL;
+
+    iter = ajListIterNewread(entry->fields);
+    while(!ajListIterDone(iter))
+    {
+        field = ajListIterGet(iter);
+        if(ajStrMatchC(field->name, nametxt))
+        {
+            ret = field;
+            break;
+        }
+    }
+
+    ajListIterDel(&iter);
+
+    return ret;
+}
+
+
+
+
+/* @func embBtreeGetFieldS ***********************************************
+**
+** Set database fields to index
+**
+** @param [w] entry [EmbPBtreeEntry] Database entry information
+** @param [r] name [const AjPStr] Field name
+**
+** @return [EmbPBtreeField] Btree index field definition
+** @@
+******************************************************************************/
+
+EmbPBtreeField embBtreeGetFieldS(EmbPBtreeEntry entry, const AjPStr name)
+{
+    EmbPBtreeField ret = NULL;
+    EmbPBtreeField field = NULL;
+
+    AjIList iter;
+
+    if(!ajListGetLength(entry->fields))
+        return NULL;
+
+    iter = ajListIterNewread(entry->fields);
+    while(!ajListIterDone(iter))
+    {
+        field = ajListIterGet(iter);
+        if(ajStrMatchS(field->name, name))
+        {
+            ret = field;
+            break;
+        }
+    }
+
+    ajListIterDel(&iter);
+
+    return ret;
 }
 
 
@@ -1109,29 +1567,25 @@ AjBool embBtreeWriteEntryFile(const EmbPBtreeEntry entry)
 
 void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 {
-    const char *resource;
+    AjPStr attrstr = NULL;
     AjPStr value = NULL;
     ajuint  n = 0;
+    AjIList iter;
+    EmbPBtreeField field;
 
     value = ajStrNew();
-    
 
-    resource = ajStrGetPtr(entry->dbrs);
-
-    if(!ajNamRsAttrValueC(resource,"type",&value))
+    ajStrAssignC(&attrstr, "type");
+    if(!ajNamRsAttrValueS(entry->dbrs, attrstr, &value))
 	ajFatal("Missing resource entry (%S) for indexing",entry->dbrs);
 
     if(!ajStrMatchCaseC(value,"Index"))
 	ajFatal("Incorrect 'type' field for resource (%S)",entry->dbrs);
 
 
-    if(!ajNamGetValueC("CACHESIZE",&value))
-    {
-	entry->cachesize = BTREE_DEF_CACHESIZE;
-	ajUser("CACHESIZE defaults to %d", entry->cachesize);
-    }
-    else
-    {
+    if(ajNamRsAttrValueC(MAJSTRGETPTR(entry->dbrs),"cachesize",&value) ||
+       ajNamGetValueC("CACHESIZE",&value))
+          {
 	if(ajStrToUint(value,&n))
 	{
 	    entry->cachesize = n;
@@ -1139,16 +1593,17 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	else
 	{
 	    ajErr("Bad value for environment variable 'CACHESIZE'");
-	    entry->cachesize = BTREE_DEF_CACHESIZE;
+	    entry->cachesize = BT_CACHESIZE;
 	}
     }
-
-    if(!ajNamGetValueC("PAGESIZE",&value))
-    {
-	entry->pagesize = BTREE_DEF_PAGESIZE;
-	ajUser("PAGESIZE defaults to %d", entry->pagesize);
-    }
     else
+    {
+	entry->cachesize = BT_CACHESIZE;
+	ajUser("CACHESIZE defaults to %d", entry->cachesize);
+    }
+
+    if(ajNamRsAttrValueC(MAJSTRGETPTR(entry->dbrs),"pagesize",&value) ||
+       ajNamGetValueC("PAGESIZE",&value))
     {
 	if(ajStrToUint(value,&n))
 	{
@@ -1157,12 +1612,18 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	else
 	{
 	    ajErr("Bad value for environment variable 'PAGESIZE'");
-	    entry->pagesize = BTREE_DEF_PAGESIZE;
+	    entry->pagesize = BT_PAGESIZE;
 	}
     }
+    else
+    {
+	entry->pagesize = BT_PAGESIZE;
+	ajUser("PAGESIZE defaults to %d", entry->pagesize);
+    }
 
-    if(!ajNamRsAttrValueC(resource,"idlen",&value))
-	entry->idlen = BTREE_DEF_IDLEN;
+    ajStrAssignC(&attrstr, "idlen");
+    if(!ajNamRsAttrValueS(entry->dbrs,attrstr,&value))
+	entry->idlen = BT_KWLIMIT;
     else
     {
 	if(ajStrToUint(value,&n))
@@ -1170,76 +1631,12 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	else
 	{
 	    ajErr("Bad value for index resource 'idlen'");
-	    entry->idlen = BTREE_DEF_IDLEN;
-	}
-    }
-    
-    if(!ajNamRsAttrValueC(resource,"acclen",&value))
-	entry->aclen = BTREE_DEF_ACLEN;
-    else
-    {
-	if(ajStrToUint(value,&n))
-	    entry->aclen = n;
-	else
-	{
-	    ajErr("Bad value for index resource 'acclen'");
-	    entry->aclen = BTREE_DEF_ACLEN;
+	    entry->idlen = BT_KWLIMIT;
 	}
     }
 
-    if(!ajNamRsAttrValueC(resource,"svlen",&value))
-	entry->svlen = BTREE_DEF_SVLEN;
-    else
-    {
-	if(ajStrToUint(value,&n))
-	    entry->svlen = n;
-	else
-	{
-	    ajErr("Bad value for index resource 'svlen'");
-	    entry->svlen = BTREE_DEF_SVLEN;
-	}
-    }
-
-    if(!ajNamRsAttrValueC(resource,"keylen",&value))
-	entry->kwlen = BTREE_DEF_KWLEN;
-    else
-    {
-	if(ajStrToUint(value,&n))
-	    entry->kwlen = n;
-	else
-	{
-	    ajErr("Bad value for index resource 'keylen'");
-	    entry->kwlen = BTREE_DEF_KWLEN;
-	}
-    }
-
-    if(!ajNamRsAttrValueC(resource,"deslen",&value))
-	entry->delen = BTREE_DEF_DELEN;
-    else
-    {
-	if(ajStrToUint(value,&n))
-	    entry->delen = n;
-	else
-	{
-	    ajErr("Bad value for index resource 'deslen'");
-	    entry->delen = BTREE_DEF_DELEN;
-	}
-    }
-
-    if(!ajNamRsAttrValueC(resource,"orglen",&value))
-	entry->txlen = BTREE_DEF_TXLEN;
-    else
-    {
-	if(ajStrToUint(value,&n))
-	    entry->txlen = n;
-	else
-	{
-	    ajErr("Bad value for index resource 'orglen'");
-	    entry->txlen = BTREE_DEF_TXLEN;
-	}
-    }
-
-    if(!ajNamRsAttrValueC(resource,"idpagesize",&value))
+    ajStrAssignC(&attrstr, "idpagesize");
+    if(!ajNamRsAttrValueS(entry->dbrs,attrstr,&value))
 	entry->idpagesize = entry->pagesize;
     else
     {
@@ -1253,83 +1650,9 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	    entry->idpagesize = entry->pagesize;
 	}
     }
-        
-    if(!ajNamRsAttrValueC(resource,"accpagesize",&value))
-	entry->acpagesize = entry->pagesize;
-    else
-    {
-        if(ajStrToUint(value,&n))
-	{
-	    entry->acpagesize = n;
-	}
-	else
-	{
-	    ajErr("Bad value for index resource 'accpagesize'");
-	    entry->acpagesize = entry->pagesize;
-	}
-    }
-        
-    if(!ajNamRsAttrValueC(resource,"svpagesize",&value))
-	entry->svpagesize = entry->pagesize;
-    else
-    {
-        if(ajStrToUint(value,&n))
-	{
-	    entry->svpagesize = n;
-	}
-	else
-	{
-	    ajErr("Bad value for index resource 'svpagesize'");
-	    entry->svpagesize = entry->pagesize;
-	}
-    }
-        
-    if(!ajNamRsAttrValueC(resource,"keypagesize",&value))
-	entry->kwpagesize = entry->pagesize;
-    else
-    {
-        if(ajStrToUint(value,&n))
-	{
-	    entry->kwpagesize = n;
-	}
-	else
-	{
-	    ajErr("Bad value for index resource 'keypagesize'");
-	    entry->kwpagesize = entry->pagesize;
-	}
-    }
-        
-    if(!ajNamRsAttrValueC(resource,"despagesize",&value))
-	entry->depagesize = entry->pagesize;
-    else
-    {
-        if(ajStrToUint(value,&n))
-	{
-	    entry->depagesize = n;
-	}
-	else
-	{
-	    ajErr("Bad value for index resource 'despagesize'");
-	    entry->depagesize = entry->pagesize;
-	}
-    }
-        
-    if(!ajNamRsAttrValueC(resource,"orgpagesize",&value))
-	entry->txpagesize = entry->pagesize;
-    else
-    {
-        if(ajStrToUint(value,&n))
-	{
-	    entry->txpagesize = n;
-	}
-	else
-	{
-	    ajErr("Bad value for index resource 'orgpagesize'");
-	    entry->txpagesize = entry->pagesize;
-	}
-    }
-        
-    if(!ajNamRsAttrValueC(resource,"idcachesize",&value))
+
+    ajStrAssignC(&attrstr, "idcachesize");
+    if(!ajNamRsAttrValueS(entry->dbrs, attrstr, &value))
 	entry->idcachesize = entry->cachesize;
     else
     {
@@ -1344,158 +1667,120 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 	}
     }
         
-    if(!ajNamRsAttrValueC(resource,"acccachesize",&value))
-	entry->accachesize = entry->cachesize;
-    else
-    {
-        if(ajStrToUint(value,&n))
-	{
-	    entry->accachesize = n;
-	}
-	else
-	{
-	    ajErr("Bad value for index resource 'acccachesize'");
-	    entry->accachesize = entry->cachesize;
-	}
-    }
-        
-    if(!ajNamRsAttrValueC(resource,"svcachesize",&value))
-	entry->svcachesize = entry->cachesize;
-    else
-    {
-        if(ajStrToUint(value,&n))
-	{
-	    entry->svcachesize = n;
-	}
-	else
-	{
-	    ajErr("Bad value for index resource 'svcachesize'");
-	    entry->svcachesize = entry->cachesize;
-	}
-    }
-        
-    if(!ajNamRsAttrValueC(resource,"keycachesize",&value))
-	entry->kwcachesize = entry->cachesize;
-    else
-    {
-        if(ajStrToUint(value,&n))
-	{
-	    entry->kwcachesize = n;
-	}
-	else
-	{
-	    ajErr("Bad value for index resource 'keycachesize'");
-	    entry->kwcachesize = entry->cachesize;
-	}
-    }
-        
-    if(!ajNamRsAttrValueC(resource,"descachesize",&value))
-	entry->decachesize = entry->cachesize;
-    else
-    {
-        if(ajStrToUint(value,&n))
-	{
-	    entry->decachesize = n;
-	}
-	else
-	{
-	    ajErr("Bad value for index resource 'descachesize'");
-	    entry->decachesize = entry->cachesize;
-	}
-    }
-        
-    if(!ajNamRsAttrValueC(resource,"orgcachesize",&value))
-	entry->txcachesize = entry->cachesize;
-    else
-    {
-        if(ajStrToUint(value,&n))
-	{
-	    entry->txcachesize = n;
-	}
-	else
-	{
-	    ajErr("Bad value for index resource 'orgcachesize'");
-	    entry->txcachesize = entry->cachesize;
-	}
-    }
-        
     entry->idorder = (entry->idpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         ((entry->idlen + 1) + BT_IDKEYEXTRA);
 
     entry->idfill  = (entry->idpagesize - BT_BUCKPREAMBLE) /
         ((entry->idlen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
 
-    entry->acorder = (entry->acpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
-        ((entry->aclen + 1) + BT_IDKEYEXTRA);
-
-    entry->acfill  = (entry->acpagesize - BT_BUCKPREAMBLE) /
-        ((entry->aclen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
-
-    entry->svorder = (entry->svpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
-        ((entry->svlen + 1) + BT_IDKEYEXTRA);
-
-    entry->svfill  = (entry->svpagesize - BT_BUCKPREAMBLE) /
-        ((entry->svlen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
-
-    entry->kworder = (entry->kwpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
-        ((entry->kwlen + 1) + BT_IDKEYEXTRA);
-
-    entry->kwfill  = (entry->kwpagesize - BT_BUCKPREAMBLE) /
-        ((entry->kwlen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
-
-    entry->deorder = (entry->depagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
-        ((entry->delen + 1) + BT_IDKEYEXTRA);
-
-    entry->defill  = (entry->depagesize - BT_BUCKPREAMBLE) /
-        ((entry->delen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
-
-    entry->txorder = (entry->txpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
-        ((entry->txlen + 1) + BT_IDKEYEXTRA);
-
-    entry->txfill  = (entry->txpagesize - BT_BUCKPREAMBLE) /
-        ((entry->txlen + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
-
- 
     entry->idsecorder = (entry->idpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         (BT_OFFKEYLEN + BT_IDKEYEXTRA);
 
-    entry->acsecorder = (entry->acpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
-        (BT_OFFKEYLEN + BT_IDKEYEXTRA);
-
-    entry->svsecorder = (entry->svpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
-        (BT_OFFKEYLEN + BT_IDKEYEXTRA);
-
- 
     entry->idsecfill  = (entry->idpagesize - BT_BUCKPREAMBLE) /
         BT_DOFFROFF;
 
-    entry->acsecfill  = (entry->acpagesize - BT_BUCKPREAMBLE) /
-        BT_DOFFROFF;
+/* now process the same values for each index field */
 
-    entry->svsecfill  = (entry->svpagesize - BT_BUCKPREAMBLE) /
-        BT_DOFFROFF;
+    if(ajListGetLength(entry->fields))
+    {
+        iter = ajListIterNewread(entry->fields);
 
+        while(!ajListIterDone(iter))
+        {
+            field = ajListIterGet(iter);
+            ajFmtPrintS(&attrstr, "%Slen", field->name);
+            if(!ajNamRsAttrValueS(entry->dbrs,attrstr,&value))
+                field->len = ajBtreeFieldGetLenS(field->name);
+            else
+            {
+                if(ajStrToUint(value,&n))
+                    field->len = n;
+                else
+                {
+                    ajErr("Bad value for index resource '%S'", attrstr);
+                    field->len = 15;
+                }
+            }
+
+            ajFmtPrintS(&attrstr, "%Spagesize", field->name);
+
+            if(!ajNamRsAttrValueS(entry->dbrs,attrstr,&value))
+                field->pagesize = entry->pagesize;
+            else
+            {
+                if(ajStrToUint(value,&n))
+                {
+                    field->pagesize = n;
+                }
+                else
+                {
+                    ajErr("Bad value for index resource '%S'", attrstr);
+                    field->pagesize = entry->pagesize;
+                }
+            }
+        
+            ajFmtPrintS(&attrstr, "%Scachesize", field->name);
+            ajDebug("embBtreeGetRsInfo '%S':\n", attrstr);
+            if(!ajNamRsAttrValueS(entry->dbrs,attrstr,&value))
+            {
+                ajDebug("embBtreeGetRsInfo '%S' no value, use entry %u\n",
+                        attrstr, entry->cachesize);
+                field->cachesize = entry->cachesize;
+            }
+            else
+            {
+                if(ajStrToUint(value,&n))
+                {
+                    ajDebug("embBtreeGetRsInfo '%S' defined %u\n",
+                            attrstr, n);
+                    field->cachesize = n;
+                }
+                else
+                {
+                    ajDebug("embBtreeGetRsInfo '%S' bad value '%S'\n",
+                            attrstr, value);
+                    ajErr("Bad value for index resource '%Scachesize'",
+                          field->name);
+                    field->cachesize = entry->cachesize;
+                }
+            }
+        
+            field->order =
+                (field->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+                ((field->len + 1) + BT_IDKEYEXTRA);
+
+            field->fill  =
+                (field->pagesize - BT_BUCKPREAMBLE) /
+                ((field->len + 1) + BT_KEYLENENTRY + BT_DDOFFROFF);
 
     /*
      *  The secondary tree keys are the IDs of the entries containing
      *  the keywords
      */
+            if(!field->secondary)
+            {
+                field->secorder =
+                    (field->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+                    (BT_OFFKEYLEN + BT_IDKEYEXTRA);
+                field->secfill  =
+                    (field->pagesize - BT_BUCKPREAMBLE) /
+                    BT_DOFFROFF;
+            }
+            else
+            {
+                field->secorder =
+                    (field->pagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+                    ((entry->idlen + 1) + BT_IDKEYEXTRA);
+                field->secfill  =
+                    (field->pagesize - BT_BUCKPREAMBLE) /
+                    ((entry->idlen + 1) + BT_KEYLENENTRY);
+            }
+        }
 
-    entry->kwsecorder = (entry->kwpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
-        ((entry->idlen + 1) + BT_IDKEYEXTRA);
-    entry->desecorder = (entry->depagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
-        ((entry->idlen + 1) + BT_IDKEYEXTRA);
-    entry->txsecorder = (entry->txpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
-        ((entry->idlen + 1) + BT_IDKEYEXTRA);
-
-
-    entry->kwsecfill  = (entry->kwpagesize - BT_BUCKPREAMBLE) /
-        ((entry->idlen + 1) + BT_KEYLENENTRY);
-    entry->desecfill  = (entry->depagesize - BT_BUCKPREAMBLE) /
-        ((entry->idlen + 1) + BT_KEYLENENTRY);
-    entry->txsecfill  = (entry->txpagesize - BT_BUCKPREAMBLE) /
-        ((entry->idlen + 1) + BT_KEYLENENTRY);
-
+        ajListIterDel(&iter);
+    }
+    
+    ajStrDel(&attrstr);
     ajStrDel(&value);
 
     return;
@@ -1504,9 +1789,9 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 
 
 
-/* @func embBtreeOpenCaches ***********************************************
+/* @func embBtreeOpenCaches ***************************************************
 **
-** Open index files
+** Open index files for writing
 **
 ** @param [u] entry [EmbPBtreeEntry] database data
 **
@@ -1516,115 +1801,85 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
 
 AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
 {
-    char *basenam = NULL;
-    char *idir    = NULL;
-    ajuint level   = 0;
-    ajuint slevel  = 0;
-    ajuint count   = 0;
+    ajuint level    = 0;
+    ajlong count    = 0L;
+    ajlong countall = 0L;
+    AjIList iter;
+    EmbPBtreeField field;
     
-    basenam = entry->dbname->Ptr;
-    idir    = entry->idirectory->Ptr;
-
-
     if(entry->do_id)
     {
-	entry->idcache = ajBtreeSecCacheNewC(basenam,ID_EXTENSION,idir,"w+",
-					     entry->idpagesize, entry->idorder,
-					     entry->idfill, level,
-					     entry->idcachesize,
-					     entry->idsecorder, slevel,
-					     entry->idsecfill, count,
-					     entry->idlen);
+	entry->idcache = ajBtreeCacheNewS(entry->dbname,
+                                          entry->idextension,
+                                          entry->idirectory,
+                                          "wb+",
+                                          entry->compressed,
+                                          entry->idlen,
+                                          entry->idpagesize,
+                                          entry->idcachesize,
+                                          entry->idpagecount,
+                                          entry->idorder,
+                                          entry->idfill,
+                                          level,
+                                          entry->idsecorder,
+                                          entry->idsecfill,
+                                          count,
+                                          countall);
 	if(!entry->idcache)
 	    ajFatal("Cannot open ID index");
 	
 	ajBtreeCreateRootNode(entry->idcache,0L);
     }
 
-    if(entry->do_accession)
+    if(ajListGetLength(entry->fields))
     {
-	entry->accache = ajBtreeSecCacheNewC(basenam,AC_EXTENSION,idir,"w+",
-					     entry->acpagesize,
-					     entry->acorder, entry->acfill,
-					     level,
-					     entry->accachesize,
-					     entry->acsecorder, slevel,
-					     entry->acsecfill, count,
-					     entry->aclen);
-	if(!entry->accache)
-	    ajFatal("Cannot open ACC index");
+        iter = ajListIterNewread(entry->fields);
 
-	ajBtreeCreateRootNode(entry->accache,0L);
+        while(!ajListIterDone(iter))
+        {
+            field = ajListIterGet(iter);
+
+            if(field->secondary)
+                field->cache = ajBtreeSecCacheNewS(entry->dbname,
+                                                   field->extension,
+                                                   entry->idirectory,
+                                                   "wb+",
+                                                   field->compressed,
+                                                   field->len,
+                                                   field->pagesize,
+                                                   field->cachesize,
+                                                   field->pagecount,
+                                                   field->order,
+                                                   field->fill,
+                                                   level,
+                                                   field->secorder,
+                                                   field->secfill,
+                                                   count,
+                                                   countall);
+            else
+                field->cache = ajBtreeCacheNewS(entry->dbname,
+                                                field->extension,
+                                                entry->idirectory,
+                                                "wb+",
+                                                field->compressed,
+                                                field->len,
+                                                field->pagesize,
+                                                field->cachesize,
+                                                field->pagecount,
+                                                field->order,
+                                                field->fill,
+                                                level,
+                                                field->secorder,
+                                                field->secfill,
+                                                count,
+                                                countall);
+            if(!field->cache)
+                ajFatal("Cannot open %S index", field->extension);
+
+            ajBtreeCreateRootNode(field->cache,0L);
+        }
+        ajListIterDel(&iter);
     }
-
-    if(entry->do_sv)
-    {
-	entry->svcache = ajBtreeSecCacheNewC(basenam,SV_EXTENSION,idir,"w+",
-					     entry->svpagesize, entry->svorder,
-					     entry->svfill, level,
-					     entry->svcachesize,
-					     entry->svsecorder, slevel,
-					     entry->svsecfill, count,
-					     entry->svlen);
-	if(!entry->svcache)
-	    ajFatal("Cannot open SV index");
-
-
-	ajBtreeCreateRootNode(entry->svcache,0L);
-    }
-
-
-    if(entry->do_keyword)
-    {
-	entry->kwcache = ajBtreeSecCacheNewC(basenam,KW_EXTENSION,idir,"w+",
-					     entry->kwpagesize,
-					     entry->kworder, entry->kwfill,
-					     level,
-					     entry->kwcachesize,
-					     entry->kwsecorder, slevel,
-					     entry->kwsecfill, count,
-					     entry->kwlen);
-	if(!entry->kwcache)
-	    ajFatal("Cannot open KW index");
-
-
-	ajBtreeCreateRootNode(entry->kwcache,0L);
-    }
-    
-    if(entry->do_description)
-    {
-	entry->decache = ajBtreeSecCacheNewC(basenam,DE_EXTENSION,idir,"w+",
-					     entry->depagesize,
-					     entry->deorder, entry->defill,
-					     level,
-					     entry->decachesize,
-					     entry->desecorder, slevel,
-					     entry->desecfill, count,
-					     entry->delen);
-	if(!entry->decache)
-	    ajFatal("Cannot open DE index");
-
-
-	ajBtreeCreateRootNode(entry->decache,0L);
-    }
-    
-    if(entry->do_taxonomy)
-    {
-	entry->txcache = ajBtreeSecCacheNewC(basenam,TX_EXTENSION,idir,"w+",
-					     entry->txpagesize,
-					     entry->txorder, entry->txfill,
-					     level,
-					     entry->txcachesize,
-					     entry->txsecorder, slevel,
-					     entry->txsecfill, count,
-					     entry->txlen);
-	if(!entry->txcache)
-	    ajFatal("Cannot open TX index");
-
-
-	ajBtreeCreateRootNode(entry->txcache,0L);
-    }
-    
 
     return ajTrue;
 }
@@ -1644,53 +1899,26 @@ AjBool embBtreeOpenCaches(EmbPBtreeEntry entry)
 
 AjBool embBtreeCloseCaches(EmbPBtreeEntry entry)
 {
+    AjIList iter;
+    EmbPBtreeField field;
 
     if(entry->do_id)
     {
-	ajBtreeFreePriArray(entry->idcache);
-	ajBtreeFreeSecArray(entry->idcache);
-
-	ajBtreeCacheSync(entry->idcache,0L);
 	ajBtreeCacheDel(&entry->idcache);
     }
 
-    if(entry->do_accession)
+    if(ajListGetLength(entry->fields))
     {
-	ajBtreeFreePriArray(entry->accache);
-	ajBtreeFreeSecArray(entry->accache);
+        iter = ajListIterNewread(entry->fields);
 
-	ajBtreeCacheSync(entry->accache,0L);
-	ajBtreeCacheDel(&entry->accache);
-    }
+        while(!ajListIterDone(iter))
+        {
+            field = ajListIterGet(iter);
 
-    if(entry->do_sv)
-    {
-	ajBtreeFreePriArray(entry->svcache);
-	ajBtreeFreeSecArray(entry->svcache);
-
-	ajBtreeCacheSync(entry->svcache,0L);
-	ajBtreeCacheDel(&entry->svcache);
+            ajBtreeCacheDel(&field->cache);
+         }
+        ajListIterDel(&iter);
     }
-
-
-    if(entry->do_keyword)
-    {
-	ajBtreeCacheSync(entry->kwcache,0L);
-	ajBtreeCacheDel(&entry->kwcache);
-    }
-    
-    if(entry->do_description)
-    {
-	ajBtreeCacheSync(entry->decache,0L);
-	ajBtreeCacheDel(&entry->decache);
-    }
-    
-    if(entry->do_taxonomy)
-    {
-	ajBtreeCacheSync(entry->txcache,0L);
-	ajBtreeCacheDel(&entry->txcache);
-    }
-    
 
     return ajTrue;
 }
@@ -1711,6 +1939,8 @@ AjBool embBtreeCloseCaches(EmbPBtreeEntry entry)
 
 AjBool embBtreeProbeCaches(EmbPBtreeEntry entry)
 {
+    AjIList iter;
+    EmbPBtreeField field;
 
     if(entry->do_id)
     {
@@ -1718,16 +1948,21 @@ AjBool embBtreeProbeCaches(EmbPBtreeEntry entry)
 	ajBtreeProbeSecArray(entry->idcache);
     }
 
-    if(entry->do_accession)
+    if(ajListGetLength(entry->fields))
     {
-	ajBtreeProbePriArray(entry->accache);
-	ajBtreeProbeSecArray(entry->accache);
-    }
+        iter = ajListIterNewread(entry->fields);
 
-    if(entry->do_sv)
-    {
-	ajBtreeProbePriArray(entry->svcache);
-	ajBtreeProbeSecArray(entry->svcache);
+        while(!ajListIterDone(iter))
+        {
+            field = ajListIterGet(iter);
+            if(ajStrMatchC(field->extension, "ac") ||
+               ajStrMatchC(field->extension, "sv"))
+            {
+            	ajBtreeProbePriArray(field->cache);
+                ajBtreeProbeSecArray(field->cache);
+            }
+        }
+        ajListIterDel(&iter);
     }
 
     return ajTrue;
@@ -1750,32 +1985,183 @@ AjBool embBtreeProbeCaches(EmbPBtreeEntry entry)
 
 AjBool embBtreeDumpParameters(EmbPBtreeEntry entry)
 {
-    char *basenam = NULL;
-    char *idir    = NULL;
-
-    basenam = entry->dbname->Ptr;
-    idir    = entry->idirectory->Ptr;
-    
+    AjIList iter;
+    EmbPBtreeField field;
 
     if(entry->do_id)
-	ajBtreeWriteParams(entry->idcache, basenam, ID_EXTENSION, idir);
+	ajBtreeWriteParamsS(entry->idcache, entry->dbname,
+                            entry->idextension, entry->idirectory);
 
-    if(entry->do_accession)
-	ajBtreeWriteParams(entry->accache, basenam, AC_EXTENSION, idir);
+    if(ajListGetLength(entry->fields))
+    {
+        iter = ajListIterNewread(entry->fields);
 
-    if(entry->do_sv)
-	ajBtreeWriteParams(entry->svcache, basenam, SV_EXTENSION, idir);
-
-    if(entry->do_keyword)
-	ajBtreeWriteParams(entry->kwcache, basenam, KW_EXTENSION, idir);
+        while(!ajListIterDone(iter))
+        {
+            field = ajListIterGet(iter);
+            ajBtreeWriteParamsS(field->cache, entry->dbname,
+                                field->extension, entry->idirectory);
+        }
+        ajListIterDel(&iter);
+    }
     
-    if(entry->do_description)
-	ajBtreeWriteParams(entry->decache, basenam, DE_EXTENSION, idir);
-    
-    if(entry->do_taxonomy)
-	ajBtreeWriteParams(entry->txcache, basenam, TX_EXTENSION, idir);    
-
     return ajTrue;
+}
+
+
+
+
+/* @func embBtreeFieldNewC *****************************************************
+**
+** Constructor for a Btree index field
+**
+** @param [r] nametxt [const char*] Name
+** @return [EmbPBtreeField] Btree field
+******************************************************************************/
+
+EmbPBtreeField embBtreeFieldNewC(const char* nametxt)
+{
+    EmbPBtreeField ret = NULL;
+
+    AJNEW0(ret);
+
+    ajStrAssignC(&ret->name, nametxt);
+    ajStrAssignS(&ret->extension, ajBtreeFieldGetExtensionC(nametxt));
+    ret->secondary = ajBtreeFieldGetSecondaryC(nametxt);
+
+    if(!ajStrGetLen(ret->extension))
+    {
+        ajStrAssignK(&ret->extension, 'x');
+        ajStrAppendC(&ret->extension, nametxt);
+    }
+
+    ret->data = ajListNew();
+
+    return ret;
+}
+
+
+
+
+/* @func embBtreeFieldNewS *****************************************************
+**
+** Constructor for a Btree index field
+**
+** @param [r] name [const AjPStr] Name
+** @return [EmbPBtreeField] Btree field
+******************************************************************************/
+
+EmbPBtreeField embBtreeFieldNewS(const AjPStr name)
+{
+    EmbPBtreeField ret = NULL;
+
+    AJNEW0(ret);
+
+    ret->name = ajStrNewS(name);
+    ret->extension = ajStrNewS(ajBtreeFieldGetExtensionS(name));
+    ret->secondary = ajBtreeFieldGetSecondaryS(name);
+
+    if(!ajStrGetLen(ret->extension))
+    {
+        ajStrAssignK(&ret->extension, 'x');
+        ajStrAppendS(&ret->extension, name);
+    }
+
+    ret->maxkey = ajStrNewC("");
+
+    ret->data = ajListNew();
+
+    return ret;
+}
+
+
+
+
+/* @func embBtreeFieldDel ******************************************************
+**
+** Destructor for a Btree index field
+**
+** @param [d] Pthis [EmbPBtreeField*] Btree index field object
+** @return [void]
+******************************************************************************/
+
+void embBtreeFieldDel(EmbPBtreeField *Pthis)
+{
+    EmbPBtreeField  thys;
+
+    if(!Pthis) return;
+
+    thys = *Pthis;
+
+    ajStrDel(&thys->name);
+    ajStrDel(&thys->extension);
+    ajStrDel(&thys->maxkey);
+    ajListstrFree(&thys->data);
+
+    AJFREE(*Pthis);
+    *Pthis = NULL;
+
+    return;
+}
+
+
+
+
+/* @func embBtreeFieldSetCompressed *******************************************
+**
+** Set database field to be compressed on writing
+**
+** @param [u] field [EmbPBtreeField] Database field information
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void embBtreeFieldSetCompressed(EmbPBtreeField field)
+{
+    field->compressed = ajTrue;
+
+    return;
+}
+
+
+
+
+/* @func embBtreeFieldSetIdtype ***********************************************
+**
+** Set database field to be identifier type (not secondary) on writing
+**
+** @param [u] field [EmbPBtreeField] Database field information
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void embBtreeFieldSetIdtype(EmbPBtreeField field)
+{
+    field->secondary = ajFalse;
+
+    return;
+}
+
+
+
+
+/* @func embBtreeFieldSetSecondary ********************************************
+**
+** Set database field to be secondary on writing
+**
+** @param [u] field [EmbPBtreeField] Database field information
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void embBtreeFieldSetSecondary(EmbPBtreeField field)
+{
+    field->secondary = ajTrue;
+
+    return;
 }
 
 
@@ -1796,6 +2182,9 @@ void embIndexExit(void)
     ajStrDel(&embindexPrefix);
     ajStrDel(&embindexFormat);
     ajStrTokenDel(&embindexHandle);
+
+    ajBtreePriDel(&indexPriobj);
+    ajBtreeHybDel(&indexHyb);
 
     return;
 }

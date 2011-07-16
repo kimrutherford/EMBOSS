@@ -371,7 +371,7 @@ AjPList embDbiFileList(const AjPStr dir, const AjPStr wildfile, AjBool trim)
 
     DIR* dp;
     struct dirent* de;
-    int dirsize;
+    ajuint dirsize;
 
     AjPStr name = NULL;
     AjPStr tmp;
@@ -382,8 +382,8 @@ AjPList embDbiFileList(const AjPStr dir, const AjPStr wildfile, AjBool trim)
     char *p;
     char *q;
     AjPList l;
-    int ll;
-    int i;
+    ajuint ll;
+    ajuint i;
     AjBool d;
 
     ajDebug("embDbiFileList dir '%S' wildfile '%S' maxsize %Ld\n",
@@ -486,7 +486,7 @@ AjPList embDbiFileList(const AjPStr dir, const AjPStr wildfile, AjBool trim)
     ajStrDel(&tmp);
 
     closedir(dp);
-    ajDebug("%d files for '%S' '%S'\n", dirsize, dir, dbiWildFname);
+    ajDebug("%u files for '%S' '%S'\n", dirsize, dir, dbiWildFname);
 
     return retlist;
 }
@@ -569,7 +569,7 @@ AjPList embDbiFileListExc(const AjPStr dir, const AjPStr wildfile,
     }
 
     closedir(dp);
-    ajDebug("%d files for '%S' '%S'\n", dirsize, dir, wildfile);
+    ajDebug("%u files for '%S' '%S'\n", dirsize, dir, wildfile);
 
     return retlist;
 }
@@ -782,6 +782,17 @@ void embDbiSortFile(const AjPStr dbname, const char* ext1, const char* ext2,
     dir = ajStrNewC(sortProgDir);
     ajStrAppendC(&dir,SLASH_STRING);
     ajStrAppendC(&dir,prog);
+
+    if(!ajFilenameExistsExec(dir))
+    {
+        ajFmtPrintS(&dir, "%s\\apps\\release\\%s", sortProgDir, prog);
+    }
+
+    if(!ajFilenameExistsExec(dir))
+    {
+        ajFatal("'%s' not found in EMBOSS_ROOT or apps\\release", prog);
+    }
+
 #endif
 
 
@@ -1163,14 +1174,14 @@ void embDbiWriteDivisionRecord(AjPFile file, ajuint maxnamlen, short recnum,
 ** @param [u] file [AjPFile] hit file
 ** @param [r] maxidlen [ajuint] Maximum length for an id string
 ** @param [r] id [const AjPStr] The id string for this entry
-** @param [r] rpos [ajint] Data file offset
-** @param [r] spos [ajint] sequence file offset
-** @param [r] filenum [short] file number in division file
+** @param [r] rpos [ajuint] Data file offset
+** @param [r] spos [ajuint] sequence file offset
+** @param [r] filenum [ajushort] file number in division file
 ** @return [void]
 ******************************************************************************/
 
 void embDbiWriteEntryRecord(AjPFile file, ajuint maxidlen, const AjPStr id,
-			    ajint rpos, ajint spos, short filenum)
+			    ajuint rpos, ajuint spos, ajushort filenum)
 {
 
     ajWritebinStr(file, id, maxidlen);
@@ -1513,10 +1524,10 @@ ajuint embDbiSortWriteFields(const AjPStr dbname, const AjPStr release,
 	dbiRegFieldIdSort = ajRegCompC("^([^ ]+) +");
 
     if(!dbiRegFieldTokSort)
-	dbiRegFieldTokSort = ajRegCompC("^([^ ]+) +([^\n]+)");
+	dbiRegFieldTokSort = ajRegCompC("^([^ ]+) +([^\n\r]+)");
 
     if(!dbiRegFieldTokIdSort)
-	dbiRegFieldTokIdSort = ajRegCompC("^(.*[^ ]) +([0-9]+)\n$");
+	dbiRegFieldTokIdSort = ajRegCompC("^(.*[^ ]) +([0-9]+)[\r\n]+$");
 
     ajFmtPrintS(&dbiFieldId2, "%S_id2", dbiFieldName);
     ajFmtPrintS(&dbiFieldSort, "%S_sort", dbiFieldName);
@@ -1547,19 +1558,26 @@ ajuint embDbiSortWriteFields(const AjPStr dbname, const AjPStr release,
 	ajRegSubI(dbiRegFieldTokSort, 1, &dbiIdStr);
 	ajRegSubI(dbiRegFieldTokSort, 2, &dbiFieldStr);
 
+	ajDebug("asortfile curr '%S' id '%S' field '%S'\n",
+		dbiCurrentId, dbiIdStr, dbiFieldStr);
+
 	while(!ajStrMatchS(dbiIdStr, dbiCurrentId))
 	{
 	    ajStrAssignS(&dbiFieldId, dbiCurrentId);
 
 	    if(!ajReadline(elistfile, &dbiIdLine))
 		ajFatal("Error in embDbiSortWriteFields, "
-			"expected entry %S not found",
-			dbiIdStr);
+			"expected entry %S not found, last was '%S'",
+			dbiIdStr, dbiCurrentId);
 	    ajRegExec(dbiRegFieldIdSort, dbiIdLine);
 	    ajRegSubI(dbiRegFieldIdSort, 1, &dbiCurrentId);
 
+	    ajDebug("curr '%S' line '%S'\n", dbiCurrentId, dbiIdLine);
+
 	    if(!ajStrMatchS(dbiFieldId, dbiCurrentId))
 		ient++;
+	    ajDebug("asortfile curr '%S' id '%S' ient: %u\n",
+		    dbiCurrentId, dbiIdStr, ient);
 	}
 
 	ajFmtPrintF(blistfile, "%S %0*d\n", dbiFieldStr, idwidth, ient);

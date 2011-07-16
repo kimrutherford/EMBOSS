@@ -1,5 +1,5 @@
 Finds tandem repeats in nucleotide sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -8,6 +8,7 @@ Version: EMBOSS:6.3.0
                                   value)
    -threshold          integer    [20] Threshold score (Any integer value)
   [-outfile]           report     [*.equicktandem] Output report file name
+                                  (default -rformat table)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:

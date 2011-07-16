@@ -15,11 +15,14 @@ Function
 
 Description
 
-   **************** EDIT HERE ****************
+   splitsource splits a synthetic sequence into original source sequences
+   by processing the "source" features in the feature table.
 
 Algorithm
 
-   **************** EDIT HERE ****************
+   The "source" feature annotated the origin of a sequence region.
+   Synthetic sequences are characterized by having two or more "source"
+   features each describing one of the original sequence fragments.
 
 Usage
 
@@ -39,7 +42,7 @@ output sequence(s) [a01139.fasta]:
 Command line arguments
 
 Split sequence(s) into original source sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -101,7 +104,22 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   splitsource reads any normal sequence USAs.
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -166,8 +184,17 @@ SQ   Sequence 279 BP; 76 A; 66 C; 68 G; 69 T; 0 other;
 
 Output file format
 
-   splitsource outputs a graph to the specified graphics device. outputs a
-   report format file. The default format is ...
+   The output is a standard EMBOSS sequence file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -osformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   excel, feattable, motif, nametable, regions, seqtable, simple, srs,
+   table, tagseq.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Output files for usage example
 
@@ -186,7 +213,7 @@ gaagaatacctgcagtag
 
 Data files
 
-   **************** EDIT HERE ****************
+   None.
 
 Notes
 
@@ -228,6 +255,7 @@ See also
    extractseq       Extract regions from a sequence
    featcopy         Reads and writes a feature table
    featreport       Reads and writes a feature table
+   feattext         Return a feature table original text
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
@@ -248,6 +276,7 @@ See also
    nthseqset        Reads and writes (returns) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
+   seqcount         Reads and counts sequences
    seqret           Reads and writes (returns) sequences
    seqretsetall     Reads and writes (returns) many sets of sequences
    seqretsplit      Reads sequences and writes them to individual files
@@ -264,7 +293,12 @@ See also
 
 Author(s)
 
-   **************** EDIT HERE ****************
+   Peter Rice
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 

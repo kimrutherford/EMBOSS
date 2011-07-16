@@ -122,7 +122,7 @@ int main(int argc, char **argv)
     use_dend  = ajAcdGetToggle("dend");
     dend_file = ajAcdGetInfile("dendfile");
     if (dend_file)
-	ajStrAssignS(&dend_filename, ajFileGetNameS(dend_file));
+	ajStrAssignS(&dend_filename, ajFileGetPrintnameS(dend_file));
     ajFileClose(&dend_file);
 
     do_slow = ajAcdGetToggle("slow");
@@ -237,7 +237,7 @@ int main(int argc, char **argv)
 
     /* add tmp file containing sequences */
     ajStrAppendC(&cmd, " -infile=");
-    ajStrAppendC(&cmd, ajStrGetPtr( tmpFilename));
+    ajStrAppendS(&cmd, tmpFilename);
 
     /* add out file name */
     tmp_aln_outfile = emma_getUniqueFileName();
@@ -298,7 +298,7 @@ int main(int argc, char **argv)
 		    ajStrAppendC(&cmd, " -pwmatrix=");
 		else
 		    ajStrAppendC(&cmd, " -pwdnamatrix=");
-		ajStrAppendS(&cmd, ajFileGetNameS(pairwise_matrix));
+		ajStrAppendS(&cmd, ajFileGetPrintnameS(pairwise_matrix));
             }
             else
             {
@@ -344,7 +344,7 @@ int main(int argc, char **argv)
 	    ajStrAppendC(&cmd, " -matrix=");
 	else
 	    ajStrAppendC(&cmd, " -pwmatrix=");
-	ajStrAppendS(&cmd, ajFileGetNameS(ma_matrix));
+	ajStrAppendS(&cmd, ajFileGetPrintnameS(ma_matrix));
     }
     else
     {

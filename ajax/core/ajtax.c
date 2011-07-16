@@ -1,9 +1,12 @@
 /******************************************************************************
-** @Source AJAX NCBI Taxonomy handling functions
+** @source AJAX taxonomy functions
+**
+** These functions control all aspects of AJAX taxonomy
+** parsing and include simple utilities.
 **
 ** @author Copyright (C) 2010 Peter Rice
 ** @version 1.0
-** @modified May 5 pmr First AJAX version
+** @modified Oct 5 pmr First version
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -24,31 +27,57 @@
 
 #include "ajax.h"
 
+static AjPStr taxTempQry = NULL;
 
-
-
-static AjPTable taxidtable = NULL;
-static AjPTable taxnametable = NULL;
-static AjPTable taxNameclassTable = NULL;
-static AjPTable taxRankTable = NULL;
-static AjPTable taxEmblcodeTable = NULL;
-
-#define TAXFLAG_INHERITDIV    0x01
-#define TAXFLAG_INHERITCODE   0x02
-#define TAXFLAG_INHERITMITO   0x04
-#define TAXFLAG_HIDDENGENBANK 0x10
-#define TAXFLAG_HIDDENSUBTREE 0x20
-
-
-static ajint taxTableCmp(const void *x, const void *y);
-static ajuint taxTableHash(const void *key, ajuint hashsize);
+static void taxMakeQry(const AjPTax thys, AjPStr* qry);
 
 
 
 
-/* @func ajTaxNew **********************************************************
+/* @filesection ajtax *******************************************************
 **
-** Taxonomy node constructor
+** @nam1rule aj Function belongs to the AJAX library.
+**
+******************************************************************************/
+
+
+
+
+
+/* @datasection [AjPTax] Taxonomy data ***************************************
+**
+** Function is for manipulating taxonomy data objects
+**
+** @nam2rule Tax Taxonomy data objects
+**
+******************************************************************************/
+
+
+
+
+/* @section constructors ******************************************************
+**
+** Constructors
+**
+** @fdata [AjPTax]
+**
+** @nam3rule New Constructor
+** @nam4rule NewTax Copy constructor
+**
+** @argrule NewTax tax [const AjPTax] Source taxon object
+**
+** @valrule * [AjPTax] Taxonomy data object
+**
+** @fcategory new
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTaxNew ************************************************************
+**
+** Tax data constructor
 **
 ** @return [AjPTax] New object
 ** @@
@@ -69,19 +98,67 @@ AjPTax ajTaxNew(void)
 
 
 
-/* @func ajTaxCitNew **********************************************************
+/* @func ajTaxNewTax **********************************************************
 **
-** Taxonomy citation constructor
+** Taxon copy constructor
 **
-** @return [AjPTaxCit] New object
+** @param [r] tax [const AjPTax] Taxon
+** @return [AjPTax] New object
 ** @@
 ******************************************************************************/
 
-AjPTaxCit ajTaxCitNew(void)
+AjPTax ajTaxNewTax(const AjPTax tax)
 {
-    AjPTaxCit ret;
+    AjPTax ret;
+    AjIList iter = NULL;
+    AjPTaxname name = NULL;
 
     AJNEW0(ret);
+
+    if(tax->Id)
+        ret->Id = ajStrNewS(tax->Id);
+    if(tax->Db)
+        ret->Db = ajStrNewS(tax->Db);
+    if(tax->Setdb)
+        ret->Setdb = ajStrNewS(tax->Setdb);
+    if(tax->Full)
+        ret->Full = ajStrNewS(tax->Full);
+    if(tax->Qry)
+        ret->Qry = ajStrNewS(tax->Qry);
+    if(tax->Formatstr)
+        ret->Formatstr = ajStrNewS(tax->Formatstr);
+    if(tax->Filename)
+        ret->Filename = ajStrNewS(tax->Filename);
+    if(tax->Rank)
+        ret->Rank = ajStrNewS(tax->Rank);
+    if(tax->Emblcode)
+        ret->Emblcode = ajStrNewS(tax->Emblcode);
+    if(tax->Comment)
+        ret->Comment = ajStrNewS(tax->Comment);
+    if(tax->Name)
+        ret->Name = ajStrNewS(tax->Name);
+
+    if(tax->Namelist)
+    {
+        ret->Namelist = ajListNew();
+        iter = ajListIterNewread(tax->Namelist);
+        while(!ajListIterDone(iter))
+        {
+            name = ajListIterGet(iter);
+            ajListPushAppend(ret->Namelist, ajTaxnameNewName(name));
+        }
+        ajListIterDel(&iter);
+    }
+
+    ret->Fpos = tax->Fpos;
+    ret->Format = tax->Format;
+    ret->Count = tax->Count;
+    ret->Taxid = tax->Taxid;
+    ret->Parent = tax->Parent;
+    ret->Flags = tax->Flags;
+    ret->Divid = tax->Divid;
+    ret->Gencode = tax->Gencode;
+    ret->Mitocode = tax->Mitocode;
 
     return ret;
 }
@@ -89,125 +166,74 @@ AjPTaxCit ajTaxCitNew(void)
 
 
 
-/* @func ajTaxCodeNew *********************************************************
+/* @section Taxonomy data destructors *****************************************
 **
-** Taxonomy genetic code constructor
+** Destruction destroys all internal data structures and frees the
+** memory allocated for the taxonomy data object.
 **
-** @return [AjPTaxCode] New object
-** @@
+** @fdata [AjPTax]
+**
+** @nam3rule Del Destructor
+**
+** @argrule Del Ptax [AjPTax*] Taxonomy data
+**
+** @valrule * [void]
+**
+** @fcategory delete
+**
 ******************************************************************************/
 
-AjPTaxCode ajTaxCodeNew(void)
-{
-    AjPTaxCode ret;
-
-    AJNEW0(ret);
-
-    return ret;
-}
 
 
 
-
-/* @func ajTaxDelNew **********************************************************
+/* @func ajTaxDel ************************************************************
 **
-** Taxonomy deleted id constructor
+** Taxonomy data destructor
 **
-** @return [AjPTaxDel] New object
-** @@
-******************************************************************************/
-
-AjPTaxDel ajTaxDelNew(void)
-{
-    AjPTaxDel ret;
-
-    AJNEW0(ret);
-
-    return ret;
-}
-
-
-
-
-/* @func ajTaxDivNew **********************************************************
-**
-** Taxonomy division constructor
-**
-** @return [AjPTaxDiv] New object
-** @@
-******************************************************************************/
-
-AjPTaxDiv ajTaxDivNew(void)
-{
-    AjPTaxDiv ret;
-
-    AJNEW0(ret);
-
-    return ret;
-}
-
-
-
-
-/* @func ajTaxMergeNew ********************************************************
-**
-** Taxonomy merged id  constructor
-**
-** @return [AjPTaxMerge] New object
-** @@
-******************************************************************************/
-
-AjPTaxMerge ajTaxMergeNew(void)
-{
-    AjPTaxMerge ret;
-
-    AJNEW0(ret);
-
-    return ret;
-}
-
-
-
-
-/* @func ajTaxNameNew **********************************************************
-**
-** Taxonomy names constructor
-**
-** @return [AjPTaxName] New object
-** @@
-******************************************************************************/
-
-AjPTaxName ajTaxNameNew(void)
-{
-    AjPTaxName ret;
-
-    AJNEW0(ret);
-
-    return ret;
-}
-
-
-
-
-/* @func ajTaxDel *********************************************************
-**
-** Taxonomy node destructor
-**
-** @param [d] Ptax [AjPTax*]  Taxonomy node object to delete
+** @param [d] Ptax       [AjPTax*] Taxonomy data object to delete
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
 void ajTaxDel(AjPTax *Ptax)
 {
-    if(!Ptax)
-        ajFatal("Null arg error 1 in ajTaxDel");
-    else if(!(*Ptax))
-        ajFatal("Null arg error 2 in ajTaxDel");
+    AjPTax tax;
+    AjPTaxname name = NULL;
+    AjPTaxcit   cit = NULL;
 
-/*
-    ajStrDel(&(*Ptax)->Name);
-*/
+    if(!Ptax) return;
+    if(!(*Ptax)) return;
+
+    tax = *Ptax;
+
+    ajStrDel(&tax->Id);
+    ajStrDel(&tax->Db);
+    ajStrDel(&tax->Setdb);
+    ajStrDel(&tax->Full);
+    ajStrDel(&tax->Qry);
+    ajStrDel(&tax->Formatstr);
+    ajStrDel(&tax->Filename);
+    ajStrDel(&tax->Rank);
+    ajStrDel(&tax->Emblcode);
+    ajStrDel(&tax->Comment);
+    ajStrDel(&tax->Name);
+
+    ajStrDelarray(&tax->Lines);
+
+    if(tax->Namelist)
+    {
+        while(ajListPop(tax->Namelist, (void*) &name))
+            ajTaxnameDel(&name);
+        ajListFree(&tax->Namelist);
+    }
+
+    if(tax->Citations)
+    {
+        while(ajListPop(tax->Citations, (void*) &cit))
+            ajTaxcitDel(&cit);
+        ajListFree(&tax->Citations);
+    }
+
 
     AJFREE(*Ptax);
     *Ptax = NULL;
@@ -218,877 +244,851 @@ void ajTaxDel(AjPTax *Ptax)
 
 
 
-/* @func ajTaxParse ***********************************************************
+/* @section Casts *************************************************************
 **
-** Parse an NCBI Taxonomy file
+** Return values from a taxonomy data object
 **
-** @param [u] taxfile [AjPFile] NCBI Taxonomy format input file
-** @return [AjBool] True on success
+** @fdata [AjPTax]
+**
+** @nam3rule Get Return a value
+** @nam3rule Is Test a condition
+** @nam4rule Db Source database name
+** @nam4rule Id Identifier string
+** @nam4rule Name Name
+** @nam4rule Parent Return the parent taxid
+** @nam4rule Qry Return a query field
+** @nam4rule Rank Taxonomic rank
+** @nam4rule Tree List of taxons below in hierarchy
+** @nam4rule Hidden Taxon has the GenBank hidden flag set
+** @nam4rule Species Taxon is a species
+** @suffix C Character string result
+** @suffix S String object result
+**
+** @argrule * tax [const AjPTax] Taxonomy data object.
+** @argrule Tree taxlist [AjPList] Child taxons
+**
+** @valrule *C [const char*] Query as a character string.
+** @valrule *S [const AjPStr] Query as a string object.
+** @valrule *GetDb [const AjPStr] Database name
+** @valrule *GetId [const AjPStr] Identifier string
+** @valrule *GetName [const AjPStr] Name
+** @valrule *GetParent [ajuint] Parent taxid
+** @valrule *GetRank [const AjPStr] Taxonomic rank
+** @valrule *GetTree [ajuint] Number of new terms in list
+** @valrule *IsHidden [AjBool] Hidden flag
+** @valrule *IsSpecies [AjBool] Species taxon
+**
+** @fcategory cast
+**
 ******************************************************************************/
 
-AjBool ajTaxParse(AjPFile taxfile)
+
+
+
+/* @func ajTaxGetDb ***********************************************************
+**
+** Return the database name
+**
+** @param [r] tax [const AjPTax] Taxon
+**
+** @return [const AjPStr] Database name
+**
+******************************************************************************/
+
+const AjPStr ajTaxGetDb(const AjPTax tax)
 {
-    AjPStr line = NULL;
-    ajuint linecnt = 0;
-
-    while(ajReadlineTrim(taxfile, &line))
-        linecnt++;
-
-    return ajTrue;
+    return tax->Db;
 }
 
 
 
 
-/* @func ajTaxLoad ************************************************************
+/* @func ajTaxGetId ***********************************************************
 **
-** Parse an NCBI Taxonomy database
+** Return the identifier
 **
-** @param [r] taxdir [const AjPDir] NCBI Taxonomy database directory
-** @return [AjBool] True on success
+** @param [r] tax [const AjPTax] Taxon
+**
+** @return [const AjPStr] Returned id
 **
 ******************************************************************************/
 
-AjBool ajTaxLoad(const AjPDir taxdir)
+const AjPStr ajTaxGetId(const AjPTax tax)
 {
-    AjPFile infile;
-    AjPStr line    = NULL;
-    AjPStr tmpstr  = NULL;
-    ajint i        = 0;
-    ajint lasti    = 0;
-    ajuint linecnt = 0;
-    AjPTax oldtax = NULL;
-    AjPTax tax    = NULL;
-    AjPTaxDiv taxdiv     = NULL;
-    AjPTaxName taxname   = NULL;
-    AjPTaxCode taxcode   = NULL;
-    AjPTaxDel taxdel     = NULL;
-    AjPTaxMerge taxmerge = NULL;
-    AjPTaxCit taxcit = NULL;
-    ajuint nfield = 0;
-    ajlong taxid = 0;
-    AjPStr idstr = NULL;
-    ajuint tmpid = 0;
-    AjPStr tablestr = NULL;
-    AjPStr tmpkey = NULL;
-    AjPStr tmpval = NULL;
-    ajlong *ptaxid;
-
-    taxidtable = ajTableNewFunctionLen(600000, taxTableCmp, taxTableHash);
-    taxnametable = ajTablestrNewLen(900000);
-    taxRankTable = ajTablestrNewLen(20);
-    taxNameclassTable = ajTablestrNewLen(20);
-    taxEmblcodeTable = ajTablestrNewLen(20);
-
-    infile = ajFileNewInNamePathC("nodes.dmp", ajDirGetPath(taxdir));
-    linecnt = 0;
-
-    while(ajReadlineTrim(infile, &line))
-    {
-        linecnt++;
-        nfield = 0;
-        lasti = 0;
-
-        /* files have tab | tab as delimiters */
-
-        tax = ajTaxNew();
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(!ajStrToUint(tmpstr, &tax->Taxid))
-            ajWarn("%F line %u: invalid taxid '%S'",
-                   infile, linecnt, tmpstr);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(!ajStrToUint(tmpstr, &tax->Parent))
-            ajWarn("%F line %u: invalid parent '%S'",
-                   infile, linecnt, tmpstr);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-        tablestr = ajTableFetch(taxRankTable, tmpstr);
-
-        if(!tablestr)
-        {
-            tmpkey = ajStrNewS(tmpstr);
-            tmpval = ajStrNewS(tmpstr);
-            ajTablePut(taxRankTable, tmpkey, tmpstr);
-            tax->Rank = ajStrNewRef(tmpval);
-        }
-        else
-            tax->Rank = ajStrNewRef(tablestr);
-        
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        if(i > lasti)
-        {
-            ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-            tablestr = ajTableFetch(taxEmblcodeTable, tmpstr);
-
-            if(!tablestr)
-            {
-                tmpkey = ajStrNewS(tmpstr);
-                tmpval = ajStrNewS(tmpstr);
-                ajTablePut(taxEmblcodeTable, tmpkey, tmpstr);
-                tax->Emblcode = ajStrNewRef(tmpval);
-            }
-            else
-                tax->Emblcode = ajStrNewRef(tablestr);
-        }
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(!ajStrToUint(tmpstr, &tmpid))
-            ajWarn("%F line %u: invalid division id '%S'",
-                   infile, linecnt, tmpstr);
-        else
-            tax->Divid = tmpid;
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(ajStrMatchC(tmpstr, "1"))
-            tax->Flags |= TAXFLAG_INHERITDIV;
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(!ajStrToUint(tmpstr, &tmpid))
-            ajWarn("%F line %u: invalid gencode '%S'",
-                   infile, linecnt, tmpstr);
-        else
-            tax->Gencode = tmpid;
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(ajStrMatchC(tmpstr, "1"))
-            tax->Flags |= TAXFLAG_INHERITCODE;
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(!ajStrToUint(tmpstr, &tmpid))
-            ajWarn("%F line %u: invalid mitocode '%S'",
-                   infile, linecnt, tmpstr);
-        else
-            tax->Mitocode = tmpid;
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(ajStrMatchC(tmpstr, "1"))
-            tax->Flags |= TAXFLAG_INHERITMITO;
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(ajStrMatchC(tmpstr, "1"))
-            tax->Flags |= TAXFLAG_HIDDENGENBANK;
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(ajStrMatchC(tmpstr, "1"))
-            tax->Flags |= TAXFLAG_HIDDENSUBTREE;
-
-        lasti = i+3;
-        nfield++;
-
-        if((ajint) ajStrGetLen(line) > (lasti+2))
-            ajStrAssignSubS(&tax->Comment, line, lasti, -3);
-
-        lasti = i+3;
-        nfield++;
-
-        AJNEW0(ptaxid);
-        *ptaxid = tax->Taxid;
-        oldtax = ajTablePut(taxidtable, (void*) ptaxid, tax);
-        if(oldtax)
-            ajWarn("%F line %u: Duplicate taxon id '%u' (%Lu) found %u",
-                   infile, linecnt, tax->Taxid, *ptaxid, oldtax->Taxid);
-        ptaxid = NULL;
-        tax = NULL;
-    }
-
-    ajUser("nodes.dmp %u records", linecnt);
-
-    infile = ajFileNewInNamePathC("names.dmp", ajDirGetPath(taxdir));
-    linecnt = 0;
-
-    while(ajReadlineTrim(infile, &line))
-    {
-        linecnt++;
-        nfield = 0;
-        lasti = 0;
-
-        /* files have tab | tab as delimiters */
-
-        taxname = ajTaxNameNew();
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(!ajStrToLong(tmpstr, &taxid))
-            ajWarn("%F line %u: invalid taxid '%S'",
-                   infile, linecnt, tmpstr);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        if(i > lasti)
-            ajStrAssignSubS(&taxname->Name, line, lasti, i-1);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        if(i > lasti)
-            ajStrAssignSubS(&taxname->UniqueName, line, lasti, i-1);
-
-        lasti = i+3;
-        nfield++;
-
-        if((ajint)ajStrGetLen(line) > (lasti+2))
-        {
-            ajStrAssignSubS(&tmpstr, line, lasti, -3);
-            tablestr = ajTableFetch(taxNameclassTable, tmpstr);
-
-            if(!tablestr)
-            {
-                tmpkey = ajStrNewS(tmpstr);
-                tmpval = ajStrNewS(tmpstr);
-                ajTablePut(taxNameclassTable, tmpkey, tmpstr);
-                taxname->NameClass = ajStrNewRef(tmpval);
-            }
-            else
-                taxname->NameClass = ajStrNewRef(tablestr);
-        }
-
-        lasti = i+3;
-        nfield++;
-
-        if(!ajStrMatchC(taxname->NameClass, "authority") &&
-           ajStrGetLen(taxname->Name))
-        {
-            tax = ajTableFetch(taxnametable, taxname->Name);
-
-            if(!tax)
-                ajTablePut(taxnametable, taxname->Name, (void*) &taxid);
-        }
-
-        if(!ajStrMatchC(taxname->NameClass, "authority") &&
-           ajStrGetLen(taxname->UniqueName))
-        {
-            tax = ajTableFetch(taxnametable, taxname->Name);
-
-            if(!tax)
-                ajTablePut(taxnametable, taxname->Name, (void*) &taxid);
-        }
-
-        tax = ajTableFetch(taxidtable, (const void*) &taxid);
-
-        if(!tax)
-            ajWarn("%F line %u: unknown taxon id '%u' '%S''",
-                   infile, linecnt, taxid, tmpstr);
-        else
-        {
-            ajListPushAppend(tax->Namelist, taxname);
-            taxname = NULL;
-        }
-    }
-
-    ajUser("names.dmp %u records", linecnt);
-
-    infile = ajFileNewInNamePathC("division.dmp", ajDirGetPath(taxdir));
-    linecnt = 0;
-
-    while(ajReadlineTrim(infile, &line))
-    {
-        linecnt++;
-        nfield = 0;
-        lasti = 0;
-
-        /* files have tab | tab as delimiters */
-
-        taxdiv = ajTaxDivNew();
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(!ajStrToUint(tmpstr, &taxdiv->Divid))
-            ajWarn("%F line %u: invalid division id '%S'",
-                   infile, linecnt, tmpstr);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        if(i > lasti)
-            ajStrAssignSubS(&taxdiv->GbCode, line, lasti, i-1);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        if(i > lasti)
-            ajStrAssignSubS(&taxdiv->GbName, line, lasti, i-1);
-
-        lasti = i+3;
-        nfield++;
-
-        if((ajint) ajStrGetLen(line) > (lasti+2))
-            ajStrAssignSubS(&taxdiv->Comments, line, lasti, -3);
-
-        lasti = i+3;
-        nfield++;
-    }
-
-    ajUser("division.dmp %u records", linecnt);
-
-    infile = ajFileNewInNamePathC("gencode.dmp", ajDirGetPath(taxdir));
-    linecnt = 0;
-
-    while(ajReadlineTrim(infile, &line))
-    {
-        linecnt++;
-        nfield = 0;
-        lasti = 0;
-
-        /* files have tab | tab as delimiters */
-
-        taxcode = ajTaxCodeNew();
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(!ajStrToUint(tmpstr, &taxcode->Gencode))
-            ajWarn("%F line %u: invalid gencode '%S'",
-                   infile, linecnt, tmpstr);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        if(i > lasti)
-            ajStrAssignSubS(&taxcode->Abbrev, line, lasti, i-1);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        if(i > lasti)
-            ajStrAssignSubS(&taxcode->Name, line, lasti, i-1);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        if(i > lasti)
-            ajStrAssignSubS(&taxcode->Trans, line, lasti, i-1);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-        
-        if(i > lasti)
-            ajStrAssignSubS(&taxcode->Starts, line, lasti, -3);
-
-        lasti = i+3;
-        nfield++;
-    }
-
-    ajUser("gencode.dmp %u records", linecnt);
-    
-    infile = ajFileNewInNamePathC("delnodes.dmp", ajDirGetPath(taxdir));
-    linecnt = 0;
-
-    while(ajReadlineTrim(infile, &line))
-    {
-        linecnt++;
-        nfield = 0;
-        lasti = 0;
-
-        /* files have tab | tab as delimiters */
-
-        taxdel = ajTaxDelNew();
-
-        ajStrAssignSubS(&tmpstr, line, 0, -3);
-
-        if(!ajStrToUint(tmpstr, &taxdel->Taxid))
-            ajWarn("%F line %u: invalid taxid '%S'",
-                   infile, linecnt, tmpstr);
-
-        nfield++;
-    }
-
-    ajUser("delnodes.dmp %u records", linecnt);
-
-    infile = ajFileNewInNamePathC("merged.dmp", ajDirGetPath(taxdir));
-    linecnt = 0;
-
-    while(ajReadlineTrim(infile, &line))
-    {
-        linecnt++;
-        nfield = 0;
-        lasti = 0;
-
-        /* files have tab | tab as delimiters */
-
-        taxmerge = ajTaxMergeNew();
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(!ajStrToUint(tmpstr, &taxmerge->Taxid))
-            ajWarn("%F line %u: invalid taxid '%S'",
-                   infile, linecnt, tmpstr);
-        lasti = i+3;
-        nfield++;
-
-        ajStrAssignSubS(&tmpstr, line, lasti, -3);
-
-        if(!ajStrToUint(tmpstr, &taxmerge->Mergeid))
-            ajWarn("%F line %u: invalid merged taxid '%S'",
-                   infile, linecnt, tmpstr);
-        nfield++;
-    }
-
-    ajUser("merged.dmp %u records", linecnt);
-
-    infile = ajFileNewInNamePathC("citations.dmp", ajDirGetPath(taxdir));
-    linecnt = 0;
-
-    while(ajReadlineTrim(infile, &line))
-    {
-        linecnt++;
-        nfield = 0;
-        lasti = 0;
-
-        /* files have tab | tab as delimiters */
-
-        taxcit = ajTaxCitNew();
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(!ajStrToUint(tmpstr, &taxcit->Citid))
-            ajWarn("%F line %u: invalid citation id '%S'",
-                   infile, linecnt, tmpstr);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        if(i > lasti)
-            ajStrAssignSubS(&taxcit->Key, line, lasti, i-1);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(ajStrGetLen(tmpstr))
-        {
-            if(!ajStrToUint(tmpstr, &taxcit->Pubmed))
-                ajWarn("%F line %u: invalid pubmed id '%S'",
-                       infile, linecnt, tmpstr);
-        }
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        ajStrAssignSubS(&tmpstr, line, lasti, i-1);
-
-        if(ajStrGetLen(tmpstr))
-        {
-            if(!ajStrToUint(tmpstr, &taxcit->Medline))
-                ajWarn("%F line %u: invalid medline id '%S'",
-                       infile, linecnt, tmpstr);
-        }
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        if(i > lasti)
-            ajStrAssignSubS(&taxcit->Url, line, lasti, i-1);
-
-        lasti = i+3;
-        nfield++;
-
-        i = ajStrFindNextC(line, lasti, "\t|\t");
-
-        if(i<0)
-        {
-            ajWarn("%F line %u: only %u fields",
-                      infile, linecnt, nfield);
-            continue;
-        }
-
-        if(i > lasti)
-            ajStrAssignSubS(&taxcit->Text, line, lasti, i-1);
-
-        lasti = i+3;
-        nfield++;
-
-        ajStrAssignSubS(&tmpstr, line, lasti, -3); /* taxid list */
-        nfield++;
-
-        lasti = 0;
-        ajStrTrimWhite(&tmpstr);
-        i = ajStrFindNextC(tmpstr, lasti, " ");
-
-        while(i > 0)
-        {
-            ajStrAssignSubS(&idstr, tmpstr, lasti, i-1);
-
-            if(!ajStrToLong(idstr, &taxid))
-            ajWarn("%F line %u: invalid taxid '%S'",
-                   infile, linecnt, idstr);
-            tax =  ajTableFetch(taxidtable, (const void*) &taxid);
-
-            if(!tax)
-                ajWarn("%F line %u: unknown taxon id '%u' '%S' '%S''",
-                       infile, linecnt, taxid, idstr, tmpstr);
-            else
-            {
-                taxcit->Refcount++;
-                ajListPushAppend(tax->Citations, (void*) taxcit);
-            }
-
-            lasti = i+1;
-            i = ajStrFindNextC(tmpstr, lasti, " ");
-        }
-    }
-
-    ajUser("citations.dmp %u records", linecnt);
-
-    ajUser("id table: %u", ajTableGetLength(taxidtable));
-    ajUser("name table: %u", ajTableGetLength(taxnametable));
-
-    ajUser("reftables rank: %u embl: %u nameclass: %u",
-           ajTableGetLength(taxRankTable),
-           ajTableGetLength(taxEmblcodeTable),
-           ajTableGetLength(taxNameclassTable));
-
-
-    ajUser("sizes node: %u", (ajuint) sizeof(*tax));
-
-    return ajTrue;
+    return tax->Id;
 }
 
 
 
 
-/* @funcstatic taxTableCmp ****************************************************
+/* @func ajTaxGetName *********************************************************
 **
-** Default comparison function for key comparison
+** Return the name
 **
-** @param [r] x [const void*] First key
-** @param [r] y [const void*] Second key
-** @return [ajint] 0 for success, 1 for different keys
+** @param [r] tax [const AjPTax] Taxon
+**
+** @return [const AjPStr] Returned name
+**
+******************************************************************************/
+
+const AjPStr ajTaxGetName(const AjPTax tax)
+{
+    return tax->Name;
+}
+
+
+
+
+/* @func ajTaxGetParent *******************************************************
+**
+** Return the parent id of a taxon
+**
+** @param [r] tax [const AjPTax] Taxon
+**
+** @return [ajuint] Parent id
+**
+******************************************************************************/
+
+ajuint ajTaxGetParent(const AjPTax tax)
+{
+    return tax->Parent;
+}
+
+
+
+
+/* @func ajTaxGetQryC ********************************************************
+**
+** Returns the query string of a taxonomy data object.
+** Because this is a pointer to the real internal string
+** the caller must take care not to change the character string in any way.
+** If the string is to be changed (case for example) then it must first
+** be copied.
+**
+** @param [r] tax [const AjPTax] Taxonomy data object.
+** @return [const char*] Query as a character string.
 ** @@
 ******************************************************************************/
 
-static ajint taxTableCmp(const void *x, const void *y)
+const char* ajTaxGetQryC(const AjPTax tax)
 {
-    ajlong ix = *(const ajlong*)x;
-    ajlong iy = *(const ajlong*)y;
-
-    if(ix == iy)
-        return 0;
-
-    return 1;
+    return MAJSTRGETPTR(ajTaxGetQryS(tax));
 }
 
 
 
 
-/* @funcstatic taxTableHash ***************************************************
+/* @func ajTaxGetQryS ********************************************************
 **
-** Hash function for the cache table
+** Returns the query string of a taxonomy data object.
+** Because this is a pointer to the real internal string
+** the caller must take care not to change the character string in any way.
+** If the string is to be changed (case for example) then it must first
+** be copied.
 **
-** @param [r] key [const void*] Key
-** @param [r] hashsize [ajuint] Hash size (maximum hash value)
-** @return [ajuint] Hash value in range 0 to hashsize-1
+** @param [r] tax [const AjPTax] Taxonomy data object.
+** @return [const AjPStr] Query as a string.
 ** @@
 ******************************************************************************/
 
-static ajuint taxTableHash(const void *key, ajuint hashsize)
+const AjPStr ajTaxGetQryS(const AjPTax tax)
 {
-    ajlong pageno = *(const ajlong*)key;
+    ajDebug("ajTaxGetQryS '%S'\n", tax->Qry);
 
-    return(pageno % hashsize);
+    if(ajStrGetLen(tax->Qry))
+	return tax->Qry;
+
+    taxMakeQry(tax, &taxTempQry);
+
+    return taxTempQry;
 }
+
+
+
+
+/* @func ajTaxGetRank *********************************************************
+**
+** Return the taxonomic rank
+**
+** @param [r] tax [const AjPTax] Taxon
+**
+** @return [const AjPStr] Returned rank
+**
+******************************************************************************/
+
+const AjPStr ajTaxGetRank(const AjPTax tax)
+{
+    return tax->Rank;
+}
+
+
+
+
+/* @func ajTaxGetTree *********************************************************
+**
+** Return a list with all this taxon's descendants appended
+**
+** @param [r] tax [const AjPTax] Taxon
+** @param [u] taxlist [AjPList] List of taxons
+**
+** @return [ajuint] Number of taxons returned
+**
+******************************************************************************/
+
+ajuint ajTaxGetTree(const AjPTax tax, AjPList taxlist)
+{
+    AjPTax taxnext = NULL;
+    AjPTaxin taxin = NULL;
+    AjPStr taxqry = NULL;
+    static ajuint depth = 0;
+
+    depth++;
+    taxin = ajTaxinNew();
+    ajFmtPrintS(&taxqry, "%S-up:%S", tax->Db, tax->Id);
+    ajTaxinQryS(taxin, taxqry);
+
+    ajDebug("ajTaxGetTree %u '%S'\n", depth, taxqry);
+    taxnext = ajTaxNew();
+    while(ajTaxinRead(taxin, taxnext))
+    {
+        ajDebug("ajTaxGetTree push '%S'\n", taxnext->Id);
+        ajListPushAppend(taxlist, taxnext);
+        ajTaxGetTree(taxnext, taxlist);
+        taxnext = ajTaxNew();
+    }
+
+    ajTaxDel(&taxnext);
+    ajTaxinDel(&taxin);
+    ajStrDel(&taxqry);
+
+    depth--;
+
+    return ajListGetLength(taxlist);
+}
+
+
+
+
+/* @funcstatic taxMakeQry ***************************************************
+**
+** Sets the query for a taxonomy data object.
+**
+** @param [r] thys [const AjPTax] Taxonomy data object
+** @param [w] qry [AjPStr*] Query string in full
+** @return [void]
+** @@
+******************************************************************************/
+
+static void taxMakeQry(const AjPTax thys, AjPStr* qry)
+{
+    ajDebug("taxMakeQry (Id <%S> Formatstr <%S> Db <%S> "
+	    "Filename <%S>)\n",
+	    thys->Id, thys->Formatstr, thys->Db,
+	    thys->Filename);
+
+    /* ajTaxTrace(thys); */
+
+    if(ajStrGetLen(thys->Db))
+	ajFmtPrintS(qry, "%S-id:%S", thys->Db, thys->Id);
+    else
+    {
+	ajFmtPrintS(qry, "%S::%S:%S", thys->Formatstr,
+                    thys->Filename,thys->Id);
+    }
+
+    ajDebug("      result: <%S>\n",
+	    *qry);
+
+    return;
+}
+
+
+
+
+/* @func ajTaxIsHidden ********************************************************
+**
+** Tests whether a taxon had tghe GenBank "hidden" flag set.
+**
+** @param [r] tax [const AjPTax] Taxon
+**
+** @return [AjBool] True if node is hidden in GenBank taxonomy record
+**
+******************************************************************************/
+
+AjBool ajTaxIsHidden(const AjPTax tax)
+{
+    if(tax->Flags & 8)
+        return ajTrue;
+
+    return ajFalse;
+}
+
+
+
+
+/* @func ajTaxIsSpecies ********************************************************
+**
+** Tests whether a taxon is at the rank of 'species'
+**
+** @param [r] tax [const AjPTax] Taxon
+**
+** @return [AjBool] True if taxon is a species
+**
+******************************************************************************/
+
+AjBool ajTaxIsSpecies(const AjPTax tax)
+{
+    if(ajStrMatchC(tax->Rank, "species"))
+        return ajTrue;
+
+    return ajFalse;
+}
+
+
+
+
+/* @section taxonomy data modifiers *******************************************
+**
+** Taxonomy data modifiers
+**
+** @fdata [AjPTax]
+**
+** @nam3rule Clear clear internal values
+**
+** @argrule * tax [AjPTax] Taxonomy data object
+**
+** @valrule * [void]
+**
+** @fcategory modify
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTaxClear **********************************************************
+**
+** Resets all data for a taxonomy data object so that it can be reused.
+**
+** @param [u] tax [AjPTax] Taxonomy data object
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajTaxClear(AjPTax tax)
+{
+    AjPTaxname name = NULL;
+
+    if(MAJSTRGETLEN(tax->Id))
+       ajStrSetClear(&tax->Id);
+
+    if(MAJSTRGETLEN(tax->Db))
+       ajStrSetClear(&tax->Db);
+
+    if(MAJSTRGETLEN(tax->Setdb))
+       ajStrSetClear(&tax->Setdb);
+
+    if(MAJSTRGETLEN(tax->Full))
+       ajStrSetClear(&tax->Full);
+
+    if(MAJSTRGETLEN(tax->Qry))
+       ajStrSetClear(&tax->Qry);
+
+    if(MAJSTRGETLEN(tax->Formatstr))
+       ajStrSetClear(&tax->Formatstr);
+
+    if(MAJSTRGETLEN(tax->Filename))
+       ajStrSetClear(&tax->Filename);
+
+    if(MAJSTRGETLEN(tax->Name))
+       ajStrSetClear(&tax->Name);
+
+    ajStrDelarray(&tax->Lines);
+
+    if(tax->Namelist)
+    {
+        while(ajListPop(tax->Namelist, (void*) &name))
+            ajTaxnameDel(&name);
+    }
+
+    tax->Count = 0;
+    tax->Fpos = 0L;
+    tax->Format = 0;
+    tax->Flags = 0;
+    tax->Taxid = 0;
+    tax->Parent = 0;
+
+    return;
+}
+
+
+
+
+/* @datasection [AjPTaxcit] Taxonomy citation data ****************************
+**
+** Function is for manipulating taxonomy citation data objects
+**
+** @nam2rule Taxcit Taxonomy data objects
+**
+******************************************************************************/
+
+
+
+
+/* @section constructors ******************************************************
+**
+** Constructors
+**
+** @fdata [AjPTaxcit]
+**
+** @nam3rule New Constructor
+**
+** @valrule * [AjPTaxcit] Taxonomy citation data object
+**
+** @fcategory new
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTaxcitNew **********************************************************
+**
+** Taxonomy citation constructor
+**
+** @return [AjPTaxcit] New object
+** @@
+******************************************************************************/
+
+AjPTaxcit ajTaxcitNew(void)
+{
+    AjPTaxcit ret;
+
+    AJNEW0(ret);
+
+    return ret;
+}
+
+
+
+
+/* @section destructors ***********************************************
+**
+** Destruction destroys all internal data structures and frees the
+** memory allocated for the taxon citation object.
+**
+** @fdata [AjPTaxcit]
+**
+** @nam3rule Del destructor
+**
+** @argrule Del Pcit [AjPTaxcit*]Taxon citation
+**
+** @valrule * [void]
+**
+** @fcategory delete
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTaxcitDel **********************************************************
+**
+** Taxonomy citation destructor
+**
+** @param [d] Pcit [AjPTaxcit*] Taxon citation object
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajTaxcitDel(AjPTaxcit *Pcit)
+{
+    AjPTaxcit cit;
+
+    if(!Pcit)
+        return;
+    if(!*Pcit)
+        return;
+
+    cit = *Pcit;
+    ajStrDel(&cit->Key);
+    ajStrDel(&cit->Url);
+    ajStrDel(&cit->Text);
+
+    AJFREE(*Pcit);
+
+    return;
+}
+
+
+
+
+/* @datasection [AjPTaxcode] Taxonomy genetic code data ***********************
+**
+** Function is for manipulating taxonomy genetic code data objects
+**
+** @nam2rule Taxcode Taxonomy genetic code data objects
+**
+******************************************************************************/
+
+
+
+
+/* @section constructors ******************************************************
+**
+** Constructors
+**
+** @fdata [AjPTaxcode]
+**
+** @nam3rule New Constructor
+**
+** @valrule * [AjPTaxcode] Taxonomy genetic code data object
+**
+** @fcategory new
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTaxcodeNew *********************************************************
+**
+** Taxonomy genetic code constructor
+**
+** @return [AjPTaxcode] New object
+** @@
+******************************************************************************/
+
+AjPTaxcode ajTaxcodeNew(void)
+{
+    AjPTaxcode ret;
+
+    AJNEW0(ret);
+
+    return ret;
+}
+
+
+
+
+/* @datasection [AjPTaxdel] Taxonomy deleted id data **************************
+**
+** Function is for manipulating taxonomy deleted id data objects
+**
+** @nam2rule Taxdel Taxonomy deleted id data objects
+**
+******************************************************************************/
+
+
+
+
+/* @section constructors ******************************************************
+**
+** Constructors
+**
+** @fdata [AjPTaxdel]
+**
+** @nam3rule New Constructor
+**
+** @valrule * [AjPTaxdel] Taxonomy deleted id data object
+**
+** @fcategory new
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTaxdelNew **********************************************************
+**
+** Taxonomy deleted id constructor
+**
+** @return [AjPTaxdel] New object
+** @@
+******************************************************************************/
+
+AjPTaxdel ajTaxdelNew(void)
+{
+    AjPTaxdel ret;
+
+    AJNEW0(ret);
+
+    return ret;
+}
+
+
+
+
+/* @datasection [AjPTaxdiv] Taxonomy division data ****************************
+**
+** Function is for manipulating taxonomy division data objects
+**
+** @nam2rule Taxdiv Taxonomy division data objects
+**
+******************************************************************************/
+
+
+
+
+/* @section constructors ******************************************************
+**
+** Constructors
+**
+** @fdata [AjPTaxdiv]
+**
+** @nam3rule New Constructor
+**
+** @valrule * [AjPTaxdiv] Taxonomy division data object
+**
+** @fcategory new
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTaxdivNew **********************************************************
+**
+** Taxonomy division constructor
+**
+** @return [AjPTaxdiv] New object
+** @@
+******************************************************************************/
+
+AjPTaxdiv ajTaxdivNew(void)
+{
+    AjPTaxdiv ret;
+
+    AJNEW0(ret);
+
+    return ret;
+}
+
+
+
+
+/* @datasection [AjPTaxmerge] Taxonomy merged id data *************************
+**
+** Function is for manipulating taxonomy merged id data objects
+**
+** @nam2rule Taxmerge Taxonomy merged id data objects
+**
+******************************************************************************/
+
+
+
+
+/* @section constructors ******************************************************
+**
+** Constructors
+**
+** @fdata [AjPTaxmerge]
+**
+** @nam3rule New Constructor
+**
+** @valrule * [AjPTaxmerge] Taxonomy merged id data object
+**
+** @fcategory new
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTaxmergeNew ********************************************************
+**
+** Taxonomy merged id  constructor
+**
+** @return [AjPTaxmerge] New object
+** @@
+******************************************************************************/
+
+AjPTaxmerge ajTaxmergeNew(void)
+{
+    AjPTaxmerge ret;
+
+    AJNEW0(ret);
+
+    return ret;
+}
+
+
+
+
+/* @datasection [AjPTaxname] Taxonomy name data *******************************
+**
+** Function is for manipulating taxonomy name data objects
+**
+** @nam2rule Taxname Taxonomy name data objects
+**
+******************************************************************************/
+
+
+
+
+/* @section constructors ******************************************************
+**
+** Constructors
+**
+** @fdata [AjPTaxname]
+**
+** @nam3rule New Constructor
+** @nam4rule NewName  Copy constructor
+**
+** @argrule *NewName name [const AjPTaxname] Taxonomy name data object
+**
+** @valrule * [AjPTaxname] Taxonomy name data object
+**
+** @fcategory new
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTaxnameNew **********************************************************
+**
+** Taxonomy names constructor
+**
+** @return [AjPTaxname] New object
+** @@
+******************************************************************************/
+
+AjPTaxname ajTaxnameNew(void)
+{
+    AjPTaxname ret;
+
+    AJNEW0(ret);
+
+    return ret;
+}
+
+
+
+
+/* @func ajTaxnameNewName *****************************************************
+**
+** Taxonomy names copy constructor
+**
+** @param [r] name [const AjPTaxname] Name
+** @return [AjPTaxname] New object
+** @@
+******************************************************************************/
+
+AjPTaxname ajTaxnameNewName(const AjPTaxname name)
+{
+    AjPTaxname ret;
+
+    AJNEW0(ret);
+
+    if(name->Name)
+        ret->Name = ajStrNewS(name->Name);
+    if(name->UniqueName)
+        ret->UniqueName = ajStrNewS(name->UniqueName);
+    if(name->NameClass)
+        ret->NameClass = ajStrNewS(name->NameClass);
+
+    return ret;
+}
+
+
+
+
+/* @section destructors ***********************************************
+**
+** Destruction destroys all internal data structures and frees the
+** memory allocated for the taxon name object.
+**
+** @fdata [AjPTaxname]
+**
+** @nam3rule Del destructor
+**
+** @argrule Del Pname [AjPTaxname*]Taxon name
+**
+** @valrule * [void]
+**
+** @fcategory delete
+**
+******************************************************************************/
+
+
+
+
+/* @func ajTaxnameDel **********************************************************
+**
+** Taxonomy names destructor
+**
+** @param [d] Pname [AjPTaxname*] Taxon name object
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajTaxnameDel(AjPTaxname *Pname)
+{
+    AjPTaxname name;
+
+    if(!Pname)
+        return;
+    if(!*Pname)
+        return;
+
+    name = *Pname;
+    ajStrDel(&name->Name);
+    ajStrDel(&name->UniqueName);
+    ajStrDel(&name->NameClass);
+
+    AJFREE(*Pname);
+
+    return;
+}
+
+
+
+
+/* @datasection [none] Miscellaneous functions ********************************
+**
+** Functions to initialise and clean up internals
+**
+** @nam2rule Tax Taxonomy internals
+**
+******************************************************************************/
+
+
+
+
+/* @section exit **************************************************************
+**
+** Functions called on exit from the program by ajExit to do
+** any necessary cleanup and to report internal statistics to the debug file
+**
+** @fdata      [none]
+** @fnote     general exit functions, no arguments
+**
+** @nam3rule Exit Cleanup and report on exit
+**
+** @valrule * [void]
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ajTaxExit ***********************************************************
+**
+** Cleans up taxonomy processing internal memory
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajTaxExit(void)
+{
+    ajTaxinExit();
+    ajTaxoutExit();
+
+    return;
+}
+
+
+

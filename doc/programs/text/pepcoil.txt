@@ -41,13 +41,14 @@ Output report [gcn4_yeast.pepcoil]:
 Command line arguments
 
 Predicts coiled coil regions in protein sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
    -window             integer    [28] Window size (Integer from 7 to 28)
-  [-outfile]           report     [*.pepcoil] Output report file name
+  [-outfile]           report     [*.pepcoil] Output report file name (default
+                                  -rformat motif)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -106,7 +107,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   pepcoil reads in a protein sequence USA.
+   pepcoil reads one or more protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -223,6 +241,20 @@ SQ   SEQUENCE   281 AA;  31310 MW;  2ED1B8E35D509578 CRC64;
 
 Output file format
 
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   By default the report is in 'motif' format.
+
   Output files for usage example
 
    The SwissProt annotation marks the true leucine zipper motif as from
@@ -233,7 +265,7 @@ Output file format
 
 ########################################
 # Program: pepcoil
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: pepcoil
 #    -sequence tsw:gcn4_yeast
 # Report_format: motif
@@ -304,26 +336,11 @@ Known bugs
 See also
 
    Program name     Description
-   antigenic        Finds antigenic sites in proteins
-   digest           Reports on protein proteolytic enzyme or reagent cleavage sites
-   epestfind        Finds PEST motifs as potential proteolytic cleavage sites
-   fuzzpro          Search for patterns in protein sequences
-   fuzztran         Search for patterns in protein sequences (translated)
    garnier          Predicts protein secondary structure using GOR method
    helixturnhelix   Identify nucleic acid-binding motifs in protein
                     sequences
-   hmoment          Calculate and plot hydrophobic moment for protein sequence(s)
-   oddcomp          Identify proteins with specified sequence word composition
-   patmatdb         Searches protein sequences with a sequence motif
-   patmatmotifs     Scan a protein sequence with motifs from the PROSITE
-                    database
    pepnet           Draw a helical net for a protein sequence
    pepwheel         Draw a helical wheel diagram for a protein sequence
-   preg             Regular expression search of protein sequence(s)
-   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
-                    database
-   sigcleave        Reports on signal cleavage sites in a protein sequence
-   tmap             Predict and plot transmembrane segments in protein sequences
 
 Author(s)
 

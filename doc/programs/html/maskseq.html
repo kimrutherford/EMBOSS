@@ -48,7 +48,7 @@ Write a sequence with masked regions
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with maskseq</b>
+Here is a sample session with <b>maskseq</b>
 <p>
 Mask off bases 10 to 12 from a sequence 'prot.fasta' and write to the new sequence file 'prot2.seq': 
 <p>
@@ -115,7 +115,7 @@ Write a sequence with masked regions
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Write a sequence with masked regions
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
@@ -593,7 +593,7 @@ If the mask character is set to be the SPACE character or a null character, then
 </H2>
 
 
-<b>maskseq</b> reads in a single sequence USA.
+<b>maskseq</b> reads in a single nucleotide or protein sequence.
 
 <p>
 
@@ -653,7 +653,28 @@ An example range file is:
 </H2>
 
 
-<b>maskseq</b> writes s single masked sequence file.
+<p>
+
+The output is a standard EMBOSS sequence file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
+<p>
+The sequence file has the selected range masked with the specified character.
 
 <p>
 
@@ -829,6 +850,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
 <td><a href="listor.html">listor</a></td>
 <td>Write a list file of the logical OR of two sets of sequences</td>
 </tr>
@@ -906,6 +932,11 @@ None.
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>

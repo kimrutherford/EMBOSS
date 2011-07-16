@@ -1,5 +1,5 @@
 Finds antigenic sites in proteins
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -7,6 +7,7 @@ Version: EMBOSS:6.3.0
    -minlen             integer    [6] Minimum length of antigenic region
                                   (Integer from 1 to 50)
   [-outfile]           report     [*.antigenic] Output report file name
+                                  (default -rformat motif)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)

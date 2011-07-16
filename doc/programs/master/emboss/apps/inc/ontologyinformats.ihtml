@@ -1,0 +1,11 @@
+<p>
+
+The input is a standard EMBOSS ontology query.
+
+<p> The major ontology sources defined as standard in EMBOSS
+installations are EDAM, GO (gene Ontology) and SO (Sequence Ontology).
+
+<p>
+
+Data can also be read from ontology output in "obo" format written by an
+EMBOSS application.

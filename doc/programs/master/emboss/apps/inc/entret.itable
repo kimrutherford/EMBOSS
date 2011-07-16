@@ -22,7 +22,7 @@
 <tr bgcolor="#FFFFCC">
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>outfile</td>
-<td>Full text of a sequence database entry output file</td>
+<td>Full text output file</td>
 <td>Output file</td>
 <td><i>&lt;*&gt;</i>.entret</td>
 </tr>

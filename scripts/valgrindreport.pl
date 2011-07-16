@@ -68,6 +68,7 @@ sub getprogramnames ( ) {
 
 @embassylist = ("appendixd",
 		"cbstools",
+		"clustalomega",
 		"domainatrix",
 		"domalign",
 		"domsearch",
@@ -87,7 +88,8 @@ sub getprogramnames ( ) {
 		"signature",
 		"structure",
 		"topo",
-		"vienna",
+		"vienna",	# old vienna
+		"vienna2",
     );
 
 %cmd = ();
@@ -120,7 +122,8 @@ while (<DAT>) {
 close DAT;
 
 while (<>) {
-    if (/^Valgrind test (\S+)/) {
+    if (/^Valgrind time /) {next}
+    elsif (/^Valgrind test (\S+)/) {
 	$name = $1;
 	($appname) = ($name =~ /^([^-]+)/);
 	$isembassy = 0;
@@ -136,7 +139,6 @@ while (<>) {
 	    $embassy = $embassyprogs{$appname};
 	}
 	$leak = $status = 0;
-	if (/^Valgrind time /) {next}
 	if (/^Valgrind test (\S+) OK [\(]all clean[\)]/) {next}
 	elsif (/^Valgrind test (\S+) OK [\(]still reachable +([^\)]+)/) {
 	    $status = $2;

@@ -42,7 +42,10 @@ getorf
 </H2>
 
 
-<b>getorf</b> reads any nucleic acid sequence USA.
+<b>getorf</b> reads one or more nucleotide sequences.
+
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
 
 <p>
 <!--#include file="inc/getorf.input" -->
@@ -52,7 +55,9 @@ getorf
     Output file format
 </H2>
 
+<!--#include file="inc/seqfeatinformats.ihtml" -->
 
+<p>
 The output is a sequence file containing predicted open reading frames
 longer than the minimum size, which defaults to 30 bases (i.e. 10 amino acids).
 

@@ -1,5 +1,5 @@
 Many-to-many pairwise alignments of two sequence sets
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqset     Sequence set filename and optional format,
@@ -30,6 +30,7 @@ Version: EMBOSS:6.3.0
                                   penalty to control gap scoring. (Floating
                                   point number from 0.0 to 10.0)
   [-outfile]           align      [*.needleall] Output alignment file name
+                                  (default -aformat score)
 
    Additional (Optional) qualifiers:
    -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]

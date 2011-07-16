@@ -37,17 +37,22 @@ build_triplet = @build@
 host_triplet = @host@
 subdir = ajax/core
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in COPYING
+	$(srcdir)/Makefile.in $(srcdir)/config.h.in COPYING
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
+	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
 	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pngdriver.m4 \
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
+	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
 	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
 	$(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -74,16 +79,21 @@ am__base_list = \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libajax_la_LIBADD =
-am__objects_1 = ajalign.lo ajarr.lo ajassert.lo ajbase.lo ajcall.lo \
-	ajcod.lo ajdan.lo ajdmx.lo ajdom.lo ajdomain.lo ajexcept.lo \
-	ajfeat.lo ajfile.lo ajfiledata.lo ajfileio.lo ajfmt.lo \
-	ajindex.lo ajjava.lo ajlist.lo ajmath.lo ajmatrices.lo \
-	ajmem.lo ajmess.lo ajnam.lo ajnexus.lo ajobo.lo ajpat.lo \
-	ajpdb.lo ajpdbio.lo ajphylo.lo ajrange.lo ajreg.lo ajreport.lo \
-	ajresource.lo ajseq.lo ajseqabi.lo ajseqbam.lo ajseqread.lo \
-	ajseqtype.lo ajseqwrite.lo ajsort.lo ajsql.lo ajstr.lo \
-	ajsys.lo ajtable.lo ajtax.lo ajtime.lo ajtranslate.lo \
-	ajtree.lo ajutil.lo ajvector.lo
+am__objects_1 = ajalign.lo ajarr.lo ajassem.lo ajassemread.lo \
+	ajassemwrite.lo ajassert.lo ajbase.lo ajcall.lo ajcod.lo \
+	ajdan.lo ajdmx.lo ajdom.lo ajdomain.lo ajexcept.lo ajfeat.lo \
+	ajfeatread.lo ajfeatwrite.lo ajfile.lo ajfiledata.lo \
+	ajfileio.lo ajfmt.lo ajhttp.lo ajindex.lo ajjava.lo ajlist.lo \
+	ajmath.lo ajmatrices.lo ajmem.lo ajmess.lo ajnam.lo ajnexus.lo \
+	ajobo.lo ajoboread.lo ajobowrite.lo ajpat.lo ajpdb.lo \
+	ajpdbio.lo ajphylo.lo ajquery.lo ajrange.lo ajreg.lo \
+	ajreport.lo ajresource.lo ajresourceread.lo ajresourcewrite.lo \
+	ajseq.lo ajseqabi.lo ajseqbam.lo ajseqread.lo ajseqtype.lo \
+	ajseqwrite.lo ajsort.lo ajsql.lo ajstr.lo ajsys.lo ajtable.lo \
+	ajtax.lo ajtaxread.lo ajtaxwrite.lo ajtext.lo ajtextread.lo \
+	ajtextwrite.lo ajtime.lo ajtranslate.lo ajtree.lo ajurl.lo \
+	ajurlread.lo ajurlwrite.lo ajutil.lo ajvar.lo ajvarread.lo \
+	ajvarwrite.lo ajvector.lo
 am_libajax_la_OBJECTS = $(am__objects_1)
 libajax_la_OBJECTS = $(am_libajax_la_OBJECTS)
 libajax_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -117,16 +127,24 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+AXIS2C_CFLAGS = @AXIS2C_CFLAGS@
+AXIS2C_CPPFLAGS = @AXIS2C_CPPFLAGS@
+AXIS2C_LDFLAGS = @AXIS2C_LDFLAGS@
+AXIS2C_LIBS = @AXIS2C_LIBS@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+CXXDEPMODE = @CXXDEPMODE@
+CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
-DEVWARNINGS = @DEVWARNINGS@
 DEVWARN_CFLAGS = @DEVWARN_CFLAGS@
+DLLTOOL = @DLLTOOL@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -158,9 +176,11 @@ LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
+MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
 MYSQL_CFLAGS = @MYSQL_CFLAGS@
 MYSQL_CONFIG = @MYSQL_CONFIG@
+MYSQL_CPPFLAGS = @MYSQL_CPPFLAGS@
 MYSQL_LDFLAGS = @MYSQL_LDFLAGS@
 MYSQL_VERSION = @MYSQL_VERSION@
 NEEDAJAX = @NEEDAJAX@
@@ -185,8 +205,12 @@ PCRE_MINOR = @PCRE_MINOR@
 PCRE_POSIXLIB_VERSION = @PCRE_POSIXLIB_VERSION@
 PCRE_VERSION = @PCRE_VERSION@
 PG_CONFIG = @PG_CONFIG@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 POSTGRESQL_CFLAGS = @POSTGRESQL_CFLAGS@
+POSTGRESQL_CPPFLAGS = @POSTGRESQL_CPPFLAGS@
 POSTGRESQL_LDFLAGS = @POSTGRESQL_LDFLAGS@
 POSTGRESQL_VERSION = @POSTGRESQL_VERSION@
 RANLIB = @RANLIB@
@@ -195,7 +219,6 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
-WARNINGS = @WARNINGS@
 WARN_CFLAGS = @WARN_CFLAGS@
 XLIB = @XLIB@
 XMKMF = @XMKMF@
@@ -207,7 +230,9 @@ abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
+ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -242,7 +267,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -267,45 +291,73 @@ AM_CFLAGS = $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
 @ISCYGWIN_TRUE@-leplplot -leexpat -lepcre -lezlib
 
 @ESYSTEMLIBS_FALSE@EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib
-INCLUDES = -DAJAX_FIXED_ROOT=$(AJAX_FIXED_ROOT) \
+AM_CPPFLAGS = -DAJAX_FIXED_ROOT=$(AJAX_FIXED_ROOT) \
 -DAJAX_SYSTEM="$(AJAX_SYSTEM)" -DPREFIX=\"$(prefix)\" \
--I$(top_srcdir)/plplot -I$(top_srcdir)/ajax/pcre $(EXTRA_INCLUDES)
+$(MYSQL_CPPFLAGS) $(POSTGRESQL_CPPFLAGS) \
+-I. -I$(top_srcdir)/plplot -I$(top_srcdir)/ajax/pcre $(EXTRA_INCLUDES)
 
-AJAXSRC = ajalign.c ajarr.c ajassert.c \
+AJAXSRC = ajalign.c ajarr.c \
+ajassem.c ajassemread.c ajassemwrite.c \
+ajassert.c \
 ajbase.c ajcall.c ajcod.c \
 ajdan.c ajdmx.c ajdom.c ajdomain.c \
 ajexcept.c \
-ajfeat.c ajfile.c ajfiledata.c ajfileio.c ajfmt.c \
-ajindex.c ajjava.c ajlist.c \
+ajfeat.c ajfeatread.c ajfeatwrite.c \
+ajfile.c ajfiledata.c ajfileio.c ajfmt.c \
+ajhttp.c ajindex.c ajjava.c ajlist.c \
 ajmath.c ajmatrices.c ajmem.c ajmess.c \
-ajnam.c ajnexus.c ajobo.c \
+ajnam.c ajnexus.c \
+ajobo.c ajoboread.c ajobowrite.c \
 ajpat.c ajpdb.c ajpdbio.c ajphylo.c \
-ajrange.c ajreg.c ajreport.c ajresource.c \
+ajquery.c \
+ajrange.c ajreg.c ajreport.c \
+ajresource.c ajresourceread.c ajresourcewrite.c \
 ajseq.c ajseqabi.c ajseqbam.c ajseqread.c ajseqtype.c ajseqwrite.c \
 ajsort.c ajsql.c ajstr.c ajsys.c \
-ajtable.c ajtax.c ajtime.c ajtranslate.c ajtree.c \
-ajutil.c ajvector.c
+ajtable.c \
+ajtax.c ajtaxread.c ajtaxwrite.c \
+ajtext.c ajtextread.c ajtextwrite.c \
+ajtime.c ajtranslate.c ajtree.c \
+ajurl.c ajurlread.c ajurlwrite.c \
+ajutil.c \
+ajvar.c ajvarread.c ajvarwrite.c \
+ajvector.c
 
 include_HEADERS = ajax.h ajarch.h ajdefine.h \
-ajalign.h ajarr.h ajassert.h \
+ajalign.h \
+ajarr.h \
+ajassem.h ajassemdata.h ajassemread.h ajassemwrite.h \
+ajassert.h \
 ajbase.h ajcall.h ajcod.h \
 ajdan.h ajdmx.h ajdom.h ajdomain.h ajexcept.h \
-ajfeat.h ajfeatdata.h ajfile.h ajfiledata.h ajfileio.h ajfmt.h \
-ajindex.h ajjava.h ajlist.h \
+ajfeat.h ajfeatdata.h ajfeatread.h ajfeatwrite.h \
+ajfile.h ajfiledata.h ajfileio.h ajfmt.h \
+ajhttp.h ajindex.h ajjava.h ajlist.h \
 ajmath.h ajmatrices.h ajmem.h ajmess.h \
-ajnam.h ajnexus.h ajobo.h \
+ajnam.h ajnexus.h \
+ajobo.h ajobodata.h ajoboread.h ajobowrite.h \
 ajpat.h ajpdb.h ajpdbio.h ajphylo.h \
-ajrange.h ajreg.h ajreport.h ajresource.h \
+ajquery.h ajquerydata.h \
+ajrange.h ajreg.h ajreport.h \
+ajresource.h ajresourcedata.h ajresourceread.h ajresourcewrite.h \
 ajseq.h ajseqabi.h ajseqbam.h ajseqdata.h ajseqread.h ajseqtype.h ajseqwrite.h \
 ajsort.h ajsql.h ajstr.h ajsys.h \
-ajtable.h ajtax.h ajtime.h ajtranslate.h ajtree.h ajutil.h ajvector.h
+ajtable.h \
+ajtax.h ajtaxdata.h ajtaxread.h ajtaxwrite.h \
+ajtext.h ajtextdata.h ajtextread.h ajtextwrite.h \
+ajtime.h ajtranslate.h ajtree.h \
+ajurl.h ajurldata.h ajurlread.h ajurlwrite.h \
+ajutil.h \
+ajvar.h ajvardata.h ajvarread.h ajvarwrite.h \
+ajvector.h
 
 libajax_la_SOURCES = $(AJAXSRC)
-VERS_INF = -version-info 6:3:0
+VERS_INF = -version-info 6:4:0
 @ISCYGWIN_FALSE@LINKFLAGS = $(VERS_INF)
 @ISCYGWIN_TRUE@LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LDAJAX)
-libajax_la_LDFLAGS = $(LINKFLAGS)
-all: all-am
+libajax_la_LDFLAGS = $(LINKFLAGS) $(MYSQL_LDFLAGS) $(POSTGRESQL_LDFLAGS)
+all: config.h
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
@@ -339,6 +391,23 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
+
+config.h: stamp-h1
+	@if test ! -f $@; then \
+	  rm -f stamp-h1; \
+	  $(MAKE) $(AM_MAKEFLAGS) stamp-h1; \
+	else :; fi
+
+stamp-h1: $(srcdir)/config.h.in $(top_builddir)/config.status
+	@rm -f stamp-h1
+	cd $(top_builddir) && $(SHELL) ./config.status ajax/core/config.h
+$(srcdir)/config.h.in:  $(am__configure_deps) 
+	($(am__cd) $(top_srcdir) && $(AUTOHEADER))
+	rm -f stamp-h1
+	touch $@
+
+distclean-hdr:
+	-rm -f config.h stamp-h1
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
 	test -z "$(libdir)" || $(MKDIR_P) "$(DESTDIR)$(libdir)"
@@ -381,6 +450,9 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajalign.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajarr.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajassem.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajassemread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajassemwrite.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajassert.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajbase.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajcall.Plo@am__quote@
@@ -391,10 +463,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajdomain.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajexcept.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfeat.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfeatread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfeatwrite.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfile.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfiledata.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfileio.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajfmt.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajhttp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajindex.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajjava.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajlist.Plo@am__quote@
@@ -405,14 +480,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajnam.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajnexus.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajobo.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajoboread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajobowrite.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajpat.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajpdb.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajpdbio.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajphylo.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajquery.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajrange.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajreg.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajreport.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajresource.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajresourceread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajresourcewrite.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseq.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseqabi.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajseqbam.Plo@am__quote@
@@ -425,10 +505,21 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajsys.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtable.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtax.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtaxread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtaxwrite.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtext.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtextread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtextwrite.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtime.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtranslate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajtree.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajurl.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajurlread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajurlwrite.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajutil.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajvar.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajvarread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajvarwrite.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ajvector.Plo@am__quote@
 
 .c.o:
@@ -488,11 +579,11 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	mkid -fID $$unique
 tags: TAGS
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS:  $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	set x; \
 	here=`pwd`; \
-	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
+	list='$(SOURCES) $(HEADERS) config.h.in $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
 	  done | \
@@ -510,9 +601,9 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 	  fi; \
 	fi
 ctags: CTAGS
-CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+CTAGS:  $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
-	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
+	list='$(SOURCES) $(HEADERS) config.h.in $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
 	  done | \
@@ -562,7 +653,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES) $(HEADERS) config.h
 installdirs:
 	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
@@ -601,7 +692,7 @@ distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
-	distclean-tags
+	distclean-hdr distclean-tags
 
 dvi: dvi-am
 
@@ -663,18 +754,19 @@ ps-am:
 
 uninstall-am: uninstall-includeHEADERS uninstall-libLTLIBRARIES
 
-.MAKE: install-am install-strip
+.MAKE: all install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
 	clean-libLTLIBRARIES clean-libtool ctags distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-includeHEADERS install-info \
-	install-info-am install-libLTLIBRARIES install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+	distclean-compile distclean-generic distclean-hdr \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am \
+	install-includeHEADERS install-info install-info-am \
+	install-libLTLIBRARIES install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-includeHEADERS \

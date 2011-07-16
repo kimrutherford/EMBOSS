@@ -1,0 +1,301 @@
+                                edamisformat
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Find EDAM ontology terms by is_format_of relation
+
+Description
+
+   edamisformat searches the is_format_of relations of EDAM terms and
+   returns matching terms. The input is read from the installed EDAM
+   database. The ontology term output can be written to screen, to file,
+   or passed to another program. A wide range of standard ontology term
+   formats may be specified for input and output.
+
+   Optionally the search can be restricted to specified EDAM namespaces.
+
+Usage
+
+   Here is a sample session with edamisformat
+
+
+% edamisformat sequence
+Find EDAM ontology terms by is_format_of relation
+Obo output file [edamisformat.obo]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Find EDAM ontology terms by is_format_of relation
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-identifier]        string     Identifier(s) to search for in ontology (Any
+                                  string)
+  [-outfile]           outobo     [*.edamisformat] Output ontology term file
+                                  name
+
+   Additional (Optional) qualifiers:
+   -namespace          menu       [*] By default all terms are returned.
+                                  Searches can be limited to one or a few
+                                  namespaces. (Values: data (Data entity);
+                                  entity (Biological entity); format (Data
+                                  format); identifier (Identifier); operation
+                                  (Bioinformatics operation); resource (Data
+                                  resource); topic (Field of bioinformatics
+                                  study))
+
+   Advanced (Unprompted) qualifiers:
+   -sensitive          boolean    [N] By default, the query keywords are
+                                  matched against the EDAM term names (and
+                                  synonyms) only. This option also matches the
+                                  keywords against the EDAM term definitions
+                                  and will therefore (typically) report more
+                                  matches.
+   -subclasses         boolean    [N] Extend the query matches to include all
+                                  terms which are specialisations (EDAM
+                                  sub-classes) of the matched type.
+   -obsolete           boolean    [N] The default behaviour is to not use or
+                                  return obsolete terms. This option if set
+                                  will include all terms.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Ontology term output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   edamisformat queries the EDAM ontology.
+
+Output file format
+
+   The output is a standard EMBOSS ontology term file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -oformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: obo,
+   brief, list, html, xml, json, excel.
+
+   See: http://emboss.sf.net/docs/themes/OntologyFormats.html for further
+   information on ontology formats.
+
+  Output files for usage example
+
+  File: edamisformat.obo
+
+[Term]
+id: EDAM:0002078
+name: Sequence range format
+namespace: format
+def: Format used to specify range(s) of sequence positions.
+subset: format
+is_a: EDAM:0002350 ! Format (typed)
+relationship: is_format_of EDAM:0001017 ! Sequence range
+
+[Term]
+id: EDAM:0002571
+name: Raw sequence format
+namespace: format
+def: Format of a raw molecular sequence (i.e. the alphabet used).
+subset: format
+is_a: EDAM:0002350 ! Format (typed)
+relationship: is_format_of EDAM:0000848 ! Raw sequence
+
+[Term]
+id: EDAM:0001921
+name: Alignment format
+namespace: format
+def: Data format for molecular sequence alignment information.
+subset: format
+is_a: EDAM:0002350 ! Format (typed)
+relationship: is_format_of EDAM:0000863 ! Sequence alignment
+
+[Term]
+id: EDAM:0001919
+name: Sequence record format
+namespace: format
+def: Data format for a molecular sequence record.
+subset: format
+is_a: EDAM:0002350 ! Format (typed)
+relationship: is_format_of EDAM:0000849 ! Sequence record
+
+[Term]
+id: EDAM:0002057
+name: Sequence trace format
+namespace: format
+def: Format for sequence trace data (i.e. including base call information).
+subset: format
+is_a: EDAM:0001919 ! Sequence record format
+relationship: is_format_of EDAM:0000924 ! Sequence trace
+
+[Term]
+id: EDAM:0002014
+name: Sequence-profile alignment format
+namespace: format
+def: Data format for a sequence-profile alignment.
+
+
+  [Part of this file has been deleted for brevity]
+
+namespace: format
+def: Data format for a molecular sequence record, typically corresponding to a f
+ull entry from a molecular sequence database.
+subset: format
+is_a: EDAM:0001919 ! Sequence record format
+relationship: is_format_of EDAM:0002201 ! Sequence record full
+
+[Term]
+id: EDAM:0002067
+name: Sequence distance matrix format
+namespace: format
+def: Format of a matrix of genetic distances between molecular sequences.
+subset: format
+is_a: EDAM:0002350 ! Format (typed)
+relationship: is_format_of EDAM:0000870 ! Sequence distance matrix
+
+[Term]
+id: EDAM:0002066
+name: Database hits (sequence) format
+namespace: format
+def: Format of a report on sequence hits and associated data from searching a se
+quence database.
+subset: format
+is_a: EDAM:0002350 ! Format (typed)
+relationship: is_format_of EDAM:0000857 ! Database hits (sequence)
+
+[Term]
+id: EDAM:0002921
+name: Sequence variation annotation format
+namespace: format
+def: Format of sequence variation annotation.
+subset: format
+is_a: EDAM:0002350 ! Format (typed)
+relationship: is_format_of EDAM:0000918 ! Sequence variation annotation
+
+[Term]
+id: EDAM:0002170
+name: Sequence cluster format
+namespace: format
+def: Format used for clusters of molecular sequences.
+subset: format
+is_a: EDAM:0002350 ! Format (typed)
+relationship: is_format_of EDAM:0001235 ! Sequence cluster
+
+[Term]
+id: EDAM:0001920
+name: Sequence feature annotation format
+namespace: format
+def: Data format for molecular sequence feature information.
+subset: format
+is_a: EDAM:0002350 ! Format (typed)
+relationship: is_format_of EDAM:0001255 ! Sequence features
+
+
+Data files
+
+   The EDAM Ontology is included in EMBOSS as local database edam.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                     Program name                        Description
+                    drfinddata      Find public databases by data type
+                    drfindformat    Find public databases by format
+                    drfindid        Find public databases by identifier
+                    drfindresource  Find public databases by resource
+                    edamdef         Find EDAM ontology terms by definition
+                    edamhasinput    Find EDAM ontology terms by has_input relation
+                    edamhasoutput   Find EDAM ontology terms by has_output relation
+                    edamisid        Find EDAM ontology terms by is_identifier_of relation
+                    edamname        Find EDAM ontology terms by name
+                    godef           Find GO ontology terms by definition
+                    goname          Find GO ontology terms by name
+                    ontoget         Get ontology term(s)
+                    ontogetcommon   Get common ancestor for terms
+                    ontogetdown     Get ontology term(s) by parent id
+   ontogetobsolete  Get ontology ontology terms
+                    ontogetroot     Get ontology root terms by child identifier
+                    ontogetsibs     Get ontology term(s) by id with common parent
+                    ontogetup       Get ontology term(s) by id of child
+                    ontoisobsolete  Report whether an ontology term id is obsolete
+                    ontotext        Get ontology term(s) original full text
+                    wossdata        Finds programs by EDAM data
+                    wossinput       Finds programs by EDAM input data
+                    wossoperation   Finds programs by EDAM operation
+                    wossoutput      Finds programs by EDAM output data
+                    wossparam       Finds programs by EDAM parameter
+                    wosstopic       Finds programs by EDAM topic
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

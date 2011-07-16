@@ -1,4 +1,4 @@
-<b>Here is a sample session with dbifasta</b>
+Here is a sample session with <b>dbifasta</b>
 <p>
 
 <p>
@@ -7,12 +7,12 @@
 % <b>dbifasta </b>
 Index a fasta file database
 Database name: <b>EMROD</b>
-              simple : >ID
-               idacc : >ID ACC
-  or >ID (ACC) gcgid : >db:ID
-            gcgidacc : >db:ID ACC
-                dbid : >db ID
-                ncbi : | formats
+    simple : >ID
+     idacc : >ID ACC or >ID (ACC)
+     gcgid : >db:ID
+  gcgidacc : >db:ID ACC
+      dbid : >db ID
+      ncbi : | formats
 ID line format [idacc]: <b>idacc</b>
 Database directory [.]: <b>data</b>
 Wildcard database filename [*.dat]: <b>emrod</b>

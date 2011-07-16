@@ -25,9 +25,10 @@
 #
 #   This macro calls:
 #
-#     AC_SUBST(POSTGRESQL_CFLAGS)
-#     AC_SUBST(POSTGRESQL_LDFLAGS)
-#     AC_SUBST(POSTGRESQL_VERSION)
+#     AC_SUBST([POSTGRESQL_CFLAGS])
+#     AC_SUBST([POSTGRESQL_CPPFLAGS])
+#     AC_SUBST([POSTGRESQL_LDFLAGS])
+#     AC_SUBST([POSTGRESQL_VERSION])
 #
 #   And sets:
 #
@@ -36,6 +37,8 @@
 # LAST MODIFICATION
 #
 #   2006-07-16
+#   2010-05-14 MKS: Added POSTGRESQL_CPPFLAGS
+#   2011-06-21 AJB: Added workaround for Fedora pg_config oddity
 #
 # COPYLEFT
 #
@@ -65,6 +68,7 @@ AC_DEFUN([AX_LIB_POSTGRESQL],
     )
 
     POSTGRESQL_CFLAGS=""
+    POSTGRESQL_CPPFLAGS=""
     POSTGRESQL_LDFLAGS=""
     POSTGRESQL_POSTGRESQL=""
 
@@ -82,19 +86,47 @@ AC_DEFUN([AX_LIB_POSTGRESQL],
             AC_MSG_CHECKING([for PostgreSQL libraries])
 
             POSTGRESQL_CFLAGS="-I`$PG_CONFIG --includedir`"
+            POSTGRESQL_CPPFLAGS="-I`$PG_CONFIG --includedir`"
             POSTGRESQL_LDFLAGS="-L`$PG_CONFIG --libdir` -lpq"
 
             POSTGRESQL_VERSION=`$PG_CONFIG --version | sed -e 's#PostgreSQL ##'`
 
-            AC_DEFINE([HAVE_POSTGRESQL], [1],
-                [Define to 1 if PostgreSQL libraries are available])
+dnl It isn't enough to just test for pg_config as Fedora
+dnl provides it in the postgresql RPM even though postgresql-devel may
+dnl not be installed
 
-            found_postgresql="yes"
-            AC_MSG_RESULT([yes])
-        else
+            EMBCPPFLAGS=$CPPFLAGS
+	    EMBLDFLAGS=$LDFLAGS
+            
+            CPPFLAGS="$POSTGRESSQL_CPPFLAGS $EMBCPPFLAGS"
+	    LDFLAGS="$POSTGRESQL_LDFLAGS $EMBLDFLAGS"
+
+            AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
+                                              #include "libpq-fe.h"]],
+					    [[PQconnectdb(NULL)]])],
+			   [havepostgresql=yes],
+			   [havepostgresql=no])
+
+	    CPPFLAGS=$EMBCPPFLAGS
+	    LDFLAGS=$EMBLDFLAGS
+
+            if test "$havepostgresql" = yes; then
+                AC_DEFINE([HAVE_POSTGRESQL], [1],
+                    [Define to 1 if PostgreSQL libraries are available.])
+                found_postgresql="yes"
+                AC_MSG_RESULT([yes])
+            else
+	        POSTGRESQL_CFLAGS=""
+                POSTGRESQL_CPPFLAGS=""
+	        POSTGRESQL_LDFLAGS=""
+                found_postgresql="no"
+                AC_MSG_RESULT([no])
+            fi
+	else
             found_postgresql="no"
             AC_MSG_RESULT([Not configuring for PostgreSQL])
-        fi
+	fi
+
     fi
 
     dnl
@@ -144,5 +176,6 @@ AC_DEFUN([AX_LIB_POSTGRESQL],
 
     AC_SUBST([POSTGRESQL_VERSION])
     AC_SUBST([POSTGRESQL_CFLAGS])
+    AC_SUBST([POSTGRESQL_CPPFLAGS])
     AC_SUBST([POSTGRESQL_LDFLAGS])
 ])

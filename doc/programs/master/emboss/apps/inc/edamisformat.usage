@@ -1,0 +1,13 @@
+Here is a sample session with <b>edamisformat</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>edamisformat sequence </b>
+Find EDAM ontology terms by is_format_of relation
+Obo output file [edamisformat.obo]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

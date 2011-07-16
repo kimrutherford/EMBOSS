@@ -1,0 +1,221 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: outfile.dbxedam</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Processing directory: /homes/user/test/data/
+Processing file: EDAM.obo entries: 144 (144) time: 0.0s (0.0s)
+Total time: 0.0s
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.ent</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Number of files: 1
+# Release: 0.0
+# Date:    00/00/00
+Single filename database
+EDAM.obo
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxac</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Identifier
+Compress  Yes
+Pages     4
+Order     87
+Fill      75
+Pagesize  8192
+Level     0
+Cachesize 100
+Order2    406
+Fill2     408
+Count     153
+Fullcount 153
+Kwlimit   80
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxde</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     1556
+Order     93
+Fill      69
+Pagesize  4096
+Level     0
+Cachesize 100
+Order2    144
+Fill2     204
+Count     515
+Fullcount 1611
+Kwlimit   30
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxhasin</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     12
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     3
+Fullcount 3
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxhasout</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     15
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     4
+Fullcount 7
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Identifier
+Compress  Yes
+Pages     7
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     144
+Fullcount 144
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxis</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     229
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     75
+Fullcount 230
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxisfmt</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     24
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     7
+Fullcount 20
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxisid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     6
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     1
+Fullcount 1
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxnm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     622
+Order     60
+Fill      41
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     204
+Fullcount 425
+Kwlimit   20
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.pxns</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     21
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     6
+Fullcount 144
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: edam.xac</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xde</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xhasin</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xhasout</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xis</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xisfmt</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xisid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xnm</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: edam.xns</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.

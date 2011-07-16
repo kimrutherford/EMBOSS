@@ -1,0 +1,166 @@
+                                   dbxstat
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Dump statistics for dbx databases
+
+Description
+
+   dbxstat reports the contents of a B+ tree database index.
+
+Usage
+
+   Here is a sample session with dbxstat
+
+
+% dbxstat
+Dump statistics for dbx databases
+EMBOSS database name: edam
+EMBOSS database field [id]: ns
+Output file [edam.dbxstat]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Dump statistics for dbx databases
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     EMBOSS database name (Any string from 2 to
+                                  19 characters, matching regular expression
+                                  /[A-z][A-z0-9_]+/)
+  [-field]             string     [id] EMBOSS database field (Any string)
+   -outfile            outfile    [*.dbxstat] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -indexdir           directory  Index directory (optional)
+   -minimum            integer    [1] Minimum occurrences (Integer 1 or more)
+   -maximum            integer    [0] Maximum occurrences (0=no maximum)
+                                  (Integer 0 or more)
+
+   Associated qualifiers:
+
+   "-indexdir" associated qualifiers
+   -extension          string     Default file extension
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   dbxstat reads the index files for any database defined with "emboss"
+   access method.
+
+Output file format
+
+   dbxstat reports the contents of the selected index files.
+
+  Output files for usage example
+
+  File: edam.dbxstat
+
+       565 operation
+       827 data
+       420 format
+       601 identifier
+        82 entity
+        57 resource
+       274 topic
+
+Total keywords: 7 IDs: 2826
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                       Description
+                    dbiblast      Index a BLAST database
+                    dbifasta      Index a fasta file database
+                    dbiflat       Index a flat file database
+                    dbigcg        Index a GCG formatted database
+                    dbxcompress   Compress an uncompressed dbx index
+                    dbxedam       Index the EDAM ontology using b+tree indices
+                    dbxfasta      Index a fasta file database using b+tree indices
+                    dbxflat       Index a flat file database using b+tree indices
+                    dbxgcg        Index a GCG formatted database using b+tree indices
+                    dbxobo        Index an obo ontology using b+tree indices
+                    dbxreport     Validate index and report internals for dbx databases
+                    dbxresource   Index a data resource catalogue using b+tree indices
+                    dbxtax        Index NCBI taxonomy using b+tree indices
+   dbxuncompress    Uncompress a compressed dbx index
+
+Author(s)
+
+   Alan             Bleasby
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

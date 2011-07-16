@@ -58,7 +58,7 @@ Algorithm
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with oddcomp</b>
+Here is a sample session with <b>oddcomp</b>
 <p>
 To search for entries in swissprot with at least 1 SR AND at least 2 RS: 
 <p>
@@ -72,6 +72,7 @@ Input protein sequence(s): <b>tsw:*</b>
 Program compseq output file: <b>oddcomp.comp</b>
 Window size to consider (e.g. 30 aa) [30]: <b></b>
 Output file [12s1_arath.oddcomp]: <b>out.odd</b>
+ajSeqxrefNewDbS '1-I' 'FT025'
 
 </pre></td></tr></table><p>
 <p>
@@ -84,7 +85,7 @@ Output file [12s1_arath.oddcomp]: <b>out.odd</b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Identify proteins with specified sequence word composition
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -623,63 +624,58 @@ None.
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
-<td><a href="antigenic.html">antigenic</a></td>
-<td>Finds antigenic sites in proteins</td>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
 </tr>
 
 <tr>
-<td><a href="digest.html">digest</a></td>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back-translate a protein sequence to a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Calculate the composition of unique words in sequences</td>
+</tr>
+
+<tr>
+<td><a href="emowse.html">emowse</a></td>
+<td>Search protein sequences by digest fragment molecular weight</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Generate residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="mwcontam.html">mwcontam</a></td>
+<td>Find weights common to multiple molecular weights files</td>
+</tr>
+
+<tr>
+<td><a href="mwfilter.html">mwfilter</a></td>
+<td>Filter noisy data from molecular weights file</td>
+</tr>
+
+<tr>
+<td><a href="pepdigest.html">pepdigest</a></td>
 <td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
-<td><a href="epestfind.html">epestfind</a></td>
-<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plot amino acid properties of a protein sequence in parallel</td>
 </tr>
 
 <tr>
-<td><a href="fuzzpro.html">fuzzpro</a></td>
-<td>Search for patterns in protein sequences</td>
+<td><a href="pepstats.html">pepstats</a></td>
+<td>Calculates statistics of protein properties</td>
 </tr>
 
 <tr>
-<td><a href="fuzztran.html">fuzztran</a></td>
-<td>Search for patterns in protein sequences (translated)</td>
-</tr>
-
-<tr>
-<td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Identify nucleic acid-binding motifs in protein sequences</td>
-</tr>
-
-<tr>
-<td><a href="patmatdb.html">patmatdb</a></td>
-<td>Searches protein sequences with a sequence motif</td>
-</tr>
-
-<tr>
-<td><a href="patmatmotifs.html">patmatmotifs</a></td>
-<td>Scan a protein sequence with motifs from the PROSITE database</td>
-</tr>
-
-<tr>
-<td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions in protein sequences</td>
-</tr>
-
-<tr>
-<td><a href="preg.html">preg</a></td>
-<td>Regular expression search of protein sequence(s)</td>
-</tr>
-
-<tr>
-<td><a href="pscan.html">pscan</a></td>
-<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
-</tr>
-
-<tr>
-<td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports on signal cleavage sites in a protein sequence</td>
+<td><a href="wordcount.html">wordcount</a></td>
+<td>Count and extract unique words in molecular sequence(s)</td>
 </tr>
 
 </table>

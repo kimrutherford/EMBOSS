@@ -34,97 +34,124 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = acdlog$(EXEEXT) acdrelations$(EXEEXT) acdxsd$(EXEEXT) \
-	ajtest$(EXEEXT) complex$(EXEEXT) corbatest$(EXEEXT) \
-	domtesta$(EXEEXT) domtestb$(EXEEXT) domtestc$(EXEEXT) \
-	domtestd$(EXEEXT) edamclean$(EXEEXT) ensembltest$(EXEEXT) \
-	entrails$(EXEEXT) entrailsbook$(EXEEXT) entrailshtml$(EXEEXT) \
-	entrailswiki$(EXEEXT) histogramtest$(EXEEXT) intconv$(EXEEXT) \
-	origsplitter$(EXEEXT) origunion$(EXEEXT) \
-	martattributes$(EXEEXT) martdatasets$(EXEEXT) \
-	martfilters$(EXEEXT) martquery$(EXEEXT) martregistry$(EXEEXT) \
-	martseqs$(EXEEXT) newcoils$(EXEEXT) patmattest$(EXEEXT) \
-	prima$(EXEEXT) primers$(EXEEXT) seqinfo$(EXEEXT) \
-	seqretall$(EXEEXT) seqretallfeat$(EXEEXT) seqretset$(EXEEXT) \
-	seqretsingle$(EXEEXT) seqrettype$(EXEEXT) sqltest$(EXEEXT) \
-	testplot$(EXEEXT) treetypedisplay$(EXEEXT)
+check_PROGRAMS = acdgalaxy$(EXEEXT) acdlog$(EXEEXT) \
+	acdrelations$(EXEEXT) acdxsd$(EXEEXT) ajtest$(EXEEXT) \
+	complex$(EXEEXT) corbatest$(EXEEXT) dastest$(EXEEXT) \
+	dbfetchtest$(EXEEXT) domtesta$(EXEEXT) domtestb$(EXEEXT) \
+	domtestc$(EXEEXT) domtestd$(EXEEXT) edamclean$(EXEEXT) \
+	ensembltest$(EXEEXT) entrails$(EXEEXT) entrailsbook$(EXEEXT) \
+	entrailshtml$(EXEEXT) entrailswiki$(EXEEXT) \
+	histogramtest$(EXEEXT) intconv$(EXEEXT) origsplitter$(EXEEXT) \
+	origunion$(EXEEXT) martattributes$(EXEEXT) \
+	martdatasets$(EXEEXT) martfilters$(EXEEXT) martquery$(EXEEXT) \
+	martregistry$(EXEEXT) martseqs$(EXEEXT) newcoils$(EXEEXT) \
+	patmattest$(EXEEXT) prima$(EXEEXT) primers$(EXEEXT) \
+	seqinfo$(EXEEXT) seqretall$(EXEEXT) seqretallfeat$(EXEEXT) \
+	seqretset$(EXEEXT) seqretsingle$(EXEEXT) seqrettype$(EXEEXT) \
+	sqltest$(EXEEXT) testplot$(EXEEXT) treetypedisplay$(EXEEXT)
 bin_PROGRAMS = aaindexextract$(EXEEXT) abiview$(EXEEXT) acdc$(EXEEXT) \
 	acdgalaxy$(EXEEXT) acdpretty$(EXEEXT) acdtable$(EXEEXT) \
 	acdtrace$(EXEEXT) acdvalid$(EXEEXT) aligncopy$(EXEEXT) \
 	aligncopypair$(EXEEXT) antigenic$(EXEEXT) \
 	backtranambig$(EXEEXT) backtranseq$(EXEEXT) banana$(EXEEXT) \
-	biosed$(EXEEXT) btwisted$(EXEEXT) cai$(EXEEXT) chaos$(EXEEXT) \
+	biosed$(EXEEXT) btwisted$(EXEEXT) cachedas$(EXEEXT) \
+	cachedbfetch$(EXEEXT) cacheebeyesearch$(EXEEXT) \
+	cacheensembl$(EXEEXT) cai$(EXEEXT) chaos$(EXEEXT) \
 	charge$(EXEEXT) checktrans$(EXEEXT) chips$(EXEEXT) \
 	cirdna$(EXEEXT) codcmp$(EXEEXT) codcopy$(EXEEXT) \
 	coderet$(EXEEXT) compseq$(EXEEXT) cons$(EXEEXT) \
 	consambig$(EXEEXT) cpgplot$(EXEEXT) cpgreport$(EXEEXT) \
 	cusp$(EXEEXT) cutgextract$(EXEEXT) cutseq$(EXEEXT) \
 	dan$(EXEEXT) dbiblast$(EXEEXT) dbifasta$(EXEEXT) \
-	dbiflat$(EXEEXT) dbigcg$(EXEEXT) dbxfasta$(EXEEXT) \
-	dbxflat$(EXEEXT) dbxgcg$(EXEEXT) degapseq$(EXEEXT) \
+	dbiflat$(EXEEXT) dbigcg$(EXEEXT) dbtell$(EXEEXT) \
+	dbxcompress$(EXEEXT) dbxedam$(EXEEXT) dbxfasta$(EXEEXT) \
+	dbxflat$(EXEEXT) dbxgcg$(EXEEXT) dbxobo$(EXEEXT) \
+	dbxreport$(EXEEXT) dbxresource$(EXEEXT) dbxstat$(EXEEXT) \
+	dbxtax$(EXEEXT) dbxuncompress$(EXEEXT) degapseq$(EXEEXT) \
 	density$(EXEEXT) descseq$(EXEEXT) diffseq$(EXEEXT) \
-	digest$(EXEEXT) distmat$(EXEEXT) dotmatcher$(EXEEXT) \
-	dotpath$(EXEEXT) dottup$(EXEEXT) dreg$(EXEEXT) \
+	distmat$(EXEEXT) dotmatcher$(EXEEXT) dotpath$(EXEEXT) \
+	dottup$(EXEEXT) dreg$(EXEEXT) drfinddata$(EXEEXT) \
+	drfindformat$(EXEEXT) drfindid$(EXEEXT) \
+	drfindresource$(EXEEXT) drget$(EXEEXT) drtext$(EXEEXT) \
+	edamdef$(EXEEXT) edamhasinput$(EXEEXT) edamhasoutput$(EXEEXT) \
+	edamisformat$(EXEEXT) edamisid$(EXEEXT) edamname$(EXEEXT) \
 	edialign$(EXEEXT) einverted$(EXEEXT) embossdata$(EXEEXT) \
 	embossversion$(EXEEXT) emma$(EXEEXT) emowse$(EXEEXT) \
 	entret$(EXEEXT) epestfind$(EXEEXT) eprimer3$(EXEEXT) \
-	equicktandem$(EXEEXT) est2genome$(EXEEXT) etandem$(EXEEXT) \
-	extractalign$(EXEEXT) extractfeat$(EXEEXT) extractseq$(EXEEXT) \
-	featcopy$(EXEEXT) featreport$(EXEEXT) findkm$(EXEEXT) \
-	freak$(EXEEXT) fuzznuc$(EXEEXT) fuzzpro$(EXEEXT) \
-	fuzztran$(EXEEXT) garnier$(EXEEXT) geecee$(EXEEXT) \
-	getorf$(EXEEXT) helixturnhelix$(EXEEXT) hmoment$(EXEEXT) \
-	iep$(EXEEXT) infoalign$(EXEEXT) infobase$(EXEEXT) \
-	inforesidue$(EXEEXT) infoseq$(EXEEXT) isochore$(EXEEXT) \
-	jaspextract$(EXEEXT) jaspscan$(EXEEXT) jembossctl$(EXEEXT) \
-	lindna$(EXEEXT) listor$(EXEEXT) makenucseq$(EXEEXT) \
-	makeprotseq$(EXEEXT) marscan$(EXEEXT) maskambignuc$(EXEEXT) \
-	maskambigprot$(EXEEXT) maskfeat$(EXEEXT) maskseq$(EXEEXT) \
-	matcher$(EXEEXT) megamerger$(EXEEXT) merger$(EXEEXT) \
-	msbar$(EXEEXT) mwcontam$(EXEEXT) mwfilter$(EXEEXT) \
-	needle$(EXEEXT) needleall$(EXEEXT) newcpgreport$(EXEEXT) \
-	newcpgseek$(EXEEXT) newseq$(EXEEXT) nohtml$(EXEEXT) \
-	noreturn$(EXEEXT) nospace$(EXEEXT) notab$(EXEEXT) \
-	notseq$(EXEEXT) nthseq$(EXEEXT) nthseqset$(EXEEXT) \
-	octanol$(EXEEXT) oddcomp$(EXEEXT) palindrome$(EXEEXT) \
+	eprimer32$(EXEEXT) equicktandem$(EXEEXT) est2genome$(EXEEXT) \
+	etandem$(EXEEXT) extractalign$(EXEEXT) extractfeat$(EXEEXT) \
+	extractseq$(EXEEXT) featcopy$(EXEEXT) featreport$(EXEEXT) \
+	feattext$(EXEEXT) findkm$(EXEEXT) freak$(EXEEXT) \
+	fuzznuc$(EXEEXT) fuzzpro$(EXEEXT) fuzztran$(EXEEXT) \
+	garnier$(EXEEXT) geecee$(EXEEXT) getorf$(EXEEXT) \
+	godef$(EXEEXT) goname$(EXEEXT) helixturnhelix$(EXEEXT) \
+	hmoment$(EXEEXT) iep$(EXEEXT) infoalign$(EXEEXT) \
+	infobase$(EXEEXT) inforesidue$(EXEEXT) infoseq$(EXEEXT) \
+	isochore$(EXEEXT) jaspextract$(EXEEXT) jaspscan$(EXEEXT) \
+	jembossctl$(EXEEXT) lindna$(EXEEXT) listor$(EXEEXT) \
+	makenucseq$(EXEEXT) makeprotseq$(EXEEXT) marscan$(EXEEXT) \
+	maskambignuc$(EXEEXT) maskambigprot$(EXEEXT) maskfeat$(EXEEXT) \
+	maskseq$(EXEEXT) matcher$(EXEEXT) megamerger$(EXEEXT) \
+	merger$(EXEEXT) msbar$(EXEEXT) mwcontam$(EXEEXT) \
+	mwfilter$(EXEEXT) needle$(EXEEXT) needleall$(EXEEXT) \
+	newcpgreport$(EXEEXT) newcpgseek$(EXEEXT) newseq$(EXEEXT) \
+	nohtml$(EXEEXT) noreturn$(EXEEXT) nospace$(EXEEXT) \
+	notab$(EXEEXT) notseq$(EXEEXT) nthseq$(EXEEXT) \
+	nthseqset$(EXEEXT) octanol$(EXEEXT) oddcomp$(EXEEXT) \
+	ontocount$(EXEEXT) ontoget$(EXEEXT) ontogetcommon$(EXEEXT) \
+	ontogetdown$(EXEEXT) ontogetobsolete$(EXEEXT) \
+	ontogetroot$(EXEEXT) ontogetsibs$(EXEEXT) ontogetup$(EXEEXT) \
+	ontoisobsolete$(EXEEXT) ontotext$(EXEEXT) palindrome$(EXEEXT) \
 	pasteseq$(EXEEXT) patmatdb$(EXEEXT) patmatmotifs$(EXEEXT) \
-	pepcoil$(EXEEXT) pepinfo$(EXEEXT) pepnet$(EXEEXT) \
-	pepstats$(EXEEXT) pepwheel$(EXEEXT) pepwindow$(EXEEXT) \
-	pepwindowall$(EXEEXT) plotcon$(EXEEXT) plotorf$(EXEEXT) \
-	polydot$(EXEEXT) preg$(EXEEXT) prettyplot$(EXEEXT) \
-	prettyseq$(EXEEXT) primersearch$(EXEEXT) \
+	pepcoil$(EXEEXT) pepdigest$(EXEEXT) pepinfo$(EXEEXT) \
+	pepnet$(EXEEXT) pepstats$(EXEEXT) pepwheel$(EXEEXT) \
+	pepwindow$(EXEEXT) pepwindowall$(EXEEXT) plotcon$(EXEEXT) \
+	plotorf$(EXEEXT) polydot$(EXEEXT) preg$(EXEEXT) \
+	prettyplot$(EXEEXT) prettyseq$(EXEEXT) primersearch$(EXEEXT) \
 	printsextract$(EXEEXT) profit$(EXEEXT) prophecy$(EXEEXT) \
 	prophet$(EXEEXT) prosextract$(EXEEXT) pscan$(EXEEXT) \
 	psiphi$(EXEEXT) rebaseextract$(EXEEXT) recoder$(EXEEXT) \
 	redata$(EXEEXT) remap$(EXEEXT) restover$(EXEEXT) \
 	restrict$(EXEEXT) revseq$(EXEEXT) seealso$(EXEEXT) \
-	seqmatchall$(EXEEXT) seqret$(EXEEXT) seqretsetall$(EXEEXT) \
-	seqretsplit$(EXEEXT) showalign$(EXEEXT) showdb$(EXEEXT) \
-	showfeat$(EXEEXT) showorf$(EXEEXT) showpep$(EXEEXT) \
-	showseq$(EXEEXT) shuffleseq$(EXEEXT) sigcleave$(EXEEXT) \
-	silent$(EXEEXT) sirna$(EXEEXT) sixpack$(EXEEXT) \
-	sizeseq$(EXEEXT) skipredundant$(EXEEXT) skipseq$(EXEEXT) \
-	splitsource$(EXEEXT) splitter$(EXEEXT) stretcher$(EXEEXT) \
-	stssearch$(EXEEXT) supermatcher$(EXEEXT) syco$(EXEEXT) \
-	tcode$(EXEEXT) textsearch$(EXEEXT) tfextract$(EXEEXT) \
-	tfm$(EXEEXT) tfscan$(EXEEXT) tmap$(EXEEXT) tranalign$(EXEEXT) \
+	seqcount$(EXEEXT) seqmatchall$(EXEEXT) seqret$(EXEEXT) \
+	seqretsetall$(EXEEXT) seqretsplit$(EXEEXT) seqxref$(EXEEXT) \
+	seqxrefget$(EXEEXT) servertell$(EXEEXT) showalign$(EXEEXT) \
+	showdb$(EXEEXT) showfeat$(EXEEXT) showorf$(EXEEXT) \
+	showpep$(EXEEXT) showseq$(EXEEXT) showserver$(EXEEXT) \
+	shuffleseq$(EXEEXT) sigcleave$(EXEEXT) silent$(EXEEXT) \
+	sirna$(EXEEXT) sixpack$(EXEEXT) sizeseq$(EXEEXT) \
+	skipredundant$(EXEEXT) skipseq$(EXEEXT) splitsource$(EXEEXT) \
+	splitter$(EXEEXT) stretcher$(EXEEXT) stssearch$(EXEEXT) \
+	supermatcher$(EXEEXT) syco$(EXEEXT) taxget$(EXEEXT) \
+	taxgetdown$(EXEEXT) taxgetrank$(EXEEXT) taxgetspecies$(EXEEXT) \
+	taxgetup$(EXEEXT) tcode$(EXEEXT) textget$(EXEEXT) \
+	textsearch$(EXEEXT) tfextract$(EXEEXT) tfm$(EXEEXT) \
+	tfscan$(EXEEXT) tmap$(EXEEXT) tranalign$(EXEEXT) \
 	transeq$(EXEEXT) trimest$(EXEEXT) trimseq$(EXEEXT) \
 	trimspace$(EXEEXT) twofeat$(EXEEXT) union$(EXEEXT) \
-	vectorstrip$(EXEEXT) water$(EXEEXT) whichdb$(EXEEXT) \
-	wobble$(EXEEXT) wordcount$(EXEEXT) wordfinder$(EXEEXT) \
-	wordmatch$(EXEEXT) wossname$(EXEEXT) yank$(EXEEXT)
+	urlget$(EXEEXT) vectorstrip$(EXEEXT) water$(EXEEXT) \
+	whichdb$(EXEEXT) wobble$(EXEEXT) wordcount$(EXEEXT) \
+	wordfinder$(EXEEXT) wordmatch$(EXEEXT) wossdata$(EXEEXT) \
+	wossinput$(EXEEXT) wossname$(EXEEXT) wossoperation$(EXEEXT) \
+	wossoutput$(EXEEXT) wossparam$(EXEEXT) wosstopic$(EXEEXT) \
+	yank$(EXEEXT)
 subdir = emboss
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in COPYING
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
+	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
 	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pngdriver.m4 \
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
+	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
 	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
 	$(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = $(top_builddir)/ajax/core/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgdatadir)"
@@ -290,6 +317,38 @@ btwisted_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+am_cachedas_OBJECTS = cachedas.$(OBJEXT)
+cachedas_OBJECTS = $(am_cachedas_OBJECTS)
+cachedas_LDADD = $(LDADD)
+cachedas_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_cachedbfetch_OBJECTS = cachedbfetch.$(OBJEXT)
+cachedbfetch_OBJECTS = $(am_cachedbfetch_OBJECTS)
+cachedbfetch_LDADD = $(LDADD)
+cachedbfetch_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_cacheebeyesearch_OBJECTS = cacheebeyesearch.$(OBJEXT)
+cacheebeyesearch_OBJECTS = $(am_cacheebeyesearch_OBJECTS)
+cacheebeyesearch_LDADD = $(LDADD)
+cacheebeyesearch_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_cacheensembl_OBJECTS = cacheensembl.$(OBJEXT)
+cacheensembl_OBJECTS = $(am_cacheensembl_OBJECTS)
+cacheensembl_LDADD = $(LDADD)
+cacheensembl_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_cai_OBJECTS = cai.$(OBJEXT)
 cai_OBJECTS = $(am_cai_OBJECTS)
 cai_LDADD = $(LDADD)
@@ -450,6 +509,22 @@ dan_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+am_dastest_OBJECTS = dastest.$(OBJEXT)
+dastest_OBJECTS = $(am_dastest_OBJECTS)
+dastest_LDADD = $(LDADD)
+dastest_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_dbfetchtest_OBJECTS = dbfetchtest.$(OBJEXT)
+dbfetchtest_OBJECTS = $(am_dbfetchtest_OBJECTS)
+dbfetchtest_LDADD = $(LDADD)
+dbfetchtest_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_dbiblast_OBJECTS = dbiblast.$(OBJEXT)
 dbiblast_OBJECTS = $(am_dbiblast_OBJECTS)
 dbiblast_LDADD = $(LDADD)
@@ -482,6 +557,30 @@ dbigcg_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+am_dbtell_OBJECTS = dbtell.$(OBJEXT)
+dbtell_OBJECTS = $(am_dbtell_OBJECTS)
+dbtell_LDADD = $(LDADD)
+dbtell_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_dbxcompress_OBJECTS = dbxcompress.$(OBJEXT)
+dbxcompress_OBJECTS = $(am_dbxcompress_OBJECTS)
+dbxcompress_LDADD = $(LDADD)
+dbxcompress_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_dbxedam_OBJECTS = dbxedam.$(OBJEXT)
+dbxedam_OBJECTS = $(am_dbxedam_OBJECTS)
+dbxedam_LDADD = $(LDADD)
+dbxedam_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
 am_dbxfasta_OBJECTS = dbxfasta.$(OBJEXT)
 dbxfasta_OBJECTS = $(am_dbxfasta_OBJECTS)
 dbxfasta_LDADD = $(LDADD)
@@ -506,6 +605,54 @@ dbxgcg_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+am_dbxobo_OBJECTS = dbxobo.$(OBJEXT)
+dbxobo_OBJECTS = $(am_dbxobo_OBJECTS)
+dbxobo_LDADD = $(LDADD)
+dbxobo_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_dbxreport_OBJECTS = dbxreport.$(OBJEXT)
+dbxreport_OBJECTS = $(am_dbxreport_OBJECTS)
+dbxreport_LDADD = $(LDADD)
+dbxreport_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_dbxresource_OBJECTS = dbxresource.$(OBJEXT)
+dbxresource_OBJECTS = $(am_dbxresource_OBJECTS)
+dbxresource_LDADD = $(LDADD)
+dbxresource_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_dbxstat_OBJECTS = dbxstat.$(OBJEXT)
+dbxstat_OBJECTS = $(am_dbxstat_OBJECTS)
+dbxstat_LDADD = $(LDADD)
+dbxstat_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_dbxtax_OBJECTS = dbxtax.$(OBJEXT)
+dbxtax_OBJECTS = $(am_dbxtax_OBJECTS)
+dbxtax_LDADD = $(LDADD)
+dbxtax_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_dbxuncompress_OBJECTS = dbxuncompress.$(OBJEXT)
+dbxuncompress_OBJECTS = $(am_dbxuncompress_OBJECTS)
+dbxuncompress_LDADD = $(LDADD)
+dbxuncompress_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_degapseq_OBJECTS = degapseq.$(OBJEXT)
 degapseq_OBJECTS = $(am_degapseq_OBJECTS)
 degapseq_LDADD = $(LDADD)
@@ -534,14 +681,6 @@ am_diffseq_OBJECTS = diffseq.$(OBJEXT)
 diffseq_OBJECTS = $(am_diffseq_OBJECTS)
 diffseq_LDADD = $(LDADD)
 diffseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
-	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
-	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
-	$(am__DEPENDENCIES_1)
-am_digest_OBJECTS = digest.$(OBJEXT)
-digest_OBJECTS = $(am_digest_OBJECTS)
-digest_LDADD = $(LDADD)
-digest_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
@@ -618,6 +757,54 @@ dreg_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+am_drfinddata_OBJECTS = drfinddata.$(OBJEXT)
+drfinddata_OBJECTS = $(am_drfinddata_OBJECTS)
+drfinddata_LDADD = $(LDADD)
+drfinddata_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_drfindformat_OBJECTS = drfindformat.$(OBJEXT)
+drfindformat_OBJECTS = $(am_drfindformat_OBJECTS)
+drfindformat_LDADD = $(LDADD)
+drfindformat_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_drfindid_OBJECTS = drfindid.$(OBJEXT)
+drfindid_OBJECTS = $(am_drfindid_OBJECTS)
+drfindid_LDADD = $(LDADD)
+drfindid_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_drfindresource_OBJECTS = drfindresource.$(OBJEXT)
+drfindresource_OBJECTS = $(am_drfindresource_OBJECTS)
+drfindresource_LDADD = $(LDADD)
+drfindresource_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_drget_OBJECTS = drget.$(OBJEXT)
+drget_OBJECTS = $(am_drget_OBJECTS)
+drget_LDADD = $(LDADD)
+drget_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_drtext_OBJECTS = drtext.$(OBJEXT)
+drtext_OBJECTS = $(am_drtext_OBJECTS)
+drtext_LDADD = $(LDADD)
+drtext_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
 am_edamclean_OBJECTS = edamclean.$(OBJEXT)
 edamclean_OBJECTS = $(am_edamclean_OBJECTS)
 edamclean_LDADD = $(LDADD)
@@ -626,6 +813,54 @@ edamclean_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
 	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_edamdef_OBJECTS = edamdef.$(OBJEXT)
+edamdef_OBJECTS = $(am_edamdef_OBJECTS)
+edamdef_LDADD = $(LDADD)
+edamdef_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_edamhasinput_OBJECTS = edamhasinput.$(OBJEXT)
+edamhasinput_OBJECTS = $(am_edamhasinput_OBJECTS)
+edamhasinput_LDADD = $(LDADD)
+edamhasinput_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_edamhasoutput_OBJECTS = edamhasoutput.$(OBJEXT)
+edamhasoutput_OBJECTS = $(am_edamhasoutput_OBJECTS)
+edamhasoutput_LDADD = $(LDADD)
+edamhasoutput_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_edamisformat_OBJECTS = edamisformat.$(OBJEXT)
+edamisformat_OBJECTS = $(am_edamisformat_OBJECTS)
+edamisformat_LDADD = $(LDADD)
+edamisformat_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_edamisid_OBJECTS = edamisid.$(OBJEXT)
+edamisid_OBJECTS = $(am_edamisid_OBJECTS)
+edamisid_LDADD = $(LDADD)
+edamisid_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_edamname_OBJECTS = edamname.$(OBJEXT)
+edamname_OBJECTS = $(am_edamname_OBJECTS)
+edamname_LDADD = $(LDADD)
+edamname_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
 am_edialign_OBJECTS = edialign.$(OBJEXT)
 edialign_OBJECTS = $(am_edialign_OBJECTS)
 edialign_LDADD = $(LDADD)
@@ -738,6 +973,14 @@ eprimer3_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+am_eprimer32_OBJECTS = eprimer32.$(OBJEXT)
+eprimer32_OBJECTS = $(am_eprimer32_OBJECTS)
+eprimer32_LDADD = $(LDADD)
+eprimer32_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_equicktandem_OBJECTS = equicktandem.$(OBJEXT)
 equicktandem_OBJECTS = $(am_equicktandem_OBJECTS)
 equicktandem_LDADD = $(LDADD)
@@ -802,6 +1045,14 @@ featreport_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
 	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_feattext_OBJECTS = feattext.$(OBJEXT)
+feattext_OBJECTS = $(am_feattext_OBJECTS)
+feattext_LDADD = $(LDADD)
+feattext_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
 am_findkm_OBJECTS = findkm.$(OBJEXT)
 findkm_OBJECTS = $(am_findkm_OBJECTS)
 findkm_LDADD = $(LDADD)
@@ -862,6 +1113,22 @@ am_getorf_OBJECTS = getorf.$(OBJEXT)
 getorf_OBJECTS = $(am_getorf_OBJECTS)
 getorf_LDADD = $(LDADD)
 getorf_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_godef_OBJECTS = godef.$(OBJEXT)
+godef_OBJECTS = $(am_godef_OBJECTS)
+godef_LDADD = $(LDADD)
+godef_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_goname_OBJECTS = goname.$(OBJEXT)
+goname_OBJECTS = $(am_goname_OBJECTS)
+goname_LDADD = $(LDADD)
+goname_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
@@ -1258,6 +1525,86 @@ oddcomp_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+am_ontocount_OBJECTS = ontocount.$(OBJEXT)
+ontocount_OBJECTS = $(am_ontocount_OBJECTS)
+ontocount_LDADD = $(LDADD)
+ontocount_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_ontoget_OBJECTS = ontoget.$(OBJEXT)
+ontoget_OBJECTS = $(am_ontoget_OBJECTS)
+ontoget_LDADD = $(LDADD)
+ontoget_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_ontogetcommon_OBJECTS = ontogetcommon.$(OBJEXT)
+ontogetcommon_OBJECTS = $(am_ontogetcommon_OBJECTS)
+ontogetcommon_LDADD = $(LDADD)
+ontogetcommon_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_ontogetdown_OBJECTS = ontogetdown.$(OBJEXT)
+ontogetdown_OBJECTS = $(am_ontogetdown_OBJECTS)
+ontogetdown_LDADD = $(LDADD)
+ontogetdown_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_ontogetobsolete_OBJECTS = ontogetobsolete.$(OBJEXT)
+ontogetobsolete_OBJECTS = $(am_ontogetobsolete_OBJECTS)
+ontogetobsolete_LDADD = $(LDADD)
+ontogetobsolete_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_ontogetroot_OBJECTS = ontogetroot.$(OBJEXT)
+ontogetroot_OBJECTS = $(am_ontogetroot_OBJECTS)
+ontogetroot_LDADD = $(LDADD)
+ontogetroot_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_ontogetsibs_OBJECTS = ontogetsibs.$(OBJEXT)
+ontogetsibs_OBJECTS = $(am_ontogetsibs_OBJECTS)
+ontogetsibs_LDADD = $(LDADD)
+ontogetsibs_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_ontogetup_OBJECTS = ontogetup.$(OBJEXT)
+ontogetup_OBJECTS = $(am_ontogetup_OBJECTS)
+ontogetup_LDADD = $(LDADD)
+ontogetup_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_ontoisobsolete_OBJECTS = ontoisobsolete.$(OBJEXT)
+ontoisobsolete_OBJECTS = $(am_ontoisobsolete_OBJECTS)
+ontoisobsolete_LDADD = $(LDADD)
+ontoisobsolete_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_ontotext_OBJECTS = ontotext.$(OBJEXT)
+ontotext_OBJECTS = $(am_ontotext_OBJECTS)
+ontotext_LDADD = $(LDADD)
+ontotext_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
 am_origsplitter_OBJECTS = origsplitter.$(OBJEXT)
 origsplitter_OBJECTS = $(am_origsplitter_OBJECTS)
 origsplitter_LDADD = $(LDADD)
@@ -1322,6 +1669,14 @@ pepcoil_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+am_pepdigest_OBJECTS = pepdigest.$(OBJEXT)
+pepdigest_OBJECTS = $(am_pepdigest_OBJECTS)
+pepdigest_LDADD = $(LDADD)
+pepdigest_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_pepinfo_OBJECTS = pepinfo.$(OBJEXT)
 pepinfo_OBJECTS = $(am_pepinfo_OBJECTS)
 pepinfo_LDADD = $(LDADD)
@@ -1562,6 +1917,14 @@ seealso_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+am_seqcount_OBJECTS = seqcount.$(OBJEXT)
+seqcount_OBJECTS = $(am_seqcount_OBJECTS)
+seqcount_LDADD = $(LDADD)
+seqcount_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
 am_seqinfo_OBJECTS = seqinfo.$(OBJEXT)
 seqinfo_OBJECTS = $(am_seqinfo_OBJECTS)
 seqinfo_LDADD = $(LDADD)
@@ -1642,6 +2005,30 @@ seqrettype_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
 	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_seqxref_OBJECTS = seqxref.$(OBJEXT)
+seqxref_OBJECTS = $(am_seqxref_OBJECTS)
+seqxref_LDADD = $(LDADD)
+seqxref_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_seqxrefget_OBJECTS = seqxrefget.$(OBJEXT)
+seqxrefget_OBJECTS = $(am_seqxrefget_OBJECTS)
+seqxrefget_LDADD = $(LDADD)
+seqxrefget_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_servertell_OBJECTS = servertell.$(OBJEXT)
+servertell_OBJECTS = $(am_servertell_OBJECTS)
+servertell_LDADD = $(LDADD)
+servertell_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_showalign_OBJECTS = showalign.$(OBJEXT)
 showalign_OBJECTS = $(am_showalign_OBJECTS)
 showalign_LDADD = $(LDADD)
@@ -1690,6 +2077,14 @@ showseq_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+showserver_SOURCES = showserver.c
+showserver_OBJECTS = showserver.$(OBJEXT)
+showserver_LDADD = $(LDADD)
+showserver_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_shuffleseq_OBJECTS = shuffleseq.$(OBJEXT)
 shuffleseq_OBJECTS = $(am_shuffleseq_OBJECTS)
 shuffleseq_LDADD = $(LDADD)
@@ -1810,6 +2205,46 @@ syco_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+am_taxget_OBJECTS = taxget.$(OBJEXT)
+taxget_OBJECTS = $(am_taxget_OBJECTS)
+taxget_LDADD = $(LDADD)
+taxget_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+am_taxgetdown_OBJECTS = taxgetdown.$(OBJEXT)
+taxgetdown_OBJECTS = $(am_taxgetdown_OBJECTS)
+taxgetdown_LDADD = $(LDADD)
+taxgetdown_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_taxgetrank_OBJECTS = taxgetrank.$(OBJEXT)
+taxgetrank_OBJECTS = $(am_taxgetrank_OBJECTS)
+taxgetrank_LDADD = $(LDADD)
+taxgetrank_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_taxgetspecies_OBJECTS = taxgetspecies.$(OBJEXT)
+taxgetspecies_OBJECTS = $(am_taxgetspecies_OBJECTS)
+taxgetspecies_LDADD = $(LDADD)
+taxgetspecies_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_taxgetup_OBJECTS = taxgetup.$(OBJEXT)
+taxgetup_OBJECTS = $(am_taxgetup_OBJECTS)
+taxgetup_LDADD = $(LDADD)
+taxgetup_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
 am_tcode_OBJECTS = tcode.$(OBJEXT)
 tcode_OBJECTS = $(am_tcode_OBJECTS)
 tcode_LDADD = $(LDADD)
@@ -1822,6 +2257,14 @@ am_testplot_OBJECTS = testplot.$(OBJEXT)
 testplot_OBJECTS = $(am_testplot_OBJECTS)
 testplot_LDADD = $(LDADD)
 testplot_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+textget_SOURCES = textget.c
+textget_OBJECTS = textget.$(OBJEXT)
+textget_LDADD = $(LDADD)
+textget_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
@@ -1930,6 +2373,14 @@ union_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+am_urlget_OBJECTS = urlget.$(OBJEXT)
+urlget_OBJECTS = $(am_urlget_OBJECTS)
+urlget_LDADD = $(LDADD)
+urlget_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
 am_vectorstrip_OBJECTS = vectorstrip.$(OBJEXT)
 vectorstrip_OBJECTS = $(am_vectorstrip_OBJECTS)
 vectorstrip_LDADD = $(LDADD)
@@ -1986,6 +2437,22 @@ wordmatch_DEPENDENCIES = ../nucleus/libnucleus.la \
 	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
 	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
 	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+wossdata_SOURCES = wossdata.c
+wossdata_OBJECTS = wossdata.$(OBJEXT)
+wossdata_LDADD = $(LDADD)
+wossdata_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
+	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
+	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
+	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
+	$(am__DEPENDENCIES_1)
+wossinput_SOURCES = wossinput.c
+wossinput_OBJECTS = wossinput.$(OBJEXT)
+wossinput_LDADD = $(LDADD)
+wossinput_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_wossname_OBJECTS = wossname.$(OBJEXT)
 wossname_OBJECTS = $(am_wossname_OBJECTS)
 wossname_LDADD = $(LDADD)
@@ -1994,6 +2461,38 @@ wossname_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
+wossoperation_SOURCES = wossoperation.c
+wossoperation_OBJECTS = wossoperation.$(OBJEXT)
+wossoperation_LDADD = $(LDADD)
+wossoperation_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+wossoutput_SOURCES = wossoutput.c
+wossoutput_OBJECTS = wossoutput.$(OBJEXT)
+wossoutput_LDADD = $(LDADD)
+wossoutput_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+wossparam_SOURCES = wossparam.c
+wossparam_OBJECTS = wossparam.$(OBJEXT)
+wossparam_LDADD = $(LDADD)
+wossparam_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
+am_wosstopic_OBJECTS = wosstopic.$(OBJEXT)
+wosstopic_OBJECTS = $(am_wosstopic_OBJECTS)
+wosstopic_LDADD = $(LDADD)
+wosstopic_DEPENDENCIES = ../nucleus/libnucleus.la \
+	../ajax/acd/libacd.la ../ajax/ajaxdb/libajaxdb.la \
+	../ajax/ensembl/libensembl.la ../ajax/graphics/libajaxg.la \
+	../ajax/core/libajax.la $(EXTRA_LDS) ../ajax/pcre/libepcre.la \
+	../plplot/libeplplot.la $(am__DEPENDENCIES_1)
 am_yank_OBJECTS = yank.$(OBJEXT)
 yank_OBJECTS = $(am_yank_OBJECTS)
 yank_LDADD = $(LDADD)
@@ -2002,7 +2501,7 @@ yank_DEPENDENCIES = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
 	$(EXTRA_LDS) ../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(am__DEPENDENCIES_1)
-DEFAULT_INCLUDES = -I.@am__isrc@
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/ajax/core
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
@@ -2023,54 +2522,70 @@ SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) $(acdc_SOURCES) \
 	$(aligncopypair_SOURCES) $(antigenic_SOURCES) \
 	$(backtranambig_SOURCES) $(backtranseq_SOURCES) \
 	$(banana_SOURCES) $(biosed_SOURCES) $(btwisted_SOURCES) \
+	$(cachedas_SOURCES) $(cachedbfetch_SOURCES) \
+	$(cacheebeyesearch_SOURCES) $(cacheensembl_SOURCES) \
 	$(cai_SOURCES) $(chaos_SOURCES) $(charge_SOURCES) \
 	$(checktrans_SOURCES) $(chips_SOURCES) $(cirdna_SOURCES) \
 	$(codcmp_SOURCES) codcopy.c $(coderet_SOURCES) \
 	$(complex_SOURCES) $(compseq_SOURCES) $(cons_SOURCES) \
 	$(consambig_SOURCES) $(corbatest_SOURCES) $(cpgplot_SOURCES) \
 	$(cpgreport_SOURCES) $(cusp_SOURCES) $(cutgextract_SOURCES) \
-	$(cutseq_SOURCES) $(dan_SOURCES) $(dbiblast_SOURCES) \
-	$(dbifasta_SOURCES) $(dbiflat_SOURCES) $(dbigcg_SOURCES) \
-	$(dbxfasta_SOURCES) $(dbxflat_SOURCES) $(dbxgcg_SOURCES) \
-	$(degapseq_SOURCES) $(density_SOURCES) $(descseq_SOURCES) \
-	$(diffseq_SOURCES) $(digest_SOURCES) $(distmat_SOURCES) \
-	domtesta.c domtestb.c domtestc.c domtestd.c \
+	$(cutseq_SOURCES) $(dan_SOURCES) $(dastest_SOURCES) \
+	$(dbfetchtest_SOURCES) $(dbiblast_SOURCES) $(dbifasta_SOURCES) \
+	$(dbiflat_SOURCES) $(dbigcg_SOURCES) $(dbtell_SOURCES) \
+	$(dbxcompress_SOURCES) $(dbxedam_SOURCES) $(dbxfasta_SOURCES) \
+	$(dbxflat_SOURCES) $(dbxgcg_SOURCES) $(dbxobo_SOURCES) \
+	$(dbxreport_SOURCES) $(dbxresource_SOURCES) $(dbxstat_SOURCES) \
+	$(dbxtax_SOURCES) $(dbxuncompress_SOURCES) $(degapseq_SOURCES) \
+	$(density_SOURCES) $(descseq_SOURCES) $(diffseq_SOURCES) \
+	$(distmat_SOURCES) domtesta.c domtestb.c domtestc.c domtestd.c \
 	$(dotmatcher_SOURCES) $(dotpath_SOURCES) $(dottup_SOURCES) \
-	$(dreg_SOURCES) $(edamclean_SOURCES) $(edialign_SOURCES) \
-	$(einverted_SOURCES) $(embossdata_SOURCES) \
-	$(embossversion_SOURCES) $(emma_SOURCES) $(emowse_SOURCES) \
-	$(ensembltest_SOURCES) $(entrails_SOURCES) \
+	$(dreg_SOURCES) $(drfinddata_SOURCES) $(drfindformat_SOURCES) \
+	$(drfindid_SOURCES) $(drfindresource_SOURCES) $(drget_SOURCES) \
+	$(drtext_SOURCES) $(edamclean_SOURCES) $(edamdef_SOURCES) \
+	$(edamhasinput_SOURCES) $(edamhasoutput_SOURCES) \
+	$(edamisformat_SOURCES) $(edamisid_SOURCES) \
+	$(edamname_SOURCES) $(edialign_SOURCES) $(einverted_SOURCES) \
+	$(embossdata_SOURCES) $(embossversion_SOURCES) $(emma_SOURCES) \
+	$(emowse_SOURCES) $(ensembltest_SOURCES) $(entrails_SOURCES) \
 	$(entrailsbook_SOURCES) $(entrailshtml_SOURCES) \
 	$(entrailswiki_SOURCES) $(entret_SOURCES) $(epestfind_SOURCES) \
-	$(eprimer3_SOURCES) $(equicktandem_SOURCES) \
-	$(est2genome_SOURCES) $(etandem_SOURCES) \
-	$(extractalign_SOURCES) $(extractfeat_SOURCES) \
-	$(extractseq_SOURCES) $(featcopy_SOURCES) \
-	$(featreport_SOURCES) $(findkm_SOURCES) $(freak_SOURCES) \
-	$(fuzznuc_SOURCES) $(fuzzpro_SOURCES) $(fuzztran_SOURCES) \
-	$(garnier_SOURCES) $(geecee_SOURCES) $(getorf_SOURCES) \
-	$(helixturnhelix_SOURCES) $(histogramtest_SOURCES) \
-	$(hmoment_SOURCES) $(iep_SOURCES) $(infoalign_SOURCES) \
-	$(infobase_SOURCES) $(inforesidue_SOURCES) $(infoseq_SOURCES) \
-	$(intconv_SOURCES) $(isochore_SOURCES) $(jaspextract_SOURCES) \
-	$(jaspscan_SOURCES) $(jembossctl_SOURCES) $(lindna_SOURCES) \
-	$(listor_SOURCES) makenucseq.c makeprotseq.c \
-	$(marscan_SOURCES) $(martattributes_SOURCES) \
-	$(martdatasets_SOURCES) $(martfilters_SOURCES) \
-	$(martquery_SOURCES) $(martregistry_SOURCES) \
-	$(martseqs_SOURCES) $(maskambignuc_SOURCES) \
-	$(maskambigprot_SOURCES) $(maskfeat_SOURCES) \
-	$(maskseq_SOURCES) $(matcher_SOURCES) $(megamerger_SOURCES) \
-	$(merger_SOURCES) $(msbar_SOURCES) $(mwcontam_SOURCES) \
-	$(mwfilter_SOURCES) $(needle_SOURCES) $(needleall_SOURCES) \
-	$(newcoils_SOURCES) $(newcpgreport_SOURCES) \
-	$(newcpgseek_SOURCES) $(newseq_SOURCES) $(nohtml_SOURCES) \
-	$(noreturn_SOURCES) $(nospace_SOURCES) $(notab_SOURCES) \
-	$(notseq_SOURCES) $(nthseq_SOURCES) $(nthseqset_SOURCES) \
-	$(octanol_SOURCES) $(oddcomp_SOURCES) $(origsplitter_SOURCES) \
-	$(origunion_SOURCES) $(palindrome_SOURCES) $(pasteseq_SOURCES) \
-	$(patmatdb_SOURCES) $(patmatmotifs_SOURCES) \
-	$(patmattest_SOURCES) $(pepcoil_SOURCES) $(pepinfo_SOURCES) \
+	$(eprimer3_SOURCES) $(eprimer32_SOURCES) \
+	$(equicktandem_SOURCES) $(est2genome_SOURCES) \
+	$(etandem_SOURCES) $(extractalign_SOURCES) \
+	$(extractfeat_SOURCES) $(extractseq_SOURCES) \
+	$(featcopy_SOURCES) $(featreport_SOURCES) $(feattext_SOURCES) \
+	$(findkm_SOURCES) $(freak_SOURCES) $(fuzznuc_SOURCES) \
+	$(fuzzpro_SOURCES) $(fuzztran_SOURCES) $(garnier_SOURCES) \
+	$(geecee_SOURCES) $(getorf_SOURCES) $(godef_SOURCES) \
+	$(goname_SOURCES) $(helixturnhelix_SOURCES) \
+	$(histogramtest_SOURCES) $(hmoment_SOURCES) $(iep_SOURCES) \
+	$(infoalign_SOURCES) $(infobase_SOURCES) \
+	$(inforesidue_SOURCES) $(infoseq_SOURCES) $(intconv_SOURCES) \
+	$(isochore_SOURCES) $(jaspextract_SOURCES) $(jaspscan_SOURCES) \
+	$(jembossctl_SOURCES) $(lindna_SOURCES) $(listor_SOURCES) \
+	makenucseq.c makeprotseq.c $(marscan_SOURCES) \
+	$(martattributes_SOURCES) $(martdatasets_SOURCES) \
+	$(martfilters_SOURCES) $(martquery_SOURCES) \
+	$(martregistry_SOURCES) $(martseqs_SOURCES) \
+	$(maskambignuc_SOURCES) $(maskambigprot_SOURCES) \
+	$(maskfeat_SOURCES) $(maskseq_SOURCES) $(matcher_SOURCES) \
+	$(megamerger_SOURCES) $(merger_SOURCES) $(msbar_SOURCES) \
+	$(mwcontam_SOURCES) $(mwfilter_SOURCES) $(needle_SOURCES) \
+	$(needleall_SOURCES) $(newcoils_SOURCES) \
+	$(newcpgreport_SOURCES) $(newcpgseek_SOURCES) \
+	$(newseq_SOURCES) $(nohtml_SOURCES) $(noreturn_SOURCES) \
+	$(nospace_SOURCES) $(notab_SOURCES) $(notseq_SOURCES) \
+	$(nthseq_SOURCES) $(nthseqset_SOURCES) $(octanol_SOURCES) \
+	$(oddcomp_SOURCES) $(ontocount_SOURCES) $(ontoget_SOURCES) \
+	$(ontogetcommon_SOURCES) $(ontogetdown_SOURCES) \
+	$(ontogetobsolete_SOURCES) $(ontogetroot_SOURCES) \
+	$(ontogetsibs_SOURCES) $(ontogetup_SOURCES) \
+	$(ontoisobsolete_SOURCES) $(ontotext_SOURCES) \
+	$(origsplitter_SOURCES) $(origunion_SOURCES) \
+	$(palindrome_SOURCES) $(pasteseq_SOURCES) $(patmatdb_SOURCES) \
+	$(patmatmotifs_SOURCES) $(patmattest_SOURCES) \
+	$(pepcoil_SOURCES) $(pepdigest_SOURCES) $(pepinfo_SOURCES) \
 	$(pepnet_SOURCES) $(pepstats_SOURCES) $(pepwheel_SOURCES) \
 	$(pepwindow_SOURCES) $(pepwindowall_SOURCES) \
 	$(plotcon_SOURCES) $(plotorf_SOURCES) $(polydot_SOURCES) \
@@ -2081,27 +2596,33 @@ SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) $(acdc_SOURCES) \
 	$(psiphi_SOURCES) $(rebaseextract_SOURCES) $(recoder_SOURCES) \
 	$(redata_SOURCES) $(remap_SOURCES) $(restover_SOURCES) \
 	$(restrict_SOURCES) $(revseq_SOURCES) $(seealso_SOURCES) \
-	$(seqinfo_SOURCES) $(seqmatchall_SOURCES) $(seqret_SOURCES) \
-	$(seqretall_SOURCES) $(seqretallfeat_SOURCES) \
-	$(seqretset_SOURCES) $(seqretsetall_SOURCES) \
-	$(seqretsingle_SOURCES) $(seqretsplit_SOURCES) \
-	$(seqrettype_SOURCES) $(showalign_SOURCES) $(showdb_SOURCES) \
-	$(showfeat_SOURCES) $(showorf_SOURCES) $(showpep_SOURCES) \
-	$(showseq_SOURCES) $(shuffleseq_SOURCES) $(sigcleave_SOURCES) \
+	$(seqcount_SOURCES) $(seqinfo_SOURCES) $(seqmatchall_SOURCES) \
+	$(seqret_SOURCES) $(seqretall_SOURCES) \
+	$(seqretallfeat_SOURCES) $(seqretset_SOURCES) \
+	$(seqretsetall_SOURCES) $(seqretsingle_SOURCES) \
+	$(seqretsplit_SOURCES) $(seqrettype_SOURCES) \
+	$(seqxref_SOURCES) $(seqxrefget_SOURCES) $(servertell_SOURCES) \
+	$(showalign_SOURCES) $(showdb_SOURCES) $(showfeat_SOURCES) \
+	$(showorf_SOURCES) $(showpep_SOURCES) $(showseq_SOURCES) \
+	showserver.c $(shuffleseq_SOURCES) $(sigcleave_SOURCES) \
 	$(silent_SOURCES) $(sirna_SOURCES) $(sixpack_SOURCES) \
 	$(sizeseq_SOURCES) $(skipredundant_SOURCES) $(skipseq_SOURCES) \
 	splitsource.c $(splitter_SOURCES) $(sqltest_SOURCES) \
 	$(stretcher_SOURCES) $(stssearch_SOURCES) \
-	$(supermatcher_SOURCES) $(syco_SOURCES) $(tcode_SOURCES) \
-	$(testplot_SOURCES) $(textsearch_SOURCES) $(tfextract_SOURCES) \
-	$(tfm_SOURCES) $(tfscan_SOURCES) $(tmap_SOURCES) \
-	$(tranalign_SOURCES) $(transeq_SOURCES) \
+	$(supermatcher_SOURCES) $(syco_SOURCES) $(taxget_SOURCES) \
+	$(taxgetdown_SOURCES) $(taxgetrank_SOURCES) \
+	$(taxgetspecies_SOURCES) $(taxgetup_SOURCES) $(tcode_SOURCES) \
+	$(testplot_SOURCES) textget.c $(textsearch_SOURCES) \
+	$(tfextract_SOURCES) $(tfm_SOURCES) $(tfscan_SOURCES) \
+	$(tmap_SOURCES) $(tranalign_SOURCES) $(transeq_SOURCES) \
 	$(treetypedisplay_SOURCES) $(trimest_SOURCES) \
 	$(trimseq_SOURCES) $(trimspace_SOURCES) $(twofeat_SOURCES) \
-	$(union_SOURCES) $(vectorstrip_SOURCES) $(water_SOURCES) \
-	$(whichdb_SOURCES) $(wobble_SOURCES) $(wordcount_SOURCES) \
-	$(wordfinder_SOURCES) $(wordmatch_SOURCES) $(wossname_SOURCES) \
-	$(yank_SOURCES)
+	$(union_SOURCES) $(urlget_SOURCES) $(vectorstrip_SOURCES) \
+	$(water_SOURCES) $(whichdb_SOURCES) $(wobble_SOURCES) \
+	$(wordcount_SOURCES) $(wordfinder_SOURCES) \
+	$(wordmatch_SOURCES) wossdata.c wossinput.c \
+	$(wossname_SOURCES) wossoperation.c wossoutput.c wossparam.c \
+	$(wosstopic_SOURCES) $(yank_SOURCES)
 DIST_SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) \
 	$(acdc_SOURCES) $(acdgalaxy_SOURCES) $(acdlog_SOURCES) \
 	$(acdpretty_SOURCES) $(acdrelations_SOURCES) \
@@ -2110,54 +2631,70 @@ DIST_SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) \
 	$(aligncopypair_SOURCES) $(antigenic_SOURCES) \
 	$(backtranambig_SOURCES) $(backtranseq_SOURCES) \
 	$(banana_SOURCES) $(biosed_SOURCES) $(btwisted_SOURCES) \
+	$(cachedas_SOURCES) $(cachedbfetch_SOURCES) \
+	$(cacheebeyesearch_SOURCES) $(cacheensembl_SOURCES) \
 	$(cai_SOURCES) $(chaos_SOURCES) $(charge_SOURCES) \
 	$(checktrans_SOURCES) $(chips_SOURCES) $(cirdna_SOURCES) \
 	$(codcmp_SOURCES) codcopy.c $(coderet_SOURCES) \
 	$(complex_SOURCES) $(compseq_SOURCES) $(cons_SOURCES) \
 	$(consambig_SOURCES) $(corbatest_SOURCES) $(cpgplot_SOURCES) \
 	$(cpgreport_SOURCES) $(cusp_SOURCES) $(cutgextract_SOURCES) \
-	$(cutseq_SOURCES) $(dan_SOURCES) $(dbiblast_SOURCES) \
-	$(dbifasta_SOURCES) $(dbiflat_SOURCES) $(dbigcg_SOURCES) \
-	$(dbxfasta_SOURCES) $(dbxflat_SOURCES) $(dbxgcg_SOURCES) \
-	$(degapseq_SOURCES) $(density_SOURCES) $(descseq_SOURCES) \
-	$(diffseq_SOURCES) $(digest_SOURCES) $(distmat_SOURCES) \
-	domtesta.c domtestb.c domtestc.c domtestd.c \
+	$(cutseq_SOURCES) $(dan_SOURCES) $(dastest_SOURCES) \
+	$(dbfetchtest_SOURCES) $(dbiblast_SOURCES) $(dbifasta_SOURCES) \
+	$(dbiflat_SOURCES) $(dbigcg_SOURCES) $(dbtell_SOURCES) \
+	$(dbxcompress_SOURCES) $(dbxedam_SOURCES) $(dbxfasta_SOURCES) \
+	$(dbxflat_SOURCES) $(dbxgcg_SOURCES) $(dbxobo_SOURCES) \
+	$(dbxreport_SOURCES) $(dbxresource_SOURCES) $(dbxstat_SOURCES) \
+	$(dbxtax_SOURCES) $(dbxuncompress_SOURCES) $(degapseq_SOURCES) \
+	$(density_SOURCES) $(descseq_SOURCES) $(diffseq_SOURCES) \
+	$(distmat_SOURCES) domtesta.c domtestb.c domtestc.c domtestd.c \
 	$(dotmatcher_SOURCES) $(dotpath_SOURCES) $(dottup_SOURCES) \
-	$(dreg_SOURCES) $(edamclean_SOURCES) $(edialign_SOURCES) \
-	$(einverted_SOURCES) $(embossdata_SOURCES) \
-	$(embossversion_SOURCES) $(emma_SOURCES) $(emowse_SOURCES) \
-	$(ensembltest_SOURCES) $(entrails_SOURCES) \
+	$(dreg_SOURCES) $(drfinddata_SOURCES) $(drfindformat_SOURCES) \
+	$(drfindid_SOURCES) $(drfindresource_SOURCES) $(drget_SOURCES) \
+	$(drtext_SOURCES) $(edamclean_SOURCES) $(edamdef_SOURCES) \
+	$(edamhasinput_SOURCES) $(edamhasoutput_SOURCES) \
+	$(edamisformat_SOURCES) $(edamisid_SOURCES) \
+	$(edamname_SOURCES) $(edialign_SOURCES) $(einverted_SOURCES) \
+	$(embossdata_SOURCES) $(embossversion_SOURCES) $(emma_SOURCES) \
+	$(emowse_SOURCES) $(ensembltest_SOURCES) $(entrails_SOURCES) \
 	$(entrailsbook_SOURCES) $(entrailshtml_SOURCES) \
 	$(entrailswiki_SOURCES) $(entret_SOURCES) $(epestfind_SOURCES) \
-	$(eprimer3_SOURCES) $(equicktandem_SOURCES) \
-	$(est2genome_SOURCES) $(etandem_SOURCES) \
-	$(extractalign_SOURCES) $(extractfeat_SOURCES) \
-	$(extractseq_SOURCES) $(featcopy_SOURCES) \
-	$(featreport_SOURCES) $(findkm_SOURCES) $(freak_SOURCES) \
-	$(fuzznuc_SOURCES) $(fuzzpro_SOURCES) $(fuzztran_SOURCES) \
-	$(garnier_SOURCES) $(geecee_SOURCES) $(getorf_SOURCES) \
-	$(helixturnhelix_SOURCES) $(histogramtest_SOURCES) \
-	$(hmoment_SOURCES) $(iep_SOURCES) $(infoalign_SOURCES) \
-	$(infobase_SOURCES) $(inforesidue_SOURCES) $(infoseq_SOURCES) \
-	$(intconv_SOURCES) $(isochore_SOURCES) $(jaspextract_SOURCES) \
-	$(jaspscan_SOURCES) $(jembossctl_SOURCES) $(lindna_SOURCES) \
-	$(listor_SOURCES) makenucseq.c makeprotseq.c \
-	$(marscan_SOURCES) $(martattributes_SOURCES) \
-	$(martdatasets_SOURCES) $(martfilters_SOURCES) \
-	$(martquery_SOURCES) $(martregistry_SOURCES) \
-	$(martseqs_SOURCES) $(maskambignuc_SOURCES) \
-	$(maskambigprot_SOURCES) $(maskfeat_SOURCES) \
-	$(maskseq_SOURCES) $(matcher_SOURCES) $(megamerger_SOURCES) \
-	$(merger_SOURCES) $(msbar_SOURCES) $(mwcontam_SOURCES) \
-	$(mwfilter_SOURCES) $(needle_SOURCES) $(needleall_SOURCES) \
-	$(newcoils_SOURCES) $(newcpgreport_SOURCES) \
-	$(newcpgseek_SOURCES) $(newseq_SOURCES) $(nohtml_SOURCES) \
-	$(noreturn_SOURCES) $(nospace_SOURCES) $(notab_SOURCES) \
-	$(notseq_SOURCES) $(nthseq_SOURCES) $(nthseqset_SOURCES) \
-	$(octanol_SOURCES) $(oddcomp_SOURCES) $(origsplitter_SOURCES) \
-	$(origunion_SOURCES) $(palindrome_SOURCES) $(pasteseq_SOURCES) \
-	$(patmatdb_SOURCES) $(patmatmotifs_SOURCES) \
-	$(patmattest_SOURCES) $(pepcoil_SOURCES) $(pepinfo_SOURCES) \
+	$(eprimer3_SOURCES) $(eprimer32_SOURCES) \
+	$(equicktandem_SOURCES) $(est2genome_SOURCES) \
+	$(etandem_SOURCES) $(extractalign_SOURCES) \
+	$(extractfeat_SOURCES) $(extractseq_SOURCES) \
+	$(featcopy_SOURCES) $(featreport_SOURCES) $(feattext_SOURCES) \
+	$(findkm_SOURCES) $(freak_SOURCES) $(fuzznuc_SOURCES) \
+	$(fuzzpro_SOURCES) $(fuzztran_SOURCES) $(garnier_SOURCES) \
+	$(geecee_SOURCES) $(getorf_SOURCES) $(godef_SOURCES) \
+	$(goname_SOURCES) $(helixturnhelix_SOURCES) \
+	$(histogramtest_SOURCES) $(hmoment_SOURCES) $(iep_SOURCES) \
+	$(infoalign_SOURCES) $(infobase_SOURCES) \
+	$(inforesidue_SOURCES) $(infoseq_SOURCES) $(intconv_SOURCES) \
+	$(isochore_SOURCES) $(jaspextract_SOURCES) $(jaspscan_SOURCES) \
+	$(jembossctl_SOURCES) $(lindna_SOURCES) $(listor_SOURCES) \
+	makenucseq.c makeprotseq.c $(marscan_SOURCES) \
+	$(martattributes_SOURCES) $(martdatasets_SOURCES) \
+	$(martfilters_SOURCES) $(martquery_SOURCES) \
+	$(martregistry_SOURCES) $(martseqs_SOURCES) \
+	$(maskambignuc_SOURCES) $(maskambigprot_SOURCES) \
+	$(maskfeat_SOURCES) $(maskseq_SOURCES) $(matcher_SOURCES) \
+	$(megamerger_SOURCES) $(merger_SOURCES) $(msbar_SOURCES) \
+	$(mwcontam_SOURCES) $(mwfilter_SOURCES) $(needle_SOURCES) \
+	$(needleall_SOURCES) $(newcoils_SOURCES) \
+	$(newcpgreport_SOURCES) $(newcpgseek_SOURCES) \
+	$(newseq_SOURCES) $(nohtml_SOURCES) $(noreturn_SOURCES) \
+	$(nospace_SOURCES) $(notab_SOURCES) $(notseq_SOURCES) \
+	$(nthseq_SOURCES) $(nthseqset_SOURCES) $(octanol_SOURCES) \
+	$(oddcomp_SOURCES) $(ontocount_SOURCES) $(ontoget_SOURCES) \
+	$(ontogetcommon_SOURCES) $(ontogetdown_SOURCES) \
+	$(ontogetobsolete_SOURCES) $(ontogetroot_SOURCES) \
+	$(ontogetsibs_SOURCES) $(ontogetup_SOURCES) \
+	$(ontoisobsolete_SOURCES) $(ontotext_SOURCES) \
+	$(origsplitter_SOURCES) $(origunion_SOURCES) \
+	$(palindrome_SOURCES) $(pasteseq_SOURCES) $(patmatdb_SOURCES) \
+	$(patmatmotifs_SOURCES) $(patmattest_SOURCES) \
+	$(pepcoil_SOURCES) $(pepdigest_SOURCES) $(pepinfo_SOURCES) \
 	$(pepnet_SOURCES) $(pepstats_SOURCES) $(pepwheel_SOURCES) \
 	$(pepwindow_SOURCES) $(pepwindowall_SOURCES) \
 	$(plotcon_SOURCES) $(plotorf_SOURCES) $(polydot_SOURCES) \
@@ -2168,27 +2705,33 @@ DIST_SOURCES = $(aaindexextract_SOURCES) $(abiview_SOURCES) \
 	$(psiphi_SOURCES) $(rebaseextract_SOURCES) $(recoder_SOURCES) \
 	$(redata_SOURCES) $(remap_SOURCES) $(restover_SOURCES) \
 	$(restrict_SOURCES) $(revseq_SOURCES) $(seealso_SOURCES) \
-	$(seqinfo_SOURCES) $(seqmatchall_SOURCES) $(seqret_SOURCES) \
-	$(seqretall_SOURCES) $(seqretallfeat_SOURCES) \
-	$(seqretset_SOURCES) $(seqretsetall_SOURCES) \
-	$(seqretsingle_SOURCES) $(seqretsplit_SOURCES) \
-	$(seqrettype_SOURCES) $(showalign_SOURCES) $(showdb_SOURCES) \
-	$(showfeat_SOURCES) $(showorf_SOURCES) $(showpep_SOURCES) \
-	$(showseq_SOURCES) $(shuffleseq_SOURCES) $(sigcleave_SOURCES) \
+	$(seqcount_SOURCES) $(seqinfo_SOURCES) $(seqmatchall_SOURCES) \
+	$(seqret_SOURCES) $(seqretall_SOURCES) \
+	$(seqretallfeat_SOURCES) $(seqretset_SOURCES) \
+	$(seqretsetall_SOURCES) $(seqretsingle_SOURCES) \
+	$(seqretsplit_SOURCES) $(seqrettype_SOURCES) \
+	$(seqxref_SOURCES) $(seqxrefget_SOURCES) $(servertell_SOURCES) \
+	$(showalign_SOURCES) $(showdb_SOURCES) $(showfeat_SOURCES) \
+	$(showorf_SOURCES) $(showpep_SOURCES) $(showseq_SOURCES) \
+	showserver.c $(shuffleseq_SOURCES) $(sigcleave_SOURCES) \
 	$(silent_SOURCES) $(sirna_SOURCES) $(sixpack_SOURCES) \
 	$(sizeseq_SOURCES) $(skipredundant_SOURCES) $(skipseq_SOURCES) \
 	splitsource.c $(splitter_SOURCES) $(sqltest_SOURCES) \
 	$(stretcher_SOURCES) $(stssearch_SOURCES) \
-	$(supermatcher_SOURCES) $(syco_SOURCES) $(tcode_SOURCES) \
-	$(testplot_SOURCES) $(textsearch_SOURCES) $(tfextract_SOURCES) \
-	$(tfm_SOURCES) $(tfscan_SOURCES) $(tmap_SOURCES) \
-	$(tranalign_SOURCES) $(transeq_SOURCES) \
+	$(supermatcher_SOURCES) $(syco_SOURCES) $(taxget_SOURCES) \
+	$(taxgetdown_SOURCES) $(taxgetrank_SOURCES) \
+	$(taxgetspecies_SOURCES) $(taxgetup_SOURCES) $(tcode_SOURCES) \
+	$(testplot_SOURCES) textget.c $(textsearch_SOURCES) \
+	$(tfextract_SOURCES) $(tfm_SOURCES) $(tfscan_SOURCES) \
+	$(tmap_SOURCES) $(tranalign_SOURCES) $(transeq_SOURCES) \
 	$(treetypedisplay_SOURCES) $(trimest_SOURCES) \
 	$(trimseq_SOURCES) $(trimspace_SOURCES) $(twofeat_SOURCES) \
-	$(union_SOURCES) $(vectorstrip_SOURCES) $(water_SOURCES) \
-	$(whichdb_SOURCES) $(wobble_SOURCES) $(wordcount_SOURCES) \
-	$(wordfinder_SOURCES) $(wordmatch_SOURCES) $(wossname_SOURCES) \
-	$(yank_SOURCES)
+	$(union_SOURCES) $(urlget_SOURCES) $(vectorstrip_SOURCES) \
+	$(water_SOURCES) $(whichdb_SOURCES) $(wobble_SOURCES) \
+	$(wordcount_SOURCES) $(wordfinder_SOURCES) \
+	$(wordmatch_SOURCES) wossdata.c wossinput.c \
+	$(wossname_SOURCES) wossoperation.c wossoutput.c wossparam.c \
+	$(wosstopic_SOURCES) $(yank_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -2262,16 +2805,24 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+AXIS2C_CFLAGS = @AXIS2C_CFLAGS@
+AXIS2C_CPPFLAGS = @AXIS2C_CPPFLAGS@
+AXIS2C_LDFLAGS = @AXIS2C_LDFLAGS@
+AXIS2C_LIBS = @AXIS2C_LIBS@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+CXXDEPMODE = @CXXDEPMODE@
+CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
-DEVWARNINGS = @DEVWARNINGS@
 DEVWARN_CFLAGS = @DEVWARN_CFLAGS@
+DLLTOOL = @DLLTOOL@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -2303,9 +2854,11 @@ LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
+MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
 MYSQL_CFLAGS = @MYSQL_CFLAGS@
 MYSQL_CONFIG = @MYSQL_CONFIG@
+MYSQL_CPPFLAGS = @MYSQL_CPPFLAGS@
 MYSQL_LDFLAGS = @MYSQL_LDFLAGS@
 MYSQL_VERSION = @MYSQL_VERSION@
 NEEDAJAX = @NEEDAJAX@
@@ -2330,8 +2883,12 @@ PCRE_MINOR = @PCRE_MINOR@
 PCRE_POSIXLIB_VERSION = @PCRE_POSIXLIB_VERSION@
 PCRE_VERSION = @PCRE_VERSION@
 PG_CONFIG = @PG_CONFIG@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 POSTGRESQL_CFLAGS = @POSTGRESQL_CFLAGS@
+POSTGRESQL_CPPFLAGS = @POSTGRESQL_CPPFLAGS@
 POSTGRESQL_LDFLAGS = @POSTGRESQL_LDFLAGS@
 POSTGRESQL_VERSION = @POSTGRESQL_VERSION@
 RANLIB = @RANLIB@
@@ -2340,7 +2897,6 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
-WARNINGS = @WARNINGS@
 WARN_CFLAGS = @WARN_CFLAGS@
 XLIB = @XLIB@
 XMKMF = @XMKMF@
@@ -2352,7 +2908,9 @@ abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
+ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -2387,7 +2945,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -2403,8 +2960,14 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = acd data
-EXTRA_DIST = emboss.default.template
+SUBDIRS = acd data index
+EXTRA_DIST = emboss.default.template emboss.standard \
+	server.biomart server.dasregistry server.dbfetch server.dkfz \
+	server.ebeye server.entrez \
+	server.ensembl server.ensemblgenomes \
+	server.mrs server.mrs3 server.mrs4 \
+	server.srs server.wsdbfetch
+
 @ISAIXIA64_TRUE@@ISSHARED_TRUE@AIX_CFLAGS = -Wl,-bdynamic -Wl,-brtl -L../ajax/pcre/.libs \
 @ISAIXIA64_TRUE@@ISSHARED_TRUE@-L../ajax/expat/.libs -L../ajax/zlib/.libs -L../ajax/core/.libs \
 @ISAIXIA64_TRUE@@ISSHARED_TRUE@-L../ajax/graphics/.libs -L../ajax/ensembl/.libs -L../ajax/ajaxdb/.libs \
@@ -2413,11 +2976,16 @@ EXTRA_DIST = emboss.default.template
 
 AM_CFLAGS = $(AIX_CFLAGS) $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
 @ESYSTEMLIBS_FALSE@EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib
-INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax/pcre \
+AM_CPPFLAGS = -I$(top_srcdir)/ajax/core \
+	-I$(top_srcdir)/nucleus \
+	-I$(top_srcdir)/ajax/pcre \
 	$(EXTRA_INCLUDES) \
-	-I$(top_srcdir)/ajax/core -I$(top_srcdir)/ajax/graphics \
-	-I$(top_srcdir)/ajax/ensembl -I$(top_srcdir)/ajax/ajaxdb \
-	-I$(top_srcdir)/ajax/acd -I$(top_srcdir)/plplot
+	$(AXIS2C_CPPFLAGS) \
+	-I$(top_srcdir)/ajax/graphics \
+	-I$(top_srcdir)/ajax/ensembl \
+	-I$(top_srcdir)/ajax/ajaxdb \
+	-I$(top_srcdir)/ajax/acd \
+	-I$(top_srcdir)/plplot
 
 aaindexextract_SOURCES = aaindexextract.c
 abiview_SOURCES = abiview.c
@@ -2437,6 +3005,10 @@ backtranseq_SOURCES = backtranseq.c
 banana_SOURCES = banana.c
 biosed_SOURCES = biosed.c
 btwisted_SOURCES = btwisted.c
+cachedas_SOURCES = cachedas.c
+cachedbfetch_SOURCES = cachedbfetch.c
+cacheebeyesearch_SOURCES = cacheebeyesearch.c
+cacheensembl_SOURCES = cacheensembl.c
 chaos_SOURCES = chaos.c
 cai_SOURCES = cai.c
 charge_SOURCES = charge.c
@@ -2454,23 +3026,45 @@ cusp_SOURCES = cusp.c
 cutgextract_SOURCES = cutgextract.c
 cutseq_SOURCES = cutseq.c
 dan_SOURCES = dan.c
+dastest_SOURCES = dastest.c
+dbfetchtest_SOURCES = dbfetchtest.c
 dbiblast_SOURCES = dbiblast.c
 dbifasta_SOURCES = dbifasta.c
 dbiflat_SOURCES = dbiflat.c
 dbigcg_SOURCES = dbigcg.c
+dbtell_SOURCES = dbtell.c
+dbxcompress_SOURCES = dbxcompress.c
+dbxedam_SOURCES = dbxedam.c
 dbxfasta_SOURCES = dbxfasta.c
 dbxflat_SOURCES = dbxflat.c
 dbxgcg_SOURCES = dbxgcg.c
+dbxobo_SOURCES = dbxobo.c
+dbxreport_SOURCES = dbxreport.c
+dbxresource_SOURCES = dbxresource.c
+dbxstat_SOURCES = dbxstat.c
+dbxtax_SOURCES = dbxtax.c
+dbxuncompress_SOURCES = dbxuncompress.c
 degapseq_SOURCES = degapseq.c
 density_SOURCES = density.c
 descseq_SOURCES = descseq.c
 diffseq_SOURCES = diffseq.c
-digest_SOURCES = digest.c
 distmat_SOURCES = distmat.c
 dotmatcher_SOURCES = dotmatcher.c
 dotpath_SOURCES = dotpath.c
 dottup_SOURCES = dottup.c
 dreg_SOURCES = dreg.c
+drfinddata_SOURCES = drfinddata.c
+drfindformat_SOURCES = drfindformat.c
+drfindid_SOURCES = drfindid.c
+drfindresource_SOURCES = drfindresource.c
+drget_SOURCES = drget.c
+drtext_SOURCES = drtext.c
+edamdef_SOURCES = edamdef.c
+edamhasinput_SOURCES = edamhasinput.c
+edamhasoutput_SOURCES = edamhasoutput.c
+edamisformat_SOURCES = edamisformat.c
+edamisid_SOURCES = edamisid.c
+edamname_SOURCES = edamname.c
 edialign_SOURCES = edialign.c
 einverted_SOURCES = einverted.c
 embossdata_SOURCES = embossdata.c
@@ -2479,6 +3073,7 @@ emowse_SOURCES = emowse.c
 entret_SOURCES = entret.c
 epestfind_SOURCES = epestfind.c
 eprimer3_SOURCES = eprimer3.c
+eprimer32_SOURCES = eprimer32.c
 equicktandem_SOURCES = equicktandem.c
 est2genome_SOURCES = est2genome.c
 etandem_SOURCES = etandem.c
@@ -2488,6 +3083,7 @@ extractfeat_SOURCES = extractfeat.c
 extractseq_SOURCES = extractseq.c
 featcopy_SOURCES = featcopy.c
 featreport_SOURCES = featreport.c
+feattext_SOURCES = feattext.c
 findkm_SOURCES = findkm.c
 freak_SOURCES = freak.c
 fuzznuc_SOURCES = fuzznuc.c
@@ -2496,6 +3092,8 @@ fuzztran_SOURCES = fuzztran.c
 garnier_SOURCES = garnier.c
 geecee_SOURCES = geecee.c
 getorf_SOURCES = getorf.c
+godef_SOURCES = godef.c
+goname_SOURCES = goname.c
 helixturnhelix_SOURCES = helixturnhelix.c
 hmoment_SOURCES = hmoment.c
 iep_SOURCES = iep.c
@@ -2540,11 +3138,22 @@ nthseq_SOURCES = nthseq.c
 nthseqset_SOURCES = nthseqset.c
 octanol_SOURCES = octanol.c
 oddcomp_SOURCES = oddcomp.c
+ontocount_SOURCES = ontocount.c
+ontoget_SOURCES = ontoget.c
+ontogetcommon_SOURCES = ontogetcommon.c
+ontogetdown_SOURCES = ontogetdown.c
+ontogetobsolete_SOURCES = ontogetobsolete.c
+ontogetroot_SOURCES = ontogetroot.c
+ontogetsibs_SOURCES = ontogetsibs.c
+ontogetup_SOURCES = ontogetup.c
+ontoisobsolete_SOURCES = ontoisobsolete.c
+ontotext_SOURCES = ontotext.c
 palindrome_SOURCES = palindrome.c
 pasteseq_SOURCES = pasteseq.c
 patmatdb_SOURCES = patmatdb.c
 patmatmotifs_SOURCES = patmatmotifs.c
 pepcoil_SOURCES = pepcoil.c
+pepdigest_SOURCES = pepdigest.c
 pepinfo_SOURCES = pepinfo.c
 pepnet_SOURCES = pepnet.c
 pepstats_SOURCES = pepstats.c
@@ -2573,10 +3182,14 @@ restover_SOURCES = restover.c
 restrict_SOURCES = restrict.c
 revseq_SOURCES = revseq.c
 seealso_SOURCES = seealso.c
+seqcount_SOURCES = seqcount.c
 seqmatchall_SOURCES = seqmatchall.c
 seqret_SOURCES = seqret.c
 seqretsetall_SOURCES = seqretsetall.c
 seqretsplit_SOURCES = seqretsplit.c
+seqxref_SOURCES = seqxref.c
+seqxrefget_SOURCES = seqxrefget.c
+servertell_SOURCES = servertell.c
 showalign_SOURCES = showalign.c
 showdb_SOURCES = showdb.c
 showfeat_SOURCES = showfeat.c
@@ -2596,6 +3209,11 @@ stretcher_SOURCES = stretcher.c
 stssearch_SOURCES = stssearch.c
 supermatcher_SOURCES = supermatcher.c
 syco_SOURCES = syco.c
+taxget_SOURCES = taxget.c
+taxgetdown_SOURCES = taxgetdown.c
+taxgetrank_SOURCES = taxgetrank.c
+taxgetspecies_SOURCES = taxgetspecies.c
+taxgetup_SOURCES = taxgetup.c
 tcode_SOURCES = tcode.c
 textsearch_SOURCES = textsearch.c
 tfextract_SOURCES = tfextract.c
@@ -2609,6 +3227,7 @@ trimseq_SOURCES = trimseq.c
 trimspace_SOURCES = trimspace.c
 twofeat_SOURCES = twofeat.c
 union_SOURCES = union.c
+urlget_SOURCES = urlget.c
 vectorstrip_SOURCES = vectorstrip.c
 water_SOURCES = water.c
 whichdb_SOURCES = whichdb.c
@@ -2617,6 +3236,7 @@ wordcount_SOURCES = wordcount.c
 wordfinder_SOURCES = wordfinder.c
 wordmatch_SOURCES = wordmatch.c
 wossname_SOURCES = wossname.c
+wosstopic_SOURCES = wosstopic.c
 yank_SOURCES = yank.c
 acdlog_SOURCES = acdlog.c
 ajtest_SOURCES = ajtest.c
@@ -2653,7 +3273,7 @@ LDADD = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
 	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
 	$(XLIB)
 
-pkgdata_DATA = emboss.default.template
+pkgdata_DATA = $(EXTRA_DIST)
 all: all-recursive
 
 .SUFFIXES:
@@ -2800,6 +3420,18 @@ biosed$(EXEEXT): $(biosed_OBJECTS) $(biosed_DEPENDENCIES)
 btwisted$(EXEEXT): $(btwisted_OBJECTS) $(btwisted_DEPENDENCIES) 
 	@rm -f btwisted$(EXEEXT)
 	$(LINK) $(btwisted_OBJECTS) $(btwisted_LDADD) $(LIBS)
+cachedas$(EXEEXT): $(cachedas_OBJECTS) $(cachedas_DEPENDENCIES) 
+	@rm -f cachedas$(EXEEXT)
+	$(LINK) $(cachedas_OBJECTS) $(cachedas_LDADD) $(LIBS)
+cachedbfetch$(EXEEXT): $(cachedbfetch_OBJECTS) $(cachedbfetch_DEPENDENCIES) 
+	@rm -f cachedbfetch$(EXEEXT)
+	$(LINK) $(cachedbfetch_OBJECTS) $(cachedbfetch_LDADD) $(LIBS)
+cacheebeyesearch$(EXEEXT): $(cacheebeyesearch_OBJECTS) $(cacheebeyesearch_DEPENDENCIES) 
+	@rm -f cacheebeyesearch$(EXEEXT)
+	$(LINK) $(cacheebeyesearch_OBJECTS) $(cacheebeyesearch_LDADD) $(LIBS)
+cacheensembl$(EXEEXT): $(cacheensembl_OBJECTS) $(cacheensembl_DEPENDENCIES) 
+	@rm -f cacheensembl$(EXEEXT)
+	$(LINK) $(cacheensembl_OBJECTS) $(cacheensembl_LDADD) $(LIBS)
 cai$(EXEEXT): $(cai_OBJECTS) $(cai_DEPENDENCIES) 
 	@rm -f cai$(EXEEXT)
 	$(LINK) $(cai_OBJECTS) $(cai_LDADD) $(LIBS)
@@ -2860,6 +3492,12 @@ cutseq$(EXEEXT): $(cutseq_OBJECTS) $(cutseq_DEPENDENCIES)
 dan$(EXEEXT): $(dan_OBJECTS) $(dan_DEPENDENCIES) 
 	@rm -f dan$(EXEEXT)
 	$(LINK) $(dan_OBJECTS) $(dan_LDADD) $(LIBS)
+dastest$(EXEEXT): $(dastest_OBJECTS) $(dastest_DEPENDENCIES) 
+	@rm -f dastest$(EXEEXT)
+	$(LINK) $(dastest_OBJECTS) $(dastest_LDADD) $(LIBS)
+dbfetchtest$(EXEEXT): $(dbfetchtest_OBJECTS) $(dbfetchtest_DEPENDENCIES) 
+	@rm -f dbfetchtest$(EXEEXT)
+	$(LINK) $(dbfetchtest_OBJECTS) $(dbfetchtest_LDADD) $(LIBS)
 dbiblast$(EXEEXT): $(dbiblast_OBJECTS) $(dbiblast_DEPENDENCIES) 
 	@rm -f dbiblast$(EXEEXT)
 	$(LINK) $(dbiblast_OBJECTS) $(dbiblast_LDADD) $(LIBS)
@@ -2872,6 +3510,15 @@ dbiflat$(EXEEXT): $(dbiflat_OBJECTS) $(dbiflat_DEPENDENCIES)
 dbigcg$(EXEEXT): $(dbigcg_OBJECTS) $(dbigcg_DEPENDENCIES) 
 	@rm -f dbigcg$(EXEEXT)
 	$(LINK) $(dbigcg_OBJECTS) $(dbigcg_LDADD) $(LIBS)
+dbtell$(EXEEXT): $(dbtell_OBJECTS) $(dbtell_DEPENDENCIES) 
+	@rm -f dbtell$(EXEEXT)
+	$(LINK) $(dbtell_OBJECTS) $(dbtell_LDADD) $(LIBS)
+dbxcompress$(EXEEXT): $(dbxcompress_OBJECTS) $(dbxcompress_DEPENDENCIES) 
+	@rm -f dbxcompress$(EXEEXT)
+	$(LINK) $(dbxcompress_OBJECTS) $(dbxcompress_LDADD) $(LIBS)
+dbxedam$(EXEEXT): $(dbxedam_OBJECTS) $(dbxedam_DEPENDENCIES) 
+	@rm -f dbxedam$(EXEEXT)
+	$(LINK) $(dbxedam_OBJECTS) $(dbxedam_LDADD) $(LIBS)
 dbxfasta$(EXEEXT): $(dbxfasta_OBJECTS) $(dbxfasta_DEPENDENCIES) 
 	@rm -f dbxfasta$(EXEEXT)
 	$(LINK) $(dbxfasta_OBJECTS) $(dbxfasta_LDADD) $(LIBS)
@@ -2881,6 +3528,24 @@ dbxflat$(EXEEXT): $(dbxflat_OBJECTS) $(dbxflat_DEPENDENCIES)
 dbxgcg$(EXEEXT): $(dbxgcg_OBJECTS) $(dbxgcg_DEPENDENCIES) 
 	@rm -f dbxgcg$(EXEEXT)
 	$(LINK) $(dbxgcg_OBJECTS) $(dbxgcg_LDADD) $(LIBS)
+dbxobo$(EXEEXT): $(dbxobo_OBJECTS) $(dbxobo_DEPENDENCIES) 
+	@rm -f dbxobo$(EXEEXT)
+	$(LINK) $(dbxobo_OBJECTS) $(dbxobo_LDADD) $(LIBS)
+dbxreport$(EXEEXT): $(dbxreport_OBJECTS) $(dbxreport_DEPENDENCIES) 
+	@rm -f dbxreport$(EXEEXT)
+	$(LINK) $(dbxreport_OBJECTS) $(dbxreport_LDADD) $(LIBS)
+dbxresource$(EXEEXT): $(dbxresource_OBJECTS) $(dbxresource_DEPENDENCIES) 
+	@rm -f dbxresource$(EXEEXT)
+	$(LINK) $(dbxresource_OBJECTS) $(dbxresource_LDADD) $(LIBS)
+dbxstat$(EXEEXT): $(dbxstat_OBJECTS) $(dbxstat_DEPENDENCIES) 
+	@rm -f dbxstat$(EXEEXT)
+	$(LINK) $(dbxstat_OBJECTS) $(dbxstat_LDADD) $(LIBS)
+dbxtax$(EXEEXT): $(dbxtax_OBJECTS) $(dbxtax_DEPENDENCIES) 
+	@rm -f dbxtax$(EXEEXT)
+	$(LINK) $(dbxtax_OBJECTS) $(dbxtax_LDADD) $(LIBS)
+dbxuncompress$(EXEEXT): $(dbxuncompress_OBJECTS) $(dbxuncompress_DEPENDENCIES) 
+	@rm -f dbxuncompress$(EXEEXT)
+	$(LINK) $(dbxuncompress_OBJECTS) $(dbxuncompress_LDADD) $(LIBS)
 degapseq$(EXEEXT): $(degapseq_OBJECTS) $(degapseq_DEPENDENCIES) 
 	@rm -f degapseq$(EXEEXT)
 	$(LINK) $(degapseq_OBJECTS) $(degapseq_LDADD) $(LIBS)
@@ -2893,9 +3558,6 @@ descseq$(EXEEXT): $(descseq_OBJECTS) $(descseq_DEPENDENCIES)
 diffseq$(EXEEXT): $(diffseq_OBJECTS) $(diffseq_DEPENDENCIES) 
 	@rm -f diffseq$(EXEEXT)
 	$(LINK) $(diffseq_OBJECTS) $(diffseq_LDADD) $(LIBS)
-digest$(EXEEXT): $(digest_OBJECTS) $(digest_DEPENDENCIES) 
-	@rm -f digest$(EXEEXT)
-	$(LINK) $(digest_OBJECTS) $(digest_LDADD) $(LIBS)
 distmat$(EXEEXT): $(distmat_OBJECTS) $(distmat_DEPENDENCIES) 
 	@rm -f distmat$(EXEEXT)
 	$(LINK) $(distmat_OBJECTS) $(distmat_LDADD) $(LIBS)
@@ -2923,9 +3585,45 @@ dottup$(EXEEXT): $(dottup_OBJECTS) $(dottup_DEPENDENCIES)
 dreg$(EXEEXT): $(dreg_OBJECTS) $(dreg_DEPENDENCIES) 
 	@rm -f dreg$(EXEEXT)
 	$(LINK) $(dreg_OBJECTS) $(dreg_LDADD) $(LIBS)
+drfinddata$(EXEEXT): $(drfinddata_OBJECTS) $(drfinddata_DEPENDENCIES) 
+	@rm -f drfinddata$(EXEEXT)
+	$(LINK) $(drfinddata_OBJECTS) $(drfinddata_LDADD) $(LIBS)
+drfindformat$(EXEEXT): $(drfindformat_OBJECTS) $(drfindformat_DEPENDENCIES) 
+	@rm -f drfindformat$(EXEEXT)
+	$(LINK) $(drfindformat_OBJECTS) $(drfindformat_LDADD) $(LIBS)
+drfindid$(EXEEXT): $(drfindid_OBJECTS) $(drfindid_DEPENDENCIES) 
+	@rm -f drfindid$(EXEEXT)
+	$(LINK) $(drfindid_OBJECTS) $(drfindid_LDADD) $(LIBS)
+drfindresource$(EXEEXT): $(drfindresource_OBJECTS) $(drfindresource_DEPENDENCIES) 
+	@rm -f drfindresource$(EXEEXT)
+	$(LINK) $(drfindresource_OBJECTS) $(drfindresource_LDADD) $(LIBS)
+drget$(EXEEXT): $(drget_OBJECTS) $(drget_DEPENDENCIES) 
+	@rm -f drget$(EXEEXT)
+	$(LINK) $(drget_OBJECTS) $(drget_LDADD) $(LIBS)
+drtext$(EXEEXT): $(drtext_OBJECTS) $(drtext_DEPENDENCIES) 
+	@rm -f drtext$(EXEEXT)
+	$(LINK) $(drtext_OBJECTS) $(drtext_LDADD) $(LIBS)
 edamclean$(EXEEXT): $(edamclean_OBJECTS) $(edamclean_DEPENDENCIES) 
 	@rm -f edamclean$(EXEEXT)
 	$(LINK) $(edamclean_OBJECTS) $(edamclean_LDADD) $(LIBS)
+edamdef$(EXEEXT): $(edamdef_OBJECTS) $(edamdef_DEPENDENCIES) 
+	@rm -f edamdef$(EXEEXT)
+	$(LINK) $(edamdef_OBJECTS) $(edamdef_LDADD) $(LIBS)
+edamhasinput$(EXEEXT): $(edamhasinput_OBJECTS) $(edamhasinput_DEPENDENCIES) 
+	@rm -f edamhasinput$(EXEEXT)
+	$(LINK) $(edamhasinput_OBJECTS) $(edamhasinput_LDADD) $(LIBS)
+edamhasoutput$(EXEEXT): $(edamhasoutput_OBJECTS) $(edamhasoutput_DEPENDENCIES) 
+	@rm -f edamhasoutput$(EXEEXT)
+	$(LINK) $(edamhasoutput_OBJECTS) $(edamhasoutput_LDADD) $(LIBS)
+edamisformat$(EXEEXT): $(edamisformat_OBJECTS) $(edamisformat_DEPENDENCIES) 
+	@rm -f edamisformat$(EXEEXT)
+	$(LINK) $(edamisformat_OBJECTS) $(edamisformat_LDADD) $(LIBS)
+edamisid$(EXEEXT): $(edamisid_OBJECTS) $(edamisid_DEPENDENCIES) 
+	@rm -f edamisid$(EXEEXT)
+	$(LINK) $(edamisid_OBJECTS) $(edamisid_LDADD) $(LIBS)
+edamname$(EXEEXT): $(edamname_OBJECTS) $(edamname_DEPENDENCIES) 
+	@rm -f edamname$(EXEEXT)
+	$(LINK) $(edamname_OBJECTS) $(edamname_LDADD) $(LIBS)
 edialign$(EXEEXT): $(edialign_OBJECTS) $(edialign_DEPENDENCIES) 
 	@rm -f edialign$(EXEEXT)
 	$(LINK) $(edialign_OBJECTS) $(edialign_LDADD) $(LIBS)
@@ -2968,6 +3666,9 @@ epestfind$(EXEEXT): $(epestfind_OBJECTS) $(epestfind_DEPENDENCIES)
 eprimer3$(EXEEXT): $(eprimer3_OBJECTS) $(eprimer3_DEPENDENCIES) 
 	@rm -f eprimer3$(EXEEXT)
 	$(LINK) $(eprimer3_OBJECTS) $(eprimer3_LDADD) $(LIBS)
+eprimer32$(EXEEXT): $(eprimer32_OBJECTS) $(eprimer32_DEPENDENCIES) 
+	@rm -f eprimer32$(EXEEXT)
+	$(LINK) $(eprimer32_OBJECTS) $(eprimer32_LDADD) $(LIBS)
 equicktandem$(EXEEXT): $(equicktandem_OBJECTS) $(equicktandem_DEPENDENCIES) 
 	@rm -f equicktandem$(EXEEXT)
 	$(LINK) $(equicktandem_OBJECTS) $(equicktandem_LDADD) $(LIBS)
@@ -2992,6 +3693,9 @@ featcopy$(EXEEXT): $(featcopy_OBJECTS) $(featcopy_DEPENDENCIES)
 featreport$(EXEEXT): $(featreport_OBJECTS) $(featreport_DEPENDENCIES) 
 	@rm -f featreport$(EXEEXT)
 	$(LINK) $(featreport_OBJECTS) $(featreport_LDADD) $(LIBS)
+feattext$(EXEEXT): $(feattext_OBJECTS) $(feattext_DEPENDENCIES) 
+	@rm -f feattext$(EXEEXT)
+	$(LINK) $(feattext_OBJECTS) $(feattext_LDADD) $(LIBS)
 findkm$(EXEEXT): $(findkm_OBJECTS) $(findkm_DEPENDENCIES) 
 	@rm -f findkm$(EXEEXT)
 	$(LINK) $(findkm_OBJECTS) $(findkm_LDADD) $(LIBS)
@@ -3016,6 +3720,12 @@ geecee$(EXEEXT): $(geecee_OBJECTS) $(geecee_DEPENDENCIES)
 getorf$(EXEEXT): $(getorf_OBJECTS) $(getorf_DEPENDENCIES) 
 	@rm -f getorf$(EXEEXT)
 	$(LINK) $(getorf_OBJECTS) $(getorf_LDADD) $(LIBS)
+godef$(EXEEXT): $(godef_OBJECTS) $(godef_DEPENDENCIES) 
+	@rm -f godef$(EXEEXT)
+	$(LINK) $(godef_OBJECTS) $(godef_LDADD) $(LIBS)
+goname$(EXEEXT): $(goname_OBJECTS) $(goname_DEPENDENCIES) 
+	@rm -f goname$(EXEEXT)
+	$(LINK) $(goname_OBJECTS) $(goname_LDADD) $(LIBS)
 helixturnhelix$(EXEEXT): $(helixturnhelix_OBJECTS) $(helixturnhelix_DEPENDENCIES) 
 	@rm -f helixturnhelix$(EXEEXT)
 	$(LINK) $(helixturnhelix_OBJECTS) $(helixturnhelix_LDADD) $(LIBS)
@@ -3163,6 +3873,36 @@ octanol$(EXEEXT): $(octanol_OBJECTS) $(octanol_DEPENDENCIES)
 oddcomp$(EXEEXT): $(oddcomp_OBJECTS) $(oddcomp_DEPENDENCIES) 
 	@rm -f oddcomp$(EXEEXT)
 	$(LINK) $(oddcomp_OBJECTS) $(oddcomp_LDADD) $(LIBS)
+ontocount$(EXEEXT): $(ontocount_OBJECTS) $(ontocount_DEPENDENCIES) 
+	@rm -f ontocount$(EXEEXT)
+	$(LINK) $(ontocount_OBJECTS) $(ontocount_LDADD) $(LIBS)
+ontoget$(EXEEXT): $(ontoget_OBJECTS) $(ontoget_DEPENDENCIES) 
+	@rm -f ontoget$(EXEEXT)
+	$(LINK) $(ontoget_OBJECTS) $(ontoget_LDADD) $(LIBS)
+ontogetcommon$(EXEEXT): $(ontogetcommon_OBJECTS) $(ontogetcommon_DEPENDENCIES) 
+	@rm -f ontogetcommon$(EXEEXT)
+	$(LINK) $(ontogetcommon_OBJECTS) $(ontogetcommon_LDADD) $(LIBS)
+ontogetdown$(EXEEXT): $(ontogetdown_OBJECTS) $(ontogetdown_DEPENDENCIES) 
+	@rm -f ontogetdown$(EXEEXT)
+	$(LINK) $(ontogetdown_OBJECTS) $(ontogetdown_LDADD) $(LIBS)
+ontogetobsolete$(EXEEXT): $(ontogetobsolete_OBJECTS) $(ontogetobsolete_DEPENDENCIES) 
+	@rm -f ontogetobsolete$(EXEEXT)
+	$(LINK) $(ontogetobsolete_OBJECTS) $(ontogetobsolete_LDADD) $(LIBS)
+ontogetroot$(EXEEXT): $(ontogetroot_OBJECTS) $(ontogetroot_DEPENDENCIES) 
+	@rm -f ontogetroot$(EXEEXT)
+	$(LINK) $(ontogetroot_OBJECTS) $(ontogetroot_LDADD) $(LIBS)
+ontogetsibs$(EXEEXT): $(ontogetsibs_OBJECTS) $(ontogetsibs_DEPENDENCIES) 
+	@rm -f ontogetsibs$(EXEEXT)
+	$(LINK) $(ontogetsibs_OBJECTS) $(ontogetsibs_LDADD) $(LIBS)
+ontogetup$(EXEEXT): $(ontogetup_OBJECTS) $(ontogetup_DEPENDENCIES) 
+	@rm -f ontogetup$(EXEEXT)
+	$(LINK) $(ontogetup_OBJECTS) $(ontogetup_LDADD) $(LIBS)
+ontoisobsolete$(EXEEXT): $(ontoisobsolete_OBJECTS) $(ontoisobsolete_DEPENDENCIES) 
+	@rm -f ontoisobsolete$(EXEEXT)
+	$(LINK) $(ontoisobsolete_OBJECTS) $(ontoisobsolete_LDADD) $(LIBS)
+ontotext$(EXEEXT): $(ontotext_OBJECTS) $(ontotext_DEPENDENCIES) 
+	@rm -f ontotext$(EXEEXT)
+	$(LINK) $(ontotext_OBJECTS) $(ontotext_LDADD) $(LIBS)
 origsplitter$(EXEEXT): $(origsplitter_OBJECTS) $(origsplitter_DEPENDENCIES) 
 	@rm -f origsplitter$(EXEEXT)
 	$(LINK) $(origsplitter_OBJECTS) $(origsplitter_LDADD) $(LIBS)
@@ -3187,6 +3927,9 @@ patmattest$(EXEEXT): $(patmattest_OBJECTS) $(patmattest_DEPENDENCIES)
 pepcoil$(EXEEXT): $(pepcoil_OBJECTS) $(pepcoil_DEPENDENCIES) 
 	@rm -f pepcoil$(EXEEXT)
 	$(LINK) $(pepcoil_OBJECTS) $(pepcoil_LDADD) $(LIBS)
+pepdigest$(EXEEXT): $(pepdigest_OBJECTS) $(pepdigest_DEPENDENCIES) 
+	@rm -f pepdigest$(EXEEXT)
+	$(LINK) $(pepdigest_OBJECTS) $(pepdigest_LDADD) $(LIBS)
 pepinfo$(EXEEXT): $(pepinfo_OBJECTS) $(pepinfo_DEPENDENCIES) 
 	@rm -f pepinfo$(EXEEXT)
 	$(LINK) $(pepinfo_OBJECTS) $(pepinfo_LDADD) $(LIBS)
@@ -3277,6 +4020,9 @@ revseq$(EXEEXT): $(revseq_OBJECTS) $(revseq_DEPENDENCIES)
 seealso$(EXEEXT): $(seealso_OBJECTS) $(seealso_DEPENDENCIES) 
 	@rm -f seealso$(EXEEXT)
 	$(LINK) $(seealso_OBJECTS) $(seealso_LDADD) $(LIBS)
+seqcount$(EXEEXT): $(seqcount_OBJECTS) $(seqcount_DEPENDENCIES) 
+	@rm -f seqcount$(EXEEXT)
+	$(LINK) $(seqcount_OBJECTS) $(seqcount_LDADD) $(LIBS)
 seqinfo$(EXEEXT): $(seqinfo_OBJECTS) $(seqinfo_DEPENDENCIES) 
 	@rm -f seqinfo$(EXEEXT)
 	$(LINK) $(seqinfo_OBJECTS) $(seqinfo_LDADD) $(LIBS)
@@ -3307,6 +4053,15 @@ seqretsplit$(EXEEXT): $(seqretsplit_OBJECTS) $(seqretsplit_DEPENDENCIES)
 seqrettype$(EXEEXT): $(seqrettype_OBJECTS) $(seqrettype_DEPENDENCIES) 
 	@rm -f seqrettype$(EXEEXT)
 	$(LINK) $(seqrettype_OBJECTS) $(seqrettype_LDADD) $(LIBS)
+seqxref$(EXEEXT): $(seqxref_OBJECTS) $(seqxref_DEPENDENCIES) 
+	@rm -f seqxref$(EXEEXT)
+	$(LINK) $(seqxref_OBJECTS) $(seqxref_LDADD) $(LIBS)
+seqxrefget$(EXEEXT): $(seqxrefget_OBJECTS) $(seqxrefget_DEPENDENCIES) 
+	@rm -f seqxrefget$(EXEEXT)
+	$(LINK) $(seqxrefget_OBJECTS) $(seqxrefget_LDADD) $(LIBS)
+servertell$(EXEEXT): $(servertell_OBJECTS) $(servertell_DEPENDENCIES) 
+	@rm -f servertell$(EXEEXT)
+	$(LINK) $(servertell_OBJECTS) $(servertell_LDADD) $(LIBS)
 showalign$(EXEEXT): $(showalign_OBJECTS) $(showalign_DEPENDENCIES) 
 	@rm -f showalign$(EXEEXT)
 	$(LINK) $(showalign_OBJECTS) $(showalign_LDADD) $(LIBS)
@@ -3325,6 +4080,9 @@ showpep$(EXEEXT): $(showpep_OBJECTS) $(showpep_DEPENDENCIES)
 showseq$(EXEEXT): $(showseq_OBJECTS) $(showseq_DEPENDENCIES) 
 	@rm -f showseq$(EXEEXT)
 	$(LINK) $(showseq_OBJECTS) $(showseq_LDADD) $(LIBS)
+showserver$(EXEEXT): $(showserver_OBJECTS) $(showserver_DEPENDENCIES) 
+	@rm -f showserver$(EXEEXT)
+	$(LINK) $(showserver_OBJECTS) $(showserver_LDADD) $(LIBS)
 shuffleseq$(EXEEXT): $(shuffleseq_OBJECTS) $(shuffleseq_DEPENDENCIES) 
 	@rm -f shuffleseq$(EXEEXT)
 	$(LINK) $(shuffleseq_OBJECTS) $(shuffleseq_LDADD) $(LIBS)
@@ -3370,12 +4128,30 @@ supermatcher$(EXEEXT): $(supermatcher_OBJECTS) $(supermatcher_DEPENDENCIES)
 syco$(EXEEXT): $(syco_OBJECTS) $(syco_DEPENDENCIES) 
 	@rm -f syco$(EXEEXT)
 	$(LINK) $(syco_OBJECTS) $(syco_LDADD) $(LIBS)
+taxget$(EXEEXT): $(taxget_OBJECTS) $(taxget_DEPENDENCIES) 
+	@rm -f taxget$(EXEEXT)
+	$(LINK) $(taxget_OBJECTS) $(taxget_LDADD) $(LIBS)
+taxgetdown$(EXEEXT): $(taxgetdown_OBJECTS) $(taxgetdown_DEPENDENCIES) 
+	@rm -f taxgetdown$(EXEEXT)
+	$(LINK) $(taxgetdown_OBJECTS) $(taxgetdown_LDADD) $(LIBS)
+taxgetrank$(EXEEXT): $(taxgetrank_OBJECTS) $(taxgetrank_DEPENDENCIES) 
+	@rm -f taxgetrank$(EXEEXT)
+	$(LINK) $(taxgetrank_OBJECTS) $(taxgetrank_LDADD) $(LIBS)
+taxgetspecies$(EXEEXT): $(taxgetspecies_OBJECTS) $(taxgetspecies_DEPENDENCIES) 
+	@rm -f taxgetspecies$(EXEEXT)
+	$(LINK) $(taxgetspecies_OBJECTS) $(taxgetspecies_LDADD) $(LIBS)
+taxgetup$(EXEEXT): $(taxgetup_OBJECTS) $(taxgetup_DEPENDENCIES) 
+	@rm -f taxgetup$(EXEEXT)
+	$(LINK) $(taxgetup_OBJECTS) $(taxgetup_LDADD) $(LIBS)
 tcode$(EXEEXT): $(tcode_OBJECTS) $(tcode_DEPENDENCIES) 
 	@rm -f tcode$(EXEEXT)
 	$(LINK) $(tcode_OBJECTS) $(tcode_LDADD) $(LIBS)
 testplot$(EXEEXT): $(testplot_OBJECTS) $(testplot_DEPENDENCIES) 
 	@rm -f testplot$(EXEEXT)
 	$(LINK) $(testplot_OBJECTS) $(testplot_LDADD) $(LIBS)
+textget$(EXEEXT): $(textget_OBJECTS) $(textget_DEPENDENCIES) 
+	@rm -f textget$(EXEEXT)
+	$(LINK) $(textget_OBJECTS) $(textget_LDADD) $(LIBS)
 textsearch$(EXEEXT): $(textsearch_OBJECTS) $(textsearch_DEPENDENCIES) 
 	@rm -f textsearch$(EXEEXT)
 	$(LINK) $(textsearch_OBJECTS) $(textsearch_LDADD) $(LIBS)
@@ -3415,6 +4191,9 @@ twofeat$(EXEEXT): $(twofeat_OBJECTS) $(twofeat_DEPENDENCIES)
 union$(EXEEXT): $(union_OBJECTS) $(union_DEPENDENCIES) 
 	@rm -f union$(EXEEXT)
 	$(LINK) $(union_OBJECTS) $(union_LDADD) $(LIBS)
+urlget$(EXEEXT): $(urlget_OBJECTS) $(urlget_DEPENDENCIES) 
+	@rm -f urlget$(EXEEXT)
+	$(LINK) $(urlget_OBJECTS) $(urlget_LDADD) $(LIBS)
 vectorstrip$(EXEEXT): $(vectorstrip_OBJECTS) $(vectorstrip_DEPENDENCIES) 
 	@rm -f vectorstrip$(EXEEXT)
 	$(LINK) $(vectorstrip_OBJECTS) $(vectorstrip_LDADD) $(LIBS)
@@ -3436,9 +4215,27 @@ wordfinder$(EXEEXT): $(wordfinder_OBJECTS) $(wordfinder_DEPENDENCIES)
 wordmatch$(EXEEXT): $(wordmatch_OBJECTS) $(wordmatch_DEPENDENCIES) 
 	@rm -f wordmatch$(EXEEXT)
 	$(LINK) $(wordmatch_OBJECTS) $(wordmatch_LDADD) $(LIBS)
+wossdata$(EXEEXT): $(wossdata_OBJECTS) $(wossdata_DEPENDENCIES) 
+	@rm -f wossdata$(EXEEXT)
+	$(LINK) $(wossdata_OBJECTS) $(wossdata_LDADD) $(LIBS)
+wossinput$(EXEEXT): $(wossinput_OBJECTS) $(wossinput_DEPENDENCIES) 
+	@rm -f wossinput$(EXEEXT)
+	$(LINK) $(wossinput_OBJECTS) $(wossinput_LDADD) $(LIBS)
 wossname$(EXEEXT): $(wossname_OBJECTS) $(wossname_DEPENDENCIES) 
 	@rm -f wossname$(EXEEXT)
 	$(LINK) $(wossname_OBJECTS) $(wossname_LDADD) $(LIBS)
+wossoperation$(EXEEXT): $(wossoperation_OBJECTS) $(wossoperation_DEPENDENCIES) 
+	@rm -f wossoperation$(EXEEXT)
+	$(LINK) $(wossoperation_OBJECTS) $(wossoperation_LDADD) $(LIBS)
+wossoutput$(EXEEXT): $(wossoutput_OBJECTS) $(wossoutput_DEPENDENCIES) 
+	@rm -f wossoutput$(EXEEXT)
+	$(LINK) $(wossoutput_OBJECTS) $(wossoutput_LDADD) $(LIBS)
+wossparam$(EXEEXT): $(wossparam_OBJECTS) $(wossparam_DEPENDENCIES) 
+	@rm -f wossparam$(EXEEXT)
+	$(LINK) $(wossparam_OBJECTS) $(wossparam_LDADD) $(LIBS)
+wosstopic$(EXEEXT): $(wosstopic_OBJECTS) $(wosstopic_DEPENDENCIES) 
+	@rm -f wosstopic$(EXEEXT)
+	$(LINK) $(wosstopic_OBJECTS) $(wosstopic_LDADD) $(LIBS)
 yank$(EXEEXT): $(yank_OBJECTS) $(yank_DEPENDENCIES) 
 	@rm -f yank$(EXEEXT)
 	$(LINK) $(yank_OBJECTS) $(yank_LDADD) $(LIBS)
@@ -3469,6 +4266,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/banana.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/biosed.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/btwisted.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cachedas.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cachedbfetch.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cacheebeyesearch.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cacheensembl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cai.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/chaos.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/charge.Po@am__quote@
@@ -3489,18 +4290,28 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cutgextract.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cutseq.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dan.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dastest.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbfetchtest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbiblast.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbifasta.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbiflat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbigcg.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbtell.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbxcompress.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbxedam.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbxfasta.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbxflat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbxgcg.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbxobo.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbxreport.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbxresource.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbxstat.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbxtax.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dbxuncompress.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/degapseq.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/density.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/descseq.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/diffseq.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/digest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/distmat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/domtesta.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/domtestb.Po@am__quote@
@@ -3510,7 +4321,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dotpath.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dottup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dreg.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/drfinddata.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/drfindformat.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/drfindid.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/drfindresource.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/drget.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/drtext.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edamclean.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edamdef.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edamhasinput.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edamhasoutput.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edamisformat.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edamisid.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edamname.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edialign.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/einverted.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/embossdata.Po@am__quote@
@@ -3525,6 +4348,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/entret.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/epestfind.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eprimer3.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eprimer32.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/equicktandem.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/est2genome.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/etandem.Po@am__quote@
@@ -3533,6 +4357,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/extractseq.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/featcopy.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/featreport.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/feattext.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/findkm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/freak.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fuzznuc.Po@am__quote@
@@ -3541,6 +4366,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/garnier.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/geecee.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getorf.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/godef.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/goname.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/helixturnhelix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/histogramtest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hmoment.Po@am__quote@
@@ -3590,6 +4417,16 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nthseqset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/octanol.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/oddcomp.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ontocount.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ontoget.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ontogetcommon.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ontogetdown.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ontogetobsolete.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ontogetroot.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ontogetsibs.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ontogetup.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ontoisobsolete.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ontotext.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/origsplitter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/origunion.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/palindrome.Po@am__quote@
@@ -3598,6 +4435,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/patmatmotifs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/patmattest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pepcoil.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pepdigest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pepinfo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pepnet.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pepstats.Po@am__quote@
@@ -3628,6 +4466,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/restrict.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/revseq.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/seealso.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/seqcount.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/seqinfo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/seqmatchall.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/seqret.Po@am__quote@
@@ -3638,12 +4477,16 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/seqretsingle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/seqretsplit.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/seqrettype.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/seqxref.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/seqxrefget.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servertell.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/showalign.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/showdb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/showfeat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/showorf.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/showpep.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/showseq.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/showserver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/shuffleseq.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sigcleave.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/silent.Po@am__quote@
@@ -3659,8 +4502,14 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stssearch.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/supermatcher.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/syco.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/taxget.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/taxgetdown.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/taxgetrank.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/taxgetspecies.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/taxgetup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testplot.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textsearch.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tfextract.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tfm.Po@am__quote@
@@ -3674,6 +4523,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/trimspace.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/twofeat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/union.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/urlget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vectorstrip.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/water.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/whichdb.Po@am__quote@
@@ -3681,7 +4531,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wordcount.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wordfinder.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wordmatch.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wossdata.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wossinput.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wossname.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wossoperation.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wossoutput.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wossparam.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wosstopic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/yank.Po@am__quote@
 
 .c.o:

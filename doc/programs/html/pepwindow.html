@@ -56,7 +56,7 @@ Algorithm
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with pepwindow</b>
+Here is a sample session with <b>pepwindow</b>
 <p>
 
 <p>
@@ -79,7 +79,7 @@ Created pepwindow.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Draw a hydropathy plot for a protein sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
@@ -87,7 +87,7 @@ Version: EMBOSS:6.3.0
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers:
    -datafile           datafile   [Enakai.dat] AAINDEX entry data file
@@ -169,7 +169,7 @@ Version: EMBOSS:6.3.0
 <td>-graph</td>
 <td>xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -507,7 +507,34 @@ Version: EMBOSS:6.3.0
 </H2>
 
 
-<b>pepwindow</b> reads any protein sequence USA.
+<b>pepwindow</b> reads a single protein sequence.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -632,7 +659,36 @@ SQ   SEQUENCE   348 AA;  38893 MW;  6F4F6FCBA34265B2 CRC64;
     Output file format
 </H2>
 
-An image is displayed on the specified graphics device.
+<p>
+
+The output is to the specified graphics device.
+
+<p>
+
+The results can be output in one of several formats by using the
+command-line qualifier <b>-graph xxx</b>, where 'xxx' is replaced by
+the name of the required device. Support depends on the availability
+of third-party software packages.
+
+<p>
+The device names that output to a file are:
+ps (postscript), cps (colourps), png, gif, pdf, svg, hpgl, hp7470,
+hp7580, das, data.
+
+<p> The other available device names are: meta, x11 (xwindows), tek
+(tek4107t), tekt (tektronix), xterm, text.
+
+<p>
+Output can be turned off by specifying none (null).
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/GraphicsDevices.html">
+http://emboss.sf.net/docs/themes/GraphicsDevices.html</A>
+for further information on supported devices.
+
+<p>
 
 <p>
 
@@ -799,53 +855,18 @@ None.
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
-<td><a href="backtranambig.html">backtranambig</a></td>
-<td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
-</tr>
-
-<tr>
-<td><a href="backtranseq.html">backtranseq</a></td>
-<td>Back-translate a protein sequence to a nucleotide sequence</td>
-</tr>
-
-<tr>
 <td><a href="charge.html">charge</a></td>
 <td>Draw a protein charge plot</td>
 </tr>
 
 <tr>
-<td><a href="checktrans.html">checktrans</a></td>
-<td>Reports STOP codons and ORF statistics of a protein</td>
-</tr>
-
-<tr>
-<td><a href="compseq.html">compseq</a></td>
-<td>Calculate the composition of unique words in sequences</td>
-</tr>
-
-<tr>
-<td><a href="emowse.html">emowse</a></td>
-<td>Search protein sequences by digest fragment molecular weight</td>
-</tr>
-
-<tr>
-<td><a href="freak.html">freak</a></td>
-<td>Generate residue/base frequency table or plot</td>
+<td><a href="hmoment.html">hmoment</a></td>
+<td>Calculate and plot hydrophobic moment for protein sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="iep.html">iep</a></td>
 <td>Calculate the isoelectric point of proteins</td>
-</tr>
-
-<tr>
-<td><a href="mwcontam.html">mwcontam</a></td>
-<td>Find weights common to multiple molecular weights files</td>
-</tr>
-
-<tr>
-<td><a href="mwfilter.html">mwfilter</a></td>
-<td>Filter noisy data from molecular weights file</td>
 </tr>
 
 <tr>
@@ -866,11 +887,6 @@ None.
 <tr>
 <td><a href="pepwindowall.html">pepwindowall</a></td>
 <td>Draw Kyte-Doolittle hydropathy plot for a protein alignment</td>
-</tr>
-
-<tr>
-<td><a href="wordcount.html">wordcount</a></td>
-<td>Count and extract unique words in molecular sequence(s)</td>
 </tr>
 
 </table>

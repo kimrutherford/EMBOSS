@@ -1,5 +1,5 @@
 Remove redundant sequences from an input set
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequences]         seqset     Sequence set filename and optional format,

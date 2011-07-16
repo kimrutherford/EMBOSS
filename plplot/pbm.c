@@ -1,5 +1,5 @@
 /*
-  $Id: pbm.c,v 1.3 2007/05/08 09:09:37 rice Exp $
+  $Id: pbm.c,v 1.4 2010/10/06 16:02:49 rice Exp $
 
   PLplot PBM (PPM) device driver.
 
@@ -236,6 +236,7 @@ void
 plD_eop_pbm(PLStream *pls)
 {
     FILE *fp = pls->OutFile;
+    int iw;
 
     if (fp != NULL) {
 	fprintf(fp, "%s\n", "P6");
@@ -250,7 +251,7 @@ plD_eop_pbm(PLStream *pls)
 			fprintf(fp, "%c", cmap[i][j][k]);
 	}
     */
-	fwrite( cmap, 1, pls->xlength * pls->ylength * 3, fp );
+	iw = fwrite( cmap, 1, pls->xlength * pls->ylength * 3, fp );
 
 	fclose(fp);
     } 

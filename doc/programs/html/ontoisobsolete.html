@@ -1,0 +1,687 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: ontoget
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+ontoget
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Get ontology term(s)
+<H2>
+    Description
+</H2>
+
+<p><b>ontoget</b> displays on-screen for a named ontology whether term statement(s) with the supplied IDs are obsolete or not. The information may be written to an output file in various formats.</p>
+
+<p>Ontologies from the EMBOSS data directory are used.</p>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with <b>ontoget</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>ontoget edam:0001234 </b>
+Get ontology term(s)
+Obo output file [0001234.obo]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>ontoget edam:0000850 -subclasses </b>
+Get ontology term(s)
+Obo output file [0000850.obo]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Get ontology term(s)
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-oboterms]          obo        Obo term filename and optional format, or
+                                  reference (input query)
+  [-outfile]           outobo     [*.ontoget] Output ontology term file name
+
+   Additional (Optional) qualifiers:
+   -subclasses         boolean    [N] Extend the query matches to include all
+                                  terms which are specialisations
+                                  (sub-classes) of the matched terms.
+   -obsolete           boolean    [N] The default behaviour is to not use or
+                                  return obsolete terms. This option if set
+                                  will include all terms.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-oboterms" associated qualifiers
+   -iformat1           string     Input obo format
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Ontology term output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-oboterms]<br>(Parameter 1)</td>
+<td>obo</td>
+<td>Obo term filename and optional format, or reference (input query)</td>
+<td>OBO bio-ontology term(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>outobo</td>
+<td>Output ontology term file name</td>
+<td>OBO ontology term(s)</td>
+<td><i>&lt;*&gt;</i>.ontoget</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-subclasses</td>
+<td>boolean</td>
+<td>Extend the query matches to include all terms which are specialisations (sub-classes) of the matched terms.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-obsolete</td>
+<td>boolean</td>
+<td>The default behaviour is to not use or return obsolete terms. This option if set will include all terms.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-oboterms" associated obo qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iformat1<br>-iformat_oboterms</td>
+<td>string</td>
+<td>Input obo format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -idbname1<br>-idbname_oboterms</td>
+<td>string</td>
+<td>User-provided database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outobo qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -oformat2<br>-oformat_outfile</td>
+<td>string</td>
+<td>Ontology term output format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file format
+</H2>
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>Database entry: edam:0001234</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+[Term]
+id: EDAM:0001234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002977 ! Nucleic acid sequence
+
+</pre>
+</td></tr></table><p>
+
+<a name="input.2"></a>
+<h3>Input files for usage example 2</h3>
+<p><h3>Database entry: edam:0000850</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+[Term]
+id: EDAM:0000850
+name: Sequence set
+namespace: data
+def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
+comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
+subset: data
+is_a: EDAM:0002955 ! Sequence report
+
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Output file format
+</H2>
+<p>A single line per term is is given, including the term id, namespace and name, and whether it is obsolete or not.</p>
+
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 0001234.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0001234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002977 ! Nucleic acid sequence
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: 0000850.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0000850
+name: Sequence set
+namespace: data
+def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
+comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
+subset: data
+is_a: EDAM:0002955 ! Sequence report
+
+[Term]
+id: EDAM:0001234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002977 ! Nucleic acid sequence
+
+[Term]
+id: EDAM:0001240
+name: PCR primers
+namespace: data
+def: Oligonucleotide primer(s) for PCR and DNA amplification, for example a minimal primer set.
+subset: data
+is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+
+[Term]
+id: EDAM:0001246
+name: Sequence cluster (nucleic acid)
+namespace: data
+def: A cluster of nucleotide sequences.
+comment: The sequences are typically related, for example a family of sequences.
+subset: data
+synonym: "Nucleotide sequence cluster" EXACT []
+is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+is_a: EDAM:0001235 ! Sequence cluster
+
+[Term]
+id: EDAM:0002198
+name: Gene cluster
+namespace: data
+def: A cluster of similar genes.
+subset: data
+is_a: EDAM:0001246 ! Sequence cluster (nucleic acid)
+
+[Term]
+id: EDAM:0002874
+name: Sequence set (polymorphic)
+namespace: data
+def: A set of sub-sequences displaying some type of polymorphism, typically indicating the sequence in which they occur, their position and other metadata.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+def: Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+
+[Term]
+id: EDAM:0001245
+name: Sequence cluster (protein)
+namespace: data
+def: A cluster of protein sequences.
+comment: The sequences are typically related, for example a family of sequences.
+subset: data
+synonym: "Protein sequence cluster" EXACT []
+is_a: EDAM:0001233 ! Sequence set (protein)
+is_a: EDAM:0001235 ! Sequence cluster
+
+[Term]
+id: EDAM:0001238
+name: Proteolytic digest
+namespace: data
+def: A protein sequence cleaved into peptide fragments (by enzymatic or chemical cleavage) with fragment masses.
+subset: data
+is_a: EDAM:0001233 ! Sequence set (protein)
+
+[Term]
+id: EDAM:0001262
+name: Peptide molecular weight hits
+namespace: data
+def: A report on peptide fragments of certain molecular weight(s) in one or more protein sequences.
+subset: data
+is_a: EDAM:0001233 ! Sequence set (protein)
+
+[Term]
+id: EDAM:0001235
+name: Sequence cluster
+namespace: data
+def: A set of sequences that have been clustered or otherwise classified as belonging to a group including (typically) sequence cluster information.
+comment: The cluster might include sequences identifiers, short descriptions, alignment and summary information.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+relationship: in_topic EDAM:0000164 ! Sequence clustering
+relationship: in_topic EDAM:0000724 ! Protein families
+
+[Term]
+id: EDAM:0002245
+name: Sequence set (bootstrapped)
+namespace: data
+def: A collection of sequences output from a bootstrapping (resampling) procedure.
+comment: Bootstrapping is often performed in phylogenetic analysis.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+
+</pre>
+</td></tr></table><p>
+
+<H2>
+    Data files
+</H2>
+<p>OBO-format ontologies must be installed in the EMBOSS data directory and indexed. This is done automatically for typical installations.</p>
+        
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+  
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="edamdef.html">edamdef</a></td>
+<td>Find EDAM ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="edamhasinput.html">edamhasinput</a></td>
+<td>Find EDAM ontology terms by has_input relation</td>
+</tr>
+
+<tr>
+<td><a href="edamhasoutput.html">edamhasoutput</a></td>
+<td>Find EDAM ontology terms by has_output relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisformat.html">edamisformat</a></td>
+<td>Find EDAM ontology terms by is_format_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisid.html">edamisid</a></td>
+<td>Find EDAM ontology terms by is_identifier_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamname.html">edamname</a></td>
+<td>Find EDAM ontology terms by name</td>
+</tr>
+
+<tr>
+<td><a href="godef.html">godef</a></td>
+<td>Find GO ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="goname.html">goname</a></td>
+<td>Find GO ontology terms by name</td>
+</tr>
+
+<tr>
+<td><a href="ontocount.html">ontocount</a></td>
+<td>Count ontology term(s)</td>
+</tr>
+
+<tr>
+<td><a href="ontogetcommon.html">ontogetcommon</a></td>
+<td>Get common ancestor for terms</td>
+</tr>
+
+<tr>
+<td><a href="ontogetdown.html">ontogetdown</a></td>
+<td>Get ontology term(s) by parent id</td>
+</tr>
+
+<tr>
+<td><a href="ontogetobsolete.html">ontogetobsolete</a></td>
+<td>Get ontology ontology terms</td>
+</tr>
+
+<tr>
+<td><a href="ontogetroot.html">ontogetroot</a></td>
+<td>Get ontology root terms by child identifier</td>
+</tr>
+
+<tr>
+<td><a href="ontogetsibs.html">ontogetsibs</a></td>
+<td>Get ontology term(s) by id with common parent</td>
+</tr>
+
+<tr>
+<td><a href="ontogetup.html">ontogetup</a></td>
+<td>Get ontology term(s) by id of child</td>
+</tr>
+
+<tr>
+<td><a href="ontoisobsolete.html">ontoisobsolete</a></td>
+<td>Report whether an ontology term id is obsolete</td>
+</tr>
+
+<tr>
+<td><a href="ontotext.html">ontotext</a></td>
+<td>Get ontology term(s) original full text</td>
+</tr>
+
+</table>
+
+<H2>
+    Author(s)
+</H2>
+
+Jon Ison
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+
+
+<p>
+
+This application was modified by 
+Jon Ison
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+<H2>
+    History
+</H2>
+
+
+
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+None
+
+</BODY>
+</HTML>
+

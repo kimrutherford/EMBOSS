@@ -37,8 +37,10 @@ IT IS DONE FOR YOU.
    with no restrictions (open-source).
 
 <p>
-   This program copies the 3 JASPAR matrix sets into the EMBOSS
-   data directories, performing any necessary conversions.
+   This program copies the JASPAR distribution into its component
+   matrix sets (e.g. JASPAR_CORE, JASPAR_PHYLOFACTS etc) and copies
+   them into the EMBOSS data directories, performing any necessary
+   conversions
 
 <p>
    The home page of JASPAR
@@ -93,17 +95,15 @@ IT IS DONE FOR YOU.
 <!--#include file="inc/jaspextract.input" -->
 
 
-   The input files are the uncompressed and extracted JASPAR_CORE.tgz,
-   JASPAR_FAM.tgz and JASPAR_PHYLOFACTS.tgz files provided in the JASPAR
-   MatrixDir download directory of the JASPAR homepage
-   <a href="http://jaspar.genereg.net">(http://jaspar.genereg.net).</a>
-<p>
-   The files will usually be extracted in the same directory thereby
-   creating a directory containing subdirectories JASPAR_CORE,
-   JASPAR_FAM and JASPAR_PHYLOFACTS. Given a directory specification,
-   jasparextract will search for these subdirectories and process the
-   files in any that exist. jasparextract will warn the user if any
-   of the three subdirectories do not exist.
+The input files are part of the uncompressed and extracted Archive.zip
+file provided in the JASPAR html/DOWNLOAD directory of the JASPAR
+homepage <a href="http://jaspar.genereg.net">(http://jaspar.genereg.net).</a>
+
+After extracting the file you should specify the all_data/FlatFileDir
+directory when running jasparextract. It is advisable to first delete
+any old data files from your EMBOSS data file area e.g. from the
+/usr/local/emboss/share/EMBOSS/data/JASPAR_* directories
+
 
 
 
@@ -122,8 +122,9 @@ IT IS DONE FOR YOU.
         #include file="inc/reportformats.ihtml"
    -->
 
-  The output file format is currently the same as the JASPAR
-  distribution format.
+The output file format is currently the same as the JASPAR
+distribution format, but with the matrix files separated into
+directories according to their type.
 
 <!--#include file="inc/jaspextract.output" -->
 
@@ -151,11 +152,10 @@ None
         Useful things you can do with this program.
    -->
 
-   The home page of REBASE
-   is: <a href="http://jaspar.genereg.net/">http://jaspar.genereg.net/<a>
-<p>
-   Running this program may be the job of your system manager.
+The home page of JASPAR
+is: <a href="http://jaspar.genereg.net/">http://jaspar.genereg.net</a>
 
+Running this program may be the job of your system manager.
 
 
 
@@ -198,10 +198,7 @@ None
         Potentially stupid things the program will let you do.
    -->
 
-  The program will warn you if any of the JASPAR_CORE, JASPAR_FAM or
-   JASPAR_PHYLOFACTS subdirectories do not exist.
-
-
+None.
 
 
 

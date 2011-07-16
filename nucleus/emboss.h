@@ -6,7 +6,17 @@
 #include "ajgraphstruct.h"
 #include "ajhist.h"
 #include "ensembl.h"
+
+#include "ajtextdb.h"
 #include "ajseqdb.h"
+#include "ajfeatdb.h"
+#include "ajobodb.h"
+#include "ajassemdb.h"
+#include "ajtaxdb.h"
+#include "ajurldb.h"
+#include "ajvardb.h"
+#include "ajresourcedb.h"
+
 #include "ajmart.h"
 #include "ajacd.h"
 #include "embaln.h"

@@ -224,8 +224,9 @@ void embPatternRegexSearch (AjPFeattable ftable, const AjPSeq seq,
 	    if(isreversed)
 		ajFeatReverse(sf, seqlen);
 
-	    ajFmtPrintS (&tmpstr,"*pat %S",
-			 ajPatternRegexGetName(pat));
+	    ajFmtPrintS (&tmpstr,"*pat %S: %S",
+			 ajPatternRegexGetName(pat),
+                         ajPatternRegexGetPattern(pat));
 	    ajFeatTagAdd (sf,NULL,tmpstr);
 	    pos += 1;
 	    ajStrCutStart(&seqstr, 1);
@@ -366,7 +367,9 @@ void embPatternSeqSearch (AjPFeattable ftable, const AjPSeq seq,
 
 	ajFeatSetScore(sf, (float) (m->len - m->mm));
 
-        ajFmtPrintS(&tmp, "*pat %S", ajPatternSeqGetName(pat));
+        ajFmtPrintS(&tmp, "*pat %S: %S",
+                    ajPatternSeqGetName(pat),
+                    ajPatternSeqGetPattern(pat));
         ajFeatTagAdd(sf,NULL,tmp);
 
         if(m->mm)

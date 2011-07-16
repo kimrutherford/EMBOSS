@@ -1,11 +1,10 @@
-/******************************************************************************
-**
-** @source Ensembl Transcript functions.
+/* @source Ensembl Transcript functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.23 $
+** @modified $Date: 2011/07/06 21:50:29 $ by $Author: mks $
+** @version $Revision: 1.57 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -28,13 +27,31 @@
 /* ========================== include files =========================== */
 /* ==================================================================== */
 
-#include "enstranscript.h"
+#include "ensalign.h"
 #include "ensattribute.h"
+#include "ensdatabaseentry.h"
 #include "ensexon.h"
 #include "ensgene.h"
 #include "ensintron.h"
+#include "ensprojectionsegment.h"
 #include "enssequenceedit.h"
+#include "enstable.h"
+#include "enstranscript.h"
 #include "enstranslation.h"
+
+
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== global variables ========================== */
+/* ==================================================================== */
 
 
 
@@ -43,27 +60,24 @@
 /* ========================== private data ============================ */
 /* ==================================================================== */
 
-
-
-
 /* @datastatic TranscriptPExonRank ********************************************
 **
 ** Ensembl Transcript, Exon and rank associations.
 **
-** Holds associations between Ensembl Transcripts, Ensembl Exons and their rank
-** in the Transcript.
+** Holds associations between Ensembl Transcript objects, Ensembl Exon objects
+** and their rank in the Ensembl Transcript.
 **
 ** @alias TranscriptSExonRank
 ** @alias TranscriptOExonRank
 **
-** @attr TranscriptIdentifier [ajuint] Ensembl Transcript identifier
+** @attr Transcriptidentifier [ajuint] Ensembl Transcript identifier
 ** @attr Rank [ajint] Ensembl Exon rank
 ** @@
 ******************************************************************************/
 
 typedef struct TranscriptSExonRank
 {
-    ajuint TranscriptIdentifier;
+    ajuint Transcriptidentifier;
     ajint Rank;
 } TranscriptOExonRank;
 
@@ -72,45 +86,133 @@ typedef struct TranscriptSExonRank
 
 
 
-/* transcriptStatus ***********************************************************
+/* ==================================================================== */
+/* ======================== private constants ========================= */
+/* ==================================================================== */
+
+/* @conststatic transcriptSequenceeditCode ************************************
 **
-** The Ensembl Transcript status element is enumerated in both, the SQL table
-** definition and the data structure. The following strings are used for
-** conversion in database operations and correspond to EnsETranscriptStatus.
+** Ensembl Sequence Edit objects for Ensembl Transcript objects are a sub-set
+** of Ensembl Attribute objects that provide information about
+** post-transcriptional modifications of the Transcript sequence.
+** Attribute objects with the following codes are Sequence Edit objects
+** on the Transcript-level.
+**
+** _rna_edit: General cDNA, RNA or Transcript sequence edit
 **
 ******************************************************************************/
 
-static const char *transcriptStatus[] =
+static const char* const transcriptSequenceeditCode[] =
 {
-    NULL,
+    "_rna_edit",
+    (const char*) NULL
+};
+
+
+
+
+/* @conststatic transcriptStatus **********************************************
+**
+** The Ensembl Transcript status element is enumerated in both, the SQL table
+** definition and the data structure. The following strings are used for
+** conversion in database operations and correspond to EnsETranscriptStatus
+** and the 'transcript.status' field.
+**
+******************************************************************************/
+
+static const char* const transcriptStatus[] =
+{
+    "",
     "KNOWN",
     "NOVEL",
     "PUTATIVE",
     "PREDICTED",
     "KNOWN_BY_PROJECTION",
     "UNKNOWN",
-    NULL
+    (const char*) NULL
 };
 
 
 
 
-/* transcriptSequenceEditCode *************************************************
+/* @conststatic transcriptadaptorTables ***************************************
 **
-** Ensembl Sequence Edits for Ensembl Transcripts are a sub-set of
-** Ensembl Attributes that provide information about post-transcriptional
-** modifications of the Transcript sequence. Attributes with the following
-** codes are Sequence Edits on the Transcript-level.
-**
-** _rna_edit: General cDNA, RNA or Transcript sequence edit
+** Array of Ensembl Transcript Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char *transcriptSequenceEditCode[] =
+static const char* const transcriptadaptorTables[] =
 {
-    "_rna_edit",
-    NULL
+    "transcript",
+    "transcript_stable_id",
+    "xref",
+    "external_db",
+    (const char*) NULL
 };
+
+
+
+
+/* @conststatic transcriptadaptorColumns **************************************
+**
+** Array of Ensembl Transcript Adaptor SQL column names
+**
+******************************************************************************/
+
+static const char* const transcriptadaptorColumns[] =
+{
+    "transcript.transcript_id",
+    "transcript.seq_region_id",
+    "transcript.seq_region_start",
+    "transcript.seq_region_end",
+    "transcript.seq_region_strand",
+    "transcript.analysis_id",
+    "transcript.display_xref_id",
+    "transcript.description",
+    "transcript.biotype",
+    "transcript.status",
+    "transcript.is_current",
+    "transcript.gene_id",
+    "transcript_stable_id.stable_id",
+    "transcript_stable_id.version",
+    "transcript_stable_id.created_date",
+    "transcript_stable_id.modified_date",
+    "xref.external_db_id",
+    "xref.dbprimary_acc",
+    "xref.display_label",
+    "xref.version",
+    "xref.description",
+    "xref.info_type",
+    "xref.info_text",
+    (const char*) NULL
+};
+
+
+
+
+/* @conststatic transcriptadaptorLeftjoin *************************************
+**
+** Array of Ensembl Transcript Adaptor SQL left join conditions
+**
+******************************************************************************/
+
+static EnsOBaseadaptorLeftjoin transcriptadaptorLeftjoin[] =
+{
+    {
+        "transcript_stable_id",
+        "transcript_stable_id.transcript_id = transcript.transcript_id"
+    },
+    {"xref", "xref.xref_id = transcript.display_xref_id"},
+    {"external_db", "external_db.external_db_id = xref.external_db_id"},
+    {(const char*) NULL, (const char*) NULL}
+};
+
+
+
+
+/* ==================================================================== */
+/* ======================== private variables ========================= */
+/* ==================================================================== */
 
 
 
@@ -119,17 +221,68 @@ static const char *transcriptSequenceEditCode[] =
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
+static TranscriptPExonRank transcriptExonRankNew(ajuint trid, ajint rank);
+
+static void transcriptExonRankDel(TranscriptPExonRank *Ptrex);
+
+static EnsPTranscript transcriptNewCpyFeatures(EnsPTranscript transcript);
+
+static int listTranscriptCompareStartAscending(const void* P1,
+                                               const void* P2);
+
+static int listTranscriptCompareStartDescending(const void* P1,
+                                                const void* P2);
+
+static void tableTranscriptClear(void** key,
+                                 void** value,
+                                 void* cl);
+
+static AjBool transcriptadaptorFetchAllbyStatement(
+    EnsPDatabaseadaptor dba,
+    const AjPStr statement,
+    EnsPAssemblymapper am,
+    EnsPSlice slice,
+    AjPList transcripts);
+
+static void* transcriptadaptorCacheReference(void* value);
+
+static void transcriptadaptorCacheDelete(void** value);
+
+static size_t transcriptadaptorCacheSize(const void* value);
+
+static EnsPFeature transcriptadaptorGetFeature(const void* value);
+
+static void transcriptadaptorClearTranscriptExonRankList(void** key,
+                                                         void** value,
+                                                         void* cl);
 
 
 
-/* @funcstatic transcriptExonRankNew **********************************
+
+/* ==================================================================== */
+/* ===================== All functions by section ===================== */
+/* ==================================================================== */
+
+
+
+
+/* @filesection enstranscript *************************************************
 **
-** Default constructor for an Ensembl Transcripts Exon rank association.
+** @nam1rule ens Function belongs to the Ensembl library
+**
+******************************************************************************/
+
+
+
+
+/* @funcstatic transcriptExonRankNew ******************************************
+**
+** Default constructor for a Transcript Exon Rank object.
 **
 ** @param [r] trid [ajuint] Ensembl Transcript identifier
 ** @param [r] rank [ajint] Ensembl Exon rank
 **
-** @return [TranscriptPExonRank] Transcript and Exon rank association
+** @return [TranscriptPExonRank] Transcript Exon Rank object
 ** @@
 ******************************************************************************/
 
@@ -139,7 +292,7 @@ static TranscriptPExonRank transcriptExonRankNew(ajuint trid, ajint rank)
 
     AJNEW0(trex);
 
-    trex->TranscriptIdentifier = trid;
+    trex->Transcriptidentifier = trid;
     trex->Rank = rank;
 
     return trex;
@@ -148,11 +301,11 @@ static TranscriptPExonRank transcriptExonRankNew(ajuint trid, ajint rank)
 
 
 
-/* @funcstatic transcriptExonRankDel **********************************
+/* @funcstatic transcriptExonRankDel ******************************************
 **
-** Default destructor for an Ensembl Transcripts Exon rank association.
+** Default destructor for a Transcript Exon Rank object.
 **
-** @param [d] Ptrex [TranscriptPExonRank*] Ensembl Exon rank object address
+** @param [d] Ptrex [TranscriptPExonRank*] Transcript Exon Rank object address
 **
 ** @return [void]
 ** @@
@@ -174,43 +327,13 @@ static void transcriptExonRankDel(TranscriptPExonRank *Ptrex)
 
 
 
-static int transcriptCompareStartAscending(const void* P1, const void* P2);
-
-static int transcriptCompareStartDescending(const void* P1, const void* P2);
-
-static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
-                                             const AjPStr statement,
-                                             EnsPAssemblymapper am,
-                                             EnsPSlice slice,
-                                             AjPList transcripts);
-
-static void *transcriptadaptorCacheReference(void *value);
-
-static void transcriptadaptorCacheDelete(void **value);
-
-static ajulong transcriptadaptorCacheSize(const void *value);
-
-static EnsPFeature transcriptadaptorGetFeature(const void *value);
-
-
-
-
-/* @filesection enstranscript *************************************************
+/* @datasection [EnsPTranscript] Ensembl Transcript ***************************
 **
-** @nam1rule ens Function belongs to the Ensembl library
+** @nam2rule Transcript Functions for manipulating Ensembl Transcript objects
 **
-******************************************************************************/
-
-
-
-
-/* @datasection [EnsPTranscript] Transcript ***********************************
-**
-** Functions for manipulating Ensembl Transcript objects
-**
-** @cc Bio::EnsEMBL::Transcript CVS Revision: 1.292
-**
-** @nam2rule Transcript
+** @cc Bio::EnsEMBL::Transcript
+** @cc CVS Revision: 1.317
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -225,14 +348,27 @@ static EnsPFeature transcriptadaptorGetFeature(const void *value);
 ** NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPTranscript]
-** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the reference counter
 **
-** @argrule Obj object [const EnsPTranscript] Ensembl Transcript
-** @argrule Ref object [EnsPTranscript] Ensembl Transcript
+** @argrule Cpy transcript [const EnsPTranscript] Ensembl Transcript
+** @argrule Ini tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @argrule Ini identifier [ajuint] SQL database-internal identifier
+** @argrule Ini feature [EnsPFeature] Ensembl Feature
+** @argrule Ini displaydbe [EnsPDatabaseentry] Ensembl Database Entry
+** @argrule Ini description [AjPStr] Description
+** @argrule Ini biotype [AjPStr] Biotype
+** @argrule Ini status [EnsETranscriptStatus] Status
+** @argrule Ini current [AjBool] Current attribute
+** @argrule Ini stableid [AjPStr] Stable identifier
+** @argrule Ini version [ajuint] Version
+** @argrule Ini cdate [AjPStr] Creation date
+** @argrule Ini mdate [AjPStr] Modification date
+** @argrule Ini exons [AjPList] AJAX List of Ensembl Exon objects
+** @argrule Ref transcript [EnsPTranscript] Ensembl Transcript
 **
 ** @valrule * [EnsPTranscript] Ensembl Transcript
 **
@@ -242,12 +378,205 @@ static EnsPFeature transcriptadaptorGetFeature(const void *value);
 
 
 
-/* @func ensTranscriptNew *****************************************************
+/* @func ensTranscriptNewCpy **************************************************
 **
-** Default Ensembl Transcript constructor.
+** Object-based constructor function, which returns an independent object.
+**
+** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
+**
+** @return [EnsPTranscript] Ensembl Transcript or NULL
+** @@
+******************************************************************************/
+
+EnsPTranscript ensTranscriptNewCpy(const EnsPTranscript transcript)
+{
+    AjIList iter = NULL;
+
+    EnsPAttribute attribute = NULL;
+
+    EnsPBasealignfeature baf = NULL;
+
+    EnsPDatabaseentry dbe = NULL;
+
+    EnsPExon exon = NULL;
+
+    EnsPTranscript pthis = NULL;
+
+    EnsPTranslation translation = NULL;
+
+    if(!transcript)
+        return NULL;
+
+    AJNEW0(pthis);
+
+    pthis->Use = 1;
+
+    pthis->Identifier = transcript->Identifier;
+
+    pthis->Adaptor = transcript->Adaptor;
+
+    pthis->Feature = ensFeatureNewRef(transcript->Feature);
+
+    pthis->Displayreference = ensDatabaseentryNewRef(
+        transcript->Displayreference);
+
+    if(transcript->Description)
+        pthis->Description = ajStrNewRef(transcript->Description);
+
+    if(transcript->Biotype)
+        pthis->Biotype = ajStrNewRef(transcript->Biotype);
+
+    pthis->Status = transcript->Status;
+
+    pthis->Current = transcript->Current;
+
+    if(transcript->Stableidentifier)
+        pthis->Stableidentifier = ajStrNewRef(transcript->Stableidentifier);
+
+    if(transcript->DateCreation)
+        pthis->DateCreation = ajStrNewRef(transcript->DateCreation);
+
+    if(transcript->DateModification)
+        pthis->DateModification = ajStrNewRef(transcript->DateModification);
+
+    pthis->Version = transcript->Version;
+
+    pthis->Geneidentifier = transcript->Geneidentifier;
+
+    /* NOTE: Copy the AJAX List of alternative Ensembl Translation objects. */
+
+    if(transcript->Alternativetranslations
+       && ajListGetLength(transcript->Alternativetranslations))
+    {
+        pthis->Alternativetranslations = ajListNew();
+
+        iter = ajListIterNew(transcript->Alternativetranslations);
+
+        while(!ajListIterDone(iter))
+        {
+            translation = (EnsPTranslation) ajListIterGet(iter);
+
+            ajListPushAppend(pthis->Alternativetranslations,
+                             (void*) ensTranslationNewRef(translation));
+        }
+
+        ajListIterDel(&iter);
+    }
+    else
+        pthis->Alternativetranslations = NULL;
+
+    /* Copy the AJAX List of Ensembl Attributes. */
+
+    if(transcript->Attributes && ajListGetLength(transcript->Attributes))
+    {
+        pthis->Attributes = ajListNew();
+
+        iter = ajListIterNew(transcript->Attributes);
+
+        while(!ajListIterDone(iter))
+        {
+            attribute = (EnsPAttribute) ajListIterGet(iter);
+
+            ajListPushAppend(pthis->Attributes,
+                             (void*) ensAttributeNewRef(attribute));
+        }
+
+        ajListIterDel(&iter);
+    }
+    else
+        pthis->Attributes = NULL;
+
+    /* NOTE: Copy the AJAX List of Ensembl Database Entry objects. */
+
+    if(transcript->Databaseentries
+       && ajListGetLength(transcript->Databaseentries))
+    {
+        pthis->Databaseentries = ajListNew();
+
+        iter = ajListIterNew(transcript->Databaseentries);
+
+        while(!ajListIterDone(iter))
+        {
+            dbe = (EnsPDatabaseentry) ajListIterGet(iter);
+
+            ajListPushAppend(pthis->Databaseentries,
+                             (void*) ensDatabaseentryNewRef(dbe));
+        }
+
+        ajListIterDel(&iter);
+    }
+    else
+        pthis->Databaseentries = NULL;
+
+    /* Copy the AJAX List of Ensembl Exon objects. */
+
+    if(transcript->Exons && ajListGetLength(transcript->Exons))
+    {
+        pthis->Exons = ajListNew();
+
+        iter = ajListIterNew(transcript->Exons);
+
+        while(!ajListIterDone(iter))
+        {
+            exon = (EnsPExon) ajListIterGet(iter);
+
+            ajListPushAppend(pthis->Exons, (void*) ensExonNewRef(exon));
+        }
+
+        ajListIterDel(&iter);
+    }
+    else
+        pthis->Exons = NULL;
+
+    /*
+    ** NOTE: Copy the AJAX List of supporting
+    ** Ensembl Base Align Feature objects.
+    */
+
+    if(transcript->Supportingfeatures &&
+       ajListGetLength(transcript->Supportingfeatures))
+    {
+        pthis->Supportingfeatures = ajListNew();
+
+        iter = ajListIterNew(transcript->Supportingfeatures);
+
+        while(!ajListIterDone(iter))
+        {
+            baf = (EnsPBasealignfeature) ajListIterGet(iter);
+
+            ajListPushAppend(pthis->Supportingfeatures,
+                             (void*) ensBasealignfeatureNewRef(baf));
+        }
+
+        ajListIterDel(&iter);
+    }
+    else
+        pthis->Supportingfeatures = NULL;
+
+    pthis->Translation = ensTranslationNewRef(transcript->Translation);
+
+    pthis->Sequenceedits = transcript->Sequenceedits;
+
+    /*
+    ** NOTE: The ExonCoordMapper is not copied here, as the new Transcript
+    ** object is most likely placed onto a new Slice, which required
+    ** subsequent deletion of the Ensembl Mapper.
+    */
+
+    pthis->ExonCoordMapper = NULL;
+
+    return pthis;
+}
+
+
+
+
+/* @func ensTranscriptNewIni **************************************************
+**
+** Constructor for an Ensembl Transcript with initial values.
 **
 ** @cc Bio::EnsEMBL::Storable::new
-** @param [r] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @cc Bio::EnsEMBL::Feature::new
 ** @param [u] feature [EnsPFeature] Ensembl Feature
@@ -255,31 +584,31 @@ static EnsPFeature transcriptadaptorGetFeature(const void *value);
 ** @param [u] displaydbe [EnsPDatabaseentry] Ensembl Database Entry
 ** @param [u] description [AjPStr] Description
 ** @param [u] biotype [AjPStr] Biotype
-** @param [r] status [EnsETranscriptStatus] Status
+** @param [u] status [EnsETranscriptStatus] Status
 ** @param [r] current [AjBool] Current attribute
 ** @param [u] stableid [AjPStr] Stable identifier
 ** @param [r] version [ajuint] Version
 ** @param [u] cdate [AjPStr] Creation date
 ** @param [u] mdate [AjPStr] Modification date
-** @param [u] exons [AjPList] AJAX List of Ensembl Exons
+** @param [u] exons [AjPList] AJAX List of Ensembl Exon objects
 **
 ** @return [EnsPTranscript] Ensembl Transcript or NULL
 ** @@
 ******************************************************************************/
 
-EnsPTranscript ensTranscriptNew(EnsPTranscriptadaptor tca,
-                                ajuint identifier,
-                                EnsPFeature feature,
-                                EnsPDatabaseentry displaydbe,
-                                AjPStr description,
-                                AjPStr biotype,
-                                EnsETranscriptStatus status,
-                                AjBool current,
-                                AjPStr stableid,
-                                ajuint version,
-                                AjPStr cdate,
-                                AjPStr mdate,
-                                AjPList exons)
+EnsPTranscript ensTranscriptNewIni(EnsPTranscriptadaptor tca,
+                                   ajuint identifier,
+                                   EnsPFeature feature,
+                                   EnsPDatabaseentry displaydbe,
+                                   AjPStr description,
+                                   AjPStr biotype,
+                                   EnsETranscriptStatus status,
+                                   AjBool current,
+                                   AjPStr stableid,
+                                   ajuint version,
+                                   AjPStr cdate,
+                                   AjPStr mdate,
+                                   AjPList exons)
 {
     AjIList iter = NULL;
 
@@ -300,36 +629,36 @@ EnsPTranscript ensTranscriptNew(EnsPTranscriptadaptor tca,
 
     transcript->Feature = ensFeatureNewRef(feature);
 
-    transcript->DisplayReference = ensDatabaseentryNewRef(displaydbe);
+    transcript->Displayreference = ensDatabaseentryNewRef(displaydbe);
 
     if(description)
         transcript->Description = ajStrNewRef(description);
 
     if(biotype)
-        transcript->BioType = ajStrNewRef(biotype);
+        transcript->Biotype = ajStrNewRef(biotype);
 
     transcript->Status = status;
 
     transcript->Current = current;
 
     if(stableid)
-        transcript->StableIdentifier = ajStrNewRef(stableid);
+        transcript->Stableidentifier = ajStrNewRef(stableid);
 
     if(cdate)
-        transcript->CreationDate = ajStrNewRef(cdate);
+        transcript->DateCreation = ajStrNewRef(cdate);
 
     if(mdate)
-        transcript->ModificationDate = ajStrNewRef(mdate);
+        transcript->DateModification = ajStrNewRef(mdate);
 
     transcript->Version = version;
 
-    transcript->GeneIdentifier = 0;
+    transcript->Geneidentifier = 0;
 
-    transcript->AlternativeTranslations = NULL;
+    transcript->Alternativetranslations = NULL;
 
     transcript->Attributes = NULL;
 
-    transcript->DatabaseEntries = NULL;
+    transcript->Databaseentries = NULL;
 
     if(exons && ajListGetLength(exons))
     {
@@ -342,7 +671,7 @@ EnsPTranscript ensTranscriptNew(EnsPTranscriptadaptor tca,
             exon = (EnsPExon) ajListIterGet(iter);
 
             ajListPushAppend(transcript->Exons,
-                             (void *) ensExonNewRef(exon));
+                             (void*) ensExonNewRef(exon));
         }
 
         ajListIterDel(&iter);
@@ -354,221 +683,13 @@ EnsPTranscript ensTranscriptNew(EnsPTranscriptadaptor tca,
 
     transcript->Translation = NULL;
 
-    transcript->SliceCodingStart = 0;
-
-    transcript->SliceCodingEnd = 0;
-
-    transcript->TranscriptCodingStart = 0;
-
-    transcript->TranscriptCodingEnd = 0;
-
     /*
-    ** NOTE: Sequence Edits such as transcription and translation exceptions
-    ** are applied by default. Use ensTranscriptGetEnableSequenceEdits and
-    ** ensTranscriptSetEnableSequenceEdits to toggle Sequence Edit application.
+    ** NOTE: Sequence Edit objects such as transcription and translation
+    ** exceptions are applied by default. Use ensTranscriptGetSequenceedits and
+    ** ensTranscriptSetSequenceedits to toggle Sequence Edit application.
     */
 
-    transcript->EnableSequenceEdits = ajTrue;
-
-    transcript->StartPhase = 0;
-
-    transcript->ExonCoordMapper = NULL;
-
-    return transcript;
-}
-
-
-
-
-/* @func ensTranscriptNewObj **************************************************
-**
-** Object-based constructor function, which returns an independent object.
-**
-** @param [r] object [const EnsPTranscript] Ensembl Transcript
-**
-** @return [EnsPTranscript] Ensembl Transcript or NULL
-** @@
-******************************************************************************/
-
-EnsPTranscript ensTranscriptNewObj(const EnsPTranscript object)
-{
-    AjIList iter = NULL;
-
-    EnsPAttribute attribute = NULL;
-
-    EnsPBasealignfeature baf = NULL;
-
-    EnsPDatabaseentry dbe = NULL;
-
-    EnsPExon exon = NULL;
-
-    EnsPTranscript transcript = NULL;
-
-    EnsPTranslation translation = NULL;
-
-    if(!object)
-        return NULL;
-
-    AJNEW0(transcript);
-
-    transcript->Use = 1;
-
-    transcript->Identifier = object->Identifier;
-
-    transcript->Adaptor = object->Adaptor;
-
-    transcript->Feature = ensFeatureNewRef(object->Feature);
-
-    transcript->DisplayReference = ensDatabaseentryNewRef(
-        object->DisplayReference);
-
-    if(object->Description)
-        transcript->Description = ajStrNewRef(object->Description);
-
-    if(object->BioType)
-        transcript->BioType = ajStrNewRef(object->BioType);
-
-    transcript->Status = object->Status;
-
-    transcript->Current = object->Current;
-
-    if(object->StableIdentifier)
-        transcript->StableIdentifier = ajStrNewRef(object->StableIdentifier);
-
-    if(object->CreationDate)
-        transcript->CreationDate = ajStrNewRef(object->CreationDate);
-
-    if(object->ModificationDate)
-        transcript->ModificationDate = ajStrNewRef(object->ModificationDate);
-
-    transcript->Version = object->Version;
-
-    transcript->GeneIdentifier = object->GeneIdentifier;
-
-    /* Copy the AJAX List of alternative Ensembl Translations. */
-
-    if(object->AlternativeTranslations &&
-       ajListGetLength(object->AlternativeTranslations))
-    {
-        transcript->AlternativeTranslations = ajListNew();
-
-        iter = ajListIterNew(object->AlternativeTranslations);
-
-        while(!ajListIterDone(iter))
-        {
-            translation = (EnsPTranslation) ajListIterGet(iter);
-
-            ajListPushAppend(transcript->AlternativeTranslations,
-                             (void *) ensTranslationNewRef(translation));
-        }
-
-        ajListIterDel(&iter);
-    }
-    else
-        transcript->AlternativeTranslations = NULL;
-
-    /* Copy the AJAX List of Ensembl Attributes. */
-
-    if(object->Attributes && ajListGetLength(object->Attributes))
-    {
-        transcript->Attributes = ajListNew();
-
-        iter = ajListIterNew(object->Attributes);
-
-        while(!ajListIterDone(iter))
-        {
-            attribute = (EnsPAttribute) ajListIterGet(iter);
-
-            ajListPushAppend(transcript->Attributes,
-                             (void *) ensAttributeNewRef(attribute));
-        }
-
-        ajListIterDel(&iter);
-    }
-    else
-        transcript->Attributes = NULL;
-
-    /* Copy the AJAX List of Ensembl Database Entries. */
-
-    if(object->DatabaseEntries && ajListGetLength(object->DatabaseEntries))
-    {
-        transcript->DatabaseEntries = ajListNew();
-
-        iter = ajListIterNew(object->DatabaseEntries);
-
-        while(!ajListIterDone(iter))
-        {
-            dbe = (EnsPDatabaseentry) ajListIterGet(iter);
-
-            ajListPushAppend(transcript->DatabaseEntries,
-                             (void *) ensDatabaseentryNewRef(dbe));
-        }
-
-        ajListIterDel(&iter);
-    }
-    else
-        transcript->DatabaseEntries = NULL;
-
-    /* Copy the AJAX List of Ensembl Exons. */
-
-    if(object->Exons && ajListGetLength(object->Exons))
-    {
-        transcript->Exons = ajListNew();
-
-        iter = ajListIterNew(object->Exons);
-
-        while(!ajListIterDone(iter))
-        {
-            exon = (EnsPExon) ajListIterGet(iter);
-
-            ajListPushAppend(transcript->Exons, (void *) ensExonNewRef(exon));
-        }
-
-        ajListIterDel(&iter);
-    }
-    else
-        transcript->Exons = NULL;
-
-    /* Copy the AJAX List of supporting Ensembl Base Align Features. */
-
-    if(object->Supportingfeatures &&
-       ajListGetLength(object->Supportingfeatures))
-    {
-        transcript->Supportingfeatures = ajListNew();
-
-        iter = ajListIterNew(object->Supportingfeatures);
-
-        while(!ajListIterDone(iter))
-        {
-            baf = (EnsPBasealignfeature) ajListIterGet(iter);
-
-            ajListPushAppend(transcript->Supportingfeatures,
-                             (void *) ensBasealignfeatureNewRef(baf));
-        }
-
-        ajListIterDel(&iter);
-    }
-    else
-        transcript->Supportingfeatures = NULL;
-
-    transcript->Translation = ensTranslationNewRef(object->Translation);
-
-    transcript->SliceCodingStart = object->SliceCodingStart;
-
-    transcript->SliceCodingEnd = object->SliceCodingEnd;
-
-    transcript->TranscriptCodingStart = object->TranscriptCodingStart;
-
-    transcript->TranscriptCodingEnd = object->TranscriptCodingEnd;
-
-    transcript->EnableSequenceEdits = object->EnableSequenceEdits;
-
-    transcript->StartPhase = object->StartPhase;
-
-    /*
-    ** TODO: The ExonCoordMapper is missing, but how should the
-    ** Ensembl Mapper be copied? Should we really copy it deeply?
-    */
+    transcript->Sequenceedits = ajTrue;
 
     transcript->ExonCoordMapper = NULL;
 
@@ -602,17 +723,147 @@ EnsPTranscript ensTranscriptNewRef(EnsPTranscript transcript)
 
 
 
+/* @funcstatic transcriptNewCpyFeatures ***************************************
+**
+** Returns a new copy of an Ensembl Transcript, but in addition to the shallow
+** copy provided by ensTranscriptNewCpy, also copies all Ensembl Transcript-
+** internal Ensembl Objects based on the Ensembl Feature class. This is useful
+** in preparation of ensTranscriptTransform and ensTranscriptTransfer, which
+** return an independent Ensembl Transcript object and therefore, require
+** independent mapping of all internal Feature objects to the new
+** Ensembl Coordinate System or Ensembl Slice.
+**
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+**
+** @return [EnsPTranscript] Ensembl Transcript or NULL
+** @@
+******************************************************************************/
+
+static EnsPTranscript transcriptNewCpyFeatures(EnsPTranscript transcript)
+{
+    AjIList iter = NULL;
+
+    EnsPBasealignfeature newbaf = NULL;
+    EnsPBasealignfeature oldbaf = NULL;
+
+    EnsPExon newexon = NULL;
+    EnsPExon oldexon = NULL;
+
+    EnsPTranscript newtranscript = NULL;
+
+    EnsPTranslation newtranslation = NULL;
+    EnsPTranslation oldtranslation = NULL;
+
+    if(!transcript)
+        return NULL;
+
+    newtranscript = ensTranscriptNewCpy(transcript);
+
+    if(!newtranscript)
+        return NULL;
+
+    /* Copy the AJAX List of alternative Ensembl Translation objects. */
+
+    if(newtranscript->Alternativetranslations)
+    {
+        iter = ajListIterNew(newtranscript->Alternativetranslations);
+
+        while(!ajListIterDone(iter))
+        {
+            oldtranslation = (EnsPTranslation) ajListIterGet(iter);
+
+            ajListIterRemove(iter);
+
+            newtranslation = ensTranslationNewCpy(oldtranslation);
+
+            ajListIterInsert(iter, (void*) newtranslation);
+
+            /* Advance the AJAX List Iterator after the insert. */
+
+            (void) ajListIterGet(iter);
+
+            ensTranslationDel(&oldtranslation);
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    /* Copy the AJAX List of Ensembl Exon objects. */
+
+    if(newtranscript->Exons)
+    {
+        iter = ajListIterNew(newtranscript->Exons);
+
+        while(!ajListIterDone(iter))
+        {
+            oldexon = (EnsPExon) ajListIterGet(iter);
+
+            ajListIterRemove(iter);
+
+            newexon = ensExonNewCpy(oldexon);
+
+            ajListIterInsert(iter, (void*) newexon);
+
+            /* Advance the AJAX List Iterator after the insert. */
+
+            (void) ajListIterGet(iter);
+
+            ensExonDel(&oldexon);
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    /* Copy the AJAX List of supporting Ensembl Base Align Feature objects. */
+
+    if(newtranscript->Supportingfeatures)
+    {
+        iter = ajListIterNew(newtranscript->Supportingfeatures);
+
+        while(!ajListIterDone(iter))
+        {
+            oldbaf = (EnsPBasealignfeature) ajListIterGet(iter);
+
+            ajListIterRemove(iter);
+
+            newbaf = ensBasealignfeatureNewCpy(oldbaf);
+
+            ajListIterInsert(iter, (void*) newbaf);
+
+            /* Advance the AJAX List Iterator after the insert. */
+
+            (void) ajListIterGet(iter);
+
+            ensBasealignfeatureDel(&oldbaf);
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    /* Copy the canonical Ensembl Translation. */
+
+    newtranslation = ensTranslationNewCpy(newtranscript->Translation);
+
+    ensTranslationDel(&newtranscript->Translation);
+
+    newtranscript->Translation = newtranslation;
+
+    return newtranscript;
+}
+
+
+
+
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Transcript.
+** memory allocated for an Ensembl Transcript object.
 **
 ** @fdata [EnsPTranscript]
-** @fnote None
 **
-** @nam3rule Del Destroy (free) a Transcript object
+** @nam3rule Del Destroy (free) an Ensembl Transcript object
 **
-** @argrule * Ptranscript [EnsPTranscript*] Transcript object address
+** @argrule * Ptranscript [EnsPTranscript*] Ensembl Transcript object address
 **
 ** @valrule * [void]
 **
@@ -626,13 +877,13 @@ EnsPTranscript ensTranscriptNewRef(EnsPTranscript transcript)
 **
 ** Default destructor for an Ensembl Transcript.
 **
-** @param [d] Ptranscript [EnsPTranscript*] Ensembl Transcript address
+** @param [d] Ptranscript [EnsPTranscript*] Ensembl Transcript object address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensTranscriptDel(EnsPTranscript *Ptranscript)
+void ensTranscriptDel(EnsPTranscript* Ptranscript)
 {
     EnsPAttribute attribute = NULL;
 
@@ -670,49 +921,52 @@ void ensTranscriptDel(EnsPTranscript *Ptranscript)
 
     ensFeatureDel(&pthis->Feature);
 
-    ensDatabaseentryDel(&pthis->DisplayReference);
+    ensDatabaseentryDel(&pthis->Displayreference);
 
     ajStrDel(&pthis->Description);
 
-    ajStrDel(&pthis->BioType);
+    ajStrDel(&pthis->Biotype);
 
-    ajStrDel(&pthis->StableIdentifier);
+    ajStrDel(&pthis->Stableidentifier);
 
-    ajStrDel(&pthis->CreationDate);
+    ajStrDel(&pthis->DateCreation);
 
-    ajStrDel(&pthis->ModificationDate);
+    ajStrDel(&pthis->DateModification);
 
-    /* Clear and delete the AJAX List of alternative Ensembl Translations. */
+    /*
+    ** Clear and delete the AJAX List of alternative
+    ** Ensembl Translation objects.
+    */
 
-    while(ajListPop(pthis->AlternativeTranslations, (void **) &translation))
+    while(ajListPop(pthis->Alternativetranslations, (void**) &translation))
         ensTranslationDel(&translation);
 
-    ajListFree(&pthis->AlternativeTranslations);
+    ajListFree(&pthis->Alternativetranslations);
 
     /* Clear and delete the AJAX List of Ensembl Attributes. */
 
-    while(ajListPop(pthis->Attributes, (void **) &attribute))
+    while(ajListPop(pthis->Attributes, (void**) &attribute))
         ensAttributeDel(&attribute);
 
     ajListFree(&pthis->Attributes);
 
-    /* Clear and delete the AJAX List of Ensembl Database Entries. */
+    /* Clear and delete the AJAX List of Ensembl Database Entry objects. */
 
-    while(ajListPop(pthis->DatabaseEntries, (void **) &dbe))
+    while(ajListPop(pthis->Databaseentries, (void**) &dbe))
         ensDatabaseentryDel(&dbe);
 
-    ajListFree(&pthis->DatabaseEntries);
+    ajListFree(&pthis->Databaseentries);
 
-    /* Clear and delete the AJAX List of Ensembl Exons. */
+    /* Clear and delete the AJAX List of Ensembl Exon objects. */
 
-    while(ajListPop(pthis->Exons, (void **) &exon))
+    while(ajListPop(pthis->Exons, (void**) &exon))
         ensExonDel(&exon);
 
     ajListFree(&pthis->Exons);
 
-    /* Clear and delete the AJAX List of Ensembl Base Align Features. */
+    /* Clear and delete the AJAX List of Ensembl Base Align Feature objects. */
 
-    while(ajListPop(pthis->Supportingfeatures, (void **) &baf))
+    while(ajListPop(pthis->Supportingfeatures, (void**) &baf))
         ensBasealignfeatureDel(&baf);
 
     ajListFree(&pthis->Supportingfeatures);
@@ -736,66 +990,46 @@ void ensTranscriptDel(EnsPTranscript *Ptranscript)
 ** Functions for returning elements of an Ensembl Transcript object.
 **
 ** @fdata [EnsPTranscript]
-** @fnote None
 **
 ** @nam3rule Get Return Transcript attribute(s)
-** @nam4rule GetAdaptor Return the Ensembl Transcript Adaptor
-** @nam4rule GetIdentifier Return the SQL database-internal identifier
-** @nam4rule GetFeature Return the Feature
-** @nam4rule GetDisplayReference Return the display Database Entry
-** @nam4rule GetDescription Return the description
-** @nam4rule GetBioType Return the biological type
-** @nam4rule GetStatus Return the status
-** @nam4rule GetCurrent Return the current element
-** @nam4rule GetStableIdentifier Return the stable identifier
-** @nam4rule GetVersion Return the version
-** @nam4rule GetCreationDate Return the creation date
-** @nam4rule GetModificationDate Return the modification date
-** @nam4rule GetAlternativeTransaltions Return all alternative
-**                                      Ensembl Translations
-** @nam4rule GetAttributes Return all Ensembl Attributes
-** @nam4rule GetDatabaseEntries Return all Ensembl Database Entries
-** @nam4rule GetExons Return all Ensembl Exons
-** @nam4rule GetSupportingfeatures Return the supporting Ensembl Base Align
-**                                 Features
-** @nam4rule GetTranslation Return the Ensembl Translation
-** @nam4rule GetTranscriptCodingStart Return the Translation start coordinate
-**                                    in Transcript coordinates
-** @nam4rule GetTranscriptCodingEnd Return the Translation end coordinate
-**                                  in Transcript coordinates
-** @nam4rule GetSliceCodingStart Return the Translation start coordinate
-**                               in Slice coordinates
-** @nam4rule GetSliceCodingEnd Return the Translation end coordinate
-**                             in Slice coordinates
-** @nam4rule GetEnableSequenceEdits Return enable Ensembl Sequence Edits
+** @nam4rule Adaptor Return the Ensembl Transcript Adaptor
+** @nam4rule Biotype Return the biological type
+** @nam4rule Canonical Return the canonical element
+** @nam4rule Current Return the current element
+** @nam4rule Date Return a date
+** @nam5rule DateCreation Return the creation date
+** @nam5rule DateModification Return the modification date
+** @nam4rule Description Return the description
+** @nam4rule Displayreference Return the display Database Entry
+** @nam4rule Feature Return the Feature
+** @nam4rule Geneidentifier Return the Ensembl Gene identifier
+** @nam4rule Identifier Return the SQL database-internal identifier
+** @nam4rule Sequenceedits Return the enable Ensembl Sequence Edit flag
+** @nam4rule Stableidentifier Return the stable identifier
+** @nam4rule Status Return the status
+** @nam4rule Version Return the version
 **
 ** @argrule * transcript [const EnsPTranscript] Transcript
 **
-** @valrule Adaptor [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
-** @valrule Identifier [ajuint] SQL database-internal identifier
-** @valrule Feature [EnsPFeature] Ensembl Feature
-** @valrule DisplayReference [EnsPDatabaseentry] Ensembl Database Entry
-** @valrule Description [AjPStr] Description
-** @valrule BioType [ajuint] Biological type
-** @valrule Status [EnsETranscriptStatus] Status
-** @valrule GeneIdentifier [ajuint] Ensembl Gene identifier
-** @valrule Current [AjBool] Current attribute
-** @valrule StableIdentifier [AjPStr] Stable identifier
-** @valrule Version [ajuint] Version
-** @valrule CreationDate [AjPStr] Creation date
-** @valrule ModificationDate [AjPStr] Modification date
-** @valrule Attributes [const AjPList] AJAX List of Ensembl Attributes
-** @valrule DatabaseEntries [const AjPList] AJAX List of
-**                                          Ensembl Database Entries
-** @valrule Exons [const AjPList] AJAX List of Ensembl Exons
+** @valrule Adaptor [EnsPTranscriptadaptor] Ensembl Transcript Adaptor or NULL
+** @valrule Biotype [AjPStr] Biological type or NULL
+** @valrule Canonical [AjBool] Canonical atrribute or ajFalse
+** @valrule Current [AjBool] Current attribute or ajFalse
+** @valrule DateCreation [AjPStr] Creation date or NULL
+** @valrule DateModification [AjPStr] Modification date or NULL
+** @valrule Description [AjPStr] Description or NULL
+** @valrule Displayreference [EnsPDatabaseentry] Ensembl Database Entry or NULL
+** @valrule Feature [EnsPFeature] Ensembl Feature or NULL
+** @valrule Geneidentifier [ajuint] Ensembl Gene identifier or 0
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Sequenceedits [AjBool] Enable Ensembl Sequence Edit flag ro ajFalse
+** @valrule Status [EnsETranscriptStatus] Status or NULL
+** @valrule Stableidentifier [AjPStr] Stable identifier or NULL
+** @valrule Version [ajuint] Version or 0
+** @valrule Exons [const AjPList] AJAX List of Ensembl Exon objects or NULL
 ** @valrule Supportingfeatures [const AjPList] AJAX List of Ensembl Base
-**                                       Align Features
-** @valrule Translation [EnsPTranslation] Ensembl Translation
-** @valrule TranscriptCodingStart [ajuint] Translation start coordinate
-** @valrule TranscriptCodingEnd [ajuint] Translation end coordinate
-** @valrule SliceCodingStart [ajuint] Translation start coordinate
-** @valrule SliceCodingEnd [ajuint] Translation end coordinate
-** @valrule EnableSequenceEdits [AjBool] Enable Ensembl Sequence Edits
+** Align Feature objects or NULL
+** @valrule Translation [EnsPTranslation] Ensembl Translation or NULL
 **
 ** @fcategory use
 ******************************************************************************/
@@ -810,7 +1044,7 @@ void ensTranscriptDel(EnsPTranscript *Ptranscript)
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
 **
-** @return [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @return [EnsPTranscriptadaptor] Ensembl Transcript Adaptor or NULL
 ** @@
 ******************************************************************************/
 
@@ -825,158 +1059,45 @@ EnsPTranscriptadaptor ensTranscriptGetAdaptor(const EnsPTranscript transcript)
 
 
 
-/* @func ensTranscriptGetIdentifier *******************************************
-**
-** Get the SQL database-internal identifier element of an Ensembl Transcript.
-**
-** @cc Bio::EnsEMBL::Storable::dbID
-** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
-**
-** @return [ajuint] SQL database-internal identifier
-** @@
-******************************************************************************/
-
-ajuint ensTranscriptGetIdentifier(const EnsPTranscript transcript)
-{
-    if(!transcript)
-        return 0;
-
-    return transcript->Identifier;
-}
-
-
-
-
-/* @func ensTranscriptGetFeature **********************************************
-**
-** Get the Ensembl Feature element of an Ensembl Transcript.
-**
-** @cc Bio::EnsEMBL::Feature
-** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
-**
-** @return [EnsPFeature] Ensembl Feature
-** @@
-******************************************************************************/
-
-EnsPFeature ensTranscriptGetFeature(const EnsPTranscript transcript)
-{
-    if(!transcript)
-        return NULL;
-
-    return transcript->Feature;
-}
-
-
-
-
-/* @func ensTranscriptGetDisplayReference *************************************
-**
-** Get the display reference element of an Ensembl Transcript.
-**
-** @cc Bio::EnsEMBL::Transcript::display_xref
-** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
-**
-** @return [EnsPDatabaseentry] Ensembl Database Entry
-** @@
-******************************************************************************/
-
-EnsPDatabaseentry ensTranscriptGetDisplayReference(
-    const EnsPTranscript transcript)
-{
-    if(!transcript)
-        return NULL;
-
-    return transcript->DisplayReference;
-}
-
-
-
-
-/* @func ensTranscriptGetDescription ******************************************
-**
-** Get the description element of an Ensembl Transcript.
-**
-** @cc Bio::EnsEMBL::Transcript::description
-** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
-**
-** @return [AjPStr] Description
-** @@
-******************************************************************************/
-
-AjPStr ensTranscriptGetDescription(const EnsPTranscript transcript)
-{
-    if(!transcript)
-        return NULL;
-
-    return transcript->Description;
-}
-
-
-
-
-/* @func ensTranscriptGetBioType **********************************************
+/* @func ensTranscriptGetBiotype **********************************************
 **
 ** Get the biological type element of an Ensembl Transcript.
 **
 ** @cc Bio::EnsEMBL::Transcript::biotype
 ** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
 **
-** @return [AjPStr] Biological type
+** @return [AjPStr] Biological type or NULL
 ** @@
 ******************************************************************************/
 
-AjPStr ensTranscriptGetBioType(const EnsPTranscript transcript)
+AjPStr ensTranscriptGetBiotype(const EnsPTranscript transcript)
 {
     if(!transcript)
         return NULL;
 
-    return transcript->BioType;
+    return transcript->Biotype;
 }
 
 
 
 
-/* @func ensTranscriptGetStatus ***********************************************
+/* @func ensTranscriptGetCanonical ********************************************
 **
-** Get the status element of an Ensembl Transcript.
+** Get the canonical element of an Ensembl Transcript.
 **
-** @cc Bio::EnsEMBL::Transcript::status
+** @cc Bio::EnsEMBL::Transcript::is_canonical
 ** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
 **
-** @return [EnsETranscriptStatus] Status or ensETranscriptStatusNULL
+** @return [AjBool] ajTrue if this is a canonical Transcript
 ** @@
 ******************************************************************************/
 
-EnsETranscriptStatus ensTranscriptGetStatus(const EnsPTranscript transcript)
+AjBool ensTranscriptGetCanonical(const EnsPTranscript transcript)
 {
     if(!transcript)
-        return ensETranscriptStatusNULL;
+        return ajFalse;
 
-    return transcript->Status;
-}
-
-
-
-
-/* @func ensTranscriptGetGeneIdentifier ***************************************
-**
-** Get the SQL database-internal Ensembl Gene identifier element of an
-** Ensembl Transcript.
-**
-** @cc Bio::EnsEMBL::Transcript::???
-** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
-**
-** @return [ajuint] Internal database identifier of the Ensembl Gene this
-** Transcript is a member of
-** @@
-******************************************************************************/
-
-ajuint ensTranscriptGetGeneIdentifier(const EnsPTranscript transcript)
-{
-    if(!transcript)
-        return 0;
-
-    return transcript->GeneIdentifier;
+    return transcript->Canonical;
 }
 
 
@@ -1005,23 +1126,224 @@ AjBool ensTranscriptGetCurrent(const EnsPTranscript transcript)
 
 
 
-/* @func ensTranscriptGetStableIdentifier *************************************
+/* @func ensTranscriptGetDateCreation *****************************************
+**
+** Get the creation date element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Transcript::created_date
+** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
+**
+** @return [AjPStr] Creation date or NULL
+** @@
+******************************************************************************/
+
+AjPStr ensTranscriptGetDateCreation(const EnsPTranscript transcript)
+{
+    if(!transcript)
+        return NULL;
+
+    return transcript->DateCreation;
+}
+
+
+
+
+/* @func ensTranscriptGetDateModification *************************************
+**
+** Get the modification date element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Transcript::modified_date
+** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
+**
+** @return [AjPStr] Modification date or NULL
+** @@
+******************************************************************************/
+
+AjPStr ensTranscriptGetDateModification(const EnsPTranscript transcript)
+{
+    if(!transcript)
+        return NULL;
+
+    return transcript->DateModification;
+}
+
+
+
+
+/* @func ensTranscriptGetDescription ******************************************
+**
+** Get the description element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Transcript::description
+** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
+**
+** @return [AjPStr] Description or NULL
+** @@
+******************************************************************************/
+
+AjPStr ensTranscriptGetDescription(const EnsPTranscript transcript)
+{
+    if(!transcript)
+        return NULL;
+
+    return transcript->Description;
+}
+
+
+
+
+/* @func ensTranscriptGetDisplayreference *************************************
+**
+** Get the display reference element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Transcript::display_xref
+** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
+**
+** @return [EnsPDatabaseentry] Ensembl Database Entry or NULL
+** @@
+******************************************************************************/
+
+EnsPDatabaseentry ensTranscriptGetDisplayreference(
+    const EnsPTranscript transcript)
+{
+    if(!transcript)
+        return NULL;
+
+    return transcript->Displayreference;
+}
+
+
+
+
+/* @func ensTranscriptGetFeature **********************************************
+**
+** Get the Ensembl Feature element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Feature
+** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
+**
+** @return [EnsPFeature] Ensembl Feature or NULL
+** @@
+******************************************************************************/
+
+EnsPFeature ensTranscriptGetFeature(const EnsPTranscript transcript)
+{
+    if(!transcript)
+        return NULL;
+
+    return transcript->Feature;
+}
+
+
+
+
+/* @func ensTranscriptGetGeneidentifier ***************************************
+**
+** Get the SQL database-internal Ensembl Gene identifier element of an
+** Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Transcript::???
+** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
+**
+** @return [ajuint] SQL database-internal identifier of the Ensembl Gene or 0
+** @@
+******************************************************************************/
+
+ajuint ensTranscriptGetGeneidentifier(const EnsPTranscript transcript)
+{
+    if(!transcript)
+        return 0;
+
+    return transcript->Geneidentifier;
+}
+
+
+
+
+/* @func ensTranscriptGetIdentifier *******************************************
+**
+** Get the SQL database-internal identifier element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Storable::dbID
+** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
+**
+** @return [ajuint] SQL database-internal identifier or 0
+** @@
+******************************************************************************/
+
+ajuint ensTranscriptGetIdentifier(const EnsPTranscript transcript)
+{
+    if(!transcript)
+        return 0;
+
+    return transcript->Identifier;
+}
+
+
+
+
+/* @func ensTranscriptGetSequenceedits ****************************************
+**
+** Get the enable Ensembl Sequence Edit objects element of an
+** Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Transcript::edits_enabled
+** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
+**
+** @return [AjBool] ajTrue: Apply Ensembl Sequence Edit objects to the sequence
+** @@
+******************************************************************************/
+
+AjBool ensTranscriptGetSequenceedits(const EnsPTranscript transcript)
+{
+    if(!transcript)
+        return ajFalse;
+
+    return transcript->Sequenceedits;
+}
+
+
+
+
+/* @func ensTranscriptGetStableidentifier *************************************
 **
 ** Get the stable identifier element of an Ensembl Transcript.
 **
 ** @cc Bio::EnsEMBL::Transcript::stable_id
 ** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
 **
-** @return [AjPStr] Stable identifier
+** @return [AjPStr] Stable identifier or NULL
 ** @@
 ******************************************************************************/
 
-AjPStr ensTranscriptGetStableIdentifier(const EnsPTranscript transcript)
+AjPStr ensTranscriptGetStableidentifier(const EnsPTranscript transcript)
 {
     if(!transcript)
         return NULL;
 
-    return transcript->StableIdentifier;
+    return transcript->Stableidentifier;
+}
+
+
+
+
+/* @func ensTranscriptGetStatus ***********************************************
+**
+** Get the status element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Transcript::status
+** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
+**
+** @return [EnsETranscriptStatus] Status or ensETranscriptStatusNULL
+** @@
+******************************************************************************/
+
+EnsETranscriptStatus ensTranscriptGetStatus(const EnsPTranscript transcript)
+{
+    if(!transcript)
+        return ensETranscriptStatusNULL;
+
+    return transcript->Status;
 }
 
 
@@ -1034,7 +1356,7 @@ AjPStr ensTranscriptGetStableIdentifier(const EnsPTranscript transcript)
 ** @cc Bio::EnsEMBL::Transcript::version
 ** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
 **
-** @return [ajuint] Version
+** @return [ajuint] Version or 0
 ** @@
 ******************************************************************************/
 
@@ -1049,67 +1371,59 @@ ajuint ensTranscriptGetVersion(const EnsPTranscript transcript)
 
 
 
-/* @func ensTranscriptGetCreationDate *****************************************
+/* @section load on demand ****************************************************
 **
-** Get the creation date element of an Ensembl Transcript.
+** Functions for returning elements of an Ensembl Transcript object,
+** which may need loading from an Ensembl SQL database on demand.
 **
-** @cc Bio::EnsEMBL::Transcript::created_date
-** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
+** @fdata [EnsPTranscript]
 **
-** @return [AjPStr] Creation date
-** @@
+** @nam3rule Load Return Ensembl Transcript attribute(s) loaded on demand
+** @nam4rule Alternativetranslations Return all alternative Ensembl Translation
+**                                   objects
+** @nam4rule Attributes Return all Ensembl Attribute objects
+** @nam4rule Databaseentries Return all Ensembl Database Entry objects
+** @nam4rule Exons Return all Ensembl Exon objects
+** @nam4rule Supportingfeatures Return the supporting Ensembl Base Align
+**                              Feature objects
+** @nam4rule Translation Return the Ensembl Translation
+**
+** @argrule * transcript [EnsPTranscript] Ensembl Transcript
+**
+** @valrule Alternativetranslations [const AjPList] AJAX List of alternative
+** Ensembl Translation objects or NULL
+** @valrule Attributes [const AjPList] AJAX List of Ensembl Attribute objects
+** or NULL
+** @valrule Databaseentries [const AjPList] AJAX List of
+** Ensembl Database Entry objects or NULL
+** @valrule Exons [const AjPList] AJAX List of Ensembl Exon objects or NULL
+** @valrule Supportingfeatures [const AjPList] AJAX List of supporting
+** Ensembl Base Align Feature objects or NULL
+** @valrule Translation [EnsPTranslation] Ensembl Translation or NULL
+**
+** @fcategory use
 ******************************************************************************/
 
-AjPStr ensTranscriptGetCreationDate(const EnsPTranscript transcript)
-{
-    if(!transcript)
-        return NULL;
-
-    return transcript->CreationDate;
-}
 
 
 
-
-/* @func ensTranscriptGetModificationDate *************************************
+/* @func ensTranscriptLoadAlternativetranslations *****************************
 **
-** Get the modification date element of an Ensembl Transcript.
+** Load all alternative Ensembl Translation objects of an Ensembl Transcript.
 **
-** @cc Bio::EnsEMBL::Transcript::modified_date
-** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
-**
-** @return [AjPStr] Modification date
-** @@
-******************************************************************************/
-
-AjPStr ensTranscriptGetModificationDate(const EnsPTranscript transcript)
-{
-    if(!transcript)
-        return NULL;
-
-    return transcript->ModificationDate;
-}
-
-
-
-
-/* @func ensTranscriptGetAlternativeTranslations ******************************
-**
-** Get all alternative Ensembl Translations of an Ensembl Transcript.
-**
-** This is not a simple accessor function, it will fetch Ensembl Translations
-** from the Ensembl Core database in case the AJAX List is empty.
+** This is not a simple accessor function, it will fetch Ensembl Translation
+** objects from the Ensembl SQL database in case the AJAX List is not defined.
 **
 **
 ** @cc Bio::EnsEMBL::Transcript::get_all_alternative_translations
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
 ** @see ensTranscriptFetchAllAttributes
 **
-** @return [const AjPList] AJAX List of Ensembl Translations
+** @return [const AjPList] AJAX List of Ensembl Translation objects or NULL
 ** @@
 ******************************************************************************/
 
-const AjPList ensTranscriptGetAlternativeTranslations(
+const AjPList ensTranscriptLoadAlternativetranslations(
     EnsPTranscript transcript)
 {
     EnsPDatabaseadaptor dba = NULL;
@@ -1119,14 +1433,14 @@ const AjPList ensTranscriptGetAlternativeTranslations(
     if(!transcript)
         return NULL;
 
-    if(transcript->AlternativeTranslations)
-        return transcript->AlternativeTranslations;
+    if(transcript->Alternativetranslations)
+        return transcript->Alternativetranslations;
 
     if(!transcript->Adaptor)
     {
-        ajDebug("ensTranscriptGetAlternativeTranslations cannot fetch "
-                "Ensembl Translations for a Transcript without a "
-                "Transcript Adaptor.\n");
+        ajDebug("ensTranscriptLoadAlternativetranslations cannot fetch "
+                "Ensembl Translation objects for an Ensembl Transcript "
+                "without an Ensembl Transcript Adaptor.\n");
 
         return NULL;
     }
@@ -1135,44 +1449,45 @@ const AjPList ensTranscriptGetAlternativeTranslations(
 
     if(!dba)
     {
-        ajDebug("ensTranscriptGetAlternativeTranslations cannot fetch "
-                "Ensembl Translations for a Transcript without a "
-                "Database Adaptor set in the Transcript Adaptor.\n");
+        ajDebug("ensTranscriptLoadAlternativetranslations cannot fetch "
+                "Ensembl Translation objects for an Ensembl Transcript "
+                "without an Ensembl Database Adaptor set in the "
+                "Ensembl Transcript Adaptor.\n");
 
         return NULL;
     }
 
     tla = ensRegistryGetTranslationadaptor(dba);
 
-    transcript->AlternativeTranslations = ajListNew();
+    transcript->Alternativetranslations = ajListNew();
 
-    ensTranslationadaptorFetchAllByTranscript(tla, transcript);
+    ensTranslationadaptorFetchAllbyTranscript(tla, transcript);
 
-    return transcript->AlternativeTranslations;
+    return transcript->Alternativetranslations;
 }
 
 
 
 
-/* @func ensTranscriptGetAttributes *******************************************
+/* @func ensTranscriptLoadAttributes ******************************************
 **
-** Get all Ensembl Attributes of an Ensembl Transcript.
+** Load all Ensembl Attribute objects of an Ensembl Transcript.
 **
-** This is not a simple accessor function, it will fetch Ensembl Attributes
-** from the Ensembl Core database in case the AJAX List is empty.
+** This is not a simple accessor function, it will fetch Ensembl Attribute
+** objects from an Ensembl SQL database in case the AJAX List is empty.
 **
-** To filter Ensembl Attributes via their code, consider using
+** To filter Ensembl Attribute objects via their code, consider using
 ** ensTranscriptFetchAllAttributes.
 **
 ** @cc Bio::EnsEMBL::Transcript::get_all_Attributes
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
 ** @see ensTranscriptFetchAllAttributes
 **
-** @return [const AjPList] AJAX List of Ensembl Attributes
+** @return [const AjPList] AJAX List of Ensembl Attribute objects or NULL
 ** @@
 ******************************************************************************/
 
-const AjPList ensTranscriptGetAttributes(EnsPTranscript transcript)
+const AjPList ensTranscriptLoadAttributes(EnsPTranscript transcript)
 {
     EnsPAttributeadaptor ata = NULL;
 
@@ -1186,7 +1501,7 @@ const AjPList ensTranscriptGetAttributes(EnsPTranscript transcript)
 
     if(!transcript->Adaptor)
     {
-        ajDebug("ensTranscriptGetAttributes cannot fetch "
+        ajDebug("ensTranscriptLoadAttributes cannot fetch "
                 "Ensembl Attributes for a Transcript without a "
                 "Transcript Adaptor.\n");
 
@@ -1197,7 +1512,7 @@ const AjPList ensTranscriptGetAttributes(EnsPTranscript transcript)
 
     if(!dba)
     {
-        ajDebug("ensTranscriptGetAttributes cannot fetch "
+        ajDebug("ensTranscriptLoadAttributes cannot fetch "
                 "Ensembl Attributes for a Transcript without a "
                 "Database Adaptor set in the Transcript Adaptor.\n");
 
@@ -1208,7 +1523,7 @@ const AjPList ensTranscriptGetAttributes(EnsPTranscript transcript)
 
     transcript->Attributes = ajListNew();
 
-    ensAttributeadaptorFetchAllByTranscript(ata,
+    ensAttributeadaptorFetchAllbyTranscript(ata,
                                             transcript,
                                             (const AjPStr) NULL,
                                             transcript->Attributes);
@@ -1219,26 +1534,26 @@ const AjPList ensTranscriptGetAttributes(EnsPTranscript transcript)
 
 
 
-/* @func ensTranscriptGetDatabaseEntries **************************************
+/* @func ensTranscriptLoadDatabaseentries *************************************
 **
-** Get all Ensembl Database Entries of an Ensembl Transcript.
+** Load all Ensembl Database Entry objects of an Ensembl Transcript.
 **
 ** This is not a simple accessor function, since it will attempt loading the
-** Database Entries from the Ensembl Core database associated with the
+** Database Entry objects from the Ensembl SQL database associated with the
 ** Transcript Adaptor.
 **
-** To filter Ensembl Database Entires via an Ensembl External Database name or
-** type, consider using ensTranscriptFetchAllDatabaseEntries.
+** To filter Ensembl Database Entry objects via an Ensembl External Database
+** name or type, consider using ensTranscriptFetchAllDatabaseentries.
 **
 ** @cc Bio::EnsEMBL::Transcript::get_all_DBEntries
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @see ensTranscriptFetchAllDatabaseEntries
+** @see ensTranscriptFetchAllDatabaseentries
 **
-** @return [const AjPList] AJAX List of Ensembl Database Entries
+** @return [const AjPList] AJAX List of Ensembl Database Entry objects or NULL
 ** @@
 ******************************************************************************/
 
-const AjPList ensTranscriptGetDatabaseEntries(EnsPTranscript transcript)
+const AjPList ensTranscriptLoadDatabaseentries(EnsPTranscript transcript)
 {
     AjPStr objtype = NULL;
 
@@ -1249,14 +1564,14 @@ const AjPList ensTranscriptGetDatabaseEntries(EnsPTranscript transcript)
     if(!transcript)
         return NULL;
 
-    if(transcript->DatabaseEntries)
-        return transcript->DatabaseEntries;
+    if(transcript->Databaseentries)
+        return transcript->Databaseentries;
 
     if(!transcript->Adaptor)
     {
-        ajDebug("ensTranscriptGetDatabaseEntries cannot fetch "
-                "Ensembl Database Entries for a Transcript without a "
-                "Transcript Adaptor.\n");
+        ajDebug("ensTranscriptLoadDatabaseentries cannot fetch "
+                "Ensembl Database Entry objects for an Ensembl Transcript "
+                "without an Ensembl Transcript Adaptor.\n");
 
         return NULL;
     }
@@ -1265,9 +1580,10 @@ const AjPList ensTranscriptGetDatabaseEntries(EnsPTranscript transcript)
 
     if(!dba)
     {
-        ajDebug("ensTranscriptGetDatabaseEntries cannot fetch "
-                "Ensembl Database Entries for a Transcript without a "
-                "Database Adaptor set in the Transcript Adaptor.\n");
+        ajDebug("ensTranscriptLoadDatabaseentries cannot fetch "
+                "Ensembl Database Entry objects for an Ensembl Transcript "
+                "without an Ensembl Database Adaptor set in the "
+                "Ensembl Transcript Adaptor.\n");
 
         return NULL;
     }
@@ -1276,26 +1592,26 @@ const AjPList ensTranscriptGetDatabaseEntries(EnsPTranscript transcript)
 
     objtype = ajStrNewC("Transcript");
 
-    transcript->DatabaseEntries = ajListNew();
+    transcript->Databaseentries = ajListNew();
 
-    ensDatabaseentryadaptorFetchAllByObjectType(dbea,
-                                                transcript->Identifier,
-                                                objtype,
-                                                (AjPStr) NULL,
-                                                ensEExternaldatabaseTypeNULL,
-                                                transcript->DatabaseEntries);
+    ensDatabaseentryadaptorFetchAllbyObject(dbea,
+                                            transcript->Identifier,
+                                            objtype,
+                                            (AjPStr) NULL,
+                                            ensEExternaldatabaseTypeNULL,
+                                            transcript->Databaseentries);
 
     ajStrDel(&objtype);
 
-    return transcript->DatabaseEntries;
+    return transcript->Databaseentries;
 }
 
 
 
 
-/* @func ensTranscriptGetExons ************************************************
+/* @func ensTranscriptLoadExons ***********************************************
 **
-** Get all Ensembl Exons of an Ensembl Transcript.
+** Load all Ensembl Exon objects of an Ensembl Transcript.
 **
 ** This is not a simple accessor function, since it will attempt fetching the
 ** Exons from the Ensembl Core database associated with the
@@ -1304,13 +1620,13 @@ const AjPList ensTranscriptGetDatabaseEntries(EnsPTranscript transcript)
 ** @cc Bio::EnsEMBL::Transcript::get_all_Exons
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
 **
-** @return [const AjPList] AJAX List of Ensembl Exons
+** @return [const AjPList] AJAX List of Ensembl Exon objects or NULL
 ** @@
 ** NOTE: This implementation does not support the constitutive parameter.
-** Please use the ensTranscriptFetchAllConstitutiveExons function instead.
+** Please use the ensTranscriptFetchAllConstitutiveexons function instead.
 ******************************************************************************/
 
-const AjPList ensTranscriptGetExons(EnsPTranscript transcript)
+const AjPList ensTranscriptLoadExons(EnsPTranscript transcript)
 {
     EnsPDatabaseadaptor dba = NULL;
 
@@ -1324,9 +1640,10 @@ const AjPList ensTranscriptGetExons(EnsPTranscript transcript)
 
     if(!transcript->Adaptor)
     {
-        ajDebug("ensTranscriptGetExons cannot fetch "
-                "Ensembl Exons for a Transcript without a "
-                "Transcript Adaptor.\n");
+        ajDebug("ensTranscriptLoadExons cannot fetch "
+                "Ensembl Exon objects for an "
+                "Ensembl Transcript without an "
+                "Ensembl Transcript Adaptor.\n");
 
         return NULL;
     }
@@ -1337,7 +1654,7 @@ const AjPList ensTranscriptGetExons(EnsPTranscript transcript)
 
     transcript->Exons = ajListNew();
 
-    ensExonadaptorFetchAllByTranscript(ea, transcript, transcript->Exons);
+    ensExonadaptorFetchAllbyTranscript(ea, transcript, transcript->Exons);
 
     return transcript->Exons;
 }
@@ -1345,22 +1662,23 @@ const AjPList ensTranscriptGetExons(EnsPTranscript transcript)
 
 
 
-/* @func ensTranscriptGetSupportingfeatures ***********************************
+/* @func ensTranscriptLoadSupportingfeatures **********************************
 **
-** Get all Ensembl Supporting Features of an Ensembl Transcript.
+** Load all Ensembl Supporting Feature objects of an Ensembl Transcript.
 **
 ** This is not a simple accessor function, since it will attempt loading the
-** supporting Base Align Features from the Ensembl Core database associated
-** with the Transcript Adaptor.
+** supporting Ensembl Base Align Feature objects from the Ensembl SQL database
+** associated with the Ensembl Transcript Adaptor.
 **
 ** @cc Bio::EnsEMBL::Transcript::get_all_supporting_features
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
 **
-** @return [const AjPList] AJAX List of Ensembl Base Align Features
+** @return [const AjPList] AJAX List of Ensembl Base Align Feature objects
+** or NULL
 ** @@
 ******************************************************************************/
 
-const AjPList ensTranscriptGetSupportingfeatures(EnsPTranscript transcript)
+const AjPList ensTranscriptLoadSupportingfeatures(EnsPTranscript transcript)
 {
     EnsPDatabaseadaptor dba = NULL;
 
@@ -1372,9 +1690,9 @@ const AjPList ensTranscriptGetSupportingfeatures(EnsPTranscript transcript)
 
     if(!transcript->Adaptor)
     {
-        ajDebug("ensTranscriptGetSupportingfeatures cannot fetch "
-                "Ensembl Base Align Features for a Transcript without a "
-                "Transcript Adaptor.\n");
+        ajDebug("ensTranscriptLoadSupportingfeatures cannot fetch "
+                "Ensembl Base Align Feature objects for an Ensembl Transcript "
+                "without an Ensembl Transcript Adaptor.\n");
 
         return NULL;
     }
@@ -1383,7 +1701,7 @@ const AjPList ensTranscriptGetSupportingfeatures(EnsPTranscript transcript)
 
     transcript->Supportingfeatures = ajListNew();
 
-    ensSupportingfeatureadaptorFetchAllByTranscript(
+    ensSupportingfeatureadaptorFetchAllbyTranscript(
         dba,
         transcript,
         transcript->Supportingfeatures);
@@ -1394,9 +1712,9 @@ const AjPList ensTranscriptGetSupportingfeatures(EnsPTranscript transcript)
 
 
 
-/* @func ensTranscriptGetTranslation ******************************************
+/* @func ensTranscriptLoadTranslation *****************************************
 **
-** Get the Ensembl Translation of an Ensembl Transcript.
+** Load the Ensembl Translation of an Ensembl Transcript.
 **
 ** This is not a simple accessor function, since it will attempt loading the
 ** Ensembl Translation from the Ensembl Core database associated
@@ -1405,11 +1723,11 @@ const AjPList ensTranscriptGetSupportingfeatures(EnsPTranscript transcript)
 ** @cc Bio::EnsEMBL::Transcript::translation
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
 **
-** @return [EnsPTranslation] Ensembl Translations or NULL
+** @return [EnsPTranslation] Ensembl Translation objects or NULL
 ** @@
 ******************************************************************************/
 
-EnsPTranslation ensTranscriptGetTranslation(EnsPTranscript transcript)
+EnsPTranslation ensTranscriptLoadTranslation(EnsPTranscript transcript)
 {
     EnsPDatabaseadaptor dba = NULL;
 
@@ -1423,7 +1741,7 @@ EnsPTranslation ensTranscriptGetTranslation(EnsPTranscript transcript)
 
     if(!transcript->Adaptor)
     {
-        ajDebug("ensTranscriptGetTranslation cannot fetch an "
+        ajDebug("ensTranscriptLoadTranslation cannot fetch an "
                 "Ensembl Translation for a Transcript without a "
                 "Transcript Adaptor.\n");
 
@@ -1442,671 +1760,52 @@ EnsPTranslation ensTranscriptGetTranslation(EnsPTranscript transcript)
 
 
 
-/* @func ensTranscriptGetTranscriptCodingStart ********************************
-**
-** Get the start position of the coding region in Transcript coordinates.
-**
-** @cc Bio::EnsEMBL::Transcript::cdna_coding_start
-** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-**
-** @return [ajuint] Coding region start in Transcript coordinates or 0,
-** if this Transcript has no Translation
-** @@
-******************************************************************************/
-
-ajuint ensTranscriptGetTranscriptCodingStart(EnsPTranscript transcript)
-{
-    AjBool debug = AJFALSE;
-
-    AjIList iter = NULL;
-
-    const AjPList exons = NULL;
-    AjPList ses         = NULL;
-
-    EnsPExon exon = NULL;
-
-    EnsPFeature feature = NULL;
-
-    EnsPSequenceEdit se = NULL;
-
-    EnsPTranslation translation = NULL;
-
-    debug = ajDebugTest("ensTranscriptGetTranscriptCodingStart");
-
-    if(debug)
-        ajDebug("ensTranscriptGetTranscriptCodingStart\n"
-                "  transcript %p\n",
-                transcript);
-
-    if(!transcript)
-        return 0;
-
-    if(transcript->TranscriptCodingStart)
-        return transcript->TranscriptCodingStart;
-
-    translation = ensTranscriptGetTranslation(transcript);
-
-    if(!translation)
-        return 0;
-
-    /*
-    ** Calculate the coding start relative to the start of the
-    ** Translation in Transcript coordinates.
-    */
-
-    exons = ensTranscriptGetExons(transcript);
-
-    iter = ajListIterNewread(exons);
-
-    while(!ajListIterDone(iter))
-    {
-        exon = (EnsPExon) ajListIterGet(iter);
-
-        if(debug)
-            ajDebug("ensTranscriptGetTranscriptCodingStart "
-                    "exon %p start exon %p\n",
-                    exon, ensTranslationGetStartExon(translation));
-
-        if(exon == ensTranslationGetStartExon(translation))
-        {
-            /* Add the UTR portion of the first coding Exon. */
-
-            transcript->TranscriptCodingStart +=
-                ensTranslationGetStart(translation);
-
-            break;
-        }
-        else
-        {
-            /* Add the entire length of this non-coding Exon. */
-
-            feature = ensExonGetFeature(exon);
-
-            transcript->TranscriptCodingStart +=
-                ensFeatureGetLength(feature);
-        }
-    }
-
-    ajListIterDel(&iter);
-
-    /* Adjust Transcript coordinates if Sequence Edits are enabled. */
-
-    if(transcript->EnableSequenceEdits)
-    {
-        ses = ajListNew();
-
-        ensTranscriptFetchAllSequenceEdits(transcript, ses);
-
-        /*
-        ** Sort in reverse order to avoid adjustment of down-stream
-        ** Sequence Edits.
-        */
-
-        ensSequenceEditSortByStartDescending(ses);
-
-        while(ajListPop(ses, (void **) &se))
-        {
-            if(ensSequenceEditGetStart(se) <
-               transcript->TranscriptCodingStart)
-                transcript->TranscriptCodingStart +=
-                    ensSequenceEditGetLengthDifference(se);
-
-            ensSequenceEditDel(&se);
-        }
-
-        ajListFree(&ses);
-    }
-
-    return transcript->TranscriptCodingStart;
-}
-
-
-
-
-/* @func ensTranscriptGetTranscriptCodingEnd **********************************
-**
-** Get the end position of the coding region in Transcript coordinates.
-**
-** @cc Bio::EnsEMBL::Transcript::cdna_coding_end
-** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-**
-** @return [ajuint] Coding region end in Transcript coordinates or 0,
-** if this Transcript has no Translation
-** @@
-******************************************************************************/
-
-ajuint ensTranscriptGetTranscriptCodingEnd(EnsPTranscript transcript)
-{
-    AjBool debug = AJFALSE;
-
-    AjIList iter = NULL;
-
-    const AjPList exons = NULL;
-    AjPList ses         = NULL;
-
-    EnsPExon exon = NULL;
-
-    EnsPFeature feature = NULL;
-
-    EnsPSequenceEdit se = NULL;
-
-    EnsPTranslation translation = NULL;
-
-    debug = ajDebugTest("ensTranscriptGetTranscriptCodingEnd");
-
-    if(debug)
-        ajDebug("ensTranscriptGetTranscriptCodingEnd\n"
-                "  transcript %p\n",
-                transcript);
-
-    if(!transcript)
-        return 0;
-
-    if(transcript->TranscriptCodingEnd)
-        return transcript->TranscriptCodingEnd;
-
-    translation = ensTranscriptGetTranslation(transcript);
-
-    if(!translation)
-        return 0;
-
-    /*
-    ** Calculate the coding start relative to the start of the
-    ** Translation in Transcript coordinates.
-    */
-
-    exons = ensTranscriptGetExons(transcript);
-
-    iter = ajListIterNewread(exons);
-
-    while(!ajListIterDone(iter))
-    {
-        exon = (EnsPExon) ajListIterGet(iter);
-
-        if(debug)
-            ajDebug("ensTranscriptGetTranscriptCodingEnd "
-                    "exon %p end exon %p\n",
-                    exon, ensTranslationGetEndExon(translation));
-
-        if(exon == ensTranslationGetEndExon(translation))
-        {
-            /* Add the coding portion of the last coding Exon. */
-
-            transcript->TranscriptCodingEnd +=
-                ensTranslationGetEnd(translation);
-
-            break;
-        }
-        else
-        {
-            /* Add the entire length of this Exon. */
-
-            feature = ensExonGetFeature(exon);
-
-            transcript->TranscriptCodingEnd +=
-                ensFeatureGetLength(feature);
-        }
-    }
-
-    ajListIterDel(&iter);
-
-    /* Adjust Transcript coordinates if Sequence Edits are enabled. */
-
-    if(transcript->EnableSequenceEdits)
-    {
-        ses = ajListNew();
-
-        ensTranscriptFetchAllSequenceEdits(transcript, ses);
-
-        /*
-        ** Sort in reverse order to avoid adjustment of down-stream
-        ** Sequence Edits.
-        */
-
-        ensSequenceEditSortByStartDescending(ses);
-
-        while(ajListPop(ses, (void **) &se))
-        {
-            /*
-            ** Use less than or equal to end + 1 so that the end of the
-            ** CDS can be extended.
-            */
-
-            if(ensSequenceEditGetStart(se) <=
-               transcript->TranscriptCodingEnd + 1)
-                transcript->TranscriptCodingEnd +=
-                    ensSequenceEditGetLengthDifference(se);
-
-            ensSequenceEditDel(&se);
-        }
-
-        ajListFree(&ses);
-    }
-
-    return transcript->TranscriptCodingEnd;
-}
-
-
-
-
-/* @func ensTranscriptGetSliceCodingStart *************************************
-**
-** Get the start position of the coding region in Slice coordinates.
-**
-** @cc Bio::EnsEMBL::Transcript::coding_region_start
-** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-**
-** @return [ajuint] Coding region start in Slice coordinates
-** @@
-******************************************************************************/
-
-ajuint ensTranscriptGetSliceCodingStart(EnsPTranscript transcript)
-{
-    EnsPExon exon = NULL;
-
-    EnsPFeature feature = NULL;
-
-    EnsPTranslation translation = NULL;
-
-    if(!transcript)
-        return 0;
-
-    if(transcript->SliceCodingStart)
-        return transcript->SliceCodingStart;
-
-    translation = ensTranscriptGetTranslation(transcript);
-
-    if(translation)
-    {
-        /* Calulate the Slice coding start from the Translation. */
-
-        exon = ensTranslationGetStartExon(translation);
-
-        feature = ensExonGetFeature(exon);
-
-        if(ensFeatureGetStrand(feature) >= 0)
-        {
-            exon = ensTranslationGetStartExon(translation);
-
-            feature = ensExonGetFeature(exon);
-
-            transcript->SliceCodingStart = ensFeatureGetStart(feature);
-
-            transcript->SliceCodingStart +=
-                (ensTranslationGetStart(translation) - 1);
-        }
-        else
-        {
-            exon = ensTranslationGetEndExon(translation);
-
-            feature = ensExonGetFeature(exon);
-
-            transcript->SliceCodingStart = ensFeatureGetEnd(feature);
-
-            transcript->SliceCodingStart -=
-                (ensTranslationGetEnd(translation) - 1);
-        }
-    }
-
-    return transcript->SliceCodingStart;
-}
-
-
-
-
-/* @func ensTranscriptGetSliceCodingEnd ***************************************
-**
-** Get the end position of the coding region in Slice coordinates.
-**
-** @cc Bio::EnsEMBL::Transcript::coding_region_end
-** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-**
-** @return [ajuint] Coding region end in Slice coordinates
-** @@
-******************************************************************************/
-
-ajuint ensTranscriptGetSliceCodingEnd(EnsPTranscript transcript)
-{
-    EnsPExon exon = NULL;
-
-    EnsPFeature feature = NULL;
-
-    EnsPTranslation translation = NULL;
-
-    if(!transcript)
-        return 0;
-
-    if(transcript->SliceCodingEnd)
-        return transcript->SliceCodingEnd;
-
-    translation = ensTranscriptGetTranslation(transcript);
-
-    if(translation)
-    {
-        /* Calulate the Slice coding start from the Translation. */
-
-        exon = ensTranslationGetStartExon(translation);
-
-        feature = ensExonGetFeature(exon);
-
-        if(ensFeatureGetStrand(feature) >= 0)
-        {
-            exon = ensTranslationGetEndExon(translation);
-
-            feature = ensExonGetFeature(exon);
-
-            transcript->SliceCodingEnd = ensFeatureGetStart(feature);
-
-            transcript->SliceCodingEnd +=
-                (ensTranslationGetEnd(translation) - 1);
-        }
-        else
-        {
-            exon = ensTranslationGetStartExon(translation);
-
-            feature = ensExonGetFeature(exon);
-
-            transcript->SliceCodingEnd = ensFeatureGetEnd(feature);
-
-            transcript->SliceCodingEnd -=
-                (ensTranslationGetStart(translation) - 1);
-        }
-    }
-
-    return transcript->SliceCodingEnd;
-}
-
-
-
-
-/* @func ensTranscriptGetEnableSequenceEdits **********************************
-**
-** Get the enable Ensembl Sequence Edits element of an Ensembl Transcript.
-**
-** @cc Bio::EnsEMBL::Transcript::edits_enabled
-** @param [r] transcript [EnsPTranscript] Ensembl Transcript
-**
-** @return [AjBool] ajTrue: Enable Ensembl Sequence Edits to the sequence
-** @@
-******************************************************************************/
-
-AjBool ensTranscriptGetEnableSequenceEdits(EnsPTranscript transcript)
-{
-    if(!transcript)
-        return ajFalse;
-
-    return transcript->EnableSequenceEdits;
-}
-
-
-
-
-/* @func ensTranscriptGetLength ***********************************************
-**
-** Get the length of an Ensembl Transcript, which is the sum of the length of
-** all Ensembl Exons of this transcript.
-**
-** @cc Bio::EnsEMBL::Transcript::length
-** @param [r] transcript [EnsPTranscript] Ensembl Transcript
-**
-** @return [ajuint] Transcript (cDNA) length
-** @@
-******************************************************************************/
-
-ajuint ensTranscriptGetLength(EnsPTranscript transcript)
-{
-    ajuint length = 0;
-
-    AjIList iter = NULL;
-
-    const AjPList exons = NULL;
-    AjPList ses         = NULL;
-
-    EnsPExon exon = NULL;
-
-    EnsPFeature feature = NULL;
-
-    EnsPSequenceEdit se = NULL;
-
-    if(!transcript)
-        return 0;
-
-    exons = ensTranscriptGetExons(transcript);
-
-    iter = ajListIterNewread(exons);
-
-    while(!ajListIterDone(iter))
-    {
-        exon = (EnsPExon) ajListIterGet(iter);
-
-        feature = ensExonGetFeature(exon);
-
-        length += ensFeatureGetLength(feature);
-    }
-
-    ajListIterDel(&iter);
-
-    /* Adjust the length if post-transcriptional Sequence Edits are enabled. */
-
-    if(transcript->EnableSequenceEdits)
-    {
-        ses = ajListNew();
-
-        ensTranscriptFetchAllSequenceEdits(transcript, ses);
-
-        while(ajListPop(ses, (void **) &se))
-        {
-            length += ensSequenceEditGetLengthDifference(se);
-
-            ensSequenceEditDel(&se);
-        }
-
-        ajListFree(&ses);
-    }
-
-    return length;
-}
-
-
-
-
-/* @func ensTranscriptGetMemsize **********************************************
-**
-** Get the memory size in bytes of an Ensembl Transcript.
-**
-** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
-**
-** @return [ajulong] Memory size
-** @@
-******************************************************************************/
-
-ajulong ensTranscriptGetMemsize(const EnsPTranscript transcript)
-{
-    ajulong size = 0;
-
-    AjIList iter = NULL;
-
-    EnsPAttribute attribute = NULL;
-
-    EnsPBasealignfeature baf = NULL;
-
-    EnsPDatabaseentry dbe = NULL;
-
-    EnsPExon exon = NULL;
-
-    EnsPTranslation translation = NULL;
-
-    if(!transcript)
-        return 0;
-
-    size += sizeof (EnsOTranscript);
-
-    size += ensFeatureGetMemsize(transcript->Feature);
-
-    size += ensDatabaseentryGetMemsize(transcript->DisplayReference);
-
-    if(transcript->Description)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(transcript->Description);
-    }
-
-    if(transcript->BioType)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(transcript->BioType);
-    }
-
-    if(transcript->StableIdentifier)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(transcript->StableIdentifier);
-    }
-
-    if(transcript->CreationDate)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(transcript->CreationDate);
-    }
-
-    if(transcript->ModificationDate)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(transcript->ModificationDate);
-    }
-
-    /* Summarise the AJAX List of alternative Ensembl Translations. */
-
-    if(transcript->AlternativeTranslations)
-    {
-        size += sizeof (AjOList);
-
-        iter = ajListIterNewread(transcript->AlternativeTranslations);
-
-        while(!ajListIterDone(iter))
-        {
-            translation = (EnsPTranslation) ajListIterGet(iter);
-
-            size += ensTranslationGetMemsize(translation);
-        }
-
-        ajListIterDel(&iter);
-    }
-
-    /* Summarise the AJAX List of Ensembl Attributes. */
-
-    if(transcript->Attributes)
-    {
-        size += sizeof (AjOList);
-
-        iter = ajListIterNewread(transcript->Attributes);
-
-        while(!ajListIterDone(iter))
-        {
-            attribute = (EnsPAttribute) ajListIterGet(iter);
-
-            size += ensAttributeGetMemsize(attribute);
-        }
-
-        ajListIterDel(&iter);
-    }
-
-    /* Summarise the AJAX List of Ensembl Database Entries. */
-
-    if(transcript->DatabaseEntries)
-    {
-        size += sizeof (AjOList);
-
-        iter = ajListIterNewread(transcript->DatabaseEntries);
-
-        while(!ajListIterDone(iter))
-        {
-            dbe = (EnsPDatabaseentry) ajListIterGet(iter);
-
-            size += ensDatabaseentryGetMemsize(dbe);
-        }
-
-        ajListIterDel(&iter);
-    }
-
-    /* Summarise the AJAX List of Ensembl Exons. */
-
-    if(transcript->Exons)
-    {
-        size += sizeof (AjOList);
-
-        iter = ajListIterNewread(transcript->Exons);
-
-        while(!ajListIterDone(iter))
-        {
-            exon = (EnsPExon) ajListIterGet(iter);
-
-            size += ensExonGetMemsize(exon);
-        }
-
-        ajListIterDel(&iter);
-    }
-
-    /* Summarise the AJAX List of supporting Ensembl Base Align Features. */
-
-    if(transcript->Supportingfeatures)
-    {
-        size += sizeof (AjOList);
-
-        iter = ajListIterNewread(transcript->Supportingfeatures);
-
-        while(!ajListIterDone(iter))
-        {
-            baf = (EnsPBasealignfeature) ajListIterGet(iter);
-
-            size += ensBasealignfeatureGetMemsize(baf);
-        }
-
-        ajListIterDel(&iter);
-    }
-
-    size += ensTranslationGetMemsize(transcript->Translation);
-
-    size += ensMapperGetMemsize(transcript->ExonCoordMapper);
-
-    return size;
-}
-
-
-
-
 /* @section element assignment ************************************************
 **
 ** Functions for assigning elements of an Ensembl Transcript object.
 **
 ** @fdata [EnsPTranscript]
-** @fnote None
 **
 ** @nam3rule Set Set one element of a Transcript
-** @nam4rule SetAdaptor Set the Ensembl Transcript Adaptor
-** @nam4rule SetIdentifier Set the SQL database-internal identifier
-** @nam4rule SetFeature Set the Ensembl Feature
-** @nam4rule SetDisplayReference Set the display Ensembl Database Entry
-** @nam4rule SetDescription Set the description
-** @nam4rule SetBioType Set the biological type
-** @nam4rule SetStatus Set the status
-** @nam4rule SetGeneIdentifier Set the Ensembl Gene identifier
-** @nam4rule SetCurrent Set the current element
-** @nam4rule SetStableIdentifier Set the stable identifier
-** @nam4rule SetVersion Set the version
-** @nam4rule SetCreationDate Set the creation date
-** @nam4rule SetModificationDate Set the modification date
-** @nam4rule SetTranslation Set the Ensembl Translation
-** @nam4rule SetEnableSequenceEdits Set enable Ensembl Sequence Edits
+** @nam4rule Adaptor Set the Ensembl Transcript Adaptor
+** @nam4rule Biotype Set the biological type
+** @nam4rule Canonical Set the canonical attribute
+** @nam4rule Current Set the current attribute
+** @nam4rule Date Set a date
+** @nam5rule DateCreation Set the creation date
+** @nam5rule DateModification Set the modification date
+** @nam4rule Description Set the description
+** @nam4rule Displayreference Set the display Ensembl Database Entry
+** @nam4rule Feature Set the Ensembl Feature
+** @nam4rule Geneidentifier Set the Ensembl Gene identifier
+** @nam4rule Identifier Set the SQL database-internal identifier
+** @nam4rule Stableidentifier Set the stable identifier
+** @nam4rule Status Set the status
+** @nam4rule Version Set the version
+** @nam4rule Sequenceedits Set enable Ensembl Sequence Edit objects
+** @nam4rule Translation Set the Ensembl Translation
 **
 ** @argrule * transcript [EnsPTranscript] Ensembl Transcript object
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+** @argrule Adaptor tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @argrule Biotype biotype [AjPStr] Biological type
+** @argrule Canonical canonical [AjBool] Canonical attribute
+** @argrule Current current [AjBool] Current attribute
+** @argrule DateCreation cdate [AjPStr] Creation date
+** @argrule DateModification mdate [AjPStr] Modification date
+** @argrule Description description [AjPStr] Description
+** @argrule Displayreference displaydbe [EnsPDatabaseentry] Ensembl Database
+** Entry
+** @argrule Feature feature [EnsPFeature] Ensembl Feature
+** @argrule Geneidentifier geneid [ajuint] Ensembl Gene identifier
+** @argrule Identifier identifier [ajuint] SQL database-internal identifier
+** @argrule Sequenceedits enablese [AjBool] Enable Ensembl Sequence Edit
+** objects
+** @argrule Stableidentifier stableid [AjPStr] Stable identifier
+** @argrule Status status [EnsETranscriptStatus] Status
+** @argrule Translation translation [EnsPTranslation] Ensembl Translation
+** @argrule Version version [ajuint] Version
 **
 ** @fcategory modify
 ******************************************************************************/
@@ -2140,24 +1839,28 @@ AjBool ensTranscriptSetAdaptor(EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptSetIdentifier *******************************************
+/* @func ensTranscriptSetBiotype **********************************************
 **
-** Set the SQL database-internal identifier element of an Ensembl Transcript.
+** Set the biological type element of an Ensembl Transcript.
 **
-** @cc Bio::EnsEMBL::Storable::dbID
+** @cc Bio::EnsEMBL::Transcript::biotype
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [r] identifier [ajuint] SQL database-internal identifier
+** @param [uN] biotype [AjPStr] Biological type
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptSetIdentifier(EnsPTranscript transcript, ajuint identifier)
+AjBool ensTranscriptSetBiotype(EnsPTranscript transcript,
+                               AjPStr biotype)
 {
     if(!transcript)
         return ajFalse;
 
-    transcript->Identifier = identifier;
+    ajStrDel(&transcript->Biotype);
+
+    if(biotype)
+        transcript->Description = ajStrNewRef(biotype);
 
     return ajTrue;
 }
@@ -2165,153 +1868,25 @@ AjBool ensTranscriptSetIdentifier(EnsPTranscript transcript, ajuint identifier)
 
 
 
-/* @func ensTranscriptSetFeature **********************************************
+/* @func ensTranscriptSetCanonical ********************************************
 **
-** Set the Ensembl Feature element of an Ensembl Transcript.
+** Set the canonical element of an Ensembl Transcript.
 **
-** @cc Bio::EnsEMBL::Feature
+** @cc Bio::EnsEMBL::Transcript::is_canonical
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [u] feature [EnsPFeature] Ensembl Feature
+** @param [r] canonical [AjBool] Canonical attribute
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptSetFeature(EnsPTranscript transcript, EnsPFeature feature)
+AjBool ensTranscriptSetCanonical(EnsPTranscript transcript,
+                                 AjBool canonical)
 {
-    AjIList iter = NULL;
-
-    EnsPBasealignfeature oldbaf = NULL;
-    EnsPBasealignfeature newbaf = NULL;
-
-    EnsPExon oldexon = NULL;
-    EnsPExon newexon = NULL;
-
-    EnsPSlice slice = NULL;
-
-    if(ajDebugTest("ensTranscriptSetFeature"))
-    {
-        ajDebug("ensTranscriptSetFeature\n"
-                "  transcript %p\n"
-                "  feature %p\n",
-                transcript,
-                feature);
-
-        ensTranscriptTrace(transcript, 1);
-
-        ensFeatureTrace(feature, 1);
-    }
-
     if(!transcript)
         return ajFalse;
 
-    if(!feature)
-        return ajFalse;
-
-    /* Replace the current Feature. */
-
-    if(transcript->Feature)
-        ensFeatureDel(&transcript->Feature);
-
-    transcript->Feature = ensFeatureNewRef(feature);
-
-    slice = ensFeatureGetSlice(transcript->Feature);
-
-    /*
-    ** Transfer Exons onto the new Feature Slice and thereby also adjust
-    ** the start and end Exons of the Translation if it is defined.
-    */
-
-    if(transcript->Exons)
-    {
-        iter = ajListIterNew(transcript->Exons);
-
-        while(!ajListIterDone(iter))
-        {
-            oldexon = (EnsPExon) ajListIterGet(iter);
-
-            ajListIterRemove(iter);
-
-            newexon = ensExonTransfer(oldexon, slice);
-
-            if(!newexon)
-            {
-                ajDebug("ensTranscriptSetFeature could not transfer "
-                        "Exon onto new Ensembl Feature Slice.");
-
-                ensExonTrace(oldexon, 1);
-            }
-
-            ajListIterInsert(iter, (void *) newexon);
-
-            /* Advance the AJAX List Iterator after the insert. */
-
-            (void) ajListIterGet(iter);
-
-            /* Re-assign the start and end Exons of the Ensembl Translation. */
-
-            if(transcript->Translation)
-            {
-                if(oldexon ==
-                   ensTranslationGetStartExon(transcript->Translation))
-                    ensTranslationSetStartExon(transcript->Translation,
-                                               newexon);
-
-                if(oldexon ==
-                   ensTranslationGetEndExon(transcript->Translation))
-                    ensTranslationSetEndExon(transcript->Translation,
-                                             newexon);
-            }
-
-            ensExonDel(&oldexon);
-        }
-
-        ajListIterDel(&iter);
-    }
-
-    /* Transfer Base Align Features onto the new Feature Slice. */
-
-    if(transcript->Supportingfeatures)
-    {
-        iter = ajListIterNew(transcript->Supportingfeatures);
-
-        while(!ajListIterDone(iter))
-        {
-            oldbaf = (EnsPBasealignfeature) ajListIterGet(iter);
-
-            ajListIterRemove(iter);
-
-            newbaf = ensBasealignfeatureTransfer(oldbaf, slice);
-
-            if(!newbaf)
-            {
-                ajDebug("ensTranscriptSetFeature could not transfer "
-                        "Base Align Feature onto new Ensembl Feature Slice.");
-
-                ensBasealignfeatureTrace(oldbaf, 1);
-            }
-
-            ajListIterInsert(iter, (void *) newbaf);
-
-            /* Advance the AJAX List Iterator after the insert. */
-
-            (void) ajListIterGet(iter);
-
-            ensBasealignfeatureDel(&oldbaf);
-        }
-
-        ajListIterDel(&iter);
-    }
-
-    /* Clear internal values that depend on Exon coordinates. */
-
-    transcript->SliceCodingStart = 0;
-    transcript->SliceCodingEnd   = 0;
-
-    transcript->TranscriptCodingStart = 0;
-    transcript->TranscriptCodingEnd   = 0;
-
-    ensMapperDel(&transcript->ExonCoordMapper);
+    transcript->Canonical = canonical;
 
     return ajTrue;
 }
@@ -2319,27 +1894,83 @@ AjBool ensTranscriptSetFeature(EnsPTranscript transcript, EnsPFeature feature)
 
 
 
-/* @func ensTranscriptSetDisplayReference **************************************
+/* @func ensTranscriptSetCurrent **********************************************
 **
-** Set the display Ensembl Database Entry element of an Ensembl Transcript.
+** Set the current element of an Ensembl Transcript.
 **
-** @cc Bio::EnsEMBL::Transcript::display_xref
+** @cc Bio::EnsEMBL::Transcript::is_current
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [uN] displaydbe [EnsPDatabaseentry] Ensembl Database Entry
+** @param [r] current [AjBool] Current attribute
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptSetDisplayReference(EnsPTranscript transcript,
-                                        EnsPDatabaseentry displaydbe)
+AjBool ensTranscriptSetCurrent(EnsPTranscript transcript,
+                               AjBool current)
 {
     if(!transcript)
         return ajFalse;
 
-    ensDatabaseentryDel(&transcript->DisplayReference);
+    transcript->Current = current;
 
-    transcript->DisplayReference = ensDatabaseentryNewRef(displaydbe);
+    return ajTrue;
+}
+
+
+
+
+/* @func ensTranscriptSetDateCreation *****************************************
+**
+** Set the creation date element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Transcript::created_date
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] cdate [AjPStr] Creation date
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensTranscriptSetDateCreation(EnsPTranscript transcript,
+                                    AjPStr cdate)
+{
+    if(!transcript)
+        return ajFalse;
+
+    ajStrDel(&transcript->DateCreation);
+
+    if(cdate)
+        transcript->DateCreation = ajStrNewRef(cdate);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensTranscriptSetDateModification *************************************
+**
+** Set the modification date element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Transcript::modified_date
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] mdate [AjPStr] Modification date
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensTranscriptSetDateModification(EnsPTranscript transcript,
+                                        AjPStr mdate)
+{
+    if(!transcript)
+        return ajFalse;
+
+    ajStrDel(&transcript->DateModification);
+
+    if(mdate)
+        transcript->DateModification = ajStrNewRef(mdate);
 
     return ajTrue;
 }
@@ -2376,28 +2007,320 @@ AjBool ensTranscriptSetDescription(EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptSetBioType **********************************************
+/* @func ensTranscriptSetDisplayreference *************************************
 **
-** Set the biological type element of an Ensembl Transcript.
+** Set the display Ensembl Database Entry element of an Ensembl Transcript.
 **
-** @cc Bio::EnsEMBL::Transcript::biotype
+** @cc Bio::EnsEMBL::Transcript::display_xref
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [uN] biotype [AjPStr] Biological type
+** @param [uN] displaydbe [EnsPDatabaseentry] Ensembl Database Entry
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptSetBioType(EnsPTranscript transcript,
-                               AjPStr biotype)
+AjBool ensTranscriptSetDisplayreference(EnsPTranscript transcript,
+                                        EnsPDatabaseentry displaydbe)
 {
     if(!transcript)
         return ajFalse;
 
-    ajStrDel(&transcript->BioType);
+    ensDatabaseentryDel(&transcript->Displayreference);
 
-    if(biotype)
-        transcript->Description = ajStrNewRef(biotype);
+    transcript->Displayreference = ensDatabaseentryNewRef(displaydbe);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensTranscriptSetFeature **********************************************
+**
+** Set the Ensembl Feature element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Feature
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [u] feature [EnsPFeature] Ensembl Feature
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensTranscriptSetFeature(EnsPTranscript transcript, EnsPFeature feature)
+{
+    AjIList iter1 = NULL;
+    AjIList iter2 = NULL;
+
+    EnsPBasealignfeature oldbaf = NULL;
+    EnsPBasealignfeature newbaf = NULL;
+
+    EnsPExon oldexon = NULL;
+    EnsPExon newexon = NULL;
+
+    EnsPSlice slice = NULL;
+
+    EnsPTranslation translation = NULL;
+
+    if(ajDebugTest("ensTranscriptSetFeature"))
+    {
+        ajDebug("ensTranscriptSetFeature\n"
+                "  transcript %p\n"
+                "  feature %p\n",
+                transcript,
+                feature);
+
+        ensTranscriptTrace(transcript, 1);
+
+        ensFeatureTrace(feature, 1);
+    }
+
+    if(!transcript)
+        return ajFalse;
+
+    if(!feature)
+        return ajFalse;
+
+    /* Replace the current Feature. */
+
+    ensFeatureDel(&transcript->Feature);
+
+    transcript->Feature = ensFeatureNewRef(feature);
+
+    slice = ensFeatureGetSlice(transcript->Feature);
+
+    /*
+    ** Transfer Ensembl Exon objects onto the new Ensembl Feature Slice and
+    ** thereby also adjust the start and end Exon objects of the
+    ** Ensembl Translation if it is defined.
+    */
+
+    if(transcript->Exons)
+    {
+        iter1 = ajListIterNew(transcript->Exons);
+
+        while(!ajListIterDone(iter1))
+        {
+            oldexon = (EnsPExon) ajListIterGet(iter1);
+
+            ajListIterRemove(iter1);
+
+            newexon = ensExonTransfer(oldexon, slice);
+
+            if(!newexon)
+            {
+                ajDebug("ensTranscriptSetFeature could not transfer "
+                        "Exon onto new Ensembl Feature Slice.");
+
+                ensExonTrace(oldexon, 1);
+            }
+
+            ajListIterInsert(iter1, (void*) newexon);
+
+            /* Advance the AJAX List Iterator after the insert. */
+
+            (void) ajListIterGet(iter1);
+
+            /*
+            ** Re-assign the start and end Ensembl Exon objects of the
+            ** Ensembl Translation.
+            */
+
+            if(transcript->Translation)
+            {
+                if(ensExonMatch(
+                       oldexon,
+                       ensTranslationGetStartexon(transcript->Translation)))
+                    ensTranslationSetStartexon(transcript->Translation,
+                                               newexon);
+
+                if(ensExonMatch(
+                       oldexon,
+                       ensTranslationGetEndexon(transcript->Translation)))
+                    ensTranslationSetEndexon(transcript->Translation,
+                                             newexon);
+            }
+
+            /*
+            ** Reassign also the start and end Exon for each alternative
+            ** Translation of this Transcript.
+            */
+
+            if(transcript->Alternativetranslations)
+            {
+                iter2 = ajListIterNew(transcript->Alternativetranslations);
+
+                while(!ajListIterDone(iter2))
+                {
+                    translation = (EnsPTranslation) ajListIterGet(iter2);
+
+                    if(ensExonMatch(
+                           oldexon,
+                           ensTranslationGetStartexon(translation)))
+                        ensTranslationSetStartexon(translation, newexon);
+
+                    if(ensExonMatch(
+                           oldexon,
+                           ensTranslationGetEndexon(translation)))
+                        ensTranslationSetEndexon(translation, newexon);
+                }
+
+                ajListIterDel(&iter2);
+            }
+
+            ensExonDel(&oldexon);
+        }
+
+        ajListIterDel(&iter1);
+    }
+
+    /*
+    ** Transfer all Ensembl Base Align Feature objects onto the new
+    ** Ensembl Feature Slice.
+    */
+
+    if(transcript->Supportingfeatures)
+    {
+        iter1 = ajListIterNew(transcript->Supportingfeatures);
+
+        while(!ajListIterDone(iter1))
+        {
+            oldbaf = (EnsPBasealignfeature) ajListIterGet(iter1);
+
+            ajListIterRemove(iter1);
+
+            newbaf = ensBasealignfeatureTransfer(oldbaf, slice);
+
+            if(!newbaf)
+            {
+                ajDebug("ensTranscriptSetFeature could not transfer "
+                        "Base Align Feature onto new Ensembl Feature Slice.");
+
+                ensBasealignfeatureTrace(oldbaf, 1);
+            }
+
+            ajListIterInsert(iter1, (void*) newbaf);
+
+            /* Advance the AJAX List Iterator after the insert. */
+
+            (void) ajListIterGet(iter1);
+
+            ensBasealignfeatureDel(&oldbaf);
+        }
+
+        ajListIterDel(&iter1);
+    }
+
+    /* Clear internal values that depend on Exon coordinates. */
+
+    ensMapperClear(transcript->ExonCoordMapper);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensTranscriptSetGeneidentifier ***************************************
+**
+** Set the Ensembl Gene identifier element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Transcript::???
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [r] geneid [ajuint] Ensembl Gene identifier
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensTranscriptSetGeneidentifier(EnsPTranscript transcript,
+                                      ajuint geneid)
+{
+    if(!transcript)
+        return ajFalse;
+
+    transcript->Geneidentifier = geneid;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensTranscriptSetIdentifier *******************************************
+**
+** Set the SQL database-internal identifier element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Storable::dbID
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [r] identifier [ajuint] SQL database-internal identifier
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensTranscriptSetIdentifier(EnsPTranscript transcript, ajuint identifier)
+{
+    if(!transcript)
+        return ajFalse;
+
+    transcript->Identifier = identifier;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensTranscriptSetSequenceedits ****************************************
+**
+** Set the enable Ensembl Sequence Edit object element of an
+** Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Transcript::edits_enabled
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [r] enablese [AjBool] Enable Ensembl Sequence Edit objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensTranscriptSetSequenceedits(EnsPTranscript transcript,
+                                     AjBool enablese)
+{
+    if(!transcript)
+        return ajFalse;
+
+    transcript->Sequenceedits = enablese;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensTranscriptSetStableidentifier *************************************
+**
+** Set the stable identifier element of an Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::Transcript::stable_id
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] stableid [AjPStr] Stable identifier
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensTranscriptSetStableidentifier(EnsPTranscript transcript,
+                                        AjPStr stableid)
+{
+    if(!transcript)
+        return ajFalse;
+
+    ajStrDel(&transcript->Stableidentifier);
+
+    if(stableid)
+        transcript->Stableidentifier = ajStrNewRef(stableid);
 
     return ajTrue;
 }
@@ -2411,7 +2334,7 @@ AjBool ensTranscriptSetBioType(EnsPTranscript transcript,
 **
 ** @cc Bio::EnsEMBL::Transcript::status
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [r] status [EnsETranscriptStatus] Status
+** @param [u] status [EnsETranscriptStatus] Status
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -2431,80 +2354,37 @@ AjBool ensTranscriptSetStatus(EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptSetGeneIdentifier ***************************************
+/* @func ensTranscriptSetTranslation ******************************************
 **
-** Set the Ensembl Gene identifier element of an Ensembl Transcript.
+** Set the Ensembl Translation element of an Ensembl Transcript.
 **
-** @cc Bio::EnsEMBL::Transcript::???
+** @cc Bio::EnsEMBL::Transcript::translation
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [r] geneid [ajuint] Ensembl Gene identifier
+** @param [uE] translation [EnsPTranslation] Ensembl Translation
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @return [AjBool] ajTrue on success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptSetGeneIdentifier(EnsPTranscript transcript,
-                                      ajuint geneid)
+AjBool ensTranscriptSetTranslation(EnsPTranscript transcript,
+                                   EnsPTranslation translation)
 {
     if(!transcript)
         return ajFalse;
 
-    transcript->GeneIdentifier = geneid;
+    ensTranslationDel(&transcript->Translation);
 
-    return ajTrue;
-}
+    transcript->Translation = ensTranslationNewRef(translation);
 
+    /* Clear internal values that depend on Translation coordinates. */
 
-
-
-/* @func ensTranscriptSetCurrent **********************************************
-**
-** Set the current element of an Ensembl Transcript.
-**
-** @cc Bio::EnsEMBL::Transcript::is_current
-** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [r] current [AjBool] Current
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensTranscriptSetCurrent(EnsPTranscript transcript,
-                               AjBool current)
-{
-    if(!transcript)
-        return ajFalse;
-
-    transcript->Current = current;
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensTranscriptSetStableIdentifier *************************************
-**
-** Set the stable identifier element of an Ensembl Transcript.
-**
-** @cc Bio::EnsEMBL::Transcript::stable_id
-** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [uN] stableid [AjPStr] Stable identifier
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensTranscriptSetStableIdentifier(EnsPTranscript transcript,
-                                        AjPStr stableid)
-{
-    if(!transcript)
-        return ajFalse;
-
-    ajStrDel(&transcript->StableIdentifier);
-
-    if(stableid)
-        transcript->StableIdentifier = ajStrNewRef(stableid);
+    /*
+    ** NOTE: The Perl API clears the Bio::EnsEMBL::TranscriptMapper,
+    ** although it is independent of a Bio::EnsEMBL::Translation.
+    ** It also sets the Bio::EnsEMBL::Transcript in the
+    ** Bio::EnsEMBL::Translation object via weak references,
+    ** which is not implemented here.
+    */
 
     return ajTrue;
 }
@@ -2538,129 +2418,35 @@ AjBool ensTranscriptSetVersion(EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptSetCreationDate *****************************************
+/* @section element addition **************************************************
 **
-** Set the creation date element of an Ensembl Transcript.
+** Functions for adding elements to an Ensembl Transcript object.
 **
-** @cc Bio::EnsEMBL::Transcript::created_date
-** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [uN] cdate [AjPStr] Creation date
+** @fdata [EnsPTranscript]
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
+** @nam3rule Add Add one object to an Ensembl Transcript
+** @nam4rule Alternativetranslation Add an alternative Ensembl Translation
+** @nam4rule Attribute Add an Ensembl Attribute
+** @nam4rule Databaseentry Add an Ensembl Database Entry
+** @nam4rule Exon Add an Ensembl Exon
+**
+** @argrule * transcript [EnsPTranscript] Ensembl Transcript object
+** @argrule Alternativetranslation translation [EnsPTranslation]
+**                                                         Ensembl Translation
+** @argrule Attribute attribute [EnsPAttribute] Ensembl Attribute
+** @argrule Databaseentry dbe [EnsPDatabaseentry] Ensembl Database Entry
+** @argrule Exon exon [EnsPExon] Ensembl Exon
+** @argrule Exon rank [ajint] Ensembl Exon rank
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory modify
 ******************************************************************************/
 
-AjBool ensTranscriptSetCreationDate(EnsPTranscript transcript,
-                                    AjPStr cdate)
-{
-    if(!transcript)
-        return ajFalse;
-
-    ajStrDel(&transcript->CreationDate);
-
-    if(cdate)
-        transcript->CreationDate = ajStrNewRef(cdate);
-
-    return ajTrue;
-}
 
 
 
-
-/* @func ensTranscriptSetModificationDate *************************************
-**
-** Set the modification date element of an Ensembl Transcript.
-**
-** @cc Bio::EnsEMBL::Transcript::modified_date
-** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [uN] mdate [AjPStr] Modification date
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensTranscriptSetModificationDate(EnsPTranscript transcript,
-                                        AjPStr mdate)
-{
-    if(!transcript)
-        return ajFalse;
-
-    ajStrDel(&transcript->ModificationDate);
-
-    if(mdate)
-        transcript->ModificationDate = ajStrNewRef(mdate);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensTranscriptSetTranslation ******************************************
-**
-** Set the Ensembl Translation element of an Ensembl Transcript.
-**
-** @cc Bio::EnsEMBL::Transcript::translation
-** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [uE] translation [EnsPTranslation] Ensembl Translation
-**
-** @return [AjBool] ajTrue on success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensTranscriptSetTranslation(EnsPTranscript transcript,
-                                   EnsPTranslation translation)
-{
-    if(!transcript)
-        return ajFalse;
-
-    ensTranslationDel(&transcript->Translation);
-
-    transcript->Translation = ensTranslationNewRef(translation);
-
-    /* Clear internal values that depend on Translation coordinates. */
-
-    transcript->SliceCodingStart = 0;
-
-    transcript->SliceCodingEnd = 0;
-
-    transcript->TranscriptCodingStart = 0;
-
-    transcript->TranscriptCodingEnd = 0;
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensTranscriptSetEnableSequenceEdits **********************************
-**
-** Set the enable Ensembl Sequence Edits element of an Ensembl Transcript.
-**
-** @cc Bio::EnsEMBL::Transcript::edits_enabled
-** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [r] enablese [AjBool] Enable Ensembl Sequence Edits
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensTranscriptSetEnableSequenceEdits(EnsPTranscript transcript,
-                                           AjBool enablese)
-{
-    if(!transcript)
-        return ajFalse;
-
-    transcript->EnableSequenceEdits = enablese;
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensTranscriptAddAlternativeTranslation *******************************
+/* @func ensTranscriptAddAlternativetranslation *******************************
 **
 ** Add an alternative Ensembl Translation to an Ensembl Transcript.
 **
@@ -2672,7 +2458,7 @@ AjBool ensTranscriptSetEnableSequenceEdits(EnsPTranscript transcript,
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptAddAlternativeTranslation(EnsPTranscript transcript,
+AjBool ensTranscriptAddAlternativetranslation(EnsPTranscript transcript,
                                               EnsPTranslation translation)
 {
     if(!transcript)
@@ -2681,11 +2467,11 @@ AjBool ensTranscriptAddAlternativeTranslation(EnsPTranscript transcript,
     if(!translation)
         return ajFalse;
 
-    if(!transcript->AlternativeTranslations)
-        transcript->AlternativeTranslations = ajListNew();
+    if(!transcript->Alternativetranslations)
+        transcript->Alternativetranslations = ajListNew();
 
-    ajListPushAppend(transcript->AlternativeTranslations,
-                     (void *) ensTranslationNewRef(translation));
+    ajListPushAppend(transcript->Alternativetranslations,
+                     (void*) ensTranslationNewRef(translation));
 
     return ajTrue;
 }
@@ -2722,32 +2508,20 @@ AjBool ensTranscriptAddAttribute(EnsPTranscript transcript,
         transcript->Attributes = ajListNew();
 
     ajListPushAppend(transcript->Attributes,
-                     (void *) ensAttributeNewRef(attribute));
+                     (void*) ensAttributeNewRef(attribute));
 
-    /* Check if this Attribute is associated with a Sequence Edit. */
+    /*
+    ** Check if this Attribute is associated with a Sequence Edit and clear
+    ** internal values that depend on the now modified Transcript sequence.
+    */
 
-    for(i = 0; transcriptSequenceEditCode[i]; i++)
-    {
+    for(i = 0; transcriptSequenceeditCode[i]; i++)
         if(ajStrMatchC(ensAttributeGetCode(attribute),
-                       transcriptSequenceEditCode[i]))
+                       transcriptSequenceeditCode[i]))
             match = ajTrue;
-    }
 
     if(match)
-    {
-        /*
-        ** If the Attribute is a Sequence Edit, then clear internal values
-        ** that depend on the edited Transcript sequence.
-        */
-
-        transcript->SliceCodingStart = 0;
-        transcript->SliceCodingEnd   = 0;
-
-        transcript->TranscriptCodingStart = 0;
-        transcript->TranscriptCodingEnd   = 0;
-
-        ensMapperDel(&transcript->ExonCoordMapper);
-    }
+        ensMapperClear(transcript->ExonCoordMapper);
 
     return ajTrue;
 }
@@ -2776,11 +2550,11 @@ AjBool ensTranscriptAddDatabaseentry(EnsPTranscript transcript,
     if(!dbe)
         return ajFalse;
 
-    if(!transcript->DatabaseEntries)
-        transcript->DatabaseEntries = ajListNew();
+    if(!transcript->Databaseentries)
+        transcript->Databaseentries = ajListNew();
 
-    ajListPushAppend(transcript->DatabaseEntries,
-                     (void *) ensDatabaseentryNewRef(dbe));
+    ajListPushAppend(transcript->Databaseentries,
+                     (void*) ensDatabaseentryNewRef(dbe));
 
     return ajTrue;
 }
@@ -2856,7 +2630,7 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
                 if(i == rank)
                 {
                     ajListPushAppend(transcript->Exons,
-                                     (void *) ensExonNewRef(exon));
+                                     (void*) ensExonNewRef(exon));
 
                     break;
                 }
@@ -2875,11 +2649,17 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
                 ** if any, insert the new List node and advance the
                 ** List Iterator one step. Remeber, inserts into AJAX Lists
                 ** are applied ahead of the Iterator so that they will be seen
-                ** in th enext iteration.
+                ** in the next iteration.
                 */
+
                 ajListIterRemove(iter);
+
                 ensExonDel(&lastexon);
-                ajListIterInsert(iter, (void *) ensExonNewRef(exon));
+
+                ajListIterInsert(iter, (void*) ensExonNewRef(exon));
+
+                /* Advance the AJAX List Iterator after the insert. */
+
                 lastexon = (EnsPExon) ajListIterGet(iter);
             }
         }
@@ -2893,7 +2673,7 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
 
     if(ensFeatureGetStrand(feature) > 0)
     {
-        ajListPeekLast(transcript->Exons, (void **) &lastexon);
+        ajListPeekLast(transcript->Exons, (void**) &lastexon);
 
         lastfeature = ensExonGetFeature(lastexon);
 
@@ -2901,7 +2681,7 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
         {
             /* Append at the end. */
 
-            ajListPushAppend(transcript->Exons, (void *) ensExonNewRef(exon));
+            ajListPushAppend(transcript->Exons, (void*) ensExonNewRef(exon));
 
             added = ajTrue;
         }
@@ -2917,9 +2697,16 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
 
                 lastfeature = ensExonGetFeature(lastexon);
 
-                if(ensFeatureGetEnd(feature) < ensFeatureGetStart(lastfeature))
+                if(ensFeatureGetStart(feature) <
+                   ensFeatureGetStart(lastfeature))
                 {
-                    ajListIterInsert(iter, (void *) ensExonNewRef(exon));
+                    /* Ensembl Exon objects that overlap are not added. */
+
+                    if(ensFeatureGetEnd(feature) >=
+                       ensFeatureGetStart(lastfeature))
+                        break;
+
+                    ajListIterInsert(iter, (void*) ensExonNewRef(exon));
 
                     added = ajTrue;
 
@@ -2932,7 +2719,7 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
     }
     else
     {
-        ajListPeekLast(transcript->Exons, (void **) &lastexon);
+        ajListPeekLast(transcript->Exons, (void**) &lastexon);
 
         lastfeature = ensExonGetFeature(lastexon);
 
@@ -2940,7 +2727,7 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
         {
             /* Append at the end. */
 
-            ajListPushAppend(transcript->Exons, (void *) ensExonNewRef(exon));
+            ajListPushAppend(transcript->Exons, (void*) ensExonNewRef(exon));
 
             added = ajTrue;
         }
@@ -2956,9 +2743,15 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
 
                 lastfeature = ensExonGetFeature(lastexon);
 
-                if(ensFeatureGetStart(feature) > ensFeatureGetEnd(lastfeature))
+                if(ensFeatureGetEnd(feature) > ensFeatureGetEnd(lastfeature))
                 {
-                    ajListIterInsert(iter, (void *) ensExonNewRef(exon));
+                    /* Ensembl Exon objects that overlap are not added. */
+
+                    if(ensFeatureGetStart(feature) <=
+                       ensFeatureGetEnd(lastfeature))
+                        break;
+
+                    ajListIterInsert(iter, (void*) ensExonNewRef(exon));
 
                     added = ajTrue;
 
@@ -2974,15 +2767,12 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
 
     if(!added)
     {
-        /*
-        ** The Exon was not added because it has the same end coordinate as
-        ** the start coordinate of another Exon.
-        */
+        /* The Exon was not added because it overlaps with another Exon. */
 
         message = ajStrNewC("ensTranscriptAddExon got an Exon, "
                             "which overlaps with another Exon in the same "
                             "Transcript.\n"
-                            "Transcript Exons:\n");
+                            "  Transcript Exons:\n");
 
         iter = ajListIterNew(transcript->Exons);
 
@@ -2993,8 +2783,8 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
             lastfeature = ensExonGetFeature(lastexon);
 
             ajFmtPrintAppS(&message,
-                           "  %S %d:%d:%d\n",
-                           ensExonGetStableIdentifier(exon),
+                           "    %S %d:%d:%d\n",
+                           ensExonGetStableidentifier(exon),
                            ensFeatureGetStart(lastfeature),
                            ensFeatureGetEnd(lastfeature),
                            ensFeatureGetStrand(lastfeature));
@@ -3003,9 +2793,9 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
         ajListIterDel(&iter);
 
         ajFmtPrintAppS(&message,
-                       "This Exon:\n"
-                       "  %S %d:%d:%d\n",
-                       ensExonGetStableIdentifier(exon),
+                       "  This Exon:\n"
+                       "    %S %d:%d:%d\n",
+                       ensExonGetStableidentifier(exon),
                        ensFeatureGetStart(feature),
                        ensFeatureGetEnd(feature),
                        ensFeatureGetStrand(feature));
@@ -3014,6 +2804,11 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
 
         ajStrDel(&message);
     }
+
+    /*
+    ** Recalculate the Transcript coordinates, delete the
+    ** Ensembl Transcript Mapper, as well as internal cache values.
+    */
 
     ensTranscriptCalculateCoordinates(transcript);
 
@@ -3028,6 +2823,7 @@ AjBool ensTranscriptAddExon(EnsPTranscript transcript,
 ** Functions for reporting of an Ensembl Transcript object.
 **
 ** @fdata [EnsPTranscript]
+**
 ** @nam3rule Trace Report Ensembl Transcript elements to debug file
 **
 ** @argrule Trace transcript [const EnsPTranscript] Ensembl Transcript
@@ -3080,70 +2876,63 @@ AjBool ensTranscriptTrace(const EnsPTranscript transcript, ajuint level)
             "%S  Identifier %u\n"
             "%S  Adaptor %p\n"
             "%S  Feature %p\n"
-            "%S  DisplayReference %p\n"
+            "%S  Displayreference %p\n"
             "%S  Description '%S'\n"
-            "%S  BioType '%S'\n"
+            "%S  Biotype '%S'\n"
             "%S  Status %d\n"
             "%S  Current '%B'\n"
-            "%S  StableIdentifier '%S'\n"
-            "%S  CreationDate '%S'\n"
-            "%S  ModificationDate '%S'\n"
+            "%S  Stableidentifier '%S'\n"
+            "%S  DateCreation '%S'\n"
+            "%S  DateModification '%S'\n"
             "%S  Version %u\n"
-            "%S  GeneIdentifier %u\n"
-            "%S  AlternativeTranslations %p\n"
+            "%S  Geneidentifier %u\n"
+            "%S  Alternativetranslations %p\n"
             "%S  Attributes %p\n"
-            "%S  DatabaseEntries %p\n"
+            "%S  Databaseentries %p\n"
             "%S  Exons %p\n"
             "%S  Supportingfeatures %p\n"
             "%S  Translation %p\n"
-            "%S  SliceCodingStart %u\n"
-            "%S  SliceCodingEnd %u\n"
-            "%S  TranscriptCodingStart %u\n"
-            "%S  TranscriptCodingEnd %u\n"
-            "%S  EnableSequenceEdits '%B'\n"
-            "%S  ExonCoordMapper %p\n"
-            "%S  StartPhase %d\n",
+            "%S  Sequenceedits '%B'\n"
+            "%S  Canonical '%B'\n"
+            "%S  ExonCoordMapper %p\n",
             indent, transcript,
             indent, transcript->Use,
             indent, transcript->Identifier,
             indent, transcript->Adaptor,
             indent, transcript->Feature,
-            indent, transcript->DisplayReference,
+            indent, transcript->Displayreference,
             indent, transcript->Description,
-            indent, transcript->BioType,
+            indent, transcript->Biotype,
             indent, transcript->Status,
             indent, transcript->Current,
-            indent, transcript->StableIdentifier,
-            indent, transcript->CreationDate,
-            indent, transcript->ModificationDate,
+            indent, transcript->Stableidentifier,
+            indent, transcript->DateCreation,
+            indent, transcript->DateModification,
             indent, transcript->Version,
-            indent, transcript->GeneIdentifier,
-            indent, transcript->AlternativeTranslations,
+            indent, transcript->Geneidentifier,
+            indent, transcript->Alternativetranslations,
             indent, transcript->Attributes,
-            indent, transcript->DatabaseEntries,
+            indent, transcript->Databaseentries,
             indent, transcript->Exons,
             indent, transcript->Supportingfeatures,
             indent, transcript->Translation,
-            indent, transcript->SliceCodingStart,
-            indent, transcript->SliceCodingEnd,
-            indent, transcript->TranscriptCodingStart,
-            indent, transcript->TranscriptCodingEnd,
-            indent, transcript->EnableSequenceEdits,
-            indent, transcript->ExonCoordMapper,
-            indent, transcript->StartPhase);
+            indent, transcript->Sequenceedits,
+            indent, transcript->Canonical,
+            indent, transcript->ExonCoordMapper);
 
     ensFeatureTrace(transcript->Feature, level + 1);
 
-    ensDatabaseentryTrace(transcript->DisplayReference, level + 1);
+    ensDatabaseentryTrace(transcript->Displayreference, level + 1);
 
-    /* Trace the AJAX List of alternative Ensembl Translations. */
+    /* Trace the AJAX List of alternative Ensembl Translation objects. */
 
-    if(transcript->AlternativeTranslations)
+    if(transcript->Alternativetranslations)
     {
-        ajDebug("%S    AJAX List %p of alternative Ensembl Translations\n",
-                indent, transcript->AlternativeTranslations);
+        ajDebug("%S    AJAX List %p of alternative "
+                "Ensembl Translation objects:\n",
+                indent, transcript->Alternativetranslations);
 
-        iter = ajListIterNewread(transcript->AlternativeTranslations);
+        iter = ajListIterNewread(transcript->Alternativetranslations);
 
         while(!ajListIterDone(iter))
         {
@@ -3174,14 +2963,14 @@ AjBool ensTranscriptTrace(const EnsPTranscript transcript, ajuint level)
         ajListIterDel(&iter);
     }
 
-    /* Trace the AJAX List of Ensembl Database Entries. */
+    /* Trace the AJAX List of Ensembl Database Entry objects. */
 
-    if(transcript->DatabaseEntries)
+    if(transcript->Databaseentries)
     {
-        ajDebug("%S    AJAX List %p of Ensembl Database Entries\n",
-                indent, transcript->DatabaseEntries);
+        ajDebug("%S    AJAX List %p of Ensembl Database Entry objects\n",
+                indent, transcript->Databaseentries);
 
-        iter = ajListIterNewread(transcript->DatabaseEntries);
+        iter = ajListIterNewread(transcript->Databaseentries);
 
         while(!ajListIterDone(iter))
         {
@@ -3193,11 +2982,11 @@ AjBool ensTranscriptTrace(const EnsPTranscript transcript, ajuint level)
         ajListIterDel(&iter);
     }
 
-    /* Trace the AJAX List of Ensembl Exons. */
+    /* Trace the AJAX List of Ensembl Exon objects. */
 
     if(transcript->Exons)
     {
-        ajDebug("%S    AJAX List %p of Ensembl Exons\n",
+        ajDebug("%S    AJAX List %p of Ensembl Exon objects\n",
                 indent, transcript->Exons);
 
         iter = ajListIterNewread(transcript->Exons);
@@ -3212,11 +3001,11 @@ AjBool ensTranscriptTrace(const EnsPTranscript transcript, ajuint level)
         ajListIterDel(&iter);
     }
 
-    /* Trace the AJAX List of supporting Ensembl Base Align Features. */
+    /* Trace the AJAX List of supporting Ensembl Base Align Feature objects. */
 
     if(transcript->Supportingfeatures)
     {
-        ajDebug("%S    AJAX List %p of Ensembl Base Align Features\n",
+        ajDebug("%S    AJAX List %p of Ensembl Base Align Feature objects:\n",
                 indent, transcript->Supportingfeatures);
 
         iter = ajListIterNewread(transcript->Supportingfeatures);
@@ -3243,64 +3032,56 @@ AjBool ensTranscriptTrace(const EnsPTranscript transcript, ajuint level)
 
 
 
-/* @func ensTranscriptStatusFromStr *******************************************
+/* @section calculate *********************************************************
 **
-** Convert an AJAX String into an Ensembl Transcript status element.
+** Functions for calculating values of an Ensembl Transcript object.
 **
-** @param [r] status [const AjPStr] Status string
+** @fdata [EnsPTranscript]
 **
-** @return [EnsETranscriptStatus] Ensembl Transcript status or
-**                                ensETranscriptStatusNULL
-** @@
+** @nam3rule Calculate Calculate Ensembl Transcript values
+** @nam4rule Coordinates Calculate coordinates
+** @nam4rule Length  Calculate the length
+** @nam4rule Memsize Calculate the memory size in bytes
+** @nam4rule Phase   Calculate the phase
+** @nam4rule Slice   Calculate Ensembl Transcript coordinates relative to
+**                   an Ensembl Slice
+** @nam5rule Coding  Calculate Ensembl Transcript coding coordinates
+** @nam6rule End     Calculate the Ensembl Transcript coding end coordinate
+** @nam6rule Start   Calculate the Ensembl Transcript coding start coordinate
+** @nam4rule Transcript Calculate Ensembl Transcript coordinates relative to
+**                      an Ensembl Transcript
+** @nam5rule Coding  Calculate Ensembl Transcript coding coordinates
+** @nam6rule End     Calculate the Ensembl Transcript coding end coordinate
+** @nam6rule Start   Calculate the Ensembl Transcript coding start coordinate
+** @nam5rule End     Calculate the Ensembl Transcript end coordinate
+** @nam5rule Start   Calculate the Ensembl Transcript start coordinate
+**
+** @argrule Coordinates transcript [EnsPTranscript] Ensembl Transcript
+** @argrule Length transcript [EnsPTranscript] Ensembl Transcript
+** @argrule Memsize transcript [const EnsPTranscript] Ensembl Transcript
+** @argrule Phase transcript [EnsPTranscript] Ensembl Transcript
+** @argrule CodingEnd transcript [EnsPTranscript] Ensembl Transcript
+** @argrule CodingEnd translation [EnsPTranslation] Ensembl Translation
+** @argrule CodingStart transcript [EnsPTranscript] Ensembl Transcript
+** @argrule CodingStart translation [EnsPTranslation] Ensembl Translation
+** @argrule TranscriptEnd exon [EnsPExon] Ensembl Exon
+** @argrule TranscriptEnd transcript [EnsPTranscript] Ensembl Transcript
+** @argrule TranscriptStart exon [EnsPExon] Ensembl Exon
+** @argrule TranscriptStart transcript [EnsPTranscript] Ensembl Transcript
+**
+** @valrule Coordinates [AjBool] ajTrue upon success, ajFalse otherwise
+** @valrule Length [ajuint] Transcript (cDNA) length or 0
+** @valrule Memsize [size_t] Memory size in bytes or 0
+** @valrule PhaseStart [ajint] Start phase or -1
+** @valrule SliceCodingEnd [ajint] End coordinate or 0
+** @valrule SliceCodingStart [ajint] Start coordinate or 0
+** @valrule TranscriptCodingEnd [ajuint] End coordinate or 0
+** @valrule TranscriptCodingStart [ajuint] Start coordinate or 0
+** @valrule TranscriptEnd [ajuint] End coordinate or 0
+** @valrule TranscriptStart [ajuint] Start coordinate or 0
+**
+** @fcategory misc
 ******************************************************************************/
-
-EnsETranscriptStatus ensTranscriptStatusFromStr(const AjPStr status)
-{
-    register EnsETranscriptStatus i = ensETranscriptStatusNULL;
-
-    EnsETranscriptStatus estatus = ensETranscriptStatusNULL;
-
-    for(i = ensETranscriptStatusKnown; transcriptStatus[i]; i++)
-        if(ajStrMatchC(status, transcriptStatus[i]))
-            estatus = i;
-
-    if(!estatus)
-        ajDebug("ensTranscriptStatusFromStr encountered "
-                "unexpected string '%S'.\n", status);
-
-    return estatus;
-}
-
-
-
-
-/* @func ensTranscriptStatusToChar ********************************************
-**
-** Convert an Ensembl Transcript status element into a C-type (char*) string.
-**
-** @param [r] status [EnsETranscriptStatus] Transcript status
-**
-** @return [const char*] Transcript status C-type (char*) string
-** @@
-******************************************************************************/
-
-const char* ensTranscriptStatusToChar(EnsETranscriptStatus status)
-{
-    register EnsETranscriptStatus i = ensETranscriptStatusNULL;
-
-    if(!status)
-        return NULL;
-
-    for(i = ensETranscriptStatusKnown;
-        transcriptStatus[i] && (i < status);
-        i++);
-
-    if(!transcriptStatus[i])
-        ajDebug("ensTranscriptStatusToChar encountered an "
-                "out of boundary error on status %d.\n", status);
-
-    return transcriptStatus[i];
-}
 
 
 
@@ -3339,7 +3120,7 @@ AjBool ensTranscriptCalculateCoordinates(EnsPTranscript transcript)
     if(!transcript)
         return ajFalse;
 
-    list = ensTranscriptGetExons(transcript);
+    list = ensTranscriptLoadExons(transcript);
 
     if(!ajListGetLength(list))
         return ajTrue;
@@ -3350,24 +3131,21 @@ AjBool ensTranscriptCalculateCoordinates(EnsPTranscript transcript)
     {
         exon = (EnsPExon) ajListIterGet(iter);
 
-        /* Skip missing Exons. */
+        /* Skip missing Exon objects. */
 
         if(!exon)
             continue;
 
         efeature = ensExonGetFeature(exon);
 
-        /* Skip un-mapped Exons. */
+        /* Skip un-mapped Exon objects. */
 
         if(!ensFeatureGetStart(efeature))
             continue;
 
-        slice = ensFeatureGetSlice(efeature);
-
-        start = ensFeatureGetStart(efeature);
-
-        end = ensFeatureGetEnd(efeature);
-
+        slice  = ensFeatureGetSlice(efeature);
+        start  = ensFeatureGetStart(efeature);
+        end    = ensFeatureGetEnd(efeature);
         strand = ensFeatureGetStrand(efeature);
 
         break;
@@ -3383,29 +3161,29 @@ AjBool ensTranscriptCalculateCoordinates(EnsPTranscript transcript)
     {
         exon = (EnsPExon) ajListIterGet(iter);
 
-        /* Skip missing Exons. */
+        /* Skip missing Exon objects. */
 
         if(!exon)
             continue;
 
         efeature = ensExonGetFeature(exon);
 
-        /* Skip un-mapped Exons. */
+        /* Skip un-mapped Exon objects. */
 
         if(!ensFeatureGetStart(efeature))
             continue;
 
         if(!ensSliceMatch(ensFeatureGetSlice(efeature), slice))
-            ajFatal("ensTranscriptCalculateCoordinates got Exons of one "
-                    "Transcript on different Slices.\n");
+            ajFatal("ensTranscriptCalculateCoordinates got "
+                    "Ensembl Exon objects of one "
+                    "Ensembl Transcript on different "
+                    "Ensembl Slice objects.\n");
 
-        start = (ensFeatureGetStart(efeature) < start) ?
-            ensFeatureGetStart(efeature) :
-            start;
+        start = (ensFeatureGetStart(efeature) < start)
+            ? ensFeatureGetStart(efeature) : start;
 
-        end = (ensFeatureGetEnd(efeature) > end) ?
-            ensFeatureGetEnd(efeature) :
-            end;
+        end = (ensFeatureGetEnd(efeature) > end)
+            ? ensFeatureGetEnd(efeature) : end;
 
         if(ensFeatureGetStrand(efeature) != strand)
             transsplicing = ajTrue;
@@ -3420,26 +3198,865 @@ AjBool ensTranscriptCalculateCoordinates(EnsPTranscript transcript)
     tfeature = ensTranscriptGetFeature(transcript);
 
     ensFeatureSetStart(tfeature, start);
-
     ensFeatureSetEnd(tfeature, end);
-
     ensFeatureSetStrand(tfeature, strand);
-
     ensFeatureSetSlice(tfeature, slice);
 
     /* Clear internal values that depend on Exon coordinates. */
 
     ensMapperClear(transcript->ExonCoordMapper);
 
-    transcript->SliceCodingStart = 0;
+    return ajTrue;
+}
 
-    transcript->SliceCodingEnd = 0;
 
-    transcript->TranscriptCodingStart = 0;
 
-    transcript->TranscriptCodingEnd = 0;
+
+/* @func ensTranscriptCalculateLength *****************************************
+**
+** Calculate the length of an Ensembl Transcript, which is the sum of the
+** length of all Ensembl Exon objects.
+**
+** @cc Bio::EnsEMBL::Transcript::length
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+**
+** @return [ajuint] Transcript (cDNA) length or 0
+** @@
+******************************************************************************/
+
+ajuint ensTranscriptCalculateLength(EnsPTranscript transcript)
+{
+    ajuint length = 0;
+
+    AjIList iter = NULL;
+
+    const AjPList exons = NULL;
+    AjPList ses         = NULL;
+
+    EnsPExon exon = NULL;
+
+    EnsPFeature feature = NULL;
+
+    EnsPSequenceedit se = NULL;
+
+    if(!transcript)
+        return 0;
+
+    exons = ensTranscriptLoadExons(transcript);
+
+    iter = ajListIterNewread(exons);
+
+    while(!ajListIterDone(iter))
+    {
+        exon = (EnsPExon) ajListIterGet(iter);
+
+        feature = ensExonGetFeature(exon);
+
+        length += ensFeatureCalculateLength(feature);
+    }
+
+    ajListIterDel(&iter);
+
+    /*
+    ** Adjust the length if post-transcriptional Sequence Edit objects are
+    ** applied.
+    */
+
+    if(transcript->Sequenceedits)
+    {
+        ses = ajListNew();
+
+        ensTranscriptFetchAllSequenceedits(transcript, ses);
+
+        while(ajListPop(ses, (void**) &se))
+        {
+            length += ensSequenceeditCalculateDifference(se);
+
+            ensSequenceeditDel(&se);
+        }
+
+        ajListFree(&ses);
+    }
+
+    return length;
+}
+
+
+
+
+/* @func ensTranscriptCalculateMemsize ****************************************
+**
+** Calculate the memory size in bytes of an Ensembl Transcript.
+**
+** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
+**
+** @return [size_t] Memory size in bytes or 0
+** @@
+******************************************************************************/
+
+size_t ensTranscriptCalculateMemsize(const EnsPTranscript transcript)
+{
+    size_t size = 0;
+
+    AjIList iter = NULL;
+
+    EnsPAttribute attribute = NULL;
+
+    EnsPBasealignfeature baf = NULL;
+
+    EnsPDatabaseentry dbe = NULL;
+
+    EnsPExon exon = NULL;
+
+    EnsPTranslation translation = NULL;
+
+    if(!transcript)
+        return 0;
+
+    size += sizeof (EnsOTranscript);
+
+    size += ensFeatureCalculateMemsize(transcript->Feature);
+
+    size += ensDatabaseentryCalculateMemsize(transcript->Displayreference);
+
+    if(transcript->Description)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(transcript->Description);
+    }
+
+    if(transcript->Biotype)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(transcript->Biotype);
+    }
+
+    if(transcript->Stableidentifier)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(transcript->Stableidentifier);
+    }
+
+    if(transcript->DateCreation)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(transcript->DateCreation);
+    }
+
+    if(transcript->DateModification)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(transcript->DateModification);
+    }
+
+    /* Summarise the AJAX List of alternative Ensembl Translation objects. */
+
+    if(transcript->Alternativetranslations)
+    {
+        size += sizeof (AjOList);
+
+        iter = ajListIterNewread(transcript->Alternativetranslations);
+
+        while(!ajListIterDone(iter))
+        {
+            translation = (EnsPTranslation) ajListIterGet(iter);
+
+            size += ensTranslationCalculateMemsize(translation);
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    /* Summarise the AJAX List of Ensembl Attributes. */
+
+    if(transcript->Attributes)
+    {
+        size += sizeof (AjOList);
+
+        iter = ajListIterNewread(transcript->Attributes);
+
+        while(!ajListIterDone(iter))
+        {
+            attribute = (EnsPAttribute) ajListIterGet(iter);
+
+            size += ensAttributeCalculateMemsize(attribute);
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    /* Summarise the AJAX List of Ensembl Database Entry objects. */
+
+    if(transcript->Databaseentries)
+    {
+        size += sizeof (AjOList);
+
+        iter = ajListIterNewread(transcript->Databaseentries);
+
+        while(!ajListIterDone(iter))
+        {
+            dbe = (EnsPDatabaseentry) ajListIterGet(iter);
+
+            size += ensDatabaseentryCalculateMemsize(dbe);
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    /* Summarise the AJAX List of Ensembl Exon objects. */
+
+    if(transcript->Exons)
+    {
+        size += sizeof (AjOList);
+
+        iter = ajListIterNewread(transcript->Exons);
+
+        while(!ajListIterDone(iter))
+        {
+            exon = (EnsPExon) ajListIterGet(iter);
+
+            size += ensExonCalculateMemsize(exon);
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    /*
+    ** Summarise the AJAX List of supporting
+    ** Ensembl Base Align Feature objects.
+    */
+
+    if(transcript->Supportingfeatures)
+    {
+        size += sizeof (AjOList);
+
+        iter = ajListIterNewread(transcript->Supportingfeatures);
+
+        while(!ajListIterDone(iter))
+        {
+            baf = (EnsPBasealignfeature) ajListIterGet(iter);
+
+            size += ensBasealignfeatureCalculateMemsize(baf);
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    size += ensTranslationCalculateMemsize(transcript->Translation);
+
+    size += ensMapperCalculateMemsize(transcript->ExonCoordMapper);
+
+    return size;
+}
+
+
+
+
+/* @func ensTranscriptCalculatePhaseStart *************************************
+**
+** Calculate the start phase of an Ensembl Transcript,
+** which is the start phase of the first Ensembl Exon object.
+**
+** This function will load the Ensembl Exon objects in case they have not
+** been loaded before.
+**
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+**
+** @return [ajint] Start phase or -1
+** @@
+******************************************************************************/
+
+ajint ensTranscriptCalculatePhaseStart(EnsPTranscript transcript)
+{
+    const AjPList exons = NULL;
+
+    EnsPExon exon = NULL;
+
+    if(!transcript)
+        return -1;
+
+    exons = ensTranscriptLoadExons(transcript);
+
+    ajListPeekFirst(exons, (void**) &exon);
+
+    if(!exon)
+        return -1;
+
+    return ensExonGetPhaseStart(exon);
+}
+
+
+
+
+/* @func ensTranscriptCalculateSliceCodingEnd *********************************
+**
+** Calculate the end position of the coding region in Slice coordinates.
+**
+** @cc Bio::EnsEMBL::Transcript::coding_region_end
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] translation [EnsPTranslation] Ensembl Translation
+**
+** @return [ajint] Coding region end in Slice coordinates or 0
+** @@
+******************************************************************************/
+
+ajint ensTranscriptCalculateSliceCodingEnd(
+    EnsPTranscript transcript,
+    EnsPTranslation translation)
+{
+    ajint scend = 0;
+
+    EnsPExon exon = NULL;
+
+    EnsPFeature feature = NULL;
+
+    if(!transcript)
+        return 0;
+
+    if(!translation)
+        return 0;
+
+    /* Calculate the Slice coding start from the Translation. */
+
+    exon = ensTranslationGetStartexon(translation);
+
+    feature = ensExonGetFeature(exon);
+
+    if(ensFeatureGetStrand(feature) >= 0)
+    {
+        exon = ensTranslationGetEndexon(translation);
+
+        feature = ensExonGetFeature(exon);
+
+        scend = ensFeatureGetStart(feature)
+            + (ensTranslationGetEnd(translation) - 1);
+    }
+    else
+    {
+        exon = ensTranslationGetStartexon(translation);
+
+        feature = ensExonGetFeature(exon);
+
+        scend = ensFeatureGetEnd(feature)
+            - (ensTranslationGetStart(translation) - 1);
+    }
+
+    return scend;
+}
+
+
+
+
+/* @func ensTranscriptCalculateSliceCodingStart *******************************
+**
+** Calculate the start position of the coding region in Slice coordinates.
+**
+** @cc Bio::EnsEMBL::Transcript::coding_region_start
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] translation [EnsPTranslation] Ensembl Translation
+**
+** @return [ajint] Coding region start in Slice coordinates or 0
+** @@
+******************************************************************************/
+
+ajint ensTranscriptCalculateSliceCodingStart(
+    EnsPTranscript transcript,
+    EnsPTranslation translation)
+{
+    ajint scstart = 0;
+
+    EnsPExon exon = NULL;
+
+    EnsPFeature feature = NULL;
+
+    if(!transcript)
+        return 0;
+
+    if(!translation)
+        return 0;
+
+    /* Calculate the Slice coding start from the Translation. */
+
+    exon = ensTranslationGetStartexon(translation);
+
+    feature = ensExonGetFeature(exon);
+
+    if(ensFeatureGetStrand(feature) >= 0)
+    {
+        exon = ensTranslationGetStartexon(translation);
+
+        feature = ensExonGetFeature(exon);
+
+        scstart = ensFeatureGetStart(feature)
+            + (ensTranslationGetStart(translation) - 1);
+    }
+    else
+    {
+        exon = ensTranslationGetEndexon(translation);
+
+        feature = ensExonGetFeature(exon);
+
+        scstart = ensFeatureGetEnd(feature)
+            - (ensTranslationGetEnd(translation) - 1);
+    }
+
+    return scstart;
+}
+
+
+
+
+/* @func ensTranscriptCalculateTranscriptCodingEnd ****************************
+**
+** Calculate the end position of the coding region in Transcript coordinates.
+**
+** @cc Bio::EnsEMBL::Transcript::cdna_coding_end
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] translation [EnsPTranslation] Ensembl Translation
+**
+** @return [ajuint] Coding region end in Transcript coordinates or 0,
+** if this Transcript has no Translation
+** @@
+******************************************************************************/
+
+ajuint ensTranscriptCalculateTranscriptCodingEnd(
+    EnsPTranscript transcript,
+    EnsPTranslation translation)
+{
+    ajuint tcend = 0;
+
+    AjBool debug = AJFALSE;
+
+    AjIList iter = NULL;
+
+    const AjPList exons = NULL;
+    AjPList ses         = NULL;
+
+    EnsPExon exon = NULL;
+
+    EnsPFeature feature = NULL;
+
+    EnsPSequenceedit se = NULL;
+
+    debug = ajDebugTest("ensTranscriptCalculateTranscriptCodingEnd");
+
+    if(debug)
+    {
+        ajDebug("ensTranscriptCalculateTranscriptCodingEnd\n"
+                "  transcript %p\n"
+                "  translation %p\n",
+                transcript,
+                translation);
+
+        ensTranscriptTrace(transcript, 1);
+
+        ensTranslationTrace(translation, 1);
+    }
+
+    if(!transcript)
+        return 0;
+
+    if(!translation)
+        return 0;
+
+    /*
+    ** Calculate the coding start relative to the start of the
+    ** Translation in Transcript coordinates.
+    */
+
+    exons = ensTranscriptLoadExons(transcript);
+
+    iter = ajListIterNewread(exons);
+
+    while(!ajListIterDone(iter))
+    {
+        exon = (EnsPExon) ajListIterGet(iter);
+
+        if(debug)
+            ajDebug("ensTranscriptCalculateTranscriptCodingEnd "
+                    "exon %p (Identifier %u) end exon %p (Identifier %u)\n",
+                    exon, ensExonGetIdentifier(exon),
+                    ensTranslationGetEndexon(translation),
+                    ensExonGetIdentifier(
+                        ensTranslationGetEndexon(translation)));
+
+        if(ensExonMatch(exon, ensTranslationGetEndexon(translation)))
+        {
+            /* Add the coding portion of the last coding Exon. */
+
+            tcend += ensTranslationGetEnd(translation);
+
+            break;
+        }
+        else
+        {
+            /* Add the entire length of this Exon. */
+
+            feature = ensExonGetFeature(exon);
+
+            tcend += ensFeatureCalculateLength(feature);
+        }
+    }
+
+    ajListIterDel(&iter);
+
+    /* Adjust Transcript coordinates if Sequence Edit objects are enabled. */
+
+    if(transcript->Sequenceedits)
+    {
+        ses = ajListNew();
+
+        ensTranscriptFetchAllSequenceedits(transcript, ses);
+
+        /*
+        ** Sort in reverse order to avoid adjustment of down-stream
+        ** Sequence Edit objects.
+        */
+
+        ensListSequenceeditSortStartDescending(ses);
+
+        while(ajListPop(ses, (void**) &se))
+        {
+            /*
+            ** Use less than or equal to end + 1 so that the end of the
+            ** CDS can be extended.
+            */
+
+            if(ensSequenceeditGetStart(se) <= tcend + 1)
+                tcend += ensSequenceeditCalculateDifference(se);
+
+            ensSequenceeditDel(&se);
+        }
+
+        ajListFree(&ses);
+    }
+
+    return tcend;
+}
+
+
+
+
+/* @func ensTranscriptCalculateTranscriptCodingStart **************************
+**
+** Calculate the start position of the coding region in Transcript coordinates.
+**
+** @cc Bio::EnsEMBL::Transcript::cdna_coding_start
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] translation [EnsPTranslation] Ensembl Translation
+**
+** @return [ajuint] Coding region start in Transcript coordinates or 0,
+** if this Transcript has no Translation
+** @@
+******************************************************************************/
+
+ajuint ensTranscriptCalculateTranscriptCodingStart(
+    EnsPTranscript transcript,
+    EnsPTranslation translation)
+{
+    ajuint tcstart = 0;
+
+    AjBool debug = AJFALSE;
+
+    AjIList iter = NULL;
+
+    const AjPList exons = NULL;
+    AjPList ses         = NULL;
+
+    EnsPExon exon = NULL;
+
+    EnsPFeature feature = NULL;
+
+    EnsPSequenceedit se = NULL;
+
+    debug = ajDebugTest("ensTranscriptCalculateTranscriptCodingStart");
+
+    if(debug)
+    {
+        ajDebug("ensTranscriptCalculateTranscriptCodingStart\n"
+                "  transcript %p\n"
+                "  translation %p\n",
+                transcript,
+                translation);
+
+        ensTranscriptTrace(transcript, 1);
+
+        ensTranslationTrace(translation, 1);
+    }
+
+    if(!transcript)
+        return 0;
+
+    /*
+    ** Calculate the coding start relative to the start of the
+    ** Translation in Transcript coordinates.
+    */
+
+    exons = ensTranscriptLoadExons(transcript);
+
+    iter = ajListIterNewread(exons);
+
+    while(!ajListIterDone(iter))
+    {
+        exon = (EnsPExon) ajListIterGet(iter);
+
+        if(debug)
+            ajDebug("ensTranscriptCalculateTranscriptCodingStart "
+                    "exon %p (Identifier %u) start exon %p (Identifier %u)\n",
+                    exon, ensExonGetIdentifier(exon),
+                    ensTranslationGetStartexon(translation),
+                    ensExonGetIdentifier(
+                        ensTranslationGetStartexon(translation)));
+
+        if(ensExonMatch(exon, ensTranslationGetStartexon(translation)))
+        {
+            /* Add the UTR portion of the first coding Exon. */
+
+            tcstart += ensTranslationGetStart(translation);
+
+            break;
+        }
+        else
+        {
+            /* Add the entire length of this non-coding Exon. */
+
+            feature = ensExonGetFeature(exon);
+
+            tcstart += ensFeatureCalculateLength(feature);
+        }
+    }
+
+    ajListIterDel(&iter);
+
+    /* Adjust Transcript coordinates if Sequence Edit objects are enabled. */
+
+    if(transcript->Sequenceedits)
+    {
+        ses = ajListNew();
+
+        ensTranscriptFetchAllSequenceedits(transcript, ses);
+
+        /*
+        ** Sort in reverse order to avoid adjustment of down-stream
+        ** Sequence Edit objects.
+        */
+
+        ensListSequenceeditSortStartDescending(ses);
+
+        while(ajListPop(ses, (void**) &se))
+        {
+            if(ensSequenceeditGetStart(se) < tcstart)
+                tcstart += ensSequenceeditCalculateDifference(se);
+
+            ensSequenceeditDel(&se);
+        }
+
+        ajListFree(&ses);
+    }
+
+    return tcstart;
+}
+
+
+
+
+/* @section matching **********************************************************
+**
+** Functions for matching Ensembl Transcript objects
+**
+** @fdata [EnsPTranscript]
+**
+** @nam3rule Match      Test Ensembl Transcript objects for identity
+** @nam3rule Overlap    Test Ensembl Transcript objects for overlap
+** @nam3rule Similarity Test Ensembl Transcript objects for similarity
+**
+** @argrule * transcript1 [EnsPTranscript] Ensembl Transcript
+** @argrule * transcript2 [EnsPTranscript] Ensembl Transcript
+**
+** @valrule * [AjBool] True on success
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensTranscriptSimilarity **********************************************
+**
+** Test Ensembl Transcript objects for similarity.
+**
+** @cc Bio::EnsEMBL::Transcript::equals
+** @param [u] transcript1 [EnsPTranscript] Ensembl Transcript
+** @param [u] transcript2 [EnsPTranscript] Ensembl Transcript
+**
+** @return [AjBool] ajTrue if the Ensembl Transcript objects are similar
+** @@
+** NOTE: This function is similar to Bio::EnsEMBL::Transcript::equals, but not
+** completely identical. The Bio::EnsEMBL::Exon objects are not sorted before
+** comparison, as this would interfere with the internal AJAX List and their
+** biological order in the Ensembl Transcript.
+******************************************************************************/
+
+AjBool ensTranscriptSimilarity(EnsPTranscript transcript1,
+                               EnsPTranscript transcript2)
+{
+    AjBool mismatch = AJFALSE;
+    AjBool similarity = AJFALSE;
+
+    AjIList iter1 = NULL;
+    AjIList iter2 = NULL;
+
+    const AjPList exons1 = NULL;
+    const AjPList exons2 = NULL;
+
+    EnsPExon exon1 = NULL;
+    EnsPExon exon2 = NULL;
+
+    if(!transcript1)
+        return ajFalse;
+
+    if(!transcript2)
+        return ajFalse;
+
+    if(transcript1 == transcript2)
+        return ajTrue;
+
+    if(!ensFeatureSimilarity(transcript1->Feature, transcript2->Feature))
+        return ajFalse;
+
+    if(!ajStrMatchCaseS(transcript1->Biotype, transcript2->Biotype))
+        return ajFalse;
+
+    if((transcript1->Stableidentifier && transcript2->Stableidentifier) &&
+       (!ajStrMatchCaseS(transcript1->Stableidentifier,
+                         transcript2->Stableidentifier)))
+        return ajFalse;
+
+    exons1 = ensTranscriptLoadExons(transcript1);
+    exons2 = ensTranscriptLoadExons(transcript2);
+
+    if(ajListGetLength(exons1) != ajListGetLength(exons2))
+        return ajFalse;
+
+    iter1 = ajListIterNewread(exons1);
+    iter2 = ajListIterNewread(exons2);
+
+    while(!ajListIterDone(iter1))
+    {
+        exon1 = (EnsPExon) ajListIterGet(iter1);
+
+        ajListIterRewind(iter2);
+
+        similarity = ajFalse;
+
+        while(!ajListIterDone(iter2))
+        {
+            exon2 = (EnsPExon) ajListIterGet(iter2);
+
+            if(ensExonSimilarity(exon1, exon2))
+            {
+                similarity = ajTrue;
+                break;
+            }
+        }
+
+        if(similarity == ajFalse)
+        {
+            mismatch = ajTrue;
+            break;
+        }
+    }
+
+    ajListIterDel(&iter1);
+    ajListIterDel(&iter2);
+
+    if(mismatch == ajTrue)
+        return ajFalse;
 
     return ajTrue;
+}
+
+
+
+
+/* @section map ***************************************************************
+**
+** Functions for mapping Ensembl Transcript objects between
+** Ensembl Coordinate Systems.
+**
+** @fdata [EnsPTranscript]
+**
+** @nam3rule Transfer Transfer an Ensembl Transcript
+** @nam3rule Transform Transform an Ensembl Transcript
+**
+** @argrule * transcript [EnsPTranscript] Ensembl Transcript
+** @argrule Transfer slice [EnsPSlice] Ensembl Slice
+** @argrule Transform csname [const AjPStr] Ensembl Coordinate System name
+** @argrule Transform csversion [const AjPStr] Ensembl Coordinate System
+**                                             version
+**
+** @valrule * [EnsPTranscript] Ensembl Transcript or NULL
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensTranscriptTransfer ************************************************
+**
+** Transfer an Ensembl Transcript onto another Ensembl Slice.
+**
+** @cc Bio::EnsEMBL::Transcript::transfer
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [u] slice [EnsPSlice] Ensembl Slice
+** @see ensFeatureTransfer
+**
+** @return [EnsPTranscript] Ensembl Transcript or NULL
+** @@
+******************************************************************************/
+
+EnsPTranscript ensTranscriptTransfer(EnsPTranscript transcript,
+                                     EnsPSlice slice)
+{
+    EnsPFeature newtf = NULL;
+
+    EnsPTranscript newtranscript = NULL;
+
+    if(ajDebugTest("ensTranscriptTransfer"))
+        ajDebug("ensTranscriptTransfer\n"
+                "  transcript %p\n"
+                "  slice %p\n",
+                transcript,
+                slice);
+
+    if(!transcript)
+        return NULL;
+
+    if(!slice)
+        return NULL;
+
+    if(!transcript->Feature)
+        ajFatal("ensTranscriptTransfer cannot transfer an Ensembl Transcript "
+                "without an Ensembl Feature.\n");
+
+    newtf = ensFeatureTransfer(transcript->Feature, slice);
+
+    if(!newtf)
+        return NULL;
+
+    newtranscript = transcriptNewCpyFeatures(transcript);
+
+    ensTranscriptSetFeature(newtranscript, newtf);
+
+    ensFeatureDel(&newtf);
+
+    return newtranscript;
 }
 
 
@@ -3466,37 +4083,38 @@ EnsPTranscript ensTranscriptTransform(EnsPTranscript transcript,
     ajint lastnewstart  = 0;
     ajint lastnewstrand = 0;
     ajint lastoldstrand = 0;
-    ajint trstart = 0;
-    ajint trend   = 0;
+    ajint minstart      = INT_MAX;
+    ajint maxend        = INT_MIN;
 
-    ajuint pslength = 0;
+    ajuint psslength = 0;
 
     AjBool first       = AJFALSE;
     AjBool ignoreorder = AJFALSE;
     AjBool orderbroken = AJFALSE;
     AjBool error       = AJFALSE;
 
-    AjIList iter   = NULL;
-    AjPList exons  = NULL;
-    AjPList pslist = NULL;
+    AjIList iter1 = NULL;
+    AjIList iter2 = NULL;
+    AjPList pss   = NULL;
 
-    EnsPFeature newfeature = NULL;
-    EnsPFeature oldfeature = NULL;
-    EnsPFeature feature    = NULL;
+    EnsPBasealignfeature oldbaf = NULL;
+    EnsPBasealignfeature newbaf = NULL;
 
-    EnsPExon oldexon   = NULL;
-    EnsPExon newexon   = NULL;
-    EnsPExon startexon = NULL;
-    EnsPExon endexon   = NULL;
+    EnsPFeature newef = NULL;
+    EnsPFeature oldef = NULL;
+    EnsPFeature newtf = NULL;
+
+    EnsPExon oldexon = NULL;
+    EnsPExon newexon = NULL;
 
     EnsPProjectionsegment ps = NULL;
 
-    const EnsPSeqregion newsr     = NULL;
+    const EnsPSeqregion     newsr = NULL;
     const EnsPSeqregion lastnewsr = NULL;
 
     EnsPTranscript newtranscript = NULL;
 
-    EnsPTranslation newtranslation = NULL;
+    EnsPTranslation translation = NULL;
 
     if(!transcript)
         return NULL;
@@ -3504,54 +4122,64 @@ EnsPTranscript ensTranscriptTransform(EnsPTranscript transcript,
     if(!csname)
         return NULL;
 
-    feature = ensFeatureTransform(transcript->Feature, csname, csversion);
+    newtf = ensFeatureTransform(transcript->Feature,
+                                csname,
+                                csversion,
+                                (EnsPSlice) NULL);
 
-    if(!feature)
+    if(!newtf)
     {
         /*
-        ** If the Transcript does not transform, test whether it
-        ** projects, since its Exons may transform well.
+        ** If the Ensembl Transcript does not transform, test whether it
+        ** projects, since its Ensembl Exon objects may transform well.
         */
 
-        pslist = ajListNew();
+        pss = ajListNew();
 
-        ensFeatureProject(transcript->Feature, csname, csversion, pslist);
+        ensFeatureProject(transcript->Feature, csname, csversion, pss);
 
-        pslength = ajListGetLength(pslist);
+        psslength = ajListGetLength(pss);
 
-        while(ajListPop(pslist, (void **) &ps))
+        while(ajListPop(pss, (void**) &ps))
             ensProjectionsegmentDel(&ps);
 
-        ajListFree(&pslist);
+        ajListFree(&pss);
 
         /*
-        ** If the List of Ensembl Projection Segments was empty, the
-        ** Transcript did not project. If it projects, make sure
-        ** all its Exons are defined.
+        ** If the AJAX List of Ensembl Projection Segment objects is empty,
+        ** the Transcript did not project. If it projects, make sure
+        ** all its Ensembl Exon objects are loaded.
         */
 
-        if(!pslength)
+        if(psslength == 0)
             return NULL;
         else
-            ensTranscriptGetExons(transcript);
+            ensTranscriptLoadExons(transcript);
     }
 
-    exons = ajListNew();
+    /*
+    ** Copy the Ensembl Transcript object and also its internal
+    ** Ensembl Feature class-based members.
+    */
 
-    if(transcript->Exons)
+    newtranscript = transcriptNewCpyFeatures(transcript);
+
+    if(newtranscript->Exons)
     {
         first = ajTrue;
 
-        iter = ajListIterNew(transcript->Exons);
+        iter1 = ajListIterNew(newtranscript->Exons);
 
-        while(!ajListIterDone(iter))
+        while(!ajListIterDone(iter1))
         {
             /*
             ** We want to check, whether the transform preserved the
             ** 5 prime to 3 prime order. No complaints on trans-splicing.
             */
 
-            oldexon = (EnsPExon) ajListIterGet(iter);
+            oldexon = (EnsPExon) ajListIterGet(iter1);
+
+            ajListIterRemove(iter1);
 
             newexon = ensExonTransform(oldexon, csname, csversion);
 
@@ -3562,23 +4190,27 @@ EnsPTranscript ensTranscriptTransform(EnsPTranscript transcript,
                 break;
             }
 
-            oldfeature = ensExonGetFeature(oldexon);
+            ajListIterInsert(iter1, (void*) newexon);
 
-            newfeature = ensExonGetFeature(newexon);
+            /* Advance the AJAX List Iterator after the insert. */
 
-            if(!feature)
+            (void) ajListIterGet(iter1);
+
+            if(!newtf)
             {
+                oldef = ensExonGetFeature(oldexon);
+                newef = ensExonGetFeature(newexon);
+
                 if(first)
                 {
-                    trstart = ensFeatureGetStart(newfeature);
-
-                    trend = ensFeatureGetEnd(newfeature);
+                    minstart = ensFeatureGetStart(newef);
+                    maxend   = ensFeatureGetEnd(newef);
 
                     first = ajFalse;
                 }
                 else
                 {
-                    newsr = ensFeatureGetSeqregion(newfeature);
+                    newsr = ensFeatureGetSeqregionObject(newef);
 
                     if(!ensSeqregionMatch(newsr, lastnewsr))
                     {
@@ -3592,58 +4224,79 @@ EnsPTranscript ensTranscriptTransform(EnsPTranscript transcript,
                     ** order in those cases.
                     */
 
-                    if(ensFeatureGetStrand(oldfeature) != lastoldstrand)
+                    if(ensFeatureGetStrand(oldef) != lastoldstrand)
                         ignoreorder = ajTrue;
 
                     /* Check for correct Exon order. */
 
                     if((lastnewstrand >= 0) &&
-                       (ensFeatureGetStart(newfeature) < lastnewstart))
+                       (ensFeatureGetStart(newef) < lastnewstart))
                         orderbroken = ajTrue;
 
                     if((lastnewstrand < 0) &&
-                       (ensFeatureGetStart(newfeature) > lastnewstart))
+                       (ensFeatureGetStart(newef) > lastnewstart))
                         orderbroken = ajTrue;
 
-                    trstart = (ensFeatureGetStart(newfeature) < trstart) ?
-                        ensFeatureGetStart(newfeature) :
-                        trstart;
+                    minstart = (ensFeatureGetStart(newef) < minstart)
+                        ? ensFeatureGetStart(newef) : minstart;
 
-                    trend = (ensFeatureGetEnd(newfeature) > trend) ?
-                        ensFeatureGetEnd(newfeature) :
-                        trend;
+                    maxend   = (ensFeatureGetEnd(newef) > maxend)
+                        ? ensFeatureGetEnd(newef) : maxend;
                 }
 
-                lastnewsr = ensFeatureGetSeqregion(newfeature);
-
-                lastnewstart = ensFeatureGetStart(newfeature);
-
-                lastnewstrand = ensFeatureGetStrand(newfeature);
-
-                lastoldstrand = ensFeatureGetStrand(oldfeature);
+                lastnewsr     = ensFeatureGetSeqregionObject(newef);
+                lastnewstart  = ensFeatureGetStart(newef);
+                lastnewstrand = ensFeatureGetStrand(newef);
+                lastoldstrand = ensFeatureGetStrand(oldef);
             }
 
-            if(transcript->Translation)
+            if(newtranscript->Translation)
             {
-                /* FIXME: Should this move into ensTranscriptSetFeature? */
-                if(ensTranslationGetStartExon(transcript->Translation) ==
-                   oldexon)
-                    startexon = newexon;
+                if(ensExonMatch(
+                       oldexon,
+                       ensTranslationGetStartexon(newtranscript->Translation)))
+                    ensTranslationSetStartexon(newtranscript->Translation,
+                                               newexon);
 
-                if(ensTranslationGetEndExon(transcript->Translation) ==
-                   oldexon)
-                    endexon = newexon;
+                if(ensExonMatch(
+                       oldexon,
+                       ensTranslationGetEndexon(newtranscript->Translation)))
+                    ensTranslationSetEndexon(newtranscript->Translation,
+                                             newexon);
             }
 
-            ajListPushAppend(exons, (void *) newexon);
+            if(newtranscript->Alternativetranslations)
+            {
+                iter2 = ajListIterNew(newtranscript->Alternativetranslations);
+
+                while(!ajListIterDone(iter2))
+                {
+                    translation = (EnsPTranslation) ajListIterGet(iter2);
+
+                    if(ensExonMatch(
+                           oldexon,
+                           ensTranslationGetStartexon(translation)))
+                        ensTranslationSetStartexon(translation, newexon);
+
+                    if(ensExonMatch(
+                           oldexon,
+                           ensTranslationGetEndexon(translation)))
+                        ensTranslationSetEndexon(translation, newexon);
+                }
+
+                ajListIterDel(&iter2);
+            }
+
+            ensExonDel(&oldexon);
         }
 
-        ajListIterDel(&iter);
+        ajListIterDel(&iter1);
 
         if(orderbroken && (!ignoreorder))
         {
-            ajWarn("ensTranscriptTransform got Exons out of order in "
-                   "transformation of Transcript with identifier %u.\n",
+            ajWarn("ensTranscriptTransform got Ensembl Exon objects out of "
+                   "order in the transformation of Ensembl Transcript with "
+                   "identifier %u.\n",
                    transcript->Identifier);
 
             error = ajTrue;
@@ -3651,54 +4304,77 @@ EnsPTranscript ensTranscriptTransform(EnsPTranscript transcript,
 
         if(error)
         {
-            /* Clean up in case we encountered an error. */
+            ensFeatureDel(&newtf);
 
-            ensFeatureDel(&feature);
-
-            while(ajListPop(exons, (void **) &newexon))
-                ensExonDel(&newexon);
+            ensTranscriptDel(&newtranscript);
 
             return NULL;
         }
     }
 
-    if(!feature)
+    if(!newtf)
     {
-        ajListPeekFirst(exons, (void **) &newexon);
+        ajListPeekFirst(newtranscript->Exons, (void**) &newexon);
 
-        newfeature = ensExonGetFeature(newexon);
+        newef = ensExonGetFeature(newexon);
 
-        feature = ensFeatureNewS(ensFeatureGetAnalysis(transcript->Feature),
-                                 ensFeatureGetSlice(newfeature),
-                                 trstart,
-                                 trend,
-                                 ensFeatureGetStrand(newfeature));
+        newtf = ensFeatureNewIniS(ensFeatureGetAnalysis(transcript->Feature),
+                                  ensFeatureGetSlice(newef),
+                                  minstart,
+                                  maxend,
+                                  ensFeatureGetStrand(newef));
     }
 
-    newtranscript = ensTranscriptNewObj(transcript);
+    /*
+    ** Set the Feature directly, since ensTranscriptSetFeature transfers all
+    ** internal Ensembl Objects based on the Feature class onto the new
+    ** Ensembl Feature Slice, which duplicates the work already done here.
+    */
 
-    ensTranscriptSetFeature(newtranscript, feature);
+    ensFeatureDel(&newtranscript->Feature);
 
-    ensFeatureDel(&feature);
+    newtranscript->Feature = newtf;
 
-    if(transcript->Translation)
+    /*
+    ** Transfer all Ensembl Base Align Feature objects onto the new
+    ** Ensembl Feature Slice.
+    */
+
+    if(newtranscript->Supportingfeatures)
     {
-        /* FIXME: Should this move into ensTranscriptSetFeature? */
-        newtranslation = ensTranslationNewObj(transcript->Translation);
+        iter1 = ajListIterNew(newtranscript->Supportingfeatures);
 
-        ensTranslationSetStartExon(newtranslation, startexon);
+        while(!ajListIterDone(iter1))
+        {
+            oldbaf = (EnsPBasealignfeature) ajListIterGet(iter1);
 
-        ensTranslationSetEndExon(transcript->Translation, endexon);
+            ajListIterRemove(iter1);
 
-        ensTranscriptSetTranslation(newtranscript, newtranslation);
+            newbaf = ensBasealignfeatureTransform(oldbaf, csname, csversion);
 
-        ensTranslationDel(&newtranslation);
+            if(!newbaf)
+            {
+                ajDebug("ensTranscriptTransform could not transfer "
+                        "Base Align Feature onto new Ensembl Feature Slice.");
+
+                ensBasealignfeatureTrace(oldbaf, 1);
+            }
+
+            ajListIterInsert(iter1, (void*) newbaf);
+
+            /* Advance the AJAX List Iterator after the insert. */
+
+            (void) ajListIterGet(iter1);
+
+            ensBasealignfeatureDel(&oldbaf);
+        }
+
+        ajListIterDel(&iter1);
     }
 
-    while(ajListPop(exons, (void **) &newexon))
-        ensExonDel(&newexon);
+    /* Clear internal values that depend on Exon coordinates. */
 
-    ajListFree(&exons);
+    ensMapperClear(newtranscript->ExonCoordMapper);
 
     return newtranscript;
 }
@@ -3706,74 +4382,80 @@ EnsPTranscript ensTranscriptTransform(EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptTransfer ************************************************
+/* @section fetch *************************************************************
 **
-** Transfer an Ensembl Transcript onto another Ensembl Slice.
+** Functions for fetching values of an Ensembl Transcript object.
 **
-** @cc Bio::EnsEMBL::Transcript::transfer
-** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [u] slice [EnsPSlice] Ensembl Slice
-** @see ensFeatureTransfer
+** @fdata [EnsPTranscript]
 **
-** @return [EnsPTranscript] Ensembl Transcript or NULL
-** @@
+** @nam3rule Fetch Fetch Ensembl Transcript values
+** @nam4rule All Fetch all objects
+** @nam5rule Attributes Fetch all Ensembl Attribute objects
+** @nam5rule Constitutiveexons Fetch all constitutive Ensembl Exon objects
+** @nam5rule Databaseentries Fetch all Ensembl Database Entry objects
+** @nam5rule Introns Fetch all Ensembl Intron objects
+** @nam5rule Sequenceedits Fetch all Ensembl Sequence Edit objects
+** @nam4rule Displayidentifier Fetch the display identifier
+** @nam4rule Sequence    Fetch the sequence
+** @nam5rule Coding      Fetch the coding sequence
+** @nam5rule Transcript  Fetch the Ensembl Transcript (cDNA) sequence
+** @nam6rule Seq         Fetch as AJAX Sequence object
+** @nam6rule Str         Fetch as AJAX String object
+** @nam5rule Translation Fetch the Ensembl Translation sequence
+** @nam6rule Seq         Fetch as AJAX Sequence object
+** @nam6rule Str         Fetch as AJAX String object
+**
+** @argrule AllAttributes transcript [EnsPTranscript] Ensembl Transcript
+** @argrule AllAttributes code [const AjPStr] Ensembl Attribute code
+** @argrule AllAttributes attributes [AjPList] AJAX List of
+** Ensembl Attribute objects
+** @argrule AllConstitutiveexons transcript [EnsPTranscript] Ensembl Transcript
+** @argrule AllConstitutiveexons exons [AjPList] AJAX List of
+** Ensembl Exon objects
+** @argrule AllDatabaseentries transcript [EnsPTranscript] Ensembl Transcript
+** @argrule AllDatabaseentries name [const AjPStr]
+** Ensembl External Database name
+** @argrule AllDatabaseentries type [EnsEExternaldatabaseType]
+** Ensembl External Database type
+** @argrule AllDatabaseentries dbes [AjPList] AJAX List of
+** Ensembl Database Entry objects
+** @argrule AllIntrons transcript [EnsPTranscript] Ensembl Transcript
+** @argrule AllIntrons introns [AjPList] AJAX List of Ensembl Intron objects
+** @argrule AllSequenceedits transcript [EnsPTranscript] Ensembl Transcript
+** @argrule AllSequenceedits ses [AjPList] AJAX List of
+** Ensembl Sequence Edit objects
+** @argrule Displayidentifier transcript [const EnsPTranscript]
+** Ensembl Transcript
+** @argrule Displayidentifier Pidentifier [AjPStr*] AJAX String address
+** @argrule Sequence transcript [EnsPTranscript] Ensembl Transcript
+** @argrule SequenceCoding translation [EnsPTranslation] Ensembl Translation
+** @argrule SequenceTranslation translation [EnsPTranslation]
+** Ensembl Translation
+** @argrule Seq Psequence [AjPSeq*] AJAX Sequence address
+** @argrule Str Psequence [AjPStr*] AJAX String address
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
 ******************************************************************************/
-
-EnsPTranscript ensTranscriptTransfer(EnsPTranscript transcript,
-                                     EnsPSlice slice)
-{
-    EnsPFeature newfeature = NULL;
-
-    EnsPTranscript newtranscript = NULL;
-
-    if(ajDebugTest("ensTranscriptTransfer"))
-        ajDebug("ensTranscriptTransfer\n"
-                "  transcript %p\n"
-                "  slice %p\n",
-                transcript,
-                slice);
-
-    if(!transcript)
-        return NULL;
-
-    if(!slice)
-        return NULL;
-
-    if(!transcript->Feature)
-        ajFatal("ensTranscriptTransfer cannot transfer an Ensembl Transcript "
-                "without an Ensembl Feature.\n");
-
-    newfeature = ensFeatureTransfer(transcript->Feature, slice);
-
-    if(!newfeature)
-        return NULL;
-
-    newtranscript = ensTranscriptNewObj(transcript);
-
-    ensTranscriptSetFeature(newtranscript, newfeature);
-
-    ensFeatureDel(&newfeature);
-
-    return newtranscript;
-}
 
 
 
 
 /* @func ensTranscriptFetchAllAttributes **************************************
 **
-** Fetch all Ensembl Attributes of an Ensembl Transcript and optionally filter
-** via an Ensembl Attribute code. To get all Ensembl Attributes for this
-** Ensembl Transcript, consider using ensTranscriptGetAttributes.
+** Fetch all Ensembl Attribute objects of an Ensembl Transcript and optionally
+** filter via an Ensembl Attribute code. To get all Ensembl Attribute objects
+** for this Ensembl Transcript, consider using ensTranscriptLoadAttributes.
 **
-** The caller is responsible for deleting the Ensembl Attributes before
+** The caller is responsible for deleting the Ensembl Attribute objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Transcript::get_all_Attributes
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
 ** @param [r] code [const AjPStr] Ensembl Attribute code
-** @param [r] attributes [AjPList] AJAX List of Ensembl Attributes
-** @see ensTranscriptGetAttributes
+** @param [u] attributes [AjPList] AJAX List of Ensembl Attribute objects
+** @see ensTranscriptLoadAttributes
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -3796,7 +4478,7 @@ AjBool ensTranscriptFetchAllAttributes(EnsPTranscript transcript,
     if(!attributes)
         return ajFalse;
 
-    list = ensTranscriptGetAttributes(transcript);
+    list = ensTranscriptLoadAttributes(transcript);
 
     iter = ajListIterNewread(list);
 
@@ -3816,7 +4498,7 @@ AjBool ensTranscriptFetchAllAttributes(EnsPTranscript transcript,
 
         if(match)
             ajListPushAppend(attributes,
-                             (void *) ensAttributeNewRef(attribute));
+                             (void*) ensAttributeNewRef(attribute));
     }
 
     ajListIterDel(&iter);
@@ -3827,22 +4509,22 @@ AjBool ensTranscriptFetchAllAttributes(EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptFetchAllConstitutiveExons *******************************
+/* @func ensTranscriptFetchAllConstitutiveexons *******************************
 **
-** Fetch all constitutive Ensembl Exons of an Ensembl Transcript.
+** Fetch all constitutive Ensembl Exon objects of an Ensembl Transcript.
 **
-** The caller is responsible for deleting the Ensembl Exons before
+** The caller is responsible for deleting the Ensembl Exon objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Transcript::get_all_constitutive_Exons
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [u] exons [AjPList] AJAX List of Ensembl Exons
+** @param [u] exons [AjPList] AJAX List of Ensembl Exon objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptFetchAllConstitutiveExons(EnsPTranscript transcript,
+AjBool ensTranscriptFetchAllConstitutiveexons(EnsPTranscript transcript,
                                               AjPList exons)
 {
     AjIList iter = NULL;
@@ -3856,7 +4538,7 @@ AjBool ensTranscriptFetchAllConstitutiveExons(EnsPTranscript transcript,
     if(!exons)
         return ajFalse;
 
-    list = ensTranscriptGetExons(transcript);
+    list = ensTranscriptLoadExons(transcript);
 
     iter = ajListIterNewread(list);
 
@@ -3865,7 +4547,7 @@ AjBool ensTranscriptFetchAllConstitutiveExons(EnsPTranscript transcript,
         exon = (EnsPExon) ajListIterGet(iter);
 
         if(ensExonGetConstitutive(exon))
-            ajListPushAppend(exons, (void *) ensExonNewRef(exon));
+            ajListPushAppend(exons, (void*) ensExonNewRef(exon));
     }
 
     ajListIterDel(&iter);
@@ -3876,28 +4558,28 @@ AjBool ensTranscriptFetchAllConstitutiveExons(EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptFetchAllDatabaseEntries *********************************
+/* @func ensTranscriptFetchAllDatabaseentries *********************************
 **
-** Fetch all Ensembl Database Entries of an Ensembl Transcript and optionally
-** filter via an Ensembl External Database name or type. To get all Ensembl
-** External Database objects for this Ensembl Transcript, consider using
-** ensTranscriptGetExternalDatabaseEntries.
+** Fetch all Ensembl Database Entry objects of an Ensembl Transcript and
+** optionally filter via an Ensembl External Database name or type. To get all
+** Ensembl External Database objects for this Ensembl Transcript, consider
+** using ensTranscriptGetExternalDatabaseentries.
 **
-** The caller is responsible for deleting the Ensembl Database Entries before
-** deleting the AJAX List.
+** The caller is responsible for deleting the Ensembl Database Entry objects
+** before deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Transcript::get_all_DBEntries
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
 ** @param [r] name [const AjPStr] Ensembl External Database name
-** @param [r] type [EnsEExternaldatabaseType] Ensembl External Database type
-** @param [u] dbes [AjPList] AJAX List of Ensembl Database Entries
-** @see ensTranscriptGetDatabaseEntries
+** @param [u] type [EnsEExternaldatabaseType] Ensembl External Database type
+** @param [u] dbes [AjPList] AJAX List of Ensembl Database Entry object
+** @see ensTranscriptLoadDatabaseentries
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptFetchAllDatabaseEntries(EnsPTranscript transcript,
+AjBool ensTranscriptFetchAllDatabaseentries(EnsPTranscript transcript,
                                             const AjPStr name,
                                             EnsEExternaldatabaseType type,
                                             AjPList dbes)
@@ -3916,7 +4598,7 @@ AjBool ensTranscriptFetchAllDatabaseEntries(EnsPTranscript transcript,
     if(!dbes)
         return ajFalse;
 
-    list = ensTranscriptGetDatabaseEntries(transcript);
+    list = ensTranscriptLoadDatabaseentries(transcript);
 
     iter = ajListIterNewread(list);
 
@@ -3946,7 +4628,7 @@ AjBool ensTranscriptFetchAllDatabaseEntries(EnsPTranscript transcript,
             typematch = ajTrue;
 
         if(namematch && typematch)
-            ajListPushAppend(dbes, (void *) ensDatabaseentryNewRef(dbe));
+            ajListPushAppend(dbes, (void*) ensDatabaseentryNewRef(dbe));
     }
 
     ajListIterDel(&iter);
@@ -3959,14 +4641,14 @@ AjBool ensTranscriptFetchAllDatabaseEntries(EnsPTranscript transcript,
 
 /* @func ensTranscriptFetchAllIntrons *****************************************
 **
-** Fetch all Ensembl Introns of an Ensembl Transcript.
+** Fetch all Ensembl Intron objects of an Ensembl Transcript.
 **
-** The caller is responsible for deleting the Ensembl Introns before
+** The caller is responsible for deleting the Ensembl Intron objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Transcript::get_all_Introns
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [u] introns [AjPList] AJAX List of Ensembl Introns
+** @param [u] introns [AjPList] AJAX List of Ensembl Intron objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -3989,17 +4671,17 @@ AjBool ensTranscriptFetchAllIntrons(EnsPTranscript transcript, AjPList introns)
     if(!introns)
         return ajFalse;
 
-    list = ensTranscriptGetExons(transcript);
+    list = ensTranscriptLoadExons(transcript);
 
     for(i = 0; i < (ajListGetLength(list) - 1); i++)
     {
-        ajListPeekNumber(list, i, (void **) &exon1);
+        ajListPeekNumber(list, i, (void**) &exon1);
 
-        ajListPeekNumber(list, i + 1, (void **) &exon2);
+        ajListPeekNumber(list, i + 1, (void**) &exon2);
 
-        intron = ensIntronNewExons(exon1, exon2);
+        intron = ensIntronNewIni(exon1, exon2);
 
-        ajListPushAppend(introns, (void *) intron);
+        ajListPushAppend(introns, (void*) intron);
     }
 
     return ajTrue;
@@ -4008,24 +4690,25 @@ AjBool ensTranscriptFetchAllIntrons(EnsPTranscript transcript, AjPList introns)
 
 
 
-/* @func ensTranscriptFetchAllSequenceEdits ***********************************
+/* @func ensTranscriptFetchAllSequenceedits ***********************************
 **
-** Fetch all Ensembl Sequence Edits of an Ensembl Transcript.
+** Fetch all Ensembl Sequence Edit objects of an Ensembl Transcript.
 **
-** The caller is responsible for deleting the Ensembl Sequence Edits before
-** deleting the AJAX List.
+** The caller is responsible for deleting the Ensembl Sequence Edit objects
+** before deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Transcript::get_all_SeqEdits
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
-** @param [r] ses [AjPList] AJAX List of Ensembl Sequence Edits
+** @param [u] ses [AjPList] AJAX List of Ensembl Sequence Edit objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
-** Ensembl Sequence Edits are Ensembl Attributes, which codes have to be
-** defined in the static const char *transcriptSequenceEditCode array.
+** Ensembl Sequence Edit objects are Ensembl Attribute objects, which codes
+** have to be defined in the
+** static const char* const transcriptSequenceeditCode[] array.
 ******************************************************************************/
 
-AjBool ensTranscriptFetchAllSequenceEdits(EnsPTranscript transcript,
+AjBool ensTranscriptFetchAllSequenceedits(EnsPTranscript transcript,
                                           AjPList ses)
 {
     register ajuint i = 0;
@@ -4036,7 +4719,7 @@ AjBool ensTranscriptFetchAllSequenceEdits(EnsPTranscript transcript,
 
     EnsPAttribute at = NULL;
 
-    EnsPSequenceEdit se = NULL;
+    EnsPSequenceedit se = NULL;
 
     if(!transcript)
         return ajFalse;
@@ -4048,18 +4731,18 @@ AjBool ensTranscriptFetchAllSequenceEdits(EnsPTranscript transcript,
 
     attributes = ajListNew();
 
-    for(i = 0; transcriptSequenceEditCode[i]; i++)
+    for(i = 0; transcriptSequenceeditCode[i]; i++)
     {
-        ajStrAssignC(&code, transcriptSequenceEditCode[i]);
+        ajStrAssignC(&code, transcriptSequenceeditCode[i]);
 
         ensTranscriptFetchAllAttributes(transcript, code, attributes);
     }
 
-    while(ajListPop(attributes, (void **) &at))
+    while(ajListPop(attributes, (void**) &at))
     {
-        se = ensSequenceEditNewA(at);
+        se = ensSequenceeditNewAttribute(at);
 
-        ajListPushAppend(ses, (void *) se);
+        ajListPushAppend(ses, (void*) se);
 
         ensAttributeDel(&at);
     }
@@ -4074,7 +4757,7 @@ AjBool ensTranscriptFetchAllSequenceEdits(EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptFetchDisplayIdentifier **********************************
+/* @func ensTranscriptFetchDisplayidentifier **********************************
 **
 ** Fetch the display identifier of an Ensembl Transcript.
 ** This will return the stable identifier, the SQL database-internal identifier
@@ -4089,8 +4772,8 @@ AjBool ensTranscriptFetchAllSequenceEdits(EnsPTranscript transcript,
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptFetchDisplayIdentifier(const EnsPTranscript transcript,
-                                           AjPStr *Pidentifier)
+AjBool ensTranscriptFetchDisplayidentifier(const EnsPTranscript transcript,
+                                           AjPStr* Pidentifier)
 {
     if(!transcript)
         return ajFalse;
@@ -4098,9 +4781,9 @@ AjBool ensTranscriptFetchDisplayIdentifier(const EnsPTranscript transcript,
     if(!Pidentifier)
         return ajFalse;
 
-    if(transcript->StableIdentifier &&
-       ajStrGetLen(transcript->StableIdentifier))
-        *Pidentifier = ajStrNewS(transcript->StableIdentifier);
+    if(transcript->Stableidentifier &&
+       ajStrGetLen(transcript->Stableidentifier))
+        *Pidentifier = ajStrNewS(transcript->Stableidentifier);
     else if(transcript->Identifier)
         *Pidentifier = ajFmtStr("%u", transcript->Identifier);
     else
@@ -4112,7 +4795,101 @@ AjBool ensTranscriptFetchDisplayIdentifier(const EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptFetchSequenceSeq ****************************************
+/* @func ensTranscriptFetchSequenceCodingStr **********************************
+**
+** Fetch the coding (translatable) sequence portion of an Ensembl Transcript as
+** AJAX String. The sequence is padded with 'N's according to the start phase
+** of the first coding Exon.
+**
+** The caller is responsible for deleting the AJAX String.
+**
+** @cc Bio::EnsEMBL::Transcript::translateable_seq
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] translation [EnsPTranslation] Ensembl Translation
+** @param [wP] Psequence [AjPStr*] AJAX String address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensTranscriptFetchSequenceCodingStr(EnsPTranscript transcript,
+                                           EnsPTranslation translation,
+                                           AjPStr* Psequence)
+{
+    ajint sphase = 0;
+
+    ajuint cdsstart = 0;
+    ajuint cdsend = 0;
+
+    AjPStr sequence = NULL;
+
+    if(!transcript)
+        return ajFalse;
+
+    if(!Psequence)
+        return ajFalse;
+
+    if(*Psequence)
+        ajStrAssignClear(Psequence);
+    else
+        *Psequence = ajStrNew();
+
+    /*
+    ** Return an empty string for non-coding Ensembl Transcript objects.
+    ** The ensTranscriptLoadTranslation function will attempt to load the
+    ** Translation from the database.
+    */
+
+    if(!translation)
+    {
+        ajDebug("ensTranscriptFetchSequenceCodingStr got a Transcript "
+                "without a Translation.\n");
+
+        return ajTrue;
+    }
+
+    /* Calculate coding start and end coordinates. */
+
+    cdsstart = ensTranscriptCalculateTranscriptCodingStart(transcript,
+                                                           translation);
+
+    if(!cdsstart)
+    {
+        ajDebug("ensTranscriptFetchSequenceCodingStr got a Transcript and "
+                "Translation pair with an invalid cdsstart %u.\n", cdsstart);
+
+        return ajTrue;
+    }
+
+    cdsend = ensTranscriptCalculateTranscriptCodingEnd(transcript,
+                                                       translation);
+
+    if(!cdsend)
+    {
+        ajDebug("ensTranscriptFetchSequenceCodingStr got a Transcript and "
+                "Translation pair with an invalid cdsend %u.\n", cdsend);
+
+        return ajTrue;
+    }
+
+    sphase = ensExonGetPhaseStart(ensTranslationGetStartexon(translation));
+
+    if(sphase > 0)
+        ajStrAppendCountK(Psequence, 'N', sphase);
+
+    ensTranscriptFetchSequenceTranscriptStr(transcript, &sequence);
+
+    ajStrAppendSubS(Psequence, sequence, cdsstart - 1, cdsend - 1);
+
+    ajStrDel(&sequence);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensTranscriptFetchSequenceTranscriptSeq ******************************
 **
 ** Fetch the sequence of an Ensembl Transcript as AJAX Sequence.
 ** The caller is responsible for deleting the AJAX Sequence.
@@ -4125,8 +4902,8 @@ AjBool ensTranscriptFetchDisplayIdentifier(const EnsPTranscript transcript,
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptFetchSequenceSeq(EnsPTranscript transcript,
-                                     AjPSeq *Psequence)
+AjBool ensTranscriptFetchSequenceTranscriptSeq(EnsPTranscript transcript,
+                                               AjPSeq* Psequence)
 {
     AjPStr name     = NULL;
     AjPStr sequence = NULL;
@@ -4137,9 +4914,9 @@ AjBool ensTranscriptFetchSequenceSeq(EnsPTranscript transcript,
     if(!Psequence)
         return ajFalse;
 
-    ensTranscriptFetchSequenceStr(transcript, &sequence);
+    ensTranscriptFetchSequenceTranscriptStr(transcript, &sequence);
 
-    ensTranscriptFetchDisplayIdentifier(transcript, &name);
+    ensTranscriptFetchDisplayidentifier(transcript, &name);
 
     *Psequence = ajSeqNewNameS(sequence, name);
 
@@ -4154,27 +4931,27 @@ AjBool ensTranscriptFetchSequenceSeq(EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptFetchSequenceStr ****************************************
+/* @func ensTranscriptFetchSequenceTranscriptStr ******************************
 **
 ** Fetch the spliced sequence of an Ensembl Transcript as AJAX String.
 **
-** The sequence of all Ensembl Exons is concatenated and by default, all
-** post-transcriptional Sequence Edits are applied. Applying Sequence Edits can
-** be disabled by setting ensTranscriptSetEnableSequenceEdits to ajFalse.
+** The sequence of all Ensembl Exon objects is concatenated and by default, all
+** post-transcriptional Sequence Edit objects are applied, but can be disabled
+** by setting ensTranscriptSetSequenceedits to ajFalse.
 **
 ** The caller is responsible for deleting the AJAX String.
 **
 ** @cc Bio::EnsEMBL::Transcript::spliced_seq
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
 ** @param [wP] Psequence [AjPStr*] AJAX String address
-** @see ensTranscriptSetEnableSequenceEdits
+** @see ensTranscriptSetSequenceedits
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptFetchSequenceStr(EnsPTranscript transcript,
-                                     AjPStr *Psequence)
+AjBool ensTranscriptFetchSequenceTranscriptStr(EnsPTranscript transcript,
+                                               AjPStr* Psequence)
 {
     AjIList iter        = NULL;
     const AjPList exons = NULL;
@@ -4186,7 +4963,7 @@ AjBool ensTranscriptFetchSequenceStr(EnsPTranscript transcript,
 
     EnsPFeature feature = NULL;
 
-    EnsPSequenceEdit se = NULL;
+    EnsPSequenceedit se = NULL;
 
     if(!transcript)
         return ajFalse;
@@ -4199,7 +4976,7 @@ AjBool ensTranscriptFetchSequenceStr(EnsPTranscript transcript,
     else
         *Psequence = ajStrNew();
 
-    exons = ensTranscriptGetExons(transcript);
+    exons = ensTranscriptLoadExons(transcript);
 
     iter = ajListIterNewread(exons);
 
@@ -4207,18 +4984,24 @@ AjBool ensTranscriptFetchSequenceStr(EnsPTranscript transcript,
     {
         exon = (EnsPExon) ajListIterGet(iter);
 
-        ensExonFetchSequenceStr(exon, &exseq);
+        ensExonFetchSequenceSliceStr(exon, &exseq);
 
         if(exseq && ajStrGetLen(exseq))
             ajStrAppendS(Psequence, exseq);
         else
         {
-            ajDebug("ensTranscriptFetchSequenceStr could not get sequence "
-                    "for Exon. Transcript sequence may not be correct.\n");
+            ajDebug("ensTranscriptFetchSequenceTranscriptStr could not get "
+                    "sequence for Exon %p. Transcript sequence may not be "
+                    "correct.\n",
+                    exon);
+
+            ensExonTrace(exon, 1);
 
             feature = ensExonGetFeature(exon);
 
-            ajStrAppendCountK(Psequence, 'N', ensFeatureGetLength(feature));
+            ajStrAppendCountK(Psequence,
+                              'N',
+                              ensFeatureCalculateLength(feature));
         }
 
         ajStrDel(&exseq);
@@ -4226,26 +5009,26 @@ AjBool ensTranscriptFetchSequenceStr(EnsPTranscript transcript,
 
     ajListIterDel(&iter);
 
-    /* Apply post-transcriptional Sequence Edits if enabled. */
+    /* Apply post-transcriptional Sequence Edit objects if enabled. */
 
-    if(transcript->EnableSequenceEdits)
+    if(transcript->Sequenceedits)
     {
         ses = ajListNew();
 
-        ensTranscriptFetchAllSequenceEdits(transcript, ses);
+        ensTranscriptFetchAllSequenceedits(transcript, ses);
 
         /*
-        ** Sort Sequence Edits in reverse order to avoid the complication of
-        ** adjusting down-stream Sequence Edit coordinates.
+        ** Sort Sequence Edit objects in reverse order to avoid the
+        ** complication of adjusting down-stream Sequence Edit coordinates.
         */
 
-        ensSequenceEditSortByStartDescending(ses);
+        ensListSequenceeditSortStartDescending(ses);
 
-        while(ajListPop(ses, (void **) &se))
+        while(ajListPop(ses, (void**) &se))
         {
-            ensSequenceEditApplyEdit(se, 0, Psequence);
+            ensSequenceeditApplyString(se, 0, Psequence);
 
-            ensSequenceEditDel(&se);
+            ensSequenceeditDel(&se);
         }
 
         ajListFree(&ses);
@@ -4257,271 +5040,52 @@ AjBool ensTranscriptFetchSequenceStr(EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptFetchTranslatableSequence *******************************
-**
-** Fetch the translatable sequence portion of an Ensembl Transcript as
-** AJAX String. The sequence is padded with 'N's according to the start phase
-** of the first coding Exon.
-**
-** The caller is responsible for deleting the AJAX String.
-**
-** @cc Bio::EnsEMBL::Transcript::translateable_seq
-** @param [r] transcript [EnsPTranscript] Ensembl Transcript
-** @param [wP] Psequence [AjPStr*] AJAX String address
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensTranscriptFetchTranslatableSequence(EnsPTranscript transcript,
-                                              AjPStr *Psequence)
-{
-    ajint sphase = 0;
-
-    ajuint cdsstart = 0;
-    ajuint cdsend = 0;
-
-    AjPStr sequence = NULL;
-
-    EnsPTranslation translation = NULL;
-
-    if(!transcript)
-        return ajFalse;
-
-    if(!Psequence)
-        return ajFalse;
-
-    if(*Psequence)
-        ajStrAssignClear(Psequence);
-    else
-        *Psequence = ajStrNew();
-
-    /*
-    ** Return empty string for non-coding Transcripts.
-    ** The ensTranscriptGetTranslation function will attempt to load the
-    ** Translation from the database.
-    */
-
-    translation = ensTranscriptGetTranslation(transcript);
-
-    if(!translation)
-    {
-        ajDebug("ensTranscriptFetchTranslatableSequence got a Transcript "
-                "without a Translation.\n");
-
-        return ajTrue;
-    }
-
-    /* Calculate coding start and end coordinates. */
-
-    cdsstart = ensTranscriptGetTranscriptCodingStart(transcript);
-
-    if(!cdsstart)
-        return ajTrue;
-
-    cdsend = ensTranscriptGetTranscriptCodingEnd(transcript);
-
-    if(!cdsend)
-        return ajTrue;
-
-    sphase = ensExonGetStartPhase(ensTranslationGetStartExon(translation));
-
-    if(sphase > 0)
-        ajStrAppendCountK(Psequence, 'N', sphase);
-
-    ensTranscriptFetchSequenceStr(transcript, &sequence);
-
-    ajStrAppendSubS(Psequence, sequence, cdsstart - 1, cdsend - 1);
-
-    ajStrDel(&sequence);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensTranscriptFetchTranslationSequenceStr *****************************
-**
-** Fetch the sequence of the Ensembl Translation of an
-** Ensembl Transcript as AJAX String.
-**
-** The sequence is based on ensTranscriptFetchTranslatableSequence and by
-** default, all post-translational Sequence Edits are applied. Applying
-** Sequence Edits can be disabled by setting
-** ensTranscriptSetEnableSequenceEdits to ajFalse.
-**
-** The caller is responsible for deleting the AJAX String.
-**
-** @cc Bio::EnsEMBL::Transcript::translate
-** @cc Bio::EnsEMBL::Translation::modify_translation
-** @param [r] transcript [EnsPTranscript] Ensembl Transcript
-** @param [wP] Psequence [AjPStr*] AJAX String address
-** @see ensTranscriptFetchTranslatableSequence
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensTranscriptFetchTranslationSequenceStr(EnsPTranscript transcript,
-                                                AjPStr *Psequence)
-{
-    AjPList ses = NULL;
-
-    AjPStr cdna = NULL;
-
-    const AjPTrn atranslation = NULL;
-
-    EnsPSequenceEdit se = NULL;
-
-    EnsPSlice slice = NULL;
-
-    EnsPTranslation etranslation = NULL;
-
-    if(ajDebugTest("ensTranscriptFetchTranslationSequenceStr"))
-        ajDebug("ensTranscriptFetchTranslationSequenceStr\n"
-                "  transcript %p\n"
-                "  Psequence %p\n",
-                transcript,
-                Psequence);
-
-    if(!transcript)
-        return ajFalse;
-
-    if(!Psequence)
-        return ajFalse;
-
-    if(*Psequence)
-        ajStrAssignClear(Psequence);
-    else
-        *Psequence = ajStrNew();
-
-    /*
-    ** Return empty string for non-coding Transcripts.
-    ** The ensTranscriptGetTranslation function will attempt to load the
-    ** Translation from the database.
-    */
-
-    etranslation = ensTranscriptGetTranslation(transcript);
-
-    if(!etranslation)
-    {
-        ajDebug("ensTranscriptFetchTranslationSequenceStr got a Transcript "
-                "without a Translation.\n");
-
-        return ajTrue;
-    }
-
-    cdna = ajStrNew();
-
-    ensTranscriptFetchTranslatableSequence(transcript, &cdna);
-
-    if(ajStrGetLen(cdna) < 1)
-        return ajTrue;
-
-    slice = ensFeatureGetSlice(transcript->Feature);
-
-    atranslation = ensSliceGetTranslation(slice);
-
-    ajTrnSeqS(atranslation, cdna, Psequence);
-
-    ajStrDel(&cdna);
-
-    /*
-    ** Remove the final stop codon from the mRNA if it is present, so that the
-    ** resulting peptides do not end with a '*'. If a terminal stop codon is
-    ** desired, call ensTranscriptFetchTranslatableSequence and translate it
-    ** directly.
-    ** NOTE: This test is simpler and hopefully more efficient than the one
-    ** in the Perl API, which tests for a termination codon in a
-    ** codon table-specifc manner and removes the last triplet from the cDNA.
-    ** NOTE: This implementation does not use the 'complete5' and 'complete3'
-    ** Sequence Region Attributes to modify the translated sequence. The
-    ** initiator codon should be correctly translated by ajTrnSeqS based on
-    ** the codon table and the stop codon, if present, is removed above.
-    */
-
-    if(ajStrGetCharLast(*Psequence) == '*')
-        ajStrCutEnd(Psequence, 1);
-
-    /* Apply post-translational Sequence Edits if enabled. */
-
-    if(transcript->EnableSequenceEdits)
-    {
-        ses = ajListNew();
-
-        ensTranslationFetchAllSequenceEdits(etranslation, ses);
-
-        /*
-        ** Sort Sequence Edits in reverse order to avoid the complication of
-        ** adjusting down-stream Sequence Edit coordinates.
-        */
-
-        ensSequenceEditSortByStartDescending(ses);
-
-        while(ajListPop(ses, (void **) &se))
-        {
-            ensSequenceEditApplyEdit(se, 0, Psequence);
-
-            ensSequenceEditDel(&se);
-        }
-
-        ajListFree(&ses);
-    }
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensTranscriptFetchTranslationSequenceSeq *****************************
+/* @func ensTranscriptFetchSequenceTranslationSeq *****************************
 **
 ** Fetch the sequence of the Ensembl Translation of an
 ** Ensembl Transcript as AJAX Sequence.
 **
-** The sequence is based on ensTranscriptFetchTranslatableSequence and by
-** default, all post-translational Sequence Edits are applied. Applying
-** Sequence Edits can be disabled by setting
-** ensTranscriptSetEnableSequenceEdits to ajFalse.
+** The sequence is based on ensTranscriptFetchSequenceCodingStr and by
+** default, all post-translational Sequence Edit objects are applied, but
+** can be disabled by setting ensTranscriptSetSequenceedits to ajFalse.
 **
 ** The caller is responsible for deleting the AJAX Sequence.
 **
 ** @cc Bio::EnsEMBL::Transcript::translate
 ** @cc Bio::EnsEMBL::Translation::modify_translation
-** @param [r] transcript [EnsPTranscript] Ensembl Transcript
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] translation [EnsPTranslation] Ensembl Translation
 ** @param [wP] Psequence [AjPSeq*] AJAX Sequence address
-** @see ensTranscriptFetchTranslatableSequence
+** @see ensTranscriptFetchSequenceCodingStr
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptFetchTranslationSequenceSeq(EnsPTranscript transcript,
-                                                AjPSeq *Psequence)
+AjBool ensTranscriptFetchSequenceTranslationSeq(EnsPTranscript transcript,
+                                                EnsPTranslation translation,
+                                                AjPSeq* Psequence)
 {
     AjPStr name     = NULL;
     AjPStr sequence = NULL;
 
-    EnsPTranslation translation = NULL;
-
     if(!transcript)
         return ajFalse;
-
-    if(!Psequence)
-        return ajFalse;
-
-    translation = ensTranscriptGetTranslation(transcript);
 
     if(!translation)
         return ajTrue;
 
+    if(!Psequence)
+        return ajFalse;
+
     name     = ajStrNew();
     sequence = ajStrNew();
 
-    ensTranslationFetchDisplayIdentifier(translation, &name);
+    ensTranslationFetchDisplayidentifier(translation, &name);
 
-    ensTranscriptFetchTranslationSequenceStr(transcript, &sequence);
+    ensTranscriptFetchSequenceTranslationStr(transcript,
+                                             translation,
+                                             &sequence);
 
     *Psequence = ajSeqNewNameS(sequence, name);
 
@@ -4536,145 +5100,132 @@ AjBool ensTranscriptFetchTranslationSequenceSeq(EnsPTranscript transcript,
 
 
 
-/* @funcstatic transcriptCompareStartAscending ********************************
+/* @func ensTranscriptFetchSequenceTranslationStr *****************************
 **
-** Comparison function to sort Ensembl Transcripts by their Ensembl Feature
-** start coordinate in ascending order.
+** Fetch the sequence of the Ensembl Translation of an
+** Ensembl Transcript as AJAX String.
 **
-** @param [r] P1 [const void*] Ensembl Transcript address 1
-** @param [r] P2 [const void*] Ensembl Transcript address 2
-** @see ajListSort
+** The sequence is based on ensTranscriptFetchSequenceCodingStr and by
+** default, all post-translational Sequence Edit objects are applied,
+** but can be disabled by setting ensTranscriptSetSequenceedits to ajFalse.
 **
-** @return [int] The comparison function returns an integer less than,
-**               equal to, or greater than zero if the first argument is
-**               considered to be respectively less than, equal to, or
-**               greater than the second.
-** @@
-******************************************************************************/
-
-static int transcriptCompareStartAscending(const void* P1, const void* P2)
-{
-    const EnsPTranscript transcript1 = NULL;
-    const EnsPTranscript transcript2 = NULL;
-
-    transcript1 = *(EnsPTranscript const *) P1;
-    transcript2 = *(EnsPTranscript const *) P2;
-
-    if(ajDebugTest("transcriptCompareStartAscending"))
-        ajDebug("transcriptCompareStartAscending\n"
-                "  transcript1 %p\n"
-                "  transcript2 %p\n",
-                transcript1,
-                transcript2);
-
-    /* Sort empty values towards the end of the AJAX List. */
-
-    if(transcript1 && (!transcript2))
-        return -1;
-
-    if((!transcript1) && (!transcript2))
-        return 0;
-
-    if((!transcript1) && transcript2)
-        return +1;
-
-    return ensFeatureCompareStartAscending(transcript1->Feature,
-                                           transcript2->Feature);
-}
-
-
-
-
-/* @func ensTranscriptSortByStartAscending ************************************
+** The caller is responsible for deleting the AJAX String.
 **
-** Sort Ensembl Transcripts by their Ensembl Feature start coordinate
-** in ascending order.
-**
-** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcripts
+** @cc Bio::EnsEMBL::Transcript::translate
+** @cc Bio::EnsEMBL::Translation::modify_translation
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] translation [EnsPTranslation] Ensembl Translation
+** @param [wP] Psequence [AjPStr*] AJAX String address
+** @see ensTranscriptFetchSequenceCodingStr
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptSortByStartAscending(AjPList transcripts)
+AjBool ensTranscriptFetchSequenceTranslationStr(EnsPTranscript transcript,
+                                                EnsPTranslation translation,
+                                                AjPStr* Psequence)
 {
-    if(!transcripts)
+    AjPList ses = NULL;
+
+    AjPStr cdna = NULL;
+
+    const AjPTrn trn = NULL;
+
+    EnsPSequenceedit se = NULL;
+
+    EnsPSlice slice = NULL;
+
+    if(ajDebugTest("ensTranscriptFetchSequenceTranslationStr"))
+        ajDebug("ensTranscriptFetchSequenceTranslationStr\n"
+                "  transcript %p\n"
+                "  translation %p\n"
+                "  Psequence %p\n",
+                transcript,
+                translation,
+                Psequence);
+
+    if(!transcript)
         return ajFalse;
 
-    ajListSort(transcripts, transcriptCompareStartAscending);
-
-    return ajTrue;
-}
-
-
-
-
-/* @funcstatic transcriptCompareStartDescending *******************************
-**
-** Comparison function to sort Ensembl Transcripts by their Ensembl Feature
-** start coordinate in descending order.
-**
-** @param [r] P1 [const void*] Ensembl Transcript address 1
-** @param [r] P2 [const void*] Ensembl Transcript address 2
-** @see ajListSort
-**
-** @return [int] The comparison function returns an integer less than,
-**               equal to, or greater than zero if the first argument is
-**               considered to be respectively less than, equal to, or
-**               greater than the second.
-** @@
-******************************************************************************/
-
-static int transcriptCompareStartDescending(const void* P1, const void* P2)
-{
-    const EnsPTranscript transcript1 = NULL;
-    const EnsPTranscript transcript2 = NULL;
-
-    transcript1 = *(EnsPTranscript const *) P1;
-    transcript2 = *(EnsPTranscript const *) P2;
-
-    if(ajDebugTest("transcriptCompareStartDescending"))
-        ajDebug("transcriptCompareStartDescending\n"
-                "  transcript1 %p\n"
-                "  transcript2 %p\n",
-                transcript1,
-                transcript2);
-
-    /* Sort empty values towards the end of the AJAX List. */
-
-    if(transcript1 && (!transcript2))
-        return -1;
-
-    if((!transcript1) && (!transcript2))
-        return 0;
-
-    if((!transcript1) && transcript2)
-        return +1;
-
-    return ensFeatureCompareStartDescending(transcript1->Feature,
-                                            transcript2->Feature);
-}
-
-
-
-
-/* @func ensTranscriptSortByStartDescending ***********************************
-**
-** Sort Ensembl Transcripts by their Ensembl Feature start coordinate
-** in descending order.
-**
-** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcripts
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensTranscriptSortByStartDescending(AjPList transcripts)
-{
-    if(!transcripts)
+    if(!Psequence)
         return ajFalse;
 
-    ajListSort(transcripts, transcriptCompareStartDescending);
+    if(*Psequence)
+        ajStrAssignClear(Psequence);
+    else
+        *Psequence = ajStrNew();
+
+    /*
+    ** Return an empty string for non-coding Ensembl Transcript objects.
+    ** The ensTranscriptLoadTranslation function will attempt to load the
+    ** Translation from the database.
+    */
+
+    if(!translation)
+    {
+        ajDebug("ensTranscriptFetchSequenceTranslationStr got a Transcript "
+                "without a Translation.\n");
+
+        return ajTrue;
+    }
+
+    cdna = ajStrNew();
+
+    ensTranscriptFetchSequenceCodingStr(transcript, translation, &cdna);
+
+    if(ajStrGetLen(cdna) < 1)
+        return ajTrue;
+
+    slice = ensFeatureGetSlice(transcript->Feature);
+
+    trn = ensSliceGetTranslation(slice);
+
+    ajTrnSeqS(trn, cdna, Psequence);
+
+    ajStrDel(&cdna);
+
+    /*
+    ** Remove the final stop codon from the mRNA if it is present, so that the
+    ** resulting peptides do not end with a '*'. If a terminal stop codon is
+    ** desired, call ensTranscriptFetchSequenceCodingStr and translate it
+    ** directly.
+    ** NOTE: This test is simpler and hopefully more efficient than the one
+    ** in the Perl API, which tests for a termination codon in a
+    ** codon table-specifc manner and removes the last triplet from the cDNA.
+    ** NOTE: This implementation does not use the 'complete5' and 'complete3'
+    ** Sequence Region Attributes to modify the translated sequence. The
+    ** initiator codon should be correctly translated by ajTrnSeqS based on
+    ** the codon table and the stop codon, if present, is removed above.
+    */
+
+    if(ajStrGetCharLast(*Psequence) == '*')
+        ajStrCutEnd(Psequence, 1);
+
+    /* Apply post-translational Sequence Edit objects if enabled. */
+
+    if(transcript->Sequenceedits)
+    {
+        ses = ajListNew();
+
+        ensTranslationFetchAllSequenceedits(translation, ses);
+
+        /*
+        ** Sort Sequence Edit objects in reverse order to avoid the
+        ** complication of adjusting down-stream Sequence Edit coordinates.
+        */
+
+        ensListSequenceeditSortStartDescending(ses);
+
+        while(ajListPop(ses, (void**) &se))
+        {
+            ensSequenceeditApplyString(se, 0, Psequence);
+
+            ensSequenceeditDel(&se);
+        }
+
+        ajListFree(&ses);
+    }
 
     return ajTrue;
 }
@@ -4687,13 +5238,39 @@ AjBool ensTranscriptSortByStartDescending(AjPList transcripts)
 ** Ensembl Transcript Mapper functions.
 **
 ** @fdata [EnsPTranscript]
-** @fnote None
 **
-** @cc Bio::EnsEMBL::TranscriptMapper CVS Revision: 1.6
+** @cc Bio::EnsEMBL::TranscriptMapper
+** @cc CVS Revision: 1.15
+** @cc CVS Tag: branch-ensembl-62
 **
 ** @nam3rule Mapper Ensembl Transcript Mapper functions
+** @nam4rule Init          Initialise an Ensembl Transcript Mapper
+** @nam4rule Slice         Map from Ensembl Slice coordinates
+** @nam5rule Tocoding      Map to coding coordinates
+** @nam5rule Totranscript  Map to transcript coordinates
+** @nam5rule Totranslation Map to translation coordinates
+** @nam4rule Transcript    Map from Ensembl Transcript coordinates
+** @nam5rule Toslice       Map to Ensembl Slice coordinates
+** @nam4rule Translation   Map from Ensembl Translation coordinates
+** @nam5rule Toslice       Map to Ensembl Slice coordinates
 **
 ** @argrule * transcript [EnsPTranscript] Ensembl Transcript
+** @argrule Init force [AjBool] force re-initialisation
+** @argrule Tocoding translation [EnsPTranslation] Ensembl Translation
+** @argrule Totranslation translation [EnsPTranslation] Ensembl Translation
+** @argrule Translation translation [EnsPTranslation] Ensembl Translation
+** @argrule Slice start  [ajint] Ensembl Slice start coordinate
+** @argrule Slice end    [ajint] Ensembl Slice end coordinate
+** @argrule Slice strand [ajint] Ensembl Slice strand information
+** @argrule Slice mrs [AjPList] AJAX List of Ensembl Mapper Result objects
+** @argrule TranscriptToslice start [ajuint] Transcript start coordinate
+** @argrule TranscriptToslice end   [ajuint] Transcript end coordinate
+** @argrule TranscriptToslice mrs   [AjPList] AJAX List of
+**                                            Ensembl Mapper Result objects
+** @argrule TranslationToslice start [ajuint] Translation start coordinate
+** @argrule TranslationToslice end   [ajuint] Translation end coordinate
+** @argrule TranslationToslice mrs   [AjPList] AJAX List of
+**                                             Ensembl Mapper Result objects
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -4705,35 +5282,41 @@ AjBool ensTranscriptSortByStartDescending(AjPList transcripts)
 
 /* @func ensTranscriptMapperInit **********************************************
 **
-** Initialise the Ensembl Transcript Mapper of an Ensembl Transcript.
+** Initialise or re-initialise an Ensembl Transcript Mapper of an
+** Ensembl Transcript.
+**
+** If the force parameter is set to ajTrue the Ensembl Transcript Mapper will
+** be re-initialised regardless whetner it has been initialised before,
+** i.e. if it already contains Ensembl Mapper Pair objects.
 **
 ** @cc Bio::EnsEMBL::TranscriptMapper::new
 ** @cc Bio::EnsEMBL::TranscriptMapper::_load_mapper
-** @param [r] transcript [EnsPTranscript] Ensembl Transcript
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [r] force [AjBool] force re-initialisation
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ** Initialises a Transcript Mapper object which can be used to perform
-** various coordinate transformations relating to Transcripts.
+** various coordinate transformations relating to Ensembl Transcript objects.
 ** Since the Transcript Mapper uses the Transcript state at the time of
 ** initialisation to perform the conversions, it must be re-initialised if the
 ** underlying Transcript is altered.
-** 'Genomic' coordinates are in fact relative to the Slice that the Transcript
-** is annotated on.
+** All 'Genomic' coordinates in the Perl API are in fact relative to the
+** Slice on which the particular Transcript is annotated.
 ******************************************************************************/
 
-AjBool ensTranscriptMapperInit(EnsPTranscript transcript)
+AjBool ensTranscriptMapperInit(EnsPTranscript transcript, AjBool force)
 {
     ajuint srid = 0;
 
     /* Current and previous Feature (Exon) Slice coordinates */
 
-    ajuint curftrstart = 0;
-    ajuint curftrend   = 0;
+    ajint curftrstart  = 0;
+    ajint curftrend    = 0;
     ajint curftrstrand = 0;
 
-    ajuint prvftrstart = 0;
-    ajuint prvftrend   = 0;
+    ajint prvftrstart = 0;
+    ajint prvftrend   = 0;
 
     /* Current and previous Transcript (cDNA) coordinates */
 
@@ -4759,7 +5342,7 @@ AjBool ensTranscriptMapperInit(EnsPTranscript transcript)
 
     EnsPFeature feature = NULL;
 
-    EnsPSequenceEdit se = NULL;
+    EnsPSequenceedit se = NULL;
 
     EnsPSlice slice = NULL;
 
@@ -4772,15 +5355,22 @@ AjBool ensTranscriptMapperInit(EnsPTranscript transcript)
         return ajFalse;
 
     if(transcript->ExonCoordMapper)
-        ensMapperClear(transcript->ExonCoordMapper);
+    {
+        if(force == ajTrue)
+            ensMapperClear(transcript->ExonCoordMapper);
+
+        if(ensMapperGetCount(transcript->ExonCoordMapper) > 0)
+            return ajTrue;
+    }
     else
     {
         src = ajStrNewC("transcript");
         trg = ajStrNewC("slice");
 
-        cs = ensSliceGetCoordsystem(ensFeatureGetSlice(transcript->Feature));
+        cs = ensSliceGetCoordsystemObject(
+            ensFeatureGetSlice(transcript->Feature));
 
-        transcript->ExonCoordMapper = ensMapperNew(src, trg, cs, cs);
+        transcript->ExonCoordMapper = ensMapperNewIni(src, trg, cs, cs);
 
         ajStrDel(&src);
         ajStrDel(&trg);
@@ -4794,28 +5384,19 @@ AjBool ensTranscriptMapperInit(EnsPTranscript transcript)
 
     srid = ensSliceGetSeqregionIdentifier(slice);
 
-    /* Get all Exons of this Transcript. */
+    /* Get all Ensembl Exon objects of this Ensembl Transcript. */
 
-    exons = ensTranscriptGetExons(transcript);
-
-    if(ajListGetLength(exons))
-    {
-        ajListPeekFirst(exons, (void **) &exon);
-
-        transcript->StartPhase = ensExonGetStartPhase(exon);
-    }
-    else
-        transcript->StartPhase = -1;
+    exons = ensTranscriptLoadExons(transcript);
 
     /* Load Mapper Bio::EnsEMBL::TranscriptMapper::_load_mapper */
 
     ses = ajListNew();
 
-    if(transcript->EnableSequenceEdits)
+    if(transcript->Sequenceedits)
     {
-        ensTranscriptFetchAllSequenceEdits(transcript, ses);
+        ensTranscriptFetchAllSequenceedits(transcript, ses);
 
-        ensSequenceEditSortByStartAscending(ses);
+        ensListSequenceeditSortStartAscending(ses);
     }
 
     iter = ajListIterNewread(exons);
@@ -4826,50 +5407,44 @@ AjBool ensTranscriptMapperInit(EnsPTranscript transcript)
 
         feature = ensExonGetFeature(exon);
 
-        curftrstart = ensFeatureGetStart(feature);
-
-        curftrend = ensFeatureGetEnd(feature);
-
+        curftrstart  = ensFeatureGetStart(feature);
+        curftrend    = ensFeatureGetEnd(feature);
         curftrstrand = ensFeatureGetStrand(feature);
 
-        curtrcstart = curtrcend + 1;
-
-        curtrcend = curtrcstart + ensFeatureGetLength(feature) - 1;
+        curtrcstart = curtrcend   + 1;
+        curtrcend   = curtrcstart + ensFeatureCalculateLength(feature) - 1;
 
         /*
-        ** Add deletions and insertions into Mapper Pairs when Sequence Edits
-        ** are turned on and ignore mismatches, i.e. treat them as matches.
+        ** Add deletions and insertions into Mapper Pair objects when
+        ** Sequence Edit objects are applied and ignore mismatches,
+        ** i.e. treat them as matches.
         */
 
-        if(transcript->EnableSequenceEdits)
+        if(transcript->Sequenceedits)
         {
-            while(ajListPeekFirst(ses, (void **) &se) &&
-                  (ensSequenceEditGetStart(se) + editshift <= curtrcend))
+            while(ajListPeekFirst(ses, (void**) &se) &&
+                  (ensSequenceeditGetStart(se) + editshift <= curtrcend))
             {
-                if(ensSequenceEditGetLengthDifference(se))
+                if(ensSequenceeditCalculateDifference(se))
                 {
                     /*
                     ** Break the Mapper Pair into two parts, finish the
                     ** first Mapper Pair just before the Sequence Edit.
                     */
 
-                    prvtrcend = ensSequenceEditGetStart(se) + editshift - 1;
-
-                    prvtrcstart = curtrcstart;
-
+                    prvtrcend    = ensSequenceeditGetStart(se) + editshift - 1;
+                    prvtrcstart  = curtrcstart;
                     prvtrclength = prvtrcend - prvtrcstart + 1;
 
                     if(curftrstrand >= 0)
                     {
                         prvftrstart = curftrstart;
-
-                        prvftrend = curftrstart + prvtrclength - 1;
+                        prvftrend   = curftrstart + prvtrclength - 1;
                     }
                     else
                     {
                         prvftrstart = curftrend - prvtrclength + 1;
-
-                        prvftrend = curftrend;
+                        prvftrend   = curftrend;
                     }
 
                     /*
@@ -4893,13 +5468,13 @@ AjBool ensTranscriptMapperInit(EnsPTranscript transcript)
                     curtrcstart = prvtrcend + 1;
 
                     if(curftrstrand >= 0)
-                        curftrstart = prvftrend + 1;
+                        curftrstart = prvftrend   + 1;
                     else
-                        curftrend = prvftrstart - 1;
+                        curftrend   = prvftrstart - 1;
 
-                    curtrcend += ensSequenceEditGetLengthDifference(se);
+                    curtrcend += ensSequenceeditCalculateDifference(se);
 
-                    if(ensSequenceEditGetLengthDifference(se) >= 0)
+                    if(ensSequenceeditCalculateDifference(se) >= 0)
                     {
                         /*
                         ** Positive length difference means insertion into
@@ -4907,7 +5482,7 @@ AjBool ensTranscriptMapperInit(EnsPTranscript transcript)
                         ** Shift Transcript coordinates along.
                         */
 
-                        curtrcstart += ensSequenceEditGetLengthDifference(se);
+                        curtrcstart += ensSequenceeditCalculateDifference(se);
                     }
                     else
                     {
@@ -4918,21 +5493,21 @@ AjBool ensTranscriptMapperInit(EnsPTranscript transcript)
                         */
 
                         if(curftrstrand >= 0)
-                            curftrstart -=
-                                ensSequenceEditGetLengthDifference(se);
+                            curftrstart
+                                -= ensSequenceeditCalculateDifference(se);
                         else
-                            curftrend +=
-                                ensSequenceEditGetLengthDifference(se);
+                            curftrend
+                                += ensSequenceeditCalculateDifference(se);
                     }
 
-                    editshift += ensSequenceEditGetLengthDifference(se);
+                    editshift += ensSequenceeditCalculateDifference(se);
                 }
 
                 /* At this stage remove the Sequence Edit from the List. */
 
-                ajListPop(ses, (void **) &se);
+                ajListPop(ses, (void**) &se);
 
-                ensSequenceEditDel(&se);
+                ensSequenceeditDel(&se);
             }
         }
 
@@ -4955,10 +5530,13 @@ AjBool ensTranscriptMapperInit(EnsPTranscript transcript)
 
     ajListIterDel(&iter);
 
-    /* Delete any remaining Sequence Edits before deleting the List. */
+    /*
+    ** Delete any remaining Sequence Edit objects before deleting the
+    ** AJAX List.
+    */
 
-    while(ajListPop(ses, (void **) &se))
-        ensSequenceEditDel(&se);
+    while(ajListPop(ses, (void**) &se))
+        ensSequenceeditDel(&se);
 
     ajListFree(&ses);
 
@@ -4968,69 +5546,167 @@ AjBool ensTranscriptMapperInit(EnsPTranscript transcript)
 
 
 
-/* @func ensTranscriptMapperTranscriptToSlice *********************************
+/* @func ensTranscriptMapperSliceTocoding *************************************
 **
-** Map Transcript (cDNA) coordinates of an Ensembl Transcript into Slice
-** (genome) coordinates.
+** Map Slice (genome) coordinates of an Ensembl Transcript into coding
+** sequence coordinates.
 **
-** @cc Bio::EnsEMBL::TranscriptMapper::cdna2genomic
-** @param [r] transcript [EnsPTranscript] Ensembl Transcript
-** @param [r] start [ajuint] Transcript start coordinate
-** @param [r] end [ajuint] Transcript end coordinate
-** @param [u] mrs [AjPList] AJAX List of Ensembl Mapper Results
+** @cc Bio::EnsEMBL::TranscriptMapper::genomic2cds
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] translation [EnsPTranslation] Ensembl Translation
+** @param [r] start  [ajint] Ensembl Slice start coordinate
+** @param [r] end    [ajint] Ensembl Slice end coordinate
+** @param [r] strand [ajint] Ensembl Slice strand information
+** @param [u] mrs    [AjPList] AJAX List of Ensembl Mapper Results
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptMapperTranscriptToSlice(EnsPTranscript transcript,
-                                            ajuint start,
-                                            ajuint end,
-                                            AjPList mrs)
+AjBool ensTranscriptMapperSliceTocoding(EnsPTranscript transcript,
+                                        EnsPTranslation translation,
+                                        ajint start,
+                                        ajint end,
+                                        ajint strand,
+                                        AjPList mrs)
 {
-    AjPStr src = NULL;
+    ajuint cdsstart = 0;
+    ajuint cdsend   = 0;
+    ajuint tcstart  = 0;
+    ajuint tcend    = 0;
+
+    AjPList result = NULL;
+
+    EnsPMapperresult mr     = NULL;
+    EnsPMapperresult gcmr   = NULL;
+    EnsPMapperresult endgap = NULL;
 
     if(!transcript)
         return ajFalse;
 
-    if(!start)
-    {
-        ajDebug("ensTranscriptMapperTranscriptToSlice "
-                "requires a start coordinate.\n");
-
-        return ajFalse;
-    }
-
-    if(!end)
-    {
-        ajDebug("ensTranscriptMapperTranscriptToSlice "
-                "requires an end coordinate.\n");
-
-        return ajFalse;
-    }
-
     if(!mrs)
     {
-        ajDebug("ensTranscriptMapperTranscriptToSlice "
+        ajDebug("ensTranscriptMapperSliceTocoding "
                 "requires an AJAX List of Ensembl Mapper Results.\n");
 
         return ajFalse;
     }
 
-    if(!transcript->ExonCoordMapper)
-        ensTranscriptMapperInit(transcript);
+    if(start > (end + 1))
+        ajFatal("ensTranscriptMapperSliceTocoding requires start %d to be "
+                "less than end %d + 1.\n", start, end);
 
-    src = ajStrNewC("transcript");
+    /*
+    ** For non-coding Ensembl Transcript objects return an
+    ** Ensembl Mapper Result of type ensEMapperresultTypeGap,
+    ** as there is no coding sequence.
+    */
 
-    ensMapperMapCoordinates(transcript->ExonCoordMapper,
-                            transcript->Identifier,
-                            start,
-                            end,
-                            1,
-                            src,
-                            mrs);
+    if(!translation)
+    {
+        mr = ensMapperresultNewGap(start, end, 0);
 
-    ajStrDel(&src);
+        ajListPushAppend(mrs, (void*) mr);
+
+        return ajTrue;
+    }
+
+    tcstart = ensTranscriptCalculateTranscriptCodingStart(transcript,
+                                                          translation);
+
+    tcend   = ensTranscriptCalculateTranscriptCodingEnd(transcript,
+                                                        translation);
+
+    result = ajListNew();
+
+    ensTranscriptMapperSliceTotranscript(transcript,
+                                         start,
+                                         end,
+                                         strand,
+                                         result);
+
+    while(ajListPop(result, (void**) &gcmr))
+    {
+        if(ensMapperresultGetType(gcmr) == ensEMapperresultTypeGap)
+            ajListPushAppend(mrs, (void*) gcmr);
+        else
+        {
+            if((ensMapperresultGetCoordinateStrand(gcmr) < 0) ||
+               (ensMapperresultGetCoordinateEnd(gcmr)    < (ajint) tcstart) ||
+               (ensMapperresultGetCoordinateStart(gcmr)  > (ajint) tcend))
+            {
+                /* All gap - does not map to peptide. */
+
+                mr = ensMapperresultNewGap(start, end, 0);
+
+                ajListPushAppend(mrs, (void*) mr);
+            }
+            else
+            {
+                /* We know area is at least partially overlapping CDS. */
+
+                cdsstart = ensMapperresultGetCoordinateStart(gcmr)
+                    - tcstart + 1;
+
+                cdsend   = ensMapperresultGetCoordinateEnd(gcmr)
+                    - tcstart + 1;
+
+                if(ensMapperresultGetCoordinateStart(gcmr) < (ajint) tcstart)
+                {
+                    /* Start coordinate is in the 5' UTR. */
+
+                    mr = ensMapperresultNewGap(
+                        ensMapperresultGetCoordinateStart(gcmr),
+                        tcstart - 1,
+                        0);
+
+                    ajListPushAppend(mrs, (void*) mr);
+
+                    /* Start is now relative to start of CDS. */
+
+                    cdsstart = 1;
+                }
+
+                endgap = NULL;
+
+                if(ensMapperresultGetCoordinateEnd(gcmr) > (ajint) tcend)
+                {
+                    /* End coordinate is in the 3' UTR. */
+
+                    endgap = ensMapperresultNewGap(
+                        tcend + 1,
+                        ensMapperresultGetCoordinateEnd(gcmr),
+                        0);
+
+                    /* Adjust end coordinate relative to CDS start. */
+
+                    cdsend = tcend - tcstart + 1;
+                }
+
+                /*
+                ** Start and end are now entirely in CDS and relative
+                ** to CDS start.
+                */
+
+                mr = ensMapperresultNewCoordinate(
+                    ensMapperresultGetObjectidentifier(gcmr),
+                    cdsstart,
+                    cdsend,
+                    ensMapperresultGetCoordinateStrand(gcmr),
+                    ensMapperresultGetCoordsystem(gcmr),
+                    0);
+
+                ajListPushAppend(mrs, (void*) mr);
+
+                if(endgap)
+                    ajListPushAppend(mrs, (void*) endgap);
+            }
+
+            ensMapperresultDel(&gcmr);
+        }
+    }
+
+    ajListFree(&result);
 
     return ajTrue;
 }
@@ -5038,16 +5714,16 @@ AjBool ensTranscriptMapperTranscriptToSlice(EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptMapperSliceToTranscript *********************************
+/* @func ensTranscriptMapperSliceTotranscript *********************************
 **
 ** Map Slice (genome) coordinates of an Ensembl Transcript into
 ** Transcript (cDNA) coordinates.
 **
 ** @cc Bio::EnsEMBL::TranscriptMapper::genomic2cdna
-** @param [r] transcript [EnsPTranscript] Ensembl Transcript
-** @param [r] start [ajuint] Slice start coordinate
-** @param [r] end [ajuint] Slice end coordinate
-** @param [r] strand [ajint] Slice strand information
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [r] start [ajint] Ensembl Slice start coordinate
+** @param [r] end [ajint] Ensembl Slice end coordinate
+** @param [r] strand [ajint] Ensembl Slice strand information
 ** @param [u] mrs [AjPList] AJAX List of Ensembl Mapper Results
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
@@ -5056,12 +5732,12 @@ AjBool ensTranscriptMapperTranscriptToSlice(EnsPTranscript transcript,
 ** AJAX List of Mapper Result coordinates and gaps. Gaps represent intronic
 ** or upstream/downstream regions which do not comprise this transcript's
 ** cDNA. Mapper Result Coordinate objects represent Slice regions which map
-** to Exons (UTRs included).
+** to Ensembl Exon objects (UTRs included).
 ******************************************************************************/
 
-AjBool ensTranscriptMapperSliceToTranscript(EnsPTranscript transcript,
-                                            ajuint start,
-                                            ajuint end,
+AjBool ensTranscriptMapperSliceTotranscript(EnsPTranscript transcript,
+                                            ajint start,
+                                            ajint end,
                                             ajint strand,
                                             AjPList mrs)
 {
@@ -5074,40 +5750,15 @@ AjBool ensTranscriptMapperSliceToTranscript(EnsPTranscript transcript,
     if(!transcript)
         return ajFalse;
 
-    if(!start)
-    {
-        ajDebug("ensTranscriptMapperSliceToTranscript "
-                "requires a start coordinate.\n");
-
-        return ajFalse;
-    }
-
-    if(!end)
-    {
-        ajDebug("ensTranscriptMapperSliceToTranscript "
-                "requires an end coordinate.\n");
-
-        return ajFalse;
-    }
-
-    if(!strand)
-    {
-        ajDebug("ensTranscriptMapperSliceToTranscript "
-                "requires strand information.\n");
-
-        return ajFalse;
-    }
-
     if(!mrs)
     {
-        ajDebug("ensTranscriptMapperSliceToTranscript "
+        ajDebug("ensTranscriptMapperSliceTotranscript "
                 "requires an AJAX List of Ensembl Mapper Results.\n");
 
         return ajFalse;
     }
 
-    if(!transcript->ExonCoordMapper)
-        ensTranscriptMapperInit(transcript);
+    ensTranscriptMapperInit(transcript, ajFalse);
 
     slice = ensFeatureGetSlice(transcript->Feature);
 
@@ -5115,13 +5766,13 @@ AjBool ensTranscriptMapperSliceToTranscript(EnsPTranscript transcript,
 
     src = ajStrNewC("slice");
 
-    ensMapperMapCoordinates(transcript->ExonCoordMapper,
-                            srid,
-                            start,
-                            end,
-                            strand,
-                            src,
-                            mrs);
+    ensMapperMap(transcript->ExonCoordMapper,
+                 srid,
+                 start,
+                 end,
+                 strand,
+                 src,
+                 mrs);
 
     ajStrDel(&src);
 
@@ -5131,275 +5782,33 @@ AjBool ensTranscriptMapperSliceToTranscript(EnsPTranscript transcript,
 
 
 
-/* @func ensTranscriptMapperTranslationToSlice ********************************
-**
-** Map Translation (Peptide) coordinates of an Ensembl Transcript into Slice
-** (genome) coordinates.
-**
-** @cc Bio::EnsEMBL::TranscriptMapper::pep2genomic
-** @param [r] transcript [EnsPTranscript] Ensembl Transcript
-** @param [r] start [ajuint] Transcript start coordinate
-** @param [r] end [ajuint] Transcript end coordinate
-** @param [u] mrs [AjPList] AJAX List of Ensembl Mapper Results
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-** Converts Translation coordinates into Slice coordinates. The Mapper Result
-** Coordinates returned are relative to the same slice that the Transcript
-** used to initialise this Transcript Mapper was on.
-******************************************************************************/
-
-AjBool ensTranscriptMapperTranslationToSlice(EnsPTranscript transcript,
-                                             ajuint start,
-                                             ajuint end,
-                                             AjPList mrs)
-{
-    if(!transcript)
-        return ajFalse;
-
-    if(!start)
-    {
-        ajDebug("ensTranscriptMapperTranslationToSlice "
-                "requires a start coordinate.\n");
-
-        return ajFalse;
-    }
-
-    if(!end)
-    {
-        ajDebug("ensTranscriptMapperTranslationToSlice "
-                "requires an end coordinate.\n");
-
-        return ajFalse;
-    }
-
-    if(!mrs)
-    {
-        ajDebug("ensTranscriptMapperTranslationToSlice "
-                "requires an AJAX List of Ensembl Mapper Results.\n");
-
-        return ajFalse;
-    }
-
-    /* Move start and end into cDNA coordinates. */
-
-    start = 3 * start - 2 + (transcript->TranscriptCodingStart - 1);
-
-    end = 3 * end + (transcript->TranscriptCodingStart - 1);
-
-    return ensTranscriptMapperTranscriptToSlice(transcript, start, end, mrs);
-}
-
-
-
-
-/* @func ensTranscriptMapperSliceToCDS ****************************************
-**
-** Map Translation (Peptide) coordinates of an Ensembl Transcript into coding
-** sequence coordinates.
-**
-** @cc Bio::EnsEMBL::TranscriptMapper::genomic2cds
-** @param [r] transcript [EnsPTranscript] Ensembl Transcript
-** @param [r] start  [ajuint] Transcript start coordinate
-** @param [r] end    [ajuint] Transcript end coordinate
-** @param [r] strand [ajint] Transcript strand
-** @param [u] mrs    [AjPList] AJAX List of Ensembl Mapper Results
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensTranscriptMapperSliceToCDS(EnsPTranscript transcript,
-                                     ajuint start,
-                                     ajuint end,
-                                     ajint strand,
-                                     AjPList mrs)
-{
-    ajuint cdsstart = 0;
-    ajuint cdsend   = 0;
-
-    AjPList result = NULL;
-
-    EnsPMapperresult mr     = NULL;
-    EnsPMapperresult gcmr   = NULL;
-    EnsPMapperresult endgap = NULL;
-
-    if(!transcript)
-        return ajFalse;
-
-    if(!start)
-    {
-        ajDebug("ensTranscriptMapperSliceToCDS "
-                "requires a start coordinate.\n");
-
-        return ajFalse;
-    }
-
-    if(!end)
-    {
-        ajDebug("ensTranscriptMapperSliceToCDS "
-                "requires an end coordinate.\n");
-
-        return ajFalse;
-    }
-
-    if(!strand)
-    {
-        ajDebug("ensTranscriptMapperSliceToCDS "
-                "requires strand information.\n");
-
-        return ajFalse;
-    }
-
-    if(!mrs)
-    {
-        ajDebug("ensTranscriptMapperSliceToCDS "
-                "requires an AJAX List of Ensembl Mapper Results.\n");
-
-        return ajFalse;
-    }
-
-    if(start > (end + 1))
-        ajFatal("ensTranscriptMapperSliceToCDS requires start %u to be "
-                "less than end %u + 1.\n", start, end);
-
-    /*
-    ** For non-cooding Transcripts return a Mapper Result Gap as there is no
-    ** coding sequence.
-    */
-
-    if(!transcript->TranscriptCodingStart)
-    {
-        mr = MENSMAPPERGAPNEW(start, end, 0);
-
-        ajListPushAppend(mrs, (void *) mr);
-
-        return ajTrue;
-    }
-
-    result = ajListNew();
-
-    ensTranscriptMapperSliceToTranscript(transcript,
-                                         start,
-                                         end,
-                                         strand,
-                                         result);
-
-    while(ajListPop(result, (void **) &gcmr))
-    {
-        if(ensMapperresultGetType(gcmr) == ensEMapperresultGap)
-            ajListPushAppend(mrs, (void *) gcmr);
-        else
-        {
-            if((ensMapperresultGetStrand(gcmr) < 0) ||
-               (ensMapperresultGetEnd(gcmr) <
-                (ajint) transcript->TranscriptCodingStart) ||
-               (ensMapperresultGetStart(gcmr) >
-                (ajint) transcript->TranscriptCodingEnd))
-            {
-                /* All gap - does not map to peptide. */
-
-                mr = MENSMAPPERGAPNEW(start, end, 0);
-
-                ajListPushAppend(mrs, (void *) mr);
-            }
-            else
-            {
-                /* We know area is at least partially overlapping CDS. */
-
-                cdsstart = start - transcript->TranscriptCodingStart + 1;
-
-                cdsend = end - transcript->TranscriptCodingStart + 1;
-
-                if(start < transcript->TranscriptCodingStart)
-                {
-                    /* Start coordinate is in the 5' UTR. */
-
-                    mr = MENSMAPPERGAPNEW(
-                        start,
-                        transcript->TranscriptCodingStart - 1,
-                        0);
-
-                    ajListPushAppend(mrs, (void *) mr);
-
-                    /* Start is now relative to start of CDS. */
-
-                    cdsstart = 1;
-                }
-
-                endgap = NULL;
-
-                if(end > transcript->TranscriptCodingEnd)
-                {
-                    /* End coordinate is in the 3' UTR. */
-
-                    endgap = MENSMAPPERGAPNEW(
-                        transcript->TranscriptCodingEnd + 1,
-                        end,
-                        0);
-
-                    /* Adjust end coordinate relative to CDS start. */
-
-                    cdsend = transcript->TranscriptCodingEnd -
-                        transcript->TranscriptCodingStart + 1;
-                }
-
-                /*
-                ** Start and end are now entirely in CDS and relative
-                ** to CDS start.
-                */
-
-                mr = MENSMAPPERCOORDINATENEW(
-                    ensMapperresultGetObjectIdentifier(gcmr),
-                    cdsstart,
-                    cdsend,
-                    ensMapperresultGetStrand(gcmr),
-                    ensMapperresultGetCoordsystem(gcmr),
-                    0);
-
-                ajListPushAppend(mrs, (void *) mr);
-
-                if(endgap)
-                    ajListPushAppend(mrs, (void *) endgap);
-            }
-
-            ensMapperresultDel(&gcmr);
-        }
-    }
-
-    ajListFree(&result);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensTranscriptMapperSliceToTranslation ********************************
+/* @func ensTranscriptMapperSliceTotranslation ********************************
 **
 ** Map Slice (genome) coordinates of an Ensembl Transcript into
 ** Translation (peptide) coordinates.
 **
 ** @cc Bio::EnsEMBL::TranscriptMapper::genomic2pep
-** @param [r] transcript [EnsPTranscript] Ensembl Transcript
-** @param [r] start [ajuint] Slice start coordinate
-** @param [r] end [ajuint] Slice end coordinate
-** @param [r] strand [ajint] Slice strand information
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] translation [EnsPTranslation] Ensembl Translation
+** @param [r] start [ajint] Ensembl Slice start coordinate
+** @param [r] end [ajint] Ensembl Slice end coordinate
+** @param [r] strand [ajint] Ensembl Slice strand information
 ** @param [u] mrs [AjPList] AJAX List of Ensembl Mapper Results
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptMapperSliceToTranslation(EnsPTranscript transcript,
-                                             ajuint start,
-                                             ajuint end,
+AjBool ensTranscriptMapperSliceTotranslation(EnsPTranscript transcript,
+                                             EnsPTranslation translation,
+                                             ajint start,
+                                             ajint end,
                                              ajint strand,
                                              AjPList mrs)
 {
-    ajuint pepstart = 0;
-    ajuint pepend   = 0;
-    ajuint shift    = 0;
+    ajint tlstart = 0;
+    ajint tlend   = 0;
+    ajint shift   = 0;
 
     AjPList result = NULL;
 
@@ -5409,33 +5818,9 @@ AjBool ensTranscriptMapperSliceToTranslation(EnsPTranscript transcript,
     if(!transcript)
         return ajFalse;
 
-    if(!start)
-    {
-        ajDebug("ensTranscriptMapperSliceToTranslation "
-                "requires a start coordinate.\n");
-
-        return ajFalse;
-    }
-
-    if(!end)
-    {
-        ajDebug("ensTranscriptMapperSliceToTranslation "
-                "requires an end coordinate.\n");
-
-        return ajFalse;
-    }
-
-    if(!strand)
-    {
-        ajDebug("ensTranscriptMapperSliceToTranslation "
-                "requires strand information.\n");
-
-        return ajFalse;
-    }
-
     if(!mrs)
     {
-        ajDebug("ensTranscriptMapperSliceToTranslation "
+        ajDebug("ensTranscriptMapperSliceTotranslation "
                 "requires an AJAX List of Ensembl Mapper Results.\n");
 
         return ajFalse;
@@ -5443,16 +5828,22 @@ AjBool ensTranscriptMapperSliceToTranslation(EnsPTranscript transcript,
 
     result = ajListNew();
 
-    ensTranscriptMapperSliceToCDS(transcript, start, end, strand, result);
+    ensTranscriptMapperSliceTocoding(transcript,
+                                     translation,
+                                     start,
+                                     end,
+                                     strand,
+                                     result);
 
     /* Take possible N padding at beginning of CDS. */
 
-    shift = (transcript->StartPhase > 0) ? transcript->StartPhase : 0;
+    shift = ensTranscriptCalculatePhaseStart(transcript);
+    shift = (shift >= 0) ? shift : 0;
 
-    while(ajListPop(result, (void **) &gcmr))
+    while(ajListPop(result, (void**) &gcmr))
     {
-        if(ensMapperresultGetType(gcmr) == ensEMapperresultGap)
-            ajListPushAppend(mrs, (void *) gcmr);
+        if(ensMapperresultGetType(gcmr) == ensEMapperresultTypeGap)
+            ajListPushAppend(mrs, (void*) gcmr);
         else
         {
             /*
@@ -5461,24 +5852,24 @@ AjBool ensTranscriptMapperSliceToTranslation(EnsPTranscript transcript,
             ** Convert to peptide coordinates.
             */
 
-            pepstart = (ajuint)
-                ((ensMapperresultGetStart(gcmr) + shift + 2) / 3);
+            tlstart = (ensMapperresultGetCoordinateStart(gcmr) + shift + 2)
+                / 3;
 
-            pepend = (ajuint) ((ensMapperresultGetEnd(gcmr) + shift + 2) / 3);
+            tlend =   (ensMapperresultGetCoordinateEnd(gcmr)   + shift + 2)
+                / 3;
 
-            mr = MENSMAPPERCOORDINATENEW(
-                ensMapperresultGetObjectIdentifier(gcmr),
-                pepstart,
-                pepend,
-                ensMapperresultGetStrand(gcmr),
+            mr = ensMapperresultNewCoordinate(
+                ensMapperresultGetObjectidentifier(gcmr),
+                tlstart,
+                tlend,
+                ensMapperresultGetCoordinateStrand(gcmr),
                 ensMapperresultGetCoordsystem(gcmr),
                 0);
 
-            ajListPushAppend(mrs, (void *) mr);
+            ajListPushAppend(mrs, (void*) mr);
 
             ensMapperresultDel(&gcmr);
         }
-
     }
 
     ajListFree(&result);
@@ -5489,19 +5880,612 @@ AjBool ensTranscriptMapperSliceToTranslation(EnsPTranscript transcript,
 
 
 
-/* @func ensSupportingfeatureadaptorFetchAllByTranscript **********************
+/* @func ensTranscriptMapperTranscriptToslice *********************************
 **
-** Fetch Ensembl Supporting Features via an Ensembl Transcript.
+** Map Transcript (cDNA) coordinates of an Ensembl Transcript into Slice
+** (genome) coordinates.
 **
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @param [r] transcript [EnsPTranscript] Ensembl Transcript
-** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Features
+** @cc Bio::EnsEMBL::TranscriptMapper::cdna2genomic
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [r] start [ajuint] Ensembl Transcript start coordinate
+** @param [r] end [ajuint] Ensembl Transcript end coordinate
+** @param [u] mrs [AjPList] AJAX List of Ensembl Mapper Results
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensSupportingfeatureadaptorFetchAllByTranscript(
+AjBool ensTranscriptMapperTranscriptToslice(EnsPTranscript transcript,
+                                            ajuint start,
+                                            ajuint end,
+                                            AjPList mrs)
+{
+    AjPStr src = NULL;
+
+    if(!transcript)
+        return ajFalse;
+
+    if(!mrs)
+    {
+        ajDebug("ensTranscriptMapperTranscriptToslice "
+                "requires an AJAX List of Ensembl Mapper Results.\n");
+
+        return ajFalse;
+    }
+
+    ensTranscriptMapperInit(transcript, ajFalse);
+
+    src = ajStrNewC("transcript");
+
+    ensMapperMap(transcript->ExonCoordMapper,
+                 transcript->Identifier,
+                 start,
+                 end,
+                 1,
+                 src,
+                 mrs);
+
+    ajStrDel(&src);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensTranscriptMapperTranslationToslice ********************************
+**
+** Map Translation (Peptide) coordinates of an Ensembl Transcript into Slice
+** (genome) coordinates.
+**
+** @cc Bio::EnsEMBL::TranscriptMapper::pep2genomic
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [uN] translation [EnsPTranslation] Ensembl Translation
+** @param [r] start [ajuint] Ensembl Translation start coordinate
+** @param [r] end [ajuint] Ensembl Translation end coordinate
+** @param [u] mrs [AjPList] AJAX List of Ensembl Mapper Results
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+** Converts Translation coordinates into Slice coordinates. The Mapper Result
+** Coordinates returned are relative to the same slice that the Transcript
+** used to initialise this Transcript Mapper was on.
+******************************************************************************/
+
+AjBool ensTranscriptMapperTranslationToslice(EnsPTranscript transcript,
+                                             EnsPTranslation translation,
+                                             ajuint start,
+                                             ajuint end,
+                                             AjPList mrs)
+{
+    ajint tcstart = 0;
+    ajint shift   = 0;
+
+    if(!transcript)
+        return ajFalse;
+
+    if(!mrs)
+    {
+        ajDebug("ensTranscriptMapperTranslationToslice "
+                "requires an AJAX List of Ensembl Mapper Results.\n");
+
+        return ajFalse;
+    }
+
+    tcstart = ensTranscriptCalculateTranscriptCodingStart(transcript,
+                                                          translation);
+
+    /* Take possible N-padding at the beginning of the CDS into account. */
+
+    shift = ensTranscriptCalculatePhaseStart(transcript);
+    shift = (shift >= 0) ? shift : 0;
+
+    /* Move start and end into cDNA coordinates. */
+
+    start = 3 * start - 2 + (tcstart - 1) - shift;
+    end   = 3 * end       + (tcstart - 1) - shift;
+
+    return ensTranscriptMapperTranscriptToslice(transcript, start, end, mrs);
+}
+
+
+
+
+/* @datasection [EnsETranscriptStatus] Ensembl Transcript Status **************
+**
+** @nam2rule Transcript Functions for manipulating
+** Ensembl Transcript objects
+** @nam3rule TranscriptStatus Functions for manipulating
+** Ensembl Transcript Status enumerations
+**
+******************************************************************************/
+
+
+
+
+/* @section Misc **************************************************************
+**
+** Functions for returning an Ensembl Transcript Status enumeration.
+**
+** @fdata [EnsETranscriptStatus]
+**
+** @nam4rule From Ensembl Transcript Status query
+** @nam5rule Str  AJAX String object query
+**
+** @argrule  Str  status  [const AjPStr] Status string
+**
+** @valrule * [EnsETranscriptStatus] Ensembl Transcript Status enumeration or
+**                                   ensETranscriptStatusNULL
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensTranscriptStatusFromStr *******************************************
+**
+** Return an Ensembl Transcript Status enumeration from an AJAX String.
+**
+** @param [r] status [const AjPStr] Status string
+**
+** @return [EnsETranscriptStatus] Ensembl Transcript Status enumeration or
+**                                ensETranscriptStatusNULL
+** @@
+******************************************************************************/
+
+EnsETranscriptStatus ensTranscriptStatusFromStr(const AjPStr status)
+{
+    register EnsETranscriptStatus i = ensETranscriptStatusNULL;
+
+    EnsETranscriptStatus estatus = ensETranscriptStatusNULL;
+
+    for(i = ensETranscriptStatusNULL;
+        transcriptStatus[i];
+        i++)
+        if(ajStrMatchC(status, transcriptStatus[i]))
+            estatus = i;
+
+    if(!estatus)
+        ajDebug("ensTranscriptStatusFromStr encountered "
+                "unexpected string '%S'.\n", status);
+
+    return estatus;
+}
+
+
+
+
+/* @section Cast **************************************************************
+**
+** Functions for returning attributes of an
+** Ensembl Transcript Status enumeration.
+**
+** @fdata [EnsETranscriptStatus]
+**
+** @nam4rule To   Return Ensembl Transcript Status enumeration
+** @nam5rule Char Return C character string value
+**
+** @argrule To status [EnsETranscriptStatus]
+** Ensembl Transcript Status enumeration
+**
+** @valrule Char [const char*] Status
+**
+** @fcategory cast
+******************************************************************************/
+
+
+
+
+/* @func ensTranscriptStatusToChar ********************************************
+**
+** Cast an Ensembl Transcript Status enumeration into a C-type (char*) string.
+**
+** @param [u] status [EnsETranscriptStatus]
+** Ensembl Transcript Status enumeration
+**
+** @return [const char*] Ensembl Transcript status C-type (char*) string
+** @@
+******************************************************************************/
+
+const char* ensTranscriptStatusToChar(EnsETranscriptStatus status)
+{
+    register EnsETranscriptStatus i = ensETranscriptStatusNULL;
+
+    for(i = ensETranscriptStatusNULL;
+        transcriptStatus[i] && (i < status);
+        i++);
+
+    if(!transcriptStatus[i])
+        ajDebug("ensTranscriptStatusToChar encountered an "
+                "out of boundary error on "
+                "Ensembl Transcript Status enumeration %d.\n",
+                status);
+
+    return transcriptStatus[i];
+}
+
+
+
+
+/* @datasection [AjPList] AJAX List *******************************************
+**
+** @nam2rule List Functions for manipulating AJAX List objects
+**
+******************************************************************************/
+
+
+
+
+/* @section list **************************************************************
+**
+** Functions for manipulating AJAX List objects.
+**
+** @fdata [AjPList]
+**
+** @nam3rule Transcript Functions for manipulating AJAX List objects of
+** Ensembl Transcript objects
+** @nam4rule Sort Sort functions
+** @nam5rule Start Sort by Ensembl Feature start element
+** @nam6rule Ascending  Sort in ascending order
+** @nam6rule Descending Sort in descending order
+**
+** @argrule Ascending transcripts [AjPList] AJAX List of Ensembl Transcript
+**                                          objects
+** @argrule Descending transcripts [AjPList] AJAX List of Ensembl Transcript
+**                                           objects
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @funcstatic listTranscriptCompareStartAscending ****************************
+**
+** AJAX List of Ensembl Transcript objects comparison function to sort by
+** Ensembl Feature start element in ascending order.
+**
+** @param [r] P1 [const void*] Ensembl Transcript address 1
+** @param [r] P2 [const void*] Ensembl Transcript address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int listTranscriptCompareStartAscending(const void* P1,
+                                               const void* P2)
+{
+    const EnsPTranscript transcript1 = NULL;
+    const EnsPTranscript transcript2 = NULL;
+
+    transcript1 = *(EnsPTranscript const*) P1;
+    transcript2 = *(EnsPTranscript const*) P2;
+
+    if(ajDebugTest("listTranscriptCompareStartAscending"))
+        ajDebug("listTranscriptCompareStartAscending\n"
+                "  transcript1 %p\n"
+                "  transcript2 %p\n",
+                transcript1,
+                transcript2);
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(transcript1 && (!transcript2))
+        return -1;
+
+    if((!transcript1) && (!transcript2))
+        return 0;
+
+    if((!transcript1) && transcript2)
+        return +1;
+
+    return ensFeatureCompareStartAscending(transcript1->Feature,
+                                           transcript2->Feature);
+}
+
+
+
+
+/* @func ensListTranscriptSortStartAscending **********************************
+**
+** Sort an AJAX List of Ensembl Transcript objects by their
+** Ensembl Feature start element in ascending order.
+**
+** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcript objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensListTranscriptSortStartAscending(AjPList transcripts)
+{
+    if(!transcripts)
+        return ajFalse;
+
+    ajListSort(transcripts, listTranscriptCompareStartAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic listTranscriptCompareStartDescending ***************************
+**
+** AJAX List of Ensembl Transcript objects comparison function to sort by
+** Ensembl Feature start element in descending order.
+**
+** @param [r] P1 [const void*] Ensembl Transcript address 1
+** @param [r] P2 [const void*] Ensembl Transcript address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+** @@
+******************************************************************************/
+
+static int listTranscriptCompareStartDescending(const void* P1,
+                                                const void* P2)
+{
+    const EnsPTranscript transcript1 = NULL;
+    const EnsPTranscript transcript2 = NULL;
+
+    transcript1 = *(EnsPTranscript const*) P1;
+    transcript2 = *(EnsPTranscript const*) P2;
+
+    if(ajDebugTest("listTranscriptCompareStartDescending"))
+        ajDebug("listTranscriptCompareStartDescending\n"
+                "  transcript1 %p\n"
+                "  transcript2 %p\n",
+                transcript1,
+                transcript2);
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if(transcript1 && (!transcript2))
+        return -1;
+
+    if((!transcript1) && (!transcript2))
+        return 0;
+
+    if((!transcript1) && transcript2)
+        return +1;
+
+    return ensFeatureCompareStartDescending(transcript1->Feature,
+                                            transcript2->Feature);
+}
+
+
+
+
+/* @func ensListTranscriptSortStartDescending *********************************
+**
+** Sort an AJAX List of Ensembl Transcript objects by their
+** Ensembl Feature start element in descending order.
+**
+** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcript objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensListTranscriptSortStartDescending(AjPList transcripts)
+{
+    if(!transcripts)
+        return ajFalse;
+
+    ajListSort(transcripts, listTranscriptCompareStartDescending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @datasection [AjPTable] AJAX Table *****************************************
+**
+** @nam2rule Table Functions for manipulating AJAX Table objects
+**
+******************************************************************************/
+
+
+
+
+/* @section table *************************************************************
+**
+** Functions for processing AJAX Table objects of
+** Ensembl Transcript objects.
+**
+** @fdata [AjPTable]
+**
+** @nam3rule Transcript AJAX Table of AJAX unsigned integer key data and
+**                      Ensembl Transcript value data
+** @nam4rule Clear Clear an AJAX Table
+** @nam4rule Delete Delete an AJAX Table
+**
+** @argrule Clear table [AjPTable] AJAX Table
+** @argrule Delete Ptable [AjPTable*] AJAX Table address
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @funcstatic tableTranscriptClear *******************************************
+**
+** An ajTableMapDel "apply" function to clear an AJAX Table of
+** AJAX unsigned integer key data and
+** Ensembl Transcript value data.
+**
+** @param [u] key [void**] AJAX unsigned integer address
+** @param [u] value [void**] Ensembl Transcript address
+** @param [u] cl [void*] Standard, passed in from ajTableMapDel
+** @see ajTableMapDel
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void tableTranscriptClear(void** key,
+                                 void** value,
+                                 void* cl)
+{
+    if(!key)
+        return;
+
+    if(!*key)
+        return;
+
+    if(!value)
+        return;
+
+    if(!*value)
+        return;
+
+    (void) cl;
+
+    AJFREE(*key);
+
+    ensTranscriptDel((EnsPTranscript*) value);
+
+    *key   = NULL;
+    *value = NULL;
+
+    return;
+}
+
+
+
+
+/* @func ensTableTranscriptClear **********************************************
+**
+** Utility function to clear an AJAX Table of
+** AJAX unsigned integer key data and
+** Ensembl Transcript value data.
+**
+** @param [u] table [AjPTable] AJAX Table
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensTableTranscriptClear(AjPTable table)
+{
+    if(!table)
+        return ajFalse;
+
+    ajTableMapDel(table, tableTranscriptClear, NULL);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensTableTranscriptDelete *********************************************
+**
+** Utility function to clear and delete an AJAX Table of
+** AJAX unsigned integer key data and
+** Ensembl Transcript value data.
+**
+** @param [d] Ptable [AjPTable*] AJAX Table address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensTableTranscriptDelete(AjPTable* Ptable)
+{
+    AjPTable pthis = NULL;
+
+    if(!Ptable)
+        return ajFalse;
+
+    if(!*Ptable)
+        return ajFalse;
+
+    pthis = *Ptable;
+
+    ensTableTranscriptClear(pthis);
+
+    ajTableFree(&pthis);
+
+    *Ptable = NULL;
+
+    return ajTrue;
+}
+
+
+
+
+/* @datasection [EnsPDatabaseadaptor] Ensembl Supporting Feature Adaptor ******
+**
+** @nam2rule Supportingfeatureadaptor Functions for manipulating
+** Ensembl Supporting Feature Adaptor objects
+**
+** @cc Bio::EnsEMBL::DBSQL::SupportingFeatureAdaptor
+** @cc CVS Revision: 1.21
+** @cc CVS Tag: branch-ensembl-62
+**
+******************************************************************************/
+
+
+
+
+/* @section object retrieval **************************************************
+**
+** Functions for fetching Ensembl Base Align Feature objects from an
+** Ensembl SQL database.
+**
+** @fdata [EnsPDatabaseadaptor]
+**
+** @nam3rule Fetch Fetch Ensembl Base Align Feature object(s)
+** @nam4rule FetchAll Fetch all Ensembl Base Align Feature objects
+** @nam4rule FetchAllby Fetch all Ensembl Base Align Feature objects
+**                      matching a criterion
+** @nam5rule Transcript Fetch all Ensembl Base Align Feature objects matching
+**                      an Ensembl Transcript
+** @nam4rule FetchBy Fetch one Ensembl Base Align Feature object
+**                   matching a criterion
+**
+** @argrule * dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @argrule AllbyTranscript transcript [EnsPTranscript] Ensembl Transcript
+** @argrule AllbyTranscript bafs [AjPList] AJAX List of Ensembl Base Align
+**                                         Feature objects
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensSupportingfeatureadaptorFetchAllbyTranscript **********************
+**
+** Fetch Ensembl Supporting Feature objects via an Ensembl Transcript.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] transcript [EnsPTranscript] Ensembl Transcript
+** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensSupportingfeatureadaptorFetchAllbyTranscript(
     EnsPDatabaseadaptor dba,
     EnsPTranscript transcript,
     AjPList bafs)
@@ -5523,7 +6507,7 @@ AjBool ensSupportingfeatureadaptorFetchAllByTranscript(
 
     EnsPBasealignfeature baf = NULL;
 
-    EnsPDNAAlignFeatureadaptor dafa = NULL;
+    EnsPDnaalignfeatureadaptor dafa = NULL;
 
     EnsPProteinalignfeatureadaptor pafa = NULL;
 
@@ -5538,9 +6522,9 @@ AjBool ensSupportingfeatureadaptorFetchAllByTranscript(
 
     if(!ensTranscriptGetIdentifier(transcript))
     {
-        ajDebug("ensSupportingfeatureadaptorFetchAllByTranscript cannot get "
-                "Supporting Features for a Transcript without an "
-                "identifier.\n");
+        ajDebug("ensSupportingfeatureadaptorFetchAllbyTranscript cannot get "
+                "Ensembl Supporting Feature objects for an Ensembl Transcript "
+                "without an identifier.\n");
 
         return ajFalse;
     }
@@ -5549,7 +6533,7 @@ AjBool ensSupportingfeatureadaptorFetchAllByTranscript(
 
     tslice = ensFeatureGetSlice(tfeature);
 
-    dafa = ensRegistryGetDNAAlignFeatureadaptor(dba);
+    dafa = ensRegistryGetDnaalignfeatureadaptor(dba);
 
     pafa = ensRegistryGetProteinalignfeatureadaptor(dba);
 
@@ -5579,7 +6563,7 @@ AjBool ensSupportingfeatureadaptorFetchAllByTranscript(
 
         if(ajStrMatchC(type, "dna_align_feature"))
         {
-            ensDNAAlignFeatureadaptorFetchByIdentifier(dafa,
+            ensDnaalignfeatureadaptorFetchByIdentifier(dafa,
                                                        identifier,
                                                        &baf);
         }
@@ -5590,7 +6574,7 @@ AjBool ensSupportingfeatureadaptorFetchAllByTranscript(
                                                            &baf);
         }
         else
-            ajWarn("ensSupportingfeatureadaptorFetchAllByTranscript got "
+            ajWarn("ensSupportingfeatureadaptorFetchAllbyTranscript got "
                    "unexpected value in "
                    "transcript_supporting_feature.feature_type '%S'.\n", type);
 
@@ -5604,12 +6588,12 @@ AjBool ensSupportingfeatureadaptorFetchAllByTranscript(
 
             ensFeatureDel(&nfeature);
 
-            ajListPushAppend(bafs, (void *) baf);
+            ajListPushAppend(bafs, (void*) baf);
         }
         else
         {
-            ajDebug("ensSupportingfeatureadaptorFetchAllByTranscript could "
-                    "not retrieve Supporting feature of type '%S' and "
+            ajDebug("ensSupportingfeatureadaptorFetchAllbyTranscript could "
+                    "not fetch Supporting feature of type '%S' and "
                     "identifier %u from database.\n", type, identifier);
         }
 
@@ -5628,90 +6612,40 @@ AjBool ensSupportingfeatureadaptorFetchAllByTranscript(
 
 
 
-/* @datasection [EnsPTranscriptadaptor] Transcript Adaptor ********************
+/* @datasection [EnsPTranscriptadaptor] Ensembl Transcript Adaptor ************
 **
-** Functions for manipulating Ensembl Transcript Adaptor objects
+** @nam2rule Transcriptadaptor Functions for manipulating
+** Ensembl Transcript Adaptor objects
 **
-** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor CVS Revision: 1.121
-**
-** @nam2rule Transcriptadaptor
+** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor
+** @cc CVS Revision: 1.135
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
-static const char *transcriptadaptorTables[] =
-{
-    "transcript",
-    "transcript_stable_id",
-    "xref",
-    "external_db",
-    NULL
-};
-
-static const char *transcriptadaptorColumns[] =
-{
-    "transcript.transcript_id",
-    "transcript.seq_region_id",
-    "transcript.seq_region_start",
-    "transcript.seq_region_end",
-    "transcript.seq_region_strand",
-    "transcript.analysis_id",
-    "transcript.display_xref_id",
-    "transcript.description",
-    "transcript.biotype",
-    "transcript.status",
-    "transcript.is_current",
-    "transcript.gene_id",
-    "transcript_stable_id.stable_id",
-    "transcript_stable_id.version",
-    "transcript_stable_id.created_date",
-    "transcript_stable_id.modified_date",
-    "xref.external_db_id",
-    "xref.dbprimary_acc",
-    "xref.display_label",
-    "xref.version",
-    "xref.description",
-    "xref.info_type",
-    "xref.info_text",
-    NULL
-};
-
-static EnsOBaseadaptorLeftJoin transcriptadaptorLeftJoin[] =
-{
-    {
-        "transcript_stable_id",
-        "transcript_stable_id.transcript_id = transcript.transcript_id"
-    },
-    {"xref", "xref.xref_id = transcript.display_xref_id"},
-    {"external_db", "external_db.external_db_id = xref.external_db_id"},
-    {NULL, NULL}
-};
-
-static const char *transcriptadaptorDefaultCondition = NULL;
-
-static const char *transcriptadaptorFinalCondition = NULL;
 
 
 
-
-/* @funcstatic transcriptadaptorFetchAllBySQL *********************************
+/* @funcstatic transcriptadaptorFetchAllbyStatement ***************************
 **
 ** Fetch all Ensembl Transcript objects via an SQL statement.
 **
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
-** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcripts
+** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcript objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
-                                             const AjPStr statement,
-                                             EnsPAssemblymapper am,
-                                             EnsPSlice slice,
-                                             AjPList transcripts)
+static AjBool transcriptadaptorFetchAllbyStatement(
+    EnsPDatabaseadaptor dba,
+    const AjPStr statement,
+    EnsPAssemblymapper am,
+    EnsPSlice slice,
+    AjPList transcripts)
 {
     ajuint identifier = 0;
     ajuint analysisid = 0;
@@ -5728,16 +6662,17 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
     ajint slend    = 0;
     ajint slstrand = 0;
     ajint sllength = 0;
+    ajint tmpstart = 0;
 
     ajuint version = 0;
 
-    AjBool current = AJFALSE;
+    AjBool circular = AJFALSE;
+    AjBool current  = AJFALSE;
 
     EnsETranscriptStatus estatus =
         ensETranscriptStatusNULL;
 
-    EnsEExternalreferenceInfoType einfotype =
-        ensEExternalreferenceInfoTypeNULL;
+    EnsEExternalreferenceInfotype erit = ensEExternalreferenceInfotypeNULL;
 
     AjPList mrs = NULL;
 
@@ -5780,8 +6715,8 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
     EnsPSlice srslice   = NULL;
     EnsPSliceadaptor sa = NULL;
 
-    if(ajDebugTest("transcriptadaptorFetchAllBySQL"))
-        ajDebug("transcriptadaptorFetchAllBySQL\n"
+    if(ajDebugTest("transcriptadaptorFetchAllbyStatement"))
+        ajDebug("transcriptadaptorFetchAllbyStatement\n"
                 "  dba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
@@ -5848,8 +6783,8 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
         erinfotype    = ajStrNew();
         erinfotext    = ajStrNew();
 
-        estatus   = ensETranscriptStatusNULL;
-        einfotype = ensEExternalreferenceInfoTypeNULL;
+        estatus = ensETranscriptStatusNULL;
+        erit    = ensEExternalreferenceInfotypeNULL;
 
         sqlr = ajSqlrowiterGet(sqli);
 
@@ -5879,18 +6814,18 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 
         /* Need to get the internal Ensembl Sequence Region identifier. */
 
-        srid = ensCoordsystemadaptorGetInternalSeqregionIdentifier(csa, srid);
+        srid = ensCoordsystemadaptorGetSeqregionidentifierInternal(csa, srid);
 
         /*
         ** Since the Ensembl SQL schema defines Sequence Region start and end
-        ** coordinates as unsigned integers for all Features, the range needs
-        ** checking.
+        ** coordinates as unsigned integers for all Ensembl Feature objects,
+        ** the range needs checking.
         */
 
         if(srstart <= INT_MAX)
             slstart = (ajint) srstart;
         else
-            ajFatal("transcriptadaptorFetchAllBySQL got a "
+            ajFatal("transcriptadaptorFetchAllbyStatement got a "
                     "Sequence Region start coordinate (%u) outside the "
                     "maximum integer limit (%d).",
                     srstart, INT_MAX);
@@ -5898,7 +6833,7 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
         if(srend <= INT_MAX)
             slend = (ajint) srend;
         else
-            ajFatal("transcriptadaptorFetchAllBySQL got a "
+            ajFatal("transcriptadaptorFetchAllbyStatement got a "
                     "Sequence Region end coordinate (%u) outside the "
                     "maximum integer limit (%d).",
                     srend, INT_MAX);
@@ -5918,9 +6853,9 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
         if(am)
             am = ensAssemblymapperNewRef(am);
         else if(slice && (!ensCoordsystemMatch(
-                              ensSliceGetCoordsystem(slice),
-                              ensSliceGetCoordsystem(srslice))))
-            am = ensAssemblymapperadaptorFetchBySlices(ama, slice, srslice);
+                              ensSliceGetCoordsystemObject(slice),
+                              ensSliceGetCoordsystemObject(srslice))))
+            ensAssemblymapperadaptorFetchBySlices(ama, slice, srslice, &am);
 
         /*
         ** Remap the Feature coordinates to another Ensembl Coordinate System
@@ -5929,7 +6864,7 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 
         if(am)
         {
-            ensAssemblymapperFastMap(am,
+            ensAssemblymapperFastmap(am,
                                      ensSliceGetSeqregion(srslice),
                                      slstart,
                                      slend,
@@ -5937,18 +6872,18 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                                      mrs);
 
             /*
-            ** The ensAssemblymapperFastMap function returns at best one
+            ** The ensAssemblymapperFastmap function returns at best one
             ** Ensembl Mapper Result.
             */
 
-            ajListPop(mrs, (void **) &mr);
+            ajListPop(mrs, (void**) &mr);
 
             /*
-            ** Skip Features that map to gaps or
+            ** Skip Ensembl Feature objects that map to gaps or
             ** Coordinate System boundaries.
             */
 
-            if(ensMapperresultGetType(mr) != ensEMapperresultCoordinate)
+            if(ensMapperresultGetType(mr) != ensEMapperresultTypeCoordinate)
             {
                 /* Load the next Feature but destroy first! */
 
@@ -5974,13 +6909,10 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
                 continue;
             }
 
-            srid = ensMapperresultGetObjectIdentifier(mr);
-
-            slstart = ensMapperresultGetStart(mr);
-
-            slend = ensMapperresultGetEnd(mr);
-
-            slstrand = ensMapperresultGetStrand(mr);
+            srid     = ensMapperresultGetObjectidentifier(mr);
+            slstart  = ensMapperresultGetCoordinateStart(mr);
+            slend    = ensMapperresultGetCoordinateEnd(mr);
+            slstrand = ensMapperresultGetCoordinateStrand(mr);
 
             /*
             ** Delete the Sequence Region Slice and fetch a Slice in the
@@ -6008,41 +6940,104 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
         {
             /* Check that the length of the Slice is within range. */
 
-            if(ensSliceGetLength(slice) <= INT_MAX)
-                sllength = (ajint) ensSliceGetLength(slice);
+            if(ensSliceCalculateLength(slice) <= INT_MAX)
+                sllength = (ajint) ensSliceCalculateLength(slice);
             else
-                ajFatal("transcriptadaptorFetchAllBySQL got a Slice, "
+                ajFatal("transcriptadaptorFetchAllbyStatement got a Slice, "
                         "which length (%u) exceeds the "
                         "maximum integer limit (%d).",
-                        ensSliceGetLength(slice), INT_MAX);
+                        ensSliceCalculateLength(slice), INT_MAX);
 
-            /*
-            ** Nothing needs to be done if the destination Slice starts at 1
-            ** and is on the forward strand.
-            */
+            ensSliceIsCircular(slice, &circular);
 
-            if((ensSliceGetStart(slice) != 1) ||
-               (ensSliceGetStrand(slice) < 0))
+            if(ensSliceGetStrand(slice) >= 0)
             {
-                if(ensSliceGetStrand(slice) >= 0)
-                {
-                    slstart = slstart - ensSliceGetStart(slice) + 1;
+                /* On the positive strand ... */
 
-                    slend = slend - ensSliceGetStart(slice) + 1;
+                slstart = slstart - ensSliceGetStart(slice) + 1;
+                slend   = slend   - ensSliceGetStart(slice) + 1;
+
+                if(circular == ajTrue)
+                {
+                    if(slstart > slend)
+                    {
+                        /* A Feature overlapping the chromsome origin. */
+
+                        /* Region in the beginning of the chromosome. */
+                        if(slend > ensSliceGetStart(slice))
+                            slstart -= sllength;
+
+                        if(slend < 0)
+                            slend += sllength;
+                    }
+                    else
+                    {
+                        if((ensSliceGetStart(slice) > ensSliceGetEnd(slice))
+                           && (slend < 0))
+                        {
+                            /*
+                            ** A region overlapping the chromosome origin
+                            ** and a Feature, which is at the beginning of
+                            ** the chromosome.
+                            */
+
+                            slstart += sllength;
+                            slend   += sllength;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                /* On the negative strand ... */
+
+                if((circular == ajTrue) && (slstart > slend))
+                {
+                    /* Handle circular chromosomes. */
+
+                    if(ensSliceGetStart(slice) > ensSliceGetEnd(slice))
+                    {
+                        tmpstart = slstart;
+                        slstart = ensSliceGetEnd(slice) - slend + 1;
+                        slend   = ensSliceGetEnd(slice) + sllength
+                            - tmpstart + 1;
+                    }
+                    else
+                    {
+
+                        if(slend > ensSliceGetStart(slice))
+                        {
+                            /*
+                            ** Looking at the region in the beginning of the
+                            ** chromosome.
+                            */
+
+                            slstart = ensSliceGetEnd(slice) - slend + 1;
+                            slend   = slend - sllength - slstart + 1;
+                        }
+                        else
+                        {
+                            tmpstart = slstart;
+                            slstart  = ensSliceGetEnd(slice) - slend
+                                - sllength + 1;
+                            slend    = slend - tmpstart + 1;
+                        }
+                    }
                 }
                 else
                 {
-                    slend = ensSliceGetEnd(slice) - slstart + 1;
+                    /* Non-circular Ensembl Slice objects... */
 
-                    slstart = ensSliceGetEnd(slice) - slend + 1;
-
-                    slstrand *= -1;
+                    slend   = ensSliceGetEnd(slice) - slstart + 1;
+                    slstart = ensSliceGetEnd(slice) - slend   + 1;
                 }
+
+                slstrand *= -1;
             }
 
             /*
-            ** Throw away Features off the end of the requested Slice or on
-            ** any other than the requested Slice.
+            ** Throw away Ensembl Feature objects off the end of the requested
+            ** Slice or on any other than the requested Slice.
             */
 
             if((slend < 1) ||
@@ -6082,24 +7077,27 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
         {
             ensExternaldatabaseadaptorFetchByIdentifier(edba, edbid, &edb);
 
-            einfotype = ensExternalreferenceInfoTypeFromStr(erinfotype);
+            erit = ensExternalreferenceInfotypeFromStr(erinfotype);
 
-            if(!einfotype)
-                ajDebug("transcriptadaptorFetchAllBySQL encountered "
+            if(!erit)
+                ajDebug("transcriptadaptorFetchAllbyStatement encountered "
                         "unexpected string '%S' in the "
                         "'xref.infotype' field.\n", erinfotype);
 
-            dbe = ensDatabaseentryNew((EnsPDatabaseentryadaptor) NULL,
-                                      erid,
-                                      (EnsPAnalysis) NULL,
-                                      edb,
-                                      erprimaryid,
-                                      erdisplayid,
-                                      erversion,
-                                      erdescription,
-                                      (AjPStr) NULL,
-                                      einfotype,
-                                      erinfotext);
+            dbe = ensDatabaseentryNewIni(
+                (EnsPDatabaseentryadaptor) NULL,
+                erid,
+                (EnsPAnalysis) NULL,
+                edb,
+                erprimaryid,
+                erdisplayid,
+                erversion,
+                erdescription,
+                (AjPStr) NULL,
+                erinfotext,
+                erit,
+                ensEExternalreferenceObjectypeTranscript,
+                identifier);
 
             ensExternaldatabaseDel(&edb);
         }
@@ -6113,33 +7111,33 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
         estatus = ensTranscriptStatusFromStr(status);
 
         if(!estatus)
-            ajFatal("transcriptadaptorFetchAllBySQL encountered "
+            ajFatal("transcriptadaptorFetchAllbyStatement encountered "
                     "unexpected string '%S' in the "
                     "'transcript.status' field.\n", status);
 
         /* Finally, create a new Ensembl Transcript. */
 
-        feature = ensFeatureNewS(analysis,
-                                 srslice,
-                                 slstart,
-                                 slend,
-                                 slstrand);
+        feature = ensFeatureNewIniS(analysis,
+                                    srslice,
+                                    slstart,
+                                    slend,
+                                    slstrand);
 
-        transcript = ensTranscriptNew(tca,
-                                      identifier,
-                                      feature,
-                                      dbe,
-                                      description,
-                                      biotype,
-                                      estatus,
-                                      current,
-                                      stableid,
-                                      version,
-                                      cdate,
-                                      mdate,
-                                      (AjPList) NULL);
+        transcript = ensTranscriptNewIni(tca,
+                                         identifier,
+                                         feature,
+                                         dbe,
+                                         description,
+                                         biotype,
+                                         estatus,
+                                         current,
+                                         stableid,
+                                         version,
+                                         cdate,
+                                         mdate,
+                                         (AjPList) NULL);
 
-        ajListPushAppend(transcripts, (void *) transcript);
+        ajListPushAppend(transcripts, (void*) transcript);
 
         ensFeatureDel(&feature);
 
@@ -6188,12 +7186,12 @@ static AjBool transcriptadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** @@
 ******************************************************************************/
 
-static void* transcriptadaptorCacheReference(void *value)
+static void* transcriptadaptorCacheReference(void* value)
 {
     if(!value)
         return NULL;
 
-    return (void *) ensTranscriptNewRef((EnsPTranscript) value);
+    return (void*) ensTranscriptNewRef((EnsPTranscript) value);
 }
 
 
@@ -6210,12 +7208,12 @@ static void* transcriptadaptorCacheReference(void *value)
 ** @@
 ******************************************************************************/
 
-static void transcriptadaptorCacheDelete(void **value)
+static void transcriptadaptorCacheDelete(void** value)
 {
     if(!value)
         return;
 
-    ensTranscriptDel((EnsPTranscript *) value);
+    ensTranscriptDel((EnsPTranscript*) value);
 
     return;
 }
@@ -6230,16 +7228,16 @@ static void transcriptadaptorCacheDelete(void **value)
 **
 ** @param [r] value [const void*] Ensembl Transcript
 **
-** @return [ajulong] Memory size
+** @return [size_t] Memory size in bytes or 0
 ** @@
 ******************************************************************************/
 
-static ajulong transcriptadaptorCacheSize(const void *value)
+static size_t transcriptadaptorCacheSize(const void* value)
 {
     if(!value)
         return 0;
 
-    return ensTranscriptGetMemsize((const EnsPTranscript) value);
+    return ensTranscriptCalculateMemsize((const EnsPTranscript) value);
 }
 
 
@@ -6256,7 +7254,7 @@ static ajulong transcriptadaptorCacheSize(const void *value)
 ** @@
 ******************************************************************************/
 
-static EnsPFeature transcriptadaptorGetFeature(const void *value)
+static EnsPFeature transcriptadaptorGetFeature(const void* value)
 {
     if(!value)
         return NULL;
@@ -6275,7 +7273,6 @@ static EnsPFeature transcriptadaptorGetFeature(const void *value)
 ** NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPTranscriptadaptor]
-** @fnote None
 **
 ** @nam3rule New Constructor
 **
@@ -6291,7 +7288,7 @@ static EnsPFeature transcriptadaptorGetFeature(const void *value)
 
 /* @func ensTranscriptadaptorNew **********************************************
 **
-** Default Ensembl Transcript Adaptor constructor.
+** Default constructor for an Ensembl Transcript Adaptor.
 **
 ** Ensembl Object Adaptors are singleton objects in the sense that a single
 ** instance of an Ensembl Object Adaptor connected to a particular database is
@@ -6304,7 +7301,7 @@ static EnsPFeature transcriptadaptorGetFeature(const void *value)
 ** @see ensRegistryGetDatabaseadaptor
 ** @see ensRegistryGetTranscriptadaptor
 **
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPTranscriptadaptor] Ensembl Transcript Adaptor or NULL
 ** @@
@@ -6313,21 +7310,17 @@ static EnsPFeature transcriptadaptorGetFeature(const void *value)
 EnsPTranscriptadaptor ensTranscriptadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    EnsPTranscriptadaptor tca = NULL;
-
     if(!dba)
         return NULL;
 
-    AJNEW0(tca);
-
-    tca->Adaptor = ensFeatureadaptorNew(
+    return ensFeatureadaptorNew(
         dba,
         transcriptadaptorTables,
         transcriptadaptorColumns,
-        transcriptadaptorLeftJoin,
-        transcriptadaptorDefaultCondition,
-        transcriptadaptorFinalCondition,
-        transcriptadaptorFetchAllBySQL,
+        transcriptadaptorLeftjoin,
+        (const char*) NULL,
+        (const char*) NULL,
+        transcriptadaptorFetchAllbyStatement,
         (void* (*)(const void* key)) NULL,
         transcriptadaptorCacheReference,
         (AjBool (*)(const void* value)) NULL,
@@ -6335,8 +7328,6 @@ EnsPTranscriptadaptor ensTranscriptadaptorNew(
         transcriptadaptorCacheSize,
         transcriptadaptorGetFeature,
         "Transcript");
-
-    return tca;
 }
 
 
@@ -6345,12 +7336,11 @@ EnsPTranscriptadaptor ensTranscriptadaptorNew(
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Transcript Adaptor.
+** memory allocated for an Ensembl Transcript Adaptor object.
 **
 ** @fdata [EnsPTranscriptadaptor]
-** @fnote None
 **
-** @nam3rule Del Destroy (free) an Ensembl Transcript Adaptor object.
+** @nam3rule Del Destroy (free) an Ensembl Transcript Adaptor object
 **
 ** @argrule * Ptca [EnsPTranscriptadaptor*] Ensembl Transcript Adaptor
 **                                          object address
@@ -6379,21 +7369,15 @@ EnsPTranscriptadaptor ensTranscriptadaptorNew(
 ** @@
 ******************************************************************************/
 
-void ensTranscriptadaptorDel(EnsPTranscriptadaptor *Ptca)
+void ensTranscriptadaptorDel(EnsPTranscriptadaptor* Ptca)
 {
-    EnsPTranscriptadaptor pthis = NULL;
-
     if(!Ptca)
         return;
 
     if(!*Ptca)
         return;
 
-    pthis = *Ptca;
-
-    ensFeatureadaptorDel(&pthis->Adaptor);
-
-    AJFREE(pthis);
+    ensFeatureadaptorDel(Ptca);
 
     *Ptca = NULL;
 
@@ -6403,24 +7387,24 @@ void ensTranscriptadaptorDel(EnsPTranscriptadaptor *Ptca)
 
 
 
-/* @func ensTranscriptadaptorGetFeatureadaptor ********************************
+/* @section element retrieval *************************************************
 **
-** Get the Ensembl Feature Adaptor element of an Ensembl Transcript Adaptor.
+** Functions for returning elements of an Ensembl Transcript Adaptor object.
 **
-** @param [r] tca [const EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @fdata [EnsPTranscriptadaptor]
 **
-** @return [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @@
+** @nam3rule Get Return Ensembl Transcript Adaptor attribute(s)
+** @nam4rule Featureadaptor Return the Ensembl Feature Adaptor
+** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
+**
+** @argrule * tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+**
+** @valrule Featureadaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** or NULL
+**
+** @fcategory use
 ******************************************************************************/
-
-EnsPFeatureadaptor ensTranscriptadaptorGetFeatureadaptor(
-    const EnsPTranscriptadaptor tca)
-{
-    if(!tca)
-        return NULL;
-
-    return tca->Adaptor;
-}
 
 
 
@@ -6429,41 +7413,140 @@ EnsPFeatureadaptor ensTranscriptadaptorGetFeatureadaptor(
 **
 ** Get the Ensembl Database Adaptor element of an Ensembl Transcript Adaptor.
 **
-** @param [r] tca [const EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
 **
-** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensTranscriptadaptorGetDatabaseadaptor(
-    const EnsPTranscriptadaptor tca)
+    EnsPTranscriptadaptor tca)
 {
     if(!tca)
         return NULL;
 
-    return ensFeatureadaptorGetDatabaseadaptor(tca->Adaptor);
+    return ensFeatureadaptorGetDatabaseadaptor(tca);
 }
+
+
+
+
+/* @func ensTranscriptadaptorGetFeatureadaptor ********************************
+**
+** Get the Ensembl Feature Adaptor element of an Ensembl Transcript Adaptor.
+**
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+**
+** @return [EnsPFeatureadaptor] Ensembl Feature Adaptor or NULL
+** @@
+******************************************************************************/
+
+EnsPFeatureadaptor ensTranscriptadaptorGetFeatureadaptor(
+    EnsPTranscriptadaptor tca)
+{
+    if(!tca)
+        return NULL;
+
+    return tca;
+}
+
+
+
+
+/* @section canonical object retrieval ****************************************
+**
+** Functions for fetching Ensembl Transcript objects from an
+** Ensembl SQL database.
+**
+** @fdata [EnsPTranscriptadaptor]
+**
+** @nam3rule Fetch Fetch Ensembl Transcript object(s)
+** @nam4rule All   Fetch all Ensembl Transcript objects
+** @nam4rule Allby Fetch all Ensembl Transcript objects matching a criterion
+** @nam5rule Gene  Fetch all by an Ensembl Gene
+** @nam5rule Slice Fetch all by an Ensembl Slice
+** @nam5rule Stableidentifier Fetch all by a stable Ensembl Transcript
+** identifier
+** @nam4rule By Fetch one Ensembl Transcript object matching a criterion
+** @nam5rule Displaylabel Fetch by display label
+** @nam5rule Exonidentifier Fetch by an Ensembl Exon identifier
+** @nam5rule Exonstableidentifier Fetch by an Ensembl Exon stable identifier
+** @nam5rule Identifier Fetch by SQL database-internal identifier
+** @nam5rule Stableidentifier Fetch by stable Ensembl Transcript identifier
+** @nam5rule Translationidentifier Fetch by an Ensembl Translation identifier
+** @nam5rule Translationstableidentifier Fetch by an Ensembl Translation
+** stable identifier
+**
+** @argrule * tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @argrule All transcripts [AjPList] AJAX List of Ensembl Transcript objects
+** @argrule AllbyGene gene [EnsPGene] Ensembl Gene
+** @argrule AllbyGene transcripts [AjPList] AJAX List of
+** Ensembl Transcript objects
+** @argrule AllbySlice slice [EnsPSlice] Ensembl Slice
+** @argrule AllbySlice anname [const AjPStr] Ensembl Analysis name
+** @argrule AllbySlice constraint [const AjPStr] SQL constraint
+** @argrule AllbySlice loadexons [AjBool] Load Ensembl Exon objects
+** @argrule AllbySlice transcripts [AjPList] AJAX List of
+** Ensembl Transcript objects
+** @argrule AllbyStableidentifier stableid [const AjPStr] Stable identifier
+** @argrule AllbyStableidentifier transcripts [AjPList] AJAX List of
+** Ensembl Transcript objects
+** @argrule ByDisplaylabel label [const AjPStr] Display label
+** @argrule ByDisplaylabel Ptranscript [EnsPTranscript*]
+** Ensembl Transcript address
+** @argrule ByExonidentifier identifier [ajuint] Ensembl Exon identifier
+** @argrule ByExonidentifier Ptranscript [EnsPTranscript*]
+** Ensembl Transcript address
+** @argrule ByExonstableidentifier stableid [const AjPStr]
+** Ensembl Exon stable identifier
+** @argrule ByExonstableidentifier Ptranscript [EnsPTranscript*]
+** Ensembl Transcript address
+** @argrule ByIdentifier identifier [ajuint] SQL database-internal identifier
+** @argrule ByIdentifier Ptranscript [EnsPTranscript*]
+** Ensembl Transcript address
+** @argrule ByStableidentifier stableid [const AjPStr] Stable identifier
+** @argrule ByStableidentifier version [ajuint] Version
+** @argrule ByStableidentifier Ptranscript [EnsPTranscript*]
+** Ensembl Transcript address
+** @argrule ByTranslationidentifier identifier [ajuint]
+** Ensembl Translation identifier
+** @argrule ByTranslationidentifier Ptranscript [EnsPTranscript*]
+** Ensembl Transcript address
+** @argrule ByTranslationstableidentifier stableid [const AjPStr]
+** Ensembl Translation stable identifier
+** @argrule ByTranslationstableidentifier Ptranscript [EnsPTranscript*]
+** Ensembl Transcript address
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory use
+******************************************************************************/
 
 
 
 
 /* @func ensTranscriptadaptorFetchAll *****************************************
 **
-** Fetch all Ensembl Transcripts.
+** Fetch all Ensembl Transcript objects.
+**
+** The caller is responsible for deleting the Ensembl Transcript objects before
+** deleting the AJAX List.
 **
 ** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
-** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcripts
+** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcript objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
-** NOTE: In this implementation fetch all really fetches all. The Perl API
-** adds the following constraint:
-** "transcript.biotype != 'LRG_gene' and transcript.is_current = 1"
 ******************************************************************************/
 
-AjBool ensTranscriptadaptorFetchAll(EnsPTranscriptadaptor tca,
-                                    AjPList transcripts)
+AjBool ensTranscriptadaptorFetchAll(
+    EnsPTranscriptadaptor tca,
+    AjPList transcripts)
 {
+    AjBool result = AJFALSE;
+
+    AjPStr constraint = NULL;
+
     EnsPBaseadaptor ba = NULL;
 
     if(!tca)
@@ -6472,31 +7555,50 @@ AjBool ensTranscriptadaptorFetchAll(EnsPTranscriptadaptor tca,
     if(!transcripts)
         return ajFalse;
 
-    ba = ensFeatureadaptorGetBaseadaptor(tca->Adaptor);
+    ba = ensFeatureadaptorGetBaseadaptor(tca);
 
-    return ensBaseadaptorFetchAll(ba, transcripts);
+    constraint = ajStrNewC(
+        "transcript.biotype != 'LRG_gene' "
+        "AND "
+        "transcript.is_current = 1");
+
+    result = ensBaseadaptorFetchAllbyConstraint(ba,
+                                                constraint,
+                                                (EnsPAssemblymapper) NULL,
+                                                (EnsPSlice) NULL,
+                                                transcripts);
+
+    ajStrDel(&constraint);
+
+    return result;
 }
 
 
 
 
-/* @func ensTranscriptadaptorFetchAllByGene ***********************************
+/* @func ensTranscriptadaptorFetchAllbyGene ***********************************
 **
-** Fetch all Ensembl Transcripts via an Ensembl Gene.
+** Fetch all Ensembl Transcript objects via an Ensembl Gene.
+**
+** The caller is responsible for deleting the Ensembl Transcript objects before
+** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::fetch_all_by_Gene
-** @param [r] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
-** @param [r] gene [EnsPGene] Ensembl Gene
-** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcripts
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [u] gene [EnsPGene] Ensembl Gene
+** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcript objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptadaptorFetchAllByGene(EnsPTranscriptadaptor tca,
-                                          EnsPGene gene,
-                                          AjPList transcripts)
+AjBool ensTranscriptadaptorFetchAllbyGene(
+    EnsPTranscriptadaptor tca,
+    EnsPGene gene,
+    AjPList transcripts)
 {
+    AjBool circular = AJFALSE;
+
     AjPList list = NULL;
 
     AjPStr constraint = NULL;
@@ -6525,8 +7627,8 @@ AjBool ensTranscriptadaptorFetchAllByGene(EnsPTranscriptadaptor tca,
     ** Use the fetch_all_by_Slice_constraint method because it
     ** handles the difficult Haps/PARs and coordinate remapping.
     **
-    ** Get a Slice that entirely overlaps the gene.  This is because we
-    ** want all Transcripts to be retrieved, not just ones overlapping
+    ** Get a Slice that entirely overlaps the gene. This is because we
+    ** want all Transcript objects to be fetched, not just ones overlapping
     ** the Slice the Gene is on, as the Gene may only partially overlap the
     ** Slice. For speed reasons, only use a different Slice if necessary
     ** though.
@@ -6536,9 +7638,10 @@ AjBool ensTranscriptadaptorFetchAllByGene(EnsPTranscriptadaptor tca,
 
     if(!dba)
     {
-        ajWarn("ensTranscriptadaptorFetchAllByGene cannot get Transcripts "
-               "without an Ensembl Database Adaptor defined in the "
-               "Transcript Adaptor.\n");
+        ajWarn("ensTranscriptadaptorFetchAllbyGene cannot fetch "
+               "Ensembl Transcript objects without an "
+               "Ensembl Database Adaptor defined in the "
+               "Ensembl Transcript Adaptor.\n");
 
         return ajFalse;
     }
@@ -6547,8 +7650,9 @@ AjBool ensTranscriptadaptorFetchAllByGene(EnsPTranscriptadaptor tca,
 
     if(!gfeature)
     {
-        ajWarn("ensTranscriptadaptorFetchAllByGene cannot get Transcripts "
-               "without an Ensembl Feature defined in the Gene.\n");
+        ajWarn("ensTranscriptadaptorFetchAllbyGene cannot fetch "
+               "Ensembl Transcript objects without an "
+               "Ensembl Feature defined in the Ensembl Gene.\n");
 
         return ajFalse;
     }
@@ -6557,19 +7661,27 @@ AjBool ensTranscriptadaptorFetchAllByGene(EnsPTranscriptadaptor tca,
 
     if(!gslice)
     {
-        ajWarn("ensTranscriptadaptorFetchAllByGene cannot get Transcripts "
-               "without an Ensembl Slice defined in the Ensembl Feature of "
-               "the Gene.\n");
+        ajWarn("ensTranscriptadaptorFetchAllbyGene cannot fetch "
+               "Ensembl Transcript objects without an Ensembl Slice defined "
+               "in the Ensembl Feature of the Ensembl Gene.\n");
 
         return ajFalse;
     }
 
-    if((ensFeatureGetStart(gfeature) < 1) ||
-       (ensFeatureGetEnd(gfeature) > (ajint) ensSliceGetLength(gslice)))
-    {
-        sa = ensRegistryGetSliceadaptor(dba);
+    if(!ensSliceIsCircular(gslice, &circular))
+        return ajFalse;
 
-        ensSliceadaptorFetchByFeature(sa, gfeature, 0, &tslice);
+    if((ensFeatureGetStart(gfeature) < 1) ||
+       (ensFeatureGetEnd(gfeature) > (ajint) ensSliceCalculateLength(gslice)))
+    {
+        if(circular == ajTrue)
+            tslice = ensSliceNewRef(gslice);
+        else
+        {
+            sa = ensRegistryGetSliceadaptor(dba);
+
+            ensSliceadaptorFetchByFeature(sa, gfeature, 0, &tslice);
+        }
     }
     else
         tslice = ensSliceNewRef(gslice);
@@ -6580,21 +7692,21 @@ AjBool ensTranscriptadaptorFetchAllByGene(EnsPTranscriptadaptor tca,
 
     list = ajListNew();
 
-    ensFeatureadaptorFetchAllBySliceConstraint(tca->Adaptor,
-                                               tslice,
-                                               constraint,
-                                               (const AjPStr) NULL,
-                                               list);
+    ensFeatureadaptorFetchAllbySlice(tca,
+                                     tslice,
+                                     constraint,
+                                     (const AjPStr) NULL,
+                                     list);
 
-    while(ajListPop(list, (void **) &transcript))
+    while(ajListPop(list, (void**) &transcript))
     {
         if(ensSliceMatch(gslice, tslice))
-            ajListPushAppend(transcripts, (void *) transcript);
+            ajListPushAppend(transcripts, (void*) transcript);
         else
         {
             newtranscript = ensTranscriptTransfer(transcript, tslice);
 
-            ajListPushAppend(transcripts, (void *) newtranscript);
+            ajListPushAppend(transcripts, (void*) newtranscript);
 
             ensTranscriptDel(&transcript);
         }
@@ -6612,34 +7724,85 @@ AjBool ensTranscriptadaptorFetchAllByGene(EnsPTranscriptadaptor tca,
 
 
 
-/* @func ensTranscriptadaptorFetchAllBySlice **********************************
+/* @funcstatic transcriptadaptorClearTranscriptExonRankList *******************
 **
-** Fetch all Ensembl Transcripts via an Ensembl Slice.
+** An ajTableMapDel "apply" function to clear an AJAX Table of
+** AJAX unsigned integer key data and
+** AJAX List value data of Transcript Exon Rank objects.
 **
-** The caller is responsible for deleting the Ensembl Transcripts before
+** @param [u] key [void**] AJAX unsigned integer address
+** @param [u] value [void**] AJAX List address of Transcript Exon Rank objects
+** @param [u] cl [void*] Standard, passed in from ajTableMapDel
+** @see ajTableMapDel
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void transcriptadaptorClearTranscriptExonRankList(void** key,
+                                                         void** value,
+                                                         void* cl)
+{
+    TranscriptPExonRank trex = NULL;
+
+    if(!key)
+        return;
+
+    if(!*key)
+        return;
+
+    if(!value)
+        return;
+
+    if(!*value)
+        return;
+
+    (void) cl;
+
+    AJFREE(*key);
+
+    while(ajListPop(*((AjPList*) value), (void**) &trex))
+        transcriptExonRankDel(&trex);
+
+    ajListFree((AjPList*) value);
+
+    *key   = NULL;
+    *value = NULL;
+
+    return;
+}
+
+
+
+
+/* @func ensTranscriptadaptorFetchAllbySlice **********************************
+**
+** Fetch all Ensembl Transcript objects via an Ensembl Slice.
+**
+** The caller is responsible for deleting the Ensembl Transcript objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::fetch_all_by_Slice
-** @param [r] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
-** @param [r] slice [EnsPSlice] Ensembl Slice
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [u] slice [EnsPSlice] Ensembl Slice
 ** @param [r] anname [const AjPStr] Ensembl Analysis name
 ** @param [r] constraint [const AjPStr] SQL constraint
-** @param [r] loadexons [AjBool] Load Ensembl Exons
-** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcripts
+** @param [r] loadexons [AjBool] Load Ensembl Exon objects
+** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcript objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
-                                           EnsPSlice slice,
-                                           const AjPStr anname,
-                                           const AjPStr constraint,
-                                           AjBool loadexons,
-                                           AjPList transcripts)
+AjBool ensTranscriptadaptorFetchAllbySlice(
+    EnsPTranscriptadaptor tca,
+    EnsPSlice slice,
+    const AjPStr anname,
+    const AjPStr constraint,
+    AjBool loadexons,
+    AjPList transcripts)
 {
-    void **keyarray = NULL;
-    void **valarray = NULL;
+    void** keyarray = NULL;
 
     ajint start = INT_MAX;
     ajint end   = INT_MIN;
@@ -6650,7 +7813,7 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
     ajuint exid = 0;
     ajuint trid = 0;
 
-    ajuint *Pidentifier = NULL;
+    ajuint* Pidentifier = NULL;
 
     AjIList iter  = NULL;
     AjPList exons = NULL;
@@ -6699,27 +7862,27 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
     else
         trconstraint = ajStrNewC("transcript.is_current = 1");
 
-    ensFeatureadaptorFetchAllBySliceConstraint(tca->Adaptor,
-                                               slice,
-                                               trconstraint,
-                                               anname,
-                                               transcripts);
+    ensFeatureadaptorFetchAllbySlice(tca,
+                                     slice,
+                                     trconstraint,
+                                     anname,
+                                     transcripts);
 
     ajStrDel(&trconstraint);
 
-    /* If there are 0 or 1 Transcripts, still do lazy-loading. */
+    /* If there is no or just one Ensembl Transcript, still do lazy-loading. */
 
-    if(!loadexons || ajListGetLength(transcripts) < 2)
+    if((!loadexons) || (ajListGetLength(transcripts) == 0))
         return ajTrue;
 
     /*
-    ** Preload all Ensembl Exons now, instead of lazy loading later, which is
-    ** faster than one SQL query per Transcript.
-    ** First check if the Exons are already preloaded.
-    ** TODO: This should test all Exons.
+    ** Preload all Ensembl Exon objects now, instead of lazy loading later,
+    ** which is faster than one SQL query per Transcript.
+    ** First check if the Ensembl Exon objects are already preloaded.
+    ** TODO: This should test all Ensembl Exon objects.
     */
 
-    ajListPeekFirst(transcripts, (void **) &transcript);
+    ajListPeekFirst(transcripts, (void**) &transcript);
 
     if(transcript->Exons)
         return ajTrue;
@@ -6733,20 +7896,23 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
     tla = ensRegistryGetTranslationadaptor(dba);
 
     /*
-    ** Get the extent of the region spanned by Transcripts, prepare a
-    ** comma-separared list of Transcript identifiers and put Transcripts
-    ** into an AJAX Table indexed by their identifier.
+    ** Get the extent of the region spanned by Ensembl Transcript objects,
+    ** prepare a comma-separared list of Transcript identifiers and put
+    ** Ensembl Transcript objects into an AJAX Table indexed by their
+    ** identifier.
     */
 
     csv = ajStrNew();
 
-    trtable = MENSTABLEUINTNEW(0);
+    trtable = ensTableuintNewLen(0);
 
     iter = ajListIterNew(transcripts);
 
     while(!ajListIterDone(iter))
     {
         transcript = (EnsPTranscript) ajListIterGet(iter);
+
+        trid = ensTranscriptGetIdentifier(transcript);
 
         feature = ensTranscriptGetFeature(transcript);
 
@@ -6756,20 +7922,26 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
         end = (ensFeatureGetSeqregionEnd(feature) > end) ?
             ensFeatureGetSeqregionEnd(feature) : end;
 
-        ajFmtPrintAppS(&csv, "%u, ", ensTranscriptGetIdentifier(transcript));
+        ajFmtPrintAppS(&csv, "%u, ", trid);
 
         /*
-        ** Put all Ensembl Transcripts into an AJAX Table indexed by their
-        ** identifier.
+        ** Put all Ensembl Transcript objects into an AJAX Table indexed by
+        ** their identifier.
         */
 
-        AJNEW0(Pidentifier);
+        if(ajTableMatchV(trtable, (const void*) &trid))
+            ajDebug("ensTranscriptadaptorFetchAllbySlice got duplicate "
+                    "Ensembl Transcript with identifier %u.\n", trid);
+        else
+        {
+            AJNEW0(Pidentifier);
 
-        *Pidentifier = ensTranscriptGetIdentifier(transcript);
+            *Pidentifier = trid;
 
-        ajTablePut(trtable,
-                   (void *) Pidentifier,
-                   (void *) ensTranscriptNewRef(transcript));
+            ajTablePut(trtable,
+                       (void*) Pidentifier,
+                       (void*) ensTranscriptNewRef(transcript));
+        }
     }
 
     ajListIterDel(&iter);
@@ -6788,7 +7960,7 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
                                     ensSliceGetStrand(slice),
                                     &newslice);
 
-    /* Associate Exon identifiers with Transcripts and Exon ranks. */
+    /* Associate Exon identifiers with Transcript objects and Exon ranks. */
 
     statement = ajFmtStr(
         "SELECT "
@@ -6803,7 +7975,7 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
 
     ajStrAssignClear(&csv);
 
-    extable = MENSTABLEUINTNEW(0);
+    extable = ensTableuintNewLen(0);
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
@@ -6821,7 +7993,7 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
         ajSqlcolumnToUint(sqlr, &exid);
         ajSqlcolumnToInt(sqlr, &rank);
 
-        list = (AjPList) ajTableFetch(extable, (void *) &exid);
+        list = (AjPList) ajTableFetchmodV(extable, (const void*) &exid);
 
         if(!list)
         {
@@ -6831,10 +8003,10 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
 
             list = ajListNew();
 
-            ajTablePut(extable, (void *) Pidentifier, (void *) list);
+            ajTablePut(extable, (void*) Pidentifier, (void*) list);
         }
 
-        ajListPushAppend(list, (void *) transcriptExonRankNew(trid, rank));
+        ajListPushAppend(list, (void*) transcriptExonRankNew(trid, rank));
     }
 
     ajSqlrowiterDel(&sqli);
@@ -6848,7 +8020,7 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
     ajTableToarrayKeys(extable, &keyarray);
 
     for(i = 0; keyarray[i]; i++)
-        ajFmtPrintAppS(&csv, "%u, ", *((ajuint *) keyarray[i]));
+        ajFmtPrintAppS(&csv, "%u, ", *((ajuint*) keyarray[i]));
 
     AJFREE(keyarray);
 
@@ -6862,23 +8034,26 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
 
     exons = ajListNew();
 
-    ensExonadaptorFetchAllBySliceConstraint(ea, newslice, trconstraint, exons);
+    ensExonadaptorFetchAllbySlice(ea, newslice, trconstraint, exons);
 
     ajStrDel(&trconstraint);
 
-    /* Transfer Exons onto Transcript Slice, and add them to Transcripts. */
+    /*
+    ** Transfer Ensembl Exon objects onto the Ensembl Transcript Slice and add
+    ** them to Ensembl Transcript objects.
+    */
 
-    while(ajListPop(exons, (void **) &exon))
+    while(ajListPop(exons, (void**) &exon))
     {
         newexon = ensExonTransfer(exon, newslice);
 
         if(!newexon)
-            ajFatal("ensTranscriptAdaptorFetchAllBySlice could not transfer "
+            ajFatal("ensTranscriptAdaptorFetchAllbySlice could not transfer "
                     "Exon onto new Slice.\n");
 
         exid = ensExonGetIdentifier(newexon);
 
-        list = (AjPList) ajTableFetch(extable, &exid);
+        list = (AjPList) ajTableFetchmodV(extable, (const void*) &exid);
 
         iter = ajListIterNew(list);
 
@@ -6886,9 +8061,9 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
         {
             trex = (TranscriptPExonRank) ajListIterGet(iter);
 
-            transcript = (EnsPTranscript) ajTableFetch(
+            transcript = (EnsPTranscript) ajTableFetchmodV(
                 trtable,
-                &trex->TranscriptIdentifier);
+                (const void*) &trex->Transcriptidentifier);
 
             ensTranscriptAddExon(transcript, newexon, trex->Rank);
         }
@@ -6901,46 +8076,24 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
 
     ajListFree(&exons);
 
-    ensTranslationadaptorFetchAllByTranscriptTable(tla, trtable);
+    ensTranslationadaptorFetchAllbyTranscriptsTable(tla, trtable);
 
     /*
-    ** Clear and delete the AJAX Table of unsigned integer key and
+    ** Clear and delete the AJAX Table of
+    ** AJAX unsigned integer key and
     ** Ensembl Transcript value data.
     */
 
-    ajTableToarrayKeysValues(trtable, &keyarray, &valarray);
-
-    for(i = 0; keyarray[i]; i++)
-    {
-        AJFREE(keyarray[i]);
-
-        ensTranscriptDel((EnsPTranscript *) &valarray[i]);
-    }
-
-    AJFREE(keyarray);
-    AJFREE(valarray);
-
-    ajTableFree(&trtable);
+    ensTableTranscriptDelete(&trtable);
 
     /*
-    ** Clear and detete the AJAX Table of unsigned integer key and
+    ** Clear and detete the AJAX Table of
+    ** AJAX unsigned integer key and
     ** AJAX List value data.
+    ** Also delete the transcriptExonRank objects from the AJAX Lists.
     */
 
-    ajTableToarrayKeysValues(extable, &keyarray, &valarray);
-
-    for(i = 0; keyarray[i]; i++)
-    {
-        AJFREE(keyarray[i]);
-
-        while(ajListPop((AjPList) valarray[i], (void **) &trex))
-            transcriptExonRankDel(&trex);
-
-        ajListFree((AjPList *) &valarray[i]);
-    }
-
-    AJFREE(keyarray);
-    AJFREE(valarray);
+    ajTableMapDel(extable, transcriptadaptorClearTranscriptExonRankList, NULL);
 
     ajTableFree(&extable);
 
@@ -6952,28 +8105,30 @@ AjBool ensTranscriptadaptorFetchAllBySlice(EnsPTranscriptadaptor tca,
 
 
 
-/* @func ensTranscriptadaptorFetchAllByStableIdentifier ***********************
+/* @func ensTranscriptadaptorFetchAllbyStableidentifier ***********************
 **
 ** Fetch all Ensembl Transcript versions via a stable identifier.
 **
-** The caller is responsible for deleting the Ensembl Transcripts before
+** The caller is responsible for deleting the Ensembl Transcript objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::fetch_all_versions_by_stable_id
-** @param [r] tca [const EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
 ** @param [r] stableid [const AjPStr] Stable identifier
-** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcripts
+** @param [u] transcripts [AjPList] AJAX List of Ensembl Transcript objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptadaptorFetchAllByStableIdentifier(
-    const EnsPTranscriptadaptor tca,
+AjBool ensTranscriptadaptorFetchAllbyStableidentifier(
+    EnsPTranscriptadaptor tca,
     const AjPStr stableid,
     AjPList transcripts)
 {
-    char *txtstableid = NULL;
+    char* txtstableid = NULL;
+
+    AjBool result = AJFALSE;
 
     AjPStr constraint = NULL;
 
@@ -6988,7 +8143,7 @@ AjBool ensTranscriptadaptorFetchAllByStableIdentifier(
     if(!transcripts)
         return ajFalse;
 
-    ba = ensFeatureadaptorGetBaseadaptor(tca->Adaptor);
+    ba = ensFeatureadaptorGetBaseadaptor(tca);
 
     ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
 
@@ -6997,84 +8152,43 @@ AjBool ensTranscriptadaptorFetchAllByStableIdentifier(
 
     ajCharDel(&txtstableid);
 
-    ensBaseadaptorGenericFetch(ba,
-                               constraint,
-                               (EnsPAssemblymapper) NULL,
-                               (EnsPSlice) NULL,
-                               transcripts);
+    result = ensBaseadaptorFetchAllbyConstraint(ba,
+                                                constraint,
+                                                (EnsPAssemblymapper) NULL,
+                                                (EnsPSlice) NULL,
+                                                transcripts);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
 
 
-/* @func ensTranscriptadaptorFetchByIdentifier ********************************
+/* @func ensTranscriptadaptorFetchByDisplaylabel ******************************
 **
-** Fetch an Ensembl Transcript via its SQL database-internal identifier.
+** Fetch an Ensembl Transcript via its display label.
+**
 ** The caller is responsible for deleting the Ensembl Transcript.
 **
-** @cc Bio::EnsEMBL::DBSQL::BaseAdaptor::fetch_by_dbID
-** @param [r] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
-** @param [r] identifier [ajuint] SQL database-internal identifier
+** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::fetch_by_display_label
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [r] label [const AjPStr] Display label
 ** @param [wP] Ptranscript [EnsPTranscript*] Ensembl Transcript address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptadaptorFetchByIdentifier(EnsPTranscriptadaptor tca,
-                                             ajuint identifier,
-                                             EnsPTranscript *Ptranscript)
-{
-    EnsPBaseadaptor ba = NULL;
-
-    if(!tca)
-        return ajFalse;
-
-    if(!identifier)
-        return ajFalse;
-
-    if(!Ptranscript)
-        return ajFalse;
-
-    ba = ensFeatureadaptorGetBaseadaptor(tca->Adaptor);
-
-    *Ptranscript = (EnsPTranscript)
-        ensBaseadaptorFetchByIdentifier(ba, identifier);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensTranscriptadaptorFetchByStableIdentifier **************************
-**
-** Fetch an Ensembl Transcript via its stable identifier and version.
-** In case a version is not specified, the current Ensembl Transcript
-** will be returned.
-** The caller is responsible for deleting the Ensembl Transcript.
-**
-** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::fetch_by_stable_id
-** @param [r] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
-** @param [r] stableid [const AjPStr] Stable identifier
-** @param [r] version [ajuint] Version
-** @param [wP] Ptranscript [EnsPTranscript*] Ensembl Transcript address
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensTranscriptadaptorFetchByStableIdentifier(
+AjBool ensTranscriptadaptorFetchByDisplaylabel(
     EnsPTranscriptadaptor tca,
-    const AjPStr stableid,
-    ajuint version,
-    EnsPTranscript *Ptranscript)
+    const AjPStr label,
+    EnsPTranscript* Ptranscript)
 {
-    char *txtstableid = NULL;
+    char* txtlabel = NULL;
+
+    AjBool result = AJFALSE;
 
     AjPList transcripts = NULL;
 
@@ -7087,67 +8201,58 @@ AjBool ensTranscriptadaptorFetchByStableIdentifier(
     if(!tca)
         return ajFalse;
 
-    if(!stableid)
+    if(!label)
         return ajFalse;
 
     if(!Ptranscript)
         return ajFalse;
 
-    ba = ensFeatureadaptorGetBaseadaptor(tca->Adaptor);
+    ba = ensFeatureadaptorGetBaseadaptor(tca);
 
-    ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
+    ensBaseadaptorEscapeC(ba, &txtlabel, label);
 
-    if(version)
-        constraint = ajFmtStr(
-            "transcript_stable_id.stable_id = '%s' "
-            "AND "
-            "transcript_stable_id.version = %u",
-            txtstableid,
-            version);
-    else
-        constraint = ajFmtStr(
-            "transcript_stable_id.stable_id = '%s' "
-            "AND "
-            "transcript.is_current = 1",
-            txtstableid);
+    constraint = ajFmtStr(
+        "transcript.is_current = 1 "
+        "AND "
+        "xref.display_label = '%s'",
+        txtlabel);
 
-    ajCharDel(&txtstableid);
+    ajCharDel(&txtlabel);
 
     transcripts = ajListNew();
 
-    ensBaseadaptorGenericFetch(ba,
-                               constraint,
-                               (EnsPAssemblymapper) NULL,
-                               (EnsPSlice) NULL,
-                               transcripts);
+    result = ensBaseadaptorFetchAllbyConstraint(ba,
+                                                constraint,
+                                                (EnsPAssemblymapper) NULL,
+                                                (EnsPSlice) NULL,
+                                                transcripts);
 
     if(ajListGetLength(transcripts) > 1)
-        ajDebug("ensTranscriptadaptorFetchByStableIdentifier got more than "
-                "one Transcript for stable identifier '%S' and version %u.\n",
-                stableid, version);
+        ajDebug("ensTranscriptadaptorFetchByDisplaylabel got more than one "
+                "Transcript for display label '%S'.\n", label);
 
-    ajListPop(transcripts, (void **) Ptranscript);
+    ajListPop(transcripts, (void**) Ptranscript);
 
-    while(ajListPop(transcripts, (void **) &transcript))
+    while(ajListPop(transcripts, (void**) &transcript))
         ensTranscriptDel(&transcript);
 
     ajListFree(&transcripts);
 
     ajStrDel(&constraint);
 
-    return ajTrue;
+    return result;
 }
 
 
 
 
-/* @func ensTranscriptadaptorFetchByExonIdentifier ****************************
+/* @func ensTranscriptadaptorFetchByExonidentifier ****************************
 **
 ** Fetch an Ensembl Transcript via an Ensembl Exon identifier.
 ** The caller is responsible for deleting the Ensembl Transcript.
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::fetch_all_by_exon_id
-** @param [r] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
 ** @param [r] identifier [ajuint] Ensembl Exon identifier
 ** @param [wP] Ptranscript [EnsPTranscript*] Ensembl Transcript address
 **
@@ -7155,7 +8260,7 @@ AjBool ensTranscriptadaptorFetchByStableIdentifier(
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptadaptorFetchByExonIdentifier(
+AjBool ensTranscriptadaptorFetchByExonidentifier(
     EnsPTranscriptadaptor tca,
     ajuint identifier,
     EnsPTranscript* Ptranscript)
@@ -7181,7 +8286,7 @@ AjBool ensTranscriptadaptorFetchByExonIdentifier(
     if(!Ptranscript)
         return ajFalse;
 
-    dba = ensFeatureadaptorGetDatabaseadaptor(tca->Adaptor);
+    dba = ensFeatureadaptorGetDatabaseadaptor(tca);
 
     statement = ajFmtStr(
         "SELECT "
@@ -7218,30 +8323,28 @@ AjBool ensTranscriptadaptorFetchByExonIdentifier(
 
     if(!trid)
     {
-        ajDebug("ensTranscriptadaptorFetchByExonIdentifier could not "
+        ajDebug("ensTranscriptadaptorFetchByExonidentifier could not "
                 "get Transcript identifier for Exon identifier %u.\n",
                 identifier);
 
         return ajFalse;
     }
 
-    ba = ensFeatureadaptorGetBaseadaptor(tca->Adaptor);
+    ba = ensFeatureadaptorGetBaseadaptor(tca);
 
-    *Ptranscript = (EnsPTranscript) ensBaseadaptorFetchByIdentifier(ba, trid);
-
-    return ajTrue;
+    return ensBaseadaptorFetchByIdentifier(ba, trid, (void**) Ptranscript);
 }
 
 
 
 
-/* @func ensTranscriptadaptorFetchByExonStableIdentifier **********************
+/* @func ensTranscriptadaptorFetchByExonstableidentifier **********************
 **
 ** Fetch an Ensembl Transcript via an Ensembl Exon stable identifier.
 ** The caller is responsible for deleting the Ensembl Transcript.
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::fetch_all_by_exon_stable_id
-** @param [r] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
 ** @param [r] stableid [const AjPStr] Ensembl Exon stable identifier
 ** @param [wP] Ptranscript [EnsPTranscript*] Ensembl Transcript address
 **
@@ -7249,12 +8352,12 @@ AjBool ensTranscriptadaptorFetchByExonIdentifier(
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptadaptorFetchByExonStableIdentifier(
+AjBool ensTranscriptadaptorFetchByExonstableidentifier(
     EnsPTranscriptadaptor tca,
     const AjPStr stableid,
-    EnsPTranscript *Ptranscript)
+    EnsPTranscript* Ptranscript)
 {
-    char *txtstableid = NULL;
+    char* txtstableid = NULL;
 
     ajuint trid = 0;
 
@@ -7277,7 +8380,7 @@ AjBool ensTranscriptadaptorFetchByExonStableIdentifier(
     if(!Ptranscript)
         return ajFalse;
 
-    dba = ensFeatureadaptorGetDatabaseadaptor(tca->Adaptor);
+    dba = ensFeatureadaptorGetDatabaseadaptor(tca);
 
     ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
 
@@ -7321,30 +8424,160 @@ AjBool ensTranscriptadaptorFetchByExonStableIdentifier(
 
     if(!trid)
     {
-        ajDebug("ensTranscriptadaptorFetchByExonStableIdentifier "
+        ajDebug("ensTranscriptadaptorFetchByExonstableidentifier "
                 "could not get Transcript identifier for Exon "
                 "stable identifier '%S'.\n", stableid);
 
         return ajFalse;
     }
 
-    ba = ensFeatureadaptorGetBaseadaptor(tca->Adaptor);
+    ba = ensFeatureadaptorGetBaseadaptor(tca);
 
-    *Ptranscript = (EnsPTranscript) ensBaseadaptorFetchByIdentifier(ba, trid);
-
-    return ajTrue;
+    return ensBaseadaptorFetchByIdentifier(ba, trid, (void**) Ptranscript);
 }
 
 
 
 
-/* @func ensTranscriptadaptorFetchByTranslationIdentifier *********************
+/* @func ensTranscriptadaptorFetchByIdentifier ********************************
+**
+** Fetch an Ensembl Transcript via its SQL database-internal identifier.
+** The caller is responsible for deleting the Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::DBSQL::BaseAdaptor::fetch_by_dbID
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [r] identifier [ajuint] SQL database-internal identifier
+** @param [wP] Ptranscript [EnsPTranscript*] Ensembl Transcript address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensTranscriptadaptorFetchByIdentifier(
+    EnsPTranscriptadaptor tca,
+    ajuint identifier,
+    EnsPTranscript* Ptranscript)
+{
+    EnsPBaseadaptor ba = NULL;
+
+    if(!tca)
+        return ajFalse;
+
+    if(!identifier)
+        return ajFalse;
+
+    if(!Ptranscript)
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(tca);
+
+    return ensBaseadaptorFetchByIdentifier(ba,
+                                           identifier,
+                                           (void**) Ptranscript);
+}
+
+
+
+
+/* @func ensTranscriptadaptorFetchByStableidentifier **************************
+**
+** Fetch an Ensembl Transcript via its stable identifier and version.
+** In case a version is not specified, the current Ensembl Transcript
+** will be returned.
+** The caller is responsible for deleting the Ensembl Transcript.
+**
+** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::fetch_by_stable_id
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [r] stableid [const AjPStr] Stable identifier
+** @param [r] version [ajuint] Version
+** @param [wP] Ptranscript [EnsPTranscript*] Ensembl Transcript address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensTranscriptadaptorFetchByStableidentifier(
+    EnsPTranscriptadaptor tca,
+    const AjPStr stableid,
+    ajuint version,
+    EnsPTranscript* Ptranscript)
+{
+    char* txtstableid = NULL;
+
+    AjBool result = AJFALSE;
+
+    AjPList transcripts = NULL;
+
+    AjPStr constraint = NULL;
+
+    EnsPBaseadaptor ba = NULL;
+
+    EnsPTranscript transcript = NULL;
+
+    if(!tca)
+        return ajFalse;
+
+    if(!stableid)
+        return ajFalse;
+
+    if(!Ptranscript)
+        return ajFalse;
+
+    ba = ensFeatureadaptorGetBaseadaptor(tca);
+
+    ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
+
+    if(version)
+        constraint = ajFmtStr(
+            "transcript_stable_id.stable_id = '%s' "
+            "AND "
+            "transcript_stable_id.version = %u",
+            txtstableid,
+            version);
+    else
+        constraint = ajFmtStr(
+            "transcript_stable_id.stable_id = '%s' "
+            "AND "
+            "transcript.is_current = 1",
+            txtstableid);
+
+    ajCharDel(&txtstableid);
+
+    transcripts = ajListNew();
+
+    result = ensBaseadaptorFetchAllbyConstraint(ba,
+                                                constraint,
+                                                (EnsPAssemblymapper) NULL,
+                                                (EnsPSlice) NULL,
+                                                transcripts);
+
+    if(ajListGetLength(transcripts) > 1)
+        ajDebug("ensTranscriptadaptorFetchByStableidentifier got more than "
+                "one Transcript for stable identifier '%S' and version %u.\n",
+                stableid, version);
+
+    ajListPop(transcripts, (void**) Ptranscript);
+
+    while(ajListPop(transcripts, (void**) &transcript))
+        ensTranscriptDel(&transcript);
+
+    ajListFree(&transcripts);
+
+    ajStrDel(&constraint);
+
+    return result;
+}
+
+
+
+
+/* @func ensTranscriptadaptorFetchByTranslationidentifier *********************
 **
 ** Fetch an Ensembl Transcript via its Ensembl Translation identifier.
 ** The caller is responsible for deleting the Ensembl Transcript.
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::fetch_by_translation_id
-** @param [r] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
 ** @param [r] identifier [ajuint] Ensembl Translation identifier
 ** @param [wP] Ptranscript [EnsPTranscript*] Ensembl Transcript address
 **
@@ -7352,7 +8585,7 @@ AjBool ensTranscriptadaptorFetchByExonStableIdentifier(
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptadaptorFetchByTranslationIdentifier(
+AjBool ensTranscriptadaptorFetchByTranslationidentifier(
     EnsPTranscriptadaptor tca,
     ajuint identifier,
     EnsPTranscript* Ptranscript)
@@ -7378,7 +8611,7 @@ AjBool ensTranscriptadaptorFetchByTranslationIdentifier(
     if(!Ptranscript)
         return ajFalse;
 
-    dba = ensFeatureadaptorGetDatabaseadaptor(tca->Adaptor);
+    dba = ensFeatureadaptorGetDatabaseadaptor(tca);
 
     statement = ajFmtStr(
         "SELECT "
@@ -7410,30 +8643,28 @@ AjBool ensTranscriptadaptorFetchByTranslationIdentifier(
 
     if(!trid)
     {
-        ajDebug("ensTranscriptadaptorFetchByTranslationIdentifier could not "
+        ajDebug("ensTranscriptadaptorFetchByTranslationidentifier could not "
                 "get Transcript identifier for Translation identifier %u.\n",
                 identifier);
 
         return ajFalse;
     }
 
-    ba = ensFeatureadaptorGetBaseadaptor(tca->Adaptor);
+    ba = ensFeatureadaptorGetBaseadaptor(tca);
 
-    *Ptranscript = (EnsPTranscript) ensBaseadaptorFetchByIdentifier(ba, trid);
-
-    return ajTrue;
+    return ensBaseadaptorFetchByIdentifier(ba, trid, (void**) Ptranscript);
 }
 
 
 
 
-/* @func ensTranscriptadaptorFetchByTranslationStableIdentifier ***************
+/* @func ensTranscriptadaptorFetchByTranslationstableidentifier ***************
 **
 ** Fetch an Ensembl Transcript via its Ensembl Translation stable identifier.
 ** The caller is responsible for deleting the Ensembl Transcript.
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::fetch_by_translation_stable_id
-** @param [r] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
 ** @param [r] stableid [const AjPStr] Ensembl Translation stable identifier
 ** @param [wP] Ptranscript [EnsPTranscript*] Ensembl Transcript address
 **
@@ -7441,12 +8672,12 @@ AjBool ensTranscriptadaptorFetchByTranslationIdentifier(
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptadaptorFetchByTranslationStableIdentifier(
+AjBool ensTranscriptadaptorFetchByTranslationstableidentifier(
     EnsPTranscriptadaptor tca,
     const AjPStr stableid,
     EnsPTranscript* Ptranscript)
 {
-    char *txtstableid = NULL;
+    char* txtstableid = NULL;
 
     ajuint trid = 0;
 
@@ -7469,7 +8700,7 @@ AjBool ensTranscriptadaptorFetchByTranslationStableIdentifier(
     if(!Ptranscript)
         return ajFalse;
 
-    dba = ensFeatureadaptorGetDatabaseadaptor(tca->Adaptor);
+    dba = ensFeatureadaptorGetDatabaseadaptor(tca);
 
     ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
 
@@ -7514,120 +8745,68 @@ AjBool ensTranscriptadaptorFetchByTranslationStableIdentifier(
 
     if(!trid)
     {
-        ajDebug("ensTranscriptadaptorFetchByTranslationStableIdentifier "
+        ajDebug("ensTranscriptadaptorFetchByTranslationstableidentifier "
                 "could not get Transcript identifier for Translation "
                 "stable identifier '%S'.\n", stableid);
 
         return ajFalse;
     }
 
-    ba = ensFeatureadaptorGetBaseadaptor(tca->Adaptor);
+    ba = ensFeatureadaptorGetBaseadaptor(tca);
 
-    *Ptranscript = (EnsPTranscript) ensBaseadaptorFetchByIdentifier(ba, trid);
-
-    return ajTrue;
+    return ensBaseadaptorFetchByIdentifier(ba, trid, (void**) Ptranscript);
 }
 
 
 
 
-/* @func ensTranscriptadaptorFetchByDisplayLabel ******************************
+/* @section accessory object retrieval ****************************************
 **
-** Fetch an Ensembl Transcript via its display label.
+** Functions for retrieving objects releated to Ensembl Transcript objects
+** from an Ensembl SQL database.
 **
-** The caller is responsible for deleting the Ensembl Transcript.
+** @fdata [EnsPTranscriptadaptor]
 **
-** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::fetch_by_display_label
-** @param [r] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
-** @param [r] label [const AjPStr] Display label
-** @param [wP] Ptranscript [EnsPTranscript*] Ensembl Transcript address
+** @nam3rule Retrieve Retrieve Ensembl Transcript-releated object(s)
+** @nam4rule All Retrieve all Ensembl Transcript-releated objects
+** @nam5rule Identifiers Retrieve all SQL database-internal identifiers
+** @nam5rule Stableidentifiers Retrieve all stable Ensembl Transcript
+** identifiers
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
+** @argrule * tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @argrule AllIdentifiers identifiers [AjPList] AJAX List of
+** AJAX unsigned integer objects
+** @argrule AllStableidentifiers identifiers [AjPList] AJAX List of
+** AJAX String (Ensembl Transcript stable identifier) objects
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory use
 ******************************************************************************/
 
-AjBool ensTranscriptadaptorFetchByDisplayLabel(EnsPTranscriptadaptor tca,
-                                               const AjPStr label,
-                                               EnsPTranscript *Ptranscript)
-{
-    char *txtlabel = NULL;
-
-    AjPList transcripts = NULL;
-
-    AjPStr constraint = NULL;
-
-    EnsPBaseadaptor ba = NULL;
-
-    EnsPTranscript transcript = NULL;
-
-    if(!tca)
-        return ajFalse;
-
-    if(!label)
-        return ajFalse;
-
-    if(!Ptranscript)
-        return ajFalse;
-
-    ba = ensFeatureadaptorGetBaseadaptor(tca->Adaptor);
-
-    ensBaseadaptorEscapeC(ba, &txtlabel, label);
-
-    constraint = ajFmtStr(
-        "transcript.is_current = 1 "
-        "AND "
-        "xref.display_label = '%s'",
-        txtlabel);
-
-    ajCharDel(&txtlabel);
-
-    transcripts = ajListNew();
-
-    ensBaseadaptorGenericFetch(ba,
-                               constraint,
-                               (EnsPAssemblymapper) NULL,
-                               (EnsPSlice) NULL,
-                               transcripts);
-
-    if(ajListGetLength(transcripts) > 1)
-        ajDebug("ensTranscriptadaptorFetchByDisplayLabel got more than one "
-                "Transcript for display label '%S'.\n", label);
-
-    ajListPop(transcripts, (void **) Ptranscript);
-
-    while(ajListPop(transcripts, (void **) &transcript))
-        ensTranscriptDel(&transcript);
-
-    ajListFree(&transcripts);
-
-    ajStrDel(&constraint);
-
-    return ajTrue;
-}
 
 
 
-
-/* @func ensTranscriptadaptorFetchAllIdentifiers ******************************
+/* @func ensTranscriptadaptorRetrieveAllIdentifiers ***************************
 **
-** Fetch all SQL database-internal identifiers of Ensembl Transcripts.
+** Fetch all SQL database-internal identifiers of Ensembl Transcript objects.
 **
-** The caller is responsible for deleting the AJAX unsigned integers before
-** deleting the AJAX List.
+** The caller is responsible for deleting the AJAX unsigned integer objects
+** before deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::list_dbIDs
-** @param [u] tca [const EnsPTranscriptadaptor] Ensembl Transcript Adaptor
-** @param [u] identifiers [AjPList] AJAX List of AJAX unsigned integers
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [u] identifiers [AjPList] AJAX List of AJAX unsigned integer objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptadaptorFetchAllIdentifiers(
-    const EnsPTranscriptadaptor tca,
+AjBool ensTranscriptadaptorRetrieveAllIdentifiers(
+    EnsPTranscriptadaptor tca,
     AjPList identifiers)
 {
-    AjBool value = AJFALSE;
+    AjBool result = AJFALSE;
 
     AjPStr table = NULL;
 
@@ -7639,43 +8818,43 @@ AjBool ensTranscriptadaptorFetchAllIdentifiers(
     if(!identifiers)
         return ajFalse;
 
-    ba = ensFeatureadaptorGetBaseadaptor(tca->Adaptor);
+    ba = ensFeatureadaptorGetBaseadaptor(tca);
 
     table = ajStrNewC("transcript");
 
-    value = ensBaseadaptorFetchAllIdentifiers(ba,
-                                              table,
-                                              (AjPStr) NULL,
-                                              identifiers);
+    result = ensBaseadaptorRetrieveAllIdentifiers(ba,
+                                                  table,
+                                                  (AjPStr) NULL,
+                                                  identifiers);
 
     ajStrDel(&table);
 
-    return value;
+    return result;
 }
 
 
 
 
-/* @func ensTranscriptadaptorFetchAllStableIdentifiers ************************
+/* @func ensTranscriptadaptorRetrieveAllStableidentifiers *********************
 **
-** Fetch all stable identifiers of Ensembl Transcripts.
+** Fetch all stable identifiers of Ensembl Transcript objects.
 **
-** The caller is responsible for deleting the AJAX Strings before
+** The caller is responsible for deleting the AJAX String objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::TranscriptAdaptor::list_stable_ids
-** @param [r] tca [const EnsPTranscriptadaptor] Ensembl Transcript Adaptor
-** @param [u] identifiers [AjPList] AJAX List of AJAX Strings
+** @param [u] tca [EnsPTranscriptadaptor] Ensembl Transcript Adaptor
+** @param [u] identifiers [AjPList] AJAX List of AJAX String objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensTranscriptadaptorFetchAllStableIdentifiers(
-    const EnsPTranscriptadaptor tca,
+AjBool ensTranscriptadaptorRetrieveAllStableidentifiers(
+    EnsPTranscriptadaptor tca,
     AjPList identifiers)
 {
-    AjBool value = AJFALSE;
+    AjBool result = AJFALSE;
 
     AjPStr table   = NULL;
     AjPStr primary = NULL;
@@ -7688,15 +8867,15 @@ AjBool ensTranscriptadaptorFetchAllStableIdentifiers(
     if(!identifiers)
         return ajFalse;
 
-    ba = ensFeatureadaptorGetBaseadaptor(tca->Adaptor);
+    ba = ensFeatureadaptorGetBaseadaptor(tca);
 
     table   = ajStrNewC("transcript_stable_id");
     primary = ajStrNewC("stable_id");
 
-    value = ensBaseadaptorFetchAllStrings(ba, table, primary, identifiers);
+    result = ensBaseadaptorRetrieveAllStrings(ba, table, primary, identifiers);
 
     ajStrDel(&table);
     ajStrDel(&primary);
 
-    return value;
+    return result;
 }

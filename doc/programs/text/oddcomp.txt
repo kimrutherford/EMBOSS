@@ -52,6 +52,7 @@ Input protein sequence(s): tsw:*
 Program compseq output file: oddcomp.comp
 Window size to consider (e.g. 30 aa) [30]:
 Output file [12s1_arath.oddcomp]: out.odd
+ajSeqxrefNewDbS '1-I' 'FT025'
 
 
    Go to the input files for this example
@@ -60,7 +61,7 @@ Output file [12s1_arath.oddcomp]: out.odd
 Command line arguments
 
 Identify proteins with specified sequence word composition
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -243,21 +244,19 @@ Known bugs
 See also
 
    Program name     Description
-   antigenic        Finds antigenic sites in proteins
-   digest           Reports on protein proteolytic enzyme or reagent cleavage sites
-   epestfind        Finds PEST motifs as potential proteolytic cleavage sites
-   fuzzpro          Search for patterns in protein sequences
-   fuzztran         Search for patterns in protein sequences (translated)
-   helixturnhelix   Identify nucleic acid-binding motifs in protein
-                    sequences
-   patmatdb         Searches protein sequences with a sequence motif
-   patmatmotifs     Scan a protein sequence with motifs from the PROSITE
-                    database
-   pepcoil          Predicts coiled coil regions in protein sequences
-   preg             Regular expression search of protein sequence(s)
-   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
-                    database
-   sigcleave        Reports on signal cleavage sites in a protein sequence
+   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
+                    sequence
+   backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   compseq          Calculate the composition of unique words in sequences
+   emowse           Search protein sequences by digest fragment molecular weight
+   freak            Generate residue/base frequency table or plot
+   mwcontam         Find weights common to multiple molecular weights files
+   mwfilter         Filter noisy data from molecular weights file
+   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+                    sites
+   pepinfo          Plot amino acid properties of a protein sequence in parallel
+   pepstats         Calculates statistics of protein properties
+   wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)
 

@@ -1,16 +1,35 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensgene_h
-#define ensgene_h
+#ifndef ENSGENE_H
+#define ENSGENE_H
 
-#include "ensdata.h"
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
+
 #include "ensfeature.h"
 
+AJ_BEGIN_DECLS
 
 
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
 
 /*
 ** Prototype definitions
@@ -18,24 +37,24 @@ extern "C"
 
 /* Ensembl Gene */
 
-EnsPGene ensGeneNew(EnsPGeneadaptor ga,
-                    ajuint identifier,
-                    EnsPFeature feature,
-                    EnsPDatabaseentry displaydbe,
-                    AjPStr description,
-                    AjPStr source,
-                    AjPStr biotype,
-                    EnsEGeneStatus status,
-                    AjBool current,
-                    ajuint cantrcid,
-                    AjPStr canann,
-                    AjPStr stableid,
-                    ajuint version,
-                    AjPStr cdate,
-                    AjPStr mdate,
-                    AjPList transcripts);
+EnsPGene ensGeneNewCpy(const EnsPGene gene);
 
-EnsPGene ensGeneNewObj(const EnsPGene object);
+EnsPGene ensGeneNewIni(EnsPGeneadaptor ga,
+                       ajuint identifier,
+                       EnsPFeature feature,
+                       EnsPDatabaseentry displaydbe,
+                       AjPStr description,
+                       AjPStr source,
+                       AjPStr biotype,
+                       EnsEGeneStatus status,
+                       AjBool current,
+                       ajuint cantrcid,
+                       AjPStr canann,
+                       AjPStr stableid,
+                       ajuint version,
+                       AjPStr cdate,
+                       AjPStr mdate,
+                       AjPList transcripts);
 
 EnsPGene ensGeneNewRef(EnsPGene gene);
 
@@ -43,73 +62,69 @@ void ensGeneDel(EnsPGene* Pgene);
 
 EnsPGeneadaptor ensGeneGetAdaptor(const EnsPGene gene);
 
-ajuint ensGeneGetIdentifier(const EnsPGene gene);
+AjPStr ensGeneGetBiotype(const EnsPGene gene);
 
-EnsPFeature ensGeneGetFeature(const EnsPGene gene);
+AjPStr ensGeneGetCanonicalannotation(const EnsPGene gene);
 
-EnsPDatabaseentry ensGeneGetDisplayReference(const EnsPGene gene);
-
-AjPStr ensGeneGetDescription(const EnsPGene gene);
-
-AjPStr ensGeneGetSource(const EnsPGene gene);
-
-AjPStr ensGeneGetBioType(const EnsPGene gene);
-
-EnsEGeneStatus ensGeneGetStatus(const EnsPGene gene);
+ajuint ensGeneGetCanonicaltranscriptidentifier(const EnsPGene gene);
 
 AjBool ensGeneGetCurrent(const EnsPGene gene);
 
-AjPStr ensGeneGetCanonicalAnnotation(const EnsPGene gene);
+AjPStr ensGeneGetDateCreation(const EnsPGene gene);
 
-ajuint ensGeneGetCanonicalTranscriptIdentifier(const EnsPGene gene);
+AjPStr ensGeneGetDateModification(const EnsPGene gene);
 
-AjPStr ensGeneGetStableIdentifier(const EnsPGene gene);
+AjPStr ensGeneGetDescription(const EnsPGene gene);
+
+EnsPDatabaseentry ensGeneGetDisplayreference(const EnsPGene gene);
+
+EnsPFeature ensGeneGetFeature(const EnsPGene gene);
+
+ajuint ensGeneGetIdentifier(const EnsPGene gene);
+
+AjPStr ensGeneGetSource(const EnsPGene gene);
+
+AjPStr ensGeneGetStableidentifier(const EnsPGene gene);
+
+EnsEGeneStatus ensGeneGetStatus(const EnsPGene gene);
 
 ajuint ensGeneGetVersion(const EnsPGene gene);
 
-AjPStr ensGeneGetCreationDate(const EnsPGene gene);
+const AjPList ensGeneLoadAttributes(EnsPGene gene);
 
-AjPStr ensGeneGetModificationDate(const EnsPGene gene);
+const AjPList ensGeneLoadDatabaseentries(EnsPGene gene);
 
-const AjPList ensGeneGetAttributes(EnsPGene gene);
-
-const AjPList ensGeneGetDatabaseEntries(EnsPGene gene);
-
-const AjPList ensGeneGetTranscripts(EnsPGene gene);
+const AjPList ensGeneLoadTranscripts(EnsPGene gene);
 
 AjBool ensGeneSetAdaptor(EnsPGene gene, EnsPGeneadaptor ga);
 
-AjBool ensGeneSetIdentifier(EnsPGene gene, ajuint identifier);
+AjBool ensGeneSetBiotype(EnsPGene gene, AjPStr biotype);
 
-AjBool ensGeneSetFeature(EnsPGene gene, EnsPFeature feature);
+AjBool ensGeneSetCanonicalannotation(EnsPGene gene, AjPStr canann);
 
-AjBool ensGeneSetDisplayReference(EnsPGene gene, EnsPDatabaseentry dbe);
-
-AjBool ensGeneSetDescription(EnsPGene gene, AjPStr description);
-
-AjBool ensGeneSetSource(EnsPGene gene, AjPStr source);
-
-AjBool ensGeneSetBioType(EnsPGene gene, AjPStr biotype);
-
-AjBool ensGeneSetStatus(EnsPGene gene, EnsEGeneStatus status);
+AjBool ensGeneSetCanonicaltranscriptidentifier(EnsPGene gene, ajuint cantrcid);
 
 AjBool ensGeneSetCurrent(EnsPGene gene, AjBool current);
 
-AjBool ensGeneSetCanonicalTranscript(EnsPGene gene, ajuint cantrcid);
+AjBool ensGeneSetDateCreation(EnsPGene gene, AjPStr cdate);
 
-AjBool ensGeneSetCanonicalAnnotation(EnsPGene gene, AjPStr canann);
+AjBool ensGeneSetDateModification(EnsPGene gene, AjPStr mdate);
 
-AjBool ensGeneSetStableIdentifier(EnsPGene gene, AjPStr stableid);
+AjBool ensGeneSetDescription(EnsPGene gene, AjPStr description);
+
+AjBool ensGeneSetDisplayreference(EnsPGene gene, EnsPDatabaseentry dbe);
+
+AjBool ensGeneSetFeature(EnsPGene gene, EnsPFeature feature);
+
+AjBool ensGeneSetIdentifier(EnsPGene gene, ajuint identifier);
+
+AjBool ensGeneSetSource(EnsPGene gene, AjPStr source);
+
+AjBool ensGeneSetStableidentifier(EnsPGene gene, AjPStr stableid);
+
+AjBool ensGeneSetStatus(EnsPGene gene, EnsEGeneStatus status);
 
 AjBool ensGeneSetVersion(EnsPGene gene, ajuint version);
-
-AjBool ensGeneSetCreationDate(EnsPGene gene, AjPStr cdate);
-
-AjBool ensGeneSetModificationDate(EnsPGene gene, AjPStr mdate);
-
-AjBool ensGeneTrace(const EnsPGene gene, ajuint level);
-
-ajulong ensGeneGetMemsize(const EnsPGene gene);
 
 AjBool ensGeneAddAttribute(EnsPGene gene, EnsPAttribute attribute);
 
@@ -117,9 +132,9 @@ AjBool ensGeneAddDatabaseentry(EnsPGene gene, EnsPDatabaseentry dbe);
 
 AjBool ensGeneAddTranscript(EnsPGene gene, EnsPTranscript transcript);
 
-EnsEGeneStatus ensGeneStatusFromStr(const AjPStr status);
+AjBool ensGeneTrace(const EnsPGene gene, ajuint level);
 
-const char* ensGeneStatusToChar(EnsEGeneStatus status);
+size_t ensGeneCalculateMemsize(const EnsPGene gene);
 
 AjBool ensGeneCalculateCoordinates(EnsPGene gene);
 
@@ -127,25 +142,35 @@ AjBool ensGeneFetchAllAttributes(EnsPGene gene,
                                  const AjPStr code,
                                  AjPList attributes);
 
-AjBool ensGeneFetchAllDatabaseEntries(EnsPGene gene,
+AjBool ensGeneFetchAllDatabaseentries(EnsPGene gene,
                                       const AjPStr name,
                                       EnsEExternaldatabaseType type,
                                       AjPList dbes);
 
 AjBool ensGeneFetchAllExons(EnsPGene gene, AjPList exons);
 
-AjBool ensGeneFetchCanonicalTranscript(EnsPGene gene,
-                                       EnsPTranscript *Ptranscript);
+AjBool ensGeneFetchCanonicaltranscript(EnsPGene gene,
+                                       EnsPTranscript* Ptranscript);
+
+AjBool ensGeneSimilarity(EnsPGene gene1, EnsPGene gene2);
+
+EnsPGene ensGeneTransfer(EnsPGene gene, EnsPSlice slice);
 
 EnsPGene ensGeneTransform(EnsPGene gene,
                           const AjPStr csname,
                           const AjPStr csversion);
 
-EnsPGene ensGeneTransfer(EnsPGene gene, EnsPSlice slice);
+EnsEGeneStatus ensGeneStatusFromStr(const AjPStr status);
 
-AjBool ensGeneSortByStartAscending(AjPList genes);
+const char* ensGeneStatusToChar(EnsEGeneStatus status);
 
-AjBool ensGeneSortByStartDescending(AjPList genes);
+AjBool ensListGeneSortStartAscending(AjPList genes);
+
+AjBool ensListGeneSortStartDescending(AjPList genes);
+
+AjBool ensTableGeneClear(AjPTable table);
+
+AjBool ensTableGeneDelete(AjPTable* Ptable);
 
 /* Ensembl Gene Adaptor */
 
@@ -155,20 +180,20 @@ EnsPGeneadaptor ensRegistryGetGeneadaptor(
 EnsPGeneadaptor ensGeneadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensGeneadaptorDel(EnsPGeneadaptor *Pga);
-
-EnsPFeatureadaptor ensGeneadaptorGetFeatureadaptor(const EnsPGeneadaptor ga);
+void ensGeneadaptorDel(EnsPGeneadaptor* Pga);
 
 EnsPDatabaseadaptor ensGeneadaptorGetDatabaseadaptor(const EnsPGeneadaptor ga);
 
-AjBool ensGeneadaptorFetchAll(const EnsPGeneadaptor ga,
+EnsPFeatureadaptor ensGeneadaptorGetFeatureadaptor(const EnsPGeneadaptor ga);
+
+AjBool ensGeneadaptorFetchAll(EnsPGeneadaptor ga,
                               AjPList genes);
 
-AjBool ensGeneadaptorFetchAllByBiotype(EnsPGeneadaptor ga,
+AjBool ensGeneadaptorFetchAllbyBiotype(EnsPGeneadaptor ga,
                                        const AjPStr biotype,
                                        AjPList genes);
 
-AjBool ensGeneadaptorFetchAllBySlice(EnsPGeneadaptor ga,
+AjBool ensGeneadaptorFetchAllbySlice(EnsPGeneadaptor ga,
                                      EnsPSlice slice,
                                      const AjPStr anname,
                                      const AjPStr source,
@@ -176,28 +201,28 @@ AjBool ensGeneadaptorFetchAllBySlice(EnsPGeneadaptor ga,
                                      AjBool loadtranscripts,
                                      AjPList genes);
 
-AjBool ensGeneadaptorFetchAllByStableIdentifier(EnsPGeneadaptor ga,
+AjBool ensGeneadaptorFetchAllbyStableidentifier(EnsPGeneadaptor ga,
                                                 const AjPStr stableid,
                                                 AjPList genes);
 
+AjBool ensGeneadaptorFetchByDisplaylabel(EnsPGeneadaptor ga,
+                                         const AjPStr label,
+                                         EnsPGene* Pgene);
+
 AjBool ensGeneadaptorFetchByIdentifier(EnsPGeneadaptor ga,
                                        ajuint identifier,
-                                       EnsPGene *Pgene);
+                                       EnsPGene* Pgene);
 
-AjBool ensGeneadaptorFetchByStableIdentifier(EnsPGeneadaptor ga,
+AjBool ensGeneadaptorFetchByStableidentifier(EnsPGeneadaptor ga,
                                              const AjPStr stableid,
                                              ajuint version,
-                                             EnsPGene *Pgene);
+                                             EnsPGene* Pgene);
 
-AjBool ensGeneadaptorFetchByDisplayLabel(EnsPGeneadaptor ga,
-                                         const AjPStr label,
-                                         EnsPGene *Pgene);
+AjBool ensGeneadaptorRetrieveAllIdentifiers(EnsPGeneadaptor ga,
+                                            AjPList identifiers);
 
-AjBool ensGeneadaptorFetchAllIdentifiers(const EnsPGeneadaptor ga,
-                                         AjPList identifiers);
-
-AjBool ensGeneadaptorFetchAllStableIdentifiers(const EnsPGeneadaptor ga,
-                                               AjPList identifiers);
+AjBool ensGeneadaptorRetrieveAllStableidentifiers(EnsPGeneadaptor ga,
+                                                  AjPList identifiers);
 
 /*
 ** End of prototype definitions
@@ -206,8 +231,6 @@ AjBool ensGeneadaptorFetchAllStableIdentifiers(const EnsPGeneadaptor ga,
 
 
 
-#endif /* ensgene_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSGENE_H */

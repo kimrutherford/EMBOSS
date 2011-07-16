@@ -1,5 +1,5 @@
 Reads and writes (returns) many sets of sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqsetall  Sequence set(s) filename and optional

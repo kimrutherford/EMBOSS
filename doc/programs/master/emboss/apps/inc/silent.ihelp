@@ -1,12 +1,13 @@
 Find restriction sites to insert (mutate) with no translation change
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
                                   format, or reference (input USA)
    -enzymes            string     [all] Comma separated enzyme list (Any
                                   string)
-  [-outfile]           report     [*.silent] Output report file name
+  [-outfile]           report     [*.silent] Output report file name (default
+                                  -rformat table)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:

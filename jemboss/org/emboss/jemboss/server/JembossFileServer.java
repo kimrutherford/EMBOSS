@@ -154,10 +154,9 @@ public class JembossFileServer
     
     int split = options.indexOf("=")+1;  
     String fullFileName = getRoot(options.substring(split),user) + "/" + filename;
-    File dir = new File(fullFileName);
+    File file = new File(fullFileName);
 
     String line = new String("");
-    String fc = new String("");
 
     if(fullFileName.toLowerCase().endsWith(".png") ||
        fullFileName.toLowerCase().endsWith(".gif") ||
@@ -172,11 +171,17 @@ public class JembossFileServer
 
       try
       {
-        BufferedReader in = new BufferedReader(new FileReader(dir));
+        BufferedReader in = new BufferedReader(new FileReader(file));
+        StringBuffer buff = new StringBuffer(Long.valueOf(file.length()).intValue());
+
         while((line = in.readLine()) != null)
-          fc = fc.concat(line + "\n");
+        {
+          buff.append(line);
+          buff.append('\n');
+        }
+        
         vans.add("contents");
-        vans.add(fc);
+        vans.add(buff.toString());
       }
       catch (IOException ioe)
       {

@@ -1,0 +1,25 @@
+Here is a sample session with <b>wossinput</b>
+<p>
+Search for programs with 'codon' in their input: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>wossinput codon </b>
+Finds programs by EDAM input data
+
+SEARCH FOR INPUT 'CODON'
+backtranseq Back-translate a protein sequence to a nucleotide sequence
+cai         Calculate codon adaptation index
+codcmp      Codon usage table comparison
+codcopy     Copy and reformat a codon usage table
+cutgextract Extract codon usage tables from CUTG database
+makenucseq  Create random nucleotide sequences
+syco        Draw synonymous codon usage statistic plot for a nucleotide sequence
+tcode       Identify protein-coding regions using Fickett TESTCODE statistic
+
+
+</pre></td></tr></table><p>
+<p>
+<p>

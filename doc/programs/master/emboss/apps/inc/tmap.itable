@@ -14,7 +14,7 @@
 <tr bgcolor="#FFFFCC">
 <td>[-sequences]<br>(Parameter 1)</td>
 <td>seqset</td>
-<td>File containing a sequence alignment</td>
+<td>File containing a protein sequence alignment</td>
 <td>Readable set of sequences</td>
 <td><b>Required</b></td>
 </tr>
@@ -23,7 +23,7 @@
 <td>-graph</td>
 <td>xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -31,7 +31,7 @@
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat seqtable)</td>
 <td><i>&lt;*&gt;</i>.tmap</td>
 </tr>
 

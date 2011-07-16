@@ -23,7 +23,7 @@
 <td>-gap</td>
 <td>integer</td>
 <td>Gap penalty</td>
-<td>Any integer value</td>
+<td>Integer 0 or more</td>
 <td>12</td>
 </tr>
 
@@ -31,7 +31,7 @@
 <td>-threshold</td>
 <td>integer</td>
 <td>Minimum score threshold</td>
-<td>Any integer value</td>
+<td>Integer 0 or more</td>
 <td>50</td>
 </tr>
 
@@ -39,7 +39,7 @@
 <td>-match</td>
 <td>integer</td>
 <td>Match score</td>
-<td>Any integer value</td>
+<td>Integer 0 or more</td>
 <td>3</td>
 </tr>
 
@@ -47,7 +47,7 @@
 <td>-mismatch</td>
 <td>integer</td>
 <td>Mismatch score</td>
-<td>Any integer value</td>
+<td>Integer up to 0</td>
 <td>-4</td>
 </tr>
 
@@ -74,8 +74,8 @@
 <tr bgcolor="#FFFFCC">
 <td>-maxrepeat</td>
 <td>integer</td>
-<td>Maximum separation between the start of repeat and the end of the inverted repeat (the default is 2000 bases).</td>
-<td>Any integer value</td>
+<td>Maximum separation between the start of repeat and the end of the inverted repeat.</td>
+<td>Integer 0 or more</td>
 <td>2000</td>
 </tr>
 

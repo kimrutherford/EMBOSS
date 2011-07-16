@@ -1,5 +1,5 @@
 Replace or delete sequence sections
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional

@@ -1,0 +1,41 @@
+Get URLs of data resources
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-url]               url        Url filename and optional format, or
+                                  reference (input query)
+  [-outfile]           outurl     (no help text) outurl value
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-url" associated qualifiers
+   -iformat1           string     Input URL format
+   -idbname1           string     User-provided database name
+   -swiss1             boolean    Swissprot cross-reference
+   -embl1              boolean    EMBL/GenBank/DDBJ cross-reference
+   -accession1         string     Primary accession for source data
+   -identifier1        string     Identifier term name in EDAM
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     URL output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+

@@ -55,7 +55,7 @@ Output report [k00650.tfscan]:
 Command line arguments
 
 Identify transcription factor binding sites in DNA sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -65,7 +65,8 @@ Version: EMBOSS:6.3.0
                                   (other); C (Custom))
 *  -custom             datafile   Transfac database data file (optional)
    -mismatch           integer    [0] Number of mismatches (Integer 0 or more)
-  [-outfile]           report     [*.tfscan] Output report file name
+  [-outfile]           report     [*.tfscan] Output report file name (default
+                                  -rformat seqtable)
 
    Additional (Optional) qualifiers:
    -minlength          integer    [1] Display matches equal to or above this
@@ -123,7 +124,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   tfscan reads normal nucleic acid sequence USAs.
+   tfscan reads one or more nucleotide sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -240,13 +258,27 @@ CC   and human c-fos proto-oncogenes that causes complete divergence of
 
 Output file format
 
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   By default the output is in 'seqtable' format.
+
   Output files for usage example
 
   File: k00650.tfscan
 
 ########################################
 # Program: tfscan
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: tfscan
 #    -sequence tembl:k00650
 #    -menu v
@@ -391,30 +423,32 @@ Known bugs
 
 See also
 
-                    Program name                  Description
-                    jaspscan     Scans DNA sequences for transcription factors
+   Program name     Description
+   jaspscan         Scans DNA sequences for transcription factors
+   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
+                    sequences
 
-   Your             EMBOSS administrator will have to run the EMBOSS program tfextract
-                    in order to set up the data files from the TRANSFAC distribution files.
+   Your EMBOSS administrator will have to run the EMBOSS program tfextract
+   in order to set up the data files from the TRANSFAC distribution files.
 
 Author(s)
 
-   Alan             Bleasby
-   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton,         Cambridge CB10 1SD, UK
+   Alan Bleasby
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
-                    Please report all bugs to the EMBOSS bug team
-                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 
-   Written          Summer 2000 - Alan Bleasby
+   Written Summer 2000 - Alan Bleasby
 
 Target users
 
-                    This program is intended to be used by everyone and everything, from
-                    naive users to embedded scripts.
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
 
 Comments
 
-                    None
+   None

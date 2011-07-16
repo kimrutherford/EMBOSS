@@ -14,7 +14,6 @@ extern "C"
 ** Hold details of programs (names and documentation) and the package
 ** they belong to.
 **
-**
 ** @alias EmbOGroupProg
 ** @alias EmbSGroupProg
 **
@@ -23,17 +22,56 @@ extern "C"
 ** @attr keywords [AjPStr] keywords for this program
 ** @attr package [AjPStr] EMBASSY package, empty for main package
 ** @attr groups [AjPList] List of group(s) this program belongs to.
+** @attr acdtopics [AjPList] List of relation topic attributes
+** @attr acdoperations [AjPList] List of relation operation attributes
+** @attr acdinputs [AjPList] List of relation input attributes
+** @attr acdoutputs [AjPList] List of relation output attributes
+** @attr acdparams [AjPList] List of relation parameter attributes
 ** @@
 ******************************************************************************/
 
 typedef struct EmbSGroupProg {
-  AjPStr name;
-  AjPStr doc;
-  AjPStr keywords;
-  AjPStr package;
-  AjPList groups;
+    AjPStr name;
+    AjPStr doc;
+    AjPStr keywords;
+    AjPStr package;
+    AjPList groups;
+    AjPList acdtopics;
+    AjPList acdoperations;
+    AjPList acdinputs;
+    AjPList acdoutputs;
+    AjPList acdparams;
 } EmbOGroupProg;
 #define EmbPGroupProg EmbOGroupProg*
+
+
+
+
+/* @data EmbPGroupRelation ****************************************************
+**
+** Hold details of relation attributes and the qualifiers they appear in.
+**
+** @alias EmbOGroupRelation
+** @alias EmbSGroupRelation
+**
+** @attr type [AjPStr] Type of qualifier
+** @attr qual [AjPStr] Name of qualifier
+** @attr acdgroup [AjPStr] ACD group for qualifier type
+** @attr id [AjPStr] EDAM term id
+** @attr namespace [AjPStr] EDAM namespace
+** @attr name [AjPStr] EDAM term name
+** @@
+******************************************************************************/
+
+typedef struct EmbSGroupRelation {
+    AjPStr type;
+    AjPStr qual;
+    AjPStr acdgroup;
+    AjPStr id;
+    AjPStr namespace;
+    AjPStr name;
+} EmbOGroupRelation;
+#define EmbPGroupRelation EmbOGroupRelation*
 
 
 
@@ -89,9 +127,9 @@ typedef struct EmbSGroupProg {
 ******************************************************************************/
 
 typedef struct EmbSGroupTop {
-  AjPStr name;
-  AjPStr doc;
-  AjPList progs;
+    AjPStr name;
+    AjPStr doc;
+    AjPList progs;
 } EmbOGroupTop;
 #define EmbPGroupTop EmbOGroupTop*
 
@@ -114,8 +152,14 @@ void          embGrpGetProgGroups(AjPList glist, AjPList alpha,
 				  AjBool gui);
 void          embGrpGroupsListDel(AjPList *groupslist);
 void          embGrpProgsListDel(AjPList *progslist);
+void          embGrpRelationsListDel(AjPList *relslist);
+void          embGrpProgDel(EmbPGroupProg *Pgl);
 void          embGrpKeySearchProgs(AjPList newlist, const AjPList glist,
 				   const AjPStr key, AjBool all);
+void          embGrpSearchProgsEdam(AjPList newlist, const AjPList glist,
+                                    const AjPStr key, const char* namespace,
+                                    AjBool sensitive, AjBool subclasses,
+                                    AjBool obsolete);
 void          embGrpKeySearchSeeAlso(AjPList newlist,
 				     AjPList *appgroups, AjPStr* package,
 				     const AjPList alpha, const AjPList glist,

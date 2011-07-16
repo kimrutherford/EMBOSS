@@ -1,8 +1,9 @@
 application: dan [
   documentation: "Calculates nucleic acid melting temperature"
-  groups: "Nucleic:Composition"
-  relations: "/edam/topic/0000104 Nucleic acid denaturation"
-  relations: "/edam/operation/0000455 Nucleic acid melting temperature calculation"
+  groups: "Nucleic:Properties, Nucleic:Composition"
+  relations: "EDAM:0000104 topic Nucleic acid denaturation"
+  relations: "EDAM:0000157 topic Sequence composition"
+  relations: "EDAM:0000455 operation Nucleic acid thermodynamic property calculation"
 ]
 
 section: input [
@@ -13,9 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "/edam/data/0001215 Pure DNA sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
   ]
 
 endsection: input
@@ -37,7 +36,7 @@ section: required [
            the sequence in that window. The window is incrementally moved
            along the sequence with the properties being calculated at each
            new position."
-    relations: "/edam/data/0001251 Window size"
+    relations: "EDAM:0001251 data Window size"
   ]
 
   integer: shiftincrement [
@@ -51,7 +50,7 @@ section: required [
     help: "This is the amount by which the window is moved at each
            increment in order to find the melting point and other properties
            along the sequence."
-    relations: "/edam/data/0002141 Window step size"
+    relations: "EDAM:0002141 data Window step size"
   ]
 
   float: dnaconc [
@@ -60,7 +59,7 @@ section: required [
     maximum: "100000."
     default: "50."
     information: "Enter DNA concentration (nM)"
-    relations: "/edam/data/0002140 Concentration"
+    relations: "EDAM:0002140 data Concentration"
   ]
 
   float: saltconc [
@@ -69,7 +68,7 @@ section: required [
     maximum: "1000."
     default: "50."
     information: "Enter salt concentration (mM)"
-    relations: "/edam/data/0002140 Concentration"
+    relations: "EDAM:0002140 data Concentration"
   ]
 
 endsection: required
@@ -89,7 +88,7 @@ section: additional [
       information: "Prompt for product values"
       help: "This prompts for percent formamide, percent of mismatches
              allowed and product length."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
     ]
 
     float: formamide [
@@ -100,7 +99,7 @@ section: additional [
       information: "Enter percentage of formamide"
       help: "This specifies the percent formamide to be used in
              calculations (it is ignored unless -product is used)."
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
     ]
 
     float: mismatch [
@@ -111,7 +110,7 @@ relations: "/edam/data/0001773 Tool-specific parameter"
       information: "Enter percent mismatch"
       help: "This specifies the percent mismatch to be used in
              calculations (it is ignored unless -product is used)."
-    relations: "/edam/data/0002146 Threshold"                                       
+    relations: "EDAM:0002146 data Threshold"
     ]
 
     integer: prodlen [
@@ -122,7 +121,7 @@ relations: "/edam/data/0001773 Tool-specific parameter"
       expected: "Window size (20)"
       help: "This specifies the product length to be used in
              calculations (it is ignored unless -product is used)."
-    relations:  "/edam/data/0001249 Sequence length"  
+    relations: "EDAM:0001249 data Sequence length"
     ]
 
   endsection: productsection
@@ -137,7 +136,7 @@ relations: "/edam/data/0001773 Tool-specific parameter"
       information: "Thermodynamic calculations"
       help: "Output the DeltaG, DeltaH and DeltaS values of the
              sequence windows to the output data file."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
     ]
 
     float: temperature [
@@ -149,7 +148,7 @@ relations: "/edam/data/0001773 Tool-specific parameter"
       help: "If -thermo has been specified then this specifies the
              temperature at which to calculate the DeltaG, DeltaH and DeltaS
              values."
-    relations: "/edam/data/0002139 Melting temperature"
+    relations: "EDAM:0002139 data Melting temperature"
     ]
 
   endsection: thermosection
@@ -165,7 +164,7 @@ section: advanced [
     information: "Use RNA data values"
     help: "This specifies that the sequence is an RNA sequence and not
            a DNA sequence."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -180,7 +179,7 @@ section: output [
     help: "If this is not specified then the file of output data is
            produced, else a plot of the melting point along the sequence is
            produced."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   float: mintemp [
@@ -191,14 +190,14 @@ section: output [
     information: "Enter minimum temperature"
     help: "Enter a minimum value for the temperature scale (y-axis) of
            the plot."
-    relations: "/edam/data/0002139 Melting temperature"
+    relations: "EDAM:0002139 data Melting temperature"
   ]
 
   xygraph: graph [
     standard: "$(plot)"
     multiple: "1"
     gdesc: "DNA melting plot"
-    relations: "/edam/data/0002142 EMBOSS graph"                                   
+    relations: "EDAM:0002968 data Image or plot"
   ]
 
   report: outfile [
@@ -211,7 +210,7 @@ section: output [
               float:dh=DeltaH float:ds=DeltaS float:tmprod=TmProd"
     nullok: "$(plot)"
     nulldefault: "$(plot)"
-    relations: "/edam/data/0001583 Nucleic acid melting profile"                                       
+    relations: "EDAM:0001583 data Nucleic acid melting profile"
   ]
 
 endsection: output

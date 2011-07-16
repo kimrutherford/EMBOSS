@@ -55,7 +55,7 @@ Back-translate a protein sequence to ambiguous nucleotide sequence
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with backtranambig</b>
+Here is a sample session with <b>backtranambig</b>
 <p>
 
 <p>
@@ -76,7 +76,7 @@ Input (gapped) protein sequence(s): <b>tsw:opsd_human</b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Back-translate a protein sequence to ambiguous nucleotide sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) protein sequence(s) filename and
@@ -516,7 +516,36 @@ Version: EMBOSS:6.3.0
 </H2>
 
 
-Any DNA sequence USA.
+<b>backtranambig</b> reads one or more protein sequences.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
 
 <p>
 
@@ -643,7 +672,28 @@ SQ   SEQUENCE   348 AA;  38893 MW;  6F4F6FCBA34265B2 CRC64;
 
 The output is a nucleotide sequence containing the most favoured back
 translation of the specified protein, and using the specified
-translation table (which defaults to human).
+codon usage table (which defaults to human).
+<p>
+<p>
+
+The output is a standard EMBOSS sequence file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
 
 <p>
 
@@ -780,11 +830,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="charge.html">charge</a></td>
-<td>Draw a protein charge plot</td>
-</tr>
-
-<tr>
 <td><a href="checktrans.html">checktrans</a></td>
 <td>Reports STOP codons and ORF statistics of a protein</td>
 </tr>
@@ -810,11 +855,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="iep.html">iep</a></td>
-<td>Calculate the isoelectric point of proteins</td>
-</tr>
-
-<tr>
 <td><a href="mwcontam.html">mwcontam</a></td>
 <td>Find weights common to multiple molecular weights files</td>
 </tr>
@@ -825,8 +865,13 @@ None.
 </tr>
 
 <tr>
-<td><a href="octanol.html">octanol</a></td>
-<td>Draw a White-Wimley protein hydropathy plot</td>
+<td><a href="oddcomp.html">oddcomp</a></td>
+<td>Identify proteins with specified sequence word composition</td>
+</tr>
+
+<tr>
+<td><a href="pepdigest.html">pepdigest</a></td>
+<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
@@ -837,16 +882,6 @@ None.
 <tr>
 <td><a href="pepstats.html">pepstats</a></td>
 <td>Calculates statistics of protein properties</td>
-</tr>
-
-<tr>
-<td><a href="pepwindow.html">pepwindow</a></td>
-<td>Draw a hydropathy plot for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="pepwindowall.html">pepwindowall</a></td>
-<td>Draw Kyte-Doolittle hydropathy plot for a protein alignment</td>
 </tr>
 
 <tr>

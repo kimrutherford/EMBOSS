@@ -872,7 +872,7 @@ static AjPTable jaspscan_ReadCoreList(const AjPStr jaspdir)
 	ajFatal("Matrix list file %S not found",lfile);
 
 
-    ret = ajTablestrNewLen(JASPTAB_GUESS);
+    ret = ajTablestrNew(JASPTAB_GUESS);
     
     
     while(ajReadlineTrim(inf,&line))
@@ -968,7 +968,7 @@ static AjPTable jaspscan_ReadFamList(const AjPStr jaspdir)
 	ajFatal("Matrix list file %S not found",lfile);
 
 
-    ret = ajTablestrNewLen(JASPTAB_GUESS);
+    ret = ajTablestrNew(JASPTAB_GUESS);
     
     
     while(ajReadlineTrim(inf,&line))
@@ -1223,7 +1223,7 @@ static void jaspscan_ReportHits(AjPFeattable TabRpt, const AjPTable mattab,
 				AjPList hits)
 {
     PJsphits hit = NULL;
-    PJspmat info = NULL;
+    const PJspmat info = NULL;
     AjPFeature feat = NULL;
     AjPStr str = NULL;
     float fnum = 0.;
@@ -1243,7 +1243,7 @@ static void jaspscan_ReportHits(AjPFeattable TabRpt, const AjPTable mattab,
 	ajFmtPrintS(&str,"*id %S",hit->matname);
 	ajFeatTagAdd(feat, NULL, str);
 
-	info = ajTableFetch(mattab,hit->matname);
+	info = ajTableFetchS(mattab, hit->matname);
 	if(!info)
 	    ajWarn("No info for matrix %S",hit->matname);
 	

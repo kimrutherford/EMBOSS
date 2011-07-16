@@ -45,7 +45,7 @@ Input (gapped) protein sequence(s): tsw:opsd_human
 Command line arguments
 
 Back-translate a protein sequence to ambiguous nucleotide sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) protein sequence(s) filename and
@@ -123,7 +123,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   Any DNA sequence USA.
+   backtranambig reads one or more protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -241,8 +258,20 @@ SQ   SEQUENCE   348 AA;  38893 MW;  6F4F6FCBA34265B2 CRC64;
 Output file format
 
    The output is a nucleotide sequence containing the most favoured back
-   translation of the specified protein, and using the specified
-   translation table (which defaults to human).
+   translation of the specified protein, and using the specified codon
+   usage table (which defaults to human).
+
+   The output is a standard EMBOSS sequence file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -osformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   excel, feattable, motif, nametable, regions, seqtable, simple, srs,
+   table, tagseq.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Output files for usage example
 
@@ -338,21 +367,18 @@ See also
 
    Program name     Description
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
-   charge           Draw a protein charge plot
    checktrans       Reports STOP codons and ORF statistics of a protein
    coderet          Extract CDS, mRNA and translations from feature tables
    compseq          Calculate the composition of unique words in sequences
    emowse           Search protein sequences by digest fragment molecular weight
    freak            Generate residue/base frequency table or plot
-   iep              Calculate the isoelectric point of proteins
    mwcontam         Find weights common to multiple molecular weights files
    mwfilter         Filter noisy data from molecular weights file
-   octanol          Draw a White-Wimley protein hydropathy plot
+   oddcomp          Identify proteins with specified sequence word composition
+   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+                    sites
    pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepstats         Calculates statistics of protein properties
-   pepwindow        Draw a hydropathy plot for a protein sequence
-   pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
-                    alignment
    plotorf          Plot potential open reading frames in a nucleotide sequence
    prettyseq        Write a nucleotide sequence and its translation to file
    remap            Display restriction enzyme binding sites in a nucleotide sequence

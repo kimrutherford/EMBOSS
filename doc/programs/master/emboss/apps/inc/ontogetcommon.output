@@ -1,0 +1,19 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: ontogetcommon.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0000197
+name: Gene expression and regulation
+namespace: topic
+def: The study of gene expression and regulation (genetic information that is used in the synthesis of a protein).
+comment: This involves analysis of microarray data, northern blots, gene-indexed expression profiles etc.
+alt_id: EDAM:0000631
+alt_id: EDAM:0000204
+subset: topic
+is_a: EDAM:0002816 ! Genes
+
+</pre>
+</td></tr></table><p>

@@ -1,16 +1,28 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensmetacoordinate_h
-#define ensmetacoordinate_h
+#ifndef ENSMETACOORDINATE_H
+#define ENSMETACOORDINATE_H
 
-#include "enstable.h"
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
+
 #include "enscoordsystem.h"
 
+AJ_BEGIN_DECLS
 
 
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
 
 /* @data EnsPMetacoordinateadaptor ********************************************
 **
@@ -37,6 +49,10 @@ typedef struct EnsSMetacoordinateadaptor
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
@@ -49,14 +65,14 @@ EnsPMetacoordinateadaptor ensRegistryGetMetacoordinateadaptor(
 EnsPMetacoordinateadaptor ensMetacoordinateadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensMetacoordinateadaptorDel(EnsPMetacoordinateadaptor *Pmca);
+void ensMetacoordinateadaptorDel(EnsPMetacoordinateadaptor* Pmca);
 
 AjBool ensMetacoordinateadaptorFetchAllCoordsystems(
     const EnsPMetacoordinateadaptor mca,
     const AjPStr name,
     AjPList css);
 
-ajuint ensMetacoordinateadaptorGetMaximumlength(
+ajint ensMetacoordinateadaptorGetMaximumlength(
     const EnsPMetacoordinateadaptor mca,
     const EnsPCoordsystem cs,
     const AjPStr name);
@@ -68,8 +84,6 @@ ajuint ensMetacoordinateadaptorGetMaximumlength(
 
 
 
-#endif /* ensmetacoordinate_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSMETACOORDINATE_H */

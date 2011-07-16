@@ -46,7 +46,7 @@ Extract regions from a sequence
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with extractseq</b>
+Here is a sample session with <b>extractseq</b>
 <p>
 Extract the region from position 10 to 20: 
 <p>
@@ -54,7 +54,7 @@ Extract the region from position 10 to 20:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractseq tembl:x65923 result.seq -regions '10-20' </b>
+% <b>extractseq tembl:x65923 result.seq -regions "10-20" </b>
 Extract regions from a sequence
 
 </pre></td></tr></table><p>
@@ -69,7 +69,7 @@ Extract the regions 10 to 20, 30 to 45, 533 to 537:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractseq tembl:x65921 result2.seq -regions '10-20 30-45 533-537' </b>
+% <b>extractseq tembl:x65921 result2.seq -regions "10-20 30-45 533-537" </b>
 Extract regions from a sequence
 
 </pre></td></tr></table><p>
@@ -84,7 +84,7 @@ Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractseq tembl:x65921 -reg '782..856,951..1095,1557..1612,1787..1912' stdout </b>
+% <b>extractseq tembl:x65921 -reg "782..856,951..1095,1557..1612,1787..1912" stdout </b>
 Extract regions from a sequence
 
 >X65921 X65921.1 H.sapiens fau 1 gene
@@ -108,7 +108,7 @@ Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912 all to separate o
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractseq tembl:x65921 -reg '782..856,951..1095,1557..1612,1787..1912' stdout -separate </b>
+% <b>extractseq tembl:x65921 -reg "782..856,951..1095,1557..1612,1787..1912" stdout -separate </b>
 Extract regions from a sequence
 
 >X65921_782_856 H.sapiens fau 1 gene
@@ -135,7 +135,7 @@ tcttaa
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Extract regions from a sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
@@ -590,7 +590,35 @@ Examples of region specifications are:
     Input file format
 </H2>
 
-<b>extractseq</b> reads a normal sequence USA.
+<b>extractseq</b> reads a single nucleotide or protein sequence.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -802,7 +830,7 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
 
 <p>
 
-You can specifiy a file of ranges to extract by giving the '-regions'
+You can specify a file of ranges to extract by giving the '-regions'
 qualifier the value '@' followed by the name of the file containing the
 ranges. (eg: '-regions @myfile').
 
@@ -838,7 +866,26 @@ An example range file is:
 </H2>
 
 
-The output is a normal sequence file.
+<p>
+
+The output is a standard EMBOSS sequence file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
 
 <p>
 
@@ -863,7 +910,7 @@ tccctctcgatacactcgggacaagttagggc
 </td></tr></table><p>
 <p>
 
-If the option '-separate' is used then each specified region is written
+If the option <tt>-separate</tt> is used then each specified region is written
 to the output file as a separate sequence.  The name of the sequence is
 created from the name of the original sequence with the start and end
 positions of the range appended with underscore characters between them,
@@ -888,7 +935,7 @@ None.
 </H2>
 
 <p><b>extractseq</b> allows you to specify one or more regions of a sequence to extract sub-sequences from to build up a contiguous output sequence.  This is modelled on the cell's process of splicing out exons from mRNA, but the program is generally applicable to any cutting and splicing or editing operation on a single sequence.</p>
-<p>Where the <tt>-regions</tt> option is used to specify output as separate sequences, the name of the sequence is created from the name of the original sequence with the start and end positions of the range appended with underscore characters between them, eg: XYZ region 2 to 34 is written as: <tt>XYZ_2_34</tt>.  In such cases the output sequence foramt must be capable of supporting multiple sequences.</p>
+<p>Where the <tt>-regions</tt> option is used to specify output as separate sequences, the name of the sequence is created from the name of the original sequence with the start and end positions of the range appended with underscore characters between them, eg: XYZ region 2 to 34 is written as: <tt>XYZ_2_34</tt>.  In such cases the output sequence format must be capable of supporting multiple sequences.</p>
 
 	
 <H2>
@@ -1007,6 +1054,11 @@ None noted.
 </tr>
 
 <tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
 <td><a href="listor.html">listor</a></td>
 <td>Write a list file of the logical OR of two sets of sequences</td>
 </tr>
@@ -1089,6 +1141,11 @@ None noted.
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>

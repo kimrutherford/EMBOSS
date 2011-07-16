@@ -3,6 +3,11 @@
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
 <td><a href="getorf.html">getorf</a></td>
 <td>Finds and extracts open reading frames (ORFs)</td>
 </tr>

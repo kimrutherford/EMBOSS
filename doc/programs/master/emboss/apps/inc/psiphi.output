@@ -1,12 +1,12 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: 1hmp_a.psiphi </h3>
+<p><h3>File: 1hmp_a.psiphi</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: psiphi
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: psiphi
 #    [-infile] ../../data/1hmp_a.ccf
 #    -chainnumber 1

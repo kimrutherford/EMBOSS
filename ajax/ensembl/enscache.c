@@ -1,13 +1,11 @@
-/******************************************************************************
-** @source Ensembl Cache functions
+/* @source Ensembl Cache functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.8 $
+** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
+** @version $Revision: 1.24 $
 ** @@
-**
-** Bio::EnsEMBL::Utils::Cache CVS Revision: 1.2
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -30,6 +28,21 @@
 /* ==================================================================== */
 
 #include "enscache.h"
+#include "enstable.h"
+
+
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== global variables ========================== */
+/* ==================================================================== */
 
 
 
@@ -37,9 +50,6 @@
 /* ==================================================================== */
 /* ========================== private data ============================ */
 /* ==================================================================== */
-
-
-
 
 /* @datastatic CachePNode *****************************************************
 **
@@ -50,20 +60,34 @@
 **
 ** @attr Key [void*] Key data address
 ** @attr Value [void*] Value data address
-** @attr Bytes [ajulong] Byte size of this node including key and value data
+** @attr Bytes [size_t] Byte size of this node including key and value data
 ** @attr Dirty [AjBool] Flag to mark that value data has not been written back
 ** @@
 ******************************************************************************/
 
 typedef struct CacheSNode
 {
-    void *Key;
-    void *Value;
-    ajulong Bytes;
+    void* Key;
+    void* Value;
+    size_t Bytes;
     AjBool Dirty;
 } CacheONode;
 
 #define CachePNode CacheONode*
+
+
+
+
+/* ==================================================================== */
+/* ======================== private constants ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== private variables ========================= */
+/* ==================================================================== */
 
 
 
@@ -79,6 +103,22 @@ static void cacheNodeDel(const EnsPCache cache, CachePNode* Pnode);
 static AjBool cacheNodeInsert(EnsPCache cache, CachePNode node);
 
 static AjBool cacheNodeRemove(EnsPCache cache, const CachePNode node);
+
+
+
+
+/* ==================================================================== */
+/* ===================== All functions by section ===================== */
+/* ==================================================================== */
+
+
+
+
+/* @filesection enscache ******************************************************
+**
+** @nam1rule ens Function belongs to the Ensembl library
+**
+******************************************************************************/
 
 
 
@@ -102,7 +142,7 @@ static AjBool cacheNodeRemove(EnsPCache cache, const CachePNode node);
 
 static CachePNode cacheNodeNew(const EnsPCache cache, void* key, void* value)
 {
-    ajuint *Puintkey = NULL;
+    ajuint* Puintkey = NULL;
 
     CachePNode node = NULL;
 
@@ -119,7 +159,7 @@ static CachePNode cacheNodeNew(const EnsPCache cache, void* key, void* value)
 
     /* Add the size of the Ensembl Cache Node itself. */
 
-    node->Bytes += sizeof (CacheONode);
+    node->Bytes = sizeof (CacheONode);
 
     switch(cache->Type)
     {
@@ -129,9 +169,9 @@ static CachePNode cacheNodeNew(const EnsPCache cache, void* key, void* value)
 
             AJNEW0(Puintkey);
 
-            *Puintkey = *((ajuint *) key);
+            *Puintkey = *((ajuint*) key);
 
-            node->Key = (void *) Puintkey;
+            node->Key = (void*) Puintkey;
 
             /* Add the size of unsigned integer key data. */
 
@@ -143,7 +183,7 @@ static CachePNode cacheNodeNew(const EnsPCache cache, void* key, void* value)
 
             /* Reference AJAX String key data. */
 
-            node->Key = (void *) ajStrNewS((AjPStr) key);
+            node->Key = (void*) ajStrNewS((AjPStr) key);
 
             /* Add the size of AJAX String key data. */
 
@@ -190,6 +230,8 @@ static CachePNode cacheNodeNew(const EnsPCache cache, void* key, void* value)
 
 static void cacheNodeDel(const EnsPCache cache, CachePNode* Pnode)
 {
+    CachePNode pthis = NULL;
+
     if(!cache)
         return;
 
@@ -199,13 +241,15 @@ static void cacheNodeDel(const EnsPCache cache, CachePNode* Pnode)
     if(!*Pnode)
         return;
 
+    pthis = *Pnode;
+
     switch(cache->Type)
     {
         case ensECacheTypeNumeric:
 
             /* Delete AJAX unsigned integer key data. */
 
-            AJFREE((*Pnode)->Key);
+            AJFREE(pthis->Key);
 
             break;
 
@@ -213,7 +257,7 @@ static void cacheNodeDel(const EnsPCache cache, CachePNode* Pnode)
 
             /* Delete AJAX String key data. */
 
-            ajStrDel((AjPStr *) &((*Pnode)->Key));
+            ajStrDel((AjPStr*) &pthis->Key);
 
             break;
 
@@ -225,10 +269,10 @@ static void cacheNodeDel(const EnsPCache cache, CachePNode* Pnode)
 
     /* Delete the value data. */
 
-    if(cache->Delete && (*Pnode)->Value)
-        (*cache->Delete)(&((*Pnode)->Value));
+    if(cache->Delete && pthis->Value)
+        (*cache->Delete)(&pthis->Value);
 
-    AJFREE(*Pnode);
+    AJFREE(pthis);
 
     *Pnode = NULL;
 
@@ -264,11 +308,11 @@ static AjBool cacheNodeInsert(EnsPCache cache, CachePNode node)
 
     /* Insert the node into the AJAX List. */
 
-    ajListPushAppend(cache->List, (void *) node);
+    ajListPushAppend(cache->List, (void*) node);
 
     /* Insert the node into the AJAX Table. */
 
-    ajTablePut(cache->Table, node->Key, (void *) node);
+    ajTablePut(cache->Table, node->Key, (void*) node);
 
     /* Update the cache statistics. */
 
@@ -285,7 +329,7 @@ static AjBool cacheNodeInsert(EnsPCache cache, CachePNode node)
     {
         /* Remove the top node from the AJAX List. */
 
-        ajListPop(cache->List, (void **) &old);
+        ajListPop(cache->List, (void**) &old);
 
         /* Remove the node also from the AJAX Table. */
 
@@ -374,31 +418,40 @@ static AjBool cacheNodeRemove(EnsPCache cache, const CachePNode node)
 
 
 
-/* @filesection enscache ******************************************************
-**
-** @nam1rule ens Function belongs to the AJAX Ensembl library
-** @nam2rule Cache Ensembl Cache objects
-**
-******************************************************************************/
-
-
-
-
 /* @datasection [EnsPCache] Ensembl Cache *************************************
 **
-** Functions for Ensembl Caches
-**
+** @nam2rule Cache Functions for manipulating Ensembl Cache objects
+** @cc Bio::EnsEMBL::Utils::Cache
+** @cc CVS Revision: 1.3
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
 
 
 
-/* @section functions *********************************************************
+/* @section constructors ******************************************************
 **
 ** @fdata [EnsPCache]
-** @fcategory misc
 **
+** @nam3rule New Constructor
+**
+** @argrule New type [const EnsECacheType] Ensembl Cache type
+** @argrule New maxbytes [size_t] Maximum number of bytes held in the cache
+** @argrule New maxcount [ajuint] Maximum number of objects to be cached
+** @argrule New maxsize [size_t] Maximum size of an object to be cached
+** @argrule New Freference [void* function] Object-specific referencing
+** function
+** @argrule New Fdelete [void function] Object-specific deletion function
+** @argrule New Fsize [size_t function] Object-specific memory sizing function
+** @argrule New Fread [void* function] Object-specific reading function
+** @argrule New Fwrite [AjBool function] Object-specific writing function
+** @argrule New synchron [AjBool] ajTrue: Immediately write-back value data
+** @argrule New label [const char*] Cache label for statistics output
+**
+** @valrule * [EnsPCache] Ensembl Cache or NULL
+**
+** @fcategory new
 ******************************************************************************/
 
 
@@ -408,14 +461,14 @@ static AjBool cacheNodeRemove(EnsPCache cache, const CachePNode node)
 **
 ** Default constructor for an Ensembl Cache.
 **
-** @param [r] type [EnsECacheType] Ensembl Cache type
+** @param [r] type [const EnsECacheType] Ensembl Cache type
 **                 (ensECacheTypeNumeric or ensECacheTypeAlphaNumeric)
-** @param [r] maxbytes [ajulong] Maximum number of bytes held in the cache
+** @param [r] maxbytes [size_t] Maximum number of bytes held in the cache
 ** @param [r] maxcount [ajuint] Maximum number of objects to be cached
-** @param [r] maxsize [ajulong] Maximum size of an object to be cached
+** @param [r] maxsize [size_t] Maximum size of an object to be cached
 ** @param [f] Freference [void* function] Object-specific referencing function
 ** @param [f] Fdelete [void function] Object-specific deletion function
-** @param [f] Fsize [ajulong function] Object-specific memory sizing function
+** @param [f] Fsize [size_t function] Object-specific memory sizing function
 ** @param [f] Fread [void* function] Object-specific reading function
 ** @param [f] Fwrite [AjBool function] Object-specific writing function
 ** @param [r] synchron [AjBool] ajTrue: Immediately write-back value data
@@ -433,17 +486,17 @@ static AjBool cacheNodeRemove(EnsPCache cache, const CachePNode node)
 ** functions and object-specific read and write back functions.
 ******************************************************************************/
 
-EnsPCache ensCacheNew(EnsECacheType type,
-                      ajulong maxbytes,
+EnsPCache ensCacheNew(const EnsECacheType type,
+                      size_t maxbytes,
                       ajuint maxcount,
-                      ajulong maxsize,
+                      size_t maxsize,
                       void* Freference(void* value),
                       void Fdelete(void** value),
-                      ajulong Fsize(const void* value),
+                      size_t Fsize(const void* value),
                       void* Fread(const void* key),
                       AjBool Fwrite(const void* value),
                       AjBool synchron,
-                      const char *label)
+                      const char* label)
 {
     AjBool debug = AJFALSE;
 
@@ -538,15 +591,13 @@ EnsPCache ensCacheNew(EnsECacheType type,
     {
         case ensECacheTypeNumeric:
 
-            cache->Table = ajTableNewFunctionLen(0,
-                                                 ensTableCmpUint,
-                                                 ensTableHashUint);
+            cache->Table = ensTableuintNewLen(0);
 
             break;
 
         case ensECacheTypeAlphaNumeric:
 
-            cache->Table = ajTablestrNewLen(0);
+            cache->Table = ensTablestrNewLen(0);
 
             break;
 
@@ -579,11 +630,30 @@ EnsPCache ensCacheNew(EnsECacheType type,
 
 
 
+/* @section destructors *******************************************************
+**
+** Destruction destroys all internal data structures and frees the
+** memory allocated for an Ensembl Cache object.
+**
+** @fdata [EnsPCache]
+**
+** @nam3rule Del Destroy (free) an Ensembl Cache object
+**
+** @argrule * Pcache [EnsPCache*] Ensembl Cache object address
+**
+** @valrule * [void]
+**
+** @fcategory delete
+******************************************************************************/
+
+
+
+
 /* @func ensCacheDel **********************************************************
 **
 ** Default destructor for an Ensembl Cache.
 **
-** @param [u] Pcache [EnsPCache*] Ensembl Cache address
+** @param [u] Pcache [EnsPCache*] Ensembl Cache object address
 **
 ** @return [void]
 ** @@
@@ -618,7 +688,7 @@ void ensCacheDel(EnsPCache* Pcache)
 
     /* Remove nodes from the AJAX List. */
 
-    while(ajListPop(pthis->List, (void **) &node))
+    while(ajListPop(pthis->List, (void**) &node))
     {
         /* Remove the node from the AJAX Table. */
 
@@ -659,242 +729,21 @@ void ensCacheDel(EnsPCache* Pcache)
 
 
 
-/* @func ensCacheFetch ********************************************************
+/* @section debugging *********************************************************
 **
-** Fetch a value from an Ensembl Cache via a key. If the value is not already
-** in the cache it will be read by the function provided at the Cache
-** initialisation stage.
+** Functions for reporting of an Ensembl Cache object.
 **
-** The caller is resposible for deleting the returned object.
+** @fdata [EnsPCache]
 **
-** @param [u] cache [EnsPCache] Ensembl Cache
-** @param [r] key [void*] Key data address
+** @nam3rule Trace Report Ensembl Cache elements to debug file.
 **
-** @return [void*] Value data address or NULL
-** @@
+** @argrule Trace cache [const EnsPCache] Ensembl Cache
+** @argrule Trace level [ajuint] Indentation level
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
 ******************************************************************************/
-
-void* ensCacheFetch(EnsPCache cache, void *key)
-{
-    void *value = NULL;
-
-    AjIList iter = NULL;
-
-    CachePNode lnode = NULL;
-    CachePNode tnode = NULL;
-
-    if(!cache)
-        return NULL;
-
-    if(!key)
-        return NULL;
-
-    tnode = (CachePNode) ajTableFetch(cache->Table, key);
-
-    if(tnode)
-    {
-        cache->Hit++;
-
-        /* Move the node to the end of the list. */
-
-        iter = ajListIterNew(cache->List);
-
-        while(!ajListIterDone(iter))
-        {
-            lnode = (CachePNode) ajListIterGet(iter);
-
-            if(lnode == tnode)
-            {
-                ajListIterRemove(iter);
-
-                ajListPushAppend(cache->List, (void *) lnode);
-
-                break;
-            }
-        }
-
-        ajListIterDel(&iter);
-
-        /*
-        ** Reference the object when returned by the cache so that external
-        ** code has to delete it irrespectively whether it was read from the
-        ** cache or instantiated by the cache->Read function.
-        */
-
-        if(cache->Reference && tnode->Value)
-            value = (*cache->Reference)(tnode->Value);
-    }
-    else
-    {
-        cache->Miss++;
-
-        if(cache->Read)
-        {
-            value = (*cache->Read)(key);
-
-            if(value)
-            {
-                tnode = cacheNodeNew(cache, key, value);
-
-                if(!cacheNodeInsert(cache, tnode))
-                    cacheNodeDel(cache, &tnode);
-            }
-        }
-    }
-
-    return value;
-}
-
-
-
-
-/* @func ensCacheStore ********************************************************
-**
-** Insert value data into an Ensembl Cache under key data.
-**
-** @param [u] cache [EnsPCache] Ensembl Cache
-** @param [r] key [void*] Key data address
-** @param [r] value [void**] Value data address
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensCacheStore(EnsPCache cache, void* key, void** value)
-{
-    CachePNode node = NULL;
-
-    if(!cache)
-        return ajFalse;
-
-    if(!key)
-        return ajFalse;
-
-    if(!value)
-        return ajFalse;
-
-    /* Is a node already cached under this key? */
-
-    node = (CachePNode) ajTableFetch(cache->Table, key);
-
-    if(node)
-    {
-        /*
-        ** Delete the Object passed in and increase the reference counter
-        ** of the cached Object before assigning it.
-        */
-
-        (*cache->Delete)(value);
-
-        *value = (*cache->Reference)(node->Value);
-    }
-    else
-    {
-        node = cacheNodeNew(cache, key, *value);
-
-        if(cacheNodeInsert(cache, node))
-        {
-            if(cache->Synchron)
-            {
-                if(cache->Write && node->Value)
-                    (*cache->Write)(node->Value);
-
-                node->Dirty = ajFalse;
-            }
-            else
-                node->Dirty = ajTrue;
-        }
-        else
-        {
-            if(cache->Write && node->Value)
-                (*cache->Write)(node->Value);
-
-            cacheNodeDel(cache, &node);
-        }
-    }
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensCacheRemove *******************************************************
-**
-** Remove value data from an Ensembl Cache via key data.
-**
-** @param [u] cache [EnsPCache] Ensembl Cache
-** @param [r] key [const void*] Key data
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensCacheRemove(EnsPCache cache, const void* key)
-{
-    CachePNode node = NULL;
-
-    if(!cache)
-        return ajFalse;
-
-    if(!key)
-        return ajFalse;
-
-    node = (CachePNode) ajTableFetch(cache->Table, key);
-
-    if(node)
-    {
-        cacheNodeRemove(cache, node);
-
-        /* Both, key and value data are deleted via cacheNodeDel. */
-
-        cacheNodeDel(cache, &node);
-    }
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensCacheSynchronise **************************************************
-**
-** Synchronise an Ensembl Cache by writing-back all value data that have not
-** been written before.
-**
-** @param [u] cache [EnsPCache] Ensembl Cache
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensCacheSynchronise(EnsPCache cache)
-{
-    AjIList iter = NULL;
-
-    CachePNode node = NULL;
-
-    if(!cache)
-        return ajFalse;
-
-    iter = ajListIterNew(cache->List);
-
-    while(!ajListIterDone(iter))
-    {
-        node = (CachePNode) ajListIterGet(iter);
-
-        if(cache->Write && node->Value && node->Dirty)
-        {
-            (*cache->Write)(node->Value);
-
-            node->Dirty = ajFalse;
-        }
-    }
-
-    ajListIterDel(&iter);
-
-    return ajTrue;
-}
 
 
 
@@ -963,6 +812,277 @@ AjBool ensCacheTrace(const EnsPCache cache, ajuint level)
             indent, ratio);
 
     ajStrDel(&indent);
+
+    return ajTrue;
+}
+
+
+
+
+/* @section modify ************************************************************
+**
+** Update cache object values
+**
+** @fdata [EnsPCache]
+**
+** @nam3rule Fetch Fetch value data from an Ensembl Cache
+** @nam3rule Remove Remove value data from an Ensembl Cache
+** @nam3rule Store Insert a value into an Ensembl Cache
+** @nam3rule Synchronise Synchronise an Ensembl Cache
+**
+** @argrule Fetch cache [EnsPCache] Ensembl Cache
+** @argrule Fetch key [void*] Key data address
+** @argrule Fetch Pvalue [void**] Value data address address
+** @argrule Remove cache [EnsPCache] Ensembl Cache
+** @argrule Remove key [const void*] Key data address
+** @argrule Store cache [EnsPCache] Ensembl Cache
+** @argrule Store key [void*] Key data address
+** @argrule Store Pvalue [void**] Value data address adress
+** @argrule Synchronise cache [EnsPCache] Ensembl Cache
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory modify
+******************************************************************************/
+
+
+
+
+/* @func ensCacheFetch ********************************************************
+**
+** Fetch a value from an Ensembl Cache via a key. If the value is not already
+** in the cache it will be read by the function provided at the Cache
+** initialisation stage.
+**
+** The caller is responsible for deleting the returned object.
+**
+** @param [u] cache [EnsPCache] Ensembl Cache
+** @param [r] key [void*] Key data address
+** @param [wP] Pvalue [void**] Value data address address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensCacheFetch(EnsPCache cache, void* key, void** Pvalue)
+{
+    AjIList iter = NULL;
+
+    CachePNode lnode = NULL;
+    CachePNode tnode = NULL;
+
+    if(!cache)
+        return ajFalse;
+
+    if(!key)
+        return ajFalse;
+
+    if(!Pvalue)
+        return ajFalse;
+
+    tnode = (CachePNode) ajTableFetchmodV(cache->Table, key);
+
+    if(tnode)
+    {
+        cache->Hit++;
+
+        /* Move the node to the end of the list. */
+
+        iter = ajListIterNew(cache->List);
+
+        while(!ajListIterDone(iter))
+        {
+            lnode = (CachePNode) ajListIterGet(iter);
+
+            if(lnode == tnode)
+            {
+                ajListIterRemove(iter);
+
+                ajListPushAppend(cache->List, (void*) lnode);
+
+                break;
+            }
+        }
+
+        ajListIterDel(&iter);
+
+        /*
+        ** Reference the object when returned by the cache so that external
+        ** code has to delete it irrespectively whether it was read from the
+        ** cache or instantiated by the cache->Read function.
+        */
+
+        if(cache->Reference && tnode->Value)
+            *Pvalue = (*cache->Reference)(tnode->Value);
+    }
+    else
+    {
+        cache->Miss++;
+
+        if(cache->Read)
+        {
+            *Pvalue = (*cache->Read)(key);
+
+            if(*Pvalue)
+            {
+                tnode = cacheNodeNew(cache, key, *Pvalue);
+
+                if(!cacheNodeInsert(cache, tnode))
+                    cacheNodeDel(cache, &tnode);
+            }
+        }
+    }
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensCacheRemove *******************************************************
+**
+** Remove value data from an Ensembl Cache via key data.
+**
+** @param [u] cache [EnsPCache] Ensembl Cache
+** @param [r] key [const void*] Key data address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensCacheRemove(EnsPCache cache, const void* key)
+{
+    CachePNode node = NULL;
+
+    if(!cache)
+        return ajFalse;
+
+    if(!key)
+        return ajFalse;
+
+    node = (CachePNode) ajTableFetchmodV(cache->Table, key);
+
+    if(node)
+    {
+        cacheNodeRemove(cache, node);
+
+        /* Both, key and value data are deleted via cacheNodeDel. */
+
+        cacheNodeDel(cache, &node);
+    }
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensCacheStore ********************************************************
+**
+** Insert value data into an Ensembl Cache under key data.
+**
+** @param [u] cache [EnsPCache] Ensembl Cache
+** @param [u] key [void*] Key data address
+** @param [w] Pvalue [void**] Value data address address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensCacheStore(EnsPCache cache, void* key, void** Pvalue)
+{
+    CachePNode node = NULL;
+
+    if(!cache)
+        return ajFalse;
+
+    if(!key)
+        return ajFalse;
+
+    if(!Pvalue)
+        return ajFalse;
+
+    /* Is a node already cached under this key? */
+
+    node = (CachePNode) ajTableFetchmodV(cache->Table, key);
+
+    if(node)
+    {
+        /*
+        ** Delete the Object passed in and increase the reference counter
+        ** of the cached Object before assigning it.
+        */
+
+        (*cache->Delete)(Pvalue);
+
+        *Pvalue = (*cache->Reference)(node->Value);
+    }
+    else
+    {
+        node = cacheNodeNew(cache, key, *Pvalue);
+
+        if(cacheNodeInsert(cache, node))
+        {
+            if(cache->Synchron)
+            {
+                if(cache->Write && node->Value)
+                    (*cache->Write)(node->Value);
+
+                node->Dirty = ajFalse;
+            }
+            else
+                node->Dirty = ajTrue;
+        }
+        else
+        {
+            if(cache->Write && node->Value)
+                (*cache->Write)(node->Value);
+
+            cacheNodeDel(cache, &node);
+        }
+    }
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensCacheSynchronise **************************************************
+**
+** Synchronise an Ensembl Cache by writing-back all value data that have not
+** been written before.
+**
+** @param [u] cache [EnsPCache] Ensembl Cache
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensCacheSynchronise(EnsPCache cache)
+{
+    AjIList iter = NULL;
+
+    CachePNode node = NULL;
+
+    if(!cache)
+        return ajFalse;
+
+    iter = ajListIterNew(cache->List);
+
+    while(!ajListIterDone(iter))
+    {
+        node = (CachePNode) ajListIterGet(iter);
+
+        if(cache->Write && node->Value && node->Dirty)
+        {
+            (*cache->Write)(node->Value);
+
+            node->Dirty = ajFalse;
+        }
+    }
+
+    ajListIterDel(&iter);
 
     return ajTrue;
 }

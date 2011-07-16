@@ -30,7 +30,6 @@
 #include <sys/file.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <errno.h>
 #include <unistd.h>
 #include <locale.h>
 #include <pwd.h>
@@ -51,6 +50,7 @@
 #include <Sddl.h>
 #endif
 
+#include <errno.h>
 
 static AjPStr sysTname = NULL;
 static AjPStr sysFname = NULL;
@@ -100,10 +100,10 @@ static void CALLBACK sysTimeoutAbort(LPVOID arg, DWORD low, DWORD high);
 ** @suffix    C            Accept C character string parameters
 ** @suffix    S            Accept string object parameters
 ** 
-** @argrule C   cmdline   [const char*] Original command line
-** @argrule S   cmdline   [const AjPStr] Original command line
-** @argrule Build   Pname     [char**] Returned program name
-** @argrule Arglist PParglist [char***] Returns argument array
+** @argrule C       cmdlinetxt [const char*] Original command line
+** @argrule S       cmdline    [const AjPStr] Original command line
+** @argrule Build   Pname      [char**] Returned program name
+** @argrule Arglist PParglist  [char***] Returns argument array
 **
 ** @valrule Build [AjBool] True on success
 ** @valrule Free [void]
@@ -119,14 +119,15 @@ static void CALLBACK sysTimeoutAbort(LPVOID arg, DWORD low, DWORD high);
 **
 ** Generates a program name and argument list from a command line string.
 **
-** @param [r] cmdline [const char*] Command line.
+** @param [r] cmdlinetxt [const char*] Command line.
 ** @param [w] Pname [char**] Program name.
 ** @param [w] PParglist [char***] Argument list.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-AjBool ajSysArglistBuildC(const char* cmdline, char** Pname, char*** PParglist)
+AjBool ajSysArglistBuildC(const char* cmdlinetxt,
+                          char** Pname, char*** PParglist)
 {    
     static AjPRegexp argexp = NULL;
     AjPStr tmpline          = NULL;
@@ -141,11 +142,11 @@ AjBool ajSysArglistBuildC(const char* cmdline, char** Pname, char*** PParglist)
     if(!argexp)
 	argexp = ajRegCompC("^[ \t]*(\"([^\"]*)\"|'([^']*)'|([^ \t]+))");
     
-    ajDebug("ajSysArglistBuildC '%s'\n", cmdline);
+    ajDebug("ajSysArglistBuildC '%s'\n", cmdlinetxt);
     
-    ajStrAssignC(&tmpline, cmdline);
+    ajStrAssignC(&tmpline, cmdlinetxt);
     
-    cp   = cmdline;
+    cp   = cmdlinetxt;
     ipos = 0;
     while(ajRegExecC(argexp, &cp[ipos]))
     {
@@ -383,11 +384,23 @@ __deprecated unsigned char ajSysItoUC(ajint v)
 **                           file.
 ** @nam5rule  FileWhichEnv   Uses environment to extract the PATH list.
 ** @nam4rule  FileUnlink     Deletes a file or link
-** 
-** @argrule Unlink filename [const AjPStr] File name
+** @nam3rule  Get            Return attribute
+** @nam4rule  GetHomedir     Return home directory
+** @nam5rule  GetHomedirFrom Get home directory from parameter
+** @nam6rule  FromName       Get home directory for a named user
+**
+** @suffix    C            Accept C character string parameters
+** @suffix    S            Accept string object parameters
+**
+** @argrule RmrfC path [const char*] File name
+** @argrule UnlinkC filename [const char*] File name
+** @argrule UnlinkS filename [const AjPStr] File name
 ** @argrule Which Pfilename [AjPStr*] File name (updated when found)
 ** @argrule Env env [char* const[]] File name (updated when found)
-** @valrule   *  [AjBool]  True if operation is successful.
+** @argrule FromName username [const char*] Username
+**
+** @valrule Homedir  [char*]  Home directory name
+** @valrule File     [AjBool]  True if operation is successful.
 **
 ******************************************************************************/
 
@@ -771,9 +784,173 @@ __deprecated AjBool ajSysWhichEnv(AjPStr *Pfilename, char * const env[])
 
 
 
-/* @section Wrappers to C functions *******************************************
+/* @func ajSysGetHomedir *************************************************
 **
-** Functions for calling or substituting C-functions.
+** Get the home directory of the current user
+**
+** @return [char*] Home directory or NULL
+** @@
+******************************************************************************/
+
+char* ajSysGetHomedir(void)
+{
+    char *hdir = NULL;
+#ifndef WIN32
+    char *p = NULL;
+
+    if(!(p = getenv("HOME")))
+        return NULL;
+
+    hdir = ajCharNewC(p);
+#else
+    TCHAR wpath[MAX_PATH];
+    HRESULT ret;
+
+    /* Replace with SHGetKnownFolderPath when XP is no longer supported */
+    ret = SHGetFolderPath(NULL,CSIDL_PROFILE,NULL,0,wpath);
+
+    if(ret != S_OK)
+        return NULL;
+    
+    hdir = ajCharNewC(wpath);
+#endif
+
+    return hdir;
+}
+
+
+
+
+/* @func ajSysGetHomedirFromName *********************************************
+**
+** Get a home directory location from  a username
+**
+** @param [r] username [const char*] Username
+** @return [char*] Home directory or NULL
+** @@
+******************************************************************************/
+
+char* ajSysGetHomedirFromName(const char *username)
+{
+    char *hdir = NULL;
+#ifndef WIN32
+    struct passwd *pass = NULL;
+    
+
+    pass = getpwnam(username);
+    
+    if(!pass)
+        return NULL;
+
+    hdir = ajCharNewC(pass->pw_dir);
+#else
+    LPTSTR domainname = NULL;
+    LPTSTR localsvr   = NULL;
+    DWORD dnsize  = 0;
+    PSID psid     = NULL;
+    DWORD sidsize = 0;
+
+    SID_NAME_USE sidtype;
+
+    LPTSTR strsid = NULL;
+    AjPStr subkey = NULL;
+
+    DWORD hdbuffsize = MAX_PATH;
+    char hdbuff[MAX_PATH];
+
+    LONG ret;
+    HKEY hkey = NULL;
+
+    if(!LookupAccountName(localsvr, username, psid, &sidsize, domainname,
+			  &dnsize, &sidtype))
+    {
+        if(GetLastError() == ERROR_NONE_MAPPED)
+        {
+            ajWarn("No Windows username found for '%s'", username);
+            return NULL;
+        }
+        else if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+        {
+            psid = (LPTSTR) LocalAlloc(LPTR,sidsize * sizeof(TCHAR));
+            if(!psid)
+            {
+                ajWarn("ajSysLookupAccount: SID allocation failure");
+                return NULL;
+            }
+
+            domainname = (LPTSTR) LocalAlloc(LPTR, dnsize * sizeof(TCHAR));
+            if(!domainname)
+            {
+                ajWarn("ajSysLookupAccount: Domain allocation failure");
+                LocalFree(psid);
+                return NULL;
+            }
+
+            if(!LookupAccountName(localsvr, username, psid, &sidsize,
+				  domainname, &dnsize, &sidtype))
+            {
+                ajWarn("LookupAccountName failed with %d", GetLastError());
+                LocalFree(psid);
+                LocalFree(domainname);
+                return NULL;
+            }
+        }
+        else
+        {
+            ajWarn("General LookupAccountName failure with %d", GetLastError());
+            return NULL;
+        }
+    }
+
+
+    if(!ConvertSidToStringSid(psid, &strsid))
+    {
+        LocalFree(psid);
+
+        return NULL;
+    }
+
+    LocalFree(psid);
+
+    subkey = ajStrNew();
+
+    ajFmtPrintS(&subkey,"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\"
+                "ProfileList\\%s",strsid);
+
+    LocalFree(strsid);
+
+    ret = RegOpenKeyEx(HKEY_LOCAL_MACHINE,ajStrGetPtr(subkey),(DWORD) 0,
+		       KEY_QUERY_VALUE,&hkey);
+
+    ajStrDel(&subkey);
+
+    if(ret != ERROR_SUCCESS)
+        return NULL;
+
+    ret = RegQueryValueEx(hkey,"ProfileImagePath",NULL,NULL,(LPBYTE)hdbuff,
+			  &hdbuffsize);
+
+    if(ret != ERROR_SUCCESS)
+        return NULL;
+
+    ret = RegCloseKey(hkey);
+
+    if(ret != ERROR_SUCCESS)
+        return NULL;
+
+    hdir = ajCharNewC(hdbuff);
+#endif
+
+
+    return hdir;
+}
+
+
+
+
+/* @section Wrappers to commands **********************************************
+**
+** Functions for invoking commands
 **
 ** @fdata [none]
 ** @fcategory misc
@@ -785,46 +962,17 @@ __deprecated AjBool ajSysWhichEnv(AjPStr *Pfilename, char * const env[])
 ** @nam4rule  CommandRemove    Execute a remove file command
 ** @nam4rule  CommandRemovedir Execute a remove directory command
 ** @nam4rule  CommandRename    Execute a fle rename command
-** @nam3rule  Func         Replacement for C-function.
-** @nam4rule  FuncSocket   A socket function for UNIX and Windows
-** @nam4rule  FuncStrtok   strtok that doesn't corrupt the source string
-** @nam5rule  FuncStrtokR  Reentrant version.
-** @nam4rule  FuncFgets    An fgets replacement that will cope with Mac OSX
-**                          files
-** @nam4rule  FuncFopen    An fopen replacement to cope with cygwin and windows
-** @nam4rule  FuncFdopen   Calls non-ANSI fdopen.
-** @nam4rule  FuncSocket   A socket function fore UNIX and Windows
-** @nam4rule  FuncStrdup   Duplicate BSD strdup function for very strict ANSI 
-** @nam3rule  System       Execute a command line as if from the C shell
-** @nam4rule  SystemEnv    Execute command line and pass the environment 
-**                         received from main to extract the PATH list
-** @nam4rule  SystemOut    Execute command line and write standard output to
-**                         a named file
-** @suffix    C            Accept CC character string parameters
+** @suffix    C            Accept C character string parameters
 ** @suffix    S            Accept string object parameters
 **
-** @argrule Fdopen filedes [ajint] file descriptor
-** @argrule Fdopen mode [const char*] file mode
-** @argrule Fgets buf [char*] buffer
-** @argrule Fgets size [int] maximum length to read
-** @argrule Fgets fp [FILE*] stream
-** @argrule Fopen name [const char*] Name of file to open
-** @argrule Fopen flags [const char*] Read/write/append flags
-** @argrule Strdup dupstr [const char*] String to duplicate
-** @argrule Strtok srcstr [const char*] source string
-** @argrule Strtok delimstr [const char*] delimiter string
-** @argrule R ptrptr [const char**] Saved pointer
-** @argrule R buf [AjPStr*] Independent buffer provided by caller
-** @argrule System cmdline [const AjPStr] The command line
-** @argrule SystemEnv env [char* const[]] Environment variables and values
-** @argrule SystemOut outfname [const AjPStr] The output file name
+** @argrule C name [const char*] Filename or directory name
+** @argrule S strname [const AjPStr] Filename or directory name
+** @argrule CopyC name2 [const char*] Destination filename
+** @argrule CopyS strname2 [const AjPStr] Destination filename
+** @argrule RenameC name2 [const char*] Destination filename
+** @argrule RenameS strname2 [const AjPStr] Destination filename
 **
-** @valrule Fdopen [FILE*] C open file
-** @valrule Fgets [char*] Buffer on success
-** @valrule Fopen [FILE*] C open file
-** @valrule Strdup [char*] New string
-** @valrule Strtok [char*] New string
-** @valrule System [void]
+** @valrule * [AjBool] True on success
 **
 ******************************************************************************/
 
@@ -846,7 +994,9 @@ AjBool ajSysCommandCopyC(const char* name, const char* name2)
     int from;
     int to;
     int n;
-    char buf[1024];
+    int nw;
+    char cbuf[1024];
+    char *buf;
 
     from = open(name, O_RDONLY);
     if(from < 0)
@@ -864,8 +1014,27 @@ AjBool ajSysCommandCopyC(const char* name, const char* name2)
         return ajFalse;
     }
 
-    while((n = read(from, buf, sizeof(buf))) > 0)
-        write(to, buf, n);
+    while((n = read(from, cbuf, sizeof(cbuf))) > 0)
+    {
+        buf = cbuf;
+        do
+        {
+            nw = write(to, buf, n);
+            if(nw == n)
+                break;
+            if(nw > 0)
+            {
+                buf += nw;
+                n -= nw;
+            }
+        } while (nw >= 0 || errno == EINTR);
+        if(nw < 0)
+        {
+            ajErr("Write to %s failed, error:%d %s",
+                  name2, errno, strerror(errno));
+            return ajFalse;
+        }
+    }
 
     close(from);
     close(to);
@@ -906,7 +1075,7 @@ AjBool ajSysCommandCopyS(const AjPStr strname, const AjPStr strname2)
 AjBool ajSysCommandMakedirC(const char* name)
 {
 #ifndef WIN32
-    if(!mkdir(name, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))
+    if(!mkdir(name, 0775))
         return ajTrue;
 #else
     if(!_mkdir(name))
@@ -1065,6 +1234,63 @@ AjBool ajSysCommandRenameS(const AjPStr strname, const AjPStr strname2)
 {
     return ajSysCommandRenameC(MAJSTRGETPTR(strname), MAJSTRGETPTR(strname2));
 }
+
+
+
+
+/* @section Wrappers to C functions *******************************************
+**
+** Functions for calling or substituting C-functions.
+**
+** @fdata [none]
+** @fcategory misc
+**
+** @nam3rule  Func         Replacement for C-function.
+** @nam4rule  FuncSocket   A socket function for UNIX and Windows
+** @nam4rule  FuncStrtok   strtok that doesn't corrupt the source string
+** @nam5rule  FuncStrtokR  Reentrant version.
+** @nam4rule  FuncFgets    An fgets replacement that will cope with Mac OSX
+**                          files
+** @nam4rule  FuncFopen    An fopen replacement to cope with cygwin and windows
+** @nam4rule  FuncFdopen   Calls non-ANSI fdopen.
+** @nam4rule  FuncSocket   A socket function fore UNIX and Windows
+** @nam4rule  FuncStrdup   Duplicate BSD strdup function for very strict ANSI 
+** @nam3rule  System       Execute a command line as if from the C shell
+** @nam4rule  SystemEnv    Execute command line and pass the environment 
+**                         received from main to extract the PATH list
+** @nam4rule  SystemOut    Execute command line and write standard output to
+**                         a named file
+** @suffix    C            Accept C character string parameters
+** @suffix    S            Accept string object parameters
+**
+** @argrule Fdopen filedes [ajint] file descriptor
+** @argrule Fdopen mode [const char*] file mode
+** @argrule Fgets buf [char*] buffer
+** @argrule Fgets size [int] maximum length to read
+** @argrule Fgets fp [FILE*] stream
+** @argrule Fopen name [const char*] Name of file to open
+** @argrule Fopen flags [const char*] Read/write/append flags
+** @argrule Socket domain [int] Domain
+** @argrule Socket type [int] Type
+** @argrule Socket protocol [int] Protocol
+** @argrule Strdup dupstr [const char*] String to duplicate
+** @argrule Strtok srcstr [const char*] source string
+** @argrule Strtok delimstr [const char*] delimiter string
+** @argrule R ptrptr [const char**] Saved pointer
+** @argrule R buf [AjPStr*] Independent buffer provided by caller
+** @argrule System cmdline [const AjPStr] The command line
+** @argrule SystemEnv env [char* const[]] Environment variables and values
+** @argrule SystemOut outfname [const AjPStr] The output file name
+**
+** @valrule Fdopen [FILE*] C open file
+** @valrule Fgets [char*] Buffer on success
+** @valrule Fopen [FILE*] C open file
+** @valrule Strdup [char*] New string
+** @valrule Strtok [char*] New string
+** @valrule Socket [SOCKRET] Socketvoid]
+** @valrule System [void]
+**
+******************************************************************************/
 
 
 
@@ -1420,6 +1646,33 @@ __deprecated char* ajSysStrtokR(const char *s, const char *t,
 ** @fcategory misc
 **
 ** @nam3rule  Exec          Execute the equivalent of a command
+** @nam4rule  Env           Execute under local environment
+** @nam4rule  Locale        Execute under defined locale
+** @nam4rule  Outname       Write to output file
+** @nam4rule  Redirect      Redirect standard input and output
+**
+** @suffix    Append       Append to output file
+** @suffix    Err          Write standard error to output file
+** @suffix    Path         Look for progam name in current PATH
+** @suffix    C            Accept C character string parameters
+** @suffix    S            Accept string object parameters
+**
+** @argrule   C        cmdlinetxt  [const char*] The command line
+** @argrule   S        cmdline     [const AjPStr] The command line
+** @argrule   Env      env         [char* const[]] The environment
+** @argrule   LocaleC  localetxt   [const char*] The locale value
+** @argrule   LocaleS  localestr   [const AjPStr] The locale value
+** @argrule   AppendC  outfnametxt [const char*] The output file name
+** @argrule   AppendS  outfname    [const AjPStr] The output file name
+** @argrule   ErrC     outfnametxt [const char*] The output file name
+** @argrule   ErrS     outfname    [const AjPStr] The output file name
+** @argrule   OutnameC outfnametxt [const char*] The output file name
+** @argrule   OutnameS outfname    [const AjPStr] The output file name
+** @argrule   Redirect pipeto      [int**] pipes to the process
+** @argrule   Redirect pipefrom    [int**] pipes from the process
+**
+** @valrule Exec [ajint] Exit status
+** @valrule *Redirect [AjBool] True on success
 **
 ******************************************************************************/
 
@@ -1500,7 +1753,7 @@ ajint ajSysExecC(const char* cmdlinetxt)
     
     if(!CreateProcess(NULL, (char *)cmdlinetxt, NULL, NULL, FALSE,
                       CREATE_NO_WINDOW, NULL, NULL, &startInfo, &procInfo))
-	ajFatal("CreateProcess failed");
+      ajFatal("CreateProcess failed: %s", cmdlinetxt);
 
     if(!WaitForSingleObject(procInfo.hProcess, INFINITE))
         status = 0;
@@ -1751,7 +2004,7 @@ ajint ajSysExecLocaleC(const char* cmdlinetxt, const char* localetxt)
     
     if(!CreateProcess(NULL, (char *)cmdlinetxt, NULL, NULL, FALSE,
                       CREATE_NO_WINDOW, NULL, NULL, &startInfo, &procInfo))
-	ajFatal("CreateProcess failed");
+      ajFatal("CreateProcess failed: %s", cmdlinetxt);
 
     if(!WaitForSingleObject(procInfo.hProcess, INFINITE))
         status = 0;
@@ -1899,7 +2152,7 @@ ajint ajSysExecOutnameC(const char* cmdlinetxt, const char* outfnametxt)
     if(!CreateProcess(NULL, (char *) cmdlinetxt, NULL, NULL, TRUE,
                       CREATE_NO_WINDOW, NULL, NULL, &si, &pinf))
     {
-	ajFatal("CreateProcess failed");
+      ajFatal("CreateProcess failed: %s", cmdlinetxt);
     }
     
     if(!WaitForSingleObject(pinf.hProcess, INFINITE))
@@ -2050,7 +2303,7 @@ ajint ajSysExecOutnameAppendC(const char* cmdlinetxt, const char* outfnametxt)
     if(!CreateProcess(NULL, (char *) cmdlinetxt, NULL, NULL, TRUE,
                       CREATE_NO_WINDOW, NULL, NULL, &si, &pinf))
     {
-	ajFatal("CreateProcess failed");
+      ajFatal("CreateProcess failed: %s", cmdlinetxt);
     }
     
     if(!WaitForSingleObject(pinf.hProcess, INFINITE))
@@ -2113,6 +2366,7 @@ ajint ajSysExecOutnameErrC(const char* cmdlinetxt, const char* outfnametxt)
     char *pgm;
     char **argptr;
     ajint i;
+    ajint id;
 
     AjPStr pname = NULL;
 
@@ -2150,7 +2404,10 @@ ajint ajSysExecOutnameErrC(const char* cmdlinetxt, const char* outfnametxt)
 	if(!freopen(outfnametxt, "wb", stdout))
 	    ajErr("Failed to redirect standard output to '%s'", outfnametxt);
         close(STDERR_FILENO);
-        dup(fileno(stdout));
+        id = dup(fileno(stdout));
+        if(id < 0)
+            ajErr("Failed to duplicate file descriptor stdout, error:%d %s",
+                  errno, strerror(errno));
 	execv(ajStrGetPtr(pname), argptr);
 	ajExitAbort();			/* just in case */
     }
@@ -2204,7 +2461,7 @@ ajint ajSysExecOutnameErrC(const char* cmdlinetxt, const char* outfnametxt)
     if(!CreateProcess(NULL, (char *) cmdlinetxt, NULL, NULL, TRUE,
                       CREATE_NO_WINDOW, NULL, NULL, &si, &pinf))
     {
-	ajFatal("CreateProcess failed");
+      ajFatal("CreateProcess failed: %s", cmdlinetxt);
     }
     
     if(!WaitForSingleObject(pinf.hProcess, INFINITE))
@@ -2292,6 +2549,7 @@ ajint ajSysExecOutnameErrAppendC(const char* cmdlinetxt,
     char *pgm;
     char **argptr;
     ajint i;
+    int id;
 
     AjPStr pname = NULL;
 
@@ -2329,7 +2587,10 @@ ajint ajSysExecOutnameErrAppendC(const char* cmdlinetxt,
 	    ajErr("Failed to redirect standard output and error to '%s'",
                   outfnametxt);
         close(STDERR_FILENO);
-        dup(fileno(stdout));
+        id = dup(fileno(stdout));
+        if(id < 0)
+            ajErr("Failed to duplicate file descriptor stdout, error:%d %s",
+                  errno, strerror(errno));
 	execv(ajStrGetPtr(pname), argptr);
 	ajExitAbort();			/* just in case */
     }
@@ -2381,7 +2642,7 @@ ajint ajSysExecOutnameErrAppendC(const char* cmdlinetxt,
     if(!CreateProcess(NULL, (char *) cmdlinetxt, NULL, NULL, TRUE,
                       CREATE_NO_WINDOW, NULL, NULL, &si, &pinf))
     {
-	ajFatal("CreateProcess failed");
+      ajFatal("CreateProcess failed: %s", cmdlinetxt);
     }
     
     if(!WaitForSingleObject(pinf.hProcess, INFINITE))
@@ -2495,7 +2756,7 @@ ajint ajSysExecPathC(const char* cmdlinetxt)
     
     if (!CreateProcess(NULL, (char *)cmdlinetxt, NULL, NULL, FALSE,
 		       CREATE_NO_WINDOW, NULL, NULL, &startInfo, &procInfo))
-	ajFatal("CreateProcess failed");
+      ajFatal("CreateProcess failed: %s", cmdlinetxt);
 
     if(!WaitForSingleObject(procInfo.hProcess, INFINITE))
         status = 0;
@@ -2555,7 +2816,280 @@ __deprecated void ajSysSystem(const AjPStr cmdline)
 
 
 
-/* @func ajSysExecProgArgEnvNowaitC *******************************************
+/* @func ajSysExecRedirectC **************************************************
+**
+** Execute an application redirecting its stdin/out to pipe fds
+**
+** @param [r] cmdlinetxt [const char*] Command string.
+**                    The string may end with a trailing pipe character.
+** @param [w] pipeto [int**] pipes to the process
+** @param [w] pipefrom [int**] pipes from the process
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+AjBool ajSysExecRedirectC(const char *cmdlinetxt, int **pipeto, int **pipefrom)
+{
+    int *pipeout = NULL;
+    int *pipein  = NULL;
+#ifndef WIN32
+    pid_t pid;
+    char *pgm = NULL;
+    char **argptr = NULL;
+    ajint i;
+#else
+    HANDLE cstdinr;
+    HANDLE cstdinw;
+    HANDLE cstdoutr;
+    HANDLE cstdoutw;
+    HANDLE svstdin;
+    HANDLE svstdout;
+    BOOL ret;
+
+    HANDLE cstdinwdup;
+    HANDLE cstdoutrdup;
+
+    SECURITY_ATTRIBUTES sa;
+
+    PROCESS_INFORMATION pinf;
+    STARTUPINFO sinf;
+#endif
+    
+    if(!pipeto || !pipefrom)
+        return ajFalse;
+
+    if(!*pipeto || !*pipefrom)
+        return ajFalse;
+    
+    pipeout = *pipeto;
+    pipein  = *pipefrom;
+    
+#ifndef WIN32
+
+    if(!ajSysArglistBuildC(cmdlinetxt, &pgm, &argptr))
+    {
+        ajDebug("ajSysExecWithRedirect: Cannot parse command line");
+        return ajFalse;
+    }
+
+    
+    if(pipe(pipeout))
+    {
+        ajDebug("ajSysExecRedirectC: Cannot open pipeout");
+        return ajFalse;
+    }
+
+    if(pipe(pipein))
+    {
+        ajDebug("ajSysExecRedirectC: Cannot open pipein");
+        return ajFalse;
+    }
+    
+    pid = fork();
+    if(pid < 0)
+    {
+        ajDebug("ajSysExecRedirectC: fork failure");
+        return ajFalse;
+    }
+    else if(!pid)
+    {
+        /*
+        ** CHILD PROCESS
+        ** dup pipe read/write to stdin/stdout
+        */
+        dup2(pipeout[0],  fileno(stdin));
+        dup2(pipein[1], fileno(stdout));
+
+        /* close unnecessary pipe descriptors */
+        close(pipeout[0]);
+        close(pipeout[1]);
+        close(pipein[0]);
+        close(pipein[1]);
+
+	execv(pgm, argptr);
+        
+        ajDebug("ajSysExecRedirectC: Problem executing application");
+        return ajFalse;
+    }
+
+    /*
+    ** PARENT PROCESS
+    ** Close unused pipe ends. This is especially important for the
+    ** pipein[1] write descriptor, otherwise reading will never
+    ** give an EOF.
+    */
+
+    ajDebug("ajSysExecRedirectC: Within the PARENT process");
+    
+    close(pipeout[0]);
+    close(pipein[1]);
+
+    i = 0;
+
+    while(argptr[i])
+    {
+	AJFREE(argptr[i]);
+	++i;
+    }
+
+    AJFREE(argptr);
+    AJFREE(pgm);
+    
+#else	/* WIN32 */
+
+    
+    sa.nLength = sizeof(SECURITY_ATTRIBUTES);
+    sa.bInheritHandle = TRUE;
+    sa.lpSecurityDescriptor = NULL;
+		
+    /*
+    ** Redirect stdout by
+    **    Save stdout for later restoration
+    **    Create anonymous pipe as stdout for the child
+    **    Set stdout of parent to be write handle to  the pipe thereby
+    **       making it inherited by the child
+    **    Create non-inheritable duplicate of the read handle and close
+    **       the inheritable read handle
+    */
+
+    svstdout = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    if (!CreatePipe(&cstdoutr, &cstdoutw, &sa, 0))
+    {
+        ajDebug("ajSysExecRedirectC: Couldn't open input pipe" );
+        return ajFalse;
+    }
+    
+    SetHandleInformation(cstdoutr,HANDLE_FLAG_INHERIT,0);
+
+    if (!SetStdHandle(STD_OUTPUT_HANDLE, cstdoutw))
+    {
+        ajDebug("ajSysExecRedirectC: failure redirecting stdout");
+        return ajFalse;
+    }
+    
+    ret = DuplicateHandle(GetCurrentProcess(),
+                          cstdoutr,
+                          GetCurrentProcess(),
+                          &cstdoutrdup , 0,
+                          FALSE,
+                          DUPLICATE_SAME_ACCESS);
+    if(!ret)
+    {
+        ajDebug("ajSysExecRedirectC: DuplicateHandle failed");
+        return ajFalse;
+    }
+
+    CloseHandle(cstdoutr);
+
+    /*
+    ** Redirect stdin by
+    **    Save stdin for later restoration
+    **    Create anonymous pipe as stdin for the child
+    **    Set stdin of parent to be read handle of the pipe thereby
+    **       making it inherited by the child
+    **    Create non-inheritable duplicate of the write handle and close
+    **       the inheritable write handle
+    */
+
+    svstdin = GetStdHandle(STD_INPUT_HANDLE);
+
+    if(!CreatePipe(&cstdinr, &cstdinw, &sa, 0)) 
+    {
+        ajDebug("ajSysExecRedirectC: Cannot open pipeout");
+        return ajFalse;
+    }
+
+    if (!SetStdHandle(STD_INPUT_HANDLE, cstdinr)) 
+    {
+        ajDebug("ajSysExecRedirectC: Cannot redirect stdin");
+        return ajFalse;
+    }
+
+    ret = DuplicateHandle(GetCurrentProcess(),
+                               cstdinw, 
+                               GetCurrentProcess(),
+                               &cstdinwdup, 0, 
+                               FALSE, 
+                               DUPLICATE_SAME_ACCESS); 
+    if(!ret) 
+    {
+        ajDebug("ajSysExecRedirectC: DuplicateHandle failure");
+        return ajFalse;
+    }
+
+    CloseHandle(cstdinw);
+
+    ZeroMemory(&pinf, sizeof(PROCESS_INFORMATION));
+    ZeroMemory(&sinf, sizeof(STARTUPINFO));
+    sinf.cb = sizeof(STARTUPINFO);
+
+    ret = CreateProcess(NULL, (char *)cmdlinetxt, NULL, NULL, TRUE, 0,
+                        NULL, NULL, &sinf, &pinf);
+
+    if(ret == 0)
+    {
+        ajDebug("ajSysExecRedirectC: Cannot execute application: %s",
+		cmdlinetxt);
+        return ajFalse;
+    }
+
+    CloseHandle(pinf.hProcess);
+    CloseHandle(pinf.hThread);
+
+
+    if(!SetStdHandle(STD_INPUT_HANDLE, svstdin))
+    {
+        ajDebug("ajSysExecRedirectC: Error restoring stdin");
+        return ajFalse;
+    }
+
+    if(!SetStdHandle(STD_OUTPUT_HANDLE, svstdout))
+    {
+        ajDebug("ajSysExecRedirectC: Error restoring stdout");
+        return ajFalse;
+    }
+
+    CloseHandle(cstdoutw);
+
+    pipeout[1] = _open_osfhandle((intptr_t) cstdinwdup,
+                                 _O_APPEND);
+
+    pipein[0]  = _open_osfhandle((intptr_t) cstdoutrdup,
+                                 _O_RDONLY);
+#endif
+
+    return ajTrue;
+}
+
+
+
+
+/* @section executing programs ************************************************
+**
+** Functions for executing programs
+**
+** @fdata [none]
+** @fcategory misc
+**
+** @nam3rule  Execprog      Execute a progfam
+** @suffix    Nowait        No parent wait
+** @suffix    C             Accept C character string parameters
+** @suffix    S             Accept string object parameters
+**
+** @argrule   C prog    [const char*] The program name
+** @argrule   S progstr [const AjPStr] The program name
+** @argrule   * arg     [char* const[]] Argument list
+** @argrule   * env     [char* const[]] An environment list
+**
+** @valrule Execprog [ajint] Exit status
+**
+******************************************************************************/
+
+
+
+
+/* @func ajSysExecprogNowaitC *************************************************
 **
 ** Exec a command line with no parent wait
 **
@@ -2570,8 +3104,8 @@ __deprecated void ajSysSystem(const AjPStr cmdline)
 ** @@
 ******************************************************************************/
 
-ajint  ajSysExecProgArgEnvNowaitC(const char *prog, char * const arg[],
-                                char * const env[])
+ajint  ajSysExecprogNowaitC(const char *prog, char * const arg[],
+                            char * const env[])
 {
 #ifndef WIN32
     if(execve(prog,arg,env) == -1)
@@ -2585,7 +3119,20 @@ ajint  ajSysExecProgArgEnvNowaitC(const char *prog, char * const arg[],
 
 
 
-/* @func ajSysExecProgArgEnvNowaitS *******************************************
+/* @obsolete ajSysExecProgArgEnvNowaitC
+** @rename ajSysExecProgArgEnvNowaitC
+*/
+__deprecated ajint  ajSysExecProgArgEnvNowaitC(const char *prog,
+                                               char * const arg[],
+                                               char * const env[])
+{
+    return ajSysExecprogNowaitC(prog, arg, env);
+}
+
+
+
+
+/* @func ajSysExecprogNowaitS *************************************************
 **
 ** Exec a command line with no parent wait
 **
@@ -2600,10 +3147,23 @@ ajint  ajSysExecProgArgEnvNowaitC(const char *prog, char * const arg[],
 ** @@
 ******************************************************************************/
 
-ajint ajSysExecProgArgEnvNowaitS(const AjPStr progstr, char * const arg[],
-                                 char * const env[])
+ajint ajSysExecprogNowaitS(const AjPStr progstr, char * const arg[],
+                           char * const env[])
 {
-    return ajSysExecProgArgEnvNowaitC(MAJSTRGETPTR(progstr), arg, env);
+    return ajSysExecprogNowaitC(MAJSTRGETPTR(progstr), arg, env);
+}
+
+
+
+
+/* @obsolete ajSysExecProgArgEnvNowaitS
+** @rename ajSysExecProgArgEnvNowaitS
+*/
+__deprecated ajint  ajSysExecProgArgEnvNowaitS(const AjPStr progstr,
+                                               char * const arg[],
+                                               char * const env[])
+{
+    return ajSysExecprogNowaitC(MAJSTRGETPTR(progstr), arg, env);
 }
 
 
@@ -2618,10 +3178,23 @@ ajint ajSysExecProgArgEnvNowaitS(const AjPStr progstr, char * const arg[],
 **
 ** @nam3rule  Canon          Sets or unsets TTY canonical mode
 ** @nam3rule  Socketclose    Closes a UNIX or WIN32 socket
+** @nam3rule  Fd             Gets file descriptor
+** @nam4rule  FdFrom         Gets file descriptor from object
+** @nam5rule  FdFromSocket   Gets file descriptor from open socket
 ** @nam3rule  Exit           Cleans up system internals memory
+** @nam3rule  Timeout        Control alarm abort timeouts
+** @nam4rule  TimeoutSet     Set a timeout
+** @nam4rule  TimeoutUnset   Unset a timeout
 ** 
-** @argrule Canon state [AjBool] Canonical mode set if true
-** @valrule   *  [void]
+** @argrule Canon        state [AjBool]        Canonical mode set if true
+** @argrule FdFromSocket sock  [const struct AJSOCKET] AJAX socket structure
+** @argrule FdFromSocket mode  [const char*]          Opening mode ("r" or "a")
+** @argrule Socketclose  sock  [struct AJSOCKET]      AJAX socket structure
+** @argrule Timeout      ts    [struct AJTIMEOUT*]     AJAX timeout structure
+** 
+** @valrule  *  [void]
+** @valrule  *FdFromSocket  [FILE*] File descriptor
+** @valrule  *Timeout [int] Exit code (-1 for error, 0 =for success)
 **
 ******************************************************************************/
 
@@ -2665,15 +3238,15 @@ void ajSysCanon(AjBool state)
 
 /* @func ajSysFdFromSocket  ****************************************************
 **
-** return a file descriptor from a UNIX of Windows socket
+** Return a file descriptor from a UNIX of Windows socket
 **
-** @param [r] sock [struct AJSOCKET] AJAX socket structure
+** @param [r] sock [const struct AJSOCKET] AJAX socket structure
 ** @param [r] mode [const char*] Opening mode ("r" or "a")
 ** @return [FILE*] File descriptor
 ** @@
 ******************************************************************************/
 
-FILE* ajSysFdFromSocket(struct AJSOCKET sock, const char *mode)
+FILE* ajSysFdFromSocket(const struct AJSOCKET sock, const char *mode)
 {
     FILE *ret;
 #ifdef WIN32
@@ -2718,7 +3291,7 @@ FILE* ajSysFdFromSocket(struct AJSOCKET sock, const char *mode)
 **
 ** Closes a UNIX or WIN32 socket
 **
-** @param [r] sock [struct AJSOCKET] AJAX socket structure
+** @param [u] sock [struct AJSOCKET] AJAX socket structure
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -2737,7 +3310,7 @@ void ajSysSocketclose(struct AJSOCKET sock)
 
 
 
-/* @func ajSysTimeoutSet  ****************************************************
+/* @func ajSysTimeoutSet *****************************************************
 **
 ** Sets an alarm abort timeout for UNIX and Windows
 **
@@ -2906,12 +3479,12 @@ __deprecated AjBool ajSysIsRegular(const char *s)
 ** @fcategory misc
 **
 ** @nam3rule  Create         Create a new input
-** @nam3rule  Inpipe         Create a new input
+** @nam4rule  Inpipe         Create a new input
 **
 ** @suffix C C character string arguments
 ** @suffix S String object arguments
 ** 
-** @argrule C commandtxt [const char*] Command line
+** @argrule C cmdlinetxt [const char*] Command line
 ** @argrule S command [const AjPStr] Command line
 ** @valrule   *Inpipe  [AjPFile]
 **
@@ -2924,13 +3497,13 @@ __deprecated AjBool ajSysIsRegular(const char *s)
 **
 ** Return a new file object from which to read the output from a command.
 **
-** @param [r] commandtxt [const char*] Command string.
+** @param [r] cmdlinetxt [const char*] Command string.
 **                    The string may end with a trailing pipe character.
 ** @return [AjPFile] New file object.
 ** @@
 ******************************************************************************/
 
-AjPFile ajSysCreateInpipeC(const char* commandtxt)
+AjPFile ajSysCreateInpipeC(const char* cmdlinetxt)
 {
     AjPFile thys;
     AjPStr cmdstr = NULL;
@@ -2960,9 +3533,9 @@ AjPFile ajSysCreateInpipeC(const char* commandtxt)
     cmdstr = ajStrNew();
     
     AJNEW0(thys);
-    ajStrAssignC(&cmdstr, commandtxt);
+    ajStrAssignC(&cmdstr, cmdlinetxt);
 
-    ajDebug("ajSysCreateInpipeC: '%s'\n", commandtxt);
+    ajDebug("ajSysCreateInpipeC: '%s'\n", cmdlinetxt);
 
     /* pipe character at end */
     if(ajStrGetCharLast(cmdstr) == '|')
@@ -3044,7 +3617,7 @@ AjPFile ajSysCreateInpipeC(const char* commandtxt)
 			NULL, NULL, &sinf, &pinf);
 
     if(!ret)
-        ajFatal("ajSysCreateInpipeC: CreateProcess failed");
+        ajFatal("ajSysCreateInpipeC: CreateProcess failed: %S", cmdstr);
 
     thys->Process = pinf.hProcess;
     thys->Thread  = pinf.hThread;
@@ -3087,418 +3660,6 @@ AjPFile ajSysCreateInpipeC(const char* commandtxt)
 AjPFile ajSysCreateInpipeS(const AjPStr command)
 {
     return ajSysCreateInpipeC(MAJSTRGETPTR(command));
-}
-
-
-
-
-/* @func ajSysExecRedirectC **************************************************
-**
-** Execute an application redirecting its stdin/out to pipe fds
-**
-** @param [r] command [const char*] Command string.
-**                    The string may end with a trailing pipe character.
-** @param [w] pipeto [int**] pipes to the process
-** @param [w] pipefrom [int**] pipes from the process
-** @return [AjBool] True on success
-** @@
-******************************************************************************/
-
-AjBool ajSysExecRedirectC(const char *command, int **pipeto, int **pipefrom)
-{
-    int *pipeout = NULL;
-    int *pipein  = NULL;
-#ifndef WIN32
-    pid_t pid;
-    char *pgm = NULL;
-    char **argptr = NULL;
-    ajint i;
-#else
-    HANDLE cstdinr;
-    HANDLE cstdinw;
-    HANDLE cstdoutr;
-    HANDLE cstdoutw;
-    HANDLE svstdin;
-    HANDLE svstdout;
-    BOOL ret;
-
-    HANDLE cstdinwdup;
-    HANDLE cstdoutrdup;
-
-    SECURITY_ATTRIBUTES sa;
-
-    PROCESS_INFORMATION pinf;
-    STARTUPINFO sinf;
-#endif
-    
-    if(!pipeto || !pipefrom)
-        return ajFalse;
-
-    if(!*pipeto || !*pipefrom)
-        return ajFalse;
-    
-    pipeout = *pipeto;
-    pipein  = *pipefrom;
-    
-#ifndef WIN32
-
-    if(!ajSysArglistBuildC(command, &pgm, &argptr))
-    {
-        ajDebug("ajSysExecWithRedirect: Cannot parse command line");
-        return ajFalse;
-    }
-
-    
-    if(pipe(pipeout))
-    {
-        ajDebug("ajSysExecWithRedirect: Cannot open pipeout");
-        return ajFalse;
-    }
-
-    if(pipe(pipein))
-    {
-        ajDebug("ajSysExecWithRedirect: Cannot open pipein");
-        return ajFalse;
-    }
-    
-    pid = fork();
-    if(pid < 0)
-    {
-        ajDebug("ajSysExecWithRedirect: fork failure");
-        return ajFalse;
-    }
-    else if(!pid)
-    {
-        /*
-        ** CHILD PROCESS
-        ** dup pipe read/write to stdin/stdout
-        */
-        dup2(pipeout[0],  fileno(stdin));
-        dup2(pipein[1], fileno(stdout));
-
-        /* close unnecessary pipe descriptors */
-        close(pipeout[0]);
-        close(pipeout[1]);
-        close(pipein[0]);
-        close(pipein[1]);
-
-	execv(pgm, argptr);
-        
-        ajDebug("ajSysExecWithRedirect: Problem executing application");
-        return ajFalse;
-    }
-
-    /*
-    ** PARENT PROCESS
-    ** Close unused pipe ends. This is especially important for the
-    ** pipein[1] write descriptor, otherwise reading will never
-    ** give an EOF.
-    */
-
-    ajDebug("ajSysExecWithRedirect: Within the PARENT process");
-    
-    close(pipeout[0]);
-    close(pipein[1]);
-
-    i = 0;
-
-    while(argptr[i])
-    {
-	AJFREE(argptr[i]);
-	++i;
-    }
-
-    AJFREE(argptr);
-    AJFREE(pgm);
-    
-#else	/* WIN32 */
-
-    
-    sa.nLength = sizeof(SECURITY_ATTRIBUTES);
-    sa.bInheritHandle = TRUE;
-    sa.lpSecurityDescriptor = NULL;
-		
-    /*
-    ** Redirect stdout by
-    **    Save stdout for later restoration
-    **    Create anonymous pipe as stdout for the child
-    **    Set stdout of parent to be write handle to  the pipe thereby
-    **       making it inherited by the child
-    **    Create non-inheritable duplicate of the read handle and close
-    **       the inheritable read handle
-    */
-
-    svstdout = GetStdHandle(STD_OUTPUT_HANDLE);
-
-    if (!CreatePipe(&cstdoutr, &cstdoutw, &sa, 0))
-    {
-        ajDebug("ajSysExecWithRedirect: Couldn't open input pipe" );
-        return ajFalse;
-    }
-    
-    SetHandleInformation(cstdoutr,HANDLE_FLAG_INHERIT,0);
-
-    if (!SetStdHandle(STD_OUTPUT_HANDLE, cstdoutw))
-    {
-        ajDebug("ajSysExecWithRedirect: failure redirecting stdout");
-        return ajFalse;
-    }
-    
-    ret = DuplicateHandle(GetCurrentProcess(),
-                          cstdoutr,
-                          GetCurrentProcess(),
-                          &cstdoutrdup , 0,
-                          FALSE,
-                          DUPLICATE_SAME_ACCESS);
-    if(!ret)
-    {
-        ajDebug("ajSysExecWithRedirect: DuplicateHandle failed");
-        return ajFalse;
-    }
-
-    CloseHandle(cstdoutr);
-
-    /*
-    ** Redirect stdin by
-    **    Save stdin for later restoration
-    **    Create anonymous pipe as stdin for the child
-    **    Set stdin of parent to be read handle of the pipe thereby
-    **       making it inherited by the child
-    **    Create non-inheritable duplicate of the write handle and close
-    **       the inheritable write handle
-    */
-
-    svstdin = GetStdHandle(STD_INPUT_HANDLE);
-
-    if(!CreatePipe(&cstdinr, &cstdinw, &sa, 0)) 
-    {
-        ajDebug("ajSysExecWithRedirect: Cannot open pipeout");
-        return ajFalse;
-    }
-
-    if (!SetStdHandle(STD_INPUT_HANDLE, cstdinr)) 
-    {
-        ajDebug("ajSysExecWithRedirect: Cannot redirect stdin");
-        return ajFalse;
-    }
-
-    ret = DuplicateHandle(GetCurrentProcess(),
-                               cstdinw, 
-                               GetCurrentProcess(),
-                               &cstdinwdup, 0, 
-                               FALSE, 
-                               DUPLICATE_SAME_ACCESS); 
-    if(!ret) 
-    {
-        ajDebug("ajSysExecWithRedirect: DuplicateHandle failure");
-        return ajFalse;
-    }
-
-    CloseHandle(cstdinw);
-
-    ZeroMemory(&pinf, sizeof(PROCESS_INFORMATION));
-    ZeroMemory(&sinf, sizeof(STARTUPINFO));
-    sinf.cb = sizeof(STARTUPINFO);
-
-    ret = CreateProcess(NULL, (char *)command, NULL, NULL, TRUE, 0, NULL, NULL,
-                        &sinf, &pinf);
-
-    if(ret == 0)
-    {
-        ajDebug("ajSysExecWithRedirect: Cannot execute application");
-        return ajFalse;
-    }
-
-    CloseHandle(pinf.hProcess);
-    CloseHandle(pinf.hThread);
-
-
-    if(!SetStdHandle(STD_INPUT_HANDLE, svstdin))
-    {
-        ajDebug("ajSysExecWithRedirect: Error restoring stdin");
-        return ajFalse;
-    }
-
-    if(!SetStdHandle(STD_OUTPUT_HANDLE, svstdout))
-    {
-        ajDebug("ajSysExecWithRedirect: Error restoring stdout");
-        return ajFalse;
-    }
-
-    CloseHandle(cstdoutw);
-
-    pipeout[1] = _open_osfhandle((intptr_t) cstdinwdup,
-                                 _O_APPEND);
-
-    pipein[0]  = _open_osfhandle((intptr_t) cstdoutrdup,
-                                 _O_RDONLY);
-#endif
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ajSysGetHomedirFromName *********************************************
-**
-** Get a home directory location from  a username
-**
-** @param [r] username [const char*] Username
-** @return [char*] Home directory or NULL
-** @@
-******************************************************************************/
-
-char* ajSysGetHomedirFromName(const char *username)
-{
-    char *hdir = NULL;
-#ifndef WIN32
-    struct passwd *pass = NULL;
-    
-
-    pass = getpwnam(username);
-    
-    if(!pass)
-        return NULL;
-
-    hdir = ajCharNewC(pass->pw_dir);
-#else
-    LPTSTR domainname = NULL;
-    LPTSTR localsvr   = NULL;
-    DWORD dnsize  = 0;
-    PSID psid     = NULL;
-    DWORD sidsize = 0;
-
-    SID_NAME_USE sidtype;
-
-    LPTSTR strsid = NULL;
-    AjPStr subkey = NULL;
-
-    DWORD hdbuffsize = MAX_PATH;
-    char hdbuff[MAX_PATH];
-
-    LONG ret;
-    HKEY hkey = NULL;
-
-    if(!LookupAccountName(localsvr, username, psid, &sidsize, domainname,
-			  &dnsize, &sidtype))
-    {
-        if(GetLastError() == ERROR_NONE_MAPPED)
-        {
-            ajWarn("No Windows username found for '%s'", username);
-            return NULL;
-        }
-        else if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-        {
-            psid = (LPTSTR) LocalAlloc(LPTR,sidsize * sizeof(TCHAR));
-            if(!psid)
-            {
-                ajWarn("ajSysLookupAccount: SID allocation failure");
-                return NULL;
-            }
-
-            domainname = (LPTSTR) LocalAlloc(LPTR, dnsize * sizeof(TCHAR));
-            if(!domainname)
-            {
-                ajWarn("ajSysLookupAccount: Domain allocation failure");
-                LocalFree(psid);
-                return NULL;
-            }
-
-            if(!LookupAccountName(localsvr, username, psid, &sidsize,
-				  domainname, &dnsize, &sidtype))
-            {
-                ajWarn("LookupAccountName failed with %d", GetLastError());
-                LocalFree(psid);
-                LocalFree(domainname);
-                return NULL;
-            }
-        }
-        else
-        {
-            ajWarn("General LookupAccountName failure with %d", GetLastError());
-            return NULL;
-        }
-    }
-
-
-    if(!ConvertSidToStringSid(psid, &strsid))
-    {
-        LocalFree(psid);
-
-        return NULL;
-    }
-
-    LocalFree(psid);
-
-    subkey = ajStrNew();
-
-    ajFmtPrintS(&subkey,"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\"
-                "ProfileList\\%s",strsid);
-
-    LocalFree(strsid);
-
-    ret = RegOpenKeyEx(HKEY_LOCAL_MACHINE,ajStrGetPtr(subkey),(DWORD) 0,
-		       KEY_QUERY_VALUE,&hkey);
-
-    ajStrDel(&subkey);
-
-    if(ret != ERROR_SUCCESS)
-        return NULL;
-
-    ret = RegQueryValueEx(hkey,"ProfileImagePath",NULL,NULL,(LPBYTE)hdbuff,
-			  &hdbuffsize);
-
-    if(ret != ERROR_SUCCESS)
-        return NULL;
-
-    ret = RegCloseKey(hkey);
-
-    if(ret != ERROR_SUCCESS)
-        return NULL;
-
-    hdir = ajCharNewC(hdbuff);
-#endif
-
-
-    return hdir;
-}
-
-
-
-
-/* @func ajSysGetHomedir *************************************************
-**
-** Get the home directory of the current user
-**
-** @return [char*] Home directory or NULL
-** @@
-******************************************************************************/
-
-char* ajSysGetHomedir(void)
-{
-    char *hdir = NULL;
-#ifndef WIN32
-    char *p = NULL;
-
-    if(!(p = getenv("HOME")))
-        return NULL;
-
-    hdir = ajCharNewC(p);
-#else
-    TCHAR wpath[MAX_PATH];
-    HRESULT ret;
-
-    /* Replace with SHGetKnownFolderPath when XP is no longer supported */
-    ret = SHGetFolderPath(NULL,CSIDL_PROFILE,NULL,0,wpath);
-
-    if(ret != S_OK)
-        return NULL;
-    
-    hdir = ajCharNewC(wpath);
-#endif
-
-    return hdir;
 }
 
 

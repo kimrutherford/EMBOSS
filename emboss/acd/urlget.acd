@@ -1,0 +1,58 @@
+application: urlget [
+  documentation: "Get URLs of data resources"
+  groups: "Data retrieval:Url data"
+    relations: "EDAM:0000090 topic Data retrieval"
+    relations: "EDAM:0002422 operation Data retrieval"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+  url: url [
+     default: ""
+     parameter: "Y"
+     relations: "EDAM:0000957 data Database metadata"
+  ]
+
+endsection: input
+
+
+
+
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+endsection: additional
+
+
+
+
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+
+
+
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outurl: outfile [
+    parameter: "Y"
+    relations: "EDAM:0000957 data Database metadata"
+  ]
+
+endsection: output
+
+

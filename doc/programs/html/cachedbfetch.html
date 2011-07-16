@@ -1,0 +1,849 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: cachedbfetch
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+cachedbfetch
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Generates server cache file for Dbfetch/WSDbfetch data sources
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+
+
+Contacts the EBI dbfetch service to find the available databases and
+saves definitions for them to a server cache file.
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>cachedbfetch</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cachedbfetch -servername tdbfetch -auto -cachefile ~/.embossdata/qatests.server.tdbfetch </b>
+Warning: No dbtype found supporting format emblxml-1.2
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format emblxml
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format insdxml
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format emblxml-1.2
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format emblxml
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format emblxml-1.2
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format emblxml
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format insdxml
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format emblxml-1.2
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format csv
+Warning: No dbtype found supporting format tab
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format tab
+Warning: No dbtype found for db HGNC
+Warning: No dbtype found supporting format hgbase
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format interpro
+Warning: No dbtype found supporting format interproxml
+Warning: No dbtype found for db InterPro
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format iprmc
+Warning: No dbtype found supporting format iprmctab
+Warning: No dbtype found supporting format iprmcxml
+Warning: No dbtype found for db IPRMC
+Warning: No dbtype found supporting format iprmc
+Warning: No dbtype found supporting format iprmctab
+Warning: No dbtype found supporting format iprmcxml
+Warning: No dbtype found for db IPRMC UniParc
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format livelists
+Warning: No dbtype found for db LiveLists
+Warning: No dbtype found supporting format bibtex
+Warning: No dbtype found supporting format endnote
+Warning: No dbtype found supporting format isi
+Warning: No dbtype found supporting format medlinefull
+Warning: No dbtype found supporting format medlineref
+Warning: No dbtype found supporting format medlinexml
+Warning: No dbtype found supporting format modsxml
+Warning: No dbtype found supporting format ris
+Warning: No dbtype found supporting format wordbibxml
+Warning: No dbtype found for db MEDLINE
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format nrl1
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format nrl2
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format nrl1
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format nrl2
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format mmcif
+Warning: No dbtype found supporting format pdbml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format resid
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format sgtxml
+Warning: No dbtype found supporting format taxonomy
+Warning: No dbtype found supporting format enataxonomyxml
+Warning: No dbtype found supporting format uniprottaxonomyrdfxml
+Warning: No dbtype found for db Taxonomy
+Warning: No dbtype found supporting format tracexml
+Warning: No dbtype found supporting format uniparc
+Warning: No dbtype found supporting format uniprotrdfxml
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format uniprotrdfxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format uniprotrdfxml
+Warning: No dbtype found supporting format uniref100
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format uniprotrdfxml
+Warning: No dbtype found supporting format uniref50
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format uniprotrdfxml
+Warning: No dbtype found supporting format uniref90
+Warning: No dbtype found supporting format seqxml
+Warning: No dbtype found supporting format annot
+Warning: No dbtype found supporting format entrysize
+Warning: No dbtype found supporting format seqxml
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Generates server cache file for Dbfetch/WSDbfetch data sources
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-servername]        string     [dbfetch] Name of the ws/dbfetch server
+                                  defined in EMBOSS resource files (Any
+                                  string)
+  [-cachefile]         outfile    [server.$(servername)] Server cache output
+                                  file
+
+   Additional (Optional) qualifiers:
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   "-cachefile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-servername]<br>(Parameter 1)</td>
+<td>string</td>
+<td>Name of the ws/dbfetch server defined in EMBOSS resource files</td>
+<td>Any string</td>
+<td>dbfetch</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-cachefile]<br>(Parameter 2)</td>
+<td>outfile</td>
+<td>Server cache output file</td>
+<td>Output file</td>
+<td>server.$(servername)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-outfile</td>
+<td>outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-cachefile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_cachefile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>cachedbfetch</b> contacts the EBI dbfetch server for details of
+available databases.
+
+<p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+        #include file="inc/reportformats.ihtml"
+   -->
+
+<b>cachedbfetch</b> writes a server cache file which can be saved in the
+user's .embossdata directory or, for a system administrator, stored in
+the site-wide share/EMBOSS/ directory.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: qatests.server.tdbfetch</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# qatests.server.tdbfetch 2011-07-15 12:00:00
+
+DB edam [
+  method: dbfetch
+  hasacc: N
+  format: "obo"
+  type: "text, obo"
+  example: "0000352, 0001223"
+  comment: "EMBRACE Data and Methods (EDAM) Ontology."
+]
+
+DB embl [
+  method: dbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "M10051, K00650, D87894, AJ242600, HSINSR, HSFOS, ROD894, LOP242600, J00231.1, K00650.1, D87894.1, AJ242600.1"
+  comment: "EMBL Nucleotide Sequence Database, Europe's primary nucleotide sequence resource. The main sources of the DNA and RNA sequences in the database are submissions from individual researchers, genome sequencing projects and patent applications."
+]
+
+DB emblcds [
+  method: dbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "AAA59452, AAA59452.1"
+  comment: "EMBLCDS is a database of nucleotide sequences of the CDS (coding sequence) features, as annotated in EMBL database. EMBLCDS record contains the nucleotide sequence of the CDS region, accompanying annotation from the parent nucleotide entry and the additional automatically generated annotation."
+]
+
+DB emblcon [
+  method: dbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "CH003588, CH003588.1"
+  comment: "The EMBLCON database division represents complete genomes and other long sequences constructed from segment entries."
+]
+
+DB emblconexp [
+  method: dbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "AL672111, AL672111.1"
+  comment: "The EMBLCON database division represents complete genomes and other long sequences constructed from segment entries. Expanded entries including the complete sequence."
+]
+
+DB emblsva [
+  method: dbfetch
+  hasacc: N
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+  format: "fasta, gff3, uniprot, uniprotxml"
+  type: "text, features, sequence"
+  example: "P06213, P29306, P68255, INSR_HUMAN, 1433X_MAIZE, 1433T_RAT"
+  comment: "The UniProt Knowledgebase (UniProtKB) is the central access point for extensive curated protein information, including function, classification, and cross-references. Search UniProtKB to retrieve “everything that is known” about a particular sequence."
+]
+
+DB uniref100 [
+  method: dbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "UniRef100_P06213"
+  comment: "The UniProt Reference Clusters (UniRef) databases combine closely related sequences into a single record to speed searches. There are three different non-redundant databases with different sequence identity cut-offs. In UniRef100, UniRef90 and UniRef50 databases no pair of sequences in the representative set has &gt;100%, &gt;90% or &gt;50% mutual sequence identity. The three UniRef databases allow the user to choose between a fast search and a truly comprehensive one."
+]
+
+DB uniref50 [
+  method: dbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "UniRef50_P06213"
+  comment: "The UniProt Reference Clusters (UniRef) databases combine closely related sequences into a single record to speed searches. There are three different non-redundant databases with different sequence identity cut-offs. In UniRef100, UniRef90 and UniRef50 databases no pair of sequences in the representative set has &gt;100%, &gt;90% or &gt;50% mutual sequence identity. The three UniRef databases allow the user to choose between a fast search and a truly comprehensive one."
+]
+
+DB uniref90 [
+  method: dbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "UniRef90_P06213"
+  comment: "The UniProt Reference Clusters (UniRef) databases combine closely related sequences into a single record to speed searches. There are three different non-redundant databases with different sequence identity cut-offs. In UniRef100, UniRef90 and UniRef50 databases no pair of sequences in the representative set has &gt;100%, &gt;90% or &gt;50% mutual sequence identity. The three UniRef databases allow the user to choose between a fast search and a truly comprehensive one."
+]
+
+DB unisave [
+  method: dbfetch
+  hasacc: N
+  format: "fasta, uniprot"
+  type: "text, features, sequence"
+  example: "P06213, P06213.157, P06213.3, INSR_HUMAN"
+  comment: "The UniProtKB Sequence/Annotation Version Archive (UniSave) is a repository of UniProtKB/Swiss-Prot and UniProtKB/TrEMBL entry versions."
+]
+
+DB uspto_prt [
+  method: dbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "AAA00053, I02590, AAA00053.1"
+  comment: "Protein sequences appearing in patents from the United States Patent and Trademark Office (USPTO)."
+]
+
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+
+        #include file="inc/localfiles.ihtml"
+   -->
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="cachedas.html">cachedas</a></td>
+<td>Generates server cache file for DAS servers or for the DAS registry</td>
+</tr>
+
+<tr>
+<td><a href="cacheebeyesearch.html">cacheebeyesearch</a></td>
+<td>Generates server cache file for EB-eye search domains</td>
+</tr>
+
+<tr>
+<td><a href="cacheensembl.html">cacheensembl</a></td>
+<td>Generates server cache file for an Ensembl server</td>
+</tr>
+
+<tr>
+<td><a href="dbtell.html">dbtell</a></td>
+<td>Display information about a public database</td>
+</tr>
+
+<tr>
+<td><a href="servertell.html">servertell</a></td>
+<td>Display information about a public server</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on configured databases</td>
+</tr>
+
+<tr>
+<td><a href="showserver.html">showserver</a></td>
+<td>Displays information on configured servers</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

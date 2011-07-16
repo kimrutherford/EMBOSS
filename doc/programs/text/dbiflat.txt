@@ -16,10 +16,12 @@ Function
 Description
 
    dbiflat indexes a flat file database of one or more files, and builds
-   EMBL CD-ROM format index files. This format is used by the software on
-   the EMBL database CD-ROM distribution and by the Staden package in
-   addition to EMBOSS, and appears to be the most generally used and
-   publicly available index file format for these databases.
+   EMBL CD-ROM format index files.
+
+   The resulting index-file format is used by the software on the EMBL
+   database CD-ROM distribution and by the Staden package in addition to
+   EMBOSS, and appears to be the most generally used and publicly
+   available index file format for these databases.
 
    A flat file database is a database in one of the native formats: EMBL,
    Swiss-Prot or GenBank, as distributed by the EBI, NCBI, or DDBJ. (It is
@@ -52,7 +54,7 @@ General log output file [outfile.dbiflat]:
 Command line arguments
 
 Index a flat file database
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Database name (Any string from 2 to 19
@@ -149,10 +151,10 @@ Output file format
 
 ########################################
 # Program: dbiflat
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Dbname: EMBL
 # Release: 0.0
-# Date: 15/01/10
+# Date: 15/07/11
 # CurrentDirectory: /homes/user/test/qa/dbiflat-ex-keep/
 # IndexDirectory: ./
 # IndexDirectoryPath: /homes/user/test/qa/dbiflat-ex-keep/
@@ -257,13 +259,21 @@ Known bugs
 
 See also
 
-                    Program name                     Description
-                    dbiblast     Index a BLAST database
-                    dbifasta     Index a fasta file database
-                    dbigcg       Index a GCG formatted database
-                    dbxfasta     Index a fasta file database using b+tree indices
-                    dbxflat      Index a flat file database using b+tree indices
-                    dbxgcg       Index a GCG formatted database using b+tree indices
+                    Program name                       Description
+                    dbiblast      Index a BLAST database
+                    dbifasta      Index a fasta file database
+                    dbigcg        Index a GCG formatted database
+                    dbxcompress   Compress an uncompressed dbx index
+                    dbxedam       Index the EDAM ontology using b+tree indices
+                    dbxfasta      Index a fasta file database using b+tree indices
+                    dbxflat       Index a flat file database using b+tree indices
+                    dbxgcg        Index a GCG formatted database using b+tree indices
+                    dbxobo        Index an obo ontology using b+tree indices
+                    dbxreport     Validate index and report internals for dbx databases
+                    dbxresource   Index a data resource catalogue using b+tree indices
+                    dbxstat       Dump statistics for dbx databases
+                    dbxtax        Index NCBI taxonomy using b+tree indices
+   dbxuncompress    Uncompress a compressed dbx index
 
 Author(s)
 

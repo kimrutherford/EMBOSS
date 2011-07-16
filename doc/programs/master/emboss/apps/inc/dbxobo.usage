@@ -1,0 +1,26 @@
+Here is a sample session with <b>dbxobo</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbxobo </b>
+Index an obo ontology using b+tree indices
+Basename for index files: <b>edam</b>
+Standard database name [edam]: <b></b>
+Resource name [oboresource]: <b>oboresource</b>
+Database directory [.]: <b></b>
+Wildcard database filename [*.obo]: <b>EDAM.obo</b>
+        id : ID
+       acc : Synonym
+       nam : Name
+       isa : Parent
+       des : Description
+        ns : Namespace
+Index fields [*]: <b>*</b>
+Compressed index files [Y]: <b></b>
+General log output file [outfile.dbxobo]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

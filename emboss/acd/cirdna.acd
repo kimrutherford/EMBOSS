@@ -1,9 +1,9 @@
 application: cirdna [
   documentation: "Draws circular maps of DNA constructs"
   groups: "Display"
-  relations: "/edam/topic/0000092 Visualisation and rendering"
-  relations: "/edam/topic/0000096 Nucleic acid sequence analysis"
-  relations: "/edam/operation/0000578 DNA circular map drawing"
+    relations: "EDAM:0000092 topic Data rendering and visualisation"
+    relations: "EDAM:0000640 topic Nucleic acid sequences"
+    relations: "EDAM:0000578 operation DNA circular map rendering"
 ]
 
 section: input [
@@ -16,7 +16,7 @@ section: input [
     default: "inputfile"
     information: "Commands to the cirdna drawing program file"
     knowntype: "cirdna mapping commands"
-    relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
 endsection: input
@@ -31,7 +31,7 @@ section: additional [
     default: "20"
     minimum: "1"
     information: "Maximum number of groups"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   integer: maxlabels [
@@ -39,7 +39,7 @@ relations: "/edam/data/0002152 Rendering parameter"
     default: "10000"
     minimum: "1"
     information: "Maximum number of labels"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
 endsection: additional
@@ -53,7 +53,7 @@ section: output [
     standard: "Y"
     default: "Y"
     information: "Draw a ruler"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   list: blocktype [
@@ -62,7 +62,7 @@ section: output [
     values: "Open:Open blocks;Filled:Filled blocks;Outline:Black
              border"
     information: "Type of blocks"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   float: originangle [
@@ -72,7 +72,7 @@ relations: "/edam/data/0002152 Rendering parameter"
     maximum: "360"
     information: "Position in degrees of the molecule's origin
                   on the circle"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   selection: posticks [
@@ -80,7 +80,7 @@ relations: "/edam/data/0002152 Rendering parameter"
     default: "Out"
     values: "In;Out"
     information: "Ticks inside or outside the circle"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   selection: posblocks [
@@ -88,14 +88,14 @@ relations: "/edam/data/0002152 Rendering parameter"
     default: "In"
     values: "In;Out"
     information: "Text inside or outside the blocks"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   boolean: intersymbol [
     additional: "Y"
     default: "Y"
     information: "Horizontal junctions between blocks"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: intercolour [
@@ -105,14 +105,14 @@ relations: "/edam/data/0002152 Rendering parameter"
     maximum: "15"
     information: "Colour of junctions between blocks (enter a
                   colour number)"
-    relations: "/edam/data/0002151 Colour"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   boolean: interticks [
     additional: "Y"
     default: "N"
     information: "Horizontal junctions between ticks"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: gapsize [
@@ -120,14 +120,14 @@ relations: "/edam/data/0002152 Rendering parameter"
     default: "500"
     minimum: "0"
     information: "Interval between ticks in the ruler"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   boolean: ticklines [
     additional: "Y"
     default: "N"
     information: "Vertical lines at the ruler's ticks"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   float: textheight [
@@ -137,7 +137,7 @@ relations: "/edam/data/0002152 Rendering parameter"
     information: "Text scale factor"
     help: "Height of text. Enter a number <1.0 or >1.0 to decrease or
            increase the size, respectively"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   float: textlength [
@@ -147,7 +147,7 @@ relations: "/edam/data/0002152 Rendering parameter"
     information: "Length of text multiplier"
     help: "Length of text. Enter a number <1.0 or >1.0 to decrease or
            increase the size, respectively"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   float: tickheight [
@@ -157,7 +157,7 @@ relations: "/edam/data/0002152 Rendering parameter"
     information: "Height of ticks multiplier"
     help: "Height of ticks. Enter a number <1.0 or >1.0 to decrease or
            increase the size, respectively"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   float: blockheight [
@@ -167,7 +167,7 @@ relations: "/edam/data/0002152 Rendering parameter"
     information: "Height of blocks multiplier"
     help: "Height of blocks. Enter a number <1.0 or >1.0 to decrease
            or increase the size, respectively"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   float: rangeheight [
@@ -177,7 +177,7 @@ relations: "/edam/data/0002152 Rendering parameter"
     information: "Height of range ends multiplier"
     help: "Height of range ends. Enter a number <1.0 or >1.0 to
            decrease or increase the size, respectively"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   float: gapgroup [
@@ -187,7 +187,7 @@ relations: "/edam/data/0002152 Rendering parameter"
     information: "Space between groups multiplier"
     help: "Space between groups. Enter a number <1.0 or >1.0 to
            decrease or increase the size, respectively"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   float: postext [
@@ -199,13 +199,13 @@ relations: "/edam/data/0002152 Rendering parameter"
     help: "Space between text and ticks, blocks, and ranges. Enter a
            number <1.0 or >1.0 to decrease or increase the size,
            respectively"
-relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   graph: graphout [
     standard: "Y"
     gdesc: "Circular DNA map"
-    relations: "/edam/data/0001278 Genetic map"                                   
+    relations: "EDAM:0001278 data Genetic map"
   ]
 
 endsection: output

@@ -1009,7 +1009,7 @@ int main(int argc, char **argv)
 /*
 ** This section had to be used if the VC++ /MT libs were used instead of
 ** the /MD ones
-    ajStrAssignS(&tnstr,ajFileGetNameS(matfp));
+    ajStrAssignS(&tnstr,ajFileGetPrintnameS(matfp));
     ajFileClose(&matfp);
 
     fp_matrix = fopen(ajStrGetPtr(tnstr),"rb");
@@ -1441,7 +1441,7 @@ int main(int argc, char **argv)
     if( textual_alignment )
     {
 /*
-	ajStrAssignS(&tnstr,ajFileGetNameS(outfile));
+	ajStrAssignS(&tnstr,ajFileGetPrintnameS(outfile));
 	ajFileClose(&outfile);
 
 	fp_ali = fopen(ajStrGetPtr(tnstr),"wb");
@@ -5537,7 +5537,7 @@ static void edialign_av_tree_print(void)
     ajuint j;
     ajint k;
     ajuint tconnect;
-    ajint max_pair[2];
+    ajint max_pair[2] = {0,0};
     ajuint m1;
     ajuint m2;
     struct subtree *all_clades = NULL;
@@ -6340,21 +6340,36 @@ static void edialign_matrix_read( FILE *fp_mat )
 {
     ajint i, j;
     char line[MLINE], dummy[MLINE];
- 
-    fgets( line , MLINE , fp_mat );
-    fgets( line , MLINE , fp_mat );
+
+    /* Ubuntu warns if fgets return is not tested */
+    if(!fgets( line , MLINE , fp_mat ))
+    {
+    }
+    
+    if(!fgets( line , MLINE , fp_mat ))
+    {
+    }
+    
 
     for( i = 1 ; i <= 20 ; i++ )
     {
 	for(j=i;j<=20;j++)
 	{
-	    fscanf( fp_mat , "%d" , &sim_score[i][j]);
+	    /* Ubuntu warns if fscanf return is not tested */
+	    if(fscanf( fp_mat , "%d" , &sim_score[i][j]) != 1)
+            {
+            }
+            
 	    sim_score[j][i] = sim_score[i][j];  
 	    if ( sim_score[i][j] > max_sim_score )
 		max_sim_score = sim_score[i][j] ;
 	}
 
-	fscanf( fp_mat, "%s\n", dummy);
+	/* Ubuntu warns if fscanf return is not tested */
+	if(fscanf( fp_mat, "%s\n", dummy) != 1)
+        {
+        }
+        
     }
 
 
@@ -6446,7 +6461,7 @@ static void edialign_tp400_read( ajint w_type , double **pr_ptr )
 
 
 /*
-    ajStrAssignS(&tnstr,ajFileGetNameS(etpfile));
+    ajStrAssignS(&tnstr,ajFileGetPrintnameS(etpfile));
     ajFileClose(&etpfile);    
     fp = fopen(ajStrGetPtr(tnstr),"rb");
 */

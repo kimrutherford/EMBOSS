@@ -57,7 +57,7 @@ Output report [m23100.jaspscan]:
 Command line arguments
 
 Scans DNA sequences for transcription factors
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -98,6 +98,7 @@ Version: EMBOSS:6.3.0
                                   then a hit will be reported (Any numeric
                                   value)
   [-outfile]           report     [*.jaspscan] Output report file name
+                                  (default -rformat seqtable)
 
    Additional (Optional) qualifiers:
    -exclude            string     The names of any matrices to exclude from
@@ -160,7 +161,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   jaspscan reads any normal sequence USAs.
+   jaspscan reads one or more nucleotide sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -277,7 +295,19 @@ SQ   Sequence 2085 BP; 417 A; 631 C; 702 G; 335 T; 0 other;
 
 Output file format
 
-   jaspscan outputs a report format file.
+   The output is a standard EMBOSS report file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
+   By default the report is in 'seqtable' format.
 
   Output files for usage example
 
@@ -285,7 +315,7 @@ Output file format
 
 ########################################
 # Program: jaspscan
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: jaspscan
 #    -both
 #    -sequence tembl:m23100
@@ -436,27 +466,29 @@ Known bugs
 
 See also
 
-                    Program name                         Description
-                    tfscan       Identify transcription factor binding sites in DNA sequences
+   Program name     Description
+   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
+                    sequences
+   tfscan           Identify transcription factor binding sites in DNA sequences
 
 Author(s)
 
-   Alan             Bleasby
-   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton,         Cambridge CB10 1SD, UK
+   Alan Bleasby
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
-                    Please report all bugs to the EMBOSS bug team
-                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 
-                    Completed 23rd July 2007
+   Completed 23rd July 2007
 
 Target users
 
-                    This program is intended to be used by everyone and everything, from
-                    naive users to embedded scripts.
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
 
 Comments
 
-                    None
+   None

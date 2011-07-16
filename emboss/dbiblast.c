@@ -488,9 +488,9 @@ int main(int argc, char **argv)
     listTestFiles = embDbiFileListExc(directory, filename, exclude);
     ajListSort(listTestFiles, ajStrVcmp);
     nfiles = ajListToarray(listTestFiles, &testFiles);
-    
     if(!nfiles)
-	ajFatal("No files selected");
+        ajDie("No input files in '%S' matched filename '%S'",
+              directory, filename);
     
     embDbiLogHeader(logfile, dbname, release, datestr,
 		     indexdir, maxindex);

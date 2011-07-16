@@ -5,13 +5,15 @@
 ** define expat BYTEORDER and WORDS_BIGENDIAN
 */
 
+#ifndef WIN32
+#include "config.h"
+#endif
 
 /* 1234 = LIL_ENDIAN, 4321 = BIGENDIAN */
-#ifdef LENDIAN
+#ifndef WORDS_BIGENDIAN
 #define BYTEORDER 1234
 #else
 #define BYTEORDER 4321
-#define WORDS_BIGENDIAN
 #endif
 
 

@@ -39,7 +39,7 @@
 <td>-graphout</td>
 <td>graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -90,9 +90,9 @@
 <tr bgcolor="#FFFFCC">
 <td>-gapsize</td>
 <td>integer</td>
-<td>Interval between ticks in the ruler</td>
+<td>A zero value allows the application to choose a gap size</td>
 <td>Integer 0 or more</td>
-<td>500</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

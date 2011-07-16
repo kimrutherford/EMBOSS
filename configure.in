@@ -1,200 +1,463 @@
+#                                               -*- Autoconf -*-
 # Configure template for the EMBOSS package.
 # Process this file with autoconf to produce a configure script.
 
-#if you want to force configure to use the default C compiler cc
-## then uncomment the following line.
-#CC=cc
-
-AC_INIT(ajax/core/ajmath.c)
-AM_INIT_AUTOMAKE([EMBOSS],[6.3.1])
+AC_PREREQ([2.59])
+AC_INIT([EMBOSS], [6.4.0], [emboss-bug@emboss.open-bio.org],
+  [EMBOSS], [http://emboss.sourceforge.net/])
+AC_REVISION([$Revision: 1.152 $])
+AC_CONFIG_SRCDIR([ajax/acd/ajacd.c])
+AC_CONFIG_HEADERS([ajax/core/config.h])
+AC_CONFIG_MACRO_DIR([m4])
 
 # Make sure CFLAGS is defined to stop LT_INIT adding -g
 CFLAGS="$CFLAGS "
 
+# Checks for programs.
+AC_PROG_AWK
+AC_PROG_CC([icc gcc cc])
+AC_PROG_CXX([icpc g++])
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_MKDIR_P
+
+AM_INIT_AUTOMAKE
+
 # Use libtool to make a shared library.
 LT_INIT
 
-# Checks for programs.
-#as# AC_PROG_CXX
-AC_PROG_AWK
-AC_PROG_CC
-AC_PROG_CPP
-AC_C_INLINE
-#as# AC_PROG_INSTALL
-#as# AC_PROG_LN_S
-#as# AC_PROG_MAKE_SET
-#as# AC_PROG_RANLIB
+dnl Check if 64 bit pointer support is required on 32 bit machines
+dnl Disabled by default
+use_64bit_ptrs=no
+AC_ARG_ENABLE([64],
+  AS_HELP_STRING([--enable-64], [64 bit pointers on 32 bit machines]))
 
-# Checks for libraries.
+AS_IF([test "x$enable_64" = "xyes"],
+  [AC_MSG_CHECKING([for 64bit compilation support])
+  use_64bit_ptrs=yes
 
-# none needed for the libraries we build
-# external library dependencies tested in m4 macros: X11 gd, z, png
+  case $host_os in
+    aix*)
+    CPPFLAGS="-DAJ_AIX64 $CPPFLAGS"
+    case $CC in
+      gcc)
+      ;;
+      *)
+      CC="$CC -q64"
+      ;;
+    esac
+    NM="nm -B -X 64"
+    AR="ar -X 64"
+    ;;
+
+    hpux*)
+    case $CC in
+      gcc)
+      ;;
+      *)
+      CC="$CC +DD64"
+      ;;
+    esac
+    AC_DEFINE([HPUX64PTRS],[1],[Set to 1 if HPUX 64bit ptrs on 32 bit m/c])
+    ;;
+    *)
+    ;;
+  esac
+  AC_MSG_RESULT([done])
+])
+dnl End of checks for 64 bit pointers on 32 bit machines
+
+
+
+
+
+
+
+
+dnl Compiler optimisations
+dnl The Solaris 64bit ptr check has to be done here owing to param order
+AC_ARG_WITH([optimisation],
+  AS_HELP_STRING([--without-optimisation], [Disable compiler optimisation]))
+
+AS_IF([test "x$with_optimisation" != "xno"],
+[case $CC in
+
+  gcc)
+  dnl Intel MacOSX requires reduced optimisation for PCRE code
+  dnl other OSs just use -O2
+  case $host_os in
+    darwin*)
+    if test "$host_cpu" = "i386"; then
+      CFLAGS="$CFLAGS -O1"
+    else
+      CFLAGS="$CFLAGS -O2"
+    fi
+    ;;
+
+    *)
+    CFLAGS="$CFLAGS -O2"
+    ;;
+  esac
+  ;;
+
+  *)
+  case $host_os in
+
+    aix*)
+    CFLAGS="$CFLAGS -O3 -qstrict -qarch=auto -qtune=auto"
+    ;;
+
+    irix*)
+    LD="/usr/bin/ld -IPA"
+    CFLAGS="$CFLAGS -O3"
+    ;;
+
+    hpux*)
+    CFLAGS="$CFLAGS -fast"
+    ;;
+
+    osf*)
+    CFLAGS="$CFLAGS -fast -U_FASTMATH"
+    ;;
+
+    solaris*)
+    CFLAGS="$CFLAGS -O"
+
+    dnl test for 64 bit ptr here (see Solaris 64bit above)
+
+    if test "${enable_64}" = "yes" ; then
+      CFLAGS="$CFLAGS -xtarget=ultra -xarch=v9"
+    fi
+    ;;
+
+    linux*)
+    dnl Default optimisation for non-gcc compilers under Linux
+    CFLAGS="$CFLAGS -O2"
+    ;;
+
+    freebsd*)
+    CFLAGS="$CFLAGS -O2"
+    ;;
+  esac
+esac
+])
+dnl end of compiler tests
+
+
+
+# Compiler warning settings: --enable-warnings, WARN_CFLAGS
+have_warnings=no
+AC_ARG_ENABLE([warnings],
+  [AS_HELP_STRING([--enable-warnings], [warnings])])
+AS_IF([test "${enable_warnings}" = "yes"],
+  [have_warnings=yes
+  AS_CASE($CC,
+    [gcc],
+    [WARN_CFLAGS="-Wall -fno-strict-aliasing"])
+])
+
+AC_SUBST([WARN_CFLAGS])
+
+
+
+
+# Compiler developer warning settings: --enable-devwarnings, DEVWARN_CFLAGS
+have_devwarnings=no
+AC_ARG_ENABLE([devwarnings],
+  [AS_HELP_STRING([--enable-devwarnings], [strict warnings for developers])])
+AS_IF([test "${enable_devwarnings}" = "yes"],
+  [have_devwarnings=yes
+  AS_CASE($CC,
+    [gcc],
+    [
+    # -Wextra: more warnings beyond what -Wall provides
+    #    -Wclobbered -Wempty-body -Wignored-qualifiers
+    #    -Wmissing-field-initializers -Wmissing-parameter-type (C only)
+    #    -Wold-style-declaration (C only) -Woverride-init -Wsign-compare
+    #    -Wtype-limits -Wuninitialized -Wunused-parameter (only with
+    #        -Wunused or -Wall)
+
+    DEVWARN_CFLAGS="-Wextra"
+
+    # prototype warnings. prototypes required for all functions
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wstrict-prototypes"
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wmissing-prototypes"
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wold-style-definition"
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wmissing-declarations"
+
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wwrite-strings"
+
+    # catches things like index as a variable name
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wshadow"
+
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wdeclaration-after-statement"
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wundef"
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wpointer-arith"
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wcast-qual"
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wcast-align"
+
+    # casts of function results that can lose data e.g. double to int
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wbad-function-cast"
+
+    # comparing signed and unsigned values
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wsign-compare"
+
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wmissing-field-initializers"
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wmissing-noreturn"
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wnested-externs"
+
+    # useful messages
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wredundant-decls"
+
+    # -Wunsafe-loop-optimizations objects to loops with increments more
+    # than 1 because if the end is at INT_MAX it could run forever ...
+    # rarely
+    # DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wunsafe-loop-optimizations"
+
+    # -Wconversion is brain-damaged - complains about char arguments
+    # every time
+    #  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wconversion"
+
+    # -Wtraditional gives #elif and #error msgs
+    #  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wtraditional"
+
+    # -Wwrite-strings upsets struct initialisation
+    #  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wwrite-strings"
+
+    # -Wfloat-equal will not allow tests for values still 0.0
+    # DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wfloat-equal"
+
+    # -Warray-bounds gives false positives in gcc 4.6.0
+    # Disable rather than use a non-portable pragma
+    # DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wno-array-bounds"
+    ],
+
+    [icc],
+    [
+    # Diagnostic options for the Intel(R) C++ compiler version 11.1.
+    # http://software.intel.com/en-us/articles/intel-c-compiler-professional-edition-for-linux-documentation/
+
+    # This option specifies the level of diagnostic messages to be
+    # generated by the compiler.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -w2"
+
+    # This option determines whether a warning is issued if generated
+    # code is not C++ ABI compliant.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wabi"
+
+    # This option tells the compiler to display errors, warnings, and
+    # remarks.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wall"
+
+    # This option tells the compiler to display a shorter form of
+    # diagnostic output.
+    # DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wbrief"
+
+    # This option warns if cast is used to override pointer type
+    # qualifier
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wcast-qual"
+
+    # This option tells the compiler to perform compile-time code
+    # checking for certain code.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wcheck"
+
+    # This option determines whether a warning is issued when /*
+    # appears in the middle of a /* */ comment.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wcomment"
+
+    # Set maximum number of template instantiation contexts shown in
+    # diagnostic.
+    # DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wcontext-limit=n"
+
+    # This option enables warnings for implicit conversions that may
+    # alter a value.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wconversion"
+
+    # This option determines whether warnings are issued for deprecated
+    # features.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wdeprecated"
+
+    # This option enables warnings based on certain C++ programming
+    # guidelines.
+    # DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Weffc++"
+
+    # This option changes all warnings to errors.
+    # Alternate: -diag-error warn
+    # DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Werror"
+
+    # This option changes all warnings and remarks to errors.
+    # Alternate: -diag-error warn, remark
+    # DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Werror-all"
+
+    # This option determines whether warnings are issued about extra
+    # tokens at the end of preprocessor directives.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wextra-tokens"
+
+    # This option determines whether argument checking is enabled for
+    # calls to printf, scanf, and so forth.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wformat"
+
+    # This option determines whether the compiler issues a warning when
+    # the use of format functions may cause security problems.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wformat-security"
+
+    # This option enables diagnostics about what is inlined and what is
+    # not inlined.
+    # DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Winline"
+
+    # This option determines whether a warning is issued if the return
+    # type of main is not expected.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wmain"
+
+    # This option determines whether warnings are issued for global
+    # functions and variables without prior declaration.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wmissing-declarations"
+
+    # Determines whether warnings are issued for missing prototypes.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wmissing-prototypes"
+
+    # This option enables warnings if a multicharacter constant
+    # ('ABC') is used.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wmultichar"
+
+    # ssue a warning when a class appears to be polymorphic,
+    # yet it declares a non-virtual one.
+    # This option is supported in C++ only.
+    # DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wnon-virtual-dtor"
+
+    # This option warns about operations that could result in
+    # integer overflow.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Woverflow"
+
+    # This option tells the compiler to display diagnostics for 64-bit
+    # porting.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wp64"
+
+    # Determines whether warnings are issued for questionable pointer
+    # arithmetic.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wpointer-arith"
+
+    # his option determines whether a warning is issued about the
+    # use of #pragma once.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wpragma-once"
+
+    # Issue a warning when the order of member initializers does not
+    # match the order in which they must be executed.
+    # This option is supported with C++ only.
+    # DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wreorder"
+
+    # This option determines whether warnings are issued when a function
+    # uses the default int return type or when a return statement is
+    # used in a void function.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wreturn-type"
+
+    # This option determines whether a warning is issued when a variable
+    # declaration hides a previous declaration.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wshadow"
+
+    # This option warns for code that might violate the optimizer's
+    # strict aliasing rules. Warnings are issued only when using
+    # -fstrict-aliasing or -ansi-alias.
+    # DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wstrict-aliasing"
+
+    # This option determines whether warnings are issued for functions
+    # declared or defined without specified argument types.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wstrict-prototypes"
+
+    # This option determines whether warnings are issued if any trigraphs
+    # are encountered that might change the meaning of the program.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wtrigraphs"
+
+    # This option determines whether a warning is issued if a variable
+    # is used before being initialized.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wuninitialized"
+
+    # This option determines whether a warning is issued if an unknown
+    # #pragma directive is used.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wunknown-pragmas"
+
+    # This option determines whether a warning is issued if a declared
+    # function is not used.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wunused-function"
+
+    # This option determines whether a warning is issued if a local or
+    # non-constant static variable is unused after being declared.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wunused-variable"
+
+    # This option issues a diagnostic message if const char* is
+    # converted to (non-const) char *.
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wwrite-strings"
+
+    # Disable warning #981 operands are evaluated in unspecified order
+    # http://software.intel.com/en-us/articles/cdiag981/
+    DEVWARN_CFLAGS="$DEVWARN_CFLAGS -diag-disable 981"
+    ])
+])
+
+AC_SUBST([DEVWARN_CFLAGS])
+
+
+
+# Compiler extra developer warning settings: --enable-devextrawarnings
+# Will only have an effect if --enable-devwarnings also given
+AC_ARG_ENABLE([devextrawarnings],
+  [AS_HELP_STRING([--enable-devextrawarnings],
+    [add extra warnings to devwarnings])])
+if test "${enable_devextrawarnings}" = "yes" ; then
+  if test "$have_devwarnings" = "yes"; then
+    AS_CASE($CC,
+      [gcc],
+      [
+      # flags used by Ubuntu 8.10 to check open has 2/3 arguments etc.
+      AC_DEFINE([_FORTIFY_SOURCE],[2],[Set to 2 for open args])
+
+      # compiler flags
+      CPPFLAGS="-fstack-protector $CPPFLAGS"
+
+      # warnings used by Ubuntu 8.10
+      # -Wall already includes:
+      #           -Wformat
+      DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wformat-security -Wl,-z,relro"
+
+      # -Wpadded means moving char to end of structs - but also flags
+      #  end of struct so need to add padding at end
+      DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wpadded"
+    ])
+  fi
+fi
+
+
+
+
+dnl Add extensions to Solaris for some reentrant functions
+
+case $host_os in
+  solaris*)
+  CFLAGS="$CFLAGS -D__EXTENSIONS__"
+  ;;
+esac
+
 
 
 
 dnl Test whether --with-sgiabi given for IRIX (n32m3 n32m4 64m3 64m4)
 
-if test "$CC" != "gcc"; then
-
-if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64" ; then
-if test "$CC" != "gcc"; then
-  CFLAGS="$CFLAGS"
-  CHECK_SGI
-fi
-fi
-
-
-dnl Test if --enable-64 is given
-
-if test "${enable_64+set}" != set; then
-enable_64=no
-fi
-
-
-AC_ARG_ENABLE(64,
-   AS_HELP_STRING([--enable-64], [64 bit pointers]))
-if test "${enable_64}" = "yes" ; then
-AC_MSG_CHECKING(for 64bit compilation support)
-
-dnl Test for Linux 64 bit
-
-if test "`uname`" = "Linux"; then
-CPPFLAGS="-DAJ_Linux64 $CPPFLAGS"
-fi
-
-dnl Test for FreeBSD 64 bit
-
-if test "`uname`" = "FreeBSD"; then
-CPPFLAGS="-DAJ_FreeBSD64 $CPPFLAGS"
-fi
-
-dnl Test for Solaris 64 bit. This is done in the optimisation section...
-dnl Another Solaris feature is that -fast implies -xarch=v8 and
-dnl therefore switches off -xarch=v9 if it is given first.
-
-
-dnl Test for OSF1 64 bit (it's always this anyway)
-
-if test "`uname`" = "OSF1"; then
-CPPFLAGS="-DAJ_OSF164 $CPPFLAGS"
-fi
-
-dnl Test for SGI 64 bit
-
-if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64"; then
-CPPFLAGS="-DAJ_IRIX64 $CPPFLAGS"
-fi
-
-dnl Test for AIX 64 bit
-
-if test "`uname`" = "AIX"; then
-CPPFLAGS="-DAJ_AIX64 $CPPFLAGS"
-if test "$CC" != "gcc"; then
-CC="$CC -q64"
-fi
-NM="nm -B -X 64"
-AR="ar -X 64"
-fi
-
-dnl Test for HP-UX 64 bit
-
-if test "`uname`" = "HP-UX"; then
-if test "$CC" != "gcc"; then
-CC="$CC +DD64"
-fi
-CPPFLAGS="-DAJ_HPUX64 $CPPFLAGS"
-fi
-
-AC_MSG_RESULT(done)
-fi
+case $host_os in
+  irix*)
+  case $CC in
+    gcc)
+    ;;
+    cc)
+    CHECK_SGI
+    ;;
+  esac
+  ;;
+esac
 
 
 
-
-
-
-
-dnl Set optimisation flags
-
-dnl Test for AIX optimisation
-
-if test "`uname`" = "AIX"; then
-CFLAGS="$CFLAGS -O3 -qstrict -qarch=auto -qtune=auto"
-fi
-
-dnl test for SGI optimisation
-
-if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64" ; then
-LD="/usr/bin/ld -IPA"
-CFLAGS="$CFLAGS -O3"
-fi
-
-dnl Test for HP-UX optimisation
-
-if test "`uname`" = "HP-UX"; then
-CFLAGS="$CFLAGS -fast"
-fi
-
-dnl Test for OSF1 optimisation
-
-if test "`uname`" = "OSF1"; then
-CFLAGS="$CFLAGS -fast -U_FASTMATH"
-fi
-
-dnl test for Solaris optimisation
-
-if test "`uname`" = "SunOS"; then
-CFLAGS="$CFLAGS -O"
-
-dnl test for 64 bit ptr here (see Solaris 64bit above)
-
-if test "${enable_64}" = "yes" ; then
-CFLAGS="$CFLAGS -xtarget=ultra -xarch=v9"
-fi
-fi
-
-dnl Test for Linux optimisation
-
-if test "`uname`" = "Linux"; then
-CFLAGS="$CFLAGS -O2"
-fi
-
-dnl Test for FreeBSD optimisation
-
-if test "`uname`" = "FreeBSD"; then
-CFLAGS="$CFLAGS -O2"
-fi
-
-
-
-else
-
-dnl Intel MacOSX requires reduced optimisation for PCRE code
-
-if test "`uname -a | grep Darwin`"; then
-  if test "`uname -a | grep i386`"; then
-    CFLAGS="$CFLAGS -O1"
-  else
-    CFLAGS="$CFLAGS -O2"
-  fi
-
-else
-CFLAGS="$CFLAGS -O2"
-fi
-
-fi
-dnl End of Optimisation tests
-
-
-dnl Add extensions to Solaris for some reentrant functions
-
-if test "`uname`" = "SunOS"; then
-CFLAGS="$CFLAGS -D__EXTENSIONS__"
-fi
-
-
-dnl endian test for indexing system
-AC_C_BIGENDIAN(CPPFLAGS="$CPPFLAGS -DBENDIAN",CPPFLAGS="$CPPFLAGS -DLENDIAN")
 
 dnl PCRE library definitions - see the MAJOR and MINOR values
 dnl to see which version's configure.in these lines come from
@@ -222,96 +485,79 @@ PCRE_POSIXLIB_VERSION=0:0:0
 
 
 dnl Define where the EMBOSS package is located
-AC_SUBST(AJAX_FIXED_ROOT)
+AC_SUBST([AJAX_FIXED_ROOT])
 AJAX_FIXED_ROOT="\\\"`pwd`/emboss\\\""
-AC_SUBST(EMBOSS_TOP)
+AC_SUBST([EMBOSS_TOP])
 EMBOSS_TOP=`pwd`
-AC_SUBST(AJAX_SYSTEM)
+AC_SUBST([AJAX_SYSTEM])
 AJAX_SYSTEM="\\\"`uname`\\\""
 
 
-dnl Program checks
-AC_PROG_INSTALL
-AC_PROG_LN_S
-AC_PROG_MAKE_SET
-
 dnl Intel MacOSX 10.6 puts X11 in a non-standard place
 if test "${with_x}" != "no" ; then
-if test "`uname -a | grep Darwin`"; then
-OSXX=`sw_vers -productVersion | sed 's/\(10\.[[0-9]]*\).*/\1/'`
-if test ${OSXX} '>' '10.4'; then
-CFLAGS="$CFLAGS -I/usr/X11/include -L/usr/X11/lib"
-fi
-fi
+  case $host_os in
+    darwin*)
+    OSXX=`sw_vers -productVersion | sed 's/\(10\.[[0-9]]*\).*/\1/'`
+    if test ${OSXX} '>' '10.4'; then
+      CFLAGS="$CFLAGS -I/usr/X11/include -L/usr/X11/lib"
+    fi
+    ;;
+  esac
 fi
 
+
 # Checks for header files.
-#as# AC_PATH_X
 AC_PATH_XTRA
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 
 AC_CHECK_HEADERS([unistd.h TargetConfig.h])
-#as# AC_CHECK_HEADERS([arpa/inet.h fcntl.h float.h limits.h \
-#as# 		  malloc.h memory.h netdb.h netinet/in.h \
-#as# 		  shadow.h stddef.h stdint.h stdlib.h string.h strings.h \
-#as# 		  sys/file.h sys/ioctl.h sys/param.h sys/socket.h sys/time.h \
-#as# 		  termios.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_C_BIGENDIAN
 AC_C_CONST
-#as# AC_HEADER_STDBOOL
-#as# AC_TYPE_UID_T
-#as# AC_C_INLINE
-#as# AC_TYPE_INT32_T
+AC_C_INLINE
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
-#as# AC_STRUCT_TIMEZONE
-#as# AC_TYPE_UINT32_T
 AC_STRUCT_TM
-
-#as# AC_CHECK_TYPES([ptrdiff_t])
-
 
 
 dnl Check for library functions
-#AC_FUNC_ERROR_AT_LINE
 AC_FUNC_GETPGRP
 AC_FUNC_STRFTIME
-AC_FUNC_VFORK
+AC_FUNC_FORK
 AC_FUNC_VPRINTF
-#as# AC_FUNC_MALLOC
-#as# AC_FUNC_MKTIME
-#as# AC_FUNC_REALLOC
-#as# AC_FUNC_STRTOD
 
-AC_CHECK_FUNCS(memmove)
-#as# AC_CHECK_FUNCS([alarm atexit bzero dup2 floor \
-#as# 		getcwd gethostbyname getspnam gettimeofday inet_ntoa \
-#as# 		localtime_r memmove memset mkdir modf pow regcomp rint \
-#as# 		select socket sqrt strchr strcspn strdup strerror strpbrk \
-#as# 		strrchr strspn strstr strtol])
+AC_CHECK_FUNCS([memmove])
 
 if test "${with_x}" != "no" ; then
-LF_EMBOSS_PATH_XLIB
+  LF_EMBOSS_PATH_XLIB
 fi
 
 dnl Library checks
 AC_CHECK_LIB(c, socket, LIBS="$LIBS" , LIBS="$LIBS -lsocket")
 AC_CHECK_LIB(m, main)
 
-dnl GD for FreeBSD requires libiconv
-if test "`uname`" = "FreeBSD" && ${with_pngdriver} != "no"; then
-AC_CHECK_LIB(iconv, main, LIBS="$LIBS", LIBS="-liconv $LIBS")
-fi
 
-AM_CONDITIONAL(AMPNG, false)
-AM_CONDITIONAL(AMPDF, false)
+dnl GD for FreeBSD requires libiconv
+case $host_os in
+  freebsd*)
+  if test ${with_pngdriver} != "no"; then
+    AC_CHECK_LIB(iconv, main, LIBS="$LIBS", LIBS="-liconv $LIBS")
+  fi
+  ;;
+esac
+
+
+AM_CONDITIONAL([AMPNG], [false])
+AM_CONDITIONAL([AMPDF], [false])
 
 CHECK_GENERAL
+CHECK_IDXDBS
 CHECK_JAVA
 CHECK_JAVAOS
 CHECK_HPDF
+CHECK_AXIS2C
 CHECK_PNGDRIVER
 CHECK_AUTH
 CHECK_AMD64
@@ -319,120 +565,94 @@ CHECK_AMD64
 AX_LIB_MYSQL
 AX_LIB_POSTGRESQL
 
-CFLAGS="$CFLAGS $MYSQL_CFLAGS"
-LDFLAGS="$LDFLAGS $MYSQL_LDFLAGS"
-
-CFLAGS="$CFLAGS $POSTGRESQL_CFLAGS"
-LDFLAGS="$LDFLAGS $POSTGRESQL_LDFLAGS"
-
 
 dnl Check for 'ant' for packaging Jemboss and export result
 
 AC_CHECK_PROG(javac_in_path,javac,true,false)
 AC_CHECK_PROG(ant_in_path,ant,true,false)
-AM_CONDITIONAL(EHAVEANT, test "$ant_in_path" = "true" && "$javac_in_path" = "true")
-AC_SUBST(EHAVEANT)
+AM_CONDITIONAL([EHAVEANT], [test "$ant_in_path" = "true" && "$javac_in_path" = "true"])
+AC_SUBST([EHAVEANT])
 
 dnl "Export" these variables for PCRE
 
-AC_SUBST(HAVE_MEMMOVE)
-AC_SUBST(HAVE_STRERROR)
-AC_SUBST(PCRE_MAJOR)
-AC_SUBST(PCRE_MINOR)
-AC_SUBST(PCRE_DATE)
-AC_SUBST(PCRE_VERSION)
-AC_SUBST(PCRE_LIB_VERSION)
-AC_SUBST(PCRE_POSIXLIB_VERSION)
-AC_SUBST(POSIX_MALLOC_THRESHOLD)
+AC_SUBST([HAVE_MEMMOVE])
+AC_SUBST([HAVE_STRERROR])
+AC_SUBST([PCRE_MAJOR])
+AC_SUBST([PCRE_MINOR])
+AC_SUBST([PCRE_DATE])
+AC_SUBST([PCRE_VERSION])
+AC_SUBST([PCRE_LIB_VERSION])
+AC_SUBST([PCRE_POSIXLIB_VERSION])
+AC_SUBST([POSIX_MALLOC_THRESHOLD])
 
-#dnl Test if --enable-corba is given
-#AC_ARG_ENABLE(corba,
-#   AS_HELP_STRING([--enable-corba], [corba (need glib and orbit)]))
-#if test "${enable_corba}" = "yes" ; then
-#AC_MSG_CHECKING(for ORBit and glib)
-#CPPFLAGS="$CPPFLAGS -I/usr/lib/glib/include -I/usr/local/lib/glib/include"
-#
-#AC_CHECK_HEADERS(glib.h)
-#AC_CHECK_HEADERS(orb/orbit.h)
-#AC_CHECK_LIB(glib, main)
-#
-#AC_CHECK_LIB(ORBitutil, main)
-#AC_CHECK_LIB(IIOP, main)
-#AC_CHECK_LIB(ORBit, main)
-#fi
 
 dnl Test if --enable-debug given
-AC_ARG_ENABLE(debug,
-   AS_HELP_STRING([--enable-debug], [debug (-g option on compiler)]))
+AC_ARG_ENABLE([debug],
+  [AS_HELP_STRING([--enable-debug], [debug (-g option on compiler)])])
 if test "${enable_debug}" = "yes" ; then
   CFLAGS="$CFLAGS -g"
-fi          
+fi
 
 
 dnl Turn off irritating linker warnings in IRIX
-if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64"; then
-CFLAGS="-Wl,-LD_MSG:off=85:off=84:off=16:off=134 $CFLAGS"
-fi
-
+case $host_os in
+  irix*)
+  CFLAGS="-Wl,-LD_MSG:off=85:off=84:off=16:off=134 $CFLAGS"
+  ;;
+esac
 
 
 
 dnl Test if --enable-large is given
 if test "${enable_large+set}" != set; then
-enable_large=yes
+  enable_large=yes
 fi
 
 
-AC_ARG_ENABLE(large,
-   AS_HELP_STRING([--enable-large], [over 2Gb file support (default)]))
+AC_ARG_ENABLE([large],
+  [AS_HELP_STRING([--enable-large], [over 2Gb file support (default)])])
 if test "${enable_large}" = "yes" ; then
-AC_MSG_CHECKING(for large file support)
+  AC_MSG_CHECKING([for large file support])
 
-dnl Test for Linux large file support
-if test "`uname`" = "Linux"; then
-CPPFLAGS="-DAJ_LinuxLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE $CPPFLAGS"
-fi
+dnl Test for large file support
+  case $host_os in
+    linux*)
+    CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE $CPPFLAGS"
+    CPPFLAGS="-DAJ_LinuxLF -D_FILE_OFFSET_BITS=64 $CPPFLAGS"
+    ;;
 
-dnl Test for FreeBSD large file support
-if test "`uname`" = "FreeBSD"; then
-CPPFLAGS="-DAJ_FreeBSDLF $CPPFLAGS"
-fi
+    freebsd*)
+    CPPFLAGS="-DAJ_FreeBSDLF $CPPFLAGS"
+    ;;
 
-dnl Test for Solaris large file support
-if test "`uname`" = "SunOS"; then
-CPPFLAGS="-DAJ_SolarisLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE $CPPFLAGS"
-fi
+    solaris*)
+    CPPFLAGS="-D_LARGEFILE_SOURCE $CPPFLAGS"
+    CPPFLAGS="-DAJ_SolarisLF -D_FILE_OFFSET_BITS=64 $CPPFLAGS"
+    ;;
 
-dnl Test for OSF1 large file support (its always this anyway)
-if test "`uname`" = "OSF1"; then
-CPPFLAGS="-DAJ_OSF1LF $CPPFLAGS"
-fi
+    osf*)
+    CPPFLAGS="-DAJ_OSF1LF $CPPFLAGS"
+    ;;
 
-dnl Test for SGI large file support
-dnl CPPFLAGS="-DAJ_IRIXLF -D_LARGEFILE64_SOURCE $CPPFLAGS"
-if test "`uname`" = "IRIX" || test "`uname`" = "IRIX64"; then
-CPPFLAGS="-DAJ_IRIXLF -D_LARGEFILE64_SOURCE $CPPFLAGS"
-fi
+    irix*)
+    CPPFLAGS="-DAJ_IRIXLF -D_LARGEFILE64_SOURCE $CPPFLAGS"
+    ;;
 
-dnl Test for AIX large file support
-dnl CPPFLAGS="-DAJ_AIXLF $CPPFLAGS"
-if test "`uname`" = "AIX"; then
-CPPFLAGS="-DAJ_AIXLF -D_LARGE_FILES $CPPFLAGS"
-fi
+    aix*)
+    CPPFLAGS="-DAJ_AIXLF -D_LARGE_FILES $CPPFLAGS"
+    ;;
 
-dnl Test for HP-UX large file support
-dnl CPPFLAGS="-DAJ_HPUXLF -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $CPPFLAGS"
-if test "`uname`" = "HP-UX"; then
-CPPFLAGS="-DAJ_HPUXLF -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $CPPFLAGS"
-fi
+    hpux*)
+    CPPFLAGS="-D_FILE_OFFSET_BITS=64 $CPPFLAGS"
+    CPPFLAGS="-DAJ_HPUXLF -D_LARGEFILE_SOURCE $CPPFLAGS"
+    ;;
 
-dnl Test for MacOSX large file support off_t and fpos_t are always 64-bit
-dnl CPPFLAGS="-DAJ_MACOSXLF $CPPFLAGS"
-if test "`uname`" = "Darwin"; then
-CPPFLAGS="-DAJ_MACOSXLF $CPPFLAGS"
-fi
+    darwin*)
+    CPPFLAGS="-DAJ_MACOSXLF $CPPFLAGS"
+    ;;
+  esac
 
-AC_MSG_RESULT(done)
+  AC_MSG_RESULT([done])
 fi
 
 
@@ -443,13 +663,13 @@ fi
 
 dnl Test if --enable-systemlibs given
 have_systemlibs=no
-AC_ARG_ENABLE(systemlibs,
-   AS_HELP_STRING([--enable-systemlibs], [utility for RPM/dpkg bundles]))
+AC_ARG_ENABLE([systemlibs],
+  [AS_HELP_STRING([--enable-systemlibs], [utility for RPM/dpkg bundles])])
 if test "${enable_systemlibs}" = "yes" ; then
-    have_systemlibs=yes
-fi          
-AM_CONDITIONAL(ESYSTEMLIBS, test "$have_systemlibs" = "yes")
-AC_SUBST(ESYSTEMLIBS)
+  have_systemlibs=yes
+fi
+AM_CONDITIONAL([ESYSTEMLIBS], [test "$have_systemlibs" = "yes"])
+AC_SUBST([ESYSTEMLIBS])
 
 
 
@@ -458,17 +678,17 @@ AC_SUBST(ESYSTEMLIBS)
 dnl Test if purify exists and if --enable-purify given if so
 dnl set "-g"
 
-AC_MSG_CHECKING(for purify)
+AC_MSG_CHECKING([for purify])
 dnl if(purify -version) < /dev/null > /dev/null 2>&1; then
-   AC_ARG_ENABLE(purify,
-      AS_HELP_STRING([--enable-purify], [purify]))
+AC_ARG_ENABLE([purify],
+  [AS_HELP_STRING([--enable-purify], [purify])])
 if test "${enable_purify}" = "yes" ; then
-     CC="purify --chain-length="20" -best-effort -windows=yes gcc -g"
-     LIBTOOL="$LIBTOOL --tag=CC"
-     AC_MSG_RESULT(yes)
+  CC="purify --chain-length="20" -best-effort -windows=yes gcc -g"
+  LIBTOOL="$LIBTOOL --tag=CC"
+  AC_MSG_RESULT([yes])
 else
-   AC_MSG_RESULT(no)
-fi          
+  AC_MSG_RESULT([no])
+fi
 dnl fi
 
 
@@ -476,26 +696,11 @@ dnl Test if --enable-gccprofile given if so
 dnl set "-pg"
 
 if test "${with_gccprofile}" = "yes" ; then
-     CFLAGS="$CFLAGS -pg"
-     LDFLAGS="$LDFLAGS -pg"
-fi          
+  CFLAGS="$CFLAGS -pg"
+  LDFLAGS="$LDFLAGS -pg"
+fi
 
 
-
-dnl Test if --enable-warnings given
-have_warnings=no
-AC_SUBST(WARN_CFLAGS)
-AC_ARG_ENABLE(warnings,
-   AS_HELP_STRING([--enable-warnings],
-                  [warnings (-Wall option on gcc compiler)]))
-if test "${enable_warnings}" = "yes" ; then
-  if test "$CC" = "gcc"; then
-    have_warnings=yes
-    WARN_CFLAGS="-Wall -fno-strict-aliasing"
-  fi
-fi          
-AM_CONDITIONAL(WARNINGS, test "$have_warnings" = "yes")
-AC_SUBST(WARNINGS)
 
 
 dnl Set extra needed compiler flags
@@ -504,12 +709,12 @@ if test "$CC" = "cc"; then
     alpha*-dec-osf*) CFLAGS="$CFLAGS -ieee";;
   esac
 fi
-AM_CONDITIONAL(PURIFY, test "${enable_purify}" = "yes")
+AM_CONDITIONAL([PURIFY], [test "${enable_purify}" = "yes"])
 
 
 dnl Set a gcc test flag for use in Makefile.am that can be used in modifiying
 dnl (dev) warnings in Makefile.am files.
-AM_CONDITIONAL(ISGCC, test "$CC" = "gcc")
+AM_CONDITIONAL([ISGCC], [test "$CC" = "gcc"])
 
 
 
@@ -517,79 +722,6 @@ AM_CONDITIONAL(ISGCC, test "$CC" = "gcc")
 
 
 
-dnl Test if --enable-devwarnings given
-have_devwarnings=no
-AC_SUBST(DEVWARN_CFLAGS)
-AC_ARG_ENABLE(devwarnings,
-   AS_HELP_STRING([--enable-devwarnings],
-                  [strict warnings (gcc compiler only) for developers]))
-if test "${enable_devwarnings}" = "yes" ; then
-  if test "$CC" = "gcc"; then
-    have_devwarnings=yes
-dnl more warnings beyond what -Wall provides
-  DEVWARN_CFLAGS="-Wextra"
-
-dnl prototype warnings. prototypes required for all functions
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wstrict-prototypes -Wmissing-prototypes"
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wold-style-definition -Wmissing-declarations"
-
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wwrite-strings"
-
-dnl catches things like index as a variable name
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wshadow"
-
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wdeclaration-after-statement -Wundef"
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wpointer-arith"
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wcast-qual -Wcast-align"
-
-dnl casts of function results that can lose data e.g. double to int
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wbad-function-cast"
-
-dnl comparing signed and unsigned values
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wsign-compare"
-
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wmissing-field-initializers"
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wmissing-noreturn -Wnested-externs"
-dnl useful messages
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wredundant-decls"
-
-dnl -Wunsafe-loop-optimizations objects to loops with increments more than 1
-dnl because if the end is at INT_MAX it could run forever ... rarely
-dnl  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wunsafe-loop-optimizations"
-
-dnl -Wconversion is brain-damaged - complains about char arguments every time
-dnl  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wconversion"
-
-dnl -Wtraditional gives #elif and #error msgs
-dnl  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wtraditional"
-
-dnl -Wwrite-strings upsets struct initialisation
-dnl  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wwrite-strings"
-
-dnl -Wfloat-equal will not allow tests for values still 0.0
-dnl DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wfloat-equal"
-  fi
-fi          
-
-
-dnl Test if --enable-devextrawarnings given
-dnl Will only have an effect if --enable-devwarnings also given
-AC_ARG_ENABLE(devextrawarnings,
-   AS_HELP_STRING([--enable-devextrawarnings],
-                  [add extra warnings to devwarnings]))
-if test "${enable_devextrawarnings}" = "yes" ; then
-  if test "$have_devwarnings" = "yes"; then
-
-dnl -Wpadded means moving char to end of structs - but also flags end of struct
-dnl  so need to add padding at end
-  DEVWARN_CFLAGS="$DEVWARN_CFLAGS -Wpadded"
-
-  fi
-fi
-
-
-AM_CONDITIONAL(DEVWARNINGS, test "$have_devwarnings" = "yes")
-AC_SUBST(DEVWARNINGS)
 
 dnl Test for cygwin to set AM_LDFLAGS in library & apps Makefile.ams
 dnl Replaces original version which used 'expr' and so wasn't entirely
@@ -598,111 +730,153 @@ platform_cygwin='no'
 AC_MSG_CHECKING([for cygwin])
 case "$host" in
   *-*-mingw*|*-*-cygwin*)
-    platform_cygwin='yes'
-    ;;
+  platform_cygwin='yes'
+  ;;
   *)
-    platform_cygwin='no'
-    ;;
+  platform_cygwin='no'
+  ;;
 esac
 AC_MSG_RESULT([$platform_cygwin])
-AM_CONDITIONAL(ISCYGWIN, test "$platform_cygwin" = "yes")
-AC_SUBST(ISCYGWIN)
+AM_CONDITIONAL([ISCYGWIN], [test "$platform_cygwin" = "yes"])
+AC_SUBST([ISCYGWIN])
 
 dnl Tests for AIX
 dnl If shared needs -Wl,-G in plplot,ajax,nucleus, -lX11 in plplot,
 dnl and -Wl,brtl -Wl,-bdynamic in emboss
 dnl We therefore need a static test as well
 needajax=no
-AM_CONDITIONAL(ISAIXIA64, test "`uname`" = "AIX")
-AM_CONDITIONAL(ISSHARED, test "${enable_shared}" = "yes")
-AC_SUBST(ISAIXIA64)
 
-if test "`uname`" = "AIX"; then
-if test -d ajax/.libs ; then
-	echo AIX ajax/.libs exists
-else
-	mkdir ajax/.libs
-fi
-
-#if test "$host_os" = "aix5.1.0.0"; then
-#	echo $host_os
-#	exit 0
-#fi
 case $host_os in
-	aix5*) needajax=no ;;
-	aix4.3.3*) needajax=yes ;;
-	*) needajax=no ;;
+  aix*)
+  AM_CONDITIONAL([ISAIXIA64], [true])
+  ;;
+  *)
+  AM_CONDITIONAL([ISAIXIA64], [false])
+  ;;
 esac
-fi
-AM_CONDITIONAL(NEEDAJAX,test "$needajax" = "yes")
-AC_SUBST(NEEDAJAX)
+
+AM_CONDITIONAL([ISSHARED], [test "${enable_shared}" = "yes"])
+AC_SUBST([ISAIXIA64])
+
+case $host_os in
+  aix*)
+  if test -d ajax/.libs ; then
+    echo AIX ajax/.libs exists
+  else
+    mkdir ajax/.libs
+  fi
+
+  case $host_os in
+    aix5*) needajax=no ;;
+    aix4.3.3*) needajax=yes ;;
+    *) needajax=no ;;
+  esac
+esac
+
+AM_CONDITIONAL([NEEDAJAX], [test "$needajax" = "yes"])
+AC_SUBST([NEEDAJAX])
 
 
 dnl HP-UX needs -lsec for shadow passwords
 
-if test "`uname`" = "HP-UX"; then
-LDFLAGS="$LDFLAGS -lsec"
-fi
+case $host_os in
+  hpux*)
+  LDFLAGS="$LDFLAGS -lsec"
+  ;;
+esac
 
 
 dnl Test if --enable-mprobe is given
 
 if test "${enable_mprobe+set}" != set; then
-enable_mprobe=no
+  enable_mprobe=no
 fi
 
 AC_MSG_CHECKING([for mprobe])
-AC_ARG_ENABLE(mprobe,
-   AS_HELP_STRING([--enable-mprobe], [mprobe memory allocation test]))
+AC_ARG_ENABLE([mprobe],
+  [AS_HELP_STRING([--enable-mprobe], [mprobe memory allocation test])])
 if test "${enable_mprobe}" = "yes" ; then
-   CPPFLAGS="-DAJ_MPROBE $CPPFLAGS"
-   AC_MSG_RESULT(yes)
+  CPPFLAGS="-DAJ_MPROBE $CPPFLAGS"
+  AC_MSG_RESULT([yes])
 else
-   AC_MSG_RESULT(no)
+  AC_MSG_RESULT([no])
 fi
 
 dnl Test if --enable-savestats is given
 
 if test "${enable_savestats+set}" != set; then
-enable_savestats=no
+  enable_savestats=no
 fi
 
 AC_MSG_CHECKING([for savestats])
-AC_ARG_ENABLE(savestats,
-   AS_HELP_STRING([--enable-savestats],
-                  [save statistics and print with debug output]))
+AC_ARG_ENABLE([savestats],
+  [AS_HELP_STRING([--enable-savestats],
+    [save statistics and print with debug output])])
 if test "${enable_savestats}" = "yes" ; then
-   CPPFLAGS="-DAJ_SAVESTATS $CPPFLAGS"
-   AC_MSG_RESULT(yes)
+  AC_DEFINE([AJ_SAVESTATS], [1],
+    [Define to 1 to collect AJAX library usage statistics.])
+  AC_MSG_RESULT([yes])
 else
-   AC_MSG_RESULT(no)
+  AC_MSG_RESULT([no])
 fi
 
 dnl check and set compilation flags for Jemboss auth server code
 CHECK_THREADS
 
 
-AC_OUTPUT([plplot/Makefile plplot/lib/Makefile nucleus/Makefile ajax/Makefile
-ajax/pcre/Makefile ajax/expat/Makefile ajax/zlib/Makefile ajax/core/Makefile
-ajax/graphics/Makefile ajax/ensembl/Makefile ajax/ajaxdb/Makefile
-ajax/acd/Makefile
-emboss/Makefile emboss/acd/Makefile test/Makefile test/data/Makefile
-test/embl/Makefile test/genbank/Makefile
-test/pir/Makefile test/swiss/Makefile
-test/swnew/Makefile test/testdb/Makefile
-emboss/data/Makefile
-emboss/data/AAINDEX/Makefile
-emboss/data/CODONS/Makefile emboss/data/REBASE/Makefile 
-emboss/data/JASPAR_CORE/Makefile emboss/data/JASPAR_FAM/Makefile
-emboss/data/JASPAR_PHYLOFACTS/Makefile emboss/data/JASPAR_CNE/Makefile
-emboss/data/JASPAR_POLII/Makefile emboss/data/JASPAR_SPLICE/Makefile
-emboss/data/JASPAR_PBM/Makefile emboss/data/JASPAR_PBM_HLH/Makefile
-emboss/data/JASPAR_PBM_HOMEO/Makefile
-emboss/data/PRINTS/Makefile emboss/data/PROSITE/Makefile
-doc/Makefile doc/manuals/Makefile doc/tutorials/Makefile
-doc/programs/Makefile doc/programs/html/Makefile doc/programs/text/Makefile
-jemboss/Makefile
-jemboss/images/Makefile
-jemboss/lib/Makefile jemboss/lib/axis/Makefile
-jemboss/resources/Makefile jemboss/utils/Makefile
-Makefile])
+AC_CONFIG_FILES([Makefile
+                 ajax/Makefile
+                 ajax/acd/Makefile
+                 ajax/ajaxdb/Makefile
+                 ajax/core/Makefile
+                 ajax/ensembl/Makefile
+                 ajax/expat/Makefile
+                 ajax/graphics/Makefile
+                 ajax/pcre/Makefile
+                 ajax/zlib/Makefile
+                 doc/Makefile
+                 doc/manuals/Makefile
+                 doc/programs/Makefile
+                 doc/programs/html/Makefile
+                 doc/programs/text/Makefile
+                 doc/tutorials/Makefile
+                 emboss/Makefile
+                 emboss/acd/Makefile
+                 emboss/data/AAINDEX/Makefile
+                 emboss/data/CODONS/Makefile
+                 emboss/data/JASPAR_CNE/Makefile
+                 emboss/data/JASPAR_CORE/Makefile
+                 emboss/data/JASPAR_FAM/Makefile
+                 emboss/data/JASPAR_PBM/Makefile
+                 emboss/data/JASPAR_PBM_HLH/Makefile
+                 emboss/data/JASPAR_PBM_HOMEO/Makefile
+                 emboss/data/JASPAR_PHYLOFACTS/Makefile
+                 emboss/data/JASPAR_POLII/Makefile
+                 emboss/data/JASPAR_SPLICE/Makefile
+                 emboss/data/Makefile
+                 emboss/data/OBO/Makefile
+                 emboss/data/PRINTS/Makefile
+                 emboss/data/PROSITE/Makefile
+                 emboss/data/REBASE/Makefile
+                 emboss/data/TAXONOMY/Makefile
+                 emboss/index/Makefile
+                 jemboss/Makefile
+                 jemboss/images/Makefile
+                 jemboss/lib/Makefile
+                 jemboss/lib/axis/Makefile
+                 jemboss/resources/Makefile
+                 jemboss/utils/Makefile
+                 nucleus/Makefile
+                 plplot/Makefile
+                 plplot/lib/Makefile
+                 test/Makefile
+                 test/data/Makefile
+                 test/embl/Makefile
+                 test/genbank/Makefile
+                 test/pir/Makefile
+                 test/swiss/Makefile
+                 test/swnew/Makefile
+                 test/testdb/Makefile
+])
+
+AC_OUTPUT

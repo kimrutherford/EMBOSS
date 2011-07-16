@@ -1,0 +1,82 @@
+application:  seqxrefget
+[
+  documentation: "Retrieve all cross-referenced data for a sequence entry"
+  groups: "Data retrieval:Sequence data"
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
+  relations: "EDAM:0000090 topic Data retrieval"
+  relations: "EDAM:0000225 operation Data retrieval (database cross-reference)"
+]
+
+
+
+
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+  seqall: sequence 
+  [
+    parameter: "Y"
+    type: "any"
+    features: "Y"
+    relations: "EDAM:0000849 data Sequence record"
+  ]
+
+endsection: input
+
+
+
+
+
+section: required 
+[
+  information: "Required section"
+  type: "page"
+]
+endsection: required
+
+
+
+
+
+section: additional
+[
+  information: "Additional section"
+  type: "page"
+]
+endsection: additional
+
+
+
+
+
+section: advanced
+[
+  information: "Advanced section"
+  type: "page"
+]
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile 
+  [
+    parameter: "Y"
+    knowntype: "seqxrefget output"
+    relations: "EDAM:0002093 data Data reference"
+  ]
+
+endsection: output

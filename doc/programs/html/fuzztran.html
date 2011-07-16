@@ -46,7 +46,7 @@ Search for patterns in protein sequences (translated)
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with fuzztran</b>
+Here is a sample session with <b>fuzztran</b>
 <p>
 
 <p>
@@ -100,7 +100,7 @@ Output report [z46957.fuzztran]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Search for patterns in protein sequences (translated)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -135,6 +135,7 @@ Version: EMBOSS:6.3.0
                                   fuzztran).
                                   For example, [DE](2)HS{P}X(2)PX(2,4)C
   [-outfile]           report     [*.fuzztran] Output report file name
+                                  (default -rformat table)
 
    Additional (Optional) qualifiers:
    -frame              menu       [1] Frame(s) to translate (Values: 1 (1); 2
@@ -256,7 +257,7 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat table)</td>
 <td><i>&lt;*&gt;</i>.fuzztran</td>
 </tr>
 
@@ -637,7 +638,35 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
     Input file format
 </H2>
 
-<b>fuzztran</b> reads in normal nucleic acid sequence USAs. 
+<b>fuzztran</b> reads in one or more nucleotide sequences.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -833,10 +862,11 @@ The output is a standard EMBOSS report file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
 
 <p>
 
@@ -859,7 +889,7 @@ By default <b>fuzztran</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: fuzztran
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: fuzztran
 #    -options
 #    -sequence tembl:Z46957
@@ -881,16 +911,16 @@ By default <b>fuzztran</b> writes a 'table' report file.
 #
 #=======================================
 
-  Start     End  Strand   Score Pattern_name Mismatch  Frame PStart   PEnd Translation
-     97     102       +       2 pattern             .      1     33     34 RA         
-    133     138       +       2 pattern             .      1     45     46 RA         
-    421     426       +       2 pattern             .      1    141    142 RA         
-    625     630       +       2 pattern             .      1    209    210 RA         
-    835     840       +       2 pattern             .      1    279    280 RA         
-    919     924       +       2 pattern             .      1    307    308 RA         
-    227     232       +       2 pattern             .      2     76     77 RA         
-    752     757       +       2 pattern             .      2    251    252 RA         
-     72      77       +       2 pattern             .      3     24     25 RA         
+  Start     End  Strand   Score Pattern     Mismatch  Frame PStart   PEnd Translation
+     97     102       +       2 pattern: RA        .      1     33     34 RA         
+    133     138       +       2 pattern: RA        .      1     45     46 RA         
+    421     426       +       2 pattern: RA        .      1    141    142 RA         
+    625     630       +       2 pattern: RA        .      1    209    210 RA         
+    835     840       +       2 pattern: RA        .      1    279    280 RA         
+    919     924       +       2 pattern: RA        .      1    307    308 RA         
+    227     232       +       2 pattern: RA        .      2     76     77 RA         
+    752     757       +       2 pattern: RA        .      2    251    252 RA         
+     72      77       +       2 pattern: RA        .      3     24     25 RA         
 
 #---------------------------------------
 #---------------------------------------
@@ -1109,11 +1139,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="digest.html">digest</a></td>
-<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
-</tr>
-
-<tr>
 <td><a href="dreg.html">dreg</a></td>
 <td>Regular expression search of nucleotide sequence(s)</td>
 </tr>
@@ -1134,21 +1159,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Identify nucleic acid-binding motifs in protein sequences</td>
-</tr>
-
-<tr>
-<td><a href="marscan.html">marscan</a></td>
-<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
-</tr>
-
-<tr>
-<td><a href="oddcomp.html">oddcomp</a></td>
-<td>Identify proteins with specified sequence word composition</td>
-</tr>
-
-<tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
 <td>Searches protein sequences with a sequence motif</td>
 </tr>
@@ -1156,11 +1166,6 @@ None.
 <tr>
 <td><a href="patmatmotifs.html">patmatmotifs</a></td>
 <td>Scan a protein sequence with motifs from the PROSITE database</td>
-</tr>
-
-<tr>
-<td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
@@ -1179,22 +1184,6 @@ None.
 </tr>
 
 </table>
-<p>
-Other EMBOSS programs allow you to search for regular expression
-patterns but may be less easy for the user who has never used regular
-expressions before:
-
-<p>
-
-<ul>
-
-<li><a href="dreg.html">dreg</a> - Regular expression search of a
-nucleotide sequence
-
-<li><a href="preg.html">preg</a> - Regular expression search of a protein
-sequence
-
-</ul>
 
 <H2>
     Author(s)

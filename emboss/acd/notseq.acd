@@ -1,8 +1,8 @@
 application: notseq [
   documentation: "Write to file a subset of an input stream of sequences"
   groups: "Edit"
-  relations: "/edam/topic/0000220 File handling"
-  relations: "/edam/operation/0002121 Sequence file handling"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0002121 operation Sequence file processing"
 ]
 
 section: input [
@@ -13,9 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -42,7 +40,7 @@ section: required [
            a file containing a list of sequence names can be specified by
            giving the file name preceeded by a '@', eg: '@names.dat'"
     knowntype: "sequence id list"
-    relations:  "/edam/data/0001063 Sequence identifier"            
+    relations: "EDAM:0001063 identifier Sequence identifier"
   ]
 
 endsection: required
@@ -54,9 +52,7 @@ section: output [
 
   seqoutall: outseq [
     parameter: "Y"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   seqoutall: junkoutseq [
@@ -65,9 +61,7 @@ section: output [
     information: "File of excluded sequences"
     help: "This file collects the sequences which you have excluded
            from the main output file of sequences."
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: output

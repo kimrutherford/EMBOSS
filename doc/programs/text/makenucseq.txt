@@ -59,7 +59,7 @@ nucleotide output sequence(s) [makeseq.fasta]:
 Command line arguments
 
 Create random nucleotide sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
    -codonfile          codon      Optional codon usage file. Nucleotide
@@ -120,7 +120,17 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   makenucseq reads any normal sequence USAs.
+   makenucseq reads an optional codon usage file.
+
+   The input is a standard EMBOSS codon usage query.
+
+   Data can also be read from codon usage output in any supported format
+   written by an EMBOSS or third party application.
+
+   The input format can be specified by using the command-line qualifier
+   -format xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: emboss, cut, gcg, cutg, cutgaa,
+   spsum, cherry, transterm, codehop, staden and numstaden.
 
 Output file format
 
@@ -349,6 +359,8 @@ ctcgcccccgcccgcgaccgagtcgcgctcgacacggtcg
 
 Data files
 
+   None.
+
 Notes
 
    None.
@@ -389,6 +401,7 @@ See also
    extractseq       Extract regions from a sequence
    featcopy         Reads and writes a feature table
    featreport       Reads and writes a feature table
+   feattext         Return a feature table original text
    listor           Write a list file of the logical OR of two sets of sequences
    makeprotseq      Create random protein sequences
    maskambignuc     Masks all ambiguity characters in nucleotide sequences
@@ -408,6 +421,7 @@ See also
    nthseqset        Reads and writes (returns) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
+   seqcount         Reads and counts sequences
    seqret           Reads and writes (returns) sequences
    seqretsetall     Reads and writes (returns) many sets of sequences
    seqretsplit      Reads sequences and writes them to individual files

@@ -6,6 +6,7 @@ acdroot           string  "(install directory)" "EMBOSS root directory for findi
 acdutilroot       string  "(source directory)"  "EMBOSS source directory for finding files"
 acdwarnrange      boolean "N"                   "Warn if a number is out of range and fixed to be within limits"
 auto              boolean "N"                   "Run with all default values unless -noauto is on the command line"
+axis2c_home       string "AXIS2C directory)"    "AXIS2 C library directory"
 cachesize         integer "2048"                "Cache size to use for database indexing"
 data              string  "(install directory)" "EMBOSS directory for finding data files"
 debug             boolean "N"                   "Write debug output to program.dbg unless -nodebug is on the command line"
@@ -34,8 +35,10 @@ pagesize          integer "2048"                "Page size to use for database i
 proxy             string  ""                    "HTTP proxy server address in the form proxy.xyz.ac.uk:7890"
 rchome            boolean "Y"                   "Process the .embossrc file in the home directory"
 seqwarn           boolean "N"                   "Print warning messages when parsing standard sequence characters"
+standard          string  "(install share directory)" "EMBOSS root directory for finding standard files"
 stdout            boolean "Y"                   "By default write to standard output unless -nostdout is on the command line"
 timetoday         string  "2010-07-15 12:00:00" "Date and time to override the current date - used to give a standard date and time for test runs"
+userdir           string  "(user .embossdata directory)" "EMBOSS root directory for finding user files"
 verbose           boolean "N"                   "Print verbose help output"
 warnobsolete      boolean "Y"                   "Print warning messages when ACD file declares an application as 'obsolete'"
 

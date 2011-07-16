@@ -1,12 +1,12 @@
 Index a fasta file database
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Database name (Any string from 2 to 19
                                   characters, matching regular expression
                                   /[A-z][A-z0-9_]+/)
    -idformat           menu       [idacc] ID line format (Values: simple
-                                  (>ID); idacc (>ID ACC); or >ID (ACC) gcgid
+                                  (>ID); idacc (>ID ACC or >ID (ACC)); gcgid
                                   (>db:ID); gcgidacc (>db:ID ACC); dbid (>db
                                   ID); ncbi (| formats))
    -directory          directory  [.] Database directory

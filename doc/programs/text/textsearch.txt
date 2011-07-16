@@ -36,9 +36,10 @@ Usage
    Search for 'lactose':
 
 
-% textsearch 'tsw:*' 'lactose'
+% textsearch "tsw:*" "lactose"
 Search the textual description of sequence(s)
 Output file [12s1_arath.textsearch]:
+ajSeqxrefNewDbS '1-I' 'FT025'
 
 
    Go to the output files for this example
@@ -48,7 +49,7 @@ Output file [12s1_arath.textsearch]:
    Search for 'lactose' or 'permease' in E.coli proteins:
 
 
-% textsearch 'tsw:*_ecoli' 'lactose | permease'
+% textsearch "tsw:*_ecoli" "lactose | permease"
 Search the textual description of sequence(s)
 Output file [bgal_ecoli.textsearch]:
 
@@ -61,7 +62,7 @@ Output file [bgal_ecoli.textsearch]:
    Output a search for 'lacz' formatted with HTML to a file:
 
 
-% textsearch 'tembl:*' 'lacz' -html -outfile embl.lacz.html
+% textsearch "tembl:*" "lacz" -html -outfile embl.lacz.html
 Search the textual description of sequence(s)
 
 
@@ -70,7 +71,7 @@ Search the textual description of sequence(s)
 Command line arguments
 
 Search the textual description of sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -142,7 +143,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   textsearch reads one or more normal sequence USAs.
+   textsearch reads one or more nucleotide or protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example 2
 
@@ -222,29 +240,11 @@ Known bugs
 
 See also
 
-                   Program name                            Description
-                   abiview      Display the trace in an ABI sequencer file
-                   cirdna       Draws circular maps of DNA constructs
-                   infoalign    Display basic information about a multiple sequence alignment
-                   infobase     Return information on a given nucleotide base
-                   inforesidue  Return information on a given amino acid residue
-                   infoseq      Display basic information about sequences
-                   lindna       Draws linear maps of DNA constructs
-                   pepnet       Draw a helical net for a protein sequence
-                   pepwheel     Draw a helical wheel diagram for a protein sequence
-                   prettyplot   Draw a sequence alignment with pretty formatting
-                   prettyseq    Write a nucleotide sequence and its translation to file
-                   remap        Display restriction enzyme binding sites in a nucleotide sequence
-                   seealso      Finds programs with similar function to a specified program
-                   showalign    Display a multiple sequence alignment in pretty format
-                   showdb       Displays information on configured databases
-                   showfeat     Display features of a sequence in pretty format
-                   showpep      Displays protein sequences with features in pretty format
-                   showseq      Displays sequences with features in pretty format
-                   sixpack      Display a DNA sequence with 6-frame translation and ORFs
-                   tfm          Displays full documentation for an application
-                   whichdb      Search all sequence databases for an entry and retrieve it
-                   wossname     Finds programs by keywords in their short description
+                    Program name                         Description
+                    drtext       Get data resource entries complete text
+                    entret       Retrieves sequence entries from flatfile databases and files
+                    ontotext     Get ontology term(s) original full text
+                    textget      Get text data entries
 
 Author(s)
 

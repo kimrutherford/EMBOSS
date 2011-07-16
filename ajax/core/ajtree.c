@@ -1430,7 +1430,7 @@ void ajTreeExit(void)
 
     ajDebug("Tree usage : %d opened, %d closed, %d maxsize %d nodes\n",
 	    treeNewCnt, treeDelCnt, treeMaxNum, treeNodeCnt);
-    ajDebug("Tree iterator usage : %d opened, %d closed, %d maxsize\n",
+    ajDebug("Tree iterator usage : %d opened, %d closed\n",
 	    treeIterNewCnt, treeIterDelCnt);
 
     return;

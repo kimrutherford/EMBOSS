@@ -204,7 +204,7 @@ void ajMeltInit(AjBool isdna, ajint savesize)
 
 
 
-/* @funcstatic meltProbScore ***************************************************
+/* @funcstatic meltProbScore **************************************************
 **
 ** Gives a score for the probability of two sequences being the same.
 ** The sequences are the same length.
@@ -390,7 +390,7 @@ float ajMeltEnergy(const AjPStr strand, ajint len, ajint shift, AjBool isDNA,
 
 
 
-/* @func ajMeltTemp ************************************************************
+/* @func ajMeltTemp ***********************************************************
 **
 ** Calculates melt temperature of DNA or RNA
 ** An optional shift is given for stepping along the sequence and loading
@@ -575,7 +575,7 @@ float ajMeltEnergy2(const char *strand, ajint pos, ajint len, AjBool isDNA,
 
 
 
-/* @func ajMeltTempSave ********************************************************
+/* @func ajMeltTempSave *******************************************************
 **
 ** Calculates melt temperature of DNA or RNA
 **
@@ -608,7 +608,7 @@ float ajMeltTempSave(const char *strand, ajint pos, ajint len, float saltconc,
     /* double LogSalt;*/
 
 
-    /* LogSalt = 16.6 * (float) (log10((double) (saltconc/1000.0))); */ /* mM */
+ /* LogSalt = 16.6 * (float) (log10((double) (saltconc/1000.0))); */ /* mM */
     R = (float) 1.987;		 /* molar gas constant (cal/c * mol)        */
     LogDNA = R * (float)log((double)(DNAconc/4000000000.0)); /* nM */
     To = (float) 273.15;
@@ -652,7 +652,7 @@ __deprecated float ajTm2(const char *strand, ajint pos,
 
 
 
-/* @func ajMeltTempProd ********************************************************
+/* @func ajMeltTempProd *******************************************************
 **
 ** Calculates product melt temperature of DNA
 **

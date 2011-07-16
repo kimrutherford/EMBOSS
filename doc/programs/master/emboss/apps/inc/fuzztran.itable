@@ -39,7 +39,7 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat table)</td>
 <td><i>&lt;*&gt;</i>.fuzztran</td>
 </tr>
 

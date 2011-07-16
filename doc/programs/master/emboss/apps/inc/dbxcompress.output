@@ -1,0 +1,31 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: embl.pxde</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     647
+Order     60
+Fill      41
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     213
+Fullcount 417
+Kwlimit   20
+</pre>
+</td></tr></table><p>
+<p><h3>File: embl.xde</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: embl.dbxcompress</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Compressing index 'des' for database 'embl'
+Index 'des' opened, compressing
+Completed
+</pre>
+</td></tr></table><p>

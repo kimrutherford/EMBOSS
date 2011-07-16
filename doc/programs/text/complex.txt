@@ -1,7 +1,13 @@
+                                   complex
 
-                                  complex 
 
 
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
 
 Function
 
@@ -14,32 +20,36 @@ Usage
    Here is a sample session with complex
 
 
-% complex -omnia 
+% complex -omnia
 Find the linguistic complexity in nucleotide sequences
-Input nucleotide sequence(s): tembl:*
-Window length [100]: 
-Step size [5]: 
-Minimum word length [4]: 
-Maximum word length [6]: 
-Output file [hs989235.complex]: 
-output sequence(s) [hs989235.fasta]: 
+Input nucleotide sequence(s): tembl:x*
+Window length [100]:
+Step size [5]:
+Minimum word length [4]:
+Maximum word length [6]:
+Program complex output file [x59796.complex]:
+output sequence(s) [x59796.fasta]:
+
 
    Go to the input files for this example
    Go to the output files for this example
 
 Command line arguments
 
+Find the linguistic complexity in nucleotide sequences
+Version: EMBOSS:6.3.1
+
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
-   -lwin               integer    [100] Window length (Any integer value)
+   -lwin               integer    [100] Window length (Integer 1 or more)
    -step               integer    [5] Displacement of the window over the
-                                  sequence (Any integer value)
+                                  sequence (Integer 1 or more)
    -jmin               integer    [4] Minimum word length (Integer from 2 to
                                   20)
    -jmax               integer    [6] Maximum word length (Integer from 2 to
                                   50)
-  [-outfile]           outfile    [*.complex] Output file name
+  [-outfile]           outfile    [*.complex] Program complex output file
 *  -outseq             seqoutall  [.] Sequence set(s)
                                   filename and optional format (output USA)
 
@@ -98,24 +108,27 @@ Command line arguments
 
    General qualifiers:
    -auto               boolean    Turn off prompts
-   -stdout             boolean    Write standard output
-   -filter             boolean    Read standard input, write standard output
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
    -options            boolean    Prompt for standard and additional values
    -debug              boolean    Write debug output to program.dbg
    -verbose            boolean    Report some/full command line options
-   -help               boolean    Report command line options. More
+   -help               boolean    Report command line options and exit. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
    -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
 
 Input file format
 
   Input files for usage example
 
-   'tembl:*' is a sequence entry in the example nucleic acid database
+   'tembl:x*' is a sequence entry in the example nucleic acid database
    'tembl'
 
 Output file format
@@ -127,7 +140,8 @@ Output file format
 
   File: complex.ujtable
 
-  File: hs989235.complex
+
+  File: x59796.complex
 
 Length of window : 100
 jmin : 4
@@ -140,78 +154,22 @@ Execution without simulation
 |     sequence     |     sequence     |     sequence     |     complexity   |
 |                  |                  |                  |                  |
 ----------------------------------------------------------------------------
-         1                    HS989235            495             0.7210
-         2                    AB009602            561             0.6688
-         3                      HSCAD5           3170             0.6921
-         4                         HSD            781             0.6991
-         5                      HSEGL1           3919             0.6618
-         6                       HSFAU            518             0.6739
-         7                      HSFAU1           2016             0.7105
-         8                       HSFOS           6210             0.6681
-         9                       HSEF2           3075             0.6925
-        10                        HSHT           1658             0.7314
-        11                       HSTS1          18596             0.6668
-        12                      HSNFG9          33760             0.6661
-        13                    AB000095           2399             0.6569
-        14                    AB009062            532             0.6465
-        15                     HSFERG1            512             0.5609
-        16                     HSFERG2           1132             0.7217
-        17                    AC004629         116019             0.6478
-        18                    AP000504         100000             0.6611
-        19                    AF129756         184666             0.6562
-        20                    AB000360           2582             0.6710
-        21                       HSHBB          73308             0.6544
-        22                     CEZK637          40699             0.6307
-        23                      PDRHOD           1675             0.6201
-        24                    AAHSP70B           4712             0.7110
-        25                      GMGL01           3400             0.3981
-        26                    GMLLBPS1            852             0.5986
-        27                    GMLLBPS2           1698             0.5225
-        28                       ECLAC           7477             0.7137
-        29                      ECLACA           1832             0.6916
-        30                      ECLACI           1113             0.7480
-        31                      ECLACY           1500             0.6801
-        32                      ECLACZ           3078             0.7278
-        33                      PAAMIB           1212             0.6596
-        34                      PAAMIE           1065             0.6418
-        35                      PAAMIR           2167             0.6562
-        36                      PAAMIS           1130             0.6989
-        37                        MMAM            366             0.7163
-        38                       RNOPS           1493             0.6571
-        39                    RNU68037           1218             0.6381
-        40                   HSA203YC1            389             0.4327
-        41                     HHTETRA           1272             0.3114
-        42                    XLRHODOP           1684             0.7193
-        43                     XL23808           4734             0.7180
-        44                    AF123456           1510             0.5913
-        45                    AF123457           1634             0.7254
+         1                      X59796           3170             0.6921
+         2                      X65923            518             0.6739
+         3                      X65921           2016             0.7105
+         4                      X51466           3075             0.6925
+         5                      X07523           1658             0.7314
+         6                      X03487            512             0.5609
+         7                      X03488           1132             0.7217
+         8                      X07797           1675             0.6201
+         9                      X51872           1832             0.6916
+        10                      X77160           1212             0.6596
+        11                      X13776           2167             0.6562
+        12                      X77161           1130             0.6989
 
-  File: hs989235.fasta
+  File: x59796.fasta
 
->HS989235 H45989.1 yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA cl
-one IMAGE:177794 3', mRNA sequence.
-ccggnaagctcancttggaccaccgactctcgantgnntcgccgcgggagccggntggan
-aacctgagcgggactggnagaaggagcagagggaggcagcacccggcgtgacggnagtgt
-gtggggcactcaggccttccgcagtgtcatctgccacacggaaggcacggccacgggcag
-gggggtctatgatcttctgcatgcccagctggcatggccccacgtagagtggnntggcgt
-ctcggtgctggtcagcgacacgttgtcctggctgggcaggtccagctcccggaggacctg
-gggcttcagcttcccgtagcgctggctgcagtgacggatgctcttgcgctgccatttctg
-ggtgctgtcactgtccttgctcactccaaaccagttcggcggtccccctgcggatggtct
-gtgttgatggacgtttgggctttgcagcaccggccgccgagttcatggtngggtnaagag
-atttgggttttttcn
->AB009602 AB009602.1 Schizosaccharomyces pombe mRNA for MET1 homolog, partial c
-ds.
-gttcgatgcctaaaataccttcttttgtccctacacagaccacagttttcctaatggctt
-tacaccgactagaaattcttgtgcaagcactaattgaaagcggttggcctagagtgttac
-cggtttgtatagctgagcgcgtctcttgccctgatcaaaggttcattttctctactttgg
-aagacgttgtggaagaatacaacaagtacgagtctctcccccctggtttgctgattactg
-gatacagttgtaatacccttcgcaacaccgcgtaactatctatatgaattattttccctt
-tattatatgtagtaggttcgtctttaatcttcctttagcaagtcttttactgttttcgac
-ctcaatgttcatgttcttaggttgttttggataatatgcggtcagtttaatcttcgttgt
-ttcttcttaaaatatttattcatggtttaatttttggtttgtacttgttcaggggccagt
-tcattatttactctgtttgtatacagcagttcttttatttttagtatgattttaatttaa
-aacaattctaatggtcaaaaa
->HSCAD5 X59796.1 H.sapiens mRNA for cadherin-5
+>X59796 X59796.1 H.sapiens mRNA for cadherin-5
 ctccactcacgctcagccctggacggacaggcagtccaacggaacagaaacatccctcag
 cccacaggcacgatctgttcctcctgggaagatgcagaggctcatgatgctcctcgccac
 atcgggcgcctgcctgggcctgctggcagtggcagcagtggcagcagcaggtgctaaccc
@@ -240,61 +198,82 @@ ggattccactggaacccccacaggaaaagaatccattgtgcaagtccacattgaagtttt
 ggatgagaatgacaatgccccggagtttgccaagccctaccagcccaaagtgtgtgagaa
 cgctgtccatggccagctggtcctgcagatctccgcaatagacaaggacataacaccacg
 aaacgtgaagttcaaattcatcttgaatactgagaacaactttaccctcacggataatca
+cgataacacggccaacatcacagtcaagtatgggcagtttgaccgggagcataccaaggt
+ccacttcctacccgtggtcatctcagacaatgggatgccaagtcgcacgggcaccagcac
+gctgaccgtggccgtgtgcaagtgcaacgagcagggcgagttcaccttctgcgaggatat
+ggccgcccaggtgggcgtgagcatccaggcagtggtagccatcttactctgcatcctcac
+catcacagtgatcaccctgctcatcttcctgcggcggcggctccggaagcaggcccgcgc
+gcacggcaagagcgtgccggagatccacgagcagctggtcacctacgacgaggagggcgg
+cggcgagatggacaccaccagctacgatgtgtcggtgctcaactcggtgcgccgcggcgg
+ggccaagcccccgcggcccgcgctggacgcccggccttccctctatgcgcaggtgcagaa
+gccaccgaggcacgcgcctggggcacacggagggcccggggagatggcagccatgatcga
+ggtgaagaaggacgaggcggaccacgacggcgacggccccccctacgacacgctgcacat
+ctacggctacgagggctccgagtccatagccgagtccctcagctccctgggcaccgactc
+atccgactctgacgtggattacgacttccttaacgactggggacccaggtttaagatgct
+ggctgagctgtacggctcggacccccgggaggagctgctgtattaggcggccgaggtcac
+tctgggcctggggacccaaaccccctgcagcccaggccagtcagactccaggcaccacag
+cvncadctccaaaaatggcagtgactccccagcccagcaccccttcctcgtgggtcccag
+agacctcatcagccttgggatagcaaactccaggttcctgaaatatccaggaatatatgt
+cagtgatgactattctcaaatgctggcaaatccaggctggtgttctgtctgggctcagac
+atccacataaccctgtcacccacagaccgccgtctaactcaaagacttcctctggctccc
+caaggctgcaaagcaaaacagactgtgtttaactgctgcagggtctttttctagggtccc
+tgaacgccctggtaaggctggtgaggtcctggtgcctatctgcctggaggcaaaggcctg
+gacagcttgacttgtggggcaggattctctgcagcccattcccaagggagactgaccatc
 
 
   [Part of this file has been deleted for brevity]
 
-gagccagttgtcaagaagagcagcagcagcagctcctgtctcctgcaggacagcagcagc
-cctgctcactccacgagcacggtggcagcagcagcagcgagcgcaccaccagagggacgg
-atgctcattcaggacatcccttccatccccagcagagggcacttggagagcacgtctgat
-ttggttgtggactccacctactacagcagtttttaccagccatccctgtatccttactat
-aacaacctgtacaactactcccagtaccaaatggcagtggccactgagtcttcctcaagt
-gagacagggggtacgtttgtagggtcagccatgaaaaacagccttcgaagcctcccagca
-acatacatgtcaagccagtcaggaaaacagtggcagatgaagggaatggagaaccgccat
-gccatgagctcccagtaccggatgtgctcctactacccgcccacctcatacctgggccag
-ggggttggcagtcccacctgcgtcacacagatactggcctcggaggacaccccctcctac
-tcagagtcgaaagcgagagtgttttcgccgcccagcagccaggactcgggcctggggtgc
-ctgtcgagcagcgagagcaccaagggagacctggagtgcgagccccaccaagagcccggc
-gccttcgcggtgagcccggttcttgagggcgagtaggcgcggcgtcgggcggctgctgcg
-cggcgttcactgttgccttgttctgttggggttgcgggggggcgttgggtttcttctttc
-cggggcggggggggcacggcggggccgcggccgggccggcggggcggggcggggcgggac
-ggggcggggcggagccgcgcgggggccgcagtccgggccggggccgccgtcgggtctcgg
-cccgctcccgtcggggcggagcgtccgacgatcggcctccacgaaacgcggtgccgtgat
-gtgtttgtagtggttcctcgtaggctccagacgttttctcctcgtatcgccaaattaacg
-cgttttgcatattacagttgagtgcctcgacttagattgcaatataagcggccagcaaac
-aagtctcaaaaaaaagttacgtgcgtttctgcgagtgttattttgttaagaacggctcac
-agtgtcctcttcctgtgttacagaagccaacctgaaatgaaactagtctggaaaaattca
-ttgttctctgtagttgcagctgtacctgaaataaaaatgttattgatgactgaaaaaaaa
-aaaaaaaaaa
->AF123457 AF123457.1 Toxoplasma gondii enolase (ENO2) mRNA, complete cds.
-tctaccgttactcaacttccaacaaaatggtggccatcaaggacatcactgctcgtcaga
-tcctcgactcccgaggaaacccgaccgtcgaggttgacttgttgaccgatggcggctgct
-tccgtgccgctgtccccagcggcgcatccactggcatctacgaggcgcttgagctccgtg
-acaaggaccaaactaagttcatgggcaagggtgtgatgaaggccgtggagaacatccaca
-agattatcaagccggcgcttattggcaaggacccgtgcgaccagaagggtattgacaagc
-tgatggtcgaggagctcgatggaactaagaacgagtggggctggtgcaagtcgaagctcg
-gcgcgaacgcgatcctggccgtctcgatggcttgctgccgcgccggcgctgctgccaagg
-gcatgcccctgtacaagtacattgccactttggctggaaacccgacagacaagatggtaa
-tgcccgtcccgttcttcaacgtcatcaacggcggctcccacgcaggcaacaaggtcgcga
-tgcaggagttcatgatcgcccccgtcggcgcctccacaatccaagaggcgatccagatcg
-gcgcggaagtgtaccagcacctgaaggtcgtcattaagaagaagtatggcctcgacgcca
-cgaacgtcggcgacgagggtggcttcgcccccaacatcagcggcgccacggaggccctcg
-acttgctgatggaggccatcaaggtgtctggtcacgaaggcaaggtcaagattgccgccg
-acgtcgccgcttccgagttcttcctccaggacgacaaagtctatgacctagacttcaaga
-ctccgaacaacgacaagtcgcaacgcaagactggcgaagagcttcgcaacctgtacaagg
-acctgtgccagaagtatcccttcgtgtccatcgaggacccgttcgaccaggacgacttcc
-acagctacgctcagctcaccaacgaggttggcgagaaggtccaaatcgtcggcgacgacc
-tcctggtcaccaacccgacgcgcattgagaaggccgttcaggagaaagcgtgcaacggcc
-tgcttctcaaggtgaaccagattggcacagtcagcgagtctatcgaggcctgccagcttg
-cccagaagaacaagtggggcgttatggtttctcaccgctccggtgagactgaggactcct
-tcatcgctgacctcgtcgtcggtctccgcaccgggcaaatcaagactggcgccccgtgca
-gatccgagcgtctctgcaagtacaaccagctgatgcgtatcgaagagtcgctcggctccg
-actgtcagtacgccggcgctggcttccgccatcccaactaagtggaaacggagtttcgac
-tacccaactgctcaattggggctgggtggtttgtccactctgcaacaagggcgtgacgag
-atcgttgcacatgcaactgccttttttgtgcttggtgggaaggagcactttcgcaggtgc
-agcaccgagttgcggttgatgggaatttcggaactgatttgtttcttgcatgccatcacc
-gaaggaacgagcagtttcgttgataatattggaaagtcttttgaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaa
+tacggttcctcgtgggctgctacatgtcgcacacgcgcaaggcggtgatgccggtggtcg
+agcgcgccgacgcgctgctctgctacccgaccccctacgagggcttcgagtattcgccga
+acatcgtctacggcggtccggcgccgaaccagaacagtgcgccgctggcggcgtacctga
+ttcgccactacggcgagcgggtggtgttcatcggctcggactacatctatccgcgggaaa
+gcaaccatgtgatgcgccacctgtatcgccagcacggcggcacggtgctcgaggaaatct
+acattccgctgtatccctccgacgacgacttgcagcgcgccgtcgagcgcatctaccagg
+cgcgcgccgacgtggtcttctccaccgtggtgggcaccggcaccgccgagctgtatcgcg
+ccatcgcccgtcgctacggcgacggcaggcggccgccgatcgccagcctgaccaccagcg
+aggcggaggtggcgaagatggagagtgacgtggcagaggggcaggtggtggtcgcgcctt
+acttctccagcatcgatacgcccgccagccgggccttcgtccaggcctgccatggtttct
+tcccggagaacgcgaccatcaccgcctgggccgaggcggcctactggcagaccttgttgc
+tcggccgcgccgcgcaggccgcaggcaactggcgggtggaagacgtgcagcggcacctgt
+acgacatcgacatcgacgcgccacaggggccggtccgggtggagcgccagaacaaccaca
+gccgcctgtcttcgcgcatcgcggaaatcgatgcgcgcggcgtgttccaggtccgctggc
+agtcgcccgaaccgattcgccccgacccttatgtcgtcgtgcataacctcgacgactggt
+ccgccagcatgggcgggggaccgctcccatgagcgccaactcgctgctcggcagcctgcg
+cgagttgcaggtgctggtcctcaacccgccgggggaggtcagcgacgccctggtcttgca
+gctgatccgcatcggttgttcggtgcgccagtgctggccgccgccggaagccttcgacgt
+gccggtggacgtggtcttcaccagcattttccagaatggccaccacgacgagatcgctgc
+gctgctcgccgccgggactccgcgcactaccctggtggcgctggtggagtacgaaagccc
+cgcggtgctctcgcagatcatcgagctggagtgccacggcgtgatcacccagccgctcga
+tgcccaccgggtgctgcctgtgctggtatcggcgcggcgcatcagcgaggaaatggcgaa
+gctgaagcagaagaccgagcagctccaggaccgcatcgccggccaggcccggatcaacca
+ggccaaggtgttgctgatgcagcgccatggctgggacgagcgcgaggcgcaccagcacct
+gtcgcgggaagcgatgaagcggcgcgagccgatcctgaagatcgctcaggagttgctggg
+aaacgagccgtccgcctgagcgatccgggccgaccagaacaataacaagaggggtatcgt
+catcatgctgggactggttctgctgtacgttggcgcggtgctgtttctcaatgccgtctg
+gttgctgggcaagatcagcggtcgggaggtggcggtgatcaacttcctggtcggcgtgct
+gagcgcctgcgtcgcgttctacctgatcttttccgcagcagccgggcagggctcgctgaa
+ggccggagcgctgaccctgctattcgcttttacctatctgtgggtggccgccaaccagtt
+cctcgag
+>X77161 X77161.1 Pseudomonas aeruginosa (PAC1) amiS gene.
+gagccgtccgcctgagcgatccgggccgaccagaacaataacaagaggggtatcgtcatc
+atgctgggactggttctgctgtacgttggcgcggtgctgtttctcaatgccgtctggttg
+ctgggcaagatcagcggtcgggaggtggcggtgatcaacttcctggtcggcgtgctgagc
+gcctgcgtcgcgttctacctgatcttttccgcagcagccgggcagggctcgctgaaggcc
+ggagcgctgaccctgctattcgcttttacctatctgtgggtggccgccaaccagttcctc
+gaggtggacggcaagggcctcggctggttctgcctgttcgtcagcctcaccgcctgcacc
+gtggcgatcgagtcgttcgccggcgccagtggtccgttcggcctgtggaacgcggtcaac
+tggacagtctgggcgttgctctggttctgtttcttcctgctgctggggctgtcccgcggc
+atccagaagccggtggcctacctgaccctggccagcgccatattcaccgcctggttgccc
+ggcctgctgctgctcggacaggtgctcaaggcatagcaggaagtcggaaagggatgacgg
+cttgccgccatcccgtcccttccgaacgcctagccgagcggccagttgatcaccacgacg
+gcgtcgttgtagtcgttgtcggtgccgtcttcagagccgaccagggcgaagttcagctcg
+ttggtcaggattacctgtgccgagaccagatccgaggggcggccgttgacgctgacctgg
+acctgtaccttgccactgctgccggagttgagcacctgggtgccgatgacggcgttattg
+gtgctttgcccgctgaaggtcgcggccgtgctcgttgttgaccagcacgttcaccgtctg
+ggttccggacgagttggcgaaggcggtgacgccggaacctggttgttggcgggaagggtg
+aacactccttgtggttgccatggtggtatctccactgaatacctggccccttccttttca
+ggcagccgtctggcgcgcggtatggcgtgtcgggagaaatccgcagtccttggcggcagg
+cgatgcgcaggcaggaaggacgcatcgttcagccaatctacgccgtcgac
 
 Data files
 
@@ -326,24 +305,25 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   banana       Bending and curvature plot in B-DNA
-   btwisted     Calculates the twisting in a B-DNA sequence
-   chaos        Create a chaos game representation plot for a sequence
-   compseq      Count composition of dimer/trimer/etc words in a sequence
-   dan          Calculates DNA RNA/DNA melting temperature
-   freak        Residue/base frequency table or plot
-   isochore     Plots isochores in large DNA sequences
-   sirna        Finds siRNA duplexes in mRNA
-   wordcount    Counts words of a specified size in a DNA sequence
+                    Program name                           Description
+                    banana       Plot bending and curvature data for B-DNA
+                    btwisted     Calculate the twisting in a B-DNA sequence
+                    chaos        Draw a chaos game representation plot for a nucleotide sequence
+                    compseq      Calculate the composition of unique words in sequences
+                    dan          Calculates nucleic acid melting temperature
+                    density      Draw a nucleic acid density plot
+                    freak        Generate residue/base frequency table or plot
+                    isochore     Plots isochores in DNA sequences
+                    sirna        Finds siRNA duplexes in mRNA
+                    wordcount    Count and extract unique words in molecular sequence(s)
 
 Author(s)
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

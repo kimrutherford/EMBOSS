@@ -1,0 +1,45 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: outfile.text</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt; 99
+CGAP Lib id: 182
+Unigene id: 729
+dbEST lib id: 1452
+Keyword: lymph node
+Keyword: follicular lymphoma
+Keyword: non-normalized
+Keyword: bulk
+Keyword: CGAP
+Keyword: EST
+Keyword: Stratagene non-normalized
+Keyword: unknown developmental stage
+Keyword: size fractionated
+Keyword: directionally cloned
+Keyword: phagemid
+Keyword: oligo-dT primed
+Keyword: EST
+Keyword: CGAP
+Lib Name: NCI_CGAP_Lym5
+Organism: Homo sapiens
+Organ: lymph node
+Tissue_type: follicular lymphoma
+Lab host: SOLR (Stratagene, kanamycin resistant)
+Vector: pBluescript SK-
+Vector type: phagemid (ampicillin resistant)
+R. Site 1: EcoRI
+R. Site 2: XhoI
+Description: Cloned unidirectionally.  Primer: Oligo dT. Average insert size 1.2 kb. Non-amplified library. ~5' adaptor sequence: 5' GAATTCGGCACGAG 3' ~3' adaptor sequence: 5' CTCGAGTTTTTTTTTTTTTTTTTT 3'
+Library treatment: non-normalized
+Tissue description: Lymph node, follicular lymphoma, node 2
+Tissue supplier: Mark Raffeld, M.D.
+Sample type: Bulk
+Image legend: 
+Producer: Stratagene, Inc.
+Clones generated to date: 2304
+Sequences generated to date: 1293
+
+</pre>
+</td></tr></table><p>

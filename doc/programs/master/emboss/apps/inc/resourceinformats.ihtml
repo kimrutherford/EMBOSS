@@ -1,0 +1,14 @@
+<p>
+
+The input is a standard EMBOSS resource query.
+
+<p>
+
+The expected source of data resource information is the Data
+Resource Catalogue database "drcat" which is available as a standard
+database in all EMBOSS installations.
+
+<p>
+
+Data can also be read from resource output in "drcat" format written by an
+EMBOSS application.

@@ -64,7 +64,12 @@ needleall
     Input file format
 </H2>
 
-<b>needleall</b> reads any 2 sequence USAs of the same type (DNA or protein).
+<b>needleall</b> reads in two nucleotide or protein sequences
+inputs. Both can be one or more sequences. All sequences in the first
+ionput are aligned to all sequences in the second input.
+
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
 
 <p>
 
@@ -154,7 +159,7 @@ use water and needle for accurate alignment of reasonably short
 sequences.
 
 <p>
-The first input sequence USA is loaded completely into memory. When
+The first input sequence set is loaded completely into memory. When
 comparing large numbers (or lengths) of sequences, the smallest set
 should be the first input to make the most efficient use of memory.
 <p>

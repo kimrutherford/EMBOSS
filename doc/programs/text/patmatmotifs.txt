@@ -89,12 +89,13 @@ Output report [opsd_human.patmatmotifs]:
 Command line arguments
 
 Scan a protein sequence with motifs from the PROSITE database
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
                                   format, or reference (input USA)
   [-outfile]           report     [*.patmatmotifs] Output report file name
+                                  (default -rformat dbmotif)
 
    Additional (Optional) qualifiers:
    -full               boolean    [N] Provide full documentation for matching
@@ -158,7 +159,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   patmatmotifs reads a protein sequence USA.
+   patmatmotifs reads a single protein sequence.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -280,8 +298,9 @@ Output file format
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
-   genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
 
    See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
    information on report formats.
@@ -294,7 +313,7 @@ Output file format
 
 ########################################
 # Program: patmatmotifs
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: patmatmotifs
 #    -full
 #    -sequence tsw:opsd_human
@@ -457,15 +476,10 @@ See also
 
    Program name     Description
    antigenic        Finds antigenic sites in proteins
-   digest           Reports on protein proteolytic enzyme or reagent cleavage sites
    epestfind        Finds PEST motifs as potential proteolytic cleavage sites
    fuzzpro          Search for patterns in protein sequences
    fuzztran         Search for patterns in protein sequences (translated)
-   helixturnhelix   Identify nucleic acid-binding motifs in protein
-                    sequences
-   oddcomp          Identify proteins with specified sequence word composition
    patmatdb         Searches protein sequences with a sequence motif
-   pepcoil          Predicts coiled coil regions in protein sequences
    preg             Regular expression search of protein sequence(s)
    pscan            Scans protein sequence(s) with fingerprints from the PRINTS
                     database

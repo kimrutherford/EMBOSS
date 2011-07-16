@@ -95,8 +95,12 @@ to put it into the correct orientation to make it join. For example:
     Input file format
 </H2>
 
-<b>merger</b> reads any two sequence USAs of the same type (protein or
-nucleic acid.)
+<b>merger</b> reads two nucleotide or protein sequences.
+
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
+
+
 
 <p>
 
@@ -107,26 +111,15 @@ nucleic acid.)
 </H2>
 
 
-The output <i>sequence file</i> contains the joined sequence, by default in
-FASTA format.  Where there is a mismatch in the alignment, the chosen
-base is written to the output sequence in uppercase. 
-
-<p>
-
 <!--#include file="inc/alignformats.ihtml" -->
  
 <p>
-
-The output <i>report file</i> contains descriptions of the positions where
-there is a mismatch in the alignment and shows the alignment.  Where
-there is a mismatch in the alignment, the chosen base is written in
-uppercase. 
-
+<!--#include file="inc/seqformats.ihtml" -->
+ 
 
 <p>
 
 <!--#include file="inc/merger.output" -->
-
 
 <H2>
     Data files

@@ -18,11 +18,6 @@
 </tr>
 
 <tr>
-<td><a href="checktrans.html">checktrans</a></td>
-<td>Reports STOP codons and ORF statistics of a protein</td>
-</tr>
-
-<tr>
 <td><a href="compseq.html">compseq</a></td>
 <td>Calculate the composition of unique words in sequences</td>
 </tr>
@@ -35,6 +30,11 @@
 <tr>
 <td><a href="freak.html">freak</a></td>
 <td>Generate residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="hmoment.html">hmoment</a></td>
+<td>Calculate and plot hydrophobic moment for protein sequence(s)</td>
 </tr>
 
 <tr>
@@ -55,6 +55,16 @@
 <tr>
 <td><a href="octanol.html">octanol</a></td>
 <td>Draw a White-Wimley protein hydropathy plot</td>
+</tr>
+
+<tr>
+<td><a href="oddcomp.html">oddcomp</a></td>
+<td>Identify proteins with specified sequence word composition</td>
+</tr>
+
+<tr>
+<td><a href="pepdigest.html">pepdigest</a></td>
+<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>

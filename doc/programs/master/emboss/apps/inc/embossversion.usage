@@ -1,4 +1,4 @@
-<b>Here is a sample session with embossversion</b>
+Here is a sample session with <b>embossversion</b>
 <p>
 
 <p>
@@ -7,7 +7,7 @@
 % <b>embossversion </b>
 Reports the current EMBOSS version number
 
-6.3.0
+6.4.0.0
 
 </pre></td></tr></table><p>
 <p>

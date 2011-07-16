@@ -1,4 +1,4 @@
-<b>Here is a sample session with dbxflat</b>
+Here is a sample session with <b>dbxflat</b>
 <p>
 
 <p>
@@ -23,6 +23,7 @@ Database directory [.]: <b>embl</b>
        key : Keywords
        org : Taxonomy
 Index fields [id,acc]: <b></b>
+Compressed index files [Y]: <b></b>
 General log output file [outfile.dbxflat]: <b></b>
 
 </pre></td></tr></table><p>

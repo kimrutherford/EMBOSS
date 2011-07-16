@@ -2,8 +2,9 @@ application: digest [
   documentation: "Reports on protein proteolytic enzyme or
                   reagent cleavage sites"
   groups: "Protein:Motifs"
-  relations: "/edam/topic/0000141 Proteolysis and peptide mass"
-  relations: "/edam/operation/0000422 Protein cleavage site prediction"
+    relations: "EDAM:0000767 topic Peptide identification and proteolysis"
+    relations: "EDAM:0000422 operation Protein cleavage site prediction"
+    obsolete: "renamed to pepdigest"
 ]
 
 section: input [
@@ -14,9 +15,7 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "Protein"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   datafile: mwdata [
@@ -25,7 +24,7 @@ section: input [
            acids"
     default: "Emolwt.dat"
     knowntype: "molecular weights"
-    relations:  "/edam/data/0001505 Amino acid molecular weight data"               
+    relations: "EDAM:0001505 data Amino acid index (molecular weight)"
   ]
 
 endsection: input
@@ -48,14 +47,14 @@ section: required [
     header: "Enzymes and Reagents"
     information: "Select number"
     button: "Y"
-    relations: "/edam/data/0001773 Tool-specific parameter"                                
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: mono [
     standard: "Y"
     default: "N"
     information: "Use monoisotopic weights"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: required
@@ -82,7 +81,7 @@ section: advanced [
            'P'. Specifying unfavoured shows
            these unfavoured cuts as well as the
            favoured ones."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: ragging [
@@ -93,7 +92,7 @@ section: advanced [
            lists of peptide sequences for
            protein identification using
            mass-spectrometry."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   list: termini [
@@ -107,7 +106,7 @@ section: advanced [
     header: "Ragging value"
     information: "Select number"
     button: "Y"
-    relations: "/edam/data/0001773 Tool-specific parameter"                                
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -125,7 +124,7 @@ section: output [
            2..5. Overlaps are therefore
            fragments with exactly one potential
            cut site within it."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: allpartials [
@@ -133,7 +132,7 @@ section: output [
     help: "As for overlap but fragments
            containing more than one potential
            cut site are included."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   report: outfile [
@@ -142,7 +141,7 @@ section: output [
     multiple: "Y"
     taglist: "float:molwt=Mol_Weight
               str:cterm=Cterm str:nterm=Nterm"
-    relations: "/edam/data/0001323 Protein cleavage site report"
+    relations: "EDAM:0001323 data Protein features (cleavage sites)"
   ]
 
 endsection: output

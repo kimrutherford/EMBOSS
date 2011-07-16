@@ -972,7 +972,7 @@ AjBool ajSeqoutWriteSeq(AjPSeqout outseq, const AjPSeq seq)
     seqOutFormat[outseq->Format].Write(outseq);
     outseq->Count++;
     
-    ajDebug("ajSeqoutWriteSeq tests features %B tabouitisopen %B "
+    ajDebug("ajSeqoutWriteSeq tests features %B taboutisopen %B "
 	    "UfoLocal %B ftlocal %B\n",
 	    outseq->Features, ajFeattabOutIsOpen(outseq->Ftquery),
 	    seqoutUfoLocal(outseq), ajFeattabOutIsLocal(outseq->Ftquery));
@@ -1092,7 +1092,7 @@ AjBool ajSeqoutWriteSet(AjPSeqout outseq, const AjPSeqset seq)
 	seqOutFormat[outseq->Format].Write(outseq);
 	outseq->Count++;
 
-	ajDebug("ajSeqoutWriteSet tests features %B tabouitisopen %B "
+	ajDebug("ajSeqoutWriteSet tests features %B taboutisopen %B "
 		"UfoLocal %B ftlocal %B\n",
 		outseq->Features, ajFeattabOutIsOpen(outseq->Ftquery),
 		seqoutUfoLocal(outseq), ajFeattabOutIsLocal(outseq->Ftquery));
@@ -3863,7 +3863,7 @@ static void seqWriteEmbl(AjPSeqout outseq)
     ajuint ilen;
     AjPStr tmpstr = NULL;
     const AjPStr tmpline = NULL;
-    
+
     if(ajStrMatchC(outseq->Type, "P"))
     {
 	seqWriteSwiss(outseq);
@@ -4045,7 +4045,7 @@ static void seqWriteEmblnew(AjPSeqout outseq)
     AjIList it;
     const AjPStr cur;
     ajuint ilen;
-    ajint ifind;
+    ajlong ifind;
     AjPStr idstr = NULL;
     AjPStr svstr = NULL;
     const AjPStr cmtstr = NULL;		/* from list - do not delete */
@@ -4067,7 +4067,7 @@ static void seqWriteEmblnew(AjPSeqout outseq)
 	ifind = ajStrFindC(svstr, ".");
 
 	if(ifind >= 0)
-	    ajStrCutStart(&svstr, ifind+1);
+	  ajStrCutStart(&svstr, (size_t) (ifind+1));
     }
     else
        ajStrAssignC(&svstr, "1");
@@ -8090,7 +8090,7 @@ static void seqWriteSeq(AjPSeqout outseq, const SeqPSeqFormat sf)
 		    fprintf(outf,"%s",sf->endstr);
 	    }
 
-	    fputc('\n',outf);
+	    fprintf(outf, "\n");
 	    linesout++;
 
 	    if(sf->skipafter)
@@ -8164,7 +8164,8 @@ static AjBool seqoutUsaProcess(AjPSeqout thys)
 #else
     /* Windows file names can start with e.g.: 'C:\' */
     /* -> Require that format names have at least 2 letters */
-    seqoutRegFmt = ajRegCompC("^([A-Za-z0-9][A-Za-z0-9-][A-Za-z0-9-]*)::?(.*)$");
+    seqoutRegFmt = ajRegCompC("^([A-Za-z0-9][A-Za-z0-9-][A-Za-z0-9-]*)"
+                              "::?(.*)$");
     /* \1 format */
     /* \2 remainder */
 #endif
@@ -8991,7 +8992,7 @@ void ajSeqoutPrintFormat(AjPFile outf, AjBool full)
     (void) full;	 /* make it used - no extra detail reported */
 
     ajFmtPrintF(outf, "\n");
-    ajFmtPrintF(outf, "# sequence output formats\n");
+    ajFmtPrintF(outf, "# Sequence output formats\n");
     ajFmtPrintF(outf, "# Alias Alias name\n");
     ajFmtPrintF(outf, "# Single: If true, write each sequence to new file\n");
     ajFmtPrintF(outf, "# Save: If true, save sequences, write when closed\n");
@@ -9498,7 +9499,7 @@ ajint ajSeqoutGetCheckgcg(const AjPSeqout seqout)
     }
     check %= 10000;
 
-    return check;
+    return (ajint) check;
 }
 
 
@@ -9530,7 +9531,7 @@ const AjPStr ajSeqoutGetFilename(const AjPSeqout seqout)
     if(!seqout)
         return NULL;
 
-    return ajFileGetNameS(seqout->File);
+    return ajFileGetPrintnameS(seqout->File);
 }
 
 

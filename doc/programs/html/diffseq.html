@@ -72,7 +72,7 @@ other. The mismatched regions between these matches are reported.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with diffseq</b>
+Here is a sample session with <b>diffseq</b>
 <p>
 
 <p>
@@ -95,7 +95,7 @@ Second features output [AY411291.diffgff]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Compare and report features of two similar sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -114,7 +114,8 @@ Version: EMBOSS:6.3.0
                                   improve the resolution of nearby
                                   differences, but the program will go much
                                   slower. (Integer 2 or more)
-  [-outfile]           report     [*.diffseq] Output report file name
+  [-outfile]           report     [*.diffseq] Output report file name (default
+                                  -rformat diffseq)
   [-aoutfeat]          featout    [$(asequence.name).diffgff] File for output
                                   of first sequence's features
   [-boutfeat]          featout    [$(bsequence.name).diffgff] File for output
@@ -262,7 +263,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat diffseq)</td>
 <td><i>&lt;*&gt;</i>.diffseq</td>
 </tr>
 
@@ -844,8 +845,36 @@ Version: EMBOSS:6.3.0
 <H2>
     Input file format
 </H2>
-This program reads in two nucleic acid sequence USAs or two protein
-sequence USAs. 
+
+This program reads in two nucleotide or protein sequences 
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -1018,10 +1047,11 @@ The output is a standard EMBOSS report file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
 
 <p>
 
@@ -1044,7 +1074,7 @@ By default <b>diffseq</b> writes a 'diffseq' report file.
 <pre>
 ########################################
 # Program: diffseq
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: diffseq
 #    [-asequence] tembl:x65923
 #    [-bsequence] tembl:ay411291
@@ -1101,10 +1131,10 @@ AY411291 228-228 Length: 1
 <pre>
 ##gff-version 3
 ##sequence-region AY411291 1 402
-#!Date 2010-01-15
+#!Date 2011-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.3.0
-AY411291	diffseq	sequence_conflict	228	228	1.000	+	.	ID="AY411291.1";note="SNP in X65923";replace="t"
+#!Source-version EMBOSS 6.4.0.0
+AY411291	diffseq	sequence_conflict	228	228	1.000	+	.	ID=AY411291.1;note=SNP in X65923;replace=t
 </pre>
 </td></tr></table><p>
 <p><h3>File: X65923.diffgff</h3>
@@ -1112,10 +1142,10 @@ AY411291	diffseq	sequence_conflict	228	228	1.000	+	.	ID="AY411291.1";note="SNP i
 <pre>
 ##gff-version 3
 ##sequence-region X65923 1 518
-#!Date 2010-01-15
+#!Date 2011-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.3.0
-X65923	diffseq	sequence_conflict	284	284	1.000	+	.	ID="X65923.1";note="SNP in AY411291";replace="c"
+#!Source-version EMBOSS 6.4.0.0
+X65923	diffseq	sequence_conflict	284	284	1.000	+	.	ID=X65923.1;note=SNP in AY411291;replace=c
 </pre>
 </td></tr></table><p>
 

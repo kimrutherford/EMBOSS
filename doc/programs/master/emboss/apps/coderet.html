@@ -49,8 +49,11 @@ coderet
     Input file format
 </H2>
 
-<b>coderet</b> reads one or more nucleic sequence USAs having CDS, mRNA
+<b>coderet</b> reads one or more nucleic sequences having CDS, mRNA
 or translation headings in their feature tables. 
+
+<p>
+<!--#include file="inc/seqfeatinformats.ihtml" -->
 
 <p>
 <!--#include file="inc/coderet.input" -->
@@ -59,13 +62,16 @@ or translation headings in their feature tables.
     Output file format
 </H2>
 
+<!--#include file="inc/seqformats.ihtml" -->
+
+<p>
 The output is a sequence file containing any CDS, mRNA and protein
 translation sequences as specified by the feature table of the sequence(s).
 
 <p>
 
 One or more of CDS, mRNA, translation can be excluded from the output by
-using the appropriate qualifiers to the program (i.e.  <b>-nocds</b>,
+using the appropriate qualifiers to the program (i.e.  <tt>-nocds</tt>,
 etc.)
 
 <p>

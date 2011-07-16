@@ -1,11 +1,12 @@
 Reads and writes a feature table
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
                                   reference (input USA)
   [-features]          features   (no help text) features value
   [-outfile]           report     [*.featreport] Output report file name
+                                  (default -rformat gff)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)

@@ -1,22 +1,23 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensslice_h
-#define ensslice_h
+#ifndef ENSSLICE_H
+#define ENSSLICE_H
 
-#include "ensassemblyexception.h"
-#include "ensassemblymapper.h"
-#include "enscache.h"
-#include "ensmapper.h"
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
+
 #include "ensseqregion.h"
-#include "enstable.h"
+
+AJ_BEGIN_DECLS
 
 
 
 
-/* EnsERepeatMaskType *********************************************************
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+/* @const EnsERepeatMaskType **************************************************
 **
 ** Ensembl Repeat Mask Type enumeration.
 **
@@ -33,6 +34,10 @@ typedef enum EnsORepeatMaskType
 
 
 
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
 /* @data EnsPRepeatmaskedslice ************************************************
 **
 ** Ensembl Repeat-Masked Slice.
@@ -43,8 +48,8 @@ typedef enum EnsORepeatMaskType
 ** @alias EnsORepeatmaskedslice
 **
 ** @attr Slice [EnsPSlice] Ensembl Slice.
-** @attr AnalysisNames [AjPList] AJAX List of Ensembl Analysis name
-**                               AJAX Strings
+** @attr Analysisnames [AjPList] AJAX List of AJAX String objects
+**                               (Ensembl Analysis names)
 ** @attr Masking [AjPTable] AJAX Table of Repeat Consensus types, classes or
 **                          names and sequence masking types
 ** @attr Use [ajuint] Use counter
@@ -55,7 +60,7 @@ typedef enum EnsORepeatMaskType
 typedef struct EnsSRepeatmaskedslice
 {
     EnsPSlice Slice;
-    AjPList AnalysisNames;
+    AjPList Analysisnames;
     AjPTable Masking;
     ajuint Use;
     ajuint Padding;
@@ -66,10 +71,9 @@ typedef struct EnsSRepeatmaskedslice
 
 
 
-#include "ensprojectionsegment.h"
-
-
-
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
 
 /*
 ** Prototype definitions
@@ -77,26 +81,28 @@ typedef struct EnsSRepeatmaskedslice
 
 /* Ensembl Slice */
 
-EnsPSlice ensSliceNewS(EnsPSliceadaptor adaptor,
-                       EnsPSeqregion sr,
-                       ajint start,
-                       ajint end,
-                       ajint strand,
-                       AjPStr sequence);
+EnsPSlice ensSliceNewCpy(const EnsPSlice slice);
 
-EnsPSlice ensSliceNew(EnsPSliceadaptor adaptor,
-                      EnsPSeqregion sr,
-                      ajint start,
-                      ajint end,
-                      ajint strand);
-
-EnsPSlice ensSliceNewObj(EnsPSlice object);
+EnsPSlice ensSliceNewIni(EnsPSliceadaptor sla,
+                         EnsPSeqregion sr,
+                         ajint start,
+                         ajint end,
+                         ajint strand);
 
 EnsPSlice ensSliceNewRef(EnsPSlice slice);
+
+EnsPSlice ensSliceNewSeq(EnsPSliceadaptor sla,
+                         EnsPSeqregion sr,
+                         ajint start,
+                         ajint end,
+                         ajint strand,
+                         AjPStr sequence);
 
 void ensSliceDel(EnsPSlice* Pslice);
 
 EnsPSliceadaptor ensSliceGetAdaptor(const EnsPSlice slice);
+
+ajint ensSliceGetEnd(const EnsPSlice slice);
 
 EnsPSeqregion ensSliceGetSeqregion(const EnsPSlice slice);
 
@@ -104,85 +110,39 @@ const AjPStr ensSliceGetSequence(const EnsPSlice slice);
 
 ajint ensSliceGetStart(const EnsPSlice slice);
 
-ajint ensSliceGetEnd(const EnsPSlice slice);
-
 ajint ensSliceGetStrand(const EnsPSlice slice);
 
-AjBool ensSliceSetAdaptor(EnsPSlice slice, EnsPSliceadaptor adaptor);
+EnsESliceTopology ensSliceLoadTopology(EnsPSlice slice);
+
+AjBool ensSliceSetAdaptor(EnsPSlice slice, EnsPSliceadaptor sla);
 
 AjBool ensSliceSetSequence(EnsPSlice slice, AjPStr sequence);
 
+AjBool ensSliceSetTopology(EnsPSlice slice, EnsESliceTopology sltp);
+
 AjBool ensSliceTrace(const EnsPSlice slice, ajuint level);
-
-ajuint ensSliceGetSeqregionIdentifier(const EnsPSlice slice);
-
-const AjPStr ensSliceGetSeqregionName(const EnsPSlice slice);
-
-ajint ensSliceGetSeqregionLength(const EnsPSlice slice);
-
-EnsPCoordsystem ensSliceGetCoordsystem(const EnsPSlice slice);
 
 const AjPStr ensSliceGetCoordsystemName(const EnsPSlice slice);
 
+EnsPCoordsystem ensSliceGetCoordsystemObject(const EnsPSlice slice);
+
 const AjPStr ensSliceGetCoordsystemVersion(const EnsPSlice slice);
 
-ajint ensSliceGetCentrePoint(const EnsPSlice slice);
+ajuint ensSliceGetSeqregionIdentifier(const EnsPSlice slice);
 
-ajuint ensSliceGetLength(const EnsPSlice slice);
+ajint ensSliceGetSeqregionLength(const EnsPSlice slice);
 
-ajulong ensSliceGetMemsize(const EnsPSlice slice);
+const AjPStr ensSliceGetSeqregionName(const EnsPSlice slice);
 
 const AjPTrn ensSliceGetTranslation(EnsPSlice slice);
 
-AjBool ensSliceFetchName(const EnsPSlice slice, AjPStr* Pname);
+ajint ensSliceCalculateCentrepoint(EnsPSlice slice);
 
-int ensSliceCompareIdentifierAscending(const EnsPSlice slice1,
-                                       const EnsPSlice slice2);
+ajuint ensSliceCalculateLength(EnsPSlice slice);
 
-AjBool ensSliceMatch(const EnsPSlice slice1, const EnsPSlice slice2);
+size_t ensSliceCalculateMemsize(const EnsPSlice slice);
 
-AjBool ensSliceIsTopLevel(EnsPSlice slice, AjBool* Presult);
-
-AjBool ensSliceFetchSequenceSeq(EnsPSlice slice, AjPSeq *Psequence);
-
-AjBool ensSliceFetchSequenceStr(EnsPSlice slice, AjPStr *Psequence);
-
-AjBool ensSliceFetchSubSequenceSeq(EnsPSlice slice,
-                                   ajint start,
-                                   ajint end,
-                                   ajint strand,
-                                   AjPSeq *Psequence);
-
-AjBool ensSliceFetchSubSequenceStr(EnsPSlice slice,
-                                   ajint start,
-                                   ajint end,
-                                   ajint strand,
-                                   AjPStr *Psequence);
-
-AjBool ensSliceFetchInvertedSlice(EnsPSlice slice, EnsPSlice *Pslice);
-
-AjBool ensSliceFetchSubSlice(EnsPSlice slice,
-                             ajint start,
-                             ajint end,
-                             ajint strand,
-                             EnsPSlice *Pslice);
-
-AjBool ensSliceFetchExpandedSlice(const EnsPSlice slice,
-                                  ajint five,
-                                  ajint three,
-                                  AjBool force,
-                                  ajint *Pfshift,
-                                  ajint *Ptshift,
-                                  EnsPSlice *Pslice);
-
-AjBool ensSliceProject(EnsPSlice slice,
-                       const AjPStr csname,
-                       const AjPStr csversion,
-                       AjPList pss);
-
-AjBool ensSliceProjectToSlice(EnsPSlice srcslice,
-                              EnsPSlice trgslice,
-                              AjPList pss);
+ajuint ensSliceCalculateRegion(EnsPSlice slice, ajint start, ajint end);
 
 AjBool ensSliceFetchAllAttributes(EnsPSlice slice,
                                   const AjPStr code,
@@ -190,13 +150,78 @@ AjBool ensSliceFetchAllAttributes(EnsPSlice slice,
 
 AjBool ensSliceFetchAllRepeatfeatures(EnsPSlice slice,
                                       const AjPStr anname,
-                                      AjPStr rctype,
-                                      AjPStr rcclass,
-                                      AjPStr rcname,
+                                      const AjPStr rctype,
+                                      const AjPStr rcclass,
+                                      const AjPStr rcname,
                                       AjPList rfs);
 
-AjBool ensSliceFetchAllSequenceEdits(EnsPSlice slice,
+AjBool ensSliceFetchAllSequenceedits(EnsPSlice slice,
                                      AjPList ses);
+
+AjBool ensSliceFetchName(const EnsPSlice slice, AjPStr* Pname);
+
+AjBool ensSliceFetchSequenceAllSeq(EnsPSlice slice, AjPSeq* Psequence);
+
+AjBool ensSliceFetchSequenceAllStr(EnsPSlice slice, AjPStr* Psequence);
+
+AjBool ensSliceFetchSequenceSubSeq(EnsPSlice slice,
+                                   ajint start,
+                                   ajint end,
+                                   ajint strand,
+                                   AjPSeq* Psequence);
+
+AjBool ensSliceFetchSequenceSubStr(EnsPSlice slice,
+                                   ajint start,
+                                   ajint end,
+                                   ajint strand,
+                                   AjPStr* Psequence);
+
+AjBool ensSliceFetchSliceinverted(EnsPSlice slice,
+                                  EnsPSlice* Pslice);
+
+AjBool ensSliceFetchSlicesub(EnsPSlice slice,
+                             ajint start,
+                             ajint end,
+                             ajint strand,
+                             EnsPSlice* Pslice);
+
+AjBool ensSliceFetchSliceexpanded(EnsPSlice slice,
+                                  ajint five,
+                                  ajint three,
+                                  AjBool force,
+                                  ajint* Pfshift,
+                                  ajint* Ptshift,
+                                  EnsPSlice* Pslice);
+
+int ensSliceCompareIdentifierAscending(const EnsPSlice slice1,
+                                       const EnsPSlice slice2);
+
+AjBool ensSliceMatch(const EnsPSlice slice1, const EnsPSlice slice2);
+
+AjBool ensSliceSimilarity(const EnsPSlice slice1, const EnsPSlice slice2);
+
+AjBool ensSliceIsCircular(EnsPSlice slice, AjBool* Presult);
+
+AjBool ensSliceIsNonreference(EnsPSlice slice, AjBool* Presult);
+
+AjBool ensSliceIsToplevel(EnsPSlice slice, AjBool* Presult);
+
+AjBool ensSliceProject(EnsPSlice slice,
+                       const AjPStr csname,
+                       const AjPStr csversion,
+                       AjPList pss);
+
+AjBool ensSliceProjectslice(EnsPSlice srcslice,
+                            EnsPSlice trgslice,
+                            AjPList pss);
+
+EnsESliceType ensSliceTypeFromSeqregion(EnsPSeqregion sr);
+
+EnsESliceType ensSliceTypeFromStr(const AjPStr type);
+
+const char* ensSliceTypeToChar(EnsESliceType ste);
+
+AjBool ensListSliceRemoveDuplications(AjPList slices);
 
 /* Ensembl Slice Adaptor */
 
@@ -206,64 +231,84 @@ EnsPSliceadaptor ensRegistryGetSliceadaptor(
 EnsPSliceadaptor ensSliceadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensSliceadaptorDel(EnsPSliceadaptor* Padaptor);
+void ensSliceadaptorDel(EnsPSliceadaptor* Psla);
 
 EnsPDatabaseadaptor ensSliceadaptorGetDatabaseadaptor(
-    const EnsPSliceadaptor adaptor);
+    EnsPSliceadaptor sla);
 
-AjBool ensSliceadaptorCacheInsert(EnsPSliceadaptor adaptor, EnsPSlice* Pslice);
+AjBool ensSliceadaptorCacheInsert(EnsPSliceadaptor sla, EnsPSlice* Pslice);
 
-AjBool ensSliceadaptorFetchBySeqregionIdentifier(EnsPSliceadaptor adaptor,
-                                                 ajuint srid,
-                                                 ajint srstart,
-                                                 ajint srend,
-                                                 ajint srstrand,
-                                                 EnsPSlice *Pslice);
+AjBool ensSliceadaptorFetchAll(EnsPSliceadaptor sla,
+                               const AjPStr csname,
+                               const AjPStr csversion,
+                               AjBool nonreference,
+                               AjBool duplicates,
+                               AjBool lrg,
+                               AjPList slices);
 
-AjBool ensSliceadaptorFetchByRegion(EnsPSliceadaptor adaptor,
+AjBool ensSliceadaptorFetchAllbyRegionunique(EnsPSliceadaptor sla,
+                                             const AjPStr csname,
+                                             const AjPStr csversion,
+                                             const AjPStr srname,
+                                             ajint srstart,
+                                             ajint srend,
+                                             ajint srstrand,
+                                             AjPList slices);
+
+AjBool ensSliceadaptorFetchByFeature(EnsPSliceadaptor sla,
+                                     const EnsPFeature feature,
+                                     ajint flank,
+                                     EnsPSlice* Pslice);
+
+AjBool ensSliceadaptorFetchByMapperresult(EnsPSliceadaptor sla,
+                                          const EnsPMapperresult mr,
+                                          EnsPSlice* Pslice);
+
+AjBool ensSliceadaptorFetchByName(EnsPSliceadaptor sla,
+                                  const AjPStr name,
+                                  EnsPSlice* Pslice);
+
+AjBool ensSliceadaptorFetchByRegion(EnsPSliceadaptor sla,
                                     const AjPStr csname,
                                     const AjPStr csversion,
                                     const AjPStr srname,
                                     ajint srstart,
                                     ajint srend,
                                     ajint srstrand,
-                                    EnsPSlice *Pslice);
+                                    EnsPSlice* Pslice);
 
-AjBool ensSliceadaptorFetchByName(EnsPSliceadaptor adaptor,
-                                  const AjPStr name,
-                                  EnsPSlice *Pslice);
+AjBool ensSliceadaptorFetchBySeqregionIdentifier(EnsPSliceadaptor sla,
+                                                 ajuint srid,
+                                                 ajint srstart,
+                                                 ajint srend,
+                                                 ajint srstrand,
+                                                 EnsPSlice* Pslice);
 
-AjBool ensSliceadaptorFetchBySlice(EnsPSliceadaptor adaptor,
+AjBool ensSliceadaptorFetchBySeqregionName(EnsPSliceadaptor sla,
+                                           const AjPStr csname,
+                                           const AjPStr csversion,
+                                           const AjPStr srname,
+                                           EnsPSlice* Pslice);
+
+AjBool ensSliceadaptorFetchBySlice(EnsPSliceadaptor sla,
                                    EnsPSlice slice,
                                    ajint start,
                                    ajint end,
                                    ajint strand,
-                                   EnsPSlice *Pslice);
+                                   EnsPSlice* Pslice);
 
-AjBool ensSliceadaptorFetchByFeature(EnsPSliceadaptor adaptor,
-                                     const EnsPFeature feature,
-                                     ajint flank,
-                                     EnsPSlice *Pslice);
-
-AjBool ensSliceadaptorFetchNormalisedSliceProjection(EnsPSliceadaptor adaptor,
-                                                     EnsPSlice slice,
-                                                     AjPList pss);
-
-AjBool ensSliceadaptorFetchAll(EnsPSliceadaptor adaptor,
-                               const AjPStr csname,
-                               const AjPStr csversion,
-                               AjBool nonreference,
-                               AjBool duplicates,
-                               AjPList slices);
+AjBool ensSliceadaptorRetrieveNormalisedprojection(EnsPSliceadaptor sla,
+                                                   EnsPSlice slice,
+                                                   AjPList pss);
 
 /* Ensembl Repeat-Masked Slice */
 
-EnsPRepeatmaskedslice ensRepeatmaskedsliceNew(EnsPSlice slice,
-                                              AjPList annames,
-                                              AjPTable masking);
+EnsPRepeatmaskedslice ensRepeatmaskedsliceNewCpy(
+    const EnsPRepeatmaskedslice rmslice);
 
-EnsPRepeatmaskedslice ensRepeatmaskedsliceNewObj(
-    EnsPRepeatmaskedslice object);
+EnsPRepeatmaskedslice ensRepeatmaskedsliceNewIni(EnsPSlice slice,
+                                                 AjPList annames,
+                                                 AjPTable masking);
 
 EnsPRepeatmaskedslice ensRepeatmaskedsliceNewRef(
     EnsPRepeatmaskedslice rmslice);
@@ -272,11 +317,11 @@ void ensRepeatmaskedsliceDel(EnsPRepeatmaskedslice* Prmslice);
 
 AjBool ensRepeatmaskedsliceFetchSequenceSeq(EnsPRepeatmaskedslice rmslice,
                                             EnsERepeatMaskType mtype,
-                                            AjPSeq *Psequence);
+                                            AjPSeq* Psequence);
 
 AjBool ensRepeatmaskedsliceFetchSequenceStr(EnsPRepeatmaskedslice rmslice,
                                             EnsERepeatMaskType mtype,
-                                            AjPStr *Psequence);
+                                            AjPStr* Psequence);
 
 /*
 ** End of prototype definitions
@@ -285,8 +330,6 @@ AjBool ensRepeatmaskedsliceFetchSequenceStr(EnsPRepeatmaskedslice rmslice,
 
 
 
-#endif /* ensslice_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSSLICE_H */

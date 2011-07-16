@@ -1,3 +1,310 @@
+	Version 6.4.0 15-Jul-2011
+
+	DBXFLAT can index FASTQ format short
+	read sequence files, allowing individual sequences to be rapidly
+	retrieved by name.
+
+	Genpept format has changed since we last tested it. The LOCUS line
+	is simpler. EMBOSS now supports GenPept as documented and
+	distributed by NCBI.
+
+	Sequence in SAM format ignores the reference sequence
+	name. Previous releases saved it as the accession number, but this
+	is inappropriate as it is then reported as the identifier in EMBL
+	format.
+
+	The -help output (and documentation) for align and report output
+	types now includes the default format if defined in the ACD file.
+
+	New code added to handle variation data in ajvar* source
+	files. The AjPVar object will hold genetic variation data from the
+	Ensembl API and from VCF input files.
+
+	New access methods for URLs have been added as ajurlread.c and for
+	URL output methods as ajurlwrite.c - supporting collecting and
+	reporting of URLs as output. URLs are saved as an array of strings,
+	intended to be reported as a set of links to the underlying data.
+
+	Sequence format "raw" now only reads binary files, which means it
+	cannot be used for piped data. The change was needed to avoid
+	accepting binary data where a file has a NULL and then no newline,
+	for example ABI data files where the initial 'ABIF' could be read
+	as a valid sequence.
+
+	Application tcode failed to plot results for more than one
+	sequence.  It also reported a plplot error when reading random
+	noncoding input. It also failed to report the threshold lines
+	when they were outside the range of observed scores.
+
+	Four new functions combine tables where the keys and values are of
+	the same types. In each case the tables are resized to the larger
+	of the hash array sizes, and then at each hash array position all
+	keys in both tables are compared. The functions differ only in the
+	actions taken when a match is or is not found. ajTableMergeAnd
+	keeps all keys that are in both tables. ajTableMergeEor is the
+	inverse keeping only keys that are in only one table.
+	ajTableMergeNot removes keys that are also in the second
+	table. ajTableMergeOr adds keys from the second table that do not
+	match. All remaining keys and values are deleted using the tables
+	built-in destructor functions.
+
+	New application dbtell reports the attributes for a database.
+
+	All messages written to the user are also logged to the debug file
+	to help locate where they are generated when debugging.
+
+	Applications showfeat, extractfeat and coderet are updated to
+	follow the new features /subfeatures data structures.
+
+	GFF3 format has been rewritten to comply strictly with the GFF3
+	standard on the sequence ontology website. Characters are now
+	escaped in tag values. The 'featflag' tag has been changed to
+	convert the hex value into a readable list of flags, with some
+	flags now inferred from the content of the GFF line. The GFF3
+	special tags (all starting with an upper-case letter) are now
+	stored separately. The ID and Parent tags are used in
+	post-processing to build subfeatures which are stored under the
+	feature with an ID matching their first Parent tag.
+
+	GFF3 format sequence format failed to read files with additional
+	## comment records after the header block. These comments are now
+	ignored.
+
+	Feature objects have been extended. A feature may now include a
+	list of subfeatures. This is intended to allow exons to be stored
+	under the feature to which they belong. With this new structure,
+	sorting feature tables becomes easy as there is no need to match
+	group tags and sort by ID. Features simply sort by their main
+	(parent) feature, with the other subfeatures (exons) unseen by the
+	sort algorithm.
+
+	Application restrict crashed when the enzyme list was empty. If
+	reported invalid enzyme names, but not 'no enzyme name given'.
+
+	Reference-counted lists are enabled with the constructor
+	ajListNewRef creating a reference-counted copy. Lists are only
+	deleted when the reference count falls to zero.
+
+	Reference-counted tables are enabled with the constructor
+	ajTableNewRef creating a reference-counted copy. Tables are only
+	deleted when the reference count falls to zero.
+
+	Table code has been rewritten to automatically delete keys unless
+	the table is created with a Const version of the constructor. All
+	table constructors are renamed, with the older names retains as
+	"deprecated" functions which do not delete keys or values. All
+	EMBOSS code has been changed to use the new function names.
+
+	New functions ajTableMatch, ajTableMatchC and ajTableMatchS test a
+	key is present in a table. They can be used where the ajTableFetch
+	is inadequate because the value may be NULL. Some code used
+	ajTableFetchKey but this is intended only for case-insensitive keys.
+
+	Tables (AjPTable) have defined functions to hash and compare
+	keys. Two new functions can be defined to delete keys and
+	values. By default these are NULL and no keys or values are
+	deleted. The functions can be ajMemFree to simply free memory, or
+	more complex object destructors. As these require a void** argument
+	(all keys and values are void* internally) wrappers are needed
+	around object destructors. We recommend appending 'Void' to the
+	standard destructor name and casting the void** argument to pass
+	to the object-specific destructor.
+
+	Tables (AjPTable) can be resized using the ajTableResizeLen
+	function. When adding to a table with ajTablePut the table is
+	automatically resized when the number of entries exceeds an
+	average of 8 per bucket.
+
+	Function ajMemFree now accepts a void** argument and sets the
+	pointer to zero after free the memory. All EMBOSS code calls this
+	through the AJFREE macro which is now safer to use as the pointer
+	appears only once in the generated code.
+
+	Application digest conflicted with the name of a utility on some
+	systems. It has been renamed to pepdigest.
+
+	In the emboss.standard and emboss.default files certain attributes
+	can appear more than once if defined as type "ATTR_LIST" in the
+	ajnam.c source file. These include a new attribute 'field:' defined
+	once for each database query field, superseding the 'fields:'
+	list of field names. The 'field:' attribute has a list of field
+	names, with the first being the name preferred by EMBOSS and
+	others acceptable on the command line. A '!' delimiter marks the
+	end of the field names and the start of a free text description.
+	This style of description is also allowed for other attributes,
+	including 'taxon:' and the 'edam*:' attributes. The syntax is
+	taken from the metadata in OBO format.
+
+	Data retrieval using the HTTP protocol now checks for redirects in
+	the header and replaces the file buffer with the results from the
+	new URL. This allows EMBOSS to read outdated URLs for database
+	access.
+
+	New trace functions ajTableFetchTrace and ajTablePutTrace help to
+	debug adding new keys to a table.
+
+	New parsing function ajStrTokenNextParseDelimiters returns the
+	delimiter string in addition to the token parsed from a string
+	token handler.
+
+	Application einverted could report a bad alignment if the matched
+	region reached the end of the search window. Matches which go
+	beyond the search window are now ignored. This bug was reported
+	with a very low threshold score and was unlikely to be noticed
+	with the default settings.
+
+	Sequence format treecon failed if the only line of input started
+	with a number. Failure to find a second record now simply returns
+	false.
+
+	Tables can now use integer keys and values of four types - integer
+	and long, signed and unsigned. The unsigned longs are used
+	internally for emblcd index reading and for b+tree index creation.
+
+	Report output in from pattern patching applications (fuzznuc,
+	fuzzpro, fuzztran, dreg, preg) now includes the pattern as well
+	as the pattern name in the '*pat' or 'Pattern_name' feature tag
+	value.
+
+	New applications search the EDAM ontology by each of its query
+	fields, with common options to restrict the results to one of the
+	7 EDAM namespaces. Also new applications to look for EDAM term with
+	each of the 5 common relationships for EDAM data terms:
+	has_input, has_output, is_identifier_of, is_format_of and
+	is_source_of. The sixth relationship has_attribute is only used by
+	the obsolete 'entity' namespace terms.
+
+	New application dbxresource indexes the data resource catalogue
+	DRCAT.dat which is distributed with EMBOSS. Most fields in DRCAT
+	are indexed. The EDAM and Taxon fields are used by other
+	applications to search the EDAM and TAXON databases for terms which
+	are in turn used to select DRCAT entries by taxon, data type,
+	format, identifier and resource.
+
+	Any menu (list and selection ACD types) which allows all options
+	to be selected now accepts "*" to select everything. This can be
+	the default (e.g. for database index fields) or can be specified
+	by the user with quotes to protect it from interpretation by the
+	Unix shell.
+
+	Tokens indexed with the dbx* programs now have white space indexed
+	as underscores. Any index files with spaces in the tokens need to
+	be re-indexed. This applies to keyword and organism indexes.
+
+	New code added to handle short read assemblies in ajassem* source
+	files. The AjPAssem object will hold large numbers of short reads
+	in managed memory buffers.
+
+	New template for adding data types with specific formats for input
+	and output and data access methods. These templates are stored in
+	ajwxyz* source files with a script newdatatypes.pl to
+	automatically create new, properly named, stub functions in the
+	AJAX core and ajaxdb libraries.
+
+	Program nthseq now simply reports an error (not a fatal error) if
+	too few sequences were read.
+
+	Feature input and output was in one large file. This has now been
+	refactored with ajfeatdata.h for the data structures, ajfeatread.c
+	for input formats, ajfeatwrite.c for output formats and remaining
+	feature object handling code in ajfeat.c.
+
+	New access methods for text have been added as ajtextread.c and
+	for text output methods as ajtextwrite.c - supporting text and
+	(preserved) HTML and XML output. Text is saved as an array of
+	strings, intended to be used as one per input record although
+	storing the entire text in the first string is also possible.
+
+	Data queries have been made general. A new AjPQuery object handles
+	queries for any datatype, storing a list of field names and
+	queries, plus an operator (OR, AND, NOT, EOR, ELSE) for combining
+	fields. Previous releases had a hard-coded search for "id or
+	accession" which now uses the new query structure. Extensions to
+	the query language will allow more complex combinations, and will
+	allow any field to be defined for an external data resource
+	(e.g. fields for an SRSWWW server).
+
+	All data reading access methods have been restructured. Methods
+	that essentially return an open file with the pointer set to the
+	start of an entry (which covers most of the original access
+	methods) are moved to a new source file ajtextdb.c and use a new
+	AjPTextin input object which is included within AjPSeqin for
+	sequence input and AjPOboin for OBO term input. These functions
+	are generalised for any input data in some text-based file
+	format. Sequence access will first check for a text-based access
+	method, and then for a sequence-specific method (e.g. ensembl).
+	Other input datatypes can do the same. The code for OBO ontology
+	terms will use the new text access methods. Code for access to
+	other input data types (feature, alignment) will now be relatively
+	easy to add. Text retrieval of data from a new list of data
+	resources can also use these access methods.
+
+	Program einverted required at least one base between the halves of
+	an inverted repeat. Blunt joins are now reported where previous
+	versions reported a 2 base gap.
+
+	Error messages from database indexing now include the filename of
+	the index file. This is useful when identifying the indexing
+	operation where the problem occurred.
+
+	EMBOSS database index files are extended to mark numeric and
+	string index pages. In previous releases all were marked as
+	strings. Older index files remain valid for sequence retrieval,
+	but not for the new dbxreport index analysis application.
+
+	New application dbxreport analyses the contents of an EMBOSS
+	index, reporting the numbers of keys of various types, number of
+	pages, and percent free space. It also checks that all pages in
+	the index have been used and are linked to a higher page.
+
+	New application dbxedam is an extended version of dbxobo which
+	also indexes EDAM-specific relationships between terms.
+
+	New application dbxobo indexes OBO format ontology files. Index
+	fields are id, acc (alt_id records), name (name and synonym
+	records), ns (namespace records), isa (is_a records pointing to
+	the parent term) and des (def records).
+
+	EMBOSS database index files include an extra count value
+	"fullcount" for the total number of words indexed. The "count"
+	value is the number of unique terms (for example, words in
+	descriptions or accession numbers).
+
+	EMBOSS database index files include an extra type value "Type"
+	with the value "Identifier" for a simple primary identifier such
+	as ID or accession, and "Secondary" for an index of secondary terms
+	which points to the entry unique ID.
+
+	Database indexing application dbxfasta may corrupt index files with
+	long words in the description index. Dbxfasta now checks the
+	maximum word length, and as an added safeguard the indexing
+	library code also checks and truncates any word longer than the
+	maximum.
+
+	New application seqcount returns the number of sequences read.
+	This simple application was requested on the EMBOSS mailing list
+	to avoid complicated command line manipulations and unnecessary
+	sequence output.
+
+	acdpretty now writes lines up to 75 characters wide. The width was
+	restricted to 50 to allow space for in-line comments but this
+	restricted the length of indented text too severely.
+
+	In emboss.defaults and the user's .embossrc file variables are now
+	resolved at read time, including the names of include files. This
+	can simplify the configuration files for sites running more than
+	one installation.
+
+	Patched: SAM format file entries with negative insert sizes are
+	valid but were wrongly rejected.
+
+	Patched: BAM format misread the quality scores. An offset of 33
+	used to report values for debugging was incorrectly included in
+	the stored values.
+
+	Configuration now uses autoheader and has less dependency
+	on the libtool version.
+
 Version 6.3.0 15-Jul-2010
 	'ensembl' is a new access method for accessing Ensembl
 	from MySQL. Queries take the form:
@@ -11,11 +318,11 @@ Version 6.3.0 15-Jul-2010
 	the public Ensembl servers.
 
 	'sql' is a new access method for networked SQL servers
-	(mysql or postgresql). The server and database is described
+	(MySQL or PostgreSQL). The server and database is described
 	using the 'url' field. As for biomart (described below) the
 	database definition must include definitions of new attributes
 	'sequence' (the sequence column) and 'identifier' (the
-	column used in the squery). Additional columns may be
+	column used in the query). Additional columns may be
 	returned as description text if they are listed in the 'returns'
 	attribute of the DB definition. An example definition is
 	given in emboss.default.template.
@@ -112,7 +419,7 @@ Version 6.3.0 15-Jul-2010
 	according to the OBO format documentation, but these can be turned
 	off as in many cases the OBO foundry ontologies do not follow the
 	exact standard. Examples include terms not in sorted order, and
-	Typedef stanzzas following Term stanzas, and dbxrefs to
+	Typedef stanzas following Term stanzas, and dbxrefs to
 	non-existent terms (e.g. GO:ma in the gene ontology to cite a
 	curator).
 
@@ -136,8 +443,8 @@ Version 6.3.0 15-Jul-2010
 	When reading ABI trace files the quality scores can now be
 	read. They are undefined in ABI files, but assumed to be phred
 	scores. ABI files can have two sequences and sets of quality
-	scores. The first is from the instrument basecalling. The second
-	is from a second basecaller. Where two sets are found, EMBOSS now
+	scores. The first is from the instrument base calling. The second
+	is from a second base caller. Where two sets are found, EMBOSS now
 	reads the second set.
 
 	Application nospace has a new  -menu option to trim all, trailing, or
@@ -175,7 +482,7 @@ Version 6.3.0 15-Jul-2010
 	to pass the filename to be used for standard output and possibly
 	standard error. The filename is most usefully picked up from a new
 	function ajAcdGetOutfileName which closes an ACD outfile and
-	returns the name of the file. Te file will be empty if simply
+	returns the name of the file. The file will be empty if simply
 	opened, or will have existing contents if the append attribute is
 	true in the ACD file.
 
@@ -217,7 +524,7 @@ Version 6.3.0 15-Jul-2010
 	Restriction mapping applications no longer have an upper limit on
 	the number of cuts.
 
-	Warning messages for EMBL format sequences created vby ENSEMBL
+	Warning messages for EMBL format sequences created by ENSEMBL
 	have been turned off.
 
 	Corrected references to the EMBL/GenBank feature table
@@ -733,7 +1040,7 @@ Version 6.1.0 15-Jul-2009
 
 	Command line qualifiers are renamed where the first 5 characters
 	are the same. These were:
-	    eprimer3 major revision of all optoins
+	    eprimer3 major revision of all options
 	    est2genome -splice to -usesplace
 	    prettyplot -boxcolval to -boxuse
             octanol -*plot to -plot*

@@ -1,9 +1,9 @@
 application: biosed [
   documentation: "Replace or delete sequence sections"
   groups: "Edit"
-  relations: "/edam/topic/0000156 Sequence editing"
-  relations: "/edam/operation/0000369 Sequence cutting"
-  relations: "/edam/operation/0000232 Sequence merging"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000369 operation Sequence cutting"
+    relations: "EDAM:0000232 operation Sequence merging"
 ]
 
 section: input [
@@ -14,9 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "/edam/data/0000848 Sequence"     
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -31,13 +29,13 @@ section: required [
     information: "Sequence section to match"
     default: "N"
     knowntype: "sequence"
-    relations:  "/edam/data/0000848 Sequence"                                       
+    relations: "EDAM:0000848 data Raw sequence"
   ]
 
   toggle: delete [
     information: "Delete the target sequence sections"
     default: "N"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   string: replace [
@@ -45,7 +43,7 @@ section: required [
     information: "Replacement sequence section"
     default: "A"
     knowntype: "sequence"
-    relations:  "/edam/data/0000848 Sequence"                                       
+    relations: "EDAM:0000848 data Raw sequence"
   ]
 
 endsection: required
@@ -63,7 +61,7 @@ section: additional [
     maximum: "$(sequence.len)"
     failrange: "N"
     trueminimum: "N"
-    relations: "/edam/data/0001016 Sequence position"
+    relations: "EDAM:0001016 data Sequence position"
   ]
 
 endsection: additional
@@ -75,8 +73,7 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
-    relations: "/edam/data/0000848 Sequence"                                            
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: output

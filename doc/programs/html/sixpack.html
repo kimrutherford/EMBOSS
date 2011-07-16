@@ -68,7 +68,7 @@ the default of 1 base shows all possible open reading frames.</p>
  The nucleic acid sequence is read in.
  The required genetic code is read in from the EGC* data files.
  The three forward and three reverse translations are created.
- The name and description are written to the ouput display file.
+ The name and description are written to the output display file.
  Any required regions to be changed to upper case are changed.
  Any required regions to be highlighted in HTML colour tags are changed.
  The reverse sense sequence is placed below the forward sequence.
@@ -81,7 +81,7 @@ the default of 1 base shows all possible open reading frames.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with sixpack</b>
+Here is a sample session with <b>sixpack</b>
 <p>
 
 <p>
@@ -106,7 +106,7 @@ protein output sequence(s) [x13776.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Display a DNA sequence with 6-frame translation and ORFs
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -758,7 +758,34 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
     Input file format
 </H2>
 
-<b>sixpack</b> reads any normal sequence USAs.
+<b>sixpack</b> reads a single nucleotide sequence.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -883,6 +910,30 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
     Output file format
 </H2>
 
+<b>sixpack</b> writes a text report and an ORF sequence file.
+
+<p>
+
+The output is a standard EMBOSS sequence file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
+
+<p>
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
@@ -1303,6 +1354,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
 <td><a href="cirdna.html">cirdna</a></td>
 <td>Draws circular maps of DNA constructs</td>
 </tr>
@@ -1318,6 +1374,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculate the isoelectric point of proteins</td>
+</tr>
+
+<tr>
 <td><a href="lindna.html">lindna</a></td>
 <td>Draws linear maps of DNA constructs</td>
 </tr>
@@ -1325,6 +1386,11 @@ None.
 <tr>
 <td><a href="marscan.html">marscan</a></td>
 <td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plot amino acid properties of a protein sequence in parallel</td>
 </tr>
 
 <tr>
@@ -1358,21 +1424,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="seealso.html">seealso</a></td>
-<td>Finds programs with similar function to a specified program</td>
-</tr>
-
-<tr>
-<td><a href="showalign.html">showalign</a></td>
-<td>Display a multiple sequence alignment in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showdb.html">showdb</a></td>
-<td>Displays information on configured databases</td>
-</tr>
-
-<tr>
 <td><a href="showfeat.html">showfeat</a></td>
 <td>Display features of a sequence in pretty format</td>
 </tr>
@@ -1400,11 +1451,6 @@ None.
 <tr>
 <td><a href="tcode.html">tcode</a></td>
 <td>Identify protein-coding regions using Fickett TESTCODE statistic</td>
-</tr>
-
-<tr>
-<td><a href="textsearch.html">textsearch</a></td>
-<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>

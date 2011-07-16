@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 
     AjPTable t;
     AjPStr key   = NULL;
-    AjPStr value = NULL;
+    const AjPStr value = NULL;
 
     AjPStr line    = NULL;
     AjPStr enzline = NULL;
@@ -219,7 +219,7 @@ int main(int argc, char **argv)
 	    while(*p)
 	    {
 		ajStrAssignK(&key,*p);
-		value = ajTableFetch(t,key);
+		value = ajTableFetchS(t,key);
 		if (value)
 		    ajFmtPrintF(outf,"%S\n",value);
 		else
@@ -291,7 +291,7 @@ static AjPTable redata_supply_table(AjPFile inf)
     const char *q;
     char c;
 
-    t = ajTablestrNewLen(SUPPGUESS);
+    t = ajTablestrNew(SUPPGUESS);
     line = ajStrNew();
 
     while(ajReadlineTrim(inf,&line))

@@ -1,0 +1,219 @@
+application: wossparam [
+  documentation: "Finds programs by EDAM parameter"
+  groups: "Ontology:EDAM, Documentation"
+    relations: "EDAM:0000219 topic Annotation"
+    relations: "EDAM:0000088 topic Literature and documentation"
+    relations: "EDAM:0000515 operation Data retrieval (tool annotation)"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: identifier [
+      default: ""
+      parameter: "Y"
+      information: "Identifier(s) to search for in ontology"
+      knowntype: "keyword"
+    relations: "EDAM:0000968 data Keyword"
+  ]
+
+endsection: input
+
+
+
+
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  boolean: explode [
+    additional: "Y"
+    default: "N"
+    information: "Use the expanded group names"
+    help: "The groups that EMBOSS applications belong to have two
+           forms, exploded and not exploded. The exploded group names are
+           more numerous and often vaguely phrased than the non-exploded
+           ones. The exploded names are formed from definitions of the group
+           names that start like NAME1:NAME2 and which are then expanded into
+           many combinations of the names as: 'NAME1', 'NAME2', 'NAME1
+           NAME2', NAME2 NAME1'. The non-expanded names are simply like:
+           'NAME1 NAME2'."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: showkeywords [
+    additional: "Y"
+    default: "N"
+    information: "Show keywords with program documentation"
+    outputmodifier: "Y"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+endsection: additional
+
+
+
+
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: sensitive [
+    default: "N"
+    information: "Increase sensitivity of search"
+    help: "By default, the query keywords are matched against the EDAM
+          term names (and synonyms) only. This option also matches the
+	  keywords against the EDAM term definitions and will therefore
+	  (typically) report more matches."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: subclasses [
+    default: "Y"
+    information: "Include subclasses of hits"
+    help: "Extend the query matches to include all terms which are
+           specialisations (EDAM sub-classes) of the matched type."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+
+  boolean: obsolete [
+    default: "N"
+    information: "Include obsolete terms"
+    help: "The default behaviour is to not use or return obsolete terms.
+           This option if set will include all terms."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+
+  boolean: emboss [
+    default: "Y"
+    information: "Search the EMBOSS programs"
+    help: "If you use this option then EMBOSS program documentation
+           will be searched. If this option is set to be false, then only the
+           EMBASSY programs will be searched (if the -embassy option is
+           true). EMBASSY programs are not strictly part of EMBOSS, but use
+           the same code libraries and share the same look and feel, but are
+           generally developed by people who wish the programs to be outside
+           of the GNU Public Licence scheme"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: embassy [
+    default: "Y"
+    information: "Search the EMBASSY programs"
+    help: "If you use this option then EMBASSY program documentation
+           will be searched. If this option is set to be false, then only the
+           EMBOSS programs will be searched (if the -emboss option is true).
+           EMBASSY programs are not strictly part of EMBOSS, but use the
+           same code libraries and share the same look and feel, but are
+           generally developed by people who wish the programs to be outside
+           of the GNU Public Licence scheme"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  string: showembassy [
+    default: ""
+    information: "Show programs in one EMBASSY package"
+    help: "If you use this option then this EMBASSY package program
+           documentation will be searched. EMBASSY programs are not strictly
+           part of EMBOSS, but use the same code libraries and share the same
+           look and feel, but are generally developed by people who wish the
+           programs to be outside of the GNU Public Licence scheme"
+    knowntype: "embassy package"
+    relations: "EDAM:0001195 identifier Tool name (EMBASSY package)"
+  ]
+
+  boolean: colon [
+    default: "N"
+    information: "Put a colon in the group name between two
+                  levels"
+    help: "The groups that EMBOSS applications belong to up to two
+           levels, for example the primary group 'ALIGNMENT' has several
+           sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES,
+           DOT PLOTS, GLOBAL, LOCAL, MULTIPLE. To aid programs that parse the
+           output of wossname that require the names of these subgroups, a
+           colon ':' will be placed between the first and second level of the
+           group name if this option is true. Note: This does not apply if
+           the group names have been exploded with the 'explode' option."
+    outputmodifier: "Y"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: gui [
+    default: "N"
+    information: "Only report those applications that can run
+                  in a GUI"
+    help: "This option is intended to help those who are designing
+           Graphical User Interfaces to the EMBOSS applications. Some EMBOSS
+           programs are inappropriate for running in a GUI, these include
+           other menu programs and interactive editors. This option allows
+           you to only report those programs that can be run from a GUI"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+endsection: advanced
+
+
+
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    additional: "Y"
+    default: "stdout"
+    knowntype: "tool metadata"
+    information: "Tool metadata output file"
+    relations: "EDAM:0000958 data Tool metadata"
+  ]
+
+  section: htmlsection [
+    information: "Html section"
+    type: "frame"
+  ]
+
+    toggle: html [
+      additional: "Y"
+      default: "N"
+      information: "Format the output for HTML"
+      help: "If you are sending the output to a file, this will format
+             it for displaying as a table in a WWW document."
+      outputmodifier: "Y"
+    relations: "EDAM:0002527 data Parameter or primitive"
+    ]
+
+  endsection: htmlsection
+
+  boolean: groups [
+    additional: "Y"
+    default: "N"
+    information: "Output only the group names"
+    help: "If you use this option, then only the group names will be
+           output to the file"
+    outputmodifier: "Y"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: alphabetic [
+    additional: "Y"
+    default: "N"
+    information: "Output an alphabetic list of programs"
+    help: "If you use this option, then you will get a single list of
+           the program names and descriptions instead of the programs being
+           listed in their functional groups."
+    outputmodifier: "Y"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+endsection: output
+
+

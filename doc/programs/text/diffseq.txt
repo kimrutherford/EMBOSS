@@ -58,7 +58,7 @@ Second features output [AY411291.diffgff]:
 Command line arguments
 
 Compare and report features of two similar sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -77,7 +77,8 @@ Version: EMBOSS:6.3.0
                                   improve the resolution of nearby
                                   differences, but the program will go much
                                   slower. (Integer 2 or more)
-  [-outfile]           report     [*.diffseq] Output report file name
+  [-outfile]           report     [*.diffseq] Output report file name (default
+                                  -rformat diffseq)
   [-aoutfeat]          featout    [$(asequence.name).diffgff] File for output
                                   of first sequence's features
   [-boutfeat]          featout    [$(bsequence.name).diffgff] File for output
@@ -184,8 +185,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   This program reads in two nucleic acid sequence USAs or two protein
-   sequence USAs.
+   This program reads in two nucleotide or protein sequences
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -346,8 +363,9 @@ Output file format
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
-   genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
 
    See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
    information on report formats.
@@ -360,7 +378,7 @@ Output file format
 
 ########################################
 # Program: diffseq
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: diffseq
 #    [-asequence] tembl:x65923
 #    [-bsequence] tembl:ay411291
@@ -419,21 +437,21 @@ AY411291 228-228 Length: 1
 
 ##gff-version 3
 ##sequence-region AY411291 1 402
-#!Date 2010-01-15
+#!Date 2011-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.3.0
+#!Source-version EMBOSS 6.4.0.0
 AY411291        diffseq sequence_conflict       228     228     1.000   +
-.       ID="AY411291.1";note="SNP in X65923";replace="t"
+.       ID=AY411291.1;note=SNP in X65923;replace=t
 
   File: X65923.diffgff
 
 ##gff-version 3
 ##sequence-region X65923 1 518
-#!Date 2010-01-15
+#!Date 2011-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.3.0
+#!Source-version EMBOSS 6.4.0.0
 X65923  diffseq sequence_conflict       284     284     1.000   +       .
-ID="X65923.1";note="SNP in AY411291";replace="c"
+ID=X65923.1;note=SNP in AY411291;replace=c
 
    The first line is the title giving the names of the sequences used.
 

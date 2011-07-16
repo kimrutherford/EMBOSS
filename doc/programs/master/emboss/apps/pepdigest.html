@@ -1,0 +1,166 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pepdigest
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<!--#include file="header1.inc" -->
+pepdigest
+<!--#include file="header2.inc" -->
+
+<H2>
+    Function
+</H2>
+<!--#include file="inc/pepdigest.ione" -->
+
+<H2>
+    Description
+</H2>
+
+<p>This programs allows you to input one or more protein sequences and to specify one proteolytic agent from a list, which might be a proteolytic enzyme or other reagent.  It will then write  a report file containing the positions where the agent cuts, together with the peptides produced.</p>
+
+<H2>
+Algorithm
+</H2>
+<p>By default <b>pepdigest</b> uses average molecular weights.  The <tt>-mono</tt> option will use monoisotopic weights.</p>
+
+<H2>
+    Usage
+</H2>
+<!--#include file="inc/pepdigest.usage" -->
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+<!--#include file="inc/pepdigest.ihelp" -->
+</pre>
+</td></tr></table>
+<P>
+<!--#include file="inc/pepdigest.itable" -->
+
+<H2>
+    Input file format
+</H2>
+
+Any protein sequence.
+
+<p>
+<!--#include file="inc/pepdigest.input" -->
+
+<H2>
+    Output file format
+</H2>
+<!--#include file="inc/reportformats.ihtml" -->
+
+By default <b>pepdigest</b> writes a 'seqtable' report file.
+
+
+<p>
+<!--#include file="inc/pepdigest.output" -->
+
+<p>
+
+The header information contains the program name, date of run, name of
+the reagent used to digest the protein and the number of fragments
+reported.  The header will report if complete or partial digestion was
+chosen.  
+
+<p>
+The rest of the file consists of columns holding the following data:
+
+<ul>
+<li> The start position of the fragment
+<li> The end position of the fragment
+<li> The molecular weight of the fragment
+<li> The residue before the cut site ('.' if start of sequence)
+<li> The residue after the second cut site ('.' if end of sequence)
+<li> The sequence of the fragment. 
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+
+<p>If you wish to emulate a partial digestion, then using the <tt>-overlap</tt> qualifier will display the results from a digest in which all cut sites are used and in which one site at a time is not cut. Thus the resulting peptide fragments from the cut sites numbered 1, 2, 3, 4 etc. are shown, plus the fragments produced by cutting at the sites 1 to 3, 2 to 4, etc.  In other words, this option will reveal fragments containing one potential cut site.</p>
+
+<p>If you wish to emulate a very partial digestion (!) then using the <tt>-allpartials</tt> qualifier will do what -overlap did, but also show all possible fragments from using all possible combinations of cut sites. For example, fragments from the cut sites numbered 1, 2, 3, 4, 5 and from the fragments produced by cutting between sites 1..3, 1..4, 1..5, 2..4, 2..5, 3..5, etc. In other words, this option will reveal fragments containing one or more potential cut site.</p>
+
+<p>If the boolean <tt>-ragging</tt> is specified then terminal digest fragments are also shown; this can be useful for mass spectrometry. Ragging is further controlled by the <tt>-termini</tt> option which allows you to select removal of residues from the N and/or C termini.</p>
+
+<p>Each proteolytic enzyme has favoured as well as unfavoured cut sites.  For example, Trypsin will not normally cut after a K if it is followed by (e.g.) another K or a P.  By default, only data for favoured cut sites is generated.  Specifying the qualifier <tt>-unfavoured</tt> produces data for unfavoured cut sites as well.</p>
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+
+<H2>
+    Exit status
+</H2>
+
+It always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+None.
+
+
+<!--#include file="inc/pepdigest.isee" -->
+
+<H2>
+    Author(s)
+</H2>
+
+<!--#include file="inc/ableasby.address" -->
+
+<H2>
+    History
+</H2>
+<!--#include file="inc/pepdigest.history" -->
+
+<H2>
+    Target users
+</H2>
+<!--#include file="inc/target.itxt" -->
+
+<H2>
+    Comments
+</H2>
+<!--#include file="inc/pepdigest.comment" -->
+
+</BODY>
+</HTML>
+

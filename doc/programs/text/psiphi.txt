@@ -40,7 +40,7 @@ Output report [1hmp_a.psiphi]:
 Command line arguments
 
 Calculates phi and psi torsion angles from protein coordinates
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Clean protein structure coordinates file
@@ -53,7 +53,8 @@ Version: EMBOSS:6.3.0
    -finishresiduenumber integer    [1] Last residue in chain for which torsion
                                   angles should be calculated (1 = last
                                   residue) (Any integer value)
-  [-outfile]           report     [*.psiphi] Output report file name
+  [-outfile]           report     [*.psiphi] Output report file name (default
+                                  -rformat table)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -376,8 +377,9 @@ Output file format
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
-   genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
 
    See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
    information on report formats.
@@ -390,7 +392,7 @@ Output file format
 
 ########################################
 # Program: psiphi
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: psiphi
 #    [-infile] ../../data/1hmp_a.ccf
 #    -chainnumber 1

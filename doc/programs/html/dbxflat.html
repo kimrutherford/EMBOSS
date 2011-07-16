@@ -57,8 +57,10 @@ IT IS DONE FOR YOU.
   -->
 
 <b>dbxflat</b> indexes a flat file database of one or more files, and builds
-EMBOSS B+tree format index files. These indexes allow access of flat
-files larger than 2Gb.
+EMBOSS B+tree format index files.
+
+<p>
+These indexes allow access of flat files larger than 2Gb.
 
 
 <H2>
@@ -70,7 +72,7 @@ files larger than 2Gb.
         Many examples illustrating different behaviours is good.
  -->
 
-<b>Here is a sample session with dbxflat</b>
+Here is a sample session with <b>dbxflat</b>
 <p>
 
 <p>
@@ -95,6 +97,7 @@ Database directory [.]: <b>embl</b>
        key : Keywords
        org : Taxonomy
 Index fields [id,acc]: <b></b>
+Compressed index files [Y]: <b></b>
 General log output file [outfile.dbxflat]: <b></b>
 
 </pre></td></tr></table><p>
@@ -110,7 +113,7 @@ General log output file [outfile.dbxflat]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Index a flat file database using b+tree indices
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -130,6 +133,7 @@ Version: EMBOSS:6.3.0
                                   (Accession number); sv (Sequence Version and
                                   GI); des (Description); key (Keywords); org
                                   (Taxonomy))
+   -[no]compressed     boolean    [Y] Compressed index files
    -outfile            outfile    [*.dbxflat] General log output file
 
    Additional (Optional) qualifiers: (none)
@@ -138,6 +142,8 @@ Version: EMBOSS:6.3.0
                                   characters)
    -date               string     [00/00/00] Index date (Date string dd/mm/yy)
    -exclude            string     Wildcard filename(s) to exclude (Any string)
+   -statistics         boolean    [N] Report I/O statistics for each input
+                                  file
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:
@@ -233,6 +239,14 @@ Version: EMBOSS:6.3.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td>-[no]compressed</td>
+<td>boolean</td>
+<td>Compressed index files</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>-outfile</td>
 <td>outfile</td>
 <td>General log output file</td>
@@ -274,6 +288,14 @@ Version: EMBOSS:6.3.0
 <td>Wildcard filename(s) to exclude</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-statistics</td>
+<td>boolean</td>
+<td>Report I/O statistics for each input file</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -452,7 +474,8 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-<b>dbxflat</b> reads any normal sequence USAs.
+<b>dbxflat</b> reads and indexes sequence data flatfiles in any of the available
+formats.
 
 <p>
 
@@ -496,7 +519,7 @@ structure of the ID name index.
 <pre>
 Processing directory: /homes/user/test/embl/
 Processing file: rod.dat entries: 6 (6) time: 0.0/0.0s (0.0/0.0s)
-Total time: 0.0s
+Total time: 0:00.0
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.ent</h3>
@@ -512,6 +535,9 @@ rod.dat
 <p><h3>File: embl.pxac</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+Type      Identifier
+Compress  Yes
+Pages     6
 Order     71
 Fill      46
 Pagesize  2048
@@ -519,13 +545,17 @@ Level     0
 Cachesize 100
 Order2    99
 Fill2     101
-Count     8
+Count     7
+Fullcount 9
 Kwlimit   15
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.pxid</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+Type      Identifier
+Compress  Yes
+Pages     3
 Order     71
 Fill      46
 Pagesize  2048
@@ -533,7 +563,8 @@ Level     0
 Cachesize 100
 Order2    99
 Fill2     101
-Count     5
+Count     6
+Fullcount 6
 Kwlimit   15
 </pre>
 </td></tr></table><p>
@@ -786,6 +817,16 @@ None.
 </tr>
 
 <tr>
+<td><a href="dbxcompress.html">dbxcompress</a></td>
+<td>Compress an uncompressed dbx index</td>
+</tr>
+
+<tr>
+<td><a href="dbxedam.html">dbxedam</a></td>
+<td>Index the EDAM ontology using b+tree indices</td>
+</tr>
+
+<tr>
 <td><a href="dbxfasta.html">dbxfasta</a></td>
 <td>Index a fasta file database using b+tree indices</td>
 </tr>
@@ -793,6 +834,36 @@ None.
 <tr>
 <td><a href="dbxgcg.html">dbxgcg</a></td>
 <td>Index a GCG formatted database using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxobo.html">dbxobo</a></td>
+<td>Index an obo ontology using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxreport.html">dbxreport</a></td>
+<td>Validate index and report internals for dbx databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxresource.html">dbxresource</a></td>
+<td>Index a data resource catalogue using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxstat.html">dbxstat</a></td>
+<td>Dump statistics for dbx databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxtax.html">dbxtax</a></td>
+<td>Index NCBI taxonomy using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxuncompress.html">dbxuncompress</a></td>
+<td>Uncompress a compressed dbx index</td>
 </tr>
 
 </table>
@@ -847,7 +918,8 @@ Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;embos
 <!--
         For general users, use this text
    -->
-This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
 
 <H2>
     Comments

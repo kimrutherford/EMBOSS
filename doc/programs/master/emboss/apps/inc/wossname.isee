@@ -3,38 +3,8 @@
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
-<td><a href="infoalign.html">infoalign</a></td>
-<td>Display basic information about a multiple sequence alignment</td>
-</tr>
-
-<tr>
-<td><a href="infobase.html">infobase</a></td>
-<td>Return information on a given nucleotide base</td>
-</tr>
-
-<tr>
-<td><a href="inforesidue.html">inforesidue</a></td>
-<td>Return information on a given amino acid residue</td>
-</tr>
-
-<tr>
-<td><a href="infoseq.html">infoseq</a></td>
-<td>Display basic information about sequences</td>
-</tr>
-
-<tr>
 <td><a href="seealso.html">seealso</a></td>
 <td>Finds programs with similar function to a specified program</td>
-</tr>
-
-<tr>
-<td><a href="showdb.html">showdb</a></td>
-<td>Displays information on configured databases</td>
-</tr>
-
-<tr>
-<td><a href="textsearch.html">textsearch</a></td>
-<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>
@@ -43,8 +13,33 @@
 </tr>
 
 <tr>
-<td><a href="whichdb.html">whichdb</a></td>
-<td>Search all sequence databases for an entry and retrieve it</td>
+<td><a href="wossdata.html">wossdata</a></td>
+<td>Finds programs by EDAM data</td>
+</tr>
+
+<tr>
+<td><a href="wossinput.html">wossinput</a></td>
+<td>Finds programs by EDAM input data</td>
+</tr>
+
+<tr>
+<td><a href="wossoperation.html">wossoperation</a></td>
+<td>Finds programs by EDAM operation</td>
+</tr>
+
+<tr>
+<td><a href="wossoutput.html">wossoutput</a></td>
+<td>Finds programs by EDAM output data</td>
+</tr>
+
+<tr>
+<td><a href="wossparam.html">wossparam</a></td>
+<td>Finds programs by EDAM parameter</td>
+</tr>
+
+<tr>
+<td><a href="wosstopic.html">wosstopic</a></td>
+<td>Finds programs by EDAM topic</td>
 </tr>
 
 </table>

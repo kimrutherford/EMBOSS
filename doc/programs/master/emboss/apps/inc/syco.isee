@@ -8,6 +8,11 @@
 </tr>
 
 <tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
 <td><a href="chips.html">chips</a></td>
 <td>Calculates Nc codon usage statistic</td>
 </tr>
@@ -15,6 +20,11 @@
 <tr>
 <td><a href="codcmp.html">codcmp</a></td>
 <td>Codon usage table comparison</td>
+</tr>
+
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Copy and reformat a codon usage table</td>
 </tr>
 
 <tr>

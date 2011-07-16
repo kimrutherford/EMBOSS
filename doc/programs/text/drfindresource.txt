@@ -1,0 +1,298 @@
+                               drfindresource
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Find public databases by resource
+
+Description
+
+   drfindresource searches the Data Resource Catalogue to find entries
+   with EDAM resource terms matching a query string.
+
+Algorithm
+
+   The first search is of the EDAM ontology topic namespace, using the
+   term names and their synonynms. All child terms are automatically
+   included in the set of matches inless the -nosubclasses qualifier is
+   used.
+
+   The -sensitive qualifier also searches the definition strings.
+
+   The set of EDAM terms are then compared to entries in the Data Resource
+   Catalogue, searching the 'etpc' EDAM topic index.
+
+Usage
+
+   Here is a sample session with drfindresource
+
+
+% drfindresource pathogen
+Find public databases by resource
+Data resource output file [drfindresource.drcat]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Find public databases by resource
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-query]             string     List of EDAM data keywords (Any string)
+  [-outfile]           outresource [*.drfindresource] Output data resource file
+                                  name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -sensitive          boolean    [N] By default, the query keywords are
+                                  matched against the EDAM term names (and
+                                  synonyms) only. This option also matches the
+                                  keywords against the EDAM term definitions
+                                  and will therefore (typically) report more
+                                  matches.
+   -[no]subclasses     boolean    [Y] Extend the query matches to include all
+                                  terms which are specialisations (EDAM
+                                  sub-classes) of the matched type.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Data resource output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   None.
+
+Output file format
+
+   The output is a standard EMBOSS resource file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -oformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: drcat,
+   basic, wsbasic, list.
+
+   See: http://emboss.sf.net/docs/themes/ResourceFormats.html for further
+   information on resource formats.
+
+  Output files for usage example
+
+  File: drfindresource.drcat
+
+ID      ApiDB_PlasmoDB
+IDalt   PlasmoDB
+Name    Plasmodium genome resources (PlasmoDB)
+Desc    Genomic-scale dataset associated with the eukaryotic pathogens Plasmodiu
+m.
+URL     http://plasmodb.org/plasmo/
+URLrest http://eupathdb.org/eupathdb/serviceList.jsp
+Cat     Not available
+Taxon   5820 | Plasmodium
+EDAMtpc 0002821 | Unicellular eukaryote
+EDAMtpc 0000643 | Genomes
+EDAMtpc 0000783 | Pathogen
+EDAMdat 0000916 | Gene annotation
+EDAMid  0002295 | Gene ID
+EDAMfmt 0002331 | HTML
+Xref    SP_FT | None
+Query    Gene annotation | HTML | Gene ID | http://plasmodb.org/gene/%s
+Example Gene ID | PF11_0344
+
+ID      COGEME
+Name    Phytopathogenic fungi and oomycete EST database (COGEME)
+Desc    Phytopathogenic fungi and oomycete EST database.
+URL     http://cogeme.ex.ac.uk/
+Taxon   4751 | Fungi
+EDAMtpc 0000655 | mRNA, EST or cDNA
+EDAMtpc 0000783 | Pathogen
+EDAMtpc 0000782 | Fungal
+EDAMdat 0000849 | Sequence record
+EDAMid  0002729 | COGEME EST ID
+EDAMid  0002730 | COGEME unisequence ID
+EDAMfmt 0002331 | HTML
+Query    Sequence record {Unisequence} | HTML | COGEME unisequence ID | http://c
+ogeme.ex.ac.uk/cgi-bin/uni.pl?uni=x
+Query    Sequence record {EST} | HTML | COGEME EST ID | http://cogeme.ex.ac.uk/c
+gi-bin/est.pl?est=x
+Example COGEME EST ID | Bg13901527
+Example COGEME unisequence ID | BgCon[0123]
+
+ID      ApiDB_TrichDB
+IDalt   TrichDB
+Name    Trichomonas genome resources (TrichDB)
+Desc    Genomic-scale datasets associated with the eukaryotic Trichomonas.
+URL     http://trichdb.org/trichdb/
+URLrest http://eupathdb.org/eupathdb/serviceList.jsp
+Cat     Not available
+Taxon   5721 | Trichomonas
+EDAMtpc 0002821 | Unicellular eukaryote
+EDAMtpc 0000643 | Genomes
+EDAMtpc 0000783 | Pathogen
+EDAMdat 0000916 | Gene annotation
+EDAMid  0002295 | Gene ID
+EDAMfmt 0002331 | HTML
+Xref    SP_FT | None
+
+
+  [Part of this file has been deleted for brevity]
+
+Name    Enteropathogen resource integration center (ERIC)
+Desc    Annotated enterobacterial genome and associated information.
+URL     http://www.ericbrc.org/portal/eric/
+Cat     Not available
+Taxon   543 | Enterobacteriaceae
+EDAMtpc 0001811 | Prokaryote
+EDAMtpc 0000643 | Genomes
+EDAMtpc 0000783 | Pathogen
+Xref    SP_FT | None
+
+ID      NMPDR
+Acc     DB-0125
+Name    National microbial pathogen
+Desc    Curated annotations in an environment for comparative analysis of genome
+s and biological subsystems, with an emphasis on the food-borne pathogens Campyl
+obacter, Listeria, Staphylococcus, Streptococcus, and Vibrio as well as the STD
+pathogens Chlamydiaceae, Haemophilus, Mycoplasma, Neisseria, Treponema, and Urea
+plasma.
+URL     http://www.nmpdr.org
+URLlink http://www.nmpdr.org/FIG/wiki/view.cgi/FIG/LinkingToTheGenomeViewer
+Cat     Genome annotation databases
+Taxon   2 | Bacteria
+EDAMtpc 0000643 | Genomes
+EDAMtpc 0000783 | Pathogen
+EDAMtpc 0000797 | Comparative genomics
+EDAMdat 0000916 | Gene annotation
+EDAMid  0001179 | NCBI taxonomy ID
+EDAMid  0002737 | FIG ID
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit | FIG ID
+Query    Gene annotation | HTML | NCBI taxonomy ID | http://www.nmpdr.org/linkin
+.cgi?genome=%s
+Query    Gene annotation {Protein encoding gene or other feature} | HTML | FIG I
+D | http://www.nmpdr.org/linkin.cgi?id=%s
+Example NCBI taxonomy ID | 83333.1
+Example FIG ID | 83333.1.peg.123
+Example FIG ID | 83333.1.rna.1
+
+ID      Pathema
+Name    Pathema: a clade-specific bioinformatics resource
+Desc    Genome database for six clades of Category A-C pathogens aEUR" Bacillus
+anthracis, Clostridium botulinum, Burkholderia mallei, Burkholderia pseudomallei
+, Clostridium perfringens, Entamoeba histolytica.
+URL     http://www.jcvi.org/cms/research/projects/pathema/overview/
+Cat     Not available
+Taxon   1 | all
+EDAMtpc 0001811 | Prokaryote
+EDAMtpc 0000643 | Genomes
+EDAMtpc 0000783 | Pathogen
+Xref    SP_FT | None
+
+ID      PHI-base
+Name    PHI-base pathogen host interactions database
+Desc    Curated molecular and biological information on genes proven to affect t
+he outcome of pathogen-host interactions. Information is also given on the targe
+t sites of some anti-infective chemistries.
+URL     http://www.phibase.org
+Taxon   1 | all
+EDAMtpc 0000623 | Gene family or system
+EDAMtpc 0000783 | Pathogen
+
+
+Data files
+
+   The Data Resource Catalogue is included in EMBOSS as local database
+   drcat. The EDAM Ontology is included in EMBOSS as local database edam.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                       Description
+                    drfinddata    Find public databases by data type
+                    drfindformat  Find public databases by format
+                    drfindid      Find public databases by identifier
+                    drget         Get data resource entries
+                    drtext        Get data resource entries complete text
+                    edamdef       Find EDAM ontology terms by definition
+                    edamhasinput  Find EDAM ontology terms by has_input relation
+   edamhasoutput    Find EDAM ontology terms by has_output relation
+                    edamisformat  Find EDAM ontology terms by is_format_of relation
+                    edamisid      Find EDAM ontology terms by is_identifier_of relation
+                    edamname      Find EDAM ontology terms by name
+                    wossdata      Finds programs by EDAM data
+                    wossinput     Finds programs by EDAM input data
+   wossoperation    Finds programs by EDAM operation
+                    wossoutput    Finds programs by EDAM output data
+                    wossparam     Finds programs by EDAM parameter
+                    wosstopic     Finds programs by EDAM topic
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

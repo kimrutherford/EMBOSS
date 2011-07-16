@@ -77,7 +77,7 @@ int main(int argc, char **argv)
     const char *sname;
 
     EmbPPropAmino *adata = NULL;
-    
+    AjPStr title = NULL;
 
     embInit("charge", argc, argv);
 
@@ -91,14 +91,18 @@ int main(int argc, char **argv)
     outf  = ajAcdGetOutfile("outfile");
     graph = ajAcdGetGraphxy("graph");
 
+    title = ajStrNewS(ajGraphGetTitleS(graph));
+
     adata = embPropEaminoRead(cdata);
     ajFileClose(&cdata);
 
     str = ajStrNew();
 
-    ajGraphAppendTitleS(graph, ajSeqallGetUsa(seqall));
     while(ajSeqallNext(seqall, &seq))
     {
+        ajGraphSetTitleS(graph, title);
+        ajGraphAppendTitleS(graph, ajSeqGetUsaS(seq));
+
 	beg = ajSeqallGetseqBegin(seqall);
 	end = ajSeqallGetseqEnd(seqall);
 	len = end-beg+1;
@@ -153,7 +157,6 @@ int main(int argc, char **argv)
 	if(plot)
 	{
 	    ajGraphSetMulti(graph,1);
-	    ajGraphxySetflagOverlay(graph,ajFalse);
 	    ajGraphSetXlabelC(graph,"Position");
 	    ajGraphSetYlabelC(graph,"Charge");
 	    charge_addgraph(graph,limit,x,y,ymax,ymin,window);
@@ -178,6 +181,7 @@ int main(int argc, char **argv)
     ajFileClose(&cdata);
 
     ajStrDel(&str);
+    ajStrDel(&title);
 
     embPropAminoDel(&adata);
 

@@ -1,0 +1,113 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: qatests.server.dasregistry</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# qatests.server.dasregistry 2011-07-15 12:00:00
+
+DB cath [
+  method: das
+  type: "Protfeatures"
+  format: "dasgff"
+  url: http://cathdb.info:9000/das/cath_pdb
+  example: "5pti"
+  comment: "The CATH database annotates PDB structures with CATH structural domains as derived from a combination of automatic and manually methods."
+  hasaccession: "N"
+  identifier: "segment"
+  fields: "segment,type,category,categorize,feature_id"
+]
+
+DB DS_114_signalp [
+  method: das
+  type: "Protfeatures"
+  format: "dasgff"
+  url: http://das.cbs.dtu.dk:9000/das/signalp
+  example: "ALBU_HUMAN"
+  comment: "SignalP (http://www.cbs.dtu.dk/services/SignalP) predictions for UniProt."
+  hasaccession: "N"
+  identifier: "segment"
+  fields: "segment,type,category,categorize,feature_id"
+]
+
+DB netphos [
+  method: das
+  type: "Protfeatures"
+  format: "dasgff"
+  url: http://das.cbs.dtu.dk:9000/das/netphos
+  example: "ALBU_HUMAN"
+  comment: "NetPhos (http://www.cbs.dtu.dk/services/NetPhos) predictions for UniProt."
+  hasaccession: "N"
+  identifier: "segment"
+  fields: "segment,type,category,categorize,feature_id"
+]
+
+DB prop [
+  method: das
+  type: "Protfeatures"
+  format: "dasgff"
+  url: http://das.cbs.dtu.dk:9000/das/prop
+  example: "GDNF_HUMAN"
+  comment: "ProP (http://www.cbs.dtu.dk/services/ProP) predictions for UniProt."
+  hasaccession: "N"
+  identifier: "segment"
+  fields: "segment,type,category,categorize,feature_id"
+]
+
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+  fields: "segment,type,category,categorize,feature_id"
+]
+
+DB CATH_Domain_Homologues_in_Ensembl [
+  method: das
+  type: "Protfeatures"
+  format: "dasgff"
+  url: http://das.cathdb.info/das/gene3d_ensembl
+  example: "ENSGACP00000019937"
+  comment: "CATH Superfamily domain homologues, identified by sequence similarity, and mapped to Ensembl."
+  hasaccession: "N"
+  identifier: "segment"
+  fields: "segment,type,category,categorize,feature_id"
+]
+
+DB DS_2765_CATH_Domains_in_UniProt [
+  method: das
+  type: "Protfeatures"
+  format: "dasgff"
+  url: http://das.cathdb.info/das/cath_sptr
+  example: "P20279"
+  comment: "Structural domains directly mapped to UniProt. A clone of the cath_uniprot server for backwards compatibility."
+  hasaccession: "N"
+  identifier: "segment"
+  fields: "segment,type,category,categorize,feature_id"
+]
+
+DB DS_2767_CATH_Domains_in_UniProt [
+  method: das
+  type: "Protfeatures"
+  format: "dasgff"
+  url: http://das.cathdb.info/das/cath_uniprot
+  example: "P20279"
+  comment: "Structural domains directly mapped to UniProt."
+  hasaccession: "N"
+  identifier: "segment"
+  fields: "segment,type,category,categorize,feature_id"
+]
+
+DB CATH_Domain_Homologues_in_UniProt [
+  method: das
+  type: "Protfeatures"
+  format: "dasgff"
+  url: http://das.cathdb.info/das/gene3d_cath
+  example: "P15498"
+  comment: "CATH Superfamily domain homologues, identified using DomainFinder."
+  hasaccession: "N"
+  identifier: "segment"
+  fields: "segment,type,category,categorize,feature_id"
+]
+
+</pre>
+</td></tr></table><p>

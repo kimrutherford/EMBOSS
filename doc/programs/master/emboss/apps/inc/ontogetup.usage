@@ -1,0 +1,13 @@
+Here is a sample session with <b>ontogetup</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>ontogetup edam:0001234 </b>
+Get ontology term(s) by id of child
+Obo output file [0001234.obo]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

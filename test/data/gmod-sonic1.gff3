@@ -1,0 +1,24 @@
+##gff-version 3
+#
+#Nesting Features
+#
+#Many genomic features are discontinuous and have multiple
+#subparts. GFF3 represents such features by linking the parts
+#together with the Parent tag. For example, to represent an mRNA
+#transcript that has five exons, we could write this:
+#
+#The first feature is an mRNA that extends from position 1300 to 9000
+#in genomic coordinates. It has an ID of "mrna0001" and a
+#human-readable name of "sonichedgehog" (note that the ID and the Name
+#are not the same thing). This is followed by five exon features, each
+#of which is linked to the mRNA using a Parent tag. When GBrowse
+#displays this transcript, it will display each of the exons linked
+#together by a solid line. The entire set can be found by searching
+#for the name "sonichedgehog."
+#
+ctg123	.	mRNA	1300	9000	.	+	.	ID=mrna0001;Name=sonichedgehog
+ctg123	.	exon	1300	1500	.	+	.	ID=exon00001;Parent=mrna0001
+ctg123	.	exon	1050	1500	.	+	.	ID=exon00002;Parent=mrna0001
+ctg123	.	exon	3000	3902	.	+	.	ID=exon00003;Parent=mrna0001
+ctg123	.	exon	5000	5500	.	+	.	ID=exon00004;Parent=mrna0001
+ctg123	.	exon	7000	9000	.	+	.	ID=exon00005;Parent=mrna0001

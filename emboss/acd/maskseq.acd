@@ -1,8 +1,8 @@
 application: maskseq [
   documentation: "Write a sequence with masked regions"
   groups: "Edit"
-  relations: "/edam/topic/0000156 Sequence editing"
-  relations: "/edam/operation/0000368 Sequence masking"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000368 operation Sequence masking"
 ]
 
 section: input [
@@ -13,8 +13,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "any"
-    relations: "/edam/data/0000848 Sequence"                                            
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -37,7 +36,7 @@ section: required [
            1:45, 67=99;765..888 \
            1,5,8,10,23,45,57,99"
     expected: "None"
-    relations: "/edam/data/0001017 Sequence range"
+    relations: "EDAM:0001017 data Sequence range"
   ]
 
 endsection: required
@@ -57,7 +56,7 @@ section: additional [
            from the case change. You might like to ensure that the whole
            sequence is in upper-case before masking the specified regions to
            lower-case by using the '-supper' flag."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   string: maskchar [
@@ -73,7 +72,7 @@ section: additional [
     maxlength: "1"
     minlength: "1"
     knowntype: "sequence mask character"
-    relations:  "/edam/data/0000851 Sequence mask character"                        
+    relations: "EDAM:0000851 data Sequence mask character"
   ]
 
 endsection: additional
@@ -85,8 +84,7 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
-    relations: "/edam/data/0000848 Sequence"                                            
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: output

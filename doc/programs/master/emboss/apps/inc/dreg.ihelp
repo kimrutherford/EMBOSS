@@ -1,11 +1,12 @@
 Regular expression search of nucleotide sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
   [-pattern]           regexp     Any regular expression pattern is accepted)
-  [-outfile]           report     [*.dreg] Output report file name
+  [-outfile]           report     [*.dreg] Output report file name (default
+                                  -rformat seqtable)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)

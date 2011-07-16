@@ -1,8 +1,16 @@
 #!/bin/csh
 
-setenv EMBOSS_EDAM /homes/pmr/obo/EDAM_beta07.obo
+foreach embosshome (`embossversion -full -auto| grep '^BaseDirectory'`)
+#  echo "$embosshome"
+end
 
-foreach x ( ~/local/share/EMBOSS/acd/*.acd )
+foreach embossinst (`embossversion -full -auto| grep '^InstallDirectory'`)
+#  echo "$embossinst"
+end
+
+setenv EMBOSS_EDAM $embosshome/emboss/data/EDAM.obo
+
+foreach x ( $embossinst/share/EMBOSS/acd/*.acd )
   set y = $x:t
-  acdvalid $y:r |& ~/devemboss/scripts/dovalidclean.pl $y:r
+  acdvalid $y:r |& $embosshome/scripts/dovalidclean.pl $y:r
 end

@@ -45,8 +45,8 @@ Index a GCG formatted database
 of one or more files, and builds EMBL CD-ROM format index files. 
 <p>
 
-A GCG-format database consists of *.seq and *.ref files - only the *.seq
-files are used.  The data in these is often compressed. 
+A GCG-format database consists of *.seq and *.ref files.  The data in
+the *.seq files is often compressed.
 
 <p>
 
@@ -61,7 +61,7 @@ publicly available index file format for these databases.
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with dbigcg</b>
+Here is a sample session with <b>dbigcg</b>
 <p>
 
 <p>
@@ -93,7 +93,7 @@ General log output file [outfile.dbigcg]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Index a GCG formatted database
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Database name (Any string from 2 to 19
@@ -470,10 +470,10 @@ files are used.  The data in these is often compressed.
 <pre>
 ########################################
 # Program: dbigcg
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Dbname: EMBL
 # Release: 0.0
-# Date: 15/01/10
+# Date: 15/07/11
 # CurrentDirectory: /homes/user/test/qa/dbigcg-ex-keep/
 # IndexDirectory: ./
 # IndexDirectoryPath: /homes/user/test/qa/dbigcg-ex-keep/
@@ -663,6 +663,16 @@ None.
 </tr>
 
 <tr>
+<td><a href="dbxcompress.html">dbxcompress</a></td>
+<td>Compress an uncompressed dbx index</td>
+</tr>
+
+<tr>
+<td><a href="dbxedam.html">dbxedam</a></td>
+<td>Index the EDAM ontology using b+tree indices</td>
+</tr>
+
+<tr>
 <td><a href="dbxfasta.html">dbxfasta</a></td>
 <td>Index a fasta file database using b+tree indices</td>
 </tr>
@@ -675,6 +685,36 @@ None.
 <tr>
 <td><a href="dbxgcg.html">dbxgcg</a></td>
 <td>Index a GCG formatted database using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxobo.html">dbxobo</a></td>
+<td>Index an obo ontology using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxreport.html">dbxreport</a></td>
+<td>Validate index and report internals for dbx databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxresource.html">dbxresource</a></td>
+<td>Index a data resource catalogue using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxstat.html">dbxstat</a></td>
+<td>Dump statistics for dbx databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxtax.html">dbxtax</a></td>
+<td>Index NCBI taxonomy using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxuncompress.html">dbxuncompress</a></td>
+<td>Uncompress a compressed dbx index</td>
 </tr>
 
 </table>

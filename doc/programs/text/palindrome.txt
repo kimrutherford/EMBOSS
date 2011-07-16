@@ -44,7 +44,7 @@ Report overlapping matches [Y]:
 Command line arguments
 
 Finds inverted repeats in nucleotide sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -103,7 +103,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   palindrome reads normal nucleotide sequence USAs.
+   palindrome reads one or more nucleotide sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -219,6 +236,8 @@ FT                   /note="thymidylate synthase mRNA and introns"
 //
 
 Output file format
+
+   palindrome writes a text report of the alignment.
 
   Output files for usage example
 

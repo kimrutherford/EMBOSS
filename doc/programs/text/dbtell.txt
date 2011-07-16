@@ -1,0 +1,174 @@
+                                   dbtell
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Display information about a public database
+
+Description
+
+   dbtell displays on-screen information on a database with the specific
+   ID. Optionally, the information may be written to an output file in
+   plain text or HTML.
+
+Usage
+
+   Here is a sample session with dbtell
+
+
+% dbtell tsw
+Display information about a public database
+
+# tsw is defined in special
+# access levels id: Yes query: Yes all: Yes
+
+DBNAME tsw [
+   format:         "swiss"
+   method:         "emblcd"
+   type:           "Protein"
+   comment:        "Swissprot native format with EMBL CD-ROM index"
+   directory:      "/homes/pmr/local/share/EMBOSS/test/swiss"
+   field:          "id"
+   field:          "acc"
+   field:          "sv"
+   field:          "des"
+   field:          "org"
+   field:          "key"
+   release:        "36"
+   edamdat:        "0001230 UniProt protein sequence record"
+   taxon:          "1 all"
+]
+
+
+   Go to the input files for this example
+
+Command line arguments
+
+Display information about a public database
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-database]          string     The name of the database defined locally for
+                                  use by EMBOSS. (Any string)
+
+   Additional (Optional) qualifiers:
+   -full               boolean    [N] The default behaviour is to report for
+                                  relevant databases only basic information
+                                  from the EMBOSS database definition
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+  Input files for usage example
+
+   'tsw' is a sequence entry in the example protein database 'tsw'
+
+Output file format
+
+   The output file (plain text format) is an excerpt of and (by default)
+   in the same format as the EMBOSS data file db.dat. The format of the
+   file is explained in comments at the top of that file. Optionally, the
+   data can be tabulated.
+
+   If the -html qualifier is specified, then the output will be a web page
+   suitable for viewing in any browser.
+
+Data files
+
+   The EMBOSS database information file (db.dat) must be installed in the
+   EMBOSS data directory and indexed. This is done automatically for
+   typical installations.
+
+Notes
+
+   None.
+
+References
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   cachedas         Generates server cache file for DAS servers or for the DAS
+                    registry
+   cachedbfetch     Generates server cache file for Dbfetch/WSDbfetch data
+                    sources
+   cacheebeyesearch Generates server cache file for EB-eye search domains
+   cacheensembl     Generates server cache file for an Ensembl server
+   servertell       Display information about a public server
+   showdb           Displays information on configured databases
+   showserver       Displays information on configured servers
+
+Author(s)
+
+   Jon Ison
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+   This application was modified by Jon Ison
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

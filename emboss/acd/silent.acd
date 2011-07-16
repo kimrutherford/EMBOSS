@@ -2,8 +2,8 @@ application: silent [
   documentation: "Find restriction sites to insert (mutate)
                   with no translation change"
   groups: "Nucleic:Restriction"
-  relations: "/edam/topic/0000100 Nucleic acid restriction"
-  relations: "/edam/operation/0000431 Restriction site identification"
+    relations: "EDAM:0000100 topic Nucleic acid restriction"
+    relations: "EDAM:0000431 operation Restriction site recognition"
 ]
 
 section: input [
@@ -14,8 +14,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "/edam/data/0001215 Pure DNA sequence"                                   
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
   ]
 
 endsection: input
@@ -30,7 +29,7 @@ section: required [
     default: "all"
     information: "Comma separated enzyme list"
     knowntype: "enzyme list"
-    relations:  "/edam/data/0001013 Restriction enzyme name"                        
+    relations: "EDAM:0001013 identifier Restriction enzyme name"
   ]
 
 endsection: required
@@ -43,19 +42,19 @@ section: output [
   boolean: sshow [
     default: "N"
     information: "Display untranslated sequence"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: tshow [
     default: "N"
     information: "Display translated sequence"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: allmut [
     default: "N"
     information: "Display all mutations"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   report: outfile [
@@ -65,7 +64,7 @@ section: output [
     	      int:baseposn=Base-Posn rstr:aa=AAs
               rstr:silent=Silent rstr:mutation=Mutation"
     rscoreshow: "N"
-    relations: "/edam/data/0001305 Restriction site report"                                       
+    relations: "EDAM:0001305 data Nucleic acid features (restriction sites)"
   ]
 
 endsection: output

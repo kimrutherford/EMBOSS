@@ -117,8 +117,53 @@ typedef struct node
 
 static char *exclude_names[]=
 {
-    "dbxreport.c",
-    "dbxstat.c",
+    "dassources.c",
+    "wosscat.c",
+    "wossfunc.c",
+    "wossdat.c",
+    "dbfind.c",
+    "dbfindcat.c",
+    "dbfinddat.c",
+    "dbfindsoap.c",
+    "dbfindrest.c",
+    "dbtellquery.c",
+    "dbshowall.c",
+    "dbshowdat.c",
+    "dbshowquery.c",
+    "dbget.c",
+    "dbgeturl.c",
+    "seqgo.c",
+    "seqtax.c",
+    "goseq.c",
+    "taxseq.c",
+    "entrygo.c",
+    "entrytax.c",
+    "isdbname.c",
+    "isdbdata.c",
+    "ontoterm.c",
+    "idtell.c",
+    "ontoshow.c",
+    "ontofind.c",
+    "ontogetparents.c",
+    "ontogetkids.c",
+    "ontogetall.c",
+    "ontogetrootkids.c",
+    "edamget.c",
+    "edamfind.c",
+    "edamentity.c",
+    "edamtopic.c",
+    "edamoperation.c",
+    "edamresource.c",
+    "edamdata.c",
+    "edamformat.c",
+    "xmltransform.c",
+    "xmltoxml.c",
+    "xmltotext.c",
+    "texttoxml.c",
+    "texttotext.c",
+    "docxmlvalid.c",
+    "docxmlwell.c",
+    "textvalid.c",
     NULL
 };
 
@@ -154,10 +199,14 @@ static void copy_plplot(char *basedir);
 static void copy_DLLs(char *basedir);
 static int  copy_apps(char *basedir, listnode *head);
 static void copy_data(char *basedir);
+static void copy_index(char *basedir);
 static void copy_doc(char *basedir);
 static void copy_test(char *basedir);
+static void copy_scripts(char *basedir);
 static void copy_jemboss(char *basedir);
 static void copy_mysql(char *basedir);
+static void copy_postgresql(char *basedir);
+static void copy_axis2c(char *basedir);
 static void copy_redist(char *basedir);
     
 static void create_directories(char *basedir);
@@ -231,10 +280,14 @@ int main(int argc, char **argv)
     /* Copy data files */
 
     copy_data(basedir);
+    copy_index(basedir);    
     copy_doc(basedir);
     copy_test(basedir);
+    copy_scripts(basedir);
     copy_jemboss(basedir);
     copy_mysql(basedir);
+    copy_postgresql(basedir);
+    copy_axis2c(basedir);
     copy_redist(basedir);
 
 
@@ -806,6 +859,34 @@ static void copy_plplot(char *basedir)
 	exit(-1);
     }
 
+    sprintf(src,"%s/emboss/plplotwin/haru/lib/libharu.dll",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/Release",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/scripts/qatest.pl",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/scripts",basedir);
+    fix_dir(dest);
+  
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
     sprintf(dest,"%s/win32/DLLs/Release",basedir);
     fix_dir(dest);
 
@@ -1046,6 +1127,63 @@ static void copy_data(char *basedir)
 
 
 
+
+static void copy_index(char *basedir)
+{
+    char command[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
+
+    
+    sprintf(src,"%s/emboss/emboss/index/*",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/index",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CPR,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+    sprintf(src,"%s/emboss/emboss/emboss.standard",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/emboss/server.*",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CPR,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+    
+    return;
+}
+
+
+
+
 static void copy_doc(char *basedir)
 {
     char command[MAXNAMLEN];
@@ -1111,6 +1249,47 @@ static void copy_test(char *basedir)
     fix_dir(src);
     
     sprintf(dest,"%s/win32/test",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CPDFPR,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+  sprintf(src,"%s/emboss/test/.embossrc",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/test",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CPDFPR,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    return;
+}
+
+
+
+
+static void copy_scripts(char *basedir)
+{
+    char command[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
+
+
+    sprintf(src,"%s/emboss/scripts/qatest.pl",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/scripts",basedir);
     fix_dir(dest);
 
     sprintf(command,"%s %s %s",CPDFPR,src,dest);
@@ -1263,6 +1442,320 @@ static void copy_mysql(char *basedir)
 
 
 
+static void copy_postgresql(char *basedir)
+{
+    char command[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
+
+    
+    sprintf(src,"%s/emboss/win32/postgresql/Release/*.lib",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/postgresql/Debug",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/win32/postgresql/Release/*.lib",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/postgresql/Release",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+    sprintf(src,"%s/emboss/win32/postgresql/include/*.h",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/postgresql/include",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+    /* Copy dlls to top Release/Debug dirs for in-situ testing */
+    
+    sprintf(src,"%s/emboss/win32/postgresql/Release/*.dll",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/Release",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/win32/postgresql/Release/*.dll",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/Debug",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    return;
+}
+
+
+
+
+static void copy_axis2c(char *basedir)
+{
+    char command[MAXNAMLEN];
+    char src[MAXNAMLEN];
+    char dest[MAXNAMLEN];
+
+    
+    sprintf(src,"%s/emboss/win32/axis2c/lib/*.lib",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/axis2c/lib",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+    sprintf(src,"%s/emboss/win32/axis2c/lib/*.dll",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/axis2c/lib",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+    sprintf(src,"%s/emboss/win32/axis2c/include/*.h",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/axis2c/include",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+
+    sprintf(src,"%s/emboss/win32/axis2c/include/platforms/*.h",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/axis2c/include/platforms",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+
+    sprintf(src,"%s/emboss/win32/axis2c/include/platforms/windows/*.h",
+            basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/axis2c/include/platforms/windows",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+
+    sprintf(src,"%s/emboss/win32/axis2c/include/platforms/unix/*.h",
+            basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/axis2c/include/platforms/unix",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+
+    sprintf(src,"%s/emboss/win32/axis2c/modules/addressing/axis*",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/axis2c/modules/addressing",basedir);
+    fix_dir(dest);
+    
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+
+    sprintf(src,"%s/emboss/win32/axis2c/modules/addressing/module.xml",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/axis2c/modules/addressing",basedir);
+    fix_dir(dest);
+    
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+
+    sprintf(src,"%s/emboss/win32/axis2c/modules/logging/axis*",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/axis2c/modules/logging",basedir);
+    fix_dir(dest);
+    
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+
+    sprintf(src,"%s/emboss/win32/axis2c/modules/logging/module.xml",basedir);
+    fix_dir(src);
+
+    sprintf(dest,"%s/win32/axis2c/modules/logging",basedir);
+    fix_dir(dest);
+    
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+    sprintf(src,"%s/emboss/win32/axis2c/axis2.xml",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/axis2c",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+
+
+    /* Copy dlls to top Release/Debug dirs for in-situ testing */
+    
+    sprintf(src,"%s/emboss/win32/axis2c/lib/*.dll",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/Release",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+
+    sprintf(src,"%s/emboss/win32/axis2c/lib/*.dll",basedir);
+    fix_dir(src);
+    
+    sprintf(dest,"%s/win32/DLLs/Debug",basedir);
+    fix_dir(dest);
+
+    sprintf(command,"%s %s %s",CP,src,dest);
+
+    if(system(command))
+    {
+	fprintf(stderr,"Can't execute %s\n",command);
+	exit(-1);
+    }
+    
+    return;
+}
+
+
+
+
 static void copy_redist(char *basedir)
 {
     char command[MAXNAMLEN];
@@ -1388,14 +1881,27 @@ static void zip_up(char *basedir)
 {
 #ifndef WIN32
     char command[MAXNAMLEN];
+    char zipfile[MAXNAMLEN];
+
+    sprintf(zipfile,"%s/emboss.zip",basedir);
+    if(file_exists(zipfile))
+    {
+        sprintf(command,"rm %s/emboss.zip",basedir);
+        if(system(command))
+        {
+            fprintf(stderr,"Can't execute %s\n",command);
+            exit(-1);
+        }
+    }
 
     fprintf(stdout,"Creating %s/emboss.zip\n",basedir);
 
     sprintf(command,"find %s/win32 -name CVS -exec rm -rf {} \\; "
-	    ">/dev/null 2>&1",basedir,basedir);
+	    ">/dev/null 2>&1",basedir);
     system(command);
 
-    sprintf(command,"cd %s; zip -r emboss win32 >/dev/null 2>&1",basedir);
+    sprintf(command,"cd %s; zip -r emboss win32 win32/test/.embossrc >/dev/null 2>&1",
+            basedir);
     if(system(command))
     {
 	fprintf(stderr,"Can't execute %s\n",command);
@@ -1408,6 +1914,7 @@ static void zip_up(char *basedir)
 	fprintf(stderr,"Can't execute %s\n",command);
 	exit(-1);
     }
+
 #else
     (void) basedir;
 #endif
@@ -1439,6 +1946,7 @@ static void create_directories(char *basedir)
 	"win32/doc",
 	"win32/jemboss",
 	"win32/test",
+	"win32/scripts",
 	"win32/apps",
 	"win32/acd",
 	"win32/DLLs",
@@ -1481,6 +1989,7 @@ static void create_directories(char *basedir)
 	"win32/DLLs/Debug",
 	"win32/DLLs/Release",
 	"win32/DLLs/_UpgradeReport_Files",
+	"win32/index",
 	"win32/apps/debug",
 	"win32/apps/release",
 	"win32/apps/emboss",
@@ -1490,6 +1999,20 @@ static void create_directories(char *basedir)
  	"win32/mysql/include/mysql",
 	"win32/mysql/Debug",
 	"win32/mysql/Release",
+        "win32/postgresql",
+	"win32/postgresql/include",
+	"win32/postgresql/Debug",
+	"win32/postgresql/Release",
+        "win32/axis2c",
+        "win32/axis2c/include",
+        "win32/axis2c/include/platforms",
+        "win32/axis2c/include/platforms/unix",
+        "win32/axis2c/include/platforms/windows",
+        "win32/axis2c/lib",
+        "win32/axis2c/logs",
+        "win32/axis2c/modules",
+        "win32/axis2c/modules/addressing",
+        "win32/axis2c/modules/logging",
 	NULL
     };
     int i;
@@ -2411,6 +2934,7 @@ static void write_projects(char *basedir, char **prognames, char **uids,
 	}
     }
 
+    
     for(i=0;i<napps;++i)
     {
 	sprintf(filename,"%s/win32/apps/emboss/%s/%s.vcxproj",basedir,

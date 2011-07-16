@@ -1,8 +1,8 @@
 application: entrailsbook [
   documentation: "Reports the internal structures in EMBOSS book format"
   groups: "Utils:Misc"
-  relations: "/edam/topic/0000220 File handling"
-  relations: "/edam/operation/0000335 File reformatting"
+    relations: "EDAM:0000220 topic File handling"
+    relations: "EDAM:0000335 operation File reformatting"
 ]
 
 section: required [
@@ -14,15 +14,18 @@ section: required [
     standard: "Y"
     default: "all"
     minimum: "1"
-    value: "all: All tables;
-           inseq: Input sequence formats;
-           outseq: Output sequence formats;
-           infeat: Input feature formats;
-           outfeat: Output feature formats;
-           report: Output report formats;
-           align: Output alignment formats"
+    values: "all: All tables;
+            inseq: Input sequence formats;
+            outseq: Output sequence formats;
+            infeat: Input feature formats;
+            outfeat: Output feature formats;
+            report: Output report formats;
+            align: Output alignment formats;
+            assembly: Assembly formats;
+            resource: Data resource formats;
+            taxonomy: Taxonomy formats"
     information: "Tables to be written"
-    relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
 endsection: required
@@ -35,7 +38,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "docbook"
-    relations: "/edam/data/0000969 Free text"                                      
+    relations: "EDAM:0000969 data Text"
   ]
 
 endsection: output

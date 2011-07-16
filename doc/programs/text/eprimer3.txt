@@ -24,9 +24,9 @@ Description
    Primer3 picks primers for PCR reactions, considering as criteria:
 
      * oligonucleotide melting temperature, size, GC content, and
-       primer-dimer possibilities,
-     * PCR product size,
-     * positional constraints within the source sequence, and
+       primer-dimer possibilities
+     * PCR product size
+     * positional constraints within the source sequence
      * miscellaneous other constraints.
 
    All of these criteria are user-specifiable as constraints.
@@ -53,7 +53,7 @@ Description
    database searches using blast, fasta, or other similarity searching
    program to screen for vector contaminants and possible repeats. Repbase
    (J. Jurka, A.F.A. Smit, C. Pethiyagoda, and others, 1995-1996,
-   ftp://ftp.ncbi.nih.gov/repository/repbase) is an excellent source of
+   ftp://ncbi.nlm.nih.gov/repository/repbase) is an excellent source of
    repeat sequences and pointers to the literature. eprimer3 now allows
    you to screen candidate oligos against a Mispriming Library (or a
    Mishyb Library in the case of internal oligos).
@@ -103,7 +103,7 @@ Picks PCR primers and hybridization oligos
 Command line arguments
 
 Picks PCR primers and hybridization oligos
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     The sequence from which to choose primers.
@@ -688,7 +688,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   eprimer3 reads a normal nucleic acid sequence USA.
+   eprimer3 reads one or more nucleotide sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -955,6 +972,7 @@ Known bugs
 See also
 
                     Program name                         Description
+                    eprimer32    Picks PCR primers and hybridization oligos
    primersearch     Search DNA sequences for matches with primer pairs
                     stssearch    Search a DNA database for matches with a set of STS primers
 

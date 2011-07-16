@@ -69,7 +69,7 @@ AjPStr ajFmtVPrintS (AjPStr *pthis, const char *fmt, va_list ap) ;
 AjPStr ajFmtPrintAppS (AjPStr *pthis, const char *fmt, ...) ;
 ajint  ajFmtVfmtCL (char* buf, ajint size, const char* fmt,
 		    va_list ap);
-ajint  ajFmtVfmtStrCL (char** buf, ajint pos, ajuint *size,
+ajint  ajFmtVfmtStrCL (char** buf, ajint pos, size_t *size,
 		       const char* fmt, va_list ap);
 
 ajint  ajFmtScanS (const AjPStr thys, const char* fmt, ...);

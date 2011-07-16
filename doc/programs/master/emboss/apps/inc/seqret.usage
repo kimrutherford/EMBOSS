@@ -1,4 +1,4 @@
-<b>Here is a sample session with seqret</b>
+Here is a sample session with <b>seqret</b>
 <p>
 Extract an entry from a database and write it to a file:  
 <p>
@@ -23,7 +23,7 @@ Read all entries in the database 'tembl' that start with 'ab' and write them to 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>seqret 'tembl:ab*'  aball.seq </b>
+% <b>seqret "tembl:ab*"  aball.seq </b>
 Reads and writes (returns) sequences
 
 </pre></td></tr></table><p>

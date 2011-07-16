@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     ajint i;
     ajuint st;
     ajuint en;
-    AjPStr str;
+    AjPStr str = NULL;
     AjPStr name   = NULL;		/* new name of the sequence */
     AjPStr value  = NULL;  /* string value of start or end position */
     AjPSeq newseq = NULL;

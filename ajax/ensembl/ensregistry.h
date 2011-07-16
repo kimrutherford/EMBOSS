@@ -1,44 +1,35 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensregistry_h
-#define ensregistry_h
+#ifndef ENSREGISTRY_H
+#define ENSREGISTRY_H
 
-#include "ajax.h"
-#include "ensdatabaseadaptor.h"
-#include "ensanalysis.h"
-#include "ensassemblyexception.h"
-#include "ensassemblymapper.h"
-#include "enscoordsystem.h"
-#include "ensdatabaseentry.h"
-#include "ensdensity.h"
-#include "ensditag.h"
-#include "ensexon.h"
-#include "ensexternaldatabase.h"
-#include "ensgene.h"
-#include "ensgvdata.h"
-#include "ensgvsample.h"
-#include "ensgvindividual.h"
-#include "ensgvpopulation.h"
-#include "enskaryotype.h"
-#include "ensmarker.h"
-#include "ensmetacoordinate.h"
-#include "ensmetainformation.h"
-#include "ensmiscellaneous.h"
-#include "ensprediction.h"
-#include "ensqc.h"
-#include "ensrepeat.h"
-#include "enssequence.h"
-#include "ensseqregion.h"
-#include "ensslice.h"
-#include "enstranscript.h"
-#include "enstranslation.h"
-#include "ensvariation.h"
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
+
+#include "ensembl.h"
+
+AJ_BEGIN_DECLS
 
 
 
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
 
 /*
 ** Prototype definitions
@@ -46,25 +37,54 @@ extern "C"
 
 /* Ensembl Registry */
 
-void ensRegistryInit(void);
-
 void ensRegistryClear(void);
 
 void ensRegistryExit(void);
 
+void ensRegistryInit(void);
+
+AjBool ensRegistryLoadDatabaseconnection(EnsPDatabaseconnection dbc);
+
+AjBool ensRegistryLoadServername(AjPStr servername);
+
+AjBool ensRegistryRetrieveAllSpecies(AjPList species);
+
 /* Ensembl Registry Alias */
 
-AjBool ensRegistryAddAlias(const AjPStr species, const AjPStr alias);
+AjBool ensRegistryAliasAdd(const AjPStr species, const AjPStr alias);
 
-AjBool ensRegistryRemoveAlias(const AjPStr alias);
+AjBool ensRegistryAliasClear(void);
 
-AjPStr ensRegistryGetSpecies(const AjPStr alias);
+AjBool ensRegistryAliasFetchAllbySpecies(const AjPStr species,
+                                         AjPList aliases);
 
-AjBool ensRegistryLoadAliasesFromFile(const AjPStr filename);
+AjBool ensRegistryAliasLoadFile(const AjPStr filename);
 
-AjBool ensRegistryTraceAliases(ajuint level);
+AjBool ensRegistryAliasRemove(const AjPStr alias);
 
-AjBool ensRegistryTraceEntries(ajuint level);
+AjBool ensRegistryAliasResolve(const AjPStr alias, AjPStr* Pspecies);
+
+AjBool ensRegistryAliasTrace(ajuint level);
+
+/* Ensembl Registry Entry */
+
+AjBool ensRegistryEntryClear(void);
+
+AjBool ensRegistryEntryTrace(ajuint level);
+
+/* Ensembl Registry Identifier */
+
+AjBool ensRegistryIdentifierClear(void);
+
+AjBool ensRegistryIdentifierLoadFile(const AjPStr filename);
+
+AjBool ensRegistryIdentifierResolve(const AjPStr identifier,
+                                    AjPStr* Pspecies,
+                                    EnsEDatabaseadaptorGroup* Pdbag);
+
+/* Ensembl Registry Source */
+
+AjBool ensRegistrySourceTrace(ajuint level);
 
 /* Ensembl Registry Database Adaptor */
 
@@ -80,7 +100,7 @@ EnsPDatabaseadaptor ensRegistryNewDatabaseadaptor(
     EnsPDatabaseconnection dbc,
     AjPStr database,
     AjPStr alias,
-    EnsEDatabaseadaptorGroup group,
+    EnsEDatabaseadaptorGroup dbag,
     AjBool multi,
     ajuint identifier);
 
@@ -89,25 +109,17 @@ EnsPDatabaseadaptor ensRegistryNewReferenceadaptor(
     EnsPDatabaseconnection dbc,
     AjPStr database,
     AjPStr alias,
-    EnsEDatabaseadaptorGroup group,
+    EnsEDatabaseadaptorGroup dbag,
     AjBool multi,
     ajuint identifier);
 
-AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor *Pdba);
+AjBool ensRegistryRemoveDatabaseadaptor(EnsPDatabaseadaptor* Pdba);
 
-AjBool ensRegistryGetAllDatabaseadaptors(EnsEDatabaseadaptorGroup group,
+AjBool ensRegistryGetAllDatabaseadaptors(EnsEDatabaseadaptorGroup dbag,
                                          const AjPStr alias,
                                          AjPList dbas);
 
 AjPStr ensRegistryGetStableidentifierprefix(EnsPDatabaseadaptor dba);
-
-AjBool ensRegistryLoadFromServer(EnsPDatabaseconnection dbc);
-
-AjBool ensRegistryLoadIdentifiers(void);
-
-AjBool ensRegistryGetSpeciesGroup(const AjPStr identifier,
-                                  AjPStr *Pspecies,
-                                  EnsEDatabaseadaptorGroup *Pgroup);
 
 /*
 ** End of prototype definitions
@@ -116,8 +128,6 @@ AjBool ensRegistryGetSpeciesGroup(const AjPStr identifier,
 
 
 
-#endif /* ensregistry_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSREGISTRY_H */

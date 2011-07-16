@@ -143,7 +143,7 @@ __deprecated void ajFileDataNewC(const char *s, AjPFile *f)
 
 
 
-/* @func ajDatafileNewInNameS ********************************************
+/* @func ajDatafileNewInNameS *************************************************
 **
 ** Returns an allocated data file pointer (AjPFile) if file exists
 ** a) in .   b) in ./.embossdata c) ~/ d) ~/.embossdata e) $DATA

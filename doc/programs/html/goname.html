@@ -1,0 +1,763 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: goname
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+goname
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Find GO ontology terms by name
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>goname</b> searches the names and synonyms of gene ontology terms and
+returns matching terms.  The input is read from the installed GO
+database. The ontology term output can be written to screen, to file,
+or passed to another program. A wide range of standard ontology term
+formats may be specified for input and output.
+
+<p>
+Optionally the search can be restricted to specified GO namespaces.
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>goname</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>goname glycoprotein </b>
+Find GO ontology terms by name
+Obo output file [goname.obo]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Find GO ontology terms by name
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-query]             string     Name(s) to search for in ontology (Any
+                                  string)
+  [-outfile]           outobo     [*.goname] Output ontology term file name
+
+   Additional (Optional) qualifiers:
+   -namespace          menu       [*] By default all terms are returned.
+                                  Searches can be limited to one or a few
+                                  namespaces. (Values: biological_process
+                                  (Biological process); cellular_component
+                                  (Cellular component); molecular_function
+                                  (Molecular function))
+
+   Advanced (Unprompted) qualifiers:
+   -subclasses         boolean    [N] Extend the query matches to include all
+                                  terms which are specialisations (GO
+                                  sub-classes) of the matched type.
+   -obsolete           boolean    [N] The default behaviour is to not use or
+                                  return obsolete terms. This option if set
+                                  will include all terms.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Ontology term output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-query]<br>(Parameter 1)</td>
+<td>string</td>
+<td>Name(s) to search for in ontology</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>outobo</td>
+<td>Output ontology term file name</td>
+<td>OBO ontology term(s)</td>
+<td><i>&lt;*&gt;</i>.goname</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-namespace</td>
+<td>list</td>
+<td>By default all terms are returned. Searches can be limited to one or a few namespaces.</td>
+<td><table><tr><td>biological_process</td> <td><i>(Biological process)</i></td></tr><tr><td>cellular_component</td> <td><i>(Cellular component)</i></td></tr><tr><td>molecular_function</td> <td><i>(Molecular function)</i></td></tr></table></td>
+<td>*</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-subclasses</td>
+<td>boolean</td>
+<td>Extend the query matches to include all terms which are specialisations (GO sub-classes) of the matched type.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-obsolete</td>
+<td>boolean</td>
+<td>The default behaviour is to not use or return obsolete terms. This option if set will include all terms.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outobo qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -oformat2<br>-oformat_outfile</td>
+<td>string</td>
+<td>Ontology term output format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>goname</b> queries the gene ontology.
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+The output is a standard EMBOSS ontology term file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-oformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: obo,
+brief, list, html, xml, json, excel.
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/OntologyFormats.html">
+http://emboss.sf.net/docs/themes/OntologyFormats.html</A>
+for further information on ontology formats.
+
+<p>
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: goname.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: GO:0003980
+name: UDP-glucose:glycoprotein glucosyltransferase activity
+namespace: molecular_function
+def: Catalysis of the addition of UDP-glucose on to asparagine-linked (N-linked) oligosaccharides of the form Man7-9GlcNAc2 on incorrectly folded glycoproteins.
+synonym: "UGGT activity" EXACT []
+xref: EC:2.4.1.-
+xref: Reactome:12706 "UDP-glucose:glycoprotein glucosyltransferase activity"
+is_a: GO:0035251 ! UDP-glucosyltransferase activity
+
+[Term]
+id: GO:0005201
+name: extracellular matrix structural constituent
+namespace: molecular_function
+def: The action of a molecule that contributes to the structural integrity of the extracellular matrix.
+subset: gosubset_prok
+synonym: "extracellular matrix glycoprotein" NARROW []
+is_a: GO:0005198 ! structural molecule activity
+
+[Term]
+id: GO:0009306
+name: protein secretion
+namespace: biological_process
+def: The controlled release of proteins from a cell or group of cells.
+alt_id: GO:0045166
+alt_id: GO:0045731
+subset: gosubset_prok
+synonym: "glycoprotein secretion" NARROW []
+synonym: "protein secretion during cell fate commitment" NARROW []
+synonym: "protein secretion resulting in cell fate commitment" NARROW []
+is_a: GO:0015031 ! protein transport
+is_a: GO:0032940 ! secretion by cell
+
+[Term]
+id: GO:0017060
+name: 3-galactosyl-N-acetylglucosaminide 4-alpha-L-fucosyltransferase activity
+namespace: molecular_function
+def: Catalysis of the reaction: GDP-L-fucose + beta-D-galactosyl-(1,3)-N-acetyl-D-glucosaminyl-R = GDP + beta-D-galactosyl-(1,3)-[alpha-L-fucosyl-(1,4)]-N-acetyl-D-glucosaminyl-R.
+synonym: "(Le(a))-dependent (alpha-3/4)-fucosyltransferase activity" NARROW [EC:2.4.1.65]
+synonym: "(Lea)-dependent (alpha-3/4)-fucosyltransferase activity" EXACT [EC:2.4.1.65]
+synonym: "3-alpha-galactosyl-N-acetylglucosaminide 4-alpha-L-fucosyltransferase activity" EXACT [EC:2.4.1.65]
+synonym: "alpha(1,3/1,4) fucosyltransferase III" RELATED [EC:2.4.1.65]
+synonym: "alpha(1,4)-L-fucosyltransferase activity" EXACT []
+synonym: "alpha-(1,3/1,4) fucosyltransferase III activity" EXACT [EC:2.4.1.65]
+synonym: "alpha-(1-&gt;4)-L-fucosyltransferase activity" EXACT [EC:2.4.1.65]
+synonym: "alpha-4-L-fucosyltransferase activity" EXACT [EC:2.4.1.65]
+synonym: "beta-acetylglucosaminylsaccharide fucosyltransferase activity" EXACT [EC:2.4.1.65]
+synonym: "blood group Lewis alpha-4-fucosyltransferase" NARROW [EC:2.4.1.65]
+synonym: "blood group Lewis alpha-4-fucosyltransferase activity" NARROW [EC:2.4.1.65]
+synonym: "blood-group substance Le(a)-dependent fucosyltransferase activity" NARROW [EC:2.4.1.65]
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+synonym: "GNTI activity" EXACT [EC:2.4.1.101]
+synonym: "N-acetylglucosaminyltransferase I activity" EXACT [EC:2.4.1.101]
+synonym: "N-glycosyl-oligosaccharide-glycoprotein N-acetylglucosaminyltransferase I activity" EXACT [EC:2.4.1.101]
+synonym: "UDP-N-acetyl-D-glucosamine:3-(alpha-D-mannosyl)-beta-D-mannosyl-glycoprotein 2-beta-N-acetyl-D-glucosaminyltransferase activity" EXACT [EC:2.4.1.101]
+synonym: "UDP-N-acetylglucosaminyl:alpha-1,3-D-mannoside-beta-1,2-N-acetylglucosaminyltransferase I activity" EXACT [EC:2.4.1.101]
+synonym: "UDP-N-acetylglucosaminyl:alpha-3-D-mannoside beta-1,2-N-acetylglucosaminyltransferase I activity" EXACT [EC:2.4.1.101]
+synonym: "uridine diphosphoacetylglucosamine-alpha-1,3-mannosylglycoprotein beta-1,2-N-acetylglucosaminyltransferase activity" EXACT [EC:2.4.1.101]
+xref: EC:2.4.1.101
+xref: KEGG:R05983
+xref: MetaCyc:2.4.1.101-RXN
+xref: Reactome:11577 "alpha-1,3-mannosylglycoprotein 2-beta-N-acetylglucosaminyltransferase activity"
+xref: RHEA:11459
+is_a: GO:0008375 ! acetylglucosaminyltransferase activity
+
+[Term]
+id: GO:0047253
+name: alpha-1,6-mannosyl-glycoprotein 4-beta-N-acetylglucosaminyltransferase activity
+namespace: molecular_function
+def: Catalysis of the reaction: N-acetyl-beta-D-glucosaminyl-1,6-beta-D-(N-acetyl-B-glucosaminyl-1,2)-beta-D-mannosyl-R + UDP-N-acetyl-D-glucosamine = N-acetyl-beta-D-glucosaminyl-1,6-beta-D-(N-acetyl-D-glucosaminyl-1,2-beta)-(N-acetyl-D-glucosaminyl-1,4-beta)-D-mannosyl-R + UDP.
+synonym: "mannosyl-glycoprotein beta-1,4-N-acetylglucosaminyl-transferase activity" EXACT []
+synonym: "mannosyl-glycoprotein beta-1,4-N-acetylglucosaminyltransferase activity" EXACT [EC:2.4.1.201]
+synonym: "N-acetylglucosaminyltransferase VI activity" RELATED [EC:2.4.1.201]
+synonym: "N-glycosyl-oligosaccharide-glycoprotein N-acetylglucosaminyltransferase VI activity" EXACT [EC:2.4.1.201]
+synonym: "UDP-N-acetyl-D-glucosamine:2,6-bis(N-acetyl-beta-D-glucosaminyl)-alpha-D-mannosyl-glycoprotein 4-beta-N-acetyl-D-glucosaminyltransferase activity" EXACT [EC:2.4.1.201]
+synonym: "uridine diphosphoacetylglucosamine-glycopeptide beta-1-&gt;4-acetylglucosaminyltransferase VI" RELATED [EC:2.4.1.201]
+synonym: "uridine diphosphoacetylglucosamine-glycopeptide beta-1-&gt;4-acetylglucosaminyltransferase VI activity" EXACT [EC:2.4.1.201]
+xref: EC:2.4.1.201
+xref: MetaCyc:2.4.1.201-RXN
+is_a: GO:0008375 ! acetylglucosaminyltransferase activity
+
+[Term]
+id: GO:0047396
+name: glycosylphosphatidylinositol diacylglycerol-lyase activity
+namespace: molecular_function
+def: Catalysis of the reaction: 6-(alpha-D-glucosaminyl)-1-phosphatidyl-1D-myo-inositol = 1,2-diacyl-sn-glycerol + 6-(alpha-D-glucosaminyl)-1D-myo-inositol 1,2-cyclic phosphate.
+subset: gosubset_prok
+synonym: "(glycosyl)phosphatidylinositol-specific phospholipase C activity" EXACT [EC:4.6.1.14]
+synonym: "6-(alpha-D-glucosaminyl)-1-phosphatidyl-1D-myo-inositol diacyl-sn-glycerol-lyase [6-(alpha-D-glucosaminyl)-1D-myo-inositol 1,2-cyclic phosphate-forming]" RELATED [EC:4.6.1.14]
+synonym: "6-(alpha-D-glucosaminyl)-1-phosphatidyl-1D-myo-inositol diacylglycerol-lyase (1,2-cyclic-phosphate-forming) activity" EXACT [EC:4.6.1.14]
+synonym: "glycosyl inositol phospholipid anchor-hydrolyzing enzyme activity" EXACT [EC:4.6.1.14]
+synonym: "glycosylphosphatidylinositol-phospholipase C activity" NARROW [EC:4.6.1.14]
+synonym: "glycosylphosphatidylinositol-specific phospholipase C activity" EXACT [EC:4.6.1.14]
+synonym: "GPI-PLC activity" EXACT [EC:4.6.1.14]
+synonym: "GPI-specific phospholipase C activity" EXACT [EC:4.6.1.14]
+synonym: "variant-surface-glycoprotein phospholipase C activity" EXACT []
+synonym: "VSG-lipase activity" EXACT [EC:4.6.1.14]
+xref: EC:4.6.1.14
+xref: MetaCyc:3.1.4.47-RXN
+is_a: GO:0009975 ! cyclase activity
+is_a: GO:0016849 ! phosphorus-oxygen lyase activity
+
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+The gene Ontology is included in EMBOSS as local
+database <b>go</b>.
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="edamdef.html">edamdef</a></td>
+<td>Find EDAM ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="edamhasinput.html">edamhasinput</a></td>
+<td>Find EDAM ontology terms by has_input relation</td>
+</tr>
+
+<tr>
+<td><a href="edamhasoutput.html">edamhasoutput</a></td>
+<td>Find EDAM ontology terms by has_output relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisformat.html">edamisformat</a></td>
+<td>Find EDAM ontology terms by is_format_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisid.html">edamisid</a></td>
+<td>Find EDAM ontology terms by is_identifier_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamname.html">edamname</a></td>
+<td>Find EDAM ontology terms by name</td>
+</tr>
+
+<tr>
+<td><a href="godef.html">godef</a></td>
+<td>Find GO ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="ontoget.html">ontoget</a></td>
+<td>Get ontology term(s)</td>
+</tr>
+
+<tr>
+<td><a href="ontogetcommon.html">ontogetcommon</a></td>
+<td>Get common ancestor for terms</td>
+</tr>
+
+<tr>
+<td><a href="ontogetdown.html">ontogetdown</a></td>
+<td>Get ontology term(s) by parent id</td>
+</tr>
+
+<tr>
+<td><a href="ontogetobsolete.html">ontogetobsolete</a></td>
+<td>Get ontology ontology terms</td>
+</tr>
+
+<tr>
+<td><a href="ontogetroot.html">ontogetroot</a></td>
+<td>Get ontology root terms by child identifier</td>
+</tr>
+
+<tr>
+<td><a href="ontogetsibs.html">ontogetsibs</a></td>
+<td>Get ontology term(s) by id with common parent</td>
+</tr>
+
+<tr>
+<td><a href="ontogetup.html">ontogetup</a></td>
+<td>Get ontology term(s) by id of child</td>
+</tr>
+
+<tr>
+<td><a href="ontoisobsolete.html">ontoisobsolete</a></td>
+<td>Report whether an ontology term id is obsolete</td>
+</tr>
+
+<tr>
+<td><a href="ontotext.html">ontotext</a></td>
+<td>Get ontology term(s) original full text</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

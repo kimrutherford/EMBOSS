@@ -32,7 +32,7 @@ Usage
 Command line arguments
 
 Calculate the twisting in a B-DNA sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -87,7 +87,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   Nucleic acid sequence USA.
+   btwisted reads a single nucleotide sequence.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -329,6 +346,7 @@ See also
                     compseq      Calculate the composition of unique words in sequences
                     dan          Calculates nucleic acid melting temperature
                     density      Draw a nucleic acid density plot
+                    einverted    Finds inverted repeats in nucleotide sequences
                     freak        Generate residue/base frequency table or plot
                     isochore     Plots isochores in DNA sequences
                     sirna        Finds siRNA duplexes in mRNA

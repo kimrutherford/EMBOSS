@@ -1,0 +1,16 @@
+##gff-version 3
+#
+#
+#Multiple levels of nesting are allowed. If this transcript is part of
+#an operon, then we can add another level of nesting:
+#
+ctg123	.	operon	1300	15000	.	+	.	ID=operon001;Name=superOperon
+ctg123	.	mRNA	1300	9000	.	+	.	ID=mrna0001;Parent=operon001;Name=sonichedgehog
+ctg123	.	exon	1300	1500	.	+	.	Parent=mrna0001
+ctg123	.	exon	1050	1500	.	+	.	Parent=mrna0001
+ctg123	.	exon	3000	3902	.	+	.	Parent=mrna0001
+ctg123	.	exon	5000	5500	.	+	.	Parent=mrna0001
+ctg123	.	exon	7000	9000	.	+	.	Parent=mrna0001
+ctg123	.	mRNA	10000	15000	.	+	.	ID=mrna0002;Parent=operon001;Name=subsonicsquirrel
+ctg123	.	exon	10000	12000	.	+	.	Parent=mrna0002
+ctg123	.	exon	14000	15000	.	+	.	Parent=mrna0002

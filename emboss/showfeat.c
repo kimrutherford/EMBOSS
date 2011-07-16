@@ -265,7 +265,9 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 				 AjBool stricttags, const AjPRange annotation)
 {
     AjIList    iter = NULL ;
+    AjIList    itersub = NULL ;
     AjPFeature gf   = NULL ;
+    AjPFeature gfsub   = NULL ;
     void **array   = NULL ;
     AjPFeature *fullfeats   = NULL ;
     ajuint *featindex = NULL;
@@ -274,7 +276,6 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
     AjPList fullfeatlist = NULL;
     AjPStr lineout;
     char strandout   = '\0';
-    AjBool first     = ajTrue;
     AjPStr sourceout = NULL;
     AjPStr typeout   = NULL;
     AjPStr tagstmp   = NULL;
@@ -288,9 +289,6 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 
     AjBool gotoutput = ajFalse;		 /* have a line to output */
 
-    AjBool want_multiple_line = ajFalse; /* true if want a join()s line */
-    AjBool in_multiple_line = ajFalse;   /* true if this is a join()s line */
-    AjBool child;	                 /* true if multiple's child */
     AjPStrTok tokens = NULL;
     AjPStr key = NULL;
     AjBool val = ajFalse;
@@ -350,9 +348,7 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
             for(i=0;i<jsize;i++) 
             {
                 j = featindex[i];
-                ajListPushAppend(fullfeatlist, fullfeats[j++]);
-                while(j < isize && ajFeatIsChild(fullfeats[j]))
-                      ajListPushAppend(fullfeatlist, fullfeats[j++]);
+                ajListPushAppend(fullfeatlist, fullfeats[j]);
             }
             iter = ajListIterNewread(fullfeatlist);
         }
@@ -361,40 +357,6 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 	while(!ajListIterDone(iter))
 	{
 	    gf = ajListIterGet(iter);
-            /* see if its a child of a multiple join */
-	    child = ajFalse;
-            if(ajFeatIsMultiple(gf))
-	    {
-                if(ajFeatIsChild(gf))
-                {
-                    child = ajTrue;
-                }
-		else
-		{
-		    /* parent */
-                    want_multiple_line = ajTrue;
-                    in_multiple_line   = ajFalse;
-                }
-	    }
-	    else
-	    	want_multiple_line = ajFalse;
-
-	    /* check that the feature is within the range we wish to display */
-	    if(beg+1 > (ajint)ajFeatGetEnd(gf) || 
-	       end+1 < (ajint)ajFeatGetStart(gf))
-		continue;
-
-            /* ignore remote IDs */
-            if(!ajFeatIsLocal(gf))
-                continue;
-
-	    /* check that we want to output this sense */
-	    if(!forward && ajFeatGetStrand(gf) == '+')
-		continue;
-	    if(!reverse && ajFeatGetStrand(gf) == '-')
-		continue;
-	    if(!unknown && ajFeatGetStrand(gf) == '\0')
-		continue;
 
             ajStrSetClear(&tagstmp);
 	    /* check that we want to output this match of source, type */
@@ -425,62 +387,150 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
                     continue;
             }
             
-            /*
-            ** Starting a new line?
-            ** Don't start a new line if:
-            ** collapse and source, type and sense are the same as the last gf
-            **  or
-            **  joinfeat and child and we are in an existing join multiple line
-            */
-	    if((!collapse ||
-		first ||
-		ajFeatGetStrand(gf) != strandout ||
-		(source && ajStrCmpCaseS(ajFeatGetSource(gf), sourceout)) ||
-		ajStrCmpCaseS(ajFeatGetType(gf), typeout))
-	       &&
-	       (!joinfeat ||
-		! child ||
-		!in_multiple_line))
-	    {
-		if(gotoutput)
-		    showfeat_FeatOut(outfile, lineout, strandout, sourceout,
-				     posout, typeout, tagsout, width, strand,
-				     source, type, tags, position);
+/* check that the feature is within the range we wish to display */
+	    if(beg+1 > (ajint)ajFeatGetEnd(gf) || 
+	       end+1 < (ajint)ajFeatGetStart(gf))
+		continue;
 
-		/* reset the strings for the new line */
-		ajStrSetClear(&lineout);
-		ajStrAppendCountK(&lineout, ' ', width);
-		ajStrAssignS(&sourceout, ajFeatGetSource(gf));
-		ajStrAssignS(&typeout, ajFeatGetType(gf));
-		strandout = ajFeatGetStrand(gf);
-		ajStrSetClear(&tagsout);
-		ajStrSetClear(&posout);
+            if(ajListGetLength(gf->Subfeatures))
+            {
+                if(joinfeat)
+                {
+                    if(gotoutput)
+                    {
+                        showfeat_FeatOut(outfile,
+                                         lineout, strandout, sourceout,
+                                         posout, typeout, tagsout,
+                                         width, strand,
+                                         source, type, tags, position);
+                        gotoutput = ajFalse;
+                    }
 
-		/* something to output */
-		gotoutput = ajTrue;
+                    ajStrSetClear(&lineout);
+                    ajStrAppendCountK(&lineout, ' ', width);
+                    ajStrAssignS(&sourceout, ajFeatGetSource(gf));
+                    ajStrAssignS(&typeout, ajFeatGetType(gf));
+                    strandout = ajFeatGetStrand(gf);
+                    ajStrSetClear(&tagsout);
+                    ajStrSetClear(&posout);
+                }
 
-		/* in a multiple line now? */
-		if(want_multiple_line)
-		{
-		    in_multiple_line = ajTrue;
-		    want_multiple_line = ajFalse;
-		}
+                itersub = ajListIterNewread(gf->Subfeatures);
+                while(!ajListIterDone(itersub))
+                {
+                    gfsub = ajListIterGet(itersub);
+                    /* check that we want to output this sense */
+                    if(!forward && ajFeatGetStrand(gfsub) == '+')
+                        continue;
+                    if(!reverse && ajFeatGetStrand(gfsub) == '-')
+                        continue;
+                    if(!unknown && ajFeatGetStrand(gfsub) == '\0')
+                        continue;
+                    /* ignore remote IDs */
+                    if(!ajFeatIsLocal(gfsub))
+                        continue;
 
-	    }
+                    if(!joinfeat)
+                    {
+                        if(gotoutput)
+                            showfeat_FeatOut(outfile,
+                                             lineout, strandout, sourceout,
+                                             posout, typeout, tagsout,
+                                             width, strand,
+                                             source, type, tags, position);
 
-	    /* append current tags to tagsout */
-	    ajStrAppendS(&tagsout, tagstmp);
-	    ajStrSetClear(&tagstmp);
+                        /* reset the strings for the new line */
+                        ajStrSetClear(&lineout);
+                        ajStrAppendCountK(&lineout, ' ', width);
+                        ajStrAssignS(&sourceout, ajFeatGetSource(gfsub));
+                        ajStrAssignS(&typeout, ajFeatGetType(gfsub));
+                        strandout = ajFeatGetStrand(gfsub);
+                        ajStrSetClear(&tagsout);
+                        ajStrSetClear(&posout);
 
-	    /* add positions to posout */
-	    showfeat_AddPos(&posout, ajFeatGetStart(gf), ajFeatGetEnd(gf));
+                    }
 
-	    /* write the feature on the line */
-	    showfeat_WriteFeat(lineout, strandout,
-			       ajFeatGetStart(gf), ajFeatGetEnd(gf), width,
-			       beg, end);
+                    /* something to output */
+                    gotoutput = ajTrue;
 
-	    first = ajFalse;
+                    /* append current tags to tagsout */
+                    ajStrAppendS(&tagsout, tagstmp);
+                    ajStrSetClear(&tagstmp);
+
+                    /* add positions to posout */
+                    showfeat_AddPos(&posout,
+                                    ajFeatGetStart(gfsub),
+                                    ajFeatGetEnd(gfsub));
+
+                    /* write the feature on the line */
+                    showfeat_WriteFeat(lineout, strandout,
+                                       ajFeatGetStart(gfsub),
+                                       ajFeatGetEnd(gfsub),
+                                       width, beg, end);
+                }
+
+                ajListIterDel(&itersub);
+
+                if(gotoutput)
+                {
+                    showfeat_FeatOut(outfile,
+                                     lineout, strandout, sourceout,
+                                     posout, typeout, tagsout,
+                                     width, strand,
+                                     source, type, tags, position);
+                    gotoutput = ajFalse;
+                }
+            }
+            else
+            {
+                /* check that we want to output this sense */
+                if(!forward && ajFeatGetStrand(gf) == '+')
+                    continue;
+                if(!reverse && ajFeatGetStrand(gf) == '-')
+                    continue;
+                if(!unknown && ajFeatGetStrand(gf) == '\0')
+                    continue;
+
+                /* ignore remote IDs */
+                if(!ajFeatIsLocal(gf))
+                    continue;
+
+		if(!collapse)
+                {
+                    if(gotoutput)
+                        showfeat_FeatOut(outfile,
+                                         lineout, strandout, sourceout,
+                                         posout, typeout, tagsout,
+                                         width, strand,
+                                         source, type, tags, position);
+
+                    /* reset the strings for the new line */
+                    ajStrSetClear(&lineout);
+                    ajStrAppendCountK(&lineout, ' ', width);
+                    ajStrAssignS(&sourceout, ajFeatGetSource(gf));
+                    ajStrAssignS(&typeout, ajFeatGetType(gf));
+                    strandout = ajFeatGetStrand(gf);
+                    ajStrSetClear(&tagsout);
+                    ajStrSetClear(&posout);
+
+                    /* something to output */
+                    gotoutput = ajTrue;
+                }
+
+                /* append current tags to tagsout */
+                ajStrAppendS(&tagsout, tagstmp);
+                ajStrSetClear(&tagstmp);
+
+                /* add positions to posout */
+                showfeat_AddPos(&posout, ajFeatGetStart(gf),
+                                ajFeatGetEnd(gf));
+
+                /* write the feature on the line */
+                showfeat_WriteFeat(lineout, strandout,
+                                   ajFeatGetStart(gf),
+                                   ajFeatGetEnd(gf),
+                                   width, beg, end);
+            }
 	}
 
 	/* print out any last line */
@@ -488,8 +538,6 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 	    showfeat_FeatOut(outfile, lineout, strandout, sourceout, posout,
 			     typeout, tagsout, width, strand, source, type,
 			     tags, position);
-
-
 
         /* 
         ** Now do the annotation range object, if we have one

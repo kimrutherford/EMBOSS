@@ -1,20 +1,26 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensqcalignment_h
-#define ensqcalignment_h
+#ifndef ENSQCALIGNMENT_H
+#define ENSQCALIGNMENT_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ensanalysis.h"
 #include "ensqcsequence.h"
 
+AJ_BEGIN_DECLS
 
 
 
-/* EnsPQcalignmentadaptor *****************************************************
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+/* @const EnsPQcalignmentadaptor **********************************************
 **
-** Ensembl QC Alignment Adaptor
+** Ensembl Quality Check Alignment Adaptor
 **
 ******************************************************************************/
 
@@ -23,9 +29,13 @@ extern "C"
 
 
 
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
 /* @data EnsPQcalignment ******************************************************
 **
-** Ensembl QC Alignment
+** Ensembl Quality Check Alignment
 **
 ** @alias EnsSQcalignment
 ** @alias EnsOQcalignment
@@ -37,16 +47,16 @@ extern "C"
 ** @cc Bio::EnsEMBL::QC::Alignment
 ** @cc 'alignment' SQL table
 ** @attr Analysis [EnsPAnalysis] Ensembl Analysis
-** @attr QuerySequence [EnsPQcsequence] Query Ensembl QC Sequence
-** @attr TargetSequence [EnsPQcsequence] Target Ensembl QC Sequence
-** @attr VULGAR [AjPStr] VULGAR line
+** @attr QuerySequence [EnsPQcsequence] Query Ensembl Quality Check Sequence
+** @attr TargetSequence [EnsPQcsequence] Target Ensembl Quality Check Sequence
+** @attr Vulgar [AjPStr] Vulgar line
 ** @attr QueryStart [ajuint] Query start
 ** @attr QueryEnd [ajuint] Query end
 ** @attr QueryStrand [ajint] Query strand
 ** @attr TargetStart [ajuint] Target start
 ** @attr TargetEnd [ajuint] Target end
 ** @attr TargetStrand [ajint] Target strand
-** @attr SpliceStrand [ajint] Splice strand
+** @attr Splicestrand [ajint] Splice strand
 ** @attr Coverage [ajuint] Coverage score
 ** @attr Score [double] Score
 ** @attr Identity [float] Identity
@@ -62,14 +72,14 @@ typedef struct EnsSQcalignment
     EnsPAnalysis Analysis;
     EnsPQcsequence QuerySequence;
     EnsPQcsequence TargetSequence;
-    AjPStr VULGAR;
+    AjPStr Vulgar;
     ajuint QueryStart;
     ajuint QueryEnd;
     ajint QueryStrand;
     ajuint TargetStart;
     ajuint TargetEnd;
     ajint TargetStrand;
-    ajint SpliceStrand;
+    ajint Splicestrand;
     ajuint Coverage;
     double Score;
     float Identity;
@@ -81,30 +91,34 @@ typedef struct EnsSQcalignment
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
 
 /* Ensembl Quality Check Alignment */
 
-EnsPQcalignment ensQcalignmentNew(EnsPQcalignmentadaptor qcaa,
-                                  ajuint identifier,
-                                  EnsPAnalysis analysis,
-                                  EnsPQcsequence qsequence,
-                                  ajuint qstart,
-                                  ajuint qend,
-                                  ajint qstrand,
-                                  EnsPQcsequence tsequence,
-                                  ajuint tstart,
-                                  ajuint tend,
-                                  ajint tstrand,
-                                  ajint sstrand,
-                                  ajuint coverage,
-                                  double score,
-                                  float identity,
-                                  AjPStr vulgar);
+EnsPQcalignment ensQcalignmentNewCpy(const EnsPQcalignment qca);
 
-EnsPQcalignment ensQcalignmentNewObj(const EnsPQcalignment object);
+EnsPQcalignment ensQcalignmentNewIni(EnsPQcalignmentadaptor qcaa,
+                                     ajuint identifier,
+                                     EnsPAnalysis analysis,
+                                     EnsPQcsequence qsequence,
+                                     ajuint qstart,
+                                     ajuint qend,
+                                     ajint qstrand,
+                                     EnsPQcsequence tsequence,
+                                     ajuint tstart,
+                                     ajuint tend,
+                                     ajint tstrand,
+                                     ajint sstrand,
+                                     ajuint coverage,
+                                     double score,
+                                     float identity,
+                                     AjPStr vulgar);
 
 EnsPQcalignment ensQcalignmentNewRef(EnsPQcalignment qca);
 
@@ -112,44 +126,53 @@ void ensQcalignmentDel(EnsPQcalignment* Pqca);
 
 EnsPQcalignmentadaptor ensQcalignmentGetAdaptor(const EnsPQcalignment qca);
 
+EnsPAnalysis ensQcalignmentGetAnalysis(const EnsPQcalignment qca);
+
+ajuint ensQcalignmentGetCoverage(const EnsPQcalignment qca);
+
 ajuint ensQcalignmentGetIdentifier(const EnsPQcalignment qca);
 
-const EnsPAnalysis ensQcalignmentGetAnalysis(const EnsPQcalignment qca);
+float ensQcalignmentGetIdentity(const EnsPQcalignment qca);
+
+ajuint ensQcalignmentGetQueryEnd(const EnsPQcalignment qca);
 
 EnsPQcsequence ensQcalignmentGetQuerySequence(const EnsPQcalignment qca);
 
 ajuint ensQcalignmentGetQueryStart(const EnsPQcalignment qca);
 
-ajuint ensQcalignmentGetQueryEnd(const EnsPQcalignment qca);
-
 ajint ensQcalignmentGetQueryStrand(const EnsPQcalignment qca);
+
+double ensQcalignmentGetScore(const EnsPQcalignment qca);
+
+ajint ensQcalignmentGetSplicestrand(const EnsPQcalignment qca);
+
+ajuint ensQcalignmentGetTargetEnd(const EnsPQcalignment qca);
 
 EnsPQcsequence ensQcalignmentGetTargetSequence(const EnsPQcalignment qca);
 
 ajuint ensQcalignmentGetTargetStart(const EnsPQcalignment qca);
 
-ajuint ensQcalignmentGetTargetEnd(const EnsPQcalignment qca);
-
 ajint ensQcalignmentGetTargetStrand(const EnsPQcalignment qca);
 
-ajint ensQcalignmentGetSpliceStrand(const EnsPQcalignment qca);
-
-ajuint ensQcalignmentGetCoverage(const EnsPQcalignment qca);
-
-double ensQcalignmentGetScore(const EnsPQcalignment qca);
-
-float ensQcalignmentGetIdentity(const EnsPQcalignment qca);
-
-AjPStr ensQcalignmentGetVULGAR(const EnsPQcalignment qca);
+AjPStr ensQcalignmentGetVulgar(const EnsPQcalignment qca);
 
 AjBool ensQcalignmentSetAdaptor(EnsPQcalignment qca,
                                 EnsPQcalignmentadaptor qcaa);
 
+AjBool ensQcalignmentSetAnalysis(EnsPQcalignment qca,
+                                 EnsPAnalysis analysis);
+
+AjBool ensQcalignmentSetCoverage(EnsPQcalignment qca,
+                                 ajuint coverage);
+
 AjBool ensQcalignmentSetIdentifier(EnsPQcalignment qca,
                                    ajuint identifier);
 
-AjBool ensQcalignmentSetAnalysis(EnsPQcalignment qca,
-                                 EnsPAnalysis analysis);
+AjBool ensQcalignmentSetIdentity(EnsPQcalignment qca,
+                                 float identity);
+
+AjBool ensQcalignmentSetQueryEnd(EnsPQcalignment qca,
+                                 ajuint qend);
 
 AjBool ensQcalignmentSetQuerySequence(EnsPQcalignment qca,
                                       EnsPQcsequence qsequence);
@@ -157,11 +180,17 @@ AjBool ensQcalignmentSetQuerySequence(EnsPQcalignment qca,
 AjBool ensQcalignmentSetQueryStart(EnsPQcalignment qca,
                                    ajuint qstart);
 
-AjBool ensQcalignmentSetQueryEnd(EnsPQcalignment qca,
-                                 ajuint qend);
-
 AjBool ensQcalignmentSetQueryStrand(EnsPQcalignment qca,
                                     ajint qstrand);
+
+AjBool ensQcalignmentSetScore(EnsPQcalignment qca,
+                              double score);
+
+AjBool ensQcalignmentSetSplicestrand(EnsPQcalignment qca,
+                                     ajint sstrand);
+
+AjBool ensQcalignmentSetTargetEnd(EnsPQcalignment qca,
+                                  ajuint tend);
 
 AjBool ensQcalignmentSetTargetSequence(EnsPQcalignment qca,
                                        EnsPQcsequence qcs);
@@ -169,76 +198,63 @@ AjBool ensQcalignmentSetTargetSequence(EnsPQcalignment qca,
 AjBool ensQcalignmentSetTargetStart(EnsPQcalignment qca,
                                     ajuint tstart);
 
-AjBool ensQcalignmentSetTargetEnd(EnsPQcalignment qca,
-                                  ajuint tend);
-
 AjBool ensQcalignmentSetTargetStrand(EnsPQcalignment qca,
                                      ajint tstrand);
 
-AjBool ensQcalignmentSetSpliceStrand(EnsPQcalignment qca,
-                                     ajint sstrand);
-
-AjBool ensQcalignmentSetCoverage(EnsPQcalignment qca,
-                                 ajuint coverage);
-
-AjBool ensQcalignmentSetScore(EnsPQcalignment qca,
-                              double score);
-
-AjBool ensQcalignmentSetIdentity(EnsPQcalignment qca,
-                                 float identity);
-
-AjBool ensQcalignmentSetVULGAR(EnsPQcalignment qca,
+AjBool ensQcalignmentSetVulgar(EnsPQcalignment qca,
                                AjPStr vulgar);
-
-ajulong ensQcalignmentGetMemsize(const EnsPQcalignment qca);
 
 AjBool ensQcalignmentTrace(const EnsPQcalignment qca, ajuint level);
 
-AjBool ensQcalignmentGetQueryCoordinates(const EnsPQcalignment qca,
-                                         ajint *Pstart,
-                                         ajint *Pend,
-                                         ajint *Pstrand,
-                                         ajuint *Plength);
+size_t ensQcalignmentCalculateMemsize(const EnsPQcalignment qca);
 
-AjBool ensQcalignmentGetTargetCoordinates(const EnsPQcalignment qca,
-                                          ajint *Pstart,
-                                          ajint *Pend,
-                                          ajint *Pstrand,
-                                          ajuint *Plength);
+AjBool ensQcalignmentCalculateQueryCoordinates(
+    const EnsPQcalignment qca,
+    ajint* Pstart,
+    ajint* Pend,
+    ajint* Pstrand,
+    ajuint* Plength);
 
-AjBool ensQcalignmentOverlapOnTarget(const EnsPQcalignment qca1,
-                                     const EnsPQcalignment qca2);
-
-AjBool ensQcalignmentCalculateQueryCoverage(
+AjBool ensQcalignmentCalculateQueryCoverageDnaDna(
     EnsPQcalignment qca,
     float identity,
     ajuint edge);
 
-AjBool ensQcalignmentCalculateProteinToProteinQueryCoverage(
+AjBool ensQcalignmentCalculateQueryCoverageDnaGenome(
+    EnsPQcalignment qca,
+    float identity,
+    ajuint edge);
+
+AjBool ensQcalignmentCalculateQueryCoverageProteinGenome(
+    EnsPQcalignment qca,
+    float identity,
+    ajuint edge);
+
+AjBool ensQcalignmentCalculateQueryCoverageProteinProtein(
     EnsPQcalignment qca,
     float identity);
 
-AjBool ensQcalignmentCalculateProteinToGenomeQueryCoverage(
-    EnsPQcalignment qca,
-    float identity,
-    ajuint edge);
-
-AjBool ensQcalignmentCalculateDNAToDNAQueryCoverage(
-    EnsPQcalignment qca,
-    float identity,
-    ajuint edge);
-
-AjBool ensQcalignmentCalculateDNAToGenomeQueryCoverage(
-    EnsPQcalignment qca,
-    float identity,
-    ajuint edge);
-
-ajuint ensQcalignmentCalculateQueryToQueryCoverage(
+AjBool ensQcalignmentCalculateQueryCoverageQueryQuery(
     const EnsPQcalignment qca1,
-    const EnsPQcalignment qca2);
+    const EnsPQcalignment qca2,
+    ajuint* Pscore);
+
+AjBool ensQcalignmentCalculateQueryCoverageQueryTarget(
+    EnsPQcalignment qca,
+    float identity,
+    ajuint edge);
+
+AjBool ensQcalignmentCalculateTargetCoordinates(const EnsPQcalignment qca,
+                                                ajint* Pstart,
+                                                ajint* Pend,
+                                                ajint* Pstrand,
+                                                ajuint* Plength);
+
+AjBool ensQcalignmentCheckTargetOverlap(const EnsPQcalignment qca1,
+                                        const EnsPQcalignment qca2);
 
 AjBool ensQcalignmentReport(const EnsPQcalignment qca,
-                            AjPStr *Pstr,
+                            AjPStr* Pstr,
                             AjBool internalquery,
                             AjBool internaltarget);
 
@@ -252,43 +268,49 @@ EnsPQcalignmentadaptor ensQcalignmentadaptorNew(
 
 void ensQcalignmentadaptorDel(EnsPQcalignmentadaptor* Pqcaa);
 
-AjBool ensQcalignmentadaptorFetchByIdentifier(
-    EnsPQcalignmentadaptor qcaa,
-    ajuint identifier,
-    EnsPQcalignment *Pqca);
+EnsPBaseadaptor ensQcalignmentadaptorGetBaseadaptor(
+    EnsPQcalignmentadaptor qcaa);
 
-AjBool ensQcalignmentadaptorFetchAllByAnalysisQueryTarget(
-    EnsPQcalignmentadaptor qcaa,
-    const EnsPAnalysis analysis,
-    const EnsPQcdatabase qdb,
-    const EnsPQcdatabase tdb,
-    AjPList qcas);
+EnsPDatabaseadaptor ensQcalignmentadaptorGetDatabaseadaptor(
+    EnsPQcalignmentadaptor qcaa);
 
-
-AjBool ensQcalignmentadaptorFetchAllByQuery(
-    EnsPQcalignmentadaptor qcaa,
-    const EnsPAnalysis analysis,
-    const EnsPQcdatabase qdb,
-    AjPList qcas);
-
-AjBool ensQcalignmentadaptorFetchAllByTarget(
-    EnsPQcalignmentadaptor qcaa,
-    const EnsPAnalysis analysis,
-    const EnsPQcdatabase tdb,
-    AjPList qcas);
-
-AjBool ensQcalignmentadaptorFetchAllByCoverage(
-    EnsPQcalignmentadaptor qcaa,
-    ajuint lower,
-    ajuint upper,
-    AjPList qcas);
-
-AjBool ensQcalignmentadaptorFetchAllByTargetLocation(
+AjBool ensQcalignmentadaptorFetchAllbyLocationTarget(
     EnsPQcalignmentadaptor qcaa,
     const EnsPAnalysis analysis,
     const EnsPQcsequence tsequence,
     ajuint tstart,
     ajuint tend,
+    AjPList qcas);
+
+AjBool ensQcalignmentadaptorFetchAllbyQcdatabasePair(
+    EnsPQcalignmentadaptor qcaa,
+    const EnsPAnalysis analysis,
+    const EnsPQcdatabase qdb,
+    const EnsPQcdatabase tdb,
+    AjPList qcas);
+
+
+AjBool ensQcalignmentadaptorFetchAllbyQcdatabaseQuery(
+    EnsPQcalignmentadaptor qcaa,
+    const EnsPAnalysis analysis,
+    const EnsPQcdatabase qdb,
+    AjPList qcas);
+
+AjBool ensQcalignmentadaptorFetchAllbyQcdatabaseTarget(
+    EnsPQcalignmentadaptor qcaa,
+    const EnsPAnalysis analysis,
+    const EnsPQcdatabase tdb,
+    AjPList qcas);
+
+AjBool ensQcalignmentadaptorFetchByIdentifier(
+    EnsPQcalignmentadaptor qcaa,
+    ajuint identifier,
+    EnsPQcalignment* Pqca);
+
+AjBool ensQcalignmentadaptorFetchAllbyCoverage(
+    EnsPQcalignmentadaptor qcaa,
+    ajuint lower,
+    ajuint upper,
     AjPList qcas);
 
 AjBool ensQcalignmentadaptorStore(EnsPQcalignmentadaptor qcaa,
@@ -300,8 +322,6 @@ AjBool ensQcalignmentadaptorUpdate(EnsPQcalignmentadaptor qcaa,
 AjBool ensQcalignmentadaptorDelete(EnsPQcalignmentadaptor qcaa,
                                    EnsPQcalignment qca);
 
-void ensQcalignmentDummyFunction(void);
-
 /*
 ** End of prototype definitions
 */
@@ -309,8 +329,6 @@ void ensQcalignmentDummyFunction(void);
 
 
 
-#endif /* ensqcalignment_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSQCALIGNMENT_H */

@@ -55,7 +55,7 @@ int main(int argc, char **argv)
             ajSeqoutPrintbookFormat(outf);
 
         if(doall || ajStrMatchC(tables[i], "infeat"))
-            ajFeatPrintbookFormat(outf);
+            ajFeatinPrintbookFormat(outf);
 
         if(doall || ajStrMatchC(tables[i], "outfeat"))
             ajFeatoutPrintbookFormat(outf);
@@ -65,6 +65,24 @@ int main(int argc, char **argv)
 
         if(doall || ajStrMatchC(tables[i], "align"))
             ajAlignPrintbookFormat(outf);
+
+        if(doall || ajStrMatchC(tables[i], "assembly"))
+        {
+            ajAsseminprintBook(outf);
+            ajAssemoutprintBook(outf);
+        }
+        
+        if(doall || ajStrMatchC(tables[i], "resource"))
+        {
+            ajResourceinprintBook(outf);
+            ajResourceoutprintBook(outf);
+        }
+        
+        if(doall || ajStrMatchC(tables[i], "taxonomy"))
+        {
+            ajTaxinprintBook(outf);
+            ajTaxoutprintBook(outf);
+        }
     }
     
     ajFileClose(&outf);

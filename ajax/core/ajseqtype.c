@@ -527,6 +527,8 @@ static void seqTypeSet(AjPSeq thys, const AjPStr Type)
             ajSeqSetNuc(thys);
             break;
         case '\0':
+        case 'S':
+        case 's':
             break;
         default:
             ajDie("Unknown sequence type '%c'", *cp);
@@ -623,7 +625,7 @@ AjBool ajSeqTypeCheckIn(AjPSeq thys, const AjPSeqin seqin)
 {    
     ajint itype = -1;
     AjPStr Type;
-    ajint i;
+    ajlong i;
     
     ajDebug("testing sequence '%s' '%50.50S' type '%S' IsNuc %B IsProt %B\n",
 	    ajSeqGetNameC(thys), thys->Seq,
@@ -637,8 +639,8 @@ AjBool ajSeqTypeCheckIn(AjPSeq thys, const AjPSeqin seqin)
     if(seqin->IsProt)
 	ajSeqSetProt(thys);
     
-    if(seqin->Query && ajStrGetLen(seqin->Query->DbType))
-	seqTypeSet(thys, seqin->Query->DbType);
+    if(seqin->Input->Query && ajStrGetLen(seqin->Input->Query->DbType))
+	seqTypeSet(thys, seqin->Input->Query->DbType);
 
     
     if(!ajStrGetLen(Type))		   /* nothing given - anything goes */
@@ -1293,7 +1295,7 @@ void ajSeqPrintType(AjPFile outf, AjBool full)
 
     (void) full;	    /* make used - no extra detail reported */
 
-    ajFmtPrintF(outf, "\n# Sequence Types\n");
+    ajFmtPrintF(outf, "\n# Sequence types\n");
     ajFmtPrintF(outf, "# Name                 Gap Ambig N/P "
 		"From     To       Description\n");
     ajFmtPrintF(outf, "seqType {\n");
@@ -1392,7 +1394,7 @@ static char seqTypeTest(const AjPStr thys, AjPRegexp badchars)
 static char seqTypeTestS(const AjPStr thys, const AjPStr goodchars)
 {
     char ret = '\0';
-    ajint i;
+    ajlong i;
 
     if(!ajStrGetLen(thys))
 	return ret;
@@ -1408,7 +1410,8 @@ static char seqTypeTestS(const AjPStr thys, const AjPStr goodchars)
     if (i < 0)
       return ret;
 
-    ret = ajStrGetCharPos(thys, i);
+    ret = ajStrGetCharPos(thys, (size_t) i);
+
     ajDebug("seqTypeTest, Sequence had bad character '%c' (%x) "
 	    "at %d of %d/%d\n",
 	    ret, ret,

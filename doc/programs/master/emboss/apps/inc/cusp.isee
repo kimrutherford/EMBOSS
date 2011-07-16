@@ -18,6 +18,11 @@
 </tr>
 
 <tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Copy and reformat a codon usage table</td>
+</tr>
+
+<tr>
 <td><a href="syco.html">syco</a></td>
 <td>Draw synonymous codon usage statistic plot for a nucleotide sequence</td>
 </tr>

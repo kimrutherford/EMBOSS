@@ -1,16 +1,36 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef enstranslation_h
-#define enstranslation_h
+#ifndef ENSTRANSLATION_H
+#define ENSTRANSLATION_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ensdata.h"
-#include "ensfeature.h"
+#include "ensprotein.h"
+
+AJ_BEGIN_DECLS
 
 
 
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
 
 /*
 ** Prototype definitions
@@ -20,64 +40,54 @@ void ensTranslationInit(void);
 
 void ensTranslationExit(void);
 
-const AjPTrn ensTranslationCacheGetTranslation(ajint codontable);
+const AjPTrn ensTranslationCacheGet(ajint codontable);
 
 /* Ensembl Translation */
 
-EnsPTranslation ensTranslationNew(EnsPTranslationadaptor tla,
-                                  ajuint identifier,
-                                  EnsPExon startexon,
-                                  EnsPExon endexon,
-                                  ajuint start,
-                                  ajuint end,
-                                  AjPStr sequence,
-                                  AjPStr stableid,
-                                  ajuint version,
-                                  AjPStr cdate,
-                                  AjPStr mdate);
+EnsPTranslation ensTranslationNewCpy(const EnsPTranslation translation);
 
-EnsPTranslation ensTranslationNewObj(const EnsPTranslation object);
+EnsPTranslation ensTranslationNewIni(EnsPTranslationadaptor tla,
+                                     ajuint identifier,
+                                     EnsPExon startexon,
+                                     EnsPExon endexon,
+                                     ajuint start,
+                                     ajuint end,
+                                     AjPStr sequence,
+                                     AjPStr stableid,
+                                     ajuint version,
+                                     AjPStr cdate,
+                                     AjPStr mdate);
 
 EnsPTranslation ensTranslationNewRef(EnsPTranslation translation);
 
 void ensTranslationDel(EnsPTranslation* Ptranslation);
 
-const EnsPTranslationadaptor ensTranslationGetAdaptor(
+EnsPTranslationadaptor ensTranslationGetAdaptor(
     const EnsPTranslation translation);
 
-ajuint ensTranslationGetIdentifier(const EnsPTranslation translation);
+AjPStr ensTranslationGetDateCreation(const EnsPTranslation translation);
 
-EnsPExon ensTranslationGetStartExon(const EnsPTranslation translation);
-
-EnsPExon ensTranslationGetEndExon(const EnsPTranslation translation);
-
-ajuint ensTranslationGetStart(const EnsPTranslation translation);
+AjPStr ensTranslationGetDateModification(const EnsPTranslation translation);
 
 ajuint ensTranslationGetEnd(const EnsPTranslation translation);
 
-AjPStr ensTranslationGetStableIdentifier(const EnsPTranslation translation);
+EnsPExon ensTranslationGetEndexon(const EnsPTranslation translation);
+
+ajuint ensTranslationGetIdentifier(const EnsPTranslation translation);
+
+AjPStr ensTranslationGetStableidentifier(const EnsPTranslation translation);
+
+ajuint ensTranslationGetStart(const EnsPTranslation translation);
+
+EnsPExon ensTranslationGetStartexon(const EnsPTranslation translation);
 
 ajuint ensTranslationGetVersion(const EnsPTranslation translation);
 
-AjPStr ensTranslationGetCreationDate(const EnsPTranslation translation);
+const AjPList ensTranslationLoadAttributes(EnsPTranslation translation);
 
-AjPStr ensTranslationGetModificationDate(const EnsPTranslation translation);
+const AjPList ensTranslationLoadDatabaseentries(EnsPTranslation translation);
 
-const AjPList ensTranslationGetAttributes(EnsPTranslation translation);
-
-const AjPList ensTranslationGetDatabaseEntries(EnsPTranslation translation);
-
-const AjPList ensTranslationGetProteinfeatures(EnsPTranslation translation);
-
-ajuint ensTranslationGetTranscriptStart(EnsPTranslation translation);
-
-ajuint ensTranslationGetTranscriptEnd(EnsPTranslation translation);
-
-ajuint ensTranslationGetSliceStart(EnsPTranslation translation);
-
-ajuint ensTranslationGetSliceEnd(EnsPTranslation translation);
-
-ajulong ensTranslationGetMemsize(const EnsPTranslation translation);
+const AjPList ensTranslationLoadProteinfeatures(EnsPTranslation translation);
 
 AjBool ensTranslationSetAdaptor(EnsPTranslation translation,
                                 EnsPTranslationadaptor tla);
@@ -85,22 +95,28 @@ AjBool ensTranslationSetAdaptor(EnsPTranslation translation,
 AjBool ensTranslationSetIdentifier(EnsPTranslation translation,
                                    ajuint identifier);
 
-AjBool ensTranslationSetStartExon(EnsPTranslation translation, EnsPExon exon);
+AjBool ensTranslationSetStartexon(EnsPTranslation translation,
+                                  EnsPExon exon);
 
-AjBool ensTranslationSetEndExon(EnsPTranslation translation, EnsPExon exon);
+AjBool ensTranslationSetEndexon(EnsPTranslation translation,
+                                EnsPExon exon);
 
-AjBool ensTranslationSetStart(EnsPTranslation translation, ajuint start);
+AjBool ensTranslationSetStart(EnsPTranslation translation,
+                              ajuint start);
 
-AjBool ensTranslationSetEnd(EnsPTranslation translation, ajuint end);
+AjBool ensTranslationSetEnd(EnsPTranslation translation,
+                            ajuint end);
 
-AjBool ensTranslationSetStableIdentifier(EnsPTranslation translation,
+AjBool ensTranslationSetStableidentifier(EnsPTranslation translation,
                                          AjPStr stableid);
 
-AjBool ensTranslationSetVersion(EnsPTranslation translation, ajuint version);
+AjBool ensTranslationSetVersion(EnsPTranslation translation,
+                                ajuint version);
 
-AjBool ensTranslationSetCreationDate(EnsPTranslation translation, AjPStr cdate);
+AjBool ensTranslationSetDateCreation(EnsPTranslation translation,
+                                     AjPStr cdate);
 
-AjBool ensTranslationSetModificationDate(EnsPTranslation translation,
+AjBool ensTranslationSetDateModification(EnsPTranslation translation,
                                          AjPStr mdate);
 
 AjBool ensTranslationAddAttribute(EnsPTranslation translation,
@@ -112,35 +128,45 @@ AjBool ensTranslationAddDatabaseentry(EnsPTranslation translation,
 AjBool ensTranslationAddProteinfeature(EnsPTranslation translation,
                                        EnsPProteinfeature pf);
 
+size_t ensTranslationCalculateMemsize(const EnsPTranslation translation);
+
+ajint ensTranslationCalculateSliceEnd(EnsPTranslation translation);
+
+ajint ensTranslationCalculateSliceStart(EnsPTranslation translation);
+
+ajuint ensTranslationCalculateTranscriptEnd(EnsPTranslation translation);
+
+ajuint ensTranslationCalculateTranscriptStart(EnsPTranslation translation);
+
 AjBool ensTranslationFetchAllAttributes( EnsPTranslation translation,
                                          const AjPStr code,
                                          AjPList attributes);
 
-AjBool ensTranslationFetchAllDatabaseEntries(EnsPTranslation translation,
+AjBool ensTranslationFetchAllDatabaseentries(EnsPTranslation translation,
                                              const AjPStr name,
                                              EnsEExternaldatabaseType type,
                                              AjPList dbes);
+
+AjBool ensTranslationFetchAllDomains(EnsPTranslation translation,
+                                     AjPList pfs);
 
 AjBool ensTranslationFetchAllProteinfeatures(EnsPTranslation translation,
                                              const AjPStr name,
                                              AjPList pfs);
 
-AjBool ensTranslationFetchAllProteinfeaturesDomain(EnsPTranslation translation,
-                                                   AjPList pfs);
-
-AjBool ensTranslationFetchAllSequenceEdits(EnsPTranslation translation,
+AjBool ensTranslationFetchAllSequenceedits(EnsPTranslation translation,
                                            AjPList ses);
 
-AjBool ensTranslationFetchDisplayIdentifier(const EnsPTranslation translation,
+AjBool ensTranslationFetchDisplayidentifier(const EnsPTranslation translation,
                                             AjPStr* Pidentifier);
 
 AjBool ensTranslationTrace(const EnsPTranslation translation, ajuint level);
 
-AjBool ensTranslationFetchSequenceStr(EnsPTranslation translation,
-                                      AjPStr *Psequence);
-
 AjBool ensTranslationFetchSequenceSeq(EnsPTranslation translation,
-                                      AjPSeq *Psequence);
+                                      AjPSeq* Psequence);
+
+AjBool ensTranslationFetchSequenceStr(EnsPTranslation translation,
+                                      AjPStr* Psequence);
 
 /* Ensembl Translation Adaptor */
 
@@ -150,47 +176,47 @@ EnsPTranslationadaptor ensRegistryGetTranslationadaptor(
 EnsPTranslationadaptor ensTranslationadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensTranslationadaptorDel(EnsPTranslationadaptor *Ptla);
+void ensTranslationadaptorDel(EnsPTranslationadaptor* Ptla);
 
 EnsPDatabaseadaptor ensTranslationadaptorGetDatabaseadaptor(
-    const EnsPTranslationadaptor tla);
+    EnsPTranslationadaptor tla);
+
+AjBool ensTranslationadaptorFetchAllbyExternalname(
+    EnsPTranslationadaptor tla,
+    const AjPStr name,
+    const AjPStr dbname,
+    AjPList translations);
+
+AjBool ensTranslationadaptorFetchAllbyTranscript(EnsPTranslationadaptor tla,
+                                                 EnsPTranscript transcript);
 
 AjBool ensTranslationadaptorFetchByIdentifier(EnsPTranslationadaptor tla,
                                               ajuint identifier,
-                                              EnsPTranslation *Ptranslation);
+                                              EnsPTranslation* Ptranslation);
 
-AjBool ensTranslationadaptorFetchByStableIdentifier(
+AjBool ensTranslationadaptorFetchByStableidentifier(
     EnsPTranslationadaptor tla,
     const AjPStr stableid,
     ajuint version,
-    EnsPTranslation *Ptranslation);
+    EnsPTranslation* Ptranslation);
 
 AjBool ensTranslationadaptorFetchByTranscript(EnsPTranslationadaptor tla,
                                               EnsPTranscript transcript);
 
-AjBool ensTranslationadaptorFetchAllByTranscript(EnsPTranslationadaptor tla,
-                                                 EnsPTranscript transcript);
-
-AjBool ensTranslationadaptorFetchAllByExternalName(
-    EnsPTranslationadaptor tla,
-    AjPStr externalname,
-    AjPStr externaldbname,
-    AjPList translations);
-
-AjBool ensTranslationadaptorFetchAllByTranscriptList(
+AjBool ensTranslationadaptorFetchAllbyTranscriptsList(
     EnsPTranslationadaptor tla,
     AjPList transcripts);
 
-AjBool ensTranslationadaptorFetchAllByTranscriptTable(
+AjBool ensTranslationadaptorFetchAllbyTranscriptsTable(
     EnsPTranslationadaptor tla,
     AjPTable transcripts);
 
-AjBool ensTranslationadaptorFetchAllIdentifiers(
-    const EnsPTranslationadaptor tla,
+AjBool ensTranslationadaptorRetrieveAllIdentifiers(
+    EnsPTranslationadaptor tla,
     AjPList identifiers);
 
-AjBool ensTranslationadaptorFetchAllStableIdentifiers(
-    const EnsPTranslationadaptor tla,
+AjBool ensTranslationadaptorRetrieveAllStableidentifiers(
+    EnsPTranslationadaptor tla,
     AjPList identifiers);
 
 /*
@@ -200,8 +226,6 @@ AjBool ensTranslationadaptorFetchAllStableIdentifiers(
 
 
 
-#endif /* enstranslation_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSTRANSLATION_H */

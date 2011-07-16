@@ -1,0 +1,314 @@
+                                  drfindid
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Find public databases by identifier
+
+Description
+
+   drfindid searches the Data Resource Catalogue to find entries with EDAM
+   data identifier terms matching a query string.
+
+Algorithm
+
+   The first search is of the EDAM ontology data namespace, using the term
+   names and their synonynms. All child terms are automatically included
+   in the set of matches inless the -nosubclasses qualifier is used.
+
+   The -sensitive qualifier also searches the definition strings.
+
+   The set of EDAM terms are then compared to entries in the Data Resource
+   Catalogue, searching the 'eid' EDAM identifier index.
+
+Usage
+
+   Here is a sample session with drfindid
+
+
+% drfindid protein
+Find public databases by identifier
+Data resource output file [drfindid.drcat]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Find public databases by identifier
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-query]             string     List of EDAM data keywords (Any string)
+  [-outfile]           outresource [*.drfindid] Output data resource file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -sensitive          boolean    [N] By default, the query keywords are
+                                  matched against the EDAM term names (and
+                                  synonyms) only. This option also matches the
+                                  keywords against the EDAM term definitions
+                                  and will therefore (typically) report more
+                                  matches.
+   -[no]subclasses     boolean    [Y] Extend the query matches to include all
+                                  terms which are specialisations (EDAM
+                                  sub-classes) of the matched type.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Data resource output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   None.
+
+Output file format
+
+   The output is a standard EMBOSS resource file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -oformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: drcat,
+   basic, wsbasic, list.
+
+   See: http://emboss.sf.net/docs/themes/ResourceFormats.html for further
+   information on resource formats.
+
+  Output files for usage example
+
+  File: drfindid.drcat
+
+ID      CuticleDB
+Name    Structural proteins of the arthropod cuticle (CuticleDB)
+Desc    A relational database containing all structural proteins of Arthropod cu
+ticle identified to date. Many come from direct sequencing of proteins isolated
+from cuticle and from sequences from cDNAs that share common features with these
+ authentic cuticular proteins. It also includes proteins from the Drosophila mel
+anogaster and the Anopheles gambiae genomes, that have been predicted to be cuti
+cular proteins, based on a Pfam motif responsible for chitin binding in Arthropo
+d cuticle.
+URL     http://biophysics.biol.uoa.gr/cuticleDB/
+Taxon   6656 | Arthropoda
+EDAMtpc 0000635 | Specific protein
+EDAMdat 0000896 | Protein report
+EDAMid  0002715 | Protein ID (CuticleDB)
+EDAMfmt 0002331 | HTML
+Query    Protein report | HTML | Protein ID (CuticleDB) | http://bioinformatics.
+biol.uoa.gr/cuticleDB/protview.jsp?id=%s
+Example Protein ID (CuticleDB) | 639
+
+ID      PIRSF
+Acc     DB-0079
+Name    PIRSF whole-protein classification database
+Desc    Non-overlapping clustering of UniProtKB sequences into a hierarchical or
+der to reflect their evolutionary relationships. The PIRSF classification system
+ is based on whole proteins rather than on the component domains therefore, it a
+llows annotation of generic biochemical and specific biological functions, as we
+ll as classification of proteins without well-defined domains.
+URL     http://pir.georgetown.edu/pirsf/
+Cat     Family and domain databases
+Taxon   1 | all
+EDAMtpc 0000164 | Sequence clustering
+EDAMtpc 0000724 | Protein families
+EDAMdat 0000907 | Protein family annotation
+EDAMid  0001136 | PIRSF ID
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit | PIRSF ID
+Query    Protein family annotation {PIRSF entry} | HTML | PIRSF ID | http://pir.
+georgetown.edu/cgi-bin/ipcSF?id=%s
+Example PIRSF ID | SF000186
+
+ID      Pfam
+Acc     DB-0073
+Name    Pfam protein domain database
+Desc    Large collection of protein families, each represented by multiple seque
+nce alignments and hidden Markov models (HMMs).
+URL     http://pfam.sanger.ac.uk/
+Cat     Family and domain databases
+Taxon   1 | all
+EDAMtpc 0000741 | Protein sequence alignment
+EDAMtpc 0000188 | Sequence profiles and HMMs
+EDAMtpc 0000724 | Protein families
+EDAMtpc 0000736 | Protein domains
+EDAMdat 0000907 | Protein family annotation
+EDAMid  0001096 | Sequence accession (protein)
+EDAMid  0001138 | Pfam accession number
+EDAMid  0001179 | NCBI taxonomy ID
+EDAMid  0002758 | Pfam clan ID
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit | Pfam accession number
+Xref    SP_FT | Pfam accession number
+Query    Protein family annotation {Pfam entry} | HTML | Sequence accession (pro
+tein) | http://pfam.sanger.ac.uk/protein/acc=%s
+Query    Protein family annotation {Pfam entry} | HTML | Pfam accession number |
+ http://pfam.sanger.ac.uk/family?acc=%s
+Query    Protein family annotation {Pfam entry} | HTML | Pfam clan ID | http://p
+fam.sanger.ac.uk/clan?acc=%s
+
+
+  [Part of this file has been deleted for brevity]
+
+
+ID      SCOWL
+Name    Structural characterization of water, ligands and proteins (SCOWL)
+Desc    PDB interface interactions at atom, residue and domain level. The databa
+se contains protein interfaces and residue-residue interactions formed by struct
+ural units and interacting solvent.
+URL     http://www.scowlp.org
+Taxon   1 | all
+EDAMtpc 0000128 | Protein interactions
+EDAMdat 0002359 | Domain-domain interaction
+EDAMid  0001127 | PDB ID
+EDAMid  0001042 | SCOP sunid
+EDAMfmt 0002331 | HTML
+Query    Domain-domain interaction | HTML | PDB ID | http://www.scowlp.org/scowl
+p/PDB.action?show=&PDBId=%s
+Query    Domain-domain interaction | HTML | SCOP sunid {SCOP family id} | http:/
+/www.scowlp.org/scowlp/Search.action?childs=&currentChoice=SCOP_FAMILY%s
+Example PDB ID | 1fxk
+Example SCOP sunid | 2381635
+
+ID      SCOP
+Name    Structural classification of proteins (SCOP) database
+Desc    The SCOP database, created by manual inspection and abetted by a battery
+ of automated methods, aims to provide a detailed and comprehensive description
+of the structural and evolutionary relationships between all proteins whose stru
+cture is known. As such, it provides a broad survey of all known protein folds,
+detailed information about the close relatives of any particular protein, and a
+framework for future research and classification.
+URL     http://scop.mrc-lmb.cam.ac.uk/scop
+Taxon   1 | all
+EDAMtpc 0000736 | Protein domains
+EDAMdat 0001554 | SCOP node
+EDAMdat 0002093 | Data reference
+EDAMid  0001042 | SCOP sunid
+EDAMid  0001127 | PDB ID
+EDAMid  0000842 | Identifier
+EDAMfmt 0002331 | HTML
+Query    SCOP node | HTML | SCOP sunid | http://scop.mrc-lmb.cam.ac.uk/scop/sear
+ch.cgi?sunid=%s
+Query    Data reference {PDB Entry search} | HTML | PDB ID | http://scop.mrc-lmb
+.cam.ac.uk/scop/search.cgi?PDB=%s
+Query    Data reference | HTML | Identifier {Keyword} | http://scop.mrc-lmb.cam.
+ac.uk/scop/search.cgi?key=%s
+Example SCOP sunid | 47718
+Example PDB ID | 1djh
+Example Identifier {Keyword} | immunoglobulin
+
+ID      BIPA
+Name    BIPA database for interaction between protein and nucleic acid
+Desc    Protein-nucleic acid interactions, with various features of protein-nule
+ic acid interfaces.
+URL     http://www-cryst.bioc.cam.ac.uk/bipa
+Taxon   1 | all
+EDAMtpc 0000149 | Protein-nucleic acid interactions
+EDAMdat 0001567 | Protein-nucleic acid interaction
+EDAMdat 0002358 | Domain-nucleic acid interaction
+EDAMid  0001042 | SCOP sunid
+EDAMid  0001127 | PDB ID
+EDAMfmt 0002331 | HTML
+Query    Protein-nucleic acid interaction | HTML | PDB ID | http://mordred.bioc.
+cam.ac.uk/bipa/structures/%s
+Query    Domain-nucleic acid interaction | HTML | SCOP sunid | http://mordred.bi
+oc.cam.ac.uk/bipa/scops/%s
+Example PDB ID | 10MH
+Example SCOP sunid | 120412
+
+
+Data files
+
+   The Data Resource Catalogue is included in EMBOSS as local database
+   drcat. The EDAM Ontology is included in EMBOSS as local database edam.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                     Program name                       Description
+                    drfinddata     Find public databases by data type
+                    drfindformat   Find public databases by format
+   drfindresource   Find public databases by resource
+                    drget          Get data resource entries
+                    drtext         Get data resource entries complete text
+                    edamdef        Find EDAM ontology terms by definition
+                    edamhasinput   Find EDAM ontology terms by has_input relation
+                    edamhasoutput  Find EDAM ontology terms by has_output relation
+                    edamisformat   Find EDAM ontology terms by is_format_of relation
+                    edamisid       Find EDAM ontology terms by is_identifier_of relation
+                    edamname       Find EDAM ontology terms by name
+                    wossdata       Finds programs by EDAM data
+                    wossinput      Finds programs by EDAM input data
+                    wossoperation  Finds programs by EDAM operation
+                    wossoutput     Finds programs by EDAM output data
+                    wossparam      Finds programs by EDAM parameter
+                    wosstopic      Finds programs by EDAM topic
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

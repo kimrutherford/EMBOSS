@@ -27,7 +27,7 @@
 
 static void tranalign_AddGaps (AjPSeq newseq,
 			       const AjPSeq nseq, const AjPSeq pseq,
-			       ajint npos);
+			       ajlong npos);
 
 
 
@@ -52,11 +52,13 @@ int main(int argc, char **argv)
     AjPSeqset outseqset;	/* set of aligned nucleic sequences */
     ajint proteinseqcount = 0;
     AjPStr degapstr = NULL;
-    AjPStr degapstr2 = NULL;	/* used to check if it matches with START removed */
+    /* used to check if it matches with START removed */
+    AjPStr degapstr2 = NULL;
     AjPStr codon = NULL;	/* holds temporary codon to check if is START */
     char aa;			/* translated putative START codon */
     ajint type;			/* returned type of the putative START codon */
-    ajint pos = 0;		/* start position of guide protein in translation */
+    /* start position of guide protein in translation */
+    ajlong pos = 0;
     AjPSeq newseq = NULL;	/* output aligned nucleic sequence */
     ajint frame;
 
@@ -104,15 +106,23 @@ int main(int argc, char **argv)
 
             /* 
             ** we might have a START codon that should be translated as 'M'
-            ** we need to check if there is a match after a possible START codon 
+            ** we need to check if there is a match after a possible START
+            ** codon 
             */
             if(pos == -1 && ajStrGetLen(degapstr) > 1 && 
-               (ajStrGetPtr(degapstr)[0] == 'M' || ajStrGetPtr(degapstr)[0] == 'm')) {
+                (ajStrGetPtr(degapstr)[0] == 'M' ||
+		 ajStrGetPtr(degapstr)[0] == 'm'))
+	      {
                 /* see if pep minus the first character is a match */
                 ajStrCutStart(&degapstr2, 1);
                 pos = ajStrFindCaseS(ajSeqGetSeqS(pep), degapstr2); 
-                /* pos is >= 1 if we have a match that is after the first residue */
-                if (pos >= 1) {
+
+                /*
+		** pos is >= 1 if we have a match that is after the first
+		** residue
+		*/
+                if(pos >= 1)
+		{
                     /* point back at the putative START Methionine */
                     pos--;
                     /* test if first codon is a START */
@@ -120,16 +130,20 @@ int main(int argc, char **argv)
                     ajStrAssignSubS(&codon, ajSeqGetSeqS(nseq), 
                                 (pos*3)+frame-1, (pos*3)+frame+2);
                     type = ajTrnCodonstrTypeS(trnTable, codon, &aa);
-                    if (type != 1) {
+
+                    if(type != 1)
+                    {
                         /* first codon is not a valid START, force a mismatch */
                         pos = -1;
                     }
                     ajStrDel(&codon);
                 
-            	} else {
+            	}
+		else
+		{
                     /* force 'pos == 0' to be treated as a mismatch */
             	    pos = -1;
-            	}
+		}
             }
 
             ajStrDel(&degapstr2);
@@ -191,14 +205,14 @@ int main(int argc, char **argv)
 ** @param [u] newseq [AjPSeq] newseq
 ** @param [r] nseq [const AjPSeq] nseq
 ** @param [r] pseq [const AjPSeq] pseq
-** @param [r] npos [ajint] nseq start pos
+** @param [r] npos [ajlong] nseq start pos
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void tranalign_AddGaps(AjPSeq newseq,
 			      const AjPSeq nseq, const AjPSeq pseq,
-			      ajint npos)
+			      ajlong npos)
 {
 
     AjPStr newstr = NULL;

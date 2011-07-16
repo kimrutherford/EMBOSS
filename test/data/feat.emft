@@ -504,7 +504,7 @@ FT   STS             54..225
 FT                   /note="STS49"
 FT   mRNA            1..542
 FT   misc_feature    group(226..288,688..754)
-FT                   /note="encodes putative transmembrane helices which enclose
+FT                   /note="encodes putative transmembrane helices; enclosing
 FT                   a presumably periplasmic domain"
 FT                   /gene="citA"
 FT   Cds             1289..1879
@@ -536,6 +536,7 @@ FT                   /db_xref="taxon:562"
 FT                   /note="Nucleotide position 2327544-2345628 from the
 FT                   initiation site of ThrA (0 min.)."
 FT                   /note="This clone is from Kohara lambda miniset library"
+FT                   /note="Certainty = 50%, testing URL encoding;"
 FT                   /mol_type="genomic DNA"
 FT                   /organism="Escherichia coli"
 FT                   /clone="Kohara clone #376"

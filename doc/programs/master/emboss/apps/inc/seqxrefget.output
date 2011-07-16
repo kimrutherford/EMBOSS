@@ -1,0 +1,28 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.seqxrefget</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+#tembl-id:X13776: 20
+# no route to DOI:10.1016/0014-5793(89)80249-2
+urlget GOA:P10932
+urlget GOA:P27017
+urlget GOA:Q51417
+urlget InterPro:IPR000709
+urlget InterPro:IPR003211
+urlget InterPro:IPR005561
+urlget InterPro:IPR008327
+urlget InterPro:IPR011006
+urlget InterPro:IPR011991
+textget PDB:1PEA
+textget PDB:1QNL
+textget PDB:1QO0
+# no route to PubMed:1907262
+# no route to PubMed:2495988
+taxtext taxon:287
+entret UniProtKB/Swiss-Prot:P10932
+entret UniProtKB/Swiss-Prot:P27017
+entret UniProtKB/Swiss-Prot:Q51417
+</pre>
+</td></tr></table><p>

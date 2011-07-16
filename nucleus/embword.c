@@ -65,7 +65,8 @@ static void     wordOrderPosMatchTable(AjPList unorderedList);
 
 static unsigned wordStrHash(const void *key, unsigned hashsize);
 
-static void     wordVFree(void **key, void **count, void *cl);
+static void     wordVFreeLocs(void **value);
+static void     wordVFreeSeqlocs(void **value);
 
 static ajint    wordRabinKarpCmp(const void *trgseq, const void *qryseq);
 static ajulong  wordRabinKarpConstant(ajuint m);
@@ -329,58 +330,20 @@ void embWordPrintTableF(const AjPTable table, AjPFile outf)
 
 
 
-/* @funcstatic wordPositionListDelete *****************************************
-**
-** deletes entries in a list of positions.
-**
-** @param [d] x [void**] Data values as void**
-** @param [r] cl [void*] Ignored user data, usually NULL.
-** @return [void]
-** @@
-******************************************************************************/
-
-static void wordPositionListDelete(void **x,void *cl)
-{
-    ajint *p;
-
-    p = (ajint *)*x;
-
-    AJFREE(p);
-
-    if(!cl)
-        return;
-
-    return;
-}
-
-
-
-
-/* @funcstatic wordVFreeSeqLocs ***********************************************
+/* @funcstatic wordVFreeLocs **************************************************
 **
 ** Free the elements in a EmbPWord locations table.
 **
-** @param [r] key [void**] key for a table item
-** @param [d] value [void**] Data values as void**
-** @param [r] cl [void*] Ignored user data, usually NULL.
+** @param [d] value [void**] Data value for a table item
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void wordVFreeSeqLocs(void **key, void **value, void *cl)
+static void wordVFreeLocs(void **value)
 {
-    AjPStr mykey;
+    AjPTable table = ((EmbPWord)*value)->seqlocs;
 
-    (void) cl;                  /* make it used */
-
-    mykey = (AjPStr) *key;
-    ajStrDel(&mykey);
-
-    /* free the elements in the list of the positions */
-    ajListMap(((EmbPWordSeqLocs)*value)->locs,wordPositionListDelete, NULL);
-
-    /* free the list structure for the positions. */
-    ajListFree(&((EmbPWordSeqLocs)*value)->locs);
+    ajTableDelValdel(&table, wordVFreeSeqlocs);
 
     /* free the locations structure */
     AJFREE(*value);
@@ -391,34 +354,24 @@ static void wordVFreeSeqLocs(void **key, void **value, void *cl)
 
 
 
-/* @funcstatic wordVFree ******************************************************
+/* @funcstatic wordVFreeSeqlocs ***********************************************
 **
-** free the elements in a list of positions
+** Free the elements in a EmbPWord sequence locations list.
 **
-** @param [r] key [void**] key for a table item
-** @param [d] count [void**] Data values as void**
-** @param [r] cl [void*] Ignored user data, usually NULL.
+** @param [d] value [void**] Data values as void**
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void wordVFree(void **key, void **count, void *cl)
+static void wordVFreeSeqlocs(void **value)
 {
-    char* ckey;
+    AjPList list = ((EmbPWordSeqLocs)*value)->locs;
 
-    ckey = (char*) *key;
-    ajCharDel(&ckey);
+    /* free the elements in the list of the positions */
+    ajListFreeData(&list);
 
-
-    ajTableMapDel(((EmbPWord)*count)->seqlocs, wordVFreeSeqLocs, NULL);
-
-    ajTableFree(&((EmbPWord)*count)->seqlocs);
-
-    /* free the word structure */
-    AJFREE(*count);
-
-    if(!cl)
-        return;
+    /* free the locations structure */
+    AJFREE(*value);
 
     return;
 }
@@ -437,9 +390,7 @@ static void wordVFree(void **key, void **count, void *cl)
 
 void embWordFreeTable(AjPTable *table)
 {
-    ajTableMapDel(*table, wordVFree, NULL);
-    ajTableFree(table);
-    table = 0;
+    ajTableDel(table);
 
     return;
 }
@@ -662,7 +613,8 @@ AjBool embWordGetTable(AjPTable *table, const AjPSeq seq)
     if(!*table)
     {
 	*table = ajTableNewFunctionLen(ajSeqGetLen(seq),
-				       wordCmpStr, wordStrHash);
+				       wordCmpStr, wordStrHash,
+                                       ajMemFree, wordVFreeLocs);
 	ajDebug("make new table\n");
     }
 
@@ -723,7 +675,7 @@ AjBool embWordGetTable(AjPTable *table, const AjPSeq seq)
 	    continue;
 	}
 
-	rec = (EmbPWord) ajTableFetch(*table, startptr);
+	rec = (EmbPWord) ajTableFetchmodV(*table, startptr);
 
 	/* does it exist already */
 	if(rec)
@@ -738,14 +690,14 @@ AjBool embWordGetTable(AjPTable *table, const AjPSeq seq)
 	    rec->count = 1;
 	    key = ajCharNewResLenC(startptr, wordsize, wordLength);
 	    rec->fword = key;
-	    rec->seqlocs = ajTablestrNew();
+	    rec->seqlocs = ajTablestrNew(1000);
 	    ajTablePut(*table, key, rec);
 	}
 
 	AJNEW0(k);
 	*k = i;
 	seqname = ajSeqGetNameS(seq);
-	seqlocs = (EmbPWordSeqLocs) ajTableFetch(rec->seqlocs, seqname);
+	seqlocs = (EmbPWordSeqLocs) ajTableFetchmodS(rec->seqlocs, seqname);
 
 	if (seqlocs == NULL)
 	{
@@ -991,7 +943,7 @@ AjPList embWordBuildMatchTable(const AjPTable seq1MatchTable,
 
     while(i < (ilast+1))
     {
-	if((wordmatch = ajTableFetch(seq1MatchTable, startptr)))
+	if((wordmatch = ajTableFetchmodV(seq1MatchTable, startptr)))
 	{
 	    /* match found so create EmbSWordMatch structure and fill it
 	    ** in. Then set next pos accordingly
@@ -1655,8 +1607,8 @@ static ajint wordRabinKarpCmp(const void *trgseq, const void *qryseq)
 ** Computes hash values for each word/pattern.
 **
 ** @param [r] table [const AjPTable] Table of patterns
-** @param [u] newwords [EmbPWordRK**] Extended patterns to be used
-**                                    by Rabin-Karp search
+** @param [u] ewords [EmbPWordRK**] Extended word objects to be used
+**                                  in Rabin-Karp search
 ** @param [r] wordlen [ajuint] Length of words/patterns, kmer size
 ** @param [r] seqset [const AjPSeqset] Sequence set, input patterns
 **                                     were derived from
@@ -1664,14 +1616,14 @@ static ajint wordRabinKarpCmp(const void *trgseq, const void *qryseq)
 ** @@
 ******************************************************************************/
 
-ajuint embWordRabinKarpInit(const AjPTable table, EmbPWordRK** newwords,
+ajuint embWordRabinKarpInit(const AjPTable table, EmbPWordRK** ewords,
                             ajuint wordlen, const AjPSeqset seqset)
 {
     ajuint i;
     ajuint j;
     ajuint k;
     ajuint l;
-    EmbPWord* embwords = NULL;
+    EmbPWord* words = NULL;
     const EmbPWord embword = NULL;
     ajulong patternHash;
     EmbPWordRK newword = NULL;
@@ -1685,13 +1637,13 @@ ajuint embWordRabinKarpInit(const AjPTable table, EmbPWordRK** newwords,
     ajuint pos;
     
     nseqs = ajSeqsetGetSize(seqset);
-    nwords = ajTableToarrayValues(table, (void***)&embwords);
-    AJCNEW(*newwords, nwords);
+    nwords = ajTableToarrayValues(table, (void***)&words);
+    AJCNEW(*ewords, nwords);
 
     for(i=0; i<nwords; i++)
     {
         seqlocs=NULL;
-        embword = embwords[i];
+        embword = words[i];
         word = embword->fword;
 
         AJNEW0(newword);
@@ -1746,13 +1698,13 @@ ajuint embWordRabinKarpInit(const AjPTable table, EmbPWordRK** newwords,
 
         AJFREE(seqlocs);
 
-        (*newwords)[i] = newword;
+        (*ewords)[i] = newword;
 
     }
 
-    AJFREE(embwords);
+    AJFREE(words);
 
-    qsort(*newwords, nwords, sizeof(EmbPWordRK), wordRabinKarpCmp);
+    qsort(*ewords, nwords, sizeof(EmbPWordRK), wordRabinKarpCmp);
 
     return nwords;
 }
@@ -1767,7 +1719,7 @@ ajuint embWordRabinKarpInit(const AjPTable table, EmbPWordRK** newwords,
 ** @param [r] sseq [const AjPStr] Sequence to be scanned for multiple patterns
 ** @param [r] seqset [const AjPSeqset] Sequence-set,
 **                                     where search patterns coming from
-** @param [r] patterns [const EmbPWordRK*] Patterns to be searched
+** @param [r] patterns [EmbPWordRK const *] Patterns to be searched
 ** @param [r] plen [ajuint] Length of patterns
 ** @param [r] npatterns [ajuint] Number of patterns
 ** @param [u] matchlist [AjPList*] List of matches for each sequence
@@ -1782,7 +1734,7 @@ ajuint embWordRabinKarpInit(const AjPTable table, EmbPWordRK** newwords,
 
 ajuint embWordRabinKarpSearch(const AjPStr sseq,
                               const AjPSeqset seqset,
-                              const EmbPWordRK* patterns,
+                              EmbPWordRK const * patterns,
                               ajuint plen, ajuint npatterns,
                               AjPList* matchlist,
                               ajuint* lastlocation, AjBool checkmode)

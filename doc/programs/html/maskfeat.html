@@ -53,7 +53,7 @@ replaced with the specified mask character.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with maskfeat</b>
+Here is a sample session with <b>maskfeat</b>
 <p>
 Mask out a feature whose type is "repeat_region" from position 2331 to 2356: 
 <p>
@@ -91,7 +91,7 @@ output sequence [ab000360.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Write a sequence with masked features
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -569,9 +569,46 @@ If the mask character is set to be the SPACE character or a null character, then
     Input file format
 </H2>
 
-<b>maskfeat</b> reads in a sequence USA.  You can optionally specify a
-GFF feature file to use with the command-line option '-ufo filename'. 
+<b>maskfeat</b> reads one or more nucleotide or protein sequences with features.
 
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA')
+with associated feature information.
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the command-line qualifier
+<tt>-sformat xxx</tt>, where 'xxx' is replaced by the name of the
+required format.  The available format names are: text, html, xml (uniprotxml),
+obo, embl (swissprot)
+
+<p> Where the sequence format has no feature information, a second
+file can be read to load the feature data. The file is specified with
+the qualifier <tt>-ufo xxx</tt> and the feature format is specified with
+the qualifier <tt>-fformat xxx</tt>
+
+<p>
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
+See:
+<A href="http://emboss.sf.net/docs/themes/FeatureFormats.html">
+http://emboss.sf.net/docs/themes/FeatureFormats.html</A>
+for further information on feature formats.
 <p>
 
 
@@ -695,8 +732,29 @@ SQ   Sequence 2582 BP; 694 A; 494 C; 581 G; 813 T; 0 other;
     Output file format
 </H2>
 
-<b>maskfeat</b> writes out a normal, masked, sequence file.
 
+<p>
+
+The output is a standard EMBOSS sequence file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
+<p>
+The sequence file has features masked with the specified character.
 <p>
 
 
@@ -896,11 +954,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="coderet.html">coderet</a></td>
-<td>Extract CDS, mRNA and translations from feature tables</td>
-</tr>
-
-<tr>
 <td><a href="cutseq.html">cutseq</a></td>
 <td>Removes a section from a sequence</td>
 </tr>
@@ -943,6 +996,11 @@ None.
 <tr>
 <td><a href="featreport.html">featreport</a></td>
 <td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
 </tr>
 
 <tr>
@@ -1023,6 +1081,11 @@ None.
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>

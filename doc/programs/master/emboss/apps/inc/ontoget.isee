@@ -1,0 +1,90 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="edamdef.html">edamdef</a></td>
+<td>Find EDAM ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="edamhasinput.html">edamhasinput</a></td>
+<td>Find EDAM ontology terms by has_input relation</td>
+</tr>
+
+<tr>
+<td><a href="edamhasoutput.html">edamhasoutput</a></td>
+<td>Find EDAM ontology terms by has_output relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisformat.html">edamisformat</a></td>
+<td>Find EDAM ontology terms by is_format_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisid.html">edamisid</a></td>
+<td>Find EDAM ontology terms by is_identifier_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamname.html">edamname</a></td>
+<td>Find EDAM ontology terms by name</td>
+</tr>
+
+<tr>
+<td><a href="godef.html">godef</a></td>
+<td>Find GO ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="goname.html">goname</a></td>
+<td>Find GO ontology terms by name</td>
+</tr>
+
+<tr>
+<td><a href="ontocount.html">ontocount</a></td>
+<td>Count ontology term(s)</td>
+</tr>
+
+<tr>
+<td><a href="ontogetcommon.html">ontogetcommon</a></td>
+<td>Get common ancestor for terms</td>
+</tr>
+
+<tr>
+<td><a href="ontogetdown.html">ontogetdown</a></td>
+<td>Get ontology term(s) by parent id</td>
+</tr>
+
+<tr>
+<td><a href="ontogetobsolete.html">ontogetobsolete</a></td>
+<td>Get ontology ontology terms</td>
+</tr>
+
+<tr>
+<td><a href="ontogetroot.html">ontogetroot</a></td>
+<td>Get ontology root terms by child identifier</td>
+</tr>
+
+<tr>
+<td><a href="ontogetsibs.html">ontogetsibs</a></td>
+<td>Get ontology term(s) by id with common parent</td>
+</tr>
+
+<tr>
+<td><a href="ontogetup.html">ontogetup</a></td>
+<td>Get ontology term(s) by id of child</td>
+</tr>
+
+<tr>
+<td><a href="ontoisobsolete.html">ontoisobsolete</a></td>
+<td>Report whether an ontology term id is obsolete</td>
+</tr>
+
+<tr>
+<td><a href="ontotext.html">ontotext</a></td>
+<td>Get ontology term(s) original full text</td>
+</tr>
+
+</table>

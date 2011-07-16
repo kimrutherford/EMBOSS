@@ -51,6 +51,10 @@ HELPGRAPH     "Graph type"
 HELPXYGRAPH   "Graph type"
 HELPCODON     "Codon usage table name"
 HELPOUTCODON  "Codon usage table name"
+HELPOBO       "Ontology term query"
+HELPOUTOBO    "Output ontology term file name"
+HELPRESOURCE  "Data resource catalogue query"
+HELPOUTRESOURCE "Output data resource file name"
 
 
 # Gap penalties

@@ -1,5 +1,5 @@
 Reports on signal cleavage sites in a protein sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -8,6 +8,7 @@ Version: EMBOSS:6.3.0
                                   predicted cleavage site (Number from 0.000
                                   to 100.000)
   [-outfile]           report     [*.sigcleave] Output report file name
+                                  (default -rformat motif)
 
    Additional (Optional) qualifiers:
    -prokaryote         boolean    Specifies the sequence is prokaryotic and

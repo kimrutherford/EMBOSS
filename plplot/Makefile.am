@@ -29,7 +29,7 @@ CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols 
 CYGWIN_LIBS = -lX11 -lgd -lpng -lz
 endif
 
-INCLUDES = $(X_CFLAGS) -I$(srcdir)/ -I/usr/include/gd -DPREFIX=\"$(prefix)\" -DBUILD_DIR=\"$(srcdir)\" -DDRV_DIR=\"$(srcdir)\" -DEMBOSS_TOP=\"$(EMBOSS_TOP)\"
+AM_CPPFLAGS = -I$(top_srcdir)/ajax/core $(X_CFLAGS) -I$(srcdir)/ -I/usr/include/gd -DPREFIX=\"$(prefix)\" -DBUILD_DIR=\"$(srcdir)\" -DDRV_DIR=\"$(srcdir)\" -DEMBOSS_TOP=\"$(EMBOSS_TOP)\"
 
 PLPLOTSRC = pdfutils.c plargs.c plbox.c plcont.c plcore.c \
 plctrl.c plcvt.c pldtik.c plfill.c plhist.c plline.c plmap.c \

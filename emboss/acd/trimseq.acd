@@ -1,9 +1,9 @@
 application: trimseq [
   documentation: "Remove unwanted characters from start and end of sequence(s)"
   groups: "Edit"
-  relations: "/edam/topic/0000156 Sequence editing"
-  relations: "/edam/operation/0000369 Sequence cutting"
-  relations: "/edam/operation/0000235 Sequence ambiguity calculation"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000369 operation Sequence cutting"
+    relations: "EDAM:0000235 operation Sequence ambiguity calculation"
 ]
 
 section: input [
@@ -14,9 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -40,7 +38,7 @@ section: additional [
            the sequence is shifted along the sequence from the ends and
            trimming is done only if there is a greater or equal percentage of
            ambiguity than the threshold percentage."
-    relations: "/edam/data/0001251 Window size"
+    relations: "EDAM:0001251 data Window size"
   ]
 
   float: percent [
@@ -49,7 +47,7 @@ section: additional [
     information: "Percent threshold of ambiguity in window"
     help: "This is the threshold of the percentage ambiguity in the
            window required in order to trim a sequence."
-    relations: "/edam/data/0002146 Threshold"
+    relations: "EDAM:0002146 data Threshold"
   ]
 
   boolean: strict [
@@ -61,7 +59,7 @@ section: additional [
            also the nucleotide IUPAC ambiguity codes M, R, W, S, Y, K, V, H,
            D and B. In protein sequences, trim off not only X's but also B
            and Z."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: star [
@@ -70,7 +68,7 @@ section: additional [
     information: "Trim off asterisks"
     help: "In protein sequences, trim off not only X's, but also the
            *'s"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: additional
@@ -83,13 +81,13 @@ section: advanced [
   boolean: left [
     default: "Y"
     information: "Trim at the start"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: right [
     default: "Y"
     information: "Trim at the end"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -101,9 +99,7 @@ section: output [
 
   seqoutall: outseq [
     parameter: "Y"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: output

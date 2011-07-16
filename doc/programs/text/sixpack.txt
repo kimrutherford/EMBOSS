@@ -30,7 +30,7 @@ Algorithm
  The nucleic acid sequence is read in.
  The required genetic code is read in from the EGC* data files.
  The three forward and three reverse translations are created.
- The name and description are written to the ouput display file.
+ The name and description are written to the output display file.
  Any required regions to be changed to upper case are changed.
  Any required regions to be highlighted in HTML colour tags are changed.
  The reverse sense sequence is placed below the forward sequence.
@@ -58,7 +58,7 @@ protein output sequence(s) [x13776.fasta]:
 Command line arguments
 
 Display a DNA sequence with 6-frame translation and ORFs
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -196,7 +196,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   sixpack reads any normal sequence USAs.
+   sixpack reads a single nucleotide sequence.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -312,6 +329,20 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 //
 
 Output file format
+
+   sixpack writes a text report and an ORF sequence file.
+
+   The output is a standard EMBOSS sequence file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -osformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   excel, feattable, motif, nametable, regions, seqtable, simple, srs,
+   table, tagseq.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Output files for usage example
 
@@ -688,21 +719,21 @@ See also
    backtranambig    Back-translate a protein sequence to ambiguous nucleotide
                     sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   checktrans       Reports STOP codons and ORF statistics of a protein
    cirdna           Draws circular maps of DNA constructs
    coderet          Extract CDS, mRNA and translations from feature tables
    getorf           Finds and extracts open reading frames (ORFs)
+   iep              Calculate the isoelectric point of proteins
    lindna           Draws linear maps of DNA constructs
    marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
                     sequences
+   pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepnet           Draw a helical net for a protein sequence
    pepwheel         Draw a helical wheel diagram for a protein sequence
    plotorf          Plot potential open reading frames in a nucleotide sequence
    prettyplot       Draw a sequence alignment with pretty formatting
    prettyseq        Write a nucleotide sequence and its translation to file
    remap            Display restriction enzyme binding sites in a nucleotide sequence
-   seealso          Finds programs with similar function to a specified program
-   showalign        Display a multiple sequence alignment in pretty format
-   showdb           Displays information on configured databases
    showfeat         Display features of a sequence in pretty format
    showorf          Display a nucleotide sequence and translation in pretty format
    showpep          Displays protein sequences with features in pretty format
@@ -710,7 +741,6 @@ See also
    syco             Draw synonymous codon usage statistic plot for a nucleotide
                     sequence
    tcode            Identify protein-coding regions using Fickett TESTCODE statistic
-   textsearch       Search the textual description of sequence(s)
    transeq          Translate nucleic acid sequences
    wobble           Plot third base position variability in a nucleotide sequence
 

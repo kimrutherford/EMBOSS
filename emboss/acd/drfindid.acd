@@ -1,0 +1,87 @@
+application: drfindid
+[
+   documentation: "Find public databases by identifier"
+   groups: "Ontology:EDAM, Data retrieval:Resource data"
+   relations: "EDAM:0000219 topic Annotation"
+   relations: "EDAM:0000090 topic Data retrieval"
+   relations: "EDAM:0000516 operation Data retrieval (database annotation)"
+]
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+  string: query
+  [
+      default: ""
+      parameter: "Y"
+      information: "List of EDAM data keywords"
+      knowntype: "keyword"
+      relations: "EDAM:0000968 data Keyword"
+  ]
+
+endsection: input
+
+
+
+
+
+section: additional 
+[
+  information: "Additional section"
+  type: "page"
+]
+
+endsection: additional
+
+
+
+
+
+section: advanced 
+[
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: sensitive [
+    default: "N"
+    information: "Increase sensitivity of search"
+    help: "By default, the query keywords are matched against the EDAM
+          term names (and synonyms) only. This option also matches the
+	  keywords against the EDAM term definitions and will therefore
+	  (typically) report more matches."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+  boolean: subclasses [
+    default: "Y"
+    information: "Include subclasses of hits"
+    help: "Extend the query matches to include all terms which are
+           specialisations (EDAM sub-classes) of the matched type."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+
+  outresource: outfile 
+  [
+    parameter: "Y"
+    name: "drfindid"
+    relations: "EDAM:0000957 data Database metadata"
+  ]
+
+endsection: output

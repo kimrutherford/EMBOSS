@@ -828,7 +828,7 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 	    if((x>(ret)->Dim) || (y>(ret)->Dim))
 		ajFatal("Fatal attempt to write bad data in "
 			"ajCmapReadNew\nFile: %S (%S)\nx: %d y:%d\n",
-			ajFileGetNameS(inf), cmapStrtemp_id, x, y);
+			ajFileGetPrintnameS(inf), cmapStrtemp_id, x, y);
 	    
 	    /* Enter '1' in matrix to indicate contact */
 	    ajUint2dPut(&(ret)->Mat, x-1, y-1, 1);
@@ -846,7 +846,7 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 	    if((x>(ret)->Dim))
 		ajFatal("Fatal attempt to write bad data in "
 			"ajCmapReadNew\nFile: %S (%S)\nx: %d\n",
-			ajFileGetNameS(inf), cmapStrtemp_id, x);
+			ajFileGetPrintnameS(inf), cmapStrtemp_id, x);
 	    
 	    /* Enter '1' in matrix to indicate contact.  For ligand contacts, 
 	       the first row / column only is used. */
@@ -6351,8 +6351,8 @@ AjBool ajPdbWriteSegment(AjPFile outf, const AjPPdb pdb, const AjPStr segment,
 			  char chnid, const AjPStr domain, AjPFile errf)
 {
     ajint chn;
-    ajint start     = 0;
-    ajint end       = 0;
+    ajlong start     = 0L;
+    ajlong end       = 0L;
     char  id;
     
     AjIList    iter        = NULL;

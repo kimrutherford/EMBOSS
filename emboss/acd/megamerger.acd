@@ -4,9 +4,9 @@ application: megamerger [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
-  relations: "/edam/topic/0000159 Sequence comparison"
-  relations: "/edam/operation/0000288 Sequence word comparison"
-  relations: "/edam/operation/0000232 Sequence merging"
+    relations: "EDAM:0000159 topic Sequence comparison"
+    relations: "EDAM:0000288 operation Sequence word comparison"
+    relations: "EDAM:0000232 operation Sequence merging"
 ]
 
 section: input [
@@ -17,15 +17,13 @@ section: input [
   sequence: asequence [
     parameter: "Y"
     type: "DNA"
-    relations: "/edam/data/0000848 Sequence"                                            
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   sequence: bsequence [
     parameter: "Y"
     type: "DNA"
-    relations: "/edam/data/0000848 Sequence"                                            
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -40,7 +38,7 @@ section: required [
     default: "20"
     minimum: "2"
     information: "Word size"
-    relations: "/edam/data/0001250 Word size"
+    relations: "EDAM:0001250 data Word size"
   ]
 
 endsection: required
@@ -62,7 +60,7 @@ section: additional [
            is closest to that sequence's centre. If this option is used, then
            the first sequence (seqa) will always be used in preference to
            the other sequence when there is a mismatch."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: additional
@@ -75,15 +73,14 @@ section: output [
   seqout: outseq [
     parameter: "Y"
     extension: "merged"
-    relations: "/edam/data/0000848 Sequence"                                            
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   outfile: outfile [
     parameter: "Y"
     extension: "megamerger"
     knowntype: "megamerger output"
-    relations:  "/edam/data/0001678 Tool log"
+    relations: "EDAM:0001678 data Tool log"
   ]
 
 endsection: output

@@ -57,6 +57,65 @@ sub usage () {
 }
 
 ###################################################################
+# qatestsystem
+#
+# system call with pre and post processing
+# run as-is on Unix/cygwin
+# converted for windows
+###################################################################
+
+sub qatestsystem($$$){
+  my ($pp, $cmd, $qq) = @_;
+  my $sysstat;
+  if(!$iswindows) {
+    $sysstat = system("$pp $cmd $qq");
+    return $sysstat;
+  }
+#  print "Pre  '$pp'\n";
+#  print "Cmd  '$cmd'\n";
+#  print "Post '$qq'\n";
+
+  open (BAT, ">qatest.bat") || die "Cannot open qatest.bat";
+  print BAT "\@echo off\n";
+
+  my $c;
+  my $i=0;
+
+  foreach $c (split(/;/, $pp)){
+    $c =~ s/^ +//;
+    $c =~ s/ +$//;
+    $c =~ s/\//\\/g;
+    $c =~ s/^cp /copy /;
+    $c =~ s/^rm /del \/q /;
+    $c =~ s/^(\S+)=/SET $1=/;
+    if($c eq "") {next}
+    if($c =~ /export /i) {next}
+    $i++;
+#    print "    Pre[$i] '$c'\n";
+    print BAT "$c\n";
+  }
+  print BAT "$cmd\n";
+
+  foreach $c (split(/;/, $qq)){
+    $c =~ s/^ +//;
+    $c =~ s/ +$//;
+    $c =~ s/\//\\/g;
+    $c =~ s/^rm -rf/rmdir \/s \/q /;
+    $c =~ s/^rm /del \/q /;
+    if($c eq "") {next}
+    if($c =~ /export /i) {next}
+    $i++;
+#    print "   Post[$i] '$c'\n";
+    print BAT "$c\n";
+  }
+  close BAT;
+
+  $sysstat = system("qatest.bat");
+
+  return $sysstat;
+}
+
+###################################################################
 # runtest
 #
 # parses the test definition, runs the test, check the results
@@ -80,7 +139,8 @@ sub runtest ($) {
   my $testid = "";
   my $testin = "";
   my $timeout = $timeoutdef;
-  my $ppcmd = "EMBOSSRC=../../ ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;";
+
+  my $ppcmd = "$ppcmd";
   my $qqcmd = "";
   my %testfile = ();
   my %outfile = ();
@@ -113,17 +173,27 @@ sub runtest ($) {
       $ifile=0;
       $packa = "unknown";
       print LOG "Test <$testid>\n";
-      $sysstat = system( "rm -rf $testid");
-      $status = $sysstat >> 8;
-      if ($status) {
-	$testerr = "failed to delete old directory $testid, status $status\n";
-	print STDERR $testerr;
-	print LOG $testerr;
+      if(!$repeattest){
+#	  print "+++ clean up old '$id' directory\n";
+	  if(-e $id && -d $testid) {
+#	  print "+++ calling rmdir\n";
+	  if($iswindows){
+	      $sysstat = system( "rmdir /s /q $testid");
+	  } else {
+	      $sysstat = system( "rm -rf $testid");
+	  }
+	  $status = $sysstat >> 8;
+	  if ($status) {
+	      $testerr = "failed to delete old directory $testid, status $status\n";
+	      print STDERR $testerr;
+	      print LOG $testerr;
+	  }
+	  }
+	  mkdir ("$testid", 0777);
+	  open (SAVEDEF, ">$1/testdef") || die "Cannot save $1/testdef";
+	  print SAVEDEF $testdef;
+	  close (SAVEDEF);
       }
-      mkdir ("$testid", 0777);
-      open (SAVEDEF, ">$1/testdef") || die "Cannot save $1/testdef";
-      print SAVEDEF $testdef;
-      close (SAVEDEF);
     }
 
 # other lines
@@ -143,12 +213,23 @@ sub runtest ($) {
 	$apcount{$testapp}++;
 	if (!$simple && !defined($tfm{$testapp})) {
 	    $tfm{$testapp}=0;
-	    $dtop = "../../doc/programs/";
-	    if (-e "$dtop/html/$testapp.html") {$tfm{$testapp}++}
+	    if($iswindows) {
+	      $dtop = "$basedir\\doc\\programs";
+	      $dochtml = "$dtop\\html\\$testapp.html";
+	      $doctext = "$dtop\\text\\$testapp.txt";
+	      $docmain = "$dtop\\master\\emboss\\apps\\$testapp.html";
+	    }
+	    else {
+	      $dtop = "$basedir/doc/programs";
+	      $dochtml = "$dtop/html/$testapp.html";
+	      $doctext = "$dtop/text/$testapp.txt";
+	      $docmain = "$dtop/master/emboss/apps/$testapp.html";
+	    }
+	    if (-e "$dochtml") {$tfm{$testapp}++}
 	    else {print STDERR "No HTML docs for $testapp\n";$misshtml++;}
-	    if (-e "$dtop/text/$testapp.txt") {$tfm{$testapp}++}
+	    if (-e "$doctext") {$tfm{$testapp}++}
 	    else {print STDERR "No tfm text docs for $testapp\n";$misstext++;}
-	    if (-e "$dtop/master/emboss/apps/$testapp.html") {$sf{$testapp}++}
+	    if (-e "$docmain") {$sf{$testapp}++}
 	    else {print STDERR "No master (sourceforge) docs for $testapp\n";$misssf++;}
 	}
     }
@@ -183,8 +264,14 @@ sub runtest ($) {
     }
     elsif ($line =~ /^AB\s*(.*)/) {$packa = $1}
     elsif ($line =~ /^CL\s+(.*)/) {
-      if ($cmdline ne "") {$cmdline .= " "}
-      $cmdline .= $1;
+      $newcmdline = $1;
+      if ($cmdline ne "") {
+	if($iswindows && ($cmdline =~ /\\$/)){
+	  $cmdline =~ s/\\$//g;
+	}
+	else {$cmdline .= " "}
+      }
+	$cmdline .= $newcmdline;
     }
 
 # directoryname - must be unique
@@ -230,8 +317,10 @@ sub runtest ($) {
 
 # filename - must be unique
 
-    elsif ($line =~ /^F[IK]\s+(\S+)/) {
+    elsif ($line =~ /^F[IK]\s+(\S+)(\s+binary)?/) {
       $filename = $1;
+      $isbinary = $2;
+      if(!defined($isbinary)){$isbinary = 0}
       if (defined($outfile{$filename})) {
 	$testerr = "$retcode{16} $testid/$filename\n";
 	print STDERR $testerr;
@@ -240,9 +329,10 @@ sub runtest ($) {
       }
       $outfile{$filename} = $ifile;
       $outfilepatt{$ifile} = $ipatt;
-      print LOG "Known file [$ifile] <$1>\n";
+      print LOG "Known file [$ifile] <$filename>\n";
       $ifile++;
       $filezero{$ifile} = 0;
+      $binfile{$ifile-1} = $isbinary;
     }
 
 # file pattern(s) - can be many for each file
@@ -318,11 +408,10 @@ sub runtest ($) {
   if ($doembassy && $testa) {	# for "embassy" apps (AA lines) we can skip
     if ($testappname && !defined($acdname{$testapp})) { # embassy make not run
 	print STDERR "Embassy application $testapp ($packa) not installed - skip\n";
-      $skipembassy++;
-      return 0;
+	$globaltestdelete = "all";
+	$skipembassy++;
+	return 0;
     }
-
-#    if ($testappname && !defined($acdname{$testapp})) {$skipembassy++; return 0} # embassy make not run
   }
 
 # cd to the test directory (created when ID was parsed)
@@ -332,75 +421,84 @@ sub runtest ($) {
 # set up stdin always
 # we need to hit EOF if it tries to read when there is no input
 
-  open (TESTIN, ">stdin");
-  if ($testin ne "") {
-    print TESTIN $testin;
-  }
-  close TESTIN;
-  $stdin = "< stdin";
-
-  $timealarm=0;
   $starttime = time();
+  
+  if($repeattest){
+      system("rm testlog");
+  }
+  if(!$repeattest){
+      open (TESTIN, ">stdin");
+      if ($testin ne "") {
+	  print TESTIN $testin;
+      }
+      close TESTIN;
+      $stdin = "< stdin";
+
+      $timealarm=0;
 
 # run the test with a timeout (default 60 seconds) to catch infinite loops
 # The easiest infinite loop is an unexpected prompt, which waits on stdin
 
-  eval {
-    $status = 0;
-    alarm($timeout);
-    $sysstat = system("$domcheck$ppcmd $testpath$testapp $cmdline > stdout 2> stderr $stdin $qqcmd");
-    alarm(0);
-    $status = $sysstat >> 8;
-  };
+      eval {
+	  $status = 0;
+	  alarm($timeout);
+          $cmdstr = "$testpath$testapp $cmdline > stdout 2> stderr $stdin";
+#          print STDERR "$cmdstr\n";
+	  $sysstat = qatestsystem("$domcheck$ppcmd", "$cmdstr", "$qqcmd");
+	  alarm(0);
+	  $status = $sysstat >> 8;
+      };
 
 
-  if ($@) {			# error from eval block
-    if ($@ =~ /qatest timeout/) {	# timeout signal handler
-      $timealarm = 1;		# set timeout flag and continue
-    }
-    else {			# other signal - fail
-      die;
-    }
-  }
+      if ($@) {			# error from eval block
+	  if ($@ =~ /qatest timeout/) {	# timeout signal handler
+	      $timealarm = 1;		# set timeout flag and continue
+	  }
+	  else {			# other signal - fail
+	      die;
+	  }
+      }
 
 # Report any timeout
 
-  if ($timealarm) {
-    $testerr = "$retcode{11} ($timeout secs) '$testapp $cmdline $stdin', status $status/$testret\n";
-    print STDERR $testerr;
-    print LOG $testerr;
-    chdir ("..");
-    return 11;
-  }
+      if ($timealarm) {
+	  $testerr = "$retcode{11} ($timeout secs) '$testapp $cmdline $stdin', status $status/$testret\n";
+	  print STDERR $testerr;
+	  print LOG $testerr;
+	  chdir ("..");
+	  return 11;
+      }
 
 # report any failed system call
 
-  elsif ($status) {
-    if ($status != $testret) {
-      $testerr = "$retcode{2} '$testapp $cmdline $stdin', status $status/$testret\n";
-      print STDERR $testerr;
-      print LOG $testerr;
-      chdir ("..");
-      return 2;
-    }
-  }
+      elsif ($status) {
+	  if ($status != $testret) {
+	      $testerr = "$retcode{2} '$testapp $cmdline $stdin', status $status/$testret\n";
+	      print STDERR $testerr;
+	      print LOG $testerr;
+	      chdir ("..");
+	      return 2;
+	  }
+      }
 
 # report any run that succeeded where a failure was expected
 
-  else {
-    if ($testret) {
-      $testerr = "$retcode{5} '$testapp $cmdline $stdin', status $status/$testret\n";
-      print STDERR $testerr;
-      print LOG $testerr;
-      chdir ("..");
-      return 5;
-    }
-  }
+      else {
+	  if ($testret) {
+	      $testerr = "$retcode{5} '$testapp $cmdline $stdin', status $status/$testret\n";
+	      print STDERR $testerr;
+	      print LOG $testerr;
+	      chdir ("..");
+	      return 5;
+	  }
+      }
 
 # We have a successful run, no timeouts.
 # Check it did what we wanted it to
 
 # Note the run time
+
+  }
 
   $endtime = time();
   $runtime = $endtime - $starttime;
@@ -408,11 +506,11 @@ sub runtest ($) {
 # Check for a core dump
 
   if (-e "core") {
-    $testerr = "$retcode{12} $testid\n";
-    print STDERR $testerr;
-    print LOG $testerr;
-    chdir ("..");
-    return 12;
+      $testerr = "$retcode{12} $testid\n";
+      print STDERR $testerr;
+      print LOG $testerr;
+      chdir ("..");
+      return 12;
   }
 
 # Read the file names in the test directory
@@ -503,7 +601,9 @@ sub runtest ($) {
 # This file was not defined (we let extra -debug files through)
 
     if (!defined($outfile{$file})) {
+      if($iswindows && ($file eq "qatest.bat")) {next}
       if($file eq "$testapp.dbg") {next}
+      if($file eq "$testapp.ax2log") {next}
       $testerr = "$retcode{3} $testid/$file\n";
       print STDERR $testerr;
       print LOG $testerr;
@@ -517,10 +617,20 @@ sub runtest ($) {
       $i =  $outfile{$file};
       print LOG "file [$i] <$file>\n";
 
+# read the output file - to test patterns and line count
+
+      open (OFIL, $file) || die "Cannot open $testid/$file";
+      $odata = "";
+      $linecount=0;
+      while (<OFIL>) {$odata .= $_; $linecount ++;}
+      close OFIL;
+
 # File size defined - test it
 
       if (defined($outsize{$i})) {
 	$size = -s $file;
+	if($iswindows && !$binfile{$i} &&
+	   ($file eq "stderr" || $file eq "stdout")) {$size -= $linecount}
 	print LOG "Test size $size '$outsize{$i}' $testid/$file\n";
 	if (testnum($outsize{$i}, $size)) {
 	  $testerr = "$retcode{7} $size '$outsize{$i}' $testid/$file\n";
@@ -531,18 +641,17 @@ sub runtest ($) {
 	}
       }
 
-# read the output file - to test patterns and line count
-
-      open (OFIL, $file) || die "Cannot open $testid/$file";
-      $odata = "";
-      $linecount=0;
-      while (<OFIL>) {$odata .= $_; $linecount ++;}
-      close OFIL;
-
 # Test line count (FC)
 
       if (defined($outcount{$i})) {
 	print LOG "Test linecount $linecount '$outcount{$i}' $testid/$file\n";
+	if ($binfile{$i}) {
+	  $testerr = "$retcode{8} '$outcount{$i}' BINARY FILE $testid/$file\n";
+	  print STDERR $testerr;
+	  print LOG $testerr;
+	  chdir ("..");
+	  return 8;
+	}
 	if (testnum($outcount{$i}, $linecount)) {
 	  $testerr = "$retcode{8} $linecount '$outcount{$i}' $testid/$file\n";
 	  print STDERR $testerr;
@@ -747,20 +856,35 @@ $logfile = "qatest.log";
 $testwild = "*";
 $doembassy=1;
 $docheck=1;
-$qatestfile = "../qatest.dat";
-
-$acddir=  "../../emboss/acd";
-$simple=0;
+$repeattest=0;
 
 open (VERSION, "embossversion -full -filter|") ||
     die "Cannot run embossversion";
 while (<VERSION>){
+    if(/System: (\S+)/) {
+      $os = $1;
+      if($os =~ /windows/) {$iswindows = 1; $docheck=0}
+    }
     if(/BaseDirectory: (\S+)/) {
-	$acddir = $1;
-	$qatestfile = "$acddir"."test/qatest.dat";
+	$basedir = $1;
+#        print "BaseDirectory: $acddir\n";
     }
 }
 close VERSION;
+
+if($iswindows){
+  $ppcmd = "SET EMBOSSRC=..\\..\\;SET EMBOSS_RCHOME=N;";
+  $qatestfile = "$basedir\\test\\qatest.dat";
+  $acddir = "$basedir\\acd";
+  chdir "$basedir\\test\\qa";
+}
+else {
+  $ppcmd = "EMBOSSRC=../../ ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;";
+  $qatestfile = "$basedir/test/qatest.dat";
+  $acddir=  "$basedir/emboss/acd";
+  chdir "$basedir/test/qa";
+}
+$simple=0;
 
 foreach $test (@ARGV) {
   if ($test =~ /^-(.*)/) {
@@ -771,6 +895,7 @@ foreach $test (@ARGV) {
     elsif ($opt eq "ka") {$defdelete="all"}
     elsif ($opt eq "noembassy") {$doembassy=0}
     elsif ($opt eq "nocheck") {$docheck=0}
+    elsif ($opt eq "retest") {$repeattest=1}
     elsif ($opt eq "simple") {$simple=1}
     elsif ($opt eq "wild") {
 	$dowild=1;
@@ -850,7 +975,7 @@ $SIG{ALRM} = sub { print STDERR "+++ timeout handler\n"; die "qatest timeout" };
 # The relative path is fixed, as are the paths of files in the qatest.dat
 # file, so best to keep everything running in the test/qa directory
 
-opendir (ACDDIR, "$acddir") || die "Cannot open emboss/acd directory";
+opendir (ACDDIR, "$acddir") || die "Cannot open ACD directory '$acddir'";
 @acdfiles = readdir(ACDDIR);
 closedir ACDDIR;
 
@@ -864,7 +989,13 @@ if (!$numtests) {
 
   undef @acdfiles;
 
-  open (WOSSNAME, "unset EMBOSS_ACDCOMMANDLINE;wossname -alpha -auto|") || die "Cannot run wossname";
+  if($iswindows) {
+      open (WOSSNAME, "wossname -alpha -auto|") || die "Cannot run wossname";
+  }
+  else {
+      open (WOSSNAME, "unset EMBOSS_ACDCOMMANDLINE;wossname -alpha -auto|") ||
+	  die "Cannot run wossname";
+  }
   while (<WOSSNAME>) {
     if (/^[a-z]\S+/) {
       $app = $&;
@@ -953,13 +1084,23 @@ while (<IN>) {
 # Usually we keep failed tests (unless delete is set to 'all')
 
       if ($globaltestdelete eq "all") {
-	$sysstat = system( "rm -rf $id");
-	$status = $sysstat >> 8;
-	if ($status) {
-	  $testerr = "failed to delete old directory $id, status $status\n";
-	  print STDERR $testerr;
-	  print LOG $testerr;
-	}
+	  if(!$repeattest){
+#              print "+++ clean up old '$id' directory\n";
+              if(-e $id && -d $id) {
+#              print "+++ calling rmdir\n";
+              if($iswindows){
+	        $sysstat = system( "rmdir /s /q $id");
+              } else {
+	        $sysstat = system( "rm -rf $id");
+              }
+	      $status = $sysstat >> 8;
+	      if ($status) {
+		  $testerr = "failed to delete old directory $id, status $status\n";
+		  print STDERR $testerr;
+		  print LOG $testerr;
+	      }
+              }
+	  }
       }
 
     }
@@ -975,12 +1116,19 @@ while (<IN>) {
 # usually we delete successful results (unless delete is set to 'keep')
 
       if ($globaltestdelete ne "keep") {
-	$sysstat = system( "rm -rf $id");
-	$status = $sysstat >> 8;
-	if ($status) {
-	  $testerr = "failed to delete old directory $id, status $status\n";
-	  print STDERR $testerr;
-	  print LOG $testerr;
+	if(!$repeattest){
+	  if($iswindows) {
+	    $sysstat = system( "rmdir /s /q $id");
+	  }
+	  else {
+	    $sysstat = system( "rm -rf $id");
+	  }
+	    $status = $sysstat >> 8;
+	    if ($status) {
+		$testerr = "failed to delete old directory $id, status $status\n";
+		print STDERR $testerr;
+		print LOG $testerr;
+	    }
 	}
       }
 

@@ -1,38 +1,49 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensprojectionsegment_h
-#define ensprojectionsegment_h
+#ifndef ENSPROJECTIONSEGMENT_H
+#define ENSPROJECTIONSEGMENT_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ensslice.h"
 
+AJ_BEGIN_DECLS
 
 
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
 
 /* @data EnsPProjectionsegment ************************************************
 **
-** Ensembl Projection Segment.
-**
-** Holds information about a genome sequence slice.
+** Ensembl Projection Segment
 **
 ** @alias EnsSProjectionsegment
 ** @alias EnsOProjectionsegment
 **
-** @attr SrcStart [ajuint] Source start coordinate.
-** @attr SrcEnd [ajuint] Source end coordinate.
-** @attr TrgSlice [EnsPSlice] Target Ensembl Slice.
-** @attr Use [ajuint] Use counter.
-** @attr Padding [ajuint] Padding to alignment boundary.
+** @attr SourceStart [ajuint] Source start coordinate
+** @attr SourceEnd [ajuint] Source end coordinate
+** @attr TargetSlice [EnsPSlice] Target Ensembl Slice
+** @attr Use [ajuint] Use counter
+** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct EnsSProjectionsegment
 {
-    ajuint SrcStart;
-    ajuint SrcEnd;
-    EnsPSlice TrgSlice;
+    ajuint SourceStart;
+    ajuint SourceEnd;
+    EnsPSlice TargetSlice;
     ajuint Use;
     ajuint Padding;
 } EnsOProjectionsegment;
@@ -42,25 +53,34 @@ typedef struct EnsSProjectionsegment
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
 
-EnsPProjectionsegment ensProjectionsegmentNew(ajuint srcstart,
-                                              ajuint srcend,
-                                              EnsPSlice trgslice);
+EnsPProjectionsegment ensProjectionsegmentNewCpy(
+    const EnsPProjectionsegment ps);
+
+EnsPProjectionsegment ensProjectionsegmentNewIni(ajuint srcstart,
+                                                 ajuint srcend,
+                                                 EnsPSlice trgslice);
 
 EnsPProjectionsegment ensProjectionsegmentNewRef(EnsPProjectionsegment ps);
 
 void ensProjectionsegmentDel(EnsPProjectionsegment* Pps);
 
-ajuint ensProjectionsegmentGetSrcStart(const EnsPProjectionsegment ps);
+ajuint ensProjectionsegmentGetSourceStart(const EnsPProjectionsegment ps);
 
-ajuint ensProjectionsegmentGetSrcEnd(const EnsPProjectionsegment ps);
+ajuint ensProjectionsegmentGetSourceEnd(const EnsPProjectionsegment ps);
 
-EnsPSlice ensProjectionsegmentGetTrgSlice(const EnsPProjectionsegment ps);
+EnsPSlice ensProjectionsegmentGetTargetSlice(const EnsPProjectionsegment ps);
 
 AjBool ensProjectionsegmentTrace(const EnsPProjectionsegment ps, ajuint level);
+
+size_t ensProjectionsegmentCalculateMemsize(const EnsPProjectionsegment ps);
 
 /*
 ** End of prototype definitions
@@ -69,8 +89,6 @@ AjBool ensProjectionsegmentTrace(const EnsPProjectionsegment ps, ajuint level);
 
 
 
-#endif /* ensprojectionsegment_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSPROJECTIONSEGMENT_H */

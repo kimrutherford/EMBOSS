@@ -1,10 +1,10 @@
-/******************************************************************************
-** @source Ensembl Attribute functions.
+/* @source Ensembl Attribute functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.9 $
+** @modified $Date: 2011/07/08 11:40:49 $ by $Author: mks $
+** @version $Revision: 1.23 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -29,8 +29,53 @@
 
 #include "ensattribute.h"
 #include "ensgene.h"
+#include "enstable.h"
 #include "enstranscript.h"
 #include "enstranslation.h"
+
+
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+/* @conststatic attributetypeadaptorTables ************************************
+**
+** Array of Ensembl Attribute Type Adaptor SQL table names
+**
+******************************************************************************/
+
+static const char* const attributetypeadaptorTables[] =
+{
+    "attrib_type",
+    (const char*) NULL
+};
+
+
+
+
+/* @conststatic attributetypeadaptorColumns ***********************************
+**
+** Array of Ensembl Attribute Type Adaptor SQL column names
+**
+******************************************************************************/
+
+static const char* const attributetypeadaptorColumns[] =
+{
+    "attrib_type.attrib_type_id",
+    "attrib_type.code",
+    "attrib_type.description",
+    "attrib_type.name",
+    (const char*) NULL
+};
+
+
+
+
+/* ==================================================================== */
+/* ======================== global variables ========================== */
+/* ==================================================================== */
 
 
 
@@ -43,12 +88,58 @@
 
 
 /* ==================================================================== */
+/* ======================== private constants ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== private variables ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-static AjBool attributeadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
-                                            const AjPStr statement,
-                                            AjPList attributes);
+static AjBool attributeadaptorFetchAllbyStatement(
+    EnsPDatabaseadaptor dba,
+    const AjPStr statement,
+    AjPList attributes);
+
+static AjBool attributetypeadaptorFetchAllbyStatement(
+    EnsPDatabaseadaptor dba,
+    const AjPStr statement,
+    EnsPAssemblymapper am,
+    EnsPSlice slice,
+    AjPList ats);
+
+static AjBool attributetypeadaptorCacheInit(EnsPAttributetypeadaptor ata);
+
+static AjBool attributetypeadaptorCacheInsert(EnsPAttributetypeadaptor ata,
+                                              EnsPAttributetype* Pat);
+
+static void attributetypeadaptorCacheClearIdentifier(void** key,
+                                                     void** value,
+                                                     void* cl);
+
+static void attributetypeadaptorCacheClearCode(void** key,
+                                               void** value,
+                                               void* cl);
+
+static void attributetypeadaptorFetchAll(const void* key,
+                                         void** value,
+                                         void* cl);
+
+
+
+
+/* ==================================================================== */
+/* ===================== All functions by section ===================== */
+/* ==================================================================== */
 
 
 
@@ -62,13 +153,13 @@ static AjBool attributeadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 
 
 
-/* @datasection [EnsPAttribute] Attribute *************************************
+/* @datasection [EnsPAttribute] Ensembl Attribute *****************************
 **
-** Functions for manipulating Ensembl Attribute objects
+** @nam2rule Attribute Functions for manipulating Ensembl Attribute objects
 **
-** @cc Bio::EnsEMBL::Attribute CVS Revision: 1.8
-**
-** @nam2rule Attribute
+** @cc Bio::EnsEMBL::Attribute
+** @cc CVS Revision: 1.11
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -83,16 +174,18 @@ static AjBool attributeadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPAttribute]
-** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the reference counter
 **
-** @argrule Obj object [EnsPAttribute] Ensembl Attribute
-** @argrule Ref object [EnsPAttribute] Ensembl Attribute
+** @argrule Cpy attribute [const EnsPAttribute] Ensembl Attribute
+** @argrule Ini at [EnsPAttributetype] Ensembl Attribute Type
+** @argrule Ini value [AjPStr] Value
+** @argrule Ref attribute [EnsPAttribute] Ensembl Attribute
 **
-** @valrule * [EnsPAttribute] Ensembl Attribute
+** @valrule * [EnsPAttribute] Ensembl Attribute or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -100,76 +193,58 @@ static AjBool attributeadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 
 
 
-/* @func ensAttributeNew ******************************************************
+/* @func ensAttributeNewCpy ***************************************************
 **
-** Default Ensembl Attribute constructor.
+** Object-based constructor function, which returns an independent object.
+**
+** @param [r] attribute [const EnsPAttribute] Ensembl Attribute
+**
+** @return [EnsPAttribute] Ensembl Attribute or NULL
+** @@
+******************************************************************************/
+
+EnsPAttribute ensAttributeNewCpy(const EnsPAttribute attribute)
+{
+    EnsPAttribute pthis = NULL;
+
+    AJNEW0(pthis);
+
+    pthis->Attributetype = ensAttributetypeNewRef(attribute->Attributetype);
+
+    if(attribute->Value)
+        pthis->Value = ajStrNewRef(attribute->Value);
+
+    pthis->Use = 1;
+
+    return pthis;
+}
+
+
+
+
+/* @func ensAttributeNewIni ***************************************************
+**
+** Ensembl Attribute constructor with initial values.
 **
 ** @cc Bio::EnsEMBL::Attribute::new
-** @param [u] code [AjPStr] Code
-** @param [u] name [AjPStr] Name
-** @param [u] description [AjPStr] Description
+** @param [u] at [EnsPAttributetype] Ensembl Attribute Type
 ** @param [u] value [AjPStr] Value
 **
 ** @return [EnsPAttribute] Ensembl Attribute or NULL
 ** @@
 ******************************************************************************/
 
-EnsPAttribute ensAttributeNew(AjPStr code,
-                              AjPStr name,
-                              AjPStr description,
-                              AjPStr value)
+EnsPAttribute ensAttributeNewIni(EnsPAttributetype at,
+                                 AjPStr value)
 {
     EnsPAttribute attribute = NULL;
 
     AJNEW0(attribute);
 
-    if(code)
-        attribute->Code = ajStrNewRef(code);
-
-    if(name)
-        attribute->Name = ajStrNewRef(name);
-
-    if(description)
-        attribute->Description = ajStrNewRef(description);
+    attribute->Attributetype = ensAttributetypeNewRef(at);
 
     if(value)
         attribute->Value = ajStrNewRef(value);
-
-    attribute->Use = 1;
-
-    return attribute;
-}
-
-
-
-
-/* @func ensAttributeNewObj ***************************************************
-**
-** Object-based constructor function, which returns an independent object.
-**
-** @param [r] object [const EnsPAttribute] Ensembl Attribute
-**
-** @return [EnsPAttribute] Ensembl Attribute or NULL
-** @@
-******************************************************************************/
-
-EnsPAttribute ensAttributeNewObj(const EnsPAttribute object)
-{
-    EnsPAttribute attribute = NULL;
-
-    AJNEW0(attribute);
-
-    if(object->Code)
-        attribute->Code = ajStrNewRef(object->Code);
-
-    if(object->Name)
-        attribute->Name = ajStrNewRef(object->Name);
-
-    if(object->Description)
-        attribute->Description = ajStrNewRef(object->Description);
-
-    if(object->Value)
-        attribute->Value = ajStrNewRef(object->Value);
 
     attribute->Use = 1;
 
@@ -206,14 +281,13 @@ EnsPAttribute ensAttributeNewRef(EnsPAttribute attribute)
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Attributes.
+** memory allocated for an Ensembl Attribute object.
 **
 ** @fdata [EnsPAttribute]
-** @fnote None
 **
-** @nam3rule Del Destroy (free) an Attribute object
+** @nam3rule Del Destroy (free) an Ensembl Attribute object
 **
-** @argrule * Pattribute [EnsPAttribute*] Attribute object address
+** @argrule * Pattribute [EnsPAttribute*] Ensembl Attribute object address
 **
 ** @valrule * [void]
 **
@@ -227,7 +301,7 @@ EnsPAttribute ensAttributeNewRef(EnsPAttribute attribute)
 **
 ** Default destructor for an Ensembl Attribute.
 **
-** @param [d] Pattribute [EnsPAttribute*] Ensembl Attribute address
+** @param [d] Pattribute [EnsPAttribute*] Ensembl Attribute object address
 **
 ** @return [void]
 ** @@
@@ -254,11 +328,7 @@ void ensAttributeDel(EnsPAttribute* Pattribute)
         return;
     }
 
-    ajStrDel(&pthis->Code);
-
-    ajStrDel(&pthis->Name);
-
-    ajStrDel(&pthis->Description);
+    ensAttributetypeDel(&pthis->Attributetype);
 
     ajStrDel(&pthis->Value);
 
@@ -277,20 +347,15 @@ void ensAttributeDel(EnsPAttribute* Pattribute)
 ** Functions for returning elements of an Ensembl Attribute object.
 **
 ** @fdata [EnsPAttribute]
-** @fnote None
 **
-** @nam3rule Get Return Attribute attribute(s)
-** @nam4rule GetCode Return the code
-** @nam4rule GetName Return the name
-** @nam4rule GetDescription Return the description
-** @nam4rule GetValue Return the value
+** @nam3rule Get Return Ensembl Attribute attribute(s)
+** @nam4rule Attributetype Return the Ensembl Attribute Type
+** @nam4rule Value Return the value
 **
-** @argrule * attribute [const EnsPAttribute] Attribute
+** @argrule * attribute [const EnsPAttribute] Ensembl Attribute
 **
-** @valrule Code [AjPStr] Code
-** @valrule Name [AjPStr] Name
-** @valrule Description [AjPStr] Description
-** @valrule Value [AjPStr] Value
+** @valrule Attributetype [EnsPAttributetype] Ensembl Attribute Type or NULL
+** @valrule Value [AjPStr] Value or NULL
 **
 ** @fcategory use
 ******************************************************************************/
@@ -298,67 +363,25 @@ void ensAttributeDel(EnsPAttribute* Pattribute)
 
 
 
-/* @func ensAttributeGetCode **************************************************
+/* @func ensAttributeGetAttributetype *****************************************
 **
-** Get the code element of an Ensembl Attribute.
+** Get the Ensembl Attribute Type element of an Ensembl Attribute.
 **
 ** @cc Bio::EnsEMBL::Attribute::code
-** @param [r] attribute [const EnsPAttribute] Ensembl Attribute
-**
-** @return [AjPStr] Code
-** @@
-******************************************************************************/
-
-AjPStr ensAttributeGetCode(const EnsPAttribute attribute)
-{
-    if(!attribute)
-        return NULL;
-
-    return attribute->Code;
-}
-
-
-
-
-/* @func ensAttributeGetName **************************************************
-**
-** Get the name element of an Ensembl Attribute.
-**
+** @cc Bio::EnsEMBL::Attribute::description
 ** @cc Bio::EnsEMBL::Attribute::name
 ** @param [r] attribute [const EnsPAttribute] Ensembl Attribute
 **
-** @return [AjPStr] Name
+** @return [EnsPAttributetype] Ensembl Attribute Type or NULL
 ** @@
 ******************************************************************************/
 
-AjPStr ensAttributeGetName(const EnsPAttribute attribute)
+EnsPAttributetype ensAttributeGetAttributetype(const EnsPAttribute attribute)
 {
     if(!attribute)
         return NULL;
 
-    return attribute->Name;
-}
-
-
-
-
-/* @func ensAttributeGetDescription *******************************************
-**
-** Get the description element of an Ensembl Attribute.
-**
-** @cc Bio::EnsEMBL::Attribute::description
-** @param [r] attribute [const EnsPAttribute] Ensembl Attribute
-**
-** @return [AjPStr] Description
-** @@
-******************************************************************************/
-
-AjPStr ensAttributeGetDescription(const EnsPAttribute attribute)
-{
-    if(!attribute)
-        return NULL;
-
-    return attribute->Description;
+    return attribute->Attributetype;
 }
 
 
@@ -371,7 +394,7 @@ AjPStr ensAttributeGetDescription(const EnsPAttribute attribute)
 ** @cc Bio::EnsEMBL::Attribute::value
 ** @param [r] attribute [const EnsPAttribute] Ensembl Attribute
 **
-** @return [AjPStr] Value
+** @return [AjPStr] Value or NULL
 ** @@
 ******************************************************************************/
 
@@ -386,64 +409,12 @@ AjPStr ensAttributeGetValue(const EnsPAttribute attribute)
 
 
 
-/* @func ensAttributeGetMemsize ***********************************************
-**
-** Get the memory size in bytes of an Ensembl Attribute.
-**
-** @param [r] attribute [const EnsPAttribute] Ensembl Attribute
-**
-** @return [ajulong] Memory size
-** @@
-******************************************************************************/
-
-ajulong ensAttributeGetMemsize(const EnsPAttribute attribute)
-{
-    ajulong size = 0;
-
-    if(!attribute)
-        return 0;
-
-    size += sizeof (EnsOAttribute);
-
-    if(attribute->Code)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(attribute->Code);
-    }
-
-    if(attribute->Name)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(attribute->Name);
-    }
-
-    if(attribute->Description)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(attribute->Description);
-    }
-
-    if(attribute->Value)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(attribute->Value);
-    }
-
-    return size;
-}
-
-
-
-
 /* @section debugging *********************************************************
 **
 ** Functions for reporting of an Ensembl Attribute object.
 **
 ** @fdata [EnsPAttribute]
+**
 ** @nam3rule Trace Report Ensembl Attribute elements to debug file
 **
 ** @argrule Trace attribute [const EnsPAttribute] Ensembl Attribute
@@ -480,17 +451,15 @@ AjBool ensAttributeTrace(const EnsPAttribute attribute, ajuint level)
     ajStrAppendCountK(&indent, ' ', level * 2);
 
     ajDebug("%SensAttributeTrace %p\n"
-            "%S  Code '%S'\n"
-            "%S  Name '%S'\n"
-            "%S  Description '%S'\n"
+            "%S  Attributetype %p\n"
             "%S  Value '%S'\n"
             "%S  Use %u\n",
             indent, attribute,
-            indent, attribute->Code,
-            indent, attribute->Name,
-            indent, attribute->Description,
+            indent, attribute->Attributetype,
             indent, attribute->Value,
             indent, attribute->Use);
+
+    ensAttributetypeTrace(attribute->Attributetype, level + 1);
 
     ajStrDel(&indent);
 
@@ -500,49 +469,201 @@ AjBool ensAttributeTrace(const EnsPAttribute attribute, ajuint level)
 
 
 
-/* @datasection [EnsPAttributeadaptor] Attribute Adaptor **********************
+/* @section calculate *********************************************************
 **
-** Functions for manipulating Ensembl Attribute Adaptor objects
+** Functions for calculating values of an Ensembl Attribute object.
 **
-** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor CVS Revision: 1.24
+** @fdata [EnsPAttribute]
 **
-** @nam2rule Attributeadaptor
+** @nam3rule Calculate Calculate Ensembl Attribute values
+** @nam4rule Memsize Calculate the memory size in bytes
+**
+** @argrule * attribute [const EnsPAttribute] Ensembl Attribute
+**
+** @valrule Memsize [size_t] Memory size in bytes or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensAttributeCalculateMemsize *****************************************
+**
+** Calclate the memory size in bytes of an Ensembl Attribute.
+**
+** @param [r] attribute [const EnsPAttribute] Ensembl Attribute
+**
+** @return [size_t] Memory size in bytes or 0
+** @@
+******************************************************************************/
+
+size_t ensAttributeCalculateMemsize(const EnsPAttribute attribute)
+{
+    size_t size = 0;
+
+    if(!attribute)
+        return 0;
+
+    size += sizeof (EnsOAttribute);
+
+    size += ensAttributetypeCalculateMemsize(attribute->Attributetype);
+
+    if(attribute->Value)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(attribute->Value);
+    }
+
+    return size;
+}
+
+
+
+
+/* @section convenience functions *********************************************
+**
+** Ensembl Attribute convenience functions
+**
+** @fdata [EnsPAttribute]
+**
+** @nam3rule Get Get member(s) of associated objects
+** @nam4rule Code Get the code element of the Ensembl Attribute Type
+** linked to an Ensembl Attribute
+** @nam4rule Description Get the description element of an
+** Ensembl Attribute Type linked to an Ensembl Attribute
+** @nam4rule Name Get the name element of an Ensembl Attribute Type
+** linked to an Ensembl Attribute
+**
+** @argrule * attribute [const EnsPAttribute] Ensembl Attribute
+**
+** @valrule Code [AjPStr] Code or NULL
+** @valrule Description [AjPStr] Description or NULL
+** @valrule Name [AjPStr] Name or NULL
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensAttributeGetCode **************************************************
+**
+** Get the code element of an Ensembl Attribute Type
+** linked to an Ensembl Attribute.
+**
+** @cc Bio::EnsEMBL::Attribute::code
+** @param [r] attribute [const EnsPAttribute] Ensembl Attribute
+**
+** @return [AjPStr] Code or NULL
+** @@
+******************************************************************************/
+
+AjPStr ensAttributeGetCode(const EnsPAttribute attribute)
+{
+    if(!attribute)
+        return NULL;
+
+    return ensAttributetypeGetCode(attribute->Attributetype);
+}
+
+
+
+
+/* @func ensAttributeGetDescription *******************************************
+**
+** Get the description element of an Ensembl Attribute Type
+** linked to an Ensembl Attribute.
+**
+** @cc Bio::EnsEMBL::Attribute::description
+** @param [r] attribute [const EnsPAttribute] Ensembl Attribute
+**
+** @return [AjPStr] Description or NULL
+** @@
+******************************************************************************/
+
+AjPStr ensAttributeGetDescription(const EnsPAttribute attribute)
+{
+    if(!attribute)
+        return NULL;
+
+    return ensAttributetypeGetDescription(attribute->Attributetype);
+}
+
+
+
+
+/* @func ensAttributeGetName **************************************************
+**
+** Get the name element of an Ensembl Attribute Type
+** linked to an Ensembl Attribute.
+**
+** @cc Bio::EnsEMBL::Attribute::name
+** @param [r] attribute [const EnsPAttribute] Ensembl Attribute
+**
+** @return [AjPStr] Name or NULL
+** @@
+******************************************************************************/
+
+AjPStr ensAttributeGetName(const EnsPAttribute attribute)
+{
+    if(!attribute)
+        return NULL;
+
+    return ensAttributetypeGetName(attribute->Attributetype);
+}
+
+
+
+
+/* @datasection [EnsPAttributeadaptor] Ensembl Attribute Adaptor **************
+**
+** @nam2rule Attributeadaptor Functions for manipulating
+** Ensembl Attribute Adaptor objects
+**
+** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor
+** @cc CVS Revision: 1.26
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
 
 
 
-/* @funcstatic attributeadaptorFetchAllBySQL **********************************
+/* @funcstatic attributeadaptorFetchAllbyStatement ****************************
 **
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
-** results into an AJAX List of Ensembl Attributes.
+** results into an AJAX List of Ensembl Attribute objects.
 **
-** The caller is responsible for deleting the Ensembl Attributes before
+** The caller is responsible for deleting the Ensembl Attribute objects before
 ** deleting the AJAX List.
 **
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
-** @param [u] attributes [AjPList] AJAX List of Ensembl Attributes
+** @param [u] attributes [AjPList] AJAX List of Ensembl Attribute objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool attributeadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
-                                            const AjPStr statement,
-                                            AjPList attributes)
+static AjBool attributeadaptorFetchAllbyStatement(
+    EnsPDatabaseadaptor dba,
+    const AjPStr statement,
+    AjPList attributes)
 {
+    ajuint atid = 0;
+
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
 
-    AjPStr code        = NULL;
-    AjPStr name        = NULL;
-    AjPStr description = NULL;
     AjPStr value       = NULL;
 
     EnsPAttribute attribute = NULL;
+
+    EnsPAttributetype        at  = NULL;
+    EnsPAttributetypeadaptor ata = NULL;
 
     if(!dba)
         return ajFalse;
@@ -553,31 +674,30 @@ static AjBool attributeadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
     if(!attributes)
         return ajFalse;
 
+    ata = ensRegistryGetAttributetypeadaptor(dba);
+
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
     while(!ajSqlrowiterDone(sqli))
     {
-        code        = ajStrNew();
-        name        = ajStrNew();
-        description = ajStrNew();
-        value       = ajStrNew();
+        atid  = 0;
+        value = ajStrNew();
 
         sqlr = ajSqlrowiterGet(sqli);
 
-        ajSqlcolumnToStr(sqlr, &code);
-        ajSqlcolumnToStr(sqlr, &name);
-        ajSqlcolumnToStr(sqlr, &description);
+        ajSqlcolumnToUint(sqlr, &atid);
         ajSqlcolumnToStr(sqlr, &value);
 
-        attribute = ensAttributeNew(code, name, description, value);
+        ensAttributetypeadaptorFetchByIdentifier(ata, atid, &at);
 
-        ajListPushAppend(attributes, (void *) attribute);
+        attribute = ensAttributeNewIni(at, value);
 
-        ajStrDel(&code);
-        ajStrDel(&name);
-        ajStrDel(&description);
+        ajListPushAppend(attributes, (void*) attribute);
+
+        ensAttributetypeDel(&at);
+
         ajStrDel(&value);
     }
 
@@ -596,14 +716,13 @@ static AjBool attributeadaptorFetchAllBySQL(EnsPDatabaseadaptor dba,
 ** Functions for returning elements of an Ensembl Attribute Adaptor object.
 **
 ** @fdata [EnsPAttributeadaptor]
-** @fnote None
 **
 ** @nam3rule Get Return Ensembl Attribute Adaptor attribute(s)
-** @nam4rule GetAdaptor Return the Ensembl Database Adaptor
+** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 **
-** @argrule * ata [const EnsPAttributeadaptor] Ensembl Attribute Adaptor
+** @argrule * ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
 **
-** @valrule Adaptor [EnsPDatabasedaptor] Ensembl Database Adaptor
+** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @fcategory use
 ******************************************************************************/
@@ -637,22 +756,44 @@ EnsPDatabaseadaptor ensAttributeadaptorGetDatabaseadaptor(
 
 /* @section object retrieval **************************************************
 **
-** Functions for retrieving Ensembl Attribute objects from an
-** Ensembl Core database.
+** Functions for fetching Ensembl Attribute objects from an
+** Ensembl SQL database.
 **
 ** @fdata [EnsPAttributeadaptor]
-** @fnote None
 **
-** @nam3rule Fetch Retrieve Ensembl Attribute object(s)
-** @nam4rule FetchAll Retrieve all Ensembl Attribute objects
-** @nam5rule FetchAllBy Retrieve all Ensembl Attribute objects
-**                      matching a criterion
-** @nam4rule FetchBy Retrieve one Ensembl Attribute object
-**                   matching a criterion
+** @nam3rule Fetch Fetch Ensembl Attribute object(s)
+** @nam4rule All   Fetch all Ensembl Attribute objects
+** @nam4rule Allby Fetch all Ensembl Attribute objects matching criteria
+** @nam5rule Gene  Fetch all by an Ensembl Gene
+** @nam5rule Seqregion   Fetch all by an Ensembl Sequence Region
+** @nam5rule Slice       Fetch all by an Ensembl Slice
+** @nam5rule Transcript  Fetch all by an Ensembl Transcript
+** @nam5rule Translation Fetch all by an Ensembl Translation
+** @nam4rule By    Fetch one Ensembl Attribute object matching criteria
 **
-** @argrule * ata [const EnsPAttributeadaptor] Ensembl Attribute Adaptor
-** @argrule FetchAll attributes [AjPList] AJAX List of Ensembl Attribute
-**                                        objects
+** @argrule * ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
+** @argrule AllbyGene gene [const EnsPGene] Ensembl Gene
+** @argrule AllbyGene code [const AjPStr] Ensembl Attribute code
+** @argrule AllbyGene attributes [AjPList]
+** AJAX List of Ensembl Attribute objects
+** @argrule AllbySeqregion sr [const EnsPSeqregion] Ensembl Sequence Region
+** @argrule AllbySeqregion code [const AjPStr] Ensembl Attribute code
+** @argrule AllbySeqregion attributes [AjPList]
+** AJAX List of Ensembl Attribute objects
+** @argrule AllbySlice slice [const EnsPSlice] Ensembl Slice
+** @argrule AllbySlice code [const AjPStr] Ensembl Attribute code
+** @argrule AllbySlice attributes [AjPList]
+** AJAX List of Ensembl Attribute objects
+** @argrule AllbyTranscript transcript [const EnsPTranscript]
+** Ensembl Transcript
+** @argrule AllbyTranscript code [const AjPStr] Ensembl Attribute code
+** @argrule AllbyTranscript attributes [AjPList]
+** AJAX List of Ensembl Attribute objects
+** @argrule AllbyTranslation translation [const EnsPTranslation]
+** Ensembl Translation
+** @argrule AllbyTranslation code [const AjPStr] Ensembl Attribute code
+** @argrule AllbyTranslation attributes [AjPList]
+** AJAX List of Ensembl Attribute objects
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -662,30 +803,31 @@ EnsPDatabaseadaptor ensAttributeadaptorGetDatabaseadaptor(
 
 
 
-/* @func ensAttributeadaptorFetchAllByGene ************************************
+/* @func ensAttributeadaptorFetchAllbyGene ************************************
 **
-** Fetch all Ensembl Attributes via an Ensembl Gene.
+** Fetch all Ensembl Attribute objects via an Ensembl Gene.
 **
-** The caller is responsible for deleting the Ensembl Attributes before
+** The caller is responsible for deleting the Ensembl Attribute objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::AUTOLOAD
 ** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::fetch_all_by_
-** @param [r] ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
+** @param [u] ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
 ** @param [r] gene [const EnsPGene] Ensembl Gene
 ** @param [r] code [const AjPStr] Ensembl Attribute code
-** @param [u] attributes [AjPList] AJAX List of Ensembl Attributes
+** @param [u] attributes [AjPList] AJAX List of Ensembl Attribute objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensAttributeadaptorFetchAllByGene(EnsPAttributeadaptor ata,
-                                         const EnsPGene gene,
-                                         const AjPStr code,
-                                         AjPList attributes)
+AjBool ensAttributeadaptorFetchAllbyGene(
+    EnsPAttributeadaptor ata,
+    const EnsPGene gene,
+    const AjPStr code,
+    AjPList attributes)
 {
-    char *txtcode = NULL;
+    char* txtcode = NULL;
 
     AjPStr statement = NULL;
 
@@ -702,9 +844,7 @@ AjBool ensAttributeadaptorFetchAllByGene(EnsPAttributeadaptor ata,
 
     statement = ajFmtStr(
         "SELECT "
-        "attrib_type.code, "
-        "attrib_type.name, "
-        "attrib_type.description, "
+        "gene_attrib.attrib_type_id, "
         "gene_attrib.value "
         "FROM "
         "attrib_type, "
@@ -727,7 +867,7 @@ AjBool ensAttributeadaptorFetchAllByGene(EnsPAttributeadaptor ata,
         ajCharDel(&txtcode);
     }
 
-    attributeadaptorFetchAllBySQL(ata, statement, attributes);
+    attributeadaptorFetchAllbyStatement(ata, statement, attributes);
 
     ajStrDel(&statement);
 
@@ -737,30 +877,31 @@ AjBool ensAttributeadaptorFetchAllByGene(EnsPAttributeadaptor ata,
 
 
 
-/* @func ensAttributeadaptorFetchAllBySeqregion *******************************
+/* @func ensAttributeadaptorFetchAllbySeqregion *******************************
 **
-** Fetch all Ensembl Attributes via an Ensembl Sequence Region.
+** Fetch all Ensembl Attribute objects via an Ensembl Sequence Region.
 **
-** The caller is responsible for deleting the Ensembl Attributes before
+** The caller is responsible for deleting the Ensembl Attribute objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::AUTOLOAD
 ** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::fetch_all_by_
-** @param [r] ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
+** @param [u] ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
 ** @param [r] sr [const EnsPSeqregion] Ensembl Sequence Region
 ** @param [r] code [const AjPStr] Ensembl Attribute code
-** @param [u] attributes [AjPList] AJAX List of Ensembl Attributes
+** @param [u] attributes [AjPList] AJAX List of Ensembl Attribute objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensAttributeadaptorFetchAllBySeqregion(EnsPAttributeadaptor ata,
-                                              const EnsPSeqregion sr,
-                                              const AjPStr code,
-                                              AjPList attributes)
+AjBool ensAttributeadaptorFetchAllbySeqregion(
+    EnsPAttributeadaptor ata,
+    const EnsPSeqregion sr,
+    const AjPStr code,
+    AjPList attributes)
 {
-    char *txtcode = NULL;
+    char* txtcode = NULL;
 
     AjPStr statement = NULL;
 
@@ -777,9 +918,7 @@ AjBool ensAttributeadaptorFetchAllBySeqregion(EnsPAttributeadaptor ata,
 
     statement = ajFmtStr(
         "SELECT "
-        "attrib_type.code, "
-        "attrib_type.name, "
-        "attrib_type.description, "
+        "seq_region_attrib.attrib_type_id, "
         "seq_region_attrib.value "
         "FROM "
         "attrib_type, "
@@ -802,7 +941,7 @@ AjBool ensAttributeadaptorFetchAllBySeqregion(EnsPAttributeadaptor ata,
         ajCharDel(&txtcode);
     }
 
-    attributeadaptorFetchAllBySQL(ata, statement, attributes);
+    attributeadaptorFetchAllbyStatement(ata, statement, attributes);
 
     ajStrDel(&statement);
 
@@ -812,28 +951,29 @@ AjBool ensAttributeadaptorFetchAllBySeqregion(EnsPAttributeadaptor ata,
 
 
 
-/* @func ensAttributeadaptorFetchAllBySlice ***********************************
+/* @func ensAttributeadaptorFetchAllbySlice ***********************************
 **
-** Fetch all Ensembl Attributes via an Ensembl Slice.
+** Fetch all Ensembl Attribute objects via an Ensembl Slice.
 **
-** The caller is responsible for deleting the Ensembl Attributes before
+** The caller is responsible for deleting the Ensembl Attribute objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::AUTOLOAD
 ** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::fetch_all_by_
-** @param [r] ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
+** @param [u] ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
 ** @param [r] slice [const EnsPSlice] Ensembl Slice
 ** @param [r] code [const AjPStr] Ensembl Attribute code
-** @param [u] attributes [AjPList] AJAX List of Ensembl Attributes
+** @param [u] attributes [AjPList] AJAX List of Ensembl Attribute objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensAttributeadaptorFetchAllBySlice(EnsPAttributeadaptor ata,
-                                          const EnsPSlice slice,
-                                          const AjPStr code,
-                                          AjPList attributes)
+AjBool ensAttributeadaptorFetchAllbySlice(
+    EnsPAttributeadaptor ata,
+    const EnsPSlice slice,
+    const AjPStr code,
+    AjPList attributes)
 {
     EnsPSeqregion sr = NULL;
 
@@ -850,13 +990,14 @@ AjBool ensAttributeadaptorFetchAllBySlice(EnsPAttributeadaptor ata,
 
     if(!sr)
     {
-        ajDebug("ensAttributeadaptorFetchAllBySlice cannot get Attributes "
-                "for a Slice without a Sequence Region.\n");
+        ajDebug("ensAttributeadaptorFetchAllbySlice cannot get "
+                "Ensembl Attribute objects for an Ensembl Slice without an "
+                "Ensembl Sequence Region.\n");
 
         return ajFalse;
     }
 
-    return ensAttributeadaptorFetchAllBySeqregion(ata,
+    return ensAttributeadaptorFetchAllbySeqregion(ata,
                                                   sr,
                                                   code,
                                                   attributes);
@@ -865,30 +1006,31 @@ AjBool ensAttributeadaptorFetchAllBySlice(EnsPAttributeadaptor ata,
 
 
 
-/* @func ensAttributeadaptorFetchAllByTranscript ******************************
+/* @func ensAttributeadaptorFetchAllbyTranscript ******************************
 **
-** Fetch all Ensembl Attributes via an Ensembl Transcript.
+** Fetch all Ensembl Attribute objects via an Ensembl Transcript.
 **
-** The caller is responsible for deleting the Ensembl Attributes before
+** The caller is responsible for deleting the Ensembl Attribute objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::AUTOLOAD
 ** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::fetch_all_by_
-** @param [r] ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
+** @param [u] ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
 ** @param [r] transcript [const EnsPTranscript] Ensembl Transcript
 ** @param [r] code [const AjPStr] Ensembl Attribute code
-** @param [u] attributes [AjPList] AJAX List of Ensembl Attributes
+** @param [u] attributes [AjPList] AJAX List of Ensembl Attribute objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensAttributeadaptorFetchAllByTranscript(EnsPAttributeadaptor ata,
-                                               const EnsPTranscript transcript,
-                                               const AjPStr code,
-                                               AjPList attributes)
+AjBool ensAttributeadaptorFetchAllbyTranscript(
+    EnsPAttributeadaptor ata,
+    const EnsPTranscript transcript,
+    const AjPStr code,
+    AjPList attributes)
 {
-    char *txtcode = NULL;
+    char* txtcode = NULL;
 
     AjPStr statement = NULL;
 
@@ -905,9 +1047,7 @@ AjBool ensAttributeadaptorFetchAllByTranscript(EnsPAttributeadaptor ata,
 
     statement = ajFmtStr(
         "SELECT "
-        "attrib_type.code, "
-        "attrib_type.name, "
-        "attrib_type.description, "
+        "transcript_attrib.attrib_type_id, "
         "transcript_attrib.value "
         "FROM "
         "attrib_type, "
@@ -930,7 +1070,7 @@ AjBool ensAttributeadaptorFetchAllByTranscript(EnsPAttributeadaptor ata,
         ajCharDel(&txtcode);
     }
 
-    attributeadaptorFetchAllBySQL(ata, statement, attributes);
+    attributeadaptorFetchAllbyStatement(ata, statement, attributes);
 
     ajStrDel(&statement);
 
@@ -940,31 +1080,31 @@ AjBool ensAttributeadaptorFetchAllByTranscript(EnsPAttributeadaptor ata,
 
 
 
-/* @func ensAttributeadaptorFetchAllByTranslation *****************************
+/* @func ensAttributeadaptorFetchAllbyTranslation *****************************
 **
-** Fetch all Ensembl Attributes via an Ensembl Translation.
+** Fetch all Ensembl Attribute objects via an Ensembl Translation.
 **
-** The caller is responsible for deleting the Ensembl Attributes before
+** The caller is responsible for deleting the Ensembl Attribute objects before
 ** deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::AUTOLOAD
 ** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor::fetch_all_by_
-** @param [r] ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
+** @param [u] ata [EnsPAttributeadaptor] Ensembl Attribute Adaptor
 ** @param [r] translation [const EnsPTranslation] Ensembl Translation
 ** @param [r] code [const AjPStr] Ensembl Attribute code
-** @param [u] attributes [AjPList] AJAX List of Ensembl Attributes
+** @param [u] attributes [AjPList] AJAX List of Ensembl Attribute objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensAttributeadaptorFetchAllByTranslation(
+AjBool ensAttributeadaptorFetchAllbyTranslation(
     EnsPAttributeadaptor ata,
     const EnsPTranslation translation,
     const AjPStr code,
     AjPList attributes)
 {
-    char *txtcode = NULL;
+    char* txtcode = NULL;
 
     AjPStr statement = NULL;
 
@@ -981,9 +1121,7 @@ AjBool ensAttributeadaptorFetchAllByTranslation(
 
     statement = ajFmtStr(
         "SELECT "
-        "attrib_type.code, "
-        "attrib_type.name, "
-        "attrib_type.description, "
+        "translation_attrib.attrib_type_id, "
         "translation_attrib.value "
         "FROM "
         "attrib_type, "
@@ -1006,9 +1144,1683 @@ AjBool ensAttributeadaptorFetchAllByTranslation(
         ajCharDel(&txtcode);
     }
 
-    attributeadaptorFetchAllBySQL(ata, statement, attributes);
+    attributeadaptorFetchAllbyStatement(ata, statement, attributes);
 
     ajStrDel(&statement);
+
+    return ajTrue;
+}
+
+
+
+
+/* @datasection [EnsPAttributetype] Ensembl Attribute Type ********************
+**
+** @nam2rule Attributetype Functions for manipulating
+** Ensembl Attribute Type objects
+**
+** @cc Bio::EnsEMBL::Attribute
+** @cc CVS Revision: 1.11
+** @cc CVS Tag: branch-ensembl-62
+**
+******************************************************************************/
+
+
+
+
+/* @section constructors ******************************************************
+**
+** All constructors return a new Ensembl Attribute Type by pointer.
+** It is the responsibility of the user to first destroy any previous
+** Attribute Type. The target pointer does not need to be initialised to
+** NULL, but it is good programming practice to do so anyway.
+**
+** @fdata [EnsPAttributetype]
+**
+** @nam3rule New Constructor
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the reference counter
+**
+** @argrule Cpy at [const EnsPAttributetype] Ensembl Attribute Type
+** @argrule Ini ata [EnsPAttributetypeadaptor]
+** Ensembl Attribute Type Adaptor
+** @argrule Ini identifier [ajuint] SQL database-internal identifier
+** @argrule Ini code [AjPStr] Code
+** @argrule Ini name [AjPStr] Name
+** @argrule Ini description [AjPStr] Description
+** @argrule Ref at [EnsPAttributetype] Ensembl Attribute Type
+**
+** @valrule * [EnsPAttributetype] Ensembl Attribute Type
+**
+** @fcategory new
+******************************************************************************/
+
+
+
+
+/* @func ensAttributetypeNewCpy ***********************************************
+**
+** Object-based constructor function, which returns an independent object.
+**
+** @param [r] at [const EnsPAttributetype] Ensembl Attribute Type
+**
+** @return [EnsPAttributetype] Ensembl Attribute Type or NULL
+** @@
+******************************************************************************/
+
+EnsPAttributetype ensAttributetypeNewCpy(const EnsPAttributetype at)
+{
+    EnsPAttributetype pthis = NULL;
+
+    AJNEW0(pthis);
+
+    pthis->Use        = 1;
+    pthis->Identifier = at->Identifier;
+    pthis->Adaptor    = at->Adaptor;
+
+    if(at->Code)
+        pthis->Code = ajStrNewRef(at->Code);
+
+    if(at->Name)
+        pthis->Name = ajStrNewRef(at->Name);
+
+    if(at->Description)
+        pthis->Description = ajStrNewRef(at->Description);
+
+    return pthis;
+}
+
+
+
+
+/* @func ensAttributetypeNewIni ***********************************************
+**
+** Ensembl Attribute Type constructor with initial values.
+**
+** @cc Bio::EnsEMBL::Storable::new
+** @param [u] ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+** @param [r] identifier [ajuint] SQL database-internal identifier
+** @cc Bio::EnsEMBL::AttributeType::new
+** @param [u] code [AjPStr] Code
+** @param [u] name [AjPStr] Name
+** @param [u] description [AjPStr] Description
+**
+** @return [EnsPAttributetype] Ensembl Attribute Type or NULL
+** @@
+******************************************************************************/
+
+EnsPAttributetype ensAttributetypeNewIni(EnsPAttributetypeadaptor ata,
+                                         ajuint identifier,
+                                         AjPStr code,
+                                         AjPStr name,
+                                         AjPStr description)
+{
+    EnsPAttributetype at = NULL;
+
+    AJNEW0(at);
+
+    at->Use        = 1;
+    at->Adaptor    = ata;
+    at->Identifier = identifier;
+
+    if(code)
+        at->Code = ajStrNewRef(code);
+
+    if(name)
+        at->Name = ajStrNewRef(name);
+
+    if(description)
+        at->Description = ajStrNewRef(description);
+
+    return at;
+}
+
+
+
+
+/* @func ensAttributetypeNewRef ***********************************************
+**
+** Ensembl Object referencing function, which returns a pointer to the
+** Ensembl Object passed in and increases its reference count.
+**
+** @param [u] at [EnsPAttributetype] Ensembl Attribute Type
+**
+** @return [EnsPAttributetype] Ensembl Attribute Type or NULL
+** @@
+******************************************************************************/
+
+EnsPAttributetype ensAttributetypeNewRef(EnsPAttributetype at)
+{
+    if(!at)
+        return NULL;
+
+    at->Use++;
+
+    return at;
+}
+
+
+
+
+/* @section destructors *******************************************************
+**
+** Destruction destroys all internal data structures and frees the
+** memory allocated for an Ensembl Attribute Type object.
+**
+** @fdata [EnsPAttributetype]
+**
+** @nam3rule Del Destroy (free) an Ensembl Attribute Type object
+**
+** @argrule * Pat [EnsPAttributetype*] Ensembl Attribute Type object address
+**
+** @valrule * [void]
+**
+** @fcategory delete
+******************************************************************************/
+
+
+
+
+/* @func ensAttributetypeDel **************************************************
+**
+** Default destructor for an Ensembl Attribute Type.
+**
+** @param [d] Pat [EnsPAttributetype*] Ensembl Attribute Type object address
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ensAttributetypeDel(EnsPAttributetype* Pat)
+{
+    EnsPAttributetype pthis = NULL;
+
+    if(!Pat)
+        return;
+
+    if(!*Pat)
+        return;
+
+    pthis = *Pat;
+
+    pthis->Use--;
+
+    if(pthis->Use)
+    {
+        *Pat = NULL;
+
+        return;
+    }
+
+    ajStrDel(&pthis->Code);
+    ajStrDel(&pthis->Name);
+    ajStrDel(&pthis->Description);
+
+    AJFREE(pthis);
+
+    *Pat = NULL;
+
+    return;
+}
+
+
+
+
+/* @section element retrieval *************************************************
+**
+** Functions for returning elements of an Ensembl Attribute Type object.
+**
+** @fdata [EnsPAttributetype]
+**
+** @nam3rule Get Return Ensembl Attribute Type attribute(s)
+** @nam4rule Adaptor Return the Ensembl Attribute Type Adaptor
+** @nam4rule Code Return the code
+** @nam4rule Description Return the description
+** @nam4rule Identifier Return the SQL database-internal identifier
+** @nam4rule Name Return the name
+**
+** @argrule * at [const EnsPAttributetype] Ensembl Attribute Type
+**
+** @valrule Adaptor [EnsPAttributetypeadaptor]
+** Ensembl Attribute Type Adaptor or NULL
+** @valrule Code [AjPStr] Code or NULL
+** @valrule Description [AjPStr] Description or NULL
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Name [AjPStr] Name or NULL
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensAttributetypeGetAdaptor *******************************************
+**
+** Get the Ensembl Attribute Type Adaptor element of an
+** Ensembl Attribute Type.
+**
+** @cc Bio::EnsEMBL::Storable::adaptor
+** @param [r] at [const EnsPAttributetype] Ensembl Attribute Type
+**
+** @return [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor or NULL
+** @@
+******************************************************************************/
+
+EnsPAttributetypeadaptor ensAttributetypeGetAdaptor(
+    const EnsPAttributetype at)
+{
+    if(!at)
+        return NULL;
+
+    return at->Adaptor;
+}
+
+
+
+
+/* @func ensAttributetypeGetCode **********************************************
+**
+** Get the code element of an Ensembl Attribute Type.
+**
+** @cc Bio::EnsEMBL::Attribute::code
+** @param [r] at [const EnsPAttributetype] Ensembl Attribute Type
+**
+** @return [AjPStr] Code or NULL
+** @@
+******************************************************************************/
+
+AjPStr ensAttributetypeGetCode(
+    const EnsPAttributetype at)
+{
+    if(!at)
+        return NULL;
+
+    return at->Code;
+}
+
+
+
+
+/* @func ensAttributetypeGetDescription ***************************************
+**
+** Get the description element of an Ensembl Attribute Type.
+**
+** @cc Bio::EnsEMBL::Attribute::description
+** @param [r] at [const EnsPAttributetype] Ensembl Attribute Type
+**
+** @return [AjPStr] Description or NULL
+** @@
+******************************************************************************/
+
+AjPStr ensAttributetypeGetDescription(
+    const EnsPAttributetype at)
+{
+    if(!at)
+        return NULL;
+
+    return at->Description;
+}
+
+
+
+
+/* @func ensAttributetypeGetIdentifier ****************************************
+**
+** Get the SQL database-internal identifier element of an
+** Ensembl Attribute Type.
+**
+** @cc Bio::EnsEMBL::Storable::dbID
+** @param [r] at [const EnsPAttributetype] Ensembl Attribute Type
+**
+** @return [ajuint] SQL database-internal identifier or 0
+** @@
+******************************************************************************/
+
+ajuint ensAttributetypeGetIdentifier(
+    const EnsPAttributetype at)
+{
+    if(!at)
+        return 0;
+
+    return at->Identifier;
+}
+
+
+
+
+/* @func ensAttributetypeGetName **********************************************
+**
+** Get the name element of an Ensembl Attribute Type.
+**
+** @cc Bio::EnsEMBL::Attribute::name
+** @param [r] at [const EnsPAttributetype] Ensembl Attribute Type
+**
+** @return [AjPStr] Name or NULL
+** @@
+******************************************************************************/
+
+AjPStr ensAttributetypeGetName(
+    const EnsPAttributetype at)
+{
+    if(!at)
+        return NULL;
+
+    return at->Name;
+}
+
+
+
+
+/* @section element assignment ************************************************
+**
+** Functions for assigning elements of an Ensembl Attribute Type object.
+**
+** @fdata [EnsPAttributetype]
+**
+** @nam3rule Set Set one element of an Ensembl Attribute Type
+** @nam4rule Adaptor Set the Ensembl Attribute Type Adaptor
+** @nam4rule Code Set the code
+** @nam4rule Description Set the description
+** @nam4rule Identifier Set the SQL database-internal identifier
+** @nam4rule Name Set the name
+**
+** @argrule * at [EnsPAttributetype] Ensembl Attribute Type object
+** @argrule Adaptor ata [EnsPAttributetypeadaptor]
+** Ensembl Attribute Type Adaptor
+** @argrule Code code [AjPStr] Code
+** @argrule Description description [AjPStr] Description
+** @argrule Identifier identifier [ajuint] SQL database-internal identifier
+** @argrule Name name [AjPStr] Name
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory modify
+******************************************************************************/
+
+
+
+
+/* @func ensAttributetypeSetAdaptor *******************************************
+**
+** Set the Ensembl Attribute Type Adaptor element of an
+** Ensembl Attribute Type.
+**
+** @cc Bio::EnsEMBL::Storable::adaptor
+** @param [u] at [EnsPAttributetype] Ensembl Attribute Type
+** @param [u] ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAttributetypeSetAdaptor(EnsPAttributetype at,
+                                  EnsPAttributetypeadaptor ata)
+{
+    if(!at)
+        return ajFalse;
+
+    at->Adaptor = ata;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensAttributetypeSetCode **********************************************
+**
+** Set the code element of an Ensembl Attribute Type.
+**
+** @cc Bio::EnsEMBL::Attribute::code
+** @param [u] at [EnsPAttributetype] Ensembl Attribute Type
+** @param [u] code [AjPStr] Code
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAttributetypeSetCode(EnsPAttributetype at,
+                               AjPStr code)
+{
+    if(!at)
+        return ajFalse;
+
+    ajStrDel(&at->Code);
+
+    at->Code = ajStrNewRef(code);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensAttributetypeSetDescription ***************************************
+**
+** Set the description element of an Ensembl Attribute Type.
+**
+** @cc Bio::EnsEMBL::Attribute::description
+** @param [u] at [EnsPAttributetype] Ensembl Attribute Type
+** @param [u] description [AjPStr] Description
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAttributetypeSetDescription(EnsPAttributetype at,
+                                      AjPStr description)
+{
+    if(!at)
+        return ajFalse;
+
+    ajStrDel(&at->Description);
+
+    at->Description = ajStrNewRef(description);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensAttributetypeSetIdentifier ****************************************
+**
+** Set the SQL database-internal identifier element of an
+** Ensembl Attribute Type.
+**
+** @cc Bio::EnsEMBL::Storable::dbID
+** @param [u] at [EnsPAttributetype] Ensembl Attribute Type
+** @param [r] identifier [ajuint] SQL database-internal identifier
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAttributetypeSetIdentifier(EnsPAttributetype at,
+                                     ajuint identifier)
+{
+    if(!at)
+        return ajFalse;
+
+    at->Identifier = identifier;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensAttributetypeSetName **********************************************
+**
+** Set the name element of an Ensembl Attribute Type.
+**
+** @cc Bio::EnsEMBL::Attribute::name
+** @param [u] at [EnsPAttributetype] Ensembl Attribute Type
+** @param [u] name [AjPStr] Name
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAttributetypeSetName(EnsPAttributetype at,
+                               AjPStr name)
+{
+    if(!at)
+        return ajFalse;
+
+    ajStrDel(&at->Name);
+
+    at->Name = ajStrNewRef(name);
+
+    return ajTrue;
+}
+
+
+
+
+/* @section debugging *********************************************************
+**
+** Functions for reporting of an Ensembl Attribute Type object.
+**
+** @fdata [EnsPAttributetype]
+**
+** @nam3rule Trace Report Ensembl Attribute Type elements to debug file
+**
+** @argrule Trace at [const EnsPAttributetype] Ensembl Attribute Type
+** @argrule Trace level [ajuint] Indentation level
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensAttributetypeTrace ************************************************
+**
+** Trace an Ensembl Attribute Type.
+**
+** @param [r] at [const EnsPAttributetype] Ensembl Attribute Type
+** @param [r] level [ajuint] Indentation level
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAttributetypeTrace(const EnsPAttributetype at, ajuint level)
+{
+    AjPStr indent = NULL;
+
+    if(!at)
+        return ajFalse;
+
+    indent = ajStrNew();
+
+    ajStrAppendCountK(&indent, ' ', level * 2);
+
+    ajDebug("%SensAttributetypeTrace %p\n"
+            "%S  Use %u\n"
+            "%S  Identifier %u\n"
+            "%S  Adaptor %p\n"
+            "%S  Code '%S'\n"
+            "%S  Name '%S'\n"
+            "%S  Description '%S'\n"
+            "%S  Value '%S'\n",
+            indent, at,
+            indent, at->Use,
+            indent, at->Identifier,
+            indent, at->Adaptor,
+            indent, at->Code,
+            indent, at->Name,
+            indent, at->Description);
+
+    ajStrDel(&indent);
+
+    return ajTrue;
+}
+
+
+
+
+/* @section calculate *********************************************************
+**
+** Functions for calculating values of an Ensembl Attribute Type object.
+**
+** @fdata [EnsPAttributetype]
+**
+** @nam3rule Calculate Calculate Ensembl Attribute Type values
+** @nam4rule Memsize Calculate the memory size in bytes
+**
+** @argrule * at [const EnsPAttributetype] Ensembl Attribute Type
+**
+** @valrule Memsize [size_t] Memory size in bytes or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensAttributetypeCalculateMemsize *************************************
+**
+** Calclate the memory size in bytes of an Ensembl Attribute Type.
+**
+** @param [r] at [const EnsPAttributetype] Ensembl Attribute Type
+**
+** @return [size_t] Memory size in bytes or 0
+** @@
+******************************************************************************/
+
+size_t ensAttributetypeCalculateMemsize(const EnsPAttributetype at)
+{
+    size_t size = 0;
+
+    if(!at)
+        return 0;
+
+    size += sizeof (EnsOAttributetype);
+
+    if(at->Code)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(at->Code);
+    }
+
+    if(at->Name)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(at->Name);
+    }
+
+    if(at->Description)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(at->Description);
+    }
+
+    return size;
+}
+
+
+
+
+/* @datasection [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor *****
+**
+** @nam2rule Attributetypeadaptor Functions for manipulating
+** Ensembl Attribute Type Adaptor objects
+**
+** @cc Bio::EnsEMBL::DBSQL::AttributeAdaptor
+** @cc CVS Revision: 1.26
+** @cc CVS Tag: branch-ensembl-62
+**
+******************************************************************************/
+
+
+
+
+/* @funcstatic attributetypeadaptorFetchAllbyStatement ************************
+**
+** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
+** results into an AJAX List of Ensembl Attribute Type objects.
+**
+** The caller is responsible for deleting the Ensembl Attribute Type objects
+** before deleting the AJAX List.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [r] statement [const AjPStr] SQL statement
+** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
+** @param [uN] slice [EnsPSlice] Ensembl Slice
+** @param [u] ats [AjPList] AJAX List of Ensembl Attribute Type objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool attributetypeadaptorFetchAllbyStatement(
+    EnsPDatabaseadaptor dba,
+    const AjPStr statement,
+    EnsPAssemblymapper am,
+    EnsPSlice slice,
+    AjPList ats)
+{
+    ajuint identifier = 0;
+
+    AjPSqlstatement sqls = NULL;
+    AjISqlrow sqli       = NULL;
+    AjPSqlrow sqlr       = NULL;
+
+    AjPStr code        = NULL;
+    AjPStr name        = NULL;
+    AjPStr description = NULL;
+
+    EnsPAttributetype        at  = NULL;
+    EnsPAttributetypeadaptor ata = NULL;
+
+    if(ajDebugTest("attributetypeadaptorFetchAllbyStatement"))
+        ajDebug("attributetypeadaptorFetchAllbyStatement\n"
+                "  dba %p\n"
+                "  statement %p\n"
+                "  am %p\n"
+                "  slice %p\n"
+                "  ats %p\n",
+                dba,
+                statement,
+                am,
+                slice,
+                ats);
+
+    if(!dba)
+        return ajFalse;
+
+    if(!statement)
+        return ajFalse;
+
+    if(!ats)
+        return ajFalse;
+
+    ata = ensRegistryGetAttributetypeadaptor(dba);
+
+    sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
+
+    sqli = ajSqlrowiterNew(sqls);
+
+    while(!ajSqlrowiterDone(sqli))
+    {
+        identifier  = 0;
+        code        = ajStrNew();
+        name        = ajStrNew();
+        description = ajStrNew();
+
+        sqlr = ajSqlrowiterGet(sqli);
+
+        ajSqlcolumnToUint(sqlr, &identifier);
+        ajSqlcolumnToStr(sqlr, &code);
+        ajSqlcolumnToStr(sqlr, &name);
+        ajSqlcolumnToStr(sqlr, &description);
+
+        at = ensAttributetypeNewIni(ata, identifier, code, name, description);
+
+        ajListPushAppend(ats, (void*) at);
+
+        ajStrDel(&code);
+        ajStrDel(&name);
+        ajStrDel(&description);
+    }
+
+    ajSqlrowiterDel(&sqli);
+
+    ensDatabaseadaptorSqlstatementDel(dba, &sqls);
+
+    return ajTrue;
+}
+
+
+
+
+/* @section constructors ******************************************************
+**
+** All constructors return a new Ensembl Attribute Type Adaptor by pointer.
+** It is the responsibility of the user to first destroy any previous
+** Attribute Type Adaptor. The target pointer does not need to be initialised
+** to NULL, but it is good programming practice to do so anyway.
+**
+** @fdata [EnsPAttributetypeadaptor]
+**
+** @nam3rule New Constructor
+**
+** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @valrule * [EnsPAttributetypeadaptor]
+** Ensembl Attribute Type Adaptor or NULL
+**
+** @fcategory new
+******************************************************************************/
+
+
+
+
+/* @func ensAttributetypeadaptorNew *******************************************
+**
+** Default constructor for an Ensembl Attribute Type Adaptor.
+**
+** Ensembl Object Adaptors are singleton objects in the sense that a single
+** instance of an Ensembl Object Adaptor connected to a particular database is
+** sufficient to instantiate any number of Ensembl Objects from the database.
+** Each Ensembl Object will have a weak reference to the Object Adaptor that
+** instantiated it. Therefore, Ensembl Object Adaptors should not be
+** instantiated directly, but rather obtained from the Ensembl Registry,
+** which will in turn call this function if neccessary.
+**
+** @see ensRegistryGetDatabaseadaptor
+** @see ensRegistryGetAttributetypeadaptor
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @return [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor or NULL
+** @@
+******************************************************************************/
+
+EnsPAttributetypeadaptor ensAttributetypeadaptorNew(
+    EnsPDatabaseadaptor dba)
+{
+    EnsPAttributetypeadaptor ata = NULL;
+
+    if(!dba)
+        return NULL;
+
+    if(ajDebugTest("ensAttributetypeadaptorNew"))
+        ajDebug("ensAttributetypeadaptorNew\n"
+                "  dba %p\n",
+                dba);
+
+    AJNEW0(ata);
+
+    ata->Adaptor = ensBaseadaptorNew(
+        dba,
+        attributetypeadaptorTables,
+        attributetypeadaptorColumns,
+        (EnsPBaseadaptorLeftjoin) NULL,
+        (const char*) NULL,
+        (const char*) NULL,
+        attributetypeadaptorFetchAllbyStatement);
+
+    /*
+    ** NOTE: The cache cannot be initialised here because the
+    ** attributetypeadaptorCacheInit function calls
+    ** ensBaseadaptorFetchAllbyConstraint,
+    ** which calls attributetypeadaptorFetchAllbyStatement, which calls
+    ** ensRegistryGetAttributetypeadaptor. At that point, however, the
+    ** Ensembl Attribute Type Adaptor has not been stored in the Registry.
+    ** Therefore, each ensAttributetypeadaptorFetch function has to test the
+    ** presence of the adaptor-internal cache and eventually initialise before
+    ** accessing it.
+    **
+    **  attributetypeadaptorCacheInit(ata);
+    */
+
+    return ata;
+}
+
+
+
+
+/* @section cache *************************************************************
+**
+** Functions for maintaining the Ensembl Attribute Type Adaptor-internal
+** cache of Ensembl Attribute Type objects.
+**
+** @fdata [EnsPAttributetypeadaptor]
+**
+** @nam3rule Cache Process an Ensembl Attribute Type Adaptor-internal cache
+** @nam4rule Clear Clear the Ensembl Attribute Type Adaptor-internal cache
+**
+** @argrule * ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+**
+** @valrule * [AjBool] True on success, ajFalse otherwise
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @funcstatic attributetypeadaptorCacheInit **********************************
+**
+** Initialise the internal Attribute Type cache of an
+** Ensembl Attribute Type Adaptor.
+**
+** @param [u] ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool attributetypeadaptorCacheInit(EnsPAttributetypeadaptor ata)
+{
+    AjPList ats = NULL;
+
+    EnsPAttributetype at = NULL;
+
+    if(ajDebugTest("attributetypeadaptorCacheInit"))
+        ajDebug("attributetypeadaptorCacheInit\n"
+                "  ata %p\n",
+                ata);
+
+    if(!ata)
+        return ajFalse;
+
+    if(ata->CacheByIdentifier)
+        return ajFalse;
+    else
+        ata->CacheByIdentifier = ensTableuintNewLen(0);
+
+    if(ata->CacheByCode)
+        return ajFalse;
+    else
+        ata->CacheByCode = ensTablestrNewLen(0);
+
+    ats = ajListNew();
+
+    ensBaseadaptorFetchAllbyConstraint(ata->Adaptor,
+                                       (const AjPStr) NULL,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       ats);
+
+    while(ajListPop(ats, (void**) &at))
+    {
+        attributetypeadaptorCacheInsert(ata, &at);
+
+        /*
+        ** Both caches hold internal references to the
+        ** Ensembl attribute Type objects.
+        */
+
+        ensAttributetypeDel(&at);
+    }
+
+    ajListFree(&ats);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic attributetypeadaptorCacheInsert ********************************
+**
+** Insert an Ensembl Attribute Type into the
+** Ensembl Attribute Type Adaptor-internal cache.
+** If an Ensembl Attribute Type with the same code element is already present
+** in the adaptor cache, the Ensembl Attribute Type is deleted and a pointer
+** to the cached Ensembl Attribute Type is returned.
+**
+** @param [u] ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+** @param [u] Pat [EnsPAttributetype*] Ensembl Attribute Type address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool attributetypeadaptorCacheInsert(EnsPAttributetypeadaptor ata,
+                                              EnsPAttributetype* Pat)
+{
+    ajuint* Pidentifier = NULL;
+
+    EnsPAttributetype at1 = NULL;
+    EnsPAttributetype at2 = NULL;
+
+    if(!ata)
+        return ajFalse;
+
+    if(!ata->CacheByIdentifier)
+        return ajFalse;
+
+    if(!ata->CacheByCode)
+        return ajFalse;
+
+    if(!Pat)
+        return ajFalse;
+
+    if(!*Pat)
+        return ajFalse;
+
+    /* Search the identifer cache. */
+
+    at1 = (EnsPAttributetype) ajTableFetchmodV(
+        ata->CacheByIdentifier,
+        (const void*) &((*Pat)->Identifier));
+
+    /* Search the code cache. */
+
+    at2 = (EnsPAttributetype) ajTableFetchmodV(
+        ata->CacheByCode,
+        (const void*) (*Pat)->Code);
+
+    if((!at1) && (!at2))
+    {
+        /* Insert into the identifier cache. */
+
+        AJNEW0(Pidentifier);
+
+        *Pidentifier = (*Pat)->Identifier;
+
+        ajTablePut(ata->CacheByIdentifier,
+                   (void*) Pidentifier,
+                   (void*) ensAttributetypeNewRef(*Pat));
+
+        /* Insert into the code cache. */
+
+        ajTablePut(ata->CacheByCode,
+                   (void*) ajStrNewS((*Pat)->Code),
+                   (void*) ensAttributetypeNewRef(*Pat));
+    }
+
+    if(at1 && at2 && (at1 == at2))
+    {
+        ajDebug("attributetypeadaptorCacheInsert replaced "
+                "Ensembl Attribute Type %p with "
+                "one already cached %p.\n",
+                *Pat, at1);
+
+        ensAttributetypeDel(Pat);
+
+        ensAttributetypeNewRef(at1);
+
+        Pat = &at1;
+    }
+
+    if(at1 && at2 && (at1 != at2))
+        ajDebug("attributetypeadaptorCacheInsert detected "
+                "Ensembl Attribute Type objects in the "
+                "identifier and code cache with identical codes "
+                "('%S' and '%S') but different addresses (%p and %p).\n",
+                at1->Code, at2->Code, at1, at2);
+
+    if(at1 && (!at2))
+        ajDebug("attributetypeadaptorCacheInsert detected an "
+                "Ensembl Attribute Type object in the identifier, "
+                "but not in the code cache.\n");
+
+    if((!at1) && at2)
+        ajDebug("attributetypeadaptorCacheInsert detected an "
+                "Ensembl Attribute Type object in the code, "
+                "but not in the identifier cache.\n");
+
+    return ajTrue;
+}
+
+
+
+
+#if AJFALSE
+/* @funcstatic attributetypeadaptorCacheRemove ********************************
+**
+** Remove an Ensembl Attribute Type from the
+** Ensembl Attribute Type Adaptor-internal cache.
+**
+** @param [u] ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+** @param [u] at [EnsPAttributetype] Ensembl Attribute Type
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool attributetypeadaptorCacheRemove(EnsPAttributetypeadaptor ata,
+                                              EnsPAttributetype at)
+{
+    ajuint* Pidentifier = NULL;
+
+    AjPStr key = NULL;
+
+    EnsPAttributetype at1 = NULL;
+    EnsPAttributetype at2 = NULL;
+
+    if(!ata)
+        return ajFalse;
+
+    if(!at)
+        return ajFalse;
+
+    /* Remove the table nodes. */
+
+    at1 = (EnsPAttributetype)
+        ajTableRemoveKey(ata->CacheByIdentifier,
+                         (const void*) &at->Identifier,
+                         (void**) &Pidentifier);
+
+    at2 = (EnsPAttributetype)
+        ajTableRemoveKey(ata->CacheByCode,
+                         (const void*) at->Code,
+                         (void**) &key);
+
+    if(at1 && (!at2))
+        ajWarn("attributetypeadaptorCacheRemove could remove "
+               "Ensembl Attribute Type with "
+               "identifier %u and code '%S' only from the identifier cache.\n",
+               at->Identifier,
+               at->Code);
+
+    if((!at1) && at2)
+        ajWarn("attributetypeadaptorCacheRemove could remove "
+               "Ensembl Attribute Type with "
+               "identifier %u and code '%S' only from the code cache.\n",
+               at->Identifier,
+               at->Code);
+
+    AJFREE(Pidentifier);
+
+    ajStrDel(&key);
+
+    ensAttributetypeDel(&at1);
+    ensAttributetypeDel(&at2);
+
+    return ajTrue;
+}
+
+#endif
+
+
+
+
+/* @funcstatic attributetypeadaptorCacheClearIdentifier ***********************
+**
+** An ajTableMapDel "apply" function to clear the Ensembl Attribute Type
+** Adaptor-internal Ensembl Attribute Type cache.
+** This function deletes the unsigned integer identifier key and
+** the Ensembl Attribute Type value data.
+**
+** @param [u] key [void**] AJAX unsigned integer key data address
+** @param [u] value [void**] Ensembl Attribute Type value data address
+** @param [u] cl [void*] Standard, passed in from ajTableMapDel
+** @see ajTableMapDel
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void attributetypeadaptorCacheClearIdentifier(void** key,
+                                                     void** value,
+                                                     void* cl)
+{
+    if(!key)
+        return;
+
+    if(!*key)
+        return;
+
+    if(!value)
+        return;
+
+    if(!*value)
+        return;
+
+    (void) cl;
+
+    AJFREE(*key);
+
+    ensAttributetypeDel((EnsPAttributetype*) value);
+
+    *key   = NULL;
+    *value = NULL;
+
+    return;
+}
+
+
+
+
+/* @funcstatic attributetypeadaptorCacheClearCode *****************************
+**
+** An ajTableMapDel "apply" function to clear the Ensembl Attribute Type
+** Adaptor-internal Ensembl Attribute Type cache.
+** This function deletes the AJAX String key data and
+** the Ensembl Attribute Type value data.
+**
+** @param [u] key [void**] AJAX String key data address
+** @param [u] value [void**] Ensembl Attribute Type value data address
+** @param [u] cl [void*] Standard, passed in from ajTableMapDel
+** @see ajTableMapDel
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void attributetypeadaptorCacheClearCode(void** key,
+                                               void** value,
+                                               void* cl)
+{
+    if(!key)
+        return;
+
+    if(!*key)
+        return;
+
+    if(!value)
+        return;
+
+    if(!*value)
+        return;
+
+    (void) cl;
+
+    ajStrDel((AjPStr*) key);
+
+    ensAttributetypeDel((EnsPAttributetype*) value);
+
+    *key   = NULL;
+    *value = NULL;
+
+    return;
+}
+
+
+
+
+/* @func ensAttributetypeadaptorCacheClear ************************************
+**
+** Clear the Ensembl Attribute Type Adaptor-internal cache of
+** Ensembl Attribute Type objects.
+**
+** @param [u] ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAttributetypeadaptorCacheClear(EnsPAttributetypeadaptor ata)
+{
+    if(!ata)
+        return ajFalse;
+
+    /* Clear and delete the identifier cache. */
+
+    ajTableMapDel(ata->CacheByIdentifier,
+                  attributetypeadaptorCacheClearIdentifier,
+                  NULL);
+
+    ajTableFree(&ata->CacheByIdentifier);
+
+    /* Clear and delete the code cache. */
+
+    ajTableMapDel(ata->CacheByCode,
+                  attributetypeadaptorCacheClearCode,
+                  NULL);
+
+    ajTableFree(&ata->CacheByCode);
+
+    return ajTrue;
+}
+
+
+
+
+/* @section destructors *******************************************************
+**
+** Destruction destroys all internal data structures and frees the
+** memory allocated for an Ensembl Attribute Type Adaptor object.
+**
+** @fdata [EnsPAttributetypeadaptor]
+**
+** @nam3rule Del Destroy (free) an Ensembl Attribute Type Adaptor object.
+**
+** @argrule * Pata [EnsPAttributetypeadaptor*]
+** Ensembl Attribute Type Adaptor object address
+**
+** @valrule * [void]
+**
+** @fcategory delete
+******************************************************************************/
+
+
+
+
+/* @func ensAttributetypeadaptorDel *******************************************
+**
+** Default destructor for an Ensembl Attribute Type Adaptor.
+**
+** This function also clears the internal caches.
+**
+** Ensembl Object Adaptors are singleton objects that are registered in the
+** Ensembl Registry and weakly referenced by Ensembl Objects that have been
+** instantiated by it. Therefore, Ensembl Object Adaptors should never be
+** destroyed directly. Upon exit, the Ensembl Registry will call this function
+** if required.
+**
+** @param [d] Pata [EnsPAttributetypeadaptor*]
+** Ensembl Attribute Type Adaptor object address
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ensAttributetypeadaptorDel(EnsPAttributetypeadaptor* Pata)
+{
+    EnsPAttributetypeadaptor pthis = NULL;
+
+    if(!Pata)
+        return;
+
+    if(!*Pata)
+        return;
+
+    pthis = *Pata;
+
+    ensAttributetypeadaptorCacheClear(pthis);
+
+    ensBaseadaptorDel(&pthis->Adaptor);
+
+    AJFREE(pthis);
+
+    *Pata = NULL;
+
+    return;
+}
+
+
+
+
+/* @section element retrieval *************************************************
+**
+** Functions for returning elements of an
+** Ensembl Attribute Type Adaptor object.
+**
+** @fdata [EnsPAttributetypeadaptor]
+**
+** @nam3rule Get Return Ensembl Attribute Type Adaptor attribute(s)
+** @nam4rule Baseadaptor Return the Ensembl Base Adaptor
+** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
+**
+** @argrule * ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+**
+** @valrule Baseadaptor [EnsPBaseadaptor]
+** Ensembl Base Adaptor or NULL
+** @valrule Databaseadaptor [EnsPDatabaseadaptor]
+** Ensembl Database Adaptor or NULL
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensAttributetypeadaptorGetBaseadaptor ********************************
+**
+** Get the Ensembl Base Adaptor element of an
+** Ensembl Attribute Type Adaptor.
+**
+** @param [u] ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+**
+** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+** @@
+******************************************************************************/
+
+EnsPBaseadaptor ensAttributetypeadaptorGetBaseadaptor(
+    EnsPAttributetypeadaptor ata)
+{
+    if(!ata)
+        return NULL;
+
+    return ata->Adaptor;
+}
+
+
+
+
+/* @func ensAttributetypeadaptorGetDatabaseadaptor ****************************
+**
+** Get the Ensembl Database Adaptor element of an
+** Ensembl Attribute Type Adaptor.
+**
+** @param [u] ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+**
+** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+** @@
+******************************************************************************/
+
+EnsPDatabaseadaptor ensAttributetypeadaptorGetDatabaseadaptor(
+    EnsPAttributetypeadaptor ata)
+{
+    if(!ata)
+        return NULL;
+
+    return ensBaseadaptorGetDatabaseadaptor(ata->Adaptor);
+}
+
+
+
+
+/* @section object retrieval **************************************************
+**
+** Functions for fetching Ensembl Attribute Type objects from an
+** Ensembl SQL database.
+**
+** @fdata [EnsPAttributetypeadaptor]
+**
+** @nam3rule Fetch Fetch Ensembl Attribute Type object(s)
+** @nam4rule All Fetch all Ensembl Attribute Type objects
+** @nam4rule Allby
+** Fetch all Ensembl Attribute Type objects matching a criterion
+** @nam4rule By Fetch one Ensembl Attribute Type object matching a criterion
+** @nam5rule Code Fetch by a code
+** @nam5rule Identifier Fetch by an SQL database internal identifier
+**
+** @argrule * ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+** @argrule All ats [AjPList] AJAX List of Ensembl Attribute Type objects
+** @argrule ByCode code [const AjPStr] Ensembl Attribute Type code
+** @argrule ByCode Pat [EnsPAttributetype*] Ensembl Attribute Type address
+** @argrule ByIdentifier identifier [ajuint] SQL database-internal identifier
+** @argrule ByIdentifier Pat [EnsPAttributetype*]
+** Ensembl Attribute Type address
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @funcstatic attributetypeadaptorFetchAll ***********************************
+**
+** An ajTableMap "apply" function to return all Ensembl Attribute Type objects
+** from the Ensembl Attribute Type Adaptor-internal cache.
+**
+** @param [u] key [const void*] AJAX unsigned integer key data address
+** @param [u] value [void**] Ensembl Attribute Type value data address
+** @param [u] cl [void*]
+** AJAX List of Ensembl Attribute Type objects, passed in via ajTableMap
+** @see ajTableMap
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void attributetypeadaptorFetchAll(const void* key,
+                                         void** value,
+                                         void* cl)
+{
+    if(!key)
+        return;
+
+    if(!value)
+        return;
+
+    if(!*value)
+        return;
+
+    if(!cl)
+        return;
+
+    ajListPushAppend((AjPList) cl,
+                     (void*) ensAttributetypeNewRef(
+                         *((EnsPAttributetype*) value)));
+
+    return;
+}
+
+
+
+
+/* @func ensAttributetypeadaptorFetchAll **************************************
+**
+** Fetch all Ensembl Attribute Type objects.
+**
+** The caller is responsible for deleting the Ensembl Attribute Type objects
+** before deleting the AJAX List object.
+**
+** @param [u] ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+** @param [u] ats [AjPList] AJAX List of Ensembl Attribute Type objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAttributetypeadaptorFetchAll(EnsPAttributetypeadaptor ata,
+                                       AjPList ats)
+{
+    if(!ata)
+        return ajFalse;
+
+    if(!ats)
+        return ajFalse;
+
+    if(!ata->CacheByIdentifier)
+        attributetypeadaptorCacheInit(ata);
+
+    ajTableMap(ata->CacheByIdentifier,
+               attributetypeadaptorFetchAll,
+               (void*) ats);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensAttributetypeadaptorFetchByCode ***********************************
+**
+** Fetch an Ensembl Attribute Type by its code.
+**
+** The caller is responsible for deleting the Ensembl Attribute Type.
+**
+** @param [u] ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+** @param [r] code [const AjPStr] Ensembl Attribute Type code
+** @param [wP] Pat [EnsPAttributetype*] Ensembl Attribute Type address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAttributetypeadaptorFetchByCode(EnsPAttributetypeadaptor ata,
+                                          const AjPStr code,
+                                          EnsPAttributetype* Pat)
+{
+    char* txtcode = NULL;
+
+    AjPList ats = NULL;
+
+    AjPStr constraint = NULL;
+
+    EnsPAttributetype at = NULL;
+
+    if(!ata)
+        return ajFalse;
+
+    if(!(code && ajStrGetLen(code)))
+        return ajFalse;
+
+    if(!Pat)
+        return ajFalse;
+
+    /*
+    ** Initially, search the name cache.
+    ** For any object returned by the AJAX Table the reference counter needs
+    ** to be incremented manually.
+    */
+
+    if(!ata->CacheByCode)
+        attributetypeadaptorCacheInit(ata);
+
+    *Pat = (EnsPAttributetype) ajTableFetchmodV(ata->CacheByCode,
+                                                (const void*) code);
+
+    if(*Pat)
+    {
+        ensAttributetypeNewRef(*Pat);
+
+        return ajTrue;
+    }
+
+    /* In case of a cache miss, re-query the database. */
+
+    ensBaseadaptorEscapeC(ata->Adaptor, &txtcode, code);
+
+    constraint = ajFmtStr("attrib_type.code = '%s'", txtcode);
+
+    ajCharDel(&txtcode);
+
+    ats = ajListNew();
+
+    ensBaseadaptorFetchAllbyConstraint(ata->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       ats);
+
+    if(ajListGetLength(ats) > 1)
+        ajWarn("ensAttributetypeadaptorFetchByCode got more than one "
+               "Ensembl Attribute Type for (UNIQUE) code '%S'.\n",
+               code);
+
+    ajListPop(ats, (void**) Pat);
+
+    attributetypeadaptorCacheInsert(ata, Pat);
+
+    while(ajListPop(ats, (void**) &at))
+    {
+        attributetypeadaptorCacheInsert(ata, &at);
+
+        ensAttributetypeDel(&at);
+    }
+
+    ajListFree(&ats);
+
+    ajStrDel(&constraint);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensAttributetypeadaptorFetchByIdentifier *****************************
+**
+** Fetch an Ensembl Attribute Type by its SQL database-internal identifier.
+** The caller is responsible for deleting the Ensembl Attribute Type.
+**
+** @param [u] ata [EnsPAttributetypeadaptor] Ensembl Attribute Type Adaptor
+** @param [r] identifier [ajuint] SQL database-internal identifier
+** @param [wP] Pat [EnsPAttributetype*] Ensembl Attribute Type address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensAttributetypeadaptorFetchByIdentifier(EnsPAttributetypeadaptor ata,
+                                                ajuint identifier,
+                                                EnsPAttributetype* Pat)
+{
+    AjPList ats = NULL;
+
+    AjPStr constraint = NULL;
+
+    EnsPAttributetype at = NULL;
+
+    if(!ata)
+        return ajFalse;
+
+    if(!identifier)
+        return ajFalse;
+
+    if(!Pat)
+        return ajFalse;
+
+    /*
+    ** Initially, search the identifier cache.
+    ** For any object returned by the AJAX Table the reference counter needs
+    ** to be incremented manually.
+    */
+
+    if(!ata->CacheByIdentifier)
+        attributetypeadaptorCacheInit(ata);
+
+    *Pat = (EnsPAttributetype) ajTableFetchmodV(ata->CacheByIdentifier,
+                                                (const void*) &identifier);
+
+    if(*Pat)
+    {
+        ensAttributetypeNewRef(*Pat);
+
+        return ajTrue;
+    }
+
+    /* For a cache miss re-query the database. */
+
+    constraint = ajFmtStr("attrib_type.attrib_type_id = %u", identifier);
+
+    ats = ajListNew();
+
+    ensBaseadaptorFetchAllbyConstraint(ata->Adaptor,
+                                       constraint,
+                                       (EnsPAssemblymapper) NULL,
+                                       (EnsPSlice) NULL,
+                                       ats);
+
+    if(ajListGetLength(ats) > 1)
+        ajWarn("ensAttributetypeadaptorFetchByIdentifier got more than one "
+               "Ensembl Attribute Type for (PRIMARY KEY) identifier %u.\n",
+               identifier);
+
+    ajListPop(ats, (void**) Pat);
+
+    attributetypeadaptorCacheInsert(ata, Pat);
+
+    while(ajListPop(ats, (void**) &at))
+    {
+        attributetypeadaptorCacheInsert(ata, &at);
+
+        ensAttributetypeDel(&at);
+    }
+
+    ajListFree(&ats);
+
+    ajStrDel(&constraint);
 
     return ajTrue;
 }

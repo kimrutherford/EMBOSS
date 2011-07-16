@@ -38,7 +38,7 @@ PRINTS database file: prints.test
 Command line arguments
 
 Extract data from PRINTS database for use by pscan
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     PRINTS database file

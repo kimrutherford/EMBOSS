@@ -1,8 +1,9 @@
 application: pepwindow [
   documentation: "Draw a hydropathy plot for a protein sequence"
-  groups: "Protein:Composition"
-  relations: "/edam/topic/0000137 Protein hydropathy"
-  relations: "/edam/operation/0000401 Protein sequence hydropathy calculation"
+  groups: "Protein:Properties"
+  relations: "EDAM:0000137 topic Protein hydropathy"
+  relations: "EDAM:0000401 operation Protein hydropathy calculation
+              (from sequence)"
 ]
 
 section: input [
@@ -13,8 +14,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "protein"
-    relations: "/edam/data/0001219 Pure protein sequence"     
-    relations: "/edam/data/0000849 Sequence record"                           
+    relations: "EDAM:0002886 data Sequence record (protein)"
   ]
 
   datafile: datafile [
@@ -23,7 +23,7 @@ section: input [
     directory: "AAINDEX"
     default: "Enakai.dat"
     knowntype: "aaindex data"
-    relations:  "/edam/data/0001501 Amino acid index"                               
+    relations: "EDAM:0001501 data Amino acid index"
   ]
 
 endsection: input
@@ -39,14 +39,14 @@ section: additional [
     default: "19"
     minimum: "1"
     maximum: "200"
-    relations: "/edam/data/0001251 Window size"
+    relations: "EDAM:0001251 data Window size"
   ]
 
   boolean: normalize [
     additional: "Y"
     information: "Normalize data values"
     default: "N"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
   
 
@@ -63,7 +63,7 @@ section: output [
     gxtitle: "$(sequence.name)"
     gytitle: "Hydropathy"
     gtitle: "Hydropathy Plot"
-    relations: "/edam/data/0001522 Protein sequence hydropathy plot"                                   
+    relations: "EDAM:0001522 data Protein sequence hydropathy plot"
   ]
 
 endsection: output

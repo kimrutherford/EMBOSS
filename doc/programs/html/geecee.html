@@ -45,7 +45,7 @@ Calculate fractional GC content of nucleic acid sequences
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with geecee</b>
+Here is a sample session with <b>geecee</b>
 <p>
 
 <p>
@@ -65,7 +65,7 @@ Output file [l46634.geecee]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Calculate fractional GC content of nucleic acid sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -401,7 +401,35 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>geecee</b> reads any nucleic acid sequence USAs.
+<b>geecee</b> reads one or more nucleotide sequences.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 

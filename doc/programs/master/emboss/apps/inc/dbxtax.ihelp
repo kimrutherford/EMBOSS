@@ -1,0 +1,53 @@
+Index NCBI taxonomy using b+tree indices
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     [taxon] Basename for index files (Any string
+                                  from 2 to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+  [-dbresource]        string     [taxresource] Resource name (Any string from
+                                  2 to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+   -directory          directory  [.] Database directory
+   -fields             menu       [*] Index fields (Values: id (ID); acc
+                                  (Synonym); tax (Scientific name); rnk
+                                  (Rank); up (Parent); gc (Genetics code); mgc
+                                  (Mitochondrial genetic code))
+   -[no]compressed     boolean    [Y] Compressed index files
+   -outfile            outfile    [*.dbxtax] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -indexoutdir        outdir     [.] Index file output directory
+
+   Associated qualifiers:
+
+   "-directory" associated qualifiers
+   -extension          string     Default file extension
+
+   "-indexoutdir" associated qualifiers
+   -extension          string     Default file extension
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
