@@ -1,4 +1,4 @@
-/* $Id: ljiip.c,v 1.3 2007/05/08 09:09:37 rice Exp $
+/* $Id: ljiip.c,v 1.4 2010/10/06 16:02:49 rice Exp $
 
 	PLplot Laser Jet IIp device driver.
 	Based on old LJII driver, modifications by Wesley Ebisuzaki
@@ -329,6 +329,7 @@ plD_eop_ljiip(PLStream *pls)
 {
     PLINT j;
     unsigned char _HUGE *p;
+    int iw;
 #if GCMODE > 0
     int i, iy, last, n, jmax;
     unsigned char _HUGE t_buf[BPROW*2];
@@ -356,7 +357,7 @@ plD_eop_ljiip(PLStream *pls)
 #if GCMODE == 0
     for (j = 0, p = bitmap; j < YDOTS; j++, p += BPROW1) {
 	fprintf(OF,"\033*b>%dW", BPROW);
-	fwrite(p, BPROW, sizeof(char), OF);
+	iw = fwrite(p, BPROW, sizeof(char), OF);
     }
 #endif
 #if GCMODE == 2
@@ -394,7 +395,7 @@ plD_eop_ljiip(PLStream *pls)
 	    }
 	}
 	fprintf(OF,"\033*b%dW", (int) n);
-	fwrite(t_buf, (int) n, sizeof(char), OF);
+	iw = fwrite(t_buf, (int) n, sizeof(char), OF);
     }
 #endif
 

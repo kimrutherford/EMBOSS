@@ -43,7 +43,7 @@ Output file [hbb_human.charge]:
 Command line arguments
 
 Draw a protein charge plot
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Protein sequence(s) filename and optional
@@ -51,7 +51,7 @@ Version: EMBOSS:6.3.0
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 *  -outfile            outfile    [*.charge] Output file name
 
    Additional (Optional) qualifiers:
@@ -407,23 +407,14 @@ Known bugs
 See also
 
    Program name     Description
-   backtranambig    Back-translate a protein sequence to ambiguous nucleotide
-                    sequence
-   backtranseq      Back-translate a protein sequence to a nucleotide sequence
-   checktrans       Reports STOP codons and ORF statistics of a protein
-   compseq          Calculate the composition of unique words in sequences
-   emowse           Search protein sequences by digest fragment molecular weight
-   freak            Generate residue/base frequency table or plot
+   hmoment          Calculate and plot hydrophobic moment for protein sequence(s)
    iep              Calculate the isoelectric point of proteins
-   mwcontam         Find weights common to multiple molecular weights files
-   mwfilter         Filter noisy data from molecular weights file
    octanol          Draw a White-Wimley protein hydropathy plot
    pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepstats         Calculates statistics of protein properties
    pepwindow        Draw a hydropathy plot for a protein sequence
    pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
                     alignment
-   wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)
 

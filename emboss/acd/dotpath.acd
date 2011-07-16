@@ -4,9 +4,9 @@ application: dotpath [
   gui: "yes"
   batch: "yes"
   cpu: "high"
-  relations: "/edam/topic/0000159 Sequence comparison"
-  relations: "/edam/operation/0000288 Sequence word comparison"
-  relations: "/edam/operation/0000490 Dotplot generation"
+    relations: "EDAM:0000159 topic Sequence comparison"
+    relations: "EDAM:0000288 operation Sequence word comparison"
+    relations: "EDAM:0000490 operation Dotplot plotting"
 ]
 
 section: input [
@@ -17,15 +17,13 @@ section: input [
   sequence: asequence [
     parameter: "y"
     type: "any"
-    relations: "/edam/data/0000848 Sequence"                                            
-    relations: "/edam/data/0000849 Sequence record"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   sequence: bsequence [
     parameter: "y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
-    relations: "/edam/data/0000848 Sequence"       
-    relations: "/edam/data/0000849 Sequence record"                                     
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -40,7 +38,7 @@ section: required [
     default: "4"
     minimum: "2"
     information: "Word size"
-    relations: "/edam/data/0001250 Word size"
+    relations: "EDAM:0001250 data Word size"
   ]
 
 endsection: required
@@ -56,14 +54,14 @@ section: output [
     information: "Display the overlapping matches"
     help: "Displays the overlapping matches (in red) as well as the
            minimal set of non-overlapping matches"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: boxit [
     default: "Y"
     additional: "Y"
     information: "Draw a box around dotplot"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   graph: graph [
@@ -71,7 +69,7 @@ section: output [
     gtitle: "Dotpath: $(asequence.usa) vs $(bsequence.usa)"
     gxtitle: "$(bsequence.name)"
     gytitle: "$(asequence.name)"
-    relations: "/edam/data/0000862 Dotplot"                                   
+    relations: "EDAM:0000862 data Dotplot"
   ]
 
 endsection: output

@@ -1,0 +1,152 @@
+                                 servertell
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Display information about a public server
+
+Description
+
+   servertell displays on-screen information on a server with the specific
+   ID. Optionally, the information may be written to an output file in
+   plain text or HTML.
+
+Usage
+
+   Here is a sample session with servertell
+
+
+% servertell srs
+Display information about a public server
+
+# srs is defined in standard
+# access levels id: Yes query: Yes all: Yes
+# scope: text
+# cache file: /homes/pmr/local/share/EMBOSS/server.srs
+# databases: 21
+
+SERVER srs [
+   method:         "srswww"
+   type:           "unknown"
+   cachefile:      "server.srs"
+   comment:        "SRS from EBI"
+   serverversion:  "7.1.3"
+   url:            "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+]
+
+
+Command line arguments
+
+Display information about a public server
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-server]            string     The name of the database defined locally for
+                                  use by EMBOSS. (Any string)
+
+   Additional (Optional) qualifiers:
+   -full               boolean    [N] The default behaviour is to report for
+                                  relevant databases only basic information
+                                  from the EMBOSS database definition
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   None.
+
+Output file format
+
+   servertell outputs a report of a server configuration.
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   cachedas         Generates server cache file for DAS servers or for the DAS
+                    registry
+   cachedbfetch     Generates server cache file for Dbfetch/WSDbfetch data
+                    sources
+   cacheebeyesearch Generates server cache file for EB-eye search domains
+   cacheensembl     Generates server cache file for an Ensembl server
+   dbtell           Display information about a public database
+   showdb           Displays information on configured databases
+   showserver       Displays information on configured servers
+
+Author(s)
+
+   Peter Rice
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

@@ -40,14 +40,19 @@ DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
+	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
 	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pngdriver.m4 \
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
+	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
 	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
 	$(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = $(top_builddir)/ajax/core/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -74,26 +79,30 @@ am__base_list = \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libensembl_la_LIBADD =
-am__objects_1 = ensanalysis.lo ensassembly.lo ensassemblyexception.lo \
-	ensassemblymapper.lo ensattribute.lo ensbaseadaptor.lo \
-	enscache.lo enscoordsystem.lo ensdatabaseadaptor.lo \
-	ensdatabaseconnection.lo ensdatabaseentry.lo ensdensity.lo \
-	ensditag.lo ensexon.lo ensexternaldatabase.lo ensfeature.lo \
-	ensgene.lo ensgvindividual.lo ensgvpopulation.lo \
-	ensgvsample.lo ensintron.lo enskaryotype.lo ensmapper.lo \
+am__objects_1 = ensalign.lo ensanalysis.lo ensassembly.lo \
+	ensassemblyexception.lo ensassemblymapper.lo ensattribute.lo \
+	ensbaseadaptor.lo enscache.lo enscoordsystem.lo \
+	ensdatabaseadaptor.lo ensdatabaseconnection.lo \
+	ensdatabaseentry.lo ensdensity.lo ensditag.lo ensexon.lo \
+	ensexternaldatabase.lo ensfeature.lo ensgene.lo ensgvallele.lo \
+	ensgvattribute.lo ensgvbaseadaptor.lo ensgvdatabaseadaptor.lo \
+	ensgvgenotype.lo ensgvindividual.lo ensgvpopulation.lo \
+	ensgvsample.lo ensgvsource.lo ensgvsynonym.lo \
+	ensgvvariation.lo ensintron.lo enskaryotype.lo ensmapper.lo \
 	ensmarker.lo ensmetacoordinate.lo ensmetainformation.lo \
 	ensmiscellaneous.lo ensprediction.lo ensprojectionsegment.lo \
-	ensqcalignment.lo ensqc.lo ensqcdatabase.lo ensqcsequence.lo \
-	ensregistry.lo ensrepeat.lo ensseqregion.lo enssequence.lo \
-	enssequenceedit.lo ensslice.lo ensstorable.lo enstable.lo \
-	enstranscript.lo enstranslation.lo ensutility.lo \
-	ensvariation.lo
+	ensprotein.lo ensqc.lo ensqcalignment.lo ensqcdasfeature.lo \
+	ensqcdatabase.lo ensqcsequence.lo ensqcsubmission.lo \
+	ensqcvariation.lo ensregistry.lo ensrepeat.lo ensseqregion.lo \
+	enssequence.lo enssequenceedit.lo enssimple.lo ensslice.lo \
+	enssoftware.lo ensstorable.lo enstable.lo enstranscript.lo \
+	enstranslation.lo ensutility.lo ensvariation.lo
 am_libensembl_la_OBJECTS = $(am__objects_1)
 libensembl_la_OBJECTS = $(am_libensembl_la_OBJECTS)
 libensembl_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(libensembl_la_LDFLAGS) $(LDFLAGS) -o $@
-DEFAULT_INCLUDES = -I.@am__isrc@
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/ajax/core
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
@@ -121,16 +130,24 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+AXIS2C_CFLAGS = @AXIS2C_CFLAGS@
+AXIS2C_CPPFLAGS = @AXIS2C_CPPFLAGS@
+AXIS2C_LDFLAGS = @AXIS2C_LDFLAGS@
+AXIS2C_LIBS = @AXIS2C_LIBS@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+CXXDEPMODE = @CXXDEPMODE@
+CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
-DEVWARNINGS = @DEVWARNINGS@
 DEVWARN_CFLAGS = @DEVWARN_CFLAGS@
+DLLTOOL = @DLLTOOL@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -162,9 +179,11 @@ LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
+MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
 MYSQL_CFLAGS = @MYSQL_CFLAGS@
 MYSQL_CONFIG = @MYSQL_CONFIG@
+MYSQL_CPPFLAGS = @MYSQL_CPPFLAGS@
 MYSQL_LDFLAGS = @MYSQL_LDFLAGS@
 MYSQL_VERSION = @MYSQL_VERSION@
 NEEDAJAX = @NEEDAJAX@
@@ -189,8 +208,12 @@ PCRE_MINOR = @PCRE_MINOR@
 PCRE_POSIXLIB_VERSION = @PCRE_POSIXLIB_VERSION@
 PCRE_VERSION = @PCRE_VERSION@
 PG_CONFIG = @PG_CONFIG@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 POSTGRESQL_CFLAGS = @POSTGRESQL_CFLAGS@
+POSTGRESQL_CPPFLAGS = @POSTGRESQL_CPPFLAGS@
 POSTGRESQL_LDFLAGS = @POSTGRESQL_LDFLAGS@
 POSTGRESQL_VERSION = @POSTGRESQL_VERSION@
 RANLIB = @RANLIB@
@@ -199,7 +222,6 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
-WARNINGS = @WARNINGS@
 WARN_CFLAGS = @WARN_CFLAGS@
 XLIB = @XLIB@
 XMKMF = @XMKMF@
@@ -211,7 +233,9 @@ abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
+ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -246,7 +270,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -267,39 +290,140 @@ AM_CFLAGS = $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
 @ISCYGWIN_TRUE@CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import
 @ISCYGWIN_TRUE@CYGWIN_LDENSEMBL = -L../../plplot -L../expat -L../pcre -L../core -lajax -leplplot -leexpat -lepcre
 @ESYSTEMLIBS_FALSE@EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat
-INCLUDES = -I$(top_srcdir)/plplot $(EXTRA_INCLUDES) \
--I$(top_srcdir)/ajax/pcre -I$(top_srcdir)/ajax/core
+AM_CPPFLAGS = -I$(top_srcdir)/ajax/core \
+-I$(top_srcdir)/plplot \
+$(EXTRA_INCLUDES) \
+-I$(top_srcdir)/ajax/pcre
 
-ENSEMBLSRC = ensanalysis.c ensassembly.c ensassemblyexception.c \
-ensassemblymapper.c ensattribute.c ensbaseadaptor.c enscache.c \
-enscoordsystem.c ensdatabaseadaptor.c ensdatabaseconnection.c \
-ensdatabaseentry.c ensdensity.c ensditag.c ensexon.c \
-ensexternaldatabase.c ensfeature.c ensgene.c ensgvindividual.c \
-ensgvpopulation.c ensgvsample.c ensintron.c \
-enskaryotype.c ensmapper.c ensmarker.c ensmetacoordinate.c \
-ensmetainformation.c ensmiscellaneous.c ensprediction.c \
-ensprojectionsegment.c ensqcalignment.c ensqc.c ensqcdatabase.c \
-ensqcsequence.c ensregistry.c ensrepeat.c ensseqregion.c \
-enssequence.c enssequenceedit.c ensslice.c ensstorable.c \
-enstable.c enstranscript.c enstranslation.c ensutility.c \
+ENSEMBLSRC = \
+ensalign.c \
+ensanalysis.c \
+ensassembly.c \
+ensassemblyexception.c \
+ensassemblymapper.c \
+ensattribute.c \
+ensbaseadaptor.c \
+enscache.c \
+enscoordsystem.c \
+ensdatabaseadaptor.c \
+ensdatabaseconnection.c \
+ensdatabaseentry.c \
+ensdensity.c \
+ensditag.c \
+ensexon.c \
+ensexternaldatabase.c \
+ensfeature.c \
+ensgene.c \
+ensgvallele.c \
+ensgvattribute.c \
+ensgvbaseadaptor.c \
+ensgvdatabaseadaptor.c \
+ensgvgenotype.c \
+ensgvindividual.c \
+ensgvpopulation.c \
+ensgvsample.c \
+ensgvsource.c \
+ensgvsynonym.c \
+ensgvvariation.c \
+ensintron.c \
+enskaryotype.c \
+ensmapper.c \
+ensmarker.c \
+ensmetacoordinate.c \
+ensmetainformation.c \
+ensmiscellaneous.c \
+ensprediction.c \
+ensprojectionsegment.c \
+ensprotein.c \
+ensqc.c \
+ensqcalignment.c \
+ensqcdasfeature.c \
+ensqcdatabase.c \
+ensqcsequence.c \
+ensqcsubmission.c \
+ensqcvariation.c \
+ensregistry.c \
+ensrepeat.c \
+ensseqregion.c \
+enssequence.c \
+enssequenceedit.c \
+enssimple.c \
+ensslice.c \
+enssoftware.c \
+ensstorable.c \
+enstable.c \
+enstranscript.c \
+enstranslation.c \
+ensutility.c \
 ensvariation.c
 
-include_HEADERS = ensanalysis.h ensassemblyexception.h ensassembly.h \
-ensassemblymapper.h ensattribute.h ensbaseadaptor.h enscache.h \
-enscoordsystem.h ensdatabaseadaptor.h ensdatabaseconnection.h \
-ensdatabaseentry.h ensdata.h ensdensity.h ensditag.h ensembl.h \
-ensexon.h ensexternaldatabase.h ensfeature.h ensgene.h ensgvdata.h \
-ensgvindividual.h ensgvpopulation.h ensgvsample.h ensintron.h \
-enskaryotype.h ensmapper.h ensmarker.h ensmetacoordinate.h \
-ensmetainformation.h ensmiscellaneous.h ensprediction.h \
-ensprojectionsegment.h ensqcalignment.h ensqcdatabase.h \
-ensqc.h ensqcsequence.h ensregistry.h ensrepeat.h ensseqregion.h \
-enssequenceedit.h enssequence.h ensslice.h ensstorable.h \
-enstable.h enstranscript.h enstranslation.h ensutility.h \
+include_HEADERS = \
+ensalign.h \
+ensanalysis.h \
+ensassemblyexception.h \
+ensassembly.h \
+ensassemblymapper.h \
+ensattribute.h \
+ensbaseadaptor.h \
+enscache.h \
+enscoordsystem.h \
+ensdatabaseadaptor.h \
+ensdatabaseconnection.h \
+ensdatabaseentry.h \
+ensdata.h \
+ensdensity.h \
+ensditag.h \
+ensembl.h \
+ensexon.h \
+ensexternaldatabase.h \
+ensfeature.h \
+ensgene.h \
+ensgvallele.h \
+ensgvattribute.h \
+ensgvbaseadaptor.h \
+ensgvdata.h \
+ensgvdatabaseadaptor.h \
+ensgvgenotype.h \
+ensgvindividual.h \
+ensgvpopulation.h \
+ensgvsample.h \
+ensgvsource.h \
+ensgvsynonym.h \
+ensgvvariation.h \
+ensintron.h \
+enskaryotype.h \
+ensmapper.h \
+ensmarker.h \
+ensmetacoordinate.h \
+ensmetainformation.h \
+ensmiscellaneous.h \
+ensprediction.h \
+ensprojectionsegment.h \
+ensprotein.h \
+ensqc.h \
+ensqcalignment.h \
+ensqcdasfeature.h \
+ensqcdatabase.h \
+ensqcsequence.h \
+ensqcsubmission.h \
+ensqcvariation.h \
+ensregistry.h \
+ensrepeat.h \
+ensseqregion.h \
+enssequenceedit.h \
+enssequence.h \
+enssimple.h \
+ensslice.h \
+enssoftware.h \
+ensstorable.h \
+enstable.h \
+enstranscript.h \
+enstranslation.h \
+ensutility.h \
 ensvariation.h
 
 libensembl_la_SOURCES = $(ENSEMBLSRC)
-VERS_INF = -version-info 6:3:0
+VERS_INF = -version-info 6:4:0
 @ISCYGWIN_FALSE@LINKFLAGS = $(VERS_INF)
 @ISCYGWIN_TRUE@LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LDENSEMBL)
 libensembl_la_LDFLAGS = $(LINKFLAGS)
@@ -377,6 +501,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensalign.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensanalysis.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensassembly.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensassemblyexception.Plo@am__quote@
@@ -394,9 +519,17 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensexternaldatabase.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensfeature.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgene.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvallele.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvattribute.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvbaseadaptor.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvdatabaseadaptor.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvgenotype.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvindividual.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvpopulation.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvsample.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvsource.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvsynonym.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvvariation.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensintron.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enskaryotype.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensmapper.Plo@am__quote@
@@ -406,16 +539,22 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensmiscellaneous.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensprediction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensprojectionsegment.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensprotein.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqcalignment.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqcdasfeature.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqcdatabase.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqcsequence.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqcsubmission.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqcvariation.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensregistry.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensrepeat.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensseqregion.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enssequence.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enssequenceedit.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enssimple.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensslice.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enssoftware.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensstorable.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enstable.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enstranscript.Plo@am__quote@

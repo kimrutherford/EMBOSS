@@ -90,7 +90,7 @@ void embDataListDel(AjPList* data)
 static AjBool dataListNextLine(AjPFile pfile, const char *commentLine,
 			       AjPStr * line)
 {
-   ajint i;
+   ajlong i;
    AjBool test;
 
    test = ajReadlineTrim(pfile, line);
@@ -170,7 +170,7 @@ void embDataListRead(AjPList data, AjPFile pfile)
 
 	    if(ajStrTokenNextParse(&tokens, &value))
 	    {
-		table = ajTablestrNewCaseLen(350);
+		table = ajTablestrNewCase(350);
 		copyKey = ajStrNewRef(key);
 		ajTablePut(table, copyKey, value);
 		ajListPushAppend(data, table);

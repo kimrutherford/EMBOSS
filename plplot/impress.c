@@ -1,4 +1,4 @@
-/* $Id: impress.c,v 1.3 2007/05/08 09:09:37 rice Exp $
+/* $Id: impress.c,v 1.4 2010/10/06 16:02:49 rice Exp $
 
 	PLplot ImPress device driver.
 */
@@ -134,6 +134,7 @@ plD_line_imp(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 {
     PLDev *dev = (PLDev *) pls->dev;
     int xx1 = x1a, yy1 = y1a, xx2 = x2a, yy2 = y2a;
+    int iw;
 
     if (FirstLine) {
 	if (penchange) {
@@ -163,7 +164,7 @@ plD_line_imp(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 
 	count /= 2;
 	fprintf(pls->OutFile, "%c%c%c", CREATE_PATH, (char) count / 256, (char) count % 256);
-	fwrite((char *) LineBuff, sizeof(short), 2 * count, pls->OutFile);
+	iw = fwrite((char *) LineBuff, sizeof(short), 2 * count, pls->OutFile);
 	fprintf(pls->OutFile, "%c%c", DRAW_PATH, OPTYPE);
 
     /* And start a new path */
@@ -293,9 +294,11 @@ plD_esc_imp(PLStream *pls, PLINT op, void *ptr)
 static void
 flushline(PLStream *pls)
 {
+    int iw;
+
     count /= 2;
     fprintf(pls->OutFile, "%c%c%c", CREATE_PATH, (char) count / 256, (char) count % 256);
-    fwrite((char *) LineBuff, sizeof(short), 2 * count, pls->OutFile);
+    iw = fwrite((char *) LineBuff, sizeof(short), 2 * count, pls->OutFile);
     fprintf(pls->OutFile, "%c%c", DRAW_PATH, OPTYPE);
     FirstLine = 1;
 }

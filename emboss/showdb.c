@@ -1,4 +1,4 @@
-/* @source showdb application
+/* @source  application
 **
 ** Displays information on the currently available databases
 **
@@ -67,8 +67,13 @@ static int    showdbDBSortDefined(const void* str1, const void* str2);
 int main(int argc, char **argv)
 {
     AjBool html;
-    AjBool protein;
-    AjBool nucleic;
+    AjBool showprotein;
+    AjBool shownucleic;
+    AjBool showobo;
+    AjBool showtext;
+    AjBool showtax;
+    AjBool showsequence;
+    AjBool showfeature;
     AjBool doheader;
     AjBool dotype;
     AjBool doid;
@@ -110,8 +115,17 @@ int main(int argc, char **argv)
     outfile = ajAcdGetOutfile("outfile");
 
     html    = ajAcdGetBoolean("html");
-    protein = ajAcdGetBoolean("protein");
-    nucleic = ajAcdGetBoolean("nucleic");
+    showprotein = ajAcdGetBoolean("protein");
+    shownucleic = ajAcdGetBoolean("nucleic");
+    showobo     = ajAcdGetBoolean("obo");
+    showfeature = ajAcdGetBoolean("feature");
+    showtext    = ajAcdGetBoolean("text");
+    showtax     = ajAcdGetBoolean("taxonomy");
+/*
+    showresource = ajAcdGetBoolean("resource");
+    showassembly= ajAcdGetBoolean("assembly");
+*/
+    showsequence= ajAcdGetBoolean("sequence");
 
     doheader  = ajAcdGetBoolean("heading");
     dotype    = ajAcdGetBoolean("type");
@@ -138,27 +152,27 @@ int main(int argc, char **argv)
     {
 	if(ajNamDbDetails(onedbname, &type, &id, &qry, &all, &comment,
 			  &release, &methods, &defined))
+        {
 	    showdbDBWidth(onedbname, type, methods, defined, release,
 			   &maxname, &maxtype, &maxmethod,
 			   &maxfield, &maxdefined, &maxrelease);
 
-	/* print the header information */
-	if(doheader)
-	{
-	    showdbDBHead(outfile, html, dotype, doid, doqry,
-			  doall, domethod, dofields, dodefined,
-			  docomment, dorelease,
-			  maxname, maxtype, maxmethod, maxfield,
-			  maxdefined, maxrelease);
-    
+            /* print the header information */
+            if(doheader)
+                showdbDBHead(outfile, html, dotype, doid, doqry,
+                             doall, domethod, dofields, dodefined,
+                             docomment, dorelease,
+                             maxname, maxtype, maxmethod, maxfield,
+                             maxdefined, maxrelease);
+
     	    showdbDBOut(outfile, onedbname, type, id, qry, all,
-			 methods, defined,
-			 comment, release, html,
-			 dotype, doid, doqry, doall, 
-			 domethod, dofields, dodefined,
-			 docomment, dorelease,
+                        methods, defined,
+                        comment, release, html,
+                        dotype, doid, doqry, doall, 
+                        domethod, dofields, dodefined,
+                        docomment, dorelease,
 			 maxname, maxtype,
-			 maxmethod, maxfield, maxdefined, maxrelease);
+                        maxmethod, maxfield, maxdefined, maxrelease);
 	}
 	else
 	    ajFatal("The database '%S' does not exist", onedbname);
@@ -209,7 +223,7 @@ int main(int argc, char **argv)
 	    if(ajNamDbDetails(nextdbname, &type, &id, &qry, &all, &comment,
 			      &release, &methods, &defined))
 	    {
-		if(protein &&
+		if(showprotein &&
 		   (ajStrMatchC(type, "P") ||
                     ajStrMatchCaseC(type, "Protein")))
                     showdbDBOut(outfile, nextdbname, type, id, qry, all,
@@ -234,9 +248,156 @@ int main(int argc, char **argv)
 	    if(ajNamDbDetails(nextdbname, &type, &id, &qry, &all, &comment,
 			      &release, &methods, &defined))
 	    {
-		if( nucleic &&
+		if(shownucleic &&
 		   (ajStrMatchC(type, "N") ||
                     ajStrPrefixCaseC(type, "Nucleotide")))
+		    showdbDBOut(outfile, nextdbname, type, id, qry, all,
+                                methods, defined,
+                                comment, release, html,
+                                dotype, doid,
+                                doqry, doall, domethod, dofields, dodefined,
+                                docomment, dorelease,
+                                maxname, maxtype, maxmethod,
+                                maxfield, maxdefined, maxrelease);
+	    }
+	    else
+		ajFatal("The database '%S' does not exist", nextdbname);
+	}
+
+	/* reset the iterator */
+	ajListIterDel(&iter);
+	iter = ajListIterNewread(dbnames);
+
+	/* now write out sequence databases */
+	while((nextdbname = ajListIterGet(iter)) != NULL)
+	{
+	    if(ajNamDbDetails(nextdbname, &type, &id, &qry, &all, &comment,
+			      &release, &methods, &defined))
+	    {
+		if(showsequence &&
+		   (ajStrMatchCaseC(type, "Sequence")))
+		    showdbDBOut(outfile, nextdbname, type, id, qry, all,
+                                methods, defined,
+                                comment, release, html,
+                                dotype, doid,
+                                doqry, doall, domethod, dofields, dodefined,
+                                docomment, dorelease,
+                                maxname, maxtype, maxmethod,
+                                maxfield, maxdefined, maxrelease);
+	    }
+	    else
+		ajFatal("The database '%S' does not exist", nextdbname);
+	}
+
+	ajListIterDel(&iter);
+	iter = ajListIterNewread(dbnames);
+
+	/* now write out feature databases */
+	while((nextdbname = ajListIterGet(iter)) != NULL)
+	{
+	    if(ajNamDbDetails(nextdbname, &type, &id, &qry, &all, &comment,
+			      &release, &methods, &defined))
+	    {
+		if(showfeature &&
+		   (ajStrMatchCaseC(type, "Features")))
+		    showdbDBOut(outfile, nextdbname, type, id, qry, all,
+                                methods, defined,
+                                comment, release, html,
+                                dotype, doid,
+                                doqry, doall, domethod, dofields, dodefined,
+                                docomment, dorelease,
+                                maxname, maxtype, maxmethod,
+                                maxfield, maxdefined, maxrelease);
+	    }
+	    else
+		ajFatal("The database '%S' does not exist", nextdbname);
+	}
+
+	ajListIterDel(&iter);
+	iter = ajListIterNewread(dbnames);
+
+	/* now write out text databases */
+	while((nextdbname = ajListIterGet(iter)) != NULL)
+	{
+	    if(ajNamDbDetails(nextdbname, &type, &id, &qry, &all, &comment,
+			      &release, &methods, &defined))
+	    {
+		if(showtext &&
+                    (ajStrMatchCaseC(type, "Text") ||
+                     ajStrMatchCaseC(type, "Html") ||
+                     ajStrMatchCaseC(type, "Xml")))
+		    showdbDBOut(outfile, nextdbname, type, id, qry, all,
+                                methods, defined,
+                                comment, release, html,
+                                dotype, doid,
+                                doqry, doall, domethod, dofields, dodefined,
+                                docomment, dorelease,
+                                maxname, maxtype, maxmethod,
+                                maxfield, maxdefined, maxrelease);
+	    }
+	    else
+		ajFatal("The database '%S' does not exist", nextdbname);
+	}
+
+	ajListIterDel(&iter);
+	iter = ajListIterNewread(dbnames);
+
+	/* now write out taxonomy databases */
+	while((nextdbname = ajListIterGet(iter)) != NULL)
+	{
+	    if(ajNamDbDetails(nextdbname, &type, &id, &qry, &all, &comment,
+			      &release, &methods, &defined))
+	    {
+		if(showtax &&
+		   (ajStrMatchCaseC(type, "Taxonomy")))
+		    showdbDBOut(outfile, nextdbname, type, id, qry, all,
+                                methods, defined,
+                                comment, release, html,
+                                dotype, doid,
+                                doqry, doall, domethod, dofields, dodefined,
+                                docomment, dorelease,
+                                maxname, maxtype, maxmethod,
+                                maxfield, maxdefined, maxrelease);
+	    }
+	    else
+		ajFatal("The database '%S' does not exist", nextdbname);
+	}
+
+	ajListIterDel(&iter);
+	iter = ajListIterNewread(dbnames);
+
+	/* now write out resource databases */
+	while((nextdbname = ajListIterGet(iter)) != NULL)
+	{
+	    if(ajNamDbDetails(nextdbname, &type, &id, &qry, &all, &comment,
+			      &release, &methods, &defined))
+	    {
+		if(showtax &&
+		   (ajStrMatchCaseC(type, "Resource")))
+		    showdbDBOut(outfile, nextdbname, type, id, qry, all,
+                                methods, defined,
+                                comment, release, html,
+                                dotype, doid,
+                                doqry, doall, domethod, dofields, dodefined,
+                                docomment, dorelease,
+                                maxname, maxtype, maxmethod,
+                                maxfield, maxdefined, maxrelease);
+	    }
+	    else
+		ajFatal("The database '%S' does not exist", nextdbname);
+	}
+
+	ajListIterDel(&iter);
+	iter = ajListIterNewread(dbnames);
+
+	/* now write out OBO databases */
+	while((nextdbname = ajListIterGet(iter)) != NULL)
+	{
+	    if(ajNamDbDetails(nextdbname, &type, &id, &qry, &all, &comment,
+			      &release, &methods, &defined))
+	    {
+		if(showobo &&
+		   (ajStrMatchCaseC(type, "Obo")))
 		    showdbDBOut(outfile, nextdbname, type, id, qry, all,
                                 methods, defined,
                                 comment, release, html,
@@ -467,6 +628,7 @@ static void showdbDBHead (AjPFile outfile, AjBool html, AjBool dotype,
 
 	if(dofields)
 	    ajFmtPrintF(outfile, "%.*s ", maxfield,
+			"=================================================="
 			"==================================================");
 
 	if(dodefined)
@@ -681,12 +843,18 @@ static void showdbDBOut(AjPFile outfile,
 
 static void showdbGetFields(const AjPStr dbname, AjPStr* fields)
 {
-    AjPSeqQuery query;
+    AjPQuery query;
 
-    query = ajSeqQueryNew();
+    ajDebug("showdbGetFields '%S'\n", dbname);
+
+    query = ajQueryNew(AJDATATYPE_UNKNOWN);
 
     ajStrAssignS(&query->DbName, dbname);
-    ajNamDbData(query);
+
+    /* ajNamDbData will make no changes if the database does not exist */
+    if(!ajNamDbData(query,0))
+        ajWarn("Database '%S' unknown", dbname);
+
     ajStrAssignS(fields, query->DbFields);
 
     /* if there are no query fields, then change to a '_' */
@@ -696,7 +864,7 @@ static void showdbGetFields(const AjPStr dbname, AjPStr* fields)
 	/* change spaces to commas to make the result one word */
 	ajStrExchangeSetCC(fields, " ", ",");
 
-    ajSeqQueryDel(&query);
+    ajQueryDel(&query);
     return;
 }
 

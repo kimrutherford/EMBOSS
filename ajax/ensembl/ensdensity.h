@@ -1,15 +1,57 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensdensity_h
-#define ensdensity_h
+#ifndef ENSDENSITY_H
+#define ENSDENSITY_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ensfeature.h"
 
+AJ_BEGIN_DECLS
 
 
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+/* @const EnsPDensityfeatureadaptor *******************************************
+**
+** Ensembl Density Feature Adaptor.
+** Defined as an alias in EnsPFeatureadaptor.
+**
+** #alias EnsPFeatureadaptor
+**
+** # Bio::EnsEMBL::DBSQL::DensityFeatureAdaptor
+** ##
+******************************************************************************/
+
+#define EnsPDensityfeatureadaptor EnsPFeatureadaptor
+
+
+
+
+/* @const EnsEDensitytypeType *************************************************
+**
+** Ensembl Density Type type enumeration.
+**
+******************************************************************************/
+
+typedef enum EnsODensitytypeType
+{
+    ensEDensitytypeTypeNULL,
+    ensEDensitytypeTypeSum,
+    ensEDensitytypeTypeRatio
+} EnsEDensitytypeType;
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
 
 /* @data EnsPDensitytypeadaptor ***********************************************
 **
@@ -34,22 +76,6 @@ typedef struct EnsSDensitytypeadaptor
 
 
 
-/* EnsEDensitytypeValueType ***************************************************
-**
-** Ensembl Density Type value type enumeration.
-**
-******************************************************************************/
-
-typedef enum EnsODensitytypeValueType
-{
-    ensEDensitytypeValueTypeNULL,
-    ensEDensitytypeValueTypeSum,
-    ensEDensitytypeValueTypeRatio
-} EnsEDensitytypeValueType;
-
-
-
-
 /* @data EnsPDensitytype ******************************************************
 **
 ** Ensembl Density Type.
@@ -63,10 +89,10 @@ typedef enum EnsODensitytypeValueType
 ** @attr Adaptor [EnsPDensitytypeadaptor] Ensembl Density Type Adaptor
 ** @cc Bio::EnsEMBL::Densitytype
 ** @attr Analysis [EnsPAnalysis] Ensembl Analysis
-** @attr ValueType [EnsEDensitytypeValueType] Value type enumeration
-** @attr BlockSize [ajuint] Block size
-** @attr RegionFeatures [ajuint] Number of Features per Sequence Region in
-**                               this Density Type
+** @attr Type [EnsEDensitytypeType] Type enumeration
+** @attr Size [ajuint] Block size
+** @attr Features [ajuint] Number of Ensembl Density Features per
+**                         Ensembl Sequence Region
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
@@ -77,34 +103,13 @@ typedef struct EnsSDensitytype
     ajuint Identifier;
     EnsPDensitytypeadaptor Adaptor;
     EnsPAnalysis Analysis;
-    EnsEDensitytypeValueType ValueType;
-    ajuint BlockSize;
-    ajuint RegionFeatures;
+    EnsEDensitytypeType Type;
+    ajuint Size;
+    ajuint Features;
     ajuint Padding;
 } EnsODensitytype;
 
 #define EnsPDensitytype EnsODensitytype*
-
-
-
-
-/* @data EnsPDensityfeatureadaptor ********************************************
-**
-** Ensembl Density Feature Adaptor.
-**
-** @alias EnsSDensityfeatureadaptor
-** @alias EnsODensityfeatureadaptor
-**
-** @attr Adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @@
-******************************************************************************/
-
-typedef struct EnsSDensityfeatureadaptor
-{
-    EnsPFeatureadaptor Adaptor;
-} EnsODensityfeatureadaptor;
-
-#define EnsPDensityfeatureadaptor EnsODensityfeatureadaptor*
 
 
 
@@ -124,7 +129,7 @@ typedef struct EnsSDensityfeatureadaptor
 ** @attr Feature [EnsPFeature] Ensembl Feature
 ** @cc Bio::EnsEMBL::Densityfeature
 ** @attr Densitytype [EnsPDensitytype] Ensembl Density Type
-** @attr DensityValue [float] Density value
+** @attr Value [float] Value
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
@@ -136,7 +141,7 @@ typedef struct EnsSDensityfeature
     EnsPDensityfeatureadaptor Adaptor;
     EnsPFeature Feature;
     EnsPDensitytype Densitytype;
-    float DensityValue;
+    float Value;
     ajuint Padding;
 } EnsODensityfeature;
 
@@ -145,20 +150,24 @@ typedef struct EnsSDensityfeature
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
 
 /* Ensembl Density Type */
 
-EnsPDensitytype ensDensitytypeNew(EnsPDensitytypeadaptor dta,
-                                  ajuint identifier,
-                                  EnsPAnalysis analysis,
-                                  EnsEDensitytypeValueType type,
-                                  ajuint size,
-                                  ajuint features);
+EnsPDensitytype ensDensitytypeNewCpy(const EnsPDensitytype dt);
 
-EnsPDensitytype ensDensitytypeNewObj(const EnsPDensitytype object);
+EnsPDensitytype ensDensitytypeNewIni(EnsPDensitytypeadaptor dta,
+                                     ajuint identifier,
+                                     EnsPAnalysis analysis,
+                                     EnsEDensitytypeType type,
+                                     ajuint size,
+                                     ajuint features);
 
 EnsPDensitytype ensDensitytypeNewRef(EnsPDensitytype dt);
 
@@ -166,15 +175,15 @@ void ensDensitytypeDel(EnsPDensitytype* Pdt);
 
 EnsPDensitytypeadaptor ensDensitytypeGetAdaptor(const EnsPDensitytype dt);
 
-ajuint ensDensitytypeGetIdentifier(const EnsPDensitytype dt);
-
 EnsPAnalysis ensDensitytypeGetAnalysis(const EnsPDensitytype dt);
 
-EnsEDensitytypeValueType ensDensitytypeGetValueType(const EnsPDensitytype dt);
+ajuint ensDensitytypeGetFeatures(const EnsPDensitytype dt);
 
-ajuint ensDensitytypeGetBlockSize(const EnsPDensitytype dt);
+ajuint ensDensitytypeGetIdentifier(const EnsPDensitytype dt);
 
-ajuint ensDensitytypeGetRegionFeatures(const EnsPDensitytype dt);
+ajuint ensDensitytypeGetSize(const EnsPDensitytype dt);
+
+EnsEDensitytypeType ensDensitytypeGetType(const EnsPDensitytype dt);
 
 AjBool ensDensitytypeSetAdaptor(EnsPDensitytype dt,
                                 EnsPDensitytypeadaptor dta);
@@ -185,22 +194,22 @@ AjBool ensDensitytypeSetIdentifier(EnsPDensitytype dt,
 AjBool ensDensitytypeSetAnalysis(EnsPDensitytype dt,
                                  EnsPAnalysis analysis);
 
-AjBool ensDensitytypeSetValueType(EnsPDensitytype dt,
-                                  EnsEDensitytypeValueType type);
+AjBool ensDensitytypeSetFeatures(EnsPDensitytype dt,
+                                 ajuint features);
 
-AjBool ensDensitytypeSetBlockSize(EnsPDensitytype dt,
-                                  ajuint size);
+AjBool ensDensitytypeSetType(EnsPDensitytype dt,
+                             EnsEDensitytypeType type);
 
-AjBool ensDensitytypeSetRegionFeatures(EnsPDensitytype dt,
-                                       ajuint features);
+AjBool ensDensitytypeSetSize(EnsPDensitytype dt,
+                             ajuint size);
 
 AjBool ensDensitytypeTrace(const EnsPDensitytype dt, ajuint level);
 
-ajulong ensDensitytypeGetMemsize(const EnsPDensitytype dt);
+size_t ensDensitytypeCalculateMemsize(const EnsPDensitytype dt);
 
-EnsEDensitytypeValueType ensDensitytypeValeTypeFromStr(const AjPStr type);
+EnsEDensitytypeType ensDensitytypeTypeFromStr(const AjPStr type);
 
-const char* ensDensitytypeValeTypeToChar(const EnsEDensitytypeValueType type);
+const char* ensDensitytypeTypeToChar(const EnsEDensitytypeType dtt);
 
 /* Ensembl Density Type Adaptor */
 
@@ -222,25 +231,25 @@ AjBool ensDensitytypeadaptorFetchAll(
     EnsPDensitytypeadaptor dta,
     AjPList dts);
 
-AjBool ensDensitytypeadaptorFetchByIdentifier(
-    EnsPDensitytypeadaptor dta,
-    ajuint identifier,
-    EnsPDensitytype *Pdt);
-
-AjBool ensDensitytypeadaptorFetchAllByAnalysisName(
+AjBool ensDensitytypeadaptorFetchAllbyAnalysisname(
     EnsPDensitytypeadaptor dta,
     const AjPStr name,
     AjPList dts);
 
+AjBool ensDensitytypeadaptorFetchByIdentifier(
+    EnsPDensitytypeadaptor dta,
+    ajuint identifier,
+    EnsPDensitytype* Pdt);
+
 /* Ensembl Density Feature */
 
-EnsPDensityfeature ensDensityfeatureNew(EnsPDensityfeatureadaptor dfa,
-                                        ajuint identifier,
-                                        EnsPFeature feature,
-                                        EnsPDensitytype dt,
-                                        float value);
+EnsPDensityfeature ensDensityfeatureNewCpy(const EnsPDensityfeature df);
 
-EnsPDensityfeature ensDensityfeatureNewObj(const EnsPDensityfeature object);
+EnsPDensityfeature ensDensityfeatureNewIni(EnsPDensityfeatureadaptor dfa,
+                                           ajuint identifier,
+                                           EnsPFeature feature,
+                                           EnsPDensitytype dt,
+                                           float value);
 
 EnsPDensityfeature ensDensityfeatureNewRef(EnsPDensityfeature df);
 
@@ -249,36 +258,36 @@ void ensDensityfeatureDel(EnsPDensityfeature* Pdf);
 EnsPDensityfeatureadaptor ensDensityfeatureGetAdaptor(
     const EnsPDensityfeature df);
 
-ajuint ensDensityfeatureGetIdentifier(const EnsPDensityfeature df);
+EnsPDensitytype ensDensityfeatureGetDensitytype(const EnsPDensityfeature df);
 
 EnsPFeature ensDensityfeatureGetFeature(const EnsPDensityfeature df);
 
-EnsPDensitytype ensDensityfeatureGetDensitytype(const EnsPDensityfeature df);
+ajuint ensDensityfeatureGetIdentifier(const EnsPDensityfeature df);
 
-float ensDensityfeatureGetDensityValue(const EnsPDensityfeature df);
+float ensDensityfeatureGetValue(const EnsPDensityfeature df);
 
 AjBool ensDensityfeatureSetAdaptor(EnsPDensityfeature df,
                                    EnsPDensityfeatureadaptor dfa);
 
-AjBool ensDensityfeatureSetIdentifier(EnsPDensityfeature df,
-                                      ajuint identifier);
+AjBool ensDensityfeatureSetDensitytype(EnsPDensityfeature df,
+                                       EnsPDensitytype dt);
 
 AjBool ensDensityfeatureSetFeature(EnsPDensityfeature df,
                                    EnsPFeature feature);
 
-AjBool ensDensityfeatureSetDensitytype(EnsPDensityfeature df,
-                                       EnsPDensitytype dt);
+AjBool ensDensityfeatureSetIdentifier(EnsPDensityfeature df,
+                                      ajuint identifier);
 
-AjBool ensDensityfeatureSetDensityValue(EnsPDensityfeature df,
-                                        float value);
+AjBool ensDensityfeatureSetValue(EnsPDensityfeature df,
+                                 float value);
 
 AjBool ensDensityfeatureTrace(const EnsPDensityfeature df, ajuint level);
 
-ajulong ensDensityfeatureGetMemsize(const EnsPDensityfeature df);
+size_t ensDensityfeatureCalculateMemsize(const EnsPDensityfeature df);
 
-AjBool ensDensityfeatureSortByStartAscending(AjPList dfs);
+AjBool ensListDensityfeatureSortStartAscending(AjPList dfs);
 
-AjBool ensDensityfeatureSortByStartDescending(AjPList dfs);
+AjBool ensListDensityfeatureSortStartDescending(AjPList dfs);
 
 /* Ensembl Density Feature Adaptor */
 
@@ -288,9 +297,12 @@ EnsPDensityfeatureadaptor ensRegistryGetDensityfeatureadaptor(
 EnsPDensityfeatureadaptor ensDensityfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensDensityfeatureadaptorDel(EnsPDensityfeatureadaptor *Pdfa);
+void ensDensityfeatureadaptorDel(EnsPDensityfeatureadaptor* Pdfa);
 
-AjBool ensDensityfeatureadaptorFetchAllBySlice(
+EnsPDatabaseadaptor ensDensityfeatureadaptorGetDatabaseadaptor(
+    EnsPDensityfeatureadaptor dfa);
+
+AjBool ensDensityfeatureadaptorFetchAllbySlice(
     EnsPDensityfeatureadaptor dfa,
     EnsPSlice slice,
     const AjPStr anname,
@@ -306,8 +318,6 @@ AjBool ensDensityfeatureadaptorFetchAllBySlice(
 
 
 
-#endif /* ensdensity_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSDENSITY_H */

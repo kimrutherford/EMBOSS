@@ -48,7 +48,7 @@ List of USAs output file [x65921.yank]: cds.list
 Command line arguments
 
 Add a sequence reference (a full USA) to a list file
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   (Gapped) sequence filename and optional
@@ -100,7 +100,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   yank reads any valid sequence USA.
+   yank reads a single nucleotide or protein sequence.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
    You will be prompted for the start and end positions you wish to use.
 
@@ -305,6 +322,7 @@ See also
    extractseq       Extract regions from a sequence
    featcopy         Reads and writes a feature table
    featreport       Reads and writes a feature table
+   feattext         Return a feature table original text
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
@@ -325,6 +343,7 @@ See also
    nthseqset        Reads and writes (returns) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
+   seqcount         Reads and counts sequences
    seqret           Reads and writes (returns) sequences
    seqretsetall     Reads and writes (returns) many sets of sequences
    seqretsplit      Reads sequences and writes them to individual files

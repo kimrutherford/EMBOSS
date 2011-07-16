@@ -1,0 +1,82 @@
+application: servertell 
+[
+  documentation: "Display information about a public server"
+  groups: "Data resources"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000516 operation Data retrieval (database annotation)"
+]
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+  string: server
+  [
+      default: ""
+      parameter: "Y"
+      information: "Server name"
+      help: "The name of the database defined locally for use by EMBOSS."
+      knowntype: "emboss database name"
+      relations: "EDAM:0001048 identifier Database identifier"
+  ]
+
+endsection: input
+
+
+
+
+
+section: additional 
+[
+  information: "Additional section"
+  type: "page"
+]
+
+
+boolean: full
+  [
+    additional: "Y"
+    default: "N"
+    information: "Verbose output"
+    help: "The default behaviour is to report for relevant databases only
+           basic information from the EMBOSS database definition"
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+
+endsection: additional
+
+
+
+
+
+section: advanced 
+[
+  information: "Advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile 
+  [
+    additional: "Y"
+    default: "stdout"
+    knowntype: "servertell output"
+    relations: "EDAM:0000957 data Database metadata"
+  ]
+
+
+endsection: output

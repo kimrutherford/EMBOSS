@@ -33,6 +33,16 @@
 &lt;/tr&gt;
 
 &lt;/table&gt;
+&lt;h2&gt;&lt;a name="ALIGNMENT"&gt;ALIGNMENT&lt;/a&gt;&lt;/h2&gt;
+&lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
+&lt;tr&gt;&lt;th&gt;Program name&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="extractalign.html"&gt;extractalign&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Extract regions from a sequence alignment&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
 &lt;h2&gt;&lt;a name="ALIGNMENT CONSENSUS"&gt;ALIGNMENT CONSENSUS&lt;/a&gt;&lt;/h2&gt;
 &lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
 &lt;tr&gt;&lt;th&gt;Program name&lt;/th&gt;
@@ -43,38 +53,13 @@
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td&gt;&lt;a href="consambig.html"&gt;consambig&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Create an ambiguous consensus sequence from a multiple alignment&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href="megamerger.html"&gt;megamerger&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Merge two large overlapping DNA sequences&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
 &lt;tr&gt;
-&lt;td&gt;&lt;a href="dbiblast.html"&gt;dbiblast&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Index a BLAST database&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href="dbifasta.html"&gt;dbifasta&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Index a fasta file database&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href="dbiflat.html"&gt;dbiflat&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Index a flat file database&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href="dbigcg.html"&gt;dbigcg&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Index a GCG formatted database&lt;/td&gt;
+&lt;td&gt;&lt;a href="dbxedam.html"&gt;dbxedam&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index the EDAM ontology using b+tree indices&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
@@ -92,19 +77,34 @@
 &lt;td&gt;Index a GCG formatted database using b+tree indices&lt;/td&gt;
 &lt;/tr&gt;
 
-&lt;/table&gt;
-&lt;h2&gt;&lt;a name="UTILS MISC"&gt;UTILS MISC&lt;/a&gt;&lt;/h2&gt;
-&lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
-&lt;tr&gt;&lt;th&gt;Program name&lt;/th&gt;
-&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&lt;a href="embossdata.html"&gt;embossdata&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Find and retrieve EMBOSS data files&lt;/td&gt;
+&lt;td&gt;&lt;a href="dbxobo.html"&gt;dbxobo&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index an obo ontology using b+tree indices&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td&gt;&lt;a href="embossversion.html"&gt;embossversion&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;Reports the current EMBOSS version number&lt;/td&gt;
+&lt;td&gt;&lt;a href="dbxreport.html"&gt;dbxreport&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Validate index and report internals for dbx databases&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbxresource.html"&gt;dbxresource&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index a data resource catalogue using b+tree indices&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbxstat.html"&gt;dbxstat&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Dump statistics for dbx databases&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbxtax.html"&gt;dbxtax&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Index NCBI taxonomy using b+tree indices&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href="dbxuncompress.html"&gt;dbxuncompress&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Uncompress a compressed dbx index&lt;/td&gt;
 &lt;/tr&gt;
 
 &lt;/table&gt;

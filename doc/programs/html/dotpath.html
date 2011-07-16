@@ -54,7 +54,7 @@ Algorithm
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with dotpath</b>
+Here is a sample session with <b>dotpath</b>
 <p>
 
 <p>
@@ -76,7 +76,7 @@ Created dotpath.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Draw a non-overlapping wordmatch dotplot of two sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -87,7 +87,7 @@ Version: EMBOSS:6.3.0
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers:
    -overlaps           boolean    [N] Displays the overlapping matches (in
@@ -201,7 +201,7 @@ Version: EMBOSS:6.3.0
 <td>-graph</td>
 <td>graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -880,7 +880,7 @@ DR   RFAM; RF00100; 7SK.
 In normal operation, a dotplot image is displayed.
 <p>
 
-With the <b>-data</b> qualifier a file of the positions of the
+With the <tt>-data</tt> qualifier a file of the positions of the
 matches in the minimal non-overlapping set of matches is output.
 
 <p>

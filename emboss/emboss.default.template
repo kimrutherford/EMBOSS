@@ -618,12 +618,12 @@ DB tgenbank [ type: N dir: $emboss_tempdata/genbank
 ##################################################################
 # Resource definitions for the dbx indexing system.
 ##################################################################
-
-RES embl [ type: Index
-  idlen:  15
-  acclen: 15
-  svlen:  15
-  keylen: 15
-  deslen: 15
-  orglen: 15
-]
+#
+#RES embl [ type: Index
+#  idlen:  15
+#  acclen: 15
+#  svlen:  15
+#  keylen: 15
+#  deslen: 15
+#  orglen: 15
+#]

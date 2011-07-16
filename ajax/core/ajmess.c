@@ -40,6 +40,7 @@ AjBool acdDebugSet    = 0;
 AjBool acdDebugBuffer = 0;
 AjBool acdDebug       = 0;
 AjPStr acdProgram     = NULL;
+AjPStr acdAppldoc     = NULL;
 AjPStr acdArgSave     = NULL;
 AjPStr acdInputSave   = NULL;
 
@@ -449,6 +450,8 @@ void ajUser(const char *format,...)
     else
 	fprintf(stderr, "%s\n", mesg_buf);
 
+    ajDebug("ajUser: %s\n", mesg_buf);
+
     return;
 }
 
@@ -471,6 +474,8 @@ void ajUserDumpC(const char* txt)
 	(*outRoutine)(txt);
     else
 	fprintf(stderr, "%s\n", txt);
+
+    ajDebug("ajUserDumpC: %s\n", txt);
 
     return;
 }
@@ -496,6 +501,8 @@ void ajUserDumpS(const AjPStr str)
 	(*outRoutine)(mesg_buf);
     else
 	fprintf(stderr, "%s\n", mesg_buf);
+
+    ajDebug("ajUserDumpS: %s\n", mesg_buf);
 
     return;
 }
@@ -526,6 +533,8 @@ void ajMessOut(const char *format,...)
     else
 	fprintf(stderr, "%s", mesg_buf);
 
+    ajDebug("ajMessOut: %s\n", mesg_buf);
+
     return;
 }
 
@@ -553,6 +562,8 @@ void ajVUser(const char *format, va_list args)
 	(*outRoutine)(mesg_buf);
     else
 	fprintf(stderr, "%s\n", mesg_buf);
+
+    ajDebug("ajVUser: %s\n", mesg_buf);
 
     return;
 }
@@ -675,6 +686,8 @@ void ajErr(const char *format, ...)
 	else
 	    fprintf(stderr, "%s\n", mesg_buf);
 
+        ajDebug("ajErr: %s\n", mesg_buf);
+
 	ajMessInvokeDebugger();
         ajUtilCatch();
     }
@@ -714,7 +727,10 @@ void ajVErr(const char *format, va_list args)
     else
     {
 	if(AjErrorLevel.error)
+        {
 	    fprintf(stderr, "%s\n", mesg_buf);
+            ajDebug("ajVErr: %s\n", mesg_buf);
+        }
     }
     ajMessInvokeDebugger();
 
@@ -757,7 +773,9 @@ __noreturn void  ajDie(const char *format, ...)
 	else
 	    fprintf(stderr, "%s\n", mesg_buf);
 
-	ajMessInvokeDebugger();
+        ajDebug("ajDie: %s\n", mesg_buf);
+
+        ajMessInvokeDebugger();
     }
 
 
@@ -833,7 +851,10 @@ void ajWarn(const char *format, ...)
 	else
 	    fprintf(stderr, "%s\n", mesg_buf);
 
+        ajDebug("ajWarn: %s\n", mesg_buf);
+
 	ajMessInvokeDebugger();
+        ajUtilCatch();
     }
 
     return;
@@ -867,6 +888,8 @@ void ajVWarn(const char *format, va_list args)
     else
 	fprintf(stderr, "%s\n", mesg_buf);
 
+    ajDebug("ajVWarn: %s\n", mesg_buf);
+
     ajMessInvokeDebugger();
 
     return;
@@ -894,7 +917,7 @@ void ajVWarn(const char *format, va_list args)
 ** @@
 ******************************************************************************/
 
-__noreturn void  ajMessExitmsg(const char *format, ...)
+__noreturn void ajMessExitmsg(const char *format, ...)
 {
     const char *prefix   = EXIT_PREFIX;
     const char *mesg_buf = NULL;
@@ -908,6 +931,8 @@ __noreturn void  ajMessExitmsg(const char *format, ...)
 	(*exitRoutine)(mesg_buf);
     else
 	fprintf(stderr, "%s\n", mesg_buf);
+
+    ajDebug("ajMessExitmsg: %s\n", mesg_buf);
 
     exit(EXIT_FAILURE);
 }
@@ -929,7 +954,7 @@ __noreturn void  ajMessExitmsg(const char *format, ...)
 ** @@
 ******************************************************************************/
 
-__noreturn void  ajMessCrashFL(const char *format, ...)
+__noreturn void ajMessCrashFL(const char *format, ...)
 {
     enum {MAXERRORS = 1};
     static ajint internalErrors = 0;
@@ -967,6 +992,8 @@ __noreturn void  ajMessCrashFL(const char *format, ...)
 	else
 	    fprintf(stderr, "%s\n", mesg_buf);
 
+        ajDebug("ajMessCrashFL: %s\n", mesg_buf);
+
 	ajMessInvokeDebugger();
     }
 
@@ -991,7 +1018,7 @@ __noreturn void  ajMessCrashFL(const char *format, ...)
 ** @@
 ******************************************************************************/
 
-__noreturn void  ajMessVCrashFL(const char *format, va_list args)
+__noreturn void ajMessVCrashFL(const char *format, va_list args)
 {
     enum {MAXERRORS = 1};
     static ajint internalErrors = 0;
@@ -1026,6 +1053,8 @@ __noreturn void  ajMessVCrashFL(const char *format, va_list args)
     else
 	fprintf(stderr, "%s\n", mesg_buf);
     
+    ajDebug("ajMessVCrashFL: %s\n", mesg_buf);
+
     ajMessInvokeDebugger();
     
     exit(EXIT_FAILURE);
@@ -1454,7 +1483,7 @@ static AjBool ajMessReadErrorFile(void)
     if(!fp)
 	return ajFalse;
 
-    messErrorTable = ajTablecharNew();
+    messErrorTable = ajTablecharNew(100);
 
     while(fgets(line, 512, fp))
     {
@@ -1473,15 +1502,12 @@ static AjBool ajMessReadErrorFile(void)
 	}
 
 	*mess = '\0';
-	namestore = ajFmtString("%s",name);
-	messstore = ajFmtString("%s",message);
-	mess = (char *) ajTableFetch(messErrorTable, namestore);
+	namestore = ajCharNewC(name);
+	messstore = ajCharNewC(message);
 
-	if(mess)
+        if(ajTablePut(messErrorTable, namestore, messstore))
 	    ajErr("%s is listed more than once in file %s",
-			name,messErrorFile);
-	else
-	    ajTablePut(messErrorTable, namestore, messstore);
+                  name,messErrorFile);
     }
 
     return ajTrue;
@@ -1501,11 +1527,11 @@ static AjBool ajMessReadErrorFile(void)
 
 void ajMessOutCode(const char *code)
 {
-    char *mess=0;
+    const char *mess=0;
 
     if(messErrorTable)
     {
-	mess = ajTableFetch(messErrorTable, code);
+	mess = ajTableFetchC(messErrorTable, code);
 
 	if(mess)
 	    ajMessOut(mess);
@@ -1516,7 +1542,7 @@ void ajMessOutCode(const char *code)
     {
 	if(ajMessReadErrorFile())
 	{
-	    mess = ajTableFetch(messErrorTable, code);
+	    mess = ajTableFetchC(messErrorTable, code);
 
 	    if(mess)
 		ajMessOut(mess);
@@ -1545,11 +1571,11 @@ void ajMessOutCode(const char *code)
 
 void ajMessErrorCode(const char *code)
 {
-    char *mess = 0;
+    const char *mess = 0;
 
     if(messErrorTable)
     {
-	mess = ajTableFetch(messErrorTable, code);
+	mess = ajTableFetchC(messErrorTable, code);
 
 	if(mess)
 	    ajErr(mess);
@@ -1560,7 +1586,7 @@ void ajMessErrorCode(const char *code)
     {
 	if(ajMessReadErrorFile())
 	{
-	    mess = ajTableFetch(messErrorTable, code);
+	    mess = ajTableFetchC(messErrorTable, code);
 
 	    if(mess)
 		ajErr(mess);
@@ -1590,11 +1616,11 @@ void ajMessErrorCode(const char *code)
 
 __noreturn void  ajMessCrashCodeFL(const char *code)
 {
-    char *mess = 0;
+    const char *mess = 0;
 
     if(messErrorTable)
     {
-	mess = ajTableFetch(messErrorTable, code);
+	mess = ajTableFetchC(messErrorTable, code);
 
 	if(mess)
 	    ajMessCrashFL(mess);
@@ -1605,7 +1631,7 @@ __noreturn void  ajMessCrashCodeFL(const char *code)
     {
 	if(ajMessReadErrorFile())
 	{
-	    mess = ajTableFetch(messErrorTable, code);
+	    mess = ajTableFetchC(messErrorTable, code);
 
 	    if(mess)
 		ajMessCrashFL(mess);
@@ -1757,6 +1783,22 @@ void ajDebug(const char* fmt, ...)
 
 
 
+/* @func ajDebugOn ************************************************************
+**
+** Test whether debugging is on.
+**
+** @return [AjBool] True if user has enabled debugging
+** @@
+******************************************************************************/
+
+AjBool ajDebugOn(void)
+{
+    return acdDebug;
+}
+
+
+
+
 /* @func ajDebugTest **********************************************************
 **
 ** Tests a token string and returns true if the user has requested debug output
@@ -1806,10 +1848,12 @@ AjBool ajDebugTest(const char* token)
 
         if(messDebugTestFile) 
         {
-            messDebugTestTable = ajTablecharNewLen(256);
+            messDebugTestTable = ajTablecharNew(256);
 
             while(ajReadlineTrim(messDebugTestFile, &line))
             {
+                if(!ajStrCutComments(&line))
+                    continue;
                 if(ajStrExtractFirst(line, &rest, &strtoken))
                 {
                     AJNEW0(stats);
@@ -1818,6 +1862,7 @@ AjBool ajDebugTest(const char* token)
                         ajStrToUint(rest, &stats->max);
                     else
                         stats->max = UINT_MAX;
+
                     ajTablePut(messDebugTestTable, ctoken, stats);
                     ctoken = NULL;
                     stats = NULL;
@@ -1838,7 +1883,7 @@ AjBool ajDebugTest(const char* token)
         return ajFalse;
 
     depth++;
-    stats = ajTableFetch(messDebugTestTable, token);
+    stats = ajTableFetchmodC(messDebugTestTable, token);
     depth--;
     
 

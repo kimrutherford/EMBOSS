@@ -23,6 +23,7 @@
 #include "emboss.h"
 #include <math.h>
 #include <string.h>
+#include <errno.h>
 
 
 
@@ -251,19 +252,19 @@ int main(int argc, char **argv)
 
 static void emowse_read_freqs(AjPFile finf, AjPDouble *freqs)
 {
-    ajint c;
-    AjPStr  str;
-    double f;
+    ajint c = 0;
+    AjPStr  str = NULL;
+    double f = 0.0;
 
-    c   = 0;
     str = ajStrNew();
 
     while(ajReadlineTrim(finf,&str))
     {
-       	if(sscanf(ajStrGetPtr(str),"%lf",&f)==1)
-	    ajDoublePut(freqs,c,f);
-	else
-	    ajDoublePut(freqs,c,0.);
+        if(!ajStrToDouble(str, &f))
+	    ajWarn("Bad record in frequencies file '%F': '%S'\n",
+		   finf, str);
+
+        ajDoublePut(freqs,c,f);
 
 	++c;
     }

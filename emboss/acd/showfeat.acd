@@ -1,9 +1,9 @@
 application: showfeat [
   documentation: "Display features of a sequence in pretty format"
   groups: "Display, Feature tables"
-  relations: "/edam/topic/0000160 Sequence features"
-  relations: "/edam/topic/0000092 Visualisation and rendering"
-  relations: "/edam/operation/0000564 Sequence visualisation"
+    relations: "EDAM:0000160 topic Sequence features"
+    relations: "EDAM:0000092 topic Data rendering and visualisation"
+    relations: "EDAM:0000564 operation Sequence rendering"
 ]
 
 section: input [
@@ -15,9 +15,7 @@ section: input [
     parameter: "Y"
     type: "any"
     features: "Y"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -42,7 +40,7 @@ section: additional [
            with the character '|', eg: \
            gene* | embl"
     knowntype: "feature source list"
-    relations:  "/edam/data/0000856 Sequence feature source"               
+    relations: "EDAM:0000856 data Sequence feature source"
   ]
 
   string: typematch [
@@ -60,7 +58,7 @@ section: additional [
            the character '|', eg: \
            *UTR | intron"
     knowntype: "feature key list"
-    relations:  "/edam/data/0001020 Sequence feature key"                 
+    relations: "EDAM:0001020 data Sequence feature key"
   ]
 
   string: tagmatch [
@@ -83,7 +81,7 @@ section: additional [
            the character '|', eg: \
            gene | label"
     knowntype: "feature tag list"
-    relations:  "/edam/data/0001021 Sequence feature qualifier"                  
+    relations: "EDAM:0001021 data Sequence feature qualifier"
   ]
 
   string: valuematch [
@@ -106,7 +104,7 @@ section: additional [
            with the character '|', eg: \
            pax* | 10"
     knowntype: "feature tagvalue list"
-    relations:  "/edam/data/0001021 Sequence feature qualifier"
+    relations: "EDAM:0001021 data Sequence feature qualifier"
   ]
 
   list: sort [
@@ -123,14 +121,14 @@ section: additional [
                   Nosort (don't sort - use input order) or join coding
                   regions together and leave other features in the input
                   order"
-    relations: "/edam/data/0001773 Tool-specific parameter"                                
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: joinfeatures [
     additional: "Y"
     default: "N"
     information: "Join coding regions together"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
  
   range: annotation [
@@ -152,7 +150,7 @@ section: additional [
            as '@filename'."
     expected: "If this is left blank, then no annotation is
                added."
-    relations: "/edam/data/0001017 Sequence range"
+    relations: "EDAM:0001017 data Sequence range"
   ]
 
 endsection: additional
@@ -166,7 +164,7 @@ section: advanced [
     default: "N"
     information: "Use HTML formatting"
     outputmodifier: "Y"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: id [
@@ -174,7 +172,7 @@ section: advanced [
     information: "Show sequence ID"
     help: "Set this to be false if you do not wish to display the ID
            name of the sequence."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: description [
@@ -182,7 +180,7 @@ section: advanced [
     information: "Show description"
     help: "Set this to be false if you do not wish to display the
            description of the sequence."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: scale [
@@ -190,7 +188,7 @@ section: advanced [
     information: "Show scale line"
     help: "Set this to be false if you do not wish to display the
            scale line."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: width [
@@ -204,7 +202,7 @@ section: advanced [
            width and a width a 10 characters would be nearly unreadable. \
            If the width is set to less than 4, the graphics lines and the
            scale line will not be displayed."
-    relations: "/edam/data/0002152 Rendering parameter"                                     
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   boolean: collapse [
@@ -220,7 +218,7 @@ section: advanced [
            If this is set to false then each feature is displayed on a
            separate line making it easier to distinguish where features start
            and end."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: forward [
@@ -228,7 +226,7 @@ section: advanced [
     information: "Display forward sense features"
     help: "Set this to be false if you do not wish to display forward
            sense features."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: reverse [
@@ -236,7 +234,7 @@ section: advanced [
     information: "Display reverse sense features"
     help: "Set this to be false if you do not wish to display reverse
            sense features."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: unknown [
@@ -246,7 +244,7 @@ section: advanced [
            sense features. (ie. features with no directionality - all protein
            features are of this type and some nucleic features (for example,
            CG-rich regions))."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: strand [
@@ -255,7 +253,7 @@ section: advanced [
     help: "Set this if you wish to display the strand of the features.
            Protein features are always directionless (indicated by '0'),
            forward is indicated by '+' and reverse is '-'."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: origin [
@@ -266,7 +264,7 @@ section: advanced [
            The source name is usually either the name of the program that
            detected the feature or it is the name of the feature table (eg:
            EMBL) that the feature came from."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: position [
@@ -276,7 +274,7 @@ section: advanced [
            of the features. If several features are being displayed on the
            same line, then the start and end positions will be joined by a
            comma, for example: '189-189,225-225'."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: type [
@@ -284,7 +282,7 @@ section: advanced [
     information: "Display type of features"
     help: "Set this to be false if you do not wish to display the type
            of the features."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: tags [
@@ -292,7 +290,7 @@ section: advanced [
     information: "Display tags of features"
     help: "Set this to be false if you do not wish to display the tags
            and values of the features."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: values [
@@ -303,7 +301,7 @@ section: advanced [
            names will be displayed. If the tags are not displayed, then the
            values will not be displayed. The value of the 'translation' tag
            is never displayed as it is often extremely long."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: stricttags [
@@ -314,7 +312,7 @@ section: advanced [
            feature will be displayed. If this is set to be true, then only
            those tag/value pairs in a feature that match the specified tag
            and value will be displayed."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -328,7 +326,7 @@ section: output [
     parameter: "Y"
     extension: "showfeat"
     knowntype: "showfeat output"
-    relations:  "/edam/data/0001275 General sequence feature report"                    
+    relations: "EDAM:0001275 data General sequence features"
   ]
 
 endsection: output

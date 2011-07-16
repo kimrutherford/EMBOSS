@@ -1,9 +1,10 @@
 application: checktrans [
   documentation: "Reports STOP codons and ORF statistics of a
                   protein"
-  groups: "Protein:Composition"
-  relations: "/edam/topic/0000109 Gene finding"
-  relations: "/edam/operation/0000436 Coding region prediction"
+  groups: "Nucleic:Gene finding, Nucleic:Translation"
+  relations: "EDAM:0000109 topic Gene finding"
+  relations: "EDAM:0000108 topic Translation"
+  relations: "EDAM:0000436 operation Coding region prediction"
 ]
 
 section: input [
@@ -14,9 +15,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "stopprotein"
-    relations: "/edam/data/0001208 Protein sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0002886 data Sequence record (protein)"
   ]
 
 endsection: input
@@ -31,7 +30,7 @@ section: required [
     minimum: "1"
     default: "100"
     information: "Minimum ORF Length to report"
-    relations: "/edam/data/0001249 Sequence length"                                     
+    relations: "EDAM:0001249 data Sequence length"
   ]
 
 endsection: required
@@ -51,7 +50,7 @@ section: additional [
            not one there already, makes checktrans treat the end as a
            potential ORF. If an asterisk is added, it is not included in the
            reported count of STOPs."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: additional
@@ -64,21 +63,20 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "checktrans output"
-    relations:  "/edam/data/0001313 Coding region report"                                
+    relations: "EDAM:0001313 data Gene features (coding region)"
   ]
 
   seqoutall: outseq [
     parameter: "Y"
     help: "Sequence file to hold output ORF sequences"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   featout: outfeat [
     parameter: "Y"
     help: "File for output features"
     type: "protein"
-    relations: "/edam/data/0001272 Protein sequence feature table"                      
+    relations: "EDAM:0001272 data Feature table (protein)"
   ]
 
 endsection: output

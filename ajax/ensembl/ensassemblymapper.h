@@ -1,17 +1,35 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensassemblymapper_h
-#define ensassemblymapper_h
+#ifndef ENSASSEMBLYMAPPER_H
+#define ENSASSEMBLYMAPPER_H
 
-#include "ensassembly.h"
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
+
 #include "ensdata.h"
-#include "enstable.h"
+
+AJ_BEGIN_DECLS
 
 
 
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
 
 /*
 ** Prototype definitions
@@ -19,7 +37,7 @@ extern "C"
 
 /* Ensembl Generic Assembly Mapper */
 
-EnsPGenericassemblymapper ensGenericassemblymapperNew(
+EnsPGenericassemblymapper ensGenericassemblymapperNewIni(
     EnsPAssemblymapperadaptor ama,
     EnsPCoordsystem asmcs,
     EnsPCoordsystem cmpcs);
@@ -34,26 +52,31 @@ void ensGenericassemblymapperDel(EnsPGenericassemblymapper* Pgam);
 EnsPAssemblymapperadaptor ensGenericassemblymapperGetAdaptor(
     const EnsPGenericassemblymapper gam);
 
-const EnsPCoordsystem ensGenericassemblymapperGetAssembledCoordsystem(
+const EnsPCoordsystem ensGenericassemblymapperGetCoordsystemAssembled(
     const EnsPGenericassemblymapper gam);
 
-const EnsPCoordsystem ensGenericassemblymapperGetComponentCoordsystem(
+const EnsPCoordsystem ensGenericassemblymapperGetCoordsystemComponent(
     const EnsPGenericassemblymapper gam);
 
 EnsPMapper ensGenericassemblymapperGetMapper(
     const EnsPGenericassemblymapper gam);
 
-ajuint ensGenericassemblymapperGetMaxPairCount(
-    const EnsPGenericassemblymapper gam);
-
-ajuint ensGenericassemblymapperGetPairCount(
+ajuint ensGenericassemblymapperGetMaximum(
     const EnsPGenericassemblymapper gam);
 
 AjBool ensGenericassemblymapperSetAdaptor(EnsPGenericassemblymapper gam,
                                           EnsPAssemblymapperadaptor ama);
 
-AjBool ensGenericassemblymapperSetMaxPairCount(EnsPGenericassemblymapper gam,
-                                               ajuint count);
+AjBool ensGenericassemblymapperSetMaximum(EnsPGenericassemblymapper gam,
+                                          ajuint maximum);
+
+AjBool ensGenericassemblymapperTrace(const EnsPGenericassemblymapper gam,
+                                     ajuint level);
+
+ajuint ensGenericassemblymapperGetCount(
+    const EnsPGenericassemblymapper gam);
+
+AjBool ensGenericassemblymapperRegisterAll(EnsPGenericassemblymapper gam);
 
 AjBool ensGenericassemblymapperRegisterAssembled(EnsPGenericassemblymapper gam,
                                                  ajuint asmsrid,
@@ -62,14 +85,21 @@ AjBool ensGenericassemblymapperRegisterAssembled(EnsPGenericassemblymapper gam,
 AjBool ensGenericassemblymapperRegisterComponent(EnsPGenericassemblymapper gam,
                                                  ajuint cmpsrid);
 
-AjBool ensGenericassemblymapperHaveRegisteredAssembled(
+AjBool ensGenericassemblymapperCheckAssembled(
     const EnsPGenericassemblymapper gam,
     ajuint asmsrid,
     ajint chunkid);
 
-AjBool ensGenericassemblymapperHaveRegisteredComponent(
+AjBool ensGenericassemblymapperCheckComponent(
     const EnsPGenericassemblymapper gam,
     ajuint cmpsrid);
+
+AjBool ensGenericassemblymapperFastmap(EnsPGenericassemblymapper gam,
+                                       const EnsPSeqregion sr,
+                                       ajint srstart,
+                                       ajint srend,
+                                       ajint srstrand,
+                                       AjPList mrs);
 
 AjBool ensGenericassemblymapperMap(EnsPGenericassemblymapper gam,
                                    const EnsPSeqregion sr,
@@ -78,18 +108,9 @@ AjBool ensGenericassemblymapperMap(EnsPGenericassemblymapper gam,
                                    ajint srstrand,
                                    AjPList mrs);
 
-AjBool ensGenericassemblymapperFastMap(EnsPGenericassemblymapper gam,
-                                       const EnsPSeqregion sr,
-                                       ajint srstart,
-                                       ajint srend,
-                                       ajint srstrand,
-                                       AjPList mrs);
-
-AjBool ensGenericassemblymapperRegisterAll(EnsPGenericassemblymapper gam);
-
 /* Ensembl Chained Assembly Mapper */
 
-EnsPChainedassemblymapper ensChainedassemblymapperNew(
+EnsPChainedassemblymapper ensChainedassemblymapperNewIni(
     EnsPAssemblymapperadaptor ama,
     EnsPCoordsystem srccs,
     EnsPCoordsystem midcs,
@@ -98,47 +119,49 @@ EnsPChainedassemblymapper ensChainedassemblymapperNew(
 EnsPChainedassemblymapper ensChainedassemblymapperNewRef(
     EnsPChainedassemblymapper cam);
 
-void ensChainedassemblymapperDel(EnsPChainedassemblymapper *Pcam);
+void ensChainedassemblymapperDel(EnsPChainedassemblymapper* Pcam);
 
 AjBool ensChainedassemblymapperClear(EnsPChainedassemblymapper cam);
 
 EnsPAssemblymapperadaptor ensChainedassemblymapperGetAdaptor(
     const EnsPChainedassemblymapper cam);
 
-const EnsPCoordsystem ensChainedassemblymapperGetSourceCoordsystem(
+const EnsPCoordsystem ensChainedassemblymapperGetCoordsystemMiddle(
     const EnsPChainedassemblymapper cam);
 
-const EnsPCoordsystem ensChainedassemblymapperGetMiddleCoordsystem(
+const EnsPCoordsystem ensChainedassemblymapperGetCoordsystemSource(
     const EnsPChainedassemblymapper cam);
 
-const EnsPCoordsystem ensChainedassemblymapperGetTargetCoordsystem(
+const EnsPCoordsystem ensChainedassemblymapperGetCoordsystemTarget(
     const EnsPChainedassemblymapper cam);
 
-EnsPMapper ensChainedassemblymapperGetSourceMiddleMapper(
+EnsPMapper ensChainedassemblymapperGetMapperSourceMiddle(
     const EnsPChainedassemblymapper cam);
 
-EnsPMapper ensChainedassemblymapperGetTargetMiddleMapper(
+EnsPMapper ensChainedassemblymapperGetMapperSourceTarget(
     const EnsPChainedassemblymapper cam);
 
-EnsPMapper ensChainedassemblymapperGetSourceTargetMapper(
+EnsPMapper ensChainedassemblymapperGetMapperTargetMiddle(
     const EnsPChainedassemblymapper cam);
 
-EnsPMapperrangeregistry ensChainedassemblymapperGetSourceRegistry(
+ajuint ensChainedassemblymapperGetMaximum(
     const EnsPChainedassemblymapper cam);
 
-EnsPMapperrangeregistry ensChainedassemblymapperGetTargetRegistry(
+EnsPMapperrangeregistry ensChainedassemblymapperGetRegistrySource(
     const EnsPChainedassemblymapper cam);
 
-ajuint ensChainedassemblymapperGetMaxPairCount(
+EnsPMapperrangeregistry ensChainedassemblymapperGetRegistryTarget(
     const EnsPChainedassemblymapper cam);
 
 AjBool ensChainedassemblymapperSetAdaptor(EnsPChainedassemblymapper cam,
                                           EnsPAssemblymapperadaptor ama);
 
-AjBool ensChainedassemblymapperSetMaxPairCount(EnsPChainedassemblymapper cam,
-                                               ajuint count);
+AjBool ensChainedassemblymapperSetMaximum(EnsPChainedassemblymapper cam,
+                                          ajuint maximum);
 
-ajuint ensChainedassemblymapperGetPairCount(
+AjBool ensChainedassemblymapperTrace(const EnsPChainedassemblymapper cam,
+                                     ajuint level);
+ajuint ensChainedassemblymapperGetCount(
     const EnsPChainedassemblymapper cam);
 
 AjBool ensChainedassemblymapperMap(EnsPChainedassemblymapper cam,
@@ -154,28 +177,31 @@ AjBool ensChainedassemblymapperRegisterAll(EnsPChainedassemblymapper cam);
 
 /* Ensembl Top-level Assembly Mapper */
 
-EnsPToplevelassemblymapper ensToplevelassemblymapperNew(
+EnsPToplevelassemblymapper ensToplevelassemblymapperNewIni(
     EnsPAssemblymapperadaptor ama,
-    EnsPCoordsystem cs1,
-    EnsPCoordsystem cs2);
+    EnsPCoordsystem asmcs,
+    EnsPCoordsystem cmpcs);
 
 EnsPToplevelassemblymapper ensToplevelassemblymapperNewRef(
     EnsPToplevelassemblymapper tlam);
 
 void ensToplevelassemblymapperDel(EnsPToplevelassemblymapper* Ptlam);
 
-const EnsPAssemblymapperadaptor ensToplevelassemblymapperGetAdaptor(
+EnsPAssemblymapperadaptor ensToplevelassemblymapperGetAdaptor(
     const EnsPToplevelassemblymapper tlam);
 
-const EnsPCoordsystem ensToplevelassemblymapperGetAssembledCoordsystem(
+const EnsPCoordsystem ensToplevelassemblymapperGetCoordsystemAssembled(
     const EnsPToplevelassemblymapper tlam);
 
-const EnsPCoordsystem ensToplevelassemblymapperGetComponentCoordsystem(
+const EnsPCoordsystem ensToplevelassemblymapperGetCoordsystemComponent(
     const EnsPToplevelassemblymapper tlam);
 
 AjBool ensToplevelassemblymapperSetAdaptor(
     EnsPToplevelassemblymapper tlam,
     EnsPAssemblymapperadaptor ama);
+
+AjBool ensToplevelassemblymapperTrace(const EnsPToplevelassemblymapper tlam,
+                                      ajuint level);
 
 AjBool ensToplevelassemblymapperMap(EnsPToplevelassemblymapper tlam,
                                     const EnsPSeqregion sr,
@@ -187,28 +213,34 @@ AjBool ensToplevelassemblymapperMap(EnsPToplevelassemblymapper tlam,
 
 /* Ensembl Assembly Mapper */
 
-EnsPAssemblymapper ensAssemblymapperNew(EnsPAssemblymapperadaptor ama,
-                                        EnsPGenericassemblymapper gam,
-                                        EnsPChainedassemblymapper cam,
-                                        EnsPToplevelassemblymapper tlam);
+EnsPAssemblymapper ensAssemblymapperNewIni(EnsPAssemblymapperadaptor ama,
+                                           EnsPGenericassemblymapper gam,
+                                           EnsPChainedassemblymapper cam,
+                                           EnsPToplevelassemblymapper tlam);
 
 EnsPAssemblymapper ensAssemblymapperNewRef(EnsPAssemblymapper am);
 
 void ensAssemblymapperDel(EnsPAssemblymapper* Pam);
 
-AjBool ensAssemblymapperMap(EnsPAssemblymapper am,
-                            const EnsPSeqregion sr,
-                            ajint srstart,
-                            ajint srend,
-                            ajint srstrand,
-                            AjPList mrs);
+AjBool ensAssemblymapperTrace(const EnsPAssemblymapper am, ajuint level);
 
-AjBool ensAssemblymapperFastMap(EnsPAssemblymapper am,
+AjBool ensAssemblymapperFastmap(EnsPAssemblymapper am,
                                 const EnsPSeqregion sr,
                                 ajint srstart,
                                 ajint srend,
                                 ajint srstrand,
                                 AjPList mrs);
+
+AjBool ensAssemblymapperMapSeqregion(EnsPAssemblymapper am,
+                                     const EnsPSeqregion sr,
+                                     ajint srstart,
+                                     ajint srend,
+                                     ajint srstrand,
+                                     AjPList mrs);
+
+AjBool ensAssemblymapperMapSlice(EnsPAssemblymapper am,
+                                 const EnsPSlice slice,
+                                 AjPList mrs);
 
 AjBool ensAssemblymapperMapToSeqregion(EnsPAssemblymapper am,
                                        const EnsPSeqregion sr,
@@ -218,6 +250,11 @@ AjBool ensAssemblymapperMapToSeqregion(EnsPAssemblymapper am,
                                        const EnsPSeqregion optsr,
                                        AjPList mrs);
 
+AjBool ensAssemblymapperMapToSlice(EnsPAssemblymapper am,
+                                   const EnsPSlice slice,
+                                   const EnsPSlice optslice,
+                                   AjPList mrs);
+
 /* Ensembl Assembly Mapper Adaptor */
 
 EnsPAssemblymapperadaptor ensRegistryGetAssemblymapperadaptor(
@@ -226,50 +263,30 @@ EnsPAssemblymapperadaptor ensRegistryGetAssemblymapperadaptor(
 EnsPAssemblymapperadaptor ensAssemblymapperadaptorNew(
     EnsPDatabaseadaptor dba);
 
-AjBool ensAssemblymapperadaptorCacheClear(EnsPAssemblymapperadaptor ama);
+AjBool ensAssemblymapperadaptorClear(EnsPAssemblymapperadaptor ama);
 
 void ensAssemblymapperadaptorDel(EnsPAssemblymapperadaptor* Pama);
 
 EnsPDatabaseadaptor ensAssemblymapperadaptorGetDatabaseadaptor(
     const EnsPAssemblymapperadaptor ama);
 
-EnsPAssemblymapper ensAssemblymapperadaptorFetchByCoordsystems(
+AjBool ensAssemblymapperadaptorFetchByCoordsystems(
     EnsPAssemblymapperadaptor ama,
     EnsPCoordsystem cs1,
-    EnsPCoordsystem cs2);
+    EnsPCoordsystem cs2,
+    EnsPAssemblymapper* Pam);
 
-EnsPAssemblymapper ensAssemblymapperadaptorFetchBySlices(
+AjBool ensAssemblymapperadaptorFetchBySlices(
     EnsPAssemblymapperadaptor ama,
     EnsPSlice slice1,
-    EnsPSlice slice2);
+    EnsPSlice slice2,
+    EnsPAssemblymapper* Pam);
 
-AjBool ensAssemblymapperadaptorSeqregionIdsToNames(
+AjBool ensAssemblymapperadaptorRegisterChainedAll(
     EnsPAssemblymapperadaptor ama,
-    const AjPList ids,
-    AjPList names);
+    EnsPChainedassemblymapper cam);
 
-AjBool ensAssemblymapperadaptorSeqregionNamesToIds(
-    EnsPAssemblymapperadaptor ama,
-    EnsPCoordsystem cs,
-    const AjPList names,
-    AjPList identifiers);
-
-AjBool ensAssemblymapperadaptorRegisterAssembled(
-    EnsPAssemblymapperadaptor ama,
-    EnsPGenericassemblymapper gam,
-    ajuint asmsrid,
-    ajint regstart,
-    ajint regend);
-
-AjBool ensAssemblymapperadaptorRegisterComponent(
-    EnsPAssemblymapperadaptor ama,
-    EnsPGenericassemblymapper gam,
-    ajuint cmpsrid);
-
-AjBool ensAssemblymapperadaptorRegisterAll(EnsPAssemblymapperadaptor ama,
-                                           EnsPGenericassemblymapper gam);
-
-AjBool ensAssemblymapperadaptorRegisterChained(
+AjBool ensAssemblymapperadaptorRegisterChainedRegion(
     EnsPAssemblymapperadaptor ama,
     EnsPChainedassemblymapper cam,
     const AjPStr source,
@@ -285,25 +302,29 @@ AjBool ensAssemblymapperadaptorRegisterChainedSpecial(
     ajuint optsrid,
     AjPList ranges);
 
-AjBool ensAssemblymapperadaptorRegisterAllChained(
+AjBool ensAssemblymapperadaptorRegisterGenericAll(
     EnsPAssemblymapperadaptor ama,
-    EnsPChainedassemblymapper cam);
+    EnsPGenericassemblymapper gam);
+
+AjBool ensAssemblymapperadaptorRegisterGenericAssembled(
+    EnsPAssemblymapperadaptor ama,
+    EnsPGenericassemblymapper gam,
+    ajuint asmsrid,
+    ajint regstart,
+    ajint regend);
+
+AjBool ensAssemblymapperadaptorRegisterGenericComponent(
+    EnsPAssemblymapperadaptor ama,
+    EnsPGenericassemblymapper gam,
+    ajuint cmpsrid);
 
 /*
 ** End of prototype definitions
 */
 
-#define MENSCHAINEDASSEMBLYMAPPERADAPTORGETASSEMBLEDCOORDSYSTEM(cam)    \
-ensChainedassemblymapperGetSourceCoordsystem(cam)
 
-#define MENSCHAINEDASSEMBLYMAPPERADAPTORGETCOMPONENTCOORDSYSTEM(cam)    \
-ensChainedassemblymapperGetTargetCoordsystem(cam)
 
-#define MENSCHAINEDASSEMBLYMAPPERGETMAPPER(cam)         \
-ensChainedassemblymapperGetSourceTargetMapper(cam)
 
-#endif /* ensassemblymapper_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSASSEMBLYMAPPER_H */

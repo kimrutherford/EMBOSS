@@ -68,7 +68,7 @@ of file names until one is found.
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with dbiblast</b>
+Here is a sample session with <b>dbiblast</b>
 <p>
 This creates EMBOSS indices for the BLAST database 'swnew' 
 <p>
@@ -105,7 +105,7 @@ General log output file [outfile.dbiblast]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Index a BLAST database
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Database name (Any string from 2 to 19
@@ -498,10 +498,10 @@ Any BLAST1 or BLAST2 database index files.
 <pre>
 ########################################
 # Program: dbiblast
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Dbname: swnew
 # Release: 0.0
-# Date: 15/01/10
+# Date: 15/07/11
 # CurrentDirectory: /homes/user/test/qa/dbiblast-ex-keep/
 # IndexDirectory: ./
 # IndexDirectoryPath: /homes/user/test/qa/dbiblast-ex-keep/
@@ -579,7 +579,7 @@ None.
 </H2>
 
 <b>dbiblast</b> can't use the new style of Blast indices.  You must
-create the old style of Blast indices by adding <b>-A F</b> to the
+create the old style of Blast indices by adding <tt>-A F</tt> to the
 formatdb command line. 
 
 
@@ -614,7 +614,7 @@ appropriate values.
 <h3>Indexing the Blast database</h3>
 
 <b>dbiblast</b> can't use the new style of Blast indices.  You must
-create the old style of Blast indices by adding <b>-A F</b> to the
+create the old style of Blast indices by adding <tt>-A F</tt> to the
 formatdb command line. 
 
 <p>
@@ -667,7 +667,7 @@ None.
 </H2>
 
 <b>dbiblast</b> can't use the new style of Blast indices.  You must
-create the old style of Blast indices by adding <b>-A F</b> to the
+create the old style of Blast indices by adding <tt>-A F</tt> to the
 formatdb command line. 
 
 <h2><a name="See also">See also</a></h2>
@@ -690,6 +690,16 @@ formatdb command line.
 </tr>
 
 <tr>
+<td><a href="dbxcompress.html">dbxcompress</a></td>
+<td>Compress an uncompressed dbx index</td>
+</tr>
+
+<tr>
+<td><a href="dbxedam.html">dbxedam</a></td>
+<td>Index the EDAM ontology using b+tree indices</td>
+</tr>
+
+<tr>
 <td><a href="dbxfasta.html">dbxfasta</a></td>
 <td>Index a fasta file database using b+tree indices</td>
 </tr>
@@ -702,6 +712,36 @@ formatdb command line.
 <tr>
 <td><a href="dbxgcg.html">dbxgcg</a></td>
 <td>Index a GCG formatted database using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxobo.html">dbxobo</a></td>
+<td>Index an obo ontology using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxreport.html">dbxreport</a></td>
+<td>Validate index and report internals for dbx databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxresource.html">dbxresource</a></td>
+<td>Index a data resource catalogue using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxstat.html">dbxstat</a></td>
+<td>Dump statistics for dbx databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxtax.html">dbxtax</a></td>
+<td>Index NCBI taxonomy using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxuncompress.html">dbxuncompress</a></td>
+<td>Uncompress a compressed dbx index</td>
 </tr>
 
 </table>

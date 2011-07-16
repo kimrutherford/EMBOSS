@@ -14,8 +14,10 @@ EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat
 endif
 
 
-INCLUDES = -I$(top_srcdir)/plplot -I$(top_srcdir)/ajax/pcre \
-$(EXTRA_INCLUDES) -I$(top_srcdir)/ajax/core
+AM_CPPFLAGS = -I$(top_srcdir)/ajax/core \
+-I$(top_srcdir)/plplot \
+-I$(top_srcdir)/ajax/pcre \
+$(EXTRA_INCLUDES)
 
 AJAXGSRC = ajgraph.c ajhist.c
 
@@ -23,7 +25,7 @@ include_HEADERS = ajgraph.h ajgraphstruct.h  ajhist.h
 
 libajaxg_la_SOURCES = $(AJAXGSRC)
 
-VERS_INF = -version-info 6:3:0
+VERS_INF = -version-info 6:4:0
 
 if ISCYGWIN
 LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LDAJAXG)

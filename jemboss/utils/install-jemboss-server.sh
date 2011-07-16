@@ -66,6 +66,11 @@ getClustalWPath()
     echo "this later (in jemboss.properties)"
     read CLUSTALW
   fi
+  
+  if (test "$CLUSTALW" = ""); then
+    CLUSTALW="/packages/clustal/"
+  fi
+  
 }
 
 
@@ -93,6 +98,11 @@ getPrimerPath()
     echo "this later in (jemboss.properties)"
     read PRIMER3
   fi
+
+  if (test "$PRIMER3" = ""); then
+    PRIMER3="/packages/primer3/bin"
+  fi
+
 }
 
 
@@ -153,6 +163,7 @@ embassy_install()
 
     for dir in *
     do
+      if (test -d $dir ); then
       if [ $ALL = "y" ]; then
         INST="y"
       else
@@ -174,12 +185,14 @@ embassy_install()
               --prefix=$EMBOSS_INSTALL $USER_CONFIG
           make
           make -j install
+	  cd ..
         else
           echo
           echo "Did not install $dir cannot find"
           echo "$EMBASSY_INST/configure"
           echo
         fi
+      fi
       fi
     done
 
@@ -350,17 +363,8 @@ make_jemboss_properties()
   EMBOSSPATH=/usr/bin/:/bin
   export EMBOSSPATH
 
-  if (test "$CLUSTALW" != ""); then
-    EMBOSSPATH=${EMBOSSPATH}:$CLUSTALW
-  else
-    EMBOSSPATH=${EMBOSSPATH}:/packages/clustal/
-  fi
-
-  if (test "$PRIMER3" != ""); then
-    EMBOSSPATH=${EMBOSSPATH}:$PRIMER3
-  else
-    EMBOSSPATH=${EMBOSSPATH}:/packages/primer3/bin
-  fi
+  EMBOSSPATH=${EMBOSSPATH}:$CLUSTALW
+  EMBOSSPATH=${EMBOSSPATH}:$PRIMER3
  
   if [ $SSL = "y" ]; then
      URL=https://$URL:$PORT
@@ -1075,18 +1079,18 @@ echo
 if [ $INSTALL_TYPE = "1" ]; then
 #
 #
-# SOAP data directory store
+# Results directory for jobs
 #
 
   echo "Define the directory you want to store the results in"
   echo "[/tmp/SOAP/emboss]"
-  read DATADIR
-  echo "$DATADIR" >> $RECORD
+  read JOBDIR
 
-  if (test "$DATADIR" = ""); then
-    DATADIR="/tmp/SOAP/emboss"
+  if (test "$JOBDIR" = ""); then
+    JOBDIR="/tmp/SOAP/emboss"
   fi
 
+  echo "$JOBDIR" >> $RECORD
 
   echo
 
@@ -1129,7 +1133,7 @@ if [ $INSTALL_TYPE = "1" ]; then
 
   while [ ! -d "$SOAP_ROOT/webapps/axis" ]
   do
-    echo "Enter Apache AXIS (SOAP) root directory (e.g. /usr/local/axis)"
+    echo "Enter Apache AXIS (SOAP) root directory (e.g. /usr/local/axis-1.4)"
     read SOAP_ROOT
   done
   echo "$SOAP_ROOT" >> $RECORD
@@ -1212,7 +1216,30 @@ cd $EMBOSS_DOWNLOAD
             --with-thread=$PLATFORM \
             --prefix=$EMBOSS_INSTALL $JEMBOSS_SERVER_AUTH $USER_CONFIG
 
+CONFIGURE_EXIT_STAT=$?
+if [ $CONFIGURE_EXIT_STAT -eq 0 ];then
+   echo "EMBOSS configuration call has been completed."
+else
+   echo
+   echo "EMBOSS configuration call returned with error."
+   echo "Please check error messages and run the install script again."
+   echo "Now terminating the install script."
+   exit $CONFIGURE_EXIT_STAT
+fi
+
 make
+
+MAKE_EXIT_STAT=$?
+if [ $MAKE_EXIT_STAT -eq 0 ];then
+   echo "EMBOSS build has been completed."
+else
+   echo
+   echo "EMBOSS build returned with error."
+   echo "Please check error messages and run the install script again."
+   echo "Now terminating the install script."
+   exit $MAKE_EXIT_STAT
+fi
+
 
 echo
 echo "  ******* EMBOSS with Jemboss will be installed in $EMBOSS_INSTALL ******* "
@@ -1268,7 +1295,7 @@ fi
 
 
 
-make_jemboss_properties $EMBOSS_INSTALL $LOCALHOST $AUTH $SSL $PORT $EMBOSS_URL $CLUSTALW $PRIMER3 $DATADIR
+make_jemboss_properties $EMBOSS_INSTALL $LOCALHOST $AUTH $SSL $PORT $EMBOSS_URL $CLUSTALW $PRIMER3 $JOBDIR
 
 #
 #
@@ -1375,13 +1402,13 @@ RUNFILE=$JEMBOSS/runJemboss.sh
 # web app, and ensure that the loadLibrary() call is executed only once
 # during the lifetime of a particular JVM.
   cd $JEMBOSS;
-  echo "moving Ajax and AjaxUtil classes from jemboss.jar into ajax.jar"
+  echo "moving Ajax class from jemboss.jar into ajax.jar"
   mkdir tmp;
   cd tmp;
-  jar -xf ../lib/jemboss.jar org/emboss/jemboss/parser/Ajax.class org/emboss/jemboss/parser/AjaxUtil.class
+  jar -xf ../lib/jemboss.jar org/emboss/jemboss/server/Ajax.class
   jar -cf ../lib/ajax.jar org
   jar -xf ../lib/jemboss.jar
-  rm org/emboss/jemboss/parser/Ajax.class org/emboss/jemboss/parser/AjaxUtil.class
+  rm org/emboss/jemboss/server/Ajax.class
   echo "copying Java class files to axis web-application classes folder"
   cp -R org $TOMCAT_ROOT/webapps/axis/WEB-INF/classes/
   cd ..;
@@ -1542,9 +1569,9 @@ else
   echo
 fi
 
-if [ ! -d "$DATADIR" ]; then
+if [ ! -d "$JOBDIR" ]; then
   echo "Create the user results directory (and ensure this is world read/write-able): "
-  echo "   mkdir $DATADIR"
+  echo "   mkdir $JOBDIR"
   echo
 fi
 echo "Try running Jemboss with the script:"

@@ -1,0 +1,12 @@
+Here is a sample session with <b>seqcount</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqcount "tembl:*" -out tembl.seqcount </b>
+Reads and counts sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

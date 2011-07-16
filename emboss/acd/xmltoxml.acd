@@ -1,0 +1,145 @@
+application:  xmltoxml
+[
+  documentation: "Convert an XML document to a different format"
+  groups: "Utils:Misc"
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
+  relations: "EDAM:0000220 topic File handling"
+  relations: "EDAM:0000335 operation File reformatting"
+]
+
+
+
+
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+infile: infile 
+[
+    parameter: "Y"
+    knowntype: "ascii text"
+    information: "ASCII text file"
+    relations: "EDAM:0000969 data Text"
+]
+
+endsection: input
+
+
+
+
+
+section: required 
+[
+  information: "Required section"
+  type: "page"
+]
+
+list: type
+[
+    standard: "Y"
+    header: "File content"
+    # Values are taken from EDAM "format" branch.  More could be added in time.
+    values: "S:Sequence record, F:Sequence feature annotation, A:Sequence alignment"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Enter the type of file content"
+    help: "You must specify the type of file content so that appropriate output format options may be generated."
+    relations: "EDAM:0002527 data Parameter or primitive"
+]
+
+list: seq
+[
+    standard: "@(type=='S')"
+    # Must give sensible default
+    default: "X"
+    header: "Sequence format"
+    # Values are taken from EDAM "format" branch and are sequence record formats supported by EMBOSS.  More could be added in time.
+    # Must add list of formats.
+    values: "X:XXX, X:XXX"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Enter the ouput file format"
+    help: "This option sets the XML format of a sequence output file."
+    relations: "EDAM:0002129 identifier File format name"
+]
+
+list: feat
+[
+    standard: "@(type=='F')"
+    # Must give sensible default
+    default: "X"
+    header: "Sequence feature format"
+    # Values are taken from EDAM "format" branch and are sequence feature formats supported by EMBOSS.  More could be added in time.
+    # Must add list of formats.
+    values: "X:XXX, X:XXX"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Enter the ouput file format"
+    help: "This option sets the XML format of a sequence feature output file."
+    relations: "EDAM:0002129 identifier File format name"
+]
+
+list: align
+[
+    standard: "@(type=='A')"
+    # Must give sensible default
+    default: "X"
+    header: "Sequence alignment format"
+    # Values are taken from EDAM "format" branch and are sequence alignment formats supported by EMBOSS.  More could be added in time.
+    # Must add list of formats.
+    values: "X:XXX, X:XXX"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Enter the ouput file format"
+    help: "This option sets the XML format of a sequence alignment output file."
+    relations: "EDAM:0002129 identifier File format name"
+]
+
+endsection: required
+
+
+
+
+
+section: additional
+[
+  information: "Additional section"
+  type: "page"
+]
+endsection: additional
+
+
+
+
+
+section: advanced
+[
+  information: "Advanced section"
+  type: "page"
+]
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+
+outfile: outfile 
+[
+    parameter: "Y"
+    knowntype: "ascii text"
+    information: "ASCII text file"
+    relations: "EDAM:0000969 data Text"
+]
+
+endsection: output

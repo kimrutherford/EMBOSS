@@ -98,11 +98,8 @@ public class LineAttribute extends JPanel
       }
     });
 
-    if(draw != null)
-      start.setValue(draw.getStart());
-    else
-      start.setValue(0);
-
+    start.setValue(draw.getStart());
+    
     start.setPreferredSize(d);
     start.setMaximumSize(d);
     bacross.add(new JLabel(" start:"));
@@ -127,10 +124,7 @@ public class LineAttribute extends JPanel
     end.setPreferredSize(d);
     end.setMaximumSize(d);
 
-    if(draw != null)
-      end.setValue(draw.getEnd());
-    else
-      end.setValue(1000);
+    end.setValue(draw.getEnd());
 
     bacross.add(new JLabel(" stop:"));
     bacross.add(end);

@@ -128,6 +128,7 @@ AjPAlign     ajAlignNew (void);
 AjBool       ajAlignOpen (AjPAlign thys, const AjPStr name);
 void         ajAlignPrintFormat (AjPFile outf, AjBool full);
 void         ajAlignPrintbookFormat (AjPFile outf);
+void         ajAlignPrinthtmlFormat (AjPFile outf);
 void         ajAlignPrintwikiFormat (AjPFile outf);
 void         ajAlignReset (AjPAlign thys);
 void         ajAlignSetExternal (AjPAlign thys, AjBool external);

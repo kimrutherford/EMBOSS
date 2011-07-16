@@ -79,6 +79,7 @@ static TimeOFormat timeFormat[] =  /* formats for strftime */
 #endif
     {"dbindex", "%d/%m/%y", AJFALSE, 0},
     {"dtline", "%d-%b-%Y", AJTRUE, 0},
+    {"cachefile", "%Y-%m-%d %H:%M:%S", AJTRUE, 0},
     { NULL, NULL, AJFALSE, 0}
 };
 
@@ -168,7 +169,7 @@ AjPTime ajTimeNew(void)
 ** @@
 ******************************************************************************/
 
-AjPTime ajTimeNewDayFmt( const char *timefmt,
+AjPTime ajTimeNewDayFmt(const char *timefmt,
 			ajint mday, ajint mon, ajint year)
 {
     AjPTime thys;
@@ -979,7 +980,7 @@ double ajClockDiff(ajlong starttime, ajlong nowtime)
 {
     double x;
 
-    x = (nowtime - starttime);
+    x = (double) (nowtime - starttime);
 
     return x/(double)CLOCKS_PER_SEC;
 }
@@ -1042,8 +1043,9 @@ ajlong ajClockNow(void)
 double ajClockSeconds(void)
 {
     double x;
+    ajlong lv = ajClockNow();
 
-    x = ajClockNow();
+    x = (double) lv;
 
     return x/(double)CLOCKS_PER_SEC;
 }

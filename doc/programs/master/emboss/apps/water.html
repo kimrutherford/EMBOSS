@@ -70,7 +70,10 @@ gap penalty + n * gap length penalty
 </H2>
 
 
-<b>water</b> reads any two sequence USAs of the same type (DNA or protein).
+<b>water</b> reads a nucleotide or protein sequence and one or more
+sequence to be aligned to it.
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
 
 <p>
 
@@ -82,6 +85,8 @@ gap penalty + n * gap length penalty
 
 <!--#include file="inc/alignformats.ihtml" -->
 
+<p>
+By default the output is in 'srspair' format.
 <p>
 
 <!--#include file="inc/water.output" -->
@@ -169,23 +174,14 @@ None.
 <p>
 
 <b>matcher</b> is a local alignment program that gives as good an
-alignment as <p>water</p> but it uses far less memory.  However,
-<p>water</p> runs twice as fast as <b>matcher</b>. 
+alignment as <b>water</b> but it uses far less memory.  However,
+<b>water</b> runs twice as fast as <b>matcher</b>. 
 
 <p>
 
 <b>supermatcher</b> is designed for local alignments of very large
-sequences.  It gives good results as long as there is not significant
-amounts of insertion or deletion in the alignment. 
-
-
-<p>
-
-<a href="supermatcher.html">supermatcher</a> Finds a match of a large
-sequence against one or more sequences
-
-<a href="matcher.html">matcher</a> Finds the best local alignments
-between two sequences
+sequences.  It gives good results as long as there is not a significant
+amount of insertion or deletion in the alignment. 
 
 <H2>
     Author(s)

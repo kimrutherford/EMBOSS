@@ -1,0 +1,56 @@
+Find EDAM ontology terms by has_input relation
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-identifier]        string     Identifier(s) to search for in ontology (Any
+                                  string)
+  [-outfile]           outobo     [*.edamhasinput] Output ontology term file
+                                  name
+
+   Additional (Optional) qualifiers:
+   -namespace          menu       [*] By default all terms are returned.
+                                  Searches can be limited to one or a few
+                                  namespaces. (Values: data (Data entity);
+                                  entity (Biological entity); format (Data
+                                  format); identifier (Identifier); operation
+                                  (Bioinformatics operation); resource (Data
+                                  resource); topic (Field of bioinformatics
+                                  study))
+
+   Advanced (Unprompted) qualifiers:
+   -sensitive          boolean    [N] By default, the query keywords are
+                                  matched against the EDAM term names (and
+                                  synonyms) only. This option also matches the
+                                  keywords against the EDAM term definitions
+                                  and will therefore (typically) report more
+                                  matches.
+   -subclasses         boolean    [N] Extend the query matches to include all
+                                  terms which are specialisations (EDAM
+                                  sub-classes) of the matched type.
+   -obsolete           boolean    [N] The default behaviour is to not use or
+                                  return obsolete terms. This option if set
+                                  will include all terms.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Ontology term output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+

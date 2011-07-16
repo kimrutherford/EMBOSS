@@ -1,7 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
 lib_LTLIBRARIES = libepcre.la
-AM_CFLAGS = -DHAVE_CONFIG_H
 
 if ISCYGWIN
 CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import
@@ -13,7 +12,7 @@ POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 PCRELIBVERSION = @PCRE_LIB_VERSION@
 PCREPOSIXLIBVERSION = @PCRE_POSIXLIB_VERSION@
 
-INCLUDES = $(POSIX_MALLOC_THRESHOLD) 
+AM_CPPFLAGS = -I$(top_srcdir)/ajax/core $(POSIX_MALLOC_THRESHOLD) 
 
 PCRESRC = pcre_chartables.c pcre_compile.c pcre_exec.c \
 pcre_fullinfo.c pcre_get.c pcre_globals.c pcre_info.c pcre_newline.c \

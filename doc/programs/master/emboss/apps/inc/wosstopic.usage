@@ -1,0 +1,24 @@
+Here is a sample session with <b>wosstopic</b>
+<p>
+Search for programs with 'codon' in their topic: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>wosstopic codon </b>
+Finds programs by EDAM topic
+
+SEARCH FOR TOPIC 'CODON'
+cai         Calculate codon adaptation index
+chips       Calculates Nc codon usage statistic
+codcmp      Codon usage table comparison
+codcopy     Copy and reformat a codon usage table
+cusp        Create a codon usage table from nucleotide sequence(s)
+cutgextract Extract codon usage tables from CUTG database
+syco        Draw synonymous codon usage statistic plot for a nucleotide sequence
+
+
+</pre></td></tr></table><p>
+<p>
+<p>

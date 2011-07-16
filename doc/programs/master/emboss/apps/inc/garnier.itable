@@ -23,7 +23,7 @@
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat tagseq)</td>
 <td><i>&lt;*&gt;</i>.garnier</td>
 </tr>
 

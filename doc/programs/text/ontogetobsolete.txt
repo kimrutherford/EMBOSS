@@ -1,0 +1,221 @@
+                               ontogetobsolete
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Get ontology ontology terms
+
+Description
+
+   ontogetobsolete displays on-screen for a named ontology all term
+   statement(s) that are obsolete. The information may be written to an
+   output file in various formats.
+
+   Ontologies from the EMBOSS data directory are used.
+
+Usage
+
+   Here is a sample session with ontogetobsolete
+
+
+% ontogetobsolete edam:alignment -subclasses
+Get ontology ontology terms
+Obo output file [0000083.obo]:
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+Get ontology ontology terms
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-oboterms]          obo        Obo term filename and optional format, or
+                                  reference (input query)
+  [-outfile]           outobo     [*.ontogetobsolete] Output ontology term
+                                  file name
+
+   Additional (Optional) qualifiers:
+   -subclasses         boolean    [N] Extend the query matches to include all
+                                  terms which are specialisations
+                                  (sub-classes) of the matched terms.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-oboterms" associated qualifiers
+   -iformat1           string     Input obo format
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Ontology term output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+  Input files for usage example
+
+  Database entry: edam:alignment
+
+[Term]
+id: EDAM:0000083
+name: Alignment
+namespace: topic
+def: Study concerning the alignment (equivalence between sites) of molecular seq
+uences, structures or profiles (representing a sequence or structure alignment).
+subset: topic
+is_obsolete: true
+consider: EDAM:0000182 ! Sequence alignment
+consider: EDAM:0000183 ! Structure alignment
+consider: EDAM:0000184 ! Threading
+
+[Term]
+id: EDAM:0002928
+name: Alignment
+namespace: operation
+def: Compare two or more entities, typically the sequence or structure (or deriv
+atives) of macromolecules, to identify equivalent subunits.
+subset: operation
+is_a: EDAM:0000004 ! Operation
+is_a: EDAM:0002951 ! Alignment processing
+relationship: has_output EDAM:0001916 ! Alignment {minCardinality=1}
+
+[Term]
+id: EDAM:0001916
+name: Alignment
+namespace: data
+def: An alignment of molecular sequences, structures or profiles derived from th
+em.
+subset: data
+is_a: EDAM:0002539 ! Alignment data
+
+
+Output file format
+
+   The default behaviour is to report the entire OBO term statement from
+   the ontology. Optionally, then only the the term id, name and
+   namespace, or just the term id will be reported.
+
+   The output file by default is in OBO plain text format as used by the
+   ontologies in the EMBOSS data directory and explained at
+   http://www.geneontology.org/GO.format.obo-1_2.shtml.
+
+   Optionally, the output can be in HTML, OBO-XML or JSON format.
+
+  Output files for usage example
+
+  File: 0000083.obo
+
+[Term]
+id: EDAM:0000083
+name: Alignment
+namespace: topic
+def: Study concerning the alignment (equivalence between sites) of molecular seq
+uences, structures or profiles (representing a sequence or structure alignment).
+subset: topic
+is_obsolete: true
+consider: EDAM:0000182 ! Sequence alignment
+consider: EDAM:0000183 ! Structure alignment
+consider: EDAM:0000184 ! Threading
+
+
+Data files
+
+   OBO-format ontologies must be installed in the EMBOSS data directory
+   and indexed. This is done automatically for typical installations.
+
+Notes
+
+References
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                     Program name                       Description
+                    edamdef        Find EDAM ontology terms by definition
+                    edamhasinput   Find EDAM ontology terms by has_input relation
+                    edamhasoutput  Find EDAM ontology terms by has_output relation
+                    edamisformat   Find EDAM ontology terms by is_format_of relation
+                    edamisid       Find EDAM ontology terms by is_identifier_of relation
+                    edamname       Find EDAM ontology terms by name
+                    godef          Find GO ontology terms by definition
+                    goname         Find GO ontology terms by name
+                    ontocount      Count ontology term(s)
+                    ontoget        Get ontology term(s)
+                    ontogetcommon  Get common ancestor for terms
+                    ontogetdown    Get ontology term(s) by parent id
+                    ontogetroot    Get ontology root terms by child identifier
+                    ontogetsibs    Get ontology term(s) by id with common parent
+                    ontogetup      Get ontology term(s) by id of child
+   ontoisobsolete   Report whether an ontology term id is obsolete
+                    ontotext       Get ontology term(s) original full text
+
+Author(s)
+
+   Jon              Ison
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+                    This application was modified by Jon Ison
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

@@ -7,6 +7,11 @@ extern "C"
 #define ajnam_h
 
 
+#define AJMETHOD_ENTRY 1
+#define AJMETHOD_QUERY 2
+#define AJMETHOD_ALL   4
+
+#include "ajquerydata.h"
 
 
 /*
@@ -14,33 +19,82 @@ extern "C"
 */
 
 AjBool ajNamDatabase(const AjPStr name);
-AjBool ajNamDbDetails (const AjPStr name, AjPStr* type, AjBool* id,
-		       AjBool* qry, AjBool* all,
+AjBool ajNamAliasDatabase(AjPStr *Pname);
+AjBool ajNamServer(const AjPStr name);
+AjBool ajNamAliasServer(AjPStr *Pname, const AjPStr server);
+AjBool ajNamDatabaseServer(const AjPStr name, const AjPStr server);
+AjPList ajNamDbGetAttrlist(const AjPStr name);
+AjBool ajNamDbGetAttrC(const AjPStr name, const char *attribute,
+                       AjPStr *value);
+AjBool ajNamDbGetAttrS(const AjPStr name, const AjPStr attribute,
+                       AjPStr *value);
+AjBool ajNamDbDetails (const AjPStr name, AjPStr* type,
+                       AjBool* id, AjBool* qry, AjBool* all,
 		       AjPStr* comment, AjPStr* release,
 		       AjPStr* methods, AjPStr* defined);
-AjBool ajNamDbGetDbalias (const AjPStr dbname, AjPStr* dbalias);
-AjBool ajNamDbGetUrl (const AjPStr dbname, AjPStr* url);
-AjBool ajNamDbData (AjPSeqQuery qry);
-AjBool ajNamDbQuery (AjPSeqQuery qry);
-AjBool ajNamDbTest (const AjPStr dbname);
-void   ajNamDebugOrigin (void);
-void   ajNamDebugDatabases (void);
-void   ajNamDebugResources (void);
-void   ajNamDebugVariables (void);
-void   ajNamExit (void);
-AjBool ajNamGetenvC (const char* name, AjPStr* value);
-AjBool ajNamGetenvS (const AjPStr name, AjPStr* value);
-AjBool ajNamGetValueC (const char *name, AjPStr* value);
-AjBool ajNamGetValueS (const AjPStr name, AjPStr* value);
-void   ajNamInit (const char* prefix);
+AjBool ajNamSvrGetAttrC(const AjPStr name, const char *attribute,
+                        AjPStr *value);
+AjBool ajNamSvrGetAttrS(const AjPStr name, const AjPStr attribute,
+                        AjPStr *value);
+AjPList ajNamSvrGetAttrlist(const AjPStr name);
+AjBool ajNamSvrGetdbAttrC(const AjPStr name, const AjPStr dbname,
+                          const char *attribute,
+                          AjPStr *value);
+AjBool ajNamSvrGetdbAttrS(const AjPStr name, const AjPStr dbname,
+                          const AjPStr attribute,
+                          AjPStr *value);
+AjBool ajNamSvrDetails (const AjPStr name, AjPStr* type, AjPStr *scope,
+                        AjBool* id, AjBool* qry, AjBool* all,
+                        AjPStr* comment, AjPStr *version,
+                        AjPStr* methods, AjPStr* defined,
+                        AjPStr* cachedirectory, AjPStr* cachefile,
+                        AjPStr* url);
+AjBool ajNamDbGetDbalias(const AjPStr dbname, AjPStr* dbalias);
+AjBool ajNamDbGetIndexdir(const AjPStr dbname, AjPStr* indexdir);
+AjBool ajNamDbGetType(const AjPStr dbname, ajuint *itype);
+AjBool ajNamDbGetUrl(const AjPStr dbname, AjPStr* url);
+AjBool ajNamDbData(AjPQuery qry, ajuint argc, ...);
+AjBool ajNamDbQuery(AjPQuery qry);
+AjBool ajNamFileQuery(AjPQuery qry);
+AjBool ajNamQuerySetDbalias(AjPQuery qry);
+const char* ajNamQueryGetDatatypeC(const AjPQuery qry);
+const AjPStr ajNamQueryGetUrl(const AjPQuery qry);
+AjBool ajNamDbTest(const AjPStr dbname);
+
+AjBool ajNamSvrGetDbalias(const AjPStr svrname, AjPStr* svralias);
+AjBool ajNamSvrGetUrl(const AjPStr svrname, AjPStr* url);
+AjBool ajNamSvrData(AjPQuery qry, ajuint argc, ...);
+AjBool ajNamSvrQuery(AjPQuery qry);
+AjBool ajNamSvrTest(const AjPStr svrname);
+ajuint ajNamSvrCount(const AjPStr svrname);
+void   ajNamSvrListListDatabases(const AjPStr server, AjPList dbnames);
+
+void   ajNamDebugOrigin(void);
+void   ajNamDebugServers(void);
+void   ajNamDebugDatabases(void);
+void   ajNamDebugResources(void);
+void   ajNamDebugVariables(void);
+void   ajNamDebugAliases(void);
+
+void   ajNamExit(void);
+
+AjBool ajNamGetAliasC(const char* name, AjPStr* value);
+AjBool ajNamGetAliasS(const AjPStr namestr, AjPStr* value);
+
+AjBool ajNamGetenvC(const char* name, AjPStr* value);
+AjBool ajNamGetenvS(const AjPStr name, AjPStr* value);
+AjBool ajNamGetValueC(const char *name, AjPStr* value);
+AjBool ajNamGetValueS(const AjPStr name, AjPStr* value);
+void   ajNamInit(const char* prefix);
 AjBool ajNamIsDbname(const AjPStr name);
-void   ajNamListDatabases(void); /* test routine */
-void   ajNamListListDatabases (AjPList dbnames);
-void   ajNamListListResources (AjPList dbnames);
-void   ajNamListOrigin (void);
-void   ajNamPrintDbAttr (AjPFile outf, AjBool full);
-void   ajNamPrintRsAttr (AjPFile outf, AjBool full);
-AjBool ajNamResolve (AjPStr* name);
+void   ajNamListListServers(AjPList svrnames);
+void   ajNamListListDatabases(AjPList dbnames);
+void   ajNamListListResources(AjPList dbnames);
+void   ajNamPrintSvrAttr(AjPFile outf, AjBool full);
+void   ajNamPrintDbAttr(AjPFile outf, AjBool full);
+void   ajNamPrintRsAttr(AjPFile outf, AjBool full);
+
+AjBool ajNamResolve(AjPStr* name);
 
 const AjPStr ajNamValueRootdir(void);
 const AjPStr ajNamValueBasedir(void);
@@ -49,18 +103,19 @@ const AjPStr ajNamValuePackage(void);
 const AjPStr ajNamValueSystem(void);
 const AjPStr ajNamValueVersion(void);
 
-AjBool ajNamRsAttrValue(const AjPStr name, const AjPStr attribute,
+AjBool ajNamRsAttrValueS(const AjPStr name, const AjPStr attribute,
 			 AjPStr *value);
 AjBool ajNamRsAttrValueC(const char *name, const char *attribute,
 			 AjPStr *value);
 AjBool ajNamRsListValue(const AjPStr name, AjPStr *value);
-AjBool ajNamSetControl (const char* optionName);
-void   ajNamVariables (void); /* "" "" may want to delete later */
+AjBool ajNamSetControl(const char* optionName);
 
 /*
 ** End of prototype definitions
 */
 
+__deprecated AjBool ajNamRsAttrValue(const AjPStr name, const AjPStr attribute,
+			 AjPStr *value);
 __deprecated AjBool ajNamGetenv (const AjPStr name, AjPStr* value);
 __deprecated AjBool ajNamGetValue (const AjPStr name, AjPStr* value);
 __deprecated AjBool ajNamRootInstall (AjPStr* root);

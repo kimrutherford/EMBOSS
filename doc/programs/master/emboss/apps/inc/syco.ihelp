@@ -1,5 +1,5 @@
 Draw synonymous codon usage statistic plot for a nucleotide sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -8,7 +8,7 @@ Version: EMBOSS:6.3.0
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 *  -outfile            outfile    [*.syco] Output file name
 
    Additional (Optional) qualifiers: (none)

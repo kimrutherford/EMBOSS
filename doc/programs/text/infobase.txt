@@ -34,7 +34,7 @@ Output file [outfile.infobase]:
 Command line arguments
 
 Return information on a given nucleotide base
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-code]              string     [ABCDGHKMNRSTUVWXY] Enter IUPAC nucleotide
@@ -155,16 +155,8 @@ Known bugs
 
 See also
 
-                    Program name                          Description
-                    infoalign    Display basic information about a multiple sequence alignment
+                    Program name                   Description
                     inforesidue  Return information on a given amino acid residue
-                    infoseq      Display basic information about sequences
-                    seealso      Finds programs with similar function to a specified program
-                    showdb       Displays information on configured databases
-                    textsearch   Search the textual description of sequence(s)
-                    tfm          Displays full documentation for an application
-                    whichdb      Search all sequence databases for an entry and retrieve it
-                    wossname     Finds programs by keywords in their short description
 
 Author(s)
 

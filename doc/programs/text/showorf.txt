@@ -46,7 +46,7 @@ Output file [x13776.showorf]:
 Command line arguments
 
 Display a nucleotide sequence and translation in pretty format
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -121,7 +121,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   showorf reads a normal nucleic acid sequence USA.
+   showorf reads a single nucleotide sequence.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -388,6 +405,7 @@ See also
    backtranambig    Back-translate a protein sequence to ambiguous nucleotide
                     sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
+   checktrans       Reports STOP codons and ORF statistics of a protein
    coderet          Extract CDS, mRNA and translations from feature tables
    getorf           Finds and extracts open reading frames (ORFs)
    marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA

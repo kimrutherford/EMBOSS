@@ -188,6 +188,12 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	    }
 	}
 
+	elsif ($token eq "conststatic")  {
+	}
+
+	elsif ($token eq "const")  {
+	}
+
 	elsif ($token eq "datastatic")  {
 	    $nattr = 0;
 	    $OFILE = HTMLB;

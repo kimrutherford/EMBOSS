@@ -1,9 +1,9 @@
 application: pepwheel [
   documentation: "Draw a helical wheel diagram for a protein sequence"
   groups: "Display, Protein:2D Structure"
-  relations: "/edam/topic/0000092 Visualisation and rendering"
-  relations: "/edam/topic/0002124 Protein secondary structure analysis"
-  relations: "/edam/operation/0000569 Protein secondary structure visualisation"
+    relations: "EDAM:0000092 topic Data rendering and visualisation"
+    relations: "EDAM:0000694 topic Protein secondary structure"
+    relations: "EDAM:0000569 operation Protein secondary structure rendering"
 ]
 
 section: input [
@@ -14,8 +14,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "Protein"
-    relations: "/edam/data/0000848 Sequence"                                            
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -28,7 +27,7 @@ section: output [
   boolean: wheel [
     default: "Y"
     information: "Plot the wheel"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: steps [
@@ -39,7 +38,7 @@ section: output [
     information: "Number of steps"
     help: "The number of residues plotted per turn is this value
            divided by the 'turns' value."
-    relations: "/edam/data/0001773 Tool-specific parameter"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: turns [
@@ -50,14 +49,14 @@ section: output [
     information: "Number of turns"
     help: "The number of residues plotted per turn is the 'steps'
            value divided by this value."
-    relations: "/edam/data/0001773 Tool-specific parameter"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   graph: graph [
     standard: "Y"
     gdesc: "Helical wheel"
     gxtitle: "$(sequence.name)"
-    relations: "/edam/data/0002162 Helical wheel"                                   
+    relations: "EDAM:0002162 data Helical wheel"
   ]
 
   section: markupsection [
@@ -71,7 +70,7 @@ section: output [
              as squares and all other residues are unmarked. This overrides
              any other markup that you may have specified using the
              qualifiers '-squares', '-diamonds' and '-octags'."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
     ]
 
     string: squares [
@@ -81,7 +80,7 @@ section: output [
       help: "By default the aliphatic residues ILVM are marked with
              squares."
       knowntype: "protein codes"
-    relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
     ]
 
     string: diamonds [
@@ -90,7 +89,7 @@ section: output [
       information: "Mark as diamonds"
       help: "By default the residues DENQST are marked with diamonds."
       knowntype: "protein codes"
-    relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
     ]
 
     string: octags [
@@ -100,7 +99,7 @@ section: output [
       help: "By default the positively charged residues HKR are marked
              with octagons."
       knowntype: "protein codes"
-    relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
     ]
 
   endsection: markupsection

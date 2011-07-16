@@ -174,7 +174,7 @@ int main(int argc, char **argv)
 	}
 
 	embWordRabinKarpSearch(ajSeqGetSeqS(queryseq), targetseqs,
-		(const EmbPWordRK*)wordsw, wordlen, nkmers,
+		(EmbPWordRK const *)wordsw, wordlen, nkmers,
 		matchlist, lastlocation, ajFalse);
 
 
@@ -221,8 +221,10 @@ int main(int argc, char **argv)
 
 	    if(newmax > oldmax)
 	    {
-		AJCRESIZE0(path,oldmax,newmax);
-		AJCRESIZE0(compass,oldmax,newmax);
+		AJFREE(path);
+		AJCNEW0(path,newmax);
+		AJFREE(compass);
+		AJCNEW0(compass,newmax);
 		oldmax=newmax;
 		ajDebug("++ memory re/allocation for path/compass arrays"
 			" to size: %d\n", newmax);

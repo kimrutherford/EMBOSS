@@ -2,8 +2,8 @@ application: polydot [
   documentation: "Draw dotplots for all-against-all comparison of a
                   sequence set"
   groups: "Alignment:Dot plots"
-  relations: "/edam/topic/0000159 Sequence comparison"
-  relations: "/edam/operation/0000490 Dotplot generation"
+    relations: "EDAM:0000159 topic Sequence comparison"
+    relations: "EDAM:0000490 operation Dotplot plotting"
 ]
 
 section: input [
@@ -16,9 +16,7 @@ section: input [
     type: "any"
     help: "File containing a sequence alignment"
     aligned: "N"
-    relations: "/edam/data/0000848 Sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -33,7 +31,7 @@ section: required [
     default: "6"
     minimum: "2"
     information: "Word size"
-    relations: "/edam/data/0001250 Word size"
+    relations: "EDAM:0001250 data Word size"
   ]
 
 endsection: required
@@ -50,34 +48,34 @@ section: output [
     help: "This specifies the size of the gap that is used to separate
            the individual dotplots in the display. The size is measured in
            residues, as displayed in the output."
-    relations: "/edam/data/0001249 Sequence length"
+    relations: "EDAM:0001249 data Sequence length"
   ]
 
   boolean: boxit [
     default: "Y"
     additional: "Y"
     information: "Draw a box around each dotplot"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   toggle: dumpfeat [
     default: "N"
     additional: "Y"
     information: "Dump all matches as feature files"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   featout: outfeat [
     standard: "$(dumpfeat)"
     nullok: "@(!$(dumpfeat))"
     nulldefault: "@(!$(dumpfeat))"
-    relations: "/edam/data/0001270 Sequence feature table"                              
+    relations: "EDAM:0001270 data Feature table"
   ]
 
   graph: graph [
     standard: "Y"
     gdesc: "Poly dotplot"
-    relations: "/edam/data/0000862 Dotplot"                                   
+    relations: "EDAM:0000862 data Dotplot"
   ]
 
 endsection: output

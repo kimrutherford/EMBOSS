@@ -7,7 +7,7 @@ if ISCYGWIN
 CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import
 endif
 
-INCLUDES =
+AM_CPPFLAGS = -I$(top_srcdir)/ajax/core
 
 ZLIBSRC = adler32.c compress.c crc32.c deflate.c gzio.c infback.c inffast.c \
 inflate.c inftrees.c trees.c uncompr.c zutil.c

@@ -1,0 +1,41 @@
+##gff-version 3
+#
+#Protein-Coding Genes
+#
+#We'll now look at how to represent several common cases, starting
+#with protein-coding genes.
+#
+#The most general way of representing a protein-coding gene is the
+#so-called "three-level gene." The top level is a feature of type
+#"gene" which bundles up the gene's transcripts and regulatory
+#elements. Beneath this level are one or more transcripts of type
+#"mRNA". This level can also accommodate promoters and other
+#cis-regulatory elements. At the third level are the components of the
+#mRNA transcripts, most commonly CDS coding segments and UTRs. This
+#example shows how to represent a gene named "EDEN" which has three
+#alternatively-spliced mRNA transcripts:
+
+ctg123	example	gene	1050	9000	.	+	.	ID=EDEN;Name=EDEN;Note=protein	kinase
+
+ctg123	example	mRNA	1050	9000	.	+	.	ID=EDEN.1;Parent=EDEN;Name=EDEN.1;Index=1
+ctg123	example	five_prime_UTR	1050	1200	.	+	.	Parent=EDEN.1
+ctg123	example	CDS	1201	1500	.	+	0	Parent=EDEN.1
+ctg123	example	CDS	3000	3902	.	+	0	Parent=EDEN.1
+ctg123	example	CDS	5000	5500	.	+	0	Parent=EDEN.1
+ctg123	example	CDS	7000	7608	.	+	0	Parent=EDEN.1
+ctg123	example	three_prime_UTR	7609	9000	.	+	.	Parent=EDEN.1
+
+ctg123	example	mRNA	1050	9000	.	+	.	ID=EDEN.2;Parent=EDEN;Name=EDEN.2;Index=1
+ctg123	example	five_prime_UTR	1050	1200	.	+	.	Parent=EDEN.2
+ctg123	example	CDS	1201	1500	.	+	0	Parent=EDEN.2
+ctg123	example	CDS	5000	5500	.	+	0	Parent=EDEN.2
+ctg123	example	CDS	7000	7608	.	+	0	Parent=EDEN.2
+ctg123	example	three_prime_UTR	7609	9000	.	+	.	Parent=EDEN.2
+
+ctg123	example	mRNA	1300	9000	.	+	.	ID=EDEN.3;Parent=EDEN;Name=EDEN.3;Index=1
+ctg123	example	five_prime_UTR	1300	1500	.	+	.	Parent=EDEN.3
+ctg123	example	five_prime_UTR	3000	3300	.	+	.	Parent=EDEN.3
+ctg123	example	CDS	3301	3902	.	+	0	Parent=EDEN.3
+ctg123	example	CDS	5000	5500	.	+	1	Parent=EDEN.3
+ctg123	example	CDS	7000	7600	.	+	1	Parent=EDEN.3
+ctg123	example	three_prime_UTR	7601	9000	.	+	.	Parent=EDEN.3

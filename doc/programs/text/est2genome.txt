@@ -106,7 +106,7 @@ Output file [h45989.est2genome]:
 Command line arguments
 
 Align EST sequences to genomic DNA sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-estsequence]       seqall     Spliced EST nucleotide sequence(s)

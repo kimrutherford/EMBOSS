@@ -88,8 +88,8 @@ int main(int argc, char **argv)
 
     for(i=0; i < filt->Nfilters; ++i)
     {
-        value1 = ajTableFetch(filt->Filters[i],(void *)key1);
-        value2 = ajTableFetch(filt->Filters[i],(void *)key2);
+        value1 = ajTableFetchS(filt->Filters[i], key1);
+        value2 = ajTableFetchS(filt->Filters[i], key2);
         ajFmtPrintF(outf,"%-40S %S\n",value1,value2);
     }
     

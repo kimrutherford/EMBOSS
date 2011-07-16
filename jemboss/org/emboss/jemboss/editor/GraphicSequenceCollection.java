@@ -20,11 +20,14 @@
 
 package org.emboss.jemboss.editor;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.print.*;
-import java.util.*;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
 import java.io.File;
+import java.util.*;
+
+import javax.swing.*;
 
 import org.emboss.jemboss.gui.form.MultiLineToolTipUI;
 
@@ -1405,9 +1408,13 @@ public class GraphicSequenceCollection extends JPanel
 
     setNumberSize();
     SequenceNameJButton snjBlank =
-               new SequenceNameJButton(new Sequence(" "),0);
+        new SequenceNameJButton(new Sequence("seq-id:",""),0);
+    snjBlank.setEnabled(false);
     graphicName.add(snjBlank);
-    seqNameBox.add(snjBlank);
+    XBox = new Box(BoxLayout.X_AXIS);
+    XBox.add(Box.createHorizontalGlue());
+    XBox.add(snjBlank);
+    seqNameBox.add(XBox);
   }
 
   protected void addAnnotationSequence(Sequence s)

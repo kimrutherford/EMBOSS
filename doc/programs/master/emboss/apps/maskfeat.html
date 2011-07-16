@@ -51,9 +51,11 @@ replaced with the specified mask character.</p>
     Input file format
 </H2>
 
-<b>maskfeat</b> reads in a sequence USA.  You can optionally specify a
-GFF feature file to use with the command-line option '-ufo filename'. 
+<b>maskfeat</b> reads one or more nucleotide or protein sequences with features.
 
+
+<p>
+<!--#include file="inc/seqfeatinformats.ihtml" -->
 <p>
 
 <!--#include file="inc/maskfeat.input" -->
@@ -62,8 +64,10 @@ GFF feature file to use with the command-line option '-ufo filename'.
     Output file format
 </H2>
 
-<b>maskfeat</b> writes out a normal, masked, sequence file.
 
+<!--#include file="inc/seqformats.ihtml" -->
+<p>
+The sequence file has features masked with the specified character.
 <p>
 
 <!--#include file="inc/maskfeat.output" -->

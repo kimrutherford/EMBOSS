@@ -41,7 +41,16 @@ __noreturn void embExit (void)
     embWordExit();
     embPatlistExit();
 
+    ajTextdbExit();
     ajSeqDbExit();
+    ajFeatdbExit();
+    ajObodbExit();
+    ajAssemdbExit();
+    ajTaxdbExit();
+    ajUrldbExit();
+    ajVardbExit();
+    ajResourcedbExit();
+
     ajGraphicsExit();
     ajAcdExit(ajFalse);
 

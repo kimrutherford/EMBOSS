@@ -1,0 +1,18 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>Database entry: edam:0000575</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+[Term]
+id: EDAM:0000575
+name: Restriction map rendering
+namespace: operation
+def: Visualise restriction maps in DNA sequences.
+subset: operation
+is_a: EDAM:0000573 ! DNA map rendering
+is_a: EDAM:0000431 ! Restriction site recognition
+relationship: has_output EDAM:0001289 ! Restriction map
+
+</pre>
+</td></tr></table><p>

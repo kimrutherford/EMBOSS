@@ -1,0 +1,427 @@
+                                   dbxedam
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Index the EDAM ontology using b+tree indices
+
+Description
+
+   dbxedam indexes the EDAM ontology in OBO format, and builds EMBOSS
+   B+tree format index files. These indexes allow access of flat files
+   larger than 2Gb.
+
+   These indexes allow access of flat files larger than 2Gb.
+
+   Related application dbxobo can also index the EDAM input file. dbxedam
+   provides additional index fields for EDAM-specific namespaces and
+   relations.
+
+Usage
+
+   Here is a sample session with dbxedam
+
+
+% dbxedam
+Index the EDAM ontology using b+tree indices
+Basename for index files [edam]:
+Standard database name [edam]:
+Resource name [edamresource]:
+Database directory [.]:
+Wildcard database filename [EDAM*.obo]:
+        id : ID
+       acc : Synonym
+       nam : Name
+       isa : Parent
+       des : Description
+        ns : Namespace
+     hasin : has_input
+    hasout : has_output
+      isid : is_identifier_of
+     isfmt : is_format_of
+Index fields [*]:
+Compressed index files [Y]:
+General log output file [outfile.dbxedam]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Index the EDAM ontology using b+tree indices
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     [edam] Basename for index files (Any string
+                                  from 2 to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+  [-standardname]      string     [$(dbname)] Standard database name (Any
+                                  string from 2 to 19 characters, matching
+                                  regular expression /[A-z][A-z0-9_]+/)
+  [-dbresource]        string     [edamresource] Resource name (Any string
+                                  from 2 to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+   -directory          directory  [.] Database directory
+   -filenames          string     [EDAM*.obo] Wildcard database filename (Any
+                                  string)
+   -fields             menu       [*] Index fields (Values: id (ID); acc
+                                  (Synonym); nam (Name); isa (Parent); des
+                                  (Description); ns (Namespace); hasin
+                                  (has_input); hasout (has_output); isid
+                                  (is_identifier_of); isfmt (is_format_of))
+   -[no]compressed     boolean    [Y] Compressed index files
+   -outfile            outfile    [*.dbxedam] General log output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -exclude            string     Wildcard filename(s) to exclude (Any string)
+   -indexoutdir        outdir     [.] Index file output directory
+
+   Associated qualifiers:
+
+   "-directory" associated qualifiers
+   -extension          string     Default file extension
+
+   "-indexoutdir" associated qualifiers
+   -extension          string     Default file extension
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   dbxedam reads and indexes the EDAM ontology file in OBO format.
+
+Output file format
+
+   dbxedam creates one summary file for the database and two files for
+   each field indexed.
+
+     * dbalias.ent is the master file containing the names of the files
+       that have been indexed. It is an ASCII file. This file also
+       contains the database release and date information.
+     * dbalias.xid is the B+tree index file for the ID names. It is a
+       binary file.
+     * dbalias.pxid is an ASCII file containing information regarding the
+       structure of the ID name index.
+
+  Output files for usage example
+
+  File: outfile.dbxedam
+
+Processing directory: /homes/user/test/data/
+Processing file: EDAM.obo entries: 144 (144) time: 0.0s (0.0s)
+Total time: 0.0s
+
+  File: edam.ent
+
+# Number of files: 1
+# Release: 0.0
+# Date:    00/00/00
+Single filename database
+EDAM.obo
+
+  File: edam.pxac
+
+Type      Identifier
+Compress  Yes
+Pages     4
+Order     87
+Fill      75
+Pagesize  8192
+Level     0
+Cachesize 100
+Order2    406
+Fill2     408
+Count     153
+Fullcount 153
+Kwlimit   80
+
+  File: edam.pxde
+
+Type      Secondary
+Compress  Yes
+Pages     1556
+Order     93
+Fill      69
+Pagesize  4096
+Level     0
+Cachesize 100
+Order2    144
+Fill2     204
+Count     515
+Fullcount 1611
+Kwlimit   30
+
+  File: edam.pxhasin
+
+Type      Secondary
+Compress  Yes
+Pages     12
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     3
+Fullcount 3
+Kwlimit   15
+
+  File: edam.pxhasout
+
+Type      Secondary
+Compress  Yes
+Pages     15
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     4
+Fullcount 7
+Kwlimit   15
+
+  File: edam.pxid
+
+Type      Identifier
+Compress  Yes
+Pages     7
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     144
+Fullcount 144
+Kwlimit   15
+
+  File: edam.pxis
+
+Type      Secondary
+Compress  Yes
+Pages     229
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     75
+Fullcount 230
+Kwlimit   15
+
+  File: edam.pxisfmt
+
+Type      Secondary
+Compress  Yes
+Pages     24
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     7
+Fullcount 20
+Kwlimit   15
+
+  File: edam.pxisid
+
+Type      Secondary
+Compress  Yes
+Pages     6
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     1
+Fullcount 1
+Kwlimit   15
+
+  File: edam.pxnm
+
+Type      Secondary
+Compress  Yes
+Pages     622
+Order     60
+Fill      41
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     204
+Fullcount 425
+Kwlimit   20
+
+  File: edam.pxns
+
+Type      Secondary
+Compress  Yes
+Pages     21
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     6
+Fullcount 144
+Kwlimit   15
+
+  File: edam.xac
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: edam.xde
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: edam.xhasin
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: edam.xhasout
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: edam.xid
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: edam.xis
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: edam.xisfmt
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: edam.xisid
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: edam.xnm
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: edam.xns
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                       Description
+                    dbiblast      Index a BLAST database
+                    dbifasta      Index a fasta file database
+                    dbiflat       Index a flat file database
+                    dbigcg        Index a GCG formatted database
+                    dbxcompress   Compress an uncompressed dbx index
+                    dbxfasta      Index a fasta file database using b+tree indices
+                    dbxflat       Index a flat file database using b+tree indices
+                    dbxgcg        Index a GCG formatted database using b+tree indices
+                    dbxobo        Index an obo ontology using b+tree indices
+                    dbxreport     Validate index and report internals for dbx databases
+                    dbxresource   Index a data resource catalogue using b+tree indices
+                    dbxstat       Dump statistics for dbx databases
+                    dbxtax        Index NCBI taxonomy using b+tree indices
+   dbxuncompress    Uncompress a compressed dbx index
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by administrators responsible for
+                    software and database installation and maintenance.
+
+Comments
+
+                    None

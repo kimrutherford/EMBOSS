@@ -47,7 +47,7 @@ Display basic information about sequences
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with infoseq</b>
+Here is a sample session with <b>infoseq</b>
 <p>
 Display information on a sequence: 
 <p>
@@ -163,7 +163,7 @@ Display basic information about sequences
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Display basic information about sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -666,7 +666,35 @@ to get only the length output, you can specify
 </H2>
 
 
-<b>infoseq</b> reads any sequence USAs.
+<b>infoseq</b> reads one or more nucleotide or protein sequences.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -792,7 +820,8 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 </H2>
 
 
-	The output is displayed on the screen (stdout) by default.
+The output is displayed on the screen (stdout) by default.
+
 <p>
 	
 
@@ -890,48 +919,48 @@ None noted.
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Display the trace in an ABI sequencer file</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
 <td><a href="infoalign.html">infoalign</a></td>
 <td>Display basic information about a multiple sequence alignment</td>
 </tr>
 
 <tr>
-<td><a href="infobase.html">infobase</a></td>
-<td>Return information on a given nucleotide base</td>
+<td><a href="seqxref.html">seqxref</a></td>
+<td>Retrieve all database cross-references for a sequence entry</td>
 </tr>
 
 <tr>
-<td><a href="inforesidue.html">inforesidue</a></td>
-<td>Return information on a given amino acid residue</td>
+<td><a href="seqxrefget.html">seqxrefget</a></td>
+<td>Retrieve all cross-referenced data for a sequence entry</td>
 </tr>
 
 <tr>
-<td><a href="seealso.html">seealso</a></td>
-<td>Finds programs with similar function to a specified program</td>
-</tr>
-
-<tr>
-<td><a href="showdb.html">showdb</a></td>
-<td>Displays information on configured databases</td>
-</tr>
-
-<tr>
-<td><a href="textsearch.html">textsearch</a></td>
-<td>Search the textual description of sequence(s)</td>
-</tr>
-
-<tr>
-<td><a href="tfm.html">tfm</a></td>
-<td>Displays full documentation for an application</td>
+<td><a href="showalign.html">showalign</a></td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
 <td><a href="whichdb.html">whichdb</a></td>
 <td>Search all sequence databases for an entry and retrieve it</td>
-</tr>
-
-<tr>
-<td><a href="wossname.html">wossname</a></td>
-<td>Finds programs by keywords in their short description</td>
 </tr>
 
 </table>

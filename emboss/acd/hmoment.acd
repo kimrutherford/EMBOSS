@@ -1,8 +1,9 @@
 application: hmoment [
   documentation: "Calculate and plot hydrophobic moment for protein sequence(s)"
-  groups: "Protein:2D Structure"
-  relations: "/edam/topic/0000137 Protein hydropathy"
-  relations: "/edam/operation/0000407 Protein hydrophobic moment calculation"
+  groups: "Protein:Properties"
+  relations: "EDAM:0000137 topic Protein hydropathy"
+  relations: "EDAM:0000407 operation Protein hydrophobic moment plotting"
+  relations: "EDAM:0000401 operation Protein hydropathy calculation (from sequence)"
 ]
 
 section: input [
@@ -13,9 +14,7 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "protein"
-    relations: "/edam/data/0001219 Pure protein sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0002886 data Sequence record (protein)"
   ]
 
 endsection: input
@@ -29,21 +28,21 @@ section: additional [
     additional: "Y"
     default: "10"
     information: "Window"
-    relations: "/edam/data/0001251 Window size"
+    relations: "EDAM:0001251 data Window size"
   ]
 
   integer: aangle [
     additional: "Y"
     default: "100"
     information: "Alpha helix angle (degrees)"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: bangle [
     additional: "Y"
     default: "160"
     information: "Beta sheet angle (degrees)"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: additional
@@ -56,7 +55,7 @@ section: advanced [
   float: baseline [
     default: "0.35"
     information: "Graph marker line"
-    relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
 endsection: advanced
@@ -69,18 +68,18 @@ section: output [
   toggle: plot [
     default: "N"
     information: "Produce graphic"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: double [
     default: "N"
     information: "Plot two graphs"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   xygraph: graph [
     standard: "$(plot)"
-    relations: "/edam/data/0001520 Peptide hydrophobic moment"                                   
+    relations: "EDAM:0001520 data Peptide hydrophobic moment"
   ]
 
   outfile: outfile [
@@ -88,7 +87,7 @@ section: output [
     knowntype: "hmoment output"
     nullok: "$(plot)"
     nulldefault: "$(plot)"
-    relations:  "/edam/data/0001520 Peptide hydrophobic moment"                   
+    relations: "EDAM:0001520 data Peptide hydrophobic moment"
   ]
 
 endsection: output

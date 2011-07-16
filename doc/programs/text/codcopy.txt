@@ -21,8 +21,6 @@ Description
    single format. This program supports all available codon usage input
    and output formats.
 
-Algorithm
-
 Usage
 
    Here is a sample session with codcopy
@@ -39,7 +37,7 @@ Codon usage output file [eecoli.cut]:
 Command line arguments
 
 Copy and reformat a codon usage table
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            codon      Codon usage table name
@@ -199,6 +197,10 @@ See also
    aligncopy        Reads and writes alignments
    aligncopypair    Reads and writes pairs from alignments
    biosed           Replace or delete sequence sections
+   cai              Calculate codon adaptation index
+   chips            Calculates Nc codon usage statistic
+   codcmp           Codon usage table comparison
+   cusp             Create a codon usage table from nucleotide sequence(s)
    cutseq           Removes a section from a sequence
    degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
    descseq          Alter the name or description of a sequence
@@ -208,6 +210,7 @@ See also
    extractseq       Extract regions from a sequence
    featcopy         Reads and writes a feature table
    featreport       Reads and writes a feature table
+   feattext         Return a feature table original text
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
@@ -228,6 +231,7 @@ See also
    nthseqset        Reads and writes (returns) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
+   seqcount         Reads and counts sequences
    seqret           Reads and writes (returns) sequences
    seqretsetall     Reads and writes (returns) many sets of sequences
    seqretsplit      Reads sequences and writes them to individual files
@@ -236,6 +240,8 @@ See also
    skipseq          Reads and writes (returns) sequences, skipping first few
    splitsource      Split sequence(s) into original source sequences
    splitter         Split sequence(s) into smaller sequences
+   syco             Draw synonymous codon usage statistic plot for a nucleotide
+                    sequence
    trimest          Remove poly-A tails from nucleotide sequences
    trimseq          Remove unwanted characters from start and end of sequence(s)
    trimspace        Remove extra whitespace from an ASCII text file

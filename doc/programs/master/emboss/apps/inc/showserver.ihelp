@@ -1,0 +1,74 @@
+Displays information on configured servers
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -server             string     Name of a single server to give information
+                                  on (Any string)
+   -showtypes          menu       [*] Show type(s) (Values: Protein (Protein
+                                  sequences); Nucleic (Nucleotide sequences);
+                                  Sequence (Any sequence data); Protfeatures
+                                  (Protein features); Nucfeatures (Nucleotide
+                                  features); Features (Any feature table
+                                  data); Obo (OBO ontology data); Resource
+                                  (Data resource); Taxonomy (Taxonomy data);
+                                  Assembly (Assembled short read data); Text
+                                  (text data); Html (HTML text data); Xml (XML
+                                  text data); Unknown (Unspecified datatype
+                                  to be defined for each database))
+   -html               boolean    [N] Format output as an HTML table
+   -full               boolean    [N] Display all columns
+   -methods            boolean    [$(full)] This displays the access methods
+                                  that can be used on this server, for all,
+                                  query or ID access
+   -[no]count          boolean    [Y] Display 'count' column
+   -[no]cachefile      boolean    [Y] Display 'cachefile' column
+   -[no]url            boolean    [Y] Display 'URL' column
+   -fields             boolean    [$(full)] This displays the search fields
+                                  that can be used on this server, other than
+                                  the standard 'id' or 'acc' fields.
+   -defined            boolean    [$(full)] This displays a short name for the
+                                  file containing the server definition
+   -serverversion      boolean    [$(full)] Display 'version' column
+   -sortby             menu       [type] Sort by (Values: defined (Definition
+                                  file short name); type (Datatype))
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers:
+   -only               toggle     [N] This is a way of shortening the command
+                                  line if you only want a few standard columns
+                                  to be displayed. Instead of specifying:
+                                  '-nohead -notype -noid -noquery -noall'
+                                  to get only the comment output, you can
+                                  specify
+                                  '-only -comment'
+   -heading            boolean    [@(!$(only))] Display column headings
+   -scope              boolean    [@(!$(only))] Display 'scope' column
+   -type               boolean    [@(!$(only))] Display 'type' column
+   -id                 boolean    [@(!$(only))] Display 'id' column
+   -query              boolean    [@(!$(only))] Display 'qry' column
+   -all                boolean    [@(!$(only))] Display 'all' column
+   -comment            boolean    [@(!$(only))] Display 'comment' column
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+

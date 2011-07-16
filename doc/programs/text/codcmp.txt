@@ -91,7 +91,7 @@ Output file [eecoli.codcmp]:
 Command line arguments
 
 Codon usage table comparison
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-first]             codon      First codon usage file
@@ -245,6 +245,7 @@ See also
    Program name     Description
    cai              Calculate codon adaptation index
    chips            Calculates Nc codon usage statistic
+   codcopy          Copy and reformat a codon usage table
    cusp             Create a codon usage table from nucleotide sequence(s)
    syco             Draw synonymous codon usage statistic plot for a nucleotide
                     sequence

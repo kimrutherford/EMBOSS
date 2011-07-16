@@ -133,7 +133,7 @@ Anything in between these two values is uncertain.
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with tcode</b>
+Here is a sample session with <b>tcode</b>
 <p>
 
 <p>
@@ -177,7 +177,7 @@ Created tcode.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Identify protein-coding regions using Fickett TESTCODE statistic
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -188,11 +188,12 @@ Version: EMBOSS:6.3.0
                                   slide along the sequence, covering the same
                                   number of bases each time. (Integer 200 or
                                   more)
-*  -outfile            report     [*.tcode] Output report file name
+*  -outfile            report     [*.tcode] Output report file name (default
+                                  -rformat table)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -308,7 +309,7 @@ Version: EMBOSS:6.3.0
 <td>-outfile</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat table)</td>
 <td><i>&lt;*&gt;</i>.tcode</td>
 </tr>
 
@@ -316,7 +317,7 @@ Version: EMBOSS:6.3.0
 <td>-graph</td>
 <td>xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -745,7 +746,32 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>tcode</b> reads any normal sequence USAs.
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -883,10 +909,11 @@ The output is a standard EMBOSS report file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
 
 <p>
 
@@ -933,7 +960,7 @@ red horizontal line.
 <pre>
 ########################################
 # Program: tcode
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: tcode
 #    -sequence tembl:x65921
 # Report_format: table
@@ -950,82 +977,82 @@ red horizontal line.
 #=======================================
 
   Start     End  Strand   Score Estimation
-      1     200       +   0.673 Non-coding
-      4     203       +   0.681 Non-coding
-      7     206       +   0.649 Non-coding
-     10     209       +   0.649 Non-coding
-     13     212       +   0.649 Non-coding
-     16     215       +   0.657 Non-coding
-     19     218       +   0.687 Non-coding
-     22     221       +   0.767 No opinion
-     25     224       +   0.800 No opinion
-     28     227       +   0.782 No opinion
-     31     230       +   0.779 No opinion
-     34     233       +   0.839 No opinion
-     37     236       +   0.951 Coding    
-     40     239       +   0.916 No opinion
-     43     242       +   0.900 No opinion
-     46     245       +   0.839 No opinion
-     49     248       +   0.835 No opinion
-     52     251       +   0.926 No opinion
-     55     254       +   0.887 No opinion
-     58     257       +   0.927 No opinion
-     61     260       +   0.873 No opinion
-     64     263       +   0.873 No opinion
-     67     266       +   0.927 No opinion
-     70     269       +   1.033 Coding    
-     73     272       +   1.044 Coding    
-     76     275       +   1.012 Coding    
-     79     278       +   1.105 Coding    
-     82     281       +   1.022 Coding    
-     85     284       +   1.098 Coding    
-     88     287       +   0.976 Coding    
-     91     290       +   0.962 Coding    
+      1     200       +   0.692 Non-coding
+      4     203       +   0.666 Non-coding
+      7     206       +   0.692 Non-coding
+     10     209       +   0.797 No opinion
+     13     212       +   0.766 No opinion
+     16     215       +   0.805 No opinion
+     19     218       +   0.824 No opinion
+     22     221       +   0.901 No opinion
+     25     224       +   0.934 No opinion
+     28     227       +   0.977 Coding    
+     31     230       +   0.903 No opinion
+     34     233       +   0.942 No opinion
+     37     236       +   1.043 Coding    
+     40     239       +   1.179 Coding    
+     43     242       +   1.149 Coding    
+     46     245       +   1.031 Coding    
+     49     248       +   1.012 Coding    
+     52     251       +   1.121 Coding    
+     55     254       +   1.004 Coding    
+     58     257       +   0.970 Coding    
+     61     260       +   0.941 No opinion
+     64     263       +   0.941 No opinion
+     67     266       +   0.995 Coding    
+     70     269       +   1.029 Coding    
+     73     272       +   1.072 Coding    
+     76     275       +   0.930 No opinion
+     79     278       +   1.023 Coding    
+     82     281       +   0.959 Coding    
+     85     284       +   1.107 Coding    
+     88     287       +   0.985 Coding    
+     91     290       +   0.880 No opinion
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-   1696    1895       +   0.985 Coding    
-   1699    1898       +   0.907 No opinion
-   1702    1901       +   0.985 Coding    
-   1705    1904       +   0.985 Coding    
-   1708    1907       +   0.988 Coding    
-   1711    1910       +   0.981 Coding    
-   1714    1913       +   1.001 Coding    
-   1717    1916       +   1.001 Coding    
-   1720    1919       +   1.004 Coding    
-   1723    1922       +   0.975 Coding    
-   1726    1925       +   0.975 Coding    
-   1729    1928       +   0.927 No opinion
-   1732    1931       +   0.939 No opinion
-   1735    1934       +   0.930 No opinion
-   1738    1937       +   0.860 No opinion
-   1741    1940       +   0.876 No opinion
-   1744    1943       +   0.876 No opinion
-   1747    1946       +   0.836 No opinion
-   1750    1949       +   0.883 No opinion
-   1753    1952       +   0.934 No opinion
-   1756    1955       +   0.965 Coding    
-   1759    1958       +   1.012 Coding    
-   1762    1961       +   1.025 Coding    
-   1765    1964       +   0.940 No opinion
-   1768    1967       +   0.978 Coding    
-   1771    1970       +   0.978 Coding    
-   1774    1973       +   1.012 Coding    
-   1777    1976       +   1.023 Coding    
-   1780    1979       +   1.023 Coding    
-   1783    1982       +   1.023 Coding    
-   1786    1985       +   1.012 Coding    
-   1789    1988       +   0.972 Coding    
-   1792    1991       +   0.943 No opinion
-   1795    1994       +   1.031 Coding    
-   1798    1997       +   1.031 Coding    
-   1801    2000       +   0.926 No opinion
-   1804    2003       +   0.845 No opinion
-   1807    2006       +   0.804 No opinion
-   1810    2009       +   0.765 No opinion
-   1813    2012       +   0.765 No opinion
-   1816    2015       +   0.765 No opinion
+   1696    1895       +   1.099 Coding    
+   1699    1898       +   1.027 Coding    
+   1702    1901       +   1.067 Coding    
+   1705    1904       +   1.067 Coding    
+   1708    1907       +   1.067 Coding    
+   1711    1910       +   1.086 Coding    
+   1714    1913       +   1.024 Coding    
+   1717    1916       +   1.016 Coding    
+   1720    1919       +   0.933 No opinion
+   1723    1922       +   0.964 Coding    
+   1726    1925       +   0.887 No opinion
+   1729    1928       +   0.973 Coding    
+   1732    1931       +   0.991 Coding    
+   1735    1934       +   0.928 No opinion
+   1738    1937       +   0.862 No opinion
+   1741    1940       +   0.848 No opinion
+   1744    1943       +   0.848 No opinion
+   1747    1946       +   0.797 No opinion
+   1750    1949       +   0.844 No opinion
+   1753    1952       +   0.873 No opinion
+   1756    1955       +   0.883 No opinion
+   1759    1958       +   0.959 Coding    
+   1762    1961       +   1.002 Coding    
+   1765    1964       +   0.977 Coding    
+   1768    1967       +   0.955 Coding    
+   1771    1970       +   0.955 Coding    
+   1774    1973       +   0.959 Coding    
+   1777    1976       +   0.969 Coding    
+   1780    1979       +   0.969 Coding    
+   1783    1982       +   0.969 Coding    
+   1786    1985       +   0.911 No opinion
+   1789    1988       +   0.948 No opinion
+   1792    1991       +   0.865 No opinion
+   1795    1994       +   0.948 No opinion
+   1798    1997       +   0.948 No opinion
+   1801    2000       +   0.948 No opinion
+   1804    2003       +   0.901 No opinion
+   1807    2006       +   0.879 No opinion
+   1810    2009       +   0.840 No opinion
+   1813    2012       +   0.785 No opinion
+   1816    2015       +   0.785 No opinion
 
 #---------------------------------------
 #---------------------------------------
@@ -1248,6 +1275,11 @@ It always exits with status 0.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th>
 <th>Description</th></tr>
+<tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
 <tr>
 <td><a href="getorf.html">getorf</a></td>
 <td>Finds and extracts open reading frames (ORFs)</td>

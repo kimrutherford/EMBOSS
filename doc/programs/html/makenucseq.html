@@ -88,7 +88,7 @@ be inserted into each output sequence at a specified position</p>
         Many examples illustrating different behaviours is good.
  -->
 
-<b>Here is a sample session with makenucseq</b>
+Here is a sample session with <b>makenucseq</b>
 <p>
 
 <p>
@@ -133,7 +133,7 @@ nucleotide output sequence(s) [makeseq.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Create random nucleotide sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
    -codonfile          codon      Optional codon usage file. Nucleotide
@@ -495,14 +495,27 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
 
-<b>makenucseq</b> reads any normal sequence USAs.
+<b>makenucseq</b> reads an optional codon usage file.
+
+<p>
+
+<p>
+
+The input is a standard EMBOSS codon usage query.
+
+
+<p>
+
+Data can also be read from codon usage output in any supported format
+written by an EMBOSS or third party application.
+
+<p> The input format can be specified by using the command-line
+qualifier <tt>-format xxx</tt>, where 'xxx' is replaced by the name of
+the required format.  The available format names are: emboss, cut,
+gcg, cutg, cutgaa, spsum, cherry, transterm, codehop, staden and
+numstaden.
+
 
 <p>
 
@@ -767,27 +780,8 @@ ctcgcccccgcccgcgaccgagtcgcgctcgacacggtcg
     Data files
 </H2>
 
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
 
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-
-        #include file="inc/localfiles.ihtml"
-   -->
-
-
-
-
-
-
-
-
-
-
+None.
 
 
 
@@ -975,6 +969,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
 <td><a href="listor.html">listor</a></td>
 <td>Write a list file of the logical OR of two sets of sequences</td>
 </tr>
@@ -1052,6 +1051,11 @@ None.
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>

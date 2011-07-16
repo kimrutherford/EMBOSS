@@ -168,17 +168,10 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
+<b>edialign</b> reads nucleotide or protein sequences to be aligned.
 
-<b>edialign</b> reads any normal sequence USAs.  You must give as
-input at least two sequences. You can use proteins as well as nucleic
-acids, but you can't mix them.
-
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
 <p>
 
 <!--#include file="inc/edialign.input" -->
@@ -191,21 +184,16 @@ acids, but you can't mix them.
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-
-        If you wish to include the standard description of the avalable
-	report formats, use:
-        #include file="inc/reportformats.ihtml"
-   -->
 
 <b>edialign</b> produces two output files with a multiple sequence
 alignment. The first one is a file in DIALIGN format and the second
 one is a sequence file in any format you choose (by default
-fastA). Capital letters denote aligned residues, i.e. residues
+fastA).
+
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
+<p>
+Capital letters denote aligned residues, i.e. residues
 involved in at least one of the "diagonals" in the
 alignment. Lower-case letters denote residues not belonging to any of
 these selected "diagonals". They are not considered to be aligned by

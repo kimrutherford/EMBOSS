@@ -1,0 +1,53 @@
+LOCUS       ACN78416                 225 aa            linear   BCT 21-MAR-2009
+DEFINITION  galactosyltransferase A [Pasteurella multocida].
+ACCESSION   ACN78416
+VERSION     ACN78416.1  GI:224999306
+DBSOURCE    accession FJ755839.1
+KEYWORDS    .
+SOURCE      Pasteurella multocida
+ ORGANISM  Pasteurella multocida
+           Bacteria; Proteobacteria; Gammaproteobacteria; Pasteurellales;
+           Pasteurellaceae; Pasteurella.
+REFERENCE   1  (residues 1 to 225)
+ AUTHORS   Boyce,J.D., Harper,M., St Michael,F., John,M., Aubry,A., Parnas,H.,
+           Logan,S.M., Wilkie,I.W., Ford,M., Cox,A.D. and Adler,B.
+ TITLE     Identification of novel glycosyltransferases required for assembly
+           of the Pasteurella multocida A:1 lipopolysaccharide and their
+           involvement in virulence
+ JOURNAL   Infect. Immun. 77 (4), 1532-1542 (2009)
+  PUBMED   19168738
+REFERENCE   2  (residues 1 to 225)
+ AUTHORS   Harper,M., John,M., Adler,B. and Boyce,J.
+ TITLE     Direct Submission
+ JOURNAL   Submitted (17-FEB-2009) Microbiology, Monash University, Wellington
+           road, Clayton, Melbourne, Victoria 3800, Australia
+COMMENT     Method: conceptual translation supplied by author.
+FEATURES             Location/Qualifiers
+    source          1..225
+                    /organism="Pasteurella multocida"
+                    /strain="VP161"
+                    /serotype="1"
+                    /db_xref="taxon:747"
+                    /note="serogroup: A"
+    Protein         1..225
+                    /product="galactosyltransferase A"
+                    /function="adds beta-D-galactose to both the 4 and 6
+                    position of alpha-L,D-heptose IV"
+                    /name="putative bi-functional galactosyltransferase; GatA"
+    Region          5..188
+                    /region_name="Glyco_transf_25"
+                    /note="Glycosyltransferase family 25 [lipooligosaccharide
+                    (LOS) biosynthesis protein] is a family of
+                    glycosyltransferases involved in LOS biosynthesis. The
+                    members include the beta(1,4) galactosyltransferases: Lgt2
+                    of Moraxella catarrhalis, LgtB and LgtE of...; cd06532"
+                    /db_xref="CDD:133474"
+    CDS             1..225
+                    /gene="gatA"
+                    /coded_by="FJ755839.1:1..678"
+                    /transl_table=11
+ORIGIN             1 mklpkiivis lknsprrqii shrlsglgld feffdavygk dltkeeleki dyeffpkycg
+      61 skgaltlgei gcamshikiy ehivannleq viileddaiv slyfeeivla alqklpnrre
+     121 ilfldhgkak vypfmrnlpe ryrlaryrkp skhskrfivr ttaylitleg akkllkhayp
+     181 irmpsdfltg llqlthinay giepscvfgg veseinemer raglk
+//

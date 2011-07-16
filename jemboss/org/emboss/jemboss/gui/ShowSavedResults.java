@@ -222,11 +222,7 @@ public class ShowSavedResults extends JFrame
             return;
 
           JList theList = (JList)e.getSource();
-          if (theList.isSelectionEmpty()) 
-          {
-            System.out.println("Empty selection");
-          } 
-          else 
+          if (!theList.isSelectionEmpty()) 
           {
             int index = theList.getSelectedIndex();
             String thisdata = convertToOriginal(datasets.elementAt(index));
@@ -331,7 +327,7 @@ public class ShowSavedResults extends JFrame
           }
           else
           {
-            statusField.setText("Selected a project!");
+            statusField.setText("Select a project!");
           }
         }
       });
@@ -740,6 +736,9 @@ public class ShowSavedResults extends JFrame
   */
   private String convertToOriginal(Object sorig)
   {
+    if(sorig==null)
+        return null;
+      
     String s = ((String)sorig).replace('\t','_');
     return s.replace(' ','_');
   }

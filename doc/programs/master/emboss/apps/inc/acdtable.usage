@@ -1,4 +1,4 @@
-<b>Here is a sample session with acdtable</b>
+Here is a sample session with <b>acdtable</b>
 <p>
 
 <p>
@@ -38,7 +38,7 @@
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat motif)</td>
 <td><i>&lt;*&gt;</i>.antigenic</td>
 </tr>
 

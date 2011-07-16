@@ -1,4 +1,4 @@
-<b>Here is a sample session with showalign</b>
+Here is a sample session with <b>showalign</b>
 <p>
 
 <p>
@@ -38,7 +38,7 @@ Format for HTML and highlight some interesting regions in different colours:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showalign -html -high '4-13 green 43-43 red 51-56 blue' </b>
+% <b>showalign -html -high "4-13 green 43-43 red 51-56 blue" </b>
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>

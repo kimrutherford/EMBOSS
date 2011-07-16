@@ -2,7 +2,7 @@
 
 #############################################################################
 #
-# Processing new @section blocks for ajstr etc.
+
 #
 # Controls
 #
@@ -49,7 +49,7 @@ sub nametowords($) {
     return @nameparts;
 }
 
-sub nametorules($\@) {
+sub nametorules($@) {
     my ($name,$rules) = @_;
     my $fname = $name;
     my $ok = 1;
@@ -108,8 +108,8 @@ sub nametorules($\@) {
     return 0;
 }
 
-sub testorder($@$) {
-    my($lastname, @newparts, $type) = @_;
+sub testorder($$@) {
+    my ($lastname, $type, @newparts) = @_;
     print LOG "testorder '$lastname' '$name'\n";
     if($lastname eq "") {return 1}
     $lastname =~ s/([A-Z])/ $1/go;
@@ -636,10 +636,10 @@ foreach $x ("short", "int", "long", "float", "double", "char",
     $simpletype{$x} = 1;
 }
 
-foreach $x ("ajshort", "ajint", "ajuint", "ajlong", "ajulong",
+foreach $x ("ajshort", "ajushort", "ajint", "ajuint", "ajlong", "ajulong",
 	    "jobject", "jstring", "jboolean", "jclass", "jint", "jbyteArray",
 	    "AjBool", "AjStatus", "BOOL", "AjEnum", "PLFLT", "PLINT",
-	    "VALIST") {
+	    "VALIST", "AjEQryLink") {
     $simpletype{$x} = 1;
 }
 
@@ -647,7 +647,7 @@ foreach $x ("CallFunc", "AjMessVoidRoutine", "AjMessOutRoutine") {
     $functype{$x} = 1;
 }
 
-foreach $x ("datastatic", "alias", "attr") {
+foreach $x ("datastatic", "conststatic", "const", "alias", "attr") {
     $datatoken{$x} = 1;
 }
 
@@ -664,7 +664,15 @@ if ($infile) {
     if ($dir) {$lib = $dir}
     print "set pubout '$pubout' lib '$lib'\n";
     open (INFILE, "$infile") || die "Cannot open $infile";
-    while (<INFILE>) {$source .= $_}
+    $linenum=0;
+    while (<INFILE>) {
+	$linenum++;
+	if(length($_) > 81) {
+	    printf "%s %d: length %d\n",
+	    $infile, $linenum, length($_);
+	}
+	$source .= $_
+    }
 }
 else {
     while (<>) {$source .= $_}
@@ -851,7 +859,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    if(!defined($fdata)) {
 		print "bad fdata: $data\n";
 	    }
-	    if($fdata ne $datatype) {
+	    elsif($fdata ne $datatype) {
 		print "bad fdata <$fdata> <$datatype>\n";
 	    }
 	}
@@ -1069,6 +1077,9 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
 	    ($ftype,$fname, $fargs) =
 		$rest =~ /^\s*([^\(\)]*\S)\s+(\S+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os;
+	    if(!defined($ftype)){
+		print "bad \@$type header\n";
+	    }
 	    $sectstr .= " <a href=#$name>$name</a>";
 	    $ftype =~ s/^__noreturn +//;
 	    if($isprog) {$progname = $name}
@@ -1182,8 +1193,11 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 
 	    $type = $token;
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
-	    ($unused,$ftype,$fname, $fargs) =
+	    ($unused,$ftype,$fname,$fargs) =
 		$rest =~ /^\s*(__noreturn\s*)?static\s+([^\(\)]*\S)\s+(\S+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os;
+	    if(!defined($fname)){
+		print "bad \@$type header\n";
+	    }
 	    print "Static function $name\n";
 
 	    if($prespace !~ /^\n\n\n\n\n$/) {
@@ -1545,6 +1559,12 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 			print "bad paramcode '$var' const($cast) but code '$code'\n";
 		    }
 		}
+		elsif ($cast =~ /^[\S+ const[*]/)
+		{
+		    if ($code !~ /[rwud]/) {
+			print "bad paramcode '$var' const($cast) but code '$code'\n";
+		    }
+		}
 		elsif ($code !~ /r/) {
 			print "bad paramcode '$var' const($cast) but code '$code'\n";
 		}
@@ -1649,7 +1669,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 		print "bad return type <$rtype> <$ftype>\n";
 	    }
 	    if (!$rrest && $rtype ne "void") {
-		print "bad returndescription [$rtype], no description\n";
+		print "bad return description [$rtype], no description\n";
 	    }
 
 	    if($rtype eq "void") {
@@ -2065,7 +2085,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    else {
 		@nameparts = nametowords($fname);
 	    }
-	    if(!testorder($lastfname, @nameparts, $type)) {
+	    if(!testorder($lastfname, $type, @nameparts)) {
 		print "bad order: Function $fname follows $lastfname\n";
 	    }
 	    if($type eq "macro") {

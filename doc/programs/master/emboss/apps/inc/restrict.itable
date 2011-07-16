@@ -48,7 +48,7 @@ PpiI</td>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat table)</td>
 <td><i>&lt;*&gt;</i>.restrict</td>
 </tr>
 
@@ -75,7 +75,7 @@ PpiI</td>
 <tr bgcolor="#FFFFCC">
 <td>-mfile</td>
 <td>datafile</td>
-<td>Restriction enzyme methylation data file (optional)</td>
+<td>Restriction enzyme methylation data file</td>
 <td>Data file</td>
 <td>Emethylsites.dat</td>
 </tr>

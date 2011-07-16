@@ -36,13 +36,14 @@ Output report [x13776.dreg]:
 Command line arguments
 
 Regular expression search of nucleotide sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
                                   format, or reference (input USA)
   [-pattern]           regexp     Any regular expression pattern is accepted)
-  [-outfile]           report     [*.dreg] Output report file name
+  [-outfile]           report     [*.dreg] Output report file name (default
+                                  -rformat seqtable)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -223,8 +224,9 @@ Output file format
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
-   genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
 
    See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
    information on report formats.
@@ -237,7 +239,7 @@ Output file format
 
 ########################################
 # Program: dreg
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: dreg
 #    -sequence tembl:x13776
 #    -pattern ggtacc
@@ -254,8 +256,8 @@ Output file format
 #
 #=======================================
 
-  Start     End  Strand Pattern_name Sequence
-      1       6       + regex        ggtacc
+  Start     End  Strand Pattern       Sequence
+      1       6       + regex: GGTACC ggtacc
 
 #---------------------------------------
 #---------------------------------------
@@ -928,36 +930,28 @@ Known bugs
 
 See also
 
-   Program name     Description
-   fuzznuc          Search for patterns in nucleotide sequences
-   fuzztran         Search for patterns in protein sequences (translated)
-   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
-                    sequences
-
-   Other EMBOSS programs allow you to search for simple patterns and may
-   be easier for the user who has never used regular expressions before:
-     * fuzznuc - Nucleic acid pattern search
-     * fuzzpro - Protein pattern search
-     * fuzztran - Protein pattern search after translation
+                    Program name                      Description
+                    fuzznuc      Search for patterns in nucleotide sequences
+                    fuzztran     Search for patterns in protein sequences (translated)
 
 Author(s)
 
-   Peter Rice
-   European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
 
-   Please report all bugs to the EMBOSS bug team
-   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
 
 History
 
-   Written (1999) - Peter Rice.
+                    Written (1999) - Peter Rice.
 
 Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
 
 Comments
 
-   None
+                    None

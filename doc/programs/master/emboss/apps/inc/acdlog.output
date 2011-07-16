@@ -1,0 +1,118 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: actb1_takru.antigenic</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: antigenic.acdlog</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+testing acdpromptsacdArgsScan acdDebug No acdDoHelp No
+Trying acdfile '/homes/pmr/local/share/EMBOSS/acd/antigenic.acd' (installed)
+Code file installed: '/homes/pmr/local/share/EMBOSS/acd/codes.english'
+Code file /homes/pmr/local/share/EMBOSS/acd/codes.english used
+add to table defalign 'Write output alignment to'
+add to table defreport 'Write output report to'
+add to table definteger 'Enter a number'
+add to table deffloat 'Enter a number'
+add to table defbool 'Yes or No'
+add to table defdirectory 'Which directory'
+add to table defoutfile 'Write output to'
+add to table deffeatout 'Write features  to'
+add to table defseqout 'Write sequence to'
+add to table defseqoutset 'Write sequence set to'
+add to table defseqoutall 'Write sequences to'
+add to table defsequence 'Read sequence from'
+add to table defseqset 'Read sequence set from'
+add to table defseqall 'Read sequences from'
+add to table defstring 'Enter text'
+add to table defgraph 'Graph type'
+add to table defxygraph 'Graph type'
+add to table defrange 'Range(s)'
+add to table helpdirectory 'Directory name'
+add to table helpoutfile 'Output file name'
+add to table helpalign 'Output alignment file name'
+add to table helpreport 'Output report file name'
+add to table helpfeatout 'Output features UFO'
+add to table helpseqout 'Output sequence USA'
+add to table helpseqoutset 'Output sequence set USA'
+add to table helpseqoutall 'Output sequence(s) USA'
+add to table helpsequence 'Sequence USA'
+add to table helpseqset 'Sequence set USA'
+add to table helpseqall 'Sequence database USA'
+add to table helpgraph 'Graph type'
+add to table helpxygraph 'Graph type'
+add to table helpcodon 'Codon usage table name'
+add to table helpoutcodon 'Codon usage table name'
+add to table helpobo 'Ontology term query'
+add to table helpoutobo 'Output ontology term file name'
+add to table helpresource 'Data resource catalogue query'
+add to table helpoutresource 'Output data resource file name'
+add to table gap 'What gap penalty'
+add to table gapext 'What gap extension penalty'
+add to table fred 'Sanger special'
+add to table ciao 'Hello from Bari'
+Knowntypes file installed: '/homes/pmr/local/share/EMBOSS/acd/knowntypes.standard'
+Knowntypes file /homes/pmr/local/share/EMBOSS/acd/knowntypes.standard used
+acdSetDefC auto 'N' 1202710
+acdSetDefC stdout 'N' 11eb970
+acdSetDefC filter 'N' 11ebba0
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+      Assoc: No
+ AssocQuals: rformat
+    Defined: No
+    Userdefined: No
+Orig. Value: ''
+      Value: 'actb1_takru.antigenic'
+
+      Default Attributes:
+         default: 'actb1_takru.antigenic'
+     information: ''
+          prompt: ''
+            code: ''
+            help: ''
+       parameter: 'Y'
+        standard: 'Y'
+      additional: ''
+         missing: ''
+           valid: ''
+        expected: ''
+          needed: ''
+       knowntype: ''
+       relations: 'EDAM:0001534 data Peptide immunogenicity report'
+  outputmodifier: ''
+           style: ''
+       qualifier: ''
+        template: ''
+
+      Attributes:
+            type: ''
+         taglist: 'int:pos=Max_score_pos'
+        multiple: 'Y'
+       precision: ''
+     nulldefault: ''
+          nullok: ''
+
+ACD 48
+       Name: 'output'
+      Token: 'output'
+      Param: 0
+      Level: 6   (ENDSEC)
+   Key Type: 5   (endsection)
+      NAttr: 0
+      Assoc: No
+ AssocQuals: &lt;undefined&gt;
+    Defined: No
+    Userdefined: No
+Orig. Value: '&lt;null&gt;'
+      Value: &lt;undefined&gt;
+
+      Attributes:
+
+</pre>
+</td></tr></table><p>

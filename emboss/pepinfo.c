@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     AjBool do_hydropathy;
     AjBool do_plot;
     AjPStr key;
-    AjPStr value;
+    const AjPStr value;
     AjIList listIter;
     AjPTable table;
 
@@ -183,7 +183,7 @@ int main(int argc, char **argv)
 		for(j = seq_start; j < seq_end; j++)
 		{
 		    ajStrAssignSubS(&key, ajSeqGetSeqS(inseq), j, j);
-		    value = ajTableFetch(table, key);
+		    value = ajTableFetchS(table, key);
 		    if(value != NULL)
 		    {
 			if(ajStrToInt(value, ival))
@@ -305,7 +305,7 @@ int main(int argc, char **argv)
 		for(k=0; k < hwindow; k++)
 		{
 		    ajStrAssignSubS(&key, ajSeqGetSeqS(inseq), (j+k), (j+k));
-		    value = ajTableFetch(table, key);
+		    value = ajTableFetchS(table, key);
 		    if(value == NULL)
 		    {
 			ajErr("At position %d in seq, couldn't find key %s",

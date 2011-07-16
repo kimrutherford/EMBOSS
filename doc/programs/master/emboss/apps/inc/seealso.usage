@@ -1,4 +1,4 @@
-<b>Here is a sample session with seealso</b>
+Here is a sample session with <b>seealso</b>
 <p>
 
 <p>
@@ -9,6 +9,10 @@ Finds programs with similar function to a specified program
 Program to search for: <b>matcher</b>
 
 SEE ALSO
+domainalign  Generate alignments (DAF file) for nodes in a DCF file
+domainrep    Reorder DCF file to identify representative structures
+oalistat     Statistics for multiple alignment files
+seqalign     Extend alignments (DAF file) with sequences (DHF file)
 seqmatchall  All-against-all word comparison of a sequence set
 supermatcher Calculate approximate local pair-wise alignments of larger sequences
 water        Smith-Waterman local alignment of sequences

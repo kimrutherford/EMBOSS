@@ -1,7 +1,7 @@
 application: acdpretty [
   documentation: "Correctly reformat an application ACD file"
   gui: "no"
-  groups: "Acd"
-  relations: "/edam/topic/0000220 File handling"
-  relations: "/edam/operation/0000335 File reformatting"
+  groups: "Acd, Data retrieval:Tool data"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000335 operation File reformatting"
 ]

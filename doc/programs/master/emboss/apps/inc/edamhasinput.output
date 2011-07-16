@@ -1,0 +1,113 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: edamhasinput.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0002403
+name: Sequence analysis
+namespace: operation
+def: Analyse one or more known molecular sequences.
+subset: operation
+is_a: EDAM:0002446 ! Sequence processing
+relationship: has_input EDAM:0002044 ! Sequence {minCardinality=1}
+relationship: has_output EDAM:0002955 ! Sequence report {minCardinality=1}
+relationship: in_topic EDAM:0000080 ! Sequence
+
+[Term]
+id: EDAM:0001780
+name: Sequence submission
+namespace: operation
+def: Submit a molecular sequence to a database.
+subset: operation
+is_a: EDAM:0002446 ! Sequence processing
+relationship: has_input EDAM:0002044 ! Sequence {minCardinality=1}
+relationship: in_topic EDAM:0000091 ! Data handling
+
+[Term]
+id: EDAM:0000564
+name: Sequence rendering
+namespace: operation
+def: Visualise, format or render a molecular sequence, possibly with sequence features or properties shown.
+subset: operation
+is_a: EDAM:0000337 ! Plotting and rendering
+is_a: EDAM:0002446 ! Sequence processing
+relationship: has_input EDAM:0002044 ! Sequence {minCardinality=1}
+relationship: has_output EDAM:0002969 ! Sequence image or plot {minCardinality=1}
+
+[Term]
+id: EDAM:0002446
+name: Sequence processing
+namespace: operation
+def: Process (read and / or write) one or more molecular sequences and associated annotation.
+subset: operation
+is_a: EDAM:0002503 ! Sequence data processing
+relationship: has_input EDAM:0002044 ! Sequence {minCardinality=0}
+relationship: has_output EDAM:0002044 ! Sequence {minCardinality=0}
+
+[Term]
+id: EDAM:0000346
+name: Sequence database search (by sequence)
+namespace: operation
+def: Search a sequence database and retrieve sequences that are similar to a query sequence.
+subset: operation
+synonym: "Sequence similarity search" EXACT []
+is_a: EDAM:0000338 ! Sequence database search
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+namespace: operation
+def: Design and optimize oligonucleotide probes for DNA microarrays, for example for transcription profiling of genes, or for genomes and gene families.
+subset: operation
+is_a: EDAM:0002419 ! Primer and probe design
+relationship: has_input EDAM:0002977 ! Nucleic acid sequence
+relationship: has_output EDAM:0000932 ! Oligonucleotide probe data {minCardinality=1}
+relationship: in_topic EDAM:0000200 ! Microarrays
+relationship: in_topic EDAM:0000632 ! Molecular probes or primers
+
+[Term]
+id: EDAM:0002478
+name: Sequence analysis (nucleic acid)
+namespace: operation
+def: Analyse a nucleic acid sequence (using methods that are only applicable to nucleic acid sequences).
+subset: operation
+is_a: EDAM:0002403 ! Sequence analysis
+is_a: EDAM:0002501 ! Nucleic acid data processing
+relationship: has_input EDAM:0002977 ! Nucleic acid sequence {minCardinality=1}
+relationship: in_topic EDAM:0000640 ! Nucleic acid sequences
+
+[Term]
+id: EDAM:0002452
+name: Sequence cluster processing
+namespace: operation
+def: Process (read and / or write) a sequence cluster.
+subset: operation
+is_a: EDAM:0002503 ! Sequence data processing
+relationship: has_input EDAM:0001235 ! Sequence cluster {minCardinality=0}
+relationship: has_output EDAM:0001235 ! Sequence cluster {minCardinality=0}
+relationship: in_topic EDAM:0000164 ! Sequence clustering
+
+[Term]
+id: EDAM:0000566
+name: Sequence cluster rendering
+namespace: operation
+def: Visualise, format or render sequence clusters.
+subset: operation
+is_a: EDAM:0000337 ! Plotting and rendering
+is_a: EDAM:0002452 ! Sequence cluster processing
+relationship: has_input EDAM:0001235 ! Sequence cluster {minCardinality=1}
+
+[Term]
+id: EDAM:0000368
+name: Sequence masking
+namespace: operation
+def: Mask characters in a molecular sequence (replacing those characters with a mask character).
+comment: For example, SNPs or repeats in a DNA sequence might be masked.
+subset: operation
+is_a: EDAM:0000231 ! Sequence editing
+relationship: has_input EDAM:0000851 ! Sequence mask character {minCardinality=1}
+
+</pre>
+</td></tr></table><p>

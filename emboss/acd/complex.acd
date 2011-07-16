@@ -2,8 +2,8 @@ application: complex [
   documentation: "Find the linguistic complexity in
                   nucleotide sequences"
   groups: "Nucleic:Composition"
-  relations: "/edam/topic/0000157 Sequence composition"
-  relations: "/edam/operation/0000374 Nucleotide sequence complexity calculation"
+    relations: "EDAM:0000157 topic Sequence composition"
+    relations: "EDAM:0000374 operation Nucleotide sequence complexity calculation"
 ]
 
 section: input [
@@ -14,9 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "/edam/data/0001215 Pure DNA sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
   ]
 
   integer: lwin [
@@ -27,7 +25,7 @@ section: input [
     failrange: "N"
     trueminimum: "Y"
     information: "Window length"
-    relations: "/edam/data/0001251 Window size"
+    relations: "EDAM:0001251 data Window size"
   ]
 
   integer: step [
@@ -39,7 +37,7 @@ section: input [
     trueminimum: "Y"
     information: "Step size"
     help: "Displacement of the window over the sequence"
-    relations: "/edam/data/0002141 Window step size"
+    relations: "EDAM:0002141 data Window step size"
   ]
 
   integer: jmin [
@@ -49,7 +47,7 @@ section: input [
     maximum: "20"
     information: "Minimum word length"
     help: ""
-    relations: "/edam/data/0001250 Word size"
+    relations: "EDAM:0001250 data Word size"
   ]
 
   integer: jmax [
@@ -59,7 +57,7 @@ section: input [
     maximum: "50"
     information: "Maximum word length"
     help: ""
-    relations: "/edam/data/0001250 Word size"
+    relations: "EDAM:0001250 data Word size"
   ]
 
 endsection: input
@@ -73,7 +71,7 @@ section: advanced [
     default: "N"
     information: "All sequences"
     help: "Calculate over a set of sequences"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: sim [
@@ -81,7 +79,7 @@ section: advanced [
     information: "Simulations"
     help: "Calculate the linguistic complexity by comparison with a
            number of simulations having a uniform distribution of bases"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: freq [
@@ -89,7 +87,7 @@ relations: "/edam/data/0001773 Tool-specific parameter"
     information: "Calculate frequency"
     help: "Execute the simulation of a sequence based on the base
            frequency of the original sequence"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -105,14 +103,14 @@ section: output [
     help: "Generate a file named UjTable containing the values of Uj
            for each word j in the real sequence(s) and in any simulated
            sequences"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "complex output"
     information: "Program complex output file"
-    relations:  "/edam/data/0001259 Sequence complexity"                     
+    relations: "EDAM:0001259 data Sequence complexity"
   ]
 
   outfile: ujtablefile [
@@ -126,9 +124,7 @@ section: output [
   seqoutall: outseq [
     standard: "$(omnia)"
     nullok: "Y"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: output

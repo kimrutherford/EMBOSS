@@ -15,7 +15,7 @@ install-exec-hook:
 if !AMPDF
 	echo "embossHavePDF=false" >> jemboss.properties.new;
 endif
-	mv -f -v jemboss.properties.new $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/jemboss.properties;
+	mv -f jemboss.properties.new $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/jemboss.properties;
 	@if test "${JAVA_OK}" = "yes" ; then \
 		rm -f   $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/resources/acdstore.jar; \
 		cd $(EMBOSS_TOP)/emboss/acd; \

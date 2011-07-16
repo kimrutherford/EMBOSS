@@ -40,7 +40,7 @@ Usage
    Here is a sample session with polydot
 
 
-% polydot globins.fasta -gtitle='Polydot of globins.fasta' -graph cps
+% polydot globins.fasta -gtitle="Polydot of globins.fasta" -graph cps
 Draw dotplots for all-against-all comparison of a sequence set
 Word size [6]:
 
@@ -53,7 +53,7 @@ Created polydot.ps
 Command line arguments
 
 Draw dotplots for all-against-all comparison of a sequence set
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequences]         seqset     File containing a sequence alignment
@@ -62,7 +62,7 @@ Version: EMBOSS:6.3.0
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers:
    -[no]boxit          boolean    [Y] Draw a box around each dotplot

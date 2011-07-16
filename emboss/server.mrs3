@@ -1,0 +1,142 @@
+# server.mrs3  2011-01-20 14:00:00
+
+DB dbest [
+  type: "Nucleotide"
+]
+
+DB dssp [
+  type: "Text"
+]
+
+#http://mrs.cmbi.ru.nl/mrs-web/plain.do?db=embl&id=x13776&format=text
+
+DB embl [
+  type: "Nucleotide"
+  format: "embl"
+  field: "id Identifier | Identifier"
+  field: "ac Accession ! Accession number"
+  field: "query Query ! All text query"
+]
+
+DB enzyme [
+  type: "Text"
+]
+
+DB genbank_release [
+  type: "Nucleotide"
+]
+
+DB gene [
+  type: "Gene"
+]
+
+DB go [
+  type: "Obo"
+]
+
+DB goa [
+  type: "Obo"
+]
+
+DB gpcrdb [
+  type: "Text"
+]
+
+DB gpcrdbnew [
+  type: "Text"
+  dbalias: "gpcrdb-new"
+]
+
+DB hssp [
+  type: "Text"
+]
+
+DB interpro [
+  type: "Text"
+]
+
+DB lovd [
+  type: "Text"
+]
+
+DB mimmap [
+  type: "Text"
+]
+
+DB nucleardb [
+  type: "Text"
+]
+
+DB oxford [
+  type: "Text"
+]
+
+DB pdb [
+  type: "Text"
+]
+
+DB pdbfinder2 [
+  type: "Text"
+]
+
+DB pfama [
+  type: "Text"
+]
+
+DB pfamb [
+  type: "Text"
+]
+
+DB pfamseed [
+  type: "Text"
+]
+
+DB pmc [
+  type: "Text"
+]
+
+DB prints [
+  type: "Text"
+]
+
+DB prosite [
+  type: "Text"
+]
+
+DB prosite_doc [
+  type: "Text"
+]
+
+DB rebase [
+  type: "Text"
+]
+
+DB refseq [
+  type: "Nucleotide"
+]
+
+DB sprot [
+  type: "Protein"
+]
+
+ALIAS swissprot sprot
+
+DB taxonomy [
+  type: "Taxonomy"
+]
+
+DB trembl [
+  type: "Protein"
+]
+
+DB unigene [
+  type: "Nucleotide"
+]
+
+DB uniprot [
+  type: "Protein"
+]
+
+DB uniuniq [
+  type: "Nucleotide"
+]

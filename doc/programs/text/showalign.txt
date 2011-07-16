@@ -60,7 +60,7 @@ Output file [globins.showalign]:
    colours:
 
 
-% showalign -html -high '4-13 green 43-43 red 51-56 blue'
+% showalign -html -high "4-13 green 43-43 red 51-56 blue"
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]:
@@ -189,7 +189,7 @@ Output file [globins.showalign]:
 Command line arguments
 
 Display a multiple sequence alignment in pretty format
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     The sequence alignment to be displayed.
@@ -414,7 +414,7 @@ GLB5_PETMA Y~~~~~~~~~~~~~
 LGB2_LUPLU IVIKKEMNDAA~~~
 
 
-   You can specifiy a file of ranges to display in uppercase by giving the
+   You can specify a file of ranges to display in uppercase by giving the
    '-uppercase' qualifier the value '@' followed by the name of the file
    containing the ranges. (eg: '-upper @myfile').
 
@@ -439,7 +439,7 @@ LGB2_LUPLU IVIKKEMNDAA~~~
  4   5       this is like 12-23, but smaller
 67   10348   interesting region
 
-   You can specifiy a file of ranges to highlight in a different colour
+   You can specify a file of ranges to highlight in a different colour
    when outputting in HTML format (using the '-html' qualifier) by giving
    the '-highlight' qualifier the value '@' followed by the name of the
    file containing the ranges. (eg: '-highlight @myfile').
@@ -450,10 +450,8 @@ LGB2_LUPLU IVIKKEMNDAA~~~
    is' when specifying the colour in HTML in a '' construct, (where 'xxx'
    is the name of the colour).
 
-   The standard names of HTML font colours are given in:
-   http://http://www.w3.org/TR/REC-html40/types.html and
-   http://www.ausmall.com.au/freegraf/ncolour2.htm and
-   http://mindprod.com/htmlcolours.html (amongst other places).
+   The standard names of HTML font colours are given in
+   http://http://www.w3.org/TR/REC-html40/types.html#h-6.5
 
    An example highlight range file is:
 

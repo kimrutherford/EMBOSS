@@ -36,6 +36,8 @@
 **  1. Report only
 **  2. Renumber terms
 **  3. Fix relations
+**  4. Output PURL XML (single file)
+**  5. Output PURL XML (one file / term)
 **
 **  1. Report only
 **  Write an informative report from parsing but do not change the file.
@@ -51,6 +53,8 @@
 **  vi.   Terms in specific namespaces have all mandatory relations defined
 **        and do not have disallowed relations. See "Rules" below.
 **  vii.  End-points (term names) of all relations exist. See "Rules" below.
+**        This includes checking for mismatches between term id and name
+**        (in comment) in relations lines 
 **  viii. All id: lines have the format:   id: EDAM:0000000 
 **  ix.   All def: lines have the format:  def: "Some text."
 **        [EDAM:EBI "EMBRACE definition"]
@@ -68,8 +72,24 @@
 **  3. Fix relations
 **  Write a report as above.  If no errors reported, correct term ids used
 **  in all relations fields.  
-** 
 **
+**  4. Output PURL XML (single file)
+**  Write a report as above. Then write XML output for term submission to PURL.org
+** <purls>
+** <purl id="/tld/subdomain/testPartial" type="partial">
+** -
+** <maintainers>
+** <uid>jon</uid>
+** </maintainers>
+** <target url="http://wwwdev.ebi.ac.uk/Tools/dbfetch/dbfetch/edam/0000352"/>
+** </purl>
+** </purls>
+**
+**
+**  5. Output PURL XML (one file / term)
+**  As option 4. above, but write a single XML file per term to the specified directory.
+**
+** 
 **  edamclean parameters:
 **  Name of OBO format file (input)
 **  Name of OBO format file (output)
@@ -104,17 +124,16 @@
 **   is_identifier_of
 **   has_attribute
 **   is_attribute_of
-**   has_syntax
-**   is_syntax_of
+**   has_format
+**   is_format_of
 **
 ** Namespace
 **   entity
 **   topic
 **   operation
-**   database
-**   ontology
+**   resource
 **   data
-**   syntax 
+**   format 
 **
 **
 ** Tokens to ignore
@@ -161,6 +180,9 @@
 ** It does not check for multiple (erroneous) comment: lines
 **
 ** It does not suppress (irrelevant) error messages for obsolete terms.
+** 
+** It does not check for duplicate relationships (where these are not allowed)
+** e.g. an exact duplication of a relationship line.
 ******************************************************************************/
 
  #include "emboss.h"
@@ -175,7 +197,7 @@
 **
 ******************************************************************************/
 
-#define NFIELDS 9
+#define NFIELDS 10
 
 static const char *FIELDS[NFIELDS] =
 {
@@ -187,7 +209,8 @@ static const char *FIELDS[NFIELDS] =
     "synonym:",
     "xref:",
     "is_obsolete:",
-    "consider:"
+    "consider:",
+    "relationship:"
 };
 
 
@@ -214,25 +237,24 @@ static const char *RELATIONS[NRELATIONS] =
     "is_identifier_of:",
     "has_attribute:",
     "is_attribute_of:",
-    "has_syntax:",
-    "is_syntax_of:",
+    "has_format:",
+    "is_format_of:",
     "consider:"
 };
 
 
 
 
-#define NNAMESPACES 7
+#define NNAMESPACES 6
 
 static const char *NAMESPACES[NNAMESPACES] =
 {
     "entity", 
     "topic", 
     "operation", 
-    "database",
-    "ontology", 
+    "resource",
     "data", 
-    "syntax"
+    "format"
 };
 
 
@@ -243,10 +265,9 @@ enum _namespace
     entity, 
     topic, 
     operation, 
-    database,
-    ontology, 
+    resource,
     data, 
-    syntax
+    format
 };
 
 
@@ -347,8 +368,8 @@ static PTerm       ajTermNew(void);
 static PNamespace  ajNamespaceNew(void);
 static void        ajTermDel(PTerm *P);
 static void        ajNamespaceDel(PNamespace *P);
-static AjPStr      FindTerm(ajint namespace, const AjPStr termname,
-                            PNamespace *namespaces);
+static const AjPStr FindTerm(ajint namespace, const AjPStr termname,
+                             PNamespace *namespaces);
 
 
 
@@ -479,17 +500,19 @@ static void ajNamespaceDel(PNamespace *P)
 
 /* @funcstatic FindTerm ***************************************************
 **
-** Finds a term within a namespace and returns its index in the namespace array.
+** Finds a term within a namespace index and returns its identifier in the
+** namespace array.
+**
 ** Returns NULL if term is not found
 ** 
-** @param [r] namespace    [ajint]  Namespace as integer
+** @param [r] namespace    [ajint]  Namespace index as integer
 ** @param [r] termname     [const AjPStr] Name of term
 ** @param [u] namespaces   [PNamespace*] Array of namespace objects
-** @return [AjPStr] ID from the namespace objects provided
+** @return [const AjPStr] Term identifier
 ** @@
 ******************************************************************************/
 
-static AjPStr FindTerm(ajint namespace, const AjPStr termname,
+static const AjPStr FindTerm(ajint namespace, const AjPStr termname,
                        PNamespace *namespaces)
 {
     ajint x;
@@ -519,6 +542,9 @@ int main(ajint argc, char **argv)
     AjPFile    inf_edam        = NULL;    /* Name of EDAM (input) file      */
     AjPFile    ouf_edam        = NULL;    /* Name of EDAM (output) file     */
     AjPFile    ouf_log         = NULL;    /* Name of report (output) file   */
+    AjPFile    ouf_xml         = NULL;    /* Name of XML (output) file   */
+    AjPFile    tmp_xml         = NULL;    /* Temp. XML (output) file   */
+    AjPDirout  xmloutdir       = NULL;    /* XML (output) file directory */
     AjPStr     mode            = NULL;    /* Mode of operation              */
     AjPList    list_tmp        = NULL;    /* Temporary list                 */
     AjPStr    *fields          = NULL;    /* Array of valid tokens for first
@@ -526,7 +552,7 @@ int main(ajint argc, char **argv)
     ajint      nfields         = 0;       /* Size of fields array           */
     AjPStr    *ids             = NULL;    /* Array of all ids in file       */  
     ajint      nids            = 0;       /* Size of ids                    */
-    AjPStr     id              = NULL;    /* ID of a term                   */
+    const AjPStr id            = NULL;    /* ID of a term                   */
 
     AjPStr     line    = NULL;    /* A line from the input file             */
     ajint      linecnt = 0;       /* Line number of line                    */
@@ -537,9 +563,11 @@ int main(ajint argc, char **argv)
     ajint      y               = 0;       /* Housekeeping  */
     ajint      z               = 0;       /* Housekeeping  */
     ajint      idx             = 0;       /* Housekeeping  */
+    AjPStr     name            = NULL;    /* Name of a term */
     AjPStr     namespace       = NULL;    /* Namespace of a term */
     AjPStr     relation        = NULL;    /* Relationship name, e.g. "is_a" */
     AjPStr     tmp_name        = NULL;    /* Temp. name of a term */
+    AjPStr     tmp_id          = NULL;    /* Temp. id of a term */
     AjPStr     tmp_str         = NULL;    /* Temp. string */
     PTerm      tmp_term        = NULL;    /* Temp. term pointer */
     ajint      tmp_line        = 0;       /* Temp. line number */  
@@ -548,8 +576,8 @@ int main(ajint argc, char **argv)
     AjBool    done_first      = ajFalse;  /* Housekeeping ... read first term */
     AjBool    first           = ajFalse;  /* Housekeeping ... on first term */
     AjBool    found_id        = ajFalse;
-    AjBool    found_typedef   = ajFalse;  /* Found first [Typedef] line */
-      
+    AjBool    in_typedef      = ajFalse;  /* In a [Typedef] statement */
+          
     AjBool    found_name             = ajFalse;
     AjBool    found_namespace        = ajFalse;
     AjBool    found_def              = ajFalse;
@@ -573,8 +601,8 @@ int main(ajint argc, char **argv)
     AjBool    found_is_attribute_of  = ajFalse;
     AjBool    found_has_part         = ajFalse;
     AjBool    found_is_part_of       = ajFalse;
-    AjBool    found_has_syntax       = ajFalse;
-    AjBool    found_is_syntax_of     = ajFalse;
+    AjBool    found_has_format       = ajFalse;
+    AjBool    found_is_format_of     = ajFalse;
 
 
 
@@ -584,27 +612,38 @@ int main(ajint argc, char **argv)
 
 
     /* ACD data handling */
-    inf_edam  = ajAcdGetInfile("edamin");
-    ouf_edam  = ajAcdGetOutfile("edamout");
-    ouf_log   = ajAcdGetOutfile("log");
-    mode      = ajAcdGetSelectSingle("mode");
-
+    inf_edam   = ajAcdGetInfile("edaminfile");
+    ouf_edam   = ajAcdGetOutfile("edamoutfile");
+    ouf_log    = ajAcdGetOutfile("logfile");
+    ouf_xml    = ajAcdGetOutfile("xmlfile");
+    xmloutdir  = ajAcdGetOutdir("xmloutdir");
+    mode       = ajAcdGetSelectSingle("mode");
+/*    taxdir    = ajAcdGetDirectory("taxdirectory"); */
+    
     ajFmtPrint("MODE : %S\n", mode);
+
+    /*
+    ajTaxLoad(taxdir);
+    ajOboParseObofile(inf_edam, "noidorder,nounkid"); 
+    ajFileSeek(inf_edam, 0, 0);    
+    embExit(); */
 
     /* Memory allocation */
     line       = ajStrNew();
     tok        = ajStrNew();
+    name       = ajStrNew();
     namespace  = ajStrNew();
     relation   = ajStrNew();
     tmp_name = ajStrNew();
+    tmp_id   = ajStrNew();
 
     for(x=0; x<NNAMESPACES; x++)
     {
         namespaces[x] = ajNamespaceNew();
         ajStrAssignC(&(namespaces[x]->name), NAMESPACES[x]);
     }
-
-
+          
+    
 
     /*  Check for valid first tokens */      
     /* First, write array of valid tokens for first word in line */
@@ -637,6 +676,83 @@ int main(ajint argc, char **argv)
     ajFmtPrintF(ouf_log, "1. FIRST TOKEN IN LINES\n");          
 
     
+
+
+
+
+    
+        /* Output PURL XML */
+    if(ajStrMatchC(mode, "Output PURL XML (single file)") ||
+       ajStrMatchC(mode, "Output PURL XML (one file / term)"))
+    {
+        if(ajStrMatchC(mode, "Output PURL XML (single file)"))
+        {
+            tmp_xml = ouf_xml;
+            ajFmtPrintF(tmp_xml, "<purls>\n");
+        }
+        
+            
+        for(in_typedef=ajFalse; ajReadline(inf_edam, &line); )
+        {
+            if(ajStrPrefixC(line, "[Typedef]"))
+                in_typedef=ajTrue;
+            else if(ajStrPrefixC(line, "[Term]"))
+                in_typedef=ajFalse;
+
+            if(in_typedef)
+                continue;
+
+            if(ajStrPrefixC(line, "namespace:"))
+            {
+
+                if(ajStrMatchC(mode, "Output PURL XML (one file / term)"))
+                {
+                    if(!(tmp_xml=ajFileNewOutNameDirS(tmp_id, xmloutdir)))
+                        ajFatal("Could not create file");
+                    else
+                        ajFmtPrintF(tmp_xml, "<purls>\n");
+                }
+                
+
+                
+                ajStrAssignClear(&tok);
+                ajFmtScanS(line, "%*s %S", &tok);
+                ajStrRemoveWhite(&tok);
+                ajFmtPrintF(tmp_xml,
+                            "<purl id=\"/edam/%S/%S\" type=\"partial\">\n"
+                            "<maintainers>\n"
+                            "<uid>jon</uid>\n"
+                            "</maintainers>\n"
+                            "<target url=\"http://wwwdev.ebi.ac.uk/Tools/dbfetch/dbfetch/edam/%S\"/>\n"
+                            "</purl>\n", tok, tmp_id, tmp_id);
+
+
+                if(ajStrMatchC(mode, "Output PURL XML (one file / term)"))
+                {
+                    ajFmtPrintF(tmp_xml, "</purls>\n");
+                    ajFileClose(&tmp_xml);
+                }
+                
+            }
+            
+            if(ajStrPrefixC(line, "id:"))
+            {
+                ajStrParseC(line, ":");
+                ajStrParseC(NULL, ":");
+                ajStrAssignS(&tmp_id, ajStrParseC(NULL, ":"));
+                ajStrRemoveWhite(&tmp_id);
+            }
+        }
+
+        if(ajStrMatchC(mode, "Output PURL XML (single file)"))
+            ajFmtPrintF(tmp_xml, "</purls>\n");
+    }
+
+    exit(0);
+    
+    
+
+    
     
     for(linecnt=0; ajReadline(inf_edam, &line); linecnt++)
     {
@@ -657,7 +773,6 @@ int main(ajint argc, char **argv)
 
     ajFmtPrintF(ouf_log, "\n\n");
     ajFileSeek(inf_edam, 0, 0);    /* Rewind file */
-
 
 
     /*  Check for valid namespace: values */
@@ -682,7 +797,6 @@ int main(ajint argc, char **argv)
         }
 
     }
-
 
     
     ajFmtPrintF(ouf_log, "\n\n");
@@ -715,20 +829,26 @@ int main(ajint argc, char **argv)
     ajFileSeek(inf_edam, 0, 0);    /* Rewind file */
 
 
-
-
     /*  Check for id: line format (also build list of term ids) */
     list_tmp = ajListstrNew();
     ajFmtPrintF(ouf_log, "4. id: LINE FORMAT\n");          
 
-    for(linecnt=0; ajReadline(inf_edam, &line); linecnt++)
+    for(in_typedef=ajFalse, linecnt=0; ajReadline(inf_edam, &line); linecnt++)
     {
         /* Stop checking once first [Typedef] line is found. */ 
+/*         if(ajStrPrefixC(line, "[Typedef]"))
+           break; */
+
         if(ajStrPrefixC(line, "[Typedef]"))
-            break;
-       
+            in_typedef=ajTrue;
+        else if(ajStrPrefixC(line, "[Term]"))
+            in_typedef=ajFalse;
+        
         if(ajStrPrefixC(line, "id:"))
         {
+            if(in_typedef)
+                continue;
+            
             if(ajStrCalcCountC(line, ":")!=2)
                 ajFmtPrintF(ouf_log, "Line %6d : Invalid id: line format - "
                             "wrong number of colon (:) (%S) \n",
@@ -761,18 +881,24 @@ int main(ajint argc, char **argv)
     ajFmtPrintF(ouf_log, "\n\n");
     ajFileSeek(inf_edam, 0, 0);    /* Rewind file */
 
-
-
     /*  Check for def: line format */
     ajFmtPrintF(ouf_log, "5. def: LINE FORMAT\n");          
-    for(linecnt=0; ajReadline(inf_edam, &line); linecnt++)
+    for(in_typedef=ajFalse, linecnt=0; ajReadline(inf_edam, &line); linecnt++)
     {
         /* Stop checking once first [Typedef] line is found. */ 
+/*        if(ajStrPrefixC(line, "[Typedef]"))
+          break; */
+        
         if(ajStrPrefixC(line, "[Typedef]"))
-            break;
-
+            in_typedef=ajTrue;
+        else if(ajStrPrefixC(line, "[Term]"))
+            in_typedef=ajFalse;
+        
         if(ajStrPrefixC(line, "def:"))
         {
+            if(in_typedef)
+                continue;
+                        
             if(ajStrCalcCountC(line, ":[")!=3)
                 ajFmtPrintF(ouf_log, "Line %6d : Invalid def: line format - "
                             "wrong number of colon ':' or open-bracket '[' "
@@ -809,44 +935,74 @@ int main(ajint argc, char **argv)
     ajFileSeek(inf_edam, 0, 0);    /* Rewind file */
 
 
-
     /*  Check for relations line format */
     ajFmtPrintF(ouf_log, "6. RELATIONS LINE FORMAT\n");          
 
-    for(linecnt=0; ajReadline(inf_edam, &line); linecnt++)
+    for(in_typedef=ajFalse, linecnt=0; ajReadline(inf_edam, &line); linecnt++)
     {
+        if(ajStrPrefixC(line, "[Typedef]"))
+            in_typedef=ajTrue;
+        else if(ajStrPrefixC(line, "[Term]"))
+            in_typedef=ajFalse;
+
+        if(in_typedef)
+            continue;
+
+        ajStrAssignClear(&relation);
+      
+        if(ajStrPrefixC(line, "relationship:"))
+            ajFmtScanS(line, "%*S %S", &relation);
+        else
+            ajFmtScanS(line, "%S", &relation);
+        
         for(x=0; x<NRELATIONS; x++)
         {
-            if(ajStrPrefixC(line, RELATIONS[x]))
+            if(ajStrMatchC(relation, RELATIONS[x]))
             {
-                if(ajStrCalcCountC(line, "!:")!=3)
+
+
+                if(((ajStrPrefixC(line, "relationship:")) &&
+                    (ajStrCalcCountC(line, "!:")!=4)) ||
+                   ((!ajStrPrefixC(line, "relationship:")) &&
+                    (ajStrCalcCountC(line, "!:")!=3)))
+                {
                     ajFmtPrintF(ouf_log, "Line %6d : Invalid relations line "
-                                "format (%S)\n", linecnt+1, line);
+                                "format1 (%S)\n", linecnt+1, line);
+/*                    ajFmtPrint("relation: %S  RELATIONS[%d]: %s", relation, x, RELATIONS[x]); */
+                }
                 else
                 {
-                    ajStrParseC(line, ":!");
-                    ajStrAssignS(&tok, ajStrParseC(NULL, ":!"));
+                    ajStrAssignS(&tok, ajStrParseC(line, ":! "));
                     ajStrRemoveWhite(&tok);
-                    /* Check for "EDAM" */
 
+                    
+                    /* Discard first "relationship:" token and get next one */
+                    if(ajStrMatchC(tok, "relationship"))
+                        ajStrParseC(NULL, ":! ");
+                    
+                    /* Get supposed "EDAM" token */
+                    ajStrAssignS(&tok, ajStrParseC(NULL, ":! "));
+                    ajStrRemoveWhite(&tok);
+
+                    /* Check for "EDAM" */
                     if(!ajStrMatchC(tok, "EDAM"))
                         ajFmtPrintF(ouf_log, "Line %6d : Invalid relations "
-                                    "line format (%S)\n", linecnt+1, line);
+                                    "line format2 (%S)\n", linecnt+1, line);
 
                     /* Check for 7 digit number */
-                    ajStrAssignS(&tok, ajStrParseC(NULL, ":!"));
+                    ajStrAssignS(&tok, ajStrParseC(NULL, ":! "));
                     ajStrRemoveWhite(&tok);
 
                     if(ajStrGetLen(tok) != 7)
                         ajFmtPrintF(ouf_log, "Line %6d : Invalid relations "
-                                    "line format (%S)\n", linecnt+1, line);
+                                    "line format3 (%S)\n", linecnt+1, line);
                     
                     /* Check for non-NULL terminal comment */
-                    ajStrAssignS(&tok, ajStrParseC(NULL, ":!"));   
+                    ajStrAssignS(&tok, ajStrParseC(NULL, ":! "));   
 
                     if(ajStrGetLen(tok) == 0)
                         ajFmtPrintF(ouf_log, "Line %6d : Invalid relations "
-                                    "line format (%S)\n", linecnt+1, line);
+                                    "line format4 (%S)\n", linecnt+1, line);
                     break;
 
                 }
@@ -863,8 +1019,8 @@ int main(ajint argc, char **argv)
     for(linecnt=0; ajReadline(inf_edam, &line); linecnt++)
     {
         /* Stop checking once first [Typedef] line is found. */ 
-        if(ajStrPrefixC(line, "[Typedef]"))
-            break;
+/*        if(ajStrPrefixC(line, "[Typedef]"))
+          break; */
         
         if(ajStrPrefixC(line, "id:"))
         {
@@ -895,22 +1051,25 @@ int main(ajint argc, char **argv)
     ajFmtPrintF(ouf_log, "\n\n");
     ajFileSeek(inf_edam, 0, 0);    /* Rewind file */
 
-
-
     /*  Check for mandatory fields / field order */
     ajFmtPrintF(ouf_log, "8. STANDARD MANDATORY FIELDS AND FIELD ORDER\n");
     
-    for(first = ajTrue, done_first=ajFalse, linecnt=0;
+    for(in_typedef=ajFalse, first = ajTrue, done_first=ajFalse, linecnt=0;
         ajReadline(inf_edam, &line); linecnt++)
     {
         /*      id, name, namespace, def, (comment), (synonym), is_a */
 
         /* Stop checking once first [Typedef] line is found. */ 
-        if(ajStrPrefixC(line, "[Typedef]"))
-            break;
+/*        if(ajStrPrefixC(line, "[Typedef]"))
+          break; */
 
+        if(ajStrPrefixC(line, "[Typedef]"))
+            in_typedef=ajTrue;
+        
         if(ajStrPrefixC(line, "[Term]"))
         {
+            in_typedef=ajFalse;
+            
             /* Process previous term */
             if(done_first)
             {
@@ -941,7 +1100,7 @@ int main(ajint argc, char **argv)
                        found_is_input_of || found_has_output ||
                        found_is_output_of || found_has_source ||
                        found_is_source_of || found_is_identifier_of ||
-                       found_is_syntax_of || found_has_syntax ||
+                       found_is_format_of || found_has_format ||
                        found_is_attribute_of)
                         ajFmtPrintF(ouf_log, "Line %6d : Relation not allowed "
                                     "for term in this namespace\n", tmp_line);   
@@ -959,7 +1118,7 @@ int main(ajint argc, char **argv)
                        found_is_source_of || found_has_identifier ||
                        found_is_identifier_of || found_has_attribute ||
                        found_is_attribute_of || found_has_part ||
-                       found_is_syntax_of || found_has_syntax ||
+                       found_is_format_of || found_has_format ||
                        found_is_part_of)
                         ajFmtPrintF(ouf_log, "Line %6d : Relation not allowed "
                                     "for term in this namespace\n", tmp_line);   
@@ -975,14 +1134,13 @@ int main(ajint argc, char **argv)
                        found_is_source_of || found_has_identifier ||
                        found_is_identifier_of || found_has_attribute ||
                        found_is_attribute_of || found_has_part ||
-                       found_is_syntax_of || found_has_syntax ||
+                       found_is_format_of || found_has_format ||
                        found_is_part_of)
                         ajFmtPrintF(ouf_log, "Line %6d : Relation not allowed "
                                     "for term in this namespace\n", tmp_line);
                 }
-                /* database or ontology */
-                else if(ajStrMatchC(namespace, NAMESPACES[3])  ||
-                        ajStrMatchC(namespace, NAMESPACES[4]))
+                /* resource */
+                else if(ajStrMatchC(namespace, NAMESPACES[3]))
                 {
                     if(!found_is_source_of) 
                         ajFmtPrintF(ouf_log, "Line %6d : No is_source_of: "
@@ -992,24 +1150,24 @@ int main(ajint argc, char **argv)
                        found_is_input_of || found_has_output ||
                        found_is_output_of || found_has_source ||
                        found_is_identifier_of || found_has_attribute ||
-                       found_is_syntax_of || found_has_syntax ||
+                       found_is_format_of || found_has_format ||
                        found_is_attribute_of)
                         ajFmtPrintF(ouf_log, "Line %6d : Relation not allowed "
                                     "for term in this namespace\n", tmp_line);   
                 }
                 /* data */
-                else if(ajStrMatchC(namespace, NAMESPACES[5]))
+                else if(ajStrMatchC(namespace, NAMESPACES[4]))
                 {
                     if(found_concerns || found_is_concern_of ||
                        found_has_input || found_has_output ||
                        found_is_source_of || found_has_attribute ||
-                       found_is_syntax_of)
+                       found_is_format_of)
                         ajFmtPrintF(ouf_log, "Line %6d : Relation not allowed "
                                     "for term in this namespace\n", tmp_line);
                 }
 
-                /* syntax */
-                else if(ajStrMatchC(namespace, NAMESPACES[6]))
+                /* format */
+                else if(ajStrMatchC(namespace, NAMESPACES[5]))
                 {
                     if(found_concerns         ||
                        found_is_concern_of    ||
@@ -1025,7 +1183,7 @@ int main(ajint argc, char **argv)
                        found_is_attribute_of  ||
                        found_has_part         ||
                        found_is_part_of       ||
-                       found_has_syntax  )
+                       found_has_format  )
                         ajFmtPrintF(ouf_log, "Line %6d : Relation not allowed "
                                     "for term in this namespace\n", tmp_line);
 
@@ -1045,13 +1203,14 @@ int main(ajint argc, char **argv)
                        found_has_input || found_has_output ||
                        found_is_source_of || found_has_identifier ||
                        found_has_attribute || found_is_attribute_of ||
-                       found_is_syntax_of || found_has_syntax ||
+                       found_is_format_of || found_has_format ||
                        found_has_part || found_is_part_of)
                         ajFmtPrintF(ouf_log, "Line %6d : Relation not allowed "
                                     "for term in this namespace\n", tmp_line);
                 }
                 */
             }
+            
 
 
             tmp_line        = linecnt+1;
@@ -1080,12 +1239,14 @@ int main(ajint argc, char **argv)
             found_is_attribute_of  = ajFalse;
             found_has_part         = ajFalse;
             found_is_part_of       = ajFalse;
-            found_has_syntax       = ajFalse;
-            found_is_syntax_of     = ajFalse;
+            found_has_format       = ajFalse;
+            found_is_format_of     = ajFalse;
 
           
             done_first = ajTrue;
         }
+        else if(in_typedef)
+            continue;
         else if(ajStrPrefixC(line, "id:"))
         {
             found_id = ajTrue;
@@ -1183,10 +1344,10 @@ int main(ajint argc, char **argv)
             found_has_part         = ajTrue;
         else if(ajStrPrefixC(line, "is_part_of:"))
             found_is_part_of       = ajTrue;
-        else if(ajStrPrefixC(line, "has_syntax:"))
-            found_has_syntax       = ajTrue;
-        else if(ajStrPrefixC(line, "is_syntax_of:"))
-            found_is_syntax_of     = ajTrue;
+        else if(ajStrPrefixC(line, "has_format:"))
+            found_has_format       = ajTrue;
+        else if(ajStrPrefixC(line, "is_format_of:"))
+            found_is_format_of     = ajTrue;
         else if(ajStrPrefixC(line, "xref:"))
             found_xref             = ajTrue;
         else if(ajStrPrefixC(line, "is_obsolete:"))
@@ -1197,16 +1358,23 @@ int main(ajint argc, char **argv)
     ajFmtPrintF(ouf_log, "\n\n");
     ajFileSeek(inf_edam, 0, 0);    /* Rewind file */
   
-  
 
     /*  Check for unique names within each namespace */
     ajFmtPrintF(ouf_log, "9. UNIQUE NAMES WITHIN EACH NAMESPACE\n");          
 
-    for(linecnt=0; ajReadline(inf_edam, &line); linecnt++)
+    for(in_typedef=ajFalse, linecnt=0; ajReadline(inf_edam, &line); linecnt++)
     {
+        if(ajStrPrefixC(line, "[Typedef]"))
+            in_typedef=ajTrue;
+                    
         /* First build the arrays of names in each namespace */
         if(ajStrPrefixC(line, "[Term]"))
+        {
             tmp_term = ajTermNew();
+            in_typedef=ajFalse;
+        }
+        else if(in_typedef)
+            continue;
         else if(ajStrPrefixC(line, "name:"))
         {
             ajStrParseC(line, ":");
@@ -1234,8 +1402,6 @@ int main(ajint argc, char **argv)
         namespaces[x]->n = ajListToarray(namespaces[x]->list,
                                          (void***) &(namespaces[x]->terms));
 
-
-          
     for(x=0; x<NNAMESPACES; x++)
     {
         ajFmtPrintF(ouf_log, "9.%d %s\n", x+1, NAMESPACES[x]);          
@@ -1254,8 +1420,16 @@ int main(ajint argc, char **argv)
     }
     ajFmtPrintF(ouf_log, "\n\n");
     ajFileSeek(inf_edam, 0, 0);    /* Rewind file */
-  
-  
+
+
+/*
+    for(x=0; x<NNAMESPACES; x++)
+    {
+        ajFmtPrint("namespaces[%d]->name): %S\n", x, namespaces[x]->name);
+        fflush(stdout);
+    }
+*/
+    
     /*  Check for valid end-points of relations */
     ajFmtPrintF(ouf_log, "10. VALID END-POINTS OF RELATIONS\n");          
 
@@ -1263,22 +1437,49 @@ int main(ajint argc, char **argv)
     {
         if(ajStrPrefixC(line, "namespace:"))
         {
+/*          ajFmtPrint("line === %S\n", line);  fflush(stdout); */
+            
+            
             /* Identify index of this namespace */
             ajFmtScanS(line, "%*s %S", &namespace);
 
+/*          ajFmtPrint("namespace === %S\n", namespace);  fflush(stdout); */
+
+
+/*
+  for(x=0; x<NNAMESPACES; x++)
+    {
+        ajFmtPrint("namespaces[%d]->name): %S\n", x, namespaces[x]->name);
+        fflush(stdout);
+    }
+*/
+            
             for(idx=0; idx<NNAMESPACES; idx++)
+            {
+/*              ajFmtPrint("namespace === %S\n", namespace);  fflush(stdout);
+                ajFmtPrint("namespaces[%d]->name === %S++\n", idx, namespaces[idx]->name);  fflush(stdout);
+*/
+               
                 if(ajStrMatchS(namespace, namespaces[idx]->name))
                     break;
-
+                else
+                    ajFmtPrint("Failing to match %S to %S\n", namespace, namespaces[idx]->name);
+            }
+            
             if(idx==NNAMESPACES)
-                ajFatal("namespace not found - cannot recover");
+                ajFatal("namespace not found - cannot recover\nline: %S\nnamespace: %S\n", line, namespace);
 
 /*          if(!ajStrMatchC(mode, "Fix relations"))
             continue; */
         }
 
         ajStrAssignClear(&tok);
-        ajFmtScanS(line, "%S", &tok);
+
+        if(ajStrPrefixC(line, "relationship:"))
+            ajFmtScanS(line, "%*S %S", &tok);
+        else
+            ajFmtPrintS(&tok, "%S", &tok);
+        
 
         for(x=0, done=ajFalse; x<NRELATIONS; x++)
             if(ajStrMatchC(tok, RELATIONS[x]))
@@ -1303,10 +1504,15 @@ int main(ajint argc, char **argv)
           
             else
             {
-                ajStrAssignS(&relation, ajStrParseC(line, ":!"));
-                ajStrParseC(NULL, ":!");
-                ajStrParseC(NULL, ":!");
-                ajStrAssignS(&tmp_name, ajStrParseC(NULL, ":!"));             
+                ajStrAssignS(&relation, ajStrParseC(line, ":! "));
+
+                /* Get second token in line if on "relationship:" line */
+                if(ajStrMatchC(relation, "relationship"))
+                    ajStrAssignS(&relation, ajStrParseC(NULL, ":! "));
+                
+                ajStrParseC(NULL, ":! ");
+                ajStrParseC(NULL, ":! ");
+                ajStrAssignS(&tmp_name, ajStrParseC(NULL, ":! "));             
                 ajStrRemoveWhiteExcess(&tmp_name);
               
 /*
@@ -1315,7 +1521,7 @@ int main(ajint argc, char **argv)
 */
               
                   
-                if(ajStrPrefixC(line, "is_a:"))
+                if(ajStrPrefixC(line, "relationship: is_a:"))
                 {
                     if(!(id=FindTerm(idx, tmp_name, namespaces)))
 
@@ -1361,8 +1567,8 @@ int main(ajint argc, char **argv)
                     ajFmtPrint("... not found !!!!\n");
                     } */
                 }
-                else if(ajStrPrefixC(line, "has_part:") ||
-                        ajStrPrefixC(line, "is_part_of:"))
+                else if(ajStrPrefixC(line, "relationship: has_part:") ||
+                        ajStrPrefixC(line, "relationship: is_part_of:"))
                 {
                     if(!(id=FindTerm(idx, tmp_name, namespaces)))
                         ajFmtPrintF(ouf_log,
@@ -1370,18 +1576,17 @@ int main(ajint argc, char **argv)
                                     "does not exist (%S)\n",
                                     linecnt+1, line);
                 }
-                else if (ajStrPrefixC(line, "concerns:"))
+                else if (ajStrPrefixC(line, "relationship: concerns:"))
                 {
                     if(!(id=FindTerm(entity, tmp_name, namespaces)))
                         if(!(id=FindTerm(operation, tmp_name, namespaces)))
-                            if(!(id=FindTerm(database, tmp_name, namespaces)))
-                                if(!(id=FindTerm(ontology, tmp_name, namespaces)))
+                            if(!(id=FindTerm(resource, tmp_name, namespaces)))
                                 ajFmtPrintF(ouf_log,
                                             "Line %6d : End-point term of "
                                             "relation does not exist (%S)\n",
                                             linecnt+1, line);
                 }
-                else if (ajStrPrefixC(line, "is_concern_of:"))
+                else if (ajStrPrefixC(line, "relationship: is_concern_of:"))
                 {
                     if(!(id=FindTerm(topic, tmp_name, namespaces)))
                         ajFmtPrintF(ouf_log,
@@ -1389,11 +1594,11 @@ int main(ajint argc, char **argv)
                                     "does not exist (%S)\n",
                                     linecnt+1, line);
                 }
-                else if (ajStrPrefixC(line, "has_input:") ||
-                         ajStrPrefixC(line, "has_output:") ||
-                         ajStrPrefixC(line, "has_attribute:") ||
-                         ajStrPrefixC(line, "is_source_of:") ||
-                         ajStrPrefixC(line, "is_syntax_of:"))
+                else if (ajStrPrefixC(line, "relationship: has_input:") ||
+                         ajStrPrefixC(line, "relationship: has_output:") ||
+                         ajStrPrefixC(line, "relationship: has_attribute:") ||
+                         ajStrPrefixC(line, "relationship: is_source_of:") ||
+                         ajStrPrefixC(line, "relationship: is_format_of:"))
                 {
                     if(!(id=FindTerm(data, tmp_name, namespaces)))
                         ajFmtPrintF(ouf_log,
@@ -1401,8 +1606,8 @@ int main(ajint argc, char **argv)
                                     "does not exist (%S)\n",
                                     linecnt+1, line);
                 }
-                else if (ajStrPrefixC(line, "is_input_of:") ||
-                         ajStrPrefixC(line, "is_output_of:"))
+                else if (ajStrPrefixC(line, "relationship: is_input_of:") ||
+                         ajStrPrefixC(line, "relationship: is_output_of:"))
                 {
                     if(!(id=FindTerm(operation, tmp_name, namespaces)))
                         ajFmtPrintF(ouf_log,
@@ -1410,14 +1615,13 @@ int main(ajint argc, char **argv)
                                     "does not exist (%S)\n",
                                     linecnt+1, line);
                 }
-                else if (ajStrPrefixC(line, "has_source:"))
+                else if (ajStrPrefixC(line, "relationship: has_source:"))
                 {
-                    if(!(id=FindTerm(database, tmp_name, namespaces)))
-                        if(!(id=FindTerm(ontology, tmp_name, namespaces)))
+                    if(!(id=FindTerm(resource, tmp_name, namespaces)))
                             ajFmtPrintF(ouf_log, "Line %6d : End-point term of relation does not exist (%S)\n",
                                         linecnt+1, line);
                 }
-                else if (ajStrPrefixC(line, "has_identifier:"))
+                else if (ajStrPrefixC(line, "relationship: has_identifier:"))
                 {
                     /* if(!(id=FindTerm(edam_identifier, tmp_name, namespaces))) */
                     if(!(id=FindTerm(data, tmp_name, namespaces)))
@@ -1426,11 +1630,10 @@ int main(ajint argc, char **argv)
                                     "does not exist (%S)\n",
                                     linecnt+1, line);
                 }
-                else if (ajStrPrefixC(line, "is_identifier_of:"))
+                else if (ajStrPrefixC(line, "relationship: is_identifier_of:"))
                 {
                     if(!(id=FindTerm(entity, tmp_name, namespaces)))
-                        if(!(id=FindTerm(database, tmp_name, namespaces)))
-                            if(!(id=FindTerm(ontology, tmp_name, namespaces)))
+                        if(!(id=FindTerm(resource, tmp_name, namespaces)))
                                 if(!(id=FindTerm(data, tmp_name,
                                                  namespaces)))
                                     ajFmtPrintF(ouf_log, "Line %6d : End-point "
@@ -1438,30 +1641,29 @@ int main(ajint argc, char **argv)
                                                 "exist (%S)\n",
                                                 linecnt+1, line);
                 }
-                else if (ajStrPrefixC(line,  "is_attribute_of:"))
+                else if (ajStrPrefixC(line,  "relationship: is_attribute_of:"))
                 {
                     if(!(id=FindTerm(entity, tmp_name, namespaces)))
                         ajFmtPrintF(ouf_log, "Line %6d : End-point term of "
                                     "relation does not exist (%S)\n",
                                     linecnt+1, line);
                 }
-                else if (ajStrPrefixC(line,  "has_syntax:"))
+                else if (ajStrPrefixC(line,  "relationship: has_format:"))
                 {
-                    if(!(id=FindTerm(syntax, tmp_name, namespaces)))
+                    if(!(id=FindTerm(format, tmp_name, namespaces)))
                         ajFmtPrintF(ouf_log, "Line %6d : End-point term of "
                                     "relation does not exist (%S)\n",
                                     linecnt+1, line);
                 }
                 /* Check all namespaces for 'consider' field */
-                else if (ajStrPrefixC(line, "consider:"))
+                else if (ajStrPrefixC(line, "relationship: consider:"))
                 {
                     if(!(id=FindTerm(entity, tmp_name, namespaces)))
                         if(!(id=FindTerm(topic, tmp_name, namespaces)))
                             if(!(id=FindTerm(operation, tmp_name, namespaces)))
-                                if(!(id=FindTerm(database, tmp_name, namespaces)))
-                                    if(!(id=FindTerm(ontology, tmp_name, namespaces)))
+                                if(!(id=FindTerm(resource, tmp_name, namespaces)))
                                         if(!(id=FindTerm(data, tmp_name, namespaces)))
-                                            if(!(id=FindTerm(syntax, tmp_name, namespaces)))
+                                            if(!(id=FindTerm(format, tmp_name, namespaces)))
                                                 ajFmtPrintF(ouf_log,
                                                             "Line %6d : End-point term of "
                                                             "relation does not exist (%S)\n",
@@ -1485,7 +1687,7 @@ int main(ajint argc, char **argv)
                 if(ajStrMatchC(mode, "Fix relations"))
                 {
                     if(id != NULL)
-                        ajFmtPrintF(ouf_edam, "%S: EDAM:%S ! %S\n", relation,
+                        ajFmtPrintF(ouf_edam, "relationship: %S: EDAM:%S ! %S\n", relation,
                                     id, tmp_name);
                     else
                         ajFatal("Could not find end-point term of relation "
@@ -1507,6 +1709,7 @@ int main(ajint argc, char **argv)
     /* Renumber term ids */
     if(ajStrMatchC(mode, "Renumber terms"))
     {
+/*
         for(termcnt=0, found_typedef = ajFalse; ajReadline(inf_edam, &line); )
         {
             if(ajStrPrefixC(line, "[Term]"))
@@ -1519,8 +1722,24 @@ int main(ajint argc, char **argv)
             else
                 ajFmtPrintF(ouf_edam, "%S", line);
         }
-    }
+*/
 
+        for(termcnt=0; ajReadline(inf_edam, &line); )
+        {
+            if(ajStrPrefixC(line, "[Term]"))
+                termcnt++;
+                 
+            if(ajStrPrefixC(line, "id:"))
+                ajFmtPrintF(ouf_edam, "id: EDAM:%07d\n", termcnt);
+            else
+                ajFmtPrintF(ouf_edam, "%S", line);
+        }
+    }
+    ajFileSeek(inf_edam, 0, 0);    /* Rewind file */
+    
+    
+
+    
       
   
     /* Clean up and exit */
@@ -1528,25 +1747,32 @@ int main(ajint argc, char **argv)
   for(x=0; x<nfields; x++)
   ajStrDel(&fields[x]);
   AJFREE(fields);
-
+  
   for(x=0; x<nids; x++)
   ajStrDel(&ids[x]);
   AJFREE(ids);
-
-  
-  ajFileClose(&inf_edam);
-  ajFileClose(&ouf_edam);
-  ajFileClose(&ouf_log);
-  ajStrDel(&line);
-  ajStrDel(&tok);
-  ajStrDel(&namespace);
-  ajStrDel(&relation);
-  ajStrDel(&tmp_name);
-
-  
-  for(x=0; x<NNAMESPACES; x++)
-  ajNamespaceDel(&namespaces[x]);
 */  
+
+    
+    ajFileClose(&inf_edam);
+    ajFileClose(&ouf_edam);
+    ajFileClose(&ouf_log);
+    if(ouf_xml)
+        ajFileClose(&ouf_xml);
+    ajStrDel(&line);
+    ajStrDel(&tok);
+    ajStrDel(&name);
+    ajStrDel(&namespace);
+    ajStrDel(&relation);
+    ajStrDel(&tmp_name);
+    ajStrDel(&tmp_id);
+
+    
+    for(x=0; x<NNAMESPACES; x++)
+        ajNamespaceDel(&namespaces[x]);
     ajExit();
     return 0;
+
+    ajDiroutDel(&xmloutdir);
+
 }

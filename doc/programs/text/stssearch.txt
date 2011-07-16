@@ -40,7 +40,7 @@ Output file [j01636.stssearch]:
 Command line arguments
 
 Search a DNA database for matches with a set of STS primers
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
@@ -190,6 +190,7 @@ See also
 
                     Program name                    Description
                     eprimer3     Picks PCR primers and hybridization oligos
+                    eprimer32    Picks PCR primers and hybridization oligos
    primersearch     Search DNA sequences for matches with primer pairs
 
                     If you want something that only reports matches of both primer pairs

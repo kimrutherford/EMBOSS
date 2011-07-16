@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: preg
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: preg
 #    -sequence "tsw:*_rat"
 #    -pattern "IA[QWF]A"
@@ -23,7 +23,7 @@
 #
 #=======================================
 
-  Start     End Pattern_name Sequence
+  Start     End Pattern Sequence
 
 #---------------------------------------
 #---------------------------------------
@@ -36,8 +36,8 @@
 #
 #=======================================
 
-  Start     End Pattern_name Sequence
-    421     424 regex        IAQA
+  Start     End Pattern         Sequence
+    421     424 regex: IA[QWF]A IAQA
 
 #---------------------------------------
 #---------------------------------------

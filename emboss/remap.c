@@ -25,7 +25,7 @@
 
 
 #define ENZDATA "REBASE/embossre.enz"
-#define EQUDATA "embossre.equ"
+#define EQUDATA "REBASE/embossre.equ"
 #define EQUGUESS 3500     /* Estimate of number of equivalent names */
 
 #define TABLEGUESS 200
@@ -238,7 +238,7 @@ int main(int argc, char **argv)
 	 */
 	if(single)
 	    maxcuts=mincuts=1;
-	retable = ajTablestrNewLen(EQUGUESS);
+	retable = ajTablestrNew(EQUGUESS);
 	enzfile = ajDatafileNewInNameC(ENZDATA);
 	if(!enzfile)
 	    ajFatal("Cannot locate enzyme file. Run REBASEEXTRACT");
@@ -282,7 +282,7 @@ int main(int argc, char **argv)
 	** criteria, but save them in hittable for printing out later.
 	** Keep a count of how many hits each enzyme gets in hittable.
 	*/
-        hittable = ajTablestrNewCaseLen(TABLEGUESS);
+        hittable = ajTablestrNewCase(TABLEGUESS);
 	remap_RemoveMinMax(restrictlist, hittable, mincuts, maxcuts);
 
 
@@ -467,7 +467,7 @@ static void remap_RemoveMinMax(AjPList restrictlist,
 	    ajStrAssignS(&key, m->cod);
 
 	    /* increment the count of key */
-	    value = (PValue) ajTableFetch(hittable, (const void *)key);
+	    value = (PValue) ajTableFetchmodS(hittable, key);
 	    if(value == NULL)
 	    {
 		AJNEW0(value);
@@ -488,7 +488,7 @@ static void remap_RemoveMinMax(AjPList restrictlist,
 	miter = ajListIterNew(restrictlist);
 	while((m = ajListIterGet(miter)) != NULL)
 	{
-	    value = (PValue) ajTableFetch(hittable, (const void *)(m->cod));
+	    value = (PValue) ajTableFetchmodS(hittable, (m->cod));
             if(value->count < mincuts || value->count > maxcuts)
 	    {
             	ajListIterRemove(miter);
@@ -524,7 +524,7 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
 			  AjBool isos,
 			  AjBool html, ajint mincuts, ajint maxcuts)
 {
-    PValue value;
+    const PValue value;
     void **keyarray = NULL;		/* array for table */
     ajint i;
 
@@ -552,7 +552,7 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
 
 	for(i = 0; keyarray[i]; i++)
 	{
-	    value = ajTableFetch(hittable,keyarray[i]);
+	    value = ajTableFetchS(hittable,keyarray[i]);
 	    if(value->count >= mincuts && value->count <= maxcuts)
 	    ajFmtPrintF(outfile, "%10S\t    %d\t%S\n",
 		    (AjPStr) keyarray[i], value->count,
@@ -589,7 +589,7 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
 
 	for(i = 0; keyarray[i]; i++)
 	{
-	    value = ajTableFetch(hittable,keyarray[i]);
+	    value = ajTableFetchS(hittable,keyarray[i]);
 	    if(value->count < mincuts)
 	    ajFmtPrintF(outfile, "%10S\t    %d\t%S\n",
 			    (AjPStr) keyarray[i], value->count,
@@ -625,7 +625,7 @@ static void remap_CutList(AjPFile outfile, const AjPTable hittable,
 
 	for(i = 0; keyarray[i]; i++)
 	{
-	    value = ajTableFetch(hittable,keyarray[i]);
+	    value = ajTableFetchS(hittable,keyarray[i]);
 	    if(value->count > maxcuts)
 	    ajFmtPrintF(outfile, "%10S\t    %d\t%S\n",
 			    (AjPStr) keyarray[i], value->count,
@@ -1006,7 +1006,7 @@ static void remap_NoCutList(AjPFile outfile, const AjPTable hittable,
         ajFmtPrintF(outfile, "<H2>");
     ajFmtPrintF(outfile,
 		"\n\n# No. of cutting enzymes which do not match the\n"
-		"# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria\n\n");
+		"# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria\n\n");
     if(html)
 	ajFmtPrintF(outfile, "</H2>\n");
     ajFmtPrintF(outfile, "%d\n", rejected_count);
@@ -1195,7 +1195,7 @@ static void remap_RenamePreferred(const AjPList list, const AjPTable table,
 {
     AjIList iter = NULL;
     AjPStr key   = NULL;
-    AjPStr value = NULL;
+    const AjPStr value = NULL;
     AjPStr name  = NULL;
 
     iter = ajListIterNewread(list);
@@ -1206,7 +1206,7 @@ static void remap_RenamePreferred(const AjPList list, const AjPTable table,
         ** If a key-value entry found, write the new value to the new list
         ** else write the old key name to the new list
         */
-        value = ajTableFetch(table, key);
+        value = ajTableFetchS(table, key);
         name = ajStrNew();
         if(value)
 	{
@@ -1250,7 +1250,7 @@ static void remap_RestrictPreferred(const AjPList l, const AjPTable t)
 {
     AjIList iter   = NULL;
     EmbPMatMatch m = NULL;
-    AjPStr value   = NULL;
+    const AjPStr value   = NULL;
     AjPStr newiso  = NULL;
     AjBool found;		/* name found in isoschizomer list */
         	    
@@ -1266,7 +1266,7 @@ static void remap_RestrictPreferred(const AjPList l, const AjPTable t)
 	found = ajFalse;
 	
     	/* get prototype name */
-    	value = ajTableFetch(t, m->cod);
+    	value = ajTableFetchS(t, m->cod);
     	if(value) 
     	{
     	    ajStrAssignC(&newiso, "");

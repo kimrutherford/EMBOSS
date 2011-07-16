@@ -1,0 +1,887 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: edamname
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+edamname
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Find EDAM ontology terms by name
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>edamname</b> searches the names and synonyms of EDAM terms and
+returns matching terms.  The input is read from the installed EDAM
+database. The ontology term output can be written to screen, to file,
+or passed to another program. A wide range of standard ontology term
+formats may be specified for input and output.
+
+<p>
+Optionally the search can be restricted to specified EDAM namespaces.
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>edamname</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>edamname "*sequence_set*" </b>
+Find EDAM ontology terms by name
+Obo output file [edamname.obo]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>edamname "*sequence_set*" -subclasses </b>
+Find EDAM ontology terms by name
+Obo output file [edamname.obo]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Find EDAM ontology terms by name
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-query]             string     Name(s) to search for in ontology (Any
+                                  string)
+  [-outfile]           outobo     [*.edamname] Output ontology term file name
+
+   Additional (Optional) qualifiers:
+   -namespace          menu       [*] By default all terms are returned.
+                                  Searches can be limited to one or a few
+                                  namespaces. (Values: data (Data entity);
+                                  entity (Biological entity); format (Data
+                                  format); identifier (Identifier); operation
+                                  (Bioinformatics operation); resource (Data
+                                  resource); topic (Field of bioinformatics
+                                  study))
+
+   Advanced (Unprompted) qualifiers:
+   -subclasses         boolean    [N] Extend the query matches to include all
+                                  terms which are specialisations (EDAM
+                                  sub-classes) of the matched type.
+   -obsolete           boolean    [N] The default behaviour is to not use or
+                                  return obsolete terms. This option if set
+                                  will include all terms.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Ontology term output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-query]<br>(Parameter 1)</td>
+<td>string</td>
+<td>Name(s) to search for in ontology</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>outobo</td>
+<td>Output ontology term file name</td>
+<td>OBO ontology term(s)</td>
+<td><i>&lt;*&gt;</i>.edamname</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-namespace</td>
+<td>list</td>
+<td>By default all terms are returned. Searches can be limited to one or a few namespaces.</td>
+<td><table><tr><td>data</td> <td><i>(Data entity)</i></td></tr><tr><td>entity</td> <td><i>(Biological entity)</i></td></tr><tr><td>format</td> <td><i>(Data format)</i></td></tr><tr><td>identifier</td> <td><i>(Identifier)</i></td></tr><tr><td>operation</td> <td><i>(Bioinformatics operation)</i></td></tr><tr><td>resource</td> <td><i>(Data resource)</i></td></tr><tr><td>topic</td> <td><i>(Field of bioinformatics study)</i></td></tr></table></td>
+<td>*</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-subclasses</td>
+<td>boolean</td>
+<td>Extend the query matches to include all terms which are specialisations (EDAM sub-classes) of the matched type.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-obsolete</td>
+<td>boolean</td>
+<td>The default behaviour is to not use or return obsolete terms. This option if set will include all terms.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outobo qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -oformat2<br>-oformat_outfile</td>
+<td>string</td>
+<td>Ontology term output format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<b>edamname</b> queries the EDAM ontology.
+
+<p>
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+The output is a standard EMBOSS ontology term file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-oformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: obo,
+brief, list, html, xml, json, excel.
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/OntologyFormats.html">
+http://emboss.sf.net/docs/themes/OntologyFormats.html</A>
+for further information on ontology formats.
+
+<p>
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: edamname.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0001064
+name: Sequence set ID
+namespace: identifier
+def: An identifier of a set of molecular sequence(s).
+subset: identifier
+is_a: EDAM:0000976 ! Identifier (typed)
+is_a: EDAM:0002091 ! Accession
+relationship: is_identifier_of EDAM:0000850 ! Sequence set
+
+[Term]
+id: EDAM:0001234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002977 ! Nucleic acid sequence
+
+[Term]
+id: EDAM:0001233
+name: Sequence set (protein)
+namespace: data
+def: Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+
+[Term]
+id: EDAM:0002245
+name: Sequence set (bootstrapped)
+namespace: data
+def: A collection of sequences output from a bootstrapping (resampling) procedure.
+comment: Bootstrapping is often performed in phylogenetic analysis.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+
+[Term]
+id: EDAM:0002874
+name: Sequence set (polymorphic)
+namespace: data
+def: A set of sub-sequences displaying some type of polymorphism, typically indicating the sequence in which they occur, their position and other metadata.
+subset: data
+is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+
+[Term]
+id: EDAM:0000850
+name: Sequence set
+namespace: data
+def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
+comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
+subset: data
+is_a: EDAM:0002955 ! Sequence report
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: edamname.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0001064
+name: Sequence set ID
+namespace: identifier
+def: An identifier of a set of molecular sequence(s).
+subset: identifier
+is_a: EDAM:0000976 ! Identifier (typed)
+is_a: EDAM:0002091 ! Accession
+relationship: is_identifier_of EDAM:0000850 ! Sequence set
+
+[Term]
+id: EDAM:0001112
+name: Sequence cluster ID
+namespace: identifier
+def: An identifier of a cluster of molecular sequence(s).
+subset: identifier
+is_a: EDAM:0001064 ! Sequence set ID
+relationship: is_identifier_of EDAM:0001235 ! Sequence cluster
+
+[Term]
+id: EDAM:0002612
+name: Sequence cluster ID (CluSTr)
+namespace: identifier
+def: Unique identifier of a sequence cluster from the CluSTr database.
+subset: identifier
+synonym: "CluSTr cluster ID" EXACT []
+synonym: "CluSTr ID" EXACT []
+regex: "[0-9A-Za-z]+:[0-9]+:[0-9]{1,5}(.[0-9])?"
+is_a: EDAM:0001112 ! Sequence cluster ID
+
+[Term]
+id: EDAM:0002220
+name: Sequence cluster ID (SYSTERS)
+namespace: identifier
+def: Unique identifier of a sequence cluster from the SYSTERS database.
+subset: identifier
+synonym: "SYSTERS cluster ID" EXACT []
+is_a: EDAM:0001112 ! Sequence cluster ID
+
+[Term]
+id: EDAM:0002346
+name: Sequence cluster ID (UniRef)
+namespace: identifier
+def: Unique identifier of an entry from the UniRef database.
+subset: identifier
+synonym: "UniRef entry accession" EXACT []
+synonym: "UniRef cluster id" EXACT []
+is_a: EDAM:0001112 ! Sequence cluster ID
+
+[Term]
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+comment: The sequences are typically related, for example a family of sequences.
+subset: data
+synonym: "Protein sequence cluster" EXACT []
+is_a: EDAM:0001233 ! Sequence set (protein)
+is_a: EDAM:0001235 ! Sequence cluster
+
+[Term]
+id: EDAM:0001238
+name: Proteolytic digest
+namespace: data
+def: A protein sequence cleaved into peptide fragments (by enzymatic or chemical cleavage) with fragment masses.
+subset: data
+is_a: EDAM:0001233 ! Sequence set (protein)
+
+[Term]
+id: EDAM:0001262
+name: Peptide molecular weight hits
+namespace: data
+def: A report on peptide fragments of certain molecular weight(s) in one or more protein sequences.
+subset: data
+is_a: EDAM:0001233 ! Sequence set (protein)
+
+[Term]
+id: EDAM:0002245
+name: Sequence set (bootstrapped)
+namespace: data
+def: A collection of sequences output from a bootstrapping (resampling) procedure.
+comment: Bootstrapping is often performed in phylogenetic analysis.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+
+[Term]
+id: EDAM:0000850
+name: Sequence set
+namespace: data
+def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
+comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
+subset: data
+is_a: EDAM:0002955 ! Sequence report
+
+[Term]
+id: EDAM:0001235
+name: Sequence cluster
+namespace: data
+def: A set of sequences that have been clustered or otherwise classified as belonging to a group including (typically) sequence cluster information.
+comment: The cluster might include sequences identifiers, short descriptions, alignment and summary information.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+relationship: in_topic EDAM:0000164 ! Sequence clustering
+relationship: in_topic EDAM:0000724 ! Protein families
+
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+The EDAM Ontology is included in EMBOSS as local
+database <b>edam</b>.
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="drfinddata.html">drfinddata</a></td>
+<td>Find public databases by data type</td>
+</tr>
+
+<tr>
+<td><a href="drfindformat.html">drfindformat</a></td>
+<td>Find public databases by format</td>
+</tr>
+
+<tr>
+<td><a href="drfindid.html">drfindid</a></td>
+<td>Find public databases by identifier</td>
+</tr>
+
+<tr>
+<td><a href="drfindresource.html">drfindresource</a></td>
+<td>Find public databases by resource</td>
+</tr>
+
+<tr>
+<td><a href="edamdef.html">edamdef</a></td>
+<td>Find EDAM ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="edamhasinput.html">edamhasinput</a></td>
+<td>Find EDAM ontology terms by has_input relation</td>
+</tr>
+
+<tr>
+<td><a href="edamhasoutput.html">edamhasoutput</a></td>
+<td>Find EDAM ontology terms by has_output relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisformat.html">edamisformat</a></td>
+<td>Find EDAM ontology terms by is_format_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisid.html">edamisid</a></td>
+<td>Find EDAM ontology terms by is_identifier_of relation</td>
+</tr>
+
+<tr>
+<td><a href="godef.html">godef</a></td>
+<td>Find GO ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="goname.html">goname</a></td>
+<td>Find GO ontology terms by name</td>
+</tr>
+
+<tr>
+<td><a href="ontoget.html">ontoget</a></td>
+<td>Get ontology term(s)</td>
+</tr>
+
+<tr>
+<td><a href="ontogetcommon.html">ontogetcommon</a></td>
+<td>Get common ancestor for terms</td>
+</tr>
+
+<tr>
+<td><a href="ontogetdown.html">ontogetdown</a></td>
+<td>Get ontology term(s) by parent id</td>
+</tr>
+
+<tr>
+<td><a href="ontogetobsolete.html">ontogetobsolete</a></td>
+<td>Get ontology ontology terms</td>
+</tr>
+
+<tr>
+<td><a href="ontogetroot.html">ontogetroot</a></td>
+<td>Get ontology root terms by child identifier</td>
+</tr>
+
+<tr>
+<td><a href="ontogetsibs.html">ontogetsibs</a></td>
+<td>Get ontology term(s) by id with common parent</td>
+</tr>
+
+<tr>
+<td><a href="ontogetup.html">ontogetup</a></td>
+<td>Get ontology term(s) by id of child</td>
+</tr>
+
+<tr>
+<td><a href="ontoisobsolete.html">ontoisobsolete</a></td>
+<td>Report whether an ontology term id is obsolete</td>
+</tr>
+
+<tr>
+<td><a href="ontotext.html">ontotext</a></td>
+<td>Get ontology term(s) original full text</td>
+</tr>
+
+<tr>
+<td><a href="wossdata.html">wossdata</a></td>
+<td>Finds programs by EDAM data</td>
+</tr>
+
+<tr>
+<td><a href="wossinput.html">wossinput</a></td>
+<td>Finds programs by EDAM input data</td>
+</tr>
+
+<tr>
+<td><a href="wossoperation.html">wossoperation</a></td>
+<td>Finds programs by EDAM operation</td>
+</tr>
+
+<tr>
+<td><a href="wossoutput.html">wossoutput</a></td>
+<td>Finds programs by EDAM output data</td>
+</tr>
+
+<tr>
+<td><a href="wossparam.html">wossparam</a></td>
+<td>Finds programs by EDAM parameter</td>
+</tr>
+
+<tr>
+<td><a href="wosstopic.html">wosstopic</a></td>
+<td>Finds programs by EDAM topic</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

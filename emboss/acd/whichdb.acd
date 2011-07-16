@@ -1,11 +1,11 @@
 application: whichdb [
   documentation: "Search all sequence databases for an entry and retrieve it"
-  groups: "Information"
+  groups: "Data retrieval:Sequence data"
   gui: "yes"
   batch: "yes"
   cpu: "low"
-  relations: "/edam/topic/0000155 Sequence retrieval"
-  relations: "/edam/operation/0000344 Sequence retrieval by code"
+  relations: "EDAM:0000090 topic Data retrieval"
+  relations: "EDAM:0000344 operation Sequence retrieval (by code)"
 ]
 
 section: input [
@@ -17,7 +17,7 @@ section: input [
     parameter: "Y"
     information: "ID or Accession number"
     knowntype: "sequence id input"
-    relations:  "/edam/data/0001063 Sequence identifier"                     
+    relations: "EDAM:0001063 identifier Sequence identifier"
   ]
 
 endsection: input
@@ -30,13 +30,13 @@ section: output [
   toggle: get [
     default: "N"
     information: "Retrieve sequences"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: showall [
     default: "N"
     information: "Show failed attempts"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   outfile: outfile [
@@ -44,7 +44,7 @@ section: output [
     nullok: "$(get)"
     nulldefault: "$(get)"
     knowntype: "whichdb output"
-    relations:  "/edam/data/0000957 Database metadata"                         
+    relations: "EDAM:0000957 data Database metadata"
   ]
 
 endsection: output

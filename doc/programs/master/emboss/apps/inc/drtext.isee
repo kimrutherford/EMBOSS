@@ -1,0 +1,50 @@
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="drfinddata.html">drfinddata</a></td>
+<td>Find public databases by data type</td>
+</tr>
+
+<tr>
+<td><a href="drfindformat.html">drfindformat</a></td>
+<td>Find public databases by format</td>
+</tr>
+
+<tr>
+<td><a href="drfindid.html">drfindid</a></td>
+<td>Find public databases by identifier</td>
+</tr>
+
+<tr>
+<td><a href="drfindresource.html">drfindresource</a></td>
+<td>Find public databases by resource</td>
+</tr>
+
+<tr>
+<td><a href="drget.html">drget</a></td>
+<td>Get data resource entries</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
+</tr>
+
+<tr>
+<td><a href="ontotext.html">ontotext</a></td>
+<td>Get ontology term(s) original full text</td>
+</tr>
+
+<tr>
+<td><a href="textget.html">textget</a></td>
+<td>Get text data entries</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search the textual description of sequence(s)</td>
+</tr>
+
+</table>

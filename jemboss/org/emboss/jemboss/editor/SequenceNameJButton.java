@@ -22,6 +22,7 @@ package org.emboss.jemboss.editor;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 /**
 *
@@ -30,8 +31,6 @@ import javax.swing.*;
 */
 public class SequenceNameJButton extends JToggleButton
 {
-  /** sequence */
-  //private Sequence seq;
   /** boundary width */
   private int boundWidth = 6;
   /** font size */
@@ -53,20 +52,21 @@ public class SequenceNameJButton extends JToggleButton
   public SequenceNameJButton(Sequence seq, int ypad)
   {
     super();
-    //this.seq = seq;
+
     this.ypad = ypad;
     if(seq.getID().equals(""))
       nameLabel = new String("");
+    else if (seq.getLength()>0)
+        nameLabel = new String(seq.getID()+"/"+
+                               Integer.toString(seq.getLength()));
     else
-      nameLabel = new String(seq.getID()+"/"+
-                             Integer.toString(seq.getLength()));
+      nameLabel = new String(seq.getID());
 
     setText(nameLabel);
     setBackground(Color.white);
-//  setMaximumSize(getPreferredSize());
-//  setMinimumSize(getPreferredSize());
+
     setHorizontalTextPosition(SwingConstants.RIGHT);
-    setMargin(new Insets(0,0,0,0));
+    setBorder(new EmptyBorder(0, 0, 0, 0));
     setFont(font);
     setBorderPainted(false);
   }
@@ -107,7 +107,7 @@ public class SequenceNameJButton extends JToggleButton
   public int getPanelWidth()
   {
     FontMetrics metrics = getFontMetrics(font);
-    return metrics.stringWidth(nameLabel)+boundWidth;
+    return metrics.stringWidth(nameLabel)+boundWidth+10;
   }
 
   /**

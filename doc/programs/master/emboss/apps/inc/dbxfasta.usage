@@ -1,4 +1,4 @@
-<b>Here is a sample session with dbxfasta</b>
+Here is a sample session with <b>dbxfasta</b>
 <p>
 
 <p>
@@ -22,6 +22,7 @@ Wildcard database filename [*.fasta]: <b>emrod</b>
         sv : Sequence Version and GI
        des : Description
 Index fields [id,acc]: <b></b>
+Compressed index files [Y]: <b></b>
 General log output file [outfile.dbxfasta]: <b></b>
 
 </pre></td></tr></table><p>

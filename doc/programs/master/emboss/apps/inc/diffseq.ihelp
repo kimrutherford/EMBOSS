@@ -1,5 +1,5 @@
 Compare and report features of two similar sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -18,7 +18,8 @@ Version: EMBOSS:6.3.0
                                   improve the resolution of nearby
                                   differences, but the program will go much
                                   slower. (Integer 2 or more)
-  [-outfile]           report     [*.diffseq] Output report file name
+  [-outfile]           report     [*.diffseq] Output report file name (default
+                                  -rformat diffseq)
   [-aoutfeat]          featout    [$(asequence.name).diffgff] File for output
                                   of first sequence's features
   [-boutfeat]          featout    [$(bsequence.name).diffgff] File for output

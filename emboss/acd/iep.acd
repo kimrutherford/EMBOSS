@@ -1,9 +1,9 @@
 application: iep [
   documentation: "Calculate the isoelectric point of proteins"
-  groups: "Protein:Composition"
-  relations: "/edam/topic/0000123 Protein physicochemical properties"
-  relations: "/edam/topic/0000137 Protein hydropathy"
-  relations: "/edam/operation/0000403 Protein isoelectric point calculation"
+  groups: "Protein:Properties, Display"
+  relations: "EDAM:0000137 topic Protein hydropathy"
+  relations: "EDAM:0000403 operation Protein isoelectric point calculation"
+  relations: "EDAM:0000092 topic Data rendering and visualisation"
 ]
 
 section: input [
@@ -14,9 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "protein"
-    relations: "/edam/data/0001219 Pure protein sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0002886 data Sequence record (protein)"
   ]
 
 endsection: input
@@ -31,7 +29,7 @@ section: additional [
     information: "Number of N-termini"
     default: "1"
     minimum: "0"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: carboxyl [
@@ -39,14 +37,14 @@ relations: "/edam/data/0001773 Tool-specific parameter"
     information: "Number of C-termini"
     default: "1"
     minimum: "0"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: termini [
     additional: "Y"
     information: "Include charge at N and C terminus"
     default: "Y"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: lysinemodified [
@@ -54,7 +52,7 @@ relations: "/edam/data/0001773 Tool-specific parameter"
     information: "Number of modified lysines"
     default: "0"
     minimum: "0"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: disulphides [
@@ -62,7 +60,7 @@ relations: "/edam/data/0001773 Tool-specific parameter"
     information: "Number of disulphide bridges"
     default: "0"
     minimum: "0"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: additional
@@ -77,7 +75,7 @@ section: advanced [
     minimum: ".01"
     maximum: "1."
     default: ".5"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -90,18 +88,18 @@ section: output [
   toggle: plot [
     default: "N"
     information: "Plot charge vs pH"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   toggle: report [
     default: "Y"
     information: "Write results to a file"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   xygraph: graph [
     standard: "$(plot)"
-    relations: "/edam/data/0002165 Protein ionization curve"
+    relations: "EDAM:0002165 data Protein ionization curve"
   ]
 
   outfile: outfile [
@@ -109,7 +107,7 @@ section: output [
     knowntype: "iep output"
     nullok: "@(!$(report))"
     nulldefault: "@(!$(report))"
-    relations:  "/edam/data/0001528 Protein isoelectric point"                    
+    relations: "EDAM:0001528 data Protein isoelectric point"
   ]
 
 endsection: output

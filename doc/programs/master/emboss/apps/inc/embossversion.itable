@@ -30,7 +30,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-outfile</td>
 <td>outfile</td>
-<td>Output file name</td>
+<td>EMBOSS version output file</td>
 <td>Output file</td>
 <td>stdout</td>
 </tr>

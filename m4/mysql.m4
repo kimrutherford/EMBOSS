@@ -25,9 +25,10 @@
 #
 #   This macro calls:
 #
-#     AC_SUBST(MYSQL_CFLAGS)
-#     AC_SUBST(MYSQL_LDFLAGS)
-#     AC_SUBST(MYSQL_VERSION)
+#     AC_SUBST([MYSQL_CFLAGS])
+#     AC_SUBST([MYSQL_CPPFLAGS])
+#     AC_SUBST([MYSQL_LDFLAGS])
+#     AC_SUBST([MYSQL_VERSION])
 #
 #   And sets:
 #
@@ -36,9 +37,12 @@
 # LAST MODIFICATION
 #
 #   2006-07-16
-#   2007-01-09 MS: mysql_config --cflags may set gcc -fomit-frame-pointers,
-#                  which prevents gdb from displaying stack traces.
-#                  Changed mysql_config --cflags to mysql_config --include
+#   2007-01-09 MKS: mysql_config --cflags may set gcc -fomit-frame-pointers,
+#                   which prevents gdb from displaying stack traces.
+#                   Changed mysql_config --cflags to mysql_config --include
+#   2009-09-23 AJB: Checking for availability of both, include files and
+#                   library files.
+#   2010-06-14 MKS: Added MYSQL_CPPFLAGS
 #
 # COPYLEFT
 #
@@ -68,11 +72,12 @@ AC_DEFUN([AX_LIB_MYSQL],
     )
 
     MYSQL_CFLAGS=""
+    MYSQL_CPPFLAGS=""
     MYSQL_LDFLAGS=""
     MYSQL_VERSION=""
 
     dnl
-    dnl Check MySQL libraries (libpq)
+    dnl Check MySQL libraries (libmysqlclient)
     dnl
 
     if test "$want_mysql" = "yes"; then
@@ -84,8 +89,8 @@ AC_DEFUN([AX_LIB_MYSQL],
         if test "$MYSQL_CONFIG" != "no"; then
             AC_MSG_CHECKING([for MySQL libraries])
 
-dnl         MYSQL_CFLAGS="`$MYSQL_CONFIG --cflags`"
-            MYSQL_CFLAGS="`$MYSQL_CONFIG --include`"
+            MYSQL_CFLAGS="`$MYSQL_CONFIG --cflags`"
+            MYSQL_CPPFLAGS="`$MYSQL_CONFIG --include`"
             MYSQL_LDFLAGS="`$MYSQL_CONFIG --libs`"
 
             MYSQL_VERSION=`$MYSQL_CONFIG --version`
@@ -94,10 +99,11 @@ dnl It isn't enough to just test for mysql_config as Fedora
 dnl provides it in the mysql RPM even though mysql-devel may
 dnl not be installed
 
-    	    EMBCFLAGS=$CFLAGS
+            EMBCPPFLAGS=$CPPFLAGS
 	    EMBLDFLAGS=$LDFLAGS
-	    CFLAGS=$MYSQL_CFLAGS
-	    LDFLAGS=$MYSQL_LDFLAGS
+            
+            CPPFLAGS="$MYSQL_CPPFLAGS $EMBCPPFLAGS"
+	    LDFLAGS="$MYSQL_LDFLAGS $EMBLDFLAGS"
 
             AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
                                               #include "mysql.h"]],
@@ -105,16 +111,17 @@ dnl not be installed
 			   [havemysql=yes],
 			   [havemysql=no])
 
-	    CFLAGS=$EMBCFLAGS
+	    CPPFLAGS=$EMBCPPFLAGS
 	    LDFLAGS=$EMBLDFLAGS
 
             if test "$havemysql" = yes; then
                 AC_DEFINE([HAVE_MYSQL], [1],
-                    [Define to 1 if MySQL libraries are available])
+                    [Define to 1 if MySQL libraries are available.])
                 found_mysql="yes"
                 AC_MSG_RESULT([yes])
             else
 	        MYSQL_CFLAGS=""
+                MYSQL_CPPFLAGS=""
 	        MYSQL_LDFLAGS=""
                 found_mysql="no"
                 AC_MSG_RESULT([no])
@@ -172,5 +179,6 @@ dnl not be installed
 
     AC_SUBST([MYSQL_VERSION])
     AC_SUBST([MYSQL_CFLAGS])
+    AC_SUBST([MYSQL_CPPFLAGS])
     AC_SUBST([MYSQL_LDFLAGS])
 ])

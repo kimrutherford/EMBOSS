@@ -1,0 +1,26 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'ttax:9605' is a sequence entry in the example taxonomy database 'ttax'
+<p>
+<p><h3>Database entry: ttax:9605</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+id: 9605
+parent: 207598
+rank: genus
+emblprefix: 
+division: 5
+divflag: 1
+gencode: 1
+gcflag: 1
+mitocode: 2
+mgcflag 1
+hidden: 1
+nosequence: 1
+scientific name: Homo
+authority: Homo Linnaeus, 1758
+
+</pre>
+</td></tr></table><p>

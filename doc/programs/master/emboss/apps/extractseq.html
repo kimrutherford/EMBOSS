@@ -42,14 +42,17 @@ extractseq
     Input file format
 </H2>
 
-<b>extractseq</b> reads a normal sequence USA.
+<b>extractseq</b> reads a single nucleotide or protein sequence.
+
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
 
 <p>
 <!--#include file="inc/extractseq.input" -->
 
 <p>
 
-You can specifiy a file of ranges to extract by giving the '-regions'
+You can specify a file of ranges to extract by giving the '-regions'
 qualifier the value '@' followed by the name of the file containing the
 ranges. (eg: '-regions @myfile').
 
@@ -85,13 +88,13 @@ An example range file is:
 </H2>
 
 
-The output is a normal sequence file.
+<!--#include file="inc/seqformats.ihtml" -->
 
 <p>
 <!--#include file="inc/extractseq.output" -->
 <p>
 
-If the option '-separate' is used then each specified region is written
+If the option <tt>-separate</tt> is used then each specified region is written
 to the output file as a separate sequence.  The name of the sequence is
 created from the name of the original sequence with the start and end
 positions of the range appended with underscore characters between them,
@@ -116,7 +119,7 @@ None.
 </H2>
 
 <p><b>extractseq</b> allows you to specify one or more regions of a sequence to extract sub-sequences from to build up a contiguous output sequence.  This is modelled on the cell's process of splicing out exons from mRNA, but the program is generally applicable to any cutting and splicing or editing operation on a single sequence.</p>
-<p>Where the <tt>-regions</tt> option is used to specify output as separate sequences, the name of the sequence is created from the name of the original sequence with the start and end positions of the range appended with underscore characters between them, eg: XYZ region 2 to 34 is written as: <tt>XYZ_2_34</tt>.  In such cases the output sequence foramt must be capable of supporting multiple sequences.</p>
+<p>Where the <tt>-regions</tt> option is used to specify output as separate sequences, the name of the sequence is created from the name of the original sequence with the start and end positions of the range appended with underscore characters between them, eg: XYZ region 2 to 34 is written as: <tt>XYZ_2_34</tt>.  In such cases the output sequence format must be capable of supporting multiple sequences.</p>
 
 	
 <H2>

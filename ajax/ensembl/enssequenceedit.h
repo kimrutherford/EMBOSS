@@ -1,47 +1,64 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef enssequenceedit_h
-#define enssequenceedit_h
+#ifndef ENSSEQUENCEEDIT_H
+#define ENSSEQUENCEEDIT_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ensattribute.h"
 
+AJ_BEGIN_DECLS
 
 
 
-/* @data EnsPSequenceEdit *****************************************************
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
+/* @data EnsPSequenceedit *****************************************************
 **
 ** Ensembl Sequence Edit.
 **
-** @alias EnsSSequenceEdit
-** @alias EnsOSequenceEdit
+** @alias EnsSSequenceedit
+** @alias EnsOSequenceedit
 **
 ** @cc Bio::EnsEMBL::Attribute
-** @attr Attribute [EnsPAttribute] Ensembl Attribute.
-** @attr AltSeq [AjPStr] Alternative sequence.
-** @attr Start [ajuint] Start coordinate.
-** @attr End [ajuint] End coordinate.
-** @attr Use [ajuint] Use counter.
-** @attr Padding [ajuint] Padding to alignment boundary.
+** @attr Attribute [EnsPAttribute] Ensembl Attribute
+** @attr Sequence [AjPStr] Alternative sequence
+** @attr Start [ajuint] Start coordinate
+** @attr End [ajuint] End coordinate
+** @attr Use [ajuint] Use counter
+** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
-typedef struct EnsSSequenceEdit
+typedef struct EnsSSequenceedit
 {
     EnsPAttribute Attribute;
-    AjPStr AltSeq;
+    AjPStr Sequence;
     ajuint Start;
     ajuint End;
     ajuint Use;
     ajuint Padding;
-} EnsOSequenceEdit;
+} EnsOSequenceedit;
 
-#define EnsPSequenceEdit EnsOSequenceEdit*
+#define EnsPSequenceedit EnsOSequenceedit*
 
 
 
+
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
 
 /*
 ** Prototype definitions
@@ -49,36 +66,40 @@ typedef struct EnsSSequenceEdit
 
 /* Ensembl Sequence Edit */
 
-EnsPSequenceEdit ensSequenceEditNew(AjPStr code,
-                                    AjPStr name,
-                                    AjPStr description,
-                                    AjPStr altseq,
-                                    ajuint start,
-                                    ajuint end);
+EnsPSequenceedit ensSequenceeditNewAttribute(EnsPAttribute attribute);
 
-EnsPSequenceEdit ensSequenceEditNewA(EnsPAttribute attribute);
+EnsPSequenceedit ensSequenceeditNewCpy(const EnsPSequenceedit se);
 
-void ensSequenceEditDel(EnsPSequenceEdit* Pse);
+EnsPSequenceedit ensSequenceeditNewIni(EnsPAttributetype at,
+                                       AjPStr sequence,
+                                       ajuint start,
+                                       ajuint end);
 
-EnsPAttribute ensSequenceEditGetAttribute(const EnsPSequenceEdit se);
+EnsPSequenceedit ensSequenceeditNewRef(EnsPSequenceedit se);
 
-AjPStr ensSequenceEditGetAltSeq(const EnsPSequenceEdit se);
+void ensSequenceeditDel(EnsPSequenceedit* Pse);
 
-ajuint ensSequenceEditGetStart(const EnsPSequenceEdit se);
+EnsPAttribute ensSequenceeditGetAttribute(const EnsPSequenceedit se);
 
-ajuint ensSequenceEditGetEnd(const EnsPSequenceEdit se);
+ajuint ensSequenceeditGetEnd(const EnsPSequenceedit se);
 
-ajint ensSequenceEditGetLengthDifference(EnsPSequenceEdit se);
+AjPStr ensSequenceeditGetSequence(const EnsPSequenceedit se);
 
-AjBool ensSequenceEditTrace(const EnsPSequenceEdit se, ajuint level);
+ajuint ensSequenceeditGetStart(const EnsPSequenceedit se);
 
-AjBool ensSequenceEditApplyEdit(EnsPSequenceEdit se,
-                                ajint offset,
-                                AjPStr* Psequence);
+AjBool ensSequenceeditTrace(const EnsPSequenceedit se, ajuint level);
 
-AjBool ensSequenceEditSortByStartAscending(AjPList ses);
+ajint ensSequenceeditCalculateDifference(const EnsPSequenceedit se);
 
-AjBool ensSequenceEditSortByStartDescending(AjPList ses);
+size_t ensSequenceeditCalculateMemsize(const EnsPSequenceedit se);
+
+AjBool ensSequenceeditApplyString(const EnsPSequenceedit se,
+                                  ajint offset,
+                                  AjPStr* Psequence);
+
+AjBool ensListSequenceeditSortStartAscending(AjPList ses);
+
+AjBool ensListSequenceeditSortStartDescending(AjPList ses);
 
 /*
 ** End of prototype definitions
@@ -87,8 +108,6 @@ AjBool ensSequenceEditSortByStartDescending(AjPList ses);
 
 
 
-#endif /* enssequenceedit_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSSEQUENCEEDIT_H */

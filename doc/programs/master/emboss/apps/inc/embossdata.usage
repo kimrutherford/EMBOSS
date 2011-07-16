@@ -1,4 +1,4 @@
-<b>Here is a sample session with embossdata</b>
+Here is a sample session with <b>embossdata</b>
 <p>
 Display the directories searched for EMBOSS data files: 
 <p>
@@ -18,7 +18,7 @@ Data file name: <b></b>
 .                                                            Exists
 .embossdata                                                  Does not exist
 /homes/pmr                                                   Exists
-/homes/pmr/.embossdata                                       Does not exist
+/homes/pmr/.embossdata                                       Exists
 /homes/pmr/local/share/EMBOSS/data/                          Exists
 
 </pre></td></tr></table><p>
@@ -41,6 +41,7 @@ Data file name: <b></b>
 
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
 
+  DRCAT.dat
   EBLOSUM30
   EBLOSUM35
   EBLOSUM40
@@ -57,6 +58,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   EBLOSUM85
   EBLOSUM90
   EBLOSUMN
+  EDAM.obo
   EDNAFULL
   EDNAMAT
   EDNASIMPLE
@@ -151,6 +153,7 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   Efeatures.gff2protein
   Efeatures.gff3
   Efeatures.gff3protein
+  Efeatures.gff3~
   Efeatures.gffprotein
   Efeatures.pir
   Efeatures.protein
@@ -181,6 +184,8 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   Etags.embl
   Etags.emboss
   Etags.gff
+  Etags.gff2
+  Etags.gff2protein
   Etags.gff3
   Etags.gff3protein
   Etags.gffprotein
@@ -1233,6 +1238,24 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/JASPAR_CNE
 
   dummyfile
   matrix_list.txt
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/OBO
+
+  evidence_code.obo
+  gene_ontology.1_2.obo
+  pathway.obo
+  ro.obo
+  so.obo
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/TAXONOMY
+
+  division.dmp
+  gencode.dmp
+  merged.dmp
+  names.dmp
+  nodes.dmp
 
 </pre></td></tr></table><p>
 <p>

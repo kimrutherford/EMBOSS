@@ -76,7 +76,7 @@ IT IS DONE FOR YOU.
         Many examples illustrating different behaviours is good.
  -->
 
-<b>Here is a sample session with jaspscan</b>
+Here is a sample session with <b>jaspscan</b>
 <p>
 
 <p>
@@ -113,7 +113,7 @@ Output report [m23100.jaspscan]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Scans DNA sequences for transcription factors
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -154,6 +154,7 @@ Version: EMBOSS:6.3.0
                                   then a hit will be reported (Any numeric
                                   value)
   [-outfile]           report     [*.jaspscan] Output report file name
+                                  (default -rformat seqtable)
 
    Additional (Optional) qualifiers:
    -exclude            string     The names of any matrices to exclude from
@@ -283,7 +284,7 @@ then a hit will be reported</td>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat seqtable)</td>
 <td><i>&lt;*&gt;</i>.jaspscan</td>
 </tr>
 
@@ -649,17 +650,39 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
 
-<b>jaspscan</b> reads any normal sequence USAs.
+<b>jaspscan</b> reads one or more nucleotide sequences.
+
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
 
 <p>
 
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -785,32 +808,43 @@ SQ   Sequence 2085 BP; 417 A; 631 C; 702 G; 335 T; 0 other;
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
 
-        If you wish to include the standard description of the avalable
-	report formats, use:
-        #include file="inc/reportformats.ihtml"
-   -->
+<p>
 
-<b>jaspscan</b> 
-outputs a report format file.
+The output is a standard EMBOSS report file. 
 
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+<p>
+By default the report is in 'seqtable' format.
 
 <p>
 
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: m23100.jaspscan </h3>
+<p><h3>File: m23100.jaspscan</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: jaspscan
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: jaspscan
 #    -both
 #    -sequence tembl:m23100
@@ -1041,6 +1075,11 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th>
 <th>Description</th></tr>
+<tr>
+<td><a href="marscan.html">marscan</a></td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
+</tr>
+
 <tr>
 <td><a href="tfscan.html">tfscan</a></td>
 <td>Identify transcription factor binding sites in DNA sequences</td>

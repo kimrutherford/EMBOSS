@@ -1,0 +1,25 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>Database entry: taxon-tax:hominidae</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+id: 9604
+parent: 314295
+rank: family
+emblprefix: 
+division: 5
+divflag: 1
+gencode: 1
+gcflag: 1
+mitocode: 2
+mgcflag 1
+hidden: 1
+nosequence: 1
+scientific name: Hominidae
+authority: Hominidae Gray, 1825
+synonym: Pongidae
+common name: great apes
+
+</pre>
+</td></tr></table><p>

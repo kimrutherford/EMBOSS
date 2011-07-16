@@ -37,14 +37,19 @@ subdir = emboss/acd
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
+	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
 	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pngdriver.m4 \
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
+	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
 	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
 	$(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = $(top_builddir)/ajax/core/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 SOURCES =
@@ -84,16 +89,24 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+AXIS2C_CFLAGS = @AXIS2C_CFLAGS@
+AXIS2C_CPPFLAGS = @AXIS2C_CPPFLAGS@
+AXIS2C_LDFLAGS = @AXIS2C_LDFLAGS@
+AXIS2C_LIBS = @AXIS2C_LIBS@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+CXXDEPMODE = @CXXDEPMODE@
+CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
-DEVWARNINGS = @DEVWARNINGS@
 DEVWARN_CFLAGS = @DEVWARN_CFLAGS@
+DLLTOOL = @DLLTOOL@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -125,9 +138,11 @@ LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
+MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
 MYSQL_CFLAGS = @MYSQL_CFLAGS@
 MYSQL_CONFIG = @MYSQL_CONFIG@
+MYSQL_CPPFLAGS = @MYSQL_CPPFLAGS@
 MYSQL_LDFLAGS = @MYSQL_LDFLAGS@
 MYSQL_VERSION = @MYSQL_VERSION@
 NEEDAJAX = @NEEDAJAX@
@@ -152,8 +167,12 @@ PCRE_MINOR = @PCRE_MINOR@
 PCRE_POSIXLIB_VERSION = @PCRE_POSIXLIB_VERSION@
 PCRE_VERSION = @PCRE_VERSION@
 PG_CONFIG = @PG_CONFIG@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 POSTGRESQL_CFLAGS = @POSTGRESQL_CFLAGS@
+POSTGRESQL_CPPFLAGS = @POSTGRESQL_CPPFLAGS@
 POSTGRESQL_LDFLAGS = @POSTGRESQL_LDFLAGS@
 POSTGRESQL_VERSION = @POSTGRESQL_VERSION@
 RANLIB = @RANLIB@
@@ -162,7 +181,6 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
-WARNINGS = @WARNINGS@
 WARN_CFLAGS = @WARN_CFLAGS@
 XLIB = @XLIB@
 XMKMF = @XMKMF@
@@ -174,7 +192,9 @@ abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
+ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -209,7 +229,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -225,70 +244,85 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
-	acdpretty.acd acdrelations.acd acdtable.acd acdtrace.acd \
-	acdvalid.acd ajbad.acd \
-	ajfeatest.acd ajtest.acd aligncopy.acd aligncopypair.acd antigenic.acd \
+pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd \
+	acdpretty.acd acdtable.acd acdtrace.acd acdvalid.acd \
+	aligncopy.acd aligncopypair.acd antigenic.acd \
 	backtranambig.acd backtranseq.acd banana.acd \
-	biosed.acd btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd \
-	chips.acd cirdna.acd codcmp.acd codcopy.acd coderet.acd complex.acd \
+	biosed.acd btwisted.acd \
+	cachedas.acd cachedbfetch.acd \
+	cacheensembl.acd cacheebeyesearch.acd \
+	cai.acd chaos.acd charge.acd checktrans.acd \
+	chips.acd cirdna.acd codcmp.acd codcopy.acd coderet.acd \
 	compseq.acd cons.acd consambig.acd \
-	corbatest.acd cpgplot.acd cpgreport.acd \
-	cusp.acd cutgextract.acd cutseq.acd dan.acd dbiblast.acd \
-	dbifasta.acd dbiflat.acd dbigcg.acd dbxfasta.acd dbxflat.acd \
-	dbxgcg.acd dbxreport.acd dbxstat.acd \
+	cpgplot.acd cpgreport.acd \
+	cusp.acd cutgextract.acd cutseq.acd dan.acd \
+	dbiblast.acd dbifasta.acd dbiflat.acd dbigcg.acd \
+	dbtell.acd \
+	dbxcompress.acd \
+	dbxedam.acd dbxfasta.acd dbxflat.acd dbxgcg.acd dbxobo.acd \
+	dbxreport.acd dbxresource.acd dbxstat.acd dbxtax.acd \
+	dbxuncompress.acd \
 	degapseq.acd density.acd descseq.acd \
 	diffseq.acd digest.acd distmat.acd \
-	domtesta.acd domtestb.acd domtestc.acd domtestd.acd \
 	dotmatcher.acd dotpath.acd dottup.acd dreg.acd \
+	drfinddata.acd drfindformat.acd drfindid.acd drfindresource.acd \
+	drget.acd drtext.acd \
+	edamdef.acd edamhasinput.acd edamhasoutput.acd \
+	edamisformat.acd edamisid.acd edamname.acd \
 	edialign.acd \
 	einverted.acd embossdata.acd embossversion.acd emma.acd emowse.acd \
-	edamclean.acd ensembltest.acd \
-	entrails.acd entret.acd epestfind.acd eprimer3.acd equicktandem.acd \
-	est2genome.acd etandem.acd \
+	entret.acd epestfind.acd eprimer3.acd eprimer32.acd \
+	equicktandem.acd est2genome.acd etandem.acd \
 	extractalign.acd extractfeat.acd extractseq.acd \
-	featcopy.acd featreport.acd findkm.acd freak.acd \
+	featcopy.acd featreport.acd feattext.acd findkm.acd freak.acd \
 	fuzznuc.acd fuzzpro.acd fuzztran.acd \
 	garnier.acd geecee.acd getorf.acd \
-	helixturnhelix.acd histogramtest.acd \
+	godef.acd goname.acd helixturnhelix.acd \
 	hmoment.acd iep.acd infoalign.acd infobase.acd inforesidue.acd \
-        infoseq.acd intconv.acd \
+        infoseq.acd \
 	isochore.acd jaspextract.acd jaspscan.acd lindna.acd listor.acd \
 	makenucseq.acd makeprotseq.acd marscan.acd \
-	martattributes.acd martdatasets.acd martfilters.acd  martquery.acd \
-	martregistry.acd martseqs.acd \
 	maskambignuc.acd maskambigprot.acd maskfeat.acd maskseq.acd \
 	matcher.acd megamerger.acd \
 	merger.acd msbar.acd mwcontam.acd mwfilter.acd
 
 pkgdata2_DATA = needle.acd needleall.acd \
-	newcoils.acd newcpgreport.acd newcpgseek.acd \
+	newcpgreport.acd newcpgseek.acd \
 	newseq.acd nohtml.acd noreturn.acd nospace.acd notab.acd \
 	notseq.acd nthseq.acd nthseqset.acd \
-	octanol.acd oddcomp.acd origsplitter.acd origunion.acd \
+	octanol.acd oddcomp.acd \
+	ontocount.acd ontoget.acd ontogetcommon.acd ontogetdown.acd \
+	ontogetobsolete.acd ontogetroot.acd \
+	ontogetsibs.acd ontogetup.acd ontoisobsolete.acd ontotext.acd \
 	palindrome.acd pasteseq.acd patmatdb.acd patmatmotifs.acd \
-	patmattest.acd pepcoil.acd pepinfo.acd pepnet.acd pepstats.acd \
+	pepcoil.acd pepdigest.acd pepinfo.acd pepnet.acd pepstats.acd \
 	pepwheel.acd pepwindow.acd pepwindowall.acd plotcon.acd plotorf.acd \
-	polydot.acd preg.acd prettyplot.acd prettyseq.acd prima.acd \
-	primers.acd primersearch.acd printsextract.acd profit.acd \
+	polydot.acd preg.acd prettyplot.acd prettyseq.acd \
+	primersearch.acd printsextract.acd profit.acd \
 	prophecy.acd prophet.acd prosextract.acd pscan.acd psiphi.acd \
 	rebaseextract.acd recoder.acd redata.acd remap.acd restover.acd \
-	restrict.acd revseq.acd seealso.acd seqinfo.acd seqmatchall.acd \
-	seqret.acd seqretall.acd seqretallfeat.acd \
-	seqretset.acd seqretsetall.acd seqretsingle.acd seqretsplit.acd \
-	seqrettype.acd showalign.acd \
+	restrict.acd revseq.acd seealso.acd \
+	seqcount.acd seqmatchall.acd \
+	seqret.acd \
+	seqretsetall.acd seqretsplit.acd \
+	seqxref.acd seqxrefget.acd servertell.acd showalign.acd \
 	showdb.acd showfeat.acd showorf.acd \
-	showpep.acd showseq.acd shuffleseq.acd \
+	showpep.acd showseq.acd showserver.acd shuffleseq.acd \
 	sigcleave.acd silent.acd sirna.acd \
 	sixpack.acd sizeseq.acd skipredundant.acd skipseq.acd \
-	splitsource.acd splitter.acd sqltest.acd stretcher.acd \
+	splitsource.acd splitter.acd stretcher.acd \
 	stssearch.acd supermatcher.acd syco.acd \
-	tcode.acd testplot.acd textsearch.acd tfextract.acd tfm.acd \
-	tfscan.acd tmap.acd tranalign.acd transeq.acd treetypedisplay.acd \
-	trimest.acd trimseq.acd trimspace.acd twofeat.acd union.acd \
+	taxget.acd taxgetdown.acd taxgetrank.acd \
+	taxgetspecies.acd taxgetup.acd \
+	tcode.acd textget.acd textsearch.acd tfextract.acd tfm.acd \
+	tfscan.acd tmap.acd tranalign.acd transeq.acd \
+	trimest.acd trimseq.acd trimspace.acd twofeat.acd \
+	union.acd urlget.acd \
         vectorstrip.acd water.acd whichdb.acd wobble.acd \
 	wordcount.acd wordfinder.acd wordmatch.acd \
-	wossname.acd yank.acd
+	wossdata.acd wossinput.acd wossname.acd \
+	wossoperation.acd wossoutput.acd wossparam.acd wosstopic.acd \
+	yank.acd
 
 pkgdata3_DATA = codes.english  \
 	groups.standard keywords.standard knowntypes.standard \

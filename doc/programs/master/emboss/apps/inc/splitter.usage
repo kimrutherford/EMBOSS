@@ -1,4 +1,4 @@
-<b>Here is a sample session with splitter</b>
+Here is a sample session with <b>splitter</b>
 <p>
 Split a sequence into sub-sequences of 10,000 bases (the default size) with no overlap between the sub-sequences: 
 <p>

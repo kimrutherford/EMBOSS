@@ -49,7 +49,7 @@ Output file [ab009602.cai]:
 Command line arguments
 
 Calculate codon adaptation index
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
@@ -293,6 +293,7 @@ See also
    Program name     Description
    chips            Calculates Nc codon usage statistic
    codcmp           Codon usage table comparison
+   codcopy          Copy and reformat a codon usage table
    cusp             Create a codon usage table from nucleotide sequence(s)
    syco             Draw synonymous codon usage statistic plot for a nucleotide
                     sequence

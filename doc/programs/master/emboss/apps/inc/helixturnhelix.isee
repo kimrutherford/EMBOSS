@@ -3,53 +3,8 @@
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
-<td><a href="antigenic.html">antigenic</a></td>
-<td>Finds antigenic sites in proteins</td>
-</tr>
-
-<tr>
-<td><a href="digest.html">digest</a></td>
-<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
-</tr>
-
-<tr>
-<td><a href="epestfind.html">epestfind</a></td>
-<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
-</tr>
-
-<tr>
-<td><a href="fuzzpro.html">fuzzpro</a></td>
-<td>Search for patterns in protein sequences</td>
-</tr>
-
-<tr>
-<td><a href="fuzztran.html">fuzztran</a></td>
-<td>Search for patterns in protein sequences (translated)</td>
-</tr>
-
-<tr>
 <td><a href="garnier.html">garnier</a></td>
 <td>Predicts protein secondary structure using GOR method</td>
-</tr>
-
-<tr>
-<td><a href="hmoment.html">hmoment</a></td>
-<td>Calculate and plot hydrophobic moment for protein sequence(s)</td>
-</tr>
-
-<tr>
-<td><a href="oddcomp.html">oddcomp</a></td>
-<td>Identify proteins with specified sequence word composition</td>
-</tr>
-
-<tr>
-<td><a href="patmatdb.html">patmatdb</a></td>
-<td>Searches protein sequences with a sequence motif</td>
-</tr>
-
-<tr>
-<td><a href="patmatmotifs.html">patmatmotifs</a></td>
-<td>Scan a protein sequence with motifs from the PROSITE database</td>
 </tr>
 
 <tr>
@@ -65,26 +20,6 @@
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
 <td>Draw a helical wheel diagram for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="preg.html">preg</a></td>
-<td>Regular expression search of protein sequence(s)</td>
-</tr>
-
-<tr>
-<td><a href="pscan.html">pscan</a></td>
-<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
-</tr>
-
-<tr>
-<td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports on signal cleavage sites in a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="tmap.html">tmap</a></td>
-<td>Predict and plot transmembrane segments in protein sequences</td>
 </tr>
 
 </table>

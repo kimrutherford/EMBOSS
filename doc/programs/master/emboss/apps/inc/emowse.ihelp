@@ -1,5 +1,5 @@
 Search protein sequences by digest fragment molecular weight
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional

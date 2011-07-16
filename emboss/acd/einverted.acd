@@ -4,9 +4,10 @@ application: einverted [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
-  relations: "/edam/topic/0000157 Sequence composition"
-  relations: "/edam/operation/0000379 Repeat sequence identification"
-  relations: "/edam/operation/0000278 RNA secondary structure prediction"
+    relations: "EDAM:0000157 topic Sequence composition"
+    relations: "EDAM:0000097 topic Nucleic acid structure"
+    relations: "EDAM:0000379 operation Repeat sequence detection"
+    relations: "EDAM:0000278 operation RNA secondary structure prediction"
 ]
 
 section: input [
@@ -17,9 +18,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "/edam/data/0001215 Pure DNA sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
   ]
 
 endsection: input
@@ -32,29 +31,33 @@ section: required [
   integer: gap [
     default: "12"
     standard: "Y"
+    minimum: "0"
     information: "Gap penalty"
-    relations: "/edam/data/0002137 Gap penalty"
+    relations: "EDAM:0002137 data Gap penalty"
   ]
 
   integer: threshold [
     default: "50"
     standard: "Y"
+    minimum: "0"
     information: "Minimum score threshold"
-relations: "/edam/data/0002146 Threshold"
+    relations: "EDAM:0002146 data Threshold"
   ]
 
   integer: match [
     default: "3"
     standard: "Y"
+    minimum: "0"
     information: "Match score"
-    relations: "/edam/data/0001401 Match reward score"
+    relations: "EDAM:0001401 data Match reward score"
   ]
 
   integer: mismatch [
     default: "-4"
     standard: "Y"
+    maximum: "0"
     information: "Mismatch score"
-    relations: "/edam/data/0001402 Mismatch penalty score"
+    relations: "EDAM:0001402 data Mismatch penalty score"
   ]
 
 endsection: required
@@ -67,10 +70,11 @@ section: additional [
   integer: maxrepeat [
     additional: "Y"
     default: "2000"
+    minimum: "0"
     information: "Maximum extent of repeats"
     help: "Maximum separation between the start of repeat and the end
-           of the inverted repeat (the default is 2000 bases)."
-    relations: "/edam/data/0001249 Sequence length"                                     
+           of the inverted repeat."
+    relations: "EDAM:0001249 data Sequence length"
   ]
 
 endsection: additional
@@ -85,7 +89,7 @@ section: output [
     extension: "inv"
     knowntype: "inverted output"
     information: "Sanger Centre program inverted output file"
-    relations: "/edam/data/0000969 Free text"                                      
+    relations: "EDAM:0000969 data Text"
   ]
 
   seqout: outseq [
@@ -95,8 +99,7 @@ section: output [
                   repeats."
     help: "The sequence of the inverted repeat regions without gap
            characters."
-    relations: "/edam/data/0000848 Sequence"                 
-    relations: "/edam/data/0000849 Sequence record"                            
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: output

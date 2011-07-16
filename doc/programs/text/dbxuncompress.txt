@@ -1,0 +1,197 @@
+                                dbxuncompress
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Uncompress a compressed dbx index
+
+Description
+
+   dbxuncompress uncompresses EMBOSS B+tree format index files. By
+   default, the indexing applications in EMBOSS compress all index files.
+
+   Indexes prior to EMBOSS 6.4.0 are uncompressed.
+
+   Uncompressed index files are required for updating an existing index.
+   Compressed index files provide more efficient storage and retrieval.
+
+Algorithm
+
+   The B+tree index files contain discrete pages with a known maximum
+   size, filled from the first byte with a count of index terms.
+
+   dbxcompress reads all pages, identifying the end of the used space and
+   adding calculating the free space at the end of each page and
+   calculating the new start position for each uncompressed page. It then
+   rereads the index file, and rewrites the pages to disk expanded to the
+   full page size.
+
+   The final page is always written in full. This allows index reading to
+   assume the maximum page size in all cases without reading beyond the
+   end of file.
+
+Usage
+
+   Here is a sample session with dbxuncompress
+
+
+% dbxuncompress embl -indexdir . -field des
+Uncompress a compressed dbx index
+Output file [embl.dbxuncompress]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Uncompress a compressed dbx index
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     EMBOSS database name (Any string from 2 to
+                                  19 characters, matching regular expression
+                                  /[A-z][A-z0-9_]+/)
+  [-field]             string     EMBOSS database field (Any string)
+   -outfile            outfile    [*.dbxuncompress] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -indexdir           directory  Index directory (optional)
+
+   Associated qualifiers:
+
+   "-indexdir" associated qualifiers
+   -extension          string     Default file extension
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   dbxuncompress reads the index files for a database created with one of
+   the 'dbx' indexing programs.
+
+Output file format
+
+   dbxuncompress rewrites the index files in uncompressed form.
+
+  Output files for usage example
+
+  File: embl.pxde
+
+Type      Secondary
+Compress  No
+Pages     647
+Order     60
+Fill      41
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    71
+Fill2     101
+Count     213
+Fullcount 417
+Kwlimit   20
+
+  File: embl.xde
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: embl.dbxuncompress
+
+Uncompressing index 'des' for database 'embl'
+Index 'des' uncompressed
+Completed
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                      Description
+                    dbiblast     Index a BLAST database
+                    dbifasta     Index a fasta file database
+                    dbiflat      Index a flat file database
+                    dbigcg       Index a GCG formatted database
+                    dbxcompress  Compress an uncompressed dbx index
+                    dbxedam      Index the EDAM ontology using b+tree indices
+                    dbxfasta     Index a fasta file database using b+tree indices
+                    dbxflat      Index a flat file database using b+tree indices
+                    dbxgcg       Index a GCG formatted database using b+tree indices
+                    dbxobo       Index an obo ontology using b+tree indices
+                    dbxreport    Validate index and report internals for dbx databases
+                    dbxresource  Index a data resource catalogue using b+tree indices
+                    dbxstat      Dump statistics for dbx databases
+                    dbxtax       Index NCBI taxonomy using b+tree indices
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by administrators responsible for
+                    software and database installation and maintenance.
+
+Comments
+
+                    None

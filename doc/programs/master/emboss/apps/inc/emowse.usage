@@ -1,4 +1,4 @@
-<b>Here is a sample session with emowse</b>
+Here is a sample session with <b>emowse</b>
 <p>
 
 <p>
@@ -11,6 +11,7 @@ Peptide molecular weight values file: <b>test.mowse</b>
 Whole sequence molwt [0]: <b></b>
 Use monoisotopic weights [N]: <b></b>
 Output file [12s1_arath.emowse]: <b></b>
+ajSeqxrefNewDbS '1-I' 'FT025'
 
 </pre></td></tr></table><p>
 <p>

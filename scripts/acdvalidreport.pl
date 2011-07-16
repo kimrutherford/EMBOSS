@@ -89,9 +89,13 @@ foreach $x (sort (keys ( %countknown ) ) ) {
 print "\n$applcnt EMBOSS and $embassycnt EMBASSY applications\n";
 
 foreach $x(sort(keys(%apps))) {
-    print "\n$apps{$x}";
+    if($apps{$x} ne "$x\n") {
+	print "\n$apps{$x}";
+    }
 }
 
 foreach $x(sort(keys(%embassy))) {
-    print "\n$embassy{$x}";
+    if($embassy{$x} !~ /^\+\S+ [\(][^\)]+[\)]$/) {
+	print "\n$embassy{$x}";
+    }
 }

@@ -1,0 +1,115 @@
+application: taxgetrank [
+  documentation: "Get parents of taxon(s)"
+  groups: "Ontology:Taxonomy"
+    relations: "EDAM:0000637 topic Taxonomy"
+    relations: "EDAM:0002224 operation Data retrieval (ontology concept)"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+  taxon: taxons [
+     default: ""
+     parameter: "Y"
+     relations: "EDAM:0001875 identifier NCBI taxon"
+  ]
+
+
+endsection: input
+
+
+
+
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  list: rank [
+    parameter: "Y"
+    default: "kingdom,phylum,class,order,family,genus,species"
+    minimum: "1"
+    maximum: "28"
+    header: "Taxonomic rank(s)"
+    values: "kingdom:Kingdom;
+    	    phylum:Phylum;
+	    class:Class;
+	    order:Order;
+	    family:Family;
+	    genus:Genus;
+	    species:Species;
+	    tribe:Tribe;
+	    varietas:varietas;
+	    species group:Species group;
+	    species subgroup:Species subgroup;
+	    no rank:None;
+	    superkingdom:Superkingdom;
+	    superphylum:Superphylum;
+	    superclass:Superclass;
+	    superorder:Superorder;
+	    superfamily:Superfamily;
+    	    subkingdom:Subkingdom;
+    	    subphylum:Subphylum;
+    	    subclass:Subclass;
+	    suborder:Suborder;
+	    subfamily:Subfamily;
+	    subgenus:Subgenus;
+	    subspecies:Subspecies;
+	    subtribe:Subtribe;
+	    infraclass:Infraclass;
+	    infraorder:Infraorder;
+	    parvorder:Parvorder;"
+    delimiter: ";"
+    codedelimiter: ":"
+    information: "Find taxons at rank"
+    help: "Multiple ranks can be specified, or '*' for all"
+    relations: "EDAM:0001872 identifier Taxonomic classification"
+]
+endsection: required
+
+
+
+
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+endsection: additional
+
+
+
+
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: hidden [
+    default: "N"
+    information: "Show taxons hidden in GenBank"
+  ]
+
+endsection: advanced
+
+
+
+
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outtaxon: outfile [
+    parameter: "Y"
+    relations: "EDAM:0002858 data Ontology concept"
+  ]
+
+endsection: output
+
+

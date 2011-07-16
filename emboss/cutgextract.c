@@ -138,7 +138,7 @@ int main(int argc, char **argv)
     fname  = ajStrNew();
 
 
-    table = ajTablestrNewLen(TABLE_ESTIMATE);
+    table = ajTablestrNewConst(TABLE_ESTIMATE);
 
 
     flist = ajAcdGetDirlist("directory");
@@ -180,8 +180,9 @@ int main(int argc, char **argv)
 		ajStrAssignC(&tmpkey,entryname);
 
 	    /* See if organism is already in the table */
-	    value = ajTableFetch(table,tmpkey);
-	    if(!value)			/* Initialise */
+
+	    value = ajTableFetchmodV(table,tmpkey);
+            if(!value)			/* Initialise */
 	    {
 		key = ajStrNewS(tmpkey);
 		AJNEW0(value);

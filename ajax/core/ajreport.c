@@ -105,6 +105,8 @@ static void reportWriteNameTable(AjPReport outrpt, const AjPFeattable ftable,
 				 const AjPSeq seq);
 static void reportWriteRegions(AjPReport outrpt, const AjPFeattable ftable,
 			       const AjPSeq seq);
+static void reportWriteRestrict(AjPReport outrpt, const AjPFeattable ftable,
+                                const AjPSeq seq);
 static void reportWriteSeqTable(AjPReport outrpt, const AjPFeattable ftable,
 				const AjPSeq seq);
 static void reportWriteSimple(AjPReport outrpt, const AjPFeattable ftable,
@@ -166,9 +168,11 @@ static ReportOFormat reportFormat[] =
 	 AJFALSE, 0, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  reportWriteDbMotif},
     {"diffseq",   "Differences between a pair of sequences",
 	 AJFALSE, 7, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  reportWriteDiffseq},
-/*    cirdna/lindna input format - looks horrible in those programs */
-/*    {"draw",      "",
-	 0, AJFALSE, AJTRUE,  AJTRUE,  reportWriteDraw},*/
+/*    cirdna/lindna input format - may need work */
+    {"draw",      "lindna/cirdna input format",
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteDraw},
+    {"restrict",  "lindna/cirdna input format for restriction sites",
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteRestrict},
     {"excel",     "Tab-delimited file for import to Microsoft Excel",
 	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, reportWriteExcel},
     {"feattable", "EMBL format feature table with internal tags",
@@ -793,7 +797,7 @@ static void reportWriteDiffseq(AjPReport thys,
 **
 ** Data reported:
 **
-** Tags required: Enzyme_name, 5prime, 3primem 5primerev, 3primerev
+** Tags required:
 **
 ** Tags used:
 **
@@ -808,6 +812,95 @@ static void reportWriteDiffseq(AjPReport thys,
 
 static void reportWriteDraw(AjPReport thys,
 			    const AjPFeattable ftable, const AjPSeq seq)
+{
+    AjPFile outf;
+    AjIList iterft     = NULL;
+    AjPFeature feature = NULL;
+    AjPStr subseq = NULL;
+    AjPStr tagval = NULL;
+    ajint istart  = 0;
+    ajint iend    = 0;
+
+    outf = thys->File;
+    
+    ajReportWriteHeader(thys, ftable, seq);
+    
+    ajFmtPrintF(outf, "Start %d\n", 
+ 		ajSeqGetBegin(seq) + ajSeqGetOffset(seq));
+    ajFmtPrintF(outf, "End   %d\n", 
+ 		ajSeqGetEnd(seq) + ajSeqGetOffset(seq));
+
+    ajFmtPrintF(outf, "\n"); 
+    ajFmtPrintF(outf, "group\n");
+    
+    iterft = ajListIterNewread(ftable->Features);
+
+    while(!ajListIterDone(iterft))
+    {
+	feature = (AjPFeature)ajListIterGet(iterft);
+	/*strand = ajFeatGetStrand(feature);*/
+	istart = feature->Start;
+	iend   = feature->End;
+
+	ajFmtPrintF(outf, "label\n");
+
+        ajFmtPrintF(outf, "Range %d %d | | 9 H\n", istart, iend);
+        ajFmtPrintF(outf, "%S\n", ajFeatGetType(feature));
+
+        ajFmtPrintF(outf, "endlabel\n");
+
+	ajFmtPrintF(outf, "\n");
+    }
+    
+    ajFmtPrintF(outf, "endgroup\n");
+
+    ajReportWriteTail(thys, ftable, seq);
+    
+    ajStrDel(&subseq);
+    ajStrDel(&tagval);
+    
+    ajListIterDel(&iterft);
+
+    return;
+}
+
+
+
+
+/* @funcstatic reportWriteRestrict ********************************************
+**
+** Writes a report in Draw format, for use as input to cirdna or lindna
+** specialised to select data from restriction sites by selecting feature tags
+**
+** Format:<br>
+**   group<br>
+**<br>
+**   label<br>
+**   tick  [tagvalue] [start] 8<br>
+**   endlabel<br>
+**   label<br>
+**   tick  [tagvalue] [end] 3<br>
+**   endlabel<br>
+**<br>
+**   endgroup<br>
+**
+** Data reported:
+**
+** Tags required: Enzyme_name, 5prime, 3primem 5primerev, 3primerev
+**
+** Tags used:
+**
+** Tags reported:
+**
+** @param [u] thys [AjPReport] Report object
+** @param [r] ftable [const AjPFeattable] Feature table object
+** @param [r] seq [const AjPSeq] Sequence object
+** @return [void]
+** @@
+******************************************************************************/
+
+static void reportWriteRestrict(AjPReport thys,
+                                const AjPFeattable ftable, const AjPSeq seq)
 {
     AjPFile outf;
     AjIList iterft     = NULL;
@@ -849,7 +942,9 @@ static void reportWriteDraw(AjPReport thys,
  		ajSeqGetEnd(seq) + ajSeqGetOffset(seq));
 
     ajFmtPrintF(outf, "\n"); 
+
     ajFmtPrintF(outf, "group\n");
+    ajFmtPrintF(outf, "Forward\n");
     
     iterft = ajListIterNewread(ftable->Features);
 
@@ -857,10 +952,10 @@ static void reportWriteDraw(AjPReport thys,
     {
 	feature = (AjPFeature)ajListIterGet(iterft);
 
-	ajFmtPrintF(outf, "label\n");
-
 	if (j5 >= 0)
 	{
+            ajFmtPrintF(outf, "label\n");
+
 	    ajFeatGetNoteS(feature, tagnames[j5], &tagval);
 	    ajStrToUint(tagval, &jstart);
 	    ajFmtPrintF(outf, "Tick %d 8\n", jstart);
@@ -876,9 +971,25 @@ static void reportWriteDraw(AjPReport thys,
 	    ajFmtPrintF(outf, "endlabel\n");
 	}
 
+	ajFmtPrintF(outf, "\n");
+    }
+    
+    ajListIterDel(&iterft);
+
+    ajFmtPrintF(outf, "endgroup\n");
+    ajFmtPrintF(outf, "group\n");
+    ajFmtPrintF(outf, "Reverse\n");
+   
+    iterft = ajListIterNewread(ftable->Features);
+
+    while(!ajListIterDone(iterft))
+    {
+	feature = (AjPFeature)ajListIterGet(iterft);
+
 	if (j3 >= 0)
 	{
 	    ajFmtPrintF(outf, "label\n");
+
 	    ajFeatGetNoteS(feature, tagnames[j3], &tagval);
 	    ajStrToUint(tagval, &jend);
 	    ajFmtPrintF(outf, "Tick %d 3\n", jend);
@@ -897,12 +1008,14 @@ static void reportWriteDraw(AjPReport thys,
 	ajFmtPrintF(outf, "\n");
     }
     
+    ajListIterDel(&iterft);
+
+    ajFmtPrintF(outf, "endgroup\n");
     ajReportWriteTail(thys, ftable, seq);
     
     ajStrDel(&subseq);
     ajStrDel(&tagval);
     
-    ajListIterDel(&iterft);
 
     AJFREE(tagtypes);
     AJFREE(tagnames);
@@ -1168,7 +1281,7 @@ static void reportWriteListFile(AjPReport thys,
     ajuint istart = 0;
     ajuint iend   = 0;
     ajuint i = 0;
-    ajint ipos;
+    ajlong ipos;
     ajint jpos;
     AjPStr tmpstr = NULL;
     AjPStr tmpname = NULL;
@@ -2291,7 +2404,6 @@ static void reportWriteTagseq(AjPReport thys,
     char strand;
     char ctagval;
     const char* garnierkeys[] = {"helix", "sheet", "turns", "coil"};
-    AjPStr garnierkeystr[4] = {NULL, NULL, NULL, NULL};
     AjBool isnuc = ajFalse;
     const AjPStr seqalias;
 
@@ -2311,7 +2423,7 @@ static void reportWriteTagseq(AjPReport thys,
     seqend = ajSeqGetEnd(seq) + ajSeqGetOffset(seq);
     
     ajReportWriteHeader(thys, ftable, seq);
-    featkeys = ajTablestrNewLen(100);
+    featkeys = ajTablestrNew(100);
     listkeys = ajListstrNew();
 
     if(ajFeattableIsNuc(ftable))
@@ -2335,7 +2447,6 @@ static void reportWriteTagseq(AjPReport thys,
 	    ajTablePut(featkeys, featname, seqmarkup);
 	    ajListstrPushAppend(listkeys, featname);
 	    margin = AJMAX(margin, ajStrGetLen(featname));
-	    garnierkeystr[i] = ajStrNewS(featname);
 	}
     else
     {
@@ -2345,7 +2456,7 @@ static void reportWriteTagseq(AjPReport thys,
 	{
 	    feature = (AjPFeature)ajListIterGet(iterft);
 
-	    if(!ajTableFetch(featkeys, feature->Type))
+	    if(!ajTableMatchS(featkeys, feature->Type))
 	    {
 		featname = ajStrNewS(feature->Type);
 		seqmarkup = ajStrNewRes(seqlen+1);
@@ -2392,16 +2503,16 @@ static void reportWriteTagseq(AjPReport thys,
 	    switch(ctagval)
 	    {
                 case 'H':
-                    seqmarkup = ajTableFetch(featkeys, garnierkeystr[0]); 
+                    seqmarkup = ajTableFetchmodC(featkeys, garnierkeys[0]); 
                     break;
                 case 'E':
-                    seqmarkup = ajTableFetch(featkeys, garnierkeystr[1]); 
+                    seqmarkup = ajTableFetchmodC(featkeys, garnierkeys[1]); 
                     break;
                 case 'T':
-                    seqmarkup = ajTableFetch(featkeys, garnierkeystr[2]); 
+                    seqmarkup = ajTableFetchmodC(featkeys, garnierkeys[2]); 
                     break;
                 default:
-                    seqmarkup = ajTableFetch(featkeys, garnierkeystr[3]); 
+                    seqmarkup = ajTableFetchmodC(featkeys, garnierkeys[3]); 
                     break;
 	    }
 
@@ -2410,7 +2521,7 @@ static void reportWriteTagseq(AjPReport thys,
 	}
 	else
 	{
-	    seqmarkup = ajTableFetch(featkeys, feature->Type); 
+	    seqmarkup = ajTableFetchmodS(featkeys, feature->Type); 
 	    ajStrPasteCountK(&seqmarkup, istart-1, strand, ilen);
 	}
     }
@@ -2435,7 +2546,7 @@ static void reportWriteTagseq(AjPReport thys,
 	while(!ajListIterDone(iterkey))
 	{
 	    featname = ajListstrIterGet(iterkey);
-	    seqmarkup = ajTableFetch(featkeys, featname);
+	    seqmarkup = ajTableFetchmodS(featkeys, featname);
 	    ajStrAssignSubS(&substr, seqmarkup, i, ilast);
 
 	    if(isgarnier)
@@ -2466,10 +2577,6 @@ static void reportWriteTagseq(AjPReport thys,
     AJFREE(tagnames);
     AJFREE(tagprints);
     AJFREE(tagsizes);
-
-    if(isgarnier)
-	for(i=0;i<4;i++)
-	    ajStrDel(&garnierkeystr[i]);
 
     ajTablestrFree(&featkeys);
     ajListFree(&listkeys);
@@ -4070,7 +4177,7 @@ void ajReportPrintFormat(AjPFile outf, AjBool full)
     ajint i = 0;
 
     ajFmtPrintF(outf, "\n");
-    ajFmtPrintF(outf, "# report output formats\n");
+    ajFmtPrintF(outf, "# Report output formats\n");
     ajFmtPrintF(outf, "# Name    Format name (or alias)\n");
     ajFmtPrintF(outf, "# Alias   Alias name\n");
     ajFmtPrintF(outf, "# Nuc     Valid for nucleotide sequences\n");
@@ -4098,6 +4205,48 @@ void ajReportPrintFormat(AjPFile outf, AjBool full)
 			reportFormat[i].Desc);
 
     ajFmtPrintF(outf, "}\n\n");
+
+    return;
+}
+
+
+
+
+/* @func ajReportPrinthtmlFormat **********************************************
+**
+** Reports the internal data structures
+**
+** @param [u] outf [AjPFile] Output file
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajReportPrinthtmlFormat(AjPFile outf)
+{
+    ajint i = 0;
+
+    ajFmtPrintF(outf, "<table border=3>");
+    ajFmtPrintF(outf, "<tr><th>Report Format</th><th>Alias</th>\n");
+    ajFmtPrintF(outf, "<th>Nuc</th><th>Pro</th><th>Showheader</th>\n");
+    ajFmtPrintF(outf, "<th>Mintags</th><th>Showseq</th>\n");
+    ajFmtPrintF(outf, "<th>Description</th></tr>\n");
+
+
+    for(i=0; reportFormat[i].Name; i++)
+	if(!reportFormat[i].Alias)
+	    ajFmtPrintF(outf, "<tr><td>\n%-12s\n</td><td>%5B</td>"
+                        "<td>%3B</td><td>%3B</td><td>%3B</td>"
+                        "<td>%7d</td><td>%7B</td><td>\"%s\"</td></tr>\n",
+			reportFormat[i].Name,
+			reportFormat[i].Alias,
+			reportFormat[i].Nucleotide,
+			reportFormat[i].Protein,
+			reportFormat[i].Showheader,
+			reportFormat[i].Mintags,
+			reportFormat[i].Showseq,
+			reportFormat[i].Desc);
+
+    ajFmtPrintF(outf, "</table>\n");
 
     return;
 }
@@ -4210,7 +4359,7 @@ void ajReportPrintbookFormat(AjPFile outf)
 
 
 
-/* @func ajReportPrintwikiFormat **************************************************
+/* @func ajReportPrintwikiFormat **********************************************
 **
 ** Reports the report format internals as wikitext
 **
@@ -4284,12 +4433,6 @@ void ajReportPrintwikiFormat(AjPFile outf)
 
 void ajReportDummyFunction(void)
 {
-    AjPReport report = NULL;
-    AjPFeattable ftable = NULL;
-    AjPSeq seq = NULL;
-
-    reportWriteDraw(report, ftable, seq);
-
     return;
 }
 

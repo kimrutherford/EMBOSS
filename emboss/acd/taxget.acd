@@ -1,0 +1,60 @@
+application: taxget [
+  documentation: "Get taxon(s)"
+  groups: "Ontology:Taxonomy"
+    relations: "EDAM:0000637 topic Taxonomy"
+    relations: "EDAM:0002224 operation Data retrieval (ontology concept)"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  taxon: taxons [
+     default: ""
+     parameter: "Y"
+     relations: "EDAM:0001875 identifier NCBI taxon"
+  ]
+
+
+endsection: input
+
+
+
+
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+endsection: additional
+
+
+
+
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+
+
+
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outtaxon: outfile [
+    parameter: "Y"
+    relations: "EDAM:0002858 data Ontology concept"
+  ]
+
+endsection: output
+
+

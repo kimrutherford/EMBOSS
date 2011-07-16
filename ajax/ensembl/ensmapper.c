@@ -1,10 +1,10 @@
-/******************************************************************************
-** @source Ensembl Mapper functions
+/* @source Ensembl Mapper functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.15 $
+** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
+** @version $Revision: 1.34 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -28,6 +28,21 @@
 /* ==================================================================== */
 
 #include "ensmapper.h"
+#include "enstable.h"
+
+
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== global variables ========================== */
+/* ==================================================================== */
 
 
 
@@ -40,14 +55,44 @@
 
 
 /* ==================================================================== */
+/* ======================== private constants ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== private variables ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-static int mapperpairCompareSourceStartAscending(const void* P1,
-                                                 const void* P2);
+static int listMapperpairCompareSourceStartAscending(const void* P1,
+                                                     const void* P2);
 
-static int mapperpairCompareTargetStartAscending(const void* P1,
-                                                 const void* P2);
+static int listMapperpairCompareTargetStartAscending(const void* P1,
+                                                     const void* P2);
+
+static void mapperrangeregistryClear(void** key,
+                                     void** value,
+                                     void* cl);
+
+static void mapperClearL2(void** key,
+                          void** value,
+                          void* cl);
+
+static void mapperClearL1(void** key,
+                          void** value,
+                          void* cl);
+
+static void mapperProcessL1(const void* key,
+                            void** value,
+                            void* cl);
 
 static AjBool mapperMergePairs(EnsPMapper mapper);
 
@@ -65,6 +110,13 @@ static AjBool mapperMapInsert(EnsPMapper mapper,
 
 
 
+/* ==================================================================== */
+/* ===================== All functions by section ===================== */
+/* ==================================================================== */
+
+
+
+
 /* @filesection ensmapper *****************************************************
 **
 ** @nam1rule ens Function belongs to the Ensembl library
@@ -74,13 +126,13 @@ static AjBool mapperMapInsert(EnsPMapper mapper,
 
 
 
-/* @datasection [EnsPMapperunit] Mapper Unit **********************************
+/* @datasection [EnsPMapperunit] Ensembl Mapper Unit **************************
 **
-** Functions for manipulating Ensembl Mapper Unit objects
+** @nam2rule Mapperunit Functions for manipulating Ensembl Mapper Unit objects
 **
-** Bio::EnsEMBL::Mapper::Unit CVS Revision: 1.9
-**
-** @nam2rule Mapperunit
+** @cc Bio::EnsEMBL::Mapper::Unit
+** @cc CVS Revision: 1.11
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -95,16 +147,19 @@ static AjBool mapperMapInsert(EnsPMapper mapper,
 ** NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPMapperunit]
-** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the reference counter
 **
-** @argrule Obj object [EnsPMapperunit] Ensembl Mapper Unit
-** @argrule Ref object [EnsPMapperunit] Ensembl Mapper Unit
+** @argrule Cpy mu [const EnsPMapperunit] Ensembl Mapper Unit
+** @argrule Ini oid [ajuint] Ensembl Object identifier
+** @argrule Ini start [ajint] Start coordinate
+** @argrule Ini end [ajint] End coordinate
+** @argrule Ref mu [EnsPMapperunit] Ensembl Mapper Unit
 **
-** @valrule * [EnsPMapperunit] Ensembl Mapper Unit
+** @valrule * [EnsPMapperunit] Ensembl Mapper Unit or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -112,9 +167,40 @@ static AjBool mapperMapInsert(EnsPMapper mapper,
 
 
 
-/* @func ensMapperunitNew *****************************************************
+/* @func ensMapperunitNewCpy **************************************************
 **
-** Default constructor for an Ensembl Mapper Unit.
+** Object-based constructor function, which returns an independent object.
+**
+** @param [r] mu [const EnsPMapperunit] Ensembl Mapper Unit
+**
+** @return [EnsPMapperunit] Ensembl Mapper Unit or NULL
+** @@
+******************************************************************************/
+
+EnsPMapperunit ensMapperunitNewCpy(const EnsPMapperunit mu)
+{
+    EnsPMapperunit pthis = NULL;
+
+    if(!mu)
+        return NULL;
+
+    AJNEW0(pthis);
+
+    pthis->Objectidentifier = mu->Objectidentifier;
+
+    pthis->Start = mu->Start;
+    pthis->End   = mu->End;
+    pthis->Use   = 1;
+
+    return pthis;
+}
+
+
+
+
+/* @func ensMapperunitNewIni **************************************************
+**
+** Constructor for an Ensembl Mapper Unit with initial values.
 **
 ** @cc Bio::EnsEMBL::Mapper::Unit::new
 ** @param [r] oid [ajuint] Ensembl Object identifier
@@ -125,7 +211,7 @@ static AjBool mapperMapInsert(EnsPMapper mapper,
 ** @@
 ******************************************************************************/
 
-EnsPMapperunit ensMapperunitNew(ajuint oid, ajint start, ajint end)
+EnsPMapperunit ensMapperunitNewIni(ajuint oid, ajint start, ajint end)
 {
     EnsPMapperunit mu = NULL;
 
@@ -134,41 +220,10 @@ EnsPMapperunit ensMapperunitNew(ajuint oid, ajint start, ajint end)
 
     AJNEW0(mu);
 
-    mu->ObjectIdentifier = oid;
+    mu->Objectidentifier = oid;
 
     mu->Start = start;
     mu->End   = end;
-    mu->Use   = 1;
-
-    return mu;
-}
-
-
-
-
-/* @func ensMapperunitNewObj **************************************************
-**
-** Object-based constructor function, which returns an independent object.
-**
-** @param [r] object [const EnsPMapperunit] Ensembl Mapper Unit
-**
-** @return [EnsPMapperunit] Ensembl Mapper Unit or NULL
-** @@
-******************************************************************************/
-
-EnsPMapperunit ensMapperunitNewObj(const EnsPMapperunit object)
-{
-    EnsPMapperunit mu = NULL;
-
-    if(!object)
-        return NULL;
-
-    AJNEW0(mu);
-
-    mu->ObjectIdentifier = object->ObjectIdentifier;
-
-    mu->Start = object->Start;
-    mu->End   = object->End;
     mu->Use   = 1;
 
     return mu;
@@ -204,10 +259,9 @@ EnsPMapperunit ensMapperunitNewRef(EnsPMapperunit mu)
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Mapper Unit.
+** memory allocated for an Ensembl Mapper Unit object.
 **
 ** @fdata [EnsPMapperunit]
-** @fnote None
 **
 ** @nam3rule Del Destroy (free) an Ensembl Mapper Unit object
 **
@@ -223,15 +277,15 @@ EnsPMapperunit ensMapperunitNewRef(EnsPMapperunit mu)
 
 /* @func ensMapperunitDel *****************************************************
 **
-** Default Ensembl Mapper Unit destructor.
+** Default destructor for an Ensembl Mapper Unit.
 **
-** @param [d] Pmu [EnsPMapperunit*] Ensembl Mapper Unit address
+** @param [d] Pmu [EnsPMapperunit*] Ensembl Mapper Unit object address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensMapperunitDel(EnsPMapperunit *Pmu)
+void ensMapperunitDel(EnsPMapperunit* Pmu)
 {
     EnsPMapperunit pthis = NULL;
 
@@ -267,18 +321,17 @@ void ensMapperunitDel(EnsPMapperunit *Pmu)
 ** Functions for returning elements of an Ensembl Mapper Unit object.
 **
 ** @fdata [EnsPMapperunit]
-** @fnote None
 **
 ** @nam3rule Get Return Ensembl Mapper Unit attribute(s)
-** @nam4rule GetObjectIdentifier Return the Ensembl Object identifier
-** @nam4rule GetStart Return the start coordinate
-** @nam4rule GetEnd Return the end coordinate
+** @nam4rule End Return the end coordinate
+** @nam4rule Objectidentifier Return the Ensembl Object identifier
+** @nam4rule Start Return the start coordinate
 **
 ** @argrule * mu [const EnsPMapperunit] Ensembl Mapper Unit
 **
-** @valrule ObjectIdentifier [ajuint] Ensembl Object identifier
-** @valrule Start [ajint] Start coordinate
 ** @valrule End [ajint] End coordinate
+** @valrule Objectidentifier [ajuint] Ensembl Object identifier
+** @valrule Start [ajint] Start coordinate
 **
 ** @fcategory use
 ******************************************************************************/
@@ -286,7 +339,29 @@ void ensMapperunitDel(EnsPMapperunit *Pmu)
 
 
 
-/* @func ensMapperunitGetObjectIdentifier *************************************
+/* @func ensMapperunitGetEnd **************************************************
+**
+** Get the end coordinate element of an Ensembl Mapper Unit.
+**
+** @cc Bio::EnsEMBL::Mapper::Unit::end
+** @param [r] mu [const EnsPMapperunit] Ensembl Mapper Unit
+**
+** @return [ajint] End coordinate
+** @@
+******************************************************************************/
+
+ajint ensMapperunitGetEnd(const EnsPMapperunit mu)
+{
+    if(!mu)
+        return 0;
+
+    return mu->End;
+}
+
+
+
+
+/* @func ensMapperunitGetObjectidentifier *************************************
 **
 ** Get the Ensembl Object identifier element of an Ensembl Mapper Unit.
 **
@@ -297,12 +372,12 @@ void ensMapperunitDel(EnsPMapperunit *Pmu)
 ** @@
 ******************************************************************************/
 
-ajuint ensMapperunitGetObjectIdentifier(const EnsPMapperunit mu)
+ajuint ensMapperunitGetObjectidentifier(const EnsPMapperunit mu)
 {
     if(!mu)
         return 0;
 
-    return mu->ObjectIdentifier;
+    return mu->Objectidentifier;
 }
 
 
@@ -330,41 +405,21 @@ ajint ensMapperunitGetStart(const EnsPMapperunit mu)
 
 
 
-/* @func ensMapperunitGetEnd **************************************************
-**
-** Get the end coordinate element of an Ensembl Mapper Unit.
-**
-** @cc Bio::EnsEMBL::Mapper::Unit::end
-** @param [r] mu [const EnsPMapperunit] Ensembl Mapper Unit
-**
-** @return [ajint] End coordinate
-** @@
-******************************************************************************/
-
-ajint ensMapperunitGetEnd(const EnsPMapperunit mu)
-{
-    if(!mu)
-        return 0;
-
-    return mu->End;
-}
-
-
-
-
 /* @section modifiers *********************************************************
 **
 ** Functions for assigning elements of an Ensembl Mapper Unit object.
 **
 ** @fdata [EnsPMapperunit]
-** @fnote None
 **
 ** @nam3rule Set Set one element of an Ensembl Mapper Unit
-** @nam4rule SetObjectIdentifier Set the Ensembl Object identifier
-** @nam4rule SetStart Set the start coordinate
-** @nam4rule SetEnd Set the end coordinate
+** @nam4rule End Set the end coordinate
+** @nam4rule Objectidentifier Set the Ensembl Object identifier
+** @nam4rule Start Set the start coordinate
 **
 ** @argrule * mu [EnsPMapperunit] Ensembl Mapper Unit object
+** @argrule End end [ajint] End coordinate
+** @argrule Objectidentifier oid [ajuint] Ensembl Object identifier
+** @argrule Start start [ajint] Start coordinate
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -374,7 +429,32 @@ ajint ensMapperunitGetEnd(const EnsPMapperunit mu)
 
 
 
-/* @func ensMapperunitSetObjectIdentifier *************************************
+/* @func ensMapperunitSetEnd **************************************************
+**
+** Set the end coordinate element of an Ensembl Mapper Unit.
+**
+** @cc Bio::EnsEMBL::Mapper::Unit::end
+** @param [u] mu [EnsPMapperunit] Ensembl Mapper Unit
+** @param [r] end [ajint] End coordinate
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperunitSetEnd(EnsPMapperunit mu, ajint end)
+{
+    if(!mu)
+        return ajFalse;
+
+    mu->End = end;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensMapperunitSetObjectidentifier *************************************
 **
 ** Set the Ensembl Object identifier element of an Ensembl Mapper Unit.
 **
@@ -386,7 +466,7 @@ ajint ensMapperunitGetEnd(const EnsPMapperunit mu)
 ** @@
 ******************************************************************************/
 
-AjBool ensMapperunitSetObjectIdentifier(EnsPMapperunit mu, ajuint oid)
+AjBool ensMapperunitSetObjectidentifier(EnsPMapperunit mu, ajuint oid)
 {
     if(!mu)
         return ajFalse;
@@ -394,7 +474,7 @@ AjBool ensMapperunitSetObjectIdentifier(EnsPMapperunit mu, ajuint oid)
     if(!oid)
         return ajFalse;
 
-    mu->ObjectIdentifier = oid;
+    mu->Objectidentifier = oid;
 
     return ajTrue;
 }
@@ -427,61 +507,12 @@ AjBool ensMapperunitSetStart(EnsPMapperunit mu, ajint start)
 
 
 
-/* @func ensMapperunitSetEnd **************************************************
-**
-** Set the end coordinate element of an Ensembl Mapper Unit.
-**
-** @cc Bio::EnsEMBL::Mapper::Unit::end
-** @param [u] mu [EnsPMapperunit] Ensembl Mapper Unit
-** @param [r] end [ajint] End coordinate
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensMapperunitSetEnd(EnsPMapperunit mu, ajint end)
-{
-    if(!mu)
-        return ajFalse;
-
-    mu->End = end;
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensMapperunitGetMemsize **********************************************
-**
-** Get the memory size in bytes of an Ensembl Mapper Unit.
-**
-** @param [r] mu [const EnsPMapperunit] Ensembl Mapper Unit
-**
-** @return [ajulong] Memory size
-** @@
-******************************************************************************/
-
-ajulong ensMapperunitGetMemsize(const EnsPMapperunit mu)
-{
-    ajulong size = 0;
-
-    if(!mu)
-        return 0;
-
-    size += sizeof (EnsOMapperunit);
-
-    return size;
-}
-
-
-
-
 /* @section debugging *********************************************************
 **
 ** Functions for reporting of an Ensembl Mapper Unit object.
 **
 ** @fdata [EnsPMapperunit]
+**
 ** @nam3rule Trace Report Ensembl Mapper Unit elements to debug file
 **
 ** @argrule Trace mu [const EnsPMapperunit] Ensembl Mapper Unit
@@ -518,12 +549,12 @@ AjBool ensMapperunitTrace(const EnsPMapperunit mu, ajuint level)
     ajStrAppendCountK(&indent, ' ', level * 2);
 
     ajDebug("%SensMapperunitTrace %p\n"
-            "%S  ObjectIdentifier %u\n"
+            "%S  Objectidentifier %u\n"
             "%S  Start %d\n"
             "%S  End %d\n"
             "%S  Use %u\n",
             indent, mu,
-            indent, mu->ObjectIdentifier,
+            indent, mu->Objectidentifier,
             indent, mu->Start,
             indent, mu->End,
             indent, mu->Use);
@@ -536,14 +567,61 @@ AjBool ensMapperunitTrace(const EnsPMapperunit mu, ajuint level)
 
 
 
-/* @datasection [EnsPMapperpair] Mapper Pair **********************************
+/* @section calculate *********************************************************
 **
-** Functions for manipulating Ensembl Mapper Pair objects
+** Functions for calculating values of an Ensembl Mapper Unit object.
 **
-** Bio::EnsEMBL::Mapper::IndelPair CVS Revision: 1.5
-** Bio::EnsEMBL::Mapper::Pair CVS Revision: 1.9
+** @fdata [EnsPMapperunit]
 **
-** @nam2rule Mapperpair
+** @nam3rule Calculate Calculate Ensembl Mapper Unit values
+** @nam4rule Memsize Calculate the memory size in bytes
+**
+** @argrule * mu [const EnsPMapperunit] Ensembl Mapper Unit
+**
+** @valrule Memsize [size_t] Memory size in bytes or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensMapperunitCalculateMemsize ****************************************
+**
+** Calculate the memory size in bytes of an Ensembl Mapper Unit.
+**
+** @param [r] mu [const EnsPMapperunit] Ensembl Mapper Unit
+**
+** @return [size_t] Memory size in bytes or 0
+** @@
+******************************************************************************/
+
+size_t ensMapperunitCalculateMemsize(const EnsPMapperunit mu)
+{
+    size_t size = 0;
+
+    if(!mu)
+        return 0;
+
+    size += sizeof (EnsOMapperunit);
+
+    return size;
+}
+
+
+
+
+/* @datasection [EnsPMapperpair] Ensembl Mapper Pair **************************
+**
+** @nam2rule Mapperpair Functions for manipulating Ensembl Mapper Pair objects
+**
+** @cc Bio::EnsEMBL::Mapper::IndelPair
+** @cc CVS Revision: 1.7
+** @cc CVS Tag: branch-ensembl-62
+**
+** @cc Bio::EnsEMBL::Mapper::Pair
+** @cc CVS Revision: 1.11
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -558,16 +636,31 @@ AjBool ensMapperunitTrace(const EnsPMapperunit mu, ajuint level)
 ** NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPMapperpair]
-** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the reference counter
+** @nam4rule Unit Constructor with Ensembl Mapper Unit objects
 **
-** @argrule Obj object [EnsPMapperpair] Ensembl Mapper Pair
-** @argrule Ref object [EnsPMapperpair] Ensembl Mapper Pair
+** @argrule Cpy mp [const EnsPMapperpair] Ensembl Mapper Pair
+** @argrule Ini srcoid [ajuint] Source Ensembl Object identifier
+** @argrule Ini srcstart [ajint] Source Start coordinate
+** @argrule Ini srcend [ajint] Source End coordinate
+** @argrule Ini trgoid [ajuint] Target Ensembl Object identifier
+** @argrule Ini trgstart [ajint] Target Start coordinate
+** @argrule Ini trgend [ajint] Target End coordinate
+** @argrule Ini ori [ajint] Relative orientation of the Ensembl Mapper Unit
+**                          objects
+** @argrule ensMapperpairNewIni indel [AjBool] Insertion-deletion attribute
+** @argrule Unit source [EnsPMapperunit] Source Ensembl Mapper Unit
+** @argrule Unit target [EnsPMapperunit] Target Ensembl Mapper Unit
+** @argrule Unit ori [ajint] Relative orientation of the Ensembl Mapper Unit
+**                           objects
+** @argrule ensMapperpairNewUnit indel [AjBool] Insertion-deletion attribute
+** @argrule Ref mp [EnsPMapperpair] Ensembl Mapper Pair
 **
-** @valrule * [EnsPMapperpair] Ensembl Mapper Pair
+** @valrule * [EnsPMapperpair] Ensembl Mapper Pair or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -575,55 +668,44 @@ AjBool ensMapperunitTrace(const EnsPMapperunit mu, ajuint level)
 
 
 
-/* @func ensMapperpairNew *****************************************************
+/* @func ensMapperpairNewCpy **************************************************
 **
-** Default constructor for an Ensembl Mapper Pair.
+** Object-based constructor function, which returns an independent object.
 **
-** @cc Bio::EnsEMBL::Mapper::Pair::new
-** @param [u] source [EnsPMapperunit] Source Ensembl Mapper Unit
-** @param [u] target [EnsPMapperunit] Target Ensembl Mapper Unit
-** @param [r] ori [ajint] Relative orientation of the Ensembl Mapper Units
-** @cc Bio::EnsEMBL::Mapper::IndelPair::new
-** @param [r] indel [AjBool] Insertion-deletion attribute
+** @param [r] mp [const EnsPMapperpair] Ensembl Mapper Pair
 **
 ** @return [EnsPMapperpair] Ensembl Mapper Pair or NULL
 ** @@
 ******************************************************************************/
 
-EnsPMapperpair ensMapperpairNew(EnsPMapperunit source,
-                                EnsPMapperunit target,
-                                ajint ori,
-                                AjBool indel)
+EnsPMapperpair ensMapperpairNewCpy(const EnsPMapperpair mp)
 {
-    EnsPMapperpair mp = NULL;
+    EnsPMapperpair pthis = NULL;
 
-    if(!source)
+    if(!mp)
         return NULL;
 
-    if(!target)
-        return NULL;
+    AJNEW0(pthis);
 
-    AJNEW0(mp);
+    pthis->Source = ensMapperunitNewCpy(mp->Source);
+    pthis->Target = ensMapperunitNewCpy(mp->Target);
 
-    mp->Source = ensMapperunitNewRef(source);
+    pthis->Orientation = mp->Orientation;
 
-    mp->Target = ensMapperunitNewRef(target);
+    pthis->Indel = mp->Indel;
 
-    mp->Orientation = ori;
+    pthis->Use = 1;
 
-    mp->InsertionDeletion = indel;
-
-    mp->Use = 1;
-
-    return mp;
+    return pthis;
 }
 
 
 
 
-/* @func ensMapperpairNewC ****************************************************
+/* @func ensMapperpairNewIni **************************************************
 **
-** Construct an Ensembl Mapper Pair from components of Ensembl Mapper Units.
+** Construct an Ensembl Mapper Pair from components of Ensembl Mapper Unit
+** objects.
 **
 ** @param [r] srcoid [ajuint] Source Ensembl Object identifier
 ** @param [r] srcstart [ajint] Source Start coordinate
@@ -631,21 +713,22 @@ EnsPMapperpair ensMapperpairNew(EnsPMapperunit source,
 ** @param [r] trgoid [ajuint] Target Ensembl Object identifier
 ** @param [r] trgstart [ajint] Target Start coordinate
 ** @param [r] trgend [ajint] Target End coordinate
-** @param [r] ori [ajint] Relative orientation of the Ensembl Mapper Units
+** @param [r] ori [ajint] Relative orientation of the Ensembl Mapper Unit
+**                        objects
 ** @param [r] indel [AjBool] Insertion-deletion attribute
 **
 ** @return [EnsPMapperpair] Ensembl Mapper Pair or NULL
 ** @@
 ******************************************************************************/
 
-EnsPMapperpair ensMapperpairNewC(ajuint srcoid,
-                                 ajint srcstart,
-                                 ajint srcend,
-                                 ajuint trgoid,
-                                 ajint trgstart,
-                                 ajint trgend,
-                                 ajint ori,
-                                 AjBool indel)
+EnsPMapperpair ensMapperpairNewIni(ajuint srcoid,
+                                   ajint srcstart,
+                                   ajint srcend,
+                                   ajuint trgoid,
+                                   ajint trgstart,
+                                   ajint trgend,
+                                   ajint ori,
+                                   AjBool indel)
 {
     EnsPMapperunit source = NULL;
     EnsPMapperunit target = NULL;
@@ -658,49 +741,13 @@ EnsPMapperpair ensMapperpairNewC(ajuint srcoid,
     if(!trgoid)
         return NULL;
 
-    source = ensMapperunitNew(srcoid, srcstart, srcend);
+    source = ensMapperunitNewIni(srcoid, srcstart, srcend);
+    target = ensMapperunitNewIni(trgoid, trgstart, trgend);
 
-    target = ensMapperunitNew(trgoid, trgstart, trgend);
-
-    mp = ensMapperpairNew(source, target, ori, indel);
+    mp = ensMapperpairNewUnit(source, target, ori, indel);
 
     ensMapperunitDel(&source);
-
     ensMapperunitDel(&target);
-
-    return mp;
-}
-
-
-
-
-/* @func ensMapperpairNewObj **************************************************
-**
-** Object-based constructor function, which returns an independent object.
-**
-** @param [r] object [const EnsPMapperpair] Ensembl Mapper Pair
-**
-** @return [EnsPMapperpair] Ensembl Mapper Pair or NULL
-** @@
-******************************************************************************/
-
-EnsPMapperpair ensMapperpairNewObj(const EnsPMapperpair object)
-{
-    EnsPMapperpair mp = NULL;
-
-    if(!object)
-        return NULL;
-
-    AJNEW0(mp);
-
-    mp->Source = ensMapperunitNewObj(object->Source);
-    mp->Target = ensMapperunitNewObj(object->Target);
-
-    mp->Orientation = object->Orientation;
-
-    mp->InsertionDeletion = object->InsertionDeletion;
-
-    mp->Use = 1;
 
     return mp;
 }
@@ -732,17 +779,62 @@ EnsPMapperpair ensMapperpairNewRef(EnsPMapperpair mp)
 
 
 
+/* @func ensMapperpairNewUnit *************************************************
+**
+** Constructor for an Ensembl Mapper Pair with Ensembl Mapper Unit objects.
+**
+** @cc Bio::EnsEMBL::Mapper::Pair::new
+** @param [u] source [EnsPMapperunit] Source Ensembl Mapper Unit
+** @param [u] target [EnsPMapperunit] Target Ensembl Mapper Unit
+** @param [r] ori [ajint] Relative orientation of the Ensembl Mapper Unit
+**                        objects
+** @cc Bio::EnsEMBL::Mapper::IndelPair::new
+** @param [r] indel [AjBool] Insertion-deletion attribute
+**
+** @return [EnsPMapperpair] Ensembl Mapper Pair or NULL
+** @@
+******************************************************************************/
+
+EnsPMapperpair ensMapperpairNewUnit(EnsPMapperunit source,
+                                    EnsPMapperunit target,
+                                    ajint ori,
+                                    AjBool indel)
+{
+    EnsPMapperpair mp = NULL;
+
+    if(!source)
+        return NULL;
+
+    if(!target)
+        return NULL;
+
+    AJNEW0(mp);
+
+    mp->Source = ensMapperunitNewRef(source);
+    mp->Target = ensMapperunitNewRef(target);
+
+    mp->Orientation = ori;
+
+    mp->Indel = indel;
+
+    mp->Use = 1;
+
+    return mp;
+}
+
+
+
+
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Mapper Pair.
+** memory allocated for an Ensembl Mapper Pair object.
 **
 ** @fdata [EnsPMapperpair]
-** @fnote None
 **
 ** @nam3rule Del Destroy (free) an Ensembl Mapper Pair object
 **
-** @argrule * Pmp [EnsPMapperpair*] Mapper Pair object address
+** @argrule * Pmp [EnsPMapperpair*] Ensembl Mapper Pair object address
 **
 ** @valrule * [void]
 **
@@ -754,15 +846,15 @@ EnsPMapperpair ensMapperpairNewRef(EnsPMapperpair mp)
 
 /* @func ensMapperpairDel *****************************************************
 **
-** Default Ensembl Mapper Pair destructor.
+** Default destructor for an Ensembl Mapper Pair.
 **
-** @param [d] Pmp [EnsPMapperpair*] Ensembl Mapper Pair address
+** @param [d] Pmp [EnsPMapperpair*] Ensembl Mapper Pair object address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensMapperpairDel(EnsPMapperpair *Pmp)
+void ensMapperpairDel(EnsPMapperpair* Pmp)
 {
     EnsPMapperpair pthis = NULL;
 
@@ -784,7 +876,6 @@ void ensMapperpairDel(EnsPMapperpair *Pmp)
     }
 
     ensMapperunitDel(&pthis->Source);
-
     ensMapperunitDel(&pthis->Target);
 
     AJFREE(pthis);
@@ -802,23 +893,66 @@ void ensMapperpairDel(EnsPMapperpair *Pmp)
 ** Functions for returning elements of an Ensembl Mapper Pair object.
 **
 ** @fdata [EnsPMapperpair]
-** @fnote None
 **
 ** @nam3rule Get Return Ensembl Mapper Pair attribute(s)
-** @nam4rule GetSource Return the source Ensembl Mapper Unit
-** @nam4rule GetTarget Return the target Ensembl Mapper Unit
-** @nam4rule GetOrientation Return the orientation
-** @nam4rule GetInsertionDeletion Return the 'Insertion Deletion' element
+** @nam4rule Indel Return the insertion or deletion element
+** @nam4rule Orientation Return the orientation
+** @nam4rule Source Return the source Ensembl Mapper Unit
+** @nam4rule Target Return the target Ensembl Mapper Unit
 **
-** @argrule * mu [const EnsPMapperunit] Ensembl Mapper Unit
+** @argrule * mp [const EnsPMapperpair] Ensembl Mapper Pair
 **
-** @valrule Source [EnsPMapperunit] Ensembl Mapper Unit
-** @valrule Target [EnsPMapperunit] Ensembl Mapper Unit
-** @valrule Orientation [ajint] Orientation
-** @valrule InsertionDeletion [AjBool] 'Insertion Deletion' element
+** @valrule Indel [AjBool] Insertion-deletion attribute
+** @valrule Orientation [ajint] Orientation or 0
+** @valrule Source [EnsPMapperunit] Ensembl Mapper Unit or NULL
+** @valrule Target [EnsPMapperunit] Ensembl Mapper Unit or NULL
 **
 ** @fcategory use
 ******************************************************************************/
+
+
+
+
+/* @func ensMapperpairGetIndel ************************************************
+**
+** Return the insertion or deletion element of an Ensembl Mapper Pair.
+**
+** @cc Bio::EnsEMBL::Mapper::IndelPair::???
+** @param [r] mp [const EnsPMapperpair] Ensembl Mapper Pair
+**
+** @return [AjBool] ajTrue if this is an insertion or deletion
+** @@
+******************************************************************************/
+
+AjBool ensMapperpairGetIndel(const EnsPMapperpair mp)
+{
+    if(!mp)
+        return ajFalse;
+
+    return mp->Indel;
+}
+
+
+
+
+/* @func ensMapperpairGetOrientation ******************************************
+**
+** Get the relative orientation element of an Ensembl Mapper Pair.
+**
+** @cc Bio::EnsEMBL::Mapper::Pair::ori
+** @param [r] mp [const EnsPMapperpair] Ensembl Mapper Pair
+**
+** @return [ajint] Relative orientation or 0
+** @@
+******************************************************************************/
+
+ajint ensMapperpairGetOrientation(const EnsPMapperpair mp)
+{
+    if(!mp)
+        return 0;
+
+    return mp->Orientation;
+}
 
 
 
@@ -830,7 +964,7 @@ void ensMapperpairDel(EnsPMapperpair *Pmp)
 ** @cc Bio::EnsEMBL::Mapper::Pair::from
 ** @param [r] mp [const EnsPMapperpair] Ensembl Mapper Pair
 **
-** @return [EnsPMapperunit] Source Ensembl Mapper Unit
+** @return [EnsPMapperunit] Source Ensembl Mapper Unit or NULL
 ** @@
 ******************************************************************************/
 
@@ -852,7 +986,7 @@ EnsPMapperunit ensMapperpairGetSource(const EnsPMapperpair mp)
 ** @cc Bio::EnsEMBL::Mapper::Pair::to
 ** @param [r] mp [const EnsPMapperpair] Ensembl Mapper Pair
 **
-** @return [EnsPMapperunit] Target Ensembl Mapper Unit
+** @return [EnsPMapperunit] Target Ensembl Mapper Unit or NULL
 ** @@
 ******************************************************************************/
 
@@ -867,123 +1001,12 @@ EnsPMapperunit ensMapperpairGetTarget(const EnsPMapperpair mp)
 
 
 
-/* @func ensMapperpairGetOrientation ******************************************
-**
-** Get the relative orientation element of an Ensembl Mapper Pair.
-**
-** @cc Bio::EnsEMBL::Mapper::Pair::ori
-** @param [r] mp [const EnsPMapperpair] Ensembl Mapper Pair
-**
-** @return [ajint] Relative orientation
-** @@
-******************************************************************************/
-
-ajint ensMapperpairGetOrientation(const EnsPMapperpair mp)
-{
-    if(!mp)
-        return 0;
-
-    return mp->Orientation;
-}
-
-
-
-
-/* @func ensMapperpairGetInsertionDeletion ************************************
-**
-** Test whether this Ensembl Mapper Pair represents an insertion-deletion.
-**
-** @cc Bio::EnsEMBL::Mapper::IndelPair::???
-** @param [r] mp [const EnsPMapperpair] Ensembl Mapper Pair
-**
-** @return [AjBool] ajTrue if this Mapper Pair represents an
-**                  insertion-deletion
-** @@
-******************************************************************************/
-
-AjBool ensMapperpairGetInsertionDeletion(const EnsPMapperpair mp)
-{
-    if(!mp)
-        return ajFalse;
-
-    return mp->InsertionDeletion;
-}
-
-
-
-
-/* @func ensMapperpairGetUnit *************************************************
-**
-** Get the Ensembl Mapper Unit element of an Ensembl Mapper Pair via an
-** Ensembl Mapper Unit Type enumeration.
-**
-** @cc Bio::EnsEMBL::Mapper::Pair::from
-** @cc Bio::EnsEMBL::Mapper::Pair::to
-** @param [r] mp [const EnsPMapperpair] Ensembl Mapper Pair
-** @param [r] type [EnsEMapperunitType] Ensembl Mapper Unit Type
-**
-** @return [EnsPMapperunit] Source or Target Ensembl Mapper Unit or NULL
-** @@
-******************************************************************************/
-
-EnsPMapperunit ensMapperpairGetUnit(const EnsPMapperpair mp,
-                                    EnsEMapperunitType type)
-{
-    if(!mp)
-        return NULL;
-
-    if(!type)
-        return NULL;
-
-    switch(type)
-    {
-        case ensEMapperunitTypeSource:
-            return mp->Source;
-        case ensEMapperunitTypeTarget:
-            return mp->Target;
-        default:
-            ajWarn("ensMapperpairGetUnit got unexpected type %d.\n", type);
-    }
-
-    return NULL;
-}
-
-
-
-
-/* @func ensMapperpairGetMemsize **********************************************
-**
-** Get the memory size in bytes of an Ensembl Mapper Pair.
-**
-** @param [r] mp [const EnsPMapperpair] Ensembl Mapper Pair
-**
-** @return [ajulong] Memory size
-** @@
-******************************************************************************/
-
-ajulong ensMapperpairGetMemsize(const EnsPMapperpair mp)
-{
-    ajulong size = 0;
-
-    if(!mp)
-        return 0;
-
-    size += sizeof (EnsOMapperpair);
-
-    size += ensMapperunitGetMemsize(mp->Source);
-    size += ensMapperunitGetMemsize(mp->Target);
-
-    return size;
-}
-
-
-
-
 /* @section debugging *********************************************************
 **
 ** Functions for reporting of an Ensembl Mapper Pair object.
 **
 ** @fdata [EnsPMapperpair]
+**
 ** @nam3rule Trace Report Ensembl Mapper Pair elements to debug file
 **
 ** @argrule Trace mp [const EnsPMapperpair] Ensembl Mapper Pair
@@ -1023,13 +1046,13 @@ AjBool ensMapperpairTrace(const EnsPMapperpair mp, ajuint level)
             "%S  Source %p\n"
             "%S  Target %p\n"
             "%S  Orientation %d\n"
-            "%S  InsertionDeletion '%B'\n"
+            "%S  Indel '%B'\n"
             "%S  Use %u\n",
             indent, mp,
             indent, mp->Source,
             indent, mp->Target,
             indent, mp->Orientation,
-            indent, mp->InsertionDeletion,
+            indent, mp->Indel,
             indent, mp->Use);
 
     ensMapperunitTrace(mp->Source, level + 1);
@@ -1043,10 +1066,135 @@ AjBool ensMapperpairTrace(const EnsPMapperpair mp, ajuint level)
 
 
 
-/* @funcstatic mapperpairCompareSourceStartAscending **************************
+/* @section calculate *********************************************************
 **
-** Comparison function to sort Ensembl Mapper Pairs by the start coordinate of
-** their source Ensembl Mapper Unit in ascending order.
+** Functions for calculating values of an Ensembl Mapper Pair object.
+**
+** @fdata [EnsPMapperpair]
+**
+** @nam3rule Calculate Calculate Ensembl Mapper Pair values
+** @nam4rule Mapperunit Calculate the Ensembl Mapper Unit
+** @nam4rule Memsize Calculate the memory size in bytes
+**
+** @argrule * mp [const EnsPMapperpair] Ensembl Mapper Pair
+** @argrule Mapperunit type [EnsEMapperunitType] Ensembl Mapper Unit Type
+**
+** @valrule Mapperunit [EnsPMapperunit] Ensembl Mapper Unit or NULL
+** @valrule Memsize [size_t] Memory size in bytes or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensMapperpairCalculateMapperunit *************************************
+**
+** Calculate the Ensembl Mapper Unit element of an Ensembl Mapper Pair via an
+** Ensembl Mapper Unit Type enumeration.
+**
+** @cc Bio::EnsEMBL::Mapper::Pair::from
+** @cc Bio::EnsEMBL::Mapper::Pair::to
+** @param [r] mp [const EnsPMapperpair] Ensembl Mapper Pair
+** @param [u] type [EnsEMapperunitType] Ensembl Mapper Unit Type
+**
+** @return [EnsPMapperunit] Source or Target Ensembl Mapper Unit or NULL
+** @@
+******************************************************************************/
+
+EnsPMapperunit ensMapperpairCalculateMapperunit(const EnsPMapperpair mp,
+                                                EnsEMapperunitType type)
+{
+    if(!mp)
+        return NULL;
+
+    if(!type)
+        return NULL;
+
+    switch(type)
+    {
+        case ensEMapperunitTypeSource:
+            return mp->Source;
+        case ensEMapperunitTypeTarget:
+            return mp->Target;
+        default:
+            ajWarn("ensMapperpairCalculateMapperunit got unexpected "
+                   "Ensembl Mapper Unit Type enumeration %d.\n", type);
+    }
+
+    return NULL;
+}
+
+
+
+
+/* @func ensMapperpairCalculateMemsize ****************************************
+**
+** Calculate the memory size in bytes of an Ensembl Mapper Pair.
+**
+** @param [r] mp [const EnsPMapperpair] Ensembl Mapper Pair
+**
+** @return [size_t] Memory size in bytes or 0
+** @@
+******************************************************************************/
+
+size_t ensMapperpairCalculateMemsize(const EnsPMapperpair mp)
+{
+    size_t size = 0;
+
+    if(!mp)
+        return 0;
+
+    size += sizeof (EnsOMapperpair);
+
+    size += ensMapperunitCalculateMemsize(mp->Source);
+    size += ensMapperunitCalculateMemsize(mp->Target);
+
+    return size;
+}
+
+
+
+
+/* @datasection [AjPList] AJAX List *******************************************
+**
+** @nam2rule List Functions for manipulating AJAX List objects
+**
+******************************************************************************/
+
+
+
+
+/* @section list **************************************************************
+**
+** Functions for manipulating AJAX List objects.
+**
+** @fdata [AjPList]
+**
+** @nam3rule Mapperpair Functions for manipulating AJAX List objects of
+** Ensembl Mapper Pair objects
+** @nam4rule Sort Sort functions
+** @nam5rule Source Sort by source Ensembl Mapper Unit
+** @nam5rule Target Sort by target Ensembl Mapper Unit
+** @nam6rule Start Sort by Ensembl Feature start element
+** @nam7rule Ascending  Sort in ascending order
+** @nam7rule Descending Sort in descending order
+**
+** @argrule Ascending mps [AjPList] AJAX List of Ensembl Mapper Pair objects
+** @argrule Descending mps [AjPList] AJAX List of Ensembl Mapper Pair objects
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @funcstatic listMapperpairCompareSourceStartAscending **********************
+**
+** AJAX List of Ensembl Mapper Pair objects comparison function to sort by
+** source Ensembl Mapper Unit start coordinate in ascending order.
 **
 ** @param [r] P1 [const void*] Ensembl Mapper Pair address 1
 ** @param [r] P2 [const void*] Ensembl Mapper Pair address 2
@@ -1059,20 +1207,20 @@ AjBool ensMapperpairTrace(const EnsPMapperpair mp, ajuint level)
 ** @@
 ******************************************************************************/
 
-static int mapperpairCompareSourceStartAscending(const void* P1,
-                                                 const void* P2)
+static int listMapperpairCompareSourceStartAscending(const void* P1,
+                                                     const void* P2)
 {
-    int value = 0;
+    int result = 0;
 
     const EnsPMapperpair mp1 = NULL;
     const EnsPMapperpair mp2 = NULL;
 
-    mp1 = *(EnsPMapperpair const *) P1;
-    mp2 = *(EnsPMapperpair const *) P2;
+    mp1 = *(EnsPMapperpair const*) P1;
+    mp2 = *(EnsPMapperpair const*) P2;
 
-    if(ajDebugTest("mapperpairCompareSourceStartAscending"))
+    if(ajDebugTest("listMapperpairCompareSourceStartAscending"))
     {
-        ajDebug("mapperpairCompareSourceStartAscending\n"
+        ajDebug("listMapperpairCompareSourceStartAscending\n"
                 "  mp1 %p\n"
                 "  mp2 %p\n",
                 mp1,
@@ -1094,8 +1242,8 @@ static int mapperpairCompareSourceStartAscending(const void* P1,
         return +1;
 
     /*
-    ** Sort Ensembl Mapper Pairs with empty source Ensembl Mapper Units
-    ** towards the end of the AJAX List.
+    ** Sort Ensembl Mapper Pair objects with empty source Ensembl Mapper Unit
+    ** objects towards the end of the AJAX List.
     */
 
     if(mp1->Source && (!mp2->Source))
@@ -1107,37 +1255,37 @@ static int mapperpairCompareSourceStartAscending(const void* P1,
     if((!mp1->Source) && mp2->Source)
         return +1;
 
-    /* Evaluate the Start coordinates of source Ensembl Mapper Units. */
+    /* Evaluate the Start coordinates of source Ensembl Mapper Unit objects. */
 
     if(mp1->Source->Start < mp2->Source->Start)
-        value = -1;
+        result = -1;
 
     if(mp1->Source->Start > mp2->Source->Start)
-        value = +1;
+        result = +1;
 
-    return value;
+    return result;
 }
 
 
 
 
-/* @func ensMapperpairSortBySourceStartAscending ******************************
+/* @func ensListMapperpairSortSourceStartAscending ****************************
 **
-** Sort Ensembl Mapper Pairs by their source Ensembl Mapper Unit
-** start coordinate in ascending order.
+** Sort an AJAX List of Ensembl Mapper Pair objects by their source
+** Ensembl Mapper Unit start element in ascending order.
 **
-** @param [u] mps [AjPList] AJAX List of Ensembl Mapper Pairs
+** @param [u] mps [AjPList] AJAX List of Ensembl Mapper Pair objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensMapperpairSortBySourceStartAscending(AjPList mps)
+AjBool ensListMapperpairSortSourceStartAscending(AjPList mps)
 {
     if(!mps)
         return ajFalse;
 
-    ajListSort(mps, mapperpairCompareSourceStartAscending);
+    ajListSort(mps, listMapperpairCompareSourceStartAscending);
 
     return ajTrue;
 }
@@ -1145,10 +1293,10 @@ AjBool ensMapperpairSortBySourceStartAscending(AjPList mps)
 
 
 
-/* @funcstatic mapperpairCompareTargetStartAscending **************************
+/* @funcstatic listMapperpairCompareTargetStartAscending **********************
 **
-** Comparison function to sort Ensembl Mapper Pairs by the start coordinate of
-** their target Ensembl Mapper Unit in ascending order.
+** AJAX List of Ensembl Mapper Pair objects comparison function to sort by
+** target Ensembl Mapper Unit start coordinate in ascending order.
 **
 ** @param [r] P1 [const void*] Ensembl Mapper Pair address 1
 ** @param [r] P2 [const void*] Ensembl Mapper Pair address 2
@@ -1161,20 +1309,20 @@ AjBool ensMapperpairSortBySourceStartAscending(AjPList mps)
 ** @@
 ******************************************************************************/
 
-static int mapperpairCompareTargetStartAscending(const void* P1,
-                                                 const void* P2)
+static int listMapperpairCompareTargetStartAscending(const void* P1,
+                                                     const void* P2)
 {
-    int value = 0;
+    int result = 0;
 
     const EnsPMapperpair mp1 = NULL;
     const EnsPMapperpair mp2 = NULL;
 
-    mp1 = *(EnsPMapperpair const *) P1;
-    mp2 = *(EnsPMapperpair const *) P2;
+    mp1 = *(EnsPMapperpair const*) P1;
+    mp2 = *(EnsPMapperpair const*) P2;
 
-    if(ajDebugTest("mapperpairCompareTargetStartAscending"))
+    if(ajDebugTest("listMapperpairCompareTargetStartAscending"))
     {
-        ajDebug("mapperpairCompareTargetStartAscending\n"
+        ajDebug("listMapperpairCompareTargetStartAscending\n"
                 "  mp1 %p\n"
                 "  mp2 %p\n",
                 mp1,
@@ -1196,8 +1344,8 @@ static int mapperpairCompareTargetStartAscending(const void* P1,
         return +1;
 
     /*
-    ** Sort Ensembl Mapper Pairs with empty target Ensembl Mapper Units
-    ** towards the end of the AJAX List.
+    ** Sort Ensembl Mapper Pair objects with empty target Ensembl Mapper Unit
+    ** objects towards the end of the AJAX List.
     */
 
     if(mp1->Target && (!mp2->Target))
@@ -1209,37 +1357,37 @@ static int mapperpairCompareTargetStartAscending(const void* P1,
     if((!mp1->Target) && mp2->Target)
         return +1;
 
-    /* Evaluate the Start coordinates of target Ensembl Mapper Units. */
+    /* Evaluate the Start coordinates of target Ensembl Mapper Unit objects. */
 
     if(mp1->Target->Start < mp2->Target->Start)
-        value = -1;
+        result = -1;
 
     if(mp1->Target->Start > mp2->Target->Start)
-        value = +1;
+        result = +1;
 
-    return value;
+    return result;
 }
 
 
 
 
-/* @func ensMapperpairSortByTargetStartAscending ******************************
+/* @func ensListMapperpairSortTargetStartAscending ****************************
 **
-** Sort Ensembl Mapper Pairs by their target Ensembl Mapper Unit
-** start coordinate in ascending order.
+** Sort an AJAX List of Ensembl Mapper Pair objects by their target
+** Ensembl Mapper Unit start element in ascending order.
 **
-** @param [u] mps [AjPList] AJAX List of Ensembl Mapper Pairs
+** @param [u] mps [AjPList] AJAX List of Ensembl Mapper Pair objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensMapperpairSortByTargetStartAscending(AjPList mps)
+AjBool ensListMapperpairSortTargetStartAscending(AjPList mps)
 {
     if(!mps)
         return ajFalse;
 
-    ajListSort(mps, mapperpairCompareTargetStartAscending);
+    ajListSort(mps, listMapperpairCompareTargetStartAscending);
 
     return ajTrue;
 }
@@ -1247,15 +1395,22 @@ AjBool ensMapperpairSortByTargetStartAscending(AjPList mps)
 
 
 
-/* @datasection [EnsPMapperresult] Mapper Result ******************************
+/* @datasection [EnsPMapperresult] Ensembl Mapper Result **********************
 **
-** Functions for manipulating Ensembl Mapper Result objects
+** @nam2rule Mapperresult Functions for manipulating
+** Ensembl Mapper Result objects
 **
-** Bio::EnsEMBL::Mapper::Coordinate CVS Revision: 1.13
-** Bio::EnsEMBL::Mapper::Gap CVS Revision: 1.11
-** Bio::EnsEMBL::Mapper::IndelCoordinate CVS Revision: 1.6
+** @cc Bio::EnsEMBL::Mapper::Coordinate
+** @cc CVS Revision: 1.15
+** @cc CVS Tag: branch-ensembl-62
 **
-** @nam2rule Mapperresult
+** @cc Bio::EnsEMBL::Mapper::Gap
+** @cc CVS Revision: 1.13
+** @cc CVS Tag: branch-ensembl-62
+**
+** @cc Bio::EnsEMBL::Mapper::IndelCoordinate
+** @cc CVS Revision: 1.8
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -1270,16 +1425,45 @@ AjBool ensMapperpairSortByTargetStartAscending(AjPList mps)
 ** NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPMapperresult]
-** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
+** @nam4rule Coordinate Constructor for type ensEMapperresultTypeCoordinate
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Gap Constructor for type ensEMapperresultTypeGap
+** @nam4rule Indel Constructor for type ensEMapperresultTypeInDel
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the reference counter
 **
-** @argrule Obj object [EnsPMapperresult] Ensembl Mapper Result
-** @argrule Ref object [EnsPMapperresult] Ensembl Mapper Result
+** @argrule Coordinate oid [ajuint] Ensembl Object identifier
+** @argrule Coordinate crdstart [ajint] Start
+** @argrule Coordinate crdend [ajint] End
+** @argrule Coordinate crdstrand [ajint] Strand
+** @argrule Coordinate cs [EnsPCoordsystem] Ensembl Coordinate System
+** @argrule Coordinate rank [ajuint] Rank
+** @argrule Cpy mr [const EnsPMapperresult] Ensembl Mapper Result
+** @argrule Gap gapstart [ajint] Gap start
+** @argrule Gap gapend [ajint] Gap end
+** @argrule Gap rank [ajuint] Rank
+** @argrule Indel oid [ajuint] Ensembl Object identifier
+** @argrule Indel crdstart [ajint] Start
+** @argrule Indel crdend [ajint] End
+** @argrule Indel crdstrand [ajint] Strand
+** @argrule Indel cs [EnsPCoordsystem] Ensembl Coordinate System
+** @argrule Indel gapstart [ajint] Gap start
+** @argrule Indel gapend [ajint] Gap end
+** @argrule Indel rank [ajuint] Rank
+** @argrule Ini type [EnsEMapperresultType] Type
+** @argrule Ini oid [ajuint] Ensembl Object identifier
+** @argrule Ini crdstart [ajint] Start
+** @argrule Ini crdend [ajint] End
+** @argrule Ini crdstrand [ajint] Strand
+** @argrule Ini cs [EnsPCoordsystem] Ensembl Coordinate System
+** @argrule Ini gapstart [ajint] Gap start
+** @argrule Ini gapend [ajint] Gap end
+** @argrule Ini rank [ajuint] Rank
+** @argrule Ref mr [EnsPMapperresult] Ensembl Mapper Result
 **
-** @valrule * [EnsPMapperresult] Ensembl Mapper Result
+** @valrule * [EnsPMapperresult] Ensembl Mapper Result or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -1287,15 +1471,153 @@ AjBool ensMapperpairSortByTargetStartAscending(AjPList mps)
 
 
 
-/* @func ensMapperresultNew ***************************************************
+/* @func ensMapperresultNewCoordinate *****************************************
 **
-** Default constructor for an Ensembl Mapper Result.
+** Constructor for an Ensembl Mapper Result of type
+** ensEMapperresultTypeCoordinate.
 **
-** @param [r] type [EnsEMapperresultType] Type
 ** @param [r] oid [ajuint] Ensembl Object identifier
-** @param [r] start [ajint] Start
-** @param [r] end [ajint] End
-** @param [r] strand [ajint] Strand
+** @param [r] crdstart [ajint] Start
+** @param [r] crdend [ajint] End
+** @param [r] crdstrand [ajint] Strand
+** @param [u] cs [EnsPCoordsystem] Ensembl Coordinate System
+** @param [r] rank [ajuint] Rank
+**
+** @return [EnsPMapperresult] Ensembl Mapper Result or NULL
+** @@
+******************************************************************************/
+
+EnsPMapperresult ensMapperresultNewCoordinate(ajuint oid,
+                                              ajint crdstart,
+                                              ajint crdend,
+                                              ajint crdstrand,
+                                              EnsPCoordsystem cs,
+                                              ajuint rank)
+{
+    EnsPMapperresult mr = NULL;
+
+    if(!oid)
+        return NULL;
+
+    if(!cs)
+        return NULL;
+
+    AJNEW0(mr);
+
+    mr->Type = ensEMapperresultTypeCoordinate;
+
+    mr->Objectidentifier = oid;
+    mr->CoordinateStart  = crdstart;
+    mr->CoordinateEnd    = crdend;
+    mr->CoordinateStrand = crdstrand;
+
+    mr->Coordsystem = ensCoordsystemNewRef(cs);
+
+    mr->GapStart = 0;
+    mr->GapEnd   = 0;
+
+    mr->Rank = rank;
+
+    mr->Use = 1;
+
+    return mr;
+}
+
+
+
+
+/* @func ensMapperresultNewCpy ************************************************
+**
+** Object-based constructor function, which returns an independent object.
+**
+** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
+**
+** @return [EnsPMapperresult] Ensembl Mapper Result or NULL
+** @@
+******************************************************************************/
+
+EnsPMapperresult ensMapperresultNewCpy(const EnsPMapperresult mr)
+{
+    EnsPMapperresult pthis = NULL;
+
+    if(!mr)
+        return NULL;
+
+    AJNEW0(pthis);
+
+    pthis->Type = mr->Type;
+
+    pthis->Objectidentifier = mr->Objectidentifier;
+    pthis->CoordinateStart  = mr->CoordinateStart;
+    pthis->CoordinateEnd    = mr->CoordinateEnd;
+    pthis->CoordinateStrand = mr->CoordinateStrand;
+
+    pthis->Coordsystem = ensCoordsystemNewRef(mr->Coordsystem);
+
+    pthis->GapStart = mr->GapStart;
+    pthis->GapEnd   = mr->GapEnd;
+
+    pthis->Rank = mr->Rank;
+
+    pthis->Use = 1;
+
+    return pthis;
+}
+
+
+
+
+/* @func ensMapperresultNewGap ************************************************
+**
+** Constructor for an Ensembl Mapper Result of type ensEMapperresultTypeGap.
+**
+** @param [r] gapstart [ajint] Gap start
+** @param [r] gapend [ajint] Gap end
+** @param [r] rank [ajuint] Rank
+**
+** @return [EnsPMapperresult] Ensembl Mapper Result or NULL
+** @@
+******************************************************************************/
+
+EnsPMapperresult ensMapperresultNewGap(ajint gapstart,
+                                       ajint gapend,
+                                       ajuint rank)
+{
+    EnsPMapperresult mr = NULL;
+
+    AJNEW0(mr);
+
+    mr->Type = ensEMapperresultTypeGap;
+
+    mr->Objectidentifier = 0;
+    mr->CoordinateStart  = 0;
+    mr->CoordinateEnd    = 0;
+    mr->CoordinateStrand = 0;
+
+    mr->Coordsystem = (EnsPCoordsystem) NULL;
+
+    mr->GapStart = gapstart;
+    mr->GapEnd   = gapend;
+
+    mr->Rank = rank;
+
+    mr->Use = 1;
+
+    return mr;
+}
+
+
+
+
+/* @func ensMapperresultNewIndel **********************************************
+**
+** Constructor for an Ensembl Mapper Result of type
+** ensEMapperresultTypeInDel.
+**
+** @param [r] oid [ajuint] Ensembl Object identifier
+** @param [r] crdstart [ajint] Start
+** @param [r] crdend [ajint] End
+** @param [r] crdstrand [ajint] Strand
 ** @param [u] cs [EnsPCoordsystem] Ensembl Coordinate System
 ** @param [r] gapstart [ajint] Gap start
 ** @param [r] gapend [ajint] Gap end
@@ -1305,23 +1627,82 @@ AjBool ensMapperpairSortByTargetStartAscending(AjPList mps)
 ** @@
 ******************************************************************************/
 
-EnsPMapperresult ensMapperresultNew(EnsEMapperresultType type,
-                                    ajuint oid,
-                                    ajint start,
-                                    ajint end,
-                                    ajint strand,
-                                    EnsPCoordsystem cs,
-                                    ajint gapstart,
-                                    ajint gapend,
-                                    ajuint rank)
+EnsPMapperresult ensMapperresultNewIndel(ajuint oid,
+                                         ajint crdstart,
+                                         ajint crdend,
+                                         ajint crdstrand,
+                                         EnsPCoordsystem cs,
+                                         ajint gapstart,
+                                         ajint gapend,
+                                         ajuint rank)
+{
+    EnsPMapperresult mr = NULL;
+
+    AJNEW0(mr);
+
+    if(!oid)
+        return NULL;
+
+    if(!cs)
+        return NULL;
+
+    mr->Type = ensEMapperresultTypeInDel;
+
+    mr->Objectidentifier = oid;
+    mr->CoordinateStart  = crdstart;
+    mr->CoordinateEnd    = crdend;
+    mr->CoordinateStrand = crdstrand;
+
+    mr->Coordsystem = ensCoordsystemNewRef(cs);
+
+    mr->GapStart = gapstart;
+    mr->GapEnd   = gapend;
+
+    mr->Rank = rank;
+
+    mr->Use = 1;
+
+    return mr;
+}
+
+
+
+
+/* @func ensMapperresultNewIni ************************************************
+**
+** Constructor for an Ensembl Mapper Result with initial values.
+**
+** @param [u] type [EnsEMapperresultType] Type
+** @param [r] oid [ajuint] Ensembl Object identifier
+** @param [r] crdstart [ajint] Start
+** @param [r] crdend [ajint] End
+** @param [r] crdstrand [ajint] Strand
+** @param [u] cs [EnsPCoordsystem] Ensembl Coordinate System
+** @param [r] gapstart [ajint] Gap start
+** @param [r] gapend [ajint] Gap end
+** @param [r] rank [ajuint] Rank
+**
+** @return [EnsPMapperresult] Ensembl Mapper Result or NULL
+** @@
+******************************************************************************/
+
+EnsPMapperresult ensMapperresultNewIni(EnsEMapperresultType type,
+                                       ajuint oid,
+                                       ajint crdstart,
+                                       ajint crdend,
+                                       ajint crdstrand,
+                                       EnsPCoordsystem cs,
+                                       ajint gapstart,
+                                       ajint gapend,
+                                       ajuint rank)
 {
     EnsPMapperresult mr = NULL;
 
     if(!type)
         return NULL;
 
-    if((type == ensEMapperresultCoordinate) ||
-       (type == ensEMapperresultInDel))
+    if((type == ensEMapperresultTypeCoordinate) ||
+       (type == ensEMapperresultTypeInDel))
     {
         if(!oid)
             return NULL;
@@ -1334,66 +1715,17 @@ EnsPMapperresult ensMapperresultNew(EnsEMapperresultType type,
 
     mr->Type = type;
 
-    mr->ObjectIdentifier = oid;
-
-    mr->Start = start;
-
-    mr->End = end;
-
-    mr->Strand = strand;
+    mr->Objectidentifier = oid;
+    mr->CoordinateStart  = crdstart;
+    mr->CoordinateEnd    = crdend;
+    mr->CoordinateStrand = crdstrand;
 
     mr->Coordsystem = ensCoordsystemNewRef(cs);
 
     mr->GapStart = gapstart;
-
-    mr->GapEnd = gapend;
+    mr->GapEnd   = gapend;
 
     mr->Rank = rank;
-
-    mr->Use = 1;
-
-    return mr;
-}
-
-
-
-
-/* @func ensMapperresultNewObj ************************************************
-**
-** Object-based constructor function, which returns an independent object.
-**
-** @param [r] object [const EnsPMapperresult] Ensembl Mapper Result
-**
-** @return [EnsPMapperresult] Ensembl Mapper Result or NULL
-** @@
-******************************************************************************/
-
-EnsPMapperresult ensMapperresultNewObj(const EnsPMapperresult object)
-{
-    EnsPMapperresult mr = NULL;
-
-    if(!object)
-        return NULL;
-
-    AJNEW0(mr);
-
-    mr->Type = object->Type;
-
-    mr->ObjectIdentifier = object->ObjectIdentifier;
-
-    mr->Start = object->Start;
-
-    mr->End = object->End;
-
-    mr->Strand = object->Strand;
-
-    mr->Coordsystem = ensCoordsystemNewRef(object->Coordsystem);
-
-    mr->GapStart = object->GapStart;
-
-    mr->GapEnd = object->GapEnd;
-
-    mr->Rank = object->Rank;
 
     mr->Use = 1;
 
@@ -1430,14 +1762,13 @@ EnsPMapperresult ensMapperresultNewRef(EnsPMapperresult mr)
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Mapper Result.
+** memory allocated for an Ensembl Mapper Result object.
 **
 ** @fdata [EnsPMapperresult]
-** @fnote None
 **
 ** @nam3rule Del Destroy (free) an Ensembl Mapper Result object
 **
-** @argrule * Pmr [EnsPMapperresult*] Mapper Result object address
+** @argrule * Pmr [EnsPMapperresult*] Ensembl Mapper Result object address
 **
 ** @valrule * [void]
 **
@@ -1449,15 +1780,15 @@ EnsPMapperresult ensMapperresultNewRef(EnsPMapperresult mr)
 
 /* @func ensMapperresultDel ***************************************************
 **
-** Default Ensembl Mapper Result destructor.
+** Default destructor for an Ensembl Mapper Result.
 **
-** @param [d] Pmr [EnsPMapperresult*] Ensembl Mapper Result address
+** @param [d] Pmr [EnsPMapperresult*] Ensembl Mapper Result object address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensMapperresultDel(EnsPMapperresult *Pmr)
+void ensMapperresultDel(EnsPMapperresult* Pmr)
 {
     EnsPMapperresult pthis = NULL;
 
@@ -1495,30 +1826,31 @@ void ensMapperresultDel(EnsPMapperresult *Pmr)
 ** Functions for returning elements of an Ensembl Mapper Result object.
 **
 ** @fdata [EnsPMapperresult]
-** @fnote None
 **
 ** @nam3rule Get Return Ensembl Mapper Result attribute(s)
-** @nam4rule GetType Return the type
-** @nam4rule GetObjectIdentifier Return the Ensembl Object identifier
-** @nam4rule GetStart Return the start
-** @nam4rule GetEnd Return the end
-** @nam4rule GetStrand Return the strand
-** @nam4rule GetCoordsystem Return the Ensembl Coordinate System
-** @nam4rule GetGapStart Return the gap start
-** @nam4rule GetGapEnd Return the gap end
-** @nam4rule GetRank Return the rank
+** @nam4rule Coordinate Return coordinate elements
+** @nam5rule End Return the coordinate end
+** @nam5rule Start Return the coordinate start
+** @nam5rule Strand Return the coordinate strand
+** @nam4rule Coordsystem Return the Ensembl Coordinate System
+** @nam4rule Gap Return gap elements
+** @nam5rule End Return the gap end
+** @nam5rule Start Return the gap start
+** @nam4rule Objectidentifier Return the Ensembl Object identifier
+** @nam4rule Rank Return the rank
+** @nam4rule Type Return the type
 **
 ** @argrule * mr [const EnsPMapperresult] Ensembl Mapper Result
 **
-** @valrule Type [EnsEMapperresultType] Type
-** @valrule ObjectIdentifier [ajuint] Ensembl Object identifier
-** @valrule Start [ajint] Start
-** @valrule End [ajint] End
-** @valrule Strand [ajint] Strand
-** @valrule Coordsystem [EnsPCoordsystem] Ensembl Coordinate System
-** @valrule GapStart [ajint] Gap start
-** @valrule GapEnd [ajint] Gap end
-** @valrule Rank [ajuint] Rank
+** @valrule Coordsystem [EnsPCoordsystem] Ensembl Coordinate System or NULL
+** @valrule CoordinateEnd [ajint] End or 0
+** @valrule CoordinateStart [ajint] Coordinate start or 0
+** @valrule CoordinateStrand [ajint] Coordinate strand or 0
+** @valrule GapEnd [ajint] Gap end or 0
+** @valrule GapStart [ajint] Gap start or 0
+** @valrule Objectidentifier [ajuint] Ensembl Object identifier or 0
+** @valrule Rank [ajuint] Rank or 0
+** @valrule Type [EnsEMapperresultType] Type or ensEMapperresultTypeNULL
 **
 ** @fcategory use
 ******************************************************************************/
@@ -1526,106 +1858,67 @@ void ensMapperresultDel(EnsPMapperresult *Pmr)
 
 
 
-/* @func ensMapperresultGetType ***********************************************
+/* @func ensMapperresultGetCoordinateEnd **************************************
 **
-** Get the type element of an Ensembl Mapper Result.
+** Get the coordinate end element of an Ensembl Mapper Result.
 **
+** @cc Bio::EnsEMBL::Mapper::Coordinate::end
 ** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
 **
-** @return [EnsEMapperresultType] Type or ensEMapperresultNULL
+** @return [ajint] Coordinate end or 0
 ** @@
 ******************************************************************************/
 
-EnsEMapperresultType ensMapperresultGetType(const EnsPMapperresult mr)
+ajint ensMapperresultGetCoordinateEnd(const EnsPMapperresult mr)
 {
     if(!mr)
-        return ensEMapperresultNULL;
+        return 0;
 
-    return mr->Type;
+    return mr->CoordinateEnd;
 }
 
 
 
 
-/* @func ensMapperresultGetObjectIdentifier ***********************************
+/* @func ensMapperresultGetCoordinateStart ************************************
 **
-** Get the Ensembl Object identifier element of an Ensembl Mapper Result.
+** Get the coordinate start element of an Ensembl Mapper Result.
 **
+** @cc Bio::EnsEMBL::Mapper::Coordinate::start
 ** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
 **
-** @return [ajuint] Ensembl Object identifier
+** @return [ajint] Coordinate start or 0
 ** @@
 ******************************************************************************/
 
-ajuint ensMapperresultGetObjectIdentifier(const EnsPMapperresult mr)
+ajint ensMapperresultGetCoordinateStart(const EnsPMapperresult mr)
 {
     if(!mr)
         return 0;
 
-    return mr->ObjectIdentifier;
+    return mr->CoordinateStart;
 }
 
 
 
 
-/* @func ensMapperresultGetStart **********************************************
+/* @func ensMapperresultGetCoordinateStrand ***********************************
 **
-** Get the start element of an Ensembl Mapper Result.
+** Get the coordinate strand element of an Ensembl Mapper Result.
 **
+** @cc Bio::EnsEMBL::Mapper::Coordinate::strand
 ** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
 **
-** @return [ajint] Start
+** @return [ajint] Coordinate strand or 0
 ** @@
 ******************************************************************************/
 
-ajint ensMapperresultGetStart(const EnsPMapperresult mr)
+ajint ensMapperresultGetCoordinateStrand(const EnsPMapperresult mr)
 {
     if(!mr)
         return 0;
 
-    return mr->Start;
-}
-
-
-
-
-/* @func ensMapperresultGetEnd ************************************************
-**
-** Get the end element of an Ensembl Mapper Result.
-**
-** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
-**
-** @return [ajint] End
-** @@
-******************************************************************************/
-
-ajint ensMapperresultGetEnd(const EnsPMapperresult mr)
-{
-    if(!mr)
-        return 0;
-
-    return mr->End;
-}
-
-
-
-
-/* @func ensMapperresultGetStrand *********************************************
-**
-** Get the strand element of an Ensembl Mapper Result.
-**
-** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
-**
-** @return [ajint] Strand
-** @@
-******************************************************************************/
-
-ajint ensMapperresultGetStrand(const EnsPMapperresult mr)
-{
-    if(!mr)
-        return 0;
-
-    return mr->Strand;
+    return mr->CoordinateStrand;
 }
 
 
@@ -1635,9 +1928,10 @@ ajint ensMapperresultGetStrand(const EnsPMapperresult mr)
 **
 ** Get the Ensembl Coordinate System element of an Ensembl Mapper Result.
 **
+** @cc Bio::EnsEMBL::Mapper::Coordinate::coord_system
 ** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
 **
-** @return [EnsPCoordsystem] Ensembl Coordinate System
+** @return [EnsPCoordsystem] Ensembl Coordinate System or NULL
 ** @@
 ******************************************************************************/
 
@@ -1652,34 +1946,14 @@ EnsPCoordsystem ensMapperresultGetCoordsystem(const EnsPMapperresult mr)
 
 
 
-/* @func ensMapperresultGetGapStart *******************************************
-**
-** Get the gap start element of an Ensembl Mapper Result.
-**
-** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
-**
-** @return [ajint] Ensembl Mapper Result Gap Start Coordinate
-** @@
-******************************************************************************/
-
-ajint ensMapperresultGetGapStart(const EnsPMapperresult mr)
-{
-    if(!mr)
-        return 0;
-
-    return mr->GapStart;
-}
-
-
-
-
 /* @func ensMapperresultGetGapEnd *********************************************
 **
 ** Get the gap end element of an Ensembl Mapper Result.
 **
+** @cc Bio::EnsEMBL::Mapper::Gap::end
 ** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
 **
-** @return [ajint] Ensembl Mapper Result Gap End Coordinate
+** @return [ajint] Gap end or 0
 ** @@
 ******************************************************************************/
 
@@ -1694,17 +1968,62 @@ ajint ensMapperresultGetGapEnd(const EnsPMapperresult mr)
 
 
 
+/* @func ensMapperresultGetGapStart *******************************************
+**
+** Get the gap start element of an Ensembl Mapper Result.
+**
+** @cc Bio::EnsEMBL::Mapper::Gap::start
+** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
+**
+** @return [ajint] Gap start or 0
+** @@
+******************************************************************************/
+
+ajint ensMapperresultGetGapStart(const EnsPMapperresult mr)
+{
+    if(!mr)
+        return 0;
+
+    return mr->GapStart;
+}
+
+
+
+
+/* @func ensMapperresultGetObjectidentifier ***********************************
+**
+** Get the Ensembl Object identifier element of an Ensembl Mapper Result.
+**
+** @cc Bio::EnsEMBL::Mapper::Coordinate::id
+** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
+**
+** @return [ajuint] Ensembl Object identifier or 0
+** @@
+******************************************************************************/
+
+ajuint ensMapperresultGetObjectidentifier(const EnsPMapperresult mr)
+{
+    if(!mr)
+        return 0;
+
+    return mr->Objectidentifier;
+}
+
+
+
+
 /* @func ensMapperresultGetRank ***********************************************
 **
 ** Get the rank element of an Ensembl Mapper Result.
 **
+** @cc Bio::EnsEMBL::Mapper::Coordinate::rank
 ** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
 **
-** @return [ajint] Rank
+** @return [ajuint] Rank or 0
 ** @@
 ******************************************************************************/
 
-ajint ensMapperresultGetRank(const EnsPMapperresult mr)
+ajuint ensMapperresultGetRank(const EnsPMapperresult mr)
 {
     if(!mr)
         return 0;
@@ -1715,80 +2034,295 @@ ajint ensMapperresultGetRank(const EnsPMapperresult mr)
 
 
 
-/* @func ensMapperresultGetCoordinateLength ***********************************
+/* @func ensMapperresultGetType ***********************************************
 **
-** Get the coordinate (end - start + 1) length of an Ensembl Mapper Result.
+** Get the type element of an Ensembl Mapper Result.
 **
 ** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
 **
-** @return [ajuint] Coordinate length
+** @return [EnsEMapperresultType] Type or ensEMapperresultTypeNULL
 ** @@
 ******************************************************************************/
 
-ajuint ensMapperresultGetCoordinateLength(const EnsPMapperresult mr)
+EnsEMapperresultType ensMapperresultGetType(const EnsPMapperresult mr)
 {
     if(!mr)
-        return 0;
+        return ensEMapperresultTypeNULL;
 
-    return (mr->End - mr->Start + 1);
+    return mr->Type;
 }
 
 
 
 
-/* @func ensMapperresultGetGapLength ******************************************
+/* @section element assignment ************************************************
 **
-** Get the gap (gapend - gapstart + 1) length of an Ensembl Mapper Result.
+** Functions for assigning elements of an Ensembl Mapper Result object.
 **
-** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
+** @fdata [EnsPMapperresult]
 **
-** @return [ajuint] Gap length
+** @nam3rule Set Set one element of an Ensembl Mapper Result
+** @nam4rule Coordinate Set a coordinate
+** @nam4rule Gap Set a gap
+** @nam5rule End Set the end
+** @nam5rule Start Set the start
+** @nam5rule Strand Set the strand
+** @nam4rule Coordsystem Set the Ensembl Coordinate System
+** @nam4rule Objectidentifier Set the Ensembl Object identifier
+** @nam4rule Rank Set the rank
+** @nam4rule Type Set the type
+**
+** @argrule * mr [EnsPMapperresult] Ensembl Mapper Result object
+** @argrule CoordinateEnd crdend [ajint] End
+** @argrule CoordinateStart crdstart [ajint] Start
+** @argrule CoordinateStrand crdstrand [ajint] Strand
+** @argrule Coordsystem cs [EnsPCoordsystem] Ensembl Coordinate System
+** @argrule GapEnd gapend [ajint] End
+** @argrule GapStart gapstart [ajint] Start
+** @argrule Objectidentifier oid [ajuint] Ensembl Object identifier
+** @argrule Rank rank [ajuint] Rank
+** @argrule Type mrt [EnsEMapperresultType] Ensembl Mapper Result Type
+** enumeration
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory modify
+******************************************************************************/
+
+
+
+
+/* @func ensMapperresultSetCoordinateEnd **************************************
+**
+** Set the coordinate end element of an Ensembl Mapper Result.
+**
+** @cc Bio::EnsEMBL::Mapper::Coordinate::end
+** @param [u] mr [EnsPMapperresult] Ensembl Mapper Result
+** @param [r] crdend [ajint] End
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-ajuint ensMapperresultGetGapLength(const EnsPMapperresult mr)
+AjBool ensMapperresultSetCoordinateEnd(EnsPMapperresult mr,
+                                       ajint crdend)
 {
     if(!mr)
-        return 0;
+        return ajFalse;
 
-    return (mr->GapEnd - mr->GapStart + 1);
+    mr->CoordinateEnd = crdend;
+
+    return ajTrue;
 }
 
 
 
 
-/* @func ensMapperresultGetLength *********************************************
+/* @func ensMapperresultSetCoordinateStart ************************************
 **
-** Get the length of an Ensembl Mapper Result.
-** This is the coordinate length for Mapper Results of type
-** ensEMapperresultCoordinate and ensEMapperresultInDel and the gap length
-** for Mapper Resuls of type ensEMapperresultGap.
+** Set the coordinate start element of an Ensembl Mapper Result.
 **
-** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
+** @cc Bio::EnsEMBL::Mapper::Coordinate::start
+** @param [u] mr [EnsPMapperresult] Ensembl Mapper Result
+** @param [r] crdstart [ajint] Start
 **
-** @return [ajuint] Ensembl Mapper Result length
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-ajuint ensMapperresultGetLength(const EnsPMapperresult mr)
+AjBool ensMapperresultSetCoordinateStart(EnsPMapperresult mr,
+                                         ajint crdstart)
 {
     if(!mr)
-        return 0;
+        return ajFalse;
 
-    switch(mr->Type)
-    {
-        case ensEMapperresultCoordinate:
-            return ensMapperresultGetCoordinateLength(mr);
-        case ensEMapperresultGap:
-            return ensMapperresultGetGapLength(mr);
-        case ensEMapperresultInDel:
-            return ensMapperresultGetCoordinateLength(mr);
-        default:
-            ajWarn("ensMapperresultGetLength got unexpected "
-                   "Ensembl Mapper Result type %d.\n", mr->Type);
-    }
+    mr->CoordinateStart = crdstart;
 
-    return 0;
+    return ajTrue;
+}
+
+
+
+
+/* @func ensMapperresultSetCoordinateStrand ***********************************
+**
+** Set the coordinate strand element of an Ensembl Mapper Result.
+**
+** @cc Bio::EnsEMBL::Mapper::Coordinate::strand
+** @param [u] mr [EnsPMapperresult] Ensembl Mapper Result
+** @param [r] crdstrand [ajint] Strand
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperresultSetCoordinateStrand(EnsPMapperresult mr,
+                                          ajint crdstrand)
+{
+    if(!mr)
+        return ajFalse;
+
+    mr->CoordinateStrand = crdstrand;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensMapperresultSetCoordsystem ****************************************
+**
+** Set the Ensembl Coordinate System element of an Ensembl Mapper Result.
+**
+** @cc Bio::EnsEMBL::Mapper::Coordinate::coord_system
+** @param [u] mr [EnsPMapperresult] Ensembl Mapper Result
+** @param [u] cs [EnsPCoordsystem] Ensembl Coordinate System
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperresultSetCoordsystem(EnsPMapperresult mr,
+                                     EnsPCoordsystem cs)
+{
+    if(!mr)
+        return ajFalse;
+
+    ensCoordsystemDel(&mr->Coordsystem);
+
+    mr->Coordsystem = ensCoordsystemNewRef(cs);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensMapperresultSetGapEnd *********************************************
+**
+** Set the gap end element of an Ensembl Mapper Result.
+**
+** @cc Bio::EnsEMBL::Mapper::Gap::end
+** @param [u] mr [EnsPMapperresult] Ensembl Mapper Result
+** @param [r] gapend [ajint] End
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperresultSetGapEnd(EnsPMapperresult mr,
+                                ajint gapend)
+{
+    if(!mr)
+        return ajFalse;
+
+    mr->GapEnd = gapend;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensMapperresultSetGapStart *******************************************
+**
+** Set the gap start element of an Ensembl Mapper Result.
+**
+** @cc Bio::EnsEMBL::Mapper::Gap::start
+** @param [u] mr [EnsPMapperresult] Ensembl Mapper Result
+** @param [r] gapstart [ajint] Start
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperresultSetGapStart(EnsPMapperresult mr,
+                                  ajint gapstart)
+{
+    if(!mr)
+        return ajFalse;
+
+    mr->GapStart = gapstart;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensMapperresultSetObjectidentifier ***********************************
+**
+** Set the Ensembl Object identifier element of an Ensembl Mapper Result.
+**
+** @cc Bio::EnsEMBL::Mapper::Coordinate::id
+** @param [u] mr [EnsPMapperresult] Ensembl Mapper Result
+** @param [r] oid [ajuint] Ensembl Object identifier
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperresultSetObjectidentifier(EnsPMapperresult mr,
+                                          ajuint oid)
+{
+    if(!mr)
+        return ajFalse;
+
+    mr->Objectidentifier = oid;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensMapperresultSetRank ***********************************************
+**
+** Set the rank element of an Ensembl Mapper Result.
+**
+** @cc Bio::EnsEMBL::Mapper::Coordinate::rank
+** @param [u] mr [EnsPMapperresult] Ensembl Mapper Result
+** @param [r] rank [ajuint] Rank
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperresultSetRank(EnsPMapperresult mr,
+                              ajuint rank)
+{
+    if(!mr)
+        return ajFalse;
+
+    mr->Rank = rank;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensMapperresultSetType ***********************************************
+**
+** Set the type element of an Ensembl Mapper Result.
+**
+** @param [u] mr [EnsPMapperresult] Ensembl Mapper Result
+** @param [u] mrt [EnsEMapperresultType] Ensembl Mapper Result Type
+** enumeration
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperresultSetType(EnsPMapperresult mr,
+                              EnsEMapperresultType mrt)
+{
+    if(!mr)
+        return ajFalse;
+
+    mr->Type = mrt;
+
+    return ajTrue;
 }
 
 
@@ -1799,6 +2333,7 @@ ajuint ensMapperresultGetLength(const EnsPMapperresult mr)
 ** Functions for reporting of an Ensembl Mapper Result object.
 **
 ** @fdata [EnsPMapperresult]
+**
 ** @nam3rule Trace Report Ensembl Mapper Result elements to debug file
 **
 ** @argrule Trace mr [const EnsPMapperresult] Ensembl Mapper Result
@@ -1836,10 +2371,10 @@ AjBool ensMapperresultTrace(const EnsPMapperresult mr, ajuint level)
 
     ajDebug("%SensMapperresultTrace %p\n"
             "%S  Type %d\n"
-            "%S  ObjectIdentifier %u\n"
-            "%S  Start %d\n"
-            "%S  End %d\n"
-            "%S  Strand %d\n"
+            "%S  Objectidentifier %u\n"
+            "%S  CoordinateStart %d\n"
+            "%S  CoordinateEnd %d\n"
+            "%S  CoordinateStrand %d\n"
             "%S  Coordsystem %p\n"
             "%S  GapStart %d\n"
             "%S  GapEnd %d\n"
@@ -1847,10 +2382,10 @@ AjBool ensMapperresultTrace(const EnsPMapperresult mr, ajuint level)
             "%S  Use %u\n",
             indent, mr,
             indent, mr->Type,
-            indent, mr->ObjectIdentifier,
-            indent, mr->Start,
-            indent, mr->End,
-            indent, mr->Strand,
+            indent, mr->Objectidentifier,
+            indent, mr->CoordinateStart,
+            indent, mr->CoordinateEnd,
+            indent, mr->CoordinateStrand,
             indent, mr->Coordsystem,
             indent, mr->GapStart,
             indent, mr->GapEnd,
@@ -1867,11 +2402,141 @@ AjBool ensMapperresultTrace(const EnsPMapperresult mr, ajuint level)
 
 
 
-/* @datasection [EnsPMapperrange] Mapper Range ********************************
+/* @section calculate *********************************************************
 **
-** Functions for manipulating Ensembl Mapper Range objects
+** Functions for calculating values of an Ensembl Mapper Result object.
 **
-** @nam2rule Mapperrange
+** @fdata [EnsPMapperresult]
+**
+** @nam3rule Calculate Calculate Ensembl Mapper Result values
+** @nam4rule Length Calculate the length
+** @nam5rule Coordinate Ensembl Mapper Result Type
+** ensEMapperresultTypeCoordinate
+** @nam5rule Gap Ensembl Mapper Result Type ensEMapperresultTypeGap
+** @nam5rule Result Ensembl Mapper Result Type
+** @nam4rule Memsize Calculate the memory size in bytes
+**
+** @argrule * mr [const EnsPMapperresult] Ensembl Mapper Result
+**
+** @valrule Length [ajuint] Length or 0
+** @valrule Memsize [size_t] Memory size in bytes or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensMapperresultCalculateLengthCoordinate *****************************
+**
+** Calculate the length of an Ensembl Mapper Result of
+** Ensembl Mapper Result Type ensEMapperresultTypeCoordinate.
+**
+** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
+**
+** @return [ajuint] Coordinate length or 0
+** @@
+******************************************************************************/
+
+ajuint ensMapperresultCalculateLengthCoordinate(const EnsPMapperresult mr)
+{
+    if(!mr)
+        return 0;
+
+    return mr->CoordinateEnd - mr->CoordinateStart + 1;
+}
+
+
+
+
+/* @func ensMapperresultCalculateLengthGap ************************************
+**
+** Calculate the length gap of an Ensembl Mapper Result of
+** Ensembl Mapper Result Type ensEMapperresultTypeGap.
+**
+** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
+**
+** @return [ajuint] Gap length or 0
+** @@
+******************************************************************************/
+
+ajuint ensMapperresultCalculateLengthGap(const EnsPMapperresult mr)
+{
+    if(!mr)
+        return 0;
+
+    return mr->GapEnd - mr->GapStart + 1;
+}
+
+
+
+
+/* @func ensMapperresultCalculateLengthResult *********************************
+**
+** Get the length of an Ensembl Mapper Result.
+** This is the coordinate length for Mapper Results of type
+** ensEMapperresultTypeCoordinate and ensEMapperresultTypeInDel and the
+** gap length for Mapper Resuls of type ensEMapperresultTypeGap.
+**
+** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
+**
+** @return [ajuint] Ensembl Mapper Result length
+** @@
+******************************************************************************/
+
+ajuint ensMapperresultCalculateLengthResult(const EnsPMapperresult mr)
+{
+    if(!mr)
+        return 0;
+
+    switch(mr->Type)
+    {
+        case ensEMapperresultTypeCoordinate:
+            return ensMapperresultCalculateLengthCoordinate(mr);
+        case ensEMapperresultTypeGap:
+            return ensMapperresultCalculateLengthGap(mr);
+        case ensEMapperresultTypeInDel:
+            return ensMapperresultCalculateLengthCoordinate(mr);
+        default:
+            ajWarn("ensMapperresultCalculateLengthResult got unexpected "
+                   "Ensembl Mapper Result type %d.\n", mr->Type);
+    }
+
+    return 0;
+}
+
+
+
+
+/* @func ensMapperresultCalculateMemsize **************************************
+**
+** Calculate the memory size in bytes of an Ensembl Mapper Result.
+**
+** @param [r] mr [const EnsPMapperresult] Ensembl Mapper Result
+**
+** @return [size_t] Memory size in bytes or 0
+** @@
+******************************************************************************/
+
+size_t ensMapperresultCalculateMemsize(const EnsPMapperresult mr)
+{
+    size_t size = 0;
+
+    if(!mr)
+        return 0;
+
+    size += sizeof (EnsOMapperresult);
+
+    return size;
+}
+
+
+
+
+/* @datasection [EnsPMapperrange] Ensembl Mapper Range ************************
+**
+** @nam2rule Mapperrange Functions for manipulating
+** Ensembl Mapper Range objects
 **
 ******************************************************************************/
 
@@ -1886,16 +2551,18 @@ AjBool ensMapperresultTrace(const EnsPMapperresult mr, ajuint level)
 ** NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPMapperrange]
-** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the reference counter
 **
-** @argrule Obj object [EnsPMapperrange] Ensembl Mapper Range
-** @argrule Ref object [EnsPMapperrange] Ensembl Mapper Range
+** @argrule Cpy mr [const EnsPMapperrange] Ensembl Mapper Range
+** @argrule Ini start [ajint] Start
+** @argrule Ini end [ajint] End
+** @argrule Ref mr [EnsPMapperrange] Ensembl Mapper Range
 **
-** @valrule * [EnsPMapperrange] Ensembl Mapper Range
+** @valrule * [EnsPMapperrange] Ensembl Mapper Range or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -1903,9 +2570,38 @@ AjBool ensMapperresultTrace(const EnsPMapperresult mr, ajuint level)
 
 
 
-/* @func ensMapperrangeNew ****************************************************
+/* @func ensMapperrangeNewCpy *************************************************
 **
-** Default constructor for an Ensembl Mapper Range.
+** Object-based constructor function, which returns an independent object.
+**
+** @param [r] mr [const EnsPMapperrange] Ensembl Mapper Range
+**
+** @return [EnsPMapperrange] Ensembl Mapper Range or NULL
+** @@
+******************************************************************************/
+
+EnsPMapperrange ensMapperrangeNewCpy(const EnsPMapperrange mr)
+{
+    EnsPMapperrange pthis = NULL;
+
+    if(!mr)
+        return NULL;
+
+    AJNEW0(pthis);
+
+    pthis->Start = mr->Start;
+    pthis->End   = mr->End;
+    pthis->Use   = 1;
+
+    return pthis;
+}
+
+
+
+
+/* @func ensMapperrangeNewIni *************************************************
+**
+** Constructor for an Ensembl Mapper Range with initial values.
 **
 ** @param [r] start [ajint] Start
 ** @param [r] end [ajint] End
@@ -1914,7 +2610,7 @@ AjBool ensMapperresultTrace(const EnsPMapperresult mr, ajuint level)
 ** @@
 ******************************************************************************/
 
-EnsPMapperrange ensMapperrangeNew(ajint start, ajint end)
+EnsPMapperrange ensMapperrangeNewIni(ajint start, ajint end)
 {
     EnsPMapperrange mr = NULL;
 
@@ -1922,35 +2618,6 @@ EnsPMapperrange ensMapperrangeNew(ajint start, ajint end)
 
     mr->Start = start;
     mr->End   = end;
-    mr->Use   = 1;
-
-    return mr;
-}
-
-
-
-
-/* @func ensMapperrangeNewObj *************************************************
-**
-** Object-based constructor function, which returns an independent object.
-**
-** @param [r] object [const EnsPMapperrange] Ensembl Mapper Range
-**
-** @return [EnsPMapperrange] Ensembl Mapper Range or NULL
-** @@
-******************************************************************************/
-
-EnsPMapperrange ensMapperrangeNewObj(const EnsPMapperrange object)
-{
-    EnsPMapperrange mr = NULL;
-
-    if(!object)
-        return NULL;
-
-    AJNEW0(mr);
-
-    mr->Start = object->Start;
-    mr->End   = object->End;
     mr->Use   = 1;
 
     return mr;
@@ -1986,10 +2653,9 @@ EnsPMapperrange ensMapperrangeNewRef(EnsPMapperrange mr)
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Mapper Range.
+** memory allocated for an Ensembl Mapper Range object.
 **
 ** @fdata [EnsPMapperrange]
-** @fnote None
 **
 ** @nam3rule Del Destroy (free) an Ensembl Mapper Range object
 **
@@ -2005,15 +2671,15 @@ EnsPMapperrange ensMapperrangeNewRef(EnsPMapperrange mr)
 
 /* @func ensMapperrangeDel ****************************************************
 **
-** Default Ensembl Mapper Range destructor.
+** Default destructor for an Ensembl Mapper Range.
 **
-** @param [d] Pmr [EnsPMapperrange*] Ensembl Mapper Range address
+** @param [d] Pmr [EnsPMapperrange*] Ensembl Mapper Range object address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensMapperrangeDel(EnsPMapperrange *Pmr)
+void ensMapperrangeDel(EnsPMapperrange* Pmr)
 {
     EnsPMapperrange pthis = NULL;
 
@@ -2054,40 +2720,18 @@ void ensMapperrangeDel(EnsPMapperrange *Pmr)
 ** Functions for returning elements of an Ensembl Mapper Range object.
 **
 ** @fdata [EnsPMapperrange]
-** @fnote None
 **
 ** @nam3rule Get Return Ensembl Mapper Range attribute(s)
-** @nam4rule GetStart Return the start
 ** @nam4rule GetEnd Return the end
+** @nam4rule GetStart Return the start
 **
 ** @argrule * mr [const EnsPMapperrange] Ensembl Mapper Range
 **
-** @valrule Start [ajint] Start
-** @valrule End [ajint] End
+** @valrule End [ajint] End or 0
+** @valrule Start [ajint] Start or 0
 **
 ** @fcategory use
 ******************************************************************************/
-
-
-
-
-/* @func ensMapperrangeGetStart ***********************************************
-**
-** Get the start element of an Ensembl Mapper Range.
-**
-** @param [r] mr [const EnsPMapperrange] Ensembl Mapper Range
-**
-** @return [ajint] Start
-** @@
-******************************************************************************/
-
-ajint ensMapperrangeGetStart(const EnsPMapperrange mr)
-{
-    if(!mr)
-        return 0;
-
-    return mr->Start;
-}
 
 
 
@@ -2098,7 +2742,7 @@ ajint ensMapperrangeGetStart(const EnsPMapperrange mr)
 **
 ** @param [r] mr [const EnsPMapperrange] Ensembl Mapper Range
 **
-** @return [ajint] End
+** @return [ajint] End or 0
 ** @@
 ******************************************************************************/
 
@@ -2113,13 +2757,137 @@ ajint ensMapperrangeGetEnd(const EnsPMapperrange mr)
 
 
 
-/* @datasection [EnsPMapperrangeregistry] Mapper Range Registry ***************
+/* @func ensMapperrangeGetStart ***********************************************
 **
-** Functions for manipulating Ensembl Mapper Range Registry objects
+** Get the start element of an Ensembl Mapper Range.
 **
-** Bio::EnsEMBL::Mapper::RangeRegistry CVS Revision: 1.13
+** @param [r] mr [const EnsPMapperrange] Ensembl Mapper Range
 **
-** @nam2rule Mapperrangeregistry
+** @return [ajint] Start or 0
+** @@
+******************************************************************************/
+
+ajint ensMapperrangeGetStart(const EnsPMapperrange mr)
+{
+    if(!mr)
+        return 0;
+
+    return mr->Start;
+}
+
+
+
+
+/* @section debugging *********************************************************
+**
+** Functions for reporting of an Ensembl Mapper Range object.
+**
+** @fdata [EnsPMapperrange]
+**
+** @nam3rule Trace Report Ensembl Mapper Range elements to debug file
+**
+** @argrule Trace mr [const EnsPMapperrange] Ensembl Mapper Range
+** @argrule Trace level [ajuint] Indentation level
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensMapperrangeTrace **************************************************
+**
+** Trace an Ensembl Mapper Range.
+**
+** @param [r] mr [const EnsPMapperrange] Ensembl Mapper Range
+** @param [r] level [ajuint] Indentation level
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperrangeTrace(const EnsPMapperrange mr, ajuint level)
+{
+    AjPStr indent = NULL;
+
+    if(!mr)
+        return ajFalse;
+
+    indent = ajStrNew();
+
+    ajStrAppendCountK(&indent, ' ', level * 2);
+
+    ajDebug("%SensMapperrangeTrace %p\n"
+            "%S  Start %d\n"
+            "%S  End %d\n"
+            "%S  Use %u\n",
+            indent, mr,
+            indent, mr->Start,
+            indent, mr->End,
+            indent, mr->Use);
+
+    ajStrDel(&indent);
+
+    return ajTrue;
+}
+
+
+
+
+/* @section calculate *********************************************************
+**
+** Functions for calculating values of an Ensembl Mapper Range object.
+**
+** @fdata [EnsPMapperrange]
+**
+** @nam3rule Calculate Calculate Ensembl Mapper Range values
+** @nam4rule Memsize Calculate the memory size in bytes
+**
+** @argrule * mr [const EnsPMapperrange] Ensembl Mapper Range
+**
+** @valrule Memsize [size_t] Memory size in bytes or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensMapperrangeCalculateMemsize ***************************************
+**
+** Calculate the memory size in bytes of an Ensembl Mapper Range.
+**
+** @param [r] mr [const EnsPMapperrange] Ensembl Mapper Range
+**
+** @return [size_t] Memory size in bytes or 0
+** @@
+******************************************************************************/
+
+size_t ensMapperrangeCalculateMemsize(const EnsPMapperrange mr)
+{
+    size_t size = 0;
+
+    if(!mr)
+        return 0;
+
+    size += sizeof (EnsOMapperrange);
+
+    return size;
+}
+
+
+
+
+/* @datasection [EnsPMapperrangeregistry] Ensembl Mapper Range Registry *******
+**
+** @nam2rule Mapperrangeregistry Functions for manipulating
+** Ensembl Mapper Range Registry objects
+**
+** @cc Bio::EnsEMBL::Mapper::RangeRegistry
+** @cc CVS Revision: 1.17
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -2134,16 +2902,17 @@ ajint ensMapperrangeGetEnd(const EnsPMapperrange mr)
 ** NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPMapperrangeregistry]
-** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the reference counter
 **
-** @argrule Obj object [EnsPMapperrangeregistry] Ensembl Mapper Range Registry
-** @argrule Ref object [EnsPMapperrangeregistry] Ensembl Mapper Range Registry
+** @argrule Cpy mrr [const EnsPMapperrangeregistry] Ensembl Mapper Range
+** Registry
+** @argrule Ref mrr [EnsPMapperrangeregistry] Ensembl Mapper Range Registry
 **
-** @valrule * [EnsPMapperrangeregistry] Ensembl Mapper Range Registry
+** @valrule * [EnsPMapperrangeregistry] Ensembl Mapper Range Registry or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -2162,7 +2931,7 @@ ajint ensMapperrangeGetEnd(const EnsPMapperrange mr)
 ** regions and is used to quickly ascertain if and what regions of a provided
 ** range need registration. It is implemented as a first-level AJAX Table with
 ** Ensembl Object identifers as keys and second-level AJAX Lists of
-** Ensembl Mapper Ranges as values.
+** Ensembl Mapper Range objects as values.
 ******************************************************************************/
 
 EnsPMapperrangeregistry ensMapperrangeregistryNew(void)
@@ -2174,8 +2943,7 @@ EnsPMapperrangeregistry ensMapperrangeregistryNew(void)
 
     AJNEW0(mrr);
 
-    mrr->Registry =
-        ajTableNewFunctionLen(0, ensTableCmpUint, ensTableHashUint);
+    mrr->Registry = ensTableuintNewLen(0);
 
     mrr->Use = 1;
 
@@ -2210,12 +2978,84 @@ EnsPMapperrangeregistry ensMapperrangeregistryNewRef(
 
 
 
+/* @section clear *************************************************************
+**
+** Clear all internal data structures and frees the
+** memory allocated for Ensembl Mapper Range Registry internals.
+**
+** @fdata [EnsPMapperrangeregistry]
+**
+** @nam3rule Clear Clear (free) an Ensembl Mapper Range Registry object
+**
+** @argrule * mrr [EnsPMapperrangeregistry] Ensembl Mapper Range Registry
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory delete
+******************************************************************************/
+
+
+
+
+/* @funcstatic mapperrangeregistryClear ***************************************
+**
+** An ajTableMapDel "apply" function to clear an AJAX Table of
+** AJAX unsigned integer key data and
+** AJAX List object value data.
+** This function also deletes the Ensembl Mapper Range objects from the
+** AJAX List objects, before deleting the AJAX List objects.
+**
+** @param [u] key [void**] AJAX unsigned integer address
+** @param [u] value [void**] AJAX List address
+** @param [u] cl [void*] Standard, passed in from ajTableMapDel
+** @see ajTableMapDel
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void mapperrangeregistryClear(void** key,
+                                     void** value,
+                                     void* cl)
+{
+    EnsPMapperrange mr = NULL;
+
+    if(!key)
+        return;
+
+    if(!*key)
+        return;
+
+    if(!value)
+        return;
+
+    if(!*value)
+        return;
+
+    (void) cl;
+
+    AJFREE(*key);
+
+    while(ajListPop(*((AjPList*) value), (void**) &mr))
+        ensMapperrangeDel(&mr);
+
+    ajListFree((AjPList*) value);
+
+    *key   = NULL;
+    *value = NULL;
+
+    return;
+}
+
+
+
+
 /* @func ensMapperrangeregistryClear ******************************************
 **
 ** Clear an Ensembl Mapper Range Registry.
 ** This function clears the unsigned integer key data and the AJAX List value
-** data from the first-level AJAX Table, as well as the Ensembl Mapper Ranges
-** from the second-level AJAX List.
+** data from the first-level AJAX Table, as well as the Ensembl Mapper Range
+** objects from the second-level AJAX List.
 **
 ** @param [u] mrr [EnsPMapperrangeregistry] Ensembl Mapper Range Registry
 **
@@ -2225,13 +3065,6 @@ EnsPMapperrangeregistry ensMapperrangeregistryNewRef(
 
 AjBool ensMapperrangeregistryClear(EnsPMapperrangeregistry mrr)
 {
-    void **keyarray = NULL;
-    void **valarray = NULL;
-
-    register ajuint i = 0;
-
-    EnsPMapperrange mr = NULL;
-
     if(ajDebugTest("ensMapperrangeregistryClear"))
         ajDebug("ensMapperrangeregistryClear\n"
                 "  mrr %p\n",
@@ -2240,28 +3073,7 @@ AjBool ensMapperrangeregistryClear(EnsPMapperrangeregistry mrr)
     if(!mrr)
         return ajFalse;
 
-    /* Clear the first-level AJAX Table. */
-
-    ajTableToarrayKeysValues(mrr->Registry, &keyarray, &valarray);
-
-    for(i = 0; keyarray[i]; i++)
-    {
-        ajTableRemove(mrr->Registry, (const void *) keyarray[i]);
-
-        /* Delete unsigned integer key data. */
-
-        AJFREE(keyarray[i]);
-
-        /* Clear and delete the second-level AJAX List value data. */
-
-        while(ajListPop((AjPList) valarray[i], (void **) &mr))
-            ensMapperrangeDel(&mr);
-
-        ajListFree((AjPList *) &valarray[i]);
-    }
-
-    AJFREE(keyarray);
-    AJFREE(valarray);
+    ajTableMapDel(mrr->Registry, mapperrangeregistryClear, NULL);
 
     return ajTrue;
 }
@@ -2272,10 +3084,9 @@ AjBool ensMapperrangeregistryClear(EnsPMapperrangeregistry mrr)
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Mapper Range Registry.
+** memory allocated for an Ensembl Mapper Range Registry object.
 **
 ** @fdata [EnsPMapperrangeregistry]
-** @fnote None
 **
 ** @nam3rule Del Destroy (free) an Ensembl Mapper Range Registry object
 **
@@ -2292,16 +3103,16 @@ AjBool ensMapperrangeregistryClear(EnsPMapperrangeregistry mrr)
 
 /* @func ensMapperrangeregistryDel ********************************************
 **
-** Default Ensembl Mapper Range Registry destructor.
+** Default destructor for an Ensembl Mapper Range Registry.
 **
-** @param [d] Pmrr [EnsPMapperrangeregistry*] Ensembl Mapper
-**                                            Range Registry address
+** @param [d] Pmrr [EnsPMapperrangeregistry*] Ensembl Mapper Range Registry
+**                                            object address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensMapperrangeregistryDel(EnsPMapperrangeregistry *Pmrr)
+void ensMapperrangeregistryDel(EnsPMapperrangeregistry* Pmrr)
 {
     EnsPMapperrangeregistry pthis = NULL;
 
@@ -2341,9 +3152,33 @@ void ensMapperrangeregistryDel(EnsPMapperrangeregistry *Pmrr)
 
 
 
-/* @func ensMapperrangeregistryCheckAndRegister *******************************
+/* @section check *************************************************************
 **
-** Check and register Ensembl Mapper Ranges in the
+** Check, whether coordinates have been registered before.
+**
+** @fdata [EnsPMapperrangeregistry]
+**
+** @nam3rule Check Check a coordinates
+**
+** @argrule * mrr [EnsPMapperrangeregistry] Ensembl Mapper Range Registry
+** @argrule Check oid [ajuint] Ensembl Object identifier
+** @argrule Check chkstart [ajint] Start coordinate of the region to be checked
+** @argrule Check chkend [ajint] End coordinate of the region to be checked
+** @argrule Check regstart [ajint] Start coordinate of the region to register
+** @argrule Check regend [ajint] End coordinate of the region to register
+** @argrule Check ranges [AjPList] AJAX List of Ensembl Mapper Range objects
+**
+** @valrule * [AjBool] ajTrue if already registered, ajFalse otherwise
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensMapperrangeregistryCheck ******************************************
+**
+** Check and register Ensembl Mapper Range objects in the
 ** Ensembl Mapper Range Registry.
 **
 ** @cc Bio::EnsEMBL::Mapper::RangeRegistry::check_and_register
@@ -2353,7 +3188,7 @@ void ensMapperrangeregistryDel(EnsPMapperrangeregistry *Pmrr)
 ** @param [r] chkend [ajint] End coordinate of the region to be checked
 ** @param [r] regstart [ajint] Start coordinate of the region to register
 ** @param [r] regend [ajint] End coordinate of the region to register
-** @param [uN] ranges [AjPList] AJAX List of Ensembl Mapper Ranges
+** @param [uN] ranges [AjPList] AJAX List of Ensembl Mapper Range objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -2372,13 +3207,13 @@ void ensMapperrangeregistryDel(EnsPMapperrangeregistry *Pmrr)
 ** is registered is the same as registering a region around that range.
 ******************************************************************************/
 
-AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
-                                              ajuint oid,
-                                              ajint chkstart,
-                                              ajint chkend,
-                                              ajint regstart,
-                                              ajint regend,
-                                              AjPList ranges)
+AjBool ensMapperrangeregistryCheck(EnsPMapperrangeregistry mrr,
+                                   ajuint oid,
+                                   ajint chkstart,
+                                   ajint chkend,
+                                   ajint regstart,
+                                   ajint regend,
+                                   AjPList ranges)
 {
     register ajuint i = 0;
 
@@ -2396,7 +3231,7 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
     ajint newstart = 0;
     ajint newend   = 0;
 
-    ajuint *Poid = NULL;
+    ajuint* Poid = NULL;
 
     AjBool idxregstartset = AJFALSE;
     AjBool idxregposset   = AJFALSE;
@@ -2407,8 +3242,8 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
     EnsPMapperrange range = NULL;
     EnsPMapperrange gap   = NULL;
 
-    if(ajDebugTest("ensMapperrangeregistryCheckAndRegister"))
-        ajDebug("ensMapperrangeregistryCheckAndRegister\n"
+    if(ajDebugTest("ensMapperrangeregistryCheck"))
+        ajDebug("ensMapperrangeregistryCheck\n"
                 "  mrr %p\n"
                 "  oid %u\n"
                 "  chkstart %d\n"
@@ -2426,25 +3261,28 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
 
     if(!mrr)
     {
-        ajDebug("ensMapperrangeregistryCheckAndRegister requires an "
+        ajDebug("ensMapperrangeregistryCheck requires an "
                 "Ensembl Range Registry.\n");
 
         return ajFalse;
     }
 
     if(!oid)
-        ajWarn("ensMapperrangeregistryCheckAndRegister did not get a valid "
+        ajWarn("ensMapperrangeregistryCheck did not get a valid "
                "Ensembl Object identifier.\n");
 
+    /*
+    ** NOTE: Not applicable for circular genomes.
     if(chkstart > chkend)
     {
-        ajWarn("ensMapperrangeregistryCheckAndRegister requires the start "
-               "coordinate (%d) to be less than or equal the end "
-               "coordinate (%d) for the region to be checked.\n",
-               chkstart, chkend);
+    ajWarn("ensMapperrangeregistryCheck requires the start "
+    "coordinate (%d) to be less than or equal the end "
+    "coordinate (%d) for the region to be checked.\n",
+    chkstart, chkend);
 
-        return ajFalse;
+    return ajFalse;
     }
+    */
 
     if((!regstart) && (!regend))
     {
@@ -2453,19 +3291,22 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
         regend = chkend;
     }
 
+    /*
+    ** NOTE: Not applicable for circular genomes.
     if(regstart > regend)
     {
-        ajWarn("ensMapperrangeregistryCheckAndRegister requires the start "
-               "coordinate (%d) to be less than or equal the end "
-               "coordinate (%d) for the region to be registered.\n",
-               regstart, regend);
+    ajWarn("ensMapperrangeregistryCheck requires the start "
+    "coordinate (%d) to be less than or equal the end "
+    "coordinate (%d) for the region to be registered.\n",
+    regstart, regend);
 
-        return ajFalse;
+    return ajFalse;
     }
+    */
 
     if(regstart > chkstart)
     {
-        ajWarn("ensMapperrangeregistryCheckAndRegister requires the start "
+        ajWarn("ensMapperrangeregistryCheck requires the start "
                "coordinate (%d) of the region to be registered to be less "
                "than or equal the start coordinate (%d) of the "
                "region to be checked.\n",
@@ -2476,7 +3317,7 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
 
     if(regend < chkend)
     {
-        ajWarn("ensMapperrangeregistryCheckAndRegister requires the end "
+        ajWarn("ensMapperrangeregistryCheck requires the end "
                "coordinate (%d) of the region to be registered to be less "
                "than or equal the end coordinate (%d) of the "
                "region to be checked.\n",
@@ -2486,10 +3327,10 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
     }
 
     if(!mrr->Registry)
-        ajFatal("ensMapperrangeregistryCheckAndRegister got a "
+        ajFatal("ensMapperrangeregistryCheck got a "
                 "Mapper Range Registry without a valid AJAX Table.\n");
 
-    list = (AjPList) ajTableFetch(mrr->Registry, (const void *) &oid);
+    list = (AjPList) ajTableFetchmodV(mrr->Registry, (const void*) &oid);
 
     if(!list)
     {
@@ -2499,7 +3340,7 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
 
         list = ajListNew();
 
-        ajTablePut(mrr->Registry, (void *) Poid, (void *) list);
+        ajTablePut(mrr->Registry, (void*) Poid, (void*) list);
     }
 
     idxlength = ajListGetLength(list);
@@ -2512,35 +3353,35 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
         ** seen.
         */
 
-        range = ensMapperrangeNew(regstart, regend);
+        range = ensMapperrangeNewIni(regstart, regend);
 
-        ajListPushAppend(list, (void *) range);
+        ajListPushAppend(list, (void*) range);
 
         if(ranges)
-            ajListPushAppend(ranges, (void *) ensMapperrangeNewRef(range));
+            ajListPushAppend(ranges, (void*) ensMapperrangeNewRef(range));
 
         return ajTrue;
     }
 
     /*
-    ** Loop through the List of existing Ensembl Mapper Ranges recording any
-    ** "gaps" where the existing Mapper Ranges do not cover part of the
-    ** requested range.
+    ** Loop through the AJAX List of existing Ensembl Mapper Range objects
+    ** recording any "gaps" where the existing Mapper Range objects do not
+    ** cover part of the requested range.
     */
 
     idxstart = 0;
     idxend   = idxlength - 1;
 
     /*
-    ** Binary search the relevant Ensembl Mapper Ranges,
-    ** which helps if the AJAX List of Ensembl Mapper Ranges is long.
+    ** Binary search the relevant Ensembl Mapper Range objects,
+    ** which helps if the AJAX List of Ensembl Mapper Range objects is long.
     */
 
     while((idxend - idxstart) > 1)
     {
         idxmid = (idxstart + idxend) >> 1;
 
-        ajListPeekNumber(list, idxmid, (void **) &range);
+        ajListPeekNumber(list, idxmid, (void**) &range);
 
         if(range->End < regstart)
             idxstart = idxmid;
@@ -2552,7 +3393,7 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
 
     for(i = idxstart; i < idxlength; i++)
     {
-        ajListPeekNumber(list, i, (void **) &range);
+        ajListPeekNumber(list, i, (void**) &range);
 
         /*
         ** No work needs to be done at all if we find a Mapper Range that
@@ -2584,9 +3425,9 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
 
             if(ranges)
             {
-                gap = ensMapperrangeNew(gapstart, gapend);
+                gap = ensMapperrangeNewIni(gapstart, gapend);
 
-                ajListPushAppend(ranges, (void *) gap);
+                ajListPushAppend(ranges, (void*) gap);
             }
         }
 
@@ -2606,9 +3447,9 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
 
     if((gapstart <= regend) && ranges)
     {
-        gap = ensMapperrangeNew(gapstart, regend);
+        gap = ensMapperrangeNewIni(gapstart, regend);
 
-        ajListPushAppend(ranges, (void *) gap);
+        ajListPushAppend(ranges, (void*) gap);
     }
 
     /* Merge the new Ensembl Mapper Range into the AJAX List of registered. */
@@ -2617,11 +3458,11 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
     {
         /* Adjacent or overlapping regions have been found. */
 
-        ajListPeekNumber(list, idxregstart, (void **) &range);
+        ajListPeekNumber(list, idxregstart, (void**) &range);
 
         newstart = (regstart < range->Start) ? regstart : range->Start;
 
-        ajListPeekNumber(list, idxregend, (void **) &range);
+        ajListPeekNumber(list, idxregend, (void**) &range);
 
         newend = (regend > range->End) ? regend : range->End;
 
@@ -2648,9 +3489,9 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
 
         /* Finally, insert a new Mapper Range at the current position. */
 
-        range = ensMapperrangeNew(newstart, newend);
+        range = ensMapperrangeNewIni(newstart, newend);
 
-        ajListIterInsert(iter, (void *) range);
+        ajListIterInsert(iter, (void*) range);
 
         ajListIterDel(&iter);
     }
@@ -2665,17 +3506,17 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
 
         /* Insert a new Mapper Range at this position. */
 
-        range = ensMapperrangeNew(regstart, regend);
+        range = ensMapperrangeNewIni(regstart, regend);
 
-        ajListIterInsert(iter, (void *) range);
+        ajListIterInsert(iter, (void*) range);
 
         ajListIterDel(&iter);
     }
     else
     {
-        range = ensMapperrangeNew(regstart, regend);
+        range = ensMapperrangeNewIni(regstart, regend);
 
-        ajListPushAppend(list, (void *) range);
+        ajListPushAppend(list, (void*) range);
     }
 
     return ajTrue;
@@ -2684,21 +3525,51 @@ AjBool ensMapperrangeregistryCheckAndRegister(EnsPMapperrangeregistry mrr,
 
 
 
-/* @func ensMapperrangeregistryGetRanges **************************************
+/* @section calculate *********************************************************
 **
-** Get Ensembl Mapper Ranges from the Ensembl Mapper Range Registry.
+** Functions for calculating values of an Ensembl Mapper Range Registry object.
+**
+** @fdata [EnsPMapperrangeregistry]
+**
+** @nam3rule Calculate Calculate Ensembl Mapper Range Registry values
+** @nam4rule Mapperranges Calculate an AJAX List of Ensembl Mapper Range
+**                        objects
+** @nam4rule Memsize Calculate the memory size in bytes
+** @nam4rule Overlap Calculate the overlap size
+**
+** @argrule * mrr [const EnsPMapperrangeregistry] Ensembl Mapper Range Registry
+** @argrule Mapperranges oid [ajuint] Ensembl Object identifier
+** @argrule Overlap oid [ajuint] Ensembl Object identifier
+** @argrule Overlap start [ajint] Start coordinate
+** @argrule Overlap end [ajint] End coordinate
+**
+** @valrule Mapperranges [const AjPList] AJAX List or Ensembl Mapper Range
+**                                       objects or NULL
+** @valrule Memsize [size_t] Memory size in bytes or 0
+** @valrule Overlap [ajuint] Overlap size or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensMapperrangeregistryCalculateMapperranges **************************
+**
+** Calculate an AJAX List of Ensembl Mapper Range objects.
 **
 ** @cc Bio::EnsEMBL::Mapper::RangeRegistry::get_ranges
 ** @param [r] mrr [const EnsPMapperrangeregistry] Ensembl Mapper
 **                                                Range Registry
 ** @param [r] oid [ajuint] Ensembl Object identifier
 **
-** @return [const AjPList] AJAX List of Ensembl Mapper Ranges or NULL
+** @return [const AjPList] AJAX List of Ensembl Mapper Range objects or NULL
 ** @@
 ******************************************************************************/
 
-const AjPList ensMapperrangeregistryGetRanges(const EnsPMapperrangeregistry mrr,
-                                              ajuint oid)
+const AjPList ensMapperrangeregistryCalculateMapperranges(
+    const EnsPMapperrangeregistry mrr,
+    ajuint oid)
 {
     if(!mrr)
         return NULL;
@@ -2706,20 +3577,20 @@ const AjPList ensMapperrangeregistryGetRanges(const EnsPMapperrangeregistry mrr,
     if(!oid)
         return NULL;
 
-    return (AjPList) ajTableFetch(mrr->Registry, (const void *) &oid);
+    return (AjPList) ajTableFetchmodV(mrr->Registry, (const void*) &oid);
 }
 
 
 
 
-/* @func ensMapperrangeregistryOverlapSize ************************************
+/* @func ensMapperrangeregistryCalculateOverlap *******************************
 **
-** Get the overlap size of Ensembl Mapper Ranges in the
+** Calculate the overlap size of Ensembl Mapper Range objects in the
 ** Ensembl Mapper Range Registry. Finds out how many bases in the given range
 ** are already registered in an Ensembl Mapper Range Registry.
 **
 ** @cc Bio::EnsEMBL::Mapper::RangeRegistry::overlap_size
-** @param [u] mrr [const EnsPMapperrangeregistry] Ensembl Mapper
+** @param [r] mrr [const EnsPMapperrangeregistry] Ensembl Mapper
 **                                                Range Registry
 ** @param [r] oid [ajuint] Ensembl Object identifier
 ** @param [r] start [ajint] Start coordinate
@@ -2729,10 +3600,11 @@ const AjPList ensMapperrangeregistryGetRanges(const EnsPMapperrangeregistry mrr,
 ** @@
 ******************************************************************************/
 
-ajuint ensMapperrangeregistryOverlapSize(const EnsPMapperrangeregistry mrr,
-                                         ajuint oid,
-                                         ajint start,
-                                         ajint end)
+ajuint ensMapperrangeregistryCalculateOverlap(
+    const EnsPMapperrangeregistry mrr,
+    ajuint oid,
+    ajint start,
+    ajint end)
 {
     register ajuint i = 0;
 
@@ -2756,7 +3628,7 @@ ajuint ensMapperrangeregistryOverlapSize(const EnsPMapperrangeregistry mrr,
     if(start > end)
         return 0;
 
-    list = (AjPList) ajTableFetch(mrr->Registry, (const void *) &oid);
+    list = (AjPList) ajTableFetchmodV(mrr->Registry, (const void*) &oid);
 
     if(!list)
         return 0;
@@ -2770,7 +3642,7 @@ ajuint ensMapperrangeregistryOverlapSize(const EnsPMapperrangeregistry mrr,
     idxend   = idxlength - 1;
 
     /*
-    ** Binary search the relevant Ensembl Mapper Ranges,
+    ** Binary search the relevant Ensembl Mapper Range objects,
     ** which helps if the AJAX List is long.
     */
 
@@ -2778,7 +3650,7 @@ ajuint ensMapperrangeregistryOverlapSize(const EnsPMapperrangeregistry mrr,
     {
         idxmid = (idxstart + idxend) >> 1;
 
-        ajListPeekNumber(list, idxmid, (void **) &range);
+        ajListPeekNumber(list, idxmid, (void**) &range);
 
         if(range->End < start)
             idxstart = idxmid;
@@ -2788,11 +3660,12 @@ ajuint ensMapperrangeregistryOverlapSize(const EnsPMapperrangeregistry mrr,
 
     for(i = idxstart; i < idxlength; i++)
     {
-        ajListPeekNumber(list, i, (void **) &range);
+        ajListPeekNumber(list, i, (void**) &range);
 
         /*
         ** Check, wheher the loop has already overrun.
-        ** If that was the case, there are no more interesting Mapper Ranges.
+        ** If that was the case, there are no more interesting Mapper Range
+        ** objects.
         */
 
         if(range->Start > start)
@@ -2824,13 +3697,13 @@ ajuint ensMapperrangeregistryOverlapSize(const EnsPMapperrangeregistry mrr,
 
 
 
-/* @datasection [EnsPMapper] Mapper *******************************************
+/* @datasection [EnsPMapper] Ensembl Mapper ***********************************
 **
-** Functions for manipulating Ensembl Mapper objects
+** @nam2rule Mapper Functions for manipulating Ensembl Mapper objects
 **
-** @cc Bio::EnsEMBL::Mapper CVS Revision: 1.48
-**
-** @nam2rule Mapper
+** @cc Bio::EnsEMBL::Mapper
+** @cc CVS Revision: 1.58
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -2845,16 +3718,20 @@ ajuint ensMapperrangeregistryOverlapSize(const EnsPMapperrangeregistry mrr,
 ** NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPMapper]
-** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the reference counter
 **
-** @argrule Obj object [EnsPMapper] Ensembl Mapper
-** @argrule Ref object [EnsPMapper] Ensembl Mapper
+** @argrule Cpy mapper [const EnsPMapper] Ensembl Mapper
+** @argrule Ini srctype [AjPStr] Source type
+** @argrule Ini trgtype [AjPStr] Target type
+** @argrule Ini srccs [EnsPCoordsystem] Source Ensembl Coordinate System
+** @argrule Ini trgcs [EnsPCoordsystem] Target Ensembl Coordinate System
+** @argrule Ref mapper [EnsPMapper] Ensembl Mapper
 **
-** @valrule * [EnsPMapper] Ensembl Mapper
+** @valrule * [EnsPMapper] Ensembl Mapper or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -2862,13 +3739,13 @@ ajuint ensMapperrangeregistryOverlapSize(const EnsPMapperrangeregistry mrr,
 
 
 
-/* @func ensMapperNew *********************************************************
+/* @func ensMapperNewIni ******************************************************
 **
-** Default constructor for an Ensembl Mapper.
+** Constructor for an Ensembl Mapper with initial values.
 **
 ** @cc Bio::EnsEMBL::Mapper::new
-** @param [r] srctype [AjPStr] Source type
-** @param [r] trgtype [AjPStr] Target type
+** @param [u] srctype [AjPStr] Source type
+** @param [u] trgtype [AjPStr] Target type
 ** @param [u] srccs [EnsPCoordsystem] Source Ensembl Coordinate System
 ** @param [u] trgcs [EnsPCoordsystem] Target Ensembl Coordinate System
 **
@@ -2876,18 +3753,18 @@ ajuint ensMapperrangeregistryOverlapSize(const EnsPMapperrangeregistry mrr,
 ** @@
 ******************************************************************************/
 
-EnsPMapper ensMapperNew(AjPStr srctype,
-                        AjPStr trgtype,
-                        EnsPCoordsystem srccs,
-                        EnsPCoordsystem trgcs)
+EnsPMapper ensMapperNewIni(AjPStr srctype,
+                           AjPStr trgtype,
+                           EnsPCoordsystem srccs,
+                           EnsPCoordsystem trgcs)
 {
     AjPTable table = NULL;
 
     EnsPMapper mapper = NULL;
 
-    if(ajDebugTest("ensMapperNew"))
+    if(ajDebugTest("ensMapperNewIni"))
     {
-        ajDebug("ensMapperNew\n"
+        ajDebug("ensMapperNewIni\n"
                 "  srctype '%S'\n"
                 "  trgtype '%S'\n"
                 "  srccs %p\n"
@@ -2915,35 +3792,33 @@ EnsPMapper ensMapperNew(AjPStr srctype,
 
     AJNEW0(mapper);
 
-    mapper->SourceType = ajStrNewRef(srctype);
+    mapper->TypeSource = ajStrNewRef(srctype);
+    mapper->TypeTarget = ajStrNewRef(trgtype);
 
-    mapper->TargetType = ajStrNewRef(trgtype);
+    mapper->CoordsystemSource = ensCoordsystemNewRef(srccs);
+    mapper->CoordsystemTarget = ensCoordsystemNewRef(trgcs);
 
-    mapper->SourceCoordsystem = ensCoordsystemNewRef(srccs);
+    mapper->Pairs = ensTablestrNewLen(0);
 
-    mapper->TargetCoordsystem = ensCoordsystemNewRef(trgcs);
+    mapper->Count = 0;
 
-    mapper->Pairs = ajTablestrNewCaseLen(0);
-
-    mapper->PairCount = 0;
-
-    mapper->IsSorted = ajFalse;
+    mapper->Sorted = ajFalse;
 
     mapper->Use = 1;
 
     /*
-    ** Initialise second-level AJAX Tables with Ensembl Object identifier
-    ** keys and put them into the first-level AJAX Table indexed on
+    ** Initialise second-level AJAX Table objects with Ensembl Object
+    ** identifier keys and put them into the first-level AJAX Table indexed on
     ** source and target types.
     */
 
-    table = ajTableNewFunctionLen(0, ensTableCmpUint, ensTableHashUint);
+    table = ensTableuintNewLen(0);
 
-    ajTablePut(mapper->Pairs, (void *) ajStrNewS(srctype), (void *) table);
+    ajTablePut(mapper->Pairs, (void*) ajStrNewS(srctype), (void*) table);
 
-    table = ajTableNewFunctionLen(0, ensTableCmpUint, ensTableHashUint);
+    table = ensTableuintNewLen(0);
 
-    ajTablePut(mapper->Pairs, (void *) ajStrNewS(trgtype), (void *) table);
+    ajTablePut(mapper->Pairs, (void*) ajStrNewS(trgtype), (void*) table);
 
     return mapper;
 }
@@ -2975,16 +3850,179 @@ EnsPMapper ensMapperNewRef(EnsPMapper mapper)
 
 
 
+/* @section clear *************************************************************
+**
+** Clear all internal data structures and frees the
+** memory allocated for Ensembl Mapper internals.
+**
+** @fdata [EnsPMapper]
+**
+** @nam3rule Clear Clear (free) an Ensembl Mapper object
+**
+** @argrule * mapper [EnsPMapper] Ensembl Mapper
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory delete
+******************************************************************************/
+
+
+
+
+/* @funcstatic mapperClearL2 **************************************************
+**
+** An ajTableMapDel "apply" function to clear an AJAX Table of
+** AJAX unsigned integer key data and
+** AJAX List object value data.
+** This function also deletes the Ensembl Mapper Pair objects from the
+** AJAX List objects, before deleting the AJAX List objects.
+**
+** @param [u] key [void**] AJAX unsigned integer address
+** @param [u] value [void**] AJAX List address
+** @param [u] cl [void*] Standard, passed in from ajTableMapDel
+** @see ajTableMapDel
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void mapperClearL2(void** key,
+                          void** value,
+                          void* cl)
+{
+    EnsPMapperpair mp = NULL;
+
+    if(!key)
+        return;
+
+    if(!*key)
+        return;
+
+    if(!value)
+        return;
+
+    if(!*value)
+        return;
+
+    (void) cl;
+
+    AJFREE(*key);
+
+    while(ajListPop(*((AjPList*) value), (void**) &mp))
+        ensMapperpairDel(&mp);
+
+    ajListFree((AjPList*) value);
+
+    *key   = NULL;
+    *value = NULL;
+
+    return;
+}
+
+
+
+
+/* @funcstatic mapperClearL1 **************************************************
+**
+** An ajTableMapDel "apply" function to clear an AJAX Table of
+** AJAX String object key data and
+** AJAX Table object value data.
+** This function also clears and deletes the secondary AJAX Table objects via
+** mapperClearL2.
+**
+** @param [u] key [void**] AJAX String address
+** @param [u] value [void**] AJAX Table address
+** @param [u] cl [void*] Standard, passed in from ajTableMapDel
+** @see ajTableMapDel
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void mapperClearL1(void** key,
+                          void** value,
+                          void* cl)
+{
+    if(!key)
+        return;
+
+    if(!*key)
+        return;
+
+    if(!value)
+        return;
+
+    if(!*value)
+        return;
+
+    (void) cl;
+
+    ajStrDel((AjPStr*) key);
+
+    ajTableMapDel(*((AjPTable*) value), mapperClearL2, NULL);
+
+    ajTableFree((AjPTable*) value);
+
+    *key   = NULL;
+    *value = NULL;
+
+    return;
+}
+
+
+
+
+/* @funcstatic mapperProcessL1 ************************************************
+**
+** An ajTableMap "apply" function to process an AJAX Table of
+** AJAX String object key data and
+** AJAX Table object value data.
+** This function also clears and deletes the secondary AJAX Table objects via
+** mapperClearL2.
+**
+** @param [r] key [const void*] AJAX String address
+** @param [u] value [void**] AJAX Table address
+** @param [u] cl [void*] Standard, passed in from ajTableMapDel
+** @see ajTableMap
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+static void mapperProcessL1(const void* key,
+                            void** value,
+                            void* cl)
+{
+    if(!value)
+        return;
+
+    if(!*value)
+        return;
+
+    (void) cl;
+
+    (void) key;
+
+    ajTableMapDel(*((AjPTable*) value), mapperClearL2, NULL);
+
+    return;
+}
+
+
+
+
 /* @func ensMapperClear *******************************************************
 **
 ** Clear an Ensembl Mapper.
 **
-** This function does not delete or modify first-level AJAX Tables with
-** Ensembl Mapper type AJAX Strings as keys and second-level AJAX Tables as
-** values. The second-level AJAX Tables with Object identifiers as keys and
-** third-level AJAX Lists of Ensembl Mapper Pairs are cleared.
-** The third-level AJAX Lists of Ensembl Mapper Pairs are cleared and deleted,
-** as are the Ensembl Mapper Pair list elements.
+** This function processes the first-level AJAX Table of
+** AJAX String object (Ensembl Mapper type) key data and
+** second-level AJAX Table object value data.
+** The second-level AJAX Table of
+** AJAX unsigned integer (Ensembl Object identifier) key data and
+** third-level AJAX List object valude data are cleared.
+** The third-level AJAX List objects of Ensembl Mapper Pair objects are cleared
+** and deleted, as are the Ensembl Mapper Pair objects.
 **
 ** @cc Bio::EnsEMBL::Mapper::flush
 ** @param [u] mapper [EnsPMapper] Ensembl Mapper
@@ -2995,16 +4033,6 @@ EnsPMapper ensMapperNewRef(EnsPMapper mapper)
 
 AjBool ensMapperClear(EnsPMapper mapper)
 {
-    void **keyarray1 = NULL;
-    void **valarray1 = NULL;
-    void **keyarray2 = NULL;
-    void **valarray2 = NULL;
-
-    register ajuint i = 0;
-    register ajuint j = 0;
-
-    EnsPMapperpair mp = NULL;
-
     if(ajDebugTest("ensMapperClear"))
     {
         ajDebug("ensMapperClear\n"
@@ -3017,54 +4045,10 @@ AjBool ensMapperClear(EnsPMapper mapper)
     if(!mapper)
         return ajFalse;
 
-    /*
-    ** Clear the first-level AJAX Table with Ensembl Mapper type AJAX Strings
-    ** of source and target as keys and AJAX Tables as values into an array.
-    ** This first-level AJAX Table is not modified here, but deleted later by
-    ** the ensMapperDel function.
-    */
+    ajTableMap(mapper->Pairs, mapperProcessL1, NULL);
 
-    ajTableToarrayKeysValues(mapper->Pairs, &keyarray1, &valarray1);
-
-    for(i = 0; keyarray1[i]; i++)
-    {
-        /*
-        ** Clear the second-level AJAX Tables with Ensembl Object identifiers
-        ** as keys and AJAX Lists as values.
-        */
-
-        ajTableToarrayKeysValues((AjPTable) valarray1[i],
-                                 &keyarray2, &valarray2);
-
-        for(j = 0; keyarray2[j]; j++)
-        {
-            ajTableRemove((AjPTable) valarray1[i],
-                          (const void *) keyarray2[j]);
-
-            AJFREE(keyarray2[j]);
-
-            /*
-            ** Clear the third-level AJAX Lists of Ensembl Mapper Pairs and
-            ** delete the Ensembl Mapper Pair list elements.
-            */
-
-            while(ajListPop((AjPList) valarray2[j], (void **) &mp))
-                ensMapperpairDel(&mp);
-
-            /* Delete the third-level AJAX Lists */
-
-            ajListFree((AjPList *) &valarray2[j]);
-        }
-
-        AJFREE(keyarray2);
-        AJFREE(valarray2);
-    }
-
-    AJFREE(keyarray1);
-    AJFREE(valarray1);
-
-    mapper->PairCount = 0;
-    mapper->IsSorted  = ajFalse;
+    mapper->Count = 0;
+    mapper->Sorted  = ajFalse;
 
     return ajTrue;
 }
@@ -3075,10 +4059,9 @@ AjBool ensMapperClear(EnsPMapper mapper)
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Mapper.
+** memory allocated for an Ensembl Mapper object.
 **
 ** @fdata [EnsPMapper]
-** @fnote None
 **
 ** @nam3rule Del Destroy (free) an Ensembl Mapper object
 **
@@ -3096,27 +4079,24 @@ AjBool ensMapperClear(EnsPMapper mapper)
 **
 ** Default destructor for an Ensembl Mapper.
 **
-** This function clears and deletes first-level AJAX Tables with Ensembl Mapper
-** type AJAX Strings as keys and second-level AJAX Tables as values.
-** The second-level AJAX Tables with Object identifiers as keys and
-** third-level AJAX Lists of Ensembl Mapper Pairs are also cleared and deleted.
-** The third-level AJAX Lists of Ensembl Mapper Pairs are cleared and deleted,
-** as are the Ensembl Mapper Pair list elements.
+** This function clears and deletes the first-level AJAX Table of
+** AJAX String object (Ensembl Mapper type) key data and
+** second-level AJAX Table object value data.
+** The second-level AJAX Table of
+** AJAX unsigned integer (Ensembl Object identifier) key data and
+** third-level AJAX List object value data are also cleared.
+** The third-level AJAX List objects of Ensembl Mapper Pair objects are cleared
+** and deleted, as are the Ensembl Mapper Pair objects.
 **
-** @param [d] Pmapper [EnsPMapper*] Ensembl Mapper address
+** @param [d] Pmapper [EnsPMapper*] Ensembl Mapper object address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensMapperDel(EnsPMapper *Pmapper)
+void ensMapperDel(EnsPMapper* Pmapper)
 {
-    void **keyarray = NULL;
-    void **valarray = NULL;
-
     EnsPMapper pthis = NULL;
-
-    register ajuint i = 0;
 
     if(!Pmapper)
         return;
@@ -3135,36 +4115,15 @@ void ensMapperDel(EnsPMapper *Pmapper)
         return;
     }
 
-    ensMapperClear(pthis);
-
-    ajStrDel(&pthis->SourceType);
-
-    ajStrDel(&pthis->TargetType);
-
-    ensCoordsystemDel(&pthis->SourceCoordsystem);
-
-    ensCoordsystemDel(&pthis->TargetCoordsystem);
-
-    ajTableToarrayKeysValues(pthis->Pairs, &keyarray, &valarray);
-
-    for(i = 0; keyarray[i]; i++)
-    {
-        /*
-        ** Clear the first-level AJAX Tables with source and target
-        ** Ensembl Mapper types as keys and second-level AJAX Tables as values.
-        */
-
-        ajStrDel((AjPStr *) &keyarray[i]);
-
-        ajTableFree((AjPTable *) &valarray[i]);
-    }
-
-    AJFREE(keyarray);
-    AJFREE(valarray);
-
-    /* Delete the first-level AJAX Table. */
+    ajTableMapDel(pthis->Pairs, mapperClearL1, NULL);
 
     ajTableFree(&pthis->Pairs);
+
+    ajStrDel(&pthis->TypeSource);
+    ajStrDel(&pthis->TypeTarget);
+
+    ensCoordsystemDel(&pthis->CoordsystemSource);
+    ensCoordsystemDel(&pthis->CoordsystemTarget);
 
     AJFREE(pthis);
 
@@ -3176,88 +4135,166 @@ void ensMapperDel(EnsPMapper *Pmapper)
 
 
 
-/* @func ensMapperGetSourceType ***********************************************
+/* @section element retrieval *************************************************
+**
+** Functions for returning elements of an Ensembl Mapper object.
+**
+** @fdata [EnsPMapper]
+**
+** @nam3rule Get Return Ensembl Mapper attribute(s)
+** @nam4rule Coordsystem Return an Ensembl Coordinate System
+** @nam5rule Source Return the source Ensembl Coordinate System
+** @nam5rule Target Return the target Ensembl Coordinate System
+** @nam4rule Count Return the number of Ensembl Mapper Pair objects
+** @nam4rule Sorted Return the sorted attribute
+** @nam4rule Type Return an Ensembl Mapper Type
+** @nam5rule Source Return the source type
+** @nam5rule Target Return the target type
+**
+** @argrule * mapper [const EnsPMapper] Ensembl Mapper
+**
+** @valrule CoordsystemSource [EnsPCoordsystem] Source Ensembl Coordinate
+** System or NULL
+** @valrule CoordsystemTarget [EnsPCoordsystem] Target Ensembl Coordinate
+** System or NULL
+** @valrule Count [ajuint] Number of Ensembl Mapper Pair objects or 0
+** @valrule Sorted [AjBool] ajTrue if the Mapper Pair objects are sorted
+** @valrule TypeSource [AjPStr] Source type or NULL
+** @valrule TypeTarget [AjPStr] Target type or NULL
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensMapperGetCoordsystemSource ****************************************
+**
+** Get the source Ensembl Coordinate System element of an Ensembl Mapper.
+**
+** @param [r] mapper [const EnsPMapper] Ensembl Mapper
+**
+** @return [EnsPCoordsystem] Source Ensembl Coordinate System or NULL
+** @@
+******************************************************************************/
+
+EnsPCoordsystem ensMapperGetCoordsystemSource(const EnsPMapper mapper)
+{
+    if(!mapper)
+        return NULL;
+
+    return mapper->CoordsystemSource;
+}
+
+
+
+
+/* @func ensMapperGetCoordsystemTarget ****************************************
+**
+** Get the target Ensembl Coordinate System element of an Ensembl Mapper.
+**
+** @param [r] mapper [const EnsPMapper] Ensembl Mapper
+**
+** @return [EnsPCoordsystem] Target Ensembl Coordinate System or NULL
+** @@
+******************************************************************************/
+
+EnsPCoordsystem ensMapperGetCoordsystemTarget(const EnsPMapper mapper)
+{
+    if(!mapper)
+        return NULL;
+
+    return mapper->CoordsystemTarget;
+}
+
+
+
+
+/* @func ensMapperGetCount ****************************************************
+**
+** Get the number of Ensembl Mapper Pair objects in an Ensembl Mapper.
+**
+** @param [r] mapper [const EnsPMapper] Ensembl Mapper
+**
+** @return [ajuint] Number of Ensembl Mapper Pair objects or 0
+** @@
+******************************************************************************/
+
+ajuint ensMapperGetCount(const EnsPMapper mapper)
+{
+    if(!mapper)
+        return 0;
+
+    return mapper->Count;
+}
+
+
+
+
+/* @func ensMapperGetSorted ***************************************************
+**
+** Return the sorted element of an Ensembl Mapper.
+**
+** This element indicates whether Ensembl Mapper Pair objects are sorted
+** in the Ensembl Mapper.
+**
+** @cc Bio::EnsEMBL::Mapper::_is_sorted
+** @param [r] mapper [const EnsPMapper] Ensembl Mapper
+**
+** @return [AjBool] ajTrue if the Mapper Pair objects are sorted
+** @@
+******************************************************************************/
+
+AjBool ensMapperGetSorted(const EnsPMapper mapper)
+{
+    if(!mapper)
+        return ajFalse;
+
+    return mapper->Sorted;
+}
+
+
+
+
+/* @func ensMapperGetTypeSource ***********************************************
 **
 ** Get the source type element of an Ensembl Mapper.
 **
 ** @cc Bio::EnsEMBL::Mapper::from
 ** @param [r] mapper [const EnsPMapper] Ensembl Mapper
 **
-** @return [AjPStr] Source type
+** @return [AjPStr] Source type or NULL
 ** @@
 ******************************************************************************/
 
-AjPStr ensMapperGetSourceType(const EnsPMapper mapper)
+AjPStr ensMapperGetTypeSource(const EnsPMapper mapper)
 {
     if(!mapper)
         return NULL;
 
-    return mapper->SourceType;
+    return mapper->TypeSource;
 }
 
 
 
 
-/* @func ensMapperGetTargetType ***********************************************
+/* @func ensMapperGetTypeTarget ***********************************************
 **
 ** Get the target type element of an Ensembl Mapper.
 **
 ** @cc Bio::EnsEMBL::Mapper::to
 ** @param [r] mapper [const EnsPMapper] Ensembl Mapper
 **
-** @return [AjPStr] Target type
+** @return [AjPStr] Target type or NULL
 ** @@
 ******************************************************************************/
 
-AjPStr ensMapperGetTargetType(const EnsPMapper mapper)
+AjPStr ensMapperGetTypeTarget(const EnsPMapper mapper)
 {
     if(!mapper)
         return NULL;
 
-    return mapper->TargetType;
-}
-
-
-
-
-/* @func ensMapperGetPairCount ************************************************
-**
-** Get the number of Ensembl Mapper Pairs in an Ensembl Mapper.
-**
-** @param [r] mapper [const EnsPMapper] Ensembl Mapper
-**
-** @return [ajuint] Number of Ensembl Mapper Pairs in an Ensembl Mapper
-** @@
-******************************************************************************/
-
-ajuint ensMapperGetPairCount(const EnsPMapper mapper)
-{
-    if(!mapper)
-        return 0;
-
-    return mapper->PairCount;
-}
-
-
-
-
-/* @func ensMapperIsSorted ****************************************************
-**
-** Test whether the Ensembl Mapper Pairs are sorted in the Ensembl Mapper.
-**
-** @cc Bio::EnsEMBL::Mapper::_is_sorted
-** @param [r] mapper [const EnsPMapper] Ensembl Mapper
-**
-** @return [AjBool] ajTrue if the Mapper Pairs are sorted
-** @@
-******************************************************************************/
-
-AjBool ensMapperIsSorted(const EnsPMapper mapper)
-{
-    if(!mapper)
-        return ajFalse;
-
-    return mapper->IsSorted;
+    return mapper->TypeTarget;
 }
 
 
@@ -3265,10 +4302,10 @@ AjBool ensMapperIsSorted(const EnsPMapper mapper)
 
 /* @funcstatic mapperMergePairs ***********************************************
 **
-** Merge adjacent Ensembl Mapper Pairs in an Ensembl Mapper into one.
+** Merge adjacent Ensembl Mapper Pair objects in an Ensembl Mapper into one.
 **
 ** @cc Bio::EnsEMBL::Mapper::_merge_pairs
-** @param [r] mapper [EnsPMapper] Ensembl Mapper
+** @param [u] mapper [EnsPMapper] Ensembl Mapper
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -3276,7 +4313,7 @@ AjBool ensMapperIsSorted(const EnsPMapper mapper)
 
 static AjBool mapperMergePairs(EnsPMapper mapper)
 {
-    void **valarray = NULL;
+    void** valarray = NULL;
 
     register ajuint i = 0;
 
@@ -3310,8 +4347,8 @@ static AjBool mapperMergePairs(EnsPMapper mapper)
     if(!mapper)
         return ajFalse;
 
-    trgtable = (AjPTable)
-        ajTableFetch(mapper->Pairs, (const void *) mapper->TargetType);
+    trgtable = (AjPTable) ajTableFetchmodV(mapper->Pairs,
+                                           (const void*) mapper->TypeTarget);
 
     ajTableToarrayValues(trgtable, &valarray);
 
@@ -3328,15 +4365,15 @@ static AjBool mapperMergePairs(EnsPMapper mapper)
 
             /*
             ** If target Mapper Pair 2 is not defined, there are no more
-            ** Mapper Pairs to compare.
+            ** Mapper Pair objects to compare.
             */
 
             if((!trgpair1) || (!trgpair2))
                 break;
 
-            /* Do not merge insertion or deletion Mapper Pairs. */
+            /* Do not merge insertion or deletion Mapper Pair objects. */
 
-            if(trgpair1->InsertionDeletion || trgpair2->InsertionDeletion)
+            if(trgpair1->Indel || trgpair2->Indel)
                 continue;
 
             assert(trgpair1->Source);
@@ -3345,15 +4382,15 @@ static AjBool mapperMergePairs(EnsPMapper mapper)
             assert(trgpair2->Source);
             assert(trgpair2->Target);
 
-            /* Merge overlapping Mapper Pairs. */
+            /* Merge overlapping Mapper Pair objects. */
 
-            if((trgpair1->Source->ObjectIdentifier ==
-                trgpair2->Source->ObjectIdentifier) &&
+            if((trgpair1->Source->Objectidentifier ==
+                trgpair2->Source->Objectidentifier) &&
                (trgpair1->Target->Start == trgpair2->Target->Start))
                 delpair = trgpair2;
-            /* Merge adjacent Mapper Pairs. */
-            else if((trgpair1->Source->ObjectIdentifier ==
-                     trgpair2->Source->ObjectIdentifier) &&
+            /* Merge adjacent Mapper Pair objects. */
+            else if((trgpair1->Source->Objectidentifier ==
+                     trgpair2->Source->Objectidentifier) &&
                     (trgpair1->Orientation == trgpair2->Orientation) &&
                     (trgpair1->Target->End == (trgpair2->Target->Start - 1)))
             {
@@ -3400,7 +4437,7 @@ static AjBool mapperMergePairs(EnsPMapper mapper)
                         /* Merge in anti-parallel orientation. */
 
                         trgpair1->Source->Start = trgpair2->Source->Start;
-                        trgpair1->Target->End = trgpair2->Target->End;
+                        trgpair1->Target->End   = trgpair2->Target->End;
 
                         delpair = trgpair2;
                     }
@@ -3413,14 +4450,13 @@ static AjBool mapperMergePairs(EnsPMapper mapper)
             {
                 ajListIterRemove(trgiter);
 
-                srctable = (AjPTable)
-                    ajTableFetch(mapper->Pairs,
-                                 (const void *) mapper->SourceType);
+                srctable = (AjPTable) ajTableFetchmodV(
+                    mapper->Pairs,
+                    (const void*) mapper->TypeSource);
 
-                srclist = (AjPList)
-                    ajTableFetch(srctable,
-                                 (const void *)
-                                 &delpair->Source->ObjectIdentifier);
+                srclist = (AjPList) ajTableFetchmodV(
+                    srctable,
+                    (const void*) &delpair->Source->Objectidentifier);
 
                 srciter = ajListIterNew(srclist);
 
@@ -3444,7 +4480,7 @@ static AjBool mapperMergePairs(EnsPMapper mapper)
 
         ajListIterDel(&trgiter);
 
-        mapper->PairCount = ajListGetLength(trglist);
+        mapper->Count = ajListGetLength(trglist);
     }
 
     AJFREE(valarray);
@@ -3457,10 +4493,10 @@ static AjBool mapperMergePairs(EnsPMapper mapper)
 
 /* @funcstatic mapperSort *****************************************************
 **
-** Sort Ensembl Mapper Pairs in an Ensembl Mapper.
+** Sort Ensembl Mapper Pair objects in an Ensembl Mapper.
 ** @cc Bio::EnsEMBL::Mapper::_sort
 **
-** @param [r] mapper [EnsPMapper] Ensembl Mapper
+** @param [u] mapper [EnsPMapper] Ensembl Mapper
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
@@ -3468,7 +4504,7 @@ static AjBool mapperMergePairs(EnsPMapper mapper)
 
 static AjBool mapperSort(EnsPMapper mapper)
 {
-    void **valarray = NULL;
+    void** valarray = NULL;
 
     register ajuint i = 0;
 
@@ -3486,32 +4522,80 @@ static AjBool mapperSort(EnsPMapper mapper)
     if(!mapper)
         return ajFalse;
 
-    table = (AjPTable)
-        ajTableFetch(mapper->Pairs, (const void *) mapper->SourceType);
+    table = (AjPTable) ajTableFetchmodV(mapper->Pairs,
+                                        (const void*) mapper->TypeSource);
 
     ajTableToarrayValues(table, &valarray);
 
     for(i = 0; valarray[i]; i++)
-        ensMapperpairSortBySourceStartAscending((AjPList) valarray[i]);
+        ensListMapperpairSortSourceStartAscending((AjPList) valarray[i]);
 
     AJFREE(valarray);
 
-    table = (AjPTable)
-        ajTableFetch(mapper->Pairs, (const void *) mapper->TargetType);
+    table = (AjPTable) ajTableFetchmodV(mapper->Pairs,
+                                        (const void*) mapper->TypeTarget);
 
     ajTableToarrayValues(table, &valarray);
 
     for(i = 0; valarray[i]; i++)
-        ensMapperpairSortByTargetStartAscending((AjPList) valarray[i]);
+        ensListMapperpairSortTargetStartAscending((AjPList) valarray[i]);
 
     AJFREE(valarray);
 
     mapperMergePairs(mapper);
 
-    mapper->IsSorted = ajTrue;
+    mapper->Sorted = ajTrue;
 
     return ajTrue;
 }
+
+
+
+
+/* @section element addition **************************************************
+**
+** Functions for adding elements to an Ensembl Mapper object.
+**
+** @fdata [EnsPMapper]
+**
+** @nam3rule Add Add one object to an Ensembl Mapper
+** @nam4rule Coordinates Add coordinates
+** @nam4rule Indel       Add insertion-deletion coordinates
+** @nam4rule Mapperpair  Add an Ensembl Mapper Pair
+** @nam4rule Mappers     Add an Ensembl Mapper
+** @nam4rule Mapperunits Add an Ensembl Mapper Unit pair
+**
+** @argrule Coordinates mapper [EnsPMapper] Ensembl Mapper
+** @argrule Coordinates srcoid [ajuint] Source Object identifier
+** @argrule Coordinates srcstart [ajint] Source start coordinate
+** @argrule Coordinates srcend [ajint] Source end coordinate
+** @argrule Coordinates ori [ajint] Orientation
+** @argrule Coordinates trgoid [ajuint] Target Object identifier
+** @argrule Coordinates trgstart [ajint] Target start coordinate
+** @argrule Coordinates trgend [ajint] Target end coordinate
+** @argrule Indel mapper [EnsPMapper] Ensembl Mapper
+** @argrule Indel srcoid [ajuint] Source Object identifier
+** @argrule Indel srcstart [ajint] Source start coordinate
+** @argrule Indel srcend [ajint] Source end coordinate
+** @argrule Indel ori [ajint] Orientation
+** @argrule Indel trgoid [ajuint] Target Object identifier
+** @argrule Indel trgstart [ajint] Target start coordinate
+** @argrule Indel trgend [ajint] Target end coordinate
+** @argrule Mapperpair mapper [EnsPMapper] Ensembl Mapper
+** @argrule Mapperpair mp [EnsPMapperpair] Ensembl Mapper Pair
+** @argrule Mappers mapper1 [EnsPMapper] Ensembl Mapper
+** @argrule Mappers mapper2 [EnsPMapper] Ensembl Mapper
+** @argrule Mapperunits mapper [EnsPMapper] Ensembl Mapper
+** @argrule Mapperunits srcmu [EnsPMapperunit] Source Ensembl Mapper Unit
+** @argrule Mapperunits trgmu [EnsPMapperunit] Target Ensembl Mapper Unit
+** @argrule Mapperunits ori [ajint] Relative orientation of the Ensembl Mapper
+** Unit objects
+** @argrule Mapperunits indel [AjBool] Insertion-deletion attribute
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory modify
+******************************************************************************/
 
 
 
@@ -3543,7 +4627,7 @@ AjBool ensMapperAddCoordinates(EnsPMapper mapper,
                                ajint trgstart,
                                ajint trgend)
 {
-    AjBool value = AJFALSE;
+    AjBool result = AJFALSE;
 
     EnsPMapperpair mp = NULL;
 
@@ -3579,60 +4663,69 @@ AjBool ensMapperAddCoordinates(EnsPMapper mapper,
         ajFatal("ensMapperAddCoordinates cannot deal with mis-lengthed "
                 "mappings so far.\n");
 
-    mp = ensMapperpairNewC(srcoid, srcstart, srcend,
-                           trgoid, trgstart, trgend,
-                           ori, ajFalse);
+    mp = ensMapperpairNewIni(srcoid, srcstart, srcend,
+                             trgoid, trgstart, trgend,
+                             ori, ajFalse);
 
-    value = ensMapperAddMapperpair(mapper, mp);
+    result = ensMapperAddMapperpair(mapper, mp);
 
     ensMapperpairDel(&mp);
 
-    return value;
+    return result;
 }
 
 
 
 
-/* @func ensMapperAddMapperunits **********************************************
+/* @func ensMapperAddIndel ****************************************************
 **
-** Insert Ensembl Mapper Units into an Ensembl Mapper.
+** Store details of mapping between a source and a target region.
 **
+** @cc Bio::EnsEMBL::Mapper::add_indel_coordinates
 ** @param [u] mapper [EnsPMapper] Ensembl Mapper
-** @param [u] srcmu [EnsPMapperunit] Source Ensembl Mapper Unit
-** @param [u] trgmu [EnsPMapperunit] Target Ensembl Mapper Unit
-** @param [r] ori [ajint] Relative orientation of the Ensembl Mapper Units
-** @param [r] indel [AjBool] Insertion-deletion attribute
+** @param [r] srcoid [ajuint] Source Object identifier
+** @param [r] srcstart [ajint] Source start coordinate
+** @param [r] srcend [ajint] Source end coordinate
+** @param [r] ori [ajint] Orientation
+** @param [r] trgoid [ajuint] Target Object identifier
+** @param [r] trgstart [ajint] Target start coordinate
+** @param [r] trgend [ajint] Target end coordinate
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensMapperAddMapperunits(EnsPMapper mapper,
-                               EnsPMapperunit srcmu,
-                               EnsPMapperunit trgmu,
-                               ajint ori,
-                               AjBool indel)
+AjBool ensMapperAddIndel(EnsPMapper mapper,
+                         ajuint srcoid,
+                         ajint srcstart,
+                         ajint srcend,
+                         ajint ori,
+                         ajuint trgoid,
+                         ajint trgstart,
+                         ajint trgend)
 {
-    AjBool value = AJFALSE;
+    AjBool result = AJFALSE;
 
     EnsPMapperpair mp = NULL;
 
     if(!mapper)
         return ajFalse;
 
-    if(!srcmu)
+    if(!srcoid)
         return ajFalse;
 
-    if(!trgmu)
+    if(!trgoid)
         return ajFalse;
 
-    mp = ensMapperpairNew(srcmu, trgmu, ori, indel);
+    mp = ensMapperpairNewIni(srcoid, srcstart, srcend,
+                             trgoid, trgstart, trgend,
+                             ori, ajTrue);
 
-    value = ensMapperAddMapperpair(mapper, mp);
+    result = ensMapperAddMapperpair(mapper, mp);
 
     ensMapperpairDel(&mp);
 
-    return value;
+    return result;
 }
 
 
@@ -3651,7 +4744,7 @@ AjBool ensMapperAddMapperunits(EnsPMapper mapper,
 
 AjBool ensMapperAddMapperpair(EnsPMapper mapper, EnsPMapperpair mp)
 {
-    ajuint *Poid = NULL;
+    ajuint* Poid = NULL;
 
     AjPList list = NULL;
 
@@ -3687,7 +4780,7 @@ AjBool ensMapperAddMapperpair(EnsPMapper mapper, EnsPMapperpair mp)
     ** reflecting an insertion or deletion.
     */
 
-    if((!mp->InsertionDeletion) &&
+    if((!mp->Indel) &&
        ((mp->Source->End - mp->Source->Start) !=
         (mp->Target->End - mp->Target->Start)))
         ajFatal("ensMapperAddMapperpair cannot deal with mis-lengthed "
@@ -3696,84 +4789,84 @@ AjBool ensMapperAddMapperpair(EnsPMapper mapper, EnsPMapperpair mp)
     /*
     ** Insert the Mapper Pair into the source branch of the Mapper.
     **
-    ** Search the first-level AJAX Table of Ensembl Mapper type AJAX Strings
-    ** for the second-level AJAX Table of Ensembl Object Identifers.
+    ** Search the first-level AJAX Table of (Ensembl Mapper type) AJAX String
+    ** objects for the second-level AJAX Table of Ensembl Object identifers.
     */
 
-    table = (AjPTable) ajTableFetch(mapper->Pairs,
-                                    (const void *) mapper->SourceType);
+    table = (AjPTable) ajTableFetchmodV(mapper->Pairs,
+                                        (const void*) mapper->TypeSource);
 
     if(table)
     {
         /*
         ** Search the second-level AJAX Table of Ensembl Object identifiers
-        ** for the third-level AJAX List of Ensembl Mapper Pairs.
+        ** for the third-level AJAX List of Ensembl Mapper Pair objects.
         */
 
-        list = (AjPList) ajTableFetch(
+        list = (AjPList) ajTableFetchmodV(
             table,
-            (const void *) &mp->Source->ObjectIdentifier);
+            (const void*) &mp->Source->Objectidentifier);
 
         if(!list)
         {
             AJNEW0(Poid);
 
-            *Poid = mp->Source->ObjectIdentifier;
+            *Poid = mp->Source->Objectidentifier;
 
             list = ajListNew();
 
-            ajTablePut(table, (void *) Poid, (void *) list);
+            ajTablePut(table, (void*) Poid, (void*) list);
         }
 
-        ajListPushAppend(list, (void *) ensMapperpairNewRef(mp));
+        ajListPushAppend(list, (void*) ensMapperpairNewRef(mp));
     }
     else
         ajFatal("ensMapperAddMapperpair first-level AJAX Table for "
                 "Ensembl Mapper source type '%S' has not been initialised.",
-                mapper->SourceType);
+                mapper->TypeSource);
 
     /*
     ** Insert the Mapper Pair into the target branch of the Mapper.
     **
-    ** Search the first-level AJAX Table of Ensembl Mapper type AJAX Strings
-    ** for the second-level AJAX Table of Ensembl Object Identifers.
+    ** Search the first-level AJAX Table of (Ensembl Mapper type) AJAX String
+    ** objects for the second-level AJAX Table of Ensembl Object identifers.
     */
 
-    table = (AjPTable) ajTableFetch(mapper->Pairs,
-                                    (const void *) mapper->TargetType);
+    table = (AjPTable) ajTableFetchmodV(mapper->Pairs,
+                                        (const void*) mapper->TypeTarget);
 
     if(table)
     {
         /*
         ** Search the second-level AJAX Table of Ensembl Object identifiers
-        ** for the third-level AJAX List of Ensembl Mapper Pairs.
+        ** for the third-level AJAX List of Ensembl Mapper Pair objects.
         */
 
-        list = (AjPList) ajTableFetch(
+        list = (AjPList) ajTableFetchmodV(
             table,
-            (const void *) &mp->Target->ObjectIdentifier);
+            (const void*) &mp->Target->Objectidentifier);
 
         if(!list)
         {
             AJNEW0(Poid);
 
-            *Poid = mp->Target->ObjectIdentifier;
+            *Poid = mp->Target->Objectidentifier;
 
             list = ajListNew();
 
-            ajTablePut(table, (void *) Poid, (void *) list);
+            ajTablePut(table, (void*) Poid, (void*) list);
         }
 
-        ajListPushAppend(list, (void *) ensMapperpairNewRef(mp));
+        ajListPushAppend(list, (void*) ensMapperpairNewRef(mp));
     }
     else
         ajFatal("ensMapperAddMapperpair first-level AJAX Table for "
                 "Ensembl Mapper target type '%S' has not been initialised.",
-                mapper->TargetType);
+                mapper->TypeTarget);
 
-    mapper->PairCount++;
+    mapper->Count++;
 
-    mapper->IsSorted = ajFalse;
+    mapper->Sorted = ajFalse;
 
     return ajTrue;
 }
@@ -3781,30 +4874,287 @@ AjBool ensMapperAddMapperpair(EnsPMapper mapper, EnsPMapperpair mp)
 
 
 
-/* @func ensMapperListPairs ***************************************************
+/* @func ensMapperAddMappers **************************************************
 **
-** List Ensembl Mapper Pairs in an Ensembl Mapper.
-** The caller is responsible for deleting the Ensembl Mapper Pairs before
-** deleting the AJAX List.
+** Transfer all Ensembl Mapper Pair objects from the second into the first
+** Ensembl Mapper.
 **
-** @cc Bio::EnsEMBL::Mapper::list_pairs
-** @param [r] mapper [EnsPMapper] Ensembl Mapper
-** @param [r] oid [ajuint] Ensembl Object identifier
-** @param [r] start [ajint] Start coordinate
-** @param [r] end [ajint] End coordinate
-** @param [r] type [const AjPStr] Ensembl Mapper type
-** @param [u] mps [AjPList] AJAX List of Ensembl Mapper Pairs
+** @cc Bio::EnsEMBL::Mapper::add_Mapper
+** @param [u] mapper1 [EnsPMapper] First Ensembl Mapper
+** @param [u] mapper2 [EnsPMapper] Second Ensembl Mapper
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensMapperListPairs(EnsPMapper mapper,
-                          ajuint oid,
-                          ajint start,
-                          ajint end,
-                          const AjPStr type,
-                          AjPList mps)
+AjBool ensMapperAddMappers(EnsPMapper mapper1, EnsPMapper mapper2)
+{
+    void** keyarray = NULL;
+    void** valarray = NULL;
+
+    register ajuint i = 0;
+
+    ajuint srccounter = 0;
+    ajuint trgcounter = 0;
+
+    AjPList list1 = NULL;
+    AjPList list2 = NULL;
+
+    AjPTable table1 = NULL;
+    AjPTable table2 = NULL;
+
+    EnsPMapperpair mp = NULL;
+
+    if(!mapper1)
+        return ajFalse;
+
+    if(!mapper2)
+        return ajFalse;
+
+    if(!ajStrMatchCaseS(mapper1->TypeSource, mapper2->TypeSource) ||
+       !ajStrMatchCaseS(mapper1->TypeTarget, mapper2->TypeTarget))
+        ajFatal("ensMapperAddMappers trying to add Ensembl Mapper of "
+                "incompatible type ('%S:%S' vs '%S:%S').",
+                mapper1->TypeSource,
+                mapper1->TypeTarget,
+                mapper2->TypeSource,
+                mapper2->TypeTarget);
+
+    /*
+    ** Get the first-level AJAX Table objects for the source type of both
+    ** Ensembl Mapper objects.
+    */
+
+    table1 = (AjPTable) ajTableFetchmodV(mapper1->Pairs,
+                                         (const void*) mapper1->TypeSource);
+
+    if(!table1)
+        ajFatal("ensMapperAddMappers first-level AJAX Table for first "
+                "Ensembl Mapper source type '%S' not initialised.",
+                mapper1->TypeSource);
+
+    table2 = (AjPTable) ajTableFetchmodV(mapper2->Pairs,
+                                         (const void*) mapper2->TypeSource);
+
+    if(!table2)
+        ajFatal("ensMapperAddMappers first-level AJAX Table for second "
+                "Ensembl Mapper source type '%S' not initialised.",
+                mapper2->TypeSource);
+
+    /*
+    ** Convert the second-level AJAX Table with Ensembl Object
+    ** identifiers as key data and AJAX List value data for the second
+    ** Ensembl Mapper.
+    */
+
+    ajTableToarrayKeysValues(table2, &keyarray, &valarray);
+
+    for(i = 0; keyarray[i]; i++)
+    {
+        /*
+        ** Get the third-level AJAX Lists for corresponding
+        ** Ensembl Object identifiers.
+        */
+
+        list1 = (AjPList) ajTableFetchmodV(table1, (const void*) &keyarray[i]);
+
+        list2 = (AjPList) valarray[i];
+
+        while(ajListPop(list2, (void**) &mp))
+        {
+            ajListPushAppend(list1, (void*) mp);
+
+            srccounter++;
+        }
+
+        /*
+        ** Remove the entry from the AJAX Table and free the
+        ** Object identifier and the AJAX List.
+        */
+
+        ajTableRemove(table2, (const void*) keyarray[i]);
+
+        AJFREE(keyarray[i]);
+
+        ajListFree(&list2);
+    }
+
+    AJFREE(keyarray);
+    AJFREE(valarray);
+
+    /*
+    ** Get the first-level AJAX Table objects for the target type of both
+    ** Ensembl Mapper objects.
+    */
+
+    table1 = (AjPTable) ajTableFetchmodV(mapper1->Pairs,
+                                         (const void*) mapper1->TypeTarget);
+
+    if(!table1)
+        ajFatal("ensMapperAddMappers first-level AJAX Table for first "
+                "Ensembl Mapper target type '%S' not initialised.",
+                mapper1->TypeTarget);
+
+    table2 = (AjPTable) ajTableFetchmodV(mapper2->Pairs,
+                                         (const void*) mapper2->TypeTarget);
+
+    if(!table2)
+        ajFatal("ensMapperAddMappers first-level AJAX Table for second "
+                "Ensembl Mapper target type '%S' not initialised.",
+                mapper2->TypeTarget);
+
+    /*
+    ** Convert the second-level AJAX Table with Ensembl Object identifiers
+    ** as key data and AJAX List value data for the second Ensembl Mapper.
+    */
+
+    ajTableToarrayKeysValues(table2, &keyarray, &valarray);
+
+    for(i = 0; keyarray[i]; i++)
+    {
+        /*
+        ** Get the third-level AJAX Lists for corresponding
+        ** Ensembl Object identifiers.
+        */
+
+        list1 = (AjPList) ajTableFetchmodV(table1, (const void*) &keyarray[i]);
+
+        list2 = (AjPList) valarray[i];
+
+        while(ajListPop(list2, (void**) &mp))
+        {
+            ajListPushAppend(list1, (void*) mp);
+
+            trgcounter++;
+        }
+
+        /*
+        ** Remove the entry from the AJAX Table and free the
+        ** Ensembl Object identifier and the AJAX List.
+        */
+
+        ajTableRemove(table2, (const void*) keyarray[i]);
+
+        AJFREE(keyarray[i]);
+
+        ajListFree(&list2);
+    }
+
+    AJFREE(keyarray);
+    AJFREE(valarray);
+
+    if(srccounter == trgcounter)
+        mapper1->Count += srccounter;
+    else
+        ajFatal("ensMapperAddMappers Numbers of Ensembl Mapper Pair objects "
+                "for source (%u) and target (%u) types do not match in the "
+                "second Ensembl Mapper.",
+                srccounter, trgcounter);
+
+    mapper1->Sorted = ajFalse;
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensMapperAddMapperunits **********************************************
+**
+** Insert Ensembl Mapper Unit objects into an Ensembl Mapper.
+**
+** @param [u] mapper [EnsPMapper] Ensembl Mapper
+** @param [u] srcmu [EnsPMapperunit] Source Ensembl Mapper Unit
+** @param [u] trgmu [EnsPMapperunit] Target Ensembl Mapper Unit
+** @param [r] ori [ajint] Relative orientation of the Ensembl Mapper Unit
+**                        objects
+** @param [r] indel [AjBool] Insertion-deletion attribute
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperAddMapperunits(EnsPMapper mapper,
+                               EnsPMapperunit srcmu,
+                               EnsPMapperunit trgmu,
+                               ajint ori,
+                               AjBool indel)
+{
+    AjBool result = AJFALSE;
+
+    EnsPMapperpair mp = NULL;
+
+    if(!mapper)
+        return ajFalse;
+
+    if(!srcmu)
+        return ajFalse;
+
+    if(!trgmu)
+        return ajFalse;
+
+    mp = ensMapperpairNewUnit(srcmu, trgmu, ori, indel);
+
+    result = ensMapperAddMapperpair(mapper, mp);
+
+    ensMapperpairDel(&mp);
+
+    return result;
+}
+
+
+
+
+/* @section debugging *********************************************************
+**
+** Functions for reporting of an Ensembl Mapper object.
+**
+** @fdata [EnsPMapper]
+**
+** @nam3rule List List Ensembl Mapper Pair objects
+** @nam3rule Trace Report Ensembl Mapper elements to debug file
+**
+** @argrule List mapper [EnsPMapper] Ensembl Mapper
+** @argrule List oid [ajuint] Ensembl Object identifier
+** @argrule List start [ajint] Start coordinate
+** @argrule List end [ajint] End coordinate
+** @argrule List type [const AjPStr] Ensembl Mapper type
+** @argrule List mps [AjPList] AJAX List of Ensembl Mapper Pair objects
+** @argrule Trace mapper [const EnsPMapper] Ensembl Mapper
+** @argrule Trace level [ajuint] Indentation level
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensMapperList ********************************************************
+**
+** List Ensembl Mapper Pair objects in an Ensembl Mapper.
+** The caller is responsible for deleting the Ensembl Mapper Pair objects
+** before deleting the AJAX List.
+**
+** @cc Bio::EnsEMBL::Mapper::list_pairs
+** @param [u] mapper [EnsPMapper] Ensembl Mapper
+** @param [r] oid [ajuint] Ensembl Object identifier
+** @param [r] start [ajint] Start coordinate
+** @param [r] end [ajint] End coordinate
+** @param [r] type [const AjPStr] Ensembl Mapper type
+** @param [u] mps [AjPList] AJAX List of Ensembl Mapper Pair objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperList(EnsPMapper mapper,
+                     ajuint oid,
+                     ajint start,
+                     ajint end,
+                     const AjPStr type,
+                     AjPList mps)
 {
     EnsEMapperunitType mutype = ensEMapperunitTypeNULL;
 
@@ -3826,31 +5176,31 @@ AjBool ensMapperListPairs(EnsPMapper mapper,
     if(!type)
         return ajFalse;
 
-    if(!mapper->IsSorted)
+    if(!mapper->Sorted)
         mapperSort(mapper);
 
     if(start > end)
-        ajFatal("ensMapperListPairs start (%d) is greater than end (%d) "
+        ajFatal("ensMapperList start (%d) is greater than end (%d) "
                 "for Ensembl Object identifier %u.\n",
                 start, end, oid);
 
-    if(ajStrMatchCaseS(mapper->SourceType, type))
+    if(ajStrMatchCaseS(mapper->TypeSource, type))
         mutype = ensEMapperunitTypeSource;
-    else if(ajStrMatchCaseS(mapper->TargetType, type))
+    else if(ajStrMatchCaseS(mapper->TypeTarget, type))
         mutype = ensEMapperunitTypeTarget;
     else
-        ajFatal("ensMapperListPairs type '%S' is neither the source '%S' nor "
+        ajFatal("ensMapperList type '%S' is neither the source '%S' nor "
                 "target '%S' type of the Ensembl Mapper.\n",
-                type, mapper->SourceType, mapper->TargetType);
+                type, mapper->TypeSource, mapper->TypeTarget);
 
-    table = (AjPTable) ajTableFetch(mapper->Pairs, (const void *) type);
+    table = (AjPTable) ajTableFetchmodV(mapper->Pairs, (const void*) type);
 
     if(!table)
-        ajFatal("ensMapperListPairs first-level AJAX Table for "
+        ajFatal("ensMapperList first-level AJAX Table for "
                 "Ensembl Mapper type '%S' has not been initialised.",
                 type);
 
-    list = (AjPList) ajTableFetch(table, (const void *) &oid);
+    list = (AjPList) ajTableFetchmodV(table, (const void*) &oid);
 
     if(!list)
         return ajTrue;
@@ -3863,12 +5213,12 @@ AjBool ensMapperListPairs(EnsPMapper mapper,
 
         if((!start) && (!end))
         {
-            ajListPushAppend(mps, (void *) ensMapperpairNewRef(mp));
+            ajListPushAppend(mps, (void*) ensMapperpairNewRef(mp));
 
             continue;
         }
 
-        mu = ensMapperpairGetUnit(mp, mutype);
+        mu = ensMapperpairCalculateMapperunit(mp, mutype);
 
         if(mu->End < start)
             continue;
@@ -3876,12 +5226,265 @@ AjBool ensMapperListPairs(EnsPMapper mapper,
         if(mu->Start > end)
             break;
 
-        ajListPushAppend(mps, (void *) ensMapperpairNewRef(mp));
+        ajListPushAppend(mps, (void*) ensMapperpairNewRef(mp));
     }
 
     ajListIterDel(&iter);
 
     return ajTrue;
+}
+
+
+
+
+/* @func ensMapperTrace *******************************************************
+**
+** Trace an Ensembl Mapper.
+**
+** @param [r] mapper [const EnsPMapper] Ensembl Mapper
+** @param [r] level [ajuint] Indentation level
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperTrace(const EnsPMapper mapper, ajuint level)
+{
+    void** keyarray = NULL;
+    void** valarray = NULL;
+
+    register ajuint i = 0;
+
+    ajuint* Poid = NULL;
+
+    AjIList iter = NULL;
+
+    AjPStr indent = NULL;
+
+    AjPTable table = NULL;
+
+    EnsPMapperpair mp = NULL;
+
+    if(!mapper)
+        return ajFalse;
+
+    indent = ajStrNew();
+
+    ajStrAppendCountK(&indent, ' ', level * 2);
+
+    ajDebug("%SensMapperTrace %p\n"
+            "%S  TypeSource '%S'\n"
+            "%S  TypeTarget '%S'\n"
+            "%S  CoordsystemSource %p\n"
+            "%S  CoordsystemTarget %p\n"
+            "%S  Pairs %p\n"
+            "%S  Count %u\n"
+            "%S  Sorted '%B'\n"
+            "%S  Use %u\n",
+            indent, mapper,
+            indent, mapper->TypeSource,
+            indent, mapper->TypeTarget,
+            indent, mapper->CoordsystemSource,
+            indent, mapper->CoordsystemTarget,
+            indent, mapper->Pairs,
+            indent, mapper->Count,
+            indent, mapper->Sorted,
+            indent, mapper->Use);
+
+    ensCoordsystemTrace(mapper->CoordsystemSource, level + 1);
+
+    ensCoordsystemTrace(mapper->CoordsystemTarget, level + 1);
+
+    /* Trace the AJAX Table for the TypeSource. */
+
+    table = (AjPTable) ajTableFetchmodV(mapper->Pairs,
+                                        (const void*) mapper->TypeSource);
+
+    ajDebug("%S  AJAX Table %p for TypeSource '%S'\n",
+            indent, table, mapper->TypeSource);
+
+    ajTableToarrayKeysValues(table, &keyarray, &valarray);
+
+    for(i = 0; valarray[i]; i++)
+    {
+        Poid = (ajuint*) keyarray[i];
+
+        ajDebug("%S    AJAX List %p for Object identifier %u\n",
+                indent, valarray[i], *Poid);
+
+        iter = ajListIterNew((AjPList) valarray[i]);
+
+        while(!ajListIterDone(iter))
+        {
+            mp = (EnsPMapperpair) ajListIterGet(iter);
+
+            ensMapperpairTrace(mp, level + 3);
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    AJFREE(keyarray);
+    AJFREE(valarray);
+
+    /* Trace the AJAX Table for the TypeTarget. */
+
+    table = (AjPTable) ajTableFetchmodV(mapper->Pairs,
+                                        (const void*) mapper->TypeTarget);
+
+    ajDebug("%S  AJAX Table %p for TypeTarget '%S'\n",
+            indent, table, mapper->TypeTarget);
+
+    ajTableToarrayKeysValues(table, &keyarray, &valarray);
+
+    for(i = 0; valarray[i]; i++)
+    {
+        Poid = (ajuint*) keyarray[i];
+
+        ajDebug("%S    AJAX List %p for Object identifier %u\n",
+                indent, valarray[i], *Poid);
+
+        iter = ajListIterNew((AjPList) valarray[i]);
+
+        while(!ajListIterDone(iter))
+        {
+            mp = (EnsPMapperpair) ajListIterGet(iter);
+
+            ensMapperpairTrace(mp, level + 3);
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    AJFREE(keyarray);
+    AJFREE(valarray);
+
+    ajStrDel(&indent);
+
+    return ajTrue;
+}
+
+
+
+
+/* @section calculate *********************************************************
+**
+** Functions for calculating values of an Ensembl Mapper object.
+**
+** @fdata [EnsPMapper]
+**
+** @nam3rule Calculate Calculate Ensembl Mapper values
+** @nam4rule Memsize Calculate the memory size in bytes
+**
+** @argrule * mapper [const EnsPMapper] Ensembl Mapper
+**
+** @valrule Memsize [size_t] Memory size in bytes or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensMapperCalculateMemsize ********************************************
+**
+** Calculate the memory size in bytes of an Ensembl Mapper.
+**
+** @param [r] mapper [const EnsPMapper] Ensembl Mapper
+**
+** @return [size_t] Memory size in bytes or 0
+** @@
+******************************************************************************/
+
+size_t ensMapperCalculateMemsize(const EnsPMapper mapper)
+{
+    void** keyarray1 = NULL;
+    void** valarray1 = NULL;
+
+    void** valarray2 = NULL;
+
+    register ajuint i = 0;
+    register ajuint j = 0;
+
+    size_t size = 0;
+
+    AjIList iter = NULL;
+
+    EnsPMapperpair mp = NULL;
+
+    if(!mapper)
+        return 0;
+
+    size += sizeof (EnsOMapper);
+
+    if(mapper->TypeSource)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(mapper->TypeSource);
+    }
+
+    if(mapper->TypeTarget)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(mapper->TypeTarget);
+    }
+
+    size += ensCoordsystemCalculateMemsize(mapper->CoordsystemSource);
+    size += ensCoordsystemCalculateMemsize(mapper->CoordsystemTarget);
+
+    /* Level 0 data (AjOTable). */
+
+    size += sizeof (AjOTable);
+
+    ajTableToarrayKeysValues(mapper->Pairs, &keyarray1, &valarray1);
+
+    for(i = 0; valarray1[i]; i++)
+    {
+        /* Level 1 key data (AjOStr). */
+
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes((AjPStr) keyarray1[i]);
+
+        /* Level 1 value data (AjOTable). */
+
+        size += sizeof (AjOTable);
+
+        ajTableToarrayValues(valarray1[i], &valarray2);
+
+        for(j = 0; valarray2[j]; j++)
+        {
+            /* Level 2 key data (ajuint). */
+
+            size += sizeof (ajuint);
+
+            /* Level 2 value data (AjOList). */
+
+            size += sizeof (AjOList);
+
+            iter = ajListIterNew((AjPList) valarray2[j]);
+
+            while(!ajListIterDone(iter))
+            {
+                /* Level 3 data (EnsOMapperpair). */
+
+                mp = (EnsPMapperpair) ajListIterGet(iter);
+
+                size += ensMapperpairCalculateMemsize(mp);
+            }
+
+            ajListIterDel(&iter);
+        }
+
+        AJFREE(valarray2);
+    }
+
+    AJFREE(keyarray1);
+    AJFREE(valarray1);
+
+    return size;
 }
 
 
@@ -3955,32 +5558,32 @@ static AjBool mapperMapInsert(EnsPMapper mapper,
 
     coords = ajListNew();
 
-    ensMapperMapCoordinates(mapper, oid, srcstart, srcend, strand,
-                            type, coords);
+    ensMapperMap(mapper, oid, srcstart, srcend, strand,
+                 type, coords);
 
     if(ajListGetLength(coords) == 1)
     {
-        ajListPop(coords, (void **) &mr);
+        ajListPop(coords, (void**) &mr);
 
         /*
         ** Swap start and end to convert back into an insert where
         ** (start == end + 1)
         */
 
-        srcstart = mr->End;
-        srcend   = mr->Start;
+        srcstart = mr->CoordinateEnd;
+        srcend   = mr->CoordinateStart;
 
-        mr->Start = srcstart;
-        mr->End   = srcend;
+        mr->CoordinateStart = srcstart;
+        mr->CoordinateEnd   = srcend;
 
-        ajListPushAppend(mrs, (void *) ensMapperresultNewRef(mr));
+        ajListPushAppend(mrs, (void*) ensMapperresultNewRef(mr));
 
         ensMapperresultDel(&mr);
     }
     else
     {
         if(ajListGetLength(coords) != 2)
-            ajFatal("mapperMapInsert got %d Ensembl Mapper Pairs "
+            ajFatal("mapperMapInsert got %d Ensembl Mapper Pair objects "
                     "but expected only two.\n",
                     ajListGetLength(coords));
 
@@ -3989,44 +5592,44 @@ static AjBool mapperMapInsert(EnsPMapper mapper,
         if(strand < 0)
             ajListReverse(coords);
 
-        ajListPop(coords, (void **) &mr);
+        ajListPop(coords, (void**) &mr);
 
-        if(mr->Type == ensEMapperresultCoordinate)
+        if(mr->Type == ensEMapperresultTypeCoordinate)
         {
             /* The insert is after the first coordinate. */
 
-            if((mr->Strand * strand) < 0)
-                mr->End--;
+            if((mr->CoordinateStrand * strand) < 0)
+                mr->CoordinateEnd--;
             else
-                mr->Start++;
+                mr->CoordinateStart++;
 
-            ajListPushAppend(mrs, (void *) ensMapperresultNewRef(mr));
+            ajListPushAppend(mrs, (void*) ensMapperresultNewRef(mr));
         }
 
         ensMapperresultDel(&mr);
 
-        ajListPop(coords, (void **) &mr);
+        ajListPop(coords, (void**) &mr);
 
-        if(mr->Type == ensEMapperresultCoordinate)
+        if(mr->Type == ensEMapperresultTypeCoordinate)
         {
             /* The insert is before the second coordinate. */
 
-            if((mr->Strand * strand) < 0)
-                mr->Start++;
+            if((mr->CoordinateStrand * strand) < 0)
+                mr->CoordinateStart++;
             else
-                mr->End++;
+                mr->CoordinateEnd++;
 
             if(strand < 0)
-                ajListPush(mrs, (void *) ensMapperresultNewRef(mr));
+                ajListPush(mrs, (void*) ensMapperresultNewRef(mr));
             else
-                ajListPushAppend(mrs, (void *) ensMapperresultNewRef(mr));
+                ajListPushAppend(mrs, (void*) ensMapperresultNewRef(mr));
         }
 
         ensMapperresultDel(&mr);
     }
 
     if(fastmap && (ajListGetLength(mrs) != 1))
-        while(ajListPop(mrs, (void **) &mr))
+        while(ajListPop(mrs, (void**) &mr))
             ensMapperresultDel(&mr);
 
     ajListFree(&coords);
@@ -4037,12 +5640,217 @@ static AjBool mapperMapInsert(EnsPMapper mapper,
 
 
 
-/* @func ensMapperMapCoordinates **********************************************
+/* @section map ***************************************************************
 **
-** Map Coordinates.
+** Map coordinates between Ensembl Coordinate Systems.
 **
-** The caller is responsible for deleting the Ensembl Mapper Results before
-** deleting the AJAX List.
+** @fdata [EnsPMapper]
+**
+** @nam3rule Fastmap Fast map coordinates
+** @nam3rule Map Map coordinates
+** @nam3rule Mapindel Map insertion-deletion coordinates
+**
+** @argrule * mapper [EnsPMapper] Ensembl Mapper
+** @argrule * oid [ajuint] Ensembl Object Identifier
+** @argrule * start [ajint] Start coordinate
+** @argrule * end [ajint] End coordinate
+** @argrule * strand [ajint] Strand information
+** @argrule * type [const AjPStr] Ensembl Mapper type to map from
+** @argrule * mrs [AjPList] AJAX List of Ensembl Mapper Result objects
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensMapperFastmap *****************************************************
+**
+** Inferior mapping function, which will only perform ungapped,
+** unsplit mapping.
+**
+** The caller is responsible for deleting the Ensembl Mapper Result objects
+** before deleting the AJAX List.
+**
+** @cc Bio::EnsEMBL::Mapper::fastmap
+** @param [u] mapper [EnsPMapper] Ensembl Mapper
+** @param [r] oid [ajuint] Ensembl Object identifier
+** @param [r] start [ajint] Start coordinate
+** @param [r] end [ajint] End coordinate
+** @param [r] strand [ajint] Strand information
+** @param [r] type [const AjPStr] Ensembl Mapper type to map from
+** @param [u] mrs [AjPList] AJAX List of Ensembl Mapper Results
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensMapperFastmap(EnsPMapper mapper,
+                        ajuint oid,
+                        ajint start,
+                        ajint end,
+                        ajint strand,
+                        const AjPStr type,
+                        AjPList mrs)
+{
+    AjBool debug = AJFALSE;
+
+    EnsEMapperunitType srctype = ensEMapperunitTypeNULL;
+    EnsEMapperunitType trgtype = ensEMapperunitTypeNULL;
+
+    AjIList iter = NULL;
+    AjPList list = NULL;
+
+    AjPTable table = NULL;
+
+    EnsPCoordsystem cs = NULL;
+
+    EnsPMapperpair mp = NULL;
+
+    EnsPMapperresult mr = NULL;
+
+    EnsPMapperunit srcmu = NULL;
+    EnsPMapperunit trgmu = NULL;
+
+    debug = ajDebugTest("ensMapperFastmap");
+
+    if(debug)
+        ajDebug("ensMapperFastmap\n"
+                "  mapper %p\n"
+                "  oid %u\n"
+                "  start %d\n"
+                "  end %d\n"
+                "  strand %d\n"
+                "  type '%S'\n"
+                "  mrs %p\n",
+                mapper,
+                oid,
+                start,
+                end,
+                strand,
+                type,
+                mrs);
+
+    if(!mapper)
+        return ajFalse;
+
+    if(!oid)
+        return ajFalse;
+
+    if(!type)
+        return ajFalse;
+
+    if(!mrs)
+        return ajFalse;
+
+    if(start == (end + 1))
+        return mapperMapInsert(mapper, oid, start, end, strand, type,
+                               ajTrue, mrs);
+
+    if(!mapper->Sorted)
+        mapperSort(mapper);
+
+    if(ajStrMatchCaseS(mapper->TypeSource, type))
+    {
+        srctype = ensEMapperunitTypeSource;
+        trgtype = ensEMapperunitTypeTarget;
+
+        cs = mapper->CoordsystemTarget;
+    }
+    else if(ajStrMatchCaseS(mapper->TypeTarget, type))
+    {
+        srctype = ensEMapperunitTypeTarget;
+        trgtype = ensEMapperunitTypeSource;
+
+        cs = mapper->CoordsystemSource;
+    }
+    else
+        ajFatal("ensMapperFastmap type '%S' is neither the "
+                "source '%S' nor "
+                "target '%S' type of the Ensembl Mapper.\n",
+                type,
+                mapper->TypeSource,
+                mapper->TypeTarget);
+
+    table = (AjPTable) ajTableFetchmodV(mapper->Pairs, (const void*) type);
+
+    if(!table)
+        ajFatal("ensMapperFastmap first-level AJAX Table for "
+                "Ensembl Mapper type '%S' has not been initialised.\n",
+                type);
+
+    list = (AjPList) ajTableFetchmodV(table, (const void*) &oid);
+
+    if(!(list && ajListGetLength(list)))
+    {
+        /*
+        ** If an Ensembl Object identifier is not associated with an
+        ** AJAX List of Ensembl Mapper Pair objects or the AJAX List is empty,
+        ** the whole region is just one big gap. The ensMapperFastmap
+        ** function returns no Ensembl Mapper Result.
+        */
+
+        if(debug)
+            ajDebug("ensMapperFastmap could not find an AJAX List for "
+                    "Ensembl Object identifier %u or the List is empty "
+                    "--> one big gap!\n",
+                    oid);
+
+        return ajTrue;
+    }
+
+    iter = ajListIterNew(list);
+
+    while(!ajListIterDone(iter))
+    {
+        mp = (EnsPMapperpair) ajListIterGet(iter);
+
+        srcmu = ensMapperpairCalculateMapperunit(mp, srctype);
+        trgmu = ensMapperpairCalculateMapperunit(mp, trgtype);
+
+        /* Only super easy mapping is done! */
+
+        if((start < srcmu->Start) || (end > srcmu->End))
+            continue;
+
+        if(mp->Orientation >= 0)
+            mr = ensMapperresultNewCoordinate(
+                trgmu->Objectidentifier,
+                trgmu->Start + (start - srcmu->Start),
+                trgmu->Start + (end   - srcmu->Start),
+                +strand,
+                cs,
+                0);
+        else
+            mr = ensMapperresultNewCoordinate(
+                trgmu->Objectidentifier,
+                trgmu->End - (end   - srcmu->Start),
+                trgmu->End - (start - srcmu->Start),
+                -strand,
+                cs,
+                0);
+
+        ajListPushAppend(mrs, (void*) mr);
+
+        break;
+    }
+
+    ajListIterDel(&iter);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensMapperMap *********************************************************
+**
+** Map coordinates.
+**
+** The caller is responsible for deleting the Ensembl Mapper Result obects
+** before deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Mapper::map_coordinates
 ** @param [u] mapper [EnsPMapper] Ensembl Mapper
@@ -4057,13 +5865,13 @@ static AjBool mapperMapInsert(EnsPMapper mapper,
 ** @@
 ******************************************************************************/
 
-AjBool ensMapperMapCoordinates(EnsPMapper mapper,
-                               ajuint oid,
-                               ajint start,
-                               ajint end,
-                               ajint strand,
-                               const AjPStr type,
-                               AjPList mrs)
+AjBool ensMapperMap(EnsPMapper mapper,
+                    ajuint oid,
+                    ajint start,
+                    ajint end,
+                    ajint strand,
+                    const AjPStr type,
+                    AjPList mrs)
 {
     register ajuint i = 0;
 
@@ -4099,10 +5907,10 @@ AjBool ensMapperMapCoordinates(EnsPMapper mapper,
     EnsPMapperunit srcmu = NULL;
     EnsPMapperunit trgmu = NULL;
 
-    debug = ajDebugTest("ensMapperMapCoordinates");
+    debug = ajDebugTest("ensMapperMap");
 
     if(debug)
-        ajDebug("ensMapperMapCoordinates\n"
+        ajDebug("ensMapperMap\n"
                 "  mapper %p\n"
                 "  oid %u\n"
                 "  start %d\n"
@@ -4134,64 +5942,64 @@ AjBool ensMapperMapCoordinates(EnsPMapper mapper,
         return mapperMapInsert(mapper, oid, start, end, strand, type,
                                ajFalse, mrs);
 
-    if(!mapper->IsSorted)
+    if(!mapper->Sorted)
         mapperSort(mapper);
 
-    if(ajStrMatchCaseS(mapper->SourceType, type))
+    if(ajStrMatchCaseS(mapper->TypeSource, type))
     {
         srctype = ensEMapperunitTypeSource;
         trgtype = ensEMapperunitTypeTarget;
 
-        cs = mapper->TargetCoordsystem;
+        cs = mapper->CoordsystemTarget;
     }
-    else if(ajStrMatchCaseS(mapper->TargetType, type))
+    else if(ajStrMatchCaseS(mapper->TypeTarget, type))
     {
         srctype = ensEMapperunitTypeTarget;
         trgtype = ensEMapperunitTypeSource;
 
-        cs = mapper->SourceCoordsystem;
+        cs = mapper->CoordsystemSource;
     }
     else
-        ajFatal("ensMapperMapCoordinates type '%S' is neither the "
+        ajFatal("ensMapperMap type '%S' is neither the "
                 "source '%S' nor "
                 "target '%S' type of the Ensembl Mapper.\n",
                 type,
-                mapper->SourceType,
-                mapper->TargetType);
+                mapper->TypeSource,
+                mapper->TypeTarget);
 
-    table = (AjPTable) ajTableFetch(mapper->Pairs, (const void *) type);
+    table = (AjPTable) ajTableFetchmodV(mapper->Pairs, (const void*) type);
 
     if(!table)
-        ajFatal("ensMapperMapCoordinates first-level AJAX Table for "
+        ajFatal("ensMapperMap first-level AJAX Table for "
                 "Ensembl Mapper type '%S' has not been initialised.\n",
                 type);
 
-    list = (AjPList) ajTableFetch(table, (const void *) &oid);
+    list = (AjPList) ajTableFetchmodV(table, (const void*) &oid);
 
     if(!(list && (idxlength = ajListGetLength(list))))
     {
         /*
         ** If an Ensembl Object identifier is not associated with an
-        ** AJAX List of Ensembl Mapper Pairs or the AJAX List is empty,
+        ** AJAX List of Ensembl Mapper Pair objects or the AJAX List is empty,
         ** the whole region is just one big gap.
         */
 
         if(debug)
-            ajDebug("ensMapperMapCoordinates could not find an AJAX List for "
+            ajDebug("ensMapperMap could not find an AJAX List for "
                     "Ensembl Object identifier %u or the List is empty "
                     "--> one big gap!\n",
                     oid);
 
-        mr = MENSMAPPERGAPNEW(start, end, 0);
+        mr = ensMapperresultNewGap(start, end, 0);
 
-        ajListPushAppend(mrs, (void *) mr);
+        ajListPushAppend(mrs, (void*) mr);
 
         return ajTrue;
     }
 
     /*
-    ** Binary search the relevant Ensembl Mapper Pairs,
-    ** which helps if the AJAX List of Ensembl Mapper Pairs is long.
+    ** Binary search the relevant Ensembl Mapper Pair objects,
+    ** which helps if the AJAX List of Ensembl Mapper Pair objects is long.
     */
 
     idxstart = 0;
@@ -4201,9 +6009,9 @@ AjBool ensMapperMapCoordinates(EnsPMapper mapper,
     {
         idxmid = (idxstart + idxend) >> 1;
 
-        ajListPeekNumber(list, idxmid, (void **) &mp);
+        ajListPeekNumber(list, idxmid, (void**) &mp);
 
-        srcmu = ensMapperpairGetUnit(mp, srctype);
+        srcmu = ensMapperpairCalculateMapperunit(mp, srctype);
 
         if(srcmu->End < start)
             idxstart = idxmid;
@@ -4216,13 +6024,13 @@ AjBool ensMapperMapCoordinates(EnsPMapper mapper,
 
     for(i = idxstart; i < idxlength; i++)
     {
-        ajListPeekNumber(list, i, (void **) &mp);
+        ajListPeekNumber(list, i, (void**) &mp);
 
-        srcmu = ensMapperpairGetUnit(mp, srctype);
-        trgmu = ensMapperpairGetUnit(mp, trgtype);
+        srcmu = ensMapperpairCalculateMapperunit(mp, srctype);
+        trgmu = ensMapperpairCalculateMapperunit(mp, trgtype);
 
         if(debug)
-            ajDebug("ensMapperMapCoordinates coordinates "
+            ajDebug("ensMapperMap coordinates "
                     "%u:%d:%d:%d %d:%d srcMU %u:%d:%d\n",
                     oid,
                     start,
@@ -4230,16 +6038,21 @@ AjBool ensMapperMapCoordinates(EnsPMapper mapper,
                     strand,
                     srcstart,
                     srcend,
-                    srcmu->ObjectIdentifier,
+                    srcmu->Objectidentifier,
                     srcmu->Start,
                     srcmu->End);
 
+        /*
+        ** NOTE: This breaks the haplotype projection and was therefore removed
+        ** in CVS revision 1.49
+        **
         if(srcmu->Start < start)
         {
-            srcstart = start;
+        srcstart = start;
 
-            rank++;
+        rank++;
         }
+        */
 
         /*
         ** Check for cases where the source Mapper Unit maps to more than one
@@ -4250,13 +6063,13 @@ AjBool ensMapperMapCoordinates(EnsPMapper mapper,
         ** Reset the current source start position to the original start.
         */
 
-        if(trgoid && (trgoid != trgmu->ObjectIdentifier))
+        if(trgoid && (trgoid != trgmu->Objectidentifier))
         {
             if(srcmu->Start < start)
                 srcstart = start;
         }
         else
-            trgoid = trgmu->ObjectIdentifier;
+            trgoid = trgmu->Objectidentifier;
 
         /* In case the loop hasn't even reached the start, move on. */
 
@@ -4272,28 +6085,29 @@ AjBool ensMapperMapCoordinates(EnsPMapper mapper,
         {
             /* A gap has been detected. */
 
-            mr = MENSMAPPERGAPNEW(srcstart, srcmu->Start - 1, rank);
+            mr = ensMapperresultNewGap(srcstart, srcmu->Start - 1, rank);
 
-            ajListPushAppend(mrs, (void *) mr);
+            ajListPushAppend(mrs, (void*) mr);
 
             srcstart = srcmu->Start;
         }
 
-        if(mp->InsertionDeletion)
+        if(mp->Indel)
         {
             /*
             ** If the Mapper Pair represents an insertion or deletion,
             ** create a Mapper Result of type insertion or deletion.
             */
 
-            mr = MENSMAPPERINDELNEW(trgmu->ObjectIdentifier,
-                                    trgmu->Start,
-                                    trgmu->End,
-                                    mp->Orientation * strand,
-                                    cs,
-                                    srcstart,
-                                    (srcmu->End < srcend) ?
-                                    srcmu->End : srcend);
+            mr = ensMapperresultNewIndel(trgmu->Objectidentifier,
+                                         trgmu->Start,
+                                         trgmu->End,
+                                         mp->Orientation * strand,
+                                         cs,
+                                         srcstart,
+                                         (srcmu->End < srcend) ?
+                                         srcmu->End : srcend,
+                                         rank);
         }
         else
         {
@@ -4329,15 +6143,15 @@ AjBool ensMapperMapCoordinates(EnsPMapper mapper,
                     trgstart = trgmu->End - (srcend - srcmu->Start);
             }
 
-            mr = MENSMAPPERCOORDINATENEW(trgmu->ObjectIdentifier,
-                                         trgstart,
-                                         trgend,
-                                         mp->Orientation * strand,
-                                         cs,
-                                         rank);
+            mr = ensMapperresultNewCoordinate(trgmu->Objectidentifier,
+                                              trgstart,
+                                              trgend,
+                                              mp->Orientation * strand,
+                                              cs,
+                                              rank);
         }
 
-        ajListPushAppend(mrs, (void *) mr);
+        ajListPushAppend(mrs, (void*) mr);
 
         lastmp = mp;
 
@@ -4351,24 +6165,24 @@ AjBool ensMapperMapCoordinates(EnsPMapper mapper,
         ** check for a gap inbetween.
         */
 
-        srcmu = ensMapperpairGetUnit(lastmp, srctype);
+        srcmu = ensMapperpairCalculateMapperunit(lastmp, srctype);
 
         if(srcmu->End < srcend)
         {
             /* A gap at the end has been detected. */
 
-            mr = MENSMAPPERGAPNEW(srcmu->End + 1, srcend, rank);
+            mr = ensMapperresultNewGap(srcmu->End + 1, srcend, rank);
 
-            ajListPushAppend(mrs, (void *) mr);
+            ajListPushAppend(mrs, (void*) mr);
         }
     }
     else
     {
         /* Since no Mapper Pair has been found the entire region is a gap. */
 
-        mr = MENSMAPPERGAPNEW(srcstart, srcend, 0);
+        mr = ensMapperresultNewGap(srcstart, srcend, 0);
 
-        ajListPushAppend(mrs, (void *) mr);
+        ajListPushAppend(mrs, (void*) mr);
     }
 
     if(strand < 0)
@@ -4380,242 +6194,12 @@ AjBool ensMapperMapCoordinates(EnsPMapper mapper,
 
 
 
-/* @func ensMapperFastMap *****************************************************
+/* @func ensMapperMapindel ****************************************************
 **
-** Inferior mapping function, which will only perform ungapped,
-** unsplit mapping.
+** Map insertion-deletion coordinates.
 **
-** The caller is responsible for deleting the Ensembl Mapper Results before
-** deleting the AJAX List.
-**
-** @cc Bio::EnsEMBL::Mapper::fastmap
-** @param [u] mapper [EnsPMapper] Ensembl Mapper
-** @param [r] oid [ajuint] Ensembl Object identifier
-** @param [r] start [ajint] Start coordinate
-** @param [r] end [ajint] End coordinate
-** @param [r] strand [ajint] Strand information
-** @param [r] type [const AjPStr] Ensembl Mapper type to map from
-** @param [u] mrs [AjPList] AJAX List of Ensembl Mapper Results
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensMapperFastMap(EnsPMapper mapper,
-                        ajuint oid,
-                        ajint start,
-                        ajint end,
-                        ajint strand,
-                        const AjPStr type,
-                        AjPList mrs)
-{
-    AjBool debug = AJFALSE;
-
-    EnsEMapperunitType srctype = ensEMapperunitTypeNULL;
-    EnsEMapperunitType trgtype = ensEMapperunitTypeNULL;
-
-    AjIList iter = NULL;
-    AjPList list = NULL;
-
-    AjPTable table = NULL;
-
-    EnsPCoordsystem cs = NULL;
-
-    EnsPMapperpair mp = NULL;
-
-    EnsPMapperresult mr = NULL;
-
-    EnsPMapperunit srcmu = NULL;
-    EnsPMapperunit trgmu = NULL;
-
-    debug = ajDebugTest("ensMapperFastMap");
-
-    if(debug)
-        ajDebug("ensMapperFastMap\n"
-                "  mapper %p\n"
-                "  oid %u\n"
-                "  start %d\n"
-                "  end %d\n"
-                "  strand %d\n"
-                "  type '%S'\n"
-                "  mrs %p\n",
-                mapper,
-                oid,
-                start,
-                end,
-                strand,
-                type,
-                mrs);
-
-    if(!mapper)
-        return ajFalse;
-
-    if(!oid)
-        return ajFalse;
-
-    if(!type)
-        return ajFalse;
-
-    if(!mrs)
-        return ajFalse;
-
-    if(start == (end + 1))
-        return mapperMapInsert(mapper, oid, start, end, strand, type,
-                               ajTrue, mrs);
-
-    if(!mapper->IsSorted)
-        mapperSort(mapper);
-
-    if(ajStrMatchCaseS(mapper->SourceType, type))
-    {
-        srctype = ensEMapperunitTypeSource;
-        trgtype = ensEMapperunitTypeTarget;
-
-        cs = mapper->TargetCoordsystem;
-    }
-    else if(ajStrMatchCaseS(mapper->TargetType, type))
-    {
-        srctype = ensEMapperunitTypeTarget;
-        trgtype = ensEMapperunitTypeSource;
-
-        cs = mapper->SourceCoordsystem;
-    }
-    else
-        ajFatal("ensMapperFastMap type '%S' is neither the "
-                "source '%S' nor "
-                "target '%S' type of the Ensembl Mapper.\n",
-                type,
-                mapper->SourceType,
-                mapper->TargetType);
-
-    table = (AjPTable) ajTableFetch(mapper->Pairs, (const void *) type);
-
-    if(!table)
-        ajFatal("ensMapperFastMap first-level AJAX Table for "
-                "Ensembl Mapper type '%S' has not been initialised.\n",
-                type);
-
-    list = (AjPList) ajTableFetch(table, (const void *) &oid);
-
-    if(!(list && ajListGetLength(list)))
-    {
-        /*
-        ** If an Ensembl Object identifier is not associated with an
-        ** AJAX List of Ensembl Mapper Pairs or the AJAX List is empty,
-        ** the whole region is just one big gap. The ensMapperFastMap
-        ** function returns no Ensembl Mapper Result.
-        */
-
-        if(debug)
-            ajDebug("ensMapperFastMap could not find an AJAX List for "
-                    "Ensembl Object identifier %u or the List is empty "
-                    "--> one big gap!\n",
-                    oid);
-
-        return ajTrue;
-    }
-
-    iter = ajListIterNew(list);
-
-    while(!ajListIterDone(iter))
-    {
-        mp = (EnsPMapperpair) ajListIterGet(iter);
-
-        srcmu = ensMapperpairGetUnit(mp, srctype);
-        trgmu = ensMapperpairGetUnit(mp, trgtype);
-
-        /* Only super easy mapping is done! */
-
-        if((start < srcmu->Start) || (end > srcmu->End))
-            continue;
-
-        if(mp->Orientation >= 0)
-            mr = MENSMAPPERCOORDINATENEW(trgmu->ObjectIdentifier,
-                                         trgmu->Start + (start - srcmu->Start),
-                                         trgmu->Start + (end - srcmu->Start),
-                                         +strand,
-                                         cs,
-                                         0);
-        else
-            mr = MENSMAPPERCOORDINATENEW(trgmu->ObjectIdentifier,
-                                         trgmu->End - (end - srcmu->Start),
-                                         trgmu->End - (start - srcmu->Start),
-                                         -strand,
-                                         cs,
-                                         0);
-
-        ajListPushAppend(mrs, (void *) mr);
-
-        break;
-    }
-
-    ajListIterDel(&iter);
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensMapperAddInDelCoordinates *****************************************
-**
-** Store details of mapping between a source and a target region.
-**
-** @cc Bio::EnsEMBL::Mapper::add_indel_coordinates
-** @param [u] mapper [EnsPMapper] Ensembl Mapper
-** @param [r] srcoid [ajuint] Source Object identifier
-** @param [r] srcstart [ajint] Source start coordinate
-** @param [r] srcend [ajint] Source end coordinate
-** @param [r] ori [ajint] Orientation
-** @param [r] trgoid [ajuint] Target Object identifier
-** @param [r] trgstart [ajint] Target start coordinate
-** @param [r] trgend [ajint] Target end coordinate
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensMapperAddInDelCoordinates(EnsPMapper mapper,
-                                    ajuint srcoid,
-                                    ajint srcstart,
-                                    ajint srcend,
-                                    ajint ori,
-                                    ajuint trgoid,
-                                    ajint trgstart,
-                                    ajint trgend)
-{
-    AjBool value = AJFALSE;
-
-    EnsPMapperpair mp = NULL;
-
-    if(!mapper)
-        return ajFalse;
-
-    if(!srcoid)
-        return ajFalse;
-
-    if(!trgoid)
-        return ajFalse;
-
-    mp = ensMapperpairNewC(srcoid, srcstart, srcend,
-                           trgoid, trgstart, trgend,
-                           ori, ajTrue);
-
-    value = ensMapperAddMapperpair(mapper, mp);
-
-    ensMapperpairDel(&mp);
-
-    return value;
-}
-
-
-
-
-/* @func ensMapperMapInDel ****************************************************
-**
-** Map InDel Coordinates.
-** The caller is responsible for deleting the Ensembl Mapper Results before
-** deleting the AJAX List.
+** The caller is responsible for deleting the Ensembl Mapper Result objects
+** before deleting the AJAX List.
 **
 ** @cc Bio::EnsEMBL::Mapper::map_indel
 ** @param [u] mapper [EnsPMapper] Ensembl Mapper
@@ -4630,7 +6214,7 @@ AjBool ensMapperAddInDelCoordinates(EnsPMapper mapper,
 ** @@
 ******************************************************************************/
 
-AjBool ensMapperMapInDel(EnsPMapper mapper,
+AjBool ensMapperMapindel(EnsPMapper mapper,
                          ajuint oid,
                          ajint start,
                          ajint end,
@@ -4663,10 +6247,10 @@ AjBool ensMapperMapInDel(EnsPMapper mapper,
     EnsPMapperunit srcmu = NULL;
     EnsPMapperunit trgmu = NULL;
 
-    debug = ajDebugTest("ensMapperMapInDel");
+    debug = ajDebugTest("ensMapperMapindel");
 
     if(debug)
-        ajDebug("ensMapperMapInDel\n"
+        ajDebug("ensMapperMapindel\n"
                 "  mapper %p\n"
                 "  oid %u\n"
                 "  start %u\n"
@@ -4694,50 +6278,50 @@ AjBool ensMapperMapInDel(EnsPMapper mapper,
     if(!mrs)
         return ajFalse;
 
-    if(!mapper->IsSorted)
+    if(!mapper->Sorted)
         mapperSort(mapper);
 
-    if(ajStrMatchCaseS(mapper->SourceType, type))
+    if(ajStrMatchCaseS(mapper->TypeSource, type))
     {
         srctype = ensEMapperunitTypeSource;
         trgtype = ensEMapperunitTypeTarget;
 
-        cs = mapper->TargetCoordsystem;
+        cs = mapper->CoordsystemTarget;
     }
-    else if(ajStrMatchCaseS(mapper->TargetType, type))
+    else if(ajStrMatchCaseS(mapper->TypeTarget, type))
     {
         srctype = ensEMapperunitTypeTarget;
         trgtype = ensEMapperunitTypeSource;
 
-        cs = mapper->SourceCoordsystem;
+        cs = mapper->CoordsystemSource;
     }
     else
-        ajFatal("ensMapperMapInDel type '%S' is neither the "
+        ajFatal("ensMapperMapindel type '%S' is neither the "
                 "source '%S' nor "
                 "target '%S' type of the Ensembl Mapper.\n",
                 type,
-                mapper->SourceType,
-                mapper->TargetType);
+                mapper->TypeSource,
+                mapper->TypeTarget);
 
-    table = (AjPTable) ajTableFetch(mapper->Pairs, (const void *) type);
+    table = (AjPTable) ajTableFetchmodV(mapper->Pairs, (const void*) type);
 
     if(!table)
-        ajFatal("ensMapperMapInDel first-level AJAX Table for "
+        ajFatal("ensMapperMapindel first-level AJAX Table for "
                 "Ensembl Mapper type '%S' has not been initialised.",
                 type);
 
-    list = (AjPList) ajTableFetch(table, (const void *) &oid);
+    list = (AjPList) ajTableFetchmodV(table, (const void*) &oid);
 
     if(!(list && (idxlength = ajListGetLength(list))))
     {
         /*
         ** If an Ensembl Object identifier is not associated with an
-        ** AJAX List of Ensembl Mapper Pairs or the AJAX List is empty,
+        ** AJAX List of Ensembl Mapper Pair objects or the AJAX List is empty,
         ** the whole region is just one big gap.
         */
 
         if(debug)
-            ajDebug("ensMapperMapInDel could not find an AJAX List for "
+            ajDebug("ensMapperMapindel could not find an AJAX List for "
                     "Ensembl Object identifier %u or the List is empty\n",
                     oid);
 
@@ -4745,8 +6329,8 @@ AjBool ensMapperMapInDel(EnsPMapper mapper,
     }
 
     /*
-    ** Binary search the relevant Ensembl Mapper Pairs,
-    ** which helps if the AJAX List of Ensembl Mapper Pairs is long.
+    ** Binary search the relevant Ensembl Mapper Pair objects,
+    ** which helps if the AJAX List of Ensembl Mapper Pair objects is long.
     */
 
     idxstart = 0;
@@ -4756,12 +6340,12 @@ AjBool ensMapperMapInDel(EnsPMapper mapper,
     {
         idxmid = (idxstart + idxend) >> 1;
 
-        ajListPeekNumber(list, idxmid, (void **) &mp);
+        ajListPeekNumber(list, idxmid, (void**) &mp);
 
-        srcmu = ensMapperpairGetUnit(mp, srctype);
+        srcmu = ensMapperpairCalculateMapperunit(mp, srctype);
 
         /*
-        ** NOTE: The ensMapperMapCoordinates function checks for source
+        ** NOTE: The ensMapperMap function checks for source
         ** Mapper Unit end less than start. if(srcmu->End < start)
         ** This function has already swapped the start and end coordinates
         ** for the insertion-deletion and checks for source Mapper Unit end
@@ -4777,460 +6361,24 @@ AjBool ensMapperMapInDel(EnsPMapper mapper,
 
     for(i = idxstart; i < idxlength; i++)
     {
-        ajListPeekNumber(list, i, (void **) &mp);
+        ajListPeekNumber(list, i, (void**) &mp);
 
-        trgmu = ensMapperpairGetUnit(mp, trgtype);
+        trgmu = ensMapperpairCalculateMapperunit(mp, trgtype);
 
-        if(mp->InsertionDeletion)
+        if(mp->Indel)
         {
-            mr = MENSMAPPERCOORDINATENEW(trgmu->ObjectIdentifier,
-                                         trgmu->Start,
-                                         trgmu->End,
-                                         mp->Orientation * strand,
-                                         cs,
-                                         0);
+            mr = ensMapperresultNewCoordinate(trgmu->Objectidentifier,
+                                              trgmu->Start,
+                                              trgmu->End,
+                                              mp->Orientation * strand,
+                                              cs,
+                                              0);
 
-            ajListPushAppend(mrs, (void *) mr);
+            ajListPushAppend(mrs, (void*) mr);
 
             break;
         }
     }
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensMapperAddMapper ***************************************************
-**
-** Transfer all Ensembl Mapper Pairs from the second into the first
-** Ensembl Mapper.
-**
-** @cc Bio::EnsEMBL::Mapper::add_Mapper
-** @param [u] mapper1 [EnsPMapper] First Ensembl Mapper
-** @param [u] mapper2 [EnsPMapper] Second Ensembl Mapper
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensMapperAddMapper(EnsPMapper mapper1, EnsPMapper mapper2)
-{
-    void **keyarray = NULL;
-    void **valarray = NULL;
-
-    register ajuint i = 0;
-
-    ajuint srccounter = 0;
-    ajuint trgcounter = 0;
-
-    AjPList list1 = NULL;
-    AjPList list2 = NULL;
-
-    AjPTable table1 = NULL;
-    AjPTable table2 = NULL;
-
-    EnsPMapperpair mp = NULL;
-
-    if(!mapper1)
-        return ajFalse;
-
-    if(!mapper2)
-        return ajFalse;
-
-    if(!ajStrMatchCaseS(mapper1->SourceType, mapper2->SourceType) ||
-       !ajStrMatchCaseS(mapper1->TargetType, mapper2->TargetType))
-        ajFatal("ensMapperAddMapper trying to add Ensembl Mapper of "
-                "incompatible type ('%S:%S' vs '%S:%S').",
-                mapper1->SourceType,
-                mapper1->TargetType,
-                mapper2->SourceType,
-                mapper2->TargetType);
-
-    /*
-    ** Get the first-level AJAX Tables for the source type of both
-    ** Ensembl Mappers.
-    */
-
-    table1 = (AjPTable)
-        ajTableFetch(mapper1->Pairs, (const void *) mapper1->SourceType);
-
-    if(!table1)
-        ajFatal("ensMapperAddMapper first-level AJAX Table for first "
-                "Ensembl Mapper source type '%S' not initialised.",
-                mapper1->SourceType);
-
-    table2 = (AjPTable)
-        ajTableFetch(mapper2->Pairs, (const void *) mapper2->SourceType);
-
-    if(!table2)
-        ajFatal("ensMapperAddMapper first-level AJAX Table for second "
-                "Ensembl Mapper source type '%S' not initialised.",
-                mapper2->SourceType);
-
-    /*
-    ** Convert the second-level AJAX Table with Ensembl Object
-    ** identifiers as key data and AJAX List value data for the second
-    ** Ensembl Mapper.
-    */
-
-    ajTableToarrayKeysValues(table2, &keyarray, &valarray);
-
-    for(i = 0; keyarray[i]; i++)
-    {
-        /*
-        ** Get the third-level AJAX Lists for corresponding
-        ** Ensembl Object identifiers.
-        */
-
-        list1 = (AjPList) ajTableFetch(table1, (const void *) &keyarray[i]);
-
-        list2 = (AjPList) valarray[i];
-
-        while(ajListPop(list2, (void **) &mp))
-        {
-            ajListPushAppend(list1, (void *) mp);
-
-            srccounter++;
-        }
-
-        /*
-        ** Remove the entry from the AJAX Table and free the
-        ** Object identifier and the AJAX List.
-        */
-
-        ajTableRemove(table2, (const void *) keyarray[i]);
-
-        AJFREE(keyarray[i]);
-
-        ajListFree(&list2);
-    }
-
-    AJFREE(keyarray);
-    AJFREE(valarray);
-
-    /*
-    ** Get the first-level AJAX Tables for the target type of both
-    ** Ensembl Mappers.
-    */
-
-    table1 = (AjPTable)
-        ajTableFetch(mapper1->Pairs, (const void *) mapper1->TargetType);
-
-    if(!table1)
-        ajFatal("ensMapperAddMapper first-level AJAX Table for first "
-                "Ensembl Mapper target type '%S' not initialised.",
-                mapper1->TargetType);
-
-    table2 = (AjPTable)
-        ajTableFetch(mapper2->Pairs, (const void *) mapper2->TargetType);
-
-    if(!table2)
-        ajFatal("ensMapperAddMapper first-level AJAX Table for second "
-                "Ensembl Mapper target type '%S' not initialised.",
-                mapper2->TargetType);
-
-    /*
-    ** Convert the second-level AJAX Table with Ensembl Object identifiers
-    ** as key data and AJAX List value data for the second Ensembl Mapper.
-    */
-
-    ajTableToarrayKeysValues(table2, &keyarray, &valarray);
-
-    for(i = 0; keyarray[i]; i++)
-    {
-        /*
-        ** Get the third-level AJAX Lists for corresponding
-        ** Ensembl Object identifiers.
-        */
-
-        list1 = (AjPList) ajTableFetch(table1, (const void *) &keyarray[i]);
-
-        list2 = (AjPList) valarray[i];
-
-        while(ajListPop(list2, (void **) &mp))
-        {
-            ajListPushAppend(list1, (void *) mp);
-
-            trgcounter++;
-        }
-
-        /*
-        ** Remove the entry from the AJAX Table and free the
-        ** Ensembl Object identifier and the AJAX List.
-        */
-
-        ajTableRemove(table2, (const void *) keyarray[i]);
-
-        AJFREE(keyarray[i]);
-
-        ajListFree(&list2);
-    }
-
-    AJFREE(keyarray);
-    AJFREE(valarray);
-
-    if(srccounter == trgcounter)
-        mapper1->PairCount += srccounter;
-    else
-        ajFatal("ensMapperAddMapper Ensembl Mapper Pairs for source (%u) and "
-                "target (%u) types do not match in the second Ensembl Mapper.",
-                srccounter, trgcounter);
-
-    mapper1->IsSorted = ajFalse;
-
-    return ajTrue;
-}
-
-
-
-
-/* @func ensMapperGetMemsize **************************************************
-**
-** Get the memory size in bytes of an Ensembl Mapper.
-**
-** @param [r] mapper [const EnsPMapper] Ensembl Mapper
-**
-** @return [ajulong] Memory size
-** @@
-******************************************************************************/
-
-ajulong ensMapperGetMemsize(const EnsPMapper mapper)
-{
-    void **keyarray1 = NULL;
-    void **valarray1 = NULL;
-
-    void **valarray2 = NULL;
-
-    register ajuint i = 0;
-    register ajuint j = 0;
-
-    ajulong size = 0;
-
-    AjIList iter = NULL;
-
-    EnsPMapperpair mp = NULL;
-
-    if(!mapper)
-        return 0;
-
-    size += sizeof (EnsOMapper);
-
-    if(mapper->SourceType)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(mapper->SourceType);
-    }
-
-    if(mapper->TargetType)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(mapper->TargetType);
-    }
-
-    size += ensCoordsystemGetMemsize(mapper->SourceCoordsystem);
-    size += ensCoordsystemGetMemsize(mapper->TargetCoordsystem);
-
-    /* Level 0 data (AjOTable). */
-
-    size += sizeof (AjOTable);
-
-    ajTableToarrayKeysValues(mapper->Pairs, &keyarray1, &valarray1);
-
-    for(i = 0; valarray1[i]; i++)
-    {
-        /* Level 1 key data (AjOStr). */
-
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes((AjPStr) keyarray1[i]);
-
-        /* Level 1 value data (AjOTable). */
-
-        size += sizeof (AjOTable);
-
-        ajTableToarrayValues(valarray1[i], &valarray2);
-
-        for(j = 0; valarray2[j]; j++)
-        {
-            /* Level 2 key data (ajuint). */
-
-            size += sizeof (ajuint);
-
-            /* Level 2 value data (AjOList). */
-
-            size += sizeof (AjOList);
-
-            iter = ajListIterNew((AjPList) valarray2[j]);
-
-            while(!ajListIterDone(iter))
-            {
-                /* Level 3 data (EnsOMapperpair). */
-
-                mp = (EnsPMapperpair) ajListIterGet(iter);
-
-                size += ensMapperpairGetMemsize(mp);
-            }
-
-            ajListIterDel(&iter);
-        }
-
-        AJFREE(valarray2);
-    }
-
-    AJFREE(keyarray1);
-    AJFREE(valarray1);
-
-    return size;
-}
-
-
-
-
-/* @section debugging *********************************************************
-**
-** Functions for reporting of an Ensembl Mapper object.
-**
-** @fdata [EnsPMapper]
-** @nam3rule Trace Report Ensembl Mapper elements to debug file
-**
-** @argrule Trace mapper [const EnsPMapper] Ensembl Mapper
-** @argrule Trace level [ajuint] Indentation level
-**
-** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @fcategory misc
-******************************************************************************/
-
-
-
-
-/* @func ensMapperTrace *******************************************************
-**
-** Trace an Ensembl Mapper.
-**
-** @param [r] mapper [const EnsPMapper] Ensembl Mapper
-** @param [r] level [ajuint] Indentation level
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensMapperTrace(const EnsPMapper mapper, ajuint level)
-{
-    void **keyarray = NULL;
-    void **valarray = NULL;
-
-    register ajuint i = 0;
-
-    ajuint *Poid = NULL;
-
-    AjIList iter = NULL;
-
-    AjPStr indent = NULL;
-
-    AjPTable table = NULL;
-
-    EnsPMapperpair mp = NULL;
-
-    if(!mapper)
-        return ajFalse;
-
-    indent = ajStrNew();
-
-    ajStrAppendCountK(&indent, ' ', level * 2);
-
-    ajDebug("%SensMapperTrace %p\n"
-            "%S  SourceType '%S'\n"
-            "%S  TargetType '%S'\n"
-            "%S  SourceCoordsystem %p\n"
-            "%S  TargetCoordsystem %p\n"
-            "%S  Pairs %p\n"
-            "%S  PairCount %u\n"
-            "%S  IsSorted '%B'\n"
-            "%S  Use %u\n",
-            indent, mapper,
-            indent, mapper->SourceType,
-            indent, mapper->TargetType,
-            indent, mapper->SourceCoordsystem,
-            indent, mapper->TargetCoordsystem,
-            indent, mapper->Pairs,
-            indent, mapper->PairCount,
-            indent, mapper->IsSorted,
-            indent, mapper->Use);
-
-    ensCoordsystemTrace(mapper->SourceCoordsystem, level + 1);
-
-    ensCoordsystemTrace(mapper->TargetCoordsystem, level + 1);
-
-    /* Trace the AJAX Table for the SourceType. */
-
-    table = (AjPTable)
-        ajTableFetch(mapper->Pairs, (const void *) mapper->SourceType);
-
-    ajDebug("%S  AJAX Table %p for SourceType '%S'\n",
-            indent, table, mapper->SourceType);
-
-    ajTableToarrayKeysValues(table, &keyarray, &valarray);
-
-    for(i = 0; valarray[i]; i++)
-    {
-        Poid = (ajuint *) keyarray[i];
-
-        ajDebug("%S    AJAX List %p for Object identifier %u\n",
-                indent, valarray[i], *Poid);
-
-        iter = ajListIterNew((AjPList) valarray[i]);
-
-        while(!ajListIterDone(iter))
-        {
-            mp = (EnsPMapperpair) ajListIterGet(iter);
-
-            ensMapperpairTrace(mp, level + 3);
-        }
-
-        ajListIterDel(&iter);
-    }
-
-    AJFREE(keyarray);
-    AJFREE(valarray);
-
-    /* Trace the AJAX Table for the TargetType. */
-
-    table = (AjPTable)
-        ajTableFetch(mapper->Pairs, (const void *) mapper->TargetType);
-
-    ajDebug("%S  AJAX Table %p for TargetType '%S'\n",
-            indent, table, mapper->TargetType);
-
-    ajTableToarrayKeysValues(table, &keyarray, &valarray);
-
-    for(i = 0; valarray[i]; i++)
-    {
-        Poid = (ajuint *) keyarray[i];
-
-        ajDebug("%S    AJAX List %p for Object identifier %u\n",
-                indent, valarray[i], *Poid);
-
-        iter = ajListIterNew((AjPList) valarray[i]);
-
-        while(!ajListIterDone(iter))
-        {
-            mp = (EnsPMapperpair) ajListIterGet(iter);
-
-            ensMapperpairTrace(mp, level + 3);
-        }
-
-        ajListIterDel(&iter);
-    }
-
-    AJFREE(keyarray);
-    AJFREE(valarray);
-
-    ajStrDel(&indent);
 
     return ajTrue;
 }

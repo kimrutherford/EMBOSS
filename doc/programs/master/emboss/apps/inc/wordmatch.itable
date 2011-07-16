@@ -39,7 +39,7 @@
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>align</td>
 <td>Output alignment file name</td>
-<td>Alignment output file</td>
+<td>(default -aformat match)</td>
 <td><i>&lt;*&gt;</i>.wordmatch</td>
 </tr>
 

@@ -1,0 +1,216 @@
+                                   drtext
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Get data resource entries complete text
+
+Description
+
+   drtext reads one or more complete data resource entries from a database
+   or a file and writes them to a text file. Optionally, the first data
+   resourcefrom the input stream only can be retrieved. The complete
+   entry, including heading annotation, is retrieved and written and the
+   data is not altered or reformatted in any way.
+
+Usage
+
+   Here is a sample session with drtext
+
+
+% drtext drcat:uniprot
+Get data resource entries complete text
+Full text output file [uniprot.drtext]:
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+Get data resource entries complete text
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-resources]         resource   Data resource filename and optional format,
+                                  or reference (input query)
+  [-outfile]           outfile    [*.drtext] Full text output file
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-resources" associated qualifiers
+   -iformat1           string     Input resource format
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   The input is a standard EMBOSS resource query.
+
+   The expected source of data resource information is the Data Resource
+   Catalogue database "drcat" which is available as a standard database in
+   all EMBOSS installations.
+
+   Data can also be read from resource output in "drcat" format written by
+   an EMBOSS application.
+
+  Input files for usage example
+
+  Database entry: drcat:uniprot
+
+ID      UniProt
+IDalt   UniProtKB
+Name    Universal protein resource
+Desc    A comprehensive, high-quality and freely accessible resource of protein
+sequence and functional information.
+URL     http://www.uniprot.org/
+Taxon   1 | all
+EDAMtpc 0000639 | Protein sequences
+EDAMdat 0002201 | Sequence record full
+EDAMid  0003021 | UniProt accession
+EDAMfmt 0001929 | FASTA format
+EDAMfmt 0002376 | RDF
+EDAMfmt 0002188 | uniprot
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    SP_FT | None
+Query    Sequence record full | HTML | UniProt accession | http://www.uniprot.or
+g/uniprot/%s
+Query    Sequence record full | uniprot | UniProt accession | http://www.uniprot
+.org/uniprot/%s.txt
+Query    Sequence record full | XML | UniProt accession | http://www.uniprot.org
+/uniprot/%s.xml
+Query    Sequence record full | RDF | UniProt accession | http://www.uniprot.org
+/uniprot/%s.rdf
+Query    Sequence record full | FASTA format | UniProt accession | http://www.un
+iprot.org/uniprot/%s.fasta
+Example UniProt accession | P12345
+
+
+Output file format
+
+   drtext reports the full text of the input resources.
+
+  Output files for usage example
+
+  File: uniprot.drtext
+
+ID      UniProt
+IDalt   UniProtKB
+Name    Universal protein resource
+Desc    A comprehensive, high-quality and freely accessible resource of protein
+sequence and functional information.
+URL     http://www.uniprot.org/
+Taxon   1 | all
+EDAMtpc 0000639 | Protein sequences
+EDAMdat 0002201 | Sequence record full
+EDAMid  0003021 | UniProt accession
+EDAMfmt 0001929 | FASTA format
+EDAMfmt 0002376 | RDF
+EDAMfmt 0002188 | uniprot
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    SP_FT | None
+Query   Sequence record full | HTML | UniProt accession | http://www.uniprot.org
+/uniprot/%s
+Query   Sequence record full | uniprot | UniProt accession | http://www.uniprot.
+org/uniprot/%s.txt
+Query   Sequence record full | XML | UniProt accession | http://www.uniprot.org/
+uniprot/%s.xml
+Query   Sequence record full | RDF | UniProt accession | http://www.uniprot.org/
+uniprot/%s.rdf
+Query   Sequence record full | FASTA format | UniProt accession | http://www.uni
+prot.org/uniprot/%s.fasta
+Example UniProt accession | P12345
+
+Data files
+
+   The Data Resource Catalogue is included in EMBOSS as local database
+   drcat.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                     Program name                          Description
+                    drfinddata     Find public databases by data type
+                    drfindformat   Find public databases by format
+                    drfindid       Find public databases by identifier
+   drfindresource   Find public databases by resource
+                    drget          Get data resource entries
+                    entret         Retrieves sequence entries from flatfile databases and files
+                    ontotext       Get ontology term(s) original full text
+                    textget        Get text data entries
+                    textsearch     Search the textual description of sequence(s)
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

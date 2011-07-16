@@ -104,7 +104,7 @@ int main(int argc, char **argv)
     if(!ajMartSendQuery(seqin))
         ajWarn("Query Failed");
     else
-        while(ajBuffreadLine(seqin->Filebuff,&line))
+        while(ajBuffreadLine(seqin->Input->Filebuff,&line))
             ajFmtPrintF(outf,"%S",line);
         
     
@@ -116,6 +116,7 @@ int main(int argc, char **argv)
     ajStrDel(&filts);
     
     ajMartquerySeqinFree(seqin);
+    ajMartQinfoDel(&qinfo);
 
     ajSeqinDel(&seqin);
     ajFileClose(&outf);

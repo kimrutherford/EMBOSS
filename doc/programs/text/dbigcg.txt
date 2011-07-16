@@ -18,8 +18,8 @@ Description
    dbigcg indexes a GCG-format database of one or more files, and builds
    EMBL CD-ROM format index files.
 
-   A GCG-format database consists of *.seq and *.ref files - only the
-   *.seq files are used. The data in these is often compressed.
+   A GCG-format database consists of *.seq and *.ref files. The data in
+   the *.seq files is often compressed.
 
    The resulting index-file format is used by the software on the EMBL
    database CD-ROM distribution and by the Staden package in addition to
@@ -51,7 +51,7 @@ General log output file [outfile.dbigcg]:
 Command line arguments
 
 Index a GCG formatted database
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Database name (Any string from 2 to 19
@@ -149,10 +149,10 @@ Output file format
 
 ########################################
 # Program: dbigcg
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Dbname: EMBL
 # Release: 0.0
-# Date: 15/01/10
+# Date: 15/07/11
 # CurrentDirectory: /homes/user/test/qa/dbigcg-ex-keep/
 # IndexDirectory: ./
 # IndexDirectoryPath: /homes/user/test/qa/dbigcg-ex-keep/
@@ -285,13 +285,21 @@ Known bugs
 
 See also
 
-                    Program name                     Description
-                    dbiblast     Index a BLAST database
-                    dbifasta     Index a fasta file database
-                    dbiflat      Index a flat file database
-                    dbxfasta     Index a fasta file database using b+tree indices
-                    dbxflat      Index a flat file database using b+tree indices
-                    dbxgcg       Index a GCG formatted database using b+tree indices
+                    Program name                       Description
+                    dbiblast      Index a BLAST database
+                    dbifasta      Index a fasta file database
+                    dbiflat       Index a flat file database
+                    dbxcompress   Compress an uncompressed dbx index
+                    dbxedam       Index the EDAM ontology using b+tree indices
+                    dbxfasta      Index a fasta file database using b+tree indices
+                    dbxflat       Index a flat file database using b+tree indices
+                    dbxgcg        Index a GCG formatted database using b+tree indices
+                    dbxobo        Index an obo ontology using b+tree indices
+                    dbxreport     Validate index and report internals for dbx databases
+                    dbxresource   Index a data resource catalogue using b+tree indices
+                    dbxstat       Dump statistics for dbx databases
+                    dbxtax        Index NCBI taxonomy using b+tree indices
+   dbxuncompress    Uncompress a compressed dbx index
 
 Author(s)
 

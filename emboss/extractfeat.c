@@ -192,27 +192,25 @@ static void extractfeat_FeatSeqExtract(const AjPSeq seq, AjPSeqout seqout,
 				       const AjPStr describe)
 {
     AjIList iter = NULL;
+    AjIList itersub = NULL;
     AjPFeature gf = NULL;
-    AjBool  single;		/* ajtrue = is not a multiple */
-    AjBool  parent;		/* ajtrue = is a parent of a multiple */
-    AjBool  child;		/* ajTrue = is a child of a multiple */
+    AjPFeature gftop = NULL;
+
+
     AjBool  compall;		/* ajTrue = reverse comp all of join */
     AjBool  sense;		/* ajTrue = forward sense */
     AjBool  remote;		/* ajTrue = remote ID */
     AjPStr  type = NULL;	/* name of feature */
     AjPStr  featseq = NULL;	/* feature sequence string */
-    AjPStr  tmpseq = NULL;	/* temporary sequence string */
     ajint   firstpos;
     ajint   lastpos;	        /* bounds of feature in sequence */
     AjPStr  describeout = NULL;	/* tag names/values to add to descriptions */
-    ajuint count = 0;
 
     /* For all features... */
     if(featab && ajFeattableGetSize(featab))
     {
 	/* initialise details of a feature */
         featseq = ajStrNew();
-        tmpseq  = ajStrNew();
         type    = ajStrNew();
         remote  = ajFalse;
         compall = ajFalse;
@@ -225,140 +223,89 @@ static void extractfeat_FeatSeqExtract(const AjPSeq seq, AjPSeqout seqout,
 	iter = ajListIterNewread(featab->Features);
 	while(!ajListIterDone(iter))
 	{
-	    gf = ajListIterGet(iter) ;
+	    gftop = ajListIterGet(iter) ;
 
-	    /*
-	    ** Determine what sort of thing this feature is. Only one of
-	    ** these will be true.
-	    ** True if this is part of a multiple join and it is not
-	    ** the parent
-	    */
-	    child = ajFalse;
+            /*
+            ** We have 3 possibilities
+            ** 1. A simple feature
+            ** 2. A join() where we want to iterate over each subfeature
+            ** 3. A join where we want to fetch the single joined feature
+            */
 
-	    /* True if this is part of a multiple join and it is the parent */
-	    parent = ajFalse;
+            remote = ajFalse;
+            compall = ajFalse;
+            sense = ajTrue;
+            firstpos = 0;
+            lastpos = 0;
 
-	    /* True if this is not part of a multiple join */
-	    single = ajFalse;
+            itersub = ajFeatSubIter(gftop);
+            extractfeat_MatchPatternDescribe(gftop, describe, &describeout);
 
-            if(ajFeatIsMultiple(gf))
-	    {
-            	if(ajFeatIsChild(gf))
-            	    child = ajTrue;
-		else
-            	    parent = ajTrue;
-            }
-	    else
-            	single = ajTrue;
+            if(itersub && !join)
+            {
+                while (!ajListIterDone(itersub))
+                {
+                    gf = ajListIterGet(itersub);
 
-	    /* 
-	    ** If not wish to assembling joins(), then force all features
-	    ** to be treated as single 
-	    */
-	    if(!join)
-	    {
-	    	child = ajFalse;
-	    	parent = ajFalse;
-	    	single = ajTrue;
-	    }
+                    if(ajFeatGetStrand(gf) == '-')
+                        sense = ajFalse;
 
+                    ajStrAssignS(&type, ajFeatGetType(gf));
 
+                    ajFeatGetSeq(gf, seq, &featseq);
 
-	    ajDebug("feature %S %d-%d is parent %B, child %B, single %B\n",
-		    ajFeatGetType(gf), ajFeatGetStart(gf), ajFeatGetEnd(gf),
-		    parent, child, single);
-/*
-	    ajUser("feature %S %d-%d is parent %B, child %B, single %B",
-		    ajFeatGetType(gf), ajFeatGetStart(gf), ajFeatGetEnd(gf),
-		    parent, child, single);
-*/
-	    /*
-	    ** If single or parent, write out any stored previous feature
-	    ** sequence
-	    */	    
-            if(count++ && !child)
-	    {
-            	extractfeat_WriteOut(seqout, &featseq, compall, sense,
-				     firstpos, lastpos, before, after, seq,
-				     remote, type, 
-				     featinname, describeout);
-
-                /* reset joined feature information */
-                ajStrSetClear(&featseq);
-                ajStrSetClear(&tmpseq);
-                ajStrSetClear(&type);
-		ajStrSetClear(&describeout);
-                remote = ajFalse;
-                compall = ajFalse;
-                sense = ajTrue;
-                firstpos = 0;
-                lastpos = 0;
-            }
-
-
-	    /* if parent, note if have Complemented Join */
-            if(parent)
-                compall = ajFeatIsCompMult(gf);
-
-	    /*
-	    ** Get the sense of the feature
-	    ** NB.  if complementing several joined features, then pretend they
-	    ** are forward sense until its possible to  reverse-complement
-	    ** them all together.
-	    */
-	    if(!compall && ajFeatGetStrand(gf) == '-')
-	        sense = ajFalse;
-	    
-	    /* get 'type' name of feature */
-	    if(single || parent)
-	    	ajStrAssignS(&type, ajFeatGetType(gf));
-	    
-	    /*
-	    ** if single or parent, get 'before' + 'after' sequence
-	    ** positions
-	    */
-            if(single || parent)
-	    {
-                firstpos = ajFeatGetStart(gf)-1;
-                lastpos = ajFeatGetEnd(gf)-1;
-            }
-	    
-	    /* if child, update the boundary positions */
-            if(child)
-	    {
-                if(sense)
+                    firstpos = ajFeatGetStart(gf)-1;
                     lastpos = ajFeatGetEnd(gf)-1;
-		else
-		    firstpos = ajFeatGetStart(gf)-1;
+
+                    extractfeat_WriteOut(seqout, &featseq, compall, sense,
+                                         firstpos, lastpos,
+                                         before, after, seq,
+                                         remote, type, 
+                                         featinname, describeout);
+                }
             }
-	    
-            extractfeat_MatchPatternDescribe(gf, describe, &describeout);
-	    
-	    /* get feature sequence(complement if required) */
-            if(!child)
+            else
             {
                 if(join)
-                    ajFeatGetSeqJoin(gf, featab, seq, &tmpseq);
+                {
+                    compall = ajFeatIsCompMult(gftop);
+
+                    if(!compall && ajFeatGetStrand(gftop) == '-')
+                        sense = ajFalse;
+
+                    ajFeatGetSeqJoin(gftop, seq, &featseq);
+                }
                 else
-                    ajFeatGetSeq(gf, seq, &tmpseq);
-                ajDebug("extracted feature = %d bases\n", ajStrGetLen(tmpseq));
-                /*ajUser("extracted feature = %d bases", ajStrGetLen(tmpseq));*/
-            	ajStrAssignS(&featseq, tmpseq);
-	    }
-	}
+                {
+                    if(ajFeatGetStrand(gftop) == '-')
+                        sense = ajFalse;
+
+                    ajFeatGetSeq(gftop, seq, &featseq);
+                }
+
+                firstpos = ajFeatGetStart(gftop)-1;
+                lastpos = ajFeatGetEnd(gftop)-1;
+
+                ajStrAssignS(&type, ajFeatGetType(gftop));
+
+                extractfeat_WriteOut(seqout, &featseq, compall, sense,
+                                     firstpos, lastpos,
+                                     before, after, seq,
+                                     remote, type, 
+                                     featinname, describeout);
+            }
+ 
+            /* reset joined feature information */
+            ajStrSetClear(&featseq);
+            ajStrSetClear(&type);
+            ajStrSetClear(&describeout);
+
+            ajListIterDel(&itersub);
+        }
+
 	ajListIterDel(&iter) ;
-	
-	/*
-	** write out any previous sequence(s)
-	** - add before + after, complement all
-	*/
-        extractfeat_WriteOut(seqout, &featseq, compall, sense,
-			     firstpos, lastpos, before, after,
-			     seq, remote, type, 
-			     featinname, describeout);
-	
+
         ajStrDel(&featseq);
-        ajStrDel(&tmpseq);
         ajStrDel(&type);
         ajStrDel(&describeout);
     }

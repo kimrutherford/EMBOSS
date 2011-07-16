@@ -1,0 +1,37 @@
+##gff-version 3
+
+#Quantitative Data
+
+#GBrowse can plot quantitative data such as alignment scores,
+#confidence scores from gene prediction programs, and microarray
+#intensity data. There is a simple format that can be placed directly
+#inside of a GFF3 file but does not scale to very large data sets, and
+#a "WIG" format designed for very high-density quantitative data such
+#as tiling arrays.
+
+#We first look at the simple format: 
+
+ctg123	affy	microarray_oligo			1	100	281	.	.	Name=Expt1
+ctg123	affy	microarray_oligo	101	200	183	.	.	Name=Expt1
+ctg123	affy	microarray_oligo	201	300	213	.	.	Name=Expt1
+ctg123	affy	microarray_oligo	301	400	191	.	.	Name=Expt1
+ctg123	affy	microarray_oligo	401	500	288	.	.	Name=Expt1
+ctg123	affy	microarray_oligo	501	600	184	.	.	Name=Expt1
+
+#In this format, which can be embedded directly in the GFF3 file, each
+#data point is a distinct feature with a start and end point. The
+#features are grouped together by giving them a common experimental
+#name so that they can be retrieved together. We use the score field
+#(column 6) to represent the quantitative information
+#(e.g. hybridization intensity).
+
+#In contrast, when using WIG format, the quantitative data is kept
+#outside of the main database in a special-purpose binary file that is
+#kept somewhere on the file system. In this case the GFF3 file
+#contains a single line per experiment like this one:
+
+#ctg123 . microarray_oligo 1 50000 . . . Name=example;wigfile=/usr/data/ctg123.Expt1.wig
+
+#The .wig file is created and managed using a script called
+#wiggle2gff3.pl that comes with GBrowse. Instructions on how to use
+#this script is described in the GBrowse Administration Tutorial.

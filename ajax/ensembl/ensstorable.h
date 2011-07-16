@@ -1,18 +1,23 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensstorable_h
-#define ensstorable_h
+#ifndef ENSSTORABLE_H
+#define ENSSTORABLE_H
 
-#include "ajax.h"
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
+
 #include "ensdatabaseconnection.h"
 
+AJ_BEGIN_DECLS
 
 
 
-/* EnsEStorableType ***********************************************************
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+/* @const EnsEStorableType ****************************************************
 **
 ** Ensembl Storable Type enumeration.
 **
@@ -27,6 +32,10 @@ typedef enum EnsOStorableType
 
 
 
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
 
 /* @data EnsPStorable *********************************************************
 **
@@ -48,7 +57,7 @@ typedef struct EnsSStorable
 {
     ajuint Use;
     ajuint Identifier;
-    void *Adaptor;
+    void* Adaptor;
     EnsEStorableType Type;
     ajuint Padding;
 } EnsOStorable;
@@ -58,25 +67,29 @@ typedef struct EnsSStorable
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
 
-EnsPStorable ensStorableNew(EnsEStorableType type,
-                            ajuint identifier,
-                            void* adaptor);
+EnsPStorable ensStorableNewCpy(const EnsPStorable storable);
 
-EnsPStorable ensStorableNewObj(const EnsPStorable object);
+EnsPStorable ensStorableNewIni(EnsEStorableType type,
+                               ajuint identifier,
+                               void* adaptor);
 
 EnsPStorable ensStorableNewRef(EnsPStorable storable);
 
 void ensStorableDel(EnsPStorable* Pstorable);
 
-EnsEStorableType ensStorableGetType(const EnsPStorable storable);
-
-void *ensStorableGetAdaptor(const EnsPStorable storable);
+void* ensStorableGetAdaptor(const EnsPStorable storable);
 
 ajuint ensStorableGetIdentifier(const EnsPStorable storable);
+
+EnsEStorableType ensStorableGetType(const EnsPStorable storable);
 
 AjBool ensStorableSetIdentifier(EnsPStorable storable, ajuint identifier);
 
@@ -92,8 +105,6 @@ AjBool ensStorableIsStored(const EnsPStorable storable,
 
 
 
-#endif /* ensstorable_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSSTORABLE_H */

@@ -37,14 +37,19 @@ subdir = emboss/data
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
+	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
 	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pngdriver.m4 \
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
+	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
 	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
 	$(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = $(top_builddir)/ajax/core/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 SOURCES =
@@ -123,16 +128,24 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+AXIS2C_CFLAGS = @AXIS2C_CFLAGS@
+AXIS2C_CPPFLAGS = @AXIS2C_CPPFLAGS@
+AXIS2C_LDFLAGS = @AXIS2C_LDFLAGS@
+AXIS2C_LIBS = @AXIS2C_LIBS@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+CXXDEPMODE = @CXXDEPMODE@
+CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
-DEVWARNINGS = @DEVWARNINGS@
 DEVWARN_CFLAGS = @DEVWARN_CFLAGS@
+DLLTOOL = @DLLTOOL@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -164,9 +177,11 @@ LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
+MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
 MYSQL_CFLAGS = @MYSQL_CFLAGS@
 MYSQL_CONFIG = @MYSQL_CONFIG@
+MYSQL_CPPFLAGS = @MYSQL_CPPFLAGS@
 MYSQL_LDFLAGS = @MYSQL_LDFLAGS@
 MYSQL_VERSION = @MYSQL_VERSION@
 NEEDAJAX = @NEEDAJAX@
@@ -191,8 +206,12 @@ PCRE_MINOR = @PCRE_MINOR@
 PCRE_POSIXLIB_VERSION = @PCRE_POSIXLIB_VERSION@
 PCRE_VERSION = @PCRE_VERSION@
 PG_CONFIG = @PG_CONFIG@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 POSTGRESQL_CFLAGS = @POSTGRESQL_CFLAGS@
+POSTGRESQL_CPPFLAGS = @POSTGRESQL_CPPFLAGS@
 POSTGRESQL_LDFLAGS = @POSTGRESQL_LDFLAGS@
 POSTGRESQL_VERSION = @POSTGRESQL_VERSION@
 RANLIB = @RANLIB@
@@ -201,7 +220,6 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
-WARNINGS = @WARNINGS@
 WARN_CFLAGS = @WARN_CFLAGS@
 XLIB = @XLIB@
 XMKMF = @XMKMF@
@@ -213,7 +231,9 @@ abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
+ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -248,7 +268,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -264,11 +283,13 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = AAINDEX CODONS REBASE PRINTS PROSITE JASPAR_CORE JASPAR_FAM \
-	  JASPAR_PHYLOFACTS JASPAR_CNE JASPAR_POLII JASPAR_SPLICE \
-	  JASPAR_PBM JASPAR_PBM_HLH JASPAR_PBM_HOMEO
+SUBDIRS = AAINDEX CODONS \
+	JASPAR_CORE JASPAR_FAM \
+	JASPAR_PHYLOFACTS JASPAR_CNE JASPAR_POLII JASPAR_SPLICE \
+	JASPAR_PBM JASPAR_PBM_HLH JASPAR_PBM_HOMEO \
+	OBO PRINTS PROSITE REBASE TAXONOMY
 
-pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
+pkgdata_DATA = DRCAT.dat EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                EBLOSUM55 EBLOSUM60 EBLOSUM62 EBLOSUM62-12 EBLOSUM65 \
                EBLOSUM70 EBLOSUM75 EBLOSUM80 EBLOSUM85 EBLOSUM90 \
                EBLOSUMN EDNAFULL EDNAMAT EDNASIMPLE \
@@ -276,7 +297,7 @@ pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                EGC.2 EGC.21 EGC.22 EGC.23 \
                EGC.3 EGC.4 EGC.5 EGC.6 EGC.9 EGC.index EGC.txt \
                ENUC.4.2 ENUC.4.4 \
-               EPAM10 EPAM100 EPAM110 EPAM120 EPAM130 EPAM140 \
+               EDAM.obo EPAM10 EPAM100 EPAM110 EPAM120 EPAM130 EPAM140 \
                EPAM150 EPAM160 EPAM170 EPAM180 EPAM190 EPAM20 \
                EPAM200 EPAM210 EPAM220 EPAM230 EPAM240 EPAM250 \
                EPAM260 EPAM270 EPAM280 EPAM290 EPAM30 EPAM300 \
@@ -288,8 +309,8 @@ pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                Eamino.dat Eangles.dat Eangles_tri.dat Eantigenic.dat \
                Ebases.iub Edayhoff.freq Edna.melt Eembl.ior Eenergy.dat \
                Efeatures.embl Efeatures.emboss \
-               Efeatures.gff Efeatures.gff3 \
-               Efeatures.gffprotein Efeatures.gff3protein \
+               Efeatures.gff2 Efeatures.gff3 \
+               Efeatures.gff2protein Efeatures.gff3protein \
                Efeatures.pir Efeatures.protein Efeatures.refseqp \
                Efeatures.swiss \
                Efreqs.dat Ehet.dat Ehth.dat \
@@ -299,10 +320,10 @@ pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                Epprofile Eprior1.plib Eprior30.plib Erna.melt Eresidues.iub \
                Esig.euk Esig.pro \
                Etags.embl Etags.emboss \
-               Etags.gff Etags.gff3 Etags.gffprotein Etags.gff3protein \
+               Etags.gff2 Etags.gff3 Etags.gff2protein Etags.gff3protein \
                Etags.pir Etags.protein Etags.refseqp Etags.swiss \
                Etcode.dat Evdw.dat Ewhite-wimley.dat \
-               embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
+               Emwfilter.dat Emass.dat Emassmod.dat \
                Matrices.nucleotide Matrices.protein Matrices.proteinstructure \
                SSSUB edialignmat tp400_dna tp400_prot tp400_trans
 

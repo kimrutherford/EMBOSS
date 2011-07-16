@@ -1,4 +1,4 @@
-<b>Here is a sample session with pasteseq</b>
+Here is a sample session with <b>pasteseq</b>
 <p>
 To insert the sequence 'tsw:flav_nossm' after position 67 in sequence 'tsw:amir_pseae' and write the results to the file 'amir_pseae.fasta':  
 <p>

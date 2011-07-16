@@ -1,10 +1,10 @@
-<b>Here is a sample session with dottup</b>
+Here is a sample session with <b>dottup</b>
 <p>
 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>dottup tembl:j01636 tembl:v00294 -wordsize=6 -gtitle='v00294 vs j01636' -graph cps </b>
+% <b>dottup tembl:j01636 tembl:v00294 -wordsize=6 -gtitle="v00294 vs j01636" -graph cps </b>
 Displays a wordmatch dotplot of two sequences
 
 Created dottup.ps

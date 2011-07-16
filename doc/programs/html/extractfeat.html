@@ -63,7 +63,7 @@ feature which will be reported in the output file.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with extractfeat</b>
+Here is a sample session with <b>extractfeat</b>
 <p>
 To write out the exons of a sequence:  
 <p>
@@ -103,7 +103,7 @@ To write out the 10 bases around the start of all 'exon' features in the tembl d
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractfeat 'tembl:*'  -type exon -before 5 -after -5 </b>
+% <b>extractfeat "tembl:*"  -type exon -before 5 -after -5 </b>
 Extract features from sequence(s)
 output sequence [h45989.fasta]: <b></b>
 
@@ -135,9 +135,10 @@ To write out the 7 residues around all phosphorylated serine residues
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractfeat 'tsw:*' -type MOD_RES -value 'phosphoserine*' -before 3 -after -4 </b>
+% <b>extractfeat "tsw:*" -type MOD_RES -value "phosphoserine*" -before 3 -after -4 </b>
 Extract features from sequence(s)
 output sequence [12s1_arath.fasta]: <b></b>
+ajSeqxrefNewDbS '1-I' 'FT025'
 
 </pre></td></tr></table><p>
 <p>
@@ -149,7 +150,7 @@ output sequence [12s1_arath.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Extract features from sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -1242,8 +1243,8 @@ table are written to file.</p>
 
 <p>By default every feature in the feature table is
 extracted. <tt>-type</tt> will set the specific feature type to
-extract. See <a href="http://www.ebi.ac.uk/Services/WebFeat/">
-http://www.ebi.ac.uk/Services/WebFeat/</a> for a list of the EMBL
+extract. See <a href="http://www.ebi.ac.uk/embl/WebFeindex.html">
+http://www.ebi.ac.uk/embl/WebFeindex.html</a> for a list of the EMBL
 feature types and see Appendix A of the Swissprot user manual
 in <a href="http://www.uniprot.org/manual/sequence_annotation">
 http://www.uniprot.org/manual/sequence_annotation</a> for a list of
@@ -1294,7 +1295,7 @@ output feature has the tag (for example) <tt>/gene=BRCA1</tt>
 associated with it, then the text <tt>(gene=BRCA1)</tt> will be added
 to the Description line. By default no feature tag is given in the
 "Description" text. You can set -describe to specify any feature tag
-you wish to show. </p>
+you wish to show.</p>
 
 
 <h3> "Joined" features </h3>
@@ -1368,11 +1369,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="coderet.html">coderet</a></td>
-<td>Extract CDS, mRNA and translations from feature tables</td>
-</tr>
-
-<tr>
 <td><a href="cutseq.html">cutseq</a></td>
 <td>Removes a section from a sequence</td>
 </tr>
@@ -1410,6 +1406,11 @@ None.
 <tr>
 <td><a href="featreport.html">featreport</a></td>
 <td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
 </tr>
 
 <tr>
@@ -1495,6 +1496,11 @@ None.
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>

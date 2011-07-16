@@ -1,0 +1,113 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: drfindformat.drcat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID      dbEST
+Name    dbEST database of EST sequences
+Desc    dbEST is a division of GenBank that contains sequence data and other information on "single-pass" cDNA sequences, or "Expressed Sequence Tags", from a number of organisms.
+URL     http://www.ncbi.nlm.nih.gov/dbEST/
+Cat     Not available
+Taxon   1 | all
+EDAMtpc 0000655 | mRNA, EST or cDNA
+EDAMdat 0000849 | Sequence record
+EDAMid  0002314 | GI number
+EDAMid  0001105 | dbEST accession
+EDAMfmt 0002310 | FASTA-HTML
+EDAMfmt 0002532 | GenBank-HTML
+EDAMfmt 0002331 | HTML
+Xref    SP_FT | None
+Query    Sequence record | GenBank-HTML | dbEST accession | http://www.ncbi.nlm.nih.gov/nucest/%s?report=genbank
+Query    Sequence record | HTML {est} | dbEST accession | http://www.ncbi.nlm.nih.gov/nucest/%s?report=est
+Query    Sequence record | HTML {docsum} | dbEST accession | http://www.ncbi.nlm.nih.gov/nucest/%s?report=docsum
+Query    Sequence record | FASTA-HTML | dbEST accession | http://www.ncbi.nlm.nih.gov/nucest/%s?report=fasta
+Query    Sequence record | GenBank-HTML | dbEST accession | http://www.ncbi.nlm.nih.gov/nucest/%s?report=genbank
+Query    Sequence record | GenBank-HTML | GI number | http://www.ncbi.nlm.nih.gov/nucest/%s?report=genbank
+Query    Sequence record | HTML {est} | GI number | http://www.ncbi.nlm.nih.gov/nucest/%s?report=est
+Query    Sequence record | HTML {docsum} | GI number | http://www.ncbi.nlm.nih.gov/nucest/%s?report=docsum
+Query    Sequence record | FASTA-HTML | GI number | http://www.ncbi.nlm.nih.gov/nucest/%s?report=fasta
+Query    Sequence record | GenBank-HTML | GI number | http://www.ncbi.nlm.nih.gov/nucest/%s?report=genbank
+Example dbEST accession | f12345
+Example GI number | 706694
+
+ID      REDIdb
+Name    RNA editing database (REDIdb)
+Desc    Sequences post-transcriptionally modified by RNA editing from primary databases and literature. All editing information such as substitutions, insertions and deletions occurring in a wide range of organisms is stored.
+URL     http://biologia.unical.it/py_script/overview.html
+Taxon   1 | all
+EDAMtpc 0000630 | Gene structure
+EDAMdat 0002043 | Sequence record lite
+EDAMdat 0001383 | Sequence alignment (nucleic acid)
+EDAMid  0002781 | REDIdb ID
+EDAMfmt 0002310 | FASTA-HTML
+EDAMfmt 0002331 | HTML
+Query    Sequence record lite {REDIdb entry} | HTML | REDIdb ID | http://biologia.unical.it/py_script/cgi-bin/retrieve.py?query=%s
+Query    Sequence record lite {REDIdb fasta} | FASTA-HTML | REDIdb ID | http://biologia.unical.it/py_script/cgi-bin/fasta.py?query=%s
+Query    Sequence alignment (nucleic acid) {REDIdb overview} | HTML | REDIdb ID | http://biologia.unical.it/py_script/cgi-bin/display.py?query=%s
+Query    Sequence alignment (nucleic acid) {REDIdb alignment} | HTML | REDIdb ID | http://biologia.unical.it/py_script/cgi-bin/align.py?query=%s
+Example REDIdb ID  | EDI_000000002
+
+ID      UniRef
+Name    Non-redundant reference (UniRef) databases
+Desc    Clustered sets of sequences from UniProt Knowledgebase (including splice variants and isoforms) and selected UniParc records, in order to obtain complete coverage of sequence space at several resolutions while hiding redundant sequences (but not their descriptions) from view.
+URL     http://www.uniprot.org/help/uniref
+Cat     Other
+Taxon   1 | all
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+Xref    SP_FT | None
+Query    Sequence record full | HTML | UniProt accession | http://www.uniprot.org/uniprot/%s
+Query    Sequence record full | uniprot | UniProt accession | http://www.uniprot.org/uniprot/%s.txt
+Query    Sequence record full | XML | UniProt accession | http://www.uniprot.org/uniprot/%s.xml
+Query    Sequence record full | RDF | UniProt accession | http://www.uniprot.org/uniprot/%s.rdf
+Query    Sequence record full | FASTA format | UniProt accession | http://www.uniprot.org/uniprot/%s.fasta
+Example UniProt accession | P12345
+
+ID      Ensembl
+Acc     DB-0023
+Name    Ensembl eukaryotic genome annotation project
+Desc    Genome databases for vertebrates and other eukaryotic species.
+URL     http://www.ensembl.org/
+Cat     Genome annotation databases
+Taxon   33208 | Metazoa
+EDAMtpc 0000643 | Genomes
+EDAMtpc 0002818 | Eukaryote
+EDAMtpc 0000643 | Genomes
+EDAMdat 0000849 | Sequence record
+EDAMdat 0000916 | Gene annotation
+EDAMid  0001033 | Gene ID (Ensembl)
+EDAMid  0002725 | Transcript ID (Ensembl)
+EDAMfmt 0001929 | FASTA format
+EDAMfmt 0002331 | HTML
+Xref    SP_explicit | Transcript ID (Ensembl);Protein ID (Ensembl);Gene ID (Ensembl)
+Xref    SP_FT | None
+Query    Gene annotation | HTML | Gene ID (Ensembl) | http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=%s
+Query    Sequence record | FASTA format | Gene ID (Ensembl);Transcript ID (Ensembl) | http://www.ensembl.org/Homo_sapiens/Gene/Export?db=core;g=%s1;output=fasta;r=13:31787617-31871809;strand=feature;t=%s2;time=1244110856.85314;st=cdna;st=coding;st=peptide;st=utr5;st=utr3;st=exons;st=introns;genomic=unmasked;_format=Text
+Example Gene ID (Ensembl);Transcript ID (Ensembl) | ENSG00000139618;ENST00000380152
+
+ID      UniProtKB/Swiss-Prot
+IDalt   SwissProt
+Name    Universal protein resource knowledge base / Swiss-Prot
+Desc    Section of the UniProt knowledgebase, containing annotated records, which include curator-evaluated computational analysis, as well as, information extracted from the literature
+URL     http://www.uniprot.org
+Taxon   1 | all
+EDAMtpc 0000639 | Protein sequences
+EDAMdat 0002201 | Sequence record full
+EDAMid  0003021 | UniProt accession
+EDAMfmt 0001929 | FASTA format
+EDAMfmt 0002376 | RDF
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    EMBL_explicit | UniProt accession
+Query    Sequence record full | HTML | UniProt accession | http://www.uniprot.org/uniprot/%s
+Query    Sequence record full | Text | UniProt accession | http://www.uniprot.org/uniprot/%s.txt
+Query    Sequence record full | XML | UniProt accession | http://www.uniprot.org/uniprot/%s.xml
+Query    Sequence record full | RDF | UniProt accession | http://www.uniprot.org/uniprot/%s.rdf
+Query    Sequence record full | FASTA format | UniProt accession | http://www.uniprot.org/uniprot/%s.fasta
+Example UniProt accession | P12345
+
+</pre>
+</td></tr></table><p>

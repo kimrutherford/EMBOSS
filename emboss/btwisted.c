@@ -47,8 +47,8 @@ int main(int argc, char **argv)
     AjPTable angletable  = NULL;
     AjPTable energytable = NULL;
 
-    AjPStr   nucs   = NULL;
-    AjPStr   valstr = NULL;
+    AjPStr       nucs   = NULL;
+    const AjPStr valstr = NULL;
 
     const char * dinuc = NULL;
     ajint    len;
@@ -89,12 +89,12 @@ int main(int argc, char **argv)
     for(i=begin-1; i<end-1; ++i)
     {
 	ajStrAssignSubC(&nucs,dinuc,i,i+1);
-	if(!(valstr = ajTableFetch(angletable,(const void *)nucs)))
+	if(!(valstr = ajTableFetchS(angletable, nucs)))
 	    ajFatal("Incomplete table");
 
 	ajStrToFloat(valstr,&val);
 	anglesum += val;
-	if(!(valstr = ajTableFetch(energytable,(const void *)nucs)))
+	if(!(valstr = ajTableFetchS(energytable, nucs)))
 	    ajFatal("Incomplete table");
 
 	ajStrToFloat(valstr,&val);
@@ -150,7 +150,7 @@ static AjPTable btwisted_getdinucdata(AjPFile inf)
     valstr = ajStrNew();
     line = ajStrNew();
 
-    table = ajTablestrNewCaseLen(20);
+    table = ajTablestrNewCase(20);
 
     while(ajReadlineTrim(inf,&line))
     {

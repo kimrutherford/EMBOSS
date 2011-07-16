@@ -77,7 +77,10 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-<b>wordmatch</b> reads any two sequence USAs of the same type (DNA or protein).
+<b>wordmatch</b> reads two sets of nucleotide or protein sequences.
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
+
 
 <p>
 
@@ -89,6 +92,15 @@ IT IS DONE FOR YOU.
 </H2>
 
 <!--#include file="inc/alignformats.ihtml" -->
+
+<p>
+By default the output is in 'match' format.
+
+<p>
+The matches in each set of input sequences are written as feature files.
+<p>
+
+<!--#include file="inc/featformats.ihtml" -->
 
 <p>
 
@@ -119,7 +131,7 @@ None.
     Notes
 </H2>
 
-<p>wormatch will only report identical regions that are at least as long as the specified wordsize.</p>
+<p><b>wordmatch</b> will only report identical regions that are at least as long as the specified wordsize.</p>
 
 
 <H2>

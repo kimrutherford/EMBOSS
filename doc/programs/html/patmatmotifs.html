@@ -67,7 +67,7 @@ Scan a protein sequence with motifs from the PROSITE database
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with patmatmotifs</b>
+Here is a sample session with <b>patmatmotifs</b>
 <p>
 
 <p>
@@ -89,12 +89,13 @@ Output report [opsd_human.patmatmotifs]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Scan a protein sequence with motifs from the PROSITE database
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
                                   format, or reference (input USA)
   [-outfile]           report     [*.patmatmotifs] Output report file name
+                                  (default -rformat dbmotif)
 
    Additional (Optional) qualifiers:
    -full               boolean    [N] Provide full documentation for matching
@@ -184,7 +185,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat dbmotif)</td>
 <td><i>&lt;*&gt;</i>.patmatmotifs</td>
 </tr>
 
@@ -538,7 +539,34 @@ Version: EMBOSS:6.3.0
 </H2>
 
 
-<b>patmatmotifs</b> reads a protein sequence USA.
+<b>patmatmotifs</b> reads a single protein sequence.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -671,10 +699,11 @@ The output is a standard EMBOSS report file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
 
 <p>
 
@@ -699,7 +728,7 @@ By default <b>patmatmotifs</b> writes a 'dbmotif' report file.
 <pre>
 ########################################
 # Program: patmatmotifs
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: patmatmotifs
 #    -full
 #    -sequence tsw:opsd_human
@@ -906,11 +935,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="digest.html">digest</a></td>
-<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
-</tr>
-
-<tr>
 <td><a href="epestfind.html">epestfind</a></td>
 <td>Finds PEST motifs as potential proteolytic cleavage sites</td>
 </tr>
@@ -926,23 +950,8 @@ None.
 </tr>
 
 <tr>
-<td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Identify nucleic acid-binding motifs in protein sequences</td>
-</tr>
-
-<tr>
-<td><a href="oddcomp.html">oddcomp</a></td>
-<td>Identify proteins with specified sequence word composition</td>
-</tr>
-
-<tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
 <td>Searches protein sequences with a sequence motif</td>
-</tr>
-
-<tr>
-<td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>

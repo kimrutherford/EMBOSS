@@ -90,7 +90,7 @@ each output sequence at a specified position</p>
         Many examples illustrating different behaviours is good.
  -->
 
-<b>Here is a sample session with makeprotseq</b>
+Here is a sample session with <b>makeprotseq</b>
 <p>
 
 <p>
@@ -133,7 +133,7 @@ protein output sequence(s) [makeseq.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Create random protein sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
    -pepstatsfile       infile     This file should be a pepstats output file.
@@ -477,14 +477,8 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
 
-<b>makeprotseq</b> reads any normal sequence USAs.
+<b>makeprotseq</b> reads a <b>pepstats</b> output file.
 
 <p>
 
@@ -553,20 +547,27 @@ Acidic		(B+D+E+Z)		32		 8.889
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
 
-        If you wish to include the standard description of the avalable
-	report formats, use:
-        #include file="inc/reportformats.ihtml"
-   -->
+<p>
 
-<b>makeprotseq</b> 
-writes a sequence file with the number of sequences requested.
+The output is a standard EMBOSS sequence file. 
 
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
 
 <p>
 
@@ -1002,6 +1003,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
 <td><a href="listor.html">listor</a></td>
 <td>Write a list file of the logical OR of two sets of sequences</td>
 </tr>
@@ -1079,6 +1085,11 @@ None.
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>

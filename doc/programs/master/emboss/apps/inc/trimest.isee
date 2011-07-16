@@ -68,6 +68,11 @@
 </tr>
 
 <tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
 <td><a href="listor.html">listor</a></td>
 <td>Write a list file of the logical OR of two sets of sequences</td>
 </tr>
@@ -80,6 +85,11 @@
 <tr>
 <td><a href="makeprotseq.html">makeprotseq</a></td>
 <td>Create random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="marscan.html">marscan</a></td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>
@@ -153,6 +163,11 @@
 </tr>
 
 <tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
+</tr>
+
+<tr>
 <td><a href="seqret.html">seqret</a></td>
 <td>Reads and writes (returns) sequences</td>
 </tr>
@@ -165,6 +180,11 @@
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
 <td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="sirna.html">sirna</a></td>
+<td>Finds siRNA duplexes in mRNA</td>
 </tr>
 
 <tr>

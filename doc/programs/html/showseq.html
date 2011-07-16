@@ -56,7 +56,7 @@ displayed and numbered and the output can be formatted for HTML.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with showseq</b>
+Here is a sample session with <b>showseq</b>
 <p>
 
 <p>
@@ -181,7 +181,7 @@ Make selected regions uppercase. (Use '-slower' to force the rest of the sequenc
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '8-24,65-81' </b>
+% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper "8-24,65-81" </b>
 Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
@@ -213,7 +213,7 @@ Add your own annotation to the display:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26 binding site 15-15 SNP' </b>
+% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 2 -send 120 -annotation "13-26 binding site 15-15 SNP" </b>
 Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
@@ -227,7 +227,7 @@ Output file [x13776.showseq]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Displays sequences with features in pretty format
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) nucleotide sequence(s) filename and
@@ -459,7 +459,7 @@ Version: EMBOSS:6.3.0
 
    Advanced (Unprompted) qualifiers:
    -mfile              datafile   [Emethylsites.dat] Restriction enzyme
-                                  methylation data file (optional)
+                                  methylation data file
    -flatreformat       boolean    [N] This changes the output format to one
                                   where the recognition site is indicated by a
                                   row of '===' characters and the cut site is
@@ -830,7 +830,7 @@ pax* | 10</td>
 <tr bgcolor="#FFFFCC">
 <td>-mfile</td>
 <td>datafile</td>
-<td>Restriction enzyme methylation data file (optional)</td>
+<td>Restriction enzyme methylation data file</td>
 <td>Data file</td>
 <td>Emethylsites.dat</td>
 </tr>
@@ -1252,7 +1252,34 @@ pax* | 10</td>
     Input file format
 </H2>
 
-<b>showseq</b> reads normal sequence USAs.
+<b>showseq</b> reads one or more nucleotide sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -1427,19 +1454,9 @@ construct, (where 'xxx' is the name of the colour).
 
 <p>
 
-The standard names of HTML font colours are given in:
-
-<br>
-
-<A HREF="http://http://www.w3.org/TR/REC-html40/types.html">
-http://http://www.w3.org/TR/REC-html40/types.html</A>
-and
-<A HREF="http://www.ausmall.com.au/freegraf/ncolour2.htm">
-http://www.ausmall.com.au/freegraf/ncolour2.htm</A>
-and
-<A HREF="http://mindprod.com/htmlcolours.html">
-http://mindprod.com/htmlcolours.html</A>
-(amongst other places).
+The standard names of HTML font colours are given in
+<A HREF="http://http://www.w3.org/TR/REC-html40/types.html#h-6.5">
+http://http://www.w3.org/TR/REC-html40/types.html#h-6.5</A>
 
 
 <p>
@@ -1518,7 +1535,7 @@ HinfI
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: x13776.showseq </h3>
+<p><h3>File: x13776.showseq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 X13776
@@ -1544,7 +1561,7 @@ regulation
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: x13776.showseq </h3>
+<p><h3>File: x13776.showseq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 X13776
@@ -1564,7 +1581,7 @@ regulation
 
 <a name="output.3"></a>
 <h3>Output files for usage example 3</h3>
-<p><h3>File: x13776.showseq </h3>
+<p><h3>File: x13776.showseq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
           ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
@@ -1575,7 +1592,7 @@ regulation
 
 <a name="output.4"></a>
 <h3>Output files for usage example 4</h3>
-<p><h3>File: x13776.showseq </h3>
+<p><h3>File: x13776.showseq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 X13776
@@ -1589,7 +1606,7 @@ regulation
 
 <a name="output.5"></a>
 <h3>Output files for usage example 5</h3>
-<p><h3>File: x13776.showseq </h3>
+<p><h3>File: x13776.showseq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 X13776
@@ -1603,7 +1620,7 @@ regulation
 
 <a name="output.6"></a>
 <h3>Output files for usage example 6</h3>
-<p><h3>File: x13776.showseq </h3>
+<p><h3>File: x13776.showseq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 X13776
@@ -1617,7 +1634,7 @@ regulation
 
 <a name="output.7"></a>
 <h3>Output files for usage example 7</h3>
-<p><h3>File: x13776.showseq </h3>
+<p><h3>File: x13776.showseq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 X13776
@@ -1651,7 +1668,7 @@ regulation
 
 <a name="output.8"></a>
 <h3>Output files for usage example 8</h3>
-<p><h3>File: x13776.showseq </h3>
+<p><h3>File: x13776.showseq</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 X13776
@@ -2064,11 +2081,6 @@ None known.
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
-<td><a href="abiview.html">abiview</a></td>
-<td>Display the trace in an ABI sequencer file</td>
-</tr>
-
-<tr>
 <td><a href="backtranambig.html">backtranambig</a></td>
 <td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
 </tr>
@@ -2079,8 +2091,8 @@ None known.
 </tr>
 
 <tr>
-<td><a href="cirdna.html">cirdna</a></td>
-<td>Draws circular maps of DNA constructs</td>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>
@@ -2089,28 +2101,8 @@ None known.
 </tr>
 
 <tr>
-<td><a href="lindna.html">lindna</a></td>
-<td>Draws linear maps of DNA constructs</td>
-</tr>
-
-<tr>
-<td><a href="pepnet.html">pepnet</a></td>
-<td>Draw a helical net for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="pepwheel.html">pepwheel</a></td>
-<td>Draw a helical wheel diagram for a protein sequence</td>
-</tr>
-
-<tr>
 <td><a href="plotorf.html">plotorf</a></td>
 <td>Plot potential open reading frames in a nucleotide sequence</td>
-</tr>
-
-<tr>
-<td><a href="prettyplot.html">prettyplot</a></td>
-<td>Draw a sequence alignment with pretty formatting</td>
 </tr>
 
 <tr>
@@ -2144,33 +2136,8 @@ None known.
 </tr>
 
 <tr>
-<td><a href="seealso.html">seealso</a></td>
-<td>Finds programs with similar function to a specified program</td>
-</tr>
-
-<tr>
-<td><a href="showalign.html">showalign</a></td>
-<td>Display a multiple sequence alignment in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showdb.html">showdb</a></td>
-<td>Displays information on configured databases</td>
-</tr>
-
-<tr>
-<td><a href="showfeat.html">showfeat</a></td>
-<td>Display features of a sequence in pretty format</td>
-</tr>
-
-<tr>
 <td><a href="showorf.html">showorf</a></td>
 <td>Display a nucleotide sequence and translation in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showpep.html">showpep</a></td>
-<td>Displays protein sequences with features in pretty format</td>
 </tr>
 
 <tr>
@@ -2181,11 +2148,6 @@ None known.
 <tr>
 <td><a href="sixpack.html">sixpack</a></td>
 <td>Display a DNA sequence with 6-frame translation and ORFs</td>
-</tr>
-
-<tr>
-<td><a href="textsearch.html">textsearch</a></td>
-<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>

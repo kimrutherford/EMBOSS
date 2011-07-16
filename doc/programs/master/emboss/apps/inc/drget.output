@@ -1,0 +1,30 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: uniprot.drcat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID      UniProt
+IDalt   UniProtKB
+Name    Universal protein resource
+Desc    A comprehensive, high-quality and freely accessible resource of protein sequence and functional information.
+URL     http://www.uniprot.org/
+Taxon   1 | all
+EDAMtpc 0000639 | Protein sequences
+EDAMdat 0002201 | Sequence record full
+EDAMid  0003021 | UniProt accession
+EDAMfmt 0001929 | FASTA format
+EDAMfmt 0002376 | RDF
+EDAMfmt 0002188 | uniprot
+EDAMfmt 0002331 | HTML
+EDAMfmt 0002332 | XML
+Xref    SP_FT | None
+Query    Sequence record full | HTML | UniProt accession | http://www.uniprot.org/uniprot/%s
+Query    Sequence record full | uniprot | UniProt accession | http://www.uniprot.org/uniprot/%s.txt
+Query    Sequence record full | XML | UniProt accession | http://www.uniprot.org/uniprot/%s.xml
+Query    Sequence record full | RDF | UniProt accession | http://www.uniprot.org/uniprot/%s.rdf
+Query    Sequence record full | FASTA format | UniProt accession | http://www.uniprot.org/uniprot/%s.fasta
+Example UniProt accession | P12345
+
+</pre>
+</td></tr></table><p>

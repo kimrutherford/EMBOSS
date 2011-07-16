@@ -1,0 +1,100 @@
+application: dastest [
+  documentation: "Return DAS sources from a DAS server or from the DAS registry"
+  groups: "Display, Information"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+endsection: input
+
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  boolean: sequencesourcesonly [
+    additional: "Y"
+    default: "N"
+    information: "Display DAS sequence sources only"
+  ]
+
+  boolean: entrypoints [
+    additional: "Y"
+    default: "N"
+    information: "List entry points"
+  ]
+
+  boolean: showtestqueries [
+    additional: "Y"
+    default: "N"
+    information: "Show test queries"
+  ]
+
+  boolean: runtestqueries [
+    additional: "Y"
+    default: "N"
+    information: "Run test queries"
+  ]
+
+endsection: additional
+
+
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  string: host [
+    default: "www.dasregistry.org"
+    information: "DAS registry/server host location"
+  ]
+
+  string: path [
+    default: "/das"
+    information: "DAS registry/server path on registry/server host"
+  ]
+
+  integer: port [
+    default: "80"
+    information: "DAS registry/server port on registry/server host"
+  ]
+
+  string: servername [
+    default: "das"
+    information: "Name of a DAS server defined in EMBOSS resource files"
+  ]
+
+  integer: maxtests [
+    default: "80"
+    information: "Maximum number of feature test queries"
+  ]
+
+  integer: maxfeatures [
+    default: "80"
+    information: "Maximum number of features to report, for each DAS source"
+  ]
+
+  integer: maxsegments [
+    default: "5"
+    information: "Maximum number of segments to report, for each DAS source"
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+  
+  outfile: outfile [
+    additional: "Y"
+    default: "stdout"
+  ]
+
+
+endsection: output

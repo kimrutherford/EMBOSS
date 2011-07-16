@@ -2583,7 +2583,7 @@ static AjBool nexusSetSequences(AjPNexus thys)
 
     word = ajRegCompC("\\S+");
 
-    seqtab = ajTablestrNewLen(thys->Taxa->Ntax);
+    seqtab = ajTablestrNew(thys->Taxa->Ntax);
 
     if (thys->Taxa->TaxLabels)
     {
@@ -2631,7 +2631,7 @@ static AjBool nexusSetSequences(AjPNexus thys)
 		    havetaxa = ajTrue;
 	    }
 
-	    seqstr = ajTableFetch(seqtab, taxlabel);
+	    seqstr = ajTableFetchmodS(seqtab, taxlabel);
 
 	    if (!seqstr)
 	    {
@@ -2666,7 +2666,7 @@ static AjBool nexusSetSequences(AjPNexus thys)
 
     for (i=0; thys->Taxa->TaxLabels[i]; i++)
     {
-	thys->Characters->Sequences[i] = ajTableFetch(seqtab,
+	thys->Characters->Sequences[i] = ajTableFetchmodS(seqtab,
 						    thys->Taxa->TaxLabels[i]);
 	if (ajStrGetLen(thys->Characters->Sequences[i]) !=
 	    thys->Characters->Nchar)

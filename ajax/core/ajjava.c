@@ -97,8 +97,10 @@
 #define _XOPEN_SOURCE
 #endif
 
-#if !defined(__ppc__) && !defined(__APPLE__) && !defined(__FreeBSD__) && !defined(WIN32)
+#if !defined(__ppc__) && !defined(__APPLE__)
+#if !defined(__FreeBSD__) && !defined(WIN32)
 #include <crypt.h>
+#endif
 #endif
 
 
@@ -254,7 +256,7 @@ static int java_block(int chan, unsigned long flag);
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqType
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_seqType
            (JNIEnv *env, jobject obj, jstring usa)
 {
 
@@ -316,7 +318,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqType
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetType
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_seqsetType
            (JNIEnv *env, jobject obj, jstring usa)
 {
     AjPStr name    = NULL;
@@ -382,8 +384,8 @@ static AjBool ajJavaGetSeqFromUsa(const AjPStr thys, AjPSeq *seq)
     ajNamInit("emboss");
 
     seqin = ajSeqinNew();
-    seqin->multi = ajFalse;
-    seqin->Text  = ajFalse;
+    seqin->Input->Multi = ajFalse;
+    seqin->Input->Text  = ajFalse;
 
     ajSeqinUsa (&seqin, thys);
     ok = ajSeqRead(*seq, seqin);
@@ -415,8 +417,8 @@ static AjBool ajJavaGetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq)
     ajNamInit("emboss");
 
     seqin = ajSeqinNew();
-    seqin->multi = ajTrue;
-    seqin->Text  = ajFalse;
+    seqin->Input->Multi = ajTrue;
+    seqin->Input->Text  = ajFalse;
 
     ajSeqinUsa (&seqin, thys);
     ok = ajSeqsetRead(*seq, seqin);
@@ -447,7 +449,7 @@ static AjBool ajJavaGetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq)
 ******************************************************************************/
 
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userInfo
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_userInfo
 (JNIEnv *env, jobject obj, jstring door, jstring key)
 {
     AjPStr username = NULL;
@@ -1032,7 +1034,7 @@ static AjBool java_pass(AjPStr username,AjPStr password,ajint *uid,
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setuid
+JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_setuid
 (JNIEnv *env, jclass j, jint uid)
 {
     (void) env;
@@ -1056,7 +1058,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setuid
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_seteuid
+JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_seteuid
 (JNIEnv *env, jclass j, jint uid)
 {
     (void) env;
@@ -1084,7 +1086,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_seteuid
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setgid
+JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_setgid
 (JNIEnv *env, jclass j, jint gid)
 {
     (void) env;
@@ -1108,7 +1110,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setgid
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setegid
+JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_setegid
 (JNIEnv *env, jclass j, jint gid)
 {
     (void) env;
@@ -1135,7 +1137,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setegid
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_getuid
+JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_getuid
 (JNIEnv *env, jclass j)
 {
     (void) env;
@@ -1158,7 +1160,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_getuid
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_getgid
+JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_getgid
 (JNIEnv *env, jclass j)
 {
     (void) env;
@@ -1181,7 +1183,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_getgid
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_geteuid
+JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_geteuid
 (JNIEnv *env, jclass j)
 {
     (void) env;
@@ -1204,7 +1206,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_geteuid
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_getegid
+JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_getegid
 (JNIEnv *env, jclass j)
 {
     (void) env;
@@ -1233,7 +1235,7 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_getegid
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_fork
 (JNIEnv *env, jobject obj, jstring commandline,
  jstring environment, jstring directory, jint uid, jint gid)
 {
@@ -1391,7 +1393,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
 	    exit(-1);
 	}
 
-        ajSysExecProgArgEnvNowaitC(ajStrGetPtr(prog),argp,envp);
+        ajSysExecprogNowaitS(prog,argp,envp);
     }
 
     *buf = '\0';
@@ -2908,7 +2910,7 @@ static int java_jembossctl(ajint command,
 	dup2(outpipe[1],1);
 	dup2(errpipe[1],2);
 
-        ajSysExecProgArgEnvNowaitC(ajStrGetPtr(prog),argp,envp);
+        ajSysExecprogNowaitS(prog,argp,envp);
     }
 
 
@@ -3189,7 +3191,7 @@ static void java_tidy_command3(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userAuth
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_userAuth
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment)
 {
@@ -3327,7 +3329,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userAuth
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkBatch
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_forkBatch
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring cline, jstring direct)
 {
@@ -3509,7 +3511,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkBatch
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkEmboss
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_forkEmboss
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring cline, jstring direct)
 {
@@ -3691,7 +3693,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkEmboss
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_makeDir
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_makeDir
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring direct)
 {
@@ -3844,7 +3846,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_makeDir
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delFile
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_delFile
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename)
 {
@@ -4003,7 +4005,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delFile
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_renameFile
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_renameFile
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename, jstring filename2)
 {
@@ -4182,7 +4184,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_renameFile
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delDir
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_delDir
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring direct)
 {
@@ -4340,7 +4342,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delDir
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listFiles
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_listFiles
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring direct)
 {
@@ -4498,7 +4500,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listFiles
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listDirs
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_listDirs
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring direct)
 {
@@ -4658,7 +4660,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listDirs
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_parser_Ajax_getFile
+JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_server_Ajax_getFile
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename)
 {
@@ -4837,7 +4839,7 @@ JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_parser_Ajax_getFile
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_putFile
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_putFile
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename, jbyteArray arr)
 {
@@ -5027,7 +5029,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_putFile
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqAttrib
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_seqAttrib
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename)
 {
@@ -5203,7 +5205,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqAttrib
 ** @@
 ******************************************************************************/
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetAttrib
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_seqsetAttrib
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename)
 {

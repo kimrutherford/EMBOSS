@@ -39,7 +39,7 @@
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat diffseq)</td>
 <td><i>&lt;*&gt;</i>.diffseq</td>
 </tr>
 

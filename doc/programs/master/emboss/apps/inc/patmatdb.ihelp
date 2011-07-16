@@ -1,5 +1,5 @@
 Searches protein sequences with a sequence motif
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -16,6 +16,7 @@ Version: EMBOSS:6.3.0
                                   'aaa'. (Any string of at least 2
                                   characters)
   [-outfile]           report     [*.patmatdb] Output report file name
+                                  (default -rformat dbmotif)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)

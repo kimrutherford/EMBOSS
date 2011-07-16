@@ -1,0 +1,28 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.seqxref</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+#tembl-id:X13776: 20
+DOI:10.1016/0014-5793(89)80249-2
+GOA:P10932
+GOA:P27017
+GOA:Q51417
+InterPro:IPR000709
+InterPro:IPR003211
+InterPro:IPR005561
+InterPro:IPR008327
+InterPro:IPR011006
+InterPro:IPR011991
+PDB:1PEA
+PDB:1QNL
+PDB:1QO0
+PubMed:1907262
+PubMed:2495988
+taxon:287
+UniProtKB/Swiss-Prot:P10932
+UniProtKB/Swiss-Prot:P27017
+UniProtKB/Swiss-Prot:Q51417
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,58 @@
+application: textget [
+  documentation: "Get text data entries"
+  groups: "Data retrieval:Text data"
+    relations: "EDAM:0000090 topic Data retrieval"
+    relations: "EDAM:0002422 operation Data retrieval"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+  text: text [
+     default: ""
+     parameter: "Y"
+     relations: "EDAM:0000957 data Database metadata"
+  ]
+
+endsection: input
+
+
+
+
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+endsection: additional
+
+
+
+
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+
+
+
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outtext: outfile [
+    parameter: "Y"
+    relations: "EDAM:0000957 data Database metadata"
+  ]
+
+endsection: output
+
+

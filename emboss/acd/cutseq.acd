@@ -1,8 +1,8 @@
 application: cutseq [
   documentation: "Removes a section from a sequence"
   groups: "Edit"
-  relations: "/edam/topic/0000156 Sequence editing"
-  relations: "/edam/operation/0000369 Sequence cutting"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000369 operation Sequence cutting"
 ]
 
 section: input [
@@ -13,8 +13,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "/edam/data/0000848 Sequence"                 
-    relations: "/edam/data/0000849 Sequence record"                            
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -35,7 +34,7 @@ section: required [
     help: "This is the start position (inclusive) of the section of
            the sequence that you wish to remove."
     expected: "Start of sequence (0)"
-    relations: "/edam/data/0001016 Sequence position"                                     
+    relations: "EDAM:0001016 data Sequence position"
   ]
 
   integer: to [
@@ -49,7 +48,7 @@ section: required [
     help: "This is the end position (inclusive) of the section of the
            sequence that you wish to remove."
     expected: "End of sequence (0)"
-    relations: "/edam/data/0001016 Sequence position"                                     
+    relations: "EDAM:0001016 data Sequence position"
   ]
 
 endsection: required
@@ -61,8 +60,7 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
-    relations: "/edam/data/0000848 Sequence"                                            
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: output

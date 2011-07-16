@@ -1,37 +1,41 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef enskaryotype_h
-#define enskaryotype_h
+#ifndef ENSKARYOTYPE_H
+#define ENSKARYOTYPE_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ensfeature.h"
 
+AJ_BEGIN_DECLS
 
 
 
-/* @data EnsPKaryotypebandadaptor *********************************************
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+/* @const EnsPKaryotypebandadaptor ********************************************
 **
 ** Ensembl Karyotype Band Adaptor
+** Defined as an alias in EnsPFeatureadaptor
 **
-** @alias EnsSKaryotypebandadaptor
-** @alias EnsOKaryotypebandadaptor
+** #alias EnsPFeatureadaptor
 **
-** @cc Bio::EnsEMBL::BaseFeatureadaptor
-** @attr Adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @@
+** #cc Bio::EnsEMBL::DBSQL::KaryotypeBandAdaptor
+** ##
 ******************************************************************************/
 
-typedef struct EnsSKaryotypebandadaptor
-{
-    EnsPFeatureadaptor Adaptor;
-} EnsOKaryotypebandadaptor;
-
-#define EnsPKaryotypebandadaptor EnsOKaryotypebandadaptor*
+#define EnsPKaryotypebandadaptor EnsPFeatureadaptor
 
 
 
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
 
 /* @data EnsPKaryotypeband ****************************************************
 **
@@ -66,52 +70,66 @@ typedef struct EnsSKaryotypeband
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
 
 /* Ensembl Karyotype Band */
 
-EnsPKaryotypeband ensKaryotypebandNew(EnsPKaryotypebandadaptor kba,
-                                      ajuint identifier,
-                                      EnsPFeature feature,
-                                      AjPStr name,
-                                      AjPStr stain);
+EnsPKaryotypeband ensKaryotypebandNewCpy(const EnsPKaryotypeband kb);
 
-EnsPKaryotypeband ensKaryotypebandNewObj(const EnsPKaryotypeband object);
+EnsPKaryotypeband ensKaryotypebandNewIni(EnsPKaryotypebandadaptor kba,
+                                         ajuint identifier,
+                                         EnsPFeature feature,
+                                         AjPStr name,
+                                         AjPStr stain);
 
 EnsPKaryotypeband ensKaryotypebandNewRef(EnsPKaryotypeband kb);
 
 void ensKaryotypebandDel(EnsPKaryotypeband* Pkb);
 
-EnsPKaryotypebandadaptor ensKaryotypebandGetAdaptor(const EnsPKaryotypeband kb);
+EnsPKaryotypebandadaptor ensKaryotypebandGetAdaptor(
+    const EnsPKaryotypeband kb);
 
-ajuint ensKaryotypebandGetIdentifier(const EnsPKaryotypeband kb);
+EnsPFeature ensKaryotypebandGetFeature(
+    const EnsPKaryotypeband kb);
 
-EnsPFeature ensKaryotypebandGetFeature(const EnsPKaryotypeband kb);
+ajuint ensKaryotypebandGetIdentifier(
+    const EnsPKaryotypeband kb);
 
-AjPStr ensKaryotypebandGetName(const EnsPKaryotypeband kb);
+AjPStr ensKaryotypebandGetName(
+    const EnsPKaryotypeband kb);
 
-AjPStr ensKaryotypebandGetStain(const EnsPKaryotypeband kb);
+AjPStr ensKaryotypebandGetStain(
+    const EnsPKaryotypeband kb);
 
 AjBool ensKaryotypebandSetAdaptor(EnsPKaryotypeband kb,
                                   EnsPKaryotypebandadaptor kba);
 
-AjBool ensKaryotypebandSetIdentifier(EnsPKaryotypeband kb, ajuint identifier);
+AjBool ensKaryotypebandSetFeature(EnsPKaryotypeband kb,
+                                  EnsPFeature feature);
 
-AjBool ensKaryotypebandSetFeature(EnsPKaryotypeband kb, EnsPFeature feature);
+AjBool ensKaryotypebandSetIdentifier(EnsPKaryotypeband kb,
+                                     ajuint identifier);
 
-AjBool ensKaryotypebandSetName(EnsPKaryotypeband kb, AjPStr name);
+AjBool ensKaryotypebandSetName(EnsPKaryotypeband kb,
+                               AjPStr name);
 
-AjBool ensKaryotypebandSetStain(EnsPKaryotypeband kb, AjPStr stain);
+AjBool ensKaryotypebandSetStain(EnsPKaryotypeband kb,
+                                AjPStr stain);
 
-AjBool ensKaryotypebandTrace(const EnsPKaryotypeband kb, ajuint level);
+AjBool ensKaryotypebandTrace(const EnsPKaryotypeband kb,
+                             ajuint level);
 
-ajulong ensKaryotypebandGetMemsize(const EnsPKaryotypeband kb);
+size_t ensKaryotypebandCalculateMemsize(const EnsPKaryotypeband kb);
 
-AjBool ensKaryotypebandSortByStartAscending(AjPList kbs);
+AjBool ensListKaryotypebandSortStartAscending(AjPList kbs);
 
-AjBool ensKaryotypebandSortByStartDescending(AjPList kbs);
+AjBool ensListKaryotypebandSortStartDescending(AjPList kbs);
 
 /* Ensembl Karyoptype Band Adaptor */
 
@@ -123,15 +141,18 @@ EnsPKaryotypebandadaptor ensKaryotypebandadaptorNew(
 
 void ensKaryotypebandadaptorDel(EnsPKaryotypebandadaptor* Padaptor);
 
-AjBool ensKaryotypebandadaptorFetchAllByChromosomeName(
-    EnsPKaryotypebandadaptor adaptor,
-    const AjPStr name,
-    AjPList kblist);
+EnsPDatabaseadaptor ensKaryotypebandadaptorGetDatabaseadaptor(
+    EnsPKaryotypebandadaptor kba);
 
-AjBool ensKaryotypebandadaptorFetchAllByChromosomeBand(
+AjBool ensKaryotypebandadaptorFetchAllbyChromosomeband(
     EnsPKaryotypebandadaptor adaptor,
     const AjPStr name,
     const AjPStr band,
+    AjPList kblist);
+
+AjBool ensKaryotypebandadaptorFetchAllbyChromosomename(
+    EnsPKaryotypebandadaptor adaptor,
+    const AjPStr name,
     AjPList kblist);
 
 /*
@@ -141,8 +162,6 @@ AjBool ensKaryotypebandadaptorFetchAllByChromosomeBand(
 
 
 
-#endif /* enskaryotype_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSKARYOTYPE_H */

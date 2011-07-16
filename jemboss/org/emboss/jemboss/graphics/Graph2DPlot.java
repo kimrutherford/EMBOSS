@@ -1427,6 +1427,8 @@ public class Graph2DPlot extends ScrollPanel
         tok.nextToken();
         ymax = Float.parseFloat(tok.nextToken());
       }
+      else if(line.startsWith("Shaded"))
+          System.err.println("unsupported line: '"+line+"'");
       else if(!line.startsWith("#") && !line.equals("") && 
               !line.startsWith("Text") && !line.startsWith("Line"))
       {

@@ -47,7 +47,7 @@ OR - gives all that occur in one set or the other
 AND - gives only those which occur in both sets
 XOR - gives those which only occur in one set or the other, but not in both
 NOT - gives those which occur in the first set except for those that also occur in the second</td>
-<td><table><tr><td>O</td> <td><i>(OR - merger of both sets)</i></td></tr><tr><td>A</td> <td><i>(AND - only those in both sets)</i></td></tr><tr><td>X</td> <td><i>(XOR - only those not in both sets)</i></td></tr><tr><td>N</td> <td><i>(NOT - those of the first set that are not in the second)</i></td></tr></table></td>
+<td><table><tr><td>OR</td> <td><i>(OR - merger of both sets)</i></td></tr><tr><td>AND</td> <td><i>(AND - only those in both sets)</i></td></tr><tr><td>XOR</td> <td><i>(XOR - only those not in both sets)</i></td></tr><tr><td>NOT</td> <td><i>(NOT - those of the first set that are not in the second)</i></td></tr></table></td>
 <td>OR</td>
 </tr>
 

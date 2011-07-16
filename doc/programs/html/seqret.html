@@ -56,7 +56,7 @@ Reads and writes (returns) sequences
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with seqret</b>
+Here is a sample session with <b>seqret</b>
 <p>
 Extract an entry from a database and write it to a file:  
 <p>
@@ -81,7 +81,7 @@ Read all entries in the database 'tembl' that start with 'ab' and write them to 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>seqret 'tembl:ab*'  aball.seq </b>
+% <b>seqret "tembl:ab*"  aball.seq </b>
 Reads and writes (returns) sequences
 
 </pre></td></tr></table><p>
@@ -258,7 +258,7 @@ output sequence(s) [h45989.fasta]: <b>hall.seq</b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Reads and writes (returns) sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -693,7 +693,35 @@ Version: EMBOSS:6.3.0
 </H2>
 
 
-<b>seqret</b> reads one or more sequence USAs.
+<b>seqret</b> reads one or more nucleotide or protein sequences.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -795,6 +823,28 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
     Output file format
 </H2>
 
+<p>
+
+The output is a standard EMBOSS sequence file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
+
+<p>
 
 The output from <b>seqret</b> is one or more sequences, and by default will be
 written in FASTA format. 
@@ -1398,401 +1448,56 @@ joke, but has proved quite useful for generating command lines when testing.</TD
 
 <h3>Input sequence formats</h3>
 
-To date, the following sequence formats are accepted as
-input.
-<P>
+<p>
 
-By default, (i.e.  if no format is explicitly specified) EMBOSS tries
-each format in turn until one succeeds.
+The input is a standard EMBOSS sequence query (also known as a 'USA').
 
-<!--
-INPUT FORMAT TABLE
-LAST UPDATED: 23 OCT 2000 - GWW
--->
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
 
 <p>
 
-<table border=3>
-<tr><th>Input Format</th><th>Comments</th></tr>
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
 
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
 
+<p>
 
-<tr><td>gcg</td><td>
-GCG 9.x and 10.x format with the format and sequence type identified on the
-first line of the file
-</td></tr>
-
-<tr><td>gcg8</td><td>
-GCG 8.x format where anything up to the first line containing ".." is
-considered as heading, and the remainder is sequence data.  This
-format is complicated by the header appearing to be in other formats
-such as EMBL, and by the possibility of reading a large amount of data
-in the wrong format before discovering that there is no ".." line
-because it is not GCG format after all.
-</td></tr>
-
-<tr><td>embl<br>em</td><td>
-EMBL entry format, or at least a minimal subset of the fields. The <a
-href="http://www.mrc-lmb.cam.ac.uk/pubseq/"> Staden package</a> and
-others use EMBL or similar formats for sequence data.
-</td></tr>
-
-<tr><td>swiss<br>sw</td><td>   
-SWISSPROT entry format, or at least a minimal subset of the fields.
-</td></tr>
-
-<tr><td>fasta<br>pearson</td><td>
-FASTA format with an optional accession number after the sequence
-identifier, eg:
-<br>
-<b>&gt;name description</b>
-<br>
-or   
-<br>
-<b>&gt;name accession description</b>
-<br>
-and with an optional database name in GCG style
-fasta format included as part of the sequence identifier, eg:
-<br>
-<b>&gt;database:name accession description</b>
-<br>
-</td></tr>
-   
-<tr><td>ncbi</td><td>
-FASTA format with optional accession number and database name in NCBI
-style included as part of the sequence identifier.
-eg
-<br>
-<b>&gt;database|accession|id description</b>
-<br>
-(and other variants on this theme!)
-</td></tr>
-
-<tr><td>genbank<br>gb</td><td>
-GENBANK entry format, or at least a minimal subset of the fields.
-</td></tr>
-
-<tr><td>nbrf<br>pir</td><td>
-NBRF (PIR) format, as used in the PIR database sequence files.
-</td></tr>
-
-<tr><td>codata</td><td>
-CODATA format.
-</td></tr>
-
-<tr><td>strider</td><td>
-DNA strider format
-</td></tr>
-   
-<tr><td>clustal<br>aln</td><td>
-ClustalW ALN (multiple alignment) format.
-</td></tr>
-
-<tr><td>phylip</td><td>
-PHYLIP interleaved multiple alignment format.
-</td></tr>
-
-<tr><td>acedb</td><td>
-ACeDB format
-</td></tr>
-
-<tr><td>msf</td><td>
-<a href="http://www.gcg.com/">Wisconsin Package</a>
-GCG's MSF multiple sequence format.
-</td></tr>
-
-<tr><td>hennig86</td><td>
-Hennig86 format
-</td></tr>
-
-<tr><td>jackknifer</td><td>
-Jackknifer format
-</td></tr>
-
-<tr><td>jackknifernon</td><td> 
-Jackknifernon format
-</td></tr>
-
-<tr><td>nexus<br>paup</td><td>   
-Nexus/PAUP format
-</td></tr>
-
-<tr><td>nexusnon<br>paupnon</td><td>
-Nexusnon/PAUPnon format
-</td></tr>
-
-<tr><td>treecon</td><td>
-Treecon format
-</td></tr>
-
-<tr><td>mega</td><td>
-Mega format
-</td></tr>
-
-<tr><td>meganon</td><td>
-Meganon format
-</td></tr>
-
-<tr><td>ig</td><td>
-IntelliGenetics format.
-</td></tr>
-
-<tr><td>staden<br>experiment</td><td>
-The experiment file format used by the "gap" program in the Staden
-package, where the sequence identifier is optional and the remainer is
-plain text.  Some alternative nucleotide ambiguity codes are used and
-must be converted.
-</td></tr>
-
-
-<tr><td>unknown<br>text<br>plain</td><td>
-Plain text.
-This is the format with no format. The whole of the file is
-read in as a sequence. 
-No attempt is made to parse the file contents in any way.
-Anything is acceptable in this format.
-</td></tr>
-
-
-<tr><td>raw</td><td>
-Like unknown/text/plain format except that
-it accepts only alphanumeric and whitespace
-characters and rejects anything else.
-</td></tr>
-
-
-<tr><td>asis</td><td>
-This is not so much a sequence format as a quick way of entering a
-sequence on the command line, but it is included here for completeness.
-Where a filename would normally be given, in <b>asis</b> format there is
-the sequence itself.
-An example would be:
-<br>
-asis::atacgcagttatctgaccat
-<br>
-In 'asis' format the name is the sequence so no file needs to be opened.
-This is a special case.  It was intended as a joke, but could be quite
-useful for generating command lines.
-</td></tr>
-
-
-</table>
-
-
-
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 
 <h3>Output sequence formats</h3>
 
-To date, the following sequence formats are available as output.
 <p>
 
-Some sequence formats can hold multiple sequences in one file, these are
-marked as <b>multiple</b> in the following table.  The details of how many
-sequences are held in one file differs between formats, but they either
-allow many sequences to be concatenated one after the other, or they
-hold the sequences together in some sort of aligned set of sequences.
-<P>
-
-Other formats, such as GCG, plain and staden formats can only hold one
-sequence per file, these are marked as <b>single</b>.  An attempt to
-concatenate several sequences in one file leaves the results as a mess
-that makes it impossible to decide where the sequences start and end or
-what is annotation and what is sequence. 
-<p>
-   
-These <b>single</b> formats therefore cause problems when there are
-multiple sequences to write out because a single file containing
-multiple sequences in that format is invalid.  When these formats are
-specified for output, an EMBOSS program will allow you to write many
-sequences to one file, but EMBOSS programs will not be able to reliably
-read in the resulting mess. 
-<p>
-
-<B>N.B</B> This behaviour changed in EMBOSS version 1.7.0.  (31 Oct
-2000) Previously, EMBOSS programs that were asked to write multiple
-sequences in a <b>single</b> format would ignore the requested output
-file name and would write each sequence into a separate file whose name
-was constructed from the sequence name and the name of the format.  This
-resulted in ouput to files whose names could not be reliably controlled. 
-A decision was taken that EMBOSS users were intelligent people who could
-live with the consequences of their actions and who could learn not to
-write out multiple sequences to a file in formats that could not cope
-with multiple sequences. 
-<P>
-
-It you really wish to write multiple sequences out in formats that can
-not cope with multiple sequences, you are advised to add the global
-qualifier <b>-ossingle</b> on the command line.  This will force the
-EMBOSS program to ignore the given output file name and will generate its
-own file names.  One sequence will be written to each such file.  These file
-names are made from the sequence ID name, with the name of the format as
-the extension (e.g.  <b>x65923.gcg</b>). 
-<P>
-
-This is not ideal.  Preferably, you should stay away from formats that
-can't cope with multiple sequences in a file. 
-<P>
-
-
-<!--
-OUTPUT FORMAT TABLE
-LAST UPDATED: 30 OCT 2000 - GWW
--->
+The output is a standard EMBOSS sequence file. 
 
 <p>
 
-<table border=3>
-<tr><th>Output Format</th><th>Single/<br>Multiple</th><th>Comments</th></tr>
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
 
-<tr><td>gcg</td><td>single</td><td>
-<a href="http://www.gcg.com/">Wisconsin Package</a> GCG 9.x and 10.x format
-with the sequence type on the first line of the file.
-</td></tr>
+<p>
 
-<tr><td>gcg8</td><td>single</td><td>
-GCG 8.x format where anything up to the first line containing ".." is
-considered as heading, and the remainder is sequence data.
-</td></tr>
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
-<tr><td>embl<br>em</td><td>multiple</td><td>
-EMBL entry format with available fields filled in and others with no
-infomation omitted. The EMBOSS command line allows missing data such
-as accession numbers to be provided if they are not obtainable from
-the input sequence.
-</td></tr>
-
-<tr><td>swiss<br>sw</td><td>multiple</td><td>
-SwisProt entry format with available fields filled in and others with no
-infomation omitted.  The EMBOSS command line allows missing data such as
-accession numbers to be provided if they are not obtainable from the
-input sequence. 
-</td></tr>
-
-<tr><td>fasta</td><td>multiple</td><td>
-Standard Pearson FASTA format, but with the accession number included
-after the identifier if available.
-</td></tr>
-
-<tr><td>pearson</td><td>multiple</td><td>
-Simple Pearson FASTA format, an alias for "fasta" format.
-</td></tr>
-
-<tr><td>ncbi</td><td>multiple</td><td>
-NCBI style FASTA format with the database name, entry name and
-accession number separated by pipe ("|") characters.
-</td></tr>
-
-<tr><td>nbrf<br>pir</td><td>multiple</td><td>
-NBRF (PIR) format, as used in the PIR database sequence files.
-</td></tr>
-
-
-<tr><td>genbank<br>gb</td><td>multiple</td><td>
-GENBANK entry format with available fields filled in and others with no
-infomation omitted. The EMBOSS command line allows missing data such
-as accession numbers to be provided if they are not obtainable from
-the input sequence.
-</td></tr>
-
-
-<tr><td>ig</td><td>multiple</td><td>
-Intelligenetics format, as used by the
-Intelligenetics package
-</td></tr>
-
-<tr><td>codata</td><td>multiple</td><td>
-CODATA format.
-</td></tr>
-
-<tr><td>strider</td><td>multiple</td><td>
-DNA strider format
-</td></tr>
-
-<tr><td>acedb</td><td>multiple</td><td>
-ACeDB format
-</td></tr>
-
-<tr><td>staden<br>experiment</td><td>single</td><td>
-The experiment file format used by the "gap" program in the 
-<a href="http://www.mrc-lmb.cam.ac.uk/pubseq/">
-Staden package</a>.
-Some alternative nucleotide ambiguity codes are used and are converted.
-</td></tr>
-
-<tr><td>text<br>plain<br>raw</td><td>single</td><td>
-Plain sequence, no annotation or heading.
-</td></tr>
-
-<tr><td>fitch</td><td>multiple</td><td>
-Fitch format
-</td></tr>
-
-<tr><td>msf</td><td>multiple</td><td>
-<a href="http://www.gcg.com/">Wisconsin Package</a>
-GCG's MSF multiple sequence format.
-</td></tr>
-
-<tr><td>clustal<br>aln</td><td>multiple</td><td>
-Clustal multiple sequence format.
-</td></tr>
-
-<tr><td>phylip</td><td>multiple</td><td>
-PHYLIP non-interleaved format.
-</td></tr>
-
-<tr><td>phylip3</td><td>multiple</td><td>
-PHYLIP interleaved format.
-</td></tr>
-
-<tr><td>asn1</td><td>multiple</td><td>
-A subset of ASN.1 containing entry name, accession number, description
-and sequence, similar to the current ASN.1 output of
-<a href="http://iubio.bio.indiana.edu/soft/molbio/readseq/">
-readseq</a> 
-</td></tr>
-
-<tr><td>hennig86</td><td>multiple</td><td>
-Hennig86 format
-</td></tr>
-
-<tr><td>mega</td><td>multiple</td><td>
-Mega format
-</td></tr>
-
-<tr><td>meganon</td><td>multiple</td><td>
-Meganon format
-</td></tr>
-
-<tr><td>nexus<br>paup</td><td>multiple</td><td>
-Nexus/PAUP format
-</td></tr>
-
-<tr><td>nexusnon<br>paupnon</td><td>multiple</td><td>
-Nexusnon/PAUPnon format
-</td></tr>
-
-<tr><td>jackknifer</td><td>multiple</td><td>
-Jackknifer format
-</td></tr>
-
-<tr><td>jackknifernon</td><td>multiple</td><td>
-Jackknifernon format
-</td></tr>
-
-<tr><td>treecon</td><td>multiple</td><td>
-Treecon format
-</td></tr>
-
-
-<tr><td>debug</td><td>multiple</td><td>
-EMBOSS sequence object report for debugging showing all available fields.
-Not all fields will contain data - this depends very much on the input
-format used.
-</td></tr>
-
-
-</table>
+<p>
 
 
 <h3>Future directions</h3>
@@ -1829,11 +1534,6 @@ Some of the more useful associated qualifiers are:
 <tr><td>-sformat</td><td>Specify the input sequence format</td></tr>
 <tr><td>-osformat</td><td>Specify the output sequence format</td></tr>
 <tr><td>-ossingle</td><td>Write each entry into a separate file</td></tr>
-<tr><td>-auto</td><td>Turn off prompts and don't report the one-line description</td></tr>
-<tr><td>-stdout</td><td>Write the results to 'standard output' (the screen)</td></tr>
-<tr><td>-filter</td><td>Read input from another program, write to the screen</td></tr>
-<tr><td>-options</td><td>Prompt for optional qualifiers</td></tr>
-<tr><td>-help</td><td>Display a table of the command-line options</td></tr>
 </table>
 
 <p>
@@ -2018,6 +1718,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
 <td><a href="listor.html">listor</a></td>
 <td>Write a list file of the logical OR of two sets of sequences</td>
 </tr>
@@ -2100,6 +1805,11 @@ None.
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>

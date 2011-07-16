@@ -5,8 +5,8 @@ application: aligncopypair
   gui: "yes"
   batch: "yes"
   cpu: "low"
-  relations: "/edam/topic/0000220 File handling"
-  relations: "/edam/operation/0002122 Alignment file handling"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0002122 operation Sequence alignment editing"
 ]
 
 
@@ -25,7 +25,7 @@ seqset: sequences
     type: "gapany"
     aligned: "Y"
     help: "File containing a sequence alignment."
-    relations: "/edam/data/0000863 Sequence alignment"                             
+    relations: "EDAM:0000863 data Sequence alignment"
 ]
 
 endsection: input
@@ -56,7 +56,7 @@ section: additional
     default: ""
     information: "Name of the alignment"
     knowntype: "sequence id output"
-    relations:  "/edam/data/0001063 Sequence identifier"                     
+    relations: "EDAM:0001063 identifier Sequence identifier"
   ]
 
   string: comment 
@@ -65,7 +65,7 @@ section: additional
     default: ""
     information: "Comment on the alignment"
     knowntype: "string"
-    relations:  "/edam/data/0000969 Free text"                                 
+    relations: "EDAM:0000969 data Text"
   ]
 
   boolean: append
@@ -75,7 +75,7 @@ section: additional
     information: "Append to the existing alignment header"
     help: "This allows you to append the name and comments you have given 
            on to the end of the existing alignment header."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: additional
@@ -107,7 +107,7 @@ align: outfile
     minseqs: "2"
     maxseqs: "2"
     aformat: "simple"
-    relations: "/edam/data/0001381 Pairwise sequence alignment"                    
+    relations: "EDAM:0001381 data Sequence alignment (pair)"
 ]
 
 endsection: output

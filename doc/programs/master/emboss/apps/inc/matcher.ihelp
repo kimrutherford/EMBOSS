@@ -1,5 +1,5 @@
 Waterman-Eggert local alignment of two sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -7,6 +7,7 @@ Version: EMBOSS:6.3.0
   [-bsequence]         sequence   Sequence filename and optional format, or
                                   reference (input USA)
   [-outfile]           align      [*.matcher] Output alignment file name
+                                  (default -aformat markx0)
 
    Additional (Optional) qualifiers:
    -datafile           matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]

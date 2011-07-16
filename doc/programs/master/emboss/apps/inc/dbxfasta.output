@@ -22,6 +22,9 @@ emrod
 <p><h3>File: emrod.pxac</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+Type      Identifier
+Compress  Yes
+Pages     3
 Order     71
 Fill      46
 Pagesize  2048
@@ -29,13 +32,17 @@ Level     0
 Cachesize 100
 Order2    99
 Fill2     101
-Count     5
+Count     6
+Fullcount 6
 Kwlimit   15
 </pre>
 </td></tr></table><p>
 <p><h3>File: emrod.pxid</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+Type      Identifier
+Compress  Yes
+Pages     3
 Order     71
 Fill      46
 Pagesize  2048
@@ -43,7 +50,8 @@ Level     0
 Cachesize 100
 Order2    99
 Fill2     101
-Count     5
+Count     6
+Fullcount 6
 Kwlimit   15
 </pre>
 </td></tr></table><p>

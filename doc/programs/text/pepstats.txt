@@ -46,7 +46,7 @@ Pepstats program output file [laci_ecoli.pepstats]:
 Command line arguments
 
 Calculates statistics of protein properties
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -102,7 +102,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   pepstats reads a normal protein sequence USA.
+   pepstats reads one or more protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -362,14 +379,17 @@ See also
                     sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
    charge           Draw a protein charge plot
-   checktrans       Reports STOP codons and ORF statistics of a protein
    compseq          Calculate the composition of unique words in sequences
    emowse           Search protein sequences by digest fragment molecular weight
    freak            Generate residue/base frequency table or plot
+   hmoment          Calculate and plot hydrophobic moment for protein sequence(s)
    iep              Calculate the isoelectric point of proteins
    mwcontam         Find weights common to multiple molecular weights files
    mwfilter         Filter noisy data from molecular weights file
    octanol          Draw a White-Wimley protein hydropathy plot
+   oddcomp          Identify proteins with specified sequence word composition
+   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+                    sites
    pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepwindow        Draw a hydropathy plot for a protein sequence
    pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein

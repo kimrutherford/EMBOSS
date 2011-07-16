@@ -217,6 +217,8 @@ int main(int argc, char **argv)
     float minsize;
     ajint maxgroups;
     ajint maxlabels;
+    ajuint jgap;
+    ajuint jzeroes;
 
     /* read the ACD file for graphical programs */
     embInit("lindna", argc, argv);
@@ -272,19 +274,43 @@ int main(int argc, char **argv)
     TextLength = 7*ajAcdGetFloat("textlength");
 
     /* open the window in which the graphics will be drawn */
-    DrawLength = 500;
+    DrawLength = 240;
     Border     = TextLength/2;
 
     Margin = 50*ajAcdGetFloat("margin");
     Width = DrawLength + 2*Border + Margin;
     Height = DrawLength + 2*Border;
 
-    ajGraphAppendTitleS(graph, ajFileGetNameS(infile));
+    ajGraphAppendTitleS(graph, ajFileGetPrintnameS(infile));
 
     ajGraphOpenWin(graph, 0, Width, 0, Height*(float)1.1);
 
     /* read the start and end positions */
     lindna_ReadInput(infile, &Start, &End);
+
+    if(GapSize < 1)
+    {
+        jgap = (ajuint) ((End - Start) / 10);
+        jzeroes = 1;
+        do
+        {
+            jzeroes *= 10;
+            ajDebug("jzeroes %u jgap %u", jzeroes, jgap);
+        } while((jgap /= 10) > 0);
+        jgap /= jzeroes;
+        if(jgap <= 1)
+            jgap = 1;
+        else if(jgap <= 3)
+            jgap = 3;
+        else if (jgap <= 7)
+            jgap = 5;
+        else
+            jgap = 10;
+
+        GapSize = jgap * jzeroes;
+        ajDebug("Start %.0f End %.0f GapSize %d", Start, End, GapSize);
+    }
+    
 
     /*
     **  compute the coefficient of reduction to scale the real length of
@@ -436,16 +462,21 @@ int main(int argc, char **argv)
     **  window
     */
     if(TotalHeight<DrawLength)
+    {
 	TotalHeight = DrawLength;
-    TickHeight  /= (TotalHeight/DrawLength);
-    BlockHeight /= (TotalHeight/DrawLength);
-    RangeHeight /= (TotalHeight/DrawLength);
-    TextHeight  /= (TotalHeight/DrawLength);
-    TextLength  /= (TotalHeight/DrawLength);
-    postext     /= (TotalHeight/DrawLength);
-    posblock    /= (TotalHeight/DrawLength);
-    posrange    /= (TotalHeight/DrawLength);
-    GapGroup    /= (TotalHeight/DrawLength);
+    }
+    else 
+    {
+        TickHeight  /= (TotalHeight/DrawLength);
+        BlockHeight /= (TotalHeight/DrawLength);
+        RangeHeight /= (TotalHeight/DrawLength);
+        TextHeight  /= (TotalHeight/DrawLength);
+        TextLength  /= (TotalHeight/DrawLength);
+        postext     /= (TotalHeight/DrawLength);
+        posblock    /= (TotalHeight/DrawLength);
+        posrange    /= (TotalHeight/DrawLength);
+        GapGroup    /= (TotalHeight/DrawLength);
+    }
 
     /*
     **  the groups having been resized, recompute the character size that
@@ -652,6 +683,8 @@ static float lindna_HeightRuler(float Start, float End, ajint GapSize,
     float RulerHeight;
     AjPStr string;
     AjPStr totalstring;
+    ajuint mingap = GapSize/10;
+    ajuint lasttick = 1;
 
     string      = ajStrNew();
     totalstring = ajStrNew();
@@ -662,19 +695,38 @@ static float lindna_HeightRuler(float Start, float End, ajint GapSize,
 	RulerHeight += ajGraphicsCalcTextheight();
     else
     {
-	ajStrFromInt(&string, (ajint)Start);
-	ajStrAppendS(&totalstring, string);
-	ajStrAppendC(&totalstring, ";");
-	for(i=GapSize, j=0; i<End; i+=GapSize, j++) if(i>Start)
-	{
-	    ajStrFromInt(&string, i);
-	    ajStrAppendS(&totalstring, string);
-	    ajStrAppendC(&totalstring, ";");
-	}
-	ajStrFromInt(&string, (ajint)End);
-	ajStrAppendS(&totalstring, string);
-	ajStrAppendC(&totalstring, ";");
-	RulerHeight += lindna_VerTextSeqHeightMax(totalstring, postext, j);
+	for(i=0; i<Start; i+=GapSize)
+            continue;
+
+        if((i-Start) > mingap)
+        {
+            ajStrFromInt(&string, (ajint)Start);
+            ajStrAppendS(&totalstring, string);
+            ajStrAppendC(&totalstring, ";");
+        }
+
+        j = 0;
+
+	for(i=GapSize; i<End; i+=GapSize)
+        {
+            if(i>Start)
+            {
+                ajStrFromInt(&string, i);
+                ajStrAppendS(&totalstring, string);
+                ajStrAppendC(&totalstring, ";");
+                lasttick = i;
+                j++;
+            }
+        }
+
+	if((End - lasttick) > mingap)
+        {
+            ajStrFromInt(&string, (ajint)End);
+            ajStrAppendS(&totalstring, string);
+            ajStrAppendC(&totalstring, ";");
+        }
+
+        RulerHeight += lindna_VerTextSeqHeightMax(totalstring, postext, j);
 	/*RulerHeight += lindna_VerTextSeqHeightMax(totalstring,
 	  postext, j+2);*/
     }

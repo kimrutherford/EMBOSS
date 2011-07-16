@@ -1,5 +1,5 @@
 Search for patterns in protein sequences (translated)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -34,6 +34,7 @@ Version: EMBOSS:6.3.0
                                   fuzztran).
                                   For example, [DE](2)HS{P}X(2)PX(2,4)C
   [-outfile]           report     [*.fuzztran] Output report file name
+                                  (default -rformat table)
 
    Additional (Optional) qualifiers:
    -frame              menu       [1] Frame(s) to translate (Values: 1 (1); 2

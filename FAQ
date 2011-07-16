@@ -265,18 +265,10 @@ A) You will need automake, autoconf, (GNU) make and libtool for this.
    (Note that some non-gcc compilers may need '--include-deps' added to
    the automake command line.)
 
-   If you have system versions of the GNU tools that, by chance, are
-   more recent than the GNU tools used in the EMBOSS source tree
-   then typing 'autoreconf -fiv' may be necessary before you start.
-
-   MacOSX CVS users should also use 'autoreconf -fiv' after
-   downloading the source.
 
    Then type:
 
-   aclocal -I m4
-   autoconf
-   automake -a            #   --include-deps  # some non-gcc compilers
+   autoreconf -fi
    ./configure            # --enable-warnings is a useful developers' switch
    make
 
@@ -295,9 +287,7 @@ A) Here is how to install PHYLIP given the various ways you can install
        cd embassy/phylipnew
 
        2) make the configuration file
-       aclocal -I m4
-       autoconf
-       automake -a
+       autoreconf -fi
 
        3) configure and compile
        ./configure (use same options as you used to compile emboss,

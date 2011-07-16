@@ -117,13 +117,14 @@ void         ajCodSetBacktranslate(AjPCod thys);
 char*        ajCodTriplet(ajint idx);
 void 	     ajCodWrite(AjPCod thys, AjPFile outf);
 void 	     ajCodWriteOut( const AjPCod thys, AjPOutfile outf);
-ajint        ajCodOutFormat(const AjPStr name);
+AjBool       ajCodoutformatFind(const AjPStr name, ajint *iformat);
 void         ajCodPrintFormat(AjPFile outf, AjBool full);
 
 /*
 ** End of prototype definitions
 */
 
+__deprecated ajint        ajCodOutFormat(const AjPStr name);
 __deprecated AjPCod       ajCodDup (const AjPCod thys);
 __deprecated AjPCod	  ajCodNewCode(ajint code);
 __deprecated void         ajCodAssCode(AjPCod thys, ajint geneticcode);

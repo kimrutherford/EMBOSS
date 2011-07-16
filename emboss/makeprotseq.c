@@ -86,7 +86,7 @@ int main(int argc, char **argv)
     if(data)
     {
 	ajDebug("Distribution datafile '%s' given checking type\n",
-		 ajFileGetNameC(data));
+		 ajFileGetPrintnameC(data));
 	seqstr = ajStrNew();
 	ajReadlineTrim(data,&seqstr);
 

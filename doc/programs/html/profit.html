@@ -96,7 +96,7 @@ Output file [outfile.prophecy]:
 
 <p>
 
-<b>Here is a sample session with profit</b>
+Here is a sample session with <b>profit</b>
 <p>
 
 <p>
@@ -107,6 +107,7 @@ Scan one or more sequences with a simple frequency matrix
 Profile or weight matrix file: <b>outfile.prophecy</b>
 Input sequence(s): <b>tsw:*</b>
 Output file [outfile.profit]: <b></b>
+ajSeqxrefNewDbS '1-I' 'FT025'
 
 </pre></td></tr></table><p>
 <p>
@@ -120,7 +121,7 @@ Output file [outfile.profit]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Scan one or more sequences with a simple frequency matrix
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Profile or weight matrix file
@@ -468,7 +469,34 @@ Version: EMBOSS:6.3.0
 
 <b>profit</b> reads a simple frequency matrix produced by
 <b>prophecy</b> and uses it to search searches one or more protein or
-nucleic acid sequence USAs. 
+nucleic acid sequences. 
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -534,7 +562,7 @@ HBB_PANTR 22 Percentage: 100
 
 <p>
 
-The ouput is a list of three columns.
+The output is a list of three columns.
 
 <p>
 

@@ -1,0 +1,381 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: drcat.ent</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Number of files: 1
+# Release: 0.0
+# Date:    00/00/00
+Single filename database
+DRCAT.dat
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxac</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Identifier
+Compress  Yes
+Pages     3
+Order     64
+Fill      43
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     21
+Fullcount 21
+Kwlimit   18
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxcat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     60
+Order     37
+Fill      29
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     19
+Fullcount 72
+Kwlimit   40
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxde</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     2539
+Order     60
+Fill      41
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     835
+Fullcount 2001
+Kwlimit   20
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxedat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     198
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     65
+Fullcount 150
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxefmt</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     37
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     11
+Fullcount 135
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxeid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     328
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     108
+Fullcount 197
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxetpc</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     204
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     67
+Fullcount 204
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Identifier
+Compress  Yes
+Pages     8
+Order     44
+Fill      33
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     110
+Fullcount 110
+Kwlimit   32
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxnm</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     1021
+Order     60
+Fill      41
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     335
+Fullcount 659
+Kwlimit   20
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxqfmt</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     52
+Order     46
+Fill      34
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     16
+Fullcount 148
+Kwlimit   30
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxqin</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     377
+Order     25
+Fill      21
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     122
+Fullcount 204
+Kwlimit   65
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxqout</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     391
+Order     19
+Fill      17
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     126
+Fullcount 169
+Kwlimit   90
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxqurl</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     2252
+Order     46
+Fill      34
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     737
+Fullcount 2118
+Kwlimit   30
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxrest</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     39
+Order     60
+Fill      41
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     12
+Fullcount 43
+Kwlimit   20
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxrf</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     15
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     4
+Fullcount 87
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxsoap</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     57
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     18
+Fullcount 23
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxtaxid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     82
+Order     104
+Fill      58
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     26
+Fullcount 114
+Kwlimit   6
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.pxurl</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     709
+Order     52
+Fill      37
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    44
+Fill2     54
+Count     231
+Fullcount 594
+Kwlimit   25
+</pre>
+</td></tr></table><p>
+<p><h3>File: drcat.xac</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xcat</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xde</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xedat</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xefmt</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xeid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xetpc</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xnm</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xqfmt</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xqin</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xqout</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xqurl</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xrest</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xrf</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xsoap</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xtaxid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: drcat.xurl</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: outfile.dbxresource</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Processing directory: /homes/user/test/data/
+Processing file: DRCAT.dat entries: 110 (110) time: 0.0s (0.0s)
+Total time: 0.0s
+</pre>
+</td></tr></table><p>

@@ -7,6 +7,11 @@ extern "C"
 #define ajmart_h
 
 
+#define MART_CACHE_RD 1
+#define MART_CACHE_WT 2
+#define MART_CACHE_WTIFEMPTY 4
+
+
 
 
 /* @data AjPMartLoc ******************************************************
@@ -228,15 +233,18 @@ typedef struct AjSMartqinfo
 ** @attr Regpath [AjPStr] Registry path to mart service on Reghost
 ** @attr Marthost [AjPStr] Host containing desired mart (selected from registry)
 ** @attr Martpath [AjPStr] Path to mart service on Marthost
+** @attr Cachedir [AjPStr] Cache directory
 ** @attr Query [AjPStr] Mart query
 ** @attr Loc [AjPMartLoc] Mart registry information
 ** @attr Mart [AjPStr] Mart name
+** @attr Dsname [AjPStr] Dataset name
 ** @attr Dataset [AjPMartDataset] Mart datasets
 ** @attr Atts [AjPMartAttribute] Mart attributes
 ** @attr Filters [AjPMartFilter] Mart filters
 ** @attr Config [AjPDomDocument] Configuration Information
 ** @attr Regport [ajuint] Registry host URL port
 ** @attr Martport [ajuint] Mart host URL port
+** @attr Cacheflag [ajuint] Control operation of cache
 ** @@
 ******************************************************************************/
 
@@ -246,53 +254,21 @@ typedef struct AjSMartquery
     AjPStr Regpath;
     AjPStr Marthost;
     AjPStr Martpath;
+    AjPStr Cachedir;
     AjPStr Query;
     AjPMartLoc Loc;
     AjPStr Mart;
+    AjPStr Dsname;
     AjPMartDataset Dataset;
     AjPMartAttribute Atts;
     AjPMartFilter Filters;
     AjPDomDocument Config;
     ajuint Regport;
     ajuint Martport;
+    ajuint Cacheflag;
 } AjOMartquery;
 
 #define AjPMartquery AjOMartquery*
-
-
-
-
-/* @data AjUrl ******************************************************
-**
-** Structure to hold parts of a URL
-**
-** @alias AjSUrl
-** @alias AjOUrl
-**
-** @attr Method [AjPStr] Method of access (e.g. http)
-** @attr Host [AjPStr] host
-** @attr Port [AjPStr] Port
-** @attr Absolute [AjPStr] Absolute path
-** @attr Relative [AjPStr] Relative path
-** @attr Fragment [AjPStr] Fragment/section
-** @attr Username [AjPStr] Username
-** @attr Password [AjPStr] Password
-** @@
-******************************************************************************/
-
-typedef struct AjSUrl
-{
-    AjPStr Method;
-    AjPStr Host;
-    AjPStr Port;
-    AjPStr Absolute;
-    AjPStr Relative;
-    AjPStr Fragment;
-    AjPStr Username;
-    AjPStr Password;
-} AjOUrl;
-
-#define AjPUrl AjOUrl*
 
 
 
@@ -301,15 +277,6 @@ typedef struct AjSUrl
 ** Prototype definitions
 */
 
-AjPUrl ajStrUrlNew(void);
-void   ajStrUrlDel(AjPUrl *thys);
-void   ajStrUrlParseC(AjPUrl *parts, const char *url);
-void   ajStrUrlSplitPort(AjPUrl urli);
-void ajStrUrlSplitUsername(AjPUrl urli);
-
-AjBool ajMartHttpUrl(const AjPSeqQuery qry, ajint* iport, AjPStr* host,
-                     AjPStr* urlget);
-    
 AjPMartLoc ajMartLocNew(void);
 void ajMartLocDel(AjPMartLoc *thys);
 
@@ -419,6 +386,8 @@ AjBool ajMartTableNameIsNuc(const AjPTable t);
 AjBool ajMartTableNameIsProt(const AjPTable t);
 
 AjPStr *ajMartCheckHeader(AjPSeqin seqin, AjPMartqinfo qinfo);
+void    ajMartDecodeHname(const AjPStr dir, AjPStr *host, AjPStr *path,
+                          ajuint *port);
 
 
 /*

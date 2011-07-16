@@ -1,0 +1,73 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 9606.excel</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+9605	207598	genus	N	Homo
+9604	314295	family	N	Hominidae
+9443	314146	order	N	Primates
+40674	32524	class	N	Mammalia
+7711	33511	phylum	N	Chordata
+33208	33154	kingdom	N	Metazoa
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: 9606.excel</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+9605	207598	genus	N	Homo
+9604	314295	family	N	Hominidae
+9526	314293	parvorder	N	Catarrhini
+376913	9443	suborder	N	Haplorrhini
+9443	314146	order	N	Primates
+314146	9347	superorder	N	Euarchontoglires
+9347	32525	no rank	N	Eutheria
+40674	32524	class	N	Mammalia
+117571	117570	no rank	N	Euteleostomi
+7742	89593	no rank	N	Vertebrata
+89593	7711	subphylum	N	Craniata
+7711	33511	phylum	N	Chordata
+33208	33154	kingdom	N	Metazoa
+2759	131567	superkingdom	N	Eukaryota
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: 9606.excel</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+9605	207598	genus	N	Homo
+207598	9604	subfamily	Y	Homininae
+9604	314295	family	N	Hominidae
+314295	9526	superfamily	Y	Hominoidea
+9526	314293	parvorder	N	Catarrhini
+314293	376913	infraorder	Y	Simiiformes
+376913	9443	suborder	N	Haplorrhini
+9443	314146	order	N	Primates
+314146	9347	superorder	N	Euarchontoglires
+9347	32525	no rank	N	Eutheria
+32525	40674	no rank	Y	Theria
+40674	32524	class	N	Mammalia
+32524	32523	no rank	Y	Amniota
+32523	8287	no rank	Y	Tetrapoda
+8287	117571	no rank	Y	Sarcopterygii
+117571	117570	no rank	N	Euteleostomi
+117570	7776	no rank	Y	Teleostomi
+7776	7742	superclass	Y	Gnathostomata
+7742	89593	no rank	N	Vertebrata
+89593	7711	subphylum	N	Craniata
+7711	33511	phylum	N	Chordata
+33511	33316	no rank	Y	Deuterostomia
+33316	33213	no rank	Y	Coelomata
+33213	6072	no rank	Y	Bilateria
+6072	33208	no rank	Y	Eumetazoa
+33208	33154	kingdom	N	Metazoa
+33154	2759	no rank	Y	Fungi/Metazoa group
+2759	131567	superkingdom	N	Eukaryota
+131567	1	no rank	Y	cellular organisms
+</pre>
+</td></tr></table><p>

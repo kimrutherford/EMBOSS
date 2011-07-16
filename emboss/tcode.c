@@ -125,7 +125,8 @@ int main(int argc, char **argv)
     float ymin = 0.;
     float ymax = 0.;
     
-    
+    AjPStr title = NULL;
+
     embInit("tcode", argc, argv);
 
     report   = ajAcdGetReport("outfile");
@@ -137,6 +138,7 @@ int main(int argc, char **argv)
     
     graph = ajAcdGetGraphxy("graph");
 
+    title = ajStrNewS(ajGraphGetTitleS(graph));
 
     testcodes = ajFloatNew();
     from      = ajIntNew();
@@ -149,7 +151,6 @@ int main(int argc, char **argv)
     
     if(!tcode_readdata(&table1,datafile))
 	ajFatal("Incorrect format Testcode data file");
-    
     
     while(ajSeqallNext(seqall,&seq))
     {
@@ -183,14 +184,14 @@ int main(int argc, char **argv)
 	    ++npoints;
 	}
 
+        ajDebug("npoints: %d", npoints);
+
 	if(report)
 	    tcode_report(report, from, to, testcodes, npoints, ftable, seq);
 	if(plot)
 	{
 	    this = ajGraphdataNewI(npoints);
 	    ajGraphdataSetTypeC(this,"2D plot");
-	    ajGraphxySetflagOverlay(graph,ajFalse);
-	    ajGraphicsCalcRange(this->y,npoints,&ymin,&ymax);
 
 	    for(i=0;i<npoints;++i)
 	    {
@@ -198,25 +199,32 @@ int main(int argc, char **argv)
 				    / 2);
 		this->y[i] = ajFloatGet(testcodes,i);
 	    }
+
+	    ajGraphicsCalcRange(this->y,npoints,&ymin,&ymax);
+
 	    ajGraphdataSetTruescale(this,this->x[0],this->x[npoints-1],
 				   (float)0.,(float)1.37);
 
-
-
-	    ajGraphShowTitle(graph, ajTrue);
 	    ajGraphdataSetYlabelC(this,"TESTCODE value");
 	    ajGraphdataSetXlabelC(this,"Sequence mid position");
-	    ajGraphAppendTitleS(graph, ajSeqGetUsaS(seq));
 
 	    ajGraphdataAddposLine(this,this->x[0],(float)0.74,
 				  this->x[npoints-1],
-				  (float)0.74,1);
+				  (float)0.74,
+                                  ajGraphicsCheckColourC("RED"));
 	    ajGraphdataAddposLine(this,this->x[0],(float)0.95,
 				  this->x[npoints-1],
-				  (float)0.95,3);
+				  (float)0.95,
+                                  ajGraphicsCheckColourC("GREEN"));
 
-	    ajGraphDataAdd(graph,this);
-	    ajGraphxyDisplay(graph,ajTrue);
+	    ajGraphxySetflagOverlay(graph,ajFalse);
+            ajGraphShowTitle(graph, ajTrue);
+	    ajGraphSetTitleS(graph, title);
+	    ajGraphAppendTitleS(graph, ajSeqGetUsaS(seq));
+
+	    ajGraphDataReplace(graph,this);
+
+	    ajGraphxyDisplay(graph,ajFalse);
 	}
 	
 	ajFeattableClear(ftable);
@@ -235,11 +243,14 @@ int main(int argc, char **argv)
     ajIntDel(&from);
     ajIntDel(&to);
     ajStrDel(&substr);
+    ajStrDel(&title);
 
     ajSeqallDel(&seqall);
     ajSeqDel(&seq);
     ajFileClose(&datafile);
     ajFeattableDel(&ftable);
+
+    ajGraphicsClose();
     ajGraphxyDel(&graph);
 
     embExit();
@@ -549,7 +560,8 @@ static float tcode_slide(const AjPStr substr, ajint window,
 	    break;
 	case 'G':
 	    ++scores[i%3][2];
-	case 'T':
+            break;
+        case 'T':
 	    ++scores[i%3][3];
 	default:
 	    break;

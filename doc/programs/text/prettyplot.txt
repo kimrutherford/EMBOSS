@@ -51,7 +51,7 @@ Created prettyplot.ps
 Command line arguments
 
 Draw a sequence alignment with pretty formatting
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     (Aligned) sequence set filename and optional
@@ -59,7 +59,7 @@ Version: EMBOSS:6.3.0
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers:
    -matrixfile         matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -191,7 +191,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   prettyplot reads any sequence USA.
+   prettyplot reads aligned protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -250,8 +267,23 @@ LGB2_LUPLU IVIKKEMNDAA~~~
 
 Output file format
 
-   An image of the alignment is displayed on the specified graphics
-   device.
+   The output is to the specified graphics device.
+
+   The results can be output in one of several formats by using the
+   command-line qualifier -graph xxx, where 'xxx' is replaced by the name
+   of the required device. Support depends on the availability of
+   third-party software packages.
+
+   The device names that output to a file are: ps (postscript), cps
+   (colourps), png, gif, pdf, svg, hpgl, hp7470, hp7580, das, data.
+
+   The other available device names are: meta, x11 (xwindows), tek
+   (tek4107t), tekt (tektronix), xterm, text.
+
+   Output can be turned off by specifying none (null).
+
+   See: http://emboss.sf.net/docs/themes/GraphicsDevices.html for further
+   information on supported devices.
 
   Output files for usage example
 
@@ -343,21 +375,20 @@ See also
    cirdna           Draws circular maps of DNA constructs
    edialign         Local multiple alignment of sequences
    emma             Multiple sequence alignment (ClustalW wrapper)
+   iep              Calculate the isoelectric point of proteins
    infoalign        Display basic information about a multiple sequence alignment
    lindna           Draws linear maps of DNA constructs
+   pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepnet           Draw a helical net for a protein sequence
    pepwheel         Draw a helical wheel diagram for a protein sequence
    plotcon          Plot conservation of a sequence alignment
+   plotorf          Plot potential open reading frames in a nucleotide sequence
    prettyseq        Write a nucleotide sequence and its translation to file
    remap            Display restriction enzyme binding sites in a nucleotide sequence
-   seealso          Finds programs with similar function to a specified program
    showalign        Display a multiple sequence alignment in pretty format
-   showdb           Displays information on configured databases
    showfeat         Display features of a sequence in pretty format
    showpep          Displays protein sequences with features in pretty format
-   showseq          Displays sequences with features in pretty format
    sixpack          Display a DNA sequence with 6-frame translation and ORFs
-   textsearch       Search the textual description of sequence(s)
    tranalign        Generate an alignment of nucleic coding regions from aligned
                     proteins
 

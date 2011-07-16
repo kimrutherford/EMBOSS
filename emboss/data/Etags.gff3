@@ -76,4 +76,4 @@ Dbxref
 
 Ontology_term
 
-#include Etags.gff
+#include Etags.embl

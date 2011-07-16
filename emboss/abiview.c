@@ -128,7 +128,8 @@ int main(int argc, char **argv)
     window     = ajAcdGetInt("window");
     baseN      = ajAcdGetString("bases");
 
-    fname = ajStrNewC(ajFileGetNameC(fp));
+    fname = ajStrNewS(ajFileGetPrintnameS(fp));
+    ajFilenameTrimAll(&fname);
 
     ajStrFmtUpper(&baseN);
     nbases  = ajStrGetLen(baseN);
@@ -136,7 +137,7 @@ int main(int argc, char **argv)
 
 
     if(!ajSeqABITest(fp))
-        ajFatal("%s not an ABI file",ajFileGetNameC(fp));
+        ajFatal("%s not an ABI file",ajFileGetPrintnameC(fp));
 
     numBases = ajSeqABIGetNBase(fp);
 
@@ -152,7 +153,7 @@ int main(int argc, char **argv)
 
     /* For data, all in one 'plot' */
     if(ajGraphIsData(graphs))
-	window = numBases+1;
+      window = (ajint) numBases+1; /* Lossy cast */
 
     trace = ajInt2dNew();
     basePositions = ajShortNew();
@@ -224,7 +225,7 @@ int main(int argc, char **argv)
     while(nstart < numBases-1)
     {
 	if(nstop > numBases)
-	    nstop = numBases;
+	  nstop = (ajint) numBases; /* Lossy cast */
 
 	ajGraphSetMulti(graphs,nbases+1);
 	ajGraphxySetflagOverlay(graphs,overlay);

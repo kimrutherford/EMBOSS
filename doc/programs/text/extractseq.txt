@@ -30,7 +30,7 @@ Usage
    Extract the region from position 10 to 20:
 
 
-% extractseq tembl:x65923 result.seq -regions '10-20'
+% extractseq tembl:x65923 result.seq -regions "10-20"
 Extract regions from a sequence
 
 
@@ -42,7 +42,7 @@ Extract regions from a sequence
    Extract the regions 10 to 20, 30 to 45, 533 to 537:
 
 
-% extractseq tembl:x65921 result2.seq -regions '10-20 30-45 533-537'
+% extractseq tembl:x65921 result2.seq -regions "10-20 30-45 533-537"
 Extract regions from a sequence
 
 
@@ -54,7 +54,7 @@ Extract regions from a sequence
    Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912:
 
 
-% extractseq tembl:x65921 -reg '782..856,951..1095,1557..1612,1787..1912' stdout
+% extractseq tembl:x65921 -reg "782..856,951..1095,1557..1612,1787..1912" stdout
 
 Extract regions from a sequence
 
@@ -74,7 +74,7 @@ cccacctttggcaagaagaagggccccaatgccaactcttaa
    separate output sequences:
 
 
-% extractseq tembl:x65921 -reg '782..856,951..1095,1557..1612,1787..1912' stdout
+% extractseq tembl:x65921 -reg "782..856,951..1095,1557..1612,1787..1912" stdout
  -separate
 Extract regions from a sequence
 
@@ -96,7 +96,7 @@ tcttaa
 Command line arguments
 
 Extract regions from a sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
@@ -175,7 +175,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   extractseq reads a normal sequence USA.
+   extractseq reads a single nucleotide or protein sequence.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -377,7 +394,7 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
      tacttgcaag gcctcaggga gaggtgtgct tctcgg                                2016
 //
 
-   You can specifiy a file of ranges to extract by giving the '-regions'
+   You can specify a file of ranges to extract by giving the '-regions'
    qualifier the value '@' followed by the name of the file containing the
    ranges. (eg: '-regions @myfile').
 
@@ -402,7 +419,17 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
 
 Output file format
 
-   The output is a normal sequence file.
+   The output is a standard EMBOSS sequence file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -osformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   excel, feattable, motif, nametable, regions, seqtable, simple, srs,
+   table, tagseq.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Output files for usage example
 
@@ -418,7 +445,7 @@ ctcgactccat
 >X65921 X65921.1 H.sapiens fau 1 gene
 tccctctcgatacactcgggacaagttagggc
 
-   If the option '-separate' is used then each specified region is written
+   If the option -separate is used then each specified region is written
    to the output file as a separate sequence. The name of the sequence is
    created from the name of the original sequence with the start and end
    positions of the range appended with underscore characters between
@@ -442,7 +469,7 @@ Notes
    sequences, the name of the sequence is created from the name of the
    original sequence with the start and end positions of the range
    appended with underscore characters between them, eg: XYZ region 2 to
-   34 is written as: XYZ_2_34. In such cases the output sequence foramt
+   34 is written as: XYZ_2_34. In such cases the output sequence format
    must be capable of supporting multiple sequences.
 
 References
@@ -487,6 +514,7 @@ See also
    extractfeat      Extract features from sequence(s)
    featcopy         Reads and writes a feature table
    featreport       Reads and writes a feature table
+   feattext         Return a feature table original text
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
@@ -507,6 +535,7 @@ See also
    nthseqset        Reads and writes (returns) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
+   seqcount         Reads and counts sequences
    seqret           Reads and writes (returns) sequences
    seqretsetall     Reads and writes (returns) many sets of sequences
    seqretsplit      Reads sequences and writes them to individual files

@@ -1,4 +1,4 @@
-<b>Here is a sample session with dbxgcg</b>
+Here is a sample session with <b>dbxgcg</b>
 <p>
 
 <p>
@@ -22,6 +22,7 @@ Wildcard database filename [*.seq]: <b></b>
        key : Keywords
        org : Taxonomy
 Index fields [id,acc]: <b></b>
+Compressed index files [Y]: <b></b>
 General log output file [outfile.dbxgcg]: <b></b>
 
 </pre></td></tr></table><p>

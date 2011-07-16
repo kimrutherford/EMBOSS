@@ -1,11 +1,10 @@
-/******************************************************************************
-**
-** @source Ensembl Coordinate System functions
+/* @source Ensembl Coordinate System functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.15 $
+** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
+** @version $Revision: 1.33 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -30,6 +29,21 @@
 
 #include "enscoordsystem.h"
 #include "ensmetainformation.h"
+#include "enstable.h"
+
+
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== global variables ========================== */
+/* ==================================================================== */
 
 
 
@@ -42,12 +56,27 @@
 
 
 /* ==================================================================== */
+/* ======================== private constants ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== private variables ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-static AjBool coordsystemadaptorFetchAllBySQL(EnsPCoordsystemadaptor csa,
-                                              const AjPStr statement,
-                                              AjPList css);
+static AjBool coordsystemadaptorFetchAllbyStatement(
+    EnsPCoordsystemadaptor csa,
+    const AjPStr statement,
+    AjPList css);
 
 static AjBool coordsystemadaptorCacheInit(EnsPCoordsystemadaptor csa);
 
@@ -55,35 +84,42 @@ static AjBool coordsystemadaptorMapPathInit(EnsPCoordsystemadaptor csa);
 
 static AjBool coordsystemadaptorSeqregionMapInit(EnsPCoordsystemadaptor csa);
 
-static void coordsystemadaptorClearIdentifierCache(void **key,
-                                                   void **value,
-                                                   void *cl);
+static void coordsystemadaptorClearIdentifierCache(void** key,
+                                                   void** value,
+                                                   void* cl);
 
-static void coordsystemadaptorClearNameCacheL2(void **key,
-                                               void **value,
-                                               void *cl);
+static void coordsystemadaptorClearNameCacheL2(void** key,
+                                               void** value,
+                                               void* cl);
 
-static void coordsystemadaptorClearNameCacheL1(void **key,
-                                               void **value,
-                                               void *cl);
+static void coordsystemadaptorClearNameCacheL1(void** key,
+                                               void** value,
+                                               void* cl);
 
 static AjBool coordsystemadaptorCacheExit(EnsPCoordsystemadaptor csa);
 
-static void coordsystemadaptorClearMapPath(void **key,
-                                           void **value,
-                                           void *cl);
+static void coordsystemadaptorClearMapPath(void** key,
+                                           void** value,
+                                           void* cl);
 
 static AjBool coordsystemadaptorMapPathExit(EnsPCoordsystemadaptor csa);
 
-static void coordsystemadaptorClearSeqregionMap(void **key,
-                                                void **value,
-                                                void *cl);
+static void coordsystemadaptorClearSeqregionMap(void** key,
+                                                void** value,
+                                                void* cl);
 
 static AjBool coordsystemadaptorSeqregionMapExit(EnsPCoordsystemadaptor csa);
 
-static void coordsystemadaptorFetchAll(const void *key,
-                                       void **value,
-                                       void *cl);
+static void coordsystemadaptorFetchAll(const void* key,
+                                       void** value,
+                                       void* cl);
+
+
+
+
+/* ==================================================================== */
+/* ===================== All functions by section ===================== */
+/* ==================================================================== */
 
 
 
@@ -97,13 +133,14 @@ static void coordsystemadaptorFetchAll(const void *key,
 
 
 
-/* @datasection [EnsPCoordsystem] Coordinate System ***************************
+/* @datasection [EnsPCoordsystem] Ensembl Coordinate System *******************
 **
-** Functions for manipulating Ensembl Coordinate System objects
+** @nam2rule Coordsystem Functions for manipulating
+** Ensembl Coordinate System objects
 **
-** @cc Bio::EnsEMBL::CoordSystem CVS Revision: 1.8
-**
-** @nam2rule Coordsystem
+** @cc Bio::EnsEMBL::CoordSystem
+** @cc CVS Revision: 1.12
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -118,25 +155,87 @@ static void coordsystemadaptorFetchAll(const void *key,
 ** NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPCoordsystem]
-** @fcategory new
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the use counter
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the use counter
 **
-** @argrule Obj object [EnsPCoordsystem] Ensembl Coordinate System
-** @argrule Ref object [EnsPCoordsystem] Ensembl Coordinate System
+** @argrule Cpy cs [const EnsPCoordsystem] Ensembl Coordinate System
+** @argrule Ini csa [EnsPCoordsystemadaptor] Ensembl Coordinate System Adaptor
+** @argrule Ini identifier [ajuint] SQL database-internal identifier
+** @argrule Ini name [AjPStr] Name
+** @argrule Ini version [AjPStr] Version
+** @argrule Ini rank [ajuint] Rank
+** @argrule Ini dflt [AjBool] Default attribute
+** @argrule Ini toplevel [AjBool] Top-level attrbute
+** @argrule Ini seqlevel [AjBool] Sequence-level attribute
+** @argrule Ref cs [EnsPCoordsystem] Ensembl Coordinate System
 **
-** @valrule * [EnsPCoordsystem] Ensembl Coordinate System
+** @valrule * [EnsPCoordsystem] Ensembl Coordinate System or NULL
 **
+** @fcategory new
 ******************************************************************************/
 
 
 
 
-/* @func ensCoordsystemNew ****************************************************
+/* @func ensCoordsystemNewCpy *************************************************
 **
-** Default Ensembl Coordinate System constructor.
+** Object-based constructor function, which returns an independent object.
+**
+** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
+**
+** @return [EnsPCoordsystem] Ensembl Coordinate System or NULL
+** @@
+******************************************************************************/
+
+EnsPCoordsystem ensCoordsystemNewCpy(const EnsPCoordsystem cs)
+{
+    EnsPCoordsystem pthis = NULL;
+
+    if(!cs)
+        return NULL;
+
+    AJNEW0(pthis);
+
+    pthis->Use = 1;
+
+    pthis->Identifier = cs->Identifier;
+
+    pthis->Adaptor = cs->Adaptor;
+
+    if(cs->Name)
+        pthis->Name = ajStrNewRef(cs->Name);
+
+    /*
+    ** Although Coordinate System versions are optional, the AJAX String
+    ** should always be defined, since Ensembl Slice names are depending
+    ** on it.
+    */
+
+    if(cs->Version)
+        pthis->Version = ajStrNewRef(cs->Version);
+    else
+        pthis->Version = ajStrNew();
+
+    pthis->Default = cs->Default;
+
+    pthis->SequenceLevel = cs->SequenceLevel;
+
+    pthis->Toplevel = cs->Toplevel;
+
+    pthis->Rank = cs->Rank;
+
+    return pthis;
+}
+
+
+
+
+/* @func ensCoordsystemNewIni *************************************************
+**
+** Constructor for an Ensembl Coordinate System with initial values.
 **
 ** @cc Bio::EnsEMBL::Storable::new
 ** @param [u] csa [EnsPCoordsystemadaptor] Ensembl Coordinate System Adaptor
@@ -166,7 +265,7 @@ static void coordsystemadaptorFetchAll(const void *key,
 ** System of name 'toplevel'.
 ******************************************************************************/
 
-EnsPCoordsystem ensCoordsystemNew(
+EnsPCoordsystem ensCoordsystemNewIni(
     EnsPCoordsystemadaptor csa,
     ajuint identifier,
     AjPStr name,
@@ -178,8 +277,8 @@ EnsPCoordsystem ensCoordsystemNew(
 {
     EnsPCoordsystem cs = NULL;
 
-    if(ajDebugTest("ensCoordsystemNew"))
-        ajDebug("ensCoordsystemNew\n"
+    if(ajDebugTest("ensCoordsystemNewIni"))
+        ajDebug("ensCoordsystemNewIni\n"
                 "  csa %p\n"
                 "  identifier %u\n"
                 "  name '%S'\n"
@@ -203,32 +302,32 @@ EnsPCoordsystem ensCoordsystemNew(
         {
             if(!ajStrMatchCaseC(name, "toplevel"))
             {
-                ajWarn("ensCoordsystemNew name parameter must be 'toplevel' "
+                ajWarn("ensCoordsystemNewIni name parameter must be 'toplevel' "
                        "if the top-level parameter is set.\n");
 
                 return NULL;
             }
         }
 
-        if(rank)
+        if(rank > 0)
         {
-            ajWarn("ensCoordsystemNew rank parameter must be 0 "
+            ajWarn("ensCoordsystemNewIni rank parameter must be 0 "
                    "if the top-level parameter is set.\n");
 
             return NULL;
         }
 
-        if(seqlevel)
+        if(seqlevel == ajTrue)
         {
-            ajWarn("ensCoordsystemNew sequence-level parameter must not "
+            ajWarn("ensCoordsystemNewIni sequence-level parameter must not "
                    "be set if the top-level parameter is set.\n");
 
             return NULL;
         }
 
-        if(dflt)
+        if(dflt == ajTrue)
         {
-            ajWarn("ensCoordsystemNew default parameter must not be set "
+            ajWarn("ensCoordsystemNewIni default parameter must not be set "
                    "if the top-level parameter is set.\n");
 
             return NULL;
@@ -240,7 +339,7 @@ EnsPCoordsystem ensCoordsystemNew(
         {
             if(ajStrMatchCaseC(name, "toplevel"))
             {
-                ajWarn("ensCoordsystemNew name parameter cannot be "
+                ajWarn("ensCoordsystemNewIni name parameter cannot be "
                        "'toplevel' for non-top-level Coordinate Systems.\n");
 
                 return NULL;
@@ -248,15 +347,15 @@ EnsPCoordsystem ensCoordsystemNew(
         }
         else
         {
-            ajWarn("ensCoordsystemNew name parameter must be provided for "
+            ajWarn("ensCoordsystemNewIni name parameter must be provided for "
                    "non-top-level Coordinate Systems.\n");
 
             return NULL;
         }
 
-        if(!rank)
+        if(rank == 0)
         {
-            ajWarn("ensCoordsystemNew rank parameter must be non-zero "
+            ajWarn("ensCoordsystemNewIni rank parameter must be non-zero "
                    "for non-top-level Coordinate Systems.\n");
 
             return NULL;
@@ -291,62 +390,9 @@ EnsPCoordsystem ensCoordsystemNew(
 
     cs->SequenceLevel = seqlevel;
 
-    cs->TopLevel = toplevel;
+    cs->Toplevel = toplevel;
 
     cs->Default = dflt;
-
-    return cs;
-}
-
-
-
-
-/* @func ensCoordsystemNewObj *************************************************
-**
-** Object-based constructor function, which returns an independent object.
-**
-** @param [u] object [EnsPCoordsystem] Ensembl Coordinate System
-**
-** @return [EnsPCoordsystem] Ensembl Coordinate System or NULL
-** @@
-******************************************************************************/
-
-EnsPCoordsystem ensCoordsystemNewObj(EnsPCoordsystem object)
-{
-    EnsPCoordsystem cs = NULL;
-
-    if(!object)
-        return NULL;
-
-    AJNEW0(cs);
-
-    cs->Use = 1;
-
-    cs->Identifier = object->Identifier;
-
-    cs->Adaptor = object->Adaptor;
-
-    if(object->Name)
-        cs->Name = ajStrNewRef(object->Name);
-
-    /*
-    ** Although Coordinate System versions are optional, the AJAX String
-    ** should always be defined, since Ensembl Slice names are depending
-    ** on it.
-    */
-
-    if(object->Version)
-        cs->Version = ajStrNewRef(object->Version);
-    else
-        cs->Version = ajStrNew();
-
-    cs->Default = object->Default;
-
-    cs->SequenceLevel = object->SequenceLevel;
-
-    cs->TopLevel = object->TopLevel;
-
-    cs->Rank = object->Rank;
 
     return cs;
 }
@@ -390,17 +436,17 @@ EnsPCoordsystem ensCoordsystemNewRef(EnsPCoordsystem cs)
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Coordinate System.
+** memory allocated for an Ensembl Coordinate System object.
 **
 ** @fdata [EnsPCoordsystem]
-** @fcategory delete
 **
-** @nam3rule Del Destroy (free) an Coordinate System object
+** @nam3rule Del Destroy (free) an Ensembl Coordinate System object
 **
-** @argrule * Pcs [EnsPCoordsystem*] Coordinate System object address
+** @argrule * Pcs [EnsPCoordsystem*] Ensembl Coordinate System object address
 **
 ** @valrule * [void]
 **
+** @fcategory delete
 ******************************************************************************/
 
 
@@ -408,15 +454,15 @@ EnsPCoordsystem ensCoordsystemNewRef(EnsPCoordsystem cs)
 
 /* @func ensCoordsystemDel ****************************************************
 **
-** Default Ensembl Coordinate System destructor.
+** Default destructor for an Ensembl Coordinate System.
 **
-** @param [d] Pcs [EnsPCoordsystem*] Ensembl Coordinate System address
+** @param [d] Pcs [EnsPCoordsystem*] Ensembl Coordinate System object address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensCoordsystemDel(EnsPCoordsystem *Pcs)
+void ensCoordsystemDel(EnsPCoordsystem* Pcs)
 {
     EnsPCoordsystem pthis = NULL;
 
@@ -465,28 +511,30 @@ void ensCoordsystemDel(EnsPCoordsystem *Pcs)
 ** Functions for returning elements of an Ensembl Coordinate System object.
 **
 ** @fdata [EnsPCoordsystem]
-** @fcategory use
 **
 ** @nam3rule Get Return Coordinate System attribute(s)
-** @nam4rule GetAdaptor Return the Ensembl Coordinate System Adaptor
-** @nam4rule GetIdentifier Return the SQL database-internal identifier
-** @nam4rule GetName Return the name
-** @nam4rule GetVersion Return the version
-** @nam4rule GetDefault Return the default attribute
-** @nam4rule GetSeqLevel Return the sequence-level attribute
-** @nam4rule GetTopLevel Return the top-level attribute
-** @nam4rule GetRank Return the rank
+** @nam4rule Adaptor Return the Ensembl Coordinate System Adaptor
+** @nam4rule Default Return the default attribute
+** @nam4rule Identifier Return the SQL database-internal identifier
+** @nam4rule Name Return the name
+** @nam4rule Rank Return the rank
+** @nam4rule Seqlevel Return the sequence-level attribute
+** @nam4rule Toplevel Return the top-level attribute
+** @nam4rule Version Return the version
 **
 ** @argrule * cs [const EnsPCoordsystem] Coordinate System
 **
 ** @valrule Adaptor [EnsPCoordsystemadaptor] Ensembl Coordinate System Adaptor
-** @valrule Identifier [ajuint] SQL database-internal identifier
-** @valrule Name [AjPStr] Name
-** @valrule Version [AjPStr] Version
-** @valrule Default [AjBool] Default attribute
-** @valrule SeqLevel [AjBool] Sequence-level attribute
-** @valrule TopLevel [AjBool] Top-level attribute
-** @valrule Rank [ajuint] Rank
+** or NULL
+** @valrule Default [AjBool] Default attribute or ajFalse
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Name [const AjPStr] Name or NULL
+** @valrule Rank [ajuint] Rank or 0
+** @valrule Seqlevel [AjBool] Sequence-level attribute or ajFalse
+** @valrule Toplevel [AjBool] Top-level attribute or ajFalse
+** @valrule Version [const AjPStr] Version or NULL
+**
+** @fcategory use
 ******************************************************************************/
 
 
@@ -500,7 +548,7 @@ void ensCoordsystemDel(EnsPCoordsystem *Pcs)
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
 **
-** @return [EnsPCoordsystemadaptor] Ensembl Coordinate System Adaptor
+** @return [EnsPCoordsystemadaptor] Ensembl Coordinate System Adaptor or NULL
 ** @@
 ******************************************************************************/
 
@@ -510,73 +558,6 @@ EnsPCoordsystemadaptor ensCoordsystemGetAdaptor(const EnsPCoordsystem cs)
         return NULL;
 
     return cs->Adaptor;
-}
-
-
-
-
-/* @func ensCoordsystemGetIdentifier ******************************************
-**
-** Get the SQL database-internal identifier element of an
-** Ensembl Coordinate System.
-**
-** @cc Bio::EnsEMBL::Storable::dbID
-** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
-**
-** @return [ajuint] SQL database-internal identifier
-** @@
-******************************************************************************/
-
-ajuint ensCoordsystemGetIdentifier(const EnsPCoordsystem cs)
-{
-    if(!cs)
-        return 0;
-
-    return cs->Identifier;
-}
-
-
-
-
-/* @func ensCoordsystemGetName ************************************************
-**
-** Get the name element of an Ensembl Coordinate System.
-**
-** @cc Bio::EnsEMBL::CoordSystem::name
-** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
-**
-** @return [const AjPStr] Name
-** @@
-******************************************************************************/
-
-const AjPStr ensCoordsystemGetName(const EnsPCoordsystem cs)
-{
-    if(!cs)
-        return NULL;
-
-    return cs->Name;
-}
-
-
-
-
-/* @func ensCoordsystemGetVersion *********************************************
-**
-** Get the version element of an Ensembl Coordinate System.
-**
-** @cc Bio::EnsEMBL::CoordSystem::version
-** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
-**
-** @return [const AjPStr] Version
-** @@
-******************************************************************************/
-
-const AjPStr ensCoordsystemGetVersion(const EnsPCoordsystem cs)
-{
-    if(!cs)
-        return NULL;
-
-    return cs->Version;
 }
 
 
@@ -605,45 +586,46 @@ AjBool ensCoordsystemGetDefault(const EnsPCoordsystem cs)
 
 
 
-/* @func ensCoordsystemGetSeqLevel ********************************************
+/* @func ensCoordsystemGetIdentifier ******************************************
 **
-** Get the sequence-level element of an Ensembl Coordinate System.
+** Get the SQL database-internal identifier element of an
+** Ensembl Coordinate System.
 **
-** @cc Bio::EnsEMBL::CoordSystem::is_sequence_level
+** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
 **
-** @return [AjBool] ajTrue if the Coordinate System defines the sequence-level
+** @return [ajuint] SQL database-internal identifier or NULL
 ** @@
 ******************************************************************************/
 
-AjBool ensCoordsystemGetSeqLevel(const EnsPCoordsystem cs)
+ajuint ensCoordsystemGetIdentifier(const EnsPCoordsystem cs)
 {
     if(!cs)
-        return ajFalse;
+        return 0;
 
-    return cs->SequenceLevel;
+    return cs->Identifier;
 }
 
 
 
 
-/* @func ensCoordsystemGetTopLevel ********************************************
+/* @func ensCoordsystemGetName ************************************************
 **
-** Get the top-level element of an Ensembl Coordinate System.
+** Get the name element of an Ensembl Coordinate System.
 **
-** @cc Bio::EnsEMBL::CoordSystem::is_top_level
+** @cc Bio::EnsEMBL::CoordSystem::name
 ** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
 **
-** @return [AjBool] ajTrue if the coordinate system defines the top-level
+** @return [const AjPStr] Name or NULL
 ** @@
 ******************************************************************************/
 
-AjBool ensCoordsystemGetTopLevel(const EnsPCoordsystem cs)
+const AjPStr ensCoordsystemGetName(const EnsPCoordsystem cs)
 {
     if(!cs)
-        return ajFalse;
+        return NULL;
 
-    return cs->TopLevel;
+    return cs->Name;
 }
 
 
@@ -656,7 +638,7 @@ AjBool ensCoordsystemGetTopLevel(const EnsPCoordsystem cs)
 ** @cc Bio::EnsEMBL::CoordSystem::rank
 ** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
 **
-** @return [ajuint] Rank
+** @return [ajuint] Rank or 0
 ** @@
 ******************************************************************************/
 
@@ -671,21 +653,92 @@ ajuint ensCoordsystemGetRank(const EnsPCoordsystem cs)
 
 
 
+/* @func ensCoordsystemGetSeqlevel ********************************************
+**
+** Get the sequence-level element of an Ensembl Coordinate System.
+**
+** @cc Bio::EnsEMBL::CoordSystem::is_sequence_level
+** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
+**
+** @return [AjBool] ajTrue if the Coordinate System defines the sequence-level
+** or ajFalse
+** @@
+******************************************************************************/
+
+AjBool ensCoordsystemGetSeqlevel(const EnsPCoordsystem cs)
+{
+    if(!cs)
+        return ajFalse;
+
+    return cs->SequenceLevel;
+}
+
+
+
+
+/* @func ensCoordsystemGetToplevel ********************************************
+**
+** Get the top-level element of an Ensembl Coordinate System.
+**
+** @cc Bio::EnsEMBL::CoordSystem::is_top_level
+** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
+**
+** @return [AjBool] ajTrue if the coordinate system defines the top-level
+** or ajFalse
+** @@
+******************************************************************************/
+
+AjBool ensCoordsystemGetToplevel(const EnsPCoordsystem cs)
+{
+    if(!cs)
+        return ajFalse;
+
+    return cs->Toplevel;
+}
+
+
+
+
+/* @func ensCoordsystemGetVersion *********************************************
+**
+** Get the version element of an Ensembl Coordinate System.
+**
+** @cc Bio::EnsEMBL::CoordSystem::version
+** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
+**
+** @return [const AjPStr] Version or NULL
+** @@
+******************************************************************************/
+
+const AjPStr ensCoordsystemGetVersion(const EnsPCoordsystem cs)
+{
+    if(!cs)
+        return NULL;
+
+    return cs->Version;
+}
+
+
+
+
 /* @section element assignment ************************************************
 **
 ** Functions for assigning elements of an Ensembl Coordinate System object.
 **
 ** @fdata [EnsPCoordsystem]
-** @fcategory modify
 **
 ** @nam3rule Set Set one element of a Coordinate System
-** @nam4rule SetAdaptor Set the Ensembl Coordinate System Adaptor
-** @nam4rule SetIdentifier Set the SQL database-internal identifier
+** @nam4rule Adaptor Set the Ensembl Coordinate System Adaptor
+** @nam4rule Identifier Set the SQL database-internal identifier
 **
 ** @argrule * cs [EnsPCoordsystem] Ensembl Coordinate System object
+** @argrule Adaptor csa [EnsPCoordsystemadaptor]
+** Ensembl Coordinate System Adaptor
+** @argrule Identifier identifier [ajuint] SQL database-internal identifier
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
+** @fcategory modify
 ******************************************************************************/
 
 
@@ -748,9 +801,10 @@ AjBool ensCoordsystemSetIdentifier(EnsPCoordsystem cs, ajuint identifier)
 ** Functions for reporting of an Ensembl Coordinate System object.
 **
 ** @fdata [EnsPCoordsystem]
+**
 ** @nam3rule Trace Report Ensembl Coordinate System elements to debug file
 **
-** @argrule Trace analysis [const EnsPCoordsystem] Ensembl Coordinate System
+** @argrule Trace cs [const EnsPCoordsystem] Ensembl Coordinate System
 ** @argrule Trace level [ajuint] Indentation level
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
@@ -790,7 +844,7 @@ AjBool ensCoordsystemTrace(const EnsPCoordsystem cs, ajuint level)
             "%S  Name '%S'\n"
             "%S  Version '%S'\n"
             "%S  SequenceLevel '%B'\n"
-            "%S  TopLevel '%B'\n"
+            "%S  Toplevel '%B'\n"
             "%S  Default '%B'\n"
             "%S  Rank %u\n",
             indent, cs,
@@ -800,7 +854,7 @@ AjBool ensCoordsystemTrace(const EnsPCoordsystem cs, ajuint level)
             indent, cs->Name,
             indent, cs->Version,
             indent, cs->SequenceLevel,
-            indent, cs->TopLevel,
+            indent, cs->Toplevel,
             indent, cs->Default,
             indent, cs->Rank);
 
@@ -812,54 +866,59 @@ AjBool ensCoordsystemTrace(const EnsPCoordsystem cs, ajuint level)
 
 
 
-/* @func ensCoordsystemMappingPathTrace ***************************************
+/* @section calculate *********************************************************
 **
-** Trace an Ensembl Coordinate System mapping path.
+** Functions for calculating values of an Ensembl Coordinate System object.
 **
-** @param [r] css [const AjPList] AJAX List of Ensembl Coordinate Systems
-** @param [r] level [ajuint] Indentation level
+** @fdata [EnsPCoordsystem]
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @nam3rule Calculate Calculate Ensembl Coordinate System values
+** @nam4rule Memsize Calculate the memory size in bytes
+**
+** @argrule * cs [const EnsPCoordsystem] Ensembl Coordinate System
+**
+** @valrule Memsize [size_t] Memory size in bytes or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensCoordsystemCalculateMemsize ***************************************
+**
+** Get the memory size in bytes of an Ensembl Coordinate System.
+**
+** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
+**
+** @return [size_t] Memory size in bytes or 0
 ** @@
 ******************************************************************************/
 
-AjBool ensCoordsystemMappingPathTrace(const AjPList css, ajuint level)
+size_t ensCoordsystemCalculateMemsize(const EnsPCoordsystem cs)
 {
-    AjIList iter = NULL;
+    size_t size = 0;
 
-    AjPStr indent = NULL;
+    if(!cs)
+        return 0;
 
-    EnsPCoordsystem cs = NULL;
+    size += sizeof (EnsOCoordsystem);
 
-    if(!css)
-        return ajFalse;
-
-    indent = ajStrNew();
-
-    ajStrAppendCountK(&indent, ' ', level * 2);
-
-    ajDebug("%SensCoordsystemMappingPathTrace %p\n"
-            "%S  length %u\n",
-            indent, css,
-            indent, ajListGetLength(css));
-
-    iter = ajListIterNewread(css);
-
-    while(!ajListIterDone(iter))
+    if(cs->Name)
     {
-        cs = (EnsPCoordsystem) ajListIterGet(iter);
+        size += sizeof (AjOStr);
 
-        if(cs)
-            ensCoordsystemTrace(cs, level + 1);
-        else
-            ajDebug("%S  <nul>\n", indent);
+        size += ajStrGetRes(cs->Name);
     }
 
-    ajListIterDel(&iter);
+    if(cs->Version)
+    {
+        size += sizeof (AjOStr);
 
-    ajStrDel(&indent);
+        size += ajStrGetRes(cs->Version);
+    }
 
-    return ajTrue;
+    return size;
 }
 
 
@@ -867,14 +926,14 @@ AjBool ensCoordsystemMappingPathTrace(const AjPList css, ajuint level)
 
 /* @section comparison ********************************************************
 **
-** Functions for comparing Ensembl Coordinate Systems.
+** Functions for comparing Ensembl Coordinate System objects.
 **
 ** @fdata [EnsPCoordsystem]
 **
-** @nam3rule  Match Compare two Coordinate Systems
+** @nam3rule  Match Compare two Ensembl Coordinate System objects
 **
-** @argrule * cs1 [const EnsPCoordsystem] Coordinate System
-** @argrule * cs2 [const EnsPCoordsystem] Coordinate System
+** @argrule * cs1 [const EnsPCoordsystem] Ensembl Coordinate System
+** @argrule * cs2 [const EnsPCoordsystem] Ensembl Coordinate System
 **
 ** @valrule * [AjBool] True on success
 **
@@ -892,7 +951,7 @@ AjBool ensCoordsystemMappingPathTrace(const AjPList css, ajuint level)
 ** @param [r] cs1 [const EnsPCoordsystem] First Ensembl Coordinate System
 ** @param [r] cs2 [const EnsPCoordsystem] Second Ensembl Coordinate System
 **
-** @return [AjBool] ajTrue if the Ensembl Coordinate Systems are equal
+** @return [AjBool] ajTrue if the Ensembl Coordinate System objects are equal
 ** @@
 ** The comparison is based on an initial pointer equality test and if that
 ** fails, a case-insensitive string comparison of the name and version elements
@@ -938,7 +997,7 @@ AjBool ensCoordsystemMatch(const EnsPCoordsystem cs1,
     if(cs1->SequenceLevel != cs2->SequenceLevel)
         return ajFalse;
 
-    if(cs1->TopLevel != cs2->TopLevel)
+    if(cs1->Toplevel != cs2->Toplevel)
         return ajFalse;
 
     if(cs1->Rank != cs2->Rank)
@@ -950,41 +1009,21 @@ AjBool ensCoordsystemMatch(const EnsPCoordsystem cs1,
 
 
 
-/* @func ensCoordsystemGetMemsize *********************************************
+/* @section convenience functions *********************************************
 **
-** Get the memory size in bytes of an Ensembl Coordinate System.
+** Ensembl Coordinate System convenience functions
 **
-** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
+** @fdata [EnsPCoordsystem]
 **
-** @return [ajulong] Memory size
-** @@
+** @nam3rule Get Get member(s) of associated objects
+** @nam4rule Species Get the Ensembl Database Adaptor species
+**
+** @argrule * cs [const EnsPCoordsystem] Ensembl Coordinate System
+**
+** @valrule Species [AjPStr] Ensembl Database Adaptor species or NULL
+**
+** @fcategory use
 ******************************************************************************/
-
-ajulong ensCoordsystemGetMemsize(const EnsPCoordsystem cs)
-{
-    ajulong size = 0;
-
-    if(!cs)
-        return 0;
-
-    size += sizeof (EnsOCoordsystem);
-
-    if(cs->Name)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(cs->Name);
-    }
-
-    if(cs->Version)
-    {
-        size += sizeof (AjOStr);
-
-        size += ajStrGetRes(cs->Version);
-    }
-
-    return size;
-}
 
 
 
@@ -996,13 +1035,13 @@ ajulong ensCoordsystemGetMemsize(const EnsPCoordsystem cs)
 ** based on.
 **
 ** @cc Bio::EnsEMBL::CoordSystem::species
-** @param [r] cs [EnsPCoordsystem] Ensembl Coordinate System
+** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
 **
-** @return [AjPStr] Ensembl Database Adaptor species
+** @return [AjPStr] Ensembl Database Adaptor species or NULL
 ** @@
 ******************************************************************************/
 
-AjPStr ensCoordsystemGetSpecies(EnsPCoordsystem cs)
+AjPStr ensCoordsystemGetSpecies(const EnsPCoordsystem cs)
 {
     if(!cs)
         return NULL;
@@ -1016,13 +1055,99 @@ AjPStr ensCoordsystemGetSpecies(EnsPCoordsystem cs)
 
 
 
-/* @datasection [EnsPCoordsystemadaptor] Coordinate System Adaptor ************
+/* @datasection [AjPList] AJAX List *******************************************
 **
-** Functions for manipulating Ensembl Coordinate System Adaptor objects
+** @nam2rule List Functions for manipulating AJAX List objects
 **
-** @cc Bio::EnsEMBL::DBSQL::CoordSystemAdaptor CVS Revision: 1.26
+******************************************************************************/
+
+
+
+
+/* @section list **************************************************************
 **
-** @nam2rule Coordsystemadaptor
+** Functions for manipulating AJAX List objects.
+**
+** @fdata [AjPList]
+**
+** @nam3rule Coordsystem Functions for manipulating AJAX List objects of
+** Ensembl Coordinate System objects
+** @nam4rule Trace Trace Ensembl Coordinate System objects
+**
+** @argrule Trace css [const AjPList] AJAX List of
+** Ensembl Coordinate System objects
+** @argrule Trace level [ajuint] Indentation level
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensListCoordsystemTrace **********************************************
+**
+** Trace an Ensembl Coordinate System mapping path.
+**
+** @param [r] css [const AjPList] AJAX List of
+** Ensembl Coordinate System objects
+** @param [r] level [ajuint] Indentation level
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+AjBool ensListCoordsystemTrace(const AjPList css, ajuint level)
+{
+    AjIList iter = NULL;
+
+    AjPStr indent = NULL;
+
+    EnsPCoordsystem cs = NULL;
+
+    if(!css)
+        return ajFalse;
+
+    indent = ajStrNew();
+
+    ajStrAppendCountK(&indent, ' ', level * 2);
+
+    ajDebug("%SensListCoordsystemTrace %p\n"
+            "%S  length %u\n",
+            indent, css,
+            indent, ajListGetLength(css));
+
+    iter = ajListIterNewread(css);
+
+    while(!ajListIterDone(iter))
+    {
+        cs = (EnsPCoordsystem) ajListIterGet(iter);
+
+        if(cs)
+            ensCoordsystemTrace(cs, level + 1);
+        else
+            ajDebug("%S  <nul>\n", indent);
+    }
+
+    ajListIterDel(&iter);
+
+    ajStrDel(&indent);
+
+    return ajTrue;
+}
+
+
+
+
+/* @datasection [EnsPCoordsystemadaptor] Ensembl Coordinate System Adaptor ****
+**
+** @nam2rule Coordsystemadaptor Functions for manipulating
+** Ensembl Coordinate System Adaptor objects
+**
+** @cc Bio::EnsEMBL::DBSQL::CoordSystemAdaptor
+** @cc CVS Revision: 1.28
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -1030,29 +1155,7 @@ AjPStr ensCoordsystemGetSpecies(EnsPCoordsystem cs)
 
 
 
-/* @section constructors ******************************************************
-**
-** All constructors return a new Ensembl Coordinate System Adaptor by pointer.
-** It is the responsibility of the user to first destroy any previous
-** Coordinate System Adaptor. The target pointer does not need to be
-** initialised to NULL, but it is good programming practice to do so anyway.
-**
-** @fdata [EnsPCoordsystemadaptor]
-** @fnote None
-**
-** @nam3rule New Constructor
-**
-** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
-**
-** @valrule * [EnsPCoordsystemadaptor] Ensembl Coordinate System Adaptor
-**
-** @fcategory new
-******************************************************************************/
-
-
-
-
-/* @funcstatic coordsystemadaptorFetchAllBySQL ********************************
+/* @funcstatic coordsystemadaptorFetchAllbyStatement **************************
 **
 ** Run a SQL statement against an Ensembl Coordinate System Adaptor and
 ** consolidate the results into an AJAX List of Ensembl Coordinate System
@@ -1069,9 +1172,10 @@ AjPStr ensCoordsystemGetSpecies(EnsPCoordsystem cs)
 ** @@
 ******************************************************************************/
 
-static AjBool coordsystemadaptorFetchAllBySQL(EnsPCoordsystemadaptor csa,
-                                              const AjPStr statement,
-                                              AjPList css)
+static AjBool coordsystemadaptorFetchAllbyStatement(
+    EnsPCoordsystemadaptor csa,
+    const AjPStr statement,
+    AjPList css)
 {
     ajuint identifier = 0;
     ajuint rank       = 0;
@@ -1141,16 +1245,16 @@ static AjBool coordsystemadaptorFetchAllBySQL(EnsPCoordsystemadaptor csa,
 
         ajStrTokenDel(&attrtoken);
 
-        cs = ensCoordsystemNew(csa,
-                               identifier,
-                               name,
-                               version,
-                               rank,
-                               dflt,
-                               toplevel,
-                               seqlevel);
+        cs = ensCoordsystemNewIni(csa,
+                                  identifier,
+                                  name,
+                                  version,
+                                  rank,
+                                  dflt,
+                                  toplevel,
+                                  seqlevel);
 
-        ajListPushAppend(css, (void *) cs);
+        ajListPushAppend(css, (void*) cs);
 
         ajStrDel(&name);
         ajStrDel(&version);
@@ -1181,8 +1285,8 @@ static AjBool coordsystemadaptorFetchAllBySQL(EnsPCoordsystemadaptor csa,
 
 static AjBool coordsystemadaptorCacheInit(EnsPCoordsystemadaptor csa)
 {
-    ajuint *Pid   = NULL;
-    ajuint *Prank = NULL;
+    ajuint* Pid   = NULL;
+    ajuint* Prank = NULL;
 
     AjPList css = NULL;
 
@@ -1197,19 +1301,16 @@ static AjBool coordsystemadaptorCacheInit(EnsPCoordsystemadaptor csa)
         return ajFalse;
 
     if(!csa->CacheByIdentifier)
-        csa->CacheByIdentifier =
-            ajTableNewFunctionLen(0, ensTableCmpUint, ensTableHashUint);
+        csa->CacheByIdentifier = ensTableuintNewLen(0);
 
     if(!csa->CacheByName)
-        csa->CacheByName = ajTablestrNewLen(0);
+        csa->CacheByName = ensTablestrNewLen(0);
 
     if(!csa->CacheByRank)
-        csa->CacheByRank =
-            ajTableNewFunctionLen(0, ensTableCmpUint, ensTableHashUint);
+        csa->CacheByRank = ensTableuintNewLen(0);
 
     if(!csa->CacheByDefault)
-        csa->CacheByDefault =
-            ajTableNewFunctionLen(0, ensTableCmpUint, ensTableHashUint);
+        csa->CacheByDefault = ensTableuintNewLen(0);
 
     statement = ajFmtStr(
         "SELECT "
@@ -1226,14 +1327,14 @@ static AjBool coordsystemadaptorCacheInit(EnsPCoordsystemadaptor csa)
 
     css = ajListNew();
 
-    coordsystemadaptorFetchAllBySQL(csa, statement, css);
+    coordsystemadaptorFetchAllbyStatement(csa, statement, css);
 
-    while(ajListPop(css, (void **) &cs))
+    while(ajListPop(css, (void**) &cs))
     {
         /* Sequence-level cache */
 
         if(cs->SequenceLevel)
-            csa->SeqLevel = (void *) ensCoordsystemNewRef(cs);
+            csa->Seqlevel = (void*) ensCoordsystemNewRef(cs);
 
         /* Identifier cache */
 
@@ -1243,8 +1344,8 @@ static AjBool coordsystemadaptorCacheInit(EnsPCoordsystemadaptor csa)
 
         cstemp = (EnsPCoordsystem)
             ajTablePut(csa->CacheByIdentifier,
-                       (void *) Pid,
-                       (void *) ensCoordsystemNewRef(cs));
+                       (void*) Pid,
+                       (void*) ensCoordsystemNewRef(cs));
 
         if(cstemp)
         {
@@ -1261,35 +1362,35 @@ static AjBool coordsystemadaptorCacheInit(EnsPCoordsystemadaptor csa)
         /*
         ** For each Coordinate System of a particular name one or more
         ** versions are supported. Thus, Coordinate Systems are cached in
-        ** two levels of AJAX Tables.
+        ** two levels of AJAX Table objects.
         **
-        ** First-level Name Table: An AJAX Table storing Coordinate System
-        ** name AJAX Strings as key data and second-level AJAX Tables as
-        ** value data.
+        ** First-level Name Table: An AJAX Table storing
+        ** (Ensembl Coordinate System name) AJAX String objects as key data
+        ** and second-level AJAX Table objects as value data.
         **
-        ** Second-level Version Table: An AJAX Table storing Coordinate System
-        ** version AJAX Strings as key data and Coordinate Systems as
-        ** value data.
+        ** Second-level Version Table: An AJAX Table storing
+        ** (Ensembl Coordinate System version) AJAX String objects as key data
+        ** and Ensembl Coordinate System objects as value data.
         */
 
-        versions = (AjPTable)
-            ajTableFetch(csa->CacheByName, (const void *) cs->Name);
+        versions = (AjPTable) ajTableFetchmodV(csa->CacheByName,
+                                               (const void*) cs->Name);
 
         if(!versions)
         {
-            /* Create a new versions Table first. */
+            /* Create a new versions AJAX Table first. */
 
-            versions = ajTablestrNewLen(0);
+            versions = ensTablestrNewLen(0);
 
             ajTablePut(csa->CacheByName,
-                       (void *) ajStrNewS(cs->Name),
-                       (void *) versions);
+                       (void*) ajStrNewS(cs->Name),
+                       (void*) versions);
         }
 
         cstemp = (EnsPCoordsystem)
             ajTablePut(versions,
-                       (void *) ajStrNewS(cs->Version),
-                       (void *) ensCoordsystemNewRef(cs));
+                       (void*) ajStrNewS(cs->Version),
+                       (void*) ensCoordsystemNewRef(cs));
 
         if(cstemp)
         {
@@ -1312,8 +1413,8 @@ static AjBool coordsystemadaptorCacheInit(EnsPCoordsystemadaptor csa)
 
         cstemp = (EnsPCoordsystem)
             ajTablePut(csa->CacheByRank,
-                       (void *) Prank,
-                       (void *) ensCoordsystemNewRef(cs));
+                       (void*) Prank,
+                       (void*) ensCoordsystemNewRef(cs));
 
         if(cstemp)
         {
@@ -1330,9 +1431,10 @@ static AjBool coordsystemadaptorCacheInit(EnsPCoordsystemadaptor csa)
         /* Defaults cache */
 
         /*
-        ** Ensembl supports one or more default Coordinate Systems.
-        ** Coordinate Systems are stored in a table keyed on the database
-        ** identifier.
+        ** Ensembl supports one or more default Coordinate System objects.
+        ** Ensembl Coordinate System objects are stored in an AJAX Table
+        ** with (Ensembl Coordinate System identifier) AJAX unsigned integer
+        ** key data and Ensembl Coordinate System value data.
         */
 
         if(cs->Default)
@@ -1343,8 +1445,8 @@ static AjBool coordsystemadaptorCacheInit(EnsPCoordsystemadaptor csa)
 
             cstemp = (EnsPCoordsystem)
                 ajTablePut(csa->CacheByDefault,
-                           (void *) Pid,
-                           (void *) ensCoordsystemNewRef(cs));
+                           (void*) Pid,
+                           (void*) ensCoordsystemNewRef(cs));
 
             if(cstemp)
             {
@@ -1426,7 +1528,7 @@ static AjBool coordsystemadaptorMapPathInit(EnsPCoordsystemadaptor csa)
         return ajFalse;
 
     if(!csa->MappingPaths)
-        csa->MappingPaths = ajTablestrNewLen(0);
+        csa->MappingPaths = ensTablestrNewLen(0);
 
     cskeys = ajListNew();
 
@@ -1438,9 +1540,9 @@ static AjBool coordsystemadaptorMapPathInit(EnsPCoordsystemadaptor csa)
 
     mis = ajListNew();
 
-    ensMetainformationadaptorFetchAllByKey(mia, metakey, mis);
+    ensMetainformationadaptorFetchAllbyKey(mia, metakey, mis);
 
-    while(ajListPop(mis, (void **) &mi))
+    while(ajListPop(mis, (void**) &mi))
     {
         metaval = ensMetainformationGetValue(mi);
 
@@ -1459,7 +1561,7 @@ static AjBool coordsystemadaptorMapPathInit(EnsPCoordsystemadaptor csa)
         cskey = ajStrNew();
 
         while(ajStrTokenNextParse(&pathtoken, &cskey))
-            ajListPushAppend(cskeys, (void *) ajStrNewS(cskey));
+            ajListPushAppend(cskeys, (void*) ajStrNewS(cskey));
 
         ajStrDel(&cskey);
 
@@ -1499,7 +1601,7 @@ static AjBool coordsystemadaptorMapPathInit(EnsPCoordsystemadaptor csa)
                                                  &cs);
 
                 if(cs)
-                    ajListPushAppend(css, (void *) cs);
+                    ajListPushAppend(css, (void*) cs);
                 else
                     ajWarn("coordsystemadaptorMapPathInit could not load "
                            "an Ensembl Coordinate System for name '%S' and "
@@ -1550,8 +1652,8 @@ static AjBool coordsystemadaptorMapPathInit(EnsPCoordsystemadaptor csa)
             ** a name1:version1|name2:version2 map key.
             */
 
-            ajListPeekFirst(css, (void **) &cs1);
-            ajListPeekLast(css, (void **) &cs2);
+            ajListPeekFirst(css, (void**) &cs1);
+            ajListPeekLast(css, (void**) &cs2);
 
             if(debug)
             {
@@ -1576,8 +1678,8 @@ static AjBool coordsystemadaptorMapPathInit(EnsPCoordsystemadaptor csa)
 
                 /* Does a mapping path already exist? */
 
-                mappath = (AjPList) ajTableFetch(csa->MappingPaths,
-                                                 (const void *) mapkey);
+                mappath = (AjPList) ajTableFetchmodV(csa->MappingPaths,
+                                                     (const void*) mapkey);
 
                 if(mappath)
                 {
@@ -1599,13 +1701,13 @@ static AjBool coordsystemadaptorMapPathInit(EnsPCoordsystemadaptor csa)
                         */
 
                         mappath = (AjPList) ajTablePut(csa->MappingPaths,
-                                                       (void *) mapkey,
-                                                       (void *) css);
+                                                       (void*) mapkey,
+                                                       (void*) css);
 
                         ajDebug("coordsystemadaptorMapPathInit "
                                 "deleted the longer, stored mapping path!\n");
 
-                        while(ajListPop(mappath, (void **) &cs))
+                        while(ajListPop(mappath, (void**) &cs))
                             ensCoordsystemDel(&cs);
 
                         ajListFree(&mappath);
@@ -1620,7 +1722,7 @@ static AjBool coordsystemadaptorMapPathInit(EnsPCoordsystemadaptor csa)
                         ajDebug("coordsystemadaptorMapPathInit "
                                 "deleted the longer, current mapping path!\n");
 
-                        while(ajListPop(css, (void **) &cs))
+                        while(ajListPop(css, (void**) &cs))
                             ensCoordsystemDel(&cs);
 
                         ajListFree(&css);
@@ -1631,8 +1733,8 @@ static AjBool coordsystemadaptorMapPathInit(EnsPCoordsystemadaptor csa)
                     /* No similar mappath exists so store the new mappath. */
 
                     ajTablePut(csa->MappingPaths,
-                               (void *) ajStrNewS(mapkey),
-                               (void *) css);
+                               (void*) ajStrNewS(mapkey),
+                               (void*) css);
 
                     if(debug)
                         ajDebug("coordsystemadaptorMapPathInit "
@@ -1657,7 +1759,7 @@ static AjBool coordsystemadaptorMapPathInit(EnsPCoordsystemadaptor csa)
         ** AJAX List between Ensembl Meta Information entries.
         */
 
-        while(ajListPop(cskeys, (void **) &cskey))
+        while(ajListPop(cskeys, (void**) &cskey))
             ajStrDel(&cskey);
 
         ensMetainformationDel(&mi);
@@ -1691,9 +1793,9 @@ static AjBool coordsystemadaptorSeqregionMapInit(EnsPCoordsystemadaptor csa)
     ajuint internal = 0;
     ajuint external = 0;
 
-    ajuint *Pinternal = NULL;
-    ajuint *Pexternal = NULL;
-    ajuint *Pprevious = NULL;
+    ajuint* Pinternal = NULL;
+    ajuint* Pexternal = NULL;
+    ajuint* Pprevious = NULL;
 
     AjBool debug = AJFALSE;
 
@@ -1717,16 +1819,16 @@ static AjBool coordsystemadaptorSeqregionMapInit(EnsPCoordsystemadaptor csa)
     if(csa->ExternalToInternal)
         return ajFalse;
     else
-        csa->ExternalToInternal = MENSTABLEUINTNEW(0);
+        csa->ExternalToInternal = ensTableuintNewLen(0);
 
     if(csa->InternalToExternal)
         return ajFalse;
     else
-        csa->InternalToExternal = MENSTABLEUINTNEW(0);
+        csa->InternalToExternal = ensTableuintNewLen(0);
 
     build = ajStrNew();
 
-    ensDatabaseadaptorGetSchemaBuild(csa->Adaptor, &build);
+    ensDatabaseadaptorFetchSchemabuild(csa->Adaptor, &build);
 
     if(debug)
         ajDebug("coordsystemadaptorSeqregionMapInit got build '%S'.\n", build);
@@ -1773,8 +1875,8 @@ static AjBool coordsystemadaptorSeqregionMapInit(EnsPCoordsystemadaptor csa)
 
         /* Internal to external mapping. */
 
-        Pprevious = (ajuint *) ajTableFetch(csa->InternalToExternal,
-                                            (const void *) &internal);
+        Pprevious = (ajuint*) ajTableFetchmodV(csa->InternalToExternal,
+                                               (const void*) &internal);
 
         if(Pprevious)
             ajDebug("coordsystemadaptorSeqregionMapInit got duplicate "
@@ -1792,14 +1894,14 @@ static AjBool coordsystemadaptorSeqregionMapInit(EnsPCoordsystemadaptor csa)
             *Pexternal = external;
 
             ajTablePut(csa->InternalToExternal,
-                       (void *) Pinternal,
-                       (void *) Pexternal);
+                       (void*) Pinternal,
+                       (void*) Pexternal);
         }
 
         /* External to internal mapping. */
 
-        Pprevious = (ajuint *) ajTableFetch(csa->ExternalToInternal,
-                                            (const void *) &external);
+        Pprevious = (ajuint*) ajTableFetchmodV(csa->ExternalToInternal,
+                                               (const void*) &external);
 
         if(Pprevious)
             ajDebug("coordsystemadaptorSeqregionMapInit got duplicate "
@@ -1817,8 +1919,8 @@ static AjBool coordsystemadaptorSeqregionMapInit(EnsPCoordsystemadaptor csa)
             *Pexternal = external;
 
             ajTablePut(csa->ExternalToInternal,
-                       (void *) Pexternal,
-                       (void *) Pinternal);
+                       (void*) Pexternal,
+                       (void*) Pinternal);
         }
     }
 
@@ -1830,6 +1932,28 @@ static AjBool coordsystemadaptorSeqregionMapInit(EnsPCoordsystemadaptor csa)
 
     return ajTrue;
 }
+
+
+
+
+/* @section constructors ******************************************************
+**
+** All constructors return a new Ensembl Coordinate System Adaptor by pointer.
+** It is the responsibility of the user to first destroy any previous
+** Coordinate System Adaptor. The target pointer does not need to be
+** initialised to NULL, but it is good programming practice to do so anyway.
+**
+** @fdata [EnsPCoordsystemadaptor]
+**
+** @nam3rule New Constructor
+**
+** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @valrule * [EnsPCoordsystemadaptor] Ensembl Coordinate System Adaptor
+** or NULL
+**
+** @fcategory new
+******************************************************************************/
 
 
 
@@ -1850,7 +1974,7 @@ static AjBool coordsystemadaptorSeqregionMapInit(EnsPCoordsystemadaptor csa)
 ** @see ensRegistryGetCoordsystemadaptor
 **
 ** @cc Bio::EnsEMBL::DBSQL::CoordSystemAdaptor::new
-** @param [r] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPCoordsystemadaptor] Ensembl Coordinate System Adaptor or NULL
 ** @@
@@ -1879,8 +2003,8 @@ EnsPCoordsystemadaptor ensCoordsystemadaptorNew(
     ** one of these is created for each database.
     */
 
-    csa->TopLevel = (void *)
-        ensCoordsystemNew(csa, 0, NULL, NULL, 0, ajFalse, ajTrue, ajFalse);
+    csa->Toplevel = (void*)
+        ensCoordsystemNewIni(csa, 0, NULL, NULL, 0, ajFalse, ajTrue, ajFalse);
 
     return csa;
 }
@@ -1888,30 +2012,9 @@ EnsPCoordsystemadaptor ensCoordsystemadaptorNew(
 
 
 
-/* @section destructors *******************************************************
-**
-** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Coordinate System Adaptor.
-**
-** @fdata [EnsPCoordsystemadaptor]
-** @fnote None
-**
-** @nam3rule Del Destroy (free) an Ensembl Coordinate System Adaptor object
-**
-** @argrule * Pcsa [EnsPCoordsystemadaptor*] Ensembl Coordinate System Adaptor
-**                                           object address
-**
-** @valrule * [void]
-**
-** @fcategory delete
-******************************************************************************/
-
-
-
-
 /* @funcstatic coordsystemadaptorClearIdentifierCache *************************
 **
-** An ajTableMapDel 'apply' function to clear the Ensembl Coordinate System
+** An ajTableMapDel "apply" function to clear the Ensembl Coordinate System
 ** Adaptor-internal Ensembl Coordinate System cache. This function deletes the
 ** unsigned integer identifier key data and the Ensembl Coordinate System value
 ** data.
@@ -1925,9 +2028,9 @@ EnsPCoordsystemadaptor ensCoordsystemadaptorNew(
 ** @@
 ******************************************************************************/
 
-static void coordsystemadaptorClearIdentifierCache(void **key,
-                                                   void **value,
-                                                   void *cl)
+static void coordsystemadaptorClearIdentifierCache(void** key,
+                                                   void** value,
+                                                   void* cl)
 {
     if(!key)
         return;
@@ -1945,7 +2048,10 @@ static void coordsystemadaptorClearIdentifierCache(void **key,
 
     AJFREE(*key);
 
-    ensCoordsystemDel((EnsPCoordsystem *) value);
+    ensCoordsystemDel((EnsPCoordsystem*) value);
+
+    *key   = NULL;
+    *value = NULL;
 
     return;
 }
@@ -1955,7 +2061,7 @@ static void coordsystemadaptorClearIdentifierCache(void **key,
 
 /* @funcstatic coordsystemadaptorClearNameCacheL2 *****************************
 **
-** An ajTableMapDel 'apply' function to clear the Ensembl Coordinate System
+** An ajTableMapDel "apply" function to clear the Ensembl Coordinate System
 ** Adaptor-internal Ensembl Coordinate System cache. This function clears the
 ** second-level cache of Coordinate System version AJAX String key data and
 ** Ensembl Coordinate System value data.
@@ -1969,9 +2075,9 @@ static void coordsystemadaptorClearIdentifierCache(void **key,
 ** @@
 ******************************************************************************/
 
-static void coordsystemadaptorClearNameCacheL2(void **key,
-                                               void **value,
-                                               void *cl)
+static void coordsystemadaptorClearNameCacheL2(void** key,
+                                               void** value,
+                                               void* cl)
 {
     if(!key)
         return;
@@ -1987,9 +2093,12 @@ static void coordsystemadaptorClearNameCacheL2(void **key,
 
     (void) cl;
 
-    ajStrDel((AjPStr *) key);
+    ajStrDel((AjPStr*) key);
 
-    ensCoordsystemDel((EnsPCoordsystem *) value);
+    ensCoordsystemDel((EnsPCoordsystem*) value);
+
+    *key   = NULL;
+    *value = NULL;
 
     return;
 }
@@ -1999,7 +2108,7 @@ static void coordsystemadaptorClearNameCacheL2(void **key,
 
 /* @funcstatic coordsystemadaptorClearNameCacheL1 *****************************
 **
-** An ajTableMapDel 'apply' function to clear the Ensembl Coordinate System
+** An ajTableMapDel "apply" function to clear the Ensembl Coordinate System
 ** Adaptor-internal Ensembl Coordinate System cache. This function clears the
 ** first-level cache of Coordinate System name AJAX String key data and the
 ** second-level AJAX Table value data.
@@ -2013,9 +2122,9 @@ static void coordsystemadaptorClearNameCacheL2(void **key,
 ** @@
 ******************************************************************************/
 
-static void coordsystemadaptorClearNameCacheL1(void **key,
-                                               void **value,
-                                               void *cl)
+static void coordsystemadaptorClearNameCacheL1(void** key,
+                                               void** value,
+                                               void* cl)
 {
     if(!key)
         return;
@@ -2031,13 +2140,16 @@ static void coordsystemadaptorClearNameCacheL1(void **key,
 
     (void) cl;
 
-    ajStrDel((AjPStr *) key);
+    ajStrDel((AjPStr*) key);
 
-    ajTableMapDel(*((AjPTable *) value),
+    ajTableMapDel(*((AjPTable*) value),
                   coordsystemadaptorClearNameCacheL2,
                   NULL);
 
-    ajTableFree((AjPTable *) value);
+    ajTableFree((AjPTable*) value);
+
+    *key   = NULL;
+    *value = NULL;
 
     return;
 }
@@ -2068,7 +2180,7 @@ static AjBool coordsystemadaptorCacheExit(EnsPCoordsystemadaptor csa)
 
     /* Clear the Sequence-level cache */
 
-    ensCoordsystemDel((EnsPCoordsystem *) &csa->SeqLevel);
+    ensCoordsystemDel((EnsPCoordsystem*) &csa->Seqlevel);
 
     /* Clear the identifier cache. */
 
@@ -2110,7 +2222,7 @@ static AjBool coordsystemadaptorCacheExit(EnsPCoordsystemadaptor csa)
 
 /* @funcstatic coordsystemadaptorClearMapPath *********************************
 **
-** An ajTableMapDel 'apply' function to clear the Ensembl Coordinate System
+** An ajTableMapDel "apply" function to clear the Ensembl Coordinate System
 ** Adaptor-internal Coordinate System mapping path. This function clears
 ** the AJAX String key data and the AJAX List value data, as well as the
 ** Ensembl Coordinate Systems from the AJAX List.
@@ -2124,9 +2236,9 @@ static AjBool coordsystemadaptorCacheExit(EnsPCoordsystemadaptor csa)
 ** @@
 ******************************************************************************/
 
-static void coordsystemadaptorClearMapPath(void **key,
-                                           void **value,
-                                           void *cl)
+static void coordsystemadaptorClearMapPath(void** key,
+                                           void** value,
+                                           void* cl)
 {
     EnsPCoordsystem cs = NULL;
 
@@ -2144,12 +2256,15 @@ static void coordsystemadaptorClearMapPath(void **key,
 
     (void) cl;
 
-    ajStrDel((AjPStr *) key);
+    ajStrDel((AjPStr*) key);
 
-    while(ajListPop(*((AjPList *) value), (void **) &cs))
+    while(ajListPop(*((AjPList*) value), (void**) &cs))
         ensCoordsystemDel(&cs);
 
-    ajListFree((AjPList *) value);
+    ajListFree((AjPList*) value);
+
+    *key   = NULL;
+    *value = NULL;
 
     return;
 }
@@ -2185,7 +2300,7 @@ static AjBool coordsystemadaptorMapPathExit(EnsPCoordsystemadaptor csa)
 
 /* @funcstatic coordsystemadaptorClearSeqregionMap ****************************
 **
-** An ajTableMapDel 'apply' function to clear the Ensembl Coordinate System
+** An ajTableMapDel "apply" function to clear the Ensembl Coordinate System
 ** Adaptor-internal Ensembl Sequence Region identifier mapping cache.
 ** This function clears the unsigned integer key data and the unsigned integer
 ** value data.
@@ -2199,9 +2314,9 @@ static AjBool coordsystemadaptorMapPathExit(EnsPCoordsystemadaptor csa)
 ** @@
 ******************************************************************************/
 
-static void coordsystemadaptorClearSeqregionMap(void **key,
-                                                void **value,
-                                                void *cl)
+static void coordsystemadaptorClearSeqregionMap(void** key,
+                                                void** value,
+                                                void* cl)
 {
     if(!key)
         return;
@@ -2219,6 +2334,9 @@ static void coordsystemadaptorClearSeqregionMap(void **key,
 
     AJFREE(*key);
     AJFREE(*value);
+
+    *key   = NULL;
+    *value = NULL;
 
     return;
 }
@@ -2260,11 +2378,32 @@ static AjBool coordsystemadaptorSeqregionMapExit(EnsPCoordsystemadaptor csa)
 
 
 
+/* @section destructors *******************************************************
+**
+** Destruction destroys all internal data structures and frees the
+** memory allocated for an Ensembl Coordinate System Adaptor object.
+**
+** @fdata [EnsPCoordsystemadaptor]
+**
+** @nam3rule Del Destroy (free) an Ensembl Coordinate System Adaptor object
+**
+** @argrule * Pcsa [EnsPCoordsystemadaptor*] Ensembl Coordinate System Adaptor
+**                                           object address
+**
+** @valrule * [void]
+**
+** @fcategory delete
+******************************************************************************/
+
+
+
+
 /* @func ensCoordsystemadaptorDel *********************************************
 **
 ** Default destructor for an Ensembl Coordinate System Adaptor.
-** This function also clears the internal cordinate system and mapping path
-** caches.
+**
+** This function also clears the internal Ensembl Coordinate System and
+** mapping path caches.
 **
 ** Ensembl Object Adaptors are singleton objects that are registered in the
 ** Ensembl Registry and weakly referenced by Ensembl Objects that have been
@@ -2273,7 +2412,7 @@ static AjBool coordsystemadaptorSeqregionMapExit(EnsPCoordsystemadaptor csa)
 ** if required.
 **
 ** @param [d] Pcsa [EnsPCoordsystemadaptor*] Ensembl Coordinate System Adaptor
-**                                           address
+**                                           object address
 **
 ** @return [void]
 ** @@
@@ -2304,7 +2443,7 @@ void ensCoordsystemadaptorDel(EnsPCoordsystemadaptor* Pcsa)
 
     /* Clear the top-level cache. */
 
-    ensCoordsystemDel((EnsPCoordsystem *) &pthis->TopLevel);
+    ensCoordsystemDel((EnsPCoordsystem*) &pthis->Toplevel);
 
     AJFREE(pthis);
 
@@ -2322,14 +2461,16 @@ void ensCoordsystemadaptorDel(EnsPCoordsystemadaptor* Pcsa)
 ** object.
 **
 ** @fdata [EnsPCoordsystemadaptor]
-** @fcategory use
 **
 ** @nam3rule Get Return Coordinate System Adaptor attribute(s)
-** @nam4rule GetDatabaseadaptor Return the Ensembl Database Adaptor
+** @nam4rule Databaseadaptor Return the Ensembl Database Adaptor
 **
 ** @argrule * csa [const EnsPCoordsystemadaptor] Coordinate System Adaptor
 **
 ** @valrule Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** or NULL
+**
+** @fcategory use
 ******************************************************************************/
 
 
@@ -2359,25 +2500,41 @@ EnsPDatabaseadaptor ensCoordsystemadaptorGetDatabaseadaptor(
 
 
 
-/* @section object retrieval **************************************************
+/* @section object fetching ***************************************************
 **
-** Functions for retrieving Ensembl Coordinate System objects from an
-** Ensembl Core database.
+** Functions for fetching Ensembl Coordinate System objects from an
+** Ensembl SQL database.
 **
 ** @fdata [EnsPCoordsystemadaptor]
-** @fnote None
 **
-** @nam3rule Fetch Retrieve Ensembl Coordinate System object(s)
-** @nam4rule FetchAll Retrieve all Ensembl Coordinate System objects
-** @nam5rule FetchAllBy Retrieve all Ensembl Coordinate System objects
-**                      matching a criterion
-** @nam4rule FetchBy Retrieve one Ensembl Coordinate System object
-**                   matching a criterion
+** @nam3rule Fetch Fetch Ensembl Coordinate System object(s)
+** @nam4rule All   Fetch all Ensembl Coordinate System objects
+** @nam4rule Allby Fetch all Ensembl Coordinate System objects
+**                 matching a criterion
+** @nam5rule Name  Fetch all by a name
+** @nam4rule By    Fetch one Ensembl Coordinate System object
+**                 matching a criterion
+** @nam5rule Identifier Fetch by an SQL database-internal identifier
+** @nam5rule Name  Fetch by a name
+** @nam5rule Rank  Fetch by a rank
+** @nam4rule Seqlevel Fetch the sequence-level Ensembl Coordinate System
+** @nam4rule Toplevel Fetch the top-level Ensembl Coordinate System
 **
-** @argrule * csa [const EnsPCoordsystemadaptor] Ensembl Coordinate
-**                                               System Adaptor
-** @argrule FetchAll css [AjPList] AJAX List of Ensembl Coordinate Systems
-** @argrule FetchBy Pcs [EnsPCoordsystem*] Ensembl Coordinate System address
+** @argrule * csa [const EnsPCoordsystemadaptor]
+** Ensembl Coordinate System Adaptor
+** @argrule All css [AjPList] AJAX List of Ensembl Coordinate System objects
+** @argrule AllbyName name [const AjPStr] Name
+** @argrule Allby css [AjPList] AJAX List of Ensembl Coordinate System objects
+** @argrule ByIdentifier identifier [ajuint] SQL database-internal identifier
+** @argrule ByIdentifier Pcs [EnsPCoordsystem*] Ensembl Coordinate System
+** address
+** @argrule ByName name [const AjPStr] Name
+** @argrule ByName version [const AjPStr] Version
+** @argrule ByName Pcs [EnsPCoordsystem*] Ensembl Coordinate System address
+** @argrule ByRank rank [ajuint] Rank
+** @argrule ByRank Pcs [EnsPCoordsystem*] Ensembl Coordinate System address
+** @argrule Seqlevel Pcs [EnsPCoordsystem*] Ensembl Coordinate System address
+** @argrule Toplevel Pcs [EnsPCoordsystem*] Ensembl Coordinate System address
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -2389,12 +2546,12 @@ EnsPDatabaseadaptor ensCoordsystemadaptorGetDatabaseadaptor(
 
 /* @funcstatic coordsystemadaptorFetchAll *************************************
 **
-** An ajTableMap 'apply' function to return all Ensembl Coordinate Systems from
+** An ajTableMap "apply" function to return all Ensembl Coordinate Systems from
 ** an Ensembl Coordinate System Adaptor-internal cache.
 ** The caller is responsible for deleting the Ensembl Coordinate Systems before
 ** deleting the AJAX List.
 **
-** @param [u] key [const void *] AJAX unsigned integer key data address
+** @param [u] key [const void*] AJAX unsigned integer key data address
 ** @param [u] value [void**] Ensembl Coordinate System value data address
 ** @param [u] cl [void*] AJAX List of Ensembl Coordinate System objects,
 **                       passed in via ajTableMap
@@ -2404,9 +2561,9 @@ EnsPDatabaseadaptor ensCoordsystemadaptorGetDatabaseadaptor(
 ** @@
 ******************************************************************************/
 
-static void coordsystemadaptorFetchAll(const void *key,
-                                       void **value,
-                                       void *cl)
+static void coordsystemadaptorFetchAll(const void* key,
+                                       void** value,
+                                       void* cl)
 {
     if(!key)
         return;
@@ -2420,8 +2577,8 @@ static void coordsystemadaptorFetchAll(const void *key,
     if(!cl)
         return;
 
-    ajListPushAppend((AjPList) cl, (void *)
-                     ensCoordsystemNewRef(*((EnsPCoordsystem *) value)));
+    ajListPushAppend((AjPList) cl, (void*)
+                     ensCoordsystemNewRef(*((EnsPCoordsystem*) value)));
 
     return;
 }
@@ -2455,7 +2612,7 @@ AjBool ensCoordsystemadaptorFetchAll(const EnsPCoordsystemadaptor csa,
 
     ajTableMap(csa->CacheByIdentifier,
                coordsystemadaptorFetchAll,
-               (void *) css);
+               (void*) css);
 
     return ajTrue;
 }
@@ -2463,7 +2620,7 @@ AjBool ensCoordsystemadaptorFetchAll(const EnsPCoordsystemadaptor csa,
 
 
 
-/* @func ensCoordsystemadaptorFetchAllByName **********************************
+/* @func ensCoordsystemadaptorFetchAllbyName **********************************
 **
 ** Fetch Ensembl Coordinate Systems of all versions for a name.
 ** The caller is responsible for deleting the Ensembl Coordinate Systems before
@@ -2479,7 +2636,7 @@ AjBool ensCoordsystemadaptorFetchAll(const EnsPCoordsystemadaptor csa,
 ** @@
 ******************************************************************************/
 
-AjBool ensCoordsystemadaptorFetchAllByName(
+AjBool ensCoordsystemadaptorFetchAllbyName(
     const EnsPCoordsystemadaptor csa,
     const AjPStr name,
     AjPList css)
@@ -2499,27 +2656,27 @@ AjBool ensCoordsystemadaptorFetchAllByName(
 
     if(ajStrMatchCaseC(name, "seqlevel"))
     {
-        ensCoordsystemadaptorFetchSeqLevel(csa, &cs);
+        ensCoordsystemadaptorFetchSeqlevel(csa, &cs);
 
-        ajListPushAppend(css, (void *) cs);
+        ajListPushAppend(css, (void*) cs);
 
         return ajTrue;
     }
 
     if(ajStrMatchCaseC(name, "toplevel"))
     {
-        ensCoordsystemadaptorFetchTopLevel(csa, &cs);
+        ensCoordsystemadaptorFetchToplevel(csa, &cs);
 
-        ajListPushAppend(css, (void *) cs);
+        ajListPushAppend(css, (void*) cs);
 
         return ajTrue;
     }
 
-    versions = (AjPTable)
-        ajTableFetch(csa->CacheByName, (const void *) name);
+    versions = (AjPTable) ajTableFetchmodV(csa->CacheByName,
+                                           (const void*) name);
 
     if(versions)
-        ajTableMap(versions, coordsystemadaptorFetchAll, (void *) css);
+        ajTableMap(versions, coordsystemadaptorFetchAll, (void*) css);
 
     return ajTrue;
 }
@@ -2529,7 +2686,7 @@ AjBool ensCoordsystemadaptorFetchAllByName(
 
 /* @func ensCoordsystemadaptorFetchByIdentifier *******************************
 **
-** Fetch an Ensembl Coordinate System by its internal database identifier.
+** Fetch an Ensembl Coordinate System by its SQL database-internal identifier.
 ** The caller is responsible for deleting the Ensembl Coordinate System.
 **
 ** @cc Bio::EnsEMBL::DBSQL::CoordSystemAdaptor::fetch_by_dbID
@@ -2545,7 +2702,7 @@ AjBool ensCoordsystemadaptorFetchAllByName(
 AjBool ensCoordsystemadaptorFetchByIdentifier(
     const EnsPCoordsystemadaptor csa,
     ajuint identifier,
-    EnsPCoordsystem *Pcs)
+    EnsPCoordsystem* Pcs)
 {
     if(!csa)
         return ajFalse;
@@ -2556,8 +2713,8 @@ AjBool ensCoordsystemadaptorFetchByIdentifier(
     if(!Pcs)
         return ajFalse;
 
-    *Pcs = (EnsPCoordsystem)
-        ajTableFetch(csa->CacheByIdentifier, (const void *) &identifier);
+    *Pcs = (EnsPCoordsystem) ajTableFetchmodV(csa->CacheByIdentifier,
+                                              (const void*) &identifier);
 
     ensCoordsystemNewRef(*Pcs);
 
@@ -2587,9 +2744,9 @@ AjBool ensCoordsystemadaptorFetchByName(
     const EnsPCoordsystemadaptor csa,
     const AjPStr name,
     const AjPStr version,
-    EnsPCoordsystem *Pcs)
+    EnsPCoordsystem* Pcs)
 {
-    void **valarray = NULL;
+    void** valarray = NULL;
 
     register ajuint i = 0;
 
@@ -2620,19 +2777,19 @@ AjBool ensCoordsystemadaptorFetchByName(
     *Pcs = (EnsPCoordsystem) NULL;
 
     if(ajStrMatchCaseC(name, "seqlevel"))
-        return ensCoordsystemadaptorFetchSeqLevel(csa, Pcs);
+        return ensCoordsystemadaptorFetchSeqlevel(csa, Pcs);
 
     if(ajStrMatchCaseC(name, "toplevel"))
-        return ensCoordsystemadaptorFetchTopLevel(csa, Pcs);
+        return ensCoordsystemadaptorFetchToplevel(csa, Pcs);
 
-    versions = (AjPTable)
-        ajTableFetch(csa->CacheByName, (const void *) name);
+    versions = (AjPTable) ajTableFetchmodV(csa->CacheByName,
+                                           (const void*) name);
 
     if(versions)
     {
         if(version && ajStrGetLen(version))
-            *Pcs = (EnsPCoordsystem)
-                ajTableFetch(versions, (const void *) version);
+            *Pcs = (EnsPCoordsystem) ajTableFetchmodV(versions,
+                                                      (const void*) version);
         else
         {
             /*
@@ -2686,19 +2843,19 @@ AjBool ensCoordsystemadaptorFetchByName(
 AjBool ensCoordsystemadaptorFetchByRank(
     const EnsPCoordsystemadaptor csa,
     ajuint rank,
-    EnsPCoordsystem *Pcs)
+    EnsPCoordsystem* Pcs)
 {
     if(!csa)
         return ajFalse;
 
     if(!rank)
-        return ensCoordsystemadaptorFetchTopLevel(csa, Pcs);
+        return ensCoordsystemadaptorFetchToplevel(csa, Pcs);
 
     if(!Pcs)
         return ajFalse;
 
-    *Pcs = (EnsPCoordsystem)
-        ajTableFetch(csa->CacheByRank, (const void *) &rank);
+    *Pcs = (EnsPCoordsystem) ajTableFetchmodV(csa->CacheByRank,
+                                              (const void*) &rank);
 
     ensCoordsystemNewRef(*Pcs);
 
@@ -2708,7 +2865,7 @@ AjBool ensCoordsystemadaptorFetchByRank(
 
 
 
-/* @func ensCoordsystemadaptorFetchSeqLevel ***********************************
+/* @func ensCoordsystemadaptorFetchSeqlevel ***********************************
 **
 ** Fetch the sequence-level Ensembl Coordinate System.
 ** The caller is responsible for deleting the Ensembl Coordinate System.
@@ -2722,9 +2879,9 @@ AjBool ensCoordsystemadaptorFetchByRank(
 ** @@
 ******************************************************************************/
 
-AjBool ensCoordsystemadaptorFetchSeqLevel(
+AjBool ensCoordsystemadaptorFetchSeqlevel(
     const EnsPCoordsystemadaptor csa,
-    EnsPCoordsystem *Pcs)
+    EnsPCoordsystem* Pcs)
 {
     if(!csa)
         return ajFalse;
@@ -2732,7 +2889,7 @@ AjBool ensCoordsystemadaptorFetchSeqLevel(
     if(!Pcs)
         return ajFalse;
 
-    *Pcs = ensCoordsystemNewRef((EnsPCoordsystem) csa->SeqLevel);
+    *Pcs = ensCoordsystemNewRef((EnsPCoordsystem) csa->Seqlevel);
 
     return ajTrue;
 }
@@ -2740,7 +2897,7 @@ AjBool ensCoordsystemadaptorFetchSeqLevel(
 
 
 
-/* @func ensCoordsystemadaptorFetchTopLevel ***********************************
+/* @func ensCoordsystemadaptorFetchToplevel ***********************************
 **
 ** Fetch the top-level Ensembl Coordinate System.
 ** The caller is responsible for deleting the Ensembl Coordinate System.
@@ -2754,9 +2911,9 @@ AjBool ensCoordsystemadaptorFetchSeqLevel(
 ** @@
 ******************************************************************************/
 
-AjBool ensCoordsystemadaptorFetchTopLevel(
+AjBool ensCoordsystemadaptorFetchToplevel(
     const EnsPCoordsystemadaptor csa,
-    EnsPCoordsystem *Pcs)
+    EnsPCoordsystem* Pcs)
 {
     if(!csa)
         return ajFalse;
@@ -2764,7 +2921,7 @@ AjBool ensCoordsystemadaptorFetchTopLevel(
     if(!Pcs)
         return ajFalse;
 
-    *Pcs = ensCoordsystemNewRef((EnsPCoordsystem) csa->TopLevel);
+    *Pcs = ensCoordsystemNewRef((EnsPCoordsystem) csa->Toplevel);
 
     return ajTrue;
 }
@@ -2772,15 +2929,45 @@ AjBool ensCoordsystemadaptorFetchTopLevel(
 
 
 
-/* @func ensCoordsystemadaptorGetMappingPath **********************************
+/* @section element retrieval *************************************************
+**
+** Functions for returning elements of an Ensembl Coordinate System Adaptor
+** object.
+**
+** @fdata [EnsPCoordsystemadaptor]
+**
+** @nam3rule Get Return Coordinate System Adaptor attribute(s)
+** @nam4rule Mappingpath Return the Ensembl Coordinate System mapping path
+** @nam4rule Seqregionidentifier Return an Ensembl Sequence Region identifier
+** @nam5rule External Return the external identifier
+** @nam5rule Internal Return the internal identifier
+**
+** @argrule * csa [const EnsPCoordsystemadaptor] Coordinate System Adaptor
+** @argrule Mappingpath cs1 [EnsPCoordsystem] First Ensembl Coordinate System
+** @argrule Mappingpath cs2 [EnsPCoordsystem] Second Ensembl Coordinate System
+** @argrule External srid [ajuint] Internal Ensembl Sequence Region identifier
+** @argrule Internal srid [ajuint] External Ensembl Sequence Region identifier
+**
+** @valrule Mappingpath [const AjPList] AJAX List of
+** Ensembl Coordinate System objects or NULL
+** @valrule External [ajuint] External Ensembl Sequence Region identifier or 0
+** @valrule Internal [ajuint] Internal Ensembl Sequence Region identifier or 0
+**
+** @fcategory use
+******************************************************************************/
+
+
+
+
+/* @func ensCoordsystemadaptorGetMappingpath **********************************
 **
 ** Fetch a mapping path between two Ensembl Coordinate Systems.
 **
 ** @cc Bio::EnsEMBL::DBSQL::CoordSystemAdaptor::get_mapping_path
 ** @param [r] csa [const EnsPCoordsystemadaptor] Ensembl Coordinate
 **                                               System Adaptor
-** @param [r] cs1 [EnsPCoordsystem] First Ensembl Coordinate System
-** @param [r] cs2 [EnsPCoordsystem] Second Ensembl Coordinate System
+** @param [u] cs1 [EnsPCoordsystem] First Ensembl Coordinate System
+** @param [u] cs2 [EnsPCoordsystem] Second Ensembl Coordinate System
 **
 ** @return [const AjPList] AJAX List of Ensembl Coordinate Systems or NULL
 ** @@
@@ -2814,13 +3001,13 @@ AjBool ensCoordsystemadaptorFetchTopLevel(
 ** In those cases, the mapping path is elongated by an empty middle node.
 ******************************************************************************/
 
-const AjPList ensCoordsystemadaptorGetMappingPath(
+const AjPList ensCoordsystemadaptorGetMappingpath(
     const EnsPCoordsystemadaptor csa,
     EnsPCoordsystem cs1,
     EnsPCoordsystem cs2)
 {
-    void **keyarray = NULL;
-    void **valarray = NULL;
+    void** keyarray = NULL;
+    void** valarray = NULL;
 
     register ajuint i = 0;
 
@@ -2848,11 +3035,11 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
     EnsPCoordsystem csp1 = NULL;
     EnsPCoordsystem midcs = NULL;
 
-    debug = ajDebugTest("ensCoordsystemadaptorGetMappingPath");
+    debug = ajDebugTest("ensCoordsystemadaptorGetMappingpath");
 
     if(debug)
     {
-        ajDebug("ensCoordsystemadaptorGetMappingPath\n"
+        ajDebug("ensCoordsystemadaptorGetMappingpath\n"
                 "  csa %p\n"
                 "  cs1 %p\n"
                 "  cs2 %p\n",
@@ -2880,7 +3067,8 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
 
     mapkey = ajFmtStr("%S|%S", cs1key, cs2key);
 
-    mappath = (AjPList) ajTableFetch(csa->MappingPaths, (const void *) mapkey);
+    mappath = (AjPList) ajTableFetchmodV(csa->MappingPaths,
+                                         (const void*) mapkey);
 
     ajStrDel(&mapkey);
 
@@ -2896,7 +3084,8 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
 
     mapkey = ajFmtStr("%S|%S", cs2key, cs1key);
 
-    mappath = (AjPList) ajTableFetch(csa->MappingPaths, (const void *) mapkey);
+    mappath = (AjPList) ajTableFetchmodV(csa->MappingPaths,
+                                         (const void*) mapkey);
 
     ajStrDel(&mapkey);
 
@@ -2914,7 +3103,7 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
     */
 
     if(debug)
-        ajDebug("ensCoordsystemadaptorGetMappingPath got no explicit mapping "
+        ajDebug("ensCoordsystemadaptorGetMappingpath got no explicit mapping "
                 "path between Ensembl Coordinate Systems '%S' and '%S'.\n",
                 cs1key, cs2key);
 
@@ -2923,8 +3112,8 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
     ** Coordinate System Adaptor.
     */
 
-    midcs1 = ajTablestrNewLen(0);
-    midcs2 = ajTablestrNewLen(0);
+    midcs1 = ensTablestrNewLen(0);
+    midcs2 = ensTablestrNewLen(0);
 
     ajTableToarrayKeysValues(csa->MappingPaths, &keyarray, &valarray);
 
@@ -2937,8 +3126,8 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
         if(ajListGetLength(tmppath) != 2)
             continue;
 
-        ajListPeekNumber(tmppath, 0, (void **) &csp0);
-        ajListPeekNumber(tmppath, 1, (void **) &csp1);
+        ajListPeekNumber(tmppath, 0, (void**) &csp0);
+        ajListPeekNumber(tmppath, 1, (void**) &csp1);
 
         match = -1;
 
@@ -2950,28 +3139,28 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
 
         if(match >= 0)
         {
-            ajListPeekNumber(tmppath, (ajuint) match, (void **) &midcs);
+            ajListPeekNumber(tmppath, (ajuint) match, (void**) &midcs);
 
             midkey = ajFmtStr("%S:%S", midcs->Name, midcs->Version);
 
-            if(ajTableFetch(midcs2, (const void *) midkey))
+            if(ajTableFetchmodV(midcs2, (const void*) midkey))
             {
                 mapkey = ajFmtStr("%S|%S", cs1key, cs2key);
 
                 midpath = ajListNew();
 
                 ajListPushAppend(midpath,
-                                 (void *) ensCoordsystemNewRef(cs1));
+                                 (void*) ensCoordsystemNewRef(cs1));
 
                 ajListPushAppend(midpath,
-                                 (void *) ensCoordsystemNewRef(midcs));
+                                 (void*) ensCoordsystemNewRef(midcs));
 
                 ajListPushAppend(midpath,
-                                 (void *) ensCoordsystemNewRef(cs2));
+                                 (void*) ensCoordsystemNewRef(cs2));
 
                 ajTablePut(csa->MappingPaths,
-                           (void *) mapkey,
-                           (void *) midpath);
+                           (void*) mapkey,
+                           (void*) midpath);
 
                 mappath = midpath;
 
@@ -2992,7 +3181,7 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
                     ajFmtStr("%S:%S", cs2->Name, cs2->Version) :
                     ajStrNewS(cs2->Name);
 
-                ajWarn("ensCoordsystemadaptorGetMappingPath uses an implicit"
+                ajWarn("ensCoordsystemadaptorGetMappingpath uses an implicit"
                        "mapping path between Ensembl Coordinate Systems "
                        "'%S' and '%S'.\n"
                        "An explicit 'assembly.mapping' entry should be "
@@ -3013,11 +3202,11 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
                 midpath = ajListNew();
 
                 ajListPushAppend(midpath,
-                                 (void *) ensCoordsystemNewRef(midcs));
+                                 (void*) ensCoordsystemNewRef(midcs));
 
                 ajTablePut(midcs1,
-                           (void *) ajStrNewS(midkey),
-                           (void *) midpath);
+                           (void*) ajStrNewS(midkey),
+                           (void*) midpath);
             }
 
             ajStrDel(&midkey);
@@ -3033,28 +3222,28 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
 
         if(match >= 0)
         {
-            ajListPeekNumber(tmppath, (ajuint) match, (void **) &midcs);
+            ajListPeekNumber(tmppath, (ajuint) match, (void**) &midcs);
 
             midkey = ajFmtStr("%S:%S", midcs->Name, midcs->Version);
 
-            if(ajTableFetch(midcs1, (const void *) midkey))
+            if(ajTableFetchmodV(midcs1, (const void*) midkey))
             {
                 mapkey = ajFmtStr("%S|%S", cs2key, cs1key);
 
                 midpath = ajListNew();
 
                 ajListPushAppend(midpath,
-                                 (void *) ensCoordsystemNewRef(cs2));
+                                 (void*) ensCoordsystemNewRef(cs2));
 
                 ajListPushAppend(midpath,
-                                 (void *) ensCoordsystemNewRef(midcs));
+                                 (void*) ensCoordsystemNewRef(midcs));
 
                 ajListPushAppend(midpath,
-                                 (void *) ensCoordsystemNewRef(cs1));
+                                 (void*) ensCoordsystemNewRef(cs1));
 
                 ajTablePut(csa->MappingPaths,
-                           (void *) mapkey,
-                           (void *) midpath);
+                           (void*) mapkey,
+                           (void*) midpath);
 
                 mappath = midpath;
 
@@ -3075,7 +3264,7 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
                     ajFmtStr("%S:%S", cs2->Name, cs2->Version) :
                     ajStrNewS(cs2->Name);
 
-                ajWarn("ensCoordsystemadaptorGetMappingPath uses an implicit "
+                ajWarn("ensCoordsystemadaptorGetMappingpath uses an implicit "
                        "mapping path between Ensembl Coordinate Systems "
                        "'%S' and '%S'.\n"
                        "An explicit 'assembly.mapping' entry should be "
@@ -3096,11 +3285,11 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
                 midpath = ajListNew();
 
                 ajListPushAppend(midpath,
-                                 (void *) ensCoordsystemNewRef(midcs));
+                                 (void*) ensCoordsystemNewRef(midcs));
 
                 ajTablePut(midcs2,
-                           (void *) ajStrNewS(midkey),
-                           (void *) midpath);
+                           (void*) ajStrNewS(midkey),
+                           (void*) midpath);
             }
 
             ajStrDel(&midkey);
@@ -3112,21 +3301,22 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
     AJFREE(valarray);
 
     /*
-    ** Clear the temporary AJAX Tables of AJAX String keys and AJAX List
-    ** values, before deleting the Tables.
-    ** Do not delete Coordinate Systems from the Lists.
+    ** Clear the temporary AJAX Table objects of AJAX String key and AJAX List
+    ** value data, before deleting the AJAX Table objects.
+    ** Do not delete Ensembl Coordinate System objects from the
+    ** AJAX List objects.
     */
 
     ajTableToarrayKeysValues(midcs1, &keyarray, &valarray);
 
     for(i = 0; keyarray[i]; i++)
     {
-        ajStrDel((AjPStr *) &keyarray[i]);
+        ajStrDel((AjPStr*) &keyarray[i]);
 
-        while(ajListPop((AjPList) valarray[i], (void **) &midcs))
+        while(ajListPop((AjPList) valarray[i], (void**) &midcs))
             ensCoordsystemDel(&midcs);
 
-        ajListFree((AjPList *) &valarray[i]);
+        ajListFree((AjPList*) &valarray[i]);
     }
 
     AJFREE(keyarray);
@@ -3138,12 +3328,12 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
 
     for(i = 0; keyarray[i]; i++)
     {
-        ajStrDel((AjPStr *) &keyarray[i]);
+        ajStrDel((AjPStr*) &keyarray[i]);
 
-        while(ajListPop((AjPList) valarray[i], (void **) &midcs))
+        while(ajListPop((AjPList) valarray[i], (void**) &midcs))
             ensCoordsystemDel(&midcs);
 
-        ajListFree((AjPList *) &valarray[i]);
+        ajListFree((AjPList*) &valarray[i]);
     }
 
     AJFREE(keyarray);
@@ -3160,7 +3350,7 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
 
 
 
-/* @func ensCoordsystemadaptorGetExternalSeqregionIdentifier ******************
+/* @func ensCoordsystemadaptorGetSeqregionidentifierExternal ******************
 **
 ** Get the external Ensembl Sequence Region identifier for an
 ** internal Ensembl Sequence Region identifier.
@@ -3175,11 +3365,11 @@ const AjPList ensCoordsystemadaptorGetMappingPath(
 ** @@
 ******************************************************************************/
 
-ajuint ensCoordsystemadaptorGetExternalSeqregionIdentifier(
+ajuint ensCoordsystemadaptorGetSeqregionidentifierExternal(
     const EnsPCoordsystemadaptor csa,
     ajuint srid)
 {
-    ajuint *Pidentifier = NULL;
+    ajuint* Pidentifier = NULL;
 
     if(!csa)
         return 0;
@@ -3187,8 +3377,8 @@ ajuint ensCoordsystemadaptorGetExternalSeqregionIdentifier(
     if(!srid)
         return 0;
 
-    Pidentifier = (ajuint *)
-        ajTableFetch(csa->InternalToExternal, (const void *) &srid);
+    Pidentifier = (ajuint*) ajTableFetchmodV(csa->InternalToExternal,
+                                             (const void*) &srid);
 
     if(Pidentifier)
         return *Pidentifier;
@@ -3199,7 +3389,7 @@ ajuint ensCoordsystemadaptorGetExternalSeqregionIdentifier(
 
 
 
-/* @func ensCoordsystemadaptorGetInternalSeqregionIdentifier ******************
+/* @func ensCoordsystemadaptorGetSeqregionidentifierInternal ******************
 **
 ** Get the internal Ensembl Sequence Region identifier for an
 ** external Ensembl Sequence Region identifier.
@@ -3214,11 +3404,11 @@ ajuint ensCoordsystemadaptorGetExternalSeqregionIdentifier(
 ** @@
 ******************************************************************************/
 
-ajuint ensCoordsystemadaptorGetInternalSeqregionIdentifier(
+ajuint ensCoordsystemadaptorGetSeqregionidentifierInternal(
     const EnsPCoordsystemadaptor csa,
     ajuint srid)
 {
-    ajuint *Pidentifier = NULL;
+    ajuint* Pidentifier = NULL;
 
     if(!csa)
         return 0;
@@ -3226,8 +3416,8 @@ ajuint ensCoordsystemadaptorGetInternalSeqregionIdentifier(
     if(!srid)
         return 0;
 
-    Pidentifier = (ajuint *)
-        ajTableFetch(csa->ExternalToInternal, (const void *) &srid);
+    Pidentifier = (ajuint*) ajTableFetchmodV(csa->ExternalToInternal,
+                                             (const void*) &srid);
 
     if(Pidentifier)
         return *Pidentifier;

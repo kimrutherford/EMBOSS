@@ -1,0 +1,314 @@
+                                    godef
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Find GO ontology terms by definition
+
+Description
+
+   godef searches the definition of gene ontology terms and returns
+   matching terms. The input is read from the installed GO database. The
+   ontology term output can be written to screen, to file, or passed to
+   another program. A wide range of standard ontology term formats may be
+   specified for input and output.
+
+   Optionally the search can be restricted to specified GO namespaces.
+
+Usage
+
+   Here is a sample session with godef
+
+
+% godef glycoprotein
+Find GO ontology terms by definition
+Obo output file [godef.obo]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Find GO ontology terms by definition
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-query]             string     Definition word(s) to search for in ontology
+                                  (Any string)
+  [-outfile]           outobo     [*.godef] Output ontology term file name
+
+   Additional (Optional) qualifiers:
+   -namespace          menu       [*] By default all terms are returned.
+                                  Searches can be limited to one or a few
+                                  namespaces. (Values: biological_process
+                                  (Biological process); cellular_component
+                                  (Cellular component); molecular_function
+                                  (Molecular function))
+
+   Advanced (Unprompted) qualifiers:
+   -subclasses         boolean    [N] Extend the query matches to include all
+                                  terms which are specialisations (GO
+                                  sub-classes) of the matched type.
+   -obsolete           boolean    [N] The default behaviour is to not use or
+                                  return obsolete terms. This option if set
+                                  will include all terms.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Ontology term output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   godef queries the gene ontology.
+
+Output file format
+
+   The output is a standard EMBOSS ontology term file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -oformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: obo,
+   brief, list, html, xml, json, excel.
+
+   See: http://emboss.sf.net/docs/themes/OntologyFormats.html for further
+   information on ontology formats.
+
+  Output files for usage example
+
+  File: godef.obo
+
+[Term]
+id: GO:0004579
+name: dolichyl-diphosphooligosaccharide-protein glycotransferase activity
+namespace: molecular_function
+def: Catalysis of the reaction: dolichyl diphosphooligosaccharide + protein L-as
+paragine = dolichyl diphosphate + a glycoprotein with the oligosaccharide chain
+attached by glycosylamine linkage to protein L-asparagine.
+synonym: "asparagine N-glycosyltransferase activity" EXACT [EC:2.4.1.119]
+synonym: "dolichyl-diphosphooligosaccharide-protein glycosyltransferase activity
+" EXACT []
+synonym: "dolichyl-diphosphooligosaccharide:protein-L-asparagine oligopolysaccha
+ridotransferase activity" EXACT [EC:2.4.1.119]
+synonym: "dolichyldiphosphooligosaccharide-protein glycosyltransferase activity"
+ EXACT [EC:2.4.1.119]
+synonym: "dolichyldiphosphooligosaccharide-protein oligosaccharyltransferase act
+ivity" EXACT [EC:2.4.1.119]
+synonym: "dolichyldiphosphoryloligosaccharide-protein oligosaccharyltransferase
+activity" EXACT [EC:2.4.1.119]
+synonym: "dolichylpyrophosphodiacetylchitobiose-protein glycosyltransferase acti
+vity" EXACT [EC:2.4.1.119]
+synonym: "oligomannosyltransferase activity" RELATED [EC:2.4.1.119]
+xref: EC:2.4.1.119
+xref: MetaCyc:2.4.1.119-RXN
+xref: Reactome:12500 "dolichyl-diphosphooligosaccharide-protein glycotransferase
+ activity"
+is_a: GO:0004576 ! oligosaccharyl transferase activity
+
+[Term]
+id: GO:0015572
+name: N-acetylglucosamine transmembrane transporter activity
+namespace: molecular_function
+def: Catalysis of the transfer of N-acetylglucosamine from one side of the membr
+ane to the other. The D isomer of N-acetylglucosamine is a common structural uni
+t of glycoproteins in plants, bacteria and animals; it is often the terminal sug
+ar of an oligosaccharide group of a glycoprotein.
+alt_id: GO:0015580
+subset: gosubset_prok
+synonym: "D-GlcNAc transmembrane transporter activity" EXACT []
+synonym: "N-Acetyl-D-glucosamine permease" RELATED []
+synonym: "N-acetyl-D-glucosamine transmembrane transporter activity" EXACT []
+synonym: "N-acetylchitosamine transmembrane transporter activity" EXACT []
+synonym: "N-acetylglucosamine permease activity" RELATED []
+is_a: GO:0015149 ! hexose transmembrane transporter activity
+
+[Term]
+id: GO:0002162
+name: dystroglycan binding
+namespace: molecular_function
+def: Interacting selectively and non-covalently with dystroglycan. Dystroglycan
+is glycoprotein found in non-muscle tissues as well as in muscle tissues, often
+in association with dystrophin. The native dystroglycan cleaved into two non-cov
+alently associated subunits, alpha (N-terminal) and beta (C-terminal).
+is_a: GO:0001948 ! glycoprotein binding
+
+[Term]
+id: GO:0031150
+name: sorocarp stalk development
+namespace: biological_process
+def: The process whose specific outcome is the progression of the sorocarp stalk
+ over time, from its formation to the mature structure. The sorocarp stalk is a
+tubular structure that consists of cellulose-covered cells stacked on top of eac
+h other and surrounded by an acellular stalk tube composed of cellulose and glyc
+oprotein. An example of this process is found in Dictyostelium discoideum.
+synonym: "sorophore development" EXACT []
+synonym: "stalk development" BROAD []
+synonym: "stalk formation" BROAD []
+is_a: GO:0003006 ! developmental process involved in reproduction
+is_a: GO:0048856 ! anatomical structure development
+relationship: part_of GO:0031154 ! culmination involved in sorocarp development
+
+
+  [Part of this file has been deleted for brevity]
+
+synonym: "positive regulation of glycoprotein biosynthetic process of formation
+of immunological synapse" EXACT [GOC:obol]
+synonym: "positive regulation of glycoprotein biosynthetic process of immunologi
+cal synapse formation" EXACT [GOC:obol]
+is_a: GO:0010560 ! positive regulation of glycoprotein biosynthetic process
+relationship: part_of GO:0001771 ! immunological synapse formation
+
+[Term]
+id: GO:0016914
+name: follicle-stimulating hormone complex
+namespace: cellular_component
+def: A gonadotrophic glycoprotein hormone secreted, in mammals, by the anterior
+pituitary gland; consists of alpha and beta subunits, the latter of which confer
+s hormonal specificity.
+synonym: "follicle stimulating hormone complex" EXACT []
+synonym: "FSH complex" EXACT []
+is_a: GO:0043234 ! protein complex
+is_a: GO:0044421 ! extracellular region part
+
+[Term]
+id: GO:0043256
+name: laminin complex
+namespace: cellular_component
+def: A large, extracellular glycoprotein complex composed of three different pol
+ypeptide chains, alpha, beta and gamma. Provides an integral part of the structu
+ral scaffolding of basement membranes.
+subset: goslim_pir
+is_a: GO:0043234 ! protein complex
+is_a: GO:0044420 ! extracellular matrix part
+relationship: part_of GO:0005605 ! basal lamina
+
+[Term]
+id: GO:0048829
+name: root cap development
+namespace: biological_process
+def: The process whose specific outcome is the progression of the root cap over
+time, from its formation to the mature structure. The root cap protects the root
+ meristem from friction as the root grows through the soil. The cap is made up o
+f a group of parenchyma cells which secrete a glycoprotein mucilage as a lubrica
+nt.
+is_a: GO:0048856 ! anatomical structure development
+relationship: part_of GO:0048364 ! root development
+
+[Term]
+id: GO:0051541
+name: elastin metabolic process
+namespace: biological_process
+def: The chemical reactions and pathways involving elastin, a glycoprotein which
+ is randomly coiled and crosslinked to form elastic fibers that are found in con
+nective tissue.
+synonym: "elastin metabolism" EXACT []
+is_a: GO:0009100 ! glycoprotein metabolic process
+
+[Term]
+id: GO:0033947
+name: mannosylglycoprotein endo-beta-mannosidase activity
+namespace: molecular_function
+def: Catalysis of the hydrolysis of the alpha-D-mannosyl-(1->6)-beta-D-mannosyl-
+(1->4)-beta-D-N-acetylglucosaminyl-(1->4)-beta-D-N-acetylglucosaminyl sequence o
+f glycoprotein to alpha-D-mannosyl-(1->6)-D-mannose and beta-D-N-acetylglucosami
+nyl-(1->4)-beta-D-N-acetylglucosaminyl sequences.
+synonym: "endo-beta-mannosidase activity" EXACT [EC:3.2.1.152]
+xref: EC:3.2.1.152
+xref: MetaCyc:3.2.1.152-RXN
+is_a: GO:0015923 ! mannosidase activity
+
+
+Data files
+
+   The gene Ontology is included in EMBOSS as local database go.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                     Program name                        Description
+                    edamdef         Find EDAM ontology terms by definition
+                    edamhasinput    Find EDAM ontology terms by has_input relation
+                    edamhasoutput   Find EDAM ontology terms by has_output relation
+                    edamisformat    Find EDAM ontology terms by is_format_of relation
+                    edamisid        Find EDAM ontology terms by is_identifier_of relation
+                    edamname        Find EDAM ontology terms by name
+                    goname          Find GO ontology terms by name
+                    ontoget         Get ontology term(s)
+                    ontogetcommon   Get common ancestor for terms
+                    ontogetdown     Get ontology term(s) by parent id
+   ontogetobsolete  Get ontology ontology terms
+                    ontogetroot     Get ontology root terms by child identifier
+                    ontogetsibs     Get ontology term(s) by id with common parent
+                    ontogetup       Get ontology term(s) by id of child
+                    ontoisobsolete  Report whether an ontology term id is obsolete
+                    ontotext        Get ontology term(s) original full text
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

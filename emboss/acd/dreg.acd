@@ -1,9 +1,11 @@
 application: dreg [
   documentation: "Regular expression search of nucleotide sequence(s)"
   groups: "Nucleic:Motifs"
-  relations: "/edam/topic/0000162 Nucleic acid sequence motifs"
-  relations: "/edam/operation/0000381 Nucleotide sequence motif searching"
-  relations: "/edam/operation/0000347 Sequence database search by motif or pattern"
+    relations: "EDAM:0000158 topic Sequence motifs"
+    relations: "EDAM:0000381 operation Sequence motif recognition
+                (nucleic acid)"
+    relations: "EDAM:0000347 operation Sequence database search
+                (by motif or pattern)"
 ]
 
 section: input [
@@ -14,16 +16,14 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "/edam/data/0001215 Pure DNA sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
   ]
 
   regexp: pattern [
     parameter: "Y"
     upper: "Y"
     information: "Regular expression pattern"
-    relations: "/edam/data/0001352 Regular expression"                                  
+    relations: "EDAM:0001352 data Regular expression"
   ]
 
 endsection: input
@@ -35,9 +35,9 @@ section: output [
 
   report: outfile [
     parameter: "Y"
-    taglist: "str:pat=Pattern_name"
+    taglist: "str:pat=Pattern"
     rformat: "seqtable"
-    relations: "/edam/data/0001298 Sequence motif report"
+    relations: "EDAM:0001298 data Sequence features (motifs)"
   ]
 
 endsection: output

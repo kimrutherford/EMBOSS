@@ -1,0 +1,25 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 9606.tax</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+id: 9606
+parent: 9605
+rank: species
+emblprefix: HS
+division: 5
+divflag: 1
+gencode: 1
+gcflag: 1
+mitocode: 2
+mgcflag 1
+hidden: 1
+nosequence: 1
+scientific name: Homo sapiens
+authority: Homo sapiens Linnaeus, 1758
+genbank common name: human
+common name: man
+
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,346 @@
+                                   ontoget
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Get ontology term(s)
+
+Description
+
+   ontoget displays on-screen for a named ontology whether term
+   statement(s) with the supplied IDs are obsolete or not. The information
+   may be written to an output file in various formats.
+
+   Ontologies from the EMBOSS data directory are used.
+
+Usage
+
+   Here is a sample session with ontoget
+
+
+% ontoget edam:0001234
+Get ontology term(s)
+Obo output file [0001234.obo]:
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+
+% ontoget edam:0000850 -subclasses
+Get ontology term(s)
+Obo output file [0000850.obo]:
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+Get ontology term(s)
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-oboterms]          obo        Obo term filename and optional format, or
+                                  reference (input query)
+  [-outfile]           outobo     [*.ontoget] Output ontology term file name
+
+   Additional (Optional) qualifiers:
+   -subclasses         boolean    [N] Extend the query matches to include all
+                                  terms which are specialisations
+                                  (sub-classes) of the matched terms.
+   -obsolete           boolean    [N] The default behaviour is to not use or
+                                  return obsolete terms. This option if set
+                                  will include all terms.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-oboterms" associated qualifiers
+   -iformat1           string     Input obo format
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Ontology term output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+  Input files for usage example
+
+  Database entry: edam:0001234
+
+[Term]
+id: EDAM:0001234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata tha
+t do not (typically) correspond to common sequence database records or database
+entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002977 ! Nucleic acid sequence
+
+
+  Input files for usage example 2
+
+  Database entry: edam:0000850
+
+[Term]
+id: EDAM:0000850
+name: Sequence set
+namespace: data
+def: A collection of multiple molecular sequences and associated metadata that d
+o not (typically) correspond to molecular sequence database records or entries a
+nd which (typically) are derived from some analytical method.
+comment: This term may be used for arbitrary sequence sets and associated data a
+rising from processing.
+subset: data
+is_a: EDAM:0002955 ! Sequence report
+
+
+Output file format
+
+   A single line per term is is given, including the term id, namespace
+   and name, and whether it is obsolete or not.
+
+  Output files for usage example
+
+  File: 0001234.obo
+
+[Term]
+id: EDAM:0001234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata tha
+t do not (typically) correspond to common sequence database records or database
+entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002977 ! Nucleic acid sequence
+
+
+  Output files for usage example 2
+
+  File: 0000850.obo
+
+[Term]
+id: EDAM:0000850
+name: Sequence set
+namespace: data
+def: A collection of multiple molecular sequences and associated metadata that d
+o not (typically) correspond to molecular sequence database records or entries a
+nd which (typically) are derived from some analytical method.
+comment: This term may be used for arbitrary sequence sets and associated data a
+rising from processing.
+subset: data
+is_a: EDAM:0002955 ! Sequence report
+
+[Term]
+id: EDAM:0001234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata tha
+t do not (typically) correspond to common sequence database records or database
+entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002977 ! Nucleic acid sequence
+
+[Term]
+id: EDAM:0001240
+name: PCR primers
+namespace: data
+def: Oligonucleotide primer(s) for PCR and DNA amplification, for example a mini
+mal primer set.
+subset: data
+is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+
+[Term]
+id: EDAM:0001246
+name: Sequence cluster (nucleic acid)
+namespace: data
+def: A cluster of nucleotide sequences.
+comment: The sequences are typically related, for example a family of sequences.
+subset: data
+synonym: "Nucleotide sequence cluster" EXACT []
+is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+is_a: EDAM:0001235 ! Sequence cluster
+
+[Term]
+id: EDAM:0002198
+name: Gene cluster
+namespace: data
+def: A cluster of similar genes.
+subset: data
+is_a: EDAM:0001246 ! Sequence cluster (nucleic acid)
+
+[Term]
+id: EDAM:0002874
+name: Sequence set (polymorphic)
+namespace: data
+def: A set of sub-sequences displaying some type of polymorphism, typically indi
+cating the sequence in which they occur, their position and other metadata.
+
+
+  [Part of this file has been deleted for brevity]
+
+def: Any collection of multiple protein sequences and associated metadata that d
+o not (typically) correspond to common sequence database records or database ent
+ries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+
+[Term]
+id: EDAM:0001245
+name: Sequence cluster (protein)
+namespace: data
+def: A cluster of protein sequences.
+comment: The sequences are typically related, for example a family of sequences.
+subset: data
+synonym: "Protein sequence cluster" EXACT []
+is_a: EDAM:0001233 ! Sequence set (protein)
+is_a: EDAM:0001235 ! Sequence cluster
+
+[Term]
+id: EDAM:0001238
+name: Proteolytic digest
+namespace: data
+def: A protein sequence cleaved into peptide fragments (by enzymatic or chemical
+ cleavage) with fragment masses.
+subset: data
+is_a: EDAM:0001233 ! Sequence set (protein)
+
+[Term]
+id: EDAM:0001262
+name: Peptide molecular weight hits
+namespace: data
+def: A report on peptide fragments of certain molecular weight(s) in one or more
+ protein sequences.
+subset: data
+is_a: EDAM:0001233 ! Sequence set (protein)
+
+[Term]
+id: EDAM:0001235
+name: Sequence cluster
+namespace: data
+def: A set of sequences that have been clustered or otherwise classified as belo
+nging to a group including (typically) sequence cluster information.
+comment: The cluster might include sequences identifiers, short descriptions, al
+ignment and summary information.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+relationship: in_topic EDAM:0000164 ! Sequence clustering
+relationship: in_topic EDAM:0000724 ! Protein families
+
+[Term]
+id: EDAM:0002245
+name: Sequence set (bootstrapped)
+namespace: data
+def: A collection of sequences output from a bootstrapping (resampling) procedur
+e.
+comment: Bootstrapping is often performed in phylogenetic analysis.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+
+
+Data files
+
+   OBO-format ontologies must be installed in the EMBOSS data directory
+   and indexed. This is done automatically for typical installations.
+
+Notes
+
+References
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It exits with a status of 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                     Program name                        Description
+                    edamdef         Find EDAM ontology terms by definition
+                    edamhasinput    Find EDAM ontology terms by has_input relation
+                    edamhasoutput   Find EDAM ontology terms by has_output relation
+                    edamisformat    Find EDAM ontology terms by is_format_of relation
+                    edamisid        Find EDAM ontology terms by is_identifier_of relation
+                    edamname        Find EDAM ontology terms by name
+                    godef           Find GO ontology terms by definition
+                    goname          Find GO ontology terms by name
+                    ontocount       Count ontology term(s)
+                    ontogetcommon   Get common ancestor for terms
+                    ontogetdown     Get ontology term(s) by parent id
+   ontogetobsolete  Get ontology ontology terms
+                    ontogetroot     Get ontology root terms by child identifier
+                    ontogetsibs     Get ontology term(s) by id with common parent
+                    ontogetup       Get ontology term(s) by id of child
+                    ontoisobsolete  Report whether an ontology term id is obsolete
+                    ontotext        Get ontology term(s) original full text
+
+Author(s)
+
+   Jon              Ison
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+                    This application was modified by Jon Ison
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

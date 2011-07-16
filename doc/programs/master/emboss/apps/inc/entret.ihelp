@@ -1,11 +1,10 @@
 Retrieves sequence entries from flatfile databases and files
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
                                   reference (input USA)
-  [-outfile]           outfile    [*.entret] Full text of a sequence database
-                                  entry output file
+  [-outfile]           outfile    [*.entret] Full text output file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:

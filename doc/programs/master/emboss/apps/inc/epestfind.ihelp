@@ -1,5 +1,5 @@
 Finds PEST motifs as potential proteolytic cleavage sites
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence USA to be analysed.
@@ -13,7 +13,7 @@ Version: EMBOSS:6.3.0
    -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers:
    -mwdata             datafile   [Emolwt.dat] Molecular weights data file

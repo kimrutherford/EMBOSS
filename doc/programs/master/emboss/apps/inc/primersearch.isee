@@ -8,6 +8,11 @@
 </tr>
 
 <tr>
+<td><a href="eprimer32.html">eprimer32</a></td>
+<td>Picks PCR primers and hybridization oligos</td>
+</tr>
+
+<tr>
 <td><a href="stssearch.html">stssearch</a></td>
 <td>Search a DNA database for matches with a set of STS primers</td>
 </tr>

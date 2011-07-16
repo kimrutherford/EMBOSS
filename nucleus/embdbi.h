@@ -40,8 +40,8 @@ typedef struct EmbSField {
 **
 ** @attr entry [char*] entry name
 ** @attr filenum [ajuint] record in division file
-** @attr rpos [ajint] entry offset in data file
-** @attr spos [ajint] entry offset in sequence file
+** @attr rpos [ajuint] entry offset in data file
+** @attr spos [ajuint] entry offset in sequence file
 ** @attr nfields [ajuint] number of fields
 ** @attr nfield [ajuint*] number of tokens for each field
 ** @attr field [char***] array of tokens for each field
@@ -51,8 +51,8 @@ typedef struct EmbSField {
 typedef struct EmbSEntry {
   char* entry;
   ajuint filenum;
-  ajint rpos;
-  ajint spos;
+  ajuint rpos;
+  ajuint spos;
   ajuint nfields;
   ajuint* nfield;
   char*** field;
@@ -156,7 +156,7 @@ void      embDbiWriteDivisionRecord (AjPFile file,
 				     const AjPStr seqfile);
 void      embDbiWriteEntryRecord (AjPFile file, ajuint maxidlen,
 				  const AjPStr id,
-				  ajint rpos, ajint spos, short filenum);
+				  ajuint rpos, ajuint spos, ajushort filenum);
 void      embDbiWriteHit (AjPFile file, ajuint idnum);
 void      embDbiWriteTrg (AjPFile file, ajuint maxfieldlen,
 			  ajuint idnum, ajuint idcnt, const AjPStr hitstr);

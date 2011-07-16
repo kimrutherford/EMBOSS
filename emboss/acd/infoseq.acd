@@ -1,8 +1,8 @@
 application: infoseq [
   documentation: "Display basic information about sequences"
-  groups: "Information"
-  relations: "/edam/topic/0000155 Sequence retrieval"
-  relations: "/edam/operation/0000229 Sequence description"
+  groups: "Data retrieval:Sequence data"
+    relations: "EDAM:0000090 topic Data retrieval"
+    relations: "EDAM:0001813 operation Sequence retrieval"
 ]
 
 section: input [
@@ -13,9 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -34,7 +32,7 @@ section: advanced [
            delimited by a character, which you may specify by using the
            -delimiter option. In other words, if -columns is set on, the
            -delimiter option is overriden."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   string: delimiter [
@@ -45,7 +43,7 @@ section: advanced [
            could be a space character, a tab character, a pipe character or
            any other character or string."
     knowntype: "output delimiter"
-    relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
 endsection: advanced
@@ -61,7 +59,7 @@ section: output [
     knowntype: "infoseq output"
     help: "If you enter the name of a file here then this program will
            write the sequence details into that file."
-    relations:  "/edam/data/0000855 Sequence annotation"                         
+    relations: "EDAM:0000855 data Sequence metadata"
   ]
 
   boolean: html [
@@ -69,7 +67,7 @@ section: output [
     default: "N"
     information: "Format output as an HTML table"
     outputmodifier: "Y"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: only [
@@ -80,79 +78,79 @@ section: output [
            '-nohead -noname -noacc -notype -nopgc -nodesc' \
            to get only the length output, you can specify \
            '-only -length'"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: heading [
     default: "Y"
     information: "Display column headings"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: usa [
     default: "@(!$(only))"
     information: "Display the USA of the sequence"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: database [
     default: "@(!$(only))"
     information: "Display 'database' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: name [
     default: "@(!$(only))"
     information: "Display 'name' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: accession [
     default: "@(!$(only))"
     information: "Display 'accession' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: gi [
     default: "N"
     information: "Display 'GI' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: seqversion [
     default: "N"
     information: "Display 'version' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: type [
     default: "@(!$(only))"
     information: "Display 'type' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: length [
     default: "@(!$(only))"
     information: "Display 'length' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: pgc [
     default: "@(!$(only))"
     information: "Display 'percent GC content' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: organism [
     default: "@(!$(only))"
     information: "Display 'organism' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: description [
     default: "@(!$(only))"
     information: "Display 'description' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: output

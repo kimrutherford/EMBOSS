@@ -8,11 +8,6 @@
 </tr>
 
 <tr>
-<td><a href="hmoment.html">hmoment</a></td>
-<td>Calculate and plot hydrophobic moment for protein sequence(s)</td>
-</tr>
-
-<tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
 <td>Predicts coiled coil regions in protein sequences</td>
 </tr>
@@ -25,11 +20,6 @@
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
 <td>Draw a helical wheel diagram for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="tmap.html">tmap</a></td>
-<td>Predict and plot transmembrane segments in protein sequences</td>
 </tr>
 
 </table>

@@ -625,7 +625,7 @@ const char* ajSeqBamGetLibrary(AjPSeqBamHeader h, const AjPSeqBam b)
 
     rg = bamGetAux(b, "RG");
 
-    return (rg == 0) ? 0 : ajTableFetch(h->rg2lib, (const char*)(rg + 1));
+    return (rg == 0) ? 0 : ajTableFetchC(h->rg2lib, (const char*)(rg + 1));
 }
 
 
@@ -777,7 +777,7 @@ static AjPSeqBamBgzf bamBgzfNew(void)
     fp->compressed_block_size = MAX_BLOCK_SIZE;
     fp->compressed_block = malloc(MAX_BLOCK_SIZE);
     fp->cache_size = 0;
-    fp->cache = ajTableNewLen(512);
+    fp->cache = ajTableNew(512);
 
     return fp;
 }
@@ -1221,9 +1221,9 @@ static void bamCacheFree(AjPSeqBamBgzf fp)
 
 static int bamCacheLoadBlock(AjPSeqBamBgzf fp, ajlong block_address)
 {
-	BamPCache p;
+	const BamPCache p;
 
-	p = ajTableFetch(fp->cache, &block_address);
+	p = ajTableFetchV(fp->cache, &block_address);
 
 	if(!p)
             return 0;
@@ -1609,7 +1609,11 @@ int ajSeqBamBgzfEof(AjPSeqBamBgzf fp)
     if(status != 0)
         return -1;
 
-    fread(buf, 1, 28, fp->file);
+    /* Ubuntu warns if retval of fread is not tested */
+    if(!fread(buf, 1, 28, fp->file))
+    {
+    }
+    
     fseek(fp->file, offset, SEEK_SET);
 
     return (memcmp(magic, buf, 28) == 0) ? 1 : 0;
@@ -1766,7 +1770,7 @@ static AjPTable bamHeaderTotable(const AjPList dict, const char type[2],
     BamPHeaderTag key;
     BamPHeaderTag value;
 
-    tbl = ajTableNewLen(512);
+    tbl = ajTableNew(512);
 
     if(dict == 0)       /* return an empty (not null) hash table */
         return tbl;

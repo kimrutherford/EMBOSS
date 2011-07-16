@@ -1,0 +1,13 @@
+Here is a sample session with <b>taxgetspecies</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>taxgetspecies taxon-tax:hominidae -oformat excel </b>
+Get all species under taxon(s)
+Taxon output file [9604.excel]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

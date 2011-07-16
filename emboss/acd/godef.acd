@@ -1,0 +1,98 @@
+application: godef [
+  documentation: "Find GO ontology terms by definition"
+  groups: "Ontology:GO, Data retrieval:Ontology data"
+    relations: "EDAM:0000089 topic Ontologies"
+    relations: "EDAM:0000090 topic Data retrieval"
+    relations: "EDAM:0002224 operation Data retrieval (ontology concept)"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: query [
+      default: ""
+      parameter: "Y"
+      information: "Definition word(s) to search for in ontology"
+      knowntype: "keyword"
+    relations: "EDAM:0000968 data Keyword"
+  ]
+
+endsection: input
+
+
+
+
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+list: namespace [
+      additional: "Y"
+      default: "*"
+      minimum: "1"
+      maximum: "7"
+      header: "GO namespace(s)"
+      values: "biological_process: Biological process;
+      	       cellular_component: Cellular component;
+	       molecular_function: Molecular function;"
+      delimiter: ";"
+      codedelimiter: ":"
+      information: "Return terms in namespace(s)"
+      help: "By default all terms are returned. Searches can be limited
+      	    to one or a few namespaces."
+    relations: "EDAM:0000967 data Ontology concept metadata"
+    ]
+
+endsection: additional
+
+
+
+
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: subclasses [
+    default: "N"
+    information: "Include subclasses of hits"
+    help: "Extend the query matches to include all terms which are
+           specialisations (GO sub-classes) of the matched type."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+
+  boolean: obsolete [
+    default: "N"
+    information: "Include obsolete terms"
+    help: "The default behaviour is to not use or return obsolete terms.
+           This option if set will include all terms."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+
+endsection: advanced
+
+
+
+
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outobo: outfile [
+    parameter: "Y"
+    name: "godef"
+    relations: "EDAM:0002223 data Ontology metadata"
+  ]
+
+endsection: output
+
+

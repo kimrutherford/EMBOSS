@@ -1,10 +1,11 @@
 Predicts protein secondary structure using GOR method
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
-  [-outfile]           report     [*.garnier] Output report file name
+  [-outfile]           report     [*.garnier] Output report file name (default
+                                  -rformat tagseq)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:

@@ -143,13 +143,15 @@ static void tfm_FindAppDocRoot(const AjPStr program,
     AjPStr roottmp = NULL;
     AjPStr tmpstr = NULL;
     AjPStr embassy = NULL;
-
+    AjPStr doctest = NULL;
+    
     AjBool is_windows = ajFalse;
 #ifdef WIN32
     is_windows = ajTrue;
 #endif
 
     docrootinst = ajStrNew();
+    doctest     = ajStrNew();
     roottmp     = ajStrNew();
     tmpstr      = ajStrNew();
     
@@ -163,11 +165,25 @@ static void tfm_FindAppDocRoot(const AjPStr program,
     /* look at EMBOSS doc files */
 
     /* try to open the installed doc directory */
-    if(ajStrGetLen(roottmp))
-	ajStrAssignS(docroot, roottmp);
-   else
+    if(ajStrGetLen(roottmp)) 
     {
-        ajStrAssignS(&docrootinst, ajNamValueInstalldir());
+        /*
+        ** Check for old-style EMBOSS_DOCROOT and adjust accordingly
+        */
+        ajFmtPrintS(&doctest,"%S%cprograms%ctext",roottmp,SLASH_CHAR,
+                    SLASH_CHAR);
+        ajStrAssignS(&docrootinst,roottmp);
+        ajDirnameFix(&docrootinst);
+        
+        if(!ajDirnameFixExists(&doctest))
+        {
+            ajDirnameUp(&docrootinst);
+            ajDirnameUp(&docrootinst);
+        }
+    }
+    else
+    {
+	ajStrAssignS(&docrootinst, ajNamValueInstalldir());
 	ajDirnameFix(&docrootinst);
 
 	if(is_windows)
@@ -184,28 +200,28 @@ static void tfm_FindAppDocRoot(const AjPStr program,
 	else
 	    ajFmtPrintAppS(&docrootinst, "share%sEMBOSS%sdoc%s",
 			SLASH_STRING,SLASH_STRING,SLASH_STRING);
+    }
 
-
-	if(html)
-	{
-	  if(ajStrGetLen(embassy))
+    if(html)
+    {
+	if(ajStrGetLen(embassy))
 	    ajFmtPrintS(docroot,"%Shtml%sembassy%s%S%s",
 			docrootinst,SLASH_STRING,SLASH_STRING,
 			embassy, SLASH_STRING);
-	  else
-	  {
-	      if(is_windows)
-		  ajFmtPrintS(docroot,"%Sprograms%shtml%s",
-			      docrootinst,SLASH_STRING,SLASH_STRING);
-	      else
-		  ajFmtPrintS(docroot,"%Sprograms%shtml%s",
-			      docrootinst,SLASH_STRING,SLASH_STRING);
-          }
-	}
 	else
+	{
+	    if(is_windows)
+		ajFmtPrintS(docroot,"%Sprograms%shtml%s",
+			    docrootinst,SLASH_STRING,SLASH_STRING);
+	    else
+		ajFmtPrintS(docroot,"%Sprograms%shtml%s",
+			    docrootinst,SLASH_STRING,SLASH_STRING);
+	}
+    }
+    else
 	    ajFmtPrintS(docroot,"%Sprograms%stext%s",docrootinst,SLASH_STRING,
 			SLASH_STRING);
-    }
+
     ajDirnameFix(docroot);
     ajDebug("installed docroot '%S'\n", *docroot);
 
@@ -248,6 +264,7 @@ static void tfm_FindAppDocRoot(const AjPStr program,
 
     ajStrDel(&roottmp);
     ajStrDel(&docrootinst);
+    ajStrDel(&doctest);
     ajStrDel(&tmpstr);
     
     return;

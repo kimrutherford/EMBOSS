@@ -209,7 +209,12 @@ public class Jemboss implements ActionListener
   *  
   * @param mysettings
   */
-  private void initMainFrame(JembossParams mysettings){
+  private void initMainFrame(JembossParams mysettings)
+  {
+      
+    // setup the top menu bar
+    mainMenu = new SetUpMenuBar(mysettings,f,withSoap);
+
     // make the local file manager
     tree = new DragTree(new File(mysettings.getUserHome()),
                         f, mysettings);
@@ -256,10 +261,6 @@ public class Jemboss implements ActionListener
 
     pmain = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                   menuPanel,pright);
-
-    // setup the top menu bar
-    mainMenu = new SetUpMenuBar(mysettings,f,
-                                withSoap);
 
     new BuildProgramMenu(menuPanel,embossFormPanel,pform,scrollProgForm,
                          mysettings,withSoap,

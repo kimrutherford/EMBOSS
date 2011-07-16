@@ -143,6 +143,9 @@ public class SequenceReader
           }
         }
       }
+      
+      System.err.println("File format not recognised. " +
+      		"Supported formats are 'fasta', 'msf', 'clustal', and 'jpred'.");
 
     }
     catch (IOException e)

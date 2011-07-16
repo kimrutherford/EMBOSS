@@ -344,7 +344,7 @@ static void density_addquadgraph(AjPGraph qgraph, ajint limit,
 
     ajGraphdataSetTypeC(data,"2D Plot Float");
 
-    ajGraphDataAdd(qgraph,data);
+    ajGraphDataReplaceI(qgraph,data,0);
 
 
 
@@ -364,7 +364,7 @@ static void density_addquadgraph(AjPGraph qgraph, ajint limit,
 
     ajGraphdataSetTypeC(data,"2D Plot Float");
 
-    ajGraphDataAdd(qgraph,data);
+    ajGraphDataReplaceI(qgraph,data,1);
 
 
 
@@ -384,7 +384,7 @@ static void density_addquadgraph(AjPGraph qgraph, ajint limit,
 
     ajGraphdataSetTypeC(data,"2D Plot Float");
 
-    ajGraphDataAdd(qgraph,data);
+    ajGraphDataReplaceI(qgraph,data,2);
 
 
 
@@ -404,7 +404,7 @@ static void density_addquadgraph(AjPGraph qgraph, ajint limit,
 
     ajGraphdataSetTypeC(data,"2D Plot Float");
 
-    ajGraphDataAdd(qgraph,data);
+    ajGraphDataReplaceI(qgraph,data,3);
 
 
     ajStrDel(&st);
@@ -462,7 +462,7 @@ static void density_adddualgraph(AjPGraph dgraph, ajint limit,
 
     ajGraphdataSetTypeC(data,"2D Plot Float");
 
-    ajGraphDataAdd(dgraph,data);
+    ajGraphDataReplaceI(dgraph,data,0);
 
 
 
@@ -482,7 +482,7 @@ static void density_adddualgraph(AjPGraph dgraph, ajint limit,
 
     ajGraphdataSetTypeC(data,"2D Plot Float");
 
-    ajGraphDataAdd(dgraph,data);
+    ajGraphDataReplaceI(dgraph,data,1);
 
     ajStrDel(&st);
 

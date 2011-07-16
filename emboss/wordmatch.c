@@ -111,9 +111,9 @@ int main(int argc, char **argv)
     embWordLength(wordlen);
 
     ajFmtPrintF(logfile, "Small sequence/file for constructing"
-	    " target patterns: %S\n", ajSeqsetGetFilename(seqset));
+	    " target patterns: %S\n", ajSeqsetGetUsa(seqset));
     ajFmtPrintF(logfile, "Large sequence/file to be scanned"
-	    " for patterns: %S\n", ajSeqallGetFilename(seqall));
+	    " for patterns: %S\n", ajSeqallGetUsa(seqall));
     ajFmtPrintF(logfile, "Number of sequences in the patterns file: %u\n",
             seqsetsize);
     ajFmtPrintF(logfile, "Pattern/word length: %u\n", wordlen);
@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 
             nmatches = embWordRabinKarpSearch(
                     ajSeqGetSeqS(queryseq), seqset,
-                    (const EmbPWordRK*)wordsw, wordlen, npatterns,
+                    (EmbPWordRK const *)wordsw, wordlen, npatterns,
                     matchlist, lastlocation, checkmode);
             nAllMatches += nmatches;
 

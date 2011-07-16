@@ -20,6 +20,9 @@ extern "C"
 #define AJDOM_DOCUMENT_FRAGMENT_NODE      11
 #define AJDOM_NOTATION_NODE               12
 
+#define AJDOMDESTROY 1
+#define AJDOMKEEP 0
+
 
 
 
@@ -424,8 +427,17 @@ ajint ajDomReadFp(AjPDomDocument node, FILE *stream);
 ajint ajDomReadFilebuff(AjPDomDocument node, AjPFilebuff buff);
 ajint ajDomReadString(AjPDomDocument node, AjPStr str);
     
+AjPStr ajDomTextGetText(AjPDomText text);
+AjPStr ajDomElementGetText(AjPDomElement element);
 
+AjPDomElement ajDomElementGetNthChildByTagNameC(AjPDomDocument doc,
+                                                AjPDomElement element,
+                                                const char *name,
+                                                ajint n);
 
+AjPDomElement ajDomElementGetFirstChildByTagNameC(AjPDomDocument doc,
+                                                  AjPDomElement element,
+                                                  const char *name);
 
 /*
 ** End of prototype definitions

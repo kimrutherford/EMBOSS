@@ -1,20 +1,31 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensfeature_h
-#define ensfeature_h
+#ifndef ENSFEATURE_H
+#define ENSFEATURE_H
 
-#include "ensdata.h"
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
+
+#include "ensanalysis.h"
 #include "ensassemblyexception.h"
-#include "ensdatabaseentry.h"
-#include "ensmetainformation.h"
-#include "ensmetacoordinate.h"
+#include "ensdata.h"
 #include "ensslice.h"
 
+AJ_BEGIN_DECLS
 
 
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
 
 /* @data EnsPFeaturepair ******************************************************
 **
@@ -27,16 +38,16 @@ extern "C"
 ** @attr SourceFeature [EnsPFeature] Source Ensembl Feature (Query)
 ** @attr TargetFeature [EnsPFeature] Target Ensembl Feature (Target)
 ** @attr Externaldatabase [EnsPExternaldatabase] Ensembl External Database
-** @attr ExtraData [AjPStr] Extra data
+** @attr Extradata [AjPStr] Extra data
 ** @attr SourceSpecies [AjPStr] Source species name
 ** @attr TargetSpecies [AjPStr] Target species name
-** @attr GroupIdentifier [ajuint] Group identifier
-** @attr LevelIdentifier [ajuint] Level identifier
+** @attr Groupidentifier [ajuint] Group identifier
+** @attr Levelidentifier [ajuint] Level identifier
 ** @attr Evalue [double] e- or p-value
 ** @attr Score [double] Score
 ** @attr SourceCoverage [float] Source coverage in percent
 ** @attr TargetCoverage [float] Target coverage in percent
-** @attr SequenceIdentity [float] Sequence identity in percent
+** @attr Identity [float] Sequence identity in percent
 ** @attr Use [ajuint] Use counter
 ** @@
 ******************************************************************************/
@@ -46,235 +57,20 @@ typedef struct EnsSFeaturepair
     EnsPFeature SourceFeature;
     EnsPFeature TargetFeature;
     EnsPExternaldatabase Externaldatabase;
-    AjPStr ExtraData;
+    AjPStr Extradata;
     AjPStr SourceSpecies;
     AjPStr TargetSpecies;
-    ajuint GroupIdentifier;
-    ajuint LevelIdentifier;
+    ajuint Groupidentifier;
+    ajuint Levelidentifier;
     double Evalue;
     double Score;
     float SourceCoverage;
     float TargetCoverage;
-    float SequenceIdentity;
+    float Identity;
     ajuint Use;
 } EnsOFeaturepair;
 
 #define EnsPFeaturepair EnsOFeaturepair*
-
-
-
-
-/* @data EnsPDNAAlignFeatureadaptor *******************************************
-**
-** Ensembl DNA Align Feature Adaptor.
-**
-** @alias EnsSDNAAlignFeatureadaptor
-** @alias EnsODNAAlignFeatureadaptor
-**
-** @attr Adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @@
-******************************************************************************/
-
-typedef struct EnsSDNAAlignFeatureadaptor
-{
-    EnsPFeatureadaptor Adaptor;
-} EnsODNAAlignFeatureadaptor;
-
-#define EnsPDNAAlignFeatureadaptor EnsODNAAlignFeatureadaptor*
-
-
-
-
-/* @data EnsPProteinalignfeatureadaptor ***************************************
-**
-** Ensembl Protein Align Feature Adaptor.
-**
-** @alias EnsSProteinalignfeatureadaptor
-** @alias EnsOProteinalignfeatureadaptor
-**
-** @attr Adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @@
-******************************************************************************/
-
-typedef struct EnsSProteinalignfeatureadaptor
-{
-    EnsPFeatureadaptor Adaptor;
-} EnsOProteinalignfeatureadaptor;
-
-#define EnsPProteinalignfeatureadaptor EnsOProteinalignfeatureadaptor*
-
-
-
-
-/* EnsEBasealignfeatureType ***************************************************
-**
-** Ensembl Base Align Feature Type enumeration.
-**
-******************************************************************************/
-
-typedef enum EnsOBasealignfeatureType
-{
-    ensEBasealignfeatureTypeNULL,
-    ensEBasealignfeatureTypeDNA,
-    ensEBasealignfeatureTypeProtein
-} EnsEBasealignfeatureType;
-
-
-
-
-/* @data EnsPBasealignfeature *************************************************
-**
-** Ensembl Base Align Feature.
-**
-** @alias EnsSBasealignfeature
-** @alias EnsOBasealignfeature
-**
-** @attr Use [ajuint] Use counter
-** @cc Bio::EnsEMBL::Storable
-** @attr Identifier [ajuint] SQL database-internal identifier
-** @attr DNAAlignFeatureadaptor [EnsPDNAAlignFeatureadaptor]
-**                              Ensembl DNA Align Feature Adaptor
-** @attr Proteinalignfeatureadaptor [EnsPProteinalignfeatureadaptor]
-**                                  Ensembl Protein Align Feature Adaptor
-** @cc Bio::EnsEMBL::Featurepair
-** @attr Featurepair [EnsPFeaturepair] Ensembl Feature Pair
-** @cc Bio::EnsEMBL::Basealignfeature
-** @attr GetFeaturepair [(EnsPFeaturepair*)] Get Ensembl Feature Pair function
-** @attr Cigar [AjPStr] CIGAR line
-** @attr Type [EnsEBasealignfeatureType] Type
-** @attr AlignmentLength [ajuint] Target component alignment length
-** @attr PairDNAAlignFeatureIdentifier [ajuint] Pair DNA Align Feature
-**                                              identifier
-** @attr Padding [ajuint] Padding to alignment boundary
-** @@
-******************************************************************************/
-
-typedef struct EnsSBasealignfeature
-{
-    ajuint Use;
-    ajuint Identifier;
-    EnsPDNAAlignFeatureadaptor DNAAlignFeatureadaptor;
-    EnsPProteinalignfeatureadaptor Proteinalignfeatureadaptor;
-    EnsPFeaturepair Featurepair;
-    EnsPFeaturepair (*GetFeaturepair)(void* object);
-    AjPStr Cigar;
-    EnsEBasealignfeatureType Type;
-    ajuint AlignmentLength;
-    ajuint PairDNAAlignFeatureIdentifier;
-    ajuint Padding;
-} EnsOBasealignfeature;
-
-#define EnsPBasealignfeature EnsOBasealignfeature*
-
-
-
-
-/* @data EnsPProteinfeatureadaptor ********************************************
-**
-** Ensembl Protein Feature Adaptor.
-**
-** @alias EnsSProteinfeatureadaptor
-** @alias EnsOProteinfeatureadaptor
-**
-** @attr Adaptor [EnsPBaseadaptor] Ensembl Base Adaptor
-** @@
-******************************************************************************/
-
-typedef struct EnsSProteinfeatureadaptor
-{
-    EnsPBaseadaptor Adaptor;
-} EnsOProteinfeatureadaptor;
-
-#define EnsPProteinfeatureadaptor EnsOProteinfeatureadaptor*
-
-
-
-
-/* @data EnsPProteinfeature ***************************************************
-**
-** Ensembl Protein Feature.
-**
-** @alias EnsSProteinfeature
-** @alias EnsOProteinfeature
-**
-** @attr Use [ajuint] Use counter
-** @cc Bio::EnsEMBL::Storable
-** @attr Identifier [ajuint] SQL database-internal identifier
-** @attr Adaptor [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
-** @cc Bio::EnsEMBL::Featurepair
-** @attr Featurepair [EnsPFeaturepair] Ensembl Feature Pair
-** @cc Bio::EnsEMBL::Proteinfeature
-** @attr Accession [AjPStr] (InterPro) Accession
-** @attr Description [AjPStr] (InterPro) Description
-** @@
-******************************************************************************/
-
-typedef struct EnsSProteinfeature
-{
-    ajuint Use;
-    ajuint Identifier;
-    EnsPProteinfeatureadaptor Adaptor;
-    EnsPFeaturepair Featurepair;
-    AjPStr Accession;
-    AjPStr Description;
-} EnsOProteinfeature;
-
-#define EnsPProteinfeature EnsOProteinfeature*
-
-
-
-
-/* @data EnsPSimplefeatureadaptor *********************************************
-**
-** Ensembl Simple Feature Adaptor.
-**
-** @alias EnsSSimplefeatureadaptor
-** @alias EnsOSimplefeatureadaptor
-**
-** @attr Adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @@
-******************************************************************************/
-
-typedef struct EnsSSimplefeatureadaptor
-{
-    EnsPFeatureadaptor Adaptor;
-} EnsOSimplefeatureadaptor;
-
-#define EnsPSimplefeatureadaptor EnsOSimplefeatureadaptor*
-
-
-
-
-/* @data EnsPSimplefeature ****************************************************
-**
-** Ensembl Simple Feature.
-**
-** @alias EnsSSimplefeature
-** @alias EnsOSimplefeature
-**
-** @attr Use [ajuint] Use counter
-** @cc Bio::EnsEMBL::Storable
-** @attr Identifier [ajuint] SQL database-internal identifier
-** @attr Adaptor [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
-** @cc Bio::EnsEMBL::Feature
-** @attr Feature [EnsPFeature] Ensembl Feature
-** @cc Bio::EnsEMBL::Simplefeature
-** @attr DisplayLabel [AjPStr] Display label
-** @attr Score [double] Score
-** @@
-******************************************************************************/
-
-typedef struct EnsSSimplefeature
-{
-    ajuint Use;
-    ajuint Identifier;
-    EnsPSimplefeatureadaptor Adaptor;
-    EnsPFeature Feature;
-    AjPStr DisplayLabel;
-    double Score;
-} EnsOSimplefeature;
-
-#define EnsPSimplefeature EnsOSimplefeature*
 
 
 
@@ -287,9 +83,10 @@ typedef struct EnsSSimplefeature
 ** @alias EnsOAssemblyexceptionfeatureadaptor
 **
 ** @attr Adaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
-** @attr Cache [AjPList] AJAX List of Ensembl Assembly Exception Features
-** @attr CacheByIdentifier [AjPTable] AJAX Table of Ensembl Assembly Exception
-**                                    Features
+** @attr Cache [AjPList]
+** AJAX List of Ensembl Assembly Exception Feature objects
+** @attr CacheByIdentifier [AjPTable]
+** AJAX Table of Ensembl Assembly Exception Feature objects
 ** @attr CacheBySlice [EnsPCache] Ensembl Cache by Ensembl Slice names
 ** @@
 ******************************************************************************/
@@ -322,7 +119,7 @@ typedef struct EnsSAssemblyexceptionfeatureadaptor
 ** @cc Bio::EnsEMBL::Feature
 ** @attr Feature [EnsPFeature] Ensembl Feature
 ** @cc Bio::EnsEMBL::Assemblyexceptionfeature
-** @attr AlternateSlice [EnsPSlice] Alternate Ensembl Slice
+** @attr ExceptionSlice [EnsPSlice] Exception Ensembl Slice
 ** @attr Type [EnsEAssemblyexceptionType] Ensembl Assembly Exception type
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
@@ -334,7 +131,7 @@ typedef struct EnsSAssemblyexceptionfeature
     ajuint Identifier;
     EnsPAssemblyexceptionfeatureadaptor Adaptor;
     EnsPFeature Feature;
-    EnsPSlice AlternateSlice;
+    EnsPSlice ExceptionSlice;
     EnsEAssemblyexceptionType Type;
     ajuint Padding;
 } EnsOAssemblyexceptionfeature;
@@ -344,25 +141,29 @@ typedef struct EnsSAssemblyexceptionfeature
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
 
 /* Ensembl Feature */
 
-EnsPFeature ensFeatureNewS(EnsPAnalysis analysis,
-                           EnsPSlice slice,
-                           ajint start,
-                           ajint end,
-                           ajint strand);
+EnsPFeature ensFeatureNewCpy(const EnsPFeature feature);
 
-EnsPFeature ensFeatureNewN(EnsPAnalysis analysis,
-                           AjPStr seqname,
-                           ajint start,
-                           ajint end,
-                           ajint strand);
+EnsPFeature ensFeatureNewIniN(EnsPAnalysis analysis,
+                              AjPStr seqname,
+                              ajint start,
+                              ajint end,
+                              ajint strand);
 
-EnsPFeature ensFeatureNewObj(const EnsPFeature object);
+EnsPFeature ensFeatureNewIniS(EnsPAnalysis analysis,
+                              EnsPSlice slice,
+                              ajint start,
+                              ajint end,
+                              ajint strand);
 
 EnsPFeature ensFeatureNewRef(EnsPFeature feature);
 
@@ -370,45 +171,51 @@ void ensFeatureDel(EnsPFeature* Pfeature);
 
 EnsPAnalysis ensFeatureGetAnalysis(const EnsPFeature feature);
 
+ajint ensFeatureGetEnd(const EnsPFeature feature);
+
+AjPStr ensFeatureGetSequencename(const EnsPFeature feature);
+
 EnsPSlice ensFeatureGetSlice(const EnsPFeature feature);
 
-AjPStr ensFeatureGetSequenceName(const EnsPFeature feature);
-
 ajint ensFeatureGetStart(const EnsPFeature feature);
-
-ajint ensFeatureGetEnd(const EnsPFeature feature);
 
 ajint ensFeatureGetStrand(const EnsPFeature feature);
 
 AjBool ensFeatureSetAnalysis(EnsPFeature feature, EnsPAnalysis analysis);
 
+AjBool ensFeatureSetEnd(EnsPFeature feature, ajint end);
+
+AjBool ensFeatureSetSequencename(EnsPFeature, AjPStr seqname);
+
 AjBool ensFeatureSetSlice(EnsPFeature feature, EnsPSlice slice);
 
-AjBool ensFeatureSetSequenceName(EnsPFeature, AjPStr seqname);
-
 AjBool ensFeatureSetStart(EnsPFeature feature, ajint start);
-
-AjBool ensFeatureSetEnd(EnsPFeature feature, ajint end);
 
 AjBool ensFeatureSetStrand(EnsPFeature feature, ajint strand);
 
 AjBool ensFeatureTrace(const EnsPFeature feature, ajuint level);
 
-ajuint ensFeatureGetLength(const EnsPFeature feature);
+ajuint ensFeatureCalculateLength(const EnsPFeature feature);
 
-ajulong ensFeatureGetMemsize(const EnsPFeature feature);
-
-const EnsPSeqregion ensFeatureGetSeqregion(const EnsPFeature feature);
-
-ajint ensFeatureGetSeqregionStart(const EnsPFeature feature);
+size_t ensFeatureCalculateMemsize(const EnsPFeature feature);
 
 ajint ensFeatureGetSeqregionEnd(const EnsPFeature feature);
 
-ajint ensFeatureGetSeqregionStrand(const EnsPFeature feature);
+ajuint ensFeatureGetSeqregionLength(const EnsPFeature feature);
 
 const AjPStr ensFeatureGetSeqregionName(const EnsPFeature feature);
 
-ajuint ensFeatureGetSeqregionLength(const EnsPFeature feature);
+const EnsPSeqregion ensFeatureGetSeqregionObject(const EnsPFeature feature);
+
+ajint ensFeatureGetSeqregionStart(const EnsPFeature feature);
+
+ajint ensFeatureGetSeqregionStrand(const EnsPFeature feature);
+
+AjBool ensFeatureFetchAllAlternativelocations(EnsPFeature feature,
+                                              AjBool all,
+                                              AjPList features);
+
+AjBool ensFeatureFetchSequencename(const EnsPFeature feature, AjPStr* Pname);
 
 AjBool ensFeatureMove(EnsPFeature feature,
                       ajint start,
@@ -420,25 +227,16 @@ AjBool ensFeatureProject(const EnsPFeature feature,
                          const AjPStr csversion,
                          AjPList pss);
 
+AjBool ensFeatureProjectslice(const EnsPFeature feature,
+                              EnsPSlice slice,
+                              AjPList pss);
+
 EnsPFeature ensFeatureTransform(EnsPFeature feature,
                                 const AjPStr csname,
-                                const AjPStr csversion);
+                                const AjPStr csversion,
+                                const EnsPSlice slice);
 
 EnsPFeature ensFeatureTransfer(EnsPFeature feature, EnsPSlice slice);
-
-AjBool ensFeatureFetchAllAlternativeLocations(EnsPFeature feature,
-                                              AjBool all,
-                                              AjPList features);
-
-int ensFeatureCompareStartAscending(const EnsPFeature feature1,
-                                    const EnsPFeature feature2);
-
-int ensFeatureCompareStartDescending(const EnsPFeature feature1,
-                                     const EnsPFeature feature2);
-
-AjBool ensFeatureSortByStartAscending(AjPList features);
-
-AjBool ensFeatureSortByStartDescending(AjPList features);
 
 AjBool ensFeatureMatch(const EnsPFeature feature1,
                        const EnsPFeature feature2);
@@ -446,501 +244,230 @@ AjBool ensFeatureMatch(const EnsPFeature feature1,
 AjBool ensFeatureOverlap(const EnsPFeature feature1,
                          const EnsPFeature feature2);
 
-AjBool ensFeatureFetchSeqregionName(const EnsPFeature feature, AjPStr* Pname);
+AjBool ensFeatureSimilarity(const EnsPFeature feature1,
+                            const EnsPFeature feature2);
+
+int ensFeatureCompareStartAscending(const EnsPFeature feature1,
+                                    const EnsPFeature feature2);
+
+int ensFeatureCompareStartDescending(const EnsPFeature feature1,
+                                     const EnsPFeature feature2);
+
+AjBool ensListFeatureSortStartAscending(AjPList features);
+
+AjBool ensListFeatureSortStartDescending(AjPList features);
 
 /* Ensembl Feature Adaptor */
 
 EnsPFeatureadaptor ensFeatureadaptorNew(
     EnsPDatabaseadaptor dba,
-    const char **Ptables,
-    const char **Pcolumns,
-    EnsOBaseadaptorLeftJoin *leftjoin,
-    const char *condition,
-    const char *final,
-    AjBool Fquery(EnsPDatabaseadaptor dba,
-                  const AjPStr statement,
-                  EnsPAssemblymapper am,
-                  EnsPSlice slice,
-                  AjPList objects),
+    const char* const* Ptables,
+    const char* const* Pcolumns,
+    EnsPBaseadaptorLeftjoin leftjoin,
+    const char* condition,
+    const char* final,
+    AjBool Fstatement(EnsPDatabaseadaptor dba,
+                      const AjPStr statement,
+                      EnsPAssemblymapper am,
+                      EnsPSlice slice,
+                      AjPList objects),
     void* Fread(const void* key),
     void* Freference(void* value),
     AjBool Fwrite(const void* value),
     void Fdelete(void** value),
-    ajulong Fsize(const void* value),
-    EnsPFeature Fgetfeature(const void *object),
-    const char *label);
+    size_t Fsize(const void* value),
+    EnsPFeature Fgetfeature(const void* object),
+    const char* label);
 
-void ensFeatureadaptorDel(EnsPFeatureadaptor *Pfa);
+void ensFeatureadaptorDel(EnsPFeatureadaptor* Pfa);
 
-EnsPBaseadaptor ensFeatureadaptorGetBaseadaptor(const EnsPFeatureadaptor fa);
+EnsPBaseadaptor ensFeatureadaptorGetBaseadaptor(
+    const EnsPFeatureadaptor fa);
 
-EnsPCache ensFeatureadaptorGetCache(const EnsPFeatureadaptor fa);
-
-ajuint ensFeatureadaptorGetMaxFeatureLength(const EnsPFeatureadaptor fa);
+EnsPCache ensFeatureadaptorGetCache(
+    const EnsPFeatureadaptor fa);
 
 EnsPDatabaseadaptor ensFeatureadaptorGetDatabaseadaptor(
     const EnsPFeatureadaptor fa);
 
-AjBool ensFeatureadaptorSetMaximumFeatureLength(EnsPFeatureadaptor fa,
-                                                ajuint length);
-
-AjBool ensFeatureadaptorSetTables(EnsPFeatureadaptor fa,
-                                  const char **Ptables);
+ajint ensFeatureadaptorGetMaximumlength(
+    const EnsPFeatureadaptor fa);
 
 AjBool ensFeatureadaptorSetColumns(EnsPFeatureadaptor fa,
-                                   const char **Pcolumns);
+                                   const char* const* Pcolumns);
 
-AjBool ensFeatureadaptorSetDefaultCondition(EnsPFeatureadaptor fa,
-                                            const char *condition);
+AjBool ensFeatureadaptorSetDefaultcondition(EnsPFeatureadaptor fa,
+                                            const char* condition);
 
-AjBool ensFeatureadaptorSetFinalCondition(EnsPFeatureadaptor fa,
-                                          const char *final);
+AjBool ensFeatureadaptorSetFinalcondition(EnsPFeatureadaptor fa,
+                                          const char* final);
+
+AjBool ensFeatureadaptorSetMaximumlength(EnsPFeatureadaptor fa,
+                                         ajint length);
+
+AjBool ensFeatureadaptorSetTables(EnsPFeatureadaptor fa,
+                                  const char* const* Ptables);
 
 AjBool ensFeatureadaptorEscapeC(EnsPFeatureadaptor fa,
-                                char **Ptxt,
+                                char** Ptxt,
                                 const AjPStr str);
 
 AjBool ensFeatureadaptorEscapeS(EnsPFeatureadaptor fa,
-                                AjPStr *Pstr,
+                                AjPStr* Pstr,
                                 const AjPStr str);
 
-AjBool ensFeatureadaptorFetchAllBySliceConstraint(EnsPFeatureadaptor fa,
-                                                  EnsPSlice slice,
-                                                  const AjPStr constraint,
-                                                  const AjPStr anname,
-                                                  AjPList objects);
+AjBool ensFeatureadaptorConstraintAppendAnalysisname(
+    const EnsPFeatureadaptor fa,
+    AjPStr* Pconstraint,
+    const AjPStr anname);
 
-AjBool ensFeatureadaptorFetchAllBySlice(EnsPFeatureadaptor fa,
+AjBool ensFeatureadaptorFetchAllbyAnalysisname(EnsPFeatureadaptor fa,
+                                               const AjPStr anname,
+                                               AjPList objects);
+
+AjBool ensFeatureadaptorFetchAllbySlice(EnsPFeatureadaptor fa,
                                         EnsPSlice slice,
+                                        const AjPStr constraint,
                                         const AjPStr anname,
                                         AjPList objects);
 
-AjBool ensFeatureadaptorFetchAllBySliceScore(EnsPFeatureadaptor fa,
+AjBool ensFeatureadaptorFetchAllbySlicescore(EnsPFeatureadaptor fa,
                                              EnsPSlice slice,
                                              double score,
                                              const AjPStr anname,
                                              AjPList objects);
 
-AjBool ensFeatureadaptorFetchAllByAnalysisName(EnsPFeatureadaptor fa,
-                                               const AjPStr anname,
-                                               AjPList objects);
-
 /* Ensembl Feature Pair */
 
-EnsPFeaturepair ensFeaturepairNew(EnsPFeature srcfeature,
-                                  EnsPFeature trgfeature,
-                                  EnsPExternaldatabase edb,
-                                  AjPStr extra,
-                                  AjPStr srcspecies,
-                                  AjPStr trgspecies,
-                                  ajuint groupid,
-                                  ajuint levelid,
-                                  double evalue,
-                                  double score,
-                                  float srccoverage,
-                                  float trgcoverage,
-                                  float identity);
+EnsPFeaturepair ensFeaturepairNewCpy(const EnsPFeaturepair fp);
 
-EnsPFeaturepair ensFeaturepairNewObj(const EnsPFeaturepair object);
+EnsPFeaturepair ensFeaturepairNewIni(EnsPFeature srcfeature,
+                                     EnsPFeature trgfeature,
+                                     EnsPExternaldatabase edb,
+                                     AjPStr extra,
+                                     AjPStr srcspecies,
+                                     AjPStr trgspecies,
+                                     ajuint groupid,
+                                     ajuint levelid,
+                                     double evalue,
+                                     double score,
+                                     float srccoverage,
+                                     float trgcoverage,
+                                     float identity);
 
 EnsPFeaturepair ensFeaturepairNewRef(EnsPFeaturepair fp);
 
 void ensFeaturepairDel(EnsPFeaturepair* Pfp);
 
-EnsPFeature ensFeaturepairGetSourceFeature(const EnsPFeaturepair fp);
-
-EnsPFeature ensFeaturepairGetTargetFeature(const EnsPFeaturepair fp);
+double ensFeaturepairGetEvalue(
+    const EnsPFeaturepair fp);
 
 EnsPExternaldatabase ensFeaturepairGetExternaldatabase(
     const EnsPFeaturepair fp);
 
-AjPStr ensFeaturepairGetExtraData(const EnsPFeaturepair fp);
+AjPStr ensFeaturepairGetExtradata(
+    const EnsPFeaturepair fp);
 
-AjPStr ensFeaturepairGetSourceSpecies(const EnsPFeaturepair fp);
+ajuint ensFeaturepairGetGroupidentifier(
+    const EnsPFeaturepair fp);
 
-AjPStr ensFeaturepairGetTargetSpecies(const EnsPFeaturepair fp);
+float ensFeaturepairGetIdentity(
+    const EnsPFeaturepair fp);
 
-ajuint ensFeaturepairGetGroupIdentifier(const EnsPFeaturepair fp);
+ajuint ensFeaturepairGetLevelidentifier(
+    const EnsPFeaturepair fp);
 
-ajuint ensFeaturepairGetLevelIdentifier(const EnsPFeaturepair fp);
+double ensFeaturepairGetScore(
+    const EnsPFeaturepair fp);
 
-double ensFeaturepairGetEvalue(const EnsPFeaturepair fp);
+float ensFeaturepairGetSourceCoverage(
+    const EnsPFeaturepair fp);
 
-double ensFeaturepairGetScore(const EnsPFeaturepair fp);
+EnsPFeature ensFeaturepairGetSourceFeature(
+    const EnsPFeaturepair fp);
 
-float ensFeaturepairGetSourceCoverage(const EnsPFeaturepair fp);
+AjPStr ensFeaturepairGetSourceSpecies(
+    const EnsPFeaturepair fp);
 
-float ensFeaturepairGetTargetCoverage(const EnsPFeaturepair fp);
+float ensFeaturepairGetTargetCoverage(
+    const EnsPFeaturepair fp);
 
-float ensFeaturepairGetSequenceIdentity(const EnsPFeaturepair fp);
+EnsPFeature ensFeaturepairGetTargetFeature(
+    const EnsPFeaturepair fp);
 
-AjBool ensFeaturepairSetSourceFeature(EnsPFeaturepair fp, EnsPFeature feature);
+AjPStr ensFeaturepairGetTargetSpecies(
+    const EnsPFeaturepair fp);
 
-AjBool ensFeaturepairSetTargetFeature(EnsPFeaturepair fp, EnsPFeature feature);
+AjBool ensFeaturepairSetEvalue(EnsPFeaturepair fp,
+                               double evalue);
 
 AjBool ensFeaturepairSetExternaldatabase(EnsPFeaturepair fp,
                                          EnsPExternaldatabase edb);
 
-AjBool ensFeaturepairSetExtraData(EnsPFeaturepair fp, AjPStr extra);
+AjBool ensFeaturepairSetExtradata(EnsPFeaturepair fp,
+                                  AjPStr extra);
 
-AjBool ensFeaturepairSetSourceSpecies(EnsPFeaturepair fp, AjPStr species);
+AjBool ensFeaturepairSetGroupidentifier(EnsPFeaturepair fp,
+                                        ajuint groupid);
 
-AjBool ensFeaturepairSetTargetSpecies(EnsPFeaturepair fp, AjPStr species);
+AjBool ensFeaturepairSetLevelidentifier(EnsPFeaturepair fp,
+                                        ajuint levelid);
 
-AjBool ensFeaturepairSetGroupIdentifier(EnsPFeaturepair fp, ajuint groupid);
+AjBool ensFeaturepairSetScore(EnsPFeaturepair fp,
+                              double score);
 
-AjBool ensFeaturepairSetLevelIdentifier(EnsPFeaturepair fp, ajuint levelid);
+AjBool ensFeaturepairSetSourceCoverage(EnsPFeaturepair fp,
+                                       float coverage);
 
-AjBool ensFeaturepairSetEvalue(EnsPFeaturepair fp, double evalue);
+AjBool ensFeaturepairSetSourceFeature(EnsPFeaturepair fp,
+                                      EnsPFeature feature);
 
-AjBool ensFeaturepairSetScore(EnsPFeaturepair fp, double score);
+AjBool ensFeaturepairSetSourceSpecies(EnsPFeaturepair fp,
+                                      AjPStr species);
 
-AjBool ensFeaturepairSetSourceCoverage(EnsPFeaturepair fp, float coverage);
+AjBool ensFeaturepairSetTargetCoverage(EnsPFeaturepair fp,
+                                       float coverage);
 
-AjBool ensFeaturepairSetTargetCoverage(EnsPFeaturepair fp, float coverage);
+AjBool ensFeaturepairSetTargetFeature(EnsPFeaturepair fp,
+                                      EnsPFeature feature);
+
+AjBool ensFeaturepairSetTargetSpecies(EnsPFeaturepair fp,
+                                      AjPStr species);
 
 AjBool ensFeaturepairTrace(const EnsPFeaturepair fp, ajuint level);
 
-AjBool ensFeaturepairSetSequenceIdentity(EnsPFeaturepair fp, float identity);
+AjBool ensFeaturepairSetIdentity(EnsPFeaturepair fp, float identity);
 
-ajulong ensFeaturepairGetMemsize(const EnsPFeaturepair fp);
+size_t ensFeaturepairCalculateMemsize(const EnsPFeaturepair fp);
+
+EnsPFeaturepair ensFeaturepairTransfer(EnsPFeaturepair fp,
+                                       EnsPSlice slice);
 
 EnsPFeaturepair ensFeaturepairTransform(const EnsPFeaturepair fp,
                                         const AjPStr csname,
                                         const AjPStr csversion);
 
-EnsPFeaturepair ensFeaturepairTransfer(EnsPFeaturepair fp, EnsPSlice slice);
+int ensFeaturepairCompareSourceStartAscending(const EnsPFeaturepair fp1,
+                                              const EnsPFeaturepair fp2);
 
-int ensFeaturepairCompareSourceFeatureStartAscending(const void* P1,
-                                                     const void* P2);
+int ensFeaturepairCompareSourceStartDescending(const EnsPFeaturepair fp1,
+                                               const EnsPFeaturepair fp2);
 
-int ensFeaturepairCompareSourceFeatureStartDescending(const void* P1,
-                                                      const void* P2);
+AjBool ensListFeaturepairSortSourceStartAscending(AjPList fps);
 
-AjBool ensFeaturepairSortBySourceFeatureStartAscending(AjPList fps);
-
-AjBool ensFeaturepairSortBySourceFeatureStartDescending(AjPList fps);
-
-/* Ensembl Base Align Feature */
-
-EnsPBasealignfeature ensBasealignfeatureNewD(
-    EnsPDNAAlignFeatureadaptor dafa,
-    ajuint identifier,
-    EnsPFeaturepair fp,
-    AjPStr cigar,
-    ajuint pair);
-
-EnsPBasealignfeature ensBasealignfeatureNewP(
-    EnsPProteinalignfeatureadaptor pafa,
-    ajuint identifier,
-    EnsPFeaturepair fp,
-    AjPStr cigar);
-
-EnsPBasealignfeature ensBasealignfeatureNew(
-    EnsPFeaturepair fp,
-    AjPStr cigar,
-    AjPList fps,
-    EnsEBasealignfeatureType type,
-    ajuint pair);
-
-EnsPBasealignfeature ensBasealignfeatureNewObj(
-    const EnsPBasealignfeature object);
-
-EnsPBasealignfeature ensBasealignfeatureNewRef(EnsPBasealignfeature baf);
-
-void ensBasealignfeatureDel(EnsPBasealignfeature *Pbaf);
-
-EnsPDNAAlignFeatureadaptor ensBasealignfeatureGetDNAAlignFeatureadaptor(
-    const EnsPBasealignfeature baf);
-
-EnsPProteinalignfeatureadaptor ensBasealignfeatureGetProteinalignfeatureadaptor(
-    const EnsPBasealignfeature baf);
-
-ajuint ensBasealignfeatureGetIdentifier(const EnsPBasealignfeature baf);
-
-EnsPFeaturepair ensBasealignfeatureGetFeaturepair(
-    const EnsPBasealignfeature baf);
-
-AjBool ensBasealignfeatureSetFeaturepair(EnsPBasealignfeature baf,
-                                         EnsPFeaturepair fp);
-
-EnsPFeature ensBasealignfeatureGetFeature(const EnsPBasealignfeature baf);
-
-ajuint ensBasealignfeatureGetAlignmentLength(EnsPBasealignfeature baf);
-
-void *ensBasealignfeatureGetAdaptor(const EnsPBasealignfeature baf);
-
-ajuint ensBasealignfeatureGetSourceUnit(const EnsPBasealignfeature baf);
-
-ajuint ensBasealignfeatureGetTargetUnit(const EnsPBasealignfeature baf);
-
-ajulong ensBasealignfeatureGetMemsize(const EnsPBasealignfeature baf);
-
-EnsPBasealignfeature ensBasealignfeatureTransform(
-    const EnsPBasealignfeature baf,
-    const AjPStr csname,
-    const AjPStr csversion);
-
-EnsPBasealignfeature ensBasealignfeatureTransfer(EnsPBasealignfeature baf,
-                                                 EnsPSlice slice);
-
-AjBool ensBasealignfeatureTrace(const EnsPBasealignfeature baf, ajuint level);
-
-AjBool ensBasealignfeatureFetchAllFeaturepairs(const EnsPBasealignfeature baf,
-                                               AjPList fps);
-
-AjBool ensBasealignfeatureSortBySourceFeatureStartAscending(AjPList bafs);
-
-AjBool ensBasealignfeatureSortBySourceFeatureStartDescending(AjPList bafs);
-
-/* Ensembl DNA Align Feature Adaptor */
-
-EnsPDNAAlignFeatureadaptor ensRegistryGetDNAAlignFeatureadaptor(
-    EnsPDatabaseadaptor dba);
-
-EnsPDNAAlignFeatureadaptor ensDNAAlignFeatureadaptorNew(
-    EnsPDatabaseadaptor dba);
-
-void ensDNAAlignFeatureadaptorDel(EnsPDNAAlignFeatureadaptor *Pdafa);
-
-AjBool ensDNAAlignFeatureadaptorFetchByIdentifier(
-    EnsPDNAAlignFeatureadaptor dafa,
-    ajuint identifier,
-    EnsPBasealignfeature *Pbaf);
-
-AjBool ensDNAAlignFeatureadaptorFetchAllBySliceIdentity(
-    EnsPDNAAlignFeatureadaptor dafa,
-    EnsPSlice slice,
-    float identity,
-    const AjPStr anname,
-    AjPList bafs);
-
-AjBool ensDNAAlignFeatureadaptorFetchAllBySliceCoverage(
-    EnsPDNAAlignFeatureadaptor dafa,
-    EnsPSlice slice,
-    float coverage,
-    const AjPStr anname,
-    AjPList bafs);
-
-AjBool ensDNAAlignFeatureadaptorFetchAllBySliceExternaldatabase(
-    EnsPDNAAlignFeatureadaptor dafa,
-    EnsPSlice slice,
-    const AjPStr edbname,
-    const AjPStr anname,
-    AjPList bafs);
-
-AjBool ensDNAAlignFeatureadaptorFetchAllByHitName(
-    EnsPDNAAlignFeatureadaptor dafa,
-    const AjPStr hitname,
-    const AjPStr anname,
-    AjPList bafs);
-
-AjBool ensDNAAlignFeatureadaptorFetchAllByHitUnversioned(
-    EnsPDNAAlignFeatureadaptor dafa,
-    const AjPStr hitname,
-    const AjPStr anname,
-    AjPList bafs);
-
-AjBool ensDNAAlignFeatureadaptorFetchAllIdentifiers(
-    EnsPDNAAlignFeatureadaptor dafa,
-    AjPList idlist);
-
-/* Ensembl Protein Align Feature Adaptor */
-
-EnsPProteinalignfeatureadaptor ensRegistryGetProteinalignfeatureadaptor(
-    EnsPDatabaseadaptor dba);
-
-EnsPProteinalignfeatureadaptor ensProteinalignfeatureadaptorNew(
-    EnsPDatabaseadaptor dba);
-
-void ensProteinalignfeatureadaptorDel(EnsPProteinalignfeatureadaptor *Ppafa);
-
-AjBool ensProteinalignfeatureadaptorFetchByIdentifier(
-    EnsPProteinalignfeatureadaptor pafa,
-    ajuint identifier,
-    EnsPBasealignfeature *Pbaf);
-
-AjBool ensProteinalignfeatureadaptorFetchAllBySliceIdentity(
-    EnsPProteinalignfeatureadaptor pafa,
-    EnsPSlice slice,
-    float identity,
-    const AjPStr anname,
-    AjPList bafs);
-
-AjBool ensProteinalignfeatureadaptorFetchAllBySliceCoverage(
-    EnsPProteinalignfeatureadaptor pafa,
-    EnsPSlice slice,
-    float coverage,
-    const AjPStr anname,
-    AjPList bafs);
-
-AjBool ensProteinalignfeatureadaptorFetchAllBySliceExternaldatabase(
-    EnsPProteinalignfeatureadaptor pafa,
-    EnsPSlice slice,
-    const AjPStr edbname,
-    const AjPStr anname,
-    AjPList bafs);
-
-AjBool ensProteinalignfeatureadaptorFetchAllByHitName(
-    EnsPProteinalignfeatureadaptor pafa,
-    const AjPStr hitname,
-    const AjPStr anname,
-    AjPList bafs);
-
-AjBool ensProteinalignfeatureadaptorFetchAllByHitUnversioned(
-    EnsPProteinalignfeatureadaptor pafa,
-    const AjPStr hitname,
-    const AjPStr anname,
-    AjPList bafs);
-
-AjBool ensProteinalignfeatureadaptorFetchAllIdentifiers(
-    EnsPProteinalignfeatureadaptor pafa,
-    AjPList idlist);
-
-/* Ensembl Protein Feature */
-
-EnsPProteinfeature ensProteinfeatureNew(
-    EnsPProteinfeatureadaptor pfa,
-    ajuint identifier,
-    EnsPFeaturepair fp,
-    AjPStr accession,
-    AjPStr description);
-
-EnsPProteinfeature ensProteinfeatureNewObj(const EnsPProteinfeature object);
-
-EnsPProteinfeature ensProteinfeatureNewRef(EnsPProteinfeature pf);
-
-void ensProteinfeatureDel(EnsPProteinfeature *Ppf);
-
-EnsPProteinfeatureadaptor ensProteinfeatureGetAdaptor(
-    const EnsPProteinfeature pf);
-
-ajuint ensProteinfeatureGetIdentifier(const EnsPProteinfeature pf);
-
-EnsPFeaturepair ensProteinfeatureGetFeaturepair(const EnsPProteinfeature pf);
-
-AjPStr ensProteinfeatureGetAccession(const EnsPProteinfeature pf);
-
-AjPStr ensProteinfeatureGetDescription(const EnsPProteinfeature pf);
-
-AjBool ensProteinfeatureSetAdaptor(EnsPProteinfeature pf,
-                                   EnsPProteinfeatureadaptor pfa);
-
-AjBool ensProteinfeatureSetIdentifier(EnsPProteinfeature pf, ajuint identifier);
-
-AjBool ensProteinfeatureSetFeaturepair(EnsPProteinfeature pf,
-                                       EnsPFeaturepair fp);
-
-AjBool ensProteinfeatureSetAccession(EnsPProteinfeature pf, AjPStr accession);
-
-AjBool ensProteinfeatureSetDescription(EnsPProteinfeature pf,
-                                       AjPStr description);
-
-AjBool ensProteinfeatureTrace(const EnsPProteinfeature pf, ajuint level);
-
-ajulong ensProteinfeatureGetMemsize(const EnsPProteinfeature pf);
-
-/* Ensembl Protein Feature Adaptor */
-
-EnsPProteinfeatureadaptor ensRegistryGetProteinfeatureadaptor(
-    EnsPDatabaseadaptor dba);
-
-EnsPProteinfeatureadaptor ensProteinfeatureadaptorNew(
-    EnsPDatabaseadaptor dba);
-
-void ensProteinfeatureadaptorDel(EnsPProteinfeatureadaptor *Ppfa);
-
-AjBool ensProteinfeatureadaptorFetchAllByTranslationIdentifier(
-    EnsPProteinfeatureadaptor pfa,
-    ajuint tlid,
-    AjPList pfs);
-
-AjBool ensProteinfeatureadaptorFetchByIdentifier(
-    EnsPProteinfeatureadaptor pfa,
-    ajuint identifier,
-    EnsPProteinfeature *Ppf);
-
-/* Ensembl Simple Feature */
-
-EnsPSimplefeature ensSimplefeatureNew(EnsPSimplefeatureadaptor pfa,
-                                      ajuint identifier,
-                                      EnsPFeature feature,
-                                      AjPStr label,
-                                      double score);
-
-EnsPSimplefeature ensSimplefeatureNewObj(const EnsPSimplefeature object);
-
-EnsPSimplefeature ensSimplefeatureNewRef(EnsPSimplefeature sf);
-
-void ensSimplefeatureDel(EnsPSimplefeature* Psf);
-
-EnsPSimplefeatureadaptor ensSimplefeatureGetAdaptor(const EnsPSimplefeature sf);
-
-ajuint ensSimplefeatureGetIdentifier(const EnsPSimplefeature sf);
-
-EnsPFeature ensSimplefeatureGetFeature(const EnsPSimplefeature sf);
-
-AjPStr ensSimplefeatureGetDisplayLabel(const EnsPSimplefeature sf);
-
-double ensSimplefeatureGetScore(const EnsPSimplefeature sf);
-
-AjBool ensSimplefeatureSetAdaptor(EnsPSimplefeature sf,
-                                  EnsPSimplefeatureadaptor sfa);
-
-AjBool ensSimplefeatureSetIdentifier(EnsPSimplefeature sf, ajuint identifier);
-
-AjBool ensSimplefeatureSetFeature(EnsPSimplefeature sf, EnsPFeature feature);
-
-AjBool ensSimplefeatureSetDisplayLabel(EnsPSimplefeature sf, AjPStr label);
-
-AjBool ensSimplefeatureSetScore(EnsPSimplefeature sf, double score);
-
-AjBool ensSimplefeatureTrace(const EnsPSimplefeature sf, ajuint level);
-
-ajulong ensSimplefeatureGetMemsize(const EnsPSimplefeature sf);
-
-AjBool ensSimplefeatureSortByStartAscending(AjPList sfs);
-
-AjBool ensSimplefeatureSortByStartDescending(AjPList sfs);
-
-/* Ensembl Simple Feature Adaptor */
-
-EnsPSimplefeatureadaptor ensRegistryGetSimplefeatureadaptor(
-    EnsPDatabaseadaptor dba);
-
-EnsPSimplefeatureadaptor ensSimplefeatureadaptorNew(
-    EnsPDatabaseadaptor dba);
-
-void ensSimplefeatureadaptorDel(EnsPSimplefeatureadaptor *Psfa);
-
-AjBool ensSimplefeatureadaptorFetchAllBySlice(EnsPSimplefeatureadaptor sfa,
-                                              EnsPSlice slice,
-                                              const AjPStr anname,
-                                              AjPList sfs);
-
-AjBool ensSimplefeatureadaptorFetchAllBySliceScore(
-    EnsPSimplefeatureadaptor sfa,
-    EnsPSlice slice,
-    double score,
-    const AjPStr anname,
-    AjPList sfs);
-
-AjBool ensSimplefeatureadaptorFetchAllByAnalysisName(
-    EnsPSimplefeatureadaptor sfa,
-    const AjPStr anname,
-    AjPList sfs);
+AjBool ensListFeaturepairSortSourceStartDescending(AjPList fps);
 
 /* Ensembl Assembly Exception Feature */
 
-EnsPAssemblyexceptionfeature ensAssemblyexceptionfeatureNew(
+EnsPAssemblyexceptionfeature ensAssemblyexceptionfeatureNewCpy(
+    const EnsPAssemblyexceptionfeature aef);
+
+EnsPAssemblyexceptionfeature ensAssemblyexceptionfeatureNewIni(
     EnsPAssemblyexceptionfeatureadaptor aefa,
     ajuint identifier,
     EnsPFeature feature,
     EnsPSlice slice,
     EnsEAssemblyexceptionType type);
-
-EnsPAssemblyexceptionfeature ensAssemblyexceptionfeatureNewObj(
-    const EnsPAssemblyexceptionfeature object);
 
 EnsPAssemblyexceptionfeature ensAssemblyexceptionfeatureNewRef(
     EnsPAssemblyexceptionfeature aef);
@@ -950,13 +477,13 @@ void ensAssemblyexceptionfeatureDel(EnsPAssemblyexceptionfeature* Paef);
 EnsPAssemblyexceptionfeatureadaptor ensAssemblyexceptionfeatureGetAdaptor(
     const EnsPAssemblyexceptionfeature aef);
 
-ajuint ensAssemblyexceptionfeatureGetIdentifier(
+EnsPSlice ensAssemblyexceptionfeatureGetExceptionSlice(
     const EnsPAssemblyexceptionfeature aef);
 
 EnsPFeature ensAssemblyexceptionfeatureGetFeature(
     const EnsPAssemblyexceptionfeature aef);
 
-EnsPSlice ensAssemblyexceptionfeatureGetAlternateSlice(
+ajuint ensAssemblyexceptionfeatureGetIdentifier(
     const EnsPAssemblyexceptionfeature aef);
 
 EnsEAssemblyexceptionType ensAssemblyexceptionfeatureGetType(
@@ -966,26 +493,33 @@ AjBool ensAssemblyexceptionfeatureSetAdaptor(
     EnsPAssemblyexceptionfeature aef,
     EnsPAssemblyexceptionfeatureadaptor aefa);
 
-AjBool ensAssemblyexceptionfeatureSetIdentifier(
+AjBool ensAssemblyexceptionfeatureSetExceptionSlice(
     EnsPAssemblyexceptionfeature aef,
-    ajuint identifier);
+    EnsPSlice slice);
 
 AjBool ensAssemblyexceptionfeatureSetFeature(EnsPAssemblyexceptionfeature aef,
                                              EnsPFeature feature);
 
-AjBool ensAssemblyexceptionfeatureSetAlternateSlice(
+AjBool ensAssemblyexceptionfeatureSetIdentifier(
     EnsPAssemblyexceptionfeature aef,
-    EnsPSlice altslice);
+    ajuint identifier);
 
 AjBool ensAssemblyexceptionfeatureSetType(EnsPAssemblyexceptionfeature aef,
                                           EnsEAssemblyexceptionType type);
 
-AjBool ensAssemblyexceptionfeatureFetchDisplayIdentifier(
+size_t ensAssemblyexceptionfeatureCalculateMemsize(
+    const EnsPAssemblyexceptionfeature aef);
+
+AjBool ensAssemblyexceptionfeatureFetchDisplayidentifier(
     const EnsPAssemblyexceptionfeature aef,
-    AjPStr *Pidentifier);
+    AjPStr* Pidentifier);
 
 AjBool ensAssemblyexceptionfeatureTrace(const EnsPAssemblyexceptionfeature aef,
                                         ajuint level);
+
+AjBool ensTableAssemblyexceptionfeatureClear(AjPTable table);
+
+AjBool ensTableAssemblyexceptionfeatureDelete(AjPTable* Ptable);
 
 /* Ensembl Assembly Exception Feature Adaptor */
 
@@ -1002,15 +536,15 @@ AjBool ensAssemblyexceptionfeatureadaptorFetchAll(
     EnsPAssemblyexceptionfeatureadaptor aefa,
     AjPList aefs);
 
+AjBool ensAssemblyexceptionfeatureadaptorFetchAllbySlice(
+    EnsPAssemblyexceptionfeatureadaptor aefa,
+    EnsPSlice slice,
+    AjPList aefs);
+
 AjBool ensAssemblyexceptionfeatureadaptorFetchByIdentifier(
     EnsPAssemblyexceptionfeatureadaptor aefa,
     ajuint identifier,
     EnsPAssemblyexceptionfeature* Paef);
-
-AjBool ensAssemblyexceptionfeatureadaptorFetchAllBySlice(
-    EnsPAssemblyexceptionfeatureadaptor aefa,
-    EnsPSlice slice,
-    AjPList aefs);
 
 /*
 ** End of prototype definitions
@@ -1019,8 +553,6 @@ AjBool ensAssemblyexceptionfeatureadaptorFetchAllBySlice(
 
 
 
-#endif /* ensfeature_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSFEATURE_H */

@@ -1,8 +1,8 @@
 application: corbatest [
   documentation: "Test of EMBL corba retrieval"
   groups: "Test"
-  relations: "/edam/topic/0000220 File handling"
-  relations: "/edam/operation/0000336 File debugging"
+    relations: "EDAM:0000220 topic File handling"
+    relations: "EDAM:0000336 operation File debugging"
 ]
 
 section: input [
@@ -15,7 +15,7 @@ section: input [
     information: "Enter an EMBL ID or ACCNO"
     default: "hsfau"
     knowntype: "sequence id input"
-    relations:  "/edam/data/0001063 Sequence identifier"                     
+    relations: "EDAM:0001063 identifier Sequence identifier"
   ]
 
 endsection: input
@@ -28,7 +28,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "corbatest output"
-    relations: "/edam/data/0000969 Free text"                                      
+    relations: "EDAM:0000969 data Text"
   ]
 
 endsection: output

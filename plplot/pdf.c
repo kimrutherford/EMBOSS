@@ -22,9 +22,9 @@
    	
 */
 
-#ifdef WIN32
+/*#ifdef WIN32*/
 #include "plDevs.h"
-#endif
+/*#endif*/
 
 #if defined(PLD_pdf)
 

@@ -82,6 +82,14 @@ public class AlignJFrame extends JFrame
 
     SequenceReader sr = new SequenceReader(seqFile);
     sequenceFile = sr.getSequenceFile();
+
+    if(sr.getSequenceVector()==null)
+    {
+        statusField.setText("Jemboss not able to read sequences in "+
+                sequenceFile.getName());
+        return;
+    }
+    
     openMethod(sr.getSequenceVector());
     setTitle("Jemboss Alignment Viewer    :: "+
               sequenceFile.getName());
@@ -635,6 +643,7 @@ public class AlignJFrame extends JFrame
 // font menu
     String sizes[] = {"10", "12", "14", "16", "18"};
     final JComboBox fntSize = new JComboBox(sizes);
+    fntSize.setToolTipText("font size");
     fntSize.setSelectedItem("12");
     menuBar.add(fntSize);
     fntSize.setEditable(true);

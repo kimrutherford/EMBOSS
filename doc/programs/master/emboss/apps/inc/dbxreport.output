@@ -1,0 +1,63 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: embl.dbxreport</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Index 'id' (.xid)
+ compressed:  Yes (Compressed)
+  cachesize:  100 (Size of cache)
+   pagesize: 2048 (Page size)
+  pagecount:    3 (Page count)
+      order:   71 (Tree order)
+     sorder:   99 (Order of secondary tree)
+      level:    0 (Level of tree)
+     slevel:    0 (Level of secondary tree)
+       fill:   46 (Entries per bucket)
+      sfill:  101 (Entries per secondary bucket)
+    kwlimit:   15 (Max key size)
+      count:    6 (Unique entries in index)
+  fullcount:    6 (Total entries in index)
+Identifier index 'id' index found with 3 pages
+      COUNT: 6
+   COUNTALL: 6
+       root: 1
+     bucket: 2
+...       keys: 1
+...      bkeys: 6
+...   total_size: 2143
+...    freespace: 5823, 94.8 of uncompressed
+      FOUND: 6
+   FOUNDALL: 6
+Index 'acc' (.xac)
+ compressed:  Yes (Compressed)
+  cachesize:  100 (Size of cache)
+   pagesize: 2048 (Page size)
+  pagecount:    6 (Page count)
+      order:   71 (Tree order)
+     sorder:   99 (Order of secondary tree)
+      level:    0 (Level of tree)
+     slevel:    0 (Level of secondary tree)
+       fill:   46 (Entries per bucket)
+      sfill:  101 (Entries per secondary bucket)
+    kwlimit:   15 (Max key size)
+      count:    7 (Unique entries in index)
+  fullcount:    9 (Total entries in index)
+Identifier index 'acc' index found with 6 pages
+      COUNT: 7
+   COUNTALL: 9
+       root: 1
+    numroot: 1
+     bucket: 2
+  numbucket: 2
+...       keys: 2
+...      bkeys: 7
+...      bdups: 1
+...      bxtra: 2
+...      nkeys: 3 (0)
+...   total_size: 2496
+...    freespace: 11764, 95.7 of uncompressed
+      FOUND: 7
+   FOUNDALL: 9
+</pre>
+</td></tr></table><p>

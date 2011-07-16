@@ -67,7 +67,7 @@ ca_contact_site SO:0001094
 # FT   CARBOHYD     10     10       O-LINKED (GALNAC...) (BY SIMILARITY).
 # FT   CARBOHYD     34     34       C-LINKED (MAN).
 
-carbohyd
+carbohyd SO:0001089_carbohyd
 	/note
 	/comment
 
@@ -120,7 +120,7 @@ sequence_conflict SO:0001085
 # identical, the amino acid bond is an interchain one. The name of the
 # linked peptide is indicated in the description field.
  
-crosslnk
+crosslnk SO:0001087_crosslnk
 	/note
 	/comment
 

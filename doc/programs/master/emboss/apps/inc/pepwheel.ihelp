@@ -1,5 +1,5 @@
 Draw a helical wheel diagram for a protein sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
@@ -7,7 +7,7 @@ Version: EMBOSS:6.3.0
    -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers (* if not always prompted):
    -steps              integer    [18] The number of residues plotted per turn

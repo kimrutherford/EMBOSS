@@ -1,4 +1,4 @@
-<b>Here is a sample session with showseq</b>
+Here is a sample session with <b>showseq</b>
 <p>
 
 <p>
@@ -123,7 +123,7 @@ Make selected regions uppercase. (Use '-slower' to force the rest of the sequenc
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '8-24,65-81' </b>
+% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper "8-24,65-81" </b>
 Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 
@@ -155,7 +155,7 @@ Add your own annotation to the display:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26 binding site 15-15 SNP' </b>
+% <b>showseq tembl:x13776 -sbeg 1 -send 100 -format 2 -send 120 -annotation "13-26 binding site 15-15 SNP" </b>
 Displays sequences with features in pretty format
 Output file [x13776.showseq]: <b></b>
 

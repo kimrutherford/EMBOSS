@@ -25,9 +25,6 @@
 #include "ajax.h"
 #include "expat.h"
 
-#define AJDOMDESTROY 1
-#define AJDOMKEEP 0
-
 #define AJDOM_TABLE_HINT 1000
 
 #define AJXML_BUFSIZ 8192
@@ -82,7 +79,8 @@ static void domExpatElement(void *udata, const XML_Char *name,
 static void domExpatAttlist(void *udata, const XML_Char *name,
                             const XML_Char *attname, const XML_Char *atttype,
                             const XML_Char *deflt, int isrequired);
-static void domExpatEntity(void *udata, const XML_Char *entityname, int isparam,
+static void domExpatEntity(void *udata,
+                           const XML_Char *entityname, int isparam,
                            const XML_Char *value, int lenval,
                            const XML_Char *base, const XML_Char *systemid,
                            const XML_Char *publicid, const XML_Char *notname);
@@ -90,6 +88,8 @@ static void domExpatNotation(void *udata, const XML_Char *notname,
                              const XML_Char *base, const XML_Char *systemid,
                              const XML_Char *publicid);
 static void domClearMapValues(void **key, void **value, void *cl);
+static void domClearMapAll(void **key, void **value, void *cl);
+
 
 
 
@@ -189,7 +189,7 @@ static void domAddToMap(AjPDomNodeList list, AjPDomNode key,
 			AjPDomNodeEntry val)
 {
     if(!list->table)
-	list->table = ajTableNewLen(AJDOM_TABLE_HINT);
+	list->table = ajTableNew(AJDOM_TABLE_HINT);
     
 
     domRemoveFromMap(list,key);
@@ -241,13 +241,13 @@ AjPDomNodeEntry ajDomNodeListAppend(AjPDomNodeList list,
 
     if(!list)
     {
-	ajWarn("ajDomNodeListAppend: Null pointer error\n");
+	ajDebug("ajDomNodeListAppend: Null pointer error\n");
 	return NULL;
     }
 
     if(list->filter)
     {
-	ajWarn("ajDomNodeListAppend: Filtered list error\n");
+	ajDebug("ajDomNodeListAppend: Filtered list error\n");
 	return NULL;
     }
 
@@ -313,7 +313,7 @@ AjPDomNode ajDomNodeAppendChild(AjPDomNode node, AjPDomNode extrachild)
        node->type != AJDOM_DOCUMENT_NODE &&
        extrachild->type != AJDOM_DOCUMENT_TYPE_NODE)
     {
-	ajWarn("ajDomNodeAppendChild: Wrong document");
+	ajDebug("ajDomNodeAppendChild: Wrong document");
 	return NULL;
     }
 
@@ -322,7 +322,7 @@ AjPDomNode ajDomNodeAppendChild(AjPDomNode node, AjPDomNode extrachild)
 	for(n=extrachild->firstchild; n; n=n->nextsibling)
 	    if(AJDOM_CANTDO(node,n) || domIsAncestor(n,node))
 	    {
-		ajWarn("ajDomNodeAppendChild: Hierarchy Request Error\n");
+		ajDebug("ajDomNodeAppendChild: Hierarchy Request Error\n");
 		return NULL;
 	    }
 
@@ -346,7 +346,7 @@ AjPDomNode ajDomNodeAppendChild(AjPDomNode node, AjPDomNode extrachild)
 
     if(AJDOM_CANTDO(node,extrachild) || domIsAncestor(extrachild,node))
     {
-	ajWarn("ajDomNodeAppendChild: Hierarchy Request Error 2\n");
+	ajDebug("ajDomNodeAppendChild: Hierarchy Request Error 2\n");
 	return NULL;
     }
 
@@ -471,7 +471,7 @@ AjPDomNode ajDomRemoveChild(AjPDomNode node, AjPDomNode child)
     if(child->ownerdocument != node->ownerdocument &&
        child->ownerdocument != node)
     {
-	ajWarn("ajDomRemoveChild: Wrong document");
+	ajDebug("ajDomRemoveChild: Wrong document");
 
 	return NULL;
     }
@@ -527,7 +527,7 @@ static AjPDomNodeEntry domDoLookupNode(const AjPDomNodeList list,
 {
     AjPDomNodeEntry p;
 
-    p = (AjPDomNodeEntry) ajTableFetch(list->table,node);
+    p = (AjPDomNodeEntry) ajTableFetchmodV(list->table,node);
 
     return p;
 }
@@ -552,13 +552,13 @@ AjPDomNodeEntry ajDomNodeListRemove(AjPDomNodeList list, AjPDomNode child)
 
     if(!list)
     {
-	ajWarn("ajDomNodeListRemove: Empty list");
+	ajDebug("ajDomNodeListRemove: Empty list");
 	return NULL;
     }
 
     if(list->filter)
     {
-	ajWarn("ajDomNodeListRemove: Filtered list error");
+	ajDebug("ajDomNodeListRemove: Filtered list error");
 	return NULL;
     }
     
@@ -690,13 +690,18 @@ void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode node)
     {
         case AJDOM_ELEMENT_NODE:
             ajDomDocumentDestroyNodeList(doc,node->attributes,AJDOMDESTROY);
-            ajStrDel(&node->sub.Element.tagname);
             ajStrDel(&node->name);
             break;
         case AJDOM_TEXT_NODE:
             ajStrDel(&node->name);
+            ajStrDel(&node->value);
+            break;
         case AJDOM_COMMENT_NODE:
+            ajStrDel(&node->name);
+            ajStrDel(&node->value);
+            break;
         case AJDOM_CDATA_SECTION_NODE:
+            ajStrDel(&node->name);
             ajStrDel(&node->value);
             break;
         case AJDOM_ATTRIBUTE_NODE:
@@ -722,10 +727,9 @@ void ajDomDocumentDestroyNode(AjPDomDocument doc, AjPDomNode node)
             break;
         case AJDOM_DOCUMENT_TYPE_NODE:
             ajDomDocumentDestroyNodeList(doc,node->sub.DocumentType.entities,
-                                         AJDOMKEEP);
+                                         AJDOMDESTROY);
             ajDomDocumentDestroyNodeList(doc,node->sub.DocumentType.notations,
-                                         AJDOMKEEP);
-            ajStrDel(&node->sub.DocumentType.name);
+                                         AJDOMDESTROY);
             ajStrDel(&node->sub.DocumentType.publicid);
             ajStrDel(&node->sub.DocumentType.systemid);
             ajStrDel(&node->name);
@@ -781,7 +785,11 @@ void ajDomDocumentDestroyNodeList(AjPDomDocument doc, AjPDomNodeList list,
 	
 	if(list->table)
         {
-            ajTableMapDel(list->table, domClearMapValues, NULL);
+            if(donodes)
+                ajTableMapDel(list->table, domClearMapAll, (void *)doc);
+            else
+                ajTableMapDel(list->table, domClearMapValues, NULL);
+
 	    ajTableFree(&list->table);
         }
         
@@ -816,6 +824,41 @@ static void domClearMapValues(void **key, void **value, void *cl)
     (void) cl;				/* make it used */
     (void) key;
 
+    *value = NULL;
+
+    return;
+}
+
+
+
+
+/* @funcstatic domClearMapAll ************************************
+**
+** Clear keys and values from the map table
+**
+** @param [r] key [void**] Standard argument, table key.
+** @param [r] value [void**] Standard argument, table data item.
+** @param [r] cl [void*] Standard argument, usually NULL
+**
+** @return [void]
+** @@
+*********************************************************************/
+
+static void domClearMapAll(void **key, void **value, void *cl)
+{
+    AjPDomNodeEntry entry = NULL;
+    AjPDomNode node = NULL;
+    AjPDomDocument doc = NULL;
+    
+    entry = (AjPDomNodeEntry) *value;
+    AJFREE(entry);
+
+    node = (AjPDomNode) *key;
+    
+    doc = (AjPDomDocument) cl;
+
+    ajDomDocumentDestroyNode(doc,node);
+    
     *value = NULL;
 
     return;
@@ -863,7 +906,7 @@ AjPDomNode ajDomDocumentCreateNode(AjPDomDocument doc, ajuint nodetype)
     if (!doc && nodetype != AJDOM_DOCUMENT_NODE &&
 	nodetype != AJDOM_DOCUMENT_TYPE_NODE)
     {
-	ajWarn("ajDocumentCreateNode: allocation failure\n");
+	ajDebug("ajDocumentCreateNode: allocation failure\n");
 	return NULL;
     }
 
@@ -885,7 +928,7 @@ AjPDomNode ajDomDocumentCreateNode(AjPDomDocument doc, ajuint nodetype)
 
             if(node->childnodes == NULL)
 	    {
-		ajWarn("ajDocumentCreateNode: ajDocumentCreateNodeList"
+		ajDebug("ajDocumentCreateNode: ajDocumentCreateNodeList"
 		       " failed\n");
                 ajDomDocumentDestroyNode(doc,node);
                 return NULL;
@@ -957,7 +1000,7 @@ AjPDomDocumentType ajDomImplementationCreateDocumentTypeC(const char *qualname,
 
     if(!(doctype=ajDomDocumentCreateNode(NULL,AJDOM_DOCUMENT_TYPE_NODE)))
     {
-	ajWarn("ajDomImplementationCreateDocumentType: Cannot create node");
+	ajDebug("ajDomImplementationCreateDocumentType: Cannot create node");
 	return NULL;
     }
 
@@ -1041,7 +1084,7 @@ AjPDomDocument ajDomImplementationCreateDocumentC(const char *uri,
 
     if(!(doc = ajDomDocumentCreateNode(NULL,AJDOM_DOCUMENT_NODE)))
     {
-	ajWarn("ajDomImplementationCreateDocumentC: document memory\n");
+	ajDebug("ajDomImplementationCreateDocumentC: document memory\n");
 	return NULL;
     }
 
@@ -1057,7 +1100,7 @@ AjPDomDocument ajDomImplementationCreateDocumentC(const char *uri,
 	    element = ajDomDocumentCreateElementC(doc,qualname);
 	    if(!element)
 	    {
-		ajWarn("ajDomImplementationCreateDocumentC: element memory\n");
+		ajDebug("ajDomImplementationCreateDocumentC: element memory\n");
 		ajDomDocumentDestroyNode(doc,doc);
 
 		return NULL;
@@ -1208,14 +1251,14 @@ AjPDomNode ajDomNodeMapSetItem(AjPDomNodeMap map, AjPDomNode arg)
     {
 	if(map->filter)
 	{
-	    ajWarn("ajDomNodeMapSetItem: No mod allowed\n");
+	    ajDebug("ajDomNodeMapSetItem: No mod allowed\n");
 
 	    return NULL;
 	}
 
 	if(map->ownerdocument != arg->ownerdocument)
 	{
-	    ajWarn("ajDomNodeMapSetItem: Wrong document\n");
+	    ajDebug("ajDomNodeMapSetItem: Wrong document\n");
 
 	    return NULL;
 	}
@@ -1224,7 +1267,7 @@ AjPDomNode ajDomNodeMapSetItem(AjPDomNodeMap map, AjPDomNode arg)
 	   arg->sub.Attr.ownerelement &&
 	   arg->sub.Attr.ownerelement != map->ownerelement)
 	{
-	    ajWarn("ajDomNodeMapSetItem: In use attribute error\n");
+	    ajDebug("ajDomNodeMapSetItem: In use attribute error\n");
 
 	    return NULL;
 	}
@@ -1299,7 +1342,7 @@ AjPDomNode ajDomNodeMapRemoveItemC(AjPDomNodeMap map, const char *name)
     {
 	if(map->filter)
 	{
-	    ajWarn("ajDomNodeMapRemoveItemC: No mod allowed\n");
+	    ajDebug("ajDomNodeMapRemoveItemC: No mod allowed\n");
 
 	    return NULL;
 	}
@@ -1320,7 +1363,7 @@ AjPDomNode ajDomNodeMapRemoveItemC(AjPDomNodeMap map, const char *name)
 	}
     }
 
-    ajWarn("ajDomNodeMapRemoveItemC: Not found error\n");
+    ajDebug("ajDomNodeMapRemoveItemC: Not found error\n");
 
     return NULL;
 }
@@ -1474,7 +1517,7 @@ void ajDomElementSetAttributeC(const AjPDomElement element, const char *name,
 	prevvalue = NULL;
 	if(!(attr=ajDomDocumentCreateAttributeC(element->ownerdocument,name)))
 	{
-	    ajWarn("ajDomElementSetAttribute: DOM create failed\n");
+	    ajDebug("ajDomElementSetAttribute: DOM create failed\n");
 	    return;
 	}
 
@@ -1620,7 +1663,7 @@ AjPDomNode ajDomElementSetAttributeNode(AjPDomElement element,
 
     if(element->ownerdocument != newattr->ownerdocument)
     {
-	ajWarn("ajDomElementSetAttributeNode: Wrong document\n");
+	ajDebug("ajDomElementSetAttributeNode: Wrong document\n");
 	return NULL;
     }
 
@@ -1650,7 +1693,7 @@ AjPDomNode ajDomElementRemoveAttributeNode(AjPDomElement element,
     if(!element || !oldattr || !ajDomNodeListRemove(element->attributes,
 						    oldattr))
     {
-	ajWarn("ajDomElementRemoveAttributeNode: DOM not found error\n");
+	ajDebug("ajDomElementRemoveAttributeNode: DOM not found error\n");
 	return NULL;
     }
 
@@ -2785,14 +2828,14 @@ AjPDomNode ajDomNodeInsertBefore(AjPDomNode node, AjPDomNode newchild,
     if(newchild->ownerdocument != node->ownerdocument &&
        newchild->ownerdocument != node)
     {
-	ajWarn("ajDomNodeInsertBefore: Wrong document\n");
+	ajDebug("ajDomNodeInsertBefore: Wrong document\n");
 
 	return NULL;
     }
 
     if(refchild && refchild->parentnode != node)
     {
-	ajWarn("ajDomNodeInsertBefore: Hierarchy error\n");
+	ajDebug("ajDomNodeInsertBefore: Hierarchy error\n");
 
 	return NULL;
     }
@@ -2802,7 +2845,7 @@ AjPDomNode ajDomNodeInsertBefore(AjPDomNode node, AjPDomNode newchild,
 	for(n=newchild->firstchild; n; n=n->nextsibling)
 	    if(AJDOM_CANTDO(node,n) || domIsAncestor(n,node))
 	    {
-		ajWarn("ajDomNodeInsertBefore: Hierarchy Request Error\n");
+		ajDebug("ajDomNodeInsertBefore: Hierarchy Request Error\n");
 
 		return NULL;
 	    }
@@ -2898,7 +2941,7 @@ AjPDomNodeEntry ajDomNodeListInsert(AjPDomNodeList list, AjPDomNode newchild,
 
     if(list->filter)
     {
-	ajWarn("ajDomNodeListInsert: Filtered list error\n");
+	ajDebug("ajDomNodeListInsert: Filtered list error\n");
 
 	return NULL;
     }
@@ -2908,7 +2951,7 @@ AjPDomNodeEntry ajDomNodeListInsert(AjPDomNodeList list, AjPDomNode newchild,
 	s = domDoLookupNode(list,refchild);
 	if(!s || s->node != refchild)
 	{
-	    ajWarn("ajDomNodeListInsert: not found error\n");
+	    ajDebug("ajDomNodeListInsert: not found error\n");
 
 	    return NULL;
 	}
@@ -2975,14 +3018,14 @@ AjPDomNode ajDomNodeReplaceChild(AjPDomNode node, AjPDomNode newchild,
     if(newchild->ownerdocument != node->ownerdocument &&
        newchild->ownerdocument != node)
     {
-	ajWarn("ajDomNodeReplaceChild: Wrong document\n");
+	ajDebug("ajDomNodeReplaceChild: Wrong document\n");
 
 	return NULL;
     }
     
     if(!ajDomNodeListExists(node->childnodes,oldchild))
     {
-	ajWarn("ajDomNodeReplaceChild: Oldchild not found\n");
+	ajDebug("ajDomNodeReplaceChild: Oldchild not found\n");
 
 	return NULL;
     }
@@ -2992,7 +3035,7 @@ AjPDomNode ajDomNodeReplaceChild(AjPDomNode node, AjPDomNode newchild,
 	for(n=newchild->firstchild; n; n=n->nextsibling)
 	    if(AJDOM_CANTDO(node,n) || domIsAncestor(n,node))
 	    {
-		ajWarn("ajDomNodeReplaceChild: Hierarchy Request Error\n");
+		ajDebug("ajDomNodeReplaceChild: Hierarchy Request Error\n");
 
 		return NULL;
 	    }
@@ -3020,7 +3063,7 @@ AjPDomNode ajDomNodeReplaceChild(AjPDomNode node, AjPDomNode newchild,
 
     if(AJDOM_CANTDO(node,newchild) || domIsAncestor(newchild,node))
     {
-	ajWarn("ajDomNodeReplaceChild: Hierarchy Request Error\n");
+	ajDebug("ajDomNodeReplaceChild: Hierarchy Request Error\n");
 	return NULL;
     }
 
@@ -3082,7 +3125,7 @@ AjPDomNodeEntry ajDomNodeListReplace(AjPDomNodeList list, AjPDomNode newchild,
 
     if(list->filter)
     {
-	ajWarn("ajDomNodeListReplace: Filtered list error\n");
+	ajDebug("ajDomNodeListReplace: Filtered list error\n");
 
 	return NULL;
     }
@@ -3090,7 +3133,7 @@ AjPDomNodeEntry ajDomNodeListReplace(AjPDomNodeList list, AjPDomNode newchild,
     e = domDoLookupNode(list,oldchild);
     if(!e)
     {
-	ajWarn("ajDomNodeListReplace: Not found error\n");
+	ajDebug("ajDomNodeListReplace: Not found error\n");
 
 	return NULL;
     }
@@ -3243,7 +3286,7 @@ static AjPDomNode domNodeCloneNode(AjPDomDocument ownerdocument,
 	break;
 
     case AJDOM_ENTITY_REFERENCE_NODE:
-	ajWarn("Entity reference clone not implemented\n");
+	ajDebug("Entity reference clone not implemented\n");
 	return NULL;
     }
 
@@ -3921,7 +3964,7 @@ static void domExpatEnd(void *udata, const XML_Char *name)
 
 
 
-/* @funcstatic domExpatChardata ************************************************
+/* @funcstatic domExpatChardata ***********************************************
 **
 ** XML reading Expat chardata function
 **
@@ -3944,7 +3987,7 @@ static void domExpatChardata(void *udata, const XML_Char *str,
         return;
 
     /*
-    ** Care needs to be exercisedwith this function.
+    ** Care needs to be exercised with this function.
     ** First, it may need several callbacks to recover long strings.
     ** The operation might need to be converted to an append
     ** and only create nodes if the strings are complete
@@ -4012,7 +4055,7 @@ static void domExpatCdataStart(void *udata)
 
 
 
-/* @funcstatic domExpatCdataEnd ************************************************
+/* @funcstatic domExpatCdataEnd ***********************************************
 **
 ** XML reading Expat CDATA end function
 **
@@ -4204,14 +4247,15 @@ static void domExpatDoctypeStart(void *udata, const XML_Char *doctypename,
 
     userdata = (AjPDomUserdata) udata;
     
-    ajListPeek(userdata->Stack,(void**)&doc);
+    if(!ajListPeek(userdata->Stack,(void**)&doc))
+        return;
 
     if(!doc)
         return;
 
     if(doc->sub.Document.doctype)
     {
-        ajWarn("domExpatDoctypeStart: doctype already exists");
+        ajDebug("domExpatDoctypeStart: doctype already exists");
         return;
     }
     
@@ -4285,6 +4329,9 @@ static void domExpatElement(void *udata, const XML_Char *name,
 {
     udata = NULL;
     name  = NULL;
+
+    (void) udata;
+    (void) name;
     
     free(model);
 
@@ -4344,7 +4391,8 @@ static void domExpatAttlist(void *udata, const XML_Char *name,
 ** @@
 ******************************************************************************/
 
-static void domExpatEntity(void *udata, const XML_Char *entityname, int isparam,
+static void domExpatEntity(void *udata,
+                           const XML_Char *entityname, int isparam,
                            const XML_Char *value, int lenval,
                            const XML_Char *base, const XML_Char *systemid,
                            const XML_Char *publicid, const XML_Char *notname)
@@ -4482,7 +4530,8 @@ ajint ajDomReadFp(AjPDomDocument node, FILE *stream)
     XML_SetCommentHandler(parser, domExpatComment);
     XML_SetProcessingInstructionHandler(parser, domExpatProcessing);
     XML_SetXmlDeclHandler(parser, domExpatXmlDecl);
-    XML_SetDoctypeDeclHandler(parser, domExpatDoctypeStart, domExpatDoctypeEnd);
+    XML_SetDoctypeDeclHandler(parser, domExpatDoctypeStart,
+                              domExpatDoctypeEnd);
     XML_SetElementDeclHandler(parser, domExpatElement);
     XML_SetAttlistDeclHandler(parser, domExpatAttlist);
     XML_SetEntityDeclHandler(parser, domExpatEntity);
@@ -4498,9 +4547,9 @@ ajint ajDomReadFp(AjPDomDocument node, FILE *stream)
         if(!(n = fread(buf,1,AJXML_BUFSIZ,stream)) && ferror(stream))
             break;
 
-        if(!XML_ParseBuffer(parser, n , (done = feof(stream))))
+        if(!XML_ParseBuffer(parser, (int) n , (done = feof(stream))))
         {
-            ajWarn("ajFomRead: Expat error [%s] at XML line %d",
+            ajDebug("ajDomReadFp: Expat error [%s] at XML line %d",
                    XML_ErrorString(XML_GetErrorCode(parser)),
                    XML_GetCurrentLineNumber(parser));
             break;
@@ -4559,7 +4608,8 @@ ajint ajDomReadFilebuff(AjPDomDocument node, AjPFilebuff buff)
     XML_SetCommentHandler(parser, domExpatComment);
     XML_SetProcessingInstructionHandler(parser, domExpatProcessing);
     XML_SetXmlDeclHandler(parser, domExpatXmlDecl);
-    XML_SetDoctypeDeclHandler(parser, domExpatDoctypeStart, domExpatDoctypeEnd);
+    XML_SetDoctypeDeclHandler(parser, domExpatDoctypeStart,
+                              domExpatDoctypeEnd);
     XML_SetElementDeclHandler(parser, domExpatElement);
     XML_SetAttlistDeclHandler(parser, domExpatAttlist);
     XML_SetEntityDeclHandler(parser, domExpatEntity);
@@ -4576,12 +4626,14 @@ ajint ajDomReadFilebuff(AjPDomDocument node, AjPFilebuff buff)
         
         if(!XML_Parse(parser, line->Ptr, len, done))
         {
-            ajWarn("ajDomReadFilebuff: %s at XML line %d\n",
+            ajDebug("ajDomReadFilebuff: %s at XML line %d\n",
                    XML_ErrorString(XML_GetErrorCode(parser)),
                    XML_GetCurrentLineNumber(parser));
 
+            domUserdataDel(&userdata);
+            XML_ParserFree(parser);
             ajStrDel(&line);
-            
+
             return -1;
         }
 
@@ -4634,7 +4686,8 @@ ajint ajDomReadString(AjPDomDocument node, AjPStr str)
     XML_SetCommentHandler(parser, domExpatComment);
     XML_SetProcessingInstructionHandler(parser, domExpatProcessing);
     XML_SetXmlDeclHandler(parser, domExpatXmlDecl);
-    XML_SetDoctypeDeclHandler(parser, domExpatDoctypeStart, domExpatDoctypeEnd);
+    XML_SetDoctypeDeclHandler(parser, domExpatDoctypeStart,
+                              domExpatDoctypeEnd);
     XML_SetElementDeclHandler(parser, domExpatElement);
     XML_SetAttlistDeclHandler(parser, domExpatAttlist);
     XML_SetEntityDeclHandler(parser, domExpatEntity);
@@ -4647,7 +4700,7 @@ ajint ajDomReadString(AjPDomDocument node, AjPStr str)
         
     if(!XML_Parse(parser, str->Ptr, len, done))
     {
-        ajWarn("ajDomReadString: %s at XML line %d\n",
+        ajDebug("ajDomReadString: %s at XML line %d\n",
                XML_ErrorString(XML_GetErrorCode(parser)),
                XML_GetCurrentLineNumber(parser));
 
@@ -4661,4 +4714,126 @@ ajint ajDomReadString(AjPDomDocument node, AjPStr str)
     XML_ParserFree(parser);
 
     return 0;
+}
+
+
+
+
+/* @func ajDomTextGetText **************************************************
+**
+** Return the text from a text node
+**
+** @param [w] text [AjPDomText] text
+** @return [AjPStr] text or NULL
+** @@
+******************************************************************************/
+
+AjPStr ajDomTextGetText(AjPDomText text)
+{
+    if(!text)
+        return NULL;
+
+    if(text->type != AJDOM_TEXT_NODE)
+        return NULL;
+
+    return text->value;
+}
+
+
+
+
+/* @func ajDomElementGetText **************************************************
+**
+** Return the text from an element node
+**
+** @param [w] element [AjPDomElement] element
+** @return [AjPStr] text or NULL
+** @@
+******************************************************************************/
+
+AjPStr ajDomElementGetText(AjPDomElement element)
+{
+    if(!element)
+        return NULL;
+
+    if(element->type != AJDOM_ELEMENT_NODE)
+        return NULL;
+
+    if(!element->firstchild)
+        return NULL;
+    
+    return ajDomTextGetText(element->firstchild);
+}
+
+
+
+
+/* @func ajDomElementGetNthChildByTagNameC ***********************************
+**
+** Returns the nth child of a named element 
+**
+** @param [u] doc [AjPDomDocument] doc
+** @param [u] element [AjPDomElement] element
+** @param [r] name [const char *] element name
+** @param [r] n [ajint] number of child to get
+** @return [AjPDomElement] child or NULL
+** @@
+******************************************************************************/
+
+AjPDomElement ajDomElementGetNthChildByTagNameC(AjPDomDocument doc,
+                                                AjPDomElement element,
+                                                const char *name,
+                                                ajint n)
+{
+    AjPDomNodeList list;
+    ajint len;
+    AjPDomElement ret = NULL;
+    
+    list = ajDomElementGetElementsByTagNameC(element,name);
+
+    if(!list)
+        return NULL;
+
+    len = ajDomNodeListGetLen(list);
+
+    if(!len)
+    {
+	ajDomDocumentDestroyNodeList(doc,list,AJDOMKEEP);
+	return NULL;
+    }
+
+    if(n < 0 || n > len - 1)
+    {
+        ajDebug("ajDomElementgetNthChildByTagnameC: index out of range");
+        ajDomDocumentDestroyNodeList(doc,list,AJDOMKEEP);
+        return NULL;
+    }
+    
+    ret = ajDomNodeListItem(list,n);
+
+    ajDomDocumentDestroyNodeList(doc,list,AJDOMKEEP);
+    
+    return ret;
+}
+
+
+
+
+/* @func ajDomElementGetFirstChildByTagNameC *********************************
+**
+** Returns the 1st child of a named element 
+**
+** @param [u] doc [AjPDomDocument] doc
+** @param [u] element [AjPDomElement] element
+** @param [r] name [const char*] element name
+** @return [AjPDomElement] child or NULL
+** @@
+******************************************************************************/
+
+AjPDomElement ajDomElementGetFirstChildByTagNameC(AjPDomDocument doc,
+                                                  AjPDomElement element,
+                                                  const char *name)
+{
+    
+    return ajDomElementGetNthChildByTagNameC(doc,element,name,0);
 }

@@ -37,7 +37,7 @@ Output file [outfile.redata]:
 Command line arguments
 
 Retrieve information from REBASE restriction enzyme database
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-enzyme]            string     [BamHI] Enter the name of the restriction

@@ -30,8 +30,8 @@ double             ajCvtGaussToProb (float mean, float sd, float score);
 void               ajCvtPolToRec (float radius, float angle,
                                   float *x, float *y);
 float              ajCvtRadToDeg (float radians);
-ajuint             ajCvtSposToPos(ajuint len, ajint ipos);
-ajuint             ajCvtSposToPosStart(ajuint len, ajuint imin, ajint ipos);
+size_t             ajCvtSposToPos(size_t len, ajlong ipos);
+size_t             ajCvtSposToPosStart(size_t len, size_t imin, ajlong ipos);
 float              ajMathGmean(const float *s, ajint n);
 ajint              ajMathModulo (ajint a, ajint b);
 ajint              ajRandomNumber (void);

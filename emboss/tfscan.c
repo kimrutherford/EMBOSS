@@ -128,8 +128,8 @@ int main(int argc, char **argv)
 	ajStrFmtUpper(&substr);
 
 	l=ajListNew();
-	atable = ajTablestrNewLen(1000);
-	btable = ajTablestrNewLen(1000);
+	atable = ajTablestrNew(1000);
+	btable = ajTablestrNew(1000);
 	
 	sum=0;
 	while(ajReadlineTrim(inf,&line))
@@ -225,8 +225,8 @@ static void tfscan_print_hits(AjPList *l,
 {
     ajint i;
     EmbPMatMatch m;
-    AjPStr acc = NULL;
-    AjPStr bf  = NULL;
+    const AjPStr acc = NULL;
+    const AjPStr bf  = NULL;
     AjPFeattable ftable = NULL;
     AjPFeature gf  = NULL;
     AjPStr type = ajStrNewC("SO:0000235");
@@ -240,7 +240,7 @@ static void tfscan_print_hits(AjPList *l,
     for(i=0;i<hits;++i)
     {
 	ajListPop(*l,(void **)&m);
-	acc = ajTableFetch(t,(const void *)m->seqname);
+	acc = ajTableFetchS(t, m->seqname);
 
 	if(m->len >= minlength)
         {
@@ -262,7 +262,7 @@ static void tfscan_print_hits(AjPList *l,
                                '-',0);
             ajFmtPrintS(&tmpstr, "*acc %S", acc);
             ajFeatTagAdd(gf, NULL, tmpstr);
-            bf  = ajTableFetch(btable,(const void *)m->seqname);
+            bf  = ajTableFetchS(btable, m->seqname);
             ajFmtPrintS(&tmpstr, "*factor %S", bf);
             ajFeatTagAdd(gf, NULL, tmpstr);
         }

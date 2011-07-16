@@ -1,5 +1,5 @@
 Needleman-Wunsch global alignment of two sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -30,6 +30,7 @@ Version: EMBOSS:6.3.0
                                   penalty to control gap scoring. (Floating
                                   point number from 0.0 to 10.0)
   [-outfile]           align      [*.needle] Output alignment file name
+                                  (default -aformat srspair)
 
    Additional (Optional) qualifiers:
    -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]

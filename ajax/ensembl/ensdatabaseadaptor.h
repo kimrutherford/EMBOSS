@@ -1,23 +1,29 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensdatabaseadaptor_h
-#define ensdatabaseadaptor_h
+#ifndef ENSDATABASEADAPTOR_H
+#define ENSDATABASEADAPTOR_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ensdatabaseconnection.h"
 
+AJ_BEGIN_DECLS
 
 
 
-/* EnsMDatabaseadaptorGroups **************************************************
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+/* @const EnsMDatabaseadaptorGroups *******************************************
 **
 ** Number of Ensembl Database Adaptor groups.
 **
 ** The number of Ensembl Database Adaptor groups has to correlate with the
 ** EnsEDatabaseadaptorGroup enumeration list and the
-** static const char *databaseadaptorGroup[] array. It is used by the
+** static const char* databaseadaptorGroup[] array. It is used by the
 ** ensregistry.[ch] module.
 **
 ******************************************************************************/
@@ -27,9 +33,9 @@ extern "C"
 
 
 
-/* EnsEDatabaseadaptorGroup ***************************************************
+/* @const EnsEDatabaseadaptorGroup ********************************************
 **
-** Ensembl Database Adaptor group enumeration.
+** Ensembl Database Adaptor Group enumeration.
 **
 ******************************************************************************/
 
@@ -57,6 +63,10 @@ typedef enum EnsODatabaseadaptorGroup
 
 
 
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
 /* @data EnsPDatabaseadaptor **************************************************
 **
 ** Ensembl Database Adaptor.
@@ -68,18 +78,16 @@ typedef enum EnsODatabaseadaptorGroup
 ** @alias EnsODatabaseadaptor
 **
 ** @alias EnsPAttributeadaptor
-** @alias EnsPDitagadaptor
-** @alias EnsPRepeatconsensusadaptor
-** @alias EnsPGvalleleadaptor
 ** @alias EnsPGvgenotypeadaptor
-** @alias EnsPGvvariationadaptor
+** @alias EnsPGvsynonymadaptor
 **
 ** @attr Databaseconnection [EnsPDatabaseconnection] Ensembl Database
 **                                                   Connection
 ** @attr Species [AjPStr] Species
-** @attr SpeciesNames [AjPList] AJAX List of species name AJAX Strings
-** @attr Group [EnsEDatabaseadaptorGroup] Group
-** @attr MultiSpecies [AjBool] Multi-species database
+** @attr SpeciesNames [AjPList] AJAX List of AJAX String (species name) objects
+** @attr Group [EnsEDatabaseadaptorGroup] Ensembl Database Adaptor Group
+** enumeration
+** @attr Multispecies [AjBool] Multi-species database
 ** @attr Identifier [ajuint] Species identifier, defaults to 1
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
@@ -91,7 +99,7 @@ typedef struct EnsSDatabaseadaptor
     AjPStr Species;
     AjPList SpeciesNames;
     EnsEDatabaseadaptorGroup Group;
-    AjBool MultiSpecies;
+    AjBool Multispecies;
     ajuint Identifier;
     ajuint Padding;
 } EnsODatabaseadaptor;
@@ -101,6 +109,10 @@ typedef struct EnsSDatabaseadaptor
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
@@ -108,82 +120,88 @@ typedef struct EnsSDatabaseadaptor
 /* Ensembl Database Adaptor */
 
 EnsPDatabaseadaptor ensRegistryGetDatabaseadaptor(
-    EnsEDatabaseadaptorGroup group,
+    EnsEDatabaseadaptorGroup dbag,
     const AjPStr alias);
 
 EnsPDatabaseadaptor ensRegistryGetReferenceadaptor(EnsPDatabaseadaptor dba);
 
-EnsPDatabaseadaptor ensDatabaseadaptorNew(EnsPDatabaseconnection dbc,
-                                          AjPStr database,
-                                          AjPStr species,
-                                          EnsEDatabaseadaptorGroup group,
-                                          AjBool multi,
-                                          ajuint identifier);
+EnsPDatabaseadaptor ensDatabaseadaptorNewDatabasename(
+    EnsPDatabaseconnection dbc,
+    AjPStr database);
+
+EnsPDatabaseadaptor ensDatabaseadaptorNewIni(EnsPDatabaseconnection dbc,
+                                             AjPStr database,
+                                             AjPStr species,
+                                             EnsEDatabaseadaptorGroup dbag,
+                                             AjBool multi,
+                                             ajuint identifier);
+
+EnsPDatabaseadaptor ensDatabaseadaptorNewUrl(const AjPStr url);
 
 void ensDatabaseadaptorDel(EnsPDatabaseadaptor* Pdba);
 
 EnsPDatabaseconnection ensDatabaseadaptorGetDatabaseconnection(
     const EnsPDatabaseadaptor dba);
 
-AjPStr ensDatabaseadaptorGetSpecies(const EnsPDatabaseadaptor dba);
-
 EnsEDatabaseadaptorGroup ensDatabaseadaptorGetGroup(
     const EnsPDatabaseadaptor dba);
 
-AjBool ensDatabaseadaptorGetMultiSpecies(const EnsPDatabaseadaptor dba);
-
 ajuint ensDatabaseadaptorGetIdentifier(const EnsPDatabaseadaptor dba);
+
+AjBool ensDatabaseadaptorGetMultispecies(const EnsPDatabaseadaptor dba);
+
+AjPStr ensDatabaseadaptorGetSpecies(const EnsPDatabaseadaptor dba);
 
 AjBool ensDatabaseadaptorSetDatabaseconnection(EnsPDatabaseadaptor dba,
                                                EnsPDatabaseconnection dbc);
 
-AjBool ensDatabaseadaptorSetSpecies(EnsPDatabaseadaptor dba, AjPStr species);
-
 AjBool ensDatabaseadaptorSetGroup(EnsPDatabaseadaptor dba,
-                                  EnsEDatabaseadaptorGroup group);
-
-AjBool ensDatabaseadaptorSetMultiSpecies(EnsPDatabaseadaptor dba,
-                                         AjBool multi);
+                                  EnsEDatabaseadaptorGroup dbag);
 
 AjBool ensDatabaseadaptorSetIdentifier(EnsPDatabaseadaptor dba,
                                        ajuint identifier);
 
-EnsEDatabaseadaptorGroup ensDatabaseadaptorGroupFromStr(const AjPStr group);
+AjBool ensDatabaseadaptorSetMultispecies(EnsPDatabaseadaptor dba,
+                                         AjBool multi);
 
-const char *ensDatabaseadaptorGroupToChar(EnsEDatabaseadaptorGroup group);
+AjBool ensDatabaseadaptorSetSpecies(EnsPDatabaseadaptor dba, AjPStr species);
+
+AjBool ensDatabaseadaptorTrace(const EnsPDatabaseadaptor dba, ajuint level);
 
 AjBool ensDatabaseadaptorMatch(const EnsPDatabaseadaptor dba1,
                                const EnsPDatabaseadaptor dba2);
 
-AjBool ensDatabaseadaptorMatchComponents(const EnsPDatabaseadaptor dba,
+AjBool ensDatabaseadaptorMatchcomponents(const EnsPDatabaseadaptor dba,
                                          const EnsPDatabaseconnection dbc,
                                          const AjPStr species,
-                                         EnsEDatabaseadaptorGroup group,
+                                         EnsEDatabaseadaptorGroup dbag,
                                          AjBool multi,
                                          ajuint identifier);
-
-AjPSqlstatement ensDatabaseadaptorSqlstatementNew(EnsPDatabaseadaptor dba,
-                                                  const AjPStr statement);
-
-AjBool ensDatabaseadaptorSqlstatementDel(EnsPDatabaseadaptor dba,
-                                         AjPSqlstatement *Psqls);
 
 AjBool ensDatabaseadaptorDisconnect(EnsPDatabaseadaptor dba);
 
 AjBool ensDatabaseadaptorEscapeC(EnsPDatabaseadaptor dba,
-                                 char **Ptxt,
+                                 char** Ptxt,
                                  const AjPStr str);
 
 AjBool ensDatabaseadaptorEscapeS(EnsPDatabaseadaptor dba,
-                                 AjPStr *Pstr,
+                                 AjPStr* Pstr,
                                  const AjPStr str);
 
-AjBool ensDatabaseadaptorTrace(const EnsPDatabaseadaptor dba, ajuint level);
+const AjPList ensDatabaseadaptorGetAllSpeciesnames(EnsPDatabaseadaptor dba);
 
-AjBool ensDatabaseadaptorGetSchemaBuild(const EnsPDatabaseadaptor dba,
-                                        AjPStr *Pbuild);
+AjBool ensDatabaseadaptorSqlstatementDel(EnsPDatabaseadaptor dba,
+                                         AjPSqlstatement* Psqls);
 
-const AjPList ensDatabaseadaptorGetAllSpeciesNames(EnsPDatabaseadaptor dba);
+AjPSqlstatement ensDatabaseadaptorSqlstatementNew(EnsPDatabaseadaptor dba,
+                                                  const AjPStr statement);
+
+AjBool ensDatabaseadaptorFetchSchemabuild(EnsPDatabaseadaptor dba,
+                                          AjPStr* Pbuild);
+
+EnsEDatabaseadaptorGroup ensDatabaseadaptorGroupFromStr(const AjPStr group);
+
+const char* ensDatabaseadaptorGroupToChar(EnsEDatabaseadaptorGroup dbag);
 
 /*
 ** End of prototype definitions
@@ -192,8 +210,6 @@ const AjPList ensDatabaseadaptorGetAllSpeciesNames(EnsPDatabaseadaptor dba);
 
 
 
-#endif /* ensdatabaseadaptor_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSDATABASEADAPTOR_H */

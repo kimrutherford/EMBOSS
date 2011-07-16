@@ -47,7 +47,7 @@ Display a multiple sequence alignment in pretty format
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with showalign</b>
+Here is a sample session with <b>showalign</b>
 <p>
 
 <p>
@@ -87,7 +87,7 @@ Format for HTML and highlight some interesting regions in different colours:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showalign -html -high '4-13 green 43-43 red 51-56 blue' </b>
+% <b>showalign -html -high "4-13 green 43-43 red 51-56 blue" </b>
 Display a multiple sequence alignment in pretty format
 Input (aligned) sequence set: <b>globins.msf</b>
 Output file [globins.showalign]: <b></b>
@@ -256,7 +256,7 @@ Output file [globins.showalign]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Display a multiple sequence alignment in pretty format
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     The sequence alignment to be displayed.
@@ -926,7 +926,7 @@ LGB2_LUPLU IVIKKEMNDAA~~~
 
 <p>
 
-You can specifiy a file of ranges to display in uppercase by giving the
+You can specify a file of ranges to display in uppercase by giving the
 '-uppercase' qualifier the value '@' followed by the name of the file
 containing the ranges.  (eg: '-upper @myfile').
 <p>
@@ -956,7 +956,7 @@ An example range file is:
 </pre>
 <p>
 
-You can specifiy a file of ranges to highlight in a different colour
+You can specify a file of ranges to highlight in a different colour
 when outputting in HTML format (using the '-html' qualifier) by giving
 the '-highlight' qualifier the value '@' followed by the name of the
 file containing the ranges.  (eg: '-highlight @myfile').
@@ -969,18 +969,9 @@ is' when specifying the colour in HTML in a '<FONT COLOR=xxx>'
 construct, (where 'xxx' is the name of the colour).
 <p>
 
-The standard names of HTML font colours are given in:
-<br>
-
-<A HREF="http://http://www.w3.org/TR/REC-html40/types.html">
-http://http://www.w3.org/TR/REC-html40/types.html</A>
-and
-<A HREF="http://www.ausmall.com.au/freegraf/ncolour2.htm">
-http://www.ausmall.com.au/freegraf/ncolour2.htm</A>
-and
-<A HREF="http://mindprod.com/htmlcolours.html">
-http://mindprod.com/htmlcolours.html</A>
-(amongst other places).
+The standard names of HTML font colours are given in
+<A HREF="http://http://www.w3.org/TR/REC-html40/types.html#h-6.5">
+http://http://www.w3.org/TR/REC-html40/types.html#h-6.5</A>
 
 <p>
 
@@ -1555,8 +1546,8 @@ None.
 </tr>
 
 <tr>
-<td><a href="cirdna.html">cirdna</a></td>
-<td>Draws circular maps of DNA constructs</td>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
 </tr>
 
 <tr>
@@ -1570,23 +1561,23 @@ None.
 </tr>
 
 <tr>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
 <td><a href="infoalign.html">infoalign</a></td>
 <td>Display basic information about a multiple sequence alignment</td>
 </tr>
 
 <tr>
-<td><a href="lindna.html">lindna</a></td>
-<td>Draws linear maps of DNA constructs</td>
-</tr>
-
-<tr>
-<td><a href="pepnet.html">pepnet</a></td>
-<td>Draw a helical net for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="pepwheel.html">pepwheel</a></td>
-<td>Draw a helical wheel diagram for a protein sequence</td>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Display basic information about sequences</td>
 </tr>
 
 <tr>
@@ -1600,53 +1591,23 @@ None.
 </tr>
 
 <tr>
-<td><a href="prettyseq.html">prettyseq</a></td>
-<td>Write a nucleotide sequence and its translation to file</td>
+<td><a href="seqxref.html">seqxref</a></td>
+<td>Retrieve all database cross-references for a sequence entry</td>
 </tr>
 
 <tr>
-<td><a href="remap.html">remap</a></td>
-<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
-</tr>
-
-<tr>
-<td><a href="seealso.html">seealso</a></td>
-<td>Finds programs with similar function to a specified program</td>
-</tr>
-
-<tr>
-<td><a href="showdb.html">showdb</a></td>
-<td>Displays information on configured databases</td>
-</tr>
-
-<tr>
-<td><a href="showfeat.html">showfeat</a></td>
-<td>Display features of a sequence in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showpep.html">showpep</a></td>
-<td>Displays protein sequences with features in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showseq.html">showseq</a></td>
-<td>Displays sequences with features in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="sixpack.html">sixpack</a></td>
-<td>Display a DNA sequence with 6-frame translation and ORFs</td>
-</tr>
-
-<tr>
-<td><a href="textsearch.html">textsearch</a></td>
-<td>Search the textual description of sequence(s)</td>
+<td><a href="seqxrefget.html">seqxrefget</a></td>
+<td>Retrieve all cross-referenced data for a sequence entry</td>
 </tr>
 
 <tr>
 <td><a href="tranalign.html">tranalign</a></td>
 <td>Generate an alignment of nucleic coding regions from aligned proteins</td>
+</tr>
+
+<tr>
+<td><a href="whichdb.html">whichdb</a></td>
+<td>Search all sequence databases for an entry and retrieve it</td>
 </tr>
 
 </table>

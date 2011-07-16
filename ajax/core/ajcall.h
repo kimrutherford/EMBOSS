@@ -24,7 +24,6 @@ AjPTable ajCallTableNew(void);
 void*    ajCall(const char *name, ...);
 void*    ajCallTableGetC(const AjPTable table, const char *name);
 void*    ajCallTableGetS(const AjPTable table, const AjPStr namestr);
-void     ajCallTableDel(AjPTable* Ptable);
 void     ajCallExit(void);
 
 /*

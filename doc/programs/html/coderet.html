@@ -51,7 +51,7 @@ Extract CDS, mRNA and translations from feature tables
     Usage
 </H2>
 
-<b>Here is a sample session with coderet</b>
+Here is a sample session with <b>coderet</b>
 <p>
 To extract all of the CDS, mRNA, non-coding and the protein translations: 
 <p>
@@ -97,7 +97,7 @@ Messenger RNA nucleotide output sequence(s) (optional) [x03487.mrna]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Extract CDS, mRNA and translations from feature tables
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
@@ -861,8 +861,46 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>coderet</b> reads one or more nucleic sequence USAs having CDS, mRNA
+<b>coderet</b> reads one or more nucleic sequences having CDS, mRNA
 or translation headings in their feature tables. 
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA')
+with associated feature information.
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the command-line qualifier
+<tt>-sformat xxx</tt>, where 'xxx' is replaced by the name of the
+required format.  The available format names are: text, html, xml (uniprotxml),
+obo, embl (swissprot)
+
+<p> Where the sequence format has no feature information, a second
+file can be read to load the feature data. The file is specified with
+the qualifier <tt>-ufo xxx</tt> and the feature format is specified with
+the qualifier <tt>-fformat xxx</tt>
+
+<p>
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
+See:
+<A href="http://emboss.sf.net/docs/themes/FeatureFormats.html">
+http://emboss.sf.net/docs/themes/FeatureFormats.html</A>
+for further information on feature formats.
 
 <p>
 
@@ -1065,13 +1103,35 @@ SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
     Output file format
 </H2>
 
+<p>
+
+The output is a standard EMBOSS sequence file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
+
+<p>
 The output is a sequence file containing any CDS, mRNA and protein
 translation sequences as specified by the feature table of the sequence(s).
 
 <p>
 
 One or more of CDS, mRNA, translation can be excluded from the output by
-using the appropriate qualifiers to the program (i.e.  <b>-nocds</b>,
+using the appropriate qualifiers to the program (i.e.  <tt>-nocds</tt>,
 etc.)
 
 <p>
@@ -1250,6 +1310,11 @@ None.
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Display the trace in an ABI sequencer file</td>
+</tr>
+
+<tr>
 <td><a href="backtranambig.html">backtranambig</a></td>
 <td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
 </tr>
@@ -1260,13 +1325,28 @@ None.
 </tr>
 
 <tr>
-<td><a href="extractfeat.html">extractfeat</a></td>
-<td>Extract features from sequence(s)</td>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>
-<td><a href="maskfeat.html">maskfeat</a></td>
-<td>Write a sequence with masked features</td>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Display basic information about sequences</td>
 </tr>
 
 <tr>
@@ -1285,8 +1365,18 @@ None.
 </tr>
 
 <tr>
-<td><a href="showfeat.html">showfeat</a></td>
-<td>Display features of a sequence in pretty format</td>
+<td><a href="seqxref.html">seqxref</a></td>
+<td>Retrieve all database cross-references for a sequence entry</td>
+</tr>
+
+<tr>
+<td><a href="seqxrefget.html">seqxrefget</a></td>
+<td>Retrieve all cross-referenced data for a sequence entry</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
@@ -1310,8 +1400,8 @@ None.
 </tr>
 
 <tr>
-<td><a href="twofeat.html">twofeat</a></td>
-<td>Finds neighbouring pairs of features in sequence(s)</td>
+<td><a href="whichdb.html">whichdb</a></td>
+<td>Search all sequence databases for an entry and retrieve it</td>
 </tr>
 
 </table>

@@ -1,5 +1,5 @@
 Calculate approximate local pair-wise alignments of larger sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqall     Sequence(s) filename and optional format, or
@@ -11,6 +11,7 @@ Version: EMBOSS:6.3.0
    -gapextend          float      [0.5 for any sequence type] Gap extension
                                   penalty (Number from 0.000 to 10.000)
   [-outfile]           align      [*.supermatcher] Output alignment file name
+                                  (default -aformat simple)
 
    Additional (Optional) qualifiers:
    -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -26,7 +27,7 @@ Version: EMBOSS:6.3.0
    -wordlen            integer    [6] Word length for initial matching
                                   (Integer 3 or more)
    -errorfile          outfile    [supermatcher.error] Error file to be
-                                  written to
+                                  written to for failed alignments
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:

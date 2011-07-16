@@ -33,7 +33,7 @@ Usage
    Extract the region from position 10 to 20:
 
 
-% extractalign dna.msf result.seq -regions '11-30'
+% extractalign dna.msf result.seq -regions "11-30"
 Extract regions from a sequence alignment
 
 
@@ -43,7 +43,7 @@ Extract regions from a sequence alignment
 Command line arguments
 
 Extract regions from a sequence alignment
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     (Aligned) sequence set filename and optional
@@ -113,7 +113,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   extractalign reads a normal sequence USA.
+   extractalign reads aligned nucleotide or protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -142,7 +159,7 @@ Input file format
         MSFM3  ACGTACGTAC GTACGTACGT
 
 
-   You can specifiy a file of ranges to extract by giving the '-regions'
+   You can specify a file of ranges to extract by giving the '-regions'
    qualifier the value '@' followed by the name of the file containing the
    ranges. (eg: '-regions @myfile').
 
@@ -226,10 +243,12 @@ Comments
 See also
 
    Program name     Description
+   abiview          Display the trace in an ABI sequencer file
    aligncopy        Reads and writes alignments
    aligncopypair    Reads and writes pairs from alignments
    biosed           Replace or delete sequence sections
    codcopy          Copy and reformat a codon usage table
+   coderet          Extract CDS, mRNA and translations from feature tables
    cutseq           Removes a section from a sequence
    degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
    descseq          Alter the name or description of a sequence
@@ -238,6 +257,9 @@ See also
    extractseq       Extract regions from a sequence
    featcopy         Reads and writes a feature table
    featreport       Reads and writes a feature table
+   feattext         Return a feature table original text
+   infoalign        Display basic information about a multiple sequence alignment
+   infoseq          Display basic information about sequences
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
@@ -258,9 +280,13 @@ See also
    nthseqset        Reads and writes (returns) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
+   seqcount         Reads and counts sequences
    seqret           Reads and writes (returns) sequences
    seqretsetall     Reads and writes (returns) many sets of sequences
    seqretsplit      Reads sequences and writes them to individual files
+   seqxref          Retrieve all database cross-references for a sequence entry
+   seqxrefget       Retrieve all cross-referenced data for a sequence entry
+   showalign        Display a multiple sequence alignment in pretty format
    sizeseq          Sort sequences by size
    skipredundant    Remove redundant sequences from an input set
    skipseq          Reads and writes (returns) sequences, skipping first few
@@ -271,6 +297,7 @@ See also
    trimspace        Remove extra whitespace from an ASCII text file
    union            Concatenate multiple sequences into a single sequence
    vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   whichdb          Search all sequence databases for an entry and retrieve it
    yank             Add a sequence reference (a full USA) to a list file
 
 Author(s)

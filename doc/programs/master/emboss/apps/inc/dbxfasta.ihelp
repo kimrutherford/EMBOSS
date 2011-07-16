@@ -1,5 +1,5 @@
 Index a fasta file database using b+tree indices
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -18,6 +18,7 @@ Version: EMBOSS:6.3.0
    -fields             menu       [id,acc] Index fields (Values: id (ID); acc
                                   (Accession number); sv (Sequence Version and
                                   GI); des (Description))
+   -[no]compressed     boolean    [Y] Compressed index files
    -outfile            outfile    [*.dbxfasta] General log output file
 
    Additional (Optional) qualifiers: (none)

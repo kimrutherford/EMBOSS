@@ -4826,7 +4826,7 @@ ajint ajDomainDCFType(AjPFile inf)
 
 
 
-/* @func ajDomainExit **********************************************************
+/* @func ajDomainExit *********************************************************
 **
 ** Cleanup of Domain function internals.
 **

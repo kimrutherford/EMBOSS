@@ -30,10 +30,9 @@ make $app |& egrep '^[^ =\[]*:' |& grep -v '^libtool: '
 if(-e ~/check/bin/$app) then
 echo "install $app"
 echo "/bin/sh ../libtool --mode=install /usr/bin/install  -c $app ~/check/bin/$app"
-  cp $app ~/check/bin/$app
+/bin/sh ../libtool --mode=install /usr/bin/install  -c $app ~/check/bin/$app
 else
-echo "install $app"
-echo "/bin/sh ../libtool --mode=install /usr/bin/install -c $app $embossinst/$app"
-/bin/sh ../libtool --mode=install /usr/bin/install  -c $app $embossinst/bin/$app
+#echo "install $app"
+#echo "/bin/sh ../libtool --mode=install /usr/bin/install -c $app $embossinst/$app"
+#/bin/sh ../libtool --mode=install /usr/bin/install  -c $app $embossinst/bin/$app
 endif
-cp acd/$app.acd $embossinst/share/EMBOSS/acd/

@@ -105,8 +105,8 @@ int main(int argc, char **argv)
     
     for(i=0; i < ds->Nsets; ++i)
     {
-        value1 = ajTableFetch(ds->Sets[i],(void *)key1);
-        value2 = ajTableFetch(ds->Sets[i],(void *)key2);
+        value1 = ajTableFetchS(ds->Sets[i], key1);
+        value2 = ajTableFetchS(ds->Sets[i], key2);
         ajFmtPrintF(outf,"%-40S %S\n",value1,value2);
     }
     

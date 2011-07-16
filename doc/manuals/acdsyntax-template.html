@@ -519,8 +519,12 @@ without the need for complex extra command line options.</p>
 <!-- #acdtype-features -->
 <h5>Features</h5>
 
-<p>Feature annotation in any known feature format.
-Features can also be read from a sequence and written with a sequence.</p>
+<p>Feature annotation in any known feature format.</p>
+
+<p>Applications requiring a single entry should specify the
+attribute <i>"maxreads"</i> with a value of "1".</p>
+
+<p>Features can also be read from a sequence and written with a sequence.</p>
 
 <!-- #acdtype-filelist -->
 <h5>Filelist</h5>
@@ -578,6 +582,15 @@ penalties will need to set them separately for each matrix.</p>
 algorithms. An integer matrix file can of course be used equally well
 as a floating point matrix.</p>
 
+<!-- #acdtype-obo -->
+<h5>Obo</h5>
+
+<p>One or more terms from an OBO ontology.</p>
+
+<p>Applications requiring a single entry should specify the
+attribute <i>"maxreads"</i> with a value of "1".</p>
+
+
 <!-- #acdtype-pattern -->
 <h5>Pattern</h5>
 
@@ -615,6 +628,16 @@ expression library.</p>
 <p>EMBOSS uses the "Perl-Compatible Regular Expression Library"
 (PCRE), so any regular expression that is valid in Perl 5.0 should be
 valid here.</p>
+
+<!-- #acdtype-resource -->
+<h5>Resource</h5>
+
+<p>One or more entries from the data resource catalogue (DRCAT.dat).</p>
+
+<p>Applications requiring a single entry should specify the
+attribute <i>"maxreads"</i> with a value of "1".</p>
+
+<p>Stream of entries from the data resource catalogue (DRCAT.dat)</p>
 
 <!-- #acdtype-scop -->
 <h5>Scop</h5>
@@ -660,17 +683,56 @@ attribute <i>"type"</i> (for example, the program should only accept DNA
 files). Can also read features if the "features" ACD attribute is
 set.</p>
 
+<!-- #acdtype-taxon -->
+<h5>Taxon</h5>
+
+<p>Taxon is a new ACD type implemented specifically for taxon data
+from the NCBI taxonomy. By defining a specific ACD type EMBOSS can
+provide detailed type checking, and can automatically detect and
+validate the various alternative formats for taxonomy data from the
+major sequence databases without the need for complex extra command
+line options.</p>
+
+<!-- #acdtype-text -->
+<h5>Text</h5>
+
+<p>Text is a new ACD type for unparsed text data. Text data allows
+EMBOSS to retrieve useful information from a very large range of
+remote data resources linked to results from an application. Input
+format options allow the user to control the stripping of HTML or XML
+markup and other editing functions.</p>
+
 <!-- #acdtype-tree -->
 <h5>Tree</h5>
 
 <p>Tree is a new ACD type implemented specifically for the "phylipnew"
-EMBASSY package. Properties input is used by the phylip applications
+EMBASSY package. Tree input is used by the phylip applications
 to define one or more phylogenetic trees. By defining a specific ACD
 type EMBOSS can provide detailed type checking, and can automatically
 detect and validate the various alternative formats that phylip
 supports without the need for complex extra command line options. The
 trees are currently parsed by phylip itself, but in the near future we
 will implement parsing methods in ACD processing.</p>
+
+<!-- #acdtype-url -->
+<h5>Url</h5>
+
+<p>URL is a new ACD type implemented specifically for URL data from
+the data resource catalogue where the content returned by the URL is
+not readable as text. By defining a specific ACD type EMBOSS can
+provide detailed type checking, and can automatically detect and
+validate the various associated annotations in the data resource
+catalogue without the need for complex extra command line options.</p>
+
+<!-- #acdtype-variation -->
+<h5>Variation</h5>
+
+<p>Variation is a new ACD type implemented specifically for variation data
+from Ensembl and VCF file input. By defining a specific ACD type EMBOSS can
+provide detailed type checking, and can automatically detect and
+validate the various alternative formats from the
+major databases without the need for complex extra command
+line options.</p>
 
 <a name="sect2313">&nbsp;</a>
 <!-- #acdtype-section-selection -->
@@ -808,10 +870,24 @@ which the <i>-oformat</i> associated qualifier can override.</p>
 The default data format can be specified by an "oformat" attribute
 which the <i>-oformat</i> associated qualifier can override.</p>
 
+<!-- #acdtype-outobo -->
+<h5>Outobo</h5>
+
+<p>Output file containing bio-ontology term data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
 <!-- #acdtype-outproperties -->
 <h5>Outproperties</h5>
 
 <p>Output file containing phylogenetics property data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outresource -->
+<h5>Outresource</h5>
+
+<p>Output file containing data resource entry data.
 The default data format can be specified by an "oformat" attribute
 which the <i>-oformat</i> associated qualifier can override.</p>
 
@@ -822,10 +898,38 @@ which the <i>-oformat</i> associated qualifier can override.</p>
 The default data format can be specified by an "oformat" attribute
 which the <i>-oformat</i> associated qualifier can override.</p>
 
+<!-- #acdtype-outtaxon -->
+<h5>Outtaxon</h5>
+
+<p>Output file containing taxonomy data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outtext -->
+<h5>Outtext</h5>
+
+<p>Output file containing unparsed text data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
 <!-- #acdtype-outtree -->
 <h5>Outtree</h5>
 
 <p>Output file containing phylogenetic tree data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outurl -->
+<h5>Outurl</h5>
+
+<p>Output file containing URL data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outvariation -->
+<h5>Outvariation</h5>
+
+<p>Output file containing variation data.
 The default data format can be specified by an "oformat" attribute
 which the <i>-oformat</i> associated qualifier can override.</p>
 
@@ -1961,6 +2065,9 @@ can run without a distance file.
 "protein" or "nucleotide". There is a default based on the type of any
 input sequence, but a value should always be specified.</p>
 
+<p>Applications requiring a single entry should specify the
+attribute <i>maxreads:</i> with a value of "1".</p>
+
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
 can run without features input. The application must be able to accept a
@@ -1973,6 +2080,9 @@ string is specified on the command line, the standard default value
 will be generated instead. In combination with the <i>nullok:</i> and
 <i>missing:</i> attributes, this allows qualifiers to be null by
 default, and turned on from the command line.</p>
+
+<p>If the <i>entry:</i> attribute is set, the input will
+include the full original text of the input file or database entry.</p>
 
 <!-- #acdattr-filelist -->
 <h5>Filelist</h5>
@@ -2048,6 +2158,15 @@ scoring matrix is used as a DNA or Protein matrix.</p>
 scoring matrix is used as a DNA or Protein matrix.</p>
 
 
+<!-- #acdattr-obo -->
+<h5>Obo</h5>
+
+<p>Applications requiring a single entry should specify the
+attribute <i>maxreads:</i> with a value of "1".</p>
+
+<p>If the <i>entry:</i> attribute is set, the input will
+include the full original text of the input file or database entry.</p>
+
 <!-- #acdattr-pattern -->
 <h5>Pattern</h5>
 
@@ -2112,6 +2231,15 @@ regular expression to upper or lower case before compiling.</p>
 <p>The <i>type:</i> attribute describes the pattern as applying to
 nucleotide or protein sequence. Nucleotide patterns are compared in
 both directions.</p>
+
+<!-- #acdattr-resource -->
+<h5>Resource</h5>
+
+<p>Applications requiring a single entry should specify the
+attribute <i>maxreads:</i> with a value of "1".</p>
+
+<p>If the <i>entry:</i> attribute is set, the input will
+include the full original text of the input file or database entry.</p>
 
 <!-- #acdattr-scop -->
 <h5>Scop</h5>
@@ -2267,6 +2395,26 @@ default, and turned on from the command line.</p>
 <p>The <i>minseqs:</i> attribute specifies a minimum number of
 sequences to be read for each set. By default, a single sequence is acceptable.</p>
 
+<!-- #acdattr-taxon -->
+<h5>Taxon</h5>
+
+<p>Applications requiring a single entry should specify the
+attribute <i>maxreads:</i> with a value of "1".</p>
+
+<p>If the <i>entry:</i> attribute is set, the input will
+include the full original text of the input file or database entry.</p>
+
+<!-- #acdattr-text -->
+<h5>Text</h5>
+
+<p>Applications requiring a single entry should specify the
+attribute <i>maxreads:</i> with a value of "1".</p>
+
+<p>If the <i>entry:</i> attribute is set, the input will include the
+full original text of the input file or database entry, before markup
+is stripped or any other text processing.</p>
+
+
 <!-- #acdattr-tree -->
 <h5>Tree</h5>
 
@@ -2288,6 +2436,32 @@ by an empty string or by -noxxx on the command line if the application
 can run without a properties file.
 </p>
 
+
+<!-- #acdattr-url -->
+<h5>Url</h5>
+
+<p>Applications requiring a single entry should specify the
+attribute <i>maxreads:</i> with a value of "1".</p>
+
+<p>If the <i>entry:</i> attribute is set, the input will
+include the full original text of the input file or database entry.</p>
+
+<p>The <i>swiss:</i> amd <i>embl:</i> attributes define URLs
+originating from cross-references in UniProt/SwissProt and
+EMBL/GenBnk/DDBJ respectively. They allow the Xref records in DRCAT to
+be used to define the EDAM identifier term used to select appropriate
+query URLs. For other sources, the <i>identifier:</i> attribute allows
+the EDAM term to be named in the ACD file. All three attributes are
+also available as associated qualifiers with any URL input.</p>
+
+<!-- #acdattr-variation -->
+<h5>Variation</h5>
+
+<p>Applications requiring a single entry should specify the
+attribute <i>maxreads:</i> with a value of "1".</p>
+
+<p>If the <i>entry:</i> attribute is set, the input will
+include the full original text of the input file or database entry.</p>
 
 <a name="sect24123">&nbsp;</a>
 <!-- #acdattr-section-selection -->
@@ -2709,8 +2883,48 @@ default, and turned on from the command line.</p>
 <i>-oformat</i> qualifier, used as the file format and the default
 file extension.</p>
 
+<!-- #acdattr-outobo -->
+<h5>Outobo</h5>
+
+<p>The <i>name:</i> attribute will default to "outfile".</p>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
 <!-- #acdattr-outproperties -->
 <h5>Outproperties</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outresource -->
+<h5>Outresource</h5>
+
+<p>The <i>name:</i> attribute will default to "outfile".</p>
 
 <p>The <i>extension:</i> attribute will default to the output file
 format.</p>
@@ -2745,8 +2959,88 @@ default, and turned on from the command line.</p>
 <i>-oformat</i> qualifier, used as the file format and the default
 file extension.</p>
 
+<!-- #acdattr-outtaxon -->
+<h5>Outtaxon</h5>
+
+<p>The <i>name:</i> attribute will default to "outfile".</p>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outtext -->
+<h5>Outtext</h5>
+
+<p>The <i>name:</i> attribute will default to "outfile".</p>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
 <!-- #acdattr-outtree -->
 <h5>Outtree</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outurl -->
+<h5>Outurl</h5>
+
+<p>The <i>name:</i> attribute will default to "outfile".</p>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outvariation -->
+<h5>Outvariation</h5>
+
+<p>The <i>name:</i> attribute will default to "outfile".</p>
 
 <p>The <i>extension:</i> attribute will default to the output file
 format.</p>

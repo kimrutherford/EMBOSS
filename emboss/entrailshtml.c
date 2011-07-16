@@ -53,6 +53,36 @@ int main(int argc, char **argv)
 
         if(doall || ajStrMatchC(tables[i], "outseq"))
             ajSeqoutPrinthtmlFormat(outf);
+
+        if(doall || ajStrMatchC(tables[i], "infeat"))
+            ajFeatinPrinthtmlFormat(outf);
+
+        if(doall || ajStrMatchC(tables[i], "outfeat"))
+            ajFeatoutPrinthtmlFormat(outf);
+
+        if(doall || ajStrMatchC(tables[i], "report"))
+            ajReportPrinthtmlFormat(outf);
+
+        if(doall || ajStrMatchC(tables[i], "align"))
+            ajAlignPrinthtmlFormat(outf);
+
+        if(doall || ajStrMatchC(tables[i], "assembly"))
+        {
+            ajAsseminprintHtml(outf);
+            ajAssemoutprintHtml(outf);
+        }
+        
+        if(doall || ajStrMatchC(tables[i], "resource"))
+        {
+            ajResourceinprintHtml(outf);
+            ajResourceoutprintHtml(outf);
+        }
+        
+        if(doall || ajStrMatchC(tables[i], "taxonomy"))
+        {
+            ajTaxinprintHtml(outf);
+            ajTaxoutprintHtml(outf);
+        }
     }
     
     ajFileClose(&outf);

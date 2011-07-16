@@ -4,60 +4,73 @@
 <p><h3>File: showdb.out</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-# Name           Type       ID  Qry All Comment
-# ============== ========== ==  === === =======
-twp              Protein    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
-qapblast         Protein    OK  OK  OK  BLAST swissnew
-qapblastall      Protein    OK  OK  OK  BLAST swissnew, all fields indexed
-qapblastsplit    Protein    OK  OK  OK  BLAST swissnew split in 5 files
-qapblastsplitexc Protein    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
-qapblastsplitinc Protein    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
-qapfasta         Protein    OK  OK  OK  FASTA file swissnew entries
-qapflat          Protein    OK  OK  OK  SpTrEmbl flatfile
-qapflatall       Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
-qapir            Protein    OK  OK  OK  PIR
-qapirall         Protein    OK  OK  OK  PIR
-qapirinc         Protein    OK  OK  OK  PIR
-qapxfasta        Protein    OK  OK  OK  FASTA file swissnew entries
-qapxflat         Protein    OK  OK  OK  Swissnew flatfiles
-qaxpir           Protein    OK  OK  OK  PIR
-qaxpirall        Protein    OK  OK  OK  PIR
-qaxpirinc        Protein    OK  OK  OK  PIR
-tpir             Protein    OK  OK  OK  PIR using NBRF access for 4 files
-tsw              Protein    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
-tswnew           Protein    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
-genbanksrs       Nucleotide OK  OK  OK  Genbank IDs
-qanfasta         Nucleotide OK  OK  OK  FASTA file EMBL rodents
-qanfastaall      Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanflat          Nucleotide OK  OK  OK  EMBL flatfiles
-qanflatall       Nucleotide OK  OK  OK  EMBL flatfiles
-qanflatexc       Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
-qanflatinc       Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
-qangcg           Nucleotide OK  OK  OK  GCG format EMBL
-qangcgall        Nucleotide OK  OK  OK  GCG format EMBL
-qangcgexc        Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
-qangcginc        Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
-qanxfasta        Nucleotide OK  OK  OK  FASTA file EMBL rodents
-qanxfastaall     Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanxflat         Nucleotide OK  OK  OK  EMBL flatfiles
-qanxflatall      Nucleotide OK  OK  OK  EMBL flatfiles, all fields indexed
-qanxflatexc      Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
-qanxflatinc      Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
-qanxgcg          Nucleotide OK  OK  OK  GCG format EMBL
-qanxgcgall       Nucleotide OK  OK  OK  GCG format EMBL
-qanxgcgexc       Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
-qanxgcginc       Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
-qapirexc         Nucleotide OK  OK  OK  PIR
-qasrswww         Nucleotide OK  OK  OK  Remote SRS web server
-qawfasta         Nucleotide OK  OK  OK  FASTA file wormpep entries
-qawxfasta        Nucleotide OK  OK  OK  FASTA file wormpep entries
-qaxpirexc        Nucleotide OK  OK  OK  PIR
-tembl            Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblall         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblrest        Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblvrt         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-testdb           Nucleotide OK  OK  OK  test sequence data
-tgb              Nucleotide OK  OK  OK  Genbank IDs
-tgenbank         Nucleotide OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+# Name            Type       ID  Qry All Comment
+# =============== ========== ==  === === =======
+qapblast          Protein    OK  OK  OK  BLAST swissnew
+qapblastall       Protein    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit     Protein    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc  Protein    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc  Protein    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta          Protein    OK  OK  OK  FASTA file swissnew entries
+qapflat           Protein    OK  OK  OK  SpTrEmbl flatfile
+qapflatall        Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
+qapir             Protein    OK  OK  OK  PIR
+qapirall          Protein    OK  OK  OK  PIR
+qapirinc          Protein    OK  OK  OK  PIR
+qapxfasta         Protein    OK  OK  OK  FASTA file swissnew entries
+qapxflat          Protein    OK  OK  OK  Swissnew flatfiles
+qaxpir            Protein    OK  OK  OK  PIR
+qaxpirall         Protein    OK  OK  OK  PIR
+qaxpirinc         Protein    OK  OK  OK  PIR
+tpir              Protein    OK  OK  OK  PIR using NBRF access for 4 files
+tsw               Protein    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew            Protein    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+qanfasta          Nucleotide OK  OK  OK  FASTA file EMBL rodents
+qanfastaall       Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat           Nucleotide OK  OK  OK  EMBL flatfiles
+qanflatall        Nucleotide OK  OK  OK  EMBL flatfiles
+qanflatexc        Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
+qanflatinc        Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
+qangcg            Nucleotide OK  OK  OK  GCG format EMBL
+qangcgall         Nucleotide OK  OK  OK  GCG format EMBL
+qangcgexc         Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc         Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta         Nucleotide OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall      Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat          Nucleotide OK  OK  OK  EMBL flatfiles
+qanxflatall       Nucleotide OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxflatexc       Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
+qanxflatinc       Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
+qanxgcg           Nucleotide OK  OK  OK  GCG format EMBL
+qanxgcgall        Nucleotide OK  OK  OK  GCG format EMBL
+qanxgcgexc        Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc        Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc          Nucleotide OK  OK  OK  PIR
+qasrswww          Nucleotide OK  OK  OK  Remote SRS web server
+qawfasta          Nucleotide OK  OK  OK  FASTA file wormpep entries
+qawxfasta         Nucleotide OK  OK  OK  FASTA file wormpep entries
+qaxpirexc         Nucleotide OK  OK  OK  PIR
+tembl             Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall          Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblrest         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblvrt          Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+tensembldasgrch37 Nucleotide OK  -   -   Homo_sapiens Reference server based on GRCh37 assembly
+testdb            Nucleotide OK  OK  OK  test sequence data
+tgb               Nucleotide OK  OK  OK  Genbank IDs
+tgenbank          Nucleotide OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+tgenedashuman     Nucleotide OK  -   -   The Ensembl human Gene_ID reference source
+tflybase          Features   OK  -   -   
+tgenedb           Features   OK  -   -   
+ttax              Taxonomy   OK  OK  OK  
+taxon             Taxonomy   OK  OK  OK  
+drcat             Resource   OK  OK  OK  
+tedam             Obo        OK  OK  OK  EDAM using dbxedam test indexes
+tobo              Obo        OK  OK  OK  EDAM using dbxobo test indexes
+eco               Obo        OK  OK  OK  
+edam              Obo        OK  OK  OK  
+go                Obo        OK  OK  OK  
+pw                Obo        OK  OK  OK  
+ro                Obo        OK  OK  OK  
+so                Obo        OK  OK  OK  
 </pre>
 </td></tr></table><p>

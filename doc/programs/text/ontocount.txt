@@ -1,0 +1,180 @@
+                                  ontocount
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Count ontology term(s)
+
+Description
+
+   ontocount reads ontology entries and reports the number of entries
+   found.
+
+Usage
+
+   Here is a sample session with ontocount
+
+
+% ontocount edam:0001234
+Count ontology term(s)
+Output file [stdout]:
+
+1
+
+
+   Go to the input files for this example
+
+   Example 2
+
+
+% ontocount edam:0001234 -subclasses
+Count ontology term(s)
+Output file [stdout]:
+
+7
+
+
+Command line arguments
+
+Count ontology term(s)
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-oboterms]          obo        Obo term filename and optional format, or
+                                  reference (input query)
+  [-outfile]           outfile    [stdout] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -subclasses         boolean    [N] Extend the query matches to include all
+                                  terms which are specialisations
+                                  (sub-classes) of the matched terms.
+   -obsolete           boolean    [N] The default behaviour is to not use or
+                                  return obsolete terms. This option if set
+                                  will include all terms.
+
+   Associated qualifiers:
+
+   "-oboterms" associated qualifiers
+   -iformat1           string     Input obo format
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   The input is a standard EMBOSS ontology query.
+
+   The major ontology sources defined as standard in EMBOSS installations
+   are EDAM, GO (gene Ontology) and SO (Sequence Ontology).
+
+   Data can also be read from ontology output in "obo" format written by
+   an EMBOSS application.
+
+  Input files for usage example
+
+  Database entry: edam:0001234
+
+[Term]
+id: EDAM:0001234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata tha
+t do not (typically) correspond to common sequence database records or database
+entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002977 ! Nucleic acid sequence
+
+
+Output file format
+
+   ontocount reports the number of ontology terms read.
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                     Program name                    Description
+                    ontoget         Get ontology term(s)
+                    ontogetcommon   Get common ancestor for terms
+                    ontogetdown     Get ontology term(s) by parent id
+   ontogetobsolete  Get ontology ontology terms
+                    ontogetroot     Get ontology root terms by child identifier
+                    ontogetsibs     Get ontology term(s) by id with common parent
+                    ontogetup       Get ontology term(s) by id of child
+                    ontoisobsolete  Report whether an ontology term id is obsolete
+                    ontotext        Get ontology term(s) original full text
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

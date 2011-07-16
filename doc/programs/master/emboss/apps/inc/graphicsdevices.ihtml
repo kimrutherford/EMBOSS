@@ -1,0 +1,30 @@
+<p>
+
+The output is to the specified graphics device.
+
+<p>
+
+The results can be output in one of several formats by using the
+command-line qualifier <b>-graph xxx</b>, where 'xxx' is replaced by
+the name of the required device. Support depends on the availability
+of third-party software packages.
+
+<p>
+The device names that output to a file are:
+ps (postscript), cps (colourps), png, gif, pdf, svg, hpgl, hp7470,
+hp7580, das, data.
+
+<p> The other available device names are: meta, x11 (xwindows), tek
+(tek4107t), tekt (tektronix), xterm, text.
+
+<p>
+Output can be turned off by specifying none (null).
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/GraphicsDevices.html">
+http://emboss.sf.net/docs/themes/GraphicsDevices.html</A>
+for further information on supported devices.
+
+<p>

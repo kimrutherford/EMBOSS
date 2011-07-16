@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 
     AjPStr pagekey  = NULL;
     AjPStr currpage = NULL;
-    AjPStr pageval  = NULL;
+    const AjPStr pageval  = NULL;
     AjBool firstpage = ajTrue;
     
     AjPFile outf = NULL;
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 
     for(i=0; i < att->Natts; ++i)
     {
-        pageval = ajTableFetch(att->Attributes[i],(void *)pagekey);
+        pageval = ajTableFetchS(att->Attributes[i], pagekey);
 
         if(!ajStrMatchS(currpage, pageval))
         {
@@ -110,8 +110,8 @@ int main(int argc, char **argv)
             ajFmtPrintF(outf,"PAGE TITLE %S\n\n",pageval);
         }
         
-        value1 = ajTableFetch(att->Attributes[i],(void *)key1);
-        value2 = ajTableFetch(att->Attributes[i],(void *)key2);
+        value1 = ajTableFetchS(att->Attributes[i], key1);
+        value2 = ajTableFetchS(att->Attributes[i], key2);
         ajFmtPrintF(outf,"%-40S %S\n",value1,value2);
     }
     

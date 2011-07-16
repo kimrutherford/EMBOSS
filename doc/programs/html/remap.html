@@ -49,7 +49,7 @@ Display restriction enzyme binding sites in a nucleotide sequence
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with remap</b>
+Here is a sample session with <b>remap</b>
 <p>
 This example uses only a small region of the input sequence to save space. This is run with a small test version of the restriction enzyme database and so you will probably see more enzymes when you run this. 
 <p>
@@ -131,7 +131,7 @@ Output file [j01636.remap]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Display restriction enzyme binding sites in a nucleotide sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -1032,7 +1032,7 @@ RP   1146-1282
 
 <p>
 
-You can specifiy a file of ranges to display in uppercase by giving the
+You can specify a file of ranges to display in uppercase by giving the
 '-uppercase' qualifier the value '@' followed by the name of the file
 containing the ranges.  (eg: '-upper @myfile'). 
 
@@ -1068,7 +1068,7 @@ An example range file is:
 
 <p>
 
-You can specifiy a file of ranges to highlight in a different colour
+You can specify a file of ranges to highlight in a different colour
 when outputting in HTML format (using the '-html' qualifier) by giving
 the '-highlight' qualifier the value '@' followed by the name of the
 file containing the ranges.  (eg: '-highlight @myfile'). 
@@ -1085,17 +1085,8 @@ construct, (where 'xxx' is the name of the colour).
 
 The standard names of HTML font colours are given in:
 
-<br>
-
-<A HREF="http://http://www.w3.org/TR/REC-html40/types.html">
-http://http://www.w3.org/TR/REC-html40/types.html</A>
-and
-<A HREF="http://www.ausmall.com.au/freegraf/ncolour2.htm">
-http://www.ausmall.com.au/freegraf/ncolour2.htm</A>
-and
-<A HREF="http://mindprod.com/htmlcolours.html">
-http://mindprod.com/htmlcolours.html</A>
-(amongst other places).
+<A HREF="http://http://www.w3.org/TR/REC-html40/types.html#h-6.5">
+http://http://www.w3.org/TR/REC-html40/types.html#h-6.5</A>
 
 <p>
 
@@ -1120,7 +1111,7 @@ An example highlight range file is:
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: j01636.remap </h3>
+<p><h3>File: j01636.remap</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 J01636
@@ -1162,7 +1153,7 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 
 # No. of cutting enzymes which do not match the
-# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria
 
 0
 
@@ -1224,7 +1215,7 @@ HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI
 
 
 # No. of cutting enzymes which do not match the
-# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria
 
 0
 
@@ -1300,7 +1291,7 @@ MaeII     NotI
 
 
 # No. of cutting enzymes which do not match the
-# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria
 
 0
 
@@ -1368,7 +1359,7 @@ HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI
 
 
 # No. of cutting enzymes which do not match the
-# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria
 
 0
 
@@ -1606,6 +1597,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
 <td><a href="cirdna.html">cirdna</a></td>
 <td>Draws circular maps of DNA constructs</td>
 </tr>
@@ -1616,8 +1612,18 @@ None.
 </tr>
 
 <tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculate the isoelectric point of proteins</td>
+</tr>
+
+<tr>
 <td><a href="lindna.html">lindna</a></td>
 <td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plot amino acid properties of a protein sequence in parallel</td>
 </tr>
 
 <tr>
@@ -1666,21 +1672,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="seealso.html">seealso</a></td>
-<td>Finds programs with similar function to a specified program</td>
-</tr>
-
-<tr>
-<td><a href="showalign.html">showalign</a></td>
-<td>Display a multiple sequence alignment in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showdb.html">showdb</a></td>
-<td>Displays information on configured databases</td>
-</tr>
-
-<tr>
 <td><a href="showfeat.html">showfeat</a></td>
 <td>Display features of a sequence in pretty format</td>
 </tr>
@@ -1708,11 +1699,6 @@ None.
 <tr>
 <td><a href="sixpack.html">sixpack</a></td>
 <td>Display a DNA sequence with 6-frame translation and ORFs</td>
-</tr>
-
-<tr>
-<td><a href="textsearch.html">textsearch</a></td>
-<td>Search the textual description of sequence(s)</td>
 </tr>
 
 <tr>

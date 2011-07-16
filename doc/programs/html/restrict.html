@@ -54,7 +54,7 @@ Algorithm
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with restrict</b>
+Here is a sample session with <b>restrict</b>
 <p>
 
 <p>
@@ -116,7 +116,7 @@ Output report [x65923.restrict]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Report restriction enzyme cleavage sites in a nucleotide sequence
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -148,12 +148,13 @@ Version: EMBOSS:6.3.0
                                   HinfI
                                   PpiI (Any string)
   [-outfile]           report     [*.restrict] Output report file name
+                                  (default -rformat table)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -datafile           datafile   Restriction enzyme data file (optional)
    -mfile              datafile   [Emethylsites.dat] Restriction enzyme
-                                  methylation data file (optional)
+                                  methylation data file
    -min                integer    [1] This sets the minimum number of cuts for
                                   any restriction enzyme that will be
                                   considered. Any enzymes that cut fewer times
@@ -326,7 +327,7 @@ PpiI</td>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat table)</td>
 <td><i>&lt;*&gt;</i>.restrict</td>
 </tr>
 
@@ -353,7 +354,7 @@ PpiI</td>
 <tr bgcolor="#FFFFCC">
 <td>-mfile</td>
 <td>datafile</td>
-<td>Restriction enzyme methylation data file (optional)</td>
+<td>Restriction enzyme methylation data file</td>
 <td>Data file</td>
 <td>Emethylsites.dat</td>
 </tr>
@@ -792,7 +793,34 @@ PpiI</td>
 </H2>
 
 
-<b>restrict</b> reads one or more DNA sequence USAs.
+<b>restrict</b> reads one or more nucleotide sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -902,10 +930,11 @@ The output is a standard EMBOSS report file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
 
 <p>
 
@@ -918,7 +947,7 @@ for further information on report formats.
 
 <p>
 
-By default <b>restrict</b> writes a 'table' report file.
+By default <b>restrict</b> writes a 'table' format report file.
 
 <p>
 
@@ -930,7 +959,7 @@ By default <b>restrict</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: restrict
 #    -sequence tembl:x65923
 # Report_format: table
@@ -1027,7 +1056,7 @@ By default <b>restrict</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: restrict
 #    -fragments
 #    -sequence tembl:x65923
@@ -1140,7 +1169,7 @@ By default <b>restrict</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: restrict
 #    -solofragment
 #    -sequence tembl:x65923

@@ -27,23 +27,28 @@
 
 /* @prog featcopy *************************************************************
 **
-** Reads and writes (returns) sequences
+** Return a feature table
 **
 ******************************************************************************/
 
 int main(int argc, char **argv)
 {
-    AjPFeattable feat;
+    AjPFeattaball featin;
+    AjPFeattable feat = NULL;
     AjPFeattabOut featout;
 
     embInit("featcopy", argc, argv);
 
-    feat = ajAcdGetFeatures("features");
+    featin = ajAcdGetFeaturesall("features");
     featout = ajAcdGetFeatout("outfeat");
 
-    ajFeattableWrite(featout, feat);
+    while(ajFeattaballNext(featin, &feat))
+    {
+        ajFeattableWrite(featout, feat);
+    }
 
     ajFeattableDel(&feat);
+    ajFeattaballDel(&featin);
     ajFeattabOutDel(&featout);
 
     embExit();

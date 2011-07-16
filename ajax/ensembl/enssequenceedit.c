@@ -1,10 +1,10 @@
-/******************************************************************************
-** @source Ensembl Sequence Edit functions.
+/* @source Ensembl Sequence Edit functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.6 $
+** @modified $Date: 2011/07/06 21:58:27 $ by $Author: mks $
+** @version $Revision: 1.20 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -33,7 +33,35 @@
 
 
 /* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== global variables ========================== */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
 /* ========================== private data ============================ */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== private constants ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== private variables ========================= */
 /* ==================================================================== */
 
 
@@ -43,9 +71,18 @@
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
-static int sequenceeditCompareStartAscending(const void* P1, const void* P2);
+static int listSequenceeditCompareStartAscending(const void* P1,
+                                                 const void* P2);
 
-static int sequenceeditCompareStartDescending(const void* P1, const void* P2);
+static int listSequenceeditCompareStartDescending(const void* P1,
+                                                  const void* P2);
+
+
+
+
+/* ==================================================================== */
+/* ===================== All functions by section ===================== */
+/* ==================================================================== */
 
 
 
@@ -59,13 +96,14 @@ static int sequenceeditCompareStartDescending(const void* P1, const void* P2);
 
 
 
-/* @datasection [EnsPSequenceEdit] Sequence Edit ******************************
+/* @datasection [EnsPSequenceedit] Ensembl Sequence Edit **********************
 **
-** Functions for manipulating Ensembl Sequence Edit objects
+** @nam2rule Sequenceedit Functions for manipulating
+** Ensembl Sequence Edit objects
 **
-** @cc Bio::EnsEMBL::SeqEdit CVS Revision: 1.4
-**
-** @nam2rule Sequence Edit
+** @cc Bio::EnsEMBL::SeqEdit
+** @cc CVS Revision: 1.7
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -79,18 +117,23 @@ static int sequenceeditCompareStartDescending(const void* P1, const void* P2);
 ** Sequence Edit. The target pointer does not need to be initialised to
 ** NULL, but it is good programming practice to do so anyway.
 **
-** @fdata [EnsPSequenceEdit]
-** @fnote None
+** @fdata [EnsPSequenceedit]
 **
 ** @nam3rule New Constructor
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the reference counter
-** @nam4rule A Constructor wit Ensembl Attribute object
+** @nam4rule Attribute Constructor with an Ensembl Attribute object
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the reference counter
 **
-** @argrule Obj object [EnsPSequenceEdit] Ensembl Sequence Edit
-** @argrule Ref object [EnsPSequenceEdit] Ensembl Sequence Edit
+** @argrule Attribute attribute [EnsPAttribute] Ensembl Attribute
+** @argrule Cpy se [const EnsPSequenceedit] Ensembl Sequence Edit
+** @argrule Ini at [EnsPAttributetype] Ensembl Attribute Type
+** @argrule Ini sequence [AjPStr] Alternative sequence
+** @argrule Ini start [ajuint] Start coordinate
+** @argrule Ini end [ajuint] End coordinate
+** @argrule Ref se [EnsPSequenceedit] Ensembl Sequence Edit
 **
-** @valrule * [EnsPSequenceEdit] Ensembl Sequence Edit
+** @valrule * [EnsPSequenceedit] Ensembl Sequence Edit
 **
 ** @fcategory new
 ******************************************************************************/
@@ -98,100 +141,25 @@ static int sequenceeditCompareStartDescending(const void* P1, const void* P2);
 
 
 
-/* @func ensSequenceEditNew ***************************************************
+/* @func ensSequenceeditNewAttribute ******************************************
 **
-** Default Ensembl Sequence Edit constructor.
+** Constructor for an Ensembl Sequence Edit with an Ensembl Attribute.
 **
 ** @cc Bio::EnsEMBL:SeqEdit::new
-** @param [u] code [AjPStr] Code
-** @param [u] name [AjPStr] Name
-** @param [u] description [AjPStr] Description
-** @param [u] altseq [AjPStr] Alternative sequence
-** @param [r] start [ajuint] Start coordinate
-** @param [r] end [ajuint] End coordinate
+** @param [u] attribute [EnsPAttribute] Ensembl Attribute
 **
-** @return [EnsPSequenceEdit] Ensembl Sequence Edit or NULL
+** @return [EnsPSequenceedit] Ensembl Sequence Edit or NULL
 ** @@
 ******************************************************************************/
 
-EnsPSequenceEdit ensSequenceEditNew(AjPStr code,
-                                    AjPStr name,
-                                    AjPStr description,
-                                    AjPStr altseq,
-                                    ajuint start,
-                                    ajuint end)
-{
-    AjPStr value = NULL;
-
-    EnsPSequenceEdit se = NULL;
-
-    if(!altseq)
-    {
-        ajDebug("ensSequenceEditNew requires an alternate sequence.\n");
-
-        return NULL;
-    }
-
-    if(start > (end + 1))
-    {
-        ajDebug("ensSequenceEditNew start %d must be less than or equal to "
-                "end %d + 1.\n", start, end);
-
-        return NULL;
-    }
-
-    if(start < 1)
-    {
-        ajDebug("ensSequenceEditNew start %d must be greater than or "
-                "equal to 1.\n", start);
-
-        return NULL;
-    }
-
-    value = ajFmtStr("%u %u %S", start, end, altseq);
-
-    AJNEW0(se);
-
-    se->Attribute = ensAttributeNew(code, name, description, value);
-
-    if(altseq)
-        se->AltSeq = ajStrNewRef(altseq);
-    else
-        se->AltSeq = ajStrNew();
-
-    se->Start = start;
-
-    se->End = end;
-
-    se->Use = 1;
-
-    ajStrDel(&value);
-
-    return se;
-}
-
-
-
-
-/* @func ensSequenceEditNewA **************************************************
-**
-** Default Ensembl Sequence Edit constructor based on an Ensembl Attribute.
-**
-** @cc Bio::EnsEMBL:SeqEdit::new
-** @param [r] attribute [EnsPAttribute] Ensembl Attribute
-**
-** @return [EnsPSequenceEdit] Ensembl Sequence Edit or NULL
-** @@
-******************************************************************************/
-
-EnsPSequenceEdit ensSequenceEditNewA(EnsPAttribute attribute)
+EnsPSequenceedit ensSequenceeditNewAttribute(EnsPAttribute attribute)
 {
     ajint start = 0;
     ajint end   = 0;
 
     AjPStr altseq = NULL;
 
-    EnsPSequenceEdit se = NULL;
+    EnsPSequenceedit se = NULL;
 
     if(!attribute)
         return NULL;
@@ -202,8 +170,8 @@ EnsPSequenceEdit ensSequenceEditNewA(EnsPAttribute attribute)
 
     if(start > (end + 1))
     {
-        ajDebug("ensSequenceEditNewA start %d must be less than or equal to "
-                "end %d + 1 in Ensembl Attribute value element '%S'.\n",
+        ajDebug("ensSequenceeditNewAttribute start %d must be less than or "
+                "equal to end %d + 1 in Ensembl Attribute value '%S'.\n",
                 start, end, attribute->Value);
 
         return NULL;
@@ -211,8 +179,8 @@ EnsPSequenceEdit ensSequenceEditNewA(EnsPAttribute attribute)
 
     if(start < 1)
     {
-        ajDebug("ensSequenceEditNewA start %d in Ensembl Attribute value "
-                "element '%S' must be greater than or equal to 1.\n",
+        ajDebug("ensSequenceeditNewAttribute start %d must be greater than or "
+                "equal to 1 in Ensembl Attribute value '%S'.\n",
                 start, attribute->Value);
 
         return NULL;
@@ -220,8 +188,8 @@ EnsPSequenceEdit ensSequenceEditNewA(EnsPAttribute attribute)
 
     if(end < 0)
     {
-        ajDebug("ensSequenceEditNewA end %d in Ensembl Attribute value "
-                "element '%S' must be greater than or equal to 0.\n",
+        ajDebug("ensSequenceeditNewAttribute end %d must be greater than or "
+                "equal to 0 in Ensembl Attribute value '%S' .\n",
                 end, attribute->Value);
 
         return NULL;
@@ -232,9 +200,9 @@ EnsPSequenceEdit ensSequenceEditNewA(EnsPAttribute attribute)
     se->Attribute = ensAttributeNewRef(attribute);
 
     if(altseq)
-        se->AltSeq = ajStrNewRef(altseq);
+        se->Sequence = ajStrNewRef(altseq);
     else
-        se->AltSeq = ajStrNew();
+        se->Sequence = ajStrNew();
 
     se->Start = start;
 
@@ -250,17 +218,142 @@ EnsPSequenceEdit ensSequenceEditNewA(EnsPAttribute attribute)
 
 
 
+/* @func ensSequenceeditNewCpy ************************************************
+**
+** Object-based constructor function, which returns an independent object.
+**
+** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
+**
+** @return [EnsPSequenceedit] Ensembl Sequence Edit or NULL
+** @@
+******************************************************************************/
+
+EnsPSequenceedit ensSequenceeditNewCpy(const EnsPSequenceedit se)
+{
+    EnsPSequenceedit pthis = NULL;
+
+    AJNEW0(pthis);
+
+    pthis->Attribute = ensAttributeNewRef(se->Attribute);
+
+    if(se->Sequence)
+        pthis->Sequence = ajStrNewRef(se->Sequence);
+
+    pthis->Start = se->Start;
+
+    pthis->End = se->End;
+
+    pthis->Use = 1;
+
+    return pthis;
+}
+
+
+
+
+/* @func ensSequenceeditNewIni ************************************************
+**
+** Ensembl Sequence Edit constructor with initial values.
+**
+** @cc Bio::EnsEMBL:SeqEdit::new
+** @param [u] at [EnsPAttributetype] Ensembl Attribute Type
+** @param [u] sequence [AjPStr] Alternative sequence
+** @param [r] start [ajuint] Start coordinate
+** @param [r] end [ajuint] End coordinate
+**
+** @return [EnsPSequenceedit] Ensembl Sequence Edit or NULL
+** @@
+******************************************************************************/
+
+EnsPSequenceedit ensSequenceeditNewIni(EnsPAttributetype at,
+                                       AjPStr sequence,
+                                       ajuint start,
+                                       ajuint end)
+{
+    AjPStr value = NULL;
+
+    EnsPSequenceedit se = NULL;
+
+    if(!sequence)
+    {
+        ajDebug("ensSequenceeditNewIni requires an alternate sequence.\n");
+
+        return NULL;
+    }
+
+    if(start > (end + 1))
+    {
+        ajDebug("ensSequenceeditNewIni start %d must be less than or "
+                "equal to end %d + 1.\n", start, end);
+
+        return NULL;
+    }
+
+    if(start < 1)
+    {
+        ajDebug("ensSequenceeditNewIni start %d must be greater than or "
+                "equal to 1.\n", start);
+
+        return NULL;
+    }
+
+    value = ajFmtStr("%u %u %S", start, end, sequence);
+
+    AJNEW0(se);
+
+    se->Attribute = ensAttributeNewIni(at, value);
+
+    if(sequence)
+        se->Sequence = ajStrNewRef(sequence);
+    else
+        se->Sequence = ajStrNew();
+
+    se->Start = start;
+    se->End   = end;
+    se->Use   = 1;
+
+    ajStrDel(&value);
+
+    return se;
+}
+
+
+
+
+/* @func ensSequenceeditNewRef ************************************************
+**
+** Ensembl Object referencing function, which returns a pointer to the
+** Ensembl Object passed in and increases its reference count.
+**
+** @param [u] se [EnsPSequenceedit] Ensembl Sequence Edit
+**
+** @return [EnsPSequenceedit] Ensembl Sequence Edit or NULL
+** @@
+******************************************************************************/
+
+EnsPSequenceedit ensSequenceeditNewRef(EnsPSequenceedit se)
+{
+    if(!se)
+        return NULL;
+
+    se->Use++;
+
+    return se;
+}
+
+
+
+
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Sequence Edits.
+** memory allocated for an Ensembl Sequence Edit object.
 **
-** @fdata [EnsPSequenceEdit]
-** @fnote None
+** @fdata [EnsPSequenceedit]
 **
-** @nam3rule Del Destroy (free) a Sequence Edit object
+** @nam3rule Del Destroy (free) an Ensembl Sequence Edit object
 **
-** @argrule * Pse [EnsPSequenceEdit*] Sequence Edit object address
+** @argrule * Pse [EnsPSequenceedit*] Ensembl Sequence Edit object address
 **
 ** @valrule * [void]
 **
@@ -270,19 +363,19 @@ EnsPSequenceEdit ensSequenceEditNewA(EnsPAttribute attribute)
 
 
 
-/* @func ensSequenceEditDel ***************************************************
+/* @func ensSequenceeditDel ***************************************************
 **
 ** Default destructor for an Ensembl Sequence Edit.
 **
-** @param [d] Pse [EnsPSequenceEdit*] Ensembl Sequence Edit address
+** @param [d] Pse [EnsPSequenceedit*] Ensembl Sequence Edit object address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensSequenceEditDel(EnsPSequenceEdit *Pse)
+void ensSequenceeditDel(EnsPSequenceedit* Pse)
 {
-    EnsPSequenceEdit pthis = NULL;
+    EnsPSequenceedit pthis = NULL;
 
     if(!Pse)
         return;
@@ -303,7 +396,7 @@ void ensSequenceEditDel(EnsPSequenceEdit *Pse)
 
     ensAttributeDel(&pthis->Attribute);
 
-    ajStrDel(&pthis->AltSeq);
+    ajStrDel(&pthis->Sequence);
 
     AJFREE(pthis);
 
@@ -319,19 +412,18 @@ void ensSequenceEditDel(EnsPSequenceEdit *Pse)
 **
 ** Functions for returning elements of an Ensembl Sequence Edit object.
 **
-** @fdata [EnsPSequenceEdit]
-** @fnote None
+** @fdata [EnsPSequenceedit]
 **
 ** @nam3rule Get Return Sequence Edit attribute(s)
-** @nam4rule GetAttribute Return the Ensembl Attribute
-** @nam4rule GetAltSeq Return the alternate sequence
-** @nam4rule GetStart Return the description
-** @nam4rule GetEnd Return the value
+** @nam4rule Attribute Return the Ensembl Attribute
+** @nam4rule Sequence Return the alternate sequence
+** @nam4rule Start Return the description
+** @nam4rule End Return the value
 **
-** @argrule * se [const EnsPSequenceEdit] Sequence Edit
+** @argrule * se [const EnsPSequenceedit] Sequence Edit
 **
 ** @valrule Attribute [EnsPAttribute] Ensembl Attribute
-** @valrule AltSeq [AjPStr] Alternate sequence
+** @valrule Sequence [AjPStr] Alternate sequence
 ** @valrule Start [ajuint] Start coordinate
 ** @valrule End [ajuint] End coordinate
 **
@@ -341,18 +433,18 @@ void ensSequenceEditDel(EnsPSequenceEdit *Pse)
 
 
 
-/* @func ensSequenceEditGetAttribute ******************************************
+/* @func ensSequenceeditGetAttribute ******************************************
 **
 ** Get the Ensembl Attribute element of an Ensembl Sequence Edit.
 **
 ** @cc Bio::EnsEMBL:SeqEdit::get_Attribute
-** @param [r] se [const EnsPSequenceEdit] Ensembl Sequence Edit
+** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
 **
 ** @return [EnsPAttribute] Ensembl Attribute or NULL
 ** @@
 ******************************************************************************/
 
-EnsPAttribute ensSequenceEditGetAttribute(const EnsPSequenceEdit se)
+EnsPAttribute ensSequenceeditGetAttribute(const EnsPSequenceedit se)
 {
     if(!se)
         return NULL;
@@ -363,60 +455,7 @@ EnsPAttribute ensSequenceEditGetAttribute(const EnsPSequenceEdit se)
 
 
 
-/* @func ensSequenceEditGetAltSeq *********************************************
-**
-** Get the alternative sequence element of an Ensembl Sequence Edit.
-**
-** The sequence may either be a string of amino acids or nucleotides depending
-** on the context in which this Sequence Edit is used.
-** In the case of a deletion the replacement sequence is an empty string.
-**
-** @cc Bio::EnsEMBL:SeqEdit::alt_seq
-** @param [r] se [const EnsPSequenceEdit] Ensembl Sequence Edit
-**
-** @return [AjPStr] Alternative sequence
-** @@
-******************************************************************************/
-
-AjPStr ensSequenceEditGetAltSeq(const EnsPSequenceEdit se)
-{
-    if(!se)
-        return NULL;
-
-    return se->AltSeq;
-}
-
-
-
-
-/* @func ensSequenceEditGetStart **********************************************
-**
-** Get the start coordinate element of an Ensembl Sequence Edit.
-**
-** Coordinates are inclusive and one-based, which means that inserts are
-** unusually represented by a start one base pair higher than the end. Hence,
-** start = 1, end = 1 is a replacement of the first base, but
-** start = 1, end = 0 is an insert BEFORE the first base.
-**
-** @cc Bio::EnsEMBL:SeqEdit::start
-** @param [r] se [const EnsPSequenceEdit] Ensembl Sequence Edit
-**
-** @return [ajuint] Start coordinate
-** @@
-******************************************************************************/
-
-ajuint ensSequenceEditGetStart(const EnsPSequenceEdit se)
-{
-    if(!se)
-        return 0;
-
-    return se->Start;
-}
-
-
-
-
-/* @func ensSequenceEditGetEnd ************************************************
+/* @func ensSequenceeditGetEnd ************************************************
 **
 ** Get the end coordinate element of an Ensembl Sequence Edit.
 **
@@ -426,13 +465,13 @@ ajuint ensSequenceEditGetStart(const EnsPSequenceEdit se)
 ** start = 1, end = 0 is an insert BEFORE the first base.
 **
 ** @cc Bio::EnsEMBL:SeqEdit::end
-** @param [r] se [const EnsPSequenceEdit] Ensembl Sequence Edit
+** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
 **
 ** @return [ajuint] End coordinate
 ** @@
 ******************************************************************************/
 
-ajuint ensSequenceEditGetEnd(const EnsPSequenceEdit se)
+ajuint ensSequenceeditGetEnd(const EnsPSequenceedit se)
 {
     if(!se)
         return 0;
@@ -443,23 +482,54 @@ ajuint ensSequenceEditGetEnd(const EnsPSequenceEdit se)
 
 
 
-/* @func ensSequenceEditGetLengthDifference ***********************************
+/* @func ensSequenceeditGetSequence *******************************************
 **
-** Get the length difference an Ensembl Sequence Edit would cause.
+** Get the (alternative) sequence element of an Ensembl Sequence Edit.
 **
-** @cc Bio::EnsEMBL:SeqEdit::length_diff
-** @param [r] se [EnsPSequenceEdit] Ensembl Sequence Edit
+** The sequence may either be a string of amino acids or nucleotides depending
+** on the context in which this Sequence Edit is used.
+** In the case of a deletion the replacement sequence is an empty string.
 **
-** @return [ajint] Length difference or 0
+** @cc Bio::EnsEMBL:SeqEdit::alt_seq
+** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
+**
+** @return [AjPStr] Alternative sequence
 ** @@
 ******************************************************************************/
 
-ajint ensSequenceEditGetLengthDifference(EnsPSequenceEdit se)
+AjPStr ensSequenceeditGetSequence(const EnsPSequenceedit se)
+{
+    if(!se)
+        return NULL;
+
+    return se->Sequence;
+}
+
+
+
+
+/* @func ensSequenceeditGetStart **********************************************
+**
+** Get the start coordinate element of an Ensembl Sequence Edit.
+**
+** Coordinates are inclusive and one-based, which means that inserts are
+** unusually represented by a start one base pair higher than the end. Hence,
+** start = 1, end = 1 is a replacement of the first base, but
+** start = 1, end = 0 is an insert BEFORE the first base.
+**
+** @cc Bio::EnsEMBL:SeqEdit::start
+** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
+**
+** @return [ajuint] Start coordinate
+** @@
+******************************************************************************/
+
+ajuint ensSequenceeditGetStart(const EnsPSequenceedit se)
 {
     if(!se)
         return 0;
 
-    return ajStrGetLen(se->AltSeq) - (se->End - se->Start + 1);
+    return se->Start;
 }
 
 
@@ -469,10 +539,11 @@ ajint ensSequenceEditGetLengthDifference(EnsPSequenceEdit se)
 **
 ** Functions for reporting of an Ensembl Sequence Edit object.
 **
-** @fdata [EnsPSequenceEdit]
+** @fdata [EnsPSequenceedit]
+**
 ** @nam3rule Trace Report Ensembl Sequence Edit elements to debug file
 **
-** @argrule Trace attribute [const EnsPSequenceEdit] Ensembl Sequence Edit
+** @argrule Trace se [const EnsPSequenceedit] Ensembl Sequence Edit
 ** @argrule Trace level [ajuint] Indentation level
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
@@ -483,18 +554,18 @@ ajint ensSequenceEditGetLengthDifference(EnsPSequenceEdit se)
 
 
 
-/* @func ensSequenceEditTrace *************************************************
+/* @func ensSequenceeditTrace *************************************************
 **
 ** Trace an Ensembl Sequence Edit.
 **
-** @param [r] se [const EnsPSequenceEdit] Ensembl Sequence Edit
+** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensSequenceEditTrace(const EnsPSequenceEdit se, ajuint level)
+AjBool ensSequenceeditTrace(const EnsPSequenceedit se, ajuint level)
 {
     AjPStr indent = NULL;
 
@@ -505,15 +576,15 @@ AjBool ensSequenceEditTrace(const EnsPSequenceEdit se, ajuint level)
 
     ajStrAppendCountK(&indent, ' ', level * 2);
 
-    ajDebug("%SensSequenceEditTrace %p\n"
+    ajDebug("%SensSequenceeditTrace %p\n"
             "%S  Attribute %p\n"
-            "%S  AltSeq '%S'\n"
+            "%S  Sequence '%S'\n"
             "%S  Start %u\n"
             "%S  End %u\n"
             "%S  Use %u\n",
             indent, se,
             indent, se->Attribute,
-            indent, se->AltSeq,
+            indent, se->Sequence,
             indent, se->Start,
             indent, se->End,
             indent, se->Use);
@@ -528,23 +599,140 @@ AjBool ensSequenceEditTrace(const EnsPSequenceEdit se, ajuint level)
 
 
 
-/* @func ensSequenceEditApplyEdit *********************************************
+/* @section calculate *********************************************************
 **
-** Apply an Ensembl Sequence Edit to a sequence AJAX String.
+** Functions for calculating values of an Ensembl Sequence Edit object.
+**
+** @fdata [EnsPSequenceedit]
+**
+** @nam3rule Calculate Calculate Ensembl Sequence Edit values
+** @nam4rule Difference Calculate the length difference
+** @nam4rule Memsize Calculate the memory size in bytes
+**
+** @argrule * se [const EnsPSequenceedit] Ensembl Sequence Edit
+**
+** @valrule Difference [ajint] Length difference or 0
+** @valrule Memsize [size_t] Memory size in bytes or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensSequenceeditCalculateDifference ***********************************
+**
+** Calculate the length difference an Ensembl Sequence Edit would cause.
+**
+** @cc Bio::EnsEMBL:SeqEdit::length_diff
+** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
+**
+** @return [ajint] Length difference or 0
+** @@
+******************************************************************************/
+
+ajint ensSequenceeditCalculateDifference(const EnsPSequenceedit se)
+{
+    const char* Ptr = NULL;
+
+    register ajuint i = 0;
+
+    if(!se)
+        return 0;
+
+    /*
+    ** NOTE: Since ajStrGetLen returns size_t, which exceeds ajint,
+    ** the length of the alternative sequence needs to be determined here.
+    **
+    ** return ajStrGetLen(se->Sequence) - (se->End - se->Start + 1);
+    */
+
+    for(i = 0, Ptr = ajStrGetPtr(se->Sequence); (Ptr && *Ptr); i++, Ptr++)
+        if(i == UINT_MAX)
+            ajFatal("ensSequenceeditCalculateDifference exeeded UINT_MAX.");
+
+    return i - (se->End - se->Start + 1);
+}
+
+
+
+
+/* @func ensSequenceeditCalculateMemsize **************************************
+**
+** Calculate the memory size in bytes of an Ensembl Sequence Edit.
+**
+** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
+**
+** @return [size_t] Memory size in bytes or 0
+** @@
+******************************************************************************/
+
+size_t ensSequenceeditCalculateMemsize(const EnsPSequenceedit se)
+{
+    size_t size = 0;
+
+    if(!se)
+        return 0;
+
+    size += sizeof (EnsOSequenceedit);
+
+    size += ensAttributeCalculateMemsize(se->Attribute);
+
+    if(se->Sequence)
+    {
+        size += sizeof (AjOStr);
+
+        size += ajStrGetRes(se->Sequence);
+    }
+
+    return size;
+}
+
+
+
+
+/* @section apply *************************************************************
+**
+** Functions for applying Ensembl Sequence Edit objects.
+**
+** @fdata [EnsPSequenceedit]
+**
+** @nam3rule Apply Apply Ensembl Sequence Edit objects
+** @nam4rule String Apply an Ensembl Sequence Edit to an AJAX String
+**
+** @argrule String se [const EnsPSequenceedit] Ensembl Sequence Edit
+** @argrule String offset [ajint] Offset into sequence
+** @argrule String Psequence [AjPStr*] Sequence address
+**
+** @valrule String [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensSequenceeditApplyString *******************************************
+**
+** Apply an Ensembl Sequence Edit to an AJAX String.
 **
 ** @cc Bio::EnsEMBL:SeqEdit::apply_edit
-** @param [r] se [EnsPSequenceEdit] Ensembl Sequence Edit
+** @cc Bio::EnsEMBL::DBSQL::SequenceAdaptor::_rna_edit
+** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
 ** @param [rE] offset [ajint] Offset into sequence
-** @param [r] Psequence [AjPStr*] Sequence AJAX String address
+** @param [u] Psequence [AjPStr*] Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensSequenceEditApplyEdit(EnsPSequenceEdit se,
-                                ajint offset,
-                                AjPStr* Psequence)
+AjBool ensSequenceeditApplyString(const EnsPSequenceedit se,
+                                  ajint offset,
+                                  AjPStr* Psequence)
 {
+    ajlong pos1 = 0;
+    ajlong pos2 = 0;
+
     if(!se)
         return ajFalse;
 
@@ -554,19 +742,34 @@ AjBool ensSequenceEditApplyEdit(EnsPSequenceEdit se,
     if(!*Psequence)
         return ajFalse;
 
-    if((se->Start - offset) > ajStrGetLen(*Psequence))
+    pos1 = se->Start - offset;
+    pos2 = se->End   - offset;
+
+    if(pos2 < 1)
     {
-        ajDebug("ensSequenceEditApplyEdit start position %u beyond "
-                "sequence length %u.\n",
-                se->Start - offset,
-                ajStrGetLen(*Psequence));
+        ajDebug("ensSequenceeditApplyString got an Ensembl Sequence Edit, "
+                "which end position (%d) corrected for the offset (%d) lies "
+                "beyond the sequence start (1).",
+                se->End, offset);
 
         return ajFalse;
     }
 
-    ajStrCutRange(Psequence, se->Start - offset - 1, se->End - offset - 1);
+    if(pos1 > (ajlong) ajStrGetLen(*Psequence))
+    {
+        ajDebug("ensSequenceeditApplyString got an Ensembl Sequence Edit, "
+                "which start position (%d) corrected for the offset (%d) lies "
+                "beyond the sequence end (%lu).",
+                se->Start, offset, ajStrGetLen(*Psequence));
 
-    ajStrInsertS(Psequence, se->Start - offset - 1, se->AltSeq);
+        return ajFalse;
+    }
+
+    /* Adjust to zero-based coordinates. */
+
+    ajStrCutRange(Psequence, pos1 - 1, pos2 - 1);
+
+    ajStrInsertS(Psequence, pos1 - 1, se->Sequence);
 
     return ajTrue;
 }
@@ -574,13 +777,47 @@ AjBool ensSequenceEditApplyEdit(EnsPSequenceEdit se,
 
 
 
-/* @funcstatic sequenceeditCompareStartAscending ******************************
+/* @datasection [AjPList] AJAX List *******************************************
 **
-** Comparison function to sort Ensembl Sequence Edits by their
-** start coordinates in ascending order.
+** @nam2rule List Functions for manipulating AJAX List objects
+**
+******************************************************************************/
+
+
+
+
+/* @section list **************************************************************
+**
+** Functions for manipulating AJAX List objects.
+**
+** @fdata [AjPList]
+**
+** @nam3rule Sequenceedit Functions for manipulating AJAX List objects of
+** Ensembl Sequence Edit objects
+** @nam4rule Sort Sort functions
+** @nam5rule Start Sort by start element
+** @nam6rule Ascending  Sort in ascending order
+** @nam6rule Descending Sort in descending order
+**
+** @argrule Ascending ses [AjPList] AJAX List of Ensembl Sequence Edit objects
+** @argrule Descending ses [AjPList] AJAX List of Ensembl Sequence Edit objects
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @funcstatic listSequenceeditCompareStartAscending **************************
+**
+** AJAX List of Ensembl Sequence Edit objects comparison function to sort by
+** start element in ascending order.
 **
 ** @param [r] P1 [const void*] Ensembl Sequence Edit address 1
 ** @param [r] P2 [const void*] Ensembl Sequence Edit address 2
+** @see ajListSort
 **
 ** @return [int] The comparison function returns an integer less than,
 **               equal to, or greater than zero if the first argument is
@@ -589,26 +826,27 @@ AjBool ensSequenceEditApplyEdit(EnsPSequenceEdit se,
 ** @@
 ******************************************************************************/
 
-static int sequenceeditCompareStartAscending(const void* P1, const void* P2)
+static int listSequenceeditCompareStartAscending(const void* P1,
+                                                 const void* P2)
 {
-    int value = 0;
+    int result = 0;
 
-    const EnsPSequenceEdit se1 = NULL;
-    const EnsPSequenceEdit se2 = NULL;
+    const EnsPSequenceedit se1 = NULL;
+    const EnsPSequenceedit se2 = NULL;
 
-    se1 = *(EnsPSequenceEdit const *) P1;
-    se2 = *(EnsPSequenceEdit const *) P2;
+    se1 = *(EnsPSequenceedit const*) P1;
+    se2 = *(EnsPSequenceedit const*) P2;
 
-    if(ajDebugTest("sequenceeditCompareStartAscending"))
+    if(ajDebugTest("listSequenceeditCompareStartAscending"))
     {
-        ajDebug("sequenceeditCompareStartAscending\n"
+        ajDebug("listSequenceeditCompareStartAscending\n"
                 "  se1 %p\n"
                 "  se2 %p\n",
                 se1,
                 se2);
 
-        ensSequenceEditTrace(se1, 1);
-        ensSequenceEditTrace(se2, 1);
+        ensSequenceeditTrace(se1, 1);
+        ensSequenceeditTrace(se2, 1);
     }
 
     /* Sort empty values towards the end of the AJAX list. */
@@ -623,33 +861,34 @@ static int sequenceeditCompareStartAscending(const void* P1, const void* P2)
         return +1;
 
     if(se1->Start < se2->Start)
-        value = -1;
+        result = -1;
 
     if(se1->Start > se2->Start)
-        value = +1;
+        result = +1;
 
-    return value;
+    return result;
 }
 
 
 
 
-/* @func ensSequenceEditSortByStartAscending **********************************
+/* @func ensListSequenceeditSortStartAscending ********************************
 **
-** Sort Ensembl Sequence Edits by their start coordinate in ascending order.
+** Sort an AJAX List of Ensembl Sequence Edit objects by start element in
+** ascending order.
 **
-** @param [u] ses [AjPList] AJAX List of Ensembl Sequence Edits
+** @param [u] ses [AjPList] AJAX List of Ensembl Sequence Edit objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensSequenceEditSortByStartAscending(AjPList ses)
+AjBool ensListSequenceeditSortStartAscending(AjPList ses)
 {
     if(!ses)
         return ajFalse;
 
-    ajListSort(ses, sequenceeditCompareStartAscending);
+    ajListSort(ses, listSequenceeditCompareStartAscending);
 
     return ajTrue;
 }
@@ -657,13 +896,14 @@ AjBool ensSequenceEditSortByStartAscending(AjPList ses)
 
 
 
-/* @funcstatic sequenceeditCompareStartDescending *****************************
+/* @funcstatic listSequenceeditCompareStartDescending *************************
 **
-** Comparison function to sort Ensembl Sequence Edits by their
-** start coordinates in descending order.
+** AJAX List of Ensembl Sequence Edit objects comparison function to sort by
+** start element in descending order.
 **
 ** @param [r] P1 [const void*] Ensembl Sequence Edit address 1
 ** @param [r] P2 [const void*] Ensembl Sequence Edit address 2
+** @see ajListSort
 **
 ** @return [int] The comparison function returns an integer less than,
 **               equal to, or greater than zero if the first argument is
@@ -672,26 +912,27 @@ AjBool ensSequenceEditSortByStartAscending(AjPList ses)
 ** @@
 ******************************************************************************/
 
-static int sequenceeditCompareStartDescending(const void* P1, const void* P2)
+static int listSequenceeditCompareStartDescending(const void* P1,
+                                                  const void* P2)
 {
-    int value = 0;
+    int result = 0;
 
-    const EnsPSequenceEdit se1 = NULL;
-    const EnsPSequenceEdit se2 = NULL;
+    const EnsPSequenceedit se1 = NULL;
+    const EnsPSequenceedit se2 = NULL;
 
-    se1 = *(EnsPSequenceEdit const *) P1;
-    se2 = *(EnsPSequenceEdit const *) P2;
+    se1 = *(EnsPSequenceedit const*) P1;
+    se2 = *(EnsPSequenceedit const*) P2;
 
-    if(ajDebugTest("sequenceeditCompareStartDescending"))
+    if(ajDebugTest("listSequenceeditCompareStartDescending"))
     {
-        ajDebug("sequenceeditCompareStartDescending\n"
+        ajDebug("listSequenceeditCompareStartDescending\n"
                 "  se1 %p\n"
                 "  se2 %p\n",
                 se1,
                 se2);
 
-        ensSequenceEditTrace(se1, 1);
-        ensSequenceEditTrace(se2, 1);
+        ensSequenceeditTrace(se1, 1);
+        ensSequenceeditTrace(se2, 1);
     }
 
     /* Sort empty values towards the end of the AJAX list. */
@@ -706,33 +947,34 @@ static int sequenceeditCompareStartDescending(const void* P1, const void* P2)
         return +1;
 
     if(se1->Start < se2->Start)
-        value = +1;
+        result = +1;
 
     if(se1->Start > se2->Start)
-        value = -1;
+        result = -1;
 
-    return value;
+    return result;
 }
 
 
 
 
-/* @func ensSequenceEditSortByStartDescending *********************************
+/* @func ensListSequenceeditSortStartDescending *******************************
 **
-** Sort Ensembl Sequence Edits by their start coordinate in descending order.
+** Sort an AJAX List of Ensembl Sequence Edit objects by start element in
+** descending order.
 **
-** @param [u] ses [AjPList] AJAX List of Ensembl Sequence Edits
+** @param [u] ses [AjPList] AJAX List of Ensembl Sequence Edit objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-AjBool ensSequenceEditSortByStartDescending(AjPList ses)
+AjBool ensListSequenceeditSortStartDescending(AjPList ses)
 {
     if(!ses)
         return ajFalse;
 
-    ajListSort(ses, sequenceeditCompareStartDescending);
+    ajListSort(ses, listSequenceeditCompareStartDescending);
 
     return ajTrue;
 }

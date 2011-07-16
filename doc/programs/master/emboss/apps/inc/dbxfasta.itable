@@ -60,6 +60,14 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td>-[no]compressed</td>
+<td>boolean</td>
+<td>Compressed index files</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>-outfile</td>
 <td>outfile</td>
 <td>General log output file</td>

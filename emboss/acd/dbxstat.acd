@@ -1,11 +1,11 @@
 application: dbxstat [
   groups: "Utils:Database indexing"
   documentation: "Dump statistics for dbx databases"
-  gui: "yes"
+  gui: "no"
   batch: "no"
   cpu: "medium"
-  relations: "/edam/topic/0000091 Database and file management"
-  relations: "/edam/operation/0000228 Database index analysis"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000228 operation Data index analysis"
 ]
 
 section: input [
@@ -17,31 +17,27 @@ section: input [
     parameter: "Y"
     maxlength: "19"
     minlength: "2"
-    information: "Basename for index files"
+    information: "EMBOSS database name"
     knowntype: "emboss database name"
     pattern: "[A-z][A-z0-9_]+"
-    relations:  "/edam/data/0001056 Database name"                          
+    relations: "EDAM:0001056 identifier Database name"
+  ]
+
+  string: field [
+    parameter: "y"
+    information: "EMBOSS database field"
+    knowntype: "emboss database field"
+    default: "id"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   directory: indexdir [
-    standard: "y"
-    default: "."
-    information: "Index directory"
+    default: ""
+    information: "Index directory (optional)"
     knowntype: "emboss database index"
-    relations:  "/edam/data/0001049 Directory name"                                 
-  ]
-
-  list: idtype [
-    standard: "y"
-    information: "Index type"
-    values: "id:ID index; ac:Accession index; sv:Version/GI Index;
-             kw:Keyword index; de:Description index; tx:Taxonomy Index"
-#    values: "id:ID index; ac:Accession index; sv:Version/GI Index;
-#             kw:Keyword index; de:Description index; tx:Taxonomy Index"
-    maximum: "1"
-    minimum: "1"
-    default: "id"
-    relations: "/edam/data/0001773 Tool-specific parameter"                                
+    relations: "EDAM:0001049 identifier Directory name"
+    nullok: "Y"
+    nulldefault: "Y"
   ]
 
 endsection: input
@@ -62,14 +58,14 @@ section: advanced [
     information: "Minimum occurrences"
     minimum: "1"
     default: "1"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: maximum [
     information: "Maximum occurrences (0=no maximum)"
     minimum: "0"
     default: "0"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -81,8 +77,9 @@ section: output [
 
   outfile: outfile [
     standard: "y"
+    name: "$(dbname)"
     knowntype: "dbxstat output"
-    relations:  "/edam/data/0000955 Database index"                                      
+    relations: "EDAM:0000969 data Text"
   ]
 
 endsection: output

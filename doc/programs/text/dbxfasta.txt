@@ -16,8 +16,9 @@ Function
 Description
 
    dbxfasta indexes a flat file database of one or more files, and builds
-   EMBOSS B+tree format index files. These indexes allow access of flat
-   files larger than 2Gb.
+   EMBOSS B+tree format index files.
+
+   These indexes allow access of flat files larger than 2Gb.
 
 Usage
 
@@ -42,6 +43,7 @@ Wildcard database filename [*.fasta]: emrod
         sv : Sequence Version and GI
        des : Description
 Index fields [id,acc]:
+Compressed index files [Y]:
 General log output file [outfile.dbxfasta]:
 
 
@@ -50,7 +52,7 @@ General log output file [outfile.dbxfasta]:
 Command line arguments
 
 Index a fasta file database using b+tree indices
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -69,6 +71,7 @@ Version: EMBOSS:6.3.0
    -fields             menu       [id,acc] Index fields (Values: id (ID); acc
                                   (Accession number); sv (Sequence Version and
                                   GI); des (Description))
+   -[no]compressed     boolean    [Y] Compressed index files
    -outfile            outfile    [*.dbxfasta] General log output file
 
    Additional (Optional) qualifiers: (none)
@@ -110,7 +113,7 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   dbxfasta reads any normal sequence USAs.
+   dbxfasta reads and indexes FASTA format sequence data files.
 
 Output file format
 
@@ -143,6 +146,9 @@ emrod
 
   File: emrod.pxac
 
+Type      Identifier
+Compress  Yes
+Pages     3
 Order     71
 Fill      46
 Pagesize  2048
@@ -150,11 +156,15 @@ Level     0
 Cachesize 100
 Order2    99
 Fill2     101
-Count     5
+Count     6
+Fullcount 6
 Kwlimit   15
 
   File: emrod.pxid
 
+Type      Identifier
+Compress  Yes
+Pages     3
 Order     71
 Fill      46
 Pagesize  2048
@@ -162,7 +172,8 @@ Level     0
 Cachesize 100
 Order2    99
 Fill2     101
-Count     5
+Count     6
+Fullcount 6
 Kwlimit   15
 
   File: emrod.xac
@@ -260,13 +271,21 @@ Known bugs
 
 See also
 
-                    Program name                     Description
-                    dbiblast     Index a BLAST database
-                    dbifasta     Index a fasta file database
-                    dbiflat      Index a flat file database
-                    dbigcg       Index a GCG formatted database
-                    dbxflat      Index a flat file database using b+tree indices
-                    dbxgcg       Index a GCG formatted database using b+tree indices
+                    Program name                       Description
+                    dbiblast      Index a BLAST database
+                    dbifasta      Index a fasta file database
+                    dbiflat       Index a flat file database
+                    dbigcg        Index a GCG formatted database
+                    dbxcompress   Compress an uncompressed dbx index
+                    dbxedam       Index the EDAM ontology using b+tree indices
+                    dbxflat       Index a flat file database using b+tree indices
+                    dbxgcg        Index a GCG formatted database using b+tree indices
+                    dbxobo        Index an obo ontology using b+tree indices
+                    dbxreport     Validate index and report internals for dbx databases
+                    dbxresource   Index a data resource catalogue using b+tree indices
+                    dbxstat       Dump statistics for dbx databases
+                    dbxtax        Index NCBI taxonomy using b+tree indices
+   dbxuncompress    Uncompress a compressed dbx index
 
 Author(s)
 
@@ -281,8 +300,8 @@ History
 
 Target users
 
-                    This program is intended to be used by everyone and everything, from
-                    naive users to embedded scripts.
+                    This program is intended to be used by administrators responsible for
+                    software and database installation and maintenance.
 
 Comments
 

@@ -1,4 +1,4 @@
-<b>Here is a sample session with featreport</b>
+Here is a sample session with <b>featreport</b>
 <p>
 
 <p>
@@ -7,7 +7,7 @@
 % <b>featreport </b>
 Reads and writes a feature table
 Input sequence: <b>paamir.fasta</b>
-Input features: <b>paamir.gff</b>
+Input feature table: <b>paamir.gff</b>
 Output report [x13776.featreport]: <b>test.out</b>
 
 </pre></td></tr></table><p>

@@ -1,0 +1,823 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: wossdata
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+wossdata
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Finds programs by EDAM data
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>wossdata</b> searches the annotation of application inputs and
+outputs in ACD files, using terms from the EDAM ontology. There are
+various options for controlling how the search is performed and what
+is given in the output file.  Optionally, the output will be wrapped
+in HTML tags ready for inclusion in a Web page.</p>
+
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+The first search is of the EDAM ontology data namespace, using the
+term names and their synonynms. All child terms are automatically
+included in the set of matches inless the <tt>-nosubclasses</tt>
+qualifier is used.
+
+<p>
+The <tt>-sensitive</tt> qualifier also searches the definition strings.
+
+<p>
+The set of EDAM terms are then compared to relations in the ACD file,
+where input, output and parameter definitions require data references.
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>wossdata</b>
+<p>
+Search for programs with 'codon' in their input, output or parameters 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>wossdata codon </b>
+Finds programs by EDAM data
+
+SEARCH FOR DATA 'CODON'
+backtranseq Back-translate a protein sequence to a nucleotide sequence
+cai         Calculate codon adaptation index
+chips       Calculates Nc codon usage statistic
+codcmp      Codon usage table comparison
+codcopy     Copy and reformat a codon usage table
+cusp        Create a codon usage table from nucleotide sequence(s)
+cutgextract Extract codon usage tables from CUTG database
+makenucseq  Create random nucleotide sequences
+syco        Draw synonymous codon usage statistic plot for a nucleotide sequence
+tcode       Identify protein-coding regions using Fickett TESTCODE statistic
+
+
+</pre></td></tr></table><p>
+<p>
+<p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Finds programs by EDAM data
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-identifier]        string     Identifier(s) to search for in ontology (Any
+                                  string)
+
+   Additional (Optional) qualifiers:
+   -explode            boolean    [N] The groups that EMBOSS applications
+                                  belong to have two forms, exploded and not
+                                  exploded. The exploded group names are more
+                                  numerous and often vaguely phrased than the
+                                  non-exploded ones. The exploded names are
+                                  formed from definitions of the group names
+                                  that start like NAME1:NAME2 and which are
+                                  then expanded into many combinations of the
+                                  names as: 'NAME1', 'NAME2', 'NAME1 NAME2',
+                                  NAME2 NAME1'. The non-expanded names are
+                                  simply like: 'NAME1 NAME2'.
+   -showkeywords       boolean    [N] Show keywords with program documentation
+   -outfile            outfile    [stdout] Tool metadata output file
+   -html               toggle     [N] If you are sending the output to a file,
+                                  this will format it for displaying as a
+                                  table in a WWW document.
+   -groups             boolean    [N] If you use this option, then only the
+                                  group names will be output to the file
+   -alphabetic         boolean    [N] If you use this option, then you will
+                                  get a single list of the program names and
+                                  descriptions instead of the programs being
+                                  listed in their functional groups.
+
+   Advanced (Unprompted) qualifiers:
+   -sensitive          boolean    [N] By default, the query keywords are
+                                  matched against the EDAM term names (and
+                                  synonyms) only. This option also matches the
+                                  keywords against the EDAM term definitions
+                                  and will therefore (typically) report more
+                                  matches.
+   -[no]subclasses     boolean    [Y] Extend the query matches to include all
+                                  terms which are specialisations (EDAM
+                                  sub-classes) of the matched type.
+   -obsolete           boolean    [N] The default behaviour is to not use or
+                                  return obsolete terms. This option if set
+                                  will include all terms.
+   -[no]emboss         boolean    [Y] If you use this option then EMBOSS
+                                  program documentation will be searched. If
+                                  this option is set to be false, then only
+                                  the EMBASSY programs will be searched (if
+                                  the -embassy option is true). EMBASSY
+                                  programs are not strictly part of EMBOSS,
+                                  but use the same code libraries and share
+                                  the same look and feel, but are generally
+                                  developed by people who wish the programs to
+                                  be outside of the GNU Public Licence scheme
+   -[no]embassy        boolean    [Y] If you use this option then EMBASSY
+                                  program documentation will be searched. If
+                                  this option is set to be false, then only
+                                  the EMBOSS programs will be searched (if the
+                                  -emboss option is true). EMBASSY programs
+                                  are not strictly part of EMBOSS, but use the
+                                  same code libraries and share the same look
+                                  and feel, but are generally developed by
+                                  people who wish the programs to be outside
+                                  of the GNU Public Licence scheme
+   -showembassy        string     If you use this option then this EMBASSY
+                                  package program documentation will be
+                                  searched. EMBASSY programs are not strictly
+                                  part of EMBOSS, but use the same code
+                                  libraries and share the same look and feel,
+                                  but are generally developed by people who
+                                  wish the programs to be outside of the GNU
+                                  Public Licence scheme (Any string)
+   -colon              boolean    [N] The groups that EMBOSS applications
+                                  belong to up to two levels, for example the
+                                  primary group 'ALIGNMENT' has several
+                                  sub-groups, or second-level groups, e.g.:
+                                  CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL,
+                                  LOCAL, MULTIPLE. To aid programs that parse
+                                  the output of wossname that require the
+                                  names of these subgroups, a colon ':' will
+                                  be placed between the first and second level
+                                  of the group name if this option is true.
+                                  Note: This does not apply if the group names
+                                  have been exploded with the 'explode'
+                                  option.
+   -gui                boolean    [N] This option is intended to help those
+                                  who are designing Graphical User Interfaces
+                                  to the EMBOSS applications. Some EMBOSS
+                                  programs are inappropriate for running in a
+                                  GUI, these include other menu programs and
+                                  interactive editors. This option allows you
+                                  to only report those programs that can be
+                                  run from a GUI
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-identifier]<br>(Parameter 1)</td>
+<td>string</td>
+<td>Identifier(s) to search for in ontology</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-explode</td>
+<td>boolean</td>
+<td>The groups that EMBOSS applications belong to have two forms, exploded and not exploded. The exploded group names are more numerous and often vaguely phrased than the non-exploded ones. The exploded names are formed from definitions of the group names that start like NAME1:NAME2 and which are then expanded into many combinations of the names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The non-expanded names are simply like: 'NAME1 NAME2'.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-showkeywords</td>
+<td>boolean</td>
+<td>Show keywords with program documentation</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-outfile</td>
+<td>outfile</td>
+<td>Tool metadata output file</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-html</td>
+<td>toggle</td>
+<td>If you are sending the output to a file, this will format it for displaying as a table in a WWW document.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-groups</td>
+<td>boolean</td>
+<td>If you use this option, then only the group names will be output to the file</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-alphabetic</td>
+<td>boolean</td>
+<td>If you use this option, then you will get a single list of the program names and descriptions instead of the programs being listed in their functional groups.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-sensitive</td>
+<td>boolean</td>
+<td>By default, the query keywords are matched against the EDAM term names (and synonyms) only. This option also matches the keywords against the EDAM term definitions and will therefore (typically) report more matches.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]subclasses</td>
+<td>boolean</td>
+<td>Extend the query matches to include all terms which are specialisations (EDAM sub-classes) of the matched type.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-obsolete</td>
+<td>boolean</td>
+<td>The default behaviour is to not use or return obsolete terms. This option if set will include all terms.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]emboss</td>
+<td>boolean</td>
+<td>If you use this option then EMBOSS program documentation will be searched. If this option is set to be false, then only the EMBASSY programs will be searched (if the -embassy option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]embassy</td>
+<td>boolean</td>
+<td>If you use this option then EMBASSY program documentation will be searched. If this option is set to be false, then only the EMBOSS programs will be searched (if the -emboss option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-showembassy</td>
+<td>string</td>
+<td>If you use this option then this EMBASSY package program documentation will be searched. EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-colon</td>
+<td>boolean</td>
+<td>The groups that EMBOSS applications belong to up to two levels, for example the primary group 'ALIGNMENT' has several sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL, LOCAL, MULTIPLE. To aid programs that parse the output of wossname that require the names of these subgroups, a colon ':' will be placed between the first and second level of the group name if this option is true. Note: This does not apply if the group names have been exploded with the 'explode' option.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-gui</td>
+<td>boolean</td>
+<td>This option is intended to help those who are designing Graphical User Interfaces to the EMBOSS applications. Some EMBOSS programs are inappropriate for running in a GUI, these include other menu programs and interactive editors. This option allows you to only report those programs that can be run from a GUI</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+
+<p>
+
+
+<b>wossdata</b> reads the brief descriptions and the program groups from
+the ACD files.  (ACD files control the parameters that the programs
+expect - don't worry about them unless you are writing EMBOSS
+programs).
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+The results are written out as a simple list of program names and
+short descriptions.
+
+
+<p>
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+The EDAM Ontology is included in EMBOSS as local
+database <b>edam</b>.
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="drfinddata.html">drfinddata</a></td>
+<td>Find public databases by data type</td>
+</tr>
+
+<tr>
+<td><a href="drfindformat.html">drfindformat</a></td>
+<td>Find public databases by format</td>
+</tr>
+
+<tr>
+<td><a href="drfindid.html">drfindid</a></td>
+<td>Find public databases by identifier</td>
+</tr>
+
+<tr>
+<td><a href="drfindresource.html">drfindresource</a></td>
+<td>Find public databases by resource</td>
+</tr>
+
+<tr>
+<td><a href="edamdef.html">edamdef</a></td>
+<td>Find EDAM ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="edamhasinput.html">edamhasinput</a></td>
+<td>Find EDAM ontology terms by has_input relation</td>
+</tr>
+
+<tr>
+<td><a href="edamhasoutput.html">edamhasoutput</a></td>
+<td>Find EDAM ontology terms by has_output relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisformat.html">edamisformat</a></td>
+<td>Find EDAM ontology terms by is_format_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisid.html">edamisid</a></td>
+<td>Find EDAM ontology terms by is_identifier_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamname.html">edamname</a></td>
+<td>Find EDAM ontology terms by name</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs with similar function to a specified program</td>
+</tr>
+
+<tr>
+<td><a href="tfm.html">tfm</a></td>
+<td>Displays full documentation for an application</td>
+</tr>
+
+<tr>
+<td><a href="wossinput.html">wossinput</a></td>
+<td>Finds programs by EDAM input data</td>
+</tr>
+
+<tr>
+<td><a href="wossname.html">wossname</a></td>
+<td>Finds programs by keywords in their short description</td>
+</tr>
+
+<tr>
+<td><a href="wossoperation.html">wossoperation</a></td>
+<td>Finds programs by EDAM operation</td>
+</tr>
+
+<tr>
+<td><a href="wossoutput.html">wossoutput</a></td>
+<td>Finds programs by EDAM output data</td>
+</tr>
+
+<tr>
+<td><a href="wossparam.html">wossparam</a></td>
+<td>Finds programs by EDAM parameter</td>
+</tr>
+
+<tr>
+<td><a href="wosstopic.html">wosstopic</a></td>
+<td>Finds programs by EDAM topic</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

@@ -1,10 +1,10 @@
 Reports the current EMBOSS version number
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:
    -full               boolean    Show all EMBOSS version information fields
-   -outfile            outfile    [stdout] Output file name
+   -outfile            outfile    [stdout] EMBOSS version output file
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:

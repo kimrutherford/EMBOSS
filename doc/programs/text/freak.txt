@@ -43,7 +43,7 @@ Output file [x65923.freak]:
 Command line arguments
 
 Generate residue/base frequency table or plot
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Sequence(s) filename and optional format, or
@@ -52,7 +52,7 @@ Version: EMBOSS:6.3.0
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 *  -outfile            outfile    [*.freak] Output file name
 
    Additional (Optional) qualifiers:
@@ -113,7 +113,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   freak reads normal sequence USAs.
+   freak reads one or more nucleotide or protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -206,6 +223,26 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 //
 
 Output file format
+
+   If -plot is specified, graphics output is produced.
+
+   The output is to the specified graphics device.
+
+   The results can be output in one of several formats by using the
+   command-line qualifier -graph xxx, where 'xxx' is replaced by the name
+   of the required device. Support depends on the availability of
+   third-party software packages.
+
+   The device names that output to a file are: ps (postscript), cps
+   (colourps), png, gif, pdf, svg, hpgl, hp7470, hp7580, das, data.
+
+   The other available device names are: meta, x11 (xwindows), tek
+   (tek4107t), tekt (tektronix), xterm, text.
+
+   Output can be turned off by specifying none (null).
+
+   See: http://emboss.sf.net/docs/themes/GraphicsDevices.html for further
+   information on supported devices.
 
   Output files for usage example
 
@@ -317,7 +354,7 @@ FREAK of X65923 from 1 to 518 Window 30 Step 1
 488        0.266667
 489        0.266667
 
-   The ouput consists of a title line and then two columns containing the
+   The output consists of a title line and then two columns containing the
    position of the start of the window and then the frequency in that
    window of the bases or residues being searched for.
 
@@ -359,23 +396,18 @@ See also
    banana           Plot bending and curvature data for B-DNA
    btwisted         Calculate the twisting in a B-DNA sequence
    chaos            Draw a chaos game representation plot for a nucleotide sequence
-   charge           Draw a protein charge plot
-   checktrans       Reports STOP codons and ORF statistics of a protein
    compseq          Calculate the composition of unique words in sequences
    dan              Calculates nucleic acid melting temperature
    density          Draw a nucleic acid density plot
    emowse           Search protein sequences by digest fragment molecular weight
-   iep              Calculate the isoelectric point of proteins
    isochore         Plots isochores in DNA sequences
    mwcontam         Find weights common to multiple molecular weights files
    mwfilter         Filter noisy data from molecular weights file
-   octanol          Draw a White-Wimley protein hydropathy plot
+   oddcomp          Identify proteins with specified sequence word composition
+   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+                    sites
    pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepstats         Calculates statistics of protein properties
-   pepwindow        Draw a hydropathy plot for a protein sequence
-   pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
-                    alignment
-   sirna            Finds siRNA duplexes in mRNA
    wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)

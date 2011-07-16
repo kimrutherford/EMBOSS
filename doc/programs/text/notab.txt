@@ -34,7 +34,7 @@ ASCII text output file [tabfile.notab]:
 Command line arguments
 
 Replace tabs with spaces in an ASCII text file
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ASCII text file
@@ -145,6 +145,7 @@ See also
    extractseq       Extract regions from a sequence
    featcopy         Reads and writes a feature table
    featreport       Reads and writes a feature table
+   feattext         Return a feature table original text
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
@@ -164,6 +165,7 @@ See also
    nthseqset        Reads and writes (returns) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
+   seqcount         Reads and counts sequences
    seqret           Reads and writes (returns) sequences
    seqretsetall     Reads and writes (returns) many sets of sequences
    seqretsplit      Reads sequences and writes them to individual files

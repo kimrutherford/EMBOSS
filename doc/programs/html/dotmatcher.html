@@ -52,7 +52,7 @@ Draw a threshold dotplot of two sequences
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with dotmatcher</b>
+Here is a sample session with <b>dotmatcher</b>
 <p>
 
 <p>
@@ -74,7 +74,7 @@ Created dotmatcher.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Draw a threshold dotplot of two sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -84,11 +84,11 @@ Version: EMBOSS:6.3.0
 *  -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 *  -xygraph            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers:
    -matrixfile         matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -212,7 +212,7 @@ Version: EMBOSS:6.3.0
 <td>-graph</td>
 <td>graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -220,7 +220,7 @@ Version: EMBOSS:6.3.0
 <td>-xygraph</td>
 <td>xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg, pdf, svg</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tek, tekt, none, data, xterm, png, gif, pdf, svg</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -746,7 +746,35 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-Any 2 sequence USAs of the same type (DNA or protein).
+<b>dotmatcher</b> reads two nucleotide or protein sequences.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -983,7 +1011,36 @@ SQ   SEQUENCE   147 AA;  15998 MW;  A31F6D621C6556A1 CRC64;
 </H2>
 
 
-An image is output to the requested graphics device.
+<p>
+
+The output is to the specified graphics device.
+
+<p>
+
+The results can be output in one of several formats by using the
+command-line qualifier <b>-graph xxx</b>, where 'xxx' is replaced by
+the name of the required device. Support depends on the availability
+of third-party software packages.
+
+<p>
+The device names that output to a file are:
+ps (postscript), cps (colourps), png, gif, pdf, svg, hpgl, hp7470,
+hp7580, das, data.
+
+<p> The other available device names are: meta, x11 (xwindows), tek
+(tek4107t), tekt (tektronix), xterm, text.
+
+<p>
+Output can be turned off by specifying none (null).
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/GraphicsDevices.html">
+http://emboss.sf.net/docs/themes/GraphicsDevices.html</A>
+for further information on supported devices.
+
+<p>
 
 <p>
 

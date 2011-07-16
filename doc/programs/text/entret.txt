@@ -28,7 +28,7 @@ Usage
 
 % entret tembl:x65923
 Retrieves sequence entries from flatfile databases and files
-Full text of a sequence database entry output file [x65923.entret]:
+Full text output file [x65923.entret]:
 
 
    Go to the input files for this example
@@ -37,13 +37,12 @@ Full text of a sequence database entry output file [x65923.entret]:
 Command line arguments
 
 Retrieves sequence entries from flatfile databases and files
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
                                   reference (input USA)
-  [-outfile]           outfile    [*.entret] Full text of a sequence database
-                                  entry output file
+  [-outfile]           outfile    [*.entret] Full text output file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -90,7 +89,22 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   entret reads a normal sequence USA.
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -183,6 +197,8 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 //
 
 Output file format
+
+   entret reports the full text of the input sequence data.
 
   Output files for usage example
 
@@ -324,18 +340,24 @@ Known bugs
 See also
 
    Program name     Description
+   abiview          Display the trace in an ABI sequencer file
    aligncopy        Reads and writes alignments
    aligncopypair    Reads and writes pairs from alignments
    biosed           Replace or delete sequence sections
    codcopy          Copy and reformat a codon usage table
+   coderet          Extract CDS, mRNA and translations from feature tables
    cutseq           Removes a section from a sequence
    degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
    descseq          Alter the name or description of a sequence
+   drtext           Get data resource entries complete text
    extractalign     Extract regions from a sequence alignment
    extractfeat      Extract features from sequence(s)
    extractseq       Extract regions from a sequence
    featcopy         Reads and writes a feature table
    featreport       Reads and writes a feature table
+   feattext         Return a feature table original text
+   infoalign        Display basic information about a multiple sequence alignment
+   infoseq          Display basic information about sequences
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
@@ -354,21 +376,29 @@ See also
    nthseq           Write to file a single sequence from an input stream of
                     sequences
    nthseqset        Reads and writes (returns) one set of sequences from many
+   ontotext         Get ontology term(s) original full text
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
+   seqcount         Reads and counts sequences
    seqret           Reads and writes (returns) sequences
    seqretsetall     Reads and writes (returns) many sets of sequences
    seqretsplit      Reads sequences and writes them to individual files
+   seqxref          Retrieve all database cross-references for a sequence entry
+   seqxrefget       Retrieve all cross-referenced data for a sequence entry
+   showalign        Display a multiple sequence alignment in pretty format
    sizeseq          Sort sequences by size
    skipredundant    Remove redundant sequences from an input set
    skipseq          Reads and writes (returns) sequences, skipping first few
    splitsource      Split sequence(s) into original source sequences
    splitter         Split sequence(s) into smaller sequences
+   textget          Get text data entries
+   textsearch       Search the textual description of sequence(s)
    trimest          Remove poly-A tails from nucleotide sequences
    trimseq          Remove unwanted characters from start and end of sequence(s)
    trimspace        Remove extra whitespace from an ASCII text file
    union            Concatenate multiple sequences into a single sequence
    vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   whichdb          Search all sequence databases for an entry and retrieve it
    yank             Add a sequence reference (a full USA) to a list file
 
 Author(s)

@@ -45,7 +45,7 @@ Finds and extracts open reading frames (ORFs)
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with getorf</b>
+Here is a sample session with <b>getorf</b>
 <p>
 
 <p>
@@ -66,7 +66,7 @@ protein output sequence(s) [v00294.orf]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Finds and extracts open reading frames (ORFs)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -605,7 +605,35 @@ Version: EMBOSS:6.3.0
 </H2>
 
 
-<b>getorf</b> reads any nucleic acid sequence USA.
+<b>getorf</b> reads one or more nucleotide sequences.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -718,7 +746,44 @@ SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
     Output file format
 </H2>
 
+<p>
 
+The input is a standard EMBOSS sequence query (also known as a 'USA')
+with associated feature information.
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the command-line qualifier
+<tt>-sformat xxx</tt>, where 'xxx' is replaced by the name of the
+required format.  The available format names are: text, html, xml (uniprotxml),
+obo, embl (swissprot)
+
+<p> Where the sequence format has no feature information, a second
+file can be read to load the feature data. The file is specified with
+the qualifier <tt>-ufo xxx</tt> and the feature format is specified with
+the qualifier <tt>-fformat xxx</tt>
+
+<p>
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
+See:
+<A href="http://emboss.sf.net/docs/themes/FeatureFormats.html">
+http://emboss.sf.net/docs/themes/FeatureFormats.html</A>
+for further information on feature formats.
+
+<p>
 The output is a sequence file containing predicted open reading frames
 longer than the minimum size, which defaults to 30 bases (i.e. 10 amino acids).
 
@@ -982,6 +1047,11 @@ It always exits with status 0.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th>
 <th>Description</th></tr>
+<tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
 <tr>
 <td><a href="marscan.html">marscan</a></td>
 <td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>

@@ -20,6 +20,7 @@ extern AjBool acdDebugSet;
 extern AjBool acdDebugBuffer;
 extern AjBool acdDebug;
 extern AjPStr acdProgram;
+extern AjPStr acdAppldoc;
 extern AjPStr acdArgSave;
 extern AjPStr acdInputSave;
 #else
@@ -28,6 +29,7 @@ __declspec(dllexport) AjBool acdDebugSet;
 __declspec(dllexport) AjBool acdDebugBuffer;
 __declspec(dllexport) AjBool acdDebug;
 __declspec(dllexport) AjPStr acdProgram;
+__declspec(dllexport) AjPStr acdAppldoc;
 __declspec(dllexport) AjPStr acdArgSave;
 __declspec(dllexport) AjPStr acdInputSave;
 #else
@@ -35,6 +37,7 @@ __declspec(dllimport) AjBool acdDebugSet;
 __declspec(dllimport) AjBool acdDebugBuffer;
 __declspec(dllimport) AjBool acdDebug;
 __declspec(dllimport) AjPStr acdProgram;
+__declspec(dllimport) AjPStr acdAppldoc;
 __declspec(dllimport) AjPStr acdArgSave;
 __declspec(dllimport) AjPStr acdInputSave;
 #endif
@@ -141,6 +144,7 @@ void              ajMessExitmsg(const char *format, ...) ;  /* error message,
 							       write to log
 							       file & exit */
 void              ajDebug (const char *fmt, ...);
+AjBool            ajDebugOn(void);
 AjBool            ajDebugTest (const char *token);
 FILE*             ajMessGetDebugfile (void);
 void              ajDie (const char *format, ...);

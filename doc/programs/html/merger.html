@@ -85,7 +85,7 @@ sequence reads.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with merger</b>
+Here is a sample session with <b>merger</b>
 <p>
 
 <p>
@@ -120,7 +120,7 @@ to put it into the correct orientation to make it join. For example:
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Merge two overlapping sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -128,6 +128,7 @@ Version: EMBOSS:6.3.0
   [-bsequence]         sequence   Sequence filename and optional format, or
                                   reference (input USA)
   [-outfile]           align      [*.merger] Output alignment file name
+                                  (default -aformat simple)
   [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
                                   optional format (output USA)
 
@@ -256,7 +257,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>align</td>
 <td>Output alignment file name</td>
-<td>Alignment output file</td>
+<td>(default -aformat simple)</td>
 <td><i>&lt;*&gt;</i>.merger</td>
 </tr>
 
@@ -811,8 +812,37 @@ Version: EMBOSS:6.3.0
     Input file format
 </H2>
 
-<b>merger</b> reads any two sequence USAs of the same type (protein or
-nucleic acid.)
+<b>merger</b> reads two nucleotide or protein sequences.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+
 
 <p>
 
@@ -1032,12 +1062,6 @@ SQ   Sequence 1832 BP; 519 A; 510 C; 450 G; 353 T; 0 other;
 </H2>
 
 
-The output <i>sequence file</i> contains the joined sequence, by default in
-FASTA format.  Where there is a mismatch in the alignment, the chosen
-base is written to the output sequence in uppercase. 
-
-<p>
-
 <p>
 
 The output is a standard EMBOSS alignment file. 
@@ -1045,20 +1069,21 @@ The output is a standard EMBOSS alignment file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-aformat xxx</b>, where 'xxx' is replaced by
+command-line qualifier <tt>-aformat xxx</tt>, where 'xxx' is replaced by
 the name of the required format.  Some of the alignment formats can cope
 with an unlimited number of sequences, while others are only for pairs
 of sequences.  
 
 <p>
 
-The available multiple alignment format names are: unknown, multiple,
-simple, fasta, msf, trace, srs
+The available multiple alignment format names are: multiple, simple,
+fasta, msf, clustal, mega, meganon, nexus,, nexusnon, phylip,
+phylipnon, selex, treecon, tcoffee, debug, srs.
 
 <p>
 
 The available pairwise alignment format names are: pair, markx0, markx1,
-markx2, markx3, markx10, srspair, score
+markx2, markx3, markx10, match, sam, bam, score, srspair
 
 <p>
 
@@ -1070,12 +1095,27 @@ for further information on alignment formats.
 <p>
  
 <p>
+<p>
 
-The output <i>report file</i> contains descriptions of the positions where
-there is a mismatch in the alignment and shows the alignment.  Where
-there is a mismatch in the alignment, the chosen base is written in
-uppercase. 
+The output is a standard EMBOSS sequence file. 
 
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
+ 
 
 <p>
 
@@ -1087,7 +1127,7 @@ uppercase.
 <pre>
 ########################################
 # Program: merger
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: merger
 #    -asequence tembl:v00295
 #    -bsequence tembl:x51872
@@ -1251,7 +1291,6 @@ cggcaatcagcaacagactgatggcgacactgcgacgttcgctgacatgctgatgaagcc
 agcttccggccagcgccagcccgcccatggtaaccaccggcagagcggtcgac
 </pre>
 </td></tr></table><p>
-
 
 <H2>
     Data files

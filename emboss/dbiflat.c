@@ -276,7 +276,8 @@ int main(int argc, char **argv)
     ajListSort(listInputFiles, ajStrVcmp);
     nfiles = ajListToarray(listInputFiles, &inputFiles);
     if(!nfiles)
-	ajFatal("No files selected");
+        ajDie("No input files in '%S' matched filename '%S'",
+              directory, filename);
 
     embDbiLogHeader(logfile, dbname, release, datestr,
 		     indexdir, maxindex);
@@ -698,7 +699,7 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
     if(!regEmblEnd)
 	regEmblEnd = ajRegCompC("^//");
 
-    *dpos = ajFileResetPos(libr);
+    *dpos = (ajint) ajFileResetPos(libr); /* Lossy cast */
 
     while(ajReadline(libr, &rline))
     {
@@ -1092,7 +1093,7 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 	{
 	    ajRegExec(regGbWrd, tmpline);
 	    ajRegSubI(regGbWrd, 1, myid);
-	    *dpos = ipos;
+	    *dpos = (ajint) ipos; /* Lossy cast */
 	}
 
 	else if(lineType == FLATTYPE_ACC && accfield >= 0)
@@ -1403,7 +1404,7 @@ static AjBool dbiflat_ParseRefseq(AjPFile libr, AjPFile* alistfile,
 	    ajRegExec(regRefseqId, tmpline);
 	    ajRegSubI(regRefseqId, 1, myid);
 	    ajStrFmtUpper(myid);
-	    *dpos = ipos;
+	    *dpos = (ajint) ipos; /* Lossy cast */
 	}
 
 	else if(lineType == FLATTYPE_ACC && accfield >= 0)

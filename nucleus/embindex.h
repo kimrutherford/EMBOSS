@@ -6,110 +6,50 @@ extern "C"
 #ifndef embindex_h
 #define embindex_h
 
-#define BTREE_DEF_IDLEN     15
-#define BTREE_DEF_ACLEN     15
-#define BTREE_DEF_SVLEN     15
-#define BTREE_DEF_KWLEN     15
-#define BTREE_DEF_DELEN     15
-#define BTREE_DEF_TXLEN     15
-#define BTREE_DEF_KWLIMIT   15
-#define BTREE_DEF_CACHESIZE 100
-#define BTREE_DEF_PAGESIZE  2048
-
-
 
 
 /* @data EmbPBtreeEntry *******************************************************
 **
 ** Index tree entries
 **
+** @alias EmbOBtreeEntry
 ** @alias EmbSBtreeEntry
 **
-** @attr do_id [AjBool] Undocumented
-** @attr do_accession [AjBool] Undocumented
-** @attr do_sv [AjBool] Undocumented
-** @attr do_description [AjBool] Undocumented
-** @attr do_keyword [AjBool] Undocumented
-** @attr do_taxonomy [AjBool] Undocumented
-** @attr dbname [AjPStr] Undocumented
-** @attr dbrs [AjPStr] Undocumented
-** @attr release [AjPStr] Undocumented
-** @attr date [AjPStr] Undocumented
-** @attr dbtype [AjPStr] Undocumented
-** @attr directory [AjPStr] Undocumented
-** @attr idirectory [AjPStr] Undocumented
-** @attr files [AjPList] Undocumented
-** @attr reffiles [AjPList] Undocumented
-** @attr nfiles [ajuint] Undocumented
-** @attr cachesize [ajuint] Undocumented
-** @attr pagesize [ajuint] Undocumented
-** @attr idlen [ajuint] Undocumented
-** @attr aclen [ajuint] Undocumented
-** @attr svlen [ajuint] Undocumented
-** @attr kwlen [ajuint] Undocumented
-** @attr delen [ajuint] Undocumented
-** @attr txlen [ajuint] Undocumented
-** @attr idpagesize [ajuint] Undocumented
-** @attr idcachesize [ajuint] Undocumented
-** @attr idorder [ajuint] Undocumented
-** @attr idfill [ajuint] Undocumented
-** @attr idsecorder [ajuint] Undocumented
-** @attr idsecfill [ajuint] Undocumented
-** @attr acpagesize [ajuint] Undocumented
-** @attr accachesize [ajuint] Undocumented
-** @attr acorder [ajuint] Undocumented
-** @attr acfill [ajuint] Undocumented
-** @attr acsecorder [ajuint] Undocumented
-** @attr acsecfill [ajuint] Undocumented
-** @attr svpagesize [ajuint] Undocumented
-** @attr svcachesize [ajuint] Undocumented
-** @attr svorder [ajuint] Undocumented
-** @attr svfill [ajuint] Undocumented
-** @attr svsecorder [ajuint] Undocumented
-** @attr svsecfill [ajuint] Undocumented
-** @attr kwpagesize [ajuint] Undocumented
-** @attr kwcachesize [ajuint] Undocumented
-** @attr kworder [ajuint] Undocumented
-** @attr kwfill [ajuint] Undocumented
-** @attr kwsecorder [ajuint] Undocumented
-** @attr kwsecfill [ajuint] Undocumented
-** @attr depagesize [ajuint] Undocumented
-** @attr decachesize [ajuint] Undocumented
-** @attr deorder [ajuint] Undocumented
-** @attr defill [ajuint] Undocumented
-** @attr desecorder [ajuint] Undocumented
-** @attr desecfill [ajuint] Undocumented
-** @attr txpagesize [ajuint] Undocumented
-** @attr txcachesize [ajuint] Undocumented
-** @attr txorder [ajuint] Undocumented
-** @attr txfill [ajuint] Undocumented
-** @attr txsecorder [ajuint] Undocumented
-** @attr txsecfill [ajuint] Undocumented
-** @attr Padding [ajuint] Padding to alignment boundary
-** @attr idcache [AjPBtcache] Undocumented
-** @attr accache [AjPBtcache] Undocumented
-** @attr svcache [AjPBtcache] Undocumented
-** @attr kwcache [AjPBtcache] Undocumented
-** @attr decache [AjPBtcache] Undocumented
-** @attr txcache [AjPBtcache] Undocumented
-** @attr fpos [ajlong] Undocumented
-** @attr reffpos [ajlong] Undocumented
-** @attr id [AjPStr] Undocumented
-** @attr ac [AjPList] Undocumented
-** @attr sv [AjPList] Undocumented
-** @attr tx [AjPList] Undocumented
-** @attr kw [AjPList] Undocumented
-** @attr de [AjPList] Undocumented
+** @attr dbname [AjPStr] Database name
+** @attr dbrs [AjPStr] Index resource definition
+** @attr release [AjPStr] Release number
+** @attr date [AjPStr] Release date
+** @attr dbtype [AjPStr] Database type
+** @attr directory [AjPStr] Database directory
+** @attr idirectory [AjPStr] Index directory
+** @attr idextension [AjPStr] Id index extension
+** @attr maxid [AjPStr] Longest id in data
+** @attr files [AjPList] List of data filenames
+** @attr reffiles [AjPList] List of data reference filenames
+** @attr fields [AjPList] EMBOSS index field structures
+** @attr id [AjPStr] Entry identifier
+** @attr idcache [AjPBtcache] Id cache structure
+** @attr idpagecount [ajlong] Cache page count
+** @attr do_id [AjBool] If true, build id index
+** @attr compressed [AjBool] If true, compress id index
+** @attr nfiles [ajuint] Data file count
+** @attr cachesize [ajuint] Defalt cache size
+** @attr pagesize [ajuint] Default page size
+** @attr idlen [ajuint] Maximum id length in index
+** @attr idmaxlen [ajuint] Maximum id length in data
+** @attr idtruncate [ajuint] Number of ids truncated
+** @attr idpagesize [ajuint] Id index page size
+** @attr idcachesize [ajuint] Id index cache size
+** @attr idorder [ajuint] Id index primary order
+** @attr idfill [ajuint] Id index primary fill count
+** @attr idsecorder [ajuint] Id index secondary order
+** @attr idsecfill [ajuint] Id index secondary fill count
+** @attr fpos [ajlong] Input file position
+** @attr reffpos [ajlong] Input second (reference) file position
 ******************************************************************************/
 
 typedef struct EmbSBtreeEntry
 {
-    AjBool do_id;
-    AjBool do_accession;
-    AjBool do_sv;
-    AjBool do_description;
-    AjBool do_keyword;
-    AjBool do_taxonomy;
     AjPStr dbname;
     AjPStr dbrs;
     AjPStr release;
@@ -118,19 +58,27 @@ typedef struct EmbSBtreeEntry
 
     AjPStr directory;
     AjPStr idirectory;
+    AjPStr idextension;
+    AjPStr maxid;
 
     AjPList files;
     AjPList reffiles;
-    ajuint   nfiles;
+    AjPList fields;
+
+    AjPStr id;
+    AjPBtcache idcache;
+    ajlong idpagecount;
+
+    AjBool do_id;
+    AjBool compressed;
+
+    ajuint nfiles;
     ajuint cachesize;
     ajuint pagesize;
 
     ajuint idlen;
-    ajuint aclen;
-    ajuint svlen;
-    ajuint kwlen;
-    ajuint delen;
-    ajuint txlen;
+    ajuint idmaxlen;
+    ajuint idtruncate;
 
     ajuint idpagesize;
     ajuint idcachesize;
@@ -138,65 +86,86 @@ typedef struct EmbSBtreeEntry
     ajuint idfill;
     ajuint idsecorder;
     ajuint idsecfill;
-    ajuint acpagesize;
-    ajuint accachesize;
-    ajuint acorder;
-    ajuint acfill;
-    ajuint acsecorder;
-    ajuint acsecfill;
-    ajuint svpagesize;
-    ajuint svcachesize;
-    ajuint svorder;
-    ajuint svfill;
-    ajuint svsecorder;
-    ajuint svsecfill;
-
-    ajuint kwpagesize;
-    ajuint kwcachesize;
-    ajuint kworder;
-    ajuint kwfill;
-    ajuint kwsecorder;
-    ajuint kwsecfill;
-    ajuint depagesize;
-    ajuint decachesize;
-    ajuint deorder;
-    ajuint defill;
-    ajuint desecorder;
-    ajuint desecfill;
-    ajuint txpagesize;
-    ajuint txcachesize;
-    ajuint txorder;
-    ajuint txfill;
-    ajuint txsecorder;
-    ajuint txsecfill;
-    ajuint Padding;
     
-    AjPBtcache idcache;
-    AjPBtcache accache;
-    AjPBtcache svcache;
-    AjPBtcache kwcache;
-    AjPBtcache decache;
-    AjPBtcache txcache;
 
     ajlong fpos;
     ajlong reffpos;
     
-    AjPStr id;
-    AjPList ac;
-    AjPList sv;
-    AjPList tx;
-    AjPList kw;
-    AjPList de;
 } EmbOBtreeEntry;
 #define EmbPBtreeEntry EmbOBtreeEntry*
  
 
-
+/* @data EmbPBtreeField *******************************************************
+**
+** Index tree entries
+**
+** @alias EmbSBtreeField
+** @alias EmbOBtreeField
+**
+** @attr cache     [AjPBtcache] Cache structure
+** @attr data      [AjPList] Keywords to index
+** @attr name      [AjPStr] File basename
+** @attr extension [AjPStr] File extension
+** @attr maxkey    [AjPStr] Longest keyword found
+** @attr pagecount [ajulong] Index page count
+** @attr pagesize  [ajuint] Index page size
+** @attr cachesize [ajuint] Index cache size
+** @attr order     [ajuint] Primary page order
+** @attr fill      [ajuint] Primary page fill count
+** @attr secorder  [ajuint] Secondary page order
+** @attr secfill   [ajuint] Secondary page fill count
+** @attr len       [ajuint] Maximum keyword length in index
+** @attr maxlen    [ajuint] Maximum keyword length in data
+** @attr truncate  [ajuint] Number of keywords truncated
+** @attr secondary [AjBool] Secondary index if true
+** @attr compressed [AjBool] Compress index if true
+** @attr Padding   [char[4]] Padding to alignment boundary
+******************************************************************************/
+    
+typedef struct EmbSBtreeField
+{
+    AjPBtcache cache;
+    AjPList data;
+    AjPStr name;
+    AjPStr extension;
+    AjPStr maxkey;
+    ajulong pagecount;
+    ajuint pagesize;
+    ajuint cachesize;
+    ajuint order;
+    ajuint fill;
+    ajuint secorder;
+    ajuint secfill;
+    ajuint len;
+    ajuint maxlen;
+    ajuint truncate;
+    AjBool secondary;
+    AjBool compressed;
+    char   Padding[4];
+} EmbOBtreeField;
+#define EmbPBtreeField EmbOBtreeField*
 
 /*
 ** Prototype definitions
 */
 
+void   embBtreeIndexEntry(EmbPBtreeEntry entry,
+                          ajuint dbno);
+void   embBtreeIndexField(EmbPBtreeField field,
+                          const EmbPBtreeEntry entry,
+                          ajuint dbno);
+void   embBtreeParseEntry(const AjPStr readline, AjPRegexp regexp,
+                          EmbPBtreeEntry entry);
+void   embBtreeParseField(const AjPStr readline, AjPRegexp regexp,
+                          EmbPBtreeField field);
+void   embBtreeParseFieldSecond(const AjPStr readline, AjPRegexp regexp,
+                               EmbPBtreeField field);
+void   embBtreeParseFieldThird(const AjPStr readline, AjPRegexp regexp,
+                               EmbPBtreeField field);
+void   embBtreeParseFieldTrim(const AjPStr readline, AjPRegexp regexp,
+                              EmbPBtreeField field);
+void   embBtreeReportEntry(AjPFile outf, const EmbPBtreeEntry entry);
+void   embBtreeReportField(AjPFile outf, const EmbPBtreeField field);
 void   embBtreeEmblAC(const AjPStr acline, AjPList aclist);
 void   embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajuint maxlen);
 void   embBtreeEmblDE(const AjPStr deline, AjPList delist, ajuint maxlen);
@@ -214,7 +183,8 @@ void   embBtreeFastaSV(const AjPStr kwline, AjPList kwlist, ajuint maxlen);
 ajuint  embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
 		       const AjPStr files, const AjPStr exclude);
 EmbPBtreeEntry embBtreeEntryNew(void);
-ajuint          embBtreeSetFields(EmbPBtreeEntry entry, AjPStr const * fields);
+void           embBtreeEntrySetCompressed(EmbPBtreeEntry entry);
+ajuint         embBtreeSetFields(EmbPBtreeEntry entry, AjPStr const * fields);
 void           embBtreeEntryDel(EmbPBtreeEntry *thys);
 void           embBtreeSetDbInfo(EmbPBtreeEntry entry, const AjPStr name,
 				 const AjPStr dbrs,
@@ -228,6 +198,15 @@ void           embBtreeGetRsInfo(EmbPBtreeEntry entry);
 AjBool         embBtreeOpenCaches(EmbPBtreeEntry entry);
 AjBool         embBtreeCloseCaches(EmbPBtreeEntry entry);
 AjBool         embBtreeDumpParameters(EmbPBtreeEntry entry);
+
+EmbPBtreeField embBtreeFieldNewC(const char* nametxt);
+EmbPBtreeField embBtreeFieldNewS(const AjPStr name);
+void           embBtreeFieldDel(EmbPBtreeField *Pthis);
+void           embBtreeFieldSetCompressed(EmbPBtreeField field);
+void           embBtreeFieldSetSecondary(EmbPBtreeField field);
+void           embBtreeFieldSetIdtype(EmbPBtreeField field);
+EmbPBtreeField embBtreeGetFieldC(EmbPBtreeEntry entry, const char * nametxt);
+EmbPBtreeField embBtreeGetFieldS(EmbPBtreeEntry entry, const AjPStr name);
 
 void           embIndexExit(void);
 

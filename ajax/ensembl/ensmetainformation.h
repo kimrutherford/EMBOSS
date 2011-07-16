@@ -1,20 +1,32 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensmetainformation_h
-#define ensmetainformation_h
+#ifndef ENSMETAINFORMATION_H
+#define ENSMETAINFORMATION_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ensdatabaseadaptor.h"
-#include "enstable.h"
+
+AJ_BEGIN_DECLS
 
 
 
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
 
 /* @data EnsPMetainformationadaptor *******************************************
 **
-** Ensembl Meta-Information Adaptor.
+** Ensembl Meta-Information Adaptor
 **
 ** @alias EnsSMetainformationadaptor
 ** @alias EnsOMetainformationadaptor
@@ -39,7 +51,7 @@ typedef struct EnsSMetainformationadaptor
 
 /* @data EnsPMetainformation **************************************************
 **
-** Ensembl Meta-Information.
+** Ensembl Meta-Information
 **
 ** @alias EnsSMetainformation
 ** @alias EnsOMetainformation
@@ -72,19 +84,23 @@ typedef struct EnsSMetainformation
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
 
 /* Ensembl Meta-Information */
 
-EnsPMetainformation ensMetainformationNew(EnsPMetainformationadaptor mia,
-                                          ajuint identifier,
-                                          ajuint species,
-                                          AjPStr key,
-                                          AjPStr value);
+EnsPMetainformation ensMetainformationNewCpy(const EnsPMetainformation mi);
 
-EnsPMetainformation ensMetainformationNewObj(EnsPMetainformation object);
+EnsPMetainformation ensMetainformationNewIni(EnsPMetainformationadaptor mia,
+                                             ajuint identifier,
+                                             ajuint species,
+                                             AjPStr key,
+                                             AjPStr value);
 
 EnsPMetainformation ensMetainformationNewRef(EnsPMetainformation mi);
 
@@ -97,9 +113,9 @@ ajuint ensMetainformationGetIdentifier(const EnsPMetainformation mi);
 
 AjPStr ensMetainformationGetKey(const EnsPMetainformation mi);
 
-AjPStr ensMetainformationGetValue(const EnsPMetainformation mi);
-
 ajuint ensMetainformationGetSpecies(const EnsPMetainformation mi);
+
+AjPStr ensMetainformationGetValue(const EnsPMetainformation mi);
 
 AjBool ensMetainformationSetAdaptor(EnsPMetainformation mi,
                                     EnsPMetainformationadaptor mia);
@@ -109,13 +125,13 @@ AjBool ensMetainformationSetIdentifier(EnsPMetainformation mi,
 
 AjBool ensMetainformationSetKey(EnsPMetainformation mi, AjPStr key);
 
-AjBool ensMetainformationSetValue(EnsPMetainformation mi, AjPStr value);
-
 AjBool ensMetainformationSetSpecies(EnsPMetainformation mi, ajuint species);
+
+AjBool ensMetainformationSetValue(EnsPMetainformation mi, AjPStr value);
 
 AjBool ensMetainformationTrace(const EnsPMetainformation mi, ajuint level);
 
-ajulong ensMetainformationGetMemsize(const EnsPMetainformation mi);
+size_t ensMetainformationCalculateMemsize(const EnsPMetainformation mi);
 
 /* Ensembl Meta-Information Adaptor */
 
@@ -127,34 +143,50 @@ EnsPMetainformationadaptor ensMetainformationadaptorNew(
 
 void ensMetainformationadaptorDel(EnsPMetainformationadaptor* Pmia);
 
-AjBool ensMetainformationadaptorFetchAllByKey(
-    const EnsPMetainformationadaptor mia,
+AjBool ensMetainformationadaptorFetchAllbyKey(
+    EnsPMetainformationadaptor mia,
     const AjPStr key,
     AjPList mis);
 
-AjBool ensMetainformationadaptorGetValueByKey(
-    const EnsPMetainformationadaptor mia,
-    const AjPStr key,
-    AjPStr *Pvalue);
-
-AjBool ensMetainformationadaptorGetGenebuildVersion(
-    const EnsPMetainformationadaptor mia,
-    AjPStr *Pvalue);
-
-AjBool ensMetainformationadaptorGetSchemaVersion(
-    const EnsPMetainformationadaptor mia,
-    AjPStr *Pvalue);
-
-AjBool ensMetainformationadaptorGetTaxonomyIdentifier(
-    const EnsPMetainformationadaptor mia,
-    AjPStr *Pvalue);
-
-AjBool ensMetainformationadaptorFetchAllSpeciesNames(
-    const EnsPMetainformationadaptor mia,
+AjBool ensMetainformationadaptorRetrieveAllSpeciesnames(
+    EnsPMetainformationadaptor mia,
     AjPList names);
 
-AjBool ensMetainformationadaptorKeyValueExists(
-    const EnsPMetainformationadaptor mia,
+AjBool ensMetainformationadaptorRetrieveGenebuildversion(
+    EnsPMetainformationadaptor mia,
+    AjPStr* Pvalue);
+
+AjBool ensMetainformationadaptorRetrieveSchemaversion(
+    EnsPMetainformationadaptor mia,
+    AjPStr* Pvalue);
+
+AjBool ensMetainformationadaptorRetrieveSpeciesCommonname(
+    EnsPMetainformationadaptor mia,
+    AjPStr* Pvalue);
+
+AjBool ensMetainformationadaptorRetrieveSpeciesProductionname(
+    EnsPMetainformationadaptor mia,
+    AjPStr* Pvalue);
+
+AjBool ensMetainformationadaptorRetrieveSpeciesScientificname(
+    EnsPMetainformationadaptor mia,
+    AjPStr* Pvalue);
+
+AjBool ensMetainformationadaptorRetrieveSpeciesShortname(
+    EnsPMetainformationadaptor mia,
+    AjPStr* Pvalue);
+
+AjBool ensMetainformationadaptorRetrieveTaxonomyidentifier(
+    EnsPMetainformationadaptor mia,
+    AjPStr* Pvalue);
+
+AjBool ensMetainformationadaptorRetrieveValue(
+    EnsPMetainformationadaptor mia,
+    const AjPStr key,
+    AjPStr* Pvalue);
+
+AjBool ensMetainformationadaptorCheck(
+    EnsPMetainformationadaptor mia,
     const AjPStr key,
     const AjPStr value);
 
@@ -165,8 +197,6 @@ AjBool ensMetainformationadaptorKeyValueExists(
 
 
 
-#endif /* ensmetainformation_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSMETAINFORMATION_H */

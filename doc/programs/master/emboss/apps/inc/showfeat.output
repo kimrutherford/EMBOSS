@@ -1,7 +1,7 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: x65921.showfeat </h3>
+<p><h3>File: x65921.showfeat</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 X65921
@@ -33,7 +33,7 @@ H.sapiens fau 1 gene
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: x65921.showfeat </h3>
+<p><h3>File: x65921.showfeat</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 X65921
@@ -58,7 +58,7 @@ H.sapiens fau 1 gene
 
 <a name="output.3"></a>
 <h3>Output files for usage example 3</h3>
-<p><h3>File: x65921.showfeat </h3>
+<p><h3>File: x65921.showfeat</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 782-856 CDS

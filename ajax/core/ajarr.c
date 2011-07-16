@@ -119,7 +119,7 @@ AjPChar ajChararrNew(void)
 
 
 
-/* @func ajChararrNewRes *******************************************************
+/* @func ajChararrNewRes ******************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -2459,7 +2459,7 @@ __deprecated AjPInt2d ajInt2dNewL(ajuint size)
 
 
 
-/* @func ajInt2dNewResRes2 *****************************************************
+/* @func ajInt2dNewResRes2 ****************************************************
 **
 ** Constructor given an initial reserved size in both dimensions
 **
@@ -5011,7 +5011,8 @@ void ajDouble3dDel(AjPDouble3d *thys)
 ** @@
 ******************************************************************************/
 
-double ajDouble3dGet(const AjPDouble3d thys, ajuint elem1, ajuint elem2, ajuint elem3)
+double ajDouble3dGet(const AjPDouble3d thys,
+                     ajuint elem1, ajuint elem2, ajuint elem3)
 {
     AjPDouble2d t;
 

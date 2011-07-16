@@ -23,7 +23,7 @@
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>File for output of MAR/SAR recognition signature (MRS) regions. This contains details of the MRS in normal GFF format. The MRS consists of two recognition sites, one of 8 bp and one of 16 bp on either sense strand of the genomic DNA, within 200 bp of each other.</td>
-<td>Report output file</td>
+<td>(default -rformat gff)</td>
 <td><i>&lt;*&gt;</i>.marscan</td>
 </tr>
 

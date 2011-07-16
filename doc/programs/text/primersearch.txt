@@ -67,7 +67,7 @@ Whitehead primer3_core program output file [z52466.primersearch]:
 Command line arguments
 
 Search DNA sequences for matches with primer pairs
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
@@ -121,7 +121,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   primersearch reads in any nucleic acid sequence USAs.
+   primersearch reads in one or more nucleotide sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -311,6 +328,7 @@ See also
 
                     Program name                         Description
                     eprimer3     Picks PCR primers and hybridization oligos
+                    eprimer32    Picks PCR primers and hybridization oligos
                     stssearch    Search a DNA database for matches with a set of STS primers
 
                     stssearch does something similar, but doesn't allow you to find

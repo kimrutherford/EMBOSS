@@ -36,14 +36,12 @@ integer: bint [
 
 string: testalen [
   standard: "Y"
-  information: "asequence length
-                $(asequence.length)"
+  information: "asequence length $(asequence.length)"
 ]
 
 string: testblen [
   standard: "Y"
-  information: "bsequence length
-                $(bsequence.length)"
+  information: "bsequence length $(bsequence.length)"
 ]
 
 string: outdir [

@@ -1,5 +1,5 @@
 Scans DNA sequences for transcription factors
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -40,6 +40,7 @@ Version: EMBOSS:6.3.0
                                   then a hit will be reported (Any numeric
                                   value)
   [-outfile]           report     [*.jaspscan] Output report file name
+                                  (default -rformat seqtable)
 
    Additional (Optional) qualifiers:
    -exclude            string     The names of any matrices to exclude from

@@ -7,4 +7,9 @@
 <td>Scans DNA sequences for transcription factors</td>
 </tr>
 
+<tr>
+<td><a href="marscan.html">marscan</a></td>
+<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
+</tr>
+
 </table>

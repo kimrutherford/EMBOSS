@@ -95,7 +95,7 @@ public class AcdVarResolve
                 att.startsWith("string")   || att.startsWith("seqout") ||
                 att.startsWith("outfile")  || att.startsWith("matrix") ||
                 att.startsWith("infile")   || att.startsWith("regexp") ||
-                att.startsWith("codon") )
+                att.startsWith("codon") || att.startsWith("features"))
               {
                 if(!(textf[h].getText()).equals("")) 
                   res = textf[h].getText();

@@ -1,0 +1,113 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: edamhasoutput.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0001813
+name: Sequence retrieval
+namespace: operation
+def: Query a sequence data resource (typically a database) and retrieve sequences and / or annotation.
+comment: This includes direct retrieval methods (e.g. the dbfetch program) but not those that perform calculations on the sequence.
+subset: operation
+synonym: "Data retrieval (sequences)" EXACT []
+is_a: EDAM:0002422 ! Data retrieval
+is_a: EDAM:0002446 ! Sequence processing
+relationship: has_output EDAM:0002044 ! Sequence {minCardinality=0}
+
+[Term]
+id: EDAM:0000290
+name: Sequence redundancy removal
+namespace: operation
+def: Compare two or more molecular sequences, identify and remove redundant sequences based on some criteria.
+subset: operation
+is_a: EDAM:0000291 ! Sequence clustering
+relationship: has_output EDAM:0002044 ! Sequence {minCardinality=0}
+relationship: in_topic EDAM:0000164 ! Sequence clustering
+
+[Term]
+id: EDAM:0002446
+name: Sequence processing
+namespace: operation
+def: Process (read and / or write) one or more molecular sequences and associated annotation.
+subset: operation
+is_a: EDAM:0002503 ! Sequence data processing
+relationship: has_input EDAM:0002044 ! Sequence {minCardinality=0}
+relationship: has_output EDAM:0002044 ! Sequence {minCardinality=0}
+
+[Term]
+id: EDAM:0000288
+name: Sequence word comparison
+namespace: operation
+def: Find exact character or word matches between molecular sequences without full sequence alignment.
+subset: operation
+is_a: EDAM:0002451 ! Sequence comparison
+relationship: has_output EDAM:0000861 ! Sequence word alignment {minCardinality=1}
+
+[Term]
+id: EDAM:0000292
+name: Sequence alignment
+namespace: operation
+def: Align (identify equivalent sites within) molecular sequences.
+subset: operation
+synonym: "Sequence alignment generation" EXACT []
+is_a: EDAM:0002463 ! Sequence alignment processing
+is_a: EDAM:0002451 ! Sequence comparison
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+is_a: EDAM:0002421 ! Database search
+is_a: EDAM:0000239 ! Sequence motif recognition
+is_a: EDAM:0002995 ! Sequence classification
+relationship: has_output EDAM:0001298 ! Sequence features (motifs) {minCardinality=0}
+relationship: in_topic EDAM:0000158 ! Sequence motifs
+
+[Term]
+id: EDAM:0000234
+name: Sequence complexity calculation
+namespace: operation
+def: Calculate sequence complexity, for example to find low-complexity regions in sequences.
+subset: operation
+is_a: EDAM:0000236 ! Sequence composition calculation
+relationship: has_output EDAM:0001259 ! Sequence property (complexity) {minCardinality=1}
+relationship: in_topic EDAM:0000642 ! Low complexity sequence
+
+[Term]
+id: EDAM:0000253
+name: Sequence feature detection
+namespace: operation
+def: Predict, recognise and identify positional features in molecular sequences such as key functional sites or regions.
+subset: operation
+is_a: EDAM:0002403 ! Sequence analysis
+is_a: EDAM:0002423 ! Prediction, detection and recognition
+relationship: has_output EDAM:0001255 ! Sequence features {minCardinality=1}
+relationship: in_topic EDAM:0000160 ! Sequence features
+
+[Term]
+id: EDAM:0000301
+name: Sequence-3D profile alignment
+namespace: operation
+def: Align molecular sequence(s) to structural (3D) profile(s) or template(s) (representing a structure or structure alignment).
+comment: Methods might perform one-to-one, one-to-many or many-to-many comparisons.
+subset: operation
+is_a: EDAM:0000303 ! Protein fold recognition
+is_a: EDAM:0002928 ! Alignment
+is_a: EDAM:0002403 ! Sequence analysis
+relationship: has_input EDAM:0000889 ! Structural (3D) profile {minCardinality=2}
+relationship: has_output EDAM:0000891 ! Sequence-3D profile alignment {minCardinality=1}
+relationship: in_topic EDAM:0000184 ! Threading
+
+[Term]
+id: EDAM:0000235
+name: Sequence ambiguity calculation
+namespace: operation
+def: Calculate sequence ambiguity, for example identity regions in protein or nucleotide sequences with many ambiguity codes.
+subset: operation
+is_a: EDAM:0000236 ! Sequence composition calculation
+relationship: has_output EDAM:0001260 ! Sequence property (ambiguity) {minCardinality=1}
+relationship: in_topic EDAM:0000157 ! Sequence composition
+
+</pre>
+</td></tr></table><p>

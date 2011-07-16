@@ -117,7 +117,8 @@ float ajRoundFloat(float a, ajint nbits)
     b = ldexp(w, -bitsused);		/* divide by 2**n */
     c = ldexp(b, i);	                /* divide by the orig. power of two */
 
-    /*  ajDebug("\najRoundFloat(%.10e) c: %.10e bitsused: %d\n", a, c, bitsused);
+    /*  ajDebug("\najRoundFloat(%.10e) c: %.10e bitsused: %d\n",
+                a, c, bitsused);
 	ajDebug("       x: %f i: %d y: %f w: %.1f\n", x, i, y, w);*/
 
     return (float) c;
@@ -762,13 +763,13 @@ unsigned long long ajSp64Crc(const AjPStr thys)
 ** Converts a string position into a true position. If ipos is negative,
 ** it is counted from the end of the string rather than the beginning.
 **
-** @param [r] len [ajuint] String length.
-** @param [r] ipos [ajint] Position (0 start, negative from the end).
-** @return [ajuint] string position between 0 and (length minus 1).
+** @param [r] len [size_t] String length.
+** @param [r] ipos [ajlong] Position (0 start, negative from the end).
+** @return [size_t] string position between 0 and (length minus 1).
 ** @@
 ******************************************************************************/
 
-ajuint ajCvtSposToPos(ajuint len, ajint ipos)
+size_t ajCvtSposToPos(size_t len, ajlong ipos)
 {
     return ajCvtSposToPosStart(len, 0, ipos);
 }
@@ -782,7 +783,7 @@ ajuint ajCvtSposToPos(ajuint len, ajint ipos)
 
 __deprecated ajuint ajMathPos(ajuint len, ajint ipos)
 {
-    return ajCvtSposToPosStart(len, 0, ipos);
+    return (ajuint) ajCvtSposToPosStart(len, 0, ipos);
 }
 
 
@@ -797,18 +798,18 @@ __deprecated ajuint ajMathPos(ajuint len, ajint ipos)
 ** Usually this is the start position when the end of a range
 ** is being tested.
 **
-** @param [r] len [ajuint] maximum length.
-** @param [r] imin [ajuint] Start position (0 start, no negative values).
-** @param [r] ipos [ajint] Position (0 start, negative from the end).
-** @return [ajuint] string position between 0 and (length minus 1).
+** @param [r] len [size_t] maximum length.
+** @param [r] imin [size_t] Start position (0 start, no negative values).
+** @param [r] ipos [ajlong] Position (0 start, negative from the end).
+** @return [size_t] string position between 0 and (length minus 1).
 ** @@
 ******************************************************************************/
 
-ajuint ajCvtSposToPosStart(ajuint len, ajuint imin, ajint ipos)
+size_t ajCvtSposToPosStart(size_t len, size_t imin, ajlong ipos)
 {
-    ajint jpos;
-    ajint jmin = imin;
-    ajint jlen = len;
+    ajlong jpos;
+    ajlong jmin = imin;
+    ajlong jlen = len;
 
     if(ipos < 0)
 	jpos = len + ipos;
@@ -821,7 +822,7 @@ ajuint ajCvtSposToPosStart(ajuint len, ajuint imin, ajint ipos)
     if(jpos < jmin)
 	jpos = imin;
 
-    return (ajuint) jpos;
+    return (size_t) jpos;
 }
 
 

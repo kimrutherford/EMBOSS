@@ -2,8 +2,8 @@ application: psiphi [
   documentation: "Calculates phi and psi torsion angles from
                   protein coordinates"
   groups: "protein:3D structure"
-  relations: "/edam/topic/0000126 Protein structure analysis"
-  relations: "/edam/operation/0000249 Torsion angle calculation"
+    relations: "EDAM:0002814 topic Protein structure"
+    relations: "EDAM:0000249 operation Torsion angle calculation"
 ]
 
 section: input [
@@ -15,7 +15,7 @@ section: input [
     parameter: "Y"
     information: "Clean protein structure coordinates file"
     knowntype: "protein clean coordinates"
-    relations:  "/edam/data/0001460 Protein tertiary structure"                     
+    relations: "EDAM:0001460 data Protein structure"
   ]
 
 endsection: input
@@ -31,7 +31,7 @@ section: required [
                   should be calculated"
     default: "1"
     minimum: "1"
-    relations: "/edam/data/0001008 Polypeptide chain identifier"                                     
+    relations: "EDAM:0001008 identifier Polypeptide chain ID"
   ]
 
   integer: startresiduenumber [
@@ -40,7 +40,7 @@ section: required [
                   angles should be calculated"
     default: "1"
     minimum: "1"
-    relations: "/edam/data/0001016 Sequence position"
+    relations: "EDAM:0001016 data Sequence position"
   ]
 
   integer: finishresiduenumber [
@@ -48,7 +48,7 @@ section: required [
     information: "Last residue in chain for which torsion
                   angles should be calculated (1 = last residue)"
     default: "1"
-    relations: "/edam/data/0001016 Sequence position"
+    relations: "EDAM:0001016 data Sequence position"
   ]
 
 endsection: required
@@ -71,7 +71,7 @@ section: output [
     multiple: "N"
     precision: "1"
     taglist: "float:phi float:psi"
-    relations: "/edam/data/0001544 Ramachandran plot"                                       
+    relations: "EDAM:0001544 data Ramachandran plot"
   ]
 
 endsection: output

@@ -1,4 +1,4 @@
-<b>Here is a sample session with extractfeat</b>
+Here is a sample session with <b>extractfeat</b>
 <p>
 To write out the exons of a sequence:  
 <p>
@@ -38,7 +38,7 @@ To write out the 10 bases around the start of all 'exon' features in the tembl d
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractfeat 'tembl:*'  -type exon -before 5 -after -5 </b>
+% <b>extractfeat "tembl:*"  -type exon -before 5 -after -5 </b>
 Extract features from sequence(s)
 output sequence [h45989.fasta]: <b></b>
 
@@ -70,9 +70,10 @@ To write out the 7 residues around all phosphorylated serine residues
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractfeat 'tsw:*' -type MOD_RES -value 'phosphoserine*' -before 3 -after -4 </b>
+% <b>extractfeat "tsw:*" -type MOD_RES -value "phosphoserine*" -before 3 -after -4 </b>
 Extract features from sequence(s)
 output sequence [12s1_arath.fasta]: <b></b>
+ajSeqxrefNewDbS '1-I' 'FT025'
 
 </pre></td></tr></table><p>
 <p>

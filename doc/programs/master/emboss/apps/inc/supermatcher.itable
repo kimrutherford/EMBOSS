@@ -47,7 +47,7 @@
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>align</td>
 <td>Output alignment file name</td>
-<td>Alignment output file</td>
+<td>(default -aformat simple)</td>
 <td><i>&lt;*&gt;</i>.supermatcher</td>
 </tr>
 
@@ -90,7 +90,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-errorfile</td>
 <td>outfile</td>
-<td>Error file to be written to</td>
+<td>Error file to be written to for failed alignments</td>
 <td>Output file</td>
 <td>supermatcher.error</td>
 </tr>

@@ -1,0 +1,27 @@
+Here is a sample session with <b>taxgetup</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>taxgetup ttax:9606 -oformat excel </b>
+Get parents of taxon(s)
+Taxon output file [9606.excel]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>taxgetup ttax:9606 -hidden -oformat excel </b>
+Get parents of taxon(s)
+Taxon output file [9606.excel]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>

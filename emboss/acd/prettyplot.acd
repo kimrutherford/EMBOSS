@@ -1,9 +1,10 @@
 application: prettyplot [
   documentation: "Draw a sequence alignment with pretty formatting"
   groups: "Alignment:Multiple, Display"
-  relations: "/edam/topic/0000182 Sequence alignment"
-  relations: "/edam/topic/0000091 Database and file management"
-  relations: "/edam/operation/0000562 Sequence alignment reformatting"
+  relations: "EDAM:0000182 topic Sequence alignment"
+  relations: "EDAM:0000092 topic Data rendering and visualisation"
+  relations: "EDAM:0000562 operation Sequence alignment reformatting"
+  relations: "EDAM:0000564 operation Sequence rendering"
 ]
 
 section: input [
@@ -15,7 +16,7 @@ section: input [
     parameter: "Y"
     type: "gapany"
     aligned: "Y"
-    relations: "/edam/data/0000863 Sequence alignment"                             
+    relations: "EDAM:0000863 data Sequence alignment"
   ]
 
   matrix: matrixfile [
@@ -26,7 +27,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "/edam/data/0001446 Comparison matrix (integers)"                           
+    relations: "EDAM:0000874 data Comparison matrix"
   ]
 
 endsection: input
@@ -42,7 +43,7 @@ section: additional [
     information: "Number of residues to be displayed on each
                   line"
     help: "The number of residues to be displayed on each line"
-    relations: "/edam/data/0001249 Sequence length"
+    relations: "EDAM:0001249 data Sequence length"
   ]
 
   integer: resbreak [
@@ -54,14 +55,14 @@ section: additional [
     information: "Residues before a space"
     default: "$(residuesperline)"
     expected: "Same as -residuesperline to give no breaks"
-    relations: "/edam/data/0001249 Sequence length"
+    relations: "EDAM:0001249 data Sequence length"
   ]
 
   boolean: ccolours [
     additional: "Y"
     default: "Y"
     information: "Colour residues by their consensus value."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   string: cidentity [
@@ -69,7 +70,7 @@ section: additional [
     information: "Colour to display identical residues (RED)"
     default: "RED"
     knowntype: "plot colour"
-    relations: "/edam/data/0002151 Colour"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   string: csimilarity [
@@ -77,7 +78,7 @@ section: additional [
     information: "Colour to display similar residues (GREEN)"
     default: "GREEN"
     knowntype: "plot colour"
-    relations: "/edam/data/0002151 Colour"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   string: cother [
@@ -85,14 +86,14 @@ section: additional [
     information: "Colour to display other residues (BLACK)"
     default: "BLACK"
     knowntype: "plot colour"
-    relations: "/edam/data/0002151 Colour"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   boolean: docolour [
     additional: "Y"
     information: "Colour residues by table oily, amide etc."
     default: "N"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   string: shade [
@@ -112,7 +113,7 @@ section: additional [
     minlength: "0"
     knowntype: "plot shading"
     pattern: "^([BPLW]{4})?$"
-    relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   array: pair [
@@ -124,7 +125,7 @@ section: additional [
     size: "3"
     sumtest: "N"
     knowntype: "threshold identity similar related"
-    relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   integer: identity [
@@ -133,21 +134,21 @@ section: additional [
                   sequences."
     default: "0"
     minimum: "0"
-    relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   boolean: box [
     additional: "Y"
     information: "Display prettyboxes"
     default: "Y"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: boxcol [
     additional: "Y"
     information: "Colour the background in the boxes"
     default: "N"
-    relations: "/edam/data/0002151 Colour"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   string: boxuse [
@@ -155,35 +156,35 @@ section: additional [
     information: "Colour to be used for background. (GREY)"
     default: "GREY"
     knowntype: "plot colour"
-    relations: "/edam/data/0002151 Colour"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   boolean: name [
     additional: "Y"
     information: "Display the sequence names"
     default: "Y"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: maxnamelen [
     additional: "Y"
     information: "Margin size for the sequence name."
     default: "10"
-    relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   boolean: number [
     additional: "Y"
     information: "Display the residue number"
     default: "Y"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: listoptions [
     additional: "Y"
     information: "Display the date and options used"
     default: "Y"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   float: plurality [
@@ -191,7 +192,7 @@ section: additional [
     information: "Plurality check value (totweight/2)"
     default: "@( $(sequences.totweight) / 2)"
     expected: "Half the total sequence weighting"
-    relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   section: consensussection [
@@ -203,14 +204,14 @@ section: additional [
       additional: "Y"
       information: "Display the consensus"
       default: "N"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
     ]
 
     boolean: collision [
       additional: "Y"
       information: "Allow collisions in calculating consensus"
       default: "Y"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
     ]
 
     list: alternative [
@@ -236,7 +237,7 @@ section: additional [
       default: "0"
       minimum: "1"
       maximum: "1"
-    relations: "/edam/data/0001773 Tool-specific parameter"                                
+    relations: "EDAM:0002527 data Parameter or primitive"
     ]
 
   endsection: consensussection
@@ -245,14 +246,14 @@ section: additional [
     additional: "Y"
     information: "Print residue scores"
     default: "-1"
-    relations: "/edam/data/0002152 Rendering parameter"
+    relations: "EDAM:0002152 data Rendering parameter"
   ]
 
   boolean: portrait [
     additional: "Y"
     information: "Set page to Portrait"
     default: "N"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: additional
@@ -265,7 +266,7 @@ section: output [
   graph: graph [
     standard: "Y"
     gdesc: "Pretty plot"
-    relations: "/edam/data/0001711 Sequence alignment image"                                   
+    relations: "EDAM:0001711 data Sequence alignment image or plot"
   ]
 
 endsection: output

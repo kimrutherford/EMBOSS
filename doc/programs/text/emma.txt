@@ -94,7 +94,7 @@ GCG-Alignment file created      [12345678A]
 Command line arguments
 
 Multiple sequence alignment (ClustalW wrapper)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional

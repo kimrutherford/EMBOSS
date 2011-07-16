@@ -5,9 +5,9 @@ application: wordfinder [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
-  relations: "/edam/topic/0000159 Sequence comparison"
-  relations: "/edam/operation/0000288 Sequence word comparison"
-  relations: "/edam/operation/0000493 Local pairwise sequence alignment"
+    relations: "EDAM:0000182 topic Sequence alignment"
+    relations: "EDAM:0000288 operation Sequence word comparison"
+    relations: "EDAM:0000493 operation Pairwise sequence alignment (local)"
 ]
 
 section: input [
@@ -19,17 +19,13 @@ section: input [
     parameter: "Y"
     type: "any"
     aligned: "N"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   seqall: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   matrixf: datafile [
@@ -40,7 +36,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "/edam/data/0001447 Comparison matrix (floats)"                             
+    relations: "EDAM:0000874 data Comparison matrix"
   ]
 
 endsection: input
@@ -57,7 +53,7 @@ section: required [
     maximum: "1000.0"
     default: "@($(acdprotein)? 30.0 : 30.0)"
     expected: "10.0 for any sequence type"
-    relations: "/edam/data/0001397 Gap opening penalty"
+    relations: "EDAM:0001397 data Gap opening penalty"
   ]
 
   float: gapextend [
@@ -67,7 +63,7 @@ section: required [
     maximum: "10.0"
     default: "@($(acdprotein)? 1.5 : 1.5)"
     expected: "0.5 for any sequence type"
-    relations: "/edam/data/0001398 Gap extension penalty"
+    relations: "EDAM:0001398 data Gap extension penalty"
   ]
 
 endsection: required
@@ -82,7 +78,7 @@ section: additional [
     default: "16"
     minimum: "1"
     information: "Alignment width"
-    relations: "/edam/data/0002136 Sequence width"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: wordlen [
@@ -90,7 +86,7 @@ section: additional [
     default: "6"
     minimum: "3"
     information: "Word length for initial matching"
-    relations: "/edam/data/0001250 Word size"
+    relations: "EDAM:0001250 data Word size"
   ]
 
   integer: limitmatch [
@@ -98,7 +94,7 @@ section: additional [
     default: "0"
     minimum: "0"
     information: "Maximum match score (zero for no limit)"
-    relations: "/edam/data/0001401 Match reward score"
+    relations: "EDAM:0001401 data Match reward score"
   ]
 
   integer: limitalign [
@@ -106,7 +102,7 @@ section: additional [
     default: "0"
     minimum: "0"
     information: "Maximum alignment length (zero for no limit)"
-    relations: "/edam/data/0002136 Sequence width"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: lowmatch [
@@ -114,7 +110,7 @@ section: additional [
     default: "0"
     minimum: "0"
     information: "Minimum match score (zero for no limit)"
-    relations: "/edam/data/0001401 Match reward score"
+    relations: "EDAM:0001401 data Match reward score"
   ]
 
   integer: lowalign [
@@ -122,7 +118,7 @@ section: additional [
     default: "0"
     minimum: "0"
     information: "Minimum alignment length (zero for no limit)"
-    relations: "/edam/data/0002136 Sequence width"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: additional
@@ -137,7 +133,7 @@ section: output [
     aformat: "simple"
     minseqs: "2"
     maxseqs: "2"
-    relations: "/edam/data/0001381 Pairwise sequence alignment"                    
+    relations: "EDAM:0001381 data Sequence alignment (pair)"
   ]
 
   outfile: errorfile [
@@ -146,7 +142,7 @@ section: output [
     help: "Error file to be written to"
     knowntype: "wordfinder error"
     information: "Program wordfinder errors output file"
-    relations:  "/edam/data/0001678 Tool log"
+    relations: "EDAM:0001678 data Tool log"
   ]
 
 endsection: output

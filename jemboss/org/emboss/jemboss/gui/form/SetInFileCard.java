@@ -70,7 +70,8 @@ public class SetInFileCard extends Box
   public SetInFileCard(final JPanel sectionPane, final int h,
                  final String db[], String name, final String appName,
                  final InputSequenceAttributes inSeqAttr[], boolean fopt,
-                 final JembossParams mysettings)
+                 final JembossParams mysettings,
+                 String type)
   {
     super(BoxLayout.Y_AXIS);
     this.h = h;
@@ -88,7 +89,7 @@ public class SetInFileCard extends Box
 
     final Box bdown[] = new Box[3];
     Box bacross = Box.createHorizontalBox();
-    JRadioButton rfile  = new JRadioButton("file / database entry");
+    JRadioButton rfile  = new JRadioButton("file/emboss-query");
     rfile.setFont(labfont);
   
     rfile.addActionListener(new ActionListener()
@@ -142,7 +143,7 @@ public class SetInFileCard extends Box
     group.add(rpaste);
     group.add(rlist);  
 
-    JLabel seqLabel = new JLabel("Enter the sequence as:"); 
+    JLabel seqLabel = new JLabel("Enter the '"+type+"' input as:"); 
     seqLabel.setForeground(labelColor);
     bacross.add(seqLabel);
     bacross.add(Box.createRigidArea(new Dimension(20,0)));
@@ -174,93 +175,55 @@ public class SetInFileCard extends Box
     if(defaultSeq != null)
       fileChoose.setText(defaultSeq);
    
-
-//sequence attibute options
+    
     final JButton boption = new JButton("Input Sequence Options");
     final JButton breset = new JButton("Reset");
     fileChoose.setSize(boption.getPreferredSize());
     fileChoose.setForeground(labelColor);
+    //cut 'n paste
+    cutnPaste = new CutNPasteTextArea(bdown[1],"Cut and Paste");
 
-    Box bxleft= new Box(BoxLayout.X_AXIS);
-    bxleft.add(boption);
-    bxleft.add(Box.createHorizontalGlue());
-    bxleft.add(breset);
-    bxleft.add(Box.createHorizontalStrut(14));
-//  bxleft.add(Box.createRigidArea(new Dimension(5,0)));
-
-    bdown[0].add(Box.createVerticalGlue());
-    bdown[0].add(bxleft);
-
-    Runnable constructInSeqAttr = new Runnable()
+    if(type.startsWith("seq"))
     {
-      public void run () 
-      {
-//input attributes
+        final Box bxleft= new Box(BoxLayout.X_AXIS);
+        bxleft.add(boption);
+        bxleft.add(Box.createHorizontalGlue());
+        bxleft.add(breset);
+        bxleft.add(Box.createHorizontalStrut(14));
+
+        bdown[0].add(Box.createVerticalGlue());
+        bdown[0].add(bxleft);
+
         inSeqAttr[h] = new InputSequenceAttributes(db,fileChoose);
         final JScrollPane rscroll = inSeqAttr[h].getJScrollPane();
 
-//cut 'n paste
-        cutnPaste = new CutNPasteTextArea(bdown[1],"Sequence Cut and Paste");
- 
-//buttons for input attributes
         boption.addActionListener(new ActionListener()
         {
-          public void actionPerformed(ActionEvent e)
-          {
-            JOptionPane.showMessageDialog(sectionPane,rscroll,
-                    appName.toLowerCase() + " - Input Sequence",
-                    JOptionPane.PLAIN_MESSAGE);
-          }
+            public void actionPerformed(ActionEvent e)
+            {
+                JOptionPane.showMessageDialog(sectionPane,rscroll,
+                        appName.toLowerCase() + " - Input Sequence",
+                        JOptionPane.PLAIN_MESSAGE);
+            }
         });
 
         breset.addActionListener(new ActionListener()
         {
-          public void actionPerformed(ActionEvent e)
-          {
-            doReset(); 
-          }
+            public void actionPerformed(ActionEvent e)
+            {
+                doReset(); 
+            }
         });
-
-        JButton bopt = new JButton("Input Sequence Options");
-        JButton bres = new JButton("Reset");
-        bopt.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-            JOptionPane.showMessageDialog(sectionPane,rscroll,
-                appName.toLowerCase() + " - Input Sequence",
-                JOptionPane.PLAIN_MESSAGE);
-          }
-        });
-
-        bres.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-            doReset(); 
-          }
-        });
-
-        Box bleft= new Box(BoxLayout.X_AXIS);
-        bleft.add(bopt);
-        bleft.add(Box.createHorizontalGlue());
-        bleft.add(bres);
-        bleft.add(Box.createHorizontalStrut(14));
-
-        bdown[1].add(bleft);
-
-      }
-    };
-    SwingUtilities.invokeLater(constructInSeqAttr);
+    }
 
     pfile.add(bdown[0], "File");
     pfile.add(bdown[1], "Paste");
     pfile.add(bdown[2], "List");
 
-    bxleft= new Box(BoxLayout.X_AXIS);
-    bxleft.add(pfile);
-    bxleft.add(Box.createHorizontalGlue());
-    add(bxleft);
+    Box filepastelist= new Box(BoxLayout.X_AXIS);
+    filepastelist.add(pfile);
+    filepastelist.add(Box.createHorizontalGlue());
+    add(filepastelist);
 
   }
 

@@ -92,19 +92,19 @@ int main(int argc, char **argv)
     for(i=0; i < locs->Nurls; ++i)
     {
         ajStrAssignC(&key1,"visible");
-        value1 = ajTableFetch(locs->Urls[i],(void *)key1);
+        value1 = ajTableFetchS(locs->Urls[i], key1);
         if(ajStrMatchC(value1,"0"))
             continue;
 
         ajStrAssignC(&key1,"serverVirtualSchema");
-        value1 = ajTableFetch(locs->Urls[i],(void *)key1);
+        value1 = ajTableFetchS(locs->Urls[i], key1);
         if(!value1)
             ajStrAssignC(&vschema,"default");
         else
             ajStrAssignS(&vschema,value1);
 
         ajStrAssignC(&key1,"name");
-        value1 = ajTableFetch(locs->Urls[i],(void *)key1);
+        value1 = ajTableFetchS(locs->Urls[i], key1);
         ajStrAssignS(&mart,value1);
 
         ajFmtPrintF(outf,"Mart = %S\n",mart);
@@ -117,12 +117,12 @@ int main(int argc, char **argv)
         for(j=0; j < ds->Nsets; ++j)
         {
             ajStrAssignC(&key1,"visible");
-            value1 = ajTableFetch(ds->Sets[j],(void *)key1);
+            value1 = ajTableFetchS(ds->Sets[j], key1);
             if(ajStrMatchC(value1,"0"))
                 continue;
             
             ajStrAssignC(&key1,"name");
-            value1 = ajTableFetch(ds->Sets[j],(void *)key1);
+            value1 = ajTableFetchS(ds->Sets[j], key1);
             ajStrAssignS(&dataset,value1);
             ajFmtPrintF(outf,"    Dataset = %S\n",dataset);
 
@@ -144,22 +144,22 @@ int main(int argc, char **argv)
             for(k=0; k < att->Natts; ++k)
             {
                 ajStrAssignC(&key1,"format");
-                value1 = ajTableFetch(att->Attributes[k],(void *)key1);
+                value1 = ajTableFetchS(att->Attributes[k], key1);
                 if(!ajStrMatchC(value1,"fasta"))
                     continue;
 
                 ajStrAssignC(&key1,"tableName");
-                value1 = ajTableFetch(att->Attributes[k],(void *)key1);
+                value1 = ajTableFetchS(att->Attributes[k], key1);
                 if(ajStrGetLen(value1))
                     continue;
 
                 ajStrAssignC(&key1,"columnName");
-                value1 = ajTableFetch(att->Attributes[k],(void *)key1);
+                value1 = ajTableFetchS(att->Attributes[k], key1);
                 if(ajStrGetLen(value1))
                     continue;
 
                 ajStrAssignC(&key1,"name");
-                value1 = ajTableFetch(att->Attributes[k],(void *)key1);
+                value1 = ajTableFetchS(att->Attributes[k], key1);
 
                 ajFmtPrintF(outf,"        Sequence Attribute = %S\n",value1);
             }

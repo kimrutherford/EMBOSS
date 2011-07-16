@@ -1,8 +1,9 @@
 application: oddcomp [
   documentation: "Identify proteins with specified sequence word composition"
-  groups: "Protein:Motifs"
-  relations: "/edam/topic/0000157 Sequence composition"
-  relations: "/edam/operation/0000378 Amino acid composition analysis"
+  groups: "Protein:Composition"
+    relations: "EDAM:0000157 topic Sequence composition"
+    relations: "EDAM:0000378 operation Sequence composition calculation
+                (protein)"
 ]
 
 section: input [
@@ -13,9 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "Protein"
-    relations: "/edam/data/0001219 Pure protein sequence"
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0002886 data Sequence record (protein)"
   ]
 
   infile: infile [
@@ -25,7 +24,7 @@ section: input [
            'compseq' that is used to set the minimum frequencies of words in
            this analysis."
     knowntype: "compseq output"
-    relations:  "/edam/data/0001261 Sequence composition"                    
+    relations: "EDAM:0001261 data Sequence property (composition)"
   ]
 
 endsection: input
@@ -42,7 +41,7 @@ section: required [
            set to the length of the current protein. Otherwise, leave this
            option unset, in which case you'll be prompted for a window size
            to use."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: window [
@@ -53,7 +52,7 @@ section: required [
     help: "This is the size of window in which to count. \
            Thus if you want to count frequencies in a 40 aa stretch you
            should enter 40 here."
-    relations: "/edam/data/0001251 Window size"
+    relations: "EDAM:0001251 data Window size"
   ]
 
 endsection: required
@@ -72,7 +71,7 @@ section: advanced [
            These are not commonly used codes and you may wish not to count
            words containing them, just noting them in the count of 'Other'
            words."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -87,7 +86,7 @@ section: output [
     extension: "oddcomp"
     help: "This is the results file."
     knowntype: "oddcomp output"
-    relations:  "/edam/data/0001111 EMBOSS listfile"                  
+    relations: "EDAM:0001111 data EMBOSS listfile"
   ]
 
 endsection: output

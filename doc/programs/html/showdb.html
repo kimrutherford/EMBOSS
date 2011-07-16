@@ -50,7 +50,7 @@ Displays information on configured databases
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with showdb</b>
+Here is a sample session with <b>showdb</b>
 <p>
 Display information on the currently available databases: 
 <p>
@@ -61,61 +61,74 @@ Display information on the currently available databases:
 % <b>showdb </b>
 Displays information on configured databases
 
-# Name           Type       ID  Qry All Comment
-# ============== ========== ==  === === =======
-twp              Protein    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
-qapblast         Protein    OK  OK  OK  BLAST swissnew
-qapblastall      Protein    OK  OK  OK  BLAST swissnew, all fields indexed
-qapblastsplit    Protein    OK  OK  OK  BLAST swissnew split in 5 files
-qapblastsplitexc Protein    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
-qapblastsplitinc Protein    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
-qapfasta         Protein    OK  OK  OK  FASTA file swissnew entries
-qapflat          Protein    OK  OK  OK  SpTrEmbl flatfile
-qapflatall       Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
-qapir            Protein    OK  OK  OK  PIR
-qapirall         Protein    OK  OK  OK  PIR
-qapirinc         Protein    OK  OK  OK  PIR
-qapxfasta        Protein    OK  OK  OK  FASTA file swissnew entries
-qapxflat         Protein    OK  OK  OK  Swissnew flatfiles
-qaxpir           Protein    OK  OK  OK  PIR
-qaxpirall        Protein    OK  OK  OK  PIR
-qaxpirinc        Protein    OK  OK  OK  PIR
-tpir             Protein    OK  OK  OK  PIR using NBRF access for 4 files
-tsw              Protein    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
-tswnew           Protein    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
-genbanksrs       Nucleotide OK  OK  OK  Genbank IDs
-qanfasta         Nucleotide OK  OK  OK  FASTA file EMBL rodents
-qanfastaall      Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanflat          Nucleotide OK  OK  OK  EMBL flatfiles
-qanflatall       Nucleotide OK  OK  OK  EMBL flatfiles
-qanflatexc       Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
-qanflatinc       Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
-qangcg           Nucleotide OK  OK  OK  GCG format EMBL
-qangcgall        Nucleotide OK  OK  OK  GCG format EMBL
-qangcgexc        Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
-qangcginc        Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
-qanxfasta        Nucleotide OK  OK  OK  FASTA file EMBL rodents
-qanxfastaall     Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanxflat         Nucleotide OK  OK  OK  EMBL flatfiles
-qanxflatall      Nucleotide OK  OK  OK  EMBL flatfiles, all fields indexed
-qanxflatexc      Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
-qanxflatinc      Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
-qanxgcg          Nucleotide OK  OK  OK  GCG format EMBL
-qanxgcgall       Nucleotide OK  OK  OK  GCG format EMBL
-qanxgcgexc       Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
-qanxgcginc       Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
-qapirexc         Nucleotide OK  OK  OK  PIR
-qasrswww         Nucleotide OK  OK  OK  Remote SRS web server
-qawfasta         Nucleotide OK  OK  OK  FASTA file wormpep entries
-qawxfasta        Nucleotide OK  OK  OK  FASTA file wormpep entries
-qaxpirexc        Nucleotide OK  OK  OK  PIR
-tembl            Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblall         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblrest        Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblvrt         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-testdb           Nucleotide OK  OK  OK  test sequence data
-tgb              Nucleotide OK  OK  OK  Genbank IDs
-tgenbank         Nucleotide OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+# Name            Type       ID  Qry All Comment
+# =============== ========== ==  === === =======
+qapblast          Protein    OK  OK  OK  BLAST swissnew
+qapblastall       Protein    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit     Protein    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc  Protein    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc  Protein    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta          Protein    OK  OK  OK  FASTA file swissnew entries
+qapflat           Protein    OK  OK  OK  SpTrEmbl flatfile
+qapflatall        Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
+qapir             Protein    OK  OK  OK  PIR
+qapirall          Protein    OK  OK  OK  PIR
+qapirinc          Protein    OK  OK  OK  PIR
+qapxfasta         Protein    OK  OK  OK  FASTA file swissnew entries
+qapxflat          Protein    OK  OK  OK  Swissnew flatfiles
+qaxpir            Protein    OK  OK  OK  PIR
+qaxpirall         Protein    OK  OK  OK  PIR
+qaxpirinc         Protein    OK  OK  OK  PIR
+tpir              Protein    OK  OK  OK  PIR using NBRF access for 4 files
+tsw               Protein    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew            Protein    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+qanfasta          Nucleotide OK  OK  OK  FASTA file EMBL rodents
+qanfastaall       Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat           Nucleotide OK  OK  OK  EMBL flatfiles
+qanflatall        Nucleotide OK  OK  OK  EMBL flatfiles
+qanflatexc        Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
+qanflatinc        Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
+qangcg            Nucleotide OK  OK  OK  GCG format EMBL
+qangcgall         Nucleotide OK  OK  OK  GCG format EMBL
+qangcgexc         Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc         Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta         Nucleotide OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall      Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat          Nucleotide OK  OK  OK  EMBL flatfiles
+qanxflatall       Nucleotide OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxflatexc       Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
+qanxflatinc       Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
+qanxgcg           Nucleotide OK  OK  OK  GCG format EMBL
+qanxgcgall        Nucleotide OK  OK  OK  GCG format EMBL
+qanxgcgexc        Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc        Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc          Nucleotide OK  OK  OK  PIR
+qasrswww          Nucleotide OK  OK  OK  Remote SRS web server
+qawfasta          Nucleotide OK  OK  OK  FASTA file wormpep entries
+qawxfasta         Nucleotide OK  OK  OK  FASTA file wormpep entries
+qaxpirexc         Nucleotide OK  OK  OK  PIR
+tembl             Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall          Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblrest         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblvrt          Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+tensembldasgrch37 Nucleotide OK  -   -   Homo_sapiens Reference server based on GRCh37 assembly
+testdb            Nucleotide OK  OK  OK  test sequence data
+tgb               Nucleotide OK  OK  OK  Genbank IDs
+tgenbank          Nucleotide OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+tgenedashuman     Nucleotide OK  -   -   The Ensembl human Gene_ID reference source
+tflybase          Features   OK  -   -   
+tgenedb           Features   OK  -   -   
+ttax              Taxonomy   OK  OK  OK  
+taxon             Taxonomy   OK  OK  OK  
+drcat             Resource   OK  OK  OK  
+tedam             Obo        OK  OK  OK  EDAM using dbxedam test indexes
+tobo              Obo        OK  OK  OK  EDAM using dbxobo test indexes
+eco               Obo        OK  OK  OK  
+edam              Obo        OK  OK  OK  
+go                Obo        OK  OK  OK  
+pw                Obo        OK  OK  OK  
+ro                Obo        OK  OK  OK  
+so                Obo        OK  OK  OK  
 
 </pre></td></tr></table><p>
 <p>
@@ -168,7 +181,6 @@ Displays information on configured databases
 
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Name</th><th>Type</th><th>ID</th><th>Qry</th><th>All</th><th>Comment</th></tr>
-<tr><td>twp</td><td>Protein</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL new in native format with EMBL CD-ROM index</td></tr>
 <tr><td>qapblast</td><td>Protein</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew</td></tr>
 <tr><td>qapblastall</td><td>Protein</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew, all fields indexed</td></tr>
 <tr><td>qapblastsplit</td><td>Protein</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew split in 5 files</td></tr>
@@ -188,7 +200,6 @@ Displays information on configured databases
 <tr><td>tpir</td><td>Protein</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR using NBRF access for 4 files</td></tr>
 <tr><td>tsw</td><td>Protein</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissprot native format with EMBL CD-ROM index</td></tr>
 <tr><td>tswnew</td><td>Protein</td><td>OK  </td><td>OK  </td><td>OK  </td><td>SpTrEmbl as 3 files in native format with EMBL CD-ROM index</td></tr>
-<tr><td>genbanksrs</td><td>Nucleotide</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Genbank IDs</td></tr>
 <tr><td>qanfasta</td><td>Nucleotide</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file EMBL rodents</td></tr>
 <tr><td>qanfastaall</td><td>Nucleotide</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file EMBL rodents, all fields indexed</td></tr>
 <tr><td>qanflat</td><td>Nucleotide</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL flatfiles</td></tr>
@@ -218,9 +229,24 @@ Displays information on configured databases
 <tr><td>temblall</td><td>Nucleotide</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
 <tr><td>temblrest</td><td>Nucleotide</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
 <tr><td>temblvrt</td><td>Nucleotide</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
+<tr><td>tensembldasgrch37</td><td>Nucleotide</td><td>OK  </td><td>-   </td><td>-   </td><td>Homo_sapiens Reference server based on GRCh37 assembly</td></tr>
 <tr><td>testdb</td><td>Nucleotide</td><td>OK  </td><td>OK  </td><td>OK  </td><td>test sequence data</td></tr>
 <tr><td>tgb</td><td>Nucleotide</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Genbank IDs</td></tr>
 <tr><td>tgenbank</td><td>Nucleotide</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GenBank in native format with EMBL CD-ROM index</td></tr>
+<tr><td>tgenedashuman</td><td>Nucleotide</td><td>OK  </td><td>-   </td><td>-   </td><td>The Ensembl human Gene_ID reference source</td></tr>
+<tr><td>tflybase</td><td>Features</td><td>OK  </td><td>-   </td><td>-   </td><td></td></tr>
+<tr><td>tgenedb</td><td>Features</td><td>OK  </td><td>-   </td><td>-   </td><td></td></tr>
+<tr><td>ttax</td><td>Taxonomy</td><td>OK  </td><td>OK  </td><td>OK  </td><td></td></tr>
+<tr><td>taxon</td><td>Taxonomy</td><td>OK  </td><td>OK  </td><td>OK  </td><td></td></tr>
+<tr><td>drcat</td><td>Resource</td><td>OK  </td><td>OK  </td><td>OK  </td><td></td></tr>
+<tr><td>tedam</td><td>Obo</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EDAM using dbxedam test indexes</td></tr>
+<tr><td>tobo</td><td>Obo</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EDAM using dbxobo test indexes</td></tr>
+<tr><td>eco</td><td>Obo</td><td>OK  </td><td>OK  </td><td>OK  </td><td></td></tr>
+<tr><td>edam</td><td>Obo</td><td>OK  </td><td>OK  </td><td>OK  </td><td></td></tr>
+<tr><td>go</td><td>Obo</td><td>OK  </td><td>OK  </td><td>OK  </td><td></td></tr>
+<tr><td>pw</td><td>Obo</td><td>OK  </td><td>OK  </td><td>OK  </td><td></td></tr>
+<tr><td>ro</td><td>Obo</td><td>OK  </td><td>OK  </td><td>OK  </td><td></td></tr>
+<tr><td>so</td><td>Obo</td><td>OK  </td><td>OK  </td><td>OK  </td><td></td></tr>
 </table>
 
 </pre></td></tr></table><p>
@@ -238,28 +264,40 @@ Display protein databases only:
 % <b>showdb -nonucleic </b>
 Displays information on configured databases
 
-# Name           Type       ID  Qry All Comment
-# ============== ========== ==  === === =======
-twp              Protein    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
-qapblast         Protein    OK  OK  OK  BLAST swissnew
-qapblastall      Protein    OK  OK  OK  BLAST swissnew, all fields indexed
-qapblastsplit    Protein    OK  OK  OK  BLAST swissnew split in 5 files
-qapblastsplitexc Protein    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
-qapblastsplitinc Protein    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
-qapfasta         Protein    OK  OK  OK  FASTA file swissnew entries
-qapflat          Protein    OK  OK  OK  SpTrEmbl flatfile
-qapflatall       Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
-qapir            Protein    OK  OK  OK  PIR
-qapirall         Protein    OK  OK  OK  PIR
-qapirinc         Protein    OK  OK  OK  PIR
-qapxfasta        Protein    OK  OK  OK  FASTA file swissnew entries
-qapxflat         Protein    OK  OK  OK  Swissnew flatfiles
-qaxpir           Protein    OK  OK  OK  PIR
-qaxpirall        Protein    OK  OK  OK  PIR
-qaxpirinc        Protein    OK  OK  OK  PIR
-tpir             Protein    OK  OK  OK  PIR using NBRF access for 4 files
-tsw              Protein    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
-tswnew           Protein    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+# Name            Type       ID  Qry All Comment
+# =============== ========== ==  === === =======
+qapblast          Protein    OK  OK  OK  BLAST swissnew
+qapblastall       Protein    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit     Protein    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc  Protein    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc  Protein    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta          Protein    OK  OK  OK  FASTA file swissnew entries
+qapflat           Protein    OK  OK  OK  SpTrEmbl flatfile
+qapflatall        Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
+qapir             Protein    OK  OK  OK  PIR
+qapirall          Protein    OK  OK  OK  PIR
+qapirinc          Protein    OK  OK  OK  PIR
+qapxfasta         Protein    OK  OK  OK  FASTA file swissnew entries
+qapxflat          Protein    OK  OK  OK  Swissnew flatfiles
+qaxpir            Protein    OK  OK  OK  PIR
+qaxpirall         Protein    OK  OK  OK  PIR
+qaxpirinc         Protein    OK  OK  OK  PIR
+tpir              Protein    OK  OK  OK  PIR using NBRF access for 4 files
+tsw               Protein    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew            Protein    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+tflybase          Features   OK  -   -   
+tgenedb           Features   OK  -   -   
+ttax              Taxonomy   OK  OK  OK  
+taxon             Taxonomy   OK  OK  OK  
+drcat             Resource   OK  OK  OK  
+tedam             Obo        OK  OK  OK  EDAM using dbxedam test indexes
+tobo              Obo        OK  OK  OK  EDAM using dbxobo test indexes
+eco               Obo        OK  OK  OK  
+edam              Obo        OK  OK  OK  
+go                Obo        OK  OK  OK  
+pw                Obo        OK  OK  OK  
+ro                Obo        OK  OK  OK  
+so                Obo        OK  OK  OK  
 
 </pre></td></tr></table><p>
 <p>
@@ -276,59 +314,72 @@ Display the information with no headings:
 % <b>showdb -noheading </b>
 Displays information on configured databases
 
-twp              Protein    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
-qapblast         Protein    OK  OK  OK  BLAST swissnew
-qapblastall      Protein    OK  OK  OK  BLAST swissnew, all fields indexed
-qapblastsplit    Protein    OK  OK  OK  BLAST swissnew split in 5 files
-qapblastsplitexc Protein    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
-qapblastsplitinc Protein    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
-qapfasta         Protein    OK  OK  OK  FASTA file swissnew entries
-qapflat          Protein    OK  OK  OK  SpTrEmbl flatfile
-qapflatall       Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
-qapir            Protein    OK  OK  OK  PIR
-qapirall         Protein    OK  OK  OK  PIR
-qapirinc         Protein    OK  OK  OK  PIR
-qapxfasta        Protein    OK  OK  OK  FASTA file swissnew entries
-qapxflat         Protein    OK  OK  OK  Swissnew flatfiles
-qaxpir           Protein    OK  OK  OK  PIR
-qaxpirall        Protein    OK  OK  OK  PIR
-qaxpirinc        Protein    OK  OK  OK  PIR
-tpir             Protein    OK  OK  OK  PIR using NBRF access for 4 files
-tsw              Protein    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
-tswnew           Protein    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
-genbanksrs       Nucleotide OK  OK  OK  Genbank IDs
-qanfasta         Nucleotide OK  OK  OK  FASTA file EMBL rodents
-qanfastaall      Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanflat          Nucleotide OK  OK  OK  EMBL flatfiles
-qanflatall       Nucleotide OK  OK  OK  EMBL flatfiles
-qanflatexc       Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
-qanflatinc       Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
-qangcg           Nucleotide OK  OK  OK  GCG format EMBL
-qangcgall        Nucleotide OK  OK  OK  GCG format EMBL
-qangcgexc        Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
-qangcginc        Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
-qanxfasta        Nucleotide OK  OK  OK  FASTA file EMBL rodents
-qanxfastaall     Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanxflat         Nucleotide OK  OK  OK  EMBL flatfiles
-qanxflatall      Nucleotide OK  OK  OK  EMBL flatfiles, all fields indexed
-qanxflatexc      Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
-qanxflatinc      Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
-qanxgcg          Nucleotide OK  OK  OK  GCG format EMBL
-qanxgcgall       Nucleotide OK  OK  OK  GCG format EMBL
-qanxgcgexc       Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
-qanxgcginc       Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
-qapirexc         Nucleotide OK  OK  OK  PIR
-qasrswww         Nucleotide OK  OK  OK  Remote SRS web server
-qawfasta         Nucleotide OK  OK  OK  FASTA file wormpep entries
-qawxfasta        Nucleotide OK  OK  OK  FASTA file wormpep entries
-qaxpirexc        Nucleotide OK  OK  OK  PIR
-tembl            Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblall         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblrest        Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblvrt         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-testdb           Nucleotide OK  OK  OK  test sequence data
-tgb              Nucleotide OK  OK  OK  Genbank IDs
-tgenbank         Nucleotide OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+qapblast          Protein    OK  OK  OK  BLAST swissnew
+qapblastall       Protein    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit     Protein    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc  Protein    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc  Protein    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta          Protein    OK  OK  OK  FASTA file swissnew entries
+qapflat           Protein    OK  OK  OK  SpTrEmbl flatfile
+qapflatall        Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
+qapir             Protein    OK  OK  OK  PIR
+qapirall          Protein    OK  OK  OK  PIR
+qapirinc          Protein    OK  OK  OK  PIR
+qapxfasta         Protein    OK  OK  OK  FASTA file swissnew entries
+qapxflat          Protein    OK  OK  OK  Swissnew flatfiles
+qaxpir            Protein    OK  OK  OK  PIR
+qaxpirall         Protein    OK  OK  OK  PIR
+qaxpirinc         Protein    OK  OK  OK  PIR
+tpir              Protein    OK  OK  OK  PIR using NBRF access for 4 files
+tsw               Protein    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew            Protein    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+qanfasta          Nucleotide OK  OK  OK  FASTA file EMBL rodents
+qanfastaall       Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat           Nucleotide OK  OK  OK  EMBL flatfiles
+qanflatall        Nucleotide OK  OK  OK  EMBL flatfiles
+qanflatexc        Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
+qanflatinc        Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
+qangcg            Nucleotide OK  OK  OK  GCG format EMBL
+qangcgall         Nucleotide OK  OK  OK  GCG format EMBL
+qangcgexc         Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc         Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta         Nucleotide OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall      Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat          Nucleotide OK  OK  OK  EMBL flatfiles
+qanxflatall       Nucleotide OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxflatexc       Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
+qanxflatinc       Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
+qanxgcg           Nucleotide OK  OK  OK  GCG format EMBL
+qanxgcgall        Nucleotide OK  OK  OK  GCG format EMBL
+qanxgcgexc        Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc        Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc          Nucleotide OK  OK  OK  PIR
+qasrswww          Nucleotide OK  OK  OK  Remote SRS web server
+qawfasta          Nucleotide OK  OK  OK  FASTA file wormpep entries
+qawxfasta         Nucleotide OK  OK  OK  FASTA file wormpep entries
+qaxpirexc         Nucleotide OK  OK  OK  PIR
+tembl             Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall          Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblrest         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblvrt          Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+tensembldasgrch37 Nucleotide OK  -   -   Homo_sapiens Reference server based on GRCh37 assembly
+testdb            Nucleotide OK  OK  OK  test sequence data
+tgb               Nucleotide OK  OK  OK  Genbank IDs
+tgenbank          Nucleotide OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+tgenedashuman     Nucleotide OK  -   -   The Ensembl human Gene_ID reference source
+tflybase          Features   OK  -   -   
+tgenedb           Features   OK  -   -   
+ttax              Taxonomy   OK  OK  OK  
+taxon             Taxonomy   OK  OK  OK  
+drcat             Resource   OK  OK  OK  
+tedam             Obo        OK  OK  OK  EDAM using dbxedam test indexes
+tobo              Obo        OK  OK  OK  EDAM using dbxobo test indexes
+eco               Obo        OK  OK  OK  
+edam              Obo        OK  OK  OK  
+go                Obo        OK  OK  OK  
+pw                Obo        OK  OK  OK  
+ro                Obo        OK  OK  OK  
+so                Obo        OK  OK  OK  
 
 </pre></td></tr></table><p>
 <p>
@@ -344,59 +395,72 @@ Display just a list of the available database names:
 
 % <b>showdb -noheading -notype -noid -noquery -noall -nocomment -auto </b>
 
-twp              
-qapblast         
-qapblastall      
-qapblastsplit    
-qapblastsplitexc 
-qapblastsplitinc 
-qapfasta         
-qapflat          
-qapflatall       
-qapir            
-qapirall         
-qapirinc         
-qapxfasta        
-qapxflat         
-qaxpir           
-qaxpirall        
-qaxpirinc        
-tpir             
-tsw              
-tswnew           
-genbanksrs       
-qanfasta         
-qanfastaall      
-qanflat          
-qanflatall       
-qanflatexc       
-qanflatinc       
-qangcg           
-qangcgall        
-qangcgexc        
-qangcginc        
-qanxfasta        
-qanxfastaall     
-qanxflat         
-qanxflatall      
-qanxflatexc      
-qanxflatinc      
-qanxgcg          
-qanxgcgall       
-qanxgcgexc       
-qanxgcginc       
-qapirexc         
-qasrswww         
-qawfasta         
-qawxfasta        
-qaxpirexc        
-tembl            
-temblall         
-temblrest        
-temblvrt         
-testdb           
-tgb              
-tgenbank         
+qapblast          
+qapblastall       
+qapblastsplit     
+qapblastsplitexc  
+qapblastsplitinc  
+qapfasta          
+qapflat           
+qapflatall        
+qapir             
+qapirall          
+qapirinc          
+qapxfasta         
+qapxflat          
+qaxpir            
+qaxpirall         
+qaxpirinc         
+tpir              
+tsw               
+tswnew            
+qanfasta          
+qanfastaall       
+qanflat           
+qanflatall        
+qanflatexc        
+qanflatinc        
+qangcg            
+qangcgall         
+qangcgexc         
+qangcginc         
+qanxfasta         
+qanxfastaall      
+qanxflat          
+qanxflatall       
+qanxflatexc       
+qanxflatinc       
+qanxgcg           
+qanxgcgall        
+qanxgcgexc        
+qanxgcginc        
+qapirexc          
+qasrswww          
+qawfasta          
+qawxfasta         
+qaxpirexc         
+tembl             
+temblall          
+temblrest         
+temblvrt          
+tensembldasgrch37 
+testdb            
+tgb               
+tgenbank          
+tgenedashuman     
+tflybase          
+tgenedb           
+ttax              
+taxon             
+drcat             
+tedam             
+tobo              
+eco               
+edam              
+go                
+pw                
+ro                
+so                
 
 </pre></td></tr></table><p>
 <p>
@@ -413,59 +477,72 @@ Display only the names and types:
 % <b>showdb -only -type </b>
 Displays information on configured databases
 
-twp              Protein    
-qapblast         Protein    
-qapblastall      Protein    
-qapblastsplit    Protein    
-qapblastsplitexc Protein    
-qapblastsplitinc Protein    
-qapfasta         Protein    
-qapflat          Protein    
-qapflatall       Protein    
-qapir            Protein    
-qapirall         Protein    
-qapirinc         Protein    
-qapxfasta        Protein    
-qapxflat         Protein    
-qaxpir           Protein    
-qaxpirall        Protein    
-qaxpirinc        Protein    
-tpir             Protein    
-tsw              Protein    
-tswnew           Protein    
-genbanksrs       Nucleotide 
-qanfasta         Nucleotide 
-qanfastaall      Nucleotide 
-qanflat          Nucleotide 
-qanflatall       Nucleotide 
-qanflatexc       Nucleotide 
-qanflatinc       Nucleotide 
-qangcg           Nucleotide 
-qangcgall        Nucleotide 
-qangcgexc        Nucleotide 
-qangcginc        Nucleotide 
-qanxfasta        Nucleotide 
-qanxfastaall     Nucleotide 
-qanxflat         Nucleotide 
-qanxflatall      Nucleotide 
-qanxflatexc      Nucleotide 
-qanxflatinc      Nucleotide 
-qanxgcg          Nucleotide 
-qanxgcgall       Nucleotide 
-qanxgcgexc       Nucleotide 
-qanxgcginc       Nucleotide 
-qapirexc         Nucleotide 
-qasrswww         Nucleotide 
-qawfasta         Nucleotide 
-qawxfasta        Nucleotide 
-qaxpirexc        Nucleotide 
-tembl            Nucleotide 
-temblall         Nucleotide 
-temblrest        Nucleotide 
-temblvrt         Nucleotide 
-testdb           Nucleotide 
-tgb              Nucleotide 
-tgenbank         Nucleotide 
+qapblast          Protein    
+qapblastall       Protein    
+qapblastsplit     Protein    
+qapblastsplitexc  Protein    
+qapblastsplitinc  Protein    
+qapfasta          Protein    
+qapflat           Protein    
+qapflatall        Protein    
+qapir             Protein    
+qapirall          Protein    
+qapirinc          Protein    
+qapxfasta         Protein    
+qapxflat          Protein    
+qaxpir            Protein    
+qaxpirall         Protein    
+qaxpirinc         Protein    
+tpir              Protein    
+tsw               Protein    
+tswnew            Protein    
+qanfasta          Nucleotide 
+qanfastaall       Nucleotide 
+qanflat           Nucleotide 
+qanflatall        Nucleotide 
+qanflatexc        Nucleotide 
+qanflatinc        Nucleotide 
+qangcg            Nucleotide 
+qangcgall         Nucleotide 
+qangcgexc         Nucleotide 
+qangcginc         Nucleotide 
+qanxfasta         Nucleotide 
+qanxfastaall      Nucleotide 
+qanxflat          Nucleotide 
+qanxflatall       Nucleotide 
+qanxflatexc       Nucleotide 
+qanxflatinc       Nucleotide 
+qanxgcg           Nucleotide 
+qanxgcgall        Nucleotide 
+qanxgcgexc        Nucleotide 
+qanxgcginc        Nucleotide 
+qapirexc          Nucleotide 
+qasrswww          Nucleotide 
+qawfasta          Nucleotide 
+qawxfasta         Nucleotide 
+qaxpirexc         Nucleotide 
+tembl             Nucleotide 
+temblall          Nucleotide 
+temblrest         Nucleotide 
+temblvrt          Nucleotide 
+tensembldasgrch37 Nucleotide 
+testdb            Nucleotide 
+tgb               Nucleotide 
+tgenbank          Nucleotide 
+tgenedashuman     Nucleotide 
+tflybase          Features   
+tgenedb           Features   
+ttax              Taxonomy   
+taxon             Taxonomy   
+drcat             Resource   
+tedam             Obo        
+tobo              Obo        
+eco               Obo        
+edam              Obo        
+go                Obo        
+pw                Obo        
+ro                Obo        
+so                Obo        
 
 </pre></td></tr></table><p>
 <p>
@@ -482,61 +559,74 @@ Display everything
 % <b>showdb -full </b>
 Displays information on configured databases
 
-# Name           Type       ID  Qry All Method    Fields            Defined Release Comment
-# ============== ========== ==  === === ========= ================= ======= ======= =======
-twp              Protein    OK  OK  OK  emblcd    des               global  16      EMBL new in native format with EMBL CD-ROM index
-qapblast         Protein    OK  OK  OK  blast     -                 special         BLAST swissnew
-qapblastall      Protein    OK  OK  OK  blast     sv,des            special         BLAST swissnew, all fields indexed
-qapblastsplit    Protein    OK  OK  OK  blast     -                 special         BLAST swissnew split in 5 files
-qapblastsplitexc Protein    OK  OK  OK  blast     -                 special         BLAST swissnew split in 5 files, not file 02
-qapblastsplitinc Protein    OK  OK  OK  blast     -                 special         BLAST swissnew split in 5 files, only file 02
-qapfasta         Protein    OK  OK  OK  emblcd    -                 special         FASTA file swissnew entries
-qapflat          Protein    OK  OK  OK  emblcd    -                 special         SpTrEmbl flatfile
-qapflatall       Protein    OK  OK  OK  emblcd    sv,des,org,key    special         SpTrEmbl flatfiles, all fields indexed
-qapir            Protein    OK  OK  OK  gcg       -                 special         PIR
-qapirall         Protein    OK  OK  OK  gcg       des,org,key       special         PIR
-qapirinc         Protein    OK  OK  OK  gcg       -                 special         PIR
-qapxfasta        Protein    OK  OK  OK  emboss    -                 special         FASTA file swissnew entries
-qapxflat         Protein    OK  OK  OK  emboss    -                 special         Swissnew flatfiles
-qaxpir           Protein    OK  OK  OK  embossgcg -                 special         PIR
-qaxpirall        Protein    OK  OK  OK  embossgcg des,org,key       special         PIR
-qaxpirinc        Protein    OK  OK  OK  embossgcg -                 special         PIR
-tpir             Protein    OK  OK  OK  gcg       des,org,key       special         PIR using NBRF access for 4 files
-tsw              Protein    OK  OK  OK  emblcd    sv,des,org,key    special 36      Swissprot native format with EMBL CD-ROM index
-tswnew           Protein    OK  OK  OK  emblcd    sv,des,org,key    special 37      SpTrEmbl as 3 files in native format with EMBL CD-ROM index
-genbanksrs       Nucleotide OK  OK  OK  srswww    gi,sv,des,org,key global          Genbank IDs
-qanfasta         Nucleotide OK  OK  OK  emblcd    -                 special         FASTA file EMBL rodents
-qanfastaall      Nucleotide OK  OK  OK  emblcd    sv,des            special         FASTA file EMBL rodents, all fields indexed
-qanflat          Nucleotide OK  OK  OK  emblcd    -                 special         EMBL flatfiles
-qanflatall       Nucleotide OK  OK  OK  emblcd    -                 special         EMBL flatfiles
-qanflatexc       Nucleotide OK  OK  OK  emblcd    -                 special         EMBL flatfiles, no rodent file
-qanflatinc       Nucleotide OK  OK  OK  emblcd    -                 special         EMBL flatfiles, only rodent file
-qangcg           Nucleotide OK  OK  OK  gcg       -                 special         GCG format EMBL
-qangcgall        Nucleotide OK  OK  OK  gcg       sv,des,org,key    special         GCG format EMBL
-qangcgexc        Nucleotide OK  OK  OK  gcg       -                 special         GCG format EMBL without prokaryotes
-qangcginc        Nucleotide OK  OK  OK  gcg       -                 special         GCG format EMBL only prokaryotes
-qanxfasta        Nucleotide OK  OK  OK  emboss    -                 special         FASTA file EMBL rodents
-qanxfastaall     Nucleotide OK  OK  OK  emboss    sv,des            special         FASTA file EMBL rodents, all fields indexed
-qanxflat         Nucleotide OK  OK  OK  emboss    -                 special         EMBL flatfiles
-qanxflatall      Nucleotide OK  OK  OK  emboss    des,org,key       special         EMBL flatfiles, all fields indexed
-qanxflatexc      Nucleotide OK  OK  OK  emboss    -                 special         EMBL flatfiles, no rodent file
-qanxflatinc      Nucleotide OK  OK  OK  emboss    -                 special         EMBL flatfiles, only rodent file
-qanxgcg          Nucleotide OK  OK  OK  embossgcg -                 special         GCG format EMBL
-qanxgcgall       Nucleotide OK  OK  OK  embossgcg sv,des,org,key    special         GCG format EMBL
-qanxgcgexc       Nucleotide OK  OK  OK  embossgcg -                 special         GCG format EMBL without prokaryotes
-qanxgcginc       Nucleotide OK  OK  OK  embossgcg -                 special         GCG format EMBL only prokaryotes
-qapirexc         Nucleotide OK  OK  OK  gcg       -                 special         PIR
-qasrswww         Nucleotide OK  OK  OK  srswww    sv,des,org,key    special         Remote SRS web server
-qawfasta         Nucleotide OK  OK  OK  emblcd    -                 special         FASTA file wormpep entries
-qawxfasta        Nucleotide OK  OK  OK  emboss    -                 special         FASTA file wormpep entries
-qaxpirexc        Nucleotide OK  OK  OK  embossgcg -                 special         PIR
-tembl            Nucleotide OK  OK  OK  emblcd    sv,des,org,key    special 57      EMBL in native format with EMBL CD-ROM index
-temblall         Nucleotide OK  OK  OK  direct    sv,des,org,key    special 57      EMBL in native format with EMBL CD-ROM index
-temblrest        Nucleotide OK  OK  OK  direct    sv,des,org,key    special 57      EMBL in native format with EMBL CD-ROM index
-temblvrt         Nucleotide OK  OK  OK  direct    sv,des,org,key    special 57      EMBL in native format with EMBL CD-ROM index
-testdb           Nucleotide OK  OK  OK  emblcd    des               special 01      test sequence data
-tgb              Nucleotide OK  OK  OK  srswww    sv,des,org,key    special         Genbank IDs
-tgenbank         Nucleotide OK  OK  OK  emblcd    sv,des,org,key    special 01      GenBank in native format with EMBL CD-ROM index
+# Name            Type       ID  Qry All Method    Fields                                                                                         Defined  Release Comment
+# =============== ========== ==  === === ========= ============================================================================================== ======== ======= =======
+qapblast          Protein    OK  OK  OK  blast     -                                                                                              special          BLAST swissnew
+qapblastall       Protein    OK  OK  OK  blast     sv,des                                                                                         special          BLAST swissnew, all fields indexed
+qapblastsplit     Protein    OK  OK  OK  blast     -                                                                                              special          BLAST swissnew split in 5 files
+qapblastsplitexc  Protein    OK  OK  OK  blast     -                                                                                              special          BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc  Protein    OK  OK  OK  blast     -                                                                                              special          BLAST swissnew split in 5 files, only file 02
+qapfasta          Protein    OK  OK  OK  emblcd    -                                                                                              special          FASTA file swissnew entries
+qapflat           Protein    OK  OK  OK  emblcd    -                                                                                              special          SpTrEmbl flatfile
+qapflatall        Protein    OK  OK  OK  emblcd    sv,des,org,key                                                                                 special          SpTrEmbl flatfiles, all fields indexed
+qapir             Protein    OK  OK  OK  gcg       -                                                                                              special          PIR
+qapirall          Protein    OK  OK  OK  gcg       des,org,key                                                                                    special          PIR
+qapirinc          Protein    OK  OK  OK  gcg       -                                                                                              special          PIR
+qapxfasta         Protein    OK  OK  OK  emboss    -                                                                                              special          FASTA file swissnew entries
+qapxflat          Protein    OK  OK  OK  emboss    -                                                                                              special          Swissnew flatfiles
+qaxpir            Protein    OK  OK  OK  embossgcg -                                                                                              special          PIR
+qaxpirall         Protein    OK  OK  OK  embossgcg des,org,key                                                                                    special          PIR
+qaxpirinc         Protein    OK  OK  OK  embossgcg -                                                                                              special          PIR
+tpir              Protein    OK  OK  OK  gcg       des,org,key                                                                                    special          PIR using NBRF access for 4 files
+tsw               Protein    OK  OK  OK  emblcd    id,acc,sv,des,org,key                                                                          special  36      Swissprot native format with EMBL CD-ROM index
+tswnew            Protein    OK  OK  OK  emblcd    sv,des,org,key                                                                                 special  37      SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+qanfasta          Nucleotide OK  OK  OK  emblcd    -                                                                                              special          FASTA file EMBL rodents
+qanfastaall       Nucleotide OK  OK  OK  emblcd    sv,des                                                                                         special          FASTA file EMBL rodents, all fields indexed
+qanflat           Nucleotide OK  OK  OK  emblcd    -                                                                                              special          EMBL flatfiles
+qanflatall        Nucleotide OK  OK  OK  emblcd    -                                                                                              special          EMBL flatfiles
+qanflatexc        Nucleotide OK  OK  OK  emblcd    -                                                                                              special          EMBL flatfiles, no rodent file
+qanflatinc        Nucleotide OK  OK  OK  emblcd    -                                                                                              special          EMBL flatfiles, only rodent file
+qangcg            Nucleotide OK  OK  OK  gcg       -                                                                                              special          GCG format EMBL
+qangcgall         Nucleotide OK  OK  OK  gcg       sv,des,org,key                                                                                 special          GCG format EMBL
+qangcgexc         Nucleotide OK  OK  OK  gcg       -                                                                                              special          GCG format EMBL without prokaryotes
+qangcginc         Nucleotide OK  OK  OK  gcg       -                                                                                              special          GCG format EMBL only prokaryotes
+qanxfasta         Nucleotide OK  OK  OK  emboss    -                                                                                              special          FASTA file EMBL rodents
+qanxfastaall      Nucleotide OK  OK  OK  emboss    sv,des                                                                                         special          FASTA file EMBL rodents, all fields indexed
+qanxflat          Nucleotide OK  OK  OK  emboss    -                                                                                              special          EMBL flatfiles
+qanxflatall       Nucleotide OK  OK  OK  emboss    des,org,key                                                                                    special          EMBL flatfiles, all fields indexed
+qanxflatexc       Nucleotide OK  OK  OK  emboss    -                                                                                              special          EMBL flatfiles, no rodent file
+qanxflatinc       Nucleotide OK  OK  OK  emboss    -                                                                                              special          EMBL flatfiles, only rodent file
+qanxgcg           Nucleotide OK  OK  OK  embossgcg -                                                                                              special          GCG format EMBL
+qanxgcgall        Nucleotide OK  OK  OK  embossgcg sv,des,org,key                                                                                 special          GCG format EMBL
+qanxgcgexc        Nucleotide OK  OK  OK  embossgcg -                                                                                              special          GCG format EMBL without prokaryotes
+qanxgcginc        Nucleotide OK  OK  OK  embossgcg -                                                                                              special          GCG format EMBL only prokaryotes
+qapirexc          Nucleotide OK  OK  OK  gcg       -                                                                                              special          PIR
+qasrswww          Nucleotide OK  OK  OK  srswww    sv,des,org,key                                                                                 special          Remote SRS web server
+qawfasta          Nucleotide OK  OK  OK  emblcd    -                                                                                              special          FASTA file wormpep entries
+qawxfasta         Nucleotide OK  OK  OK  emboss    -                                                                                              special          FASTA file wormpep entries
+qaxpirexc         Nucleotide OK  OK  OK  embossgcg -                                                                                              special          PIR
+tembl             Nucleotide OK  OK  OK  emblcd    sv,des,org,key                                                                                 special  57      EMBL in native format with EMBL CD-ROM index
+temblall          Nucleotide OK  OK  OK  direct    sv,des,org,key                                                                                 special  57      EMBL in native format with EMBL CD-ROM index
+temblrest         Nucleotide OK  OK  OK  direct    sv,des,org,key                                                                                 special  57      EMBL in native format with EMBL CD-ROM index
+temblvrt          Nucleotide OK  OK  OK  direct    sv,des,org,key                                                                                 special  57      EMBL in native format with EMBL CD-ROM index
+tensembldasgrch37 Nucleotide OK  -   -   das       -                                                                                              special          Homo_sapiens Reference server based on GRCh37 assembly
+testdb            Nucleotide OK  OK  OK  emblcd    des                                                                                            special  01      test sequence data
+tgb               Nucleotide OK  OK  OK  srswww    sv,des,org,key                                                                                 special          Genbank IDs
+tgenbank          Nucleotide OK  OK  OK  emblcd    sv,des,org,key                                                                                 special  01      GenBank in native format with EMBL CD-ROM index
+tgenedashuman     Nucleotide OK  -   -   das       -                                                                                              special          The Ensembl human Gene_ID reference source
+tflybase          Features   OK  -   -   chado(id) uniquename                                                                                     special          
+tgenedb           Features   OK  -   -   chado(id) uniquename                                                                                     special          
+ttax              Taxonomy   OK  OK  OK  embosstax id,acc,nam,rnk,up,gc,mgc                                                                       special          
+taxon             Taxonomy   OK  OK  OK  embosstax id,acc,tax,rnk,up,gc,mgc                                                                       standard         
+drcat             Resource   OK  OK  OK  emboss    id,acc,nam,des,url,cat,edat,efmt,eid,etpc,xref,qout,qfmt,qin,qurl,cc,rest,soap,stat,xref,taxid standard         
+tedam             Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns,hasattr,hasin,hasout,isid,isfmt,issrc                                    special  beta11  EDAM using dbxedam test indexes
+tobo              Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns,hasattr,hasin,hasout,isid,isfmt,issrc                                    special  beta11  EDAM using dbxobo test indexes
+eco               Obo        OK  OK  OK  emboss    id,acc,nam,isa,des                                                                             standard         
+edam              Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns,hasattr,hasin,hasout,isid,isfmt,issrc                                    standard         
+go                Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns                                                                          standard         
+pw                Obo        OK  OK  OK  emboss    id,acc,nam,isa,des                                                                             standard         
+ro                Obo        OK  OK  OK  emboss    id,acc,nam,isa,des                                                                             standard         
+so                Obo        OK  OK  OK  emboss    id,acc,nam,isa,des                                                                             standard         
 
 </pre></td></tr></table><p>
 <p>
@@ -549,7 +639,7 @@ tgenbank         Nucleotide OK  OK  OK  emblcd    sv,des,org,key    special 01  
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Displays information on configured databases
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:
@@ -557,7 +647,14 @@ Version: EMBOSS:6.3.0
                                   information on (Any string)
    -html               boolean    [N] Format output as an HTML table
    -[no]protein        boolean    [Y] Display protein databases
-   -[no]nucleic        boolean    [Y] Display nucleic acid databases
+   -[no]nucleic        boolean    [Y] Display nucleotide databases
+   -[no]sequence       boolean    [Y] Display general sequence databases
+   -[no]feature        boolean    [Y] Display feature annotation databases
+   -[no]text           boolean    [Y] Display text databases
+   -[no]taxonomy       boolean    [Y] Display taxonomy databases
+   -[no]resource       boolean    [Y] Display resource databases
+   -[no]assembly       boolean    [Y] Display sequence assembly databases
+   -[no]obo            boolean    [Y] Display obo bio-ontology databases
    -full               boolean    [N] Display all columns
    -methods            boolean    [$(full)] This displays the access methods
                                   that can be used on this database, for all,
@@ -659,7 +756,63 @@ Version: EMBOSS:6.3.0
 <tr bgcolor="#FFFFCC">
 <td>-[no]nucleic</td>
 <td>boolean</td>
-<td>Display nucleic acid databases</td>
+<td>Display nucleotide databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]sequence</td>
+<td>boolean</td>
+<td>Display general sequence databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]feature</td>
+<td>boolean</td>
+<td>Display feature annotation databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]text</td>
+<td>boolean</td>
+<td>Display text databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]taxonomy</td>
+<td>boolean</td>
+<td>Display taxonomy databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]resource</td>
+<td>boolean</td>
+<td>Display resource databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]assembly</td>
+<td>boolean</td>
+<td>Display sequence assembly databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]obo</td>
+<td>boolean</td>
+<td>Display obo bio-ontology databases</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
@@ -899,7 +1052,9 @@ to get only the comment output, you can specify
     Input file format
 </H2>
 
-    None.
+<b>showdb</b> examines the databases defined for this
+EMBOSS installation and for the current user.
+
 
 <p>
 
@@ -921,67 +1076,80 @@ to get only the comment output, you can specify
 <p><h3>File: showdb.out</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-# Name           Type       ID  Qry All Comment
-# ============== ========== ==  === === =======
-twp              Protein    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
-qapblast         Protein    OK  OK  OK  BLAST swissnew
-qapblastall      Protein    OK  OK  OK  BLAST swissnew, all fields indexed
-qapblastsplit    Protein    OK  OK  OK  BLAST swissnew split in 5 files
-qapblastsplitexc Protein    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
-qapblastsplitinc Protein    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
-qapfasta         Protein    OK  OK  OK  FASTA file swissnew entries
-qapflat          Protein    OK  OK  OK  SpTrEmbl flatfile
-qapflatall       Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
-qapir            Protein    OK  OK  OK  PIR
-qapirall         Protein    OK  OK  OK  PIR
-qapirinc         Protein    OK  OK  OK  PIR
-qapxfasta        Protein    OK  OK  OK  FASTA file swissnew entries
-qapxflat         Protein    OK  OK  OK  Swissnew flatfiles
-qaxpir           Protein    OK  OK  OK  PIR
-qaxpirall        Protein    OK  OK  OK  PIR
-qaxpirinc        Protein    OK  OK  OK  PIR
-tpir             Protein    OK  OK  OK  PIR using NBRF access for 4 files
-tsw              Protein    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
-tswnew           Protein    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
-genbanksrs       Nucleotide OK  OK  OK  Genbank IDs
-qanfasta         Nucleotide OK  OK  OK  FASTA file EMBL rodents
-qanfastaall      Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanflat          Nucleotide OK  OK  OK  EMBL flatfiles
-qanflatall       Nucleotide OK  OK  OK  EMBL flatfiles
-qanflatexc       Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
-qanflatinc       Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
-qangcg           Nucleotide OK  OK  OK  GCG format EMBL
-qangcgall        Nucleotide OK  OK  OK  GCG format EMBL
-qangcgexc        Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
-qangcginc        Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
-qanxfasta        Nucleotide OK  OK  OK  FASTA file EMBL rodents
-qanxfastaall     Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanxflat         Nucleotide OK  OK  OK  EMBL flatfiles
-qanxflatall      Nucleotide OK  OK  OK  EMBL flatfiles, all fields indexed
-qanxflatexc      Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
-qanxflatinc      Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
-qanxgcg          Nucleotide OK  OK  OK  GCG format EMBL
-qanxgcgall       Nucleotide OK  OK  OK  GCG format EMBL
-qanxgcgexc       Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
-qanxgcginc       Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
-qapirexc         Nucleotide OK  OK  OK  PIR
-qasrswww         Nucleotide OK  OK  OK  Remote SRS web server
-qawfasta         Nucleotide OK  OK  OK  FASTA file wormpep entries
-qawxfasta        Nucleotide OK  OK  OK  FASTA file wormpep entries
-qaxpirexc        Nucleotide OK  OK  OK  PIR
-tembl            Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblall         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblrest        Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblvrt         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-testdb           Nucleotide OK  OK  OK  test sequence data
-tgb              Nucleotide OK  OK  OK  Genbank IDs
-tgenbank         Nucleotide OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+# Name            Type       ID  Qry All Comment
+# =============== ========== ==  === === =======
+qapblast          Protein    OK  OK  OK  BLAST swissnew
+qapblastall       Protein    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit     Protein    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc  Protein    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc  Protein    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta          Protein    OK  OK  OK  FASTA file swissnew entries
+qapflat           Protein    OK  OK  OK  SpTrEmbl flatfile
+qapflatall        Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
+qapir             Protein    OK  OK  OK  PIR
+qapirall          Protein    OK  OK  OK  PIR
+qapirinc          Protein    OK  OK  OK  PIR
+qapxfasta         Protein    OK  OK  OK  FASTA file swissnew entries
+qapxflat          Protein    OK  OK  OK  Swissnew flatfiles
+qaxpir            Protein    OK  OK  OK  PIR
+qaxpirall         Protein    OK  OK  OK  PIR
+qaxpirinc         Protein    OK  OK  OK  PIR
+tpir              Protein    OK  OK  OK  PIR using NBRF access for 4 files
+tsw               Protein    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew            Protein    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+qanfasta          Nucleotide OK  OK  OK  FASTA file EMBL rodents
+qanfastaall       Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat           Nucleotide OK  OK  OK  EMBL flatfiles
+qanflatall        Nucleotide OK  OK  OK  EMBL flatfiles
+qanflatexc        Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
+qanflatinc        Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
+qangcg            Nucleotide OK  OK  OK  GCG format EMBL
+qangcgall         Nucleotide OK  OK  OK  GCG format EMBL
+qangcgexc         Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc         Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta         Nucleotide OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall      Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat          Nucleotide OK  OK  OK  EMBL flatfiles
+qanxflatall       Nucleotide OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxflatexc       Nucleotide OK  OK  OK  EMBL flatfiles, no rodent file
+qanxflatinc       Nucleotide OK  OK  OK  EMBL flatfiles, only rodent file
+qanxgcg           Nucleotide OK  OK  OK  GCG format EMBL
+qanxgcgall        Nucleotide OK  OK  OK  GCG format EMBL
+qanxgcgexc        Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc        Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc          Nucleotide OK  OK  OK  PIR
+qasrswww          Nucleotide OK  OK  OK  Remote SRS web server
+qawfasta          Nucleotide OK  OK  OK  FASTA file wormpep entries
+qawxfasta         Nucleotide OK  OK  OK  FASTA file wormpep entries
+qaxpirexc         Nucleotide OK  OK  OK  PIR
+tembl             Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall          Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblrest         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblvrt          Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+tensembldasgrch37 Nucleotide OK  -   -   Homo_sapiens Reference server based on GRCh37 assembly
+testdb            Nucleotide OK  OK  OK  test sequence data
+tgb               Nucleotide OK  OK  OK  Genbank IDs
+tgenbank          Nucleotide OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+tgenedashuman     Nucleotide OK  -   -   The Ensembl human Gene_ID reference source
+tflybase          Features   OK  -   -   
+tgenedb           Features   OK  -   -   
+ttax              Taxonomy   OK  OK  OK  
+taxon             Taxonomy   OK  OK  OK  
+drcat             Resource   OK  OK  OK  
+tedam             Obo        OK  OK  OK  EDAM using dbxedam test indexes
+tobo              Obo        OK  OK  OK  EDAM using dbxobo test indexes
+eco               Obo        OK  OK  OK  
+edam              Obo        OK  OK  OK  
+go                Obo        OK  OK  OK  
+pw                Obo        OK  OK  OK  
+ro                Obo        OK  OK  OK  
+so                Obo        OK  OK  OK  
 </pre>
 </td></tr></table><p>
 
 <p>
 
-The output is a simple table.
+The output is a simple text table.
 
 <p>
 
@@ -1085,113 +1253,38 @@ None noted.
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
-<td><a href="abiview.html">abiview</a></td>
-<td>Display the trace in an ABI sequencer file</td>
+<td><a href="cachedas.html">cachedas</a></td>
+<td>Generates server cache file for DAS servers or for the DAS registry</td>
 </tr>
 
 <tr>
-<td><a href="cirdna.html">cirdna</a></td>
-<td>Draws circular maps of DNA constructs</td>
+<td><a href="cachedbfetch.html">cachedbfetch</a></td>
+<td>Generates server cache file for Dbfetch/WSDbfetch data sources</td>
 </tr>
 
 <tr>
-<td><a href="infoalign.html">infoalign</a></td>
-<td>Display basic information about a multiple sequence alignment</td>
+<td><a href="cacheebeyesearch.html">cacheebeyesearch</a></td>
+<td>Generates server cache file for EB-eye search domains</td>
 </tr>
 
 <tr>
-<td><a href="infobase.html">infobase</a></td>
-<td>Return information on a given nucleotide base</td>
+<td><a href="cacheensembl.html">cacheensembl</a></td>
+<td>Generates server cache file for an Ensembl server</td>
 </tr>
 
 <tr>
-<td><a href="inforesidue.html">inforesidue</a></td>
-<td>Return information on a given amino acid residue</td>
+<td><a href="dbtell.html">dbtell</a></td>
+<td>Display information about a public database</td>
 </tr>
 
 <tr>
-<td><a href="infoseq.html">infoseq</a></td>
-<td>Display basic information about sequences</td>
+<td><a href="servertell.html">servertell</a></td>
+<td>Display information about a public server</td>
 </tr>
 
 <tr>
-<td><a href="lindna.html">lindna</a></td>
-<td>Draws linear maps of DNA constructs</td>
-</tr>
-
-<tr>
-<td><a href="pepnet.html">pepnet</a></td>
-<td>Draw a helical net for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="pepwheel.html">pepwheel</a></td>
-<td>Draw a helical wheel diagram for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="prettyplot.html">prettyplot</a></td>
-<td>Draw a sequence alignment with pretty formatting</td>
-</tr>
-
-<tr>
-<td><a href="prettyseq.html">prettyseq</a></td>
-<td>Write a nucleotide sequence and its translation to file</td>
-</tr>
-
-<tr>
-<td><a href="remap.html">remap</a></td>
-<td>Display restriction enzyme binding sites in a nucleotide sequence</td>
-</tr>
-
-<tr>
-<td><a href="seealso.html">seealso</a></td>
-<td>Finds programs with similar function to a specified program</td>
-</tr>
-
-<tr>
-<td><a href="showalign.html">showalign</a></td>
-<td>Display a multiple sequence alignment in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showfeat.html">showfeat</a></td>
-<td>Display features of a sequence in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showpep.html">showpep</a></td>
-<td>Displays protein sequences with features in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showseq.html">showseq</a></td>
-<td>Displays sequences with features in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="sixpack.html">sixpack</a></td>
-<td>Display a DNA sequence with 6-frame translation and ORFs</td>
-</tr>
-
-<tr>
-<td><a href="textsearch.html">textsearch</a></td>
-<td>Search the textual description of sequence(s)</td>
-</tr>
-
-<tr>
-<td><a href="tfm.html">tfm</a></td>
-<td>Displays full documentation for an application</td>
-</tr>
-
-<tr>
-<td><a href="whichdb.html">whichdb</a></td>
-<td>Search all sequence databases for an entry and retrieve it</td>
-</tr>
-
-<tr>
-<td><a href="wossname.html">wossname</a></td>
-<td>Finds programs by keywords in their short description</td>
+<td><a href="showserver.html">showserver</a></td>
+<td>Displays information on configured servers</td>
 </tr>
 
 </table>

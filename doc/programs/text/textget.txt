@@ -1,0 +1,249 @@
+                                   textget
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Get text data entries
+
+Description
+
+   textget reads text data, usually from a named database, and writes a
+   text file containing the original text of the entry or entries.
+
+Usage
+
+   Here is a sample session with textget
+
+
+% textget "srs:unilib:99"
+Get text data entries
+Text output file [outfile.text]:
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+Get text data entries
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-text]              text       Text filename and optional format, or
+                                  reference (input query)
+  [-outfile]           outtext    (no help text) outtext value
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-text" associated qualifiers
+   -iformat1           string     Input text format
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Text output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   The input is a standard EMBOSS text query.
+
+   The major text sources defined as standard in EMBOSS installations are
+   non-standard types on the srs server and databases with a "text" query
+   in the Data Resource Catalogue database DRCAT.
+
+   Data can also be read from text output in any supported text format
+   written by an EMBOSS or third-party application. The text format is
+   needed to identify the start and end of a single "entry" within a
+   larger text file.
+
+   The input format can be specified by using the command-line qualifier
+   -format xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: text, html, xml (uniprotxml),
+   obo, embl (swissprot)
+
+   See: http://emboss.sf.net/docs/themes/TextFormats.html for further
+   information on text formats.
+
+  Input files for usage example
+
+  Database entry: "srs:unilib:99"
+
+> 99
+CGAP Lib id: 182
+Unigene id: 729
+dbEST lib id: 1452
+Keyword: lymph node
+Keyword: follicular lymphoma
+Keyword: non-normalized
+Keyword: bulk
+Keyword: CGAP
+Keyword: EST
+Keyword: Stratagene non-normalized
+Keyword: unknown developmental stage
+Keyword: size fractionated
+Keyword: directionally cloned
+Keyword: phagemid
+Keyword: oligo-dT primed
+Keyword: EST
+Keyword: CGAP
+Lib Name: NCI_CGAP_Lym5
+Organism: Homo sapiens
+Organ: lymph node
+Tissue_type: follicular lymphoma
+Lab host: SOLR (Stratagene, kanamycin resistant)
+Vector: pBluescript SK-
+Vector type: phagemid (ampicillin resistant)
+R. Site 1: EcoRI
+R. Site 2: XhoI
+Description: Cloned unidirectionally.  Primer: Oligo dT. Average insert size 1.2
+ kb. Non-amplified library. ~5' adaptor sequence: 5' GAATTCGGCACGAG 3' ~3' adapt
+or sequence: 5' CTCGAGTTTTTTTTTTTTTTTTTT 3'
+Library treatment: non-normalized
+Tissue description: Lymph node, follicular lymphoma, node 2
+Tissue supplier: Mark Raffeld, M.D.
+Sample type: Bulk
+Image legend:
+Producer: Stratagene, Inc.
+Clones generated to date: 2304
+Sequences generated to date: 1293
+
+
+Output file format
+
+   The output is a standard text file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -oformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: text,
+   html, xml, json and list
+
+   See: http://emboss.sf.net/docs/themes/TextFormats.html for further
+   information on text formats.
+
+  Output files for usage example
+
+  File: outfile.text
+
+> 99
+CGAP Lib id: 182
+Unigene id: 729
+dbEST lib id: 1452
+Keyword: lymph node
+Keyword: follicular lymphoma
+Keyword: non-normalized
+Keyword: bulk
+Keyword: CGAP
+Keyword: EST
+Keyword: Stratagene non-normalized
+Keyword: unknown developmental stage
+Keyword: size fractionated
+Keyword: directionally cloned
+Keyword: phagemid
+Keyword: oligo-dT primed
+Keyword: EST
+Keyword: CGAP
+Lib Name: NCI_CGAP_Lym5
+Organism: Homo sapiens
+Organ: lymph node
+Tissue_type: follicular lymphoma
+Lab host: SOLR (Stratagene, kanamycin resistant)
+Vector: pBluescript SK-
+Vector type: phagemid (ampicillin resistant)
+R. Site 1: EcoRI
+R. Site 2: XhoI
+Description: Cloned unidirectionally.  Primer: Oligo dT. Average insert size 1.2
+ kb. Non-amplified library. ~5' adaptor sequence: 5' GAATTCGGCACGAG 3' ~3' adapt
+or sequence: 5' CTCGAGTTTTTTTTTTTTTTTTTT 3'
+Library treatment: non-normalized
+Tissue description: Lymph node, follicular lymphoma, node 2
+Tissue supplier: Mark Raffeld, M.D.
+Sample type: Bulk
+Image legend:
+Producer: Stratagene, Inc.
+Clones generated to date: 2304
+Sequences generated to date: 1293
+
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                         Description
+                    drtext       Get data resource entries complete text
+                    entret       Retrieves sequence entries from flatfile databases and files
+                    ontotext     Get ontology term(s) original full text
+                    textsearch   Search the textual description of sequence(s)
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

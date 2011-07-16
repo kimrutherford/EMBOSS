@@ -55,7 +55,7 @@ int main(int argc, char **argv)
             ajSeqoutPrintwikiFormat(outf);
 
         if(doall || ajStrMatchC(tables[i], "infeat"))
-            ajFeatPrintwikiFormat(outf);
+            ajFeatinPrintwikiFormat(outf);
 
         if(doall || ajStrMatchC(tables[i], "outfeat"))
             ajFeatoutPrintwikiFormat(outf);
@@ -65,6 +65,24 @@ int main(int argc, char **argv)
 
         if(doall || ajStrMatchC(tables[i], "align"))
             ajAlignPrintwikiFormat(outf);
+        
+        if(doall || ajStrMatchC(tables[i], "assembly"))
+        {
+            ajAsseminprintWiki(outf);
+            ajAssemoutprintWiki(outf);
+        }
+        
+        if(doall || ajStrMatchC(tables[i], "resource"))
+        {
+            ajResourceinprintWiki(outf);
+            ajResourceoutprintWiki(outf);
+        }
+        
+        if(doall || ajStrMatchC(tables[i], "taxonomy"))
+        {
+            ajTaxinprintWiki(outf);
+            ajTaxoutprintWiki(outf);
+        }
     }
     
     ajFileClose(&outf);

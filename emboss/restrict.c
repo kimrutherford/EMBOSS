@@ -27,7 +27,7 @@
 #include <limits.h>
 
 #define ENZDATA "REBASE/embossre.enz"
-#define EQUDATA "embossre.equ"
+#define EQUDATA "REBASE/embossre.equ"
 
 
 #define EQUGUESS 3500	  /* Estimate of number of equivalent names */
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
     if(single)
 	max = min = 1;
 
-    table = ajTablestrNewLen(EQUGUESS);
+    table = ajTablestrNew(EQUGUESS);
 
 
     /* read the local file of enzymes names */
@@ -286,7 +286,7 @@ static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
     ajint fb   = 0;
     ajint last = 0;
 
-    AjPStr value = NULL;
+    const AjPStr value = NULL;
 
     ajint i;
     ajint c = 0;
@@ -325,7 +325,7 @@ static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
 	for(i=0;i<hits;++i)
 	{
 	    ajListPop(l,(void **)&m);
-	    value = ajTableFetch(table,m->cod);
+	    value = ajTableFetchS(table,m->cod);
 	    if(value)
 		ajStrAssignS(&m->cod,value);
 	    ajListPushAppend(l,(void *)m);
@@ -357,7 +357,7 @@ static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
 
 	if(limit)
 	{
-	    value = ajTableFetch(table,m->cod);
+	    value = ajTableFetchS(table,m->cod);
 
 	    if(value)
 		ajStrAssignS(&m->cod,value);
@@ -481,7 +481,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
     ajint fb = 0;
     ajint last = 0;
 
-    AjPStr value   = NULL;
+    const AjPStr value   = NULL;
     AjPStr tmpStr  = NULL;
     AjPStr fthit   = NULL;
     AjPStr fragStr = NULL;
@@ -547,7 +547,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 	for(i=0;i<hits;++i)
 	{
 	    ajListPop(l,(void **)&m);
-	    value = ajTableFetch(table,m->cod);
+	    value = ajTableFetchS(table,m->cod);
 	    if(value)
 		ajStrAssignS(&m->cod,value);
 	    ajListPushAppend(l,(void *)m);
@@ -666,7 +666,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 
 	    if(limit)
 	    {
-		value = ajTableFetch(table,m->cod);
+		value = ajTableFetchS(table,m->cod);
 
 		if(value)
 		    ajStrAssignS(&m->cod,value);
@@ -947,10 +947,12 @@ static void restrict_namecheck(const AjPStr enzymes, AjPFile enzfile)
 
     EmbPPatRestrict enz = NULL;
     
-    enztable = ajTablestrNewLen(ENZGUESS);
+    enztable = ajTablestrNew(ENZGUESS);
     enz      = embPatRestrictNew();
     
     ne = ajArrCommaList(enzymes,&ea);
+    if(!ne)
+        ajFatal("No restriction enzyme names in '%S'",enzymes);
 
     while(!ajFileIsEof(enzfile))
     {
@@ -971,8 +973,7 @@ static void restrict_namecheck(const AjPStr enzymes, AjPFile enzfile)
         ajStrRemoveWhite(&ea[i]);
         ajStrFmtUpper(&ea[i]);
 
-        value = ajTableFetch(enztable,ea[i]);
-        if(!value)
+        if(!ajTableMatchS(enztable,ea[i]))
             ajFatal("Restriction enzyme %S isn't in the database",ea[i]);
     }
     

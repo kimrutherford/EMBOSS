@@ -1,0 +1,19 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 0000083.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0000083
+name: Alignment
+namespace: topic
+def: Study concerning the alignment (equivalence between sites) of molecular sequences, structures or profiles (representing a sequence or structure alignment).
+subset: topic
+is_obsolete: true
+consider: EDAM:0000182 ! Sequence alignment
+consider: EDAM:0000183 ! Structure alignment
+consider: EDAM:0000184 ! Threading
+
+</pre>
+</td></tr></table><p>

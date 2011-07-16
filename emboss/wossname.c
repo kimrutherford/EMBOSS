@@ -98,6 +98,7 @@ int main(int argc, char **argv, char **env)
     
     embGrpGroupsListDel(&glist);
     embGrpGroupsListDel(&alpha);
+
     ajFileClose(&outfile);
     ajStrDel(&search);
     ajStrDel(&showembassy);

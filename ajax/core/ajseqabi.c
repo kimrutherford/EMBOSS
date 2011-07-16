@@ -125,7 +125,7 @@ AjBool ajSeqABIReadConfid(AjPFile fp,ajlong pconO,ajlong numBases,
 ** Read in a sequence from an ABI trace file.
 **
 ** @param [u] fp [AjPFile] ABI format input file
-** @param [r] baseO [ajlong] BASE offset in an ABI file
+** @param [r] baseO [ajlong] PBAS offset in an ABI file
 ** @param [r] numBases [ajlong] number of bases
 ** @param [w] nseq [AjPStr*] read sequence
 ** @return [AjBool] ajTrue on success
@@ -213,10 +213,10 @@ ajint ajSeqABIGetNData(AjPFile fp)
     DATAtag = ((ajlong) ((((('D'<<8)+'A')<<8)+'T')<<8)+'A');
     TRACE_INDEX = 9;
 
-    if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX,3,&numPoints))
+    if(!seqABIGetFlag(fp,DATAtag,TRACE_INDEX,3,&numPoints))
 	ajFatal("Error - locating DATA tag");
 
-    return numPoints;
+    return (ajint) numPoints;
 }
 
 
@@ -224,7 +224,7 @@ ajint ajSeqABIGetNData(AjPFile fp)
 
 /* @func ajSeqABIGetNBase *****************************************************
 **
-** Find the 'BASE' tag in an ABI trace file and get the number of bases.
+** Find the 'PBAS' tag in an ABI trace file and get the number of bases.
 **
 ** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] Number of bases in file
@@ -239,14 +239,14 @@ ajint ajSeqABIGetNBase(AjPFile fp)
     BASEtag = ((ajlong) ((((('P'<<8)+'B')<<8)+'A')<<8)+'S');
 
     ajDebug("getflag PBAS 2 NBase\n");
-    if (!seqABIGetFlag(fp,BASEtag,2,3,&numBases))
-    if (!seqABIGetFlag(fp,BASEtag,1,3,&numBases))
-    {
-	ajWarn("ABI file has no BASE tag for sequence data");
-        return 0;
-    }
+    if(!seqABIGetFlag(fp,BASEtag,2,3,&numBases))
+        if(!seqABIGetFlag(fp,BASEtag,1,3,&numBases))
+        {
+	    ajWarn("ABI file has no PBAS tag for sequence data");
+            return 0;
+        }
 
-    return numBases;
+    return (ajint) numBases;
 }
 
 
@@ -401,10 +401,10 @@ float ajSeqABIGetBaseSpace(AjPFile fp)
 
 /* @func ajSeqABIGetBaseOffset ************************************************
 **
-** Routine to get the 'BASE' tag offset in an ABI file.
+** Routine to get the 'PBAS' tag offset in an ABI file.
 **
 ** @param [u] fp [AjPFile] ABI format file
-** @return [ajint] 'BASE' tag offset in an ABI file
+** @return [ajint] 'PBAS' tag offset in an ABI file
 ** @@
 ******************************************************************************/
 
@@ -417,13 +417,14 @@ ajint ajSeqABIGetBaseOffset(AjPFile fp)
     ajDebug("getflag PBAS 2 offset\n");
 
     /* Find BASE tag & get offset                                */
-    if (!seqABIGetFlag(fp,BASEtag,2,5,&baseO))
-    if (!seqABIGetFlag(fp,BASEtag,1,5,&baseO))
-    {	ajWarn("ABI file has no PBAS flag for Base Offset");
-        return 0;
-    }
+    if(!seqABIGetFlag(fp,BASEtag,2,5,&baseO))
+        if(!seqABIGetFlag(fp,BASEtag,1,5,&baseO))
+        {
+	    ajWarn("ABI file has no PBAS flag for Base Offset");
+            return 0;
+        }
 
-    return baseO;
+    return (ajint) baseO;
 }
 
 
@@ -448,13 +449,13 @@ ajint ajSeqABIGetBasePosOffset(AjPFile fp)
 
     /* Find BASEPOS tag & get base position offset               */
     if (!seqABIGetFlag(fp,BASEPOStag,2,5,&basePosO))
-    if (!seqABIGetFlag(fp,BASEPOStag,1,5,&basePosO))
-    {
-        ajWarn("ABI file has no PLOC flag for Base Pos Offset");
-        return 0;
-    }
+        if (!seqABIGetFlag(fp,BASEPOStag,1,5,&basePosO))
+        {
+            ajWarn("ABI file has no PLOC flag for Base Pos Offset");
+            return 0;
+        }
 
-    return basePosO;
+    return (ajint) basePosO;
 }
 
 
@@ -477,15 +478,15 @@ ajint ajSeqABIGetConfidOffset(AjPFile fp)
     PCONtag = ((ajlong) ((((('P'<<8)+'C')<<8)+'O')<<8)+'N');
     ajDebug("getflag PCON 2\n");
 
-    /* Find BASE tag & get offset                                */
-    if (!seqABIGetFlag(fp,PCONtag,2,5,&pconO))
-        if (!seqABIGetFlag(fp,PCONtag,1,5,&pconO))
+    /* Find PCON tag & get offset                                */
+    if(!seqABIGetFlag(fp,PCONtag,2,5,&pconO))
+        if(!seqABIGetFlag(fp,PCONtag,1,5,&pconO))
         {
             /* ajWarn("ABI file has no PCON flag for Confidence Offset");*/
             return 0;
         }
 
-    return pconO;
+    return (ajint) pconO;
 }
 
 
@@ -511,13 +512,13 @@ ajint ajSeqABIGetFWO(AjPFile fp)
 
     /* Find FWO tag */
     if (!seqABIGetFlag(fp,FWO_tag,2,5,&fwo_))
-    if (!seqABIGetFlag(fp,FWO_tag,1,5,&fwo_))
-    {
-	ajWarn("ABI file has no FWO_ flag for field order");
-        return 0;
-    }
+        if (!seqABIGetFlag(fp,FWO_tag,1,5,&fwo_))
+        {
+	    ajWarn("ABI file has no FWO_ flag for field order");
+            return 0;
+        }
 
-    return fwo_;
+    return (ajint) fwo_;
 }
 
 
@@ -580,7 +581,7 @@ ajint ajSeqABIGetPrimerPosition(AjPFile fp)
     primerPosition = primerPosition>>16;
 
 
-    return primerPosition;
+    return (ajint) primerPosition;
 }
 
 
@@ -766,14 +767,16 @@ static AjBool seqABIGetFlag(AjPFile fp, ajlong flagLabel,
     if(ajFileSeek(fp,26,SEEK_SET) ||
        (!seqABIReadInt4(fp, &indexO))) ajFatal("Error - in finding flag");
 
+    ajDebug("seqABIGetFlag Flag %Lp %Ld %Ld indexO %Ld\n",
+            flagLabel, flagInstance, word, indexO);
     do
     {
         flagNum++;
 
         if (ajFileSeek(fp,indexO+(flagNum*INDEX_ENTRY_LENGTH),SEEK_SET) != 0)
         {
-            ajDebug("Flag %Lp %Ld %Ld end of file\n",
-                   flagLabel, flagInstance, word);
+            ajDebug("num %d Flag %Lp %Ld %Ld end of file\n",
+                    flagNum, flagLabel, flagInstance, word);
             return ajFalse;
         }
 
@@ -782,6 +785,8 @@ static AjBool seqABIGetFlag(AjPFile fp, ajlong flagLabel,
 
         if (!seqABIReadInt4(fp, &Instance))
             return ajFalse;
+
+        ajDebug("Label %Lp Instance %Ld\n", Label, Instance);
 
     } while (!(Label == (ajlong)flagLabel &&
                Instance == (ajlong)flagInstance));

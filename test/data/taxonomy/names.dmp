@@ -1,0 +1,104 @@
+1	|	all	|		|	synonym	|
+1	|	root	|		|	scientific name	|
+2759	|	Eucarya	|		|	synonym	|
+2759	|	Eucaryotae	|		|	synonym	|
+2759	|	Eukarya	|		|	synonym	|
+2759	|	Eukaryota	|		|	scientific name	|
+2759	|	Eukaryotae	|		|	synonym	|
+2759	|	eucaryotes	|		|	genbank common name	|
+2759	|	eukaryotes	|		|	common name	|
+2759	|	eukaryotes	|	eukaryotes<blast2759>	|	blast name	|
+6072	|	Eumetazoa	|		|	scientific name	|
+7711	|	Chordata	|		|	scientific name	|
+7711	|	chordates	|		|	genbank common name	|
+7711	|	chordates	|	chordates<blast7711>	|	blast name	|
+7742	|	Vertebrata	|		|	scientific name	|
+7742	|	vertebrates	|		|	genbank common name	|
+7742	|	vertebrates	|	vertebrates<blast7742>	|	blast name	|
+7776	|	Gnathostomata	|	Gnathostomata <vertebrate>	|	scientific name	|
+7776	|	jawed vertebrates	|		|	genbank common name	|
+8287	|	Sarcopterygii	|		|	scientific name	|
+9347	|	Eutheria	|		|	scientific name	|
+9347	|	Placentalia	|		|	synonym	|
+9347	|	eutherian mammals	|		|	common name	|
+9347	|	placental mammals	|		|	common name	|
+9347	|	placentals	|		|	genbank common name	|
+9347	|	placentals	|	placentals <blast9347>	|	blast name	|
+9443	|	Primata	|		|	synonym	|
+9443	|	Primates	|		|	scientific name	|
+9443	|	Primates Linnaeus, 1758	|		|	authority	|
+9443	|	primate	|		|	equivalent name	|
+9443	|	primates	|	primates <blast9443>	|	blast name	|
+9526	|	Catarrhini	|		|	scientific name	|
+9593	|	Gorilla	|	Gorilla <Western Gorilla>	|	common name	|
+9593	|	Gorilla gorilla	|		|	scientific name	|
+9593	|	Western Gorilla	|		|	genbank common name	|
+9597	|	Pan paniscus	|		|	scientific name	|
+9597	|	bonobo	|		|	common name	|
+9597	|	pygmy chimpanzee	|		|	genbank common name	|
+9598	|	Chimpansee troglodytes	|		|	misspelling	|
+9598	|	Pan troglodytes	|		|	scientific name	|
+9598	|	chimpanzee	|		|	genbank common name	|
+9600	|	Bornean orangutan	|		|	genbank common name	|
+9600	|	Orang-utan	|	Orang-utan <Bornean orangutan>	|	common name	|
+9600	|	Orangutan	|	Orangutan <Bornean orangutan>	|	common name	|
+9600	|	Pongo pygmaeus	|		|	scientific name	|
+9600	|	orang utan	|	orang utan <Pongo pygmaeus>	|	common name	|
+9601	|	Orang-utan	|	Orang-utan <Sumatran orangutan>	|	common name	|
+9601	|	Orangutan	|	Orangutan <Sumatran orangutan>	|	common name	|
+9601	|	Pongo abelii	|		|	scientific name	|
+9601	|	Pongo pygmaeus abeli	|		|	synonym	|
+9601	|	Pongo pygmaeus abelii	|		|	synonym	|
+9601	|	Sumatran orangutan	|		|	genbank common name	|
+9601	|	orang utan	|	orang utan <Pongo abelii>	|	common name	|
+9603	|	Pongo sp.	|		|	scientific name	|
+9604	|	Hominidae	|		|	scientific name	|
+9604	|	Hominidae Gray, 1825	|		|	authority	|
+9604	|	Pongidae	|		|	synonym	|
+9604	|	great apes	|		|	common name	|
+9605	|	Homo	|		|	scientific name	|
+9605	|	Homo Linnaeus, 1758	|		|	authority	|
+9606	|	Homo sapiens	|		|	scientific name	|
+9606	|	Homo sapiens Linnaeus, 1758	|		|	authority	|
+9606	|	human	|		|	genbank common name	|
+9606	|	man	|		|	common name	|
+32523	|	Tetrapoda	|		|	scientific name	|
+32523	|	tetrapods	|		|	genbank common name	|
+32524	|	Amniota	|		|	scientific name	|
+32524	|	amniotes	|		|	genbank common name	|
+32525	|	Theria	|	Theria <Mammalia>	|	scientific name	|
+32525	|	Theria Parker & Haswell, 1897	|		|	authority	|
+33154	|	Fungi/Metazoa group	|		|	scientific name	|
+33154	|	Opisthokonta	|		|	synonym	|
+33154	|	opisthokonts	|		|	synonym	|
+33208	|	Animalia	|		|	synonym	|
+33208	|	Metazoa	|		|	scientific name	|
+33208	|	animals	|		|	blast name	|
+33208	|	metazoans	|		|	genbank common name	|
+33208	|	multicellular animals	|		|	common name	|
+33213	|	Bilateria	|		|	scientific name	|
+33316	|	Coelomata	|		|	scientific name	|
+33511	|	Deuterostomia	|		|	scientific name	|
+40674	|	Mammalia	|		|	scientific name	|
+40674	|	mammals	|		|	genbank common name	|
+40674	|	mammals	|	mammals<blast40674>	|	blast name	|
+89593	|	Craniata	|	Craniata <chordata>	|	scientific name	|
+117570	|	Teleostomi	|		|	scientific name	|
+117571	|	Euteleostomi	|		|	scientific name	|
+117571	|	bony vertebrates	|		|	genbank common name	|
+131567	|	biota	|		|	synonym	|
+131567	|	cellular organisms	|		|	scientific name	|
+207598	|	Homininae	|		|	scientific name	|
+207598	|	Homo/Pan/Gorilla group	|		|	synonym	|
+314146	|	Euarchontoglires	|		|	scientific name	|
+314293	|	Anthropoidea	|		|	synonym	|
+314293	|	Simiiformes	|		|	scientific name	|
+314295	|	Hominoidea	|		|	scientific name	|
+314295	|	ape	|	ape <Hominoidea>	|	common name	|
+314295	|	apes	|		|	common name	|
+317028	|	Pan sp. WO2005014654	|		|	scientific name	|
+376913	|	Haplorrhini	|		|	scientific name	|
+445518	|	Pan sp. WO2007026120	|		|	scientific name	|
+502961	|	Pongo abelii x pygmaeus	|		|	scientific name	|
+741158	|	Denisova hominin	|		|	genbank common name	|
+741158	|	Homo sp. Altai	|		|	scientific name	|

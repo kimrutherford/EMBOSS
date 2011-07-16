@@ -1,9 +1,9 @@
 application: distmat [
   documentation: "Create a distance matrix from a multiple sequence alignment"
   groups: "Phylogeny:Molecular sequence"
-  relations: "/edam/topic/0000159 Sequence comparison"
-  relations: "/edam/topic/0000084 Phylogenetics"
-  relations: "/edam/operation/0000289 Sequence distance matrix generation"
+    relations: "EDAM:0000159 topic Sequence comparison"
+    relations: "EDAM:0000084 topic Phylogenetics"
+    relations: "EDAM:0000289 operation Sequence distance matrix generation"
 ]
 
 section: input [
@@ -17,7 +17,7 @@ section: input [
     aligned: "Y"
     minseqs: "2"
     help: "File containing a sequence alignment."
-    relations: "/edam/data/0000863 Sequence alignment"                             
+    relations: "EDAM:0000863 data Sequence alignment"
   ]
 
 endsection: input
@@ -40,7 +40,7 @@ section: required [
     codedelimiter: ":"
     information: "Method to use"
     help: "Multiple substitution correction methods for nucleotides."
-    relations: "/edam/data/0001773 Tool-specific parameter"                                
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   list: protmethod [
@@ -54,7 +54,7 @@ section: required [
     codedelimiter: ":"
     information: "Method to use"
     help: "Multiple substitution correction methods for proteins."
-    relations: "/edam/data/0001773 Tool-specific parameter"                                
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: required
@@ -71,7 +71,7 @@ section: additional [
     information: "Use the ambiguous codes in the calculation."
     help: "Option to use the ambiguous codes in the calculation of the
            Jukes-Cantor method or if the sequences are proteins."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   float: gapweight [
@@ -81,7 +81,7 @@ section: additional [
     default: "0."
     help: "Option to weight gaps in the uncorrected (nucleotide) and
            Jukes-Cantor distance methods."
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   integer: position [
@@ -91,7 +91,7 @@ relations: "/edam/data/0001773 Tool-specific parameter"
     help: "Choose base positions to analyse in each codon i.e. 123
            (all bases), 12 (the first two bases), 1, 2, or 3 individual
            bases."
-    relations: "/edam/data/0001016 Sequence position"
+    relations: "EDAM:0001016 data Sequence position"
   ]
 
   boolean: calculatea [
@@ -102,7 +102,7 @@ relations: "/edam/data/0001773 Tool-specific parameter"
     help: "This will force the calculation of parameter 'a' in the
            Jin-Nei Gamma distance calculation, otherwise the default is 1.0
            (see -parametera option)."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   float: parametera [
@@ -112,7 +112,7 @@ relations: "/edam/data/0001773 Tool-specific parameter"
     help: "User defined parameter 'a' to be use in the Jin-Nei Gamma
            distance calculation. The suggested value to be used is 1.0 (Jin
            et al.) and this is the default."
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: additional
@@ -126,7 +126,7 @@ section: output [
     parameter: "Y"
     knowntype: "distance matrix"
     information: "Phylip distance matrix output file"
-    relations:  "/edam/data/0000870 Sequence distance matrix"       
+    relations: "EDAM:0000870 data Sequence distance matrix"
   ]
 
 endsection: output

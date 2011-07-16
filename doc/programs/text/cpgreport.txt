@@ -54,7 +54,7 @@ Features output [u68037.gff]:
 Command line arguments
 
 Identify and report CpG-rich regions in nucleotide sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -117,7 +117,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   Any DNA sequence USA.
+   cpgreport reads one or more nucleotide sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -237,21 +254,21 @@ U68037                 1183   1193    26          2  72.7   2.00
 
 ##gff-version 3
 ##sequence-region U68037 1 1193
-#!Date 2010-01-15
+#!Date 2011-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.3.0
+#!Source-version EMBOSS 6.4.0.0
 U68037  cpgreport       sequence_feature        12      13      17.000  +
-.       ID="U68037.1"
+.       ID=U68037.1
 U68037  cpgreport       sequence_feature        47      48      17.000  +
-.       ID="U68037.2"
+.       ID=U68037.2
 U68037  cpgreport       sequence_feature        96      1032    630.000 +
-.       ID="U68037.3"
+.       ID=U68037.3
 U68037  cpgreport       sequence_feature        1072    1100    26.000  +
-.       ID="U68037.4"
+.       ID=U68037.4
 U68037  cpgreport       sequence_feature        1139    1140    17.000  +
-.       ID="U68037.5"
+.       ID=U68037.5
 U68037  cpgreport       sequence_feature        1183    1193    26.000  +
-.       ID="U68037.6"
+.       ID=U68037.6
 
    The first non-blank line of the output file 'rnu68037.cpgreport' is the
    title line giving the program name, the name of sequence being analysed

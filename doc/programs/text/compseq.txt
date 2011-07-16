@@ -85,7 +85,7 @@ Calculate the composition of unique words in sequences
 Command line arguments
 
 Calculate the composition of unique words in sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -749,23 +749,18 @@ See also
    banana           Plot bending and curvature data for B-DNA
    btwisted         Calculate the twisting in a B-DNA sequence
    chaos            Draw a chaos game representation plot for a nucleotide sequence
-   charge           Draw a protein charge plot
-   checktrans       Reports STOP codons and ORF statistics of a protein
    dan              Calculates nucleic acid melting temperature
    density          Draw a nucleic acid density plot
    emowse           Search protein sequences by digest fragment molecular weight
    freak            Generate residue/base frequency table or plot
-   iep              Calculate the isoelectric point of proteins
    isochore         Plots isochores in DNA sequences
    mwcontam         Find weights common to multiple molecular weights files
    mwfilter         Filter noisy data from molecular weights file
-   octanol          Draw a White-Wimley protein hydropathy plot
+   oddcomp          Identify proteins with specified sequence word composition
+   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+                    sites
    pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepstats         Calculates statistics of protein properties
-   pepwindow        Draw a hydropathy plot for a protein sequence
-   pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
-                    alignment
-   sirna            Finds siRNA duplexes in mRNA
    wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)

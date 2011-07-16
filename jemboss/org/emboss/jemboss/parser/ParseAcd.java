@@ -476,8 +476,11 @@ public class ParseAcd
     if ( dataType.startsWith("datafile") || dataType.startsWith("featout") ||
          dataType.startsWith("string")   || dataType.startsWith("seqout")  ||
          dataType.startsWith("outfile")  || dataType.startsWith("matrix")  ||
+         dataType.startsWith("outtext")  || dataType.startsWith("outtaxon")  ||
+         dataType.startsWith("outobo")   || dataType.startsWith("outresource")  ||
          dataType.startsWith("infile")   || dataType.startsWith("regexp")  ||
-         dataType.startsWith("codon")    || dataType.startsWith("dirlist") )
+         dataType.startsWith("codon")    || dataType.startsWith("dirlist") ||
+         dataType.startsWith("features") || dataType.startsWith("outurl"))
     {
       appF.setGuiHandleNumber(ntextf);
       ntextf++;
@@ -504,7 +507,12 @@ public class ParseAcd
     }
     else if (dataType.startsWith("seqset") ||
              dataType.startsWith("seqall") ||
-             dataType.startsWith("sequence") )
+             dataType.startsWith("sequence") ||
+             dataType.startsWith("obo") ||
+             dataType.startsWith("text") ||
+             dataType.startsWith("taxon") ||
+             dataType.startsWith("resource") ||
+             dataType.startsWith("url"))
     {
       appF.setGuiHandleNumber(nseqs);
       nseqs++;

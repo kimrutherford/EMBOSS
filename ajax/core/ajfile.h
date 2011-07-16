@@ -31,6 +31,7 @@ extern "C"
 **
 ** @attr fp [FILE*] C file pointer
 ** @attr Name [AjPStr] File name as used when opening
+** @attr Printname [AjPStr] File name in a clean form for reporting
 ** @attr List [AjPList] List of file names (first is open)
 ** @attr End [AjBool] True if EOF has been reached
 ** @attr App [AjBool] True if file was opened for append. 
@@ -53,6 +54,7 @@ typedef struct AjSFile
 {
     FILE *fp;
     AjPStr Name;
+    AjPStr Printname;
     AjPList List;
     AjBool End;
     AjBool App;
@@ -153,6 +155,7 @@ typedef struct AjSFilebuff {
 ** @alias AjODir
 **
 ** @attr Name [AjPStr] Path
+** @attr Printname [AjPStr] Directory path in a clean form for reporting
 ** @attr Prefix [AjPStr] Default filename prefix
 ** @attr Extension [AjPStr] Default file extension
 ** @@
@@ -160,6 +163,7 @@ typedef struct AjSFilebuff {
 
 typedef struct AjSDir {
   AjPStr Name;
+  AjPStr Printname;
   AjPStr Prefix;
   AjPStr Extension;
 } AjODir;
@@ -178,12 +182,14 @@ typedef struct AjSDir {
 ** @alias AjODirout
 **
 ** @attr Name [AjPStr] Path
+** @attr Printname [AjPStr] Directory path in a clean form for reporting
 ** @attr Extension [AjPStr] Default file extension
 ** @@
 ******************************************************************************/
 
 typedef struct AjSDirout {
   AjPStr Name;
+  AjPStr Printname;
   AjPStr Extension;
 } AjODirout;
 
@@ -205,17 +211,21 @@ typedef struct AjSDirout {
 ** @attr File [AjPFile] File object
 ** @attr Type [AjPStr] Named data file type
 ** @attr Formatstr [AjPStr] Format specific for this data type
-** @attr Itype [ajint] Index number for Type
+** @attr Itype [ajuint] Index number for Type
 ** @attr Format [ajint] Index for Formatstr for this data type
+** @attr Records [ajuint] Number of records written
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSOutfile {
-  AjPFile File;
-  AjPStr Type;
-  AjPStr Formatstr;
-  ajint Itype;
-  ajint Format;
+    AjPFile File;
+    AjPStr Type;
+    AjPStr Formatstr;
+    ajuint Itype;
+    ajint Format;
+    ajuint Records;
+    char Padding[4];
 } AjOOutfile;
 
 #define AjPOutfile AjOOutfile*
@@ -230,9 +240,15 @@ enum AjEOutfileType
     OUTFILE_FREQ,			/* Frequency data */
     OUTFILE_MATRIX,			/* Integer matrix data */
     OUTFILE_MATRIXF,			/* Floating point matrix data */
+    OUTFILE_OBO,			/* OBO ontology data */
     OUTFILE_PROPERTIES,			/* Phylogenetic properties */
+    OUTFILE_RESOURCE,                   /* Data resource catalogue data */
     OUTFILE_SCOP,			/* SCOP data */
-    OUTFILE_TREE			/* Phylogenetic tree data */
+    OUTFILE_TAXON,			/* NCBI taxonomy data */
+    OUTFILE_TEXT,			/* Text data */
+    OUTFILE_TREE,			/* Phylogenetic tree data */
+    OUTFILE_URL,			/* URL data */
+    OUTFILE_VARIATION			/* Variation data */
 };
 
 
@@ -244,9 +260,11 @@ void           ajDirDel(AjPDir* pthis);
 void           ajDiroutDel(AjPDirout* pthis);
 const AjPStr   ajDirGetExt(const AjPDir thys);
 const AjPStr   ajDirGetPath(const AjPDir thys);
+const AjPStr   ajDirGetPrintpath(const AjPDir thys);
 const AjPStr   ajDirGetPrefix(const AjPDir thys);
 const AjPStr   ajDiroutGetExt(const AjPDirout thys);
 const AjPStr   ajDiroutGetPath(const AjPDirout thys);
+const AjPStr   ajDiroutGetPrintpath(const AjPDirout thys);
 AjPDir         ajDirNewPath(const AjPStr path);
 AjPDir         ajDirNewPathExt(const AjPStr path, const AjPStr ext);
 AjPDir         ajDirNewPathPreExt(const AjPStr path, const AjPStr prefix,
@@ -300,8 +318,10 @@ AjBool         ajFilebuffIsEof(const AjPFilebuff thys);
 AjPFile        ajFilebuffGetFile(const AjPFilebuff thys);
 void           ajFilebuffFix(AjPFilebuff thys);
 FILE*          ajFilebuffGetFileptr(const AjPFilebuff thys);
+const AjPStr   ajFilebuffGetFirst(const AjPFilebuff thys);
 AjBool         ajFilebuffIsBuffered(const AjPFilebuff thys);
 void           ajFilebuffLoadAll(AjPFilebuff buff);
+AjBool         ajFilebuffLoadReadurl(AjPFilebuff buff, const AjPStr url);
 void           ajFilebuffLoadC(AjPFilebuff thys, const char* str);
 void           ajFilebuffLoadS(AjPFilebuff thys, const AjPStr str);
 AjBool         ajFilebuffSetUnbuffered(AjPFilebuff thys);
@@ -311,7 +331,7 @@ void           ajFilebuffResetPos(AjPFilebuff thys);
 void           ajFilebuffResetStore(AjPFilebuff thys,
                                     AjBool store, AjPStr *astr);
 AjBool         ajFilebuffReopenFile(AjPFilebuff* Pbuff, AjPFile file);
-void           ajFilebuffHtmlNoheader(AjPFilebuff buff);
+ajuint         ajFilebuffHtmlNoheader(AjPFilebuff buff);
 void           ajFilebuffHtmlStrip(AjPFilebuff thys);
 AjBool         ajFilebuffHtmlPre(AjPFilebuff thys);
 void           ajFilebuffTrace(const AjPFilebuff thys);
@@ -322,7 +342,6 @@ AjBool         ajDirnameFixExists(AjPStr* dir);
 void           ajDirnameFix(AjPStr* dir);
 AjBool         ajDirnameUp(AjPStr* dir);
 AjBool         ajDirnameFillPath(AjPStr* dir);
-AjBool         ajFileDirTrim(AjPStr* name);
 AjBool         ajFileExtnTrim(AjPStr* name);
 AjBool         ajFileDirExtnTrim(AjPStr* name);
 AjBool         ajFileIsEof(const AjPFile thys);
@@ -340,6 +359,8 @@ AjBool         ajFilenameTrimPath(AjPStr* Pfilename);
 AjBool         ajFilenameTrimPathExt(AjPStr* Pfilename);
 const char*    ajFileGetNameC(const AjPFile thys);
 const AjPStr   ajFileGetNameS(const AjPFile thys);
+const char*    ajFileGetPrintnameC(const AjPFile thys);
+const AjPStr   ajFileGetPrintnameS(const AjPFile thys);
 AjBool         ajFilenameReplacePathS(AjPStr* filename, const AjPStr dir);
 AjBool         ajFilenameReplacePathC(AjPStr* filename, const char* dir);
 AjBool         ajFilenameReplaceExtC(AjPStr* filename, const char* extension);
@@ -418,11 +439,13 @@ void           ajOutfileClose(AjPOutfile* pthis);
 AjPFile        ajOutfileGetFile(const AjPOutfile thys);
 FILE*          ajOutfileGetFileptr(const AjPOutfile thys);
 const AjPStr   ajOutfileGetFormat(const AjPOutfile thys);
+ajuint         ajOutfileGetFormatindex (const AjPOutfile file);
 
 /*
 ** End of prototype definitions
 */
 
+__deprecated AjBool         ajFileDirTrim(AjPStr* name);
 __deprecated ajint          ajFileBuffSize(void);
 __deprecated void           ajFileBuffClearStore(AjPFilebuff buff, ajint lines,
                                                  const AjPStr rdline,

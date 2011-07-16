@@ -30,6 +30,11 @@
 #include <sys/stat.h>   /* for stat */
 
 
+static void grpProgClear(EmbPGroupProg gl);
+static void grpGroupsListClear(AjPList groupslist);
+static void grpRelationsListClear(AjPList relslist);
+static EmbPGroupProg grpCopyPnode(const EmbPGroupProg pnode);
+static EmbPGroupRelation grpRelationsCopy(const EmbPGroupRelation gr);
 static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 			   const AjPStr acddir, AjBool explode, AjBool colon,
 			   AjBool gui, AjBool embassy,
@@ -38,9 +43,10 @@ static void grpGetAcdDirs(AjPList glist, AjPList alpha, char * const env[],
 			  const AjPStr acddir, AjBool explode, AjBool colon,
 			  AjBool gui, AjBool embassy,
 			  const AjPStr embassyname);
-static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr* keywords,
-		     AjPList groups, AjBool explode, AjBool colon,
-		     AjBool *gui, AjBool* embassy, AjPStr* hasembassyname);
+static void grpParse(AjPFile file, AjPList groups,
+                     AjBool explode, AjBool colon,
+		     AjBool *gui, AjBool* embassy,
+                     EmbPGroupProg *Pprognode);
 static void grpParseEmbassy(AjPFile file, AjPStr* embassyname);
 static void grpNoComment(AjPStr* text);
 static AjPStr grpParseValueRB(AjPStrTok* tokenhandle, const char* delim);
@@ -49,8 +55,7 @@ static void grpSplitList(AjPList groups, const AjPStr value, AjBool explode,
 static void grpSubSplitList(AjPList groups, AjPList sublist);
 static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
 			       const AjPList groups,
-			       const AjPStr appl, const AjPStr doc,
-			       const AjPStr keywords, const AjPStr package);
+			       EmbPGroupProg *Pprognode);
 static AjBool grpGetAcdByname(const AjPStr appname, const AjPStr acddir,
 			      AjPStr* embassyname);
 
@@ -440,7 +445,9 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
     AjPStr keywords = NULL;
     AjBool guiresult;
     AjBool isembassy;
-    AjPStr hasembassyname = NULL;
+    EmbPGroupProg prognode = NULL;
+
+    prognode = embGrpMakeNewPnode(NULL, NULL, NULL, NULL);
 
     /* go through all the files in this directory */
     if((dirp = opendir(ajStrGetPtr(acddir))) == NULL)
@@ -466,11 +473,12 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 		    if((file = ajFileNewInNameS(progpath)) != NULL)
 		    {
 			groups = ajListstrNew();
-			grpParse(file, &appl, &doc, &keywords, groups,
+			grpParse(file,  groups,
 				 explode, colon, &guiresult,
-				 &isembassy, &hasembassyname);
+				 &isembassy, &prognode);
 
 			/* see if the appl is the name of a real program */
+			ajStrAssignS(&appl,prognode->name);
 			ajStrAssignS(&applpath, appl);
 
 			if(ajSysFileWhichEnv(&applpath, env))
@@ -484,21 +492,20 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 			    else if(!embassy && isembassy)
 				ajDebug("%S is in EMBASSY\n", appl);
 			    else if (ajStrGetLen(embassyname) &&
-				     !ajStrMatchCaseS(embassyname,
-						      hasembassyname))
+				     prognode &&
+                                     !ajStrMatchCaseS(embassyname,
+						      prognode->package))
 				ajDebug("%S is in not in EMBASSY %S\n",
 					appl, embassyname);
 			    else
 				grpAddGroupsToList(alpha, glist, groups,
-						   appl, doc, keywords,
-						   hasembassyname);
+						   &prognode);
 			}
 
 			ajFileClose(&file);
 			ajListstrFreeData(&groups);
 			ajStrDel(&appl);
 			ajStrDel(&doc);
-			ajStrDel(&hasembassyname);
 		    }
 		}
 	    }
@@ -510,6 +517,8 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
     closedir(dirp);
     ajStrDel(&applpath);
     ajStrDel(&keywords);
+    
+    embGrpProgDel(&prognode);
 
     return;
 }
@@ -522,26 +531,22 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 ** parse the acd file.
 **
 ** @param [u] file [AjPFile]  ACD file
-** @param [w] appl [AjPStr*] Application name
-** @param [w] doc  [AjPStr*]  Documentation string
-** @param [w] keywords  [AjPStr*]  Keywords string
-** @param [w] groups [AjPList] Program groups string
+** @param [w] groups [AjPList] Program groups list
 ** @param [r] explode [AjBool] Expand group names around ':'
 ** @param [r] colon [AjBool] Retain ':' in group names
 ** @param [w] gui [AjBool*] returns ajTrue if application is OK in GUIs
 ** @param [w] embassy [AjBool*] returns ajTrue if application has
 **                              an EMBASSY package definition
 **
-** @param [w] hasembassyname [AjPStr*] EMBASSY package name from
-**                                     embassy attribute
+** @param [w] Pprognode [EmbPGroupProg*] Program node
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
-		     AjPList groups,
+static void grpParse(AjPFile file, AjPList groups,
 		     AjBool explode, AjBool colon,
-		     AjBool *gui, AjBool* embassy, AjPStr* hasembassyname)
+		     AjBool *gui, AjBool* embassy,
+                     EmbPGroupProg *Pprognode)
 {
 
     AjPStr line = NULL;
@@ -553,15 +558,29 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
     AjPStr tmpstr = NULL;
     AjPStr token  = NULL;
     AjPStr value  = NULL;
-    ajint done = 0;
+    AjBool done = 0;
     AjPStr nullgroup = NULL;
     AjPStr newstr    = NULL;
     AjPStr tmpvalue  = NULL;
+    AjPStr type  = NULL;
+    AjPStr qual  = NULL;
+    AjPStr edamid  = NULL;
+    AjPStr edamspace  = NULL;
+    AjPStr edamname  = NULL;
+    EmbPGroupRelation gprel = NULL;
+    EmbPGroupProg ppnode = NULL;
 
+    if(!*Pprognode)
+        *Pprognode = embGrpMakeNewPnode(NULL, NULL, NULL, NULL);
+    else
+        grpProgClear(*Pprognode);
+
+    ppnode = *Pprognode;
+    
     /* initialise a name for programs with no assigned group */
     ajStrAppendC(&nullgroup, "ASSORTED");
 
-    ajStrAssignC(keywords, "");
+    ajStrAssignC(&ppnode->keywords, "");
 
     /* if 'gui' not defined in ACD, default is 'gui: Y' */
     *gui = ajTrue;
@@ -580,13 +599,13 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
 
     tokenhandle = ajStrTokenNewC(text, white);
 
-    /* find appl token */
+    /* find application token */
     while(ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr))
-	if(ajStrPrefixCaseC(tmpstr, "appl"))
+	if(ajStrPrefixCaseC(tmpstr, "application"))
 	    break;
 
     /* next token is the application name */
-    ajStrTokenNextParseC(&tokenhandle, white, appl);
+    ajStrTokenNextParseC(&tokenhandle, white, &ppnode->name);
 
     /* if next token is '[' */
     ajStrTokenNextParseC(&tokenhandle, white, &tmpstr);
@@ -613,9 +632,9 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
 
 		if(ajStrPrefixCaseC(token, "documentation"))
 		{
-		    ajStrAssignS(doc, value);
-		    ajStrTrimWhite(doc);
-		    ajStrTrimC(doc, ".,");
+		    ajStrAssignS(&ppnode->doc, value);
+		    ajStrTrimWhite(&ppnode->doc);
+		    ajStrTrimC(&ppnode->doc, ".,");
 
 		}
 		else if(ajStrPrefixCaseC(token, "gui"))
@@ -632,22 +651,47 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
 		}
 		else if(ajStrPrefixCaseC(token, "groups"))
 		{
-		    grpSplitList(groups, value, explode, colon, keywords);
+		    grpSplitList(groups, value, explode, colon,
+                                 &ppnode->keywords);
 		}
 		else if(ajStrPrefixCaseC(token, "keywords"))
 		{
 		    ajStrExchangeKK(&value, ' ', '_');
 
-		    if(ajStrGetLen(*keywords))
-			ajStrAppendK(keywords, ' ');
+		    if(ajStrGetLen(ppnode->keywords))
+			ajStrAppendK(&ppnode->keywords, ' ');
 
-		    ajStrAppendS(keywords, value);
+		    ajStrAppendS(&ppnode->keywords, value);
 		}
 		else if(ajStrPrefixCaseC(token, "embassy"))
 		{
 		    *embassy = ajTrue;
-		    ajStrAssignS(hasembassyname, value);
+		    ajStrAssignS(&ppnode->package, value);
 		}
+		if(ajStrPrefixCaseC(token, "relation"))
+                {
+		  /*ajDebug("+++ done:%B '%S' '%S'\n", done, token, value);*/
+                    if(ajAcdedamParse(value, &edamid, &edamspace, &edamname))
+                    {
+                        AJNEW0(gprel);
+                        ajStrAssignC(&gprel->type, "application");
+                        ajStrAssignS(&gprel->qual, ppnode->name);
+                        ajStrAssignC(&gprel->acdgroup, "application");
+                        ajStrAssignS(&gprel->id, edamid);
+                        ajStrAssignS(&gprel->namespace, edamspace);
+                        ajStrAssignS(&gprel->name, edamname);
+                        if(ajStrMatchC(edamspace, "topic"))
+                            ajListPushAppend(ppnode->acdtopics, gprel);
+                        else if(ajStrMatchC(edamspace, "operation"))
+                            ajListPushAppend(ppnode->acdoperations, gprel);
+                        else
+                            ajListPushAppend(ppnode->acdparams, gprel);
+                    }
+                    else
+                    {
+                        ajErr("%F: bad ACD relation '%S'", file, value);
+                    }
+                }
 	    }
 
 	    if(done)
@@ -656,11 +700,11 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
     }
 
     /* check that we got the doc, keywords and groups descriptions */
-    if(!ajStrGetLen(*doc))
-	ajStrAssignC(doc, "");
+    if(!ajStrGetLen(ppnode->doc))
+	ajStrAssignC(&ppnode->doc, "");
 
-    if(!ajStrGetLen(*keywords))
-	ajStrAssignC(keywords, "");
+    if(!ajStrGetLen(ppnode->keywords))
+	ajStrAssignC(&ppnode->keywords, "");
 
     if(!ajListGetLength(groups))
     {
@@ -668,13 +712,88 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPStr *keywords,
 	ajListstrPushAppend(groups, newstr);
     }
 
-    ajStrAssignEmptyC(hasembassyname, "");
+    ajStrAssignEmptyC(&ppnode->package, "");
+
+
+/* now process the qualifiers */
+
+    ajDebug("appl: '%S'\n", ppnode->name);
+
+    while(ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr))
+    {
+        ajStrAssignS(&type, tmpstr);
+        ajStrTokenNextParseC(&tokenhandle, white, &tmpstr);
+        ajStrAssignS(&qual, tmpstr);
+
+        /*ajDebug("qual: '%S' '%S'\n", type, qual);*/
+
+        if(ajStrMatchC(type, "endsection"))
+            continue;
+
+        while(!ajStrMatchC(tmpstr, "["))
+            ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr);
+
+	while(ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr))
+	{
+	    while(!ajStrMatchC(tmpstr, "]"))
+	    {
+		ajStrAssignS(&token, tmpstr);
+		value = grpParseValueRB(&tokenhandle, white);
+		done = ajStrMatchC(value, "]");
+
+		if(!done)
+		{
+		    ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr);
+		    ajStrFmtLower(&tmpstr);
+		    done = ajStrMatchC(tmpstr, "]");
+		}
+		if(ajStrPrefixCaseC(token, "relation"))
+                {
+                    if(ajAcdedamParse(value, &edamid, &edamspace, &edamname))
+                    {
+                        AJNEW0(gprel);
+                        ajStrAssignS(&gprel->type, type);
+                        ajStrAssignS(&gprel->qual, qual);
+                        ajStrAssignC(&gprel->acdgroup, ajAcdtypeGetGroup(type));
+                        ajStrAssignS(&gprel->id, edamid);
+                        ajStrAssignS(&gprel->namespace, edamspace);
+                        ajStrAssignS(&gprel->name, edamname);
+                        if(ajStrMatchC(gprel->acdgroup, "input"))
+                            ajListPushAppend(ppnode->acdinputs, gprel);
+                        else if(ajStrMatchC(gprel->acdgroup, "output"))
+                            ajListPushAppend(ppnode->acdoutputs, gprel);
+                        else
+                            ajListPushAppend(ppnode->acdparams, gprel);
+                        /*ajDebug("+++ done:%B %S: %S (%S) edam:%S '%S'\n",
+                                done, type, qual, gprel->acdgroup,
+                                edamid, edamname);*/
+                    }
+                    else
+                    {
+                        ajErr("%F: bad ACD relation '%S'", file, value);
+                    }
+                }
+		/*
+                else
+                    ajDebug("    done:%B '%S' '%S'\n", done, token, value);
+		*/
+            }
+            if(done)
+                break;
+        }
+    }
+
 
     ajStrDel(&nullgroup);
     ajStrDel(&tmpstr);
     ajStrDel(&line);
     ajStrDel(&text);
     ajStrTokenDel(&tokenhandle);
+    ajStrDel(&type);
+    ajStrDel(&edamid);
+    ajStrDel(&edamspace);
+    ajStrDel(&edamname);
+    ajStrDel(&qual);
     ajStrDel(&token);
     ajStrDel(&nullgroup);
 
@@ -727,7 +846,7 @@ static void grpParseEmbassy(AjPFile file, AjPStr* embassyname)
 
     /* find appl token */
     while(ajStrTokenNextParseC(&tokenhandle, whiteplus, &tmpstr))
-	if(ajStrPrefixCaseC(tmpstr, "appl"))
+	if(ajStrPrefixCaseC(tmpstr, "application"))
 	    break;
 
     /* next token is the application name */
@@ -818,8 +937,8 @@ static void grpNoComment(AjPStr* text)
 ** Copied from ajacd.c
 **
 ** Uses ajStrTok to complete a (possibly) quoted value.
-** Note that ajStrTok has a stored internal copy of the text string
-** which is set up at the start of acdParse and is being used here.
+** Note that the AjPStrTok object has a stored internal copy of the text string
+** which is set up in the calling function and is being used here.
 **
 ** Quotes can be single or double, or any kind of parentheses,
 ** depending on the first character of the next token examined.
@@ -839,8 +958,8 @@ static AjPStr grpParseValueRB(AjPStrTok* tokenhandle, const char* delim)
     AjBool done   = ajFalse;
     AjBool rightb = ajFalse;
 
-    const char *quotes    = "\"'{(<";
-    const char *endquotes = "\"'})>";
+    const char *quotes    = "\"";
+    const char *endquotes = "\"";
 
     if(!ajStrTokenNextParseC(tokenhandle, delim, &grpStr1))
 	return NULL;
@@ -1166,10 +1285,7 @@ static void grpSubSplitList(AjPList groups, AjPList sublist)
 ** @param [r] alpha [const AjPList] Alphabetic list of programs
 ** @param [u] glist [AjPList] List of all known groups
 ** @param [r] groups [const AjPList] List of groups for this application
-** @param [r]  appl  [const AjPStr] Application name
-** @param [r]  doc  [const AjPStr] Documentation string
-** @param [r] keywords [const AjPStr] List of keywords for this application
-** @param [r]  package  [const AjPStr] Name of package
+** @param [u] Pprognode  [EmbPGroupProg*] Program node by reference
 **
 ** @return [void]
 ** @@
@@ -1177,8 +1293,7 @@ static void grpSubSplitList(AjPList groups, AjPList sublist)
 
 static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
 			       const AjPList groups,
-			       const AjPStr appl, const AjPStr doc,
-			       const AjPStr keywords, const AjPStr package)
+			       EmbPGroupProg *Pprognode)
 {
     AjPStr g = NULL;	/* temporary value of member of groups list */
     AjIList aiter;	/* 'alpha' iterator */
@@ -1189,15 +1304,17 @@ static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
     EmbPGroupTop gl;	/* next member of glist */
     EmbPGroupTop nl;	/* next member of nlist */
     EmbPGroupTop gpnode;	/* new member of glist being added */
-    EmbPGroupProg ppnode;	/* new member of plist being added */
+    EmbPGroupProg ppnode;	/* new member of plist list being added */
     EmbPGroupProg apnode;	/* new member of alpha list being added */
     AjPList nlist=NULL;	/* list of programs in a group - used to check
 			   name is unique */
     AjBool foundit;	/* flag for found the program name */
 
+    ppnode = *Pprognode;
 
     /* add this program to the alphabetic list of programs */
-    apnode = embGrpMakeNewPnode(appl, doc, keywords, package);
+    apnode = embGrpMakeNewPnode(ppnode->name, ppnode->doc,
+                                ppnode->keywords, ppnode->package);
     aiter = ajListIterNewread(alpha);
     al = ajListIterGet(aiter);
     ajListPushAppend(al->progs, apnode);
@@ -1234,7 +1351,7 @@ static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
 		niter   = ajListIterNewread(nlist);
 
 		while((nl = ajListIterGet(niter)) != NULL)
-		    if(!ajStrCmpCaseS(nl->name, appl))
+		    if(ajStrMatchCaseS(nl->name, ppnode->name))
 		    {
 			/* found the program name */
 			foundit = ajTrue;
@@ -1245,8 +1362,7 @@ static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
 
 		if(!foundit)
 		{
-		    ppnode = embGrpMakeNewPnode(appl, doc, keywords, package);
-		    ajListPushAppend(gl->progs, ppnode);
+		    ajListPushAppend(gl->progs, grpCopyPnode(ppnode));
 		}
 
 		break;
@@ -1255,15 +1371,15 @@ static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
 
 	if(gl == NULL)
 	{
-	    /* went past the end of the group list */
+	    /* went past the end of the group list - new group */
 	    gpnode = embGrpMakeNewGnode(g);
 	    ajListPushAppend(glist, gpnode);
-	    ppnode = embGrpMakeNewPnode(appl, doc, keywords, package);
-	    ajListPushAppend(gpnode->progs, ppnode);
-	}
-
+            ajListPushAppend(gpnode->progs, grpCopyPnode(ppnode));
+        }
 	ajListIterDel(&giter);
     }
+
+    embGrpProgDel(Pprognode);
 
     ajListIterDel(&iter);
     ajStrDel(&g);
@@ -1337,6 +1453,116 @@ EmbPGroupProg embGrpMakeNewPnode(const AjPStr name, const AjPStr doc,
     gpnode->keywords= ajStrNewS(keywords);
     gpnode->package = ajStrNewS(package);
     gpnode->groups  = ajListNew();
+    gpnode->acdtopics      = ajListNew();
+    gpnode->acdoperations  = ajListNew();
+    gpnode->acdinputs      = ajListNew();
+    gpnode->acdoutputs     = ajListNew();
+    gpnode->acdparams      = ajListNew();
+
+    return gpnode;
+}
+
+
+
+
+/* @funcstatic grpCopyPnode ***************************************************
+**
+** Creates a new pointer to a Pnode struct for holding a program's
+** name and documentation.
+**
+** @param [r] pnode [const EmbPGroupProg] Source program node
+** @return [EmbPGroupProg] pointer to a new pnode struct
+** @@
+******************************************************************************/
+
+static EmbPGroupProg grpCopyPnode(const EmbPGroupProg pnode)
+{
+    EmbPGroupProg gpnode;
+    EmbPGroupTop gl;
+    EmbPGroupTop newgl;
+    EmbPGroupRelation gr;
+    AjIList iter = NULL;
+
+    AJNEW0(gpnode);
+    gpnode->name    = ajStrNewS(pnode->name);
+    gpnode->doc     = ajStrNewS(pnode->doc);
+    gpnode->keywords= ajStrNewS(pnode->keywords);
+    gpnode->package = ajStrNewS(pnode->package);
+
+    if(pnode->groups)
+    {
+        gpnode->groups  = ajListNew();
+        iter = ajListIterNewread(pnode->groups);
+        while(!ajListIterDone(iter))
+        {
+            gl = ajListIterGet(iter);
+            AJNEW0(newgl);
+            newgl->name = ajStrNewS(gl->name);
+            newgl->doc = ajStrNewS(gl->doc);
+            ajListPushAppend(gpnode->groups, newgl);
+        }
+        ajListIterDel(&iter);
+    }
+        
+    if(pnode->acdtopics)
+    {
+        gpnode->acdtopics  = ajListNew();
+        iter = ajListIterNewread(pnode->acdtopics);
+        while(!ajListIterDone(iter))
+        {
+            gr = ajListIterGet(iter);
+            ajListPushAppend(gpnode->acdtopics, grpRelationsCopy(gr));
+        }
+        ajListIterDel(&iter);
+    }
+
+    if(pnode->acdoperations)
+    {
+        gpnode->acdoperations  = ajListNew();
+        iter = ajListIterNewread(pnode->acdoperations);
+        while(!ajListIterDone(iter))
+        {
+            gr = ajListIterGet(iter);
+            ajListPushAppend(gpnode->acdoperations, grpRelationsCopy(gr));
+        }
+        ajListIterDel(&iter);
+    }
+
+    if(pnode->acdinputs)
+    {
+        gpnode->acdinputs  = ajListNew();
+        iter = ajListIterNewread(pnode->acdinputs);
+        while(!ajListIterDone(iter))
+        {
+            gr = ajListIterGet(iter);
+            ajListPushAppend(gpnode->acdinputs, grpRelationsCopy(gr));
+        }
+        ajListIterDel(&iter);
+    }
+
+    if(pnode->acdoutputs)
+    {
+        gpnode->acdoutputs = ajListNew();
+        iter = ajListIterNewread(pnode->acdoutputs);
+        while(!ajListIterDone(iter))
+        {
+            gr = ajListIterGet(iter);
+            ajListPushAppend(gpnode->acdoutputs, grpRelationsCopy(gr));
+        }
+        ajListIterDel(&iter);
+    }
+
+    if(pnode->acdparams)
+    {
+        gpnode->acdparams  = ajListNew();
+        iter = ajListIterNewread(pnode->acdparams);
+        while(!ajListIterDone(iter))
+        {
+            gr = ajListIterGet(iter);
+            ajListPushAppend(gpnode->acdparams, grpRelationsCopy(gr));
+        }
+        ajListIterDel(&iter);
+    }
 
     return gpnode;
 }
@@ -1605,6 +1831,38 @@ void embGrpOutputProgsList(AjPFile outfile, const AjPList progslist,
 
 
 
+/* @funcstatic grpGroupsListClear *********************************************
+**
+** Clear a groups list
+**
+** @param [d] groupslist [AjPList] List of groups to be cleared
+** @return [void]
+** @@
+******************************************************************************/
+
+static void grpGroupsListClear(AjPList groupslist)
+{
+    EmbPGroupTop gl;
+    AjIList giter;
+
+    giter = ajListIterNew(groupslist);
+
+    while((gl = ajListIterGet(giter)) != NULL)
+    {
+	ajStrDel(&(gl->doc));
+	ajStrDel(&(gl->name));
+	embGrpProgsListDel(&(gl->progs));
+	AJFREE(gl);
+    }
+
+    ajListIterDel(&giter);
+
+    return;
+}
+
+
+
+
 /* @func embGrpGroupsListDel **************************************************
 **
 ** Destructor for a groups list
@@ -1616,20 +1874,7 @@ void embGrpOutputProgsList(AjPFile outfile, const AjPList progslist,
 
 void embGrpGroupsListDel(AjPList *groupslist)
 {
-    EmbPGroupTop gl;
-    AjIList giter;
-
-    giter = ajListIterNew(*groupslist);
-
-    while((gl = ajListIterGet(giter)) != NULL)
-    {
-	ajStrDel(&(gl->doc));
-	ajStrDel(&(gl->name));
-	embGrpProgsListDel(&(gl->progs));
-	AJFREE(gl);
-    }
-
-    ajListIterDel(&giter);
+    grpGroupsListClear(*groupslist);
     ajListFree(groupslist);
 
     return;
@@ -1642,7 +1887,7 @@ void embGrpGroupsListDel(AjPList *groupslist)
 **
 ** Destructor for a groups list
 **
-** @param [d] progslist [AjPList*] List of programss to be destroyed
+** @param [d] progslist [AjPList*] List of programs to be destroyed
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -1652,22 +1897,177 @@ void embGrpProgsListDel(AjPList *progslist)
     EmbPGroupProg gl;
     AjIList piter;
 
+    if(!*progslist)
+        return;
+
     piter = ajListIterNew(*progslist);
 
     while((gl = ajListIterGet(piter)) != NULL)
     {
-	ajStrDel(&(gl->name));
-	ajStrDel(&(gl->doc));
-	ajStrDel(&(gl->package));
-	ajStrDel(&(gl->keywords));
-	embGrpGroupsListDel(&(gl->groups));
-	AJFREE(gl);
+        embGrpProgDel(&gl);
     }
 
     ajListIterDel(&piter);
     ajListFree(progslist);
 
     return;
+}
+
+
+
+
+/* @funcstatic grpProgClear ****************************************************
+**
+** Reset a program node
+**
+** @param [d] gl [EmbPGroupProg] Program node
+** @return [void]
+** @@
+******************************************************************************/
+
+static void grpProgClear(EmbPGroupProg gl)
+{
+    ajStrSetClear(&(gl->name));
+    ajStrSetClear(&(gl->doc));
+    ajStrSetClear(&(gl->package));
+    ajStrSetClear(&(gl->keywords));
+    grpGroupsListClear((gl->groups));
+    grpRelationsListClear((gl->acdtopics));
+    grpRelationsListClear((gl->acdoperations));
+    grpRelationsListClear((gl->acdinputs));
+    grpRelationsListClear((gl->acdoutputs));
+    grpRelationsListClear((gl->acdparams));
+
+    return;
+}
+
+
+
+
+/* @func embGrpProgDel ********************************************************
+**
+** Destructor for a program node
+**
+** @param [d] Pgl [EmbPGroupProg*] Program node
+** @return [void]
+** @@
+******************************************************************************/
+
+void embGrpProgDel(EmbPGroupProg *Pgl)
+{
+    EmbPGroupProg gl = *Pgl;
+
+    if(!*Pgl)
+        return;
+
+    ajStrDel(&(gl->name));
+    ajStrDel(&(gl->doc));
+    ajStrDel(&(gl->package));
+    ajStrDel(&(gl->keywords));
+    embGrpGroupsListDel(&(gl->groups));
+    embGrpRelationsListDel(&(gl->acdtopics));
+    embGrpRelationsListDel(&(gl->acdoperations));
+    embGrpRelationsListDel(&(gl->acdinputs));
+    embGrpRelationsListDel(&(gl->acdoutputs));
+    embGrpRelationsListDel(&(gl->acdparams));
+
+    AJFREE(*Pgl);
+
+    return;
+}
+
+
+
+
+/* @funcstatic grpRelationsListClear ******************************************
+**
+** Clear a relations list
+**
+** @param [d] relslist [AjPList] List of relations to be cleared
+** @return [void]
+** @@
+******************************************************************************/
+
+static void grpRelationsListClear(AjPList relslist)
+{
+    EmbPGroupRelation gl;
+
+    while(ajListGetLength(relslist))
+    {
+	ajListPop(relslist, (void**) &gl);
+        ajStrDel(&(gl->type));
+	ajStrDel(&(gl->qual));
+	ajStrDel(&(gl->acdgroup));
+	ajStrDel(&(gl->id));
+	ajStrDel(&(gl->namespace));
+	ajStrDel(&(gl->name));
+	AJFREE(gl);
+    }
+
+    return;
+}
+
+
+
+
+/* @func embGrpRelationsListDel ***********************************************
+**
+** Destructor for a relations list
+**
+** @param [d] relslist [AjPList*] List of relations to be destroyed
+** @return [void]
+** @@
+******************************************************************************/
+
+void embGrpRelationsListDel(AjPList *relslist)
+{
+    EmbPGroupRelation gl;
+    AjIList piter;
+
+    piter = ajListIterNew(*relslist);
+
+    while((gl = ajListIterGet(piter)) != NULL)
+    {
+	ajStrDel(&(gl->type));
+	ajStrDel(&(gl->qual));
+	ajStrDel(&(gl->acdgroup));
+	ajStrDel(&(gl->id));
+	ajStrDel(&(gl->namespace));
+	ajStrDel(&(gl->name));
+	AJFREE(gl);
+    }
+
+    ajListIterDel(&piter);
+    ajListFree(relslist);
+
+    return;
+}
+
+
+
+
+/* @funcstatic grpRelationsCopy ***********************************************
+**
+** Copy constructor for a relation
+**
+** @param [r] gr [const EmbPGroupRelation] Source relation
+** @return [EmbPGroupRelation] Relation object
+** @@
+******************************************************************************/
+
+static EmbPGroupRelation grpRelationsCopy(const EmbPGroupRelation gr)
+{
+    EmbPGroupRelation ret;
+
+    AJNEW0(ret);
+    ret->type = ajStrNewS(gr->type);
+    ret->qual = ajStrNewS(gr->qual);
+    ret->acdgroup = ajStrNewS(gr->acdgroup);
+    ret->id = ajStrNewS(gr->id);
+    ret->namespace = ajStrNewS(gr->namespace);
+    ret->name = ajStrNewS(gr->name);
+
+    return ret;
 }
 
 
@@ -1738,8 +2138,7 @@ void embGrpKeySearchProgs(AjPList newlist,
 		{
 		    ajDebug("Search '%S' in name:'%S' doc:'%S' key:'%S'\n",
 			    keystr, pl->name, pl->doc, pl->keywords);
-		    ppnode = embGrpMakeNewPnode(pl->name, pl->doc, 
-						pl->keywords, pl->package);
+		    ppnode = grpCopyPnode(pl);
 		    ajListPushAppend(gpnode->progs, ppnode);
 		}
 	    }
@@ -1751,8 +2150,7 @@ void embGrpKeySearchProgs(AjPList newlist,
 		{
 		    ajDebug("Search '%S' in name:'%S' doc:'%S' key:'%S'\n",
 			    keystr, pl->name, pl->doc, pl->keywords);
-		    ppnode = embGrpMakeNewPnode(pl->name, pl->doc, 
-						pl->keywords, pl->package);
+		    ppnode = grpCopyPnode(pl);
 		    ajListPushAppend(gpnode->progs, ppnode);
 		}
 	    }
@@ -1774,6 +2172,290 @@ void embGrpKeySearchProgs(AjPList newlist,
     ajStrDel(&doc);
     ajStrDel(&keystr);
     ajStrDel(&keywords);
+
+    return;
+}
+
+
+
+
+/* @func embGrpSearchProgsEdam ************************************************
+**
+** Searches a list of groups and programs for (partial) matches to
+** EDAM topic terms
+**
+** @param [w] newlist [AjPList] List of matching EmbPGroupProg struct returned
+** @param [r] glist [const AjPList] List of EmbPGroupProg struct to
+**                                  search through
+** @param [r] query [const AjPStr] String(s) to search for
+** @param [r] namespace [const char*] EDAM namespace to search
+** @param [r] sensitive [AjBool] Match EDAM definitions
+** @param [r] subclasses [AjBool] Match EDAM subclasses
+** @param [r] obsolete [AjBool] Match EDAM obsolete terms
+** @return [void]
+** @@
+******************************************************************************/
+
+void embGrpSearchProgsEdam(AjPList newlist, const AjPList glist,
+                           const AjPStr query, const char* namespace,
+                           AjBool sensitive, AjBool subclasses,
+                           AjBool obsolete)
+{
+    AjIList giter;		/* 'glist' iterator */
+    AjIList piter;		/* 'plist' iterator */
+    AjIList eiter;		/* 'relations' iterator */
+    EmbPGroupTop gl;			/* next member of glist */
+    EmbPGroupTop gpnode;		/* new member of glist being added */
+    EmbPGroupProg pl;			/* next member of plist */
+    EmbPGroupProg ppnode;		/* new member of plist being added */
+    EmbPGroupRelation rl;		/* next relation for program */
+    AjPStr gname = NULL;
+
+    AjPStr qrystr = NULL;
+
+    AjPOboin oboin = NULL;
+    AjPObo obo = NULL;
+    AjPObo obotest = NULL;
+
+    AjPStr oboqry = NULL;
+    AjPTable obotable = NULL;
+    AjPTable apptable = NULL;
+
+    AjPStrTok handle = NULL;
+    AjPList obolist = NULL;
+    AjBool dotopics = ajFalse;
+    AjBool dooperations = ajFalse;
+    AjBool doinputs = ajFalse;
+    AjBool dooutputs = ajFalse;
+    AjBool doparams = ajFalse;
+
+    AjBool matched = ajFalse;
+
+    AjPStr edamNamespace = NULL;
+
+    ajuint i;
+    ajuint imax = 3;
+
+    const char* fields[] = {"id", "acc", "nam", "des"};
+
+    ajDebug("embGrpSearchProgsEdam '%S' namespace '%s' sens %B sub %B obs %B\n",
+            query, namespace, sensitive, subclasses, obsolete);
+    oboin = ajOboinNew();
+    obo = ajOboNew();
+
+    obolist = ajListNew();
+    obotable = ajTablestrNew(600);
+    apptable = ajTablestrNew(600);
+
+    if(sensitive)
+        imax++;
+
+    if(ajCharMatchC(namespace, "topic"))
+    {
+        dotopics = ajTrue;
+        edamNamespace = ajStrNewC("topic");
+    }
+    else if (ajCharMatchC(namespace, "operation"))
+    {
+        dooperations = ajTrue;
+        edamNamespace = ajStrNewC("operation");
+    }
+    else if (ajCharMatchC(namespace, "input"))
+    {
+        doinputs = ajTrue;
+        edamNamespace = ajStrNewC("data");
+    }
+    else if (ajCharMatchC(namespace, "output"))
+    {
+        dooutputs = ajTrue;
+        edamNamespace = ajStrNewC("data");
+    }
+    else if (ajCharMatchC(namespace, "param"))
+    {
+        doparams = ajTrue;
+        edamNamespace = ajStrNewC("data");
+    }
+    else if (ajCharMatchC(namespace, "data"))
+    {
+        doinputs = ajTrue;
+        doparams = ajTrue;
+        dooutputs = ajTrue;
+        edamNamespace = ajStrNewC("data");
+    }
+    else 
+    {
+        ajErr("Unknown namespace '%s' for embGrpSearchProgsEdam", namespace);
+        return;
+    }
+
+    handle = ajStrTokenNewC(query, ",");
+    while(ajStrTokenNextParse(&handle, &qrystr))
+    {
+        for(i=0;i<imax;i++)
+        {
+            ajFmtPrintS(&oboqry, "edam-%s:%S", fields[i], qrystr);
+
+            ajOboinQryS(oboin, oboqry);
+
+            while(ajOboinRead(oboin, obo))
+            {
+                if(!ajStrMatchS(ajOboGetNamespace(obo), edamNamespace))
+                    continue;
+
+                if(!obsolete && ajOboIsObsolete(obo))
+                    continue;
+
+                ajListPushAppend(obolist, ajOboNewObo(obo));
+                if(subclasses)
+                    ajOboGetTree(obo, obolist);
+
+                ajDebug("%S '%S' %u\n",
+                       qrystr, obo->Id, ajListGetLength(obolist));
+
+                while(ajListGetLength(obolist))
+                {
+                    ajListPop(obolist, (void**) &obotest);
+
+                    if(!ajStrMatchS(ajOboGetNamespace(obotest), edamNamespace))
+                    {
+                        ajOboDel(&obotest);
+                        continue;
+                    }
+                    
+                    if(!obsolete && ajOboIsObsolete(obotest))
+                    {
+                        ajOboDel(&obotest);
+                        continue;
+                    }
+
+                    if(!ajTableMatchS(obotable, obotest->Id))
+                    {
+                        ajDebug("edam id '%S' namespace '%S' %d '%S'\n",
+                                obotest->Id, obotest->Namespace,
+                                fields[i], obotest->Name);
+                        ajTablePut(obotable, ajStrNewS(obotest->Id),
+                                   (void *) 1);
+                    }
+
+                    ajOboDel(&obotest);
+                }
+            }
+        }
+    }
+
+    /*
+    ** compare case independently - so use upper case of both key
+    ** and name/doc
+    */
+
+    /* make new group */
+    ajFmtPrintS(&gname, "Search for %s '%S'", namespace, query);
+    gpnode = embGrpMakeNewGnode(gname);
+    ajListPushAppend(newlist, gpnode);
+
+    giter = ajListIterNewread(glist); /* iterate through existing groups list */
+
+    while((gl = ajListIterGet(giter)) != NULL)
+    {
+	piter = ajListIterNewread(gl->progs);
+
+	while((pl = ajListIterGet(piter)) != NULL)
+	{
+            if(!ajTableMatchS(apptable, pl->name))
+            {
+                matched = ajFalse;
+                rl = NULL;
+
+                if(dotopics)
+                {
+                    eiter = ajListIterNewread(pl->acdtopics);
+
+                    while(!matched && (rl = ajListIterGet(eiter)) != NULL)
+                    {
+                        if(ajTableMatchS(obotable, rl->id))
+                            matched = ajTrue;
+                    }
+                    ajListIterDel(&eiter);
+                }
+
+                if(!matched && dooperations)
+                {
+                    eiter = ajListIterNewread(pl->acdoperations);
+
+                    while(!matched && (rl = ajListIterGet(eiter)) != NULL)
+                    {
+                        if(ajTableMatchS(obotable, rl->id))
+                            matched = ajTrue;
+                    }
+                    ajListIterDel(&eiter);
+                }
+
+                if(!matched && doinputs)
+                {
+                    eiter = ajListIterNewread(pl->acdinputs);
+
+                    while(!matched && (rl = ajListIterGet(eiter)) != NULL)
+                    {
+                        if(ajTableMatchS(obotable, rl->id))
+                            matched = ajTrue;
+                    }
+                    ajListIterDel(&eiter);
+                }
+
+                if(!matched && dooutputs)
+                {
+                    eiter = ajListIterNewread(pl->acdoutputs);
+                    
+                    while(!matched && (rl = ajListIterGet(eiter)) != NULL)
+                    {
+                        if(ajTableMatchS(obotable, rl->id))
+                            matched = ajTrue;
+                    }
+                    ajListIterDel(&eiter);
+                }
+
+                if(!matched && doparams)
+                {
+                    eiter = ajListIterNewread(pl->acdparams);
+                    
+                    while(!matched && (rl = ajListIterGet(eiter)) != NULL)
+                    {
+                        if(ajTableMatchS(obotable, rl->id))
+                            matched = ajTrue;
+                    }
+                    ajListIterDel(&eiter);
+                }
+                if(matched && rl)
+                {
+                    ajDebug("program %S edam:%S '%S' namespace '%S'\n",
+                            pl->name, rl->id, rl->name, rl->namespace);
+                    ppnode = grpCopyPnode(pl);
+                    ajListPushAppend(gpnode->progs, ppnode);
+                    ajTablePut(apptable, ajStrNewS(pl->name),
+                               (void *) 1);
+                }
+            }
+        }
+        
+	ajListIterDel(&piter);
+    }
+
+    ajListIterDel(&giter);
+
+    /* sort the results */
+    embGrpSortGroupsList(newlist);
+
+    ajListFree(&obolist);
+    ajTablestrFreeKey(&obotable);
+    ajTablestrFreeKey(&apptable);
+
+    ajOboinDel(&oboin);
+    ajOboDel(&obo);
+
+    ajStrDel(&edamNamespace);
+    ajStrDel(&qrystr);
+    ajStrDel(&oboqry);
+    ajStrDel(&gname);
 
     return;
 }
@@ -1892,8 +2574,7 @@ void embGrpKeySearchSeeAlso(AjPList newlist, AjPList *appgroups,
 			continue;
 
 		    /* make new application node and push on base */
-		    ppnode = embGrpMakeNewPnode(pl->name, pl->doc,
-						pl->keywords, pl->package);
+		    ppnode = grpCopyPnode(pl);
 		    ajListPushAppend(base, ppnode);
 
 		}

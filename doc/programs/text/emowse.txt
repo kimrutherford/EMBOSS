@@ -46,6 +46,7 @@ Peptide molecular weight values file: test.mowse
 Whole sequence molwt [0]:
 Use monoisotopic weights [N]:
 Output file [12s1_arath.emowse]:
+ajSeqxrefNewDbS '1-I' 'FT025'
 
 
    Go to the input files for this example
@@ -54,7 +55,7 @@ Output file [12s1_arath.emowse]:
 Command line arguments
 
 Search protein sequences by digest fragment molecular weight
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -758,19 +759,15 @@ See also
    backtranambig    Back-translate a protein sequence to ambiguous nucleotide
                     sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
-   charge           Draw a protein charge plot
-   checktrans       Reports STOP codons and ORF statistics of a protein
    compseq          Calculate the composition of unique words in sequences
    freak            Generate residue/base frequency table or plot
-   iep              Calculate the isoelectric point of proteins
    mwcontam         Find weights common to multiple molecular weights files
    mwfilter         Filter noisy data from molecular weights file
-   octanol          Draw a White-Wimley protein hydropathy plot
+   oddcomp          Identify proteins with specified sequence word composition
+   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+                    sites
    pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepstats         Calculates statistics of protein properties
-   pepwindow        Draw a hydropathy plot for a protein sequence
-   pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
-                    alignment
    wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)

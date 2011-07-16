@@ -1,10 +1,10 @@
-/******************************************************************************
-** @source Ensembl Intron functions
+/* @source Ensembl Intron functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.4 $
+** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
+** @version $Revision: 1.15 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -34,6 +34,20 @@
 
 
 /* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== global variables ========================== */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
 /* ========================== private data ============================ */
 /* ==================================================================== */
 
@@ -41,7 +55,28 @@
 
 
 /* ==================================================================== */
+/* ======================== private constants ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== private variables ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
 /* ======================== private functions ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ===================== All functions by section ===================== */
 /* ==================================================================== */
 
 
@@ -56,13 +91,13 @@
 
 
 
-/* @datasection [EnsPIntron] Intron *******************************************
+/* @datasection [EnsPIntron] Ensembl Intron ***********************************
 **
-** Functions for manipulating Ensembl Intron objects
+** @nam2rule Intron Functions for manipulating Ensembl Intron objects
 **
-** Bio::EnsEMBL::Intron CVS Revision: 1.13
-**
-** @nam2rule Intron
+** @cc Bio::EnsEMBL::Intron
+** @cc CVS Revision: 1.18
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -77,19 +112,18 @@
 ** NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPIntron]
-** @fnote None
 **
 ** @nam3rule New Constructor
-** @nam4rule NewExons Constructor with two flanking exons
-** @nam4rule NewObj Constructor with existing object
-** @nam4rule NewRef Constructor by incrementing the use counter
+** @nam4rule Cpy Constructor with existing object
+** @nam4rule Ini Constructor with initial values
+** @nam4rule Ref Constructor by incrementing the use counter
 **
-** @argrule Obj object [const EnsPIntron] Ensembl Intron
+** @argrule Cpy intron [const EnsPIntron] Ensembl Intron
+** @argrule Ini exon1 [EnsPExon] Ensembl Exon 1
+** @argrule Ini exon2 [EnsPExon] Ensembl Exon 2
 ** @argrule Ref intron [EnsPIntron] Ensembl Intron
-** @argrule Exons exon1 [EnsPExon] Ensembl Exon 1
-** @argrule Exons exon2 [EnsPExon] Ensembl Exon 2
 **
-** @valrule * [EnsPIntron] Ensembl Intron
+** @valrule * [EnsPIntron] Ensembl Intron or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -97,19 +131,52 @@
 
 
 
-/* @func ensIntronNewExons ****************************************************
+/* @func ensIntronNewCpy ******************************************************
 **
-** Default constructor for an Ensembl Intron.
+** Object-based constructor function, which returns an independent object.
+**
+** @param [r] intron [const EnsPIntron] Ensembl Intron
+**
+** @return [EnsPIntron] Ensembl Intron or NULL
+** @@
+******************************************************************************/
+
+EnsPIntron ensIntronNewCpy(const EnsPIntron intron)
+{
+    EnsPIntron pthis = NULL;
+
+    if(!intron)
+        return NULL;
+
+    AJNEW0(pthis);
+
+    pthis->Feature = ensFeatureNewRef(intron->Feature);
+
+    pthis->PreviousExon = ensExonNewRef(intron->PreviousExon);
+
+    pthis->NextExon = ensExonNewRef(intron->NextExon);
+
+    pthis->Use = 1;
+
+    return pthis;
+}
+
+
+
+
+/* @func ensIntronNewIni ******************************************************
+**
+** Default constructor for an Ensembl Intron with initial values.
 **
 ** @cc Bio::EnsEMBL::Intron::new
 ** @param [u] exon1 [EnsPExon] Ensembl Exon 1
 ** @param [u] exon2 [EnsPExon] Ensembl Exon 2
 **
-** @return [EnsPIntron] Ensembl Intron
+** @return [EnsPIntron] Ensembl Intron or NULL
 ** @@
 ******************************************************************************/
 
-EnsPIntron ensIntronNewExons(EnsPExon exon1, EnsPExon exon2)
+EnsPIntron ensIntronNewIni(EnsPExon exon1, EnsPExon exon2)
 {
     ajint strand = 0;
 
@@ -152,35 +219,39 @@ EnsPIntron ensIntronNewExons(EnsPExon exon1, EnsPExon exon2)
     slice1 = ensFeatureGetSlice(feature1);
     slice2 = ensFeatureGetSlice(feature2);
 
-    seqname1 = ensFeatureGetSequenceName(feature1);
-    seqname2 = ensFeatureGetSequenceName(feature2);
+    seqname1 = ensFeatureGetSequencename(feature1);
+    seqname2 = ensFeatureGetSequencename(feature2);
 
-    /* Both Exons have to be on the same Slice or sequence name. */
+    /* Both Exon objects have to be on the same Slice or sequence name. */
 
     if(!((slice1 && slice2) || (seqname1 && seqname2)))
     {
-        ajDebug("ensIntronNewExons got Exons on Slice and sequence names.\n");
+        ajDebug("ensIntronNewExons got Ensembl Exon objects on both, an "
+                "Ensembl Slice and sequence name.\n");
 
         return NULL;
     }
 
     if(slice1 && slice2 && (!ensSliceMatch(slice1, slice2)))
     {
-        ajDebug("ensIntronNewExons got Exons on different Slices.\n");
+        ajDebug("ensIntronNewExons got Ensembl Exon objects on different "
+                "Ensembl Slice objects.\n");
 
         return NULL;
     }
 
     if(seqname1 && seqname2 && (!ajStrMatchCaseS(seqname1, seqname2)))
     {
-        ajDebug("ensIntronNewExons got Exons on different sequence names.\n");
+        ajDebug("ensIntronNewExons got Ensembl Exon objects on different "
+                "sequence names.\n");
 
         return NULL;
     }
 
     if(ensFeatureGetStrand(feature1) != ensFeatureGetStrand(feature2))
     {
-        ajDebug("ensIntronNewExons got Exons on different strands.\n");
+        ajDebug("ensIntronNewExons got Ensembl Exon objects on different "
+                "strands.\n");
 
         return NULL;
     }
@@ -207,18 +278,18 @@ EnsPIntron ensIntronNewExons(EnsPExon exon1, EnsPExon exon2)
     strand = ensFeatureGetStrand(feature1);
 
     if(slice1)
-        feature = ensFeatureNewS((EnsPAnalysis) NULL,
-                                 slice1,
-                                 start,
-                                 end,
-                                 strand);
+        feature = ensFeatureNewIniS((EnsPAnalysis) NULL,
+                                    slice1,
+                                    start,
+                                    end,
+                                    strand);
 
     if(seqname1)
-        feature = ensFeatureNewN((EnsPAnalysis) NULL,
-                                 seqname1,
-                                 start,
-                                 end,
-                                 strand);
+        feature = ensFeatureNewIniN((EnsPAnalysis) NULL,
+                                    seqname1,
+                                    start,
+                                    end,
+                                    strand);
 
     if(feature)
     {
@@ -234,39 +305,6 @@ EnsPIntron ensIntronNewExons(EnsPExon exon1, EnsPExon exon2)
     }
     else
         ajDebug("ensIntronNewExons could not create an Ensembl Feature.\n");
-
-    return intron;
-}
-
-
-
-
-/* @func ensIntronNewObj ******************************************************
-**
-** Object-based constructor function, which returns an independent object.
-**
-** @param [r] object [const EnsPIntron] Ensembl Intron
-**
-** @return [EnsPIntron] Ensembl Intron or NULL
-** @@
-******************************************************************************/
-
-EnsPIntron ensIntronNewObj(const EnsPIntron object)
-{
-    EnsPIntron intron = NULL;
-
-    if(!object)
-        return NULL;
-
-    AJNEW0(intron);
-
-    intron->Feature = ensFeatureNewRef(object->Feature);
-
-    intron->PreviousExon = ensExonNewRef(object->PreviousExon);
-
-    intron->NextExon = ensExonNewRef(object->NextExon);
-
-    intron->Use = 1;
 
     return intron;
 }
@@ -301,14 +339,13 @@ EnsPIntron ensIntronNewRef(EnsPIntron intron)
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Introns.
+** memory allocated for an Ensembl Intron object.
 **
 ** @fdata [EnsPIntron]
-** @fnote None.
 **
-** @nam3rule Del Destroy (free) an Intron object
+** @nam3rule Del Destroy (free) an Ensembl Intron object
 **
-** @argrule * Pintron [EnsPIntron*] Intron object address
+** @argrule * Pintron [EnsPIntron*] Ensembl Intron object address
 **
 ** @valrule * [void]
 **
@@ -322,13 +359,13 @@ EnsPIntron ensIntronNewRef(EnsPIntron intron)
 **
 ** Default destructor for an Ensembl Intron.
 **
-** @param [d] Pintron [EnsPIntron*] Ensembl Intron address
+** @param [d] Pintron [EnsPIntron*] Ensembl Intron object address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensIntronDel(EnsPIntron *Pintron)
+void ensIntronDel(EnsPIntron* Pintron)
 {
     EnsPIntron pthis = NULL;
 
@@ -378,18 +415,17 @@ void ensIntronDel(EnsPIntron *Pintron)
 ** Functions for returning elements of an Ensembl Intron object.
 **
 ** @fdata [EnsPIntron]
-** @fnote None.
 **
 ** @nam3rule Get Return Intron attribute(s)
-** @nam4rule GetFeature Return the Ensembl Feature
-** @nam4rule GetPreviousexon Return the previous Ensembl Exon
-** @nam4rule GetNextexon Return the next Ensembl Exon
+** @nam4rule Feature Return the Ensembl Feature
+** @nam4rule Previousexon Return the previous Ensembl Exon
+** @nam4rule Nextexon Return the next Ensembl Exon
 **
 ** @argrule * intron [const EnsPIntron] Intron
 **
-** @valrule Feature [EnsPFeature] Ensembl Feature
-** @valrule Nextexon [EnsPExon] Ensembl Exon
-** @valrule Previousexon [EnsPExon] Ensembl Exon
+** @valrule Feature [EnsPFeature] Ensembl Feature or NULL
+** @valrule Nextexon [EnsPExon] Ensembl Exon or NULL
+** @valrule Previousexon [EnsPExon] Ensembl Exon or NULL
 **
 ** @fcategory use
 ******************************************************************************/
@@ -403,7 +439,7 @@ void ensIntronDel(EnsPIntron *Pintron)
 **
 ** @param [r] intron [const EnsPIntron] Ensembl Intron
 **
-** @return [EnsPFeature] Ensembl Feature.
+** @return [EnsPFeature] Ensembl Feature or NULL
 ** @@
 ******************************************************************************/
 
@@ -425,7 +461,7 @@ EnsPFeature ensIntronGetFeature(const EnsPIntron intron)
 ** @cc Bio::EnsEMBL::Intron::next_Exon
 ** @param [r] intron [const EnsPIntron] Ensembl Intron
 **
-** @return [EnsPExon] Ensembl Exon
+** @return [EnsPExon] Ensembl Exon or NULL
 ** @@
 ******************************************************************************/
 
@@ -447,7 +483,7 @@ EnsPExon ensIntronGetNextexon(const EnsPIntron intron)
 ** @cc Bio::EnsEMBL::Intron::prev_Exon
 ** @param [r] intron [const EnsPIntron] Ensembl Intron
 **
-** @return [EnsPExon] Ensembl Exon
+** @return [EnsPExon] Ensembl Exon or NULL
 ** @@
 ******************************************************************************/
 
@@ -467,6 +503,7 @@ EnsPExon ensIntronGetPreviousexon(const EnsPIntron intron)
 ** Functions for reporting of an Ensembl Intron object.
 **
 ** @fdata [EnsPIntron]
+**
 ** @nam3rule Trace Report Intron elements to debug file
 **
 ** @argrule Trace intron [const EnsPIntron] Ensembl Intron
@@ -522,4 +559,80 @@ AjBool ensIntronTrace(const EnsPIntron intron, ajuint level)
     ajStrDel(&indent);
 
     return ajTrue;
+}
+
+
+
+
+/* @section calculate *********************************************************
+**
+** Functions for calculating values of an Ensembl Intron object.
+**
+** @fdata [EnsPIntron]
+**
+** @nam3rule Calculate Calculate Ensembl Intron values
+** @nam4rule Length  Calculate the length
+** @nam4rule Memsize Calculate the memory size in bytes
+**
+** @argrule * intron [const EnsPIntron] Ensembl Intron
+**
+** @valrule Length [ajuint] Length or 0
+** @valrule Memsize [size_t] Memory size in bytes or 0
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensIntronCalculateLength *********************************************
+**
+** Calculate the length of an Ensembl Intron.
+**
+** @cc Bio::EnsEMBL::Intron::length
+** @param [r] intron [const EnsPIntron] Ensembl Intron
+**
+** @return [ajuint] Length or 0
+** @@
+** NOTE: The Bio::EnsEMBL::Intron::length method seems to override
+** Bio::EnsEMBL::Feature::length to allow for zero-length introns.
+******************************************************************************/
+
+ajuint ensIntronCalculateLength(const EnsPIntron intron)
+{
+    if(!intron)
+        return 0;
+
+    return ensFeatureGetEnd(intron->Feature)
+        - ensFeatureGetStart(intron->Feature) + 1;
+}
+
+
+
+
+/* @func ensIntronCalculateMemsize ********************************************
+**
+** Calculate the memory size in bytes of an Ensembl Intron.
+**
+** @param [r] intron [const EnsPIntron] Ensembl Intron
+**
+** @return [size_t] Memory size in bytes or 0
+** @@
+******************************************************************************/
+
+size_t ensIntronCalculateMemsize(const EnsPIntron intron)
+{
+    size_t size = 0;
+
+    if(!intron)
+        return 0;
+
+    size += sizeof (EnsOIntron);
+
+    size += ensFeatureCalculateMemsize(intron->Feature);
+
+    size += ensExonCalculateMemsize(intron->PreviousExon);
+    size += ensExonCalculateMemsize(intron->NextExon);
+
+    return size;
 }

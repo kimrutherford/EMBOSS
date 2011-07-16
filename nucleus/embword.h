@@ -152,13 +152,13 @@ EmbPWordMatch embWordMatchFirstMax(const AjPList matches);
 
 ajuint embWordRabinKarpSearch(const AjPStr sseq,
                               const AjPSeqset seqset,
-                              const EmbPWordRK* patterns,
+                              EmbPWordRK const * patterns,
                               ajuint plen, ajuint nwords,
                               AjPList* l, ajuint* lastlocation,
                               AjBool checkmode);
 
 ajuint embWordRabinKarpInit(const AjPTable table,
-	                    EmbPWordRK**, ajuint wordlen,
+	                    EmbPWordRK** ewords, ajuint wordlen,
 	                    const AjPSeqset seqset);
 
 

@@ -1,8 +1,8 @@
 application: plotcon [
   documentation: "Plot conservation of a sequence alignment"
   groups: "Alignment:Multiple"
-  relations: "/edam/topic/0000187 Sequence alignment analysis"
-  relations: "/edam/operation/0000448 Sequence alignment conservation analysis"
+    relations: "EDAM:0000182 topic Sequence alignment"
+    relations: "EDAM:0000448 operation Sequence alignment conservation analysis"
 ]
 
 section: input [
@@ -15,7 +15,7 @@ section: input [
     type: "gapany"
     aligned: "Y"
     help: "File containing a sequence alignment"
-    relations: "/edam/data/0000863 Sequence alignment"                             
+    relations: "EDAM:0000863 data Sequence alignment"
   ]
 
   matrix: scorefile [
@@ -26,7 +26,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "/edam/data/0001446 Comparison matrix (integers)"                           
+    relations: "EDAM:0000874 data Comparison matrix"
   ]
 
 endsection: input
@@ -42,7 +42,7 @@ section: required [
     help: "Number of columns to average alignment quality over. The
            larger this value is, the smoother the plot will be."
     default: "4"
-    relations: "/edam/data/0001251 Window size"
+    relations: "EDAM:0001251 data Window size"
   ]
 
 endsection: required
@@ -55,7 +55,7 @@ section: output [
   xygraph: graph [
     standard: "Y"
     gxtitle: "Relative Residue Position"
-    relations: "/edam/data/0002161 Sequence similarity plot"                                   
+    relations: "EDAM:0002161 data Sequence similarity plot"
   ]
 
 endsection: output

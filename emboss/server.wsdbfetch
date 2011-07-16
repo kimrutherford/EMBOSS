@@ -1,0 +1,407 @@
+# server.wsdbfetch 2011-07-15 12:00:00
+
+DB edam [
+  method: wsdbfetch
+  hasacc: N
+  format: "obo"
+  type: "text, obo"
+  example: "0000352, 0001223"
+  comment: "EMBRACE Data and Methods (EDAM) Ontology."
+]
+
+DB embl [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "M10051, K00650, D87894, AJ242600, HSINSR, HSFOS, ROD894, LOP242600, J00231.1, K00650.1, D87894.1, AJ242600.1"
+  comment: "EMBL Nucleotide Sequence Database, Europe's primary nucleotide sequence resource. The main sources of the DNA and RNA sequences in the database are submissions from individual researchers, genome sequencing projects and patent applications."
+]
+
+DB emblcds [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "AAA59452, AAA59452.1"
+  comment: "EMBLCDS is a database of nucleotide sequences of the CDS (coding sequence) features, as annotated in EMBL database. EMBLCDS record contains the nucleotide sequence of the CDS region, accompanying annotation from the parent nucleotide entry and the additional automatically generated annotation."
+]
+
+DB emblcon [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "CH003588, CH003588.1"
+  comment: "The EMBLCON database division represents complete genomes and other long sequences constructed from segment entries."
+]
+
+DB emblconexp [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "AL672111, AL672111.1"
+  comment: "The EMBLCON database division represents complete genomes and other long sequences constructed from segment entries. Expanded entries including the complete sequence."
+]
+
+DB emblsva [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "Y09633, Y09633.1, Y09633.4"
+  comment: "The EMBL Sequence Version Archive is a repository of all entries which have ever appeared in the EMBL Nucleotide Sequence Database."
+]
+
+DB ensemblgene [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta, genbank, gff, gff3"
+  type: "text, sequence, features"
+  example: "ENSAMEG00000011969, ENSBTAG00000000988, ENSG00000139618, ENSMUSG00000041147"
+  comment: "Ensembl genome databases for vertebrates and other eukaryotic species. Gene sequences and annotations."
+]
+
+DB ensembltranscript [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "ENSAMET00000013126, ENSBTAT00000001311, ENST00000380152, ENSMUST00000044620"
+  comment: "Ensembl genome databases for vertebrates and other eukaryotic species. Transcript sequences."
+]
+
+DB epo_prt [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "A00022, A00022.1"
+  comment: "Protein sequences appearing in patents from the European Patent Office (EPO)."
+]
+
+DB genomereviews [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "AE000784_GR, AE000784_GR.1"
+  comment: "The Genome Reviews Database consists of curated versions of complete genome entries from the EMBL/GenBank/DDBJ nucleotide sequence database."
+]
+
+DB hgnc [
+  method: wsdbfetch
+  hasacc: N
+  format: "unknown"
+  type: "text"
+  example: "1101, 3566, BRCA2, FACD"
+  comment: "HUGO Gene Nomenclature Committee (HGNC) approved gene name and symbol (short-form abbreviation) for each human gene."
+]
+
+DB hgvbase [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "GEN000002654, IND000000198, SNP000002179, STR000008969"
+  comment: "The Human Genic Bi-Allelic Sequences Database is an attempt to summarize all known sequence variations in the human genome and to facilitate research into how genotypes affect common diseases, drug responses, and other complex phenotypes."
+]
+
+DB imgthla [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "HLA00001"
+  comment: "Sequences of the human major histocompatibility complex (HLA) including the official sequences for the WHO Nomenclature Committee For Factors of the HLA System."
+]
+
+DB imgthlap [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "HLA00001"
+  comment: "Sequences of the human major histocompatibility complex (HLA) including the official sequences for the WHO Nomenclature Committee For Factors of the HLA System."
+]
+
+DB imgtligm [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "A00673"
+  comment: "A comprehensive database of Immunoglobulins and T cell Receptors from human and other vertebrates."
+]
+
+DB interpro [
+  method: wsdbfetch
+  hasacc: N
+  format: "unknown"
+  type: "text"
+  example: "IPR006212, IPR008266, IPR008957, IPR009030, IPR011009"
+  comment: "The InterPro database (Integrated Resource of Protein Domains and Functional Sites) is an integrated documentation resource for protein families, domains and functional sites. It was developed initially as a means of rationalising the complementary efforts of the PROSITE, PRINTS, Pfam and ProDom database projects, but now also includes the SMART, TIGRFAMs, PIR SuperFamilies and most recently SUPERFAMILY databases."
+]
+
+DB ipdkir [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "KIR00001"
+  comment: "A centralised repository for human Killer-cell Immunoglobulin-like Receptor (KIR) sequences."
+]
+
+DB ipdkirp [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "KIR00001"
+  comment: "A centralised repository for human Killer-cell Immunoglobulin-like Receptor (KIR) sequences."
+]
+
+DB ipdmhc [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "MHC00001"
+  comment: "Sequences of the the major histocompatibility complex in a number of species."
+]
+
+DB ipdmhcp [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "MHC00001"
+  comment: "Sequences of the the major histocompatibility complex in a number of species."
+]
+
+DB ipi [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta, swissprot"
+  type: "text, features, sequence"
+  example: "IPI00025803, IPI00220325, IPI00025803.3, IPI00220325.4"
+  comment: "The International Protein Index (IPI) provides non-redundant proteome sets for a selection of higher eukaryotes, e.g. Arabidopsis, Chicken, Mouse, Human, etc. Cross-references are provided to the various source databases."
+]
+
+DB iprmc [
+  method: wsdbfetch
+  hasacc: N
+  format: "unknown"
+  type: "text"
+  example: "A0A000"
+  comment: "InterPro Matches Complete (IPRMC) for UniProtKB proteins."
+]
+
+DB iprmcuniparc [
+  method: wsdbfetch
+  hasacc: N
+  format: "unknown"
+  type: "text"
+  example: "UPI0000000001"
+  comment: "InterPro Matches Complete (IPRMC) for UniParc proteins."
+]
+
+DB jpo_prt [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "E50010"
+  comment: "Protein sequences appearing in patents from the Japanese Patent Office (JPO)."
+]
+
+DB kipo_prt [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "DI500001"
+  comment: "Protein sequences appearing in patents from the Korean Intellectual Property Office (KIPO)."
+]
+
+DB livelists [
+  method: wsdbfetch
+  hasacc: N
+  format: "unknown"
+  type: "text"
+  example: "AF093062, AAC64372, 6019463, 6019464, AF093062.2, AAC64372.2"
+  comment: "NCBI LiveLists provides a mapping between NCBI gi numbers and INSDC (i.e. DDBJ, EMBL-Bank and GenBank) accessions."
+]
+
+DB medline [
+  method: wsdbfetch
+  hasacc: N
+  format: "unknown"
+  type: "text"
+  example: "1, 2859121, 17567924"
+  comment: "MEDLINE contains bibliographic citations and author abstracts from more than 4,000 biomedical journals published in the United States and 70 other countries. The files contains over 11 million citations dating back to the mid-1960's, updated weekly."
+]
+
+DB nrnl1 [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "NRN_DJ207917"
+  comment: "Non-redundant patent nucleotides level-1. Nucleotide sequences from patents clustered by 100% sequence identity over whole length."
+]
+
+DB nrnl2 [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "NRN006674C5"
+  comment: "Non-redundant patent nucleotides level-2. Nucleotide sequences from patents clustered by patent family and then by 100% sequence identity over whole length."
+]
+
+DB nrpl1 [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "NRP_AX013047"
+  comment: "Non-redundant patent proteins level-1. Protein sequences from patents clustered by 100% sequence identity over whole length."
+]
+
+DB nrpl2 [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "NRP00000001"
+  comment: "Non-redundant patent proteins level-2. Protein sequences from patents clustered by patent family and then by 100% sequence identity over whole length."
+]
+
+DB pdb [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta, pdb"
+  type: "text, sequence"
+  example: "101D, 1GAG, 10MH, 3E3Q, 3E3Q_A, 3E3Q_a, 3E3QA, 3E3Qa"
+  comment: "Macromolecular structures from the Brookhaven Protein Data Bank (PDB). Contains protein and nucleotide structure and sequence data."
+]
+
+DB refseqn [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta, refseq"
+  type: "features, sequence"
+  example: "AC_000162, NC_004952, NG_000865, NM_000231, NR_000003, NS_000188, NT_113950, NW_001030413, NZ_AAAC02000001, XM_001000025, XR_000302, 258513362, 32455353, 300797863, 209529740, AC_000162.1, NC_004952.1, NG_000865.5, NM_000231.2"
+  comment: "The NCBI Reference Sequence project (RefSeq) provides reference sequence standards for the naturally occurring molecules of the central dogma, from chromosomes to mRNAs to proteins."
+]
+
+DB refseqp [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta, refseqp"
+  type: "features, sequence"
+  example: "AP_000130, NP_862703, XP_001001333, YP_000022, ZP_00047513, 56160459, 32455307, AP_000130.1, NP_862703.1"
+  comment: "The NCBI Reference Sequence project (RefSeq) provides reference sequence standards for the naturally occurring molecules of the central dogma, from chromosomes to mRNAs to proteins."
+]
+
+DB resid [
+  method: wsdbfetch
+  hasacc: N
+  format: "pdb"
+  type: "text, sequence"
+  example: "AA0330"
+  comment: "A comprehensive collection of annotations and structures for protein modifications including amino-terminal, carboxyl-terminal and peptide chain cross-link post-translational modifications."
+]
+
+DB sgt [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "1, 283832, APC4091, IGBMC-0038-000, IPRv2949cPALZ, YCL050c"
+  comment: "Structural Genomics Targets (SGT) is a protein target registration database, providing information on the experimental progress and status of target amino acid sequences selected for structural determination."
+]
+
+DB taxonomy [
+  method: wsdbfetch
+  hasacc: N
+  format: "unknown"
+  type: "text"
+  example: "3702, 9606"
+  comment: "Taxonomic classification of organisms for which there are sequences in the INSDC databases (i.e. DDBJ, EMBL-Bank and GenBank) and many other biological databases."
+]
+
+DB tracearchive [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta, fastq"
+  type: "sequence"
+  example: "TI1, TI1941166100"
+  comment: "An archive of capillary electrophoresis trace data."
+]
+
+DB uniparc [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "UPI0000000001, UPI0000046364, UPI00001B3DCE"
+  comment: "The UniProt Archive (UniParc) contains available protein sequences collected from many different sources. The sequence data are archived to facilitate examination of changes to sequence data. Search UniParc if you want to examine the 'history' of a particular sequence."
+]
+
+DB uniprotkb [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta, gff3, uniprot, uniprotxml"
+  type: "text, features, sequence"
+  example: "P06213, P29306, P68255, INSR_HUMAN, 1433X_MAIZE, 1433T_RAT"
+  comment: "The UniProt Knowledgebase (UniProtKB) is the central access point for extensive curated protein information, including function, classification, and cross-references. Search UniProtKB to retrieve &#x201C;everything that is known&#x201D; about a particular sequence."
+]
+
+DB uniref100 [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "UniRef100_P06213"
+  comment: "The UniProt Reference Clusters (UniRef) databases combine closely related sequences into a single record to speed searches. There are three different non-redundant databases with different sequence identity cut-offs. In UniRef100, UniRef90 and UniRef50 databases no pair of sequences in the representative set has >100%, >90% or >50% mutual sequence identity. The three UniRef databases allow the user to choose between a fast search and a truly comprehensive one."
+]
+
+DB uniref50 [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "UniRef50_P06213"
+  comment: "The UniProt Reference Clusters (UniRef) databases combine closely related sequences into a single record to speed searches. There are three different non-redundant databases with different sequence identity cut-offs. In UniRef100, UniRef90 and UniRef50 databases no pair of sequences in the representative set has >100%, >90% or >50% mutual sequence identity. The three UniRef databases allow the user to choose between a fast search and a truly comprehensive one."
+]
+
+DB uniref90 [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta"
+  type: "sequence"
+  example: "UniRef90_P06213"
+  comment: "The UniProt Reference Clusters (UniRef) databases combine closely related sequences into a single record to speed searches. There are three different non-redundant databases with different sequence identity cut-offs. In UniRef100, UniRef90 and UniRef50 databases no pair of sequences in the representative set has >100%, >90% or >50% mutual sequence identity. The three UniRef databases allow the user to choose between a fast search and a truly comprehensive one."
+]
+
+DB unisave [
+  method: wsdbfetch
+  hasacc: N
+  format: "fasta, uniprot"
+  type: "text, features, sequence"
+  example: "P06213, P06213.157, P06213.3, INSR_HUMAN"
+  comment: "The UniProtKB Sequence/Annotation Version Archive (UniSave) is a repository of UniProtKB/Swiss-Prot and UniProtKB/TrEMBL entry versions."
+]
+
+DB uspto_prt [
+  method: wsdbfetch
+  hasacc: N
+  format: "embl, fasta"
+  type: "text, sequence, features"
+  example: "AAA00053, I02590, AAA00053.1"
+  comment: "Protein sequences appearing in patents from the United States Patent and Trademark Office (USPTO)."
+]
+

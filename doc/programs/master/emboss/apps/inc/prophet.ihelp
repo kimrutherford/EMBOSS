@@ -1,5 +1,5 @@
 Scan one or more sequences with a Gribskov or Henikoff profile
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -10,6 +10,7 @@ Version: EMBOSS:6.3.0
    -gapextend          float      [1.0] Gap extension coefficient (Number from
                                   0.000 to 100.000)
   [-outfile]           align      [*.prophet] Output alignment file name
+                                  (default -aformat simple)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)

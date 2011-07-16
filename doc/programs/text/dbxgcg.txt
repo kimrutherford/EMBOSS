@@ -16,8 +16,12 @@ Function
 Description
 
    dbxgcg indexes a flat file database of one or more files, and builds
-   EMBOSS B+tree format index files. These indexes allow access of flat
-   files larger than 2Gb.
+   EMBOSS B+tree format index files.
+
+   A GCG-format database consists of *.seq and *.ref files. The data in
+   the *.seq files is often compressed.
+
+   These indexes allow access of flat files larger than 2Gb.
 
 Usage
 
@@ -42,6 +46,7 @@ Wildcard database filename [*.seq]:
        key : Keywords
        org : Taxonomy
 Index fields [id,acc]:
+Compressed index files [Y]:
 General log output file [outfile.dbxgcg]:
 
 
@@ -50,7 +55,7 @@ General log output file [outfile.dbxgcg]:
 Command line arguments
 
 Index a GCG formatted database using b+tree indices
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -69,6 +74,7 @@ Version: EMBOSS:6.3.0
                                   (Accession number); sv (Sequence Version and
                                   GI); des (Description); key (Keywords); org
                                   (Taxonomy))
+   -[no]compressed     boolean    [Y] Compressed index files
    -outfile            outfile    [*.dbxgcg] General log output file
 
    Additional (Optional) qualifiers: (none)
@@ -110,7 +116,7 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   dbxgcg reads any normal sequence USAs.
+   dbxgcg reads and indexes GCG formatted flatfile sequnce database files.
 
 Output file format
 
@@ -159,6 +165,9 @@ eem_vi.seq eem_vi.ref
 
   File: embl.pxac
 
+Type      Identifier
+Compress  Yes
+Pages     3
 Order     71
 Fill      46
 Pagesize  2048
@@ -166,11 +175,15 @@ Level     0
 Cachesize 100
 Order2    99
 Fill2     101
-Count     47
+Count     48
+Fullcount 48
 Kwlimit   15
 
   File: embl.pxid
 
+Type      Identifier
+Compress  Yes
+Pages     3
 Order     71
 Fill      46
 Pagesize  2048
@@ -178,7 +191,8 @@ Level     0
 Cachesize 100
 Order2    99
 Fill2     101
-Count     39
+Count     40
+Fullcount 40
 Kwlimit   15
 
   File: embl.xac
@@ -276,13 +290,21 @@ Known bugs
 
 See also
 
-                    Program name                   Description
-                    dbiblast     Index a BLAST database
-                    dbifasta     Index a fasta file database
-                    dbiflat      Index a flat file database
-                    dbigcg       Index a GCG formatted database
-                    dbxfasta     Index a fasta file database using b+tree indices
-                    dbxflat      Index a flat file database using b+tree indices
+                    Program name                       Description
+                    dbiblast      Index a BLAST database
+                    dbifasta      Index a fasta file database
+                    dbiflat       Index a flat file database
+                    dbigcg        Index a GCG formatted database
+                    dbxcompress   Compress an uncompressed dbx index
+                    dbxedam       Index the EDAM ontology using b+tree indices
+                    dbxfasta      Index a fasta file database using b+tree indices
+                    dbxflat       Index a flat file database using b+tree indices
+                    dbxobo        Index an obo ontology using b+tree indices
+                    dbxreport     Validate index and report internals for dbx databases
+                    dbxresource   Index a data resource catalogue using b+tree indices
+                    dbxstat       Dump statistics for dbx databases
+                    dbxtax        Index NCBI taxonomy using b+tree indices
+   dbxuncompress    Uncompress a compressed dbx index
 
 Author(s)
 
@@ -297,8 +319,8 @@ History
 
 Target users
 
-                    This program is intended to be used by everyone and everything, from
-                    naive users to embedded scripts.
+                    This program is intended to be used by administrators responsible for
+                    software and database installation and maintenance.
 
 Comments
 

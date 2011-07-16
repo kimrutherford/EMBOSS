@@ -1,0 +1,858 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: cacheensembl
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+cacheensembl
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Generates server cache file for an Ensembl server
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+Contacts the ENSEMBL server to find the available databases and
+saves definitions for them to a server cache file.
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>cacheensembl</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cacheensembl -servername ensembl -cachefile ~/.embossdata/qatests.server.ensembl -auto </b>
+
+ailuropoda_melanoleuca
+ailuropoda_melanoleuca_otherfeatures
+anolis_carolinensis
+anolis_carolinensis_otherfeatures
+bos_taurus
+bos_taurus_otherfeatures
+bos_taurus_variation
+bos_taurus_funcgen
+caenorhabditis_elegans
+caenorhabditis_elegans_funcgen
+callithrix_jacchus
+callithrix_jacchus_otherfeatures
+canis_familiaris
+canis_familiaris_otherfeatures
+canis_familiaris_variation
+canis_familiaris_funcgen
+cavia_porcellus
+cavia_porcellus_otherfeatures
+choloepus_hoffmanni
+ciona_intestinalis
+ciona_intestinalis_otherfeatures
+ciona_intestinalis_funcgen
+ciona_savignyi
+ciona_savignyi_otherfeatures
+danio_rerio
+danio_rerio_vega
+danio_rerio_otherfeatures
+danio_rerio_variation
+danio_rerio_funcgen
+dasypus_novemcinctus
+default_compara
+default_ontology
+dipodomys_ordii
+drosophila_melanogaster
+drosophila_melanogaster_otherfeatures
+drosophila_melanogaster_variation
+drosophila_melanogaster_funcgen
+echinops_telfairi
+equus_caballus
+equus_caballus_otherfeatures
+equus_caballus_variation
+erinaceus_europaeus
+felis_catus
+felis_catus_variation
+gallus_gallus
+gallus_gallus_otherfeatures
+gallus_gallus_variation
+gallus_gallus_funcgen
+gasterosteus_aculeatus
+gasterosteus_aculeatus_otherfeatures
+gorilla_gorilla
+gorilla_gorilla_otherfeatures
+homo_sapiens
+homo_sapiens_vega
+homo_sapiens_otherfeatures
+homo_sapiens_cdna
+homo_sapiens_variation
+homo_sapiens_funcgen
+loxodonta_africana
+macaca_mulatta
+macaca_mulatta_otherfeatures
+macaca_mulatta_funcgen
+macropus_eugenii
+meleagris_gallopavo
+meleagris_gallopavo_otherfeatures
+microcebus_murinus
+monodelphis_domestica
+monodelphis_domestica_variation
+mus_musculus
+mus_musculus_vega
+mus_musculus_otherfeatures
+mus_musculus_cdna
+mus_musculus_variation
+mus_musculus_funcgen
+myotis_lucifugus
+nomascus_leucogenys
+nomascus_leucogenys_otherfeatures
+ochotona_princeps
+ornithorhynchus_anatinus
+ornithorhynchus_anatinus_otherfeatures
+ornithorhynchus_anatinus_variation
+ornithorhynchus_anatinus_funcgen
+oryctolagus_cuniculus
+oryctolagus_cuniculus_otherfeatures
+oryzias_latipes
+oryzias_latipes_otherfeatures
+otolemur_garnettii
+pan_troglodytes
+pan_troglodytes_otherfeatures
+pan_troglodytes_variation
+pan_troglodytes_funcgen
+pongo_abelii
+pongo_abelii_otherfeatures
+pongo_abelii_variation
+procavia_capensis
+pteropus_vampyrus
+rattus_norvegicus
+rattus_norvegicus_otherfeatures
+rattus_norvegicus_variation
+rattus_norvegicus_funcgen
+saccharomyces_cerevisiae
+saccharomyces_cerevisiae_otherfeatures
+saccharomyces_cerevisiae_variation
+saccharomyces_cerevisiae_funcgen
+sorex_araneus
+spermophilus_tridecemlineatus
+sus_scrofa
+sus_scrofa_otherfeatures
+sus_scrofa_variation
+sus_scrofa_funcgen
+taeniopygia_guttata
+taeniopygia_guttata_otherfeatures
+taeniopygia_guttata_variation
+takifugu_rubripes
+takifugu_rubripes_otherfeatures
+tarsius_syrichta
+tetraodon_nigroviridis
+tetraodon_nigroviridis_otherfeatures
+tetraodon_nigroviridis_variation
+tupaia_belangeri
+tursiops_truncatus
+vicugna_pacos
+xenopus_tropicalis
+xenopus_tropicalis_otherfeatures
+xenopus_tropicalis_funcgen
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Generates server cache file for an Ensembl server
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+   -servername         string     Server name (Any string)
+  [-cachefile]         outfile    [server.$(servername)] Server cache output
+                                  file
+
+   Additional (Optional) qualifiers:
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   "-cachefile" associated qualifiers
+   -odirectory1        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-servername</td>
+<td>string</td>
+<td>Server name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-cachefile]<br>(Parameter 1)</td>
+<td>outfile</td>
+<td>Server cache output file</td>
+<td>Output file</td>
+<td>server.$(servername)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-outfile</td>
+<td>outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-cachefile" associated outfile qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory1<br>-odirectory_cachefile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>cacheensembl</b>contacts the ENSEMBL server for details of
+available databases.
+
+<p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+        #include file="inc/reportformats.ihtml"
+   -->
+
+<b>cacheensembl</b> writes a server cache file which can be saved in the
+user's .embossdata directory or, for a system administrator, stored in
+the site-wide share/EMBOSS/ directory.
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: qatests.server.ensembl</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# /homes/pmr/.embossdata/qatests.server.ensembl 2011-07-15 12:00:00
+# Automatically generated by cacheensembl for server 'ensembl'.
+
+DBNAME ailuropoda_melanoleuca [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/ailuropoda_melanoleuca_core_62_1b"
+]
+
+ALIAS 9646 ailuropoda_melanoleuca
+ALIAS ailmel ailuropoda_melanoleuca
+ALIAS ailmel1 ailuropoda_melanoleuca
+ALIAS amel ailuropoda_melanoleuca
+ALIAS amelanoleuca ailuropoda_melanoleuca
+ALIAS panda ailuropoda_melanoleuca
+
+DBNAME ailuropoda_melanoleuca_otherfeatures [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/ailuropoda_melanoleuca_otherfeatures_62_1b"
+]
+
+DBNAME anolis_carolinensis [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/anolis_carolinensis_core_62_2a"
+]
+
+ALIAS 28377 anolis_carolinensis
+ALIAS acar anolis_carolinensis
+ALIAS acarolinensis anolis_carolinensis
+ALIAS anocar anolis_carolinensis
+ALIAS anolis anolis_carolinensis
+ALIAS anoliscarolinensis anolis_carolinensis
+ALIAS anolis_lizard anolis_carolinensis
+
+DBNAME anolis_carolinensis_otherfeatures [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/anolis_carolinensis_otherfeatures_62_2a"
+]
+
+DBNAME bos_taurus [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/bos_taurus_core_62_4k"
+]
+
+ALIAS 9913 bos_taurus
+ALIAS bostau bos_taurus
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/tursiops_truncatus_core_62_1h"
+]
+
+ALIAS 9739 tursiops_truncatus
+ALIAS dolphin tursiops_truncatus
+ALIAS ttru tursiops_truncatus
+ALIAS ttruncatus tursiops_truncatus
+ALIAS tursiopstruncatus tursiops_truncatus
+ALIAS turtru tursiops_truncatus
+ALIAS turtru1 tursiops_truncatus
+
+DBNAME vicugna_pacos [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/vicugna_pacos_core_62_1h"
+]
+
+ALIAS 30538 vicugna_pacos
+ALIAS alpaca vicugna_pacos
+ALIAS vicpac vicugna_pacos
+ALIAS vicpac1 vicugna_pacos
+ALIAS vicugnapacos vicugna_pacos
+ALIAS vpac vicugna_pacos
+ALIAS vpacos vicugna_pacos
+
+DBNAME xenopus_tropicalis [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/xenopus_tropicalis_core_62_42"
+]
+
+ALIAS 8364 xenopus_tropicalis
+ALIAS xenopus xenopus_tropicalis
+ALIAS xentro xenopus_tropicalis
+ALIAS xtro xenopus_tropicalis
+ALIAS xtropicalis xenopus_tropicalis
+
+DBNAME xenopus_tropicalis_otherfeatures [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/xenopus_tropicalis_otherfeatures_62_42"
+]
+
+DBNAME xenopus_tropicalis_funcgen [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/xenopus_tropicalis_funcgen_62_42"
+]
+
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+
+        #include file="inc/localfiles.ihtml"
+   -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="cachedas.html">cachedas</a></td>
+<td>Generates server cache file for DAS servers or for the DAS registry</td>
+</tr>
+
+<tr>
+<td><a href="cachedbfetch.html">cachedbfetch</a></td>
+<td>Generates server cache file for Dbfetch/WSDbfetch data sources</td>
+</tr>
+
+<tr>
+<td><a href="cacheebeyesearch.html">cacheebeyesearch</a></td>
+<td>Generates server cache file for EB-eye search domains</td>
+</tr>
+
+<tr>
+<td><a href="dbtell.html">dbtell</a></td>
+<td>Display information about a public database</td>
+</tr>
+
+<tr>
+<td><a href="servertell.html">servertell</a></td>
+<td>Display information about a public server</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on configured databases</td>
+</tr>
+
+<tr>
+<td><a href="showserver.html">showserver</a></td>
+<td>Displays information on configured servers</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+Michael Schuster
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

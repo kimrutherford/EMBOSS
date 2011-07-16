@@ -16,7 +16,7 @@ Target 5 V00296 matches 1
 <pre>
 ########################################
 # Program: wordfinder
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: wordfinder
 #    [-asequence] tembl:j01636
 #    [-bsequence] @../../data/eclac.list

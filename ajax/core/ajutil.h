@@ -27,6 +27,7 @@ void          ajByteRevInt(ajint* sval);
 void          ajByteRevShort(ajshort* ival);
 void          ajByteRevLong(ajlong* lval);
 void          ajByteRevUint(ajuint* ival);
+void          ajByteRevUlong(ajulong* lval);
 
 void          ajReset(void);
 
@@ -37,6 +38,10 @@ void          ajUtilLoginfo (void);
 const AjPStr  ajUtilGetProgram (void);
 const AjPStr  ajUtilGetCmdline (void);
 const AjPStr  ajUtilGetInputs (void);
+
+size_t ajUtilBase64DecodeC(AjPStr *dest, const char *src);
+AjBool ajUtilBase64EncodeC(AjPStr *dest, size_t size, const unsigned char *src);
+
 
 /*
 ** End of prototype definitions

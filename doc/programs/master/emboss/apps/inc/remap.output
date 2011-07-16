@@ -1,7 +1,7 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: j01636.remap </h3>
+<p><h3>File: j01636.remap</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 J01636
@@ -43,7 +43,7 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 
 # No. of cutting enzymes which do not match the
-# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria
 
 0
 
@@ -105,7 +105,7 @@ HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI
 
 
 # No. of cutting enzymes which do not match the
-# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria
 
 0
 
@@ -181,7 +181,7 @@ MaeII     NotI
 
 
 # No. of cutting enzymes which do not match the
-# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria
 
 0
 
@@ -249,7 +249,7 @@ HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI
 
 
 # No. of cutting enzymes which do not match the
-# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria
 
 0
 

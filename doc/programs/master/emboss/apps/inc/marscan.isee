@@ -3,23 +3,18 @@
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
-<td><a href="dreg.html">dreg</a></td>
-<td>Regular expression search of nucleotide sequence(s)</td>
-</tr>
-
-<tr>
-<td><a href="fuzznuc.html">fuzznuc</a></td>
-<td>Search for patterns in nucleotide sequences</td>
-</tr>
-
-<tr>
-<td><a href="fuzztran.html">fuzztran</a></td>
-<td>Search for patterns in protein sequences (translated)</td>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>
 <td><a href="getorf.html">getorf</a></td>
 <td>Finds and extracts open reading frames (ORFs)</td>
+</tr>
+
+<tr>
+<td><a href="jaspscan.html">jaspscan</a></td>
+<td>Scans DNA sequences for transcription factors</td>
 </tr>
 
 <tr>
@@ -30,6 +25,11 @@
 <tr>
 <td><a href="showorf.html">showorf</a></td>
 <td>Display a nucleotide sequence and translation in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="sirna.html">sirna</a></td>
+<td>Finds siRNA duplexes in mRNA</td>
 </tr>
 
 <tr>
@@ -45,6 +45,16 @@
 <tr>
 <td><a href="tcode.html">tcode</a></td>
 <td>Identify protein-coding regions using Fickett TESTCODE statistic</td>
+</tr>
+
+<tr>
+<td><a href="tfscan.html">tfscan</a></td>
+<td>Identify transcription factor binding sites in DNA sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Remove poly-A tails from nucleotide sequences</td>
 </tr>
 
 <tr>

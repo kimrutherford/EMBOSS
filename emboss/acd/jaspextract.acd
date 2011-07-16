@@ -4,9 +4,9 @@ application: jaspextract [
   gui: "no"
   batch: "no"
   cpu: "medium"
-  relations: "/edam/topic/0000110 Transcription regulatory sequence analysis"
-  relations: "/edam/topic/0000091 Database and file management"  
-  relations: "/edam/operation/0001812 File loading"  
+    relations: "EDAM:0000110 topic Transcription"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0001812 operation Data loading"
 ]
 
 section: input [
@@ -20,7 +20,7 @@ section: input [
     help: "The FlatFileDir directory containing the .pfm files
            and the matrix_list.txt file"
     knowntype: "Jaspar database"
-    relations: "/edam/data/0000583 Directory"                                           
+    relations: "EDAM:0001049 identifier Directory name"
   ]
 
 endsection: input

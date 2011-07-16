@@ -57,7 +57,7 @@ be: "TTTAG".
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with extractalign</b>
+Here is a sample session with <b>extractalign</b>
 <p>
 Extract the region from position 10 to 20: 
 <p>
@@ -65,7 +65,7 @@ Extract the region from position 10 to 20:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>extractalign dna.msf result.seq -regions '11-30' </b>
+% <b>extractalign dna.msf result.seq -regions "11-30" </b>
 Extract regions from a sequence alignment
 
 </pre></td></tr></table><p>
@@ -78,7 +78,7 @@ Extract regions from a sequence alignment
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Extract regions from a sequence alignment
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     (Aligned) sequence set filename and optional
@@ -520,7 +520,34 @@ Examples of region specifications are:
     Input file format
 </H2>
 
-<b>extractalign</b> reads a normal sequence USA.
+<b>extractalign</b> reads aligned nucleotide or protein sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -556,7 +583,7 @@ Examples of region specifications are:
 
 <p>
 
-You can specifiy a file of ranges to extract by giving the '-regions'
+You can specify a file of ranges to extract by giving the '-regions'
 qualifier the value '@' followed by the name of the file containing the
 ranges. (eg: '-regions @myfile').
 
@@ -694,6 +721,11 @@ None noted.
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Display the trace in an ABI sequencer file</td>
+</tr>
+
+<tr>
 <td><a href="aligncopy.html">aligncopy</a></td>
 <td>Reads and writes alignments</td>
 </tr>
@@ -711,6 +743,11 @@ None noted.
 <tr>
 <td><a href="codcopy.html">codcopy</a></td>
 <td>Copy and reformat a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
 </tr>
 
 <tr>
@@ -751,6 +788,21 @@ None noted.
 <tr>
 <td><a href="featreport.html">featreport</a></td>
 <td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Display basic information about sequences</td>
 </tr>
 
 <tr>
@@ -839,6 +891,11 @@ None noted.
 </tr>
 
 <tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
+</tr>
+
+<tr>
 <td><a href="seqret.html">seqret</a></td>
 <td>Reads and writes (returns) sequences</td>
 </tr>
@@ -851,6 +908,21 @@ None noted.
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
 <td>Reads sequences and writes them to individual files</td>
+</tr>
+
+<tr>
+<td><a href="seqxref.html">seqxref</a></td>
+<td>Retrieve all database cross-references for a sequence entry</td>
+</tr>
+
+<tr>
+<td><a href="seqxrefget.html">seqxrefget</a></td>
+<td>Retrieve all cross-referenced data for a sequence entry</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
@@ -901,6 +973,11 @@ None noted.
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
 <td>Removes vectors from the ends of nucleotide sequence(s)</td>
+</tr>
+
+<tr>
+<td><a href="whichdb.html">whichdb</a></td>
+<td>Search all sequence databases for an entry and retrieve it</td>
 </tr>
 
 <tr>

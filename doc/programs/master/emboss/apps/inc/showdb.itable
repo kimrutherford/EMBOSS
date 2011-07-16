@@ -46,7 +46,63 @@
 <tr bgcolor="#FFFFCC">
 <td>-[no]nucleic</td>
 <td>boolean</td>
-<td>Display nucleic acid databases</td>
+<td>Display nucleotide databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]sequence</td>
+<td>boolean</td>
+<td>Display general sequence databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]feature</td>
+<td>boolean</td>
+<td>Display feature annotation databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]text</td>
+<td>boolean</td>
+<td>Display text databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]taxonomy</td>
+<td>boolean</td>
+<td>Display taxonomy databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]resource</td>
+<td>boolean</td>
+<td>Display resource databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]assembly</td>
+<td>boolean</td>
+<td>Display sequence assembly databases</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]obo</td>
+<td>boolean</td>
+<td>Display obo bio-ontology databases</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>

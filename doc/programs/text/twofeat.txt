@@ -99,7 +99,7 @@ Output report [x65923.twofeat]:
 Command line arguments
 
 Finds neighbouring pairs of features in sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -136,7 +136,8 @@ Version: EMBOSS:6.3.0
    -maxrange           integer    [0] If this is less than or equal to
                                   'minrange', then no min or max range is
                                   specified (Any integer value)
-  [-outfile]           report     [*.twofeat] Output report file name
+  [-outfile]           report     [*.twofeat] Output report file name (default
+                                  -rformat table)
 
    Additional (Optional) qualifiers (* if not always prompted):
    -asource            string     [*] By default any feature source in the
@@ -375,7 +376,32 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   twofeat reads any normal sequence USAs.
+   The input is a standard EMBOSS sequence query (also known as a 'USA')
+   with associated feature information.
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: text, html, xml (uniprotxml),
+   obo, embl (swissprot)
+
+   Where the sequence format has no feature information, a second file can
+   be read to load the feature data. The file is specified with the
+   qualifier -ufo xxx and the feature format is specified with the
+   qualifier -fformat xxx
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
+
+   See: http://emboss.sf.net/docs/themes/FeatureFormats.html for further
+   information on feature formats.
+
+   twofeat reads two sequence inputs with feature information.
 
   Input files for usage example
 
@@ -474,13 +500,14 @@ Output file format
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
-   genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   draw, restrict, excel, feattable, motif, nametable, regions, seqtable,
+   simple, srs, table, tagseq.
 
    See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
    information on report formats.
 
-   twofeat outputs a report format file. The default format is table
+   twofeat outputs a report format file. The default format is 'table'.
 
   Output files for usage example
 
@@ -488,7 +515,7 @@ Output file format
 
 ########################################
 # Program: twofeat
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: twofeat
 #    [-sequence] tembl:x65923
 #    -atype polyA_signal
@@ -524,13 +551,13 @@ Output file format
 
 ##gff-version 3
 ##sequence-region X65923 1 518
-#!Date 2010-01-15
+#!Date 2011-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.3.0
-X65923  EMBL    polyA_signal_sequence   484     489     0.000   +       .
-ID="X65923.6"
-X65923  EMBL    polyA_site      509     509     0.000   +       .       ID="X659
-23.7";featflags="0x40"
+#!Source-version EMBOSS 6.4.0.0
+X65923  EMBL    polyA_signal_sequence   484     489     .       +       .
+ID=X65923.6
+X65923  EMBL    polyA_site      509     509     .       +       .       ID=X6592
+3.7
 
 Data files
 
@@ -565,8 +592,7 @@ Known bugs
 
 See also
 
-                    Program name                      Description
-                    coderet      Extract CDS, mRNA and translations from feature tables
+                    Program name                   Description
                     extractfeat  Extract features from sequence(s)
                     maskfeat     Write a sequence with masked features
                     showfeat     Display features of a sequence in pretty format

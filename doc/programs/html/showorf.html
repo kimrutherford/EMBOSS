@@ -55,7 +55,7 @@ of frames using an (optionally) specified genetic code.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with showorf</b>
+Here is a sample session with <b>showorf</b>
 <p>
 
 <p>
@@ -86,7 +86,7 @@ Output file [x13776.showorf]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Display a nucleotide sequence and translation in pretty format
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -488,7 +488,34 @@ Version: EMBOSS:6.3.0
 </H2>
 
 
-<b>showorf</b> reads a normal nucleic acid sequence USA.
+<b>showorf</b> reads a single nucleotide sequence.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -796,6 +823,11 @@ None.
 <tr>
 <td><a href="backtranseq.html">backtranseq</a></td>
 <td>Back-translate a protein sequence to a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>

@@ -38,9 +38,8 @@
 **-------------------------------------------------------------------
 */
 
+#define TEST
 #include "emboss.h"
-
-#define MYERS			/* Gene Myers DP code */
 
 /*
 ** Comment from Richard Durbin 6 April 2001:
@@ -75,9 +74,10 @@ static AjPInt2d matrix=NULL;
 
 
 /* JISON new listseq, liststart, listend, pos parameters */
-static void einverted_report(ajint max, ajint imax, const AjPSeq seq, 
-			     AjPList *list, AjPInt *liststart, 
-			     AjPInt *listend, ajint *pos);
+static AjBool einverted_report(ajint max, ajint imax, ajint jmin,
+                               const AjPSeq seq, 
+                               AjPList *list, AjPInt *liststart, 
+                               AjPInt *listend, ajint *pos);
 
 
 
@@ -92,8 +92,13 @@ int main(int argc, char **argv)
 {
     ajint i;
     ajint j;
+    ajint jback;
+    ajint jstart;
+    ajint testscore;
+    ajint jpos;
     ajint irel;
     ajint imax;
+    ajint jmin;
     ajint jmax = 0;
     ajint *ip;
     ajint *t1Base;
@@ -104,7 +109,7 @@ int main(int argc, char **argv)
     ajint d;
     ajint *t0;
     ajint *t1;
-    ajint max;
+    ajint maxval;
     AjPInt localMax = NULL;
     AjPInt back = NULL;
 
@@ -126,6 +131,9 @@ int main(int argc, char **argv)
     AjPStr    tempstr = NULL;
     AjPSeq    tempseq = NULL;
     AjPStr    tempname = 0;
+
+    AjBool ok = ajTrue;
+
     tempseq = ajSeqNew();
     
 
@@ -179,7 +187,7 @@ int main(int argc, char **argv)
 	}
 	
 	cp = ajStrGetPtr(nseq);
-	for(j = seqlength; j--;)		/* reverse order important here */
+	for(j = seqlength; j--;)	/* reverse order important here */
 	    switch(*cp++)
 	    {
 	    case 0:
@@ -214,27 +222,119 @@ int main(int argc, char **argv)
 	{
 	    irel = i % maxsave;
 
-	    /*ajDebug("i: %d irel: %d back[irel] %d\n", i, irel,
-	      ajIntGet(back,irel));*/
-
 	    if(ajIntGet(back,irel))	/* something to report */
 	    {
-		imax = 0;
-		for(j = ajIntGet(back,irel); j > i-maxsave; --j)
-		    if(ajIntGet(localMax,j%maxsave) > imax)
-		    {
-			jmax = j;
-			imax = ajIntGet(localMax,j%maxsave);
-		    }
-		/* JISON added &listseq, &liststart, &listend args */
-		einverted_report(imax, jmax, sequence, &listseq,
-				 &liststart, &listend, &pos);
-		lastReported = jmax;
+                ajDebug("\nstart reporting i: %d irel: %d back[irel] %d\n",
+                        i, irel,
+                        ajIntGet(back,irel));
 
-		for(j = jmax; j >= i-maxsave; --j)
+                jback = ajIntGet(back,irel);
+
+                ajDebug("Look for max repeat score between %d and %d\n",
+                        (i-maxsave), jback);
+
+                ok = ajFalse;
+
+                while(!ok && ajIntGet(back,irel)) 
+                {
+                    imax = 0;
+                    jmax = jback;
+
+                    for(j = jback; j > i-maxsave; --j)
+                    {
+                        testscore = ajIntGet(localMax,j%maxsave);
+
+                        if(testscore)
+                        {
+                            if(testscore > imax)
+                            {
+                                jmax = j;
+                                imax = testscore;
+                                ajDebug("j: %d jmax:  %d imax: %d "
+                                        "= localMax(%d)\n",
+                                        j, jmax, imax, j%maxsave);
+                            }
+                            else
+                            {
+                                ajDebug("j: %d testscore: %d = localMax(%d)\n",
+                                        j, testscore, j%maxsave);
+                            }
+                        }
+                    }
+
+                    if(imax)
+                    {
+                        /* JISON added &listseq, &liststart, &listend args */
+                        jmin = i - maxsave;
+                        ok = einverted_report(imax, jmax, jmin,
+                                              sequence, &listseq,
+                                              &liststart, &listend, &pos);
+                        if(!ok)
+                        {
+                            ajDebug("REPORT FAILED imax: %d jmax: %d "
+                                    "jmin: %d\n",
+                                    imax, jmax, jmin);
+                            ajIntPut(&localMax,jmax%maxsave,0);
+                        }
+                    }
+                    else
+                    {
+                        ok = ajTrue;
+                    }
+                    
+                }
+
+                lastReported = jmax;
+
+                /* remove repeats from the start to here */
+                ajDebug("Reset jmax: %d to i-maxsave: %d\n",
+                        jmax, i-maxsave);
+
+                for(j = jmax; j >= i-maxsave; --j)
 		{
-		    ajIntPut(&localMax,j%maxsave,0);
-		    ajIntPut(&back,j%maxsave,0);
+                    jpos = j % maxsave;
+                    jback = ajIntGet(back,jpos);
+                    jstart = jback % maxsave;
+                    testscore = ajIntGet(localMax,jpos);
+                    if(testscore) {
+                        ajDebug("reset localmax[%d] %d\n",
+                                jpos, testscore);
+                        ajIntPut(&localMax,jpos,0);
+                    }
+
+                    ajIntPut(&back,jpos,0);
+                    ajIntPut(&localMax,jpos,0);
+
+                    if(jback)
+                    {
+                        ajDebug("reset %d jpos %d localMax %d jback %d jstart %d\n",
+                                j, jpos,
+                                ajIntGet(localMax,jstart),
+                                jback, jstart);
+
+                        /* also scores jback pointed to */
+
+                        /*ajIntPut(&localMax,jstart,0);*/
+                    }
+		}
+
+                /* now look for repeats that include this one */
+
+                ajDebug("Keep i: %d to jmax: %d\n",
+                        i, jmax, jmax);
+
+                for(j = i; j > jmax; --j)
+		{
+                    jpos = j % maxsave;
+                    jback = ajIntGet(back,jpos);
+                    jstart = jback%maxsave;
+                    testscore = ajIntGet(localMax,jpos);
+
+                    if(jback || testscore)
+                        ajDebug("keep j %d %d localMax %d back %d\n",
+                                j, jpos,
+                                testscore,
+                                jback);
 		}
 	    }
 
@@ -256,7 +356,7 @@ int main(int argc, char **argv)
 	     ** a is current *t0, d is diagonal sum, c is working *t1 value
 	     */
 
-#ifdef TEST
+#ifdef TESTALL
 	    ajDebug("\n%2d %c: ", i, base[(ajint)sq[i]]);
 
 	    for(j = seqlength-i; --j;)
@@ -270,11 +370,10 @@ int main(int argc, char **argv)
 	    ajDebug("%2d  ", *t1);
 #endif
 
-	    max    = threshold-1;
+	    maxval = threshold-1;
 	    jmax   = 0;
 	    t1Base = t1;
 
-#ifdef MYERS
 	    c = *t1;
 	    a = -rogue;
 	    while(1)			/* inner loop */
@@ -288,7 +387,7 @@ int main(int argc, char **argv)
 		c -= gap;
 		if(d > c)
 		    c = d;
-#ifdef TEST
+#ifdef TESTALL
 		if(c == d)
 		{
 		    if(d == *t1)
@@ -296,7 +395,7 @@ int main(int argc, char **argv)
 		    else
 			ajDebug("\\");
 		}
-		else if(c + gap == a)
+		else if((c + gap) == a)
 		    ajDebug("|");
 		else
 		    ajDebug("-");
@@ -309,29 +408,44 @@ int main(int argc, char **argv)
 #endif
 		*t1 = c;
 
-		if(c > max)
+		if(c > maxval)
 		{
 		    if(c >= rogue)
 			goto done;
-		    max = c;
+		    maxval = c;
 		    jmax = (ajint) (t1 - t1Base);
 		}
 	    }
-#endif
 
 	done:
-	    if(jmax)			/* max was broken */
+	    if(jmax)            /* maxval was exceeded */
 	    {
-		ajIntPut(&localMax,irel,max);
-		j = (i-jmax-1) % maxsave;
+                /*ajIntPut(&localMax,irel,maxval);*/
+                jstart = i-jmax-1;
+		j = jstart % maxsave;
+                jback = ajIntGet(back,j);
+                ajDebug("put localMax[irel: %d] maxval: %d "
+                        "jstart: %d lastReported: %d back[%d] %d irel: %d lastmax %d\n",
+                        irel, maxval, jstart, lastReported,
+                        j, jback, irel,
+                        ajIntGet(localMax, jback%maxsave));
 
-		if(i-jmax-1 > lastReported &&
-		   (!ajIntGet(back,j) ||
-		    ajIntGet(localMax,ajIntGet(back,j)%maxsave) < max))
+		if(jstart > lastReported &&
+		   (!jback ||
+		    ajIntGet(localMax,jback%maxsave) < maxval))
+                {
+                    ajDebug("back [j: %d] i: %d\n", j, i, irel, jstart);
+                    jpos = jback % maxsave;
+                    /*if(jback)
+                      ajIntPut(&localMax,jpos,0);*/
 		    ajIntPut(&back,j,i);
+                    ajIntPut(&localMax,irel,maxval);
+                }
 	    }
 	    else
+            {
 		ajIntPut(&localMax,irel,0);
+            }
 	}
 
 	/* JISON new block */
@@ -395,21 +509,24 @@ int main(int argc, char **argv)
 
 /* @funcstatic einverted_report ***********************************************
 **
-** Undocumented.
+** Report the inverted repeat alignment
 **
-** @param [r] max [ajint] Undocumented
-** @param [r] imax [ajint] Undocumented
+** @param [r] max [ajint] Score
+** @param [r] imax [ajint] End position
+** @param [r] jmin [ajint] Earliest possible match position
 ** @param [r] seq [const AjPSeq] Sequence
 ** @param [u] listseq [AjPList *] List (for sequence regions)
 ** @param [u] liststart [AjPInt *] List (for start of regions)
 ** @param [u] listend [AjPInt *] List (for end of regions)
 ** @param [u] pos [ajint*] Position
+** @return [AjBool] False if the alignment goes over the window boundary
 ** @@
 ******************************************************************************/
 
-static void einverted_report(ajint max, ajint imax, const AjPSeq seq, 
-			     AjPList *listseq, AjPInt *liststart,
-			     AjPInt *listend, ajint *pos)
+static AjBool einverted_report(ajint max, ajint imax, ajint jmin,
+                               const AjPSeq seq, 
+                               AjPList *listseq, AjPInt *liststart,
+                               AjPInt *listend, ajint *pos)
 {
     /* JISON new listseq, liststart, listend, pos parameters*/
 
@@ -418,6 +535,7 @@ static void einverted_report(ajint max, ajint imax, const AjPSeq seq,
     ajint *jp;
     ajint i;
     ajint j;
+    ajint k;
     ajint *align1;
     ajint *align2;
     ajint nmatch = 0;
@@ -435,7 +553,7 @@ static void einverted_report(ajint max, ajint imax, const AjPSeq seq,
     AJCNEW(align1,2*maxsave);
     AJCNEW(align2,2*maxsave);
 
-    ajDebug("report (%d %d)\n", max, imax);
+    ajDebug("\nreport (%d %d) jmin: %d\n", max, imax, jmin);
 
     rev = ajSeqIsReversed(seq);
     if(rev)
@@ -450,15 +568,28 @@ static void einverted_report(ajint max, ajint imax, const AjPSeq seq,
 	if(t1[j] == max)
 	    break;
 
+    for(k = 0; k < maxsave; ++k)
+	if(t1[k] == max)
+	    ajDebug("max score %d at matrix pos %d\n",
+                    max, k);
+
     i  = imax;
     ip = align1; jp = align2;
     while(max > 0 && j >= 1)		/* original missed blunt joins */
     {
+        if(i < jmin) {
+            ajDebug("report tracing back from imax %d "
+                    "past window edge at jmin:%d\n",
+                    imax, jmin);
+            return ajFalse;
+        }
+
 	*ip++ = i;
 	*jp++ = i-j;			/* seqpt + 1 */
 #ifdef TEST
-	ajDebug("i j, max (local): %d %d, %4d (%2d)\n",
-		 i, j, max, revmatch[(ajint)sq[i]][length-i+j]);
+	ajDebug("i j, max (local): %d %d, %d:%d %4d (%2d)\n",
+                i, j, i-j, i+1,
+                max, revmatch[(ajint)sq[i]][length-i+j]);
 #endif
 	if(t1[j-1] == max + gap)
 	{
@@ -568,5 +699,5 @@ static void einverted_report(ajint max, ajint imax, const AjPSeq seq,
     AJFREE(align2);
 
 
-    return;
+    return ajTrue;
 }

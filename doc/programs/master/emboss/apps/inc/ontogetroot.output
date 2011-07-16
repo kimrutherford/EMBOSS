@@ -1,0 +1,15 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 0001234.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0000006
+name: Data
+namespace: data
+def: A type of data in common use in bioinformatics.
+subset: data
+
+</pre>
+</td></tr></table><p>

@@ -1,17 +1,16 @@
 #ifdef __cplusplus
-extern "C"
+/* extern "C" */
 {
 #endif
 
 #ifndef ajseqdata_h
 #define ajseqdata_h
 
+#include "ajquerydata.h"
+#include "ajtextdata.h"
 
 
-
-#define NULLFPOS -1
-
-enum AjEQryType {QRY_UNKNOWN, QRY_ENTRY, QRY_QUERY, QRY_ALL};
+/* #define NULLFPOS -1 */
 
 enum AjEXrefType {
     XREF_UNKNOWN,      /* type not defined */
@@ -20,8 +19,8 @@ enum AjEXrefType {
     XREF_EC,           /* EC= in SwissProt */
     XREF_DESC,         /* Allergen= and CD_Antigen= in SwissProt DE */
     XREF_TAX,          /* NCBI_TaxID */
-    XREF_RX,            /* RX line in EMBL or SwissProt */
-    XREF_MAX            /* to test we are within bounds */
+    XREF_RX,           /* RX line in EMBL or SwissProt */
+    XREF_MAX           /* to test we are within bounds */
 };
 
 typedef struct AjSSeqAccess AjSSeqAccess;
@@ -250,121 +249,6 @@ typedef struct AjSSeqXref {
 
 
 
-/* @data AjPSeqQuery **********************************************************
-**
-** Ajax Sequence Query object.
-**
-** Holds data needed to interpret the entry specification part of a USA.
-** This can refer to an entry name (or "id"), and accession number or
-** other queriable items.
-**
-** AjPSeqQuery is created with the entry specification part of a USA
-** (Uniform Sequence Address). The syntax is currently related to that
-** used by SRS release 5.1.
-**
-** @alias AjSSeqQuery
-** @alias AjOSeqQuery
-** @other AjPSeqset Sequence sets
-** @other AjPSeqall Sequence streams
-**
-** @attr DbName [AjPStr] Database name used by EMBOSS
-** @attr DbAlias [AjPStr] Database name used by access method
-** @attr DbType [AjPStr] Database type
-** @attr Id [AjPStr] ID Wildcard
-** @attr Acc [AjPStr] Accession Wildcard
-** @attr Des [AjPStr] Description Wildcard
-** @attr Key [AjPStr] Keyword Wildcard
-** @attr Org [AjPStr] Taxonomy Wildcard
-** @attr Sv [AjPStr] SeqVersion Wildcard
-** @attr Gi [AjPStr] GenInfo Identifier Wildcard
-** @attr CaseId [AjBool] True if ID match is case-sensitive
-** @attr HasAcc [AjBool] True if entries have acc field
-** @attr Method [AjPStr] Name of access method
-** @attr Formatstr [AjPStr] Name of input sequence format
-** @attr IndexDir [AjPStr] Index directory
-** @attr Directory [AjPStr] Data directory
-** @attr Filename [AjPStr] Individual filename
-** @attr Exclude [AjPStr] File wildcards to exclude (spaced)
-** @attr DbFields [AjPStr] Query fields (plus id and acc)
-** @attr DbFilter [AjPStr] Additional query filter(s) to restrict results
-** @attr DbProxy [AjPStr] Proxy host
-** @attr DbHttpVer [AjPStr] HTTP version
-** @attr DbIdentifier [AjPStr] Field name of unique identifier
-** @attr DbAccession [AjPStr] Field name of secondary identifier
-** @attr DbSequence [AjPStr] Field name of sequence string
-** @attr DbReturn [AjPStr] Comma separated field named to be returned
-** @attr ServerVer [AjPStr] Server version
-** @attr Field [AjPStr] Query field
-** @attr QryString [AjPStr] Query term
-** @attr Application [AjPStr] External application command
-** @attr Fpos [ajlong] File position from fseek
-** @attr Type [enum AjEQryType] Enumerated query type
-** @attr QryDone [AjBool] Has the query been done yet
-** @attr Access [AjSSeqAccess*] Access function : see ajseqdb.h
-** @attr QryData [void*] Private data for access function
-** @attr Wild [AjBool] True if query contains '*' or '?'
-** @attr CountEntries [ajuint] Number of entries processed
-** @attr TotalEntries [ajuint] Number of entries found
-** @attr Padding [char[4]] Padding to alignment boundary
-**
-** @new ajSeqQueryNew Default constructor
-** @delete ajSeqQueryDel Default destructor
-** @modify ajSeqQueryClear Clears all contents
-** @use seqQueryMatch Compares an AjPSeq to a query.
-** @modify ajSeqQueryStarclear Clears fully wild elements of a query because
-**                          empty elements are the same.
-** @use ajSeqQueryWild Tests whether a query includes wildcards
-** @use ajSeqQueryIs Tests whether a query has been defined
-** @@
-******************************************************************************/
-
-typedef struct AjSSeqQuery {
-  AjPStr DbName;
-  AjPStr DbAlias;
-  AjPStr DbType;
-  AjPStr Id;
-  AjPStr Acc;
-  AjPStr Des;
-  AjPStr Key;
-  AjPStr Org;
-  AjPStr Sv;
-  AjPStr Gi;
-  AjBool CaseId;
-  AjBool HasAcc;
-  AjPStr Method;
-  AjPStr Formatstr;
-  AjPStr IndexDir;
-  AjPStr Directory;
-  AjPStr Filename;
-  AjPStr Exclude;
-  AjPStr DbFields;
-  AjPStr DbFilter;
-  AjPStr DbProxy;
-  AjPStr DbHttpVer;
-  AjPStr DbIdentifier;
-  AjPStr DbAccession;
-  AjPStr DbSequence;
-  AjPStr DbReturn;
-  AjPStr ServerVer;
-  AjPStr Field;
-  AjPStr QryString;
-  AjPStr Application;
-  ajlong Fpos;
-  enum AjEQryType Type;
-  AjBool QryDone;
-  AjSSeqAccess* Access;
-  void* QryData;
-  AjBool Wild;
-  ajuint CountEntries;
-  ajuint TotalEntries;
-  char Padding[4];
-} AjOSeqQuery;
-
-#define AjPSeqQuery AjOSeqQuery*
-
-
-
-
 /* @data AjPSeqin *************************************************************
 **
 ** Ajax Sequence Input object.
@@ -378,110 +262,69 @@ typedef struct AjSSeqQuery {
 ** @alias AjSSeqin
 ** @alias AjOSeqin
 **
-** @new ajSeqinNew Default constructor
-** @delete ajSeqinDel Default destructor
-** @modify ajSeqinUsa Resets using a new USA
-** @modify ajSeqinClear Resets ready for reuse.
-** @modify ajSeqinSetRange Sets a sequence range for all input sequences
-**
 ** @other AjPSeq Sequences
 ** @other AjPSeqset Sequence sets
 ** @other AjPSeqall Sequence streams
 **
-** @attr Name [AjPStr] Sequence name (replace on reading)
-** @attr Acc [AjPStr] Sequence accession number (replace on reading)
-** @attr Inputtype [AjPStr] Sequence type from ACD
-** @attr Type [AjPStr] Sequence type N or P
-** @attr Db [AjPStr] Database name (from commandline, replace on reading)
-** @attr Full [AjPStr] Full name
-** @attr Date [AjPStr] Date
-** @attr Desc [AjPStr] One-line description
-** @attr Doc [AjPStr] Full text
-** @attr Inseq [AjPStr] Temporary input sequence holder
-** @attr Begin [ajint] Start position
-** @attr End [ajint] End position
-** @attr List [AjPList] List of USAs to be read
-** @attr Usa [AjPStr] USA for the sequence
-** @attr Ufo [AjPStr] UFO for features (if any)
-** @attr Fttable [AjPFeattable] Input feature table (why in AjPSeqin?)
-** @attr Ftquery [AjPFeattabIn] Feature table input spec
-** @attr Formatstr [AjPStr] Sequence input format name
-** @attr Filename [AjPStr] Original filename
-** @attr Entryname [AjPStr] Entry name
-** @attr Filebuff [AjPFilebuff] Input sequence buffered file
-** @attr Search [AjBool] Search for more entries (always true?)
-** @attr Single [AjBool] Read single entries
-** @attr CaseId [AjBool] Id case sensitive (default false)
-** @attr Features [AjBool] true: read features if any
-** @attr IsNuc [AjBool] true: known to be nucleic
-** @attr IsProt [AjBool] true: known to be protein
-** @attr multi [AjBool] ???? see also Single
-** @attr multiset [AjBool] true: seqsetall input
-** @attr multidone [AjBool] seqsetall input: true when set completed
-** @attr Lower [AjBool] true: convert to lower case -slower
-** @attr Upper [AjBool] true: convert to upper case -supper
-** @attr Text [AjBool] true: save full text of entry
-** @attr ChunkEntries [AjBool] true: access method returns entries in chunks
-**                             and should be called again when input is empty
-** @attr Count [ajint] count of entries so far. Used when ACD reads first
-**                     sequence and we need to reuse it in a Next loop
-** @attr Filecount [ajint] Number of files read - used by seqsetall input
-** @attr Fileseqs [ajint] Number of seqs in file - used by seqsetall input
-** @attr Rev [AjBool] Reverse/complement if true
-** @attr Padding [char[4]] Padding to alignment boundary
-** @attr Fpos [ajlong] File position (fseek) for building USA
-** @attr Query [AjPSeqQuery] Query data - see AjPSeqQuery
-** @attr Data [void*] Format data for reuse, e.g. multiple sequence input
-** @attr Format [AjEnum] Sequence input format enum
-** @attr Records [ajuint] Records processed
+** @attr Input     [AjPTextin] Text file input object
+** @attr Name      [AjPStr]    Sequence name (replace on reading)
+** @attr Acc       [AjPStr]    Sequence accession number (replace on reading)
+** @attr Inputtype [AjPStr]    Sequence type from ACD
+** @attr Type      [AjPStr]    Sequence type N or P
+** @attr Full      [AjPStr]    Full name
+** @attr Date      [AjPStr]    Date
+** @attr Desc      [AjPStr]    One-line description
+** @attr Doc       [AjPStr]    Full text
+** @attr Inseq     [AjPStr]    Temporary input sequence holder
+** @attr DbSequence   [AjPStr] Field name of sequence string
+** @attr Usalist   [AjPList]   List of USA processing nodes 
+** @attr Begin     [ajint]     Start position
+** @attr End       [ajint]     End position
+** @attr Ufo       [AjPStr]    UFO for features (if any)
+** @attr Fttable   [AjPFeattable] Input feature table (why in AjPSeqin?)
+** @attr Ftquery   [AjPFeattabin] Feature table input spec
+** @attr Entryname [AjPStr]    Entry name
+** @attr Features  [AjBool]    true: read features if any
+** @attr IsNuc     [AjBool]    true: known to be nucleic
+** @attr IsProt    [AjBool]    true: known to be protein
+** @attr Multiset  [AjBool]    true: seqsetall input
+** @attr Multidone [AjBool]    seqsetall input: true when set completed
+** @attr Lower     [AjBool]    true: convert to lower case -slower
+** @attr Upper     [AjBool]    true: convert to upper case -supper
+** @attr Rev       [AjBool]    Reverse/complement if true
+** @attr SeqData   [void*]     Format data for reuse,
+**                               e.g. multiple sequence input
 ** @@
 ******************************************************************************/
 
 typedef struct AjSSeqin {
-  AjPStr Name;
-  AjPStr Acc;
-  AjPStr Inputtype;
-  AjPStr Type;
-  AjPStr Db;
-  AjPStr Full;
-  AjPStr Date;
-  AjPStr Desc;
-  AjPStr Doc;
-  AjPStr Inseq;
-  ajint Begin;
-  ajint End;
-  AjPList List;
-  AjPStr Usa;
-  AjPStr Ufo;
-  AjPFeattable Fttable;
-  AjPFeattabIn Ftquery;
-  AjPStr Formatstr;
-  AjPStr Filename;
-  AjPStr Entryname;
-  AjPFilebuff Filebuff;
-  AjBool Search;
-  AjBool Single;
-  AjBool CaseId;
-  AjBool Features;
-  AjBool IsNuc;
-  AjBool IsProt;
-  AjBool multi;
-  AjBool multiset;
-  AjBool multidone;
-  AjBool Lower;
-  AjBool Upper;
-  AjBool Text;
-  AjBool ChunkEntries;
-  ajint Count;
-  ajint Filecount;
-  ajint Fileseqs;
-  AjBool Rev;
-  char Padding[4];
-  ajlong Fpos;
-  AjPSeqQuery Query;
-  void *Data;
-  AjEnum Format;
-  ajuint Records;
+    AjPTextin Input;
+    AjPStr Name;
+    AjPStr Acc;
+    AjPStr Inputtype;
+    AjPStr Type;
+    AjPStr Full;
+    AjPStr Date;
+    AjPStr Desc;
+    AjPStr Doc;
+    AjPStr Inseq;
+    AjPStr DbSequence;
+    AjPList Usalist;
+    ajint Begin;
+    ajint End;
+    AjPStr Ufo;
+    AjPFeattable Fttable;
+    AjPFeattabin Ftquery;
+    AjPStr Entryname;
+    AjBool Features;
+    AjBool IsNuc;
+    AjBool IsProt;
+    AjBool Multiset;
+    AjBool Multidone;
+    AjBool Lower;
+    AjBool Upper;
+    AjBool Rev;
+    void *SeqData;
 } AjOSeqin;
 
 #define AjPSeqin AjOSeqin*
@@ -491,14 +334,14 @@ typedef struct AjSSeqin {
 
 /* @data AjPSeqAccess *********************************************************
 **
-** Ajax Sequence Access database reading object.
+** Ajax sequence access database reading object.
 **
 ** Holds information needed to read a sequence from a database.
 ** Access methods are defined for each known database type.
 **
 ** Sequences are read from the database using the defined
 ** database access function, which is usually a static function
-** within ajseq.c
+** within ajtextdb.c ajseqdb.c
 **
 ** This should be a static data object but is needed for the definition
 ** of AjPSeqin.
@@ -506,12 +349,10 @@ typedef struct AjSSeqin {
 ** @alias AjSSeqAccess
 ** @alias AjOSeqAccess
 **
-** @new ajSeqMethod returns a copy of a known access method definition.
-** @other AjPSeqin Sequence input
-**
 ** @attr Name [const char*] Access method name used in emboss.default
 ** @attr Access [(AjBool*)] Access function
 ** @attr AccessFree [(AjBool*)] Access cleanup function
+** @attr Qlink [const char*] Supported query link operators
 ** @attr Desc [const char*] Description
 ** @attr Alias [AjBool] Alias for another name
 ** @attr Entry [AjBool] Supports retrieval of single entries
@@ -521,16 +362,18 @@ typedef struct AjSSeqin {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSSeqAccess {
-  const char *Name;
-  AjBool (*Access) (AjPSeqin seqin);
-  AjBool (*AccessFree) (void* qry);
-  const char* Desc;
-  AjBool Alias;
-  AjBool Entry;
-  AjBool Query;
-  AjBool All;
-  AjBool Chunked;
+typedef struct AjSSeqAccess
+{
+    const char *Name;
+    AjBool (*Access) (AjPSeqin seqin);
+    AjBool (*AccessFree) (void* qry);
+    const char* Qlink;
+    const char* Desc;
+    AjBool Alias;
+    AjBool Entry;
+    AjBool Query;
+    AjBool All;
+    AjBool Chunked;
 } AjOSeqAccess;
 
 #define AjPSeqAccess AjOSeqAccess*

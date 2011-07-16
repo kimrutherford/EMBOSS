@@ -1,0 +1,70 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x65921.eprimer32</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+# EPRIMER32 RESULTS FOR X65921
+
+# FORWARD PRIMER STATISTICS:
+# considered 18855
+# GC content failed 156
+# low tm 9245
+# high tm 3587
+# high any compl 2
+# high end compl 61
+# long poly-x seq 45
+# ok 5759
+
+# REVERSE PRIMER STATISTICS:
+# considered 18706
+# GC content failed 161
+# low tm 9106
+# high tm 3606
+# high any compl 3
+# high end compl 25
+# long poly-x seq 66
+# ok 5739
+
+# PRIMER PAIR STATISTICS:
+# considered 4135
+# unacceptable product size 3770
+# high end compl 29
+# ok 336
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 199
+     FORWARD PRIMER     201   20  59.90  65.00  ACCGGTTCTCCATCCCCGCA
+
+     REVERSE PRIMER     380   20  59.84  65.00  CCGCGCGGTTCCCTGCTATT
+
+
+   2 PRODUCT SIZE: 207
+     FORWARD PRIMER     826   20  60.04  70.00  GACCGGCCAGGAAACGGTCG
+
+     REVERSE PRIMER    1013   20  59.96  70.00  TGGCCTCATCCTCCAGGGGC
+
+
+   3 PRODUCT SIZE: 202
+     FORWARD PRIMER     831   20  60.32  70.00  GCCAGGAAACGGTCGCCCAG
+
+     REVERSE PRIMER    1013   20  59.96  70.00  TGGCCTCATCCTCCAGGGGC
+
+
+   4 PRODUCT SIZE: 205
+     FORWARD PRIMER     600   20  60.18  70.00  GTGGCCCTGCTCCAGTCCCT
+
+     REVERSE PRIMER     785   20  59.97  65.00  TGGGCGCGGACAAAGAGCTG
+
+
+   5 PRODUCT SIZE: 197
+     FORWARD PRIMER     203   20  59.84  70.00  CGGTTCTCCATCCCCGCAGC
+
+     REVERSE PRIMER     380   20  59.84  65.00  CCGCGCGGTTCCCTGCTATT
+
+
+
+</pre>
+</td></tr></table><p>

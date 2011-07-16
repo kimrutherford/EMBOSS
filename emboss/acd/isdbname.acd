@@ -1,0 +1,94 @@
+application:  isdbname
+[
+  documentation: "Check whether a supplied string is a known database name"
+  groups: "Information"
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
+  relations: "EDAM:0000088 topic Literature and documentation"
+  relations: "EDAM:0000516 operation Database information retrieval"
+]
+
+
+
+
+
+section: input 
+[
+  information: "Input section"
+  type: "page"
+]
+
+  string: term
+  [
+      parameter: "Y"
+      additional: "Y"
+      information: "Putative database name."
+      knowntype: "string"
+      relations: "EDAM:0001056 identifier Database name"
+  ]
+
+endsection: input
+
+
+
+
+
+section: required 
+[
+  information: "Required section"
+  type: "page"
+]
+endsection: required
+
+
+
+
+
+section: additional
+[
+  information: "Additional section"
+  type: "page"
+]
+
+toggle: infout
+  [
+    additional: "Y"
+    default: "N"
+    information: "Write database information to output file"
+    help: "This option will write to file information (from the EMBOSS data file DRCAT.dat) for the database with a name that matches the supplied string."
+    relations: "EDAM:0002527 data Parameter or primitive"
+  ]
+
+endsection: additional
+
+
+
+
+
+section: advanced
+[
+  information: "Advanced section"
+  type: "page"
+]
+endsection: advanced
+
+
+
+
+
+section: output 
+[
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile
+  [
+    parameter: "@($infout)"
+    default: "stdout"
+    knowntype: "isdbname output"
+    relations: "EDAM:0000957 data Database metadata"
+  ]
+
+endsection: output

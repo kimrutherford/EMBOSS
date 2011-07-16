@@ -1,0 +1,700 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: ontogetup
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+ontogetup
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Get ontology term(s) by id of child
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>ontogetup</b> finds ontology terms matching a query. All parents of the term,  related to the term by 'is_a' (class/subclass) relationships, are returned. The information may be written to an output file in various formats.
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>ontogetup</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>ontogetup edam:0001234 </b>
+Get ontology term(s) by id of child
+Obo output file [0001234.obo]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Get ontology term(s) by id of child
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-oboterms]          obo        Obo term filename and optional format, or
+                                  reference (input query)
+  [-outfile]           outobo     [*.ontogetup] Output ontology term file name
+
+   Additional (Optional) qualifiers:
+   -obsolete           boolean    [N] The default behaviour is to not use or
+                                  return obsolete terms. This option if set
+                                  will include all terms.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-oboterms" associated qualifiers
+   -iformat1           string     Input obo format
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Ontology term output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-oboterms]<br>(Parameter 1)</td>
+<td>obo</td>
+<td>Obo term filename and optional format, or reference (input query)</td>
+<td>OBO bio-ontology term(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>outobo</td>
+<td>Output ontology term file name</td>
+<td>OBO ontology term(s)</td>
+<td><i>&lt;*&gt;</i>.ontogetup</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-obsolete</td>
+<td>boolean</td>
+<td>The default behaviour is to not use or return obsolete terms. This option if set will include all terms.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-oboterms" associated obo qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iformat1<br>-iformat_oboterms</td>
+<td>string</td>
+<td>Input obo format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -idbname1<br>-idbname_oboterms</td>
+<td>string</td>
+<td>User-provided database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outobo qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -oformat2<br>-oformat_outfile</td>
+<td>string</td>
+<td>Ontology term output format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<p>
+
+The input is a standard EMBOSS ontology query.
+
+<p> The major ontology sources defined as standard in EMBOSS
+installations are EDAM, GO (gene Ontology) and SO (Sequence Ontology).
+
+<p>
+
+Data can also be read from ontology output in "obo" format written by an
+EMBOSS application.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>Database entry: edam:0001234</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+[Term]
+id: EDAM:0001234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+subset: data
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002977 ! Nucleic acid sequence
+
+</pre>
+</td></tr></table><p>
+
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+The output is a standard EMBOSS ontology term file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-oformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: obo,
+brief, list, html, xml, json, excel.
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/OntologyFormats.html">
+http://emboss.sf.net/docs/themes/OntologyFormats.html</A>
+for further information on ontology formats.
+
+<p>
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 0001234.obo</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+[Term]
+id: EDAM:0000850
+name: Sequence set
+namespace: data
+def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method.
+comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
+subset: data
+is_a: EDAM:0002955 ! Sequence report
+
+[Term]
+id: EDAM:0002977
+name: Nucleic acid sequence
+namespace: data
+def: One or more nucleic acid sequences, possibly with associated annotation.
+subset: data
+is_a: EDAM:0002044 ! Sequence
+is_a: EDAM:0002525 ! Nucleic acid data
+
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+The EDAM Ontology is included in EMBOSS as local
+database <b>edam</b>.
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="edamdef.html">edamdef</a></td>
+<td>Find EDAM ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="edamhasinput.html">edamhasinput</a></td>
+<td>Find EDAM ontology terms by has_input relation</td>
+</tr>
+
+<tr>
+<td><a href="edamhasoutput.html">edamhasoutput</a></td>
+<td>Find EDAM ontology terms by has_output relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisformat.html">edamisformat</a></td>
+<td>Find EDAM ontology terms by is_format_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisid.html">edamisid</a></td>
+<td>Find EDAM ontology terms by is_identifier_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamname.html">edamname</a></td>
+<td>Find EDAM ontology terms by name</td>
+</tr>
+
+<tr>
+<td><a href="godef.html">godef</a></td>
+<td>Find GO ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="goname.html">goname</a></td>
+<td>Find GO ontology terms by name</td>
+</tr>
+
+<tr>
+<td><a href="ontocount.html">ontocount</a></td>
+<td>Count ontology term(s)</td>
+</tr>
+
+<tr>
+<td><a href="ontoget.html">ontoget</a></td>
+<td>Get ontology term(s)</td>
+</tr>
+
+<tr>
+<td><a href="ontogetcommon.html">ontogetcommon</a></td>
+<td>Get common ancestor for terms</td>
+</tr>
+
+<tr>
+<td><a href="ontogetdown.html">ontogetdown</a></td>
+<td>Get ontology term(s) by parent id</td>
+</tr>
+
+<tr>
+<td><a href="ontogetobsolete.html">ontogetobsolete</a></td>
+<td>Get ontology ontology terms</td>
+</tr>
+
+<tr>
+<td><a href="ontogetroot.html">ontogetroot</a></td>
+<td>Get ontology root terms by child identifier</td>
+</tr>
+
+<tr>
+<td><a href="ontogetsibs.html">ontogetsibs</a></td>
+<td>Get ontology term(s) by id with common parent</td>
+</tr>
+
+<tr>
+<td><a href="ontoisobsolete.html">ontoisobsolete</a></td>
+<td>Report whether an ontology term id is obsolete</td>
+</tr>
+
+<tr>
+<td><a href="ontotext.html">ontotext</a></td>
+<td>Get ontology term(s) original full text</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

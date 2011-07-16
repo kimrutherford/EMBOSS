@@ -1,0 +1,28 @@
+##gff-version 3
+#
+#Discontinuous Features
+#
+#In addition to nested features, another common type of genomic
+#annotation is the discontinuous feature in which a single feature
+#spans multiple discontinuous portions of the genome. The primary
+#example is an alignment, such as a cDNA sequence that has been
+#aligned to genomic sequence. GFF3 deals with these features by
+#representing each continuous segment as a distinct row, and then
+#giving each segment the same ID to tie them together. For example:
+#
+#Note that this is distinct from the nested features we looked at in
+#the previous section. In the former case, there is a single parent
+#feature and multiple child features that are linked to the parent via
+#a Parent tag. The IDs of the children are distinct from each other
+#(or absent altogether). In the latter case, each segment of the
+#discontinuous feature has the same ID. There is no parent.
+#
+#Note that this method of grouping discontinuous features is not
+#currently supported by the GMOD Chado bulk GFF3 loader. Parent-child
+#grouping is required.
+#
+ctg123	example	match	26122	26126	.	+	.	ID=match001
+ctg123	example	match	26497	26869	.	+	.	ID=match001
+ctg123	example	match	27201	27325	.	+	.	ID=match001
+ctg123	example	match	27372	27433	.	+	.	ID=match001
+ctg123	example	match	27565	27565	.	+	.	ID=match001

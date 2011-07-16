@@ -1,9 +1,9 @@
 application: maskfeat [
   documentation: "Write a sequence with masked features"
   groups: "Edit, Feature tables"
-  relations: "/edam/topic/0000160 Sequence features"
-  relations: "/edam/topic/0000220 File handling"
-  relations: "/edam/operation/0000368 Sequence masking"
+    relations: "EDAM:0000160 topic Sequence features"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000368 operation Sequence masking"
 ]
 
 section: input [
@@ -15,9 +15,7 @@ section: input [
     parameter: "Y"
     type: "any"
     features: "Y"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -43,7 +41,7 @@ section: additional [
            spaces or commas, eg: \
            *UTR repeat*"
     knowntype: "feature key list"
-    relations:  "/edam/data/0001020 Sequence feature key"                 
+    relations: "EDAM:0001020 data Sequence feature key"
   ]
 
   toggle: tolower [
@@ -56,7 +54,7 @@ section: additional [
            from the case change. You might like to ensure that the whole
            sequence is in upper-case before masking the specified regions to
            lower-case by using the '-supper' flag."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   string: maskchar [
@@ -71,7 +69,7 @@ section: additional [
            lower-case, just as with the '-lowercase' flag."
     expected: "'X' for protein, 'N' for nucleic"
     knowntype: "sequence"
-    relations:  "/edam/data/0000848 Sequence"                                       
+    relations: "EDAM:0000848 data Raw sequence"
   ]
 
 endsection: additional
@@ -83,8 +81,7 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
-    relations: "/edam/data/0000848 Sequence"                                            
-    relations: "/edam/data/0000849 Sequence record" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: output

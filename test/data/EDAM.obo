@@ -1,0 +1,1470 @@
+format-version: 1.2
+date: 01:12:2010 12:25
+data-version: Beta12
+! Use for mapping to "global" id space(s) e.g.:
+! idspace: EDAM http://purl.org/edam/ "EDAM terms"
+! NEXT term number is 0002891
+! xref: WHATIF: CorrectedPDBasXML
+! xref:http://www.geneontology.org/doc/GO.xrf_abbs: FB
+! xref:Moby:GI_Gene ! xref: Moby_namespace:iHOPorganism
+! xref: SO:0000348
+! xref: BioCatalogue:Protein Multiple Alignment
+! xref: GO:0006464 ! protein modification process
+! regex: Regular expression for validating a "data<-identifier" instance.
+! spec_url: URL of format specification for a "format" term
+! seealso: Ontology term ID of term in external ontology for fine-grained annotation
+
+
+
+!
+! EDAM relations
+!
+[Typedef]
+id: concerns
+name: concerns
+def: "Defines that a term ('Topic') concerns (covers) another term ('Data', 'Resource' or 'Operation')." [EDAM:EBI]
+is_anti_symmetric: true
+is_cyclic: false
+is_transitive: true
+! inverse_of: is_concern_of
+
+! [Typedef]
+! id: has_attribute
+! name: has_attribute
+! def: "Defines a term ('Biological entity') has (or can have) an attribute ('Data')." [EDAM:EBI]
+! is_anti_symmetric: true
+! is_cyclic: false
+! is_transitive: true
+! inverse_of: is_attribute_of
+
+! [Typedef]
+! id: has_identifier
+! name: has_identifier
+! def: "Defines a term ('Biological entity', 'Resource' or 'Data') has (or can have) an identifier ('Identifier')." [EDAM:EBI]
+! is_anti_symmetric: true
+! is_cyclic: false
+! is_transitive: true
+! inverse_of: is_identifier_of
+
+[Typedef]
+id: has_input
+name: has_input
+def: "Defines a term ('Operation') as necessarily consuming another term ('Data') as input." [EDAM:EBI]
+is_anti_symmetric: true
+is_cyclic: false
+is_transitive: true
+! inverse_of: is_input_of
+
+[Typedef]
+id: has_output
+name: has_output
+def: "Defines a term ('Operation') as necessarily producing another term ('Data') as output." [EDAM:EBI]
+is_anti_symmetric: true
+is_cyclic: false
+is_transitive: true
+! inverse_of: is_output_of
+
+! [Typedef]
+! id: has_part
+! name: has_part
+! def: "Defines a term ('Biological entity' or 'Data') as having a conceptual part ('Biological entity' or 'Data')." [EDAM:EBI]
+! is_anti_symmetric: true
+! is_cyclic: false
+! is_transitive: true
+! inverse_of: is_part_of
+
+! [Typedef]
+! id: has_source
+! name: has_source
+! def: "Defines a term ('Data') has a source ('Operation', 'Resource')." [EDAM:EBI]
+! comment: is_source_of
+! is_anti_symmetric: true
+! is_cyclic: false
+! is_transitive: true
+! inverse_of: is_source_of
+
+
+! [Typedef]
+! id: has_format
+! name: has_format
+! def: "Defines a term ('Data') has a data format specification ('Format')." [EDAM:EBI]
+! is_anti_symmetric: true
+! is_cyclic: false
+! is_transitive: true
+! inverse_of: is_format_of
+
+! [Typedef]
+! id: is_attribute_of
+! name: is_attribute_of
+! def: "Defines that a term ('Data') is an attribute of another term ('Biological entity')." [EDAM:EBI]
+! is_anti_symmetric: true
+! is_cyclic: false
+! is_transitive: true
+! inverse_of: has_attribute
+
+! [Typedef]
+! id: is_concern_of
+! name: is_concern_of
+! def: "Defines a term ('Biological entity', 'Resource' or 'Operation') as a concern of another term ('Topic')." [EDAM:EBI]
+! is_anti_symmetric: true
+! is_cyclic: false
+! is_transitive: true
+! inverse_of: concerns
+
+[Typedef]
+id: is_identifier_of
+name: is_identifier_of
+def: "Defines that a term ('Identifier') is an identifier of another term ('Resource' or 'Data')." [EDAM:EBI]
+is_anti_symmetric: true
+is_cyclic: false
+is_transitive: true
+! inverse_of: has_identifier
+
+! [Typedef]
+! id: is_input_of
+! name: is_input_of
+! def: "Defines a term ('Data') as an input of another term ('Operation')." [EDAM:EBI]
+! is_anti_symmetric: true
+! is_cyclic: false
+! is_transitive: true
+! inverse_of: has_input
+
+! [Typedef]
+! id: is_output_of
+! name: is_output_of
+! def: "Defines a term ('Data') as an output of another term ('Operation')." [EDAM:EBI]
+! is_anti_symmetric: true
+! is_cyclic: false
+! is_transitive: true
+! inverse_of: has_output
+
+! [Typedef]
+! id: is_part_of
+! name: is_part_of
+! def: "Defines that a term ('Biological entity' or 'Data') is a conceptual part of some other term ('Biological entity' or 'Data')." [EDAM:EBI]
+! is_anti_symmetric: true
+! is_cyclic: false
+! is_transitive: true
+! inverse_of: has_part
+
+[Typedef]
+id: is_source_of
+name: is_source_of
+def: "Defines a term ('Resource') is a source of another term ('Data')." [EDAM:EBI]
+comment: has_source
+is_anti_symmetric: true
+is_cyclic: false
+is_transitive: true
+! inverse_of: has_source
+
+[Typedef]
+id: is_format_of
+name: is_format_of
+def: "Defines that a term ('Format') is a data format specification for another term ('Data')." [EDAM:EBI]
+is_anti_symmetric: true
+is_cyclic: false
+is_transitive: true
+! inverse_of: has_format
+
+
+
+
+[Term]
+id: EDAM:0000002
+name: Biological entity
+namespace: entity
+def: Any biological thing (or part of a thing) with a physical existence, a physical part, region or feature that can be mapped to such a thing, a collection of such things or an observable phenonema or occurence.
+is_obsolete: true
+
+[Term]
+id: EDAM:0000003
+name: Topic
+namespace: topic
+def: A general field of bioinformatics study, data, processing and analysis or technology.
+
+[Term]
+id: EDAM:0000004
+name: Operation
+namespace: operation
+def: A specific, singular function or process performed by a tool, for example a WS operation. What is done, but not (typically) how or in what context.
+
+[Term]
+id: EDAM:0000006
+name: Data
+namespace: data
+def: A semantic description of a data entity (datum) commonly used in bioinformatics.
+
+[Term]
+id: EDAM:0000077
+name: Nucleic acids
+namespace: topic
+def: Resources concerning nucleic acids.
+is_a: EDAM:0000003 ! Topic
+relationship: concerns EDAM:0002501 ! Nucleic acid data processing
+
+[Term]
+id: EDAM:0000080
+name: Sequence
+namespace: topic
+def: Resources for molecular sequences and related data such as alignments and motifs.
+alt_id: EDAM:0002228
+alt_id: EDAM:0000584
+xref: BioCatalogue:Sequence Analysis
+is_a: EDAM:0000003 ! Topic
+relationship: concerns EDAM:0002403 ! Sequence analysis
+relationship: concerns EDAM:0002503 ! Sequence data processing
+relationship: concerns EDAM:0000323 ! Phylogenetic tree construction
+relationship: is_source_of EDAM:0000849 ! Sequence record
+relationship: is_source_of EDAM:0002044 ! Sequence
+
+[Term]
+id: EDAM:0000081
+name: Structure
+namespace: topic
+def: Resources for molecular secondary or tertiary (3D) structures and related data such as alignments and structural motifs.
+alt_id: EDAM:0002827
+alt_id: EDAM:0000585
+synonym: "Structure analysis" EXACT []
+is_a: EDAM:0000003 ! Topic
+relationship: concerns EDAM:0002504 ! Structural data processing
+relationship: concerns EDAM:0002484 ! Structure processing
+
+[Term]
+id: EDAM:0000084
+name: Phylogenetics
+namespace: topic
+def: Resources for studying evolutionary relationships amongst organisms.
+comment: Phylogenetics involves phylogenetic tree construction, typically from molecular sequence or morphological data.  It can be used to analyse the genetic basis of heredity and variation, gene transfer, mode of selection / evolution etc.
+xref: BioCatalogue:Phylogeny
+xref: BioCatalogue:Statistical Robustness
+is_a: EDAM:0000003 ! Topic
+relationship: concerns EDAM:0000289 ! Sequence distance matrix generation
+relationship: concerns EDAM:0002443 ! Phylogenetic tree processing
+relationship: concerns EDAM:0000499 ! Multiple sequence alignment (phylogenetic tree-based)
+relationship: concerns EDAM:0000550 ! Phylogenetic model selection
+relationship: is_source_of EDAM:0000872 ! Phylogenetic tree
+
+[Term]
+id: EDAM:0000088
+name: Literature and documentation
+namespace: topic
+def: Resources concerning the bionformatics literature, bibliographic data and documentation.
+xref: BioCatalogue: Document Discovery
+xref: BioCatalogue: Literature retrieval
+is_a: EDAM:0000003 ! Topic
+relationship: concerns EDAM:0000515 ! Tool annotation retrieval
+relationship: concerns EDAM:0000516 ! Database annotation retrieval
+relationship: concerns EDAM:0002222 ! Ontology annotation retrieval
+relationship: concerns EDAM:0002246 ! Demonstration
+
+[Term]
+id: EDAM:0000091
+name: Data handling
+namespace: topic
+def: Resources for the generic management of biological data including basic handling of files and databases, datatypes and workflows.
+synonym: "Data types, processing and visualisation" EXACT []
+is_a: EDAM:0000003 ! Topic
+relationship: concerns EDAM:0001780 ! Sequence submission
+
+[Term]
+id: EDAM:0000102
+name: Sequencing and mapping
+namespace: topic
+def: Resources concerning the determination and mapping of complete nucleotide sequences.
+is_a: EDAM:0000003 ! Topic
+relationship: concerns EDAM:0000265 ! Frameshift error detection
+relationship: concerns EDAM:0000517 ! PCR primer design (for large scale sequencing)
+
+[Term]
+id: EDAM:0000121
+name: Proteomics
+namespace: topic
+def: Resources concerning experimental methods for studying the whole proteomes of organisms.
+comment: Proteomics uses high-throughput methods to separate, characterize and identify expressed proteins or analyse protein expression data (for example in different cells or tissues).
+alt_id: EDAM:0000764
+synonym: "Protein expression" EXACT []
+xref: BioCatalogue:Proteomics
+is_a: EDAM:0000003 ! Topic
+
+[Term]
+id: EDAM:0000200
+name: Microarrays
+namespace: topic
+def: Resources concerning microarrays, for example, to process microarray data or design probes and experiments.
+xref: BioCatalogue:Microarrays
+is_a: EDAM:0000003 ! Topic
+relationship: concerns EDAM:0002432 ! Microarray data processing
+relationship: concerns EDAM:0000309 ! Microarray probe design
+
+[Term]
+id: EDAM:0000230
+name: Sequence generation
+namespace: operation
+def: Generate a molecular sequence by some means.
+is_a: EDAM:0002121 ! Sequence report processing
+relationship: has_output EDAM:0002044 ! Sequence
+
+[Term]
+id: EDAM:0000231
+name: Sequence editing
+namespace: operation
+def: Edit or change a molecular sequence, either randomly or specifically.
+is_a: EDAM:0002121 ! Sequence report processing
+relationship: has_output EDAM:0002044 ! Sequence
+
+[Term]
+id: EDAM:0000232
+name: Sequence merging
+namespace: operation
+def: Merge two or more (typically overlapping) molecular sequences.
+synonym: "Sequence splicing" EXACT []
+is_a: EDAM:0002121 ! Sequence report processing
+relationship: has_output EDAM:0002044 ! Sequence
+
+[Term]
+id: EDAM:0000233
+name: Sequence conversion
+namespace: operation
+def: Convert a molecular sequence from one type to another.
+is_a: EDAM:0002121 ! Sequence report processing
+relationship: has_output EDAM:0002044 ! Sequence
+
+[Term]
+id: EDAM:0000335
+name: Report reformatting
+namespace: operation
+def: Reformat a file of data.
+is_a: EDAM:0002409 ! Report processing
+
+[Term]
+id: EDAM:0000561
+name: Sequence reformatting
+namespace: operation
+def: Reformat a molecular sequence.
+is_a: EDAM:0000335 ! Report reformatting
+is_a: EDAM:0002121 ! Sequence report processing
+relationship: has_input EDAM:0000849 ! Sequence record
+relationship: has_output EDAM:0000849 ! Sequence record
+
+[Term]
+id: EDAM:0000562
+name: Sequence alignment reformatting
+namespace: operation
+def: Reformat a molecular sequence alignment.
+is_a: EDAM:0000335 ! Report reformatting
+is_a: EDAM:0002122 ! Sequence alignment report processing
+relationship: has_input EDAM:0000863 ! Sequence alignment
+relationship: has_output EDAM:0000863 ! Sequence alignment
+
+[Term]
+id: EDAM:0000563
+name: Codon usage table reformating
+namespace: operation
+def: Reformat a codon usage table.
+is_a: EDAM:0000335 ! Report reformatting
+is_a: EDAM:0002433 ! Codon usage table processing
+relationship: has_input EDAM:0001597 ! Codon usage table
+relationship: has_output EDAM:0001597 ! Codon usage table
+
+[Term]
+id: EDAM:0000586
+name: Proteins
+namespace: topic
+def: Resources concerning proteins.
+alt_id: EDAM:0002225
+is_a: EDAM:0000003 ! Topic
+relationship: concerns EDAM:0002502 ! Protein data processing
+relationship: is_source_of EDAM:0000896 ! Protein annotation
+
+[Term]
+id: EDAM:0000602
+name: Pathways, networks and models
+namespace: topic
+def: Biological pathways, networks and other models, including the holistic analysis and modelling of biological systems (systems biology).
+alt_id: EDAM:0002259
+synonym: "Systems biology" EXACT []
+xref: BioCatalogue:Pathways
+xref: BioCatalogue:Pathway Retrieval
+xref: BioCatalogue:Systems Biology
+is_a: EDAM:0000003 ! Topic
+relationship: concerns EDAM:0002438 ! Pathway or network processing
+
+[Term]
+id: EDAM:0000607
+name: Laboratory resources
+namespace: topic
+def: Biological resources for use in the lab including cell lines, viruses, plasmids, phages, DNA probes and primers and so on.
+is_a: EDAM:0000003 ! Topic
+
+[Term]
+id: EDAM:0000621
+name: Organism
+namespace: topic
+def: Resources concerning a specific organism (e.g. a model organism) or group of organisms, either describing the organism(s) itself or data associated with it.
+is_a: EDAM:0000003 ! Topic
+
+[Term]
+id: EDAM:0000622
+name: Genomics
+namespace: topic
+def: Resources for the study of whole genomes of one or more organisms, or genomes in general, such as meta-information on genomes, genome projects, gene names etc.
+alt_id: EDAM:0000093
+alt_id: EDAM:0000794
+xref: BioCatalogue:Genomics
+xref: BioCatalogue:Functional Genomics
+is_a: EDAM:0000003 ! Topic
+
+[Term]
+id: EDAM:0000625
+name: Genotype and phenotype
+namespace: topic
+def: Resources concerning genotypes and / or phenotypes especially concerning variations (mutation) and disease.
+is_a: EDAM:0000003 ! Topic
+relationship: concerns EDAM:0002473 ! Genotype and phenotype annotation retrieval
+
+[Term]
+id: EDAM:0000842
+name: Identifier
+namespace: identifier
+def: Something that identifies (typically uniquely) something such as an entity, database, ontology, datatype.
+comment: This term is used for datatypes with the sole purpose of identification. It is not used for datatypes which contain other fields not related to identification. See OBO file for regular expression.
+relationship: is_identifier_of EDAM:0000006 ! Data
+
+[Term]
+id: EDAM:0000850
+name: Sequence set
+namespace: data
+def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries.
+comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
+is_a: EDAM:0002806 ! Core data
+
+[Term]
+id: EDAM:0000912
+name: Nucleic acid physicochemical property
+namespace: data
+def: A report on the physicochemical properties of a nucleic acid sequence or structure.
+comment: This is a broad data type and is used a placeholder for other, more specific types.
+is_a: EDAM:0002525 ! Nucleic acid data
+is_a: EDAM:0002087 ! Physicochemical property
+
+[Term]
+id: EDAM:0001233
+name: Sequence set (protein)
+namespace: data
+def: Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002524 ! Protein data
+
+[Term]
+id: EDAM:0001234
+name: Sequence set (nucleic acid)
+namespace: data
+def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
+is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM:0002525 ! Nucleic acid data
+
+[Term]
+id: EDAM:0001235
+name: Sequence cluster
+namespace: data
+def: A set of sequences that have been clustered or otherwise classified as belonging to a group including (typically) sequence cluster information.
+comment: The cluster might include sequences identifiers, short descriptions, alignment and summary information.
+is_a: EDAM:0000850 ! Sequence set
+
+[Term]
+id: EDAM:0001239
+name: Restriction digest
+namespace: data
+def: Restriction digest fragments from digesting a ucleotide sequence with restriction sites using a restriction endonuclease.
+xref: SO:0000412
+is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+
+[Term]
+id: EDAM:0001246
+name: Sequence cluster (nucleic acid)
+namespace: data
+def: A cluster of nucleotide sequences.
+comment: The sequences are typically related, for example a family of sequences.
+synonym: "Nucleotide sequence cluster" EXACT []
+is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+is_a: EDAM:0001235 ! Sequence cluster
+
+[Term]
+id: EDAM:0001248
+name: Sequence feature location format
+namespace: format
+def: Format for sequence positions (feature location) as used in DDBJ/EMBL/GenBank database.
+comment: See OBO file for URL of format specification.
+synonym: "Feature location" EXACT []
+is_a: EDAM:0002078 ! Sequence range format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001265
+name: Sequence composition (base frequencies)
+namespace: data
+def: A table of base frequencies of a nucleotide sequence.
+is_a: EDAM:0001261 ! Sequence composition
+is_a: EDAM:0002525 ! Nucleic acid data
+
+[Term]
+id: EDAM:0001273
+name: Sequence feature table (nucleic acid)
+namespace: data
+def: Nucleotide sequence feature annotation in any known sequence feature table format.
+is_a: EDAM:0001270 ! Sequence feature table
+is_a: EDAM:0002525 ! Nucleic acid data
+
+[Term]
+id: EDAM:0001276
+name: Nucleic acid features
+namespace: data
+def: Nucleotide sequence-specific feature annotation.
+is_a: EDAM:0002525 ! Nucleic acid data
+is_a: EDAM:0001255 ! Sequence features
+
+[Term]
+id: EDAM:0001295
+name: quicktandem
+namespace: format
+def: Report format for tandem repeats in a nucleotide sequence (format generated by the Sanger Centre quicktandem program).
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002155 ! Sequence features (repeats) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001296
+name: Sanger inverted repeat sequence report format
+namespace: format
+def: Report format for inverted repeats in a nucleotide sequence (format generated by the Sanger Centre inverted program).
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002155 ! Sequence features (repeats) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001297
+name: EMBOSS repeat sequence report format
+namespace: format
+def: Report format for tandem repeats in a sequence (an EMBOSS report format).
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002155 ! Sequence features (repeats) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001316
+name: est2genome
+namespace: format
+def: Format of a report on exon-intron structure generated by EMBOSS est2genome.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002159 ! Gene annotation (coding region) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001318
+name: restrict
+namespace: format
+def: Report format for restriction enzyme recognition sites used by EMBOSS restrict program.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002158 ! Nucleic acid features (restriction sites) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001319
+name: restover
+namespace: format
+def: Report format for restriction enzyme recognition sites used by EMBOSS restover program.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002158 ! Nucleic acid features (restriction sites) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001320
+name: REBASE restriction site report format
+namespace: format
+def: Report format for restriction enzyme recognition sites used by REBASE database.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002158 ! Nucleic acid features (restriction sites) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001334
+name: mspcrunch
+namespace: format
+def: Format of results of a sequence database search using some variant of MSPCrunch.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002066 ! Database hits (sequence) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001335
+name: smith-waterman
+namespace: format
+def: Format of results of a sequence database search using some variant of Smith Waterman.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002066 ! Database hits (sequence) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001336
+name: dhf
+namespace: format
+def: Format of EMBASSY domain hits file (DHF) of hits (sequences) with domain classification information.
+comment: The hits are relatives to a SCOP or CATH family and are found from a search of a sequence database. See OBO file for URL of format specification.
+is_a: EDAM:0002066 ! Database hits (sequence) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001337
+name: lhf
+namespace: format
+def: Format of EMBASSY ligand hits file (LHF) of database hits (sequences) with ligand classification information.
+comment: The hits are putative ligand-binding sequences and are found from a search of a sequence database. See OBO file for URL of format specification.
+is_a: EDAM:0002066 ! Database hits (sequence) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001349
+name: HMMER Dirichlet prior record
+namespace: format
+def: Dirichlet distribution HMMER format.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002074 ! Dirichlet distribution format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001350
+name: MEME Dirichlet prior record
+namespace: format
+def: Dirichlet distribution MEME format.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002074 ! Dirichlet distribution format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001351
+name: HMMER emission and transition count report
+namespace: format
+def: Format of a report from the HMMER package on the emission and transition counts of a hidden Markov model.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002075 ! HMM emission and transition counts format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001356
+name: prosite-pattern
+namespace: format
+def: Format of a regular expression pattern from the Prosite database.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002068 ! Sequence motif format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001357
+name: EMBOSS sequence pattern
+namespace: format
+def: Format of an EMBOSS sequence pattern.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002068 ! Sequence motif format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001360
+name: meme-motif
+namespace: format
+def: A motif in the format generated by the MEME program.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002068 ! Sequence motif format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001366
+name: prosite-profile
+namespace: format
+def: Sequence profile (sequence classifier) format used in the PROSITE database.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002069 ! Sequence profile format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001367
+name: jaspar
+namespace: format
+def: A profile (sequence classifier) in the format used in the JASPAR database.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002069 ! Sequence profile format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001369
+name: MEME background Markov model format
+namespace: format
+def: Format of the model of random sequences used by MEME.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002072 ! Hidden Markov model format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001370
+name: HMMER hidden Markov model format
+namespace: format
+def: Format of a hidden Markov model representation used by the HMMER package.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002072 ! Hidden Markov model format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001383
+name: Sequence alignment (nucleic acid)
+namespace: data
+def: Alignment of multiple nucleotide sequences.
+is_a: EDAM:0000863 ! Sequence alignment
+is_a: EDAM:0002525 ! Nucleic acid data
+
+[Term]
+id: EDAM:0001419
+name: Sequence-MEME profile alignment format
+namespace: format
+def: Format for alignment of molecular sequences to MEME profiles (position-dependent scoring matrices) as generated by the MAST tool from the MEME package.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002014 ! Sequence-profile alignment format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001421
+name: HMMER alignment report format (sequences versus HMMs)
+namespace: format
+def: Format used by the HMMER package for an alignment of a sequence against a hidden Markov model database.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002014 ! Sequence-profile alignment format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001422
+name: HMMER alignment report format (HMM versus sequences)
+namespace: format
+def: Format used by the HMMER package for of an alignment of a hidden Markov model against a sequence database.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002014 ! Sequence-profile alignment format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001423
+name: PHYLIP phylogenetic distance matrix format
+namespace: format
+def: Format of PHYLIP phylogenetic distance matrix data.
+comment: Data Type must include the distance matrix, probably as pairs of sequence identifiers with a distance (integer or float). See OBO file for URL of format specification.
+is_a: EDAM:0002067 ! Sequence distance matrix format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001430
+name: PHYLIP continuous quantitative characters format
+namespace: format
+def: PHYLIP file format for continuous quantitative character data.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002037 ! Phylogenetic continuous quantitative character format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001432
+name: PHYLIP phylogenetic character frequencies
+namespace: format
+def: PHYLIP file format for phylogenetics character frequency data.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002037 ! Phylogenetic continuous quantitative character format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001433
+name: PHYLIP discrete states format
+namespace: format
+def: Format of PHYLIP discrete states data.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002038 ! Phylogenetic discrete states format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001434
+name: PHYLIP cliques file format
+namespace: format
+def: Format of PHYLIP cliques data.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002039 ! Phylogenetic metadata (cliques) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001445
+name: Phylip phylogenetic tree distance data format
+namespace: format
+def: Format for distances, such as Branch Score distance, between two or more phylogenetic trees as used by the Phylip package.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002049 ! Phylogenetic metadata (tree distances) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001454
+name: dssp
+namespace: format
+def: Format of an entry from the DSSP database (Dictionary of Secondary Structure in Proteins).
+comment: The DSSP database is built using the DSSP application which defines secondary structure, geometrical features and solvent exposure of proteins, given atomic coordinates in PDB format. See OBO file for URL of format specification.
+is_a: EDAM:0002077 ! Protein secondary structure format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001455
+name: hssp
+namespace: format
+def: Entry format of the HSSP database (Homology-derived Secondary Structure in Proteins).
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002077 ! Protein secondary structure format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001457
+name: Vienna RNA secondary structure format
+namespace: format
+def: Format of RNA secondary structure (in bracket notation) with free energy values, generated by the Vienna program.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002076 ! RNA secondary structure format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001458
+name: Vienna local RNA secondary structure format
+namespace: format
+def: Format of local RNA secondary structure components with free energy values, generated by the Vienna program.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002076 ! RNA secondary structure format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001459
+name: Nucleic acid structure
+namespace: data
+def: 3D coordinate and associated data for a nucleic acid tertiary (3D) structure.
+is_a: EDAM:0000883 ! Structure
+is_a: EDAM:0002525 ! Nucleic acid data
+
+[Term]
+id: EDAM:0001476
+name: PDB format
+namespace: format
+def: Entry format of PDB database in PDB format, or any report in the same format.
+comment: See OBO file for URL of format specification.
+synonym: "PDB" EXACT []
+xref: Moby:PDB-formatted-text
+xref: Moby:PDB-Text
+is_a: EDAM:0001475 ! PDB database entry format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001477
+name: mmCIF
+namespace: format
+def: Entry format of PDB database in mmCIF format, or any report in the same format.
+comment: See OBO file for URL of format specification.
+synonym: "mmcif" EXACT []
+xref: Moby:mmCIF-Text
+xref: Moby:mmCIF_Text
+is_a: EDAM:0001475 ! PDB database entry format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001482
+name: Tertiary structure alignment (nucleic acid)
+namespace: data
+def: Alignment (superimposition) of nucleic acid tertiary (3D) structures.
+is_a: EDAM:0000886 ! Tertiary structure alignment
+is_a: EDAM:0002525 ! Nucleic acid data
+
+[Term]
+id: EDAM:0001500
+name: Domainatrix 3D-1D scoring matrix format
+namespace: format
+def: Format of a matrix of 3D-1D scores used by the EMBOSS Domainatrix applications.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002064 ! 3D-1D scoring matrix format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001504
+name: aaindex
+namespace: format
+def: Amino acid index format used by the AAindex database.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002017 ! Amino acid index format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001551
+name: Pcons report format
+namespace: format
+def: Format of output of the Pcons Model Quality Assessment Program (MQAP).
+comment: Pcons ranks protein models by assessing their quality based on the occurrence of recurring common three-dimensional structural patterns. Pcons returns a score reflecting the overall global quality and a score for each individual residue in the protein reflecting the local residue quality. See OBO file for URL of format specification.
+is_a: EDAM:0002065 ! Protein structure annotation (quality evaluation) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001552
+name: ProQ report format
+namespace: format
+def: Format of output of the ProQ protein model quality predictor.
+comment: ProQ is a neural network-based predictor that predicts the quality of a protein model based on the number of structural features. See OBO file for URL of format specification.
+is_a: EDAM:0002065 ! Protein structure annotation (quality evaluation) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001582
+name: findkm
+namespace: format
+def: A report format for the kinetics of enzyme-catalysed reaction(s) in a format generated by EMBOSS findkm. This includes Michaelis Menten plot, Hanes Woolf plot, Michaelis Menten constant (Km) and maximum velocity (Vmax).
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002027 ! Enzyme kinetics report format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001627
+name: Primer3 primer report format
+namespace: format
+def: Report format on PCR primers and hybridization oligos as generated by Whitehead primer3 program.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002061 ! Nucleic acid features (primers) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001629
+name: mira
+namespace: format
+def: Format of MIRA sequence trace information file.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002057 ! Sequence trace format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001630
+name: CAF
+namespace: format
+def: Common Assembly Format (CAF). A sequence assembly format including contigs, base-call qualities, and other metadata.
+spec_url: http://www.sanger.ac.uk/resources/software/caf/
+is_a: EDAM:0002330 ! Text format
+is_a: EDAM:0002561 ! Sequence assembly format (text)
+relationship: is_format_of EDAM:0000925 ! Sequence assembly
+
+[Term]
+id: EDAM:0001633
+name: PHD
+namespace: format
+def: PHD sequence trace format to store serialised chromatogram data (reads).
+spec_url: http://www.bioperl.org/wiki/PHD_sequence_format
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0000924 ! Sequence trace
+
+[Term]
+id: EDAM:0001637
+name: dat
+namespace: format
+def: Format of Affymetrix data file of raw image data.
+comment: See OBO file for URL of format specification.
+synonym: "Affymetrix image data file format" EXACT []
+is_a: EDAM:0002058 ! Gene annotation (expression) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001638
+name: cel
+namespace: format
+def: Format of Affymetrix data file of information about (raw) expression levels of the individual probes.
+comment: See OBO file for URL of format specification.
+synonym: "Affymetrix probe raw data format" EXACT []
+is_a: EDAM:0002058 ! Gene annotation (expression) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001639
+name: affymetrix
+namespace: format
+def: Format of affymetrix gene cluster files (hc-genes.txt, hc-chips.txt) from hierarchical clustering.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001641
+name: affymetrix-exp
+namespace: format
+def: Affymetrix data file format for information about experimental conditions and protocols.
+comment: See OBO file for URL of format specification.
+synonym: "Affymetrix experimental conditions data file format" EXACT []
+is_a: EDAM:0002056 ! Microarray experiment data format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001644
+name: chp
+namespace: format
+def: Format of Affymetrix data file of information about (normalised) expression levels of the individual probes.
+comment: See OBO file for URL of format specification.
+synonym: "Affymetrix probe normalised data format" EXACT []
+is_a: EDAM:0002058 ! Gene annotation (expression) format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001705
+name: HET group dictionary entry format
+namespace: format
+def: The format of an entry from the HET group dictionary (HET groups from PDB files).
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002030 ! Small molecule annotation format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001739
+name: pmc
+namespace: format
+def: Article format of the PubMed Central database.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002020 ! Article format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001740
+name: iHOP text mining abstract format
+namespace: format
+def: iHOP abstract format.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002021 ! Text mining report format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001741
+name: Oscar3 text mining abstract format
+namespace: format
+def: Text mining abstract format from the Oscar 3 application.
+comment: Oscar 3 performs chemistry-specific parsing of chemical documents. It attempts to identify chemical names, ontology terms and chemical data from a document. See OBO file for URL of format specification.
+is_a: EDAM:0002021 ! Text mining report format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001747
+name: PDB atom record format
+namespace: format
+def: Format of an ATOM record (describing data for an individual atom) from a PDB file.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0001918 ! Atomic data format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001848
+name: Tertiary structure reformatting
+namespace: operation
+def: Reformat a file of tertiary structure data.
+xref: WHATIF: PDBasXML
+is_a: EDAM:0000335 ! Report reformatting
+is_a: EDAM:0002234 ! Tertiary structure report processing
+
+[Term]
+id: EDAM:0001861
+name: PlasMapper TextMap plasmid map format
+namespace: format
+def: Map of a plasmid (circular DNA) in PlasMapper TextMap format.
+comment: See OBO file for URL of format specification.
+xref: Moby:PlasMapperTextMap
+is_a: EDAM:0002060 ! Map format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0001915
+name: Format
+namespace: format
+def: An exchange format of particular type of data.
+comment: Common formats used by multiple independent tools and main formats used by public databases are listed.
+
+[Term]
+id: EDAM:0001961
+name: stockholm
+namespace: format
+def: Stockholm multiple sequence alignment format (used by Pfam and Rfam).
+spec_url: http://en.wikipedia.org/wiki/Stockholm_format
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0000863 ! Sequence alignment
+
+[Term]
+id: EDAM:0001974
+name: GFF
+namespace: format
+def: General Feature Format (GFF) of sequence features.
+comment: Current version is 2 (GFF2). GFF3 is a slightly different, richer format and uses ontology terms. See OBO file for URL of format specification.
+synonym: "GFF2" EXACT []
+spec_url: http://www.sanger.ac.uk/resources/software/gff/spec.html
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0001255 ! Sequence features
+
+[Term]
+id: EDAM:0001975
+name: GFF3
+namespace: format
+def: Generic Feature Format version 3 (GFF3) of sequence features.
+comment: As opposed to GFF (GFF2), GFF3 is a slightly different, richer format and uses ontology terms. See OBO file for URL of format specification.
+spec_url: http://sequenceontology.org/resources/gff3.html
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0001255 ! Sequence features
+
+[Term]
+id: EDAM:0001979
+name: debug-feat
+namespace: format
+def: EMBOSS debugging trace feature format of full internal data content.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0001920 ! Sequence feature annotation format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002035
+name: Chemical formula format
+namespace: format
+def: Text format of a chemical formula.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002350 ! Datatype format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002070
+name: Sequence motif (nucleic acid)
+namespace: data
+def: A nucleotide sequence motif.
+is_a: EDAM:0001353 ! Sequence motif
+is_a: EDAM:0002525 ! Nucleic acid data
+
+[Term]
+id: EDAM:0002084
+name: Nucleic acid annotation
+namespace: data
+def: An informative report about a specific nucleic acid.
+is_a: EDAM:0002529 ! Molecular annotation
+is_a: EDAM:0002525 ! Nucleic acid data
+
+[Term]
+id: EDAM:0002121
+name: Sequence report processing
+namespace: operation
+def: Perform basic (non-analytical) operations on (a report or file of( sequences (which might include features), such as file creation or concatenation, removal or ordering of sequences.
+is_a: EDAM:0002446 ! Sequence processing
+is_a: EDAM:0002409 ! Report processing
+
+[Term]
+id: EDAM:0002181
+name: EMBL-like format (text)
+namespace: format
+def: A text format resembling EMBL entry format.
+comment: This term may be used for the many non-standard EMBL-like text formats. See OBO file for URL of format specification.
+is_a: EDAM:0002543 ! EMBL-like
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002182
+name: FASTQ-like format (text)
+namespace: format
+def: A text format resembling FASTQ short read format.
+comment: This term may be used for non-standard FASTQ short read-like formats. See OBO file for URL of format specification.
+is_a: EDAM:0002545 ! FASTQ-like
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002187
+name: uniprotkb-like format (text)
+namespace: format
+def: A text sequence format resembling uniprotkb entry format.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002547 ! uniprotkb-like
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002194
+name: medline
+namespace: format
+def: Abstract format used by MedLine database.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002020 ! Article format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002197
+name: OWL
+namespace: format
+def: OWL ontology format.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002195 ! Ontology format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002198
+name: Gene cluster
+namespace: data
+def: A cluster of similar genes.
+is_a: EDAM:0001246 ! Sequence cluster (nucleic acid)
+
+[Term]
+id: EDAM:0002200
+name: FASTA-like format (text)
+namespace: format
+def: A text format resembling FASTA format.
+comment: This term may be used for the many non-standard FASTA-like formats. See OBO file for URL of format specification.
+is_a: EDAM:0002546 ! FASTA-like
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002205
+name: GenBank-like format (text)
+namespace: format
+def: A text format resembling GenBank entry (plain text) format.
+comment: This term may be used for the non-standard GenBank-like text formats. See OBO file for URL of format specification.
+is_a: EDAM:0002559 ! GenBank-like
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002206
+name: Sequence feature table format (text)
+namespace: format
+def: Text format for a sequence feature table.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002548 ! Sequence feature table format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002230
+name: Classification
+namespace: topic
+def: Resources that help to identify, group, or name things in a structured way according to some schema based on observable relationships.
+is_a: EDAM:0000003 ! Topic
+
+[Term]
+id: EDAM:0002245
+name: Sequence set (bootstrapped)
+namespace: data
+def: A collection of sequences output from a bootstrapping (resampling) procedure.
+comment: Bootstrapping is often performed in phylogenetic analysis.
+is_a: EDAM:0000850 ! Sequence set
+
+[Term]
+id: EDAM:0002330
+name: Text format
+namespace: format
+def: Text format.
+comment: Data in text format can be compressed into binary format, or can be a value of an XML element or attribute.
+is_a: EDAM:0001915 ! Format
+
+[Term]
+id: EDAM:0002334
+name: URI format
+namespace: format
+def: Typical textual representation of a URI.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002330 ! Text format
+is_a: EDAM:0002350 ! Datatype format
+
+[Term]
+id: EDAM:0002354
+name: RNA family annotation
+namespace: data
+def: An informative report on a specific RNA family or other group of classified RNA sequences.
+is_a: EDAM:0002018 ! Metadata and annotation
+is_a: EDAM:0002525 ! Nucleic acid data
+
+[Term]
+id: EDAM:0002525
+name: Nucleic acid data
+namespace: data
+def: Data concerning one or more nucleic acid molecules.
+is_a: EDAM:0002528 ! Molecular data
+
+[Term]
+id: EDAM:0002549
+name: OBO
+namespace: format
+def: OBO ontology text format.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002196 ! OBO format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002551
+name: Sequence record format (text)
+namespace: format
+def: Data format for a molecular sequence record.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0001919 ! Sequence record format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002554
+name: Alignment format (text)
+namespace: format
+def: Text format for molecular sequence alignment information.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0001921 ! Alignment format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002556
+name: Phylogenetic tree format (text)
+namespace: format
+def: Text format for a phylogenetic tree.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002006 ! Phylogenetic tree format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002562
+name: Amino acid identifier format
+namespace: format
+def: Text format (representation) of amino acid residues.
+comment: See OBO file for URL of format specification.
+is_a: EDAM:0002350 ! Datatype format
+is_a: EDAM:0002330 ! Text format
+
+[Term]
+id: EDAM:0002573
+name: SAM
+namespace: format
+def: Sequence Alignment/Map (SAM) format for alignment of nucleotide sequences (e.g. sequencing reads) to (a) reference sequence(s). May contain base-call and alignment qualities and other data.
+comment: The format supports short and long reads (up to 128Mbp) produced by different sequencing platforms and is used to hold mapped data within the GATK and across the Broad Institute, the Sanger Centre, and throughout the 1000 Genomes project. See OBO file for URL of format specification.
+spec_url: http://samtools.sourceforge.net/SAM-1.3.pdf
+is_a: EDAM:0002057 ! Sequence trace format
+is_a: EDAM:0001921 ! Alignment format
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0001383 ! Sequence alignment (nucleic acid)
+relationship: is_format_of EDAM:0001381 ! Sequence alignment (pair)
+
+[Term]
+id: EDAM:0002816
+name: Genes
+namespace: topic
+def: Resources concerning the study of genes.
+is_a: EDAM:0000003 ! Topic
+is_a: EDAM:0000640 ! Nucleic acid sequences
+relationship: concerns EDAM:0002472 ! Gene annotation retrieval
+
+[Term]
+id: EDAM:0002829
+name: Ontologies and nomenclature
+namespace: topic
+def: Resources and study on conceptualisation and naming.
+is_a: EDAM:0000003 ! Topic
+
+[Term]
+id: EDAM:0002841
+name: Informatics
+namespace: topic
+def: A sub-discipline of bioinformatics; the application of information technology to a specialised biological area.
+is_a: EDAM:0000003 ! Topic
+
+[Term]
+id: EDAM:0002874
+name: Sequence set (polymorphic)
+namespace: data
+def: A set of sub-sequences displaying some type of polymorphism, typically indicating the sequence in which they occur, their position and other metadata.
+is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+
+[Term]
+id: EDAM:0003001
+name: ACE
+namespace: format
+def: ACE sequence assembly format including contigs, base-call qualities, and other metadata (version Aug 1998 and onwards).
+spec_url: http://bozeman.mbt.washington.edu/consed/distributions/README.14.0.txt
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0000925 ! Sequence assembly
+
+[Term]
+id: EDAM:0003003
+name: BED
+namespace: format
+def: BED format of sequence annotation track, typically to be displayed in a genome browser.
+comment: BED detail format includes 2 additional columns (http://genome.ucsc.edu/FAQ/FAQformat#format1.7) and BED 15 includes 3 additional columns for experiment scores (http://genomewiki.ucsc.edu/index.php/Microarray_track).
+spec_url: http://genome.ucsc.edu/FAQ/FAQformat#format1
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0003002 ! Sequence annotation track
+
+[Term]
+id: EDAM:0003005
+name: WIG
+namespace: format
+def: Wiggle format (WIG) of a sequence annotation track that consists of a value for each sequence position. Typically to be displayed in a genome browser.
+spec_url: http://genome.ucsc.edu/goldenPath/help/wiggle.html
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0003002 ! Sequence annotation track
+
+[Term]
+id: EDAM:0003007
+name: PSL
+namespace: format
+def: PSL format of alignments, typically generated by BLAT or psLayout. Can be displayed in a genome browser like a sequence annotation track.
+spec_url: http://genome.ucsc.edu/FAQ/FAQformat#format2
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0001381 ! Sequence alignment (pair)
+relationship: is_format_of EDAM:0003002 ! Sequence annotation track
+
+[Term]
+id: EDAM:0003008
+name: MAF (Multiple Alignment Format)
+namespace: format
+def: Multiple Alignment Format (MAF) supporting alignments of whole genomes with rearrangements, directions, multiple pieces to the alignment, and so forth. Typically generated by Multiz and TBA aligners; can be displayed in a genome browser like a sequence annotation track.
+spec_url: http://genome.ucsc.edu/FAQ/FAQformat#format5
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0000863 ! Sequence alignment
+relationship: is_format_of EDAM:0003002 ! Sequence annotation track
+
+[Term]
+id: EDAM:0003011
+name: genePred
+namespace: format
+def: genePred table format for gene prediction tracks.
+comment: genePred format has 3 main variations (http://genome.ucsc.edu/FAQ/FAQformat#format9 http://www.broadinstitute.org/software/igv/genePred). They reflect UCSC Browser DB tables.
+spec_url: http://genome.ucsc.edu/FAQ/FAQformat#format9
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0003002 ! Sequence annotation track
+
+[Term]
+id: EDAM:0003012
+name: pgSnp
+namespace: format
+def: Personal Genome SNP (pgSnp) format for sequence variation tracks (indels and polymorphisms), supported by the UCSC Genome Browser.
+spec_url: http://genome.ucsc.edu/FAQ/FAQformat#format10
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0003002 ! Sequence annotation track
+
+[Term]
+id: EDAM:0003013
+name: axt
+namespace: format
+def: axt format of alignments, typically produced from BLASTZ.
+spec_url: http://genome.ucsc.edu/goldenPath/help/axt.html
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0001381 ! Sequence alignment (pair)
+
+[Term]
+id: EDAM:0003014
+name: LAV
+namespace: format
+def: LAV format of alignments generated by BLASTZ and LASTZ.
+spec_url: http://www.bx.psu.edu/miller_lab/dist/lav_format.html
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0001381 ! Sequence alignment (pair)
+
+[Term]
+id: EDAM:0003015
+name: Pileup
+namespace: format
+def: Pileup format of alignment of sequences (e.g. sequencing reads) to (a) reference sequence(s). Contains aligned bases per base of the reference sequence(s).
+comment: See OBO file for URL of format specification.
+spec_url: http://samtools.sourceforge.net/pileup.shtml
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0001381 ! Sequence alignment (pair)
+
+[Term]
+id: EDAM:0003016
+name: VCF
+namespace: format
+def: Variant Call Format (VCF) for sequence variation (indels, polymorphisms, structural variation).
+spec_url: http://vcftools.sourceforge.net/specs.html
+is_a: EDAM:0002330 ! Text format
+relationship: is_format_of EDAM:0001255 ! Sequence features
+

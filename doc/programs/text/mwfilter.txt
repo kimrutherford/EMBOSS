@@ -47,7 +47,7 @@ Molecular weights output file [molwts.mwfilter]:
 Command line arguments
 
 Filter noisy data from molecular weights file
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Molecular weights file
@@ -203,19 +203,15 @@ See also
    backtranambig    Back-translate a protein sequence to ambiguous nucleotide
                     sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
-   charge           Draw a protein charge plot
-   checktrans       Reports STOP codons and ORF statistics of a protein
    compseq          Calculate the composition of unique words in sequences
    emowse           Search protein sequences by digest fragment molecular weight
    freak            Generate residue/base frequency table or plot
-   iep              Calculate the isoelectric point of proteins
    mwcontam         Find weights common to multiple molecular weights files
-   octanol          Draw a White-Wimley protein hydropathy plot
+   oddcomp          Identify proteins with specified sequence word composition
+   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+                    sites
    pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepstats         Calculates statistics of protein properties
-   pepwindow        Draw a hydropathy plot for a protein sequence
-   pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
-                    alignment
    wordcount        Count and extract unique words in molecular sequence(s)
 
 Author(s)

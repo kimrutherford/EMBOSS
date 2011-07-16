@@ -157,7 +157,7 @@ segment pairs.
         Many examples illustrating different behaviours is good.
  -->
 
-<b>Here is a sample session with edialign</b>
+Here is a sample session with <b>edialign</b>
 <p>
 
 <p>
@@ -182,7 +182,7 @@ Output file [vtest.edialign]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Local multiple alignment of sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     Sequence set filename and optional format,
@@ -756,17 +756,35 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
+<b>edialign</b> reads nucleotide or protein sequences to be aligned.
 
-<b>edialign</b> reads any normal sequence USAs.  You must give as
-input at least two sequences. You can use proteins as well as nucleic
-acids, but you can't mix them.
+<p>
+<p>
 
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 <p>
 
 
@@ -795,21 +813,41 @@ GRTSLYADSPSVPSHLPDRVH
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-
-        If you wish to include the standard description of the avalable
-	report formats, use:
-        #include file="inc/reportformats.ihtml"
-   -->
 
 <b>edialign</b> produces two output files with a multiple sequence
 alignment. The first one is a file in DIALIGN format and the second
 one is a sequence file in any format you choose (by default
-fastA). Capital letters denote aligned residues, i.e. residues
+fastA).
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+<p>
+Capital letters denote aligned residues, i.e. residues
 involved in at least one of the "diagonals" in the
 alignment. Lower-case letters denote residues not belonging to any of
 these selected "diagonals". They are not considered to be aligned by

@@ -1,5 +1,5 @@
 Identify protein-coding regions using Fickett TESTCODE statistic
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -10,11 +10,12 @@ Version: EMBOSS:6.3.0
                                   slide along the sequence, covering the same
                                   number of bases each time. (Integer 200 or
                                   more)
-*  -outfile            report     [*.tcode] Output report file name
+*  -outfile            report     [*.tcode] Output report file name (default
+                                  -rformat table)
 *  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:

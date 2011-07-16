@@ -1,0 +1,387 @@
+                                cacheensembl
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Generates server cache file for an Ensembl server
+
+Description
+
+   Contacts the ENSEMBL server to find the available databases and saves
+   definitions for them to a server cache file.
+
+Usage
+
+   Here is a sample session with cacheensembl
+
+
+% cacheensembl -servername ensembl -cachefile ~/.embossdata/qatests.server.ensem
+bl -auto
+
+ailuropoda_melanoleuca
+ailuropoda_melanoleuca_otherfeatures
+anolis_carolinensis
+anolis_carolinensis_otherfeatures
+bos_taurus
+bos_taurus_otherfeatures
+bos_taurus_variation
+bos_taurus_funcgen
+caenorhabditis_elegans
+caenorhabditis_elegans_funcgen
+callithrix_jacchus
+callithrix_jacchus_otherfeatures
+canis_familiaris
+canis_familiaris_otherfeatures
+canis_familiaris_variation
+canis_familiaris_funcgen
+cavia_porcellus
+cavia_porcellus_otherfeatures
+choloepus_hoffmanni
+ciona_intestinalis
+ciona_intestinalis_otherfeatures
+ciona_intestinalis_funcgen
+ciona_savignyi
+ciona_savignyi_otherfeatures
+danio_rerio
+danio_rerio_vega
+danio_rerio_otherfeatures
+danio_rerio_variation
+danio_rerio_funcgen
+dasypus_novemcinctus
+default_compara
+default_ontology
+dipodomys_ordii
+drosophila_melanogaster
+drosophila_melanogaster_otherfeatures
+drosophila_melanogaster_variation
+drosophila_melanogaster_funcgen
+echinops_telfairi
+equus_caballus
+equus_caballus_otherfeatures
+equus_caballus_variation
+erinaceus_europaeus
+felis_catus
+felis_catus_variation
+gallus_gallus
+gallus_gallus_otherfeatures
+gallus_gallus_variation
+gallus_gallus_funcgen
+gasterosteus_aculeatus
+gasterosteus_aculeatus_otherfeatures
+gorilla_gorilla
+gorilla_gorilla_otherfeatures
+homo_sapiens
+homo_sapiens_vega
+homo_sapiens_otherfeatures
+homo_sapiens_cdna
+homo_sapiens_variation
+homo_sapiens_funcgen
+loxodonta_africana
+macaca_mulatta
+macaca_mulatta_otherfeatures
+macaca_mulatta_funcgen
+macropus_eugenii
+meleagris_gallopavo
+meleagris_gallopavo_otherfeatures
+microcebus_murinus
+monodelphis_domestica
+monodelphis_domestica_variation
+mus_musculus
+mus_musculus_vega
+mus_musculus_otherfeatures
+mus_musculus_cdna
+mus_musculus_variation
+mus_musculus_funcgen
+myotis_lucifugus
+nomascus_leucogenys
+nomascus_leucogenys_otherfeatures
+ochotona_princeps
+ornithorhynchus_anatinus
+ornithorhynchus_anatinus_otherfeatures
+ornithorhynchus_anatinus_variation
+ornithorhynchus_anatinus_funcgen
+oryctolagus_cuniculus
+oryctolagus_cuniculus_otherfeatures
+oryzias_latipes
+oryzias_latipes_otherfeatures
+otolemur_garnettii
+pan_troglodytes
+pan_troglodytes_otherfeatures
+pan_troglodytes_variation
+pan_troglodytes_funcgen
+pongo_abelii
+pongo_abelii_otherfeatures
+pongo_abelii_variation
+procavia_capensis
+pteropus_vampyrus
+rattus_norvegicus
+rattus_norvegicus_otherfeatures
+rattus_norvegicus_variation
+rattus_norvegicus_funcgen
+saccharomyces_cerevisiae
+saccharomyces_cerevisiae_otherfeatures
+saccharomyces_cerevisiae_variation
+saccharomyces_cerevisiae_funcgen
+sorex_araneus
+spermophilus_tridecemlineatus
+sus_scrofa
+sus_scrofa_otherfeatures
+sus_scrofa_variation
+sus_scrofa_funcgen
+taeniopygia_guttata
+taeniopygia_guttata_otherfeatures
+taeniopygia_guttata_variation
+takifugu_rubripes
+takifugu_rubripes_otherfeatures
+tarsius_syrichta
+tetraodon_nigroviridis
+tetraodon_nigroviridis_otherfeatures
+tetraodon_nigroviridis_variation
+tupaia_belangeri
+tursiops_truncatus
+vicugna_pacos
+xenopus_tropicalis
+xenopus_tropicalis_otherfeatures
+xenopus_tropicalis_funcgen
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Generates server cache file for an Ensembl server
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+   -servername         string     Server name (Any string)
+  [-cachefile]         outfile    [server.$(servername)] Server cache output
+                                  file
+
+   Additional (Optional) qualifiers:
+   -outfile            outfile    [stdout] Output file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   "-cachefile" associated qualifiers
+   -odirectory1        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   cacheensemblcontacts the ENSEMBL server for details of available
+   databases.
+
+Output file format
+
+   cacheensembl writes a server cache file which can be saved in the
+   user's .embossdata directory or, for a system administrator, stored in
+   the site-wide share/EMBOSS/ directory.
+
+  Output files for usage example
+
+  File: qatests.server.ensembl
+
+# /homes/pmr/.embossdata/qatests.server.ensembl 2011-07-15 12:00:00
+# Automatically generated by cacheensembl for server 'ensembl'.
+
+DBNAME ailuropoda_melanoleuca [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/ailuropoda_melanoleuca_
+core_62_1b"
+]
+
+ALIAS 9646 ailuropoda_melanoleuca
+ALIAS ailmel ailuropoda_melanoleuca
+ALIAS ailmel1 ailuropoda_melanoleuca
+ALIAS amel ailuropoda_melanoleuca
+ALIAS amelanoleuca ailuropoda_melanoleuca
+ALIAS panda ailuropoda_melanoleuca
+
+DBNAME ailuropoda_melanoleuca_otherfeatures [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/ailuropoda_melanoleuca_
+otherfeatures_62_1b"
+]
+
+DBNAME anolis_carolinensis [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/anolis_carolinensis_cor
+e_62_2a"
+]
+
+ALIAS 28377 anolis_carolinensis
+ALIAS acar anolis_carolinensis
+ALIAS acarolinensis anolis_carolinensis
+ALIAS anocar anolis_carolinensis
+ALIAS anolis anolis_carolinensis
+ALIAS anoliscarolinensis anolis_carolinensis
+ALIAS anolis_lizard anolis_carolinensis
+
+DBNAME anolis_carolinensis_otherfeatures [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/anolis_carolinensis_oth
+erfeatures_62_2a"
+]
+
+DBNAME bos_taurus [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/bos_taurus_core_62_4k"
+]
+
+ALIAS 9913 bos_taurus
+ALIAS bostau bos_taurus
+
+
+  [Part of this file has been deleted for brevity]
+
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/tursiops_truncatus_core
+_62_1h"
+]
+
+ALIAS 9739 tursiops_truncatus
+ALIAS dolphin tursiops_truncatus
+ALIAS ttru tursiops_truncatus
+ALIAS ttruncatus tursiops_truncatus
+ALIAS tursiopstruncatus tursiops_truncatus
+ALIAS turtru tursiops_truncatus
+ALIAS turtru1 tursiops_truncatus
+
+DBNAME vicugna_pacos [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/vicugna_pacos_core_62_1
+h"
+]
+
+ALIAS 30538 vicugna_pacos
+ALIAS alpaca vicugna_pacos
+ALIAS vicpac vicugna_pacos
+ALIAS vicpac1 vicugna_pacos
+ALIAS vicugnapacos vicugna_pacos
+ALIAS vpac vicugna_pacos
+ALIAS vpacos vicugna_pacos
+
+DBNAME xenopus_tropicalis [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/xenopus_tropicalis_core
+_62_42"
+]
+
+ALIAS 8364 xenopus_tropicalis
+ALIAS xenopus xenopus_tropicalis
+ALIAS xentro xenopus_tropicalis
+ALIAS xtro xenopus_tropicalis
+ALIAS xtropicalis xenopus_tropicalis
+
+DBNAME xenopus_tropicalis_otherfeatures [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/xenopus_tropicalis_othe
+rfeatures_62_42"
+]
+
+DBNAME xenopus_tropicalis_funcgen [
+  release: "62"
+  server:  "ensembl"
+  url:     "mysql://anonymous@ensembldb.ensembl.org:5306/xenopus_tropicalis_func
+gen_62_42"
+]
+
+
+Data files
+
+   **************** EDIT HERE ****************
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+   cachedas         Generates server cache file for DAS servers or for the DAS
+                    registry
+   cachedbfetch     Generates server cache file for Dbfetch/WSDbfetch data
+                    sources
+   cacheebeyesearch Generates server cache file for EB-eye search domains
+   dbtell           Display information about a public database
+   servertell       Display information about a public server
+   showdb           Displays information on configured databases
+   showserver       Displays information on configured servers
+
+Author(s)
+
+   Michael Schuster
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

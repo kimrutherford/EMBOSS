@@ -2,8 +2,8 @@ application: ensembltest [
   documentation: "Demonstration of the Ensembl API to be."
   groups: "Test"
   embassy: "myemboss"
-  relations: "/edam/topic/0000220 File handling"
-  relations: "/edam/operation/0000336 File debugging"
+    relations: "EDAM:0000220 topic File handling"
+    relations: "EDAM:0000336 operation File debugging"
 ]
 
 section: input [

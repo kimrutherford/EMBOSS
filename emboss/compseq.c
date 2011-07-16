@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     AjBool first_time_round = ajTrue;
     ajulong count;
     AjPStr dispseq = NULL;
-    AjPStr tmpstr = NULL;		/* from table, no need to delete */
+    const AjPStr tmpstr = NULL;		/* from table, no need to delete */
 
     ajulong total = 0;		/* no. of words counted */
     ajulong calcfreq_total = 0; /* no. of single bases/residues counted */
@@ -139,7 +139,7 @@ int main(int argc, char **argv)
     else
     {
 	ajFmtPrintF(outfile,"# The Expected frequencies are taken "
-		    "from the file: %s\n",ajFileGetNameC(infile));
+		    "from the file: %S\n",ajFileGetPrintnameS(infile));
 	compseq_readexpfreq(&exptable, infile, word);
 	have_exp_freq = ajTrue;
 	ajFileClose(&infile);
@@ -322,10 +322,9 @@ int main(int argc, char **argv)
 
 	if(have_exp_freq)
 	{
-	    if((tmpstr=ajTableFetch(exptable,dispseq)))
+	    if((tmpstr=ajTableFetchS(exptable,dispseq)))
 	    {
 		ajStrToDouble(tmpstr, &exp_freq);
-		tmpstr = NULL;
 	    }
 	}
 	else
@@ -374,7 +373,8 @@ int main(int argc, char **argv)
     if(have_exp_freq)
     {
 	ajStrAssignC(&strother, "Other");
-	ajStrToDouble(ajTableFetch(exptable, strother), &exp_freq);
+	ajStrToDouble((const AjPStr)ajTableFetchS(exptable, strother),
+                      &exp_freq);
     }
     else 
     {
@@ -474,7 +474,7 @@ static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
     AjPStr value;
 
     /* initialise the hash table - use case-insensitive comparison */
-    *exptable = ajTablestrNewCaseLen(350);
+    *exptable = ajTablestrNewCase(350);
 
 
     /* read the file */

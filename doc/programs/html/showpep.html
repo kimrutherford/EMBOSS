@@ -54,7 +54,7 @@ the output can be formatted for HTML.</p>
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with showpep</b>
+Here is a sample session with <b>showpep</b>
 <p>
 
 <p>
@@ -176,7 +176,7 @@ Make selected regions uppercase. (Use '-slower' to force the rest of the sequenc
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -slower -upper '17-17,22-22' </b>
+% <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -slower -upper "17-17,22-22" </b>
 Displays protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
@@ -192,7 +192,7 @@ Add your own annotation to the display:
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 2 -send 120 -annotation '6-25 binding site 17-17 SNP 22-22 SNP' </b>
+% <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 2 -send 120 -annotation "6-25 binding site 17-17 SNP 22-22 SNP" </b>
 Displays protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
@@ -206,7 +206,7 @@ Output file [laci_ecoli.showpep]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Displays protein sequences with features in pretty format
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) protein sequence(s) filename and
@@ -876,7 +876,34 @@ pax* | 10</td>
     Input file format
 </H2>
 
-<b>showpep</b> reads normal sequence USAs.
+<b>showpep</b> reads one or more protein sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -1094,7 +1121,7 @@ An example range file is:
 
 <p>
 
-You can specifiy a file of ranges to highlight in a different colour
+You can specify a file of ranges to highlight in a different colour
 when outputting in HTML format (using the '-html' qualifier) by giving
 the '-highlight' qualifier the value '@' followed by the name of the
 file containing the ranges.  (eg: '-highlight @myfile').
@@ -1109,19 +1136,9 @@ construct, (where 'xxx' is the name of the colour).
 
 <p>
 
-The standard names of HTML font colours are given in:
-
-<br>
-
-<A HREF="http://http://www.w3.org/TR/REC-html40/types.html">
-http://http://www.w3.org/TR/REC-html40/types.html</A>
-and
-<A HREF="http://www.ausmall.com.au/freegraf/ncolour2.htm">
-http://www.ausmall.com.au/freegraf/ncolour2.htm</A>
-and
-<A HREF="http://mindprod.com/htmlcolours.html">
-http://mindprod.com/htmlcolours.html</A>
-(amongst other places).
+The standard names of HTML font colours are given in
+<A HREF="http://http://www.w3.org/TR/REC-html40/types.html#h-6.5">
+http://http://www.w3.org/TR/REC-html40/types.html#h-6.5</A>
 
 
 <p>
@@ -1174,7 +1191,7 @@ An example annotation range file is:
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: laci_ecoli.showpep </h3>
+<p><h3>File: laci_ecoli.showpep</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 LACI_ECOLI
@@ -1215,7 +1232,7 @@ Lactose operon repressor
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: laci_ecoli.showpep </h3>
+<p><h3>File: laci_ecoli.showpep</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 LACI_ECOLI
@@ -1291,7 +1308,7 @@ Lactose operon repressor
 
 <a name="output.6"></a>
 <h3>Output files for usage example 6</h3>
-<p><h3>File: laci_ecoli.showpep </h3>
+<p><h3>File: laci_ecoli.showpep</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 LACI_ECOLI
@@ -1683,8 +1700,18 @@ None known.
 </tr>
 
 <tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculate the isoelectric point of proteins</td>
+</tr>
+
+<tr>
 <td><a href="lindna.html">lindna</a></td>
 <td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plot amino acid properties of a protein sequence in parallel</td>
 </tr>
 
 <tr>
@@ -1695,6 +1722,11 @@ None known.
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
 <td>Draw a helical wheel diagram for a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="plotorf.html">plotorf</a></td>
+<td>Plot potential open reading frames in a nucleotide sequence</td>
 </tr>
 
 <tr>
@@ -1713,38 +1745,13 @@ None known.
 </tr>
 
 <tr>
-<td><a href="seealso.html">seealso</a></td>
-<td>Finds programs with similar function to a specified program</td>
-</tr>
-
-<tr>
-<td><a href="showalign.html">showalign</a></td>
-<td>Display a multiple sequence alignment in pretty format</td>
-</tr>
-
-<tr>
-<td><a href="showdb.html">showdb</a></td>
-<td>Displays information on configured databases</td>
-</tr>
-
-<tr>
 <td><a href="showfeat.html">showfeat</a></td>
 <td>Display features of a sequence in pretty format</td>
 </tr>
 
 <tr>
-<td><a href="showseq.html">showseq</a></td>
-<td>Displays sequences with features in pretty format</td>
-</tr>
-
-<tr>
 <td><a href="sixpack.html">sixpack</a></td>
 <td>Display a DNA sequence with 6-frame translation and ORFs</td>
-</tr>
-
-<tr>
-<td><a href="textsearch.html">textsearch</a></td>
-<td>Search the textual description of sequence(s)</td>
 </tr>
 
 </table>

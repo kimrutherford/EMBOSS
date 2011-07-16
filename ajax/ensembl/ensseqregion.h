@@ -1,17 +1,36 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensseqregion_h
-#define ensseqregion_h
+#ifndef ENSSEQREGION_H
+#define ENSSEQREGION_H
 
-#include "enscache.h"
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
+
 #include "enscoordsystem.h"
 #include "ensdata.h"
 
+AJ_BEGIN_DECLS
 
 
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
 
 /*
 ** Prototype definitions
@@ -19,45 +38,50 @@ extern "C"
 
 /* Ensembl Sequence Region */
 
-EnsPSeqregion ensSeqregionNew(EnsPSeqregionadaptor sra,
-                              ajuint identifier,
-                              EnsPCoordsystem cs,
-                              AjPStr name,
-                              ajint length);
+EnsPSeqregion ensSeqregionNewCpy(EnsPSeqregion sr);
 
-EnsPSeqregion ensSeqregionNewObj(EnsPSeqregion object);
+EnsPSeqregion ensSeqregionNewIni(EnsPSeqregionadaptor sra,
+                                 ajuint identifier,
+                                 EnsPCoordsystem cs,
+                                 AjPStr name,
+                                 ajint length);
 
 EnsPSeqregion ensSeqregionNewRef(EnsPSeqregion sr);
 
-void ensSeqregionDel(EnsPSeqregion *Psr);
+void ensSeqregionDel(EnsPSeqregion* Psr);
 
-const EnsPSeqregionadaptor ensSeqregionGetAdaptor(const EnsPSeqregion sr);
-
-ajuint ensSeqregionGetIdentifier(const EnsPSeqregion sr);
+EnsPSeqregionadaptor ensSeqregionGetAdaptor(const EnsPSeqregion sr);
 
 EnsPCoordsystem ensSeqregionGetCoordsystem(const EnsPSeqregion sr);
 
-AjPStr ensSeqregionGetName(const EnsPSeqregion sr);
+ajuint ensSeqregionGetIdentifier(const EnsPSeqregion sr);
 
 ajint ensSeqregionGetLength(const EnsPSeqregion sr);
 
-const AjPList ensSeqregionGetAttributes(EnsPSeqregion sr);
+AjPStr ensSeqregionGetName(const EnsPSeqregion sr);
+
+const AjPList ensSeqregionLoadAttributes(EnsPSeqregion sr);
+
+const AjPList ensSeqregionLoadSeqregionsynonyms(EnsPSeqregion sr);
 
 AjBool ensSeqregionSetAdaptor(EnsPSeqregion sr, EnsPSeqregionadaptor sra);
 
-AjBool ensSeqregionSetIdentifier(EnsPSeqregion sr, ajuint identifier);
-
 AjBool ensSeqregionSetCoordsystem(EnsPSeqregion sr, EnsPCoordsystem cs);
 
-AjBool ensSeqregionSetName(EnsPSeqregion sr, AjPStr name);
+AjBool ensSeqregionSetIdentifier(EnsPSeqregion sr, ajuint identifier);
 
 AjBool ensSeqregionSetLength(EnsPSeqregion sr, ajint length);
 
+AjBool ensSeqregionSetName(EnsPSeqregion sr, AjPStr name);
+
 AjBool ensSeqregionAddAttribute(EnsPSeqregion sr, EnsPAttribute attribute);
+
+AjBool ensSeqregionAddSeqregionsynonym(EnsPSeqregion sr,
+                                       EnsPSeqregionsynonym srs);
 
 AjBool ensSeqregionTrace(const EnsPSeqregion sr, ajuint level);
 
-ajulong ensSeqregionGetMemsize(const EnsPSeqregion sr);
+size_t ensSeqregionCalculateMemsize(const EnsPSeqregion sr);
 
 AjBool ensSeqregionMatch(const EnsPSeqregion sr1, const EnsPSeqregion sr2);
 
@@ -65,9 +89,11 @@ AjBool ensSeqregionFetchAllAttributes(EnsPSeqregion sr,
                                       const AjPStr code,
                                       AjPList attributes);
 
-AjBool ensSeqregionIsNonReference(EnsPSeqregion sr, AjBool *Presult);
+AjBool ensSeqregionIsLocusreferencegenomic(EnsPSeqregion sr, AjBool* Presult);
 
-AjBool ensSeqregionIsTopLevel(EnsPSeqregion sr, AjBool *Presult);
+AjBool ensSeqregionIsNonreference(EnsPSeqregion sr, AjBool* Presult);
+
+AjBool ensSeqregionIsToplevel(EnsPSeqregion sr, AjBool* Presult);
 
 /* Ensembl Sequence Region Adaptor */
 
@@ -77,44 +103,138 @@ EnsPSeqregionadaptor ensRegistryGetSeqregionadaptor(
 EnsPSeqregionadaptor ensSeqregionadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensSeqregionadaptorDel(EnsPSeqregionadaptor *Psra);
+void ensSeqregionadaptorDel(EnsPSeqregionadaptor* Psra);
 
 EnsPDatabaseadaptor ensSeqregionadaptorGetDatabaseadaptor(
     const EnsPSeqregionadaptor sra);
 
+const AjPList ensSeqregionadaptorLoadLocusreferencegenomic(
+    EnsPSeqregionadaptor sra);
+
+const AjPList ensSeqregionadaptorLoadNonreferences(
+    EnsPSeqregionadaptor sra);
+
 AjBool ensSeqregionadaptorCacheInsert(EnsPSeqregionadaptor sra,
-                                      EnsPSeqregion *Psr);
+                                      EnsPSeqregion* Psr);
 
 AjBool ensSeqregionadaptorCacheRemove(EnsPSeqregionadaptor sra,
                                       const EnsPSeqregion sr);
 
-AjBool ensSeqregionadaptorFetchByIdentifier(EnsPSeqregionadaptor sra,
-                                            ajuint identifier,
-                                            EnsPSeqregion *Psr);
-
-AjBool ensSeqregionadaptorFetchByName(EnsPSeqregionadaptor sra,
-                                      const EnsPCoordsystem cs,
-                                      const AjPStr name,
-                                      EnsPSeqregion *Psr);
-
-AjBool ensSeqregionadaptorFetchByNameFuzzy(EnsPSeqregionadaptor sra,
-                                           const EnsPCoordsystem cs,
-                                           const AjPStr name,
-                                           EnsPSeqregion *Psr);
-
-AjBool ensSeqregionadaptorFetchAllByCoordsystem(EnsPSeqregionadaptor sra,
-                                                const EnsPCoordsystem cs,
-                                                AjPList srs);
-
-AjBool ensSeqregionadaptorFetchAllByAttributeCodeValue(
+AjBool ensSeqregionadaptorFetchAllbyAttributecodevalue(
     EnsPSeqregionadaptor sra,
     const AjPStr code,
     const AjPStr value,
     AjPList srs);
 
-AjBool ensSeqregionadaptorIsNonReference(EnsPSeqregionadaptor sra,
+AjBool ensSeqregionadaptorFetchAllbyCoordsystem(EnsPSeqregionadaptor sra,
+                                                const EnsPCoordsystem cs,
+                                                AjPList srs);
+
+AjBool ensSeqregionadaptorFetchByIdentifier(EnsPSeqregionadaptor sra,
+                                            ajuint identifier,
+                                            EnsPSeqregion* Psr);
+
+AjBool ensSeqregionadaptorFetchByName(EnsPSeqregionadaptor sra,
+                                      const EnsPCoordsystem cs,
+                                      const AjPStr name,
+                                      EnsPSeqregion* Psr);
+
+AjBool ensSeqregionadaptorFetchByNamefuzzy(EnsPSeqregionadaptor sra,
+                                           const EnsPCoordsystem cs,
+                                           const AjPStr name,
+                                           EnsPSeqregion* Psr);
+
+AjBool ensSeqregionadaptorFetchBySynonym(EnsPSeqregionadaptor sra,
+                                         const AjPStr synonym,
+                                         EnsPSeqregion* Psr);
+
+AjBool ensSeqregionadaptorIsLocusreferencegenomic(EnsPSeqregionadaptor sra,
+                                                  const EnsPSeqregion sr,
+                                                  AjBool* Presult);
+
+AjBool ensSeqregionadaptorIsNonreference(EnsPSeqregionadaptor sra,
                                          const EnsPSeqregion sr,
-                                         AjBool *Presult);
+                                         AjBool* Presult);
+
+/* Ensembl Sequence Region Synonym */
+
+EnsPSeqregionsynonym ensSeqregionsynonymNewCpy(EnsPSeqregionsynonym srs);
+
+EnsPSeqregionsynonym ensSeqregionsynonymNewIni(
+    EnsPSeqregionsynonymadaptor srsa,
+    ajuint identifier,
+    EnsPExternaldatabase edb,
+    AjPStr name,
+    ajuint srid);
+
+EnsPSeqregionsynonym ensSeqregionsynonymNewRef(EnsPSeqregionsynonym srs);
+
+void ensSeqregionsynonymDel(EnsPSeqregionsynonym* Psrs);
+
+EnsPSeqregionsynonymadaptor ensSeqregionsynonymGetAdaptor(
+    const EnsPSeqregionsynonym srs);
+
+EnsPExternaldatabase ensSeqregionsynonymGetExternaldatabase(
+    const EnsPSeqregionsynonym srs);
+
+ajuint ensSeqregionsynonymGetIdentifier(
+    const EnsPSeqregionsynonym srs);
+
+AjPStr ensSeqregionsynonymGetName(
+    const EnsPSeqregionsynonym srs);
+
+ajuint ensSeqregionsynonymGetSeqregionidentifier(
+    const EnsPSeqregionsynonym srs);
+
+AjBool ensSeqregionsynonymSetAdaptor(EnsPSeqregionsynonym srs,
+                                     EnsPSeqregionsynonymadaptor srsa);
+
+AjBool ensSeqregionsynonymSetExternaldatabase(EnsPSeqregionsynonym srs,
+                                              EnsPExternaldatabase edb);
+
+AjBool ensSeqregionsynonymSetIdentifier(EnsPSeqregionsynonym srs,
+                                        ajuint identifier);
+
+AjBool ensSeqregionsynonymSetName(EnsPSeqregionsynonym srs,
+                                  AjPStr name);
+
+AjBool ensSeqregionsynonymSetSeqregionidentifier(EnsPSeqregionsynonym srs,
+                                                 ajuint srid);
+
+AjBool ensSeqregionsynonymTrace(const EnsPSeqregionsynonym srs, ajuint level);
+
+size_t ensSeqregionsynonymCalculateMemsize(const EnsPSeqregionsynonym srs);
+
+/* Ensembl Sequence Region Synonym Adaptor */
+
+EnsPSeqregionsynonymadaptor ensRegistryGetSeqregionsynonymadaptor(
+    EnsPDatabaseadaptor dba);
+
+EnsPSeqregionsynonymadaptor ensSeqregionsynonymadaptorNew(
+    EnsPDatabaseadaptor dba);
+
+void ensSeqregionsynonymadaptorDel(EnsPSeqregionsynonymadaptor* Psrsa);
+
+EnsPBaseadaptor ensSeqregionsynonymadaptorGetBaseadaptor(
+    EnsPSeqregionsynonymadaptor srsa);
+
+EnsPDatabaseadaptor ensSeqregionsynonymadaptorGetDatabaseadaptor(
+    const EnsPSeqregionsynonymadaptor srsa);
+
+AjBool ensSeqregionsynonymadaptorFetchAllbySeqregion(
+    EnsPSeqregionsynonymadaptor srsa,
+    const EnsPSeqregion sr,
+    AjPList srss);
+
+AjBool ensSeqregionsynonymadaptorFetchByIdentifier(
+    EnsPSeqregionsynonymadaptor srsa,
+    ajuint identifier,
+    EnsPSeqregionsynonym* Psrs);
+
+AjBool ensSeqregionsynonymadaptorFetchBySynonym(
+    EnsPSeqregionsynonymadaptor srsa,
+    const AjPStr synonym,
+    EnsPSeqregionsynonym* Psrs);
 
 /*
 ** End of prototype definitions
@@ -123,8 +243,6 @@ AjBool ensSeqregionadaptorIsNonReference(EnsPSeqregionadaptor sra,
 
 
 
-#endif /* ensseqregion_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSSEQREGION_H */

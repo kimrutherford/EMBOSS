@@ -1,0 +1,47 @@
+EXTRA_DIST = drcat.ent \
+	drcat.pxac drcat.pxcat drcat.pxde \
+	drcat.pxedat drcat.pxefmt drcat.pxeid drcat.pxetpc \
+	drcat.pxid \
+	drcat.pxqfmt drcat.pxqin drcat.pxqout drcat.pxqurl \
+	drcat.pxrest drcat.pxrf drcat.pxsoap \
+	drcat.pxtaxid drcat.pxurl \
+	drcat.xac drcat.xcat drcat.xde \
+	drcat.xedat drcat.xefmt drcat.xeid drcat.xetpc \
+	drcat.xid \
+	drcat.xqfmt drcat.xqin drcat.xqout drcat.xqurl \
+	drcat.xrest drcat.xrf drcat.xsoap \
+	drcat.xtaxid drcat.xurl \
+	eco.ent \
+	eco.pxde  eco.pxis  eco.xde  eco.xis \
+	eco.pxac  eco.pxid  eco.pxnm  eco.xac   eco.xid  eco.xnm \
+	edam.ent \
+	edam.pxac edam.pxde \
+	edam.pxhasin edam.pxhasout \
+	edam.pxid edam.pxis edam.pxisfmt edam.pxisid \
+	edam.pxnm edam.pxns \
+	edam.xac edam.xde \
+	edam.xhasin edam.xhasout \
+	edam.xid edam.xis edam.xisfmt edam.xisid \
+	edam.xnm edam.xns \
+	go.ent \
+	go.pxde  go.pxis  go.pxns  go.xde  go.xis  go.xns \
+	go.pxac  go.pxid  go.pxnm  go.xac   go.xid  go.xnm \
+	pw.ent \
+	pw.pxde  pw.pxis  pw.xde  pw.xis \
+	pw.pxac  pw.pxid  pw.pxnm  pw.xac   pw.xid  pw.xnm \
+	ro.ent \
+	ro.pxde  ro.pxis  ro.xde  ro.xis \
+	ro.pxac  ro.pxid  ro.pxnm  ro.xac   ro.xid  ro.xnm \
+	so.ent \
+	so.pxde  so.pxis  so.xde  so.xis \
+	so.pxac  so.pxid  so.pxnm  so.xac   so.xid  so.xnm \
+	taxon.ent \
+	taxon.pxac taxon.pxgc taxon.pxid taxon.pxmgc \
+	taxon.pxrnk taxon.pxtax taxon.pxup \
+	taxon.xac taxon.xgc taxon.xid taxon.xmgc \
+	taxon.xrnk taxon.xtax taxon.xup
+
+
+pkgdata_DATA = $(EXTRA_DIST)
+pkgdatadir=$(prefix)/share/$(PACKAGE)/index
+

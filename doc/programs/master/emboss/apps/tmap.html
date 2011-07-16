@@ -47,7 +47,9 @@ tmap
 </H2>
 
 
-<b>tmap</b> reads a protein sequence USA for one or more aligned sequences.
+<b>tmap</b> reads a set of aligned protein sequences.
+<p>
+<!--#include file="inc/seqinformats.ihtml" -->
 
 <p>
 
@@ -57,6 +59,15 @@ tmap
 <H2>
     Output file format
 </H2>
+
+<!--#include file="inc/graphicsdevices.ihtml" -->
+
+<p>
+<!--#include file="inc/reportformats.ihtml" -->
+
+<p>
+By default the output is in 'seqtable' format.
+<p>
 
 <!--#include file="inc/tmap.output" -->
 
@@ -72,7 +83,7 @@ likely to form transmembrane regions.
 
 <p>
 
-The text file (specified by the <b>-outfile</b> option) gives a summary
+The text file (specified by the <tt>-outfile</tt> option) gives a summary
 of these regions. 
 
 <p>

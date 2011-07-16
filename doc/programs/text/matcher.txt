@@ -57,7 +57,7 @@ Output alignment [hba_human.matcher]:
 Command line arguments
 
 Waterman-Eggert local alignment of two sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -65,6 +65,7 @@ Version: EMBOSS:6.3.0
   [-bsequence]         sequence   Sequence filename and optional format, or
                                   reference (input USA)
   [-outfile]           align      [*.matcher] Output alignment file name
+                                  (default -aformat markx0)
 
    Additional (Optional) qualifiers:
    -datafile           matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
@@ -172,7 +173,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   matcher reads in any 2 sequence USAs of the same type (DNA or protein).
+   matcher reads in two nucleotide or protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -405,11 +423,12 @@ Output file format
    with an unlimited number of sequences, while others are only for pairs
    of sequences.
 
-   The available multiple alignment format names are: unknown, multiple,
-   simple, fasta, msf, trace, srs
+   The available multiple alignment format names are: multiple, simple,
+   fasta, msf, clustal, mega, meganon, nexus,, nexusnon, phylip,
+   phylipnon, selex, treecon, tcoffee, debug, srs.
 
    The available pairwise alignment format names are: pair, markx0,
-   markx1, markx2, markx3, markx10, srspair, score
+   markx1, markx2, markx3, markx10, match, sam, bam, score, srspair
 
    See: http://emboss.sf.net/docs/themes/AlignFormats.html for further
    information on alignment formats.
@@ -420,7 +439,7 @@ Output file format
 
 ########################################
 # Program: matcher
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: matcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human
@@ -474,7 +493,7 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 
 ########################################
 # Program: matcher
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: matcher
 #    [-asequence] tsw:hba_human
 #    [-bsequence] tsw:hbb_human

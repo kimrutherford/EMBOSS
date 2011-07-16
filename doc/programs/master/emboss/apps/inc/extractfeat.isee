@@ -23,11 +23,6 @@
 </tr>
 
 <tr>
-<td><a href="coderet.html">coderet</a></td>
-<td>Extract CDS, mRNA and translations from feature tables</td>
-</tr>
-
-<tr>
 <td><a href="cutseq.html">cutseq</a></td>
 <td>Removes a section from a sequence</td>
 </tr>
@@ -65,6 +60,11 @@
 <tr>
 <td><a href="featreport.html">featreport</a></td>
 <td>Reads and writes a feature table</td>
+</tr>
+
+<tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
 </tr>
 
 <tr>
@@ -150,6 +150,11 @@
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>

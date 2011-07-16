@@ -1,0 +1,489 @@
+#######################################
+# emboss.standard definition file
+#######################################
+
+#######################################
+# This file is included in the EMBOSS distribution
+# and installed automatically.
+#
+# The definitions are required by EMBOSS applications
+# to use the EDAM annotations of ACD files and
+# public data resources, and to make a set of
+# public data servers available without the
+# need for additional configuration.
+############################################
+
+#######################################
+# Standard databases
+#######################################
+
+#######################################
+# Evidence codes ontology (ECO)
+# used to define sequence database evidence
+#######################################
+
+DB eco [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data/OBO"
+#  fields: "id acc nam isa des"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+]
+
+#######################################
+# EDAM ontology (EMBRACE Data And Methods)
+# used to annotate all ACD files
+# and the Data Resource Catalogue
+#######################################
+
+DB edam [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data"
+#  fields: "id acc nam isa des ns hasattr hasin hasout
+#           isid isfmt issrc"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+  field: "ns ! namespace"
+  field: "hasattr ! identifier(s) from has_attribute relation(s)"
+  field: "hasin ! identifier(s) from has_input relation(s)"
+  field: "hasout ! identifier(s) from has_output relation(s)"
+  field: "isid ! identifier(s) from is_identifier_of relation(s)"
+  field: "isfmt ! identifier(s) from is_format_of relation(s)"
+  field: "issrc ! identifier(s) from is_source_of relation(s)"
+]
+
+############################################
+# Gene ontology (GO)
+# used to annotate public sequence databases
+############################################
+
+DB go [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data/OBO"
+#  fields: "id acc nam isa des ns"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+  field: "ns ! namespace"
+]
+
+#######################################
+# Pathways ontology (PW)
+#######################################
+
+DB pw [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data/OBO"
+#  fields: "id acc nam isa des"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+]
+
+#######################################
+# Relations ontology (RO)
+# used to define OBO file relations
+#######################################
+
+DB ro [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data/OBO"
+#  fields: "id acc nam isa des"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+]
+
+#######################################
+# Sequence ontology (RO)
+# used to define sequence features
+#######################################
+
+DB so [
+  type:   "obo"
+  format: "obo"
+  method: "emboss"
+  indexdirectory: "$emboss_standard/index"
+  directory:      "$emboss_standard/data/OBO"
+#  fields: "id acc nam isa des"
+  field: "id ! identifier without the prefix"
+  field: "acc ! full name and any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "isa ! parent identifier from is_a relation(s)"
+  field: "des ! words in the description"
+]
+
+#############################################
+# Data Resource Catalogue DRCAT.dat
+# lists all available public data resources
+# with example queries and annotation
+# using EDAM ontology terms to describe the
+# resource, and also the data type, format
+# and identifier for each query
+#############################################
+
+DB drcat [
+  type:   "resource"
+  format: "drcat"
+  method: "emboss"
+  indexdirectory: "$emboss_standard/index/"
+  directory:      "$emboss_standard/data/"
+#  fields: "id acc nam des url cat edat efmt eid etpc xref
+#           qout qfmt qin qurl cc stat"
+  field: "id ! identifier without the prefix"
+  field: "acc ! any alternate identifier(s)"
+  field: "nam ! words in the name"
+  field: "des ! words in the description"
+  field: "url ! words in the main resource URL"
+  field: "cat ! category"
+  field: "edat ! EDAM data term(s) for query results"
+  field: "efmt ! EDAM format term(s) for query results"
+  field: "eid ! EDAM data term(s) for query identifier(s)"
+  field: "etpc ! EDAM topic term(s)"
+  field: "xref ! Data base cross-reference records"
+  field: "qout ! Query output data type"
+  field: "qfmt ! Query format name"
+  field: "qin ! Query identifier name(s)"
+  field: "qurl ! Query URLs"
+  field: "cc ! words in the comment(s)"
+  field: "rest ! REST service"
+  field: "soap ! SOAP service"
+  field: "stat ! status"
+  field: "xref ! Database cross-reference"
+  field: "taxid ! NCBI taxonomy identifier"
+]
+
+#############################################
+# NCBI taxonomy nodes.dmp and names.dmp
+# lists all taxons in the public sequence databases
+#############################################
+
+DB taxon [
+  type:   "taxonomy"
+  format: "ncbi"
+  method: "embosstax"
+  indexdirectory: "$emboss_standard/index/"
+  directory:      "$emboss_standard/data/TAXONOMY"
+#  fields: "id acc tax rnk up gc mgc"
+  field: "id ! identifier without the prefix"
+  field: "acc ! any alternate identifier(s)"
+  field: "tax ! taxon name"
+  field: "rnk ! taxon rank name"
+  field: "up ! parent taxon id"
+  field: "gc ! genetic code"
+  field: "mgc ! mitochondrial genetic code"
+  taxon: "1 ! all"
+]
+
+################################################
+# Servers providing standard sets of databases
+################################################
+
+######################
+# SRS server at EBI
+######################
+
+SERVER srs [
+  method:        "srswww"
+  type:          "unknown"
+  url:           "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+  comment:       "SRS from EBI"
+  serverversion: "7.1.3"
+  cachefile:     "server.srs"
+]
+
+SERVER dkfz [
+  method:        "srswww"
+  type:          "sequence features text obo"
+# url:           "http://www.dkfz-heidelberg.de/srs/srs7131bin/cgi-bin/wgetz"
+  url:           "http://www.dkfz.de/menu/cgi-bin/srs7.1.3.1/wgetz"
+  comment:       "SRS from DKFZ Heidelberg"
+  serverversion: "7.1.3"
+  cachefile:     "server.dkfz"
+]
+
+#######################
+# ENSEMBL
+#######################
+
+SERVER ensembl [
+  method:        "ensembl"
+  type:          "sequence"
+  cachefile:     "server.ensembl"
+  caseidmatch:   "N"
+  comment:       "Public Ensembl MySQL instance,
+                  use for small-scale queries only."
+  field:         "id ! identifier"
+  field:         "eid ! Ensembl Exon stable identifier"
+  field:         "pid ! Ensembl Translation stable identifier"
+  field:         "tid ! Ensembl Transcript stable identifier"
+  field:         "grp ! Ensembl Database Adaptor group"
+  format:        "ensembl"
+  hasaccession:  "N"
+  identifier:    "id"
+  url:           "mysql://anonymous@ensembldb.ensembl.org:5306/"
+]
+
+SERVER ensemblgenomes [
+  method:        "ensembl"
+  type:          "sequence"
+  cachefile:     "server.ensemblgenomes"
+  caseidmatch:   "N"
+  comment:       "Public Ensembl Genomes MySQL instance,
+                  use for small-scale queries only."
+  field:         "id ! identifier"
+  field:         "eid ! Ensembl Exon stable identifier"
+  field:         "pid ! Ensembl Translation stable identifier"
+  field:         "tid ! Ensembl Transcript stable identifier"
+  field:         "grp ! Ensembl Database Adaptor group"
+  format:        "ensembl"
+  hasaccession:  "N"
+  identifier:    "id"
+  url:           "mysql://anonymous@mysql.ebi.ac.uk:4157/"
+]
+
+#######################
+# DAS
+#######################
+
+SERVER das [
+  method:        "das"
+  type:          "sequence, features"
+  url:           "http://www.dasregistry.org/das/"
+  comment:       "DAS sequence/feature sources listed on the DAS registry"
+  cachefile:     "server.dasregistry"
+]
+
+#######################
+# BioMart
+#######################
+
+SERVER biomart [
+  method:        "biomart"
+  type:          "sequence"
+  url:           "http://www.biomart.org:80/biomart/martservice"
+  cachefile:     "server.biomart"
+]
+
+#######################
+# MRS
+#######################
+
+SERVER mrs [
+  methodquery:   "mrs"
+  type:          "unknown"
+  url:           "http://mrs.cmbi.ru.nl/mrs-5/search"
+  cachefile:     "server.mrs"
+  serverversion: "MRS-5"
+]
+
+SERVER mrs4 [
+  methodquery:   "mrs4"
+  type:          "unknown"
+  url:           "http://mrs.cmbi.ru.nl/mrs-web/plain.do"
+  cachefile:     "server.mrs4"
+  serverversion: "MRS-4"
+]
+
+SERVER mrs3 [
+  methodquery:   "mrs3"
+  type:          "unknown"
+  url:           "http://mrs.cmbi.ru.nl/mrs-3/plain.do"
+  cachefile:     "server.mrs3"
+  serverversion: "MRS-3"
+]
+
+#######################
+# Entrez at NCBI
+#######################
+
+SERVER entrez [
+  methodquery:   "entrez"
+  type:          "unknown"
+  cachefile:     "server.entrez"
+]
+
+IFDEF EMBOSS_AXIS2C
+
+#############################
+# EBI's EB-eye search service
+#############################
+
+SERVER ebeye [
+  methodquery:   "ebeye"
+  type:          "text"
+  url:           "http://www.ebi.ac.uk/ebisearch/service.ebi"
+  comment:       "EB-eye text search service
+                  that allows searching across EBI public databases"
+  cachefile:     "server.ebeye"
+]
+
+###########################
+# EBI's WsDbFetch service
+###########################
+
+SERVER wsdbfetch [
+  methodentry:   "wsdbfetch"
+  type:          "sequence, features, text, obo"
+  url:           "http://www.ebi.ac.uk/ws/services/WSDbfetchDoclit"
+  comment:       "EBI dbfetch webservices(SOAP)"
+  cachefile:     "server.wsdbfetch"
+]
+
+ENDIF
+
+###########################
+# EBI's DbFetch service
+###########################
+
+SERVER dbfetch [
+  methodentry:   "dbfetch"
+  type:          "sequence, features, text, obo"
+  url:           "http://www.ebi.ac.uk/Tools/dbfetch/"
+  comment:       "EBI dbfetch webservices(REST)"
+  cachefile:     "server.dbfetch"
+]
+
+##################################################################
+# Resource definitions for the dbx indexing system.
+##################################################################
+
+RES dbxresource [
+  type: "Index"
+]
+
+RES taxresource [
+  type: "Index"
+  fields: "id acc tax rnk up gc mgc"
+  rnklen: "16"
+  idlen: "7"
+  uplen: "7"
+  taxlen: "110"
+  gclen: "2"
+  mgclen: "2"
+]
+
+RES emblresource [
+  type: "Index"
+  idlen:  "15"
+  acclen: "15"
+  svlen:  "15"
+  keylen: "50"
+  deslen: "20"
+  orglen: "30"
+]
+
+RES swissresource [
+  type: "Index"
+  idlen:  "15"
+  acclen: "15"
+  svlen:  "15"
+  keylen: "15"
+  deslen: "15"
+  orglen: "15"
+]
+
+RES pirresource [
+  type: "Index"
+  idlen:  "15"
+  acclen: "15"
+  svlen:  "15"
+  keylen: "25"
+  deslen: "15"
+  orglen: "35"
+]
+
+RES chebiresource [
+  type: "Index"
+  fields: "id acc nam isa des ns"
+  acclen: "400"
+  namlen: "125"
+  deslen: "50"
+  nslen:  "20"
+  accpagesize: "16384"
+  nampagesize: "8192"
+  despagesize: "8192"
+]
+
+RES oboresource [
+  type: "Index"
+  fields: "id acc nam isa des ns"
+  acclen: "200"
+  namlen: "75"
+  deslen: "40"
+  nslen:  "20"
+  accpagesize: "16384"
+  nampagesize: "8192"
+  despagesize: "4096"
+]
+
+RES edamresource [
+  type: "Index"
+  fields: "id acc nam isa des ns hasattr hasin hasout
+           isid isfmt issrc"
+  acclen: "80"
+  namlen: "20"
+  deslen: "30"
+  accpagesize: "8192"
+  despagesize: "4096"
+]
+
+RES drcatresource [
+  type: "Index"
+  fields: "id acc nam des url cat taxid
+           edat efmt eid etpc xref
+           qout qfmt qin qurl rest soap cc stat"
+  idlen:   "32"
+  acclen:  "18"
+  qfmtlen: "30"
+  qinlen:  "65"
+  qoutlen: "90"
+  qurllen: "30"
+  namlen: "20"
+  deslen: "20"
+  urllen: "25"
+  restlen: "20"
+  cclen: "40"
+  catlen: "40"
+  taxidlen: "6"
+]
+
+# Pagesize - this is the size of disc page blocks and is
+# required by the 'dbx' indexing programs and 'method: emboss'
+# We recommend a value of 2048
+
+SET PAGESIZE 2048
+
+# Cachesize - a cache of disc pages to be used by the 'dbx'
+# indexing system and is required for 'method emboss'. It is
+# the number of PAGESIZE blocks to cache. We recommend
+# a value of 200
+
+SET CACHESIZE 200

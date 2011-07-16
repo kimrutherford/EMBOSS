@@ -1,16 +1,38 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensbaseadaptor_h
-#define ensbaseadaptor_h
+#ifndef ENSBASEADAPTOR_H
+#define ENSBASEADAPTOR_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ensassemblymapper.h"
 #include "ensdata.h"
 
+AJ_BEGIN_DECLS
 
 
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+extern const ajuint ensBaseadaptorMaximumIdentifiers;
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
 
 /*
 ** Prototype definitions
@@ -20,70 +42,75 @@ extern "C"
 
 EnsPBaseadaptor ensBaseadaptorNew(
     EnsPDatabaseadaptor dba,
-    const char **Ptables,
-    const char **Pcolumns,
-    EnsOBaseadaptorLeftJoin *leftjoin,
-    const char *condition,
-    const char *final,
-    AjBool Fquery(EnsPDatabaseadaptor dba,
-                  const AjPStr statement,
-                  EnsPAssemblymapper am,
-                  EnsPSlice slice,
-                  AjPList objects));
+    const char* const* Ptables,
+    const char* const* Pcolumns,
+    const EnsPBaseadaptorLeftjoin leftjoin,
+    const char* condition,
+    const char* final,
+    AjBool Fstatement(EnsPDatabaseadaptor dba,
+                      const AjPStr statement,
+                      EnsPAssemblymapper am,
+                      EnsPSlice slice,
+                      AjPList objects));
 
-void ensBaseadaptorDel(EnsPBaseadaptor *Pba);
+void ensBaseadaptorDel(EnsPBaseadaptor* Pba);
+
+const char* const* ensBaseadaptorGetColumns(const EnsPBaseadaptor ba);
 
 EnsPDatabaseadaptor ensBaseadaptorGetDatabaseadaptor(const EnsPBaseadaptor ba);
 
-const char **ensBaseadaptorGetTables(const EnsPBaseadaptor ba);
+const char* const* ensBaseadaptorGetTables(const EnsPBaseadaptor ba);
 
-const char **ensBaseadaptorGetColumns(const EnsPBaseadaptor ba);
+AjBool ensBaseadaptorSetColumns(EnsPBaseadaptor ba,
+                                const char* const* Pcolumns);
 
-AjBool ensBaseadaptorSetTables(EnsPBaseadaptor ba, const char ** Ptables);
+AjBool ensBaseadaptorSetDefaultcondition(EnsPBaseadaptor ba,
+                                         const char* condition);
 
-AjBool ensBaseadaptorSetColumns(EnsPBaseadaptor ba, const char ** Pcolumns);
+AjBool ensBaseadaptorSetFinalcondition(EnsPBaseadaptor ba, const char* final);
 
-AjBool ensBaseadaptorSetDefaultCondition(EnsPBaseadaptor ba,
-                                         const char *condition);
+AjBool ensBaseadaptorSetTables(EnsPBaseadaptor ba,
+                               const char* const* Ptables);
 
-AjBool ensBaseadaptorSetFinalCondition(EnsPBaseadaptor ba, const char *final);
-
-const char *ensBaseadaptorGetPrimaryTable(const EnsPBaseadaptor ba);
-
-AjBool ensBaseadaptorGetMultiSpecies(const EnsPBaseadaptor ba);
-
-ajuint ensBaseadaptorGetSpeciesIdentifier(const EnsPBaseadaptor ba);
-
-AjBool ensBaseadaptorEscapeC(EnsPBaseadaptor ba, char **Ptxt,
+AjBool ensBaseadaptorEscapeC(EnsPBaseadaptor ba, char** Ptxt,
                              const AjPStr str);
 
-AjBool ensBaseadaptorEscapeS(EnsPBaseadaptor ba, AjPStr *Pstr,
+AjBool ensBaseadaptorEscapeS(EnsPBaseadaptor ba, AjPStr* Pstr,
                              const AjPStr str);
 
-AjBool ensBaseadaptorGenericFetch(const EnsPBaseadaptor ba,
-                                  const AjPStr constraint,
-                                  EnsPAssemblymapper am,
-                                  EnsPSlice slice,
-                                  AjPList objects);
+AjBool ensBaseadaptorGetMultispecies(const EnsPBaseadaptor ba);
 
-void *ensBaseadaptorFetchByIdentifier(const EnsPBaseadaptor ba,
-                                      ajuint identifier);
+const char* ensBaseadaptorGetPrimarytable(const EnsPBaseadaptor ba);
 
-AjBool ensBaseadaptorFetchAllByIdentifiers(const EnsPBaseadaptor ba,
+ajuint ensBaseadaptorGetSpeciesidentifier(const EnsPBaseadaptor ba);
+
+AjBool ensBaseadaptorFetchAll(EnsPBaseadaptor ba,
+                              AjPList objects);
+
+AjBool ensBaseadaptorFetchAllbyConstraint(EnsPBaseadaptor ba,
+                                          const AjPStr constraint,
+                                          EnsPAssemblymapper am,
+                                          EnsPSlice slice,
+                                          AjPList objects);
+
+AjBool ensBaseadaptorFetchAllbyIdentifiers(EnsPBaseadaptor ba,
                                            const AjPList identifiers,
+                                           EnsPSlice slice,
                                            AjPList objects);
 
-AjBool ensBaseadaptorFetchAll(const EnsPBaseadaptor ba, AjPList objects);
+AjBool ensBaseadaptorFetchByIdentifier(EnsPBaseadaptor ba,
+                                       ajuint identifier,
+                                       void** Pobject);
 
-AjBool ensBaseadaptorFetchAllIdentifiers(const EnsPBaseadaptor ba,
-                                         const AjPStr table,
-                                         const AjPStr primary,
-                                         AjPList identifiers);
+AjBool ensBaseadaptorRetrieveAllIdentifiers(EnsPBaseadaptor ba,
+                                            const AjPStr table,
+                                            const AjPStr primary,
+                                            AjPList identifiers);
 
-AjBool ensBaseadaptorFetchAllStrings(const EnsPBaseadaptor ba,
-                                     const AjPStr table,
-                                     const AjPStr primary,
-                                     AjPList strings);
+AjBool ensBaseadaptorRetrieveAllStrings(EnsPBaseadaptor ba,
+                                        const AjPStr table,
+                                        const AjPStr primary,
+                                        AjPList strings);
 
 /*
 ** End of prototype definitions
@@ -92,8 +119,6 @@ AjBool ensBaseadaptorFetchAllStrings(const EnsPBaseadaptor ba,
 
 
 
-#endif /* ensbaseadaptor_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSBASEADAPTOR_H */

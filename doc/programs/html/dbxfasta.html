@@ -57,7 +57,10 @@ IT IS DONE FOR YOU.
   -->
 
 <b>dbxfasta</b> indexes a flat file database of one or more files, and builds
-EMBOSS B+tree format index files. These indexes allow access of flat
+EMBOSS B+tree format index files.
+
+<p>
+These indexes allow access of flat
 files larger than 2Gb.
 
 
@@ -70,7 +73,7 @@ files larger than 2Gb.
         Many examples illustrating different behaviours is good.
  -->
 
-<b>Here is a sample session with dbxfasta</b>
+Here is a sample session with <b>dbxfasta</b>
 <p>
 
 <p>
@@ -94,6 +97,7 @@ Wildcard database filename [*.fasta]: <b>emrod</b>
         sv : Sequence Version and GI
        des : Description
 Index fields [id,acc]: <b></b>
+Compressed index files [Y]: <b></b>
 General log output file [outfile.dbxfasta]: <b></b>
 
 </pre></td></tr></table><p>
@@ -108,7 +112,7 @@ General log output file [outfile.dbxfasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Index a fasta file database using b+tree indices
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -127,6 +131,7 @@ Version: EMBOSS:6.3.0
    -fields             menu       [id,acc] Index fields (Values: id (ID); acc
                                   (Accession number); sv (Sequence Version and
                                   GI); des (Description))
+   -[no]compressed     boolean    [Y] Compressed index files
    -outfile            outfile    [*.dbxfasta] General log output file
 
    Additional (Optional) qualifiers: (none)
@@ -227,6 +232,14 @@ Version: EMBOSS:6.3.0
 <td>Index fields</td>
 <td><table><tr><td>id</td> <td><i>(ID)</i></td></tr><tr><td>acc</td> <td><i>(Accession number)</i></td></tr><tr><td>sv</td> <td><i>(Sequence Version and GI)</i></td></tr><tr><td>des</td> <td><i>(Description)</i></td></tr></table></td>
 <td>id,acc</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]compressed</td>
+<td>boolean</td>
+<td>Compressed index files</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -449,7 +462,7 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-<b>dbxfasta</b> reads any normal sequence USAs.
+<b>dbxfasta</b> reads and indexes FASTA format sequence data files.
 
 <p>
 
@@ -509,6 +522,9 @@ emrod
 <p><h3>File: emrod.pxac</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+Type      Identifier
+Compress  Yes
+Pages     3
 Order     71
 Fill      46
 Pagesize  2048
@@ -516,13 +532,17 @@ Level     0
 Cachesize 100
 Order2    99
 Fill2     101
-Count     5
+Count     6
+Fullcount 6
 Kwlimit   15
 </pre>
 </td></tr></table><p>
 <p><h3>File: emrod.pxid</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+Type      Identifier
+Compress  Yes
+Pages     3
 Order     71
 Fill      46
 Pagesize  2048
@@ -530,7 +550,8 @@ Level     0
 Cachesize 100
 Order2    99
 Fill2     101
-Count     5
+Count     6
+Fullcount 6
 Kwlimit   15
 </pre>
 </td></tr></table><p>
@@ -784,6 +805,16 @@ None.
 </tr>
 
 <tr>
+<td><a href="dbxcompress.html">dbxcompress</a></td>
+<td>Compress an uncompressed dbx index</td>
+</tr>
+
+<tr>
+<td><a href="dbxedam.html">dbxedam</a></td>
+<td>Index the EDAM ontology using b+tree indices</td>
+</tr>
+
+<tr>
 <td><a href="dbxflat.html">dbxflat</a></td>
 <td>Index a flat file database using b+tree indices</td>
 </tr>
@@ -791,6 +822,36 @@ None.
 <tr>
 <td><a href="dbxgcg.html">dbxgcg</a></td>
 <td>Index a GCG formatted database using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxobo.html">dbxobo</a></td>
+<td>Index an obo ontology using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxreport.html">dbxreport</a></td>
+<td>Validate index and report internals for dbx databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxresource.html">dbxresource</a></td>
+<td>Index a data resource catalogue using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxstat.html">dbxstat</a></td>
+<td>Dump statistics for dbx databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxtax.html">dbxtax</a></td>
+<td>Index NCBI taxonomy using b+tree indices</td>
+</tr>
+
+<tr>
+<td><a href="dbxuncompress.html">dbxuncompress</a></td>
+<td>Uncompress a compressed dbx index</td>
 </tr>
 
 </table>
@@ -845,7 +906,8 @@ Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;embos
 <!--
         For general users, use this text
    -->
-This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
 
 <H2>
     Comments

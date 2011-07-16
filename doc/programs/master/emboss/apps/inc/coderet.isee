@@ -3,6 +3,11 @@
 <tr><th>Program name</th>
 <th>Description</th></tr>
 <tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Display the trace in an ABI sequencer file</td>
+</tr>
+
+<tr>
 <td><a href="backtranambig.html">backtranambig</a></td>
 <td>Back-translate a protein sequence to ambiguous nucleotide sequence</td>
 </tr>
@@ -13,13 +18,28 @@
 </tr>
 
 <tr>
-<td><a href="extractfeat.html">extractfeat</a></td>
-<td>Extract features from sequence(s)</td>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>
-<td><a href="maskfeat.html">maskfeat</a></td>
-<td>Write a sequence with masked features</td>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieves sequence entries from flatfile databases and files</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Display basic information about sequences</td>
 </tr>
 
 <tr>
@@ -38,8 +58,18 @@
 </tr>
 
 <tr>
-<td><a href="showfeat.html">showfeat</a></td>
-<td>Display features of a sequence in pretty format</td>
+<td><a href="seqxref.html">seqxref</a></td>
+<td>Retrieve all database cross-references for a sequence entry</td>
+</tr>
+
+<tr>
+<td><a href="seqxrefget.html">seqxrefget</a></td>
+<td>Retrieve all cross-referenced data for a sequence entry</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Display a multiple sequence alignment in pretty format</td>
 </tr>
 
 <tr>
@@ -63,8 +93,8 @@
 </tr>
 
 <tr>
-<td><a href="twofeat.html">twofeat</a></td>
-<td>Finds neighbouring pairs of features in sequence(s)</td>
+<td><a href="whichdb.html">whichdb</a></td>
+<td>Search all sequence databases for an entry and retrieve it</td>
 </tr>
 
 </table>

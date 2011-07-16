@@ -1,17 +1,35 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensutility_h
-#define ensutility_h
+#ifndef ENSUTILITY_H
+#define ENSUTILITY_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ajax.h"
-#include "ensregistry.h"
-#include "enstranslation.h"
+
+AJ_BEGIN_DECLS
 
 
 
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
 
 /*
 ** Prototype definitions
@@ -21,13 +39,15 @@ void ensInit(void);
 
 void ensExit(void);
 
-AjBool ensSeqinTrace(const AjPSeqin seqin, ajuint level);
+AjBool ensTraceQuery(const AjPQuery qry, ajuint level);
 
-AjBool ensSeqQueryTrace(const AjPSeqQuery seqquery, ajuint level);
+AjBool ensTraceSeqin(const AjPSeqin seqin, ajuint level);
 
-AjBool ensSeqDescTrace(const AjPSeqDesc seqdesc, ajuint level);
+AjBool ensTraceSeqdesc(const AjPSeqDesc seqdesc, ajuint level);
 
-AjBool ensSeqTrace(const AjPSeq seq, ajuint level);
+AjBool ensTraceSeq(const AjPSeq seq, ajuint level);
+
+AjBool ensTraceTextin(const AjPTextin textin, ajuint level);
 
 /*
 ** End of prototype definitions
@@ -36,8 +56,6 @@ AjBool ensSeqTrace(const AjPSeq seq, ajuint level);
 
 
 
-#endif /* ensutility_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSUTILITY_H */

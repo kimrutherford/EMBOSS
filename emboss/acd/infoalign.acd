@@ -1,8 +1,10 @@
 application: infoalign [
   documentation: "Display basic information about a multiple sequence alignment"
-  groups: "Alignment:Multiple, Information"
-  relations: "/edam/topic/0000187 Sequence alignment analysis"
-  relations: "/edam/operation/0000257 Sequence alignment description"
+  groups: "Alignment:Multiple, Data retrieval:Sequence data"
+    relations: "EDAM:0000182 topic Sequence alignment"
+    relations: "EDAM:0000090 topic Data retrieval"
+    relations: "EDAM:0000257 operation Data retrieval (sequence alignment)"
+    relations: "EDAM:0000564 operation Sequence rendering"
 ]
 
 section: input [
@@ -15,7 +17,7 @@ section: input [
     type: "gapany"
     aligned: "Y"
     help: "The sequence alignment to be displayed."
-    relations: "/edam/data/0000863 Sequence alignment"                             
+    relations: "EDAM:0000863 data Sequence alignment"
   ]
 
   matrix: matrix [
@@ -26,7 +28,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "/edam/data/0001446 Comparison matrix (integers)"                           
+    relations: "EDAM:0000874 data Comparison matrix"
   ]
 
   string: refseq [
@@ -41,7 +43,7 @@ section: input [
            sequence will be used as the reference sequence. By default the
            consensus sequence is used as the reference sequence."
     knowntype: "sequence id input"
-    relations:  "/edam/data/0001063 Sequence identifier"                     
+    relations: "EDAM:0001063 identifier Sequence identifier"
   ]
 
 endsection: input
@@ -59,7 +61,7 @@ section: advanced [
     help: "Set a cut-off for the % of positive scoring matches below
            which there is no consensus. The default plurality is taken as 50%
            of the total weight of all the sequences in the alignment."
-    relations: "/edam/data/0002146 Threshold"                                       
+    relations: "EDAM:0002146 data Threshold"
   ]
 
   float: identity [
@@ -72,7 +74,7 @@ section: advanced [
            identities at a position for it to give a consensus. Therefore, if
            this is set to 100% only columns of identities contribute to the
            consensus."
-    relations: "/edam/data/0002146 Threshold"                                       
+    relations: "EDAM:0002146 data Threshold"
   ]
 
 endsection: advanced
@@ -88,7 +90,7 @@ section: output [
     knowntype: "infoalign output"
     help: "If you enter the name of a file here then this program will
            write the sequence details into that file."
-    relations:  "/edam/data/0000867 Sequence alignment annotation"               
+    relations: "EDAM:0000866 data Sequence alignment metadata"
   ]
 
   boolean: html [
@@ -96,7 +98,7 @@ section: output [
     default: "N"
     information: "Format output as an HTML table"
     outputmodifier: "Y"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: only [
@@ -108,85 +110,85 @@ section: output [
            -noidcount -nodiffcount -noweight' \
            to get only the sequence length output, you can specify \
            '-only -seqlength'"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: heading [
     default: "@(!$(only))"
     information: "Display column headings"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: usa [
     default: "@(!$(only))"
     information: "Display the USA of the sequence"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: name [
     default: "@(!$(only))"
     information: "Display 'name' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: seqlength [
     default: "@(!$(only))"
     information: "Display 'seqlength' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: alignlength [
     default: "@(!$(only))"
     information: "Display 'alignlength' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: gaps [
     default: "@(!$(only))"
     information: "Display number of gaps"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: gapcount [
     default: "@(!$(only))"
     information: "Display number of gap positions"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: idcount [
     default: "@(!$(only))"
     information: "Display number of identical positions"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: simcount [
     default: "@(!$(only))"
     information: "Display number of similar positions"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: diffcount [
     default: "@(!$(only))"
     information: "Display number of different positions"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: change [
     default: "@(!$(only))"
     information: "Display % number of changed positions"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: weight [
     default: "@(!$(only))"
     information: "Display 'weight' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   boolean: description [
     default: "@(!$(only))"
     information: "Display 'description' column"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: output

@@ -1,0 +1,24 @@
+Here is a sample session with <b>wossoperation</b>
+<p>
+Search for programs with 'codon' in their operation: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>wossoperation codon </b>
+Finds programs by EDAM operation
+
+SEARCH FOR OPERATION 'CODON'
+cai     Calculate codon adaptation index
+chips   Calculates Nc codon usage statistic
+codcmp  Codon usage table comparison
+codcopy Copy and reformat a codon usage table
+cusp    Create a codon usage table from nucleotide sequence(s)
+syco    Draw synonymous codon usage statistic plot for a nucleotide sequence
+wobble  Plot third base position variability in a nucleotide sequence
+
+
+</pre></td></tr></table><p>
+<p>
+<p>

@@ -1,0 +1,706 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: drfinddata
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+drfinddata
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Find public databases by data type
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>drfinddata</b> searches the Data Resource Catalogue to find entries
+with EDAM data terms matching a query string.
+
+<H2>
+    Algorithm
+</H2>
+
+The first search is of the EDAM ontology data namespace, using the
+term names and their synonynms. All child terms are automatically
+included in the set of matches inless the <tt>-nosubclasses</tt>
+qualifier is used.
+
+<p>
+The <tt>-sensitive</tt> qualifier also searches the definition strings.
+
+<p>
+The set of EDAM terms are then compared to entries in the Data
+Resource Catalogue, searching the 'edat' EDAM data index.
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>drfinddata</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>drfinddata virus </b>
+Find public databases by data type
+Data resource output file [drfinddata.drcat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Find public databases by data type
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-query]             string     List of EDAM data keywords (Any string)
+  [-outfile]           outresource [*.drfinddata] Output data resource file
+                                  name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -sensitive          boolean    [N] By default, the query keywords are
+                                  matched against the EDAM term names (and
+                                  synonyms) only. This option also matches the
+                                  keywords against the EDAM term definitions
+                                  and will therefore (typically) report more
+                                  matches.
+   -[no]subclasses     boolean    [Y] Extend the query matches to include all
+                                  terms which are specialisations (EDAM
+                                  sub-classes) of the matched type.
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Data resource output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-query]<br>(Parameter 1)</td>
+<td>string</td>
+<td>List of EDAM data keywords</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>outresource</td>
+<td>Output data resource file name</td>
+<td>Data resource entry</td>
+<td><i>&lt;*&gt;</i>.drfinddata</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-sensitive</td>
+<td>boolean</td>
+<td>By default, the query keywords are matched against the EDAM term names (and synonyms) only. This option also matches the keywords against the EDAM term definitions and will therefore (typically) report more matches.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>-[no]subclasses</td>
+<td>boolean</td>
+<td>Extend the query matches to include all terms which are specialisations (EDAM sub-classes) of the matched type.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>"-outfile" associated outresource qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -oformat2<br>-oformat_outfile</td>
+<td>string</td>
+<td>Data resource output format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+None.
+
+<p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<p>
+
+The output is a standard EMBOSS resource file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-oformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: 
+drcat, basic, wsbasic, list.
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/ResourceFormats.html">
+http://emboss.sf.net/docs/themes/ResourceFormats.html</A>
+for further information on resource formats.
+
+<p>
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: drfinddata.drcat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID      DPVweb
+Name    DPVweb database of plant viruses
+Desc    Information about viruses, viroids and satellites of plants, fungi and protozoa, with some additional data on related animal viruses.
+URL     http://www.dpvweb.net/
+Taxon   10239 | Viruses
+EDAMtpc 0000781 | Virus
+EDAMtpc 0000780 | Plant
+EDAMdat 0002307 | Virus annotation
+EDAMdat 0002308 | Virus annotation (taxonomy)
+EDAMid  0002733 | Genus name (virus)
+EDAMid  0002734 | Family name (virus)
+EDAMid  0002836 | DPVweb ID
+EDAMfmt 0002331 | HTML
+Query    Virus annotation | HTML | DPVweb ID | http://www.dpvweb.net/dpv/showdpv.php?dpvno=%s
+Query    Virus annotation (taxonomy) | HTML | Family name (virus) | http://www.dpvweb.net/notes/showfamily.php?family=%s
+Query    Virus annotation (taxonomy) | HTML | Genus name (virus) | http://www.dpvweb.net/notes/showgenus.php?genus=%s
+Example DPVweb ID | 1
+Example Family name (virus) | Alphaflexiviridae
+Example Genus name (virus) | Alfamovirus
+
+ID      RNAVirusDB
+Name    RNA virus genome database (RNAVirusDB)
+Desc    RNA virus genome database.
+URL     http://tree.bio.ed.ac.uk/rnavirusdb
+Taxon   10239 | Viruses
+EDAMtpc 0000781 | Virus
+EDAMtpc 0000643 | Genomes
+EDAMdat 0002307 | Virus annotation
+EDAMid  0002784 | RNAVirusDB ID
+EDAMfmt 0002331 | HTML
+Query    Virus annotation | HTML | RNAVirusDB ID | http://tree.bio.ed.ac.uk/rnavirusdb/virus.php?id=%s
+Example RNAVirusDB ID | 56486
+
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+The Data Resource Catalogue is included in EMBOSS as local
+database <b>drcat</b>.
+
+
+The EDAM Ontology is included in EMBOSS as local
+database <b>edam</b>.
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="drfindformat.html">drfindformat</a></td>
+<td>Find public databases by format</td>
+</tr>
+
+<tr>
+<td><a href="drfindid.html">drfindid</a></td>
+<td>Find public databases by identifier</td>
+</tr>
+
+<tr>
+<td><a href="drfindresource.html">drfindresource</a></td>
+<td>Find public databases by resource</td>
+</tr>
+
+<tr>
+<td><a href="drget.html">drget</a></td>
+<td>Get data resource entries</td>
+</tr>
+
+<tr>
+<td><a href="drtext.html">drtext</a></td>
+<td>Get data resource entries complete text</td>
+</tr>
+
+<tr>
+<td><a href="edamdef.html">edamdef</a></td>
+<td>Find EDAM ontology terms by definition</td>
+</tr>
+
+<tr>
+<td><a href="edamhasinput.html">edamhasinput</a></td>
+<td>Find EDAM ontology terms by has_input relation</td>
+</tr>
+
+<tr>
+<td><a href="edamhasoutput.html">edamhasoutput</a></td>
+<td>Find EDAM ontology terms by has_output relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisformat.html">edamisformat</a></td>
+<td>Find EDAM ontology terms by is_format_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamisid.html">edamisid</a></td>
+<td>Find EDAM ontology terms by is_identifier_of relation</td>
+</tr>
+
+<tr>
+<td><a href="edamname.html">edamname</a></td>
+<td>Find EDAM ontology terms by name</td>
+</tr>
+
+<tr>
+<td><a href="wossdata.html">wossdata</a></td>
+<td>Finds programs by EDAM data</td>
+</tr>
+
+<tr>
+<td><a href="wossinput.html">wossinput</a></td>
+<td>Finds programs by EDAM input data</td>
+</tr>
+
+<tr>
+<td><a href="wossoperation.html">wossoperation</a></td>
+<td>Finds programs by EDAM operation</td>
+</tr>
+
+<tr>
+<td><a href="wossoutput.html">wossoutput</a></td>
+<td>Finds programs by EDAM output data</td>
+</tr>
+
+<tr>
+<td><a href="wossparam.html">wossparam</a></td>
+<td>Finds programs by EDAM parameter</td>
+</tr>
+
+<tr>
+<td><a href="wosstopic.html">wosstopic</a></td>
+<td>Finds programs by EDAM topic</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

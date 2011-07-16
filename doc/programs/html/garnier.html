@@ -51,7 +51,7 @@ Algorithm
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with garnier</b>
+Here is a sample session with <b>garnier</b>
 <p>
 
 <p>
@@ -72,12 +72,13 @@ Output report [amic_pseae.garnier]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Predicts protein secondary structure using GOR method
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
-  [-outfile]           report     [*.garnier] Output report file name
+  [-outfile]           report     [*.garnier] Output report file name (default
+                                  -rformat tagseq)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -171,7 +172,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat tagseq)</td>
 <td><i>&lt;*&gt;</i>.garnier</td>
 </tr>
 
@@ -532,7 +533,34 @@ values from their paper."</i>
 </H2>
 
 
-<b>garnier</b> read any protein sequence USA.
+<b>garnier</b> reads one or more protein sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -664,10 +692,11 @@ The output is a standard EMBOSS report file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
 
 <p>
 
@@ -690,7 +719,7 @@ By default <b>garnier</b> writes a 'tagseq' report file.
 <pre>
 ########################################
 # Program: garnier
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: garnier
 #    -sequence tsw:amic_pseae
 # Report_format: tagseq
@@ -891,11 +920,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="hmoment.html">hmoment</a></td>
-<td>Calculate and plot hydrophobic moment for protein sequence(s)</td>
-</tr>
-
-<tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
 <td>Predicts coiled coil regions in protein sequences</td>
 </tr>
@@ -908,11 +932,6 @@ None.
 <tr>
 <td><a href="pepwheel.html">pepwheel</a></td>
 <td>Draw a helical wheel diagram for a protein sequence</td>
-</tr>
-
-<tr>
-<td><a href="tmap.html">tmap</a></td>
-<td>Predict and plot transmembrane segments in protein sequences</td>
 </tr>
 
 </table>

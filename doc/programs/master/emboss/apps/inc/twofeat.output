@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: twofeat
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: twofeat
 #    [-sequence] tembl:x65923
 #    -atype polyA_signal
@@ -45,10 +45,10 @@
 <pre>
 ##gff-version 3
 ##sequence-region X65923 1 518
-#!Date 2010-01-15
+#!Date 2011-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.3.0
-X65923	EMBL	polyA_signal_sequence	484	489	0.000	+	.	ID="X65923.6"
-X65923	EMBL	polyA_site	509	509	0.000	+	.	ID="X65923.7";featflags="0x40"
+#!Source-version EMBOSS 6.4.0.0
+X65923	EMBL	polyA_signal_sequence	484	489	.	+	.	ID=X65923.6
+X65923	EMBL	polyA_site	509	509	.	+	.	ID=X65923.7
 </pre>
 </td></tr></table><p>

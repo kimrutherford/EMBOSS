@@ -1,0 +1,23 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: x13776.feattext</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 3
+##sequence-region X13776 1 2167
+#!Date 2011-05-24
+#!Type DNA
+#!Source-version EMBOSS 6.4.0.0
+X13776	EMBL	databank_entry	1	2167	.	+	.	ID=X13776.1;organism=Pseudomonas aeruginosa;map=38 min;strain=PAC;isolate=PAC 1;mol_type=genomic DNA;db_xref=taxon:287
+X13776	EMBL	CDS	1289	1879	.	+	0	ID=X13776.2;transl_table=11;gene=amiR;note=aliphatic amidase regulator%2C positive regulator of amiE;db_xref=GOA:P10932;db_xref=InterPro:IPR005561;db_xref=InterPro:IPR008327;db_xref=InterPro:IPR011006;db_xref=InterPro:IPR011991;db_xref=PDB:1QO0;db_xref=UniProtKB/Swiss-Prot:P10932;protein_id=CAA32023.1;translation=MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDEREAHQHLSREAMKRREPILKIAQELLGNEPSA
+X13776	EMBL	CDS	135	1292	.	+	0	ID=X13776.3;transl_table=11;gene=amiC;note=negative regulator of amiR;db_xref=GOA:P27017;db_xref=InterPro:IPR000709;db_xref=PDB:1PEA;db_xref=PDB:1QNL;db_xref=PDB:1QO0;db_xref=UniProtKB/Swiss-Prot:P27017;protein_id=CAA32024.1;translation=MGSHQERPLIGLLFSETGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLSSRIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP
+X13776	EMBL	promoter	8	24	.	+	.	ID=X13776.4;note=proposed rpoN-dependent promoter
+X13776	EMBL	promoter	65	81	.	+	.	ID=X13776.5;note=proposed rpoN-dependent promoter
+X13776	EMBL	ribosome_entry_site	121	126	.	+	.	ID=X13776.6;note=proposed Shine-Dalgarno sequence
+X13776	EMBL	sequence_variant	912	1167	.	+	.	ID=X13776.7;gene=amiC;replace=;note=ClaI fragment deleted in pSW36%2C constitutive phenotype
+X13776	EMBL	sequence_feature	1	1	.	+	.	ID=X13776.8;note=last base of an XhoI site
+X13776	EMBL	sequence_feature	648	653	.	+	.	ID=X13776.9;note=end of 658bp XhoI fragment%2C deletion in pSW3 causes constitutive expression of amiE
+X13776	EMBL	sequence_conflict	1281	1281	.	+	.	ID=X13776.10;replace=g;citation=[3]
+</pre>
+</td></tr></table><p>

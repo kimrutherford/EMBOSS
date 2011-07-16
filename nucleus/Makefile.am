@@ -24,10 +24,11 @@ endif
 endif
 
 
-INCLUDES = -I$(top_srcdir)/plplot $(X_CFLAGS) -I$(srcdir)/ \
+AM_CPPFLAGS =  -I$(top_srcdir)/ajax/core -I$(top_srcdir)/plplot \
+	$(X_CFLAGS) -I$(srcdir)/ \
 	-I$(top_srcdir)/ajax -I$(top_srcdir)/ajax/pcre \
 	$(EXTRA_INCLUDES) \
-	-I$(top_srcdir)/ajax/core -I$(top_srcdir)/ajax/graphics \
+	-I$(top_srcdir)/ajax/graphics \
 	-I$(top_srcdir)/ajax/ensembl -I$(top_srcdir)/ajax/ajaxdb \
 	-I$(top_srcdir)/ajax/acd
 
@@ -46,7 +47,7 @@ include_HEADERS = emboss.h embaln.h embcom.h embcons.h \
 
 libnucleus_la_SOURCES = $(NUCLSRC)
 
-VERS_INF =  -version-info 6:3:0
+VERS_INF =  -version-info 6:4:0
 
 if ISCYGWIN
 LINKFLAGS =  $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LIBS)

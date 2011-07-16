@@ -1,0 +1,25 @@
+Here is a sample session with <b>dbxtax</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbxtax </b>
+Index NCBI taxonomy using b+tree indices
+Basename for index files [taxon]: <b></b>
+Resource name [taxresource]: <b></b>
+Database directory [.]: <b>taxonomy</b>
+        id : ID
+       acc : Synonym
+       tax : Scientific name
+       rnk : Rank
+        up : Parent
+        gc : Genetics code
+       mgc : Mitochondrial genetic code
+Index fields [*]: <b></b>
+Compressed index files [Y]: <b></b>
+General log output file [outfile.dbxtax]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>

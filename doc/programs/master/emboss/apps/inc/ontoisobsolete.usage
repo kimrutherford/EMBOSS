@@ -1,0 +1,31 @@
+Here is a sample session with <b>ontoisobsolete</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>ontoisobsolete edam:0000181 </b>
+Report whether an ontology term id is obsolete
+Output file [stdout]: <b></b>
+
+Obsolete
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>ontoisobsolete edam:0000575 </b>
+Report whether an ontology term id is obsolete
+Output file [stdout]: <b></b>
+
+edam:0000575 OK
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.2">Go to the input files for this example</a><br><p>

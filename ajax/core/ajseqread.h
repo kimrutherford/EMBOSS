@@ -15,14 +15,15 @@ extern AjPTable seqDbMethods;
 ** Prototype definitions
 */
 
-AjPTable     ajSeqtableGetDb(void);
-AjBool       ajSeqMethodTest (const AjPStr method);
-AjBool       ajSeqAccessAsis (AjPSeqin seqin);
-AjBool       ajSeqAccessFile (AjPSeqin seqin);
-AjBool       ajSeqAccessOffset (AjPSeqin seqin);
+AjPTable     ajSeqaccessGetDb(void);
+AjBool       ajSeqaccessMethodTest (const AjPStr method);
+const char*  ajSeqaccessMethodGetQlinks(const AjPStr method);
+ajuint       ajSeqaccessMethodGetScope(const AjPStr method);
 AjPSeqall    ajSeqallFile (const AjPStr usa);
 AjBool       ajSeqAllRead (AjPSeq thys, AjPSeqin seqin);
 AjBool       ajSeqGetFromUsa (const AjPStr thys, AjBool protein, AjPSeq seq);
+AjBool       ajSeqGetFromUsaRange(const AjPStr thys, AjBool protein,
+			          ajint ibegin, ajint iend, AjPSeq seq);
 AjBool       ajSeqFormatTest (const AjPStr format);
 void         ajSeqinClear (AjPSeqin thys);
 void         ajSeqinClearPos(AjPSeqin thys);
@@ -33,19 +34,14 @@ void         ajSeqinSetProt (AjPSeqin seqin);
 void         ajSeqinSetRange (AjPSeqin seqin, ajint ibegin, ajint iend);
 void         ajSeqinUsa (AjPSeqin* pthis, const AjPStr Usa);
 void         ajSeqinTrace (const AjPSeqin thys);
+const char*  ajSeqinTypeGetFields(void);
+const char*  ajSeqinTypeGetQlinks(void);
 
 AjBool       ajSeqParseFasta(const AjPStr str, AjPStr* id, AjPStr* acc,
 			     AjPStr* sv, AjPStr* desc);
 AjBool       ajSeqParseFastq(const AjPStr str, AjPStr* id, AjPStr* desc);
 AjBool       ajSeqParseNcbi(const AjPStr str, AjPStr* id, AjPStr* acc,
 			    AjPStr* sv, AjPStr* gi, AjPStr* db, AjPStr* desc);
-void         ajSeqQueryClear (AjPSeqQuery thys);
-void         ajSeqQueryDel (AjPSeqQuery *pthis);
-AjBool       ajSeqQueryIs (const AjPSeqQuery qry);
-AjPSeqQuery  ajSeqQueryNew (void);
-void         ajSeqQueryStarclear (AjPSeqQuery qry);
-void         ajSeqQueryTrace (const AjPSeqQuery qry);
-AjBool       ajSeqQueryWild (AjPSeqQuery qry);
 void         ajSeqPrintInFormat (AjPFile outf, AjBool full);
 void         ajSeqPrintbookInFormat (AjPFile outf);
 void         ajSeqPrinthtmlInFormat (AjPFile outf);
@@ -60,10 +56,15 @@ ajint        ajSeqsetFromPair (AjPSeqset thys,
 AjBool       ajSeqsetallRead (AjPList thys, AjPSeqin seqin);
 AjBool       ajSeqsetRead (AjPSeqset thys, AjPSeqin seqin);
 AjBool       ajSeqUsaGetBase(const AjPStr usa, AjPStr* baseusa);
+AjBool       ajSeqinformatTerm(const AjPStr term);
+AjBool       ajSeqinformatTest(const AjPStr format);
 
 /*
 ** End of prototype definitions
 */
+
+__deprecated AjBool       ajSeqMethodTest (const AjPStr method);
+__deprecated ajuint       ajSeqMethodGetScope(const AjPStr method);
 
 #endif
 

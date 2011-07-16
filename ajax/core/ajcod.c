@@ -133,7 +133,8 @@ static CodOInFormat codInFormatDef[] =
   {"gcg",       AJTRUE,  0, "GCG codon usage file",
        codReadGcg,       "All numbers read, #comments for extras"},
   {"cutg",      AJTRUE,  0, "CUTG codon usage file",
-       codReadCutg,      "All numbers (cutgaa) read or fraction calculated, extras in first line"},
+       codReadCutg,      "All numbers (cutgaa) read or fraction calculated, "
+                         "extras in first line"},
   {"cutgaa",    AJFALSE, 0, "CUTG codon usage file with aminoacids",
        codReadCutg,      "Cutg with all numbers"},
   {"spsum",     AJTRUE,  0, "CUTG species summary file",
@@ -177,7 +178,7 @@ typedef struct CodSOutFormat
 #define CodPOutFormat CodOOutFormat*
 
 
-static CodOOutFormat codOutFormatDef[] =
+static CodOOutFormat codoutFormatDef[] =
 {
 /* "Name",      "Description" */
 /*     WriteFunction */
@@ -252,7 +253,7 @@ AjPCod ajCodNew(void)
 
 
 
-/* @func ajCodNewCodenum *******************************************************
+/* @func ajCodNewCodenum ******************************************************
 **
 ** Default constructor for empty AJAX codon usage objects, with the
 ** amino acid assignments taken from a standard genetic code.
@@ -322,7 +323,7 @@ __deprecated AjPCod ajCodNewCode(ajint code)
 
 
 
-/* @func ajCodNewCod ***********************************************************
+/* @func ajCodNewCod **********************************************************
 **
 ** Duplicate a codon object
 **
@@ -754,7 +755,7 @@ void ajCodClearData(AjPCod thys)
 
 
 
-/* @func ajCodSetTripletsS *****************************************************
+/* @func ajCodSetTripletsS ****************************************************
 **
 ** Load the num array of a codon structure
 **
@@ -897,7 +898,7 @@ AjBool ajCodRead(AjPCod thys, const AjPStr fn, const AjPStr format)
     AjPStr formatstr = NULL;
     AjPStr fname = NULL;
     AjPStr filename = NULL;
-    ajint i;
+    ajlong i;
 
     i = ajStrFindC(fn, "::");
 
@@ -1458,7 +1459,7 @@ static AjBool codReadCodehop(AjPCod thys, AjPFilebuff inbuff)
     AjPStr  tok2 = NULL;
     AjPStr  tok3 = NULL;
     AjPStr  tok4 = NULL;
-    ajint i;
+    ajlong i;
     ajint c;
     ajint idx;
     double fraction;
@@ -1599,7 +1600,7 @@ static AjBool codReadGcg(AjPCod thys, AjPFilebuff inbuff)
     AjBool header = ajTrue;
     AjPStr saveheader = NULL;
     AjPStr tok1 = NULL;
-    ajint i;
+    ajlong i;
 
     while(ajBuffreadLine(inbuff,&line))
     {
@@ -1625,7 +1626,7 @@ static AjBool codReadGcg(AjPCod thys, AjPFilebuff inbuff)
 		continue;
 	    }
 
-	    i = ajStrFindC(line, " genes found in ");
+	    i = ajStrFindC(line, " genes found in "); /* Lossy cast */
 
 	    if(i == -1)
 		ajStrAssignS(&saveheader, line);
@@ -2250,9 +2251,9 @@ void ajCodWriteOut(const AjPCod thys, AjPOutfile outf)
 
     for(i=0;codInFormatDef[i].Name; i++)
     {
-	if(ajStrMatchCaseC(ajOutfileGetFormat(outf), codOutFormatDef[i].Name))
+	if(ajStrMatchCaseC(ajOutfileGetFormat(outf), codoutFormatDef[i].Name))
 	{
-	    codOutFormatDef[i].Write(thys, ajOutfileGetFile(outf));
+	    codoutFormatDef[i].Write(thys, ajOutfileGetFile(outf));
 	    return;
 	}
     }
@@ -2263,7 +2264,7 @@ void ajCodWriteOut(const AjPCod thys, AjPOutfile outf)
 
 
 
-/* @func ajCodWrite ********************************************************
+/* @func ajCodWrite ***********************************************************
 **
 ** Write codon structure to output file
 **
@@ -3131,7 +3132,7 @@ static double* codGetWstat(const AjPCod thys)
 
 
 
-/* @func ajCodCalcCaiCod *******************************************************
+/* @func ajCodCalcCaiCod ******************************************************
 **
 ** Calculate codon adaptive index using overall codon usage data only.
 **
@@ -3199,7 +3200,7 @@ double ajCodCalcCaiCod(const AjPCod thys)
 
 
 
-/* @func ajCodCalcCaiSeq *******************************************************
+/* @func ajCodCalcCaiSeq ******************************************************
 **
 ** Calculate codon adaptive index for a coding sequence
 **
@@ -3466,7 +3467,7 @@ double ajCodCalcNc(const AjPCod thys)
 
 
 
-/* @func ajCodCalcUsage ********************************************************
+/* @func ajCodCalcUsage *******************************************************
 **
 ** Calculate fractional and thousand elements of a codon object
 ** Used for creating a codon usage table
@@ -3723,7 +3724,7 @@ ajint ajCodGetNumcodon(const AjPCod thys)
 
 
 
-/* @func ajCodGetNumcds *****************************************************
+/* @func ajCodGetNumcds *******************************************************
 **
 ** Returns the numbers of CDSs in a codon table
 **
@@ -3739,7 +3740,7 @@ ajint ajCodGetNumcds(const AjPCod thys)
 
 
 
-/* @func ajCodGetCode *****************************************************
+/* @func ajCodGetCode *********************************************************
 **
 ** Returns the genetic code of a codon table
 **
@@ -3755,7 +3756,7 @@ ajint ajCodGetCode(const AjPCod thys)
 
 
 
-/* @func ajCodSetCodenum *****************************************************
+/* @func ajCodSetCodenum ******************************************************
 **
 ** Assigns the genetic code in a codon table
 **
@@ -3817,7 +3818,7 @@ __deprecated void ajCodAssDescC(AjPCod thys, const char* desc)
 
 
 
-/* @func ajCodSetDescS *********************************************************
+/* @func ajCodSetDescS ********************************************************
 **
 ** Assigns the description of a codon table
 **
@@ -3879,7 +3880,7 @@ __deprecated void ajCodAssDivisionC(AjPCod thys, const char* division)
 
 
 
-/* @func ajCodSetDivisionS *****************************************************
+/* @func ajCodSetDivisionS ****************************************************
 **
 ** Assigns the division of a codon table
 **
@@ -3941,7 +3942,7 @@ __deprecated void ajCodAssNameC(AjPCod thys, const char* name)
 
 
 
-/* @func ajCodSetNameS *********************************************************
+/* @func ajCodSetNameS ********************************************************
 **
 ** Assigns the name of a codon table
 **
@@ -3972,7 +3973,7 @@ __deprecated void ajCodAssName(AjPCod thys, const AjPStr name)
 
 
 
-/* @func ajCodSetNumcds ********************************************************
+/* @func ajCodSetNumcds *******************************************************
 **
 ** Assigns the number of CDSs in a codon table
 **
@@ -4065,7 +4066,7 @@ __deprecated void ajCodAssReleaseC(AjPCod thys, const char* release)
 
 
 
-/* @func ajCodSetReleaseS ******************************************************
+/* @func ajCodSetReleaseS *****************************************************
 **
 ** Assigns the release of a codon table
 **
@@ -4158,26 +4159,47 @@ __deprecated void ajCodAssSpecies(AjPCod thys, const AjPStr species)
 
 
 
-/* @func ajCodOutFormat *******************************************************
+/* @func ajCodoutformatFind ***************************************************
 **
 ** Tests the output format for an outcodon ACD type
 **
 ** @param [r] name [const AjPStr] Format name
-** @return [ajint] Internal format index, of -1 if not found
+** @param [w] iformat [ajint*] Internal format index
+** @return [AjBool] True on success
 ** @@
 ******************************************************************************/
 
-ajint ajCodOutFormat(const AjPStr name)
+AjBool ajCodoutformatFind(const AjPStr name, ajint *iformat)
 {
-    ajint i;
-    for(i=0;codOutFormatDef[i].Name; i++)
+    ajuint i;
+
+    for(i=0;codoutFormatDef[i].Name; i++)
     {
-	if(ajStrMatchCaseC(name, codOutFormatDef[i].Name))
+	if(ajStrMatchCaseC(name, codoutFormatDef[i].Name))
 	{
-	    return i;
+            *iformat = i;
+	    return ajTrue;
 	}
     }
-    return -1;
+
+    *iformat = 0;
+
+    return ajFalse;
+}
+
+
+
+
+/* @obsolete ajCodOutFormat
+** @remove use ajCodoutformatFind
+*/
+__deprecated ajint ajCodOutFormat(const AjPStr name)
+{
+    ajint iformat = 0;
+    if(ajCodoutformatFind(name, &iformat))
+        return iformat;
+    else
+        return -1;
 }
 
 
@@ -4264,9 +4286,6 @@ static void codFix(AjPCod thys)
 	{
 	    aa = thys->aa[i];
 
-	    if(aa == 27)
-		totcds += thys->num[i];
-
 	    if(aa > 27)
 		aa = 26;
 
@@ -4291,7 +4310,7 @@ static void codFix(AjPCod thys)
 
 
 
-/* @func ajCodPrintFormat **************************************************
+/* @func ajCodPrintFormat *****************************************************
 **
 ** Reports the internal data structures
 **
@@ -4309,7 +4328,7 @@ void ajCodPrintFormat(AjPFile outf, AjBool full)
 	i=0;
 
     ajFmtPrintF(outf, "\n");
-    ajFmtPrintF(outf, "# codon usage input formats\n");
+    ajFmtPrintF(outf, "# Codon usage input formats\n");
     ajFmtPrintF(outf, "# Name  Format name (or alias)\n");
     ajFmtPrintF(outf, "# Try   Test for unknown input files\n");
     ajFmtPrintF(outf, "# Desc  Format description\n");
@@ -4328,18 +4347,18 @@ void ajCodPrintFormat(AjPFile outf, AjBool full)
     ajFmtPrintF(outf, "}\n\n");
 
     ajFmtPrintF(outf, "\n");
-    ajFmtPrintF(outf, "# codon usage output formats\n");
+    ajFmtPrintF(outf, "# Codon usage output formats\n");
     ajFmtPrintF(outf, "# Name  Format name (or alias)\n");
     ajFmtPrintF(outf, "# Desc  Format description\n");
     ajFmtPrintF(outf, "# Name         Description\n");
     ajFmtPrintF(outf, "\n");
     ajFmtPrintF(outf, "OFormat {\n");
 
-    for(i=0; codOutFormatDef[i].Name; i++)
+    for(i=0; codoutFormatDef[i].Name; i++)
     {
 	ajFmtPrintF(outf, "  %-12s \"%s\"\n",
-		     codOutFormatDef[i].Name,
-		     codOutFormatDef[i].Desc);
+		     codoutFormatDef[i].Name,
+		     codoutFormatDef[i].Desc);
     }
     ajFmtPrintF(outf, "}\n\n");
 

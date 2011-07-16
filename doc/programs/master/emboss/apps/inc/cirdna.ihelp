@@ -1,5 +1,5 @@
 Draws circular maps of DNA constructs
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     [inputfile] Commands to the cirdna drawing
@@ -13,7 +13,7 @@ Version: EMBOSS:6.3.0
    -graphout           graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
                                   (ps, hpgl, hp7470, hp7580, meta, cps, x11,
                                   tek, tekt, none, data, xterm, png, gif, pdf,
-                                  svg, pdf, svg)
+                                  svg)
 
    Additional (Optional) qualifiers:
    -maxgroups          integer    [20] Maximum number of groups (Integer 1 or

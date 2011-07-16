@@ -1,0 +1,20 @@
+<p>
+
+The input is a standard EMBOSS taxonomy query.
+
+<p>
+
+The expected source of taxonomy information is the NCBI Taxonomy
+database "taxon" which is available as a standard database in all
+EMBOSS installations.
+
+<p>
+
+Data can also be read from taxonomy output in "ncbi" format written by an
+EMBOSS application.
+
+<p>
+See:
+<A href="http://emboss.sf.net/docs/themes/TaxonFormats.html">
+http://emboss.sf.net/docs/themes/TaxonFormats.html</A>
+for further information on taxon formats.

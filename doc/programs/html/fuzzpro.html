@@ -52,7 +52,7 @@ Algorithm
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with fuzzpro</b>
+Here is a sample session with <b>fuzzpro</b>
 <p>
 
 <p>
@@ -63,6 +63,7 @@ Search for patterns in protein sequences
 Input protein sequence(s): <b>tsw:*</b>
 Search pattern: <b>[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G</b>
 Output report [12s1_arath.fuzzpro]: <b></b>
+ajSeqxrefNewDbS '1-I' 'FT025'
 
 </pre></td></tr></table><p>
 <p>
@@ -74,7 +75,7 @@ Output report [12s1_arath.fuzzpro]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Search for patterns in protein sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -108,7 +109,8 @@ Version: EMBOSS:6.3.0
                                   A period ends the pattern. (Optional in
                                   fuzzpro).
                                   For example, [DE](2)HS{P}X(2)PX(2,4)C
-  [-outfile]           report     [*.fuzzpro] Output report file name
+  [-outfile]           report     [*.fuzzpro] Output report file name (default
+                                  -rformat seqtable)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -209,7 +211,7 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>report</td>
 <td>Output report file name</td>
-<td>Report output file</td>
+<td>(default -rformat seqtable)</td>
 <td><i>&lt;*&gt;</i>.fuzzpro</td>
 </tr>
 
@@ -579,7 +581,36 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
     Input file format
 </H2>
 
-<b>fuzzpro</b> reads in normal protein sequence USAs. 
+
+<b>fuzzpro</b> reads in one or more protein sequences.
+
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -659,10 +690,11 @@ The output is a standard EMBOSS report file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, debug, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
+command-line qualifier <tt>-rformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+embl, genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif,
+diffseq, draw, restrict, excel, feattable, motif, nametable, regions,
+seqtable, simple, srs, table, tagseq.
 
 <p>
 
@@ -685,7 +717,7 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: fuzzpro
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: fuzzpro
 #    -sequence "tsw:*"
 #    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"
@@ -703,8 +735,8 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-     53      63 pattern             . YVGDEAQSKRG
+  Start     End Pattern                                       Mismatch Sequence
+     53      63 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -718,8 +750,8 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-     53      63 pattern             . YVGDEAQSKRG
+  Start     End Pattern                                       Mismatch Sequence
+     53      63 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -746,8 +778,8 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-     55      65 pattern             . YVGDEAQSKRG
+  Start     End Pattern                                       Mismatch Sequence
+     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -761,8 +793,8 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-     55      65 pattern             . YVGDEAQSKRG
+  Start     End Pattern                                       Mismatch Sequence
+     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -776,8 +808,8 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern_name Mismatch Sequence
-     55      65 pattern             . YVGDEAQSKRG
+  Start     End Pattern                                       Mismatch Sequence
+     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -843,11 +875,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="digest.html">digest</a></td>
-<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
-</tr>
-
-<tr>
 <td><a href="epestfind.html">epestfind</a></td>
 <td>Finds PEST motifs as potential proteolytic cleavage sites</td>
 </tr>
@@ -858,16 +885,6 @@ None.
 </tr>
 
 <tr>
-<td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Identify nucleic acid-binding motifs in protein sequences</td>
-</tr>
-
-<tr>
-<td><a href="oddcomp.html">oddcomp</a></td>
-<td>Identify proteins with specified sequence word composition</td>
-</tr>
-
-<tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
 <td>Searches protein sequences with a sequence motif</td>
 </tr>
@@ -875,11 +892,6 @@ None.
 <tr>
 <td><a href="patmatmotifs.html">patmatmotifs</a></td>
 <td>Scan a protein sequence with motifs from the PROSITE database</td>
-</tr>
-
-<tr>
-<td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
@@ -898,23 +910,6 @@ None.
 </tr>
 
 </table>
-
-<p>
-Other EMBOSS programs allow you to search for regular expression
-patterns but may be less easy for the user who has never used regular
-expressions before:
-
-<p>
-
-<ul>
-
-<li><a href="dreg.html">dreg</a> - Regular expression search of a
-nucleotide sequence
-
-<li><a href="preg.html">preg</a> - Regular expression search of a protein
-sequence
-
-</ul>
 
 <H2>
     Author(s)

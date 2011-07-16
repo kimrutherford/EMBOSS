@@ -112,7 +112,7 @@ onas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 Command line arguments
 
 Display basic information about sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     (Gapped) sequence(s) filename and optional
@@ -204,7 +204,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   infoseq reads any sequence USAs.
+   infoseq reads one or more nucleotide or protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -390,15 +407,15 @@ Known bugs
 See also
 
                     Program name                          Description
+                    abiview      Display the trace in an ABI sequencer file
+                    coderet      Extract CDS, mRNA and translations from feature tables
+                    entret       Retrieves sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
                     infoalign    Display basic information about a multiple sequence alignment
-                    infobase     Return information on a given nucleotide base
-                    inforesidue  Return information on a given amino acid residue
-                    seealso      Finds programs with similar function to a specified program
-                    showdb       Displays information on configured databases
-                    textsearch   Search the textual description of sequence(s)
-                    tfm          Displays full documentation for an application
+                    seqxref      Retrieve all database cross-references for a sequence entry
+                    seqxrefget   Retrieve all cross-referenced data for a sequence entry
+                    showalign    Display a multiple sequence alignment in pretty format
                     whichdb      Search all sequence databases for an entry and retrieve it
-                    wossname     Finds programs by keywords in their short description
 
                       * geecee - Calculates the fractional GC content of a nucleic acid
                         sequence

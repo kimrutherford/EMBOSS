@@ -58,9 +58,9 @@ static void eprimer3_report (AjPFile outfile, const AjPStr output,
 			     ajint numreturn, ajint begin);
 static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
 				   ajint numreturn, ajint begin);
-static AjPStr eprimer3_tableget(const char * key1, ajint number,
-				const char *key2,
-				const AjPTable table);
+static const AjPStr eprimer3_tableget(const char * key1, ajint number,
+                                      const char *key2,
+                                      const AjPTable table);
 static void eprimer3_write_primer(AjPFile outfile, const char *tag,
 				  const AjPStr pos,
 				  const AjPStr tm, const AjPStr gc,
@@ -357,7 +357,7 @@ int main(int argc, char **argv)
         /* mispriming library may not have been specified */
         if(mispriming_library)
             eprimer3_send_stringC(stream, "PRIMER_MISPRIMING_LIBRARY",
-                                  ajFileGetNameC(mispriming_library));
+                                  ajFileGetPrintnameC(mispriming_library));
     
         eprimer3_send_float(stream, "PRIMER_MAX_MISPRIMING", 
                             max_mispriming);
@@ -431,8 +431,8 @@ int main(int argc, char **argv)
         */
         if(internal_oligo_mishyb_library)
             eprimer3_send_stringC(stream,
-                            "PRIMER_INTERNAL_OLIGO_MISHYB_LIBRARY",
-                            ajFileGetNameC(internal_oligo_mishyb_library));
+                          "PRIMER_INTERNAL_OLIGO_MISHYB_LIBRARY",
+                          ajFileGetPrintnameC(internal_oligo_mishyb_library));
 
         eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_MISHYB",
                             internal_oligo_max_mishyb);
@@ -941,7 +941,7 @@ static void eprimer3_report(AjPFile outfile, const AjPStr output,
             if(ajStrCmpLenC(line, "PRIMER_SEQUENCE_ID=", 19) == 0)
             {
                 gotsequenceid = AJTRUE;
-                table = ajTablestrNewLen(TABLEGUESS);
+                table = ajTablestrNew(TABLEGUESS);
 
             }
             else
@@ -1011,16 +1011,16 @@ static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
                                    ajint numreturn, ajint begin)
 {
     AjPStr key   = NULL;
-    AjPStr error = NULL;		/*  value from table - do not delete */
     AjPStr explain    = NULL;
     AjPStr explainstr = NULL;
-    AjPStr seqid      = NULL;
+    const AjPStr error = NULL;		/*  value from table - do not delete */
+    const AjPStr seqid      = NULL;
     ajint i;
-    AjPStr size = NULL;
-    AjPStr seq  = NULL;
-    AjPStr pos  = NULL;
-    AjPStr tm   = NULL;
-    AjPStr gc   = NULL;
+    const AjPStr size = NULL;
+    const AjPStr seq  = NULL;
+    const AjPStr pos  = NULL;
+    const AjPStr tm   = NULL;
+    const AjPStr gc   = NULL;
 
      /*
      ** Typical primer3 output looks like:
@@ -1056,24 +1056,24 @@ static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
   
     /* check for errors */
     ajStrAssignC(&key, "PRIMER_ERROR");
-    error =(AjPStr)ajTableFetch(table,(const void*)key);
+    error = ajTableFetchS(table, key);
     if(error != NULL)
         ajErr("%S", error);
 
     ajStrAssignC(&key, "PRIMER_WARNING");
-    error = (AjPStr)ajTableFetch(table,(const void*)key);
+    error = ajTableFetchS(table, key);
     if(error != NULL)
         ajWarn("%S", error);
 
   
     /* get the sequence id */
     ajStrAssignC(&key, "PRIMER_SEQUENCE_ID");
-    seqid = (AjPStr)ajTableFetch(table,(const void*)key);
+    seqid = ajTableFetchS(table, key);
     ajFmtPrintF(outfile, "\n# EPRIMER3 RESULTS FOR %S\n\n", seqid);
   
     /* get information on the analysis */
     ajStrAssignC(&key, "PRIMER_LEFT_EXPLAIN");
-    explain = (AjPStr)ajTableFetch(table,(const void*)key);
+    explain = ajTableFetchmodS(table, key);
 
     if(explain != NULL)
     {
@@ -1083,7 +1083,7 @@ static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
                     explainstr);
     }
     ajStrAssignC(&key, "PRIMER_RIGHT_EXPLAIN");
-    explain = (AjPStr)ajTableFetch(table,(const void*)key);
+    explain = ajTableFetchmodS(table, key);
 
     if(explain != NULL)
     {
@@ -1093,7 +1093,7 @@ static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
                     explainstr);
     }
     ajStrAssignC(&key, "PRIMER_PAIR_EXPLAIN");
-    explain = (AjPStr)ajTableFetch(table,(const void*)key);
+    explain = ajTableFetchmodS(table, key);
 
     if(explain != NULL)
     {
@@ -1103,7 +1103,7 @@ static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
                     explainstr);
     }
     ajStrAssignC(&key, "PRIMER_INTERNAL_OLIGO_EXPLAIN");
-    explain = (AjPStr)ajTableFetch(table,(const void*)key);
+    explain = ajTableFetchmodS(table, key);
 
     if(explain != NULL)
     {
@@ -1177,17 +1177,17 @@ static void eprimer3_output_report(AjPFile outfile, const AjPTable table,
 ** @param [r] key2 [const char *] Second half of table key base string
 **                                (minus '_')
 ** @param [r] table [const AjPTable] Table of tag/value result pairs
-** @return [AjPStr] Table value
+** @return [const AjPStr] Table value
 **
 ******************************************************************************/
 
-static AjPStr eprimer3_tableget(const char *key1, ajint number,
+static const AjPStr eprimer3_tableget(const char *key1, ajint number,
 				const char *key2,
                                 const AjPTable table)
 {
     AjPStr fullkey = NULL;
     AjPStr keynum  = NULL;
-    AjPStr value   = NULL;
+    const AjPStr value   = NULL;
 
     ajStrAssignC(&fullkey, key1);
 
@@ -1203,7 +1203,7 @@ static AjPStr eprimer3_tableget(const char *key1, ajint number,
 
     ajStrAppendC(&fullkey, key2);
     ajDebug("Constructed key=%S\n", fullkey);
-    value =(AjPStr)ajTableFetch(table,(const void*)fullkey);
+    value = ajTableFetchS(table, fullkey);
 
 
     ajStrDel(&fullkey);
@@ -1243,7 +1243,7 @@ static void eprimer3_write_primer(AjPFile outfile, const char *tag,
     float gcfloat;
     AjPStr start = NULL;
     AjPStr lenstr = NULL;
-    ajint comma;
+    ajlong comma;
 
     if(ajStrGetLen(pos))
     {

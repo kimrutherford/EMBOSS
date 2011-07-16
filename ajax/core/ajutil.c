@@ -38,6 +38,10 @@
 static AjBool utilBigendian;
 static ajint utilBigendCalled = 0;
 
+static AjBool utilIsBase64(char c);
+static char   utilBase64Encode(unsigned char u);
+static unsigned char utilBase64Decode(char c);
+
 
 
 
@@ -182,15 +186,24 @@ void ajReset(void)
     WSACleanup();
 #endif
     ajDebug("\nFinal Summary\n=============\n\n");
-    /*    ajBtreeExit(); */
+    ajBtreeExit();
     ajSqlExit();
     ajMatrixExit();
     ajTreeExit();
     ajPdbExit();
     ajDmxExit();
     ajDomainExit();
+    ajQueryExit();
+    ajTextExit();
+ /*    ajResourceExit(); */
     ajFeatExit();
     ajSeqExit();
+    ajOboExit();
+    ajAssemExit();
+    ajTaxExit();
+    ajUrlExit();
+    ajVarExit();
+    ajResourceExit();
     ajPhyloExit();
     ajAlignExit();
     ajReportExit();
@@ -245,6 +258,7 @@ void ajReset(void)
 ** @nam4rule  RevShort  Reverse the byte order in a short integer.
 ** @nam4rule  RevLong   Reverse the byte order in a long.
 ** @nam4rule  RevUint    Reverse the byte order in an unsigned integer.
+** @nam4rule  RevUlong   Reverse the byte order in an unsigned long.
 **
 ** @argrule   RevLen2  sval [ajshort*] Short to be reversed
 ** @argrule   RevLen4  ival [ajint*] Integer to be reversed
@@ -256,6 +270,7 @@ void ajReset(void)
 ** @argrule   RevInt   ival [ajint*] Integer to be reversed
 ** @argrule   RevLong  lval [ajlong*] Long integer to be reversed
 ** @argrule   RevUint  ival [ajuint*] Unsigned integer to be reversed
+** @argrule   RevUlong lval [ajulong*] Unsigned long integer to be reversed
 **
 ** @valrule   *  [void]
 **
@@ -776,6 +791,46 @@ __deprecated void ajUtilRevUint(ajuint* ival)
 
 
 
+/* @func ajByteRevUlong *******************************************************
+**
+** Reverses the byte order in an unsigned long.
+**
+** @param [u] lval [ajulong*] Integer in wrong byte order.
+**                           Returned in correct order.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajByteRevUlong(ajulong* lval)
+{
+    union lbytes
+    {
+        char chars[8];
+        ajulong l;
+    } data, revdata;
+
+    char* cs;
+    char* cd;
+    ajuint i;
+
+    data.l = *lval;
+    cs     = data.chars;
+    cd     = &revdata.chars[sizeof(ajulong)-1];
+
+    for(i=0; i < sizeof(ajulong); i++)
+    {
+        *cd = *cs++;
+        --cd;
+    }
+
+    *lval = revdata.l;
+
+    return;
+}
+
+
+
+
 /* @datasection [none]  Miscellaneous utility functions ***********************
 **
 ** Miscellaneous utility functions.
@@ -793,6 +848,9 @@ __deprecated void ajUtilRevUint(ajuint* ival)
 **
 ** @fdata [none]
 **
+** @nam3rule  Base64     Base-64 encode/decode functions
+** @nam4rule  Decode     Base-64 decode
+** @nam4rule  Encode     Base-64 encode
 ** @nam3rule  Catch      Dummy function to be called in special cases so
 **                       it can be used when debugging in GDB.
 ** @nam3rule  Get        Retrieve system information
@@ -802,14 +860,260 @@ __deprecated void ajUtilRevUint(ajuint* ival)
 **
 ** @nam3rule  Loginfo    If a log file is in use, writes run details to
 **                       end of file.
+** @suffix C Character string input
+**
 ** @argrule   GetUid  Puid [AjPStr*] User's userid
+** @argrule   Decode  Pdest [AjPStr*] Decoded string
+** @argrule   Decode  src [const char*] Encoded input string
+** @argrule   Encode  Pdest [AjPStr*] Decoded string
+** @argrule   Encode  size [size_t] Length of input string
+** @argrule   Encode  src [const unsigned char*] Input string
 **
 ** @valrule   *  [void]
+** @valrule   *Decode  [size_t] Length of encoded string
+** @valrule   *Encode  [AjBool] True if operation was successful.
 ** @valrule   *Get  [AjBool] True if operation was successful.
 **
 ** @fcategory misc
 **
 ******************************************************************************/
+
+
+
+
+/* @func ajUtilBase64DecodeC **************************************************
+**
+** Decode a base 64 string
+**
+** @param [w] Pdest [AjPStr*] Decoded string
+** @param [r] src [const char*] source base64 string
+** @return [size_t] Length of decoded string (zero if decode error)
+** @@
+******************************************************************************/
+
+size_t ajUtilBase64DecodeC(AjPStr *Pdest, const char *src)
+{
+    unsigned char *buf = NULL;
+    size_t srclen;
+    size_t i,j;
+    char c1 = 'A';
+    char c2 = 'A';
+    char c3 = 'A';
+    char c4 = 'A';
+    unsigned char b1 = 0;
+    unsigned char b2 = 0;
+    unsigned char b3 = 0;
+    unsigned char b4 = 0;
+    
+    if(!src)
+        return 0;
+
+    if(!*src)
+        return 0;
+    
+    if(!Pdest)
+        return 0;
+
+    if(!*Pdest)
+        *Pdest = ajStrNew();
+
+    ajStrSetClear(Pdest);
+    
+    srclen = strlen(src);
+    
+    buf = (unsigned char *) ajCharNewRes(srclen);
+
+    /* Ignore non-base64 chars */
+    for(i = 0, j = 0; src[i]; ++i)
+        if(utilIsBase64(src[i]))
+            buf[j++] = src[i];
+
+    for(i = 0; i < j; i += 4)
+    {
+        c1 = buf[i];
+
+        if(i+1 < j)
+            c2 = buf[i+1];
+        
+        if(i+2 < j)
+            c3 = buf[i+2];
+
+        if(i+3 < j)
+            c4 = buf[i+3];
+    
+      
+      b1 = utilBase64Decode(c1);
+      b2 = utilBase64Decode(c2);
+      b3 = utilBase64Decode(c3);
+      b4 = utilBase64Decode(c4);
+      
+      ajStrAppendK(Pdest, ((b1<<2)|(b2>>4)));
+      
+      if(c3 != '=')
+          ajStrAppendK(Pdest, (((b2&0xf)<<4)|(b3>>2)));
+      
+      if(c4 != '=')
+          ajStrAppendK(Pdest, (((b3&0x3)<<6)|b4));	
+    }
+    
+    AJFREE(buf);
+    
+    return ajStrGetLen(*Pdest);
+  
+}
+
+
+
+
+/* @func ajUtilBase64EncodeC **************************************************
+**
+** Decode a base 64 string
+**
+** @param [u] Pdest [AjPStr*] Encoded string
+** @param [r] size [size_t] Size of data to encode
+** @param [r] src [const unsigned char *] source data
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+AjBool ajUtilBase64EncodeC(AjPStr *Pdest, size_t size, const unsigned char *src)
+{
+    size_t i;
+    unsigned char b1 = 0;
+    unsigned char b2 = 0;
+    unsigned char b3 = 0;
+    unsigned char b4 = 0;
+    unsigned char b5 = 0;
+    unsigned char b6 = 0;
+    unsigned char b7 = 0;    
+
+    if(!src)
+        return ajFalse;
+
+    if(!Pdest)
+        return ajFalse;
+
+    if(!*Pdest)
+        return ajFalse;
+    
+    if(!size)
+        size = strlen((const char *)src);
+    
+
+    for(i = 0; i < size; i += 3)
+    {
+        b1 = src[i];
+      
+        if(i+1 < size)
+            b2 = src[i+1];
+      
+        if(i+2 < size)
+            b3 = src[i+2];
+      
+        b4 = b1 >> 2;
+        b5 = ((b1 & 0x3) << 4) | (b2 >> 4);
+        b6 = ((b2 & 0xf) << 2) | (b3 >> 6);
+        b7 = b3 & 0x3f;
+
+        ajStrAppendK(Pdest, utilBase64Encode(b4));
+        ajStrAppendK(Pdest, utilBase64Encode(b5));
+      
+        if(i+1 < size)
+            ajStrAppendK(Pdest, utilBase64Encode(b6));
+        else
+            ajStrAppendK(Pdest, '=');
+      
+        if(i+2 < size)
+            ajStrAppendK(Pdest, utilBase64Encode(b7));
+        else
+            ajStrAppendK(Pdest, '=');
+    }
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic utilIsBase64 ***************************************************
+**
+** Test for valid base 64 character
+**
+** @param [r] c [char] Character
+** @return [AjBool] True if valid base64 character
+** @@
+******************************************************************************/
+
+static AjBool utilIsBase64(char c)
+{
+
+    if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+       (c >= '0' && c <= '9') || (c == '+')             ||
+       (c == '/')             || (c == '='))
+        return ajTrue;
+  
+    return ajFalse;;
+}
+
+
+
+
+/* @funcstatic utilBase64Encode ***********************************************
+**
+** Encode one byte to base 64
+**
+** @param [r] u [unsigned char] Character
+** @return [char] Encoded character
+** @@
+******************************************************************************/
+
+static char utilBase64Encode(unsigned char u)
+{
+
+    if(u < 26)
+        return 'A' + u;
+
+    if(u < 52)
+        return 'a' + (u-26);
+
+    if(u < 62)
+        return '0' + (u-52);
+
+    if(u == 62)
+        return '+';
+  
+    return '/';
+}
+
+
+
+
+/* @funcstatic utilBase64Decode ***********************************************
+**
+** Decode one byte from base 64
+**
+** @param [r] c [char] Character
+** @return [unsigned char] Decoded character
+** @@
+******************************************************************************/
+
+static unsigned char utilBase64Decode(char c)
+{
+  
+    if(c >= 'A' && c <= 'Z')
+        return(c - 'A');
+
+    if(c >= 'a' && c <= 'z')
+        return(c - 'a' + 26);
+
+    if(c >= '0' && c <= '9')
+        return(c - '0' + 52);
+
+    if(c == '+')
+        return 62;
+  
+    return 63;
+}
 
 
 
@@ -1149,3 +1453,7 @@ __deprecated const char*  ajAcdProgram(void)
 {
     return ajStrGetPtr(acdProgram);
 }
+
+
+
+

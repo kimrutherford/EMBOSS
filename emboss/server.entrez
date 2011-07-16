@@ -1,0 +1,263 @@
+# server.entrez 2011-01-04 14:00:00
+
+DB pubmed [
+  type: "Text"
+  format: "text"
+]
+
+DB protein [
+  type: "Protein"
+  format: "text"
+]
+
+DB nuccore [
+  type: "Nucleotide"
+  format: "text"
+]
+
+DB nucleotide [
+  type: "Nucleotide"
+  format: "genbank"
+  field: "ALL All_Fields ! All terms from all searchable fields"
+  field: "UID UID ! Unique number assigned to each sequence"
+  field: "FILT Filter ! Limits the records"
+  field: "WORD Text_Word ! Free text associated with the record"
+  field: "TITL Title ! Words in definition line"
+  field: "KYWD Keyword ! Nonstandardized terms provided by submitter"
+  field: "AUTH Authors ! Author(s) of publication"
+  field: "JOUR Journal ! Journal abbreviation of publication"
+  field: "VOL Volume ! Volume number of publication"
+  field: "ISS Issue ! Issue number of publication"
+  field: "PAGE Page_Number ! Page number(s) of publication"
+  field: "ORGN Organism ! Scientific and common names of organism, and all higher levels of taxonomy"
+  field: "ACCN Accession ! Accession number of sequence"
+  field: "PACC Primary_Accession ! Does not include retired secondary accessions"
+  field: "GENE Gene_Name ! Name of gene associated with sequence"
+  field: "PROT Protein_Name ! Name of protein associated with sequence"
+  field: "ECNO EC/RN_Number ! EC number for enzyme or CAS registry number"
+  field: "PDAT Publication_Date ! Date sequence added to GenBank"
+  field: "MDAT Modification_Date ! Date of last update"
+  field: "SUBS Substance_Name ! CAS chemical name or MEDLINE Substance Name"
+  field: "PROP Properties ! Classification by source qualifiers and molecule type"
+  field: "SQID SeqID String ! String identifier for sequence"
+  field: "GPRJ Genome_Project ! Genome Project"
+  field: "SLEN Sequence_Length ! Length of sequence"
+  field: "FKEY Feature_key ! Feature annotated on sequence"
+  field: "PORG Primary_Organism ! Scientific and common names of primary organism, and all higher levels of taxonomy"
+  field: "COMP Component_Accession ! Component accessions for an assembly"
+]
+
+DB nucgss [
+  type: "Nucleotide"
+  format: "text"
+]
+
+DB nucest [
+  type: "Nucleotide"
+  format: "text"
+]
+
+DB structure [
+  type: "Text"
+  format: "text"
+]
+
+DB genome [
+  type: "Nucleotide"
+  format: "text"
+]
+
+DB biosample [
+  type: "Text"
+  format: "text"
+]
+
+DB biosystems [
+  type: "Text"
+  format: "text"
+]
+
+DB blastdbinfo [
+  type: "Text"
+  format: "text"
+]
+
+DB books [
+  type: "Text"
+  format: "text"
+]
+
+DB cancerchromosomes [
+  type: "Text"
+  format: "text"
+]
+
+DB cdd [
+  type: "Text"
+  format: "text"
+]
+
+DB gap [
+  type: "Text"
+  format: "text"
+]
+
+DB dbvar [
+  type: "Text"
+  format: "text"
+]
+
+DB epigenomics [
+  type: "Text"
+  format: "text"
+]
+
+DB gene [
+  type: "Text"
+  format: "text"
+]
+
+DB genomeprj [
+  type: "Text"
+  format: "text"
+]
+
+DB gensat [
+  type: "Text"
+  format: "text"
+]
+
+DB gds [
+  type: "Text"
+  format: "text"
+]
+
+DB geo [
+  type: "Text"
+  format: "text"
+]
+
+DB geoprofiles [
+  type: "Text"
+  format: "text"
+]
+
+DB homologene [
+  type: "Text"
+  format: "text"
+]
+
+DB images [
+  type: "Text"
+  format: "text"
+]
+
+DB journals [
+  type: "Text"
+  format: "text"
+]
+
+DB mesh [
+  type: "Text"
+  format: "text"
+]
+
+DB ncbisearch [
+  type: "Text"
+  format: "text"
+]
+
+DB nlmcatalog [
+  type: "Text"
+  format: "text"
+]
+
+DB omia [
+  type: "Text"
+  format: "text"
+]
+
+DB omim [
+  type: "Text"
+  format: "text"
+]
+
+DB pmc [
+  type: "Text"
+  format: "text"
+]
+
+DB popset [
+  type: "Text"
+  format: "text"
+]
+
+DB probe [
+  type: "Text"
+  format: "text"
+]
+
+DB proteinclusters [
+  type: "Text"
+  format: "text"
+]
+
+DB pcassay [
+  type: "Text"
+  format: "text"
+]
+
+DB pccompound [
+  type: "Text"
+  format: "text"
+]
+
+DB pcsubstance [
+  type: "Text"
+  format: "text"
+]
+
+DB seqannot [
+  type: "Text"
+  format: "text"
+]
+
+DB snp [
+  type: "Text"
+  format: "text"
+]
+
+DB sra [
+  type: "Text"
+  format: "text"
+]
+
+DB taxonomy [
+  type: "Taxonomy"
+  format: "text"
+]
+
+DB toolkit [
+  type: "Text"
+  format: "text"
+]
+
+DB toolkitall [
+  type: "Text"
+  format: "text"
+]
+
+DB unigene [
+  type: "Nucleotide"
+  format: "text"
+]
+
+DB unists [
+  type: "Nucleotide"
+  format: "text"
+]
+
+DB gencoll [
+  type: "Text"
+  format: "text"
+]

@@ -1,0 +1,219 @@
+                                ontogetcommon
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Get common ancestor for terms
+
+Description
+
+   ontogetcommon reads two or more terms from an ontology and traces their
+   closest common ancestor.
+
+Algorithm
+
+   ontogetcommon traces up through the hierarchy of terms for the first
+   term it reads. Successive terms are similarly traced, saving any
+   ancestral terms that are already in the saved list.
+
+   The search fails if any term has no common ancestor with all previous
+   terms.
+
+   The match reported is the first match found when tracing back.
+
+   There is no test for common ancestors in multiple paths.
+
+Usage
+
+   Here is a sample session with ontogetcommon
+
+
+% ontogetcommon "edam:{0000108,0000110}"
+Get common ancestor for terms
+Obo output file [ontogetcommon.obo]:
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+Get common ancestor for terms
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-oboterms]          obo        Obo term filename and optional format, or
+                                  reference (input query)
+  [-outfile]           outobo     [*.ontogetcommon] Output ontology term file
+                                  name
+
+   Additional (Optional) qualifiers:
+   -obsolete           boolean    [N] The default behaviour is to not use or
+                                  return obsolete terms. This option if set
+                                  will include all terms.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-oboterms" associated qualifiers
+   -iformat1           string     Input obo format
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Ontology term output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   ontogetcommon reads terms from an ontology database.
+
+  Input files for usage example
+
+  Database entry: "edam:{0000108,0000110}"
+
+[Term]
+id: EDAM:0000110
+name: Transcription
+namespace: topic
+def: The study of the transcription of DNA into mRNA and transcription regulatio
+n including transcription factors and regulatory motifs, elements or regions in
+DNA sequences.
+comment: This includes promoters, enhancers, silencers and boundary elements / i
+nsulators.
+subset: topic
+xref: BioCatalogue:Transcription Factors
+is_a: EDAM:0000197 ! Gene expression and regulation
+
+[Term]
+id: EDAM:0000108
+name: Translation
+namespace: topic
+def: The study of the translation of mRNA into protein.
+subset: topic
+is_a: EDAM:0000197 ! Gene expression and regulation
+
+
+Output file format
+
+   The output is a standard EMBOSS ontology term file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -oformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: obo,
+   brief, list, html, xml, json, excel.
+
+   See: http://emboss.sf.net/docs/themes/OntologyFormats.html for further
+   information on ontology formats.
+
+  Output files for usage example
+
+  File: ontogetcommon.obo
+
+[Term]
+id: EDAM:0000197
+name: Gene expression and regulation
+namespace: topic
+def: The study of gene expression and regulation (genetic information that is us
+ed in the synthesis of a protein).
+comment: This involves analysis of microarray data, northern blots, gene-indexed
+ expression profiles etc.
+alt_id: EDAM:0000631
+alt_id: EDAM:0000204
+subset: topic
+is_a: EDAM:0002816 ! Genes
+
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                     Program name                        Description
+                    edamdef         Find EDAM ontology terms by definition
+                    edamhasinput    Find EDAM ontology terms by has_input relation
+                    edamhasoutput   Find EDAM ontology terms by has_output relation
+                    edamisformat    Find EDAM ontology terms by is_format_of relation
+                    edamisid        Find EDAM ontology terms by is_identifier_of relation
+                    edamname        Find EDAM ontology terms by name
+                    godef           Find GO ontology terms by definition
+                    goname          Find GO ontology terms by name
+                    ontocount       Count ontology term(s)
+                    ontoget         Get ontology term(s)
+                    ontogetdown     Get ontology term(s) by parent id
+   ontogetobsolete  Get ontology ontology terms
+                    ontogetroot     Get ontology root terms by child identifier
+                    ontogetsibs     Get ontology term(s) by id with common parent
+                    ontogetup       Get ontology term(s) by id of child
+                    ontoisobsolete  Report whether an ontology term id is obsolete
+                    ontotext        Get ontology term(s) original full text
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

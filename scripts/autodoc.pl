@@ -106,6 +106,7 @@ my $sfdoctop = "$ENV{HOME}/sfdoc/apps/cvs";
 
 my @embassylist = ("appendixd",
 		   "cbstools",
+		   "clustalomega",
 		   "domainatrix",
 		   "domalign",
 		   "domsearch",
@@ -125,7 +126,8 @@ my @embassylist = ("appendixd",
 		   "signature",
 		   "structure",
 		   "topo",
-		   "vienna",
+		   "vienna",	# old vienna
+		   "vienna2",
 		   );
 
 # the directories containing web pages - EMBOSS and EMBASSY
@@ -186,6 +188,7 @@ sub usage () {
 ######################################################################
 sub htmlsource ( $$ ) {
     my($tfile, $edir) = @_;
+    @giffiles = ();
     open (X, ">x.x") || die "Cannot upen temporary file x.x";
 
     open (H, "$edir/$tfile") ||
@@ -211,7 +214,12 @@ sub htmlsource ( $$ ) {
 	    if(-e "$edir/$ifile") {
 		open (I, "$edir/$ifile") ||
 		    die "Cannot open include file '$edir/$ifile'";
-		while (<I>) {print X}
+		while (<I>) {
+		    print X;
+		    if(/<p><img src=\"([^\"]+)\" alt=\"\[\S+ results\]\">/){
+			push @giffiles, $1;
+		    }
+		}
 		close I;
 	    }
 	    else {
@@ -676,16 +684,14 @@ sub createnewdocumentation ( $$$ ) {
 	    open (INDEX2, ">> $indexfile") || die "Cannot open $indexfile\n";
 	    print INDEX2 "
 
-<tr><td><a href=\"$thisprogram.html\">$thisprogram</a></td><td>INSTITUTE</td>
-<td>
+<tr><td><a href=\"$thisprogram.html\">$thisprogram</a></td><td>
 $progs{$thisprogram}
-</td>
-</tr>
+</td></tr>
+
 ";
 	    close (INDEX2);
 	    print STDERR "Edit $progdocdir/index.html:
 	    Look for $thisprogram line (at end)
-	    Replace INSTITUTE for $thisprogram
 	    Move $thisprogram line to be in alphabetic order
 ";
 	    system("$ENV{'EDITOR'} $progdocdir/index.html");
@@ -763,7 +769,6 @@ sub createnewdocumentationembassy ( $$$ ) {
 
 <tr>
 <td><a href=\"$thisprogram.html\">$thisprogram</a></td>
-<td>INSTITUTE</td>
 <td>
 $progs{$thisprogram}
 </td>
@@ -772,7 +777,6 @@ $progs{$thisprogram}
 	    close (INDEX2);
 	    print STDERR "Edit $progdocdir/index.html:
 	    Look for $thisprogram line (at end)
-	    Replace INSTITUTE for $thisprogram
 ";
 	    system("$ENV{'EDITOR'} $progdocdir/index.html");
 	}
@@ -894,7 +898,7 @@ sub checkcommentfile ( $$ ) {
 ##################################################################
 
 foreach $x (@embassylist) {
-    push @doclist, "$doctop/embassy/$x";
+    push @doclist, "$distribtop/embassy/$x";
 }
 
 $doccreate = "";
@@ -917,7 +921,7 @@ foreach $test (@ARGV) {
 }
 
 $cvscommit = $doccreate;
-
+@giffiles=();
 open(LOGEX, ">makeexample.log") || die "Cannot open makeexample.log";
 close (LOGEX);
 
@@ -1014,7 +1018,7 @@ $progs{$thisprogram}
 # check the documentation for this file exists and is not a symbolic link 
 # if this is an EMBASSY document, note which EMBASSY directory it is in
 	if (!defined($embassyprogs{$thisprogram})) {
-	    if (-e "$cvsdoc/html/$thisprogram.html") {
+	    if (-e "$cvsdoc/master/emboss/apps/$thisprogram.html") {
 ###	  print "$progdocdir/$thisprogram.html found\n";
 		if (-e "$sfprogdocdir/$thisprogram.html") {
 		    system("diff -b $cvsdoc/html/$thisprogram.html $sfprogdocdir/$thisprogram.html > z.z");
@@ -1066,7 +1070,7 @@ $progs{$thisprogram}
 		print STDERR "docdir: $docdir\n";
 		print STDERR "progdocdir: $progdocdir\n";
 		print STDERR "embassyprogs: $embassyprogs{$thisprogram}\n";
-		if (!createnewdocumentationembassy($thisprogram, $edir, $sfedir)) {next;}
+		if (!createnewdocumentationembassy($thisprogram, $progdocdir, $sfedir)) {next;}
 	    }
 	    $progdone{$thisprogram} = 1;
 	}
@@ -1177,6 +1181,14 @@ $progs{$thisprogram}
 	    print "htmlsource error $status $docmaster/$thisprogram.html";
 	}
 	else {
+	    if($#giffiles >= 0) {
+		foreach $gf (@giffiles) {
+		    system("cp $docmaster/$gf g.g");
+		    filediff("$dochtml/$gf", "g.g");
+		    system("cp $docmaster/$gf g.g");
+		    filediff("$sfprogdocdir/$gf", "g.g");
+		}
+	    }
 # edit the HTML file
 # change ../emboss_icon.jpg and ../index.html to current directory
 	    system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' x.x";
@@ -1195,7 +1207,6 @@ $progs{$thisprogram}
 	    cleantext("x.x");
 	    filediff ("$doctext/$thisprogram.txt", "x.x");
 	}
-
     }
     if($embassy ne "") {
 	if(!defined($singleapp)) {
@@ -1247,9 +1258,10 @@ open (GRPSTD, "$installtop/share/EMBOSS/acd/groups.standard") ||
     die "Cannot open $installtop/share/EMBOSS/acd/groups.standard";
 while (<GRPSTD>) {
     if (/^\#/) {next}
-    if (/^([^ ]+) (.*)/) {
-	$gname = $1;
-	$gdesc = ucfirst(lc($2));
+    if (/^([^ ]+) (\S+) (.*)/) {
+#	$gterm = $1;
+	$gname = $2;
+	$gdesc = ucfirst(lc($3));
 	$gname =~ s/:/ /g;
 	$gname =~ s/_/ /g;
 	$gname = ucfirst(lc($gname));

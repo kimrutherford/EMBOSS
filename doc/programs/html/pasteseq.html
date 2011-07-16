@@ -47,7 +47,7 @@ Insert one sequence into another
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with pasteseq</b>
+Here is a sample session with <b>pasteseq</b>
 <p>
 To insert the sequence 'tsw:flav_nossm' after position 67 in sequence 'tsw:amir_pseae' and write the results to the file 'amir_pseae.fasta':  
 <p>
@@ -100,7 +100,7 @@ Insert one sequence into another
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Insert one sequence into another
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   (Gapped) sequence filename and optional
@@ -674,7 +674,34 @@ To insert before the start use the position 0.</td>
     Input file format
 </H2>
 
-<b>pasteseq</b> reads 2 normal sequence USAs.
+<b>pasteseq</b> reads two nucleotide or protein sequences.
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
+
+<p>
+
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
 
 <p>
 
@@ -848,8 +875,26 @@ SQ   SEQUENCE   35 AA;  3820 MW;  B6EEB5CA7A45DDA6 CRC64;
     Output file format
 </H2>
 
-<b>pasteseq</b> writes a normal sequence file.
+<p>
 
+The output is a standard EMBOSS sequence file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-osformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq, excel,
+feattable, motif, nametable, regions, seqtable, simple, srs, table, tagseq.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
+<p>
 <p>
 
 
@@ -1007,6 +1052,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="feattext.html">feattext</a></td>
+<td>Return a feature table original text</td>
+</tr>
+
+<tr>
 <td><a href="listor.html">listor</a></td>
 <td>Write a list file of the logical OR of two sets of sequences</td>
 </tr>
@@ -1084,6 +1134,11 @@ None.
 <tr>
 <td><a href="revseq.html">revseq</a></td>
 <td>Reverse and complement a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqcount.html">seqcount</a></td>
+<td>Reads and counts sequences</td>
 </tr>
 
 <tr>

@@ -5,20 +5,21 @@ The output is a standard EMBOSS alignment file.
 <p>
 
 The results can be output in one of several styles by using the
-command-line qualifier <b>-aformat xxx</b>, where 'xxx' is replaced by
+command-line qualifier <tt>-aformat xxx</tt>, where 'xxx' is replaced by
 the name of the required format.  Some of the alignment formats can cope
 with an unlimited number of sequences, while others are only for pairs
 of sequences.  
 
 <p>
 
-The available multiple alignment format names are: unknown, multiple,
-simple, fasta, msf, trace, srs
+The available multiple alignment format names are: multiple, simple,
+fasta, msf, clustal, mega, meganon, nexus,, nexusnon, phylip,
+phylipnon, selex, treecon, tcoffee, debug, srs.
 
 <p>
 
 The available pairwise alignment format names are: pair, markx0, markx1,
-markx2, markx3, markx10, srspair, score
+markx2, markx3, markx10, match, sam, bam, score, srspair
 
 <p>
 

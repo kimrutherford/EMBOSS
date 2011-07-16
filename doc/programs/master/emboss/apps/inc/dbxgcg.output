@@ -38,6 +38,9 @@ eem_vi.seq eem_vi.ref
 <p><h3>File: embl.pxac</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+Type      Identifier
+Compress  Yes
+Pages     3
 Order     71
 Fill      46
 Pagesize  2048
@@ -45,13 +48,17 @@ Level     0
 Cachesize 100
 Order2    99
 Fill2     101
-Count     47
+Count     48
+Fullcount 48
 Kwlimit   15
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.pxid</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+Type      Identifier
+Compress  Yes
+Pages     3
 Order     71
 Fill      46
 Pagesize  2048
@@ -59,7 +66,8 @@ Level     0
 Cachesize 100
 Order2    99
 Fill2     101
-Count     39
+Count     40
+Fullcount 40
 Kwlimit   15
 </pre>
 </td></tr></table><p>

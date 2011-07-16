@@ -79,6 +79,8 @@ my $cvse = "$distribtop/embassy";
 
 my $masterembassy = "appendixd";
 my @embassylist = ("appendixd",
+		   "cbstools",
+		   "clustalomega",
 		   "domainatrix",
 		   "domalign",
 		   "domsearch",
@@ -86,17 +88,20 @@ my @embassylist = ("appendixd",
 		   "esim4",
 		   "hmmer",
 		   "hmmernew",
+		   "iprscan",
 		   "meme",
 		   "memenew",
 		   "mira",
 		   "mse",
 		   "myemboss", # we avoid documenting these examples
+		   "myembossdemo", # we avoid documenting these examples
 		   "phylip",
 		   "phylipnew",
 		   "signature",
 		   "structure",
 		   "topo",
 		   "vienna",
+		   "vienna2",
 		   );
 
 

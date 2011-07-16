@@ -90,6 +90,11 @@ int main(int argc, char **argv)
 			   &meth, &defnam))
 	    continue;
 
+        if(!ajStrMatchC(type, "Nucleotide") &&
+           !ajStrMatchC(type, "Protein") &&
+           !ajStrMatchWildCaseC(type, "*Sequence*"))
+            continue;
+           
 	if(!id)
 	    continue;
 

@@ -196,7 +196,7 @@ Output file [globins.infoalign]:
 Command line arguments
 
 Display basic information about a multiple sequence alignment
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     The sequence alignment to be displayed.
@@ -841,22 +841,21 @@ Known bugs
 See also
 
    Program name     Description
+   abiview          Display the trace in an ABI sequencer file
+   coderet          Extract CDS, mRNA and translations from feature tables
    edialign         Local multiple alignment of sequences
    emma             Multiple sequence alignment (ClustalW wrapper)
-   infobase         Return information on a given nucleotide base
-   inforesidue      Return information on a given amino acid residue
+   entret           Retrieves sequence entries from flatfile databases and files
+   extractalign     Extract regions from a sequence alignment
    infoseq          Display basic information about sequences
    plotcon          Plot conservation of a sequence alignment
    prettyplot       Draw a sequence alignment with pretty formatting
-   seealso          Finds programs with similar function to a specified program
+   seqxref          Retrieve all database cross-references for a sequence entry
+   seqxrefget       Retrieve all cross-referenced data for a sequence entry
    showalign        Display a multiple sequence alignment in pretty format
-   showdb           Displays information on configured databases
-   textsearch       Search the textual description of sequence(s)
-   tfm              Displays full documentation for an application
    tranalign        Generate an alignment of nucleic coding regions from aligned
                     proteins
    whichdb          Search all sequence databases for an entry and retrieve it
-   wossname         Finds programs by keywords in their short description
 
 Author(s)
 

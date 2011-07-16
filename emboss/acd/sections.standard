@@ -13,19 +13,29 @@ required page Required section
 # sub level (frame) sections
 # ==========================
 afeaturesection input First feature options
+align advanced Alignment algorithm options
+assembly advanced Assembly options
 bfeaturesection input Second feature options
+clipping advanced Clipping options
 consensussection additional Consensus section
+contig advanced Contig options
+dataprocessing advanced Data processing options
 datasection output Data output section
+edit advanced Edit options
 fastalignsection additional Fast align options
 featuresection additional Feature display options
 featurerelationsection input Feature relation options
 gapoptions additional Gap options
 gapsection required Gap options
+general advanced General options
 htmlsection output Html section
+loadreads advanced Load reads options
 markupsection output Markup section
 matrixsection input Matrix options
 oligosinput additional Internal oligo input
 oligosection additional Internal oligo options
+outputoptions advanced Output options
+pathfinder advanced Pathfinder algorithm options
 profiletypesection required Profile type specific options
 primersection additional Primer options
 primerweights advanced Primer penalty weights
@@ -35,7 +45,9 @@ pairwisealignsection input Pairwise align options
 remapsection advanced Restriction map options
 seqinsection input Sequence input options
 seqoptsection additional Sequence options
+skim advanced Skim algorithm options
 slowalignsection additional Slow align options
+strainbackbone advanced Strain/backbone options
 targetsection required Target options
 thermosection additional Thermodynamic options
 vectorfilesection input Vector input options

@@ -26,7 +26,7 @@ Usage
    Set the name of a sequence to "myclone23"
 
 
-% descseq -seq dna.text -out clone23.seq -name 'myclone23'
+% descseq -seq dna.text -out clone23.seq -name "myclone23"
 Alter the name or description of a sequence.
 
 
@@ -38,7 +38,7 @@ Alter the name or description of a sequence.
    Set the description of a sequence to "This is my clone number 244"
 
 
-% descseq -seq dna.text -out xy24.seq -desc 'This is my clone number 244'
+% descseq -seq dna.text -out xy24.seq -desc "This is my clone number 244"
 Alter the name or description of a sequence.
 
 
@@ -49,7 +49,7 @@ Alter the name or description of a sequence.
    Append some text to the description of a sequence
 
 
-% descseq -seq dna.text -out est4.seq -desc ' (submitted)' -append
+% descseq -seq dna.text -out est4.seq -desc " (submitted)" -append
 Alter the name or description of a sequence.
 
 
@@ -58,7 +58,7 @@ Alter the name or description of a sequence.
 Command line arguments
 
 Alter the name or description of a sequence.
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   (Gapped) sequence filename and optional
@@ -126,7 +126,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   descseq reads a normal sequence USA.
+   descseq reads a single nucleotide or protein sequence.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -138,6 +155,18 @@ GTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
 Output file format
 
    descseq writes the sequence file with a changed name or description.
+
+   The output is a standard EMBOSS sequence file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -osformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   excel, feattable, motif, nametable, regions, seqtable, simple, srs,
+   table, tagseq.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Output files for usage example
 
@@ -216,6 +245,7 @@ See also
    extractseq       Extract regions from a sequence
    featcopy         Reads and writes a feature table
    featreport       Reads and writes a feature table
+   feattext         Return a feature table original text
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
@@ -236,6 +266,7 @@ See also
    nthseqset        Reads and writes (returns) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
+   seqcount         Reads and counts sequences
    seqret           Reads and writes (returns) sequences
    seqretsetall     Reads and writes (returns) many sets of sequences
    seqretsplit      Reads sequences and writes them to individual files

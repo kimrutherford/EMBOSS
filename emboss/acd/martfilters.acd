@@ -1,8 +1,8 @@
 application: martfilters [
   documentation: "Return filters from a mart dataset from a mart host"
   groups: "Edit"
-  relations: "/edam/topic/0000088 Literature and documentation"
-  relations: "/edam/operation/0000516 Database information retrieval"  
+    relations: "EDAM:0000088 topic Literature and documentation"
+    relations: "EDAM:0000516 operation Database information retrieval"
 ]
 
 section: input [
@@ -14,7 +14,8 @@ section: input [
     standard: "Y"
     default: "oanatinus_gene_ensembl"
     information: "Dataset name"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
+    knowntype: "emboss database name"
   ]
 
 
@@ -31,19 +32,19 @@ section: advanced [
   string: host [
     default: "www.biomart.org"
     information: "Mart host location"
-    relations: "/edam/data/0001047 URI"
+    relations: "EDAM:0001047 data URI"
   ]
 
   string: path [
     default: "/biomart/martservice"
     information: "Mart path on mart host"
-    relations: "/edam/data/0001049 Directory name"
+    relations: "EDAM:0001049 identifier Directory name"
   ]
 
   integer: port [
     default: "80"
     information: "Mart port on mart host"
-relations: "/edam/data/0001773 Tool-specific parameter"
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
 endsection: advanced
@@ -55,7 +56,7 @@ section: output [
 
   outfile: outfile [
     parameter: "Y"
-    relations: "/edam/data/0000957 Database metadata"
+    relations: "EDAM:0000957 data Database metadata"
   ]
 
 endsection: output

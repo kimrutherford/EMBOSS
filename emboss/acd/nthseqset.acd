@@ -2,8 +2,8 @@ application: nthseqset [
   documentation: "Reads and writes (returns) one set of
                   sequences from many"
   groups: "Edit"
-  relations: "/edam/topic/0000220 File handling"
-  relations: "/edam/operation/0002121 Sequence file handling"
+    relations: "EDAM:0000091 topic Data handling"
+    relations: "EDAM:0000335 operation File reformatting"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
 
   boolean: feature [
     information: "Use feature information"
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   seqsetall: sequence [
@@ -21,9 +21,7 @@ section: input [
     features: "$(feature)"
     type: "gapany"
     aligned: "N"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: input
@@ -38,7 +36,7 @@ section: required [
     minimum: "1"
     default: "1"
     information: "The number of the sequence set to output"
-    relations: "/edam/data/0001694 Number of output entities"
+    relations: "EDAM:0001694 data Number of output entities"
   ]
 
 endsection: required
@@ -51,9 +49,7 @@ section: output [
   seqoutall: outseq [
     parameter: "Y"
     features: "$(feature)"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more"
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
 endsection: output

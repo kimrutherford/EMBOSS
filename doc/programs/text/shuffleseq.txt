@@ -38,7 +38,7 @@ output sequence(s) [l48662.fasta]:
 Command line arguments
 
 Shuffles a set of sequences maintaining composition
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -100,7 +100,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   shuffleseq reads one or more sequence USAs.
+   shuffleseq reads one or more nucleotide or protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -159,6 +176,18 @@ SQ   Sequence 366 BP; 100 A; 90 C; 85 G; 89 T; 2 other;
 //
 
 Output file format
+
+   The output is a standard EMBOSS sequence file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -osformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   excel, feattable, motif, nametable, regions, seqtable, simple, srs,
+   table, tagseq.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Output files for usage example
 

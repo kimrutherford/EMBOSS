@@ -1,0 +1,177 @@
+                                   urlget
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Get URLs of data resources
+
+Description
+
+   Retrieves one or more URLs for further information about an identifier
+   in a data resource.
+
+   EMBOSS can retrieve specific data types (sequences, features, taxonomy,
+   resources, ontology terms) as defined ACD types.
+
+   Where there is no defined ACD inpu type, EMBOSS can retrieve the text
+   of a database entry where the information is provided in a
+   human-readable text format.
+
+   For many data resources there is no retrievable data format. In these
+   cases EMBOSS can use the Data Resource Catalogue to construct URLs that
+   can be viewed in the user's preferred browser which should be able to
+   render them in a meaningful way.
+
+Algorithm
+
+   urlget constructs the URL using the information in the Data Resource
+   Catalogue entry which can be retrieved in its original format using
+   drget.
+
+   The Query records are searched to find a query that returns HTML data
+   (not parseable as text). The user-supplied identifier is inserted in
+   the query to construct a URL.
+
+   If the identifier is specified as a swissprot (-swiss) or EMBL (-embl)
+   cross-reference the defiitions of swissprot or EMBL cross-references in
+   the DRCAT entry are used to select queries matching the identifier
+   type.
+
+   Alternatively, the EDAM term name describing the identifier can be
+   provided by the user to resolve the selection from multiple queries.
+
+Usage
+
+   Here is a sample session with urlget
+
+
+% urlget pseudocap:PA3363 -swiss
+Get URLs of data resources
+Url output file [pa3363.url]:
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+Get URLs of data resources
+Version: EMBOSS:6.4.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-url]               url        Url filename and optional format, or
+                                  reference (input query)
+  [-outfile]           outurl     (no help text) outurl value
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-url" associated qualifiers
+   -iformat1           string     Input URL format
+   -idbname1           string     User-provided database name
+   -swiss1             boolean    Swissprot cross-reference
+   -embl1              boolean    EMBL/GenBank/DDBJ cross-reference
+   -accession1         string     Primary accession for source data
+   -identifier1        string     Identifier term name in EDAM
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     URL output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   urlget reads a query containing a database name from DRCAT and an
+   identifier.
+
+Output file format
+
+   urlget returns a file containing one or more URLs with a description.
+
+   The -oformat qualifier provides a choice of formats which may be
+   extended in future releases.
+
+  Output files for usage example
+
+  File: pa3363.url
+
+http://www.pseudomonas.com/getAnnotation.do?locusID=PA3363        Locus ID (Pseu
+doCAP): PA3363
+
+Data files
+
+   urlget uses the Data Resource Catalogue to retrieve information on URLs
+   for the specified database name.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name     Description
+
+Author(s)
+
+   Peter Rice
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+   Please report all bugs to the EMBOSS bug team
+   (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

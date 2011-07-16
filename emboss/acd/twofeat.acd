@@ -1,8 +1,8 @@
 application: twofeat [
   documentation: "Finds neighbouring pairs of features in sequence(s)"
   groups: "Feature tables"
-  relations: "/edam/topic/0000160 Sequence features"
-  relations: "/edam/operation/0000255 Sequence feature table query"
+    relations: "EDAM:0000160 topic Sequence features"
+    relations: "EDAM:0000255 operation Feature table query"
 ]
 
 section: input [
@@ -14,9 +14,7 @@ section: input [
     parameter: "Y"
     type: "any"
     features: "Y"
-    relations: "/edam/data/0000848 Sequence" 
-    relations: "/edam/data/0000849 Sequence record" 
-    relations: "/edam/data/0002178 1 or more" 
+    relations: "EDAM:0000849 data Sequence record"
   ]
 
   section: afeaturesection [
@@ -39,7 +37,7 @@ section: input [
              with the character '|', eg: \
              gene* | embl"
       knowntype: "feature source list"
-    relations:  "/edam/data/0000856 Sequence feature source"               
+    relations: "EDAM:0000856 data Sequence feature source"
     ]
 
     string: atype [
@@ -57,7 +55,7 @@ section: input [
              with the character '|', eg: \
              *UTR | intron"
       knowntype: "feature key list"
-    relations:  "/edam/data/0001020 Sequence feature key"                 
+    relations: "EDAM:0001020 data Sequence feature key"
     ]
 
     list: asense [
@@ -72,7 +70,7 @@ section: input [
       information: "Sense of first feature"
       help: "By default any feature sense is allowed. You can set this
              to match the required sense."
-    relations: "/edam/data/0000853 DNA sense specification"                                
+    relations: "EDAM:0000853 data DNA sense specification"
     ]
 
     float: aminscore [
@@ -81,7 +79,7 @@ section: input [
       information: "Minimum score of first feature"
       help: "If this is greater than or equal to the maximum score,
              then any score is allowed."
-    relations: "/edam/data/0001772 Score"
+    relations: "EDAM:0001772 data Score or penalty"
     ]
 
     float: amaxscore [
@@ -90,7 +88,7 @@ section: input [
       information: "Maximum score of first feature"
       help: "If this is less than or equal to the maximum score, then
              any score is permitted."
-    relations: "/edam/data/0001772 Score"
+    relations: "EDAM:0001772 data Score or penalty"
     ]
 
     string: atag [
@@ -113,7 +111,7 @@ section: input [
              with the character '|', eg: \
              gene | label"
       knowntype: "feature tag list"
-    relations:  "/edam/data/0001021 Sequence feature qualifier"                  
+    relations: "EDAM:0001021 data Sequence feature qualifier"
     ]
 
     string: avalue [
@@ -137,7 +135,7 @@ section: input [
              names with the character '|', eg: \
              pax* | 10"
       knowntype: "feature tagvalue list"
-    relations:  "/edam/data/0001021 Sequence feature qualifier"                                 
+    relations: "EDAM:0001021 data Sequence feature qualifier"
     ]
 
   endsection: afeaturesection
@@ -162,7 +160,7 @@ section: input [
              with the character '|', eg: \
              gene* | embl"
       knowntype: "feature source list"
-    relations:  "/edam/data/0000856 Sequence feature source"               
+    relations: "EDAM:0000856 data Sequence feature source"
     ]
 
     string: btype [
@@ -180,7 +178,7 @@ section: input [
              with the character '|', eg: \
              *UTR | intron"
       knowntype: "feature key list"
-    relations:  "/edam/data/0001020 Sequence feature key"                 
+    relations: "EDAM:0001020 data Sequence feature key"
     ]
 
     list: bsense [
@@ -195,7 +193,7 @@ section: input [
       information: "Sense of second feature"
       help: "By default any feature sense is allowed. You can set this
              to match the required sense."
-      relations: "/edam/data/0000853 DNA sense specification"                                
+    relations: "EDAM:0000853 data DNA sense specification"
     ]
 
     float: bminscore [
@@ -204,7 +202,7 @@ section: input [
       information: "Minimum score of second feature"
       help: "If this is greater than or equal to the maximum score,
              then any score is allowed."
-    relations: "/edam/data/0001772 Score"
+    relations: "EDAM:0001772 data Score or penalty"
     ]
 
     float: bmaxscore [
@@ -213,7 +211,7 @@ section: input [
       information: "Maximum score of second feature"
       help: "If this is less than or equal to the maximum score, then
              any score is permitted."
-    relations: "/edam/data/0001772 Score"
+    relations: "EDAM:0001772 data Score or penalty"
     ]
 
     string: btag [
@@ -236,7 +234,7 @@ section: input [
              with the character '|', eg: \
              gene | label"
       knowntype: "feature tag list"
-    relations:  "/edam/data/0001021 Sequence feature qualifier"                  
+    relations: "EDAM:0001021 data Sequence feature qualifier"
     ]
 
     string: bvalue [
@@ -260,7 +258,7 @@ section: input [
              names with the character '|', eg: \
              pax* | 10"
       knowntype: "feature tagvalue list"
-    relations:  "/edam/data/0001021 Sequence feature qualifier"
+    relations: "EDAM:0001021 data Sequence feature qualifier"
     ]
 
   endsection: bfeaturesection
@@ -287,7 +285,7 @@ section: input [
              You can allow any or no overlaps, specify that they must or must
              not overlap, that one must or must not be wholly enclosed
              within another feature."
-    relations: "/edam/data/0001773 Tool-specific parameter"                                
+    relations: "EDAM:0002527 data Parameter or primitive"
     ]
 
     integer: minrange [
@@ -296,7 +294,7 @@ section: input [
       information: "The minimum distance between the features"
       help: "If this is greater or equal to 'maxrange', then no min or
              max range is specified"
-    relations: "/edam/data/0001249 Sequence length"                                     
+    relations: "EDAM:0001249 data Sequence length"
     ]
 
     integer: maxrange [
@@ -305,7 +303,7 @@ section: input [
       information: "The maximum distance between the features"
       help: "If this is less than or equal to 'minrange', then no min
              or max range is specified"
-    relations: "/edam/data/0001249 Sequence length"                                     
+    relations: "EDAM:0001249 data Sequence length"
     ]
 
     list: rangetype [
@@ -322,7 +320,7 @@ section: input [
       help: "This allows you to specify the positions from which the
              allowed minimum or maximum distance between the features is
              measured"
-    relations: "/edam/data/0001773 Tool-specific parameter"                                
+    relations: "EDAM:0002527 data Parameter or primitive"
     ]
 
     list: sense [
@@ -338,7 +336,7 @@ section: input [
       help: "This allows you to specify the required sense that the
              two features must be on. This is ignored (always 'Any') when
              looking at protein sequence features."
-     relations: "/edam/data/0000853 DNA sense specification"
+    relations: "EDAM:0000853 data DNA sense specification"
     ]
 
     list: order [
@@ -356,7 +354,7 @@ section: input [
              features. The order is measured from the start positions of the
              features. This criterion is always applied despite the specified
              overlap type required."
-    relations: "/edam/data/0001773 Tool-specific parameter"                                
+    relations: "EDAM:0002527 data Parameter or primitive"
     ]
 
   endsection: featurerelationsection
@@ -377,7 +375,7 @@ section: output [
            themselves will be written out. If it is left as false, then a
            single feature will be written out covering the two features you
            found."
-    relations: "/edam/data/0002135 Toggle"                                     
+    relations: "EDAM:0002527 data Parameter or primitive"
   ]
 
   string: typeout [
@@ -394,14 +392,14 @@ section: output [
            feature types. If you specify an invalid feature type name, then
            the default name 'misc_feature' is used."
     knowntype: "feature key"
-    relations:  "/edam/data/0001020 Sequence feature key"                          
+    relations: "EDAM:0001020 data Sequence feature key"
   ]
 
   report: outfile [
     parameter: "Y"
     taglist: "int:starta int:enda int:startb int:endb"
     rformat: "table"
-    relations: "/edam/data/0001271 Sequence feature report"                                       
+    relations: "EDAM:0001255 data Sequence features"
   ]
 
 endsection: output

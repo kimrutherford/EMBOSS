@@ -838,8 +838,9 @@ sequence_uncertainty SO:0001086
 
 # SO:ke
 # A region of sequence where variation has been observed.
+# was variation SO:0000109 but this is now obsoleted in SO
 
-sequence_variant SO:0000109
+sequence_variant SO:0001060 SO:0000109
 
 sequencing_information SO:0001082
 

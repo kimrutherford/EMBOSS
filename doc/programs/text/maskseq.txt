@@ -73,7 +73,7 @@ Write a sequence with masked regions
 Command line arguments
 
 Write a sequence with masked regions
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
@@ -162,7 +162,7 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   maskseq reads in a single sequence USA.
+   maskseq reads in a single nucleotide or protein sequence.
 
   Input files for usage example
 
@@ -201,7 +201,20 @@ ACDEFGHIKLMNPQRSTVWY
 
 Output file format
 
-   maskseq writes s single masked sequence file.
+   The output is a standard EMBOSS sequence file.
+
+   The results can be output in one of several styles by using the
+   command-line qualifier -osformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, dasgff, debug, listfile, dbmotif, diffseq,
+   excel, feattable, motif, nametable, regions, seqtable, simple, srs,
+   table, tagseq.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
+
+   The sequence file has the selected range masked with the specified
+   character.
 
   Output files for usage example
 
@@ -295,6 +308,7 @@ See also
    extractseq       Extract regions from a sequence
    featcopy         Reads and writes a feature table
    featreport       Reads and writes a feature table
+   feattext         Return a feature table original text
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
@@ -314,6 +328,7 @@ See also
    nthseqset        Reads and writes (returns) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
+   seqcount         Reads and counts sequences
    seqret           Reads and writes (returns) sequences
    seqretsetall     Reads and writes (returns) many sets of sequences
    seqretsplit      Reads sequences and writes them to individual files

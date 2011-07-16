@@ -1,5 +1,5 @@
 Finds regions of identity (exact matches) of two sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqset     Sequence set filename and optional format,
@@ -8,6 +8,7 @@ Version: EMBOSS:6.3.0
                                   reference (input USA)
    -wordsize           integer    [4] Word size (Integer 2 or more)
   [-outfile]           align      [*.wordmatch] Output alignment file name
+                                  (default -aformat match)
   [-aoutfeat]          featout    [unknown.gff] Output features UFO
   [-boutfeat]          featout    [unknown.gff] Output features UFO
 

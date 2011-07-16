@@ -137,7 +137,7 @@ Output file [x13776.showseq]:
    the sequence to be lowercase).
 
 
-% showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper '8-24,65-81'
+% showseq tembl:x13776 -sbeg 1 -send 100 -format 1 -slower -upper "8-24,65-81"
 Displays sequences with features in pretty format
 Output file [x13776.showseq]:
 
@@ -161,8 +161,8 @@ Output file [x13776.showseq]:
    Add your own annotation to the display:
 
 
-% showseq tembl:x13776 -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26
-binding site 15-15 SNP'
+% showseq tembl:x13776 -sbeg 1 -send 100 -format 2 -send 120 -annotation "13-26
+binding site 15-15 SNP"
 Displays sequences with features in pretty format
 Output file [x13776.showseq]:
 
@@ -172,7 +172,7 @@ Output file [x13776.showseq]:
 Command line arguments
 
 Displays sequences with features in pretty format
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) nucleotide sequence(s) filename and
@@ -404,7 +404,7 @@ Version: EMBOSS:6.3.0
 
    Advanced (Unprompted) qualifiers:
    -mfile              datafile   [Emethylsites.dat] Restriction enzyme
-                                  methylation data file (optional)
+                                  methylation data file
    -flatreformat       boolean    [N] This changes the output format to one
                                   where the recognition site is indicated by a
                                   row of '===' characters and the cut site is
@@ -535,7 +535,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   showseq reads normal sequence USAs.
+   showseq reads one or more nucleotide sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -686,10 +703,8 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
    is' when specifying the colour in HTML in a '' construct, (where 'xxx'
    is the name of the colour).
 
-   The standard names of HTML font colours are given in:
-   http://http://www.w3.org/TR/REC-html40/types.html and
-   http://www.ausmall.com.au/freegraf/ncolour2.htm and
-   http://mindprod.com/htmlcolours.html (amongst other places).
+   The standard names of HTML font colours are given in
+   http://http://www.w3.org/TR/REC-html40/types.html#h-6.5
 
    An example highlight range file is:
 
@@ -1175,17 +1190,12 @@ Known bugs
 See also
 
    Program name     Description
-   abiview          Display the trace in an ABI sequencer file
    backtranambig    Back-translate a protein sequence to ambiguous nucleotide
                     sequence
    backtranseq      Back-translate a protein sequence to a nucleotide sequence
-   cirdna           Draws circular maps of DNA constructs
+   checktrans       Reports STOP codons and ORF statistics of a protein
    coderet          Extract CDS, mRNA and translations from feature tables
-   lindna           Draws linear maps of DNA constructs
-   pepnet           Draw a helical net for a protein sequence
-   pepwheel         Draw a helical wheel diagram for a protein sequence
    plotorf          Plot potential open reading frames in a nucleotide sequence
-   prettyplot       Draw a sequence alignment with pretty formatting
    prettyseq        Write a nucleotide sequence and its translation to file
    recoder          Find restriction sites to remove (mutate) with no translation
                     change
@@ -1194,16 +1204,10 @@ See also
    restover         Find restriction enzymes producing a specific overhang
    restrict         Report restriction enzyme cleavage sites in a nucleotide
                     sequence
-   seealso          Finds programs with similar function to a specified program
-   showalign        Display a multiple sequence alignment in pretty format
-   showdb           Displays information on configured databases
-   showfeat         Display features of a sequence in pretty format
    showorf          Display a nucleotide sequence and translation in pretty format
-   showpep          Displays protein sequences with features in pretty format
    silent           Find restriction sites to insert (mutate) with no translation
                     change
    sixpack          Display a DNA sequence with 6-frame translation and ORFs
-   textsearch       Search the textual description of sequence(s)
    transeq          Translate nucleic acid sequences
 
 Author(s)

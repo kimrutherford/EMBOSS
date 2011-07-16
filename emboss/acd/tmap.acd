@@ -1,8 +1,9 @@
 application: tmap [
   documentation: "Predict and plot transmembrane segments in protein sequences"
-  groups: "Protein:2D Structure"
-  relations: "/edam/topic/0000131 Transmembrane protein analysis"
-  relations: "/edam/operation/0000269 Transmembrane protein prediction"
+  groups: "Protein:Functional sites"
+    relations: "EDAM:0000820 topic Membrane protein"
+  relations: "EDAM:0000748 topic Protein functional sites"
+    relations: "EDAM:0000269 operation Transmembrane protein prediction"
 ]
 
 section: input [
@@ -14,8 +15,8 @@ section: input [
     parameter: "Y"
     type: "gapprotein"
     aligned: "Y"
-    help: "File containing a sequence alignment"
-    relations: "/edam/data/0001384 Protein sequence alignment"                     
+    help: "File containing a protein sequence alignment"
+    relations: "EDAM:0001384 data Sequence alignment (protein)"
   ]
 
 endsection: input
@@ -30,14 +31,14 @@ section: output [
     multiple: "2"
     gxtitle: "Residue number"
     goutfile: "tmap"
-    relations: "/edam/data/0001456 Transmembrane protein secondary structure"
+    relations: "EDAM:0001456 data Protein report (membrane protein) "
   ]
 
   report: outfile [
     parameter: "Y"
     rformat: "seqtable"
     taglist: "int:TM=TransMem"
-    relations: "/edam/data/0001456 Transmembrane protein secondary structure"
+    relations: "EDAM:0001456 data Protein report (membrane protein)"
   ]
 
 endsection: output

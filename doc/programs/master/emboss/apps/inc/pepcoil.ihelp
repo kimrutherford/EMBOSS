@@ -1,11 +1,12 @@
 Predicts coiled coil regions in protein sequences
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
                                   format, or reference (input USA)
    -window             integer    [28] Window size (Integer from 7 to 28)
-  [-outfile]           report     [*.pepcoil] Output report file name
+  [-outfile]           report     [*.pepcoil] Output report file name (default
+                                  -rformat motif)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:

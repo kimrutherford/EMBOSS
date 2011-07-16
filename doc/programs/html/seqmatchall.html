@@ -48,7 +48,7 @@ All-against-all word comparison of a sequence set
 <H2>
     Usage
 </H2>
-<b>Here is a sample session with seqmatchall</b>
+Here is a sample session with <b>seqmatchall</b>
 <p>
 Here is an example using an increased word size to avoid accidental matches: 
 <p>
@@ -74,13 +74,14 @@ Output alignment [j01636.seqmatchall]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 All-against-all word comparison of a sequence set
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     Sequence set filename and optional format,
                                   or reference (input USA)
    -wordsize           integer    [4] Word size (Integer 2 or more)
   [-outfile]           align      [*.seqmatchall] Output alignment file name
+                                  (default -aformat match)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -167,7 +168,7 @@ Version: EMBOSS:6.3.0
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>align</td>
 <td>Output alignment file name</td>
-<td>Alignment output file</td>
+<td>(default -aformat match)</td>
 <td><i>&lt;*&gt;</i>.seqmatchall</td>
 </tr>
 
@@ -493,11 +494,35 @@ Version: EMBOSS:6.3.0
 </H2>
 
 
-<b>seqmatchall</b> reads a set of sequence USAs.  
+<b>seqmatchall</b> reads a set of nucleotide or protein sequences.  
+<p>
+<p>
+
+The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+<p>
+Major sequence database sources defined as standard in EMBOSS
+installations include srs:embl, srs:uniprot and ensembl
 
 <p>
 
-The sequences must be either all protein or all nucleic acid.
+Data can also be read from sequence output in any supported format
+written by an EMBOSS or third-party application.
+
+<p>
+The input format can be specified by using the
+command-line qualifier <tt>-sformat xxx</tt>, where 'xxx' is replaced
+by the name of the required format.  The available format names are:
+gff (gff3), gff2, embl (em), genbank (gb, refseq), ddbj, refseqp, pir
+(nbrf), swissprot (swiss, sw), dasgff and debug.
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/SequenceFormats.html">
+http://emboss.sf.net/docs/themes/SequenceFormats.html</A>
+for further information on sequence formats.
+
 
 <p>
 
@@ -528,6 +553,41 @@ tembl:V00296
     Output file format
 </H2>
 
+<p>
+
+The output is a standard EMBOSS alignment file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <tt>-aformat xxx</tt>, where 'xxx' is replaced by
+the name of the required format.  Some of the alignment formats can cope
+with an unlimited number of sequences, while others are only for pairs
+of sequences.  
+
+<p>
+
+The available multiple alignment format names are: multiple, simple,
+fasta, msf, clustal, mega, meganon, nexus,, nexusnon, phylip,
+phylipnon, selex, treecon, tcoffee, debug, srs.
+
+<p>
+
+The available pairwise alignment format names are: pair, markx0, markx1,
+markx2, markx3, markx10, match, sam, bam, score, srspair
+
+<p>
+
+See:
+<A href="http://emboss.sf.net/docs/themes/AlignFormats.html">
+http://emboss.sf.net/docs/themes/AlignFormats.html</A>
+for further information on alignment formats.
+
+<p>
+
+<p>
+By default the output is in 'match' format.
+<p>
 
 
 <a name="output.1"></a>
@@ -537,7 +597,7 @@ tembl:V00296
 <pre>
 ########################################
 # Program: seqmatchall
-# Rundate: Fri 15 Jan 2010 12:00:00
+# Rundate: Fri 15 Jul 2011 12:00:00
 # Commandline: seqmatchall
 #    -sequence @../../data/eclac.list
 #    -wordsize 15

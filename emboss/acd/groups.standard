@@ -1,54 +1,79 @@
 #
 # Application groups
 #
-Acd ACD file utilities
-Alignment:Consensus Merging sequences to make a consensus
-Alignment:Differences Finding differences between sequences
-Alignment:Dot_plots Dot plot sequence comparisons
-Alignment:Global Global sequence alignment
-Alignment:Local Local sequence alignment
-Alignment:Multiple Multiple sequence alignment
-Assembly:Fragment_assembly DNA sequence assembly
-Display Publication-quality display
-Edit Sequence editing
-Enzyme_Kinetics Enzyme kinetics calculations
-Feature_tables Manipulation and display of sequence annotation
-HMM Hidden Markov Model analysis
-Information Information and general help for users
-Menus Menu interface(s)
-Nucleic:2D_structure Nucleic acid secondary structure
-Nucleic:Codon_usage Codon usage analysis
-Nucleic:Composition Composition of nucleotide sequences
-Nucleic:CpG_islands CpG island detection and analysis
-Nucleic:Gene_finding Predictions of genes and other genomic features
-Nucleic:Motifs Nucleic acid motif searches
-Nucleic:Mutation Nucleic acid sequence mutation
-Nucleic:Profiles Nucleic acid profile generation and searching
-Nucleic:Primers Primer prediction
-Nucleic:Repeats Nucleic acid repeat detection
-Nucleic:RNA_folding RNA folding methods and analysis
-Nucleic:Restriction Restriction enzyme sites in nucleotide sequences
-Nucleic:Transcription Transcription factors, promoters and terminator prediction
-Nucleic:Translation Translation of nucleotide sequence to protein sequence
-Ontology:EDAM EDAM ontology
-Ontology:GO GO Gene ontology
-Ontology:SO SO Sequence ontology
-Ontology:Taxonomy NCBI Taxonomy
-Phylogeny:Consensus Phylogenetic consensus methods
-Phylogeny:Continuous_characters Phylogenetic continuous character methods
-Phylogeny:Discrete_characters Phylogenetic discrete character methods
-Phylogeny:Distance_matrix Phylogenetic distance matrix methods
-Phylogeny:Gene_frequencies Phylogenetic gene frequency methods
-Phylogeny:Molecular_sequence Phylogenetic tree drawing methods
-Phylogeny:Tree_drawing Phylogenetic molecular sequence methods
-Phylogeny:Misc Phylogenetic other tools
-Protein:2D_structure Protein secondary structure
-Protein:3D_structure Protein tertiary structure
-Protein:Composition Composition of protein sequences
-Protein:Motifs Protein motif searches
-Protein:Mutation Protein sequence mutation
-Protein:Profiles Protein profile generation and searching
-Test Testing tools, not for general use.
-Utils:Database_creation Database installation
-Utils:Database_indexing Database indexing
-Utils:Misc Utility tools
+EDAM:0000091 Acd ACD file utilities
+EDAM:0000159 Alignment Sequence comparison and alignment
+EDAM:0000159 Alignment:Consensus Merging sequences to make a consensus
+EDAM:0000159 Alignment:Differences Finding differences between sequences
+EDAM:0000159 Alignment:Dot_plots Dot plot sequence comparisons
+EDAM:0000182 Alignment:Global Global sequence alignment
+EDAM:0000182 Alignment:Local Local sequence alignment
+EDAM:0000182 Alignment:Multiple Multiple sequence alignment
+EDAM:0000196 Assembly Sequence assembly
+EDAM:0000196 Assembly:Fragment_assembly DNA sequence assembly
+EDAM:0000091 Data_Resources Data resources
+EDAM:0000090 Data_Retrieval Data retrieval
+EDAM:0000154 Data_Retrieval:Chemistry_data Chemistry data retrieval
+EDAM:0000090 Data_Retrieval:Feature_data Sequence feature data retrieval
+EDAM:0000090 Data_Retrieval:Ontology_data Ontology data retrieval
+EDAM:0000090 Data_Retrieval:Resource_data Resource data retrieval
+EDAM:0000090 Data_Retrieval:Sequence_data Sequence data retrieval
+EDAM:0000090 Data_Retrieval:Sequence_data:Assembly_data Sequence assembly data retrieval
+EDAM:0000090 Data_Retrieval:Text_data Text data retrieval
+EDAM:0000091 Data_Retrieval:Tool_data Tool data retrieval
+EDAM:0000090 Data_Retrieval:URL_data URL data retrieval
+EDAM:0000090 Data_Retrieval:Variation_data Variation data retrieval
+EDAM:0000092 Display Publication-quality display
+EDAM:0000088 Documentation Documentation
+EDAM:0000091 Edit Sequence editing
+EDAM:0000821 Enzyme_Kinetics Enzyme kinetics calculations
+EDAM:0000160 Feature_tables Manipulation and display of sequence annotation
+EDAM:0000188 HMM Hidden Markov Model analysis
+EDAM:0000090 Information Information and general help for users
+EDAM:0000088 Literature Scientific literature and documentation
+EDAM:0000088 Menus Menu interface(s)
+EDAM:0000077 Nucleic Nucleic acids
+EDAM:0000097 Nucleic:2D_structure Nucleic acid secondary structure
+EDAM:0000107 Nucleic:Codon_usage Codon usage analysis
+EDAM:0000157 Nucleic:Composition Composition of nucleotide sequences
+EDAM:0000157 Nucleic:CpG_islands CpG island detection and analysis
+EDAM:0000747 Nucleic:Functional_sites Nucleic acid functional sites
+EDAM:0000109 Nucleic:Gene_finding Predictions of genes and other genomic features
+EDAM:0000158 Nucleic:Motifs Nucleic acid motif searches
+EDAM:0000199 Nucleic:Mutation Nucleic acid sequence mutation
+EDAM:0000195 Nucleic:Primers Primer prediction
+EDAM:0000188 Nucleic:Profiles Nucleic acid profile generation and searching
+EDAM:0000094 Nucleic:Properties Nucleic acid physicochemical properties
+EDAM:0000157 Nucleic:Repeats Nucleic acid repeat detection
+EDAM:0000097 Nucleic:RNA_folding RNA folding methods and analysis
+EDAM:0000100 Nucleic:Restriction Restriction enzyme sites in nucleotide sequences
+EDAM:0000110 Nucleic:Transcription Transcription factors, promoters and terminator prediction
+EDAM:0000108 Nucleic:Translation Translation of nucleotide sequence to protein sequence
+EDAM:0000089 Ontology Ontologies
+EDAM:0000089 Ontology:EDAM EDAM ontology
+EDAM:0000089 Ontology:GO GO Gene ontology
+EDAM:0000089 Ontology:SO SO Sequence ontology
+EDAM:0000637 Ontology:Taxonomy NCBI Taxonomy
+EDAM:0000084 Phylogeny Phylogenetic methods
+EDAM:0000084 Phylogeny:Consensus Phylogenetic consensus methods
+EDAM:0000084 Phylogeny:Continuous_characters Phylogenetic continuous character methods
+EDAM:0000084 Phylogeny:Discrete_characters Phylogenetic discrete character methods
+EDAM:0000084 Phylogeny:Distance_matrix Phylogenetic distance matrix methods
+EDAM:0000084 Phylogeny:Gene_frequencies Phylogenetic gene frequency methods
+EDAM:0000084 Phylogeny:Molecular_sequence Phylogenetic molecular sequence methods
+EDAM:0000084 Phylogeny:Tree_drawing Phylogenetic tree drawing methods
+EDAM:0000586 Protein Proteins
+EDAM:0000694 Protein:2D_structure Protein secondary structure
+EDAM:0002814 Protein:3D_structure Protein tertiary structure
+EDAM:0000157 Protein:Composition Composition of protein sequences
+EDAM:0000736 Protein:Domains Protein domain analysis
+EDAM:0000748 Protein:Functional_sites Protein functional sites
+EDAM:0000601 Protein:Modifications Protein post-translational modifications
+EDAM:0000158 Protein:Motifs Protein motif searches
+EDAM:0000199 Protein:Mutation Protein sequence mutation
+EDAM:0000188 Protein:Profiles Protein profile generation and searching
+EDAM:0000123 Protein:Properties Protein physicochemical properties
+EDAM:0000003 Test Testing tools, not for general use.
+EDAM:0000003 Utils Utility tools
+EDAM:0000091 Utils:Database_creation Database installation
+EDAM:0000091 Utils:Database_indexing Database indexing

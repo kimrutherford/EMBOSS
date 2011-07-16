@@ -65,7 +65,7 @@ output sequence [dna.fasta]: aligned.cons
 Command line arguments
 
 Create a consensus sequence from a multiple alignment
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     File containing a sequence alignment.

@@ -8,11 +8,6 @@
 </tr>
 
 <tr>
-<td><a href="digest.html">digest</a></td>
-<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
-</tr>
-
-<tr>
 <td><a href="fuzzpro.html">fuzzpro</a></td>
 <td>Search for patterns in protein sequences</td>
 </tr>
@@ -23,16 +18,6 @@
 </tr>
 
 <tr>
-<td><a href="helixturnhelix.html">helixturnhelix</a></td>
-<td>Identify nucleic acid-binding motifs in protein sequences</td>
-</tr>
-
-<tr>
-<td><a href="oddcomp.html">oddcomp</a></td>
-<td>Identify proteins with specified sequence word composition</td>
-</tr>
-
-<tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
 <td>Searches protein sequences with a sequence motif</td>
 </tr>
@@ -40,11 +25,6 @@
 <tr>
 <td><a href="patmatmotifs.html">patmatmotifs</a></td>
 <td>Scan a protein sequence with motifs from the PROSITE database</td>
-</tr>
-
-<tr>
-<td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>

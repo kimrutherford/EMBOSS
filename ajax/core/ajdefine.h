@@ -6,6 +6,10 @@ extern "C"
 #ifndef ajdefine_h
 #define ajdefine_h
 
+#ifndef WIN32
+#include <config.h>
+#endif
+
 #include "ajarch.h"
 
 #ifndef WIN32
@@ -14,12 +18,14 @@ extern "C"
 #define CURRENT_DIR  "./"
 #define UP_DIR       "../"
 #define PATH_SEPARATOR ":"
+#define _BLACKHOLE "/dev/null"
 #else
 #define SLASH_CHAR   '\\'
 #define SLASH_STRING "\\"
 #define CURRENT_DIR  ".\\"
 #define UP_DIR       "..\\"
 #define PATH_SEPARATOR ";"
+#define _BLACKHOLE "nul:"
 #endif
 
 

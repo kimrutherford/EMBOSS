@@ -38,33 +38,13 @@
 # Please keep entries in alphabetical order !
 #
 
-
-ID      
-IDOther None
-Name    
-Desc    None
-Server  
-Cat     None
-EDAM    Not available
-Link    db_xref
-LinkNB  None
-Query   Unknown|   Unknown|   Unknown|   Unknown
-Contact Unknown
-Email   Unknown
-Note    None
-Status  Referenced
-
-
-
-
-
 ID      2dpage
 IDOther None
 Name    2D-PAGE proteome database system for microbial research
 Desc    Two-dimensional gel electrophoresis (2-DE) and mass spectrometry data of diverse microorganisms and other organisms.
 Server  http://www.mpiib-berlin.mpg.de/2D-PAGE
 Cat     None
-EDAM    Two-dimensional gel electrophoresis database; Mass spectromery database
+EDAM    Two-dimensional gel electrophoresis database; Mass spectrometry database
 Link    None
 LinkNB  None
 Query   Unknown|   Unknown|   Unknown|   Unknown
@@ -3221,7 +3201,7 @@ Query   GeneID gene list| HTML|    Sequence accession number|     http://www.ncb
 Query   GeneID gene list| HTML|    Gene name (symbol)|            http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term=%s[sym] 
 Query   GeneID gene list| HTML|    PubMed ID|                     http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term=%s[PMID]
 Query   GeneID gene list| HTML|    GO terms or identifiers|       http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term="cell+adhesion"[GO]
-Query   GeneID gene list| HTML|    Chromosome name|Species name|  http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term=%s[CHR]+AND+%s[ORGN]
+Query   GeneID gene list| HTML|    Chromosome name;Species name|  http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term=%s[CHR]+AND+%s[ORGN]
 Query   GeneID gene list| HTML|    EC number|                     http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=gene&term=%s[EC]
 Contact Unknown
 Email   Unknown
@@ -3417,8 +3397,8 @@ Cat     Gene expression databases
 EDAM    Gene expression and microarray database
 Link    SP_explicit
 LinkNB  None
-Query   GermOnline entry|  HTML|  Species name|Gene name|            http://www.germonline.org/%s/geneview?gene=%s
-Query   GermOnline entry|  HTML|  Species name|SGD gene identifier|  http://www.germonline.org/%s/geneview?db=core|gene=%s
+Query   GermOnline entry|  HTML|  Species name; Gene name|            http://www.germonline.org/%s/geneview?gene=%s
+Query   GermOnline entry|  HTML|  Species name; SGD gene identifier|  http://www.germonline.org/%s/geneview?db=core|gene=%s
 Contact Mike Primig
 Email   michael.primig@unibas.ch
 Note    Species name in URL is full name with spaces replaced with underscores.  Gene name is any identifier for the gene.
@@ -3493,7 +3473,7 @@ Cat     None
 EDAM    Proteome annotation database
 Link    db_xref
 LinkNB  None
-Query   Unknown|   Gene Ontology Annotation Database Identifier|   None
+Query   Unknown|   Unknown | Gene Ontology Annotation Database Identifier|   None
 Contact Emily Dimmer
 Email   edimmer@ebi.ac.uk
 Note    Example cross-reference:  /db_xref=" GOA :P01100"
@@ -6171,7 +6151,7 @@ Link    SP_explicit
 LinkNB  None
 Query   PANTHER Gene|    HTML| Panther Gene ID|    http://www.pantherdb.org/genes/gene.do?acc=%s
 Query   PANTHER Family|  HTML| Panther family ID|  http://www.pantherdb.org/panther/family.do?clsAccession=%s
-Query   PANTHER Pathway| HTML  Panther pathway ID| http://www.pantherdb.org/pathway/pathwayDiagram.jsp?catAccession=%s
+Query   PANTHER Pathway| HTML| Panther pathway ID| http://www.pantherdb.org/pathway/pathwayDiagram.jsp?catAccession=%s
 Contact Unknown
 Email   Unknown
 Note    None

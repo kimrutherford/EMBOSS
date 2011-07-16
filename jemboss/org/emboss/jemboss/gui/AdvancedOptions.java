@@ -37,6 +37,7 @@ import java.util.Properties;
 import java.util.prefs.Preferences;
 
 import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -61,6 +62,8 @@ public class AdvancedOptions extends JPanel
   public static JCheckBox prefJNI;
   /** shade or remove unused parameters */
   public static JCheckBox prefShadeGUI;
+  /** Nimbus Look and Feel */
+  public static JCheckBox nimbusLF;
   /** job manager update times */
   public static JComboBox jobMgr;
   /** save user home directory */
@@ -77,6 +80,7 @@ public class AdvancedOptions extends JPanel
   
   Preferences preferences;
   private static final String SHADE_GUI = "SHADE_GUI";
+  public  static final String NIMBUS_LF = "NIMBUS_LF";
   private static final String CALCULATE_JNI_DEPENDENCIES = "CALCULATE_JNI_DEPENDENCIES";
   private static final String SAVE_DIRECTORY_MODIFICATIONS = "SAVE_DIRECTORY_MODIFICATIONS";
   private static final String JOBMANAGER_FREQUENCY = "JOBMANAGER_FREQUENCY";
@@ -100,6 +104,45 @@ public class AdvancedOptions extends JPanel
     Box bdown =  Box.createVerticalBox();
     Box bleft =  Box.createHorizontalBox();
 
+//Nimbus Look&Feel
+    
+    if (preferences.getBoolean(AdvancedOptions.NIMBUS_LF, false))
+    {
+        try
+        {
+            LookAndFeelInfo[] l = UIManager.getInstalledLookAndFeels();
+
+            for (int i=0; i<l.length; i++)
+            {
+                LookAndFeelInfo info = l[i];
+                
+                if ("Nimbus".equals(info.getName()))
+                {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            // Nimbus L&F not available
+        }
+
+    }
+
+    nimbusLF = new JCheckBox("Use Nimbus Look and Feel if available");
+    nimbusLF.setSelected(preferences.getBoolean(NIMBUS_LF, false));
+    nimbusLF.setToolTipText("Changes applied after Jembos restarted");
+
+    nimbusLF.addItemListener(new ItemListener(){
+        public void itemStateChanged(ItemEvent e) {
+            preferences.putBoolean(NIMBUS_LF,
+                    nimbusLF.isSelected());
+        }
+    });
+    bleft.add(nimbusLF);
+    bleft.add(Box.createHorizontalGlue());
+    bdown.add(bleft);
+    bdown.add(Box.createVerticalStrut(4));
+
 //shade or remove unused parameters
     prefShadeGUI = new JCheckBox("Shade unused parameters");
     prefShadeGUI.setSelected(preferences.getBoolean(SHADE_GUI, true));
@@ -109,6 +152,7 @@ public class AdvancedOptions extends JPanel
                     prefShadeGUI.isSelected());
         }
     });
+    bleft =  Box.createHorizontalBox();
     bleft.add(prefShadeGUI);
     bleft.add(Box.createHorizontalGlue());
     bdown.add(bleft);
@@ -359,10 +403,10 @@ public class AdvancedOptions extends JPanel
 
           JButton ok = new JButton("Apply");
           ok
-          .setToolTipText("Applies your directory change(s) (if any) and closes this dialog");
+          .setToolTipText("Applies your change(s) (if any) and closes this dialog");
           JButton cancel = new JButton("Cancel");
           cancel
-          .setToolTipText("Closes this dialog without applying your directory change(s)");
+          .setToolTipText("Closes this dialog without applying your change(s)");
           Object[] options = { ok, cancel};
 
           final JOptionPane optionPane = new JOptionPane(this,

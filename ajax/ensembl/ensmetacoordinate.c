@@ -1,10 +1,10 @@
-/******************************************************************************
-** @source Ensembl Meta-Coordinate functions
+/* @source Ensembl Meta-Coordinate functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @version $Revision: 1.8 $
+** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
+** @version $Revision: 1.22 $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -28,6 +28,21 @@
 /* ==================================================================== */
 
 #include "ensmetacoordinate.h"
+#include "enstable.h"
+
+
+
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== global variables ========================== */
+/* ==================================================================== */
 
 
 
@@ -40,22 +55,43 @@
 
 
 /* ==================================================================== */
+/* ======================== private constants ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
+/* ======================== private variables ========================= */
+/* ==================================================================== */
+
+
+
+
+/* ==================================================================== */
 /* ======================== private functions ========================= */
 /* ==================================================================== */
 
 static AjBool metacoordinateadaptorCacheInit(EnsPMetacoordinateadaptor mca);
 
-static void metacoordinateadaptorClearNameCache(void **key,
-                                                void **value,
-                                                void *cl);
+static void metacoordinateadaptorClearNameCache(void** key,
+                                                void** value,
+                                                void* cl);
 
-static void metacoordinateadaptorClearLengthCacheL2(void **key,
-                                                    void **value,
-                                                    void *cl);
+static void metacoordinateadaptorClearLengthCacheL2(void** key,
+                                                    void** value,
+                                                    void* cl);
 
-static void metacoordinateadaptorClearLengthCacheL1(void **key,
-                                                    void **value,
-                                                    void *cl);
+static void metacoordinateadaptorClearLengthCacheL1(void** key,
+                                                    void** value,
+                                                    void* cl);
+
+
+
+
+/* ==================================================================== */
+/* ===================== All functions by section ===================== */
+/* ==================================================================== */
 
 
 
@@ -69,13 +105,14 @@ static void metacoordinateadaptorClearLengthCacheL1(void **key,
 
 
 
-/* @datasection [EnsPMetacoordinateadaptor] Meta-Coordinate Adaptor ***********
+/* @datasection [EnsPMetacoordinateadaptor] Ensembl Meta-Coordinate Adaptor ***
 **
-** Functions for manipulating Ensembl Meta-Coordinate Adaptor objects
+** @nam2rule Metacoordinateadaptor Functions for manipulating
+** Ensembl Meta-Coordinate Adaptor objects
 **
-** @cc Bio::EnsEMBL::DBSQL::MetaCoordContainer CVS Revision: 1.12
-**
-** @nam2rule Metacoordinateadaptor
+** @cc Bio::EnsEMBL::DBSQL::MetaCoordContainer
+** @cc CVS Revision: 1.14
+** @cc CVS Tag: branch-ensembl-62
 **
 ******************************************************************************/
 
@@ -96,25 +133,25 @@ static void metacoordinateadaptorClearLengthCacheL1(void **key,
 static AjBool metacoordinateadaptorCacheInit(EnsPMetacoordinateadaptor mca)
 {
     ajuint csid   = 0;
-    ajuint length = 0;
+    ajint  length = 0;
 
-    ajuint *Pcsid   = NULL;
-    ajuint *Plength = NULL;
+    ajuint* Pcsid   = NULL;
+    ajint*  Plength = NULL;
 
     AjPList css  = NULL;
     AjPList list = NULL;
 
     AjPTable table = NULL;
 
+    AjISqlrow       sqli = NULL;
+    AjPSqlrow       sqlr = NULL;
     AjPSqlstatement sqls = NULL;
-    AjISqlrow sqli       = NULL;
-    AjPSqlrow sqlr       = NULL;
 
     AjPStr csv       = NULL;
     AjPStr name      = NULL;
     AjPStr statement = NULL;
 
-    EnsPCoordsystem cs         = NULL;
+    EnsPCoordsystem        cs  = NULL;
     EnsPCoordsystemadaptor csa = NULL;
 
     if(!mca)
@@ -130,7 +167,7 @@ static AjBool metacoordinateadaptorCacheInit(EnsPMetacoordinateadaptor mca)
 
     csv = ajStrNew();
 
-    while(ajListPop(css, (void **) &cs))
+    while(ajListPop(css, (void**) &cs))
     {
         ajFmtPrintAppS(&csv, "%u, ", ensCoordsystemGetIdentifier(cs));
 
@@ -162,43 +199,42 @@ static AjBool metacoordinateadaptorCacheInit(EnsPMetacoordinateadaptor mca)
 
     while(!ajSqlrowiterDone(sqli))
     {
-        name = ajStrNew();
-
-        csid = 0;
-
+        name   = ajStrNew();
+        csid   = 0;
         length = 0;
 
         sqlr = ajSqlrowiterGet(sqli);
 
         ajSqlcolumnToStr(sqlr, &name);
         ajSqlcolumnToUint(sqlr, &csid);
-        ajSqlcolumnToUint(sqlr, &length);
+        ajSqlcolumnToInt(sqlr, &length);
 
         ajStrFmtLower(&name);
 
         /* Add to the Feature Type Cache. */
 
-        list = (AjPList) ajTableFetch(mca->CacheByName, (const void *) name);
+        list = (AjPList) ajTableFetchmodV(mca->CacheByName,
+                                          (const void*) name);
 
         if(!list)
         {
             list = ajListNew();
 
             ajTablePut(mca->CacheByName,
-                       (void *) ajStrNewS(name),
-                       (void *) list);
+                       (void*) ajStrNewS(name),
+                       (void*) list);
         }
 
         AJNEW0(Pcsid);
 
         *Pcsid = csid;
 
-        ajListPushAppend(list, (void *) Pcsid);
+        ajListPushAppend(list, (void*) Pcsid);
 
         /* Add to the Length Cache. */
 
-        table = (AjPTable) ajTableFetch(mca->CacheByLength,
-                                        (const void *) &csid);
+        table = (AjPTable) ajTableFetchmodV(mca->CacheByLength,
+                                            (const void*) &csid);
 
         if(!table)
         {
@@ -206,16 +242,16 @@ static AjBool metacoordinateadaptorCacheInit(EnsPMetacoordinateadaptor mca)
 
             *Pcsid = csid;
 
-            table = ajTablestrNewCaseLen(0);
+            table = ensTablestrNewLen(0);
 
-            ajTablePut(mca->CacheByLength, (void *) Pcsid, (void *) table);
+            ajTablePut(mca->CacheByLength, (void*) Pcsid, (void*) table);
         }
 
         AJNEW0(Plength);
 
         *Plength = length;
 
-        ajTablePut(table, (void *) ajStrNewS(name), (void *) Plength);
+        ajTablePut(table, (void*) ajStrNewS(name), (void*) Plength);
 
         ajStrDel(&name);
     }
@@ -240,7 +276,6 @@ static AjBool metacoordinateadaptorCacheInit(EnsPMetacoordinateadaptor mca)
 ** initialised to NULL, but it is good programming practice to do so anyway.
 **
 ** @fdata [EnsPMetacoordinateadaptor]
-** @fnote None
 **
 ** @nam3rule New Constructor
 **
@@ -288,9 +323,9 @@ EnsPMetacoordinateadaptor ensMetacoordinateadaptorNew(
 
     mca->Adaptor = dba;
 
-    mca->CacheByName = ajTablestrNewCaseLen(0);
+    mca->CacheByName = ensTablestrNewLen(0);
 
-    mca->CacheByLength = MENSTABLEUINTNEW(0);
+    mca->CacheByLength = ensTableuintNewLen(0);
 
     metacoordinateadaptorCacheInit(mca);
 
@@ -302,7 +337,7 @@ EnsPMetacoordinateadaptor ensMetacoordinateadaptorNew(
 
 /* @funcstatic metacoordinateadaptorClearNameCache ****************************
 **
-** An ajTableMapDel 'apply' function to clear the Ensembl Meta-Coordinate
+** An ajTableMapDel "apply" function to clear the Ensembl Meta-Coordinate
 ** Adaptor-internal cache. This function deletes the AJAX String Feature name
 ** key data and the AJAX List value data, as well as the pointers to ajuint
 ** Coordinate System identifiers list elements.
@@ -316,11 +351,11 @@ EnsPMetacoordinateadaptor ensMetacoordinateadaptorNew(
 ** @@
 ******************************************************************************/
 
-static void metacoordinateadaptorClearNameCache(void **key,
-                                                void **value,
-                                                void *cl)
+static void metacoordinateadaptorClearNameCache(void** key,
+                                                void** value,
+                                                void* cl)
 {
-    void *Pcsid = NULL;
+    void* Pcsid = NULL;
 
     if(!key)
         return;
@@ -336,12 +371,15 @@ static void metacoordinateadaptorClearNameCache(void **key,
 
     (void) cl;
 
-    ajStrDel((AjPStr *) key);
+    ajStrDel((AjPStr*) key);
 
-    while(ajListPop(*((AjPList *) value), &Pcsid))
+    while(ajListPop(*((AjPList*) value), &Pcsid))
         AJFREE(Pcsid);
 
-    ajListFree((AjPList *) value);
+    ajListFree((AjPList*) value);
+
+    *key   = NULL;
+    *value = NULL;
 
     return;
 }
@@ -351,7 +389,7 @@ static void metacoordinateadaptorClearNameCache(void **key,
 
 /* @funcstatic metacoordinateadaptorClearLengthCacheL2 ************************
 **
-** An ajTableMapDel 'apply' function to clear the Ensembl Meta-Coordinate
+** An ajTableMapDel "apply" function to clear the Ensembl Meta-Coordinate
 ** Adaptor-internal maximum length cache. This function clears the
 ** second-level cache of Ensembl Feture name AJAX String key data and
 ** pointer to ajuint maximum length value data.
@@ -365,9 +403,9 @@ static void metacoordinateadaptorClearNameCache(void **key,
 ** @@
 ******************************************************************************/
 
-static void metacoordinateadaptorClearLengthCacheL2(void **key,
-                                                    void **value,
-                                                    void *cl)
+static void metacoordinateadaptorClearLengthCacheL2(void** key,
+                                                    void** value,
+                                                    void* cl)
 {
     if(!key)
         return;
@@ -383,9 +421,12 @@ static void metacoordinateadaptorClearLengthCacheL2(void **key,
 
     (void) cl;
 
-    ajStrDel((AjPStr *) key);
+    ajStrDel((AjPStr*) key);
 
     AJFREE(*value);
+
+    *key   = NULL;
+    *value = NULL;
 
     return;
 }
@@ -395,7 +436,7 @@ static void metacoordinateadaptorClearLengthCacheL2(void **key,
 
 /* @funcstatic metacoordinateadaptorClearLengthCacheL1 ************************
 **
-** An ajTableMapDel 'apply' function to clear the Ensembl Meta-Coordinate
+** An ajTableMapDel "apply" function to clear the Ensembl Meta-Coordinate
 ** Adaptor-internal maximum length cache. This function clears the
 ** first-level cache of ajuint Coordinate System identifier key data and the
 ** second-level AJAX Table value data.
@@ -409,9 +450,9 @@ static void metacoordinateadaptorClearLengthCacheL2(void **key,
 ** @@
 ******************************************************************************/
 
-static void metacoordinateadaptorClearLengthCacheL1(void **key,
-                                                    void **value,
-                                                    void *cl)
+static void metacoordinateadaptorClearLengthCacheL1(void** key,
+                                                    void** value,
+                                                    void* cl)
 {
     if(!key)
         return;
@@ -429,11 +470,14 @@ static void metacoordinateadaptorClearLengthCacheL1(void **key,
 
     AJFREE(*key);
 
-    ajTableMapDel(*((AjPTable *) value),
+    ajTableMapDel(*((AjPTable*) value),
                   metacoordinateadaptorClearLengthCacheL2,
                   NULL);
 
-    ajTableFree((AjPTable *) value);
+    ajTableFree((AjPTable*) value);
+
+    *key   = NULL;
+    *value = NULL;
 
     return;
 }
@@ -444,15 +488,14 @@ static void metacoordinateadaptorClearLengthCacheL1(void **key,
 /* @section destructors *******************************************************
 **
 ** Destruction destroys all internal data structures and frees the
-** memory allocated for the Ensembl Meta-Coordinate Adaptor.
+** memory allocated for an Ensembl Meta-Coordinate Adaptor object.
 **
 ** @fdata [EnsPMetacoordinateadaptor]
-** @fnote None
 **
 ** @nam3rule Del Destroy (free) an Ensembl Meta-Coordinate Adaptor object
 **
-** @argrule * Pmca [EnsPMetacoordinateadaptor*] Ensembl Meta-Coordinate
-**                                              Adaptor object address
+** @argrule * Pmca [EnsPMetacoordinateadaptor*] Ensembl Meta-Coordinate Adaptor
+**                                              object address
 **
 ** @valrule * [void]
 **
@@ -465,6 +508,7 @@ static void metacoordinateadaptorClearLengthCacheL1(void **key,
 /* @func ensMetacoordinateadaptorDel ******************************************
 **
 ** Default destructor for an Ensembl Meta-Coordinate Adaptor.
+**
 ** This function also clears the internal cordinate system identifer and
 ** maximum length caches.
 **
@@ -474,14 +518,14 @@ static void metacoordinateadaptorClearLengthCacheL1(void **key,
 ** destroyed directly. Upon exit, the Ensembl Registry will call this function
 ** if required.
 **
-** @param [d] Pmca [EnsPMetacoordinateadaptor*] Ensembl Meta-Coordinate
-**                                              Adaptor address
+** @param [d] Pmca [EnsPMetacoordinateadaptor*] Ensembl Meta-Coordinate Adaptor
+**                                              object address
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ensMetacoordinateadaptorDel(EnsPMetacoordinateadaptor *Pmca)
+void ensMetacoordinateadaptorDel(EnsPMetacoordinateadaptor* Pmca)
 {
     EnsPMetacoordinateadaptor pthis = NULL;
 
@@ -520,7 +564,6 @@ void ensMetacoordinateadaptorDel(EnsPMetacoordinateadaptor *Pmca)
 ** Functions for returning Ensembl Coordinate Systems.
 **
 ** @fdata [EnsPMetacoordinateadaptor]
-** @fnote None
 **
 ** @nam3rule Fetch Fetch Fetch data
 ** @nam4rule FetchAll Fetch all data
@@ -536,7 +579,7 @@ void ensMetacoordinateadaptorDel(EnsPMetacoordinateadaptor *Pmca)
 ** @argrule Get name [const AjPStr] Ensembl Feature (i.e. SQL table) name
 **
 ** @valrule * [AjBool] True on success
-** @valrule *Maximumlength [ajuint] Maximum length
+** @valrule *Maximumlength [ajint] Maximum length or 0
 **
 ** @fcategory use
 ******************************************************************************/
@@ -565,7 +608,7 @@ AjBool ensMetacoordinateadaptorFetchAllCoordsystems(
     const AjPStr name,
     AjPList css)
 {
-    ajuint *Pcsid = NULL;
+    ajuint* Pcsid = NULL;
 
     AjIList iter = NULL;
     AjPList list = NULL;
@@ -588,7 +631,7 @@ AjBool ensMetacoordinateadaptorFetchAllCoordsystems(
     if(!name)
         return ajFalse;
 
-    list = (AjPList) ajTableFetch(mca->CacheByName, (const void *) name);
+    list = (AjPList) ajTableFetchmodV(mca->CacheByName, (const void*) name);
 
     if(!list)
     {
@@ -604,12 +647,12 @@ AjBool ensMetacoordinateadaptorFetchAllCoordsystems(
 
     while(!ajListIterDone(iter))
     {
-        Pcsid = (ajuint *) ajListIterGet(iter);
+        Pcsid = (ajuint*) ajListIterGet(iter);
 
         ensCoordsystemadaptorFetchByIdentifier(csa, *Pcsid, &cs);
 
         if(cs)
-            ajListPush(css, (void *) cs);
+            ajListPush(css, (void*) cs);
         else
             ajFatal("ensMetacoordinateadaptorFetchAllCoordsystems "
                     "Ensembl Core 'meta_coord' table refers to non-existing "
@@ -636,33 +679,33 @@ AjBool ensMetacoordinateadaptorFetchAllCoordsystems(
 ** @param [r] cs [const EnsPCoordsystem] Ensembl Coordinate System
 ** @param [r] name [const AjPStr] Ensembl Feature (i.e. SQL table) name
 **
-** @return [ajuint] Maximum length
+** @return [ajint] Maximum length or 0
 ** @@
 ******************************************************************************/
 
-ajuint ensMetacoordinateadaptorGetMaximumlength(
+ajint ensMetacoordinateadaptorGetMaximumlength(
     const EnsPMetacoordinateadaptor mca,
     const EnsPCoordsystem cs,
     const AjPStr name)
 {
-    ajuint *Pcsid = NULL;
-    ajuint *Plength = NULL;
+    ajuint csid = 0;
+
+    ajint* Plength = NULL;
 
     AjPTable table = NULL;
 
-    AJNEW0(Pcsid);
+    csid = ensCoordsystemGetIdentifier(cs);
 
-    *Pcsid = ensCoordsystemGetIdentifier(cs);
-
-    table = (AjPTable)
-        ajTableFetch(mca->CacheByLength, (const void *) Pcsid);
-
-    AJFREE(Pcsid);
+    table = (AjPTable) ajTableFetchmodV(mca->CacheByLength,
+                                        (const void*) &csid);
 
     if(table)
-        Plength = (ajuint *) ajTableFetch(table, (const void *) name);
+        Plength = (ajint*) ajTableFetchmodV(table, (const void*) name);
     else
         return 0;
 
-    return *Plength;
+    if(Plength)
+        return *Plength;
+    else
+        return 0;
 }

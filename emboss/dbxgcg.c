@@ -1,6 +1,6 @@
 /* @source dbxgcg application
 **
-** Index flatfile databases
+** Index GCG and PIR/NBRF format databases
 **
 ** @author Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
@@ -33,8 +33,6 @@
 #define GCGTYPE_TAX 5
 #define GCGTYPE_VER 6
 
-static ajuint maxidlen = 0;
-static ajuint idtrunc  = 0;
 
 static AjPRegexp dbxgcg_embl_typexp = NULL;
 static AjPRegexp dbxgcg_embl_idexp  = NULL;
@@ -57,12 +55,9 @@ static AjPRegexp dbxgcg_pir_wrdexp = NULL;
 static AjPRegexp dbxgcg_pir_phrexp = NULL;
 static AjPRegexp dbxgcg_pir_pirexp = NULL;
 
-static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
-			       AjPStr *reflibstr);
-static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
-				  AjPStr *reflibstr);
-static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
-			      AjPStr *reflibstr);
+static AjBool dbxgcg_ParseEmbl(AjPFile infr, AjPStr *reflibstr);
+static AjBool dbxgcg_ParseGenbank( AjPFile infr, AjPStr *reflibstr);
+static AjBool dbxgcg_ParsePir(AjPFile infr, AjPStr *reflibstr);
 
 static AjBool dbxgcg_NextEntry(EmbPBtreeEntry entry, AjPFile infs,
 			       AjPFile infr, const AjPStr dbtype);
@@ -76,6 +71,13 @@ static ajlong dbxgcg_gcgappent(AjPFile infr, AjPFile infs,
 			       AjPRegexp rexp, AjPRegexp sexp,
 			       AjPStr* libstr);
 
+
+
+EmbPBtreeField accfield = NULL;
+EmbPBtreeField svfield = NULL;
+EmbPBtreeField orgfield = NULL;
+EmbPBtreeField desfield = NULL;
+EmbPBtreeField keyfield = NULL;
 
 
 
@@ -99,7 +101,7 @@ typedef struct DbxgcgSParser
     const char* Name;
     AjBool GcgType;
     char   Padding[4];
-    AjBool (*Parser) (EmbPBtreeEntry entry, AjPFile infr, AjPStr *reflibstr);
+    AjBool (*Parser) (AjPFile infr, AjPStr *reflibstr);
 } DbxgcgOParser;
 #define DbxgcgPParser DbxgcgOParser*
 
@@ -133,6 +135,7 @@ int main(int argc, char **argv)
     AjPStr dbrs     = NULL;
     AjPStr release  = NULL;
     AjPStr datestr  = NULL;
+    AjBool compressed;
 
     AjPStr directory;
     AjPStr indexdir;
@@ -155,8 +158,6 @@ int main(int argc, char **argv)
     AjPFile infs = NULL;
     AjPFile infr = NULL;
 
-    AjPStr word = NULL;
-    
     AjPBtId  idobj  = NULL;
     AjPBtPri priobj = NULL;
     AjPBtHybrid hyb = NULL;
@@ -180,8 +181,11 @@ int main(int argc, char **argv)
     dbrs       = ajAcdGetString("dbresource");
     release    = ajAcdGetString("release");
     datestr    = ajAcdGetString("date");
+    compressed = ajAcdGetBoolean("compressed");
 
     entry = embBtreeEntryNew();
+    if(compressed)
+        embBtreeEntrySetCompressed(entry);
     tmpstr = ajStrNew();
     
     idobj   = ajBtreeIdNew();
@@ -193,11 +197,51 @@ int main(int argc, char **argv)
     embBtreeSetDbInfo(entry,dbname,dbrs,datestr,release,dbtype,directory,
 		      indexdir);
 
+    for(i=0; i< nfields; i++)
+    {
+        if(ajStrMatchC(fieldarray[i], "acc"))
+        {
+            accfield = embBtreeGetFieldS(entry, fieldarray[i]);
+            if(compressed)
+                embBtreeFieldSetCompressed(accfield);
+        }
+        else if(ajStrMatchC(fieldarray[i], "sv"))
+        {
+            svfield = embBtreeGetFieldS(entry, fieldarray[i]);
+            if(compressed)
+                embBtreeFieldSetCompressed(svfield);
+        }
+        else if(ajStrMatchC(fieldarray[i], "des"))
+        {
+            desfield = embBtreeGetFieldS(entry, fieldarray[i]);
+            if(compressed)
+                embBtreeFieldSetCompressed(desfield);
+        }
+        else if(ajStrMatchC(fieldarray[i], "key"))
+        {
+            keyfield = embBtreeGetFieldS(entry, fieldarray[i]);
+            if(compressed)
+                embBtreeFieldSetCompressed(keyfield);
+        }
+        else if(ajStrMatchC(fieldarray[i], "org"))
+        {
+            orgfield = embBtreeGetFieldS(entry, fieldarray[i]);
+            if(compressed)
+                embBtreeFieldSetCompressed(orgfield);
+        }
+        else if(!ajStrMatchC(fieldarray[i], "id"))
+            ajErr("Unknown field '%S' specified for indexing", fieldarray[i]);
+    }
+
     embBtreeGetRsInfo(entry);
 
     nfiles = embBtreeGetFiles(entry,directory,filename,exclude);
+    if(!nfiles)
+        ajDie("No input files in '%S' matched filename '%S'",
+              directory, filename);
 
-     for(i=0; i<nfiles; ++i)
+
+    for(i=0; i<nfiles; ++i)
     {
 	ajListPop(entry->files,(void **) &seqname);
 	refname = ajStrNew();
@@ -242,96 +286,22 @@ int main(int argc, char **argv)
 	{
 	    ++ientries;
 	    if(entry->do_id)
-	    {
-               if(ajStrGetLen(entry->id) > entry->idlen)
-                {
-                    if(ajStrGetLen(entry->id) > maxidlen)
-                    {
-                        ajWarn("id '%S' too long, truncating to idlen %d",
-                               entry->id, entry->idlen);
-                        maxidlen = ajStrGetLen(entry->id);
-                    }
-                    idtrunc++;
-                    ajStrKeepRange(&entry->id,0,entry->idlen-1);
-                }
-    
-		ajStrFmtLower(&entry->id);
-		ajStrAssignS(&hyb->key1,entry->id);
-		hyb->dbno = i;
-		hyb->offset = entry->fpos;
-		hyb->refoffset = entry->reffpos;
-		hyb->dups = 0;
-		ajBtreeHybInsertId(entry->idcache,hyb);
-	    }
+                embBtreeIndexEntry(entry, i);
 
-	    if(entry->do_accession)
-	    {
-                while(ajListPop(entry->ac,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-                    ajStrAssignS(&hyb->key1,word);
-                    hyb->dbno = i;
-		    hyb->offset = entry->fpos;
-		    hyb->refoffset = entry->reffpos;
-		    hyb->dups = 0;
-		    ajBtreeHybInsertId(entry->accache,hyb);
-		    ajStrDel(&word);
-                }
-	    }
+	    if(accfield)
+                embBtreeIndexField(accfield, entry, i);
 
-	    if(entry->do_sv)
-	    {
-                while(ajListPop(entry->sv,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-                    ajStrAssignS(&hyb->key1,word);
-                    hyb->dbno = i;
-		    hyb->offset = entry->fpos;
-		    hyb->refoffset = entry->reffpos;
-		    hyb->dups = 0;
-		    ajBtreeHybInsertId(entry->svcache,hyb);
-		    ajStrDel(&word);
-                }
-	    }
+	    if(svfield)
+                embBtreeIndexField(svfield, entry, i);
 
-	    if(entry->do_keyword)
-	    {
-                while(ajListPop(entry->kw,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-		    ajStrAssignS(&priobj->id,entry->id);
-                    ajStrAssignS(&priobj->keyword,word);
-                    priobj->treeblock = 0;
-                    ajBtreeInsertKeyword(entry->kwcache, priobj);
-		    ajStrDel(&word);
-                }
-	    }
+	    if(keyfield)
+                embBtreeIndexField(keyfield, entry, i);
 
-	    if(entry->do_description)
-	    {
-                while(ajListPop(entry->de,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-		    ajStrAssignS(&priobj->id,entry->id);
-                    ajStrAssignS(&priobj->keyword,word);
-                    priobj->treeblock = 0;
-                    ajBtreeInsertKeyword(entry->decache, priobj);
-		    ajStrDel(&word);
-                }
-	    }
+	    if(desfield)
+                embBtreeIndexField(desfield, entry, i);
 
-	    if(entry->do_taxonomy)
-	    {
-                while(ajListPop(entry->tx,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-		    ajStrAssignS(&priobj->id,entry->id);
-                    ajStrAssignS(&priobj->keyword,word);
-                    priobj->treeblock = 0;
-                    ajBtreeInsertKeyword(entry->txcache, priobj);
-		    ajStrDel(&word);
-                }
-	    }
+	    if(orgfield)
+                embBtreeIndexField(orgfield, entry, i);
 	}
 	
 	ajFileClose(&infs);
@@ -352,16 +322,19 @@ int main(int argc, char **argv)
     ajTimeDel(&nowtime);
     ajTimeDel(&starttime);
 
-    if(maxidlen)
-    {
-        ajFmtPrintF(outf,
-                    "Resource idlen truncated %u IDs. "
-                    "Maximum ID length was %u.",
-                    idtrunc, maxidlen);
-        ajWarn("Resource idlen truncated %u IDs. Maximum ID length was %u.",
-               idtrunc, maxidlen);
-    }
-    
+    embBtreeReportEntry(outf, entry);
+
+    if(accfield)
+        embBtreeReportField(outf, accfield);
+    if(svfield)
+        embBtreeReportField(outf, svfield);
+    if(orgfield)
+        embBtreeReportField(outf, orgfield);
+    if(desfield)
+        embBtreeReportField(outf, desfield);
+    if(keyfield)
+        embBtreeReportField(outf, keyfield);
+
     embBtreeDumpParameters(entry);
     embBtreeCloseCaches(entry);
     
@@ -589,7 +562,7 @@ static ajlong dbxgcg_gcggetent(EmbPBtreeEntry entry, AjPFile infs,
     ajRegExec(dbxgcg_gcg_rexp, rline);
     ajRegSubI(dbxgcg_gcg_rexp, 1, &reflibstr);
 
-    parser[iparser].Parser(entry, infr, &reflibstr);/* writes alistfile data */
+    parser[iparser].Parser(infr, &reflibstr);/* writes alistfile data */
 
     /* get the description line */
     ajReadline(infs, &sline);
@@ -709,7 +682,7 @@ static ajlong dbxgcg_pirgetent(EmbPBtreeEntry entry, AjPFile infs,
     ajDebug("dbxgcg_pirgetent refid '%S' spos: %Ld\n",
 	    entry->id, ajFileResetPos(infr));
 
-    parser[iparser].Parser(entry, infr, &reflibstr);/* writes alistfile data */
+    parser[iparser].Parser(infr, &reflibstr);/* writes alistfile data */
 
     /* get the description line */
     ajReadline(infs, &sline);
@@ -868,27 +841,22 @@ static ajlong dbxgcg_gcgappent(AjPFile infr, AjPFile infs,
 **
 ** Parse the ID, accession from an EMBL or SWISSPROT entry
 **
-** @param [u] entry [EmbPBtreeEntry] b+tree entry pointer
 ** @param [u] infr [AjPFile] reference file
 ** @param [w] id [AjPStr*] ID
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
+static AjBool dbxgcg_ParseEmbl(AjPFile infr,
 			       AjPStr *id)
 {
     AjPStr tmpstr  = NULL;
     AjPStr tmpline = NULL;
     AjPStr tmpfd   = NULL;
     AjPStr typStr  = NULL;
-    AjPStr tmpacnum = NULL;
     ajint lineType;
     ajlong rpos;
     AjPStr rline = NULL;
-
-    AjPStr str = NULL;
-    
 
     if(!dbxgcg_embl_typexp)
 	dbxgcg_embl_typexp = ajRegCompC("^([A-Z][A-Z]) +");
@@ -915,9 +883,8 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 	    break;
 	
         rpos = ajFileResetPos(infr);
-	ajStrAssignS(&tmpstr,rline);
 
-	if(ajRegExec(dbxgcg_embl_typexp, tmpstr))
+	if(ajRegExec(dbxgcg_embl_typexp, rline))
 	{
 	    ajRegSubI(dbxgcg_embl_typexp, 1, &typStr);
 	    if(ajStrMatchC(typStr, "ID"))
@@ -951,91 +918,29 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 	    continue;
 	}
 
-	if(lineType == GCGTYPE_ACC && entry->do_accession)
+	if(lineType == GCGTYPE_ACC && accfield)
 	{
-	    while(ajRegExec(dbxgcg_embl_wrdexp, tmpline))
-	    {
-		ajRegSubI(dbxgcg_embl_wrdexp, 1, &tmpfd);
-		ajDebug("++acc '%S'\n", tmpfd);
-
-		if(!tmpacnum)
-		    ajStrAssignS(&tmpacnum, tmpfd);
-
-		str = ajStrNew();
-		ajStrAssignS(&str,tmpfd);
-		ajListPush(entry->ac,(void *)str);
-
-		ajRegPost(dbxgcg_embl_wrdexp, &tmpstr);
-                ajStrAssignS(&tmpline, tmpstr);
-	    }
+            embBtreeParseField(tmpline, dbxgcg_embl_wrdexp, accfield);
 	    continue;
 	}
-	else if(lineType == GCGTYPE_DES && entry->do_description)
+	else if(lineType == GCGTYPE_DES && desfield)
 	{
-	    while(ajRegExec(dbxgcg_embl_wrdexp, tmpline))
-	    {
-		ajRegSubI(dbxgcg_embl_wrdexp, 1, &tmpfd);
-		ajDebug("++des '%S'\n", tmpfd);
-
-		str = ajStrNew();
-		ajStrAssignS(&str,tmpfd);
-		ajListPush(entry->de,(void *)str);
-
-		ajRegPost(dbxgcg_embl_wrdexp, &tmpstr);
-                ajStrAssignS(&tmpline, tmpstr);
-	    }
+            embBtreeParseField(tmpline, dbxgcg_embl_wrdexp, desfield);
 	    continue;
 	}
-	else if(lineType == GCGTYPE_VER && entry->do_sv)
+	else if(lineType == GCGTYPE_VER && svfield)
 	{
-	    while(ajRegExec(dbxgcg_embl_verexp, tmpline))
-	    {
-		ajRegSubI(dbxgcg_embl_verexp, 1, &tmpfd);
-		ajDebug("++sv '%S'\n", tmpfd);
-
-		str = ajStrNew();
-		ajStrAssignS(&str,tmpfd);
-		ajListPush(entry->sv,(void *)str);
-
-		ajRegPost(dbxgcg_embl_verexp, &tmpstr);
-                ajStrAssignS(&tmpline, tmpstr);
-	    }
+            embBtreeParseField(tmpline, dbxgcg_embl_verexp, svfield);
 	    continue;
 	}
-	else if(lineType == GCGTYPE_KEY && entry->do_keyword)
+	else if(lineType == GCGTYPE_KEY && keyfield)
 	{
-	    while(ajRegExec(dbxgcg_embl_phrexp, tmpline))
-	    {
-		ajRegSubI(dbxgcg_embl_phrexp, 1, &tmpfd);
-		ajRegPost(dbxgcg_embl_phrexp, &tmpstr);
-                ajStrAssignS(&tmpline, tmpstr);
-		ajStrTrimWhiteEnd(&tmpfd);
-		if(!ajStrGetLen(tmpfd))
-		    continue;
-		ajDebug("++key '%S'\n", tmpfd);
-
-		str = ajStrNew();
-		ajStrAssignS(&str,tmpfd);
-		ajListPush(entry->kw,(void *)str);
-	    }
+            embBtreeParseFieldTrim(tmpline, dbxgcg_embl_phrexp, keyfield);
 	    continue;
 	}
-	else if(lineType == GCGTYPE_TAX && entry->do_taxonomy)
+	else if(lineType == GCGTYPE_TAX && orgfield)
 	{
-	    while(ajRegExec(dbxgcg_embl_taxexp, tmpline))
-	    {
-		ajRegSubI(dbxgcg_embl_taxexp, 1, &tmpfd);
-		ajRegPost(dbxgcg_embl_taxexp, &tmpstr);
-                ajStrAssignS(&tmpline, tmpstr);
-		ajStrTrimWhiteEnd(&tmpfd);
-		if(!ajStrGetLen(tmpfd))
-		    continue;
-		ajDebug("++tax '%S'\n", tmpfd);
-
-		str = ajStrNew();
-		ajStrAssignS(&str,tmpfd);
-		ajListPush(entry->tx,(void *)str);
-	    }
+            embBtreeParseFieldTrim(tmpline, dbxgcg_embl_taxexp, orgfield);
 	    continue;
 	}
     }
@@ -1043,7 +948,6 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
     if(rpos)
         ajFileSeek(infr, rpos, 0);
 
-    ajStrDel(&tmpacnum);
     ajStrDel(&tmpstr);
     ajStrDel(&tmpline);
     ajStrDel(&tmpfd);
@@ -1060,14 +964,13 @@ static AjBool dbxgcg_ParseEmbl(EmbPBtreeEntry entry, AjPFile infr,
 **
 ** Parse the ID, accession from a Genbank entry
 **
-** @param [u] entry [EmbPBtreeEntry] b+tree entry pointer
 ** @param [u] infr [AjPFile] reference file
 ** @param [w] id [AjPStr*] ID
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
+static AjBool dbxgcg_ParseGenbank(AjPFile infr,
 			       AjPStr *id)
 {
     static AjPRegexp typexp = NULL;
@@ -1147,7 +1050,7 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 	    ajRegExec(wrdexp, tmpline);
 	    ajRegSubI(wrdexp, 1, id);
 	}
-	else if(lineType == GCGTYPE_ACC && entry->do_accession)
+	else if(lineType == GCGTYPE_ACC && accfield)
 	{
 	    while(ajRegExec(wrdexp, tmpline))
 	    {
@@ -1156,14 +1059,14 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 
 		str = ajStrNew();
 		ajStrAssignS(&str,tmpfd);
-		ajListPush(entry->ac,(void *)str);
+		ajListPush(accfield->data,(void *)str);
 
 		ajRegPost(wrdexp, &tmpstr);
                 ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
-	else if(lineType == GCGTYPE_DES && entry->do_description)
+	else if(lineType == GCGTYPE_DES && desfield)
 	{
 	    while(ajRegExec(wrdexp, tmpline))
 	    {
@@ -1172,14 +1075,14 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 
 		str = ajStrNew();
 		ajStrAssignS(&str,tmpfd);
-		ajListPush(entry->de,(void *)str);
+		ajListPush(desfield->data,(void *)str);
 
 		ajRegPost(wrdexp, &tmpstr);
                 ajStrAssignS(&tmpline, tmpstr);
 	    }
 	    continue;
 	}
-	else if(lineType == GCGTYPE_KEY && entry->do_keyword)
+	else if(lineType == GCGTYPE_KEY && keyfield)
 	{
 	    while(ajRegExec(phrexp, tmpline))
 	    {
@@ -1193,11 +1096,11 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 
 		str = ajStrNew();
 		ajStrAssignS(&str,tmpfd);
-		ajListPush(entry->kw,(void *)str);
+		ajListPush(keyfield->data,(void *)str);
 	    }
 	    continue;
 	}
-	else if(lineType == GCGTYPE_TAX && entry->do_taxonomy)
+	else if(lineType == GCGTYPE_TAX && orgfield)
 	{
 	    while(ajRegExec(taxexp, tmpline))
 	    {
@@ -1211,11 +1114,11 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 
 		str = ajStrNew();
 		ajStrAssignS(&str,tmpfd);
-		ajListPush(entry->tx,(void *)str);
+		ajListPush(orgfield->data,(void *)str);
 	    }
 	    continue;
 	}
-	else if(lineType == GCGTYPE_VER && entry->do_sv)
+	else if(lineType == GCGTYPE_VER && svfield)
 	{
 	    if(ajRegExec(verexp, tmpline))
 	    {
@@ -1224,7 +1127,7 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 
 		str = ajStrNew();
 		ajStrAssignS(&str,tmpfd);
-		ajListPush(entry->sv,(void *)str);
+		ajListPush(svfield->data,(void *)str);
 
 		ajRegSubI(verexp, 3, &tmpfd);
 		if(!ajStrGetLen(tmpfd))
@@ -1233,7 +1136,7 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 
 		str = ajStrNew();
 		ajStrAssignS(&str,tmpfd);
-		ajListPush(entry->sv,(void *)str);
+		ajListPush(svfield->data,(void *)str);
 	    }
 	    continue;
 	}
@@ -1253,7 +1156,6 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 **
 ** Parse the ID, accession from a PIR entry
 **
-** @param [u] entry [EmbPBtreeEntry] b+tree entry pointer
 ** @param [u] infr [AjPFile] reference file
 ** @param [w] id [AjPStr*] ID
 ** @return [AjBool] ajTrue on success.
@@ -1261,7 +1163,7 @@ static AjBool dbxgcg_ParseGenbank(EmbPBtreeEntry entry, AjPFile infr,
 ******************************************************************************/
 
 
-static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
+static AjBool dbxgcg_ParsePir(AjPFile infr,
 			       AjPStr *id)
 {
     ajlong rpos;
@@ -1303,7 +1205,7 @@ static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
 
     ajReadline(infr, &rline);
     ajDebug("line-2 '%S'\n", rline);
-    if(entry->do_description)
+    if(desfield)
     {
 	while(ajRegExec(dbxgcg_pir_wrdexp, rline))
 	{
@@ -1312,7 +1214,7 @@ static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
 
 	    str = ajStrNew();
 	    ajStrAssignS(&str,tmpfd);
-	    ajListPush(entry->de,(void *)str);
+	    ajListPush(desfield->data,(void *)str);
 
 	    ajRegPost(dbxgcg_pir_wrdexp, &tmpstr);
             ajStrAssignS(&rline, tmpstr);
@@ -1324,65 +1226,30 @@ static AjBool dbxgcg_ParsePir(EmbPBtreeEntry entry, AjPFile infr,
         rpos = ajFileResetPos(infr);
 	ajStrAssignS(&tmpstr,rline);
 
-	if(ajRegExec(dbxgcg_pir_acexp, rline))
-	{
-	    ajRegPost(dbxgcg_pir_acexp, &tmpline);
-	    while(ajRegExec(dbxgcg_pir_ac2exp, tmpline))
-	    {
-		ajRegSubI(dbxgcg_pir_ac2exp, 1, &tmpfd);
-		ajDebug("++acc '%S'\n", tmpfd);
+        if(accfield)
+        {
+            if(ajRegExec(dbxgcg_pir_acexp, rline))
+            {
+                ajRegPost(dbxgcg_pir_acexp, &tmpline);
+                embBtreeParseField(tmpline, dbxgcg_pir_ac2exp, accfield);
+            }
+        }
 
-		if(entry->do_accession)
-		{
-		    str = ajStrNew();
-		    ajStrAssignS(&str,tmpfd);
-		    ajListPush(entry->ac,(void *)str);
-		}
-
-		ajRegPost(dbxgcg_pir_ac2exp, &tmpstr);
-                ajStrAssignS(&tmpline, tmpstr);
-	    }
-	}
-
-	if(entry->do_keyword)
+	if(keyfield)
 	{
 	    if(ajRegExec(dbxgcg_pir_keyexp, rline))
 	    {
 		ajRegPost(dbxgcg_pir_keyexp, &tmpline);
-		while(ajRegExec(dbxgcg_pir_phrexp, tmpline))
-		{
-		    ajRegSubI(dbxgcg_pir_phrexp, 1, &tmpfd);
-		    ajDebug("++key '%S'\n", tmpfd);
-		    ajStrTrimWhiteEnd(&tmpfd);
-
-		    str = ajStrNew();
-		    ajStrAssignS(&str,tmpfd);
-		    ajListPush(entry->kw,(void *)str);
-
-		    ajRegPost(dbxgcg_pir_phrexp, &tmpstr);
-                    ajStrAssignS(&tmpline, tmpstr);
-		}
+                embBtreeParseFieldTrim(tmpline, dbxgcg_pir_phrexp, keyfield);
 	    }
 	}
 
-	if(entry->do_taxonomy)
+	if(orgfield)
 	{
 	    if(ajRegExec(dbxgcg_pir_taxexp, rline))
 	    {
 		ajRegPost(dbxgcg_pir_taxexp, &tmpline);
-		while(ajRegExec(dbxgcg_pir_tax2exp, tmpline))
-		{
-		    ajRegSubI(dbxgcg_pir_tax2exp, 1, &tmpfd);
-		    ajStrTrimWhiteEnd(&tmpfd);
-		    ajDebug("++tax '%S'\n", tmpfd);
-
-		    str = ajStrNew();
-		    ajStrAssignS(&str,tmpfd);
-		    ajListPush(entry->tx,(void *)str);
-
-		    ajRegPost(dbxgcg_pir_tax2exp, &tmpstr);
-                    ajStrAssignS(&tmpline, tmpstr);
-		}
+                embBtreeParseFieldTrim(tmpline, dbxgcg_pir_tax2exp, orgfield);
 	    }
 	}
 

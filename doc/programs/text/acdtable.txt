@@ -60,7 +60,7 @@ Usage
 (Parameter 2)
  report
  Output report file name
- Report output file
+ (default -rformat motif)
  <*>.antigenic
 
 

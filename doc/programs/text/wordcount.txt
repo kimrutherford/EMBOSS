@@ -37,7 +37,7 @@ Output file [u68037.wordcount]:
 Command line arguments
 
 Count and extract unique words in molecular sequence(s)
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -92,7 +92,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   wordcount reads any sequence USA.
+   wordcount reads one or more nucleotide or protein sequnces.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -305,24 +322,19 @@ See also
    banana           Plot bending and curvature data for B-DNA
    btwisted         Calculate the twisting in a B-DNA sequence
    chaos            Draw a chaos game representation plot for a nucleotide sequence
-   charge           Draw a protein charge plot
-   checktrans       Reports STOP codons and ORF statistics of a protein
    compseq          Calculate the composition of unique words in sequences
    dan              Calculates nucleic acid melting temperature
    density          Draw a nucleic acid density plot
    emowse           Search protein sequences by digest fragment molecular weight
    freak            Generate residue/base frequency table or plot
-   iep              Calculate the isoelectric point of proteins
    isochore         Plots isochores in DNA sequences
    mwcontam         Find weights common to multiple molecular weights files
    mwfilter         Filter noisy data from molecular weights file
-   octanol          Draw a White-Wimley protein hydropathy plot
+   oddcomp          Identify proteins with specified sequence word composition
+   pepdigest        Reports on protein proteolytic enzyme or reagent cleavage
+                    sites
    pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepstats         Calculates statistics of protein properties
-   pepwindow        Draw a hydropathy plot for a protein sequence
-   pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
-                    alignment
-   sirna            Finds siRNA duplexes in mRNA
 
 Author(s)
 

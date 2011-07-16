@@ -1,28 +1,74 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
-#ifndef ensditag_h
-#define ensditag_h
+#ifndef ENSDITAG_H
+#define ENSDITAG_H
+
+/* ==================================================================== */
+/* ========================== include files =========================== */
+/* ==================================================================== */
 
 #include "ensfeature.h"
 
+AJ_BEGIN_DECLS
 
 
 
-/* #data EnsPDitagadaptor *****************************************************
+
+/* ==================================================================== */
+/* ============================ constants ============================= */
+/* ==================================================================== */
+
+/* @const EnsPDitagadaptor ****************************************************
 **
-** Ensembl Ditag Adaptor. Defined as an alias in EnsPDatabaseadaptor
+** Ensembl Ditag Adaptor.
+** Defined as an alias in EnsPBaseadaptor.
 **
-** #alias EnsPDatabaseadaptor
+** #alias EnsPBaseadaptor
+**
+** #cc Bio::EnsEMBL::Map::DBSQL::DitagAdaptor
 ** ##
 ******************************************************************************/
 
-#define EnsPDitagadaptor EnsPDatabaseadaptor
+#define EnsPDitagadaptor EnsPBaseadaptor
 
 
 
+
+/* @const EnsPDitagfeatureadaptor *********************************************
+**
+** Ensembl Ditag Feature Adaptor.
+** Defined as an alias in EnsPFeatureadaptor.
+**
+** #alias EnsPFeatureadaptor
+**
+** #cc Bio::EnsEMBL::Map::DBSQL::Ditagfeatureadaptor
+** ##
+******************************************************************************/
+
+#define EnsPDitagfeatureadaptor EnsPFeatureadaptor
+
+
+
+
+/* @const EnsEDitagfeatureSide ************************************************
+**
+** Ensembl Ditag Feature Side enumeration.
+**
+******************************************************************************/
+
+typedef enum EnsODitagfeatureSide
+{
+    ensEDitagfeatureSideNULL,
+    ensEDitagfeatureSideLeft,
+    ensEDitagfeatureSideRight,
+    ensEDitagfeatureSideFull
+} EnsEDitagfeatureSide;
+
+
+
+
+/* ==================================================================== */
+/* ========================== public data ============================= */
+/* ==================================================================== */
 
 /* @data EnsPDitag ************************************************************
 **
@@ -61,45 +107,6 @@ typedef struct EnsSDitag
 
 
 
-/* @data EnsPDitagfeatureadaptor **********************************************
-**
-** Ensembl Ditag Feature Adaptor.
-**
-** @alias EnsSDitagfeatureadaptor
-** @alias EnsODitagfeatureadaptor
-**
-** @cc Bio::EnsEMBL::Map::DBSQL::Ditagfeatureadaptor
-** @attr Adaptor [EnsPFeatureadaptor] Ensembl Feature Adaptor
-** @@
-******************************************************************************/
-
-typedef struct EnsSDitagfeatureadaptor
-{
-    EnsPFeatureadaptor Adaptor;
-} EnsODitagfeatureadaptor;
-
-#define EnsPDitagfeatureadaptor EnsODitagfeatureadaptor*
-
-
-
-
-/* EnsEDitagfeatureSide *******************************************************
-**
-** Ensembl Ditag Feature Side enumeration.
-**
-******************************************************************************/
-
-typedef enum EnsODitagfeatureSide
-{
-    ensEDitagfeatureSideNULL,
-    ensEDitagfeatureSideLeft,
-    ensEDitagfeatureSideRight,
-    ensEDitagfeatureSideFull
-} EnsEDitagfeatureSide;
-
-
-
-
 /* @data EnsPDitagfeature *****************************************************
 **
 ** Ensembl Ditag Feature
@@ -120,7 +127,7 @@ typedef enum EnsODitagfeatureSide
 ** @attr TargetStart [ajint] Target start
 ** @attr TargetEnd [ajint] Target end
 ** @attr TargetStrand [ajint] Target strand
-** @attr PairIdentifier [ajuint] Pair identifier
+** @attr Pairidentifier [ajuint] Pair identifier
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
@@ -137,7 +144,7 @@ typedef struct EnsSDitagfeature
     ajint TargetStart;
     ajint TargetEnd;
     ajint TargetStrand;
-    ajuint PairIdentifier;
+    ajuint Pairidentifier;
     ajuint Padding;
 } EnsODitagfeature;
 
@@ -146,20 +153,24 @@ typedef struct EnsSDitagfeature
 
 
 
+/* ==================================================================== */
+/* ======================= public functions =========================== */
+/* ==================================================================== */
+
 /*
 ** Prototype definitions
 */
 
 /* Ensembl Ditag */
 
-EnsPDitag ensDitagNew(EnsPDitagadaptor dta,
-                      ajuint identifier,
-                      AjPStr name,
-                      AjPStr type,
-                      AjPStr sequence,
-                      ajuint count);
+EnsPDitag ensDitagNewCpy(const EnsPDitag dt);
 
-EnsPDitag ensDitagNewObj(const EnsPDitag object);
+EnsPDitag ensDitagNewIni(EnsPDitagadaptor dta,
+                         ajuint identifier,
+                         AjPStr name,
+                         AjPStr type,
+                         AjPStr sequence,
+                         ajuint count);
 
 EnsPDitag ensDitagNewRef(EnsPDitag dt);
 
@@ -167,70 +178,81 @@ void ensDitagDel(EnsPDitag* Pdt);
 
 EnsPDitagadaptor ensDitagGetAdaptor(const EnsPDitag dt);
 
+ajuint ensDitagGetCount(const EnsPDitag dt);
+
 ajuint ensDitagGetIdentifier(const EnsPDitag dt);
 
 AjPStr ensDitagGetName(const EnsPDitag dt);
 
-AjPStr ensDitagGetType(const EnsPDitag dt);
-
 AjPStr ensDitagGetSequence(const EnsPDitag dt);
 
-ajuint ensDitagGetCount(const EnsPDitag dt);
+AjPStr ensDitagGetType(const EnsPDitag dt);
 
 AjBool ensDitagSetAdaptor(EnsPDitag dt, EnsPDitagadaptor dta);
+
+AjBool ensDitagSetCount(EnsPDitag dt, ajuint count);
 
 AjBool ensDitagSetIdentifier(EnsPDitag dt, ajuint identifier);
 
 AjBool ensDitagSetName(EnsPDitag dt, AjPStr name);
 
-AjBool ensDitagSetType(EnsPDitag dt, AjPStr type);
-
 AjBool ensDitagSetSequence(EnsPDitag dt, AjPStr sequence);
 
-AjBool ensDitagSetCount(EnsPDitag dt, ajuint count);
+AjBool ensDitagSetType(EnsPDitag dt, AjPStr type);
 
 AjBool ensDitagTrace(const EnsPDitag dt, ajuint level);
 
-ajulong ensDitagGetMemsize(const EnsPDitag dt);
+size_t ensDitagCalculateMemsize(const EnsPDitag dt);
+
+AjBool ensTableDitagClear(AjPTable table);
+
+AjBool ensTableDitagDelete(AjPTable* Ptable);
 
 /* Ensembl Ditag Adaptor */
 
 EnsPDitagadaptor ensRegistryGetDitagadaptor(
     EnsPDatabaseadaptor dba);
 
-EnsPDatabaseadaptor ensDitagadaptorGetDatabaseadaptor(EnsPDitagadaptor dta);
+EnsPDitagadaptor ensDitagadaptorNew(EnsPDatabaseadaptor dba);
 
-AjBool ensDitagadaptorFetchByIdentifier(EnsPDitagadaptor dta,
-                                        ajuint identifier,
-                                        EnsPDitag *Pdt);
+void ensDitagadaptorDel(EnsPDitagadaptor* Pdta);
+
+EnsPDatabaseadaptor ensDitagadaptorGetDatabaseadaptor(EnsPDitagadaptor dta);
 
 AjBool ensDitagadaptorFetchAll(EnsPDitagadaptor dta,
                                const AjPStr name,
                                const AjPStr type,
                                AjPList dts);
 
-AjBool ensDitagadaptorFetchAllByName(EnsPDitagadaptor dta,
+AjBool ensDitagadaptorFetchAllbyIdentifiers(EnsPDitagadaptor dta,
+                                            AjPTable dts);
+
+AjBool ensDitagadaptorFetchAllbyName(EnsPDitagadaptor dta,
                                      const AjPStr name,
                                      AjPList dts);
 
-AjBool ensDitagadaptorFetchAllByType(EnsPDitagadaptor dta,
+AjBool ensDitagadaptorFetchAllbyType(EnsPDitagadaptor dta,
                                      const AjPStr type,
                                      AjPList dts);
 
+AjBool ensDitagadaptorFetchByIdentifier(EnsPDitagadaptor dta,
+                                        ajuint identifier,
+                                        EnsPDitag* Pdt);
+
 /* Ensembl Ditag Feature */
 
-EnsPDitagfeature ensDitagfeatureNew(EnsPDitagfeatureadaptor dtfa,
-                                    ajuint identifier,
-                                    EnsPFeature feature,
-                                    EnsPDitag dt,
-                                    AjPStr cigar,
-                                    EnsEDitagfeatureSide side,
-                                    ajint tstart,
-                                    ajint tend,
-                                    ajint tstrand,
-                                    ajuint pairid);
+EnsPDitagfeature ensDitagfeatureNewCpy(const EnsPDitagfeature dtf);
 
-EnsPDitagfeature ensDitagfeatureNewObj(const EnsPDitagfeature object);
+EnsPDitagfeature ensDitagfeatureNewIni(EnsPDitagfeatureadaptor dtfa,
+                                       ajuint identifier,
+                                       EnsPFeature feature,
+                                       EnsPDitag dt,
+                                       AjPStr cigar,
+                                       EnsEDitagfeatureSide side,
+                                       ajint tstart,
+                                       ajint tend,
+                                       ajint tstrand,
+                                       ajuint pairid);
 
 EnsPDitagfeature ensDitagfeatureNewRef(EnsPDitagfeature dtf);
 
@@ -238,23 +260,23 @@ void ensDitagfeatureDel(EnsPDitagfeature* Pdtf);
 
 EnsPDitagfeatureadaptor ensDitagfeatureGetAdaptor(const EnsPDitagfeature dtf);
 
-ajuint ensDitagfeatureGetIdentifier(const EnsPDitagfeature dtf);
-
-EnsPFeature ensDitagfeatureGetFeature(const EnsPDitagfeature dtf);
+AjPStr ensDitagfeatureGetCigar(const EnsPDitagfeature dtf);
 
 EnsPDitag ensDitagfeatureGetDitag(const EnsPDitagfeature dtf);
 
-AjPStr ensDitagfeatureGetCigar(const EnsPDitagfeature dtf);
+EnsPFeature ensDitagfeatureGetFeature(const EnsPDitagfeature dtf);
+
+ajuint ensDitagfeatureGetIdentifier(const EnsPDitagfeature dtf);
+
+ajuint ensDitagfeatureGetPairidentifier(const EnsPDitagfeature dtf);
 
 EnsEDitagfeatureSide ensDitagfeatureGetSide(const EnsPDitagfeature dtf);
 
-ajint ensDitagfeatureGetTargetStart(const EnsPDitagfeature dtf);
-
 ajint ensDitagfeatureGetTargetEnd(const EnsPDitagfeature dtf);
 
-ajint ensDitagfeatureGetTargetStrand(const EnsPDitagfeature dtf);
+ajint ensDitagfeatureGetTargetStart(const EnsPDitagfeature dtf);
 
-ajuint ensDitagfeatureGetPairIdentifier(const EnsPDitagfeature dtf);
+ajint ensDitagfeatureGetTargetStrand(const EnsPDitagfeature dtf);
 
 AjBool ensDitagfeatureSetAdaptor(EnsPDitagfeature dtf,
                                  EnsPDitagfeatureadaptor dtfa);
@@ -275,19 +297,19 @@ AjBool ensDitagfeatureSetTargetEnd(EnsPDitagfeature dtf, ajint tend);
 
 AjBool ensDitagfeatureSetTargetStrand(EnsPDitagfeature dtf, ajint tstrand);
 
-AjBool ensDitagfeatureSetPairIdentifier(EnsPDitagfeature dtf, ajuint pairid);
+AjBool ensDitagfeatureSetPairidentifier(EnsPDitagfeature dtf, ajuint pairid);
 
 AjBool ensDitagfeatureTrace(const EnsPDitagfeature dtf, ajuint level);
 
-ajulong ensDitagfeatureGetMemsize(const EnsPDitagfeature dtf);
+size_t ensDitagfeatureCalculateMemsize(const EnsPDitagfeature dtf);
 
 EnsEDitagfeatureSide ensDitagfeatureSideFromStr(const AjPStr side);
 
-const char *ensDitagfeatureSideToChar(const EnsEDitagfeatureSide side);
+const char* ensDitagfeatureSideToChar(const EnsEDitagfeatureSide dtfs);
 
-AjBool ensDitagfeatureSortByStartAscending(AjPList dtfs);
+AjBool ensListDitagfeatureSortStartAscending(AjPList dtfs);
 
-AjBool ensDitagfeatureSortByStartDescending(AjPList dtfs);
+AjBool ensListDitagfeatureSortStartDescending(AjPList dtfs);
 
 /* Ensembl Ditag Feature Adaptor */
 
@@ -297,32 +319,35 @@ EnsPDitagfeatureadaptor ensRegistryGetDitagfeatureadaptor(
 EnsPDitagfeatureadaptor ensDitagfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensDitagfeatureadaptorDel(EnsPDitagfeatureadaptor *Pdtfa);
+void ensDitagfeatureadaptorDel(EnsPDitagfeatureadaptor* Pdtfa);
 
-AjBool ensDitagadaptorFetchAllByIdentifier(
-    const EnsPDitagfeatureadaptor dtfa,
-    ajuint identifier,
-    EnsPDitagfeature *Pdtf);
+EnsPDatabaseadaptor ensDitagfeatureadaptorGetDatabaseadaptor(
+    EnsPDitagfeatureadaptor dtfa);
 
-AjBool ensDitagfeatureadaptorFetchAllByDitag(
-    const EnsPDitagfeatureadaptor dtfa,
+AjBool ensDitagfeatureadaptorFetchAllbyDitag(
+    EnsPDitagfeatureadaptor dtfa,
     const EnsPDitag dt,
     AjPList dtfs);
 
-AjBool ensDitagfeatureadaptorFetchAllByType(
-    const EnsPDitagfeatureadaptor dtfa,
-    const AjPStr type,
-    AjPList dtfs);
-
-AjBool ensDitagfeatureadaptorFetchAllBySlice(
-    const EnsPDitagfeatureadaptor dtfa,
+AjBool ensDitagfeatureadaptorFetchAllbySlice(
+    EnsPDitagfeatureadaptor dtfa,
     EnsPSlice slice,
     const AjPStr type,
     const AjPStr anname,
     AjPList dtfs);
 
-AjBool ensDitagfeatureadaptorFetchAllIdentifiers(
-    const EnsPDitagfeatureadaptor dtfa,
+AjBool ensDitagfeatureadaptorFetchAllbyType(
+    EnsPDitagfeatureadaptor dtfa,
+    const AjPStr type,
+    AjPList dtfs);
+
+AjBool ensDitagfeatureadaptorFetchByIdentifier(
+    EnsPDitagfeatureadaptor dtfa,
+    ajuint identifier,
+    EnsPDitagfeature* Pdtf);
+
+AjBool ensDitagfeatureadaptorRetrieveAllIdentifiers(
+    EnsPDitagfeatureadaptor dtfa,
     AjPList identifiers);
 
 /*
@@ -332,8 +357,6 @@ AjBool ensDitagfeatureadaptorFetchAllIdentifiers(
 
 
 
-#endif /* ensditag_h */
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif /* !ENSDITAG_H */

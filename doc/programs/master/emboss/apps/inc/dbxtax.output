@@ -1,0 +1,161 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: outfile.dbxtax</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Processing directory: /homes/user/test/data/taxonomy/
+Processing file: nodes.dmp entries: 41 (41) time: 0.0s (0.0s)
+Total time: 0.0s
+</pre>
+</td></tr></table><p>
+<p><h3>File: taxon.ent</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# Number of files: 1
+# Release: 0.0
+# Date:    00/00/00
+Dual filename database
+nodes.dmp names.dmp
+</pre>
+</td></tr></table><p>
+<p><h3>File: taxon.pxac</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Identifier
+Compress  Yes
+Pages     3
+Order     71
+Fill      46
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     1
+Fullcount 1
+Kwlimit   15
+</pre>
+</td></tr></table><p>
+<p><h3>File: taxon.pxgc</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     6
+Order     132
+Fill      65
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     169
+Count     1
+Fullcount 41
+Kwlimit   2
+</pre>
+</td></tr></table><p>
+<p><h3>File: taxon.pxid</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Identifier
+Compress  Yes
+Pages     3
+Order     99
+Fill      56
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     41
+Fullcount 41
+Kwlimit   7
+</pre>
+</td></tr></table><p>
+<p><h3>File: taxon.pxmgc</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     12
+Order     132
+Fill      65
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     169
+Count     3
+Fullcount 39
+Kwlimit   2
+</pre>
+</td></tr></table><p>
+<p><h3>File: taxon.pxtax</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Identifier
+Compress  Yes
+Pages     19
+Order     16
+Fill      14
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     86
+Fullcount 90
+Kwlimit   110
+</pre>
+</td></tr></table><p>
+<p><h3>File: taxon.pxrnk</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Secondary
+Compress  Yes
+Pages     54
+Order     68
+Fill      45
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     169
+Count     17
+Fullcount 41
+Kwlimit   16
+</pre>
+</td></tr></table><p>
+<p><h3>File: taxon.pxup</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Type      Identifier
+Compress  Yes
+Pages     15
+Order     99
+Fill      56
+Pagesize  2048
+Level     0
+Cachesize 100
+Order2    99
+Fill2     101
+Count     33
+Fullcount 41
+Kwlimit   7
+</pre>
+</td></tr></table><p>
+<p><h3>File: taxon.xac</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: taxon.xgc</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: taxon.xid</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: taxon.xmgc</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: taxon.xtax</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: taxon.xrnk</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: taxon.xup</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.

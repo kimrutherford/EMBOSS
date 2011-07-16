@@ -129,8 +129,8 @@ Output file [laci_ecoli.showpep]:
    the sequence to be lowercase).
 
 
-% showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -slower -upper '17-17,22-22
-'
+% showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -slower -upper "17-17,22-22
+"
 Displays protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]:
 
@@ -142,8 +142,8 @@ Output file [laci_ecoli.showpep]:
    Add your own annotation to the display:
 
 
-% showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 2 -send 120 -annotation '6-25
- binding site 17-17 SNP 22-22 SNP'
+% showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 2 -send 120 -annotation "6-25
+ binding site 17-17 SNP 22-22 SNP"
 Displays protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]:
 
@@ -153,7 +153,7 @@ Output file [laci_ecoli.showpep]:
 Command line arguments
 
 Displays protein sequences with features in pretty format
-Version: EMBOSS:6.3.0
+Version: EMBOSS:6.4.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) protein sequence(s) filename and
@@ -337,7 +337,24 @@ Version: EMBOSS:6.3.0
 
 Input file format
 
-   showpep reads normal sequence USAs.
+   showpep reads one or more protein sequences.
+
+   The input is a standard EMBOSS sequence query (also known as a 'USA').
+
+   Major sequence database sources defined as standard in EMBOSS
+   installations include srs:embl, srs:uniprot and ensembl
+
+   Data can also be read from sequence output in any supported format
+   written by an EMBOSS or third-party application.
+
+   The input format can be specified by using the command-line qualifier
+   -sformat xxx, where 'xxx' is replaced by the name of the required
+   format. The available format names are: gff (gff3), gff2, embl (em),
+   genbank (gb, refseq), ddbj, refseqp, pir (nbrf), swissprot (swiss, sw),
+   dasgff and debug.
+
+   See: http://emboss.sf.net/docs/themes/SequenceFormats.html for further
+   information on sequence formats.
 
   Input files for usage example
 
@@ -533,7 +550,7 @@ SQ   SEQUENCE   132 AA;  15305 MW;  DC437F60F20C14F5 CRC64;
  4   5       this is like 12-23, but smaller
 67   10348   interesting region
 
-   You can specifiy a file of ranges to highlight in a different colour
+   You can specify a file of ranges to highlight in a different colour
    when outputting in HTML format (using the '-html' qualifier) by giving
    the '-highlight' qualifier the value '@' followed by the name of the
    file containing the ranges. (eg: '-highlight @myfile').
@@ -544,10 +561,8 @@ SQ   SEQUENCE   132 AA;  15305 MW;  DC437F60F20C14F5 CRC64;
    is' when specifying the colour in HTML in a '' construct, (where 'xxx'
    is the name of the colour).
 
-   The standard names of HTML font colours are given in:
-   http://http://www.w3.org/TR/REC-html40/types.html and
-   http://www.ausmall.com.au/freegraf/ncolour2.htm and
-   http://mindprod.com/htmlcolours.html (amongst other places).
+   The standard names of HTML font colours are given in
+   http://http://www.w3.org/TR/REC-html40/types.html#h-6.5
 
    An example highlight range file is:
 
@@ -981,19 +996,17 @@ See also
                    Program name                            Description
                    abiview      Display the trace in an ABI sequencer file
                    cirdna       Draws circular maps of DNA constructs
+                   iep          Calculate the isoelectric point of proteins
                    lindna       Draws linear maps of DNA constructs
+                   pepinfo      Plot amino acid properties of a protein sequence in parallel
                    pepnet       Draw a helical net for a protein sequence
                    pepwheel     Draw a helical wheel diagram for a protein sequence
+                   plotorf      Plot potential open reading frames in a nucleotide sequence
                    prettyplot   Draw a sequence alignment with pretty formatting
                    prettyseq    Write a nucleotide sequence and its translation to file
                    remap        Display restriction enzyme binding sites in a nucleotide sequence
-                   seealso      Finds programs with similar function to a specified program
-                   showalign    Display a multiple sequence alignment in pretty format
-                   showdb       Displays information on configured databases
                    showfeat     Display features of a sequence in pretty format
-                   showseq      Displays sequences with features in pretty format
                    sixpack      Display a DNA sequence with 6-frame translation and ORFs
-                   textsearch   Search the textual description of sequence(s)
 
 Author(s)
 
