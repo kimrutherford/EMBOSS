@@ -1,11 +1,4 @@
-The EMBOSS package for Debian was initially prepared by Matt Hope
-(dopey@debian.org) in 2002-2004 and released on
-(http://debian.bioinformatics.unsw.edu.au/). The package distributed in Debian
-was prepared by the "pkg-emboss" project in 2006, using the work of Matt Hope
-as a starting point. The packaging work of the pkg-emboss project is in the
-public domain unless stated otherwise.
-
-Source: ftp://emboss.open-bio.org/pub/EMBOSS/EMBOSS-6.2.0.tar.gz
+Source: ftp://emboss.open-bio.org/pub/EMBOSS/EMBOSS-6.4.0.tar.gz
 
 ------------------------------------------------------------------------
 EMBOSS License (http://emboss.sourceforge.net/licence/)
@@ -174,6 +167,18 @@ Comment: Four comments:
  .
  4) The documentation files contain full copies of UniProt records as
  examples of input, and therefore are not false positives.
+
+
+DEBIAN PACKAGING
+----------------
+
+The EMBOSS package for Debian was initially prepared by Matt Hope
+(dopey@debian.org) in 2002-2004 and released on
+(http://debian.bioinformatics.unsw.edu.au/). The package distributed in Debian
+was prepared by the "pkg-emboss" project in 2006, using the work of Matt Hope
+as a starting point. The packaging work of the pkg-emboss project is in the
+public domain unless stated otherwise.
+
 
 AUTHORS OF EMBOSS
 -----------------

@@ -1,8 +1,9 @@
-emboss (6.3.1-7) UNRELEASED; urgency=low
+emboss (6.4.0-1) UNRELEASED; urgency=low
 
+  * New upstream release.
   * Removed calls to dh_makeshlibs in debian/rules (closes: #595613).
 
- -- Charles Plessy <plessy@debian.org>  Sat, 02 Oct 2010 18:48:38 +0900
+ -- Charles Plessy <plessy@debian.org>  Wed, 20 Jul 2011 13:22:15 +0900
 
 emboss (6.3.1-6) unstable; urgency=low
 
