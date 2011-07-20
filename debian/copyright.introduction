@@ -136,6 +136,45 @@ ZLIB LICENSE
   jloup@gzip.org          madler@alumni.caltech.edu
 
 
+(NOT SO) NON-FREE DATA IN THE TEST SUITE AND THE EXAMPLES ?
+-----------------------------------------------------------
+
+Files : doc/programs/html/antigenic.html
+ doc/programs/html/pasteseq.html
+ doc/programs/html/showpep.html
+ doc/programs/master/emboss/apps/inc/acdc.input
+ doc/programs/master/emboss/apps/inc/acdlog.input
+ doc/programs/master/emboss/apps/inc/acdtrace.input
+ doc/programs/master/emboss/apps/inc/antigenic.input
+ doc/programs/master/emboss/apps/inc/pasteseq.input
+ doc/programs/master/emboss/apps/inc/showpep.input
+ doc/programs/text/antigenic.txt
+ doc/programs/text/pasteseq.txt
+ doc/programs/text/showpep.txt
+ emboss/data/dbxref.txt
+ test/data/amir.swiss
+ test/data/uniprotft.sw
+ test/swiss/seq.dat
+ test/swnew/trembl.dat
+Copyright: UniProt Consortium
+License: CC-BY-ND-3.0
+ Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+ Distributed under the Creative Commons Attribution-NoDerivs License
+Comment: Four comments:
+ 1) The version number of CC-BY-ND was dertermined according to the URL that
+ is included in ‘http://www.uniprot.org/terms’.
+ .
+ 2) The same page also links to ‘http://sciencecommons.org/resources/faq/databases/’,
+ which contains arguments that the files documented in this paragraph are not
+ copyrightable.  While this remains to be confirmed, I will give them the benefit
+ of the doubt for the moment.  See ‘http://lists.debian.org/20110720013742.GB4831@merveille.plessy.net’
+ for more discussion on the subject -- CP, Wed Jul 20, 2011
+ .
+ 3) Found with ‘git grep 'Copyrighted by the UniProt Consortium' | cut -f1 -d':' | sort -u’
+ .
+ 4) The documentation files contain full copies of UniProt records as
+ examples of input, and therefore are not false positives.
+
 AUTHORS OF EMBOSS
 -----------------
 
