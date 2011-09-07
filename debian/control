@@ -10,7 +10,7 @@ Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchar
 #Build-Depends-Indep: default-jdk
 Vcs-Browser: http://git.debian.org/?p=debian-med/emboss.git
 Vcs-Git: git://git.debian.org/git/debian-med/emboss.git
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Homepage: http://emboss.sourceforge.net
 
 Package: emboss
