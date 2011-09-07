@@ -40,7 +40,7 @@ Notes about how this package is tested
 The EMBOSS packages for Debian are tested during the build process by running
 the regression checks of the ‘test/qa/qatest.csh’ script. You can consult the
 results in the build logs available at ‘http://buildd.debian.org/emboss’. In
-addition, the packages are tested locally by the developper performing the
+addition, the packages are tested locally by the developer performing the
 upload, by running a couple of very simple programs like ‘embossversion’ and
 ‘tfm’.
 
