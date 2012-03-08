@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 DM-Upload-Allowed: yes
 Uploaders: Charles Plessy <plessy@debian.org>, Nelson A. de Oliveira <naoliv@debian.org>
-Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng12-dev, libexpat1-dev, libhpdf-dev, libmysqlclient-dev, libpq-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell,
+Build-Depends: debhelper (>= 7), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng-dev, libexpat1-dev, libhpdf-dev, libmysqlclient-dev, libpq-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell,
 # Needed until the following is solved: https://sourceforge.net/tracker/?func=detail&aid=3033326&group_id=93650&atid=605031 
  default-jdk
 #Build-Depends-Indep: default-jdk
