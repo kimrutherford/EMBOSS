@@ -52,7 +52,7 @@ clean: unpatch
 	find jemboss/ -type f -name "*.class" | xargs -r rm -f
 	rm --force --recursive debian/emboss_tmp
 	$(RM) config.status install-stamp
-	dh_clean debian/copyright config.sub config.guess test-stamp
+	dh_clean config.sub config.guess test-stamp
 	[ ! -f /usr/bin/git ] || git checkout config.sub config.guess
 
 install: build install-stamp
