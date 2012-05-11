@@ -35,8 +35,11 @@ include /usr/share/quilt/quilt.make
 build: config.status patch build-stamp
 build-stamp:
 	dh_testdir
-	$(MAKE) AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\" LDFLAGS="$(DEB_LDFLAGS)"
+	dh_auto_build
 	touch build-stamp
+	
+override_dh_auto_build:
+	dh_auto_build -- AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\" LDFLAGS="$(DEB_LDFLAGS)"
 
 # In order to use this rule you must install libemboss-acd-perl, xsltproc, docbook-xml and docbook-xsl
 manpages: debian/manpages/success
