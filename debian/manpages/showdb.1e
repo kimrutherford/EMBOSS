@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: SHOWDB
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 07/20/2010
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 05/11/2012
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.3.1
+.\"    Source: EMBOSS 6.4.0
 .\"  Language: English
 .\"
-.TH "SHOWDB" "1e" "07/20/2010" "EMBOSS 6.3.1" "EMBOSS Manual for Debian"
+.TH "SHOWDB" "1e" "05/11/2012" "EMBOSS 6.4.0" "EMBOSS Manual for Debian"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -31,13 +31,13 @@
 showdb \- Displays information on configured databases
 .SH "SYNOPSIS"
 .HP \w'\fBshowdb\fR\ 'u
-\fBshowdb\fR [\fB\-database\ \fR\fB\fIstring\fR\fR] [\fB\-html\ \fR\fB\fIboolean\fR\fR] [\fB\-protein\ \fR\fB\fIboolean\fR\fR] [\fB\-nucleic\ \fR\fB\fIboolean\fR\fR] [\fB\-full\ \fR\fB\fIboolean\fR\fR] [\fB\-methods\ \fR\fB\fIboolean\fR\fR] [\fB\-fields\ \fR\fB\fIboolean\fR\fR] [\fB\-defined\ \fR\fB\fIboolean\fR\fR] [\fB\-release\ \fR\fB\fIboolean\fR\fR] \fB\-only\ \fR\fB\fItoggle\fR\fR \fB\-heading\ \fR\fB\fIboolean\fR\fR \fB\-type\ \fR\fB\fIboolean\fR\fR \fB\-id\ \fR\fB\fIboolean\fR\fR \fB\-query\ \fR\fB\fIboolean\fR\fR \fB\-all\ \fR\fB\fIboolean\fR\fR \fB\-comment\ \fR\fB\fIboolean\fR\fR [\fB\-outfile\ \fR\fB\fIoutfile\fR\fR]
+\fBshowdb\fR [\fB\-database\ \fR\fB\fIstring\fR\fR] [\fB\-html\ \fR\fB\fIboolean\fR\fR] [\fB\-protein\ \fR\fB\fIboolean\fR\fR] [\fB\-nucleic\ \fR\fB\fIboolean\fR\fR] [\fB\-sequence\ \fR\fB\fIboolean\fR\fR] [\fB\-feature\ \fR\fB\fIboolean\fR\fR] [\fB\-text\ \fR\fB\fIboolean\fR\fR] [\fB\-taxonomy\ \fR\fB\fIboolean\fR\fR] [\fB\-resource\ \fR\fB\fIboolean\fR\fR] [\fB\-assembly\ \fR\fB\fIboolean\fR\fR] [\fB\-obo\ \fR\fB\fIboolean\fR\fR] [\fB\-full\ \fR\fB\fIboolean\fR\fR] [\fB\-methods\ \fR\fB\fIboolean\fR\fR] [\fB\-fields\ \fR\fB\fIboolean\fR\fR] [\fB\-defined\ \fR\fB\fIboolean\fR\fR] [\fB\-release\ \fR\fB\fIboolean\fR\fR] \fB\-only\ \fR\fB\fItoggle\fR\fR \fB\-heading\ \fR\fB\fIboolean\fR\fR \fB\-type\ \fR\fB\fIboolean\fR\fR \fB\-id\ \fR\fB\fIboolean\fR\fR \fB\-query\ \fR\fB\fIboolean\fR\fR \fB\-all\ \fR\fB\fIboolean\fR\fR \fB\-comment\ \fR\fB\fIboolean\fR\fR [\fB\-outfile\ \fR\fB\fIoutfile\fR\fR]
 .HP \w'\fBshowdb\fR\ 'u
 \fBshowdb\fR \fB\-help\fR
 .SH "DESCRIPTION"
 .PP
 \fBshowdb\fR
-is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Display,Information" command group(s)\&.
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Data resources" command group(s)\&.
 .SH "OPTIONS"
 .SS "Input section"
 .PP
@@ -57,6 +57,41 @@ Default value: Y
 .RE
 .PP
 \fB\-nucleic\fR \fIboolean\fR
+.RS 4
+Default value: Y
+.RE
+.PP
+\fB\-sequence\fR \fIboolean\fR
+.RS 4
+Default value: Y
+.RE
+.PP
+\fB\-feature\fR \fIboolean\fR
+.RS 4
+Default value: Y
+.RE
+.PP
+\fB\-text\fR \fIboolean\fR
+.RS 4
+Default value: Y
+.RE
+.PP
+\fB\-taxonomy\fR \fIboolean\fR
+.RS 4
+Default value: Y
+.RE
+.PP
+\fB\-resource\fR \fIboolean\fR
+.RS 4
+Default value: Y
+.RE
+.PP
+\fB\-assembly\fR \fIboolean\fR
+.RS 4
+Default value: Y
+.RE
+.PP
+\fB\-obo\fR \fIboolean\fR
 .RS 4
 Default value: Y
 .RE

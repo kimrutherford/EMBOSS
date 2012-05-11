@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: WOSSNAME
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 07/20/2010
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 05/11/2012
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.3.1
+.\"    Source: EMBOSS 6.4.0
 .\"  Language: English
 .\"
-.TH "WOSSNAME" "1e" "07/20/2010" "EMBOSS 6.3.1" "EMBOSS Manual for Debian"
+.TH "WOSSNAME" "1e" "05/11/2012" "EMBOSS 6.4.0" "EMBOSS Manual for Debian"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -37,7 +37,7 @@ wossname \- Finds programs by keywords in their short description
 .SH "DESCRIPTION"
 .PP
 \fBwossname\fR
-is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Information" command group(s)\&.
+is a command line program from EMBOSS (\(lqthe European Molecular Biology Open Software Suite\(rq)\&. It is part of the "Documentation" command group(s)\&.
 .SH "OPTIONS"
 .SS "Input section"
 .PP
@@ -102,7 +102,7 @@ If you are sending the output to a file, this will format it for displaying as a
 .PP
 \fB\-groups\fR \fIboolean\fR
 .RS 4
-If you use this option, then only the group names will output to the file Default value: N
+If you use this option, then only the group names will be output to the file Default value: N
 .RE
 .PP
 \fB\-alphabetic\fR \fIboolean\fR

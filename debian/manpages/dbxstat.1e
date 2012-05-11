@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: DBXSTAT
 .\"    Author: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
-.\"      Date: 07/20/2010
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 05/11/2012
 .\"    Manual: EMBOSS Manual for Debian
-.\"    Source: EMBOSS 6.3.1
+.\"    Source: EMBOSS 6.4.0
 .\"  Language: English
 .\"
-.TH "DBXSTAT" "1e" "07/20/2010" "EMBOSS 6.3.1" "EMBOSS Manual for Debian"
+.TH "DBXSTAT" "1e" "05/11/2012" "EMBOSS 6.4.0" "EMBOSS Manual for Debian"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -31,7 +31,7 @@
 dbxstat \- Dump statistics for dbx databases
 .SH "SYNOPSIS"
 .HP \w'\fBdbxstat\fR\ 'u
-\fBdbxstat\fR \fB\-dbname\ \fR\fB\fIstring\fR\fR \fB\-indexdir\ \fR\fB\fIdirectory\fR\fR \fB\-idtype\ \fR\fB\fIlist\fR\fR \fB\-minimum\ \fR\fB\fIinteger\fR\fR \fB\-maximum\ \fR\fB\fIinteger\fR\fR \fB\-outfile\ \fR\fB\fIoutfile\fR\fR
+\fBdbxstat\fR \fB\-dbname\ \fR\fB\fIstring\fR\fR \fB\-field\ \fR\fB\fIstring\fR\fR \fB\-indexdir\ \fR\fB\fIdirectory\fR\fR \fB\-minimum\ \fR\fB\fIinteger\fR\fR \fB\-maximum\ \fR\fB\fIinteger\fR\fR \fB\-$(dbname)\ \fR\fB\fIoutfile\fR\fR
 .HP \w'\fBdbxstat\fR\ 'u
 \fBdbxstat\fR \fB\-help\fR
 .SH "DESCRIPTION"
@@ -45,14 +45,13 @@ is a command line program from EMBOSS (\(lqthe European Molecular Biology Open S
 .RS 4
 .RE
 .PP
-\fB\-indexdir\fR \fIdirectory\fR
-.RS 4
-Default value: \&.
-.RE
-.PP
-\fB\-idtype\fR \fIlist\fR
+\fB\-field\fR \fIstring\fR
 .RS 4
 Default value: id
+.RE
+.PP
+\fB\-indexdir\fR \fIdirectory\fR
+.RS 4
 .RE
 .SS "Required section"
 .SS "Advanced section"
@@ -67,7 +66,7 @@ Default value: 1
 .RE
 .SS "Output section"
 .PP
-\fB\-outfile\fR \fIoutfile\fR
+\fB\-$(dbname)\fR \fIoutfile\fR
 .RS 4
 .RE
 .SH "BUGS"
