@@ -32,7 +32,7 @@ config.status:
 
 include /usr/share/quilt/quilt.make
 
-build: config.status patch debian/copyright build-stamp
+build: config.status patch build-stamp
 build-stamp:
 	dh_testdir
 	$(MAKE) AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\" LDFLAGS="$(DEB_LDFLAGS)"
@@ -43,11 +43,6 @@ manpages: debian/manpages/success
 debian/manpages/success:
 	debian/build-manpages.sh
 	echo "The manpages have been sucessfully built" > debian/manpages/success
-
-debian/copyright:
-	cat debian/copyright.introduction > $@
-	cat "AUTHORS" >> $@
-	cat "THANKS" >> $@
 
 clean: unpatch
 	dh_testdir
