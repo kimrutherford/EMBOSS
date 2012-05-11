@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-#export DH_VERBOSE=1
+export DH_VERBOSE=1
 
 VERSION := $(shell dpkg-parsechangelog | grep Ver | cut -d' ' -f2 | cut -d- -f1)
 RENAMED := cons pscan
