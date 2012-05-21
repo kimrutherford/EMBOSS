@@ -10,8 +10,7 @@ EMBOSS      = $(CURDIR)/debian/emboss
 EMBOSS-TEST = $(CURDIR)/debian/emboss-test
 EMBOSS-LIB  = $(CURDIR)/debian/emboss-lib
 
-CONFFLAGS   = --prefix=/usr
-CONFFLAGS   += --bindir=/usr/lib/emboss
+CONFFLAGS    = --bindir=/usr/lib/emboss
 CONFFLAGS   += --libdir=/usr/lib/emboss/lib
 CONFFLAGS   += --includedir=/usr/lib/emboss/include
 CONFFLAGS   += --enable-systemlibs
@@ -24,19 +23,16 @@ DEB_LDFLAGS += $(shell mysql_config --libs)
 DEB_LDFLAGS += -lpq
 #DEB_LDFLAGS += $(shell pg_config  | grep LIBS | cut -f2 -d=)
 
-config.status:
-	dh_testdir
-	ln -sf /usr/share/misc/config.sub .
-	ln -sf /usr/share/misc/config.guess .
-	./configure $(CONFFLAGS)
-
 include /usr/share/quilt/quilt.make
 
-build: config.status patch build-stamp
+build: patch build-stamp
 build-stamp:
-	dh_testdir
-	dh_auto_build
+	dh build
 	touch build-stamp
+
+override_dh_auto_configure:
+	dh_autotools-dev_updateconfig
+	dh_auto_configure -- $(CONFFLAGS)
 	
 override_dh_auto_build:
 	dh_auto_build -- AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\" LDFLAGS="$(DEB_LDFLAGS)"
@@ -50,6 +46,7 @@ debian/manpages/success:
 clean: unpatch
 	dh_testdir
 	dh_testroot
+	dh_autotools-dev_restoreconfig
 	dh_auto_clean
 	dh_clean
 
@@ -57,8 +54,7 @@ override_dh_clean:
 	rm --force --recursive debian/emboss_tmp
 	find jemboss/ -type f -name "*.class" | xargs -r rm -f
 	[ ! -d debian/testbackup ] || ( $(RM) --recursive test ; mv debian/testbackup test )
-	dh_clean config.sub config.guess config.status test-stamp install-stamp
-	[ ! -f /usr/bin/git ] || git checkout config.sub config.guess
+	dh_clean config.status test-stamp install-stamp
 
 install: build install-stamp
 install-stamp:
