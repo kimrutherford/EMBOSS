@@ -44,13 +44,10 @@ debian/manpages/success:
 	echo "The manpages have been sucessfully built" > debian/manpages/success
 
 clean: unpatch
-	dh_testdir
-	dh_testroot
-	dh_autotools-dev_restoreconfig
-	dh_auto_clean
-	dh_clean
+	dh clean
 
 override_dh_clean:
+	dh_autotools-dev_restoreconfig
 	rm --force --recursive debian/emboss_tmp
 	find jemboss/ -type f -name "*.class" | xargs -r rm -f
 	[ ! -d debian/testbackup ] || ( $(RM) --recursive test ; mv debian/testbackup test )
