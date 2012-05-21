@@ -2,6 +2,9 @@
 
 export DH_VERBOSE=1
 
+%:
+	dh $@ --with autotools-dev,quilt
+
 VERSION := $(shell dpkg-parsechangelog | grep Ver | cut -d' ' -f2 | cut -d- -f1)
 RENAMED := cons pscan
 
@@ -17,18 +20,10 @@ CONFFLAGS   += --enable-systemlibs
 CONFFLAGS   += --with-java=/usr/lib/jvm/default-java/include
 CONFFLAGS   += --with-javaos=/usr/lib/jvm/default-java/include/linux
 
-
 DEB_LDFLAGS += -lexpat
 DEB_LDFLAGS += $(shell mysql_config --libs)
 DEB_LDFLAGS += -lpq
 #DEB_LDFLAGS += $(shell pg_config  | grep LIBS | cut -f2 -d=)
-
-include /usr/share/quilt/quilt.make
-
-build: patch build-stamp
-build-stamp:
-	dh build
-	touch build-stamp
 
 override_dh_auto_configure:
 	dh_autotools-dev_updateconfig
@@ -37,15 +32,6 @@ override_dh_auto_configure:
 override_dh_auto_build:
 	dh_auto_build -- AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\" LDFLAGS="$(DEB_LDFLAGS)"
 
-# In order to use this rule you must install libemboss-acd-perl, xsltproc, docbook-xml and docbook-xsl
-manpages: debian/manpages/success
-debian/manpages/success:
-	debian/build-manpages.sh
-	echo "The manpages have been sucessfully built" > debian/manpages/success
-
-clean: unpatch
-	dh clean
-
 override_dh_clean:
 	dh_autotools-dev_restoreconfig
 	rm --force --recursive debian/emboss_tmp
@@ -53,13 +39,7 @@ override_dh_clean:
 	[ ! -d debian/testbackup ] || ( $(RM) --recursive test ; mv debian/testbackup test )
 	dh_clean config.status test-stamp install-stamp
 
-install: build install-stamp
-install-stamp:
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
-
+override_dh_auto_install:
 	### Binaries and data go to a temporary dir before being moved to their own package ###
 	$(MAKE) -C emboss install DESTDIR=$(EMBOSS-TMP)
 
@@ -96,11 +76,7 @@ install-stamp:
 	sed -i "/SET emboss_qadata/cSET emboss_qadata /usr/share/EMBOSS/test" $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc
 	mv $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc $(CURDIR)/debian/emboss-test/etc/emboss/embossrc.d/emboss-test
 
-	touch install-stamp
-
-test: build test-stamp
-test-stamp:
-ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+override_dh_auto_test:
 	$(RM) test-stamp
 	[ -d debian/testbackup ] || cp -a test debian/testbackup
 	sed -i "/SET emboss_tempdata/cSET emboss_tempdata $(CURDIR)/test" test/.embossrc
@@ -109,40 +85,22 @@ ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	echo "SET emboss_data $(CURDIR)/emboss/data" >> test/.embossrc
 	echo "SET emboss_docroot $(CURDIR)/doc" >> test/.embossrc
 	cd test/qa && LS_COLORS='' EMBOSSRC=$(CURDIR)/test PATH=$(CURDIR)/emboss:$$PATH EMBOSS_ROOT=../../../ ./qatest.csh
-	touch test-stamp
-endif
-
-binary-indep: build install
-	dh binary-indep
-
-binary-arch: build install test
-	dh_testdir -a
-	dh_testroot -a
-	dh_installchangelogs -a ChangeLog
-	dh_installdocs -a
-	dh_lintian -a
-#	dh_installmenu -a
-#	dh_desktop -a
-#	dh_installmime -a
-	dh_install -a
 	
-	# Install the manpages and provide a symlink for the renamed binaries.
+override_dh_installchangelogs:
+	dh_installchangelogs -a ChangeLog
+	
+override_dh_installman:
 	dh_installman -a -p emboss
 	for i in $(RENAMED) ; \
 		do dh_link usr/share/man/man1/$$i.1e.gz usr/share/man/man1/em_$$i.1e.gz ; \
 		done
 	
-	dh_strip -a
-	dh_compress -a
-	dh_fixperms -a
-	dh_installdeb -a
-	dh_shlibdeps -a
-	dh_gencontrol -a
-	dh_md5sums -a
-	dh_builddeb -a
-
 override_dh_builddeb:
 	dh_builddeb -- -Z xz
 
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary
+
+# Target to refresh the manpages; needs libemboss-acd-perl, xsltproc, docbook-xml and docbook-xsl
+manpages: debian/manpages/success
+debian/manpages/success:
+	debian/build-manpages.sh
+	echo "The manpages have been sucessfully built" > debian/manpages/success
