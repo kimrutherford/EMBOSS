@@ -6,8 +6,8 @@ Description: Browse the documentation with default pager.
  alternatives system. With this patch, `tfm' will use `/usr/bin/pager' by
  default, which points on the user's favorite pager.
 License: as if it were public domain.
---- emboss.orig/emboss/tfm.c
-+++ emboss/emboss/tfm.c
+--- emboss-6.4.0.orig/emboss/tfm.c
++++ emboss-6.4.0/emboss/tfm.c
 @@ -87,7 +87,7 @@
  	    if(shellpager)
  		ajStrAssignC(&pager,shellpager);

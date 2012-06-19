@@ -3,14 +3,16 @@ Section: science
 Priority: optional
 Maintainer: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
 DM-Upload-Allowed: yes
-Uploaders: Charles Plessy <plessy@debian.org>, Nelson A. de Oliveira <naoliv@debian.org>
-Build-Depends: debhelper (>= 9), quilt, libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng-dev, libexpat1-dev, libhpdf-dev, libmysqlclient-dev, libpq-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell,
+Uploaders: Charles Plessy <plessy@debian.org>,
+ Nelson A. de Oliveira <naoliv@debian.org>,
+ Andreas Tille <tille@debian.org>
+Build-Depends: debhelper (>= 9), libx11-dev, x11proto-core-dev, libgdchart-gd2-xpm-dev, zlib1g-dev, libpng-dev, libexpat1-dev, libhpdf-dev, libmysqlclient-dev, libpq-dev, antiword, sharutils, autotools-dev, tcsh | csh | c-shell,
 # Needed until the following is solved: https://sourceforge.net/tracker/?func=detail&aid=3033326&group_id=93650&atid=605031 
  default-jdk
 #Build-Depends-Indep: default-jdk
 Vcs-Browser: http://git.debian.org/?p=debian-med/emboss.git
 Vcs-Git: git://git.debian.org/git/debian-med/emboss.git
-Standards-Version: 3.9.2
+Standards-Version: 3.9.3
 Homepage: http://emboss.sourceforge.net
 
 Package: emboss
@@ -18,7 +20,7 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, emboss-lib (= ${binary:Version}), emboss-data (= ${source:Version})
 Recommends: primer3, dialign
 Suggests: emboss-doc, emboss-test, embassy, clustalw
-Description: the european molecular biology open software suite
+Description: european molecular biology open software suite
  EMBOSS is a free Open Source software analysis package specially developed for
  the needs of the molecular biology (e.g. EMBnet) user community. The software
  automatically copes with data in a variety of formats and even allows

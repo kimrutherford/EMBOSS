@@ -1,9 +1,9 @@
 Author: Charles Plessy
 Forwarded: https://sourceforge.net/tracker/?func=detail&aid=2877960&group_id=93650&atid=605031
 Description: Corrects the name of the directory where tfm looks for HTML documentation.
---- emboss.orig/emboss/tfm.c
-+++ emboss/emboss/tfm.c
-@@ -215,7 +215,7 @@
+--- emboss-6.4.0.orig/emboss/tfm.c
++++ emboss-6.4.0/emboss/tfm.c
+@@ -231,7 +231,7 @@
  	**  if that didn't work then try the doc directory from the
  	**  distribution tarball
  	*/
