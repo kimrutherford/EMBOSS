@@ -79,6 +79,7 @@ override_dh_auto_install:
 	sed -i "/SET emboss_tempdata/cSET emboss_tempdata /usr/share/EMBOSS/test" $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc
 	sed -i "/SET emboss_qadata/cSET emboss_qadata /usr/share/EMBOSS/test" $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc
 	mv $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/.embossrc $(CURDIR)/debian/emboss-test/etc/emboss/embossrc.d/emboss-test
+	find $(CURDIR)/debian/emboss-test/usr/share/EMBOSS/test/data -executable -type f -exec chmod a-x \{\} \;
 
 override_dh_auto_test:
 	$(RM) test-stamp
