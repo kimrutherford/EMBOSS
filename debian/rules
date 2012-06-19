@@ -41,7 +41,7 @@ override_dh_clean:
 	rm --force --recursive debian/emboss_tmp
 	find jemboss/ -type f -name "*.class" | xargs -r rm -f
 	[ ! -d debian/testbackup ] || ( $(RM) --recursive test ; mv debian/testbackup test )
-	dh_clean config.status test-stamp install-stamp
+	dh_clean  --exclude=feattext.html~ config.status test-stamp install-stamp
 
 override_dh_auto_install:
 	### Binaries and data go to a temporary dir before being moved to their own package ###

@@ -10,6 +10,7 @@ emboss (6.4.0-1) UNRELEASED; urgency=low
   * debian/rules:
      - Make sure every binary package has a changelog file
      - enable hardening
+     - do not clean backup file which is part of upstream tarball
   * debian/control:
      - remove article from description
      - Standards-Version: 3.9.3 (no changes needed)
