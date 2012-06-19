@@ -7,7 +7,9 @@ emboss (6.4.0-1) UNRELEASED; urgency=low
 
   [ Andreas Tille ]
   * debian/upstream: separate reference section
-  * debian/rules: Make sure every binary package has a changelog file
+  * debian/rules:
+     - Make sure every binary package has a changelog file
+     - enable hardening
 
  -- Charles Plessy <plessy@debian.org>  Wed, 20 Jul 2011 13:22:15 +0900
 

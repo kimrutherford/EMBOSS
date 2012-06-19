@@ -20,9 +20,13 @@ CONFFLAGS   += --enable-systemlibs
 CONFFLAGS   += --with-java=/usr/lib/jvm/default-java/include
 CONFFLAGS   += --with-javaos=/usr/lib/jvm/default-java/include/linux
 
+CPPFLAGS:=$(shell dpkg-buildflags --get CPPFLAGS)
+CFLAGS:=$(shell dpkg-buildflags --get CFLAGS)
+
 DEB_LDFLAGS += -lexpat
 DEB_LDFLAGS += $(shell mysql_config --libs)
 DEB_LDFLAGS += -lpq
+DEB_LDFLAGS += $(shell dpkg-buildflags --get LDFLAGS)
 #DEB_LDFLAGS += $(shell pg_config  | grep LIBS | cut -f2 -d=)
 
 override_dh_auto_configure:
@@ -30,7 +34,7 @@ override_dh_auto_configure:
 	dh_auto_configure -- $(CONFFLAGS)
 	
 override_dh_auto_build:
-	dh_auto_build -- AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\" LDFLAGS="$(DEB_LDFLAGS)"
+	dh_auto_build -- AJAX_FIXED_ROOT=\\\"/usr/share/EMBOSS\\\" CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" LDFLAGS="$(DEB_LDFLAGS)"
 
 override_dh_clean:
 	dh_autotools-dev_restoreconfig
