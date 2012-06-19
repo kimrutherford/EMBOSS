@@ -71,6 +71,8 @@ override_dh_auto_install:
 	uudecode -o $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/EMBOSS_qg.pdf $(CURDIR)/debian/EMBOSS_qg_new.pdf.uu
 
 	$(MAKE) -C jemboss install DESTDIR=$(CURDIR)/debian/jemboss bindir=/usr/bin
+	# install target seems to remove executable flag which is claimed by lintian
+	find $(CURDIR)/debian/jemboss/usr/share/EMBOSS/jemboss/utils -type f -not -executable -name "*sh" -exec chmod a+x \{\} \;
 	# dangling LICEN[CS]E FILE
 	rm $(CURDIR)/debian/jemboss/usr/share/EMBOSS/jemboss/LICENSE
 

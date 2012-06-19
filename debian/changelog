@@ -12,6 +12,8 @@ emboss (6.4.0-1) UNRELEASED; urgency=low
      - enable hardening
      - do not clean backup file which is part of upstream tarball
      - remove executable flag from some test data
+     - restore executable flag of some jemboss utils which seems to
+       be removed by install target
   * debian/control:
      - remove article from description
      - Standards-Version: 3.9.3 (no changes needed)
