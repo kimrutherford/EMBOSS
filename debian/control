@@ -68,6 +68,8 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Conflicts: libajax5, libajax6, libajax5-dev, libajax6-dev, libnucleus5, libnucleus6, libnucleus5-dev, libnucleus6-dev
 Replaces: libajax5, libajax6, libajax5-dev, libajax6-dev, libnucleus5, libnucleus6, libnucleus5-dev, libnucleus6-dev
+Breaks: embassy-domainatrix (<= 0.1.0+20100721-3), embassy-domalign (<= 0.1.0+20100721-3),
+ embassy-domsearch (<= 0.1.0++20100721-3), embassy-phylip (<= 3.69+20100721-3)
 Description: EMBOSS Libraries
  This package contains the core libraries of the European Molecular Biology
  Open Software Suite, EMBOSS.
