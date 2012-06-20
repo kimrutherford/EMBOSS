@@ -17,11 +17,8 @@ emboss (6.4.0-1) UNRELEASED; urgency=low
   * debian/control:
      - remove article from description
      - Standards-Version: 3.9.3 (no changes needed)
-  * debian/emboss.menu:
-     - menu section is calles Applications not Apps
-     - use submenu Science/Biology as root for the EMBOSS section
-  * debian/emboss.lintian-overrides: It makes really sense to create a
-    new section so silence lintian
+  * debian/emboss.menu: delete - chances that users will pick command
+    line programs from longish menu entries are pretty low
 
  -- Charles Plessy <plessy@debian.org>  Wed, 20 Jul 2011 13:22:15 +0900
 
