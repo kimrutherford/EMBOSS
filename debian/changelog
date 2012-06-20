@@ -1,9 +1,10 @@
-emboss (6.4.0-1) UNRELEASED; urgency=low
+emboss (6.4.0-1) unstable; urgency=low
 
   [ Charles Plessy ]
   * New upstream release.
   * Removed calls to dh_makeshlibs in debian/rules (closes: #595613).
   * Build on libpng-dev instead of libpng12-dev (closes: #662313).
+  * Breaks: EMBASSY <= 6.3.1 (debian/control).
 
   [ Andreas Tille ]
   * debian/upstream: separate reference section
@@ -22,7 +23,7 @@ emboss (6.4.0-1) UNRELEASED; urgency=low
   * debian/emboss-lib.lintian-overrides: Adapted string of lintian
     warning
 
- -- Charles Plessy <plessy@debian.org>  Wed, 20 Jul 2011 13:22:15 +0900
+ -- Charles Plessy <plessy@debian.org>  Wed, 20 Jun 2012 18:55:16 +0900
 
 emboss (6.3.1-6) unstable; urgency=low
 
