@@ -5,4 +5,4 @@
 # against Debian's zlib and expat libraries instead of the convenience code
 # copies in the original upstream sources.
 # -- Charles Plessy <plessy@debian.org>  Thu, 16 Sep 2010 20:27:09 +0900
-emboss-lib: embedded-library ./usr/lib/emboss/lib/libepcre.so.7.0.9: pcre3
+emboss-lib: embedded-library usr/lib/emboss/lib/libepcre.so.7.0.9: pcre3
