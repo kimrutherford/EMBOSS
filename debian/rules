@@ -43,7 +43,7 @@ override_dh_clean:
 	[ ! -d debian/testbackup ] || ( $(RM) --recursive test ; mv debian/testbackup test )
 	dh_clean  --exclude=feattext.html~ config.status test-stamp install-stamp
 
-override_dh_auto_install:
+override_dh_auto_install-arch:
 	### Binaries and data go to a temporary dir before being moved to their own package ###
 	$(MAKE) -C emboss install DESTDIR=$(EMBOSS-TMP)
 
@@ -70,6 +70,7 @@ override_dh_auto_install:
 	# Remove this file when the relicenced file becomes part of the upstream tarball.
 	uudecode -o $(CURDIR)/debian/emboss-doc/usr/share/EMBOSS/doc/manuals/EMBOSS_qg.pdf $(CURDIR)/debian/EMBOSS_qg_new.pdf.uu
 
+override_dh_auto_install-indep:
 	$(MAKE) -C jemboss install DESTDIR=$(CURDIR)/debian/jemboss bindir=/usr/bin
 	# install target seems to remove executable flag which is claimed by lintian
 	find $(CURDIR)/debian/jemboss/usr/share/EMBOSS/jemboss/utils -type f -not -executable -name "*sh" -exec chmod a+x \{\} \;
