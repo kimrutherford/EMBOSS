@@ -1,3 +1,10 @@
+emboss (6.4.0-2) unstable; urgency=low
+
+  * Separate architecture-dependant and independant targets in debian/rules.
+    This makes the package buildable again on our build farm.
+
+ -- Charles Plessy <plessy@debian.org>  Thu, 21 Jun 2012 14:31:59 +0900
+
 emboss (6.4.0-1) unstable; urgency=low
 
   [ Charles Plessy ]
