@@ -14,7 +14,7 @@ Build-Depends: debhelper (>= 9), quilt, libx11-dev, x11proto-core-dev,
  default-jdk
 #Build-Depends-Indep: default-jdk
 Vcs-Browser: http://git.debian.org/?p=debian-med/emboss.git
-Vcs-Git: git://git.debian.org/git/debian-med/emboss.git
+Vcs-Git: git://git.debian.org/debian-med/emboss.git
 Standards-Version: 3.9.3
 Homepage: http://emboss.sourceforge.net
 
