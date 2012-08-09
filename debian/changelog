@@ -1,4 +1,4 @@
-emboss (6.4.0-3) UNRELEASED; urgency=low
+emboss (6.4.0-3) unstable; urgency=low
 
   * Import patches prepared by Felix Geyer <fgeyer@debian.org> to cope
     with the --as-needed issue when linking against database clients
