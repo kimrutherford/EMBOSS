@@ -1,3 +1,12 @@
+emboss (6.4.0-3) UNRELEASED; urgency=low
+
+  * Import patches prepared by Felix Geyer <fgeyer@debian.org> to cope
+    with the --as-needed issue when linking against database clients
+    (thanks to Felix)
+    Closes: #650237
+
+ -- Andreas Tille <tille@debian.org>  Thu, 09 Aug 2012 16:01:07 +0200
+
 emboss (6.4.0-2) unstable; urgency=low
 
   * Separate architecture-dependant and independant targets in debian/rules.

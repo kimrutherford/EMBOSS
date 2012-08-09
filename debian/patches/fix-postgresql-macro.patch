@@ -1,0 +1,29 @@
+Description: Enable linking pgsqlclient with linker set for --as-needed
+Author: Felix Geyer <fgeyer@debian.org>
+Date: Sun, 29 Jul 2012 22:07:33 +0200
+Bugs-Debian: http://bugs.debian.org/650237
+
+--- emboss-6.4.0.orig/m4/postgresql.m4
++++ emboss-6.4.0/m4/postgresql.m4
+@@ -96,10 +96,10 @@
+ dnl not be installed
+ 
+             EMBCPPFLAGS=$CPPFLAGS
+-	    EMBLDFLAGS=$LDFLAGS
++	    EMBLIBS=$LIBS
+             
+             CPPFLAGS="$POSTGRESSQL_CPPFLAGS $EMBCPPFLAGS"
+-	    LDFLAGS="$POSTGRESQL_LDFLAGS $EMBLDFLAGS"
++	    LIBS="$POSTGRESQL_LDFLAGS $EMBLIBS"
+ 
+             AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
+                                               #include "libpq-fe.h"]],
+@@ -108,7 +108,7 @@
+ 			   [havepostgresql=no])
+ 
+ 	    CPPFLAGS=$EMBCPPFLAGS
+-	    LDFLAGS=$EMBLDFLAGS
++	    LIBS=$EMBLIBS
+ 
+             if test "$havepostgresql" = yes; then
+                 AC_DEFINE([HAVE_POSTGRESQL], [1],

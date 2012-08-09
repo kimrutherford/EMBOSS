@@ -1,0 +1,29 @@
+Description: Enable linking mysqlclient with linker set for --as-needed
+Author: Felix Geyer <fgeyer@debian.org>
+Date: Sun, 29 Jul 2012 22:07:33 +0200
+Bugs-Debian: http://bugs.debian.org/650237
+
+--- emboss-6.4.0.orig/m4/mysql.m4
++++ emboss-6.4.0/m4/mysql.m4
+@@ -100,10 +100,10 @@
+ dnl not be installed
+ 
+             EMBCPPFLAGS=$CPPFLAGS
+-	    EMBLDFLAGS=$LDFLAGS
++	    EMBLIBS=$LIBS
+             
+             CPPFLAGS="$MYSQL_CPPFLAGS $EMBCPPFLAGS"
+-	    LDFLAGS="$MYSQL_LDFLAGS $EMBLDFLAGS"
++	    LIBS="$MYSQL_LDFLAGS $EMBLIBS"
+ 
+             AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
+                                               #include "mysql.h"]],
+@@ -112,7 +112,7 @@
+ 			   [havemysql=no])
+ 
+ 	    CPPFLAGS=$EMBCPPFLAGS
+-	    LDFLAGS=$EMBLDFLAGS
++	    LIBS=$EMBLIBS
+ 
+             if test "$havemysql" = yes; then
+                 AC_DEFINE([HAVE_MYSQL], [1],
