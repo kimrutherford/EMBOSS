@@ -3,14 +3,14 @@ Author: Felix Geyer <fgeyer@debian.org>
 Date: Sun, 29 Jul 2012 17:51:04 UTC
 Bugs-Debian: http://bugs.debian.org/683190
 
---- emboss-6.4.0.orig/m4/postgresql.m4
-+++ emboss-6.4.0/m4/postgresql.m4
-@@ -98,7 +98,7 @@
+--- a/m4/postgresql.m4
++++ b/m4/postgresql.m4
+@@ -98,7 +98,7 @@ dnl not be installed
              EMBCPPFLAGS=$CPPFLAGS
- 	    EMBLDFLAGS=$LDFLAGS
+ 	    EMBLIBS=$LIBS
              
 -            CPPFLAGS="$POSTGRESSQL_CPPFLAGS $EMBCPPFLAGS"
 +            CPPFLAGS="$POSTGRESQL_CPPFLAGS $EMBCPPFLAGS"
- 	    LDFLAGS="$POSTGRESQL_LDFLAGS $EMBLDFLAGS"
+ 	    LIBS="$POSTGRESQL_LDFLAGS $EMBLIBS"
  
              AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
