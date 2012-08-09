@@ -3,3 +3,4 @@ using-pager-in-tfm.patch
 tfm-html.patch
 fix-postgresql-macro.patch
 fix-mysql-macro.patch
+emboss_psql_fix_typo.patch

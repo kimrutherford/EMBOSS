@@ -3,9 +3,9 @@ Author: Felix Geyer <fgeyer@debian.org>
 Date: Sun, 29 Jul 2012 22:07:33 +0200
 Bugs-Debian: http://bugs.debian.org/650237
 
---- emboss-6.4.0.orig/m4/postgresql.m4
-+++ emboss-6.4.0/m4/postgresql.m4
-@@ -96,10 +96,10 @@
+--- a/m4/postgresql.m4
++++ b/m4/postgresql.m4
+@@ -96,10 +96,10 @@ dnl provides it in the postgresql RPM ev
  dnl not be installed
  
              EMBCPPFLAGS=$CPPFLAGS
@@ -18,7 +18,7 @@ Bugs-Debian: http://bugs.debian.org/650237
  
              AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
                                                #include "libpq-fe.h"]],
-@@ -108,7 +108,7 @@
+@@ -108,7 +108,7 @@ dnl not be installed
  			   [havepostgresql=no])
  
  	    CPPFLAGS=$EMBCPPFLAGS

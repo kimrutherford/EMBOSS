@@ -4,6 +4,9 @@ emboss (6.4.0-3) UNRELEASED; urgency=low
     with the --as-needed issue when linking against database clients
     (thanks to Felix)
     Closes: #650237
+  * Fix typo to build emboss including PostgreSQL support (Thanks to
+    Felix Geyer <fgeyer@debian.org> for the patch)
+    Closes: #683190
 
  -- Andreas Tille <tille@debian.org>  Thu, 09 Aug 2012 16:01:07 +0200
 
