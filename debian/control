@@ -9,7 +9,7 @@ Uploaders: Charles Plessy <plessy@debian.org>,
 Build-Depends: debhelper (>= 9), quilt, libx11-dev, x11proto-core-dev,
  libgdchart-gd2-xpm-dev, zlib1g-dev, libpng-dev, libexpat1-dev, libhpdf-dev,
  libmysqlclient-dev, libpq-dev, antiword, sharutils, autotools-dev,
- tcsh | csh | c-shell,
+ tcsh | csh | c-shell, dh-autoreconf,
 # Needed until the following is solved: https://sourceforge.net/tracker/?func=detail&aid=3033326&group_id=93650&atid=605031 
  default-jdk
 #Build-Depends-Indep: default-jdk

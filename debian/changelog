@@ -1,3 +1,9 @@
+emboss (6.4.0-4) unstable; urgency=low
+
+  * use autoreconf to enable latest changes
+
+ -- Andreas Tille <tille@debian.org>  Fri, 10 Aug 2012 22:46:33 +0200
+
 emboss (6.4.0-3) unstable; urgency=low
 
   * Import patches prepared by Felix Geyer <fgeyer@debian.org> to cope

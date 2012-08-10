@@ -3,7 +3,7 @@
 export DH_VERBOSE=1
 
 %:
-	dh $@ --with autotools-dev,quilt
+	dh $@ --with autotools-dev,quilt,autoreconf
 
 VERSION := $(shell dpkg-parsechangelog | grep Ver | cut -d' ' -f2 | cut -d- -f1)
 RENAMED := cons pscan
