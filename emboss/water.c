@@ -114,18 +114,18 @@ int main(int argc, char **argv)
 	lenb = ajSeqGetLen(b);
 
 	if(lenb > (LONG_MAX/(size_t)(lena+1)))
-	   ajFatal("Sequences too big. Try 'matcher' or 'supermatcher'");
+            ajDie("Sequences too big. Try 'matcher' or 'supermatcher'");
 
 	len = (size_t)lena*(size_t)lenb;
 
 	if(len>maxarr)
 	{
-	    AJCRESIZE(path,len);
+	    AJCRESIZETRY0(path,maxarr,len);
 	    if(!path)
-		ajFatal("Sequences too big. Try 'matcher' or 'supermatcher'");
-	    AJCRESIZE(compass,len);
+		ajDie("Sequences too big. Try 'matcher' or 'supermatcher'");
+	    AJCRESIZETRY0(compass,maxarr,len);
 	    if(!compass)
-		ajFatal("Sequences too big. Try 'matcher' or 'supermatcher'");
+		ajDie("Sequences too big. Try 'matcher' or 'supermatcher'");
 	    maxarr=len;
 	}
 

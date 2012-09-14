@@ -1,4 +1,33 @@
+Version 6.6.0 15-Jul-2013
+	The valgrind.pl script has a new qualifier -debug which runs the
+	test with -debug on the command line.
+
+	Needle, needleall and water now fail with "die" message if there
+	is insufficient virtual memory to calculate the alignment between
+	two long sequences
+
+	Indexing with the dbx applications miscalculated the secondary
+	page capacity when the secondary page size is less than the
+	primary page size.
+
+	Ranges in a file can use a dash as a delimiter for the start and
+	end positions in addition to white space.
+
+	For all data types, format names can be replaced by EDAM format
+	term identifiers, for example 1927 for "embl". The format terms
+	are defined in the source code. We will need to define aliases or
+	use more complex queries if a format splits into a hierarchy
+	but this is unlikely in most cases.
+
+	On FreeBSD systems embossversion needs quotes corrected on the
+	line that reports FreeBSDLF is defined.
+
 Version 6.5.0 15-Jul-2012
+
+	On Windows (mEMBOSS) check the user home directory for .embossrc
+	file and .embossdata directory, using emboss.default for settings
+	defined for all users.
+
 	Database definitions with multiple types and formats now check
 	that there is at least one valid format defined for each type of
 	data.
@@ -39,7 +68,7 @@ Version 6.5.0 15-Jul-2012
 
 	Lists and tables now support very large numbers, requiring long
 	integers (datatype ajulong) to represent the return values from
-	ajListGetLength, ajtableGetLength and ajTableGetSize. Further
+	ajListGetLength, ajTableGetLength and ajTableGetSize. Further
 	extensions are planned in future releases.
 
 	Directory inputs now interpret ~/ or ~user/ in the user response
@@ -66,7 +95,7 @@ Version 6.5.0 15-Jul-2012
 	pages. Larger caches can reduce the number of physical reads and
 	writes at the cost of a small increase in CPU time.  The organism
 	and description indexes for large databases can have terms that
-	appear in a very large numbe rof entries (e.g. 'protein' in
+	appear in a very large number of entries (e.g. 'protein' in
 	UniProt or 'bacteria' in EMBL). Secondary cache sizes up to 100k
 	can be used to try to reduce the physical page rewrites needed as
 	these indexes grow.

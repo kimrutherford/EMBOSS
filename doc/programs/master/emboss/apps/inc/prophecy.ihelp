@@ -1,5 +1,5 @@
 Create frequency matrix or profile from a multiple alignment
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqset     (Aligned) sequence set filename and optional

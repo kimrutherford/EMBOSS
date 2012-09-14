@@ -285,15 +285,12 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = gnits
 SUBDIRS = images lib resources utils
-@JAVA_BUILD_TRUE@bin_SCRIPTS = runJemboss.sh
-@JAVA_BUILD_TRUE@CLEANFILES = $(bin_SCRIPTS)
+bin_SCRIPTS = runJemboss.sh
+CLEANFILES = $(bin_SCRIPTS)
 
 # files with nonstandard names in this directory
 EXTRA_DIST = LICENSE
 
-#all-local:
-
-#install-exec-hook:
 #	echo "Preparing $(DESTDIR)$(bindir)/runJemboss.csh"; \
 #	echo "#!/bin/csh" > $(DESTDIR)$(bindir)/runJemboss.csh; \
 #	echo "setenv CLASSPATH $(prefix)/share/$(PACKAGE)/jemboss/lib/mail.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/activation.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jakarta-regexp-1.2.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jalviewApplet.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jcert.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jnet.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jsse.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/axis.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/commons-discovery.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/commons-logging.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/jaxrpc.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/log4j-1.2.4.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/saaj.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/wsdl4j.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jemboss.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/client.jar:$(prefix)/share/$(PACKAGE)/jemboss" >> $(DESTDIR)$(bindir)/runJemboss.csh; \
@@ -671,7 +668,8 @@ install-dvi: install-dvi-recursive
 install-dvi-am:
 
 install-exec-am: install-binSCRIPTS
-
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 install-html: install-html-recursive
 
 install-html-am:
@@ -711,7 +709,7 @@ ps-am:
 uninstall-am: uninstall-binSCRIPTS uninstall-pkgdataDATA
 
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) ctags-recursive \
-	install-am install-strip tags-recursive
+	install-am install-exec-am install-strip tags-recursive
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am check check-am clean clean-generic clean-libtool \
@@ -719,26 +717,32 @@ uninstall-am: uninstall-binSCRIPTS uninstall-pkgdataDATA
 	distclean-generic distclean-libtool distclean-tags distdir dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-binSCRIPTS install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-pkgdataDATA install-ps \
-	install-ps-am install-strip installcheck installcheck-am \
-	installcheck-binSCRIPTS installdirs installdirs-am \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags tags-recursive uninstall uninstall-am \
+	install-dvi-am install-exec install-exec-am install-exec-hook \
+	install-html install-html-am install-info install-info-am \
+	install-man install-pdf install-pdf-am install-pkgdataDATA \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installcheck-binSCRIPTS installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am tags tags-recursive uninstall uninstall-am \
 	uninstall-binSCRIPTS uninstall-pkgdataDATA
 
 
 clean-local:
 @JAVA_BUILD_TRUE@	$(ANT) clean;
 
+#all-local:
+
+install-exec-hook:
+	rm -f $(DESTDIR)$bindir/runJemboss.csh;
+
 # tar to pick up the other directories
 # then remove any CVS subdirectories
 
 dist-hook:
-@JAVA_BUILD_TRUE@	$(ANT) package -Demboss.data=../emboss/data -Dname=jemboss -Djar.dir=lib -Dnotformemboss=yes;
-@JAVA_BUILD_TRUE@	$(ANT) clean;
+	echo "Jemboss build....."
+	$(ANT) package -Demboss.data=../emboss/data -Dname=jemboss -Djar.dir=lib -Dnotformemboss=yes;
+	$(ANT) clean;
 	tar cBf - api | ( cd $(distdir); tar xBf - ; rm -rf api/CVS );
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

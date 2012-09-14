@@ -1,5 +1,5 @@
 Insert one sequence into another
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   (Gapped) sequence filename and optional

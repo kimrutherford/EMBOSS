@@ -41,7 +41,7 @@ Created pepwindow.ps
 Command line arguments
 
 Draw a hydropathy plot for a protein sequence
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional

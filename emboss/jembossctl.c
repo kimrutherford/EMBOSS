@@ -4099,7 +4099,7 @@ static AjBool jembossctl_GetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq)
 ******************************************************************************/
 int main(void)
 {
-    return 0;
+    exit(-1);
 }
 
 #endif /* !HAVE_JAVA */

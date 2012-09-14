@@ -39,7 +39,7 @@ Second features output [HBB_HUMAN.gff]:
 Command line arguments
 
 Find regions of identity (exact matches) of two sequences
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqset     Sequence set filename and optional format,
@@ -459,7 +459,7 @@ Output file format
 ##sequence-region HBA_HUMAN 1 142
 #!Date 2012-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.5.0.0
+#!Source-version EMBOSS 6.5.6.0
 HBA_HUMAN       wordmatch       polypeptide_region      15      18      1
 .       .       ID=HBA_HUMAN.1;note=HBB_HUMAN
 HBA_HUMAN       wordmatch       polypeptide_region      59      63      1
@@ -473,7 +473,7 @@ HBA_HUMAN       wordmatch       polypeptide_region      117     120     1
 ##sequence-region HBB_HUMAN 1 147
 #!Date 2012-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.5.0.0
+#!Source-version EMBOSS 6.5.6.0
 HBB_HUMAN       wordmatch       polypeptide_region      16      19      1
 .       .       ID=HBB_HUMAN.1;note=HBA_HUMAN
 HBB_HUMAN       wordmatch       polypeptide_region      64      68      1

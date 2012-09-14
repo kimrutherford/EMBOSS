@@ -40,7 +40,7 @@ Created findkm.ps
 Command line arguments
 
 Calculate and plot enzyme reaction data
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Enzyme kinetics data (application-specific)

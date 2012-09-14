@@ -77,7 +77,7 @@ ebeye             text                       Text                       OK  OK
 .ac.uk/ebisearch/service.ebi       EB-eye text search service that allows search
 ing across EBI public databases
 tebeye            text                       Text                       OK  OK
--      64 /homes/user/.embossdata/qatests.server.ebeye            http://www.ebi
+-      65 /homes/user/.embossdata/qatests.server.ebeye            http://www.ebi
 .ac.uk/ebisearch/service.ebi       EBI ebeye webservices
 entrez            text                       Unknown                    OK  OK
 -      48 /homes/user/local/share/EMBOSS/server.entrez
@@ -99,7 +99,7 @@ OK     21 /homes/user/local/share/EMBOSS/server.srs               http://srs.ebi
 Command line arguments
 
 Display information on configured servers
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:

@@ -53,7 +53,7 @@ DBNAME tsw [
 Command line arguments
 
 Display information about a public database
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-database]          string     The name of the database defined locally for

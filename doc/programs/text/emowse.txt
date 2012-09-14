@@ -54,7 +54,7 @@ Output file [cru4_arath.emowse]:
 Command line arguments
 
 Search protein sequences by digest fragment molecular weight
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional

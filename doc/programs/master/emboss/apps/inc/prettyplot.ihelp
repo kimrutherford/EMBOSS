@@ -1,5 +1,5 @@
 Draw a sequence alignment with pretty formatting
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     (Aligned) sequence set filename and optional

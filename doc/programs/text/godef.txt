@@ -38,7 +38,7 @@ Obo output file [godef.obo]:
 Command line arguments
 
 Find GO ontology terms by definition
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-query]             string     Definition word(s) to search for in ontology

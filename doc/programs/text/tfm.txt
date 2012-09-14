@@ -789,6 +789,7 @@ crystalball Answer every drug discovery question about a sequence
 
 UTILS
 embossdata    Find and retrieve EMBOSS data files
+embossupdate  Checks for more recent updates to EMBOSS
 embossversion Report the current EMBOSS version number
 
 UTILS DATABASE CREATION
@@ -966,6 +967,7 @@ ekitsch          Fitch-Margoliash method with contemporary tips
 elipop           Predict lipoproteins
 emast            Motif detection
 embossdata       Find and retrieve EMBOSS data files
+embossupdate     Checks for more recent updates to EMBOSS
 embossversion    Report the current EMBOSS version number
 ememe            Multiple EM for motif elicitation
 ememetext        Multiple EM for motif elicitation, text file only
@@ -1400,7 +1402,7 @@ Find programs by keywords in their short description
 Command line arguments
 
 Find programs by keywords in their short description
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-search]            string     Enter a word or words here and a
@@ -1636,7 +1638,7 @@ ALIGNMENT CONSENSUS
 Command line arguments
 
 Display full documentation for an application
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-program]           string     Enter the name of an EMBOSS program (Any

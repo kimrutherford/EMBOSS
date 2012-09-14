@@ -3,8 +3,8 @@
 ** B+ Tree Indexing plus Disc Cache.
 **
 ** @author Copyright (c) 2003 Alan Bleasby
-** @version $Revision: 1.55 $
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @version $Revision: 1.56 $
+** @modified $Date: 2012/07/17 15:05:51 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -2687,10 +2687,10 @@ void embBtreeGetRsInfo(EmbPBtreeEntry entry)
         ((entry->idlen + 1) + BT_KEYLENENTRY +
          BT_DDOFF + entry->refcount*BT_EXTRA);
 
-    entry->idsecorder = (entry->pripagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
+    entry->idsecorder = (entry->secpagesize - (BT_NODEPREAMBLE + BT_PTRLEN)) /
         (BT_OFFKEYLEN + BT_IDKEYEXTRA);
 
-    entry->idsecfill  = (entry->pripagesize - BT_BUCKPREAMBLE) /
+    entry->idsecfill  = (entry->secpagesize - BT_BUCKPREAMBLE) /
         (BT_DOFF + entry->refcount*BT_EXTRA);
 
 /* now process the same values for each index field */

@@ -187,7 +187,15 @@ int main(int argc, char **argv)
         ajFmtPrintF(outfile, "%S %S is the latest version (%S)\n",
                     packagename, embossversion, fixversion);
 
+    ajStrDel(&updatemsg);
+    ajStrDel(&updateurl);
+    ajStrDel(&packagename);
+    ajStrDel(&updatedbname);
     ajStrDel(&rdline);
+    ajStrDel(&initversion);
+    ajStrDel(&fixversion);
+    ajStrDel(&embossversion);
+    ajStrDel(&embosssystem);
     ajStrDel(&tmpstr);
     ajFileClose(&outfile);
     ajFilebuffDel(&updatefile);

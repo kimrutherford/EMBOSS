@@ -40,7 +40,7 @@ Output file [x13776.prettyseq]:
 Command line arguments
 
 Write a nucleotide sequence and its translation to file
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional

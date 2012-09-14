@@ -2,8 +2,8 @@
 #
 # jemboss/runJemboss.sh.  Generated from runJemboss.sh.in by configure.
 # EMBOSS
-# Version: $Revision: 1.1 $
-# Modified $Date: 2011/08/25 20:55:38 $ by $Author: mks $
+# Version: $Revision: 1.2 $
+# Modified $Date: 2012/07/23 13:47:14 $ by $Author: rice $
 
 export JEMBOSS_HOME="/usr/local/share/EMBOSS/jemboss";
 
@@ -35,9 +35,9 @@ cd "${JEMBOSS_HOME}";
 
 case "${1}" in
   local)
-     org/emboss/jemboss/Jemboss local &
+    java org/emboss/jemboss/Jemboss local &
     ;;
   *)
-     org/emboss/jemboss/Jemboss &
+    java org/emboss/jemboss/Jemboss &
     ;;
 esac

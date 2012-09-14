@@ -3,8 +3,8 @@
 ** General routines for pattern matching.
 **
 ** @author Copyright (C) Alan Bleasby 1999
-** @version $Revision: 1.78 $
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @version $Revision: 1.79 $
+** @modified $Date: 2012/07/17 12:52:53 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -65,12 +65,12 @@ typedef struct PatSTypes
 
 static PatOTypes patTypes[] =
 {
-/* "Name",        "Description" */
+/* "Name",    "Description" */
   {"BMH",     "Boyer Moore Horspool pattern"},
   {"BYP",     "Baeza-Yates Perleberg pattern"},
-  {"SO",     "Shift-OR pattern"},
-  {"BYGC",     "Baeza-Yates Gonnet class pattern"},
-  {"Regex",     "Prosite converted to regex"},
+  {"SO",      "Shift-OR pattern"},
+  {"BYGC",    "Baeza-Yates Gonnet class pattern"},
+  {"Regex",   "Prosite converted to regex"},
   {"TUB",     "Tarhio-Ukkonen-Bleasby"},
   {"OUB",     "Brute force processing"},
   {NULL, NULL}

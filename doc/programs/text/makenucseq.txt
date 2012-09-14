@@ -59,7 +59,7 @@ nucleotide output sequence(s) [makeseq.fasta]:
 Command line arguments
 
 Create random nucleotide sequences
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
    -codonfile          codon      Optional codon usage file. Nucleotide

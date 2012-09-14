@@ -55,7 +55,7 @@ output sequence [ab000360.fasta]:
 Command line arguments
 
 Write a sequence with masked features
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or

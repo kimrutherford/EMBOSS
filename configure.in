@@ -4,11 +4,11 @@
 
 AC_PREREQ([2.64])
 AC_INIT([EMBOSS],
-[6.5.0],
+[6.5.7],
 [emboss-bug@emboss.open-bio.org],
 [EMBOSS],
 [http://emboss.open-bio.org/])
-AC_REVISION([$Revision: 1.158 $])
+AC_REVISION([$Revision: 1.160 $])
 AC_CONFIG_SRCDIR([ajax/acd/ajacd.c])
 AC_CONFIG_HEADERS([ajax/core/config.h])
 AC_CONFIG_MACRO_DIR([m4])

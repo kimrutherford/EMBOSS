@@ -1,5 +1,5 @@
 Many-to-many pairwise alignments of two sequence sets
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqset     Sequence set filename and optional format,

@@ -103,7 +103,7 @@ Pick PCR primers and hybridization oligos
 Command line arguments
 
 Pick PCR primers and hybridization oligos
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     The sequence from which to choose primers.

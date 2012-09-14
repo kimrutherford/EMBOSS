@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX assembly reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.56 $
+** @version $Revision: 1.57 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -115,15 +115,15 @@ static AssemOInFormat asseminFormatDef[] =
        "2573", "SAM Assembly format",
        AJFALSE, AJTRUE, AJFALSE, AJTRUE,  &asseminLoadSam},
   {"maf",
-       "2573", "MIRA Assembly format",
+       "3008", "MIRA Assembly format",
    /* http://mira-assembler.sourceforge.net/docs/chap_maf_part.html
     * name may change soon */
        AJFALSE, AJTRUE, AJFALSE, AJTRUE,  &asseminLoadMaf},
   {"bam",
-       "2573", "BAM Assembly format",
+       "2572", "BAM Assembly format",
        AJFALSE, AJTRUE, AJTRUE,  AJTRUE, &asseminLoadBam},
 /*  {"ace",
-       "0002573", "ACE Assembly format",
+       "3001", "ACE Assembly format",
 //   http://bozeman.mbt.washington.edu/consed/distributions/README.20.0.txt
 // http://www.cbcb.umd.edu/research/contig_representation.shtml#ACE
 AJFALSE, AJTRUE, AJFALSE, AJTRUE, &asseminLoadAce},*/
@@ -3752,8 +3752,12 @@ static AjBool asseminformatFind(const AjPStr format, ajint* iformat)
 
     for(i=0; asseminFormatDef[i].Name; i++)
     {
-	/* ajDebug("test %d '%s' \n", i, asseminFormatDef[i].Name); */
-	if(ajStrMatchCaseC(tmpformat, asseminFormatDef[i].Name))
+	/* ajDebug("test %d '%s' '%s' '%s'\n",
+           i, asseminFormatDef[i].Name,
+           asseminFormatDef[i].Obo,
+           asseminFormatDef[i].Desc); */
+	if(ajStrMatchC(tmpformat, asseminFormatDef[i].Name) ||
+           ajStrMatchC(format, asseminFormatDef[i].Obo))
 	{
 	    *iformat = i;
 	    ajStrDel(&tmpformat);
@@ -3788,7 +3792,7 @@ AjBool ajAsseminformatTerm(const AjPStr term)
     ajuint i;
 
     for(i=0; asseminFormatDef[i].Name; i++)
-	if(ajStrMatchCaseC(term, asseminFormatDef[i].Obo))
+	if(ajStrMatchC(term, asseminFormatDef[i].Obo))
 	    return ajTrue;
 
     return ajFalse;
@@ -3813,8 +3817,12 @@ AjBool ajAsseminformatTest(const AjPStr format)
     ajuint i;
 
     for(i=0; asseminFormatDef[i].Name; i++)
+    {
 	if(ajStrMatchCaseC(format, asseminFormatDef[i].Name))
 	    return ajTrue;
+	if(ajStrMatchC(format, asseminFormatDef[i].Obo))
+	    return ajTrue;
+    }
 
     return ajFalse;
 }

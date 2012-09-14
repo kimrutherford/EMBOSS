@@ -57,7 +57,7 @@ General log output file [outfile.dbxedam]:
 Command line arguments
 
 Index the EDAM ontology using b+tree indices
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     [edam] Basename for index files (Any string
@@ -253,8 +253,8 @@ Fill         56
 Level        0
 Pagesize     2048
 Cachesize    2000
-Order2       99
-Fill2        169
+Order2       22
+Fill2        41
 Secpagesize  512
 Seccachesize 2000
 Count        143

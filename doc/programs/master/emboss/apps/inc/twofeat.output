@@ -47,7 +47,7 @@
 ##sequence-region X65923 1 518
 #!Date 2012-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.5.0.0
+#!Source-version EMBOSS 6.5.6.0
 X65923	EMBL	polyA_signal_sequence	484	489	.	+	.	ID=X65923.6
 X65923	EMBL	polyA_site	509	509	.	+	.	ID=X65923.7
 </pre>

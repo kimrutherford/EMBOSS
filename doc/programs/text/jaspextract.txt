@@ -47,7 +47,7 @@ JASPAR database directory [.]: jaspar
 Command line arguments
 
 Extract data from JASPAR
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-directory]         directory  The FlatFileDir directory containing the

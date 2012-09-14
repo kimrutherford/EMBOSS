@@ -6,9 +6,9 @@
 ** parsing and include simple utilities.
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version  $Revision: 1.31 $
+** @version  $Revision: 1.32 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -415,13 +415,14 @@ AjBool ajResourceGetDbdata(const AjPResource resource, AjPQuery qry,
         {
             resqry = ajListIterGet(iter);
 
-            ajDebug("ajResourceGetDbdata test fmt: '%S'\n", resqry->Format);
+            ajDebug("ajResourceGetDbdata test fmt: '%S' edam: '%S'\n",
+                    resqry->Format, resqry->FormatTerm);
 
-            if(ajStrMatchC(resqry->Format, "HTML"))
+            if(ajStrMatchC(resqry->FormatTerm, "2331"))
             {
-                ajDebug("     OK fmt: '%S' url '%S'\n",
-                        resqry->Format, resqry->Url);
-                ajStrAssignS(&qry->Formatstr, resqry->Format);
+                ajDebug("     OK fmt: '%S' edam: '%S' url '%S'\n",
+                        resqry->Format, resqry->FormatTerm, resqry->Url);
+                ajStrAssignS(&qry->Formatstr, resqry->FormatTerm);
                 ajStrAssignS(&qry->DbUrl, resqry->Url);
                 ret = ajTrue;
             }
@@ -439,13 +440,23 @@ AjBool ajResourceGetDbdata(const AjPResource resource, AjPQuery qry,
         {
             resqry = ajListIterGet(iter);
 
-            ajDebug("ajResourceGetDbdata test fmt: '%S'\n", resqry->Format);
+            ajDebug("ajResourceGetDbdata test fmt: '%S' edam: '%S'\n",
+                    resqry->Format, resqry->FormatTerm);
 
             if(findformat(resqry->Format, &format))
             {
                 ajDebug("     OK fmt: '%S' url '%S'\n",
                         resqry->Format, resqry->Url);
                 ajStrAssignS(&qry->Formatstr, resqry->Format);
+                ajStrAssignS(&qry->DbUrl, resqry->Url);
+                ret = ajTrue;
+            }
+            if(ajStrGetLen(resqry->FormatTerm) &&
+               findformat(resqry->FormatTerm, &format))
+            {
+                ajDebug("     OK edam: '%S' url '%S'\n",
+                        resqry->FormatTerm, resqry->Url);
+                ajStrAssignS(&qry->Formatstr, resqry->FormatTerm);
                 ajStrAssignS(&qry->DbUrl, resqry->Url);
                 ret = ajTrue;
             }

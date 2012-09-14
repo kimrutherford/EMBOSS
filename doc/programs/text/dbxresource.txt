@@ -60,7 +60,7 @@ General log output file [outfile.dbxresource]:
 Command line arguments
 
 Index a data resource catalogue using b+tree indices
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     [drcat] Basename for index files (Any string
@@ -301,8 +301,8 @@ Fill         38
 Level        0
 Pagesize     2048
 Cachesize    2000
-Order2       99
-Fill2        169
+Order2       22
+Fill2        41
 Secpagesize  512
 Seccachesize 2000
 Count        110

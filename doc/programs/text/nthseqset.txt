@@ -38,7 +38,7 @@ output sequence(s) [globins-all.phylip]:
 Command line arguments
 
 Read and write (return) one set of sequences from many
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqsetall  Sequence set(s) filename and optional

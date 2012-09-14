@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX refseqdec reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.14 $
+** @version $Revision: 1.15 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/07/12 12:09:15 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -3030,8 +3030,12 @@ static AjBool refseqinformatFind(const AjPStr format, ajint* iformat)
 
     for(i=0; refseqinFormatDef[i].Name; i++)
     {
-	/* ajDebug("test %d '%s' \n", i, refseqinFormatDef[i].Name); */
-	if(ajStrMatchCaseC(tmpformat, refseqinFormatDef[i].Name))
+	/* ajDebug("test %d '%s' '%s' '%s'\n",
+           i, refseqinFormatDef[i].Name,
+           i, refseqinFormatDef[i].Obo,
+           i, refseqinFormatDef[i].Desc); */
+	if(ajStrMatchC(tmpformat, refseqinFormatDef[i].Name) ||
+           ajStrMatchC(format, refseqinFormatDef[i].Obo))
 	{
 	    *iformat = i;
 	    ajStrDel(&tmpformat);
@@ -3064,7 +3068,7 @@ AjBool ajRefseqinformatTerm(const AjPStr term)
     ajuint i;
 
     for(i=0; refseqinFormatDef[i].Name; i++)
-	if(ajStrMatchCaseC(term, refseqinFormatDef[i].Obo))
+	if(ajStrMatchC(term, refseqinFormatDef[i].Obo))
 	    return ajTrue;
 
     return ajFalse;
@@ -3087,8 +3091,12 @@ AjBool ajRefseqinformatTest(const AjPStr format)
     ajuint i;
 
     for(i=0; refseqinFormatDef[i].Name; i++)
+    {
 	if(ajStrMatchCaseC(format, refseqinFormatDef[i].Name))
 	    return ajTrue;
+	if(ajStrMatchC(format, refseqinFormatDef[i].Obo))
+	    return ajTrue;
+    }
 
     return ajFalse;
 }

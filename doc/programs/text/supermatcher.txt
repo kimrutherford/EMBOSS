@@ -42,7 +42,7 @@ Output alignment [j01636.supermatcher]:
 Command line arguments
 
 Calculate approximate local pair-wise alignments of larger sequences
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqall     Sequence(s) filename and optional format, or

@@ -60,7 +60,7 @@ Output file [cru4_arath.oddcomp]: out.odd
 Command line arguments
 
 Identify proteins with specified sequence word composition
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Protein sequence(s) filename and optional

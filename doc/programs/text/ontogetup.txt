@@ -36,7 +36,7 @@ Obo output file [1234.obo]:
 Command line arguments
 
 Get ontology term(s) by id of child
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or

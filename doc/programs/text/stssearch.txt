@@ -40,7 +40,7 @@ Output file [j01636.stssearch]:
 Command line arguments
 
 Search a DNA database for matches with a set of STS primers
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional

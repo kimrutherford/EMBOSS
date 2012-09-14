@@ -58,7 +58,7 @@ Created dottup.ps
 Command line arguments
 
 Display a wordmatch dotplot of two sequences
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-asequence]         sequence   Sequence filename and optional format, or

@@ -5,10 +5,10 @@
 ** These functions control all aspects of AJAX feature reading
 **
 ** @author Copyright (C) 1999 Richard Bruskiewich
-** @version $Revision: 1.55 $
+** @version $Revision: 1.56 $
 ** @modified 2000 Ian Longden.
 ** @modified 2001 Peter Rice.
-** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -7991,8 +7991,12 @@ static AjBool feattabinformatFind(const AjPStr format, ajint* iformat)
 
     for(i=0; featinformatDef[i].Name; i++)
     {
-	/* ajDebug("test %d '%s' \n", i, featinformatDef[i].Name); */
-	if(ajStrMatchCaseC(tmpformat, featinformatDef[i].Name))
+	/* ajDebug("test %d '%s' '%s' '%s'\n",
+           i, featinformatDef[i].Name, 
+           featinformatDef[i].Obo,
+           featinformatDef[i].Desc); */
+	if(ajStrMatchC(tmpformat, featinformatDef[i].Name) ||
+           ajStrMatchC(format, featinformatDef[i].Obo))
 	{
 	    *iformat = i;
 	    ajStrDel(&tmpformat);
@@ -8027,7 +8031,7 @@ AjBool ajFeattabinformatTerm(const AjPStr term)
     ajuint i;
 
     for(i=0; featinformatDef[i].Name; i++)
-	if(ajStrMatchCaseC(term, featinformatDef[i].Obo))
+	if(ajStrMatchC(term, featinformatDef[i].Obo))
 	    return ajTrue;
 
     return ajFalse;
@@ -8052,8 +8056,12 @@ AjBool ajFeattabinformatTest(const AjPStr format)
     ajuint i;
 
     for(i=0; featinformatDef[i].Name; i++)
+    {
 	if(ajStrMatchCaseC(format, featinformatDef[i].Name))
 	    return ajTrue;
+	if(ajStrMatchC(format, featinformatDef[i].Obo))
+	    return ajTrue;
+    }
 
     return ajFalse;
 }

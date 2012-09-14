@@ -9,16 +9,11 @@ README \
 activation.jar \
 jakarta-regexp-1.2.jar \
 mail.jar \
-jalviewApplet.jar
-
-if JAVA_BUILD
-jembosslib_DATA += jemboss.jar
-endif
+jalviewApplet.jar \
+jemboss.jar
 
 clean-local:
-if JAVA_BUILD
 	rm -f jemboss.jar;
-endif
 
 jemboss.jar:../org/emboss/jemboss/server/JembossFile*Server.java
 if JAVA_BUILD

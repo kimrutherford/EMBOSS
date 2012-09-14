@@ -55,7 +55,7 @@ Output report [k00650.tfscan]:
 Command line arguments
 
 Identify transcription factor binding sites in DNA sequences
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional

@@ -204,7 +204,7 @@ Phylip distance matrix output file [pax.distmat]:
 Command line arguments
 
 Create a distance matrix from a multiple sequence alignment
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqset     File containing a sequence alignment.

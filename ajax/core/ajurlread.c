@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX url reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.16 $
+** @version $Revision: 1.17 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/03/12 17:34:12 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -2066,8 +2066,12 @@ static AjBool urlinformatFind(const AjPStr format, ajint* iformat)
 
     for(i=0; urlinFormatDef[i].Name; i++)
     {
-	/* ajDebug("test %d '%s' \n", i, urlinFormatDef[i].Name); */
-	if(ajStrMatchCaseC(tmpformat, urlinFormatDef[i].Name))
+	/* ajDebug("test %d '%s' '%s' '%s'\n",
+           i, urlinFormatDef[i].Name,
+           urlinFormatDef[i].Obo,
+           urlinFormatDef[i].Desc); */
+	if(ajStrMatchCaseC(tmpformat, urlinFormatDef[i].Name) ||
+           ajStrMatchC(format, urlinFormatDef[i].Obo))
 	{
 	    *iformat = i;
 	    ajStrDel(&tmpformat);
@@ -2102,7 +2106,7 @@ AjBool ajUrlinformatTerm(const AjPStr term)
     ajuint i;
 
     for(i=0; urlinFormatDef[i].Name; i++)
-	if(ajStrMatchCaseC(term, urlinFormatDef[i].Obo))
+	if(ajStrMatchC(term, urlinFormatDef[i].Obo))
 	    return ajTrue;
 
     return ajFalse;
@@ -2127,8 +2131,12 @@ AjBool ajUrlinformatTest(const AjPStr format)
     ajuint i;
 
     for(i=0; urlinFormatDef[i].Name; i++)
+    {
 	if(ajStrMatchCaseC(format, urlinFormatDef[i].Name))
 	    return ajTrue;
+	if(ajStrMatchC(format, urlinFormatDef[i].Obo))
+	    return ajTrue;
+    }
 
     return ajFalse;
 }
