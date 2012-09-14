@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -191,7 +191,7 @@ Created banana9.dat
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Plot bending and curvature data for B-DNA
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -220,7 +220,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -330,7 +333,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated sequence qualifiers
+<td align="left" colspan=5>"-sequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -399,11 +402,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -447,7 +474,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-graph" associated graph qualifiers
+<td align="left" colspan=5>"-graph" associated graph qualifiers
 </td>
 </tr>
 
@@ -516,7 +543,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -694,7 +721,7 @@ RN   [2]
 RP   1-1218
 RA   Abramovitz M., Boie Y.;
 RT   ;
-RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (26-AUG-1996) to the INSDC.
 RL   Biochemistry &amp; Molecular Biology, Merck Frosst Center for Therapeutic
 RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
 XX
@@ -925,7 +952,7 @@ a       0.0      0.0
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##Maintitle Bending and curvature plot of tembl-id:U68037
-##Subtitle Fri 15 Jul 2011 12:00:00
+##Subtitle Sun 15 Jul 2012 12:00:00
 ##Graphic
 ##Screen x1 -1.000000 y1 0.000000 x2 60.000000 y2 80.000000
 Text3 x1 3.000000 y1 56.099998 colour 0 size 9.600000 a
@@ -2096,7 +2123,7 @@ None.
 
 <tr>
 <td><a href="dan.html">dan</a></td>
-<td>Calculates nucleic acid melting temperature</td>
+<td>Calculate nucleic acid melting temperature</td>
 </tr>
 
 <tr>
@@ -2106,7 +2133,7 @@ None.
 
 <tr>
 <td><a href="einverted.html">einverted</a></td>
-<td>Finds inverted repeats in nucleotide sequences</td>
+<td>Find inverted repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
@@ -2116,12 +2143,12 @@ None.
 
 <tr>
 <td><a href="isochore.html">isochore</a></td>
-<td>Plots isochores in DNA sequences</td>
+<td>Plot isochores in DNA sequences</td>
 </tr>
 
 <tr>
 <td><a href="sirna.html">sirna</a></td>
-<td>Finds siRNA duplexes in mRNA</td>
+<td>Find siRNA duplexes in mRNA</td>
 </tr>
 
 <tr>

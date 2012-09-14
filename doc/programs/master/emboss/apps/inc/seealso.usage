@@ -5,7 +5,7 @@ Here is a sample session with <b>seealso</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seealso </b>
-Finds programs with similar function to a specified program
+Find programs with similar function to a specified program
 Program to search for: <b>matcher</b>
 
 SEE ALSO
@@ -17,7 +17,7 @@ seqmatchall  All-against-all word comparison of a sequence set
 supermatcher Calculate approximate local pair-wise alignments of larger sequences
 water        Smith-Waterman local alignment of sequences
 wordfinder   Match large sequences against one or more other sequences
-wordmatch    Finds regions of identity (exact matches) of two sequences
+wordmatch    Find regions of identity (exact matches) of two sequences
 
 
 </pre></td></tr></table><p>

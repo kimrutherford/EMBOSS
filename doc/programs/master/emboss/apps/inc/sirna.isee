@@ -14,12 +14,12 @@
 
 <tr>
 <td><a href="einverted.html">einverted</a></td>
-<td>Finds inverted repeats in nucleotide sequences</td>
+<td>Find inverted repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
+<td>Find matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>

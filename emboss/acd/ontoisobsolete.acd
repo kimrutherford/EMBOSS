@@ -1,9 +1,9 @@
 application: ontoisobsolete [
   documentation: "Report whether an ontology term id is obsolete"
   groups: "Ontology, Data retrieval:Ontology data"
-    relations: "EDAM:0000089 topic Ontologies"
-    relations: "EDAM:0000090 topic Data retrieval"
-    relations: "EDAM:0002224 operation Data retrieval (ontology concept)"
+    relations: "EDAM_topic:0089 Ontology"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:2422 Data retrieval"
 ]
 
 
@@ -15,7 +15,7 @@ section: input [
      default: ""
      parameter: "Y"
      maxreads: "1"
-     relations: "EDAM:0001087 identifier Ontology term ID"
+     relations: "EDAM_identifier:1087 Ontology concept ID"
   ]
 
 
@@ -55,7 +55,7 @@ section: output [
     parameter: "Y"
     default: "stdout"
     knowntype: "ontoisobsolete output"
-    relations: "EDAM:0002223 data Ontology metadata"
+    relations: "EDAM_data:2223 Ontology metadata"
   ]
 
 endsection: output

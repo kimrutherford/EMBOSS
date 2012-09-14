@@ -1,26 +1,39 @@
-/* @source embcons.c
+/* @source embcons ************************************************************
 **
 ** General routines for consensus.
-** Copyright (c) Copyright 2001 (C) Tim Carver (tcarver@hgmp.mrc.ac.uk)
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** @author Copyright (c) Copyright 2001 (C) Tim Carver (tcarver@hgmp.mrc.ac.uk)
+** @version $Revision: 1.24 $
+** @modified $Date: 2011/11/08 15:12:52 $ by $Author: rice $
+** @@
 **
-** This program is distributed in the hope that it will be useful,
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "emboss.h"
+#include "ajlib.h"
+
+#include "embcons.h"
+#include "ajarr.h"
+#include "ajseq.h"
+#include "ajmatrices.h"
+
 #include <ctype.h>          /* for tolower function */
 #include <limits.h>         /* for INT_MAX */
+
 
 
 
@@ -42,6 +55,8 @@
 ** @param [r] gaps [AjBool] Allow gap characters in the consensus
 ** @param [w] cons [AjPStr *] the created consensus sequence
 ** @return [void]
+**
+** @release 1.13.0
 ******************************************************************************/
 
 void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,

@@ -19,7 +19,7 @@
 
 <tr>
 <td><a href="dan.html">dan</a></td>
-<td>Calculates nucleic acid melting temperature</td>
+<td>Calculate nucleic acid melting temperature</td>
 </tr>
 
 <tr>
@@ -29,7 +29,7 @@
 
 <tr>
 <td><a href="einverted.html">einverted</a></td>
-<td>Finds inverted repeats in nucleotide sequences</td>
+<td>Find inverted repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
@@ -39,12 +39,12 @@
 
 <tr>
 <td><a href="isochore.html">isochore</a></td>
-<td>Plots isochores in DNA sequences</td>
+<td>Plot isochores in DNA sequences</td>
 </tr>
 
 <tr>
 <td><a href="sirna.html">sirna</a></td>
-<td>Finds siRNA duplexes in mRNA</td>
+<td>Find siRNA duplexes in mRNA</td>
 </tr>
 
 <tr>

@@ -1,8 +1,8 @@
 application: findkm [
   documentation: "Calculate and plot enzyme reaction data"
   groups: "Enzyme Kinetics"
-    relations: "EDAM:0000821 topic Enzymes"
-    relations: "EDAM:0000334 operation Enzyme kinetics calculation"
+    relations: "EDAM_topic:0821 Enzymes and reactions"
+    relations: "EDAM_operation:0334 Enzyme kinetics calculation"
 ]
 
 section: input [
@@ -15,7 +15,7 @@ section: input [
     information: "Enzyme kinetics data (application-specific)
                   file"
     knowntype: "enzyme data"
-    relations: "EDAM:0002024 data Enzyme kinetics data"
+    relations: "EDAM_data:2024 Enzyme kinetics data"
   ]
 
 endsection: input
@@ -28,7 +28,7 @@ section: advanced [
   boolean: plot [
     default: "Y"
     information: "S/V vs S"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: advanced
@@ -41,14 +41,14 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "findkm output"
-    relations: "EDAM:0000908 data Reaction annotation"
+    relations: "EDAM_data:2978 Reaction data"
   ]
 
   xygraph: graphlb [
     standard: "Y"
     multiple: "2"
-    relations: "EDAM:0002025 data Michaelis Menten plot"
-    relations: "EDAM:0002026 data Hanes Woolf plot"
+    relations: "EDAM_data:2025 Michaelis Menten plot"
+    relations: "EDAM_data:2026 Hanes Woolf plot"
   ]
 
 endsection: output

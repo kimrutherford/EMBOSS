@@ -4,9 +4,9 @@ Here is a sample session with <b>ontoget</b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontoget edam:0001234 </b>
+% <b>ontoget edam:1234 </b>
 Get ontology term(s)
-Obo output file [0001234.obo]: <b></b>
+Obo output file [1234.obo]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -18,9 +18,9 @@ Obo output file [0001234.obo]: <b></b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontoget edam:0000850 -subclasses </b>
+% <b>ontoget edam:0850 -subclasses </b>
 Get ontology term(s)
-Obo output file [0000850.obo]: <b></b>
+Obo output file [0850.obo]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

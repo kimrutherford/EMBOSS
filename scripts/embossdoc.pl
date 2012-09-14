@@ -250,15 +250,15 @@ sub srsdref {
 sub secttest($$) {
     my ($sect, $ctype) = @_;
     my $stype = "";
-    if ($sect =~ /Constructors$/) {$stype = "new"}
-    elsif ($sect =~ /Destructors$/) {$stype = "delete"}
-    elsif ($sect =~ /Assignments$/) {$stype = "assign"}
-    elsif ($sect =~ /Iterators$/) {$stype = "iterate"}
-    elsif ($sect =~ /Modifiers$/) {$stype = "modify"}
-    elsif ($sect =~ /Casts$/) {$stype = "cast"}
-    elsif ($sect =~ /Input$/) {$stype = "input"}
-    elsif ($sect =~ /Output$/) {$stype = "output"}
-    elsif ($sect =~ /Miscellaneous$/) {$stype = "misc"}
+    if ($sect =~ /Constructors$/i) {$stype = "new"}
+    elsif ($sect =~ /Destructors$/i) {$stype = "delete"}
+    elsif ($sect =~ /Assignments$/i) {$stype = "assign"}
+    elsif ($sect =~ /Iterators$/i) {$stype = "iterate"}
+    elsif ($sect =~ /Modifiers$/i) {$stype = "modify"}
+    elsif ($sect =~ /Casts$/i) {$stype = "cast"}
+    elsif ($sect =~ /Input$/i) {$stype = "input"}
+    elsif ($sect =~ /Output$/i) {$stype = "output"}
+    elsif ($sect =~ /Miscellaneous$/i) {$stype = "misc"}
     if ($stype eq "") {return $stype}
     if ($stype ne $ctype) {
 	print "bad category '$ctype' (expected '$stype') in section '$sect'\n";
@@ -508,17 +508,25 @@ sub printsect($$) {
 	if(${$ostr} =~ /\.\.\.\.lastsect\.\.\.\./) {
 	    if(!$dosecttest) {$sectstr = ""}
 	    elsif($sectstr !~ /[^ ]$/) {$sectstr = ""}
+	    else {$sectstr .= "</table>\n"}
 	    ${$ostr} =~ s/[.]+lastsect[.]+/$sectstr\n/;
 	}
 	my $mysname = $mysect;
 	$mysname =~ s/\s+/_/;
 	${$ostr} .= "<hr><h3><a name=\"sec_$mysname\">\n";
-	${$ostr} .= "Section: $mysect</a></h3>\n";
+
+	my $dname = "none";
+	if(defined($dataname)) {$dname = $dataname}
+	if($dname eq "none") {$dname = "Section"}
+	${$ostr} .= "$dname: $mysect</a></h3>\n";
+
 	${$ostr} .= "$mysrest\n";
 	${$ostr} .= "....lastsect....";
 	$lastfsect = $mysect;
-
-	$datastr .= " <a href=#sec_$mysname>$mysect</a>";
+	my $catdesc = "";
+	if($fctype ne "") {$catdesc = "Category: '$fctype'"}
+	if(defined($categs{$fctype})) {$catdesc = $categs{$fctype}}
+	$datastr .= "<tr><td> <a href=#sec_$mysname>$mysect</a></td><td>$catdesc</td></tr>\n";
     }
 }
 
@@ -531,6 +539,7 @@ sub printsectstatic($$) {
 	if(${$ostr} =~ /\.\.\.\.lastsect\.\.\.\./) {
 	    if(!$dosecttest) {$sectstrstatic = ""}
 	    elsif($sectstrstatic !~ /[^ ]$/) {$sectstrstatic = ""}
+	    else {$sectstrstatic .= "</table>\n"}
 	    ${$ostr} =~ s/[.]+lastsect[.]+/$sectstrstatic\n/;
 	}
 	my $mysname = $mysect;
@@ -541,7 +550,10 @@ sub printsectstatic($$) {
 	${$ostr} .= "....lastsect....";
 	$laststatfsect = $mysect;
 
-	$datastrstatic .= " <a href=#sec_$mysname>$mysect</a>";
+	my $catdesc = "";
+	if(defined($fctype)) {$catdesc = "Category: '$fctype'"}
+	if(defined($categs{$fctype})) {$catdesc = $categs{$fctype}}
+	$datastrstatic .= "<tr><td> <a href=#sec_$mysname>$mysect</a></td><td>$catdesc</td></tr>\n";
     }
 }
 
@@ -551,6 +563,7 @@ sub printdata($$) {
 	if(${$ostr} =~ /\.\.\.\.lastdata\.\.\.\./) {
 	    if(!$dosecttest) {$datastr = ""}
 	    elsif($datastr !~ /[^ ]$/) {$datastr = ""}
+	    else {$datastr .= "</table>\n"}
 	    ${$ostr} =~ s/[.]+lastdata[.]+/$datastr\n/;
 	}
 	my $mydname = $mydata;
@@ -561,7 +574,7 @@ sub printdata($$) {
 	${$ostr} .= "....lastdata....";
 	$lastdsect = $mydata;
 
-	$filestr .= " <a href=#data_$mydname>$mydata</a>";
+	$filestr .= "<tr><td> <a href=#data_$mydname>$mydata</a> </td><td>$datashortdesc</td></tr>\n";
     }
 }
 
@@ -571,17 +584,19 @@ sub printdatastatic($$) {
 	if(${$ostr} =~ /\.\.\.\.lastdata\.\.\.\./) {
 	    if(!$dosecttest) {$datastrstatic = ""}
 	    elsif($datastrstatic !~ /[^ ]$/) {$datastrstatic = ""}
+	    else {$datastrstatic .= "</table>\n"}
 	    ${$ostr} =~ s/[.]+lastdata[.]+/$datastrstatic\n/;
 	}
 	my $mydname = $mydata;
 	$mydname =~ s/\s+/_/;
 	${$ostr} .= "<hr><h2><a name=\"data_$mydname\">\n";
+	    ${$ostr} .= "Datatype: $mydata</a></h2>\n";
 	${$ostr} .= "Datatype: $mydata</a></h2>\n";
 	${$ostr} .= "$mydrest\n";
 	${$ostr} .= "....lastdata....";
 	$laststatdsect = $mydata;
 
-	$filestrstatic .= " <a href=#data_$mydname>$mydata</a>";
+	$filestrstatic .= "<tr><td> <a href=#data_$mydname>$mydata</a> </td><td>$datashortdesc</td></tr>\n";
     }
 }
 
@@ -604,10 +619,11 @@ $suffixdatacount=$#sufname;
 $dosecttest = 0;
 $datatype="undefined";
 $unused = "";
+$inline = "";
 $flastname = 0;
 
-$filestr = "<p><b>Datatypes:</b> ";
-$filestrstatic = "<p><b>Datatypes:</b> ";
+$filestr = "<p><b>Datatypes:</b>\n<table> ";
+$filestrstatic = "<p><b>Datatypes:</b>\n<table> ";
 
 $ftable = "";
 
@@ -621,9 +637,18 @@ $lastfname = "";
 %test = ("func" => 1, "funcstatic" => 1, "funclist" => 0, "prog" => 0);
 %body = ("func" => 1, "funcstatic" => 1, "funclist" => 1, "prog" => 1);
 
-%categs = ("new" => 1, "delete" => 1, "assign" => 1, "modify" => 1,
-	   "cast" => 1, "derive" => 1, "use" => 1, "iterate" => 1,
-	   "input" => 1, "output" => 1, "misc" => 1, "internals" => 1);
+%categs = ("new" => "Constructors",
+	   "delete" => "Destructors",
+	   "assign" => "Assignments",
+	   "modify" => "Modifiers",
+	   "cast" => "Casts",
+	   "derive" => "Derievd values",
+	   "use" => "General use",
+	   "iterate" => "Iterators",
+	   "input" => "Input",
+	   "output" => "Output",
+	   "misc" => "Miscellaneous",
+	   "internals" => "Internals");
 %ctot = ();
 if ($ARGV[0]) {$infile = $ARGV[0];}
 if ($ARGV[1]) {$lib = $ARGV[1];}
@@ -685,6 +710,7 @@ open (HTML, ">$pubout.html");
 open (HTMLB, ">$local\_static.html");
 open (SRS, ">$pubout.srs");
 open (LOG, ">$local.log");
+
 $file = "$pubout\.c";
 $title = "$file";
 $out="";
@@ -711,7 +737,9 @@ $sectstrstatic = " ";
 $fnum=0;
 $ostr = \$out;
 $datatitle = "";
-
+$fctype = "";
+$indep=0;
+$indepbook=0;
 
 ##############################################################
 ## $source is the entire source file as a string with newlines
@@ -730,8 +758,31 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
     $partnum=0;
     $mastertoken="undefined";
     $prespace = $2;
+    $ifdef = $3;
     $ccfull = $4;
     $rest = $POSTMATCH;
+    $pref = $PREMATCH;
+
+    if($indepbook && $ccfull =~ /@/ && $pref =~ /#endif\s*\Z/om) {
+	$indepbook=0;
+#	print "unset indepbook\n";
+    }
+    if($indep && $ccfull =~ /@/ && $pref =~ /#endif\s*\Z/om) {
+        $indep=0;
+	print "unset indep pref '$ccfull'\n";
+    }
+
+    if(defined($ifdef)){
+#	print "ifdef '$ifdef'\n";
+	if(!$indepbook && $ifdef =~ /AJ_COMPILE_DEPRECATED_BOOK/g) {
+	    $indepbook=1;
+#	    print "set indepbook\n";
+	}
+	if(!$indep && $ifdef =~ /AJ_COMPILE_DEPRECATED\n/g) {
+	    $indep=1;
+#	    print "set indep\n";
+	}
+    }
 
     ($cc) = ($ccfull =~ /^..\s*(.*\S)*\s*..$/gos);
     if (defined($cc)) {
@@ -763,7 +814,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
     $errtext = "See source code";
     $dependtext = "See source code";
     $othertext = "See other functions in this section";
-    $availtext = "In release 6.3.0";
+    $availtext = "In release 6.5.0";
     $ctype = "";
 
     while ($cc =~ m/\s@((\S+)\s+([^@]*[^@\s]))/gos) {
@@ -774,18 +825,21 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 
 	if(!$partnum) {$mastertoken = $token}
 	$partnum++;
+
 	if ($token eq "section")  {
 	    $secnum++;
 	    if($out =~ /\.\.\.\.lastsect\.\.\.\./) {
 		if($sectstr !~ /[^ ]$/) {$sectstr = ""}
+		else {$sectstr .= "</table>\n"}
 		$out =~ s/\.\.\.\.lastsect\.\.\.\./$sectstr\n/;
 	    }
 	    if($outstatic =~ /\.\.\.\.lastsect\.\.\.\./) {
 		if($sectstrstatic !~ /[^ ]$/) {$sectstrstatic = ""}
+		else {$sectstrstatic .= "</table>\n"}
 		$outstatic =~ s/\.\.\.\.lastsect\.\.\.\./$sectstrstatic\n/;
 	    }
-	    $sectstr = "<p><b>Functions:</b> ";
-	    $sectstrstatic = "<p><b>Functions:</b> ";
+	    $sectstr = "<p><b>Functions:</b>\n<table> ";
+	    $sectstrstatic = "<p><b>Functions:</b>\n<table> ";
 
 	    $ostr = \$out;
 	    $countglobal++;
@@ -842,6 +896,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 		$lastfname = "";
 		$fdata = "";
 		$ctype = "";
+		$fctype = "";
 		splice(@namrules, 1+$namrulesdatacount);
 		splice(@namdescs, 1+$namrulesdatacount);
 		splice(@sufname, 1+$suffixdatacount);
@@ -868,14 +923,16 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    $datanum++;
 	    if($out =~ /\.\.\.\.lastdata\.\.\.\./) {
 		if($datastr !~ /[^ ]$/) {$datastr = ""}
+		else {$datastr .= "</table>\n"}
 		$out =~ s/\.\.\.\.lastdata\.\.\.\./$datastr\n/;
 	    }
 	    if($outstatic =~ /\.\.\.\.lastdata\.\.\.\./) {
 		if($datastrstatic !~ /[^ ]$/) {$datastrstatic = ""}
+		else {$datastrstatic .= "</table>\n"}
 		$outstatic =~ s/\.\.\.\.lastdata\.\.\.\./$datastrstatic\n/;
 	    }
-	    $datastr = "<p><b>Sections:</b> ";
-	    $datastrstatic = "<p><b>Sections:</b> ";
+	    $datastr = "<p><b>Sections:</b>\n<table> ";
+	    $datastrstatic = "<p><b>Sections:</b>\n<table> ";
 
 	    $secnum=0;
 	    $fnum=0;
@@ -884,14 +941,13 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 		print "bad syntax \@$token must be at start\n";
 	    }
 	    $flastname = "";
-	    ($datatype, $datadesc) =
-		($data =~ /\S+\s+[\[]([^\]]+)[\]]\s*([^*\n]+)(.*)/gos);
+	    ($datatype, $datashortdesc, $datadesc) =
+		($data =~ /\S+\s+[\[]([^\]]+)[\]]\s*([^*\n]+)[*\n]*(.*)/gos);
 	    if(!defined($datadesc)) {
 		print "bad datasection: $data\n";
 		next;
 	    }
-	    $dataname = $1;
-	    $datadesc = $2;
+	    $dataname = $datatype;
 	    $dataname =~ s/\s+/ /gos;
 	    $dataname =~ s/^ //gos;
 	    $dataname =~ s/ $//gos;
@@ -899,12 +955,12 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    $datadesc =~ s/^ //gos;
 	    $datadesc =~ s/ $//gos;
 
-	    $datatitle = "$dataname: $datadesc";
+	    $datatitle = "$dataname: $datashortdesc";
 	    push (@datalist, "$datatitle");
 
 	    @{ $datasect{$datatitle} } = ();
-	    $datastr = "<p><b>Sections:</b> ";
-	    $datastrstatic = "<p><b>Sections:</b> ";
+	    $datastr = "<p><b>Sections:</b>\n<table> ";
+	    $datastrstatic = "<p><b>Sections:</b>\n<table> ";
 
 	    if($prespace !~ /^\n\n\n\n\n$/) {
 		print "Datasection '$datatype' '$datadesc'\n";
@@ -1073,15 +1129,17 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 
 	    printsect($sect,$srest);
 
+	    $testrest = $rest;
+	    $testrest =~ s/[\(]assert[\)]/assert/;
 	    $type = $token;
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
 	    ($ftype,$fname, $fargs) =
-		$rest =~ /^\s*([^\(\)]*\S)\s+(\S+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os;
+		$testrest =~ /^\s*([^\(\)]+[^\(\)\s])\s+([^\(\)]+[^\(\)\s]+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os;
 	    if(!defined($ftype)){
 		print "bad \@$type header\n";
 	    }
-	    $sectstr .= " <a href=#$name>$name</a>";
-	    $ftype =~ s/^__noreturn +//;
+	    $ftype =~ s/^inline\s+//;
+	    $ftype =~ s/^__noreturn\s+//;
 	    if($isprog) {$progname = $name}
 	    elsif(defined($datasub)) {
 		push(@{$datafunc{$datasub}}, "$name");
@@ -1119,9 +1177,11 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    $frest =~ s/</\&lt;/gos;
 	    $frest =~ s/\n\n/\n<p>\n/gos;
 	    #${$ostr} .= "$frest\n";
-	    $shortdesc = $frest;
 	    $longdesc = $frest;
+	    $shortdesc = $frest;
+	    $shortdesc =~ s/\n<p>.*//gos;
 
+	    $sectstr .= "<tr><td> <a href=#$name>$name</a></td><td>$shortdesc</td></td></tr>\n";
 	    print SRS "ID $name\n";
 	    print SRS "TY public\n";
 	    print SRS "MO $pubout\n";
@@ -1159,7 +1219,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    $fargs =~ s/ *(\w+) *((\[[^\]]*\])+)/$2 $1/gos;   # [] before name
 	    $fargs =~ s/(\*+)(\S)/$1 $2/g;  # put space after run of *
 	    $fargs =~ s/ \*/\*/gos;         # no space before run of *
-	    $fargs =~ s/ [\(]\* (\w+)[\)]/* $1/gos;  # remove fn arguments
+	    $fargs =~ s/ [\(]\* (\w+)[\)]/ $1/gos;  # remove fn arguments
 	    $fargs =~ s/(\w+)\s?[\(][^\)]+[\)],/function $1,/gos; # ditto
 	    $fargs =~ s/(\w+)\s?[\(][^\)]+[\)]$/function $1/gos;  # ditto
 	    $fargs =~ s/\s*\(\*(\w+)[^\)]*\)/\* $1/gs;
@@ -1193,8 +1253,9 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 
 	    $type = $token;
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
-	    ($unused,$ftype,$fname,$fargs) =
-		$rest =~ /^\s*(__noreturn\s*)?static\s+([^\(\)]*\S)\s+(\S+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os;
+	    ($unused,$inline,$ftype,$fname,$fargs) =
+		$rest =~ /^\s*(__noreturn\s*)?static\s+(inline\s+)?([^\(\)]+[^\(\)\s])\s+([^\(\)]+[^\(\)\s]+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os;
+	    $ftype =~ s/^inline\s+//;
 	    if(!defined($fname)){
 		print "bad \@$type header\n";
 	    }
@@ -1210,7 +1271,6 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 		 }
 	    }
 
-	    $sectstrstatic .= " <a href=#$name>$name</a>";
 	    ${$ostr} .= "<hr><h4><a name=\"$name\">\n";
 	    ${$ostr} .= "Static function</a> ".srsref($name)."</h4>\n";
 	    if(!defined($ftype)){
@@ -1228,8 +1288,10 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    $frest =~ s/</\&lt;/gos;
 	    $frest =~ s/\n\n/\n<p>\n/gos;
 	    #${$ostr} .= "$frest\n";
-	    $shortdesc = $frest;
 	    $longdesc = $frest;
+	    $shortdesc = $frest;
+	    $shortdesc =~ s/\n<p>.*//gos;
+	    $sectstrstatic .= "<tr><td> <a href=#$name>$name</a></td><td>$shortdesc</td></td></tr>\n";
 
 	    print SRS "ID $name\n";
 	    print SRS "TY static\n";
@@ -1260,7 +1322,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    $fargs =~ s/ *(\w+) *((\[[^\]]*\])+)/$2 $1/gos;   # [] before name
 	    $fargs =~ s/(\*+)(\S)/$1 $2/g;  # put space after run of *
 	    $fargs =~ s/ \*/\*/gos;         # no space before run of *
-	    $fargs =~ s/ [\(]\* (\w+)[\)]/* $1/gos;  # remove fn arguments
+	    $fargs =~ s/ [\(]\* (\w+)[\)]/ $1/gos;  # remove fn arguments
 	    $fargs =~ s/(\w+)\s?[\(][^\)]+[\)],/function $1,/gos;  # ditto
 	    $fargs =~ s/(\w+)\s?[\(][^\)]+[\)]$/function $1/gos;  # ditto
 	    $fargs =~ s/\s*\(\*(\w+)[^\)]*\)/\* $1/gs;
@@ -1294,7 +1356,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 		 }
 	    }
 
-	    $sectstr .= " <a href=#$name>$name</a>";
+	    $sectstr .= "<tr><td> <a href=#$name>$name</a></td></tr>\n";
 	    ### print "args '$margs'\n";
 	    ${$ostr} .= "<hr><h4><a name=\"$name\">\n";
 	    ${$ostr} .= "Macro</a> ".srsref($name)."</h4>\n";
@@ -1304,8 +1366,9 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    $mrest =~ s/</\&lt;/gos;
 	    $mrest =~ s/\n\n/\n<p>\n/gos;
 	    #${$ostr} .= "$mrest\n";
-	    $shortdesc = $mrest;
 	    $longdesc = $mrest;
+	    $shortdesc = $mrest;
+	    $shortdesc =~ s/\n<p>.*\n//gos;
 
 	    $bookmacro = $fname;
 	    @bookmacroparams = ();
@@ -1359,7 +1422,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 		 }
 	    }
 
-	    $sectstrstatic .= " <a href=#$name>$name</a>";
+	    $sectstrstatic .= "<tr><td> <a href=#$name>$name</a></td></tr>\n";
 	    ${$ostr} .= "<hr><h4><a name=\"$name\">\n";
 	    ${$ostr} .= "Function list</a> ".srsref($name)."</h4>\n";
 	    $trest = $mrest;
@@ -1368,8 +1431,9 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    $mrest =~ s/</\&lt;/gos;
 	    $mrest =~ s/\n\n/\n<p>\n/gos;
 	    #${$ostr} .= "$mrest\n";
-	    $shortdesc = $mrest;
 	    $longdesc = $mrest;
+	    $shortdesc = $mrest;
+	    $shortdesc =~ s/\n<p>.*\n//gos;
 
 	    print SRS "ID $name\n";
 	    print SRS "TY list\n";
@@ -1396,7 +1460,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 		print "bad syntax \@$token must be in \@func, funcstatic, funclist or macro\n";
 	    }
 	    if (!$intable) {
-		$ftable = "<p><table border=3>\n";
+		$ftable = "<p><table border=1>\n";
 		$ftable .= "<tr><th>Type</th><th>Name</th><th>Read/Write</th><th>Description</th></tr>\n";
 		$intable = 1;
 	    }
@@ -1501,7 +1565,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    print SRS "PX\n";
 
 	    if (!$prest) {print "bad paramdescription '$var', no description\n"}
-	    $ftable .= "<tr><td>$cast</td><td>$var</td><td>$codename</td><td>$prest</td></tr>\n";
+	    $ftable .= "<tr><td><tt>$cast</tt></td><td><tt>$var</tt></td><td>$codename</td><td>$prest</td></tr>\n";
 
 	    if ($simpletype{$cast}) {
 # Simple C types (not structs)
@@ -1655,7 +1719,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 		print "bad syntax \@$token must be in \@func, funcstatic, funclist or macro\n";
 	    }
 	    if (!$intable) {
-		$ftable = "<p><table border=3>\n";
+		$ftable = "<p><table border=1>\n";
 		$ftable .= "<tr><th>Type</th><th>Name</th><th>Read/Write</th><th>Description</th></tr>\n";
 		$intable = 1;
 	    }
@@ -1690,7 +1754,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 
 	    $rrest =~ s/>/\&gt;/gos;
 	    $rrest =~ s/</\&lt;/gos;
-	    $ftable .= "<tr><td>$rtype</td><td>\&nbsp;</td><td>RETURN</td><td>$rrest</td></tr>\n";
+	    $ftable .= "<tr><td><tt>$rtype</tt></td><td>\&nbsp;</td><td>RETURN</td><td>$rrest</td></tr>\n";
 	    $ftable .= "</table><p>\n";
 	    $intable = 0;
 
@@ -1717,6 +1781,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 		print "bad \@$token [$ctype], extra text\n";
 	    }
 
+	    $fctype = $ctype;
 	    $ctot{$ctype}++;
 	    secttest($sect,$ctype);
 	    if (!defined($categs{$ctype})) {
@@ -1834,7 +1899,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    ($availtext) = ($data =~ /\S+\s+(.*)/);
 	    $availtext =~ s/\s+$//gos;
 	    if($availtext =~ /^(\d+[.][.\d]+)$/) {
-		$availtext = "EMBOSS $1";
+		$availtext = "From EMBOSS $1";
 	    }
 	    $availtext =~ s/>/\&gt;/gos;
 	    $availtext =~ s/</\&lt;/gos;
@@ -1854,11 +1919,14 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	}
 
 	elsif ($token eq "obsolete")  {
-	    if($partnum != 1) {
-		print "bad syntax \@$token must be at start\n";
-	    }
 	    ($oname, $norest) =
 		($data =~ /\S+\s+(\S+)\s*(.*)/gos);
+	    if($partnum != 1) {
+		print "bad syntax \@$token $oname must be at start\n";
+	    }
+	    if(!$indep && !$indepbook) {
+		print "bad syntax \@$token $oname must be in AJ_COMPILE_DEPRECATED\n";
+	    }
 	    if($prespace !~ /^\n\n\n\n\n$/) {
 		print "Obsolete $oname\n";
 		if($prespace =~ /^[\n]+$/) {
@@ -2030,7 +2098,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 
 	elsif ($datatoken{$token}) {
 	}
-	elsif ($categs{$token}) {
+	elsif (defined($categs{$token})) {
 	}
 	elsif ($ignore{$token}) {
 	}
@@ -2319,6 +2387,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	}
 	print SRS "//\n";
 
+
 	if($shortdesc) {
 	    ${$ostr} .= "$shortdesc\n";
 	}
@@ -2341,8 +2410,7 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    print SRS $body;
 
 	    if(defined($fname)) {
-		${$ostr} .= "<h4>Synopsis</h4>";
-		${$ostr} .= "<h5>Prototype</h5><pre>";
+		${$ostr} .= "<h4>Prototype</h4><pre>";
 		${$ostr} .= "\n$ftype $fname (";
 		$firstarg = 1;
 		foreach $a (@largs) {
@@ -2375,48 +2443,51 @@ while ($source =~ m"((\s+)([#]if[^\n]+\n)?)([/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])
 	    print SRS "==FUNCLIST\n$body\n==ENDLIST\n";
 	    print SRS "==REST\n$rest\n==ENDREST\n";
 	}
-	if($inputargs) {
-	    ${$ostr} .= "<h5>Input</h5>\n";
-	    ${$ostr} .= "<table>$inputargs</table>\n";
-	}
-	if($outputargs) {
-	    ${$ostr} .= "<h5>Output</h5>\n";
-	    ${$ostr} .= "<table>$outputargs</table>\n";
-	}
-	if($modifyargs) {
-	    ${$ostr} .= "<h5>Input \&amp; Output</h5>\n";
-	    ${$ostr} .= "<table>$modifyargs</table>\n";
-	}
-	if($returnargs) {
-	    ${$ostr} .= "<h5>Returns</h5>\n";
-	    ${$ostr} .= "<table>$returnargs</table>\n";
-	}
-	if($longdesc) {
-	    ${$ostr} .= "<h4>Description</h4>\n";
-	    ${$ostr} .= "$longdesc\n";
-	}
-	if($usetext) {
+
+# skip these - they duplicate what is in the table
+
+#	if($inputargs) {
+#	    ${$ostr} .= "<h4>Input</h4>\n";
+#	    ${$ostr} .= "<table>$inputargs</table>\n";
+#	}
+#	if($outputargs) {
+#	    ${$ostr} .= "<h4>Output</h4>\n";
+#	    ${$ostr} .= "<table>$outputargs</table>\n";
+#	}
+#	if($modifyargs) {
+#	    ${$ostr} .= "<h4>Input \&amp; Output</h4>\n";
+#	    ${$ostr} .= "<table>$modifyargs</table>\n";
+#	}
+#	if($returnargs) {
+#	    ${$ostr} .= "<h4>Returns</h4>\n";
+#	    ${$ostr} .= "<table>$returnargs</table>\n";
+#	}
+
+# report if not the default string
+	if($usetext ne "See source code") {
 	    ${$ostr} .= "<h4>Usage</h4>\n";
 	    ${$ostr} .= "$usetext\n";
 	}
-	if($exampletext) {
+	if($exampletext ne "In preparation") {
 	    ${$ostr} .= "<h4>Example</h4>\n";
 	    ${$ostr} .= "$exampletext\n";
 	}
-	if($errtext) {
+	if($errtext ne "See source code") {
 	    ${$ostr} .= "<h4>Errors</h4>\n";
 	    ${$ostr} .= "$errtext\n";
 	}
-	if($dependtext) {
+	if($dependtext ne "See source code") {
 	    ${$ostr} .= "<h4>Dependencies</h4>\n";
 	    ${$ostr} .= "$dependtext\n";
 	}
-	if($othertext) {
+	if($othertext ne "See other functions in this section") {
 	    ${$ostr} .= "<h4>See Also</h4>\n";
 	    ${$ostr} .= "$othertext\n";
 	}
+
+# release tag
 	if($availtext) {
-	    ${$ostr} .= "<h4>Availability</h4>\n";
+#	    ${$ostr} .= "<h4>Availability</h4>\n";
 	    ${$ostr} .= "$availtext\n";
 	}
     }
@@ -2440,21 +2511,27 @@ if (!$countstatic) {
 }
 
 if($sectstr !~ /[^ ]$/) {$sectstr = ""}
+else {$sectstr .= "</table>\n"}
 $out =~ s/[.]+lastsect[.]+/$sectstr\n/;
 
 if($sectstrstatic !~ /[^ ]$/) {$sectstrstatic = ""}
+else {$sectstrstatic .= "</table>\n"}
 $outstatic =~ s/[.]+lastsect[.]+/$sectstrstatic\n/;
 
 if($datastr !~ /[^ ]$/) {$datastr = ""}
+else {$datastr .= "</table>\n"}
 $out =~ s/[.]+lastdata[.]+/$datastr\n/;
 
 if($datastrstatic !~ /[^ ]$/) {$datastrstatic = ""}
+else {$datastrstatic .= "</table>\n"}
 $outstatic =~ s/[.]+lastdata[.]+/$datastrstatic\n/;
 
 if($filestr !~ /[^ ]$/) {$filestr = ""}
+else{$filestr .= "</table>\n"}
 $out =~ s/[.]+lastfile[.]+/$filestr\n/;
 
 if($filestrstatic !~ /[^ ]$/) {$filestrstatic = ""}
+else{$filestrstatic .= "</table>\n"}
 $outstatic =~ s/[.]+lastfile[.]+/$filestrstatic\n/;
 
 $out .= "</body></html>\n";

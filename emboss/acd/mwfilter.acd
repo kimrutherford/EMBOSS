@@ -1,9 +1,9 @@
 application: mwfilter [
   documentation: "Filter noisy data from molecular weights file"
   groups: "Protein:Composition"
-  relations: "EDAM:0000157 topic Sequence composition"
-  relations: "EDAM:0000767 topic Peptide identification and proteolysis"
-  relations: "EDAM:0000398 operation Protein molecular weight calculation"
+  relations: "EDAM_topic:0157 Sequence composition analysis"
+  relations: "EDAM_topic:0767 Protein and peptide identification"
+  relations: "EDAM_operation:0398 Protein molecular weight calculation"
 ]
 
 section: input [
@@ -15,14 +15,14 @@ section: input [
     parameter: "Y"
     information: "Molecular weights file"
     knowntype: "molecular weights"
-    relations: "EDAM:0001505 data Amino acid index (molecular weight)"
+    relations: "EDAM_data:1505 Amino acid index (molecular weight)"
   ]
 
   datafile: datafile [
     default: "Emwfilter.dat"
     information: "Molecular weight standards data file"
     knowntype: "standard molecular weights"
-    relations: "EDAM:0001646 data Molecular weights standard fingerprint"
+    relations: "EDAM_data:1646 Molecular weights standard fingerprint"
   ]
 
 endsection: input
@@ -36,7 +36,7 @@ section: required [
     standard: "Y"
     information: "Ppm tolerance"
     default: "50.0"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: required
@@ -50,7 +50,7 @@ section: additional [
     additional: "Y"
     information: "Output deleted mwts"
     default: "N"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: additional
@@ -65,7 +65,7 @@ section: output [
     extension: "mwfilter"
     knowntype: "molecular weights"
     information: "Molecular weights output file"
-    relations: "EDAM:0001505 data Amino acid index (molecular weight)"
+    relations: "EDAM_data:1505 Amino acid index (molecular weight)"
   ]
 
 endsection: output

@@ -46,8 +46,8 @@ int main(int argc, char **argv)
     AjPStr ss;
     AjPFile errorf;
 
-    ajint lena;
-    ajint lenb;
+    ajuint lena;
+    ajuint lenb;
     ajuint k;
 
     const char *p;
@@ -70,8 +70,8 @@ int main(int argc, char **argv)
     float endgapopen;
     float endgapextend;
     float minscore;
-    ajulong maxarr = 1000;  /* arbitrary. realloc'd if needed */
-    ajulong len;            
+    size_t maxarr = 1000;  /* arbitrary. realloc'd if needed */
+    size_t len;
 
     float score;
 
@@ -84,8 +84,6 @@ int main(int argc, char **argv)
     float simx = 0.;
 
     AjPStr tmpstr = NULL;
-
-    size_t stlen;
 
     embInit("needleall", argc, argv);
 
@@ -101,7 +99,7 @@ int main(int argc, char **argv)
     dobrief   = ajAcdGetBoolean("brief");
     endweight   = ajAcdGetBoolean("endweight");
     align     = ajAcdGetAlign("outfile");
-    errorf    = ajAcdGetOutfile("errorfile");
+    errorf    = ajAcdGetOutfile("errfile");
 
     gapopen = ajRoundFloat(gapopen, 8);
     gapextend = ajRoundFloat(gapextend, 8);
@@ -129,24 +127,23 @@ int main(int argc, char **argv)
             lena = ajSeqGetLen(seqa);
 
 
-            if(lenb > (LONG_MAX/(ajlong)(lena+1)))
+            if(lenb > (LONG_MAX/(size_t)(lena+1)))
                 ajFatal("Sequences too big.");
 
-            len = lena*lenb;
+            len = (size_t)lena*(size_t)lenb;
 
             if(len>maxarr)
             {
-                stlen = (size_t) len;
-                AJCRESIZETRY0(compass,(size_t)maxarr,stlen);
+                AJCRESIZETRY0(compass,(size_t)maxarr,len);
                 if(!compass)
                     ajDie("Sequences too big, memory allocation failed");
-                AJCRESIZETRY0(m,(size_t)maxarr,stlen);
+                AJCRESIZETRY0(m,(size_t)maxarr,len);
                 if(!m)
                     ajDie("Sequences too big, memory allocation failed");
-                AJCRESIZETRY0(ix,(size_t)maxarr,stlen);
+                AJCRESIZETRY0(ix,(size_t)maxarr,len);
                 if(!ix)
                     ajDie("Sequences too big, memory allocation failed");
-                AJCRESIZETRY0(iy,(size_t)maxarr,stlen);
+                AJCRESIZETRY0(iy,(size_t)maxarr,len);
                 if(!iy)
                     ajDie("Sequences too big, memory allocation failed");
                 maxarr=len;

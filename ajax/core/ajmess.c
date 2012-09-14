@@ -1,33 +1,46 @@
-/******************************************************************************
-** @source AJAX message functions
+/* @source ajmess *************************************************************
+**
+** AJAX message functions
 **
 ** @author Richard Durbin and Ed Griffiths from ACEdb (messubs.c)
-** @version 1.0
+** @version $Revision: 1.55 $
 ** @modified Ian Longden for EMBOSS
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
 #include <string.h>
 
-#include "ajax.h"
 #include <errno.h>
 #include <limits.h>
+#include <stdlib.h>
 
+#include "ajmess.h"
+#include "ajassert.h"
+#include "ajmem.h"
+#include "ajtable.h"
+#include "ajfmt.h"
+#include "ajsys.h"
+#include "ajfile.h"
+#include "ajutil.h"
+#include "ajnam.h"
+#include "ajfileio.h"
 
 #ifdef __CYGWIN__
 #define fopen(a,b) ajSysFuncFopen(a,b)
@@ -116,6 +129,8 @@ static AjPTable messDebugTestTable = NULL;
 ** Used to trace in a debugger as a breakpoint
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -254,6 +269,8 @@ static AjMessOutRoutine	 warningRoutine = 0;
 **
 ** @param [f] func [AjMessVoidRoutine] Function to be registered
 ** @return [AjMessVoidRoutine] Previously defined function
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -276,6 +293,8 @@ AjMessVoidRoutine ajMessRegBeep(AjMessVoidRoutine func)
 **
 ** @param [f] func [AjMessOutRoutine] Function to be registered
 ** @return [AjMessOutRoutine] Previously defined function
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -298,6 +317,8 @@ AjMessOutRoutine ajMessRegOut(AjMessOutRoutine func)
 **
 ** @param [f] func [AjMessOutRoutine] Function to be registered
 ** @return [AjMessOutRoutine] Previously defined function
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -320,6 +341,8 @@ AjMessOutRoutine ajMessRegDump(AjMessOutRoutine func)
 **
 ** @param [f] func [AjMessOutRoutine] Function to be registered
 ** @return [AjMessOutRoutine] Previously defined function
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -342,6 +365,8 @@ AjMessOutRoutine ajMessRegErr(AjMessOutRoutine func)
 **
 ** @param [f] func [AjMessOutRoutine] Function to be registered
 ** @return [AjMessOutRoutine] Previously defined function
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -364,6 +389,8 @@ AjMessOutRoutine ajMessRegExit(AjMessOutRoutine func)
 **
 ** @param [f] func [AjMessOutRoutine] Function to be registered
 ** @return [AjMessOutRoutine] Previously defined function
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -386,6 +413,8 @@ AjMessOutRoutine ajMessRegCrash(AjMessOutRoutine func)
 **
 ** @param [f] func [AjMessOutRoutine] Function to be registered
 ** @return [AjMessOutRoutine] Previously defined function
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -408,6 +437,8 @@ AjMessOutRoutine ajMessRegWarn(AjMessOutRoutine func)
 ** standard error.
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -435,6 +466,8 @@ void ajMessBeep(void)
 ** @param [r] format [const char*] Format string
 ** @param [v] [...] Variable length argument list
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -458,13 +491,15 @@ void ajUser(const char *format,...)
 
 
 
-/* @func ajUserDumpC ***********************************************************
+/* @func ajUserDumpC **********************************************************
 **
 ** Prints a string unchanged. Calls the defined output function (if any).
 ** Otherwise prints the message to standard error with an extra newline.
 **
 ** @param [r] txt [const char*] String to print unchanged
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -483,13 +518,15 @@ void ajUserDumpC(const char* txt)
 
 
 
-/* @func ajUserDumpS ***********************************************************
+/* @func ajUserDumpS **********************************************************
 **
 ** Prints a string unchanged. Calls the defined output function (if any).
 ** Otherwise prints the message to standard error with an extra newline.
 **
 ** @param [r] str [const AjPStr] String to print unchanged
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -518,6 +555,8 @@ void ajUserDumpS(const AjPStr str)
 ** @param [r] format [const char*] Format string
 ** @param [v] [...] Variable length argument list
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -549,6 +588,8 @@ void ajMessOut(const char *format,...)
 ** @param [r] format [const char*] Format string
 ** @param [v] args [va_list] Variable length argument list
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -579,6 +620,8 @@ void ajVUser(const char *format, va_list args)
 ** @param [r] format [const char*] format string.
 ** @param [v] [...] Variable length argument list.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -609,6 +652,8 @@ void ajMessDump(const char *format,...)
 **
 ** @param [r] message [const char*] Message text
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -626,27 +671,17 @@ static void messDump(const char *message)
 
 
 
-/* @func ajMessGetCountError ***************************************************
+/* @func ajMessGetCountError **************************************************
 **
 ** Returns the number of times the error routines have been called.
 **
 ** @return [ajint] Error function call count.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajint ajMessGetCountError(void)
-{
-    return errorCount;
-}
-
-
-
-
-/* @obsolete ajMessErrorCount
-** @rename ajMessGetCountError
-*/
-
-__deprecated ajint ajMessErrorCount(void)
 {
     return errorCount;
 }
@@ -664,6 +699,8 @@ __deprecated ajint ajMessErrorCount(void)
 ** @param [r] format [const char*] Format
 ** @param [v] [...] Variable length argument list
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -708,6 +745,8 @@ void ajErr(const char *format, ...)
 ** @param [r] format [const char*] Format
 ** @param [v] args [va_list] Variable length argument list
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -751,6 +790,8 @@ void ajVErr(const char *format, va_list args)
 ** @param [r] format [const char*] Format
 ** @param [v] [...] Variable length argument list
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -785,7 +826,7 @@ __noreturn void  ajDie(const char *format, ...)
 
 
 
-/* @func ajVDie ***********************************************************
+/* @func ajVDie ***************************************************************
 **
 ** Formats an error message. Calls the error function (if any).
 ** Otherwise prints the message to standard error with a trailing newline.
@@ -796,6 +837,8 @@ __noreturn void  ajDie(const char *format, ...)
 ** @param [r] format [const char*] Format
 ** @param [v] args [va_list] Variable length argument list
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -831,6 +874,8 @@ void ajVDie(const char *format, va_list args)
 ** @param [r] format [const char*] Format
 ** @param [v] [...] Variable length argument list
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -871,6 +916,8 @@ void ajWarn(const char *format, ...)
 ** @param [r] format [const char*] Format
 ** @param [v] args [va_list] Variable length argument list
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -914,6 +961,8 @@ void ajVWarn(const char *format, va_list args)
 ** @param [r] format [const char*] Format
 ** @param [v] [...] Variable length argument list
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -951,6 +1000,8 @@ __noreturn void ajMessExitmsg(const char *format, ...)
 ** @param [r] format [const char*] Format
 ** @param [v] [...] Variable length argument list
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1015,6 +1066,8 @@ __noreturn void ajMessCrashFL(const char *format, ...)
 ** @param [r] format [const char*] Format
 ** @param [v] args [va_list] Variable length argument list
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1063,11 +1116,13 @@ __noreturn void ajMessVCrashFL(const char *format, va_list args)
 
 
 
-/* @func ajMessGetMessageC **************************************************
+/* @func ajMessGetMessageC ****************************************************
 **
 ** Returns the current message text.
 **
 ** @return [const char*] Message text
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1079,24 +1134,14 @@ const char* ajMessGetMessageC(void)
 
 
 
-/* @obsolete ajMessCaughtMessage
-** @rename ajMessGetMessageC
-*/
-
-__deprecated char* ajMessCaughtMessage(void)
-{
-    return messbuf;
-}
-
-
-
-
-/* @func ajMessGetSysmessageC **************************************************
+/* @func ajMessGetSysmessageC *************************************************
 **
 ** Returns the system message text from 'strerror' from the standard C
 ** library.
 **
 ** @return [const char*] System error message.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1120,28 +1165,6 @@ const char* ajMessGetSysmessageC(void)
 
 
 
-
-/* @obsolete ajMessSysErrorText
-** @rename ajMessGetSysmessageC
-*/
-
-__deprecated char* ajMessSysErrorText(void)
-{
-    char *mess;
-
-    if(errno)
-	mess = ajFmtString(SYSERR_FORMAT, errno, strerror(errno));
-    else
-	mess = ajFmtString(SYSERR_OK, errno, strerror(errno));
-      
-    /* must make copy - will be used when mess* calls itself */
-    AJFREE(messErrMess);
-    messErrMess = ajSysFuncStrdup(mess);
-
-    AJFREE(mess);
-
-    return messErrMess;
-}
 
 /************************* message formatting ********************************/
 /* This routine does the formatting of the message string using vsprintf,    */
@@ -1182,6 +1205,8 @@ __deprecated char* ajMessSysErrorText(void)
 ** @param [r] format [const char*] Format string
 ** @param [r] prefix [const char*] Message prefix
 ** @return [char*] Formatted message text
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1256,6 +1281,8 @@ static char* messFormat(va_list args, const char *format, const char *prefix)
 **
 ** @param [r] path [const char*] File name, possibly with full path.
 ** @return [char*] Base file name
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1312,6 +1339,8 @@ static char* messGetFilename(const char *path)
 **
 ** @param [r] progname [const char*] Program name.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1337,6 +1366,8 @@ void ajMessErrorInit(const char *progname)
 ** @param [r] filename [const char*] source filename, __FILE__
 ** @param [r] line_num [ajint] source line number, __LINE__
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1371,6 +1402,8 @@ void ajMessSetErr(const char *filename, ajint line_num)
 ** Returns the stored program name.
 **
 ** @return [char*] Program name
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1387,6 +1420,8 @@ static char* messGetErrorProgram(void)
 ** Returns the stored error file name.
 **
 ** @return [char*] Error file name
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1403,6 +1438,8 @@ static char* messGetErrorFile(void)
 ** Returns the stored error source line number.
 **
 ** @return [ajint] Original source code line number
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1426,6 +1463,8 @@ Then a default one will be read */
 **
 ** @param [r] errfile [const char*] Error file name
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1455,6 +1494,8 @@ AjBool ajMessErrorSetFile(const char *errfile)
 ** and loads the results into an internal table.
 **
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1522,6 +1563,8 @@ static AjBool ajMessReadErrorFile(void)
 **
 ** @param [r] code [const char*] Message code
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1566,6 +1609,8 @@ void ajMessOutCode(const char *code)
 **
 ** @param [r] code [const char*] Error code
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1611,6 +1656,8 @@ void ajMessErrorCode(const char *code)
 **
 ** @param [r] code [const char*] Error code
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1653,6 +1700,8 @@ __noreturn void  ajMessCrashCodeFL(const char *code)
 ** Deletes the message codes table.
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1670,6 +1719,8 @@ void ajMessCodesDelete(void)
 **
 ** @param [d] table [AjPTable*] Table
 ** @return [void]
+**
+** @release 6.2.0
 ******************************************************************************/
 
 static void messTableDelete(AjPTable* table) 
@@ -1716,6 +1767,8 @@ static void messTableDelete(AjPTable* table)
 ** @param [r] fmt [const char*] Format.
 ** @param [v] [...] Variable argument list.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1788,6 +1841,8 @@ void ajDebug(const char* fmt, ...)
 ** Test whether debugging is on.
 **
 ** @return [AjBool] True if user has enabled debugging
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1805,6 +1860,8 @@ AjBool ajDebugOn(void)
 **
 ** @param [r] token [const char*] Token name
 ** @return [AjBool] True if token has debugging requested
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1902,11 +1959,13 @@ AjBool ajDebugTest(const char* token)
 
 
 
-/* @func ajMessGetDebugfile ****************************************************
+/* @func ajMessGetDebugfile ***************************************************
 **
 ** Returns the file used for debug output, or NULL if no debug file is open.
 **
 ** @return [FILE*] C runtime library file handle for debug output.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1921,18 +1980,6 @@ FILE* ajMessGetDebugfile(void)
 
 
 
-/* @obsolete ajDebugFile
-** @rename ajMessGetDebugfile
-*/
-
-__deprecated FILE* ajDebugFile(void)
-{
-    return ajMessGetDebugfile();
-}
-
-
-
-
 /* @func ajUserGet ************************************************************
 **
 ** Writes a prompt to the terminal and reads one line from the user.
@@ -1941,6 +1988,8 @@ __deprecated FILE* ajDebugFile(void)
 ** @param [r] fmt [const char*] Format string
 ** @param [v] [...] Variable argument list.
 ** @return [ajint] Length of response string.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2057,6 +2106,8 @@ ajint ajUserGet(AjPStr* pthis, const char* fmt, ...)
 ** Delete any static initialised values
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2072,11 +2123,13 @@ void ajMessExit(void)
 
 
 
-/* @func ajMessExitDebug *******************************************************
+/* @func ajMessExitDebug ******************************************************
 **
 ** Delete any static initialised values for ajDebug calls
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2089,3 +2142,72 @@ void ajMessExitDebug(void)
 
     return;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajMessErrorCount
+** @rename ajMessGetCountError
+*/
+
+__deprecated ajint ajMessErrorCount(void)
+{
+    return errorCount;
+}
+
+
+
+
+/* @obsolete ajMessCaughtMessage
+** @rename ajMessGetMessageC
+*/
+
+__deprecated char* ajMessCaughtMessage(void)
+{
+    return messbuf;
+}
+
+
+
+
+/* @obsolete ajMessSysErrorText
+** @rename ajMessGetSysmessageC
+*/
+
+__deprecated char* ajMessSysErrorText(void)
+{
+    char *mess;
+
+    if(errno)
+	mess = ajFmtString(SYSERR_FORMAT, errno, strerror(errno));
+    else
+	mess = ajFmtString(SYSERR_OK, errno, strerror(errno));
+      
+    /* must make copy - will be used when mess* calls itself */
+    AJFREE(messErrMess);
+    messErrMess = ajSysFuncStrdup(mess);
+
+    AJFREE(mess);
+
+    return messErrMess;
+}
+
+
+
+
+/* @obsolete ajDebugFile
+** @rename ajMessGetDebugfile
+*/
+
+__deprecated FILE* ajDebugFile(void)
+{
+    return ajMessGetDebugfile();
+}
+#endif

@@ -1,19 +1,60 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajtaxdata *********************************************************
+**
+** AJAX taxonomy data structures
+**
+** @author Copyright (C) 2010 Peter Rice
+** @version $Revision: 1.10 $
+** @modified Oct 5 pmr First version
+** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajtaxdata_h
-#define ajtaxdata_h
+#ifndef AJTAXDATA_H
+#define AJTAXDATA_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajtextdata.h"
+
+AJ_BEGIN_DECLS
 
 
-#define NULLFPOS -1
-
-typedef struct AjSTaxAccess AjSTaxAccess;
 
 
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
-/* @data AjPTax *************************************************************
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* @data AjPTax ***************************************************************
 **
 ** Ajax tax object.
 **
@@ -54,7 +95,8 @@ typedef struct AjSTaxAccess AjSTaxAccess;
 ** @@
 ******************************************************************************/
 
-typedef struct AjSTax {
+typedef struct AjSTax
+{
     AjPStr  Id;
     AjPStr  Db;
     AjPStr  Setdb;
@@ -86,7 +128,7 @@ typedef struct AjSTax {
 
 
 
-/* @data AjPTaxin ************************************************************
+/* @data AjPTaxin *************************************************************
 **
 ** Ajax tax input object.
 **
@@ -102,12 +144,15 @@ typedef struct AjSTax {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSTaxin {
+typedef struct AjSTaxin
+{
     AjPTextin Input;
     void *TaxData;
 } AjOTaxin;
 
 #define AjPTaxin AjOTaxin*
+
+
 
 
 /* @data AjPTaxall ************************************************************
@@ -146,7 +191,8 @@ typedef struct AjSTaxall
 
 
 
-/* @data AjPTaxname *********************************************************
+
+/* @data AjPTaxname ***********************************************************
 **
 ** NCBI taxonomy node name, listed within AjPTax
 **
@@ -165,12 +211,13 @@ typedef struct AjSTaxname
     AjPStr UniqueName;
     AjPStr NameClass;
 } AjOTaxname;
+
 #define AjPTaxname AjOTaxname*
 
 
 
 
-/* @data AjPTaxdiv *********************************************************
+/* @data AjPTaxdiv ************************************************************
 **
 ** NCBI taxonomy division
 **
@@ -193,12 +240,13 @@ typedef struct AjSTaxdiv
     ajuint Divid;
     ajuint Padding;
 } AjOTaxdiv;
+
 #define AjPTaxdiv AjOTaxdiv*
 
 
 
 
-/* @data AjPTaxcode *********************************************************
+/* @data AjPTaxcode ***********************************************************
 **
 ** NCBI taxonomy genetic code
 **
@@ -224,12 +272,13 @@ typedef struct AjSTaxcode
     ajuint Gencode;
     ajuint Padding;
 } AjOTaxcode;
+
 #define AjPTaxcode AjOTaxcode*
 
 
 
 
-/* @data AjPTaxdel *********************************************************
+/* @data AjPTaxdel ************************************************************
 **
 ** NCBI taxonomy deleted node
 **
@@ -244,12 +293,13 @@ typedef struct AjSTaxdel
 {
     ajuint Taxid;
 } AjOTaxdel;
+
 #define AjPTaxdel AjOTaxdel*
 
 
 
 
-/* @data AjPTaxmerge *********************************************************
+/* @data AjPTaxmerge **********************************************************
 **
 ** NCBI taxonomy mergednode
 **
@@ -266,12 +316,13 @@ typedef struct AjSTaxmerge
     ajuint Taxid;
     ajuint Mergeid;
 } AjOTaxmerge;
+
 #define AjPTaxmerge AjOTaxmerge*
 
 
 
 
-/* @data AjPTaxcit *********************************************************
+/* @data AjPTaxcit ************************************************************
 **
 ** NCBI taxonomy citation, listed within AjPTax
 **
@@ -298,12 +349,13 @@ typedef struct AjSTaxcit
     AjPStr Url;
     AjPStr Text;
 } AjOTaxcit;
+
 #define AjPTaxcit AjOTaxcit*
 
 
 
 
-/* @data AjPTaxAccess ********************************************************
+/* @data AjPTaxAccess *********************************************************
 **
 ** Ajax taxonomy access database reading object.
 **
@@ -321,8 +373,8 @@ typedef struct AjSTaxcit
 ** @alias AjOTaxAccess
 **
 ** @attr Name [const char*] Access method name used in emboss.default
-** @attr Access [(AjBool*)] Access function
-** @attr AccessFree [(AjBool*)] Access cleanup function
+** @attr Access [AjBool function] Access function
+** @attr AccessFree [AjBool function] Access cleanup function
 ** @attr Qlink [const char*] Supported query link operators
 ** @attr Desc [const char*] Description
 ** @attr Alias [AjBool] Alias for another name
@@ -330,6 +382,7 @@ typedef struct AjSTaxcit
 ** @attr Query [AjBool] Supports retrieval of selected entries
 ** @attr All [AjBool] Supports retrieval of all entries
 ** @attr Chunked [AjBool] Supports retrieval of entries in chunks
+** @attr Padding [AjBool] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -345,6 +398,7 @@ typedef struct AjSTaxAccess
     AjBool Query;
     AjBool All;
     AjBool Chunked;
+    AjBool Padding;
 } AjOTaxAccess;
 
 #define AjPTaxAccess AjOTaxAccess*
@@ -352,8 +406,24 @@ typedef struct AjSTaxAccess
 
 
 
-#endif
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
-#ifdef __cplusplus
-}
-#endif
+
+
+
+/*
+** Prototype definitions
+*/
+
+/*
+** End of prototype definitions
+*/
+
+
+
+
+AJ_END_DECLS
+
+#endif /* !AJTAXDATA_H */

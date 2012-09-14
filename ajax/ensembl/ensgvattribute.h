@@ -1,10 +1,37 @@
+/* @include ensgvattribute ****************************************************
+**
+** Ensembl Genetic Variation Attribute functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.5 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSGVATTRIBUTE_H
 #define ENSGVATTRIBUTE_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensgvdata.h"
 
@@ -13,14 +40,19 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
-/* @const EnsEGvattributetypeCode *********************************************
+/* @enum EnsEGvattributetypeCode **********************************************
 **
 ** Ensembl Genetic Variation Attribute Type Code enumeration
 **
+** @value ensEGvattributetypeCodeNULL Null
+** @value ensEGvattributetypeCodeSoaccession Sequence Ontology Accession
+** @value ensEGvattributetypeCodeSoterm Sequence Ontology Term
+** @value ensEGvattributetypeCodeDisplayterm Display Term
+** @@
 ******************************************************************************/
 
 typedef enum EnsOGvattributetypeCode
@@ -34,16 +66,16 @@ typedef enum EnsOGvattributetypeCode
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -60,7 +92,7 @@ EnsPGvattribute ensGvattributeNewIni(EnsPGvattributeadaptor gvaa,
 
 EnsPGvattribute ensGvattributeNewRef(EnsPGvattribute gva);
 
-void ensGvattributeDel(EnsPGvattribute* Pgva);
+void ensGvattributeDel(EnsPGvattribute *Pgva);
 
 EnsPGvattributeadaptor ensGvattributeGetAdaptor(const EnsPGvattribute gva);
 
@@ -90,7 +122,7 @@ EnsPGvattributeadaptor ensGvattributeadaptorNew(
 
 AjBool ensGvattributeadaptorCacheClear(EnsPGvattributeadaptor gvaa);
 
-void ensGvattributeadaptorDel(EnsPGvattributeadaptor* Pgvaa);
+void ensGvattributeadaptorDel(EnsPGvattributeadaptor *Pgvaa);
 
 EnsPBaseadaptor ensGvattributeadaptorGetBaseadaptor(
     const EnsPGvattributeadaptor gvaa);
@@ -105,7 +137,7 @@ AjBool ensGvattributeadaptorFetchAllbyCode(EnsPGvattributeadaptor gvaa,
 
 AjBool ensGvattributeadaptorFetchByIdentifier(EnsPGvattributeadaptor gvaa,
                                               ajuint identifier,
-                                              EnsPGvattribute* Pgva);
+                                              EnsPGvattribute *Pgva);
 
 const EnsPGvattribute ensGvattributeadaptorGetDisplaytermFromsoaccession(
     EnsPGvattributeadaptor gvaa,
@@ -127,7 +159,7 @@ const EnsPGvattribute ensGvattributeadaptorGetSotermFromsoaccession(
 
 EnsEGvattributetypeCode ensGvattributetypeCodeFromStr(const AjPStr code);
 
-const char* ensGvattributetypeCodeToChar(EnsEGvattributetypeCode gvatc);
+const char *ensGvattributetypeCodeToChar(EnsEGvattributetypeCode gvatc);
 
 /*
 ** End of prototype definitions

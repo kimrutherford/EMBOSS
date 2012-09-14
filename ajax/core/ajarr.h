@@ -1,13 +1,60 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajarr *************************************************************
+**
+** AJAX ARRAY functions
+**
+** These functions control all aspects of AJAX array utilities
+**
+** @author Copyright (C) 1999 Alan Bleasby
+** @version $Revision: 1.16 $
+** @modified Mar 12 1999 ajb First version
+** @modified May 10 2000 ajb added dynamically allocated numeric arrays
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajarr_h
-#define ajarr_h
+#ifndef AJARR_H
+#define AJARR_H
 
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
 
 #include <sys/types.h>
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -40,11 +87,13 @@ extern "C"
 ** @@
 ******************************************************************************/
 
-typedef struct AjSChar {
-  ajuint Res;
-  ajuint Len;
-  char *Ptr;
+typedef struct AjSChar
+{
+    ajuint Res;
+    ajuint Len;
+    char *Ptr;
 } AjOChar;
+
 #define AjPChar AjOChar*
 
 
@@ -75,11 +124,13 @@ typedef struct AjSChar {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSInt {
-  ajuint Res;
-  ajuint Len;
-  ajint *Ptr;
+typedef struct AjSInt
+{
+    ajuint Res;
+    ajuint Len;
+    ajint *Ptr;
 } AjOInt;
+
 #define AjPInt AjOInt*
 
 
@@ -110,11 +161,13 @@ typedef struct AjSInt {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSInt2d {
-  ajuint Res;
-  ajuint Len;
-  AjPInt *Ptr;
+typedef struct AjSInt2d
+{
+    ajuint Res;
+    ajuint Len;
+    AjPInt *Ptr;
 } AjOInt2d;
+
 #define AjPInt2d AjOInt2d*
 
 
@@ -145,11 +198,13 @@ typedef struct AjSInt2d {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSInt3d {
-  ajuint Res;
-  ajuint Len;
-  AjPInt2d *Ptr;
+typedef struct AjSInt3d
+{
+    ajuint Res;
+    ajuint Len;
+    AjPInt2d *Ptr;
 } AjOInt3d;
+
 #define AjPInt3d AjOInt3d*
 
 
@@ -180,11 +235,13 @@ typedef struct AjSInt3d {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSFloat {
-  ajuint Res;
-  ajuint Len;
-  float *Ptr;
+typedef struct AjSFloat
+{
+    ajuint Res;
+    ajuint Len;
+    float *Ptr;
 } AjOFloat;
+
 #define AjPFloat AjOFloat*
 
 
@@ -215,11 +272,13 @@ typedef struct AjSFloat {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSFloat2d {
-  ajuint Res;
-  ajuint Len;
-  AjPFloat *Ptr;
+typedef struct AjSFloat2d
+{
+    ajuint Res;
+    ajuint Len;
+    AjPFloat *Ptr;
 } AjOFloat2d;
+
 #define AjPFloat2d AjOFloat2d*
 
 
@@ -250,11 +309,13 @@ typedef struct AjSFloat2d {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSFloat3d {
-  ajuint Res;
-  ajuint Len;
-  AjPFloat2d  *Ptr;
+typedef struct AjSFloat3d
+{
+    ajuint Res;
+    ajuint Len;
+    AjPFloat2d  *Ptr;
 } AjOFloat3d;
+
 #define AjPFloat3d AjOFloat3d*
 
 
@@ -285,11 +346,13 @@ typedef struct AjSFloat3d {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSDouble {
-  ajuint Res;
-  ajuint Len;
-  double *Ptr;
+typedef struct AjSDouble
+{
+    ajuint Res;
+    ajuint Len;
+    double *Ptr;
 } AjODouble;
+
 #define AjPDouble AjODouble*
 
 
@@ -320,11 +383,13 @@ typedef struct AjSDouble {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSDouble2d {
-  ajuint Res;
-  ajuint Len;
-  AjPDouble *Ptr;
+typedef struct AjSDouble2d
+{
+    ajuint Res;
+    ajuint Len;
+    AjPDouble *Ptr;
 } AjODouble2d;
+
 #define AjPDouble2d AjODouble2d*
 
 
@@ -355,11 +420,13 @@ typedef struct AjSDouble2d {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSDouble3d {
-  ajuint Res;
-  ajuint Len;
-  AjPDouble2d  *Ptr;
+typedef struct AjSDouble3d
+{
+    ajuint Res;
+    ajuint Len;
+    AjPDouble2d  *Ptr;
 } AjODouble3d;
+
 #define AjPDouble3d AjODouble3d*
 
 
@@ -390,11 +457,13 @@ typedef struct AjSDouble3d {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSShort {
-  ajuint Res;
-  ajuint Len;
-  short *Ptr;
+typedef struct AjSShort
+{
+    ajuint Res;
+    ajuint Len;
+    short *Ptr;
 } AjOShort;
+
 #define AjPShort AjOShort*
 
 
@@ -425,11 +494,13 @@ typedef struct AjSShort {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSShort2d {
-  ajuint Res;
-  ajuint Len;
-  AjPShort *Ptr;
+typedef struct AjSShort2d
+{
+    ajuint Res;
+    ajuint Len;
+    AjPShort *Ptr;
 } AjOShort2d;
+
 #define AjPShort2d AjOShort2d*
 
 
@@ -460,11 +531,13 @@ typedef struct AjSShort2d {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSShort3d {
-  ajuint Res;
-  ajuint Len;
-  AjPShort2d  *Ptr;
+typedef struct AjSShort3d
+{
+    ajuint Res;
+    ajuint Len;
+    AjPShort2d  *Ptr;
 } AjOShort3d;
+
 #define AjPShort3d AjOShort3d*
 
 
@@ -495,11 +568,13 @@ typedef struct AjSShort3d {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSLong {
-  ajuint Res;
-  ajuint Len;
-  ajlong *Ptr;
+typedef struct AjSLong
+{
+    ajuint Res;
+    ajuint Len;
+    ajlong *Ptr;
 } AjOLong;
+
 #define AjPLong AjOLong*
 
 
@@ -530,11 +605,13 @@ typedef struct AjSLong {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSLong2d {
-  ajuint Res;
-  ajuint Len;
-  AjPLong *Ptr;
+typedef struct AjSLong2d
+{
+    ajuint Res;
+    ajuint Len;
+    AjPLong *Ptr;
 } AjOLong2d;
+
 #define AjPLong2d AjOLong2d*
 
 
@@ -565,11 +642,13 @@ typedef struct AjSLong2d {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSLong3d {
-  ajuint Res;
-  ajuint Len;
-  AjPLong2d  *Ptr;
+typedef struct AjSLong3d
+{
+    ajuint Res;
+    ajuint Len;
+    AjPLong2d  *Ptr;
 } AjOLong3d;
+
 #define AjPLong3d AjOLong3d*
 
 
@@ -600,11 +679,13 @@ typedef struct AjSLong3d {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSUint {
-  ajuint Res;
-  ajuint Len;
-  ajuint *Ptr;
+typedef struct AjSUint
+{
+    ajuint Res;
+    ajuint Len;
+    ajuint *Ptr;
 } AjOUint;
+
 #define AjPUint AjOUint*
 
 
@@ -635,11 +716,13 @@ typedef struct AjSUint {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSUint2d {
-  ajuint Res;
-  ajuint Len;
-  AjPUint *Ptr;
+typedef struct AjSUint2d
+{
+    ajuint Res;
+    ajuint Len;
+    AjPUint *Ptr;
 } AjOUint2d;
+
 #define AjPUint2d AjOUint2d*
 
 
@@ -670,18 +753,24 @@ typedef struct AjSUint2d {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSUint3d {
-  ajuint Res;
-  ajuint Len;
-  AjPUint2d *Ptr;
+typedef struct AjSUint3d
+{
+    ajuint Res;
+    ajuint Len;
+    AjPUint2d *Ptr;
 } AjOUint3d;
+
 #define AjPUint3d AjOUint3d*
 
 
 
+
 /* ========================================================================= */
-/* =================== All functions in alphabetical order ================= */
+/* =========================== public functions ============================ */
 /* ========================================================================= */
+
+
+
 
 /*
 ** Prototype definitions
@@ -704,19 +793,19 @@ void        ajDouble2dLen(const AjPDouble2d thys, ajuint *len1, ajuint *len2);
 AjPDouble2d ajDouble2dNew(void);
 AjPDouble2d ajDouble2dNewRes(ajuint size);
 AjBool      ajDouble2dPut(AjPDouble2d *thys,
-			  ajuint elem1, ajuint elem2, double v);
+                          ajuint elem1, ajuint elem2, double v);
 
 void        ajDouble3dDel(AjPDouble3d *thys);
 double      ajDouble3dGet(const AjPDouble3d thys,
-			  ajuint elem1, ajuint elem2, ajuint elem3);
+                          ajuint elem1, ajuint elem2, ajuint elem3);
 double***   ajDouble3dDouble(const AjPDouble3d thys);
 void        ajDouble3dLen(const AjPDouble3d thys,
-			  ajuint* len1, ajuint* len2, ajuint* len3);
+                          ajuint* len1, ajuint* len2, ajuint* len3);
 AjPDouble3d ajDouble3dNew(void);
 AjPDouble3d ajDouble3dNewRes(ajuint size);
 AjBool      ajDouble3dPut(AjPDouble3d *thys,
-			  ajuint elem1, ajuint elem2, ajuint elem3,
-			  double v);
+                          ajuint elem1, ajuint elem2, ajuint elem3,
+                          double v);
 
 void        ajFloatDel(AjPFloat *thys);
 float*      ajFloatFloat(const AjPFloat thys);
@@ -733,19 +822,19 @@ void        ajFloat2dLen(const AjPFloat2d thys, ajuint *len1, ajuint *len2);
 AjPFloat2d  ajFloat2dNew(void);
 AjPFloat2d  ajFloat2dNewRes(ajuint size);
 AjBool      ajFloat2dPut(AjPFloat2d *thys,
-			 ajuint elem1, ajuint elem2, float v);
+                         ajuint elem1, ajuint elem2, float v);
 
 void        ajFloat3dDel(AjPFloat3d *thys);
 float       ajFloat3dGet(const AjPFloat3d thys,
-			 ajuint elem1, ajuint elem2, ajuint elem3);
+                         ajuint elem1, ajuint elem2, ajuint elem3);
 float***    ajFloat3dFloat(const AjPFloat3d thys);
 void        ajFloat3dLen(const AjPFloat3d thys,
-			 ajuint* len1, ajuint* len2, ajuint* len3);
+                         ajuint* len1, ajuint* len2, ajuint* len3);
 AjPFloat3d  ajFloat3dNew(void);
 AjPFloat3d  ajFloat3dNewRes(ajuint size);
 AjBool      ajFloat3dPut(AjPFloat3d *thys,
-			 ajuint elem1, ajuint elem2, ajuint elem3,
-			 float v);
+                         ajuint elem1, ajuint elem2, ajuint elem3,
+                         float v);
 
 AjPChar     ajChararrNew(void);
 AjPChar     ajChararrNewRes(ajuint size);
@@ -777,14 +866,14 @@ AjBool      ajInt2dPut(AjPInt2d *thys, ajuint elem1, ajuint elem2, ajint v);
 
 void        ajInt3dDel(AjPInt3d *thys);
 ajint       ajInt3dGet(const AjPInt3d thys, ajuint elem1, ajuint elem2,
-		       ajuint elem3);
+                       ajuint elem3);
 ajint***    ajInt3dInt(const AjPInt3d thys);
 void        ajInt3dLen(const AjPInt3d thys,
-		       ajuint* len1, ajuint* len2, ajuint* len3);
+                       ajuint* len1, ajuint* len2, ajuint* len3);
 AjPInt3d    ajInt3dNew(void);
 AjPInt3d    ajInt3dNewRes(ajuint size);
 AjBool      ajInt3dPut(AjPInt3d *thys,
-		       ajuint elem1, ajuint elem2, ajuint elem3, ajint v);
+                       ajuint elem1, ajuint elem2, ajuint elem3, ajint v);
 
 void        ajLongDel(AjPLong *thys);
 ajlong      ajLongGet(const AjPLong thys, ajuint elem);
@@ -804,15 +893,15 @@ AjBool      ajLong2dPut(AjPLong2d *thys, ajuint elem1, ajuint elem2, ajlong v);
 
 void        ajLong3dDel(AjPLong3d *thys);
 ajlong      ajLong3dGet(const AjPLong3d thys,
-			ajuint elem1, ajuint elem2, ajuint elem3);
-void        ajLong3dLen(const AjPLong3d thys, 
-			ajuint* len1, ajuint* len2, ajuint* len3);
+                        ajuint elem1, ajuint elem2, ajuint elem3);
+void        ajLong3dLen(const AjPLong3d thys,
+                        ajuint* len1, ajuint* len2, ajuint* len3);
 ajlong***   ajLong3dLong(const AjPLong3d thys);
 AjPLong3d   ajLong3dNew(void);
 AjPLong3d   ajLong3dNewRes(ajuint size);
 AjBool      ajLong3dPut(AjPLong3d *thys,
-			ajuint elem1, ajuint elem2, ajuint elem3,
-			ajlong v);
+                        ajuint elem1, ajuint elem2, ajuint elem3,
+                        ajlong v);
 
 void        ajShortDel(AjPShort *thys);
 short       ajShortGet(const AjPShort thys, ajuint elem);
@@ -829,19 +918,19 @@ void        ajShort2dLen(const AjPShort2d thys, ajuint *len1, ajuint *len2);
 AjPShort2d  ajShort2dNew(void);
 AjPShort2d  ajShort2dNewRes(ajuint size);
 AjBool      ajShort2dPut(AjPShort2d *thys,
-			 ajuint elem1, ajuint elem2, short v);
+                         ajuint elem1, ajuint elem2, short v);
 
 void        ajShort3dDel(AjPShort3d *thys);
 short       ajShort3dGet(const AjPShort3d thys,
-			 ajuint elem1, ajuint elem2, ajuint elem3);
+                         ajuint elem1, ajuint elem2, ajuint elem3);
 void        ajShort3dLen(const AjPShort3d thys,
-			 ajuint* len1, ajuint* len2, ajuint* len3);
+                         ajuint* len1, ajuint* len2, ajuint* len3);
 short***    ajShort3dShort(const AjPShort3d thys);
 AjPShort3d  ajShort3dNew(void);
 AjPShort3d  ajShort3dNewRes(ajuint size);
 AjBool      ajShort3dPut(AjPShort3d *thys,
-			 ajuint elem1, ajuint elem2, ajuint elem3,
-			 short v);
+                         ajuint elem1, ajuint elem2, ajuint elem3,
+                         short v);
 
 
 void        ajUintDel(AjPUint *thys);
@@ -865,31 +954,36 @@ AjBool      ajUint2dPut(AjPUint2d *thys, ajuint elem1, ajuint elem2, ajuint v);
 
 void        ajUint3dDel(AjPUint3d *thys);
 ajuint      ajUint3dGet(const AjPUint3d thys, ajuint elem1, ajuint elem2,
-		       ajuint elem3);
+                        ajuint elem3);
 ajuint***   ajUint3dUint(const AjPUint3d thys);
 void        ajUint3dLen(const AjPUint3d thys,
-		       ajuint* len1, ajuint* len2, ajuint* len3);
+                        ajuint* len1, ajuint* len2, ajuint* len3);
 AjPUint3d   ajUint3dNew(void);
 AjPUint3d   ajUint3dNewRes(ajuint size);
 AjBool      ajUint3dPut(AjPUint3d *thys,
-		       ajuint elem1, ajuint elem2, ajuint elem3, ajuint v);
+                        ajuint elem1, ajuint elem2, ajuint elem3, ajuint v);
 
-AjBool      ajFloatParse (const AjPStr str, AjPFloat *array);
-void        ajFloatStr (const AjPFloat array, ajint precision, AjPStr* str);
-void        ajFloatTrace (const AjPFloat array, ajint precision,
-			  const char* text);
+AjBool      ajFloatParse(const AjPStr str, AjPFloat *array);
+void        ajFloatStr(const AjPFloat array, ajint precision, AjPStr* str);
+void        ajFloatTrace(const AjPFloat array, ajint precision,
+                         const char* text);
 
 ajuint      ajArrCommaList(const  AjPStr s, AjPStr **a);
 double*     ajArrDoubleLine(const AjPStr line, const char *delim,
-			    ajuint startcol, ajuint endcol);
+                            ajuint startcol, ajuint endcol);
 ajint*      ajArrIntLine(const AjPStr line, const char *delim,
-			 ajuint startcol, ajuint endcol);
+                         ajuint startcol, ajuint endcol);
 float*      ajArrFloatLine(const AjPStr line, const char *delim,
-			   ajuint startcol, ajuint endcol);
+                           ajuint startcol, ajuint endcol);
 
 /*
 ** End of prototype definitions
 */
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif /* AJ_COMPILE_DEPRECATED_BOOK */
+
+#ifdef AJ_COMPILE_DEPRECATED
 
 __deprecated AjPChar     ajChararrNewL(ajuint size);
 __deprecated AjPDouble   ajDoubleNewL(ajuint size);
@@ -913,8 +1007,11 @@ __deprecated AjPUint2d   ajUint2dNewL(ajuint size);
 __deprecated AjPUint2d   ajUint2dNewLL(ajuint size, ajuint size2);
 __deprecated AjPUint3d   ajUint3dNewL(ajuint size);
 
-#endif
+#endif /* AJ_COMPILE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif
+
+
+
+AJ_END_DECLS
+
+#endif /* !AJARR_H */

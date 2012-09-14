@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Picks PCR primers and hybridization oligos
+   Pick PCR primers and hybridization oligos
 
 Description
 
@@ -94,7 +94,7 @@ Usage
 
 
 % eprimer3 tembl:x65921 x65921.eprimer3 -explain
-Picks PCR primers and hybridization oligos
+Pick PCR primers and hybridization oligos
 
 
    Go to the input files for this example
@@ -102,8 +102,8 @@ Picks PCR primers and hybridization oligos
 
 Command line arguments
 
-Picks PCR primers and hybridization oligos
-Version: EMBOSS:6.4.0.0
+Pick PCR primers and hybridization oligos
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     The sequence from which to choose primers.
@@ -224,7 +224,7 @@ Version: EMBOSS:6.4.0.0
                                   parameter has no effect on the internal
                                   oligo if one is requested.) (Integer 0 or
                                   more)
-*  -osize              integer    [20] Optimum length (in bases) of a primer
+*  -optsize            integer    [20] Optimum length (in bases) of a primer
                                   oligo. EPrimer3 will attempt to pick primers
                                   close to this length. (Integer 0 or more)
 *  -minsize            integer    [18] Minimum acceptable length of a primer.
@@ -236,7 +236,7 @@ Version: EMBOSS:6.4.0.0
                                   the maximum oligo size for which EPrimer3's
                                   melting-temperature is valid. (Integer up
                                   to 35)
-*  -otm                float      [60.0] Optimum melting temperature(Celsius)
+*  -opttm              float      [60.0] Optimum melting temperature(Celsius)
                                   for a primer oligo. EPrimer3 will try to
                                   pick primers with melting temperatures are
                                   close to this temperature. The oligo melting
@@ -658,7 +658,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -734,7 +737,7 @@ RN   [1]
 RP   1-2016
 RA   Kas K.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
 RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -747,6 +750,15 @@ RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 DR   GDB; 191789.
 DR   GDB; 191790.
 DR   GDB; 354872.
@@ -755,15 +767,6 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /organism="Homo sapiens"
-FT                   /mol_type="genomic DNA"
-FT                   /clone_lib="CML cosmid"
-FT                   /clone="15.1"
-FT                   /db_xref="taxon:9606"
-FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..>1912)
-FT                   /gene="fau 1"
-FT   exon            408..504
-FT                   /number=1
 
 
   [Part of this file has been deleted for brevity]
@@ -972,7 +975,7 @@ Known bugs
 See also
 
                     Program name                         Description
-                    eprimer32    Picks PCR primers and hybridization oligos
+                    eprimer32    Pick PCR primers and hybridization oligos
    primersearch     Search DNA sequences for matches with primer pairs
                     stssearch    Search a DNA database for matches with a set of STS primers
 

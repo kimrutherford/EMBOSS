@@ -50,7 +50,7 @@ caatgccaactcttaagtcttttgta
 
 <a name="output.3"></a>
 <h3>Output files for usage example 3</h3>
-<p><h3>File: h45989.fasta</h3>
+<p><h3>File: em498477.fasta</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;X65921_408_504 [exon] H.sapiens fau 1 gene
@@ -179,42 +179,94 @@ cccacctttggcaagaagaagggccccaatgccaactcttaa
 
 <a name="output.5"></a>
 <h3>Output files for usage example 5</h3>
-<p><h3>File: 12s1_arath.fasta</h3>
+<p><h3>File: cru4_arath.fasta</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-&gt;AQP1_HUMAN_247_247 [protein_modification_categorized_by_chemical_process] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and kidney proximal tubule) (Urine water channel)
+&gt;CRU4_ARATH_52_52 [post_translationally_modified_region] 12S seed storage protein CRU4 (Cruciferin 4) (AtCRU4) (Cruciferin A1) (Legumin-type globulin storage protein CRU4) (12S seed storage protein CRU4 alpha chain) (12S seed storage protein CRU4 acidic chain) (12S seed storage protein CRU4 beta chain) (12S seed storage protein CRU4 basic chain) (Precursor)
+VLKSEAG
+&gt;CRU4_ARATH_96_96 [post_translationally_modified_region] 12S seed storage protein CRU4 (Cruciferin 4) (AtCRU4) (Cruciferin A1) (Legumin-type globulin storage protein CRU4) (12S seed storage protein CRU4 alpha chain) (12S seed storage protein CRU4 acidic chain) (12S seed storage protein CRU4 beta chain) (12S seed storage protein CRU4 basic chain) (Precursor)
+AKLSFVA
+&gt;CRU4_ARATH_314_314 [post_translationally_modified_region] 12S seed storage protein CRU4 (Cruciferin 4) (AtCRU4) (Cruciferin A1) (Legumin-type globulin storage protein CRU4) (12S seed storage protein CRU4 alpha chain) (12S seed storage protein CRU4 acidic chain) (12S seed storage protein CRU4 beta chain) (12S seed storage protein CRU4 basic chain) (Precursor)
+GYISTLN
+&gt;AQP1_HUMAN_247_247 [post_translationally_modified_region] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Urine water channel) (Water channel protein for red blood cells and kidney proximal tubule)
 VWTSGQV
-&gt;AQP1_HUMAN_262_262 [protein_modification_categorized_by_chemical_process] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Water channel protein for red blood cells and kidney proximal tubule) (Urine water channel)
+&gt;AQP1_HUMAN_262_262 [post_translationally_modified_region] Aquaporin-1 (AQP-1) (Aquaporin-CHIP) (Urine water channel) (Water channel protein for red blood cells and kidney proximal tubule)
 DINSRVE
-&gt;GCN4_YEAST_17_17 [protein_modification_categorized_by_chemical_process] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
+&gt;GCN4_YEAST_17_17 [post_translationally_modified_region] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
 MGFSPLD
-&gt;GCN4_YEAST_218_218 [protein_modification_categorized_by_chemical_process] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
+&gt;GCN4_YEAST_218_218 [post_translationally_modified_region] General control protein GCN4 (Amino acid biosynthesis regulatory protein)
 IPLSPIV
-&gt;OPSD_HUMAN_334_334 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+&gt;OPSD_HUMAN_334_334 [post_translationally_modified_region] Rhodopsin (Opsin-2)
 DEASATV
-&gt;OPSD_HUMAN_338_338 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+&gt;OPSD_HUMAN_338_338 [post_translationally_modified_region] Rhodopsin (Opsin-2)
 ATVSKTE
-&gt;OPSD_HUMAN_343_343 [protein_modification_categorized_by_chemical_process] Rhodopsin (Opsin-2)
+&gt;OPSD_HUMAN_343_343 [post_translationally_modified_region] Rhodopsin (Opsin-2)
 TETSQVA
-&gt;PAXI_HUMAN_83_83 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAX3_HUMAN_201_201 [post_translationally_modified_region] Paired box protein Pax-3 (HuP2)
+APQSDEG
+&gt;PAX3_HUMAN_205_205 [post_translationally_modified_region] Paired box protein Pax-3 (HuP2)
+DEGSDID
+&gt;PAX3_HUMAN_209_209 [post_translationally_modified_region] Paired box protein Pax-3 (HuP2)
+DIDSEPD
+&gt;PAXI_HUMAN_83_83 [post_translationally_modified_region] Paxillin
 QPQSSSP
-&gt;PAXI_HUMAN_85_85 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_84_84 [post_translationally_modified_region] Paxillin
+PQSSSPV
+&gt;PAXI_HUMAN_85_85 [post_translationally_modified_region] Paxillin
 QSSSPVY
-&gt;PAXI_HUMAN_106_106 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_106_106 [post_translationally_modified_region] Paxillin
 SVGSPCS
-&gt;PAXI_HUMAN_109_109 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_109_109 [post_translationally_modified_region] Paxillin
 SPCSRVG
-&gt;PAXI_HUMAN_126_126 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_126_126 [post_translationally_modified_region] Paxillin
 KQKSAEP
-&gt;PAXI_HUMAN_130_130 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_130_130 [post_translationally_modified_region] Paxillin
 AEPSPTV
-&gt;PAXI_HUMAN_137_137 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_137_137 [post_translationally_modified_region] Paxillin
 MSTSLGS
-&gt;PAXI_HUMAN_303_303 [protein_modification_categorized_by_chemical_process] Paxillin
+&gt;PAXI_HUMAN_244_244 [post_translationally_modified_region] Paxillin
+EMSSPQR
+&gt;PAXI_HUMAN_303_303 [post_translationally_modified_region] Paxillin
 GRSSPGG
-&gt;UBR5_RAT_193_193 [protein_modification_categorized_by_chemical_process] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+&gt;UBR5_RAT_100_100 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+TSDSPWF
+&gt;UBR5_RAT_342_342 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+PVQSPVS
+&gt;UBR5_RAT_567_567 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+QLRSPES
+&gt;UBR5_RAT_601_601 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+PPPSPAS
+&gt;UBR5_RAT_797_797 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+GQESPII
+&gt;UBR5_RAT_917_917 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+ACVSVCF
+&gt;UBR5_RAT_1007_1007 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+DPVSPPI
+&gt;UBR5_RAT_1216_1216 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+KRTSPTA
+&gt;UBR5_RAT_1344_1344 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+DPLSASS
+&gt;UBR5_RAT_1364_1364 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+NQQSGTI
+&gt;UBR5_RAT_1470_1470 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+VAESLIV
+&gt;UBR5_RAT_1730_1730 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+AASSAGL
+&gt;UBR5_RAT_1769_1769 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+YLTSASS
+&gt;UBR5_RAT_2016_2016 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+FRRSDSM
+&gt;UBR5_RAT_2018_2018 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+RSDSMTF
+&gt;UBR5_RAT_2061_2061 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
 GRPSQGL
-&gt;UBR5_RAT_607_607 [protein_modification_categorized_by_chemical_process] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+&gt;UBR5_RAT_2066_2066 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+GLYSSSA
+&gt;UBR5_RAT_2279_2279 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+GEGSGVA
+&gt;UBR5_RAT_2473_2473 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
+HGSSRSV
+&gt;UBR5_RAT_2475_2475 [post_translationally_modified_region] E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
 SSRSVVD
 </pre>
 </td></tr></table><p>

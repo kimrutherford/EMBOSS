@@ -1,0 +1,15 @@
+Here is a sample session with <b>featmerge</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>featmerge </b>
+Merge two overlapping feature tables
+Input feature table: <b>tsw:actb1_takru</b>
+Second input feature table: <b>../antigenic-keep/actb1_takru.antigenic</b>
+Features output [actb1_takru.gff]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

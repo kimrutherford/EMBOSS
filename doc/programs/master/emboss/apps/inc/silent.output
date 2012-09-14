@@ -6,10 +6,10 @@
 <pre>
 ########################################
 # Program: silent
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: silent
 #    -sequence tembl:x65923
-#    -enzymes ecori,hindiii
+#    -enzymes kpni
 # Report_format: table
 # Report_file: x65923.silent
 ########################################
@@ -17,7 +17,7 @@
 #=======================================
 #
 # Sequence: X65923     from: 1   to: 518
-# HitCount: 1
+# HitCount: 2
 #
 # KEY:
 # EnzymeName: Enzyme name
@@ -32,7 +32,8 @@
 #=======================================
 
   Start     End  Strand EnzymeName RS-Pattern Base-Posn    AAs Silent Mutation
-    267     272       - HindIII    AAGCTT           268    A.A    Yes     A-&gt;T
+     34      39       + KpnI       GGTACC            36    G.G    Yes     G-&gt;T
+    288     293       + KpnI       GGTACC           291    V.V    Yes     T-&gt;A
 
 #---------------------------------------
 #---------------------------------------
@@ -41,7 +42,7 @@
 # Total_sequences: 1
 # Total_length: 518
 # Reported_sequences: 1
-# Reported_hitcount: 1
+# Reported_hitcount: 2
 #---------------------------------------
 </pre>
 </td></tr></table><p>

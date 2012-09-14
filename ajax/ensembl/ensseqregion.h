@@ -1,10 +1,37 @@
+/* @include ensseqregion ******************************************************
+**
+** Ensembl Sequence Region functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.22 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/20 22:14:40 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSSEQREGION_H
 #define ENSSEQREGION_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "enscoordsystem.h"
 #include "ensdata.h"
@@ -14,23 +41,23 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -48,7 +75,7 @@ EnsPSeqregion ensSeqregionNewIni(EnsPSeqregionadaptor sra,
 
 EnsPSeqregion ensSeqregionNewRef(EnsPSeqregion sr);
 
-void ensSeqregionDel(EnsPSeqregion* Psr);
+void ensSeqregionDel(EnsPSeqregion *Psr);
 
 EnsPSeqregionadaptor ensSeqregionGetAdaptor(const EnsPSeqregion sr);
 
@@ -89,11 +116,19 @@ AjBool ensSeqregionFetchAllAttributes(EnsPSeqregion sr,
                                       const AjPStr code,
                                       AjPList attributes);
 
-AjBool ensSeqregionIsLocusreferencegenomic(EnsPSeqregion sr, AjBool* Presult);
+AjBool ensSeqregionIsLocusreferencegenomic(EnsPSeqregion sr, AjBool *Presult);
 
-AjBool ensSeqregionIsNonreference(EnsPSeqregion sr, AjBool* Presult);
+AjBool ensSeqregionIsNonreference(EnsPSeqregion sr, AjBool *Presult);
 
-AjBool ensSeqregionIsToplevel(EnsPSeqregion sr, AjBool* Presult);
+AjBool ensSeqregionIsToplevel(EnsPSeqregion sr, AjBool *Presult);
+
+AjBool ensListSeqregionSortIdentifierAscending(AjPList srs);
+
+AjBool ensListSeqregionSortIdentifierDescending(AjPList srs);
+
+AjBool ensListSeqregionSortNameAscending(AjPList srs);
+
+AjBool ensListSeqregionSortNameDescending(AjPList srs);
 
 /* Ensembl Sequence Region Adaptor */
 
@@ -103,7 +138,7 @@ EnsPSeqregionadaptor ensRegistryGetSeqregionadaptor(
 EnsPSeqregionadaptor ensSeqregionadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensSeqregionadaptorDel(EnsPSeqregionadaptor* Psra);
+void ensSeqregionadaptorDel(EnsPSeqregionadaptor *Psra);
 
 EnsPDatabaseadaptor ensSeqregionadaptorGetDatabaseadaptor(
     const EnsPSeqregionadaptor sra);
@@ -115,7 +150,7 @@ const AjPList ensSeqregionadaptorLoadNonreferences(
     EnsPSeqregionadaptor sra);
 
 AjBool ensSeqregionadaptorCacheInsert(EnsPSeqregionadaptor sra,
-                                      EnsPSeqregion* Psr);
+                                      EnsPSeqregion *Psr);
 
 AjBool ensSeqregionadaptorCacheRemove(EnsPSeqregionadaptor sra,
                                       const EnsPSeqregion sr);
@@ -132,29 +167,29 @@ AjBool ensSeqregionadaptorFetchAllbyCoordsystem(EnsPSeqregionadaptor sra,
 
 AjBool ensSeqregionadaptorFetchByIdentifier(EnsPSeqregionadaptor sra,
                                             ajuint identifier,
-                                            EnsPSeqregion* Psr);
+                                            EnsPSeqregion *Psr);
 
 AjBool ensSeqregionadaptorFetchByName(EnsPSeqregionadaptor sra,
                                       const EnsPCoordsystem cs,
                                       const AjPStr name,
-                                      EnsPSeqregion* Psr);
+                                      EnsPSeqregion *Psr);
 
 AjBool ensSeqregionadaptorFetchByNamefuzzy(EnsPSeqregionadaptor sra,
                                            const EnsPCoordsystem cs,
                                            const AjPStr name,
-                                           EnsPSeqregion* Psr);
+                                           EnsPSeqregion *Psr);
 
 AjBool ensSeqregionadaptorFetchBySynonym(EnsPSeqregionadaptor sra,
                                          const AjPStr synonym,
-                                         EnsPSeqregion* Psr);
+                                         EnsPSeqregion *Psr);
 
 AjBool ensSeqregionadaptorIsLocusreferencegenomic(EnsPSeqregionadaptor sra,
                                                   const EnsPSeqregion sr,
-                                                  AjBool* Presult);
+                                                  AjBool *Presult);
 
 AjBool ensSeqregionadaptorIsNonreference(EnsPSeqregionadaptor sra,
                                          const EnsPSeqregion sr,
-                                         AjBool* Presult);
+                                         AjBool *Presult);
 
 /* Ensembl Sequence Region Synonym */
 
@@ -169,7 +204,7 @@ EnsPSeqregionsynonym ensSeqregionsynonymNewIni(
 
 EnsPSeqregionsynonym ensSeqregionsynonymNewRef(EnsPSeqregionsynonym srs);
 
-void ensSeqregionsynonymDel(EnsPSeqregionsynonym* Psrs);
+void ensSeqregionsynonymDel(EnsPSeqregionsynonym *Psrs);
 
 EnsPSeqregionsynonymadaptor ensSeqregionsynonymGetAdaptor(
     const EnsPSeqregionsynonym srs);
@@ -213,7 +248,7 @@ EnsPSeqregionsynonymadaptor ensRegistryGetSeqregionsynonymadaptor(
 EnsPSeqregionsynonymadaptor ensSeqregionsynonymadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensSeqregionsynonymadaptorDel(EnsPSeqregionsynonymadaptor* Psrsa);
+void ensSeqregionsynonymadaptorDel(EnsPSeqregionsynonymadaptor *Psrsa);
 
 EnsPBaseadaptor ensSeqregionsynonymadaptorGetBaseadaptor(
     EnsPSeqregionsynonymadaptor srsa);
@@ -229,12 +264,12 @@ AjBool ensSeqregionsynonymadaptorFetchAllbySeqregion(
 AjBool ensSeqregionsynonymadaptorFetchByIdentifier(
     EnsPSeqregionsynonymadaptor srsa,
     ajuint identifier,
-    EnsPSeqregionsynonym* Psrs);
+    EnsPSeqregionsynonym *Psrs);
 
 AjBool ensSeqregionsynonymadaptorFetchBySynonym(
     EnsPSeqregionsynonymadaptor srsa,
     const AjPStr synonym,
-    EnsPSeqregionsynonym* Psrs);
+    EnsPSeqregionsynonym *Psrs);
 
 /*
 ** End of prototype definitions

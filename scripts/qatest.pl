@@ -90,6 +90,9 @@ sub qatestsystem($$$){
     $c =~ s/^(\S+)=/SET $1=/;
     if($c eq "") {next}
     if($c =~ /export /i) {next}
+    if($iswindows) {
+      $c =~ s/~(\S+)/\"\%HOMEDRIVE\%\%HOMEPATH\%$1\"/;
+    }
     $i++;
 #    print "    Pre[$i] '$c'\n";
     print BAT "$c\n";
@@ -102,8 +105,12 @@ sub qatestsystem($$$){
     $c =~ s/\//\\/g;
     $c =~ s/^rm -rf/rmdir \/s \/q /;
     $c =~ s/^rm /del \/q /;
+    $c =~ s/^cp /copy /;
     if($c eq "") {next}
     if($c =~ /export /i) {next}
+    if($iswindows) {
+      $c =~ s/~(\S+)/\"\%HOMEDRIVE\%\%HOMEPATH\%$1\"/;
+    }
     $i++;
 #    print "   Post[$i] '$c'\n";
     print BAT "$c\n";
@@ -156,6 +163,13 @@ sub runtest ($) {
 
   $globaltestdelete=$defdelete;	# global cleanup of test directory
   $globalcomment = ""; # global comment in case of expected failure
+
+  if($iswindows) {
+      if($dodebug) {$ppcmd .= "SET EMBOSS_DEBUG=Y;"}
+  }
+  else {
+      if($dodebug) {$ppcmd .= "EMBOSS_DEBUG=Y ;export EMBOSS_DEBUG ;"}
+  }
 
 # parse the test definition (EMBL-style 2 character prefixes)
 
@@ -244,6 +258,13 @@ sub runtest ($) {
 	$apcount{$testapp}++;
 	### no need to test docs for a make check application
     }
+    elsif ($line =~ /^AX\s*(.*)/) {
+	$testa = 1;
+	$testapp = $1;
+	if ($packa eq "unknown") {
+	    print STDERR "No AY line before AX line in test $testid\n";
+	}
+    }
     elsif ($line =~ /^AA\s*(.*)/) {
 	$testa = 1;
 	$testapp = $1;
@@ -263,15 +284,19 @@ sub runtest ($) {
 	}
     }
     elsif ($line =~ /^AB\s*(.*)/) {$packa = $1}
+    elsif ($line =~ /^AY\s*(.*)/) {$packa = $1}
     elsif ($line =~ /^CL\s+(.*)/) {
-      $newcmdline = $1;
-      if ($cmdline ne "") {
-	if($iswindows && ($cmdline =~ /\\$/)){
-	  $cmdline =~ s/\\$//g;
+        $newcmdline = $1;
+	if($iswindows) {
+	  $newcmdline =~ s/~(\S+)/\"\%HOMEDRIVE\%\%HOMEPATH\%$1\"/;
 	}
-	else {$cmdline .= " "}
-      }
-	$cmdline .= $newcmdline;
+	if ($cmdline ne "") {
+	    if($iswindows && ($cmdline =~ /\\$/)){
+	        $cmdline =~ s/\\$//g;
+	    }
+	    else {$cmdline .= " "}
+        }
+        $cmdline .= $newcmdline;
     }
 
 # directoryname - must be unique
@@ -854,6 +879,7 @@ $packa="unknown";
 $dowild=0;
 $logfile = "qatest.log";
 $testwild = "*";
+$dodebug=0;
 $doembassy=1;
 $docheck=1;
 $repeattest=0;
@@ -863,7 +889,7 @@ open (VERSION, "embossversion -full -filter|") ||
 while (<VERSION>){
     if(/System: (\S+)/) {
       $os = $1;
-      if($os =~ /windows/) {$iswindows = 1; $docheck=0}
+      if($os =~ /windows/) {$iswindows = 1; $docheck=0; $doembassy=0}
     }
     if(/BaseDirectory: (\S+)/) {
 	$basedir = $1;
@@ -893,6 +919,7 @@ foreach $test (@ARGV) {
     elsif ($opt eq "keep") {$defdelete="keep"}
     elsif ($opt eq "ks") {$defdelete="success"}
     elsif ($opt eq "ka") {$defdelete="all"}
+    elsif ($opt eq "debug") {$dodebug=1}
     elsif ($opt eq "noembassy") {$doembassy=0}
     elsif ($opt eq "nocheck") {$docheck=0}
     elsif ($opt eq "retest") {$repeattest=1}
@@ -1011,6 +1038,22 @@ if (!$numtests) {
 
 }
 
+@testfiles = ("$qatestfile");
+if($doembassy) {
+    opendir (EMBASSY, "$basedir/embassy") ||
+	die "Failed to find embassy directory";
+    while ($edir = readdir(EMBASSY)) {
+	if ($edir =~ /^[.]/) {next}
+	if(defined($embassyonly) && ($embassyonly ne $edir)) {next}
+	if(-d "$basedir/embassy/$edir") {
+	    if(-e "$basedir/embassy/$edir/test/qatest.dat") {
+		push @testfiles, "$basedir/embassy/$edir/test/qatest.dat";
+	    }
+	}
+    }
+}
+
+foreach $qatestfile (@testfiles) {
 open (IN, "$qatestfile") || die "Cannot open $qatestfile";
 open (LOG, ">$logfile") || die "Cannot open $logfile";
 
@@ -1032,7 +1075,12 @@ while (<IN>) {
     $isembassy = 0;
   }
   if (/^AA\s+(\S+)/) {$isembassy = 1}
+  if (/^AX\s+(\S+)/) {$isembassy = 1}
   if (/^AB\s+(\S+)/) {$embassypack = $1}
+  if (/^AY\s+(\S+)/) {
+      if(defined($embassyonly)) {$embassypack = $embassyonly}
+      else {$embassypack = $1}
+  }
   if (/^AQ\s+/) {$ischeck = 1}
   $testdef .= $_;
 
@@ -1138,7 +1186,7 @@ while (<IN>) {
 
     print LOG "\n";
 
-# clear any global hashes befoire defining the next test
+# clear any global hashes before defining the next test
 
     undef %outfilepatt;
     undef %pattest;
@@ -1150,7 +1198,7 @@ while (<IN>) {
 
   }
 }
-
+}
 # Final summary
 
 if ($testappname) {

@@ -14,7 +14,7 @@
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Retrieves sequence entries from flatfile databases and files</td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -33,6 +33,11 @@
 </tr>
 
 <tr>
+<td><a href="refseqget.html">refseqget</a></td>
+<td>Get reference sequence</td>
+</tr>
+
+<tr>
 <td><a href="seqxrefget.html">seqxrefget</a></td>
 <td>Retrieve all cross-referenced data for a sequence entry</td>
 </tr>
@@ -40,6 +45,11 @@
 <tr>
 <td><a href="showalign.html">showalign</a></td>
 <td>Display a multiple sequence alignment in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="variationget.html">variationget</a></td>
+<td>Get sequence variations</td>
 </tr>
 
 <tr>

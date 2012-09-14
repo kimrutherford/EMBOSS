@@ -1,1470 +1,1809 @@
 format-version: 1.2
-date: 01:12:2010 12:25
-data-version: Beta12
-! Use for mapping to "global" id space(s) e.g.:
-! idspace: EDAM http://purl.org/edam/ "EDAM terms"
-! NEXT term number is 0002891
-! xref: WHATIF: CorrectedPDBasXML
-! xref:http://www.geneontology.org/doc/GO.xrf_abbs: FB
-! xref:Moby:GI_Gene ! xref: Moby_namespace:iHOPorganism
-! xref: SO:0000348
-! xref: BioCatalogue:Protein Multiple Alignment
-! xref: GO:0006464 ! protein modification process
-! regex: Regular expression for validating a "data<-identifier" instance.
-! spec_url: URL of format specification for a "format" term
-! seealso: Ontology term ID of term in external ontology for fine-grained annotation
+data-version: 1.0
+date: 13:01:2012 18:00 ! Always GMT (UTC) or British Summer Time
+saved-by: Matus Kalas
+subsetdef: operations "EDAM operations" {note="Singular, bioinformatics-specific operations that are functions of tools, workflows, or scripts, or can be performed manually."}
+subsetdef: data "EDAM types of data" {note="Types of data that are relevant in bioinformatics, commonly used as inputs, outputs, or intermediate data of analyses, or provided by databases and portals."}
+subsetdef: topics "EDAM topics" {note="Application domains of bioinformatics tools and resources; topics of research, studies, or analyses; approaches, techniques, and paradigms within - or directly related to - bioinformatics."}
+subsetdef: formats "EDAM data formats" {note="Data formats commonly used in - and specific to - bioinformatics. Many format concepts in EDAM include references to their definition and documentation."}
+subsetdef: identifiers "EDAM types of identifiers" {note="Types of identifiers that identify biological or computational entities; including resource-specific data accessions. Several identifier concepts in EDAM include regular expressions and examples."}
+subsetdef: relations "EDAM relations" {note="Types of relations - defined in EDAM - that apply between concepts, entities subject to semantic annotation, and entities and concepts (or possibly even vice versa)."}
+subsetdef: concept_attributes "EDAM concept attributes" {note="Types of concept attributes and attribute modifiers or qualifiers, that are defined and used in EDAM in addition to the standard attributes of the OBO format."}
+idspace: EDAM_operation http://edamontology.org/operation_ "EDAM Operations"
+idspace: EDAM_data http://edamontology.org/data_ "EDAM Types of Data"
+idspace: EDAM_topic http://edamontology.org/topic_ "EDAM Topics"
+idspace: EDAM_format http://edamontology.org/format_ "EDAM Data Formats"
+idspace: EDAM http://edamontology.org/ "EDAM Relations and Concept Attributes"
+default-relationship-id-prefix: EDAM
+remark: EDAM (EMBRACE Data And Methods) is an ontology of bioinformatics operations (tool, application, or workflow functions), types of data, topics (application domains), and data formats. The applications of EDAM are within organising tools and data, finding suitable tools in catalogues, and integrating them into complex applications or workflows. Semantic annotations with EDAM are applicable to diverse entities such as for example Web services, databases, programmatic libraries, standalone tools and toolkits, interactive applications, data schemas, data sets, or publications within bioinformatics. Annotation with EDAM may also contribute to data provenance, and EDAM terms and synonyms can be used in text mining. EDAM - and in particular the EDAM Data sub-ontology - serves also as a markup vocabulary for bioinformatics data on the Semantic Web.
+remark: EDAM editors: Jon Ison and Matus Kalas. Co-authors: Inge Jonassen, Hamish McWilliam, James Malone, Rodrigo Lopez, Helen Parkinson, Steve Pettifer, and Peter Rice. Funding: No funding targetted exclusively the development of EDAM; contibutions from these projects: EMBRACE (FP6, EU), EMBOSS (BBSRC, UK), eSysbio and FUGE Bioinformatics Platform (both Research Council of Norway). See http://edamontology.org for documentation and licence.
+next_id: 3168 {since=1.1}
 
 
 
 !
-! EDAM relations
+! Relations
 !
-[Typedef]
-id: concerns
-name: concerns
-def: "Defines that a term ('Topic') concerns (covers) another term ('Data', 'Resource' or 'Operation')." [EDAM:EBI]
-is_anti_symmetric: true
-is_cyclic: false
-is_transitive: true
-! inverse_of: is_concern_of
-
-! [Typedef]
-! id: has_attribute
-! name: has_attribute
-! def: "Defines a term ('Biological entity') has (or can have) an attribute ('Data')." [EDAM:EBI]
-! is_anti_symmetric: true
-! is_cyclic: false
-! is_transitive: true
-! inverse_of: is_attribute_of
-
-! [Typedef]
-! id: has_identifier
-! name: has_identifier
-! def: "Defines a term ('Biological entity', 'Resource' or 'Data') has (or can have) an identifier ('Identifier')." [EDAM:EBI]
-! is_anti_symmetric: true
-! is_cyclic: false
-! is_transitive: true
-! inverse_of: is_identifier_of
 
 [Typedef]
 id: has_input
-name: has_input
-def: "Defines a term ('Operation') as necessarily consuming another term ('Data') as input." [EDAM:EBI]
-is_anti_symmetric: true
-is_cyclic: false
-is_transitive: true
-! inverse_of: is_input_of
+name: has input
+subset: relations
+def: "'A has_input B' defines for the subject A, that it has the object B as a necessary or actual input or input argument." [http://edamontology.org]
+comment: Subject A can either be concept that is or has an 'Operation' function, or an entity outside of an ontology (or an ontology concept in a role of an entity being semantically annotated) that has an 'Operation' function or is an 'Operation'. Object B can be any concept or entity. {note="In EDAM, only 'has_input' is explicitly defined between EDAM concepts ('Operation' 'has_input' 'Data'). The inverse, 'is_input_of', is not explicitly defined."}
+synonym: "has input" EXACT [http://wsio.org/has_input]
+synonym: "has_specified_input" NARROW [http://purl.obolibrary.org/obo/OBI_0000293] {note="'OBI:has_specified_input' only relates subjects that are a 'planned process' (http://purl.obolibrary.org/obo/OBI_0000011) with objects that are a 'continuant' (snap:Continuant)."}
+synonym: "has_participant" RELATED [OBO_REL:has_participant] {note="'OBO_REL:has_participant' is narrower in the sense that it only relates ontological categories (concepts) that are a 'process' (span:Process) with ontological categories that are a 'continuant' (snap:Continuant), and broader in the sense that it relates with any participating objects not just inputs or input arguments of the subject."}
+inverse_of: is_input_of
+transitive_over: OBO_REL:is_a ! Every relation type (not a metadata tag) should be transitive over 'is', shouldn't it?
+is_cyclic: true {note="In very unusual cases"}
+is_reflexive: false
+is_symmetric: false
+is_anti_symmetric: false
+is_transitive: false
+domain: EDAM_operation:0004 ! Operation
+range: EDAM_data:0006 ! Data
+
+[Typedef]
+id: is_input_of
+name: is input of
+subset: relations
+def: "'A is_input_of B' defines for the subject A, that it as a necessary or actual input or input argument of the object B." [http://edamontology.org]
+comment: Subject A can be any concept or entity outside of an ontology (or an ontology concept in a role of an entity being semantically annotated). Object B can either be a concept that is or has an 'Operation' function, or an entity outside of an ontology that has an 'Operation' function or is an 'Operation'. {note="In EDAM, 'is_input_of' is not explicitly defined between EDAM concepts, only the inverse 'has_input'."}
+synonym: "is input of" EXACT [http://wsio.org/is_input_of]
+synonym: "is_specified_input_of" NARROW [http://purl.obolibrary.org/obo/OBI_0000295] {note="'OBI:is_specified_input_of' only relates subjects that are a 'continuant' (snap:Continuant) with objects that are a 'planned process' (http://purl.obolibrary.org/obo/OBI_0000011)."}
+synonym: "participates_in" RELATED [OBO_REL:participates_in] {note="'OBO_REL:participates_in' is narrower in the sense that it only relates ontological categories (concepts) that are a 'continuant' (snap:Continuant) with ontological categories that are a 'process' (span:Process), and broader in the sense that it relates any participating subjects not just inputs or input arguments."}
+inverse_of: has_input
+transitive_over: OBO_REL:is_a ! Every relation type (not a metadata tag) should be transitive over 'is', shouldn't it?
+is_cyclic: true {note="In very unusual cases"}
+is_reflexive: false
+is_symmetric: false
+is_anti_symmetric: false
+is_transitive: false
+domain: EDAM_data:0006 ! Data
+range: EDAM_operation:0004 ! Operation
 
 [Typedef]
 id: has_output
-name: has_output
-def: "Defines a term ('Operation') as necessarily producing another term ('Data') as output." [EDAM:EBI]
-is_anti_symmetric: true
-is_cyclic: false
-is_transitive: true
-! inverse_of: is_output_of
-
-! [Typedef]
-! id: has_part
-! name: has_part
-! def: "Defines a term ('Biological entity' or 'Data') as having a conceptual part ('Biological entity' or 'Data')." [EDAM:EBI]
-! is_anti_symmetric: true
-! is_cyclic: false
-! is_transitive: true
-! inverse_of: is_part_of
-
-! [Typedef]
-! id: has_source
-! name: has_source
-! def: "Defines a term ('Data') has a source ('Operation', 'Resource')." [EDAM:EBI]
-! comment: is_source_of
-! is_anti_symmetric: true
-! is_cyclic: false
-! is_transitive: true
-! inverse_of: is_source_of
-
-
-! [Typedef]
-! id: has_format
-! name: has_format
-! def: "Defines a term ('Data') has a data format specification ('Format')." [EDAM:EBI]
-! is_anti_symmetric: true
-! is_cyclic: false
-! is_transitive: true
-! inverse_of: is_format_of
-
-! [Typedef]
-! id: is_attribute_of
-! name: is_attribute_of
-! def: "Defines that a term ('Data') is an attribute of another term ('Biological entity')." [EDAM:EBI]
-! is_anti_symmetric: true
-! is_cyclic: false
-! is_transitive: true
-! inverse_of: has_attribute
-
-! [Typedef]
-! id: is_concern_of
-! name: is_concern_of
-! def: "Defines a term ('Biological entity', 'Resource' or 'Operation') as a concern of another term ('Topic')." [EDAM:EBI]
-! is_anti_symmetric: true
-! is_cyclic: false
-! is_transitive: true
-! inverse_of: concerns
+name: has output
+subset: relations
+def: "'A has_output B' defines for the subject A, that it has the object B as a necessary or actual output or output argument." [http://edamontology.org]
+comment: Subject A can either be concept that is or has an 'Operation' function, or an entity outside of an ontology (or an ontology concept in a role of an entity being semantically annotated) that has an 'Operation' function or is an 'Operation'. Object B can be any concept or entity. {note="In EDAM, only 'has_output' is explicitly defined between EDAM concepts ('Operation' 'has_output' 'Data'). The inverse, 'is_output_of', is not explicitly defined."}
+synonym: "has output" EXACT [http://wsio.org/has_output]
+synonym: "has_specified_output" NARROW [http://purl.obolibrary.org/obo/OBI_0000299] {note="'OBI:has_specified_output' only relates subjects that are a 'planned process' (http://purl.obolibrary.org/obo/OBI_0000011) with objects that are a 'continuant' (snap:Continuant)."}
+synonym: "has_participant" RELATED [OBO_REL:has_participant] {note="'OBO_REL:has_participant' is narrower in the sense that it only relates ontological categories (concepts) that are a 'process' (span:Process) with ontological categories that are a 'continuant' (snap:Continuant), and broader in the sense that it relates with any participating objects not just outputs or output arguments of the subject. It is also not clear whether an output (result) actually participates in the process that generates it."}
+inverse_of: is_output_of
+transitive_over: OBO_REL:is_a ! Every relation type (not a metadata tag) should be transitive over 'is', shouldn't it?
+is_cyclic: true {note="In very unusual cases"}
+is_reflexive: false
+is_symmetric: false
+is_anti_symmetric: false
+is_transitive: false
+domain: EDAM_operation:0004 ! Operation
+range: EDAM_data:0006 ! Data
+! NB. 'domain' and 'range' are defined in the following way in OBO format: According to that definition and the given 'range' statement, "An operation has_output An error" implies "An error is Data".
+! NB. Notably, 'domain' and 'range' in EDAM are INFORMATIVE and NOT RESTRICTIVE. They state what 'domain' and 'range' a type of relation relates among EDAM concepts, but they are valid also outside of the 'domain' and 'range', and the OBO-format definition should not apply.
 
 [Typedef]
-id: is_identifier_of
-name: is_identifier_of
-def: "Defines that a term ('Identifier') is an identifier of another term ('Resource' or 'Data')." [EDAM:EBI]
-is_anti_symmetric: true
-is_cyclic: false
-is_transitive: true
-! inverse_of: has_identifier
-
-! [Typedef]
-! id: is_input_of
-! name: is_input_of
-! def: "Defines a term ('Data') as an input of another term ('Operation')." [EDAM:EBI]
-! is_anti_symmetric: true
-! is_cyclic: false
-! is_transitive: true
-! inverse_of: has_input
-
-! [Typedef]
-! id: is_output_of
-! name: is_output_of
-! def: "Defines a term ('Data') as an output of another term ('Operation')." [EDAM:EBI]
-! is_anti_symmetric: true
-! is_cyclic: false
-! is_transitive: true
-! inverse_of: has_output
-
-! [Typedef]
-! id: is_part_of
-! name: is_part_of
-! def: "Defines that a term ('Biological entity' or 'Data') is a conceptual part of some other term ('Biological entity' or 'Data')." [EDAM:EBI]
-! is_anti_symmetric: true
-! is_cyclic: false
-! is_transitive: true
-! inverse_of: has_part
+id: is_output_of
+name: is output of
+subset: relations
+def: "'A is_output_of B' defines for the subject A, that it as a necessary or actual output or output argument of the object B." [http://edamontology.org]
+comment: Subject A can be any concept or entity outside of an ontology (or an ontology concept in a role of an entity being semantically annotated). Object B can either be a concept that is or has an 'Operation' function, or an entity outside of an ontology that has an 'Operation' function or is an 'Operation'. {note="In EDAM, 'is_output_of' is not explicitly defined between EDAM concepts, only the inverse 'has_output'."}
+synonym: "is output of" EXACT [http://wsio.org/is_output_of]
+synonym: "is_specified_output_of" NARROW [http://purl.obolibrary.org/obo/OBI_0000312] {note="'OBI:is_specified_output_of' only relates subjects that are a 'continuant' (snap:Continuant) with objects that are a 'planned process' (http://purl.obolibrary.org/obo/OBI_0000011)."}
+synonym: "participates_in" RELATED [OBO_REL:participates_in] {note="'OBO_REL:participates_in' is narrower in the sense that it only relates ontological categories (concepts) that are a 'continuant' (snap:Continuant) with ontological categories that are a 'process' (span:Process), and broader in the sense that it relates any participating subjects not just outputs or output arguments. It is also not clear whether an output (result) actually participates in the process that generates it."}
+inverse_of: has_output
+transitive_over: OBO_REL:is_a ! Every relation type (not a metadata tag) should be transitive over 'is', shouldn't it?
+is_cyclic: true {note="In very unusual cases"}
+is_reflexive: false
+is_symmetric: false
+is_anti_symmetric: false
+is_transitive: false
+domain: EDAM_data:0006 ! Data
+range: EDAM_operation:0004 ! Operation
+! NB. 'domain' and 'range' are defined in the following way in OBO format: According to that definition and the given 'domain' statement, An error is_output_of An operation" implies "An error is Data".
+! NB. Notably, 'domain' and 'range' in EDAM are INFORMATIVE and NOT RESTRICTIVE. They state what 'domain' and 'range' a type of relation relates among EDAM concepts, but they are valid also outside of the 'domain' and 'range', and the OBO-format definition should not apply.
 
 [Typedef]
-id: is_source_of
-name: is_source_of
-def: "Defines a term ('Resource') is a source of another term ('Data')." [EDAM:EBI]
-comment: has_source
-is_anti_symmetric: true
+id: has_topic
+name: has topic
+subset: relations
+def: "'A has_topic B' defines for the subject A, that it has the object B as its topic (A is in the scope of a topic B)." [http://edamontology.org]
+comment: Subject A can be any concept or entity outside of an ontology (or an ontology concept in a role of an entity being semantically annotated). Object B can either be a concept that is a 'Topic', or in unexpected cases an entity outside of an ontology that is a 'Topic' or is in the role of a 'Topic'. {note="In EDAM, only 'has_topic' is explicitly defined between EDAM concepts ('Operation' or 'Data' 'has_topic' 'Topic'). The inverse, 'is_topic_of', is not explicitly defined."}
+synonym: "hasTopic" RELATED [http://annotation-ontology.googlecode.com/svn/trunk/annotation-core.owl#hasTopic] {note="'ao:hasTopic' is narrower in the sense that it only relates subjects that are an annotation, and it is broader in the sense that it relates with any resource."}
+synonym: "has-quality" RELATED [http://www.loa-cnr.it/ontologies/DOLCE-Lite.owl#has-quality]
+synonym: "has_quality" RELATED [http://purl.obolibrary.org/obo/OBI_0000298] {note="'OBI:has_quality' might be seen narrower in the sense that it only relates subjects that are an 'independent_continuant' (snap:IndependentContinuant) with objects that are a 'quality' (snap:Quality), and is broader in the sense that it relates with any qualities of the subject."}
+synonym: "is about" RELATED [http://purl.obolibrary.org/obo/IAO_0000136] {note="'is about' is narrower in the sense that it only relates subjects that are information artifacts and the relation is not necessarily the one of having a topic. It is broader in the sense that it relates with any object."}
+inverse_of: is_topic_of
+transitive_over: OBO_REL:is_a ! Every relation type (not a metadata tag) should be transitive over 'is', shouldn't it?
+is_cyclic: true {note="In very unusual cases"}
+is_reflexive: false
+is_symmetric: false
+is_anti_symmetric: false
+is_transitive: false
+domain: EDAM_operation:0004 ! Operation
+domain: EDAM_data:0006 ! Data
+range: EDAM_topic:0003 ! Topic
+! NB. 'domain' and 'range' are defined in the following way in OBO format: According to that definition and the given 'domain' statements, "My experiment has_topic Molecular mimicry" implies "My experiment is an Operation" and "My experiment is Data".
+! NB. Notably, 'domain' and 'range' in EDAM are INFORMATIVE and NOT RESTRICTIVE. They state what 'domain' and 'range' a type of relation relates among EDAM concepts, but they are valid also outside of the 'domain' and 'range', and the OBO-format definition should not apply.
+! NB: Second 'domain' line is not visible in OBO-Edit2
+
+[Typedef]
+id: is_topic_of
+name: is topic of
+subset: relations
+def: "'A is_topic_of B' defines for the subject A, that it is a topic of the object B (a topic A is the scope of B)." [http://edamontology.org]
+comment: Subject A can either be a concept that is a 'Topic', or in unexpected cases an entity outside of an ontology (or an ontology concept in a role of an entity being semantically annotated) that is a 'Topic' or is in the role of a 'Topic'. Object B can be any concept or entity outside of an ontology. {note="In EDAM, 'is_topic_of' is not explicitly defined between EDAM concepts, only the inverse 'has_topic'."}
+synonym: "inherent-in" RELATED [http://www.loa-cnr.it/ontologies/DOLCE-Lite.owl#inherent-in]
+synonym: "quality_of" RELATED [OBO_REL:quality_of] {note="Is defined anywhere? Not in the 'unknown' version of RO. 'OBO_REL:quality_of' might be seen narrower in the sense that it only relates subjects that are a 'quality' (snap:Quality) with objects that are an 'independent_continuant' (snap:IndependentContinuant), and is broader in the sense that it relates any qualities of the object."}
+inverse_of: has_topic
+transitive_over: OBO_REL:is_a ! Every relation type (not a metadata tag) should be transitive over 'is', shouldn't it?
+is_cyclic: true {note="In very unusual cases"}
+is_reflexive: false
+is_symmetric: false
+is_anti_symmetric: false
+is_transitive: false
+domain: EDAM_topic:0003 ! Topic
+range: EDAM_operation:0004 ! Operation
+range: EDAM_data:0006 ! Data
+! NB. 'domain' and 'range' are defined in the following way in OBO format: According to that definition and the given 'range' statements, "Molecular mimicry is_topic_of My experiment" implies "My experiment is an Operation" and (even) "My experiment is Data".
+! NB. Notably, 'domain' and 'range' in EDAM are INFORMATIVE and NOT RESTRICTIVE. They state what 'domain' and 'range' a type of relation relates among EDAM concepts, but they are valid also outside of the 'domain' and 'range', and the OBO-format definition should not apply.
+! NB: Second 'range' line is not visible in OBO-Edit2
+
+[Typedef]
+id: has_format
+name: has format
+subset: relations
+def: "'A has_format B' defines for the subject A, that it has the object B as its data format." [http://edamontology.org]
+comment: Subject A can be any concept or entity outside of an ontology (or an ontology concept in a role of an entity being semantically annotated) that is (or is in a role of) 'Data', or an input, output, input or output argument of an 'Operation'. Object B can either be a concept that is a 'Format', or in unexpected cases an entity outside of an ontology that is a 'Format' or is in the role of a 'Format'. {note="In EDAM, 'has_format' is not explicitly defined between EDAM concepts, only the inverse 'is_format_of'."}
+synonym: "has-quality" RELATED [http://www.loa-cnr.it/ontologies/DOLCE-Lite.owl#has-quality]
+synonym: "has_quality" RELATED [http://purl.obolibrary.org/obo/OBI_0000298] {note="'OBI:has_quality' might be seen narrower in the sense that it only relates subjects that are an 'independent_continuant' (snap:IndependentContinuant) with objects that are a 'quality' (snap:Quality), and is broader in the sense that it relates with any qualities of the subject."}
+inverse_of: is_format_of
+transitive_over: OBO_REL:is_a ! Every relation type (not a metadata tag) should be transitive over 'is', shouldn't it?
 is_cyclic: false
-is_transitive: true
-! inverse_of: has_source
+is_reflexive: false
+is_symmetric: false
+is_anti_symmetric: false
+is_transitive: false
+domain: EDAM_data:0006 ! Data
+range: EDAM_format:1915 ! Format
 
 [Typedef]
 id: is_format_of
-name: is_format_of
-def: "Defines that a term ('Format') is a data format specification for another term ('Data')." [EDAM:EBI]
-is_anti_symmetric: true
+name: is format of
+subset: relations
+def: "'A is_format_of B' defines for the subject A, that it is a data format of the object B." [http://edamontology.org]
+comment: Subject A can either be a concept that is a 'Format', or in unexpected cases an entity outside of an ontology (or an ontology concept in a role of an entity being semantically annotated) that is a 'Format' or is in the role of a 'Format'. Object B can be any concept or entity outside of an ontology that is (or is in a role of) 'Data', or  an input, output, input or output argument of an 'Operation'. {note="In EDAM, only 'is_format_of' is explicitly defined between EDAM concepts ('Format' 'is_format_of' 'Data'). The inverse, 'has_format', is not explicitly defined."}
+synonym: "inherent-in" RELATED [http://www.loa-cnr.it/ontologies/DOLCE-Lite.owl#inherent-in]
+synonym: "quality_of" RELATED [OBO_REL:quality_of] {note="Is defined anywhere? Not in the 'unknown' version of RO. 'OBO_REL:quality_of' might be seen narrower in the sense that it only relates subjects that are a 'quality' (snap:Quality) with objects that are an 'independent_continuant' (snap:IndependentContinuant), and is broader in the sense that it relates any qualities of the object."}
+inverse_of: has_format
+transitive_over: OBO_REL:is_a ! Every relation type (not a metadata tag) should be transitive over 'is', shouldn't it?
 is_cyclic: false
-is_transitive: true
-! inverse_of: has_format
+is_reflexive: false
+is_symmetric: false
+is_anti_symmetric: false
+is_transitive: false
+domain: EDAM_format:1915 ! Format
+range: EDAM_data:0006 ! Data
+
+[Typedef]
+id: has_identifier
+name: has identifier
+subset: relations
+def: "'A has_identifier B' defines for the subject A, that it has the object B as its identifier." [http://edamontology.org]
+comment: Subject A can be any concept or entity outside of an ontology (or an ontology concept in a role of an entity being semantically annotated). Object B can either be a concept that is an 'Identifier', or an entity outside of an ontology that is an 'Identifier' or is in the role of an 'Identifier'. {note="In EDAM, 'has_identifier' is not explicitly defined between EDAM concepts, only the inverse 'is_identifier_of'."}
+inverse_of: is_identifier_of
+transitive_over: OBO_REL:is_a ! Every relation type (not a metadata tag) should be transitive over 'is', shouldn't it?
+is_cyclic: false
+is_reflexive: false
+is_symmetric: false
+is_anti_symmetric: false
+is_transitive: false
+domain: EDAM_data:0006 ! Data
+range: EDAM_data:0842 ! Identifier
+! NB. 'domain' and 'range' are defined in the following way in OBO format: According to that definition and the given 'range' statement, "My car has_identifier Licence plate number" implies "My car is Data".
+! NB. Notably, 'domain' and 'range' in EDAM are INFORMATIVE and NOT RESTRICTIVE. They state what 'domain' and 'range' a type of relation relates among EDAM concepts, but they are valid also outside of the 'domain' and 'range', and the OBO-format definition should not apply.
+
+[Typedef]
+id: is_identifier_of
+name: is identifier of
+subset: relations
+def: "'A is_identifier_of B' defines for the subject A, that it is an identifier of the object B." [http://edamontology.org]
+comment: Subject A can either be a concept that is an 'Identifier', or an entity outside of an ontology (or an ontology concept in a role of an entity being semantically annotated) that is an 'Identifier' or is in the role of an 'Identifier'. Object B can be any concept or entity outside of an ontology. {note="In EDAM, only 'is_identifier_of' is explicitly defined between EDAM concepts (only 'Identifier' 'is_identifier_of' 'Data'). The inverse, 'has_identifier', is not explicitly defined."}
+inverse_of: has_identifier
+transitive_over: OBO_REL:is_a ! Every relation type (not a metadata tag) should be transitive over 'is', shouldn't it?
+is_cyclic: false
+is_reflexive: false
+is_symmetric: false
+is_anti_symmetric: false
+is_transitive: false
+domain: EDAM_data:0842 ! Identifier
+range: EDAM_data:0006 ! Data
+! NB. 'domain' and 'range' are defined in the following way in OBO format: According to that definition and the given 'range' statement, "Licence plate number is_identifier_of My car" implies "My car is Data".
+! NB. Notably, 'domain' and 'range' in EDAM are INFORMATIVE and NOT RESTRICTIVE. They state what 'domain' and 'range' a type of relation relates among EDAM concepts, but they are valid also outside of the 'domain' and 'range', and the OBO-format definition should not apply.
+
+[Typedef]
+id: has_function
+name: has function
+subset: relations
+def: "'A has_function B' defines for the subject A, that it has the object B as its function." [http://edamontology.org]
+comment: Subject A can be any concept or entity outside of an ontology (or an ontology concept in a role of an entity being semantically annotated). Object B can either be a concept that is (or is in a role of) a function, or an entity outside of an ontology that is (or is in a role of) a function specification. {note="In the scope of EDAM, 'has_function' serves only for relating annotated entities outside of EDAM with 'Operation' concepts."}
+synonym: "has function" EXACT [http://wsio.org/has_function]
+synonym: "has_function" NARROW [http://purl.obolibrary.org/obo/OBI_0000306] {note="'OBI:has_function' only relates subjects that are an 'independent_continuant' (snap:IndependentContinuant), so for example no processes, with objects that are a 'function' (snap:Function). It does not define explicitly that the object is a function of the subject."}
+synonym: "has-quality" RELATED [http://www.loa-cnr.it/ontologies/DOLCE-Lite.owl#has-quality]
+synonym: "bearer_of" RELATED [OBO_REL:bearer_of] {note="Is defined anywhere? Not in the 'unknown' version of RO. 'OBO_REL:bearer_of' is narrower in the sense that it only relates ontological categories (concepts) that are an 'independent_continuant' (snap:IndependentContinuant) with ontological categories that are a 'specifically_dependent_continuant' (snap:SpecificallyDependentContinuant), and broader in the sense that it relates with any borne objects not just functions of the subject."}
+inverse_of: is_function_of
+transitive_over: OBO_REL:is_a ! Every relation type (not a metadata tag) should be transitive over 'is', shouldn't it?
+is_cyclic: true {note="In very unusual cases"}
+is_reflexive: false
+is_symmetric: false
+is_anti_symmetric: false
+is_transitive: false
+range: EDAM_operation:0004 ! Operation
+! NB. 'range' is defined in the following way in OBO format: According to that definition and the given 'range' statement, "My boss has_function Institute leadership" implies "Institute leadership is an Operation".
+! NB. Notably, 'domain' and 'range' in EDAM are INFORMATIVE and NOT RESTRICTIVE. They state what 'domain' and 'range' a type of relation relates among EDAM concepts, but they are valid also outside of the 'domain' and 'range', and the OBO-format definition should not apply.
+
+[Typedef]
+id: is_function_of
+name: is function of
+subset: relations
+def: "'A is_function_of B' defines for the subject A, that it is a function of the object B." [http://edamontology.org]
+comment: Subject A can either be concept that is (or is in a role of) a function, or an entity outside of an ontology (or an ontology concept in a role of an entity being semantically annotated) that is (or is in a role of) a function specification. Object B can be any concept or entity. {note="Within EDAM itself, 'is_function_of' is not used."}
+synonym: "is function of" EXACT [http://wsio.org/is_function_of]
+synonym: "function_of" NARROW [OBO_REL:function_of] {note="Is defined anywhere? Not in the 'unknown' version of RO. 'OBO_REL:function_of' only relates subjects that are a 'function' (snap:Function) with objects that are an 'independent_continuant' (snap:IndependentContinuant), so for example no processes. It does not define explicitly that the subject is a function of the object."}
+synonym: "inherent-in" RELATED [http://www.loa-cnr.it/ontologies/DOLCE-Lite.owl#inherent-in]
+synonym: "inheres_in" RELATED [OBO_REL:inheres_in] {note="Is defined anywhere? Not in the 'unknown' version of RO. 'OBO_REL:inheres_in' is narrower in the sense that it only relates ontological categories (concepts) that are a 'specifically_dependent_continuant' (snap:SpecificallyDependentContinuant) with ontological categories that are an 'independent_continuant' (snap:IndependentContinuant), and broader in the sense that it relates any borne subjects not just functions."}
+inverse_of: has_function
+transitive_over: OBO_REL:is_a ! Every relation type (not a metadata tag) should be transitive over 'is', shouldn't it?
+is_cyclic: true {note="In very unusual cases"}
+is_reflexive: false
+is_symmetric: false
+is_anti_symmetric: false
+is_transitive: false
+domain: EDAM_operation:0004 ! Operation
+! NB. 'domain' is defined in the following way in OBO format: According to that definition and the given 'domain' statement, "Institute leadership is_function_of My boss" implies "Institute leadership is an Operation".
+! NB. Notably, 'domain' and 'range' in EDAM are INFORMATIVE and NOT RESTRICTIVE. They state what 'domain' and 'range' a type of relation relates among EDAM concepts, but they are valid also outside of the 'domain' and 'range', and the OBO-format definition should not apply.
+
+
+
+
+
+
+
+
+!
+! Concept metadata tags, modifiers, and qualifiers
+!
+
+[Typedef]
+id: regex
+name: Regular expression
+subset: concept_attributes
+def: "'Regular expression' concept attribute ('regex' metadata tag) specifies the allowed values of types of identifiers (accessions). Applicable to some other types of data, too." [http://edamontology.org]
+is_metadata_tag: true
+
+[Typedef]
+id: example
+name: Example
+subset: concept_attributes
+def: "'Example' concept attribute ('example' metadat tag) lists examples of valid values of types of identifiers (accessions). Applicable to some other types of data, too." [http://edamontology.org]
+is_metadata_tag: true
+
+[Typedef]
+id: documentation
+name: Documentation
+subset: concept_attributes
+def: "'Documentation' trailing modifier (qualifier, 'documentation') of 'xref' links of 'Format' concepts. When 'true', the link is pointing to a page with explanation, description, documentation, or specification of the given data format." [http://edamontology.org]
+synonym: "Specification" NARROW [http.//edamontology.org]
+is_metadata_tag: true
+
+[Typedef]
+id: min_cardinality
+name: Minimum cardinality
+subset: concept_attributes
+def: "'Minimum cardinality' trailing modifier ('min_cardinality') of 'has input' and 'has output' relations. Specificies the minimum number of data records consumed or produced by an operation." [http://edamontology.org]
+is_metadata_tag: true
+
+[Typedef]
+id: max_cardinality
+name: Maximum cardinality
+subset: concept_attributes
+def: "'Maximum cardinality' trailing modifier ('max_cardinality') of 'has input' and 'has output' relations. Specificies the maximum number of data records consumed or produced by an operation." [http://edamontology.org]
+comment: 'max_cardinality' is not (yet) defined among concepts in EDAM.
+is_metadata_tag: true
+
+[Typedef]
+id: cardinality
+name: Cardinality
+subset: concept_attributes
+def: "'Cardinality' trailing modifier ('cardinality') of 'has input' and 'has output' relations. Specificies the number of data records consumed or produced by an operation." [http://edamontology.org]
+comment: 'cardinality' is not (yet) defined among concepts in EDAM.
+is_metadata_tag: true
+is_a: min_cardinality
+is_a: max_cardinality
+
+[Typedef]
+id: note
+name: Note
+subset: concept_attributes
+def: "'Note' trailing modifier ('note') of any concept or ontology attributes. Contains a note for a human reader related to the given attribute." [http://edamontology.org]
+is_metadata_tag: true
+
+[Typedef]
+id: since
+name: Since
+subset: concept_attributes
+def: "'Since' trailing modifier ('since') of 'id' and 'is_obsolete: true' attributes (may be applicable to other attributes, too). Specificies the released version of the ontology in which the attribute received its current value/started to be valid. In case of 'id' this is the version in which the concept has been introduced, and in case of 'is_obsolete: true' the version in which the concept became obsolete." [http://edamontology.org]
+is_metadata_tag: true
 
 
 
 
 [Term]
-id: EDAM:0000002
-name: Biological entity
-namespace: entity
-def: Any biological thing (or part of a thing) with a physical existence, a physical part, region or feature that can be mapped to such a thing, a collection of such things or an observable phenonema or occurence.
-is_obsolete: true
-
-[Term]
-id: EDAM:0000003
-name: Topic
-namespace: topic
-def: A general field of bioinformatics study, data, processing and analysis or technology.
-
-[Term]
-id: EDAM:0000004
+id: EDAM_operation:0004
 name: Operation
 namespace: operation
-def: A specific, singular function or process performed by a tool, for example a WS operation. What is done, but not (typically) how or in what context.
+subset: operations
+def: "A function that processes a set of inputs and results in a set of outputs, or associates arguments (inputs) with values (outputs)." [http://edamontology.org]
+comment: A singular case is a constant operation (constant function) that consumes no input (has no input arguments).
+xref: WSIO_operation:operation, http://wsio.org/operation
+synonym: "Function" BROAD [http://edamontology.org] {note="Operation is a function that has input(s) and output(s) that are data."}
+synonym: "Computational operation" NARROW [http://edamontology.org]
+synonym: "Computational procedure" NARROW [http://edamontology.org]
+synonym: "Computational method" NARROW [http://edamontology.org]
+synonym: "Computational subroutine" NARROW [http://edamontology.org]
+synonym: "Function (programming)" NARROW [http://edamontology.org]
+synonym: "Lambda abstraction" NARROW [http://edamontology.org]
+synonym: "Mathematical operation" NARROW [http://edamontology.org]
+synonym: "Mathematical function" NARROW [http://edamontology.org]
+synonym: "Process" RELATED [http://edamontology.org] {note="Process can have a function (as its quality/attribute), and can also perform an operation with inputs and outputs."}
+synonym: "Computational tool" RELATED [http://edamontology.org] {note="Computational tool provides an operation with inputs and outputs."}
+synonym: "Operation" EXACT [http://wsio.org/operation_001]
+synonym: "function" BROAD [http://purl.org/biotop/biotop.owl#Function] {note="Operation is a function that has input(s) and output(s) that are data. In addition, one may think of 'biotop:Disposition' (parent of 'biotop:Function') being also a 'biotop:Quality'."}
+synonym: "function" BROAD [http://semanticscience.org/resource/SIO_000017]
+synonym: "continuant" BROAD [snap:Continuant]
+synonym: "Function" BROAD [http://www.onto-med.de/ontologies/gfo.owl#Function] {note="However, operation is not a GFO 'Concept' present only in someone's mind."}
+synonym: "Subroutine" NARROW [http://en.wikipedia.org/wiki/Subroutine, http://en.wikipedia.org/wiki/Function_(computer_science)]
+synonym: "Function (mathematics)" NARROW [http://en.wikipedia.org/wiki/Function_(mathematics)]
+synonym: "function" RELATED [sumo:Function] ! Related external synonyms in EDAM without a note is usually almost exact.
+synonym: "Perpetuant" RELATED [http://www.onto-med.de/ontologies/gfo.owl#Perpetuant] {note="GFO 'Perpetuant' is in general broader than operation, but it may be seen narrower in the sense of being a concrete individual and exhibiting presentials."}
+synonym: "function" RELATED [snap:Function] {note="BFO 'function' is narrower in the sense that it is a 'realizable_entity' (snap:RealizableEntity) and a 'dependent_continuant' (snap:DependentContinuant), and broader in the sense that it does not need to have input(s) and output(s)."}
+synonym: "quality" RELATED [http://www.loa-cnr.it/ontologies/DOLCE-Lite.owl#quality] {note="Function, including an operation, can be a quality/attribute of e.g. a computational tool."}
+synonym: "quality" RELATED [snap:Quality] {note="Function, including an operation, can have a role of a quality/attribute in semantic annotation of e.g. a computational tool."}
+synonym: "process" RELATED [http://www.loa-cnr.it/ontologies/DOLCE-Lite.owl#process] {note="Process can have a function (as its quality/attribute), and can also have (perform) an operation with inputs and outputs."}
+synonym: "process" RELATED [span:Process] {note="Process can have a function (as its quality/attribute), and can also have (perform) an operation with inputs and outputs."}
+synonym: "Process" RELATED [http://www.onto-med.de/ontologies/gfo.owl#Process] {note="Process can have a function (as its quality/attribute), and can also have (perform) an operation with inputs and outputs."}
+synonym: "information processing" RELATED [http://www.ebi.ac.uk/swo/SWO_0000003] {note="However, one may think that an operation is not a process."}
+synonym: "information processing" RELATED [http://semanticscience.org/resource/SIO_000649] {note="However, one may think that an operation is not a process and not a physical entity."}
+synonym: "Method" RELATED [http://onto.eva.mpg.de/ontologies/gfo-bio.owl#Method] {note="Method may in addition focus on how to achieve the result, not just on what to achieve as with operation."}
+relationship: has_input EDAM_data:0006 ! Data ! Unfortunately, OBO-Edit2 doesn't show the subject concept at the top level when browsed with the 'f' option.
+relationship: has_output EDAM_data:0006 ! Data ! Unfortunately, OBO-Edit2 doesn't show the subject concept at the top level when browsed with the 'f' option.
+relationship: has_topic EDAM_topic:0003 ! Topic ! Unfortunately, OBO-Edit2 doesn't show the subject concept at the top level when browsed with the 'f' option.
+
 
 [Term]
-id: EDAM:0000006
+id: EDAM_data:0006
 name: Data
 namespace: data
-def: A semantic description of a data entity (datum) commonly used in bioinformatics.
+subset: data
+! alt_id: EDAM_data:3030 {since=beta13} ! Not released
+def: "Information, represented in an information artefact (data record) that is 'understandable' by dedicated computational tools that can use the data as input or produce it as output." [http://edamontology.org]
+synonym: "Datum" EXACT [http://edamontology.org] {note="The multiplicity is not taken into account."}
+synonym: "Data record" EXACT [http://edamontology.org] {note="Currently we are for practical purposes not distinguishing a data record (a tool-understandable information artefact) from data or datum (its content, the tool-understandable information)."}
+synonym: "Data set" EXACT [http://edamontology.org] {note="The multiplicity is not taken into account."}
+synonym: "Data" EXACT [http://wsio.org/data_002]
+synonym: "continuant" BROAD [snap:Continuant]
+synonym: "digital entity" RELATED [http://purl.org/biotop/biotop.owl#DigitalEntity]
+synonym: "Perpetuant" RELATED [http://www.onto-med.de/ontologies/gfo.owl#Perpetuant] {note="GFO 'Perpetuant' is in general broader than data, but it may be seen narrower in the sense of being a concrete individual."}
+synonym: "data item" RELATED [http://semanticscience.org/resource/SIO_000069] {note="Data does theoretically not need to have a purpose, but in all regular cases it does. Remark: EDAM Data sub-ontology focuses on scientific data (SIO_000472), in particular the bioinformatics (SIO_010065) and biological (SIO_010019)."}
+synonym: "data item" RELATED [http://purl.obolibrary.org/obo/IAO_0000027] {note="IAO 'data item' is a closely related ontological category (concept) broader in the sense of being any type of data in any role, and narrower in the sense of being limited to a 'generically_dependent_continuant' (snap:GenericallyDependentContinuant), standing in relation of aboutness to some entity (http://purl.obolibrary.org/obo/IAO_0000030), and to data that is intended to be a truthful statement about something."}
+synonym: "information content entity" RELATED [http://purl.obolibrary.org/obo/IAO_0000030] {note="IAO 'information content entity' is a closely related ontological category (concept) broader in the sense of covering any type of data in any role, and narrower in the sense of being limited to a 'generically_dependent_continuant' (snap:GenericallyDependentContinuant) and standing in relation of aboutness to some entity."}
+synonym: "record" RELATED [http://semanticscience.org/resource/SIO_000088] {note="Data does however not necessarily contain statements and not necessarily about an entity."}
+relationship: has_topic EDAM_topic:0003 ! Topic ! Unfortunately, OBO-Edit2 doesn't show the subject concept at the top level when browsed with the 'f' option.
 
 [Term]
-id: EDAM:0000077
-name: Nucleic acids
+id: EDAM_topic:0003
+name: Topic
 namespace: topic
-def: Resources concerning nucleic acids.
-is_a: EDAM:0000003 ! Topic
-relationship: concerns EDAM:0002501 ! Nucleic acid data processing
-
-[Term]
-id: EDAM:0000080
-name: Sequence
-namespace: topic
-def: Resources for molecular sequences and related data such as alignments and motifs.
-alt_id: EDAM:0002228
-alt_id: EDAM:0000584
-xref: BioCatalogue:Sequence Analysis
-is_a: EDAM:0000003 ! Topic
-relationship: concerns EDAM:0002403 ! Sequence analysis
-relationship: concerns EDAM:0002503 ! Sequence data processing
-relationship: concerns EDAM:0000323 ! Phylogenetic tree construction
-relationship: is_source_of EDAM:0000849 ! Sequence record
-relationship: is_source_of EDAM:0002044 ! Sequence
-
-[Term]
-id: EDAM:0000081
-name: Structure
-namespace: topic
-def: Resources for molecular secondary or tertiary (3D) structures and related data such as alignments and structural motifs.
-alt_id: EDAM:0002827
-alt_id: EDAM:0000585
-synonym: "Structure analysis" EXACT []
-is_a: EDAM:0000003 ! Topic
-relationship: concerns EDAM:0002504 ! Structural data processing
-relationship: concerns EDAM:0002484 ! Structure processing
-
-[Term]
-id: EDAM:0000084
-name: Phylogenetics
-namespace: topic
-def: Resources for studying evolutionary relationships amongst organisms.
-comment: Phylogenetics involves phylogenetic tree construction, typically from molecular sequence or morphological data.  It can be used to analyse the genetic basis of heredity and variation, gene transfer, mode of selection / evolution etc.
-xref: BioCatalogue:Phylogeny
-xref: BioCatalogue:Statistical Robustness
-is_a: EDAM:0000003 ! Topic
-relationship: concerns EDAM:0000289 ! Sequence distance matrix generation
-relationship: concerns EDAM:0002443 ! Phylogenetic tree processing
-relationship: concerns EDAM:0000499 ! Multiple sequence alignment (phylogenetic tree-based)
-relationship: concerns EDAM:0000550 ! Phylogenetic model selection
-relationship: is_source_of EDAM:0000872 ! Phylogenetic tree
-
-[Term]
-id: EDAM:0000088
-name: Literature and documentation
-namespace: topic
-def: Resources concerning the bionformatics literature, bibliographic data and documentation.
-xref: BioCatalogue: Document Discovery
-xref: BioCatalogue: Literature retrieval
-is_a: EDAM:0000003 ! Topic
-relationship: concerns EDAM:0000515 ! Tool annotation retrieval
-relationship: concerns EDAM:0000516 ! Database annotation retrieval
-relationship: concerns EDAM:0002222 ! Ontology annotation retrieval
-relationship: concerns EDAM:0002246 ! Demonstration
-
-[Term]
-id: EDAM:0000091
-name: Data handling
-namespace: topic
-def: Resources for the generic management of biological data including basic handling of files and databases, datatypes and workflows.
-synonym: "Data types, processing and visualisation" EXACT []
-is_a: EDAM:0000003 ! Topic
-relationship: concerns EDAM:0001780 ! Sequence submission
-
-[Term]
-id: EDAM:0000102
-name: Sequencing and mapping
-namespace: topic
-def: Resources concerning the determination and mapping of complete nucleotide sequences.
-is_a: EDAM:0000003 ! Topic
-relationship: concerns EDAM:0000265 ! Frameshift error detection
-relationship: concerns EDAM:0000517 ! PCR primer design (for large scale sequencing)
-
-[Term]
-id: EDAM:0000121
-name: Proteomics
-namespace: topic
-def: Resources concerning experimental methods for studying the whole proteomes of organisms.
-comment: Proteomics uses high-throughput methods to separate, characterize and identify expressed proteins or analyse protein expression data (for example in different cells or tissues).
-alt_id: EDAM:0000764
-synonym: "Protein expression" EXACT []
-xref: BioCatalogue:Proteomics
-is_a: EDAM:0000003 ! Topic
-
-[Term]
-id: EDAM:0000200
-name: Microarrays
-namespace: topic
-def: Resources concerning microarrays, for example, to process microarray data or design probes and experiments.
-xref: BioCatalogue:Microarrays
-is_a: EDAM:0000003 ! Topic
-relationship: concerns EDAM:0002432 ! Microarray data processing
-relationship: concerns EDAM:0000309 ! Microarray probe design
-
-[Term]
-id: EDAM:0000230
-name: Sequence generation
-namespace: operation
-def: Generate a molecular sequence by some means.
-is_a: EDAM:0002121 ! Sequence report processing
-relationship: has_output EDAM:0002044 ! Sequence
-
-[Term]
-id: EDAM:0000231
-name: Sequence editing
-namespace: operation
-def: Edit or change a molecular sequence, either randomly or specifically.
-is_a: EDAM:0002121 ! Sequence report processing
-relationship: has_output EDAM:0002044 ! Sequence
-
-[Term]
-id: EDAM:0000232
-name: Sequence merging
-namespace: operation
-def: Merge two or more (typically overlapping) molecular sequences.
-synonym: "Sequence splicing" EXACT []
-is_a: EDAM:0002121 ! Sequence report processing
-relationship: has_output EDAM:0002044 ! Sequence
-
-[Term]
-id: EDAM:0000233
-name: Sequence conversion
-namespace: operation
-def: Convert a molecular sequence from one type to another.
-is_a: EDAM:0002121 ! Sequence report processing
-relationship: has_output EDAM:0002044 ! Sequence
-
-[Term]
-id: EDAM:0000335
-name: Report reformatting
-namespace: operation
-def: Reformat a file of data.
-is_a: EDAM:0002409 ! Report processing
-
-[Term]
-id: EDAM:0000561
-name: Sequence reformatting
-namespace: operation
-def: Reformat a molecular sequence.
-is_a: EDAM:0000335 ! Report reformatting
-is_a: EDAM:0002121 ! Sequence report processing
-relationship: has_input EDAM:0000849 ! Sequence record
-relationship: has_output EDAM:0000849 ! Sequence record
-
-[Term]
-id: EDAM:0000562
-name: Sequence alignment reformatting
-namespace: operation
-def: Reformat a molecular sequence alignment.
-is_a: EDAM:0000335 ! Report reformatting
-is_a: EDAM:0002122 ! Sequence alignment report processing
-relationship: has_input EDAM:0000863 ! Sequence alignment
-relationship: has_output EDAM:0000863 ! Sequence alignment
-
-[Term]
-id: EDAM:0000563
-name: Codon usage table reformating
-namespace: operation
-def: Reformat a codon usage table.
-is_a: EDAM:0000335 ! Report reformatting
-is_a: EDAM:0002433 ! Codon usage table processing
-relationship: has_input EDAM:0001597 ! Codon usage table
-relationship: has_output EDAM:0001597 ! Codon usage table
-
-[Term]
-id: EDAM:0000586
-name: Proteins
-namespace: topic
-def: Resources concerning proteins.
-alt_id: EDAM:0002225
-is_a: EDAM:0000003 ! Topic
-relationship: concerns EDAM:0002502 ! Protein data processing
-relationship: is_source_of EDAM:0000896 ! Protein annotation
-
-[Term]
-id: EDAM:0000602
-name: Pathways, networks and models
-namespace: topic
-def: Biological pathways, networks and other models, including the holistic analysis and modelling of biological systems (systems biology).
-alt_id: EDAM:0002259
-synonym: "Systems biology" EXACT []
-xref: BioCatalogue:Pathways
-xref: BioCatalogue:Pathway Retrieval
-xref: BioCatalogue:Systems Biology
-is_a: EDAM:0000003 ! Topic
-relationship: concerns EDAM:0002438 ! Pathway or network processing
-
-[Term]
-id: EDAM:0000607
-name: Laboratory resources
-namespace: topic
-def: Biological resources for use in the lab including cell lines, viruses, plasmids, phages, DNA probes and primers and so on.
-is_a: EDAM:0000003 ! Topic
-
-[Term]
-id: EDAM:0000621
-name: Organism
-namespace: topic
-def: Resources concerning a specific organism (e.g. a model organism) or group of organisms, either describing the organism(s) itself or data associated with it.
-is_a: EDAM:0000003 ! Topic
-
-[Term]
-id: EDAM:0000622
-name: Genomics
-namespace: topic
-def: Resources for the study of whole genomes of one or more organisms, or genomes in general, such as meta-information on genomes, genome projects, gene names etc.
-alt_id: EDAM:0000093
-alt_id: EDAM:0000794
-xref: BioCatalogue:Genomics
-xref: BioCatalogue:Functional Genomics
-is_a: EDAM:0000003 ! Topic
-
-[Term]
-id: EDAM:0000625
-name: Genotype and phenotype
-namespace: topic
-def: Resources concerning genotypes and / or phenotypes especially concerning variations (mutation) and disease.
-is_a: EDAM:0000003 ! Topic
-relationship: concerns EDAM:0002473 ! Genotype and phenotype annotation retrieval
-
-[Term]
-id: EDAM:0000842
-name: Identifier
-namespace: identifier
-def: Something that identifies (typically uniquely) something such as an entity, database, ontology, datatype.
-comment: This term is used for datatypes with the sole purpose of identification. It is not used for datatypes which contain other fields not related to identification. See OBO file for regular expression.
-relationship: is_identifier_of EDAM:0000006 ! Data
-
-[Term]
-id: EDAM:0000850
-name: Sequence set
-namespace: data
-def: A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries.
-comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
-is_a: EDAM:0002806 ! Core data
-
-[Term]
-id: EDAM:0000912
-name: Nucleic acid physicochemical property
-namespace: data
-def: A report on the physicochemical properties of a nucleic acid sequence or structure.
-comment: This is a broad data type and is used a placeholder for other, more specific types.
-is_a: EDAM:0002525 ! Nucleic acid data
-is_a: EDAM:0002087 ! Physicochemical property
-
-[Term]
-id: EDAM:0001233
-name: Sequence set (protein)
-namespace: data
-def: Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002524 ! Protein data
-
-[Term]
-id: EDAM:0001234
-name: Sequence set (nucleic acid)
-namespace: data
-def: Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries.
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002525 ! Nucleic acid data
-
-[Term]
-id: EDAM:0001235
-name: Sequence cluster
-namespace: data
-def: A set of sequences that have been clustered or otherwise classified as belonging to a group including (typically) sequence cluster information.
-comment: The cluster might include sequences identifiers, short descriptions, alignment and summary information.
-is_a: EDAM:0000850 ! Sequence set
-
-[Term]
-id: EDAM:0001239
-name: Restriction digest
-namespace: data
-def: Restriction digest fragments from digesting a ucleotide sequence with restriction sites using a restriction endonuclease.
-xref: SO:0000412
-is_a: EDAM:0001234 ! Sequence set (nucleic acid)
-
-[Term]
-id: EDAM:0001246
-name: Sequence cluster (nucleic acid)
-namespace: data
-def: A cluster of nucleotide sequences.
-comment: The sequences are typically related, for example a family of sequences.
-synonym: "Nucleotide sequence cluster" EXACT []
-is_a: EDAM:0001234 ! Sequence set (nucleic acid)
-is_a: EDAM:0001235 ! Sequence cluster
-
-[Term]
-id: EDAM:0001248
-name: Sequence feature location format
-namespace: format
-def: Format for sequence positions (feature location) as used in DDBJ/EMBL/GenBank database.
-comment: See OBO file for URL of format specification.
-synonym: "Feature location" EXACT []
-is_a: EDAM:0002078 ! Sequence range format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001265
-name: Sequence composition (base frequencies)
-namespace: data
-def: A table of base frequencies of a nucleotide sequence.
-is_a: EDAM:0001261 ! Sequence composition
-is_a: EDAM:0002525 ! Nucleic acid data
-
-[Term]
-id: EDAM:0001273
-name: Sequence feature table (nucleic acid)
-namespace: data
-def: Nucleotide sequence feature annotation in any known sequence feature table format.
-is_a: EDAM:0001270 ! Sequence feature table
-is_a: EDAM:0002525 ! Nucleic acid data
-
-[Term]
-id: EDAM:0001276
-name: Nucleic acid features
-namespace: data
-def: Nucleotide sequence-specific feature annotation.
-is_a: EDAM:0002525 ! Nucleic acid data
-is_a: EDAM:0001255 ! Sequence features
-
-[Term]
-id: EDAM:0001295
-name: quicktandem
-namespace: format
-def: Report format for tandem repeats in a nucleotide sequence (format generated by the Sanger Centre quicktandem program).
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002155 ! Sequence features (repeats) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001296
-name: Sanger inverted repeat sequence report format
-namespace: format
-def: Report format for inverted repeats in a nucleotide sequence (format generated by the Sanger Centre inverted program).
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002155 ! Sequence features (repeats) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001297
-name: EMBOSS repeat sequence report format
-namespace: format
-def: Report format for tandem repeats in a sequence (an EMBOSS report format).
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002155 ! Sequence features (repeats) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001316
-name: est2genome
-namespace: format
-def: Format of a report on exon-intron structure generated by EMBOSS est2genome.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002159 ! Gene annotation (coding region) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001318
-name: restrict
-namespace: format
-def: Report format for restriction enzyme recognition sites used by EMBOSS restrict program.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002158 ! Nucleic acid features (restriction sites) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001319
-name: restover
-namespace: format
-def: Report format for restriction enzyme recognition sites used by EMBOSS restover program.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002158 ! Nucleic acid features (restriction sites) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001320
-name: REBASE restriction site report format
-namespace: format
-def: Report format for restriction enzyme recognition sites used by REBASE database.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002158 ! Nucleic acid features (restriction sites) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001334
-name: mspcrunch
-namespace: format
-def: Format of results of a sequence database search using some variant of MSPCrunch.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002066 ! Database hits (sequence) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001335
-name: smith-waterman
-namespace: format
-def: Format of results of a sequence database search using some variant of Smith Waterman.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002066 ! Database hits (sequence) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001336
-name: dhf
-namespace: format
-def: Format of EMBASSY domain hits file (DHF) of hits (sequences) with domain classification information.
-comment: The hits are relatives to a SCOP or CATH family and are found from a search of a sequence database. See OBO file for URL of format specification.
-is_a: EDAM:0002066 ! Database hits (sequence) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001337
-name: lhf
-namespace: format
-def: Format of EMBASSY ligand hits file (LHF) of database hits (sequences) with ligand classification information.
-comment: The hits are putative ligand-binding sequences and are found from a search of a sequence database. See OBO file for URL of format specification.
-is_a: EDAM:0002066 ! Database hits (sequence) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001349
-name: HMMER Dirichlet prior record
-namespace: format
-def: Dirichlet distribution HMMER format.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002074 ! Dirichlet distribution format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001350
-name: MEME Dirichlet prior record
-namespace: format
-def: Dirichlet distribution MEME format.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002074 ! Dirichlet distribution format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001351
-name: HMMER emission and transition count report
-namespace: format
-def: Format of a report from the HMMER package on the emission and transition counts of a hidden Markov model.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002075 ! HMM emission and transition counts format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001356
-name: prosite-pattern
-namespace: format
-def: Format of a regular expression pattern from the Prosite database.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002068 ! Sequence motif format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001357
-name: EMBOSS sequence pattern
-namespace: format
-def: Format of an EMBOSS sequence pattern.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002068 ! Sequence motif format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001360
-name: meme-motif
-namespace: format
-def: A motif in the format generated by the MEME program.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002068 ! Sequence motif format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001366
-name: prosite-profile
-namespace: format
-def: Sequence profile (sequence classifier) format used in the PROSITE database.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002069 ! Sequence profile format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001367
-name: jaspar
-namespace: format
-def: A profile (sequence classifier) in the format used in the JASPAR database.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002069 ! Sequence profile format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001369
-name: MEME background Markov model format
-namespace: format
-def: Format of the model of random sequences used by MEME.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002072 ! Hidden Markov model format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001370
-name: HMMER hidden Markov model format
-namespace: format
-def: Format of a hidden Markov model representation used by the HMMER package.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002072 ! Hidden Markov model format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001383
-name: Sequence alignment (nucleic acid)
-namespace: data
-def: Alignment of multiple nucleotide sequences.
-is_a: EDAM:0000863 ! Sequence alignment
-is_a: EDAM:0002525 ! Nucleic acid data
-
-[Term]
-id: EDAM:0001419
-name: Sequence-MEME profile alignment format
-namespace: format
-def: Format for alignment of molecular sequences to MEME profiles (position-dependent scoring matrices) as generated by the MAST tool from the MEME package.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002014 ! Sequence-profile alignment format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001421
-name: HMMER alignment report format (sequences versus HMMs)
-namespace: format
-def: Format used by the HMMER package for an alignment of a sequence against a hidden Markov model database.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002014 ! Sequence-profile alignment format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001422
-name: HMMER alignment report format (HMM versus sequences)
-namespace: format
-def: Format used by the HMMER package for of an alignment of a hidden Markov model against a sequence database.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002014 ! Sequence-profile alignment format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001423
-name: PHYLIP phylogenetic distance matrix format
-namespace: format
-def: Format of PHYLIP phylogenetic distance matrix data.
-comment: Data Type must include the distance matrix, probably as pairs of sequence identifiers with a distance (integer or float). See OBO file for URL of format specification.
-is_a: EDAM:0002067 ! Sequence distance matrix format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001430
-name: PHYLIP continuous quantitative characters format
-namespace: format
-def: PHYLIP file format for continuous quantitative character data.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002037 ! Phylogenetic continuous quantitative character format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001432
-name: PHYLIP phylogenetic character frequencies
-namespace: format
-def: PHYLIP file format for phylogenetics character frequency data.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002037 ! Phylogenetic continuous quantitative character format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001433
-name: PHYLIP discrete states format
-namespace: format
-def: Format of PHYLIP discrete states data.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002038 ! Phylogenetic discrete states format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001434
-name: PHYLIP cliques file format
-namespace: format
-def: Format of PHYLIP cliques data.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002039 ! Phylogenetic metadata (cliques) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001445
-name: Phylip phylogenetic tree distance data format
-namespace: format
-def: Format for distances, such as Branch Score distance, between two or more phylogenetic trees as used by the Phylip package.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002049 ! Phylogenetic metadata (tree distances) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001454
-name: dssp
-namespace: format
-def: Format of an entry from the DSSP database (Dictionary of Secondary Structure in Proteins).
-comment: The DSSP database is built using the DSSP application which defines secondary structure, geometrical features and solvent exposure of proteins, given atomic coordinates in PDB format. See OBO file for URL of format specification.
-is_a: EDAM:0002077 ! Protein secondary structure format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001455
-name: hssp
-namespace: format
-def: Entry format of the HSSP database (Homology-derived Secondary Structure in Proteins).
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002077 ! Protein secondary structure format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001457
-name: Vienna RNA secondary structure format
-namespace: format
-def: Format of RNA secondary structure (in bracket notation) with free energy values, generated by the Vienna program.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002076 ! RNA secondary structure format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001458
-name: Vienna local RNA secondary structure format
-namespace: format
-def: Format of local RNA secondary structure components with free energy values, generated by the Vienna program.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002076 ! RNA secondary structure format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001459
-name: Nucleic acid structure
-namespace: data
-def: 3D coordinate and associated data for a nucleic acid tertiary (3D) structure.
-is_a: EDAM:0000883 ! Structure
-is_a: EDAM:0002525 ! Nucleic acid data
-
-[Term]
-id: EDAM:0001476
-name: PDB format
-namespace: format
-def: Entry format of PDB database in PDB format, or any report in the same format.
-comment: See OBO file for URL of format specification.
-synonym: "PDB" EXACT []
-xref: Moby:PDB-formatted-text
-xref: Moby:PDB-Text
-is_a: EDAM:0001475 ! PDB database entry format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001477
-name: mmCIF
-namespace: format
-def: Entry format of PDB database in mmCIF format, or any report in the same format.
-comment: See OBO file for URL of format specification.
-synonym: "mmcif" EXACT []
-xref: Moby:mmCIF-Text
-xref: Moby:mmCIF_Text
-is_a: EDAM:0001475 ! PDB database entry format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001482
-name: Tertiary structure alignment (nucleic acid)
-namespace: data
-def: Alignment (superimposition) of nucleic acid tertiary (3D) structures.
-is_a: EDAM:0000886 ! Tertiary structure alignment
-is_a: EDAM:0002525 ! Nucleic acid data
-
-[Term]
-id: EDAM:0001500
-name: Domainatrix 3D-1D scoring matrix format
-namespace: format
-def: Format of a matrix of 3D-1D scores used by the EMBOSS Domainatrix applications.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002064 ! 3D-1D scoring matrix format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001504
-name: aaindex
-namespace: format
-def: Amino acid index format used by the AAindex database.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002017 ! Amino acid index format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001551
-name: Pcons report format
-namespace: format
-def: Format of output of the Pcons Model Quality Assessment Program (MQAP).
-comment: Pcons ranks protein models by assessing their quality based on the occurrence of recurring common three-dimensional structural patterns. Pcons returns a score reflecting the overall global quality and a score for each individual residue in the protein reflecting the local residue quality. See OBO file for URL of format specification.
-is_a: EDAM:0002065 ! Protein structure annotation (quality evaluation) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001552
-name: ProQ report format
-namespace: format
-def: Format of output of the ProQ protein model quality predictor.
-comment: ProQ is a neural network-based predictor that predicts the quality of a protein model based on the number of structural features. See OBO file for URL of format specification.
-is_a: EDAM:0002065 ! Protein structure annotation (quality evaluation) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001582
-name: findkm
-namespace: format
-def: A report format for the kinetics of enzyme-catalysed reaction(s) in a format generated by EMBOSS findkm. This includes Michaelis Menten plot, Hanes Woolf plot, Michaelis Menten constant (Km) and maximum velocity (Vmax).
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002027 ! Enzyme kinetics report format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001627
-name: Primer3 primer report format
-namespace: format
-def: Report format on PCR primers and hybridization oligos as generated by Whitehead primer3 program.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002061 ! Nucleic acid features (primers) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001629
-name: mira
-namespace: format
-def: Format of MIRA sequence trace information file.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002057 ! Sequence trace format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001630
-name: CAF
-namespace: format
-def: Common Assembly Format (CAF). A sequence assembly format including contigs, base-call qualities, and other metadata.
-spec_url: http://www.sanger.ac.uk/resources/software/caf/
-is_a: EDAM:0002330 ! Text format
-is_a: EDAM:0002561 ! Sequence assembly format (text)
-relationship: is_format_of EDAM:0000925 ! Sequence assembly
-
-[Term]
-id: EDAM:0001633
-name: PHD
-namespace: format
-def: PHD sequence trace format to store serialised chromatogram data (reads).
-spec_url: http://www.bioperl.org/wiki/PHD_sequence_format
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0000924 ! Sequence trace
-
-[Term]
-id: EDAM:0001637
-name: dat
-namespace: format
-def: Format of Affymetrix data file of raw image data.
-comment: See OBO file for URL of format specification.
-synonym: "Affymetrix image data file format" EXACT []
-is_a: EDAM:0002058 ! Gene annotation (expression) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001638
-name: cel
-namespace: format
-def: Format of Affymetrix data file of information about (raw) expression levels of the individual probes.
-comment: See OBO file for URL of format specification.
-synonym: "Affymetrix probe raw data format" EXACT []
-is_a: EDAM:0002058 ! Gene annotation (expression) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001639
-name: affymetrix
-namespace: format
-def: Format of affymetrix gene cluster files (hc-genes.txt, hc-chips.txt) from hierarchical clustering.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001641
-name: affymetrix-exp
-namespace: format
-def: Affymetrix data file format for information about experimental conditions and protocols.
-comment: See OBO file for URL of format specification.
-synonym: "Affymetrix experimental conditions data file format" EXACT []
-is_a: EDAM:0002056 ! Microarray experiment data format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001644
-name: chp
-namespace: format
-def: Format of Affymetrix data file of information about (normalised) expression levels of the individual probes.
-comment: See OBO file for URL of format specification.
-synonym: "Affymetrix probe normalised data format" EXACT []
-is_a: EDAM:0002058 ! Gene annotation (expression) format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001705
-name: HET group dictionary entry format
-namespace: format
-def: The format of an entry from the HET group dictionary (HET groups from PDB files).
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002030 ! Small molecule annotation format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001739
-name: pmc
-namespace: format
-def: Article format of the PubMed Central database.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002020 ! Article format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001740
-name: iHOP text mining abstract format
-namespace: format
-def: iHOP abstract format.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002021 ! Text mining report format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001741
-name: Oscar3 text mining abstract format
-namespace: format
-def: Text mining abstract format from the Oscar 3 application.
-comment: Oscar 3 performs chemistry-specific parsing of chemical documents. It attempts to identify chemical names, ontology terms and chemical data from a document. See OBO file for URL of format specification.
-is_a: EDAM:0002021 ! Text mining report format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001747
-name: PDB atom record format
-namespace: format
-def: Format of an ATOM record (describing data for an individual atom) from a PDB file.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0001918 ! Atomic data format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001848
-name: Tertiary structure reformatting
-namespace: operation
-def: Reformat a file of tertiary structure data.
-xref: WHATIF: PDBasXML
-is_a: EDAM:0000335 ! Report reformatting
-is_a: EDAM:0002234 ! Tertiary structure report processing
-
-[Term]
-id: EDAM:0001861
-name: PlasMapper TextMap plasmid map format
-namespace: format
-def: Map of a plasmid (circular DNA) in PlasMapper TextMap format.
-comment: See OBO file for URL of format specification.
-xref: Moby:PlasMapperTextMap
-is_a: EDAM:0002060 ! Map format
-is_a: EDAM:0002330 ! Text format
-
-[Term]
-id: EDAM:0001915
+subset: topics
+def: "A category denoting a rather broad domain or field of interest, of study, application, work, data, or technology. Topics have no clearly defined borders between each other." [http://edamontology.org]
+synonym: "quality" BROAD [http://purl.org/biotop/biotop.owl#Quality]
+synonym: "continuant" BROAD [snap:Continuant]
+synonym: "field of study" RELATED [sumo:FiledOfStudy] ! Related external synonym in EDAM without a note is usually almost exact.
+synonym: "Area of Research" RELATED [http://bioontology.org/ontologies/ResearchArea.owl#Area_of_Research]
+synonym: "Category" RELATED [http://www.onto-med.de/ontologies/gfo.owl#Category] {note="GFO 'Category' is in general broader than topic, but it may be seen narrower in the sense that it can be instantiated."}
+synonym: "Perpetuant" RELATED [http://www.onto-med.de/ontologies/gfo.owl#Perpetuant] {note="GFO 'Perpetuant' is in general broader than topic, but depending on metaphysical (non-)beliefs it may be seen narrower in the sense of being a concrete individual and exhibiting presentials."}
+synonym: "Method" RELATED [http://onto.eva.mpg.de/ontologies/gfo-bio.owl#Method]
+synonym: "quality" RELATED [snap:Quality] {note="BFO 'quality' is narrower in the sense that it is a 'dependent_continuant' (snap:DependentContinuant), and broader in the sense that it is any quality not just the topic."}
+synonym: "quality" RELATED [http://www.loa-cnr.it/ontologies/DOLCE-Lite.owl#quality] {note="Topic can be a quality of an entity."}
+
+
+[Term]
+id: EDAM_format:1915
 name: Format
 namespace: format
-def: An exchange format of particular type of data.
-comment: Common formats used by multiple independent tools and main formats used by public databases are listed.
+subset: formats
+def: "A specified way or layout of representing, structuring (and in some cases also encoding) data in a computer file, blob, string, message and so on." [http://edamontology.org]
+synonym: "Data format" EXACT [http://edamontology.org]
+synonym: "File format" NARROW [http://edamontology.org] {note="File format denotes only formats of a computer file, but the same formats apply also to data blobs or messages. Thus the synonym is in practical terms exact."}
+synonym: "Format" BROAD [http://purl.org/dc/elements/1.1/format]
+synonym: "quality" BROAD [http://purl.org/biotop/biotop.owl#Quality]
+synonym: "continuant" BROAD [snap:Continuant]
+synonym: "data format specification" RELATED [http://purl.obolibrary.org/obo/IAO_0000098] {note="Closely related concept focusing on the specification of a data format."}
+synonym: "Perpetuant" RELATED [http://www.onto-med.de/ontologies/gfo.owl#Perpetuant] {note="GFO 'Perpetuant' is in general broader than format, but it may be seen narrower in the sense of being a concrete individual and in the way of exhibiting presentials."}
+synonym: "Symbol structure" RELATED [http://www.onto-med.de/ontologies/gfo.owl#Symbol_structure]
+synonym: "File format" RELATED [http://en.wikipedia.org/wiki/File_format, http://en.wikipedia.org/wiki/List_of_file_formats]
+synonym: "machine language" RELATED [http://purl.org/biotop/biotop.owl#MachineLanguage]
+synonym: "Compression and encoding" RELATED [http://wsio.org/compression_004] {note="'Compression and encoding' defines additional 'formatting' and/or encoding on top of the primary format."}
+synonym: "standard" RELATED [http://semanticscience.org/resource/SIO_000618]
+synonym: "representation" RELATED [http://semanticscience.org/resource/SIO_000612]
+synonym: "quality" RELATED [snap:Quality] {note="BFO 'quality' is narrower in the sense that it is a 'dependent_continuant' (snap:DependentContinuant), and broader in the sense that it is any quality not just the data format."}
+synonym: "quality" RELATED [http://www.loa-cnr.it/ontologies/DOLCE-Lite.owl#quality] {note="Format can be a quality of a data record."}
+relationship: is_format_of EDAM_data:0006 ! Data ! Unfortunately, OBO-Edit2 doesn't show the subject concept at the top level when browsed with the 'f' option.
 
 [Term]
-id: EDAM:0001961
+id: EDAM_topic:0077
+name: Nucleic acid analysis
+namespace: topic
+subset: topics
+! alt_id: EDAM_topic:3046 {since=beta13} ! Not released
+def: "Processing and analysis of nucleic acid data, typically (but not exclusively) nucleic acid sequence analysis." [http://edamontology.org]
+synonym: "Nucleic acids" EXACT [http://edamontology.org]
+synonym: "Nucleic acid informatics" EXACT [http://edamontology.org]
+synonym: "Nucleic acid bioinformatics" EXACT [http://edamontology.org]
+is_a: EDAM_topic:0003 ! Topic
+
+[Term]
+id: EDAM_topic:0080
+name: Sequence analysis
+namespace: topic
+subset: topics
+! alt_id: EDAM_topic:2228
+! alt_id: EDAM_topic:0584
+def: "Processing and analysis of molecular sequences (monomer composition of polymers) including related concepts such as sequence sites, alignments, motifs and profiles." [http://edamontology.org]
+synonym: "Sequences" EXACT [http://edamontology.org]
+xref: BioCatalogue:Sequence Analysis
+is_a: EDAM_topic:0003 ! Topic
+
+[Term]
+id: EDAM_topic:0081
+name: Structure analysis
+namespace: topic
+subset: topics
+! alt_id: EDAM_topic:0693
+! alt_id: EDAM_topic:2827
+! alt_id: EDAM_topic:0585
+def: "Processing and analysis of molecular secondary or tertiary (3D) structure, typically of proteins and nucleic acids." [http://edamontology.org]
+comment: This includes related concepts such as structural properties, alignments and structural motifs.
+synonym: "Structural bioinformatics" EXACT [http://edamontology.org]
+synonym: "Computation structural biology" EXACT [http://edamontology.org]
+is_a: EDAM_topic:0003 ! Topic
+
+[Term]
+id: EDAM_topic:0084
+! alt_id: EDAM_topic:0192
+! alt_id: EDAM_topic:0193
+name: Phylogenetics
+namespace: topic
+subset: topics
+! alt_id: EDAM_topic:0636
+def: "Topic concerning the study of evolutionary relationships amongst organisms; phylogenetic trees, gene transfer, mode of selection / evolution etc." [http://edamontology.org]
+comment: This includes diverse phylogenetic methods, including phylogenetic tree construction, typically from molecular sequence or morphological data, methods that simulate DNA sequence evolution, a phylogenetic tree or the underlying data, or which estimate or use molecular clock and stratigraphic (age) data.
+xref: BioCatalogue:Phylogeny
+xref: BioCatalogue:Statistical Robustness
+synonym: "Phylogenetic simulation" EXACT [http://edamontology.org]
+synonym: "Phylogenetic clocks, dating and stratigraphy" EXACT [http://edamontology.org]
+is_a: EDAM_topic:0003 ! Topic
+
+[Term]
+id: EDAM_topic:0085
+name: Functional genomics
+namespace: topic
+subset: topics
+def: "Topic concerning the study of gene or protein functions and their interactions." [http://edamontology.org]
+is_a: EDAM_topic:0622 ! Genomics
+
+[Term]
+id: EDAM_topic:0217
+name: Literature analysis
+namespace: topic
+subset: topics
+! alt_id: EDAM_topic:0088
+! alt_id: EDAM_topic:3058
+def: "The processing and analysis of the bioinformatics literature and bibliographic data, such as literature search and query." [http://edamontology.org]
+xref: BioCatalogue: Document Discovery
+xref: BioCatalogue: Literature retrieval
+synonym: "Literature search and analysis" EXACT [http://edamontology.org]
+synonym: "Literature sources" EXACT [http://edamontology.org]
+is_a: EDAM_topic:3068 ! Literature and reference
+
+[Term]
+id: EDAM_topic:0091
+name: Data handling
+namespace: topic
+subset: topics
+! alt_id: EDAM_topic:2282
+def: "Topic for the generic management of biological data including basic handling of files and databases, datatypes, workflows and annotation." [http://edamontology.org]
+synonym: "Data types, processing and visualisation" EXACT [http://edamontology.org]
+is_a: EDAM_topic:0003 ! Topic
+
+[Term]
+id: EDAM_topic:0102
+name: Sequencing and mapping
+namespace: topic
+subset: topics
+def: "Topic concerning the determination and mapping of complete (typically nucleotide) sequences." [http://edamontology.org]
+is_a: EDAM_topic:0640 ! Nucleic acid sequence analysis
+
+[Term]
+id: EDAM_topic:0121
+name: Proteomics
+namespace: topic
+subset: topics
+! alt_id: EDAM_topic:0764
+def: "Topic concerning the study of whole proteomes of organisms." [http://edamontology.org]
+comment: Proteomics uses high-throughput methods to separate, characterize and identify expressed proteins or analyse protein expression data (for example in different cells or tissues).
+synonym: "Protein expression" EXACT [http://edamontology.org]
+xref: BioCatalogue:Proteomics
+is_a: EDAM_topic:0003 ! Topic
+
+[Term]
+id: EDAM_topic:0200
+! alt_id: EDAM_topic:0206
+name: Microarrays
+namespace: topic
+subset: topics
+def: "Topic concerning microarrays, for example, to process microarray data or design probes and experiments." [http://edamontology.org]
+xref: BioCatalogue:Microarrays
+synonym: "DNA microarrays" EXACT [http://edamontology.org]
+is_a: EDAM_topic:0607 ! Laboratory resources
+
+[Term]
+id: EDAM_operation:0230
+name: Sequence generation
+namespace: operation
+subset: operations
+def: "Generate a molecular sequence by some means." [http://edamontology.org]
+is_a: EDAM_operation:2121 ! Sequence file processing
+
+[Term]
+id: EDAM_operation:0231
+name: Sequence editing
+namespace: operation
+subset: operations
+def: "Edit or change a molecular sequence, either randomly or specifically." [http://edamontology.org]
+is_a: EDAM_operation:2121 ! Sequence file processing
+is_a: EDAM_operation:3096 ! Editing
+
+[Term]
+id: EDAM_operation:0232
+name: Sequence merging
+namespace: operation
+subset: operations
+def: "Merge two or more (typically overlapping) molecular sequences." [http://edamontology.org]
+synonym: "Sequence splicing" EXACT [http://edamontology.org]
+is_a: EDAM_operation:0231 ! Sequence editing
+
+[Term]
+id: EDAM_operation:0233
+name: Sequence conversion
+namespace: operation
+subset: operations
+def: "Convert a molecular sequence from one type to another." [http://edamontology.org]
+is_a: EDAM_operation:0231 ! Sequence editing
+
+[Term]
+id: EDAM_operation:0335
+name: File reformatting
+namespace: operation
+subset: operations
+def: "Reformat a file of data (or equivalent entity in memory)." [http://edamontology.org]
+is_a: EDAM_operation:2409 ! File processing
+
+[Term]
+id: EDAM_operation:0561
+name: Sequence reformatting
+namespace: operation
+subset: operations
+def: "Reformat (a file or other report of) molecular sequence(s)." [http://edamontology.org]
+is_a: EDAM_operation:0335 ! File reformatting
+is_a: EDAM_operation:2121 ! Sequence file processing
+
+[Term]
+id: EDAM_operation:0562
+name: Sequence alignment reformatting
+namespace: operation
+subset: operations
+def: "Reformat (a file or other report of) molecular sequence alignment(s)." [http://edamontology.org]
+is_a: EDAM_operation:0335 ! File reformatting
+is_a: EDAM_operation:2122 ! Sequence alignment file processing
+
+[Term]
+id: EDAM_operation:0563
+name: Codon usage table reformatting
+namespace: operation
+subset: operations
+def: "Reformat a codon usage table." [http://edamontology.org]
+is_a: EDAM_operation:0335 ! File reformatting
+is_a: EDAM_operation:2433 ! Codon usage table processing
+relationship: has_input EDAM_data:1597 {min_cardinality=1} ! Codon usage table
+relationship: has_output EDAM_data:1597 {min_cardinality=1} ! Codon usage table
+
+[Term]
+id: EDAM_topic:0078
+name: Protein analysis
+namespace: topic
+subset: topics
+! alt_id: EDAM_topic:0586
+def: "Processing and analysis of protein data, typically molecular sequence and structural data." [http://edamontology.org]
+synonym: "Protein informatics" EXACT [http://edamontology.org]
+synonym: "Protein bioinformatics" EXACT [http://edamontology.org]
+synonym: "Proteins" EXACT [http://edamontology.org]
+is_a: EDAM_topic:0003 ! Topic
+
+[Term]
+id: EDAM_topic:0602
+name: Pathways, networks and models
+namespace: topic
+subset: topics
+! alt_id: EDAM_topic:0198
+! alt_id: EDAM_topic:0755
+def: "Topic concerning biological pathways, networks and other models." [http://edamontology.org]
+xref: BioCatalogue:Pathways
+xref: BioCatalogue:Pathway Retrieval
+is_a: EDAM_topic:2259 ! Systems biology
+is_a: EDAM_topic:3071 ! Biological data resources
+
+[Term]
+id: EDAM_topic:0607
+name: Laboratory resources
+namespace: topic
+subset: topics
+def: "Topic concerning biological resources for use in the lab including cell lines, viruses, plasmids, phages, DNA probes and primers and so on." [http://edamontology.org]
+is_a: EDAM_topic:3071 ! Biological data resources
+
+[Term]
+id: EDAM_topic:0621
+name: Genome, proteome and model organisms
+namespace: topic
+subset: topics
+! alt_id: EDAM_topic:0086
+! alt_id: EDAM_topic:0591
+! alt_id: EDAM_topic:0643
+! alt_id: EDAM_topic:0800
+! alt_id: EDAM_topic:0795
+def: "Topic concerning the genome, proteome or other information about a specific organism, such as a model organism, or group of organisms." [http://edamontology.org]
+comment: General information on or more organisms, genomes (including molecular sequences and map, genes and annotation) and proteomes may be included.
+synonym: "Genome map" EXACT [http://edamontology.org]
+is_a: EDAM_topic:0622 ! Genomics
+is_a: EDAM_topic:0121 ! Proteomics
+is_a: EDAM_topic:0625 ! Genotype and phenotype resources
+
+[Term]
+id: EDAM_topic:0622
+name: Genomics
+namespace: topic
+subset: topics
+! alt_id: EDAM_topic:0093
+! alt_id: EDAM_topic:0794
+def: "Topic concerning whole genomes of one or more organisms, or genomes in general, such as meta-information on genomes, genome projects, gene names etc." [http://edamontology.org]
+xref: BioCatalogue:Genomics
+xref: BioCatalogue:Functional Genomics
+is_a: EDAM_topic:0003 ! Topic
+
+[Term]
+id: EDAM_topic:0625
+name: Genotype and phenotype resources
+namespace: topic
+subset: topics
+! alt_id: EDAM_topic:2231
+def: "Topic concerning the study of genetic constitution of a living entity, such as an individual, and organism, a cell and so on, typically with respect to a particular observable phenotypic traits, or resources concerning such traits, which might be an aspect of biochemistry, physiology, morphology, anatomy, development and so on." [http://edamontology.org]
+is_a: EDAM_topic:2816 ! Gene resources
+
+[Term]
+id: EDAM_data:0842
+name: Identifier
+namespace: identifier
+subset: identifiers
+subset: data
+! alt_id: EDAM_data:2860
+! alt_id: EDAM_data:2861
+! alt_id: EDAM_data:2926
+def: "Identifier is a datum identifying an entity and serving only the sole purpose of identification." [http://edamontology.org]
+comment: An identifier is typically a rather short textual or numerical datum (string or integer). It is usually desired that an identifier identifies the entity uniquely and often also that it is persistent over time.
+synonym: "ID" EXACT [http://edamontology.org]
+synonym: "Identifier" EXACT [http://wsio.org/data_005]
+synonym: "identifier" EXACT [http://semanticscience.org/resource/SIO_000115]
+synonym: "Identifier" NARROW [http://purl.org/dc/elements/1.1/identifier] {note="Almost exact but limited to identifying resources."}
+is_a: EDAM_data:0006 ! Data
+relationship: is_identifier_of EDAM_data:0006 {note="However, NB. that an identifier may identify also other entities than data records."} ! Data
+
+[Term]
+id: EDAM_data:0850
+name: Sequence set
+namespace: data
+subset: data
+def: "A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method." [http://edamontology.org]
+comment: This concept may be used for arbitrary sequence sets and associated data arising from processing.
+synonym: "sequence_collection" EXACT [SO:0001260]
+is_a: EDAM_data:2955 ! Sequence report
+
+[Term]
+id: EDAM_data:0912
+name: Nucleic acid property
+namespace: data
+subset: data
+def: "A report of primarily non-positional data describing intrinsic physical, chemical or other properties of a nucleic acid molecule." [http://edamontology.org]
+comment:  The report may be based on analysis of nucleic acid sequence or structural data. This is a broad data type and is used a placeholder for other, more specific types.
+synonym: "Nucleic acid physicochemical property" EXACT [http://edamontology.org]
+is_a: EDAM_data:2084 ! Nucleic acid report
+is_a: EDAM_data:2087 ! Molecular property
+
+[Term]
+id: EDAM_data:1233
+name: Sequence set (protein)
+namespace: data
+subset: data
+def: "Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries." [http://edamontology.org]
+is_a: EDAM_data:0850 ! Sequence set
+
+[Term]
+id: EDAM_data:1234
+name: Sequence set (nucleic acid)
+namespace: data
+subset: data
+def: "Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries." [http://edamontology.org]
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
+
+[Term]
+id: EDAM_data:1235
+name: Sequence cluster
+namespace: data
+subset: data
+def: "A set of sequences that have been clustered or otherwise classified as belonging to a group including (typically) sequence cluster information." [http://edamontology.org]
+comment: The cluster might include sequences identifiers, short descriptions, alignment and summary information.
+is_a: EDAM_data:0850 ! Sequence set
+relationship: has_topic EDAM_topic:3052 ! Sequence clusters and classification
+relationship: has_topic EDAM_topic:0724 ! Protein families
+
+[Term]
+id: EDAM_data:1239
+name: Restriction digest
+namespace: data
+subset: data
+def: "Restriction digest fragments from digesting a nucleotide sequence with restriction sites using a restriction endonuclease." [http://edamontology.org]
+xref: SO:0000412
+is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
+
+[Term]
+id: EDAM_data:1246
+name: Sequence cluster (nucleic acid)
+namespace: data
+subset: data
+def: "A cluster of nucleotide sequences." [http://edamontology.org]
+comment: The sequences are typically related, for example a family of sequences.
+synonym: "Nucleotide sequence cluster" EXACT [http://edamontology.org]
+is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
+is_a: EDAM_data:1235 ! Sequence cluster
+
+[Term]
+id: EDAM_format:1248
+name: EMBL feature location
+namespace: format
+subset: formats
+def: "Format for sequence positions (feature location) as used in DDBJ/EMBL/GenBank database." [http://edamontology.org]
+synonym: "Feature location" EXACT [http://edamontology.org]
+is_a: EDAM_format:2078 ! Sequence range format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_data:1265
+name: Sequence composition (base frequencies)
+namespace: data
+subset: data
+def: "A table of base frequencies of a nucleotide sequence." [http://edamontology.org]
+is_a: EDAM_data:3086 ! Nucleic acid sequence composition
+
+[Term]
+id: EDAM_data:1276
+name: Nucleic acid features
+namespace: data
+subset: data
+! alt_id: EDAM_data:1273
+def: "Nucleotide sequence-specific feature annotation (positional features of a nucleotide sequence)." [http://edamontology.org]
+comment: This includes nucleotide sequence feature annotation in any known sequence feature table format and any other report of nucleic acid features.
+synonym: "Nucleic acid feature table" EXACT [http://edamontology.org]
+synonym: "Feature table (nucleic acid)" EXACT [http://edamontology.org]
+is_a: EDAM_data:2084 ! Nucleic acid report
+is_a: EDAM_data:1255 ! Feature record
+
+[Term]
+id: EDAM_format:1295
+name: quicktandem
+namespace: format
+subset: formats
+def: "Report format for tandem repeats in a nucleotide sequence (format generated by the Sanger Centre quicktandem program)." [http://edamontology.org]
+is_a: EDAM_format:2155 ! Sequence features (repeats) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1296
+name: Sanger inverted repeats
+namespace: format
+subset: formats
+def: "Report format for inverted repeats in a nucleotide sequence (format generated by the Sanger Centre inverted program)." [http://edamontology.org]
+is_a: EDAM_format:2155 ! Sequence features (repeats) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1297
+name: EMBOSS repeat
+namespace: format
+subset: formats
+def: "Report format for tandem repeats in a sequence (an EMBOSS report format)." [http://edamontology.org]
+is_a: EDAM_format:2155 ! Sequence features (repeats) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1316
+name: est2genome
+namespace: format
+subset: formats
+def: "Format of a report on exon-intron structure generated by EMBOSS est2genome." [http://edamontology.org]
+is_a: EDAM_format:2159 ! Gene features (coding region) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1318
+name: restrict
+namespace: format
+subset: formats
+def: "Report format for restriction enzyme recognition sites used by EMBOSS restrict program." [http://edamontology.org]
+is_a: EDAM_format:2158 ! Nucleic acid features (restriction sites) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1319
+name: restover
+namespace: format
+subset: formats
+def: "Report format for restriction enzyme recognition sites used by EMBOSS restover program." [http://edamontology.org]
+is_a: EDAM_format:2158 ! Nucleic acid features (restriction sites) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1320
+name: REBASE restriction sites
+namespace: format
+subset: formats
+def: "Report format for restriction enzyme recognition sites used by REBASE database." [http://edamontology.org]
+is_a: EDAM_format:2158 ! Nucleic acid features (restriction sites) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1334
+name: mspcrunch
+namespace: format
+subset: formats
+def: "Format of results of a sequence database search using some variant of MSPCrunch." [http://edamontology.org]
+is_a: EDAM_format:2066 ! Database hits (sequence) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1335
+name: smith-waterman
+namespace: format
+subset: formats
+def: "Format of results of a sequence database search using some variant of Smith Waterman." [http://edamontology.org]
+is_a: EDAM_format:2066 ! Database hits (sequence) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1336
+name: dhf
+namespace: format
+subset: formats
+def: "Format of EMBASSY domain hits file (DHF) of hits (sequences) with domain classification information." [http://edamontology.org]
+comment: The hits are relatives to a SCOP or CATH family and are found from a search of a sequence database.
+is_a: EDAM_format:2066 ! Database hits (sequence) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1337
+name: lhf
+namespace: format
+subset: formats
+def: "Format of EMBASSY ligand hits file (LHF) of database hits (sequences) with ligand classification information." [http://edamontology.org]
+comment: The hits are putative ligand-binding sequences and are found from a search of a sequence database.
+is_a: EDAM_format:2066 ! Database hits (sequence) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1349
+name: HMMER Dirichlet prior
+namespace: format
+subset: formats
+def: "Dirichlet distribution HMMER format." [http://edamontology.org]
+is_a: EDAM_format:2074 ! Dirichlet distribution format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1350
+name: MEME Dirichlet prior
+namespace: format
+subset: formats
+def: "Dirichlet distribution MEME format." [http://edamontology.org]
+is_a: EDAM_format:2074 ! Dirichlet distribution format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1351
+name: HMMER emission and transition
+namespace: format
+subset: formats
+def: "Format of a report from the HMMER package on the emission and transition counts of a hidden Markov model." [http://edamontology.org]
+is_a: EDAM_format:2075 ! HMM emission and transition counts format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1356
+name: prosite-pattern
+namespace: format
+subset: formats
+def: "Format of a regular expression pattern from the Prosite database." [http://edamontology.org]
+is_a: EDAM_format:2068 ! Sequence motif format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1357
+name: EMBOSS sequence pattern
+namespace: format
+subset: formats
+def: "Format of an EMBOSS sequence pattern." [http://edamontology.org]
+is_a: EDAM_format:2068 ! Sequence motif format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1360
+name: meme-motif
+namespace: format
+subset: formats
+def: "A motif in the format generated by the MEME program." [http://edamontology.org]
+is_a: EDAM_format:2068 ! Sequence motif format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1366
+name: prosite-profile
+namespace: format
+subset: formats
+def: "Sequence profile (sequence classifier) format used in the PROSITE database." [http://edamontology.org]
+is_a: EDAM_format:2069 ! Sequence profile format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1367
+name: jaspar
+namespace: format
+subset: formats
+def: "A profile (sequence classifier) in the format used in the JASPAR database." [http://edamontology.org]
+is_a: EDAM_format:2069 ! Sequence profile format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1369
+name: MEME background Markov model
+namespace: format
+subset: formats
+def: "Format of the model of random sequences used by MEME." [http://edamontology.org]
+is_a: EDAM_format:2072 ! Hidden Markov model format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1370
+name: hmmer
+namespace: format
+subset: formats
+def: "Format of a hidden Markov model representation used by the HMMER package." [http://edamontology.org]
+is_a: EDAM_format:2072 ! Hidden Markov model format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_data:1383
+name: Sequence alignment (nucleic acid)
+namespace: data
+subset: data
+def: "Alignment of multiple nucleotide sequences." [http://edamontology.org]
+is_a: EDAM_data:0863 ! Sequence alignment
+is_a: EDAM_data:2084 ! Nucleic acid report
+
+[Term]
+id: EDAM_format:1419
+name: Sequence-MEME profile alignment
+namespace: format
+subset: formats
+def: "Format for alignment of molecular sequences to MEME profiles (position-dependent scoring matrices) as generated by the MAST tool from the MEME package." [http://edamontology.org]
+is_a: EDAM_format:2014 ! Sequence-profile alignment format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1421
+name: HMMER profile alignment (sequences versus HMMs)
+namespace: format
+subset: formats
+def: "Format used by the HMMER package for an alignment of a sequence against a hidden Markov model database." [http://edamontology.org]
+is_a: EDAM_format:2014 ! Sequence-profile alignment format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1422
+name: HMMER profile alignment (HMM versus sequences)
+namespace: format
+subset: formats
+def: "Format used by the HMMER package for of an alignment of a hidden Markov model against a sequence database." [http://edamontology.org]
+is_a: EDAM_format:2014 ! Sequence-profile alignment format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1423
+name: phylip distance matrix
+namespace: format
+subset: formats
+def: "Format of PHYLIP phylogenetic distance matrix data." [http://edamontology.org]
+comment: Data Type must include the distance matrix, probably as pairs of sequence identifiers with a distance (integer or float).
+is_a: EDAM_format:2067 ! Sequence distance matrix format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1430
+name: phylip continuous quantitative characters
+namespace: format
+subset: formats
+def: "PHYLIP file format for continuous quantitative character data." [http://edamontology.org]
+is_a: EDAM_format:2037 ! Phylogenetic continuous quantitative character format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1432
+name: phylip character frequencies
+namespace: format
+subset: formats
+def: "PHYLIP file format for phylogenetics character frequency data." [http://edamontology.org]
+is_a: EDAM_format:2037 ! Phylogenetic continuous quantitative character format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1433
+name: phylip discrete states
+namespace: format
+subset: formats
+def: "Format of PHYLIP discrete states data." [http://edamontology.org]
+is_a: EDAM_format:2038 ! Phylogenetic discrete states format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1434
+name: phylip cliques
+namespace: format
+subset: formats
+def: "Format of PHYLIP cliques data." [http://edamontology.org]
+is_a: EDAM_format:2039 ! Phylogenetic tree report (cliques) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1445
+name: phylip tree distance
+namespace: format
+subset: formats
+def: "Format for distances, such as Branch Score distance, between two or more phylogenetic trees as used by the Phylip package." [http://edamontology.org]
+is_a: EDAM_format:2049 ! Phylogenetic tree report (tree distances) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1454
+name: dssp
+namespace: format
+subset: formats
+def: "Format of an entry from the DSSP database (Dictionary of Secondary Structure in Proteins)." [http://edamontology.org]
+comment: The DSSP database is built using the DSSP application which defines secondary structure, geometrical features and solvent exposure of proteins, given atomic coordinates in PDB format.
+is_a: EDAM_format:2077 ! Protein secondary structure format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1455
+name: hssp
+namespace: format
+subset: formats
+def: "Entry format of the HSSP database (Homology-derived Secondary Structure in Proteins)." [http://edamontology.org]
+is_a: EDAM_format:2077 ! Protein secondary structure format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1457
+name: Vienna RNA secondary structure
+namespace: format
+subset: formats
+def: "Format of RNA secondary structure (in bracket notation) with free energy values, generated by the Vienna program." [http://edamontology.org]
+synonym: "Dot-bracket format" EXACT [http://edamontology.org]
+is_a: EDAM_format:2076 ! RNA secondary structure format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1458
+name: Vienna local RNA secondary structure
+namespace: format
+subset: formats
+def: "Format of local RNA secondary structure components with free energy values, generated by the Vienna program." [http://edamontology.org]
+is_a: EDAM_format:1457 ! Vienna RNA secondary structure
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_data:1459
+name: Nucleic acid structure
+namespace: data
+subset: data
+def: "3D coordinate and associated data for a nucleic acid tertiary (3D) structure." [http://edamontology.org]
+is_a: EDAM_data:0883 ! Structure
+relationship: has_topic EDAM_topic:0097 ! Nucleic acid structure analysis
+
+[Term]
+id: EDAM_format:1476
+name: PDB format
+namespace: format
+subset: formats
+def: "Entry format of PDB database in PDB format." [http://edamontology.org]
+synonym: "PDB" EXACT [http://edamontology.org]
+xref: Moby:PDB-formatted-text
+xref: Moby:PDB-Text
+is_a: EDAM_format:1475 ! PDB database entry format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1477
+name: mmCIF
+namespace: format
+subset: formats
+def: "Entry format of PDB database in mmCIF format." [http://edamontology.org]
+synonym: "mmcif" EXACT [http://edamontology.org]
+xref: Moby:mmCIF-Text
+xref: Moby:mmCIF_Text
+is_a: EDAM_format:1475 ! PDB database entry format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_data:1482
+name: Structure alignment (nucleic acid)
+namespace: data
+subset: data
+def: "Alignment (superimposition) of nucleic acid tertiary (3D) structures." [http://edamontology.org]
+is_a: EDAM_data:0886 ! Structure alignment
+is_a: EDAM_data:2084 ! Nucleic acid report
+
+[Term]
+id: EDAM_format:1500
+name: Domainatrix 3D-1D scoring matrix format
+namespace: format
+subset: formats
+def: "Format of a matrix of 3D-1D scores used by the EMBOSS Domainatrix applications." [http://edamontology.org]
+is_obsolete: true {since=beta12orEarlier}
+
+[Term]
+id: EDAM_format:1504
+name: aaindex
+namespace: format
+subset: formats
+def: "Amino acid index format used by the AAindex database." [http://edamontology.org]
+is_a: EDAM_format:2017 ! Amino acid index format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1551
+name: Pcons report format
+namespace: format
+subset: formats
+def: "Format of output of the Pcons Model Quality Assessment Program (MQAP)." [http://edamontology.org]
+comment: Pcons ranks protein models by assessing their quality based on the occurrence of recurring common three-dimensional structural patterns. Pcons returns a score reflecting the overall global quality and a score for each individual residue in the protein reflecting the local residue quality.
+is_a: EDAM_format:2065 ! Protein structure report (quality evaluation) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1552
+name: ProQ report format
+namespace: format
+subset: formats
+def: "Format of output of the ProQ protein model quality predictor." [http://edamontology.org]
+comment: ProQ is a neural network-based predictor that predicts the quality of a protein model based on the number of structural features.
+is_a: EDAM_format:2065 ! Protein structure report (quality evaluation) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1582
+name: findkm
+namespace: format
+subset: formats
+def: "A report format for the kinetics of enzyme-catalysed reaction(s) in a format generated by EMBOSS findkm. This includes Michaelis Menten plot, Hanes Woolf plot, Michaelis Menten constant (Km) and maximum velocity (Vmax)." [http://edamontology.org]
+is_a: EDAM_format:2027 ! Enzyme kinetics report format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1627
+name: Primer3 primer
+namespace: format
+subset: formats
+def: "Report format on PCR primers and hybridization oligos as generated by Whitehead primer3 program." [http://edamontology.org]
+is_a: EDAM_format:2061 ! Nucleic acid features (primers) format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1629
+name: mira
+namespace: format
+subset: formats
+def: "Format of MIRA sequence trace information file." [http://edamontology.org]
+is_a: EDAM_format:2057 ! Sequence trace format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1630
+name: CAF
+namespace: format
+subset: formats
+def: "Common Assembly Format (CAF). A sequence assembly format including contigs, base-call qualities, and other metadata." [http://edamontology.org]
+xref: http://www.sanger.ac.uk/resources/software/caf/ {documentation=true}
+is_a: EDAM_format:2561 ! Sequence assembly format (text)
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1633
+name: PHD
+namespace: format
+subset: formats
+def: "PHD sequence trace format to store serialised chromatogram data (reads)." [http://edamontology.org]
+xref: http://www.bioperl.org/wiki/PHD_sequence_format {documentation=true}
+is_a: EDAM_format:2057 ! Sequence trace format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1637
+name: dat
+namespace: format
+subset: formats
+def: "Format of Affymetrix data file of raw image data." [http://edamontology.org]
+synonym: "Affymetrix image data file format" EXACT [http://edamontology.org]
+is_a: EDAM_format:2058 ! Gene expression report format
+is_a: EDAM_format:2330 ! Textual format
+relationship: is_format_of EDAM_data:1714 ! Microarray spots image
+
+[Term]
+id: EDAM_format:1638
+name: cel
+namespace: format
+subset: formats
+def: "Format of Affymetrix data file of information about (raw) expression levels of the individual probes." [http://edamontology.org]
+synonym: "Affymetrix probe raw data format" EXACT [http://edamontology.org]
+is_a: EDAM_format:2058 ! Gene expression report format
+is_a: EDAM_format:2330 ! Textual format
+relationship: is_format_of EDAM_data:3110 ! Raw microarray data
+
+[Term]
+id: EDAM_format:1639
+name: affymetrix
+namespace: format
+subset: formats
+def: "Format of affymetrix gene cluster files (hc-genes.txt, hc-chips.txt) from hierarchical clustering." [http://edamontology.org]
+is_a: EDAM_format:2330 ! Textual format
+is_a: EDAM_format:2172 ! Sequence cluster format (nucleic acid)
+
+[Term]
+id: EDAM_format:1641
+name: affymetrix-exp
+namespace: format
+subset: formats
+def: "Affymetrix data file format for information about experimental conditions and protocols." [http://edamontology.org]
+synonym: "Affymetrix experimental conditions data file format" EXACT [http://edamontology.org]
+is_a: EDAM_format:2056 ! Microarray experiment data format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1644
+name: CHP
+namespace: format
+subset: formats
+def: "Format of Affymetrix data file of information about (normalised) expression levels of the individual probes." [http://edamontology.org]
+synonym: "Affymetrix probe normalised data format" EXACT [http://edamontology.org]
+is_a: EDAM_format:2058 ! Gene expression report format
+is_a: EDAM_format:2330 ! Textual format
+relationship: is_format_of EDAM_data:3111 ! Processed microarray data
+
+[Term]
+id: EDAM_format:1705
+name: HET group dictionary entry format
+namespace: format
+subset: formats
+def: "The format of an entry from the HET group dictionary (HET groups from PDB files)." [http://edamontology.org]
+is_a: EDAM_format:2030 ! Small molecule report format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1739
+name: pmc
+namespace: format
+subset: formats
+def: "Article format of the PubMed Central database." [http://edamontology.org]
+is_a: EDAM_format:2020 ! Article format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1740
+name: iHOP text mining abstract format
+namespace: format
+subset: formats
+def: "iHOP abstract format." [http://edamontology.org]
+is_a: EDAM_format:2021 ! Text mining report format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1741
+name: Oscar3
+namespace: format
+subset: formats
+def: "Text mining abstract format from the Oscar 3 application." [http://edamontology.org]
+comment: Oscar 3 performs chemistry-specific parsing of chemical documents. It attempts to identify chemical names, ontology concepts and chemical data from a document.
+is_a: EDAM_format:2021 ! Text mining report format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1747
+name: PDB atom record format
+namespace: format
+subset: formats
+def: "Format of an ATOM record (describing data for an individual atom) from a PDB file." [http://edamontology.org]
+is_obsolete: true {since=beta13}
+consider: EDAM_format:1476 ! PDB format
+
+[Term]
+id: EDAM_operation:1848
+name: Structure reformatting
+namespace: operation
+subset: operations
+def: "Reformat (a file or other report of) tertiary structure data." [http://edamontology.org, WHATIF]
+xref: WHATIF: PDBasXML
+is_a: EDAM_operation:2234 ! Structure file processing
+is_a: EDAM_operation:0335 ! File reformatting
+
+[Term]
+id: EDAM_format:1861
+name: PlasMapper TextMap
+namespace: format
+subset: formats
+def: "Map of a plasmid (circular DNA) in PlasMapper TextMap format." [http://edamontology.org]
+xref: Moby:PlasMapperTextMap
+is_a: EDAM_format:2060 ! Map format
+is_a: EDAM_format:2330 ! Textual format
+
+[Term]
+id: EDAM_format:1961
 name: stockholm
 namespace: format
-def: Stockholm multiple sequence alignment format (used by Pfam and Rfam).
-spec_url: http://en.wikipedia.org/wiki/Stockholm_format
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0000863 ! Sequence alignment
+subset: formats
+def: "Stockholm multiple sequence alignment format (used by Pfam and Rfam)." [http://edamontology.org]
+xref: http://en.wikipedia.org/wiki/Stockholm_format {documentation=true}
+is_a: EDAM_format:2330 ! Textual format
+is_a: EDAM_format:2554 ! Alignment format (text)
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0001974
-name: GFF
+id: EDAM_format:1974
+name: GFF2
 namespace: format
-def: General Feature Format (GFF) of sequence features.
-comment: Current version is 2 (GFF2). GFF3 is a slightly different, richer format and uses ontology terms. See OBO file for URL of format specification.
-synonym: "GFF2" EXACT []
-spec_url: http://www.sanger.ac.uk/resources/software/gff/spec.html
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0001255 ! Sequence features
+subset: formats
+def: "General Feature Format (GFF) of sequence features." [http://edamontology.org]
+xref: http://www.sanger.ac.uk/resources/software/gff/spec.html {documentation=true}
+is_a: EDAM_format:2305 ! GFF
 
 [Term]
-id: EDAM:0001975
+id: EDAM_format:1975
 name: GFF3
 namespace: format
-def: Generic Feature Format version 3 (GFF3) of sequence features.
-comment: As opposed to GFF (GFF2), GFF3 is a slightly different, richer format and uses ontology terms. See OBO file for URL of format specification.
-spec_url: http://sequenceontology.org/resources/gff3.html
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0001255 ! Sequence features
+subset: formats
+def: "Generic Feature Format version 3 (GFF3) of sequence features." [http://edamontology.org]
+xref: http://sequenceontology.org/resources/gff3.html {documentation=true}
+is_a: EDAM_format:2305 ! GFF
 
 [Term]
-id: EDAM:0001979
+id: EDAM_format:1979
 name: debug-feat
 namespace: format
-def: EMBOSS debugging trace feature format of full internal data content.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0001920 ! Sequence feature annotation format
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "EMBOSS debugging trace feature format of full internal data content." [http://edamontology.org]
+is_a: EDAM_format:1920 ! Sequence feature annotation format
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0002035
+id: EDAM_format:2035
 name: Chemical formula format
 namespace: format
-def: Text format of a chemical formula.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002350 ! Datatype format
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "Text format of a chemical formula." [http://edamontology.org]
+is_a: EDAM_format:2350 ! Format (typed)
+relationship: is_format_of EDAM_data:0846 ! Chemical formula
 
 [Term]
-id: EDAM:0002070
+id: EDAM_data:2070
 name: Sequence motif (nucleic acid)
 namespace: data
-def: A nucleotide sequence motif.
-is_a: EDAM:0001353 ! Sequence motif
-is_a: EDAM:0002525 ! Nucleic acid data
+subset: data
+def: "A nucleotide sequence motif." [http://edamontology.org]
+is_a: EDAM_data:1353 ! Sequence motif
 
 [Term]
-id: EDAM:0002084
-name: Nucleic acid annotation
+id: EDAM_data:2084
+name: Nucleic acid report
 namespace: data
-def: An informative report about a specific nucleic acid.
-is_a: EDAM:0002529 ! Molecular annotation
-is_a: EDAM:0002525 ! Nucleic acid data
+subset: data
+def: "An informative report about one or more specific nucleic acid molecules, derived from analysis of primary (sequence or structural) data." [http://edamontology.org]
+is_a: EDAM_data:2529 ! Molecule report
 
 [Term]
-id: EDAM:0002121
-name: Sequence report processing
+id: EDAM_operation:2121
+name: Sequence file processing
 namespace: operation
-def: Perform basic (non-analytical) operations on (a report or file of( sequences (which might include features), such as file creation or concatenation, removal or ordering of sequences.
-is_a: EDAM:0002446 ! Sequence processing
-is_a: EDAM:0002409 ! Report processing
+subset: operations
+def: "Perform basic (non-analytical) operations on a report or file of sequences (which might include features), such as file concatenation, removal or ordering of sequences, or create a file of sequences." [http://edamontology.org]
+is_a: EDAM_operation:2446 ! Sequence processing
+is_a: EDAM_operation:2409 ! File processing
 
 [Term]
-id: EDAM:0002181
-name: EMBL-like format (text)
+id: EDAM_format:2181
+name: EMBL-like (text)
 namespace: format
-def: A text format resembling EMBL entry format.
-comment: This term may be used for the many non-standard EMBL-like text formats. See OBO file for URL of format specification.
-is_a: EDAM:0002543 ! EMBL-like
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "A text format resembling EMBL entry format." [http://edamontology.org]
+comment: This concept may be used for the many non-standard EMBL-like text formats.
+is_a: EDAM_format:2543 ! EMBL-like format
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0002182
+id: EDAM_format:2182
 name: FASTQ-like format (text)
 namespace: format
-def: A text format resembling FASTQ short read format.
-comment: This term may be used for non-standard FASTQ short read-like formats. See OBO file for URL of format specification.
-is_a: EDAM:0002545 ! FASTQ-like
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "A text format resembling FASTQ short read format." [http://edamontology.org]
+comment: This concept may be used for non-standard FASTQ short read-like formats.
+is_a: EDAM_format:2545 ! FASTQ-like format
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0002187
-name: uniprotkb-like format (text)
+id: EDAM_format:2187
+name: uniprotkb-like (text)
 namespace: format
-def: A text sequence format resembling uniprotkb entry format.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002547 ! uniprotkb-like
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "A text sequence format resembling uniprotkb entry format." [http://edamontology.org]
+is_a: EDAM_format:2547 ! uniprotkb-like format
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0002194
+id: EDAM_format:2194
 name: medline
 namespace: format
-def: Abstract format used by MedLine database.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002020 ! Article format
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "Abstract format used by MedLine database." [http://edamontology.org]
+is_a: EDAM_format:2020 ! Article format
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0002197
+id: EDAM_format:2197
 name: OWL
 namespace: format
-def: OWL ontology format.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002195 ! Ontology format
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "OWL ontology format." [http://edamontology.org]
+is_a: EDAM_format:2195 ! Ontology format
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0002198
+id: EDAM_data:2198
 name: Gene cluster
 namespace: data
-def: A cluster of similar genes.
-is_a: EDAM:0001246 ! Sequence cluster (nucleic acid)
+subset: data
+def: "A cluster of similar genes." [http://edamontology.org]
+is_obsolete: true {since=beta13}
+consider: EDAM_data:1246 ! Sequence cluster (nucleic acid)
 
 [Term]
-id: EDAM:0002200
-name: FASTA-like format (text)
+id: EDAM_format:2200 ! This is the one used for annotation in eSysbio
+name: FASTA-like (text)
 namespace: format
-def: A text format resembling FASTA format.
-comment: This term may be used for the many non-standard FASTA-like formats. See OBO file for URL of format specification.
-is_a: EDAM:0002546 ! FASTA-like
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "A text format resembling FASTA format." [http://edamontology.org]
+comment: This concept may also be used for the many non-standard FASTA-like formats.
+synonym: "DNA and Protein Sequence Alignment" NARROW [http://filext.com/file-extension/FASTA]
+is_a: EDAM_format:2546 ! FASTA-like
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0002205
+id: EDAM_format:2205
 name: GenBank-like format (text)
 namespace: format
-def: A text format resembling GenBank entry (plain text) format.
-comment: This term may be used for the non-standard GenBank-like text formats. See OBO file for URL of format specification.
-is_a: EDAM:0002559 ! GenBank-like
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "A text format resembling GenBank entry (plain text) format." [http://edamontology.org]
+comment: This concept may be used for the non-standard GenBank-like text formats.
+is_a: EDAM_format:2559 ! GenBank-like format
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0002206
+id: EDAM_format:2206
 name: Sequence feature table format (text)
 namespace: format
-def: Text format for a sequence feature table.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002548 ! Sequence feature table format
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "Text format for a sequence feature table." [http://edamontology.org]
+is_a: EDAM_format:2548 ! Sequence feature table format
 
 [Term]
-id: EDAM:0002230
+id: EDAM_topic:2230
 name: Classification
 namespace: topic
-def: Resources that help to identify, group, or name things in a structured way according to some schema based on observable relationships.
-is_a: EDAM:0000003 ! Topic
+subset: topics
+def: "Topic focused on identifying, grouping, or naming things in a structured way according to some schema based on observable relationships." [http://edamontology.org]
+is_obsolete: true {since=beta13}
+consider: EDAM_topic:2829 ! Ontologies, nomenclature and classification
 
 [Term]
-id: EDAM:0002245
+id: EDAM_data:2245
 name: Sequence set (bootstrapped)
 namespace: data
-def: A collection of sequences output from a bootstrapping (resampling) procedure.
+subset: data
+def: "A collection of sequences output from a bootstrapping (resampling) procedure." [http://edamontology.org]
 comment: Bootstrapping is often performed in phylogenetic analysis.
-is_a: EDAM:0000850 ! Sequence set
+is_a: EDAM_data:0850 ! Sequence set
 
 [Term]
-id: EDAM:0002330
-name: Text format
+id: EDAM_format:2330
+name: Textual format
 namespace: format
-def: Text format.
-comment: Data in text format can be compressed into binary format, or can be a value of an XML element or attribute.
-is_a: EDAM:0001915 ! Format
+subset: formats
+def: "Textual format." [http://edamontology.org]
+comment: Data in text format can be compressed into binary format, or can be a value of an XML element or attribute. Markup formats are not considered textual (or very precisely not plain-textual).
+synonym: "Tabular format" NARROW [http://edamontology.org, http://filext.com/file-extension/TSV] {note="Many textual formats used in bioinformatics are tabular (tab-separated values, TSV)."}
+synonym: "Plain text" NARROW [http://edamontology.org]
+synonym: "TXT" NARROW [http://filext.com/file-extension/TXT]
+synonym: "Text File" NARROW [http://filext.com/file-extension/TXT]
+synonym: "TSV" NARROW [http://filext.com/file-extension/TSV]
+synonym: "Tab-Separated Values" NARROW [http://filext.com/file-extension/TSV]
+is_a: EDAM_format:1915 ! Format
 
 [Term]
-id: EDAM:0002334
+id: EDAM_format:2334
 name: URI format
 namespace: format
-def: Typical textual representation of a URI.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002330 ! Text format
-is_a: EDAM:0002350 ! Datatype format
+subset: formats
+def: "Typical textual representation of a URI." [http://edamontology.org]
+is_obsolete: true {since=beta13}
+consider: EDAM_data:1047 ! URI
 
 [Term]
-id: EDAM:0002354
+id: EDAM_data:2354
 name: RNA family annotation
 namespace: data
-def: An informative report on a specific RNA family or other group of classified RNA sequences.
-is_a: EDAM:0002018 ! Metadata and annotation
-is_a: EDAM:0002525 ! Nucleic acid data
+subset: data
+def: "An informative report on a specific RNA family or other group of classified RNA sequences." [http://edamontology.org]
+is_a: EDAM_data:2986 ! Nucleic acid classification
 
 [Term]
-id: EDAM:0002525
+id: EDAM_data:2525
 name: Nucleic acid data
 namespace: data
-def: Data concerning one or more nucleic acid molecules.
-is_a: EDAM:0002528 ! Molecular data
+subset: data
+def: "Data concerning one or more nucleic acid molecules." [http://edamontology.org]
+comment: This is a broad data type and is used a placeholder for other, more specific types.
+is_obsolete: true {since=beta13}
+consider: EDAM_data:2084 ! Nucleic acid report
 
 [Term]
-id: EDAM:0002549
+id: EDAM_format:2549
 name: OBO
 namespace: format
-def: OBO ontology text format.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002196 ! OBO format
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "OBO ontology text format." [http://edamontology.org]
+is_a: EDAM_format:2196 ! OBO format
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0002551
+id: EDAM_format:2551
 name: Sequence record format (text)
 namespace: format
-def: Data format for a molecular sequence record.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0001919 ! Sequence record format
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "Data format for a molecular sequence record." [http://edamontology.org]
+is_a: EDAM_format:1919 ! Sequence record format
 
 [Term]
-id: EDAM:0002554
+id: EDAM_format:2554
 name: Alignment format (text)
 namespace: format
-def: Text format for molecular sequence alignment information.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0001921 ! Alignment format
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "Text format for molecular sequence alignment information." [http://edamontology.org]
+is_a: EDAM_format:1921 ! Alignment format
 
 [Term]
-id: EDAM:0002556
+id: EDAM_format:2556
 name: Phylogenetic tree format (text)
 namespace: format
-def: Text format for a phylogenetic tree.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002006 ! Phylogenetic tree format
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "Text format for a phylogenetic tree." [http://edamontology.org]
+is_a: EDAM_format:2006 ! Phylogenetic tree format
 
 [Term]
-id: EDAM:0002562
+id: EDAM_format:2562
 name: Amino acid identifier format
 namespace: format
-def: Text format (representation) of amino acid residues.
-comment: See OBO file for URL of format specification.
-is_a: EDAM:0002350 ! Datatype format
-is_a: EDAM:0002330 ! Text format
+subset: formats
+def: "Text format (representation) of amino acid residues." [http://edamontology.org]
+is_obsolete: true {since=beta13}
+consider: EDAM_data:0994 ! Amino acid identifier
 
 [Term]
-id: EDAM:0002573
+id: EDAM_format:2573
 name: SAM
 namespace: format
-def: Sequence Alignment/Map (SAM) format for alignment of nucleotide sequences (e.g. sequencing reads) to (a) reference sequence(s). May contain base-call and alignment qualities and other data.
-comment: The format supports short and long reads (up to 128Mbp) produced by different sequencing platforms and is used to hold mapped data within the GATK and across the Broad Institute, the Sanger Centre, and throughout the 1000 Genomes project. See OBO file for URL of format specification.
-spec_url: http://samtools.sourceforge.net/SAM-1.3.pdf
-is_a: EDAM:0002057 ! Sequence trace format
-is_a: EDAM:0001921 ! Alignment format
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0001383 ! Sequence alignment (nucleic acid)
-relationship: is_format_of EDAM:0001381 ! Sequence alignment (pair)
+subset: formats
+def: "Sequence Alignment/Map (SAM) format for alignment of nucleotide sequences (e.g. sequencing reads) to (a) reference sequence(s). May contain base-call and alignment qualities and other data." [http://edamontology.org]
+comment: The format supports short and long reads (up to 128Mbp) produced by different sequencing platforms and is used to hold mapped data within the GATK and across the Broad Institute, the Sanger Centre, and throughout the 1000 Genomes project.
+xref: http://samtools.sourceforge.net/SAM-1.3.pdf {documentation=true}
+is_a: EDAM_format:2057 ! Sequence trace format
+is_a: EDAM_format:2920 ! Alignment format (pair only)
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0002816
-name: Genes
+id: EDAM_topic:2816
+name: Gene resources
 namespace: topic
-def: Resources concerning the study of genes.
-is_a: EDAM:0000003 ! Topic
-is_a: EDAM:0000640 ! Nucleic acid sequences
-relationship: concerns EDAM:0002472 ! Gene annotation retrieval
+subset: topics
+! alt_id: EDAM_topic:0630
+def: "Informatics resource (typically a database) primarily focussed on genes." [http://edamontology.org]
+synonym: "Gene database" EXACT [http://edamontology.org]
+synonym: "Gene resource" EXACT [http://edamontology.org]
+is_a: EDAM_topic:3071 ! Biological data resources
+is_a: EDAM_topic:3053 ! Genetics
 
 [Term]
-id: EDAM:0002829
-name: Ontologies and nomenclature
+id: EDAM_topic:2829
+name: Ontologies, nomenclature and classification
 namespace: topic
-def: Resources and study on conceptualisation and naming.
-is_a: EDAM:0000003 ! Topic
+subset: topics
+def: "Topic concerning conceptualisation, categorisation and naming, or that help to identify, group, or name things in a structured way according to some schema based on observable relationships." [http://edamontology.org]
+is_a: EDAM_topic:0003 ! Topic
 
 [Term]
-id: EDAM:0002841
+id: EDAM_topic:0605
 name: Informatics
 namespace: topic
-def: A sub-discipline of bioinformatics; the application of information technology to a specialised biological area.
-is_a: EDAM:0000003 ! Topic
+subset: topics
+! alt_id: EDAM_topic:2841
+def: "A database concerning biological data management and modelling, including datatypes, workflows and models. A sub-discipline of bioinformatics; the application of information technology to a specialised biological area." [http://edamontology.org]
+is_obsolete: true {since=beta12orEarlier}
+consider: EDAM_topic:0091 ! Data handling
 
 [Term]
-id: EDAM:0002874
+id: EDAM_data:2874
 name: Sequence set (polymorphic)
 namespace: data
-def: A set of sub-sequences displaying some type of polymorphism, typically indicating the sequence in which they occur, their position and other metadata.
-is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+subset: data
+def: "A set of sub-sequences displaying some type of polymorphism, typically indicating the sequence in which they occur, their position and other metadata." [http://edamontology.org]
+is_obsolete: true {since=beta13}
+consider: EDAM_data:1234 ! Sequence set (nucleic acid)
 
 [Term]
-id: EDAM:0003001
+id: EDAM_format:3001
 name: ACE
 namespace: format
-def: ACE sequence assembly format including contigs, base-call qualities, and other metadata (version Aug 1998 and onwards).
-spec_url: http://bozeman.mbt.washington.edu/consed/distributions/README.14.0.txt
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0000925 ! Sequence assembly
+subset: formats
+def: "ACE sequence assembly format including contigs, base-call qualities, and other metadata (version Aug 1998 and onwards)." [http://edamontology.org]
+xref: http://bozeman.mbt.washington.edu/consed/distributions/README.14.0.txt {documentation=true}
+is_a: EDAM_format:2330 ! Textual format
+is_a: EDAM_format:2055 ! Sequence assembly format
 
 [Term]
-id: EDAM:0003003
+id: EDAM_format:3003
 name: BED
 namespace: format
-def: BED format of sequence annotation track, typically to be displayed in a genome browser.
+subset: formats
+def: "Browser Extensible Data (BED) format of sequence annotation track, typically to be displayed in a genome browser." [http://edamontology.org]
 comment: BED detail format includes 2 additional columns (http://genome.ucsc.edu/FAQ/FAQformat#format1.7) and BED 15 includes 3 additional columns for experiment scores (http://genomewiki.ucsc.edu/index.php/Microarray_track).
-spec_url: http://genome.ucsc.edu/FAQ/FAQformat#format1
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0003002 ! Sequence annotation track
+xref: http://genome.ucsc.edu/FAQ/FAQformat#format1 {documentation=true}
+is_a: EDAM_format:2919 ! Sequence annotation track format
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0003005
+id: EDAM_format:3005
 name: WIG
 namespace: format
-def: Wiggle format (WIG) of a sequence annotation track that consists of a value for each sequence position. Typically to be displayed in a genome browser.
-spec_url: http://genome.ucsc.edu/goldenPath/help/wiggle.html
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0003002 ! Sequence annotation track
+subset: formats
+def: "Wiggle format (WIG) of a sequence annotation track that consists of a value for each sequence position. Typically to be displayed in a genome browser." [http://edamontology.org]
+xref: http://genome.ucsc.edu/goldenPath/help/wiggle.html {documentation=true}
+is_a: EDAM_format:2919 ! Sequence annotation track format
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0003007
+id: EDAM_format:3007
 name: PSL
 namespace: format
-def: PSL format of alignments, typically generated by BLAT or psLayout. Can be displayed in a genome browser like a sequence annotation track.
-spec_url: http://genome.ucsc.edu/FAQ/FAQformat#format2
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0001381 ! Sequence alignment (pair)
-relationship: is_format_of EDAM:0003002 ! Sequence annotation track
+subset: formats
+def: "PSL format of alignments, typically generated by BLAT or psLayout. Can be displayed in a genome browser like a sequence annotation track." [http://edamontology.org]
+xref: http://genome.ucsc.edu/FAQ/FAQformat#format2 {documentation=true}
+is_a: EDAM_format:2919 ! Sequence annotation track format
+is_a: EDAM_format:2920 ! Alignment format (pair only)
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0003008
-name: MAF (Multiple Alignment Format)
+id: EDAM_format:3008
+name: MAF
 namespace: format
-def: Multiple Alignment Format (MAF) supporting alignments of whole genomes with rearrangements, directions, multiple pieces to the alignment, and so forth. Typically generated by Multiz and TBA aligners; can be displayed in a genome browser like a sequence annotation track.
-spec_url: http://genome.ucsc.edu/FAQ/FAQformat#format5
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0000863 ! Sequence alignment
-relationship: is_format_of EDAM:0003002 ! Sequence annotation track
+subset: formats
+def: "Multiple Alignment Format (MAF) supporting alignments of whole genomes with rearrangements, directions, multiple pieces to the alignment, and so forth." [http://edamontology.org]
+comment: Typically generated by Multiz and TBA aligners; can be displayed in a genome browser like a sequence annotation track. This should not be confused with MIRA Assembly Format or Mutation Annotation Format.
+xref: http://genome.ucsc.edu/FAQ/FAQformat#format5 {documentation=true}
+is_a: EDAM_format:2554 ! Alignment format (text)
+is_a: EDAM_format:2919 ! Sequence annotation track format
 
 [Term]
-id: EDAM:0003011
+id: EDAM_format:3011
 name: genePred
 namespace: format
-def: genePred table format for gene prediction tracks.
+subset: formats
+def: "genePred table format for gene prediction tracks." [http://edamontology.org]
 comment: genePred format has 3 main variations (http://genome.ucsc.edu/FAQ/FAQformat#format9 http://www.broadinstitute.org/software/igv/genePred). They reflect UCSC Browser DB tables.
-spec_url: http://genome.ucsc.edu/FAQ/FAQformat#format9
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0003002 ! Sequence annotation track
+xref: http://genome.ucsc.edu/FAQ/FAQformat#format9 {documentation=true}
+is_a: EDAM_format:2919 ! Sequence annotation track format
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0003012
+id: EDAM_format:3012
 name: pgSnp
 namespace: format
-def: Personal Genome SNP (pgSnp) format for sequence variation tracks (indels and polymorphisms), supported by the UCSC Genome Browser.
-spec_url: http://genome.ucsc.edu/FAQ/FAQformat#format10
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0003002 ! Sequence annotation track
+subset: formats
+def: "Personal Genome SNP (pgSnp) format for sequence variation tracks (indels and polymorphisms), supported by the UCSC Genome Browser." [http://edamontology.org] ! UCSC-specific,but also for custom tracks & useful
+xref: http://genome.ucsc.edu/FAQ/FAQformat#format10 {documentation=true}
+is_a: EDAM_format:2919 ! Sequence annotation track format
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0003013
+id: EDAM_format:3013
 name: axt
 namespace: format
-def: axt format of alignments, typically produced from BLASTZ.
-spec_url: http://genome.ucsc.edu/goldenPath/help/axt.html
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0001381 ! Sequence alignment (pair)
+subset: formats
+def: "axt format of alignments, typically produced from BLASTZ." [http://edamontology.org]
+xref: http://genome.ucsc.edu/goldenPath/help/axt.html {documentation=true}
+is_a: EDAM_format:2920 ! Alignment format (pair only)
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0003014
+id: EDAM_format:3014
 name: LAV
 namespace: format
-def: LAV format of alignments generated by BLASTZ and LASTZ.
-spec_url: http://www.bx.psu.edu/miller_lab/dist/lav_format.html
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0001381 ! Sequence alignment (pair)
+subset: formats
+def: "LAV format of alignments generated by BLASTZ and LASTZ." [http://genome.ucsc.edu/goldenPath/help/axt.html] ! Can be used by UCSC and Galaxy
+xref: http://www.bx.psu.edu/miller_lab/dist/lav_format.html {documentation=true}
+is_a: EDAM_format:2920 ! Alignment format (pair only)
+is_a: EDAM_format:2330 ! Textual format
 
 [Term]
-id: EDAM:0003015
+id: EDAM_format:3015
 name: Pileup
 namespace: format
-def: Pileup format of alignment of sequences (e.g. sequencing reads) to (a) reference sequence(s). Contains aligned bases per base of the reference sequence(s).
-comment: See OBO file for URL of format specification.
-spec_url: http://samtools.sourceforge.net/pileup.shtml
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0001381 ! Sequence alignment (pair)
+subset: formats
+def: "Pileup format of alignment of sequences (e.g. sequencing reads) to (a) reference sequence(s). Contains aligned bases per base of the reference sequence(s)." [http://edamontology.org]
+xref: http://samtools.sourceforge.net/pileup.shtml {documentation=true}
+is_a: EDAM_format:2920 ! Alignment format (pair only)
+is_a: EDAM_format:2330 ! Textual format
+! and of track? (encoded as points, but could be 'function', like wig)
 
 [Term]
-id: EDAM:0003016
+id: EDAM_format:3016
 name: VCF
 namespace: format
-def: Variant Call Format (VCF) for sequence variation (indels, polymorphisms, structural variation).
-spec_url: http://vcftools.sourceforge.net/specs.html
-is_a: EDAM:0002330 ! Text format
-relationship: is_format_of EDAM:0001255 ! Sequence features
-
+subset: formats
+def: "Variant Call Format (VCF) for sequence variation (indels, polymorphisms, structural variation)." [http://edamontology.org]
+xref: http://vcftools.sourceforge.net/specs.html {documentation=true}
+is_a: EDAM_format:2921 ! Sequence variation annotation format
+is_a: EDAM_format:2330 ! Textual format

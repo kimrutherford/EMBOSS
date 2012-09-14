@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Finds tandem repeats in nucleotide sequences
+   Find tandem repeats in nucleotide sequences
 
 Description
 
@@ -44,7 +44,7 @@ Usage
 
 
 % equicktandem -noorigfile
-Finds tandem repeats in nucleotide sequences
+Find tandem repeats in nucleotide sequences
 Input nucleotide sequence: tembl:L46634
 Maximum repeat size [600]:
 Threshold score [20]:
@@ -56,8 +56,8 @@ Output report [l46634.qtan]:
 
 Command line arguments
 
-Finds tandem repeats in nucleotide sequences
-Version: EMBOSS:6.4.0.0
+Find tandem repeats in nucleotide sequences
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -84,7 +84,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -241,7 +244,7 @@ Output file format
 
 ########################################
 # Program: equicktandem
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: equicktandem
 #    -noorigfile
 #    -sequence tembl:L46634
@@ -309,9 +312,9 @@ Known bugs
 See also
 
                     Program name                   Description
-                    einverted    Finds inverted repeats in nucleotide sequences
-                    etandem      Finds tandem repeats in a nucleotide sequence
-                    palindrome   Finds inverted repeats in nucleotide sequence(s)
+                    einverted    Find inverted repeats in nucleotide sequences
+                    etandem      Find tandem repeats in a nucleotide sequence
+                    palindrome   Find inverted repeats in nucleotide sequence(s)
 
 Author(s)
 

@@ -25,9 +25,9 @@ Usage
    Here is a sample session with ontogetup
 
 
-% ontogetup edam:0001234
+% ontogetup edam:1234
 Get ontology term(s) by id of child
-Obo output file [0001234.obo]:
+Obo output file [1234.obo]:
 
 
    Go to the input files for this example
@@ -36,7 +36,7 @@ Obo output file [0001234.obo]:
 Command line arguments
 
 Get ontology term(s) by id of child
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
@@ -53,6 +53,8 @@ Version: EMBOSS:6.4.0.0
 
    "-oboterms" associated qualifiers
    -iformat1           string     Input obo format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers
@@ -89,18 +91,18 @@ Input file format
 
   Input files for usage example
 
-  Database entry: edam:0001234
+  Database entry: edam:1234
 
 [Term]
-id: EDAM:0001234
+id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
 def: Any collection of multiple nucleotide sequences and associated metadata tha
 t do not (typically) correspond to common sequence database records or database
 entries.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
 
 
 Output file format
@@ -117,28 +119,30 @@ Output file format
 
   Output files for usage example
 
-  File: 0001234.obo
+  File: 1234.obo
 
 [Term]
-id: EDAM:0000850
+id: EDAM_data:0850
 name: Sequence set
 namespace: data
 def: A collection of multiple molecular sequences and associated metadata that d
 o not (typically) correspond to molecular sequence database records or entries a
 nd which (typically) are derived from some analytical method.
-comment: This term may be used for arbitrary sequence sets and associated data a
-rising from processing.
+comment: This concept may be used for arbitrary sequence sets and associated dat
+a arising from processing.
 subset: data
-is_a: EDAM:0002955 ! Sequence report
+synonym: "sequence_collection" EXACT [SO:0001260]
+is_a: EDAM_data:2955 ! Sequence report
 
 [Term]
-id: EDAM:0002977
+id: EDAM_data:2977
 name: Nucleic acid sequence
 namespace: data
 def: One or more nucleic acid sequences, possibly with associated annotation.
 subset: data
-is_a: EDAM:0002044 ! Sequence
-is_a: EDAM:0002525 ! Nucleic acid data
+synonym: "nucleotide sequence information" RELATED [http://purl.org/biotop/bioto
+p.owl#NucleotideSequenceInformation]
+is_a: EDAM_data:2044 ! Sequence
 
 
 Data files

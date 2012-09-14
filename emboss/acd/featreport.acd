@@ -1,9 +1,9 @@
 application: featreport [
-  documentation: "Reads and writes a feature table"
+  documentation: "Read and write a feature table"
   groups: "Edit"
-    relations: "EDAM:0000160 topic Sequence features"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0000254 operation Data retrieval (feature table)"
+    relations: "EDAM_topic:0160 Sequence sites and features"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:2422 Data retrieval"
 ]
 
 section: input [
@@ -14,13 +14,13 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   features: features [
     parameter: "Y"
     maxreads: "1"
-    relations: "EDAM:0001270 data Feature table"
+    relations: "EDAM_data:1255 Feature record"
   ]
 
 endsection: input
@@ -33,7 +33,7 @@ section: output [
   report: outfile [
     parameter: "Y"
     rformat: "gff"
-    relations: "EDAM:0001270 data Feature table"
+    relations: "EDAM_data:1255 Feature record"
   ]
 
 endsection: output

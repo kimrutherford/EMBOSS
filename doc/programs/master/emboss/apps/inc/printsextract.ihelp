@@ -1,5 +1,5 @@
 Extract data from PRINTS database for use by pscan
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     PRINTS database file

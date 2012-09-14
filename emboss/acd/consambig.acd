@@ -2,8 +2,9 @@ application: consambig [
   documentation: "Create an ambiguous consensus sequence from a
                   multiple alignment"
   groups: "Alignment:Consensus"
-    relations: "EDAM:0000182 topic Sequence alignment"
-    relations: "EDAM:0000448 operation Sequence alignment conservation analysis"
+    relations: "EDAM_topic:0182 Sequence alignment"
+    relations: "EDAM_operation:0448 Sequence alignment analysis
+                                       (conservation)"
 ]
 
 section: input [
@@ -16,7 +17,7 @@ section: input [
     type: "gapany"
     aligned: "Y"
     help: "File containing a sequence alignment."
-    relations: "EDAM:0000863 data Sequence alignment"
+    relations: "EDAM_data:0863 Sequence alignment"
   ]
 
 endsection: input
@@ -35,7 +36,7 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   string: name [
@@ -43,7 +44,7 @@ section: output [
     default: ""
     information: "Name of the consensus sequence"
     knowntype: "sequence id output"
-    relations: "EDAM:0001063 identifier Sequence identifier"
+    relations: "EDAM_identifier:1063 Sequence identifier"
   ]
 
 endsection: output

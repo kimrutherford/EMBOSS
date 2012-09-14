@@ -1,27 +1,37 @@
-/******************************************************************************
-** @source AJAX seqtype functions
+/* @source ajseqtype **********************************************************
+**
+** AJAX seqtype functions
 **
 ** @author Copyright (C) 2002 Peter Rice
-** @version 1.0
+** @version $Revision: 1.82 $
+** @modified 2002-2011 Peter Rice
+** @modified $Date: 2011/10/19 14:52:21 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajseqtype.h"
+#include "ajseq.h"
+#include "ajfeat.h"
+#include "ajfile.h"
+#include "ajreg.h"
 
 
 
@@ -43,8 +53,8 @@
 **                           ConvertTo equivalent
 ** @attr ConvertTo [const char*] Equivalent for each sequence character in
 **                         ConvertFrom
-** @attr Badchars [(AjPRegexp*)] Test function
-** @attr Goodchars [(AjPStr*)] Test function
+** @attr Badchars [AjPRegexp function] Test function
+** @attr Goodchars [AjPStr function] Test function
 ** @attr Desc [const char*] Description for documentation purposes
 ** @@
 ******************************************************************************/
@@ -317,6 +327,8 @@ static SeqOType seqType[] =
 ** @param [u] thys [AjPSeq] Sequence object
 ** @param [r] itype [ajint] Sequence type index
 ** @return [AjBool] ajTrue if compatible.
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -369,7 +381,7 @@ static AjBool seqTypeTestI(AjPSeq thys, ajint itype)
 	return ajFalse;
     }
 
-    if(ajStrIsCharsetCaseS(thys->Seq, seqType[itype].Goodchars()))
+    if(ajStrIsCharsetCaseS(thys->Seq, (*seqType[itype].Goodchars)()))
     {
 	if(seqType[itype].ConvertFrom)
 	{
@@ -402,6 +414,8 @@ static AjBool seqTypeTestI(AjPSeq thys, ajint itype)
 ** @param [u] thys [AjPSeq] Sequence object
 ** @param [r] itype [ajint] Sequence type index
 ** @return [AjBool] ajTrue if the type can be fixed
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -482,6 +496,8 @@ static AjBool seqTypeFix(AjPSeq thys, ajint itype)
 ** @param [r] itype [ajint] Sequence type index
 ** @param [r] fixchar [char] Character to replace with
 ** @return [AjBool] ajTrue if the type can be fixed
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -491,7 +507,7 @@ static AjBool seqTypeFixReg(AjPSeq thys, ajint itype, char fixchar)
     /*ajDebug("Seq old '%S'\n", thys->Seq);*/
 
     return ajStrExchangeSetRestSK(&thys->Seq,
-				  seqType[itype].Goodchars(), fixchar);
+				  (*seqType[itype].Goodchars)(), fixchar);
 }
 
 
@@ -505,6 +521,8 @@ static AjBool seqTypeFixReg(AjPSeq thys, ajint itype, char fixchar)
 ** @param [u] thys [AjPSeq] Sequence object
 ** @param [r] Type [const AjPStr] Sequence type
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -549,6 +567,8 @@ static void seqTypeSet(AjPSeq thys, const AjPStr Type)
 ** @param [u] pthys [AjPStr*] Sequence string
 ** @param [r] type_name [const AjPStr] Sequence type
 ** @return [AjBool] ajTrue if compatible.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -589,7 +609,7 @@ AjBool ajSeqTypeCheckS(AjPStr* pthys, const AjPStr type_name)
 
     /* no need to test sequence type, we will test every character below */
 
-    if(ajStrIsCharsetCaseS(*pthys, seqType[itype].Goodchars()))
+    if(ajStrIsCharsetCaseS(*pthys, (*seqType[itype].Goodchars)()))
     {
 	if(seqType[itype].ConvertFrom)
 	{
@@ -618,6 +638,8 @@ AjBool ajSeqTypeCheckS(AjPStr* pthys, const AjPStr type_name)
 ** @param [u] thys [AjPSeq] Sequence object
 ** @param [r] seqin [const AjPSeqin] Sequence input object
 ** @return [AjBool] ajTrue if compatible.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -699,7 +721,7 @@ AjBool ajSeqTypeCheckIn(AjPSeq thys, const AjPSeqin seqin)
 	}
     }
 
-    if(ajStrIsCharsetCaseS(thys->Seq, seqType[itype].Goodchars()))
+    if(ajStrIsCharsetCaseS(thys->Seq, (*seqType[itype].Goodchars)()))
     {
 	ajDebug("ajSeqTypeCheckIn: bad characters test passed, convert\n");
 
@@ -724,7 +746,7 @@ AjBool ajSeqTypeCheckIn(AjPSeq thys, const AjPSeqin seqin)
 	return ajTrue;
     }
 
-    i = ajStrFindRestCaseS(thys->Seq, seqType[itype].Goodchars());
+    i = ajStrFindRestCaseS(thys->Seq, (*seqType[itype].Goodchars)());
 
     if(i >= 0)
     {
@@ -747,7 +769,7 @@ AjBool ajSeqTypeCheckIn(AjPSeq thys, const AjPSeqin seqin)
 
 
 
-/* @func ajSeqTypeNucS *****************************************************
+/* @func ajSeqTypeNucS ********************************************************
 **
 ** Checks sequence type for nucleotide without gaps.
 **
@@ -755,6 +777,8 @@ AjBool ajSeqTypeCheckIn(AjPSeq thys, const AjPSeqin seqin)
 **
 ** @param [r] thys [const AjPStr] Sequence string (unchanged at present)
 ** @return [char] invalid character if any.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -774,7 +798,7 @@ char ajSeqTypeNucS(const AjPStr thys)
 
 
 
-/* @func ajSeqTypeDnaS *****************************************************
+/* @func ajSeqTypeDnaS ********************************************************
 **
 ** Checks sequence type for DNA without gaps.
 **
@@ -782,6 +806,8 @@ char ajSeqTypeNucS(const AjPStr thys)
 **
 ** @param [r] thys [const AjPStr] Sequence string (unchanged at present)
 ** @return [char] invalid character if any.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -801,7 +827,7 @@ char ajSeqTypeDnaS(const AjPStr thys)
 
 
 
-/* @func ajSeqTypeRnaS *****************************************************
+/* @func ajSeqTypeRnaS ********************************************************
 **
 ** Checks sequence type for RNA without gaps
 **
@@ -809,6 +835,8 @@ char ajSeqTypeDnaS(const AjPStr thys)
 **
 ** @param [r] thys [const AjPStr] Sequence string (unchanged at present)
 ** @return [char] invalid character if any.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -836,6 +864,8 @@ char ajSeqTypeRnaS(const AjPStr thys)
 **
 ** @param [r] thys [const AjPStr] Sequence string (unchanged at present)
 ** @return [char] invalid character if any.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -863,6 +893,8 @@ char ajSeqTypeGapdnaS(const AjPStr thys)
 **
 ** @param [r] thys [const AjPStr] Sequence string (unchanged at present)
 ** @return [char] invalid character if any.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -890,6 +922,8 @@ char ajSeqTypeGaprnaS(const AjPStr thys)
 **
 ** @param [r] thys [const AjPStr] Sequence string (unchanged at present)
 ** @return [char] invalid character if any.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -911,6 +945,8 @@ char ajSeqTypeGapnucS(const AjPStr thys)
 **
 ** @param [r] thys [const AjPStr] Sequence string (unchanged at present)
 ** @return [char] invalid character if any.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -924,7 +960,7 @@ char ajSeqTypeAnyprotS(const AjPStr thys)
 
 
 
-/* @func ajSeqTypeProtS ****************************************************
+/* @func ajSeqTypeProtS *******************************************************
 **
 ** Checks sequence type for anything that can be in a protein sequence
 **
@@ -932,6 +968,8 @@ char ajSeqTypeAnyprotS(const AjPStr thys)
 **
 ** @param [r] thys [const AjPStr] Sequence string (unchanged at present)
 ** @return [char] invalid character if any.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -953,6 +991,8 @@ char ajSeqTypeProtS(const AjPStr thys)
 **
 ** @param [r] thys [const AjPStr] Sequence string (unchanged at present)
 ** @return [char] invalid character if any.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -975,6 +1015,8 @@ char ajSeqTypeGapanyS(const AjPStr thys)
 ** @param [r] gapc [char] Standard gap character
 ** @param [r] padc [char] Gap character for ends of sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -999,6 +1041,8 @@ void ajSeqGap(AjPSeq thys, char gapc, char padc)
 ** @param [r] ilen [ajint] Sequence length. Expanded if longer than
 **                       current length
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1020,6 +1064,8 @@ void ajSeqGapLen(AjPSeq thys, char gapc, char padc, ajint ilen)
 ** @param [u] seq [AjPStr*] Sequence
 ** @param [r] gapc [char] Standard gap character
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1044,6 +1090,8 @@ void ajSeqGapS(AjPStr* seq, char gapc)
 ** @param [r] ilen [ajuint] Sequence length. Expanded if longer than
 **                       current length
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1119,6 +1167,8 @@ static void seqGapSL(AjPStr* seq, char gapc, char padc, ajuint ilen)
 **
 ** @param [u] pthys [AjPStr*] Sequence string
 ** @return [AjBool] ajTrue if a stop was removed.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -1145,6 +1195,8 @@ static AjBool seqTypeStopTrimS(AjPStr* pthys)
 ** @param [u] thys [AjPSeq] Sequence object
 ** @return [void]
  ** @category modify [AjPSeq] Sets sequence to be nucleotide
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1176,6 +1228,8 @@ void ajSeqSetNuc(AjPSeq thys)
 ** @param [u] thys [AjPSeq] Sequence object
 ** @return [void]
 ** @category modify [AjPSeq] Sets sequence to be protein
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1201,6 +1255,8 @@ void ajSeqSetProt(AjPSeq thys)
 **
 ** @param [u] thys [AjPSeqset] Sequence set object
 ** @return [void]
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -1220,6 +1276,8 @@ void ajSeqsetSetNuc(AjPSeqset thys)
 **
 ** @param [u] thys [AjPSeqset] Sequence set object
 ** @return [void]
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -1240,6 +1298,8 @@ void ajSeqsetSetProt(AjPSeqset thys)
 ** @param [u] thys [AjPSeq] Sequence object
 ** @return [void]
 ** @category modify [AjPSeq] Sets the sequence type
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1282,6 +1342,8 @@ void ajSeqType(AjPSeq thys)
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full output
 ** @return [void]
+**
+** @release 2.5.0
 ******************************************************************************/
 
 void ajSeqPrintType(AjPFile outf, AjBool full)
@@ -1349,6 +1411,8 @@ void ajSeqPrintType(AjPFile outf, AjBool full)
 ** @param [u] badchars [AjPRegexp] Regular expression for
 **                                 sequence characters disallowed
 ** @return [char] invalid character if any.
+**
+** @release 2.7.0
 ******************************************************************************/
 
 static char seqTypeTest(const AjPStr thys, AjPRegexp badchars)
@@ -1389,6 +1453,8 @@ static char seqTypeTest(const AjPStr thys, AjPRegexp badchars)
 ** @param [r] goodchars [const AjPStr] String of
 **                                 sequence characters allowed
 ** @return [char] invalid character if any.
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static char seqTypeTestS(const AjPStr thys, const AjPStr goodchars)
@@ -1430,6 +1496,8 @@ static char seqTypeTestS(const AjPStr thys, const AjPStr goodchars)
 ** Returns regular expression to test for type Any
 **
 ** @return [AjPRegexp] valid characters
+**
+** @release 2.7.0
 ******************************************************************************/
 
 static AjPRegexp seqTypeCharAny(void)
@@ -1466,6 +1534,8 @@ static AjPRegexp seqTypeCharAny(void)
 ** Returns regular expression to test for type Any with gaps
 **
 ** @return [AjPRegexp] valid characters
+**
+** @release 2.7.0
 ******************************************************************************/
 
 static AjPRegexp seqTypeCharAnyGap(void)
@@ -1502,6 +1572,8 @@ static AjPRegexp seqTypeCharAnyGap(void)
 ** Returns regular expression to test for nucleotide bases
 **
 ** @return [AjPRegexp] valid characters
+**
+** @release 2.7.0
 ******************************************************************************/
 
 static AjPRegexp seqTypeCharNuc(void)
@@ -1538,6 +1610,8 @@ static AjPRegexp seqTypeCharNuc(void)
 ** Returns regular expression to test for nucleotide bases with gaps
 **
 ** @return [AjPRegexp] valid characters
+**
+** @release 2.7.0
 ******************************************************************************/
 
 static AjPRegexp seqTypeCharNucGap(void)
@@ -1575,6 +1649,8 @@ static AjPRegexp seqTypeCharNucGap(void)
 ** and queries
 **
 ** @return [AjPRegexp] valid characters
+**
+** @release 2.9.0
 ******************************************************************************/
 
 static AjPRegexp seqTypeCharNucGapPhylo(void)
@@ -1612,6 +1688,8 @@ static AjPRegexp seqTypeCharNucGapPhylo(void)
 ** with no ambiguity
 **
 ** @return [AjPRegexp] valid characters
+**
+** @release 2.7.0
 ******************************************************************************/
 
 static AjPRegexp seqTypeCharNucPure(void)
@@ -1648,6 +1726,8 @@ static AjPRegexp seqTypeCharNucPure(void)
 ** Returns regular expression to test for protein residues
 **
 ** @return [AjPRegexp] valid characters
+**
+** @release 2.7.0
 ******************************************************************************/
 
 static AjPRegexp seqTypeCharProt(void)
@@ -1684,6 +1764,8 @@ static AjPRegexp seqTypeCharProt(void)
 ** Returns regular expression to test for protein residues or gaps
 **
 ** @return [AjPRegexp] valid characters
+**
+** @release 2.7.0
 ******************************************************************************/
 
 static AjPRegexp seqTypeCharProtGap(void)
@@ -1721,6 +1803,8 @@ static AjPRegexp seqTypeCharProtGap(void)
 ** stops and queries
 **
 ** @return [AjPRegexp] valid characters
+**
+** @release 2.9.0
 ******************************************************************************/
 
 static AjPRegexp seqTypeCharProtGapPhylo(void)
@@ -1758,6 +1842,8 @@ static AjPRegexp seqTypeCharProtGapPhylo(void)
 ** with no ambiguity
 **
 ** @return [AjPRegexp] valid characters
+**
+** @release 2.7.0
 ******************************************************************************/
 
 static AjPRegexp seqTypeCharProtPure(void)
@@ -1794,6 +1880,8 @@ static AjPRegexp seqTypeCharProtPure(void)
 ** Returns regular expression to test for protein residues or stop codons
 **
 ** @return [AjPRegexp] valid characters
+**
+** @release 2.7.0
 ******************************************************************************/
 
 static AjPRegexp seqTypeCharProtStop(void)
@@ -1831,6 +1919,8 @@ static AjPRegexp seqTypeCharProtStop(void)
 ** or gap characters
 **
 ** @return [AjPRegexp] valid characters
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static AjPRegexp seqTypeCharProtStopGap(void)
@@ -1867,6 +1957,8 @@ static AjPRegexp seqTypeCharProtStopGap(void)
 ** Returns string of valid characters to test for type Any
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrAny(void)
@@ -1893,6 +1985,8 @@ static AjPStr seqTypeStrAny(void)
 ** Returns string of valid characters to test for type Anygap
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrAnyGap(void)
@@ -1920,6 +2014,8 @@ static AjPStr seqTypeStrAnyGap(void)
 ** Returns string of valid characters to test for type Dnagap
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrDnaGap(void)
@@ -1944,6 +2040,8 @@ static AjPStr seqTypeStrDnaGap(void)
 ** Returns string of valid characters to test for type Nuc
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrNuc(void)
@@ -1967,6 +2065,8 @@ static AjPStr seqTypeStrNuc(void)
 ** Returns string of valid characters to test for type Nucgap
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrNucGap(void)
@@ -1991,6 +2091,8 @@ static AjPStr seqTypeStrNucGap(void)
 ** Returns string of valid characters to test for type Nucgapphylo
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrNucGapPhylo(void)
@@ -2016,6 +2118,8 @@ static AjPStr seqTypeStrNucGapPhylo(void)
 ** Returns string of valid characters to test for type Nucpure
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrNucPure(void)
@@ -2038,6 +2142,8 @@ static AjPStr seqTypeStrNucPure(void)
 ** Returns string of valid characters to test for type Prot
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrProt(void)
@@ -2061,6 +2167,8 @@ static AjPStr seqTypeStrProt(void)
 ** Returns string of valid characters to test for type Protany
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrProtAny(void)
@@ -2087,6 +2195,8 @@ static AjPStr seqTypeStrProtAny(void)
 ** Returns string of valid characters to test for type Protgap
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrProtGap(void)
@@ -2111,6 +2221,8 @@ static AjPStr seqTypeStrProtGap(void)
 ** Returns string of valid characters to test for type Protgapphylo
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrProtGapPhylo(void)
@@ -2137,6 +2249,8 @@ static AjPStr seqTypeStrProtGapPhylo(void)
 ** Returns string of valid characters to test for type Protpure
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrProtPure(void)
@@ -2159,6 +2273,8 @@ static AjPStr seqTypeStrProtPure(void)
 ** Returns string of valid characters to test for type Protstop
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrProtStop(void)
@@ -2183,6 +2299,8 @@ static AjPStr seqTypeStrProtStop(void)
 ** Returns string of valid characters to test for type Protstopgap
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrProtStopGap(void)
@@ -2208,6 +2326,8 @@ static AjPStr seqTypeStrProtStopGap(void)
 ** Returns string of valid characters to test for type Rnagap
 **
 ** @return [AjPStr] valid characters
+**
+** @release 4.1.0
 ******************************************************************************/
 
 static AjPStr seqTypeStrRnaGap(void)
@@ -2234,6 +2354,8 @@ static AjPStr seqTypeStrRnaGap(void)
 ** @param [w] typenum [ajint*] Sequence type index
 ** @return [AjBool] ajTrue if sequence type was found
 **
+**
+** @release 2.7.0
 ******************************************************************************/
 
 static AjBool seqFindType(const AjPStr type_name, ajint* typenum)
@@ -2270,6 +2392,8 @@ static AjBool seqFindType(const AjPStr type_name, ajint* typenum)
 ** @param [r] type_name [const AjPStr] Sequence type
 ** @return [AjBool] ajTrue if sequence can be protein
 **
+**
+** @release 2.7.0
 ******************************************************************************/
 
 AjBool ajSeqTypeIsProt(const AjPStr type_name)
@@ -2298,6 +2422,8 @@ AjBool ajSeqTypeIsProt(const AjPStr type_name)
 ** @param [r] type_name [const AjPStr] Sequence type
 ** @return [AjBool] ajTrue if sequence can be nucleotide
 **
+**
+** @release 2.7.0
 ******************************************************************************/
 
 AjBool ajSeqTypeIsNuc(const AjPStr type_name)
@@ -2327,6 +2453,8 @@ AjBool ajSeqTypeIsNuc(const AjPStr type_name)
 ** @param [r] type_name [const AjPStr] Sequence type
 ** @return [AjBool] ajTrue if sequence can be protein or nucleotide
 **
+**
+** @release 2.7.0
 ******************************************************************************/
 
 AjBool ajSeqTypeIsAny(const AjPStr type_name)
@@ -2361,6 +2489,8 @@ AjBool ajSeqTypeIsAny(const AjPStr type_name)
 ** @param [w] gaps [AjBool*] True if gap characters are preserved
 ** @return [AjBool] ajTrue if sequence can be protein or nucleotide
 **
+**
+** @release 4.0.0
 ******************************************************************************/
 
 AjBool ajSeqTypeSummary(const AjPStr type_name, AjPStr* Ptype, AjBool* gaps)
@@ -2397,6 +2527,8 @@ AjBool ajSeqTypeSummary(const AjPStr type_name, AjPStr* Ptype, AjBool* gaps)
 ** Cleans up sequence type processing internal memory
 **
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -2445,6 +2577,8 @@ void ajSeqTypeExit(void)
 **
 ** @return [void]
 **
+**
+** @release 4.1.0
 ******************************************************************************/
 
 void ajSeqTypeUnused(void)

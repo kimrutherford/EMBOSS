@@ -8,8 +8,7 @@ Here is a sample session with <b>fuzzpro</b>
 Search for patterns in protein sequences
 Input protein sequence(s): <b>tsw:*</b>
 Search pattern: <b>[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G</b>
-Output report [12s1_arath.fuzzpro]: <b></b>
-ajSeqxrefNewDbS '1-I' 'FT025'
+Output report [cru4_arath.fuzzpro]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

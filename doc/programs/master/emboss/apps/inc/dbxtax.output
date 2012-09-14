@@ -5,8 +5,16 @@
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Processing directory: /homes/user/test/data/taxonomy/
-Processing file: nodes.dmp entries: 41 (41) time: 0.0s (0.0s)
+Processing file: nodes.dmp
+entries: 41 (41) time: 0.0s (0.0s)
 Total time: 0.0s
+Entry idlen 7 OK. Maximum ID length was 6 for '117570'.
+Field acc acclen 15 OK. Maximum acc term length was 5 for '40673'.
+Field tax taxlen 120 OK. Maximum tax term length was 23 for 'Pongo abelii x pygmaeus'.
+Field rnk rnklen 16 OK. Maximum rnk term length was 12 for 'superkingdom'.
+Field up uplen 7 OK. Maximum up term length was 6 for '131567'.
+Field gc gclen 2 OK. Maximum gc term length was 1 for '1'.
+Field mgc mgclen 2 OK. Maximum mgc term length was 1 for '1'.
 </pre>
 </td></tr></table><p>
 <p><h3>File: taxon.ent</h3>
@@ -15,134 +23,162 @@ Total time: 0.0s
 # Number of files: 1
 # Release: 0.0
 # Date:    00/00/00
-Dual filename database
+Reference 2 filename database
 nodes.dmp names.dmp
 </pre>
 </td></tr></table><p>
 <p><h3>File: taxon.pxac</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     3
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     1
-Fullcount 1
-Kwlimit   15
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        71
+Fill         46
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       22
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        1
+Fullcount    1
+Kwlimit      15
+Reffiles     1
 </pre>
 </td></tr></table><p>
 <p><h3>File: taxon.pxgc</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     6
-Order     132
-Fill      65
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     169
-Count     1
-Fullcount 41
-Kwlimit   2
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     1
+Order        132
+Fill         65
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       22
+Fill2        41
+Secpagesize  512
+Seccachesize 2000
+Count        1
+Fullcount    41
+Kwlimit      2
+Idlimit      7
 </pre>
 </td></tr></table><p>
 <p><h3>File: taxon.pxid</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     3
-Order     99
-Fill      56
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     41
-Fullcount 41
-Kwlimit   7
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        99
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       99
+Fill2        101
+Secpagesize  512
+Seccachesize 2000
+Count        41
+Fullcount    41
+Kwlimit      7
+Reffiles     1
 </pre>
 </td></tr></table><p>
 <p><h3>File: taxon.pxmgc</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     12
-Order     132
-Fill      65
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     169
-Count     3
-Fullcount 39
-Kwlimit   2
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     3
+Order        132
+Fill         65
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       22
+Fill2        41
+Secpagesize  512
+Seccachesize 2000
+Count        3
+Fullcount    39
+Kwlimit      2
+Idlimit      7
 </pre>
 </td></tr></table><p>
 <p><h3>File: taxon.pxtax</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     19
-Order     16
-Fill      14
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     86
-Fullcount 90
-Kwlimit   110
+Type         Identifier
+Compress     Yes
+Pages        14
+Secpages     6
+Order        14
+Fill         13
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       22
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        86
+Fullcount    90
+Kwlimit      120
+Reffiles     1
 </pre>
 </td></tr></table><p>
 <p><h3>File: taxon.pxrnk</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     54
-Order     68
-Fill      45
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     169
-Count     17
-Fullcount 41
-Kwlimit   16
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     17
+Order        68
+Fill         45
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       22
+Fill2        41
+Secpagesize  512
+Seccachesize 2000
+Count        17
+Fullcount    41
+Kwlimit      16
+Idlimit      7
 </pre>
 </td></tr></table><p>
 <p><h3>File: taxon.pxup</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     15
-Order     99
-Fill      56
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     33
-Fullcount 41
-Kwlimit   7
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     12
+Order        99
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       22
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        33
+Fullcount    41
+Kwlimit      7
+Reffiles     1
 </pre>
 </td></tr></table><p>
 <p><h3>File: taxon.xac</h3>
@@ -153,9 +189,9 @@ Kwlimit   7
 <p>This file contains non-printing characters and so cannot be displayed here.
 <p><h3>File: taxon.xmgc</h3>
 <p>This file contains non-printing characters and so cannot be displayed here.
-<p><h3>File: taxon.xtax</h3>
-<p>This file contains non-printing characters and so cannot be displayed here.
 <p><h3>File: taxon.xrnk</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: taxon.xtax</h3>
 <p>This file contains non-printing characters and so cannot be displayed here.
 <p><h3>File: taxon.xup</h3>
 <p>This file contains non-printing characters and so cannot be displayed here.

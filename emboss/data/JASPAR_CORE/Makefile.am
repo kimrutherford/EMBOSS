@@ -1,2 +1,5 @@
-pkgdata_DATA = dummyfile
-pkgdatadir=$(prefix)/share/$(PACKAGE)/data/JASPAR_CORE
+## Process this file with automake to produce Makefile.in
+
+jasparcoredir = $(pkgdatadir)/data/JASPAR_CORE
+
+dist_jasparcore_DATA = dummyfile

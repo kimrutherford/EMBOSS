@@ -7,7 +7,7 @@
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -177,7 +177,7 @@ Created tcode.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Identify protein-coding regions using Fickett TESTCODE statistic
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -226,7 +226,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -362,7 +365,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -431,11 +434,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -479,7 +506,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated report qualifiers
+<td align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
@@ -572,7 +599,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-graph" associated xygraph qualifiers
+<td align="left" colspan=5>"-graph" associated xygraph qualifiers
 </td>
 </tr>
 
@@ -810,7 +837,7 @@ RN   [1]
 RP   1-2016
 RA   Kas K.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
 RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -823,6 +850,15 @@ RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 DR   GDB; 191789.
 DR   GDB; 191790.
 DR   GDB; 354872.
@@ -831,15 +867,6 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /organism="Homo sapiens"
-FT                   /mol_type="genomic DNA"
-FT                   /clone_lib="CML cosmid"
-FT                   /clone="15.1"
-FT                   /db_xref="taxon:9606"
-FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
-FT                   /gene="fau 1"
-FT   exon            408..504
-FT                   /number=1
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -960,7 +987,7 @@ red horizontal line.
 <pre>
 ########################################
 # Program: tcode
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: tcode
 #    -sequence tembl:x65921
 # Report_format: table
@@ -977,82 +1004,82 @@ red horizontal line.
 #=======================================
 
   Start     End  Strand   Score Estimation
-      1     200       +   0.692 Non-coding
-      4     203       +   0.666 Non-coding
-      7     206       +   0.692 Non-coding
-     10     209       +   0.797 No opinion
-     13     212       +   0.766 No opinion
-     16     215       +   0.805 No opinion
-     19     218       +   0.824 No opinion
-     22     221       +   0.901 No opinion
-     25     224       +   0.934 No opinion
-     28     227       +   0.977 Coding    
-     31     230       +   0.903 No opinion
-     34     233       +   0.942 No opinion
-     37     236       +   1.043 Coding    
-     40     239       +   1.179 Coding    
-     43     242       +   1.149 Coding    
-     46     245       +   1.031 Coding    
-     49     248       +   1.012 Coding    
-     52     251       +   1.121 Coding    
-     55     254       +   1.004 Coding    
-     58     257       +   0.970 Coding    
-     61     260       +   0.941 No opinion
-     64     263       +   0.941 No opinion
-     67     266       +   0.995 Coding    
-     70     269       +   1.029 Coding    
-     73     272       +   1.072 Coding    
-     76     275       +   0.930 No opinion
-     79     278       +   1.023 Coding    
-     82     281       +   0.959 Coding    
-     85     284       +   1.107 Coding    
-     88     287       +   0.985 Coding    
-     91     290       +   0.880 No opinion
+      1     200       +   0.617 Non-coding
+      4     203       +   0.586 Non-coding
+      7     206       +   0.617 Non-coding
+     10     209       +   0.729 Non-coding
+     13     212       +   0.696 Non-coding
+     16     215       +   0.734 Non-coding
+     19     218       +   0.779 No opinion
+     22     221       +   0.845 No opinion
+     25     224       +   0.889 No opinion
+     28     227       +   0.919 No opinion
+     31     230       +   0.831 No opinion
+     34     233       +   0.875 No opinion
+     37     236       +   0.970 Coding    
+     40     239       +   1.122 Coding    
+     43     242       +   1.110 Coding    
+     46     245       +   1.002 Coding    
+     49     248       +   0.979 Coding    
+     52     251       +   1.076 Coding    
+     55     254       +   0.966 Coding    
+     58     257       +   0.931 No opinion
+     61     260       +   0.847 No opinion
+     64     263       +   0.847 No opinion
+     67     266       +   0.914 No opinion
+     70     269       +   0.951 Coding    
+     73     272       +   1.031 Coding    
+     76     275       +   0.870 No opinion
+     79     278       +   0.964 Coding    
+     82     281       +   0.865 No opinion
+     85     284       +   1.040 Coding    
+     88     287       +   0.924 No opinion
+     91     290       +   0.812 No opinion
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-   1696    1895       +   1.099 Coding    
-   1699    1898       +   1.027 Coding    
-   1702    1901       +   1.067 Coding    
-   1705    1904       +   1.067 Coding    
-   1708    1907       +   1.067 Coding    
-   1711    1910       +   1.086 Coding    
-   1714    1913       +   1.024 Coding    
-   1717    1916       +   1.016 Coding    
-   1720    1919       +   0.933 No opinion
-   1723    1922       +   0.964 Coding    
-   1726    1925       +   0.887 No opinion
-   1729    1928       +   0.973 Coding    
-   1732    1931       +   0.991 Coding    
-   1735    1934       +   0.928 No opinion
-   1738    1937       +   0.862 No opinion
-   1741    1940       +   0.848 No opinion
-   1744    1943       +   0.848 No opinion
-   1747    1946       +   0.797 No opinion
-   1750    1949       +   0.844 No opinion
-   1753    1952       +   0.873 No opinion
-   1756    1955       +   0.883 No opinion
-   1759    1958       +   0.959 Coding    
-   1762    1961       +   1.002 Coding    
-   1765    1964       +   0.977 Coding    
-   1768    1967       +   0.955 Coding    
-   1771    1970       +   0.955 Coding    
-   1774    1973       +   0.959 Coding    
-   1777    1976       +   0.969 Coding    
-   1780    1979       +   0.969 Coding    
-   1783    1982       +   0.969 Coding    
-   1786    1985       +   0.911 No opinion
-   1789    1988       +   0.948 No opinion
-   1792    1991       +   0.865 No opinion
-   1795    1994       +   0.948 No opinion
-   1798    1997       +   0.948 No opinion
-   1801    2000       +   0.948 No opinion
-   1804    2003       +   0.901 No opinion
-   1807    2006       +   0.879 No opinion
-   1810    2009       +   0.840 No opinion
-   1813    2012       +   0.785 No opinion
-   1816    2015       +   0.785 No opinion
+   1696    1895       +   1.060 Coding    
+   1699    1898       +   0.984 Coding    
+   1702    1901       +   1.082 Coding    
+   1705    1904       +   1.082 Coding    
+   1708    1907       +   1.082 Coding    
+   1711    1910       +   1.067 Coding    
+   1714    1913       +   1.079 Coding    
+   1717    1916       +   1.005 Coding    
+   1720    1919       +   0.915 No opinion
+   1723    1922       +   0.954 Coding    
+   1726    1925       +   0.872 No opinion
+   1729    1928       +   0.976 Coding    
+   1732    1931       +   0.989 Coding    
+   1735    1934       +   0.906 No opinion
+   1738    1937       +   0.832 No opinion
+   1741    1940       +   0.840 No opinion
+   1744    1943       +   0.840 No opinion
+   1747    1946       +   0.826 No opinion
+   1750    1949       +   0.858 No opinion
+   1753    1952       +   0.865 No opinion
+   1756    1955       +   0.878 No opinion
+   1759    1958       +   0.937 No opinion
+   1762    1961       +   1.012 Coding    
+   1765    1964       +   0.968 Coding    
+   1768    1967       +   0.979 Coding    
+   1771    1970       +   0.979 Coding    
+   1774    1973       +   0.937 No opinion
+   1777    1976       +   0.944 No opinion
+   1780    1979       +   0.944 No opinion
+   1783    1982       +   0.944 No opinion
+   1786    1985       +   0.890 No opinion
+   1789    1988       +   0.902 No opinion
+   1792    1991       +   0.851 No opinion
+   1795    1994       +   0.902 No opinion
+   1798    1997       +   0.902 No opinion
+   1801    2000       +   0.902 No opinion
+   1804    2003       +   0.821 No opinion
+   1807    2006       +   0.757 No opinion
+   1810    2009       +   0.730 Non-coding
+   1813    2012       +   0.708 Non-coding
+   1816    2015       +   0.708 Non-coding
 
 #---------------------------------------
 #---------------------------------------
@@ -1277,17 +1304,17 @@ It always exits with status 0.
 <th>Description</th></tr>
 <tr>
 <td><a href="checktrans.html">checktrans</a></td>
-<td>Reports STOP codons and ORF statistics of a protein</td>
+<td>Report STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>
 <td><a href="getorf.html">getorf</a></td>
-<td>Finds and extracts open reading frames (ORFs)</td>
+<td>Find and extract open reading frames (ORFs)</td>
 </tr>
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
+<td>Find matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>

@@ -29,7 +29,7 @@ Usage
 % feattext
 Return a feature table original text
 Input feature table: paamir.gff3
-Output file [x13776.feattext]:
+Full text output file [x13776.feattext]:
 
 
    Go to the input files for this example
@@ -38,11 +38,11 @@ Output file [x13776.feattext]:
 Command line arguments
 
 Return a feature table original text
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-features]          features   (no help text) features value
-  [-outfile]           outfile    [*.feattext] Output file name
+  [-outfile]           outfile    [*.feattext] Full text output file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -50,11 +50,14 @@ Version: EMBOSS:6.4.0.0
 
    "-features" associated qualifiers
    -fformat1           string     Features format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -fopenfile1         string     Features file name
    -fask1              boolean    Prompt for begin/end/reverse
    -fbegin1            integer    Start of the features to be used
    -fend1              integer    End of the features to be used
    -freverse1          boolean    Reverse (if DNA)
+   -fcircular1         boolean    Circular sequence features
 
    "-outfile" associated qualifiers
    -odirectory2        string     Output directory
@@ -211,26 +214,26 @@ Known bugs
 See also
 
    Program name     Description
-   aligncopy        Reads and writes alignments
-   aligncopypair    Reads and writes pairs from alignments
+   aligncopy        Read and write alignments
+   aligncopypair    Read and write pairs from alignments
    biosed           Replace or delete sequence sections
    codcopy          Copy and reformat a codon usage table
-   cutseq           Removes a section from a sequence
-   degapseq         Removes non-alphabetic (e.g. gap) characters from sequences
+   cutseq           Remove a section from a sequence
+   degapseq         Remove non-alphabetic (e.g. gap) characters from sequences
    descseq          Alter the name or description of a sequence
-   entret           Retrieves sequence entries from flatfile databases and files
+   entret           Retrieve sequence entries from flatfile databases and files
    extractalign     Extract regions from a sequence alignment
    extractfeat      Extract features from sequence(s)
    extractseq       Extract regions from a sequence
-   featcopy         Reads and writes a feature table
-   featreport       Reads and writes a feature table
+   featcopy         Read and write a feature table
+   featmerge        Merge two overlapping feature tables
+   featreport       Read and write a feature table
    listor           Write a list file of the logical OR of two sets of sequences
    makenucseq       Create random nucleotide sequences
    makeprotseq      Create random protein sequences
-   maskambignuc     Masks all ambiguity characters in nucleotide sequences
-   with             N
-   maskambigprot    Masks all ambiguity characters in protein sequences with
-                    X
+   maskambignuc     Mask all ambiguity characters in nucleotide sequences with
+                    N
+   maskambigprot    Mask all ambiguity characters in protein sequences with X
    maskfeat         Write a sequence with masked features
    maskseq          Write a sequence with masked regions
    newseq           Create a sequence file from a typed-in sequence
@@ -241,23 +244,23 @@ See also
    notseq           Write to file a subset of an input stream of sequences
    nthseq           Write to file a single sequence from an input stream of
                     sequences
-   nthseqset        Reads and writes (returns) one set of sequences from many
+   nthseqset        Read and write (return) one set of sequences from many
    pasteseq         Insert one sequence into another
    revseq           Reverse and complement a nucleotide sequence
-   seqcount         Reads and counts sequences
-   seqret           Reads and writes (returns) sequences
-   seqretsetall     Reads and writes (returns) many sets of sequences
-   seqretsplit      Reads sequences and writes them to individual files
+   seqcount         Read and count sequences
+   seqret           Read and write (return) sequences
+   seqretsetall     Read and write (return) many sets of sequences
+   seqretsplit      Read sequences and write them to individual files
    sizeseq          Sort sequences by size
    skipredundant    Remove redundant sequences from an input set
-   skipseq          Reads and writes (returns) sequences, skipping first few
+   skipseq          Read and write (return) sequences, skipping first few
    splitsource      Split sequence(s) into original source sequences
    splitter         Split sequence(s) into smaller sequences
    trimest          Remove poly-A tails from nucleotide sequences
    trimseq          Remove unwanted characters from start and end of sequence(s)
    trimspace        Remove extra whitespace from an ASCII text file
    union            Concatenate multiple sequences into a single sequence
-   vectorstrip      Removes vectors from the ends of nucleotide sequence(s)
+   vectorstrip      Remove vectors from the ends of nucleotide sequence(s)
    yank             Add a sequence reference (a full USA) to a list file
 
 Author(s)

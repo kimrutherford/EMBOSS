@@ -5,8 +5,9 @@ application: supermatcher [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
-    relations: "EDAM:0000182 topic Sequence alignment"
-    relations: "EDAM:0000493 operation Pairwise sequence alignment (local)"
+    relations: "EDAM_topic:0182 Sequence alignment"
+    relations: "EDAM_operation:0493 Pairwise sequence alignment construction
+    	       (local)"
 ]
 
 section: input [
@@ -17,14 +18,14 @@ section: input [
   seqall: asequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   seqset: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
     aligned: "N"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   matrixf: datafile [
@@ -35,7 +36,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "EDAM:0000874 data Comparison matrix"
+    relations: "EDAM_data:0874 Comparison matrix"
   ]
 
   float: minscore [
@@ -44,7 +45,7 @@ section: input [
     minimum: "0"
     default: "0"
     help: "Minimum alignment score to report an alignment."
-    relations: "EDAM:0002146 data Threshold"
+    relations: "EDAM_data:2146 Threshold"
   ]
   
 endsection: input
@@ -61,7 +62,7 @@ section: required [
     maximum: "100.0"
     default: "@($(acdprotein)? 10.0 : 10.0)"
     expected: "10.0 for any sequence type"
-    relations: "EDAM:0001397 data Gap opening penalty"
+    relations: "EDAM_data:1397 Gap opening penalty"
   ]
 
   float: gapextend [
@@ -71,7 +72,7 @@ section: required [
     maximum: "10.0"
     default: "@($(acdprotein)? 0.5 : 0.5)"
     expected: "0.5 for any sequence type"
-    relations: "EDAM:0001398 data Gap extension penalty"
+    relations: "EDAM_data:1398 Gap extension penalty"
   ]
 
 endsection: required
@@ -86,7 +87,7 @@ section: additional [
     default: "16"
     minimum: "1"
     information: "Alignment width"
-    relations: "EDAM:0002152 data Rendering parameter"
+    relations: "EDAM_data:2152 Rendering parameter"
   ]
 
   integer: wordlen [
@@ -94,7 +95,7 @@ section: additional [
     default: "6"
     minimum: "3"
     information: "Word length for initial matching"
-    relations: "EDAM:0001250 data Word size"
+    relations: "EDAM_data:1250 Word size"
   ]
 
 endsection: additional
@@ -109,16 +110,16 @@ section: output [
     aformat: "simple"
     minseqs: "2"
     maxseqs: "2"
-    relations: "EDAM:0001381 data Sequence alignment (pair)"
+    relations: "EDAM_data:1381 Sequence alignment (pair)"
   ]
 
-  outfile: errorfile [
+  outfile: errfile [
     additional: "Y"
     default: "supermatcher.error"
     help: "Error file to be written to for failed alignments"
     knowntype: "supermatcher error"
     information: "Program supermatcher errors output file"
-    relations: "EDAM:0001678 data Tool log"
+    relations: "EDAM_data:1678 Tool log"
   ]
 
 endsection: output

@@ -545,7 +545,9 @@ check_libs()
   lib_dirs="
 $DIR/lib
 $DIR/lib32
-$DIR/lib64"
+$DIR/lib64
+$DIR/lib/x86_64-linux-gnu
+$DIR/lib/i386-linux-gnu"
 
   echo
   echo "Inspecting $DIR"
@@ -637,7 +639,9 @@ $DIR/lib32
 $DIR/lib64
 /usr/lib
 /usr/local/lib
-/usr/lib64"
+/usr/lib64
+$DIR/lib/x86_64-linux-gnu
+$DIR/lib/i386-linux-gnu"
 
   WARN="true"
   for lib_dir in `echo  "$lib_dirs"` ;
@@ -1378,13 +1382,15 @@ chmod u+x tomstop
 #
 # Run Jemboss script
 #
-#
+# The runJemboss.sh script is now generated from an Autoconf template
+# runJemboss.sh.in with the location of the Java Application Launcher
+# substituted.
 
-RUNFILE=$JEMBOSS/runJemboss.sh
+# RUNFILE=$JEMBOSS/runJemboss.sh
 
-  sed "s|^java |$JAVA_HOME/bin/java |" $RUNFILE > $RUNFILE.new
-  rm -f $RUNFILE
-  mv $RUNFILE.new $RUNFILE
+#  sed "s|^java |$JAVA_HOME/bin/java |" $RUNFILE > $RUNFILE.new
+#  rm -f $RUNFILE
+#  mv $RUNFILE.new $RUNFILE
   
 
 #
@@ -1575,13 +1581,18 @@ if [ ! -d "$JOBDIR" ]; then
   echo
 fi
 echo "Try running Jemboss with the script:"
-echo "   $JEMBOSS/runJemboss.sh"
+# The runJemboss.sh script is now automatically installed by Automake as
+# bin_SCRIPT in the bin directory.
+# echo "   $JEMBOSS/runJemboss.sh"
+echo "   runJemboss.sh"
 echo
 echo "To create a web launch page see:"
 echo "http://emboss.sourceforge.net/Jemboss/install/deploy.html"
 echo
 
-chmod a+x $JEMBOSS/runJemboss.sh
+# The runJemboss.sh script is now automatically installed by Automake as
+# bin_SCRIPT in the bin directory.
+# chmod a+x $JEMBOSS/runJemboss.sh
 chmod u+x $JEMBOSS/utils/*sh
 
 exit 0;

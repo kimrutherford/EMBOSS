@@ -970,7 +970,7 @@ static void cirdna_DrawTicks(float xDraw, float yDraw, float RealLength,
     {
 	token = ajStrParseC(Name2, ";");
 	/*ajStrExchangeCC(&Name2, ";", " ");*/
-	stringLength = ajGraphicsCalcTextlengthS(token);
+	stringLength = mmtolen * ajGraphicsCalcTextlengthS(token);
 	xy1 = ajGraphicsCalcCoord(xDraw, yDraw, r2Ticks+postext, Angle);
 	xy2 = ajGraphicsCalcCoord(xDraw, yDraw, r2Ticks+postext+stringLength,
 			     Angle);
@@ -1029,6 +1029,10 @@ static void cirdna_DrawBlocks(float xDraw, float yDraw, float RealLength,
     float stringHeight;
     float r1Blocks;
     float r2Blocks;
+    float mmtolen;
+
+    /* radius is 2pi*radius in mm, RealLength in bases */
+    mmtolen = RealLength/(Radius * (float) 2.0 * (float) 3.1416);
 
     r1Blocks = Radius+((float)1.0*BlockHeight/(float)2);
     r2Blocks = r1Blocks-BlockHeight;
@@ -1053,15 +1057,17 @@ static void cirdna_DrawBlocks(float xDraw, float yDraw, float RealLength,
 	ajGraphicsSetFgcolour(Colour);
     }
 
-    stringLength = cirdna_HorTextPileLengthMax(Name2, NumNames);
+    stringLength = mmtolen * cirdna_HorTextPileLengthMax(Name2, NumNames);
     stringHeight = ajGraphicsCalcTextheight();
-    StartAngle   = cirdna_ComputeAngle(RealLength, (To+From)/2+stringLength/2,
+    StartAngle   = cirdna_ComputeAngle(RealLength,
+                                       (To+From)/2 + stringLength/2,
 				       OriginAngle);
-    EndAngle = cirdna_ComputeAngle(RealLength, (To+From)/2-stringLength/2,
+    EndAngle = cirdna_ComputeAngle(RealLength,
+                                   (To+From)/2 - stringLength/2,
 				   OriginAngle);
 
     if(ajStrMatchCaseC(PosBlocks, "Out") )
-	cirdna_HorTextPile(xDraw, yDraw, r1Blocks+(Adjust*postext), StartAngle,
+	cirdna_HorTextPile(xDraw, yDraw, r1Blocks+Adjust*postext, StartAngle,
 			   EndAngle, Name2, postext, 1);
     else
 	cirdna_HorTextPile(xDraw, yDraw,

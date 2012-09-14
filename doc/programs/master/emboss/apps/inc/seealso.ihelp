@@ -1,5 +1,5 @@
-Finds programs with similar function to a specified program
-Version: EMBOSS:6.4.0.0
+Find programs with similar function to a specified program
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-search]            string     Enter the name of an EMBOSS program (Any

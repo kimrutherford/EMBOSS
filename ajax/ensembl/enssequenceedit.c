@@ -1,88 +1,93 @@
-/* @source Ensembl Sequence Edit functions
+/* @source enssequenceedit ****************************************************
+**
+** Ensembl Sequence Edit functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.33 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:58:27 $ by $Author: mks $
-** @version $Revision: 1.20 $
+** @modified $Date: 2012/04/12 20:34:17 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "enssequenceedit.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
-static int listSequenceeditCompareStartAscending(const void* P1,
-                                                 const void* P2);
+static int listSequenceeditCompareStartAscending(
+    const void *item1,
+    const void *item2);
 
-static int listSequenceeditCompareStartDescending(const void* P1,
-                                                  const void* P2);
+static int listSequenceeditCompareStartDescending(
+    const void *item1,
+    const void *item2);
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -102,8 +107,8 @@ static int listSequenceeditCompareStartDescending(const void* P1,
 ** Ensembl Sequence Edit objects
 **
 ** @cc Bio::EnsEMBL::SeqEdit
-** @cc CVS Revision: 1.7
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.8
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -133,7 +138,7 @@ static int listSequenceeditCompareStartDescending(const void* P1,
 ** @argrule Ini end [ajuint] End coordinate
 ** @argrule Ref se [EnsPSequenceedit] Ensembl Sequence Edit
 **
-** @valrule * [EnsPSequenceedit] Ensembl Sequence Edit
+** @valrule * [EnsPSequenceedit] Ensembl Sequence Edit or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -149,6 +154,8 @@ static int listSequenceeditCompareStartDescending(const void* P1,
 ** @param [u] attribute [EnsPAttribute] Ensembl Attribute
 **
 ** @return [EnsPSequenceedit] Ensembl Sequence Edit or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -161,14 +168,14 @@ EnsPSequenceedit ensSequenceeditNewAttribute(EnsPAttribute attribute)
 
     EnsPSequenceedit se = NULL;
 
-    if(!attribute)
+    if (!attribute)
         return NULL;
 
     altseq = ajStrNew();
 
     ajFmtScanS(attribute->Value, "%d %d %S", &start, &end, &altseq);
 
-    if(start > (end + 1))
+    if (start > (end + 1))
     {
         ajDebug("ensSequenceeditNewAttribute start %d must be less than or "
                 "equal to end %d + 1 in Ensembl Attribute value '%S'.\n",
@@ -177,7 +184,7 @@ EnsPSequenceedit ensSequenceeditNewAttribute(EnsPAttribute attribute)
         return NULL;
     }
 
-    if(start < 1)
+    if (start < 1)
     {
         ajDebug("ensSequenceeditNewAttribute start %d must be greater than or "
                 "equal to 1 in Ensembl Attribute value '%S'.\n",
@@ -186,7 +193,7 @@ EnsPSequenceedit ensSequenceeditNewAttribute(EnsPAttribute attribute)
         return NULL;
     }
 
-    if(end < 0)
+    if (end < 0)
     {
         ajDebug("ensSequenceeditNewAttribute end %d must be greater than or "
                 "equal to 0 in Ensembl Attribute value '%S' .\n",
@@ -199,7 +206,7 @@ EnsPSequenceedit ensSequenceeditNewAttribute(EnsPAttribute attribute)
 
     se->Attribute = ensAttributeNewRef(attribute);
 
-    if(altseq)
+    if (altseq)
         se->Sequence = ajStrNewRef(altseq);
     else
         se->Sequence = ajStrNew();
@@ -208,7 +215,7 @@ EnsPSequenceedit ensSequenceeditNewAttribute(EnsPAttribute attribute)
 
     se->End = end;
 
-    se->Use = 1;
+    se->Use = 1U;
 
     ajStrDel(&altseq);
 
@@ -225,6 +232,8 @@ EnsPSequenceedit ensSequenceeditNewAttribute(EnsPAttribute attribute)
 ** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
 **
 ** @return [EnsPSequenceedit] Ensembl Sequence Edit or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -236,14 +245,14 @@ EnsPSequenceedit ensSequenceeditNewCpy(const EnsPSequenceedit se)
 
     pthis->Attribute = ensAttributeNewRef(se->Attribute);
 
-    if(se->Sequence)
+    if (se->Sequence)
         pthis->Sequence = ajStrNewRef(se->Sequence);
 
     pthis->Start = se->Start;
 
     pthis->End = se->End;
 
-    pthis->Use = 1;
+    pthis->Use = 1U;
 
     return pthis;
 }
@@ -262,6 +271,8 @@ EnsPSequenceedit ensSequenceeditNewCpy(const EnsPSequenceedit se)
 ** @param [r] end [ajuint] End coordinate
 **
 ** @return [EnsPSequenceedit] Ensembl Sequence Edit or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -274,14 +285,14 @@ EnsPSequenceedit ensSequenceeditNewIni(EnsPAttributetype at,
 
     EnsPSequenceedit se = NULL;
 
-    if(!sequence)
+    if (!sequence)
     {
         ajDebug("ensSequenceeditNewIni requires an alternate sequence.\n");
 
         return NULL;
     }
 
-    if(start > (end + 1))
+    if (start > (end + 1))
     {
         ajDebug("ensSequenceeditNewIni start %d must be less than or "
                 "equal to end %d + 1.\n", start, end);
@@ -289,7 +300,7 @@ EnsPSequenceedit ensSequenceeditNewIni(EnsPAttributetype at,
         return NULL;
     }
 
-    if(start < 1)
+    if (start < 1)
     {
         ajDebug("ensSequenceeditNewIni start %d must be greater than or "
                 "equal to 1.\n", start);
@@ -303,14 +314,14 @@ EnsPSequenceedit ensSequenceeditNewIni(EnsPAttributetype at,
 
     se->Attribute = ensAttributeNewIni(at, value);
 
-    if(sequence)
+    if (sequence)
         se->Sequence = ajStrNewRef(sequence);
     else
         se->Sequence = ajStrNew();
 
     se->Start = start;
     se->End   = end;
-    se->Use   = 1;
+    se->Use   = 1U;
 
     ajStrDel(&value);
 
@@ -328,12 +339,14 @@ EnsPSequenceedit ensSequenceeditNewIni(EnsPAttributetype at,
 ** @param [u] se [EnsPSequenceedit] Ensembl Sequence Edit
 **
 ** @return [EnsPSequenceedit] Ensembl Sequence Edit or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPSequenceedit ensSequenceeditNewRef(EnsPSequenceedit se)
 {
-    if(!se)
+    if (!se)
         return NULL;
 
     se->Use++;
@@ -346,14 +359,14 @@ EnsPSequenceedit ensSequenceeditNewRef(EnsPSequenceedit se)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Sequence Edit object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Sequence Edit object.
 **
 ** @fdata [EnsPSequenceedit]
 **
-** @nam3rule Del Destroy (free) an Ensembl Sequence Edit object
+** @nam3rule Del Destroy (free) an Ensembl Sequence Edit
 **
-** @argrule * Pse [EnsPSequenceedit*] Ensembl Sequence Edit object address
+** @argrule * Pse [EnsPSequenceedit*] Ensembl Sequence Edit address
 **
 ** @valrule * [void]
 **
@@ -367,27 +380,40 @@ EnsPSequenceedit ensSequenceeditNewRef(EnsPSequenceedit se)
 **
 ** Default destructor for an Ensembl Sequence Edit.
 **
-** @param [d] Pse [EnsPSequenceedit*] Ensembl Sequence Edit object address
+** @param [d] Pse [EnsPSequenceedit*] Ensembl Sequence Edit address
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-void ensSequenceeditDel(EnsPSequenceedit* Pse)
+void ensSequenceeditDel(EnsPSequenceedit *Pse)
 {
     EnsPSequenceedit pthis = NULL;
 
-    if(!Pse)
+    if (!Pse)
         return;
 
-    if(!*Pse)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensSequenceeditDel"))
+    {
+        ajDebug("ensSequenceeditDel\n"
+                "  *Pse %p\n",
+                *Pse);
+
+        ensSequenceeditTrace(*Pse, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pse)
         return;
 
     pthis = *Pse;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pse = NULL;
 
@@ -408,9 +434,9 @@ void ensSequenceeditDel(EnsPSequenceedit* Pse)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Sequence Edit object.
+** Functions for returning members of an Ensembl Sequence Edit object.
 **
 ** @fdata [EnsPSequenceedit]
 **
@@ -422,10 +448,10 @@ void ensSequenceeditDel(EnsPSequenceedit* Pse)
 **
 ** @argrule * se [const EnsPSequenceedit] Sequence Edit
 **
-** @valrule Attribute [EnsPAttribute] Ensembl Attribute
-** @valrule Sequence [AjPStr] Alternate sequence
-** @valrule Start [ajuint] Start coordinate
-** @valrule End [ajuint] End coordinate
+** @valrule Attribute [EnsPAttribute] Ensembl Attribute or NULL
+** @valrule Sequence [AjPStr] Alternate sequence or NULL
+** @valrule Start [ajuint] Start coordinate or 0U
+** @valrule End [ajuint] End coordinate or 0U
 **
 ** @fcategory use
 ******************************************************************************/
@@ -435,21 +461,20 @@ void ensSequenceeditDel(EnsPSequenceedit* Pse)
 
 /* @func ensSequenceeditGetAttribute ******************************************
 **
-** Get the Ensembl Attribute element of an Ensembl Sequence Edit.
+** Get the Ensembl Attribute member of an Ensembl Sequence Edit.
 **
 ** @cc Bio::EnsEMBL:SeqEdit::get_Attribute
 ** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
 **
 ** @return [EnsPAttribute] Ensembl Attribute or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPAttribute ensSequenceeditGetAttribute(const EnsPSequenceedit se)
 {
-    if(!se)
-        return NULL;
-
-    return se->Attribute;
+    return (se) ? se->Attribute : NULL;
 }
 
 
@@ -457,7 +482,7 @@ EnsPAttribute ensSequenceeditGetAttribute(const EnsPSequenceedit se)
 
 /* @func ensSequenceeditGetEnd ************************************************
 **
-** Get the end coordinate element of an Ensembl Sequence Edit.
+** Get the end coordinate member of an Ensembl Sequence Edit.
 **
 ** Coordinates are inclusive and one-based, which means that inserts are
 ** unusually represented by a start one base pair higher than the end. Hence,
@@ -467,16 +492,15 @@ EnsPAttribute ensSequenceeditGetAttribute(const EnsPSequenceedit se)
 ** @cc Bio::EnsEMBL:SeqEdit::end
 ** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
 **
-** @return [ajuint] End coordinate
+** @return [ajuint] End coordinate or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensSequenceeditGetEnd(const EnsPSequenceedit se)
 {
-    if(!se)
-        return 0;
-
-    return se->End;
+    return (se) ? se->End : 0U;
 }
 
 
@@ -484,7 +508,7 @@ ajuint ensSequenceeditGetEnd(const EnsPSequenceedit se)
 
 /* @func ensSequenceeditGetSequence *******************************************
 **
-** Get the (alternative) sequence element of an Ensembl Sequence Edit.
+** Get the (alternative) sequence member of an Ensembl Sequence Edit.
 **
 ** The sequence may either be a string of amino acids or nucleotides depending
 ** on the context in which this Sequence Edit is used.
@@ -493,16 +517,15 @@ ajuint ensSequenceeditGetEnd(const EnsPSequenceedit se)
 ** @cc Bio::EnsEMBL:SeqEdit::alt_seq
 ** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
 **
-** @return [AjPStr] Alternative sequence
+** @return [AjPStr] Alternative sequence or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensSequenceeditGetSequence(const EnsPSequenceedit se)
 {
-    if(!se)
-        return NULL;
-
-    return se->Sequence;
+    return (se) ? se->Sequence : NULL;
 }
 
 
@@ -510,7 +533,7 @@ AjPStr ensSequenceeditGetSequence(const EnsPSequenceedit se)
 
 /* @func ensSequenceeditGetStart **********************************************
 **
-** Get the start coordinate element of an Ensembl Sequence Edit.
+** Get the start coordinate member of an Ensembl Sequence Edit.
 **
 ** Coordinates are inclusive and one-based, which means that inserts are
 ** unusually represented by a start one base pair higher than the end. Hence,
@@ -520,16 +543,15 @@ AjPStr ensSequenceeditGetSequence(const EnsPSequenceedit se)
 ** @cc Bio::EnsEMBL:SeqEdit::start
 ** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
 **
-** @return [ajuint] Start coordinate
+** @return [ajuint] Start coordinate or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensSequenceeditGetStart(const EnsPSequenceedit se)
 {
-    if(!se)
-        return 0;
-
-    return se->Start;
+    return (se) ? se->Start : 0U;
 }
 
 
@@ -541,7 +563,7 @@ ajuint ensSequenceeditGetStart(const EnsPSequenceedit se)
 **
 ** @fdata [EnsPSequenceedit]
 **
-** @nam3rule Trace Report Ensembl Sequence Edit elements to debug file
+** @nam3rule Trace Report Ensembl Sequence Edit members to debug file
 **
 ** @argrule Trace se [const EnsPSequenceedit] Ensembl Sequence Edit
 ** @argrule Trace level [ajuint] Indentation level
@@ -562,6 +584,8 @@ ajuint ensSequenceeditGetStart(const EnsPSequenceedit se)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -569,7 +593,7 @@ AjBool ensSequenceeditTrace(const EnsPSequenceedit se, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!se)
+    if (!se)
         return ajFalse;
 
     indent = ajStrNew();
@@ -628,16 +652,18 @@ AjBool ensSequenceeditTrace(const EnsPSequenceedit se, ajuint level)
 ** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
 **
 ** @return [ajint] Length difference or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajint ensSequenceeditCalculateDifference(const EnsPSequenceedit se)
 {
-    const char* Ptr = NULL;
+    const char *Ptr = NULL;
 
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
-    if(!se)
+    if (!se)
         return 0;
 
     /*
@@ -647,8 +673,8 @@ ajint ensSequenceeditCalculateDifference(const EnsPSequenceedit se)
     ** return ajStrGetLen(se->Sequence) - (se->End - se->Start + 1);
     */
 
-    for(i = 0, Ptr = ajStrGetPtr(se->Sequence); (Ptr && *Ptr); i++, Ptr++)
-        if(i == UINT_MAX)
+    for (i = 0U, Ptr = ajStrGetPtr(se->Sequence); (Ptr && *Ptr); i++, Ptr++)
+        if (i == UINT_MAX)
             ajFatal("ensSequenceeditCalculateDifference exeeded UINT_MAX.");
 
     return i - (se->End - se->Start + 1);
@@ -664,6 +690,8 @@ ajint ensSequenceeditCalculateDifference(const EnsPSequenceedit se)
 ** @param [r] se [const EnsPSequenceedit] Ensembl Sequence Edit
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -671,14 +699,14 @@ size_t ensSequenceeditCalculateMemsize(const EnsPSequenceedit se)
 {
     size_t size = 0;
 
-    if(!se)
+    if (!se)
         return 0;
 
     size += sizeof (EnsOSequenceedit);
 
     size += ensAttributeCalculateMemsize(se->Attribute);
 
-    if(se->Sequence)
+    if (se->Sequence)
     {
         size += sizeof (AjOStr);
 
@@ -723,29 +751,31 @@ size_t ensSequenceeditCalculateMemsize(const EnsPSequenceedit se)
 ** @param [u] Psequence [AjPStr*] Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensSequenceeditApplyString(const EnsPSequenceedit se,
                                   ajint offset,
-                                  AjPStr* Psequence)
+                                  AjPStr *Psequence)
 {
     ajlong pos1 = 0;
     ajlong pos2 = 0;
 
-    if(!se)
+    if (!se)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
-    if(!*Psequence)
+    if (!*Psequence)
         return ajFalse;
 
     pos1 = se->Start - offset;
     pos2 = se->End   - offset;
 
-    if(pos2 < 1)
+    if (pos2 < 1)
     {
         ajDebug("ensSequenceeditApplyString got an Ensembl Sequence Edit, "
                 "which end position (%d) corrected for the offset (%d) lies "
@@ -755,7 +785,7 @@ AjBool ensSequenceeditApplyString(const EnsPSequenceedit se,
         return ajFalse;
     }
 
-    if(pos1 > (ajlong) ajStrGetLen(*Psequence))
+    if (pos1 > (ajlong) ajStrGetLen(*Psequence))
     {
         ajDebug("ensSequenceeditApplyString got an Ensembl Sequence Edit, "
                 "which start position (%d) corrected for the offset (%d) lies "
@@ -786,6 +816,134 @@ AjBool ensSequenceeditApplyString(const EnsPSequenceedit se,
 
 
 
+/* @funcstatic listSequenceeditCompareStartAscending **************************
+**
+** AJAX List of Ensembl Sequence Edit objects comparison function to sort by
+** start member in ascending order.
+**
+** @param [r] item1 [const void*] Ensembl Sequence Edit address 1
+** @param [r] item2 [const void*] Ensembl Sequence Edit address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listSequenceeditCompareStartAscending(
+    const void *item1,
+    const void *item2)
+{
+    int result = 0;
+
+    EnsPSequenceedit se1 = *(EnsOSequenceedit *const *) item1;
+    EnsPSequenceedit se2 = *(EnsOSequenceedit *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listSequenceeditCompareStartAscending"))
+    {
+        ajDebug("listSequenceeditCompareStartAscending\n"
+                "  se1 %p\n"
+                "  se2 %p\n",
+                se1,
+                se2);
+
+        ensSequenceeditTrace(se1, 1);
+        ensSequenceeditTrace(se2, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX list. */
+
+    if (se1 && (!se2))
+        return -1;
+
+    if ((!se1) && (!se2))
+        return 0;
+
+    if ((!se1) && se2)
+        return +1;
+
+    if (se1->Start < se2->Start)
+        result = -1;
+
+    if (se1->Start > se2->Start)
+        result = +1;
+
+    return result;
+}
+
+
+
+
+/* @funcstatic listSequenceeditCompareStartDescending *************************
+**
+** AJAX List of Ensembl Sequence Edit objects comparison function to sort by
+** start member in descending order.
+**
+** @param [r] item1 [const void*] Ensembl Sequence Edit address 1
+** @param [r] item2 [const void*] Ensembl Sequence Edit address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listSequenceeditCompareStartDescending(
+    const void *item1,
+    const void *item2)
+{
+    int result = 0;
+
+    EnsPSequenceedit se1 = *(EnsOSequenceedit *const *) item1;
+    EnsPSequenceedit se2 = *(EnsOSequenceedit *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listSequenceeditCompareStartDescending"))
+    {
+        ajDebug("listSequenceeditCompareStartDescending\n"
+                "  se1 %p\n"
+                "  se2 %p\n",
+                se1,
+                se2);
+
+        ensSequenceeditTrace(se1, 1);
+        ensSequenceeditTrace(se2, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX list. */
+
+    if (se1 && (!se2))
+        return -1;
+
+    if ((!se1) && (!se2))
+        return 0;
+
+    if ((!se1) && se2)
+        return +1;
+
+    if (se1->Start < se2->Start)
+        result = +1;
+
+    if (se1->Start > se2->Start)
+        result = -1;
+
+    return result;
+}
+
+
+
+
 /* @section list **************************************************************
 **
 ** Functions for manipulating AJAX List objects.
@@ -795,7 +953,7 @@ AjBool ensSequenceeditApplyString(const EnsPSequenceedit se,
 ** @nam3rule Sequenceedit Functions for manipulating AJAX List objects of
 ** Ensembl Sequence Edit objects
 ** @nam4rule Sort Sort functions
-** @nam5rule Start Sort by start element
+** @nam5rule Start Sort by start member
 ** @nam6rule Ascending  Sort in ascending order
 ** @nam6rule Descending Sort in descending order
 **
@@ -810,85 +968,25 @@ AjBool ensSequenceeditApplyString(const EnsPSequenceedit se,
 
 
 
-/* @funcstatic listSequenceeditCompareStartAscending **************************
-**
-** AJAX List of Ensembl Sequence Edit objects comparison function to sort by
-** start element in ascending order.
-**
-** @param [r] P1 [const void*] Ensembl Sequence Edit address 1
-** @param [r] P2 [const void*] Ensembl Sequence Edit address 2
-** @see ajListSort
-**
-** @return [int] The comparison function returns an integer less than,
-**               equal to, or greater than zero if the first argument is
-**               considered to be respectively less than, equal to, or
-**               greater than the second.
-** @@
-******************************************************************************/
-
-static int listSequenceeditCompareStartAscending(const void* P1,
-                                                 const void* P2)
-{
-    int result = 0;
-
-    const EnsPSequenceedit se1 = NULL;
-    const EnsPSequenceedit se2 = NULL;
-
-    se1 = *(EnsPSequenceedit const*) P1;
-    se2 = *(EnsPSequenceedit const*) P2;
-
-    if(ajDebugTest("listSequenceeditCompareStartAscending"))
-    {
-        ajDebug("listSequenceeditCompareStartAscending\n"
-                "  se1 %p\n"
-                "  se2 %p\n",
-                se1,
-                se2);
-
-        ensSequenceeditTrace(se1, 1);
-        ensSequenceeditTrace(se2, 1);
-    }
-
-    /* Sort empty values towards the end of the AJAX list. */
-
-    if(se1 && (!se2))
-        return -1;
-
-    if((!se1) && (!se2))
-        return 0;
-
-    if((!se1) && se2)
-        return +1;
-
-    if(se1->Start < se2->Start)
-        result = -1;
-
-    if(se1->Start > se2->Start)
-        result = +1;
-
-    return result;
-}
-
-
-
-
 /* @func ensListSequenceeditSortStartAscending ********************************
 **
-** Sort an AJAX List of Ensembl Sequence Edit objects by start element in
+** Sort an AJAX List of Ensembl Sequence Edit objects by start member in
 ** ascending order.
 **
 ** @param [u] ses [AjPList] AJAX List of Ensembl Sequence Edit objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensListSequenceeditSortStartAscending(AjPList ses)
 {
-    if(!ses)
+    if (!ses)
         return ajFalse;
 
-    ajListSort(ses, listSequenceeditCompareStartAscending);
+    ajListSort(ses, &listSequenceeditCompareStartAscending);
 
     return ajTrue;
 }
@@ -896,85 +994,25 @@ AjBool ensListSequenceeditSortStartAscending(AjPList ses)
 
 
 
-/* @funcstatic listSequenceeditCompareStartDescending *************************
-**
-** AJAX List of Ensembl Sequence Edit objects comparison function to sort by
-** start element in descending order.
-**
-** @param [r] P1 [const void*] Ensembl Sequence Edit address 1
-** @param [r] P2 [const void*] Ensembl Sequence Edit address 2
-** @see ajListSort
-**
-** @return [int] The comparison function returns an integer less than,
-**               equal to, or greater than zero if the first argument is
-**               considered to be respectively less than, equal to, or
-**               greater than the second.
-** @@
-******************************************************************************/
-
-static int listSequenceeditCompareStartDescending(const void* P1,
-                                                  const void* P2)
-{
-    int result = 0;
-
-    const EnsPSequenceedit se1 = NULL;
-    const EnsPSequenceedit se2 = NULL;
-
-    se1 = *(EnsPSequenceedit const*) P1;
-    se2 = *(EnsPSequenceedit const*) P2;
-
-    if(ajDebugTest("listSequenceeditCompareStartDescending"))
-    {
-        ajDebug("listSequenceeditCompareStartDescending\n"
-                "  se1 %p\n"
-                "  se2 %p\n",
-                se1,
-                se2);
-
-        ensSequenceeditTrace(se1, 1);
-        ensSequenceeditTrace(se2, 1);
-    }
-
-    /* Sort empty values towards the end of the AJAX list. */
-
-    if(se1 && (!se2))
-        return -1;
-
-    if((!se1) && (!se2))
-        return 0;
-
-    if((!se1) && se2)
-        return +1;
-
-    if(se1->Start < se2->Start)
-        result = +1;
-
-    if(se1->Start > se2->Start)
-        result = -1;
-
-    return result;
-}
-
-
-
-
 /* @func ensListSequenceeditSortStartDescending *******************************
 **
-** Sort an AJAX List of Ensembl Sequence Edit objects by start element in
+** Sort an AJAX List of Ensembl Sequence Edit objects by start member in
 ** descending order.
 **
 ** @param [u] ses [AjPList] AJAX List of Ensembl Sequence Edit objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensListSequenceeditSortStartDescending(AjPList ses)
 {
-    if(!ses)
+    if (!ses)
         return ajFalse;
 
-    ajListSort(ses, listSequenceeditCompareStartDescending);
+    ajListSort(ses, &listSequenceeditCompareStartDescending);
 
     return ajTrue;
 }

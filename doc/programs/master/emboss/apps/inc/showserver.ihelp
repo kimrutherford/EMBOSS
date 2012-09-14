@@ -1,9 +1,9 @@
-Displays information on configured servers
-Version: EMBOSS:6.4.0.0
+Display information on configured servers
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:
-   -server             string     Name of a single server to give information
+   -servername         string     Name of a single server to give information
                                   on (Any string)
    -showtypes          menu       [*] Show type(s) (Values: Protein (Protein
                                   sequences); Nucleic (Nucleotide sequences);

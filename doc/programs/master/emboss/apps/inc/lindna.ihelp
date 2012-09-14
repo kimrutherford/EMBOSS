@@ -1,5 +1,5 @@
-Draws linear maps of DNA constructs
-Version: EMBOSS:6.4.0.0
+Draw linear maps of DNA constructs
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     [inputfile] Commands to the lindna drawing

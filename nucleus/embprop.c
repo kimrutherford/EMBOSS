@@ -1,35 +1,48 @@
-/* @source embprop.c
+/* @source embprop ************************************************************
 **
 ** Residue/sequence properties
+**
 ** @author Copyright (c) 1999 Alan Bleasby
-** @version 1.0
+** @version $Revision: 1.54 $
 ** @modified 24 Nov 1999 - GWW - Added embPropProtGaps and embPropProt1to3
 ** @modified 1 Sept 2000 - GWW - Added embPropTransition embPropTranversion
 ** @modified 4 July 2001 - DMAM - Modified embPropAminoRead embPropCalcMolwt
 ** @modified 4 July 2001 - DMAM - Added embPropCalcMolwtMod
 ** @modified 1 July 2008 - JISON - Added embPropGet* functions
+** @modified $Date: 2012/05/14 13:10:09 $ by $Author: uludag $
 ** @@
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
 **
-** This program is distributed in the hope that it will be useful,
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "emboss.h"
+
+#include "ajlib.h"
+
+#include "embprop.h"
+#include "ajbase.h"
+#include "ajfileio.h"
+#include "ajlist.h"
+#include "ajseq.h"
+
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
 #include <ctype.h>
+
 
 char dayhoffstr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -78,6 +91,8 @@ static ajint propFragCompare(const void *a, const void *b);
 **
 ** @param [u] mfptr [AjPFile] Input file object
 ** @return [EmbPPropAmino*] array of amino acid properties
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -157,13 +172,15 @@ EmbPPropAmino* embPropEaminoRead(AjPFile mfptr)
 
 
 
-/* @func embPropGetProperties **************************************************
+/* @func embPropGetProperties *************************************************
 **
 ** Returns a string containing a list of defined properties
 **
 ** @param [r] prop [const EmbPPropAmino] Input properties object
 ** @param [w] Pstr [AjPStr*] String of properties separated by commas
 ** @return [AjBool] True if properties are defined
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -206,6 +223,8 @@ AjBool embPropGetProperties(const EmbPPropAmino prop, AjPStr* Pstr)
 **
 ** @param [u] mfptr [AjPFile] Input file object
 ** @return [EmbPPropMolwt*] array of amino acid molecular weights
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -306,10 +325,12 @@ EmbPPropMolwt* embPropEmolwtRead(AjPFile mfptr)
 
 /* @func embPropMolwtGetMolwt *************************************************
 **
-** Return charge value
+** Return molecular weight
 **
-** @param [r] prop [const EmbPPropMolwt] Input mOlecular weights object
-** @return [float] charge
+** @param [r] prop [const EmbPPropMolwt] Input molecular weights object
+** @return [float] molecular weight
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -331,6 +352,8 @@ float embPropMolwtGetMolwt(const EmbPPropMolwt prop)
 **
 ** @param [r] prop [const EmbPPropAmino] Input properties object
 ** @return [float] charge
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -342,12 +365,14 @@ float embPropGetCharge(const EmbPPropAmino prop)
 
 
 
-/* @func embPropGetTiny *****************************************************
+/* @func embPropGetTiny *******************************************************
 **
 ** Return tiny value
 **
 ** @param [r] prop [const EmbPPropAmino] Input properties object
 ** @return [ajint] tiny
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -359,12 +384,14 @@ ajint embPropGetTiny(const EmbPPropAmino prop)
 
 
 
-/* @func embPropGetSmall *****************************************************
+/* @func embPropGetSmall ******************************************************
 **
 ** Return small value
 **
 ** @param [r] prop [const EmbPPropAmino] Input properties object
 ** @return [ajint] small
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -382,6 +409,8 @@ ajint embPropGetSmall(const EmbPPropAmino prop)
 **
 ** @param [r] prop [const EmbPPropAmino] Input properties object
 ** @return [ajint] aliphatic
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -399,6 +428,8 @@ ajint embPropGetAliphatic(const EmbPPropAmino prop)
 **
 ** @param [r] prop [const EmbPPropAmino] Input properties object
 ** @return [ajint] aromatic
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -416,6 +447,8 @@ ajint embPropGetAromatic(const EmbPPropAmino prop)
 **
 ** @param [r] prop [const EmbPPropAmino] Input properties object
 ** @return [ajint] nonpolar
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -427,12 +460,14 @@ ajint embPropGetNonpolar(const EmbPPropAmino prop)
 
 
 
-/* @func embPropGetPolar *****************************************************
+/* @func embPropGetPolar ******************************************************
 **
 ** Return polar value
 **
 ** @param [r] prop [const EmbPPropAmino] Input properties object
 ** @return [ajint] polar
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -444,12 +479,14 @@ ajint embPropGetPolar(const EmbPPropAmino prop)
 
 
 
-/* @func embPropGetPve *****************************************************
+/* @func embPropGetPve ********************************************************
 **
 ** Return pve value
 **
 ** @param [r] prop [const EmbPPropAmino] Input properties object
 ** @return [ajint] pve
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -461,12 +498,14 @@ ajint embPropGetPve(const EmbPPropAmino prop)
 
 
 
-/* @func embPropGetNve *****************************************************
+/* @func embPropGetNve ********************************************************
 **
 ** Return nve value
 **
 ** @param [r] prop [const EmbPPropAmino] Input properties object
 ** @return [ajint] nve
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -484,6 +523,8 @@ ajint embPropGetNve(const EmbPPropAmino prop)
 **
 ** @param [r] prop [const EmbPPropAmino] Input properties object
 ** @return [ajint] extcoeff
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -507,6 +548,8 @@ ajint embPropGetExtcoeff(const EmbPPropAmino prop)
 ** @param [r] mono [AjBool] true for monoisotopic values
 **
 ** @return [double] molecular weight
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -543,6 +586,8 @@ double embPropCalcMolwt(const char *s, ajint start, ajint end,
 ** @param [r] cmass [double] mass of the C-terminal group
 **
 ** @return [double] molecular weight
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -576,7 +621,7 @@ double embPropCalcMolwtMod(const char *s, ajint start, ajint end,
 
 
 
-/* @func embPropCalcMolextcoeff*********************************************
+/* @func embPropCalcMolextcoeff************************************************
 **
 ** Calculate the molecular extinction coefficient of a protein sequence
 **
@@ -587,6 +632,8 @@ double embPropCalcMolwtMod(const char *s, ajint start, ajint end,
 ** @param [r] aadata [EmbPPropAmino const *] amino acid data
 **
 ** @return [double] molar extinction coefficient
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -632,6 +679,8 @@ double embPropCalcMolextcoeff(const char *s, ajint start, ajint end,
 ** @param [r] c [char] integer code
 **
 ** @return [const char*] three letter amino acid code
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -650,6 +699,8 @@ const char* embPropCharToThree(char c)
 ** @param [r] c [ajint] integer code
 **
 ** @return [const char*] three letter amino acid code
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -689,6 +740,8 @@ const char* embPropIntToThree(ajint c)
 ** @param [r] mono [AjBool] true for monoisotopic weights
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -867,7 +920,7 @@ void embPropCalcFragments(const char *s, ajint n,
     }
 
     if(!dorag)
-	ajListSort(*l,propFragCompare);
+	ajListSort(*l, &propFragCompare);
     *ncomp = defcnt;
 
 
@@ -935,7 +988,7 @@ void embPropCalcFragments(const char *s, ajint n,
 	}
 
 	if(!dorag)
-	    ajListSort(*pa,propFragCompare);
+	    ajListSort(*pa, &propFragCompare);
     }
 
     if(allpartials)
@@ -965,7 +1018,7 @@ void embPropCalcFragments(const char *s, ajint n,
 	}
 
 	if(!dorag)
-	    ajListSort(*pa,propFragCompare);
+	    ajListSort(*pa, &propFragCompare);
     }
 
     if(defcnt)
@@ -992,6 +1045,8 @@ void embPropCalcFragments(const char *s, ajint n,
 ** @param [r] b [const void*] Second element
 **
 ** @return [ajint] 0=equal +ve=(a greater than b) -ve=(a less than b)
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1013,6 +1068,8 @@ static ajint propFragCompare(const void *a, const void *b)
 ** @param [u] seq [AjPSeq] protein sequence to add spaces into
 ** @param [r] pad [ajint] number of spaces to insert at the start of the result
 ** @return [AjPStr] New string with the padded sequence
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1050,6 +1107,8 @@ AjPStr embPropProtGaps(AjPSeq seq, ajint pad)
 ** @param [u] seq [AjPSeq] protein sequence to convert to 3-letter codes
 ** @param [r] pad [ajint] number of spaces to insert at the start of the result
 ** @return [AjPStr] string containing 3-letter protein sequence
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1092,7 +1151,7 @@ AjPStr embPropProt1to3(AjPSeq seq, ajint pad)
 
 
 
-/* @func embPropProt1to3Rev ****************************************************
+/* @func embPropProt1to3Rev ***************************************************
 **
 ** Creates a a 3-letter sequence protein string from single-letter sequence
 ** in the reverse direction.
@@ -1103,6 +1162,8 @@ AjPStr embPropProt1to3(AjPSeq seq, ajint pad)
 ** @param [r] pad [ajint] number of characters to skip at the start
 **                        of the result
 ** @return [AjPStr] string containing 3-letter protein sequence
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -1161,6 +1222,8 @@ AjPStr embPropProt1to3Rev(AjPSeq seq, ajint pad)
 **
 ** @param [r] base [char] base
 ** @return [AjBool] return ajTrue if this is a Purine
+**
+** @release 1.4.3
 ** @@
 ******************************************************************************/
 
@@ -1182,6 +1245,8 @@ AjBool embPropPurine(char base)
 **
 ** @param [r] base [char] base
 ** @return [AjBool] return ajTrue if this is a Pyrimidine
+**
+** @release 1.4.3
 ** @@
 ******************************************************************************/
 
@@ -1206,6 +1271,8 @@ AjBool embPropPyrimidine(char base)
 ** @param [r] base1 [char] first base
 ** @param [r] base2 [char] second base
 ** @return [AjBool] return ajTrue if this is a transversion
+**
+** @release 1.4.3
 ** @@
 ******************************************************************************/
 
@@ -1251,6 +1318,8 @@ AjBool embPropTransversion(char base1, char base2)
 ** @param [r] base1 [char] first base
 ** @param [r] base2 [char] second base
 ** @return [AjBool] return ajTrue if this is a transition
+**
+** @release 1.4.3
 ** @@
 ******************************************************************************/
 
@@ -1309,13 +1378,15 @@ AjBool embPropTransition(char base1, char base2)
 
 
 
-/* @func embPropFixF *********************************************************
+/* @func embPropFixF **********************************************************
 **
 ** Fix for missing properties data in a float array
 **
 ** @param [u] matrix [float[]] Matrix
 ** @param [r] missing [float] Missing data value
 ** @return [void]
+**
+** @release 4.1.0
 ******************************************************************************/
 
 void embPropFixF(float matrix[], float missing)
@@ -1383,7 +1454,7 @@ void embPropFixF(float matrix[], float missing)
 
 
 
-/* @func embPropNormalF ********************************************************
+/* @func embPropNormalF *******************************************************
 **
 ** Normalize data values in a float array to have mean 0.0 and
 ** standard deviation 1.0
@@ -1395,6 +1466,8 @@ void embPropFixF(float matrix[], float missing)
 ** @param [u] matrix [float[]] Matrix
 ** @param [r] missing [float] Missing data value
 ** @return [void]
+**
+** @release 6.1.0
 ******************************************************************************/
 
 void embPropNormalF(float matrix[], float missing)
@@ -1444,6 +1517,8 @@ void embPropNormalF(float matrix[], float missing)
 **
 ** @param [w] thys [EmbPPropAmino**] amino acid properties
 ** @return [void]
+**
+** @release 6.0.0
 ******************************************************************************/
 
 void embPropAminoDel(EmbPPropAmino **thys)
@@ -1472,6 +1547,8 @@ void embPropAminoDel(EmbPPropAmino **thys)
 **
 ** @param [w] thys [EmbPPropMolwt**] molwts
 ** @return [void]
+**
+** @release 6.0.0
 ******************************************************************************/
 
 void embPropMolwtDel(EmbPPropMolwt **thys)

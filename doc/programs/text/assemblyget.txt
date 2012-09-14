@@ -1,0 +1,170 @@
+                                 assemblyget
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Get assembly of sequence reads
+
+Description
+
+   Searches for a sequence assembly and returns the data in one of the
+   EBOSS assembly formats.
+
+Usage
+
+   Here is a sample session with assemblyget
+
+
+% assemblyget bam::samspec1.4example.bam -oformat sam -auto
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+Get assembly of sequence reads
+Version: EMBOSS:6.5.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-assembly]          assembly   (no help text) assembly value
+  [-outassembly]       outassembly (no help text) outassembly value
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-assembly" associated qualifiers
+   -cbegin1            integer    Start of the contig/consensus sequences
+   -cend1              integer    End of the contig/consensus sequences
+   -iformat1           string     Input assembly format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
+   -idbname1           string     User-provided database name
+
+   "-outassembly" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Assembly output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   assemblyget reads a sequence assembly.
+
+   The input is a standard EMBOSS assembly query.
+
+   The major assembly sources are files in SAM and BAM format.
+
+  Input files for usage example
+
+  File: samspec1.4example.bam
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+Output file format
+
+   assemblyget writes a sequence assembly.
+
+   The output is a standard EMBOSS assembly query.
+
+   The major assembly formats are files in SAM and BAM format.
+
+  Output files for usage example
+
+  File: 4example.sam
+
+@HD     VN:1.3  SO:coordinate
+@PG     ID:assemblyget  VN:6.5.0.0      CL:[-assembly] bam::../../data/samspec1.
+4example.bam -oformat sam -auto
+@SQ     SN:ref  LN:45
+r001    163     ref     7       30      8M2I4M1D3M      =       37      39
+TTAGATAAAGGATACTG       *
+r002    0       ref     9       30      3S6M1P1I4M      *       0       0
+AAAAGATAAGGATA  *
+r003    0       ref     9       30      5H6M    *       0       0       AGCTAA
+*       NM:i:1
+r004    0       ref     16      30      6M14N5M *       0       0       ATAGCTTC
+AGC     *
+r003    16      ref     29      30      6H5M    *       0       0       TAGGC
+*       NM:i:0
+r001    83      ref     37      30      9M      =       7       -39     CAGCGCCA
+T       *
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name             Description
+   infoassembly     Display information about assemblies
+
+Author(s)
+
+   Mahmut           Uludag
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

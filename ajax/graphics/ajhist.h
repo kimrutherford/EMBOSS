@@ -1,41 +1,58 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-
-
-
-/* @source ajhist.h
+/* @include ajhist ************************************************************
 **
-** General Plot/Printing routines.
+** AJAX GRAPH (ajax histogram) functions
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** These functions control all aspects of AJAX histogram.
 **
-** This program is distributed in the hope that it will be useful,
+** @author Copyright (C) 1998 Peter Rice
+** @version $Revision: 1.25 $
+** @modified 1988-11-12 pmr First version
+** @modified 1999 ajb ANSIfication
+** @modified $Date: 2011/09/27 11:19:27 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* temporary include file for graphics to define structure(s) */
+#ifndef AJHIST_H
+#define AJHIST_H
 
-#ifndef ajhist_h
-#define ajhist_h
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
-#include "ajgraph.h"
 #include "ajdefine.h"
+#include "ajgraph.h"
 #include "ajstr.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
 
 #define HIST_ONTOP      0
 #define HIST_SIDEBYSIDE 1
@@ -54,6 +71,13 @@ __declspec(dllexport) ajint aj_hist_mark;
 __declspec(dllimport) ajint aj_hist_mark;
 #endif
 #endif
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -135,6 +159,12 @@ typedef struct AjSHist {
 
 
 
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
 /*
 ** Prototype definitions
 */
@@ -171,6 +201,10 @@ void    ajHistogramSetMark(ajint mark);
 ** End of prototype definitions
 */
 
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+#ifdef AJ_COMPILE_DEPRECATED
+
 __deprecated void    ajHistSetColour(AjPHist hist, ajuint indexnum,
                                      ajint colour);
 __deprecated void    ajHistSetPattern (AjPHist hist, ajuint indexnum,
@@ -199,8 +233,8 @@ __deprecated void    ajHistSetMultiYTitle  (AjPHist hist, ajint indexnum,
 __deprecated void    ajHistSetMultiYTitleC (AjPHist hist, ajint indexnum,
                                             const char *title);
 
-#endif /* ajhist_h */
-
-#ifdef __cplusplus
-}
 #endif
+
+AJ_END_DECLS
+
+#endif  /* !AJHIST_H */

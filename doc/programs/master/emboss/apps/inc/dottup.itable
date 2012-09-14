@@ -80,7 +80,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-asequence" associated sequence qualifiers
+<td align="left" colspan=5>"-asequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -149,11 +149,35 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_asequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_asequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_asequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_asequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -197,7 +221,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-bsequence" associated sequence qualifiers
+<td align="left" colspan=5>"-bsequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -266,11 +290,35 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular2<br>-scircular_bsequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat2<br>-sformat_bsequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery2<br>-iquery_bsequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset2<br>-ioffset_bsequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -314,7 +362,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-graph" associated graph qualifiers
+<td align="left" colspan=5>"-graph" associated graph qualifiers
 </td>
 </tr>
 
@@ -355,7 +403,7 @@
 <td>string</td>
 <td>Graph x axis title</td>
 <td>Any string</td>
-<td>$(bsequence.name)</td>
+<td>$(asequence.name)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -363,7 +411,7 @@
 <td>string</td>
 <td>Graph y axis title</td>
 <td>Any string</td>
-<td>$(asequence.name)</td>
+<td>$(bsequence.name)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -383,7 +431,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-xygraph" associated xygraph qualifiers
+<td align="left" colspan=5>"-xygraph" associated xygraph qualifiers
 </td>
 </tr>
 
@@ -424,7 +472,7 @@
 <td>string</td>
 <td>Graph x axis title</td>
 <td>Any string</td>
-<td>&nbsp;</td>
+<td>$(asequence.name)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -432,7 +480,7 @@
 <td>string</td>
 <td>Graph y axis title</td>
 <td>Any string</td>
-<td>&nbsp;</td>
+<td>$(bsequence.name)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

@@ -1,0 +1,139 @@
+                                embossupdate
+
+
+
+Wiki
+
+   The master copies of EMBOSS documentation are available at
+   http://emboss.open-bio.org/wiki/Appdocs on the EMBOSS Wiki.
+
+   Please help by correcting and extending the Wiki pages.
+
+Function
+
+   Checks for more recent updates to EMBOSS
+
+Description
+
+   embossupdate checks for the latest EMBOSS updates and reports if a more
+   recent version is available.
+
+Algorithm
+
+   The EMBOSS webite maintains a page for the latest release with all
+   fixes available as patches or as new distributions.
+
+   embossupdate reads this page and reports a description of any changes
+   and instructions for updating. These are read from the updates page and
+   subject to change.
+
+   If no later version is found embossupdate reports success.
+
+Usage
+
+   Here is a sample session with embossupdate
+
+
+% embossupdate
+Checks for more recent updates to EMBOSS
+
+EMBOSS 6.5.0.0 is the latest version (6.5.0.0)
+
+
+Command line arguments
+
+Checks for more recent updates to EMBOSS
+Version: EMBOSS:6.5.0.0
+
+   Standard (Mandatory) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -outfile            outfile    [stdout] EMBOSS update output file
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   embossupdate reads a page from the EMBOSS website at
+   http://emboss.open-bio.org/updates/EMBOSS.fixes for a Unix version, and
+   http://emboss.open-bio.org/updates/mEMBOSS.fixes for Windows releases.
+
+Output file format
+
+   embossupdate reports any more recent updates, or reports that the
+   current version is up to date.
+
+Data files
+
+   None.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+                    Program name                Description
+                    embossdata    Find and retrieve EMBOSS data files
+   embossversion    Report the current EMBOSS version number
+
+Author(s)
+
+   Peter            Rice
+   European         Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton,         Cambridge CB10 1SD, UK
+
+                    Please report all bugs to the EMBOSS bug team
+                    (emboss-bug (c) emboss.open-bio.org) not to the original author.
+
+History
+
+Target users
+
+                    This program is intended to be used by everyone and everything, from
+                    naive users to embedded scripts.
+
+Comments
+
+                    None

@@ -15,6 +15,7 @@
 
 @SET_MAKE@
 
+
 VPATH = @srcdir@
 pkgincludedir = $(includedir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -34,33 +35,24 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 subdir = jemboss
-DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(srcdir)/runJemboss.sh.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
-	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
-	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
-	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
-	$(top_srcdir)/configure.in
+am__aclocal_m4_deps = $(top_srcdir)/m4/axis2c.m4 \
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/idxdbs.m4 $(top_srcdir)/m4/java.m4 \
+	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pkg.m4 \
+	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
+	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/ajax/core/config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = runJemboss.sh
 CONFIG_CLEAN_VPATH_FILES =
-SOURCES =
-DIST_SOURCES =
-RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
-	html-recursive info-recursive install-data-recursive \
-	install-dvi-recursive install-exec-recursive \
-	install-html-recursive install-info-recursive \
-	install-pdf-recursive install-ps-recursive install-recursive \
-	installcheck-recursive installdirs-recursive pdf-recursive \
-	ps-recursive uninstall-recursive
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -82,7 +74,17 @@ am__nobase_list = $(am__nobase_strip_setup); \
 am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(pkgdatadir)"
+am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgdatadir)"
+SCRIPTS = $(bin_SCRIPTS)
+SOURCES =
+DIST_SOURCES =
+RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
+	html-recursive info-recursive install-data-recursive \
+	install-dvi-recursive install-exec-recursive \
+	install-html-recursive install-info-recursive \
+	install-pdf-recursive install-ps-recursive install-recursive \
+	installcheck-recursive installdirs-recursive pdf-recursive \
+	ps-recursive uninstall-recursive
 DATA = $(pkgdata_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
@@ -123,6 +125,7 @@ ACLOCAL = @ACLOCAL@
 AJAX_FIXED_ROOT = @AJAX_FIXED_ROOT@
 AJAX_SYSTEM = @AJAX_SYSTEM@
 AMTAR = @AMTAR@
+ANT = @ANT@
 AR = @AR@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
@@ -152,9 +155,7 @@ ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
-EHAVEANT = @EHAVEANT@
 EMBOSS_TOP = @EMBOSS_TOP@
-ESYSTEMLIBS = @ESYSTEMLIBS@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
@@ -165,9 +166,12 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-ISAIXIA64 = @ISAIXIA64@
-ISCYGWIN = @ISCYGWIN@
-JAVA_OK = @JAVA_OK@
+JAR = @JAR@
+JAVA = @JAVA@
+JAVAC = @JAVAC@
+JAVA_CFLAGS = @JAVA_CFLAGS@
+JAVA_CPPFLAGS = @JAVA_CPPFLAGS@
+JAVA_LDFLAGS = @JAVA_LDFLAGS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -184,7 +188,6 @@ MYSQL_CONFIG = @MYSQL_CONFIG@
 MYSQL_CPPFLAGS = @MYSQL_CPPFLAGS@
 MYSQL_LDFLAGS = @MYSQL_LDFLAGS@
 MYSQL_VERSION = @MYSQL_VERSION@
-NEEDAJAX = @NEEDAJAX@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -205,12 +208,12 @@ PCRE_MAJOR = @PCRE_MAJOR@
 PCRE_MINOR = @PCRE_MINOR@
 PCRE_POSIXLIB_VERSION = @PCRE_POSIXLIB_VERSION@
 PCRE_VERSION = @PCRE_VERSION@
-PG_CONFIG = @PG_CONFIG@
 PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 POSTGRESQL_CFLAGS = @POSTGRESQL_CFLAGS@
+POSTGRESQL_CONFIG = @POSTGRESQL_CONFIG@
 POSTGRESQL_CPPFLAGS = @POSTGRESQL_CPPFLAGS@
 POSTGRESQL_LDFLAGS = @POSTGRESQL_LDFLAGS@
 POSTGRESQL_VERSION = @POSTGRESQL_VERSION@
@@ -240,7 +243,6 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
-ant_in_path = @ant_in_path@
 bindir = @bindir@
 build = @build@
 build_alias = @build_alias@
@@ -253,7 +255,6 @@ datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
-havejavac = @havejavac@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -263,7 +264,6 @@ htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-javac_in_path = @javac_in_path@
 libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
@@ -285,9 +285,23 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = gnits
 SUBDIRS = images lib resources utils
+@JAVA_BUILD_TRUE@bin_SCRIPTS = runJemboss.sh
+@JAVA_BUILD_TRUE@CLEANFILES = $(bin_SCRIPTS)
 
 # files with nonstandard names in this directory
 EXTRA_DIST = LICENSE
+
+#all-local:
+
+#install-exec-hook:
+#	echo "Preparing $(DESTDIR)$(bindir)/runJemboss.csh"; \
+#	echo "#!/bin/csh" > $(DESTDIR)$(bindir)/runJemboss.csh; \
+#	echo "setenv CLASSPATH $(prefix)/share/$(PACKAGE)/jemboss/lib/mail.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/activation.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jakarta-regexp-1.2.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jalviewApplet.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jcert.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jnet.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jsse.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/axis.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/commons-discovery.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/commons-logging.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/jaxrpc.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/log4j-1.2.4.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/saaj.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/wsdl4j.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jemboss.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/client.jar:$(prefix)/share/$(PACKAGE)/jemboss" >> $(DESTDIR)$(bindir)/runJemboss.csh; \
+#	echo "(cd $(prefix)/share/$(PACKAGE)/jemboss; java org/emboss/jemboss/Jemboss &)" >> $(DESTDIR)$(bindir)/runJemboss.csh; \
+#	chmod 755 $(DESTDIR)$(bindir)/runJemboss.csh; \
+#	echo "Updating $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/runJemboss.sh"; \
+#	sed "s|JEMBOSS_HOME=.|JEMBOSS_HOME=$(prefix)/share/$(PACKAGE)/jemboss/|" runJemboss.sh > $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/runJemboss.sh; \
+#	chmod 755 $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/runJemboss.sh;
 pkgdata_DATA = LICENSE readme.html README
 all: all-recursive
 
@@ -322,6 +336,57 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
+runJemboss.sh: $(top_builddir)/config.status $(srcdir)/runJemboss.sh.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+install-binSCRIPTS: $(bin_SCRIPTS)
+	@$(NORMAL_INSTALL)
+	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
+	@list='$(bin_SCRIPTS)'; test -n "$(bindir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  if test -f "$$d$$p"; then echo "$$d$$p"; echo "$$p"; else :; fi; \
+	done | \
+	sed -e 'p;s,.*/,,;n' \
+	    -e 'h;s|.*|.|' \
+	    -e 'p;x;s,.*/,,;$(transform)' | sed 'N;N;N;s,\n, ,g' | \
+	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1; } \
+	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
+	    if ($$2 == $$4) { files[d] = files[d] " " $$1; \
+	      if (++n[d] == $(am__install_max)) { \
+		print "f", d, files[d]; n[d] = 0; files[d] = "" } } \
+	    else { print "f", d "/" $$4, $$1 } } \
+	  END { for (d in files) print "f", d, files[d] }' | \
+	while read type dir files; do \
+	     if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
+	     test -z "$$files" || { \
+	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(bindir)$$dir'"; \
+	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(bindir)$$dir" || exit $$?; \
+	     } \
+	; done
+
+uninstall-binSCRIPTS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(bin_SCRIPTS)'; test -n "$(bindir)" || exit 0; \
+	files=`for p in $$list; do echo "$$p"; done | \
+	       sed -e 's,.*/,,;$(transform)'`; \
+	test -n "$$list" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(bindir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(bindir)" && rm -f $$files
+
+installcheck-binSCRIPTS: $(bin_SCRIPTS)
+	bad=0; pid=$$$$; list="$(bin_SCRIPTS)"; for p in $$list; do \
+	  case ' $(AM_INSTALLCHECK_STD_OPTIONS_EXEMPT) ' in \
+	   *" $$p "* | *" $(srcdir)/$$p "*) continue;; \
+	  esac; \
+	  f=`echo "$$p" | sed 's,^.*/,,;$(transform)'`; \
+	  for opt in --help --version; do \
+	    if "$(DESTDIR)$(bindir)/$$f" $$opt >c$${pid}_.out \
+	         2>c$${pid}_.err </dev/null \
+		 && test -n "`cat c$${pid}_.out`" \
+		 && test -z "`cat c$${pid}_.err`"; then :; \
+	    else echo "$$f does not support $$opt" 1>&2; bad=1; fi; \
+	  done; \
+	done; rm -f c$${pid}_.???; exit $$bad
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -547,10 +612,10 @@ distdir: $(DISTFILES)
 	  dist-hook
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(DATA) all-local
+all-am: Makefile $(SCRIPTS) $(DATA)
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(pkgdatadir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgdatadir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -570,6 +635,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -604,9 +670,8 @@ install-dvi: install-dvi-recursive
 
 install-dvi-am:
 
-install-exec-am:
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
+install-exec-am: install-binSCRIPTS
+
 install-html: install-html-recursive
 
 install-html-am:
@@ -625,7 +690,7 @@ install-ps: install-ps-recursive
 
 install-ps-am:
 
-installcheck-am:
+installcheck-am: installcheck-binSCRIPTS
 
 maintainer-clean: maintainer-clean-recursive
 	-rm -f Makefile
@@ -643,48 +708,37 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-pkgdataDATA
+uninstall-am: uninstall-binSCRIPTS uninstall-pkgdataDATA
 
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) ctags-recursive \
-	install-am install-exec-am install-strip tags-recursive
+	install-am install-strip tags-recursive
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
-	all all-am all-local check check-am clean clean-generic \
-	clean-libtool clean-local ctags ctags-recursive dist-hook \
-	distclean distclean-generic distclean-libtool distclean-tags \
-	distdir dvi dvi-am html html-am info info-am install \
-	install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-exec-hook \
-	install-html install-html-am install-info install-info-am \
-	install-man install-pdf install-pdf-am install-pkgdataDATA \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-recursive \
-	uninstall uninstall-am uninstall-pkgdataDATA
+	all all-am check check-am clean clean-generic clean-libtool \
+	clean-local ctags ctags-recursive dist-hook distclean \
+	distclean-generic distclean-libtool distclean-tags distdir dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-binSCRIPTS install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-pkgdataDATA install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installcheck-binSCRIPTS installdirs installdirs-am \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags tags-recursive uninstall uninstall-am \
+	uninstall-binSCRIPTS uninstall-pkgdataDATA
 
 
 clean-local:
-@EHAVEANT_TRUE@	ant clean;
-
-all-local:
-
-install-exec-hook:
-	echo "Preparing $(DESTDIR)$(bindir)/runJemboss.csh"; \
-	echo "#!/bin/csh" > $(DESTDIR)$(bindir)/runJemboss.csh; \
-	echo "setenv CLASSPATH $(prefix)/share/$(PACKAGE)/jemboss/lib/mail.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/activation.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jakarta-regexp-1.2.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jalviewApplet.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jcert.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jnet.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jsse.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/axis.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/commons-discovery.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/commons-logging.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/jaxrpc.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/log4j-1.2.4.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/saaj.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/axis/wsdl4j.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/jemboss.jar:$(prefix)/share/$(PACKAGE)/jemboss/lib/client.jar:$(prefix)/share/$(PACKAGE)/jemboss" >> $(DESTDIR)$(bindir)/runJemboss.csh; \
-	echo "(cd $(prefix)/share/$(PACKAGE)/jemboss; java org/emboss/jemboss/Jemboss &)" >> $(DESTDIR)$(bindir)/runJemboss.csh; \
-	chmod 755 $(DESTDIR)$(bindir)/runJemboss.csh; \
-	echo "Updating $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/runJemboss.sh"; \
-	sed "s|JEMBOSS_HOME=.|JEMBOSS_HOME=$(prefix)/share/$(PACKAGE)/jemboss/|" runJemboss.sh > $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/runJemboss.sh; \
-	chmod 755 $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/runJemboss.sh;
+@JAVA_BUILD_TRUE@	$(ANT) clean;
 
 # tar to pick up the other directories
 # then remove any CVS subdirectories
 
 dist-hook:
-@EHAVEANT_TRUE@	ant package -Demboss.data=../emboss/data -Dname=jemboss -Djar.dir=lib -Dnotformemboss=yes;
-@EHAVEANT_TRUE@	ant clean;
+@JAVA_BUILD_TRUE@	$(ANT) package -Demboss.data=../emboss/data -Dname=jemboss -Djar.dir=lib -Dnotformemboss=yes;
+@JAVA_BUILD_TRUE@	$(ANT) clean;
 	tar cBf - api | ( cd $(distdir); tar xBf - ; rm -rf api/CVS );
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

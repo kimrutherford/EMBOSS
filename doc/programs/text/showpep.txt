@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Displays protein sequences with features in pretty format
+   Display protein sequences with features in pretty format
 
 Description
 
@@ -29,7 +29,7 @@ Usage
 
 
 % showpep tsw:laci_ecoli -sbeg 1 -send 100
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -53,7 +53,7 @@ Output file [laci_ecoli.showpep]:
 
 
 % showpep tsw:laci_ecoli -sbeg 1 -send 120
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -79,7 +79,7 @@ Output file [laci_ecoli.showpep]:
 
 
 % showpep tsw:laci_ecoli -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]:
 
 
@@ -92,7 +92,7 @@ Output file [laci_ecoli.showpep]:
 
 
 % showpep tsw:rs24_takru -three -format 2
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [rs24_takru.showpep]:
 
 
@@ -105,7 +105,7 @@ Output file [rs24_takru.showpep]:
 
 
 % showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -number
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]:
 
 
@@ -117,7 +117,7 @@ Output file [laci_ecoli.showpep]:
 
 
 % showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -number -offset 123
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]:
 
 
@@ -131,7 +131,7 @@ Output file [laci_ecoli.showpep]:
 
 % showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -slower -upper "17-17,22-22
 "
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]:
 
 
@@ -144,7 +144,7 @@ Output file [laci_ecoli.showpep]:
 
 % showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 2 -send 120 -annotation "6-25
  binding site 17-17 SNP 22-22 SNP"
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]:
 
 
@@ -152,8 +152,8 @@ Output file [laci_ecoli.showpep]:
 
 Command line arguments
 
-Displays protein sequences with features in pretty format
-Version: EMBOSS:6.4.0.0
+Display protein sequences with features in pretty format
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) protein sequence(s) filename and
@@ -307,7 +307,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -367,7 +370,7 @@ ID   LACI_ECOLI              Reviewed;         360 AA.
 AC   P03023; O09196; P71309; Q2MC79; Q47338;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   19-JUL-2003, sequence version 3.
-DT   15-JUN-2010, entry version 117.
+DT   13-JUN-2012, entry version 136.
 DE   RecName: Full=Lactose operon repressor;
 GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
 OS   Escherichia coli (strain K12).
@@ -477,7 +480,7 @@ ID   RS24_TAKRU              Reviewed;         132 AA.
 AC   O42387;
 DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
 DT   01-JAN-1998, sequence version 1.
-DT   02-MAR-2010, entry version 42.
+DT   16-MAY-2012, entry version 54.
 DE   RecName: Full=40S ribosomal protein S24;
 GN   Name=rps24;
 OS   Takifugu rubripes (Japanese pufferfish) (Fugu rubripes).
@@ -496,27 +499,28 @@ CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; AJ001398; CAA04728.1; -; Genomic_DNA.
-DR   SMR; O42387; 4-96.
+DR   ProteinModelPortal; O42387; -.
 DR   STRING; O42387; -.
 DR   PRIDE; O42387; -.
-DR   Ensembl; ENSTRUT00000016709; ENSTRUP00000016637; ENSTRUG00000006773; Takifu
-gu rubripes.
-DR   eggNOG; fiNOG15754; -.
+DR   eggNOG; COG2004; -.
 DR   InParanoid; O42387; -.
 DR   GO; GO:0005840; C:ribosome; IEA:UniProtKB-KW.
 DR   GO; GO:0000166; F:nucleotide binding; IEA:InterPro.
 DR   GO; GO:0003735; F:structural constituent of ribosome; IEA:InterPro.
 DR   GO; GO:0006412; P:translation; IEA:InterPro.
-DR   InterPro; IPR012677; a_b_plait_nuc_bd.
+DR   Gene3D; G3DSA:3.30.70.330; a_b_plait_nuc_bd; 1.
+DR   InterPro; IPR012677; Nucleotide-bd_a/b_plait.
+DR   InterPro; IPR012678; Ribosomal_L23/L15e_core_dom.
 DR   InterPro; IPR001976; Ribosomal_S24e.
 DR   InterPro; IPR018098; Ribosomal_S24e_CS.
-DR   Gene3D; G3DSA:3.30.70.330; a_b_plait_nuc_bd; 1.
 DR   PANTHER; PTHR10496; Ribosomal_S24E; 1.
 DR   Pfam; PF01282; Ribosomal_S24e; 1.
 DR   ProDom; PD006052; Ribosomal_S24e; 1.
+DR   SUPFAM; SSF54189; L23_L15e_core; 1.
 DR   PROSITE; PS00529; RIBOSOMAL_S24E; 1.
 PE   3: Inferred from homology;
-KW   Ribonucleoprotein; Ribosomal protein.
+KW   Complete proteome; Reference proteome; Ribonucleoprotein;
+KW   Ribosomal protein.
 FT   CHAIN         1    132       40S ribosomal protein S24.
 FT                                /FTId=PRO_0000137627.
 SQ   SEQUENCE   132 AA;  15305 MW;  DC437F60F20C14F5 CRC64;
@@ -612,7 +616,7 @@ Lactose operon repressor
                |====|                     |===========|
                alpha_helix                alpha_helix
                      |=|
-                     turn
+                     polypeptide_turn_motif
                           |======|
                           alpha_helix
 
@@ -738,7 +742,7 @@ Lactose operon repressor
                |====|                     |===========|
                alpha_helix                alpha_helix
                      |=|
-                     turn
+                     polypeptide_turn_motif
                           |======|
                           alpha_helix
 
@@ -747,12 +751,14 @@ Lactose operon repressor
           SLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGVEACKAAVHNLLAQRVS
           ============================================================
           mature_protein_region note="Lactose operon repressor" ftid="PRO_00001
-            |=====|                       |====|                 |=|
-            beta_strand                   beta_strand            turn
+            |=====|                       |====|
+            beta_strand                   beta_strand
                        |==============|           |=|
                        alpha_helix                beta_strand
                                                      |==========|
                                                      alpha_helix
+                                                                 |=|
+                                              polypeptide_turn_motif
 
 
    Most of the variants of the output format have already been described
@@ -995,9 +1001,9 @@ See also
 
                    Program name                            Description
                    abiview      Display the trace in an ABI sequencer file
-                   cirdna       Draws circular maps of DNA constructs
+                   cirdna       Draw circular map of DNA constructs
                    iep          Calculate the isoelectric point of proteins
-                   lindna       Draws linear maps of DNA constructs
+                   lindna       Draw linear maps of DNA constructs
                    pepinfo      Plot amino acid properties of a protein sequence in parallel
                    pepnet       Draw a helical net for a protein sequence
                    pepwheel     Draw a helical wheel diagram for a protein sequence

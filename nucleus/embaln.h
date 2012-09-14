@@ -1,14 +1,70 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include embaln ************************************************************
+**
+** General routines for alignment.
+**
+** @author Copyright (c) 1999 Alan Bleasby
+** @version $Revision: 1.31 $
+** @modified $Date: 2011/10/18 14:24:24 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef embaln_h
-#define embaln_h
+#ifndef EMBALN_H
+#define EMBALN_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
+#include "ajseqdata.h"
+#include "ajalign.h"
+#include "ajfile.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
 
 #define PAZ  26
 #define PAZ1 27
 
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 
 
@@ -49,12 +105,6 @@ void embAlignPrintGlobal(AjPFile outf, const char *a, const char *b,
 			 float * const *sub, const AjPSeqCvt cvt,
 			 const char *namea,
 			 const char *nameb, ajint begina, ajint beginb);
-void embAlignPrintLocal(AjPFile outf,
-			const AjPStr m, const AjPStr n,
-			ajint start1, ajint start2, float score, AjBool mark,
-			float * const *sub, const AjPSeqCvt cvt,
-			const char *namea,
-			const char *nameb, ajint begina, ajint beginb);
 void embAlignPrintProfile(AjPFile outf,
 			  const AjPStr m, const AjPStr n,
 			  ajint start1, ajint start2, float score, AjBool mark,
@@ -144,8 +194,20 @@ void embAlignUnused(void);
 ** End of prototype definitions
 */
 
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+#ifdef AJ_COMPILE_DEPRECATED
+
+__deprecated void embAlignPrintLocal(AjPFile outf,
+                                     const AjPStr m, const AjPStr n,
+                                     ajint start1, ajint start2,
+                                     float score, AjBool mark,
+                                     float * const *sub, const AjPSeqCvt cvt,
+                                     const char *namea, const char *nameb,
+                                     ajint begina, ajint beginb);
+
 #endif
 
-#ifdef __cplusplus
-}
-#endif
+AJ_END_DECLS
+
+#endif  /* !EMBALN_H */

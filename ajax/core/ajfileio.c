@@ -1,29 +1,40 @@
-/******************************************************************************
-** @source AJAX file routines
+/* @source ajfileio ***********************************************************
 **
-** @version 1.0
-** @modified May 14 Jon Ison Added ajFileExtnTrim & ajFileDirExtnTrim
+** AJAX file routines
+**
+** @author Copyright (C) 1999 Peter Rice
+** @version $Revision: 1.28 $
+** @modified Peter Rice pmr@ebi.ac.uk I/O file functions from ajfile.c
+** @modified $Date: 2012/03/13 13:29:28 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
 
+#include "ajlib.h"
+
+#include "ajfileio.h"
+#include "ajutil.h"
+#include "ajfile.h"
+
+#include <string.h>
 #include <errno.h>
+
 
 static void   filebuffLineAdd(AjPFilebuff thys, const AjPStr line);
 
@@ -82,6 +93,8 @@ static void   filebuffLineAdd(AjPFilebuff thys, const AjPStr line);
 ** @param [w] Pdest [AjPStr*] Buffer to hold the current line.
 ** @return [AjBool] ajTrue on success.
 ** @category modify [AjPFile] Reads a record from a file
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -95,17 +108,6 @@ AjBool ajReadline(AjPFile file, AjPStr* Pdest)
 
 
 
-/* @obsolete ajFileGets
-** @rename ajReadline
-*/
-__deprecated AjBool ajFileGets(AjPFile thys, AjPStr* pdest)
-{
-    return ajReadline(thys, pdest);
-}
-
-
-
-
 /* @func ajReadlineAppend *****************************************************
 **
 ** Reads a record from a file and appends it to the user supplied buffer.
@@ -113,6 +115,8 @@ __deprecated AjBool ajFileGets(AjPFile thys, AjPStr* pdest)
 ** @param [u] file [AjPFile] Input file.
 ** @param [u] Pdest [AjPStr*] Buffer to hold results.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -137,17 +141,6 @@ AjBool ajReadlineAppend(AjPFile file, AjPStr* Pdest)
 
 
 
-/* @obsolete ajFileReadAppend
-** @rename ajReadlineAppend
-*/
-__deprecated AjBool ajFileReadAppend(AjPFile thys, AjPStr* pbuff)
-{
-    return ajReadlineAppend(thys, pbuff);
-}
-
-
-
-
 /* @func ajReadlinePos ********************************************************
 **
 ** Reads a line from a file.
@@ -157,6 +150,8 @@ __deprecated AjBool ajFileReadAppend(AjPFile thys, AjPStr* pbuff)
 ** @param [w] Ppos [ajlong*] File position before the read.
 ** @return [AjBool] ajTrue on success.
 ** @category modify [AjPFile] Reads a record from a file
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -336,17 +331,6 @@ AjBool ajReadlinePos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
 
 
 
-/* @obsolete ajFileGetsL
-** @rename ajReadlinePos
-*/
-__deprecated AjBool ajFileGetsL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
-{
-    return ajReadlinePos(thys, pdest, fpos);
-}
-
-
-
-
 /* @func ajReadlineTrim *******************************************************
 **
 ** Reads a line from a file and removes any trailing newline.
@@ -356,6 +340,8 @@ __deprecated AjBool ajFileGetsL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
 ** @return [AjBool] ajTrue on success.
 ** @category modify [AjPFile] Reads a record from a file and removes
 **                            newline characters
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -364,32 +350,6 @@ AjBool ajReadlineTrim(AjPFile file, AjPStr* Pdest)
     ajlong fpos=0;
 
     return ajReadlineTrimPos(file, Pdest, &fpos);
-}
-
-
-
-
-/* @obsolete ajFileGetsTrim
-** @rename ajReadlineTrim
-*/
-__deprecated AjBool ajFileGetsTrim(AjPFile thys, AjPStr* pdest)
-{
-    ajlong fpos=0;
-
-    return ajReadlineTrimPos(thys, pdest, &fpos);
-}
-
-
-
-
-/* @obsolete ajFileReadLine
-** @rename ajReadlineTrim
-*/
-__deprecated AjBool ajFileReadLine(AjPFile thys, AjPStr* pdest)
-{
-    ajlong fpos=0;
-
-    return ajReadlineTrimPos(thys, pdest, &fpos);
 }
 
 
@@ -405,6 +365,8 @@ __deprecated AjBool ajFileReadLine(AjPFile thys, AjPStr* pdest)
 ** @return [AjBool] ajTrue on success.
 ** @category modify [AjPFile] Reads a record from a file and removes
 **                            newline characters
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -438,17 +400,6 @@ AjBool ajReadlineTrimPos(AjPFile file, AjPStr* Pdest, ajlong* Ppos)
 
 
 
-/* @obsolete ajFileGetsTrimL
-** @rename ajReadlineTrimPos
-*/
-__deprecated AjBool ajFileGetsTrimL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
-{
-    return ajReadlineTrimPos(thys, pdest, fpos);
-}
-
-
-
-
 /* @section file binary read operations
 **
 ** @fdata [AjPFile]
@@ -470,6 +421,7 @@ __deprecated AjBool ajFileGetsTrimL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
 ** @nam3rule Uint4 Binary read of a 4 byte unsigned integer
 ** @nam3rule Uint8 Binary read of an 8 byte unsigned integer
 ** @nam3rule Str Binary read of a string
+** @nam4rule StrTrim Trim trailing space from a string
 ** @suffix Endian Data in file is big-endian
 ** @suffix Local Data in file  is in local endian-ness
 **
@@ -479,6 +431,8 @@ __deprecated AjBool ajFileGetsTrimL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
 ** @argrule Binary buffer [void*] Buffer for binary read
 ** @argrule Char size [size_t] Size of each element
 ** @argrule Char buffer [char*] Buffer for binary read
+** @argrule Str size [size_t] Size of each element
+** @argrule Str Pstr [AjPStr*] Buffer for binary read
 **
 ** @argrule Int Pi [ajint*] Integer value
 ** @argrule Int2 Pi2 [ajshort*] Integer 2 byte value
@@ -498,7 +452,7 @@ __deprecated AjBool ajFileGetsTrimL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
 
 
 
-/* @func ajReadbinBinary *****************************************************
+/* @func ajReadbinBinary ******************************************************
 **
 ** Binary read from an input file object using the C 'fread' function.
 **
@@ -507,6 +461,8 @@ __deprecated AjBool ajFileGetsTrimL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
 ** @param [r] size [size_t] Number of bytes per element.
 ** @param [w] buffer [void*] Buffer for output.
 ** @return [size_t] Return value from 'fread'
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -519,19 +475,7 @@ size_t ajReadbinBinary(AjPFile file, size_t count,size_t size,
 
 
 
-/* @obsolete ajFileRead
-** @replace ajReadbinBinary (1,2,3,4/4,3,2,1)
-*/
-__deprecated size_t ajFileRead(void* ptr, size_t element_size, size_t count,
-		  AjPFile file)
-{
-    return ajReadbinBinary(file, count, element_size, ptr);
-}
-
-
-
-
-/* @func ajReadbinChar ****************************************************
+/* @func ajReadbinChar ********************************************************
 **
 ** Reads a character string from a file
 **
@@ -539,11 +483,13 @@ __deprecated size_t ajFileRead(void* ptr, size_t element_size, size_t count,
 ** @param [r] size[size_t] Number of bytes to read from index file.
 ** @param [w] buffer[char*] Buffer to read into
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
 size_t ajReadbinChar(AjPFile file, size_t size, 
-                         char* buffer)
+                     char* buffer)
 {
     size_t ret;
 
@@ -555,7 +501,7 @@ size_t ajReadbinChar(AjPFile file, size_t size,
 
 
 
-/* @func ajReadbinCharTrim *************************************************
+/* @func ajReadbinCharTrim ****************************************************
 **
 ** Reads a character string from a file and trims trailing spaces
 **
@@ -563,6 +509,8 @@ size_t ajReadbinChar(AjPFile file, size_t size,
 ** @param [r] size[size_t] Number of bytes to read from index file.
 ** @param [w] buffer[char*] Buffer to read into
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -593,7 +541,7 @@ size_t ajReadbinCharTrim(AjPFile file, size_t size,
 
 
 
-/* @func ajReadbinInt ********************************************************
+/* @func ajReadbinInt *********************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. Converts from little-endian.
@@ -601,6 +549,8 @@ size_t ajReadbinCharTrim(AjPFile file, size_t size,
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pi [ajint*] Integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -620,7 +570,7 @@ size_t ajReadbinInt(AjPFile file, ajint *Pi)
 
 
 
-/* @func ajReadbinIntEndian **************************************************
+/* @func ajReadbinIntEndian ***************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. Converts from big-endian.
@@ -628,6 +578,8 @@ size_t ajReadbinInt(AjPFile file, ajint *Pi)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pi [ajint*] Integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -648,7 +600,7 @@ size_t ajReadbinIntEndian(AjPFile file, ajint *Pi)
 
 
 
-/* @func ajReadbinIntLocal **************************************************
+/* @func ajReadbinIntLocal ****************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. No conversion (assumes integer was written
@@ -657,6 +609,8 @@ size_t ajReadbinIntEndian(AjPFile file, ajint *Pi)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pi [ajint*] Integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -672,7 +626,7 @@ size_t ajReadbinIntLocal(AjPFile file, ajint *Pi)
 
 
 
-/* @func ajReadbinInt2 *******************************************************
+/* @func ajReadbinInt2 ********************************************************
 **
 ** Binary read of a 2 byte integer from an input file object using
 ** the C 'fread' function. Converts from little-endian.
@@ -680,6 +634,8 @@ size_t ajReadbinIntLocal(AjPFile file, ajint *Pi)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pi2 [ajshort*] Integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -699,7 +655,7 @@ size_t ajReadbinInt2(AjPFile file, ajshort *Pi2)
 
 
 
-/* @func ajReadbinInt2Endian *************************************************
+/* @func ajReadbinInt2Endian **************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. Converts from big-endian.
@@ -707,6 +663,8 @@ size_t ajReadbinInt2(AjPFile file, ajshort *Pi2)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pi2 [ajshort*] Integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -726,7 +684,7 @@ size_t ajReadbinInt2Endian(AjPFile file, ajshort *Pi2)
 
 
 
-/* @func ajReadbinInt2Local *************************************************
+/* @func ajReadbinInt2Local ***************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. No conversion (assumes integer was written
@@ -735,6 +693,8 @@ size_t ajReadbinInt2Endian(AjPFile file, ajshort *Pi2)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pi2 [ajshort*] Integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -750,7 +710,7 @@ size_t ajReadbinInt2Local(AjPFile file, ajshort *Pi2)
 
 
 
-/* @func ajReadbinInt4 *******************************************************
+/* @func ajReadbinInt4 ********************************************************
 **
 ** Binary read of a 4 byte integer from an input file object using
 ** the C 'fread' function.
@@ -758,6 +718,8 @@ size_t ajReadbinInt2Local(AjPFile file, ajshort *Pi2)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pi4 [ajint*] Integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -777,7 +739,7 @@ size_t ajReadbinInt4(AjPFile file, ajint *Pi4)
 
 
 
-/* @func ajReadbinInt4Endian *************************************************
+/* @func ajReadbinInt4Endian **************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. Converts from big-endian.
@@ -785,6 +747,8 @@ size_t ajReadbinInt4(AjPFile file, ajint *Pi4)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pi4 [ajint*] Integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -804,7 +768,7 @@ size_t ajReadbinInt4Endian(AjPFile file, ajint *Pi4)
 
 
 
-/* @func ajReadbinInt4Local *************************************************
+/* @func ajReadbinInt4Local ***************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. No conversion (assumes integer was written
@@ -813,6 +777,8 @@ size_t ajReadbinInt4Endian(AjPFile file, ajint *Pi4)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pi4 [ajint*] Integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -828,7 +794,7 @@ size_t ajReadbinInt4Local(AjPFile file, ajint *Pi4)
 
 
 
-/* @func ajReadbinInt8 *******************************************************
+/* @func ajReadbinInt8 ********************************************************
 **
 ** Binary read of an 8 byte integer from an input file object using
 ** the C 'fread' function. Converts from little-endian.
@@ -836,6 +802,8 @@ size_t ajReadbinInt4Local(AjPFile file, ajint *Pi4)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pi8 [ajlong*] Integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -855,7 +823,7 @@ size_t ajReadbinInt8(AjPFile file, ajlong *Pi8)
 
 
 
-/* @func ajReadbinInt8Endian *************************************************
+/* @func ajReadbinInt8Endian **************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. Converts from big-endian.
@@ -863,6 +831,8 @@ size_t ajReadbinInt8(AjPFile file, ajlong *Pi8)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pi8 [ajlong*] Integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -882,7 +852,7 @@ size_t ajReadbinInt8Endian(AjPFile file, ajlong *Pi8)
 
 
 
-/* @func ajReadbinInt8Local *************************************************
+/* @func ajReadbinInt8Local ***************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. No conversion (assumes integer was written
@@ -891,6 +861,8 @@ size_t ajReadbinInt8Endian(AjPFile file, ajlong *Pi8)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pi8 [ajlong*] Integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -906,7 +878,75 @@ size_t ajReadbinInt8Local(AjPFile file, ajlong *Pi8)
 
 
 
-/* @func ajReadbinUint *******************************************************
+/* @func ajReadbinStr *********************************************************
+**
+** Reads a string from a file
+**
+** @param [u] file [AjPFile] File object.
+** @param [r] size [size_t] Number of bytes to read from index file.
+** @param [w] Pstr [AjPStr*] Buffer to read into
+** @return [size_t] Number of bytes read.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+size_t ajReadbinStr(AjPFile file, size_t size, 
+                    AjPStr* Pstr)
+{
+    size_t ret;
+    char* cp;
+
+    ajStrSetRes(Pstr, size+1);
+    cp = ajStrGetuniquePtr(Pstr);
+
+    ret = fread(cp, 1, size, file->fp);
+    cp[size] = '\0';
+
+    ajStrSetValid(Pstr);
+
+    return ret;
+}
+
+
+
+
+/* @func ajReadbinStrTrim *****************************************************
+**
+** Reads a character string from a file and trims trailing spaces
+**
+** @param [u] file [AjPFile] File object.
+** @param [r] size [size_t] Number of bytes to read from index file.
+** @param [w] Pstr [AjPStr*] Buffer to read into
+** @return [size_t] Number of bytes read.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+size_t ajReadbinStrTrim(AjPFile file, size_t size,
+                        AjPStr* Pstr)
+{
+    size_t ret;
+    char* cp;
+
+    ajStrSetRes(Pstr, size+1);
+    cp = ajStrGetuniquePtr(Pstr);
+
+    ret = fread(cp, 1, size, file->fp);
+    cp[size] = '\0';
+
+    ajStrSetValid(Pstr);
+
+    ajStrTrimEndC(Pstr, " ");
+
+    return ret;
+}
+
+
+
+
+/* @func ajReadbinUint ********************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function.
@@ -914,6 +954,8 @@ size_t ajReadbinInt8Local(AjPFile file, ajlong *Pi8)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pu [ajuint*] Unsigned integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -938,7 +980,7 @@ size_t ajReadbinUint(AjPFile file, ajuint *Pu)
 
 
 
-/* @func ajReadbinUintEndian *************************************************
+/* @func ajReadbinUintEndian **************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. Converts from big-endian.
@@ -946,6 +988,8 @@ size_t ajReadbinUint(AjPFile file, ajuint *Pu)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pu [ajuint*] Unsigned integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -970,7 +1014,7 @@ size_t ajReadbinUintEndian(AjPFile file, ajuint *Pu)
 
 
 
-/* @func ajReadbinUintLocal *************************************************
+/* @func ajReadbinUintLocal ***************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. No conversion (assumes integer was written
@@ -979,6 +1023,8 @@ size_t ajReadbinUintEndian(AjPFile file, ajuint *Pu)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pu [ajuint*] Unsigned integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -994,7 +1040,7 @@ size_t ajReadbinUintLocal(AjPFile file, ajuint *Pu)
 
 
 
-/* @func ajReadbinUint2 ******************************************************
+/* @func ajReadbinUint2 *******************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. Converts from little-endian.
@@ -1002,6 +1048,8 @@ size_t ajReadbinUintLocal(AjPFile file, ajuint *Pu)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pu2 [ajushort*] Unsigned integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1026,7 +1074,7 @@ size_t ajReadbinUint2(AjPFile file, ajushort *Pu2)
 
 
 
-/* @func ajReadbinUint2Endian ************************************************
+/* @func ajReadbinUint2Endian *************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. Converts from big-endian.
@@ -1034,6 +1082,8 @@ size_t ajReadbinUint2(AjPFile file, ajushort *Pu2)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pu2 [ajushort*] Unsigned integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1058,7 +1108,7 @@ size_t ajReadbinUint2Endian(AjPFile file, ajushort *Pu2)
 
 
 
-/* @func ajReadbinUint2Local ************************************************
+/* @func ajReadbinUint2Local **************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. No conversion (assumes integer was written
@@ -1067,6 +1117,8 @@ size_t ajReadbinUint2Endian(AjPFile file, ajushort *Pu2)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pu2 [ajushort*] Unsigned integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1082,7 +1134,7 @@ size_t ajReadbinUint2Local(AjPFile file, ajushort *Pu2)
 
 
 
-/* @func ajReadbinUint4 ******************************************************
+/* @func ajReadbinUint4 *******************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. Converts from little-endian.
@@ -1090,6 +1142,8 @@ size_t ajReadbinUint2Local(AjPFile file, ajushort *Pu2)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pu4 [ajuint*] Unsigned integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1114,7 +1168,7 @@ size_t ajReadbinUint4(AjPFile file, ajuint *Pu4)
 
 
 
-/* @func ajReadbinUint4Endian ************************************************
+/* @func ajReadbinUint4Endian *************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. Converts from a big-endian.
@@ -1122,6 +1176,8 @@ size_t ajReadbinUint4(AjPFile file, ajuint *Pu4)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pu4 [ajuint*] Unsigned integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1146,7 +1202,7 @@ size_t ajReadbinUint4Endian(AjPFile file, ajuint *Pu4)
 
 
 
-/* @func ajReadbinUint4Local ************************************************
+/* @func ajReadbinUint4Local **************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. No conversion (assumes integer was written
@@ -1155,6 +1211,8 @@ size_t ajReadbinUint4Endian(AjPFile file, ajuint *Pu4)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pu4 [ajuint*] Unsigned integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1170,7 +1228,7 @@ size_t ajReadbinUint4Local(AjPFile file, ajuint *Pu4)
 
 
 
-/* @func ajReadbinUint8 ******************************************************
+/* @func ajReadbinUint8 *******************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. Converts from little-endian.
@@ -1178,6 +1236,8 @@ size_t ajReadbinUint4Local(AjPFile file, ajuint *Pu4)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pu8 [ajulong*] Unsigned long integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1202,7 +1262,7 @@ size_t ajReadbinUint8(AjPFile file, ajulong *Pu8)
 
 
 
-/* @func ajReadbinUint8Endian ************************************************
+/* @func ajReadbinUint8Endian *************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. Converts from big-endian.
@@ -1210,6 +1270,8 @@ size_t ajReadbinUint8(AjPFile file, ajulong *Pu8)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pu8 [ajulong*] Unsigned long integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1234,7 +1296,7 @@ size_t ajReadbinUint8Endian(AjPFile file, ajulong *Pu8)
 
 
 
-/* @func ajReadbinUint8Local ************************************************
+/* @func ajReadbinUint8Local **************************************************
 **
 ** Binary read of an unsigned integer from an input file object using
 ** the C 'fread' function. No conversion (assumes integer was written
@@ -1243,6 +1305,8 @@ size_t ajReadbinUint8Endian(AjPFile file, ajulong *Pu8)
 ** @param [u] file [AjPFile] Input file.
 ** @param [w] Pu8 [ajulong*] Unsigned long integer value
 ** @return [size_t] Number of bytes read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1282,6 +1346,9 @@ size_t ajReadbinUint8Local(AjPFile file, ajulong *Pu8)
 ** @nam3rule Int2 Binary read of a 2 byte integer
 ** @nam3rule Int4 Binary read of a 4 byte integer
 ** @nam3rule Int8 Binary read of an 8 byte integer
+** @nam3rule Uint2 Binary read of a 2 byte unsigned integer
+** @nam3rule Uint4 Binary read of a 4 byte unsigned integer
+** @nam3rule Uint8 Binary read of an 8 byte unsigned integer
 ** @nam3rule Newline Write newline character(s)
 ** @nam3rule Str Write a string object
 **
@@ -1296,6 +1363,9 @@ size_t ajReadbinUint8Local(AjPFile file, ajulong *Pu8)
 ** @argrule Int2 i2 [ajshort] Integer 2 byte value
 ** @argrule Int4 i4 [ajint] Integer 4 byte value
 ** @argrule Int8 i8 [ajlong] Integer 8 byte value
+** @argrule Uint2 u2 [ajushort] Integer 2 byte unsigned value
+** @argrule Uint4 u4 [ajuint] Integer 4 byte unsigned value
+** @argrule Uint8 u8 [ajulong] Integer 8 byte unsigned value
 ** @argrule Uint u [ajuint] Unsigned integer value
 ** @argrule Str str [const AjPStr] String (length passed separately)
 ** @argrule Str len [size_t] String length to be written
@@ -1309,20 +1379,7 @@ size_t ajReadbinUint8Local(AjPFile file, ajulong *Pu8)
 
 
 
-/* @obsolete ajFileOutHeader
-** @remove Not used
-*/
-__deprecated void ajFileOutHeader(AjPFile file)
-{
-    ajFmtPrintF(file, "Standard output header ...\n");
-
-    return;
-}
-
-
-
-
-/* @func ajWritebinBinary ****************************************************
+/* @func ajWritebinBinary *****************************************************
 **
 ** Binary write to an output file object using the C 'fwrite' function.
 **
@@ -1331,6 +1388,8 @@ __deprecated void ajFileOutHeader(AjPFile file)
 ** @param [r] size [size_t] Number of bytes per element.
 ** @param [r] buffer [const void*] Buffer for output.
 ** @return [size_t] Return value from 'fwrite'
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1343,25 +1402,15 @@ size_t ajWritebinBinary(AjPFile file, size_t count,
 
 
 
-/* @obsolete ajFileWrite
-** @replace ajWritebinBinary (1,2,3,4/1,4,3,2)
-*/
-__deprecated size_t ajFileWrite(AjPFile file, const void* ptr,
-		   size_t element_size, size_t count)
-{
-    return ajWritebinBinary(file,count,element_size,ptr);
-}
-
-
-
-
-/* @func ajWritebinByte ******************************************************
+/* @func ajWritebinByte *******************************************************
 **
 ** Writes a single byte to a binary file
 **
 ** @param [u] file [AjPFile] Output file
 ** @param [r] ch [char] Character
 ** @return [size_t] Return value from fwrite
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1373,18 +1422,7 @@ size_t ajWritebinByte(AjPFile file, char ch)
 
 
 
-/* @obsolete ajFileWriteByte
-** @rename ajWritebinByte
-*/
-__deprecated ajint ajFileWriteByte(AjPFile thys, char ch)
-{
-    return ajWritebinByte(thys, ch);
-}
-
-
-
-
-/* @func ajWritebinChar ******************************************************
+/* @func ajWritebinChar *******************************************************
 **
 ** Writes a text string to a binary file
 **
@@ -1392,6 +1430,8 @@ __deprecated ajint ajFileWriteByte(AjPFile thys, char ch)
 ** @param [r] txt [const char*] Text string
 ** @param [r] len [size_t] Length (padded) to write to the file
 ** @return [size_t] Return value from fwrite
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1419,13 +1459,15 @@ size_t ajWritebinChar(AjPFile file, const char* txt, size_t len)
 
 
 
-/* @func ajWritebinInt2 ******************************************************
+/* @func ajWritebinInt2 *******************************************************
 **
 ** Writes a 2 byte integer to a binary file, with the correct byte orientation
 **
 ** @param [u] file [AjPFile] Output file
 ** @param [r] i2 [ajshort] Integer
 ** @return [size_t] Return value from fwrite
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1447,24 +1489,15 @@ size_t ajWritebinInt2(AjPFile file, ajshort i2)
 
 
 
-/* @obsolete ajFileWriteInt2
-** @rename ajWritebinInt2
-*/
-__deprecated ajint ajFileWriteInt2(AjPFile thys, ajshort i)
-{
-    return ajWritebinInt2(thys, i);
-}
-
-
-
-
-/* @func ajWritebinInt4 ******************************************************
+/* @func ajWritebinInt4 *******************************************************
 **
 ** Writes a 4 byte integer to a binary file, with the correct byte orientation
 **
 ** @param [u] file [AjPFile] Output file
 ** @param [r] i4 [ajint] Integer
 ** @return [size_t] Return value from fwrite
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1486,24 +1519,15 @@ size_t ajWritebinInt4(AjPFile file, ajint i4)
 
 
 
-/* @obsolete ajFileWriteInt4
-** @rename ajWritebinInt4
-*/
-__deprecated ajint ajFileWriteInt4(AjPFile thys, ajint i)
-{
-    return ajWritebinInt4(thys, i);
-}
-
-
-
-
-/* @func ajWritebinInt8 ******************************************************
+/* @func ajWritebinInt8 *******************************************************
 **
 ** Writes an 8 byte long to a binary file, with the correct byte orientation
 **
 ** @param [u] file [AjPFile] Output file
 ** @param [r] i8 [ajlong] Integer
 ** @return [size_t] Return value from fwrite
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1531,6 +1555,8 @@ size_t ajWritebinInt8(AjPFile file, ajlong i8)
 **
 ** @param [u] file [AjPFile] Output file
 ** @return [size_t] Return value from fwrite
+**
+** @release 6.2.0
 ******************************************************************************/
 
 size_t ajWritebinNewline(AjPFile file)
@@ -1550,7 +1576,7 @@ size_t ajWritebinNewline(AjPFile file)
 
 
 
-/* @func ajWritebinStr *******************************************************
+/* @func ajWritebinStr ********************************************************
 **
 ** Writes a string to a binary file
 **
@@ -1558,6 +1584,8 @@ size_t ajWritebinNewline(AjPFile file)
 ** @param [r] str [const AjPStr] String
 ** @param [r] len [size_t] Length (padded) to use in the file
 ** @return [size_t] Return value from fwrite
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1594,12 +1622,95 @@ size_t ajWritebinStr(AjPFile file, const AjPStr str, size_t len)
 
 
 
-/* @obsolete ajFileWriteStr
-** @rename ajWritebinStr
-*/
-__deprecated ajint ajFileWriteStr(AjPFile thys, const AjPStr str, ajuint len)
+/* @func ajWritebinUint2 ******************************************************
+**
+** Writes a 2 byte unsigned integer to a binary file, with the correct
+** byte orientation
+**
+** @param [u] file [AjPFile] Output file
+** @param [r] u2 [ajushort] Unsigned integer
+** @return [size_t] Return value from fwrite
+**
+** @release 6.0.0
+** @@
+******************************************************************************/
+
+size_t ajWritebinUint2(AjPFile file, ajushort u2)
 {
-    return ajWritebinStr(thys, str, len);
+#ifdef WORDS_BIGENDIAN
+    unsigned short j;
+
+    j = u2;
+
+    ajByteRevLen2u(&j);
+
+    return fwrite(&j, 2, 1, file->fp);
+#else
+    return fwrite(&u2, 2, 1, file->fp);
+#endif
+
+}
+
+
+
+
+/* @func ajWritebinUint4 ******************************************************
+**
+** Writes a 4 byte unsigned integer to a binary file, with the correct
+** byte orientation
+**
+** @param [u] file [AjPFile] Output file
+** @param [r] u4 [ajuint] Unsigned integer
+** @return [size_t] Return value from fwrite
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+size_t ajWritebinUint4(AjPFile file, ajuint u4)
+{
+#ifdef WORDS_BIGENDIAN
+    ajuint j;
+
+    j = u4;
+
+    ajByteRevLen4u(&j);
+
+    return fwrite(&j, 4, 1, file->fp);
+#else
+    return fwrite(&u4, 4, 1, file->fp);
+#endif
+}
+
+
+
+
+/* @func ajWritebinUint8 ******************************************************
+**
+** Writes an 8 byte unsigned long to a binary file, with the correct
+** byte orientation
+**
+** @param [u] file [AjPFile] Output file
+** @param [r] u8 [ajulong] Unsigned integer
+** @return [size_t] Return value from fwrite
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+size_t ajWritebinUint8(AjPFile file, ajulong u8)
+{
+#ifdef WORDS_BIGENDIAN
+    ajulong j;
+
+    j = u8;
+
+    ajByteRevLen8u(&j);
+
+    return fwrite(&j, 8, 1, file->fp);
+#else
+    return fwrite(&u8, 8, 1, file->fp);
+#endif
 }
 
 
@@ -1629,13 +1740,15 @@ __deprecated ajint ajFileWriteStr(AjPFile thys, const AjPStr str, ajuint len)
 
 
 
-/* @func ajWriteline *******************************************************
+/* @func ajWriteline **********************************************************
 **
 ** Writes a string to a file, including any newline characters
 **
 ** @param [u] file [AjPFile] Output file
 ** @param [r] line [const AjPStr] String to be written
 ** @return [AjBool] True on success
+**
+** @release 6.0.0
 ******************************************************************************/
 
 AjBool ajWriteline(AjPFile file, const AjPStr line)
@@ -1649,13 +1762,15 @@ AjBool ajWriteline(AjPFile file, const AjPStr line)
 
 
 
-/* @func ajWritelineNewline ****************************************************
+/* @func ajWritelineNewline ***************************************************
 **
 ** Writes a string to a file, including any newline characters
 **
 ** @param [u] file [AjPFile] Output file
 ** @param [r] line [const AjPStr] String to be written
 ** @return [AjBool] True on success
+**
+** @release 6.2.0
 ******************************************************************************/
 
 AjBool ajWritelineNewline(AjPFile file, const AjPStr line)
@@ -1679,13 +1794,15 @@ AjBool ajWritelineNewline(AjPFile file, const AjPStr line)
 
 
 
-/* @func ajWritelineSpace ****************************************************
+/* @func ajWritelineSpace *****************************************************
 **
 ** Writes a string to a file, with a leading space
 **
 ** @param [u] file [AjPFile] Output file
 ** @param [r] line [const AjPStr] String to be written
 ** @return [AjBool] True on success
+**
+** @release 6.2.0
 ******************************************************************************/
 
 AjBool ajWritelineSpace(AjPFile file, const AjPStr line)
@@ -1750,6 +1867,8 @@ AjBool ajWritelineSpace(AjPFile file, const AjPStr line)
 ** @param [u] buff [AjPFilebuff] Buffered input file.
 ** @param [w] Pdest [AjPStr*] Buffer to hold results.
 ** @return [AjBool] ajTrue if data was read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1763,18 +1882,7 @@ AjBool ajBuffreadLine(AjPFilebuff buff, AjPStr* Pdest)
 
 
 
-/* @obsolete ajFileBuffGet
-** @rename ajBuffreadLine
-*/
-__deprecated AjBool ajFileBuffGet(AjPFilebuff thys, AjPStr* pdest)
-{
-    return ajBuffreadLine(thys, pdest);
-}
-
-
-
-
-/* @func ajBuffreadLinePos *****************************************************
+/* @func ajBuffreadLinePos ****************************************************
 **
 ** Reads a line from a buffered file. If the buffer has data, reads from the
 ** buffer. If the buffer is exhausted, reads from the file. If the file is
@@ -1785,6 +1893,8 @@ __deprecated AjBool ajFileBuffGet(AjPFilebuff thys, AjPStr* pdest)
 ** @param [w] Pdest [AjPStr*] Buffer to hold results.
 ** @param [w] Ppos [ajlong*] File position before the read.
 ** @return [AjBool] ajTrue if data was read.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1873,19 +1983,7 @@ AjBool ajBuffreadLinePos(AjPFilebuff buff, AjPStr* Pdest, ajlong* Ppos)
 
 
 
-/* @obsolete ajFileBuffGetL
-** @rename ajBuffreadLinePos
-*/
-__deprecated AjBool ajFileBuffGetL(AjPFilebuff buff, AjPStr* pdest,
-                                   ajlong* fpos)
-{
-    return ajBuffreadLinePos(buff, pdest, fpos);
-}
-
-
-
-
-/* @func ajBuffreadLinePosStore ************************************************
+/* @func ajBuffreadLinePosStore ***********************************************
 **
 ** Reads a line from a buffered file. Also appends the line to
 ** a given string if the append flag is true. A double NULL character
@@ -1902,6 +2000,8 @@ __deprecated AjBool ajFileBuffGetL(AjPFilebuff buff, AjPStr* pdest,
 ** @return [AjBool] ajTrue if data was read.
 ** @category modify [AjPFilebuff] Reads a line from a buffered file
 **                                with append.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1924,20 +2024,7 @@ AjBool ajBuffreadLinePosStore(AjPFilebuff buff, AjPStr* Pdest, ajlong* Ppos,
 
 
 
-/* @obsolete ajFileBuffGetStoreL
-** @rename ajBuffreadLinePosStore
-*/
-__deprecated AjBool ajFileBuffGetStoreL(AjPFilebuff thys, AjPStr* pdest,
-			   ajlong* fpos,
-			   AjBool store, AjPStr *astr)
-{
-    return ajBuffreadLinePosStore(thys, pdest, fpos, store, astr);
-}
-
-
-
-
-/* @func ajBuffreadLineStore ***************************************************
+/* @func ajBuffreadLineStore **************************************************
 **
 ** Reads a line from a buffered file. Also appends the line to
 ** a given string if the append flag is true. A double NULL character
@@ -1953,6 +2040,8 @@ __deprecated AjBool ajFileBuffGetStoreL(AjPFilebuff thys, AjPStr* pdest,
 ** @return [AjBool] ajTrue if data was read.
 ** @category modify [AjPFilebuff] Reads a line from a buffered file
 **                                with append.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -1976,19 +2065,7 @@ AjBool ajBuffreadLineStore(AjPFilebuff buff, AjPStr* Pdest,
 
 
 
-/* @obsolete ajFileBuffGetStore
-** @rename ajBuffreadLineStore
-*/
-__deprecated AjBool ajFileBuffGetStore(AjPFilebuff thys, AjPStr* pdest,
-			  AjBool store, AjPStr *astr)
-{
-    return ajBuffreadLineStore(thys, pdest, store, astr);
-}
-
-
-
-
-/* @func ajBuffreadLineTrim ****************************************************
+/* @func ajBuffreadLineTrim ***************************************************
 **
 ** Reads a line from a buffered file. If the buffer has data, reads from the
 ** buffer. If the buffer is exhausted, reads from the file. If the file is
@@ -1999,6 +2076,8 @@ __deprecated AjBool ajFileBuffGetStore(AjPFilebuff thys, AjPStr* pdest,
 ** @param [w] Pdest [AjPStr*] Buffer to hold results.
 ** @return [AjBool] ajTrue if data was read.
 ** @category modify [AjPFilebuff] Reads a line from a buffered file.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -2006,34 +2085,20 @@ AjBool ajBuffreadLineTrim(AjPFilebuff buff, AjPStr* Pdest)
 {
     AjBool ret;
     ajlong fpos = 0;
-    AjPStr dest;
 
     ret = ajBuffreadLinePos(buff, Pdest, &fpos);
     
     /* trim any trailing newline */
 
-    dest = *Pdest;
-
     /*ajDebug("Remove carriage-return characters from PC-style files\n");*/
-    if(ajStrGetCharLast(dest) == '\n')
+    if(ajStrGetCharLast(*Pdest) == '\n')
 	ajStrCutEnd(Pdest, 1);
 
     /* PC files have \r\n Macintosh files have just \r : this fixes both */
-    if(ajStrGetCharLast(dest) == '\r')
+    if(ajStrGetCharLast(*Pdest) == '\r')
 	ajStrCutEnd(Pdest, 1);
 
     return ret;
-}
-
-
-
-
-/* @obsolete ajFileBuffGetTrim
-** @rename ajBuffreadLineTrim
-*/
-__deprecated AjBool ajFileBuffGetTrim(AjPFilebuff thys, AjPStr* pdest)
-{
-    return ajBuffreadLineTrim(thys, pdest);
 }
 
 
@@ -2046,6 +2111,8 @@ __deprecated AjBool ajFileBuffGetTrim(AjPFilebuff thys, AjPStr* pdest)
 ** @param [u] buff [AjPFilebuff] File buffer
 ** @param [r] line [const AjPStr] Line
 ** @return [void]
+**
+** @release 6.0.0
 ******************************************************************************/
 
 static void filebuffLineAdd(AjPFilebuff buff, const AjPStr line)
@@ -2089,3 +2156,221 @@ static void filebuffLineAdd(AjPFilebuff buff, const AjPStr line)
         
     return;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajFileGets
+** @rename ajReadline
+*/
+__deprecated AjBool ajFileGets(AjPFile thys, AjPStr* pdest)
+{
+    return ajReadline(thys, pdest);
+}
+
+
+
+
+/* @obsolete ajFileReadAppend
+** @rename ajReadlineAppend
+*/
+__deprecated AjBool ajFileReadAppend(AjPFile thys, AjPStr* pbuff)
+{
+    return ajReadlineAppend(thys, pbuff);
+}
+
+
+
+
+/* @obsolete ajFileGetsL
+** @rename ajReadlinePos
+*/
+__deprecated AjBool ajFileGetsL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
+{
+    return ajReadlinePos(thys, pdest, fpos);
+}
+
+
+
+
+/* @obsolete ajFileGetsTrim
+** @rename ajReadlineTrim
+*/
+__deprecated AjBool ajFileGetsTrim(AjPFile thys, AjPStr* pdest)
+{
+    ajlong fpos=0;
+
+    return ajReadlineTrimPos(thys, pdest, &fpos);
+}
+
+
+
+
+/* @obsolete ajFileReadLine
+** @rename ajReadlineTrim
+*/
+__deprecated AjBool ajFileReadLine(AjPFile thys, AjPStr* pdest)
+{
+    ajlong fpos=0;
+
+    return ajReadlineTrimPos(thys, pdest, &fpos);
+}
+
+
+
+
+/* @obsolete ajFileGetsTrimL
+** @rename ajReadlineTrimPos
+*/
+__deprecated AjBool ajFileGetsTrimL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
+{
+    return ajReadlineTrimPos(thys, pdest, fpos);
+}
+
+
+
+
+/* @obsolete ajFileRead
+** @replace ajReadbinBinary (1,2,3,4/4,3,2,1)
+*/
+__deprecated size_t ajFileRead(void* ptr, size_t element_size, size_t count,
+		  AjPFile file)
+{
+    return ajReadbinBinary(file, count, element_size, ptr);
+}
+
+
+
+
+/* @obsolete ajFileOutHeader
+** @remove Not used
+*/
+__deprecated void ajFileOutHeader(AjPFile file)
+{
+    ajFmtPrintF(file, "Standard output header ...\n");
+
+    return;
+}
+
+
+
+
+/* @obsolete ajFileWrite
+** @replace ajWritebinBinary (1,2,3,4/1,4,3,2)
+*/
+__deprecated size_t ajFileWrite(AjPFile file, const void* ptr,
+		   size_t element_size, size_t count)
+{
+    return ajWritebinBinary(file,count,element_size,ptr);
+}
+
+
+
+
+/* @obsolete ajFileWriteByte
+** @rename ajWritebinByte
+*/
+__deprecated ajint ajFileWriteByte(AjPFile thys, char ch)
+{
+    return ajWritebinByte(thys, ch);
+}
+
+
+
+
+/* @obsolete ajFileWriteInt2
+** @rename ajWritebinInt2
+*/
+__deprecated ajint ajFileWriteInt2(AjPFile thys, ajshort i)
+{
+    return ajWritebinInt2(thys, i);
+}
+
+
+
+
+/* @obsolete ajFileWriteInt4
+** @rename ajWritebinInt4
+*/
+__deprecated ajint ajFileWriteInt4(AjPFile thys, ajint i)
+{
+    return ajWritebinInt4(thys, i);
+}
+
+
+
+
+/* @obsolete ajFileWriteStr
+** @rename ajWritebinStr
+*/
+__deprecated ajint ajFileWriteStr(AjPFile thys, const AjPStr str, ajuint len)
+{
+    return ajWritebinStr(thys, str, len);
+}
+
+
+
+
+/* @obsolete ajFileBuffGet
+** @rename ajBuffreadLine
+*/
+__deprecated AjBool ajFileBuffGet(AjPFilebuff thys, AjPStr* pdest)
+{
+    return ajBuffreadLine(thys, pdest);
+}
+
+
+
+
+/* @obsolete ajFileBuffGetL
+** @rename ajBuffreadLinePos
+*/
+__deprecated AjBool ajFileBuffGetL(AjPFilebuff buff, AjPStr* pdest,
+                                   ajlong* fpos)
+{
+    return ajBuffreadLinePos(buff, pdest, fpos);
+}
+
+
+
+
+/* @obsolete ajFileBuffGetStoreL
+** @rename ajBuffreadLinePosStore
+*/
+__deprecated AjBool ajFileBuffGetStoreL(AjPFilebuff thys, AjPStr* pdest,
+			   ajlong* fpos,
+			   AjBool store, AjPStr *astr)
+{
+    return ajBuffreadLinePosStore(thys, pdest, fpos, store, astr);
+}
+
+
+
+
+/* @obsolete ajFileBuffGetStore
+** @rename ajBuffreadLineStore
+*/
+__deprecated AjBool ajFileBuffGetStore(AjPFilebuff thys, AjPStr* pdest,
+			  AjBool store, AjPStr *astr)
+{
+    return ajBuffreadLineStore(thys, pdest, store, astr);
+}
+
+
+
+
+/* @obsolete ajFileBuffGetTrim
+** @rename ajBuffreadLineTrim
+*/
+__deprecated AjBool ajFileBuffGetTrim(AjPFilebuff thys, AjPStr* pdest)
+{
+    return ajBuffreadLineTrim(thys, pdest);
+}
+#endif

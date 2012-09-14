@@ -1,9 +1,9 @@
 application: biosed [
   documentation: "Replace or delete sequence sections"
   groups: "Edit"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0000369 operation Sequence cutting"
-    relations: "EDAM:0000232 operation Sequence merging"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:0369 Sequence cutting"
+    relations: "EDAM_operation:0232 Sequence merging"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "gapany"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -29,13 +29,13 @@ section: required [
     information: "Sequence section to match"
     default: "N"
     knowntype: "sequence"
-    relations: "EDAM:0000848 data Raw sequence"
+    relations: "EDAM_data:0848 Raw sequence"
   ]
 
   toggle: delete [
     information: "Delete the target sequence sections"
     default: "N"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   string: replace [
@@ -43,7 +43,7 @@ section: required [
     information: "Replacement sequence section"
     default: "A"
     knowntype: "sequence"
-    relations: "EDAM:0000848 data Raw sequence"
+    relations: "EDAM_data:0848 Raw sequence"
   ]
 
 endsection: required
@@ -61,7 +61,7 @@ section: additional [
     maximum: "$(sequence.len)"
     failrange: "N"
     trueminimum: "N"
-    relations: "EDAM:0001016 data Sequence position"
+    relations: "EDAM_data:1016 Sequence position"
   ]
 
 endsection: additional
@@ -73,7 +73,7 @@ section: output [
 
   seqout: outseq [
     parameter: "Y"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: output

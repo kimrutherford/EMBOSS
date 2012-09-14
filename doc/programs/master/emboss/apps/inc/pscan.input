@@ -11,7 +11,7 @@ ID   OPSD_HUMAN              Reviewed;         348 AA.
 AC   P08100; Q16414; Q2M249;
 DT   01-AUG-1988, integrated into UniProtKB/Swiss-Prot.
 DT   01-AUG-1988, sequence version 1.
-DT   15-JUN-2010, entry version 128.
+DT   13-JUN-2012, entry version 145.
 DE   RecName: Full=Rhodopsin;
 DE   AltName: Full=Opsin-2;
 GN   Name=RHO; Synonyms=OPN2;

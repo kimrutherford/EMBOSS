@@ -5,7 +5,7 @@ Here is a sample session with <b>wordmatch</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>wordmatch tsw:hba_human tsw:hbb_human </b>
-Finds regions of identity (exact matches) of two sequences
+Find regions of identity (exact matches) of two sequences
 Word size [4]: <b></b>
 Output alignment [hba_human.wordmatch]: <b></b>
 Features output [HBA_HUMAN.gff]: <b></b>

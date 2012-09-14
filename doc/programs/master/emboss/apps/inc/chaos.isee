@@ -19,7 +19,7 @@
 
 <tr>
 <td><a href="dan.html">dan</a></td>
-<td>Calculates nucleic acid melting temperature</td>
+<td>Calculate nucleic acid melting temperature</td>
 </tr>
 
 <tr>
@@ -34,7 +34,7 @@
 
 <tr>
 <td><a href="isochore.html">isochore</a></td>
-<td>Plots isochores in DNA sequences</td>
+<td>Plot isochores in DNA sequences</td>
 </tr>
 
 <tr>

@@ -4,8 +4,8 @@ application: est2genome [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
-    relations: "EDAM:0000182 topic Sequence alignment"
-    relations: "EDAM:0000293 operation Hybrid sequence alignment"
+    relations: "EDAM_topic:0182 Sequence alignment"
+    relations: "EDAM_operation:0292 Sequence alignment construction"
 ]
 
 section: input [
@@ -18,7 +18,7 @@ section: input [
     type: "dna"
     information: "Spliced EST nucleotide sequence(s)"
     knowntype: "est sequence"
-    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
+    relations: "EDAM_data:2887 Sequence record (nucleic acid)"
   ]
 
   sequence: genomesequence [
@@ -26,7 +26,7 @@ section: input [
     type: "dna"
     information: "Unspliced genomic nucleotide sequence"
     knowntype: "genomic sequence"
-    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
+    relations: "EDAM_data:2887 Sequence record (nucleic acid)"
   ]
 
 endsection: input
@@ -40,14 +40,14 @@ section: additional [
     additional: "Y"
     default: "1"
     information: "Score for matching two bases"
-    relations: "EDAM:0001401 data Match reward score"
+    relations: "EDAM_data:1401 Match reward score"
   ]
 
   integer: mismatch [
     additional: "Y"
     default: "1"
     information: "Cost for mismatching two bases"
-    relations: "EDAM:0001402 data Mismatch penalty score"
+    relations: "EDAM_data:1402 Mismatch penalty score"
   ]
 
   integer: gappenalty [
@@ -56,7 +56,7 @@ section: additional [
     information: "Gap penalty"
     help: "Cost for deleting a single base in either sequence,
            excluding introns"
-    relations: "EDAM:0002137 data Gap penalty"
+    relations: "EDAM_data:2137 Gap penalty"
   ]
 
   integer: intronpenalty [
@@ -64,7 +64,7 @@ section: additional [
     default: "40"
     information: "Intron penalty"
     help: "Cost for an intron, independent of length."
-    relations: "EDAM:0001772 data Score or penalty"
+    relations: "EDAM_data:1772 Score or penalty"
   ]
 
   integer: splicepenalty [
@@ -73,7 +73,7 @@ section: additional [
     information: "Splice site penalty"
     help: "Cost for an intron, independent of length and
            starting/ending on donor-acceptor sites"
-    relations: "EDAM:0001772 data Score or penalty"
+    relations: "EDAM_data:1772 Score or penalty"
   ]
 
   integer: minscore [
@@ -81,7 +81,7 @@ section: additional [
     default: "30"
     information: "Minimum accepted score"
     help: "Exclude alignments with scores below this threshold score."
-    relations: "EDAM:0002146 data Threshold"
+    relations: "EDAM_data:2146 Threshold"
   ]
 
 endsection: additional
@@ -94,7 +94,7 @@ section: advanced [
   boolean: reverse [
     information: "Reverse orientation"
     help: "Reverse the orientation of the EST sequence"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: usesplice [
@@ -102,7 +102,7 @@ section: advanced [
     information: "Use donor and acceptor splice sites"
     help: "Use donor and acceptor splice sites. If you want to ignore
            donor-acceptor sites then set this to be false."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   list: mode [
@@ -117,7 +117,7 @@ section: advanced [
            strand."
     values: "both:Both strands; forward:Forward strand only;
              reverse:Reverse strand only"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: best [
@@ -125,7 +125,7 @@ section: advanced [
     information: "Print out only best alignment"
     help: "You can print out all comparisons instead of just the best
            one by setting this to be false."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   float: space [
@@ -137,18 +137,18 @@ section: advanced [
            sequences can be aligned. \
            If you have a machine with plenty of memory you can raise this
            parameter (but do not exceed the machine's physical RAM)"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   integer: shuffle [
     information: "Shuffle"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   integer: seed [
     default: "20825"
     information: "Random number seed"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: advanced
@@ -161,7 +161,7 @@ section: output [
   outfile: outfile [
     parameter: "y"
     knowntype: "est2genome output"
-    relations: "EDAM:0001313 data Gene features (coding region)"
+    relations: "EDAM_data:1313 Nucleic acid features (coding sequence)"
   ]
 
   boolean: align [
@@ -170,13 +170,13 @@ section: output [
            last 5 bases of each intron, together with the intron width. The
            direction of splicing is indicated by angle brackets (forward or
            reverse) or ???? (unknown)."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   integer: width [
     default: "50"
     information: "Alignment width"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: output

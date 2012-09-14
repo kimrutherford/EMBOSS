@@ -1,8 +1,8 @@
 application: taxgetdown [
   documentation: "Get descendants of taxon(s)"
   groups: "Ontology:Taxonomy"
-    relations: "EDAM:0000637 topic Taxonomy"
-    relations: "EDAM:0002224 operation Data retrieval (ontology concept)"
+    relations: "EDAM_topic:0637 Taxonomy"
+    relations: "EDAM_operation:2422 Data retrieval"
 ]
 
 section: input [
@@ -12,7 +12,7 @@ section: input [
   taxon: taxons [
      default: ""
      parameter: "Y"
-     relations: "EDAM:0001875 identifier NCBI taxon"
+     relations: "EDAM_identifier:1875 NCBI taxon"
   ]
 
 
@@ -62,7 +62,7 @@ section: output [
 
   outtaxon: outfile [
     parameter: "Y"
-    relations: "EDAM:0002858 data Ontology concept"
+    relations: "EDAM_data:2858 Ontology concept"
   ]
 
 endsection: output

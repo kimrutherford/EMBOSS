@@ -1,0 +1,45 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: test.out</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID   EM498477; SV 1; linear; unassigned DNA; STD; UNC; 1791 BP.
+XX
+DE   marine metagenome JCVI_SCAF_1096627861213 genomic scaffold, whole genome
+DE   shotgun sequence.
+XX
+SQ   Sequence 1791 BP; 583 A; 286 C; 326 G; 545 T; 51 other;
+     agtacacaat atcctacaaa ttttaatcca ggaacaagtt tctttttggc aaatagtttt        60
+     gcaagatcac aggcacaatt tttgggagat agcacaggta taacaattaa tgaagttaat       120
+     agaatatcta aagctactgg accacttact gctgccactg gtgaaacttc atcatcagat       180
+     ccacatgctg gatttcagct tggtgtatta aatccttatg cttatgaacc tgctgatatt       240
+     gatgaatgta gtttgttaag cacatgttat tttaaattag gagatgccac ggtagatacg       300
+     gttaataata caattgatgt tggatttcct catggcctta gtgatttagt tttaggtaga       360
+     gtttttccgg gggcaggtaa taccttacct actggattaa ctgaaagaaa ttattatata       420
+     caagttatca attcaacaac acttgcattt tctaccagaa aatcaggaac taccacattt       480
+     agagcaaatt tatctacttc tggtagtgat gcaggaatag caaaggtttg tattgcaaca       540
+     gggataacat gttattattt ccaaaccagt ggatatgtat attttaccag ggacactcgc       600
+     gctcatttta gttataataa taatattgca cgagcacatt tatcgccagt aacaagatgg       660
+     ggtttacata ctgcaaatac aactgcaagg tctagagttg ataatggatt taattcctta       720
+     ggaggtgctg atatacgtgc taatcctaat ggattaatgg atataccaga gggtggaaac       780
+     ggtggcaata atgcacattt atattatcct tatggtagta caagtagaac taataataca       840
+     aattatttat attatggtat gagattagct cgtactcaag atggtggcac aaattatNNN       900
+     NNNNNNNNNN NNNNNNNNNN NNNNNNNNNN NNNNNNNNNN NNNNNNNNta tgctagatta       960
+     ttctgaagat ggtaacgaag atgccgatca gtacgcatta tggcttgcat ataaagaagt      1020
+     ttccgaaccg aattcgttct acattgcaaa tcatggtttt acaacgggcg acattgtaac      1080
+     atatagttca actggaactc ttcctgctgg tctcaatggt tttacaacgg caactgctca      1140
+     aataacaagt gctaacagat ttaaatttaa tagaaatagt gcagcagtaa atattgaaag      1200
+     tgtaggagtt gctggccaag atattacatt tactgcagtt tcattaaatc cacttggaaa      1260
+     ttcaattaac ttagtaggaa attcattaac caatggtgaa caagtttcat atacaaataa      1320
+     tggcgcatca aatattggtg gtcttacaag tggcactagt tattttgttt ttgatagaac      1380
+     atctgataca attaaacttg ccacaacgtt aactggttat accggagatg aagttttagt      1440
+     tgatacagat gccacatcag caacaggtgc tgcagcattt attaactcaa caaatggtag      1500
+     aattcaaggt atttctagta cagcaggaat tgatacgttc caagatggaa gcattgtgca      1560
+     aatagaacaa gtatccggtt ccactgatca tggattaaaa aatggagcat ttttatttgt      1620
+     taataaaatt aattccaaaa ccttcgagct ttacccaacc gattctgata gagtggctac      1680
+     taccaatcaa tatgttccat cacgtacatc agttgatgga caagtaaaat taaaagaaac      1740
+     cacacttgtt gatttaacag catttgattc tggtacacat agtattacag c               1791
+//
+</pre>
+</td></tr></table><p>

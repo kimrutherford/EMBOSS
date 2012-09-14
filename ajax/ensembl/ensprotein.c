@@ -1,84 +1,87 @@
-/* @source Ensembl Protein Feature functions
+/* @source ensprotein *********************************************************
+**
+** Ensembl Protein Feature functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.20 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
-** @version $Revision: 1.5 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensprotein.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic proteinfeatureadaptorTables ***********************************
+/* @conststatic proteinfeatureadaptorKTables **********************************
 **
 ** Array of Ensembl Protein Feature Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* const proteinfeatureadaptorTables[] =
+static const char *const proteinfeatureadaptorKTables[] =
 {
     "protein_feature",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic proteinfeatureadaptorColumns **********************************
+/* @conststatic proteinfeatureadaptorKColumns *********************************
 **
 ** Array of Ensembl Protein Feature Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* const proteinfeatureadaptorColumns[] =
+static const char *const proteinfeatureadaptorKColumns[] =
 {
     "protein_feature.protein_feature_id",
     "protein_feature.translation_id",
@@ -93,41 +96,41 @@ static const char* const proteinfeatureadaptorColumns[] =
     "protein_feature.perc_ident",
     "interpro.interpro_ac",
     "xref.display_label",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic proteinfeatureadaptorLeftjoin *********************************
+/* @conststatic proteinfeatureadaptorKLeftjoin ********************************
 **
 ** Array of Ensembl Protein Feature Adaptor SQL left join conditions
 **
 ******************************************************************************/
 
-static EnsOBaseadaptorLeftjoin proteinfeatureadaptorLeftjoin[] =
+static const EnsOBaseadaptorLeftjoin proteinfeatureadaptorKLeftjoin[] =
 {
     {"interpro", "protein_feature.hit_name = interpro.id"},
     {"xref", "interpro.interpro_ac = xref.dbprimary_acc"},
-    {(const char*) NULL, (const char*) NULL}
+    {(const char *) NULL, (const char *) NULL}
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 static AjBool proteinfeatureadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -136,9 +139,9 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -158,8 +161,8 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
 ** Ensembl Protein Feature objects
 **
 ** @cc Bio::EnsEMBL::ProteinFeature
-** @cc CVS Revision: 1.16
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.18
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -189,7 +192,7 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
 ** @argrule Ini description [AjPStr] (InterPro) Description
 ** @argrule Ref pf [EnsPProteinfeature] Ensembl Protein Feature
 **
-** @valrule * [EnsPProteinfeature] Ensembl Protein Feature
+** @valrule * [EnsPProteinfeature] Ensembl Protein Feature or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -204,6 +207,8 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
 ** @param [r] pf [const EnsPProteinfeature] Ensembl Protein Feature
 **
 ** @return [EnsPProteinfeature] Ensembl Protein Feature or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -211,21 +216,19 @@ EnsPProteinfeature ensProteinfeatureNewCpy(const EnsPProteinfeature pf)
 {
     EnsPProteinfeature pthis = NULL;
 
-    if(!pf)
+    if (!pf)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
-
-    pthis->Adaptor = pf->Adaptor;
-
+    pthis->Use         = 1U;
+    pthis->Adaptor     = pf->Adaptor;
     pthis->Featurepair = ensFeaturepairNewRef(pf->Featurepair);
 
-    if(pf->Accession)
+    if (pf->Accession)
         pthis->Accession = ajStrNewRef(pf->Accession);
 
-    if(pf->Description)
+    if (pf->Description)
         pthis->Description = ajStrNewRef(pf->Description);
 
     return pthis;
@@ -248,6 +251,8 @@ EnsPProteinfeature ensProteinfeatureNewCpy(const EnsPProteinfeature pf)
 ** @param [u] description [AjPStr] (InterPro) Description
 **
 ** @return [EnsPProteinfeature] Ensembl Protein Feature or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -261,18 +266,15 @@ EnsPProteinfeature ensProteinfeatureNewIni(EnsPProteinfeatureadaptor pfa,
 
     AJNEW0(pf);
 
-    pf->Use = 1;
-
-    pf->Identifier = identifier;
-
-    pf->Adaptor = pfa;
-
+    pf->Use         = 1U;
+    pf->Identifier  = identifier;
+    pf->Adaptor     = pfa;
     pf->Featurepair = ensFeaturepairNewRef(fp);
 
-    if(accession)
+    if (accession)
         pf->Accession = ajStrNewRef(accession);
 
-    if(description)
+    if (description)
         pf->Description = ajStrNewRef(description);
 
     return pf;
@@ -289,12 +291,14 @@ EnsPProteinfeature ensProteinfeatureNewIni(EnsPProteinfeatureadaptor pfa,
 ** @param [u] pf [EnsPProteinfeature] Ensembl Protein Feature
 **
 ** @return [EnsPProteinfeature] Ensembl Protein Feature or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPProteinfeature ensProteinfeatureNewRef(EnsPProteinfeature pf)
 {
-    if(!pf)
+    if (!pf)
         return NULL;
 
     pf->Use++;
@@ -307,14 +311,14 @@ EnsPProteinfeature ensProteinfeatureNewRef(EnsPProteinfeature pf)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Protein Feature object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Protein Feature object.
 **
 ** @fdata [EnsPProteinfeature]
 **
-** @nam3rule Del Destroy (free) an Ensembl Protein Feature object
+** @nam3rule Del Destroy (free) an Ensembl Protein Feature
 **
-** @argrule * Ppf [EnsPProteinfeature*] Ensembl Protein Feature object address
+** @argrule * Ppf [EnsPProteinfeature*] Ensembl Protein Feature address
 **
 ** @valrule * [void]
 **
@@ -328,27 +332,40 @@ EnsPProteinfeature ensProteinfeatureNewRef(EnsPProteinfeature pf)
 **
 ** Default destructor for an Ensembl Protein Feature.
 **
-** @param [d] Ppf [EnsPProteinfeature*] Ensembl Protein Feature object address
+** @param [d] Ppf [EnsPProteinfeature*] Ensembl Protein Feature address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensProteinfeatureDel(EnsPProteinfeature* Ppf)
+void ensProteinfeatureDel(EnsPProteinfeature *Ppf)
 {
     EnsPProteinfeature pthis = NULL;
 
-    if(!Ppf)
+    if (!Ppf)
         return;
 
-    if(!*Ppf)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensProteinfeatureDel"))
+    {
+        ajDebug("ensProteinfeatureDel\n"
+                "  *Ppf %p\n",
+                *Ppf);
+
+        ensProteinfeatureTrace(*Ppf, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Ppf)
         return;
 
     pthis = *Ppf;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Ppf = NULL;
 
@@ -370,9 +387,9 @@ void ensProteinfeatureDel(EnsPProteinfeature* Ppf)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Protein Feature object.
+** Functions for returning members of an Ensembl Protein Feature object.
 **
 ** @fdata [EnsPProteinfeature]
 **
@@ -390,7 +407,7 @@ void ensProteinfeatureDel(EnsPProteinfeature* Ppf)
 ** or NULL
 ** @valrule Description [AjPStr] Description or NULL
 ** @valrule Featurepair [EnsPFeaturepair] Ensembl Feature Pair or NULL
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
 **
 ** @fcategory use
 ******************************************************************************/
@@ -400,21 +417,20 @@ void ensProteinfeatureDel(EnsPProteinfeature* Ppf)
 
 /* @func ensProteinfeatureGetAccession ****************************************
 **
-** Get the (InterPro) accession element of an Ensembl Protein Feature.
+** Get the (InterPro) accession member of an Ensembl Protein Feature.
 **
 ** @param [r] pf [const EnsPProteinfeature] Ensembl Protein Feature
 **
 ** @return [AjPStr] (InterPro) accession or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensProteinfeatureGetAccession(
     const EnsPProteinfeature pf)
 {
-    if(!pf)
-        return NULL;
-
-    return pf->Accession;
+    return (pf) ? pf->Accession : NULL;
 }
 
 
@@ -422,22 +438,21 @@ AjPStr ensProteinfeatureGetAccession(
 
 /* @func ensProteinfeatureGetAdaptor ******************************************
 **
-** Get the Ensembl Protein Feature Adaptor element of an
+** Get the Ensembl Protein Feature Adaptor member of an
 ** Ensembl Protein Feature.
 **
 ** @param [r] pf [const EnsPProteinfeature] Ensembl Protein Feature
 **
 ** @return [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPProteinfeatureadaptor ensProteinfeatureGetAdaptor(
     const EnsPProteinfeature pf)
 {
-    if(!pf)
-        return NULL;
-
-    return pf->Adaptor;
+    return (pf) ? pf->Adaptor : NULL;
 }
 
 
@@ -445,21 +460,20 @@ EnsPProteinfeatureadaptor ensProteinfeatureGetAdaptor(
 
 /* @func ensProteinfeatureGetDescription **************************************
 **
-** Get the (InterPro) description element of an Ensembl Protein Feature.
+** Get the (InterPro) description member of an Ensembl Protein Feature.
 **
 ** @param [r] pf [const EnsPProteinfeature] Ensembl Protein Feature
 **
 ** @return [AjPStr] (InterPro) description or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensProteinfeatureGetDescription(
     const EnsPProteinfeature pf)
 {
-    if(!pf)
-        return NULL;
-
-    return pf->Description;
+    return (pf) ? pf->Description : NULL;
 }
 
 
@@ -467,21 +481,20 @@ AjPStr ensProteinfeatureGetDescription(
 
 /* @func ensProteinfeatureGetFeaturepair **************************************
 **
-** Get the Ensembl Feature Pair element of an Ensembl Protein Feature.
+** Get the Ensembl Feature Pair member of an Ensembl Protein Feature.
 **
 ** @param [r] pf [const EnsPProteinfeature] Ensembl Protein Feature
 **
 ** @return [EnsPFeaturepair] Ensembl Feature Pair or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPFeaturepair ensProteinfeatureGetFeaturepair(
     const EnsPProteinfeature pf)
 {
-    if(!pf)
-        return NULL;
-
-    return pf->Featurepair;
+    return (pf) ? pf->Featurepair : NULL;
 }
 
 
@@ -489,34 +502,33 @@ EnsPFeaturepair ensProteinfeatureGetFeaturepair(
 
 /* @func ensProteinfeatureGetIdentifier ***************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Protein Feature.
 **
 ** @param [r] pf [const EnsPProteinfeature] Ensembl Protein Feature
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensProteinfeatureGetIdentifier(
     const EnsPProteinfeature pf)
 {
-    if(!pf)
-        return 0;
-
-    return pf->Identifier;
+    return (pf) ? pf->Identifier : 0U;
 }
 
 
 
 
-/* @section element assignment ************************************************
+/* @section member assignment *************************************************
 **
-** Functions for assigning elements of an Ensembl Protein Feature object.
+** Functions for assigning members of an Ensembl Protein Feature object.
 **
 ** @fdata [EnsPProteinfeature]
 **
-** @nam3rule Set Set one element of a Protein Feature
+** @nam3rule Set Set one member of a Protein Feature
 ** @nam4rule Accession Set the accession
 ** @nam4rule Adaptor Set the Ensembl Protein Feature Adaptor
 ** @nam4rule Description Set the description
@@ -541,19 +553,21 @@ ajuint ensProteinfeatureGetIdentifier(
 
 /* @func ensProteinfeatureSetAccession ****************************************
 **
-** Set the accession element of an Ensembl Protein Feature.
+** Set the accession member of an Ensembl Protein Feature.
 **
 ** @param [u] pf [EnsPProteinfeature] Ensembl Protein Feature
 ** @param [u] accession [AjPStr] Accession
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensProteinfeatureSetAccession(EnsPProteinfeature pf,
                                      AjPStr accession)
 {
-    if(!pf)
+    if (!pf)
         return ajFalse;
 
     ajStrDel(&pf->Accession);
@@ -568,20 +582,22 @@ AjBool ensProteinfeatureSetAccession(EnsPProteinfeature pf,
 
 /* @func ensProteinfeatureSetAdaptor ******************************************
 **
-** Set the Ensembl Protein Feature Adaptor element of an
+** Set the Ensembl Protein Feature Adaptor member of an
 ** Ensembl Protein Feature.
 **
 ** @param [u] pf [EnsPProteinfeature] Ensembl Protein Feature
 ** @param [u] pfa [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensProteinfeatureSetAdaptor(EnsPProteinfeature pf,
                                    EnsPProteinfeatureadaptor pfa)
 {
-    if(!pf)
+    if (!pf)
         return ajFalse;
 
     pf->Adaptor = pfa;
@@ -594,19 +610,21 @@ AjBool ensProteinfeatureSetAdaptor(EnsPProteinfeature pf,
 
 /* @func ensProteinfeatureSetDescription **************************************
 **
-** Set the description element of an Ensembl Protein Feature.
+** Set the description member of an Ensembl Protein Feature.
 **
 ** @param [u] pf [EnsPProteinfeature] Ensembl Protein Feature
 ** @param [u] description [AjPStr] Description
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensProteinfeatureSetDescription(EnsPProteinfeature pf,
                                        AjPStr description)
 {
-    if(!pf)
+    if (!pf)
         return ajFalse;
 
     ajStrDel(&pf->Description);
@@ -621,19 +639,21 @@ AjBool ensProteinfeatureSetDescription(EnsPProteinfeature pf,
 
 /* @func ensProteinfeatureSetFeaturepair **************************************
 **
-** Set the Ensembl Feature Pair element of an Ensembl Protein Feature.
+** Set the Ensembl Feature Pair member of an Ensembl Protein Feature.
 **
 ** @param [u] pf [EnsPProteinfeature] Ensembl Protein Feature
 ** @param [u] fp [EnsPFeaturepair] Ensembl Feature Pair
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensProteinfeatureSetFeaturepair(EnsPProteinfeature pf,
                                        EnsPFeaturepair fp)
 {
-    if(!pf)
+    if (!pf)
         return ajFalse;
 
     ensFeaturepairDel(&pf->Featurepair);
@@ -648,20 +668,22 @@ AjBool ensProteinfeatureSetFeaturepair(EnsPProteinfeature pf,
 
 /* @func ensProteinfeatureSetIdentifier ***************************************
 **
-** Set the SQL database-internal identifier element of an
+** Set the SQL database-internal identifier member of an
 ** Ensembl Protein Feature.
 **
 ** @param [u] pf [EnsPProteinfeature] Ensembl Protein Feature
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensProteinfeatureSetIdentifier(EnsPProteinfeature pf,
                                       ajuint identifier)
 {
-    if(!pf)
+    if (!pf)
         return ajFalse;
 
     pf->Identifier = identifier;
@@ -678,7 +700,7 @@ AjBool ensProteinfeatureSetIdentifier(EnsPProteinfeature pf,
 **
 ** @fdata [EnsPProteinfeature]
 **
-** @nam3rule Trace Report Ensembl Protein Feature elements to debug file
+** @nam3rule Trace Report Ensembl Protein Feature members to debug file
 **
 ** @argrule Trace pf [const EnsPProteinfeature] Ensembl Protein Feature
 ** @argrule Trace level [ajuint] Indentation level
@@ -699,6 +721,8 @@ AjBool ensProteinfeatureSetIdentifier(EnsPProteinfeature pf,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -706,7 +730,7 @@ AjBool ensProteinfeatureTrace(const EnsPProteinfeature pf, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!pf)
+    if (!pf)
         return ajFalse;
 
     indent = ajStrNew();
@@ -764,6 +788,8 @@ AjBool ensProteinfeatureTrace(const EnsPProteinfeature pf, ajuint level)
 ** @param [r] pf [const EnsPProteinfeature] Ensembl Protein Feature
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -771,21 +797,21 @@ size_t ensProteinfeatureCalculateMemsize(const EnsPProteinfeature pf)
 {
     size_t size = 0;
 
-    if(!pf)
+    if (!pf)
         return 0;
 
     size += sizeof (EnsOProteinfeature);
 
     size += ensFeaturepairCalculateMemsize(pf->Featurepair);
 
-    if(pf->Accession)
+    if (pf->Accession)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(pf->Accession);
     }
 
-    if(pf->Description)
+    if (pf->Description)
     {
         size += sizeof (AjOStr);
 
@@ -804,8 +830,8 @@ size_t ensProteinfeatureCalculateMemsize(const EnsPProteinfeature pf)
 ** Ensembl Protein Feature Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::ProteinFeatureAdaptor
-** @cc CVS Revision: 1.34
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.35
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -817,18 +843,20 @@ size_t ensProteinfeatureCalculateMemsize(const EnsPProteinfeature pf)
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Protein Feature objects.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] pfs [AjPList] AJAX List of Ensembl Protein Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool proteinfeatureadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -839,12 +867,12 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
 
     float identity = 0.0F;
 
-    ajuint identifier = 0;
-    ajuint tlstart    = 0;
-    ajuint tlend      = 0;
-    ajuint analysisid = 0;
-    ajuint hitstart   = 0;
-    ajuint hitend     = 0;
+    ajuint identifier = 0U;
+    ajuint tlstart    = 0U;
+    ajuint tlend      = 0U;
+    ajuint analysisid = 0U;
+    ajuint hitstart   = 0U;
+    ajuint hitend     = 0U;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -858,6 +886,8 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPFeature srcfeature = NULL;
     EnsPFeature trgfeature = NULL;
 
@@ -866,37 +896,38 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
     EnsPProteinfeature pf         = NULL;
     EnsPProteinfeatureadaptor pfa = NULL;
 
-    if(ajDebugTest("proteinfeatureadaptorFetchAllbyStatement"))
+    if (ajDebugTest("proteinfeatureadaptorFetchAllbyStatement"))
         ajDebug("proteinfeatureadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  pfs %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 pfs);
 
-    if(!dba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!pfs)
+    if (!pfs)
         return ajFalse;
 
-    aa = ensRegistryGetAnalysisadaptor(dba);
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
+    aa  = ensRegistryGetAnalysisadaptor(dba);
     pfa = ensRegistryGetProteinfeatureadaptor(dba);
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier  = 0;
         tlid        = ajStrNew();
@@ -932,7 +963,7 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
 
         /*
         ** NOTE: The translation_id is currently handled as an AJAX String
-        ** to fit into the seqname element of an Ensembl Feature.
+        ** to fit into the seqname member of an Ensembl Feature.
         */
 
         srcfeature = ensFeatureNewIniN(analysis, tlid, tlstart, tlend, 1);
@@ -965,7 +996,7 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
                                      accession,
                                      description);
 
-        ajListPushAppend(pfs, (void*) pf);
+        ajListPushAppend(pfs, (void *) pf);
 
         ensFeaturepairDel(&fp);
 
@@ -1003,7 +1034,8 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @valrule * [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
+** @valrule * [EnsPProteinfeatureadaptor]
+** Ensembl Protein Feature Adaptor or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -1029,23 +1061,25 @@ static AjBool proteinfeatureadaptorFetchAllbyStatement(
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPProteinfeatureadaptor ensProteinfeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    if (!dba)
         return NULL;
 
     return ensBaseadaptorNew(
         dba,
-        proteinfeatureadaptorTables,
-        proteinfeatureadaptorColumns,
-        proteinfeatureadaptorLeftjoin,
-        (const char*) NULL,
-        (const char*) NULL,
-        proteinfeatureadaptorFetchAllbyStatement);
+        proteinfeatureadaptorKTables,
+        proteinfeatureadaptorKColumns,
+        proteinfeatureadaptorKLeftjoin,
+        (const char *) NULL,
+        (const char *) NULL,
+        &proteinfeatureadaptorFetchAllbyStatement);
 }
 
 
@@ -1053,15 +1087,15 @@ EnsPProteinfeatureadaptor ensProteinfeatureadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Protein Feature Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Protein Feature Adaptor object.
 **
 ** @fdata [EnsPProteinfeatureadaptor]
 **
-** @nam3rule Del Destroy (free) an Ensembl Protein Feature Adaptor object
+** @nam3rule Del Destroy (free) an Ensembl Protein Feature Adaptor
 **
-** @argrule * Ppfa [EnsPProteinfeatureadaptor*] Ensembl Protein Feature Adaptor
-**                                              object address
+** @argrule * Ppfa [EnsPProteinfeatureadaptor*]
+** Ensembl Protein Feature Adaptor address
 **
 ** @valrule * [void]
 **
@@ -1081,34 +1115,28 @@ EnsPProteinfeatureadaptor ensProteinfeatureadaptorNew(
 ** destroyed directly. Upon exit, the Ensembl Registry will call this function
 ** if required.
 **
-** @param [d] Ppfa [EnsPProteinfeatureadaptor*] Ensembl Protein Feature Adaptor
-**                                              object address
+** @param [d] Ppfa [EnsPProteinfeatureadaptor*]
+** Ensembl Protein Feature Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensProteinfeatureadaptorDel(EnsPProteinfeatureadaptor* Ppfa)
+void ensProteinfeatureadaptorDel(EnsPProteinfeatureadaptor *Ppfa)
 {
-    if(!Ppfa)
-        return;
-
-    if(!*Ppfa)
-        return;
-
     ensBaseadaptorDel(Ppfa);
 
-    *Ppfa = NULL;
-
-    return;
+	return;
 }
 
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Protein Feature Adaptor object.
 **
 ** @fdata [EnsPProteinfeatureadaptor]
@@ -1129,21 +1157,20 @@ void ensProteinfeatureadaptorDel(EnsPProteinfeatureadaptor* Ppfa)
 
 /* @func ensProteinfeatureadaptorGetDatabaseadaptor ***************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl Protein Feature Adaptor.
 **
 ** @param [u] pfa [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensProteinfeatureadaptorGetDatabaseadaptor(
     EnsPProteinfeatureadaptor pfa)
 {
-    if(!pfa)
-        return NULL;
-
     return ensBaseadaptorGetDatabaseadaptor(pfa);
 }
 
@@ -1167,14 +1194,16 @@ EnsPDatabaseadaptor ensProteinfeatureadaptorGetDatabaseadaptor(
 **                 matching a criterion
 ** @nam5rule Identifier Fetch by a SQL database-internal identifier
 **
-** @argrule * pfa [EnsPProteinfeatureadaptor] Ensembl Protein Feature Adaptor
-** @argrule AllbyTranslationidentifier tlid [ajuint] Ensembl Translation
-**                                                   identifier
-** @argrule AllbyTranslationidentifier pfs [AjPList] AJAX List of
-**                                              Ensembl Protein Feature objects
-** @argrule ByIdentifier identifier [ajuint] SQL database-internal identifier
-** @argrule ByIdentifier Ppf [EnsPProteinfeature*] Ensembl Protein Feature
-**                                                 address
+** @argrule * pfa [EnsPProteinfeatureadaptor]
+** Ensembl Protein Feature Adaptor
+** @argrule AllbyTranslationidentifier tlid [ajuint]
+** Ensembl Translation identifier
+** @argrule AllbyTranslationidentifier pfs [AjPList]
+** AJAX List of Ensembl Protein Feature objects
+** @argrule ByIdentifier identifier [ajuint]
+** SQL database-internal identifier
+** @argrule ByIdentifier Ppf [EnsPProteinfeature*]
+** Ensembl Protein Feature address
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -1194,6 +1223,8 @@ EnsPDatabaseadaptor ensProteinfeatureadaptorGetDatabaseadaptor(
 ** @param [u] pfs [AjPList] AJAX List of Ensembl Protein Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1204,13 +1235,13 @@ AjBool ensProteinfeatureadaptorFetchAllbyTranslationidentifier(
 {
     AjPStr constraint = NULL;
 
-    if(!pfa)
+    if (!pfa)
         return ajFalse;
 
-    if(!tlid)
+    if (!tlid)
         return ajFalse;
 
-    if(!pfs)
+    if (!pfs)
         return ajFalse;
 
     constraint = ajFmtStr("protein_feature.translation_id = %u", tlid);
@@ -1238,22 +1269,24 @@ AjBool ensProteinfeatureadaptorFetchAllbyTranslationidentifier(
 ** @param [wP] Ppf [EnsPProteinfeature*] Ensembl Protein Feature address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensProteinfeatureadaptorFetchByIdentifier(
     EnsPProteinfeatureadaptor pfa,
     ajuint identifier,
-    EnsPProteinfeature* Ppf)
+    EnsPProteinfeature *Ppf)
 {
-    if(!pfa)
+    if (!pfa)
         return ajFalse;
 
-    if(!identifier)
+    if (!identifier)
         return ajFalse;
 
-    if(!Ppf)
+    if (!Ppf)
         return ajFalse;
 
-    return ensBaseadaptorFetchByIdentifier(pfa, identifier, (void**) Ppf);
+    return ensBaseadaptorFetchByIdentifier(pfa, identifier, (void **) Ppf);
 }

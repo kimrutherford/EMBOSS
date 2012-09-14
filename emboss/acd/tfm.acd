@@ -1,8 +1,8 @@
 application: tfm [
-  documentation: "Displays full documentation for an application"
+  documentation: "Display full documentation for an application"
   groups: "Documentation"
-    relations: "EDAM:0000088 topic Literature and documentation"
-    relations: "EDAM:0000515 operation Data retrieval (tool annotation)"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:0515 Data retrieval (tool metadata)"
 ]
 
 section: input [
@@ -17,7 +17,7 @@ section: input [
     help: "Enter the name of an EMBOSS program"
     minlength: "1"
     knowntype: "emboss program"
-    relations: "EDAM:0001194 identifier Tool name (EMBOSS)"
+    relations: "EDAM_identifier:1194 Tool name (EMBOSS)"
   ]
 
 endsection: input
@@ -32,7 +32,7 @@ section: output [
     default: "stdout"
     knowntype: "text documentation"
     information: "Program documentation text output file"
-    relations: "EDAM:0000958 data Tool metadata"
+    relations: "EDAM_data:0958 Tool metadata"
   ]
 
   boolean: html [
@@ -42,7 +42,7 @@ section: output [
     help: "This will format the output for displaying as a WWW
            document."
     outputmodifier: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: more [
@@ -54,7 +54,7 @@ section: output [
            going on to the next page. When you have finished reading a page,
            press the SPACE bar to proceed to the next page."
     outputmodifier: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: output

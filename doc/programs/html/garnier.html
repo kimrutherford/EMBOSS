@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -35,7 +35,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Predicts protein secondary structure using GOR method
+Predict protein secondary structure using GOR method
 <H2>
     Description
 </H2>
@@ -58,7 +58,7 @@ Here is a sample session with <b>garnier</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>garnier </b>
-Predicts protein secondary structure using GOR method
+Predict protein secondary structure using GOR method
 Input protein sequence(s): <b>tsw:amic_pseae</b>
 Output report [amic_pseae.garnier]: <b></b>
 
@@ -71,8 +71,8 @@ Output report [amic_pseae.garnier]: <b></b>
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Predicts protein secondary structure using GOR method
-Version: EMBOSS:6.4.0.0
+Predict protein secondary structure using GOR method
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -107,7 +107,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -201,7 +204,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -270,11 +273,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -318,7 +345,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated report qualifiers
+<td align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
@@ -576,13 +603,14 @@ ID   AMIC_PSEAE              Reviewed;         385 AA.
 AC   P27017;
 DT   01-AUG-1992, integrated into UniProtKB/Swiss-Prot.
 DT   23-JAN-2007, sequence version 5.
-DT   18-MAY-2010, entry version 73.
+DT   16-MAY-2012, entry version 83.
 DE   RecName: Full=Aliphatic amidase expression-regulating protein;
 GN   Name=amiC; OrderedLocusNames=PA3364;
-OS   Pseudomonas aeruginosa.
+OS   Pseudomonas aeruginosa (strain ATCC 15692 / PAO1 / 1C / PRS 101 / LMG
+OS   12228).
 OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
 OC   Pseudomonadaceae; Pseudomonas.
-OX   NCBI_TaxID=287;
+OX   NCBI_TaxID=208964;
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND PROTEIN SEQUENCE OF 2-19.
 RC   STRAIN=PAC;
@@ -621,7 +649,6 @@ RT   antitermination in the amidase operon of Pseudomonas aeruginosa.";
 RL   EMBO J. 13:5810-5817(1994).
 RN   [5]
 RP   X-RAY CRYSTALLOGRAPHY (2.25 ANGSTROMS) OF COMPLEX WITH AMIR.
-RC   STRAIN=PAC1;
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -719,7 +746,7 @@ By default <b>garnier</b> writes a 'tagseq' report file.
 <pre>
 ########################################
 # Program: garnier
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: garnier
 #    -sequence tsw:amic_pseae
 # Report_format: tagseq
@@ -921,7 +948,7 @@ None.
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions in protein sequences</td>
+<td>Predict coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>

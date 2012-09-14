@@ -50,7 +50,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-[no]firstorf</td>
 <td>boolean</td>
-<td>Count the beginning of a sequence as a possible ORF, even if it's inferior to the minimal ORF size.</td>
+<td>Count the beginning of a sequence as a possible ORF, even if it is inferior to the minimal ORF size.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
@@ -58,7 +58,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-[no]lastorf</td>
 <td>boolean</td>
-<td>Count the end of a sequence as a possible ORF, even if it's not finishing with a STOP, or inferior to the minimal ORF size.</td>
+<td>Count the end of a sequence as a possible ORF, even if it is not finishing with a STOP, or inferior to the minimal ORF size.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
@@ -86,7 +86,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-orfminsize</td>
 <td>integer</td>
-<td>Minimum size of Open Reading Frames (ORFs) to display in the translations.</td>
+<td>Minimum protein size of Open Reading Frames (ORFs) to display in the translations.</td>
 <td>Integer 1 or more</td>
 <td>1</td>
 </tr>
@@ -192,7 +192,7 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated sequence qualifiers
+<td align="left" colspan=5>"-sequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -261,11 +261,35 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -309,7 +333,7 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -322,7 +346,7 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqoutall qualifiers
+<td align="left" colspan=5>"-outseq" associated seqoutall qualifiers
 </td>
 </tr>
 

@@ -1,29 +1,35 @@
-/******************************************************************************
-** @source AJAX TEXT handling functions
+/** @source ajtextwrite *******************************************************
+**
+* AJAX text data writing functions
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.14 $
 ** @modified May 5 pmr 2010 First AJAX version
 ** @modified Sep 8 2010 pmr Added query and reading functions
+** @modified $Date: 2011/10/19 14:52:22 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajtextwrite.h"
+#include "ajfileio.h"
 
 
 static AjBool textoutWriteList(AjPFile outf, const AjPText text);
@@ -44,7 +50,7 @@ static AjBool textoutWriteXml(AjPFile outf, const AjPText text);
 **
 ** @attr Name [const char*] Format name
 ** @attr Desc [const char*] Format description
-** @attr Write [(AjBool*)] Output function, returns ajTrue on success
+** @attr Write [AjBool function] Output function, returns ajTrue on success
 ** @@
 ******************************************************************************/
 
@@ -63,15 +69,15 @@ static TextOOutFormat textoutFormatDef[] =
 /* "Name",        "Description" */
 /*     WriteFunction */
   {"text",         "Plain text",
-       textoutWriteText},
+       &textoutWriteText},
   {"html",        "HTML with markup",
-       textoutWriteHtml},
+       &textoutWriteHtml},
   {"xml",         "XML format",
-       textoutWriteXml},
+       &textoutWriteXml},
   {"json",        "JSON format",
-       textoutWriteJson},
+       &textoutWriteJson},
   {"list",        "Identifier only",
-       textoutWriteList},
+       &textoutWriteList},
   {NULL, NULL, NULL}
 };
 
@@ -121,7 +127,7 @@ static TextOOutFormat textoutFormatDef[] =
 
 
 
-/* @func ajTextoutWrite ********************************************************
+/* @func ajTextoutWrite *******************************************************
 **
 ** Write a text in a named format
 **
@@ -130,6 +136,8 @@ static TextOOutFormat textoutFormatDef[] =
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajTextoutWrite(AjPOutfile outf, const AjPText text)
@@ -137,7 +145,7 @@ AjBool ajTextoutWrite(AjPOutfile outf, const AjPText text)
     ajuint i = ajOutfileGetFormatindex(outf);
     AjPFile outfile = ajOutfileGetFile(outf);
 
-    return textoutFormatDef[i].Write(outfile, text);
+    return (*textoutFormatDef[i].Write)(outfile, text);
 }
 
 
@@ -153,6 +161,8 @@ AjBool ajTextoutWrite(AjPOutfile outf, const AjPText text)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool textoutWriteHtml(AjPFile outf, const AjPText text)
@@ -183,6 +193,8 @@ static AjBool textoutWriteHtml(AjPFile outf, const AjPText text)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool textoutWriteJson(AjPFile outf, const AjPText text)
@@ -213,6 +225,8 @@ static AjBool textoutWriteJson(AjPFile outf, const AjPText text)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool textoutWriteList(AjPFile outf, const AjPText text)
@@ -240,6 +254,8 @@ static AjBool textoutWriteList(AjPFile outf, const AjPText text)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool textoutWriteText(AjPFile outf, const AjPText text)
@@ -273,6 +289,8 @@ static AjBool textoutWriteText(AjPFile outf, const AjPText text)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool textoutWriteXml(AjPFile outf, const AjPText text)
@@ -351,6 +369,8 @@ static AjBool textoutWriteXml(AjPFile outf, const AjPText text)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -399,6 +419,8 @@ void ajTextoutprintBook(AjPFile outf)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -440,6 +462,8 @@ void ajTextoutprintHtml(AjPFile outf)
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -477,6 +501,8 @@ void ajTextoutprintText(AjPFile outf, AjBool full)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -565,6 +591,8 @@ void ajTextoutprintWiki(AjPFile outf)
 ** @param [r] format [const AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -604,12 +632,14 @@ AjBool ajTextoutformatFind(const AjPStr format, ajint* iformat)
 
 
 
-/* @func ajTextoutformatTest ***************************************************
+/* @func ajTextoutformatTest **************************************************
 **
 ** Tests whether a named text output format is known
 **
 ** @param [r] format [const AjPStr] Format
 ** @return [AjBool] ajTrue if formats was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -655,11 +685,13 @@ AjBool ajTextoutformatTest(const AjPStr format)
 
 
 
-/* @func ajTextoutExit *********************************************************
+/* @func ajTextoutExit ********************************************************
 **
 ** Cleans up text data output internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

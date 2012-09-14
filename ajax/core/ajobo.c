@@ -1,29 +1,37 @@
-/******************************************************************************
-** @source AJAX OBO handling functions
+/* @source ajobo **************************************************************
+**
+** AJAX OBO handling functions
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.28 $
 ** @modified May 5 pmr 2010 First AJAX version
 ** @modified Sep 8 2010 pmr Added query and reading functions
+** @modified $Date: 2012/07/02 17:19:18 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajobo.h"
+#include "ajlist.h"
+#include "ajoboread.h"
+#include "ajobowrite.h"
 
 
 static AjPStr oboTempQry = NULL;
@@ -83,6 +91,8 @@ static void oboMakeQry(const AjPObo thys, AjPStr* qry);
 ** Term constructor
 **
 ** @return [AjPObo] New object
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -106,6 +116,8 @@ AjPObo ajOboNew(void)
 **
 ** @param [r] obo [const AjPObo] Obo term
 ** @return [AjPObo] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -210,6 +222,8 @@ AjPObo ajOboNewObo(const AjPObo obo)
 **
 ** @param [d] Pobo       [AjPObo*]  Obo term object to delete
 ** @return [void] 
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -271,6 +285,7 @@ void ajOboDel(AjPObo *Pobo)
 ** @nam4rule Def Definition string
 ** @nam4rule Entry Return entry text
 ** @nam4rule Id Identifier string
+** @nam4rule Name Name
 ** @nam4rule Namespace Namespace
 ** @nam4rule Parents Return a list of parent ids
 ** @nam4rule Qry Return a query field
@@ -294,6 +309,7 @@ void ajOboDel(AjPObo *Pobo)
 ** @valrule *GetDb [const AjPStr] Database name
 ** @valrule *GetEntry [const AjPStr] Entry full text
 ** @valrule *GetId [const AjPStr] Identifier string
+** @valrule *GetName [const AjPStr] Name
 ** @valrule *GetNamespace [const AjPStr] Namespace name
 ** @valrule *C [const char*] Query as a character string.
 ** @valrule *S [const AjPStr] Query as a string object.
@@ -313,6 +329,8 @@ void ajOboDel(AjPObo *Pobo)
 **
 ** @return [const AjPStr] Database name
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajOboGetDb(const AjPObo obo)
@@ -333,6 +351,8 @@ const AjPStr ajOboGetDb(const AjPObo obo)
 **
 ** @return [AjBool] True on success.
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajOboGetDef(const AjPObo obo, AjPStr *Pdefstr, ajuint *nrefs)
@@ -393,10 +413,15 @@ AjBool ajOboGetDef(const AjPObo obo, AjPStr *Pdefstr, ajuint *nrefs)
 **
 ** @return [const AjPStr] Returned full text
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajOboGetEntry(const AjPObo obo)
 {
+    if(!obo)
+        return NULL;
+
     if(obo->TextPtr)
         return obo->TextPtr;
 
@@ -414,11 +439,39 @@ const AjPStr ajOboGetEntry(const AjPObo obo)
 **
 ** @return [const AjPStr] Returned id
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajOboGetId(const AjPObo obo)
 {
+    if(!obo)
+        return NULL;
+
     return obo->Id;
+}
+
+
+
+
+/* @func ajOboGetName *********************************************************
+**
+** Return the name
+**
+** @param [r] obo [const AjPObo] OBO term
+**
+** @return [const AjPStr] Returned name
+**
+**
+** @release 6.5.0
+******************************************************************************/
+
+const AjPStr ajOboGetName(const AjPObo obo)
+{
+    if(!obo)
+        return NULL;
+
+    return obo->Name;
 }
 
 
@@ -432,10 +485,15 @@ const AjPStr ajOboGetId(const AjPObo obo)
 **
 ** @return [const AjPStr] Returned namespace
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajOboGetNamespace(const AjPObo obo)
 {
+    if(!obo)
+        return NULL;
+
     return obo->Namespace;
 }
 
@@ -452,6 +510,8 @@ const AjPStr ajOboGetNamespace(const AjPObo obo)
 **
 ** @return [ajuint] Number of new terms added to list
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 ajuint ajOboGetParents(const AjPObo obo, AjPList uplist)
@@ -461,12 +521,12 @@ ajuint ajOboGetParents(const AjPObo obo, AjPList uplist)
     AjPStr up = NULL;
     ajlong colpos = 0;
 
-    ajuint oldlen;
-
-    oldlen = ajListGetLength(uplist);
+    ajulong oldlen;
 
     if(!obo)
         return 0;
+
+    oldlen = ajListGetLength(uplist);
 
     iter = ajListIterNewread(obo->Taglist);
 
@@ -496,7 +556,7 @@ ajuint ajOboGetParents(const AjPObo obo, AjPList uplist)
         
     ajListIterDel(&iter);
 
-    return ajListGetLength(uplist) - oldlen;
+    return (ajuint) (ajListGetLength(uplist) - oldlen);
 }
 
 
@@ -512,6 +572,8 @@ ajuint ajOboGetParents(const AjPObo obo, AjPList uplist)
 **
 ** @param [r] obo [const AjPObo] Obo term object.
 ** @return [const char*] Query as a character string.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -533,6 +595,8 @@ const char* ajOboGetQryC(const AjPObo obo)
 **
 ** @param [r] obo [const AjPObo] Obo term object.
 ** @return [const AjPStr] Query as a string.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -559,6 +623,8 @@ const AjPStr ajOboGetQryS(const AjPObo obo)
 **
 ** @return [const AjPStr] Returned id
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajOboGetReplaced(const AjPObo obo)
@@ -578,6 +644,8 @@ const AjPStr ajOboGetReplaced(const AjPObo obo)
 **
 ** @return [ajuint] Number of terms returned
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 ajuint ajOboGetTree(const AjPObo obo, AjPList obolist)
@@ -611,7 +679,7 @@ ajuint ajOboGetTree(const AjPObo obo, AjPList obolist)
 
     depth--;
 
-    return ajListGetLength(obolist);
+    return (ajuint) ajListGetLength(obolist);
 }
 
 
@@ -626,6 +694,8 @@ ajuint ajOboGetTree(const AjPObo obo, AjPList obolist)
 **
 ** @return [AjBool] True if term is obsolete
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajOboIsObsolete(const AjPObo obo)
@@ -636,13 +706,15 @@ AjBool ajOboIsObsolete(const AjPObo obo)
 
 
 
-/* @funcstatic oboMakeQry ****************************************************
+/* @funcstatic oboMakeQry *****************************************************
 **
 ** Sets the query for an obo term
 **
 ** @param [r] thys [const AjPObo] Obo term object
 ** @param [w] qry [AjPStr*] Query string in full
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -697,6 +769,8 @@ static void oboMakeQry(const AjPObo thys, AjPStr* qry)
 **
 ** @param [u] obo [AjPObo] Obo term
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -803,6 +877,8 @@ void ajOboClear(AjPObo obo)
 ** @param [r] comment [const AjPStr] Comment
 ** @param [r] linenum [ajuint] OBO file line number
 ** @return [AjPObotag] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -832,6 +908,8 @@ AjPObotag ajObotagNewData(const AjPStr name, const AjPStr value,
 **
 ** @param [r] tag [const AjPObotag] Obo tag
 ** @return [AjPObotag] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -879,12 +957,14 @@ AjPObotag ajObotagNewTag(const AjPObotag tag)
 
 
 
-/* @func ajObotagDel *********************************************************
+/* @func ajObotagDel **********************************************************
 **
 ** Tag destructor
 **
 ** @param [d] Ptag       [AjPObotag*]  Tag object to delete
 ** @return [void] 
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -949,6 +1029,8 @@ void ajObotagDel(AjPObotag *Ptag)
 ** @param [r] name [const AjPStr] Name
 ** @param [r] desc [const AjPStr] Description
 ** @return [AjPOboxref] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -973,6 +1055,8 @@ AjPOboxref ajOboxrefNewData(const AjPStr name, const AjPStr desc)
 **
 ** @param [r] xref [const AjPOboxref] Dbxref
 ** @return [AjPOboxref] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1012,12 +1096,14 @@ AjPOboxref ajOboxrefNewXref(const AjPOboxref xref)
 
 
 
-/* @func ajOboxrefDel ********************************************************
+/* @func ajOboxrefDel *********************************************************
 **
 ** Dbxref destructor
 **
 ** @param [d] Pxref      [AjPOboxref*]  Dbxref object to delete
 ** @return [void] 
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1072,6 +1158,8 @@ void ajOboxrefDel(AjPOboxref *Pxref)
 ** Cleans up obo term internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

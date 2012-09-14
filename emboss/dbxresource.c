@@ -84,10 +84,6 @@ int main(int argc, char **argv)
     
     ajint i;
     AjPFile inf = NULL;
-
-    AjPBtId  idobj  = NULL;
-    AjPBtPri priobj = NULL;
-    AjPBtHybrid hyb = NULL;
     
     ajulong nentries = 0L;
     ajulong ientries = 0L;
@@ -109,15 +105,11 @@ int main(int argc, char **argv)
     datestr    = ajAcdGetString("date");
     compressed = ajAcdGetBoolean("compressed");
 
-    entry = embBtreeEntryNew();
+    entry = embBtreeEntryNew(0);
     if(compressed)
         embBtreeEntrySetCompressed(entry);
 
     tmpstr = ajStrNew();
-    
-    idobj   = ajBtreeIdNew();
-    priobj  = ajBtreePriNew();
-    hyb     = ajBtreeHybNew();
     
     dbtype = ajStrNewC("drcat");
 
@@ -259,7 +251,7 @@ int main(int argc, char **argv)
 	    ajFatal("Cannot open input file %S\n",tmpstr);
 	
 	ajFilenameTrimPath(&tmpstr);
-	ajFmtPrintF(outf,"Processing file: %S",tmpstr);
+	ajFmtPrintF(outf,"Processing file: %S\n",tmpstr);
 
 	ientries = 0L;
 
@@ -324,7 +316,7 @@ int main(int argc, char **argv)
 	ajFileClose(&inf);
 	nentries += ientries;
 	nowtime = ajTimeNewToday();
-	ajFmtPrintF(outf, " entries: %Lu (%Lu) time: %.1fs (%.1fs)\n",
+	ajFmtPrintF(outf, "entries: %Lu (%Lu) time: %.1fs (%.1fs)\n",
 		    nentries, ientries,
 		    ajTimeDiff(starttime, nowtime),
 		    ajTimeDiff(begintime, nowtime));
@@ -396,11 +388,6 @@ int main(int argc, char **argv)
     while(fieldarray[nfields])
 	ajStrDel(&fieldarray[nfields++]);
     AJFREE(fieldarray);
-
-
-    ajBtreeIdDel(&idobj);
-    ajBtreePriDel(&priobj);
-    ajBtreeHybDel(&hyb);
 
     ajRegFree(&dbxresource_wrdexp);
 
@@ -534,6 +521,19 @@ static AjBool dbxresource_ParseDrcat(EmbPBtreeEntry entry, const AjPStr line)
     {
         if(urlfield && !ajStrMatchC(rest, "None"))
             embBtreeParseField(rest, dbxresource_wrdexp, urlfield);
+    }
+    else if(ajStrMatchC(name, "NARCat"))
+    {
+        if(catfield && !ajStrMatchC(rest, "None"))
+        {
+            handle = ajStrTokenNewC(rest, "|");
+            while(ajStrTokenNextParse(&handle, &token))
+            {
+                ajStrRemoveWhiteExcess(&token);
+                ajListstrPush(catfield->data,ajStrNewS(token));
+            }
+            ajStrTokenDel(&handle);
+        }
     }
     else if(ajStrSuffixC(name, "Cat"))
     {

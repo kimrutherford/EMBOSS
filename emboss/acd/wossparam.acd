@@ -1,9 +1,9 @@
 application: wossparam [
-  documentation: "Finds programs by EDAM parameter"
+  documentation: "Find programs by EDAM parameter"
   groups: "Ontology:EDAM, Documentation"
-    relations: "EDAM:0000219 topic Annotation"
-    relations: "EDAM:0000088 topic Literature and documentation"
-    relations: "EDAM:0000515 operation Data retrieval (tool annotation)"
+    relations: "EDAM_topic:0219 Annotation"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:0515 Data retrieval (tool metadata)"
 ]
 
 section: input [
@@ -16,7 +16,7 @@ section: input [
       parameter: "Y"
       information: "Identifier(s) to search for in ontology"
       knowntype: "keyword"
-    relations: "EDAM:0000968 data Keyword"
+    relations: "EDAM_data:0968 Keyword"
   ]
 
 endsection: input
@@ -42,7 +42,7 @@ section: additional [
            many combinations of the names as: 'NAME1', 'NAME2', 'NAME1
            NAME2', NAME2 NAME1'. The non-expanded names are simply like:
            'NAME1 NAME2'."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: showkeywords [
@@ -50,7 +50,7 @@ section: additional [
     default: "N"
     information: "Show keywords with program documentation"
     outputmodifier: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: additional
@@ -71,7 +71,7 @@ section: advanced [
           term names (and synonyms) only. This option also matches the
 	  keywords against the EDAM term definitions and will therefore
 	  (typically) report more matches."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: subclasses [
@@ -79,7 +79,7 @@ section: advanced [
     information: "Include subclasses of hits"
     help: "Extend the query matches to include all terms which are
            specialisations (EDAM sub-classes) of the matched type."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 
@@ -88,7 +88,7 @@ section: advanced [
     information: "Include obsolete terms"
     help: "The default behaviour is to not use or return obsolete terms.
            This option if set will include all terms."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 
@@ -102,7 +102,7 @@ section: advanced [
            the same code libraries and share the same look and feel, but are
            generally developed by people who wish the programs to be outside
            of the GNU Public Licence scheme"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: embassy [
@@ -115,7 +115,7 @@ section: advanced [
            same code libraries and share the same look and feel, but are
            generally developed by people who wish the programs to be outside
            of the GNU Public Licence scheme"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   string: showembassy [
@@ -127,7 +127,7 @@ section: advanced [
            look and feel, but are generally developed by people who wish the
            programs to be outside of the GNU Public Licence scheme"
     knowntype: "embassy package"
-    relations: "EDAM:0001195 identifier Tool name (EMBASSY package)"
+    relations: "EDAM_identifier:1195 Tool name (EMBASSY package)"
   ]
 
   boolean: colon [
@@ -143,7 +143,7 @@ section: advanced [
            group name if this option is true. Note: This does not apply if
            the group names have been exploded with the 'explode' option."
     outputmodifier: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: gui [
@@ -155,7 +155,7 @@ section: advanced [
            programs are inappropriate for running in a GUI, these include
            other menu programs and interactive editors. This option allows
            you to only report those programs that can be run from a GUI"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: advanced
@@ -173,7 +173,7 @@ section: output [
     default: "stdout"
     knowntype: "tool metadata"
     information: "Tool metadata output file"
-    relations: "EDAM:0000958 data Tool metadata"
+    relations: "EDAM_data:0958 Tool metadata"
   ]
 
   section: htmlsection [
@@ -188,7 +188,7 @@ section: output [
       help: "If you are sending the output to a file, this will format
              it for displaying as a table in a WWW document."
       outputmodifier: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
   endsection: htmlsection
@@ -200,7 +200,7 @@ section: output [
     help: "If you use this option, then only the group names will be
            output to the file"
     outputmodifier: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: alphabetic [
@@ -211,7 +211,7 @@ section: output [
            the program names and descriptions instead of the programs being
            listed in their functional groups."
     outputmodifier: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: output

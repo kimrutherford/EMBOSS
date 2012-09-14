@@ -1,27 +1,38 @@
-/******************************************************************************
-** @source AJAX system functions
+/* @source ajsys **************************************************************
+**
+** AJAX system functions
 **
 ** Copyright (c) Alan Bleasby 1999
-** @version 1.0
+** @version $Revision: 1.90 $
+** @modified $Date: 2011/11/23 09:52:54 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+
+#include "ajlib.h"
+
+#include "ajsys.h"
+#include "ajlist.h"
+#include "ajfile.h"
+#include "ajreg.h"
+#include "ajnam.h"
+#include "ajutil.h"
 
 #ifndef WIN32
 #ifndef __VMS
@@ -37,6 +48,8 @@
 #else
 #include "win32.h"
 #include <direct.h>
+#include <stdio.h>
+#include <io.h>
 #define open     _open
 #define close    _close
 #define read     _read
@@ -51,6 +64,7 @@
 #endif
 
 #include <errno.h>
+
 
 static AjPStr sysTname = NULL;
 static AjPStr sysFname = NULL;
@@ -115,7 +129,7 @@ static void CALLBACK sysTimeoutAbort(LPVOID arg, DWORD low, DWORD high);
 
 
 
-/* @func ajSysArglistBuildC ****************************************************
+/* @func ajSysArglistBuildC ***************************************************
 **
 ** Generates a program name and argument list from a command line string.
 **
@@ -123,6 +137,8 @@ static void CALLBACK sysTimeoutAbort(LPVOID arg, DWORD low, DWORD high);
 ** @param [w] Pname [char**] Program name.
 ** @param [w] PParglist [char***] Argument list.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -195,7 +211,7 @@ AjBool ajSysArglistBuildC(const char* cmdlinetxt,
 
 
 
-/* @func ajSysArglistBuildS ****************************************************
+/* @func ajSysArglistBuildS ***************************************************
 **
 ** Generates a program name and argument list from a command line string.
 **
@@ -203,6 +219,8 @@ AjBool ajSysArglistBuildC(const char* cmdlinetxt,
 ** @param [w] Pname [char**] Program name.
 ** @param [w] PParglist [char***] Argument list.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -214,38 +232,14 @@ AjBool ajSysArglistBuildS(const AjPStr cmdline, char** Pname, char*** PParglist)
 
 
 
-/* @obsolete ajSysArglistBuild
-** @rename ajSysArglistBuildS
-*/
-
-__deprecated AjBool ajSysArglistBuild(const AjPStr cmdline,
-                                      char** Pname, char*** PParglist)
-{    
-    return ajSysArglistBuildS(cmdline, Pname, PParglist);
-}
-
-
-
-
-/* @obsolete ajSysArglist
-** @rename ajSysArglistBuildS
-*/
-
-__deprecated AjBool ajSysArglist(const AjPStr cmdline,
-				 char** Pname, char*** PParglist)
-{    
-    return ajSysArglistBuildS(cmdline, Pname, PParglist);
-}
-
-
-
-
 /* @func ajSysArglistFree *****************************************************
 **
 ** Free memory in an argument list allocated by ajSysArgList
 **
 ** @param [w] PParglist [char***] Argument list.
 ** @return [void]
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -265,19 +259,6 @@ void ajSysArglistFree(char*** PParglist)
 
     AJFREE(*PParglist);
 
-    return;
-}
-
-
-
-
-/* @obsolete ajSysArgListFree
-** @rename ajSysArglistFree
-*/
-
-__deprecated void ajSysArgListFree(char*** PParglist)
-{
-    ajSysArglistFree(PParglist);
     return;
 }
 
@@ -312,6 +293,8 @@ __deprecated void ajSysArgListFree(char*** PParglist)
 **
 ** @param [r] v [ajint] integer
 ** @return [char] Character cast
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -326,18 +309,6 @@ char ajSysCastItoc(ajint v)
 
 
 
-/* @obsolete ajSysItoC
-** @rename ajSysCastItoC
-*/
-
-__deprecated char ajSysItoC(ajint v)
-{
-    return ajSysCastItoc(v);
-}
-
-
-
-
 /* @func ajSysCastItouc *******************************************************
 **
 ** Convert Int to Unsigned Char
@@ -345,6 +316,8 @@ __deprecated char ajSysItoC(ajint v)
 **
 ** @param [r] v [ajint] integer
 ** @return [unsigned char] Unsigned character cast
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -354,18 +327,6 @@ unsigned char ajSysCastItouc(ajint v)
 
     c = (unsigned char) v;
     return c;
-}
-
-
-
-
-/* @obsolete ajSysItoUC
-** @rename ajSysCastItouc
-*/
-
-__deprecated unsigned char ajSysItoUC(ajint v)
-{
-    return ajSysCastItouc(v);
 }
 
 
@@ -392,7 +353,8 @@ __deprecated unsigned char ajSysItoUC(ajint v)
 ** @suffix    C            Accept C character string parameters
 ** @suffix    S            Accept string object parameters
 **
-** @argrule RmrfC path [const char*] File name
+** @argrule RmrfC path [const char*] Directory name
+** @argrule RmrfS path [const AjPStr] Directory name
 ** @argrule UnlinkC filename [const char*] File name
 ** @argrule UnlinkS filename [const AjPStr] File name
 ** @argrule Which Pfilename [AjPStr*] File name (updated when found)
@@ -407,12 +369,14 @@ __deprecated unsigned char ajSysItoUC(ajint v)
 
 
 
-/* @func ajSysFileRmrfC ******************************************************
+/* @func ajSysFileRmrfC *******************************************************
 **
 ** Forcibly delete a directory tree
 **
 ** @param [r] path [const char*] Directory path
 ** @return [AjBool] true if deleted false otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -489,12 +453,33 @@ AjBool ajSysFileRmrfC(const char *path)
 
 
 
-/* @func ajSysFileUnlinkC ******************************************************
+/* @func ajSysFileRmrfS *******************************************************
+**
+** Forcibly delete a directory tree
+**
+** @param [r] path [const AjPStr] Directory path
+** @return [AjBool] true if deleted false otherwise
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjBool ajSysFileRmrfS(const AjPStr path)
+{
+    return ajSysFileRmrfC(MAJSTRGETPTR(path));
+}
+
+
+
+
+/* @func ajSysFileUnlinkC *****************************************************
 **
 ** Deletes a file or link
 **
 ** @param [r] filename [const char*] Filename in AjStr.
 ** @return [AjBool] true if deleted false otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -520,42 +505,20 @@ AjBool ajSysFileUnlinkC(const char* filename)
 
 
 
-/* @func ajSysFileUnlinkS ******************************************************
+/* @func ajSysFileUnlinkS *****************************************************
 **
 ** Deletes a file or link
 **
 ** @param [r] filename [const AjPStr] Filename in AjStr.
 ** @return [AjBool] true if deleted false otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 AjBool ajSysFileUnlinkS(const AjPStr filename)
 {
     return ajSysFileUnlinkC(MAJSTRGETPTR(filename));
-}
-
-
-
-
-/* @obsolete ajSysFileUnlink
-** @rename ajSysFileUnlinkS
-*/
-
-__deprecated AjBool ajSysFileUnlink(const AjPStr s)
-{
-    return ajSysFileUnlinkS(s);
-}
-
-
-
-
-/* @obsolete ajSysUnlink
-** @rename ajSysFileUnlinkS
-*/
-
-__deprecated AjBool ajSysUnlink(const AjPStr s)
-{
-    return ajSysFileUnlinkS(s);
 }
 
 
@@ -568,6 +531,8 @@ __deprecated AjBool ajSysUnlink(const AjPStr s)
 **
 ** @param [u] Pfilename [AjPStr*] Filename in AjStr, replaced by full pathname
 ** @return [AjBool] True if executable found, false otherwise
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -637,18 +602,6 @@ AjBool ajSysFileWhich(AjPStr *Pfilename)
 
 
 
-/* @obsolete ajSysWhich
-** @rename ajSysFileWhich
-*/
-
-__deprecated AjBool ajSysWhich(AjPStr *s)
-{
-    return ajSysFileWhich(s);
-}
-
-
-
-
 /* @func ajSysFileWhichEnv ****************************************************
 **
 ** Gets the Basename of a file then searches $PATH sequentially until it
@@ -657,6 +610,8 @@ __deprecated AjBool ajSysWhich(AjPStr *s)
 ** @param [u] Pfilename [AjPStr*] Filename in AjStr, replaced by full pathname
 ** @param [r] env [char* const[]] Environment
 ** @return [AjBool] True if executable found, false otherwise
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -772,23 +727,13 @@ AjBool ajSysFileWhichEnv(AjPStr *Pfilename, char * const env[])
 
 
 
-/* @obsolete ajSysWhichEnv
-** @rename ajSysFileWhichEnv
-*/
-
-__deprecated AjBool ajSysWhichEnv(AjPStr *Pfilename, char * const env[])
-{
-    return ajSysFileWhichEnv(Pfilename, env);
-}
-
-
-
-
-/* @func ajSysGetHomedir *************************************************
+/* @func ajSysGetHomedir ******************************************************
 **
 ** Get the home directory of the current user
 **
 ** @return [char*] Home directory or NULL
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -821,12 +766,14 @@ char* ajSysGetHomedir(void)
 
 
 
-/* @func ajSysGetHomedirFromName *********************************************
+/* @func ajSysGetHomedirFromName **********************************************
 **
 ** Get a home directory location from  a username
 **
 ** @param [r] username [const char*] Username
 ** @return [char*] Home directory or NULL
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -979,7 +926,7 @@ char* ajSysGetHomedirFromName(const char *username)
 
 
 
-/* @func ajSysCommandCopyC **************************************************
+/* @func ajSysCommandCopyC ****************************************************
 **
 ** Copy a file
 **
@@ -987,6 +934,8 @@ char* ajSysGetHomedirFromName(const char *username)
 ** @param [r] name2 [const char*] Target filename
 ** @return [AjBool] True on success
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajSysCommandCopyC(const char* name, const char* name2)
@@ -1045,7 +994,7 @@ AjBool ajSysCommandCopyC(const char* name, const char* name2)
 
 
 
-/* @func ajSysCommandCopyS **************************************************
+/* @func ajSysCommandCopyS ****************************************************
 **
 ** Copy a file
 **
@@ -1053,6 +1002,8 @@ AjBool ajSysCommandCopyC(const char* name, const char* name2)
 ** @param [r] strname2 [const AjPStr] Target filename
 ** @return [AjBool] True on success
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajSysCommandCopyS(const AjPStr strname, const AjPStr strname2)
@@ -1070,6 +1021,8 @@ AjBool ajSysCommandCopyS(const AjPStr strname, const AjPStr strname2)
 ** @param [r] name [const char*] Directory
 ** @return [AjBool] True on success
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajSysCommandMakedirC(const char* name)
@@ -1098,6 +1051,8 @@ AjBool ajSysCommandMakedirC(const char* name)
 ** @param [r] strname [const AjPStr] Directory
 ** @return [AjBool] True on success
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajSysCommandMakedirS(const AjPStr strname)
@@ -1115,6 +1070,8 @@ AjBool ajSysCommandMakedirS(const AjPStr strname)
 ** @param [r] name [const char*] Filename
 ** @return [AjBool] True on success
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajSysCommandRemoveC(const char* name)
@@ -1132,6 +1089,8 @@ AjBool ajSysCommandRemoveC(const char* name)
 ** @param [r] strname [const AjPStr] Filename
 ** @return [AjBool] True on success
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajSysCommandRemoveS(const AjPStr strname)
@@ -1149,6 +1108,8 @@ AjBool ajSysCommandRemoveS(const AjPStr strname)
 ** @param [r] name [const char*] Directory
 ** @return [AjBool] True on success
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajSysCommandRemovedirC(const char* name)
@@ -1186,6 +1147,8 @@ AjBool ajSysCommandRemovedirC(const char* name)
 ** @param [r] strname [const AjPStr] Directory
 ** @return [AjBool] True on success
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajSysCommandRemovedirS(const AjPStr strname)
@@ -1196,7 +1159,7 @@ AjBool ajSysCommandRemovedirS(const AjPStr strname)
 
 
 
-/* @func ajSysCommandRenameC ************************************************
+/* @func ajSysCommandRenameC **************************************************
 **
 ** Rename a file
 **
@@ -1204,6 +1167,8 @@ AjBool ajSysCommandRemovedirS(const AjPStr strname)
 ** @param [r] name2 [const char*] Target filename
 ** @return [AjBool] True on success
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajSysCommandRenameC(const char* name, const char* name2)
@@ -1228,6 +1193,8 @@ AjBool ajSysCommandRenameC(const char* name, const char* name2)
 ** @param [r] strname2 [const AjPStr] Target filename
 ** @return [AjBool] True on success
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 AjBool ajSysCommandRenameS(const AjPStr strname, const AjPStr strname2)
@@ -1246,7 +1213,6 @@ AjBool ajSysCommandRenameS(const AjPStr strname, const AjPStr strname2)
 ** @fcategory misc
 **
 ** @nam3rule  Func         Replacement for C-function.
-** @nam4rule  FuncSocket   A socket function for UNIX and Windows
 ** @nam4rule  FuncStrtok   strtok that doesn't corrupt the source string
 ** @nam5rule  FuncStrtokR  Reentrant version.
 ** @nam4rule  FuncFgets    An fgets replacement that will cope with Mac OSX
@@ -1287,7 +1253,7 @@ AjBool ajSysCommandRenameS(const AjPStr strname, const AjPStr strname2)
 ** @valrule Fopen [FILE*] C open file
 ** @valrule Strdup [char*] New string
 ** @valrule Strtok [char*] New string
-** @valrule Socket [SOCKRET] Socketvoid]
+** @valrule Socket [SOCKRET] Socketvoid
 ** @valrule System [void]
 **
 ******************************************************************************/
@@ -1302,6 +1268,8 @@ AjBool ajSysCommandRenameS(const AjPStr strname, const AjPStr strname2)
 ** @param [r] filedes [ajint] file descriptor
 ** @param [r] mode [const char*] file mode
 ** @return [FILE*] file pointer
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -1319,18 +1287,6 @@ FILE* ajSysFuncFdopen(ajint filedes, const char *mode)
 
 
 
-/* @obsolete ajSysFdopen
-** @rename ajSysFuncFdopen
-*/
-
-__deprecated FILE* ajSysFdopen(ajint filedes, const char *mode)
-{
-    return ajSysFuncFdopen(filedes, mode);
-}
-
-
-
-
 /* @func ajSysFuncFgets *******************************************************
 **
 ** An fgets replacement that will cope with Mac OSX <CR> files
@@ -1340,6 +1296,8 @@ __deprecated FILE* ajSysFdopen(ajint filedes, const char *mode)
 ** @param [u] fp [FILE*] stream
 **
 ** @return [char*] buf or NULL
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -1397,18 +1355,6 @@ char* ajSysFuncFgets(char *buf, int size, FILE *fp)
 
 
 
-/* @obsolete ajSysFgets
-** @rename ajSysFuncFgets
-*/
-
-__deprecated char* ajSysFgets(char *buf, int size, FILE *fp)
-{
-    return ajSysFuncFgets(buf, size, fp);
-}
-
-
-
-
 /* @func ajSysFuncFopen *******************************************************
 **
 ** An fopen replacement to cope with cygwin and windows
@@ -1417,6 +1363,8 @@ __deprecated char* ajSysFgets(char *buf, int size, FILE *fp)
 ** @param [r] flags [const char*] r/w/a flags
 **
 ** @return [FILE*] file or NULL
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -1447,18 +1395,6 @@ FILE* ajSysFuncFopen(const char *name, const char *flags)
 
 
 
-/* @obsolete ajSysFopen
-** @rename ajSysFuncFopen
-*/
-
-__deprecated FILE* ajSysFopen(const char *name, const char *flags)
-{
-    return ajSysFuncFopen(name, flags);
-}
-
-
-
-
 /* @func ajSysFuncSocket ******************************************************
 **
 ** Socket function coping with UNIX and WIN32
@@ -1467,6 +1403,8 @@ __deprecated FILE* ajSysFopen(const char *name, const char *flags)
 ** @param [r] type [int] Type
 ** @param [r] protocol [int] Protocol
 ** @return [SOCKRET] Universal (UNIX/WIN32) socket value
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1492,6 +1430,8 @@ SOCKRET ajSysFuncSocket(int domain, int type, int protocol)
 **
 ** @param [r] dupstr [const char*] string to duplicate
 ** @return [char*] Text string as for strdup
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -1508,17 +1448,6 @@ char* ajSysFuncStrdup(const char *dupstr)
 
 
 
-/* @obsolete ajSysStrdup
-** @rename ajSysFuncStrdup
-*/
-__deprecated char* ajSysStrdup(const char *s)
-{
-    return ajSysFuncStrdup(s);
-}
-
-
-
-
 /* @func ajSysFuncStrtok ******************************************************
 **
 ** strtok that doesn't corrupt the source string
@@ -1527,6 +1456,8 @@ __deprecated char* ajSysStrdup(const char *s)
 ** @param [r] delimstr [const char*] delimiter string
 **
 ** @return [char*] pointer or NULL when nothing is found
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -1563,18 +1494,6 @@ char* ajSysFuncStrtok(const char *srcstr, const char *delimstr)
 
 
 
-/* @obsolete ajSysStrtok
-** @rename ajSysFuncStrtok
-*/
-
-__deprecated char* ajSysStrtok(const char *s, const char *t)
-{
-    return ajSysFuncStrtok(s, t);
-}
-
-
-
-
 /* @func ajSysFuncStrtokR *****************************************************
 **
 ** Reentrant strtok that doesn't corrupt the source string.
@@ -1586,6 +1505,8 @@ __deprecated char* ajSysStrtok(const char *s, const char *t)
 ** @param [w] buf [AjPStr*] result buffer
 **
 ** @return [char*] pointer or NULL
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -1618,21 +1539,6 @@ char* ajSysFuncStrtokR(const char *srcstr, const char *delimstr,
     *ptrptr = p;
 
     return ajStrGetuniquePtr(buf);
-}
-
-
-
-
-/* @obsolete ajSysStrtokR
-** @rename ajSysFuncStrtokR
-*/
-
-
-__deprecated char* ajSysStrtokR(const char *s, const char *t,
-				const char **ptrptr,
-				AjPStr *buf)
-{
-    return ajSysFuncStrtokR(s, t, ptrptr, buf);
 }
 
 
@@ -1687,6 +1593,8 @@ __deprecated char* ajSysStrtokR(const char *s, const char *t,
 **
 ** @param [r] cmdlinetxt [const char*] The command line
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1779,6 +1687,8 @@ ajint ajSysExecC(const char* cmdlinetxt)
 **
 ** @param [r] cmdline [const AjPStr] The command line
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1804,6 +1714,8 @@ ajint ajSysExecS(const AjPStr cmdline)
 ** @param [r] cmdlinetxt [const char*] The command line
 ** @param [r] env [char* const[]] The environment
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1889,39 +1801,14 @@ ajint ajSysExecEnvC(const char* cmdlinetxt, char * const env[])
 ** @param [r] cmdline [const AjPStr] The command line
 ** @param [r] env [char* const[]] The environment
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 ajint ajSysExecEnvS(const AjPStr cmdline, char * const env[])
 {
     return ajSysExecEnvC(MAJSTRGETPTR(cmdline), env);
-}
-
-
-
-
-/* @obsolete ajSystemEnv
-** @rename ajSysExecEnvS
-*/
-
-__deprecated void ajSystemEnv(const AjPStr cl, char * const env[])
-{
-    ajSysExecEnvS(cl, env);
-    return;
-}
-
-
-
-
-/* @obsolete ajSysSystemEnv
-** @rename ajSysExecEnvS
-*/
-
-__deprecated void ajSysSystemEnv(const AjPStr cmdline, char * const env[])
-{
-    ajSysExecEnvS(cmdline, env);
-
-    return;
 }
 
 
@@ -1937,6 +1824,8 @@ __deprecated void ajSysSystemEnv(const AjPStr cmdline, char * const env[])
 ** @param [r] cmdlinetxt [const char*] The command line
 ** @param [r] localetxt [const char*] The locale value
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -2032,6 +1921,8 @@ ajint ajSysExecLocaleC(const char* cmdlinetxt, const char* localetxt)
 ** @param [r] cmdline [const AjPStr] The command line
 ** @param [r] localestr [const AjPStr] The locale value
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -2043,7 +1934,7 @@ ajint ajSysExecLocaleS(const AjPStr cmdline, const AjPStr localestr)
 
 
 
-/* @func ajSysExecOutnameC *************************************************
+/* @func ajSysExecOutnameC ****************************************************
 **
 ** Exec a command line as if from the C shell with standard output redirected
 ** to and overwriting a named file
@@ -2053,6 +1944,8 @@ ajint ajSysExecLocaleS(const AjPStr cmdline, const AjPStr localestr)
 ** @param [r] cmdlinetxt [const char*] The command line
 ** @param [r] outfnametxt [const char*] The output file name
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -2180,6 +2073,8 @@ ajint ajSysExecOutnameC(const char* cmdlinetxt, const char* outfnametxt)
 ** @param [r] cmdline [const AjPStr] The command line
 ** @param [r] outfname [const AjPStr] The output file name
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -2201,6 +2096,8 @@ ajint ajSysExecOutnameS(const AjPStr cmdline, const AjPStr outfname)
 ** @param [r] cmdlinetxt [const char*] The command line
 ** @param [r] outfnametxt [const char*] The output file name
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -2332,6 +2229,8 @@ ajint ajSysExecOutnameAppendC(const char* cmdlinetxt, const char* outfnametxt)
 ** @param [r] cmdline [const AjPStr] The command line
 ** @param [r] outfname [const AjPStr] The output file name
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -2354,6 +2253,8 @@ ajint ajSysExecOutnameAppendS(const AjPStr cmdline, const AjPStr outfname)
 ** @param [r] cmdlinetxt [const char*] The command line
 ** @param [r] outfnametxt [const char*] The output file name
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -2489,38 +2390,14 @@ ajint ajSysExecOutnameErrC(const char* cmdlinetxt, const char* outfnametxt)
 ** @param [r] cmdline [const AjPStr] The command line
 ** @param [r] outfname [const AjPStr] The output file name
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 ajint ajSysExecOutnameErrS(const AjPStr cmdline, const AjPStr outfname)
 {
     return ajSysExecOutnameErrC(MAJSTRGETPTR(cmdline), MAJSTRGETPTR(outfname));
-}
-
-
-
-
-/* @obsolete ajSystemOut
-** @rename ajSysExecOutnameS
-*/
-
-__deprecated void ajSystemOut(const AjPStr cl, const AjPStr outfname)
-{
-    ajSysExecOutnameS(cl, outfname);
-    return;
-}
-
-
-
-
-/* @obsolete ajSysSystemOut
-** @rename ajSysExecOutnameS
-*/
-
-__deprecated void ajSysSystemOut(const AjPStr cmdline, const AjPStr outfname)
-{
-    ajSysExecOutnameS(cmdline, outfname);
-    return;
 }
 
 
@@ -2536,6 +2413,8 @@ __deprecated void ajSysSystemOut(const AjPStr cmdline, const AjPStr outfname)
 ** @param [r] cmdlinetxt [const char*] The command line
 ** @param [r] outfnametxt [const char*] The output file name
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -2670,6 +2549,8 @@ ajint ajSysExecOutnameErrAppendC(const char* cmdlinetxt,
 ** @param [r] cmdline [const AjPStr] The command line
 ** @param [r] outfname [const AjPStr] The output file name
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -2690,6 +2571,8 @@ ajint ajSysExecOutnameErrAppendS(const AjPStr cmdline, const AjPStr outfname)
 **
 ** @param [r] cmdlinetxt [const char*] The command line
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -2779,6 +2662,8 @@ ajint ajSysExecPathC(const char* cmdlinetxt)
 **
 ** @param [r] cmdline [const AjPStr] The command line
 ** @return [ajint] Exit status
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -2790,33 +2675,7 @@ ajint ajSysExecPathS(const AjPStr cmdline)
 
 
 
-/* @obsolete ajSystem
-** @rename ajSysSystem
-*/
-
-__deprecated void ajSystem(const AjPStr cl)
-{
-    ajSysExecS(cl);
-    return;
-}
-
-
-
-
-/* @obsolete ajSysSystem
-** @rename ajSysExecS
-*/
-
-__deprecated void ajSysSystem(const AjPStr cmdline)
-{
-    ajSysExecS(cmdline);
-    return;
-}
-
-
-
-
-/* @func ajSysExecRedirectC **************************************************
+/* @func ajSysExecRedirectC ***************************************************
 **
 ** Execute an application redirecting its stdin/out to pipe fds
 **
@@ -2825,6 +2684,8 @@ __deprecated void ajSysSystem(const AjPStr cmdline)
 ** @param [w] pipeto [int**] pipes to the process
 ** @param [w] pipefrom [int**] pipes from the process
 ** @return [AjBool] True on success
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -3101,6 +2962,8 @@ AjBool ajSysExecRedirectC(const char *cmdlinetxt, int **pipeto, int **pipefrom)
 ** @param [r] arg [char* const[]] Argument list
 ** @param [r] env [char* const[]] An environment
 ** @return [ajint] Exit status
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3119,19 +2982,6 @@ ajint  ajSysExecprogNowaitC(const char *prog, char * const arg[],
 
 
 
-/* @obsolete ajSysExecProgArgEnvNowaitC
-** @rename ajSysExecProgArgEnvNowaitC
-*/
-__deprecated ajint  ajSysExecProgArgEnvNowaitC(const char *prog,
-                                               char * const arg[],
-                                               char * const env[])
-{
-    return ajSysExecprogNowaitC(prog, arg, env);
-}
-
-
-
-
 /* @func ajSysExecprogNowaitS *************************************************
 **
 ** Exec a command line with no parent wait
@@ -3144,24 +2994,13 @@ __deprecated ajint  ajSysExecProgArgEnvNowaitC(const char *prog,
 ** @param [r] arg [char* const[]] Argument list
 ** @param [r] env [char* const[]] An environment
 ** @return [ajint] Exit status
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajint ajSysExecprogNowaitS(const AjPStr progstr, char * const arg[],
                            char * const env[])
-{
-    return ajSysExecprogNowaitC(MAJSTRGETPTR(progstr), arg, env);
-}
-
-
-
-
-/* @obsolete ajSysExecProgArgEnvNowaitS
-** @rename ajSysExecProgArgEnvNowaitS
-*/
-__deprecated ajint  ajSysExecProgArgEnvNowaitS(const AjPStr progstr,
-                                               char * const arg[],
-                                               char * const env[])
 {
     return ajSysExecprogNowaitC(MAJSTRGETPTR(progstr), arg, env);
 }
@@ -3186,11 +3025,11 @@ __deprecated ajint  ajSysExecProgArgEnvNowaitS(const AjPStr progstr,
 ** @nam4rule  TimeoutSet     Set a timeout
 ** @nam4rule  TimeoutUnset   Unset a timeout
 ** 
-** @argrule Canon        state [AjBool]        Canonical mode set if true
-** @argrule FdFromSocket sock  [const struct AJSOCKET] AJAX socket structure
-** @argrule FdFromSocket mode  [const char*]          Opening mode ("r" or "a")
-** @argrule Socketclose  sock  [struct AJSOCKET]      AJAX socket structure
-** @argrule Timeout      ts    [struct AJTIMEOUT*]     AJAX timeout structure
+** @argrule Canon        state [AjBool]          Canonical mode set if true
+** @argrule FdFromSocket sock  [const AjOSysSocket] AJAX socket structure
+** @argrule FdFromSocket mode  [const char*]     Opening mode ("r" or "a")
+** @argrule Socketclose  sock  [AjOSysSocket]       AJAX socket structure
+** @argrule Timeout      ts    [AjPSysTimeout]      AJAX timeout structure
 ** 
 ** @valrule  *  [void]
 ** @valrule  *FdFromSocket  [FILE*] File descriptor
@@ -3207,6 +3046,8 @@ __deprecated ajint  ajSysExecProgArgEnvNowaitS(const AjPStr progstr,
 **
 ** @param [r] state [AjBool] state=true sets canon state=false sets noncanon
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3236,17 +3077,19 @@ void ajSysCanon(AjBool state)
 
 
 
-/* @func ajSysFdFromSocket  ****************************************************
+/* @func ajSysFdFromSocket  ***************************************************
 **
 ** Return a file descriptor from a UNIX of Windows socket
 **
-** @param [r] sock [const struct AJSOCKET] AJAX socket structure
+** @param [r] sock [const AjOSysSocket] AJAX socket structure
 ** @param [r] mode [const char*] Opening mode ("r" or "a")
 ** @return [FILE*] File descriptor
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
-FILE* ajSysFdFromSocket(const struct AJSOCKET sock, const char *mode)
+FILE* ajSysFdFromSocket(const AjOSysSocket sock, const char *mode)
 {
     FILE *ret;
 #ifdef WIN32
@@ -3291,12 +3134,14 @@ FILE* ajSysFdFromSocket(const struct AJSOCKET sock, const char *mode)
 **
 ** Closes a UNIX or WIN32 socket
 **
-** @param [u] sock [struct AJSOCKET] AJAX socket structure
+** @param [u] sock [AjOSysSocket] AJAX socket structure
 ** @return [void]
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
-void ajSysSocketclose(struct AJSOCKET sock)
+void ajSysSocketclose(AjOSysSocket sock)
 {
 #ifndef WIN32
     close(sock.sock);
@@ -3310,16 +3155,18 @@ void ajSysSocketclose(struct AJSOCKET sock)
 
 
 
-/* @func ajSysTimeoutSet *****************************************************
+/* @func ajSysTimeoutSet ******************************************************
 **
 ** Sets an alarm abort timeout for UNIX and Windows
 **
-** @param [u] ts [struct AJTIMEOUT*] AJAX timeout structure
+** @param [u] ts [AjPSysTimeout] AJAX timeout structure
 ** @return [int] 0 = success -1 = error
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
-int ajSysTimeoutSet(struct AJTIMEOUT *ts)
+int ajSysTimeoutSet(AjPSysTimeout ts)
 {
     int ret = 0;
     
@@ -3353,16 +3200,18 @@ int ajSysTimeoutSet(struct AJTIMEOUT *ts)
 
 
 
-/* @func ajSysTimeoutUnset ***************************************************
+/* @func ajSysTimeoutUnset ****************************************************
 **
 ** Unsets an alarm abort timeout for UNIX and Windows
 **
-** @param [u] ts [struct AJTIMEOUT*] AJAX timeout structure
+** @param [u] ts [AjPSysTimeout] AJAX timeout structure
 ** @return [int] 0 = success -1 = error
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
-int ajSysTimeoutUnset(struct AJTIMEOUT *ts)
+int ajSysTimeoutUnset(AjPSysTimeout ts)
 {
     int ret = 0;
     
@@ -3385,13 +3234,15 @@ int ajSysTimeoutUnset(struct AJTIMEOUT *ts)
 
 
 #ifndef WIN32
-/* @funcstatic sysTimeoutAbort ********************************************
+/* @funcstatic sysTimeoutAbort ************************************************
 **
 ** Fatal error if a socket read hangs
 **
 ** @param [r] sig [int] Signal code - always SIGALRM but required by the
 **                      signal call
 ** @return [void]
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 static void sysTimeoutAbort(int sig)
@@ -3414,59 +3265,6 @@ static void CALLBACK sysTimeoutAbort(LPVOID arg, DWORD low, DWORD high)
     return;
 }
 #endif
-
-
-
-
-/* @obsolete ajSysBasename
-** @rename ajFilenameTrimPath
-*/
-
-__deprecated void ajSysBasename(AjPStr *s)
-{
-    ajFilenameTrimPath(s);
-
-    return;
-}
-
-
-
-
-/* @obsolete ajSysIsDirectory
-** @remove use ajFileDir instead
-*/
-
-__deprecated AjBool ajSysIsDirectory(const char *s)
-{
-    AjBool ret;
-    AjPStr tmpstr = NULL;
-    tmpstr = ajStrNewC(s);
-
-    ret = ajDirnameFixExists(&tmpstr);
-    ajStrDel(&tmpstr);
-
-    return ret;
-}
-
-
-
-
-/* @obsolete ajSysIsRegular
-** @remove use ajFileNameValid instead
-*/
-
-__deprecated AjBool ajSysIsRegular(const char *s)
-{
-    AjBool ret;
-    AjPStr tmpstr;
-
-    tmpstr = ajStrNewC(s);
-
-    ret = ajFilenameExistsRead(tmpstr);
-    ajStrDel(&tmpstr);
-
-    return ret;
-}
 
 
 
@@ -3500,6 +3298,8 @@ __deprecated AjBool ajSysIsRegular(const char *s)
 ** @param [r] cmdlinetxt [const char*] Command string.
 **                    The string may end with a trailing pipe character.
 ** @return [AjPFile] New file object.
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -3654,6 +3454,8 @@ AjPFile ajSysCreateInpipeC(const char* cmdlinetxt)
 ** @param [r] command [const AjPStr] Command string.
 **                    The string may end with a trailing pipe character.
 ** @return [AjPFile] New file object.
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -3688,6 +3490,8 @@ AjPFile ajSysCreateInpipeS(const AjPStr command)
 ** Cleans up system internals memory
 **
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -3701,3 +3505,354 @@ void ajSysExit(void)
 
     return;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajSysArglistBuild
+** @rename ajSysArglistBuildS
+*/
+
+__deprecated AjBool ajSysArglistBuild(const AjPStr cmdline,
+                                      char** Pname, char*** PParglist)
+{    
+    return ajSysArglistBuildS(cmdline, Pname, PParglist);
+}
+
+
+
+
+/* @obsolete ajSysArglist
+** @rename ajSysArglistBuildS
+*/
+
+__deprecated AjBool ajSysArglist(const AjPStr cmdline,
+				 char** Pname, char*** PParglist)
+{    
+    return ajSysArglistBuildS(cmdline, Pname, PParglist);
+}
+
+
+
+
+/* @obsolete ajSysArgListFree
+** @rename ajSysArglistFree
+*/
+
+__deprecated void ajSysArgListFree(char*** PParglist)
+{
+    ajSysArglistFree(PParglist);
+    return;
+}
+
+
+
+
+/* @obsolete ajSysItoC
+** @rename ajSysCastItoC
+*/
+
+__deprecated char ajSysItoC(ajint v)
+{
+    return ajSysCastItoc(v);
+}
+
+
+
+
+/* @obsolete ajSysItoUC
+** @rename ajSysCastItouc
+*/
+
+__deprecated unsigned char ajSysItoUC(ajint v)
+{
+    return ajSysCastItouc(v);
+}
+
+
+
+
+/* @obsolete ajSysFileUnlink
+** @rename ajSysFileUnlinkS
+*/
+
+__deprecated AjBool ajSysFileUnlink(const AjPStr s)
+{
+    return ajSysFileUnlinkS(s);
+}
+
+
+
+
+/* @obsolete ajSysUnlink
+** @rename ajSysFileUnlinkS
+*/
+
+__deprecated AjBool ajSysUnlink(const AjPStr s)
+{
+    return ajSysFileUnlinkS(s);
+}
+
+
+
+
+/* @obsolete ajSysWhich
+** @rename ajSysFileWhich
+*/
+
+__deprecated AjBool ajSysWhich(AjPStr *s)
+{
+    return ajSysFileWhich(s);
+}
+
+
+
+
+/* @obsolete ajSysWhichEnv
+** @rename ajSysFileWhichEnv
+*/
+
+__deprecated AjBool ajSysWhichEnv(AjPStr *Pfilename, char * const env[])
+{
+    return ajSysFileWhichEnv(Pfilename, env);
+}
+
+
+
+
+/* @obsolete ajSysFdopen
+** @rename ajSysFuncFdopen
+*/
+
+__deprecated FILE* ajSysFdopen(ajint filedes, const char *mode)
+{
+    return ajSysFuncFdopen(filedes, mode);
+}
+
+
+
+
+/* @obsolete ajSysFgets
+** @rename ajSysFuncFgets
+*/
+
+__deprecated char* ajSysFgets(char *buf, int size, FILE *fp)
+{
+    return ajSysFuncFgets(buf, size, fp);
+}
+
+
+
+
+/* @obsolete ajSysFopen
+** @rename ajSysFuncFopen
+*/
+
+__deprecated FILE* ajSysFopen(const char *name, const char *flags)
+{
+    return ajSysFuncFopen(name, flags);
+}
+
+
+
+
+/* @obsolete ajSysStrdup
+** @rename ajSysFuncStrdup
+*/
+__deprecated char* ajSysStrdup(const char *s)
+{
+    return ajSysFuncStrdup(s);
+}
+
+
+
+
+/* @obsolete ajSysStrtok
+** @rename ajSysFuncStrtok
+*/
+
+__deprecated char* ajSysStrtok(const char *s, const char *t)
+{
+    return ajSysFuncStrtok(s, t);
+}
+
+
+
+
+/* @obsolete ajSysStrtokR
+** @rename ajSysFuncStrtokR
+*/
+
+
+__deprecated char* ajSysStrtokR(const char *s, const char *t,
+				const char **ptrptr,
+				AjPStr *buf)
+{
+    return ajSysFuncStrtokR(s, t, ptrptr, buf);
+}
+
+
+
+
+/* @obsolete ajSystemEnv
+** @rename ajSysExecEnvS
+*/
+
+__deprecated void ajSystemEnv(const AjPStr cl, char * const env[])
+{
+    ajSysExecEnvS(cl, env);
+    return;
+}
+
+
+
+
+/* @obsolete ajSysSystemEnv
+** @rename ajSysExecEnvS
+*/
+
+__deprecated void ajSysSystemEnv(const AjPStr cmdline, char * const env[])
+{
+    ajSysExecEnvS(cmdline, env);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajSystemOut
+** @rename ajSysExecOutnameS
+*/
+
+__deprecated void ajSystemOut(const AjPStr cl, const AjPStr outfname)
+{
+    ajSysExecOutnameS(cl, outfname);
+    return;
+}
+
+
+
+
+/* @obsolete ajSysSystemOut
+** @rename ajSysExecOutnameS
+*/
+
+__deprecated void ajSysSystemOut(const AjPStr cmdline, const AjPStr outfname)
+{
+    ajSysExecOutnameS(cmdline, outfname);
+    return;
+}
+
+
+
+
+/* @obsolete ajSystem
+** @rename ajSysSystem
+*/
+
+__deprecated void ajSystem(const AjPStr cl)
+{
+    ajSysExecS(cl);
+    return;
+}
+
+
+
+
+/* @obsolete ajSysSystem
+** @rename ajSysExecS
+*/
+
+__deprecated void ajSysSystem(const AjPStr cmdline)
+{
+    ajSysExecS(cmdline);
+    return;
+}
+
+
+
+
+/* @obsolete ajSysExecProgArgEnvNowaitC
+** @rename ajSysExecProgArgEnvNowaitC
+*/
+__deprecated ajint  ajSysExecProgArgEnvNowaitC(const char *prog,
+                                               char * const arg[],
+                                               char * const env[])
+{
+    return ajSysExecprogNowaitC(prog, arg, env);
+}
+
+
+
+
+/* @obsolete ajSysExecProgArgEnvNowaitS
+** @rename ajSysExecProgArgEnvNowaitS
+*/
+__deprecated ajint  ajSysExecProgArgEnvNowaitS(const AjPStr progstr,
+                                               char * const arg[],
+                                               char * const env[])
+{
+    return ajSysExecprogNowaitC(MAJSTRGETPTR(progstr), arg, env);
+}
+
+
+
+
+/* @obsolete ajSysBasename
+** @rename ajFilenameTrimPath
+*/
+
+__deprecated void ajSysBasename(AjPStr *s)
+{
+    ajFilenameTrimPath(s);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajSysIsDirectory
+** @remove use ajFileDir instead
+*/
+
+__deprecated AjBool ajSysIsDirectory(const char *s)
+{
+    AjBool ret;
+    AjPStr tmpstr = NULL;
+    tmpstr = ajStrNewC(s);
+
+    ret = ajDirnameFixExists(&tmpstr);
+    ajStrDel(&tmpstr);
+
+    return ret;
+}
+
+
+
+
+/* @obsolete ajSysIsRegular
+** @remove use ajFileNameValid instead
+*/
+
+__deprecated AjBool ajSysIsRegular(const char *s)
+{
+    AjBool ret;
+    AjPStr tmpstr;
+
+    tmpstr = ajStrNewC(s);
+
+    ret = ajFilenameExistsRead(tmpstr);
+    ajStrDel(&tmpstr);
+
+    return ret;
+}
+#endif

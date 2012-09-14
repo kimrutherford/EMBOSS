@@ -1,28 +1,35 @@
-/******************************************************************************
-** @source AJAX Phylogeny functions
+/* @source ajphylo ************************************************************
+**
+** AJAX Phylogeny functions
 ** These functions create and control linked lists.
 **
 ** @author Copyright (C) 2003 Peter Rice
-** @version 1.0
+** @version $Revision: 1.40 $
+** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajphylo.h"
+#include "ajreg.h"
+#include "ajfileio.h"
 
 
 static AjPRegexp phyloRegDistFloat = NULL;
@@ -43,11 +50,13 @@ static AjPRegexp phyloRegTreeLength  = NULL;
 
 
 
-/* @func ajPhyloDistNew ******************************************************
+/* @func ajPhyloDistNew *******************************************************
 **
 ** Constructor for AjPPhyloDist
 **
 ** @return [AjPPhyloDist] AjPPhyloDist object
+**
+** @release 2.8.0
 ******************************************************************************/
 
 AjPPhyloDist ajPhyloDistNew(void)
@@ -62,11 +71,13 @@ AjPPhyloDist ajPhyloDistNew(void)
 
 
 
-/* @func ajPhyloFreqNew ******************************************************
+/* @func ajPhyloFreqNew *******************************************************
 **
 ** Constructor for AjPPhyloFreq
 **
 ** @return [AjPPhyloFreq] AjPPhyloFreq object
+**
+** @release 2.8.0
 ******************************************************************************/
 
 AjPPhyloFreq ajPhyloFreqNew(void)
@@ -81,11 +92,13 @@ AjPPhyloFreq ajPhyloFreqNew(void)
 
 
 
-/* @func ajPhyloPropNew ******************************************************
+/* @func ajPhyloPropNew *******************************************************
 **
 ** Constructor for AjPPhyloProp
 **
 ** @return [AjPPhyloProp] AjPPhyloProp object
+**
+** @release 2.8.0
 ******************************************************************************/
 
 AjPPhyloProp ajPhyloPropNew(void)
@@ -100,11 +113,13 @@ AjPPhyloProp ajPhyloPropNew(void)
 
 
 
-/* @func ajPhyloStateNew *****************************************************
+/* @func ajPhyloStateNew ******************************************************
 **
 ** Constructor for AjPPhyloState
 **
 ** @return [AjPPhyloState] AjPPhyloState object
+**
+** @release 2.8.0
 ******************************************************************************/
 
 AjPPhyloState ajPhyloStateNew(void)
@@ -119,11 +134,13 @@ AjPPhyloState ajPhyloStateNew(void)
 
 
 
-/* @func ajPhyloTreeNew ******************************************************
+/* @func ajPhyloTreeNew *******************************************************
 **
 ** Constructor for AjPPhyloTree
 **
 ** @return [AjPPhyloTree] AjPPhyloTree object
+**
+** @release 2.8.0
 ******************************************************************************/
 
 AjPPhyloTree ajPhyloTreeNew(void)
@@ -138,12 +155,14 @@ AjPPhyloTree ajPhyloTreeNew(void)
 
 
 
-/* @func ajPhyloDistDel ******************************************************
+/* @func ajPhyloDistDel *******************************************************
 **
 ** Destructor for AjPPhyloDist
 **
 ** @param [d] pthis [AjPPhyloDist*] Distance object
 ** @return [void]
+**
+** @release 2.8.0
 ******************************************************************************/
 
 void ajPhyloDistDel(AjPPhyloDist* pthis)
@@ -178,12 +197,14 @@ void ajPhyloDistDel(AjPPhyloDist* pthis)
 
 
 
-/* @func ajPhyloFreqDel ******************************************************
+/* @func ajPhyloFreqDel *******************************************************
 **
 ** Destructor for AjPPhyloFreq
 **
 ** @param [d] pthis [AjPPhyloFreq*] frequency object
 ** @return [void]
+**
+** @release 2.8.0
 ******************************************************************************/
 
 void ajPhyloFreqDel(AjPPhyloFreq* pthis)
@@ -227,6 +248,8 @@ void ajPhyloFreqDel(AjPPhyloFreq* pthis)
 **
 ** @param [d] pthis [AjPPhyloProp*] Properties object
 ** @return [void]
+**
+** @release 2.8.0
 ******************************************************************************/
 
 void ajPhyloPropDel(AjPPhyloProp* pthis)
@@ -260,6 +283,8 @@ void ajPhyloPropDel(AjPPhyloProp* pthis)
 **
 ** @param [d] pthis [AjPPhyloState*] Discrete states object
 ** @return [void]
+**
+** @release 2.8.0
 ******************************************************************************/
 
 void ajPhyloStateDel(AjPPhyloState* pthis)
@@ -307,6 +332,8 @@ void ajPhyloStateDel(AjPPhyloState* pthis)
 **
 ** @param [d] pthis [AjPPhyloState**] States object array
 ** @return [void]
+**
+** @release 4.1.0
 ******************************************************************************/
 
 void ajPhyloStateDelarray(AjPPhyloState** pthis)
@@ -339,6 +366,8 @@ void ajPhyloStateDelarray(AjPPhyloState** pthis)
 **
 ** @param [d] pthis [AjPPhyloTree*] Trees object
 ** @return [void]
+**
+** @release 2.8.0
 ******************************************************************************/
 
 void ajPhyloTreeDel(AjPPhyloTree* pthis)
@@ -369,6 +398,8 @@ void ajPhyloTreeDel(AjPPhyloTree* pthis)
 **
 ** @param [d] pthis [AjPPhyloTree**] Trees object array
 ** @return [void]
+**
+** @release 4.1.0
 ******************************************************************************/
 
 void ajPhyloTreeDelarray(AjPPhyloTree** pthis)
@@ -404,6 +435,8 @@ void ajPhyloTreeDelarray(AjPPhyloTree** pthis)
 ** @param [r] missing [AjBool] Missing values (replicates zero) allowed
 ** @return [AjPPhyloDist*] Phylogenetic distances object on success
 **                        NULL on failure
+**
+** @release 2.8.0
 ******************************************************************************/
 
 AjPPhyloDist* ajPhyloDistRead(const AjPStr filename, ajint size,
@@ -715,7 +748,7 @@ AjPPhyloDist* ajPhyloDistRead(const AjPStr filename, ajint size,
 	return NULL;
     }
 
-    ajDebug("Distances file '%S' has %u distance matrices\n",
+    ajDebug("Distances file '%S' has %Lu distance matrices\n",
 	    filename, ajListGetLength(distlist));
     ajFileClose(&distfile);
     ajListToarray(distlist, (void***) &ret);
@@ -740,6 +773,8 @@ AjPPhyloDist* ajPhyloDistRead(const AjPStr filename, ajint size,
 **
 ** @param [r] thys [const AjPPhyloDist] Phylogenetic frequencies object
 ** @return [void]
+**
+** @release 2.8.0
 ******************************************************************************/
 
 void ajPhyloDistTrace(const AjPPhyloDist thys)
@@ -802,6 +837,8 @@ void ajPhyloDistTrace(const AjPPhyloDist thys)
 **                           only for continuous character data.
 ** @return [AjPPhyloFreq] Phylogenetic frequencies object on success
 **                        NULL on failure
+**
+** @release 2.8.0
 ******************************************************************************/
 
 AjPPhyloFreq ajPhyloFreqRead(const AjPStr filename,
@@ -1199,6 +1236,8 @@ AjPPhyloFreq ajPhyloFreqRead(const AjPStr filename,
 **
 ** @param [r] thys [const AjPPhyloFreq] Phylogenetic frequencies object
 ** @return [void]
+**
+** @release 2.8.0
 ******************************************************************************/
 
 void ajPhyloFreqTrace(const AjPPhyloFreq thys)
@@ -1324,6 +1363,8 @@ void ajPhyloFreqTrace(const AjPPhyloFreq thys)
 **                         If zero, read first only or whatever the file says
 ** @return [AjPPhyloProp] Phylogenetic properties object on success
 **                        NULL on failure
+**
+** @release 2.8.0
 ******************************************************************************/
 
 AjPPhyloProp ajPhyloPropRead(const AjPStr filename, const AjPStr propchars,
@@ -1460,7 +1501,7 @@ AjPPhyloProp ajPhyloPropRead(const AjPStr filename, const AjPStr propchars,
 	ajListToarray(proplist, (void***) &props);
 	ret->Str = (AjPStr*) props;
 
-	ret->Size = ajListGetLength(proplist);;
+	ret->Size = (ajuint) ajListGetLength(proplist);;
 	ret->Len = len;
     }
 
@@ -1483,6 +1524,8 @@ AjPPhyloProp ajPhyloPropRead(const AjPStr filename, const AjPStr propchars,
 **
 ** @param [r] thys [const AjPPhyloProp] Properties object
 ** @return [ajint] Number of property strings
+**
+** @release 2.8.0
 ******************************************************************************/
 
 ajint ajPhyloPropGetSize(const AjPPhyloProp thys)
@@ -1502,6 +1545,8 @@ ajint ajPhyloPropGetSize(const AjPPhyloProp thys)
 **
 ** @param [r] thys [const AjPPhyloProp] Phylogenetic frequencies object
 ** @return [void]
+**
+** @release 2.9.0
 ******************************************************************************/
 
 void ajPhyloPropTrace(const AjPPhyloProp thys)
@@ -1534,6 +1579,8 @@ void ajPhyloPropTrace(const AjPPhyloProp thys)
 ** @param [r] statechars [const AjPStr] Valid state characters
 ** @return [AjPPhyloState*] Phylogenetic discrete states object on success
 **                        NULL on failure
+**
+** @release 2.8.0
 ******************************************************************************/
 
 AjPPhyloState* ajPhyloStateRead(const AjPStr filename, const AjPStr statechars)
@@ -1644,7 +1691,7 @@ AjPPhyloState* ajPhyloStateRead(const AjPStr filename, const AjPStr statechars)
                           "expected [%S]",
 			  tmpstr, state->Names[i], statechars);
 		}
-		if(*cp && !isspace(*cp))
+		if(*cp && !isspace((int)*cp))
 		    ajErr("found bad state character '%c' for '%S', "
                           "expected [%S]",
 			  *cp, state->Names[i], statechars);
@@ -1700,6 +1747,8 @@ AjPPhyloState* ajPhyloStateRead(const AjPStr filename, const AjPStr statechars)
 **
 ** @param [r] thys [const AjPPhyloState] Phylogenetic discrete states object
 ** @return [void]
+**
+** @release 2.9.0
 ******************************************************************************/
 
 void ajPhyloStateTrace(const AjPPhyloState thys)
@@ -1785,6 +1834,8 @@ void ajPhyloStateTrace(const AjPPhyloState thys)
 **                         If zero, read all trees
 ** @return [AjPPhyloTree*] Phylogenetic tree object array on success
 **                        NULL on failure
+**
+** @release 2.8.0
 ******************************************************************************/
 
 AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
@@ -1968,7 +2019,7 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
 	    return NULL;
 	}
 
-	ajDebug("Tree file '%S' has %d (%d) trees,"
+	ajDebug("Tree file '%S' has %d (%Lu) trees,"
 		" required %d\n",
 		  filename, i, ajListGetLength(treelist), size);
         ajFileClose(&treefile);
@@ -2000,12 +2051,14 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
 
 
 
-/* @func ajPhyloTreeTrace ****************************************************
+/* @func ajPhyloTreeTrace *****************************************************
 **
 ** Reports phylogenetic discrete state data to the debug file
 **
 ** @param [r] thys [const AjPPhyloTree] Phylogenetic discrete states object
 ** @return [void]
+**
+** @release 2.9.0
 ******************************************************************************/
 
 void ajPhyloTreeTrace(const AjPPhyloTree thys)
@@ -2025,11 +2078,13 @@ void ajPhyloTreeTrace(const AjPPhyloTree thys)
 
 
 
-/* @func ajPhyloExit ********************************************************
+/* @func ajPhyloExit **********************************************************
 **
 ** Cleans up phylogenetic data internal memory
 **
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 

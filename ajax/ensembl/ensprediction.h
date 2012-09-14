@@ -1,10 +1,37 @@
+/* @include ensprediction *****************************************************
+**
+** Ensembl Prediction functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.24 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSPREDICTION_H
 #define ENSPREDICTION_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensfeature.h"
 
@@ -13,9 +40,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 /* @const EnsPPredictionexonadaptor *******************************************
 **
@@ -43,9 +70,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPPredictionexon ***************************************************
 **
@@ -123,9 +150,9 @@ typedef struct EnsSPredictiontranscript
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -144,7 +171,7 @@ EnsPPredictionexon ensPredictionexonNewIni(EnsPPredictionexonadaptor pea,
 
 EnsPPredictionexon ensPredictionexonNewRef(EnsPPredictionexon pe);
 
-void ensPredictionexonDel(EnsPPredictionexon* Ppe);
+void ensPredictionexonDel(EnsPPredictionexon *Ppe);
 
 EnsPPredictionexonadaptor ensPredictionexonGetAdaptor(
     const EnsPPredictionexon pe);
@@ -191,10 +218,18 @@ EnsPPredictionexon ensPredictionexonTransform(EnsPPredictionexon pe,
                                               const AjPStr csversion);
 
 AjBool ensPredictionexonFetchSequenceSeq(EnsPPredictionexon pe,
-                                         AjPSeq* Psequence);
+                                         AjPSeq *Psequence);
 
 AjBool ensPredictionexonFetchSequenceStr(EnsPPredictionexon pe,
-                                         AjPStr* Psequence);
+                                         AjPStr *Psequence);
+
+/* AJAX List of Ensembl Prediction Exon objects */
+
+AjBool ensListPredictionexonSortEndAscending(AjPList pes);
+
+AjBool ensListPredictionexonSortEndDescending(AjPList pes);
+
+AjBool ensListPredictionexonSortIdentifierAscending(AjPList pes);
 
 AjBool ensListPredictionexonSortStartAscending(AjPList pes);
 
@@ -208,7 +243,7 @@ EnsPPredictionexonadaptor ensRegistryGetPredictionexonadaptor(
 EnsPPredictionexonadaptor ensPredictionexonadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensPredictionexonadaptorDel(EnsPPredictionexonadaptor* Ppea);
+void ensPredictionexonadaptorDel(EnsPPredictionexonadaptor *Ppea);
 
 EnsPDatabaseadaptor ensPredictionexonadaptorGetDatabaseadaptor(
     EnsPPredictionexonadaptor pea);
@@ -236,7 +271,7 @@ EnsPPredictiontranscript ensPredictiontranscriptNewRef(
     EnsPPredictiontranscript pt);
 
 void ensPredictiontranscriptDel(
-    EnsPPredictiontranscript* Ppt);
+    EnsPPredictiontranscript *Ppt);
 
 EnsPPredictiontranscriptadaptor ensPredictiontranscriptGetAdaptor(
     const EnsPPredictiontranscript pt);
@@ -290,19 +325,19 @@ ajuint ensPredictiontranscriptCalculateTranscriptCodingStart(
 
 AjBool ensPredictiontranscriptFetchSequenceTranscriptSeq(
     EnsPPredictiontranscript pt,
-    AjPSeq* Psequence);
+    AjPSeq *Psequence);
 
 AjBool ensPredictiontranscriptFetchSequenceTranscriptStr(
     EnsPPredictiontranscript pt,
-    AjPStr* Psequence);
+    AjPStr *Psequence);
 
 AjBool ensPredictiontranscriptFetchSequenceTranslationSeq(
     EnsPPredictiontranscript pt,
-    AjPSeq* Psequence);
+    AjPSeq *Psequence);
 
 AjBool ensPredictiontranscriptFetchSequenceTranslationStr(
     EnsPPredictiontranscript pt,
-    AjPStr* Psequence);
+    AjPStr *Psequence);
 
 EnsPPredictiontranscript ensPredictiontranscriptTransfer(
     EnsPPredictiontranscript pt,
@@ -312,6 +347,14 @@ EnsPPredictiontranscript ensPredictiontranscriptTransform(
     EnsPPredictiontranscript pt,
     const AjPStr csname,
     const AjPStr csversion);
+
+/* AJAX List of Ensembl Prediction Transcript objects */
+
+AjBool ensListPredictiontranscriptSortEndAscending(AjPList pts);
+
+AjBool ensListPredictiontranscriptSortEndDescending(AjPList pts);
+
+AjBool ensListPredictiontranscriptSortIdentifierAscending(AjPList pts);
 
 AjBool ensListPredictiontranscriptSortStartAscending(AjPList pts);
 
@@ -326,7 +369,7 @@ EnsPPredictiontranscriptadaptor ensPredictiontranscriptadaptorNew(
     EnsPDatabaseadaptor dba);
 
 void ensPredictiontranscriptadaptorDel(
-    EnsPPredictiontranscriptadaptor* Ppta);
+    EnsPPredictiontranscriptadaptor *Ppta);
 
 EnsPDatabaseadaptor ensPredictiontranscriptadaptorGetDatabaseadaptor(
     EnsPPredictiontranscriptadaptor pta);
@@ -337,12 +380,12 @@ EnsPFeatureadaptor ensPredictiontranscriptadaptorGetFeatureadaptor(
 AjBool ensPredictiontranscriptadaptorFetchByIdentifier(
     EnsPPredictiontranscriptadaptor pta,
     ajuint identifier,
-    EnsPPredictiontranscript* Ppt);
+    EnsPPredictiontranscript *Ppt);
 
 AjBool ensPredictiontranscriptadaptorFetchByStableidentifier(
     EnsPPredictiontranscriptadaptor pta,
     const AjPStr stableid,
-    EnsPPredictiontranscript* Ppt);
+    EnsPPredictiontranscript *Ppt);
 
 /*
 ** End of prototype definitions

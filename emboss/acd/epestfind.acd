@@ -1,10 +1,10 @@
 application: epestfind [
-  documentation: "Finds PEST motifs as potential proteolytic
+  documentation: "Find PEST motifs as potential proteolytic
                   cleavage sites"
   groups: "Protein:Motifs"
-  relations: "EDAM:0000158 topic Sequence motifs"
-  relations: "EDAM:0000767 topic Peptide identification and proteolysis"
-  relations: "EDAM:0000422 operation Protein cleavage site prediction"
+  relations: "EDAM_topic:0158 Sequence motifs"
+  relations: "EDAM_topic:0767 Protein and peptide identification"
+  relations: "EDAM_operation:0422 Protein cleavage site prediction"
 ]
 
 section: input [
@@ -16,7 +16,7 @@ section: input [
     parameter: "Y"
     type: "protein"
     help: "Protein sequence USA to be analysed."
-    relations: "EDAM:0002886 data Sequence record (protein)"
+    relations: "EDAM_data:2886 Sequence record (protein)"
   ]
 
   datafile: mwdata [
@@ -24,7 +24,7 @@ section: input [
     default: "Emolwt.dat"
     information: "Molecular weights data file"
     knowntype: "molecular weights"
-    relations: "EDAM:0001505 data Amino acid index (molecular weight)"
+    relations: "EDAM_data:1505 Amino acid index (molecular weight)"
   ]
 
 endsection: input
@@ -43,7 +43,7 @@ section: required [
     minimum: "2"
     failrange: "N"
     trueminimum: "Y"
-    relations: "EDAM:0001251 data Window size"
+    relations: "EDAM_data:1251 Window size"
   ]
 
   selection: order [
@@ -59,7 +59,7 @@ section: required [
     maximum: "1"
     minimum: "1"
     values: "length, position, score"
-    relations: "EDAM:0002134 data Results sort order"
+    relations: "EDAM_data:2134 Results sort order"
   ]
 
 endsection: required
@@ -82,7 +82,7 @@ section: additional [
     maximum: "+55.0"
     minimum: "-55.0"
     precision: "2"
-    relations: "EDAM:0002146 data Threshold"
+    relations: "EDAM_data:2146 Threshold"
   ]
 
 endsection: additional
@@ -95,35 +95,35 @@ section: advanced [
   boolean: mono [
     default: "N"
     information: "Use monoisotopic weights"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: potential [
     default: "Y"
     help: "Decide whether potential PEST motifs should be printed."
     information: "Display potential PEST motifs"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: poor [
     default: "Y"
     help: "Decide whether poor PEST motifs should be printed."
     information: "Display poor PEST motifs"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: invalid [
     default: "N"
     help: "Decide whether invalid PEST motifs should be printed."
     information: "Display invalid PEST motifs"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: map [
     default: "Y"
     help: "Decide whether PEST motifs should be mapped to sequence."
     information: "Display PEST motifs map"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: advanced
@@ -137,13 +137,14 @@ section: output [
     parameter: "Y"
     help: "Name of file to which results will be written."
     knowntype: "epestfind output"
-    relations: "EDAM:0001331 data Protein features (PEST sites)"
+    relations: "EDAM_data:1323 Protein features (cleavage sites)"
   ]
 
   xygraph: graph [
     standard: "Y"
     multiple: "1"
-    relations: "EDAM:0001331 data Protein features (PEST sites)"
+    relations: "EDAM_data:1323 Protein features (cleavage sites)"
+    sequence: "Y"
   ]
 
 endsection: output

@@ -1,20 +1,36 @@
-/*
-** This is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+/* @source ajseqabi ***********************************************************
 **
-** This program is distributed in the hope that it will be useful,
+** AJAX ABI format sequence processing functions
+**
+** These functions control all aspects of AJAX ABI file processing
+**
+** @author Copyright (C) 2000 Peter Rice
+** @version $Revision: 1.26 $
+** @modified 2000-2011 Peter Rice
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajseqabi.h"
+#include "ajfileio.h"
 
 
 
@@ -41,6 +57,8 @@ static ajshort seqABIBaseIdx(char B);
 **
 ** @param [u] fp [AjPFile] ABI format file
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -95,6 +113,8 @@ AjBool ajSeqABITest(AjPFile fp)
 ** @param [r] numBases [ajlong] number of bases
 ** @param [w] Pqual [float *] array of confidence values
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -129,6 +149,8 @@ AjBool ajSeqABIReadConfid(AjPFile fp,ajlong pconO,ajlong numBases,
 ** @param [r] numBases [ajlong] number of bases
 ** @param [w] nseq [AjPStr*] read sequence
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -161,6 +183,8 @@ AjBool ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
 ** @param [u] fp [AjPFile] ABI format file
 ** @param [w] machine [AjPStr*] machine name
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -181,6 +205,7 @@ AjBool ajSeqABIMachineName(AjPFile fp,AjPStr *machine)
 	    *machine = ajStrNewRes(l+1);
 	    ajReadbinBinary(fp,1,l,(void*)ajStrGetuniquePtr(machine));
 	    *(ajStrGetuniquePtr(machine)+l)='\0';
+            ajStrSetValid(machine);
 	}
 	else
 	    return ajFalse;
@@ -200,6 +225,8 @@ AjBool ajSeqABIMachineName(AjPFile fp,AjPStr *machine)
 **
 ** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] Number of data points in file
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -228,6 +255,8 @@ ajint ajSeqABIGetNData(AjPFile fp)
 **
 ** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] Number of bases in file
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -261,6 +290,8 @@ ajint ajSeqABIGetNBase(AjPFile fp)
 ** @param [r] numPoints [ajlong] number of data points
 ** @param [w] trace [AjPInt2d] (4xnumPoints) array of trace data
 ** @return [void]
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -298,6 +329,8 @@ void ajSeqABIGetData(AjPFile fp,const ajlong *Offset,ajlong numPoints,
 ** @param [r] numBases [ajlong] number of bases to be read
 ** @param [w] basePositions [AjPShort*] base positions output
 ** @return [void]
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -333,6 +366,8 @@ void ajSeqABIGetBasePosition(AjPFile fp,ajlong numBases,
 ** @param [w] sigG [ajshort*] average signal strength for G
 ** @param [w] sigT [ajshort*] average signal strength for T
 ** @return [void]
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -380,6 +415,8 @@ void ajSeqABIGetSignal(AjPFile fp,ajlong fwo_,
 **
 ** @param [u] fp [AjPFile] ABI format file
 ** @return [float] base spacing
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -405,6 +442,8 @@ float ajSeqABIGetBaseSpace(AjPFile fp)
 **
 ** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] 'PBAS' tag offset in an ABI file
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -436,6 +475,8 @@ ajint ajSeqABIGetBaseOffset(AjPFile fp)
 **
 ** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] base position offset in an ABI file
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -467,6 +508,8 @@ ajint ajSeqABIGetBasePosOffset(AjPFile fp)
 **
 ** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] 'PCON' tag offset in an ABI file
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -498,6 +541,8 @@ ajint ajSeqABIGetConfidOffset(AjPFile fp)
 **
 ** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] field order
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -530,6 +575,8 @@ ajint ajSeqABIGetFWO(AjPFile fp)
 **
 ** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] primer offset
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -559,6 +606,8 @@ ajint ajSeqABIGetPrimerOffset(AjPFile fp)
 **
 ** @param [u] fp [AjPFile] ABI format file
 ** @return [ajint] primer position
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -594,6 +643,8 @@ ajint ajSeqABIGetPrimerPosition(AjPFile fp)
 ** @param [u] fp [AjPFile] ABI format file
 ** @param [w] Offset [ajlong *] trace data offset, used in ajSeqABIGetData
 ** @return [AjBool]  ajTrue on success
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -648,6 +699,8 @@ AjBool ajSeqABIGetTraceOffset(AjPFile fp, ajlong *Offset)
 ** @param [u] fp [AjPFile] ABI format file
 ** @param [w] i4 [ajlong *] ajlong integer read in from ABI file
 ** @return [AjBool] true if read successfully
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -682,6 +735,8 @@ static AjBool seqABIReadInt4(AjPFile fp,ajlong *i4)
 ** @param [u] fp [AjPFile] ABI format file
 ** @param [w] f4 [float *] float read in from ABI file
 ** @return [AjBool] true if read successfully
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -715,6 +770,8 @@ static AjBool seqABIReadFloat4(AjPFile fp,float* f4)
 ** @param [u] fp [AjPFile] ABI format file
 ** @param [w] i2 [ajshort *] short integer read in from ABI file
 ** @return [AjBool] true if read successfully
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -749,6 +806,8 @@ static AjBool seqABIReadInt2(AjPFile fp, ajshort *i2)
 ** @param [r] word [ajlong] number of fields to ignore in this record
 ** @param [w] val [ajlong*] integer value of the word+1
 ** @return [AjBool] true if read successfully
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -818,6 +877,8 @@ static AjBool seqABIGetFlag(AjPFile fp, ajlong flagLabel,
 ** @param [r] word [ajlong] number of fields to ignore in this record
 ** @param [w] val [float*] integer value of the word+1
 ** @return [AjBool] true if read successfully
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -874,6 +935,8 @@ static AjBool seqABIGetFlagF(AjPFile fp, ajlong flagLabel,
 ** @param [r] word [ajlong] number of fields to ignore in this record
 ** @param [w] val [ajshort*] integer value of the word+1
 ** @return [AjBool] true if read successfully
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -924,6 +987,8 @@ static AjBool seqABIGetFlagW(AjPFile fp, ajlong flagLabel,
 **
 ** @param [r] B [char] base (C, A, G or T)
 ** @return [ajshort] 0 if C, 1 if A, 2 if G, 3 if anything else
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -942,6 +1007,8 @@ static ajshort seqABIBaseIdx(char B)
 ** @param [u] fp [AjPFile] ABI format file
 ** @param [w] sample [AjPStr*] sample name
 ** @return [AjBool] true if read successfully
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -961,6 +1028,8 @@ AjBool ajSeqABISampleName(AjPFile fp, AjPStr *sample)
 	*sample = ajStrNewRes(l+1);
 	ajReadbinBinary(fp,1,l,(void*)ajStrGetuniquePtr(sample));
 	*(ajStrGetuniquePtr(sample)+l)='\0';
+        ajStrSetValid(sample);
+        ajDebug("read SMPL at %Ld %u '%S'\n", mchn, (ajuint) l, *sample);
     }
 
     return ajTrue;

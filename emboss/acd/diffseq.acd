@@ -4,9 +4,9 @@ application: diffseq [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
-  relations: "EDAM:0000182 topic Sequence alignment"
-  relations: "EDAM:0000160 topic Sequence features"
-  relations: "EDAM:0000256 operation Feature table comparison"
+  relations: "EDAM_topic:0182 Sequence alignment"
+  relations: "EDAM_topic:0160 Sequence sites and features"
+  relations: "EDAM_operation:0256 Feature comparison"
 ]
 
 section: input [
@@ -18,14 +18,14 @@ section: input [
     parameter: "Y"
     type: "any"
     features: "Y"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   sequence: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
     features: "Y"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -48,7 +48,7 @@ section: required [
            of difference. This value may be made smaller (4?) to improve the
            resolution of nearby differences, but the program will go much
            slower."
-    relations: "EDAM:0001250 data Word size"
+    relations: "EDAM_data:1250 Word size"
   ]
 
 endsection: required
@@ -73,7 +73,7 @@ section: additional [
            interested in differences at the very ends . It this option is
            set to be true then the differences at the ends will also be
            reported."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: additional
@@ -88,7 +88,7 @@ section: output [
     rformat: "diffseq"
     taglist: "int:start int:end int:length str:name str:sequence
               str:first_feature str:second_feature"
-    relations: "EDAM:0001256 data Sequence features (comparative)"
+    relations: "EDAM_data:1255 Feature record"
   ]
 
   featout: aoutfeat [
@@ -96,7 +96,7 @@ section: output [
     default: "$(asequence.name).diffgff"
     help: "File for output of first sequence's features"
     type: "@($(acdprotein) ? protein : nucleotide)"
-    relations: "EDAM:0001270 data Feature table"
+    relations: "EDAM_data:1255 Feature record"
   ]
 
   featout: boutfeat [
@@ -104,7 +104,7 @@ section: output [
     default: "$(bsequence.name).diffgff"
     help: "File for output of second sequence's features"
     type: "@($(acdprotein) ? protein : nucleotide)"
-    relations: "EDAM:0001270 data Feature table"
+    relations: "EDAM_data:1255 Feature record"
   ]
 
 endsection: output

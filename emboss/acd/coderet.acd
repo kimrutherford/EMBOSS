@@ -2,11 +2,11 @@ application: coderet [
   documentation: "Extract CDS, mRNA and translations from
                   feature tables"
   groups: "Nucleic:Translation, Data retrieval:Sequence data"
-  relations: "EDAM:0000090 topic Data retrieval"
-  relations: "EDAM:0000108 topic Translation"
-  relations: "EDAM:0000436 operation Coding region prediction"
-  relations: "EDAM:0000371 operation DNA translation"
-  relations: "EDAM:0000372 operation DNA transcription"
+  relations: "EDAM_topic:0090 Data search and retrieval"
+  relations: "EDAM_topic:0108 Translation"
+  relations: "EDAM_operation:0436 Coding region prediction"
+  relations: "EDAM_operation:0371 DNA translation"
+  relations: "EDAM_operation:0372 DNA transcription"
 ]
 
 section: input [
@@ -18,7 +18,7 @@ section: input [
     parameter: "Y"
     type: "DNA"
     features: "Y"
-    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
+    relations: "EDAM_data:2887 Sequence record (nucleic acid)"
   ]
 
 endsection: input
@@ -32,7 +32,7 @@ section: output [
     parameter: "Y"
     extension: "coderet"
     knowntype: "coderet output"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   seqoutall: cdsoutseq [
@@ -43,8 +43,8 @@ section: output [
     osextension: "cds"
     nullok: "Y"
     knowntype: "cds sequence"
-    relations: "EDAM:0001210 format pure nucleotide"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_format:1210 pure nucleotide"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   seqoutall: mrnaoutseq [
@@ -55,7 +55,7 @@ section: output [
     osextension: "mrna"
     nullok: "Y"
     knowntype: "mrna sequence"
-    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
+    relations: "EDAM_data:2887 Sequence record (nucleic acid)"
   ]
 
   seqoutall: translationoutseq [
@@ -66,7 +66,7 @@ section: output [
     osextension: "prot"
     nullok: "Y"
     knowntype: "translated cds sequence"
-    relations: "EDAM:0002886 data Sequence record (protein)"
+    relations: "EDAM_data:2886 Sequence record (protein)"
   ]
 
   seqoutall: restoutseq [
@@ -77,8 +77,8 @@ section: output [
     osextension: "noncoding"
     nullok: "Y"
     knowntype: "non coding sequence"
-    relations: "EDAM:0001210 format pure nucleotide"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_format:1210 pure nucleotide"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: output

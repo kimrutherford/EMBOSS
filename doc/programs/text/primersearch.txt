@@ -67,7 +67,7 @@ Whitehead primer3_core program output file [z52466.primersearch]:
 Command line arguments
 
 Search DNA sequences for matches with primer pairs
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional
@@ -91,7 +91,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -179,7 +182,7 @@ RN   [1]
 RP   1-389
 RA   Weissenbach J.;
 RT   ;
-RL   Submitted (01-SEP-1995) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (01-SEP-1995) to the INSDC.
 RL   Genethon, B.P. 60, 91002 Evry Cedex France. E-mail:
 RL   Jean.Weissenbach@genethon.fr
 XX
@@ -327,8 +330,8 @@ Known bugs
 See also
 
                     Program name                         Description
-                    eprimer3     Picks PCR primers and hybridization oligos
-                    eprimer32    Picks PCR primers and hybridization oligos
+                    eprimer3     Pick PCR primers and hybridization oligos
+                    eprimer32    Pick PCR primers and hybridization oligos
                     stssearch    Search a DNA database for matches with a set of STS primers
 
                     stssearch does something similar, but doesn't allow you to find

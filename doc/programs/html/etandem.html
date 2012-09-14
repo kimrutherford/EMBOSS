@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -35,7 +35,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Finds tandem repeats in a nucleotide sequence
+Find tandem repeats in a nucleotide sequence
 <H2>
 Description
 </H2>
@@ -96,7 +96,7 @@ The input sequence is the human herpesvirus tandem repeat.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>etandem -noorigfile </b>
-Finds tandem repeats in a nucleotide sequence
+Find tandem repeats in a nucleotide sequence
 Input nucleotide sequence: <b>tembl:L46634</b>
 Minimum repeat size [10]: <b>6</b>
 Maximum repeat size [6]: <b></b>
@@ -111,8 +111,8 @@ Output report [l46634.tan]: <b></b>
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Finds tandem repeats in a nucleotide sequence
-Version: EMBOSS:6.4.0.0
+Find tandem repeats in a nucleotide sequence
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -143,7 +143,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -281,7 +284,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated sequence qualifiers
+<td align="left" colspan=5>"-sequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -350,11 +353,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -398,7 +425,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated report qualifiers
+<td align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
@@ -491,7 +518,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-origfile" associated outfile qualifiers
+<td align="left" colspan=5>"-origfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -758,7 +785,7 @@ By default <b>etandem</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: etandem
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: etandem
 #    -noorigfile
 #    -sequence tembl:L46634
@@ -844,17 +871,17 @@ None.
 <th>Description</th></tr>
 <tr>
 <td><a href="einverted.html">einverted</a></td>
-<td>Finds inverted repeats in nucleotide sequences</td>
+<td>Find inverted repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="equicktandem.html">equicktandem</a></td>
-<td>Finds tandem repeats in nucleotide sequences</td>
+<td>Find tandem repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="palindrome.html">palindrome</a></td>
-<td>Finds inverted repeats in nucleotide sequence(s)</td>
+<td>Find inverted repeats in nucleotide sequence(s)</td>
 </tr>
 
 </table>

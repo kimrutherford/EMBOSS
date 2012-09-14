@@ -1,9 +1,9 @@
 application: ontogetup [
   documentation: "Get ontology term(s) by id of child"
   groups: "Ontology, Data retrieval:Ontology data"
-    relations: "EDAM:0000089 topic Ontologies"
-    relations: "EDAM:0000090 topic Data retrieval"
-    relations: "EDAM:0002224 operation Data retrieval (ontology concept)"
+    relations: "EDAM_topic:0089 Ontology"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:2422 Data retrieval"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
   obo: oboterms [
      default: ""
      parameter: "Y"
-     relations: "EDAM:0001087 identifier Ontology term ID"
+     relations: "EDAM_identifier:1087 Ontology concept ID"
   ]
 
 
@@ -34,7 +34,7 @@ section: additional [
     information: "Include obsolete terms"
     help: "The default behaviour is to not use or return obsolete terms.
            This option if set will include all terms."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 
@@ -62,7 +62,7 @@ section: output [
 
   outobo: outfile [
     parameter: "Y"
-    relations: "EDAM:0000966 data Ontology term"
+    relations: "EDAM_data:0966 Ontology term"
   ]
 
 endsection: output

@@ -3,10 +3,10 @@
 
 appl: qatestcalcregexp [ groups: "test" doc: "ACD file for QA testing" ]
 
-regexp: test [ param: Y info: "Regular expression" ]
+regexp: testpattern [ param: Y info: "Regular expression" ]
 
 string: testlength [
 	 standard: "Y"
 	 info: "Length"
-	 default: "$(test.length)"
+	 default: "$(testpattern.length)"
 ]

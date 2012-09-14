@@ -1,8 +1,8 @@
 application: martseqs [
   documentation: "Show Biomart datasets that can return sequences"
   groups: "Edit"
-    relations: "EDAM:0000088 topic Literature and documentation"
-    relations: "EDAM:0000516 operation Database information retrieval"
+    relations: "EDAM_topic:0088 Literature and documentation"
+    relations: "EDAM_operation:0516 Database information retrieval"
 ]
 
 section: input [
@@ -14,20 +14,20 @@ section: input [
     standard: "Y"
     default: "www.biomart.org"
     information: "Host location"
-    relations: "EDAM:0001047 data URI"
+    relations: "EDAM_data:1047 URI"
   ]
 
   string: path [
     standard: "Y"
     default: "/biomart/martservice"
     information: "Path to martservice"
-    relations: "EDAM:0001049 identifier Directory name"
+    relations: "EDAM_identifier:1049 Directory name"
   ]
 
   integer: port [
     default: "80"
     information: "Port on host"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: input
@@ -40,7 +40,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     information: "Mart dataset output file"
-    relations: "EDAM:0000969 data Text"
+    relations: "EDAM_data:0969 Text"
   ]
 
 endsection: output

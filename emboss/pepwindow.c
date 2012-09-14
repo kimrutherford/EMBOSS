@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     
     mult     = ajAcdGetGraphxy("graph");
     datafile = ajAcdGetDatafile("datafile");
-    llen     = ajAcdGetInt("length");
+    llen     = ajAcdGetInt("window");
     normal   = ajAcdGetBoolean("normalize");
 
     s1 = ajStrGetPtr(ajSeqGetSeqS(seq));

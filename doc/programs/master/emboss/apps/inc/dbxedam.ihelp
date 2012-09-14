@@ -1,5 +1,5 @@
 Index the EDAM ontology using b+tree indices
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     [edam] Basename for index files (Any string

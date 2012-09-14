@@ -1,19 +1,61 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajurldata *********************************************************
+**
+** AJAX url data structures
+**
+** @author Copyright (C) 2010 Peter Rice
+** @version $Revision: 1.7 $
+** @modified Oct 5 pmr First version
+** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajurldata_h
-#define ajurldata_h
+#ifndef AJURLDATA_H
+#define AJURLDATA_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajtextdata.h"
+#include "ajresourcedata.h"
+
+AJ_BEGIN_DECLS
 
 
-#define NULLFPOS -1
-
-typedef struct AjSUrlAccess AjSUrlAccess;
 
 
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
-/* @data AjPUrl *************************************************************
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* @data AjPUrl ***************************************************************
 **
 ** Ajax url object.
 **
@@ -37,7 +79,8 @@ typedef struct AjSUrlAccess AjSUrlAccess;
 ** @@
 ******************************************************************************/
 
-typedef struct AjSUrl {
+typedef struct AjSUrl
+{
     AjPStr  Id;
     AjPStr  Db;
     AjPStr  Setdb;
@@ -57,7 +100,7 @@ typedef struct AjSUrl {
 
 
 
-/* @data AjPUrlin ************************************************************
+/* @data AjPUrlin *************************************************************
 **
 ** Ajax url input object.
 **
@@ -81,7 +124,8 @@ typedef struct AjSUrl {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSUrlin {
+typedef struct AjSUrlin
+{
     AjPTextin Input;
     AjPResource Resource;
     AjPList UrlList;
@@ -135,7 +179,8 @@ typedef struct AjSUrlall
 
 
 
-/* @data AjPUrlAccess ********************************************************
+
+/* @data AjPUrlAccess *********************************************************
 **
 ** Ajax url access database reading object.
 **
@@ -153,8 +198,8 @@ typedef struct AjSUrlall
 ** @alias AjOUrlAccess
 **
 ** @attr Name [const char*] Access method name used in emboss.default
-** @attr Access [(AjBool*)] Access function
-** @attr AccessFree [(AjBool*)] Access cleanup function
+** @attr Access [AjBool function] Access function
+** @attr AccessFree [AjBool function] Access cleanup function
 ** @attr Qlink [const char*] Supported query link operators
 ** @attr Desc [const char*] Description
 ** @attr Alias [AjBool] Alias for another name
@@ -162,14 +207,15 @@ typedef struct AjSUrlall
 ** @attr Query [AjBool] Supports retrieval of selected entries
 ** @attr All [AjBool] Supports retrieval of all entries
 ** @attr Chunked [AjBool] Supports retrieval of entries in chunks
+** @attr Padding [AjBool] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSUrlAccess
 {
     const char *Name;
-    AjBool (*Access) (AjPUrlin urlin);
-    AjBool (*AccessFree) (void* qry);
+    AjBool (*Access)(AjPUrlin urlin);
+    AjBool (*AccessFree)(void* qry);
     const char* Qlink;
     const char* Desc;
     AjBool Alias;
@@ -177,6 +223,7 @@ typedef struct AjSUrlAccess
     AjBool Query;
     AjBool All;
     AjBool Chunked;
+    AjBool Padding;
 } AjOUrlAccess;
 
 #define AjPUrlAccess AjOUrlAccess*
@@ -184,8 +231,24 @@ typedef struct AjSUrlAccess
 
 
 
-#endif
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
-#ifdef __cplusplus
-}
-#endif
+
+
+
+/*
+** Prototype definitions
+*/
+
+/*
+** End of prototype definitions
+*/
+
+
+
+
+AJ_END_DECLS
+
+#endif /* !AJURLDATA_H */

@@ -75,6 +75,7 @@ Asp713I PstI
 Asp745I AvaII
 AspAI BstEII
 AspA2I AvrII
+AspBHII PpuMI
 AspEI Eam1105I
 AspHI HgiAI*
 Asp10HI AsuII
@@ -447,6 +448,7 @@ BstV2I BbvII*
 BstX2I XhoII
 BstYI XhoII
 BstZI XmaIII*
+BsuI BciVI
 Bsu6I Ksp632I*
 Bsu15I ClaI
 Bsu23I BspMII*
@@ -474,11 +476,14 @@ CaiI AlwNI
 CatHI Ksp632I*
 CauI AvaII
 CauB3I BspMII*
+CbeI HaeIII
 CbiI AsuII
 CboI HpaII
+CchI MaeI
 CciI BspHI
 CciNI NotI
 CcoI NaeI
+CcoP13III CjuI*
 CcrI XhoI
 CcuI AsuI*
 CcyI MboI
@@ -583,6 +588,7 @@ Eco1476I Eco377I*
 Eco1524I StuI
 Eco14444I EcoBI*
 EcoA4I Eco31I
+EcoAO83I Eco377I*
 EcoHK31I CfrI
 Eco75KI HgiJII*
 EcoO44I Eco31I
@@ -617,6 +623,7 @@ FnuCI MboI
 FnuDI HaeIII
 FnuDIII HhaI
 FnuEI MboI
+FpsJI HpaII
 FriOI HgiJII*
 FsiI ApoI
 FspI MstI*
@@ -676,6 +683,7 @@ HpyF44III CviRI*
 HpyF46III MjaIV*
 HpyF49III MjaIV*
 HpyF50I MjaIV*
+HpySE526I MaeII
 Hsp92I AcyI
 Hsp92II NlaIII
 HsuI HindIII
@@ -702,6 +710,7 @@ LspI AsuII
 Lsp1109I BbvI
 LweI SfaNI
 MabI SexAI
+Mae7806III AvaII
 MaeK81I SplI*
 MaeK81II AsuI*
 MalI DpnI
@@ -725,6 +734,7 @@ MltI AluI
 Mlu23I BamHI
 Mlu31I BalI
 MluB2I NruI
+MluCI TspEI
 MluNI BalI
 Mly113I NarI
 MnoI HpaII
@@ -740,6 +750,8 @@ Msp67I ScrFI
 MspA1I NspBII*
 MspB4I HgiCI*
 MspCI AflII
+MspNI AvaII
+MspNII XhoII
 MspR9I ScrFI
 MspSWI SwaI
 MspV281I HgiAI*
@@ -757,7 +769,9 @@ NcrI BglII
 NcuI MboII
 NdaI NarI
 NdeII MboI
+NflHII HpaII
 NgoAIII SacII
+NgoMX NgoAX*
 NgoPII HaeIII
 NgoPIII SacII
 NlaII MboI
@@ -802,6 +816,7 @@ PalI HaeIII
 PalAI AscI
 PamI MstI*
 PamII AcyI
+PamDI NcoI
 PanI XhoI
 ParI BclI
 PauI BsePI
@@ -865,6 +880,7 @@ PspLI SplI*
 PspN4I NlaIV
 PspPI AsuI*
 PspPPI PpuMI
+PstNI AlwNI
 PstNHI NheI
 PsuI XhoII
 Psu161I PvuI
@@ -925,6 +941,7 @@ SdaI Sse8387I
 SdiI SfiI
 SenPT16I XmaIII*
 SenPT14bI SacII
+SepMI EcoRV
 SexBI SacII
 SexCI SacII
 SfaI HaeIII
@@ -936,6 +953,7 @@ Sfr303I SacII
 SfuI AsuII
 SgrBI SacII
 SgsI AscI
+SguI FspEI
 SinI AvaII
 SlaI XhoI
 SleI EcoRII
@@ -943,6 +961,7 @@ Slu1777I NaeI
 SmiI SwaI
 SmiMI MslI
 SmoI SmlI
+SmoLI HpaII
 SmuI FauI
 SmuCI AvaIII*
 SmuEI AvaII
@@ -1000,6 +1019,7 @@ TasI TspEI
 TelI Tth111I
 ThaI FnuDII*
 TliI XhoI
+TneDI FnuDII*
 Tru1I MseI
 Tru9I MseI
 Tru201I XhoII

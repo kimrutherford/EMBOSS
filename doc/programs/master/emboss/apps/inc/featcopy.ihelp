@@ -1,5 +1,5 @@
-Reads and writes a feature table
-Version: EMBOSS:6.4.0.0
+Read and write a feature table
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-features]          features   (no help text) features value
@@ -11,11 +11,14 @@ Version: EMBOSS:6.4.0.0
 
    "-features" associated qualifiers
    -fformat1           string     Features format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -fopenfile1         string     Features file name
    -fask1              boolean    Prompt for begin/end/reverse
    -fbegin1            integer    Start of the features to be used
    -fend1              integer    End of the features to be used
    -freverse1          boolean    Reverse (if DNA)
+   -fcircular1         boolean    Circular sequence features
 
    "-outfeat" associated qualifiers
    -offormat2          string     Output feature format

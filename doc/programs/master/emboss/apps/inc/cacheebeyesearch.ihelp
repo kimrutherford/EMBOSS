@@ -1,5 +1,5 @@
-Generates server cache file for EB-eye search domains
-Version: EMBOSS:6.4.0.0
+Generate server cache file for EB-eye search domains
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-cachefile]         outfile    [server.$(servername)] Server cache output

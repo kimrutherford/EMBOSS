@@ -1,0 +1,116 @@
+Here is a sample session with <b>infoassembly</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoassembly sam::samspec1.4example.sam stdout -auto </b>
+
+
+Read distribution:
+------------------
+
+READ_CATEGORY	#READS	Av_Read_Length
+all reads	6	10.33
+first of pair 	1	9.00
+second of pair	1	17.00
+pair          	2	13.00
+unpaired      	4	9.00
+
+Contig stats:
+-------------
+
+CONTIG	LENGTH	Mean_QUAL	#READS	Max DEPTH	Mean_DEPTH	%GC
+ref	45	0.00	6	0	0.00	0.00
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoassembly sam::xxx.sam stdout -auto -qual qualsdist.txt </b>
+
+Phred encoding: Sanger / Illumina 1.9
+
+Read distribution:
+------------------
+
+READ_CATEGORY	#READS	Av_Read_Length
+all reads	2	35.00
+first of pair 	1	35.00
+second of pair	1	35.00
+pair          	2	35.00
+unpaired      	0
+
+Contig stats:
+-------------
+
+CONTIG	LENGTH	Mean_QUAL	#READS	Max DEPTH	Mean_DEPTH	%GC
+chr20	62435964	25.36	2	2	1.97	0.00
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoassembly sam::../data/samspec1.4example.ref.fasta </b>
+
+
+Read distribution:
+------------------
+
+READ_CATEGORY	#READS	Av_Read_Length
+all reads	6	10.33
+first of pair 	1	9.00
+second of pair	1	17.00
+pair          	2	13.00
+unpaired      	4	9.00
+
+Contig stats:
+-------------
+
+CONTIG	LENGTH	Mean_QUAL	#READS	Max DEPTH	Mean_DEPTH	%GC
+ref	45	0.00	6	3	1.82	46.67
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.3">Go to the input files for this example</a><br><p>
+<p>
+<b>Example 4</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoassembly sam::../data/samspec1.4example.ref.fasta -gc gcbias.txt </b>
+
+
+Read distribution:
+------------------
+
+READ_CATEGORY	#READS	Av_Read_Length
+all reads	6	10.33
+first of pair 	1	9.00
+second of pair	1	17.00
+pair          	2	13.00
+unpaired      	4	9.00
+
+Contig stats:
+-------------
+
+CONTIG	LENGTH	Mean_QUAL	#READS	Max DEPTH	Mean_DEPTH	%GC
+ref	45	0.00	6	3	1.82	46.67
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>

@@ -39,11 +39,13 @@ int main(int argc, char **argv)
     AjPSeqout seqout;
     AjBool reverse;
     AjBool complement;
+    AjBool tag;
 
     embInit("revseq", argc, argv);
 
     seqall = ajAcdGetSeqall("sequence");
     seqout = ajAcdGetSeqoutall("outseq");
+    tag = ajAcdGetBoolean("tag");
 
     reverse    = ajAcdGetBoolean("reverse");
     complement = ajAcdGetBoolean("complement");
@@ -58,7 +60,8 @@ int main(int argc, char **argv)
 	if(reverse && complement)
         {
 	    ajSeqReverseForce(seq);	/* reverses and complements */
-            ajSeqTagRev(seq);
+            if(tag)
+                ajSeqTagRev(seq);
         }
 	else if(reverse)
 	    ajSeqReverseOnly(seq);

@@ -209,7 +209,7 @@ int main(int argc, char **argv)
 
 	    itereps = ajListIterNew(segments);
 
-	    ajFmtPrintF(outf, "Number of entry points %d\n",
+	    ajFmtPrintF(outf, "Number of entry points %Lu\n",
 		    ajListGetLength(segments));
 
 	    j=0;
@@ -400,7 +400,7 @@ int main(int argc, char **argv)
 
     ajFileClose(&outf);
 
-    ajTableDelValdel(&titlecount, ajMemFree);
+    ajTableDelValdel(&titlecount, &ajMemFree);
 
     embExit();
 
@@ -532,7 +532,7 @@ static void dastestSaveMappedFeatures(const AjPFeattable fttable,
     iterfts = ajListIterNew(fttable->Features);
     ftout= ajFeattabOutNewCSF("gff3",NULL,"",ffile);
 
-    ajFmtPrintF(outf, "Number of features %d\n",
+    ajFmtPrintF(outf, "Number of features %Lu\n",
 	    ajListGetLength(fttable->Features));
 
     while(!ajListIterDone(iterfts) && i++ < maxfeatures)

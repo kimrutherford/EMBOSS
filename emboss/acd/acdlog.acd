@@ -3,6 +3,6 @@ application: acdlog [
                   structures"
   gui: "no"
   groups: "Acd, Data retrieval:Tool data"
-    relations: "EDAM:0000220 topic File handling"
-    relations: "EDAM:0000336 operation File debugging"
+    relations: "EDAM_topic:0220 File handling"
+    relations: "EDAM_operation:0336 File debugging"
 ]

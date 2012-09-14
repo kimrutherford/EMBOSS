@@ -1,16 +1,17 @@
 #!/usr/bin/perl -w
 
 %databases = (
- 	      "embl" => "embl embl embl acc [.]dat\$",
+              "embl" => "embl embl embl acc [.]dat\$",
 	      "genbank" => "genbank genbank gb acc [.]seq\$",
 	      "swiss" => "swiss sw sw acc [.]dat\$",
-	      "pir" => "pir pir pir id [.]ref\$",
+              "pir" => "pir pir pir id [.]ref\$",
 	      "swnew" => "swnew swnew sw acc [.]dat\$"
 	      );
 
 
 foreach $d (sort( keys(%databases))) {
     my ($dir, $db,$fmt,$field, $fname) = split (/ /, $databases{$d});
+    my $srsdb;
     print "$d: '$dir' '$db' '$fmt' '$field' '$fname'\n";
     opendir(DIR, $dir);
     while($file = readdir(DIR)) {
@@ -24,6 +25,10 @@ foreach $d (sort( keys(%databases))) {
 	if($fmt eq "pir") {
 	    if(-e "newfile2") {system "rm newfile2;touch newfile2";}
 	}
+	if($file eq "est.dat") {$srsdb = $db."est"} 
+	elsif($file eq "condiv.dat") {$srsdb = $db."con"} 
+	elsif($file eq "wgs.dat") {$srsdb = $db."wgs"} 
+	else {$srsdb = $db}
 	while (<IN>) {
 	    $id="";
 	    if($fmt eq "embl") {
@@ -46,7 +51,34 @@ foreach $d (sort( keys(%databases))) {
 
 	    print "  id:$id";
 	    $istatus = system "EMBOSSRC=./dbfetch/ ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;entret  -auto  t$db\-$field:$id x.x";
-	    $jstatus = system "EMBOSSRC=./dbfetch ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;entret -auto srs$db\-$field:$id y.y";
+	    $jstatus = system "EMBOSSRC=./dbfetch ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;entret -auto srs$srsdb\-$field:$id y.y";
+	    if(!$jstatus && $fmt eq "pir") {
+		$file2 = $file;
+		$file2 =~ s/[.]ref/.seq/g;
+		open (Y, "y.y");
+		open (W, ">w.w");
+		my $pirseq = "";
+		my $pircount = 0;
+		my $pirlines = 0;
+		my $isseq = 0;
+		while(<Y>) {
+		    print W;
+		    if(/^>/) {$pircount++;$pirlines=0}
+		    else {$pirlines++}
+		    if($pircount == 2){
+			if($pirlines < 2) {next}
+			$isseq = 1;
+			s/\s//g;
+		    }
+		    $pirseq .= $_;
+		}
+		if($isseq) {$pirseq .= "\n"}
+		close Y;
+		close W;
+		open (Y, ">y.y");
+		print Y $pirseq;
+		close Y;
+	    }
 	    system "diff x.x y.y > z.z";
 	    if($istatus) {
 		print " current failed $istatus\n"; 
@@ -60,6 +92,9 @@ foreach $d (sort( keys(%databases))) {
 		printf " diff %d %d %d\n", (-s "z.z"), (-s "x.x"), (-s "y.y");
 		$change=1;
 		if($fmt eq "pir") {
+		    open (Z, "z.z");
+		    while(<Z>) {print}
+		    close Z;
 		    open (REF, ">>newfile");
 		    open (SEQ, ">>newfile2");
 		    open (Y, "y.y");
@@ -107,7 +142,7 @@ foreach $d (sort( keys(%databases))) {
 		if($fmt eq "pir") {
 		    open (REF, ">>newfile");
 		    open (SEQ, ">>newfile2");
-		    open (Y, "y.y");
+		    open (Y, "w.w");
 		    $ref = 0;
 		    $seq=0;
 		    @pirseq = ();
@@ -145,11 +180,10 @@ foreach $d (sort( keys(%databases))) {
 	}
 	close(IN);
 	if($allok && $change) {
+	    $replace++;
 	    printf "REPLACE $dir/$file %d %d\n", (-s "$dir/$file"), (-s "newfile");
 	    system "cp newfile $dir/$file";
 	    if($fmt eq "pir") {
-		$file2 = $file;
-		$file2 =~ s/[.]ref/.seq/g;
 		printf "REPLACE $dir/$file2 %d %d\n", (-s "$dir/$file2"), (-s "newfile2");
 		system "cp newfile2 $dir/$file2";
 	    }
@@ -166,6 +200,7 @@ foreach $d (sort( keys(%databases))) {
 	    if($fmt eq "pir") {
 		system "diff $dir/$file2 newfile2 > z.z";
 		if(-s "z.z") {
+		    $replace++;
 		    printf "KEEP but REF size changed %d %d %d\n",
 		    (-s "$db/$file"), (-s "newfile"), (-s "z.z");
 		}
@@ -178,3 +213,9 @@ foreach $d (sort( keys(%databases))) {
     }
 }
 
+if($replace) {
+    print "Replaced $replace databases\n";
+}
+else {
+    print "ALL UNCHANGED\n";
+}

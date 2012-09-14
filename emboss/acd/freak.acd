@@ -1,8 +1,8 @@
 application: freak [
   documentation: "Generate residue/base frequency table or plot"
   groups: "Nucleic:Composition, Protein:Composition"
-    relations: "EDAM:0000157 topic Sequence composition"
-    relations: "EDAM:0000236 operation Sequence composition calculation"
+    relations: "EDAM_topic:0157 Sequence composition analysis"
+    relations: "EDAM_operation:0236 Sequence composition calculation"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "any"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -28,7 +28,7 @@ section: required [
     default: "gc"
     information: "Residue letters"
     knowntype: "nucleotide sequence"
-    relations: "EDAM:0001210 format pure nucleotide"
+    relations: "EDAM_format:1210 pure nucleotide"
   ]
 
 endsection: required
@@ -42,14 +42,14 @@ section: additional [
     additional: "Y"
     default: "1"
     information: "Stepping value"
-    relations: "EDAM:0002141 data Window step size"
+    relations: "EDAM_data:2141 Window step size"
   ]
 
   integer: window [
     additional: "Y"
     default: "30"
     information: "Averaging window"
-    relations: "EDAM:0001251 data Window size"
+    relations: "EDAM_data:1251 Window size"
   ]
 
 endsection: additional
@@ -62,12 +62,13 @@ section: output [
   toggle: plot [
     default: "N"
     information: "Produce graphic"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   xygraph: graph [
     standard: "$(plot)"
-    relations: "EDAM:0002166 data Sequence composition plot"
+    relations: "EDAM_data:2166 Sequence composition plot"
+    sequence: "Y"
   ]
 
   outfile: outfile [
@@ -75,7 +76,7 @@ section: output [
     knowntype: "freak output"
     nullok: "$(plot)"
     nulldefault: "$(plot)"
-    relations: "EDAM:0001261 data Sequence property (composition)"
+    relations: "EDAM_data:1261 Sequence composition"
   ]
 
 endsection: output

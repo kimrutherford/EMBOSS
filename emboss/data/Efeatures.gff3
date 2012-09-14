@@ -53,6 +53,12 @@ autocatalytically_spliced_intron SO:0000588
 
 binding_site SO:0000409
 
+# SO:
+# A region defined by its disposition to be involved in a biological process
+# used as a general feature by EMBOSS
+
+biological_region SO:0001411
+
 # SO:ke
 # A pyrimidine rich sequence near the 3' end of an intron to which the
 # 5'end becomes covalently bound during nuclear splicing. The resulting

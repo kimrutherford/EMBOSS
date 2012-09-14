@@ -278,7 +278,7 @@ static void dotpath_drawPlotlines(void *x, void *cl)
 
 static void dotpath_plotMatches(const AjPList list)
 {
-    ajListMapread(list,dotpath_drawPlotlines, NULL);
+    ajListMapread(list, &dotpath_drawPlotlines, NULL);
 
     return;
 }

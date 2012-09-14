@@ -1,28 +1,49 @@
-/******************************************************************************
-** @source AJAX datafile routines
+/* @source ajfiledata *********************************************************
 **
-** @version 1.0
-** @author Peter Rice pmr@ebi.ac.uk Data file functions from ajfile.c
+** AJAX datafile routines
+**
+** @author Copyright (C) 1999 Peter Rice
+** @version $Revision: 1.9 $
+** @modified Peter Rice pmr@ebi.ac.uk Data file functions from ajfile.c
+** @modified $Date: 2011/11/08 15:07:45 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+
+#include "ajlib.h"
+
+#include "ajfiledata.h"
+#include "ajarr.h"
+#include "ajfiledata.h"
+#include "ajnam.h"
+
+
+#include <stdlib.h>
 #include <stdarg.h>
+#include <limits.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <string.h>
+#include <errno.h>
+
+
 #ifndef WIN32
 #include <dirent.h>
 #else
@@ -30,19 +51,16 @@
 #include "dirent_w32.h"
 #include <direct.h>
 #endif
-#include <sys/stat.h>
-#include <sys/types.h>
+
 #ifndef WIN32
 #include <sys/wait.h>
 #include <pwd.h>
 #endif
-#include <string.h>
-#include <errno.h>
+
 #ifndef WIN32
 #include <unistd.h>
 #endif
-#include <limits.h>
-#include <fcntl.h>
+
 
 static AjPStr filedataBaseTmp = NULL;
 static AjPStr filedataHomeTmp = NULL;
@@ -106,13 +124,15 @@ static AjPStr filedataPath = NULL;
 
 
 
-/* @func ajDatafileNewInNameC **************************************************
+/* @func ajDatafileNewInNameC *************************************************
 **
 ** Returns an allocated data file pointer (AjPFile) if file exists
 ** a) in .   b) in ./.embossdata c) ~/ d) ~/.embossdata e) $DATA
 **
 ** @param [r] name [const char*] Filename.
 ** @return [AjPFile] file pointer
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -130,19 +150,6 @@ AjPFile ajDatafileNewInNameC(const char *name)
 
 
 
-/* @obsolete ajFileDataNewC
-** @remove Use ajDatafileNewNameC
-*/
-__deprecated void ajFileDataNewC(const char *s, AjPFile *f)
-{
-    *f = ajDatafileNewInNameC(s);
-
-    return;
-}
-
-
-
-
 /* @func ajDatafileNewInNameS *************************************************
 **
 ** Returns an allocated data file pointer (AjPFile) if file exists
@@ -150,6 +157,8 @@ __deprecated void ajFileDataNewC(const char *s, AjPFile *f)
 **
 ** @param [r] name [const AjPStr] Filename
 ** @return [AjPFile] file pointer
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -291,18 +300,7 @@ AjPFile ajDatafileNewInNameS(const AjPStr name)
 
 
 
-/* @obsolete ajFileDataNew
-** @remove Use ajDatafileNewInNameS
-*/
-__deprecated void ajFileDataNew(const AjPStr name, AjPFile *fnew)
-{
-    *fnew = ajDatafileNewInNameS(name);
-}
-
-
-
-
-/* @func ajDatafileNewInNamePathS **********************************************
+/* @func ajDatafileNewInNamePathS *********************************************
 **
 ** Returns an allocated AjFileInNew pointer (AjPFile) if file exists
 ** in the EMBOSS/data/(dir) directory, or is found in the usual directories
@@ -311,6 +309,8 @@ __deprecated void ajFileDataNew(const AjPStr name, AjPFile *fnew)
 ** @param [r] name [const AjPStr] Filename in AjStr.
 ** @param [r] path [const AjPStr] Data directory name in AjStr.
 ** @return [AjPFile] file pointer
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -493,46 +493,15 @@ AjPFile ajDatafileNewInNamePathS(const AjPStr name, const AjPStr path)
 
 
 
-/* @obsolete ajFileDataDirNew
-** @remove Use ajDatafileNewInNamePathS
-*/
-__deprecated void ajFileDataDirNew(const AjPStr name, const AjPStr dir,
-                                   AjPFile *fnew)
-{
-    *fnew = ajDatafileNewInNamePathS(name, dir);
-
-    return;
-}
-
-
-
-
-/* @obsolete ajFileDataDirNewC
-** @remove Use ajDatafileNewInNamePathS
-*/
-__deprecated void ajFileDataDirNewC(const char *s, const char* d, AjPFile *f)
-{
-    AjPStr u;
-
-    u = ajStrNewC(d);
-    ajStrAssignC(&filedataTmpstr, s);
-    *f = ajDatafileNewInNamePathS(filedataTmpstr,u);
-    ajStrDelStatic(&filedataTmpstr);
-    ajStrDel(&u);
-
-    return;
-}
-
-
-
-
-/* @func ajDatafileNewOutNameS *************************************************
+/* @func ajDatafileNewOutNameS ************************************************
 **
 ** Returns an allocated output data file pointer (AjPFile) to a file in the
 ** emboss_DATA area
 **
 ** @param [r] name [const AjPStr] Filename in AjStr.
 ** @return [AjPFile] file pointer.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -619,19 +588,6 @@ AjPFile ajDatafileNewOutNameS(const AjPStr name)
 
 
 
-/* @obsolete ajFileDataNewWrite
-** @remove Use ajDatafileNewOutNameS
-*/
-__deprecated void ajFileDataNewWrite(const AjPStr name, AjPFile *fnew)
-{
-    *fnew = ajDatafileNewOutNameS(name);
-
-    return;
-}
-
-
-
-
 /* @section data file values ***************************************************
 **
 ** @fdata [AjPFile]
@@ -656,11 +612,13 @@ __deprecated void ajFileDataNewWrite(const AjPStr name, AjPFile *fnew)
 
 
 
-/* @func ajDatafileValuePath ***************************************************
+/* @func ajDatafileValuePath **************************************************
 **
 ** Get the path to the active data directory
 **
 ** @return [const AjPStr] path.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -710,20 +668,6 @@ const AjPStr ajDatafileValuePath(void)
 
 
 
-/* @obsolete ajFilePathData
-** @remove Use ajDatafileValuePath
-*/
-__deprecated AjBool ajFilePathData(AjPStr *Ppath)
-{
-
-    ajStrAssignS(Ppath, ajDatafileValuePath());
-    if(!ajStrGetLen(*Ppath)) return ajFalse;
-    return ajTrue;
-}
-
-
-
-
 /* @section file exit
 **
 ** @fdata [AjPFile]
@@ -746,6 +690,8 @@ __deprecated AjBool ajFilePathData(AjPStr *Ppath)
 ** Prints a summary of file usage with debug calls
 **
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -759,3 +705,95 @@ void ajDatafileExit(void)
 
     return;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajFileDataNewC
+** @remove Use ajDatafileNewNameC
+*/
+__deprecated void ajFileDataNewC(const char *s, AjPFile *f)
+{
+    *f = ajDatafileNewInNameC(s);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajFileDataNew
+** @remove Use ajDatafileNewInNameS
+*/
+__deprecated void ajFileDataNew(const AjPStr name, AjPFile *fnew)
+{
+    *fnew = ajDatafileNewInNameS(name);
+}
+
+
+
+
+/* @obsolete ajFileDataDirNew
+** @remove Use ajDatafileNewInNamePathS
+*/
+__deprecated void ajFileDataDirNew(const AjPStr name, const AjPStr dir,
+                                   AjPFile *fnew)
+{
+    *fnew = ajDatafileNewInNamePathS(name, dir);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajFileDataDirNewC
+** @remove Use ajDatafileNewInNamePathS
+*/
+__deprecated void ajFileDataDirNewC(const char *s, const char* d, AjPFile *f)
+{
+    AjPStr u;
+
+    u = ajStrNewC(d);
+    ajStrAssignC(&filedataTmpstr, s);
+    *f = ajDatafileNewInNamePathS(filedataTmpstr,u);
+    ajStrDelStatic(&filedataTmpstr);
+    ajStrDel(&u);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajFileDataNewWrite
+** @remove Use ajDatafileNewOutNameS
+*/
+__deprecated void ajFileDataNewWrite(const AjPStr name, AjPFile *fnew)
+{
+    *fnew = ajDatafileNewOutNameS(name);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajFilePathData
+** @remove Use ajDatafileValuePath
+*/
+__deprecated AjBool ajFilePathData(AjPStr *Ppath)
+{
+
+    ajStrAssignS(Ppath, ajDatafileValuePath());
+    if(!ajStrGetLen(*Ppath)) return ajFalse;
+    return ajTrue;
+}
+#endif

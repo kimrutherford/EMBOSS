@@ -4,7 +4,7 @@ Here is a sample session with <b>prettyplot</b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>prettyplot -resbreak=10 -boxcol -consensus -plurality=3 </b>
+% <b>prettyplot -blocksperline=5 -boxcol -consensus -ratio=0.59 </b>
 Draw a sequence alignment with pretty formatting
 Input (aligned) sequence set: <b>globins.msf</b>
 Graph type [x11]: <b>cps</b>
@@ -21,7 +21,7 @@ Created prettyplot.ps
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>prettyplot globins.msf -plurality=3 -docolour </b>
+% <b>prettyplot globins.msf -ratio=0.59 -docolour </b>
 Draw a sequence alignment with pretty formatting
 Graph type [x11]: <b>cps</b>
 

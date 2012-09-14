@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Reports the current EMBOSS version number
+   Report the current EMBOSS version number
 
 Description
 
@@ -24,15 +24,15 @@ Usage
 
 
 % embossversion
-Reports the current EMBOSS version number
+Report the current EMBOSS version number
 
-6.4.0.0
+6.5.0.0
 
 
 Command line arguments
 
-Reports the current EMBOSS version number
-Version: EMBOSS:6.4.0.0
+Report the current EMBOSS version number
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:
@@ -116,8 +116,9 @@ Known bugs
 
 See also
 
-                    Program name             Description
+                    Program name               Description
                     embossdata   Find and retrieve EMBOSS data files
+   embossupdate     Checks for more recent updates to EMBOSS
 
 Author(s)
 

@@ -1,91 +1,94 @@
-/* @source Ensembl Software functions
+/* @source enssoftware ********************************************************
+**
+** Ensembl Software functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.16 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:58:55 $ by $Author: mks $
-** @version $Revision: 1.7 $
+** @modified $Date: 2012/04/12 20:34:17 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "enssoftware.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
-/* @const ensSoftwareVersion **************************************************
+/* @const ensKSoftwareVersion *************************************************
 **
 ** This is the software version of the AJAX Ensembl library.
 ** Interoperation is only guaranteed if software and database versions match.
 **
 ******************************************************************************/
 
-const char* ensSoftwareVersion = "62";
+const char *ensKSoftwareVersion = "66";
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -105,17 +108,17 @@ const char* ensSoftwareVersion = "62";
 ** Functions to control Ensembl Software Internals
 **
 ** @cc Bio::EnsEMBL::ApiVersion
-** @cc CVS Revision: 1.8
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.13
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of the Ensembl Software internals.
+** Functions for returning members of the Ensembl Software internals.
 **
 ** @fdata [none]
 **
@@ -132,14 +135,16 @@ const char* ensSoftwareVersion = "62";
 
 /* @func ensSoftwareGetVersion ************************************************
 **
-** Get the version element of the Ensembl Software.
+** Get the version member of the Ensembl Software.
 **
 ** @cc Bio::EnsEMBL::ApiVersion::software_version
 ** @return [const char*] Ensembl Software Version or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 const char* ensSoftwareGetVersion(void)
 {
-    return ensSoftwareVersion;
+    return ensKSoftwareVersion;
 }

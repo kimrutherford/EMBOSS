@@ -134,6 +134,7 @@ int main(int argc, char **argv)
 	else if(plot && c)
 	{
 	    fgraph = ajGraphdataNewI(c);
+            ajGraphSetDatanameS(graph, ajSeqGetNameS(seq));
 	    ajGraphSetTitleS(graph,ajSeqGetNameS(seq));
 	    ajFmtPrintS(&st,"From %d to %d. Residues:%s Window:%d Step:%d",
 			pos+1,end+1,ajStrGetPtr(bases),window,step);

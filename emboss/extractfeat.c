@@ -776,7 +776,7 @@ static AjBool extractfeat_MatchFeature(const AjPFeature gf,
     ** is this a child of a join() ?
     ** if it is a child, then we use the previous result of MatchPatternTags
     */
-    if(!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf))
+    if(!ajFeatIsMultiple(gf))
         *tagsmatch = extractfeat_MatchPatternTags(gf, tag, value);
 
     /* ignore remote IDs */

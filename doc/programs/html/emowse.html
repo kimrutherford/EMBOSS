@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -62,8 +62,7 @@ Input protein sequence(s): <b>tsw:*</b>
 Peptide molecular weight values file: <b>test.mowse</b>
 Whole sequence molwt [0]: <b></b>
 Use monoisotopic weights [N]: <b></b>
-Output file [12s1_arath.emowse]: <b></b>
-ajSeqxrefNewDbS '1-I' 'FT025'
+Output file [cru4_arath.emowse]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -76,7 +75,7 @@ ajSeqxrefNewDbS '1-I' 'FT025'
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Search protein sequences by digest fragment molecular weight
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -112,7 +111,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -260,7 +262,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -329,11 +331,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -377,7 +403,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -629,7 +655,7 @@ at least 1 lysine.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: 12s1_arath.emowse</h3>
+<p><h3>File: cru4_arath.emowse</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 
@@ -643,8 +669,8 @@ Using data fragments of:
           5423.0  
           6082.8  
 
-1   UBR5_RAT     E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-prote
-2   SYVC_TAKRU   Valyl-tRNA synthetase (6.1.1.9) (Valine--tRNA ligase) (ValRS) 
+1   UBR5_RAT     E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (
+2   SYVC_TAKRU   Valine--tRNA ligase (6.1.1.9) (Valyl-tRNA synthetase) (ValRS) 
 3   TCPD_TAKRU   T-complex protein 1 subunit delta (TCP-1-delta) (CCT-delta)   
 4   OPS2_DROME   Opsin Rh2 (Ocellar opsin)                                     
 5   FLAV_ECO57   Flavodoxin-1                                                  
@@ -652,7 +678,7 @@ Using data fragments of:
 7   FLAV_ECOLI   Flavodoxin-1                                                  
 8   FLAV_KLEPN   Flavodoxin                                                    
 9   FLAV_SYNY3   Flavodoxin                                                    
-10  EI2BB_TAKRU  Translation initiation factor eIF-2B subunit beta (eIF-2B GDP-
+10  EI2BB_TAKRU  Translation initiation factor eIF-2B subunit beta (S20I15) (eI
 11  FLAV_HAEIN   Flavodoxin                                                    
 12  HIRA_TAKRU   Protein HIRA (TUP1-like enhancer of split protein 1)          
 13  OPS2_SCHGR   Opsin-2                                                       
@@ -662,23 +688,23 @@ Using data fragments of:
 17  PAX3_HUMAN   Paired box protein Pax-3 (HuP2)                               
 18  PAX4_HUMAN   Paired box protein Pax-4                                      
 19  CO9_TAKRU    Complement component C9 (Precursor)                           
-20  SYHC_TAKRU   Histidyl-tRNA synthetase, cytoplasmic (6.1.1.21) (Histidine--t
+20  SYHC_TAKRU   Histidine--tRNA ligase, cytoplasmic (6.1.1.21) (Histidyl-tRNA 
 21  BGAL_ECOLI   Beta-galactosidase (Beta-gal) (3.2.1.23) (Lactase)            
 22  HD_TAKRU     Huntingtin (Huntington disease protein homolog) (HD protein ho
 
-    1  : UBR5_RAT       1.233e+06 103949.9   0.750 
-         E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog) (100 kDa protein) (Fragment)
+    1  : UBR5_RAT       1.212e+05 308026.9   0.750 
+         E3 ubiquitin-protein ligase UBR5 (6.3.2.-) (100 kDa protein) (E3 ubiquitin-protein ligase, HECT domain-containing 1) (Hyperplastic discs protein homolog)
          Mw     Start  End    Seq
-         1086.3 389    398    CATTPMAVHR                                   
-         1399.6 37     48     GDFLNYALSLMR                                 
-         2424.7 321    343    VFMEDVGAEPGSILTELGGFEVK                      
-         2930.3 702    729    QLILASQSSDADAVFSAMDLAFAVDLCK                 
-         3086.3 489    516    QLSIDTRPFRPASEGNPSDDPDPLPAHR                 
-        *6082.9 848    901    QDLVYFWTSSPSLPASEEGFQPMPSITIRPPDDQHLPTANTCISR...
+         1086.3 2257   2266   CATTPMAVHR                                   
+         1399.6 1905   1916   GDFLNYALSLMR                                 
+         2424.7 2189   2211   VFMEDVGAEPGSILTELGGFEVK                      
+         2930.3 2570   2597   QLILASQSSDADAVFSAMDLAFAVDLCK                 
+         3086.3 2357   2384   QLSIDTRPFRPASEGNPSDDPDPLPAHR                 
+        *6082.9 2716   2769   QDLVYFWTSSPSLPASEEGFQPMPSITIRPPDDQHLPTANTCISR...
          No Match      2030.2 5423.0 
 
     2  : SYVC_TAKRU     3.791e+01 138218.2   0.375 
-         Valyl-tRNA synthetase (6.1.1.9) (Valine--tRNA ligase) (ValRS)
+         Valine--tRNA ligase (6.1.1.9) (Valyl-tRNA synthetase) (ValRS)
          Mw     Start  End    Seq
          1087.3 510    518    TVLHPFCDR                                    
         *1399.6 1184   1195   VPVKVQEQDTEK                                 
@@ -719,7 +745,7 @@ Using data fragments of:
          No Match      1086.2 1399.6 2030.2 2424.7 3086.3 5423.0 6082.8 
 
     20 : SYHC_TAKRU     2.821e+00 57913.0    0.125 
-         Histidyl-tRNA synthetase, cytoplasmic (6.1.1.21) (Histidine--tRNA ligase) (HisRS)
+         Histidine--tRNA ligase, cytoplasmic (6.1.1.21) (Histidyl-tRNA synthetase) (HisRS)
          Mw     Start  End    Seq
          1087.2 124    133    DQGGELLSLR                                   
          No Match      1399.6 2030.2 2424.7 2930.3 3086.3 5423.0 6082.8 
@@ -1313,7 +1339,7 @@ None.
 
 <tr>
 <td><a href="pepdigest.html">pepdigest</a></td>
-<td>Reports on protein proteolytic enzyme or reagent cleavage sites</td>
+<td>Report on protein proteolytic enzyme or reagent cleavage sites</td>
 </tr>
 
 <tr>
@@ -1323,7 +1349,7 @@ None.
 
 <tr>
 <td><a href="pepstats.html">pepstats</a></td>
-<td>Calculates statistics of protein properties</td>
+<td>Calculate statistics of protein properties</td>
 </tr>
 
 <tr>

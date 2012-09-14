@@ -4,26 +4,14 @@
 <p><h3>File: qatests.server.dasregistry</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-# qatests.server.dasregistry 2011-07-15 12:00:00
-
-DB cath [
-  method: das
-  type: "Protfeatures"
-  format: "dasgff"
-  url: http://cathdb.info:9000/das/cath_pdb
-  example: "5pti"
-  comment: "The CATH database annotates PDB structures with CATH structural domains as derived from a combination of automatic and manually methods."
-  hasaccession: "N"
-  identifier: "segment"
-  fields: "segment,type,category,categorize,feature_id"
-]
+# qatests.server.dasregistry 2012-07-15 12:00:00
 
 DB DS_114_signalp [
   method: das
   type: "Protfeatures"
   format: "dasgff"
   url: http://das.cbs.dtu.dk:9000/das/signalp
-  example: "ALBU_HUMAN"
+  example: "P15498"
   comment: "SignalP (http://www.cbs.dtu.dk/services/SignalP) predictions for UniProt."
   hasaccession: "N"
   identifier: "segment"
@@ -35,7 +23,7 @@ DB netphos [
   type: "Protfeatures"
   format: "dasgff"
   url: http://das.cbs.dtu.dk:9000/das/netphos
-  example: "ALBU_HUMAN"
+  example: "P15498"
   comment: "NetPhos (http://www.cbs.dtu.dk/services/NetPhos) predictions for UniProt."
   hasaccession: "N"
   identifier: "segment"
@@ -47,8 +35,20 @@ DB prop [
   type: "Protfeatures"
   format: "dasgff"
   url: http://das.cbs.dtu.dk:9000/das/prop
-  example: "GDNF_HUMAN"
+  example: "P15498"
   comment: "ProP (http://www.cbs.dtu.dk/services/ProP) predictions for UniProt."
+  hasaccession: "N"
+  identifier: "segment"
+  fields: "segment,type,category,categorize,feature_id"
+]
+
+DB transmem_pred [
+  method: das
+  type: "Protfeatures"
+  format: "dasgff"
+  url: http://pongo.biocomp.unibo.it/das/dasdb
+  example: "P15498"
+  comment: "Membrane protein annotation. Presenty This DAS server contains UNIPROT and IPI human proteins. The annotation si done using 4 different predictors: TMHMM2.0, MEMSAT, ENSEMBLE_1.0 and PRODIV_TMHMM_0.91"
   hasaccession: "N"
   identifier: "segment"
   fields: "segment,type,category,categorize,feature_id"
@@ -58,52 +58,52 @@ DB prop [
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-  fields: "segment,type,category,categorize,feature_id"
-]
-
-DB CATH_Domain_Homologues_in_Ensembl [
   method: das
-  type: "Protfeatures"
+  type: "Nucfeatures"
+  taxon: "6334"
   format: "dasgff"
-  url: http://das.cathdb.info/das/gene3d_ensembl
-  example: "ENSGACP00000019937"
-  comment: "CATH Superfamily domain homologues, identified by sequence similarity, and mapped to Ensembl."
+  url: http://metazoa.ensembl.org/das/Trichinella_spiralis.Tspiralis1.translation
+  example: ""
+  comment: "Annotation source for Trichinella_spiralis translation"
   hasaccession: "N"
   identifier: "segment"
   fields: "segment,type,category,categorize,feature_id"
 ]
 
-DB DS_2765_CATH_Domains_in_UniProt [
+DB Trichoplax_adhaerens_TRIAD1_reference [
   method: das
-  type: "Protfeatures"
-  format: "dasgff"
-  url: http://das.cathdb.info/das/cath_sptr
-  example: "P20279"
-  comment: "Structural domains directly mapped to UniProt. A clone of the cath_uniprot server for backwards compatibility."
+  type: "Nucleotide, Nucfeatures"
+  taxon: "10228"
+  format: "das, dasgff"
+  url: http://metazoa.ensembl.org/das/Trichoplax_adhaerens.TRIAD1.reference
+  example: ""
+  comment: "Trichoplax_adhaerens Reference server based on TRIAD1 assembly. Contains 1415 top level entries."
   hasaccession: "N"
   identifier: "segment"
   fields: "segment,type,category,categorize,feature_id"
 ]
 
-DB DS_2767_CATH_Domains_in_UniProt [
+DB Trichoplax_adhaerens_TRIAD1_transcript [
   method: das
-  type: "Protfeatures"
+  type: "Nucfeatures"
+  taxon: "10228"
   format: "dasgff"
-  url: http://das.cathdb.info/das/cath_uniprot
-  example: "P20279"
-  comment: "Structural domains directly mapped to UniProt."
+  url: http://metazoa.ensembl.org/das/Trichoplax_adhaerens.TRIAD1.transcript
+  example: ""
+  comment: "Annotation source for Trichoplax_adhaerens transcript"
   hasaccession: "N"
   identifier: "segment"
   fields: "segment,type,category,categorize,feature_id"
 ]
 
-DB CATH_Domain_Homologues_in_UniProt [
+DB Trichoplax_adhaerens_TRIAD1_translation [
   method: das
-  type: "Protfeatures"
+  type: "Nucfeatures"
+  taxon: "10228"
   format: "dasgff"
-  url: http://das.cathdb.info/das/gene3d_cath
-  example: "P15498"
-  comment: "CATH Superfamily domain homologues, identified using DomainFinder."
+  url: http://metazoa.ensembl.org/das/Trichoplax_adhaerens.TRIAD1.translation
+  example: ""
+  comment: "Annotation source for Trichoplax_adhaerens translation"
   hasaccession: "N"
   identifier: "segment"
   fields: "segment,type,category,categorize,feature_id"

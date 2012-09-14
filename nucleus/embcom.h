@@ -1,43 +1,126 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include embcom ************************************************************
+**
+** General routines for program Complex
+**
+** NB: THESE ROUTINES DO NOT CONFORM TO THE LIBRARY WRITING STANDARD AND
+**     THEREFORE SHOULD NOT BE USED AS A TEMPLATE FOR WRITING EMBOSS CODE
+**
+** @author Copyright (c) 1999 Donata Colangelo
+** @version $Revision: 1.11 $
+** @modified $Date: 2011/10/18 14:24:24 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef embcom_h
-#define embcom_h
+#ifndef EMBCOM_H
+#define EMBCOM_H
 
 
-struct traccia {
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajfile.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* @data EmbPComTrace *********************************************************
+**
+** Complex utility trace object
+**
+** @attr ind [ajint] Index
+** @attr pc [float] Percent
+******************************************************************************/
+
+typedef struct EmbSComTrace {
     ajint ind;
     float pc;
-   };
-
-/*
-** Gary Williams - 5 Aug 2000
-** changed struct trace to struct comtrace
-** to avoid conflict with 'trace' in ncurses.h
-*/
-typedef struct traccia comtrace;
+} EmbOComTrace;
+#define EmbPComTrace EmbOComTrace*
 
 
-struct ujwin{
+
+
+/* @data EmbPComUjwin *********************************************************
+**
+** Complex utility UJwin object
+**
+** @attr Ujwin [float*] UJ windows
+******************************************************************************/
+
+typedef struct EmbSComUjwin {
   float *Ujwin;
- };
+} EmbOComUjwin;
+#define EmbPComUjwin EmbOComUjwin*
 
-typedef struct ujwin UJWin;
 
-struct ujsim{
-  UJWin *Ujsim;
- };
 
-typedef struct ujsim UJSim;
 
-struct sqsim{
+/* @data EmbPComUjsim *********************************************************
+**
+** Complex utility UJsim object
+**
+** @attr Ujsim [EmbPComUjwin] UJ sim
+******************************************************************************/
+
+typedef struct EmbSComUjsim {
+  EmbPComUjwin Ujsim;
+} EmbOComUjsim;
+#define EmbPComUjsim EmbOComUjsim*
+
+
+
+
+/* @data EmbPComSeqsim ********************************************************
+**
+** Complex utility SEQsim object
+**
+** @attr Sqsim [char*] Sequence sim
+******************************************************************************/
+
+typedef struct EmbSComSeqsim {
   char *Sqsim;
- };
+} EmbOComSeqsim;
+#define EmbPComSeqsim EmbOComSeqsim*
 
-typedef struct sqsim SEQSim;
 
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 
 
@@ -60,8 +143,6 @@ void embComUnused (void);
 ** End of prototype definitions
 */
 
-#endif
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif  /* !EMBCOM_H */

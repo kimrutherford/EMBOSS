@@ -1,8 +1,29 @@
-#include .embossrc
+INCLUDE .embossrc
 
 DB srsembl [ method: "srswww" format: "embl"
     url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
     dbalias: "emblrelease"
+    type: "N"
+    serverversion: "7.1.3"
+]
+
+DB srsemblcon [ method: "srswww" format: "embl"
+    url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+    dbalias: "emblcon"
+    type: "N"
+    serverversion: "7.1.3"
+]
+
+DB srsemblwgs [ method: "srswww" format: "embl"
+    url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+    dbalias: "emblwgsrelease"
+    type: "N"
+    serverversion: "7.1.3"
+]
+
+DB srsemblest [ method: "srswww" format: "embl"
+    url: "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+    dbalias: "emblestrelease"
     type: "N"
     serverversion: "7.1.3"
 ]

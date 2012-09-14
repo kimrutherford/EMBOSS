@@ -1,84 +1,87 @@
-/* @source Ensembl Quality Check Sequence functions
+/* @source ensqcsequence ******************************************************
+**
+** Ensembl Quality Check Sequence functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.34 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/05/25 19:55:04 $ by $Author: mks $
-** @version $Revision: 1.23 $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensqcsequence.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic qcsequenceadaptorTables ***************************************
+/* @conststatic qcsequenceadaptorKTables **************************************
 **
 ** Array of Ensembl Quality Check Sequence Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* qcsequenceadaptorTables[] =
+static const char *qcsequenceadaptorKTables[] =
 {
     "sequence",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic qcsequenceadaptorColumns **************************************
+/* @conststatic qcsequenceadaptorKColumns *************************************
 **
 ** Array of Ensembl Quality Check Sequence Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* qcsequenceadaptorColumns[] =
+static const char *qcsequenceadaptorKColumns[] =
 {
     "sequence.sequence_id",
     "sequence.sequence_db_id",
@@ -92,25 +95,25 @@ static const char* qcsequenceadaptorColumns[] =
     "sequence.cdsstrand",
     "sequence.polya",
     "sequence.description",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 static AjBool qcsequenceadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -119,9 +122,9 @@ static AjBool qcsequenceadaptorFetchAllbyStatement(
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -180,7 +183,7 @@ static AjBool qcsequenceadaptorFetchAllbyStatement(
 ** @argrule Ini description [AjPStr] Description
 ** @argrule Ref qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 **
-** @valrule * [EnsPQcsequence] Ensembl Quality Check Sequence
+** @valrule * [EnsPQcsequence] Ensembl Quality Check Sequence or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -195,6 +198,8 @@ static AjBool qcsequenceadaptorFetchAllbyStatement(
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [EnsPQcsequence] Ensembl Quality Check Sequence or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -202,28 +207,25 @@ EnsPQcsequence ensQcsequenceNewCpy(const EnsPQcsequence qcs)
 {
     EnsPQcsequence pthis = NULL;
 
-    if(!qcs)
+    if (!qcs)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
-
+    pthis->Use        = 1U;
     pthis->Identifier = qcs->Identifier;
-
-    pthis->Adaptor = qcs->Adaptor;
-
+    pthis->Adaptor    = qcs->Adaptor;
     pthis->Qcdatabase = ensQcdatabaseNewRef(qcs->Qcdatabase);
 
-    if(qcs->Name)
+    if (qcs->Name)
         pthis->Name = ajStrNewRef(qcs->Name);
 
-    if(qcs->Accession)
+    if (qcs->Accession)
         pthis->Accession = ajStrNewRef(qcs->Accession);
 
     pthis->Version = qcs->Version;
 
-    if(qcs->Type)
+    if (qcs->Type)
         pthis->Type = ajStrNewRef(qcs->Type);
 
     pthis->Length    = qcs->Length;
@@ -232,7 +234,7 @@ EnsPQcsequence ensQcsequenceNewCpy(const EnsPQcsequence qcs)
     pthis->CdsStrand = qcs->CdsStrand;
     pthis->Polya     = qcs->Polya;
 
-    if(qcs->Description)
+    if (qcs->Description)
         pthis->Description = ajStrNewRef(qcs->Description);
 
     return pthis;
@@ -263,6 +265,8 @@ EnsPQcsequence ensQcsequenceNewCpy(const EnsPQcsequence qcs)
 ** @param [u] description [AjPStr] Description
 **
 ** @return [EnsPQcsequence] Ensembl Quality Check Sequence or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -282,34 +286,31 @@ EnsPQcsequence ensQcsequenceNewIni(EnsPQcsequenceadaptor qcsa,
 {
     EnsPQcsequence qcs = NULL;
 
-    if(!qcdb)
+    if (!qcdb)
         return NULL;
 
-    if(!name)
+    if (!name)
         return NULL;
 
-    if(!accession)
+    if (!accession)
         return NULL;
 
     AJNEW0(qcs);
 
-    qcs->Use = 1;
-
+    qcs->Use        = 1U;
     qcs->Identifier = identifier;
-
-    qcs->Adaptor = qcsa;
-
+    qcs->Adaptor    = qcsa;
     qcs->Qcdatabase = ensQcdatabaseNewRef(qcdb);
 
-    if(name)
+    if (name)
         qcs->Name = ajStrNewRef(name);
 
-    if(accession)
+    if (accession)
         qcs->Accession = ajStrNewRef(accession);
 
     qcs->Version = version;
 
-    if(type)
+    if (type)
         qcs->Type = ajStrNewRef(type);
 
     qcs->Length    = length;
@@ -318,7 +319,7 @@ EnsPQcsequence ensQcsequenceNewIni(EnsPQcsequenceadaptor qcsa,
     qcs->CdsStrand = cdsstrand;
     qcs->Polya     = polya;
 
-    if(description)
+    if (description)
         qcs->Description = ajStrNewRef(description);
 
     return qcs;
@@ -335,12 +336,14 @@ EnsPQcsequence ensQcsequenceNewIni(EnsPQcsequenceadaptor qcsa,
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [EnsPQcsequence] Ensembl Quality Check Sequence or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcsequence ensQcsequenceNewRef(EnsPQcsequence qcs)
 {
-    if(!qcs)
+    if (!qcs)
         return NULL;
 
     qcs->Use++;
@@ -353,15 +356,14 @@ EnsPQcsequence ensQcsequenceNewRef(EnsPQcsequence qcs)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Quality Check Sequence object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Quality Check Sequence object.
 **
 ** @fdata [EnsPQcsequence]
 **
-** @nam3rule Del Destroy (free) an Ensembl Quality Check Sequence object
+** @nam3rule Del Destroy (free) an Ensembl Quality Check Sequence
 **
-** @argrule * Pqcs [EnsPQcsequence*] Ensembl Quality Check Sequence
-**                                   object address
+** @argrule * Pqcs [EnsPQcsequence*] Ensembl Quality Check Sequence address
 **
 ** @valrule * [void]
 **
@@ -375,24 +377,23 @@ EnsPQcsequence ensQcsequenceNewRef(EnsPQcsequence qcs)
 **
 ** Default destructor for an Ensembl Quality Check Sequence.
 **
-** @param [d] Pqcs [EnsPQcsequence*] Ensembl Quality Check Sequence
-**                                   object address
+** @param [d] Pqcs [EnsPQcsequence*] Ensembl Quality Check Sequence address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensQcsequenceDel(EnsPQcsequence* Pqcs)
+void ensQcsequenceDel(EnsPQcsequence *Pqcs)
 {
     EnsPQcsequence pthis = NULL;
 
-    if(!Pqcs)
+    if (!Pqcs)
         return;
 
-    if(!*Pqcs)
-        return;
-
-    if(ajDebugTest("ensQcsequenceDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensQcsequenceDel"))
     {
         ajDebug("ensQcsequenceDel\n"
                 "  *Pqcs %p\n",
@@ -400,12 +401,16 @@ void ensQcsequenceDel(EnsPQcsequence* Pqcs)
 
         ensQcsequenceTrace(*Pqcs, 1);
     }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pqcs)
+        return;
 
     pthis = *Pqcs;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pqcs = NULL;
 
@@ -429,9 +434,9 @@ void ensQcsequenceDel(EnsPQcsequence* Pqcs)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Quality Check Sequence object.
 **
 ** @fdata [EnsPQcsequence]
@@ -457,17 +462,17 @@ void ensQcsequenceDel(EnsPQcsequence* Pqcs)
 ** @valrule Accession [AjPStr] Accession number or NULL
 ** @valrule Adaptor [EnsPQcsequenceadaptor]
 ** Ensembl Quality Check Sequence Adaptor or NULL
-** @valrule CdsEnd [ajuint] Coding sequence end or 0
-** @valrule CdsStart [ajuint] Coding sequence start or 0
+** @valrule CdsEnd [ajuint] Coding sequence end or 0U
+** @valrule CdsStart [ajuint] Coding sequence start or 0U
 ** @valrule CdsStrand [ajint] Coding sequence strand or 0
 ** @valrule Description [AjPStr] Description or NULL
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
-** @valrule Length [ajuint] Length or 0
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
+** @valrule Length [ajuint] Length or 0U
 ** @valrule Name [AjPStr] Name or NULL
-** @valrule Polya [ajuint] Polya tail length or 0
+** @valrule Polya [ajuint] Polya tail length or 0U
 ** @valrule Qcdatabase [EnsPQcdatabase] Ensembl Quality Check Database or NULL
 ** @valrule Type [AjPStr] Type or NULL
-** @valrule Version [ajuint] Version or 0
+** @valrule Version [ajuint] Version or 0U
 **
 ** @fcategory use
 ******************************************************************************/
@@ -477,20 +482,19 @@ void ensQcsequenceDel(EnsPQcsequence* Pqcs)
 
 /* @func ensQcsequenceGetAccession ********************************************
 **
-** Get the accession number element of an Ensembl Quality Check Sequence.
+** Get the accession number member of an Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [AjPStr] Accession number or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensQcsequenceGetAccession(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return NULL;
-
-    return qcs->Accession;
+    return (qcs) ? qcs->Accession : NULL;
 }
 
 
@@ -498,22 +502,21 @@ AjPStr ensQcsequenceGetAccession(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceGetAdaptor **********************************************
 **
-** Get the Ensembl Quality Check Sequence Adaptor element of an
+** Get the Ensembl Quality Check Sequence Adaptor member of an
 ** Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [EnsPQcsequenceadaptor] Ensembl Quality Check Sequence Adaptor
 ** or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcsequenceadaptor ensQcsequenceGetAdaptor(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return NULL;
-
-    return qcs->Adaptor;
+    return (qcs) ? qcs->Adaptor : NULL;
 }
 
 
@@ -521,20 +524,19 @@ EnsPQcsequenceadaptor ensQcsequenceGetAdaptor(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceGetCdsEnd ***********************************************
 **
-** Get the CDS end element of an Ensembl Quality Check Sequence.
+** Get the CDS end member of an Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
-** @return [ajuint] CDS start or 0
+** @return [ajuint] CDS start or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsequenceGetCdsEnd(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return 0;
-
-    return qcs->CdsEnd;
+    return (qcs) ? qcs->CdsEnd : 0U;
 }
 
 
@@ -542,20 +544,19 @@ ajuint ensQcsequenceGetCdsEnd(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceGetCdsStart *********************************************
 **
-** Get the CDS start element of an Ensembl Quality Check Sequence.
+** Get the CDS start member of an Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
-** @return [ajuint] CDS start or 0
+** @return [ajuint] CDS start or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsequenceGetCdsStart(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return 0;
-
-    return qcs->CdsStart;
+    return (qcs) ? qcs->CdsStart : 0U;
 }
 
 
@@ -563,20 +564,19 @@ ajuint ensQcsequenceGetCdsStart(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceGetCdsStrand ********************************************
 **
-** Get the CDS strand element of an Ensembl Quality Check Sequence.
+** Get the CDS strand member of an Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [ajint] CDS strand or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajint ensQcsequenceGetCdsStrand(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return 0;
-
-    return qcs->CdsStrand;
+    return (qcs) ? qcs->CdsStrand : 0;
 }
 
 
@@ -584,20 +584,19 @@ ajint ensQcsequenceGetCdsStrand(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceGetDescription ******************************************
 **
-** Get the description element of an Ensembl Quality Check Sequence.
+** Get the description member of an Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [AjPStr] Description or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensQcsequenceGetDescription(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return NULL;
-
-    return qcs->Description;
+    return (qcs) ? qcs->Description : NULL;
 }
 
 
@@ -605,21 +604,20 @@ AjPStr ensQcsequenceGetDescription(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceGetIdentifier *******************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsequenceGetIdentifier(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return 0;
-
-    return qcs->Identifier;
+    return (qcs) ? qcs->Identifier : 0U;
 }
 
 
@@ -627,20 +625,19 @@ ajuint ensQcsequenceGetIdentifier(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceGetLength ***********************************************
 **
-** Get the length element of an Ensembl Quality Check Sequence.
+** Get the length member of an Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
-** @return [ajuint] Length or 0
+** @return [ajuint] Length or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsequenceGetLength(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return 0;
-
-    return qcs->Length;
+    return (qcs) ? qcs->Length : 0U;
 }
 
 
@@ -648,20 +645,19 @@ ajuint ensQcsequenceGetLength(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceGetName *************************************************
 **
-** Get the name element of an Ensembl Quality Check Sequence.
+** Get the name member of an Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [AjPStr] Name or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensQcsequenceGetName(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return NULL;
-
-    return qcs->Name;
+    return (qcs) ? qcs->Name : NULL;
 }
 
 
@@ -669,20 +665,19 @@ AjPStr ensQcsequenceGetName(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceGetPolya ************************************************
 **
-** Get the PolyA+ tail length element of an Ensembl Quality Check Sequence.
+** Get the PolyA+ tail length member of an Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
-** @return [ajuint] PolyA+ tail length or 0
+** @return [ajuint] PolyA+ tail length or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsequenceGetPolya(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return 0;
-
-    return qcs->Polya;
+    return (qcs) ? qcs->Polya : 0U;
 }
 
 
@@ -690,21 +685,20 @@ ajuint ensQcsequenceGetPolya(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceGetQcdatabase *******************************************
 **
-** Get the Ensembl Quality Check Database element of an
+** Get the Ensembl Quality Check Database member of an
 ** Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [EnsPQcdatabase] Ensembl Quality Check Database or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcdatabase ensQcsequenceGetQcdatabase(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return NULL;
-
-    return qcs->Qcdatabase;
+    return (qcs) ? qcs->Qcdatabase : NULL;
 }
 
 
@@ -712,20 +706,19 @@ EnsPQcdatabase ensQcsequenceGetQcdatabase(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceGetType *************************************************
 **
-** Get the type element of an Ensembl Quality Check Sequence.
+** Get the type member of an Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [AjPStr] Type or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensQcsequenceGetType(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return NULL;
-
-    return qcs->Type;
+    return (qcs) ? qcs->Type : NULL;
 }
 
 
@@ -733,20 +726,19 @@ AjPStr ensQcsequenceGetType(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceGetVersion **********************************************
 **
-** Get the version element of an Ensembl Quality Check Sequence.
+** Get the version member of an Ensembl Quality Check Sequence.
 **
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
-** @return [ajuint] Version or 0
+** @return [ajuint] Version or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsequenceGetVersion(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return 0;
-
-    return qcs->Version;
+    return (qcs) ? qcs->Version : 0U;
 }
 
 
@@ -754,12 +746,12 @@ ajuint ensQcsequenceGetVersion(const EnsPQcsequence qcs)
 
 /* @section modifiers *********************************************************
 **
-** Functions for assigning elements of an
+** Functions for assigning members of an
 ** Ensembl Quality Check Sequence object.
 **
 ** @fdata [EnsPQcsequence]
 **
-** @nam3rule Set Set one element of an Ensembl Quality Check Sequence
+** @nam3rule Set Set one member of an Ensembl Quality Check Sequence
 ** @nam4rule Accession Set the accession number
 ** @nam4rule Adaptor Set the Ensembl Quality Check Sequence Adaptor
 ** @nam4rule Cds Set coding sequence members
@@ -801,18 +793,20 @@ ajuint ensQcsequenceGetVersion(const EnsPQcsequence qcs)
 
 /* @func ensQcsequenceSetAccession ********************************************
 **
-** Set the accession number element of an Ensembl Quality Check Sequence.
+** Set the accession number member of an Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 ** @param [uN] accession [AjPStr] Accession number
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetAccession(EnsPQcsequence qcs, AjPStr accession)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     ajStrDel(&qcs->Accession);
@@ -827,7 +821,7 @@ AjBool ensQcsequenceSetAccession(EnsPQcsequence qcs, AjPStr accession)
 
 /* @func ensQcsequenceSetAdaptor **********************************************
 **
-** Set the Ensembl Quality Check Sequence Adaptor element of an
+** Set the Ensembl Quality Check Sequence Adaptor member of an
 ** Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
@@ -835,12 +829,14 @@ AjBool ensQcsequenceSetAccession(EnsPQcsequence qcs, AjPStr accession)
 ** Ensembl Quality Check Sequence Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetAdaptor(EnsPQcsequence qcs, EnsPQcsequenceadaptor qcsa)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     qcs->Adaptor = qcsa;
@@ -853,18 +849,20 @@ AjBool ensQcsequenceSetAdaptor(EnsPQcsequence qcs, EnsPQcsequenceadaptor qcsa)
 
 /* @func ensQcsequenceSetCdsEnd ***********************************************
 **
-** Set the CDS end element of an Ensembl Quality Check Sequence.
+** Set the CDS end member of an Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 ** @param [r] cdsend [ajuint] CDS end
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetCdsEnd(EnsPQcsequence qcs, ajuint cdsend)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     qcs->CdsEnd = cdsend;
@@ -877,18 +875,20 @@ AjBool ensQcsequenceSetCdsEnd(EnsPQcsequence qcs, ajuint cdsend)
 
 /* @func ensQcsequenceSetCdsStart *********************************************
 **
-** Set the CDS start element of an Ensembl Quality Check Sequence.
+** Set the CDS start member of an Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 ** @param [r] cdsstart [ajuint] CDS start
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetCdsStart(EnsPQcsequence qcs, ajuint cdsstart)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     qcs->CdsStart = cdsstart;
@@ -901,18 +901,20 @@ AjBool ensQcsequenceSetCdsStart(EnsPQcsequence qcs, ajuint cdsstart)
 
 /* @func ensQcsequenceSetCdsStrand ********************************************
 **
-** Set the CDS strand element of an Ensembl Quality Check Sequence.
+** Set the CDS strand member of an Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 ** @param [r] cdsstrand [ajint] CDS strand
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetCdsStrand(EnsPQcsequence qcs, ajint cdsstrand)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     qcs->CdsStrand = cdsstrand;
@@ -925,18 +927,20 @@ AjBool ensQcsequenceSetCdsStrand(EnsPQcsequence qcs, ajint cdsstrand)
 
 /* @func ensQcsequenceSetDescription ******************************************
 **
-** Set the description element of an Ensembl Quality Check Sequence.
+** Set the description member of an Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 ** @param [uN] description [AjPStr] Description
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetDescription(EnsPQcsequence qcs, AjPStr description)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     ajStrDel(&qcs->Description);
@@ -951,19 +955,21 @@ AjBool ensQcsequenceSetDescription(EnsPQcsequence qcs, AjPStr description)
 
 /* @func ensQcsequenceSetIdentifier *******************************************
 **
-** Set the SQL database-internal identifier element of an
+** Set the SQL database-internal identifier member of an
 ** Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetIdentifier(EnsPQcsequence qcs, ajuint identifier)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     qcs->Identifier = identifier;
@@ -976,18 +982,20 @@ AjBool ensQcsequenceSetIdentifier(EnsPQcsequence qcs, ajuint identifier)
 
 /* @func ensQcsequenceSetLength ***********************************************
 **
-** Set the length element of an Ensembl Quality Check Sequence.
+** Set the length member of an Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 ** @param [r] length [ajuint] Length
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetLength(EnsPQcsequence qcs, ajuint length)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     qcs->Length = length;
@@ -1000,18 +1008,20 @@ AjBool ensQcsequenceSetLength(EnsPQcsequence qcs, ajuint length)
 
 /* @func ensQcsequenceSetName *************************************************
 **
-** Set the name element of an Ensembl Quality Check Sequence.
+** Set the name member of an Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 ** @param [uN] name [AjPStr] Name
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetName(EnsPQcsequence qcs, AjPStr name)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     ajStrDel(&qcs->Name);
@@ -1026,18 +1036,20 @@ AjBool ensQcsequenceSetName(EnsPQcsequence qcs, AjPStr name)
 
 /* @func ensQcsequenceSetPolya ************************************************
 **
-** Set the PolyA+ tail length element of an Ensembl Quality Check Sequence.
+** Set the PolyA+ tail length member of an Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 ** @param [r] polya [ajuint] PolyA+ tail length
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetPolya(EnsPQcsequence qcs, ajuint polya)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     qcs->Polya = polya;
@@ -1050,19 +1062,21 @@ AjBool ensQcsequenceSetPolya(EnsPQcsequence qcs, ajuint polya)
 
 /* @func ensQcsequenceSetQcdatabase *******************************************
 **
-** Set the Ensembl Quality Check Database element of an
+** Set the Ensembl Quality Check Database member of an
 ** Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 ** @param [uN] qcdb [EnsPQcdatabase] Ensembl Quality Check Database
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetQcdatabase(EnsPQcsequence qcs, EnsPQcdatabase qcdb)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     ensQcdatabaseDel(&qcs->Qcdatabase);
@@ -1077,18 +1091,20 @@ AjBool ensQcsequenceSetQcdatabase(EnsPQcsequence qcs, EnsPQcdatabase qcdb)
 
 /* @func ensQcsequenceSetType *************************************************
 **
-** Set the type element of an Ensembl Quality Check Sequence.
+** Set the type member of an Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 ** @param [uN] type [AjPStr] Type
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetType(EnsPQcsequence qcs, AjPStr type)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     ajStrDel(&qcs->Type);
@@ -1103,18 +1119,20 @@ AjBool ensQcsequenceSetType(EnsPQcsequence qcs, AjPStr type)
 
 /* @func ensQcsequenceSetVersion **********************************************
 **
-** Set the version element of an Ensembl Quality Check Sequence.
+** Set the version member of an Ensembl Quality Check Sequence.
 **
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 ** @param [r] version [ajuint] Version
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceSetVersion(EnsPQcsequence qcs, ajuint version)
 {
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     qcs->Version = version;
@@ -1131,7 +1149,7 @@ AjBool ensQcsequenceSetVersion(EnsPQcsequence qcs, ajuint version)
 **
 ** @fdata [EnsPQcsequence]
 **
-** @nam3rule Trace Report Ensembl Quality Check Sequence elements to debug file
+** @nam3rule Trace Report Ensembl Quality Check Sequence members to debug file
 **
 ** @argrule Trace qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 ** @argrule Trace level [ajuint] Indentation level
@@ -1152,6 +1170,8 @@ AjBool ensQcsequenceSetVersion(EnsPQcsequence qcs, ajuint version)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1159,7 +1179,7 @@ AjBool ensQcsequenceTrace(const EnsPQcsequence qcs, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1234,6 +1254,8 @@ AjBool ensQcsequenceTrace(const EnsPQcsequence qcs, ajuint level)
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1241,35 +1263,35 @@ size_t ensQcsequenceCalculateMemsize(const EnsPQcsequence qcs)
 {
     size_t size = 0;
 
-    if(!qcs)
+    if (!qcs)
         return 0;
 
     size += sizeof (EnsOQcsequence);
 
     size += ensQcdatabaseCalculateMemsize(qcs->Qcdatabase);
 
-    if(qcs->Name)
+    if (qcs->Name)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(qcs->Name);
     }
 
-    if(qcs->Accession)
+    if (qcs->Accession)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(qcs->Accession);
     }
 
-    if(qcs->Type)
+    if (qcs->Type)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(qcs->Type);
     }
 
-    if(qcs->Description)
+    if (qcs->Description)
     {
         size += sizeof (AjOStr);
 
@@ -1295,7 +1317,7 @@ size_t ensQcsequenceCalculateMemsize(const EnsPQcsequence qcs)
 ** @argrule * qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @valrule QcdatabaseIdentifier [ajuint] Ensembl Quality Check Database
-** SQL database-internal identifier or 0
+** SQL database-internal identifier or 0U
 **
 ** @fcategory use
 ******************************************************************************/
@@ -1311,16 +1333,15 @@ size_t ensQcsequenceCalculateMemsize(const EnsPQcsequence qcs)
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [ajuint] Ensembl Quality Check Database SQL database-internal
-** identifier or 0
+** identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcsequenceGetQcdatabaseIdentifier(const EnsPQcsequence qcs)
 {
-    if(!qcs)
-        return 0;
-
-    return ensQcdatabaseGetIdentifier(qcs->Qcdatabase);
+    return (qcs) ? ensQcdatabaseGetIdentifier(qcs->Qcdatabase) : 0U;
 }
 
 
@@ -1353,60 +1374,62 @@ ajuint ensQcsequenceGetQcdatabaseIdentifier(const EnsPQcsequence qcs)
 ** @param [r] qcs2 [const EnsPQcsequence] Second Ensembl Quality Check Sequence
 **
 ** @return [AjBool] ajTrue if the Ensembl Quality Check Sequences are equal
+**
+** @release 6.2.0
 ** @@
 ** The comparison is based on initial pointer equality and if that fails
-** each element is compared.
+** each member is compared.
 ******************************************************************************/
 
 AjBool ensQcsequenceMatch(const EnsPQcsequence qcs1,
                           const EnsPQcsequence qcs2)
 {
-    if(!qcs1)
+    if (!qcs1)
         return ajFalse;
 
-    if(!qcs2)
+    if (!qcs2)
         return ajFalse;
 
-    if(qcs1 == qcs2)
+    if (qcs1 == qcs2)
         return ajTrue;
 
-    if(qcs1->Identifier != qcs2->Identifier)
+    if (qcs1->Identifier != qcs2->Identifier)
         return ajFalse;
 
-    if((qcs1->Adaptor && qcs2->Adaptor) && (qcs1->Adaptor != qcs2->Adaptor))
+    if ((qcs1->Adaptor && qcs2->Adaptor) && (qcs1->Adaptor != qcs2->Adaptor))
         return ajFalse;
 
-    if(!ensQcdatabaseMatch(qcs1->Qcdatabase, qcs2->Qcdatabase))
+    if (!ensQcdatabaseMatch(qcs1->Qcdatabase, qcs2->Qcdatabase))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(qcs1->Name, qcs2->Name))
+    if (!ajStrMatchCaseS(qcs1->Name, qcs2->Name))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(qcs1->Accession, qcs2->Accession))
+    if (!ajStrMatchCaseS(qcs1->Accession, qcs2->Accession))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(qcs1->Description, qcs2->Description))
+    if (!ajStrMatchCaseS(qcs1->Description, qcs2->Description))
         return ajFalse;
 
-    if(!ajStrMatchCaseS(qcs1->Type, qcs2->Type))
+    if (!ajStrMatchCaseS(qcs1->Type, qcs2->Type))
         return ajFalse;
 
-    if(qcs1->Version != qcs2->Version)
+    if (qcs1->Version != qcs2->Version)
         return ajFalse;
 
-    if(qcs1->Length != qcs2->Length)
+    if (qcs1->Length != qcs2->Length)
         return ajFalse;
 
-    if(qcs1->CdsStart != qcs2->CdsStart)
+    if (qcs1->CdsStart != qcs2->CdsStart)
         return ajFalse;
 
-    if(qcs1->CdsEnd != qcs2->CdsEnd)
+    if (qcs1->CdsEnd != qcs2->CdsEnd)
         return ajFalse;
 
-    if(qcs1->CdsStrand != qcs2->CdsStrand)
+    if (qcs1->CdsStrand != qcs2->CdsStrand)
         return ajFalse;
 
-    if(qcs1->Polya != qcs2->Polya)
+    if (qcs1->Polya != qcs2->Polya)
         return ajFalse;
 
     return ajTrue;
@@ -1467,31 +1490,33 @@ AjBool ensQcsequenceMatch(const EnsPQcsequence qcs1,
 ** @param [w] Pstr [AjPStr*] Anchor string
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceFetchAnchorExternal(const EnsPQcsequence qcs,
                                         AjBool htmlid,
-                                        AjPStr* Pstr)
+                                        AjPStr *Pstr)
 {
     AjPStr sgmlid  = NULL;
     AjPStr exturl  = NULL;
     AjPStr qcsname = NULL;
     AjPStr qcdname = NULL;
 
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
-    if(!Pstr)
+    if (!Pstr)
         return ajFalse;
 
     ensQcsequenceFetchUrlExternal(qcs, &exturl);
 
-    if(exturl && ajStrGetLen(exturl))
+    if (exturl && ajStrGetLen(exturl))
     {
         ajStrAppendC(Pstr, "<a ");
 
-        if(htmlid)
+        if (htmlid)
         {
             sgmlid = ajStrNewS(qcs->Name);
 
@@ -1524,7 +1549,7 @@ AjBool ensQcsequenceFetchAnchorExternal(const EnsPQcsequence qcs,
     }
     else
     {
-        if(htmlid)
+        if (htmlid)
         {
             sgmlid = ajStrNewS(qcs->Name);
 
@@ -1566,19 +1591,21 @@ AjBool ensQcsequenceFetchAnchorExternal(const EnsPQcsequence qcs,
 ** @param [w] Pstr [AjPStr*] Anchor string
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceFetchAnchorInternal(const EnsPQcsequence qcs,
-                                        AjPStr* Pstr)
+                                        AjPStr *Pstr)
 {
     AjPStr sgmlid = NULL;
     AjPStr name   = NULL;
 
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
-    if(!Pstr)
+    if (!Pstr)
         return ajFalse;
 
     sgmlid = ajStrNewS(qcs->Name);
@@ -1610,23 +1637,25 @@ AjBool ensQcsequenceFetchAnchorInternal(const EnsPQcsequence qcs,
 ** @param [u] Pstr [AjPStr*] URL string
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjBool ensQcsequenceFetchUrlExternal(const EnsPQcsequence qcs, AjPStr* Pstr)
+AjBool ensQcsequenceFetchUrlExternal(const EnsPQcsequence qcs, AjPStr *Pstr)
 {
     AjPStr exturl = NULL;
     AjPStr version = NULL;
 
     EnsPQcdatabase qcdb = NULL;
 
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
-    if(!Pstr)
+    if (!Pstr)
         return ajFalse;
 
-    if(*Pstr)
+    if (*Pstr)
         ajStrAssignClear(Pstr);
     else
         *Pstr = ajStrNew();
@@ -1635,7 +1664,7 @@ AjBool ensQcsequenceFetchUrlExternal(const EnsPQcsequence qcs, AjPStr* Pstr)
 
     exturl = ensQcdatabaseGetUrlExternal(qcdb);
 
-    if(exturl && ajStrGetLen(exturl))
+    if (exturl && ajStrGetLen(exturl))
     {
         ajStrAssignS(Pstr, exturl);
 
@@ -1695,18 +1724,20 @@ AjBool ensQcsequenceFetchUrlExternal(const EnsPQcsequence qcs, AjPStr* Pstr)
 ** @param [u] Pstr [AjPStr*] HTML string
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ** NOTE: Since EMBOSS is limited to ASCII only '"', '&', '<', and '>' need
 ** replacing.
 ** FIXME: This function should move!
 ******************************************************************************/
 
-AjBool ensHtmlEncodeEntities(AjPStr* Pstr)
+AjBool ensHtmlEncodeEntities(AjPStr *Pstr)
 {
-    if(!Pstr)
+    if (!Pstr)
         return ajFalse;
 
-    if(!*Pstr)
+    if (!*Pstr)
         return ajFalse;
 
     /*
@@ -1746,15 +1777,17 @@ AjBool ensHtmlEncodeEntities(AjPStr* Pstr)
 ** @param [w] Pstr [AjPStr*] SGML identifier string
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ** FIXME: This function should move!
 ******************************************************************************/
 
-AjBool ensHtmlEncodeSgmlid(AjPStr* Pstr)
+AjBool ensHtmlEncodeSgmlid(AjPStr *Pstr)
 {
-    const char* txtstr = NULL;
+    const char *txtstr = NULL;
 
-    if(!Pstr)
+    if (!Pstr)
         return ajFalse;
 
     ajStrExchangeSetRestCK(Pstr,
@@ -1768,9 +1801,9 @@ AjBool ensHtmlEncodeSgmlid(AjPStr* Pstr)
 
     txtstr = ajStrGetPtr(*Pstr);
 
-    if(!
-       ((*txtstr >= 'A' && *txtstr <= 'Z') ||
-        (*txtstr >= 'a' && *txtstr <= 'z')))
+    if (!
+        ((*txtstr >= 'A' && *txtstr <= 'Z') ||
+         (*txtstr >= 'a' && *txtstr <= 'z')))
         ajStrInsertC(Pstr, 0, "ID_");
 
     return ajTrue;
@@ -1798,31 +1831,33 @@ AjBool ensHtmlEncodeSgmlid(AjPStr* Pstr)
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Quality Check Sequence objects.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] qcss [AjPList] AJAX List of Ensembl Quality Check Sequences
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool qcsequenceadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList qcss)
 {
-    ajuint identifier = 0;
-    ajuint databaseid = 0;
-    ajuint version    = 0;
-    ajuint length     = 0;
-    ajuint cdsstart   = 0;
-    ajuint cdsend     = 0;
-    ajint cdsstrand   = 0;
-    ajuint polya      = 0;
+    ajuint identifier = 0U;
+    ajuint databaseid = 0U;
+    ajuint version    = 0U;
+    ajuint length     = 0U;
+    ajuint cdsstart   = 0U;
+    ajuint cdsend     = 0U;
+    ajint  cdsstrand  = 0;
+    ajuint polya      = 0U;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -1833,43 +1868,46 @@ static AjBool qcsequenceadaptorFetchAllbyStatement(
     AjPStr type        = NULL;
     AjPStr description = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPQcsequence qcs         = NULL;
     EnsPQcsequenceadaptor qcsa = NULL;
 
     EnsPQcdatabase qcdb         = NULL;
     EnsPQcdatabaseadaptor qcdba = NULL;
 
-    if(ajDebugTest("qcsequenceadaptorFetchAllbyStatement"))
+    if (ajDebugTest("qcsequenceadaptorFetchAllbyStatement"))
         ajDebug("qcsequenceadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  qcss %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 qcss);
 
-    if(!dba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!qcss)
+    if (!qcss)
         return ajFalse;
+
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
     qcdba = ensRegistryGetQcdatabaseadaptor(dba);
-
     qcsa  = ensRegistryGetQcsequenceadaptor(dba);
 
     sqls  = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli  = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier  = 0;
         databaseid  = 0;
@@ -1917,7 +1955,7 @@ static AjBool qcsequenceadaptorFetchAllbyStatement(
                                   polya,
                                   description);
 
-        ajListPushAppend(qcss, (void*) qcs);
+        ajListPushAppend(qcss, (void *) qcs);
 
         ensQcdatabaseDel(&qcdb);
 
@@ -1950,7 +1988,8 @@ static AjBool qcsequenceadaptorFetchAllbyStatement(
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @valrule * [EnsPQcsequenceadaptor] Ensembl Quality Check Sequence Adaptor
+** @valrule * [EnsPQcsequenceadaptor]
+** Ensembl Quality Check Sequence Adaptor or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -1975,8 +2014,10 @@ static AjBool qcsequenceadaptorFetchAllbyStatement(
 **
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @return [EnsPQcsequenceadaptor] Ensembl Quality Check Sequence Adaptor
-** or NULL
+** @return [EnsPQcsequenceadaptor]
+** Ensembl Quality Check Sequence Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1985,19 +2026,19 @@ EnsPQcsequenceadaptor ensQcsequenceadaptorNew(
 {
     EnsPQcsequenceadaptor qcsa = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     AJNEW0(qcsa);
 
     qcsa->Adaptor = ensBaseadaptorNew(
         dba,
-        qcsequenceadaptorTables,
-        qcsequenceadaptorColumns,
-        (EnsPBaseadaptorLeftjoin) NULL,
-        (const char*) NULL,
-        (const char*) NULL,
-        qcsequenceadaptorFetchAllbyStatement);
+        qcsequenceadaptorKTables,
+        qcsequenceadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        (const char *) NULL,
+        (const char *) NULL,
+        &qcsequenceadaptorFetchAllbyStatement);
 
     return qcsa;
 }
@@ -2007,16 +2048,15 @@ EnsPQcsequenceadaptor ensQcsequenceadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Quality Check Sequence Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Quality Check Sequence Adaptor object.
 **
 ** @fdata [EnsPQcsequenceadaptor]
 **
 ** @nam3rule Del Destroy (free) an Ensembl Quality Check Sequence Adaptor
-**               object
 **
 ** @argrule * Pqcsa [EnsPQcsequenceadaptor*]
-** Ensembl Quality Check Sequence Adaptor object address
+** Ensembl Quality Check Sequence Adaptor address
 **
 ** @valrule * [void]
 **
@@ -2037,26 +2077,30 @@ EnsPQcsequenceadaptor ensQcsequenceadaptorNew(
 ** if required.
 **
 ** @param [d] Pqcsa [EnsPQcsequenceadaptor*]
-** Ensembl Quality Check Sequence Adaptor object address
+** Ensembl Quality Check Sequence Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensQcsequenceadaptorDel(EnsPQcsequenceadaptor* Pqcsa)
+void ensQcsequenceadaptorDel(EnsPQcsequenceadaptor *Pqcsa)
 {
     EnsPQcsequenceadaptor pthis = NULL;
 
-    if(!Pqcsa)
+    if (!Pqcsa)
         return;
 
-    if(!*Pqcsa)
-        return;
-
-    if(ajDebugTest("ensQcsequenceadaptorDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensQcsequenceadaptorDel"))
         ajDebug("ensQcsequenceadaptorDel\n"
                 "  *Pqcsa %p\n",
                 *Pqcsa);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pqcsa)
+        return;
 
     pthis = *Pqcsa;
 
@@ -2072,9 +2116,9 @@ void ensQcsequenceadaptorDel(EnsPQcsequenceadaptor* Pqcsa)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Quality Check Sequence Adaptor object.
 **
 ** @fdata [EnsPQcsequenceadaptor]
@@ -2098,23 +2142,22 @@ void ensQcsequenceadaptorDel(EnsPQcsequenceadaptor* Pqcsa)
 
 /* @func ensQcsequenceadaptorGetBaseadaptor ***********************************
 **
-** Get the Ensembl Base Adaptor element of an
+** Get the Ensembl Base Adaptor member of an
 ** Ensembl Quality Check Sequence Adaptor.
 **
 ** @param [u] qcsa [EnsPQcsequenceadaptor]
 ** Ensembl Quality Check Sequence Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPBaseadaptor ensQcsequenceadaptorGetBaseadaptor(
     EnsPQcsequenceadaptor qcsa)
 {
-    if(!qcsa)
-        return NULL;
-
-    return qcsa->Adaptor;
+    return (qcsa) ? qcsa->Adaptor : NULL;
 }
 
 
@@ -2122,23 +2165,22 @@ EnsPBaseadaptor ensQcsequenceadaptorGetBaseadaptor(
 
 /* @func ensQcsequenceadaptorGetDatabaseadaptor *******************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl Quality Check Sequence Adaptor.
 **
 ** @param [u] qcsa [EnsPQcsequenceadaptor]
 ** Ensembl Quality Check Sequence Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensQcsequenceadaptorGetDatabaseadaptor(
     EnsPQcsequenceadaptor qcsa)
 {
-    if(!qcsa)
-        return NULL;
-
-    return ensBaseadaptorGetDatabaseadaptor(qcsa->Adaptor);
+    return (qcsa) ? ensBaseadaptorGetDatabaseadaptor(qcsa->Adaptor) : NULL;
 }
 
 
@@ -2199,6 +2241,8 @@ EnsPDatabaseadaptor ensQcsequenceadaptorGetDatabaseadaptor(
 ** @param [u] qcss [AjPList] AJAX List of Ensembl Quality Check Sequences
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2208,13 +2252,13 @@ AjBool ensQcsequenceadaptorFetchAllbyQcdatabase(EnsPQcsequenceadaptor qcsa,
 {
     AjPStr constraint = NULL;
 
-    if(!qcsa)
+    if (!qcsa)
         return ajFalse;
 
-    if(!qcdb)
+    if (!qcdb)
         return ajFalse;
 
-    if(!qcss)
+    if (!qcss)
         return ajFalse;
 
     constraint = ajFmtStr("sequence.sequence_db_id = %u",
@@ -2251,6 +2295,8 @@ AjBool ensQcsequenceadaptorFetchAllbyQcdatabase(EnsPQcsequenceadaptor qcsa,
 ** @param [wP] Pqcs [EnsPQcsequence*] Ensembl Quality Check Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2258,9 +2304,9 @@ AjBool ensQcsequenceadaptorFetchByAccession(EnsPQcsequenceadaptor qcsa,
                                             ajuint qcdbid,
                                             const AjPStr accession,
                                             ajuint version,
-                                            EnsPQcsequence* Pqcs)
+                                            EnsPQcsequence *Pqcs)
 {
-    char* txtaccession = NULL;
+    char *txtaccession = NULL;
 
     AjPList qcss = NULL;
 
@@ -2268,13 +2314,13 @@ AjBool ensQcsequenceadaptorFetchByAccession(EnsPQcsequenceadaptor qcsa,
 
     EnsPQcsequence qcs = NULL;
 
-    if(!qcsa)
+    if (!qcsa)
         return ajFalse;
 
-    if(!accession)
+    if (!accession)
         return ajFalse;
 
-    if(!Pqcs)
+    if (!Pqcs)
         return ajFalse;
 
     ensBaseadaptorEscapeC(qcsa->Adaptor, &txtaccession, accession);
@@ -2287,7 +2333,7 @@ AjBool ensQcsequenceadaptorFetchByAccession(EnsPQcsequenceadaptor qcsa,
 
     ajCharDel(&txtaccession);
 
-    if(version)
+    if (version)
         ajFmtPrintAppS(&constraint, " AND sequence.version = %u", version);
 
     qcss = ajListNew();
@@ -2298,20 +2344,20 @@ AjBool ensQcsequenceadaptorFetchByAccession(EnsPQcsequenceadaptor qcsa,
                                        (EnsPSlice) NULL,
                                        qcss);
 
-    if(ajListGetLength(qcss) > 1)
+    if (ajListGetLength(qcss) > 1)
         ajWarn("ensQcsequenceadaptorFetchByAccession got more than "
                "one Ensembl Quality Check Sequence for accession '%S' "
                "and Quality Check Database identifier %u.\n",
                accession, qcdbid);
 
-    ajListPop(qcss, (void**) Pqcs);
+    ajListPop(qcss, (void **) Pqcs);
 
     /*
     ** TODO: To implement?
     ** qcsequenceadaptorCacheInsert(qcsa, Pqcs);
     */
 
-    while(ajListPop(qcss, (void**) &qcs))
+    while (ajListPop(qcss, (void **) &qcs))
     {
 
         /*
@@ -2346,25 +2392,27 @@ AjBool ensQcsequenceadaptorFetchByAccession(EnsPQcsequenceadaptor qcsa,
 ** @param [wP] Pqcs [EnsPQcsequence*] Ensembl Quality Check Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceadaptorFetchByIdentifier(EnsPQcsequenceadaptor qcsa,
                                              ajuint identifier,
-                                             EnsPQcsequence* Pqcs)
+                                             EnsPQcsequence *Pqcs)
 {
-    if(!qcsa)
+    if (!qcsa)
         return ajFalse;
 
-    if(!identifier)
+    if (!identifier)
         return ajFalse;
 
-    if(!Pqcs)
+    if (!Pqcs)
         return ajFalse;
 
     return ensBaseadaptorFetchByIdentifier(qcsa->Adaptor,
                                            identifier,
-                                           (void**) Pqcs);
+                                           (void **) Pqcs);
 }
 
 
@@ -2383,15 +2431,17 @@ AjBool ensQcsequenceadaptorFetchByIdentifier(EnsPQcsequenceadaptor qcsa,
 ** @param [wP] Pqcs [EnsPQcsequence*] Ensembl Quality Check Sequence address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceadaptorFetchByName(EnsPQcsequenceadaptor qcsa,
                                        ajuint qcdbid,
                                        const AjPStr name,
-                                       EnsPQcsequence* Pqcs)
+                                       EnsPQcsequence *Pqcs)
 {
-    char* txtname = NULL;
+    char *txtname = NULL;
 
     AjPList qcss = NULL;
 
@@ -2399,13 +2449,13 @@ AjBool ensQcsequenceadaptorFetchByName(EnsPQcsequenceadaptor qcsa,
 
     EnsPQcsequence qcs = NULL;
 
-    if(!qcsa)
+    if (!qcsa)
         return ajFalse;
 
-    if(!name)
+    if (!name)
         return ajFalse;
 
-    if(!Pqcs)
+    if (!Pqcs)
         return ajFalse;
 
     ensBaseadaptorEscapeC(qcsa->Adaptor, &txtname, name);
@@ -2426,20 +2476,20 @@ AjBool ensQcsequenceadaptorFetchByName(EnsPQcsequenceadaptor qcsa,
                                        (EnsPSlice) NULL,
                                        qcss);
 
-    if(ajListGetLength(qcss) > 1)
+    if (ajListGetLength(qcss) > 1)
         ajWarn("ensQcsequenceadaptorFetchByName got more than "
                "one Ensembl Quality Check Sequence for (UNIQUE) name '%S' "
                "and Quality Check Database identifier %u.\n",
                name, qcdbid);
 
-    ajListPop(qcss, (void**) Pqcs);
+    ajListPop(qcss, (void **) Pqcs);
 
     /*
     ** TODO: To implement?
     ** qcsequenceadaptorCacheInsert(qcsa, Pqcs);
     */
 
-    while(ajListPop(qcss, (void**) &qcs))
+    while (ajListPop(qcss, (void **) &qcs))
     {
         /*
         ** TODO: To implement?
@@ -2493,6 +2543,8 @@ AjBool ensQcsequenceadaptorFetchByName(EnsPQcsequenceadaptor qcsa,
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2507,13 +2559,13 @@ AjBool ensQcsequenceadaptorDelete(EnsPQcsequenceadaptor qcsa,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!qcsa)
+    if (!qcsa)
         return ajFalse;
 
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
-    if(!ensQcsequenceGetIdentifier(qcs))
+    if (!ensQcsequenceGetIdentifier(qcs))
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(qcsa->Adaptor);
@@ -2526,7 +2578,7 @@ AjBool ensQcsequenceadaptorDelete(EnsPQcsequenceadaptor qcsa,
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
-    if(ajSqlstatementGetAffectedrows(sqls))
+    if (ajSqlstatementGetAffectedrows(sqls))
     {
         qcs->Adaptor    = (EnsPQcsequenceadaptor) NULL;
         qcs->Identifier = 0;
@@ -2553,16 +2605,18 @@ AjBool ensQcsequenceadaptorDelete(EnsPQcsequenceadaptor qcsa,
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Seqeunce
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceadaptorStore(EnsPQcsequenceadaptor qcsa,
                                  EnsPQcsequence qcs)
 {
-    char* txtname        = NULL;
-    char* txtaccession   = NULL;
-    char* txtdescription = NULL;
-    char* txttype        = NULL;
+    char *txtname        = NULL;
+    char *txtaccession   = NULL;
+    char *txtdescription = NULL;
+    char *txttype        = NULL;
 
     AjBool result = AJFALSE;
 
@@ -2572,14 +2626,14 @@ AjBool ensQcsequenceadaptorStore(EnsPQcsequenceadaptor qcsa,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!qcsa)
+    if (!qcsa)
         return ajFalse;
 
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
-    if(ensQcsequenceGetAdaptor(qcs) &&
-       ensQcsequenceGetIdentifier(qcs))
+    if (ensQcsequenceGetAdaptor(qcs) &&
+        ensQcsequenceGetIdentifier(qcs))
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(qcsa->Adaptor);
@@ -2622,7 +2676,7 @@ AjBool ensQcsequenceadaptorStore(EnsPQcsequenceadaptor qcsa,
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
-    if(ajSqlstatementGetAffectedrows(sqls))
+    if (ajSqlstatementGetAffectedrows(sqls))
     {
         ensQcsequenceSetIdentifier(qcs, ajSqlstatementGetIdentifier(sqls));
 
@@ -2650,16 +2704,18 @@ AjBool ensQcsequenceadaptorStore(EnsPQcsequenceadaptor qcsa,
 ** @param [r] qcs [const EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcsequenceadaptorUpdate(EnsPQcsequenceadaptor qcsa,
                                   const EnsPQcsequence qcs)
 {
-    char* txtname        = NULL;
-    char* txtaccession   = NULL;
-    char* txtdescription = NULL;
-    char* txttype        = NULL;
+    char *txtname        = NULL;
+    char *txtaccession   = NULL;
+    char *txtdescription = NULL;
+    char *txttype        = NULL;
 
     AjBool result = AJFALSE;
 
@@ -2669,13 +2725,13 @@ AjBool ensQcsequenceadaptorUpdate(EnsPQcsequenceadaptor qcsa,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!qcsa)
+    if (!qcsa)
         return ajFalse;
 
-    if(!qcs)
+    if (!qcs)
         return ajFalse;
 
-    if(!ensQcsequenceGetIdentifier(qcs))
+    if (!ensQcsequenceGetIdentifier(qcs))
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(qcsa->Adaptor);
@@ -2721,7 +2777,7 @@ AjBool ensQcsequenceadaptorUpdate(EnsPQcsequenceadaptor qcsa,
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
-    if(ajSqlstatementGetAffectedrows(sqls))
+    if (ajSqlstatementGetAffectedrows(sqls))
         result = ajTrue;
 
     ensDatabaseadaptorSqlstatementDel(dba, &sqls);

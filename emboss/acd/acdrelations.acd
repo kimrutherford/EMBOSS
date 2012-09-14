@@ -2,8 +2,8 @@ application: acdrelations
 [
   documentation: "Add relations: attribute to ACD files"
   groups: "Acd, Data retrieval:Tool data"
-    relations: "EDAM:0000220 topic File handling"
-    relations: "EDAM:0000335 operation File reformatting"
+    relations: "EDAM_topic:0220 File handling"
+    relations: "EDAM_operation:0335 File reformatting"
 ]
 
 
@@ -28,7 +28,7 @@ list: mode
     codedelimiter: ":"
     header: "Mode of operation"
     information: "Select mode"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
 ]
 
   dirlist: indir
@@ -52,7 +52,7 @@ list: mode
   [
     standard: "@($mode=='2')"
     information: "EMBOSS known types file"
-    default: "/homes/jison/emboss/emboss/emboss/acd/knowntypes.standard"
+    default: "/homes/pmr/emboss/emboss/emboss/acd/knowntypes.standard"
     knowntype: "EMBOSS knowntypes"
   ]
 

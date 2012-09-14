@@ -31,19 +31,32 @@
 **
 ** Unlike other ACD report programs (acdpretty and acdtable) acdgalaxy will run
 ** through command line checking and prompting the user, while converting the
-** internal data. into a GALAXY tool definition
+** internal data into a GALAXY tool definition
 **
 ******************************************************************************/
 
 int main(int argc, char **argv)
 {
+    ajuint iargs = 1;
+
     if(argc < 2)
 	ajFatal("Error - must specify an application to compile\n");
 
     ajAcdSetControl("acdhelp");
     ajAcdSetControl("acdgalaxy");
     ajAcdSetControl("acdnocommandline");
-    embInit(argv[1], argc-1, &argv[1]);
+    if(ajCharMatchC(argv[1], "protein"))
+    {
+        iargs++;
+        ajAcdSetControl("acdgalaxyprotein");
+    }
+    else if(ajCharMatchC(argv[1], "nucleotide"))
+    {
+        iargs++;
+        ajAcdSetControl("acdgalaxynucleotide");
+    }
+    
+    embInit(argv[iargs], argc-iargs, &argv[iargs]);
 
     ajAcdExit(ajTrue);		/* turn off the 'never used' ACD warnings */
 

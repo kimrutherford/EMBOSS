@@ -270,10 +270,10 @@ int main(int argc, char **argv)
 					   maxscore);
 			ajFmtPrintS(&tmpstr, "*probability %.3f",
 				    maxcoil);
-			ajFeatTagAdd(gf,  NULL, tmpstr);
+			ajFeatTagAddSS(gf,  NULL, tmpstr);
 			ajFmtPrintS(&tmpstr, "*pos %d",
 				    coilpos);
-			ajFeatTagAdd(gf,  NULL, tmpstr);
+			ajFeatTagAddSS(gf,  NULL, tmpstr);
 			/*
 			ajFmtPrintF(outf,
 			  "\nOther structures from %d to %d (%d residues)\n",
@@ -329,19 +329,19 @@ int main(int argc, char **argv)
 			    ajFmtPrintS(&tmpstr, "*frames %d..%d",
 					coilframe,
 					ajIntGet(frames,i-1));
-			    ajFeatTagAdd(gf,  NULL, tmpstr);
+			    ajFeatTagAddSS(gf,  NULL, tmpstr);
 			}
 			ajFmtPrintS(&tmpstr, "*predict coiled");
-			ajFeatTagAdd(gf,  NULL, tmpstr);
+			ajFeatTagAddSS(gf,  NULL, tmpstr);
 			ajFmtPrintS(&tmpstr, "*probability %.3f",
 				    maxcoil);
-			ajFeatTagAdd(gf,  NULL, tmpstr);
+			ajFeatTagAddSS(gf,  NULL, tmpstr);
 			ajFmtPrintS(&tmpstr, "*pos %d",
 				    coilpos);
-			ajFeatTagAdd(gf,  NULL, tmpstr);
+			ajFeatTagAddSS(gf,  NULL, tmpstr);
                         while(ajListstrPop(framelist, &tmpframe))
                         {
-			    ajFeatTagAdd(gf,  NULL, tmpframe);
+			    ajFeatTagAddSS(gf,  NULL, tmpframe);
                         }
 			/*
 			ajFmtPrintF(outf,
@@ -383,16 +383,16 @@ int main(int argc, char **argv)
 				   len-1+begin,
 				   maxscore);
 		ajFmtPrintS(&tmpstr, "*predict coiled");
-		ajFeatTagAdd(gf,  NULL, tmpstr);
+		ajFeatTagAddSS(gf,  NULL, tmpstr);
 		ajFmtPrintS(&tmpstr, "*probability %.3f",
 			    maxcoil);
-		ajFeatTagAdd(gf,  NULL, tmpstr);
+		ajFeatTagAddSS(gf,  NULL, tmpstr);
 		ajFmtPrintS(&tmpstr, "*pos %d",
 			    coilpos);
-		ajFeatTagAdd(gf,  NULL, tmpstr);
+		ajFeatTagAddSS(gf,  NULL, tmpstr);
                 while(ajListstrPop(framelist, &tmpframe))
                 {
-                    ajFeatTagAdd(gf,  NULL, tmpframe);
+                    ajFeatTagAddSS(gf,  NULL, tmpframe);
                 }
 	    /*
 		ajFmtPrintF(outf,
@@ -412,10 +412,10 @@ int main(int argc, char **argv)
 				   maxscore);
 		ajFmtPrintS(&tmpstr, "*probability %.3f",
 			    maxcoil);
-		ajFeatTagAdd(gf,  NULL, tmpstr);
+		ajFeatTagAddSS(gf,  NULL, tmpstr);
 		ajFmtPrintS(&tmpstr, "*pos %d",
 			    coilpos);
-		ajFeatTagAdd(gf,  NULL, tmpstr);
+		ajFeatTagAddSS(gf,  NULL, tmpstr);
 		/*
 		ajFmtPrintF(outf,
 			    "\nOther structures from %d to %d (%d residues)\n",

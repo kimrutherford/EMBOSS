@@ -37,7 +37,6 @@ int main(int argc, char **argv)
     AjPFeattable tab = NULL;
     AjPReport report = NULL;
     AjPStr tmpstr = NULL;
- 
     AjPPatlistSeq plist = NULL;
     AjBool writeok = ajTrue;
 
@@ -54,7 +53,7 @@ int main(int argc, char **argv)
     while(writeok && ajSeqallNext(seqall,&seq))
     {
 	tab = ajFeattableNewProt(ajSeqGetNameS(seq));
-        embPatlistSeqSearch(tab,seq,plist,ajFalse);
+        embPatlistSeqSearchAll(tab,seq,plist,ajFalse);
 	if(ajFeattableGetSize(tab))
 	    writeok = ajReportWrite(report,tab,seq);
         ajFeattableDel(&tab);

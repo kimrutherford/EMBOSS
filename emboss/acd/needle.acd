@@ -4,8 +4,9 @@ application: needle [
   gui: "yes"
   batch: "yes"
   cpu: "medium"
-    relations: "EDAM:0000182 topic Sequence alignment"
-    relations: "EDAM:0000494 operation Pairwise sequence alignment (global)"
+    relations: "EDAM_topic:0182 Sequence alignment"
+    relations: "EDAM_operation:0494 Pairwise sequence alignment construction
+    	       (global)"
 ]
 
 section: input [
@@ -16,13 +17,13 @@ section: input [
   sequence: asequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   seqall: bsequence [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   matrixf: datafile [
@@ -33,7 +34,7 @@ section: input [
            sequences. By default it is the file 'EBLOSUM62' (for proteins) or
            the file 'EDNAFULL' (for nucleic sequences). These files are
            found in the 'data' directory of the EMBOSS installation."
-    relations: "EDAM:0000874 data Comparison matrix"
+    relations: "EDAM_data:0874 Comparison matrix"
   ]
 
 endsection: input
@@ -56,7 +57,7 @@ section: required [
            matrix. The default value assumes you are using the EBLOSUM62
            matrix for protein sequences, and the EDNAFULL matrix for
            nucleotide sequences."
-    relations: "EDAM:0001397 data Gap opening penalty"
+    relations: "EDAM_data:1397 Gap opening penalty"
   ]
 
   float: gapextend [
@@ -76,7 +77,7 @@ section: required [
            you would expect many single base gaps. You can get this result by
            setting the gap open penalty to zero (or very low) and using the
            gap extension penalty to control gap scoring."
-    relations: "EDAM:0001398 data Gap extension penalty"
+    relations: "EDAM_data:1398 Gap extension penalty"
   ]
 endsection: required
 
@@ -89,7 +90,7 @@ section: additional [
     additional: "Y"
     default: "N"
     information: "Apply end gap penalties."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   float: endopen [
@@ -105,7 +106,7 @@ section: additional [
            matrix. The default value assumes you are using the EBLOSUM62
            matrix for protein sequences, and the EDNAFULL matrix for
            nucleotide sequences."
-    relations: "EDAM:0001410 data Terminal gap opening penalty"
+    relations: "EDAM_data:1410 Terminal gap opening penalty"
   ]
 
   float: endextend [
@@ -119,7 +120,7 @@ section: additional [
     help: "The end gap extension, penalty is added to the end gap
            penalty for each base or residue in the end gap. This is how long end gaps
            are penalized."
-    relations: "EDAM:0001411 data Terminal gap extension penalty"
+    relations: "EDAM_data:1411 Terminal gap extension penalty"
   ]
 endsection: additional
 
@@ -133,7 +134,7 @@ section: output [
     default: "Y"
     information: "Brief identity and similarity"
     help: "Brief identity and similarity"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   align: outfile [
@@ -142,7 +143,7 @@ section: output [
     minseqs: "2"
     maxseqs: "2"
     aglobal: "Y"
-    relations: "EDAM:0001381 data Sequence alignment (pair)"
+    relations: "EDAM_data:1381 Sequence alignment (pair)"
   ]
 
 endsection: output

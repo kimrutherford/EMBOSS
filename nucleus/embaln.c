@@ -1,28 +1,43 @@
-/* @source embaln.c
+/* @source embaln *************************************************************
 **
 ** General routines for alignment.
-** Copyright (c) 1999 Alan Bleasby
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** @author Copyright (c) 1999 Alan Bleasby
+** @version $Revision: 1.102 $
+** @modified $Date: 2011/11/08 15:12:52 $ by $Author: rice $
+** @@
 **
-** This program is distributed in the hope that it will be useful,
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "emboss.h"
+#include "ajlib.h"
+
+#include "embaln.h"
+#include "ajmath.h"
+#include "ajseq.h"
+#include "ajalign.h"
+#include "ajfile.h"
+#include "ajutil.h"
+#include "ajbase.h"
+
+#include <string.h>
 #include <limits.h>
 #include <float.h>
 #include <math.h>
-
 
 
 
@@ -64,6 +79,8 @@ static float embAlignGetScoreNWMatrix(
 ** @param [r] show [AjBool] Display path matrix
 **
 ** @return [float] Maximum score
+**
+** @release 1.0.0
 ** @@
 ** Optimised to keep a maximum value to avoid looping down or left
 ** to find the maximum. (il 29/07/99)
@@ -231,7 +248,7 @@ float embAlignPathCalc(const char *a, const char *b,
 
 
 
-/* @func embAlignPathCalcWithEndGapPenalties *********************************
+/* @func embAlignPathCalcWithEndGapPenalties **********************************
 **
 ** Create path matrix for Needleman-Wunsch alignment of two sequences.
 ** Nucleotides or proteins as needed. Supports end gap penalties.
@@ -260,6 +277,8 @@ float embAlignPathCalc(const char *a, const char *b,
 ** @param [r] endweight [AjBool] Use end gap weights
 **
 ** @return [float] Score
+**
+** @release 6.2.0
 ** @@
 **
 ******************************************************************************/
@@ -535,6 +554,8 @@ float embAlignPathCalcWithEndGapPenalties(const char *a, const char *b,
 ** @param [r] show [AjBool] Display path matrix
 **
 ** @return [float] Maximum score
+**
+** @release 2.8.0
 ** @@
 ** Optimised to keep a maximum value to avoid looping down or left
 ** to find the maximum. (il 29/07/99)
@@ -754,6 +775,8 @@ float embAlignPathCalcSW(const char *a, const char *b, ajint lena, ajint lenb,
 ** @param [w] start2 [ajint *] start of alignment in second sequence
 **
 ** @return [void]
+**
+** @release 1.0.0
 ******************************************************************************/
 
 void embAlignWalkSWMatrix(const float *path, const ajint *compass,
@@ -914,6 +937,8 @@ void embAlignWalkSWMatrix(const float *path, const ajint *compass,
 ** @param [r] compass [const ajint*] Path direction pointer array
 **
 ** @return [void]
+**
+** @release 1.0.0
 ******************************************************************************/
 
 void embAlignWalkNWMatrix(const float *path, const AjPSeq a, const AjPSeq b,
@@ -1061,6 +1086,8 @@ void embAlignWalkNWMatrix(const float *path, const AjPSeq a, const AjPSeq b,
 ** @param [r] compass [ajint const *] Path direction pointer array
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 **
 ******************************************************************************/
@@ -1168,6 +1195,8 @@ void embAlignWalkNWMatrixUsingCompass(const char* p, const char* q,
 ** @param [r] beginb [ajint] second sequence offset
 **
 ** @return [void]
+**
+** @release 1.0.0
 ******************************************************************************/
 
 void embAlignPrintGlobal(AjPFile outf, const char *a, const char *b,
@@ -1504,225 +1533,13 @@ void embAlignPrintGlobal(AjPFile outf, const char *a, const char *b,
 
 
 
-/* @obsolete embAlignPrintLocal
-** @remove not used, see ajAlignWrite
-*/
-
-__deprecated void embAlignPrintLocal(AjPFile outf,
-			const AjPStr m, const AjPStr n,
-			ajint start1, ajint start2, float score, AjBool mark,
-			float * const *sub, const AjPSeqCvt cvt,
-			const char *namea,
-			const char *nameb, ajint begina, ajint beginb)
-{
-    const AjPStr fa;
-    const AjPStr fb;
-    AjPStr fm;
-    AjPStr ap;
-    AjPStr bp;
-    AjPStr mp;
-
-    ajint i;
-    ajint olen;
-    const char *p;
-    const char *q;
-    const char *r = NULL;
-
-    float match = 0.0;
-
-    ajint acnt;
-    ajint bcnt;
-    ajint aend;
-    ajint bend;
-
-    ajint len;
-    ajint pos;
-
-    fm = ajStrNewC("");
-    ap = ajStrNewC("");
-    bp = ajStrNewC("");
-    mp = ajStrNewC("");
-
-
-    /* Now deal with the alignment overlap */
-    p    = ajStrGetPtr(m);
-    q    = ajStrGetPtr(n);
-    olen = (ajint) strlen(p);
-    fa   = m;
-    fb   = n;
-
-    if(mark)
-    {
-	for(i=0;i<olen;++i)
-	{
-	    if(p[i]=='.' || q[i]=='.')
-	    {
-		ajStrAppendC(&fm," ");
-		continue;
-	    }
-
-	    match = sub[ajSeqcvtGetCodeK(cvt,p[i])][ajSeqcvtGetCodeK(cvt,q[i])];
-
-	    if(p[i]==q[i])
-	    {
-		ajStrAppendC(&fm,"|");
-		continue;
-	    }
-
-	    if(match>0.0)
-		ajStrAppendC(&fm,":");
-	    else
-		ajStrAppendC(&fm," ");
-	}
-    }
-
-    /* Get start residues */
-    p    = ajStrGetPtr(fa);
-    q    = ajStrGetPtr(fb);
-    acnt = begina+start1;
-    bcnt = beginb+start2;
-
-    len = ajStrGetLen(fa);
-    pos = 0;
-
-    if(mark)
-        r=ajStrGetPtr(fm);
-
-
-    /* Add header stuff here */
-    ajFmtPrintF(outf,"Local: %s vs %s\n",namea,nameb);
-    ajFmtPrintF(outf,"Score: %.2f\n\n",score);
-
-    while(pos<len)
-    {
-	if(pos+45 < len)
-	{
-	    ajStrAssignSubC(&ap,p,pos,pos+45-1);
-	    ajStrAssignSubC(&bp,q,pos,pos+45-1);
-
-	    if(mark)
-		ajStrAssignSubC(&mp,r,pos,pos+45-1);
-
-	    for(i=0,aend=acnt,bend=bcnt;i<45;++i)
-	    {
-		if(p[pos+i]!=' ' && p[pos+i]!='.')
-		    ++aend;
-
-		if(q[pos+i]!=' ' && q[pos+i]!='.')
-		    ++bend;
-	    }
-
-
-	    ajFmtPrintF(outf,"%-15.15s ",namea);
-
-	    if(aend!=acnt)
-		ajFmtPrintF(outf,"%-8d ",acnt);
-	    else
-		ajFmtPrintF(outf,"         ");
-
-	    ajFmtPrintF(outf,"%-45S ",ap);
-
-	    if(aend!=acnt)
-		ajFmtPrintF(outf,"%-8d\n",aend-1);
-	    else
-		ajFmtPrintF(outf,"\n");
-
-	    acnt = aend;
-
-	    if(mark)
-		ajFmtPrintF(outf,"                         %S\n",mp);
-
-	    ajFmtPrintF(outf,"%-15.15s ",nameb);
-
-	    if(bend!=bcnt)
-		ajFmtPrintF(outf,"%-8d ",bcnt);
-	    else
-		ajFmtPrintF(outf,"         ");
-
-	    ajFmtPrintF(outf,"%-45S ",bp);
-
-	    if(bend!=bcnt)
-		ajFmtPrintF(outf,"%-8d\n",bend-1);
-	    else
-		ajFmtPrintF(outf,"\n");
-
-	    bcnt = bend;
-
-	    ajFmtPrintF(outf,"\n");
-	    pos += 45;
-	    continue;
-	}
-
-	ajStrAssignC(&ap,&p[pos]);
-	ajStrAssignC(&bp,&q[pos]);
-
-	if(mark)
-	    ajStrAssignC(&mp,&r[pos]);
-
-	for(i=0,aend=acnt,bend=bcnt;i<45 && p[pos+i];++i)
-	{
-	    if(p[pos+i]!=' ' && p[pos+i]!='.')
-		++aend;
-
-	    if(q[pos+i]!=' ' && q[pos+i]!='.')
-		++bend;
-	}
-
-
-	ajFmtPrintF(outf,"%-15.15s ",namea);
-
-	if(aend!=acnt)
-	    ajFmtPrintF(outf,"%-8d ",acnt);
-	else
-	    ajFmtPrintF(outf,"         ");
-
-	ajFmtPrintF(outf,"%-45S ",ap);
-
-	if(aend!=acnt)
-	    ajFmtPrintF(outf,"%-8d\n",aend-1);
-	else
-	    ajFmtPrintF(outf,"\n");
-
-	acnt = aend;
-
-	if(mark)
-	    ajFmtPrintF(outf,"                         %S\n",mp);
-
-	ajFmtPrintF(outf,"%-15.15s ",nameb);
-
-	if(bend!=bcnt)
-	    ajFmtPrintF(outf,"%-8d ",bcnt);
-	else
-	    ajFmtPrintF(outf,"         ");
-
-	ajFmtPrintF(outf,"%-45S ",bp);
-
-	if(bend!=bcnt)
-	    ajFmtPrintF(outf,"%-8d\n",bend-1);
-	else
-	    ajFmtPrintF(outf,"\n");
-
-	bcnt = bend;
-
-	pos = len;
-    }
-
-    ajStrDel(&mp);
-    ajStrDel(&bp);
-    ajStrDel(&ap);
-    ajStrDel(&fm);
-
-    return;
-}
-
-
-
-
 /* @func embAlignUnused *******************************************************
 **
 ** Calls unused functions to avoid warning messages
 **
 ** @return [void]
+**
+** @release 2.0.0
 ******************************************************************************/
 
 void embAlignUnused(void)
@@ -1760,6 +1577,8 @@ void embAlignUnused(void)
 ** @param [r] show [AjBool] Display path matrix
 **
 ** @return [float] Maximum score
+**
+** @release 6.0.0
 ** @@
 ** Optimised to keep a maximum value to avoid looping down or left
 ** to find the maximum. (il 29/07/99)
@@ -2087,6 +1906,8 @@ float embAlignPathCalcSWFast(const char *a, const char *b,
 ** @param [w] start2 [ajint *] start of alignment in second sequence
 **
 ** @return [void]
+**
+** @release 1.0.0
 ******************************************************************************/
 
 void embAlignWalkSWMatrixFast(const float *path, const ajint *compass,
@@ -2297,6 +2118,8 @@ void embAlignWalkSWMatrixFast(const float *path, const ajint *compass,
 ** @param [r] show [AjBool] Display path matrix
 **
 ** @return [float] Maximum score
+**
+** @release 1.0.0
 ******************************************************************************/
 
 float embAlignProfilePathCalc(const char *a, ajint proflen, ajint seqlen,
@@ -2455,6 +2278,8 @@ float embAlignProfilePathCalc(const char *a, ajint proflen, ajint seqlen,
 ** @param [w] start2 [ajint *] start of alignment in test sequence
 **
 ** @return [void]
+**
+** @release 1.0.0
 ******************************************************************************/
 
 void embAlignWalkProfileMatrix(const float *path, const ajint *compass,
@@ -2639,6 +2464,8 @@ void embAlignWalkProfileMatrix(const float *path, const ajint *compass,
 ** @param [r] beginb [ajint] second sequence offset
 **
 ** @return [void]
+**
+** @release 1.0.0
 ******************************************************************************/
 
 void embAlignPrintProfile(AjPFile outf,
@@ -2874,6 +2701,8 @@ void embAlignPrintProfile(AjPFile outf,
 ** @param [w] simx [float *] % similarity wrt longest sequence
 **
 ** @return [void]
+**
+** @release 1.6.3
 ******************************************************************************/
 
 void embAlignCalcSimilarity(const AjPStr m, const AjPStr n,
@@ -2965,6 +2794,8 @@ void embAlignCalcSimilarity(const AjPStr m, const AjPStr n,
 **                               a global or overlap alignment
 **
 ** @return [float] optimal score
+**
+** @release 6.2.0
 ******************************************************************************/
 
 static float embAlignGetScoreNWMatrix(
@@ -3061,6 +2892,8 @@ static float embAlignGetScoreNWMatrix(
 ** @param [r] offset2 [ajint] second sequence offset
 **
 ** @return [void]
+**
+** @release 2.1.0
 ******************************************************************************/
 
 void embAlignReportGlobal(AjPAlign align,
@@ -3257,6 +3090,8 @@ void embAlignReportGlobal(AjPAlign align,
 ** @param [r] offset2 [ajint] second sequence offset
 **
 ** @return [void]
+**
+** @release 2.1.0
 ******************************************************************************/
 
 void embAlignReportLocal(AjPAlign align,
@@ -3366,6 +3201,8 @@ void embAlignReportLocal(AjPAlign align,
 ** @param [r] nameb [const char *] name of second sequence
 **
 ** @return [void]
+**
+** @release 2.3.0
 ******************************************************************************/
 
 void embAlignReportProfile(AjPAlign align,
@@ -3415,6 +3252,8 @@ void embAlignReportProfile(AjPAlign align,
 ** @param [r] lenb [ajuint] length of second sequence
 ** 
 ** @return [void]
+**
+** @release 6.2.0
 ******************************************************************************/
 
 static void printPathMatrix(const float* path, const ajint* compass,
@@ -3454,3 +3293,226 @@ static void printPathMatrix(const float* path, const ajint* compass,
 
     return;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete embAlignPrintLocal
+** @remove not used, see ajAlignWrite
+*/
+
+__deprecated void embAlignPrintLocal(AjPFile outf,
+                                     const AjPStr m, const AjPStr n,
+                                     ajint start1, ajint start2,
+                                     float score, AjBool mark,
+                                     float * const *sub, const AjPSeqCvt cvt,
+                                     const char *namea, const char *nameb,
+                                     ajint begina, ajint beginb)
+{
+    const AjPStr fa;
+    const AjPStr fb;
+    AjPStr fm;
+    AjPStr ap;
+    AjPStr bp;
+    AjPStr mp;
+
+    ajint i;
+    ajint olen;
+    const char *p;
+    const char *q;
+    const char *r = NULL;
+
+    float match = 0.0;
+
+    ajint acnt;
+    ajint bcnt;
+    ajint aend;
+    ajint bend;
+
+    ajint len;
+    ajint pos;
+
+    fm = ajStrNewC("");
+    ap = ajStrNewC("");
+    bp = ajStrNewC("");
+    mp = ajStrNewC("");
+
+
+    /* Now deal with the alignment overlap */
+    p    = ajStrGetPtr(m);
+    q    = ajStrGetPtr(n);
+    olen = (ajint) strlen(p);
+    fa   = m;
+    fb   = n;
+
+    if(mark)
+    {
+	for(i=0;i<olen;++i)
+	{
+	    if(p[i]=='.' || q[i]=='.')
+	    {
+		ajStrAppendC(&fm," ");
+		continue;
+	    }
+
+	    match = sub[ajSeqcvtGetCodeK(cvt,p[i])][ajSeqcvtGetCodeK(cvt,q[i])];
+
+	    if(p[i]==q[i])
+	    {
+		ajStrAppendC(&fm,"|");
+		continue;
+	    }
+
+	    if(match>0.0)
+		ajStrAppendC(&fm,":");
+	    else
+		ajStrAppendC(&fm," ");
+	}
+    }
+
+    /* Get start residues */
+    p    = ajStrGetPtr(fa);
+    q    = ajStrGetPtr(fb);
+    acnt = begina+start1;
+    bcnt = beginb+start2;
+
+    len = ajStrGetLen(fa);
+    pos = 0;
+
+    if(mark)
+        r=ajStrGetPtr(fm);
+
+
+    /* Add header stuff here */
+    ajFmtPrintF(outf,"Local: %s vs %s\n",namea,nameb);
+    ajFmtPrintF(outf,"Score: %.2f\n\n",score);
+
+    while(pos<len)
+    {
+	if(pos+45 < len)
+	{
+	    ajStrAssignSubC(&ap,p,pos,pos+45-1);
+	    ajStrAssignSubC(&bp,q,pos,pos+45-1);
+
+	    if(mark)
+		ajStrAssignSubC(&mp,r,pos,pos+45-1);
+
+	    for(i=0,aend=acnt,bend=bcnt;i<45;++i)
+	    {
+		if(p[pos+i]!=' ' && p[pos+i]!='.')
+		    ++aend;
+
+		if(q[pos+i]!=' ' && q[pos+i]!='.')
+		    ++bend;
+	    }
+
+
+	    ajFmtPrintF(outf,"%-15.15s ",namea);
+
+	    if(aend!=acnt)
+		ajFmtPrintF(outf,"%-8d ",acnt);
+	    else
+		ajFmtPrintF(outf,"         ");
+
+	    ajFmtPrintF(outf,"%-45S ",ap);
+
+	    if(aend!=acnt)
+		ajFmtPrintF(outf,"%-8d\n",aend-1);
+	    else
+		ajFmtPrintF(outf,"\n");
+
+	    acnt = aend;
+
+	    if(mark)
+		ajFmtPrintF(outf,"                         %S\n",mp);
+
+	    ajFmtPrintF(outf,"%-15.15s ",nameb);
+
+	    if(bend!=bcnt)
+		ajFmtPrintF(outf,"%-8d ",bcnt);
+	    else
+		ajFmtPrintF(outf,"         ");
+
+	    ajFmtPrintF(outf,"%-45S ",bp);
+
+	    if(bend!=bcnt)
+		ajFmtPrintF(outf,"%-8d\n",bend-1);
+	    else
+		ajFmtPrintF(outf,"\n");
+
+	    bcnt = bend;
+
+	    ajFmtPrintF(outf,"\n");
+	    pos += 45;
+	    continue;
+	}
+
+	ajStrAssignC(&ap,&p[pos]);
+	ajStrAssignC(&bp,&q[pos]);
+
+	if(mark)
+	    ajStrAssignC(&mp,&r[pos]);
+
+	for(i=0,aend=acnt,bend=bcnt;i<45 && p[pos+i];++i)
+	{
+	    if(p[pos+i]!=' ' && p[pos+i]!='.')
+		++aend;
+
+	    if(q[pos+i]!=' ' && q[pos+i]!='.')
+		++bend;
+	}
+
+
+	ajFmtPrintF(outf,"%-15.15s ",namea);
+
+	if(aend!=acnt)
+	    ajFmtPrintF(outf,"%-8d ",acnt);
+	else
+	    ajFmtPrintF(outf,"         ");
+
+	ajFmtPrintF(outf,"%-45S ",ap);
+
+	if(aend!=acnt)
+	    ajFmtPrintF(outf,"%-8d\n",aend-1);
+	else
+	    ajFmtPrintF(outf,"\n");
+
+	acnt = aend;
+
+	if(mark)
+	    ajFmtPrintF(outf,"                         %S\n",mp);
+
+	ajFmtPrintF(outf,"%-15.15s ",nameb);
+
+	if(bend!=bcnt)
+	    ajFmtPrintF(outf,"%-8d ",bcnt);
+	else
+	    ajFmtPrintF(outf,"         ");
+
+	ajFmtPrintF(outf,"%-45S ",bp);
+
+	if(bend!=bcnt)
+	    ajFmtPrintF(outf,"%-8d\n",bend-1);
+	else
+	    ajFmtPrintF(outf,"\n");
+
+	bcnt = bend;
+
+	pos = len;
+    }
+
+    ajStrDel(&mp);
+    ajStrDel(&bp);
+    ajStrDel(&ap);
+    ajStrDel(&fm);
+
+    return;
+}
+#endif

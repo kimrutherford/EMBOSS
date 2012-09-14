@@ -1,7 +1,9 @@
 format-version: 1.2
-date: 09:06:2011 17:33
-saved-by: VPetri
+date: 12:06:2012 11:03
 auto-generated-by: OBO-Edit 2.1-beta1
+synonymtypedef: KEGG "KEGG" RELATED
+synonymtypedef: NEWSYNTYPE "<new synonym type>" RELATED
+synonymtypedef: PID "PID" RELATED
 default-namespace: pathway
 
 [Term]
@@ -97,7 +99,7 @@ is_a: PW:0000002 ! classic metabolic pathway
 [Term]
 id: PW:0000012
 name: nucleotide metabolic pathway
-def: "Those metabolic reactions involved in the synthesis, utilization and/or degradation of nucleotides. Nucleotides, which are the units of DNA and RNA, can also play important roles in cellular energy and enzyme regulation." [InHouse:PW directory "Reference compiled by the PW editorial team"]
+def: "Those metabolic reactions involved in the synthesis, utilization and/or degradation of nucleotides. Nucleotides, which are the units of DNA and RNA, can also play important roles in cellular energy, enzyme regulation as well as serve as signaling molecules." [InHouse:PW directory "Reference compiled by the PW editorial team", PubMed:PMID\:21222015; 20561600]
 is_a: PW:0000002 ! classic metabolic pathway
 
 [Term]
@@ -165,13 +167,13 @@ is_a: PW:0000020 ! cardiovascular disease pathway
 [Term]
 id: PW:0000023
 name: immune response pathway
-def: "The Immune response pathways mediate the defense of host cells against infection and injury. The first line of defense is provided by the phylogenetically older innate immune response. The later, more versatile response is provided by the pathways of adaptive immunity: the B cell mediated humoral and the T cell mediated cellular or cell-mediated responses." [Gene Ontology:GO\:0006955 "Associated GO term", MCW:Handbook of cellular and molecular immunology, OneLook:www.onelook.com "Online collection of dictionaries"]
+def: "The Immune response pathways mediate the defense of host cells against infection and injury. The first line of defense is provided by the phylogenetically older innate immune response. The later, more versatile response is provided by the pathways of adaptive immunity: the B cell mediated humoral and the T cell mediated cellular or cell-mediated responses." [Gene Ontology:GO\:0006955 "Associated GO term", MCW library:Handbook of cellular and molecular immunology, OneLook:www.onelook.com "Online collection of dictionaries"]
 is_a: PW:0000004 ! regulatory pathway
 
 [Term]
 id: PW:0000024
 name: inflammatory response pathway
-def: "Inflammation is the cellular response of the innate immune system to infection or injury. Sensing of infection by pattern recognition receptors triggers signaling cascades leading to the expression of mediator genes." [Gene Ontology:GO\:0006954 "Associated GO term", OneLook:www.onelook.com "Online collection of dictionaries", PubMed:PMID\: 20303867\, 20303872\, 15364056\, 16281932\, 16226680 "Review articles in PubMed"]
+def: "Inflammation is the cellular response of the innate immune system to infection or injury. Sensing of infection by pattern recognition receptors triggers signaling cascades leading to the expression of mediator genes such as the pro-inflammatory cytokines." [Gene Ontology:GO\:0006954 "Associated GO term", MCW library:Cellular and molecular immunology\, by Abbas\, Abul K, OneLook:www.onelook.com "Online collection of dictionaries", PubMed:PMID\: 20303867\, 20303872\, 15364056\, 16281932\, 16226680 "Review articles in PubMed"]
 synonym: "CLR signaling pathway" RELATED []
 relationship: part_of PW:0000234 ! innate immune response pathway
 
@@ -183,11 +185,13 @@ is_a: PW:0000005 ! carbohydrate metabolic pathway
 
 [Term]
 id: PW:0000026
-name: citrate cycle pathway
-def: "The series of chemical reactions that are central to all aerobic cells and constitute the citrate cycle. Also known as the tricarboxylic acid cycle, the TCA or Krebs cycle, it is the second of three metabolic pathways that are involved in fuel molecule catabolism and ATP production." [Gene Ontology:GO\:0006099 "Associated GO term", KEGG:map00020 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries", Reactome:REACT_1046.3 "Related entry at Reactome"]
+name: citric acid cycle pathway
+def: "The series of chemical reactions that are central to all aerobic cells and constitute the citric acid cycle. Also known as the tricarboxylic acid cycle (TCA) or Krebs cycle, it is the center of convergence for all molecular fuels." [Gene Ontology:GO\:0006099 "Associated GO term", KEGG:map00020 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries", Reactome:REACT_1046.3 "Related entry at Reactome"]
 synonym: "Krebs cycle" RELATED []
-synonym: "TCA cycle" RELATED []
-is_a: PW:0000005 ! carbohydrate metabolic pathway
+synonym: "TCA cycle pathway" RELATED []
+synonym: "tricarboxylic cycle pathway" RELATED []
+is_a: PW:0000033 ! energy metabolic pathway
+relationship: part_of PW:0000357 ! energy homeostasis pathway
 
 [Term]
 id: PW:0000027
@@ -232,15 +236,19 @@ is_a: PW:0000002 ! classic metabolic pathway
 
 [Term]
 id: PW:0000034
-name: oxidative phosphorylation pathway
-def: "Those metabolic reactions involved in coupling ATP synthesis to the respiratory or electron transport chain. The electrons derived from the oxidation of glucose and lipids or the degradation of amino acids, are passed to oxygen through a number of steps and carriers. The free energy of electron transport drives the synthesis of ATP." [Gene Ontology:GO\:0006119 "Associated GO term", KEGG:map00190 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries"]
+name: electron transport chain pathway
+def: "Those metabolic reactions thereby the electrons derived from the oxidation of glucose and lipids or the degradation of amino acids, are passed to oxygen. The energy derived is coupled to the generation of an electrochemical gradient that drives the synthesis of ATP, also known as oxidative phosphorylation." [Gene Ontology:GO\:0006119 "Associated GO term", KEGG:map00190 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries"]
+synonym: "ETC pathway" RELATED []
+synonym: "respiratory chain pathway" RELATED []
 is_a: PW:0000033 ! energy metabolic pathway
+relationship: part_of PW:0000357 ! energy homeostasis pathway
 
 [Term]
 id: PW:0000035
-name: ATP synthetic pathway
-def: "Those metabolic reactions involved in  the synthesis of adenosine triphosphate (ATP) - a molecule present in all living cells which serves as an energy source for many metabolic processes and is required for the synthesis of ribonucleic acid." [Gene Ontology:GO\:0006754 "Related GO term", OneLook:www.onelook.com "Online collection of dictionaries"]
+name: ATP biosynthetic pathway
+def: "Those metabolic reactions involved in the synthesis of adenosine triphosphate (ATP). ATP synthesis, also known as oxidative phosphorylation, is coupled to the respiratory or electron transfer chain pathway. The electrochemical gradient which it generates, drives the phosphorylation of ADP to produce ATP." [Gene Ontology:GO\:0006754 "Related GO term", OneLook:www.onelook.com "Online collection of dictionaries"]
 is_a: PW:0000033 ! energy metabolic pathway
+relationship: part_of PW:0000357 ! energy homeostasis pathway
 
 [Term]
 id: PW:0000036
@@ -322,7 +330,7 @@ is_a: PW:0000011 ! amino acid metabolic pathway
 [Term]
 id: PW:0000048
 name: methionine cycle/metabolic pathway
-def: "Those metabolic reactions involved in the synthesis (remethylation), utilization and/or degradation of methionine - an essential amino acid that can provide the methyl group and sulfur necessary for normal metabolism. Humans do not synthesize methionine; it is derived from diet. Through a number of steps, utilization of methionine produces homocysteine (Hcy) which either regenerates the methionine cycle vya remethylation pathway or leads to the synthesis of cysteine and derivatives via transulfuration pathway." [MCW library book:Homocysteine in Health and Disease "Cambridge Press, 2001"]
+def: "Those metabolic reactions involved in the synthesis (remethylation), utilization and/or degradation of methionine - an essential amino acid that can provide the methyl group and sulfur necessary for normal metabolism. Humans do not synthesize methionine; it is derived from diet. Through a number of steps, utilization of methionine produces homocysteine (Hcy) which either regenerates the methionine cycle via remethylation pathway or leads to the synthesis of cysteine and derivatives via transsulfuration pathway." [MCW library book:Homocysteine in Health and Disease "Cambridge Press, 2001"]
 is_a: PW:0000011 ! amino acid metabolic pathway
 
 [Term]
@@ -630,7 +638,7 @@ relationship: part_of PW:0000086 ! cell cycle pathway, mitotic
 [Term]
 id: PW:0000099
 name: DNA repair pathway
-def: "Those pathways involved in the repair of damaged DNA. The damage can involve bases or it can involve breaks ine the DNA strand(s)." [Gene Ontology:GO\:0006281 "Associated GO term", PW InHouse:Cell\, 2004\, v. 117\, p171-184. "Generalized definition based on an article on specific pathways for double-strand break repair.", Reactome:REACT_216.1 "Associated entry at Reactome"]
+def: "Those pathways involved in the repair of damaged DNA. The damage can involve bases or it can involve breaks in the DNA strand(s)." [Gene Ontology:GO\:0006281 "Associated GO term", PW InHouse:Cell\, 2004\, v. 117\, p171-184. "Generalized definition based on an article on specific pathways for double-strand break repair.", Reactome:REACT_216.1 "Associated entry at Reactome"]
 is_a: PW:0000085 ! pathways of replication, repair, gene expression, protein biosynthesis
 
 [Term]
@@ -772,6 +780,8 @@ is_a: PW:0000107 ! xenobiotics biodegradation pathway
 id: PW:0000122
 name: Hedgehog signaling pathway
 def: "The Hedgehog signaling pathway (Hh) plays important roles in vertebrate embryogenesis, particularly in the differentiation of the neural tube, in vasculogenesis and angiogenesis. Post-embryonically it is believed to play a homeostatic role in the maintenance of stem cells. Alteration of the pathway has been implicated in a number of human cancers." [Gene Ontology:GO\:0007224 "Related GO term", KEGG:map04340 "Associated KEGG map", PubMed:PMID\: 15205520 \, PMID\: 15596107\,  PMID\: 12495844 "Articles dealing with the Hedgehog signaling pathway"]
+synonym: "PID:200168" RELATED []
+synonym: "PID:200172" RELATED []
 is_a: PW:0000650 ! signaling pathway pertinent to development
 relationship: part_of PW:0000660 ! hematopoiesis pathway
 
@@ -848,44 +858,49 @@ is_a: PW:0000217 ! metabolic pathway of prosthetic groups, electron carriers and
 [Term]
 id: PW:0000135
 name: metabolic pathway of cofactors and vitamins
-def: "Those reactions involved in the synthesis, utilization and/or degradation of cofactors and vitamins - compounds that are essential for the functioning of enzymes and/or are necessary for the normal metabolic functioning of the body." [InHouse:In House PW dictionary "Definition compiled by the PW editorial team", Reactome:REACT_11193.1 "Related entry at Reactome"]
+def: "Those reactions involved in the synthesis, utilization and/or degradation of cofactors and vitamins - compounds that are essential for the functioning of enzymes and/or are necessary for the normal metabolic functioning of the body. Additionally some can perform signaling functions." [InHouse:In House PW dictionary "Definition compiled by the PW editorial team", Reactome:REACT_11193.1 "Related entry at Reactome"]
 is_a: PW:0000002 ! classic metabolic pathway
 
 [Term]
 id: PW:0000136
 name: thiamine metabolic pathway
-def: "Those metabolic reactions involving thiamine, a water-soluble vitamin of the B complex. It is synthesized in bacteria, fungi and plants. Animals obtain thiamine from food. Thiamine insufficiency results in a condition called beriberi." [Gene Ontology:GO\:0006772 "Related GO term", KEGG:map00730 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries"]
+def: "Those metabolic reactions involving thiamine, a water-soluble vitamin of the B complex. It is synthesized in bacteria, fungi and plants while animals obtain thiamine from food. Thiamine insufficiency results in a condition called beriberi." [Gene Ontology:GO\:0006772 "Related GO term", KEGG:map00730 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries"]
+synonym: "vitamin B1 metabolic pathway" RELATED []
 is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
 
 [Term]
 id: PW:0000137
 name: riboflavin metabolic pathway
-def: "Those metabolic reactions involving riboflavin, also known as vitamin B2. It occurs in several products and is an essential nutrient for man." [Gene Ontology:GO\:0006771 "Related GO term", KEGG:map00740 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries"]
+def: "Those metabolic reactions involving riboflavin, also known as vitamin B2 - a water-soluble vitamin. B12 occurs in several products and is a precursor for flavin coenzymes." [Gene Ontology:GO\:0006771 "Related GO term", KEGG:map00740 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries"]
+synonym: "vitamin B2 metabolic pathway" RELATED []
 is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
 
 [Term]
 id: PW:0000138
-name: Vitamin B6 metabolic pathway
-def: "Those metabolic reactions involving vitamin B6 - a water-soluble vitamin that exists in several forms. Vitamin B6 is required for many enzymatic reactions and participates in many metabolic processes. A number of organisms can carry out de novo synthesis of vitamin B6; humans derive it from diet." [Gene Ontology:GO\:0042816 "Related GO term", KEGG:map00750 "Associated KEGG map", OneLook\, NIH :www.onelook.com and linkss "Wikipedia and links to NIH Office of Dietary Supplements"]
+name: vitamin B6 metabolic pathway
+def: "Those metabolic reactions involving vitamin B6 - a water-soluble vitamin that exists in several forms. Vitamin B6 is required for many enzymatic reactions and plays important roles in monoamine and protein synthesis. A number of organisms can carry out de novo synthesis of vitamin B6; humans derive it from diet." [Gene Ontology:GO\:0042816 "Related GO term", KEGG:map00750 "Associated KEGG map", OneLook\, NIH :www.onelook.com and linkss "Wikipedia and links to NIH Office of Dietary Supplements"]
+synonym: "pyridoxine metabolic pathway" RELATED []
 is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
 
 [Term]
 id: PW:0000139
 name: biotin metabolic pathway
-def: "Those metabolic reactions involved in the synthesis, utilization and/or degradation of biotin, also known as vitamin B7 or H. Biotin assists in various metabolic reactions and processes." [Gene Ontology:GO\:0006768 "Related GO term", KEGG:map00780 "Associated KEGG map", OneLook:www.onelook.com> "Online collection of dictionaries, Wikipedia", Reactome:REACT_11153.3 "Related entry at Reactome"]
+def: "Those metabolic reactions involved in the synthesis, utilization and/or degradation of biotin, also known as vitamin B7 or H, a water-soluble vitamin. Biotin assists in various metabolic reactions and processes." [Gene Ontology:GO\:0006768 "Related GO term", KEGG:map00780 "Associated KEGG map", OneLook:www.onelook.com> "Online collection of dictionaries, Wikipedia", Reactome:REACT_11153.3 "Related entry at Reactome"]
+synonym: "vitamin B7 metabolic pathway" RELATED []
 is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
 
 [Term]
 id: PW:0000140
 name: pathway of folate cycle/metabolism
-def: "The folate cycle/metabolism represents the various reactions involving absorption, transport, conversion and utilization of f folate compounds. Folate is the generic term for a number of chemically related molecules of the water-soluble vitamin B family that transfer one-carbon units for a number of important biosynthetic pathways." [PubMed:PMID\: 15298442; 11001804; PMID\: 15166809 "Review articles in PubMed"]
+def: "The folate cycle/metabolism represents the various reactions involving absorption, transport, conversion and utilization of f folate compounds. Folate is the generic term for a number of chemically related molecules of the water-soluble vitamin B family that transfer one-carbon units for a number of important biosynthetic pathways. Flic acid is also known as vitamin B9" [PubMed:PMID\: 15298442; 11001804; PMID\: 15166809 "Review articles in PubMed"]
+synonym: "vitamin B9 metabolic pathway" RELATED []
 is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
 
 [Term]
 id: PW:0000141
 name: retinol metabolic pathway
-def: "Those reactions involving retinol, a fat-soluble vitamin that is the dietary form of vitamin A and is important for bone growth and in vision. Precursors of retinol derived from diet are converted to retinol by tissues." [Gene Ontology:GO\:0042572 "Related GO term", KEGG:map00830 "Associated KEGG map", PneLook:www.onelook.com "Online collection of dictionaries - Wikipedia"]
-is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
+def: "Those reactions involving retinol, a fat-soluble vitamin that is the dietary form of vitamin A and is important for bone growth and in vision. Precursors of retinol such as carotenoid or retinyl esters are derived from diet are converted to retinal and retinol, respectively." [Gene Ontology:GO\:0042572 "Related GO term", KEGG:map00830 "Associated KEGG map", PneLook:www.onelook.com "Online collection of dictionaries - Wikipedia", PubMed:PMID\: 21718801\, 21586336]
+is_a: PW:0001003 ! retinoid metabolic pathway
 
 [Term]
 id: PW:0000142
@@ -896,8 +911,8 @@ is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
 [Term]
 id: PW:0000143
 name: insulin signaling pathway
-def: "Processes regulated by insulin and insulin-like growth factor signaling systems include growth and survival of many tissues; for example, neuron and retina, bone, pancreatic beta-cells. Insulin is best known for its role in the regulation of blood glucose. Deregulation of the systems is implicated in a number of metabolic disorders." [Gene Ontology:GO\:0008286 "Related GO term", KEGG:map4910 "Associated KEGG map", PubMed:PMID\: 12169433 "Review article", Reactome:REACT_498.5 "Related entry at Reactome"]
-synonym: "" RELATED []
+def: "Processes regulated by insulin and insulin-like growth factor signaling systems include growth and survival of many tissues; for example, neuron and retina, bone, pancreatic beta-cells. Insulin is best known for its role in the regulation of blood glucose. Disregulation of the systems is implicated in a number of metabolic disorders." [Gene Ontology:GO\:0008286 "Related GO term", KEGG:map4910 "Associated KEGG map", PubMed:PMID\: 12169433 "Review article", Reactome:REACT_498.5 "Related entry at Reactome"]
+synonym: "PID:200014" RELATED []
 is_a: PW:0000467 ! peptide and protein hormone signaling pathway
 relationship: part_of PW:0000357 ! energy homeostasis pathway
 relationship: part_of PW:0000553 ! glucose homeostasis pathway
@@ -917,7 +932,7 @@ is_obsolete: true
 [Term]
 id: PW:0000146
 name: glycan metabolic pathway
-def: "Those metabolic reactions involved in the synthesis, utilization and/or degradation of glycans. Glycans are a class of compounds that include oligo- and polysaccharides, simple sugars or polymeric structures of mono- or di-saccharides, respectively. The term refers to the carbohydrate moiety of glycoproteins, proteoglycans and glycolipids." [OneLook:www.onelook.com "Online collection of dictionaries"]
+def: "Those metabolic reactions involved in the synthesis, utilization and/or degradation of glycans. Glycans are a class of compounds that include oligo- and polysaccharides, simple sugars or polymeric structures of mono- or di-saccharides, respectively. The term also refers to the carbohydrate moiety of glycoproteins, proteoglycans and glycolipids." [OneLook:www.onelook.com "Online collection of dictionaries"]
 is_a: PW:0000002 ! classic metabolic pathway
 
 [Term]
@@ -1012,13 +1027,13 @@ is_a: PW:0000146 ! glycan metabolic pathway
 
 [Term]
 id: PW:0000162
-name: glycosphingolipid biosynthetic pathway - lactoseries
-is_a: PW:0000733 ! glycosphingolipid metabolic pathway
+name: sphingolipid biosynthetic pathway
+is_a: PW:0000197 ! sphingolipid metabolic pathway
 
 [Term]
 id: PW:0000163
-name: glycosphingolipid biosynthetic pathway - neolactoseries
-is_a: PW:0000733 ! glycosphingolipid metabolic pathway
+name: sphingolipid degradation pathway
+is_a: PW:0000197 ! sphingolipid metabolic pathway
 
 [Term]
 id: PW:0000164
@@ -1040,8 +1055,9 @@ is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
 
 [Term]
 id: PW:0000167
-name: pantothenate and CoA biosynthetic pathway
-def: "Those metabolic reactions involved in the synthesis of panthotenic acid, also known as vitamin B5. Vitamin B5 is an essential nutrient, is necessary for the synthesis of coenzyme A (CoA) and is also involved in the metabolism of proteins, lipids and carbohydrates." [KEGG:map00770 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries"]
+name: pantothenic acid metabolic pathway
+def: "Those metabolic reactions involving pantothenic acid or panthotenate, also known as vitamin B5 - a water-soluble vitamin. Vitamin B5 is the precursor to coenzyme A (CoA) which in turn, plays an essential role in fatty acids and pyruvate metabolism." [KEGG:map00770 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries"]
+synonym: "vitamin B5 metabolic pathway" RELATED []
 is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
 
 [Term]
@@ -1054,7 +1070,7 @@ is_a: PW:0000003 ! signaling pathway
 id: PW:0000169
 name: nerve growth factor signaling pathway
 def: "Nerve growth factor (NGF) signaling pathways control a variety of processes such as neuronal cell differentiation, axon growth. Members of the NGF family are best known for their anti-apoptotic role as mediators of neuronal cell survival." [Gene Ontology:GO\:0048011 "Related GO term", PubMed:Neuron\, 2004\, v42\, p897-912; Cellular Signaling\, 2004\, v16\, p127-36. "Articles in PubMed", Reactome:REACT_11061.4 "Associated entry at Reactome"]
-synonym: "NGF signaling pathway" RELATED []
+synonym: "NGF signaling pathway" EXACT []
 is_a: PW:0000571 ! neurotrophic factor signaling pathway
 
 [Term]
@@ -1062,6 +1078,8 @@ id: PW:0000170
 name: epidermal growth factor/neuregulin signaling pathway
 def: "Members of the EGF/neuregulin superfamily are important regulators of tissue development and repair. A characteristic feature is the presence of the EGF module, a 36-40 amino acid sequence with a disulfide-bonded three loop structure necessary for receptor binding." [Gene Ontology:GO\:0007173 "related GO term", KEGG:map04012 "Related KEGG map", MCW e-journal:J. Mol. Evolo.2000\, v50\, p397-412 "Review article on EGF receptors and ligands", PubMed:12814936 "Review article", Reactome:REACT_9417.3 "Related entry at Reactome"]
 synonym: "EGF/neuregulin signaling pathway" RELATED []
+synonym: "PID:200101" RELATED []
+synonym: "PID:200159" RELATED []
 is_a: PW:0000168 ! growth factor signaling pathway
 
 [Term]
@@ -1128,8 +1146,10 @@ is_a: PW:0000178 ! neurological disorder disease pathway
 id: PW:0000180
 name: mTOR signaling pathway
 def: "mTOR signaling pathway regulates cellular processes such as translation, ribosome biogenesis, cell growth and autophagy and is regulated or responds to growth factors, energy metabolites and/or levels of nutrients." [KEGG:map04150 "Associated KEGG map", PubMed:TIBS\, 2004\, v. 29(1)\, 32-38., Reactome:REACT_6838.1 "Associated entry at Reactome"]
+synonym: "PID:200096" RELATED []
 is_a: PW:0000003 ! signaling pathway
 is_a: PW:0000085 ! pathways of replication, repair, gene expression, protein biosynthesis
+relationship: part_of PW:0000357 ! energy homeostasis pathway
 
 [Term]
 id: PW:0000181
@@ -1240,6 +1260,7 @@ is_a: PW:0000010 ! lipid metabolic pathway
 id: PW:0000198
 name: p38 MAPK signaling pathway
 def: "A SAPK MAPK pathway that plays an important role in inflammation and may be involved in several forms of cancer." [Gene Ontology:GO\:0051403 "Related GO term", KEGG:map04010 "Related KEGG map", PubMed:PMID\: 14570565 ;  15102355 . "Review articles on p38 pathway", Reactome:REACT_12065.1 "Related entry at Reactome"]
+synonym: "PID:200018" RELATED []
 is_a: PW:0000312 ! stress-regulated MAPK signaling pathway
 
 [Term]
@@ -1261,6 +1282,7 @@ id: PW:0000201
 name: canonical Wnt signaling pathway
 def: "Wnt signaling pathway is involved in many developmental processes. In the conventional or canonical Wnt pathway,  beta-catenin is a central component required for the  transcriptional control of Wnt signaling target genes." [Gene Ontology:GO\:0060070 "Related GO term", KEGG:map04310 "Related KEGG map", PubMed:PMID\: 12573432; 15001769; 18432252, Reactome:REACT_11045.1 "Associated entry at Reactome"]
 synonym: "beta-catenin dependent Wnt signaling pathway" RELATED []
+synonym: "PID:200077" RELATED []
 is_a: PW:0000008 ! Wnt signaling pathway
 
 [Term]
@@ -1280,6 +1302,7 @@ is_a: PW:0000663 ! DNA break repair pathway
 id: PW:0000204
 name: Notch signaling pathway
 def: "Notch signaling pathway regulates processes involved in early embryonic development. It plays an important role in cell fate determination. Target genes of Notch have been implicated in angiogenesis, somitogenesis, gliogenesis. Deregulation of the Notch signaling pathway underlies a broad spectrum of diseases and clinical conditions." [Gene Ontology:GO\:0007219 "Associated GO term", KEGG:map04330 "Associated KEGG map", PubMed:Several articles in PubMed "Based on a number of review articles", Reactome:REACT_299.2 "Associated entry at Reactome"]
+synonym: "PID:200015" RELATED []
 is_a: PW:0000332 ! cell-cell signaling pathway
 is_a: PW:0000650 ! signaling pathway pertinent to development
 is_a: PW:0000656 ! glycoprotein signaling pathway
@@ -1295,7 +1318,7 @@ is_a: PW:0000171 ! disease pathways related to polyQ repeats
 id: PW:0000206
 name: transforming growth factor-beta signaling pathway
 def: "Transforming growth factor-beta (TGF-beta) signaling pathway regulates numerous cellular processes such as proliferation, differentiation, migration and cell death. The SMAD dependent pathway represents the core signaling cascade mediated by the TGF-beta superfamily. Mutations in TGF - beta family are responsible for a number of human diseases." [Gene Ontology:GO\:0007179 "Related GO term", PubMed:TIBS\, 2004\, v29 (5)\, p265-273. (PMID\: 15130563 )l PMID\:16678165, Reactome:REACT_6844.5 "Associated entry at Reactome"]
-synonym: "TGF- beta signaling pathway - SMAD dependent" RELATED []
+synonym: "TGF- beta signaling pathway - SMAD dependent" EXACT []
 is_a: PW:0000329 ! transforming growth factor-beta superfamily mediated signaling pathway
 
 [Term]
@@ -1314,8 +1337,9 @@ is_a: PW:0000176 ! diabetes pathway
 [Term]
 id: PW:0000209
 name: Jak-Stat signaling pathway
-def: "The Jak-Stat pathway involves signaling from cytokine or growth factor receptor(s) to the nucleus via Janus kinases (Jak) and the signal transducers and activators of transcription (Stat) families of proteins. Combinations between four Jak(s) and seven Stat(s) shape the outcome of ligand triggered signaling through the various receptors." [Gene Ontology:GO\:0007259 "Related GO term", KEGG:map04630 "Associated KEGG map", PubMed:14737178; 14668806; 12039028;  17312100 "Articles in PubMed"]
+def: "The Jak-Stat pathway is a main intracellular cascade initiated primarily in response to cytokine and also other ligand signaling. Four Janus kinases (Jak) and seven signal transducers and activators of transcription (Stat) families of proteins mediate the action of almost 40 cytokine receptors, including the receptor for leptin. Combinations between four Jak(s) and seven Stat(s) shape the outcome of ligand triggered signaling through the various receptors." [Gene Ontology:GO\:0007259 "Related GO term", KEGG:map04630 "Associated KEGG map", MCW library:Handbook of cellular and molecular immunology, PubMed:14737178; 14668806; 12039028;  17312100 "Articles in PubMed"]
 is_a: PW:0000003 ! signaling pathway
+is_a: PW:0000818 ! signaling pathway pertinent to immunity
 
 [Term]
 id: PW:0000210
@@ -1386,12 +1410,12 @@ is_a: PW:0000217 ! metabolic pathway of prosthetic groups, electron carriers and
 [Term]
 id: PW:0000222
 name: UDP-N-acetylgalactosamine biosynthetic pathway
-is_a: PW:0000152 ! amino sugar metabolic pathway
+is_obsolete: true
 
 [Term]
 id: PW:0000223
 name: UDP-N-acetylglucosamine biosynthetic pathway
-is_a: PW:0000152 ! amino sugar metabolic pathway
+is_obsolete: true
 
 [Term]
 id: PW:0000224
@@ -1472,33 +1496,36 @@ name: phosphatidylinositol 3-kinase-Akt signaling pathway
 def: "Phosphatidylinositol 3-kinase-Akt signaling pathway involving PI3K class I enzymes, particularly class IA, controls various processes such as cell growth, proliferation and survival. Class IA enzymes couples to receptor tyrosine kinases or their adaptors; class IB couples to G-protein coupled receptor mainly via Galphai. The Akt family of protein kinases are activated downstream of class I PI3Ks and collectively (Akt1, 2, and 3) phosphorylate more than 70 cytoplasmic and nuclear substrates. Deregulation of the pathway has been linked to various forms of cancer." [PubMed:15143962 \, 15023437\, 14737178]
 synonym: "phosphoinositide 3-kinase-Akt signaling pathway" RELATED []
 synonym: "PI3K-Akt signaling pathway" RELATED []
-is_a: PW:0000595 ! phosphatidylinositol 3-kinase signaling pathway
+synonym: "PID:200197" RELATED []
+is_a: PW:0000963 ! phosphatidylinositol 3-kinase class I signaling pathway
 
 [Term]
 id: PW:0000233
 name: tumor necrosis factor mediated signaling pathway
-def: "Tumor necrosis factor (Tnf) signaling plays pivotal roles in immunity, cell proliferation, differentiation and apoptosis by activating several pathways. NF-kB is a major pathway activated by Tnf; others include JNK and P38 MAPK. Through receptor associated adapters Tnf elicits apoptosis via the extrinsic pathway. Deregulation of Tnf signaling has been implicated in a great number of human diseases - cerebral malaria, cancer, multiple sclerosis, are a few examples." [Gene Ontology:GO\:0033209 "Associated GO term", PubMed:PMID\:12040173\, 12655295 "Review article", Reactome:REACT_1432.1 "Associated entry at Reactome"]
+def: "Tumor necrosis factor (Tnf) signaling plays pivotal roles in immunity, cell proliferation, differentiation and apoptosis by activating several pathways. NF-kB is a major pathway activated by Tnf; others include JNK and P38 MAPK. Through receptor associated adapters Tnf elicits apoptosis via the extrinsic pathway. Deregulation of Tnf signaling has been implicated in a great number of human diseases - cerebral malaria, cancer, multiple sclerosis, are a few examples." [Gene Ontology:GO\:0033209 "Associated GO term", PubMed:PMID\:12040173\, 12655295; 20303867 "Review article", Reactome:REACT_1432.1 "Associated entry at Reactome"]
+synonym: "PID:200102" RELATED []
 synonym: "TNF signaling pathway" RELATED []
 synonym: "TNFalpha signaling pathway" RELATED []
 is_a: PW:0000106 ! extrinsic apoptotic pathway
 is_a: PW:0000236 ! tumor necrosis factor superfamily mediated signaling pathway
+is_a: PW:0000926 ! pro-inflammatory cytokine mediated pathway
 
 [Term]
 id: PW:0000234
 name: innate immune response pathway
-def: "The innate immune response - a universal and ancient form of host defense against infection - is a first line of response to various pathogens and also to damaged cells. It plays a role in stimulating adaptive immunity; molecules generated during innate responses act as second signals that can impact on both the magnitude and the nature of the adaptive response." [Gene Ontology:GO\:0045087 "Associated GO term", PubMed:PMID\: 11861602 "Review article in Annual Review of Immunology"]
+def: "The innate immune response - a universal and ancient form of host defense against infection - is a first line of response to various pathogens and also to damaged cells. It plays a role in stimulating adaptive immunity; molecules generated during innate responses act as second signals that can impact on both the magnitude and the nature of the adaptive response." [Gene Ontology:GO\:0045087 "Associated GO term", PubMed:PMID\: 11861602; 20303867 "Review article in Annual Review of Immunology"]
 is_a: PW:0000023 ! immune response pathway
 
 [Term]
 id: PW:0000235
 name: adaptive immune response pathway
-def: "The adaptive immune response is an evolutionarily newer mechanism that provides great specificity and diversity of antigen recognition, immunological memory and specialized responses. The two types of adaptive immune response pathways are humoral and cellular or cell-mediated." [Gene Ontology:GO\:0002250 "Associated GO term", PubMed:PMID\: 11861602 "Review article"]
+def: "The adaptive immune response is an evolutionarily newer mechanism that provides great specificity and diversity of antigen recognition, immunological memory and specialized responses. The two types of adaptive immune response pathways are humoral and cellular or cell-mediated." [Gene Ontology:GO\:0002250 "Associated GO term", MCW library:Handbook on cellular and molecular immunology, PubMed:PMID\: 11861602 "Review article"]
 is_a: PW:0000023 ! immune response pathway
 
 [Term]
 id: PW:0000236
 name: tumor necrosis factor superfamily mediated signaling pathway
-def: "Members of TNF superfamily mediate autoimmunity and inflammation, cell proliferation, survival or apoptosis through a number of signaling mechanisms that involve activation of nuclear factor-kappaB, of caspases or of mitogen-activated protein kinases. TNF superfamily has been implicated in a wide range of human diseases including tumorigenesis, septic shock, diabetes, rheumatoid arthritis, other inflammatory conditions." [PubMed:PMID\: 14555214\,  11796220\, 11239407 "Review article"]
+def: "Members of TNF superfamily mediate autoimmunity and inflammation, cell proliferation, survival and/or apoptosis through a number of signaling mechanisms that involve activation of nuclear factor-kappaB, of caspases and/or of mitogen-activated protein kinases (MAPK). TNF superfamily has been implicated in a wide range of human diseases including tumorigenesis, septic shock, rheumatoid arthritis and other conditions." [PubMed:PMID\: 14555214\,  11796220\, 11239407 "Review article"]
 synonym: "TNF superfamily signaling pathways" RELATED []
 is_a: PW:0000828 ! cytokine mediated signaling pathway
 
@@ -1511,6 +1538,7 @@ is_a: PW:0000004 ! regulatory pathway
 id: PW:0000238
 name: insulin-like growth factor signaling pathway
 def: "Processes regulated by insulin and insulin-like growth factor signaling systems include growth and survival of many tissues; for example, neuron and retina, bone, pancreatic beta-cells. Insulin is best known for its role in the regulation of blood glucose. Deregulation of the systems is implicated in a number of metabolic disorders." [Gene Ontology:GO\:0048009 "Related GO term", PubMed:PMID\: 12169433 "Review article"]
+synonym: "PID:200100" RELATED []
 is_a: PW:0000168 ! growth factor signaling pathway
 is_a: PW:0000467 ! peptide and protein hormone signaling pathway
 
@@ -1542,6 +1570,8 @@ is_a: PW:0000240 ! neuropsychiatric disease pathway
 id: PW:0000243
 name: vascular endothelial growth factor signaling pathway
 def: "The VEGF family plays key roles in angiogenesis and lymphangiogenesis. Through their receptors, VEGFs can initiate a diverse and complex network of signaling cascades. Deregulation of VEGFs mediated pathways, mostly through upregulation of VEGFs expression, has been implicated in a number of conditions, primarily cancer." [Gene Ontology:GO\:0048010 "Related GO term", KEGG:map04370 "Associated KEGG map", OneLook\, PubMed:PMID\: 15563310; PMID\: 15544039 "Review articles,", Reactome:REACT_12529.1 "Associated entry at Reactome"]
+synonym: "PID:200109" RELATED []
+synonym: "PID:200188" RELATED []
 synonym: "VEGF signaling pathways" RELATED []
 is_a: PW:0000168 ! growth factor signaling pathway
 
@@ -1556,7 +1586,7 @@ id: PW:0000245
 name: angiotensin signaling pathway
 def: "Angiotensin peptides Ang II, Ang III, Ang IV and Ang (1-7) generated from a single precursor protein - angiotensinogen - regulate an array of physiological and pathophysiological processes." [PubMed:PMID\: 12676163; PMID\: 12676165\, 15638741 "Several review articles in PubMed"]
 is_a: PW:0000467 ! peptide and protein hormone signaling pathway
-relationship: part_of PW:0000492 ! renin-angiotensin system signaling pathway
+relationship: part_of PW:0000492 ! renin-angiotensin cascade pathway
 
 [Term]
 id: PW:0000246
@@ -1580,17 +1610,18 @@ is_a: PW:0000010 ! lipid metabolic pathway
 [Term]
 id: PW:0000249
 name: lipopolysaccharide biosynthetic pathway
-def: "Those metabolic reactions involved in the biosynthesis of lipopolysaccharides - a complex of lipid and polysaccharide." [Gene Ontology:GO\:0009103 "Related GO term", KEGG:map00540 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries"]
+def: "Those metabolic reactions involved in the biosynthesis of lipopolysaccharides, also known as lipoglycans, found in the outer membrane of Gram-negative bacteria. They are large molecules consisting of a lipid and a polysaccharide joined by a covalent bond. In host cells they act as endotoxins which are recognized by members of the Toll-like receptors to elicit strong immune responses." [Gene Ontology:GO\:0009103 "Related GO term", KEGG:map00540 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries"]
 synonym: "<new synonym>" RELATED []
+synonym: "lipoglycan biosynthetic pathway" RELATED []
 synonym: "LPS biosynthetic pathway" RELATED []
-is_a: PW:0000146 ! glycan metabolic pathway
+is_a: PW:0000876 ! bacterial polysaccharide metabolic pathway
 
 [Term]
 id: PW:0000250
 name: peptidoglycan biosynthetic pathway
 def: "Those metabolic reactions involved in the biosynthesis of peptidoglycan - a high molecular weight polymer that forms the tough, rigid structure of bacterial cell walls. It is made up of three parts: (1) a backbone, composed of alternating N-acetylglucosamine and N-acetylmuramic acid; (2) a set of identical tetrapeptide side-chains attached to N-acetylmuramic acid; and (3) a set of identical peptide cross-bridges. The backbone is the same in all bacterial species; however, the tetrapeptide side-chains and the peptide cross-bridges vary from species to species." [Gene Ontology:GO\:0009252 "Related GO term", KEGG:map00550 "Associated KEGG map", OneLook:www.onelook.com "Online collection of dictionaries - Dorland's"]
 synonym: "murein biosynthetic pathway" RELATED []
-is_a: PW:0000146 ! glycan metabolic pathway
+is_a: PW:0000876 ! bacterial polysaccharide metabolic pathway
 
 [Term]
 id: PW:0000251
@@ -1877,6 +1908,9 @@ id: PW:0000297
 name: platelet-derived growth factor signaling pathway
 def: "PDGF signaling pathway plays an important role in the regulation of cell growth and survival." [Gene Ontology:GO\:0048008 "Related GO term", PubMed:PMID\: 14515146 "Review article", Reactome:REACT_16888.1 "Associated entry at Reactome"]
 synonym: "PDGF signaling pathway" RELATED []
+synonym: "PID:200149" RELATED []
+synonym: "PID:200162" RELATED []
+synonym: "PID:200201" RELATED []
 is_a: PW:0000168 ! growth factor signaling pathway
 
 [Term]
@@ -1914,6 +1948,7 @@ is_a: PW:0000300 ! renal disease, renal disorder pathway
 id: PW:0000303
 name: p53-dependent G1/S DNA damage checkpoint pathway
 def: "The p53-dependent pathway of G1 arrest in response to damaged DNA." [InHouse:PW dictionary, Reactome:REACT_85.1 "Associated entry at Reactome"]
+synonym: "ATM pathway" RELATED PID []
 is_a: PW:0000095 ! G1/S DNA damage checkpoint pathway
 
 [Term]
@@ -2006,7 +2041,7 @@ id: PW:0000317
 name: nuclear factor of activated T-cells signaling pathway
 def: "Members of the NFAT family of transcription factors, once de-phosphorylated by calcineurin translocate from the cytoplasm to the nucleus where they induce the transcription of genes involved in the immune response, cell-cell interactions. NFAT signaling is believed to play important roles in the development and function of the cardiovascular system." [Gene Ontology:GO\:0033173 "Related GO term", pUBmED:PMID\: 11983154 \,PMID\: 12975316 "Review articles in Cell, Genes and Development"]
 synonym: "NFAT signaling pathway" RELATED []
-is_a: PW:0000315 ! calcineurin signaling pathway
+is_a: PW:0000716 ! transcription factor mediated signaling pathway
 
 [Term]
 id: PW:0000318
@@ -2040,6 +2075,12 @@ is_a: PW:0000673 ! altered signaling pathway pertinent to development
 id: PW:0000322
 name: ephrin - ephrin receptor bidirectional signaling axis
 def: "Ephrins and their receptors constitute a bidirectional signaling pathway transducing forward signals through the receptors and reverse signals through the ephrins that influence the behavior of both interacting cells. The Eph/ephrin axis plays important roles in cell morphology, adhesion and migration. Its disruption has been implicated in several human cancers." [Gene Ontology:GO\:0048013 "Related GO term", PubMed:PMID\: 15093606 "Review article on ephrins and their receptors"]
+synonym: "eph/ephrin receptor bidirectional signaling axis" EXACT []
+synonym: "PID:200052" RELATED []
+synonym: "PID:200059" RELATED []
+synonym: "PID:200142" RELATED []
+synonym: "PID:200204" RELATED []
+synonym: "PID:200216" RELATED []
 is_a: PW:0000332 ! cell-cell signaling pathway
 
 [Term]
@@ -2081,6 +2122,7 @@ id: PW:0000328
 name: fibroblast growth factor signaling pathway
 def: "The family of fibroblast growth factors comprises 22 ligands that bind several receptors. The pathway plays important roles during embryonic and postnatal development. Disregulation of the pathway has been associated with several types of cancer." [Gene Ontology:GO\:0007173 "Related GO term", PubMed:PMID\:19601767; 19379279, Reactome:REACT_9470.2 "Related entry at Reactome"]
 synonym: "FGF signaling pathway" RELATED []
+synonym: "PID:200220" RELATED []
 is_a: PW:0000168 ! growth factor signaling pathway
 
 [Term]
@@ -2094,13 +2136,15 @@ is_a: PW:0000168 ! growth factor signaling pathway
 id: PW:0000330
 name: Bone morphogenetic proteins signaling pathway
 def: "The bone morphogenetic proteins (BMP) are related to TGF-beta and activins and are members of the TGF-beta superfamily. The BMP signaling pathway plays important roles in induction and patterning of the mesoderm. BMP pathway cross-talks to other pathways such as TGF-beta, Wnt, MAPK, Notch, JAK-STAT and others." [Gene Ontology:GO\:0030509 "Associated GO term", PubMed:PMID\: 15368350 "Review article in J Cell Biochem", Reactome:REACT_12034.1 "Associated entry at Reactome"]
-synonym: "BMP signaling pathway " RELATED []
+synonym: "BMP signaling pathway " EXACT []
+synonym: "PID:200144" RELATED []
 is_a: PW:0000329 ! transforming growth factor-beta superfamily mediated signaling pathway
 
 [Term]
 id: PW:0000331
 name: activin signaling pathway
 def: "Activins are members of the TGF-beta superfamily of growth factors. The pathway plays important roles in embryonic development, inflammation, reproductive biology. Deregulation of activin signaling contributes to a number of pathological conditions." [Gene Ontology:GO\:0032924 "Related GO term", PubMed:PMID\:19273500; 16997617; 16885529]
+synonym: "PID:200029" RELATED []
 is_a: PW:0000329 ! transforming growth factor-beta superfamily mediated signaling pathway
 
 [Term]
@@ -2111,12 +2155,13 @@ is_a: PW:0000648 ! cell adhesion signaling pathway
 
 [Term]
 id: PW:0000333
-name: cadherins signaling pathway
+name: cadherin mediated signaling pathway
+def: "Cadherins represent a large protein superfamily with many and important roles in cell adhesion and signaling. Cadherins are characterized by the presence of the extracellular cadherin, calcium-binding repeat. The number and structural similarities of repeats across families vary." [PubMed:PMID\: 18848899; 11171368]
 is_a: PW:0000332 ! cell-cell signaling pathway
 
 [Term]
 id: PW:0000334
-name: connexins signaling pathway
+name: connexin signaling pathway
 is_a: PW:0000332 ! cell-cell signaling pathway
 
 [Term]
@@ -2143,12 +2188,12 @@ is_a: PW:0000332 ! cell-cell signaling pathway
 [Term]
 id: PW:0000338
 name: altered cadherins mediated signaling pathway
-is_a: PW:0000333 ! cadherins signaling pathway
+is_a: PW:0000333 ! cadherin mediated signaling pathway
 
 [Term]
 id: PW:0000339
 name: altered connexins mediated signaling pathway
-is_a: PW:0000334 ! connexins signaling pathway
+is_a: PW:0000334 ! connexin signaling pathway
 
 [Term]
 id: PW:0000340
@@ -2239,6 +2284,7 @@ is_a: PW:0000350 ! altered vascular endothelial growth factor signaling pathway
 id: PW:0000354
 name: glycerophospholipid metabolic pathway
 def: "Those metabolic reactions involved in the synthesis, utilization and/or degradation of glycerophospholipids, also known as phospholipids. They are key components of membranes and some are also involved in signaling." [Gene Ontology:GO\:0006650 "Related GO term", KEGG:map00564 "Associated KEGG map", MCW library:QU4 M235b 2009 "McKee Handbook of Biochemistry - fourth edition"]
+synonym: "phospholipid metabolic pathway" RELATED []
 is_a: PW:0000010 ! lipid metabolic pathway
 
 [Term]
@@ -2256,7 +2302,7 @@ is_a: PW:0000355 ! homeostasis pathway
 [Term]
 id: PW:0000357
 name: energy homeostasis pathway
-def: "Those pathways involved in the balance between energy uptake and energy expenditure. Disturbance of this equilibrium has been linked to various forms of human obesity." [PubMed:PMID\: 15703762 \, PMID\: 11239410 "Review articles on obesity."]
+def: "Those pathways involved in the balance between energy uptake and energy expenditure. Disturbance of this equilibrium has been linked to various conditions including obesity." [PubMed:PMID\: 15703762 \, PMID\: 11239410 "Review articles on obesity."]
 is_a: PW:0000355 ! homeostasis pathway
 
 [Term]
@@ -2275,9 +2321,12 @@ is_a: PW:0000358 ! altered homeostasis pathway
 
 [Term]
 id: PW:0000360
-name: the chronic hypoxic response - the hypoxia inducible factor - alpha pathway
-def: "The chronic hypoxic response is mediated by the hypoxia-inducible transcription factor. It involves changes in the expression of genes that play important roles in angiogenesis and erythropoiesis." [PubMed:PMID\: 11181957  PMID\: 12603312 \, PMID\: 14597660\, PMID\: 15031665 . "Review articles in PubMed."]
-synonym: "the chronic hypoxic response - the HIF-alpha pathway" RELATED []
+name: hypoxia inducible factor pathway
+def: "The hypoxia inducible transcription factor is activated in response to hypoxic conditions to promote the expression of many genes that play important roles in glucose and energy metabolism, angiogenesis and erythropoiesis." [PubMed:PMID\: 11181957  PMID\: 12603312 \, PMID\: 14597660\, PMID\: 15031665 . "Review articles in PubMed."]
+synonym: "HIF pathway" EXACT []
+synonym: "PID:200036" RELATED []
+synonym: "PID:200202" RELATED []
+is_a: PW:0000100 ! transcription pathway
 relationship: part_of PW:0000356 ! oxygen homeostasis pathway
 
 [Term]
@@ -2288,7 +2337,7 @@ is_a: PW:0000358 ! altered homeostasis pathway
 
 [Term]
 id: PW:0000362
-name: the acute hypoxic response - the ion channels pathway
+name: the ion channels pathway
 def: "The acute hypoxic response is mediated through the activity of excitable cells via oxygen-sensing ion channels." [PubMed:PMID\: 11181957 "Review article in PubMed"]
 relationship: part_of PW:0000356 ! oxygen homeostasis pathway
 
@@ -2316,7 +2365,7 @@ relationship: part_of PW:0000357 ! energy homeostasis pathway
 [Term]
 id: PW:0000366
 name: altered melanocortin system pathway
-def: "A melanocortin dependent system pathway that deviates from what its normal course should be. Mutations in the prohormone gene PMOC and a modifying enzyme PC1 are linked to obesity." [PubMed :v "review article on PMOC"]
+def: "A melanocortin dependent system pathway that deviates from what its normal course should be. Mutations in the prohormone gene PMOC and the modifying enzyme PC1 are linked to obesity. Mutations in MC2R receptor and its accessory protein MRAP have been associated with type 1 and 2 familial glucocorticoid deficiency, respectively." [PubMed :PMID\: 11874690\, 19028547 "review article on PMOC"]
 is_a: PW:0000359 ! altered energy homeostasis pathway
 is_a: PW:0000365 ! melanocortin system pathway
 is_a: PW:0000511 ! altered peptide and protein hormone signaling pathway
@@ -2376,7 +2425,6 @@ is_a: PW:0000373 ! glutathione conjugation pathway
 id: PW:0000375
 name: phase I biotransformation pathway via cytochrome P450
 def: "The major phase I biotransformation pathway for the activation of endogenous and exogenous substances carried out by members of the cytochrome P450 superfamily." [Book: QV 600 C335t 2001; PMID\:17482904\, 19835560 "of drug-metabolizing enzyme expression", Reactome:REACT_13705.1 "Related entry at Reactome"]
-synonym: "" RELATED []
 is_a: PW:0000857 ! phase I biotransformation pathway
 
 [Term]
@@ -2452,12 +2500,14 @@ is_a: PW:0000158 ! Ras family mediated signaling pathway
 id: PW:0000387
 name: Arf family mediated signaling pathway
 def: "Arf family mediated signaling pathways are involved in the regulation of intracellular vesicle trafficking. In paritcular they appear to control early events such as vesicle budding." [Gene Ontology:GO\:0032011 "Associated GO term", PubMed:PMID\: 11152757; PMID\: 11152757]
+synonym: "PID:200195" RELATED []
 is_a: PW:0000006 ! Ras superfamily mediated signaling pathway
 
 [Term]
 id: PW:0000388
 name: Reelin signaling pathway
 def: "Reelin signaling pathway regulates neuronal positioning and may also play a role in synaptic plasticity. The reelin gene appears to be downregulated in the schizophrenic brains but the link between the reelin pathway and the disease remains to be established." [PubMed:PMID\: 14993361; PMID\: 12764038;PMID\: 14715136 "Articles on Reelin"]
+synonym: "PID:200062" RELATED []
 is_a: PW:0000059 ! signaling pathway pertinent to the brain
 is_a: PW:0000656 ! glycoprotein signaling pathway
 
@@ -2493,6 +2543,7 @@ id: PW:0000393
 name: altered mTOR signaling pathway
 is_a: PW:0000180 ! mTOR signaling pathway
 is_a: PW:0000290 ! altered pathway of replication, repair, gene expression and protein biosynthesis
+is_a: PW:0000359 ! altered energy homeostasis pathway
 
 [Term]
 id: PW:0000394
@@ -2517,13 +2568,15 @@ is_a: PW:0000211 ! amines and polyamines metabolic pathway
 
 [Term]
 id: PW:0000397
-name: Vitamin B12 (cobalamin) metabolic pathway
+name: cobalamin metabolic pathway
+def: "Those metabolic reactions involving cobalamin, known as vitamin B12 - a water-soluble vitamin. Cobalamin which important roles in a number of metabolic pathways. There are several related compounds whose synthesis occurs in bacteria but whose conversion can be carried out in higher organisms." [OneLook:http\://www.onelook.com]
+synonym: "Vitamin B12 metabolic pathway" RELATED []
 is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
 
 [Term]
 id: PW:0000398
 name: homocysteine metabolic pathway
-def: "Homocysteine (Hcy) metabolism is at the interesection of two pathways: the remethylation pathway that regenerates the methionine cycle and the transulfuration pathway that gives rise to cysteine and derivatives. Hcy pathway also engages choline, folate, vitamin(s) metabolism and links to the metabolism of other amino acids and compounds." [MCW library book :Homocysteine in Health and Disease - edited by Ralph Carmel and Donald W Jacobsen "Cambridge University Press, 2001"]
+def: "Homocysteine (Hcy) metabolism is at the interesection of two pathways: the remethylation pathway that regenerates the methionine cycle and the transsulfuration pathway that gives rise to cysteine and derivatives. Hcy pathway also engages choline, folate, vitamin(s) metabolism and links to the metabolism of other amino acids and compounds." [MCW library book :Homocysteine in Health and Disease - edited by Ralph Carmel and Donald W Jacobsen "Cambridge University Press, 2001"]
 synonym: "Hcy metabolism" RELATED []
 is_a: PW:0000132 ! metabolic pathway of other amino acids
 
@@ -2534,7 +2587,7 @@ relationship: part_of PW:0000398 ! homocysteine metabolic pathway
 
 [Term]
 id: PW:0000400
-name: transulfuration pathway of homocysteine metabolism
+name: transsulfuration pathway of homocysteine metabolism
 def: "The transulfuration pathway is one of the two routes of homocysteine metabolism. It allows for the transfer of sulfur from methionine to cysteine. 70% of cysteine is then converted to glutathione and the remainder ends up as either taurine or pyruvate and sulfate." [MCW library book:Homocysteine in Health and Disease - edited by Ralph Carmel and Donald W Jacobsen "Cambridge University Press, 2001"]
 relationship: part_of PW:0000398 ! homocysteine metabolic pathway
 
@@ -3069,7 +3122,6 @@ is_a: PW:0000825 ! antigen processing and presentation pathway
 id: PW:0000487
 name: class II major histocompatibility complex pathway
 def: "Peptides generated from enzymatic degradation of proteins internalized in late endosomes or lysosomes bind to class II MHC molecules. Peptide-class II MHC complexes are delivered to the cell surface to be recognized by CD4+ T cells." [MCW:Handbook on cellular and molecular immunology, PubMed:16181322 "Brief review on MHC mediated pathways"]
-synonym: "class " RELATED []
 synonym: "class II MHC pathway" RELATED []
 is_a: PW:0000825 ! antigen processing and presentation pathway
 
@@ -3089,7 +3141,8 @@ is_a: PW:0000168 ! growth factor signaling pathway
 id: PW:0000490
 name: transforming growth factor-beta Smad dependent signaling pathway
 def: "Transforming growth factor-beta (TGF-beta) signaling is one of the best characterized module of the Tgf-b superfamily pathways. Binding to the type II receptor leads to activation of the type I receptor and subsequent activation of Smad pathway. Nuclear translocation of Smad(s) and interaction with transcription factors rleads to activation or repression of many genes." [PubMed:PMID\: 16678165 "one of many reviews used to annotate and graph the pathway"]
-synonym: "TGF-beta Smad dependent signaling pathway" RELATED []
+synonym: "PID:200227" RELATED []
+synonym: "TGF-beta Smad dependent signaling pathway" EXACT []
 is_a: PW:0000206 ! transforming growth factor-beta signaling pathway
 
 [Term]
@@ -3102,8 +3155,8 @@ is_a: PW:0000467 ! peptide and protein hormone signaling pathway
 
 [Term]
 id: PW:0000492
-name: renin-angiotensin system signaling pathway
-def: "The renin-angiotensin system (RAS) generates a number of bioactive peptides with diverse physiological and pathophysiological functions. RAS exerts vasoconstriction, vasodilation or vascular remodeling, cell proliferation or anti-proliferation effects, depending on which angiotensin peptide generates the signaling. Some of these features are also shared by the kallikrein-kinin system (KKS); the two systems can interact and cross-talk." [KEGG:ko04614 "Associated KEGG map", PubMed:PMID\: 15883759   PMID\: 15638741 \,  PMID\: 12676165 \, PMID\: 12793984 \, PMID\: 16816138 "Several review articles."]
+name: renin-angiotensin cascade pathway
+def: "The renin-angiotensin cascade (RAS) generates a number of bioactive peptides with diverse physiological and pathophysiological functions. RAS exerts vasoconstriction, vasodilation or vascular remodeling, cell proliferation or anti-proliferation effects, depending on which angiotensin peptide generates the signaling. Some of these features are also shared by the kallikrein-kinin system (KKS); the two systems can interact and cross-talk." [KEGG:ko04614 "Associated KEGG map", PubMed:PMID\: 15883759   PMID\: 15638741 \,  PMID\: 12676165 \, PMID\: 12793984 \, PMID\: 16816138 "Several review articles."]
 synonym: "RAS system signaling pathway" RELATED []
 is_a: PW:0000003 ! signaling pathway
 
@@ -3149,11 +3202,15 @@ relationship: part_of PW:0000482 ! lipoprotein metabolic pathway
 [Term]
 id: PW:0000499
 name: nuclear factor kappa B signaling pathway
-def: "NF-kB signaling plays an essential role in the mammalian immune system. The classical/canonical pathway, downstream but not exclusively of tumor necrosis factor/receptor 1 signaling, is regarded as a paradigm of NF-kB signaling. The classical and the non-classical pathway downstream of a subset of Tnf/receptor superfamily, share similar sets of core components, albeit in distinct ways. Collectively they regulate the expression of many genes." [PubMed:PMID\: 15371334\, 18267068\, 17072321 "Review articles"]
+def: "NF-kB signaling plays an essential role in the mammalian immune system. The classical/canonical pathway, downstream but not exclusively of tumor necrosis factor/receptor 1 signaling, is regarded as a paradigm of NF-kB signaling. The classical and the non-classical pathway downstream of a subset of Tnf receptor superfamily, share similar sets of core components, albeit in distinct ways. Collectively they regulate the expression of a vast array of genes." [PubMed:PMID\: 15371334\, 18267068\, 17072321 "Review articles"]
 synonym: "NF-kappaB signaling pathway" RELATED []
 synonym: "NF-kB signaling pathway" RELATED []
+synonym: "PID:200021" RELATED []
+synonym: "PID:200031" RELATED []
+synonym: "PID:200048" RELATED []
 is_a: PW:0000100 ! transcription pathway
 is_a: PW:0000716 ! transcription factor mediated signaling pathway
+is_a: PW:0000818 ! signaling pathway pertinent to immunity
 
 [Term]
 id: PW:0000500
@@ -3163,12 +3220,13 @@ is_a: PW:0000466 ! amine and amino acid-derived hormone signaling pathway
 [Term]
 id: PW:0000501
 name: thyroid hormone signaling pathway
+def: "Thyroid hormone signaling pathway plays important roles in glucose and lipid metabolism. The thyroid hormone receptors are nuclear receptors that once activated act as transcription factors." [PubMed:PMID\: 20015660\, 20872316]
 is_a: PW:0000500 ! tyrosine-based hormone signaling pathway
 
 [Term]
 id: PW:0000502
 name: complement system pathway
-def: "The complement system is an important effector of innate and also of humoral adaptive immunity. It consists of three biochemical cascades that are differently initiated but share similar late steps and effector functions." [KEGG:map04610 "Related KEGG map", MCW:Handbook on cellular and molecular immunology, PubMed:PMID\: 11287977 "Review article"]
+def: "The complement system is an important effector of innate and also of humoral adaptive immunity. It consists of three biochemical cascades that are differently initiated but share similar late steps and effector functions." [KEGG:map04610 "Related KEGG map", MCW library:Handbook on cellular and molecular immunology, PubMed:PMID\: 11287977 "Review article"]
 relationship: part_of PW:0000234 ! innate immune response pathway
 relationship: part_of PW:0000823 ! humoral immunity pathway
 
@@ -3191,7 +3249,6 @@ is_a: PW:0000502 ! complement system pathway
 id: PW:0000505
 name: alternative complement pathway
 def: "The alternative pathway is one of the three biochemical pathways of the complement system. Stable activation of the alternative pathway occurs on microbial cell surfaces." [Gene Ontology :GO\:0006957 "Related GO term", KEGG:map04610 "Related KEGG map", PubMed:PMID\:11287977]
-synonym: "" RELATED []
 synonym: "alternative pathway" RELATED []
 is_a: PW:0000502 ! complement system pathway
 
@@ -3199,6 +3256,7 @@ is_a: PW:0000502 ! complement system pathway
 id: PW:0000506
 name: endothelin signaling pathway
 def: "Endothelins represent a family of three vasoconstrictor peptides that play a role in several intracellular signaling pathways and have been associated with hypertension, heart failure and myocardial infarction." [PubMed:PMID\: 16269952\, PMID\: 15124920 "Review articles in PubMed"]
+synonym: "PID:200005" RELATED []
 is_a: PW:0000467 ! peptide and protein hormone signaling pathway
 
 [Term]
@@ -3241,23 +3299,33 @@ is_a: PW:0000828 ! cytokine mediated signaling pathway
 
 [Term]
 id: PW:0000513
-name: Interleukin signaling pathway via interleukin-10 family members
+name: interleukin-10 family mediated signaling pathway
+def: "The interleukin-10 family comprises several interleukins, including members of the interferon type III also known as interferon lambda or interferon-like type, that carry out various immunomodulatory functions." [PubMed:PMID\: 11929132\, 21112807\, 20454917]
+synonym: "Il-10 family mediated signaling pathway" RELATED []
 is_a: PW:0000512 ! Interleukin mediated signaling pathway
 
 [Term]
 id: PW:0000514
-name: Interleukin signaling pathway via interleukin-6 family members
+name: interleukin-6 family mediated signaling pathway
+def: "Interleukin-6 family includes several members involved in a wide range of biological processes such as immune regulation, inflammation, hematopoiesis and oncogenesis. All members share a common signal transducer, gp130 which activates Jak-Stat and Raf/Mek/Erk signaling pathways." [PubMed:PMID\: 21715184; 20410258]
+synonym: "Il-6 family mediated signaling pathway" EXACT []
 is_a: PW:0000512 ! Interleukin mediated signaling pathway
 
 [Term]
 id: PW:0000515
 name: Interleukin-10 signaling pathway
-is_a: PW:0000513 ! Interleukin signaling pathway via interleukin-10 family members
+def: "Interleukin-10 signaling is involved in various immunomodulatory functions. It promotes the release of immune mediators and antigen presentation exerting important anti-inflammatory effects that may primarily characterize this family member. Signaling by Il-10 and the other members of the family activate the intracellular Jak-Stat cascade." [PubMed:PMID\: 20454917; 21115385]
+synonym: "Il-10 signaling pathway" RELATED []
+is_a: PW:0000513 ! interleukin-10 family mediated signaling pathway
 
 [Term]
 id: PW:0000516
 name: Interleukin-6 signaling pathway
-is_a: PW:0000514 ! Interleukin signaling pathway via interleukin-6 family members
+def: "Interleukin-6 signaling is involved in a wide range of biological processes such as immune regulation, inflammation, hematopoiesis and oncogenesis. A signal transducer common to all family members, gp130 activates Jak-Stat and Raf/Mek/Erk signaling pathways." [PubMed:PMID\: 21715184; 20410258; 20303867]
+synonym: "Il-6 signaling pathway" EXACT []
+synonym: "PID:200146" RELATED []
+is_a: PW:0000514 ! interleukin-6 family mediated signaling pathway
+is_a: PW:0000926 ! pro-inflammatory cytokine mediated pathway
 
 [Term]
 id: PW:0000517
@@ -3329,7 +3397,7 @@ is_a: PW:0000244 ! angiotensin II signaling pathway
 [Term]
 id: PW:0000528
 name: angiotensin II signaling pathway via AT2 receptor
-def: "Angiotensin II signaling through the angiotensin type 2 receptor  (AT2) is less well understood and rather controversial. It appears to counteract AT1 receptor function and promote apoptosis. Alternatively, it may complement the effects of AT1 receptor with deleterious consequences in cardiac pathologies. AT2 receptor appears to function in a G-protein dependent as well as independent manner." [PubMed : 10977869\, 15158138\,  16286568 \, 12734384 "Articles on the pleiotropic AT1 receptor, all angiotensin receptors"]
+def: "Angiotensin II signaling through the angiotensin type 2 receptor (AT2) is less well understood and rather controversial. It appears to counteract AT1 receptor function and promote apoptosis. Alternatively, it may complement the effects of AT1 receptor with deleterious consequences in cardiac pathologies. AT2 receptor appears to function in a G-protein dependent as well as independent manner." [PubMed : 10977869\, 15158138\,  16286568 \, 12734384 "Articles on the pleiotropic AT1 receptor, all angiotensin receptors"]
 is_a: PW:0000244 ! angiotensin II signaling pathway
 
 [Term]
@@ -3340,13 +3408,13 @@ is_a: PW:0000245 ! angiotensin signaling pathway
 
 [Term]
 id: PW:0000530
-name: Angiotensin III signaling pathway via AT1 receptor
+name: angiotensin III signaling pathway via AT1 receptor
 def: "Angiotensin III, like angiotensin II, binds to the type 1 and 2 receptors and triggers downstream signaling pathways. In rats, angiotensin III signaling through the receptor type 1 (AT1) can modulate noradrenergic transmission via phospholipase C activation." [PubMed:PubMed 11100981\,]
 is_a: PW:0000457 ! angiotensin III signaling pathway
 
 [Term]
 id: PW:0000531
-name: Angiotensin III signaling pathway via AT2 receptor
+name: angiotensin III signaling pathway via AT2 receptor
 def: "The role of angiotensin type 2 receptor is less well understood. In rats, angiotensin III can mediate natriuresis through the activation of receptor type 2." [PubMed: 16380540]
 is_a: PW:0000457 ! angiotensin III signaling pathway
 
@@ -3419,6 +3487,7 @@ def: "AMPK senses changes in cellular energy as ATP/AMP ratio. AMP binding allos
 synonym: "5'AMP-activated protein kinase" RELATED []
 synonym: "AMPK signaling pathway" RELATED []
 is_a: PW:0000541 ! signaling pathway involving second messengers
+relationship: part_of PW:0000357 ! energy homeostasis pathway
 
 [Term]
 id: PW:0000543
@@ -3564,6 +3633,7 @@ is_a: PW:0000467 ! peptide and protein hormone signaling pathway
 id: PW:0000564
 name: androgen signaling pathway
 def: "Androgens are C19 steroids that constitutes the male sex hormones. They are also the precursors of female sex hormones, the estrogens. Testosterone and its more potent metabolite, dihydrotestosterone bind to androgen receptors to then translocate to the nucleus and activate the transcription of target genes. Many regulators , both activators and repressors, have been identified. Upregulation of receptor activity has been implicated in prostate cancer." [PubMed:PMID\: 17163421 \, 18657355]
+synonym: "PID:200105" RELATED []
 is_a: PW:0000100 ! transcription pathway
 is_a: PW:0000567 ! sex steroids signaling pathway
 is_a: PW:0000716 ! transcription factor mediated signaling pathway
@@ -3571,7 +3641,8 @@ is_a: PW:0000716 ! transcription factor mediated signaling pathway
 [Term]
 id: PW:0000565
 name: eicosanoids signaling pathway
-def: "eicosanoids are molecules derived from omegoa-3 or omega-6 fats that can act as hormones. " [OneLook:www.onelook.com "Online collection of dictionaries - wikipedia"]
+def: "Eicosanoids are molecules derived from omega-3 or omega-6 fats that can act as hormones." [OneLook:www.onelook.com "Online collection of dictionaries - wikipedia"]
+synonym: "PID:200082" RELATED []
 is_a: PW:0000469 ! lipid hormone signaling pathway
 
 [Term]
@@ -3596,6 +3667,7 @@ is_a: PW:0000783 ! mineralocorticoid signaling pathway
 id: PW:0000569
 name: cortisol signaling pathway
 def: "Cortisol, also known as hydrocortison, is the most important glucocorticoid. Cortisol signaling, via binding to the glucocorticoid receptor present in almost every animal cell, is essential for many cellular and physiological functions." [OneLook:www.onelook.com]
+synonym: "PID:200030" RELATED []
 is_a: PW:0000782 ! glucocorticoid signaling pathway
 
 [Term]
@@ -3615,7 +3687,7 @@ is_a: PW:0000168 ! growth factor signaling pathway
 id: PW:0000572
 name: brain-derived neurotrophic factor signaling pathway
 def: "Brain-derived neurotrophic factor signaling pathway plays important roles in the growth, differentiation and survival of neurons." [Gene Ontology:GO\:0031547 "Related GO term", OneLook:www.onelook.com "online collection of dictionaries- wikipedia"]
-synonym: "BDNF signaling pathway" RELATED []
+synonym: "BDNF signaling pathway" EXACT []
 is_a: PW:0000571 ! neurotrophic factor signaling pathway
 
 [Term]
@@ -3648,7 +3720,7 @@ is_a: PW:0000575 ! sugar transport pathway
 [Term]
 id: PW:0000577
 name: cytokine and chemokine mediated signaling pathway
-def: "Cytokines are small proteins released by the cell and acting as intercellular mediators. Chemokines are a subset of cytokine that can attract and activate leukocytes. They are characterized by a small size and the presence of four cysteines whose location is important for their structural folding. Cytokines or chemokines binding to cognate receptors triggers numerous downstream signaling cascades." [MCW:Handbook on molecular and ceullar immunology, Onelook:www.onelook.com]
+def: "Cytokines are small proteins released by the cell and acting as intercellular mediators. Chemokines are a subset of cytokine that can attract and activate leukocytes. They are characterized by a small size and the presence of four cysteines whose location is important for their structural folding. Cytokines or chemokines binding to cognate receptors triggers numerous downstream signaling cascades." [MCW library:Handbook on molecular and cellular immunology]
 is_a: PW:0000003 ! signaling pathway
 
 [Term]
@@ -3781,6 +3853,7 @@ id: PW:0000597
 name: non-canonical Wnt signaling pathway
 def: "The non-canonical Wnt signaling pathway groups the various Wnt signaling routes that are beta-catenin independent." [PubMed:PMID\: 16019432; 18432252]
 synonym: "beta-catenin independent Wnt signaling pathway" RELATED []
+synonym: "PID:200020" RELATED []
 is_a: PW:0000008 ! Wnt signaling pathway
 
 [Term]
@@ -3965,7 +4038,7 @@ id: PW:0000622
 name: altered phosphatidylinositol 3-kinase-Akt signaling pathway
 def: "A phosphatidylinositol 3-kinase-Akt signaling pathway that deviates from what its normal course should be. Altered phosphatidylinositol 3-kinase-Akt signaling pathway has been implicated in several forms of cancer. The components of the pathway are attractive targets for the development of therapeutics." [PubMed:PMID\:18473732\, 18288941\, 18288939\, 17952368]
 is_a: PW:0000232 ! phosphatidylinositol 3-kinase-Akt signaling pathway
-is_a: PW:0000621 ! altered phosphatidylinositol 3-kinase signaling pathway
+is_a: PW:0000964 ! altered phosphatidylinositol 3-kinase class I signaling pathway
 
 [Term]
 id: PW:0000623
@@ -4088,12 +4161,13 @@ is_a: PW:0000325 ! protein degradation pathway
 id: PW:0000639
 name: insulin responsive facilitative sugar transporter mediated glucose transport pathway
 def: "The GLUT family contains 14 members in mammals which can be grouped into 3 classes based on sequence similarities. The members of group I (best characterized) and of group III transporters facilitate glucose transport. Of the three members of group I, Slc2a4 (Glut4), is involved in insulin-mediated uptake of glucose in the heart, skeletal muscle and adipose tissue. The response - central to glucose homeostasis - brings together several signaling and trafficking events." [PubMed:PMID\: 15466941; 15449578; 18171430; 17717074; 18570632 "Review articles"]
+synonym: "PID:200196" RELATED []
 is_a: PW:0000560 ! facilitative sugar transporter mediated glucose transport pathway
 
 [Term]
 id: PW:0000640
 name: glycolysis pathway
-def: "The glycolytic pathway converts the six-carbon glucose to two three-carbon pyruvate molecules. The ten reactions of glycolyssis can be subdivided into an energy consuming 'stage I' and an energy generating 'stage II'. The net energy yield is two molecules of ATP. Pyruvate can further be oxidized via the citrate cycle, converted to lactose under anaerobic conditions or back to glucose via gluconeogenesis." [Gene Ontology:GO\:0006096 "Associated GO term", KEGG:map00010 "Related KEGG map", MCW Libraries:Voet & Voet \"Fundamentals od Biochemistry\" 3rd edition "Textbook", Reactome :REACT_1383.5 "Associated entry at Reactome"]
+def: "The glycolytic pathway converts the six-carbon glucose to two three-carbon pyruvate molecules. The ten reactions of glycolysis can be subdivided into an energy consuming 'stage I' and an energy generating 'stage II'. The net energy yield is two molecules of ATP. Pyruvate can further be oxidized via the citrate cycle, converted to lactose under anaerobic conditions or back to glucose via gluconeogenesis." [Gene Ontology:GO\:0006096 "Associated GO term", KEGG:map00010 "Related KEGG map", MCW Libraries:Voet & Voet \"Fundamentals od Biochemistry\" 3rd edition "Textbook", Reactome :REACT_1383.5 "Associated entry at Reactome"]
 synonym: "Embden-Meyerhof-Parnas pathway" RELATED []
 is_a: PW:0000025 ! glycolysis/gluconeogenesis pathway
 is_a: PW:0000556 ! glucose oxidation pathway
@@ -4207,12 +4281,19 @@ is_a: PW:0000655 ! glycoconjugated protein signaling pathway
 id: PW:0000658
 name: glypican signaling pathway
 def: "Glypicans are heparan sulfate proteoglycans represented by six families in mammals. They impact on a number of signaling pathways; the effect on signaling can be either inhibitory or stimulatory, depending on the context. They also appear to integrate directional cues important for neuronal migration, axon guidance and synapse formation." [PubMed:PMID\: 18505598; 16937008]
+synonym: "PID:200026" RELATED []
+synonym: "PID:200126" RELATED []
+synonym: "PID:200225" RELATED []
 is_a: PW:0000657 ! proteoglycan signaling pathway
 
 [Term]
 id: PW:0000659
 name: syndecan signaling pathway
 def: "Syndecan family of proteoglycans appears to be involved in cell-adhesion, paricularly cell-extracellular matrix (ECM) signaling and to integrate with the integrin pathway. They also appear to integrate directional cues important for neuronal migration, axon guidance and synapse formation." [PubMed:PMID\:16937008; 17971838]
+synonym: "PID:200134" RELATED []
+synonym: "PID:200156" RELATED []
+synonym: "PID:200192" RELATED []
+synonym: "PID:200198" RELATED []
 is_a: PW:0000646 ! cell-extracellular matrix signaling pathway
 is_a: PW:0000657 ! proteoglycan signaling pathway
 
@@ -4348,6 +4429,7 @@ is_a: PW:0000287 ! altered apoptotic cell death
 id: PW:0000681
 name: FasL mediated signaling pathway
 def: "Fas ligand binding to its receptor triggers a conformational change that allows the receptor to assemble a signaling complex known as DISC, followed by recruitment of pro-caspase-8 and activation of caspase-3 and -7. It is believed that Fas mediated signaling to elicit apoptosis follows two routes." [PubMed:14744432, Reactome:REACT_900.1 "Associated entry at Reactome"]
+synonym: "PID:200080" RELATED []
 is_a: PW:0000106 ! extrinsic apoptotic pathway
 is_a: PW:0000236 ! tumor necrosis factor superfamily mediated signaling pathway
 
@@ -4355,6 +4437,7 @@ is_a: PW:0000236 ! tumor necrosis factor superfamily mediated signaling pathway
 id: PW:0000682
 name: Trail mediated signaling pathway
 def: "Trail mediated signaling leads to apoptosis via assembly of the DISC complex (Death-Inducing Signaling Complex) downstream of its receptors." [PubMed:PMID\:14744432, Reactome:REACT_402.1 "Associated entry at Reactome"]
+synonym: "PID:200068" RELATED []
 is_a: PW:0000106 ! extrinsic apoptotic pathway
 is_a: PW:0000236 ! tumor necrosis factor superfamily mediated signaling pathway
 
@@ -4652,7 +4735,7 @@ creation_date: 2009-11-30T01:34:55Z
 [Term]
 id: PW:0000717
 name: forkhead class O signaling pathway
-def: "The signaling pathway mediated by the FoxO subgroup of forkhead family of transcription factors regulates cell cycle and survival via the expression of its target genes. FoxO pathway is negatively regulated by PI3K-Akt pathway downstream of insulin signaling. It is positively regulated by the Jnk pathway of stress activated MAPK cascade." [PubMed:17275054]
+def: "The signaling pathway mediated by the FoxO subgroup of forkhead family of transcription factors regulates cell cycle and survival via the expression of its target genes. FoxO pathway is negatively regulated by PI3K-Akt pathway downstream of insulin signaling. It is positively regulated by the Jnk pathway of stress activated MAPK cascade." [PubMed:PMID\: 17275054; 19274050]
 synonym: "FoxO signaling pathway" RELATED []
 is_a: PW:0000647 ! forkhead signaling pathway
 created_by: VPetri
@@ -4662,8 +4745,11 @@ creation_date: 2009-11-30T01:42:57Z
 id: PW:0000718
 name: p53 signaling pathway
 def: "p53 transcription factor is a tumor suppressor frequently mutated in cancer. p53 is at the hub of many signaling and regulatory pathways. In response to various stresses, it promotes apoptosis, cell cycle arrest and other defense pathways via transcription dependent as well as independent routes. A key regulator of p53 is Mdm2; Mdm2 is a transcriptional target of p53 thus providing a negative feedback loop." [PubMed:PMID\: 18927276; 18783169; 19776744; 19007744; 19407794]
+synonym: "<new synonym>" RELATED []
+synonym: "PID:200206" RELATED []
 is_a: PW:0000100 ! transcription pathway
 is_a: PW:0000237 ! stress response pathway
+is_a: PW:0000303 ! p53-dependent G1/S DNA damage checkpoint pathway
 is_a: PW:0000716 ! transcription factor mediated signaling pathway
 created_by: VPetri
 creation_date: 2009-11-30T03:01:53Z
@@ -4680,7 +4766,7 @@ creation_date: 2009-11-30T03:40:53Z
 [Term]
 id: PW:0000720
 name: altered p53 signaling pathway
-def: "A p53 signaling pathway that deviates from what its normal course should be. Due to its central role at the intersection of many cellular pathways, disturbance of p53 network can have far-fetching negative consequences. The tumor suppressor Tp53 gene is frequently mutated in cancer." [PubMed:PMID\: 19776744]
+def: "A p53 signaling pathway that deviates from what its normal course should be. Due to its central role at the intersection of many cellular pathways, disturbance of p53 network can have far-reaching negative consequences. The tumor suppressor Tp53 gene is frequently mutated in cancer." [PubMed:PMID\: 19776744]
 is_a: PW:0000718 ! p53 signaling pathway
 is_a: PW:0000719 ! altered transcription factor mediated signaling pathway
 is_a: PW:0000807 ! altered transcription pathway
@@ -4690,7 +4776,7 @@ creation_date: 2009-11-30T03:43:14Z
 [Term]
 id: PW:0000721
 name: nicotine pathway
-is_a: PW:0000754 ! drug pathway
+is_a: PW:0000923 ! nervous system drug pathway
 created_by: VPetri
 creation_date: 2010-01-18T03:34:19Z
 
@@ -4698,7 +4784,7 @@ creation_date: 2010-01-18T03:34:19Z
 id: PW:0000722
 name: warfarin drug pathway
 def: "The pharmacokinetics and pharmacodynamics pathway of warfarin. Warfarin is used as anticoagulant that antagonizes the vitamin K dependent clotting pathway. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/]
-is_a: PW:0000754 ! drug pathway
+is_a: PW:0000922 ! blood and blood forming organs drug pathway
 created_by: VPetri
 creation_date: 2010-01-18T03:34:31Z
 
@@ -4706,7 +4792,7 @@ creation_date: 2010-01-18T03:34:31Z
 id: PW:0000723
 name: anti-diabetic drug pathway
 def: "The pharmacokinetics and pharmacodynamics of anti-diabetic drugs such as repaglinide, nateglinide and sulfonylurea - inhibitors of ATP-dependent potassium channel. By blocking the channel they stimulate insulin secretion to lower blood glucose level. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/, PubMed:PMID\: PMID\:11259325; 12919179]
-is_a: PW:0000754 ! drug pathway
+is_a: PW:0000921 ! alimentary tract and metabolism drug pathway
 created_by: VPetri
 creation_date: 2010-01-18T03:43:49Z
 
@@ -4714,7 +4800,7 @@ creation_date: 2010-01-18T03:43:49Z
 id: PW:0000724
 name: statin drug pathway
 def: "The pharmacokinetics and pharmacodynamics pathway of statin. Statins are a class of drugs used to lower cholesterol. They act as inhibitors of HMG-CoA reductase, the enzyme that catalyzes an early rate-limiting step in cholesterol biosynthesis. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/]
-is_a: PW:0000754 ! drug pathway
+is_a: PW:0000920 ! cardiovascular system drug pathway
 created_by: VPetri
 creation_date: 2010-01-19T10:48:44Z
 
@@ -4785,8 +4871,9 @@ creation_date: 2010-02-17T11:26:21Z
 [Term]
 id: PW:0000733
 name: glycosphingolipid metabolic pathway
-def: "Those metabolic reactions involved in the synthesis, utilization and/or degradation of glycosphingolipids - glycolipids with sugar(s) attached to the ceramide core." [Gene Ontology:GO\:0006687 "Related GO term", MCW library:QU4 M235b 2009 "McKee Handbook of Biochemistry - fourth edition"]
+def: "Those metabolic reactions involved in the synthesis, utilization and/or degradation of glycosphingolipids - glycolipids with sugar(s) attached to the ceramide core. Based on the sequences of the core carbohydrate residues, they are classified into a number of series such as lacto- and neolacto-, gala-, ganglio- or muco-series." [Gene Ontology:GO\:0006687 "Related GO term", MCW library:QU4 M235b 2009 "McKee Handbook of Biochemistry - fourth edition", PubMed:PMID\: 18845618]
 synonym: "glycolipid metabolic pathway" RELATED []
+synonym: "GSL metabolic pathway" RELATED []
 is_a: PW:0000197 ! sphingolipid metabolic pathway
 created_by: VPetri
 creation_date: 2010-02-17T02:03:36Z
@@ -4978,7 +5065,7 @@ creation_date: 2010-03-15T11:01:15Z
 id: PW:0000755
 name: benzodiazepine drug pathway
 def: "The pharmacokinetics and pharmacodynamics pathway of benzodiazepines, a class of drugs acting upon the central nervous system. The drugs are administered as sedatives. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/]
-is_a: PW:0000754 ! drug pathway
+is_a: PW:0000923 ! nervous system drug pathway
 created_by: VPetri
 creation_date: 2010-03-15T11:26:01Z
 
@@ -5002,7 +5089,7 @@ creation_date: 2010-03-15T11:31:43Z
 id: PW:0000758
 name: gemcitabine pathway
 def: "The pharmacokinetics and pharmacodynamics pathway of gemcitabine, a cytidine analogue that is administered as a prodrug for the treatment of certain types of cancer. The diphosphate form is an inhibitor of ribonucleotide reductases, essential enzymes of deoxyribonucleotide synthesis. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [:, PharmGKB:http\://www.pharmgkb.org/]
-is_a: PW:0000754 ! drug pathway
+is_a: PW:0000919 ! antineoplastic and immunomodulatory drug pathway
 created_by: VPetri
 creation_date: 2010-03-17T08:04:55Z
 
@@ -5027,7 +5114,7 @@ id: PW:0000761
 name: celecoxib drug pathway
 def: "The pharmacokinetics and pharmacodynamics pathway of celecoxib, a selective cyclooxygenase 2 inhibitor used for the treatment of osteoarthritis and rheumatoid arthritis. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:www.pharmgkb.org/]
 synonym: "celebrex pathway" RELATED []
-is_a: PW:0000754 ! drug pathway
+is_a: PW:0000919 ! antineoplastic and immunomodulatory drug pathway
 created_by: VPetri
 creation_date: 2010-03-17T08:51:56Z
 
@@ -5052,7 +5139,7 @@ creation_date: 2010-03-17T09:14:56Z
 id: PW:0000764
 name: ifosfamide drug pathway
 def: "The pharmacokinetics and pharmacodynamics pathway of ifosfamide, am antitumor agent used in the treatment of certain cancers. It is administered as a prodrug that has to be converted to the active form. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/, SMPDB:http\://pathman.smpdb.ca/pathways/SMP00448/pathway]
-is_a: PW:0000754 ! drug pathway
+is_a: PW:0000919 ! antineoplastic and immunomodulatory drug pathway
 created_by: VPetri
 creation_date: 2010-03-22T01:04:43Z
 
@@ -5077,7 +5164,7 @@ id: PW:0000767
 name: omeprazole drug pathway
 def: "The pharmacokinetics and pharmacodynamics pathway of omeprazole, a proton pump inhibitor. Omeprazole is the representative compound of a class of such inhibitors that are administered for the treatment of acid-related disorders. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/, SMPDB:http\://pathman.smpdb.ca/pathways/SMP00226/pathway]
 synonym: "proton pump inhibitor pathway" RELATED []
-is_a: PW:0000754 ! drug pathway
+is_a: PW:0000918 ! proton pump inhibitor drug pathway
 created_by: VPetri
 creation_date: 2010-03-22T01:39:19Z
 
@@ -5346,7 +5433,8 @@ creation_date: 2010-06-18T04:09:20Z
 id: PW:0000799
 name: adrenergic beta receptor drug pathway - beta-agonist and beta-blocker
 def: "The pharmacokinetics and pharmacodynamics pathway of adrenergic beta receptors drugs - beta-agonists and blockers. Adrenergic beta receptors, in response to epinephrine or norepinephrine couple to the Gs alpha subunit of heterotrimeric G protein to elicit several responses. Beta-agonists are used to stimulate while beta-blocker antagonists are used to inhibit these responses, as necessary. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PubMed:PMID\: 19874988]
-is_a: PW:0000754 ! drug pathway
+is_a: PW:0000920 ! cardiovascular system drug pathway
+is_a: PW:0000924 ! respiratory system drug pathway
 created_by: VPetri
 creation_date: 2010-06-30T10:47:27Z
 
@@ -5471,46 +5559,42 @@ creation_date: 2010-10-15T04:05:12Z
 [Term]
 id: PW:0000814
 name: Toll-like receptor signaling pathway
-def: "Toll-like receptors represent a large and the better understood family of pattern recognition receptors that sense an array of exogenous structures and recent evidence shows they can also recognize defective endogenous molecules. The intracellular signaling cascades they set in motion lead to the expression of inflammatory mediators." [PubMed:PMID\: 20303867\, 2030387]
+def: "Toll-like receptors represent a large and the better understood family of pattern recognition receptors that sense an array of exogenous structures and recent evidence shows they can also recognize defective endogenous molecules. The intracellular signaling cascades they set in motion lead to the expression of inflammatory mediators." [PubMed:PMID\: 20303867\, 20303872]
 synonym: "TLR signaling pathway" RELATED []
-is_a: PW:0000024 ! inflammatory response pathway
-is_a: PW:0000819 ! signaling pathway in the innate immune response
+is_a: PW:0000925 ! pattern recognition receptor mediated pathway
 created_by: VPetri
 creation_date: 2010-10-27T11:29:27Z
 
 [Term]
 id: PW:0000815
 name: C-type lectin receptor signaling pathway
-def: "C-type lectin receptors represent one of four classes of pattern recognition receptors. The intracellular signaling cascades they set in motion lead to the expression of inflammatory mediators." [PubMed:PMID\: 20303867\, 2030387]
-is_a: PW:0000024 ! inflammatory response pathway
-is_a: PW:0000819 ! signaling pathway in the innate immune response
+def: "C-type lectin receptors represent one of four classes of pattern recognition receptors. The intracellular signaling cascades they set in motion lead to the expression of inflammatory mediators." [PubMed:PMID\: 20303867\, 20303872]
+is_a: PW:0000925 ! pattern recognition receptor mediated pathway
 created_by: VPetri
 creation_date: 2010-10-27T11:38:01Z
 
 [Term]
 id: PW:0000816
 name: Retinoic acid-inducible gene (RIG) I-like receptor signaling pathway
-def: "This family of pattern recognition receptors are cytoplasmic proteins that recognize exogenous cytoplasmic DNA. The signaling cascades they set in motion lead to the expression of inflammatory mediators." [PubMed:PMID\: 20303867\, 2030387]
+def: "This family of pattern recognition receptors are cytoplasmic proteins that recognize exogenous cytoplasmic DNA. The signaling cascades they set in motion lead to the expression of inflammatory mediators." [PubMed:PMID\: 20303867\, 20303872]
 synonym: "RLR signaling pathway" RELATED []
-is_a: PW:0000024 ! inflammatory response pathway
-is_a: PW:0000819 ! signaling pathway in the innate immune response
+is_a: PW:0000925 ! pattern recognition receptor mediated pathway
 created_by: VPetri
 creation_date: 2010-10-27T11:43:26Z
 
 [Term]
 id: PW:0000817
 name: NOD-like receptor signaling pathway
-def: "NOD-like receptors are cytosolic proteins that recognize components of bacterial peptidoglycans. The signaling cascades they set in motion lead to the expression of inflammatory mediators." [PubMed:PMID\: 20303867\, 2030387]
+def: "NOD-like receptors are cytosolic proteins that recognize components of bacterial peptidoglycans. The signaling cascades they set in motion lead to the expression of inflammatory mediators." [PubMed:PMID\: 20303867\, 20303872]
 synonym: "NLR signaling pathway" RELATED []
-is_a: PW:0000024 ! inflammatory response pathway
-is_a: PW:0000819 ! signaling pathway in the innate immune response
+is_a: PW:0000925 ! pattern recognition receptor mediated pathway
 created_by: VPetri
 creation_date: 2010-10-27T11:45:03Z
 
 [Term]
 id: PW:0000818
 name: signaling pathway pertinent to immunity
-def: "Those signaling pathways that mediate or are involved in the immune responses. While signaling mediated by cytokines are chemokines plays important roles in immunity, it also serves functions beyond immunity." [InHouse:PW dictionary]
+def: "Those signaling pathways that mediate or are involved in the various aspects of immune responses." [MCW library:Cellular and molecular immunity\, by Abbas\, Abul K]
 is_a: PW:0000003 ! signaling pathway
 created_by: VPetri
 creation_date: 2010-10-27T03:08:21Z
@@ -5532,7 +5616,7 @@ creation_date: 2010-10-27T03:09:29Z
 [Term]
 id: PW:0000821
 name: T cell receptor signaling pathway
-def: "T cell receptor (TCR) signaling in developing thymocytes is important for the establishment of CD4 and CD8 lineages. Mature T cells express either CD4 or CD8 co-receptors which are essential for the interaction with peptide-bound class II or class I MHC complexes to elicit CD4 T helper (Th) or CD8 cytotoxic T lymphocyte responses, respectively. In either case, T cells initiated signaling activates the expression of genes whose products mediate these responses." [MCW:Handbook of cellular and molecular immunology, PubMed:PMID\: 16448548\, 20537906]
+def: "T cell receptor (TCR) signaling in developing thymocytes is important for the establishment of CD4 and CD8 lineages. Mature T cells express either CD4 or CD8 co-receptors which are essential for the interaction with peptide-bound class II or class I MHC complexes to elicit CD4 T helper (Th) or CD8 cytotoxic T lymphocyte responses, respectively. In either case, T cells initiated signaling activates the expression of genes whose products mediate these responses." [MCW library:Handbook of cellular and molecular immunology, PubMed:PMID\: 16448548\, 20537906]
 synonym: "TCR signaling pathway" RELATED []
 is_a: PW:0000820 ! signaling pathway in the adaptive immune response
 relationship: part_of PW:0000824 ! cell-mediated immunity pathway
@@ -5542,7 +5626,7 @@ creation_date: 2010-10-27T03:28:43Z
 [Term]
 id: PW:0000822
 name: B cell receptor signaling pathway
-def: "Antigen recognition by B cell receptors initiates signaling cascades that activate the expression of genes whose products are important for\nB cell functional responses." [MCW:Handbook on cellular and molecular immunology, PubMed:PMID\: 20591989\, 19827951]
+def: "Antigen recognition by B cell receptors initiates signaling cascades that activate the expression of genes whose products are important for\nB cell functional responses." [MCW library:Handbook on cellular and molecular immunology, PubMed:PMID\: 20591989\, 19827951]
 synonym: "BCR signaling pathway" RELATED []
 is_a: PW:0000820 ! signaling pathway in the adaptive immune response
 relationship: part_of PW:0000823 ! humoral immunity pathway
@@ -5560,7 +5644,7 @@ creation_date: 2010-11-01T01:49:11Z
 [Term]
 id: PW:0000824
 name: cell-mediated immunity pathway
-def: "Cell-mediated immune response pathways are carried out by T cell lymphocytes. T cells receptors recognize peptides bound to a major histocompability complex (MHC) on the antigen presenting cell. Depending on whether the co-receptor is CD4 or CD8, the receptors will interact with MHC class II or class I to elicit distinct responses against intracellular pathogens." [MCW:Handbook of cellular and molecular immunology]
+def: "Cell-mediated immune response pathways are carried out by T cell lymphocytes. T cells receptors recognize peptides bound to a major histocompability complex (MHC) on the antigen presenting cell. Depending on whether the co-receptor is CD4 or CD8, the receptors will interact with MHC class II or class I to elicit distinct responses against intracellular pathogens." [MCW library:Handbook of cellular and molecular immunology]
 is_a: PW:0000235 ! adaptive immune response pathway
 created_by: VPetri
 creation_date: 2010-11-01T01:49:42Z
@@ -5568,7 +5652,7 @@ creation_date: 2010-11-01T01:49:42Z
 [Term]
 id: PW:0000825
 name: antigen processing and presentation pathway
-def: "The pathways of antigen processing and presentation assure the generation of peptides that have the structural attributes necessary for the association with and their placement near major histocompatibility complex (MHC) molecules. Protein antigen present in vesicular compartments generate class II peptides, those in cytosol class I." [MCW:Handbook on cellular and molecular immunology]
+def: "The pathways of antigen processing and presentation assure the generation of peptides that have the structural attributes necessary for the association with and their placement near major histocompatibility complex (MHC) molecules. Protein antigen present in vesicular compartments generate class II peptides, those in cytosol class I." [MCW library:Handbook on cellular and molecular immunology]
 relationship: part_of PW:0000824 ! cell-mediated immunity pathway
 created_by: VPetri
 creation_date: 2010-11-01T05:17:15Z
@@ -5592,23 +5676,25 @@ creation_date: 2010-11-03T10:44:22Z
 [Term]
 id: PW:0000828
 name: cytokine mediated signaling pathway
-def: "Cytokine initiated signaling pathways play important roles in innate and adaptive immunity, cell proliferation and apoptosis." [MCW:Handbook on molecular and cellular immunology]
+def: "Cytokine initiated signaling pathways play important roles in innate and adaptive immunity, as well as cell proliferation and apoptosis." [MCW library:Handbook on molecular and cellular immunology]
 is_a: PW:0000577 ! cytokine and chemokine mediated signaling pathway
+is_a: PW:0000818 ! signaling pathway pertinent to immunity
 created_by: VPetri
 creation_date: 2010-11-03T03:48:57Z
 
 [Term]
 id: PW:0000829
 name: chemokine mediated signaling pathway
-def: "Chemokine initiated pathways play important roles in the innate and adaptive immunity. They are also involved in development and tissue maintenance. The presence and localization of four cysteines is important for structural folding and is also the basis for chemokine classification. The spacing between the first two cysteine residues divides the family members into four groups." [MCW:Handbook on molecular and cellular immunology, OneLook:www.onelook.com]
+def: "Chemokine initiated pathways play important roles in the innate and adaptive immunity. They are also involved in development and tissue maintenance. The presence and localization of four cysteines is important for structural folding and is also the basis for chemokine classification. The spacing between the first two cysteine residues divides the family members into four groups. Most mammalian chemokines belong to the CC and CXC families. Chemokines signal via G-protein coupled receptors to engage distinct G protein signaling and downstream cascades." [MCW library:Handbook on molecular and cellular immunology, PubMed:PMID\: 15062643]
 is_a: PW:0000577 ! cytokine and chemokine mediated signaling pathway
+is_a: PW:0000818 ! signaling pathway pertinent to immunity
 created_by: VPetri
 creation_date: 2010-11-03T04:27:00Z
 
 [Term]
 id: PW:0000830
 name: CXC chemokine mediated signaling pathway
-def: "The CXC family members are characterized by the presence of two cysteine resides separated by one amino acid. CXC and CC are the two most prominent families. Chemokines signal via G-protein coupled receptors to engage distinct G protein signaling and downstream cascades." [MCW:Handbook on cellular and molecular immunology]
+def: "The CXC family members are characterized by the presence of two cysteine resides separated by one amino acid. CXC and CC are the two most prominent families. This family of chemokines is also subdivided into two subgroups: the one with the ELR motif - ELR (+) and the one without - ELR(-), respectively. Generally, ELR(+) and ELR(-) members bind to distinct chemokine, G-coupled protein, receptors. The effects of their signaling is for the most part angiogenic or angiostatic, respectively." [MCW:Handbook on cellular and molecular immunology, PubMed:PMID\: 15062643; 18579287]
 is_a: PW:0000829 ! chemokine mediated signaling pathway
 created_by: VPetri
 creation_date: 2010-11-04T11:30:26Z
@@ -5616,7 +5702,7 @@ creation_date: 2010-11-04T11:30:26Z
 [Term]
 id: PW:0000831
 name: CC chemokine mediated signaling pathway
-def: "The CC family members are characterized by the presence of two adjacent cysteine resides and along with the CXC family are the two most prominent families. Chemokines signal via G-protein coupled receptors to engage distinct G protein signaling and downstream cascades." [MCW:Handbook on cellular and molecular biology]
+def: "The CC family members are characterized by the presence of two adjacent cysteine residues. The CC and the CXC family are the two most prominent families. Chemokines signal via G-protein coupled receptors to engage distinct G protein signaling and downstream cascades." [MCW:Handbook on cellular and molecular biology]
 is_a: PW:0000829 ! chemokine mediated signaling pathway
 created_by: VPetri
 creation_date: 2010-11-04T11:30:33Z
@@ -5624,7 +5710,7 @@ creation_date: 2010-11-04T11:30:33Z
 [Term]
 id: PW:0000832
 name: C chemokine mediated signaling pathway
-def: "The C family of chemokine is small and its members have two rather than four cysteines residues. Chemokines signal via G-protein coupled receptors to engage distinct G protein signaling and downstream cascades." [MCW:Handbook on cellular and molecular immunology]
+def: "The C family of chemokine is small and its members have two rather than four cysteines residues. Chemokines signal via G-protein coupled receptors to engage distinct G protein signaling and downstream cascades." [MCW:Handbook on cellular and molecular immunology, PubMed:PMID\: 15062643]
 is_a: PW:0000829 ! chemokine mediated signaling pathway
 created_by: VPetri
 creation_date: 2010-11-04T11:32:38Z
@@ -5632,7 +5718,7 @@ creation_date: 2010-11-04T11:32:38Z
 [Term]
 id: PW:0000833
 name: CX3C chemokine mediated signaling pathway
-def: "The CX3X family of chemokine is small and characterized by the presence of three residues separating the first two cysteines. Chemokines signal via G-protein coupled receptors to engage distinct G protein signaling and downstream cascades." [MCW:Handbook on cellular and molecular immunology]
+def: "The CX3X family of chemokine is small and characterized by the presence of three residues separating the first two cysteines. Currently, only one member is known in mammals. Chemokines signal via G-protein coupled receptors to engage distinct G protein signaling and downstream cascades." [MCW:Handbook on cellular and molecular immunology, PubMed:PMID\: 15062643]
 is_a: PW:0000829 ! chemokine mediated signaling pathway
 created_by: VPetri
 creation_date: 2010-11-12T05:03:05Z
@@ -5649,7 +5735,7 @@ creation_date: 2010-12-22T02:05:33Z
 id: PW:0000835
 name: anti-estrogen drug pathway
 def: "Breast cancer is a major cause of death among Western women and many breast tumors are estrogen-dependent. Pharmacologically two major therapies have been developed: one targets the estrogen receptors via antagonists and selective modulators (SERM) and the second targets estrogen synthesis via aromatase inhibitors." [PubMed:PMID\: 20644568]
-is_a: PW:0000754 ! drug pathway
+is_a: PW:0000919 ! antineoplastic and immunomodulatory drug pathway
 created_by: VPetri
 creation_date: 2011-01-06T02:11:32Z
 
@@ -5886,6 +5972,7 @@ creation_date: 2011-06-03T04:46:14Z
 [Term]
 id: PW:0000865
 name: purine biosynthetic pathway
+def: "Those enzymatic reactions involved in the synthesis of purine nucleotides. A major route for purine synthesis is the novo pathway. However, an alternate pathway, the salvage pathway, can also be used." [OneLook:www.onelook.com]
 is_a: PW:0000031 ! purine metabolic pathway
 created_by: VPetri
 creation_date: 2011-06-06T04:49:00Z
@@ -5893,6 +5980,7 @@ creation_date: 2011-06-06T04:49:00Z
 [Term]
 id: PW:0000866
 name: purine degradation pathway
+def: "Those enzymatic reactions involved in the degradation pathway of purines. Several enzymes are involved in the breakdown of adenine and guanine to uric acid which is then excreted in the urine in humans and higher primates. In other mammals, uric acid is further oxidized to allantoin." [OneLook:www.onelook.com]
 is_a: PW:0000031 ! purine metabolic pathway
 created_by: VPetri
 creation_date: 2011-06-06T04:49:30Z
@@ -5900,6 +5988,7 @@ creation_date: 2011-06-06T04:49:30Z
 [Term]
 id: PW:0000867
 name: de novo purine biosynthetic pathway
+def: "De novo purine biosynthesis requires ten enzymatic reactions to produce inosine monophosphate (IMP). Both adenine and guanine are then derived from IMP via several reactions. Purines are synthesized as nucleosides, i.e., as bases attached to ribose. Purines can also be created synthetically." [PubMed:PMID\:18712276 "Structural biology of purine biosynthetic pathway"]
 is_a: PW:0000865 ! purine biosynthetic pathway
 created_by: VPetri
 creation_date: 2011-06-06T04:50:02Z
@@ -5914,13 +6003,15 @@ creation_date: 2011-06-06T04:50:32Z
 [Term]
 id: PW:0000869
 name: gefitinib drug pathway
-is_a: PW:0000754 ! drug pathway
+def: "The pharmacokinetics and pharmacodynamics pathway of gefitinib. Gefitinib is the first selective inhibitor of EGFR whose mutations within the tyrosine kinase domain have been associated with hyperactive epidermal growth factor signaling in non-small cell lung cancers. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PubMed:PMID\:21196393; PMID\:19657272]
+is_a: PW:0000919 ! antineoplastic and immunomodulatory drug pathway
 created_by: VPetri
 creation_date: 2011-06-09T05:30:25Z
 
 [Term]
 id: PW:0000870
 name: gefitinib pharmacokinetics pathway
+def: "The pathway of processing - absorption, distribution, metabolism or elimination - of gefitinib. Gefitinib is the first selective inhibitor of EGFR whose mutations within the tyrosine kinase domain have been associated with hyperactive epidermal growth factor signaling in non-small cell lung cancers. Genetic variations can result in changes in the availability of the drug." [PharmGKB:http\://www.pharmgkb.org/do/serve?objId=PA152325160&objCls=Pathway, PubMed:PMID\:15801543]
 is_a: PW:0000869 ! gefitinib drug pathway
 created_by: VPetri
 creation_date: 2011-06-09T05:30:58Z
@@ -5928,9 +6019,1266 @@ creation_date: 2011-06-09T05:30:58Z
 [Term]
 id: PW:0000871
 name: gefitinib pharmacodynamics pathway
+def: "The pathway of gefitinib-target interaction and of the biochemical or physiological responses to them. Gefitinib is the first selective inhibitor of EGFR whose mutations within the tyrosine kinase domain have been associated with hyperactive epidermal growth factor signaling in non-small cell lung cancers. Genetic variations can cause differences in the response of the organism to the drug." [PubMed:PMID\:21388312]
 is_a: PW:0000869 ! gefitinib drug pathway
 created_by: VPetri
 creation_date: 2011-06-09T05:31:16Z
+
+[Term]
+id: PW:0000872
+name: erlotinib drug pathway
+def: "The pharmacokinetics and pharmacodynamics pathway of erlotinib. Erlotinib is the second (after gefitinib) selective inhibitor of EGFR whose mutations within the tyrosine kinase domain have been associated with hyperactive epidermal growth factor signaling in non-small cell lung cancers. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PubMed:PMID\:20072828; 19657272]
+is_a: PW:0000919 ! antineoplastic and immunomodulatory drug pathway
+created_by: VPetri
+creation_date: 2011-06-14T03:33:11Z
+
+[Term]
+id: PW:0000873
+name: erlotinib pharmacokinetics pathway
+def: "The pathway of processing - absorption, distribution, metabolism or elimination - of erlotinib. Erlotinib is the second (after gefitinib) selective inhibitor of EGFR whose mutations within the tyrosine kinase domain have been associated with hyperactive epidermal growth factor signaling in non-small cell lung cancers. Genetic variations can result in changes in the availability of the drug." [PharmGKB:http\://www.pharmgkb.org/do/serve?objId=PA154426903&objCls=Pathway, PubMed:PMID\:19657272]
+is_a: PW:0000872 ! erlotinib drug pathway
+created_by: VPetri
+creation_date: 2011-06-14T03:33:51Z
+
+[Term]
+id: PW:0000874
+name: erlotinib pharmacodynamics pathway
+def: "The pathway of erlotinib-target interaction and of the biochemical or physiological responses to them. Erlotinib is the second (after gefitinib) selective inhibitor of EGFR whose mutations within the tyrosine kinase domain have been associated with hyperactive epidermal growth factor signaling in non-small cell lung cancers. Genetic variations can cause differences in the response of the organism to the drug." [PubMed:PMID\:20072828]
+is_a: PW:0000872 ! erlotinib drug pathway
+created_by: VPetri
+creation_date: 2011-06-14T03:34:08Z
+
+[Term]
+id: PW:0000875
+name: deoxyribonucleotide metabolic pathway
+def: "Deoxyribonucleotide synthesis occurs via the de novo pathway mediated by ribonucleotide reductase or via the salvage pathway. The de novo pathway is responsible for the bulk of dNTP during the S phase of cell cycle whereas the salvage pathway mostly operates in the quiescent state of the cell. Several cytosolic and mitochondrial enzymes are responsible for the initial steps of the salvage pathway in the two compartments and for the reverse reactions that control the size of the dNTP pool." [PubMed:PMID\:16756507; 15158709; 20561600; 17525869]
+is_a: PW:0000012 ! nucleotide metabolic pathway
+created_by: VPetri
+creation_date: 2011-07-01T10:58:55Z
+
+[Term]
+id: PW:0000876
+name: bacterial polysaccharide metabolic pathway
+def: "Those metabolic reaction involved in the synthesis, utilization and/or degradation of polysaccharides that are components of bacterial cell wall. They may also act as virulence factors." [OneLook:www.onelook.com]
+is_a: PW:0000146 ! glycan metabolic pathway
+created_by: VPetri
+creation_date: 2011-07-11T09:36:18Z
+
+[Term]
+id: PW:0000877
+name: nucleotide sugar biosynthetic pathway
+def: "Those metabolic reactions involved in the synthesis of nucleotide sugars that provide donors for the glycosylation of proteins or lipids. UTP is the primary nucleotide used in the reaction." [OneLook:www.onelook.com]
+is_a: PW:0000055 ! nucleotide sugar metabolic pathway
+created_by: VPetri
+creation_date: 2011-07-11T10:29:49Z
+
+[Term]
+id: PW:0000878
+name: phosphatidylcholine biosynthetic pathway
+def: "Phosphatidylcholine is the predominant phospholipid of eukaryotic membranes. Of the three known biosynthetic pathways, two are found in eukaryotes and one, the CDP-choline, is the best characterized." [PubMed:PMID\:15749057]
+is_a: PW:0000354 ! glycerophospholipid metabolic pathway
+created_by: VPetri
+creation_date: 2011-07-11T10:44:15Z
+
+[Term]
+id: PW:0000879
+name: altered cortisol signaling pathway
+def: "A cortisol signaling pathway that deviates from what its normal course should be. Mutations in the glucocorticoid receptor have been associated with rare, sporadic or familial, glucocorticoid resistance." [PubMed:PMID\: 21448414]
+is_a: PW:0000569 ! cortisol signaling pathway
+is_a: PW:0000881 ! altered glucocorticoid signaling pathway
+created_by: VPetri
+creation_date: 2011-08-23T09:15:01Z
+
+[Term]
+id: PW:0000880
+name: altered corticosteroid signaling pathway
+is_a: PW:0000566 ! corticosteroid signaling pathway
+created_by: VPetri
+creation_date: 2011-08-23T09:19:49Z
+
+[Term]
+id: PW:0000881
+name: altered glucocorticoid signaling pathway
+is_a: PW:0000782 ! glucocorticoid signaling pathway
+is_a: PW:0000880 ! altered corticosteroid signaling pathway
+created_by: VPetri
+creation_date: 2011-08-23T09:20:35Z
+
+[Term]
+id: PW:0000882
+name: interleukin-1 family mediated signaling pathway
+def: "The interleukin-1 family mediated signaling plays important roles in innate and adaptive immune responses. The best characterized member of the family is interleukin-1 followed by interleukin-18 and the more recently identified interleukin-33. Other family members are less well characterized." [PubMed:PMID\:20081871]
+synonym: "Il-1 family mediated signaling pathway" RELATED []
+is_a: PW:0000512 ! Interleukin mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-08-29T11:08:06Z
+
+[Term]
+id: PW:0000883
+name: interleukin-1 signaling pathway
+def: "Interleukin-1 signaling, primarily via interleukin-1beta, plays important roles in innate and adaptive immune responses. Binding of the processed cytokine to its receptor, allows for the recruitment of several accessory and adaptor proteins leading to the activation of NF-kappaB and MAPK signaling cascades. A natural receptor antagonist and a decoy receptor act as regulators of interleukin 1alpha and beta." [PubMed:PMID\:20081871\, 21219179; 20303867]
+synonym: "Il-1 signaling pathway" EXACT []
+synonym: "PID:200089" RELATED []
+is_a: PW:0000882 ! interleukin-1 family mediated signaling pathway
+is_a: PW:0000926 ! pro-inflammatory cytokine mediated pathway
+created_by: VPetri
+creation_date: 2011-08-29T11:15:28Z
+
+[Term]
+id: PW:0000884
+name: interleukin-18 signaling pathway
+def: "Interleukin-18 signaling plays important roles in innate and adaptive immunity. In the central nervous system (CNS), Il-18 and its receptors have been shown to play a role in neuroinflammatory and neurodegenerative processes as well as behavior and homeostasis. In addition, Il-18 may be a mediator of inflammation in rheumatoid arthritis." [PubMed :PMID\:20081871; 20113500; 21864160]
+synonym: "Il-18 signaling pathway" RELATED []
+is_a: PW:0000882 ! interleukin-1 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-08-29T11:16:18Z
+
+[Term]
+id: PW:0000885
+name: interleukin-33 signaling pathway
+def: "Interleukin-33 is the most recently discovered member of the interleukin-1 family. Like with the other members of the family, signaling by interleukin-33 plays important roles in inflammation and immunity and may be critical for the development of inflammatory and immune diseases." [PubMed:PMID\:20081871; 21934731]
+synonym: "Il-33 signaling pathway" RELATED []
+is_a: PW:0000882 ! interleukin-1 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-08-29T11:16:46Z
+
+[Term]
+id: PW:0000886
+name: interleukin-19 signaling pathway
+is_a: PW:0000513 ! interleukin-10 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T09:28:03Z
+
+[Term]
+id: PW:0000887
+name: interleukin-20 signaling pathway
+is_a: PW:0000513 ! interleukin-10 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T09:37:36Z
+
+[Term]
+id: PW:0000888
+name: interleukin-22 signaling pathway
+def: "Interleukin-22 signaling triggers the Jak-Stat intracellular cascade resulting in the activation of various T helper (Th) cells." [PubMed:PMID\: 11929132; 20127093]
+synonym: "Il-22 signaling pathway" RELATED []
+is_a: PW:0000513 ! interleukin-10 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T09:38:18Z
+
+[Term]
+id: PW:0000889
+name: interleukin-24 signaling pathway
+is_a: PW:0000513 ! interleukin-10 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T09:39:50Z
+
+[Term]
+id: PW:0000890
+name: interleukin-26 signaling pathway
+is_a: PW:0000513 ! interleukin-10 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T09:40:28Z
+
+[Term]
+id: PW:0000891
+name: interleukin-28A signaling pathway
+synonym: "interferon lambda2 signaling pathway" RELATED []
+is_a: PW:0000513 ! interleukin-10 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T10:26:15Z
+
+[Term]
+id: PW:0000892
+name: interleukin-28B signaling pathway
+synonym: "interferon lambda3 signaling pathway" RELATED []
+is_a: PW:0000513 ! interleukin-10 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T10:29:31Z
+
+[Term]
+id: PW:0000893
+name: interleukin-29 signaling pathway
+synonym: "interferon lambda1 signaling pathway" RELATED []
+is_a: PW:0000513 ! interleukin-10 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T10:30:34Z
+
+[Term]
+id: PW:0000894
+name: interferon mediated signaling pathway
+def: "The interferons represent a subset of cytokines whose signaling is involved in various aspects of innate and adaptive immunity. Based on the type of receptors they employ, interferons have been classified into type I and II. A third type, the lambda interferons, are members of the interleukin 10 family." [PubMed:PMID\: 17502369\, 20712454]
+is_a: PW:0000828 ! cytokine mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T10:46:23Z
+
+[Term]
+id: PW:0000895
+name: type I interferon signaling pathway
+def: "Type I interferon, which includes all but one of the seven known human genes, binds to distinct receptors that activate the Jak-Stat signaling pathway." [PubMed:PMID\:17502369]
+is_a: PW:0000894 ! interferon mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T10:58:32Z
+
+[Term]
+id: PW:0000896
+name: type II interferon signaling pathway
+def: "Type II interferon, of which there is only one in humans, binds to distinct receptors that activate Jak-Stat signaling pathway. It is known as the interferon gamma signaling." [PubMed:PMID\: 17502369]
+synonym: "interferon gamma signaling" RELATED []
+synonym: "PID:200129" RELATED []
+is_a: PW:0000894 ! interferon mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T11:07:25Z
+
+[Term]
+id: PW:0000897
+name: interleukin-17 family mediated signaling pathway
+def: "The interleukin-17 family mediated signaling plays important roles in inflammation and the development of autoimmunity as well as in the host defense against fungal and bacterial infections." [PubMed:PMID\: 21349428]
+synonym: "Il-17 family mediated signaling pathway" RELATED []
+is_a: PW:0000512 ! Interleukin mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T11:23:23Z
+
+[Term]
+id: PW:0000898
+name: interleukin-17E signaling pathway
+def: "Interleukin-17E signaling, also known as interleukin-25, induces the production of Th2 cell cytokine leading to enhancement of Th2 cell responses." [PubMed:PMID\: 21349428]
+synonym: "Il-17E signaling pathway" RELATED []
+synonym: "Il-25 signaling pathway" RELATED []
+is_a: PW:0000897 ! interleukin-17 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T02:31:33Z
+
+[Term]
+id: PW:0000899
+name: interleukin-17A signaling pathway
+def: "Of the six family members of interleukin-17 family, interleukin-17A is the founding member and the better characterized system. While interleukin-17A binds the same receptor as interleukin-17F and can also heterodimerize with it, its signaling elicits distinct and broader responses." [PubMed:PMID\: 21349428]
+synonym: "Il-17A signaling pathway" RELATED []
+is_a: PW:0000897 ! interleukin-17 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T02:31:40Z
+
+[Term]
+id: PW:0000900
+name: interleukin-17F signaling pathway
+def: "Interleukin-17F binds the same receptor as interleukin-17A and can also heterodimerize with it. However, its signaling while sharing features of interleukin-17A pathway also elicits distinct responses." [PubMed:PMID\: 21349428]
+is_a: PW:0000897 ! interleukin-17 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T02:41:48Z
+
+[Term]
+id: PW:0000901
+name: altered interleukin mediated signaling pathway
+def: "An interleukin mediated signaling pathway that deviates from what its normal course should be. Aberrant interleukin signaling pathway, alone or in combination with other pathways underlie various diseases." [InHouse:PW dictionary]
+is_a: PW:0000512 ! Interleukin mediated signaling pathway
+is_a: PW:0000617 ! altered cytokine mediated signaling pathway
+created_by: VPetri
+creation_date: 2011-12-06T03:18:18Z
+
+[Term]
+id: PW:0000902
+name: interleukin-11 signaling pathway
+is_a: PW:0000514 ! interleukin-6 family mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-01-23T04:17:23Z
+
+[Term]
+id: PW:0000903
+name: leukemia inhibitory factor signaling pathway
+synonym: "LIF signaling pathway" RELATED []
+is_a: PW:0000514 ! interleukin-6 family mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-01-23T04:19:00Z
+
+[Term]
+id: PW:0000904
+name: ciliary neurotrophic factor signaling pathway
+synonym: "C" RELATED []
+synonym: "CNTF signaling pathway" RELATED []
+is_a: PW:0000514 ! interleukin-6 family mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-01-23T04:21:01Z
+
+[Term]
+id: PW:0000905
+name: oncostatin M signaling pathway
+synonym: "OSM signaling pathway" RELATED []
+is_a: PW:0000514 ! interleukin-6 family mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-01-23T04:22:25Z
+
+[Term]
+id: PW:0000906
+name: interleukin-2 family mediated signaling pathway
+def: "Interleukin-2 family of cytokines, also known as gamma(c) family because of the shared gamma(c) receptor, plays crucial roles in the regulation of T cells." [PubMed:PMID\: 21889323; 19543225]
+synonym: "Il-2 family mediated signaling pathway" RELATED []
+is_a: PW:0000512 ! Interleukin mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-03-23T12:26:10Z
+
+[Term]
+id: PW:0000907
+name: interleukin-2 signaling pathway
+def: "Interleukin-2 is the prototypical member of the interleukin-2 family of cytokines. The signaling pathway initiated by Il-2 and the other family members activates the Jak-Stat intracellular cascade to regulate T cell, innate and adaptive immune responses." [PubMed:PMID\: 21889323; 19543225]
+synonym: "Il-2 signaling pathway" EXACT []
+synonym: "PID:200098" RELATED []
+is_a: PW:0000906 ! interleukin-2 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-03-23T12:33:40Z
+
+[Term]
+id: PW:0000908
+name: interleukin-7 signaling pathway
+is_a: PW:0000906 ! interleukin-2 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-03-23T12:38:11Z
+
+[Term]
+id: PW:0000909
+name: interleukin-9 signaling pathway
+is_a: PW:0000906 ! interleukin-2 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-03-23T12:39:11Z
+
+[Term]
+id: PW:0000910
+name: interleukin-15 signaling pathway
+is_a: PW:0000906 ! interleukin-2 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-03-23T12:39:32Z
+
+[Term]
+id: PW:0000911
+name: interleukin-21 signaling pathway
+is_a: PW:0000906 ! interleukin-2 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-03-23T12:39:52Z
+
+[Term]
+id: PW:0000912
+name: interleukin-4 signaling pathway
+def: "Interleukin-4 is a member of interleukin 2 family of cytokine whose signaling is important for the differentiation of naive T helper cells." [PubMed:PMID\: 21889323]
+synonym: "Il-4 signaling pathway" EXACT []
+synonym: "PID:200022" RELATED []
+is_a: PW:0000906 ! interleukin-2 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-03-23T12:48:51Z
+
+[Term]
+id: PW:0000913
+name: interleukin-12 family mediated signaling pathway
+def: "Interleukin-12 family members of heterodimeric cytokines are produced by antigen presenting cells. The signaling they initiate triggers the Jak-Stat intracellular cascade and plays important roles in the regulation of T helper (Th) cell differentiation." [PubMed:PMID\: 20885915]
+synonym: "Il-12 family mediated signaling pathway" RELATED []
+is_a: PW:0000512 ! Interleukin mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-03-23T03:39:11Z
+
+[Term]
+id: PW:0000914
+name: interleukin-12 signaling pathway
+def: "Interleukin-12 signaling activates the Jak-Stat intracellular cascade and promotes the differentiation and proliferation of Th1 cells and the production of interferon-gamma." [PubMed:PMID\: 20885915; 21553332]
+synonym: "Il-12 signaling pathway" EXACT []
+synonym: "PID:200045" RELATED []
+is_a: PW:0000913 ! interleukin-12 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-03-23T03:43:43Z
+
+[Term]
+id: PW:0000915
+name: interleukin-23 signaling pathway
+synonym: "Il-23 signaling pathway" EXACT []
+synonym: "PID:200154" RELATED []
+is_a: PW:0000913 ! interleukin-12 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-03-23T03:49:27Z
+
+[Term]
+id: PW:0000916
+name: interleukin-27 signaling pathway
+synonym: "Il-27 signaling pathway" EXACT []
+synonym: "PID:200028" RELATED []
+is_a: PW:0000913 ! interleukin-12 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-03-23T03:49:45Z
+
+[Term]
+id: PW:0000917
+name: interleukin-35 signaling pathway
+is_a: PW:0000913 ! interleukin-12 family mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-03-23T03:50:45Z
+
+[Term]
+id: PW:0000918
+name: proton pump inhibitor drug pathway
+def: "The pharmacokinetics and pharmacodynamics of proton pump inhibitor (PPI), a class of compounds that block the acid secretion from parietal cells in the stomach. A representative PPI compound is omeprazole. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/]
+is_a: PW:0000921 ! alimentary tract and metabolism drug pathway
+created_by: VPetri
+creation_date: 2012-03-28T02:13:39Z
+
+[Term]
+id: PW:0000919
+name: antineoplastic and immunomodulatory drug pathway
+def: "The pharmacokinetics and pharmacodynamics of compounds used as antineoplastic or as immunomodulatory agents. It is to be noted here that genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/]
+is_a: PW:0000754 ! drug pathway
+created_by: VPetri
+creation_date: 2012-03-28T02:35:45Z
+
+[Term]
+id: PW:0000920
+name: cardiovascular system drug pathway
+def: "The pharmacokinetics and pharmacodynamics of compounds used for the treatment of various cardiovascular conditions. It has to be noted here that genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/index.jsp]
+is_a: PW:0000754 ! drug pathway
+created_by: VPetri
+creation_date: 2012-03-28T02:45:12Z
+
+[Term]
+id: PW:0000921
+name: alimentary tract and metabolism drug pathway
+def: "The pharmacokinetics and pharmacodynamics of compounds used for the treatment of alimentary tract and metabolism-related conditions. It has to be noted here that genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/index.jsp]
+is_a: PW:0000754 ! drug pathway
+created_by: VPetri
+creation_date: 2012-03-28T02:49:20Z
+
+[Term]
+id: PW:0000922
+name: blood and blood forming organs drug pathway
+def: "The pharmacokinetics and pharmacodynamics of compounds used for the treatment of conditions associated with blood and blood forming organs. It has to be noted here that genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/index.jsp]
+is_a: PW:0000754 ! drug pathway
+created_by: VPetri
+creation_date: 2012-03-28T02:55:34Z
+
+[Term]
+id: PW:0000923
+name: nervous system drug pathway
+def: "The pharmacokinetics and pharmacodynamics of compounds used for the treatment of conditions associated with the nervous system. It has to be noted here that genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/index.jsp]
+is_a: PW:0000754 ! drug pathway
+created_by: VPetri
+creation_date: 2012-03-28T02:58:10Z
+
+[Term]
+id: PW:0000924
+name: respiratory system drug pathway
+def: "The pharmacokinetics and pharmacodynamics of compounds used for the treatment of conditions associated with the respiratory system. It has to be noted here that genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/index.jsp]
+is_a: PW:0000754 ! drug pathway
+created_by: VPetri
+creation_date: 2012-04-05T03:45:08Z
+
+[Term]
+id: PW:0000925
+name: pattern recognition receptor mediated pathway
+def: "Pattern recognition receptors (PRR) respond to a diverse array of exogenous molecules and also several endogenous ones. PRR's 'sensing' of pathogen-associated molecular patterns (PAMP) or damage-associated (DAMP) prompts signaling cascades leading to the expression of pro-inflammatory genes." [MCW library:Cellular and molecular immunology\, by Abbas\, Abul K, PubMed:PMID\:20303867; 20303872]
+is_a: PW:0000024 ! inflammatory response pathway
+is_a: PW:0000819 ! signaling pathway in the innate immune response
+created_by: VPetri
+creation_date: 2012-04-24T11:34:22Z
+
+[Term]
+id: PW:0000926
+name: pro-inflammatory cytokine mediated pathway
+def: "An early response of the innate immunity is the secretion of cytokines critical for the acute inflammatory response. The major pro-inflammatory cytokines are tumor necrosis factor alpha and the interleukins 1 and 6." [MCW library:cellular and molecular immunology\, by Abbas\, Abul K, PubMed:PMID\:20303867, XX:<new dbxref>]
+is_a: PW:0000024 ! inflammatory response pathway
+created_by: VPetri
+creation_date: 2012-04-24T11:43:45Z
+
+[Term]
+id: PW:0000927
+name: anti-tumor necrosis factor drug pathway
+def: "Tumor necrosis factor (TNF) inhibitors are used in the treatment of rheumatoid arthritis. The inhibitors are recombinant proteins that bind the soluble and membrane-associated TNF and inhibit the effects of this pro-inflammatory cytokine." [PubMed:PMID\:21039421]
+synonym: "anti-TNF drug pathway" RELATED []
+is_a: PW:0000919 ! antineoplastic and immunomodulatory drug pathway
+created_by: VPetri
+creation_date: 2012-04-26T02:36:43Z
+
+[Term]
+id: PW:0000928
+name: tocilizumab drug pathway
+def: "Tocilizumab is a humanized anti-interleukin 6 (Il-6) receptor antibody used in the treatment of patients with rheumatoid arthritis, Castleman's disease or juvenile idiopathic arthritis. Tocilizumab binds to the soluble and membrane-associated interleukin-6 receptor and competitively blocks binding of Il-6 to its receptor(s) and inhibits the effects of this potent cytokine." [PubMed:PMID\: 21419125]
+synonym: "Actemra drug pathway" RELATED []
+is_a: PW:0000919 ! antineoplastic and immunomodulatory drug pathway
+created_by: VPetri
+creation_date: 2012-04-26T03:00:42Z
+
+[Term]
+id: PW:0000929
+name: anakinra drug pathway
+def: "Anakinra is a recombinant, non-glycosylated version of the human interleukin-1 (Il-1) receptor antagonist used for the treatment of inflammation associated with rheumatoid arthritis. Like the natural antagonist, anakinra competitively inhibits binding of interleukin-1 to its receptor and the subsequent effects of this potent pro-inflammatory cytokine." [wikipedia:anakinra entry]
+synonym: "kineret drug pathway" RELATED []
+is_a: PW:0000919 ! antineoplastic and immunomodulatory drug pathway
+created_by: VPetri
+creation_date: 2012-04-26T03:26:25Z
+
+[Term]
+id: PW:0000930
+name: methotrexate drug pathway
+def: "The pharmacokinetics and pharmacodynamics of methotrexate (MTX), a folate analogue used in the treatment of cancers and autoimmune diseases. The impact of MTX on cancer and rheumatoid arthritis is thought to arise through distinct mechanisms and pharmacodynamic pathways. Genetic variations can result in changes in drug availability and can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/pathway/PA2039]
+is_a: PW:0000919 ! antineoplastic and immunomodulatory drug pathway
+created_by: VPetri
+creation_date: 2012-04-27T01:27:25Z
+
+[Term]
+id: PW:0000931
+name: methotrexate pharmacokinetics pathway
+def: "The pathway of processing - absorption, distribution, metabolism or elimination - of methotrexate (MTX), a folate analogue used in the treatment of cancers and autoimmune diseases. Genetic variations can result in changes in the availability of the drug and It is believed that variability in MTX pharmacokinetics is linked to genetic variations in transporter proteins." [PharmGKB:http\://www.pharmgkb.org/pathway/PA165816349]
+synonym: "MTX pharmacokinetics pathway" RELATED []
+is_a: PW:0000930 ! methotrexate drug pathway
+created_by: VPetri
+creation_date: 2012-04-27T01:46:47Z
+
+[Term]
+id: PW:0000932
+name: methotrexate pharmacodynamics pathway
+def: "The pathway of methotrexate-target interaction and of the biochemical or physiological responses to them. The impact of MTX on cancer and rheumatoid arthritis is thought to arise through distinct mechanisms and pharmacodynamic pathways. Genetic variations can cause differences in the response of the organism to the drug." [PharmGKB:http\://www.pharmgkb.org/pathway/PA2039]
+synonym: "MTX pharmacodynamics pathway" RELATED []
+is_a: PW:0000930 ! methotrexate drug pathway
+created_by: VPetri
+creation_date: 2012-04-27T02:16:39Z
+
+[Term]
+id: PW:0000933
+name: tumor necrosis factor member 14 signaling pathway
+def: "Tumor necrosis factor member 14, also known as Light, binds the lymphotoxin beta receptor and the tumor necrosis receptor member 14 known as Hvem of the tumor necrosis receptor superfamily to elicit important responses for the dendritic (DC) and T cells of the immune system." [PubMed:PMID\: 2169337\, 11239407\, 12787557]
+synonym: "Tnfsf14 (Light) signaling pathway" RELATED []
+synonym: "Tnfsf14 signaling pathway" RELATED []
+is_a: PW:0000236 ! tumor necrosis factor superfamily mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-01T10:26:22Z
+
+[Term]
+id: PW:0000934
+name: tumor necrosis factor member 13 signaling pathway
+def: "Tumor necrosis factor member 13 also known as April, binds the tumor necrosis factor receptor member 13B known as Taci and receptor member 17 known as Bcma of the tumor necrosis factor receptor superfamily to elicit important responses for the B cells of the immune system." [PubMed:PMID\: 2169337\, 11239407\, 12787557]
+synonym: "Tnfsf13 (April) signaling pathway" RELATED []
+synonym: "Tnfsf13 signaling pathway" RELATED []
+is_a: PW:0000236 ! tumor necrosis factor superfamily mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-01T11:00:20Z
+
+[Term]
+id: PW:0000935
+name: tumor necrosis factor member 13b signaling pathway
+def: "The tumor necrosis factor member 13b known as Baff binds to three receptor of the tumor necrosis factor receptor superfamily - the receptor member 13B known as Taci and member 17 known as Bcma to which member 13 of the ligand superfamily also binds, and additionally to member 13C of the receptor superfamily to elicit important responses for the B cells of the immune system." [PubMed:PMID\: 2169337\, 11239407\, 12787557]
+synonym: "Tnfsf13b (Baff) signaling pathway" RELATED []
+synonym: "Tnfsf13b signaling pathway" RELATED []
+is_a: PW:0000236 ! tumor necrosis factor superfamily mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-01T11:11:44Z
+
+[Term]
+id: PW:0000936
+name: chemokine (C-C motif) ligand 1 signaling pathway
+def: "Chemokine ligand 1 signaling engages the chemokine (C-C motif) receptor 8 (Ccr8) and together with other CC chemokines is classified as a member of the allergenic subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl1 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T02:12:50Z
+
+[Term]
+id: PW:0000937
+name: chemokine (C-C motif) ligand 2 signaling pathway
+def: "Chemokine ligand 1 signaling engages the chemokine (C-C motif) receptor 2 (Ccr2) and together with other CC chemokines is classified as a member of the allergenic subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl2 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T02:20:28Z
+
+[Term]
+id: PW:0000938
+name: chemokine (C-C motif) ligand 3 signaling pathway
+def: "Chemokine ligand 3 signaling pathway engages chemokine (C-C motif) receptors 2 and 5 (Ccr2 and Ccr5) and together with other chemokines is classified as a member of the pro-inflammatory subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl3 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T02:30:19Z
+
+[Term]
+id: PW:0000939
+name: chemokine (C-C motif) ligand 4 signaling pathway
+def: "Chemokine ligand 4 signaling engages the chemokine (C-C motif) receptor 5 (Ccr5) and together with other chemokines is classified as a member of the pro-inflammatory subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl4 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T02:34:32Z
+
+[Term]
+id: PW:0000940
+name: chemokine (C-C motif) ligand 5 signaling pathway
+def: "Chemokine ligand 5 signaling engages chemokine (C-C motif) receptors 1, 3 and 5 (Ccr1, Ccr3 and Ccr5) and together with other chemokines is classified as a member of the pro-inflammatory subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl5 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T02:39:00Z
+
+[Term]
+id: PW:0000941
+name: chemokine (C-C motif) ligand 6 signaling pathway
+def: "Chemokine ligand 6 signaling is known to act in rodents and does not appear to have a human equivalent. Ccl6, together with other chemokines is classified as a member of the pro-inflammatory subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl6 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T02:43:25Z
+
+[Term]
+id: PW:0000942
+name: chemokine (C-C motif) ligand 7 signaling pathway
+def: "Chemokine ligand 7 signaling engages chemokine (C-C) motif receptors 1, 2, and 3 (Ccr1, Ccr2, Ccr3) and together with other chemokines is classified as a member of the allergenic subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl7 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T02:51:25Z
+
+[Term]
+id: PW:0000943
+name: chemokine (C-C motif) ligand 8 signaling pathway
+def: "Chemokine ligand 8 signaling engages chemokine (C-C motif) receptors 3 and 5 (Ccr3 and Ccr5) and together with other chemokines is classified as a member of the allergenic subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl8 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T02:54:39Z
+
+[Term]
+id: PW:0000944
+name: chemokine (C-C motif) ligand 11 signaling pathway
+def: "Chemokine ligand 11 signaling engages the chemokine (C-C motif) receptor 3 (Ccr3) and together with other chemokines is classified as a member of the allergenic subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl11 signaling pathway" EXACT []
+synonym: "eotaxin signaling pathway" RELATED []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T03:09:44Z
+
+[Term]
+id: PW:0000945
+name: chemokine (C-C motif) ligand 12 signaling pathway
+def: "Chemokine ligand 12 signaling is known to act in rodents and does not appear to have a human equivalent. Ccl12, together with other chemokines is classified as a member of the allergenic subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl12 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T03:16:03Z
+
+[Term]
+id: PW:0000946
+name: chemokine (C-C motif) ligand 13 signaling pathway
+def: "Chemokine ligand 13 signaling engages chemokine (C-C motif) receptors 2 and 3 (Ccr2 and Ccr3) and together with other chemokines is classified as a member of the allergenic subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl13 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T03:17:54Z
+
+[Term]
+id: PW:0000947
+name: chemokine (C-C motif) ligand 17 signaling pathway
+def: "Chemokine ligand 17 signaling engages the chemokine (C-C motif) receptor 4 (Ccr4) and together with other chemokines is classified as a member of the developmental subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl17 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T03:23:46Z
+
+[Term]
+id: PW:0000948
+name: chemokine (C-C motif) ligand 22 signaling pathway
+def: "Chemokine ligand 22 signaling engages the chemokine (C-C motif) receptor 4 (Ccr4) and together with other chemokines is classified as member of the developmental subgroup." [PubMed:PMID\: 15062643, XX:<new dbxref>]
+synonym: "Ccl22 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T03:26:56Z
+
+[Term]
+id: PW:0000949
+name: chemokine (C-C motif) ligand 25 signaling pathway
+def: "Chemokine ligand 25 signaling engages the chemokine (C-C motif) receptor 9 (Ccr9) and together with other chemokines is classified as a member oft he developmental subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl25 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T03:31:08Z
+
+[Term]
+id: PW:0000950
+name: chemokine (C-C motif) ligand 24 signaling pathway
+def: "Chemokine ligand 24 signaling engages the chemokine (C-C motif) receptor 3 (Ccr3) and together with other chemokines is classified as member of the allergenic subgroup." [Pubmed:PMID\: 15062643]
+synonym: "Ccl24 signaling pathway" EXACT []
+synonym: "eotaxin-2 signaling pathway" RELATED []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T03:37:14Z
+
+[Term]
+id: PW:0000951
+name: chemokine (C-C motif) ligand 26 signaling pathway
+def: "Chemokine ligand 26 signaling engages the chemokine (C-C motif) receptor 3 (Ccr3) and together with other chemokines is classified as member of the allergenic subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl26 signaling pathway" EXACT []
+synonym: "eotaxin-3 signaling pathway" RELATED []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-01T03:39:19Z
+
+[Term]
+id: PW:0000952
+name: chemokine (C-C motif) ligand 14 signaling pathway
+def: "Chemokine ligand 14 signaling engages chemokine (C-C motif) receptors 1 and 5 (Ccr1 and Ccr5) and together with other chemokines is classified as a member of the HCC (hemofiltrate CC chemokine) subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl14 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-02T03:16:19Z
+
+[Term]
+id: PW:0000953
+name: chemokine (C-C motif) ligand 15 signaling pathway
+def: "Chemokine ligand 15 signaling engages chemokine (C-C motif) receptors 1 and 3 (Ccr1 and Ccr3) and together with other chemokines is classified as a member of the HCC (hemofiltrate CC chemokine) subgroup." [PubMed:PMID\: 15062643]
+synonym: " Ccl15 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-02T03:32:48Z
+
+[Term]
+id: PW:0000954
+name: chemokine (C-C motif) ligand 16 signaling pathway
+def: "Chemokine ligand 16 signaling engages chemokine (C-C motif) receptors 1 and 2 (Ccr1 and Ccr2) and together with other chemokines is classified as a member of the HCC (hemofiltrate CC chemokine) subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl16 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-02T03:34:53Z
+
+[Term]
+id: PW:0000955
+name: chemokine (C-C motif) ligand 23 signaling pathway
+def: "Chemokine ligand 23 signaling engages the chemokine (C-C motif) receptor 1 (Ccr1) and together with other chemokines is classified as a member of the HCC (hemofiltrate CC chemokine) subgroup." [PubMed:PMID\: 15062643]
+synonym: "Ccl23 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: vpetri
+creation_date: 2012-05-02T03:37:10Z
+
+[Term]
+id: PW:0000956
+name: chemokine (C-C motif) ligand 27 signaling pathway
+def: "Chemokine ligand 27 signaling engages chemokine (C-C motif) receptor 10 (Ccr10) and does not appear to be a member of any of the chemokines subgroups." [PubMed:PMID\: 15062643]
+synonym: "Ccl27 signaling pathway" EXACT []
+is_a: PW:0000831 ! CC chemokine mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-15T01:08:34Z
+
+[Term]
+id: PW:0000957
+name: chemokine (C-X-C motif) ligand 1 signaling pathway
+def: "Chemokine (C-X-C) ligand 1belongs to the growth-related oncogene (GRO) subgroup whose signaling engages receptor 2 and promotes chemotaxis of neutrophils." [PubMed:PMID\: 18579287]
+synonym: "Cxcl1 signaling pathway" EXACT []
+synonym: "Gro alpha signaling pathway" RELATED []
+is_a: PW:0000971 ! CXC chemokine ELR(+) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-15T01:23:49Z
+
+[Term]
+id: PW:0000958
+name: forkhead class A signaling pathway
+def: "The signaling pathway mediated by the FoxA subgroup of forkhead family of transcription factors plays important roles in development and in modulating steroid hormone signaling. Three FoxA genes carry out overlapping yet distinct functions. FOXA1 appears to modulate steroid receptor activity in breast and prostate cancer." [PubMed:PMID\: 21934649; 19274050; 20591647; 21934649]
+synonym: "FoxA signaling pathway" RELATED []
+synonym: "PID:200087" RELATED []
+synonym: "PID:200226" RELATED []
+is_a: PW:0000647 ! forkhead signaling pathway
+created_by: VPetri
+creation_date: 2012-05-17T11:10:35Z
+
+[Term]
+id: PW:0000959
+name: lipid signaling pathway
+is_a: PW:0000003 ! signaling pathway
+created_by: VPetri
+creation_date: 2012-05-17T01:09:58Z
+
+[Term]
+id: PW:0000960
+name: sphingosine 1-phosphate signaling pathway
+def: "Sphingosine 1-phosphate (S1P), a sphingolipid metabolite, can signal intracellularly as a second messenger or extracellularly as a ligand for five G protein coupled receptors. S1P pathway plays important roles in processes such as cell migration, proliferation and survival. The five receptors engage similar G proteins but their expression varies." [PubMed:PMID\: 18552276; 22159476]
+synonym: "PID:200046" RELATED []
+synonym: "PID:200054" RELATED []
+synonym: "PID:200076" RELATED []
+synonym: "PID:200085" RELATED []
+synonym: "PID:200123" RELATED []
+synonym: "PID:200211" RELATED []
+synonym: "S1P signaling pathway" RELATED []
+is_a: PW:0000541 ! signaling pathway involving second messengers
+is_a: PW:0000959 ! lipid signaling pathway
+created_by: VPetri
+creation_date: 2012-05-17T01:10:40Z
+
+[Term]
+id: PW:0000961
+name: ceramide signaling pathway
+def: "Ceramide signaling can act as a lipid second messenger or as a mediator of various cellular signaling pathways by promoting receptor clustering. The pathway plays important roles in apoptosis." [PubMed:PMID\: 20607622]
+synonym: "PID:200119" RELATED []
+is_a: PW:0000541 ! signaling pathway involving second messengers
+is_a: PW:0000959 ! lipid signaling pathway
+created_by: VPetri
+creation_date: 2012-05-17T01:43:41Z
+
+[Term]
+id: PW:0000962
+name: visual phototransduction pathway
+is_a: PW:0001008 ! photosignal transduction pathway
+created_by: VPetri
+creation_date: 2012-05-17T05:16:34Z
+
+[Term]
+id: PW:0000963
+name: phosphatidylinositol 3-kinase class I signaling pathway
+def: "Phosphatidylinositol kinases represent a family of lipid kinases that phosphorylate the 3' position of the inositol ring in target substrates. They are grouped into three classes: class I further subdivided into subclass A and B, class II and class III. By far the best known and characterized is class I, particularly IA that signals downstream of receptor tyrosine kinases and engages the Akt family of kinases." [PubMed:PMID\: 17052169\, 17641274\, 16847462]
+synonym: "PID:200116" RELATED []
+is_a: PW:0000595 ! phosphatidylinositol 3-kinase signaling pathway
+created_by: VPetri
+creation_date: 2012-05-18T10:40:25Z
+
+[Term]
+id: PW:0000964
+name: altered phosphatidylinositol 3-kinase class I signaling pathway
+is_a: PW:0000621 ! altered phosphatidylinositol 3-kinase signaling pathway
+created_by: VPetri
+creation_date: 2012-05-18T10:41:53Z
+
+[Term]
+id: PW:0000965
+name: phosphatidylinositol 3-kinase class II signaling pathway
+def: "Phosphatidylinositol kinases represent a family of lipid kinases that phosphorylate the 3' position of the inositol ring in target substrates. They are grouped into three classes: class I further subdivided into subclass A and B, class II and class III. By far the best known and characterized is class I, particularly IA that signals downstream of receptor tyrosine kinases and engages the Akt family of kinases." [PubMed:PMID\: 17052169\, 17641274\, 16847462]
+is_a: PW:0000595 ! phosphatidylinositol 3-kinase signaling pathway
+created_by: VPetri
+creation_date: 2012-05-18T10:50:58Z
+
+[Term]
+id: PW:0000966
+name: phosphatidylinositol 3-kinase class III signaling pathway
+def: "Phosphatidylinositol kinases represent a family of lipid kinases that phosphorylate the 3' position of the inositol ring in target substrates. They are grouped into three classes: class I further subdivided into subclass A and B, class II and class III. By far the best known and characterized is class I, particularly IA that signals downstream of receptor tyrosine kinases and engages the Akt family of kinases." [PubMed:PMID\: 17052169\, 17641274\, 16847462]
+is_a: PW:0000595 ! phosphatidylinositol 3-kinase signaling pathway
+created_by: VPetri
+creation_date: 2012-05-18T10:53:38Z
+
+[Term]
+id: PW:0000967
+name: interleukin-3/interleukin-5/GM-CSF mediated signaling pathway
+def: "Interleukin-3, interleukin 5 and granulocyte-macrophage colony-stimulating factors family of hemopoietic cytokine mediate overlapping and distinct signals. Collectively they regulate the production and activation of hemopoietic cells." [PubMed:PMID\: 19436055]
+synonym: "hemopoietic cytokine family mediated signaling pathway" RELATED []
+synonym: "Il-3/Il-5/GM-CSF family mediated signaling pathway" EXACT []
+is_a: PW:0000512 ! Interleukin mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T11:30:25Z
+
+[Term]
+id: PW:0000968
+name: interleukin-3 signaling pathway
+def: "Interleukin-3 signaling plays important roles in the function of hematopoietic cells." [PubMed:PMID\: 11312115]
+synonym: "Il-3 signaling pathway" EXACT []
+synonym: "PID:200145" RELATED []
+is_a: PW:0000967 ! interleukin-3/interleukin-5/GM-CSF mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T11:43:49Z
+
+[Term]
+id: PW:0000969
+name: interleukin-5 signaling pathway
+def: "Interleukin-5 signaling plays important roles in the function of hematopoietic cells." [PubMed:PMID\: 11312115]
+synonym: "Il-5 signaling pathway" EXACT []
+synonym: "PID:200107" RELATED []
+is_a: PW:0000967 ! interleukin-3/interleukin-5/GM-CSF mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T11:44:14Z
+
+[Term]
+id: PW:0000970
+name: granulocyte-macrophage colony-stimulating factor signaling pathway
+def: "GM-CSF signaling, like the other hemopoietic cytokines, is involved in the production and activation of hemopoietic cells. The GM-CSF pathway acts on monocytes, macrophages and granulocytes and is also involved in the regulation of T and dendritic cells functions." [PubMed:PMID\: 19436055]
+synonym: "GM-CSF signaling pathway" EXACT []
+synonym: "PID:200019" RELATED []
+is_a: PW:0000967 ! interleukin-3/interleukin-5/GM-CSF mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T11:44:40Z
+
+[Term]
+id: PW:0000971
+name: CXC chemokine ELR(+) subgroup mediated signaling pathway
+def: "The CXC chemokine ELR(+) subgroup mediated signaling primarily engages receptor 2 to promote angiogenic effects." [PubMed:PMID\: 18579287]
+is_a: PW:0000830 ! CXC chemokine mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T02:49:53Z
+
+[Term]
+id: PW:0000972
+name: CXC chemokine ELR(-) subgroup mediated signaling pathway
+def: "CXC chemokine (ELR-) subgroup mediated signaling primarily engages receptor 3 to promote angiostatic effects." [PubMed:PMID\:18579287]
+is_a: PW:0000830 ! CXC chemokine mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T02:49:59Z
+
+[Term]
+id: PW:0000973
+name: chemokine (C-X-C motif) ligand 2 signaling pathway
+def: "Chemokine (C-X-C) ligand 2 belongs to the growth-related oncogene (GRO) subgroup whose signaling engages receptor 2 to promote chemotaxis of neutrophils." [PubMed:PMID\: 18579287]
+synonym: "Cxcl2 signaling pathway" EXACT []
+synonym: "Gro beta signaling pathway" RELATED []
+is_a: PW:0000971 ! CXC chemokine ELR(+) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T03:26:21Z
+
+[Term]
+id: PW:0000974
+name: chemokine (C-X-C motif) ligand 3 signaling pathway
+def: "Chemokine (C-X-C) ligand 3 belongs to the growth-related oncogene (GRO) subgroup whose signaling engages receptor 2 to promote chemotaxis of neutrophils." [PubMed:PMID\: 18579287]
+synonym: "Cxcl3 signaling pathway" EXACT []
+synonym: "Gro gamma signaling pathway" RELATED []
+is_a: PW:0000971 ! CXC chemokine ELR(+) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T03:29:34Z
+
+[Term]
+id: PW:0000975
+name: chemokine (C-X-C motif) ligand 5 signaling pathway
+def: "Chemokine (C-X-C) ligand 5 signaling engages receptor 2 to exert potent chemotactic functions in neutrophil activation." [PubMed:PMID\: 18579287]
+synonym: "Cxcl5 signaling pathway" EXACT []
+synonym: "Ena-78 signaling pathway" RELATED []
+is_a: PW:0000971 ! CXC chemokine ELR(+) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T03:37:57Z
+
+[Term]
+id: PW:0000976
+name: chemokine (C-X-C motif) ligand 6 signaling pathway
+def: "Chemokine (C-X-C0) ligand 6 engages receptors 1 and 2 to promote chemoattraction of neutrophils and angiogenic effects, respectively." [PubMed:PMID\: 18579287]
+synonym: "Cxcl6 signaling pathway" EXACT []
+is_a: PW:0000971 ! CXC chemokine ELR(+) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T03:42:45Z
+
+[Term]
+id: PW:0000977
+name: chemokine (C-X-C motif) ligand 7 signaling pathway
+is_a: PW:0000971 ! CXC chemokine ELR(+) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T03:48:29Z
+
+[Term]
+id: PW:0000978
+name: chemokine (C-X-C motif) ligand 8 signaling pathway
+def: "Chemokine (C-X-C) ligand 8, also known as interleukin-8 (Il-8), although a chemokine, engages receptor 1 and 2 to promote angiogenic effects." [PubMed:PMID\: 18579287]
+synonym: "Cxcl8 signaling pathway" EXACT []
+synonym: "Il-8 signaling pathway" RELATED []
+synonym: "PID:200136" RELATED []
+is_a: PW:0000971 ! CXC chemokine ELR(+) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T03:49:12Z
+
+[Term]
+id: PW:0000979
+name: chemokine (C-X-C motif) ligand 4 signaling pathway
+def: "Chemokine (C-X-C) ligand 4 signaling engages receptor 3 to promote angiostatic effects." [PubMed:PMID\: 18579287]
+synonym: "Cxcl4 signaling pathway" EXACT []
+is_a: PW:0000972 ! CXC chemokine ELR(-) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T03:55:01Z
+
+[Term]
+id: PW:0000980
+name: chemokine (C-X-C motif) ligand 9 signaling pathway
+def: "Chemokine (C-X-C) ligand 9 engages receptor 3 to promote angiostatic effects." [PubMed:PMID\: 18579287]
+synonym: "Cxcl9 signaling pathway" EXACT []
+synonym: "Mig signaling pathway" RELATED []
+is_a: PW:0000972 ! CXC chemokine ELR(-) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T03:57:41Z
+
+[Term]
+id: PW:0000981
+name: chemokine (C-X-C motif) ligand 10 signaling pathway
+def: "Chemokine (C-X-C) ligand 10 signaling engages receptor 3 to promote angiostatic effects." [PubMed:PMID\: 18579287]
+synonym: "Cxcl10 signaling pathway" EXACT []
+is_a: PW:0000972 ! CXC chemokine ELR(-) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T04:00:20Z
+
+[Term]
+id: PW:0000982
+name: chemokine (C-X-C motif) ligand 11 signaling pathway
+def: "Chemokine (C-X-C) ligand 11 signaling engages receptor 3 to promote angiostatic effects." [PubMed:PMID\: 18579287]
+synonym: "Cxcl11 signaling pathway" EXACT []
+is_a: PW:0000972 ! CXC chemokine ELR(-) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T04:10:07Z
+
+[Term]
+id: PW:0000983
+name: chemokine (C-X-C motif) ligand 12 signaling pathway
+is_a: PW:0000972 ! CXC chemokine ELR(-) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T05:01:33Z
+
+[Term]
+id: PW:0000984
+name: chemokine (C-X-C motif) ligand 13 signaling pathway
+is_a: PW:0000972 ! CXC chemokine ELR(-) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T05:02:28Z
+
+[Term]
+id: PW:0000985
+name: chemokine (C-X-C motif) ligand 14 signaling pathway
+is_a: PW:0000972 ! CXC chemokine ELR(-) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T05:03:13Z
+
+[Term]
+id: PW:0000986
+name: chemokine (C-X-C motif) ligand 16 signaling pathway
+is_a: PW:0000972 ! CXC chemokine ELR(-) subgroup mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-22T05:04:00Z
+
+[Term]
+id: PW:0000987
+name: erythropoietin signaling pathway
+def: "Erythropoietin (EPO) signaling is crucial for the production of blood cell or erythropoiesis and also plays important roles in wound healing and responses to neural injury. EPO is a glycoprotein hormone and also a cytokine whose receptor belongs to type I cytokine receptor. The pathway engages the Jak-Stat intracellular cascade." [OneLook:www.onelook.com, PubMed:PMID\: 21307776]
+synonym: "EPO signaling pathway" EXACT []
+synonym: "PID:200183" RELATED []
+is_a: PW:0000467 ! peptide and protein hormone signaling pathway
+is_a: PW:0000828 ! cytokine mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-24T02:57:05Z
+
+[Term]
+id: PW:0000988
+name: classical cadherin signaling pathway
+def: "Classical cadherins, such as E- or N-cadherin are single-span transmembrane proteins with five extracellular cadherin repeats and a conserved cytoplasmic tail. Their interaction with many cytoskeletal and signaling molecules underlies the calcium-dependent cell-cell adhesion and signaling. While E- and N-cadherin share some of the interacting partners, they have different localization and impact on distinct cellular events." [PubMed:PMID\: 11171368\, 21444749]
+is_a: PW:0000333 ! cadherin mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-25T10:07:46Z
+
+[Term]
+id: PW:0000989
+name: desmosomal cadherin signaling pathway
+def: "Desmosomal cadherins, which can be further subdivided into two subgroups, possess the five cadherin repeats but have distinct cytoplasmic tails." [PubMed:PMID\: 11171368]
+is_a: PW:0000333 ! cadherin mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-25T10:37:23Z
+
+[Term]
+id: PW:0000990
+name: protocadherin signaling pathway
+def: "Protocadherin represent a very large family which can be further subdivided into two groups. The protocadherin are predominantly expressed in the nervous system. They have up to seven cadherin repeats but distict and even divergent cytoplasmic regions." [PubMed:PMID\: 11171368\,  17936607]
+is_a: PW:0000333 ! cadherin mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-25T10:37:53Z
+
+[Term]
+id: PW:0000991
+name: atypical cadherin signaling pathway
+def: "The atypical, or uncoventional group includes the seven transmembrane (7TM), GPCR-like cadherins with up to nine cadherin repeats along with EGF-like and laminin motifs, the large FAT and the t-Cadherin proteins." [PubMed:PMID\: 11171368]
+is_a: PW:0000333 ! cadherin mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-25T10:38:11Z
+
+[Term]
+id: PW:0000992
+name: E-cadherin signaling pathway
+def: "E-cadherin or the epithelial cadherin encoded by the Cdh1 gene, is a member of the classical cadherin family and among the best studied cadherin pathway. Deregulation of the pathway has been associated with several forms of cancer." [PubMed:PMID\: 11171368\, 21444749]
+synonym: "Cdh1 signaling pathway" RELATED []
+synonym: "PID:200124" RELATED []
+synonym: "PID:200147" RELATED []
+synonym: "PID:200182" RELATED []
+is_a: PW:0000988 ! classical cadherin signaling pathway
+created_by: VPetri
+creation_date: 2012-05-25T10:51:52Z
+
+[Term]
+id: PW:0000993
+name: N-cadherin signaling pathway
+def: "N-cadherin, or neuronal cadherin, is predominantly expressed in the brain. The pathway plays important roles in learning and memory." [PubMed:PMID\: 11171368\, 21444749]
+synonym: "Cdh2 signaling pathway" RELATED []
+synonym: "PID:200209" RELATED []
+is_a: PW:0000988 ! classical cadherin signaling pathway
+created_by: VPetri
+creation_date: 2012-05-25T10:52:18Z
+
+[Term]
+id: PW:0000994
+name: altered classical cadherin signaling pathway
+is_a: PW:0000338 ! altered cadherins mediated signaling pathway
+is_a: PW:0000988 ! classical cadherin signaling pathway
+created_by: VPetri
+creation_date: 2012-05-25T11:18:01Z
+
+[Term]
+id: PW:0000995
+name: altered E-cadherin signaling pathway
+is_a: PW:0000992 ! E-cadherin signaling pathway
+is_a: PW:0000994 ! altered classical cadherin signaling pathway
+created_by: VPetri
+creation_date: 2012-05-25T11:18:51Z
+
+[Term]
+id: PW:0000996
+name: antiinfective drug pathway
+synonym: "anti-infective drug pathway" EXACT []
+is_a: PW:0000754 ! drug pathway
+created_by: VPetri
+creation_date: 2012-05-25T11:37:29Z
+
+[Term]
+id: PW:0000997
+name: nucleoside and nucleotide mediated signaling pathway
+is_a: PW:0000003 ! signaling pathway
+created_by: VPetri
+creation_date: 2012-05-25T11:48:24Z
+
+[Term]
+id: PW:0000998
+name: adenosine signaling pathway
+def: "Adenosine signaling is involved in the regulation of several physiological processes. It uses four receptors of the GPCR family that activate the Gaphas and Galphai types of G proteins to increase or decrease the levels of cAMP. The adenosine receptors are a class of purinergic or purinoreceptors." [PubMed:PMID\: 21622100\, 21185259]
+is_a: PW:0000997 ! nucleoside and nucleotide mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-25T11:53:37Z
+
+[Term]
+id: PW:0000999
+name: adenosine triphosphate signaling pathway
+def: "Adenosine triphosphate (ATP) extracellular signaling activates the P2X ligand-gated ion channels that are permeable to sodium, potassium and calcium ions. There are several P2X subtypes that are involved in a range of physiological processes. ATP along with other nucleotide also engages a class of metabotropic purinergic receptors known as P2Y that couple to either the Galphaq or to G alphai subunit of heterotrimeric G proteins. ATP is the sole ligand of P2Y 11 receptor." [PubMed:PMID\: 22535247\, 21586365]
+synonym: "ATP signaling pathway" EXACT []
+is_a: PW:0000997 ! nucleoside and nucleotide mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-25T12:03:02Z
+
+[Term]
+id: PW:0001000
+name: nucleotide signaling via the purinergic P2Y receptors.
+def: "The P2Y receptors are a class of purinergic or purinoreceptors, Gprotein-coupled receptors that respond to ADP, ATP, UDP, UTP and UDP-glucose to activate either the Galphaq or the Galphai mediated signal transduction pathways." [PubMed:PMID\: 16968944\, 20594935]
+is_a: PW:0000997 ! nucleoside and nucleotide mediated signaling pathway
+created_by: VPetri
+creation_date: 2012-05-25T12:11:33Z
+
+[Term]
+id: PW:0001001
+name: adenosine triphosphate signaling via the P2X ligand-gated ion channel
+synonym: "ATP signaling via the P2X ligand-gated ion channel" EXACT []
+is_a: PW:0000999 ! adenosine triphosphate signaling pathway
+created_by: VPetri
+creation_date: 2012-05-30T02:32:59Z
+
+[Term]
+id: PW:0001002
+name: copper homeostasis pathway
+is_a: PW:0000589 ! metal homeostasis pathway
+created_by: VPetri
+creation_date: 2012-05-31T04:20:42Z
+
+[Term]
+id: PW:0001003
+name: retinoid metabolic pathway
+def: "Those metabolic reactions involving the fat-soluble vitamin A and its metabolites. Vitamin A, retinol and vitamin A activities of metabolites such as retinal and retinoic acids are essential for visual transduction as well as for neuro and immune system functions and epithelial differentiation. Plants and microorganisms can synthesize vitamin A de novo while higher organisms derive it from diet as precursors carotenoids or retinyl esters." [PubMed:PMID\: 21554983]
+synonym: "vitamin A metabolic pathway" RELATED []
+is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
+created_by: VPetri
+creation_date: 2012-06-04T10:52:32Z
+
+[Term]
+id: PW:0001004
+name: retinoic acid metabolic pathway
+def: "The reactions involved in deriving retinoic acid (RA) from retinal and its further processing to more polar derivatives. Retinoic acid engages several retinoic acid receptors; its actions are important for the neuro and immune system functions and energy balance. Deregulation of proper RA activity has been associated with obesity and cancer." [PubMed:PMID\: 21621639]
+synonym: "RA metabolic pathway" EXACT []
+is_a: PW:0001003 ! retinoid metabolic pathway
+created_by: VPetri
+creation_date: 2012-06-04T11:05:02Z
+
+[Term]
+id: PW:0001005
+name: retinoid cycle metabolic pathway
+def: "The series of reactions involved in the regeneration of the visual chromophore 11-cis retinal from the all-trans retinal released from the light -activated rhodopsin." [PubMed:PMID\: 21447403]
+synonym: "visual cycle metabolic pathway" EXACT []
+is_a: PW:0001003 ! retinoid metabolic pathway
+created_by: VPetri
+creation_date: 2012-06-04T11:19:05Z
+
+[Term]
+id: PW:0001006
+name: vitamin homeostasis
+is_a: PW:0000355 ! homeostasis pathway
+created_by: VPetri
+creation_date: 2012-06-04T01:28:58Z
+
+[Term]
+id: PW:0001007
+name: retinoid homeostasis
+def: "The pathways involved in the balanced maintenance of retinoid uptake and transport, utilization and storage, as demanded by the needs of cells, tissues and organs." [PubMed:PMID\: 21554983\, 21586336\, 21621639]
+synonym: "vitamin A homeostasis" EXACT []
+is_a: PW:0001006 ! vitamin homeostasis
+created_by: VPetri
+creation_date: 2012-06-04T01:30:04Z
+
+[Term]
+id: PW:0001008
+name: photosignal transduction pathway
+is_a: PW:0000003 ! signaling pathway
+created_by: VPetri
+creation_date: 2012-06-05T10:44:24Z
+
+[Term]
+id: PW:0001009
+name: ascorbic acid metabolic pathway
+def: "Those metabolic reactions involving ascorbic acid, known as vitamin C, a water-soluble vitamin. Vitamin C is an essential antioxidant that is derived from glucose. Unlike many animals, humans do not have the ability to produce it. Vitamin C acts as an antioxidant." [OneLook:http\://www.onelook.com]
+synonym: "vitamin C metabolic pathway" RELATED []
+is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
+created_by: VPetri
+creation_date: 2012-06-05T11:40:08Z
+
+[Term]
+id: PW:0001010
+name: niacin metabolic pathway
+def: "Those metabolic reactions involving niacin, also known as vitamin B3 or vitamin PP - a water-soluble vitamin. Niacin represents an essential nutrient and is also a precursor of NAD/NADH and NADP/NADPH molecules. Niacin is among the few vitamins humans can synthesize." [OneLoook:http\://www.onelook.com]
+synonym: "vitamin B3 metabolic pathway" RELATED []
+is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
+created_by: VPetri
+creation_date: 2012-06-05T11:44:25Z
+
+[Term]
+id: PW:0001011
+name: vitamin D metabolic pathway
+def: "Those metabolic reactions involving vitamin D - a fat-soluble vitamin. Vitamin D represents a group of fat-soluble compounds that can be synthesized from cholesterol and exposure to sunlight. In view of the latter source, it is not considered a true vitamin. One of its metabolites, calcitriol acts in a hormone-like manner as a signaling molecule." [OneLook:http\://www.onelook.com]
+is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
+created_by: VPetri
+creation_date: 2012-06-05T12:01:10Z
+
+[Term]
+id: PW:0001012
+name: vitamin and vitamin metabolites signaling pathway
+def: "Vitamin and metabolites of vitamin in addition to representing important nutrients and aid in cellular metabolism can also, in a hormone-like manner, acts as signaling molecules." [PubMed:PMID\: 22614789\, 22318625\, 22020178]
+is_a: PW:0000003 ! signaling pathway
+created_by: VPetri
+creation_date: 2012-06-05T12:07:26Z
+
+[Term]
+id: PW:0001013
+name: vitamin D signaling pathway
+def: "The active vitamin D metabolite plays important roles in cell growth and differentiation and in immunity. Its receptor is a transcription factor nuclear receptor." [PubMed:PMID\: 22213316]
+is_a: PW:0001012 ! vitamin and vitamin metabolites signaling pathway
+created_by: VPetri
+creation_date: 2012-06-05T12:13:52Z
+
+[Term]
+id: PW:0001014
+name: retinoic acid signaling pathway
+def: "Retinoic acid, a vitamin A-derived metabolite plays important roles in development and cell differentiation. all-trans retinoic acid (RA) binds to nuclear RA (RARs) and X (RXRs) receptor subtypes that once activated acts as transcription factors." [PubMed:PMID\: 22318625\, 22020178]
+synonym: "RA signaling pathway" EXACT []
+is_a: PW:0001012 ! vitamin and vitamin metabolites signaling pathway
+created_by: VPetri
+creation_date: 2012-06-05T12:22:48Z
+
+[Term]
+id: PW:0001015
+name: vitamin E metabolic pathway
+def: "Those metabolic reactions involving vitamin E - a fat-soluble vitamin which represents a class of chemical compounds known as tocopherols. The alpha- and gamma-tocopherols appear to be the main dietary forms. Vitamin E is best known for its antioxidant properties." [PubMed:PMID\: 15256801]
+synonym: "tocopherol metabolic pathway" RELATED []
+is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
+created_by: VPetri
+creation_date: 2012-06-11T01:34:39Z
+
+[Term]
+id: PW:0001016
+name: vitamin K metabolic pathway
+def: "Those metabolic reactions involving vitamin K - a fat-soluble vitamin which represents a group of related compounds. K1 and K2 are the main naturally-occurring forms. Vitamin K is an essential cofactor for many vitamin K-dependent proteins such as several coagulation factors or the anticoagulant proteins C and S." [PubMed:PMID\: 22407747\, 21968919]
+is_a: PW:0000135 ! metabolic pathway of cofactors and vitamins
+created_by: VPetri
+creation_date: 2012-06-11T01:46:25Z
 
 [Typedef]
 id: part_of

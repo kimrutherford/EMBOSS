@@ -57,7 +57,7 @@ General log output file [outfile.dbxedam]:
 Command line arguments
 
 Index the EDAM ontology using b+tree indices
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     [edam] Basename for index files (Any string
@@ -139,8 +139,20 @@ Output file format
   File: outfile.dbxedam
 
 Processing directory: /homes/user/test/data/
-Processing file: EDAM.obo entries: 144 (144) time: 0.0s (0.0s)
+Processing file: EDAM.obo
+entries: 143 (143) time: 0.0s (0.0s)
 Total time: 0.0s
+Entry idlen 15 OK. Maximum ID length was 4 for '0004'.
+Field acc acclen 80 OK. Maximum acc term length was 47 for 'HMMER profile alignm
+ent (sequences versus HMMs)'.
+Field nam namlen 32 OK. Maximum nam term length was 15 for 'semanticscience'.
+Field isa isalen 15 OK. Maximum isa term length was 4 for '0003'.
+Field ns nslen 15 OK. Maximum ns term length was 10 for 'identifier'.
+Field des deslen 30 OK. Maximum des term length was 17 for 'conceptualisation'.
+Field hasin hasinlen 15 OK. Maximum hasin term length was 4 for '0006'.
+Field hasout hasoutlen 15 OK. Maximum hasout term length was 4 for '0006'.
+Field isid isidlen 15 OK. Maximum isid term length was 4 for '0006'.
+Field isfmt isfmtlen 15 OK. Maximum isfmt term length was 4 for '0006'.
 
   File: edam.ent
 
@@ -152,163 +164,203 @@ EDAM.obo
 
   File: edam.pxac
 
-Type      Identifier
-Compress  Yes
-Pages     4
-Order     87
-Fill      75
-Pagesize  8192
-Level     0
-Cachesize 100
-Order2    406
-Fill2     408
-Count     153
-Fullcount 153
-Kwlimit   80
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        87
+Fill         80
+Level        0
+Pagesize     8192
+Cachesize    2000
+Order2       406
+Fill2        681
+Secpagesize  8192
+Seccachesize 2000
+Count        143
+Fullcount    143
+Kwlimit      80
+Reffiles     0
 
   File: edam.pxde
 
-Type      Secondary
-Compress  Yes
-Pages     1556
-Order     93
-Fill      69
-Pagesize  4096
-Level     0
-Cachesize 100
-Order2    144
-Fill2     204
-Count     515
-Fullcount 1611
-Kwlimit   30
+Type         Secondary
+Compress     Yes
+Pages        14
+Secpages     562
+Order        93
+Fill         80
+Level        0
+Pagesize     4096
+Cachesize    2000
+Order2       144
+Fill2        204
+Secpagesize  4096
+Seccachesize 2000
+Count        562
+Fullcount    2167
+Kwlimit      30
+Idlimit      15
 
   File: edam.pxhasin
 
-Type      Secondary
-Compress  Yes
-Pages     12
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    71
-Fill2     101
-Count     3
-Fullcount 3
-Kwlimit   15
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     2
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       16
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        2
+Fullcount    2
+Kwlimit      15
+Idlimit      15
 
   File: edam.pxhasout
 
-Type      Secondary
-Compress  Yes
-Pages     15
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    71
-Fill2     101
-Count     4
-Fullcount 7
-Kwlimit   15
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     2
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       16
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        2
+Fullcount    2
+Kwlimit      15
+Idlimit      15
 
   File: edam.pxid
 
-Type      Identifier
-Compress  Yes
-Pages     7
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     144
-Fullcount 144
-Kwlimit   15
+Type         Identifier
+Compress     Yes
+Pages        5
+Secpages     0
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       99
+Fill2        169
+Secpagesize  512
+Seccachesize 2000
+Count        143
+Fullcount    143
+Kwlimit      15
+Reffiles     0
 
   File: edam.pxis
 
-Type      Secondary
-Compress  Yes
-Pages     229
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    71
-Fill2     101
-Count     75
-Fullcount 230
-Kwlimit   15
+Type         Secondary
+Compress     Yes
+Pages        4
+Secpages     96
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       16
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        90
+Fullcount    225
+Kwlimit      15
+Idlimit      15
 
   File: edam.pxisfmt
 
-Type      Secondary
-Compress  Yes
-Pages     24
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    71
-Fill2     101
-Count     7
-Fullcount 20
-Kwlimit   15
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     5
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       16
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        5
+Fullcount    5
+Kwlimit      15
+Idlimit      15
 
   File: edam.pxisid
 
-Type      Secondary
-Compress  Yes
-Pages     6
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    71
-Fill2     101
-Count     1
-Fullcount 1
-Kwlimit   15
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     1
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       16
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        1
+Fullcount    1
+Kwlimit      15
+Idlimit      15
 
   File: edam.pxnm
 
-Type      Secondary
-Compress  Yes
-Pages     622
-Order     60
-Fill      41
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    71
-Fill2     101
-Count     204
-Fullcount 425
-Kwlimit   20
+Type         Secondary
+Compress     Yes
+Pages        11
+Secpages     331
+Order        44
+Fill         38
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       16
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        323
+Fullcount    725
+Kwlimit      32
+Idlimit      15
 
   File: edam.pxns
 
-Type      Secondary
-Compress  Yes
-Pages     21
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    71
-Fill2     101
-Count     6
-Fullcount 144
-Kwlimit   15
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     12
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       16
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        5
+Fullcount    143
+Kwlimit      15
+Idlimit      15
 
   File: edam.xac
 

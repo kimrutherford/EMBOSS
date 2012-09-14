@@ -14,7 +14,7 @@
 <tr bgcolor="#FFFFCC">
 <td>[-server]<br>(Parameter 1)</td>
 <td>string</td>
-<td>The name of the database defined locally for use by EMBOSS.</td>
+<td>The name of the server defined locally for use by EMBOSS.</td>
 <td>Any string</td>
 <td>&nbsp;</td>
 </tr>
@@ -26,7 +26,7 @@
 <tr bgcolor="#FFFFCC">
 <td>-full</td>
 <td>boolean</td>
-<td>The default behaviour is to report for relevant databases only basic information from the EMBOSS database definition</td>
+<td>The default behaviour is to report for relevant servers only basic information from the EMBOSS server definition</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
@@ -52,7 +52,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 

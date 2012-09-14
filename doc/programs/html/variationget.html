@@ -1,0 +1,714 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: variationget
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+variationget
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Get sequence variations
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>variationget</b> reads sequence variation data and writes the data in one
+of the EMBOSS variation output formats.
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>variationget</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>variationget valid-4.0.vcf </b>
+Get sequence variations
+Variation output file [0.vcf]: <b>test.vcf</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Get sequence variations
+Version: EMBOSS:6.5.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-variation]         variation  Variation filename and optional format, or
+                                  reference (input query)
+  [-outfile]           outvariation (no help text) outvariation value
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-variation" associated qualifiers
+   -iformat1           string     Input variation format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Variation output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-variation]<br>(Parameter 1)</td>
+<td>variation</td>
+<td>Variation filename and optional format, or reference (input query)</td>
+<td>Variation entries</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>outvariation</td>
+<td>(no help text) outvariation value</td>
+<td>Variation entries</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-variation" associated variation qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iformat1<br>-iformat_variation</td>
+<td>string</td>
+<td>Input variation format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_variation</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_variation</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -idbname1<br>-idbname_variation</td>
+<td>string</td>
+<td>User-provided database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-outfile" associated outvariation qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -oformat2<br>-oformat_outfile</td>
+<td>string</td>
+<td>Variation output format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>variationget</b> reads sequence variation data.
+<!-- #include file="inc/variationinformats.ihtml" -->
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: valid-4.0.vcf</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+##fileformat=VCFv4.0
+##fileDate=20090805
+##source=myImputationProgramV3.1
+##reference=1000GenomesPilot-NCBI36
+##phasing=partial
+##INFO=&lt;ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data"&gt;
+##INFO=&lt;ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes"&gt;
+##INFO=&lt;ID=AC,Number=.,Type=Integer,Description="Allele count in genotypes, for each ALT allele, in the same order as listed"&gt;
+##INFO=&lt;ID=DP,Number=1,Type=Integer,Description="Total Depth"&gt;
+##INFO=&lt;ID=AF,Number=.,Type=Float,Description="Allele Frequency"&gt;
+##INFO=&lt;ID=AA,Number=1,Type=String,Description="Ancestral Allele"&gt;
+##INFO=&lt;ID=DB,Number=0,Type=Flag,Description="dbSNP membership, build 129"&gt;
+##INFO=&lt;ID=H2,Number=0,Type=Flag,Description="HapMap2 membership"&gt;
+##FILTER=&lt;ID=q10,Description="Quality below 10"&gt;
+##FILTER=&lt;ID=s50,Description="Less than 50% of samples have data"&gt;
+##FORMAT=&lt;ID=GT,Number=1,Type=String,Description="Genotype"&gt;
+##FORMAT=&lt;ID=GQ,Number=1,Type=Integer,Description="Genotype Quality"&gt;
+##FORMAT=&lt;ID=DP,Number=1,Type=Integer,Description="Read Depth"&gt;
+##FORMAT=&lt;ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality"&gt;
+##ALT=&lt;ID=DEL:ME:ALU,Description="Deletion of ALU element"&gt;
+##ALT=&lt;ID=CNV,Description="Copy number variable region"&gt;
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	NA00001	NA00002	NA00003
+19	111	.	A	C	9.6	.	.	GT:HQ	0|0:10,10	0|0:10,10	0/1:3,3
+19	112	.	A	G	10	.	.	GT:HQ	0|0:10,10	0|0:10,10	0/1:3,3
+20	14370	rs6054257	G	A	29	PASS	NS=3;DP=14;AF=0.5;DB;H2	GT:GQ:DP:HQ	0|0:48:1:51,51	1|0:48:8:51,51	1/1:43:5:.,.
+20	17330	.	T	A	3	q10	NS=3;DP=11;AF=0.017	GT:GQ:DP:HQ	0|0:49:3:58,50	0|1:3:5:65,3	0/0:41:3:.,.
+20	1110696	rs6040355	A	G,T	67	PASS	NS=2;DP=10;AF=0.333,0.667;AA=T;DB	GT:GQ:DP:HQ	1|2:21:6:23,27	2|1:2:0:18,2	2/2:35:4:.,.
+20	1230237	.	T	.	47	PASS	NS=3;DP=13;AA=T	GT:GQ:DP:HQ	0|0:54:.:56,60	0|0:48:4:51,51	0/0:61:2:.,.
+20	1234567	microsat1	G	GA,GAC	50	PASS	NS=3;DP=9;AA=G;AN=6;AC=3,1	GT:GQ:DP	0/1:.:4	0/2:17:2	1/1:40:3
+20	1235237	.	T	.	.	.	.	GT	0/0	0|0	./.
+X	9	.	A	T	12.1	.	.	GT	0	0/1	1/0
+X	10	rsTest	AC	A,ATG	10	PASS	.	GT	0	0/1	0|2
+X	11	rsTest2	T	A,&lt;DEL:ME:ALU&gt;	10	q10;s50	.	GT:DP:GQ	.:3:10	./.	0|2:3
+X	12	.	T	A	13	.	.	GT	0	1/0	1/1
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- #include file="inc/variationformats.ihtml" -->
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: test.vcf</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##fileformat=VCFv4.0
+##fileDate=20090805
+##source=myImputationProgramV3.1
+##reference=1000GenomesPilot-NCBI36
+##phasing=partial
+##INFO=&lt;ID=NS,Number=1,Type=Integer,Description="Number of Samples With Data"&gt;
+##INFO=&lt;ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes"&gt;
+##INFO=&lt;ID=AC,Number=.,Type=Integer,Description="Allele count in genotypes, for each ALT allele, in the same order as listed"&gt;
+##INFO=&lt;ID=DP,Number=1,Type=Integer,Description="Total Depth"&gt;
+##INFO=&lt;ID=AF,Number=.,Type=Float,Description="Allele Frequency"&gt;
+##INFO=&lt;ID=AA,Number=1,Type=String,Description="Ancestral Allele"&gt;
+##INFO=&lt;ID=DB,Number=0,Type=Flag,Description="dbSNP membership, build 129"&gt;
+##INFO=&lt;ID=H2,Number=0,Type=Flag,Description="HapMap2 membership"&gt;
+##FORMAT=&lt;ID=GT,Number=1,Type=String,Description="Genotype"&gt;
+##FORMAT=&lt;ID=GQ,Number=1,Type=Integer,Description="Genotype Quality"&gt;
+##FORMAT=&lt;ID=DP,Number=1,Type=Integer,Description="Read Depth"&gt;
+##FORMAT=&lt;ID=HQ,Number=2,Type=Integer,Description="Haplotype Quality"&gt;
+##FILTER=&lt;ID=q10,Description="Quality below 10"&gt;
+##FILTER=&lt;ID=s50,Description="Less than 50% of samples have data"&gt;
+##ALT=&lt;ID=DEL:ME:ALU,Description="Deletion of ALU element"&gt;
+##ALT=&lt;ID=CNV,Description="Copy number variable region"&gt;
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	NA00001	NA00002	NA00003
+19	111	.	A	C	9.6	.	.	GT:HQ	0|0:10,10	0|0:10,10	0/1:3,3
+19	112	.	A	G	10	.	.	GT:HQ	0|0:10,10	0|0:10,10	0/1:3,3
+20	14370	rs6054257	G	A	29	PASS	NS=3;DP=14;AF=0.5;DB;H2	GT:GQ:DP:HQ	0|0:48:1:51,51	1|0:48:8:51,51	1/1:43:5:.,.
+20	17330	.	T	A	3	q10	NS=3;DP=11;AF=0.017	GT:GQ:DP:HQ	0|0:49:3:58,50	0|1:3:5:65,3	0/0:41:3:.,.
+20	1110696	rs6040355	A	G,T	67	PASS	NS=2;DP=10;AF=0.333,0.667;AA=T;DB	GT:GQ:DP:HQ	1|2:21:6:23,27	2|1:2:0:18,2	2/2:35:4:.,.
+20	1230237	.	T	.	47	PASS	NS=3;DP=13;AA=T	GT:GQ:DP:HQ	0|0:54:.:56,60	0|0:48:4:51,51	0/0:61:2:.,.
+20	1234567	microsat1	G	GA,GAC	50	PASS	NS=3;DP=9;AA=G;AN=6;AC=3,1	GT:GQ:DP	0/1:.:4	0/2:17:2	1/1:40:3
+20	1235237	.	T	.	.	.	.	GT	0/0	0|0	./.
+X	9	.	A	T	12.1	.	.	GT	0	0/1	1/0
+X	10	rsTest	AC	A,ATG	10	PASS	.	GT	0	0/1	0|2
+X	11	rsTest2	T	A,&lt;DEL:ME:ALU&gt;	10	q10;s50	.	GT:DP:GQ	.:3:10	./.	0|2:3
+X	12	.	T	A	13	.	.	GT	0	1/0	1/1
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+
+        #include file="inc/localfiles.ihtml"
+   -->
+
+None.
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Display the trace in an ABI sequencer file</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Display basic information about sequences</td>
+</tr>
+
+<tr>
+<td><a href="refseqget.html">refseqget</a></td>
+<td>Get reference sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqxref.html">seqxref</a></td>
+<td>Retrieve all database cross-references for a sequence entry</td>
+</tr>
+
+<tr>
+<td><a href="seqxrefget.html">seqxrefget</a></td>
+<td>Retrieve all cross-referenced data for a sequence entry</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Display a multiple sequence alignment in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="whichdb.html">whichdb</a></td>
+<td>Search all sequence databases for an entry and retrieve it</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

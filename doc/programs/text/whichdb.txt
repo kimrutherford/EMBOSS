@@ -40,7 +40,7 @@ Output file [outfile.whichdb]:
 Command line arguments
 
 Search all sequence databases for an entry and retrieve it
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-entry]             string     ID or Accession number (Any string)
@@ -84,6 +84,8 @@ Output file format
 
   File: outfile.whichdb
 
+# Trying 'bpgb:x65921'
+bpgb:x65921
 # Trying 'qaxpir:x65921'
 # Failed 'qaxpir:x65921'
 # Trying 'qanxgcgexc:x65921'
@@ -112,6 +114,8 @@ temblvrt:x65921
 # Failed 'qapirinc:x65921'
 # Trying 'qapfasta:x65921'
 # Failed 'qapfasta:x65921'
+# Trying 'qaxembl:x65921'
+qaxembl:x65921
 # Trying 'tgenedashuman:x65921'
 # Failed 'tgenedashuman:x65921'
 # Trying 'qasrswww:x65921'
@@ -128,20 +132,12 @@ temblall:x65921
 qanxflatexc:x65921
 # Trying 'qanxflat:x65921'
 # Failed 'qanxflat:x65921'
-# Trying 'qanxfasta:x65921'
-# Failed 'qanxfasta:x65921'
-# Trying 'qapflat:x65921'
-# Failed 'qapflat:x65921'
-# Trying 'qanxflatinc:x65921'
-# Failed 'qanxflatinc:x65921'
+# Trying 'bpembl:x65921'
+bpembl:x65921
 
 
   [Part of this file has been deleted for brevity]
 
-# Failed 'qapir:x65921'
-# Trying 'qangcgexc:x65921'
-# Failed 'qangcgexc:x65921'
-# Trying 'qapxfasta:x65921'
 # Failed 'qapxfasta:x65921'
 # Trying 'qanfasta:x65921'
 # Failed 'qanfasta:x65921'
@@ -167,6 +163,8 @@ qanxflatexc:x65921
 qanflatexc:x65921
 # Trying 'tsw:x65921'
 # Failed 'tsw:x65921'
+# Trying 'bpworm:x65921'
+# Failed 'bpworm:x65921'
 # Trying 'temblrest:x65921'
 # Failed 'temblrest:x65921'
 # Trying 'qapirall:x65921'
@@ -175,6 +173,8 @@ qanflatexc:x65921
 # Failed 'qanfastaall:x65921'
 # Trying 'qanflatinc:x65921'
 # Failed 'qanflatinc:x65921'
+# Trying 'bpsw:x65921'
+# Failed 'bpsw:x65921'
 # Trying 'tgb:x65921'
 tgb:x65921
 # Trying 'qapblastsplitexc:x65921'
@@ -284,13 +284,15 @@ See also
                     Program name                          Description
                     abiview      Display the trace in an ABI sequencer file
                     coderet      Extract CDS, mRNA and translations from feature tables
-                    entret       Retrieves sequence entries from flatfile databases and files
+                    entret       Retrieve sequence entries from flatfile databases and files
    extractalign     Extract regions from a sequence alignment
                     infoalign    Display basic information about a multiple sequence alignment
                     infoseq      Display basic information about sequences
+                    refseqget    Get reference sequence
                     seqxref      Retrieve all database cross-references for a sequence entry
                     seqxrefget   Retrieve all cross-referenced data for a sequence entry
                     showalign    Display a multiple sequence alignment in pretty format
+   variationget     Get sequence variations
 
 Author(s)
 

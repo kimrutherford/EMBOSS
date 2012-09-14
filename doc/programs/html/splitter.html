@@ -7,7 +7,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -88,7 +88,7 @@ Split sequence(s) into smaller sequences
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Split sequence(s) into smaller sequences
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -116,7 +116,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -229,7 +232,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -298,11 +301,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -346,7 +373,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqoutall qualifiers
+<td align="left" colspan=5>"-outseq" associated seqoutall qualifiers
 </td>
 </tr>
 
@@ -598,7 +625,7 @@ RN   [1]
 RP   1-2229817
 RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
 RT   ;
-RL   Submitted (21-AUG-2001) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (21-AUG-2001) to the INSDC.
 RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
 RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
 RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
@@ -619,15 +646,15 @@ DR   EPD; EP74203; HS_MRPS18B.
 DR   EPD; EP74346; HS_HLA-E.
 DR   EPD; EP74389; HS_BAT1.
 DR   EPD; EP74485; HS_IER3.
-DR   GDB; 11515913.
-DR   GOA; P59942.
-DR   HGNC; 20668; MCCD1.
-DR   IMGT/HLA; HLA02629; J*01:01:01:02.
-DR   IMGT/HLA; HLA02802; V*01:01:01:02.
-DR   RFAM; RF00017; SRP_euk_arch.
-DR   RFAM; RF00019; Y_RNA.
-DR   RFAM; RF00026; U6.
-DR   RFAM; RF00100; 7SK.
+DR   Ensembl-Gn; ENSG00000096155; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000096171; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000111971; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137310; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137312; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137313; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137331; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137332; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137337; Homo_sapiens.
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -1012,12 +1039,12 @@ None.
 <th>Description</th></tr>
 <tr>
 <td><a href="aligncopy.html">aligncopy</a></td>
-<td>Reads and writes alignments</td>
+<td>Read and write alignments</td>
 </tr>
 
 <tr>
 <td><a href="aligncopypair.html">aligncopypair</a></td>
-<td>Reads and writes pairs from alignments</td>
+<td>Read and write pairs from alignments</td>
 </tr>
 
 <tr>
@@ -1032,12 +1059,12 @@ None.
 
 <tr>
 <td><a href="cutseq.html">cutseq</a></td>
-<td>Removes a section from a sequence</td>
+<td>Remove a section from a sequence</td>
 </tr>
 
 <tr>
 <td><a href="degapseq.html">degapseq</a></td>
-<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
+<td>Remove non-alphabetic (e.g. gap) characters from sequences</td>
 </tr>
 
 <tr>
@@ -1047,7 +1074,7 @@ None.
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Retrieves sequence entries from flatfile databases and files</td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -1067,12 +1094,17 @@ None.
 
 <tr>
 <td><a href="featcopy.html">featcopy</a></td>
-<td>Reads and writes a feature table</td>
+<td>Read and write a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featmerge.html">featmerge</a></td>
+<td>Merge two overlapping feature tables</td>
 </tr>
 
 <tr>
 <td><a href="featreport.html">featreport</a></td>
-<td>Reads and writes a feature table</td>
+<td>Read and write a feature table</td>
 </tr>
 
 <tr>
@@ -1097,12 +1129,12 @@ None.
 
 <tr>
 <td><a href="maskambignuc.html">maskambignuc</a></td>
-<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+<td>Mask all ambiguity characters in nucleotide sequences with N</td>
 </tr>
 
 <tr>
 <td><a href="maskambigprot.html">maskambigprot</a></td>
-<td>Masks all ambiguity characters in protein sequences with X</td>
+<td>Mask all ambiguity characters in protein sequences with X</td>
 </tr>
 
 <tr>
@@ -1152,7 +1184,7 @@ None.
 
 <tr>
 <td><a href="nthseqset.html">nthseqset</a></td>
-<td>Reads and writes (returns) one set of sequences from many</td>
+<td>Read and write (return) one set of sequences from many</td>
 </tr>
 
 <tr>
@@ -1167,22 +1199,22 @@ None.
 
 <tr>
 <td><a href="seqcount.html">seqcount</a></td>
-<td>Reads and counts sequences</td>
+<td>Read and count sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqret.html">seqret</a></td>
-<td>Reads and writes (returns) sequences</td>
+<td>Read and write (return) sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqretsetall.html">seqretsetall</a></td>
-<td>Reads and writes (returns) many sets of sequences</td>
+<td>Read and write (return) many sets of sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
-<td>Reads sequences and writes them to individual files</td>
+<td>Read sequences and write them to individual files</td>
 </tr>
 
 <tr>
@@ -1197,7 +1229,7 @@ None.
 
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
-<td>Reads and writes (returns) sequences, skipping first few</td>
+<td>Read and write (return) sequences, skipping first few</td>
 </tr>
 
 <tr>
@@ -1227,7 +1259,7 @@ None.
 
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
-<td>Removes vectors from the ends of nucleotide sequence(s)</td>
+<td>Remove vectors from the ends of nucleotide sequence(s)</td>
 </tr>
 
 <tr>

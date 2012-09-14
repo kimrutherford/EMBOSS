@@ -1,10 +1,10 @@
 application: prettyseq [
   documentation: "Write a nucleotide sequence and its translation to file"
   groups: "Nucleic:Translation, Display"
-    relations: "EDAM:0000108 topic Translation"
-    relations: "EDAM:0000092 topic Data rendering and visualisation"
-    relations: "EDAM:0000371 operation DNA translation"
-    relations: "EDAM:0000564 operation Sequence rendering"
+    relations: "EDAM_topic:0108 Translation"
+    relations: "EDAM_topic:0092 Data visualisation"
+    relations: "EDAM_operation:0371 DNA translation"
+    relations: "EDAM_operation:0564 Sequence rendering"
 ]
 
 section: input [
@@ -15,7 +15,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -30,7 +30,7 @@ section: required [
     information: "Range(s) to translate"
     default: "$(sequence.begin)-$(sequence.end)"
     expected: "Whole sequence"
-    relations: "EDAM:0001017 data Sequence range"
+    relations: "EDAM_data:1017 Sequence range"
   ]
 
 endsection: required
@@ -59,28 +59,28 @@ section: additional [
     delimiter: ";"
     codedelimiter: ":"
     information: "Genetic code to use"
-    relations: "EDAM:0002128 identifier Genetic code name"
+    relations: "EDAM_identifier:2128 Genetic code name"
   ]
 
   boolean: ruler [
     additional: "Y"
     default: "Y"
     information: "Add a ruler"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: plabel [
     additional: "Y"
     default: "Y"
     information: "Number translations"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: nlabel [
     additional: "Y"
     default: "Y"
     information: "Number DNA sequence"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: additional
@@ -94,7 +94,7 @@ section: advanced [
     minimum: "10"
     default: "60"
     information: "Width of screen"
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
 endsection: advanced
@@ -107,7 +107,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "prettyseq output"
-    relations: "EDAM:0001317 data Gene annotation (translation)"
+    relations: "EDAM_data:1313 Nucleic acid features (coding sequence)"
   ]
 
 endsection: output

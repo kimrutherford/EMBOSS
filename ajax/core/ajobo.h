@@ -1,13 +1,66 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajobo *************************************************************
+**
+** AJAX OBO handling functions
+**
+** @author Copyright (C) 2010 Peter Rice
+** @version $Revision: 1.21 $
+** @modified May 5 pmr 2010 First AJAX version
+** @modified Sep 8 2010 pmr Added query and reading functions
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajobo_h
-#define ajobo_h
+#ifndef AJOBO_H
+#define AJOBO_H
 
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
 #include "ajobodata.h"
-#include "ajax.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
 
 /*
 ** Prototype definitions
@@ -35,6 +88,7 @@ const AjPStr     ajOboGetDb(const AjPObo obo);
 AjBool           ajOboGetDef(const AjPObo obo, AjPStr *Pdefstr, ajuint *nrefs);
 const AjPStr     ajOboGetEntry(const AjPObo obo);
 const AjPStr     ajOboGetId(const AjPObo obo);
+const AjPStr     ajOboGetName(const AjPObo obo);
 const AjPStr     ajOboGetNamespace(const AjPObo obo);
 ajuint           ajOboGetParents(const AjPObo obo, AjPList uplist);
 const char*      ajOboGetQryC(const AjPObo obo);
@@ -49,8 +103,9 @@ void             ajOboExit(void);
 ** End of prototype definitions
 */
 
-#endif
 
-#ifdef __cplusplus
-}
-#endif
+
+
+AJ_END_DECLS
+
+#endif /* !AJOBO_H */

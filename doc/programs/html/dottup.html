@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -36,7 +36,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Displays a wordmatch dotplot of two sequences
+Display a wordmatch dotplot of two sequences
 <H2>
     Description
 </H2>
@@ -84,7 +84,7 @@ Here is a sample session with <b>dottup</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>dottup tembl:j01636 tembl:v00294 -wordsize=6 -gtitle="v00294 vs j01636" -graph cps </b>
-Displays a wordmatch dotplot of two sequences
+Display a wordmatch dotplot of two sequences
 
 Created dottup.ps
 
@@ -97,8 +97,8 @@ Created dottup.ps
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Displays a wordmatch dotplot of two sequences
-Version: EMBOSS:6.4.0.0
+Display a wordmatch dotplot of two sequences
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -132,7 +132,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -148,7 +151,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein2          boolean    Sequence is protein
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
+   -scircular2         boolean    Sequence is circular
    -sformat2           string     Input sequence format
+   -iquery2            string     Input query fields or ID list
+   -ioffset2           integer    Input start position offset
    -sdbname2           string     Database name
    -sid2               string     Entryname
    -ufo2               string     UFO features
@@ -277,7 +283,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-asequence" associated sequence qualifiers
+<td align="left" colspan=5>"-asequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -346,11 +352,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_asequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_asequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_asequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_asequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -394,7 +424,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-bsequence" associated sequence qualifiers
+<td align="left" colspan=5>"-bsequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -463,11 +493,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular2<br>-scircular_bsequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat2<br>-sformat_bsequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery2<br>-iquery_bsequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset2<br>-ioffset_bsequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -511,7 +565,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-graph" associated graph qualifiers
+<td align="left" colspan=5>"-graph" associated graph qualifiers
 </td>
 </tr>
 
@@ -552,7 +606,7 @@ Version: EMBOSS:6.4.0.0
 <td>string</td>
 <td>Graph x axis title</td>
 <td>Any string</td>
-<td>$(bsequence.name)</td>
+<td>$(asequence.name)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -560,7 +614,7 @@ Version: EMBOSS:6.4.0.0
 <td>string</td>
 <td>Graph y axis title</td>
 <td>Any string</td>
-<td>$(asequence.name)</td>
+<td>$(bsequence.name)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -580,7 +634,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-xygraph" associated xygraph qualifiers
+<td align="left" colspan=5>"-xygraph" associated xygraph qualifiers
 </td>
 </tr>
 
@@ -621,7 +675,7 @@ Version: EMBOSS:6.4.0.0
 <td>string</td>
 <td>Graph x axis title</td>
 <td>Any string</td>
-<td>&nbsp;</td>
+<td>$(asequence.name)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -629,7 +683,7 @@ Version: EMBOSS:6.4.0.0
 <td>string</td>
 <td>Graph y axis title</td>
 <td>Any string</td>
-<td>&nbsp;</td>
+<td>$(bsequence.name)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -940,7 +994,6 @@ FT                   /transl_table=11
 FT                   /note="reading frame"
 FT                   /db_xref="GOA:P03023"
 FT                   /db_xref="InterPro:IPR000843"
-FT                   /db_xref="InterPro:IPR001761"
 FT                   /db_xref="InterPro:IPR010982"
 FT                   /db_xref="PDB:1CJG"
 FT                   /db_xref="PDB:1EFA"

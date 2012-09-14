@@ -261,10 +261,10 @@ static void tfscan_print_hits(AjPList *l,
                                (float) m->score,
                                '-',0);
             ajFmtPrintS(&tmpstr, "*acc %S", acc);
-            ajFeatTagAdd(gf, NULL, tmpstr);
+            ajFeatTagAddSS(gf, NULL, tmpstr);
             bf  = ajTableFetchS(btable, m->seqname);
             ajFmtPrintS(&tmpstr, "*factor %S", bf);
-            ajFeatTagAdd(gf, NULL, tmpstr);
+            ajFeatTagAddSS(gf, NULL, tmpstr);
         }
 
 	embMatMatchDel(&m);

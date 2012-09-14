@@ -53,7 +53,7 @@ Taxon output file [9606.excel]:
 Command line arguments
 
 Get parents of taxon(s)
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-taxons]            taxon      Taxon filename and optional format, or
@@ -68,6 +68,8 @@ Version: EMBOSS:6.4.0.0
 
    "-taxons" associated qualifiers
    -iformat1           string     Input taxonomy format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers

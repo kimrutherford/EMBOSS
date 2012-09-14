@@ -425,7 +425,7 @@ int main(int argc, char **argv)
 	/* Get rid of primer pairs nearby the top scoring ones */
 	prima_TwoSortscorepos(&pairlist);
 	prima_prune_nearby(pairlist, &npair, maxprimerlen-1);
-	ajListSort(pairlist,prima_PosCompare);
+	ajListSort(pairlist, &prima_PosCompare);
 	prima_check_overlap(pairlist,&npair,overlap);
     }
 
@@ -1690,7 +1690,7 @@ static void prima_TwoSortscorepos(AjPList *pairlist)
     float   score = 0.0;
 
 
-    ajListSort(*pairlist,prima_Compare);
+    ajListSort(*pairlist, &prima_Compare);
     intlist = ajListNew();
     filist  = ajListNew();
 
@@ -1705,7 +1705,7 @@ static void prima_TwoSortscorepos(AjPList *pairlist)
 	}
 
 	save = tmp;
-	ajListSort(intlist,prima_PosCompare);
+	ajListSort(intlist, &prima_PosCompare);
 	score = tmp->f->score;
 	prima_RevSort(&intlist);
 
@@ -1714,7 +1714,7 @@ static void prima_TwoSortscorepos(AjPList *pairlist)
 	ajListPush(intlist,(void *)save);
     }
 
-    ajListSort(intlist,prima_PosCompare);
+    ajListSort(intlist, &prima_PosCompare);
     prima_RevSort(&intlist);
 
     while(ajListPop(intlist,(void **)&tmp))
@@ -1761,14 +1761,14 @@ static void prima_RevSort(AjPList *alist)
 	}
 
 	save = tmp;
-	ajListSort(intlist,prima_PosEndCompare);
+	ajListSort(intlist, &prima_PosEndCompare);
 	pos = tmp->f->start+tmp->f->primerlen;
 	while(ajListPop(intlist,(void **)&tmp))
 	    ajListPushAppend(filist,(void *)tmp);
 	ajListPush(intlist,(void *)save);
     }
 
-    ajListSort(intlist,prima_PosEndCompare);
+    ajListSort(intlist, &prima_PosEndCompare);
     while(ajListPop(intlist,(void **)&tmp))
 	ajListPushAppend(filist,(void *)tmp);
 

@@ -644,7 +644,7 @@ static void sirna_output(const AjPList list,
 
 	    ajFmtPrintS(&tmpStr, "*gc %4.1f",
 			((float)value->GCcount*100.0)/20.0);
-	    ajFeatTagAdd(gf,  NULL, tmpStr);
+	    ajFeatTagAddSS(gf,  NULL, tmpStr);
 
 	    /* get the sequences to order */
 	    if(context)
@@ -665,7 +665,7 @@ static void sirna_output(const AjPList list,
 	    ajStrExchangeKK(&subseq, 'T', 'U');
 	    ajStrAppendC(&subseq, "dTdT");
 	    ajFmtPrintS(&tmpStr, "*forward %S", subseq);
-	    ajFeatTagAdd(gf,  NULL, tmpStr);
+	    ajFeatTagAddSS(gf,  NULL, tmpStr);
 
 	    ajStrAssignSubS(&subseq, ajSeqGetSeqS(seq),
 			    value->pos+2, value->pos+20);
@@ -674,7 +674,7 @@ static void sirna_output(const AjPList list,
 	    ajStrExchangeKK(&subseq, 'T', 'U');
 	    ajStrAppendC(&subseq, "dTdT");
 	    ajFmtPrintS(&tmpStr, "*reverse %S", subseq);
-	    ajFeatTagAdd(gf,  NULL, tmpStr);
+	    ajFeatTagAddSS(gf,  NULL, tmpStr);
 
 	    /*
 	    ** now write out the 23 base bit of sequence to the seqout file

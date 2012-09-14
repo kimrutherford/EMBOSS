@@ -1,0 +1,248 @@
+ID   AACY021843949; SV 1; linear; genomic DNA; WGS; ENV; 897 BP.
+XX
+AC   AACY021843949; AACY020000000; AACY000000000;
+XX
+PR   Project:PRJNA13694;
+XX
+DT   22-MAR-2007 (Rel. 91, Created)
+DT   04-DEC-2008 (Rel. 98, Last updated, Version 2)
+XX
+DE   Marine metagenome 1095403237553, whole genome shotgun sequence.
+XX
+KW   WGS.
+XX
+OS   marine metagenome
+OC   unclassified sequences; metagenomes; ecological metagenomes.
+XX
+RN   [1]
+RP   1-897
+RX   DOI; 10.1126/science.1093857.
+RX   PUBMED; 15001713.
+RA   Venter J.C., Remington K., Heidelberg J.F., Halpern A.L., Rusch D.,
+RA   Eisen J.A., Wu D., Paulsen I., Nelson K.E., Nelson W., Fouts D.E., Levy S.,
+RA   Knap A.H., Lomas M.W., Nealson K., White O., Peterson J., Hoffman J.,
+RA   Parsons R., Baden-Tillson H., Pfannkoch C., Rogers Y.H., Smith H.O.;
+RT   "Environmental genome shotgun sequencing of the Sargasso Sea";
+RL   Science 304(5667):66-74(2004).
+XX
+RN   [2]
+RP   1-897
+RX   DOI; 10.1371/journal.pbio.0050016.
+RX   PUBMED; 17355171.
+RA   Yooseph S., Sutton G., Rusch D.B., Halpern A.L., Williamson S.J.,
+RA   Remington K., Eisen J.A., Heidelberg K.B., Manning G., Li W.,
+RA   Jaroszewski L., Cieplak P., Miller C.S., Li H., Mashiyama S.T.,
+RA   Joachimiak M.P., van Belle C., Chandonia J.M., Soergel D.A., Zhai Y.,
+RA   Natarajan K., Lee S., Raphael B.J., Bafna V., Friedman R., Brenner S.E.,
+RA   Godzik A., Eisenberg D., Dixon J.E., Taylor S.S., Strausberg R.L.,
+RA   Frazier M., Venter J.C.;
+RT   "The Sorcerer II Global Ocean Sampling expedition: expanding the universe
+RT   of protein families";
+RL   PLoS Biol. 5(3):e16-e16(2007).
+XX
+RN   [3]
+RP   1-897
+RX   DOI; 10.1371/journal.pbio.0050017.
+RX   PUBMED; 17355172.
+RA   Kannan N., Taylor S.S., Zhai Y., Venter J.C., Manning G.;
+RT   "Structural and functional diversity of the microbial kinome";
+RL   PLoS Biol. 5(3):e17-e17(2007).
+XX
+RN   [4]
+RP   1-897
+RX   DOI; 10.1371/journal.pbio.0050077.
+RX   PUBMED; 17355176.
+RA   Rusch D.B., Halpern A.L., Sutton G., Heidelberg K.B., Williamson S.,
+RA   Yooseph S., Wu D., Eisen J.A., Hoffman J.M., Remington K., Beeson K.,
+RA   Tran B., Smith H., Baden-Tillson H., Stewart C., Thorpe J., Freeman J.,
+RA   Andrews-Pfannkoch C., Venter J.E., Li K., Kravitz S., Heidelberg J.F.,
+RA   Utterback T., Rogers Y.H., Falcon L.I., Souza V., Bonilla-Rosso G.,
+RA   Eguiarte L.E., Karl D.M., Sathyendranath S., Platt T., Bermingham E.,
+RA   Gallardo V., Tamayo-Castillo G., Ferrari M.R., Strausberg R.L., Nealson K.,
+RA   Friedman R., Frazier M., Venter J.C.;
+RT   "The Sorcerer II Global Ocean Sampling expedition: northwest Atlantic
+RT   through eastern tropical Pacific";
+RL   PLoS Biol. 5(3):e77-e77(2007).
+XX
+RN   [5]
+RP   1-897
+RA   Venter J.C., Remington K., Heidelberg J., Halpern A.L., Rusch D.,
+RA   Eisen J.A., Wu D., Paulsen I., Nelson K.E., Nelson W., Fouts D.E., Levy S.,
+RA   Knap A.H., Lomas M.W., Nealson K., White O., Peterson J., Hoffman J.,
+RA   Parsons R., Baden-Tillson H., Pfannkoch C., Rogers Y.-H., Smith H.O.;
+RT   ;
+RL   Submitted (12-JAN-2004) to the INSDC.
+RL   The Institute for Biological Energy Alternatives, 1901 Research Blvd.,
+RL   Rockville, MD 20850, USA
+XX
+RN   [6]
+RP   1-897
+RG   J. Craig Venter Institute
+RA   ;
+RT   ;
+RL   Submitted (02-MAR-2007) to the INSDC.
+RL   J. Craig Venter Institute, 9704 Medical Center Drive, Rockville, MD 20850,
+RL   USA
+XX
+DR   EMBL-CON; EM498477.
+XX
+CC   For complete environmental metadata relating to this record,
+CC   background on the Global Ocean Sampling expedition, as well as
+CC   additional analysis results, please visit the CAMERA website
+CC   (http://camera.calit2.net).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..897
+FT                   /organism="marine metagenome"
+FT                   /environmental_sample
+FT                   /mol_type="genomic DNA"
+FT                   /isolation_source="isolated as part of a large dataset
+FT                   composed predominantly from surface water marine samples
+FT                   collected along a voyage from Eastern North American coast
+FT                   to the Eastern Pacific Ocean, including locations in the
+FT                   Sargasso Sea, Panama Canal, and the Galapagos Islands"
+FT                   /note="metagenomic"
+FT                   /db_xref="taxon:408172"
+XX
+SQ   Sequence 897 BP; 295 A; 141 C; 172 G; 289 T; 0 other;
+     agtacacaat atcctacaaa ttttaatcca ggaacaagtt tctttttggc aaatagtttt        60
+     gcaagatcac aggcacaatt tttgggagat agcacaggta taacaattaa tgaagttaat       120
+     agaatatcta aagctactgg accacttact gctgccactg gtgaaacttc atcatcagat       180
+     ccacatgctg gatttcagct tggtgtatta aatccttatg cttatgaacc tgctgatatt       240
+     gatgaatgta gtttgttaag cacatgttat tttaaattag gagatgccac ggtagatacg       300
+     gttaataata caattgatgt tggatttcct catggcctta gtgatttagt tttaggtaga       360
+     gtttttccgg gggcaggtaa taccttacct actggattaa ctgaaagaaa ttattatata       420
+     caagttatca attcaacaac acttgcattt tctaccagaa aatcaggaac taccacattt       480
+     agagcaaatt tatctacttc tggtagtgat gcaggaatag caaaggtttg tattgcaaca       540
+     gggataacat gttattattt ccaaaccagt ggatatgtat attttaccag ggacactcgc       600
+     gctcatttta gttataataa taatattgca cgagcacatt tatcgccagt aacaagatgg       660
+     ggtttacata ctgcaaatac aactgcaagg tctagagttg ataatggatt taattcctta       720
+     ggaggtgctg atatacgtgc taatcctaat ggattaatgg atataccaga gggtggaaac       780
+     ggtggcaata atgcacattt atattatcct tatggtagta caagtagaac taataataca       840
+     aattatttat attatggtat gagattagct cgtactcaag atggtggcac aaattat          897
+//
+ID   AACY020702065; SV 1; linear; genomic DNA; WGS; ENV; 843 BP.
+XX
+AC   AACY020702065; AACY020000000; AACY000000000;
+XX
+PR   Project:PRJNA13694;
+XX
+DT   22-MAR-2007 (Rel. 91, Created)
+DT   04-DEC-2008 (Rel. 98, Last updated, Version 2)
+XX
+DE   Marine metagenome 1095403514786, whole genome shotgun sequence.
+XX
+KW   WGS.
+XX
+OS   marine metagenome
+OC   unclassified sequences; metagenomes; ecological metagenomes.
+XX
+RN   [1]
+RP   1-843
+RX   DOI; 10.1126/science.1093857.
+RX   PUBMED; 15001713.
+RA   Venter J.C., Remington K., Heidelberg J.F., Halpern A.L., Rusch D.,
+RA   Eisen J.A., Wu D., Paulsen I., Nelson K.E., Nelson W., Fouts D.E., Levy S.,
+RA   Knap A.H., Lomas M.W., Nealson K., White O., Peterson J., Hoffman J.,
+RA   Parsons R., Baden-Tillson H., Pfannkoch C., Rogers Y.H., Smith H.O.;
+RT   "Environmental genome shotgun sequencing of the Sargasso Sea";
+RL   Science 304(5667):66-74(2004).
+XX
+RN   [2]
+RP   1-843
+RX   DOI; 10.1371/journal.pbio.0050016.
+RX   PUBMED; 17355171.
+RA   Yooseph S., Sutton G., Rusch D.B., Halpern A.L., Williamson S.J.,
+RA   Remington K., Eisen J.A., Heidelberg K.B., Manning G., Li W.,
+RA   Jaroszewski L., Cieplak P., Miller C.S., Li H., Mashiyama S.T.,
+RA   Joachimiak M.P., van Belle C., Chandonia J.M., Soergel D.A., Zhai Y.,
+RA   Natarajan K., Lee S., Raphael B.J., Bafna V., Friedman R., Brenner S.E.,
+RA   Godzik A., Eisenberg D., Dixon J.E., Taylor S.S., Strausberg R.L.,
+RA   Frazier M., Venter J.C.;
+RT   "The Sorcerer II Global Ocean Sampling expedition: expanding the universe
+RT   of protein families";
+RL   PLoS Biol. 5(3):e16-e16(2007).
+XX
+RN   [3]
+RP   1-843
+RX   DOI; 10.1371/journal.pbio.0050017.
+RX   PUBMED; 17355172.
+RA   Kannan N., Taylor S.S., Zhai Y., Venter J.C., Manning G.;
+RT   "Structural and functional diversity of the microbial kinome";
+RL   PLoS Biol. 5(3):e17-e17(2007).
+XX
+RN   [4]
+RP   1-843
+RX   DOI; 10.1371/journal.pbio.0050077.
+RX   PUBMED; 17355176.
+RA   Rusch D.B., Halpern A.L., Sutton G., Heidelberg K.B., Williamson S.,
+RA   Yooseph S., Wu D., Eisen J.A., Hoffman J.M., Remington K., Beeson K.,
+RA   Tran B., Smith H., Baden-Tillson H., Stewart C., Thorpe J., Freeman J.,
+RA   Andrews-Pfannkoch C., Venter J.E., Li K., Kravitz S., Heidelberg J.F.,
+RA   Utterback T., Rogers Y.H., Falcon L.I., Souza V., Bonilla-Rosso G.,
+RA   Eguiarte L.E., Karl D.M., Sathyendranath S., Platt T., Bermingham E.,
+RA   Gallardo V., Tamayo-Castillo G., Ferrari M.R., Strausberg R.L., Nealson K.,
+RA   Friedman R., Frazier M., Venter J.C.;
+RT   "The Sorcerer II Global Ocean Sampling expedition: northwest Atlantic
+RT   through eastern tropical Pacific";
+RL   PLoS Biol. 5(3):e77-e77(2007).
+XX
+RN   [5]
+RP   1-843
+RA   Venter J.C., Remington K., Heidelberg J., Halpern A.L., Rusch D.,
+RA   Eisen J.A., Wu D., Paulsen I., Nelson K.E., Nelson W., Fouts D.E., Levy S.,
+RA   Knap A.H., Lomas M.W., Nealson K., White O., Peterson J., Hoffman J.,
+RA   Parsons R., Baden-Tillson H., Pfannkoch C., Rogers Y.-H., Smith H.O.;
+RT   ;
+RL   Submitted (12-JAN-2004) to the INSDC.
+RL   The Institute for Biological Energy Alternatives, 1901 Research Blvd.,
+RL   Rockville, MD 20850, USA
+XX
+RN   [6]
+RP   1-843
+RG   J. Craig Venter Institute
+RA   ;
+RT   ;
+RL   Submitted (02-MAR-2007) to the INSDC.
+RL   J. Craig Venter Institute, 9704 Medical Center Drive, Rockville, MD 20850,
+RL   USA
+XX
+DR   EMBL-CON; EM498477.
+XX
+CC   For complete environmental metadata relating to this record,
+CC   background on the Global Ocean Sampling expedition, as well as
+CC   additional analysis results, please visit the CAMERA website
+CC   (http://camera.calit2.net).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..843
+FT                   /organism="marine metagenome"
+FT                   /environmental_sample
+FT                   /mol_type="genomic DNA"
+FT                   /isolation_source="isolated as part of a large dataset
+FT                   composed predominantly from surface water marine samples
+FT                   collected along a voyage from Eastern North American coast
+FT                   to the Eastern Pacific Ocean, including locations in the
+FT                   Sargasso Sea, Panama Canal, and the Galapagos Islands"
+FT                   /note="metagenomic"
+FT                   /db_xref="taxon:408172"
+XX
+SQ   Sequence 843 BP; 256 A; 154 C; 145 G; 288 T; 0 other;
+     gctgtaatac tatgtgtacc agaatcaaat gctgttaaat caacaagtgt ggtttctttt        60
+     aattttactt gtccatcaac tgatgtacgt gatggaacat attgattggt agtagccact       120
+     ctatcagaat cggttgggta aagctcgaag gttttggaat taattttatt aacaaataaa       180
+     aatgctccat tttttaatcc atgatcagtg gaaccggata cttgttctat ttgcacaatg       240
+     cttccatctt ggaacgtatc aattcctgct gtactagaaa taccttgaat tctaccattt       300
+     gttgagttaa taaatgctgc agcacctgtt gctgatgtgg catctgtatc aactaaaact       360
+     tcatctccgg tataaccagt taacgttgtg gcaagtttaa ttgtatcaga tgttctatca       420
+     aaaacaaaat aactagtgcc acttgtaaga ccaccaatat ttgatgcgcc attatttgta       480
+     tatgaaactt gttcaccatt ggttaatgaa tttcctacta agttaattga atttccaagt       540
+     ggatttaatg aaactgcagt aaatgtaata tcttggccag caactcctac actttcaata       600
+     tttactgctg cactatttct attaaattta aatctgttag cacttgttat ttgagcagtt       660
+     gccgttgtaa aaccattgag accagcagga agagttccag ttgaactata tgttacaatg       720
+     tcgcccgttg taaaaccatg atttgcaatg tagaacgaat tcggttcgga aacttcttta       780
+     tatgcaagcc ataatgcgta ctgatcggca tcttcgttac catcttcaga ataatctagc       840
+     ata                                                                     843
+//

@@ -1,12 +1,40 @@
-#include "ajax.h"
+/* @source ajcall *************************************************************
+**
+** General routines for function callback
+**
+** @author Copyright (c) 1999 Alan Bleasby
+** @version $Revision: 1.28 $
+** @modified $Date: 2011/10/23 20:09:49 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
+
+#include "ajlib.h"
+#include "ajcall.h"
+
 #include <stdio.h>
 #include <string.h>
-#include <stdarg.h>
 
 
 
 
-/* ajCall Routines are used to allow access to different library levels.
+/*
+** ajCall Routines are used to allow access to different library levels.
 ** Originally set up for plplot graphics to be optional.
 ** So in ajgraph.c you used to see the register calls which list all the calls
 ** needed by ajacd.c. this is now a higher level library to these are obsolete
@@ -29,6 +57,8 @@ static AjPTable oldcallCount = NULL;
 ** Create new function hash table
 **
 ** @return [AjPTable] Hash table with string keys
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -46,8 +76,10 @@ AjPTable ajCallTableNew(void)
 **
 ** @param [w] table [AjPTable] name which is used later.
 ** @param [r] name [const char*] name which is used later.
-** @param [f] func [void*] function to be called on name being called.
+** @param [f] func [void*] Access structure for function to be invoked by name
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -85,6 +117,8 @@ void ajCallTableRegister(AjPTable table, const char *name, void *func)
 ** @param [r] name [const char*] name which is used later..
 ** @param [f] func [CallFunc] function to be called on name being called.
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -118,6 +152,8 @@ void ajCallRegister(const char *name, CallFunc func)
 ** @param [r] name [const char*] name which is used later.
 ** @param [f] func [CallFunc] function to be called on name being called.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -158,6 +194,8 @@ void ajCallRegisterOld(const char *name, CallFunc func)
 ** @param [r] name [const char*] name of the function to call.
 ** @param [v] [...] Optional arguments
 ** @return [void*] NULL if function call not found.
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 void* ajCall(const char *name, ...)
@@ -207,12 +245,15 @@ void* ajCall(const char *name, ...)
 
 /* @func ajCallTableGetC ******************************************************
 **
-** Returns a named function by its name. If it does not exist then give
-** an error message saying so.
+** Returns an access structure defining the named function. If it does
+** not exist then gives an error message saying so.
 **
 ** @param [r] table [const AjPTable] Function hash table
 ** @param [r] name [const char*] name of the function
-** @return [void*] NULL if function call not found.
+** @return [void*] Access structure defining the named function.
+**                 NULL if not found
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 void* ajCallTableGetC(const AjPTable table, const char *name)
@@ -239,12 +280,15 @@ void* ajCallTableGetC(const AjPTable table, const char *name)
 
 /* @func ajCallTableGetS ******************************************************
 **
-** Returns a named function by its name. If it does not exist then give
-** an error message saying so.
+** Returns an access structure defining the named function. If it does
+** not exist then gives an error message saying so.
 **
 ** @param [r] table [const AjPTable]  Function hash table
 ** @param [r] namestr [const AjPStr] name of the function
-** @return [void*] NULL if function call not found.
+** @return [void*] Access structure defining the named function.
+**                 NULL if not found
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 void* ajCallTableGetS(const AjPTable table, const AjPStr namestr)
@@ -274,6 +318,8 @@ void* ajCallTableGetS(const AjPTable table, const AjPStr namestr)
 ** Cleans up calls register internal memory
 **
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 

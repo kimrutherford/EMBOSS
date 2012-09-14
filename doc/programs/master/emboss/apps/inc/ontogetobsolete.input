@@ -5,33 +5,23 @@
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 [Term]
-id: EDAM:0000083
+id: EDAM_topic:0083
 name: Alignment
 namespace: topic
-def: Study concerning the alignment (equivalence between sites) of molecular sequences, structures or profiles (representing a sequence or structure alignment).
-subset: topic
-is_obsolete: true
-consider: EDAM:0000182 ! Sequence alignment
-consider: EDAM:0000183 ! Structure alignment
-consider: EDAM:0000184 ! Threading
+def: Topic concerning the alignment (equivalence between sites) of molecular sequences, structures or profiles (representing a sequence or structure alignment).
+subset: topics
+is_obsolete: true ! {since=beta12orEarlier}
+consider: EDAM_topic:0182 ! Sequence alignment
+consider: EDAM_topic:0183 ! Structure alignment
+consider: EDAM_topic:0184 ! Threading
 
 [Term]
-id: EDAM:0002928
-name: Alignment
-namespace: operation
-def: Compare two or more entities, typically the sequence or structure (or derivatives) of macromolecules, to identify equivalent subunits.
-subset: operation
-is_a: EDAM:0000004 ! Operation
-is_a: EDAM:0002951 ! Alignment processing
-relationship: has_output EDAM:0001916 ! Alignment {minCardinality=1}
-
-[Term]
-id: EDAM:0001916
+id: EDAM_data:1916
 name: Alignment
 namespace: data
 def: An alignment of molecular sequences, structures or profiles derived from them.
 subset: data
-is_a: EDAM:0002539 ! Alignment data
+is_a: EDAM_data:3031 ! Core data
 
 </pre>
 </td></tr></table><p>

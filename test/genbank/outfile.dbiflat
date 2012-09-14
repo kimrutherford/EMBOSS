@@ -1,12 +1,12 @@
 ########################################
 # Program: dbiflat
-# Rundate: Thu 15 Jul 2010 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Dbname: GENBANK
 # Release: 0.0
-# Date: 15/07/10
-# CurrentDirectory: /homes/pmr/devemboss/test/genbank/
+# Date: 15/07/12
+# CurrentDirectory: /home/emboss/devemboss/test/genbank/
 # IndexDirectory: ./
-# IndexDirectoryPath: /homes/pmr/devemboss/test/genbank/
+# IndexDirectoryPath: /home/emboss/devemboss/test/genbank/
 # Maxindex: 0
 # Fields: 6
 #   Field 1: id
@@ -16,7 +16,7 @@
 #   Field 5: key
 #   Field 6: org
 # Directory: ./
-# DirectoryPath: /homes/pmr/devemboss/test/genbank/
+# DirectoryPath: /home/emboss/devemboss/test/genbank/
 # Filenames: *.seq
 # Exclude: 
 # Files: 10
@@ -87,7 +87,7 @@ filename: 'gbrod1.seq'
     sv: 3
    des: 28
    key: 1
-   org: 51
+   org: 52
 filename: 'gbsts1.seq'
     id: 1
    acc: 1
@@ -108,12 +108,12 @@ filename: 'gbvrt.seq'
     sv: 2
    des: 12
    key: 6
-   org: 32
+   org: 30
 
 Index acc: maxlen 8 items 80
 Index sv: maxlen 10 items 78
 Index des: maxlen 19 items 176
 Index key: maxlen 44 items 76
-Index org: maxlen 27 items 95
+Index org: maxlen 27 items 94
 
 Total 10 files 39 entries (0 duplicates)

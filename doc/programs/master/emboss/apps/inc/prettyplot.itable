@@ -48,11 +48,11 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-resbreak</td>
+<td>-blocksperline</td>
 <td>integer</td>
-<td>Residues before a space</td>
+<td>Blocks of residues on each line</td>
 <td>Integer 1 or more</td>
-<td>Same as -residuesperline to give no breaks</td>
+<td>1</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -128,7 +128,7 @@ The only four letters allowed are BPLW, in any order.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-[no]box</td>
+<td>-[no]doboxes</td>
 <td>boolean</td>
 <td>Display prettyboxes</td>
 <td>Boolean value Yes/No</td>
@@ -184,11 +184,11 @@ The only four letters allowed are BPLW, in any order.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<td>-plurality</td>
+<td>-ratio</td>
 <td>float</td>
-<td>Plurality check value (totweight/2)</td>
-<td>Any numeric value</td>
-<td>Half the total sequence weighting</td>
+<td>Plurality ratio for a consensus match</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.5</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -247,7 +247,7 @@ The only four letters allowed are BPLW, in any order.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequences" associated seqset qualifiers
+<td align="left" colspan=5>"-sequences" associated seqset qualifiers
 </td>
 </tr>
 
@@ -316,11 +316,35 @@ The only four letters allowed are BPLW, in any order.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequences</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequences</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequences</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequences</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -364,7 +388,7 @@ The only four letters allowed are BPLW, in any order.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-graph" associated graph qualifiers
+<td align="left" colspan=5>"-graph" associated graph qualifiers
 </td>
 </tr>
 

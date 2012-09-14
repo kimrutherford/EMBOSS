@@ -1,26 +1,230 @@
-/*
-** This is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+/* @source ajvarread **********************************************************
 **
-** This program is distributed in the hope that it will be useful,
+** AJAX variation data reading functions
+**
+** These functions control all aspects of AJAX variation data reading
+**
+** @author Copyright (C) 2010 Peter Rice
+** @version $Revision: 1.24 $
+** @modified Oct 5 pmr First version
+** @modified $Date: 2012/07/14 14:52:39 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajvarread.h"
+#include "ajvar.h"
+#include "ajcall.h"
+#include "ajlist.h"
+#include "ajquery.h"
+#include "ajtextread.h"
+#include "ajnam.h"
+#include "ajfileio.h"
+#include "ajtagval.h"
+#include "ajreg.h"
+
+#include "ajseqbam.h"
+#include "ajvarbcf.h"
+
+#include <string.h>
+
 
 AjPTable varDbMethods = NULL;
 
 static AjPStr varinReadLine     = NULL;
+static AjPStr varFieldName = NULL;
 
-static AjBool varinReadAbc(AjPVarin thys, AjPVar var);
+static AjBool   VarInitVcf = AJFALSE;
+
+static AjPRegexp varRegId = NULL;
+static AjPRegexp varRegType = NULL;
+static AjPRegexp varRegNumber = NULL;
+static AjPRegexp varRegDesc = NULL;
+static AjPRegexp varRegDesc2 = NULL;
+static AjPRegexp varRegGenomes = NULL;
+static AjPRegexp varRegMixture = NULL;
+
+static AjBool	    varinReadVcf41Header(AjPVarin varin, AjPVar var);
+static AjBool       varinLoadBcf(AjPVarin thys, AjPVar var);
+static AjBool       varinLoadVcf3x(AjPVarin thys, AjPVar var);
+static AjBool       varinLoadVcf40(AjPVarin thys, AjPVar var);
+static AjBool       varinLoadVcf41(AjPVarin thys, AjPVar var);
+static const AjPStr varinFieldVcf(AjPVarField var, const AjPStr str);
+static const AjPStr varinFieldVcf3x(AjPVarField var, const AjPStr str);
+static AjPVarSample varinSampleVcf(const AjPStr str);
+static ajuint       varinDataVcf(const AjPStr str, AjPVar var);
+static ajuint       varinParseListVcf(const AjPStr str, AjPStr **Parray);
+static ajuint       varinParseFloatVcf(const AjPStr str, float **Parray);
+static void         varRegInitVcf(void);
+static void         varinVcfCheckLastrecordForRefseqIds(AjPVar var);
+
+
+
+
+/* @datastatic VarPBcfdata ****************************************************
+**
+** Variation BCF format internals
+**
+** @alias VarSBcfdata
+** @alias VarOBcfdata
+**
+** @attr gzfile [AjPVarBcfFile] BGZF file
+** @attr Header [AjPVarBcfHeader] BCF Header object
+** @@
+******************************************************************************/
+
+typedef struct VarSBcfdata
+{
+    AjPVarBcfFile gzfile;
+    AjPVarBcfHeader Header;
+} VarOBcfdata;
+
+#define VarPBcfdata VarOBcfdata*
+
+
+
+
+/* @datastatic VarPId *********************************************************
+**
+** Variation known identifiers
+**
+** @alias VarSId
+** @alias VarOId
+**
+** @attr Id [const char*] Identifier
+** @attr Num  [ajint] Number of values
+** @attr Type [AjEVarType] Format description
+** @attr Desc [const char*] Description
+** @@
+******************************************************************************/
+
+typedef struct VarSId
+{
+    const char *Id;
+    ajint Num;
+    AjEVarType Type;
+    const char *Desc;
+} VarOId;
+
+#define VarPId VarOId*
+
+
+VarOId varInfoIds40[] = {
+    {"AA",        1, AJVAR_STR,   "Ancestral Allele"},
+    {"AC",varNumAlt, AJVAR_INT,   "Allele count"},
+    {"AF",varNumAlt, AJVAR_FLOAT, "Allele Frequency"},
+    {"AN",        1, AJVAR_INT,   "Number of alleles in called genotypes"},
+    {"BQ",        1, AJVAR_INT,   "RMS base quality"},
+    {"CIGAR",     1, AJVAR_STR,   "cigar string"},
+    {"DB",        0, AJVAR_FLAG,  "dbSNP membership"},
+    {"DP",        1, AJVAR_INT,   "Total Depth"},
+    {"END",       1, AJVAR_INT,   "End position of variant"},
+    {"H2",        0, AJVAR_FLAG,  "Membership in hapmap2"},
+    {"MQ",        1, AJVAR_INT,   "RMS mapping quality"},
+    {"MQ0",       1, AJVAR_INT,   "Number of MAPQ zero reads"},
+    {"NS",        1, AJVAR_INT,   "Number of Samples With Data"},
+    {"SB",        1, AJVAR_STR,   "Strand bias"},
+    {"SOMATIC",   0, AJVAR_FLAG,  "Somatic mutation"},
+    {"VALIDATED", 0, AJVAR_FLAG,  "Validated by experiment"},
+    {NULL, 0, 0, NULL}
+};
+
+
+VarOId varInfoIds41[] = {
+    {"1000G",     0, AJVAR_FLAG,  "Membership in 1000 Genomes"},
+    {"H3",        0, AJVAR_FLAG,  "Membership in hapmap3"},
+
+    /* structural variation fields (include END, DP*/
+
+    {"IMPRECISE", 0, AJVAR_FLAG,  "Imprecise structural variation"},
+    {"NOVEL",     0, AJVAR_FLAG,  "Indicates a novel structural variation"},
+    {"SVTYPE",    1, AJVAR_STR,   "Type of structural variant"},
+    {"SVLEN",varNumAny,AJVAR_INT,
+                            "Difference in length between REF an ALT alleles"},
+
+    {"CIPOS",     2, AJVAR_INT,
+                      "Confidence interval around POS for imprecise variants"},
+    {"CIEND",     2, AJVAR_INT,
+                      "Confidence interval around END for imprecise variants"},
+
+    {"HOMLEN",varNumAny, AJVAR_INT,
+          "Length of base pair identical micro-homology at event breakpoints"},
+    {"HOMSEQ",varNumAny, AJVAR_STR,
+        "Sequence of base pair identical micro-homology at event breakpoints"},
+    {"BKPTID",varNumAny, AJVAR_STR,
+                  "ID of the assembled alternate allele in the assembly file"},
+    {"MEINFO",    4, AJVAR_STR,
+                    "Mobile element info of the form NAME,START,END,POLARITY"},
+    {"METRANS",   4, AJVAR_STR,
+        "Mobile element transduction info of the form CHR,START,END,POLARITY"},
+
+    {"DGVID",     1, AJVAR_STR,
+                        "ID of this element in Database of Genomic Variation"},
+    {"DBVARID",   1, AJVAR_STR, "ID of this element in DBVAR"},
+    {"DBRIPID",   1, AJVAR_STR, "ID of this element in DBRIP"},
+
+    {"MATEID",varNumAny, AJVAR_STR, "ID of mate breakends"},
+    {"PARID",     1, AJVAR_STR, "ID of partner breakend"},
+    {"EVENT",     1, AJVAR_STR, "ID of event associated to breakend"},
+    {"CILEN",     2, AJVAR_INT, "Confidence interval around the length of the "
+                                "inserted material between breakends"},
+    {"DPADJ",varNumAny, AJVAR_INT, "Read Depth of adjacency"},
+    {"CN",        1, AJVAR_INT, "Copy number of segment containing breakend"},
+    {"CNADJ",varNumAny, AJVAR_INT, "Copy number of adjacency"},
+    {"CICN",      2, AJVAR_INT,
+                    "Confidence interval around copy number for the segment"},
+    {"CICNADJ",varNumAny, AJVAR_INT,
+                  "Confidence interval around copy number for the adjacency"},
+    {NULL, 0, 0, NULL}
+};
+    
+
+
+
+VarOId varGenotypeIds41[] = {
+    {"GT",varNumGen, AJVAR_STR,   "Genotype"},
+    {"DP",        1, AJVAR_INT,   "Read Depth"},
+    {"FT",        1, AJVAR_STR,   "Sample genotype filter"},
+    {"GL",        1, AJVAR_FLOAT, "Genotype likelihood"},
+    {"GQ",        1, AJVAR_INT,   "Genotype Quality"},
+    {"HQ",        2, AJVAR_INT,   "Haplotype Quality"},
+
+    {"GLE",varNumGen,AJVAR_STR,   "Genotype likelihoods of heterogeneous "
+                                  "ploidy"},
+    {"PL",varNumGen, AJVAR_INT,   "Phred-scaled genotype likelihoods"},
+    {"GP",varNumGen, AJVAR_FLOAT, "Phred-scaled genotype posterior "
+                                  "probabilities"},
+    {"PS",        1, AJVAR_INT,   "Phase set"},
+    {"PQ",        1, AJVAR_FLOAT, "Phasing quality"},
+    {"EC",        1, AJVAR_FLOAT, "Expected count"},
+    {"CN",        1, AJVAR_INT,   "Copy number genotype for imprecise events"},
+    {"CNQ",       1, AJVAR_FLOAT,
+                          "Copy number genotype quality for imprecise events"},
+    {"CNL",varNumAny,AJVAR_FLOAT,
+                       "Copy number genotype likelihood for imprecise events"},
+    {"MQ",        1, AJVAR_INT,   "Phred style probability score that the "
+                     "variant is novel with respect to the genome's ancestor"},
+    {"HAP",       1, AJVAR_INT,   "Unique haplotype identifier"},
+    {"AHAP",      1, AJVAR_INT, "Unique identifier of ancestral haplotype"},
+    {NULL, 0, 0, NULL}
+};
 
 
 
@@ -38,7 +242,7 @@ static AjBool varinReadAbc(AjPVarin thys, AjPVar var);
 ** @attr Alias [AjBool] Name is an alias for an identical definition
 ** @attr Try [AjBool] If true, try for an unknown input. Duplicate names
 **                    and read-anything formats are set false
-** @attr Read [(AjBool*)] Input function, returns ajTrue on success
+** @attr Load [AjBool function] Loading function, returns ajTrue on success
 ** @@
 ******************************************************************************/
 
@@ -49,7 +253,7 @@ typedef struct VarSInFormat
     const char *Desc;
     AjBool Alias;
     AjBool Try;
-    AjBool (*Read) (AjPVarin thys, AjPVar var);
+    AjBool (*Load) (AjPVarin thys, AjPVar var);
 } VarOInFormat;
 
 #define VarPInFormat VarOInFormat*
@@ -58,21 +262,33 @@ static VarOInFormat varinFormatDef[] =
 {
 /* "Name",        "OBOterm", "Description" */
 /*     Alias,   Try,     */
-/*     ReadFunction */
-  {"unknown",     "0000000", "Unknown format",
+/*     ReadFunction LoadFunction */
+  {"unknown",     "0000", "Unknown format",
        AJFALSE, AJFALSE,
-       varinReadAbc}, /* default to first format */
-  {"abc",          "0000000", "Abc format",
+       &varinLoadVcf40}, /* default to first format */
+   {"bcf",         "0000", "BCF format",
+	AJFALSE,  AJFALSE,
+       &varinLoadBcf},
+  {"vcf40",       "0000", "VCFv4.0 format",
        AJFALSE, AJTRUE,
-       varinReadAbc},
+       &varinLoadVcf40},
+  {"vcf",         "0000", "VCFv4.0 format",
+       AJTRUE,  AJFALSE,
+       &varinLoadVcf40},
+  {"vcf41",       "0000", "VCFv4.1 format",
+       AJFALSE, AJTRUE,
+       &varinLoadVcf41},
+  {"vcf3",        "0000", "VCFv3.x format",
+       AJFALSE, AJTRUE,
+       &varinLoadVcf3x},
   {NULL, NULL, NULL, 0, 0, NULL}
 };
 
 
 
-static ajuint varinReadFmt(AjPVarin varin, AjPVar var,
+static ajuint varinLoadFmt(AjPVarin varin, AjPVar var,
                            ajuint format);
-static AjBool varinRead(AjPVarin varin, AjPVar var);
+static AjBool varinLoad(AjPVarin varin, AjPVar var);
 static AjBool varinformatFind(const AjPStr format, ajint* iformat);
 static AjBool varinFormatSet(AjPVarin varin, AjPVar var);
 static AjBool varinListProcess(AjPVarin varin, AjPVar var,
@@ -127,12 +343,14 @@ static AjBool varinQueryMatch(const AjPQuery thys, const AjPVar var);
 
 
 
-/* @func ajVarinNew **********************************************************
+/* @func ajVarinNew ***********************************************************
 **
 ** Creates a new variation input object.
 **
 ** @return [AjPVarin] New variation input object.
 ** @category new [AjPVarin] Default constructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -142,7 +360,7 @@ AjPVarin ajVarinNew(void)
 
     AJNEW0(pthis);
 
-    pthis->Input = ajTextinNew();
+    pthis->Input = ajTextinNewDatatype(AJDATATYPE_VARIATION);
 
     pthis->VarData      = NULL;
 
@@ -173,13 +391,15 @@ AjPVarin ajVarinNew(void)
 
 
 
-/* @func ajVarinDel **********************************************************
+/* @func ajVarinDel ***********************************************************
 **
 ** Deletes a variation input object.
 **
 ** @param [d] pthis [AjPVarin*] Variation input
 ** @return [void]
 ** @category delete [AjPVarin] Default destructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -190,10 +410,10 @@ void ajVarinDel(AjPVarin* pthis)
     if(!pthis)
         return;
 
-    thys = *pthis;
-
-    if(!thys)
+    if(!*pthis)
         return;
+
+    thys = *pthis;
 
     ajDebug("ajVarinDel called qry:'%S'\n", thys->Input->Qry);
 
@@ -232,14 +452,17 @@ void ajVarinDel(AjPVarin* pthis)
 
 
 
-/* @func ajVarinClear ********************************************************
+/* @func ajVarinClear *********************************************************
 **
 ** Clears a variation input object back to "as new" condition, except
 ** for the query list which must be preserved.
 **
 ** @param [w] thys [AjPVarin] Variation input
 ** @return [void]
+**
 ** @category modify [AjPVarin] Resets ready for reuse.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -250,6 +473,7 @@ void ajVarinClear(AjPVarin thys)
 
     ajTextinClear(thys->Input);
 
+    thys->Loading = ajFalse;
     thys->VarData = NULL;
 
     return;
@@ -258,7 +482,7 @@ void ajVarinClear(AjPVarin thys)
 
 
 
-/* @func ajVarinQryC *********************************************************
+/* @func ajVarinQryC **********************************************************
 **
 ** Resets a variation input object using a new Universal
 ** Query Address
@@ -266,6 +490,8 @@ void ajVarinClear(AjPVarin thys)
 ** @param [u] thys [AjPVarin] Variation input object.
 ** @param [r] txt [const char*] Query
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -281,7 +507,7 @@ void ajVarinQryC(AjPVarin thys, const char* txt)
 
 
 
-/* @func ajVarinQryS ********************************************************
+/* @func ajVarinQryS **********************************************************
 **
 ** Resets a variation input object using a new Universal
 ** Query Address
@@ -289,6 +515,8 @@ void ajVarinQryC(AjPVarin thys, const char* txt)
 ** @param [u] thys [AjPVarin] Variation input object.
 ** @param [r] str [const AjPStr] Query
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -322,12 +550,14 @@ void ajVarinQryS(AjPVarin thys, const AjPStr str)
 
 
 
-/* @func ajVarinTrace ********************************************************
+/* @func ajVarinTrace *********************************************************
 **
 ** Debug calls to trace the data in a variation input object.
 **
 ** @param [r] thys [const AjPVarin] Variation input object.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -353,8 +583,11 @@ void ajVarinTrace(const AjPVarin thys)
 **
 ** @fdata [AjPVarin]
 **
+** @nam3rule Load Load variation data
 ** @nam3rule Read Read variation data
 **
+** @argrule Load varin [AjPVarin] Variation input object
+** @argrule Load var [AjPVar] Variation data
 ** @argrule Read varin [AjPVarin] Variation input object
 ** @argrule Read var [AjPVar] Variation data
 **
@@ -367,12 +600,12 @@ void ajVarinTrace(const AjPVarin thys)
 
 
 
-/* @func ajVarinRead ********************************************************
+/* @func ajVarinLoad **********************************************************
 **
 ** If the file is not yet open, calls varinQryProcess to convert the query
 ** into an open file stream.
 **
-** Uses varinRead for the actual file reading.
+** Uses varinLoad for the actual data loading.
 **
 ** Returns the results in the AjPVar object.
 **
@@ -382,37 +615,45 @@ void ajVarinTrace(const AjPVarin thys)
 ** @category input [AjPVar] Master variation data input,
 **                  calls specific functions for file access type
 **                  and variation data format.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjBool ajVarinRead(AjPVarin varin, AjPVar var)
+AjBool ajVarinLoad(AjPVarin varin, AjPVar var)
 {
     AjBool ret       = ajFalse;
     AjPQueryList node = NULL;
     AjBool listdata  = ajFalse;
+    AjPTextin input = varin->Input;
+    AjPFilebuff buff = input->Filebuff;
 
-    if(varin->Input->Filebuff)
+    ajDebug("ajVarinLoad '%F' EOF: %B records: %u dataread: %B datadone: %B\n",
+           ajFilebuffGetFile(buff), ajFilebuffIsEof(buff),
+           input->Records, input->Dataread, input->Datadone);
+
+    if(buff)
     {
-	/* (a) if file still open, keep reading */
-	ajDebug("ajVarinRead: input file '%F' still there, try again\n",
-		varin->Input->Filebuff->File);
-	ret = varinRead(varin, var);
-	ajDebug("ajVarinRead: open buffer  qry: '%S' returns: %B\n",
-		varin->Input->Qry, ret);
+	/* (a) if file still open, keep loading */
+	ajDebug("ajVarinLoad: input file '%F' still there, try again\n",
+		buff->File);
+	ret = varinLoad(varin, var);
+	ajDebug("ajVarinLoad: open buffer  qry: '%S' returns: %B\n",
+		input->Qry, ret);
     }
     else
     {
 	/* (b) if we have a list, try the next query in the list */
-	if(ajListGetLength(varin->Input->List))
+	if(ajListGetLength(input->List))
 	{
 	    listdata = ajTrue;
-	    ajListPop(varin->Input->List, (void**) &node);
+	    ajListPop(input->List, (void**) &node);
 
 	    ajDebug("++pop from list '%S'\n", node->Qry);
 	    ajVarinQryS(varin, node->Qry);
 	    ajDebug("++SAVE WXYZIN '%S' '%S' %d\n",
-		    varin->Input->Qry,
-		    varin->Input->Formatstr, varin->Input->Format);
+		    input->Qry,
+		    input->Formatstr, input->Format);
 
             varinQryRestore(varin, node);
 
@@ -420,52 +661,52 @@ AjBool ajVarinRead(AjPVarin varin, AjPVar var)
 	    ajStrDel(&node->Formatstr);
 	    AJFREE(node);
 
-	    ajDebug("ajVarinRead: open list, try '%S'\n",
-                    varin->Input->Qry);
+	    ajDebug("ajVarinLoad: open list, try '%S'\n",
+                    input->Qry);
 
 	    if(!varinQryProcess(varin, var) &&
-               !ajListGetLength(varin->Input->List))
+               !ajListGetLength(input->List))
 		return ajFalse;
 
-	    ret = varinRead(varin, var);
-	    ajDebug("ajVarinRead: list qry: '%S' returns: %B\n",
-		    varin->Input->Qry, ret);
+	    ret = varinLoad(varin, var);
+	    ajDebug("ajVarinLoad: list qry: '%S' returns: %B\n",
+		    input->Qry, ret);
 	}
 	else
 	{
-	    ajDebug("ajVarinRead: no file yet - test query '%S'\n",
-                    varin->Input->Qry);
+	    ajDebug("ajVarinLoad: no file yet - test query '%S'\n",
+                    input->Qry);
 
 	    /* (c) Must be a query - decode it */
 	    if(!varinQryProcess(varin, var) &&
-               !ajListGetLength(varin->Input->List))
+               !ajListGetLength(input->List))
 		return ajFalse;
 
-	    if(ajListGetLength(varin->Input->List)) /* could be a new list */
+	    if(ajListGetLength(input->List)) /* could be a new list */
 		listdata = ajTrue;
 
-	    ret = varinRead(varin, var);
-	    ajDebug("ajVarinRead: new qry: '%S' returns: %B\n",
-		    varin->Input->Qry, ret);
+	    ret = varinLoad(varin, var);
+	    ajDebug("ajVarinLoad: new qry: '%S' returns: %B\n",
+		    input->Qry, ret);
 	}
     }
 
-    /* Now read whatever we got */
+    /* Now load whatever we got */
 
-    while(!ret && ajListGetLength(varin->Input->List))
+    while(!ret && ajListGetLength(input->List))
     {
 	/* Failed, but we have a list still - keep trying it */
         if(listdata)
-	    ajErr("Failed to read variation data '%S'",
-                  varin->Input->Qry);
+	    ajErr("Failed to load variation data '%S'",
+                  input->Qry);
 
 	listdata = ajTrue;
-	ajListPop(varin->Input->List,(void**) &node);
+	ajListPop(input->List,(void**) &node);
 	ajDebug("++try again: pop from list '%S'\n", node->Qry);
 	ajVarinQryS(varin, node->Qry);
-	ajDebug("++SAVE (AGAIN) WXYZIN '%S' '%S' %d\n",
-		varin->Input->Qry,
-		varin->Input->Formatstr, varin->Input->Format);
+	ajDebug("++SAVE (AGAIN) VARIN '%S' '%S' %d\n",
+		input->Qry,
+		input->Formatstr, input->Format);
 
 	varinQryRestore(varin, node);
 
@@ -476,16 +717,16 @@ AjBool ajVarinRead(AjPVarin varin, AjPVar var)
 	if(!varinQryProcess(varin, var))
 	    continue;
 
-	ret = varinRead(varin, var);
-	ajDebug("ajVarinRead: list retry qry: '%S' returns: %B\n",
-		varin->Input->Qry, ret);
+	ret = varinLoad(varin, var);
+	ajDebug("ajVarinLoad: list retry qry: '%S' returns: %B\n",
+		input->Qry, ret);
     }
 
     if(!ret)
     {
 	if(listdata)
-	    ajErr("Failed to read variation data '%S'",
-                  varin->Input->Qry);
+	    ajErr("Failed to load variation data '%S'",
+                  input->Qry);
 
 	return ajFalse;
     }
@@ -499,13 +740,15 @@ AjBool ajVarinRead(AjPVarin varin, AjPVar var)
 
 
 
-/* @funcstatic varinQueryMatch ***********************************************
+/* @funcstatic varinQueryMatch ************************************************
 **
 ** Compares a variation data item to a query and returns true if they match.
 **
 ** @param [r] thys [const AjPQuery] query.
 ** @param [r] var [const AjPVar] Variation data.
 ** @return [AjBool] ajTrue if the variation data matches the query.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -516,7 +759,7 @@ static AjBool varinQueryMatch(const AjPQuery thys, const AjPVar var)
     AjPQueryField field = NULL;
     AjBool ok = ajFalse;
 
-    ajDebug("varinQueryMatch '%S' fields: %u Case %B Done %B\n",
+    ajDebug("varinQueryMatch '%S' fields: %Lu Case %B Done %B\n",
 	    var->Id, ajListGetLength(thys->QueryFields),
             thys->CaseId, thys->QryDone);
 
@@ -588,7 +831,7 @@ static AjBool varinQueryMatch(const AjPQuery thys, const AjPVar var)
 
 
 
-/* @funcstatic varDefine ****************************************************
+/* @funcstatic varDefine ******************************************************
 **
 ** Make sure all variation data object attributes are defined
 ** using values from the variation input object if needed
@@ -596,6 +839,8 @@ static AjBool varinQueryMatch(const AjPQuery thys, const AjPVar var)
 ** @param [w] thys [AjPVar] Variation data returned.
 ** @param [u] varin [AjPVarin] Variation data input definitions
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -616,7 +861,7 @@ static AjBool varDefine(AjPVar thys, AjPVarin varin)
 
 
 
-/* @funcstatic varinReadFmt *************************************************
+/* @funcstatic varinLoadFmt ***************************************************
 **
 ** Tests whether variation data can be read using the specified format.
 ** Then tests whether the variation data matches variation data query criteria
@@ -629,11 +874,13 @@ static AjBool varDefine(AjPVar thys, AjPVarin varin)
 **                  1 if the query match failed.
 **                  2 if the variation data type failed
 **                  3 if it failed to read any variation data
-** @@
-** This is the only function that calls the appropriate Read function
-** varinReadXxxxxx where Xxxxxxx is the supported variation data format.
 **
-** Some of the varReadXxxxxx functions fail to reset the buffer correctly,
+** @release 6.4.0
+** @@
+** This is the only function that calls the appropriate Load function
+** varinLoadXxxxxx where Xxxxxxx is the supported variation data format.
+**
+** Some of the varLoadXxxxxx functions fail to reset the buffer correctly,
 ** which is a very serious problem when cycling through all of them to
 ** identify an unknown format. The extra ajFileBuffReset call at the end is
 ** intended to address this problem. The individual functions should still
@@ -641,31 +888,37 @@ static AjBool varDefine(AjPVar thys, AjPVarin varin)
 **
 ******************************************************************************/
 
-static ajuint varinReadFmt(AjPVarin varin, AjPVar var,
+static ajuint varinLoadFmt(AjPVarin varin, AjPVar var,
                            ajuint format)
 {
-    ajDebug("++varinReadFmt format %d (%s) '%S'\n",
-	    format, varinFormatDef[format].Name,
-	    varin->Input->Qry);
+    AjPTextin input = varin->Input;
+    AjPFilebuff buff = input->Filebuff;
 
-    varin->Input->Records = 0;
+    ajDebug("++varinLoadFmt format %d (%s) '%S'\n",
+	    format, varinFormatDef[format].Name,
+	    input->Qry);
+
+    if(!input->Dataread)
+        input->Records = 0;
 
     /* Calling funclist varinFormatDef() */
-    if(varinFormatDef[format].Read(varin, var))
+    if((*varinFormatDef[format].Load)(varin, var))
     {
-	ajDebug("varinReadFmt success with format %d (%s)\n",
+        input->Dataread = ajTrue;
+	ajDebug("varinLoadFmt success with format %d (%s)\n",
 		format, varinFormatDef[format].Name);
-        ajDebug("id: '%S'\n",
-                var->Id);
-	varin->Input->Format = format;
-	ajStrAssignC(&varin->Input->Formatstr,
+        ajDebug("varinLoadFmt status id: '%S' data: %Lu count: %u done: %B\n",
+                var->Id, ajListGetLength(var->Data),
+                input->Datacount, input->Datadone);
+	input->Format = format;
+	ajStrAssignC(&input->Formatstr,
 	             varinFormatDef[format].Name);
 	ajStrAssignC(&var->Formatstr,
 	             varinFormatDef[format].Name);
-	ajStrAssignEmptyS(&var->Db, varin->Input->Db);
-	ajStrAssignS(&var->Filename, varin->Input->Filename);
+	ajStrAssignEmptyS(&var->Db, input->Db);
+	ajStrAssignS(&var->Filename, input->Filename);
 
-	if(varinQueryMatch(varin->Input->Query, var))
+	if(varinQueryMatch(input->Query, var))
 	{
             /* ajVarinTrace(varin); */
 
@@ -677,23 +930,23 @@ static ajuint varinReadFmt(AjPVarin varin, AjPVar var,
 
 	return FMT_NOMATCH;
     }
-    else
+    else if (buff)
     {
 	ajDebug("Testing input buffer: IsBuff: %B Eof: %B\n",
-		ajFilebuffIsBuffered(varin->Input->Filebuff),
-		ajFilebuffIsEof(varin->Input->Filebuff));
+		ajFilebuffIsBuffered(buff),
+		ajFilebuffIsEof(buff));
 
-	if (!ajFilebuffIsBuffered(varin->Input->Filebuff) &&
-	    ajFilebuffIsEof(varin->Input->Filebuff))
+	if (!ajFilebuffIsBuffered(buff) &&
+	    ajFilebuffIsEof(buff))
 	    return FMT_EOF;
 
-	ajFilebuffReset(varin->Input->Filebuff);
-	ajDebug("Format %d (%s) failed, file buffer reset by varinReadFmt\n",
+	ajFilebuffReset(buff);
+	ajDebug("Format %d (%s) failed, file buffer reset by varinLoadFmt\n",
 		format, varinFormatDef[format].Name);
 	/* ajFilebuffTraceFull(varin->Filebuff, 10, 10);*/
     }
 
-    ajDebug("++varinReadFmt failed - nothing read\n");
+    ajDebug("++varinLoadFmt failed - nothing read\n");
 
     return FMT_FAIL;
 }
@@ -701,33 +954,40 @@ static ajuint varinReadFmt(AjPVarin varin, AjPVar var,
 
 
 
-/* @funcstatic varinRead *****************************************************
+/* @funcstatic varinLoad ******************************************************
 **
-** Given data in a varin structure, tries to read everything needed
+** Given data in a varin structure, tries to read the next chunk
 ** using the specified format or by trial and error.
 **
 ** @param [u] varin [AjPVarin] Variation data input object
 ** @param [w] var [AjPVar] Variation data object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.5.0
 ** @@
 ******************************************************************************/
 
-static AjBool varinRead(AjPVarin varin, AjPVar var)
+static AjBool varinLoad(AjPVarin varin, AjPVar var)
 {
     ajuint i;
     ajuint istat = 0;
     ajuint jstat = 0;
-
-    AjPFilebuff buff = varin->Input->Filebuff;
+    AjPTextin input = varin->Input;
+    AjPFilebuff buff = input->Filebuff;
     AjBool ok;
 
-    AjPTextAccess  textaccess  = varin->Input->Query->TextAccess;
-    AjPVarAccess varaccess = varin->Input->Query->Access;
+    AjPTextAccess  textaccess  = input->Query->TextAccess;
+    AjPVarAccess varaccess = input->Query->Access;
 
-    ajVarClear(var);
-    ajDebug("varinRead: cleared\n");
+    if(!input->Records)
+    {
+        ajVarClear(var);
+        ajDebug("varinLoad: cleared\n");
+    }
 
-    if(varin->Input->Single && varin->Input->Count)
+/* test here for a new value */
+
+    if(input->Single && input->Count && !input->Datacount)
     {
 	/*
 	** One variation data item at a time is read.
@@ -737,15 +997,15 @@ static AjBool varinRead(AjPVarin varin, AjPVar var)
 	** Single is set by the access method
 	*/
 
-	ajDebug("varinRead: single access - count %d - call access"
+	ajDebug("varinLoad: single access - count %d - call access"
 		" routine again\n",
-		varin->Input->Count);
+		input->Count);
 	/* Calling funclist varinAccess() */
 	if(textaccess)
         {
-            if(!textaccess->Access(varin->Input))
+            if(!(*textaccess->Access)(input))
             {
-                ajDebug("varinRead: textaccess->Access(varin->Input) "
+                ajDebug("varinLoad: (*textaccess->Access)(varin->Input) "
                         "*failed*\n");
 
                 return ajFalse;
@@ -754,40 +1014,38 @@ static AjBool varinRead(AjPVarin varin, AjPVar var)
 
 	if(varaccess)
         {
-            if(!varaccess->Access(varin))
+            if(!(*varaccess->Access)(varin))
             {
-                ajDebug("varinRead: varaccess->Access(varin) "
+                ajDebug("varinLoad: (*varaccess->Access)(varin) "
                         "*failed*\n");
 
                 return ajFalse;
             }
         }
 
-        buff = varin->Input->Filebuff;
+        buff = input->Filebuff;
     }
 
-    ajDebug("varinRead: varin format %d '%S'\n", varin->Input->Format,
-	    varin->Input->Formatstr);
+    ajDebug("varinLoad: varin format %d '%S'\n", input->Format,
+	    input->Formatstr);
 
-    varin->Input->Count++;
-
-    if(!varin->Input->Filebuff)
+    if(!input->Filebuff)
 	return ajFalse;
 
-    ok = ajFilebuffIsBuffered(varin->Input->Filebuff);
+    ok = ajFilebuffIsBuffered(input->Filebuff);
 
     while(ok)
     {				/* skip blank lines */
-        ok = ajBuffreadLine(varin->Input->Filebuff, &varinReadLine);
+        ok = ajBuffreadLine(input->Filebuff, &varinReadLine);
 
         if(!ajStrIsWhite(varinReadLine))
         {
-            ajFilebuffClear(varin->Input->Filebuff,1);
+            ajFilebuffClear(input->Filebuff,1);
             break;
         }
     }
 
-    if(!varin->Input->Format)
+    if(!input->Format)
     {			   /* no format specified, try all defaults */
 
 	for(i = 1; varinFormatDef[i].Name; i++)
@@ -795,72 +1053,72 @@ static AjBool varinRead(AjPVarin varin, AjPVar var)
 	    if(!varinFormatDef[i].Try)	/* skip if Try is ajFalse */
 		continue;
 
-	    ajDebug("varinRead:try format %d (%s)\n",
+	    ajDebug("varinLoad:try format %d (%s)\n",
 		    i, varinFormatDef[i].Name);
 
-	    istat = varinReadFmt(varin, var, i);
+	    istat = varinLoadFmt(varin, var, i);
 
 	    switch(istat)
 	    {
 	    case FMT_OK:
-		ajDebug("++varinRead OK, set format %d\n",
-                        varin->Input->Format);
+		ajDebug("++varinLoad OK, set format %d\n",
+                        input->Format);
 		varDefine(var, varin);
 
 		return ajTrue;
 	    case FMT_BADTYPE:
-		ajDebug("varinRead: (a1) "
-                        "varinReadFmt stat == BADTYPE *failed*\n");
+		ajDebug("varinLoad: (a1) "
+                        "varinLoadFmt stat == BADTYPE *failed*\n");
 
 		return ajFalse;
 	    case FMT_FAIL:
-		ajDebug("varinRead: (b1) "
-                        "varinReadFmt stat == FAIL *failed*\n");
+		ajDebug("varinLoad: (b1) "
+                        "varinLoadFmt stat == FAIL *failed*\n");
 		break;			/* we can try next format */
 	    case FMT_NOMATCH:
-		ajDebug("varinRead: (c1) "
-                        "varinReadFmt stat==NOMATCH try again\n");
+		ajDebug("varinLoad: (c1) "
+                        "varinLoadFmt stat==NOMATCH try again\n");
 		break;
 	    case FMT_EOF:
-		ajDebug("varinRead: (d1) "
-                        "varinReadFmt stat == EOF *failed*\n");
+		ajDebug("varinLoad: (d1) "
+                        "varinLoadFmt stat == EOF *failed*\n");
 		return ajFalse;			/* EOF and unbuffered */
 	    case FMT_EMPTY:
 		ajWarn("variation data '%S' has zero length, ignored",
 		       ajVarGetQryS(var));
-		ajDebug("varinRead: (e1) "
-                        "varinReadFmt stat==EMPTY try again\n");
+		ajDebug("varinLoad: (e1) "
+                        "varinLoadFmt stat==EMPTY try again\n");
 		break;
 	    default:
-		ajDebug("unknown code %d from varinReadFmt\n", stat);
+		ajDebug("unknown code %d from varinLoadFmt\n", stat);
 	    }
 
 	    ajVarClear(var);
 
-	    if(varin->Input->Format)
+	    if(input->Format)
 		break;			/* we read something */
 
-            ajFilebuffTrace(varin->Input->Filebuff);
+            ajFilebuffTrace(input->Filebuff);
 	}
 
-	if(!varin->Input->Format)
+	if(!input->Format)
 	{		     /* all default formats failed, give up */
-	    ajDebug("varinRead:all default formats failed, give up\n");
+	    ajDebug("varinLoad:all default formats failed, give up\n");
 
 	    return ajFalse;
 	}
 
-	ajDebug("++varinRead set format %d\n",
-                varin->Input->Format);
+	ajDebug("++varinLoad set format %d\n",
+                input->Format);
     }
     else
     {					/* one format specified */
-	ajDebug("varinRead: one format specified\n");
-	ajFilebuffSetUnbuffered(varin->Input->Filebuff);
+	ajDebug("varinLoad: one format specified\n");
+	ajFilebuffSetUnbuffered(input->Filebuff);
 
-	ajDebug("++varinRead known format %d\n",
-                varin->Input->Format);
-	istat = varinReadFmt(varin, var, varin->Input->Format);
+	ajDebug("++varinLoad known format %d\n",
+                input->Format);
+	istat = varinLoadFmt(varin, var, input->Format);
 
 	switch(istat)
 	{
@@ -869,37 +1127,37 @@ static AjBool varinRead(AjPVarin varin, AjPVar var)
 
 	    return ajTrue;
 	case FMT_BADTYPE:
-	    ajDebug("varinRead: (a2) "
-                    "varinReadFmt stat == BADTYPE *failed*\n");
+	    ajDebug("varinLoad: (a2) "
+                    "varinLoadFmt stat == BADTYPE *failed*\n");
 
 	    return ajFalse;
 
         case FMT_FAIL:
-	    ajDebug("varinRead: (b2) "
-                    "varinReadFmt stat == FAIL *failed*\n");
+	    ajDebug("varinLoad: (b2) "
+                    "varinLoadFmt stat == FAIL *failed*\n");
 
 	    return ajFalse;
 
         case FMT_NOMATCH:
-	    ajDebug("varinRead: (c2) "
-                    "varinReadFmt stat == NOMATCH *try again*\n");
+	    ajDebug("varinLoad: (c2) "
+                    "varinLoadFmt stat == NOMATCH *try again*\n");
 	    break;
 	case FMT_EOF:
-	    ajDebug("varinRead: (d2) "
-                    "varinReadFmt stat == EOF *try again*\n");
-            if(varin->Input->Records)
+	    ajDebug("varinLoad: (d2) "
+                    "varinLoadFmt stat == EOF *try again*\n");
+            if(input->Records)
                 ajErr("Error reading file '%F' with format '%s': "
                       "end-of-file before end of data "
                       "(read %u records)",
-                      ajFilebuffGetFile(varin->Input->Filebuff),
-                      varinFormatDef[varin->Input->Format].Name,
-                      varin->Input->Records);
+                      ajFilebuffGetFile(input->Filebuff),
+                      varinFormatDef[input->Format].Name,
+                      input->Records);
 	    break;		     /* simply end-of-file */
 	case FMT_EMPTY:
-	    ajWarn("assmebly data '%S' has zero length, ignored",
+	    ajWarn("variation data '%S' has zero length, ignored",
 		   ajVarGetQryS(var));
-	    ajDebug("varinRead: (e2) "
-                    "varinReadFmt stat == EMPTY *try again*\n");
+	    ajDebug("varinLoad: (e2) "
+                    "varinLoadFmt stat == EMPTY *try again*\n");
 	    break;
 	default:
 	    ajDebug("unknown code %d from varinReadFmt\n", stat);
@@ -910,29 +1168,29 @@ static AjBool varinRead(AjPVarin varin, AjPVar var)
 
     /* failed - probably entry/accession query failed. Can we try again? */
 
-    ajDebug("varinRead failed - try again with format %d '%s' code %d\n",
-	    varin->Input->Format,
-            varinFormatDef[varin->Input->Format].Name, istat);
+    ajDebug("varinLoad failed - try again with format %d '%s' code %d\n",
+	    input->Format,
+            varinFormatDef[input->Format].Name, istat);
 
     ajDebug("Search:%B Chunk:%B Data:%x ajFileBuffEmpty:%B\n",
-	    varin->Input->Search, varin->Input->ChunkEntries,
-            varin->Input->TextData, ajFilebuffIsEmpty(buff));
+	    input->Search, input->ChunkEntries,
+            input->TextData, ajFilebuffIsEmpty(buff));
 
-    if(ajFilebuffIsEmpty(buff) && varin->Input->ChunkEntries)
+    if(ajFilebuffIsEmpty(buff) && input->ChunkEntries)
     {
-	if(textaccess && !textaccess->Access(varin->Input))
+	if(textaccess && !(*textaccess->Access)(input))
             return ajFalse;
-	else if(varaccess && !varaccess->Access(varin))
+	else if(varaccess && !(*varaccess->Access)(varin))
             return ajFalse;
-        buff = varin->Input->Filebuff;
+        buff = input->Filebuff;
     }
 
 
     /* need to check end-of-file to avoid repeats */
-    while(varin->Input->Search &&
-          (varin->Input->TextData || !ajFilebuffIsEmpty(buff)))
+    while(input->Search &&
+          (input->TextData || !ajFilebuffIsEmpty(buff)))
     {
-	jstat = varinReadFmt(varin, var, varin->Input->Format);
+	jstat = varinLoadFmt(varin, var, input->Format);
 
 	switch(jstat)
 	{
@@ -942,51 +1200,51 @@ static AjBool varinRead(AjPVarin varin, AjPVar var)
 	    return ajTrue;
 
         case FMT_BADTYPE:
-	    ajDebug("varinRead: (a3) "
-                    "varinReadFmt stat == BADTYPE *failed*\n");
+	    ajDebug("varinLoad: (a3) "
+                    "varinLoadFmt stat == BADTYPE *failed*\n");
 
 	    return ajFalse;
 
         case FMT_FAIL:
-	    ajDebug("varinRead: (b3) "
-                    "varinReadFmt stat == FAIL *failed*\n");
+	    ajDebug("varinLoad: (b3) "
+                    "varinLoadFmt stat == FAIL *failed*\n");
 
 	    return ajFalse;
             
 	case FMT_NOMATCH:
-	    ajDebug("varinRead: (c3) "
-                    "varinReadFmt stat == NOMATCH *try again*\n");
+	    ajDebug("varinLoad: (c3) "
+                    "varinLoadFmt stat == NOMATCH *try again*\n");
 	    break;
 	case FMT_EOF:
-	    ajDebug("varinRead: (d3) "
-                    "varinReadFmt stat == EOF *failed*\n");
+	    ajDebug("varinLoad: (d3) "
+                    "varinLoadFmt stat == EOF *failed*\n");
 
 	    return ajFalse;			/* we already tried again */
 
         case FMT_EMPTY:
 	    if(istat != FMT_EMPTY)
-                ajWarn("assmebly data '%S' has zero length, ignored",
+                ajWarn("variation data '%S' has zero length, ignored",
                        ajVarGetQryS(var));
-	    ajDebug("varinRead: (e3) "
-                    "varinReadFmt stat == EMPTY *try again*\n");
+	    ajDebug("varinLoad: (e3) "
+                    "varinLoadFmt stat == EMPTY *try again*\n");
 	    break;
 
         default:
-	    ajDebug("unknown code %d from varinReadFmt\n", stat);
+	    ajDebug("unknown code %d from varinLoadFmt\n", stat);
 	}
 
 	ajVarClear(var); /* 1 : read, failed to match id/acc/query */
     }
 
-    if(varin->Input->Format)
-	ajDebug("varinRead: *failed* to read variation data %S "
+    if(input->Format)
+	ajDebug("varinLoad: *failed* to read variation data %S "
                 "using format %s\n",
-		varin->Input->Qry,
-                varinFormatDef[varin->Input->Format].Name);
+		input->Qry,
+                varinFormatDef[input->Format].Name);
     else
-	ajDebug("varinRead: *failed* to read variation data %S "
+	ajDebug("varinLoad: *failed* to read variation data %S "
                 "using any format\n",
-		varin->Input->Qry);
+		input->Qry);
 
     return ajFalse;
 }
@@ -994,46 +1252,1460 @@ static AjBool varinRead(AjPVarin varin, AjPVar var)
 
 
 
-/* @funcstatic varinReadAbc **************************************************
+/* @funcstatic varinLoadBcf ***************************************************
 **
-** Given data in a variation structure, tries to read everything needed
-** using Abc format.
+** Given data in a variation structure, tries to load data
+** using VCFv3.x format.
 **
-** @param [u] varin [AjPVarin] Var input object
-** @param [w] var [AjPVar] var object
+** @param [u] varin [AjPVarin] Variation input object
+** @param [w] var [AjPVar] Variation object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.5.0
 ** @@
 ******************************************************************************/
 
-static AjBool varinReadAbc(AjPVarin varin, AjPVar var)
+static AjBool varinLoadBcf(AjPVarin varin, AjPVar var)
 {
-    AjPFilebuff buff;
+    AjPTextin input = varin->Input;
+    AjPFilebuff buff= input->Filebuff;
+    AjBool ok = ajTrue;
+    AjPVarBcfFile fp = NULL;
+    AjPVarBcfHeader h = NULL;
+    AjOVarBcf *b = NULL;
+    VarPBcfdata bcfdata = NULL;
+    AjPStr s = NULL;
+    ajuint n;
+    ajuint nsamples = 0;
+    AjBool firstsample = AJTRUE;
+    AjPStrTok tok = NULL;
+    ajuint iread;
+    ajuint maxread = 1000;
+    int bcfstat = 1;
+    int nsmpl;
 
-    ajlong fpos     = 0;
-    ajuint linecnt = 0;
+    ajDebug("varinLoadBcf '%F' EOF: %B records: %u "
+            "dataread: %B datadone: %B hasdata: %B\n",
+            ajFilebuffGetFile(buff), ajFilebuffIsEof(buff),
+            input->Records, input->Dataread, input->Datadone,
+            var->Hasdata);
 
-    ajDebug("varinReadAbc\n");
-    ajVarClear(var);
-    buff = varin->Input->Filebuff;
-
-    /* ajFilebuffTrace(buff); */
-
-    while (ajBuffreadLinePos(buff, &varinReadLine, &fpos))
+    if(input->Datadone)
     {
-        linecnt++;
+        return ajFalse;
+    }
 
-        if(ajStrGetCharLast(varinReadLine) == '\n')
-            ajStrCutEnd(&varinReadLine, 1);
+    if(ajFilebuffIsEnded(buff))
+    {
+        ajFileSeek(ajFilebuffGetFile(buff), 0L, SEEK_END);
+        return ajFalse;
+    }
 
-        if(ajStrGetCharLast(varinReadLine) == '\r')
-            ajStrCutEnd(&varinReadLine, 1);
+    if(!input->Records)
+    {
+        ajVarClear(var);
 
-        ajDebug("line %u:%S\n", linecnt, varinReadLine);
+        fp = ajSeqBamBgzfNew(ajFilebuffGetFileptr(buff),"r");
+        AJNEW0(bcfdata);
+        input->TextData = bcfdata;
+        bcfdata->gzfile = fp;
 
-        /* add line to AjPVar object */
+        bcfdata->Header = ajVarbcfHdrRead(fp);
+        h = bcfdata->Header;
+
+        tok = ajStrTokenNewcharC(h->txt, "\n");
+
+        while (ajStrTokenNextFind(&tok, &varinReadLine))
+        {
+            input->Records++;
+            if(!varinReadVcf41Header(varin, var))
+            {
+                break;
+            }
+        }
+
+        return ajTrue;
+    }
+
+    /*
+    ** On later calls, read a chunk of data
+    */
+
+    /* clear current chunk */
+
+    ajDebug("continue processing: maxread %u Datacount %u\n",
+            maxread, input->Datacount);
+
+    ajVarReset(var);
+    var->Hasdata = ajTrue;
+    AJNEW0(b);
+    s = ajStrNew();
+    iread = 0;
+    bcfdata = input->TextData;
+    fp = bcfdata->gzfile;
+    h = bcfdata->Header;
+    nsmpl = h->n_smpl;
+
+    while ((iread < maxread) &&
+           (bcfstat >= 0))
+    {
+        bcfstat = ajVarbcfRead(fp, nsmpl, b);
+        if(bcfstat < 0)
+            break;
+
+        ajStrAssignClear(&s);
+
+        iread++;
+	input->Records++;
+	input->Entrycount++;
+
+	ajVarbcfFmtCore(h, b, &s);
+	n = varinDataVcf(s, var);
+
+	if(firstsample)
+	{
+	    firstsample = ajFalse;
+	    nsamples = n;
+	}
+	else
+	{
+	    if(n != nsamples)
+		ajWarn("varinLoadBcf: expected %u samples, read %u",
+		       nsamples, n);
+	}
+
+	varinVcfCheckLastrecordForRefseqIds(var);
+
+    }
+
+    input->Datacount += iread;
+
+    ajDebug("data done ok: %B Datacount: %u iread: %u/%u\n",
+            ok, input->Datacount, iread, maxread);
+
+    input->Search = ajFalse;
+
+    ajVarbcfHdrDel(h);
+    ajVarbcfDel(b);
+
+    ajStrDel(&s);
+
+    if(bcfstat < 0)
+    {
+        input->Datadone = ajTrue;
+        ajSeqBamBgzfClose(fp);
+        fp=NULL;
+        ajFilebuffClear(buff, -1);
+        buff->File->End = ajTrue;
+        AJFREE(bcfdata);
+        input->TextData = NULL;
     }
 
     return ajTrue;
+}
+
+
+
+
+/* @funcstatic varinLoadVcf3x *************************************************
+**
+** Given data in a variation structure, tries to load data
+** using VCFv3.x format.
+**
+** @param [u] varin [AjPVarin] Variation input object
+** @param [w] var [AjPVar] Variation object
+** @return [AjBool] ajTrue on success
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool varinLoadVcf3x(AjPVarin varin, AjPVar var)
+{
+    AjPFilebuff buff;
+    AjPTextin input = varin->Input;
+    AjBool ok = ajTrue;
+    AjBool header = ajTrue;
+    AjPTagval tagval = NULL;
+    AjPVarField varfield = NULL;
+    AjPVarSample varsample = NULL;
+    AjPVarHeader varheader = var->Header;
+    const AjPStr varname = NULL;
+    AjPStrTok handle = NULL;
+    AjPStr token = NULL;
+    ajuint i;
+    ajulong n;
+    ajuint nsamples = 0;
+    AjBool firstsample = AJTRUE;
+    ajuint iread;
+    ajuint maxread = 1000;
+
+    buff = input->Filebuff;
+    ajDebug("varinLoadBcf '%F' EOF: %B records: %u "
+            "dataread: %B datadone: %B hasdata: %B\n",
+            ajFilebuffGetFile(buff), ajFilebuffIsEof(buff),
+            input->Records, input->Dataread, input->Datadone,
+            var->Hasdata);
+
+    if(input->Datadone)
+    {
+        return ajFalse;
+    }
+
+    if(!input->Records)
+    {
+        /* ajFilebuffTrace(buff); */
+
+        while (header && ajBuffreadLineStore(buff, &varinReadLine,
+                                             input->Text, &var->Textptr))
+        {
+            ajStrTrimWhiteEnd(&varinReadLine);
+            input->Records++;
+            if(!ajStrPrefixC(varinReadLine, "##"))
+            {
+                header = ajFalse;
+                break;
+            }
+            /* ##type= */
+            ajDebug("Header:\n%S\n", varinReadLine);
+            if(input->Records == 1)
+            {
+                if(!ajStrPrefixC(varinReadLine, "##fileformat=VCFv3."))
+                {
+                    ajFilebuffResetStore(buff, input->Text, &var->Textptr);
+                    return ajFalse;
+                }
+            }
+            else 
+            {
+                /* parse ID=id,Number=number,Type=type,Description="desc" */
+
+                if(!varfield)
+                    varfield = ajVarfieldNew();
+
+                varname = varinFieldVcf3x(varfield, varinReadLine);
+                if(varname)
+                    ajDebug("%S=<ID=%S,Type=%d(%s),Number=%d,"
+                            "Description=\"%S\">\n",
+                            varname,
+                            varfield->Id, varfield->Type,
+                            ajVarfieldGetType(varfield),
+                            varfield->Number, varfield->Desc);
+                else
+                    ajDebug("..failed\n");
+
+                if(ajStrMatchC(varname, "INFO"))
+                {
+                    ajListPushAppend(varheader->Fields, varfield);
+                    varfield = ajVarfieldNew();
+                }
+                else if(ajStrMatchC(varname, "FILTER"))
+                {
+                    tagval = ajTagvalNewS(varfield->Id, varfield->Desc);
+                    ajListPushAppend(varheader->Filters, tagval);
+                    tagval = NULL;
+                }
+                else if(ajStrMatchC(varname, "FORMAT"))
+                {
+                    ajListPushAppend(varheader->Fields, varfield);
+                    varfield = ajVarfieldNew();
+                }
+                else if(ajStrMatchC(varname, "ALT"))
+                {
+                    tagval = ajTagvalNewS(varfield->Id, varfield->Desc);
+                    ajListPushAppend(varheader->Alts, tagval);
+                    tagval = NULL;
+                }
+                else if(ajStrMatchC(varname, "SAMPLE"))
+                {
+                    varsample = varinSampleVcf(varinReadLine);
+                    ajListPushAppend(varheader->Samples, varsample);
+                    varsample = NULL;
+                }
+                else if(ajStrMatchC(varname, "PEDIGREE"))
+                {
+                    tagval = ajTagvalNewS(varfield->Id, varfield->Desc);
+                    ajListPushAppend(varheader->Pedigrees, tagval);
+                    tagval = NULL;
+                }
+                else
+                {
+                    ajDebug("other header field tag '%S'\n", varname);
+                    tagval = ajTagvalNewS(varname, varfield->Desc);
+                    ajListPushAppend(varheader->Header, tagval);
+                    tagval = NULL;
+                }
+            }
+        }
+
+        if(!input->Records)
+        {
+            ajFilebuffResetStore(buff, input->Text, &var->Textptr);
+            return ajFalse;
+        }
+
+        /* #CHROM POS ... column headers */
+        ajDebug("Columns:\n%S", varinReadLine);
+
+        if(!ajStrPrefixC(varinReadLine,
+                         "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER"
+                         "\tINFO\tFORMAT"))
+        {
+            ajFilebuffResetStore(buff, input->Text, &var->Textptr);
+            return ajFalse;
+        }
+
+        n = ajStrCalcCountK(varinReadLine, '\t') - 8;
+
+        handle = ajStrTokenNewC(varinReadLine, "\t");
+        i = 0;
+        while(ajStrTokenNextParse(&handle, &token))
+        {
+            if(++i <= 9) continue;
+
+            ajListPushAppend(varheader->SampleIds, token);
+            token = NULL;
+        }
+
+        ajVarfieldDel(&varfield);
+        ajStrTokenDel(&handle);
+        ajStrDel(&token);
+
+        ajDebug("varinLoadVcf3x header done\n");
+
+        return ajTrue;
+    }
+
+    /*
+    ** On later calls, read a chunk of data
+    */
+
+    /* clear current chunk */
+
+    ajDebug("continue processing: maxread %u Datacount %u\n",
+            maxread, input->Datacount);
+
+    ajVarReset(var);
+    var->Hasdata = ajTrue;
+
+    iread = 0;
+    while (ok && iread < maxread)
+    {
+        ok = ajBuffreadLineStore(buff, &varinReadLine,
+                                 input->Text, &var->Textptr);
+        if(!ok) break;
+
+        iread++;
+        input->Records++;
+        /* data */
+        ajDebug("Data:\n%S", varinReadLine);
+        if(ajStrPrefixC(varinReadLine,"#"))
+        {
+            ajFilebuffClearStore(buff, 1, varinReadLine,
+                                 input->Text, &var->Textptr);
+            return ok;
+        }
+        n = varinDataVcf(varinReadLine, var);
+        if(firstsample)
+        {
+            firstsample = ajFalse;
+            nsamples = (ajuint) n;
+        }
+        else
+        {
+            if(n != nsamples)
+                ajWarn("VCF format: expected %u samples, read %u",
+                       nsamples, n);
+        }
+
+        varinVcfCheckLastrecordForRefseqIds(var);
+    }
+
+    input->Datacount += iread;
+
+    ajDebug("data done ok: %B Datacount: %u iread: %u/%u\n",
+            ok, input->Datacount, iread, maxread);
+
+    if(!ok)
+    {
+        input->Datadone = ajTrue;
+        ajFilebuffClear(buff, 0);
+    }
+
+    ajVarfieldDel(&varfield);
+    ajStrTokenDel(&handle);
+    ajStrDel(&token);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic varinLoadVcf40 *************************************************
+**
+** Given data in a variation structure, tries to load data
+** using VCFv4.0 format.
+**
+** @param [u] varin [AjPVarin] Variation input object
+** @param [w] var [AjPVar] Variation object
+** @return [AjBool] ajTrue on success
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool varinLoadVcf40(AjPVarin varin, AjPVar var)
+{
+    AjPTextin input = varin->Input;
+    AjPFilebuff buff = input->Filebuff;
+    AjBool ok = ajTrue;
+    AjPTagval tagval = NULL;
+    AjPVarField varfield = NULL;
+    AjPVarSample varsample = NULL;
+    AjPVarHeader varheader = var->Header;
+    const AjPStr varname = NULL;
+    AjPStrTok handle = NULL;
+    AjPStr token = NULL;
+    ajuint i;
+    ajulong n;
+    ajuint nsamples = 0;
+    AjBool firstsample = AJTRUE;
+    ajuint iread = 0;
+    ajuint maxread = 1000;
+
+    ajDebug("varinLoadVcf40 '%F' EOF: %B records: %u "
+            "dataread: %B datadone: %B hasdata: %B\n",
+            ajFilebuffGetFile(buff), ajFilebuffIsEof(buff),
+            input->Records, input->Dataread, input->Datadone,
+            var->Hasdata);
+
+    /* ajFilebuffTrace(buff); */
+
+    if(input->Datadone)
+    {
+        return ajFalse;
+    }
+
+    /*
+    ** On first call, we read the header only
+    */
+
+    if(!input->Records)
+    {
+        while (ajBuffreadLineStore(buff, &varinReadLine,
+                                   input->Text, &var->Textptr))
+        {
+            ajStrTrimWhiteEnd(&varinReadLine);
+            input->Records++;
+            if(!ajStrPrefixC(varinReadLine, "##"))
+            {
+                break;
+            }
+            /* ##type= */
+            ajDebug("Header:\n%S\n", varinReadLine);
+            if(input->Records == 1)
+            {
+                if(!ajStrPrefixC(varinReadLine, "##fileformat=VCFv4.0"))
+                {
+                    ajFilebuffResetStore(buff, input->Text, &var->Textptr);
+                    return ajFalse;
+                }
+            }
+            else 
+            {
+                /* parse ID=id,Number=number,Type=type,Description="desc" */
+
+                if(!varfield)
+                    varfield = ajVarfieldNew();
+
+                varname = varinFieldVcf(varfield, varinReadLine);
+                if(varname)
+                    ajDebug("%S=<ID=%S,Type=%d(%s),Number=%d,"
+                            "Description=\"%S\">\n",
+                            varname,
+                            varfield->Id, varfield->Type,
+                            ajVarfieldGetType(varfield),
+                            varfield->Number, varfield->Desc);
+                else
+                    ajDebug("..failed\n");
+
+                if(ajStrMatchC(varname, "INFO"))
+                {
+                    ajListPushAppend(varheader->Fields, varfield);
+                    varfield = NULL;
+                }
+                else if(ajStrMatchC(varname, "FILTER"))
+                {
+                    tagval = ajTagvalNewS(varfield->Id, varfield->Desc);
+                    ajListPushAppend(varheader->Filters, tagval);
+                    tagval = NULL;
+                }
+                else if(ajStrMatchC(varname, "FORMAT"))
+                {
+                    ajListPushAppend(varheader->Fields, varfield);
+                    varfield = NULL;
+                }
+                else if(ajStrMatchC(varname, "ALT"))
+                {
+                    tagval = ajTagvalNewS(varfield->Id, varfield->Desc);
+                    ajListPushAppend(varheader->Alts, tagval);
+                    tagval = NULL;
+                }
+                else if(ajStrMatchC(varname, "SAMPLE"))
+                {
+                    varsample = varinSampleVcf(varinReadLine);
+                    ajListPushAppend(varheader->Samples, varsample);
+                    varsample = NULL;
+                }
+                else if(ajStrMatchC(varname, "PEDIGREE"))
+                {
+                    tagval = ajTagvalNewS(varfield->Id, varfield->Desc);
+                    ajListPushAppend(varheader->Pedigrees, tagval);
+                    tagval = NULL;
+                }
+                else
+                {
+                    ajDebug("other header field tag '%S'\n", varname);
+                    tagval = ajTagvalNewS(varname, varfield->Desc);
+                    ajListPushAppend(varheader->Header, tagval);
+                    tagval = NULL;
+                }
+            }
+        }
+
+        if(!input->Records)
+        {
+            ajFilebuffResetStore(buff, input->Text, &var->Textptr);
+            return ajFalse;
+        }
+
+        /* #CHROM POS ... column headers */
+        ajDebug("Columns:\n%S", varinReadLine);
+
+        if(!ajStrPrefixC(varinReadLine,
+                         "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER"
+                         "\tINFO\tFORMAT"))
+        {
+            ajFilebuffResetStore(buff, input->Text, &var->Textptr);
+            return ajFalse;
+        }
+
+        n = ajStrCalcCountK(varinReadLine, '\t') - 8;
+
+        handle = ajStrTokenNewC(varinReadLine, "\t");
+        i = 0;
+
+        while(ajStrTokenNextParse(&handle, &token))
+        {
+            if(++i <= 9) continue;
+            
+            ajListPushAppend(varheader->SampleIds, token);
+            token = NULL;
+        }
+
+        ajVarfieldDel(&varfield);
+        ajStrTokenDel(&handle);
+        ajStrDel(&token);
+
+        ajDebug("varinLoadVcf41 header done\n");
+
+        return ajTrue;
+    }
+
+    /*
+    ** On later calls, read a chunk of data
+    */
+
+    /* clear current chunk */
+
+    ajDebug("continue processing: maxread %u Datacount %u\n",
+            maxread, input->Datacount);
+
+    ajVarReset(var);
+    var->Hasdata = ajTrue;
+
+    iread = 0;
+    while (ok && iread < maxread)
+    {
+        ok = ajBuffreadLineStore(buff, &varinReadLine,
+                                 input->Text, &var->Textptr);
+        if(!ok) break;
+
+        iread++;
+        input->Records++;
+        /* data */
+        ajDebug("Data:\n%S", varinReadLine);
+        if(ajStrPrefixC(varinReadLine,"#"))
+        {
+            ajFilebuffClearStore(buff, 1, varinReadLine,
+                                 input->Text, &var->Textptr);
+            return ok;
+        }
+        n = varinDataVcf(varinReadLine, var);
+        if(firstsample)
+        {
+            firstsample = ajFalse;
+            nsamples = (ajuint) n;
+        }
+        else
+        {
+            if(n != nsamples)
+                ajWarn("VCF format: expected %u samples, read %u",
+                       nsamples, n);
+        }
+
+        varinVcfCheckLastrecordForRefseqIds(var);
+    }
+
+    input->Datacount += iread;
+
+    ajDebug("data done ok: %B Datacount: %u iread: %u/%u\n",
+            ok, input->Datacount, iread, maxread);
+
+    if(!ok)
+    {
+        input->Datadone = ajTrue;
+        ajFilebuffClear(buff, 0);
+    }
+
+    ajVarfieldDel(&varfield);
+    ajStrTokenDel(&handle);
+    ajStrDel(&token);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic varinReadVcf41Header *******************************************
+**
+** Tries reading VCF header lines using VCFv4.1 format.
+**
+** @param [u] varin [AjPVarin] Variation input object
+** @param [w] var [AjPVar] Variation object
+** @return [AjBool] ajTrue on success
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool varinReadVcf41Header(AjPVarin varin, AjPVar var)
+{
+    AjPFilebuff buff;
+    AjPTextin input = varin->Input;
+    AjPTagval tagval = NULL;
+    AjPVarField varfield = NULL;
+    AjPVarSample varsample = NULL;
+    AjPVarHeader varheader = var->Header;
+    const AjPStr varname = NULL;
+
+    ajDebug("varinReadVcf41Header\n");
+
+    buff = input->Filebuff;
+
+    ajStrTrimWhiteEnd(&varinReadLine);
+    input->Records++;
+    if(!ajStrPrefixC(varinReadLine, "##"))
+    {
+        return ajFalse;
+    }
+    /* ##type= */
+    ajDebug("Header:\n%S\n", varinReadLine);
+
+    if(input->Records == 1)
+    {
+        if(!ajStrPrefixC(varinReadLine, "##fileformat=VCFv4.1"))
+        {
+            ajFilebuffResetStore(buff, input->Text, &var->Textptr);
+            return ajFalse;
+        }
+    }
+    else
+    {
+        /* parse ID=id,Number=number,Type=type,Description="desc" */
+
+	varfield = ajVarfieldNew();
+
+        varname = varinFieldVcf(varfield, varinReadLine);
+        if(varname)
+            ajDebug("%S=<ID=%S,Type=%d(%s),Number=%d,Description=\"%S\">\n",
+                    varname,
+                    varfield->Id, varfield->Type,
+                    ajVarfieldGetType(varfield),
+                    varfield->Number, varfield->Desc);
+        else
+            ajDebug("..failed\n");
+
+        if(ajStrMatchC(varname, "INFO"))
+        {
+            ajListPushAppend(varheader->Fields, varfield);
+            varfield = NULL;
+        }
+        else if(ajStrMatchC(varname, "FILTER"))
+        {
+            tagval = ajTagvalNewS(varfield->Id, varfield->Desc);
+            ajListPushAppend(varheader->Filters, tagval);
+            tagval = NULL;
+        }
+        else if(ajStrMatchC(varname, "FORMAT"))
+        {
+            ajListPushAppend(varheader->Fields, varfield);
+            varfield = NULL;
+        }
+        else if(ajStrMatchC(varname, "ALT"))
+        {
+            tagval = ajTagvalNewS(varfield->Id, varfield->Desc);
+            ajListPushAppend(varheader->Alts, tagval);
+            tagval = NULL;
+        }
+        else if(ajStrMatchC(varname, "SAMPLE"))
+        {
+            varsample = varinSampleVcf(varinReadLine);
+            ajListPushAppend(varheader->Samples, varsample);
+            varsample = NULL;
+        }
+        else if(ajStrMatchC(varname, "PEDIGREE"))
+        {
+            tagval = ajTagvalNewS(varfield->Id, varfield->Desc);
+            ajListPushAppend(varheader->Pedigrees, tagval);
+            tagval = NULL;
+        }
+        /*TODO contig lines */
+        else
+        {
+            ajDebug("other header field tag '%S'\n", varname);
+            tagval = ajTagvalNewS(varname, varfield->Desc);
+            ajListPushAppend(varheader->Header, tagval);
+            tagval = NULL;
+        }
+
+        ajVarfieldDel(&varfield);
+    }
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic varinLoadVcf41 *************************************************
+**
+** Given data in a variation structure, tries to read the next chunk
+** using VCFv4.1 format.
+**
+** @param [u] varin [AjPVarin] Variation input object
+** @param [w] var [AjPVar] Variation object
+** @return [AjBool] ajTrue on success
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool varinLoadVcf41(AjPVarin varin, AjPVar var)
+{
+    AjPTextin input = varin->Input;
+    AjPFilebuff buff = input->Filebuff;
+    AjBool ok = ajTrue;
+    AjPVarField varfield = NULL;
+    AjPVarHeader varheader = var->Header;
+    AjPStrTok handle = NULL;
+    AjPStr token = NULL;
+    ajuint i;
+    ajulong n;
+    ajuint nsamples = 0;
+    AjBool firstsample = AJTRUE;
+    ajuint iread = 0;
+    ajuint maxread = 1000;
+
+    ajDebug("varinLoadVcf41 '%F' EOF: %B records: %u "
+            "dataread: %B datadone: %B hasdata: %B\n",
+            ajFilebuffGetFile(buff), ajFilebuffIsEof(buff),
+            input->Records, input->Dataread, input->Datadone,
+            var->Hasdata);
+
+
+    /* ajFilebuffTrace(buff); */
+
+    if(input->Datadone)
+    {
+        return ajFalse;
+    }
+
+    /*
+    ** On first call, we read the header only
+    */
+
+    if(!input->Records)
+    {
+        ajVarClear(var);
+        while (ajBuffreadLineStore(buff, &varinReadLine,
+                                   input->Text, &var->Textptr))
+        {
+            if(!varinReadVcf41Header(varin, var))
+            {
+                break;
+            }
+        }
+
+        if(!input->Records)
+        {
+            ajFilebuffResetStore(buff, input->Text, &var->Textptr);
+            return ajFalse;
+        }
+
+        /* #CHROM POS ... column headers */
+        ajDebug("Columns:\n%S\n", varinReadLine);
+
+        if(!ajStrPrefixC(varinReadLine,
+                         "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER"
+                         "\tINFO\tFORMAT"))
+        {
+            ajFilebuffResetStore(buff, input->Text, &var->Textptr);
+            return ajFalse;
+        }
+
+        n = ajStrCalcCountK(varinReadLine, '\t') - 8;
+
+        handle = ajStrTokenNewC(varinReadLine, "\t");
+        i = 0;
+
+        while(ajStrTokenNextParse(&handle, &token))
+        {
+            if(++i <= 9) continue;
+
+            ajListPushAppend(varheader->SampleIds, token);
+            token = NULL;
+        }
+
+        ajVarfieldDel(&varfield);
+        ajStrTokenDel(&handle);
+        ajStrDel(&token);
+
+        ajDebug("varinLoadVcf41 header done\n");
+        return ajTrue;
+    }
+    
+    /*
+    ** On later calls, read a chunk of data
+    */
+
+    /* clear current chunk */
+
+    ajDebug("continue processing: maxread %u Datacount %u\n",
+            maxread, input->Datacount);
+
+    ajVarReset(var);
+    var->Hasdata = ajTrue;
+
+    iread = 0;
+    while (ok && iread < maxread)
+    {
+        ok = ajBuffreadLineStore(buff, &varinReadLine,
+                                 input->Text, &var->Textptr);
+        if(!ok) break;
+
+        iread++;
+        input->Records++;
+
+        /* data */
+        ajDebug("Data:\n%S", varinReadLine);
+
+        if(ajStrPrefixC(varinReadLine,"#"))
+        {
+            ajFilebuffClearStore(buff, 1, varinReadLine,
+                                 input->Text, &var->Textptr);
+            input->Datadone = ajTrue;
+            return ok;
+        }
+
+        n = varinDataVcf(varinReadLine, var);
+        if(firstsample)
+        {
+            firstsample = ajFalse;
+            nsamples = (ajuint) n;
+        }
+        else
+        {
+            if(n != nsamples)
+                ajWarn("VCFformat: expected %u samples, read %u",
+                       nsamples, n);
+        }
+
+        varinVcfCheckLastrecordForRefseqIds(var);
+    }
+
+    input->Datacount += iread;
+
+    ajDebug("data done ok: %B Datacount: %u iread: %u/%u\n",
+            ok, input->Datacount, iread, maxread);
+
+    if(!ok)
+    {
+        input->Datadone = ajTrue;
+        ajFilebuffClear(buff, 0);
+    }
+
+    ajVarfieldDel(&varfield);
+    ajStrTokenDel(&handle);
+    ajStrDel(&token);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic varinVcfCheckLastrecordForRefseqIds ****************************
+**
+** Check last record, whether its reference sequence was recorded
+** in the RefSeqIds table
+**
+** @param [u] var [AjPVar] Variation object
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void varinVcfCheckLastrecordForRefseqIds(AjPVar var)
+{
+    int* tid = NULL;
+    const int* ctid = NULL;
+    AjPVarData vardata = NULL;
+    AjPVarHeader varheader = var->Header;
+
+
+    if(ajListPeekLast(var->Data, (void**)&vardata))
+        ctid = (const int*)ajTableFetchS(varheader->RefseqIds, vardata->Chrom);
+
+    if(!ctid)
+    {
+	AJNEW0(tid);
+	*tid = (ajuint) ajTableGetLength(varheader->RefseqIds);
+	ajTablePut(varheader->RefseqIds, ajStrNewS(vardata->Chrom), tid);
+	ctid=tid;
+    }
+
+    return;
+}
+
+
+
+
+/* @funcstatic varinFieldVcf **************************************************
+**
+** Reads field data from a VCF header record
+**
+** @param [u] var [AjPVarField] Variation field object
+** @param [r] str [const AjPStr] Input header record
+** @return [const AjPStr] Field name
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static const AjPStr varinFieldVcf(AjPVarField var, const AjPStr str)
+{
+    ajlong ipos;
+    AjPStr tmpstr = NULL;
+    ajuint i;
+    AjBool isknown = ajFalse;
+
+    /* PEDIGREE not listed: has no ID field */
+
+    const char* fieldnames[] = {
+        "INFO", "FILTER", "FORMAT", "ALT", "SAMPLE", NULL
+    };
+
+    if(!VarInitVcf)
+        varRegInitVcf();
+
+    ajVarfieldClear(var);
+
+    if(!ajStrPrefixC(str, "##"))
+        return NULL;
+
+    ipos = ajStrFindAnyK(str, '=');
+    if(ipos < 3)
+    {
+        /*valid as a comment in VCF 3.x */
+        ajDebug("no equal, pos:%u '%S'\n", ipos, var->Desc);
+        ajStrAssignSubS(&var->Desc, str, 2, -1);
+        ajStrAssignC(&varFieldName, "comment");
+        return varFieldName;
+    }
+
+    ajStrAssignSubS(&varFieldName, str, 2, ipos-1);
+
+    for(i=0; fieldnames[i]; i++)
+        if(ajStrMatchC(varFieldName, fieldnames[i]))
+            isknown = ajTrue;
+    
+    if(!isknown)
+    {
+        ajStrAssignSubS(&var->Desc, str, ipos+1, -1);
+        ajDebug("simple desc '%S'\n", var->Desc);
+        return varFieldName;
+    }
+
+    if(!ajRegExec(varRegId, str))
+        return NULL;
+    ajRegSubI(varRegId, 1, &var->Id);
+    ajDebug("id '%S'\n", var->Id);
+
+    if(ajRegExec(varRegDesc, str))
+    {
+        ajRegSubI(varRegDesc, 1, &var->Desc);
+        ajDebug("Desc '%S'\n", var->Desc);
+    }
+    else
+    {
+        if(!ajRegExec(varRegDesc2, str))
+            return NULL;
+        ajRegSubI(varRegDesc2, 1, &var->Desc);
+        ajDebug("Desc2 '%S'\n", var->Desc);
+    }
+
+    if(!ajStrMatchC(varFieldName, "INFO") &&
+       !ajStrMatchC(varFieldName, "FORMAT"))
+        return varFieldName;
+
+    if(!ajRegExec(varRegNumber, str))
+        return varFieldName;    /* valid for v3.x */
+
+    ajRegSubI(varRegNumber, 1, &tmpstr);
+    ajDebug("Number '%S'\n", tmpstr);
+
+    switch(ajStrGetCharFirst(tmpstr))
+    {
+        case 'A':
+            var->Number = varNumAlt;
+            break;
+        case 'G':
+            var->Number = varNumGen;
+            break;
+        case '.':
+            var->Number = varNumAny;
+            break;
+        default:
+            if(!ajStrToInt(tmpstr, &var->Number))
+                return NULL;
+            break;
+    }
+        
+    if(!ajRegExec(varRegType, str))
+        return NULL;
+    ajRegSubI(varRegType, 1, &tmpstr);
+    ajDebug("Type '%S'\n", tmpstr);
+
+    if(ajStrMatchC(tmpstr, "Integer"))
+        var->Type = AJVAR_INT;
+    else if(ajStrMatchC(tmpstr, "Float"))
+        var->Type = AJVAR_FLOAT;
+    else if(ajStrMatchC(tmpstr, "Flag"))
+        var->Type = AJVAR_FLAG;
+    else if(ajStrMatchC(tmpstr, "Character"))
+        var->Type = AJVAR_CHAR;
+    else if(ajStrMatchC(tmpstr, "String"))
+        var->Type = AJVAR_STR;
+    else
+        return NULL;
+
+    ajStrDel(&tmpstr);
+
+    ajStrAssignS(&var->Field, varFieldName);
+
+    return varFieldName;
+}
+
+
+
+
+/* @funcstatic varinFieldVcf3x ************************************************
+**
+** Reads field data from a VCF version 3.x header record
+**
+** @param [u] var [AjPVarField] Variation field object
+** @param [r] str [const AjPStr] Input header record
+** @return [const AjPStr] Field name
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static const AjPStr varinFieldVcf3x(AjPVarField var, const AjPStr str)
+{
+    ajlong ipos;
+    AjPStr tmpstr = NULL;
+    ajuint i;
+    AjBool isknown = ajFalse;
+    AjPStrTok handle = NULL;
+
+    /* PEDIGREE not listed: has no ID field */
+
+    const char* fieldnames[] = {
+        "INFO", "FILTER", "FORMAT", NULL
+    };
+
+    ajVarfieldClear(var);
+
+    if(!ajStrPrefixC(str, "##"))
+        return NULL;
+
+    ipos = ajStrFindAnyK(str, '=');
+    if(ipos < 3)
+    {
+        /*valid as a comment in VCF 3.x */
+        ajDebug("no equal, pos:%u '%S'\n", ipos, var->Desc);
+        ajStrAssignSubS(&var->Desc, str, 2, -1);
+        ajStrAssignC(&varFieldName, "comment");
+        return varFieldName;
+    }
+
+    ajStrAssignSubS(&varFieldName, str, 2, ipos-1);
+
+    for(i=0; fieldnames[i]; i++)
+        if(ajStrMatchC(varFieldName, fieldnames[i]))
+            isknown = ajTrue;
+    
+    if(!isknown)
+    {
+        ajStrAssignSubS(&var->Desc, str, ipos+1, -1);
+        ajDebug("simple desc '%S'\n", var->Desc);
+        return varFieldName;
+    }
+
+    handle = ajStrTokenNewC(varinReadLine, "=");
+
+    if(!ajStrTokenNextParse(&handle, &tmpstr))
+    {
+        ajStrDel(&tmpstr);
+        ajStrTokenDel(&handle);
+        return NULL;
+    }
+
+    if(!ajStrTokenNextParseC(&handle, ",", &var->Id))
+    {
+        ajStrDel(&tmpstr);
+        ajStrTokenDel(&handle);
+        return NULL;
+    }
+    
+    ajDebug("id '%S'\n", var->Id);
+
+    if(ajStrMatchC(varFieldName, "FILTER"))
+    {
+        ajStrTokenRestParse(&handle, &var->Desc);
+        ajStrTrimC(&var->Desc, "\"");
+        ajStrDel(&tmpstr);
+        ajStrTokenDel(&handle);
+        return varFieldName;
+    }
+    
+    if(!ajStrTokenNextParse(&handle, &tmpstr))
+    {
+        ajStrDel(&tmpstr);
+        ajStrTokenDel(&handle);
+        return NULL;
+    }
+    
+    ajDebug("Number '%S'\n", tmpstr);
+
+    switch(ajStrGetCharFirst(tmpstr))
+    {
+        case 'A':
+            var->Number = varNumAlt;
+            break;
+        case 'G':
+            var->Number = varNumGen;
+            break;
+        case '.':
+            var->Number = varNumAny;
+            break;
+        default:
+            if(!ajStrToInt(tmpstr, &var->Number))
+            {
+                ajStrDel(&tmpstr);
+                ajStrTokenDel(&handle);
+                return NULL;
+            }
+            break;
+    }
+        
+    if(!ajStrTokenNextParse(&handle, &tmpstr))
+    {
+        ajStrDel(&tmpstr);
+        ajStrTokenDel(&handle);
+        return NULL;
+    }
+
+    ajDebug("Type '%S'\n", tmpstr);
+    ajStrTokenRestParse(&handle, &var->Desc);
+    ajStrTrimC(&var->Desc, "\"");
+
+    if(ajStrMatchC(tmpstr, "Integer"))
+        var->Type = AJVAR_INT;
+    else if(ajStrMatchC(tmpstr, "Float"))
+        var->Type = AJVAR_FLOAT;
+    else if(ajStrMatchC(tmpstr, "Flag"))
+        var->Type = AJVAR_FLAG;
+    else if(ajStrMatchC(tmpstr, "Character"))
+        var->Type = AJVAR_CHAR;
+    else if(ajStrMatchC(tmpstr, "String"))
+        var->Type = AJVAR_STR;
+    else
+        return NULL;
+
+
+    ajStrDel(&tmpstr);
+    ajStrTokenDel(&handle);
+
+    ajStrAssignS(&var->Field, varFieldName);
+
+    return varFieldName;
+}
+
+
+
+
+/* @funcstatic varinSampleVcf *************************************************
+**
+** Parses a VCF header SAMPLE record
+**
+** @param [r] str [const AjPStr] Input record
+** @return [AjPVarSample] Variation sample object
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjPVarSample varinSampleVcf(const AjPStr str)
+{
+    AjPVarSample varsample = NULL;
+    ajuint ipos;
+    AjPStr tmpstr = NULL;
+    ajuint n;
+
+    if(!VarInitVcf)
+        varRegInitVcf();
+
+    if(!ajStrPrefixC(str, "##SAMPLE"))
+        return NULL;
+
+    ipos = (ajuint) ajStrFindAnyK(str, '=');
+    if(ipos < 3)
+        return NULL;
+
+    if(!ajRegExec(varRegId, str))
+        return NULL;
+
+    varsample = ajVarsampleNew();
+
+    ajRegSubI(varRegId, 1, &varsample->Id);
+    ajDebug("id '%S'\n", varsample->Id);
+
+    if(ajRegExec(varRegDesc, str))
+    {
+        ajRegSubI(varRegDesc, 1, &tmpstr);
+        ajDebug("Desc '%S'\n", tmpstr);
+    }
+    else
+    {
+        if(!ajRegExec(varRegDesc2, str))
+            return NULL;
+        ajRegSubI(varRegDesc2, 1, &tmpstr);
+        ajDebug("Desc2 '%S'\n", tmpstr);
+    }
+    varsample->Number = varinParseListVcf(tmpstr, &varsample->Desc);
+
+    if(!ajRegExec(varRegGenomes, str))
+        return NULL;
+    ajRegSubI(varRegGenomes, 1, &tmpstr);
+    ajDebug("Genomes '%S'\n", tmpstr);
+    n = varinParseListVcf(tmpstr, &varsample->Genomes);
+    if(n != varsample->Number)
+    {
+        ajWarn("expected %u genomes, read %u",
+               varsample->Number, n);
+        return NULL;
+    }
+
+    if(!ajRegExec(varRegMixture, str))
+        return NULL;
+    ajRegSubI(varRegMixture, 1, &tmpstr);
+    ajDebug("Mixture '%S'\n", tmpstr);
+    n = varinParseFloatVcf(tmpstr, &varsample->Mixture);
+    if(n != varsample->Number)
+    {
+        ajWarn("expected %u mixtures, read %u",
+               varsample->Number, n);
+        return NULL;
+    }
+
+    ajStrDel(&tmpstr);
+
+    return varsample;
+}
+
+
+
+
+/* @funcstatic varinParseFloatVcf *********************************************
+**
+** Parse an array of semicolon-delimited floating point values
+**
+** @param [r] str [const AjPStr] Input string
+** @param [w] Parray [float**] Array of strings
+** @return [ajuint] Number of values parsed
+**
+******************************************************************************/
+
+static ajuint varinParseFloatVcf(const AjPStr str, float **Parray)
+{
+    ajuint ret;
+    ajuint i = 0;
+    ajlong ipos = 0;
+    ajlong lastpos = 0;
+    AjPStr tmpstr = NULL;
+
+    AJFREE(*Parray);
+    ret = 1 + (ajuint) ajStrCalcCountK(str, ';');
+    AJCNEW(*Parray, ret);
+
+    for(i=0; i < ret; i++)
+    {
+        ipos = ajStrFindNextK(str, lastpos, ';');
+        if(ipos < 0)
+            ipos = ajStrGetLen(str)+1;
+        ajStrAssignSubS(&tmpstr, str, lastpos, ipos-1);
+        ajStrToFloat(tmpstr, &(*Parray)[i]);
+        lastpos = ipos+1;
+    }
+
+    for(i=0; i < ret; i++)
+    {
+        ajDebug("Parsed float[%u] '%f'\n", i, (*Parray)[i]);
+    }
+
+    ajStrDel(&tmpstr);
+
+    return ret;
+}
+
+
+
+
+/* @funcstatic varinParseListVcf **********************************************
+**
+** Parse an array of semicolon-delimited strings
+**
+** @param [r] str [const AjPStr] Input string
+** @param [w] Parray [AjPStr**] Array of strings
+** @return [ajuint] Number of strings parsed
+**
+******************************************************************************/
+
+static ajuint varinParseListVcf(const AjPStr str, AjPStr **Parray)
+{
+    ajuint ret;
+    ajuint i = 0;
+    ajuint n = 0;
+    ajlong ipos = 0;
+    ajlong lastpos = 0;
+
+    ajStrDelarray(&(*Parray));
+    n = 1 + (ajuint) ajStrCalcCountK(str, ';');
+    ret = n + 1;
+    AJCNEW(*Parray, ret);
+
+    for(i=0; i < n; i++)
+    {
+        ipos = ajStrFindNextK(str, lastpos, ';');
+        if(ipos < 0)
+            ipos = ajStrGetLen(str)+1;
+        ajStrAssignSubS(&(*Parray)[i], str, lastpos, ipos-1); 
+        lastpos = ipos+1;
+    }
+
+    for(i=0; i < n; i++)
+    {
+        ajDebug("Parsed str[%u] '%S'\n", i, (*Parray)[i]);
+    }
+
+    return n;
+}
+
+
+
+
+/* @funcstatic varinDataVcf ***************************************************
+**
+** Parse a VCF file data record
+**
+** @param [r] str [const AjPStr] INput data record
+** @param [u] var [AjPVar] Variation data object
+** @return [ajuint] Number of sample columns
+**
+******************************************************************************/
+
+static ajuint varinDataVcf(const AjPStr str, AjPVar var)
+{
+    AjPVarData vardata = ajVardataNew();
+    AjPStrTok handle = NULL;
+    AjPStr token = NULL;
+    ajuint n;
+    ajuint i = 0;
+ 
+    n = (ajuint) ajStrCalcCountK(str, '\t') - 8;
+
+    handle = ajStrTokenNewC(str, "\t\n");
+    while(ajStrTokenNextParse(&handle, &token))
+    {
+        switch (i++) 
+        {
+            case 0:             /* CHROM */
+                ajStrAssignS(&vardata->Chrom, token);
+                break;
+            case 1:             /* POS */
+                ajStrToUint(token, &vardata->Pos);
+                break;
+            case 2:             /* ID */
+                ajStrAssignS(&vardata->Id, token);
+                break;
+            case 3:             /* REF */
+                ajStrAssignS(&vardata->Ref, token);
+                break;
+            case 4:             /* ALT */
+                ajStrAssignS(&vardata->Alt, token);
+                break;
+            case 5:             /* QUAL */
+                ajStrAssignS(&vardata->Qual, token);
+                break;
+            case 6:             /* FILTER */
+                ajStrAssignS(&vardata->Filter, token);
+                break;
+            case 7:             /* INFO */
+                ajStrAssignS(&vardata->Info, token);
+                break;
+            case 8:             /* FORMAT */
+                ajStrAssignS(&vardata->Format, token);
+                break;
+            default:            /* sample(s) */
+                ajListPushAppend(vardata->Samples, token);
+                token = NULL;
+                break;
+        }
+    }
+
+    ajListPushAppend(var->Data, vardata);
+    vardata = NULL;
+
+    ajStrDel(&token);
+    ajStrTokenDel(&handle);
+
+    return n;
 }
 
 
@@ -1088,12 +2760,14 @@ static AjBool varinReadAbc(AjPVarin varin, AjPVar var)
 
 
 
-/* @func ajVarinprintBook ****************************************************
+/* @func ajVarinprintBook *****************************************************
 **
 ** Reports the internal data structures as a Docbook table
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1137,7 +2811,7 @@ void ajVarinprintBook(AjPFile outf)
         }
     }
 
-    ajListSort(fmtlist, ajStrVcmp);
+    ajListSort(fmtlist, &ajStrVcmp);
     ajListstrToarray(fmtlist, &names);
 
     for(i=0; names[i]; i++)
@@ -1172,12 +2846,14 @@ void ajVarinprintBook(AjPFile outf)
 
 
 
-/* @func ajVarinprintHtml ***************************************************
+/* @func ajVarinprintHtml *****************************************************
 **
 ** Reports the internal data structures as an HTML table
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1200,7 +2876,7 @@ void ajVarinprintHtml(AjPFile outf)
         {
             for(j=i+1; varinFormatDef[j].Name; j++)
             {
-                if(varinFormatDef[j].Read == varinFormatDef[i].Read)
+                if(varinFormatDef[j].Load == varinFormatDef[i].Load)
                 {
                     ajFmtPrintAppS(&namestr, " %s",
                                    varinFormatDef[j].Name);
@@ -1231,13 +2907,15 @@ void ajVarinprintHtml(AjPFile outf)
 
 
 
-/* @func ajVarinprintText ***************************************************
+/* @func ajVarinprintText *****************************************************
 **
 ** Reports the internal data structures
 **
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1272,12 +2950,14 @@ void ajVarinprintText(AjPFile outf, AjBool full)
 
 
 
-/* @func ajVarinprintWiki ***************************************************
+/* @func ajVarinprintWiki *****************************************************
 **
 ** Reports the internal data structures as a wiki table
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1301,7 +2981,7 @@ void ajVarinprintWiki(AjPFile outf)
         {
             for(j=i+1; varinFormatDef[j].Name; j++)
             {
-                if(varinFormatDef[j].Read == varinFormatDef[i].Read)
+                if(varinFormatDef[j].Load == varinFormatDef[i].Load)
                 {
                     ajFmtPrintAppS(&namestr, "<br>%s",
                                    varinFormatDef[j].Name);
@@ -1350,19 +3030,32 @@ void ajVarinprintWiki(AjPFile outf)
 
 
 
-/* @func ajVarinExit *********************************************************
+/* @func ajVarinExit **********************************************************
 **
 ** Cleans up variation input internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 void ajVarinExit(void)
 {
     ajStrDel(&varinReadLine);
+    ajStrDel(&varFieldName);
 
     ajTableDel(&varDbMethods);
+
+    ajRegFree(&varRegId);
+    ajRegFree(&varRegNumber);
+    ajRegFree(&varRegType);
+    ajRegFree(&varRegDesc);
+    ajRegFree(&varRegDesc2);
+    ajRegFree(&varRegGenomes);
+    ajRegFree(&varRegMixture);
+
+    VarInitVcf = ajFalse;
 
     return;
 }
@@ -1376,7 +3069,7 @@ void ajVarinExit(void)
 **
 ** @fdata [none]
 **
-** @nam3rule Type Internals for var datatype
+** @nam3rule Type Internals for variation datatype
 ** @nam4rule Get  Return a value
 ** @nam5rule Fields  Known query fields for ajVarinRead
 ** @nam5rule Qlinks  Known query link operators for ajVarinRead
@@ -1390,11 +3083,13 @@ void ajVarinExit(void)
 
 
 
-/* @func ajVarinTypeGetFields ************************************************
+/* @func ajVarinTypeGetFields *************************************************
 **
 ** Returns the list of known field names for ajVarinRead
 **
 ** @return [const char*] List of field names
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1406,11 +3101,13 @@ const char* ajVarinTypeGetFields(void)
 
 
 
-/* @func ajVarinTypeGetQlinks ************************************************
+/* @func ajVarinTypeGetQlinks *************************************************
 **
 ** Returns the listof known query link operators for ajVarinRead
 **
 ** @return [const char*] List of field names
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1462,11 +3159,13 @@ const char* ajVarinTypeGetQlinks(void)
 
 
 
-/* @func ajVaraccessGetDb ***************************************************
+/* @func ajVaraccessGetDb *****************************************************
 **
 ** Returns the table in which variation database access details are registered
 **
 ** @return [AjPTable] Access functions hash table
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1481,13 +3180,15 @@ AjPTable ajVaraccessGetDb(void)
 
 
 
-/* @func ajVaraccessMethodGetQlinks ******************************************
+/* @func ajVaraccessMethodGetQlinks *******************************************
 **
-** Tests for a named method for var data reading returns the 
+** Tests for a named method for variation data reading returns the 
 ** known query link operators
 **
 ** @param [r] method [const AjPStr] Method required.
 ** @return [const char*] Known link operators
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1505,13 +3206,15 @@ const char* ajVaraccessMethodGetQlinks(const AjPStr method)
 
 
 
-/* @func ajVaraccessMethodGetScope ******************************************
+/* @func ajVaraccessMethodGetScope ********************************************
 **
 ** Tests for a named method for variation data reading and returns the scope
 ** (entry, query or all).
 *
 ** @param [r] method [const AjPStr] Method required.
 ** @return [ajuint] Scope flags
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1537,12 +3240,14 @@ ajuint ajVaraccessMethodGetScope(const AjPStr method)
 
 
 
-/* @func ajVaraccessMethodTest **********************************************
+/* @func ajVaraccessMethodTest ************************************************
 **
 ** Tests for a named method for variation data reading.
 **
 ** @param [r] method [const AjPStr] Method required.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1557,19 +3262,25 @@ AjBool ajVaraccessMethodTest(const AjPStr method)
 
 
 
-/* @funcstatic varinQryRestore **********************************************
+/* @funcstatic varinQryRestore ************************************************
 **
 ** Restores a variation input specification from an AjPQueryList node
 **
 ** @param [w] varin [AjPVarin] Variation input object
 ** @param [r] node [const AjPQueryList] Query list node
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void varinQryRestore(AjPVarin varin, const AjPQueryList node)
 {
-    varin->Input->Format = node->Format;
-    ajStrAssignS(&varin->Input->Formatstr, node->Formatstr);
+    AjPTextin input = varin->Input;
+
+    input->Format = node->Format;
+    input->Fpos   = node->Fpos;
+    ajStrAssignS(&input->Formatstr, node->Formatstr);
+    ajStrAssignS(&input->QryFields, node->QryFields);
 
     return;
 }
@@ -1577,19 +3288,25 @@ static void varinQryRestore(AjPVarin varin, const AjPQueryList node)
 
 
 
-/* @funcstatic varinQrySave *************************************************
+/* @funcstatic varinQrySave ***************************************************
 **
 ** Saves a variation input specification in an AjPQueryList node
 **
 ** @param [w] node [AjPQueryList] Query list node
 ** @param [r] varin [const AjPVarin] Variation input object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void varinQrySave(AjPQueryList node, const AjPVarin varin)
 {
-    node->Format   = varin->Input->Format;
-    ajStrAssignS(&node->Formatstr, varin->Input->Formatstr);
+    AjPTextin input = varin->Input;
+
+    node->Format   = input->Format;
+    node->Fpos     = input->Fpos;
+    ajStrAssignS(&node->Formatstr, input->Formatstr);
+    ajStrAssignS(&node->QryFields, input->QryFields);
 
     return;
 }
@@ -1597,7 +3314,7 @@ static void varinQrySave(AjPQueryList node, const AjPVarin varin)
 
 
 
-/* @funcstatic varinQryProcess **********************************************
+/* @funcstatic varinQryProcess ************************************************
 **
 ** Converts a variation data query into an open file.
 **
@@ -1619,6 +3336,8 @@ static void varinQrySave(AjPQueryList node, const AjPVarin varin)
 **                         The format will be replaced
 **                         if defined in the query string.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1631,10 +3350,11 @@ static AjBool varinQryProcess(AjPVarin varin, AjPVar var)
     AjPTextin textin;
     AjPQuery qry;
     AjPVarAccess varaccess = NULL;
+    AjBool ignorerev = ajFalse;
 
     textin = varin->Input;
     qry = textin->Query;
-
+    
     /* pick up the original query string */
     qrystr = ajStrNewS(textin->Qry);
 
@@ -1644,7 +3364,7 @@ static AjBool varinQryProcess(AjPVarin varin, AjPVar var)
     fmtstr = ajQuerystrParseFormat(&qrystr, textin, varinformatFind);
     ajDebug("varinQryProcess ... fmtstr '%S' '%S'\n", fmtstr, qrystr);
 
-    /* (seq/feat) DO NOT look for a [range] suffix */
+    ajQuerystrParseRange(&qrystr, &varin->Begin, &varin->End, &ignorerev);
 
     /* look for a list:: or @:: listfile of queries  - process and return */
     if(ajQuerystrParseListfile(&qrystr))
@@ -1679,7 +3399,7 @@ static AjBool varinQryProcess(AjPVarin varin, AjPVar var)
                 qry->Formatstr);
         qry->Access = ajCallTableGetS(varDbMethods,qry->Method);
         varaccess = qry->Access;
-        return varaccess->Access(varin);
+        return (*varaccess->Access)(varin);
     }
 
     ajDebug("varinQryProcess text method '%S' success\n", qry->Method);
@@ -1701,7 +3421,7 @@ static AjBool varinQryProcess(AjPVarin varin, AjPVar var)
 
 
 
-/* @funcstatic varinListProcess **********************************************
+/* @funcstatic varinListProcess ***********************************************
 **
 ** Processes a file of queries.
 ** This function is called by, and calls, varinQryProcess. There is
@@ -1719,6 +3439,8 @@ static AjBool varinQryProcess(AjPVarin varin, AjPVar var)
 ** @param [u] var [AjPVar] Variation data
 ** @param [r] listfile [const AjPStr] Name of list file.,
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1822,13 +3544,15 @@ static AjBool varinListProcess(AjPVarin varin, AjPVar var,
 
 
 
-/* @funcstatic varinListNoComment ********************************************
+/* @funcstatic varinListNoComment *********************************************
 **
 ** Strips comments from a character string (a line from an ACD file).
 ** Comments are blank lines or any text following a "#" character.
 **
 ** @param [u] text [AjPStr*] Line of text from input file.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1858,7 +3582,7 @@ static void varinListNoComment(AjPStr* text)
 
 
 
-/* @funcstatic varinFormatSet ************************************************
+/* @funcstatic varinFormatSet *************************************************
 **
 ** Sets the input format for variation data using the variation data
 ** input object's defined format
@@ -1866,6 +3590,8 @@ static void varinListNoComment(AjPStr* text)
 ** @param [u] varin [AjPVarin] Variation data input.
 ** @param [u] var [AjPVar] Variation data
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1935,11 +3661,13 @@ static AjBool varinFormatSet(AjPVarin varin, AjPVar var)
 
 
 
-/* @func ajVarallNew ***********************************************************
+/* @func ajVarallNew **********************************************************
 **
 ** Creates a new variation input stream object.
 **
 ** @return [AjPVarall] New variation input stream object.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1949,8 +3677,7 @@ AjPVarall ajVarallNew(void)
 
     AJNEW0(pthis);
 
-    pthis->Varin = ajVarinNew();
-    pthis->Var   = ajVarNew();
+    pthis->Loader   = ajVarloadNew();
 
     return pthis;
 }
@@ -1986,12 +3713,14 @@ AjPVarall ajVarallNew(void)
 
 
 
-/* @func ajVarallDel ***********************************************************
+/* @func ajVarallDel **********************************************************
 **
 ** Deletes a variation input stream object.
 **
 ** @param [d] pthis [AjPVarall*] Variation input stream
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2007,9 +3736,7 @@ void ajVarallDel(AjPVarall* pthis)
     if(!thys)
         return;
 
-    ajVarinDel(&thys->Varin);
-    if(!thys->Returned)
-        ajVarDel(&thys->Var);
+    ajVarloadDel(&thys->Loader);
 
     AJFREE(*pthis);
 
@@ -2053,6 +3780,8 @@ void ajVarallDel(AjPVarall* pthis)
 **
 ** @param [w] thys [AjPVarall] Variation input stream
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2061,9 +3790,7 @@ void ajVarallClear(AjPVarall thys)
 
     ajDebug("ajVarallClear called\n");
 
-    ajVarinClear(thys->Varin);
-
-    ajVarClear(thys->Var);
+    ajVarloadClear(thys->Loader);
 
     thys->Returned = ajFalse;
 
@@ -2099,7 +3826,10 @@ void ajVarallClear(AjPVarall thys)
 ** Returns the identifier of the current variation in an input stream
 **
 ** @param [r] thys [const AjPVarall] Variation input stream
+**
 ** @return [const AjPStr] Identifier
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2110,7 +3840,7 @@ const AjPStr ajVarallGetvarId(const AjPVarall thys)
 
     ajDebug("ajVarallGetvarId called\n");
 
-    return ajVarGetId(thys->Var);
+    return ajVarloadGetvarId(thys->Loader);
 }
 
 
@@ -2125,11 +3855,11 @@ const AjPStr ajVarallGetvarId(const AjPVarall thys)
 ** @nam3rule Next Read next variation
 **
 ** @argrule * thys [AjPVarall] Variation input stream object
-** @argrule * Pvar [AjPVar*] Variation object
+** @argrule * Pvarload [AjPVarload*] Variation loader object
 **
 ** @valrule * [AjBool] True on success
 **
-** @fcategory use
+** @fcategory input
 **
 ******************************************************************************/
 
@@ -2137,6 +3867,378 @@ const AjPStr ajVarallGetvarId(const AjPVarall thys)
 
 
 /* @func ajVarallNext *********************************************************
+**
+** Load the next set of initial variation data in an input stream.
+**
+** Return the results in the AjPVarload object but leave the file open for
+** future calls.
+**
+** @param [w] thys [AjPVarall] Variation input stream
+** @param [u] Pvarload [AjPVarload*] Variation loader returned
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjBool ajVarallNext(AjPVarall thys, AjPVarload *Pvarload)
+{
+    ajDebug("ajVarallNext count:%u\n", thys->Count);
+
+    if(!thys->Count)
+    {
+	thys->Count = 1;
+
+	thys->Totterms++;
+
+	*Pvarload = thys->Loader;
+	thys->Returned = ajTrue;
+
+	ajDebug("ajVarallNext initial\n");
+
+	return ajTrue;
+    }
+
+
+    if(ajVarinLoad(thys->Loader->Varin, thys->Loader->Var))
+    {
+	thys->Count++;
+
+	thys->Totterms++;
+
+	*Pvarload = thys->Loader;
+	thys->Returned = ajTrue;
+
+	ajDebug("ajVarallNext success\n");
+
+	return ajTrue;
+    }
+
+    *Pvarload = NULL;
+
+    ajDebug("ajVarallNext failed\n");
+
+    ajVarallClear(thys);
+
+    return ajFalse;
+}
+
+
+
+
+/* @datasection [AjPVarload] Variation Loader *********************************
+**
+** Function is for manipulating variation loader objects
+**
+** @nam2rule Varload Variation loader objects
+**
+******************************************************************************/
+
+
+
+
+/* @section Variation Loader Constructors *************************************
+**
+** All constructors return a new variation loader object by pointer. It
+** is the responsibility of the user to first destroy any previous
+** variation loader object. The target pointer does not need to be
+** initialised to NULL, but it is good programming practice to do so
+** anyway.
+**
+** @fdata [AjPVarload]
+**
+** @nam3rule New Constructor
+**
+** @valrule * [AjPVarload] Variation loader object
+**
+** @fcategory new
+**
+******************************************************************************/
+
+
+
+
+/* @func ajVarloadNew *********************************************************
+**
+** Creates a new variation loader object.
+**
+** @return [AjPVarload] New variation loader object.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjPVarload ajVarloadNew(void)
+{
+    AjPVarload pthis;
+
+    AJNEW0(pthis);
+
+    pthis->Varin = ajVarinNew();
+    pthis->Var   = ajVarNew();
+
+    return pthis;
+}
+
+
+
+
+
+/* ==================================================================== */
+/* ========================== destructors ============================= */
+/* ==================================================================== */
+
+
+
+
+/* @section Variation Loader Destructors **************************************
+**
+** Destruction destroys all internal data structures and frees the
+** memory allocated for the variation loader object.
+**
+** @fdata [AjPVarload]
+**
+** @nam3rule Del Destructor
+**
+** @argrule Del pthis [AjPVarload*] Variation loader
+**
+** @valrule * [void]
+**
+** @fcategory delete
+**
+******************************************************************************/
+
+
+
+
+/* @func ajVarloadDel *********************************************************
+**
+** Deletes a variation loader object.
+**
+** @param [d] pthis [AjPVarload*] Variation loader
+**
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+void ajVarloadDel(AjPVarload* pthis)
+{
+    AjPVarload thys;
+
+    if(!pthis)
+        return;
+
+    thys = *pthis;
+
+    if(!thys)
+        return;
+
+    ajVarinDel(&thys->Varin);
+    if(!thys->Returned)
+        ajVarDel(&thys->Var);
+
+    AJFREE(*pthis);
+
+    return;
+}
+
+
+
+
+/* ==================================================================== */
+/* =========================== Modifiers ============================== */
+/* ==================================================================== */
+
+
+
+
+/* @section Variation loader modifiers ****************************************
+**
+** These functions use the contents of a variation loader object and
+** update them.
+**
+** @fdata [AjPVarload]
+**
+** @nam3rule Clear Clear all values
+**
+** @argrule * thys [AjPVarload] Variation loader object
+**
+** @valrule * [void]
+**
+** @fcategory modify
+**
+******************************************************************************/
+
+
+
+
+/* @func ajVarloadClear *******************************************************
+**
+** Clears a variation loader object back to "as new" condition, except
+** for the query list which must be preserved.
+**
+** @param [w] thys [AjPVarload] Variation loader
+**
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+void ajVarloadClear(AjPVarload thys)
+{
+
+    ajDebug("ajVarloadClear called\n");
+
+    ajVarinClear(thys->Varin);
+
+    ajVarClear(thys->Var);
+
+    thys->Loading = ajFalse;
+
+    return;
+}
+
+
+
+
+/* @section Variation loader casts ********************************************
+**
+** These functions return the contents of a variation loader object
+**
+** @fdata [AjPVarload]
+**
+** @nam3rule Get Get variation loader values
+** @nam3rule Getvar Get variation values
+** @nam4rule GetvarId Get variation identifier
+**
+** @argrule * thys [const AjPVarload] Variation loader object
+**
+** @valrule * [const AjPStr] String value
+**
+** @fcategory cast
+**
+******************************************************************************/
+
+
+
+
+/* @func ajVarloadGetvarId ****************************************************
+**
+** Returns the identifier of the current variation in a loader
+**
+** @param [r] thys [const AjPVarload] Variation loader
+**
+** @return [const AjPStr] Identifier
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+const AjPStr ajVarloadGetvarId(const AjPVarload thys)
+{
+    if(!thys)
+        return NULL;
+
+    ajDebug("ajVarloadGetvarId called\n");
+
+    return ajVarGetId(thys->Var);
+}
+
+
+
+
+/* @section Variation loading *************************************************
+**
+** These functions use a variation loader object to read data
+**
+** @fdata [AjPVarload]
+**
+** @nam3rule More Test whether more data can be loaded
+** @nam3rule Next Read next variation
+**
+** @argrule * thys [AjPVarload] Variation loader object
+** @argrule * Pvar [AjPVar*] Variation object
+**
+** @valrule * [AjBool] True on success
+**
+** @fcategory input
+**
+******************************************************************************/
+
+
+
+
+/* @func ajVarloadMore ********************************************************
+**
+** Test whether more data can be loaded
+**
+** Return the results in the AjPVar object but leave the file open for
+** future calls.
+**
+** @param [w] thys [AjPVarload] Variation loader
+** @param [u] Pvar [AjPVar*] Variation returned
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjBool ajVarloadMore(AjPVarload thys, AjPVar *Pvar)
+{
+    AjPVarin  varin = thys->Varin;
+    AjPTextin input = varin->Input;
+
+    ajDebug("ajVarloadMore count:%u dataread: %B datadone: %B"
+           " loading varload: %B varin: %B\n",
+            thys->Count, input->Dataread, input->Datadone,
+            thys->Loading, varin->Loading);
+
+    if(input->Datadone)
+    {
+        input->Dataread = ajFalse;
+        input->Datadone = ajFalse;
+        ajDebug("ajVarloadMore done\n");
+        return ajFalse;
+    }
+    
+    if(!varin->Loading)
+    {
+        varin->Loading = ajTrue;
+        thys->Count++;
+
+	*Pvar = thys->Var;
+	thys->Returned = ajTrue;
+
+	ajDebug("ajVarloadMore initial\n");
+
+	return ajTrue;
+    }
+
+    if(ajVarinLoad(thys->Varin, thys->Var))
+    {
+        *Pvar = thys->Var;
+	thys->Returned = ajTrue;
+
+	ajDebug("ajVarloadMore success\n");
+
+	return ajTrue;
+    }
+
+    *Pvar = NULL;
+    thys->Returned = ajFalse;
+
+    ajDebug("ajVarloadMore failed to read\n");
+
+    return ajFalse;
+}
+
+
+
+
+/* @func ajVarloadNext ********************************************************
 **
 ** Parse a variation query into format, access, file and entry
 **
@@ -2148,48 +4250,54 @@ const AjPStr ajVarallGetvarId(const AjPVarall thys)
 ** Return the results in the AjPVar object but leave the file open for
 ** future calls.
 **
-** @param [w] thys [AjPVarall] Variation input stream
+** @param [w] thys [AjPVarload] Variation loader
 ** @param [u] Pvar [AjPVar*] Variation returned
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
 ** @@
 ******************************************************************************/
 
-AjBool ajVarallNext(AjPVarall thys, AjPVar *Pvar)
+AjBool ajVarloadNext(AjPVarload thys, AjPVar *Pvar)
 {
-    ajDebug("ajVarallNext count:%u\n", thys->Count);
+    AjPVarin  varin = thys->Varin;
+    AjPTextin input = varin->Input;
 
-    if(!thys->Count)
+    ajDebug("..ajVarloadNext count:%u dataread: %B datadone: %B"
+           " loading varload: %B varin: %B\n",
+            thys->Count, input->Dataread, input->Datadone,
+            thys->Loading, varin->Loading);
+
+    if(!thys->Loading)
     {
-	thys->Count = 1;
-
-	thys->Totterms++;
+        thys->Loading = ajTrue;
+        varin->Loading = ajFalse;
 
 	*Pvar = thys->Var;
 	thys->Returned = ajTrue;
+
+	ajDebug("..ajVarloadNext initial\n");
 
 	return ajTrue;
     }
 
 
-    if(ajVarinRead(thys->Varin, thys->Var))
+    if(ajVarinLoad(thys->Varin, thys->Var))
     {
-	thys->Count++;
-
-	thys->Totterms++;
+        varin->Loading = ajFalse;
 
 	*Pvar = thys->Var;
 	thys->Returned = ajTrue;
 
-	ajDebug("ajVarallNext success\n");
+	ajDebug("..ajVarloadNext success\n");
 
 	return ajTrue;
     }
 
     *Pvar = NULL;
+    thys->Returned = ajFalse;
 
-    ajDebug("ajVarallNext failed\n");
-
-    ajVarallClear(thys);
+    ajDebug("..ajVarloadNext failed\n");
 
     return ajFalse;
 }
@@ -2232,7 +4340,7 @@ AjBool ajVarallNext(AjPVarall thys, AjPVar *Pvar)
 
 
 
-/* @funcstatic varinformatFind ***********************************************
+/* @funcstatic varinformatFind ************************************************
 **
 ** Looks for the specified format(s) in the internal definitions and
 ** returns the index.
@@ -2242,6 +4350,8 @@ AjBool ajVarallNext(AjPVarall thys, AjPVar *Pvar)
 ** @param [r] format [const AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2279,12 +4389,14 @@ static AjBool varinformatFind(const AjPStr format, ajint* iformat)
 
 
 
-/* @func ajVarinformatTerm ***************************************************
+/* @func ajVarinformatTerm ****************************************************
 **
 ** Tests whether a variation data input format term is known
 **
 ** @param [r] term [const AjPStr] Format term EDAM ID
 ** @return [AjBool] ajTrue if term was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2302,12 +4414,14 @@ AjBool ajVarinformatTerm(const AjPStr term)
 
 
 
-/* @func ajVarinformatTest ***************************************************
+/* @func ajVarinformatTest ****************************************************
 **
 ** Tests whether a named variation data input format is known
 **
 ** @param [r] format [const AjPStr] Format
 ** @return [AjBool] ajTrue if format was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2320,4 +4434,36 @@ AjBool ajVarinformatTest(const AjPStr format)
 	    return ajTrue;
 
     return ajFalse;
+}
+
+
+
+
+/* @funcstatic varRegInitVcf **************************************************
+**
+** Initialise regular expressions and data structures for
+** VCF format
+**
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void varRegInitVcf(void)
+{
+    if(VarInitVcf)
+	return;
+
+    VarInitVcf  = ajTrue;
+
+    varRegId = ajRegCompC("ID[=]([^,>]+)[,>]");
+    varRegType = ajRegCompC("Type[=]([^,>]+)[,>]");
+    varRegNumber = ajRegCompC("Number[=]([^,>]+)[,>]");
+    varRegDesc = ajRegCompC("Description[=]\"(.*)\"");
+    varRegDesc2 = ajRegCompC("Description[=]([^,>]+)[,>]");
+    varRegGenomes = ajRegCompC("Genomes[=]([^,>]+)[,>]");
+    varRegMixture = ajRegCompC("Mixture[=]([^,>]+)[,>]");
+
+    return;
 }

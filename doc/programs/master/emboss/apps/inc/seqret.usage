@@ -7,7 +7,7 @@ Extract an entry from a database and write it to a file:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqret </b>
-Reads and writes (returns) sequences
+Read and write (return) sequences
 Input (gapped) sequence(s): <b>tembl:x65923</b>
 output sequence(s) [x65923.fasta]: <b></b>
 
@@ -24,7 +24,7 @@ Read all entries in the database 'tembl' that start with 'ab' and write them to 
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqret "tembl:ab*"  aball.seq </b>
-Reads and writes (returns) sequences
+Read and write (return) sequences
 
 </pre></td></tr></table><p>
 <p>
@@ -39,7 +39,7 @@ seqret does not read in features by default because this results in slightly fas
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqret -feature </b>
-Reads and writes (returns) sequences
+Read and write (return) sequences
 Input (gapped) sequence(s): <b>tembl:x65923</b>
 output sequence(s) [x65923.fasta]: <b>embl::x65923.embl</b>
 
@@ -56,7 +56,7 @@ Display the contents of the sequence on the screen:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqret </b>
-Reads and writes (returns) sequences
+Read and write (return) sequences
 Input (gapped) sequence(s): <b>tembl:x65923</b>
 output sequence(s) [x65923.fasta]: <b>stdout</b>
 
@@ -84,7 +84,7 @@ Write the result in GCG format by using the qualifier '-osformat'.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqret -osf gcg </b>
-Reads and writes (returns) sequences
+Read and write (return) sequences
 Input (gapped) sequence(s): <b>tembl:x65923</b>
 output sequence(s) [x65923.gcg]: <b></b>
 
@@ -101,7 +101,7 @@ Write the result in GCG format by specifying the format in the output USA on the
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqret -outseq gcg::x65923.gcg </b>
-Reads and writes (returns) sequences
+Read and write (return) sequences
 Input (gapped) sequence(s): <b>tembl:x65923</b>
 
 </pre></td></tr></table><p>
@@ -117,7 +117,7 @@ Write the result in GCG format by specifying the format in the output USA at the
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqret </b>
-Reads and writes (returns) sequences
+Read and write (return) sequences
 Input (gapped) sequence(s): <b>tembl:x65923</b>
 output sequence(s) [x65923.fasta]: <b>gcg::x65923.gcg</b>
 
@@ -134,7 +134,7 @@ Write the reverse-complement of a sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqret -srev </b>
-Reads and writes (returns) sequences
+Read and write (return) sequences
 Input (gapped) sequence(s): <b>tembl:x65923</b>
 output sequence(s) [x65923.fasta]: <b></b>
 
@@ -151,7 +151,7 @@ Extract the bases between the positions starting at 5 and ending at 25:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqret -sbegin 5 -send 25 </b>
-Reads and writes (returns) sequences
+Read and write (return) sequences
 Input (gapped) sequence(s): <b>tembl:x65923</b>
 output sequence(s) [x65923.fasta]: <b></b>
 
@@ -168,7 +168,7 @@ Extract the bases between the positions starting at 5 and ending at 5 bases befo
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqret -sbegin 5 -send -5 </b>
-Reads and writes (returns) sequences
+Read and write (return) sequences
 Input (gapped) sequence(s): <b>tembl:x65923</b>
 output sequence(s) [x65923.fasta]: <b></b>
 
@@ -185,7 +185,7 @@ Read all entries in the database 'tembl' that start with 'h' and write them to a
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>seqret </b>
-Reads and writes (returns) sequences
+Read and write (return) sequences
 Input (gapped) sequence(s): <b>tembl:h*</b>
 output sequence(s) [h45989.fasta]: <b>hall.seq</b>
 

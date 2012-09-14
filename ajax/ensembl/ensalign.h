@@ -1,10 +1,37 @@
+/* @include ensalign **********************************************************
+**
+** Ensembl Alignment functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.10 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSALIGN_H
 #define ENSALIGN_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensfeature.h"
 
@@ -13,9 +40,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 /* @const EnsPDnaalignfeatureadaptor ******************************************
 **
@@ -49,10 +76,14 @@ AJ_BEGIN_DECLS
 
 
 
-/* @const EnsEBasealignfeatureType ********************************************
+/* @enum EnsEBasealignfeatureType *********************************************
 **
-** Ensembl Base Align Feature Type enumeration.
+** Ensembl Base Align Feature Type enumeration
 **
+** @value ensEBasealignfeatureTypeNULL Null
+** @value ensEBasealignfeatureTypeDNA DNA alignment
+** @value ensEBasealignfeatureTypeProtein Protein alignment
+** @@
 ******************************************************************************/
 
 typedef enum EnsOBasealignfeatureType
@@ -65,9 +96,9 @@ typedef enum EnsOBasealignfeatureType
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPBasealignfeature *************************************************
 **
@@ -80,18 +111,19 @@ typedef enum EnsOBasealignfeatureType
 ** @cc Bio::EnsEMBL::Storable
 ** @attr Identifier [ajuint] SQL database-internal identifier
 ** @attr Dnaalignfeatureadaptor [EnsPDnaalignfeatureadaptor]
-**                              Ensembl DNA Align Feature Adaptor
+** Ensembl DNA Align Feature Adaptor
 ** @attr Proteinalignfeatureadaptor [EnsPProteinalignfeatureadaptor]
-**                                  Ensembl Protein Align Feature Adaptor
+** Ensembl Protein Align Feature Adaptor
 ** @cc Bio::EnsEMBL::Featurepair
 ** @attr Featurepair [EnsPFeaturepair] Ensembl Feature Pair
 ** @cc Bio::EnsEMBL::Basealignfeature
-** @attr GetFeaturepair [(EnsPFeaturepair*)] Get Ensembl Feature Pair function
+** @attr FobjectGetFeaturepair [EnsPFeaturepair function]
+** Ensembl Object Get Ensembl Feature Pair function
 ** @attr Cigar [AjPStr] CIGAR line
 ** @attr Type [EnsEBasealignfeatureType] Type
 ** @attr Alignmentlength [ajuint] Target component alignment length
-** @attr PairDnaalignfeatureIdentifier [ajuint] Pair DNA Align Feature
-**                                              identifier
+** @attr Pairdnaalignfeatureidentifier [ajuint]
+** Pair DNA Align Feature identifier
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
@@ -103,11 +135,11 @@ typedef struct EnsSBasealignfeature
     EnsPDnaalignfeatureadaptor Dnaalignfeatureadaptor;
     EnsPProteinalignfeatureadaptor Proteinalignfeatureadaptor;
     EnsPFeaturepair Featurepair;
-    EnsPFeaturepair (*GetFeaturepair)(void* object);
+    EnsPFeaturepair (*FobjectGetFeaturepair) (const void *object);
     AjPStr Cigar;
     EnsEBasealignfeatureType Type;
     ajuint Alignmentlength;
-    ajuint PairDnaalignfeatureIdentifier;
+    ajuint Pairdnaalignfeatureidentifier;
     ajuint Padding;
 } EnsOBasealignfeature;
 
@@ -116,9 +148,9 @@ typedef struct EnsSBasealignfeature
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -151,7 +183,7 @@ EnsPBasealignfeature ensBasealignfeatureNewIniP(
 
 EnsPBasealignfeature ensBasealignfeatureNewRef(EnsPBasealignfeature baf);
 
-void ensBasealignfeatureDel(EnsPBasealignfeature* Pbaf);
+void ensBasealignfeatureDel(EnsPBasealignfeature *Pbaf);
 
 AjPStr ensBasealignfeatureGetCigar(
     const EnsPBasealignfeature baf);
@@ -162,9 +194,16 @@ EnsPDnaalignfeatureadaptor ensBasealignfeatureGetDnaalignfeatureadaptor(
 EnsPFeaturepair ensBasealignfeatureGetFeaturepair(
     const EnsPBasealignfeature baf);
 
-ajuint ensBasealignfeatureGetIdentifier(const EnsPBasealignfeature baf);
+ajuint ensBasealignfeatureGetIdentifier(
+    const EnsPBasealignfeature baf);
+
+ajuint ensBasealignfeatureGetPairdnaalignfeatureidentifier(
+    const EnsPBasealignfeature baf);
 
 EnsPProteinalignfeatureadaptor ensBasealignfeatureGetProteinalignfeatureadaptor(
+    const EnsPBasealignfeature baf);
+
+EnsEBasealignfeatureType ensBasealignfeatureGetType(
     const EnsPBasealignfeature baf);
 
 AjBool ensBasealignfeatureSetFeaturepair(EnsPBasealignfeature baf,
@@ -172,7 +211,7 @@ AjBool ensBasealignfeatureSetFeaturepair(EnsPBasealignfeature baf,
 
 EnsPFeature ensBasealignfeatureGetFeature(const EnsPBasealignfeature baf);
 
-void* ensBasealignfeatureCalculateAdaptor(const EnsPBasealignfeature baf);
+void *ensBasealignfeatureCalculateAdaptor(const EnsPBasealignfeature baf);
 
 ajuint ensBasealignfeatureCalculateAlignmentlength(EnsPBasealignfeature baf);
 
@@ -196,6 +235,12 @@ AjBool ensBasealignfeatureTrace(const EnsPBasealignfeature baf, ajuint level);
 AjBool ensBasealignfeatureFetchAllFeaturepairs(const EnsPBasealignfeature baf,
                                                AjPList fps);
 
+/* AJAX List of Ensembl Base Align Feature objects */
+
+AjBool ensListBasealignfeatureSortSourceEndAscending(AjPList bafs);
+
+AjBool ensListBasealignfeatureSortSourceEndDescending(AjPList bafs);
+
 AjBool ensListBasealignfeatureSortSourceStartAscending(AjPList bafs);
 
 AjBool ensListBasealignfeatureSortSourceStartDescending(AjPList bafs);
@@ -208,7 +253,7 @@ EnsPDnaalignfeatureadaptor ensRegistryGetDnaalignfeatureadaptor(
 EnsPDnaalignfeatureadaptor ensDnaalignfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensDnaalignfeatureadaptorDel(EnsPDnaalignfeatureadaptor* Pdafa);
+void ensDnaalignfeatureadaptorDel(EnsPDnaalignfeatureadaptor *Pdafa);
 
 EnsPDatabaseadaptor ensDnaalignfeatureadaptorGetDatabaseadaptor(
     EnsPDnaalignfeatureadaptor dafa);
@@ -249,7 +294,7 @@ AjBool ensDnaalignfeatureadaptorFetchAllbySliceexternaldatabasename(
 AjBool ensDnaalignfeatureadaptorFetchByIdentifier(
     EnsPDnaalignfeatureadaptor dafa,
     ajuint identifier,
-    EnsPBasealignfeature* Pbaf);
+    EnsPBasealignfeature *Pbaf);
 
 AjBool ensDnaalignfeatureadaptorRetrieveAllIdentifiers(
     EnsPDnaalignfeatureadaptor dafa,
@@ -263,7 +308,7 @@ EnsPProteinalignfeatureadaptor ensRegistryGetProteinalignfeatureadaptor(
 EnsPProteinalignfeatureadaptor ensProteinalignfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensProteinalignfeatureadaptorDel(EnsPProteinalignfeatureadaptor* Ppafa);
+void ensProteinalignfeatureadaptorDel(EnsPProteinalignfeatureadaptor *Ppafa);
 
 EnsPDatabaseadaptor ensProteinalignfeatureadaptorGetDatabaseadaptor(
     EnsPProteinalignfeatureadaptor pafa);
@@ -304,7 +349,7 @@ AjBool ensProteinalignfeatureadaptorFetchAllbySliceidentity(
 AjBool ensProteinalignfeatureadaptorFetchByIdentifier(
     EnsPProteinalignfeatureadaptor pafa,
     ajuint identifier,
-    EnsPBasealignfeature* Pbaf);
+    EnsPBasealignfeature *Pbaf);
 
 AjBool ensProteinalignfeatureadaptorRetrieveAllIdentifiers(
     EnsPProteinalignfeatureadaptor pafa,

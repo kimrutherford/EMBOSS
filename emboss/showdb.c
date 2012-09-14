@@ -183,8 +183,8 @@ int main(int argc, char **argv)
 	ajNamListListDatabases(dbnames);
 
 	/* sort it */
-	/*ajListSort(dbnames, ajStrCmp);*/
-	ajListSort(dbnames, showdbDBSortDefined);
+	/*ajListSort(dbnames, &ajStrCmp);*/
+	ajListSort(dbnames, &showdbDBSortDefined);
 
 	/* iterate through the dbnames list */
 	iter = ajListIterNewread(dbnames);

@@ -540,7 +540,7 @@ static void tmap_present3p(ajint antal, const ajint *npos, const ajint *cpos,
     {
         seqf=ajFeatNewII(feat,npos[i],cpos[i]);
 	ajFmtPrintS(&tmp,"*TM %2d",  i);
-	ajFeatTagAdd(seqf,NULL,tmp);
+	ajFeatTagAddSS(seqf,NULL,tmp);
     }
 
     ajReportWrite(report, feat, seq);
@@ -558,7 +558,7 @@ static void tmap_present3p(ajint antal, const ajint *npos, const ajint *cpos,
 	{
 	    seqf=ajFeatNewII(feat,npos[i],cpos[i]);
 	    ajFmtPrintS(&tmp,"*TM %2d",i);
-	    ajFeatTagAdd(seqf,NULL,tmp);
+	    ajFeatTagAddSS(seqf,NULL,tmp);
 	}
 	ajReportWrite(report, feat, cseq);
 	ajFeattableDel(&feat);

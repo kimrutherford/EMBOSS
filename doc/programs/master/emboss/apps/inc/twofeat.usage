@@ -7,7 +7,7 @@ Without the -twoout option the output report contains just one feature for every
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>twofeat tembl:x65923 </b>
-Finds neighbouring pairs of features in sequence(s)
+Find neighbouring pairs of features in sequence(s)
 Type of first feature [*]: <b>polyA_signal</b>
 Type of second feature [*]: <b>polyA_site</b>
 The minimum distance between the features [0]: <b>10</b>
@@ -27,7 +27,7 @@ The -twoout option makes the output report give the pairs of features found. The
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>twofeat -twoout -rformat gff tembl:x65923 </b>
-Finds neighbouring pairs of features in sequence(s)
+Find neighbouring pairs of features in sequence(s)
 Type of first feature [*]: <b>polyA_signal</b>
 Type of second feature [*]: <b>polyA_site</b>
 The minimum distance between the features [0]: <b>10</b>

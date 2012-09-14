@@ -7,7 +7,7 @@ Here is a sample session with <b>silent</b>
 % <b>silent </b>
 Find restriction sites to insert (mutate) with no translation change
 Input nucleotide sequence: <b>tembl:x65923</b>
-Comma separated enzyme list [all]: <b>ecori,hindiii</b>
+Comma separated enzyme list [all]: <b>kpni</b>
 Output report [x65923.silent]: <b></b>
 
 </pre></td></tr></table><p>

@@ -1,10 +1,37 @@
+/* @include enstable **********************************************************
+**
+** Ensembl Table functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.16 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/20 22:15:34 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSTABLE_H
 #define ENSTABLE_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ajax.h"
 
@@ -13,57 +40,27 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
 */
-
-/*
-** AJAX Table of
-** AJAX String key data.
-*/
-
-AjPTable ensTablestrNewLen(ajuint size);
-
-/*
-** AJAX Table of
-** AJAX unsigned integer key data.
-*/
-
-ajint ensTableuintCmp(const void* x, const void* y);
-
-ajuint ensTableuintHash(const void* key, ajuint hashsize);
-
-void ensTableuintKeydel(void** key);
-
-AjPTable ensTableuintNewLen(ajuint size);
-
-/*
-** AJAX Table of
-** void key data and
-** void value data.
-*/
-
-AjBool ensTableClear(AjPTable table);
-
-AjBool ensTableDelete(AjPTable* Ptable);
 
 /*
 ** AJAX Table of
@@ -73,9 +70,9 @@ AjBool ensTableDelete(AjPTable* Ptable);
 
 AjPTable ensTableuintliststrNewLen(ajuint size);
 
-AjBool ensTableuintliststrClear(AjPTable table);
+void ensTableuintliststrClear(AjPTable table);
 
-AjBool ensTableuintliststrDelete(AjPTable* Ptable);
+void ensTableuintliststrDelete(AjPTable *Ptable);
 
 AjBool ensTableuintliststrRegister(AjPTable table,
                                    ajuint identifier,

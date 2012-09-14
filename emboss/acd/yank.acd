@@ -1,8 +1,8 @@
 application: yank [
   documentation: "Add a sequence reference (a full USA) to a list file"
   groups: "Edit"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0002120 operation Listfile processing"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:2120 Listfile processing"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
     parameter: "Y"
     sask: "Y"
     type: "gapany"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -27,7 +27,7 @@ section: output [
   boolean: newfile [
     default: "N"
     information: "Overwrite existing output file"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   outfile: outfile [
@@ -35,7 +35,7 @@ section: output [
     append: "@(!$(newfile))"
     knowntype: "USA list"
     information: "List of USAs output file"
-    relations: "EDAM:0001111 data EMBOSS listfile"
+    relations: "EDAM_data:1111 EMBOSS listfile"
   ]
 
 endsection: output

@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -135,7 +135,7 @@ tcttaa
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Extract regions from a sequence
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
@@ -175,7 +175,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -283,7 +286,7 @@ Examples of region specifications are:
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated sequence qualifiers
+<td align="left" colspan=5>"-sequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -352,11 +355,35 @@ Examples of region specifications are:
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -400,7 +427,7 @@ Examples of region specifications are:
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqoutall qualifiers
+<td align="left" colspan=5>"-outseq" associated seqoutall qualifiers
 </td>
 </tr>
 
@@ -650,7 +677,7 @@ RN   [1]
 RP   1-518
 RA   Michiels L.M.R.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
 RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -662,7 +689,15 @@ RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
 RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
-DR   H-InvDB; HIT000322806.
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -682,12 +717,14 @@ FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
 FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="H-InvDB:HIT000322806.14"
 FT                   /db_xref="HGNC:3597"
 FT                   /db_xref="InterPro:IPR000626"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="InterPro:IPR019954"
 FT                   /db_xref="InterPro:IPR019955"
 FT                   /db_xref="InterPro:IPR019956"
+FT                   /db_xref="PDB:2L7R"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
@@ -740,7 +777,7 @@ RN   [1]
 RP   1-2016
 RA   Kas K.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
 RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -753,6 +790,15 @@ RT   "Genomic structure and expression of the human fau gene: encoding the
 RT   ribosomal protein S30 fused to a ubiquitin-like protein";
 RL   Biochem. Biophys. Res. Commun. 187(2):927-933(1992).
 XX
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 DR   GDB; 191789.
 DR   GDB; 191790.
 DR   GDB; 354872.
@@ -761,15 +807,6 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2016
-FT                   /organism="Homo sapiens"
-FT                   /mol_type="genomic DNA"
-FT                   /clone_lib="CML cosmid"
-FT                   /clone="15.1"
-FT                   /db_xref="taxon:9606"
-FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
-FT                   /gene="fau 1"
-FT   exon            408..504
-FT                   /number=1
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -995,12 +1032,12 @@ None noted.
 <th>Description</th></tr>
 <tr>
 <td><a href="aligncopy.html">aligncopy</a></td>
-<td>Reads and writes alignments</td>
+<td>Read and write alignments</td>
 </tr>
 
 <tr>
 <td><a href="aligncopypair.html">aligncopypair</a></td>
-<td>Reads and writes pairs from alignments</td>
+<td>Read and write pairs from alignments</td>
 </tr>
 
 <tr>
@@ -1015,12 +1052,12 @@ None noted.
 
 <tr>
 <td><a href="cutseq.html">cutseq</a></td>
-<td>Removes a section from a sequence</td>
+<td>Remove a section from a sequence</td>
 </tr>
 
 <tr>
 <td><a href="degapseq.html">degapseq</a></td>
-<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
+<td>Remove non-alphabetic (e.g. gap) characters from sequences</td>
 </tr>
 
 <tr>
@@ -1030,7 +1067,7 @@ None noted.
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Retrieves sequence entries from flatfile databases and files</td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -1045,12 +1082,17 @@ None noted.
 
 <tr>
 <td><a href="featcopy.html">featcopy</a></td>
-<td>Reads and writes a feature table</td>
+<td>Read and write a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featmerge.html">featmerge</a></td>
+<td>Merge two overlapping feature tables</td>
 </tr>
 
 <tr>
 <td><a href="featreport.html">featreport</a></td>
-<td>Reads and writes a feature table</td>
+<td>Read and write a feature table</td>
 </tr>
 
 <tr>
@@ -1075,12 +1117,12 @@ None noted.
 
 <tr>
 <td><a href="maskambignuc.html">maskambignuc</a></td>
-<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+<td>Mask all ambiguity characters in nucleotide sequences with N</td>
 </tr>
 
 <tr>
 <td><a href="maskambigprot.html">maskambigprot</a></td>
-<td>Masks all ambiguity characters in protein sequences with X</td>
+<td>Mask all ambiguity characters in protein sequences with X</td>
 </tr>
 
 <tr>
@@ -1130,7 +1172,7 @@ None noted.
 
 <tr>
 <td><a href="nthseqset.html">nthseqset</a></td>
-<td>Reads and writes (returns) one set of sequences from many</td>
+<td>Read and write (return) one set of sequences from many</td>
 </tr>
 
 <tr>
@@ -1145,22 +1187,22 @@ None noted.
 
 <tr>
 <td><a href="seqcount.html">seqcount</a></td>
-<td>Reads and counts sequences</td>
+<td>Read and count sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqret.html">seqret</a></td>
-<td>Reads and writes (returns) sequences</td>
+<td>Read and write (return) sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqretsetall.html">seqretsetall</a></td>
-<td>Reads and writes (returns) many sets of sequences</td>
+<td>Read and write (return) many sets of sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
-<td>Reads sequences and writes them to individual files</td>
+<td>Read sequences and write them to individual files</td>
 </tr>
 
 <tr>
@@ -1175,7 +1217,7 @@ None noted.
 
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
-<td>Reads and writes (returns) sequences, skipping first few</td>
+<td>Read and write (return) sequences, skipping first few</td>
 </tr>
 
 <tr>
@@ -1210,7 +1252,7 @@ None noted.
 
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
-<td>Removes vectors from the ends of nucleotide sequence(s)</td>
+<td>Remove vectors from the ends of nucleotide sequence(s)</td>
 </tr>
 
 <tr>

@@ -5,7 +5,7 @@ Here is a sample session with <b>einverted</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>einverted tembl:d00596 </b>
-Finds inverted repeats in nucleotide sequences
+Find inverted repeats in nucleotide sequences
 Gap penalty [12]: <b></b>
 Minimum score threshold [50]: <b></b>
 Match score [3]: <b></b>

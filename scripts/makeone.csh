@@ -41,6 +41,6 @@ else
 make -j 4 $app |& egrep '^[^ =\[]*:' |& grep -v '^libtool: '
 endif
 echo "install $app"
-echo "/bin/sh ../libtool --mode=install /usr/bin/install -c $app $embossinst/$app"
+echo "/bin/sh ../libtool --mode=install /usr/bin/install -c $app $embossinst/bin/$app"
 /bin/sh ../libtool --mode=install /usr/bin/install  -c $app $embossinst/bin/$app
 cp acd/$app.acd $embossinst/share/EMBOSS/acd/

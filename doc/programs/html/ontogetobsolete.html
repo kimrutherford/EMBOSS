@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -56,7 +56,7 @@ Here is a sample session with <b>ontogetobsolete</b>
 
 % <b>ontogetobsolete edam:alignment -subclasses </b>
 Get ontology ontology terms
-Obo output file [0000083.obo]: <b></b>
+Obo output file [0083.obo]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -68,7 +68,7 @@ Obo output file [0000083.obo]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Get ontology ontology terms
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
@@ -86,6 +86,8 @@ Version: EMBOSS:6.4.0.0
 
    "-oboterms" associated qualifiers
    -iformat1           string     Input obo format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers
@@ -166,7 +168,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-oboterms" associated obo qualifiers
+<td align="left" colspan=5>"-oboterms" associated obo qualifiers
 </td>
 </tr>
 
@@ -179,6 +181,22 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_oboterms</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_oboterms</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -idbname1<br>-idbname_oboterms</td>
 <td>string</td>
 <td>User-provided database name</td>
@@ -187,7 +205,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outobo qualifiers
+<td align="left" colspan=5>"-outfile" associated outobo qualifiers
 </td>
 </tr>
 
@@ -321,33 +339,23 @@ Version: EMBOSS:6.4.0.0
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 [Term]
-id: EDAM:0000083
+id: EDAM_topic:0083
 name: Alignment
 namespace: topic
-def: Study concerning the alignment (equivalence between sites) of molecular sequences, structures or profiles (representing a sequence or structure alignment).
-subset: topic
-is_obsolete: true
-consider: EDAM:0000182 ! Sequence alignment
-consider: EDAM:0000183 ! Structure alignment
-consider: EDAM:0000184 ! Threading
+def: Topic concerning the alignment (equivalence between sites) of molecular sequences, structures or profiles (representing a sequence or structure alignment).
+subset: topics
+is_obsolete: true ! {since=beta12orEarlier}
+consider: EDAM_topic:0182 ! Sequence alignment
+consider: EDAM_topic:0183 ! Structure alignment
+consider: EDAM_topic:0184 ! Threading
 
 [Term]
-id: EDAM:0002928
-name: Alignment
-namespace: operation
-def: Compare two or more entities, typically the sequence or structure (or derivatives) of macromolecules, to identify equivalent subunits.
-subset: operation
-is_a: EDAM:0000004 ! Operation
-is_a: EDAM:0002951 ! Alignment processing
-relationship: has_output EDAM:0001916 ! Alignment {minCardinality=1}
-
-[Term]
-id: EDAM:0001916
+id: EDAM_data:1916
 name: Alignment
 namespace: data
 def: An alignment of molecular sequences, structures or profiles derived from them.
 subset: data
-is_a: EDAM:0002539 ! Alignment data
+is_a: EDAM_data:3031 ! Core data
 
 </pre>
 </td></tr></table><p>
@@ -367,19 +375,19 @@ is_a: EDAM:0002539 ! Alignment data
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: 0000083.obo</h3>
+<p><h3>File: 0083.obo</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 [Term]
-id: EDAM:0000083
+id: EDAM_topic:0083
 name: Alignment
 namespace: topic
-def: Study concerning the alignment (equivalence between sites) of molecular sequences, structures or profiles (representing a sequence or structure alignment).
-subset: topic
-is_obsolete: true
-consider: EDAM:0000182 ! Sequence alignment
-consider: EDAM:0000183 ! Structure alignment
-consider: EDAM:0000184 ! Threading
+def: Topic concerning the alignment (equivalence between sites) of molecular sequences, structures or profiles (representing a sequence or structure alignment).
+subset: topics
+is_obsolete: true ! {since=beta12orEarlier}
+consider: EDAM_topic:0182 ! Sequence alignment
+consider: EDAM_topic:0183 ! Structure alignment
+consider: EDAM_topic:0184 ! Threading
 
 </pre>
 </td></tr></table><p>

@@ -1,20 +1,47 @@
-/*
-** This is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+/* @source ajresourceread *****************************************************
 **
-** This program is distributed in the hope that it will be useful,
+** AJAX data resource reading functions
+**
+** These functions control all aspects of AJAX data resource reading
+**
+** @author Copyright (C) 2010 Peter Rice
+** @version $Revision: 1.34 $
+** @modified Oct 5 pmr First version
+** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+
+#include "ajlib.h"
+
+#include "ajresourceread.h"
+#include "ajresource.h"
+#include "ajcall.h"
+#include "ajlist.h"
+#include "ajquery.h"
+#include "ajtextread.h"
+#include "ajnam.h"
+#include "ajfileio.h"
+
+
+#include <string.h>
+
 
 AjPTable resourceDbMethods = NULL;
 
@@ -85,7 +112,7 @@ static AjBool resourceinReadDrcat(AjPResourcein thys, AjPResource resource);
 ** @attr Alias [AjBool] Name is an alias for an identical definition
 ** @attr Try [AjBool] If true, try for an unknown input. Duplicate names
 **                    and read-anything formats are set false
-** @attr Read [(AjBool*)] Input function, returns ajTrue on success
+** @attr Read [AjBool function] Input function, returns ajTrue on success
 ** @@
 ******************************************************************************/
 
@@ -107,10 +134,10 @@ static ResourceOInFormat resourceinFormatDef[] =
 /*     ReadFunction */
   {"unknown",     "Unknown format",
        AJFALSE, AJFALSE,
-       resourceinReadDrcat}, /* default to first format */
+       &resourceinReadDrcat}, /* default to first format */
   {"drcat",       "Data resource catalogue format",
        AJFALSE, AJFALSE,
-       resourceinReadDrcat},
+       &resourceinReadDrcat},
   {NULL, NULL, 0, 0, NULL}
 };
 
@@ -191,6 +218,8 @@ static AjBool resourceinQueryMatch(const AjPQuery thys,
 **
 ** @return [AjPResourcein] New data input object.
 ** @category new [AjPResourcein] Default constructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -219,6 +248,8 @@ AjPResourcein ajResourceinNew(void)
 **
 ** @return [AjPResourcein] New data input object.
 ** @category new [AjPResourcein] Default constructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -244,11 +275,11 @@ AjPResourcein ajResourceinNewDrcat(const AjPStr dbname)
     if(!dbstat)
         ajDie("ajResourceinNewDrcat '%S' failed to find drcat", dbname);
     ajFmtPrintS(&textin->Qry, "drcat:%S", dbname);
-    ajStrAssignC(&qry->Field, "id");
+    ajStrAssignC(&qry->SingleField, "id");
     ajStrAssignS(&qry->QryString, dbname);
-    ajQueryAddFieldOrS(qry, qry->Field, qry->QryString);
-    ajStrAssignC(&qry->Field, "acc");
-    ajQueryAddFieldOrS(qry, qry->Field, qry->QryString);
+    ajQueryAddFieldOrS(qry, qry->SingleField, qry->QryString);
+    ajStrAssignC(&qry->SingleField, "acc");
+    ajQueryAddFieldOrS(qry, qry->SingleField, qry->QryString);
     ajStrAssignC(&qry->Formatstr, "drcat");
     ajStrAssignC(&textin->Formatstr, "drcat");
     resourceinformatFind(textin->Formatstr, &textin->Format);
@@ -259,7 +290,7 @@ AjPResourcein ajResourceinNewDrcat(const AjPStr dbname)
     qry->TextAccess = ajCallTableGetS(textDbMethods,qry->Method);
     textaccess = qry->TextAccess;
 
-    textaccess->Access(textin);
+    (*textaccess->Access)(textin);
 
     return pthis;
 }
@@ -295,6 +326,8 @@ AjPResourcein ajResourceinNewDrcat(const AjPStr dbname)
 ** @param [d] pthis [AjPResourcein*] Data resource input
 ** @return [void]
 ** @category delete [AjPResourcein] Default destructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -355,6 +388,8 @@ void ajResourceinDel(AjPResourcein* pthis)
 ** @param [w] thys [AjPResourcein] Data resource input
 ** @return [void]
 ** @category modify [AjPResourcein] Resets ready for reuse.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -384,6 +419,8 @@ void ajResourceinClear(AjPResourcein thys)
 ** @param [u] thys [AjPResourcein] Data resource input object.
 ** @param [r] txt [const char*] Query
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -407,6 +444,8 @@ void ajResourceinQryC(AjPResourcein thys, const char* txt)
 ** @param [u] thys [AjPResourcein] Data resource input object.
 ** @param [r] str [const AjPStr] Query
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -449,6 +488,8 @@ void ajResourceinQryS(AjPResourcein thys, const AjPStr str)
 **
 ** @param [r] thys [const AjPResourcein] Data resource input object.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -503,6 +544,8 @@ void ajResourceinTrace(const AjPResourcein thys)
 ** @category input [AjPResource] Master data data input,
 **                  calls specific functions for file access type
 **                  and data data format.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -603,6 +646,8 @@ AjBool ajResourceinRead(AjPResourcein resourcein, AjPResource resource)
 ** @param [r] thys [const AjPQuery] query.
 ** @param [r] resource [const AjPResource] Data resource data.
 ** @return [AjBool] ajTrue if the data data matches the query.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -614,7 +659,7 @@ static AjBool resourceinQueryMatch(const AjPQuery thys,
     AjPQueryField field = NULL;
     AjBool ok = ajFalse;
 
-    ajDebug("resourceinQueryMatch '%S' fields: %u Case %B Done %B\n",
+    ajDebug("resourceinQueryMatch '%S' fields: %Lu Case %B Done %B\n",
 	    resource->Id, ajListGetLength(thys->QueryFields),
             thys->CaseId, thys->QryDone);
 
@@ -694,6 +739,8 @@ static AjBool resourceinQueryMatch(const AjPQuery thys,
 ** @param [w] thys [AjPResource] Data resource data returned.
 ** @param [u] resourcein [AjPResourcein] Data resource data input definitions
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -727,6 +774,8 @@ static AjBool resourceDefine(AjPResource thys, AjPResourcein resourcein)
 **                  1 if the query match failed.
 **                  2 if the data data type failed
 **                  3 if it failed to read any data data
+**
+** @release 6.4.0
 ** @@
 ** This is the only function that calls the appropriate Read function
 ** resourceinReadXxxxxx where Xxxxxxx is the supported data data format.
@@ -749,7 +798,7 @@ static ajuint resourceinReadFmt(AjPResourcein resourcein, AjPResource resource,
     resourcein->Input->Records = 0;
 
     /* Calling funclist resourceinFormatDef() */
-    if(resourceinFormatDef[format].Read(resourcein, resource))
+    if((*resourceinFormatDef[format].Read)(resourcein, resource))
     {
 	ajDebug("resourceinReadFmt success with format %d (%s)\n",
 		format, resourceinFormatDef[format].Name);
@@ -807,6 +856,8 @@ static ajuint resourceinReadFmt(AjPResourcein resourcein, AjPResource resource,
 ** @param [u] resourcein [AjPResourcein] Data resource data input object
 ** @param [w] resource [AjPResource] Data resource data object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -841,10 +892,10 @@ static AjBool resourceinRead(AjPResourcein resourcein, AjPResource resource)
 	/* Calling funclist resourceinAccess() */
 	if(textaccess)
         {
-            if(!textaccess->Access(resourcein->Input))
+            if(!(*textaccess->Access)(resourcein->Input))
             {
-                ajDebug("resourceinRead: textaccess->Access(resourcein->Input) "
-                        "*failed*\n");
+                ajDebug("resourceinRead: (*textaccess->Access)"
+                        "(resourcein->Input) *failed*\n");
 
                 return ajFalse;
             }
@@ -852,9 +903,9 @@ static AjBool resourceinRead(AjPResourcein resourcein, AjPResource resource)
 
 	if(resourceaccess)
         {
-            if(!resourceaccess->Access(resourcein))
+            if(!(*resourceaccess->Access)(resourcein))
             {
-                ajDebug("resourceinRead: resourceaccess->Access(resourcein) "
+                ajDebug("resourceinRead: (*resourceaccess->Access)(resourcein) "
                         "*failed*\n");
 
                 return ajFalse;
@@ -1019,9 +1070,9 @@ static AjBool resourceinRead(AjPResourcein resourcein, AjPResource resource)
 
     if(ajFilebuffIsEmpty(buff) && resourcein->Input->ChunkEntries)
     {
-	if(textaccess && !textaccess->Access(resourcein->Input))
+	if(textaccess && !(*textaccess->Access)(resourcein->Input))
             return ajFalse;
-	else if(resourceaccess && !resourceaccess->Access(resourcein))
+	else if(resourceaccess && !(*resourceaccess->Access)(resourcein))
             return ajFalse;
         buff = resourcein->Input->Filebuff;
     }
@@ -1102,6 +1153,8 @@ static AjBool resourceinRead(AjPResourcein resourcein, AjPResource resource)
 ** @param [u] resourcein [AjPResourcein] Resource input object
 ** @param [w] resource [AjPResource] resource object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1459,6 +1512,8 @@ static AjBool resourceinReadDrcat(AjPResourcein resourcein,
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1502,7 +1557,7 @@ void ajResourceinprintBook(AjPFile outf)
         }
     }
 
-    ajListSort(fmtlist, ajStrVcmp);
+    ajListSort(fmtlist, &ajStrVcmp);
     ajListstrToarray(fmtlist, &names);
 
     for(i=0; names[i]; i++)
@@ -1543,6 +1598,8 @@ void ajResourceinprintBook(AjPFile outf)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1567,7 +1624,8 @@ void ajResourceinprintHtml(AjPFile outf)
             {
                 if(resourceinFormatDef[j].Read == resourceinFormatDef[i].Read)
                 {
-                    ajFmtPrintAppS(&namestr, " %s", resourceinFormatDef[j].Name);
+                    ajFmtPrintAppS(&namestr, " %s",
+                                   resourceinFormatDef[j].Name);
                     if(!resourceinFormatDef[j].Alias) 
                     {
                         ajWarn("Input format '%s' same as '%s' but not alias",
@@ -1602,6 +1660,8 @@ void ajResourceinprintHtml(AjPFile outf)
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1642,6 +1702,8 @@ void ajResourceinprintText(AjPFile outf, AjBool full)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1719,6 +1781,8 @@ void ajResourceinprintWiki(AjPFile outf)
 ** Cleans up data input internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1759,6 +1823,8 @@ void ajResourceinExit(void)
 ** Returns the listof known field names for ajResourceinRead
 **
 ** @return [const char*] List of field names
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1775,6 +1841,8 @@ const char* ajResourceinTypeGetFields(void)
 ** Returns the listof known query link operators for ajResourceinRead
 **
 ** @return [const char*] List of field names
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1831,6 +1899,8 @@ const char* ajResourceinTypeGetQlinks(void)
 ** Returns the table in which data database access details are registered
 **
 ** @return [AjPTable] Access functions hash table
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1852,6 +1922,8 @@ AjPTable ajResourceaccessGetDb(void)
 **
 ** @param [r] method [const AjPStr] Method required.
 ** @return [const char*] Known link operators
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1876,6 +1948,8 @@ const char* ajResourceaccessMethodGetQlinks(const AjPStr method)
 *
 ** @param [r] method [const AjPStr] Method required.
 ** @return [ajuint] Scope flags
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1907,6 +1981,8 @@ ajuint ajResourceaccessMethodGetScope(const AjPStr method)
 **
 ** @param [r] method [const AjPStr] Method required.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1928,6 +2004,8 @@ AjBool ajResourceaccessMethodTest(const AjPStr method)
 ** @param [w] resourcein [AjPResourcein] Data resource input object
 ** @param [r] node [const AjPQueryList] Query list node
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void resourceinQryRestore(AjPResourcein resourcein,
@@ -1949,6 +2027,8 @@ static void resourceinQryRestore(AjPResourcein resourcein,
 ** @param [w] node [AjPQueryList] Query list node
 ** @param [r] resourcein [const AjPResourcein] Data resource input object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void resourceinQrySave(AjPQueryList node,
@@ -1985,6 +2065,8 @@ static void resourceinQrySave(AjPQueryList node,
 **                         The format will be replaced
 **                         if defined in the query string.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2047,7 +2129,7 @@ static AjBool resourceinQryProcess(AjPResourcein resourcein,
                 qry->Formatstr);
         qry->Access = ajCallTableGetS(resourceDbMethods,qry->Method);
         resourceaccess = qry->Access;
-        return resourceaccess->Access(resourcein);
+        return (*resourceaccess->Access)(resourcein);
     }
 
     ajDebug("resourceinQryProcess text method '%S' success\n", qry->Method);
@@ -2087,6 +2169,8 @@ static AjBool resourceinQryProcess(AjPResourcein resourcein,
 ** @param [u] resource [AjPResource] Data resource data
 ** @param [r] listfile [const AjPStr] Name of list file.,
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2198,6 +2282,8 @@ static AjBool resourceinListProcess(AjPResourcein resourcein,
 **
 ** @param [u] text [AjPStr*] Line of text from input file.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2235,10 +2321,13 @@ static void resourceinListNoComment(AjPStr* text)
 ** @param [u] resourcein [AjPResourcein] Data resource data input.
 ** @param [u] resource [AjPResource] Data resource data
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static AjBool resourceinFormatSet(AjPResourcein resourcein, AjPResource resource)
+static AjBool resourceinFormatSet(AjPResourcein resourcein,
+                                  AjPResource resource)
 {
 
     if(ajStrGetLen(resourcein->Input->Formatstr))
@@ -2304,11 +2393,13 @@ static AjBool resourceinFormatSet(AjPResourcein resourcein, AjPResource resource
 
 
 
-/* @func ajResourceallNew ******************************************************
+/* @func ajResourceallNew *****************************************************
 **
 ** Creates a new data resource input stream object.
 **
 ** @return [AjPResourceall] New data resource input stream object.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2355,12 +2446,14 @@ AjPResourceall ajResourceallNew(void)
 
 
 
-/* @func ajResourceallDel ******************************************************
+/* @func ajResourceallDel *****************************************************
 **
 ** Deletes a data resource input stream object.
 **
 ** @param [d] pthis [AjPResourceall*] Data resource input stream
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2422,6 +2515,8 @@ void ajResourceallDel(AjPResourceall* pthis)
 **
 ** @param [w] thys [AjPResourceall] Data resource input stream
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2472,6 +2567,8 @@ void ajResourceallClear(AjPResourceall thys)
 **
 ** @param [r] thys [const AjPResourceall] Data resource term input stream
 ** @return [const AjPStr] Identifier
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2501,7 +2598,7 @@ const AjPStr ajResourceallGetresourceId(const AjPResourceall thys)
 **
 ** @valrule * [AjBool] True on success
 **
-** @fcategory use
+** @fcategory input
 **
 ******************************************************************************/
 
@@ -2523,6 +2620,8 @@ const AjPStr ajResourceallGetresourceId(const AjPResourceall thys)
 ** @param [w] thys [AjPResourceall] Data resource input stream
 ** @param [u] Presource [AjPResource*] Data resource returned
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2612,6 +2711,8 @@ AjBool ajResourceallNext(AjPResourceall thys, AjPResource *Presource)
 ** @param [r] format [const AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2655,6 +2756,8 @@ static AjBool resourceinformatFind(const AjPStr format, ajint* iformat)
 **
 ** @param [r] term [const AjPStr] Format term EDAM ID
 ** @return [AjBool] ajTrue if term was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2678,6 +2781,8 @@ AjBool ajResourceinformatTerm(const AjPStr term)
 **
 ** @param [r] format [const AjPStr] Format term EDAM ID
 ** @return [AjBool] ajTrue if format was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

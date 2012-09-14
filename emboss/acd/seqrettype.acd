@@ -1,10 +1,10 @@
 application: seqrettype [
-  documentation: "Reads and writes (returns) sequences"
+  documentation: "Read and write (return) sequences"
   groups: "Edit"
-    relations: "EDAM:0000220 topic File handling"
-    relations: "EDAM:0000155 topic Sequence retrieval"
-    relations: "EDAM:0001813 operation Sequence retrieval"
-    relations: "EDAM:0002121 operation Sequence file processing"
+    relations: "EDAM_topic:0220 File handling"
+    relations: "EDAM_topic:0155 Sequence retrieval"
+    relations: "EDAM_operation:1813 Sequence retrieval"
+    relations: "EDAM_operation:2121 Sequence file processing"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
 
   boolean: feature [
     information: "Use feature information"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   list: type [
@@ -33,14 +33,14 @@ section: input [
              stopproteinstandard:protein sequence with a possible stop but no
              selenocysteine; gapany:any valid sequence with gaps"
     information: "Sequence type"
-    relations: "EDAM:0001110 data EMBOSS sequence type"
+    relations: "EDAM_data:1110 EMBOSS sequence type"
   ]
 
   seqall: sequence [
     parameter: "Y"
     features: "$(feature)"
     type: "$(type)"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -52,7 +52,7 @@ section: advanced [
 
   boolean: firstonly [
     information: "Read one sequence and stop"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: advanced
@@ -65,7 +65,7 @@ section: output [
   seqoutall: outseq [
     parameter: "Y"
     features: "$(feature)"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: output

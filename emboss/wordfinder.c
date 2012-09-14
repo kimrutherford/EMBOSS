@@ -157,7 +157,7 @@ int main(int argc, char **argv)
     lowmatch = ajAcdGetInt("lowmatch");
     lowalign = ajAcdGetInt("lowalign");
     align     = ajAcdGetAlign("outfile");
-    errorf    = ajAcdGetOutfile("errorfile");
+    errorf    = ajAcdGetOutfile("errfile");
     width     = ajAcdGetInt("width");	/* not the same as awidth */
 
     gapopen   = ajRoundFloat(gapopen, 8);
@@ -408,7 +408,7 @@ static void wordfinder_matchListOrder(void **x,void *cl)
 
 static void wordfinder_orderandconcat(AjPList list,AjPList ordered)
 {
-    ajListMap(list,wordfinder_matchListOrder, ordered);
+    ajListMap(list, &wordfinder_matchListOrder, ordered);
 
     return;
 }
@@ -529,14 +529,14 @@ static ajint wordfinder_findstartpoints(AjPTable seq1MatchTable,
 
     wordfinder_orderandconcat(matchlist, ordered);
 
-    ajListMap(ordered,wordfinder_findmax, &max);
+    ajListMap(ordered, &wordfinder_findmax, &max);
 
-    ajDebug("findstart conmax off:%d count:%d total:%d\n",
+    ajDebug("findstart conmax off:%d count:%d total:%d list:%Lu\n",
 	    conmax->offset, conmax->count, conmax->total,
 	    ajListGetLength(conmax->list));
     offset = conmax->offset;
 
-    ajListMap(ordered,wordfinder_removelists, NULL);
+    ajListMap(ordered, &wordfinder_removelists, NULL);
     ajListFree(&ordered);
     embWordMatchListDelete(&matchlist);	/* free the match structures */
 

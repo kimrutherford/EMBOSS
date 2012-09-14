@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Displays information on configured databases
+   Display information on configured databases
 
 Description
 
@@ -26,10 +26,12 @@ Usage
 
 
 % showdb
-Displays information on configured databases
+Display information on configured databases
 
 # Name            Type       ID  Qry All Comment
 # =============== ========== ==  === === =======
+bpsw              Protein    OK  OK  OK
+bpworm            Protein    OK  OK  OK
 qapblast          Protein    OK  OK  OK  BLAST swissnew
 qapblastall       Protein    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit     Protein    OK  OK  OK  BLAST swissnew split in 5 files
@@ -42,17 +44,21 @@ qapflat           Protein    OK  OK  OK  SpTrEmbl flatfile
 qapflatall        Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
 qapir             Protein    OK  OK  OK  PIR
 qapirall          Protein    OK  OK  OK  PIR
+qapirexc          Protein    OK  OK  OK  PIR
 qapirinc          Protein    OK  OK  OK  PIR
 qapxfasta         Protein    OK  OK  OK  FASTA file swissnew entries
 qapxflat          Protein    OK  OK  OK  Swissnew flatfiles
 qaxpir            Protein    OK  OK  OK  PIR
 qaxpirall         Protein    OK  OK  OK  PIR
+qaxpirexc         Protein    OK  OK  OK  PIR
 qaxpirinc         Protein    OK  OK  OK  PIR
 tpir              Protein    OK  OK  OK  PIR using NBRF access for 4 files
 tsw               Protein    OK  OK  OK  Swissprot native format with EMBL CD-RO
 M index
 tswnew            Protein    OK  OK  OK  SpTrEmbl as 3 files in native format wi
 th EMBL CD-ROM index
+bpembl            Nucleotide OK  OK  OK
+bpgb              Nucleotide OK  OK  OK
 qanfasta          Nucleotide OK  OK  OK  FASTA file EMBL rodents
 qanfastaall       Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields ind
 exed
@@ -75,11 +81,10 @@ qanxgcg           Nucleotide OK  OK  OK  GCG format EMBL
 qanxgcgall        Nucleotide OK  OK  OK  GCG format EMBL
 qanxgcgexc        Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
 qanxgcginc        Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
-qapirexc          Nucleotide OK  OK  OK  PIR
 qasrswww          Nucleotide OK  OK  OK  Remote SRS web server
 qawfasta          Nucleotide OK  OK  OK  FASTA file wormpep entries
 qawxfasta         Nucleotide OK  OK  OK  FASTA file wormpep entries
-qaxpirexc         Nucleotide OK  OK  OK  PIR
+qaxembl           Nucleotide OK  OK  OK  EMBL flatfiles
 tembl             Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM
 index
 temblall          Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM
@@ -103,12 +108,22 @@ taxon             Taxonomy   OK  OK  OK
 drcat             Resource   OK  OK  OK
 tedam             Obo        OK  OK  OK  EDAM using dbxedam test indexes
 tobo              Obo        OK  OK  OK  EDAM using dbxobo test indexes
+chebi             Obo        OK  OK  OK
 eco               Obo        OK  OK  OK
 edam              Obo        OK  OK  OK
+edam_data         Obo        OK  OK  OK
+edam_format       Obo        OK  OK  OK
+edam_identifier   Obo        OK  OK  OK
+edam_operation    Obo        OK  OK  OK
+edam_topic        Obo        OK  OK  OK
 go                Obo        OK  OK  OK
+go_component      Obo        OK  OK  OK
+go_function       Obo        OK  OK  OK
+go_process        Obo        OK  OK  OK
 pw                Obo        OK  OK  OK
 ro                Obo        OK  OK  OK
 so                Obo        OK  OK  OK
+swo               Obo        OK  OK  OK
 
 
    Example 2
@@ -117,7 +132,7 @@ so                Obo        OK  OK  OK
 
 
 % showdb -outfile showdb.out
-Displays information on configured databases
+Display information on configured databases
 
 
    Go to the output files for this example
@@ -128,7 +143,7 @@ Displays information on configured databases
 
 
 % showdb -database tsw
-Displays information on configured databases
+Display information on configured databases
 
 # Name         Type    ID  Qry All Comment
 # ============ ======= ==  === === =======
@@ -144,10 +159,14 @@ x
 
 
 % showdb -html
-Displays information on configured databases
+Display information on configured databases
 
 
  Name Type ID Qry All Comment
+
+ bpsw Protein OK   OK   OK
+
+ bpworm Protein OK   OK   OK
 
  qapblast Protein OK   OK   OK   BLAST swissnew
 
@@ -171,6 +190,8 @@ ile 02
 
  qapirall Protein OK   OK   OK   PIR
 
+ qapirexc Protein OK   OK   OK   PIR
+
  qapirinc Protein OK   OK   OK   PIR
 
  qapxfasta Protein OK   OK   OK   FASTA file swissnew entries
@@ -181,6 +202,8 @@ ile 02
 
  qaxpirall Protein OK   OK   OK   PIR
 
+ qaxpirexc Protein OK   OK   OK   PIR
+
  qaxpirinc Protein OK   OK   OK   PIR
 
  tpir Protein OK   OK   OK   PIR using NBRF access for 4 files
@@ -189,6 +212,10 @@ ile 02
 
  tswnew Protein OK   OK   OK   SpTrEmbl as 3 files in native format with EMBL CD
 -ROM index
+
+ bpembl Nucleotide OK   OK   OK
+
+ bpgb Nucleotide OK   OK   OK
 
  qanfasta Nucleotide OK   OK   OK   FASTA file EMBL rodents
 
@@ -232,15 +259,13 @@ xed
 
  qanxgcginc Nucleotide OK   OK   OK   GCG format EMBL only prokaryotes
 
- qapirexc Nucleotide OK   OK   OK   PIR
-
  qasrswww Nucleotide OK   OK   OK   Remote SRS web server
 
  qawfasta Nucleotide OK   OK   OK   FASTA file wormpep entries
 
  qawxfasta Nucleotide OK   OK   OK   FASTA file wormpep entries
 
- qaxpirexc Nucleotide OK   OK   OK   PIR
+ qaxembl Nucleotide OK   OK   OK   EMBL flatfiles
 
  tembl Nucleotide OK   OK   OK   EMBL in native format with EMBL CD-ROM index
 
@@ -278,17 +303,37 @@ rce
 
  tobo Obo OK   OK   OK   EDAM using dbxobo test indexes
 
+ chebi Obo OK   OK   OK
+
  eco Obo OK   OK   OK
 
  edam Obo OK   OK   OK
 
+ edam_data Obo OK   OK   OK
+
+ edam_format Obo OK   OK   OK
+
+ edam_identifier Obo OK   OK   OK
+
+ edam_operation Obo OK   OK   OK
+
+ edam_topic Obo OK   OK   OK
+
  go Obo OK   OK   OK
+
+ go_component Obo OK   OK   OK
+
+ go_function Obo OK   OK   OK
+
+ go_process Obo OK   OK   OK
 
  pw Obo OK   OK   OK
 
  ro Obo OK   OK   OK
 
  so Obo OK   OK   OK
+
+ swo Obo OK   OK   OK
 
 
 
@@ -299,10 +344,12 @@ rce
 
 
 % showdb -nonucleic
-Displays information on configured databases
+Display information on configured databases
 
 # Name            Type       ID  Qry All Comment
 # =============== ========== ==  === === =======
+bpsw              Protein    OK  OK  OK
+bpworm            Protein    OK  OK  OK
 qapblast          Protein    OK  OK  OK  BLAST swissnew
 qapblastall       Protein    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit     Protein    OK  OK  OK  BLAST swissnew split in 5 files
@@ -315,11 +362,13 @@ qapflat           Protein    OK  OK  OK  SpTrEmbl flatfile
 qapflatall        Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
 qapir             Protein    OK  OK  OK  PIR
 qapirall          Protein    OK  OK  OK  PIR
+qapirexc          Protein    OK  OK  OK  PIR
 qapirinc          Protein    OK  OK  OK  PIR
 qapxfasta         Protein    OK  OK  OK  FASTA file swissnew entries
 qapxflat          Protein    OK  OK  OK  Swissnew flatfiles
 qaxpir            Protein    OK  OK  OK  PIR
 qaxpirall         Protein    OK  OK  OK  PIR
+qaxpirexc         Protein    OK  OK  OK  PIR
 qaxpirinc         Protein    OK  OK  OK  PIR
 tpir              Protein    OK  OK  OK  PIR using NBRF access for 4 files
 tsw               Protein    OK  OK  OK  Swissprot native format with EMBL CD-RO
@@ -333,12 +382,22 @@ taxon             Taxonomy   OK  OK  OK
 drcat             Resource   OK  OK  OK
 tedam             Obo        OK  OK  OK  EDAM using dbxedam test indexes
 tobo              Obo        OK  OK  OK  EDAM using dbxobo test indexes
+chebi             Obo        OK  OK  OK
 eco               Obo        OK  OK  OK
 edam              Obo        OK  OK  OK
+edam_data         Obo        OK  OK  OK
+edam_format       Obo        OK  OK  OK
+edam_identifier   Obo        OK  OK  OK
+edam_operation    Obo        OK  OK  OK
+edam_topic        Obo        OK  OK  OK
 go                Obo        OK  OK  OK
+go_component      Obo        OK  OK  OK
+go_function       Obo        OK  OK  OK
+go_process        Obo        OK  OK  OK
 pw                Obo        OK  OK  OK
 ro                Obo        OK  OK  OK
 so                Obo        OK  OK  OK
+swo               Obo        OK  OK  OK
 
 
    Example 6
@@ -347,8 +406,10 @@ so                Obo        OK  OK  OK
 
 
 % showdb -noheading
-Displays information on configured databases
+Display information on configured databases
 
+bpsw              Protein    OK  OK  OK
+bpworm            Protein    OK  OK  OK
 qapblast          Protein    OK  OK  OK  BLAST swissnew
 qapblastall       Protein    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit     Protein    OK  OK  OK  BLAST swissnew split in 5 files
@@ -361,17 +422,21 @@ qapflat           Protein    OK  OK  OK  SpTrEmbl flatfile
 qapflatall        Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
 qapir             Protein    OK  OK  OK  PIR
 qapirall          Protein    OK  OK  OK  PIR
+qapirexc          Protein    OK  OK  OK  PIR
 qapirinc          Protein    OK  OK  OK  PIR
 qapxfasta         Protein    OK  OK  OK  FASTA file swissnew entries
 qapxflat          Protein    OK  OK  OK  Swissnew flatfiles
 qaxpir            Protein    OK  OK  OK  PIR
 qaxpirall         Protein    OK  OK  OK  PIR
+qaxpirexc         Protein    OK  OK  OK  PIR
 qaxpirinc         Protein    OK  OK  OK  PIR
 tpir              Protein    OK  OK  OK  PIR using NBRF access for 4 files
 tsw               Protein    OK  OK  OK  Swissprot native format with EMBL CD-RO
 M index
 tswnew            Protein    OK  OK  OK  SpTrEmbl as 3 files in native format wi
 th EMBL CD-ROM index
+bpembl            Nucleotide OK  OK  OK
+bpgb              Nucleotide OK  OK  OK
 qanfasta          Nucleotide OK  OK  OK  FASTA file EMBL rodents
 qanfastaall       Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields ind
 exed
@@ -394,11 +459,10 @@ qanxgcg           Nucleotide OK  OK  OK  GCG format EMBL
 qanxgcgall        Nucleotide OK  OK  OK  GCG format EMBL
 qanxgcgexc        Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
 qanxgcginc        Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
-qapirexc          Nucleotide OK  OK  OK  PIR
 qasrswww          Nucleotide OK  OK  OK  Remote SRS web server
 qawfasta          Nucleotide OK  OK  OK  FASTA file wormpep entries
 qawxfasta         Nucleotide OK  OK  OK  FASTA file wormpep entries
-qaxpirexc         Nucleotide OK  OK  OK  PIR
+qaxembl           Nucleotide OK  OK  OK  EMBL flatfiles
 tembl             Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM
 index
 temblall          Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM
@@ -422,12 +486,22 @@ taxon             Taxonomy   OK  OK  OK
 drcat             Resource   OK  OK  OK
 tedam             Obo        OK  OK  OK  EDAM using dbxedam test indexes
 tobo              Obo        OK  OK  OK  EDAM using dbxobo test indexes
+chebi             Obo        OK  OK  OK
 eco               Obo        OK  OK  OK
 edam              Obo        OK  OK  OK
+edam_data         Obo        OK  OK  OK
+edam_format       Obo        OK  OK  OK
+edam_identifier   Obo        OK  OK  OK
+edam_operation    Obo        OK  OK  OK
+edam_topic        Obo        OK  OK  OK
 go                Obo        OK  OK  OK
+go_component      Obo        OK  OK  OK
+go_function       Obo        OK  OK  OK
+go_process        Obo        OK  OK  OK
 pw                Obo        OK  OK  OK
 ro                Obo        OK  OK  OK
 so                Obo        OK  OK  OK
+swo               Obo        OK  OK  OK
 
 
    Example 7
@@ -437,6 +511,8 @@ so                Obo        OK  OK  OK
 
 % showdb -noheading -notype -noid -noquery -noall -nocomment -auto
 
+bpsw
+bpworm
 qapblast
 qapblastall
 qapblastsplit
@@ -447,15 +523,19 @@ qapflat
 qapflatall
 qapir
 qapirall
+qapirexc
 qapirinc
 qapxfasta
 qapxflat
 qaxpir
 qaxpirall
+qaxpirexc
 qaxpirinc
 tpir
 tsw
 tswnew
+bpembl
+bpgb
 qanfasta
 qanfastaall
 qanflat
@@ -476,11 +556,10 @@ qanxgcg
 qanxgcgall
 qanxgcgexc
 qanxgcginc
-qapirexc
 qasrswww
 qawfasta
 qawxfasta
-qaxpirexc
+qaxembl
 tembl
 temblall
 temblrest
@@ -497,12 +576,22 @@ taxon
 drcat
 tedam
 tobo
+chebi
 eco
 edam
+edam_data
+edam_format
+edam_identifier
+edam_operation
+edam_topic
 go
+go_component
+go_function
+go_process
 pw
 ro
 so
+swo
 
 
    Example 8
@@ -511,8 +600,10 @@ so
 
 
 % showdb -only -type
-Displays information on configured databases
+Display information on configured databases
 
+bpsw              Protein
+bpworm            Protein
 qapblast          Protein
 qapblastall       Protein
 qapblastsplit     Protein
@@ -523,15 +614,19 @@ qapflat           Protein
 qapflatall        Protein
 qapir             Protein
 qapirall          Protein
+qapirexc          Protein
 qapirinc          Protein
 qapxfasta         Protein
 qapxflat          Protein
 qaxpir            Protein
 qaxpirall         Protein
+qaxpirexc         Protein
 qaxpirinc         Protein
 tpir              Protein
 tsw               Protein
 tswnew            Protein
+bpembl            Nucleotide
+bpgb              Nucleotide
 qanfasta          Nucleotide
 qanfastaall       Nucleotide
 qanflat           Nucleotide
@@ -552,11 +647,10 @@ qanxgcg           Nucleotide
 qanxgcgall        Nucleotide
 qanxgcgexc        Nucleotide
 qanxgcginc        Nucleotide
-qapirexc          Nucleotide
 qasrswww          Nucleotide
 qawfasta          Nucleotide
 qawxfasta         Nucleotide
-qaxpirexc         Nucleotide
+qaxembl           Nucleotide
 tembl             Nucleotide
 temblall          Nucleotide
 temblrest         Nucleotide
@@ -573,12 +667,22 @@ taxon             Taxonomy
 drcat             Resource
 tedam             Obo
 tobo              Obo
+chebi             Obo
 eco               Obo
 edam              Obo
+edam_data         Obo
+edam_format       Obo
+edam_identifier   Obo
+edam_operation    Obo
+edam_topic        Obo
 go                Obo
+go_component      Obo
+go_function       Obo
+go_process        Obo
 pw                Obo
 ro                Obo
 so                Obo
+swo               Obo
 
 
    Example 9
@@ -587,7 +691,7 @@ so                Obo
 
 
 % showdb -full
-Displays information on configured databases
+Display information on configured databases
 
 # Name            Type       ID  Qry All Method    Fields
                                                                   Defined  Relea
@@ -595,6 +699,12 @@ se Comment
 # =============== ========== ==  === === ========= =============================
 ================================================================= ======== =====
 == =======
+bpsw              Protein    OK  OK  OK  obda      id,acc
+                                                                  special
+
+bpworm            Protein    OK  OK  OK  obda      id
+                                                                  special
+
 qapblast          Protein    OK  OK  OK  blast     -
                                                                   special
    BLAST swissnew
@@ -625,6 +735,9 @@ qapir             Protein    OK  OK  OK  gcg       -
 qapirall          Protein    OK  OK  OK  gcg       des,org,key
                                                                   special
    PIR
+qapirexc          Protein    OK  OK  OK  gcg       -
+                                                                  special
+   PIR
 qapirinc          Protein    OK  OK  OK  gcg       -
                                                                   special
    PIR
@@ -640,6 +753,9 @@ qaxpir            Protein    OK  OK  OK  embossgcg -
 qaxpirall         Protein    OK  OK  OK  embossgcg des,org,key
                                                                   special
    PIR
+qaxpirexc         Protein    OK  OK  OK  embossgcg -
+                                                                  special
+   PIR
 qaxpirinc         Protein    OK  OK  OK  embossgcg -
                                                                   special
    PIR
@@ -652,6 +768,12 @@ tsw               Protein    OK  OK  OK  emblcd    id,acc,sv,des,org,key
 tswnew            Protein    OK  OK  OK  emblcd    sv,des,org,key
                                                                   special  37
    SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+bpembl            Nucleotide OK  OK  OK  obda      id,acc
+                                                                  special
+
+bpgb              Nucleotide OK  OK  OK  obda      id,acc
+                                                                  special
+
 qanfasta          Nucleotide OK  OK  OK  emblcd    -
                                                                   special
    FASTA file EMBL rodents
@@ -688,10 +810,10 @@ qanxfasta         Nucleotide OK  OK  OK  emboss    -
 qanxfastaall      Nucleotide OK  OK  OK  emboss    sv,des
                                                                   special
    FASTA file EMBL rodents, all fields indexed
-qanxflat          Nucleotide OK  OK  OK  emboss    -
+qanxflat          Nucleotide OK  OK  OK  emboss    id,acc
                                                                   special
    EMBL flatfiles
-qanxflatall       Nucleotide OK  OK  OK  emboss    des,org,key
+qanxflatall       Nucleotide OK  OK  OK  emboss    des,org,key,sv
                                                                   special
    EMBL flatfiles, all fields indexed
 qanxflatexc       Nucleotide OK  OK  OK  emboss    -
@@ -712,9 +834,6 @@ qanxgcgexc        Nucleotide OK  OK  OK  embossgcg -
 qanxgcginc        Nucleotide OK  OK  OK  embossgcg -
                                                                   special
    GCG format EMBL only prokaryotes
-qapirexc          Nucleotide OK  OK  OK  gcg       -
-                                                                  special
-   PIR
 qasrswww          Nucleotide OK  OK  OK  srswww    sv,des,org,key
                                                                   special
    Remote SRS web server
@@ -724,9 +843,9 @@ qawfasta          Nucleotide OK  OK  OK  emblcd    -
 qawxfasta         Nucleotide OK  OK  OK  emboss    -
                                                                   special
    FASTA file wormpep entries
-qaxpirexc         Nucleotide OK  OK  OK  embossgcg -
+qaxembl           Nucleotide OK  OK  OK  emboss    -
                                                                   special
-   PIR
+   EMBL flatfiles
 tembl             Nucleotide OK  OK  OK  emblcd    sv,des,org,key
                                                                   special  57
    EMBL in native format with EMBL CD-ROM index
@@ -775,13 +894,40 @@ tedam             Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns,hasattr
 tobo              Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns,hasattr
 ,hasin,hasout,isid,isfmt,issrc                                    special  beta1
 1  EDAM using dbxobo test indexes
+chebi             Obo        OK  OK  OK  emboss    id,acc,nam,isa,des
+                                                                  standard
+
 eco               Obo        OK  OK  OK  emboss    id,acc,nam,isa,des
                                                                   standard
 
 edam              Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns,hasattr
 ,hasin,hasout,isid,isfmt,issrc                                    standard
 
+edam_data         Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns,hasattr
+,hasin,hasout,isid,isfmt,issrc                                    standard
+
+edam_format       Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns,hasattr
+,hasin,hasout,isid,isfmt,issrc                                    standard
+
+edam_identifier   Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns,hasattr
+,hasin,hasout,isid,isfmt,issrc                                    standard
+
+edam_operation    Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns,hasattr
+,hasin,hasout,isid,isfmt,issrc                                    standard
+
+edam_topic        Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns,hasattr
+,hasin,hasout,isid,isfmt,issrc                                    standard
+
 go                Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns
+                                                                  standard
+
+go_component      Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns
+                                                                  standard
+
+go_function       Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns
+                                                                  standard
+
+go_process        Obo        OK  OK  OK  emboss    id,acc,nam,isa,des,ns
                                                                   standard
 
 pw                Obo        OK  OK  OK  emboss    id,acc,nam,isa,des
@@ -793,12 +939,15 @@ ro                Obo        OK  OK  OK  emboss    id,acc,nam,isa,des
 so                Obo        OK  OK  OK  emboss    id,acc,nam,isa,des
                                                                   standard
 
+swo               Obo        OK  OK  OK  emboss    id,acc,nam,isa,des
+                                                                  standard
+
 
 
 Command line arguments
 
-Displays information on configured databases
-Version: EMBOSS:6.4.0.0
+Display information on configured databases
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:
@@ -881,6 +1030,8 @@ Output file format
 
 # Name            Type       ID  Qry All Comment
 # =============== ========== ==  === === =======
+bpsw              Protein    OK  OK  OK
+bpworm            Protein    OK  OK  OK
 qapblast          Protein    OK  OK  OK  BLAST swissnew
 qapblastall       Protein    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit     Protein    OK  OK  OK  BLAST swissnew split in 5 files
@@ -893,17 +1044,21 @@ qapflat           Protein    OK  OK  OK  SpTrEmbl flatfile
 qapflatall        Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
 qapir             Protein    OK  OK  OK  PIR
 qapirall          Protein    OK  OK  OK  PIR
+qapirexc          Protein    OK  OK  OK  PIR
 qapirinc          Protein    OK  OK  OK  PIR
 qapxfasta         Protein    OK  OK  OK  FASTA file swissnew entries
 qapxflat          Protein    OK  OK  OK  Swissnew flatfiles
 qaxpir            Protein    OK  OK  OK  PIR
 qaxpirall         Protein    OK  OK  OK  PIR
+qaxpirexc         Protein    OK  OK  OK  PIR
 qaxpirinc         Protein    OK  OK  OK  PIR
 tpir              Protein    OK  OK  OK  PIR using NBRF access for 4 files
 tsw               Protein    OK  OK  OK  Swissprot native format with EMBL CD-RO
 M index
 tswnew            Protein    OK  OK  OK  SpTrEmbl as 3 files in native format wi
 th EMBL CD-ROM index
+bpembl            Nucleotide OK  OK  OK
+bpgb              Nucleotide OK  OK  OK
 qanfasta          Nucleotide OK  OK  OK  FASTA file EMBL rodents
 qanfastaall       Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields ind
 exed
@@ -926,11 +1081,10 @@ qanxgcg           Nucleotide OK  OK  OK  GCG format EMBL
 qanxgcgall        Nucleotide OK  OK  OK  GCG format EMBL
 qanxgcgexc        Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
 qanxgcginc        Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
-qapirexc          Nucleotide OK  OK  OK  PIR
 qasrswww          Nucleotide OK  OK  OK  Remote SRS web server
 qawfasta          Nucleotide OK  OK  OK  FASTA file wormpep entries
 qawxfasta         Nucleotide OK  OK  OK  FASTA file wormpep entries
-qaxpirexc         Nucleotide OK  OK  OK  PIR
+qaxembl           Nucleotide OK  OK  OK  EMBL flatfiles
 tembl             Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM
 index
 temblall          Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM
@@ -954,12 +1108,22 @@ taxon             Taxonomy   OK  OK  OK
 drcat             Resource   OK  OK  OK
 tedam             Obo        OK  OK  OK  EDAM using dbxedam test indexes
 tobo              Obo        OK  OK  OK  EDAM using dbxobo test indexes
+chebi             Obo        OK  OK  OK
 eco               Obo        OK  OK  OK
 edam              Obo        OK  OK  OK
+edam_data         Obo        OK  OK  OK
+edam_format       Obo        OK  OK  OK
+edam_identifier   Obo        OK  OK  OK
+edam_operation    Obo        OK  OK  OK
+edam_topic        Obo        OK  OK  OK
 go                Obo        OK  OK  OK
+go_component      Obo        OK  OK  OK
+go_function       Obo        OK  OK  OK
+go_process        Obo        OK  OK  OK
 pw                Obo        OK  OK  OK
 ro                Obo        OK  OK  OK
 so                Obo        OK  OK  OK
+swo               Obo        OK  OK  OK
 
    The output is a simple text table.
 
@@ -1046,15 +1210,15 @@ Known bugs
 See also
 
    Program name     Description
-   cachedas         Generates server cache file for DAS servers or for the DAS
+   cachedas         Generate server cache file for DAS servers or for the DAS
                     registry
-   cachedbfetch     Generates server cache file for Dbfetch/WSDbfetch data
+   cachedbfetch     Generate server cache file for Dbfetch/WSDbfetch data
                     sources
-   cacheebeyesearch Generates server cache file for EB-eye search domains
-   cacheensembl     Generates server cache file for an Ensembl server
+   cacheebeyesearch Generate server cache file for EB-eye search domains
+   cacheensembl     Generate server cache file for an Ensembl server
    dbtell           Display information about a public database
    servertell       Display information about a public server
-   showserver       Displays information on configured servers
+   showserver       Display information on configured servers
 
 Author(s)
 

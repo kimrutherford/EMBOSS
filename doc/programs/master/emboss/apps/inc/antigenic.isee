@@ -4,7 +4,7 @@
 <th>Description</th></tr>
 <tr>
 <td><a href="epestfind.html">epestfind</a></td>
-<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
+<td>Find PEST motifs as potential proteolytic cleavage sites</td>
 </tr>
 
 <tr>
@@ -19,7 +19,7 @@
 
 <tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
-<td>Searches protein sequences with a sequence motif</td>
+<td>Search protein sequences with a sequence motif</td>
 </tr>
 
 <tr>
@@ -34,12 +34,12 @@
 
 <tr>
 <td><a href="pscan.html">pscan</a></td>
-<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
+<td>Scan protein sequence(s) with fingerprints from the PRINTS database</td>
 </tr>
 
 <tr>
 <td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports on signal cleavage sites in a protein sequence</td>
+<td>Report on signal cleavage sites in a protein sequence</td>
 </tr>
 
 </table>

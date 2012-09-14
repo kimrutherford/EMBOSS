@@ -1,130 +1,130 @@
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: 0001234.ontotext</h3>
+<p><h3>File: 1234.ontotext</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 [Term]
-id: EDAM:0001234
+id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
-def: "Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries." [EDAM:EBI "EMBRACE definition"]
 subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
+def: "Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries." [http://edamontology.org]
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
 
 </pre>
 </td></tr></table><p>
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
-<p><h3>File: 0000850.ontotext</h3>
+<p><h3>File: 0850.ontotext</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 [Term]
-id: EDAM:0000850
+id: EDAM_data:0850
 name: Sequence set
 namespace: data
-def: "A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method." [EDAM:EBI "EMBRACE definition"]
-comment: This term may be used for arbitrary sequence sets and associated data arising from processing.
 subset: data
-is_a: EDAM:0002955 ! Sequence report
+def: "A collection of multiple molecular sequences and associated metadata that do not (typically) correspond to molecular sequence database records or entries and which (typically) are derived from some analytical method." [http://edamontology.org]
+comment: This concept may be used for arbitrary sequence sets and associated data arising from processing.
+synonym: "sequence_collection" EXACT [SO:0001260]
+is_a: EDAM_data:2955 ! Sequence report
 
 [Term]
-id: EDAM:0001234
+id: EDAM_data:1234
 name: Sequence set (nucleic acid)
 namespace: data
-def: "Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries." [EDAM:EBI "EMBRACE definition"]
 subset: data
-is_a: EDAM:0000850 ! Sequence set
-is_a: EDAM:0002977 ! Nucleic acid sequence
+def: "Any collection of multiple nucleotide sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries." [http://edamontology.org]
+is_a: EDAM_data:0850 ! Sequence set
+is_a: EDAM_data:2977 ! Nucleic acid sequence
 
 [Term]
-id: EDAM:0001240
+id: EDAM_data:1239
+name: Restriction digest
+namespace: data
+subset: data
+def: "Restriction digest fragments from digesting a nucleotide sequence with restriction sites using a restriction endonuclease." [http://edamontology.org]
+xref: SO:0000412
+is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
+
+[Term]
+id: EDAM_data:1240
 name: PCR primers
 namespace: data
-def: "Oligonucleotide primer(s) for PCR and DNA amplification, for example a minimal primer set." [EDAM:EBI "EMBRACE definition"]
 subset: data
-is_a: EDAM:0001234 ! Sequence set (nucleic acid)
+def: "Oligonucleotide primer(s) for PCR and DNA amplification, for example a minimal primer set." [http://edamontology.org]
+is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
 
 [Term]
-id: EDAM:0001246
+id: EDAM_data:1246
 name: Sequence cluster (nucleic acid)
 namespace: data
-def: "A cluster of nucleotide sequences." [EDAM:EBI "EMBRACE definition"]
+subset: data
+def: "A cluster of nucleotide sequences." [http://edamontology.org]
 comment: The sequences are typically related, for example a family of sequences.
-subset: data
-synonym: "Nucleotide sequence cluster" EXACT []
-is_a: EDAM:0001234 ! Sequence set (nucleic acid)
-is_a: EDAM:0001235 ! Sequence cluster
+synonym: "Nucleotide sequence cluster" EXACT [http://edamontology.org]
+is_a: EDAM_data:1234 ! Sequence set (nucleic acid)
+is_a: EDAM_data:1235 ! Sequence cluster
 
 [Term]
-id: EDAM:0002198
-name: Gene cluster
-namespace: data
-def: "A cluster of similar genes." [EDAM:EBI "EMBRACE definition"]
-subset: data
-is_a: EDAM:0001246 ! Sequence cluster (nucleic acid)
-
-[Term]
-id: EDAM:0002874
-name: Sequence set (polymorphic)
-namespace: data
-def: "A set of sub-sequences displaying some type of polymorphism, typically indicating the sequence in which they occur, their position and other metadata." [EDAM:EBI "EMBRACE definition"]
+id: EDAM_data:0925
+name: Sequence assembly
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-subset: data
-is_a: EDAM:0000850 ! Sequence set
-! is_a: EDAM:0002976 ! Protein sequence
+def: "A set of sequences that have been clustered or otherwise classified as belonging to a group including (typically) sequence cluster information." [http://edamontology.org]
+comment: The cluster might include sequences identifiers, short descriptions, alignment and summary information.
+is_a: EDAM_data:0850 ! Sequence set
+relationship: has_topic EDAM_topic:3052 ! Sequence clusters and classification
+relationship: has_topic EDAM_topic:0724 ! Protein families
 
 [Term]
-id: EDAM:0001245
+id: EDAM_data:1245
 name: Sequence cluster (protein)
 namespace: data
-def: "A cluster of protein sequences." [EDAM:EBI "EMBRACE definition"]
+subset: data
+def: "A cluster of protein sequences." [http://edamontology.org]
 comment: The sequences are typically related, for example a family of sequences.
-subset: data
-synonym: "Protein sequence cluster" EXACT []
-is_a: EDAM:0001233 ! Sequence set (protein)
-is_a: EDAM:0001235 ! Sequence cluster
+synonym: "Protein sequence cluster" EXACT [http://edamontology.org]
+is_a: EDAM_data:1233 ! Sequence set (protein)
+is_a: EDAM_data:1235 ! Sequence cluster
 
 [Term]
-id: EDAM:0001238
-name: Proteolytic digest
-namespace: data
-def: "A protein sequence cleaved into peptide fragments (by enzymatic or chemical cleavage) with fragment masses." [EDAM:EBI "EMBRACE definition"]
-subset: data
-is_a: EDAM:0001233 ! Sequence set (protein)
-
-[Term]
-id: EDAM:0001262
-name: Peptide molecular weight hits
-namespace: data
-def: "A report on peptide fragments of certain molecular weight(s) in one or more protein sequences." [EDAM:EBI "EMBRACE definition"]
-subset: data
-is_a: EDAM:0001233 ! Sequence set (protein)
-
-[Term]
-id: EDAM:0001235
-name: Sequence cluster
-namespace: data
-def: "A set of sequences that have been clustered or otherwise classified as belonging to a group including (typically) sequence cluster information." [EDAM:EBI "EMBRACE definition"]
-comment: The cluster might include sequences identifiers, short descriptions, alignment and summary information.
-subset: data
-is_a: EDAM:0000850 ! Sequence set
-relationship: in_topic EDAM:0000164 ! Sequence clustering
-relationship: in_topic EDAM:0000724 ! Protein families
-
-[Term]
-id: EDAM:0002245
+id: EDAM_data:2245
 name: Sequence set (bootstrapped)
 namespace: data
-def: "A collection of sequences output from a bootstrapping (resampling) procedure." [EDAM:EBI "EMBRACE definition"]
-comment: Bootstrapping is often performed in phylogenetic analysis.
 subset: data
-is_a: EDAM:0000850 ! Sequence set
+def: "A collection of sequences output from a bootstrapping (resampling) procedure." [http://edamontology.org]
+comment: Bootstrapping is often performed in phylogenetic analysis.
+is_a: EDAM_data:0850 ! Sequence set
+
+[Term]
+id: EDAM_data:1233
+name: Sequence set (protein)
+namespace: data
+subset: data
+def: "Any collection of multiple protein sequences and associated metadata that do not (typically) correspond to common sequence database records or database entries." [http://edamontology.org]
+is_a: EDAM_data:0850 ! Sequence set
+
+[Term]
+id: EDAM_data:1238
+name: Proteolytic digest
+namespace: data
+subset: data
+def: "A protein sequence cleaved into peptide fragments (by enzymatic or chemical cleavage) with fragment masses." [http://edamontology.org]
+is_a: EDAM_data:1233 ! Sequence set (protein)
+relationship: has_topic EDAM_topic:0767 ! Protein and peptide identification
+
+[Term]
+id: EDAM_data:1262
+name: Peptide molecular weight hits
+namespace: data
+subset: data
+def: "A report on peptide fragments of certain molecular weight(s) in one or more protein sequences." [http://edamontology.org]
+is_a: EDAM_data:1233 ! Sequence set (protein)
 
 </pre>
 </td></tr></table><p>

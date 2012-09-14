@@ -1,35 +1,52 @@
-/******************************************************************************
-** @source AJAX taxonomy database functions
+/* @source ajtaxdb ************************************************************
+**
+** AJAX taxonomy database functions
 **
 ** These functions control all aspects of AJAX taxonomy database access
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.21 $
 ** @modified Oct 2010 pmr first version
+** @modified $Date: 2012/07/14 14:52:39 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
-#include "ajtaxdb.h"
 
+#include "ajlib.h"
+
+#include "ajtaxdb.h"
+#include "ajtaxread.h"
+#include "ajindex.h"
+#include "ajnam.h"
+#include "ajquery.h"
+#include "ajfileio.h"
+#include "ajcall.h"
+
+
+#include <ctype.h>
 #include <limits.h>
 #include <stdarg.h>
 #include <sys/types.h>
+#include <errno.h>
+#include <signal.h>
+
+
 #ifndef WIN32
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -43,8 +60,8 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #endif
-#include <errno.h>
-#include <signal.h>
+
+
 
 
 /* @datastatic TaxPEmbossQry *************************************************
@@ -57,16 +74,16 @@
 ** @attr idcache [AjPBtcache] ID cache
 ** @attr Caches [AjPList] Caches for each query field
 ** @attr files [AjPStr*] database filenames
-** @attr reffiles [AjPStr*] database reference filenames
+** @attr reffiles [AjPStr**] database reference filenames
 ** @attr Skip [AjBool*] files numbers to exclude
 ** @attr libs [AjPFile] Primary (database source) file
 ** @attr libr [AjPFile] Secondary (database bibliographic source) file
 ** @attr div [ajuint] division number of currently open database file
+** @attr refcount [ajuint] number of reference file(s) per entry
 ** @attr nentries [ajint] number of entries in the filename array(s)
 **                        -1 when done
 ** @attr Samefile [AjBool] true if the same file is passed to
 **                         ajFilebuffReopenFile
-** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -76,17 +93,17 @@ typedef struct TaxSEmbossQry
     AjPList Caches;
 
     AjPStr *files;
-    AjPStr *reffiles;
+    AjPStr **reffiles;
     AjBool *Skip;
 
     AjPFile libs;
     AjPFile libr;
 
     ajuint div;
+    ajuint refcount;
     ajint nentries;
 
     AjBool Samefile;
-    char Padding[4];
 } TaxOEmbossQry;
 
 #define TaxPEmbossQry TaxOEmbossQry*
@@ -117,7 +134,7 @@ static AjBool     taxAccessEmbossTax(AjPTaxin taxin);
 
 
 
-/* @funclist taxAccess ******************************************************
+/* @funclist taxAccess ********************************************************
 **
 ** Functions to access each database or taxonomy access method
 **
@@ -125,16 +142,19 @@ static AjBool     taxAccessEmbossTax(AjPTaxin taxin);
 
 static AjOTaxAccess taxAccess[] =
 {
-  /* Name      AccessFunction   FreeFunction
-     Qlink    Description
-     Alias    Entry    Query    All      Chunk */
-    {"embosstax",	 taxAccessEmbossTax, NULL,
-     "",      "emboss dbxtax indexed",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    /*  Name     AccessFunction   FreeFunction
+        Qlink    Description
+        Alias    Entry    Query    All      Chunk   Padding */
+    {
+        "embosstax", &taxAccessEmbossTax, NULL,
+        "",      "emboss dbxtax indexed",
+        AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {NULL, NULL, NULL,
-     NULL, NULL,
-     AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE},
+    {
+        NULL, NULL, NULL,
+        NULL, NULL,
+        AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE
+    },
 };
 
 
@@ -149,7 +169,7 @@ static AjOTaxAccess taxAccess[] =
 
 
 
-/* @funcstatic taxAccessEmbossTax ********************************************
+/* @funcstatic taxAccessEmbossTax *********************************************
 **
 ** Reads taxon(s) from an NCBI taxonomy database, using B+tree index
 ** files. Returns with the file pointer set to the position in the
@@ -157,6 +177,8 @@ static AjOTaxAccess taxAccess[] =
 **
 ** @param [u] taxin [AjPTaxin] Taxon input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -235,12 +257,14 @@ static AjBool taxAccessEmbossTax(AjPTaxin taxin)
 
 
 
-/* @funcstatic taxEmbossTaxAll ***********************************************
+/* @funcstatic taxEmbossTaxAll ************************************************
 **
 ** Opens the first or next taxonomy file for further reading
 **
 ** @param [u] taxin [AjPTaxin] Taxon input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -249,6 +273,7 @@ static AjBool taxEmbossTaxAll(AjPTaxin taxin)
     AjPQuery qry;
     TaxPEmbossQry qryd;
     static ajint i   = 0;
+    ajuint iref;
     AjPStr name      = NULL;
     AjBool ok        = ajFalse;
 /*
@@ -272,7 +297,9 @@ static AjBool taxEmbossTaxAll(AjPTaxin taxin)
 	i = -1;
 	ajBtreeReadEntriesS(qry->DbAlias,qry->IndexDir,
                             qry->Directory,
-                            &qryd->files,&qryd->reffiles);
+                            &qryd->files,
+                            &qryd->reffiles,
+                            &qryd->refcount);
 
 	taxin->Input->Single = ajTrue;
     }
@@ -333,7 +360,13 @@ static AjBool taxEmbossTaxAll(AjPTaxin taxin)
 	    while(qryd->files[i])
 	    {
 		ajStrDel(&qryd->files[i]);
-		ajStrDel(&qryd->reffiles[i]);
+
+                if(qryd->reffiles)
+                {
+                    for(iref=0; iref < qryd->refcount; iref++)
+                        ajStrDel(&qryd->reffiles[i][iref]);
+                }
+
 		++i;
 	    }
 
@@ -357,7 +390,7 @@ static AjBool taxEmbossTaxAll(AjPTaxin taxin)
 	}
 
 
-	qryd->libr = ajFileNewInNameS(qryd->reffiles[i]);
+	qryd->libr = ajFileNewInNameS(qryd->reffiles[i][0]);
 
 	if(!qryd->libr)
 	{
@@ -378,13 +411,15 @@ static AjBool taxEmbossTaxAll(AjPTaxin taxin)
 
 
 
-/* @funcstatic taxEmbossTaxLoadBuff ******************************************
+/* @funcstatic taxEmbossTaxLoadBuff *******************************************
 **
 ** Copies text data to a buffered file, and taxon data for an
 ** AjPTaxin internal data structure for reading later
 **
 ** @param [u] taxin [AjPTaxin] Taxon input object
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -416,12 +451,14 @@ static void taxEmbossTaxLoadBuff(AjPTaxin taxin)
 
 
 
-/* @funcstatic taxEmbossTaxReadRef *******************************************
+/* @funcstatic taxEmbossTaxReadRef ********************************************
 **
 ** Copies text data to a buffered file for reading later
 **
 ** @param [u] taxin [AjPTaxin] Taxon input object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -442,7 +479,7 @@ static AjBool taxEmbossTaxReadRef(AjPTaxin taxin)
     {
         taxid = 0;
         p = ajStrGetPtr(line);
-        while(isdigit(*p))
+        while(isdigit((int)*p))
             taxid = 10*taxid + (*p++ - '0');
         if(!firstid)
             firstid = taxid;
@@ -468,6 +505,8 @@ static AjBool taxEmbossTaxReadRef(AjPTaxin taxin)
 **
 ** @param [u] taxin [AjPTaxin] Taxon input object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -504,7 +543,7 @@ static AjBool taxEmbossTaxReadNode(AjPTaxin taxin)
 
 
 
-/* @funcstatic taxEmbossQryReuse *********************************************
+/* @funcstatic taxEmbossQryReuse **********************************************
 **
 ** Tests whether the B+tree index query data can be reused or it's finished.
 **
@@ -513,6 +552,8 @@ static AjBool taxEmbossTaxReadNode(AjPTaxin taxin)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if reusable,
 **                  ajFalse if finished.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -537,7 +578,7 @@ static AjBool taxEmbossQryReuse(AjPQuery qry)
     else
     {
 	ajDebug("taxEmbossQryReuse: reusing data from previous call %x "
-                "listsize:%u\n",
+                "listsize:%Lu\n",
 		qry->QryData, ajListGetLength(qry->ResultsList));
 	/*ajListTrace(qry->ResultsList);*/
     }
@@ -552,13 +593,15 @@ static AjBool taxEmbossQryReuse(AjPQuery qry)
 
 
 
-/* @funcstatic taxEmbossQryOpen **********************************************
+/* @funcstatic taxEmbossQryOpen ***********************************************
 **
 ** Open caches (etc) for B+tree search
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -602,7 +645,7 @@ static AjBool taxEmbossQryOpen(AjPQuery qry)
     ajListIterDel(&iter);
 
 
-    ajDebug("directory '%S'fields: %u hasacc:%B\n",
+    ajDebug("directory '%S'fields: %Lu hasacc:%B\n",
 	    qry->IndexDir, ajListGetLength(qry->QueryFields), qry->HasAcc);
 
 
@@ -628,7 +671,7 @@ static AjBool taxEmbossQryOpen(AjPQuery qry)
 
 
 
-/* @funcstatic taxEmbossOpenCache ********************************************
+/* @funcstatic taxEmbossOpenCache *********************************************
 **
 ** Create primary B+tree index cache
 **
@@ -636,6 +679,8 @@ static AjBool taxEmbossQryOpen(AjPQuery qry)
 ** @param [r] ext [const char*] Index file extension
 ** @param [w] cache [AjPBtcache*] cache
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -644,8 +689,6 @@ static AjBool taxEmbossOpenCache(AjPQuery qry, const char *ext,
 {
     TaxPEmbossQry qryd;
     AjPStr indexextname = NULL;
-
-    AjPBtpage page   = NULL;
 
     qryd = qry->QryData;
 
@@ -667,10 +710,8 @@ static AjBool taxEmbossOpenCache(AjPQuery qry, const char *ext,
                                              qry->IndexDir,
                                              qry->Directory,
                                              &qryd->files,
-                                             &qryd->reffiles);
-
-    page = ajBtreeCacheRead(*cache,0L);
-    page->dirty = BT_LOCK;
+                                             &qryd->reffiles,
+                                             &qryd->refcount);
 
     return ajTrue;
 }
@@ -679,19 +720,20 @@ static AjBool taxEmbossOpenCache(AjPQuery qry, const char *ext,
 
 
 
-/* @funcstatic taxEmbossQryEntry *********************************************
+/* @funcstatic taxEmbossQryEntry **********************************************
 **
 ** Queries for a single entry in a B+tree index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool taxEmbossQryEntry(AjPQuery qry)
 {
-    AjPBtId entry  = NULL;
     TaxPEmbossQry qryd;
     const AjPList fdlist;
     const AjPList cachelist;
@@ -702,7 +744,7 @@ static AjBool taxEmbossQryEntry(AjPQuery qry)
     
     qryd = qry->QryData;
 
-    ajDebug("taxEmbossQryEntry fields: %u hasacc:%B qrylist:%u\n",
+    ajDebug("taxEmbossQryEntry fields: %Lu hasacc:%B qrylist:%Lu\n",
 	    ajListGetLength(qry->QueryFields), qry->HasAcc,
             ajListGetLength(qry->ResultsList));
 
@@ -722,34 +764,17 @@ static AjBool taxEmbossQryEntry(AjPQuery qry)
         if((fd->Link == AJQLINK_ELSE) && ajListGetLength(qry->ResultsList))
                 continue;
 
-        if(ajBtreeCacheIsSecondary(cache))
+        if(!ajBtreeCacheIsSecondary(cache))
         {
-
-        }
-        else
-        {
-	    entry = ajBtreeIdFromKey(cache,fd->Wildquery);
-            ajDebug("id '%S' entry: %p\n", fd->Wildquery, entry);
-	    if(entry)
-	    {
-                ajDebug("entry id: '%S' dups: %u offset: %Ld\n",
-                        entry->id, entry->dups, entry->offset);
-		if(!entry->dups)
-		    ajListPushAppend(qry->ResultsList,(void *)entry);
-		else
-                {
-		    ajBtreeHybLeafList(cache,entry->offset,
-				       entry->id,qry->ResultsList);
-                    ajBtreeIdDel(&entry);
-                }
-	    }
+	    ajBtreeIdentFetchHitref(cache,fd->Wildquery,
+                                    qry->ResultsList);
         }
     }
   
     ajListIterDel(&iter);
     ajListIterDel(&icache);
 
-    ajDebug("  qrylist:%u\n", ajListGetLength(qry->ResultsList));
+    ajDebug("  qrylist:%Lu\n", ajListGetLength(qry->ResultsList));
 
     if(!ajListGetLength(qry->ResultsList))
 	return ajFalse;
@@ -763,18 +788,20 @@ static AjBool taxEmbossQryEntry(AjPQuery qry)
 
 
 
-/* @funcstatic taxEmbossQryNext **********************************************
+/* @funcstatic taxEmbossQryNext ***********************************************
 **
 ** Processes the next query for a B+tree index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if successful
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool taxEmbossQryNext(AjPQuery qry)
 {
-    AjPBtId entry;
+    AjPBtHitref entry;
     TaxPEmbossQry qryd;
     void* item;
     AjBool ok = ajFalse;
@@ -791,7 +818,7 @@ static AjBool taxEmbossQryNext(AjPQuery qry)
     if(!qryd->Skip)
     {
 	ajListPop(qry->ResultsList, &item);
-	entry = (AjPBtId) item;
+	entry = (AjPBtHitref) item;
     }
     else
     {
@@ -800,13 +827,13 @@ static AjBool taxEmbossQryNext(AjPQuery qry)
 	while(!ok)
 	{
 	    ajListPop(qry->ResultsList, &item);
-	    entry = (AjPBtId) item;
+	    entry = (AjPBtHitref) item;
 
 	    if(!qryd->Skip[entry->dbno])
 		ok = ajTrue;
 	    else
 	    {
-		ajBtreeIdDel(&entry);
+		ajBtreeHitrefDel(&entry);
 
 		if(!ajListGetLength(qry->ResultsList))
 		    return ajFalse;
@@ -832,7 +859,7 @@ static AjBool taxEmbossQryNext(AjPQuery qry)
 
 	if(!qryd->libs)
 	{
-	    ajBtreeIdDel(&entry);
+	    ajBtreeHitrefDel(&entry);
 
 	    return ajFalse;
 	}
@@ -841,11 +868,11 @@ static AjBool taxEmbossQryNext(AjPQuery qry)
     if(qryd->reffiles && !qryd->libr)
     {
 	ajFileClose(&qryd->libr);
-	qryd->libr = ajFileNewInNameS(qryd->reffiles[entry->dbno]);
+	qryd->libr = ajFileNewInNameS(qryd->reffiles[entry->dbno][0]);
 
 	if(!qryd->libr)
 	{
-	    ajBtreeIdDel(&entry);
+	    ajBtreeHitrefDel(&entry);
 
 	    return ajFalse;
 	}
@@ -856,7 +883,7 @@ static AjBool taxEmbossQryNext(AjPQuery qry)
     if(qryd->reffiles)
       ajFileSeek(qryd->libr, (ajlong) entry->refoffset, 0);
 
-    ajBtreeIdDel(&entry);
+    ajBtreeHitrefDel(&entry);
 
     if(!qry->CaseId)
 	qry->QryDone = ajTrue;
@@ -867,13 +894,15 @@ static AjBool taxEmbossQryNext(AjPQuery qry)
 
 
 
-/* @funcstatic taxEmbossQryClose *********************************************
+/* @funcstatic taxEmbossQryClose **********************************************
 **
 ** Closes query data for a B+tree index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -882,6 +911,7 @@ static AjBool taxEmbossQryClose(AjPQuery qry)
     TaxPEmbossQry qryd;
     void* item;
     ajint i;
+    ajuint iref;
 
     if(!qry)
 	return ajFalse;
@@ -891,7 +921,7 @@ static AjBool taxEmbossQryClose(AjPQuery qry)
 
     qryd = qry->QryData;
 
-    ajDebug("taxEmbossQryClose clean up qryd %x size:%u\n",
+    ajDebug("taxEmbossQryClose clean up qryd %x size:%Lu\n",
             qryd, ajListGetLength(qry->ResultsList));
 
     while(ajListGetLength(qryd->Caches))
@@ -916,8 +946,11 @@ static AjBool taxEmbossQryClose(AjPQuery qry)
 	{
 	    ajStrDel(&qryd->files[i]);
 
-	    if(qryd->reffiles)
-		ajStrDel(&qryd->reffiles[i]);
+            if(qryd->reffiles)
+            {
+                for(iref=0; iref < qryd->refcount; iref++)
+                    ajStrDel(&qryd->reffiles[i][iref]);
+            }
 
 	    ++i;
 	}
@@ -926,7 +959,12 @@ static AjBool taxEmbossQryClose(AjPQuery qry)
     }
 
     if(qryd->reffiles)
+    {
+        for(iref=0; iref < qryd->refcount; iref++)
+            AJFREE(qryd->reffiles[iref]);
+
 	AJFREE(qryd->reffiles);
+    }
 
     qryd->files = NULL;
     qryd->reffiles = NULL;
@@ -940,30 +978,35 @@ static AjBool taxEmbossQryClose(AjPQuery qry)
 
 
 
-/* @funcstatic taxEmbossQryQuery *********************************************
+/* @funcstatic taxEmbossQryQuery **********************************************
 **
 ** Queries for one or more entries in an EMBOSS B+tree index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool taxEmbossQryQuery(AjPQuery qry)
 {
     TaxPEmbossQry qryd;
-    AjPBtId   id   = NULL;
 
-    AjPList  tlist = NULL;
-    AjPStr   kwid  = NULL;
-    ajulong treeblock = 0L;
     const AjPList fdlist;
     const AjPList cachelist;
     AjIList iter;
     AjIList icache;
     AjPBtcache cache;
     AjPQueryField fd;
+    AjPBtHitref newhit;
+    AjPBtHitref *allhits = NULL;
+    AjPTable newtable = NULL;
+
+    ajuint i;
+    ajulong lasthits = 0UL;
+    ajulong fdhits = 0UL;
 
     if(!qry->CaseId)
 	qry->QryDone = ajTrue;
@@ -972,10 +1015,19 @@ static AjBool taxEmbossQryQuery(AjPQuery qry)
 
     cachelist = qryd->Caches;
 
+    ajTableSetDestroy(qry->ResultsTable, NULL, &ajBtreeHitrefDelVoid);
+    ajTableSettypeUser(qry->ResultsTable,
+                       &ajBtreeHitrefCmp, &ajBtreeHitrefHash);
+
     fdlist = ajQueryGetallFields(qry);
+
+    ajDebug("taxEmbossQryQuery wild: %B list:%Lu fields:%Lu\n",
+            qry->Wild, ajListGetLength(qry->ResultsList),
+            ajListGetLength(fdlist));
 
     iter = ajListIterNewread(fdlist);
     icache = ajListIterNewread(cachelist);
+
     while(!ajListIterDone(iter))
     {
         fd = ajListIterGet(iter);
@@ -983,74 +1035,119 @@ static AjBool taxEmbossQryQuery(AjPQuery qry)
 
         ajDebug("field '%S' query: '%S'\n", fd->Field, fd->Wildquery);
 
+        if((fd->Link == AJQLINK_ELSE) && (lasthits > 0))
+        {
+            continue;
+        }
+
         /* is this a primary or secondary key (check the cache)? */
 
         if(ajBtreeCacheIsSecondary(cache))
         {
             if(!qry->Wild)
             {
-                if(ajBtreePriFindKeywordLen(cache, fd->Wildquery,
-                                            &treeblock))
-                {
-                    tlist = ajBtreeSecLeafList(cache, treeblock);
-                        ajDebug("ajBtreeSecLeafList(%Ld)  results:%u\n",
-                                treeblock, ajListGetLength(tlist));
-
-                    while(ajListPop(tlist,(void **)&kwid))
-                    {
-                        ajStrFmtLower(&kwid);
-                        id = ajBtreeIdFromKey(qryd->idcache, kwid);
-                        ajDebug("ajBtreeIdFromKey id:%x\n",
-                                id);
-
-                        if(id)
-                        {
-                            if(!id->dups)
-                                ajListPushAppend(qry->ResultsList,(void *)id);
-                            else
-                            {
-                                ajBtreeHybLeafList(qryd->idcache,id->offset,
-                                                   id->id,qry->ResultsList);
-                                ajBtreeIdDel(&id);
-                            }
-                        }
-
-                        ajStrDel(&kwid);
-                    }
-
-                    ajListFree(&tlist);
-                }
-
-                ajListIterDel(&iter);
-                ajListIterDel(&icache);
-                return ajTrue;
+                ajBtreeKeyFetchHitref(cache, qryd->idcache,
+                                      fd->Wildquery, qry->ResultsList);
             }
             else
             {
-                ajBtreeListFromKeywordW(cache,fd->Wildquery,
-                                        qryd->idcache, qry->ResultsList);
-                ajListIterDel(&iter);
-                ajListIterDel(&icache);
-                return ajTrue;
+                ajBtreeKeyFetchwildHitref(cache, qryd->idcache,
+                                          fd->Wildquery, qry->ResultsList);
             }
         }
         else
         {
-            ajBtreeListFromKeyW(cache,fd->Wildquery,qry->ResultsList);
-            ajDebug("ajBtreeListFromKeyW results:%u\n",
+            ajBtreeIdentFetchwildHitref(cache,fd->Wildquery,qry->ResultsList);
+            ajDebug("ajBtreeIdentFetchwild results:%Lu\n",
                     ajListGetLength(qry->ResultsList));
 
-            if(ajListGetLength(qry->ResultsList))
-            {
-                ajListIterDel(&iter);
-                ajListIterDel(&icache);
-                return ajTrue;
-            }
         }
+
+        fdhits = ajListGetLength(qry->ResultsList);
+
+        switch(fd->Link)
+        {
+            case AJQLINK_INIT:
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                    ajTablePutClean(qry->ResultsTable, newhit, newhit,
+                                    NULL, &ajBtreeHitrefDelVoid);
+                break;
+
+            case AJQLINK_OR:
+                newtable = ajTableNewFunctionLen(fdhits,
+                                                 &ajBtreeHitrefCmp,
+                                                 &ajBtreeHitrefHash,
+                                                 NULL, &ajBtreeHitrefDelVoid);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                    ajTablePutClean(newtable, newhit, newhit,
+                                    NULL, &ajBtreeHitrefDelVoid);
+
+                ajTableMergeOr(qry->ResultsTable, newtable);
+                ajTableDel(&newtable);
+                break;
+
+            case AJQLINK_AND:
+                newtable = ajTableNewFunctionLen(fdhits,
+                                                 &ajBtreeHitrefCmp,
+                                                 &ajBtreeHitrefHash,
+                                                 NULL, &ajBtreeHitrefDelVoid);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                    ajTablePutClean(newtable, newhit, newhit,
+                                    NULL, &ajBtreeHitrefDelVoid);
+
+                ajTableMergeAnd(qry->ResultsTable, newtable);
+                ajTableDel(&newtable);
+                break;
+
+            case AJQLINK_EOR:
+            case AJQLINK_ELSE:
+                newtable = ajTableNewFunctionLen(fdhits,
+                                                 &ajBtreeHitrefCmp,
+                                                 &ajBtreeHitrefHash,
+                                                 NULL, &ajBtreeHitrefDelVoid);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                    ajTablePutClean(newtable, newhit, newhit,
+                                    NULL, &ajBtreeHitrefDelVoid);
+
+                ajTableMergeEor(qry->ResultsTable, newtable);
+                ajTableDel(&newtable);
+                break;
+
+            case AJQLINK_NOT:
+                newtable = ajTableNewFunctionLen(fdhits,
+                                                 &ajBtreeHitrefCmp,
+                                                 &ajBtreeHitrefHash,
+                                                 NULL, &ajBtreeHitrefDelVoid);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                    ajTablePutClean(newtable, newhit, newhit,
+                                    NULL, &ajBtreeHitrefDelVoid);
+
+                ajTableMergeNot(qry->ResultsTable, newtable);
+                ajTableDel(&newtable);
+                break;
+
+            default:
+                ajErr("Unexpected query link operator number '%u'",
+                      fd->Link);
+                break;
+        }
+
+        lasthits = fdhits;
     }
 
     ajListIterDel(&iter);
     ajListIterDel(&icache);
+
+    ajTableToarrayValues(qry->ResultsTable, (void***)&allhits);
+    for(i=0; allhits[i]; i++)
+        ajListPushAppend(qry->ResultsList, (void*) allhits[i]);
+
+    AJFREE(allhits);
+
+    ajTableClear(qry->ResultsTable);
+
+    if(ajListGetLength(qry->ResultsList))
+        return ajTrue;
 
     return ajFalse;
 }
@@ -1058,11 +1155,13 @@ static AjBool taxEmbossQryQuery(AjPQuery qry)
 
 
 
-/* @func ajTaxdbInit ********************************************************
+/* @func ajTaxdbInit **********************************************************
 **
 ** Initialise taxonomy database internals
 **
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajTaxdbInit(void)
@@ -1092,6 +1191,8 @@ void ajTaxdbInit(void)
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1120,11 +1221,13 @@ void ajTaxdbPrintAccess(AjPFile outf, AjBool full)
 
 
 
-/* @func ajTaxdbExit ********************************************************
+/* @func ajTaxdbExit **********************************************************
 **
 ** Cleans up taxonomy database processing internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

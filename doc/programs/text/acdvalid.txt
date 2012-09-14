@@ -39,6 +39,35 @@ Command line arguments
    command line parameters and qualifiers are defined for that program -
    see the documentation for the program of choice.
 
+Validate an application ACD file
+Version: EMBOSS:6.5.0.0
+
+   Standard (Mandatory) qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+
+Input file format
+
+   The input is whatever the chosen application reads.
+
 Output file format
 
    The output file is empty, but any format available to the specified

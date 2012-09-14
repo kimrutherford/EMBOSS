@@ -1,37 +1,56 @@
-/******************************************************************************
-** @source AJAX TEXTDB (database) functions
+/* @source ajtextdb ***********************************************************
+**
+** AJAX TEXTDB (database) functions
 **
 ** These functions control all aspects of AJAX text-based database access
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.73 $
 ** @modified Sep 27 pmr First version using code originally in ajseqdb
+** @modified $Date: 2012/07/14 16:50:25 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
-#include "ajseqdb.h"
+
+#include "ajlib.h"
+
 #include "ajtextdb.h"
+#include "ajtextread.h"
+
+#include "ajtable.h"
+#include "ajfileio.h"
+#include "ajindex.h"
 #include "ajsoap.h"
+#include "ajcall.h"
+#include "ajreg.h"
+#include "ajhttp.h"
+#include "ajquery.h"
+#include "ajnam.h"
+#include "ajseq.h"
 
 #include <limits.h>
 #include <stdarg.h>
 #include <sys/types.h>
+#include <errno.h>
+#include <signal.h>
+
+
 #ifndef WIN32
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -45,8 +64,6 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #endif
-#include <errno.h>
-#include <signal.h>
 
 
 static AjPRegexp textCdDivExp = NULL;
@@ -61,6 +78,57 @@ static AjPRegexp textRegDbfetchErr = NULL;
 
 static char* textCdName = NULL;
 static ajuint textCdMaxNameSize = 0;
+
+static AjPStr textObdaName = NULL;
+static AjPStr textObdaTmpName = NULL;
+
+
+
+
+/* @datastatic TextPObdaFile **************************************************
+**
+** OBDA division file record structure
+**
+** @alias TextSObdaFile
+** @alias TextOObdaFile
+**
+** @attr File [AjPFile] File
+** @attr NRecords [ajulong] Index record count
+** @attr RecSize [ajulong] Record length (for calculating record offsets)
+** @@
+******************************************************************************/
+
+typedef struct TextSObdaFile
+{
+    AjPFile File;
+    ajulong NRecords;
+    ajulong RecSize;
+} TextOObdaFile;
+
+#define TextPObdaFile TextOObdaFile*
+
+
+
+
+/* @datastatic TextPObdaEntry *************************************************
+**
+** OBDA ID index file record structure
+**
+** @alias TextSObdaEntry
+** @alias TextOObdaEntry
+**
+** @attr div [ajuint] config file record
+** @attr annoff [ajulong] data file offset
+** @@
+******************************************************************************/
+
+typedef struct TextSObdaEntry
+{
+    ajuint div;
+    ajulong annoff;
+} TextOObdaEntry;
+
+#define TextPObdaEntry TextOObdaEntry*
 
 
 
@@ -207,6 +275,54 @@ typedef struct TextSCdHit
 
 
 
+/* @datastatic TextPObdaIdx ***************************************************
+**
+** EMBLCD entryname index file record structure
+**
+** @alias TextSObdaIdx
+** @alias TextOObdaIdx
+**
+** @attr AnnOffset [ajulong] Data file offset (see DivCode)
+** @attr EntryName [AjPStr] Entry ID - the file is sorted by these
+** @attr DivCode [ajuint] Division file record
+** @attr Padding [char[4]] Padding to alignment boundary
+** @@
+******************************************************************************/
+
+typedef struct TextObdaIdx
+{
+    ajulong AnnOffset;
+    AjPStr EntryName;
+    ajuint DivCode;
+    char Padding[4];
+} TextOObdaIdx;
+
+#define TextPObdaIdx TextOObdaIdx*
+
+
+
+
+/* @datastatic TextPObdaSecidx ************************************************
+**
+** OBDA secondary index file record structure
+**
+** @alias TextSObdaSecidx
+** @alias TextOObdaSecidx
+**
+** @attr Target [AjPStr] Indexed target string (the file is sorted by these)
+** @@
+******************************************************************************/
+
+typedef struct TextSObdaSecidx
+{
+    AjPStr Target;
+} TextOObdaSecidx;
+
+#define TextPObdaSecidx TextOObdaSecidx*
+
+
+
+
 /* @datastatic TextPCdIdx *****************************************************
 **
 ** EMBLCD entryname index file record structure
@@ -278,11 +394,10 @@ typedef struct TextSCdTrg
 ** @attr nameSize [ajuint] division.lkp filename length
 ** @attr div [ajuint] current division number
 ** @attr maxdiv [ajuint] max division number
+** @attr Samefile [AjBool] true if the same file is used
 ** @attr libt [AjPFile] main data file
 ** @attr Skip [AjBool*] skip file(s) in division.lkp
 ** @attr idxLine [TextPCdIdx] entryname.idx input line
-** @attr Samefile [AjBool] true if the same file is used
-** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -303,12 +418,12 @@ typedef struct TextSCdQry
     ajuint div;
     ajuint maxdiv;
 
+    AjBool Samefile;
+
     AjPFile libt;
 
     AjBool* Skip;
     TextPCdIdx idxLine;
-    AjBool Samefile;
-    char Padding[4];
 } TextOCdQry;
 
 #define TextPCdQry TextOCdQry*
@@ -316,9 +431,67 @@ typedef struct TextSCdQry
 
 
 
+/* @datastatic TextPObdaQry ***************************************************
+**
+** OBDA query structure
+**
+** @alias TextSEmbossQry
+** @alias TextOEmbossQry
+**
+** @attr divfile  [AjPStr] division.lkp
+** @attr idxname  [AjPStr] primary index file name
+** @attr files    [AjPStr*]    Database filenames
+** @attr idxfiles [AjPStr*]    Index filenames
+** @attr Skip     [AjBool*]    Files numbers to exclude
+** @attr dfp [TextPObdaFile] config.dat
+** @attr ifp [TextPObdaFile] key_ID.key
+** @attr trgfp [TextPObdaFile] id_ACC.index
+** @attr idxLine [TextPObdaIdx]  key_ID.key input line
+** @attr trgLine [TextPObdaSecidx] secondary index input line
+** @attr libt     [AjPFile]    Primary (database source) file
+** @attr nfiles   [ajuint]     Number of data files
+** @attr nindex   [ajuint]     Number of index files
+** @attr ifile    [ajuint]     Division number of currently open database file
+** @attr nentries [ajint]      Number of entries in the filename array(s)
+**                               -1 when done
+** @attr Samefile [AjBool]     True if the same file is passed to
+**                               ajFilebuffReopenFile
+** @attr Padding  [char[4]]    Padding to alignment boundary
+** @@
+******************************************************************************/
+
+typedef struct TextSObdaQry
+{
+    AjPStr divfile;
+    AjPStr idxname;
+    AjPStr *files;
+    AjPStr *idxfiles;
+    AjBool *Skip;
+
+    TextPObdaFile dfp;
+    TextPObdaFile ifp;
+    TextPObdaFile trgfp;
+
+    TextPObdaIdx idxLine;
+    TextPObdaSecidx trgLine;
+    AjPFile libt;
+    
+    ajuint nfiles;
+    ajuint nindex;
+    ajuint ifile;
+    ajint nentries;
+    AjBool Samefile;
+    char Padding[4];
+} TextOObdaQry;
+
+#define TextPObdaQry TextOObdaQry*
+
+
+
+
 /* @datastatic TextPEmbossQry *************************************************
 **
-** Btree 'emboss' query structure
+** B+tree 'emboss' query structure
 **
 ** @alias TextSEmbossQry
 ** @alias TextOEmbossQry
@@ -430,6 +603,7 @@ static char*         textWsdbfetchGetEntryPtr(axiom_node_t *wsResult,
 
 #endif
 
+static AjBool      textObdaConfigOpen(AjPQuery qry);
 static AjBool      textAccessApp(AjPTextin textin);
 /* static AjBool     textAccessCmd(AjPTextin textin);*/ /* not implemented */
 static AjBool      textAccessDbfetch(AjPTextin textin);
@@ -440,10 +614,12 @@ static AjBool      textAccessEmboss(AjPTextin textin);
 static AjBool      textAccessEntrez(AjPTextin textin);
 static AjBool      textAccessFreeEmblcd(void* qry);
 static AjBool      textAccessFreeEmboss(void* qry);
+static AjBool      textAccessFreeObda(void* qry);
 static AjBool      textAccessMrs5(AjPTextin textin);
 static AjBool      textAccessMrs4(AjPTextin textin);
 static AjBool      textAccessMrs3(AjPTextin textin);
 /* static AjBool      textAccessNbrf(AjPTextin textin); */ /* obsolete */
+static AjBool      textAccessObda(AjPTextin textin);
 static AjBool      textAccessSeqhound(AjPTextin textin);
 static AjBool      textAccessSrs(AjPTextin textin);
 static AjBool      textAccessSrsfasta(AjPTextin textin);
@@ -454,39 +630,65 @@ static AjBool      textAccessWsdbfetch(AjPTextin textin);
 static void        textCdIdxDel(TextPCdIdx* pthys);
 static void        textCdTrgDel(TextPCdTrg* pthys);
 
+static void        textObdaIdxDel(TextPObdaIdx* pthys);
+static void        textObdaSecDel(TextPObdaSecidx* pthys);
+
 static AjBool      textCdAll(AjPTextin textin);
+static int         textObdaEntryCmp(const void* a, const void* b);
 static int         textCdEntryCmp(const void* a, const void* b);
 static void        textCdEntryDel(void** pentry, void* cl);
 static void        textCdFileClose(TextPCdFile *thys);
+static TextPObdaFile textObdaFileOpen(const AjPStr dir, const AjPStr name,
+                                      AjPStr* fullname);
 static TextPCdFile textCdFileOpen(const AjPStr dir, const char* name,
                                   AjPStr* fullname);
+static ajint       textObdaFileSeek(TextPObdaFile fil, ajulong ipos);
 static ajint       textCdFileSeek(TextPCdFile fil, ajuint ipos);
 static void        textCdIdxLine(TextPCdIdx idxLine,  ajuint ipos,
                             TextPCdFile fp);
+static void        textObdaIdxLine(TextPObdaIdx idxLine,  ajulong ipos,
+                                   TextPObdaFile fp);
+static const AjPStr textObdaIdxName(ajulong ipos, TextPObdaFile fp);
 static char*       textCdIdxName(ajuint ipos, TextPCdFile fp);
 static AjBool      textCdIdxQuery(AjPQuery qry, const AjPStr idqry);
 static ajuint      textCdIdxSearch(TextPCdIdx idxLine, const AjPStr entry,
 				 TextPCdFile fp);
+static AjBool      textObdaIdxQuery(AjPQuery qry, const AjPStr idqry);
+static ajlong      textObdaIdxSearch(TextPObdaIdx idxLine, const AjPStr entry,
+                                     TextPObdaFile fp);
 static AjBool      textCdQryClose(AjPQuery qry);
 static AjBool      textCdQryEntry(AjPQuery qry);
+static AjBool      textObdaQryFile(AjPQuery qry);
 static AjBool      textCdQryFile(AjPQuery qry);
 static AjBool      textCdQryOpen(AjPQuery qry);
 static AjBool      textCdQryNext(AjPQuery qry);
 static AjBool      textCdQryQuery(AjPQuery qry);
 static AjBool      textCdQryReuse(AjPQuery qry);
 static AjBool      textCdReadHeader(TextPCdFile fp);
+static AjBool      textObdaSecClose(TextPObdaFile *trgfil);
 static AjBool      textCdTrgClose(TextPCdFile *trgfil, TextPCdFile *hitfil);
+static ajuint      textObdaSecFind(AjPQuery qry, const char* indexname,
+                                  const AjPStr qrystring);
 static ajuint      textCdTrgFind(AjPQuery qry, const char* indexname,
 			       const AjPStr qrystring);
 static void        textCdTrgLine(TextPCdTrg trgLine, ajuint ipos,
 			       TextPCdFile fp);
+static void        textObdaSecLine(TextPObdaSecidx trgLine, ajulong ipos,
+                                   TextPObdaFile fp);
+static const AjPStr textObdaSecName(ajulong ipos, TextPObdaFile fp);
 static char*       textCdTrgName(ajuint ipos, TextPCdFile fp);
 static AjBool      textCdTrgOpen(const AjPStr dir, const char* name,
 			       TextPCdFile *trgfil, TextPCdFile *hitfil);
+static AjBool      textObdaSecOpen(const AjPStr dir, const char* name,
+                                   TextPObdaFile *trgfil);
+static AjBool      textObdaSecQuery(AjPQuery qry, const AjPStr field,
+                                    const AjPStr wildqry);
 static AjBool      textCdTrgQuery(AjPQuery qry, const AjPStr field,
                                 const AjPStr wildqry);
-static ajuint      textCdTrgSearch(TextPCdTrg trgLine, const AjPStr name,
+static ajint      textCdTrgSearch(TextPCdTrg trgLine, const AjPStr name,
 				TextPCdFile fp);
+static ajlong      textObdaSecSearch(TextPObdaSecidx trgLine, const AjPStr name,
+                                     TextPObdaFile fp);
 
 static AjBool      textEmbossAll(AjPTextin textin);
 
@@ -495,9 +697,20 @@ static AjBool	   textEmbossOpenCache(AjPQuery qry, const char* ext,
 static AjBool      textEmbossQryOpen(AjPQuery qry);
 static AjBool      textEmbossQryClose(AjPQuery qry);
 static AjBool      textEmbossQryEntry(AjPQuery qry);
+static AjBool      textEmbossQryNamespace(AjPQuery qry);
 static AjBool      textEmbossQryNext(AjPQuery qry);
+static AjBool      textEmbossQryOrganisms(AjPQuery qry);
 static AjBool      textEmbossQryQuery(AjPQuery qry);
 static AjBool      textEmbossQryReuse(AjPQuery qry);
+
+static AjBool      textObdaAll(AjPTextin textin);
+
+static AjBool      textObdaQryOpen(AjPQuery qry);
+static AjBool      textObdaQryClose(AjPQuery qry);
+static AjBool      textObdaQryEntry(AjPQuery qry);
+static AjBool      textObdaQryNext(AjPQuery qry);
+static AjBool      textObdaQryQuery(AjPQuery qry);
+static AjBool      textObdaQryReuse(AjPQuery qry);
 
 static AjBool      textEntrezQryNext(AjPQuery qry, AjPTextin textin);
 static AjBool      textSeqhoundQryNext(AjPQuery qry, AjPTextin textin);
@@ -517,91 +730,118 @@ static AjOTextAccess textAccess[] =
 {
   /* Name      AccessFunction   FreeFunction
      Qlink,   Description
-     Alias    Entry    Query    All      Chunk */
+     Alias    Entry    Query    All      Chunk   Padding*/
 
-    {"dbfetch", textAccessDbfetch, NULL,
-     "|",      "retrieve in text format from EBI dbfetch REST services",
-     AJFALSE, AJTRUE,  AJFALSE, AJFALSE, AJFALSE
+    {
+      "dbfetch", &textAccessDbfetch, NULL,
+      "|",      "retrieve in text format from EBI dbfetch REST services",
+      AJFALSE, AJTRUE,  AJFALSE, AJFALSE, AJFALSE, AJFALSE
     },
-    {"wsdbfetch", textAccessWsdbfetch, NULL,
-     "|",      "retrieve in range of formats from EBI WSDbfetch SOAP services",
-     AJFALSE, AJTRUE,  AJTRUE, AJFALSE, AJTRUE
+    {
+      "wsdbfetch", &textAccessWsdbfetch, NULL,
+      "|",      "retrieve in range of formats from EBI WSDbfetch SOAP services",
+      AJFALSE, AJTRUE,  AJTRUE, AJFALSE, AJTRUE, AJFALSE
     },
-    {"ebeye", textAccessEBeye, NULL,
-     "|&!",      "retrieve selected information from EBIeye SOAP services",
-     AJFALSE, AJTRUE,  AJTRUE, AJFALSE, AJTRUE
+    {
+      "ebeye", &textAccessEBeye, NULL,
+      "|&!",      "retrieve selected information from EBIeye SOAP services",
+      AJFALSE, AJTRUE,  AJTRUE, AJFALSE, AJTRUE, AJFALSE
     },
-    {"emboss",  textAccessEmboss, textAccessFreeEmboss,
-     "|&!^=", "dbx program indexed",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "emboss",  &textAccessEmboss, &textAccessFreeEmboss,
+      "|&!^=", "dbx program indexed",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {"emblcd", 	 textAccessEmblcd, textAccessFreeEmblcd,
-     "|&!^=", "use EMBL-CD index from dbi programs or Staden",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "emblcd", 	 &textAccessEmblcd, &textAccessFreeEmblcd,
+      "|&!^=", "use EMBL-CD index from dbi programs or Staden",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {"entrez",	 textAccessEntrez, NULL,
-     "",      "use NCBI Entrez services",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "entrez",	 &textAccessEntrez, NULL,
+      "",      "use NCBI Entrez services",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {"seqhound",  textAccessSeqhound, NULL,
-     "",      "use BluePrint seqhound services",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "seqhound",  &textAccessSeqhound, NULL,
+      "",      "use BluePrint seqhound services",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {"mrs",	 textAccessMrs5, NULL,
-     "",      "retrieve in text format from CMBI MRS5 server",
-     AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
+    {
+      "mrs",	 &textAccessMrs5, NULL,
+      "",      "retrieve in text format from CMBI MRS5 server",
+      AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, AJFALSE, AJFALSE
     },
-    {"mrs4",	 textAccessMrs4, NULL,
-     "",      "retrieve in text format from CMBI MRS4 server",
-     AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
+    {
+      "mrs4",	 &textAccessMrs4, NULL,
+      "",      "retrieve in text format from CMBI MRS4 server",
+      AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, AJFALSE, AJFALSE
     },
-    {"mrs3",	 textAccessMrs3, NULL,
-     "",      "retrieve in text format from CMBI MRS3 server",
-     AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
+    {
+      "mrs3",	 &textAccessMrs3, NULL,
+      "",      "retrieve in text format from CMBI MRS3 server",
+      AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, AJFALSE, AJFALSE
     },
-    {"srs",	 textAccessSrs, NULL,
-     "|&!=",  "retrieve in text format from a local SRS installation",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "obda",     &textAccessObda,   &textAccessFreeObda,
+      "|&!^=", "use Open Biological Data Access index",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {"srsfasta",	 textAccessSrsfasta, NULL,
-     "|&!=",  "retrieve in FASTA format from a local SRS installation",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "srs",	 &textAccessSrs, NULL,
+      "|&!=",  "retrieve in text format from a local SRS installation",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {"srswww",	 textAccessSrswww, NULL,
-     "|&!=",      "retrieve in text format from an SRS webserver",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "srsfasta", &textAccessSrsfasta, NULL,
+      "|&!=",  "retrieve in FASTA format from a local SRS installation",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {"url",	 textAccessUrl, NULL,
-     "",      "retrieve content from a remote webserver URL",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "srswww",	 &textAccessSrswww, NULL,
+      "|&!=",      "retrieve in text format from an SRS webserver",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {"app",	 textAccessApp, NULL,
-     "",      "call an external application",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "url",	 &textAccessUrl, NULL,
+      "",      "retrieve content from a remote webserver URL",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {"external",	 textAccessApp, NULL,
-     "",      "call an external application",
-     AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "app",	 &textAccessApp, NULL,
+      "",      "call an external application",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    /* {"asis",	 ajTextAccessAsis, NULL,
+    {
+      "external", &textAccessApp, NULL,
+      "",      "call an external application",
+      AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
+    },
+    /* {
+       "asis",	 &ajTextAccessAsis, NULL,
        "",      "",
-       AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE
+       AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE, AJFALSE
        }, */        /* called by seqUsaProcess */
-    /* {"file",	 ajTextAccessFile, NULL,
+    /* {
+       "file",	 &ajTextAccessFile, NULL,
        "",      "",
-       AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE 
+       AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE, AJFALSE
        }, */        /* called by seqUsaProcess */
-    /* {"offset",	 ajTextAccessOffset, NULL,
+    /* {
+       "offset", &ajTextAccessOffset, NULL,
        "",      "",
-       AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE
+       AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE, AJFALSE
        }, */    /* called by seqUsaProcess */
-    {"direct",	 textAccessDirect, NULL,
-     "DATA",  "reading the original files unindexed",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "direct",	 &textAccessDirect, NULL,
+      "DATA",  "reading the original files unindexed",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {NULL, NULL, NULL,
-     NULL, NULL,
-     AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE},
+    {
+      NULL, NULL, NULL,
+      NULL, NULL,
+      AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE
+    },
 
 /* after the NULL access method, and so unreachable.
 ** seqhound requires a username and password which it prompts for
@@ -617,6 +857,8 @@ static AjOTextAccess textAccess[] =
 ** Initialise text database internals
 **
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajTextdbInit(void)
@@ -663,12 +905,14 @@ void ajTextdbInit(void)
 
 
 
-/* @funcstatic textAccessEmblcd ************************************************
+/* @funcstatic textAccessEmblcd ***********************************************
 **
 ** Reads a text entry using EMBL CD-ROM index files.
 **
 ** @param [u] textin [AjPTextin] Text input, including query data.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -715,7 +959,7 @@ static AjBool textAccessEmblcd(AjPTextin textin)
 
 	if(qry->QueryType == AJQUERY_ENTRY)
 	{
-	    ajDebug("entry fields: %u hasacc:%B\n",
+	    ajDebug("entry fields: %Lu hasacc:%B\n",
 		    ajListGetLength(qry->QueryFields), qry->HasAcc);
 	    if(!textCdQryEntry(qry))
 	    {
@@ -725,7 +969,7 @@ static AjBool textAccessEmblcd(AjPTextin textin)
                 while(!ajListIterDone(iter))
                 {
                     field = ajListIterGet(iter);
-		    ajDebug("Database Entry '%S-%S' not found\n",
+		    ajDebug("Database Entry '%S:%S' not found\n",
                             field->Field, field->Wildquery);
                 }
                 ajListIterDel(&iter);
@@ -734,7 +978,7 @@ static AjBool textAccessEmblcd(AjPTextin textin)
 
 	if(qry->QueryType == AJQUERY_QUERY)
 	{
-	    ajDebug("query fields: %u hasacc:%B\n",
+	    ajDebug("query fields: %Lu hasacc:%B\n",
 		    ajListGetLength(qry->QueryFields), qry->HasAcc);
 
 	    if(!textCdQryQuery(qry))
@@ -745,7 +989,7 @@ static AjBool textAccessEmblcd(AjPTextin textin)
                 while(!ajListIterDone(iter))
                 {
                     field = ajListIterGet(iter);
-		    ajDebug("Database Query '%S-%S' not found\n",
+		    ajDebug("Database Query '%S:%S' not found\n",
                             field->Field, field->Wildquery);
                 }
                 ajListIterDel(&iter);
@@ -766,7 +1010,7 @@ static AjBool textAccessEmblcd(AjPTextin textin)
         }
     }
 
-    if(!ajListGetLength(qry->ResultsList)) /* could have been emptied by code above */
+    if(!ajListGetLength(qry->ResultsList)) /* could be emptied by code above */
     {
 	textCdQryClose(qry);
 
@@ -793,12 +1037,14 @@ static AjBool textAccessEmblcd(AjPTextin textin)
 
 
 
-/* @funcstatic textAccessFreeEmblcd ********************************************
+/* @funcstatic textAccessFreeEmblcd *******************************************
 **
 ** Frees data specific to reading EMBL CD-ROM index files.
 **
 ** @param [r] qry [void*] query data specific to EMBLCD
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -822,13 +1068,15 @@ static AjBool textAccessFreeEmblcd(void* qry)
 
 
 
-/* @funcstatic textCdAll *******************************************************
+/* @funcstatic textCdAll ******************************************************
 **
 ** Reads the EMBLCD division lookup file and opens a list of all the
 ** database files for plain reading.
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -916,7 +1164,7 @@ static AjBool textCdAll(AjPTextin textin)
 
 
 
-/* @funcstatic textCdFileOpen **************************************************
+/* @funcstatic textCdFileOpen *************************************************
 **
 ** Opens a named EMBL CD-ROM index file.
 **
@@ -924,11 +1172,13 @@ static AjBool textCdAll(AjPTextin textin)
 ** @param [r] name [const char*] File name.
 ** @param [w] fullname [AjPStr*] Full file name with directory path
 ** @return [TextPCdFile] EMBL CD-ROM index file object.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static TextPCdFile textCdFileOpen(const AjPStr dir, const char* name,
-				AjPStr* fullname)
+                                  AjPStr* fullname)
 {
     TextPCdFile thys = NULL;
 
@@ -963,13 +1213,42 @@ static TextPCdFile textCdFileOpen(const AjPStr dir, const char* name,
 
 
 
-/* @funcstatic textCdFileSeek **************************************************
+/* @funcstatic textObdaFileSeek ***********************************************
+**
+** Sets the file position in an OBDA index file.
+**
+** @param [u] fil [TextPObdaFile] EMBL CD-ROM index file object.
+** @param [r] ipos [ajulong] Offset.
+** @return [ajint] Return value from the seek operation.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+
+static ajint textObdaFileSeek(TextPObdaFile fil, ajulong ipos)
+{
+    ajint ret;
+    ajulong jpos;
+
+    jpos = 4 + ipos*(fil->RecSize);
+    ret = ajFileSeek(fil->File, jpos, 0);
+
+    return ret;
+}
+
+
+
+
+/* @funcstatic textCdFileSeek *************************************************
 **
 ** Sets the file position in an EMBL CD-ROM index file.
 **
 ** @param [u] fil [TextPCdFile] EMBL CD-ROM index file object.
 ** @param [r] ipos [ajuint] Offset.
 ** @return [ajint] Return value from the seek operation.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -993,12 +1272,45 @@ static ajint textCdFileSeek(TextPCdFile fil, ajuint ipos)
 
 
 
-/* @funcstatic textCdFileClose *************************************************
+/* @funcstatic textObdaFileClose **********************************************
+**
+** Closes an OBDA index file.
+**
+** @param [d] pthis [TextPObdaFile*] EMBL OBDA index file.
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void textObdaFileClose(TextPObdaFile* pthis)
+{
+    TextPObdaFile thys;
+
+    thys = *pthis;
+
+    if(!thys)
+        return;
+
+    ajDebug("textObdaFileClose of %F\n", (*pthis)->File);
+
+    ajFileClose(&thys->File);
+    AJFREE(*pthis);
+
+    return;
+}
+
+
+
+
+/* @funcstatic textCdFileClose ************************************************
 **
 ** Closes an EMBL CD-ROM index file.
 **
 ** @param [d] pthis [TextPCdFile*] EMBL CD-ROM index file.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1023,7 +1335,7 @@ static void textCdFileClose(TextPCdFile* pthis)
 
 
 
-/* @funcstatic textCdIdxSearch *************************************************
+/* @funcstatic textCdIdxSearch ************************************************
 **
 ** Binary search through an EMBL CD-ROM index file for an exact match.
 **
@@ -1031,11 +1343,13 @@ static void textCdFileClose(TextPCdFile* pthis)
 ** @param [r] entry [const AjPStr] Entry name to search for.
 ** @param [u] fil [TextPCdFile] EMBL CD-ROM index file.
 ** @return [ajuint] Record number on success, -1 on failure.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static ajuint textCdIdxSearch(TextPCdIdx idxLine, const AjPStr entry,
-			    TextPCdFile fil)
+                              TextPCdFile fil)
 {
     AjPStr entrystr = NULL;
     ajint ihi;
@@ -1085,7 +1399,68 @@ static ajuint textCdIdxSearch(TextPCdIdx idxLine, const AjPStr entry,
 
 
 
-/* @funcstatic textCdIdxQuery **************************************************
+/* @funcstatic textObdaIdxSearch **********************************************
+**
+** Binary search through an OBDA index file for an exact match.
+**
+** @param [u] idxLine [TextPObdaIdx] Index file record.
+** @param [r] entry [const AjPStr] Entry name to search for.
+** @param [u] fil [TextPObdaFile] OBDA index file.
+** @return [ajlong] Record number on success or -1 on failure.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static ajlong textObdaIdxSearch(TextPObdaIdx idxLine, const AjPStr entry,
+                                TextPObdaFile fil)
+{
+    AjPStr entrystr = NULL;
+    ajlong ihi;
+    ajlong ilo;
+    ajlong ipos = 0;
+    ajint icmp = 0;
+    const AjPStr name;
+
+    ajStrAssignS(&entrystr, entry);
+    ajStrFmtUpper(&entrystr);
+
+    ajDebug("textObdaIdxSearch (entry '%S') records: %u recsize: %u\n",
+	    entrystr, fil->NRecords, fil->RecSize);
+
+    ilo = 0;
+    ihi = fil->NRecords - 1;
+
+    while(ilo <= ihi)
+    {
+	ipos = (ilo + ihi)/2;
+	name = textObdaIdxName(ipos, fil);
+	icmp = ajStrCmpS(entrystr, name);
+	ajDebug("idx test %u '%S' %2d (+/- %u)\n", ipos, name, icmp, ihi-ilo);
+
+	if(!icmp)
+            break;
+
+	if(icmp < 0)
+	    ihi = ipos-1;
+	else
+	    ilo = ipos+1;
+    }
+
+    ajStrDel(&entrystr);
+
+    if(icmp)
+	return -1;
+
+    textObdaIdxLine(idxLine, ipos, fil);
+
+    return ipos;
+}
+
+
+
+
+/* @funcstatic textCdIdxQuery *************************************************
 **
 ** Binary search of an EMBL CD-ROM index file for entries matching a
 ** wildcard entry name.
@@ -1093,6 +1468,8 @@ static ajuint textCdIdxSearch(TextPCdIdx idxLine, const AjPStr entry,
 ** @param [u] qry [AjPQuery] Text query object.
 ** @param [r] idqry [const AjPStr] ID Query
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1287,7 +1664,209 @@ static AjBool textCdIdxQuery(AjPQuery qry, const AjPStr idqry)
 
 
 
-/* @funcstatic textCdTrgSearch *************************************************
+/* @funcstatic textObdaIdxQuery ***********************************************
+**
+** Binary search of an OBDA index file for entries matching a
+** wildcard entry name.
+**
+** @param [u] qry [AjPQuery] Text query object.
+** @param [r] idqry [const AjPStr] ID Query
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaIdxQuery(AjPQuery qry, const AjPStr idqry)
+{
+    TextPObdaQry qryd;
+
+    AjPList list;
+    TextPObdaIdx idxLine;
+    TextPObdaFile fil;
+
+    AjPStr idstr = NULL;
+    AjPStr idpref = NULL;
+    ajlong i;
+    ajlong ihi;
+    ajlong ilo;
+    ajlong ipos = 0L;
+    ajint icmp;
+    const AjPStr name;
+    ajuint ilen;
+    ajlong jlo;
+    ajlong jhi;
+    ajlong khi;
+    AjBool first;
+    ajuint ifail = 0;
+    ajuint iskip = 0;
+
+    TextPObdaEntry entry;
+
+    ajDebug("textObdaIdxQuery\n");
+
+    qryd    = qry->QryData;
+    list    = qry->ResultsList;
+    idxLine = qryd->idxLine;
+    fil     = qryd->ifp;
+
+    ajStrAssignS(&idstr,idqry);
+    ajStrFmtUpper(&idstr);
+    ajStrAssignS(&idpref, idstr);
+
+    ajStrRemoveWild(&idpref);
+
+    ajDebug("textObdaIdxQuery (wild '%S' prefix '%S')\n",
+	    idstr, idpref);
+
+    jlo = ilo = 0L;
+    khi = jhi = ihi = fil->NRecords-1;
+
+    ilen = ajStrGetLen(idpref);
+    first = ajTrue;
+
+    if(ilen)
+    {			       /* find first entry with this prefix */
+	while(ilo <= ihi)
+	{
+	    ipos = (ilo + ihi)/2;
+	    name = textObdaIdxName(ipos, fil);
+	    icmp = ajStrCmpS(idpref, name); /* test prefix */
+	    ajDebug("idx test %d '%S' %2d (+/- %d)\n",
+		    ipos, name, icmp, ihi-ilo);
+
+	    if(!icmp)
+	    {			     /* hit prefix - test for first */
+		ajDebug("idx hit %d\n", ipos);
+
+		if(first)
+		{
+		    jhi = ihi;
+		    first = ajFalse;
+		    khi = ipos;
+		}
+
+		jlo = ipos;
+	    }
+
+	    if(icmp > 0)
+		ilo = ipos+1;
+	    else
+		ihi = ipos-1;
+	}
+
+	if(first)
+	{			  /* failed to find any with prefix */
+	    ajStrDel(&idstr);
+	    ajStrDel(&idpref);
+
+	    return ajFalse;
+	}
+
+	ajDebug("first pass: ipos %d jlo %d jhi %d\n", ipos, jlo, jhi);
+
+	/* now search below for last */
+
+	ilo = jlo+1;
+	ihi = jhi;
+
+	while(ilo <= ihi)
+	{
+	    ipos = (ilo + ihi)/2;
+	    name = textObdaIdxName(ipos, fil);
+	    icmp = ajStrCmpS(idpref, name);
+	    ajDebug("idx test %d '%S' %2d (+/- %d)\n",
+		    ipos, name, icmp, ihi-ilo);
+
+	    if(!icmp)
+	    {				/* hit prefix */
+		ajDebug("idx hit %d\n", ipos);
+		khi = ipos;
+	    }
+
+	    if(icmp < 0)
+		ihi = ipos-1;
+	    else
+		ilo = ipos+1;
+	}
+
+	ajDebug("second pass: ipos %d jlo %d khi %d\n",
+		ipos, jlo, khi);
+
+	name = textObdaIdxName(jlo, fil);
+	ajDebug("first  %d '%S'\n", jlo, name);
+	name = textObdaIdxName(khi, fil);
+	ajDebug(" last  %d '%S'\n", khi, name);
+    }
+
+    for(i=jlo; i < (khi+1); i++)
+    {
+	textObdaIdxLine(idxLine, i, fil);
+
+	if(ajStrMatchWildS(idxLine->EntryName, idstr))
+	{
+	    if(!qryd->Skip[idxLine->DivCode])
+	    {
+		if(ifail)
+		{
+		    ajDebug("FAIL: %d entries\n", ifail);
+		    ifail=0;
+		}
+
+		if(iskip)
+		{
+		    ajDebug("SKIP: %d entries\n", iskip);
+		    iskip=0;
+		}
+
+		ajDebug("  OK: '%S' divcode %u AnnOffset %Lu\n",
+                        idxLine->EntryName, idxLine->DivCode,
+                        idxLine->AnnOffset);
+		AJNEW0(entry);
+		entry->div = idxLine->DivCode;
+		entry->annoff = idxLine->AnnOffset;
+		ajListPushAppend(list, (void*)entry);
+                entry = NULL;
+	    }
+	    else
+	    {
+		ajDebug("SKIP: '%S' [file %d]\n",
+			idxLine->EntryName, idxLine->DivCode);
+		iskip++;
+	    }
+	}
+	else
+	{
+	    ++ifail;
+	    /* ajDebug("FAIL: '%S' '%S'\n", idxLine->EntryName, idstr);*/
+	}
+    }
+
+    if(ifail)
+    {
+	ajDebug("FAIL: %d entries\n", ifail);
+	ifail=0;
+    }
+
+    if(iskip)
+    {
+	ajDebug("SKIP: %d entries\n", iskip);
+	ifail=0;
+    }
+
+    ajStrDel(&idstr);
+    ajStrDel(&idpref);
+
+    if(ajListGetLength(list))
+	return ajTrue;
+
+    return ajFalse;
+}
+
+
+
+
+/* @funcstatic textCdTrgSearch ************************************************
 **
 ** Binary search of EMBL CD-ROM target file, for example an accession number
 ** search.
@@ -1295,12 +1874,14 @@ static AjBool textCdIdxQuery(AjPQuery qry, const AjPStr idqry)
 ** @param [u] trgLine [TextPCdTrg] Target file record.
 ** @param [r] entry [const AjPStr] Entry name or accession number.
 ** @param [u] fp [TextPCdFile] EMBL CD-ROM target file
-** @return [ajuint] Record number, or -1 on failure.
+** @return [ajint] Record number, or -1 on failure.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static ajuint textCdTrgSearch(TextPCdTrg trgLine, const AjPStr entry,
-			     TextPCdFile fp)
+static ajint textCdTrgSearch(TextPCdTrg trgLine, const AjPStr entry,
+                              TextPCdFile fp)
 {
     AjPStr entrystr = NULL;
     ajint ihi;
@@ -1366,7 +1947,84 @@ static ajuint textCdTrgSearch(TextPCdTrg trgLine, const AjPStr entry,
 
 
 
-/* @funcstatic textCdIdxName ***************************************************
+/* @funcstatic textObdaSecSearch **********************************************
+**
+** Binary search of an OBDA secondary index, for example an accession number
+** search.
+**
+** @param [u] trgLine [TextPObdaSecidx] Target file record.
+** @param [r] entry [const AjPStr] Entry name or accession number.
+** @param [u] fp [TextPObdaFile] EMBL CD-ROM target file
+** @return [ajlong] Record number, or -1 on failure.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static ajlong textObdaSecSearch(TextPObdaSecidx trgLine, const AjPStr entry,
+                                TextPObdaFile fp)
+{
+    AjPStr entrystr = NULL;
+    ajlong ihi;
+    ajlong ilo;
+    ajlong ipos;
+    ajint icmp;
+    ajlong itry;
+    const AjPStr name;
+
+    ajStrAssignS(&entrystr, entry);
+    ajStrFmtUpper(&entrystr);
+
+    if(fp->NRecords < 1)
+      return -1;
+
+    ilo  = 0;
+    ihi  = fp->NRecords;
+    ipos = (ilo + ihi)/2;
+    icmp = -1;
+    ajDebug("textObdaSecSearch '%S' recSize: %d\n", entry, fp->RecSize);
+    name = textObdaSecName(ipos, fp);
+    icmp = ajStrCmpS(entrystr, name);
+
+    ajDebug("trg testa %d '%S' %2d (+/- %d)\n", ipos, name, icmp, ihi-ilo);
+
+    while(icmp)
+    {
+	if(icmp < 0)
+	    ihi = ipos;
+	else
+	    ilo = ipos;
+
+	itry = (ilo + ihi)/2;
+
+	if(itry == ipos)
+	{
+	    ajDebug("'%S' not found in .trg\n", entrystr);
+	    ajStrDel(&entrystr);
+
+	    return -1;
+	}
+
+	ipos = itry;
+	name = textObdaSecName(ipos, fp);
+	icmp = ajStrCmpS(entrystr, name);
+	ajDebug("trg testb %d '%S' %2d (+/- %d)\n",
+		 ipos, name, icmp, ihi-ilo);
+    }
+
+    textObdaSecLine(trgLine, ipos, fp);
+
+    ajStrDel(&entrystr);
+
+    ajDebug("found in .trg at record %d\n", ipos);
+
+    return ipos;
+}
+
+
+
+
+/* @funcstatic textCdIdxName **************************************************
 **
 ** Reads the name from record ipos of an EMBL CD-ROM index file.
 ** The name length is known from the index file object.
@@ -1374,6 +2032,8 @@ static ajuint textCdTrgSearch(TextPCdTrg trgLine, const AjPStr entry,
 ** @param [r] ipos [ajuint] Record number.
 ** @param [u] fil [TextPCdFile] EMBL CD-ROM index file.
 ** @return [char*] Name read from file.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1400,7 +2060,48 @@ static char* textCdIdxName(ajuint ipos, TextPCdFile fil)
 
 
 
-/* @funcstatic textCdIdxLine ***************************************************
+/* @funcstatic textObdaIdxName ************************************************
+**
+** Reads the name from record ipos of an OBDA index file.
+** The name length is known from the index file object.
+**
+** @param [r] ipos [ajulong] Record number.
+** @param [u] fil [TextPObdaFile] OBDA index file.
+** @return [const AjPStr] Name read from file.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static const AjPStr textObdaIdxName(ajulong ipos, TextPObdaFile fil)
+{
+    AjPStr token = NULL;
+    AjPStrTok handle = NULL;
+
+    textObdaFileSeek(fil, ipos);
+    ajReadbinStrTrim(fil->File, (size_t) fil->RecSize, &textObdaName);
+
+    if(ajStrParseCountC(textObdaName, "\t;") != 4)
+    {
+        ajErr("bad OBDA index record at %u in '%F'",
+              ipos, fil->File);
+        return NULL;
+    }
+    
+    handle = ajStrTokenNewC(textObdaName, "\t;");
+
+    ajStrTokenNextParse(&handle, &textObdaTmpName);
+
+    ajStrTokenDel(&handle);
+    ajStrDel(&token);
+   
+    return textObdaTmpName;
+}
+
+
+
+
+/* @funcstatic textCdIdxLine **************************************************
 **
 ** Reads a numbered record from an EMBL CD-ROM index file.
 **
@@ -1408,6 +2109,8 @@ static char* textCdIdxName(ajuint ipos, TextPCdFile fil)
 ** @param [r] ipos [ajuint] Record number.
 ** @param [u] fil [TextPCdFile] EMBL CD-ROM index file.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1443,13 +2146,96 @@ static void textCdIdxLine(TextPCdIdx idxLine, ajuint ipos, TextPCdFile fil)
 
 
 
-/* @funcstatic textCdTrgName ***************************************************
+/* @funcstatic textObdaIdxLine ************************************************
+**
+** Reads a numbered record from an OBDA index file.
+**
+** @param [u] idxLine [TextPObdaIdx] Index file record.
+** @param [r] ipos [ajulong] Record number.
+** @param [u] fil [TextPObdaFile] OBDA index file.
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void textObdaIdxLine(TextPObdaIdx idxLine, ajulong ipos,
+                            TextPObdaFile fil)
+{
+    AjPStr token = NULL;
+    AjPStrTok handle = NULL;
+
+    textObdaFileSeek(fil, ipos);
+
+    ajReadbinStrTrim(fil->File, (size_t) fil->RecSize, &textObdaName);
+
+    if(ajStrParseCountC(textObdaName, "\t") != 4)
+    {
+        ajErr("bad OBDA index record at %u in '%F'",
+              ipos, fil->File);
+        return;
+    }
+    
+    handle = ajStrTokenNewC(textObdaName, "\t");
+
+    ajStrTokenNextParse(&handle, &idxLine->EntryName);
+    ajStrTokenNextParse(&handle, &token);
+    ajStrToUint(token, &idxLine->DivCode);
+    ajStrTokenNextParse(&handle, &token);
+    ajStrToUlong(token, &idxLine->AnnOffset);
+
+    ajStrTokenDel(&handle);
+    ajStrDel(&token);
+
+    return;
+}
+
+
+
+
+/* @funcstatic textObdaSecName ************************************************
+**
+** Reads the target name from an OBDA secondary index
+**
+** @param [r] ipos [ajulong] Record number.
+** @param [u] fil [TextPObdaFile] OBDA secondary index file.
+** @return [const AjPStr] Name.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static const AjPStr textObdaSecName(ajulong ipos, TextPObdaFile fil)
+{
+    AjPStrTok handle = NULL;
+
+    textObdaFileSeek(fil, ipos);
+
+    ajReadbinStrTrim(fil->File, (size_t)fil->RecSize, &textObdaName);
+
+    handle = ajStrTokenNewC(textObdaName, "\t");
+
+    ajStrTokenNextParse(&handle, &textObdaTmpName);
+
+    ajDebug("textObdaSecName  ipos %u name '%S'\n",
+	    ipos, textObdaTmpName);
+
+    ajStrTokenDel(&handle);
+    return textObdaTmpName;
+}
+
+
+
+
+/* @funcstatic textCdTrgName **************************************************
 **
 ** Reads the target name from an EMBL CD-ROM index target file.
 **
 ** @param [r] ipos [ajuint] Record number.
 ** @param [u] fil [TextPCdFile] EMBL CD-ROM index target file.
 ** @return [char*] Name.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1484,7 +2270,45 @@ static char* textCdTrgName(ajuint ipos, TextPCdFile fil)
 
 
 
-/* @funcstatic textCdTrgLine ***************************************************
+/* @funcstatic textObdaSecLine ************************************************
+**
+** Reads a line from an OBDA secondary index
+**
+** @param [w] trgLine [TextPObdaSecidx] Target file record.
+** @param [r] ipos [ajulong] Record number.
+** @param [u] fil [TextPObdaFile] OBDA index target file.
+** @return [void].
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void textObdaSecLine(TextPObdaSecidx trgLine, ajulong ipos,
+                            TextPObdaFile fil)
+{
+    AjPStrTok handle = NULL;
+
+    textObdaFileSeek(fil, ipos);
+
+    ajReadbinStrTrim(fil->File, (size_t)fil->RecSize, &textObdaName);
+
+    handle = ajStrTokenNewC(textObdaName, "\t");
+
+    ajStrTokenNextParse(&handle, &trgLine->Target);
+    ajStrTokenNextParse(&handle, &trgLine->Target);
+
+    ajStrTokenDel(&handle);
+
+    ajDebug("textObdaSecLine %d target '%S'\n",
+	    ipos, trgLine->Target);
+
+    return;
+}
+
+
+
+
+/* @funcstatic textCdTrgLine **************************************************
 **
 ** Reads a line from an EMBL CD-ROM index target file.
 **
@@ -1492,6 +2316,8 @@ static char* textCdTrgName(ajuint ipos, TextPCdFile fil)
 ** @param [r] ipos [ajuint] Record number.
 ** @param [u] fil [TextPCdFile] EMBL CD-ROM index target file.
 ** @return [void].
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1528,12 +2354,14 @@ static void textCdTrgLine(TextPCdTrg trgLine, ajuint ipos, TextPCdFile fil)
 
 
 
-/* @funcstatic textCdReadHeader ************************************************
+/* @funcstatic textCdReadHeader ***********************************************
 **
 ** Reads the header of an EMBL CD-ROM index file.
 **
 ** @param [u] fil [TextPCdFile] EMBL CD-ROM index file.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1575,7 +2403,7 @@ static AjBool textCdReadHeader(TextPCdFile fil)
 
 
 
-/* @funcstatic textCdTrgOpen ***************************************************
+/* @funcstatic textCdTrgOpen **************************************************
 **
 ** Opens an EMBL CD-ROM target file pair.
 **
@@ -1584,6 +2412,8 @@ static AjBool textCdReadHeader(TextPCdFile fil)
 ** @param [w] trgfil [TextPCdFile*] Target file.
 ** @param [w] hitfil [TextPCdFile*] Hit file.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1614,13 +2444,70 @@ static AjBool textCdTrgOpen(const AjPStr dir, const char* name,
 
 
 
-/* @funcstatic textCdTrgClose **************************************************
+/* @funcstatic textObdaSecOpen ************************************************
+**
+** Opens an OBDA secondary index
+**
+** @param [r] dir [const AjPStr] Directory.
+** @param [r] name [const char*] File name.
+** @param [w] trgfil [TextPObdaFile*] OBDA secondary index file.
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaSecOpen(const AjPStr dir, const char* name,
+                              TextPObdaFile* trgfil)
+{
+    AjPStr tmpname  = NULL;
+    AjPStr fullname = NULL;
+
+    ajFmtPrintS(&tmpname, "id_%s.index",name);
+    *trgfil = textObdaFileOpen(dir, tmpname, &fullname);
+    ajStrDel(&tmpname);
+
+    ajStrDel(&fullname);
+
+    if(!*trgfil)
+	return ajFalse;
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic textObdaSecClose ***********************************************
+**
+** Close an OBDA secondary index
+**
+** @param [w] ptrgfil [TextPObdaFile*] OBDA secondary index file
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaSecClose(TextPObdaFile* ptrgfil)
+{
+    textObdaFileClose(ptrgfil);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic textCdTrgClose *************************************************
 **
 ** Close an EMBL CD-ROM target file pair.
 **
 ** @param [w] ptrgfil [TextPCdFile*] Target file.
 ** @param [w] phitfil [TextPCdFile*] Hit file.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1651,7 +2538,7 @@ static AjBool textCdTrgClose(TextPCdFile* ptrgfil, TextPCdFile* phitfil)
 
 
 
-/* @funcstatic textAccessEntrez ************************************************
+/* @funcstatic textAccessEntrez ***********************************************
 **
 ** Reads text entry(s) using Entrez. Sends a query to a remote Entrez
 ** web server. Opens a file using the results and returns to the caller to
@@ -1659,6 +2546,8 @@ static AjBool textCdTrgClose(TextPCdFile* ptrgfil, TextPCdFile* phitfil)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1687,7 +2576,7 @@ static AjBool textAccessEntrez(AjPTextin textin)
     AjPQueryField fd;
     AjIList iter;
     ajuint i;
-    struct AJSOCKET sock;
+    AjOSysSocket sock;
 
     const char* embossfields[] = {"id",     "acc",    "sv",
                                   "des",    "org",    "key",
@@ -1755,7 +2644,8 @@ static AjBool textAccessEntrez(AjPTextin textin)
 	    ajFmtPrintS(&get, "GET %S?", urlsearch);
 	ajStrDel(&urlsearch);
 
-	ajStrAppendC(&get, "tool=emboss&email=emboss-bug@emboss.open-bio.org&retmax=1000");
+	ajStrAppendC(&get, "tool=emboss&email=emboss-bug@emboss.open-bio.org"
+                     "&retmax=1000");
 
 	ajFmtPrintAppS(&get, "&db=%S", searchdb);
 
@@ -1832,7 +2722,10 @@ static AjBool textAccessEntrez(AjPTextin textin)
 
 	    while (ajBuffreadLineTrim(gifilebuff, &giline))
             {
-		ajDebug("+%S\n", giline);
+		ajDebug("+%d (%d) %S\n",
+                        ajStrGetLen(giline),
+                        (ajint) ajStrGetCharFirst(giline),
+                        giline);
 
 		if(!ajStrGetLen(giline))
                     break;
@@ -1870,6 +2763,7 @@ static AjBool textAccessEntrez(AjPTextin textin)
 
 		    ajStrAppendS(&gilist, tmpstr);
 		    numgi++;
+
 		}
 	    }
 
@@ -1910,7 +2804,7 @@ static AjBool textAccessEntrez(AjPTextin textin)
 
 
 
-/* @funcstatic textEntrezQryNext *********************************************
+/* @funcstatic textEntrezQryNext **********************************************
 **
 ** Processes next GI in list and sets up file buffer with a genbank entry
 **
@@ -1918,6 +2812,8 @@ static AjBool textAccessEntrez(AjPTextin textin)
 ** @param [u] textin [AjPTextin] Text input, including query data.
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1937,7 +2833,7 @@ static AjBool textEntrezQryNext(AjPQuery qry, AjPTextin textin)
     AjPStr gistr = NULL;
     AjPStr tmpstr=NULL;
     AjPStr textline=NULL;
-    struct AJSOCKET sock;
+    AjOSysSocket sock;
 
     if (!textRegGi)
 	textRegGi = ajRegCompC("(\\d+)");
@@ -1984,7 +2880,8 @@ static AjBool textEntrezQryNext(AjPQuery qry, AjPTextin textin)
 
     ajStrDel(&urlfetch);
 
-    ajStrAppendC(&get, "tool=emboss&email=pmr@ebi.ac.uk&retmax=1000");
+    ajStrAppendC(&get, "tool=emboss&email=emboss-bug@emboss.open-bio.org"
+                 "&retmax=1000");
 
     if(ajStrPrefixCaseC(qry->DbType, "N"))
 	ajStrAppendC(&get, "&db=nucleotide&retmode=text&rettype=gb");
@@ -2061,7 +2958,7 @@ static AjBool textEntrezQryNext(AjPQuery qry, AjPTextin textin)
 
 
 
-/* @funcstatic textAccessSeqhound **********************************************
+/* @funcstatic textAccessSeqhound *********************************************
 **
 ** Reads text entry(s) using Seqhound. Sends a query to a remote Seqhound
 ** web server. Uses the query to construct a list of GenInfo Identifiers
@@ -2077,6 +2974,8 @@ static AjBool textEntrezQryNext(AjPQuery qry, AjPTextin textin)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2103,7 +3002,7 @@ static AjBool textAccessSeqhound(AjPTextin textin)
     AjIList iter = NULL;
     AjPQueryField field = NULL;
     ajuint nfields = 0;
-    struct AJSOCKET sock;
+    AjOSysSocket sock;
 
     qry = textin->Query;
 
@@ -2117,7 +3016,7 @@ static AjBool textAccessSeqhound(AjPTextin textin)
 
 	if(!ajNamDbGetDbalias(qry->DbName, &qry->DbAlias))
 	    ajStrAssignS(&qry->DbAlias, qry->DbName);
-	ajDebug("textAccessSeqhound %S fields: %u\n",
+	ajDebug("textAccessSeqhound %S fields: %Lu\n",
                 qry->DbAlias, ajListGetLength(qry->QueryFields));
 
 	if(!ajHttpQueryUrl(qry, &iport, &host, &urlget))
@@ -2352,7 +3251,7 @@ static AjBool textAccessSeqhound(AjPTextin textin)
 
 
 
-/* @funcstatic textSeqhoundQryNext *********************************************
+/* @funcstatic textSeqhoundQryNext ********************************************
 **
 ** Processes next GI in list and sets up file buffer with a genbank entry
 **
@@ -2360,6 +3259,8 @@ static AjBool textAccessSeqhound(AjPTextin textin)
 ** @param [u] textin [AjPTextin] Text input, including query data.
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2379,7 +3280,7 @@ static AjBool textSeqhoundQryNext(AjPQuery qry, AjPTextin textin)
     AjPStr giline = NULL;
     AjPStr gistr = NULL;
     AjPStr tmpstr=NULL;
-    struct AJSOCKET sock;
+    AjOSysSocket sock;
 
     if (!textRegGi)
 	textRegGi = ajRegCompC("(\\d+)");
@@ -2543,13 +3444,15 @@ static AjBool textSeqhoundQryNext(AjPQuery qry, AjPTextin textin)
 
 
 
-/* @funcstatic textAccessSrs ***************************************************
+/* @funcstatic textAccessSrs **************************************************
 **
 ** Reads text entry(s) using SRS. Opens a file using the results of an SRS
 ** query and returns to the caller to read the data.
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2569,26 +3472,32 @@ static AjBool textAccessSrs(AjPTextin textin)
     if(!ajStrGetLen(qry->Application))
 	ajStrAssignC(&qry->Application, "getz");
 
-    ajDebug("textAccessSrs %S fields: %u\n",
+    ajDebug("textAccessSrs %S fields: %Lu\n",
             qry->DbAlias, ajListGetLength(qry->QueryFields));
 
     ajFmtPrintS(&textin->Filename, "%S -e '",
                 qry->Application);
 
+    if(ajStrGetLen(qry->Organisms))
+        ajFmtPrintAppS(&textin->Filename, "[%S-org:%S]&(",
+                       qry->DbName, qry->Organisms);
+    
+    if(ajStrGetLen(qry->Namespace))
+        ajFmtPrintAppS(&textin->Filename, "[%S-ns:%S]&(",
+                       qry->DbName, qry->Namespace);
+    
     iter = ajListIterNew(qry->QueryFields);
     while(!ajListIterDone(iter))
     {
         field = ajListIterGet(iter);
 
-        if(!nfields)
-            ajStrAppendK(&textin->Filename, '+');
-        else
+        if(nfields)
         {
             switch(field->Link)
             {
                 case AJQLINK_EOR:
                     ajErr("Query link operator '^' (EOR) not supported "
-                          "for access method SRSFASTA");
+                          "for access method SRS");
                     break;
                 case AJQLINK_AND:
                     ajStrAppendK(&textin->Filename, '&');
@@ -2623,6 +3532,12 @@ static AjBool textAccessSrs(AjPTextin textin)
        ajFmtPrintAppS(&textin->Filename, "%S",
                       qry->DbAlias);
 
+    if(ajStrGetLen(qry->Namespace))
+        ajStrAppendK(&textin->Filename, ')');
+
+    if(ajStrGetLen(qry->Organisms))
+        ajStrAppendK(&textin->Filename, ')');
+
     ajFmtPrintAppS(&textin->Filename, "'|");
 
     ajFilebuffDel(&textin->Filebuff);
@@ -2646,7 +3561,7 @@ static AjBool textAccessSrs(AjPTextin textin)
 
 
 
-/* @funcstatic textAccessSrsfasta **********************************************
+/* @funcstatic textAccessSrsfasta *********************************************
 **
 ** Reads text entry(s) using SRS. Opens a file using the results of an SRS
 ** query with FASTA format text output and returns to the caller to
@@ -2654,6 +3569,8 @@ static AjBool textAccessSrs(AjPTextin textin)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2673,7 +3590,7 @@ static AjBool textAccessSrsfasta(AjPTextin textin)
     if(!ajStrGetLen(qry->Application))
 	ajStrAssignC(&qry->Application, "getz");
 
-    ajDebug("textAccessSrsfasta %S fields: %u\n",
+    ajDebug("textAccessSrsfasta %S fields: %Lu\n",
             qry->DbAlias, ajListGetLength(qry->QueryFields));
 
     ajFmtPrintS(&textin->Filename, "%S -d -sf fasta '",
@@ -2684,9 +3601,7 @@ static AjBool textAccessSrsfasta(AjPTextin textin)
     {
         field = ajListIterGet(iter);
 
-        if(!nfields)
-            ajStrAppendK(&textin->Filename, '+');
-        else
+        if(nfields)
         {
             switch(field->Link)
             {
@@ -2753,7 +3668,7 @@ static AjBool textAccessSrsfasta(AjPTextin textin)
 
 
 
-/* @funcstatic textAccessSrswww ************************************************
+/* @funcstatic textAccessSrswww ***********************************************
 **
 ** Reads text entry(s) using SRS. Sends a query to a remote SRS web server.
 ** Opens a file using the results and returns to the caller to
@@ -2761,6 +3676,8 @@ static AjBool textAccessSrsfasta(AjPTextin textin)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2773,6 +3690,8 @@ static AjBool textAccessSrswww(AjPTextin textin)
     AjPQuery qry;
     AjPStr qrycount = NULL;
     AjPStr qryfield = NULL;
+    AjPStr tmpqry = NULL;
+    ajuint nfields = 0;
 
     const char* qrycount5 = "-newId+-fun+PageEntries+-bv+1+-lv+1+-bl+1+-ll+1"
         "+-ascii";
@@ -2805,7 +3724,7 @@ static AjBool textAccessSrswww(AjPTextin textin)
 /*    if(!ajNamDbGetDbalias(qry->DbName, &qry->DbAlias))
       ajStrAssignS(&qry->DbAlias, qry->DbName);*/
 
-    ajDebug("textAccessSrswww %S fields: %u %u/%u\n",
+    ajDebug("textAccessSrswww %S fields: %Lu %u/%u\n",
             qry->DbAlias, ajListGetLength(qry->QueryFields),
             qry->CountEntries, qry->TotalEntries);
 
@@ -2831,7 +3750,7 @@ static AjBool textAccessSrswww(AjPTextin textin)
                 case AJQLINK_EOR:
                     ajErr("Query link operator '^' (EOR) not supported "
                           "for access method SRSWWW");
-                    break;
+                    return ajFalse;
                 case AJQLINK_AND:
                     ajStrAppendK(&qryfield, '&');
                     break;
@@ -2856,12 +3775,27 @@ static AjBool textAccessSrswww(AjPTextin textin)
         else
             ajFmtPrintAppS(&qryfield, "[%S-%S:%S]",
                            qry->DbAlias, field->Field, field->Wildquery);
+        nfields++;
     }
     ajListIterDel(&iter);
 
     if(!ajStrGetLen(qryfield))
        ajFmtPrintAppS(&qryfield, "+%S",
                       qry->DbAlias);
+
+    if(ajStrGetLen(qry->Organisms))
+    {
+        ajStrAssignSubS(&tmpqry, qryfield, 1, -1);
+        ajFmtPrintS(&qryfield, "+[%S-org:%S]&(%S)",
+                    qry->DbAlias, qry->Organisms, tmpqry);
+    }
+
+    if(ajStrGetLen(qry->Namespace))
+    {
+        ajStrAssignSubS(&tmpqry, qryfield, 1, -1);
+        ajFmtPrintS(&qryfield, "+[%S-ns:%S]&(%S)",
+                    qry->DbAlias, qry->Namespace, tmpqry);
+    }
 
     ajDebug("searching with SRS url '%S'\n", qryfield);
 
@@ -2890,10 +3824,11 @@ static AjBool textAccessSrswww(AjPTextin textin)
         while(countfilebuff && ajBuffreadLine(countfilebuff, &countline))
         {
             foundpos = ajStrFindC(countline, "ound");
-            ajDebug("countline:%S", countline);
 
             if(foundpos < 1)
                 continue;
+
+            ajDebug("countline:%S", countline);
 
             istart = foundpos + 4;
             entrypos = ajStrFindC(countline, "entries");
@@ -3019,6 +3954,8 @@ static AjBool textAccessSrswww(AjPTextin textin)
 **
 ** @param [u] textin [AjPTextin] Text input, including query data.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3063,7 +4000,7 @@ static AjBool textAccessEmboss(AjPTextin textin)
                 ajStrDel(&qrystr);
 	    }
 
-            ajDebug("B+tree Entry success list:%u\n",
+            ajDebug("B+tree Entry success list:%Lu\n",
                     ajListGetLength(qry->ResultsList));
 	}
 
@@ -3093,7 +4030,7 @@ static AjBool textAccessEmboss(AjPTextin textin)
     if(ajListGetLength(qry->ResultsList))
     {
 	retval = textEmbossQryNext(qry);
-        ajDebug("textEmbossQryNext returned %B list %u samefile %B\n",
+        ajDebug("textEmbossQryNext returned %B list %Lu samefile %B\n",
                 retval, ajListGetLength(qry->ResultsList),
                 qryd->Samefile);
 	if(retval)
@@ -3120,12 +4057,14 @@ static AjBool textAccessEmboss(AjPTextin textin)
 
 
 
-/* @funcstatic textAccessFreeEmboss ********************************************
+/* @funcstatic textAccessFreeEmboss *******************************************
 **
 ** Frees data specific to reading EMBOSS B+tree index files.
 **
 ** @param [r] qry [void*] query data specific to EMBLCD
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3158,6 +4097,8 @@ static AjBool textAccessFreeEmboss(void* qry)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if reusable,
 **                  ajFalse if finished.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3201,6 +4142,8 @@ static AjBool textEmbossQryReuse(AjPQuery qry)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3282,6 +4225,8 @@ static AjBool textEmbossQryOpen(AjPQuery qry)
 ** @param [r] ext [const char *] Index file extension
 ** @param [w] cache [AjPBtcache *] cache
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3291,7 +4236,7 @@ static AjBool textEmbossOpenCache(AjPQuery qry, const char *ext,
     TextPEmbossQry qryd;
     AjPStr indexextname = NULL;
 
-    AjPBtpage page   = NULL;
+    ajuint refcount = 0;
 
     qryd = qry->QryData;
 
@@ -3313,10 +4258,7 @@ static AjBool textEmbossOpenCache(AjPQuery qry, const char *ext,
                                              qry->IndexDir,
                                              qry->Directory,
                                              &qryd->files,
-                                             NULL);
-
-    page = ajBtreeCacheRead(*cache,0L);
-    page->dirty = BT_LOCK;
+                                             NULL, &refcount);
 
     return ajTrue;
 }
@@ -3332,6 +4274,8 @@ static AjBool textEmbossOpenCache(AjPQuery qry, const char *ext,
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3347,7 +4291,8 @@ static AjBool textEmbossAll(AjPTextin textin)
     ajint i;
     
     AjPStr *filestrings = NULL;
-    
+    ajuint refcount = 0;
+
     qry = textin->Query;
 
     if(!ajStrGetLen(qry->IndexDir))
@@ -3363,7 +4308,7 @@ static AjBool textEmbossAll(AjPTextin textin)
 
     ajBtreeReadEntriesS(qry->DbAlias,qry->IndexDir,
                         qry->Directory,
-                        &filestrings, NULL);
+                        &filestrings, NULL, &refcount);
 
 
     list = ajListstrNew();
@@ -3443,12 +4388,14 @@ static AjBool textEmbossAll(AjPTextin textin)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool textEmbossQryEntry(AjPQuery qry)
 {
-    AjPBtId entry  = NULL;
+    AjPBtHit newhit  = NULL;
     TextPEmbossQry qryd;
     const AjPList fdlist;
     const AjPList cachelist;
@@ -3456,8 +4403,10 @@ static AjBool textEmbossQryEntry(AjPQuery qry)
     AjIList icache;
     AjPBtcache cache;
     AjPQueryField fd;
+    AjPBtHit *allhits = NULL;
+    ajuint i;
 
-    ajDebug("textEmbossQryEntry fields: %u hasacc:%B\n",
+    ajDebug("textEmbossQryEntry fields: %Lu hasacc:%B\n",
 	    ajListGetLength(qry->QueryFields), qry->HasAcc);
 
     qryd = qry->QryData;
@@ -3472,40 +4421,54 @@ static AjBool textEmbossQryEntry(AjPQuery qry)
         fd = ajListIterGet(iter);
         cache = ajListIterGet(icache);
 
-        ajDebug("link: %d list: %u\n",
+        ajDebug("link: %d list: %Lu\n",
                 fd->Link, ajListGetLength(qry->ResultsList));
         if((fd->Link == AJQLINK_ELSE) && ajListGetLength(qry->ResultsList))
                 continue;
 
-        if(ajBtreeCacheIsSecondary(cache))
+        if(!ajBtreeCacheIsSecondary(cache))
         {
-
-        }
-        else
-        {
-	    entry = ajBtreeIdFromKey(cache,fd->Wildquery);
-            ajDebug("id '%S' entry: %p\n", fd->Wildquery, entry);
-	    if(entry)
-	    {
-                ajDebug("entry id: '%S' dups: %u offset: %Ld\n",
-                        entry->id, entry->dups, entry->offset);
-		if(!entry->dups)
-                {
-		    ajListPushAppend(qry->ResultsList,(void *)entry);
-                    entry = NULL;
-                }
-		else
-                {
-		    ajBtreeHybLeafList(cache,entry->offset,
-				       entry->id,qry->ResultsList);
-                    ajBtreeIdDel(&entry);
-                }
-	    }
+	     ajBtreeIdentFetchHit(cache,fd->Wildquery,
+                                 qry->ResultsList);
         }
     }
 
     ajListIterDel(&iter);
     ajListIterDel(&icache);
+
+    if(ajStrGetLen(qry->Organisms))
+    {
+        ajTableSetDestroy(qry->ResultsTable, NULL, &ajBtreeHitDelVoid);
+        ajTableSettypeUser(qry->ResultsTable, &ajBtreeHitCmp, &ajBtreeHitHash);
+
+        while(ajListPop(qry->ResultsList, (void**)&newhit))
+            ajTablePutClean(qry->ResultsTable, newhit, newhit,
+                            NULL, &ajBtreeHitDelVoid);
+
+         textEmbossQryOrganisms(qry);
+
+         ajTableToarrayValues(qry->ResultsTable, (void***)&allhits);
+
+         for(i=0; allhits[i]; i++)
+             ajListPushAppend(qry->ResultsList, (void*) allhits[i]);
+    }
+
+    if(ajStrGetLen(qry->Namespace))
+    {
+        ajTableSetDestroy(qry->ResultsTable, NULL, &ajBtreeHitDelVoid);
+        ajTableSettypeUser(qry->ResultsTable, &ajBtreeHitCmp, &ajBtreeHitHash);
+
+        while(ajListPop(qry->ResultsList, (void**)&newhit))
+            ajTablePutClean(qry->ResultsTable, newhit, newhit,
+                            NULL, &ajBtreeHitDelVoid);
+
+         textEmbossQryNamespace(qry);
+
+         ajTableToarrayValues(qry->ResultsTable, (void***)&allhits);
+
+         for(i=0; allhits[i]; i++)
+             ajListPushAppend(qry->ResultsList, (void*) allhits[i]);
+    }
 
     if(!ajListGetLength(qry->ResultsList))
 	return ajFalse;
@@ -3525,19 +4488,21 @@ static AjBool textEmbossQryEntry(AjPQuery qry)
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if successful
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool textEmbossQryNext(AjPQuery qry)
 {
-    AjPBtId entry;
+    AjPBtHit entry;
     TextPEmbossQry qryd;
     void* item;
     AjBool ok = ajFalse;
 
     qryd = qry->QryData;
 
-    ajDebug("textEmbossQryNext list %u skip:%B\n",
+    ajDebug("textEmbossQryNext list %Lu skip:%B\n",
             ajListGetLength(qry->ResultsList), qryd->Skip);
 
     if(!ajListGetLength(qry->ResultsList))
@@ -3549,7 +4514,7 @@ static AjBool textEmbossQryNext(AjPQuery qry)
     if(!qryd->Skip)
     {
 	ajListPop(qry->ResultsList, &item);
-	entry = (AjPBtId) item;
+	entry = (AjPBtHit) item;
         /* ajDebug("no skip, popped item '%S' address '%x'\n",
            entry->id, entry); */
     }
@@ -3560,16 +4525,16 @@ static AjBool textEmbossQryNext(AjPQuery qry)
 	while(!ok)
 	{
 	    ajListPop(qry->ResultsList, &item);
-	    entry = (AjPBtId) item;
-            ajDebug("test skip, popped item '%S' dbno %u offset: %Ld skip:%B\n",
-                    entry->id, entry->dbno, entry->offset,
+	    entry = (AjPBtHit) item;
+            ajDebug("test skip, popped item dbno %u offset: %Ld skip:%B\n",
+                    entry->dbno, entry->offset,
                     qryd->Skip[entry->dbno]);
 
 	    if(!qryd->Skip[entry->dbno])
 		ok = ajTrue;
 	    else
 	    {
-		ajBtreeIdDel(&entry);
+		ajBtreeHitDel(&entry);
 
 		if(!ajListGetLength(qry->ResultsList))
 		    return ajFalse;
@@ -3592,7 +4557,8 @@ static AjBool textEmbossQryNext(AjPQuery qry)
 
 	if(!qryd->libt)
 	{
-	    ajBtreeIdDel(&entry);
+            
+	    ajBtreeHitDel(&entry);
 
 	    return ajFalse;
 	}
@@ -3601,7 +4567,7 @@ static AjBool textEmbossQryNext(AjPQuery qry)
     
     ajFileSeek(qryd->libt, (ajlong) entry->offset, 0);
 
-    ajBtreeIdDel(&entry);
+    ajBtreeHitDel(&entry);
 
     if(!qry->CaseId)
 	qry->QryDone = ajTrue;
@@ -3619,6 +4585,8 @@ static AjBool textEmbossQryNext(AjPQuery qry)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3675,6 +4643,161 @@ static AjBool textEmbossQryClose(AjPQuery qry)
 
 
 
+/* @funcstatic textEmbossQryNamespace *****************************************
+**
+** Restricts results to matches to namespace attribute of database
+**
+** @param [u] qry [AjPQuery] Query data
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textEmbossQryNamespace(AjPQuery qry)
+{
+    TextPEmbossQry qryd;
+    AjPBtcache nscache;
+    AjPStr nsqry = NULL;
+    AjPStrTok nshandle = NULL;
+    AjPTable nstable = NULL;
+    AjPList nslist = NULL;
+    AjPBtHit newhit;
+    ajulong fdhits = 0UL;
+
+    if(!ajStrGetLen(qry->Namespace))
+        return ajTrue;
+
+    qryd = qry->QryData;
+
+    textEmbossOpenCache(qry, "ns", &nscache);
+    nslist = ajListNew();
+    nshandle = ajStrTokenNewC(qry->Namespace, " \t,;|");
+    while(ajStrTokenNextParse(&nshandle, &nsqry))
+    {
+        if(ajBtreeCacheIsSecondary(nscache))
+        {
+            if(!qry->Wild)
+            {
+                ajBtreeKeyFetchHit(nscache, qryd->idcache,
+                                   nsqry, nslist);
+            }
+            else
+            {
+                ajBtreeKeyFetchwildHit(nscache,qryd->idcache,
+                                       nsqry, nslist);
+            }
+        }
+        else
+        {
+            ajBtreeIdentFetchwildHit(nscache,
+                                     nsqry, nslist);
+        }
+
+        fdhits += ajListGetLength(nslist);
+        ajDebug("Namespace list nsqry '%S' list '%Lu'", nsqry, fdhits);
+
+    }
+
+    nstable = ajTableNewFunctionLen(fdhits,
+                                    &ajBtreeHitCmp, &ajBtreeHitHash,
+                                    NULL, &ajBtreeHitDelVoid);
+    while(ajListPop(nslist, (void**)&newhit))
+        ajTablePutClean(nstable, newhit, newhit,
+                        NULL, &ajBtreeHitDelVoid);
+
+    ajStrTokenDel(&nshandle);
+
+    ajTableMergeAnd(qry->ResultsTable, nstable);
+    ajListFree(&nslist);
+    ajBtreeCacheDel(&nscache);
+    ajTableFree(&nstable);
+    ajStrDel(&nsqry);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic textEmbossQryOrganisms *****************************************
+**
+** Restricts results to matches to organism(s) in database
+**
+** @param [u] qry [AjPQuery] Query data
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textEmbossQryOrganisms(AjPQuery qry)
+{
+    TextPEmbossQry qryd;
+    AjPBtcache orgcache;
+    AjPStr orgqry = NULL;
+    AjPStrTok orghandle = NULL;
+    AjPTable orgtable = NULL;
+    AjPList orglist = NULL;
+    AjPBtHit newhit;
+    ajulong fdhits = 0UL;
+
+    if(!ajStrGetLen(qry->Organisms))
+        return ajTrue;
+
+    qryd = qry->QryData;
+
+    textEmbossOpenCache(qry, "org", &orgcache);
+    orglist = ajListNew();
+    orghandle = ajStrTokenNewC(qry->Organisms, "\t,;|");
+    while(ajStrTokenNextParse(&orghandle, &orgqry))
+    {
+        if(ajBtreeCacheIsSecondary(orgcache))
+        {
+            if(!qry->Wild)
+            {
+                ajBtreeKeyFetchHit(orgcache,qryd->idcache,
+                                   orgqry, orglist);
+
+            }
+            else
+            {
+               ajBtreeKeyFetchwildHit(orgcache, qryd->idcache,
+                                      orgqry, orglist);
+            }
+        }
+        else
+        {
+            ajBtreeIdentFetchwildHit(orgcache,
+                                     orgqry, orglist);
+        }
+
+        fdhits += ajListGetLength(orglist);
+        ajDebug("Organisms list orgqry '%S' list '%Lu'", orgqry, fdhits);
+
+    }
+
+    orgtable = ajTableNewFunctionLen(fdhits,
+				     &ajBtreeHitCmp, &ajBtreeHitHash,
+				     NULL, &ajBtreeHitDelVoid);
+    while(ajListPop(orglist, (void**)&newhit))
+        ajTablePutClean(orgtable, newhit, newhit,
+                        NULL, &ajBtreeHitDelVoid);
+
+    ajStrTokenDel(&orghandle);
+
+    ajTableMergeAnd(qry->ResultsTable, orgtable);
+    ajListFree(&orglist);
+    ajBtreeCacheDel(&orgcache);
+    ajTableFree(&orgtable);
+    ajStrDel(&orgqry);
+
+    return ajTrue;
+}
+
+
+
+
 /* @funcstatic textEmbossQryQuery *********************************************
 **
 ** Queries for one or more entries in an EMBOSS B+tree index
@@ -3682,30 +4805,28 @@ static AjBool textEmbossQryClose(AjPQuery qry)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool textEmbossQryQuery(AjPQuery qry)
 {
     TextPEmbossQry qryd;
-    AjPBtId   id   = NULL;
 
-    AjPList  tlist = NULL;
-    AjPStr   kwid  = NULL;
-    ajulong treeblock = 0L;
     const AjPList fdlist;
     const AjPList cachelist;
     AjIList iter;
     AjIList icache;
     AjPBtcache cache;
     AjPQueryField fd;
-    AjPBtId newhit;
-    AjPBtId *allhits = NULL;
+    AjPBtHit newhit;
+    AjPBtHit *allhits = NULL;
     AjPTable newtable = NULL;
 
     ajuint i;
-    ajuint lasthits = 0;
-    ajuint fdhits = 0;
+    ajulong lasthits = 0UL;
+    ajulong fdhits = 0UL;
 
     if(!qry->CaseId)
 	qry->QryDone = ajTrue;
@@ -3713,12 +4834,13 @@ static AjBool textEmbossQryQuery(AjPQuery qry)
     qryd = qry->QryData;
 
     cachelist = qryd->Caches;
-    ajTableSetDestroy(qry->ResultsTable, NULL, ajBtreeIdDelVoid);
-    ajTableSettypeUser(qry->ResultsTable, ajBtreeIdCmp, ajBtreeIdHash);
+    
+    ajTableSetDestroy(qry->ResultsTable, NULL, &ajBtreeHitDelVoid);
+    ajTableSettypeUser(qry->ResultsTable, &ajBtreeHitCmp, &ajBtreeHitHash);
 
     fdlist = ajQueryGetallFields(qry);
 
-    ajDebug("textEmbossQryQuery wild: %B list:%u fields:%u\n",
+    ajDebug("textEmbossQryQuery wild: %B list:%Lu fields:%Lu\n",
             qry->Wild, ajListGetLength(qry->ResultsList),
             ajListGetLength(fdlist));
 
@@ -3732,7 +4854,7 @@ static AjBool textEmbossQryQuery(AjPQuery qry)
 
         ajDebug("field '%S' query: '%S'\n", fd->Field, fd->Wildquery);
 
-        if((fd->Link == AJQLINK_ELSE) && (lasthits > 0))
+        if((fd->Link == AJQLINK_ELSE) && (lasthits > 0UL))
         {
             continue;
         }
@@ -3743,50 +4865,20 @@ static AjBool textEmbossQryQuery(AjPQuery qry)
         {
             if(!qry->Wild)
             {
-                if(ajBtreePriFindKeywordLen(cache, fd->Wildquery,
-                                            &treeblock))
-                {
-                    tlist = ajBtreeSecLeafList(cache, treeblock);
+                ajBtreeKeyFetchHit(cache,qryd->idcache,
+                                   fd->Wildquery, qry->ResultsList);
 
-                    while(ajListPop(tlist,(void **)&kwid))
-                    {
-                        ajStrFmtLower(&kwid);
-                        id = ajBtreeIdFromKey(qryd->idcache, kwid);
-                        ajDebug("id '%S' entry: %p\n", kwid, id);
-
-                        if(id)
-                        {
-                            ajDebug("entry id: '%S' dups: %u offset: %Ld\n",
-                                    id->id, id->dups, id->offset);
-                            if(!id->dups)
-                            {
-                                ajListPushAppend(qry->ResultsList,(void *)id);
-                                id = NULL;
-                            }
-                            else
-                            {
-                                ajBtreeHybLeafList(qryd->idcache,id->offset,
-                                                   id->id,qry->ResultsList);
-                                ajBtreeIdDel(&id);
-                            }
-                        }
-
-                        ajStrDel(&kwid);
-                    }
-
-                    ajListFree(&tlist);
-                }
             }
             else
             {
-                ajBtreeListFromKeywordW(cache,fd->Wildquery,
-                                        qryd->idcache, qry->ResultsList);
+                ajBtreeKeyFetchwildHit(cache,qryd->idcache,
+                                       fd->Wildquery, qry->ResultsList);
             }
         }
         else
         {
-            ajBtreeListFromKeyW(cache,fd->Wildquery,qry->ResultsList);
-            ajDebug("ajBtreeListFromKeyW results:%u\n",
+            ajBtreeIdentFetchwildHit(cache,fd->Wildquery,qry->ResultsList);
+            ajDebug("ajBtreeIdentFetchwild results:%Lu\n",
                     ajListGetLength(qry->ResultsList));
         }
 
@@ -3797,16 +4889,17 @@ static AjBool textEmbossQryQuery(AjPQuery qry)
             case AJQLINK_INIT:
                 while(ajListPop(qry->ResultsList, (void**)&newhit))
                     ajTablePutClean(qry->ResultsTable, newhit, newhit,
-                                    NULL, ajBtreeIdDelVoid);
+                                    NULL, &ajBtreeHitDelVoid);
                 break;
 
             case AJQLINK_OR:
                 newtable = ajTableNewFunctionLen(fdhits,
-                                                 ajBtreeIdCmp, ajBtreeIdHash,
-                                                 NULL, ajBtreeIdDelVoid);
+                                                 &ajBtreeHitCmp,
+                                                 &ajBtreeHitHash,
+                                                 NULL, &ajBtreeHitDelVoid);
                 while(ajListPop(qry->ResultsList, (void**)&newhit))
                     ajTablePutClean(newtable, newhit, newhit,
-                                    NULL, ajBtreeIdDelVoid);
+                                    NULL, &ajBtreeHitDelVoid);
 
                 ajTableMergeOr(qry->ResultsTable, newtable);
                 ajTableDel(&newtable);
@@ -3814,11 +4907,12 @@ static AjBool textEmbossQryQuery(AjPQuery qry)
 
             case AJQLINK_AND:
                 newtable = ajTableNewFunctionLen(fdhits,
-                                                 ajBtreeIdCmp, ajBtreeIdHash,
-                                                 NULL, ajBtreeIdDelVoid);
+                                                 &ajBtreeHitCmp,
+                                                 &ajBtreeHitHash,
+                                                 NULL, &ajBtreeHitDelVoid);
                 while(ajListPop(qry->ResultsList, (void**)&newhit))
                     ajTablePutClean(newtable, newhit, newhit,
-                                    NULL, ajBtreeIdDelVoid);
+                                    NULL, &ajBtreeHitDelVoid);
 
                 ajTableMergeAnd(qry->ResultsTable, newtable);
                 ajTableDel(&newtable);
@@ -3827,11 +4921,12 @@ static AjBool textEmbossQryQuery(AjPQuery qry)
             case AJQLINK_EOR:
             case AJQLINK_ELSE:
                 newtable = ajTableNewFunctionLen(fdhits,
-                                                 ajBtreeIdCmp, ajBtreeIdHash,
-                                                 NULL, ajBtreeIdDelVoid);
+                                                 &ajBtreeHitCmp,
+                                                 &ajBtreeHitHash,
+                                                 NULL, &ajBtreeHitDelVoid);
                 while(ajListPop(qry->ResultsList, (void**)&newhit))
                     ajTablePutClean(newtable, newhit, newhit,
-                                    NULL, ajBtreeIdDelVoid);
+                                    NULL, &ajBtreeHitDelVoid);
 
                 ajTableMergeEor(qry->ResultsTable, newtable);
                 ajTableDel(&newtable);
@@ -3839,11 +4934,12 @@ static AjBool textEmbossQryQuery(AjPQuery qry)
 
             case AJQLINK_NOT:
                 newtable = ajTableNewFunctionLen(fdhits,
-                                                 ajBtreeIdCmp, ajBtreeIdHash,
-                                                 NULL, ajBtreeIdDelVoid);
+                                                 &ajBtreeHitCmp,
+                                                 &ajBtreeHitHash,
+                                                 NULL, &ajBtreeHitDelVoid);
                 while(ajListPop(qry->ResultsList, (void**)&newhit))
                     ajTablePutClean(newtable, newhit, newhit,
-                                    NULL, ajBtreeIdDelVoid);
+                                    NULL, &ajBtreeHitDelVoid);
 
                 ajTableMergeNot(qry->ResultsTable, newtable);
                 ajTableDel(&newtable);
@@ -3860,6 +4956,12 @@ static AjBool textEmbossQryQuery(AjPQuery qry)
 
     ajListIterDel(&iter);
     ajListIterDel(&icache);
+
+    if(ajStrGetLen(qry->Organisms))
+        textEmbossQryOrganisms(qry);
+
+    if(ajStrGetLen(qry->Namespace))
+        textEmbossQryNamespace(qry);
 
     ajTableToarrayValues(qry->ResultsTable, (void***)&allhits);
     for(i=0; allhits[i]; i++)
@@ -3878,7 +4980,7 @@ static AjBool textEmbossQryQuery(AjPQuery qry)
 
 
 
-/* @funcstatic textCdQryReuse **************************************************
+/* @funcstatic textCdQryReuse *************************************************
 **
 ** Tests whether Cd index query data can be reused or whether we are finished.
 **
@@ -3887,6 +4989,8 @@ static AjBool textEmbossQryQuery(AjPQuery qry)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3912,7 +5016,7 @@ static AjBool textCdQryReuse(AjPQuery qry)
     else
     {
 	ajDebug("reusing data from previous call %x\n", qry->QryData);
-	ajDebug("listlen  %d\n", ajListGetLength(qry->ResultsList));
+	ajDebug("listlen  %Lu\n", ajListGetLength(qry->ResultsList));
 	ajDebug("divfile '%S'\n", qryd->divfile);
 	ajDebug("idxfile '%S'\n", qryd->idxfile);
 	ajDebug("datfile '%S'\n", qryd->datfile);
@@ -3920,7 +5024,7 @@ static AjBool textCdQryReuse(AjPQuery qry)
 	ajDebug("nameSize %d\n",  qryd->nameSize);
 	ajDebug("div      %d\n",  qryd->div);
 	ajDebug("maxdiv   %d\n",  qryd->maxdiv);
-	ajDebug("qry->ResultsList length %d\n",
+	ajDebug("qry->ResultsList length %Lu\n",
                 ajListGetLength(qry->ResultsList));
 	/*ajListTrace(qry->ResultsList);*/
     }
@@ -3931,13 +5035,15 @@ static AjBool textCdQryReuse(AjPQuery qry)
 
 
 
-/* @funcstatic textCdQryOpen ***************************************************
+/* @funcstatic textCdQryOpen **************************************************
 **
 ** Opens everything for a new CD query
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3958,7 +5064,7 @@ static AjBool textCdQryOpen(AjPQuery qry)
 	return ajFalse;
     }
 
-    ajDebug("directory '%S' fields: %u hasacc:%B\n",
+    ajDebug("directory '%S' fields: %Lu hasacc:%B\n",
 	    qry->IndexDir, ajListGetLength(qry->QueryFields), qry->HasAcc);
 
     qry->QryData = AJNEW0(qryd);
@@ -4000,7 +5106,8 @@ static AjBool textCdQryOpen(AjPQuery qry)
 
     if(!qryd->ifp)
     {
-	ajErr("Cannot open index file '%S'", qryd->idxfile);
+	ajErr("Cannot open index file '%S' for database '%S'",
+	      qryd->idxfile, qry->DbName);
 
 	return ajFalse;
     }
@@ -4014,13 +5121,15 @@ static AjBool textCdQryOpen(AjPQuery qry)
 
 
 
-/* @funcstatic textCdQryEntry **************************************************
+/* @funcstatic textCdQryEntry *************************************************
 **
 ** Queries for a single entry in an EMBLCD index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4199,13 +5308,15 @@ static AjBool textCdQryEntry(AjPQuery qry)
 
 
 
-/* @funcstatic textCdQryQuery **************************************************
+/* @funcstatic textCdQryQuery *************************************************
 **
 ** Queries for one or more entries in an EMBLCD index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4255,7 +5366,7 @@ static AjBool textCdQryQuery(AjPQuery qry)
         else
             textCdTrgQuery(qry, field->Field, field->Wildquery);
 
-        fdhits = ajListGetLength(qry->ResultsList);
+        fdhits = (ajuint) ajListGetLength(qry->ResultsList);
 
         ajDebug("textCdQryQuery hits: %u link: %u\n",
                 fdhits, field->Link);
@@ -4268,7 +5379,7 @@ static AjBool textCdQryQuery(AjPQuery qry)
                     *ikey = (((ajulong)newhit->div) << ishift) +
                         (ajulong)newhit->annoff;
                     ajTablePutClean(qry->ResultsTable, ikey, newhit,
-                                    ajMemFree, ajMemFree);
+                                    &ajMemFree, &ajMemFree);
                     ikey = NULL;
                 }
 
@@ -4281,7 +5392,7 @@ static AjBool textCdQryQuery(AjPQuery qry)
                     *ikey = (((ajulong)newhit->div) << ishift) +
                         (ajulong)newhit->annoff;
                     ajTablePutClean(qry->ResultsTable, ikey, newhit,
-                                    ajMemFree, ajMemFree);
+                                    &ajMemFree, &ajMemFree);
                     ikey = NULL;
                 }
                 break;
@@ -4295,11 +5406,11 @@ static AjBool textCdQryQuery(AjPQuery qry)
                     *ikey = (((ajulong)newhit->div) << ishift) +
                         (ajulong)newhit->annoff;
                     ajTablePutClean(newtable, ikey, newhit,
-                                    ajMemFree, ajMemFree);
+                                    &ajMemFree, &ajMemFree);
                     ikey = NULL;
                 }
                 ajTableMergeAnd(qry->ResultsTable, newtable);
-                ajTableDelValdel(&newtable, ajMemFree);
+                ajTableDelValdel(&newtable, &ajMemFree);
                 break;
 
             case AJQLINK_EOR:
@@ -4311,11 +5422,11 @@ static AjBool textCdQryQuery(AjPQuery qry)
                     AJNEW(ikey);
                     *ikey = (((ajulong)newhit->div) << ishift) + newhit->annoff;
                     ajTablePutClean(newtable, ikey, newhit,
-                                    ajMemFree, ajMemFree);
+                                    &ajMemFree, &ajMemFree);
                     ikey = NULL;
                 }
                 ajTableMergeEor(qry->ResultsTable, newtable);
-                ajTableDelValdel(&newtable, ajMemFree);
+                ajTableDelValdel(&newtable, &ajMemFree);
                 break;
 
             case AJQLINK_NOT:
@@ -4326,11 +5437,11 @@ static AjBool textCdQryQuery(AjPQuery qry)
                     AJNEW(ikey);
                     *ikey = (((ajulong)newhit->div) << ishift) + newhit->annoff;
                     ajTablePutClean(newtable, ikey, newhit,
-                                    ajMemFree, ajMemFree);
+                                    &ajMemFree, &ajMemFree);
                     ikey = NULL;
                 }
                 ajTableMergeNot(qry->ResultsTable, newtable);
-                ajTableDelValdel(&newtable, ajMemFree);
+                ajTableDelValdel(&newtable, &ajMemFree);
                 break;
 
             default:
@@ -4352,10 +5463,10 @@ static AjBool textCdQryQuery(AjPQuery qry)
     }
     AJFREE(keys);
 
-    ajDebug("ajListSortUnique len:%u\n",
+    ajDebug("ajListSortUnique len:%Lu\n",
             ajListGetLength(qry->ResultsList));
     ajListSortUnique(qry->ResultsList,
-                     textCdEntryCmp, textCdEntryDel);
+                     &textCdEntryCmp, &textCdEntryDel);
 
     AJFREE(allhits);
 
@@ -4371,14 +5482,16 @@ static AjBool textCdQryQuery(AjPQuery qry)
 
 
 
-/* @funcstatic textCdEntryCmp **************************************************
+/* @funcstatic textCdEntryCmp *************************************************
 **
-** Compares two TextPEntry objects
+** Compares two TextPCdEntry objects
 **
 ** @param [r] pa [const void*] TextPEntry object
 ** @param [r] pb [const void*] TextPEntry object
 ** @return [int] -1 if first entry should sort before second, +1 if the
 **         second entry should sort first. 0 if they are identical
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 static int textCdEntryCmp(const void* pa, const void* pb)
@@ -4402,6 +5515,46 @@ static int textCdEntryCmp(const void* pa, const void* pb)
 
 
 
+/* @funcstatic textObdaEntryCmp ***********************************************
+**
+** Compares two TextPObdaEntry objects
+**
+** @param [r] pa [const void*] TextPEntry object
+** @param [r] pb [const void*] TextPEntry object
+** @return [int] Negative if first entry should sort before second,
+**         positive if the second entry should sort first,
+**         0 if they are identical
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+static int textObdaEntryCmp(const void* pa, const void* pb)
+{
+    const TextPObdaEntry a;
+    const TextPObdaEntry b;
+
+    a = *(TextPObdaEntry const *) pa;
+    b = *(TextPObdaEntry const *) pb;
+
+    ajDebug("textObdaEntryCmp %x %d %d : %x %d %d\n",
+	     a, a->div, a->annoff,
+	     b, b->div, b->annoff);
+
+    if(a->div != b->div)
+	return (a->div - b->div);
+
+    if(a->annoff > b->annoff)
+        return 1;
+
+    if(a->annoff < b->annoff)
+        return -1;
+
+    return 0;
+}
+
+
+
+
 /* @funcstatic textCdEntryDel *************************************************
 **
 ** Deletes a TextPCdEntry object
@@ -4409,6 +5562,8 @@ static int textCdEntryCmp(const void* pa, const void* pb)
 ** @param [r] pentry [void**] Address of a TextPCdEntry object
 ** @param [r] cl [void*] Standard unused argument, usually NULL.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 static void textCdEntryDel(void** pentry, void* cl)
@@ -4423,12 +5578,37 @@ static void textCdEntryDel(void** pentry, void* cl)
 
 
 
-/* @funcstatic textCdQryNext ***************************************************
+/* @funcstatic textObdaEntryDel ***********************************************
+**
+** Deletes a TextPObdaEntry object
+**
+** @param [r] pentry [void**] Address of a TextPObdaEntry object
+** @param [r] cl [void*] Standard unused argument, usually NULL.
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+static void textObdaEntryDel(void** pentry, void* cl)
+{
+    (void) cl;
+
+    AJFREE(*pentry);
+
+    return;
+}
+
+
+
+
+/* @funcstatic textCdQryNext **************************************************
 **
 ** Processes the next query for an EMBLCD index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if successful
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4443,7 +5623,7 @@ static AjBool textCdQryNext(AjPQuery qry)
     if(!ajListGetLength(qry->ResultsList))
 	return ajFalse;
 
-    ajDebug("qry->ResultsList (b) length %d\n",
+    ajDebug("qry->ResultsList (b) length %Lu\n",
             ajListGetLength(qry->ResultsList));
     /*ajListTrace(qry->ResultsList);*/
     ajListPop(qry->ResultsList, &item);
@@ -4482,12 +5662,14 @@ static AjBool textCdQryNext(AjPQuery qry)
 
 
 
-/* @funcstatic textCdQryClose **************************************************
+/* @funcstatic textCdQryClose *************************************************
 **
 ** Closes query data for an EMBLCD index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if all is done
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4530,12 +5712,14 @@ static AjBool textCdQryClose(AjPQuery qry)
 
 
 
-/* @funcstatic textCdQryFile ***************************************************
+/* @funcstatic textCdQryFile **************************************************
 **
 ** Opens a specific file number for an EMBLCD index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4578,14 +5762,968 @@ static AjBool textCdQryFile(AjPQuery qry)
 
     if(!qryd->libt)
     {
-	ajDebug("Cannot open database file '%S'\n", qryd->datfile);
-	ajErr("Cannot open database file '%S'", qryd->datfile);
+	ajErr("Cannot open file '%S' for database '%S'",
+	      qryd->datfile, qry->DbName);
 
 	return ajFalse;
     }
 
 
     return ajTrue;
+}
+
+
+
+
+/* @funcstatic textObdaQryFile ************************************************
+**
+** Opens a specific file number for an OBDA index
+**
+** @param [u] qry [AjPQuery] Query data
+** @return [AjBool] ajTrue on success
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaQryFile(AjPQuery qry)
+{
+    TextPObdaQry qryd;
+
+    ajDebug("textObdaQryFile qry %x\n",qry);
+    qryd = qry->QryData;
+    ajDebug("textObdaQryFile qryd %x\n",qryd);
+    ajDebug("textObdaQryFile %F\n",qryd->dfp->File);
+
+    ajFileClose(&qryd->libt);
+    qryd->libt = ajFileNewInNameS(qryd->files[qryd->ifile]);
+
+    if(!qryd->libt)
+    {
+	ajErr("Cannot open file '%S' for database '%S'",
+	      qryd->files[qryd->ifile], qry->DbName);
+
+	return ajFalse;
+    }
+
+
+    return ajTrue;
+}
+
+
+
+
+/* ==========================================================================
+** EMBOSS OBDA database access
+** ==========================================================================
+*/
+
+
+
+
+/* @section OBDA Database Indexing ********************************************
+**
+** These functions manage the OBDA index access methods.
+**
+******************************************************************************/
+
+
+
+
+/* @funcstatic textAccessObda *************************************************
+**
+** Reads a text entry using OBDA index files.
+**
+** @param [u] textin [AjPTextin] Text input, including query data.
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textAccessObda(AjPTextin textin)
+{
+    AjBool retval = ajFalse;
+
+    AjPQuery qry;
+    TextPObdaQry qryd = NULL;
+    AjPStr qrystr = NULL;
+
+    qry = textin->Query;
+    qryd = qry->QryData;
+    ajDebug("textAccessObda type %d Single:%B Count:%u Multi:%B QryData:%p\n",
+            qry->QueryType, textin->Single, textin->Count, textin->Multi,
+            qry->QryData);
+
+    if(!ajNamDbGetDbalias(qry->DbName, &qry->DbAlias))
+	ajStrAssignS(&qry->DbAlias, qry->DbName);
+    
+    if(qry->QueryType == AJQUERY_ALL)
+	return textObdaAll(textin);
+
+    if(!qry->QryData)
+    {
+	if(!textObdaQryOpen(qry))
+        {
+            ajDebug("textObdaQryOpen failed\n");
+            return ajFalse;
+        }
+
+	qryd = qry->QryData;
+	textin->Single = ajTrue;
+	
+	if(qry->QueryType == AJQUERY_ENTRY)
+	{
+	    if(!textObdaQryEntry(qry))
+	    {
+                ajQueryGetQuery(qry, &qrystr);
+		ajDebug("OBDA Entry failed '%S'\n",
+                        qrystr);
+                ajStrDel(&qrystr);
+	    }
+
+            ajDebug("OBDA Entry success list:%Lu\n",
+                    ajListGetLength(qry->ResultsList));
+	}
+
+	if(qry->QueryType == AJQUERY_QUERY)
+	{
+	    if(!textObdaQryQuery(qry))
+	    {
+                ajQueryGetQuery(qry, &qrystr);
+		ajDebug("OBDA Query failed '%S'\n",
+                        qrystr);
+                ajStrDel(&qrystr);
+	    }
+
+            ajDebug("OBDA Query success\n");
+	}
+    }
+    else
+    {
+        if(!textObdaQryReuse(qry))
+        {
+            textObdaQryClose(qry);
+            return ajFalse;
+        }
+    }
+   
+
+    if(ajListGetLength(qry->ResultsList))
+    {
+	retval = textObdaQryNext(qry);
+        ajDebug("textObdaQryNext returned %B list %Lu samefile %B\n",
+                retval, ajListGetLength(qry->ResultsList),
+                qryd->Samefile);
+	if(retval)
+        {
+            if(qryd->Samefile)
+                ajFilebuffClear(textin->Filebuff, -1);
+            else
+                ajFilebuffReopenFile(&textin->Filebuff, qryd->libt);
+        }
+    }
+
+    if(!ajListGetLength(qry->ResultsList)) /* maybe emptied by code above */
+    {
+	textObdaQryClose(qry);
+    }
+
+
+    ajStrAssignS(&textin->Db, qry->DbName);
+
+    ajDebug("textAccessObda db: '%S' returns: %B\n", textin->Db, retval);
+    return retval;
+}
+
+
+
+
+/* @funcstatic textAccessFreeObda *********************************************
+**
+** Frees data specific to reading OBDA index files.
+**
+** @param [r] qry [void*] query data specific to OBDA
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textAccessFreeObda(void* qry)
+{
+    AjPQuery query;
+    TextPObdaQry qryd;
+    AjBool retval = ajTrue;
+
+    ajDebug("textAccessFreeObda\n");
+
+    query = (AjPQuery) qry;
+    qryd = query->QryData;
+    qryd->nentries = -1;
+
+    textObdaQryClose(query);
+
+    return retval;
+}
+
+
+
+
+/* @funcstatic textObdaQryReuse ***********************************************
+**
+** Tests whether the OBDA index query data can be reused or it's finished.
+**
+** Clears qryData structure when finished.
+**
+** @param [u] qry [AjPQuery] Query data
+** @return [AjBool] ajTrue if reusable,
+**                  ajFalse if finished.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaQryReuse(AjPQuery qry)
+{
+    TextPObdaQry qryd;
+
+    qryd = qry->QryData;
+
+    if(!qry || !qryd)
+	return ajFalse;
+
+
+    if(!qry->ResultsList)
+    {
+	ajDebug("textObdaQryReuse: query data all finished\n");
+	AJFREE(qry->QryData);
+	qryd = NULL;
+
+	return ajFalse;
+    }
+
+    /* ajDebug("textObdaQryReuse: reusing data from previous call %x\n",
+      qry->QryData); */
+
+    /*ajListTrace(qry->ResultsList);*/
+
+    qryd->nentries = -1;
+
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic textObdaQryOpen ************************************************
+**
+** Open config file and data file(s) for OBDA search
+**
+** @param [u] qry [AjPQuery] Query data
+** @return [AjBool] ajTrue if we can continue,
+**                  ajFalse if all is done.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaQryOpen(AjPQuery qry)
+{
+    TextPObdaQry qryd;
+
+    ajuint i;
+    static char *name;
+    AjPStr fullName = NULL;
+
+    if(!ajStrGetLen(qry->IndexDir))
+    {
+	ajDebug("no indexdir defined for database '%S'\n", qry->DbName);
+	ajErr("no indexdir defined for database '%S'", qry->DbName);
+
+	return ajFalse;
+    }
+
+    ajDebug("directory '%S' fields: %Lu hasacc:%B\n",
+	    qry->IndexDir, ajListGetLength(qry->QueryFields), qry->HasAcc);
+
+    qry->QryData = AJNEW0(qryd);
+    AJNEW0(qryd->idxLine);
+    AJNEW0(qryd->trgLine);
+
+    if(!textObdaConfigOpen(qry))
+    {
+	ajWarn("Cannot open config file in '%S' for database '%S'",
+	       qry->IndexDir, qry->DbName);
+
+	return ajFalse;
+    }
+
+    AJCNEW0(qryd->Skip, qryd->nfiles);
+
+    for(i=0; i < qryd->nfiles; i++)
+    {
+	ajStrAssignC(&fullName, name);
+	ajFilenameReplacePathS(&fullName, qry->Directory);
+
+	if(!ajFilenameTestInclude(fullName, qry->Exclude, qry->Filename))
+	    qryd->Skip[i] = ajTrue;
+    }
+
+    qryd->ifp = textObdaFileOpen(qry->IndexDir, qryd->idxname,
+                                 &fullName);
+
+    if(!qryd->ifp)
+    {
+	ajErr("Cannot open OBDA index file '%S' for database '%S'",
+	      qryd->idxname, qry->DbName);
+
+	return ajFalse;
+    }
+
+    ajStrDel(&fullName);
+    ajCharDel(&name);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic textObdaFileOpen ***********************************************
+**
+** Opens a named OBDA index file.
+**
+** @param [r] dir [const AjPStr] Directory
+** @param [r] name [const AjPStr] File name.
+** @param [w] fullname [AjPStr*] Full file name with directory path
+** @return [TextPObdaFile] OBDA index file object.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static TextPObdaFile textObdaFileOpen(const AjPStr dir, const AjPStr name,
+                                      AjPStr* fullname)
+{
+    TextPObdaFile thys = NULL;
+    char lenbuff[8] = "0000";
+    ajulong ul;
+    char* ptr;
+    ajlong isize;
+
+    AJNEW0(thys);
+
+    thys->File = ajFileNewInNamePathS(name, dir);
+
+    if(!thys->File)
+    {
+	AJFREE(thys);
+
+	return NULL;
+    }
+
+    ajReadbinChar(thys->File, 4, lenbuff);
+    ul = strtoul(lenbuff, &ptr, 10);
+    thys->RecSize = ul;
+
+    isize = ajFilenameGetSize(ajFileGetNameS(thys->File));
+    thys->NRecords = (isize-4) / thys->RecSize;
+
+    ajStrAssignS(fullname, ajFileGetPrintnameS(thys->File));
+
+    ajDebug("textObdaFileOpen '%F' RecSize: %u NRecords: %u\n",
+	    thys->File, thys->RecSize, thys->NRecords);
+
+
+    return thys;
+}
+
+
+
+
+
+/* @funcstatic textObdaAll ****************************************************
+**
+** Reads the OBDA config file and opens a list of all the
+** database files for plain reading.
+**
+** @param [u] textin [AjPTextin] Text input.
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaAll(AjPTextin textin)
+{
+    AjPList list;
+    AjPQuery qry;
+    AjPStr name = NULL;
+    TextPObdaQry qryd;
+    
+    ajint i;
+    
+    qry = textin->Query;
+
+    if(!ajStrGetLen(qry->IndexDir))
+    {
+	ajDebug("no indexdir defined for database %S\n", qry->DbName);
+	ajErr("no indexdir defined for database %S", qry->DbName);
+
+	return ajFalse;
+    }
+
+    ajDebug("OBDA All index directory '%S'\n", qry->IndexDir);
+
+
+    if(!textObdaQryOpen(qry))
+        return ajFalse;
+
+    qryd = qry->QryData;
+
+    list = ajListstrNew();
+    name     = ajStrNew();
+    
+    i = 0;
+    while(qryd->files[i])
+    {
+	ajStrAssignS(&name,qryd->files[i]);
+
+	if(ajFilenameTestInclude(name, qry->Exclude, qry->Filename))
+	{
+	    ajDebug("qrybufflist add '%S'\n", name);
+	    ajListstrPushAppend(list, name);
+	    name = NULL;
+	}
+	else
+	{
+	    ajDebug("qrybufflist *delete* '%S'\n", name);
+	    ajStrDel(&name);
+	}
+
+	++i;
+    }
+
+
+    ajFilebuffDel(&textin->Filebuff);
+    textin->Filebuff = ajFilebuffNewListinList(list);
+
+    ajStrAssignS(&textin->Db, qry->DbName);
+
+    if(!qry->CaseId)
+	qry->QryDone = ajTrue;
+
+    ajStrDel(&name);
+    
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic textObdaConfigOpen *********************************************
+**
+** Reads an OBDA config file.
+**
+** @param [u] qry [AjPQuery] Query
+** @return [AjBool] True on success
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaConfigOpen(AjPQuery qry)
+{
+    TextPObdaQry qryd;
+    AjPStr rdline = NULL;
+    const AjPStr fname = NULL;
+    AjPStr idxname = NULL;
+    AjPList idxlist = NULL;
+    AjPList filelist = NULL;
+
+    qryd = qry->QryData;
+
+    if(!qryd->dfp)
+        AJNEW0(qryd->dfp);
+
+    qryd->dfp->File = ajFileNewInNamePathC("config.dat", qry->IndexDir);
+    if(!qryd->dfp->File) 
+    {
+        ajFmtPrintS(&qryd->divfile, "%S/%S", qry->Directory, qry->DbAlias);
+        qryd->dfp->File = ajFileNewInNamePathC("config.dat", qryd->divfile);
+        if(!qryd->dfp->File) 
+        {
+            ajFatal("Failed to open OBDA config file 'config.dat' in %S or %S",
+                    qry->IndexDir, qryd->divfile);
+        }
+    }
+    else
+        ajStrAssignS(&qryd->divfile, ajFileGetNameS(qryd->dfp->File));
+
+/*
+** populate obda query with:
+** index type
+** list of filenames
+** list of fields
+** format
+*/
+    ajReadlineTrim(qryd->dfp->File, &rdline);
+    if(!ajStrMatchC(rdline, "index\tflat/1"))
+        ajErr("Obda index '%F' in format '%S'", qryd->dfp, rdline);
+
+    filelist = ajListNew();
+    idxlist = ajListNew();
+    while(ajReadlineTrim(qryd->dfp->File, &rdline))
+    {
+        fname = ajStrParseWhite(rdline);
+        if(ajStrPrefixC(fname, "fileid_"))
+        {
+            fname = ajStrParseWhite(NULL);
+            ajListstrPushAppend(filelist, ajStrNewS(fname));
+        }
+        else if(ajStrMatchC(fname, "primary_namespace"))
+        {
+            fname = ajStrParseWhite(NULL);
+            ajFmtPrintS(&qryd->idxname, "key_%S.key", fname);
+        }
+        else if(ajStrMatchC(fname, "secondary_namespaces"))
+        {
+            fname = ajStrParseWhite(NULL);
+            while(fname)
+            {
+                ajFmtPrintS(&idxname, "id_%S.index", fname);
+                ajListstrPushAppend(idxlist, ajStrNewS(idxname));
+                fname = ajStrParseWhite(NULL);
+            }
+        }
+    }
+    ajStrDel(&idxname);
+
+    qryd->nfiles = (ajuint) ajListstrToarray(filelist, &qryd->files);
+    ajListFree(&filelist);
+
+    qryd->nindex = (ajuint) ajListstrToarray(idxlist, &qryd->idxfiles);
+    ajListFree(&idxlist);
+
+    ajStrDel(&rdline);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic textObdaQryEntry ***********************************************
+**
+** Queries for a single entry in an OBDA index
+**
+** @param [u] qry [AjPQuery] Query data
+** @return [AjBool] ajTrue if can continue,
+**                  ajFalse if all is done.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaQryEntry(AjPQuery qry)
+{
+    TextPObdaEntry entry = NULL;
+    ajlong ipos = -1;
+    ajlong trghit;
+    TextPObdaQry qryd;
+    const AjPList fdlist;
+    AjIList iter;
+    AjPQueryField fd;
+    ajuint i;
+    AjPStr qrystr = NULL;
+
+    const char* embossfields[] = {
+        "id", "acc", "sv",    "org",   "key",     "des", "gi", NULL
+    };
+    const char* obdafields[] = {
+        NULL, "ACC", "seqvn", "taxon", "keyword", "des", "gi", NULL
+    };
+
+    fdlist = ajQueryGetallFields(qry);
+
+    ajQueryGetQuery(qry, &qrystr);
+
+    ajDebug("entry '%S'\n",
+	    qrystr);
+
+    ajStrDel(&qrystr);
+
+    qryd = qry->QryData;
+    iter= ajListIterNewread(fdlist);
+
+    while(!ajListIterDone(iter))
+    {
+        fd = ajListIterGet(iter);
+        if((fd->Link == AJQLINK_ELSE) && ajListGetLength(qry->ResultsList))
+                continue;
+
+        for(i=0; embossfields[i]; i++)
+        {
+            if(ajStrMatchC(fd->Field, embossfields[i]))
+            {
+                if(!obdafields[i]) /* ID index */
+                {
+                    ipos = textObdaIdxSearch(qryd->idxLine,
+                                             fd->Wildquery, qryd->ifp);
+
+                    if(ipos >= 0)
+                    {
+                        if(!qryd->Skip[qryd->idxLine->DivCode])
+                        {
+                            AJNEW0(entry);
+                            entry->div = qryd->idxLine->DivCode;
+                            entry->annoff = qryd->idxLine->AnnOffset;
+                            ajListPushAppend(qry->ResultsList, (void*)entry);
+                            entry = NULL;
+                        }
+                        else
+                            ajDebug("SKIP: '%S' [file %d]\n",
+                                    fd->Wildquery, qryd->idxLine->DivCode);
+                    }
+                }
+                else            /* target/hit index */
+                {
+                    if(textObdaSecOpen(qry->IndexDir, obdafields[i],
+                                       &qryd->trgfp))
+                    {
+                        trghit = textObdaSecSearch(qryd->trgLine,
+                                                   fd->Wildquery, qryd->trgfp);
+
+                        if(trghit >= 0)
+                        {
+                            textObdaIdxSearch(qryd->idxLine,
+                                              qryd->trgLine->Target, qryd->ifp);
+
+                            if(!qryd->Skip[qryd->idxLine->DivCode])
+                            {
+                                AJNEW0(entry);
+                                entry->div = qryd->idxLine->DivCode;
+                                entry->annoff = qryd->idxLine->AnnOffset;
+                                ajListPushAppend(qry->ResultsList,
+                                                 (void*)entry);
+                                entry = NULL;
+                            }
+                            else
+                                ajDebug("SKIP: %s '%S' [file %d]\n",
+                                        obdafields[i],
+                                        fd->Wildquery,
+                                        qryd->idxLine->DivCode);
+                        }
+
+                        textObdaSecClose(&qryd->trgfp);
+                        ajStrDel(&qryd->trgLine->Target);
+                    }
+                }
+                break;
+            }
+        }
+        if(!embossfields[i])
+        {
+/* repeat with native field name in upper case */
+        }
+    }
+
+    ajListIterDel(&iter);
+
+    if(ipos < 0)
+	return ajFalse;
+
+    if(!ajListGetLength(qry->ResultsList))
+	return ajFalse;
+
+    if(!qry->CaseId)
+	qry->QryDone = ajTrue;
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic textObdaQryNext ************************************************
+**
+** Processes the next query for an OBDA index
+**
+** @param [u] qry [AjPQuery] Query data
+** @return [AjBool] ajTrue if successful
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaQryNext(AjPQuery qry)
+{
+    TextPObdaEntry entry;
+    TextPObdaQry qryd;
+    void* item;
+
+    qryd = qry->QryData;
+
+    if(!ajListGetLength(qry->ResultsList))
+	return ajFalse;
+
+    ajDebug("qry->ResultsList (b) length %Lu\n",
+            ajListGetLength(qry->ResultsList));
+    /*ajListTrace(qry->ResultsList);*/
+    ajListPop(qry->ResultsList, &item);
+    entry = (TextPObdaEntry) item;
+
+    /*
+    ajDebug("entry: %x div: %d (%d) ann: %d\n",
+	    entry, entry->div, qryd->div, entry->annoff);
+    */
+
+    qryd->Samefile = ajTrue;
+
+    if(!qryd->libt || entry->div != qryd->ifile)
+    {
+	qryd->Samefile = ajFalse;
+	qryd->ifile = entry->div;
+	/*ajDebug("div: %d\n", qryd->div);*/
+
+	if(!textObdaQryFile(qry))
+	    return ajFalse;
+    }
+
+    /*
+    ajDebug("Offsets(obda) %d\n", entry->annoff);
+    */
+    ajFileSeek(qryd->libt, entry->annoff,0);
+
+    AJFREE(entry);
+
+    if(!qry->CaseId)
+	qry->QryDone = ajTrue;
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic textObdaQryClose ***********************************************
+**
+** Closes query data for an OBDA index
+**
+** @param [u] qry [AjPQuery] Query data
+** @return [AjBool] ajTrue if we can continue,
+**                  ajFalse if all is done.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaQryClose(AjPQuery qry)
+{
+    TextPObdaQry qryd = NULL;
+
+    ajDebug("textObdaQryClose clean up qryd\n");
+
+    qryd = qry->QryData;
+
+    if(!qryd)
+	return ajTrue;
+
+    ajStrDel(&qryd->divfile);
+
+    textObdaIdxDel(&qryd->idxLine);
+    textObdaSecDel(&qryd->trgLine);
+
+    textObdaFileClose(&qryd->ifp);
+    textObdaFileClose(&qryd->dfp);
+    ajStrDel(&qryd->idxname);
+    ajStrDelarray(&qryd->files);
+    ajStrDelarray(&qryd->idxfiles);
+
+    qryd->libt=0;
+    AJFREE(qryd->trgLine);
+    AJFREE(qryd->idxLine);
+    AJFREE(qryd->Skip);
+
+    /* keep QryData for use at top of loop */
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic textObdaQryQuery *********************************************
+**
+** Queries for one or more entries in an OBDA index
+**
+** @param [u] qry [AjPQuery] Query data
+** @return [AjBool] ajTrue if we can continue,
+**                  ajFalse if all is done.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaQryQuery(AjPQuery qry)
+{
+    AjIList iter = NULL;
+    AjPQueryField field = NULL;
+    const AjPList fdlist;
+
+    TextPObdaEntry newhit;
+    TextPObdaEntry *allhits = NULL;
+    ajulong** keys = NULL;
+
+    AjPTable newtable = NULL;
+
+    ajuint i;
+    ajulong lasthits = 0UL;
+    ajulong fdhits = 0UL;
+
+    ajulong *ikey = NULL;
+
+    ajuint ishift = sizeof(ajulong)/2;
+
+    ajDebug("textObdaQryQuery\n");
+
+    if(!qry->CaseId)
+	qry->QryDone = ajTrue;
+
+    ajTableSettypeUlong(qry->ResultsTable);
+    ajTableSetDestroyboth(qry->ResultsTable);
+
+    fdlist = ajQueryGetallFields(qry);
+    iter = ajListIterNewread(fdlist);
+
+    while(!ajListIterDone(iter))
+    {
+        field = ajListIterGet(iter);
+
+        if((field->Link == AJQLINK_ELSE) && (lasthits > 0))
+        {
+            ajDebug("ELSE: lasthits:%Lu skip\n", lasthits);
+            continue;
+        }
+
+        if(ajStrMatchC(field->Field, "id"))
+            textObdaIdxQuery(qry, field->Wildquery);
+        else
+            textObdaSecQuery(qry, field->Field, field->Wildquery);
+
+        fdhits = ajListGetLength(qry->ResultsList);
+
+        ajDebug("textObdaQryQuery hits: %Lu link: %u\n",
+                fdhits, field->Link);
+        switch(field->Link)
+        {
+            case AJQLINK_INIT:
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                {
+                    AJNEW(ikey);
+                    *ikey = (((ajulong)newhit->div) << ishift) +
+                        (ajulong)newhit->annoff;
+                    ajTablePutClean(qry->ResultsTable, ikey, newhit,
+                                    &ajMemFree, &ajMemFree);
+                    ikey = NULL;
+                }
+
+                break;
+
+            case AJQLINK_OR:
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                {
+                    AJNEW(ikey);
+                    *ikey = (((ajulong)newhit->div) << ishift) +
+                        (ajulong)newhit->annoff;
+                    ajTablePutClean(qry->ResultsTable, ikey, newhit,
+                                    &ajMemFree, &ajMemFree);
+                    ikey = NULL;
+                }
+                break;
+
+            case AJQLINK_AND:
+                newtable = ajTableulongNew(fdhits);
+                ajTableSetDestroyboth(newtable);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                {
+                    AJNEW(ikey);
+                    *ikey = (((ajulong)newhit->div) << ishift) +
+                        (ajulong)newhit->annoff;
+                    ajTablePutClean(newtable, ikey, newhit,
+                                    &ajMemFree, &ajMemFree);
+                    ikey = NULL;
+                }
+                ajTableMergeAnd(qry->ResultsTable, newtable);
+                ajTableDelValdel(&newtable, &ajMemFree);
+                break;
+
+            case AJQLINK_EOR:
+            case AJQLINK_ELSE:
+                newtable = ajTableulongNew(fdhits);
+                ajTableSetDestroyboth(newtable);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                {
+                    AJNEW(ikey);
+                    *ikey = (((ajulong)newhit->div) << ishift) + newhit->annoff;
+                    ajTablePutClean(newtable, ikey, newhit,
+                                    &ajMemFree, &ajMemFree);
+                    ikey = NULL;
+                }
+                ajTableMergeEor(qry->ResultsTable, newtable);
+                ajTableDelValdel(&newtable, &ajMemFree);
+                break;
+
+            case AJQLINK_NOT:
+                newtable = ajTableulongNew(fdhits);
+                ajTableSetDestroyboth(newtable);
+                while(ajListPop(qry->ResultsList, (void**)&newhit))
+                {
+                    AJNEW(ikey);
+                    *ikey = (((ajulong)newhit->div) << ishift) + newhit->annoff;
+                    ajTablePutClean(newtable, ikey, newhit,
+                                    &ajMemFree, &ajMemFree);
+                    ikey = NULL;
+                }
+                ajTableMergeNot(qry->ResultsTable, newtable);
+                ajTableDelValdel(&newtable, &ajMemFree);
+                break;
+
+            default:
+                ajErr("Unexpected query link operator number '%u'",
+                      field->Link);
+                break;
+        }
+        lasthits = fdhits;
+    }
+
+    ajListIterDel(&iter);
+
+    ajTableToarrayKeysValues(qry->ResultsTable, (void***) &keys,
+                             (void***)&allhits);
+    for(i=0; allhits[i]; i++)
+    {
+        AJFREE(keys[i]);
+        ajListPushAppend(qry->ResultsList, (void*) allhits[i]);
+    }
+    AJFREE(keys);
+
+    ajDebug("ajListSortUnique len:%Lu\n",
+            ajListGetLength(qry->ResultsList));
+    ajListSortUnique(qry->ResultsList,
+                     &textObdaEntryCmp, &textObdaEntryDel);
+
+    AJFREE(allhits);
+
+    ajDebug("textObdaQryQuery clear results table\n");
+    ajTableClear(qry->ResultsTable);
+
+    if(ajListGetLength(qry->ResultsList))
+        return ajTrue;
+
+    return ajFalse;
 }
 
 
@@ -4600,7 +6738,7 @@ static AjBool textCdQryFile(AjPQuery qry)
 
 
 
-/* @funcstatic textAccessDbfetch ***********************************************
+/* @funcstatic textAccessDbfetch **********************************************
 **
 ** Reads text entry(s) using EBI's dbfetch REST services.
 **
@@ -4608,6 +6746,8 @@ static AjBool textCdQryFile(AjPQuery qry)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4635,7 +6775,7 @@ static AjBool textAccessDbfetch(AjPTextin textin)
     else if(!ajNamDbGetDbalias(qry->DbName, &searchdb))
 	ajStrAssignS(&searchdb, qry->DbName);
 
-    ajDebug("textAccessDbfetch %S fields: %u\n",
+    ajDebug("textAccessDbfetch %S fields: %Lu\n",
             qry->DbAlias,
             ajListGetLength(qry->QueryFields));
 
@@ -4723,6 +6863,8 @@ static AjBool textAccessDbfetch(AjPTextin textin)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4822,6 +6964,8 @@ static AjBool textAccessWsdbfetch(AjPTextin textin)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4839,13 +6983,13 @@ static AjBool textAccessMrs5(AjPTextin textin)
     FILE *fp;
     AjPQuery qry;
     AjPStr searchdb = NULL;
-    struct AJTIMEOUT timo;
+    AjOSysTimeout timo;
     const AjPList fdlist;
     ajuint i;
     ajuint iqry=0;
     AjIList iter;
     AjPQueryField fd;
-    struct AJSOCKET sock;
+    AjOSysSocket sock;
 
     const char* embossfields[] = {
         "id", "acc", NULL
@@ -4861,7 +7005,7 @@ static AjBool textAccessMrs5(AjPTextin textin)
     if(!ajNamDbGetDbalias(qry->DbName, &searchdb))
 	ajStrAssignS(&searchdb, qry->DbName);
 
-    ajDebug("textAccessMrs5 %S fields: %u\n",
+    ajDebug("textAccessMrs5 %S fields: %Lu\n",
             qry->DbAlias, ajListGetLength(qry->QueryFields));
 
     if(!ajHttpQueryUrl(qry, &iport, &host, &urlget))
@@ -4992,6 +7136,8 @@ static AjBool textAccessMrs5(AjPTextin textin)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5009,13 +7155,13 @@ static AjBool textAccessMrs4(AjPTextin textin)
     FILE *fp;
     AjPQuery qry;
     AjPStr searchdb = NULL;
-    struct AJTIMEOUT timo;
+    AjOSysTimeout timo;
     const AjPList fdlist;
     ajuint i;
     ajuint iqry=0;
     AjIList iter;
     AjPQueryField fd;
-    struct AJSOCKET sock;
+    AjOSysSocket sock;
 
     const char* embossfields[] = {
         "id", "acc", NULL
@@ -5031,7 +7177,7 @@ static AjBool textAccessMrs4(AjPTextin textin)
     if(!ajNamDbGetDbalias(qry->DbName, &searchdb))
 	ajStrAssignS(&searchdb, qry->DbName);
 
-    ajDebug("textAccessMrs4 %S fields: %u\n",
+    ajDebug("textAccessMrs4 %S fields: %Lu\n",
             qry->DbAlias, ajListGetLength(qry->QueryFields));
 
     if(!ajHttpQueryUrl(qry, &iport, &host, &urlget))
@@ -5153,7 +7299,7 @@ static AjBool textAccessMrs4(AjPTextin textin)
 
 
 
-/* @funcstatic textAccessMrs3 ***********************************************
+/* @funcstatic textAccessMrs3 *************************************************
 **
 ** Reads sequence(s) using CMBI Nijmegen's Maarten's Retrieval System.
 ** This version of the interface assumes servers running MRS-3.
@@ -5162,6 +7308,8 @@ static AjBool textAccessMrs4(AjPTextin textin)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5179,8 +7327,8 @@ static AjBool textAccessMrs3(AjPTextin textin)
     FILE *fp;
     AjPQuery qry;
     AjPStr searchdb = NULL;
-    struct AJTIMEOUT timo;
-    struct AJSOCKET sock;
+    AjOSysTimeout timo;
+    AjOSysSocket sock;
     const AjPList fdlist;
     ajuint i;
     AjIList iter = NULL;
@@ -5201,7 +7349,7 @@ static AjBool textAccessMrs3(AjPTextin textin)
     if(!ajNamDbGetDbalias(qry->DbName, &searchdb))
 	ajStrAssignS(&searchdb, qry->DbName);
 
-    ajDebug("textAccessMrs3 %S fields: %u\n",
+    ajDebug("textAccessMrs3 %S fields: %Lu\n",
             qry->DbAlias, ajListGetLength(qry->QueryFields));
 
     if(!ajHttpQueryUrl(qry, &iport, &host, &urlget))
@@ -5329,6 +7477,8 @@ static AjBool textAccessMrs3(AjPTextin textin)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5421,13 +7571,15 @@ static AjBool textAccessUrl(AjPTextin textin)
 
 
 
-/* @funcstatic textSocketTimeout ***********************************************
+/* @funcstatic textSocketTimeout **********************************************
 **
 ** Fatal error if a socket read hangs
 **
 ** @param [r] sig [int] Signal code - always SIGALRM but required by the
 **                      signal call
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5452,13 +7604,15 @@ static void textSocketTimeout(int sig)
 
 
 
-/* @funcstatic textAccessApp ***************************************************
+/* @funcstatic textAccessApp **************************************************
 **
 ** Reads sequence data using an application which can accept a specification
 ** in the form "database:entry" such as Erik Sonnhammer's 'efetch'.
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5575,7 +7729,7 @@ static AjBool textAccessApp(AjPTextin textin)
 
 
 
-/* @funcstatic textAccessDirect ************************************************
+/* @funcstatic textAccessDirect ***********************************************
 **
 ** Reads a sequence from a database which may have multiple files.
 ** The sequence input object holds a directory name and a (wildcard)
@@ -5585,6 +7739,8 @@ static AjBool textAccessApp(AjPTextin textin)
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5626,7 +7782,7 @@ static AjBool textAccessDirect(AjPTextin textin)
 
 
 
-/* @funcstatic textCdTrgQuery **************************************************
+/* @funcstatic textCdTrgQuery *************************************************
 **
 ** Binary search of an EMBL CD-ROM index file for entries matching a
 ** wildcard query.
@@ -5638,6 +7794,8 @@ static AjBool textAccessDirect(AjPTextin textin)
 ** @param [r] field [const AjPStr] Query field
 ** @param [r] wildqry [const AjPStr] Query string
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5674,6 +7832,56 @@ static AjBool textCdTrgQuery(AjPQuery qry, const AjPStr field,
 
 
 
+/* @funcstatic textObdaSecQuery ***********************************************
+**
+** Binary search of an OBDA secondary index file for entries matching a
+** wildcard query.
+**
+** Where more than one query field is defined (usually acc and sv) it
+** can test all and append to a single list.
+**
+** @param [u] qry [AjPQuery] Sequence query object.
+** @param [r] field [const AjPStr] Query field
+** @param [r] wildqry [const AjPStr] Query string
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool textObdaSecQuery(AjPQuery qry, const AjPStr field,
+                               const AjPStr wildqry)
+{
+    ajint ret=0;
+
+    if(ajStrMatchC(field, "org"))
+	ret += textObdaSecFind(qry, "taxon", wildqry);
+
+    if(ajStrMatchC(field, "key"))
+	ret += textObdaSecFind(qry, "keyword", wildqry);
+
+    if(ajStrMatchC(field, "des"))
+	ret += textObdaSecFind(qry, "des", wildqry);
+
+    if(ajStrMatchC(field, "sv"))
+	ret += textObdaSecFind(qry, "seqvn", wildqry);
+
+    if(ajStrMatchC(field, "gi"))
+	ret += textObdaSecFind(qry, "gi", wildqry);
+
+    if(qry->HasAcc && ajStrMatchC(field, "acc"))
+	ret += textObdaSecFind(qry, "ACC", wildqry);
+
+
+    if(ret)
+	return ajTrue;
+
+    return ajFalse;
+}
+
+
+
+
 /* @funcstatic textCdTrgFind **************************************************
 **
 ** Binary search of an EMBL CD-ROM index file for entries matching a
@@ -5686,6 +7894,8 @@ static AjBool textCdTrgQuery(AjPQuery qry, const AjPStr field,
 ** @param [r] indexname [const char*] Index name.
 ** @param [r] queryName [const AjPStr] Query string.
 ** @return [ajuint] Number of matches found
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5886,25 +8096,239 @@ static ajuint textCdTrgFind(AjPQuery qry, const char* indexname,
 
     textCdTrgClose(&trgfp, &hitfp);
 
-    ajDebug("result list length: %u\n", ajListGetLength(l));
+    ajDebug("result list length: %Lu\n", ajListGetLength(l));
 
     ajStrDel(&trgline->Target);
     ajStrDel(&fdstr);
     ajStrDel(&fdprefix);
 
-    return ajListGetLength(l);
+    return (ajuint) ajListGetLength(l);
 }
 
 
 
 
-/* @func ajTextdbPrintAccess ***************************************************
+/* @funcstatic textObdaSecFind ************************************************
+**
+** Binary search of an OBDA secondary index file for entries matching a
+** wildcard query.
+**
+** Where more than one query field is defined (usually acc and sv) it
+** can test all and append to a single list.
+**
+** @param [u] qry [AjPQuery] Sequence query object.
+** @param [r] indexname [const char*] Index name.
+** @param [r] queryName [const AjPStr] Query string.
+** @return [ajuint] Number of matches found
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static ajuint textObdaSecFind(AjPQuery qry, const char* indexname,
+                              const AjPStr queryName)
+{
+    TextPObdaQry wild;
+    AjPList   l;
+    TextPObdaSecidx trgline;
+    TextPObdaIdx idxline;
+    TextPObdaFile idxfp;
+    TextPObdaFile trgfp;
+    AjBool *skip;
+
+    AjPStr fdstr    = NULL;
+    AjPStr fdprefix = NULL;
+
+    ajlong t;
+    ajlong b;
+    ajlong t2;
+    ajlong b2;
+    ajlong t3;
+    ajlong pos = 0L;
+    ajint prefixlen;
+    ajlong start;
+    ajlong end;
+    ajlong i;
+    ajint cmp;
+    AjBool match;
+
+    AjBool first;
+    const AjPStr name;
+
+    TextPObdaEntry entry;
+
+
+    wild    = qry->QryData;
+    l       = qry->ResultsList;
+    trgline = wild->trgLine;
+    idxline = wild->idxLine;
+    idxfp   = wild->ifp;
+    trgfp   = wild->trgfp;
+    skip    = wild->Skip;
+
+
+    if(!textObdaSecOpen(qry->IndexDir, indexname, &trgfp))
+	return 0;
+
+    /* fdstr is the original query string, in uppercase */
+
+    /* fdprefix is the fixed (no wildcard) prefix of fdstr */
+
+    ajStrAssignS(&fdstr,queryName);
+    ajStrFmtUpper(&fdstr);
+    ajStrAssignS(&fdprefix,fdstr);
+
+    ajStrRemoveWild(&fdprefix);
+
+    ajDebug("queryName '%S' fdstr '%S' fdprefix '%S'\n",
+	    queryName, fdstr, fdprefix);
+
+    b = b2 = 0;
+    t = t2 = t3 = trgfp->NRecords - 1;
+
+    prefixlen = ajStrGetLen(fdprefix);
+    first = ajTrue;
+
+    if(prefixlen)
+    {
+	/*
+	 ** (1a) we have a prefix (no wildcard at the start)
+	 ** look for the prefix fdprefix
+	 ** Set range of records that match (will be consecutive of course)
+	 ** from first match
+	 */
+
+	while(b<=t)
+	{
+	    pos = (t+b)/2;
+	    name = textObdaSecName(pos,trgfp);
+	    cmp = ajStrCmpS(fdprefix,name);
+	    /*	    match = ajStrMatchWildC(fdstr,name);*/
+	    ajDebug(" trg testc %d '%S' '%S' %B (+/- %d)\n",
+		    pos,name,fdprefix,cmp, t-b);
+	    if(!cmp)
+	    {
+		ajDebug(" trg hit %d\n",pos);
+
+		if(first)
+		{
+		    first = ajFalse;
+		    t2 = t;
+		    t3 = pos;
+		}
+
+		b2 = pos;
+	    }
+
+	    if(cmp>0)
+		b = pos+1;
+	    else
+		t = pos-1;
+	}
+
+	if(first)
+	{
+	    ajStrDel(&fdprefix);
+	    ajStrDel(&fdstr);
+	    textObdaSecClose(&trgfp);
+
+	    return ajFalse;
+	}
+
+	ajDebug("first pass: pos:%d b2:%d t2:%d\n",pos,b2,t2);
+
+	/*
+	 ** (1b) Process below
+	 */
+
+	b = b2-1;
+	t = t2;
+
+	while(b<=t)
+	{
+	    pos = (t+b)/2;
+	    name = textObdaSecName(pos,trgfp);
+	    cmp = ajStrCmpS(fdprefix,name);
+	    /* match = ajStrMatchWildC(fdstr,name); */
+	    ajDebug(" trg testd %d '%S' '%S' %B (+/- %d)\n",
+		    pos,name,fdprefix,cmp,t-b);
+
+	    if(!cmp)
+	    {
+		ajDebug(" trg hit %d\n",pos);
+		t3 = pos;
+	    }
+
+	    if(cmp<0)
+		t = pos-1;
+	    else
+		b = pos+1;
+	}
+
+	ajDebug("second pass: pos:%d b2:%d t3:%d\n",pos,b2,t3);
+	name = textObdaSecName(b2,trgfp);
+	ajDebug("first %d '%S'\n",b2,name);
+	name = textObdaSecName(t3,trgfp);
+	ajDebug("last %d '%S'\n",t3,name);
+    }
+
+
+    start = b2;
+    end   = t3;
+
+    for(i=start;i<=end;++i)
+    {
+	name = textObdaSecName(i,trgfp);
+	match = ajStrMatchWildS(name, fdstr);
+
+	ajDebug("third pass: match:%B i:%d name '%S' queryName '%S'\n",
+		match, i, name, fdstr);
+
+	if(!match)
+            continue;
+
+	textObdaSecLine(trgline, i, trgfp);
+
+        /* process the first hit */
+
+        textObdaIdxSearch(idxline,
+                          trgline->Target, idxfp);
+        if(!skip[idxline->DivCode])
+        {
+            AJNEW0(entry);
+            entry->div = idxline->DivCode;
+            entry->annoff = idxline->AnnOffset;
+            ajListPushAppend(l,(void*)entry);
+            entry = NULL;
+        }
+        else
+            ajDebug("SKIP: token '%S' [file %d]\n",
+                    queryName,idxline->DivCode);
+    }
+
+    textObdaSecClose(&trgfp);
+
+    ajDebug("result list length: %Lu\n", ajListGetLength(l));
+
+    ajStrDel(&trgline->Target);
+    ajStrDel(&fdstr);
+    ajStrDel(&fdprefix);
+
+    return (ajuint) ajListGetLength(l);
+}
+
+
+
+
+/* @func ajTextdbPrintAccess **************************************************
 **
 ** Reports the internal data structures
 **
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5933,12 +8357,14 @@ void ajTextdbPrintAccess(AjPFile outf, AjBool full)
 
 
 
-/* @funcstatic textCdIdxDel ****************************************************
+/* @funcstatic textCdIdxDel ***************************************************
 **
 ** Destructor for TextPCdIdx
 **
 ** @param [d] pthys [TextPCdIdx*] Cd index object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void textCdIdxDel(TextPCdIdx* pthys)
@@ -5963,6 +8389,8 @@ static void textCdIdxDel(TextPCdIdx* pthys)
 **
 ** @param [d] pthys [TextPCdTrg*] Cd index target object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void textCdTrgDel(TextPCdTrg* pthys)
@@ -5981,11 +8409,65 @@ static void textCdTrgDel(TextPCdTrg* pthys)
 
 
 
+/* @funcstatic textObdaIdxDel *************************************************
+**
+** Destructor for TextPObdaIdx
+**
+** @param [d] pthys [TextPObdaIdx*] OBDA index object
+** @return [void]
+**
+** @release 6.5.0
+******************************************************************************/
+
+static void textObdaIdxDel(TextPObdaIdx* pthys)
+{
+    TextPObdaIdx thys = *pthys;
+
+    if(!thys)
+        return;
+
+    ajStrDel(&thys->EntryName);
+    AJFREE(*pthys);
+
+    return;
+}
+
+
+
+
+/* @funcstatic textObdaSecDel *************************************************
+**
+** Destructor for TextPObdaSecidx
+**
+** @param [d] pthys [TextPObdaSecidx*] OBDA secondary index object
+** @return [void]
+**
+** @release 6.5.0
+******************************************************************************/
+
+static void textObdaSecDel(TextPObdaSecidx* pthys)
+{
+    TextPObdaSecidx thys = *pthys;
+
+    if(!thys)
+        return;
+
+    ajStrDel(&thys->Target);
+    AJFREE(*pthys);
+
+    return;
+}
+
+
+
+
 /* @func ajTextdbExit *********************************************************
 **
 ** Cleans up text entry database processing internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5998,6 +8480,8 @@ void ajTextdbExit(void)
     ajRegFree(&textRegEntrezId);
     ajRegFree(&textRegDbfetchErr);
     ajRegFree(&textRegGi);
+    ajStrDel(&textObdaName);
+    ajStrDel(&textObdaTmpName);
 
     return;
 }
@@ -6014,6 +8498,8 @@ void ajTextdbExit(void)
 ** @param [r] queryterm [const AjPStr] Query term
 ** @param [r] retfields [const AjPStr] Return fields in DB definition
 ** @return [AjPFilebuff] Buffered file
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjPFilebuff textEBeyeGetresults(const AjPStr domain,
@@ -6073,6 +8559,8 @@ static AjPFilebuff textEBeyeGetresults(const AjPStr domain,
 **
 ** @param [u] textin [AjPTextin] Text input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6154,6 +8642,8 @@ static AjBool textAccessEBeye(AjPTextin textin)
 ** @param [r] url [const AjPStr] URL for the wsdbfetch database
 ** @param [r] format [const AjPStr] format name for the wsdbfetch database
 ** @return [AjPStr] Result string
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6205,6 +8695,8 @@ static AjPStr textWsdbfetchFetchData(const AjPStr db, const AjPStr id,
 ** @param [r] retfields  [const AjPStr] return fields
 ** @param [u] buff  [AjPFilebuff] Input file buffer
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6348,6 +8840,8 @@ static void textEbeyeGetresultsParse(axiom_node_t *wsResult,
 ** @param [r] domain [const AjPStr] ebeye domain name
 ** @param [r] entry [const AjPStr] entry id
 ** @return [AjPList] list of referenced domains
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 static AjPList textEbeyeGetdomainsreferencedinentry(
@@ -6382,6 +8876,8 @@ static AjPList textEbeyeGetdomainsreferencedinentry(
 ** @param [u] buff  [AjPFilebuff] buffer for saving ws results
 ** @param [r] entry [const AjPStr] entry (id)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6440,7 +8936,7 @@ static void textEbeyeGetreferencedentries(axis2_svc_client_t* client,
     ajFilebuffLoadS(buff, refline);
     ajStrDel(&refline);
 
-    n = ajListGetLength(refdomains);
+    n = (ajuint) ajListGetLength(refdomains);
 
     while(n-- > 0)
     {
@@ -6468,6 +8964,8 @@ static void textEbeyeGetreferencedentries(axis2_svc_client_t* client,
 ** @param [u] wsResult [axiom_node_t*] axis2 environment
 ** @param [r] env [const axutil_env_t*] axis2 environment
 ** @return [AjPStr] Referenced entry ids
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6537,13 +9035,15 @@ static AjPStr textEbeyeGetreferencedentriesParse(axiom_node_t *wsResult,
 
 
 
-/* @funcstatic textEbeyeGetdomainsreferencedinentryParse *********************
+/* @funcstatic textEbeyeGetdomainsreferencedinentryParse **********************
 **
 ** Parses results of ebeye webservices GetDomainsReferencedInEntry calls
 **
 ** @param [u] wsResult [axiom_node_t*] webservices result obj
 ** @param [r] env [const axutil_env_t*] axis2 environment
 ** @return [AjPList] list of domains
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6619,6 +9119,8 @@ static AjPList textEbeyeGetdomainsreferencedinentryParse(
 ** @param [u] wsResult [axiom_node_t*] webservices result obj
 ** @param [r] env [const axutil_env_t*] axis2 environment
 ** @return [ajint] Number of results
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6687,6 +9189,8 @@ static ajint textEbeyeGetnumberofresultsParse(axiom_node_t *wsResult,
 ** @param [r] entry  [const AjPStr] entry id
 ** @param [r] refdomain  [const AjPStr] reference domain
 ** @return [axiom_node_t*] axis2 OM object, for service input
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6705,7 +9209,7 @@ static axiom_node_t* textEbeyeGetreferencedentriesPayload(
     axiom_node_t *child   = NULL;
     axiom_namespace_t *ns = NULL;
 
-    ajDebug("textEbeyeGetreferencedentriesPayload domain:%s refdomain:%S\n",
+    ajDebug("textEbeyeGetreferencedentriesPayload domain:%S refdomain:%S\n",
 	    domain, refdomain);
 
     ns = axiom_namespace_create(env, EBEYE_NS, "ebeye");
@@ -6731,7 +9235,7 @@ static axiom_node_t* textEbeyeGetreferencedentriesPayload(
 
 
 
-/* @funcstatic textEbeyeGetresultsPayload ************************************
+/* @funcstatic textEbeyeGetresultsPayload *************************************
 **
 ** Prepares input for ebeye webservices getResults calls
 **
@@ -6741,6 +9245,8 @@ static axiom_node_t* textEbeyeGetreferencedentriesPayload(
 ** @param [r] retfields  [const AjPStr] return fields
 ** @param [r] start  [ajint] Start number
 ** @return [axiom_node_t*] axis2 OM object, for service input
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6800,7 +9306,7 @@ static axiom_node_t* textEbeyeGetresultsPayload(const axutil_env_t * env,
 
 
 
-/* @funcstatic textEbeyeGetdomainsreferencedinentryPayload *******************
+/* @funcstatic textEbeyeGetdomainsreferencedinentryPayload ********************
 **
 ** Prepares input for ebeye webservices GetDomainsReferencedInEntry calls
 **
@@ -6808,6 +9314,8 @@ static axiom_node_t* textEbeyeGetresultsPayload(const axutil_env_t * env,
 ** @param [r] domain [const AjPStr] ebeye domain name
 ** @param [r] entry [const AjPStr] entry id
 ** @return [axiom_node_t*] axis2 OM object, for service input
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6851,6 +9359,8 @@ static axiom_node_t* textEbeyeGetdomainsreferencedinentryPayload(
 ** @param [r] domain [const AjPStr] ebeye domain name
 ** @param [r] query  [const AjPStr] ebeye query
 ** @return [axiom_node_t*] axis2 OM object, for service input
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6894,6 +9404,8 @@ static axiom_node_t* textEbeyeGetnumberofresultsPayload(
 ** @param [r] id [const AjPStr] wsdbfetch entry identifier
 ** @param [r] format [const AjPStr] wsdbfetch entry format name
 ** @return [axiom_node_t*] axis2 OM object, for service input
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -6933,7 +9445,7 @@ static axiom_node_t* textWsdbfetchFetchdataPayload(const axutil_env_t * env,
 
 
 
-/* @funcstatic textWsdbfetchGetEntryPtr **************************************
+/* @funcstatic textWsdbfetchGetEntryPtr ***************************************
 **
 ** Returns the entry string from result objects obtained by wsdbfetch call
 **
@@ -6941,6 +9453,8 @@ static axiom_node_t* textWsdbfetchFetchdataPayload(const axutil_env_t * env,
 **				       obtained by wsdbfetch call
 ** @param [r] env [const axutil_env_t*] axis2 environment
 ** @return [char*] sequence string
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

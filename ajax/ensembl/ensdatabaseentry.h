@@ -1,10 +1,37 @@
+/* @include ensdatabaseentry **************************************************
+**
+** Ensembl Database Entry functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.28 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/20 22:07:21 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSDATABASEENTRY_H
 #define ENSDATABASEENTRY_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensanalysis.h"
 #include "ensexternaldatabase.h"
@@ -14,55 +41,91 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
-
-
-
-/* @const EnsEOntologylinkageType *********************************************
+/* @enum EnsEOntologylinkageType **********************************************
 **
 ** Ensembl Ontology Linkage Type enumeration
 **
+** @value ensEOntologylinkageTypeNULL
+** Null
+** @value ensEOntologylinkageTypeIC
+** Inferred by Curator
+** @value ensEOntologylinkageTypeIDA
+** Inferred from Direct Assay
+** @value ensEOntologylinkageTypeIEA
+** Inferred from Electronic Annotation
+** @value ensEOntologylinkageTypeIEP
+** Inferred from Expression Pattern
+** @value ensEOntologylinkageTypeIGI
+** Inferred from Genetic Interaction
+** @value ensEOntologylinkageTypeIMP
+** Inferred from Mutant Phenotype
+** @value ensEOntologylinkageTypeIPI
+** Inferred from Physical Interaction
+** @value ensEOntologylinkageTypeISS
+** Inferred from Sequence or Structural Similarity
+** @value ensEOntologylinkageTypeNAS
+** Non-traceable Author Statement
+** @value ensEOntologylinkageTypeND
+** No biological Data available
+** @value ensEOntologylinkageTypeTAS
+** Traceable Author Statement
+** @value ensEOntologylinkageTypeNR
+** Not Recorded
+** @value ensEOntologylinkageTypeRCA
+** Inferred from Reviewed Computational Analysis
+** @value ensEOntologylinkageTypeEXP
+** Inferred from Experiment
+** @value ensEOntologylinkageTypeISO
+** Inferred from Sequence Orthology
+** @value ensEOntologylinkageTypeISA
+** Inferred from Sequence Alignment
+** @value ensEOntologylinkageTypeISM
+** Inferred from Sequence Model
+** @value ensEOntologylinkageTypeIGC
+** Inferred from Genomic Context
+** @@
 ******************************************************************************/
 
 typedef enum EnsOOntologylinkageType
 {
-    ensEOntologylinkageNULL,
-    ensEOntologylinkageIC,  /* Inferred by Curator */
-    ensEOntologylinkageIDA, /* Inferred from Direct Assay */
-    ensEOntologylinkageIEA, /* Inferred from Electronic Annotation */
-    ensEOntologylinkageIEP, /* Inferred from Expression Pattern */
-    ensEOntologylinkageIGI, /* Inferred from Genetic Interaction */
-    ensEOntologylinkageIMP, /* Inferred from Mutant Phenotype */
-    ensEOntologylinkageIPI, /* Inferred from Physical Interaction */
-    ensEOntologylinkageISS, /* Inferred from Sequence or Structural Similarity */
-    ensEOntologylinkageNAS, /* Non-traceable Author Statement */
-    ensEOntologylinkageND,  /* No biological Data available */
-    ensEOntologylinkageTAS, /* Traceable Author Statement */
-    ensEOntologylinkageNR,  /* Not Recorded */
-    ensEOntologylinkageRCA, /* Inferred from Reviewed Computational Analysis */
-    ensEOntologylinkageEXP, /* Inferred from Experiment */
-    ensEOntologylinkageISO, /* Inferred from Sequence Orthology */
-    ensEOntologylinkageISA, /* Inferred from Sequence Alignment */
-    ensEOntologylinkageISM, /* Inferred from Sequence Model */
-    ensEOntologylinkageIGC  /* Inferred from Genomic Context */
+    ensEOntologylinkageTypeNULL,
+    ensEOntologylinkageTypeIC,
+    ensEOntologylinkageTypeIDA,
+    ensEOntologylinkageTypeIEA,
+    ensEOntologylinkageTypeIEP,
+    ensEOntologylinkageTypeIGI,
+    ensEOntologylinkageTypeIMP,
+    ensEOntologylinkageTypeIPI,
+    ensEOntologylinkageTypeISS,
+    ensEOntologylinkageTypeNAS,
+    ensEOntologylinkageTypeND,
+    ensEOntologylinkageTypeTAS,
+    ensEOntologylinkageTypeNR,
+    ensEOntologylinkageTypeRCA,
+    ensEOntologylinkageTypeEXP,
+    ensEOntologylinkageTypeISO,
+    ensEOntologylinkageTypeISA,
+    ensEOntologylinkageTypeISM,
+    ensEOntologylinkageTypeIGC
 } EnsEOntologylinkageType;
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -91,7 +154,7 @@ EnsPExternalreference ensExternalreferenceNewRef(
     EnsPExternalreference er);
 
 void ensExternalreferenceDel(
-    EnsPExternalreference* Per);
+    EnsPExternalreference *Per);
 
 EnsPAnalysis ensExternalreferenceGetAnalysis(
     const EnsPExternalreference er);
@@ -172,13 +235,13 @@ size_t ensExternalreferenceCalculateMemsize(const EnsPExternalreference er);
 EnsEExternalreferenceInfotype ensExternalreferenceInfotypeFromStr(
     const AjPStr infotype);
 
-const char* ensExternalreferenceInfotypeToChar(
+const char *ensExternalreferenceInfotypeToChar(
     EnsEExternalreferenceInfotype erit);
 
 EnsEExternalreferenceObjecttype ensExternalreferenceObjecttypeFromStr(
     const AjPStr objecttype);
 
-const char* ensExternalreferenceObjecttypeToChar(
+const char *ensExternalreferenceObjecttypeToChar(
     EnsEExternalreferenceObjecttype erot);
 
 /* Ensembl Identity Reference */
@@ -199,7 +262,7 @@ EnsPIdentityreference ensIdentityreferenceNewIni(AjPStr cigar,
 EnsPIdentityreference ensIdentityreferenceNewRef(
     EnsPIdentityreference ir);
 
-void ensIdentityreferenceDel(EnsPIdentityreference* Pir);
+void ensIdentityreferenceDel(EnsPIdentityreference *Pir);
 
 AjPStr ensIdentityreferenceGetCigar(const EnsPIdentityreference ir);
 
@@ -262,13 +325,13 @@ EnsPOntologylinkage ensOntologylinkageNewIni(
 EnsPOntologylinkage ensOntologylinkageNewRef(
     EnsPOntologylinkage ol);
 
-void ensOntologylinkageDel(EnsPOntologylinkage* Pol);
+void ensOntologylinkageDel(EnsPOntologylinkage *Pol);
 
 /* Ensembl Ontology Linkage Type */
 
 EnsEOntologylinkageType ensOntologylinkageTypeFromStr(const AjPStr type);
 
-const char* ensOntologylinkageTypeToChar(EnsEOntologylinkageType olt);
+const char *ensOntologylinkageTypeToChar(EnsEOntologylinkageType olt);
 
 /* Ensembl Database Entry */
 
@@ -291,7 +354,7 @@ EnsPDatabaseentry ensDatabaseentryNewIni(
 
 EnsPDatabaseentry ensDatabaseentryNewRef(EnsPDatabaseentry dbe);
 
-void ensDatabaseentryDel(EnsPDatabaseentry* Pdbe);
+void ensDatabaseentryDel(EnsPDatabaseentry *Pdbe);
 
 EnsPDatabaseentryadaptor ensDatabaseentryGetAdaptor(
     const EnsPDatabaseentry dbe);
@@ -401,10 +464,6 @@ AjBool ensDatabaseentryFetchAllMastersByTranslation(
     const EnsPTranslation translation,
     AjPList dbes);
 
-AjBool ensTableDatabaseentryClear(AjPTable table);
-
-AjBool ensTableDatabaseentryDelete(AjPTable* Ptable);
-
 /* Ensembl Database Entry Adaptor */
 
 EnsPDatabaseentryadaptor ensRegistryGetDatabaseentryadaptor(
@@ -413,7 +472,7 @@ EnsPDatabaseentryadaptor ensRegistryGetDatabaseentryadaptor(
 EnsPDatabaseentryadaptor ensDatabaseentryadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensDatabaseentryadaptorDel(EnsPDatabaseentryadaptor* Pdbea);
+void ensDatabaseentryadaptorDel(EnsPDatabaseentryadaptor *Pdbea);
 
 EnsPDatabaseadaptor ensDatabaseentryadaptorGetDatabaseadaptor(
     const EnsPDatabaseentryadaptor dbea);
@@ -477,6 +536,12 @@ AjBool ensDatabaseentryadaptorFetchAllbyGene(
     EnsEExternaldatabaseType dbtype,
     AjPList dbes);
 
+AjBool ensDatabaseentryadaptorFetchAllbyName(
+    EnsPDatabaseentryadaptor dbea,
+    const AjPStr name,
+    const AjPStr dbname,
+    AjPList dbes);
+
 AjBool ensDatabaseentryadaptorFetchAllbyObject(
     EnsPDatabaseentryadaptor dbea,
     ajuint objectidentifier,
@@ -508,12 +573,12 @@ AjBool ensDatabaseentryadaptorFetchByAccession(
     EnsPDatabaseentryadaptor dbea,
     const AjPStr dbname,
     const AjPStr accession,
-    EnsPDatabaseentry* Pdbe);
+    EnsPDatabaseentry *Pdbe);
 
 AjBool ensDatabaseentryadaptorFetchByIdentifier(
     EnsPDatabaseentryadaptor dbea,
     ajuint identifier,
-    EnsPDatabaseentry* Pdbe);
+    EnsPDatabaseentry *Pdbe);
 
 AjBool ensDatabaseentryadaptorRetrieveAllGeneidentifiersByExternaldatabasename(
     EnsPDatabaseentryadaptor dbea,

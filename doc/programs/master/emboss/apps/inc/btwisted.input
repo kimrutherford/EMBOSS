@@ -28,7 +28,7 @@ RN   [1]
 RP   1-2399
 RA   Denda K.;
 RT   ;
-RL   Submitted (24-DEC-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (24-DEC-1996) to the INSDC.
 RL   Kimitoshi Denda, Tokyo Institute of Technology, Department of Life Science;
 RL   4259 Nagatsuta, Midori-ku, Yokohama, Kanagawa 227, Japan
 RL   (E-mail:kdenda@bio.titech.ac.jp, Tel:45-924-5702, Fax:45-924-5771)
@@ -40,23 +40,23 @@ RA   Shimomura T., Denda K., Kitamura A., Kawaguchi T., Kito M., Kondo J.,
 RA   Kagaya S., Qin L., Takata H., Miyazawa K., Kitamura N.;
 RT   "Hepatocyte growth factor activator inhibitor, a novel Kunitz-type serine
 RT   protease inhibitor";
-RL   J. Biol. Chem. 272(10):6370-6376(1997).
+RL   J Biol Chem 272(10):6370-6376(1997).
 XX
 DR   Ensembl-Gn; ENSG00000166145; Homo_sapiens.
 DR   Ensembl-Tr; ENST00000344051; Homo_sapiens.
 DR   Ensembl-Tr; ENST00000431806; Homo_sapiens.
-DR   H-InvDB; HIT000057890.
+DR   Ensembl-Tr; ENST00000536281; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000562057; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000563656; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000564375; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000566928; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000568580; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000568823; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000569589; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..2399
-FT                   /organism="Homo sapiens"
-FT                   /mol_type="mRNA"
-FT                   /db_xref="taxon:9606"
-FT   CDS             176..1717
-FT                   /product="hepatocyte growth factor activator inhibitor"
-FT                   /db_xref="GDB:118879"
-FT                   /db_xref="GOA:O43278"
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>

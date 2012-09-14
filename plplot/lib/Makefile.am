@@ -1,2 +1,5 @@
+## Process this file with automake to produce Makefile.in
 
-pkgdata_DATA = plstnd5.fnt  plxtnd5.fnt
+dist_pkgdata_DATA = \
+plstnd5.fnt \
+plxtnd5.fnt

@@ -1,4 +1,4 @@
-<HTML>
+HTML>
 
 <HEAD>
   <TITLE>
@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -62,8 +62,7 @@ Here is a sample session with <b>fuzzpro</b>
 Search for patterns in protein sequences
 Input protein sequence(s): <b>tsw:*</b>
 Search pattern: <b>[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G</b>
-Output report [12s1_arath.fuzzpro]: <b></b>
-ajSeqxrefNewDbS '1-I' 'FT025'
+Output report [cru4_arath.fuzzpro]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -75,7 +74,7 @@ ajSeqxrefNewDbS '1-I' 'FT025'
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Search for patterns in protein sequences
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -125,7 +124,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -236,7 +238,7 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -305,11 +307,35 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -353,7 +379,7 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-pattern" associated pattern qualifiers
+<td align="left" colspan=5>"-pattern" associated pattern qualifiers
 </td>
 </tr>
 
@@ -382,7 +408,7 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated report qualifiers
+<td align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
@@ -646,7 +672,7 @@ brackets `{ }' the amino acids that are not accepted at a given
 position.  For example: {AM} stands for any amino acid except Ala and
 Met. 
 
-<li>Each element in a pattern is separated from its neighbor by a `-'.
+<li>Each element in a pattern is separated from its neighbour by a `-'.
 (Optional in fuzzpro). 
 
 <li>Repetition of an element of the pattern can be indicated by following
@@ -712,17 +738,17 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: 12s1_arath.fuzzpro</h3>
+<p><h3>File: cru4_arath.fuzzpro</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: fuzzpro
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzzpro
 #    -sequence "tsw:*"
 #    -pattern "[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G"
 # Report_format: seqtable
-# Report_file: 12s1_arath.fuzzpro
+# Report_file: cru4_arath.fuzzpro
 ########################################
 
 #=======================================
@@ -735,8 +761,8 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     53      63 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
+  Start     End Pattern                                      Mismatch Sequence
+     53      63 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -750,8 +776,8 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     53      63 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
+  Start     End Pattern                                      Mismatch Sequence
+     53      63 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -778,8 +804,8 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
+  Start     End Pattern                                      Mismatch Sequence
+     55      65 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -793,8 +819,8 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
+  Start     End Pattern                                      Mismatch Sequence
+     55      65 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
@@ -808,15 +834,15 @@ By default <b>fuzzpro</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End Pattern                                       Mismatch Sequence
-     55      65 pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
+  Start     End Pattern                                      Mismatch Sequence
+     55      65 pattern:[FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G        . YVGDEAQSKRG
 
 #---------------------------------------
 #---------------------------------------
 
 #---------------------------------------
 # Total_sequences: 100
-# Total_length: 35357
+# Total_length: 37225
 # Reported_sequences: 8
 # Reported_hitcount: 8
 #---------------------------------------
@@ -871,12 +897,12 @@ None.
 <th>Description</th></tr>
 <tr>
 <td><a href="antigenic.html">antigenic</a></td>
-<td>Finds antigenic sites in proteins</td>
+<td>Find antigenic sites in proteins</td>
 </tr>
 
 <tr>
 <td><a href="epestfind.html">epestfind</a></td>
-<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
+<td>Find PEST motifs as potential proteolytic cleavage sites</td>
 </tr>
 
 <tr>
@@ -886,7 +912,7 @@ None.
 
 <tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
-<td>Searches protein sequences with a sequence motif</td>
+<td>Search protein sequences with a sequence motif</td>
 </tr>
 
 <tr>
@@ -901,12 +927,12 @@ None.
 
 <tr>
 <td><a href="pscan.html">pscan</a></td>
-<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
+<td>Scan protein sequence(s) with fingerprints from the PRINTS database</td>
 </tr>
 
 <tr>
 <td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports on signal cleavage sites in a protein sequence</td>
+<td>Report on signal cleavage sites in a protein sequence</td>
 </tr>
 
 </table>

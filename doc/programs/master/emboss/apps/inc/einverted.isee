@@ -14,22 +14,22 @@
 
 <tr>
 <td><a href="equicktandem.html">equicktandem</a></td>
-<td>Finds tandem repeats in nucleotide sequences</td>
+<td>Find tandem repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="etandem.html">etandem</a></td>
-<td>Finds tandem repeats in a nucleotide sequence</td>
+<td>Find tandem repeats in a nucleotide sequence</td>
 </tr>
 
 <tr>
 <td><a href="palindrome.html">palindrome</a></td>
-<td>Finds inverted repeats in nucleotide sequence(s)</td>
+<td>Find inverted repeats in nucleotide sequence(s)</td>
 </tr>
 
 <tr>
 <td><a href="sirna.html">sirna</a></td>
-<td>Finds siRNA duplexes in mRNA</td>
+<td>Find siRNA duplexes in mRNA</td>
 </tr>
 
 </table>

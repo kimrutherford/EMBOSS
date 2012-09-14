@@ -18,6 +18,7 @@
 
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkglibexecdir = $(libexecdir)/@PACKAGE@
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
@@ -34,23 +35,25 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@ISCYGWIN_TRUE@am__append_1 = -no-undefined -Wl,--add-stdcall-alias \
+@ISCYGWIN_TRUE@	-Wl,--export-all-symbols \
+@ISCYGWIN_TRUE@	-Wl,--enable-auto-import
 subdir = ajax/pcre
-DIST_COMMON = $(pkginclude_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in
+DIST_COMMON = $(epcreinclude_HEADERS) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in COPYING
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
-	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
-	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
-	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
-	$(top_srcdir)/configure.in
+am__aclocal_m4_deps = $(top_srcdir)/m4/axis2c.m4 \
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/idxdbs.m4 $(top_srcdir)/m4/java.m4 \
+	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pkg.m4 \
+	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
+	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/ajax/core/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
@@ -75,14 +78,17 @@ am__nobase_list = $(am__nobase_strip_setup); \
 am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgincludedir)"
+am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(epcreincludedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libepcre_la_LIBADD =
-am__objects_1 = pcre_chartables.lo pcre_compile.lo pcre_exec.lo \
-	pcre_fullinfo.lo pcre_get.lo pcre_globals.lo pcre_info.lo \
-	pcre_newline.lo pcreposix.lo pcre_study.lo pcre_tables.lo \
-	pcre_try_flipped.lo
-am_libepcre_la_OBJECTS = $(am__objects_1)
+am_libepcre_la_OBJECTS = libepcre_la-pcre_chartables.lo \
+	libepcre_la-pcre_compile.lo libepcre_la-pcre_dfa_exec.lo \
+	libepcre_la-pcre_exec.lo libepcre_la-pcre_fullinfo.lo \
+	libepcre_la-pcre_get.lo libepcre_la-pcre_globals.lo \
+	libepcre_la-pcre_info.lo libepcre_la-pcre_newline.lo \
+	libepcre_la-pcreposix.lo libepcre_la-pcre_study.lo \
+	libepcre_la-pcre_tables.lo libepcre_la-pcre_try_flipped.lo \
+	libepcre_la-pcre_version.lo libepcre_la-pcre_xclass.lo
 libepcre_la_OBJECTS = $(am_libepcre_la_OBJECTS)
 libepcre_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
@@ -102,15 +108,15 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(libepcre_la_SOURCES)
 DIST_SOURCES = $(libepcre_la_SOURCES)
-HEADERS = $(pkginclude_HEADERS)
+HEADERS = $(epcreinclude_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-pkgincludedir = $(includedir)/epcre
 ACLOCAL = @ACLOCAL@
 AJAX_FIXED_ROOT = @AJAX_FIXED_ROOT@
 AJAX_SYSTEM = @AJAX_SYSTEM@
 AMTAR = @AMTAR@
+ANT = @ANT@
 AR = @AR@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
@@ -140,9 +146,7 @@ ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
-EHAVEANT = @EHAVEANT@
 EMBOSS_TOP = @EMBOSS_TOP@
-ESYSTEMLIBS = @ESYSTEMLIBS@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
@@ -153,9 +157,12 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-ISAIXIA64 = @ISAIXIA64@
-ISCYGWIN = @ISCYGWIN@
-JAVA_OK = @JAVA_OK@
+JAR = @JAR@
+JAVA = @JAVA@
+JAVAC = @JAVAC@
+JAVA_CFLAGS = @JAVA_CFLAGS@
+JAVA_CPPFLAGS = @JAVA_CPPFLAGS@
+JAVA_LDFLAGS = @JAVA_LDFLAGS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -172,7 +179,6 @@ MYSQL_CONFIG = @MYSQL_CONFIG@
 MYSQL_CPPFLAGS = @MYSQL_CPPFLAGS@
 MYSQL_LDFLAGS = @MYSQL_LDFLAGS@
 MYSQL_VERSION = @MYSQL_VERSION@
-NEEDAJAX = @NEEDAJAX@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -193,12 +199,14 @@ PCRE_MAJOR = @PCRE_MAJOR@
 PCRE_MINOR = @PCRE_MINOR@
 PCRE_POSIXLIB_VERSION = @PCRE_POSIXLIB_VERSION@
 PCRE_VERSION = @PCRE_VERSION@
-PG_CONFIG = @PG_CONFIG@
 PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
+
+# PCRE stuff
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 POSTGRESQL_CFLAGS = @POSTGRESQL_CFLAGS@
+POSTGRESQL_CONFIG = @POSTGRESQL_CONFIG@
 POSTGRESQL_CPPFLAGS = @POSTGRESQL_CPPFLAGS@
 POSTGRESQL_LDFLAGS = @POSTGRESQL_LDFLAGS@
 POSTGRESQL_VERSION = @POSTGRESQL_VERSION@
@@ -228,7 +236,6 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
-ant_in_path = @ant_in_path@
 bindir = @bindir@
 build = @build@
 build_alias = @build_alias@
@@ -241,7 +248,6 @@ datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
-havejavac = @havejavac@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -251,7 +257,6 @@ htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-javac_in_path = @javac_in_path@
 libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
@@ -272,22 +277,37 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libepcre.la
-@ISCYGWIN_TRUE@CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import
-PCRELIBVERSION = @PCRE_LIB_VERSION@
-PCREPOSIXLIBVERSION = @PCRE_POSIXLIB_VERSION@
-AM_CPPFLAGS = -I$(top_srcdir)/ajax/core $(POSIX_MALLOC_THRESHOLD) 
-PCRESRC = pcre_chartables.c pcre_compile.c pcre_exec.c \
-pcre_fullinfo.c pcre_get.c pcre_globals.c pcre_info.c pcre_newline.c \
-pcreposix.c pcre_study.c pcre_tables.c pcre_try_flipped.c
+### PCRELIBVERSION = @PCRE_LIB_VERSION@
+### PCREPOSIXLIBVERSION = @PCRE_POSIXLIB_VERSION@
+libepcre_la_CPPFLAGS = $(POSIX_MALLOC_THRESHOLD)
+libepcre_la_LDFLAGS = -version-info 7:9:0 $(am__append_1)
+libepcre_la_SOURCES = \
+pcre_chartables.c \
+pcre_compile.c \
+pcre_dfa_exec.c \
+pcre_exec.c \
+pcre_fullinfo.c \
+pcre_get.c \
+pcre_globals.c \
+pcre_info.c \
+pcre_newline.c \
+pcreposix.c \
+pcre_study.c \
+pcre_tables.c \
+pcre_try_flipped.c \
+pcre_version.c \
+pcre_xclass.c
 
-pkginclude_HEADERS = pcre.h pcre_config.h pcreemboss.h \
-	pcre_internal.h pcreposix.h pcre_printint.src ucp.h
+epcreincludedir = $(includedir)/epcre
+epcreinclude_HEADERS = \
+pcre.h \
+pcre_config.h \
+pcreemboss.h \
+pcre_internal.h \
+pcreposix.h \
+pcre_printint.src \
+ucp.h
 
-libepcre_la_SOURCES = $(PCRESRC)
-VERS_INF = -version-info 7:9:0
-@ISCYGWIN_FALSE@LINKFLAGS = $(VERS_INF)
-@ISCYGWIN_TRUE@LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS)
-libepcre_la_LDFLAGS = $(LINKFLAGS)
 all: all-am
 
 .SUFFIXES:
@@ -362,18 +382,21 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcre_chartables.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcre_compile.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcre_exec.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcre_fullinfo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcre_get.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcre_globals.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcre_info.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcre_newline.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcre_study.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcre_tables.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcre_try_flipped.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcreposix.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_chartables.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_compile.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_dfa_exec.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_exec.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_fullinfo.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_get.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_globals.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_info.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_newline.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_study.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_tables.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_try_flipped.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_version.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcre_xclass.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepcre_la-pcreposix.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -396,31 +419,136 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
+libepcre_la-pcre_chartables.lo: pcre_chartables.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_chartables.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_chartables.Tpo -c -o libepcre_la-pcre_chartables.lo `test -f 'pcre_chartables.c' || echo '$(srcdir)/'`pcre_chartables.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_chartables.Tpo $(DEPDIR)/libepcre_la-pcre_chartables.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_chartables.c' object='libepcre_la-pcre_chartables.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_chartables.lo `test -f 'pcre_chartables.c' || echo '$(srcdir)/'`pcre_chartables.c
+
+libepcre_la-pcre_compile.lo: pcre_compile.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_compile.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_compile.Tpo -c -o libepcre_la-pcre_compile.lo `test -f 'pcre_compile.c' || echo '$(srcdir)/'`pcre_compile.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_compile.Tpo $(DEPDIR)/libepcre_la-pcre_compile.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_compile.c' object='libepcre_la-pcre_compile.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_compile.lo `test -f 'pcre_compile.c' || echo '$(srcdir)/'`pcre_compile.c
+
+libepcre_la-pcre_dfa_exec.lo: pcre_dfa_exec.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_dfa_exec.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_dfa_exec.Tpo -c -o libepcre_la-pcre_dfa_exec.lo `test -f 'pcre_dfa_exec.c' || echo '$(srcdir)/'`pcre_dfa_exec.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_dfa_exec.Tpo $(DEPDIR)/libepcre_la-pcre_dfa_exec.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_dfa_exec.c' object='libepcre_la-pcre_dfa_exec.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_dfa_exec.lo `test -f 'pcre_dfa_exec.c' || echo '$(srcdir)/'`pcre_dfa_exec.c
+
+libepcre_la-pcre_exec.lo: pcre_exec.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_exec.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_exec.Tpo -c -o libepcre_la-pcre_exec.lo `test -f 'pcre_exec.c' || echo '$(srcdir)/'`pcre_exec.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_exec.Tpo $(DEPDIR)/libepcre_la-pcre_exec.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_exec.c' object='libepcre_la-pcre_exec.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_exec.lo `test -f 'pcre_exec.c' || echo '$(srcdir)/'`pcre_exec.c
+
+libepcre_la-pcre_fullinfo.lo: pcre_fullinfo.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_fullinfo.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_fullinfo.Tpo -c -o libepcre_la-pcre_fullinfo.lo `test -f 'pcre_fullinfo.c' || echo '$(srcdir)/'`pcre_fullinfo.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_fullinfo.Tpo $(DEPDIR)/libepcre_la-pcre_fullinfo.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_fullinfo.c' object='libepcre_la-pcre_fullinfo.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_fullinfo.lo `test -f 'pcre_fullinfo.c' || echo '$(srcdir)/'`pcre_fullinfo.c
+
+libepcre_la-pcre_get.lo: pcre_get.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_get.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_get.Tpo -c -o libepcre_la-pcre_get.lo `test -f 'pcre_get.c' || echo '$(srcdir)/'`pcre_get.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_get.Tpo $(DEPDIR)/libepcre_la-pcre_get.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_get.c' object='libepcre_la-pcre_get.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_get.lo `test -f 'pcre_get.c' || echo '$(srcdir)/'`pcre_get.c
+
+libepcre_la-pcre_globals.lo: pcre_globals.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_globals.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_globals.Tpo -c -o libepcre_la-pcre_globals.lo `test -f 'pcre_globals.c' || echo '$(srcdir)/'`pcre_globals.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_globals.Tpo $(DEPDIR)/libepcre_la-pcre_globals.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_globals.c' object='libepcre_la-pcre_globals.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_globals.lo `test -f 'pcre_globals.c' || echo '$(srcdir)/'`pcre_globals.c
+
+libepcre_la-pcre_info.lo: pcre_info.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_info.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_info.Tpo -c -o libepcre_la-pcre_info.lo `test -f 'pcre_info.c' || echo '$(srcdir)/'`pcre_info.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_info.Tpo $(DEPDIR)/libepcre_la-pcre_info.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_info.c' object='libepcre_la-pcre_info.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_info.lo `test -f 'pcre_info.c' || echo '$(srcdir)/'`pcre_info.c
+
+libepcre_la-pcre_newline.lo: pcre_newline.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_newline.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_newline.Tpo -c -o libepcre_la-pcre_newline.lo `test -f 'pcre_newline.c' || echo '$(srcdir)/'`pcre_newline.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_newline.Tpo $(DEPDIR)/libepcre_la-pcre_newline.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_newline.c' object='libepcre_la-pcre_newline.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_newline.lo `test -f 'pcre_newline.c' || echo '$(srcdir)/'`pcre_newline.c
+
+libepcre_la-pcreposix.lo: pcreposix.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcreposix.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcreposix.Tpo -c -o libepcre_la-pcreposix.lo `test -f 'pcreposix.c' || echo '$(srcdir)/'`pcreposix.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcreposix.Tpo $(DEPDIR)/libepcre_la-pcreposix.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcreposix.c' object='libepcre_la-pcreposix.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcreposix.lo `test -f 'pcreposix.c' || echo '$(srcdir)/'`pcreposix.c
+
+libepcre_la-pcre_study.lo: pcre_study.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_study.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_study.Tpo -c -o libepcre_la-pcre_study.lo `test -f 'pcre_study.c' || echo '$(srcdir)/'`pcre_study.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_study.Tpo $(DEPDIR)/libepcre_la-pcre_study.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_study.c' object='libepcre_la-pcre_study.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_study.lo `test -f 'pcre_study.c' || echo '$(srcdir)/'`pcre_study.c
+
+libepcre_la-pcre_tables.lo: pcre_tables.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_tables.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_tables.Tpo -c -o libepcre_la-pcre_tables.lo `test -f 'pcre_tables.c' || echo '$(srcdir)/'`pcre_tables.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_tables.Tpo $(DEPDIR)/libepcre_la-pcre_tables.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_tables.c' object='libepcre_la-pcre_tables.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_tables.lo `test -f 'pcre_tables.c' || echo '$(srcdir)/'`pcre_tables.c
+
+libepcre_la-pcre_try_flipped.lo: pcre_try_flipped.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_try_flipped.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_try_flipped.Tpo -c -o libepcre_la-pcre_try_flipped.lo `test -f 'pcre_try_flipped.c' || echo '$(srcdir)/'`pcre_try_flipped.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_try_flipped.Tpo $(DEPDIR)/libepcre_la-pcre_try_flipped.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_try_flipped.c' object='libepcre_la-pcre_try_flipped.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_try_flipped.lo `test -f 'pcre_try_flipped.c' || echo '$(srcdir)/'`pcre_try_flipped.c
+
+libepcre_la-pcre_version.lo: pcre_version.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_version.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_version.Tpo -c -o libepcre_la-pcre_version.lo `test -f 'pcre_version.c' || echo '$(srcdir)/'`pcre_version.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_version.Tpo $(DEPDIR)/libepcre_la-pcre_version.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_version.c' object='libepcre_la-pcre_version.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_version.lo `test -f 'pcre_version.c' || echo '$(srcdir)/'`pcre_version.c
+
+libepcre_la-pcre_xclass.lo: pcre_xclass.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libepcre_la-pcre_xclass.lo -MD -MP -MF $(DEPDIR)/libepcre_la-pcre_xclass.Tpo -c -o libepcre_la-pcre_xclass.lo `test -f 'pcre_xclass.c' || echo '$(srcdir)/'`pcre_xclass.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libepcre_la-pcre_xclass.Tpo $(DEPDIR)/libepcre_la-pcre_xclass.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcre_xclass.c' object='libepcre_la-pcre_xclass.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libepcre_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libepcre_la-pcre_xclass.lo `test -f 'pcre_xclass.c' || echo '$(srcdir)/'`pcre_xclass.c
+
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-pkgincludeHEADERS: $(pkginclude_HEADERS)
+install-epcreincludeHEADERS: $(epcreinclude_HEADERS)
 	@$(NORMAL_INSTALL)
-	test -z "$(pkgincludedir)" || $(MKDIR_P) "$(DESTDIR)$(pkgincludedir)"
-	@list='$(pkginclude_HEADERS)'; test -n "$(pkgincludedir)" || list=; \
+	test -z "$(epcreincludedir)" || $(MKDIR_P) "$(DESTDIR)$(epcreincludedir)"
+	@list='$(epcreinclude_HEADERS)'; test -n "$(epcreincludedir)" || list=; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(pkgincludedir)'"; \
-	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(pkgincludedir)" || exit $$?; \
+	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(epcreincludedir)'"; \
+	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(epcreincludedir)" || exit $$?; \
 	done
 
-uninstall-pkgincludeHEADERS:
+uninstall-epcreincludeHEADERS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(pkginclude_HEADERS)'; test -n "$(pkgincludedir)" || list=; \
+	@list='$(epcreinclude_HEADERS)'; test -n "$(epcreincludedir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(pkgincludedir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(pkgincludedir)" && rm -f $$files
+	echo " ( cd '$(DESTDIR)$(epcreincludedir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(epcreincludedir)" && rm -f $$files
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -508,7 +636,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgincludedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(epcreincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -559,7 +687,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-pkgincludeHEADERS
+install-data-am: install-epcreincludeHEADERS
 
 install-dvi: install-dvi-am
 
@@ -605,7 +733,7 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-libLTLIBRARIES uninstall-pkgincludeHEADERS
+uninstall-am: uninstall-epcreincludeHEADERS uninstall-libLTLIBRARIES
 
 .MAKE: install-am install-strip
 
@@ -614,15 +742,15 @@ uninstall-am: uninstall-libLTLIBRARIES uninstall-pkgincludeHEADERS
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am \
-	install-libLTLIBRARIES install-man install-pdf install-pdf-am \
-	install-pkgincludeHEADERS install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-libLTLIBRARIES uninstall-pkgincludeHEADERS
+	install-dvi-am install-epcreincludeHEADERS install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-libLTLIBRARIES install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-epcreincludeHEADERS \
+	uninstall-libLTLIBRARIES
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

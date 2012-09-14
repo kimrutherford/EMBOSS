@@ -6,6 +6,8 @@
 <pre>
 # Name            Type       ID  Qry All Comment
 # =============== ========== ==  === === =======
+bpsw              Protein    OK  OK  OK  
+bpworm            Protein    OK  OK  OK  
 qapblast          Protein    OK  OK  OK  BLAST swissnew
 qapblastall       Protein    OK  OK  OK  BLAST swissnew, all fields indexed
 qapblastsplit     Protein    OK  OK  OK  BLAST swissnew split in 5 files
@@ -16,15 +18,19 @@ qapflat           Protein    OK  OK  OK  SpTrEmbl flatfile
 qapflatall        Protein    OK  OK  OK  SpTrEmbl flatfiles, all fields indexed
 qapir             Protein    OK  OK  OK  PIR
 qapirall          Protein    OK  OK  OK  PIR
+qapirexc          Protein    OK  OK  OK  PIR
 qapirinc          Protein    OK  OK  OK  PIR
 qapxfasta         Protein    OK  OK  OK  FASTA file swissnew entries
 qapxflat          Protein    OK  OK  OK  Swissnew flatfiles
 qaxpir            Protein    OK  OK  OK  PIR
 qaxpirall         Protein    OK  OK  OK  PIR
+qaxpirexc         Protein    OK  OK  OK  PIR
 qaxpirinc         Protein    OK  OK  OK  PIR
 tpir              Protein    OK  OK  OK  PIR using NBRF access for 4 files
 tsw               Protein    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew            Protein    OK  OK  OK  SpTrEmbl as 3 files in native format with EMBL CD-ROM index
+bpembl            Nucleotide OK  OK  OK  
+bpgb              Nucleotide OK  OK  OK  
 qanfasta          Nucleotide OK  OK  OK  FASTA file EMBL rodents
 qanfastaall       Nucleotide OK  OK  OK  FASTA file EMBL rodents, all fields indexed
 qanflat           Nucleotide OK  OK  OK  EMBL flatfiles
@@ -45,11 +51,10 @@ qanxgcg           Nucleotide OK  OK  OK  GCG format EMBL
 qanxgcgall        Nucleotide OK  OK  OK  GCG format EMBL
 qanxgcgexc        Nucleotide OK  OK  OK  GCG format EMBL without prokaryotes
 qanxgcginc        Nucleotide OK  OK  OK  GCG format EMBL only prokaryotes
-qapirexc          Nucleotide OK  OK  OK  PIR
 qasrswww          Nucleotide OK  OK  OK  Remote SRS web server
 qawfasta          Nucleotide OK  OK  OK  FASTA file wormpep entries
 qawxfasta         Nucleotide OK  OK  OK  FASTA file wormpep entries
-qaxpirexc         Nucleotide OK  OK  OK  PIR
+qaxembl           Nucleotide OK  OK  OK  EMBL flatfiles
 tembl             Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
 temblall          Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
 temblrest         Nucleotide OK  OK  OK  EMBL in native format with EMBL CD-ROM index
@@ -66,11 +71,21 @@ taxon             Taxonomy   OK  OK  OK
 drcat             Resource   OK  OK  OK  
 tedam             Obo        OK  OK  OK  EDAM using dbxedam test indexes
 tobo              Obo        OK  OK  OK  EDAM using dbxobo test indexes
+chebi             Obo        OK  OK  OK  
 eco               Obo        OK  OK  OK  
 edam              Obo        OK  OK  OK  
+edam_data         Obo        OK  OK  OK  
+edam_format       Obo        OK  OK  OK  
+edam_identifier   Obo        OK  OK  OK  
+edam_operation    Obo        OK  OK  OK  
+edam_topic        Obo        OK  OK  OK  
 go                Obo        OK  OK  OK  
+go_component      Obo        OK  OK  OK  
+go_function       Obo        OK  OK  OK  
+go_process        Obo        OK  OK  OK  
 pw                Obo        OK  OK  OK  
 ro                Obo        OK  OK  OK  
 so                Obo        OK  OK  OK  
+swo               Obo        OK  OK  OK  
 </pre>
 </td></tr></table><p>

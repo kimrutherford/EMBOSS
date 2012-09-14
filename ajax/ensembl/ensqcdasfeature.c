@@ -1,72 +1,75 @@
-/* @source Ensembl Quality Check DAS Feature functions
+/* @source ensqcdasfeature ****************************************************
+**
+** Ensembl Quality Check DAS Feature functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.17 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/05/25 19:55:04 $ by $Author: mks $
-** @version $Revision: 1.4 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensqcdasfeature.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic qcdasfeatureCategory ******************************************
+/* @conststatic qcdasfeatureKCategory *****************************************
 **
-** The Ensembl Quality Check DAS Feature category element is enumerated in
+** The Ensembl Quality Check DAS Feature category member is enumerated in
 ** both, the SQL table definition and the data structure. The following strings
 ** are used for conversion in database operations and correspond to
 ** EnsEQcdasfeatureCategory.
 **
 ******************************************************************************/
 
-static const char* qcdasfeatureCategory[] =
+static const char *qcdasfeatureKCategory[] =
 {
     "",
     "unknown",
@@ -80,22 +83,22 @@ static const char* qcdasfeatureCategory[] =
     "translation:partial",
     "translation:missing",
     "translation",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic qcdasfeatureType **********************************************
+/* @conststatic qcdasfeatureKType *********************************************
 **
-** The Ensembl Quality Check DAS Feature type element is enumerated in
+** The Ensembl Quality Check DAS Feature type member is enumerated in
 ** both, the SQL table definition and the data structure. The following strings
 ** are used for conversion in database operations and correspond to
 ** EnsEQcdasfeatureType.
 **
 ******************************************************************************/
 
-static const char* qcdasfeatureType[] =
+static const char *qcdasfeatureKType[] =
 {
     "",
     "unknown",
@@ -105,34 +108,34 @@ static const char* qcdasfeatureType[] =
     "exon:frameshift",
     "exon:gap",
     "exon",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic qcdasfeatureadaptorTables *************************************
+/* @conststatic qcdasfeatureadaptorKTables ************************************
 **
 ** Array of Ensembl Quality Check DAS Feature Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* qcdasfeatureadaptorTables[] =
+static const char *qcdasfeatureadaptorKTables[] =
 {
     "das_feature",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic qcdasfeatureadaptorColumns ************************************
+/* @conststatic qcdasfeatureadaptorKColumns ***********************************
 **
 ** Array of Ensembl Quality Check DAS Feature Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* qcdasfeatureadaptorColumns[] =
+static const char *qcdasfeatureadaptorKColumns[] =
 {
     "das_feature.das_feature_id",
     "das_feature.analysis_id",
@@ -147,25 +150,25 @@ static const char* qcdasfeatureadaptorColumns[] =
     "das_feature.phase",
     "das_feature.category",
     "das_feature.type",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 static AjBool qcdasfeatureadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -174,9 +177,9 @@ static AjBool qcdasfeatureadaptorFetchAllbyStatement(
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -253,6 +256,8 @@ static AjBool qcdasfeatureadaptorFetchAllbyStatement(
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [EnsPQcdasfeature] Ensembl Quality Check DAS Feature or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -260,27 +265,25 @@ EnsPQcdasfeature ensQcdasfeatureNewCpy(const EnsPQcdasfeature qcdasf)
 {
     EnsPQcdasfeature pthis = NULL;
 
-    if(!qcdasf)
+    if (!qcdasf)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
-
+    pthis->Use        = 1U;
     pthis->Identifier = qcdasf->Identifier;
+    pthis->Adaptor    = qcdasf->Adaptor;
 
-    pthis->Adaptor = qcdasf->Adaptor;
-
-    if(qcdasf->Qcalignment)
+    if (qcdasf->Qcalignment)
         pthis->Qcalignment = ensQcalignmentNewRef(qcdasf->Qcalignment);
 
-    if(qcdasf->Analysis)
+    if (qcdasf->Analysis)
         pthis->Analysis = ensAnalysisNewRef(qcdasf->Analysis);
 
-    if(qcdasf->SegmentSequence)
+    if (qcdasf->SegmentSequence)
         pthis->SegmentSequence = ensQcsequenceNewRef(qcdasf->SegmentSequence);
 
-    if(qcdasf->FeatureSequence)
+    if (qcdasf->FeatureSequence)
         pthis->FeatureSequence = ensQcsequenceNewRef(qcdasf->FeatureSequence);
 
     pthis->SegmentStart  = qcdasf->SegmentStart;
@@ -321,6 +324,8 @@ EnsPQcdasfeature ensQcdasfeatureNewCpy(const EnsPQcdasfeature qcdasf)
 ** @param [u] type [EnsEQcdasfeatureType] Type
 **
 ** @return [EnsPQcdasfeature] Ensembl Quality Check DAS Feature or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -341,32 +346,26 @@ EnsPQcdasfeature ensQcdasfeatureNewIni(EnsPQcdasfeatureadaptor qcdasfa,
 {
     EnsPQcdasfeature qcdasf = NULL;
 
-    if(!qca)
+    if (!qca)
         return NULL;
 
-    if(!analysis)
+    if (!analysis)
         return NULL;
 
-    if(!segment)
+    if (!segment)
         return NULL;
 
-    if(!feature)
+    if (!feature)
         return NULL;
 
     AJNEW0(qcdasf);
 
-    qcdasf->Use = 1;
-
-    qcdasf->Identifier = identifier;
-
-    qcdasf->Adaptor = qcdasfa;
-
-    qcdasf->Qcalignment = ensQcalignmentNewRef(qca);
-
-    qcdasf->Analysis = ensAnalysisNewRef(analysis);
-
+    qcdasf->Use             = 1U;
+    qcdasf->Identifier      = identifier;
+    qcdasf->Adaptor         = qcdasfa;
+    qcdasf->Qcalignment     = ensQcalignmentNewRef(qca);
+    qcdasf->Analysis        = ensAnalysisNewRef(analysis);
     qcdasf->SegmentSequence = ensQcsequenceNewRef(segment);
-
     qcdasf->SegmentStart    = segstart;
     qcdasf->SegmentEnd      = segend;
     qcdasf->SegmentStrand   = segstrand;
@@ -391,12 +390,14 @@ EnsPQcdasfeature ensQcdasfeatureNewIni(EnsPQcdasfeatureadaptor qcdasfa,
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [EnsPQcdasfeature] Ensembl Quality Check DAS Feature or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcdasfeature ensQcdasfeatureNewRef(EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return NULL;
 
     qcdasf->Use++;
@@ -409,15 +410,15 @@ EnsPQcdasfeature ensQcdasfeatureNewRef(EnsPQcdasfeature qcdasf)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Quality Check DAS Feature object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Quality Check DAS Feature object.
 **
 ** @fdata [EnsPQcdasfeature]
 **
-** @nam3rule Del Destroy (free) an Ensembl Quality Check DAS Feature object
+** @nam3rule Del Destroy (free) an Ensembl Quality Check DAS Feature
 **
-** @argrule * Pqcdasf [EnsPQcdasfeature*] Ensembl Quality Check DAS Feature
-** object address
+** @argrule * Pqcdasf [EnsPQcdasfeature*]
+** Ensembl Quality Check DAS Feature address
 **
 ** @valrule * [void]
 **
@@ -431,24 +432,24 @@ EnsPQcdasfeature ensQcdasfeatureNewRef(EnsPQcdasfeature qcdasf)
 **
 ** Default destructor for an Ensembl Quality Check DAS Feature.
 **
-** @param [d] Pqcdasf [EnsPQcdasfeature*] Ensembl Quality Check DAS Feature
-** object address
+** @param [d] Pqcdasf [EnsPQcdasfeature*]
+** Ensembl Quality Check DAS Feature address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensQcdasfeatureDel(EnsPQcdasfeature* Pqcdasf)
+void ensQcdasfeatureDel(EnsPQcdasfeature *Pqcdasf)
 {
     EnsPQcdasfeature pthis = NULL;
 
-    if(!Pqcdasf)
+    if (!Pqcdasf)
         return;
 
-    if(!*Pqcdasf)
-        return;
-
-    if(ajDebugTest("ensQcdasfeatureDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensQcdasfeatureDel"))
     {
         ajDebug("ensQcdasfeatureDel\n"
                 "  *Pqcdasf %p\n",
@@ -456,12 +457,16 @@ void ensQcdasfeatureDel(EnsPQcdasfeature* Pqcdasf)
 
         ensQcdasfeatureTrace(*Pqcdasf, 1);
     }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pqcdasf)
+        return;
 
     pthis = *Pqcdasf;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pqcdasf = NULL;
 
@@ -485,9 +490,9 @@ void ensQcdasfeatureDel(EnsPQcdasfeature* Pqcdasf)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Quality Check DAS Feature object.
 **
 ** @fdata [EnsPQcdasfeature]
@@ -517,18 +522,18 @@ void ensQcdasfeatureDel(EnsPQcdasfeature* Pqcdasf)
 ** @valrule Analysis [EnsPAnalysis] Ensembl Analysis or NULL
 ** @valrule Category [EnsEQcdasfeatureCategory] Category or
 ** ensEQcdasfeatureCategoryNULL
-** @valrule FeatureEnd [ajuint] Feature end or 0
+** @valrule FeatureEnd [ajuint] Feature end or 0U
 ** @valrule FeatureSequence [EnsPQcsequence]
 ** Feature Ensembl Quality Check Sequence or NULL
-** @valrule FeatureStart [ajuint] Feature start or 0
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule FeatureStart [ajuint] Feature start or 0U
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
 ** @valrule Phase [ajint] Phase or 0
 ** @valrule Qcalignment [EnsPQcalignment]
 ** Ensembl Quality Check Alignment or NULL
 ** @valrule SegmentSequence [EnsPQcsequence]
 ** Segment Ensembl Quality Check Sequence or NULL
-** @valrule SegmentEnd [ajuint] Segment end or 0
-** @valrule SegmentStart [ajuint] Segment start or 0
+** @valrule SegmentEnd [ajuint] Segment end or 0U
+** @valrule SegmentStart [ajuint] Segment start or 0U
 ** @valrule SegmentStrand [ajint] Segment strand or 0
 ** @valrule Type [EnsEQcdasfeatureType] Type or ensEQcdasfeatureTypeNULL
 **
@@ -540,23 +545,22 @@ void ensQcdasfeatureDel(EnsPQcdasfeature* Pqcdasf)
 
 /* @func ensQcdasfeatureGetAdaptor ********************************************
 **
-** Get the Ensembl Quality Check DAS Feature Adaptor element of an
+** Get the Ensembl Quality Check DAS Feature Adaptor member of an
 ** Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [EnsPQcdasfeatureadaptor] Ensembl Quality Check DAS Feature Adaptor
 ** or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcdasfeatureadaptor ensQcdasfeatureGetAdaptor(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return NULL;
-
-    return qcdasf->Adaptor;
+    return (qcdasf) ? qcdasf->Adaptor : NULL;
 }
 
 
@@ -564,21 +568,20 @@ EnsPQcdasfeatureadaptor ensQcdasfeatureGetAdaptor(
 
 /* @func ensQcdasfeatureGetAnalysis *******************************************
 **
-** Get the Ensembl Analysis element of an Ensembl Quality Check DAS Feature.
+** Get the Ensembl Analysis member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [EnsPAnalysis] Ensembl Analysis or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPAnalysis ensQcdasfeatureGetAnalysis(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return NULL;
-
-    return qcdasf->Analysis;
+    return (qcdasf) ? qcdasf->Analysis : NULL;
 }
 
 
@@ -586,21 +589,20 @@ EnsPAnalysis ensQcdasfeatureGetAnalysis(
 
 /* @func ensQcdasfeatureGetCategory *******************************************
 **
-** Get the category element of an Ensembl Quality Check DAS Feature.
+** Get the category member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [EnsEQcdasfeatureCategory] Category or ensEQcdasfeatureCategoryNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsEQcdasfeatureCategory ensQcdasfeatureGetCategory(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return ensEQcdasfeatureCategoryNULL;
-
-    return qcdasf->Category;
+    return (qcdasf) ? qcdasf->Category : ensEQcdasfeatureCategoryNULL;
 }
 
 
@@ -608,21 +610,20 @@ EnsEQcdasfeatureCategory ensQcdasfeatureGetCategory(
 
 /* @func ensQcdasfeatureGetFeatureEnd *****************************************
 **
-** Get the feature end element of an Ensembl Quality Check DAS Feature.
+** Get the feature end member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
-** @return [ajuint] Feature end or 0
+** @return [ajuint] Feature end or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcdasfeatureGetFeatureEnd(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return 0;
-
-    return qcdasf->FeatureEnd;
+    return (qcdasf) ? qcdasf->FeatureEnd : 0U;
 }
 
 
@@ -630,22 +631,21 @@ ajuint ensQcdasfeatureGetFeatureEnd(
 
 /* @func ensQcdasfeatureGetFeatureSequence ************************************
 **
-** Get the feature Ensembl Quality Check Sequence element of an
+** Get the feature Ensembl Quality Check Sequence member of an
 ** Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [EnsPQcsequence] Ensembl Quality Check Sequence or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcsequence ensQcdasfeatureGetFeatureSequence(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return NULL;
-
-    return qcdasf->FeatureSequence;
+    return (qcdasf) ? qcdasf->FeatureSequence : NULL;
 }
 
 
@@ -653,21 +653,20 @@ EnsPQcsequence ensQcdasfeatureGetFeatureSequence(
 
 /* @func ensQcdasfeatureGetFeatureStart ***************************************
 **
-** Get the feature start element of an Ensembl Quality Check DAS Feature.
+** Get the feature start member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
-** @return [ajuint] Feature start or 0
+** @return [ajuint] Feature start or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcdasfeatureGetFeatureStart(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return 0;
-
-    return qcdasf->FeatureStart;
+    return (qcdasf) ? qcdasf->FeatureStart : 0U;
 }
 
 
@@ -675,22 +674,21 @@ ajuint ensQcdasfeatureGetFeatureStart(
 
 /* @func ensQcdasfeatureGetIdentifier *****************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcdasfeatureGetIdentifier(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return 0;
-
-    return qcdasf->Identifier;
+    return (qcdasf) ? qcdasf->Identifier : 0U;
 }
 
 
@@ -698,21 +696,20 @@ ajuint ensQcdasfeatureGetIdentifier(
 
 /* @func ensQcdasfeatureGetPhase **********************************************
 **
-** Get the phase element of an Ensembl Quality Check DAS Feature.
+** Get the phase member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [ajint] Phase or 0
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajint ensQcdasfeatureGetPhase(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return 0;
-
-    return qcdasf->Phase;
+    return (qcdasf) ? qcdasf->Phase : 0;
 }
 
 
@@ -720,22 +717,21 @@ ajint ensQcdasfeatureGetPhase(
 
 /* @func ensQcdasfeatureGetQcalignment ****************************************
 **
-** Get the Ensembl Quality Check Alignment element of an
+** Get the Ensembl Quality Check Alignment member of an
 ** Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [EnsPQcalignment] Ensembl Quality Check Alignment or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcalignment ensQcdasfeatureGetQcalignment(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return NULL;
-
-    return qcdasf->Qcalignment;
+    return (qcdasf) ? qcdasf->Qcalignment : NULL;
 }
 
 
@@ -743,21 +739,20 @@ EnsPQcalignment ensQcdasfeatureGetQcalignment(
 
 /* @func ensQcdasfeatureGetSegmentEnd *****************************************
 **
-** Get the segment end element of an Ensembl Quality Check DAS Feature.
+** Get the segment end member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
-** @return [ajuint] Segment end or 0
+** @return [ajuint] Segment end or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcdasfeatureGetSegmentEnd(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return 0;
-
-    return qcdasf->SegmentEnd;
+    return (qcdasf) ? qcdasf->SegmentEnd : 0U;
 }
 
 
@@ -765,22 +760,21 @@ ajuint ensQcdasfeatureGetSegmentEnd(
 
 /* @func ensQcdasfeatureGetSegmentSequence ************************************
 **
-** Get the segment Ensembl Quality Check Sequence element of an
+** Get the segment Ensembl Quality Check Sequence member of an
 ** Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [EnsPQcsequence] Ensembl Quality Check Sequence or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcsequence ensQcdasfeatureGetSegmentSequence(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return NULL;
-
-    return qcdasf->SegmentSequence;
+    return (qcdasf) ? qcdasf->SegmentSequence : NULL;
 }
 
 
@@ -788,21 +782,20 @@ EnsPQcsequence ensQcdasfeatureGetSegmentSequence(
 
 /* @func ensQcdasfeatureGetSegmentStart ***************************************
 **
-** Get the segment start element of an Ensembl Quality Check DAS Feature.
+** Get the segment start member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
-** @return [ajuint] Segment start or 0
+** @return [ajuint] Segment start or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensQcdasfeatureGetSegmentStart(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return 0;
-
-    return qcdasf->SegmentStart;
+    return (qcdasf) ? qcdasf->SegmentStart : 0U;
 }
 
 
@@ -810,21 +803,20 @@ ajuint ensQcdasfeatureGetSegmentStart(
 
 /* @func ensQcdasfeatureGetSegmentStrand **************************************
 **
-** Get the segment strand element of an Ensembl Quality Check DAS Feature.
+** Get the segment strand member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [ajint] Segment strand or 0
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajint ensQcdasfeatureGetSegmentStrand(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return 0;
-
-    return qcdasf->SegmentStrand;
+    return (qcdasf) ? qcdasf->SegmentStrand : 0;
 }
 
 
@@ -832,21 +824,20 @@ ajint ensQcdasfeatureGetSegmentStrand(
 
 /* @func ensQcdasfeatureGetType ***********************************************
 **
-** Get the type element of an Ensembl Quality Check DAS Feature.
+** Get the type member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [EnsEQcdasfeatureType] Type or ensEQcdasfeatureTypeNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsEQcdasfeatureType ensQcdasfeatureGetType(
     const EnsPQcdasfeature qcdasf)
 {
-    if(!qcdasf)
-        return ensEQcdasfeatureTypeNULL;
-
-    return qcdasf->Type;
+    return (qcdasf) ? qcdasf->Type : ensEQcdasfeatureTypeNULL;
 }
 
 
@@ -854,23 +845,23 @@ EnsEQcdasfeatureType ensQcdasfeatureGetType(
 
 /* @section modifiers *********************************************************
 **
-** Functions for assigning elements of an
+** Functions for assigning members of an
 ** Ensembl Quality Check DAS Feature object.
 **
 ** @fdata [EnsPQcdasfeature]
 **
-** @nam3rule Set Set one element of an Ensembl Quality Check DAS Feature
+** @nam3rule Set Set one member of an Ensembl Quality Check DAS Feature
 ** @nam4rule Adaptor Set the Ensembl Quality Check DAS Feature Adaptor
 ** @nam4rule Analysis Set the Ensembl Analysis
 ** @nam4rule Category Set the category
-** @nam4rule Feature Set Feature elements
+** @nam4rule Feature Set Feature members
 ** @nam5rule End Set the feature end
 ** @nam5rule Sequence Set the feature Ensembl Quality Check Sequence
 ** @nam5rule Start Set the feature start
 ** @nam4rule Identifier Set the SQL database-internal identifier
 ** @nam4rule Phase Set the phase
 ** @nam4rule Qcalignment Set the Ensembl Quality Check Alignment
-** @nam4rule Segment Set Segment elements
+** @nam4rule Segment Set Segment members
 ** @nam5rule End Set the segment end
 ** @nam5rule Sequence Set the segment Ensembl Quality Check Sequence
 ** @nam5rule Start Set the segment start
@@ -904,7 +895,7 @@ EnsEQcdasfeatureType ensQcdasfeatureGetType(
 
 /* @func ensQcdasfeatureSetAdaptor ********************************************
 **
-** Set the Ensembl Quality Check DAS Feature Adaptor element of an
+** Set the Ensembl Quality Check DAS Feature Adaptor member of an
 ** Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
@@ -912,13 +903,15 @@ EnsEQcdasfeatureType ensQcdasfeatureGetType(
 ** Ensembl Quality Check DAS Feature Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetAdaptor(EnsPQcdasfeature qcdasf,
                                  EnsPQcdasfeatureadaptor qcdasfa)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     qcdasf->Adaptor = qcdasfa;
@@ -931,19 +924,21 @@ AjBool ensQcdasfeatureSetAdaptor(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetAnalysis *******************************************
 **
-** Set the Ensembl Analysis element of an Ensembl Quality Check DAS Feature.
+** Set the Ensembl Analysis member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetAnalysis(EnsPQcdasfeature qcdasf,
                                   EnsPAnalysis analysis)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     ensAnalysisDel(&qcdasf->Analysis);
@@ -958,19 +953,21 @@ AjBool ensQcdasfeatureSetAnalysis(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetCategory *******************************************
 **
-** Set the category element of an Ensembl Quality Check DAS Feature.
+** Set the category member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [u] category [EnsEQcdasfeatureCategory] Category
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetCategory(EnsPQcdasfeature qcdasf,
                                   EnsEQcdasfeatureCategory category)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     qcdasf->Category = category;
@@ -983,19 +980,21 @@ AjBool ensQcdasfeatureSetCategory(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetFeatureEnd *****************************************
 **
-** Set the feature end element of an Ensembl Quality Check DAS Feature.
+** Set the feature end member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [r] end [ajuint] Feature end
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetFeatureEnd(EnsPQcdasfeature qcdasf,
                                     ajuint end)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     qcdasf->FeatureEnd = end;
@@ -1008,20 +1007,22 @@ AjBool ensQcdasfeatureSetFeatureEnd(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetFeatureSequence ************************************
 **
-** Set the feature Ensembl Quality Check Sequence element of an
+** Set the feature Ensembl Quality Check Sequence member of an
 ** Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetFeatureSequence(EnsPQcdasfeature qcdasf,
                                          EnsPQcsequence qcs)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     ensQcsequenceDel(&qcdasf->FeatureSequence);
@@ -1036,19 +1037,21 @@ AjBool ensQcdasfeatureSetFeatureSequence(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetFeatureStart ***************************************
 **
-** Set the feature start element of an Ensembl Quality Check DAS Feature.
+** Set the feature start member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [r] start [ajuint] Feature start
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetFeatureStart(EnsPQcdasfeature qcdasf,
                                       ajuint start)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     qcdasf->FeatureStart = start;
@@ -1061,20 +1064,22 @@ AjBool ensQcdasfeatureSetFeatureStart(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetIdentifier *****************************************
 **
-** Set the SQL database-internal identifier element of an
+** Set the SQL database-internal identifier member of an
 ** Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetIdentifier(EnsPQcdasfeature qcdasf,
                                     ajuint identifier)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     qcdasf->Identifier = identifier;
@@ -1087,19 +1092,21 @@ AjBool ensQcdasfeatureSetIdentifier(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetPhase **********************************************
 **
-** Set the phase element of an Ensembl Quality Check DAS Feature.
+** Set the phase member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [r] phase [ajint] Phase
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetPhase(EnsPQcdasfeature qcdasf,
                                ajint phase)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     qcdasf->Phase = phase;
@@ -1112,20 +1119,22 @@ AjBool ensQcdasfeatureSetPhase(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetQcalignment ****************************************
 **
-** Set the Ensembl Quality Check Alignment element of an
+** Set the Ensembl Quality Check Alignment member of an
 ** Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [u] qca [EnsPQcalignment] Ensembl Quality Check Alignment
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetQcalignment(EnsPQcdasfeature qcdasf,
                                      EnsPQcalignment qca)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     ensQcalignmentDel(&qcdasf->Qcalignment);
@@ -1140,19 +1149,21 @@ AjBool ensQcdasfeatureSetQcalignment(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetSegmentEnd *****************************************
 **
-** Set the segment end element of an Ensembl Quality Check DAS Feature.
+** Set the segment end member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [r] end [ajuint] Segment end
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetSegmentEnd(EnsPQcdasfeature qcdasf,
                                     ajuint end)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     qcdasf->SegmentEnd = end;
@@ -1165,20 +1176,22 @@ AjBool ensQcdasfeatureSetSegmentEnd(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetSegmentSequence ************************************
 **
-** Set the segment Ensembl Quality Check Sequence element of an
+** Set the segment Ensembl Quality Check Sequence member of an
 ** Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [u] qcs [EnsPQcsequence] Ensembl Quality Check Sequence
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetSegmentSequence(EnsPQcdasfeature qcdasf,
                                          EnsPQcsequence qcs)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     ensQcsequenceDel(&qcdasf->SegmentSequence);
@@ -1193,19 +1206,21 @@ AjBool ensQcdasfeatureSetSegmentSequence(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetSegmentStart ***************************************
 **
-** Set the segment start element of an Ensembl Quality Check DAS Feature.
+** Set the segment start member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [r] start [ajuint] Segment start
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetSegmentStart(EnsPQcdasfeature qcdasf,
                                       ajuint start)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     qcdasf->SegmentStart = start;
@@ -1218,19 +1233,21 @@ AjBool ensQcdasfeatureSetSegmentStart(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetSegmentStrand **************************************
 **
-** Set the segment strand element of an Ensembl Quality Check DAS Feature.
+** Set the segment strand member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [r] strand [ajint] Segment strand
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetSegmentStrand(EnsPQcdasfeature qcdasf,
                                        ajint strand)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     qcdasf->SegmentStrand = strand;
@@ -1243,19 +1260,21 @@ AjBool ensQcdasfeatureSetSegmentStrand(EnsPQcdasfeature qcdasf,
 
 /* @func ensQcdasfeatureSetType ***********************************************
 **
-** Set the type element of an Ensembl Quality Check DAS Feature.
+** Set the type member of an Ensembl Quality Check DAS Feature.
 **
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 ** @param [u] type [EnsEQcdasfeatureType] Type
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureSetType(EnsPQcdasfeature qcdasf,
                               EnsEQcdasfeatureType type)
 {
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     qcdasf->Type = type;
@@ -1272,7 +1291,7 @@ AjBool ensQcdasfeatureSetType(EnsPQcdasfeature qcdasf,
 **
 ** @fdata [EnsPQcdasfeature]
 **
-** @nam3rule Trace Report Ensembl Quality Check DAS Feature elements to
+** @nam3rule Trace Report Ensembl Quality Check DAS Feature members to
 ** debug file
 **
 ** @argrule Trace qcdasf [const EnsPQcdasfeature]
@@ -1295,6 +1314,8 @@ AjBool ensQcdasfeatureSetType(EnsPQcdasfeature qcdasf,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1302,7 +1323,7 @@ AjBool ensQcdasfeatureTrace(const EnsPQcdasfeature qcdasf, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1384,6 +1405,8 @@ AjBool ensQcdasfeatureTrace(const EnsPQcdasfeature qcdasf, ajuint level)
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1391,7 +1414,7 @@ size_t ensQcdasfeatureCalculateMemsize(const EnsPQcdasfeature qcdasf)
 {
     size_t size = 0;
 
-    if(!qcdasf)
+    if (!qcdasf)
         return 0;
 
     size += sizeof (EnsOQcdasfeature);
@@ -1434,8 +1457,9 @@ size_t ensQcdasfeatureCalculateMemsize(const EnsPQcdasfeature qcdasf)
 **
 ** @argrule  Str  category  [const AjPStr] Category string
 **
-** @valrule * [EnsEQcdasfeatureCategory] Ensembl Quality Check DAS Feature
-** Category enumeration or ensEQcdasfeatureCategoryNULL
+** @valrule * [EnsEQcdasfeatureCategory]
+** Ensembl Quality Check DAS Feature Category enumeration or
+** ensEQcdasfeatureCategoryNULL
 **
 ** @fcategory misc
 ******************************************************************************/
@@ -1450,8 +1474,10 @@ size_t ensQcdasfeatureCalculateMemsize(const EnsPQcdasfeature qcdasf)
 **
 ** @param [r] category [const AjPStr] Category string
 **
-** @return [EnsEQcdasfeatureCategory] Ensembl Quality Check DAS Feature
-**                                    Category or ensEQcdasfeatureCategoryNULL
+** @return [EnsEQcdasfeatureCategory]
+** Ensembl Quality Check DAS Feature Category or ensEQcdasfeatureCategoryNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1461,13 +1487,13 @@ EnsEQcdasfeatureCategory ensQcdasfeatureCategoryFromStr(const AjPStr category)
 
     EnsEQcdasfeatureCategory ecategory = ensEQcdasfeatureCategoryNULL;
 
-    for(i = ensEQcdasfeatureCategoryNULL;
-        qcdasfeatureCategory[i];
-        i++)
-        if(ajStrMatchCaseC(category, qcdasfeatureCategory[i]))
+    for (i = ensEQcdasfeatureCategoryNULL;
+         qcdasfeatureKCategory[i];
+         i++)
+        if (ajStrMatchCaseC(category, qcdasfeatureKCategory[i]))
             ecategory = i;
 
-    if(!ecategory)
+    if (!ecategory)
         ajDebug("ensQcdasfeatureCategoryFromStr encountered "
                 "unexpected string '%S'.\n", category);
 
@@ -1487,8 +1513,8 @@ EnsEQcdasfeatureCategory ensQcdasfeatureCategoryFromStr(const AjPStr category)
 ** @nam4rule To   Return Ensembl Quality Check DAS Feature Category enumeration
 ** @nam5rule Char Return C character string value
 **
-** @argrule To qcdasfc [EnsEQcdasfeatureCategory] Ensembl Quality Check DAS
-**                                                Feature Category enumeration
+** @argrule To qcdasfc [EnsEQcdasfeatureCategory]
+** Ensembl Quality Check DAS Feature Category enumeration
 **
 ** @valrule Char [const char*] Category or NULL
 **
@@ -1501,13 +1527,15 @@ EnsEQcdasfeatureCategory ensQcdasfeatureCategoryFromStr(const AjPStr category)
 /* @func ensQcdasfeatureCategoryToChar ****************************************
 **
 ** Convert an Ensembl Quality Check DAS Feature Category enumeration into a
-** C-type (char*) string.
+** C-type (char *) string.
 **
-** @param [u] qcdasfc [EnsEQcdasfeatureCategory] Ensembl Quality Check DAS
-**                                               Feature Category enumeration
+** @param [u] qcdasfc [EnsEQcdasfeatureCategory]
+** Ensembl Quality Check DAS Feature Category enumeration
 **
-** @return [const char*] Ensembl Quality Check DAS Feature Category
-**                       C-type (char*) string or NULL
+** @return [const char*]
+** Ensembl Quality Check DAS Feature Category C-type (char *) string or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1515,17 +1543,17 @@ const char* ensQcdasfeatureCategoryToChar(EnsEQcdasfeatureCategory qcdasfc)
 {
     register EnsEQcdasfeatureCategory i = ensEQcdasfeatureCategoryNULL;
 
-    for(i = ensEQcdasfeatureCategoryNULL;
-        qcdasfeatureCategory[i] && (i < qcdasfc);
-        i++);
+    for (i = ensEQcdasfeatureCategoryNULL;
+         qcdasfeatureKCategory[i] && (i < qcdasfc);
+         i++);
 
-    if(!qcdasfeatureCategory[i])
+    if (!qcdasfeatureKCategory[i])
         ajDebug("ensQcdasfeatureCategoryToChar encountered an "
                 "out of boundary error on "
                 "Ensembl Quality Check DAS Feature Category enumeration %d.\n",
                 qcdasfc);
 
-    return qcdasfeatureCategory[i];
+    return qcdasfeatureKCategory[i];
 }
 
 
@@ -1555,8 +1583,9 @@ const char* ensQcdasfeatureCategoryToChar(EnsEQcdasfeatureCategory qcdasfc)
 **
 ** @argrule  Str  type  [const AjPStr] Type string
 **
-** @valrule * [EnsEQcdasfeatureType] Ensembl Quality Check DAS Feature Type
-** enumeration or ensEQcdasfeatureTypeNULL
+** @valrule * [EnsEQcdasfeatureType]
+** Ensembl Quality Check DAS Feature Type enumeration or
+** ensEQcdasfeatureTypeNULL
 **
 ** @fcategory misc
 ******************************************************************************/
@@ -1571,8 +1600,11 @@ const char* ensQcdasfeatureCategoryToChar(EnsEQcdasfeatureCategory qcdasfc)
 **
 ** @param [r] type [const AjPStr] Type string
 **
-** @return [EnsEQcdasfeatureType] Ensembl Quality Check DAS Feature Type
-**                                enumeration or ensEQcdasfeatureTypeNULL
+** @return [EnsEQcdasfeatureType]
+** Ensembl Quality Check DAS Feature Type enumeration or
+** ensEQcdasfeatureTypeNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1582,13 +1614,13 @@ EnsEQcdasfeatureType ensQcdasfeatureTypeFromStr(const AjPStr type)
 
     EnsEQcdasfeatureType etype = ensEQcdasfeatureTypeNULL;
 
-    for(i = ensEQcdasfeatureTypeNULL;
-        qcdasfeatureType[i];
-        i++)
-        if(ajStrMatchCaseC(type, qcdasfeatureType[i]))
+    for (i = ensEQcdasfeatureTypeNULL;
+         qcdasfeatureKType[i];
+         i++)
+        if (ajStrMatchCaseC(type, qcdasfeatureKType[i]))
             etype = i;
 
-    if(!etype)
+    if (!etype)
         ajDebug("ensQcdasfeatureTypeFromStr encountered "
                 "unexpected string '%S'.\n", type);
 
@@ -1608,8 +1640,8 @@ EnsEQcdasfeatureType ensQcdasfeatureTypeFromStr(const AjPStr type)
 ** @nam4rule To   Return Ensembl Quality Check DAS Feature Type enumeration
 ** @nam5rule Char Return C character string value
 **
-** @argrule To qcdasft [EnsEQcdasfeatureType] Ensembl Quality Check DAS Feature
-**                                            Type enumeration
+** @argrule To qcdasft [EnsEQcdasfeatureType]
+** Ensembl Quality Check DAS Feature Type enumeration
 **
 ** @valrule Char [const char*] Type or NULL
 **
@@ -1622,13 +1654,15 @@ EnsEQcdasfeatureType ensQcdasfeatureTypeFromStr(const AjPStr type)
 /* @func ensQcdasfeatureTypeToChar ********************************************
 **
 ** Convert an Ensembl Quality Check DAS Feature Type enumeration into a
-** C-type (char*) string.
+** C-type (char *) string.
 **
 ** @param [u] qcdasft [EnsEQcdasfeatureType]
 ** Ensembl Quality Check DAS Feature Type
 **
-** @return [const char*] Ensembl Quality Check DAS Feature Type
-**                       C-type (char*) string
+** @return [const char*]
+** Ensembl Quality Check DAS Feature Type C-type (char *) string
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1636,17 +1670,17 @@ const char* ensQcdasfeatureTypeToChar(EnsEQcdasfeatureType qcdasft)
 {
     register EnsEQcdasfeatureType i = ensEQcdasfeatureTypeNULL;
 
-    for(i = ensEQcdasfeatureTypeNULL;
-        qcdasfeatureType[i] && (i < qcdasft);
-        i++);
+    for (i = ensEQcdasfeatureTypeNULL;
+         qcdasfeatureKType[i] && (i < qcdasft);
+         i++);
 
-    if(!qcdasfeatureType[i])
+    if (!qcdasfeatureKType[i])
         ajDebug("ensQcdasfeatureTypeToChar encountered an "
                 "out of boundary error on "
                 "Ensembl Quality Check DAS Feature Type enumeration %d.\n",
                 qcdasft);
 
-    return qcdasfeatureType[i];
+    return qcdasfeatureKType[i];
 }
 
 
@@ -1673,7 +1707,7 @@ const char* ensQcdasfeatureTypeToChar(EnsEQcdasfeatureType qcdasft)
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Quality Check DAS Feature objects.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
@@ -1681,11 +1715,13 @@ const char* ensQcdasfeatureTypeToChar(EnsEQcdasfeatureType qcdasft)
 ** AJAX List of Ensembl Quality Check DAS Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool qcdasfeatureadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -1694,15 +1730,15 @@ static AjBool qcdasfeatureadaptorFetchAllbyStatement(
     ajint tstrand = 0;
     ajint phase   = 0;
 
-    ajuint identifier  = 0;
-    ajuint analysisid  = 0;
-    ajuint alignmentid = 0;
-    ajuint qsid   = 0;
-    ajuint qstart = 0;
-    ajuint qend   = 0;
-    ajuint tsid   = 0;
-    ajuint tstart = 0;
-    ajuint tend   = 0;
+    ajuint identifier  = 0U;
+    ajuint analysisid  = 0U;
+    ajuint alignmentid = 0U;
+    ajuint qsid        = 0U;
+    ajuint qstart      = 0U;
+    ajuint qend        = 0U;
+    ajuint tsid        = 0U;
+    ajuint tstart      = 0U;
+    ajuint tend        = 0U;
 
     EnsEQcdasfeatureCategory ecategory = ensEQcdasfeatureCategoryNULL;
     EnsEQcdasfeatureType etype         = ensEQcdasfeatureTypeNULL;
@@ -1717,6 +1753,8 @@ static AjBool qcdasfeatureadaptorFetchAllbyStatement(
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPQcalignment qca         = NULL;
     EnsPQcalignmentadaptor qcaa = NULL;
 
@@ -1727,41 +1765,40 @@ static AjBool qcdasfeatureadaptorFetchAllbyStatement(
     EnsPQcsequence tsequence   = NULL;
     EnsPQcsequenceadaptor qcsa = NULL;
 
-    if(ajDebugTest("qcdasfeatureadaptorFetchAllbyStatement"))
+    if (ajDebugTest("qcdasfeatureadaptorFetchAllbyStatement"))
         ajDebug("qcdasfeatureadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  qcdasfs %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 qcdasfs);
 
-    if(!dba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!qcdasfs)
+    if (!qcdasfs)
         return ajFalse;
 
-    aa = ensRegistryGetAnalysisadaptor(dba);
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
-    qcaa = ensRegistryGetQcalignmentadaptor(dba);
-
+    aa      = ensRegistryGetAnalysisadaptor(dba);
+    qcaa    = ensRegistryGetQcalignmentadaptor(dba);
     qcdasfa = ensRegistryGetQcdasfeatureadaptor(dba);
-
-    qcsa = ensRegistryGetQcsequenceadaptor(dba);
+    qcsa    = ensRegistryGetQcsequenceadaptor(dba);
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier  = 0;
         analysisid  = 0;
@@ -1822,7 +1859,7 @@ static AjBool qcdasfeatureadaptorFetchAllbyStatement(
                                        ecategory,
                                        etype);
 
-        ajListPushAppend(qcdasfs, (void*) qcdasf);
+        ajListPushAppend(qcdasfs, (void *) qcdasf);
 
         ensQcsequenceDel(&qsequence);
         ensQcsequenceDel(&tsequence);
@@ -1886,23 +1923,25 @@ static AjBool qcdasfeatureadaptorFetchAllbyStatement(
 **
 ** @return [EnsPQcdasfeatureadaptor]
 ** Ensembl Quality Check DAS Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPQcdasfeatureadaptor ensQcdasfeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    if (!dba)
         return NULL;
 
     return ensBaseadaptorNew(
         dba,
-        qcdasfeatureadaptorTables,
-        qcdasfeatureadaptorColumns,
-        (EnsPBaseadaptorLeftjoin) NULL,
-        (const char*) NULL,
-        (const char*) NULL,
-        qcdasfeatureadaptorFetchAllbyStatement);
+        qcdasfeatureadaptorKTables,
+        qcdasfeatureadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        (const char *) NULL,
+        (const char *) NULL,
+        &qcdasfeatureadaptorFetchAllbyStatement);
 }
 
 
@@ -1910,16 +1949,15 @@ EnsPQcdasfeatureadaptor ensQcdasfeatureadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Quality Check DAS Feature Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Quality Check DAS Feature Adaptor object.
 **
 ** @fdata [EnsPQcdasfeatureadaptor]
 **
 ** @nam3rule Del Destroy (free) an Ensembl Quality Check DAS Feature Adaptor
-** object
 **
 ** @argrule * Pqcdasfa [EnsPQcdasfeatureadaptor*]
-** Ensembl Quality Check DAS Feature Adaptor object address
+** Ensembl Quality Check DAS Feature Adaptor address
 **
 ** @valrule * [void]
 **
@@ -1943,35 +1981,24 @@ EnsPQcdasfeatureadaptor ensQcdasfeatureadaptorNew(
 ** Ensembl Quality Check DAS Feature Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensQcdasfeatureadaptorDel(EnsPQcdasfeatureadaptor* Pqcdasfa)
+void ensQcdasfeatureadaptorDel(EnsPQcdasfeatureadaptor *Pqcdasfa)
 {
-    if(!Pqcdasfa)
-        return;
-
-    if(!*Pqcdasfa)
-        return;
-
-    if(ajDebugTest("ensQcdasfeatureadaptorDel"))
-        ajDebug("ensQcdasfeatureadaptorDel\n"
-                "  *Pqcdasfa %p\n",
-                *Pqcdasfa);
-
     ensBaseadaptorDel(Pqcdasfa);
 
-    *Pqcdasfa = NULL;
-
-    return;
+	return;
 }
 
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Quality Check DAS Feature Adaptor object.
 **
 ** @fdata [EnsPQcdasfeatureadaptor]
@@ -1995,22 +2022,21 @@ void ensQcdasfeatureadaptorDel(EnsPQcdasfeatureadaptor* Pqcdasfa)
 
 /* @func ensQcdasfeatureadaptorGetBaseadaptor *********************************
 **
-** Get the Ensembl Base Adaptor element of an
+** Get the Ensembl Base Adaptor member of an
 ** Ensembl Quality Check DAS Feature Adaptor.
 **
 ** @param [u] qcdasfa [EnsPQcdasfeatureadaptor]
 ** Ensembl Quality Check DAS Feature Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPBaseadaptor ensQcdasfeatureadaptorGetBaseadaptor(
     EnsPQcdasfeatureadaptor qcdasfa)
 {
-    if(!qcdasfa)
-        return NULL;
-
     return qcdasfa;
 }
 
@@ -2019,22 +2045,21 @@ EnsPBaseadaptor ensQcdasfeatureadaptorGetBaseadaptor(
 
 /* @func ensQcdasfeatureadaptorGetDatabaseadaptor *****************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl Quality Check DAS Feature Adaptor.
 **
 ** @param [u] qcdasfa [EnsPQcdasfeatureadaptor]
 ** Ensembl Quality Check DAS Feature Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensQcdasfeatureadaptorGetDatabaseadaptor(
     EnsPQcdasfeatureadaptor qcdasfa)
 {
-    if(!qcdasfa)
-        return NULL;
-
     return ensBaseadaptorGetDatabaseadaptor(qcdasfa);
 }
 
@@ -2125,6 +2150,8 @@ EnsPDatabaseadaptor ensQcdasfeatureadaptorGetDatabaseadaptor(
 ** Ensembl Quality Check DAS Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2135,13 +2162,13 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcalignment(
 {
     AjPStr constraint = NULL;
 
-    if(!qcdasfa)
+    if (!qcdasfa)
         return ajFalse;
 
-    if(!qca)
+    if (!qca)
         return ajFalse;
 
-    if(!qcdasfs)
+    if (!qcdasfs)
         return ajFalse;
 
     constraint = ajFmtStr("das_feature.alignment_id = %u",
@@ -2165,7 +2192,7 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcalignment(
 **
 ** Fetch all Ensembl Quality Check DAS Feature objects by an
 ** Ensembl Quality Check Sequence representing an
-** Ensembl Quality Check DAS Feature feature element.
+** Ensembl Quality Check DAS Feature feature member.
 **
 ** The caller is responsible for deleting the Ensembl Quality Check DAS Feature
 ** objects before deleting the AJAX List.
@@ -2179,6 +2206,8 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcalignment(
 ** Ensembl Quality Check DAS Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2190,19 +2219,19 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcsequenceFeature(
 {
     AjPStr constraint = NULL;
 
-    if(!qcdasfa)
+    if (!qcdasfa)
         return ajFalse;
 
-    if(!feature)
+    if (!feature)
         return ajFalse;
 
-    if(!qcdasfs)
+    if (!qcdasfs)
         return ajFalse;
 
     constraint = ajFmtStr("das_feature.feature_id = %u",
                           ensQcsequenceGetIdentifier(feature));
 
-    if(analysis)
+    if (analysis)
         ajFmtPrintAppS(&constraint,
                        " AND das_feature.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
@@ -2241,6 +2270,8 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcsequenceFeature(
 ** Ensembl Quality Check DAS Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2253,16 +2284,16 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcsequencePair(
 {
     AjPStr constraint = NULL;
 
-    if(!qcdasfa)
+    if (!qcdasfa)
         return ajFalse;
 
-    if(!analysis)
+    if (!analysis)
         return ajFalse;
 
-    if(!feature)
+    if (!feature)
         return ajFalse;
 
-    if(!segment)
+    if (!segment)
         return ajFalse;
 
     constraint = ajFmtStr("das_feature.analysis_id = %u "
@@ -2306,6 +2337,8 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcsequencePair(
 ** Ensembl Quality Check DAS Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2317,19 +2350,19 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcsequenceSegment(
 {
     AjPStr constraint = NULL;
 
-    if(!qcdasfa)
+    if (!qcdasfa)
         return ajFalse;
 
-    if(!segment)
+    if (!segment)
         return ajFalse;
 
-    if(!qcdasfs)
+    if (!qcdasfs)
         return ajFalse;
 
     constraint = ajFmtStr("das_feature.segment_id = %u",
                           ensQcsequenceGetIdentifier(segment));
 
-    if(analysis)
+    if (analysis)
         ajFmtPrintAppS(&constraint,
                        " AND das_feature.analysis_id = %u",
                        ensAnalysisGetIdentifier(analysis));
@@ -2367,6 +2400,8 @@ AjBool ensQcdasfeatureadaptorFetchAllbyQcsequenceSegment(
 ** Ensembl Quality Check DAS Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2380,16 +2415,16 @@ AjBool ensQcdasfeatureadaptorFetchAllbyRegion(
 {
     AjPStr constraint = NULL;
 
-    if(!qcdasfa)
+    if (!qcdasfa)
         return ajFalse;
 
-    if(!analysis)
+    if (!analysis)
         return ajFalse;
 
-    if(!segment)
+    if (!segment)
         return ajFalse;
 
-    if(!qcdasfs)
+    if (!qcdasfs)
         return ajFalse;
 
     constraint = ajFmtStr(
@@ -2442,26 +2477,28 @@ AjBool ensQcdasfeatureadaptorFetchAllbyRegion(
 ** Ensembl Quality Check DAS Feature address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensQcdasfeatureadaptorFetchByIdentifier(
     EnsPQcdasfeatureadaptor qcdasfa,
     ajuint identifier,
-    EnsPQcdasfeature* Pqcdasf)
+    EnsPQcdasfeature *Pqcdasf)
 {
-    if(!qcdasfa)
+    if (!qcdasfa)
         return ajFalse;
 
-    if(!identifier)
+    if (!identifier)
         return ajFalse;
 
-    if(!Pqcdasf)
+    if (!Pqcdasf)
         return ajFalse;
 
     return ensBaseadaptorFetchByIdentifier(qcdasfa,
                                            identifier,
-                                           (void**) Pqcdasf);
+                                           (void **) Pqcdasf);
 }
 
 
@@ -2504,6 +2541,8 @@ AjBool ensQcdasfeatureadaptorFetchByIdentifier(
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2518,13 +2557,13 @@ AjBool ensQcdasfeatureadaptorDelete(EnsPQcdasfeatureadaptor qcdasfa,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!qcdasfa)
+    if (!qcdasfa)
         return ajFalse;
 
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
-    if(!ensQcdasfeatureGetIdentifier(qcdasf))
+    if (!ensQcdasfeatureGetIdentifier(qcdasf))
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(qcdasfa);
@@ -2538,7 +2577,7 @@ AjBool ensQcdasfeatureadaptorDelete(EnsPQcdasfeatureadaptor qcdasfa,
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
-    if(ajSqlstatementGetAffectedrows(sqls))
+    if (ajSqlstatementGetAffectedrows(sqls))
     {
         qcdasf->Adaptor    = (EnsPQcdasfeatureadaptor) NULL;
         qcdasf->Identifier = 0;
@@ -2565,6 +2604,8 @@ AjBool ensQcdasfeatureadaptorDelete(EnsPQcdasfeatureadaptor qcdasfa,
 ** @param [u] qcdasf [EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2579,14 +2620,14 @@ AjBool ensQcdasfeatureadaptorStore(EnsPQcdasfeatureadaptor qcdasfa,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!qcdasfa)
+    if (!qcdasfa)
         return ajFalse;
 
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
-    if(ensQcdasfeatureGetAdaptor(qcdasf) &&
-       ensQcdasfeatureGetIdentifier(qcdasf))
+    if (ensQcdasfeatureGetAdaptor(qcdasf) &&
+        ensQcdasfeatureGetIdentifier(qcdasf))
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(qcdasfa);
@@ -2622,7 +2663,7 @@ AjBool ensQcdasfeatureadaptorStore(EnsPQcdasfeatureadaptor qcdasfa,
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
-    if(ajSqlstatementGetAffectedrows(sqls))
+    if (ajSqlstatementGetAffectedrows(sqls))
     {
         ensQcdasfeatureSetIdentifier(qcdasf,
                                      ajSqlstatementGetIdentifier(sqls));
@@ -2651,6 +2692,8 @@ AjBool ensQcdasfeatureadaptorStore(EnsPQcdasfeatureadaptor qcdasfa,
 ** @param [r] qcdasf [const EnsPQcdasfeature] Ensembl Quality Check DAS Feature
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2665,13 +2708,13 @@ AjBool ensQcdasfeatureadaptorUpdate(EnsPQcdasfeatureadaptor qcdasfa,
 
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!qcdasfa)
+    if (!qcdasfa)
         return ajFalse;
 
-    if(!qcdasf)
+    if (!qcdasf)
         return ajFalse;
 
-    if(!ensQcdasfeatureGetIdentifier(qcdasf))
+    if (!ensQcdasfeatureGetIdentifier(qcdasf))
         return ajFalse;
 
     dba = ensBaseadaptorGetDatabaseadaptor(qcdasfa);
@@ -2710,7 +2753,7 @@ AjBool ensQcdasfeatureadaptorUpdate(EnsPQcdasfeatureadaptor qcdasfa,
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
-    if(ajSqlstatementGetAffectedrows(sqls))
+    if (ajSqlstatementGetAffectedrows(sqls))
         result = ajTrue;
 
     ensDatabaseadaptorSqlstatementDel(dba, &sqls);

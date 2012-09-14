@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -118,7 +118,7 @@ General log output file [outfile.dbxresource]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Index a data resource catalogue using b+tree indices
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     [drcat] Basename for index files (Any string
@@ -310,7 +310,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-directory" associated directory qualifiers
+<td align="left" colspan=5>"-directory" associated directory qualifiers
 </td>
 </tr>
 
@@ -323,7 +323,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
+<td align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
 </td>
 </tr>
 
@@ -336,7 +336,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -535,325 +535,397 @@ DRCAT.dat
 <p><h3>File: drcat.pxac</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     3
-Order     64
-Fill      43
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     21
-Fullcount 21
-Kwlimit   18
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        64
+Fill         52
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       22
+Fill2        41
+Secpagesize  512
+Seccachesize 2000
+Count        22
+Fullcount    22
+Kwlimit      18
+Reffiles     0
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxcat</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     60
-Order     37
-Fill      29
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     19
-Fullcount 72
-Kwlimit   40
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     21
+Order        27
+Fill         25
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        21
+Fullcount    74
+Kwlimit      60
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxde</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     2539
-Order     60
-Fill      41
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     835
-Fullcount 2001
-Kwlimit   20
+Type         Secondary
+Compress     Yes
+Pages        32
+Secpages     905
+Order        60
+Fill         49
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        829
+Fullcount    2006
+Kwlimit      20
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxedat</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     198
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     65
-Fullcount 150
-Kwlimit   15
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     69
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        61
+Fullcount    152
+Kwlimit      15
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxefmt</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     37
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     11
-Fullcount 135
-Kwlimit   15
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     32
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        11
+Fullcount    135
+Kwlimit      15
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxeid</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     328
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     108
-Fullcount 197
-Kwlimit   15
+Type         Secondary
+Compress     Yes
+Pages        4
+Secpages     110
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        106
+Fullcount    201
+Kwlimit      15
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxetpc</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     204
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     67
-Fullcount 204
-Kwlimit   15
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     71
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        67
+Fullcount    192
+Kwlimit      15
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxid</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     8
-Order     44
-Fill      33
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     110
-Fullcount 110
-Kwlimit   32
+Type         Identifier
+Compress     Yes
+Pages        6
+Secpages     0
+Order        44
+Fill         38
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       99
+Fill2        169
+Secpagesize  512
+Seccachesize 2000
+Count        110
+Fullcount    110
+Kwlimit      32
+Reffiles     0
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxnm</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     1021
-Order     60
-Fill      41
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     335
-Fullcount 659
-Kwlimit   20
+Type         Secondary
+Compress     Yes
+Pages        12
+Secpages     361
+Order        60
+Fill         49
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        335
+Fullcount    659
+Kwlimit      20
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxqfmt</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     52
-Order     46
-Fill      34
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     16
-Fullcount 148
-Kwlimit   30
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     37
+Order        46
+Fill         39
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        16
+Fullcount    148
+Kwlimit      30
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxqin</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     377
-Order     25
-Fill      21
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     122
-Fullcount 204
-Kwlimit   65
+Type         Secondary
+Compress     Yes
+Pages        12
+Secpages     130
+Order        25
+Fill         23
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        126
+Fullcount    206
+Kwlimit      65
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxqout</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     391
-Order     19
-Fill      17
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     126
-Fullcount 169
-Kwlimit   90
+Type         Secondary
+Compress     Yes
+Pages        11
+Secpages     124
+Order        19
+Fill         18
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        120
+Fullcount    169
+Kwlimit      90
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxqurl</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     2252
-Order     46
-Fill      34
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     737
-Fullcount 2118
-Kwlimit   30
+Type         Secondary
+Compress     Yes
+Pages        33
+Secpages     900
+Order        46
+Fill         39
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        729
+Fullcount    2147
+Kwlimit      30
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxrest</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     39
-Order     60
-Fill      41
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     12
-Fullcount 43
-Kwlimit   20
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     12
+Order        60
+Fill         49
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        12
+Fullcount    43
+Kwlimit      20
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxrf</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     15
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     4
-Fullcount 87
-Kwlimit   15
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     17
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        5
+Fullcount    83
+Kwlimit      15
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxsoap</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     57
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     18
-Fullcount 23
-Kwlimit   15
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     18
+Order        71
+Fill         56
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        18
+Fullcount    23
+Kwlimit      15
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxtaxid</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     82
-Order     104
-Fill      58
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     26
-Fullcount 114
-Kwlimit   6
+Type         Secondary
+Compress     Yes
+Pages        3
+Secpages     40
+Order        104
+Fill         75
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        26
+Fullcount    114
+Kwlimit      6
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.pxurl</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     709
-Order     52
-Fill      37
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    44
-Fill2     54
-Count     231
-Fullcount 594
-Kwlimit   25
+Type         Secondary
+Compress     Yes
+Pages        11
+Secpages     268
+Order        52
+Fill         44
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       10
+Fill2        13
+Secpagesize  512
+Seccachesize 2000
+Count        227
+Fullcount    585
+Kwlimit      25
+Idlimit      32
 </pre>
 </td></tr></table><p>
 <p><h3>File: drcat.xac</h3>
@@ -896,8 +968,27 @@ Kwlimit   25
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Processing directory: /homes/user/test/data/
-Processing file: DRCAT.dat entries: 110 (110) time: 0.0s (0.0s)
+Processing file: DRCAT.dat
+entries: 110 (110) time: 0.0s (0.0s)
 Total time: 0.0s
+Entry idlen 32 OK. Maximum ID length was 28 for 'WORLD_2DPAGE_CGL14067_2DPAGE'.
+Field acc acclen 18 OK. Maximum acc term length was 18 for 'REPRODUCTION2DPAGE'.
+Field nam namlen 20 OK. Maximum nam term length was 16 for 'characterization'.
+Field des deslen 20 OK. Maximum des term length was 17 for 'transcriptionally'.
+Field url urllen 25 OK. Maximum url term length was 17 for 'compluyeast2dpage'.
+Field cat catlen 60 OK. Maximum cat term length was 40 for 'Protein sequence classification database'.
+Field taxid taxidlen 6 OK. Maximum taxid term length was 5 for '40674'.
+Field edat edatlen 15 OK. Maximum edat term length was 4 for '2378'.
+Field etpc etpclen 15 OK. Maximum etpc term length was 4 for '0166'.
+Field eid eidlen 15 OK. Maximum eid term length was 4 for '1116'.
+Field efmt efmtlen 15 OK. Maximum efmt term length was 4 for '2331'.
+Field qout qoutlen 90 OK. Maximum qout term length was 85 for 'Protein report (transcription factor) {Documented regulators of a given set of genes}'.
+Field qfmt qfmtlen 30 OK. Maximum qfmt term length was 14 for 'HTML {graphic}'.
+Field qin qinlen 65 OK. Maximum qin term length was 43 for 'Sequence accession (protein) {World-2DPAGE}'.
+Field qurl qurllen 30 OK. Maximum qurl term length was 29 for 'identificationAccessionNumber'.
+Field xref xreflen 15 OK. Maximum xref term length was 13 for 'EMBL_explicit'.
+Field rest restlen 20 OK. Maximum rest term length was 19 for 'prideMartWebService'.
+Field soap soaplen 15 OK. Maximum soap term length was 12 for 'dataservices'.
 </pre>
 </td></tr></table><p>
 

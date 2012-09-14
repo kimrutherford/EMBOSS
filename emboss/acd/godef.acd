@@ -1,9 +1,9 @@
 application: godef [
   documentation: "Find GO ontology terms by definition"
   groups: "Ontology:GO, Data retrieval:Ontology data"
-    relations: "EDAM:0000089 topic Ontologies"
-    relations: "EDAM:0000090 topic Data retrieval"
-    relations: "EDAM:0002224 operation Data retrieval (ontology concept)"
+    relations: "EDAM_topic:0089 Ontology"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:2422 Data retrieval"
 ]
 
 section: input [
@@ -16,7 +16,7 @@ section: input [
       parameter: "Y"
       information: "Definition word(s) to search for in ontology"
       knowntype: "keyword"
-    relations: "EDAM:0000968 data Keyword"
+    relations: "EDAM_data:0968 Keyword"
   ]
 
 endsection: input
@@ -44,7 +44,7 @@ list: namespace [
       information: "Return terms in namespace(s)"
       help: "By default all terms are returned. Searches can be limited
       	    to one or a few namespaces."
-    relations: "EDAM:0000967 data Ontology concept metadata"
+    relations: "EDAM_data:0967 Ontology concept metadata"
     ]
 
 endsection: additional
@@ -63,7 +63,7 @@ section: advanced [
     information: "Include subclasses of hits"
     help: "Extend the query matches to include all terms which are
            specialisations (GO sub-classes) of the matched type."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 
@@ -72,7 +72,7 @@ section: advanced [
     information: "Include obsolete terms"
     help: "The default behaviour is to not use or return obsolete terms.
            This option if set will include all terms."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 
@@ -90,7 +90,7 @@ section: output [
   outobo: outfile [
     parameter: "Y"
     name: "godef"
-    relations: "EDAM:0002223 data Ontology metadata"
+    relations: "EDAM_data:2223 Ontology metadata"
   ]
 
 endsection: output

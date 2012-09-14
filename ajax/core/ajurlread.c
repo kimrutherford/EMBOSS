@@ -1,20 +1,45 @@
-/*
-** This is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+/* @source ajurlread **********************************************************
 **
-** This program is distributed in the hope that it will be useful,
+** AJAX url reading functions
+**
+** These functions control all aspects of AJAX url reading
+**
+** @author Copyright (C) 2010 Peter Rice
+** @version $Revision: 1.16 $
+** @modified Oct 5 pmr First version
+** @modified $Date: 2012/03/12 17:34:12 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajurlread.h"
+#include "ajurl.h"
+#include "ajcall.h"
+#include "ajlist.h"
+#include "ajquery.h"
+#include "ajtextread.h"
+#include "ajnam.h"
+#include "ajfileio.h"
+#include "ajresource.h"
+
+#include <string.h>
 
 AjPTable urlDbMethods = NULL;
 
@@ -39,7 +64,7 @@ static AjBool urlinReadHtml(AjPUrlin thys, AjPUrl url);
 ** @attr Alias [AjBool] Name is an alias for an identical definition
 ** @attr Try [AjBool] If true, try for an unknown input. Duplicate names
 **                    and read-anything formats are set false
-** @attr Read [(AjBool*)] Input function, returns ajTrue on success
+** @attr Read [AjBool function] Input function, returns ajTrue on success
 ** @@
 ******************************************************************************/
 
@@ -60,15 +85,15 @@ static UrlOInFormat urlinFormatDef[] =
 /* "Name",        "OBOterm", "Description" */
 /*     Alias,   Try,     */
 /*     ReadFunction */
-  {"unknown",     "0000000", "Unknown format",
+  {"unknown",     "0000", "Unknown format",
        AJFALSE, AJFALSE,
-       urlinReadHtml}, /* default to first format */
-  {"html",        "0002331", "Html format",
+       &urlinReadHtml}, /* default to first format */
+  {"html",        "2331", "Html format",
        AJFALSE, AJTRUE,
-       urlinReadHtml},
-  {"HTML",        "0002331", "Html format",
+       &urlinReadHtml},
+  {"HTML",        "2331", "Html format",
        AJTRUE, AJFALSE,
-       urlinReadHtml},
+       &urlinReadHtml},
   {NULL, NULL, NULL, 0, 0, NULL}
 };
 
@@ -128,12 +153,14 @@ static AjBool urlinQryProcess(AjPUrlin urlin, AjPUrl url);
 
 
 
-/* @func ajUrlinNew **********************************************************
+/* @func ajUrlinNew ***********************************************************
 **
 ** Creates a new url input object.
 **
 ** @return [AjPUrlin] New url input object.
 ** @category new [AjPUrlin] Default constructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -175,13 +202,15 @@ AjPUrlin ajUrlinNew(void)
 
 
 
-/* @func ajUrlinDel **********************************************************
+/* @func ajUrlinDel ***********************************************************
 **
 ** Deletes an url input object.
 **
 ** @param [d] pthis [AjPUrlin*] Url input
 ** @return [void]
 ** @category delete [AjPUrlin] Default destructor
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -246,7 +275,7 @@ void ajUrlinDel(AjPUrlin* pthis)
 
 
 
-/* @func ajUrlinClear ********************************************************
+/* @func ajUrlinClear *********************************************************
 **
 ** Clears an url input object back to "as new" condition, except
 ** for the query list which must be preserved.
@@ -254,6 +283,8 @@ void ajUrlinDel(AjPUrlin* pthis)
 ** @param [w] thys [AjPUrlin] Url input
 ** @return [void]
 ** @category modify [AjPUrlin] Resets ready for reuse.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -280,7 +311,7 @@ void ajUrlinClear(AjPUrlin thys)
 
 
 
-/* @func ajUrlinQryC *********************************************************
+/* @func ajUrlinQryC **********************************************************
 **
 ** Resets an url input object using a new Universal
 ** Query Address
@@ -288,6 +319,8 @@ void ajUrlinClear(AjPUrlin thys)
 ** @param [u] thys [AjPUrlin] Url input object.
 ** @param [r] txt [const char*] Query
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -303,7 +336,7 @@ void ajUrlinQryC(AjPUrlin thys, const char* txt)
 
 
 
-/* @func ajUrlinQryS ********************************************************
+/* @func ajUrlinQryS **********************************************************
 **
 ** Resets an url input object using a new Universal
 ** Query Address
@@ -311,6 +344,8 @@ void ajUrlinQryC(AjPUrlin thys, const char* txt)
 ** @param [u] thys [AjPUrlin] Url input object.
 ** @param [r] str [const AjPStr] Query
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -344,12 +379,14 @@ void ajUrlinQryS(AjPUrlin thys, const AjPStr str)
 
 
 
-/* @func ajUrlinTrace ********************************************************
+/* @func ajUrlinTrace *********************************************************
 **
 ** Debug calls to trace the data in an url input object.
 **
 ** @param [r] thys [const AjPUrlin] Url input object.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -389,7 +426,7 @@ void ajUrlinTrace(const AjPUrlin thys)
 
 
 
-/* @func ajUrlinRead ********************************************************
+/* @func ajUrlinRead **********************************************************
 **
 ** If the file is not yet open, calls urlinQryProcess to convert the query
 ** into an open file stream.
@@ -404,6 +441,8 @@ void ajUrlinTrace(const AjPUrlin thys)
 ** @category input [AjPUrl] Master url data input,
 **                  calls specific functions for file access type
 **                  and url data format.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -521,7 +560,7 @@ AjBool ajUrlinRead(AjPUrlin urlin, AjPUrl url)
 
 
 
-/* @funcstatic urlDefine ****************************************************
+/* @funcstatic urlDefine ******************************************************
 **
 ** Make sure all url data object attributes are defined
 ** using values from the url input object if needed
@@ -529,6 +568,8 @@ AjBool ajUrlinRead(AjPUrlin urlin, AjPUrl url)
 ** @param [w] thys [AjPUrl] Url data returned.
 ** @param [u] urlin [AjPUrlin] Url data input definitions
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -549,7 +590,7 @@ static AjBool urlDefine(AjPUrl thys, AjPUrlin urlin)
 
 
 
-/* @funcstatic urlinRead *****************************************************
+/* @funcstatic urlinRead ******************************************************
 **
 ** Given data in an urlin structure, tries to read everything needed
 ** using the specified format or by trial and error.
@@ -557,6 +598,8 @@ static AjBool urlDefine(AjPUrl thys, AjPUrlin urlin)
 ** @param [u] urlin [AjPUrlin] Url data input object
 ** @param [w] url [AjPUrl] Url data object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -588,7 +631,7 @@ static AjBool urlinRead(AjPUrlin urlin, AjPUrl url)
 
     if(!urlin->Resource)
     {
-        if(!urlaccess->Access(urlin))
+        if(!(*urlaccess->Access)(urlin))
             return ajFalse;
     }
 
@@ -710,7 +753,7 @@ static AjBool urlinRead(AjPUrlin urlin, AjPUrl url)
 
 
 
-/* @funcstatic urlinReadHtml *************************************************
+/* @funcstatic urlinReadHtml **************************************************
 **
 ** Given data in an url structure, tries to read everything needed
 ** using HTML format.
@@ -718,6 +761,8 @@ static AjBool urlinRead(AjPUrlin urlin, AjPUrl url)
 ** @param [u] urlin [AjPUrlin] Url input object
 ** @param [w] url [AjPUrl] url object
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -804,12 +849,14 @@ static AjBool urlinReadHtml(AjPUrlin urlin, AjPUrl url)
 
 
 
-/* @func ajUrlinprintBook ****************************************************
+/* @func ajUrlinprintBook *****************************************************
 **
 ** Reports the internal data structures as a Docbook table
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -853,7 +900,7 @@ void ajUrlinprintBook(AjPFile outf)
         }
     }
 
-    ajListSort(fmtlist, ajStrVcmp);
+    ajListSort(fmtlist, &ajStrVcmp);
     ajListstrToarray(fmtlist, &names);
 
     for(i=0; names[i]; i++)
@@ -888,12 +935,14 @@ void ajUrlinprintBook(AjPFile outf)
 
 
 
-/* @func ajUrlinprintHtml ***************************************************
+/* @func ajUrlinprintHtml *****************************************************
 **
 ** Reports the internal data structures as an HTML table
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -947,13 +996,15 @@ void ajUrlinprintHtml(AjPFile outf)
 
 
 
-/* @func ajUrlinprintText ***************************************************
+/* @func ajUrlinprintText *****************************************************
 **
 ** Reports the internal data structures
 **
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -988,12 +1039,14 @@ void ajUrlinprintText(AjPFile outf, AjBool full)
 
 
 
-/* @func ajUrlinprintWiki ***************************************************
+/* @func ajUrlinprintWiki *****************************************************
 **
 ** Reports the internal data structures as a wiki table
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1066,11 +1119,13 @@ void ajUrlinprintWiki(AjPFile outf)
 
 
 
-/* @func ajUrlinExit *********************************************************
+/* @func ajUrlinExit **********************************************************
 **
 ** Cleans up url input internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1111,6 +1166,8 @@ void ajUrlinExit(void)
 ** Returns the listof known field names for ajUrlinRead
 **
 ** @return [const char*] List of field names
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1122,11 +1179,13 @@ const char* ajUrlinTypeGetFields(void)
 
 
 
-/* @func ajUrlinTypeGetQlinks ************************************************
+/* @func ajUrlinTypeGetQlinks *************************************************
 **
 ** Returns the list of known query link operators for ajUrlinRead
 **
 ** @return [const char*] List of field names
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1178,11 +1237,13 @@ const char* ajUrlinTypeGetQlinks(void)
 
 
 
-/* @func ajUrlaccessGetDb ***************************************************
+/* @func ajUrlaccessGetDb *****************************************************
 **
 ** Returns the table in which url database access details are registered
 **
 ** @return [AjPTable] Access functions hash table
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1204,6 +1265,8 @@ AjPTable ajUrlaccessGetDb(void)
 **
 ** @param [r] method [const AjPStr] Method required.
 ** @return [const char*] Known link operators
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1221,13 +1284,15 @@ const char* ajUrlaccessMethodGetQlinks(const AjPStr method)
 
 
 
-/* @func ajUrlaccessMethodGetScope ******************************************
+/* @func ajUrlaccessMethodGetScope ********************************************
 **
 ** Tests for a named method for url data reading and returns the scope
 ** (entry, query or all).
 *
 ** @param [r] method [const AjPStr] Method required.
 ** @return [ajuint] Scope flags
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1253,12 +1318,14 @@ ajuint ajUrlaccessMethodGetScope(const AjPStr method)
 
 
 
-/* @func ajUrlaccessMethodTest **********************************************
+/* @func ajUrlaccessMethodTest ************************************************
 **
 ** Tests for a named method for url data reading.
 **
 ** @param [r] method [const AjPStr] Method required.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1273,13 +1340,15 @@ AjBool ajUrlaccessMethodTest(const AjPStr method)
 
 
 
-/* @funcstatic urlinQryRestore **********************************************
+/* @funcstatic urlinQryRestore ************************************************
 **
 ** Restores an url input specification from an AjPQueryList node
 **
 ** @param [w] urlin [AjPUrlin] Url input object
 ** @param [r] node [const AjPQueryList] Query list node
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void urlinQryRestore(AjPUrlin urlin, const AjPQueryList node)
@@ -1293,13 +1362,15 @@ static void urlinQryRestore(AjPUrlin urlin, const AjPQueryList node)
 
 
 
-/* @funcstatic urlinQrySave *************************************************
+/* @funcstatic urlinQrySave ***************************************************
 **
 ** Saves an url input specification in an AjPQueryList node
 **
 ** @param [w] node [AjPQueryList] Query list node
 ** @param [r] urlin [const AjPUrlin] Url input object
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void urlinQrySave(AjPQueryList node, const AjPUrlin urlin)
@@ -1313,7 +1384,7 @@ static void urlinQrySave(AjPQueryList node, const AjPUrlin urlin)
 
 
 
-/* @funcstatic urlinQryProcess **********************************************
+/* @funcstatic urlinQryProcess ************************************************
 **
 ** Converts an url data query into an open file.
 **
@@ -1335,6 +1406,8 @@ static void urlinQrySave(AjPQueryList node, const AjPUrlin urlin)
 **                         The format will be replaced
 **                         if defined in the query string.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1395,7 +1468,7 @@ static AjBool urlinQryProcess(AjPUrlin urlin, AjPUrl url)
                 qry->Formatstr);
         qry->Access = ajCallTableGetS(urlDbMethods,qry->Method);
         urlaccess = qry->Access;
-        return urlaccess->Access(urlin);
+        return (*urlaccess->Access)(urlin);
     }
 
     ajDebug("urlinQryProcess text method '%S' success\n", qry->Method);
@@ -1417,7 +1490,7 @@ static AjBool urlinQryProcess(AjPUrlin urlin, AjPUrl url)
 
 
 
-/* @funcstatic urlinListProcess **********************************************
+/* @funcstatic urlinListProcess ***********************************************
 **
 ** Processes a file of queries.
 ** This function is called by, and calls, urlinQryProcess. There is
@@ -1435,6 +1508,8 @@ static AjBool urlinQryProcess(AjPUrlin urlin, AjPUrl url)
 ** @param [u] url [AjPUrl] Url data
 ** @param [r] listfile [const AjPStr] Name of list file.,
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1538,13 +1613,15 @@ static AjBool urlinListProcess(AjPUrlin urlin, AjPUrl url,
 
 
 
-/* @funcstatic urlinListNoComment ********************************************
+/* @funcstatic urlinListNoComment *********************************************
 **
 ** Strips comments from a character string (a line from an ACD file).
 ** Comments are blank lines or any text following a "#" character.
 **
 ** @param [u] text [AjPStr*] Line of text from input file.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1574,7 +1651,7 @@ static void urlinListNoComment(AjPStr* text)
 
 
 
-/* @funcstatic urlinFormatSet ************************************************
+/* @funcstatic urlinFormatSet *************************************************
 **
 ** Sets the input format for url data using the url data
 ** input object's defined format
@@ -1582,6 +1659,8 @@ static void urlinListNoComment(AjPStr* text)
 ** @param [u] urlin [AjPUrlin] Url data input.
 ** @param [u] url [AjPUrl] Url data
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1651,11 +1730,13 @@ static AjBool urlinFormatSet(AjPUrlin urlin, AjPUrl url)
 
 
 
-/* @func ajUrlallNew ***********************************************************
+/* @func ajUrlallNew **********************************************************
 **
 ** Creates a new url input stream object.
 **
 ** @return [AjPUrlall] New url input stream object.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1702,12 +1783,14 @@ AjPUrlall ajUrlallNew(void)
 
 
 
-/* @func ajUrlallDel ***********************************************************
+/* @func ajUrlallDel **********************************************************
 **
 ** Deletes a url input stream object.
 **
 ** @param [d] pthis [AjPUrlall*] Url input stream
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1769,6 +1852,8 @@ void ajUrlallDel(AjPUrlall* pthis)
 **
 ** @param [w] thys [AjPUrlall] Url input stream
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1816,6 +1901,8 @@ void ajUrlallClear(AjPUrlall thys)
 **
 ** @param [r] thys [const AjPUrlall] Url input stream
 ** @return [const AjPStr] Identifier
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1845,7 +1932,7 @@ const AjPStr ajUrlallGeturlId(const AjPUrlall thys)
 **
 ** @valrule * [AjBool] True on success
 **
-** @fcategory use
+** @fcategory input
 **
 ******************************************************************************/
 
@@ -1867,6 +1954,8 @@ const AjPStr ajUrlallGeturlId(const AjPUrlall thys)
 ** @param [w] thys [AjPUrlall] Url input stream
 ** @param [u] Purl [AjPUrl*] Url returned
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1948,7 +2037,7 @@ AjBool ajUrlallNext(AjPUrlall thys, AjPUrl *Purl)
 
 
 
-/* @funcstatic urlinformatFind ***********************************************
+/* @funcstatic urlinformatFind ************************************************
 **
 ** Looks for the specified format(s) in the internal definitions and
 ** returns the index.
@@ -1958,6 +2047,8 @@ AjBool ajUrlallNext(AjPUrlall thys, AjPUrl *Purl)
 ** @param [r] format [const AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1995,12 +2086,14 @@ static AjBool urlinformatFind(const AjPStr format, ajint* iformat)
 
 
 
-/* @func ajUrlinformatTerm ***************************************************
+/* @func ajUrlinformatTerm ****************************************************
 **
 ** Tests whether a url data input format term is known
 **
 ** @param [r] term [const AjPStr] Format term EDAM ID
 ** @return [AjBool] ajTrue if term was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2018,12 +2111,14 @@ AjBool ajUrlinformatTerm(const AjPStr term)
 
 
 
-/* @func ajUrlinformatTest ***************************************************
+/* @func ajUrlinformatTest ****************************************************
 **
 ** Tests whether a named url data input format is known
 **
 ** @param [r] format [const AjPStr] Format
 ** @return [AjBool] ajTrue if format was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

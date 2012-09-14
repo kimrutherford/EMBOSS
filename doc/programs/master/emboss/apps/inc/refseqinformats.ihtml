@@ -1,0 +1,7 @@
+<p>
+
+The input is a standard EMBOSS reference sequence query.
+
+<p> The major reference sequence sources are files in one of the
+common sequence formats, or remote files accessed by HTTP or FTP.
+

@@ -5,7 +5,7 @@ Here is a sample session with <b>featreport</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>featreport </b>
-Reads and writes a feature table
+Read and write a feature table
 Input sequence: <b>paamir.fasta</b>
 Input feature table: <b>paamir.gff</b>
 Output report [x13776.featreport]: <b>test.out</b>

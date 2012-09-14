@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -176,7 +176,7 @@ Translate nucleic acid sequences
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Translate nucleic acid sequences
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -254,7 +254,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -392,7 +395,7 @@ Note: you should not try to use this option with any other frame than the defaul
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -461,11 +464,35 @@ Note: you should not try to use this option with any other frame than the defaul
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -509,7 +536,7 @@ Note: you should not try to use this option with any other frame than the defaul
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqoutall qualifiers
+<td align="left" colspan=5>"-outseq" associated seqoutall qualifiers
 </td>
 </tr>
 
@@ -758,7 +785,7 @@ RN   [1]
 RP   1167-2167
 RA   Rice P.M.;
 RT   ;
-RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (16-DEC-1988) to the INSDC.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 RN   [2]
@@ -783,7 +810,7 @@ RN   [4]
 RP   1-2167
 RA   Rice P.M.;
 RT   ;
-RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (04-SEP-1991) to the INSDC.
 RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
 XX
 DR   GOA; Q51417.
@@ -793,7 +820,6 @@ DR   UniProtKB/Swiss-Prot; Q51417; AMIS_PSEAE.
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-FT                   /replace=""
 FT                   /note="ClaI fragment deleted in pSW36,  constitutive
 FT                   phenotype"
 FT   misc_feature    1
@@ -801,8 +827,9 @@ FT                   /note="last base of an XhoI site"
 FT   misc_feature    648..653
 FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
 FT                   constitutive expression of amiE"
-FT   conflict        1281
+FT   misc_difference 1281
 FT                   /replace="g"
+FT                   /note="conflict"
 FT                   /citation=[3]
 XX
 SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
@@ -1559,7 +1586,7 @@ or 2 bases, which is not what you want.
 
 <tr>
 <td><a href="checktrans.html">checktrans</a></td>
-<td>Reports STOP codons and ORF statistics of a protein</td>
+<td>Report STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>
@@ -1589,7 +1616,7 @@ or 2 bases, which is not what you want.
 
 <tr>
 <td><a href="showseq.html">showseq</a></td>
-<td>Displays sequences with features in pretty format</td>
+<td>Display sequences with features in pretty format</td>
 </tr>
 
 <tr>

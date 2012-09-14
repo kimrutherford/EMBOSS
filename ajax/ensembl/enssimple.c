@@ -1,84 +1,87 @@
-/* @source Ensembl Simple Feature functions
+/* @source enssimple **********************************************************
+**
+** Ensembl Simple Feature functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.22 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
-** @version $Revision: 1.5 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "enssimple.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic simplefeatureadaptorTables ************************************
+/* @conststatic simplefeatureadaptorKTables ***********************************
 **
 ** Array of Ensembl Simple Feature Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* const simplefeatureadaptorTables[] =
+static const char *const simplefeatureadaptorKTables[] =
 {
     "simple_feature",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic simplefeatureadaptorColumns ***********************************
+/* @conststatic simplefeatureadaptorKColumns **********************************
 **
 ** Array of Ensembl Simple Feature Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* const simplefeatureadaptorColumns[] =
+static const char *const simplefeatureadaptorKColumns[] =
 {
     "simple_feature.simple_feature_id",
     "simple_feature.seq_region_id",
@@ -88,50 +91,56 @@ static const char* const simplefeatureadaptorColumns[] =
     "simple_feature.analysis_id",
     "simple_feature.label",
     "simple_feature.score",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
-static int listSimplefeatureCompareStartAscending(const void* P1,
-                                                  const void* P2);
+static int listSimplefeatureCompareEndAscending(
+    const void *item1,
+    const void *item2);
 
-static int listSimplefeatureCompareStartDescending(const void* P1,
-                                                   const void* P2);
+static int listSimplefeatureCompareEndDescending(
+    const void *item1,
+    const void *item2);
+
+static int listSimplefeatureCompareIdentifierAscending(
+    const void *item1,
+    const void *item2);
+
+static int listSimplefeatureCompareStartAscending(
+    const void *item1,
+    const void *item2);
+
+static int listSimplefeatureCompareStartDescending(
+    const void *item1,
+    const void *item2);
 
 static AjBool simplefeatureadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList sfs);
 
-static void* simplefeatureadaptorCacheReference(void* value);
-
-static void simplefeatureadaptorCacheDelete(void** value);
-
-static size_t simplefeatureadaptorCacheSize(const void* value);
-
-static EnsPFeature simplefeatureadaptorGetFeature(const void* value);
 
 
 
-
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -151,8 +160,8 @@ static EnsPFeature simplefeatureadaptorGetFeature(const void* value);
 ** Ensembl Simple Feature objects
 **
 ** @cc Bio::EnsEMBL::SimpleFeature
-** @cc CVS Revision: 1.12
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.14
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -181,7 +190,7 @@ static EnsPFeature simplefeatureadaptorGetFeature(const void* value);
 ** @argrule Ini score [double] Score
 ** @argrule Ref sf [EnsPSimplefeature] Ensembl Simple Feature
 **
-** @valrule * [EnsPSimplefeature] Ensembl Simple Feature
+** @valrule * [EnsPSimplefeature] Ensembl Simple Feature or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -196,6 +205,8 @@ static EnsPFeature simplefeatureadaptorGetFeature(const void* value);
 ** @param [r] sf [const EnsPSimplefeature] Ensembl Simple Feature
 **
 ** @return [EnsPSimplefeature] Ensembl Simple Feature or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -203,18 +214,18 @@ EnsPSimplefeature ensSimplefeatureNewCpy(const EnsPSimplefeature sf)
 {
     EnsPSimplefeature pthis = NULL;
 
-    if(!sf)
+    if (!sf)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
+    pthis->Use = 1U;
 
     pthis->Identifier = sf->Identifier;
     pthis->Adaptor    = sf->Adaptor;
     pthis->Feature    = ensFeatureNewRef(sf->Feature);
 
-    if(sf->Displaylabel)
+    if (sf->Displaylabel)
         pthis->Displaylabel = ajStrNewRef(sf->Displaylabel);
 
     pthis->Score = sf->Score;
@@ -239,6 +250,8 @@ EnsPSimplefeature ensSimplefeatureNewCpy(const EnsPSimplefeature sf)
 ** @param [r] score [double] Score
 **
 ** @return [EnsPSimplefeature] Ensembl Simple Feature or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -250,18 +263,18 @@ EnsPSimplefeature ensSimplefeatureNewIni(EnsPSimplefeatureadaptor sfa,
 {
     EnsPSimplefeature sf = NULL;
 
-    if(!feature)
+    if (!feature)
         return NULL;
 
     AJNEW0(sf);
 
-    sf->Use = 1;
+    sf->Use = 1U;
 
     sf->Identifier = identifier;
     sf->Adaptor    = sfa;
     sf->Feature    = ensFeatureNewRef(feature);
 
-    if(label)
+    if (label)
         sf->Displaylabel = ajStrNewRef(label);
 
     sf->Score = score;
@@ -280,12 +293,14 @@ EnsPSimplefeature ensSimplefeatureNewIni(EnsPSimplefeatureadaptor sfa,
 ** @param [u] sf [EnsPSimplefeature] Ensembl Simple Feature
 **
 ** @return [EnsPSimplefeature] Ensembl Simple Feature or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPSimplefeature ensSimplefeatureNewRef(EnsPSimplefeature sf)
 {
-    if(!sf)
+    if (!sf)
         return NULL;
 
     sf->Use++;
@@ -298,14 +313,14 @@ EnsPSimplefeature ensSimplefeatureNewRef(EnsPSimplefeature sf)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Simple Feature object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Simple Feature object.
 **
 ** @fdata [EnsPSimplefeature]
 **
-** @nam3rule Del Destroy (free) an Ensembl Simple Feature object
+** @nam3rule Del Destroy (free) an Ensembl Simple Feature
 **
-** @argrule * Psf [EnsPSimplefeature*] Ensembl Simple Feature object address
+** @argrule * Psf [EnsPSimplefeature*] Ensembl Simple Feature address
 **
 ** @valrule * [void]
 **
@@ -319,27 +334,40 @@ EnsPSimplefeature ensSimplefeatureNewRef(EnsPSimplefeature sf)
 **
 ** Default destructor for an Ensembl Simple Feature.
 **
-** @param [d] Psf [EnsPSimplefeature*] Ensembl Simple Feature object address
+** @param [d] Psf [EnsPSimplefeature*] Ensembl Simple Feature address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensSimplefeatureDel(EnsPSimplefeature* Psf)
+void ensSimplefeatureDel(EnsPSimplefeature *Psf)
 {
     EnsPSimplefeature pthis = NULL;
 
-    if(!Psf)
+    if (!Psf)
         return;
 
-    if(!*Psf)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensSimplefeatureDel"))
+    {
+        ajDebug("ensSimplefeatureDel\n"
+                "  *Psf %p\n",
+                *Psf);
+
+        ensSimplefeatureTrace(*Psf, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Psf)
         return;
 
     pthis = *Psf;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Psf = NULL;
 
@@ -360,9 +388,9 @@ void ensSimplefeatureDel(EnsPSimplefeature* Psf)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Simple Feature object.
+** Functions for returning members of an Ensembl Simple Feature object.
 **
 ** @fdata [EnsPSimplefeature]
 **
@@ -379,7 +407,7 @@ void ensSimplefeatureDel(EnsPSimplefeature* Psf)
 ** or NULL
 ** @valrule Feature [EnsPFeature] Ensembl Feature or NULL
 ** @valrule Displaylabel [AjPStr] Display label or NULL
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
 ** @valrule Score [double] Score or 0.0
 **
 ** @fcategory use
@@ -390,22 +418,21 @@ void ensSimplefeatureDel(EnsPSimplefeature* Psf)
 
 /* @func ensSimplefeatureGetAdaptor *******************************************
 **
-** Get the Ensembl Simple Feature Adaptor element of an Ensembl Simple Feature.
+** Get the Ensembl Simple Feature Adaptor member of an Ensembl Simple Feature.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] sf [const EnsPSimplefeature] Ensembl Simple Feature
 **
 ** @return [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPSimplefeatureadaptor ensSimplefeatureGetAdaptor(
     const EnsPSimplefeature sf)
 {
-    if(!sf)
-        return NULL;
-
-    return sf->Adaptor;
+    return (sf) ? sf->Adaptor : NULL;
 }
 
 
@@ -413,22 +440,21 @@ EnsPSimplefeatureadaptor ensSimplefeatureGetAdaptor(
 
 /* @func ensSimplefeatureGetDisplaylabel **************************************
 **
-** Get the display label element of an Ensembl Simple Feature.
+** Get the display label member of an Ensembl Simple Feature.
 **
 ** @cc Bio::EnsEMBL::SimpleFeature::display_label
 ** @param [r] sf [const EnsPSimplefeature] Ensembl Simple Feature
 **
 ** @return [AjPStr] Display label or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensSimplefeatureGetDisplaylabel(
     const EnsPSimplefeature sf)
 {
-    if(!sf)
-        return NULL;
-
-    return sf->Displaylabel;
+    return (sf) ? sf->Displaylabel : NULL;
 }
 
 
@@ -436,21 +462,20 @@ AjPStr ensSimplefeatureGetDisplaylabel(
 
 /* @func ensSimplefeatureGetFeature *******************************************
 **
-** Get the Ensembl Feature element of an Ensembl Simple Feature.
+** Get the Ensembl Feature member of an Ensembl Simple Feature.
 **
 ** @param [r] sf [const EnsPSimplefeature] Ensembl Simple Feature
 **
 ** @return [EnsPFeature] Ensembl Feature or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPFeature ensSimplefeatureGetFeature(
     const EnsPSimplefeature sf)
 {
-    if(!sf)
-        return NULL;
-
-    return sf->Feature;
+    return (sf) ? sf->Feature : NULL;
 }
 
 
@@ -458,23 +483,22 @@ EnsPFeature ensSimplefeatureGetFeature(
 
 /* @func ensSimplefeatureGetIdentifier ****************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Simple Feature.
 **
 ** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [r] sf [const EnsPSimplefeature] Ensembl Simple Feature
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensSimplefeatureGetIdentifier(
     const EnsPSimplefeature sf)
 {
-    if(!sf)
-        return 0;
-
-    return sf->Identifier;
+    return (sf) ? sf->Identifier : 0U;
 }
 
 
@@ -482,34 +506,33 @@ ajuint ensSimplefeatureGetIdentifier(
 
 /* @func ensSimplefeatureGetScore *********************************************
 **
-** Get the score element of an Ensembl Simple Feature.
+** Get the score member of an Ensembl Simple Feature.
 **
 ** @cc Bio::EnsEMBL::SimpleFeature::score
 ** @param [r] sf [const EnsPSimplefeature] Ensembl Simple Feature
 **
 ** @return [double] Score or 0.0
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 double ensSimplefeatureGetScore(
     const EnsPSimplefeature sf)
 {
-    if(!sf)
-        return 0.0;
-
-    return sf->Score;
+    return (sf) ? sf->Score : 0.0;
 }
 
 
 
 
-/* @section element assignment ************************************************
+/* @section member assignment *************************************************
 **
-** Functions for assigning elements of an Ensembl Simple Feature object.
+** Functions for assigning members of an Ensembl Simple Feature object.
 **
 ** @fdata [EnsPSimplefeature]
 **
-** @nam3rule Set Set one element of a Simple Feature
+** @nam3rule Set Set one member of a Simple Feature
 ** @nam4rule Adaptor Set the Ensembl Simple Feature Adaptor
 ** @nam4rule Displaylabel Set the display label
 ** @nam4rule Feature Set the Ensembl Feature
@@ -534,20 +557,22 @@ double ensSimplefeatureGetScore(
 
 /* @func ensSimplefeatureSetAdaptor *******************************************
 **
-** Set the Ensembl Simple Feature Adaptor element of an Ensembl Simple Feature.
+** Set the Ensembl Simple Feature Adaptor member of an Ensembl Simple Feature.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [u] sf [EnsPSimplefeature] Ensembl Simple Feature
 ** @param [u] sfa [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensSimplefeatureSetAdaptor(EnsPSimplefeature sf,
                                   EnsPSimplefeatureadaptor sfa)
 {
-    if(!sf)
+    if (!sf)
         return ajFalse;
 
     sf->Adaptor = sfa;
@@ -560,19 +585,21 @@ AjBool ensSimplefeatureSetAdaptor(EnsPSimplefeature sf,
 
 /* @func ensSimplefeatureSetDisplaylabel **************************************
 **
-** Set the display label element of an Ensembl Simple Feature.
+** Set the display label member of an Ensembl Simple Feature.
 **
 ** @cc Bio::EnsEMBL::SimpleFeature::display_label
 ** @param [u] sf [EnsPSimplefeature] Ensembl Simple Feature
 ** @param [u] label [AjPStr] Display label
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensSimplefeatureSetDisplaylabel(EnsPSimplefeature sf, AjPStr label)
 {
-    if(!sf)
+    if (!sf)
         return ajFalse;
 
     ajStrDel(&sf->Displaylabel);
@@ -587,18 +614,20 @@ AjBool ensSimplefeatureSetDisplaylabel(EnsPSimplefeature sf, AjPStr label)
 
 /* @func ensSimplefeatureSetFeature *******************************************
 **
-** Set the Ensembl Feature element of an Ensembl Simple Feature.
+** Set the Ensembl Feature member of an Ensembl Simple Feature.
 **
 ** @param [u] sf [EnsPSimplefeature] Ensembl Simple Feature
 ** @param [u] feature [EnsPFeature] Ensembl Feature
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensSimplefeatureSetFeature(EnsPSimplefeature sf, EnsPFeature feature)
 {
-    if(!sf)
+    if (!sf)
         return ajFalse;
 
     ensFeatureDel(&sf->Feature);
@@ -613,7 +642,7 @@ AjBool ensSimplefeatureSetFeature(EnsPSimplefeature sf, EnsPFeature feature)
 
 /* @func ensSimplefeatureSetIdentifier ****************************************
 **
-** Set the SQL database-internal identifier element of an
+** Set the SQL database-internal identifier member of an
 ** Ensembl Simple Feature.
 **
 ** @cc Bio::EnsEMBL::Storable::dbID
@@ -621,12 +650,14 @@ AjBool ensSimplefeatureSetFeature(EnsPSimplefeature sf, EnsPFeature feature)
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensSimplefeatureSetIdentifier(EnsPSimplefeature sf, ajuint identifier)
 {
-    if(!sf)
+    if (!sf)
         return ajFalse;
 
     sf->Identifier = identifier;
@@ -639,19 +670,21 @@ AjBool ensSimplefeatureSetIdentifier(EnsPSimplefeature sf, ajuint identifier)
 
 /* @func ensSimplefeatureSetScore *********************************************
 **
-** Set the score element of an Ensembl Simple Feature.
+** Set the score member of an Ensembl Simple Feature.
 **
 ** @cc Bio::EnsEMBL::SimpleFeature::score
 ** @param [u] sf [EnsPSimplefeature] Ensembl Simple Feature
 ** @param [r] score [double] Score
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensSimplefeatureSetScore(EnsPSimplefeature sf, double score)
 {
-    if(!sf)
+    if (!sf)
         return ajFalse;
 
     sf->Score = score;
@@ -668,7 +701,7 @@ AjBool ensSimplefeatureSetScore(EnsPSimplefeature sf, double score)
 **
 ** @fdata [EnsPSimplefeature]
 **
-** @nam3rule Trace Report Ensembl Simple Feature elements to debug file
+** @nam3rule Trace Report Ensembl Simple Feature members to debug file
 **
 ** @argrule Trace sf [const EnsPSimplefeature] Ensembl Simple Feature
 ** @argrule Trace level [ajuint] Indentation level
@@ -689,6 +722,8 @@ AjBool ensSimplefeatureSetScore(EnsPSimplefeature sf, double score)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -696,7 +731,7 @@ AjBool ensSimplefeatureTrace(const EnsPSimplefeature sf, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!sf)
+    if (!sf)
         return ajFalse;
 
     indent = ajStrNew();
@@ -754,6 +789,8 @@ AjBool ensSimplefeatureTrace(const EnsPSimplefeature sf, ajuint level)
 ** @param [r] sf [const EnsPSimplefeature] Ensembl Simple Feature
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -761,14 +798,14 @@ size_t ensSimplefeatureCalculateMemsize(const EnsPSimplefeature sf)
 {
     size_t size = 0;
 
-    if(!sf)
+    if (!sf)
         return 0;
 
     size += sizeof (EnsOSimplefeature);
 
     size += ensFeatureCalculateMemsize(sf->Feature);
 
-    if(sf->Displaylabel)
+    if (sf->Displaylabel)
     {
         size += sizeof (AjOStr);
 
@@ -790,6 +827,292 @@ size_t ensSimplefeatureCalculateMemsize(const EnsPSimplefeature sf)
 
 
 
+/* @funcstatic listSimplefeatureCompareEndAscending ***************************
+**
+** AJAX List of Ensembl Simple Feature objects comparison function to sort by
+** Ensembl Feature end coordinate in ascending order.
+**
+** @param [r] item1 [const void*] Ensembl Simple Feature address 1
+** @param [r] item2 [const void*] Ensembl Simple Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listSimplefeatureCompareEndAscending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPSimplefeature sf1 = *(EnsOSimplefeature *const *) item1;
+    EnsPSimplefeature sf2 = *(EnsOSimplefeature *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listSimplefeatureCompareEndAscending"))
+    {
+        ajDebug("listSimplefeatureCompareEndAscending\n"
+                "  sf1 %p\n"
+                "  sf2 %p\n",
+                sf1,
+                sf2);
+
+        ensSimplefeatureTrace(sf1, 1);
+        ensSimplefeatureTrace(sf2, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (sf1 && (!sf2))
+        return -1;
+
+    if ((!sf1) && (!sf2))
+        return 0;
+
+    if ((!sf1) && sf2)
+        return +1;
+
+    return ensFeatureCompareEndAscending(sf1->Feature, sf2->Feature);
+}
+
+
+
+
+/* @funcstatic listSimplefeatureCompareEndDescending **************************
+**
+** AJAX List of Ensembl Simple Feature objects comparison function to sort by
+** Ensembl Feature end coordinate in descending order.
+**
+** @param [r] item1 [const void*] Ensembl Simple Feature address 1
+** @param [r] item2 [const void*] Ensembl Simple Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listSimplefeatureCompareEndDescending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPSimplefeature sf1 = *(EnsOSimplefeature *const *) item1;
+    EnsPSimplefeature sf2 = *(EnsOSimplefeature *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listSimplefeatureCompareEndDescending"))
+    {
+        ajDebug("listSimplefeatureCompareEndDescending\n"
+                "  sf1 %p\n"
+                "  sf2 %p\n",
+                sf1,
+                sf2);
+
+        ensSimplefeatureTrace(sf1, 1);
+        ensSimplefeatureTrace(sf2, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (sf1 && (!sf2))
+        return -1;
+
+    if ((!sf1) && (!sf2))
+        return 0;
+
+    if ((!sf1) && sf2)
+        return +1;
+
+    return ensFeatureCompareEndDescending(sf1->Feature, sf2->Feature);
+}
+
+
+
+
+/* @funcstatic listSimplefeatureCompareIdentifierAscending ********************
+**
+** AJAX List of Ensembl Simple Feature objects comparison function to sort by
+** identifier member in ascending order.
+**
+** @param [r] item1 [const void*] Ensembl Simple Feature address 1
+** @param [r] item2 [const void*] Ensembl Simple Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listSimplefeatureCompareIdentifierAscending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPSimplefeature sf1 = *(EnsOSimplefeature *const *) item1;
+    EnsPSimplefeature sf2 = *(EnsOSimplefeature *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listSimplefeatureCompareIdentifierAscending"))
+    {
+        ajDebug("listSimplefeatureCompareIdentifierAscending\n"
+                "  sf1 %p\n"
+                "  sf2 %p\n",
+                sf1,
+                sf2);
+
+        ensSimplefeatureTrace(sf1, 1);
+        ensSimplefeatureTrace(sf2, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (sf1 && (!sf2))
+        return -1;
+
+    if ((!sf1) && (!sf2))
+        return 0;
+
+    if ((!sf1) && sf2)
+        return +1;
+
+    if (sf1->Identifier < sf2->Identifier)
+        return -1;
+
+    if (sf1->Identifier > sf2->Identifier)
+        return +1;
+
+    return 0;
+}
+
+
+
+
+/* @funcstatic listSimplefeatureCompareStartAscending *************************
+**
+** AJAX List of Ensembl Simple Feature objects comparison function to sort by
+** Ensembl Feature start coordinate in ascending order.
+**
+** @param [r] item1 [const void*] Ensembl Simple Feature address 1
+** @param [r] item2 [const void*] Ensembl Simple Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listSimplefeatureCompareStartAscending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPSimplefeature sf1 = *(EnsOSimplefeature *const *) item1;
+    EnsPSimplefeature sf2 = *(EnsOSimplefeature *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listSimplefeatureCompareStartAscending"))
+    {
+        ajDebug("listSimplefeatureCompareStartAscending\n"
+                "  sf1 %p\n"
+                "  sf2 %p\n",
+                sf1,
+                sf2);
+
+        ensSimplefeatureTrace(sf1, 1);
+        ensSimplefeatureTrace(sf2, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (sf1 && (!sf2))
+        return -1;
+
+    if ((!sf1) && (!sf2))
+        return 0;
+
+    if ((!sf1) && sf2)
+        return +1;
+
+    return ensFeatureCompareStartAscending(sf1->Feature, sf2->Feature);
+}
+
+
+
+
+/* @funcstatic listSimplefeatureCompareStartDescending ************************
+**
+** AJAX List of Ensembl Simple Feature objects comparison function to sort by
+** Ensembl Feature start coordinate in descending order.
+**
+** @param [r] item1 [const void*] Ensembl Simple Feature address 1
+** @param [r] item2 [const void*] Ensembl Simple Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listSimplefeatureCompareStartDescending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPSimplefeature sf1 = *(EnsOSimplefeature *const *) item1;
+    EnsPSimplefeature sf2 = *(EnsOSimplefeature *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listSimplefeatureCompareStartDescending"))
+    {
+        ajDebug("listSimplefeatureCompareStartDescending\n"
+                "  sf1 %p\n"
+                "  sf2 %p\n",
+                sf1,
+                sf2);
+
+        ensSimplefeatureTrace(sf1, 1);
+        ensSimplefeatureTrace(sf2, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (sf1 && (!sf2))
+        return -1;
+
+    if ((!sf1) && (!sf2))
+        return 0;
+
+    if ((!sf1) && sf2)
+        return +1;
+
+    return ensFeatureCompareStartDescending(sf1->Feature, sf2->Feature);
+}
+
+
+
+
 /* @section list **************************************************************
 **
 ** Functions for manipulating AJAX List objects.
@@ -798,8 +1121,10 @@ size_t ensSimplefeatureCalculateMemsize(const EnsPSimplefeature sf)
 **
 ** @nam3rule Simplefeature Functions for manipulating AJAX List objects of
 ** Ensembl Simple Feature objects
-** @nam4rule Sort Sort functions
-** @nam5rule Start Sort by Ensembl Feature start element
+** @nam4rule Sort       Sort functions
+** @nam5rule End        Sort by Ensembl Feature start member
+** @nam5rule Identifier Sort by identifier member
+** @nam5rule Start      Sort by Ensembl Feature start member
 ** @nam6rule Ascending  Sort in ascending order
 ** @nam6rule Descending Sort in descending order
 **
@@ -816,55 +1141,85 @@ size_t ensSimplefeatureCalculateMemsize(const EnsPSimplefeature sf)
 
 
 
-/* @funcstatic listSimplefeatureCompareStartAscending *************************
+/* @func ensListSimplefeatureSortEndAscending *********************************
 **
-** AJAX List of Ensembl Simple Feature objects comparison function to sort by
-** Ensembl Feature start coordinate in ascending order.
+** Sort an AJAX List of Ensembl Simple Feature objects by their
+** Ensembl Feature end coordinate in ascending order.
 **
-** @param [r] P1 [const void*] Ensembl Simple Feature address 1
-** @param [r] P2 [const void*] Ensembl Simple Feature address 2
-** @see ajListSort
+** @param [u] sfs [AjPList] AJAX List of Ensembl Simple Feature objects
 **
-** @return [int] The comparison function returns an integer less than,
-**               equal to, or greater than zero if the first argument is
-**               considered to be respectively less than, equal to, or
-**               greater than the second.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static int listSimplefeatureCompareStartAscending(const void* P1,
-                                                  const void* P2)
+AjBool ensListSimplefeatureSortEndAscending(AjPList sfs)
 {
-    EnsPSimplefeature sf1 = NULL;
-    EnsPSimplefeature sf2 = NULL;
+    if (!sfs)
+        return ajFalse;
 
-    sf1 = *(EnsPSimplefeature const*) P1;
-    sf2 = *(EnsPSimplefeature const*) P2;
+    ajListSortTwoThree(sfs,
+                       &listSimplefeatureCompareEndAscending,
+                       &listSimplefeatureCompareStartAscending,
+                       &listSimplefeatureCompareIdentifierAscending);
 
-    if(ajDebugTest("listSimplefeatureCompareStartAscending"))
-    {
-        ajDebug("listSimplefeatureCompareStartAscending\n"
-                "  sf1 %p\n"
-                "  sf2 %p\n",
-                sf1,
-                sf2);
+    return ajTrue;
+}
 
-        ensSimplefeatureTrace(sf1, 1);
-        ensSimplefeatureTrace(sf2, 1);
-    }
 
-    /* Sort empty values towards the end of the AJAX List. */
 
-    if(sf1 && (!sf2))
-        return -1;
 
-    if((!sf1) && (!sf2))
-        return 0;
+/* @func ensListSimplefeatureSortEndDescending ********************************
+**
+** Sort an AJAX List of Ensembl Simple Feature objects by their
+** Ensembl Feature end coordinate in descending order.
+**
+** @param [u] sfs [AjPList] AJAX List of Ensembl Simple Feature objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
 
-    if((!sf1) && sf2)
-        return +1;
+AjBool ensListSimplefeatureSortEndDescending(AjPList sfs)
+{
+    if (!sfs)
+        return ajFalse;
 
-    return ensFeatureCompareStartAscending(sf1->Feature, sf2->Feature);
+    ajListSortTwoThree(sfs,
+                       &listSimplefeatureCompareEndDescending,
+                       &listSimplefeatureCompareStartDescending,
+                       &listSimplefeatureCompareIdentifierAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensListSimplefeatureSortIdentifierAscending **************************
+**
+** Sort an AJAX List of Ensembl Simple Feature objects by their
+** identifier member in ascending order.
+**
+** @param [u] sfs [AjPList] AJAX List of Ensembl Simple Feature objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjBool ensListSimplefeatureSortIdentifierAscending(AjPList sfs)
+{
+    if (!sfs)
+        return ajFalse;
+
+    ajListSort(sfs, &listSimplefeatureCompareIdentifierAscending);
+
+    return ajTrue;
 }
 
 
@@ -878,66 +1233,22 @@ static int listSimplefeatureCompareStartAscending(const void* P1,
 ** @param [u] sfs [AjPList] AJAX List of Ensembl Simple Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensListSimplefeatureSortStartAscending(AjPList sfs)
 {
-    if(!sfs)
+    if (!sfs)
         return ajFalse;
 
-    ajListSort(sfs, listSimplefeatureCompareStartAscending);
+    ajListSortTwoThree(sfs,
+                       &listSimplefeatureCompareStartAscending,
+                       &listSimplefeatureCompareEndAscending,
+                       &listSimplefeatureCompareIdentifierAscending);
 
     return ajTrue;
-}
-
-
-
-
-/* @funcstatic listSimplefeatureCompareStartDescending ************************
-**
-** AJAX List of Ensembl Simple Feature objects comparison function to sort by
-** Ensembl Feature start coordinate in descending order.
-**
-** @param [r] P1 [const void*] Ensembl Simple Feature address 1
-** @param [r] P2 [const void*] Ensembl Simple Feature address 2
-** @see ajListSort
-**
-** @return [int] The comparison function returns an integer less than,
-**               equal to, or greater than zero if the first argument is
-**               considered to be respectively less than, equal to, or
-**               greater than the second.
-** @@
-******************************************************************************/
-
-static int listSimplefeatureCompareStartDescending(const void* P1,
-                                                   const void* P2)
-{
-    const EnsPSimplefeature sf1 = NULL;
-    const EnsPSimplefeature sf2 = NULL;
-
-    sf1 = *(EnsPSimplefeature const*) P1;
-    sf2 = *(EnsPSimplefeature const*) P2;
-
-    if(ajDebugTest("listSimplefeatureCompareStartDescending"))
-        ajDebug("listSimplefeatureCompareStartDescending\n"
-                "  sf1 %p\n"
-                "  sf2 %p\n",
-                sf1,
-                sf2);
-
-    /* Sort empty values towards the end of the AJAX List. */
-
-    if(sf1 && (!sf2))
-        return -1;
-
-    if((!sf1) && (!sf2))
-        return 0;
-
-    if((!sf1) && sf2)
-        return +1;
-
-    return ensFeatureCompareStartDescending(sf1->Feature, sf2->Feature);
 }
 
 
@@ -951,15 +1262,20 @@ static int listSimplefeatureCompareStartDescending(const void* P1,
 ** @param [u] sfs [AjPList] AJAX List of Ensembl Simple Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensListSimplefeatureSortStartDescending(AjPList sfs)
 {
-    if(!sfs)
+    if (!sfs)
         return ajFalse;
 
-    ajListSort(sfs, listSimplefeatureCompareStartDescending);
+    ajListSortTwoThree(sfs,
+                       &listSimplefeatureCompareStartDescending,
+                       &listSimplefeatureCompareEndDescending,
+                       &listSimplefeatureCompareIdentifierAscending);
 
     return ajTrue;
 }
@@ -973,8 +1289,8 @@ AjBool ensListSimplefeatureSortStartDescending(AjPList sfs)
 ** Ensembl Simple Feature Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::SimpleFeatureAdaptor
-** @cc CVS Revision: 1.36
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.38
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -986,18 +1302,20 @@ AjBool ensListSimplefeatureSortStartDescending(AjPList sfs)
 ** Fetch all Ensembl Simple Feature objects via an SQL statement.
 **
 ** @cc Bio::EnsEMBL::DBSQL::SimpleFeatureAdaptor::_objs_from_sth
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] sfs [AjPList] AJAX List of Ensembl Simple Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool simplefeatureadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -1005,21 +1323,13 @@ static AjBool simplefeatureadaptorFetchAllbyStatement(
 {
     double score = 0;
 
-    ajint srstrand = 0;
+    ajuint identifier = 0U;
+    ajuint analysisid = 0U;
 
-    ajuint identifier = 0;
-    ajuint analysisid = 0;
-
-    ajuint srid    = 0;
-    ajuint srstart = 0;
-    ajuint srend   = 0;
-
-    ajint slstart  = 0;
-    ajint slend    = 0;
-    ajint slstrand = 0;
-    ajint sllength = 0;
-
-    AjPList mrs = NULL;
+    ajuint srid     = 0U;
+    ajuint srstart  = 0U;
+    ajuint srend    = 0U;
+    ajint  srstrand = 0;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -1027,63 +1337,44 @@ static AjBool simplefeatureadaptorFetchAllbyStatement(
 
     AjPStr label = NULL;
 
-    EnsPAnalysis analysis  = NULL;
-    EnsPAnalysisadaptor aa = NULL;
-
-    EnsPAssemblymapperadaptor ama = NULL;
-
-    EnsPCoordsystemadaptor csa = NULL;
+    EnsPDatabaseadaptor dba = NULL;
 
     EnsPFeature feature = NULL;
 
     EnsPSimplefeature sf         = NULL;
     EnsPSimplefeatureadaptor sfa = NULL;
 
-    EnsPMapperresult mr = NULL;
-
-    EnsPSlice srslice   = NULL;
-    EnsPSliceadaptor sa = NULL;
-
-    if(ajDebugTest("simplefeatureadaptorFetchAllbyStatement"))
+    if (ajDebugTest("simplefeatureadaptorFetchAllbyStatement"))
         ajDebug("simplefeatureadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  sfs %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 sfs);
 
-    if(!dba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!sfs)
+    if (!sfs)
         return ajFalse;
 
-    aa = ensRegistryGetAnalysisadaptor(dba);
-
-    csa = ensRegistryGetCoordsystemadaptor(dba);
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
     sfa = ensRegistryGetSimplefeatureadaptor(dba);
-
-    sa = ensRegistryGetSliceadaptor(dba);
-
-    if(slice)
-        ama = ensRegistryGetAssemblymapperadaptor(dba);
-
-    mrs = ajListNew();
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier = 0;
         srid       = 0;
@@ -1104,202 +1395,30 @@ static AjBool simplefeatureadaptorFetchAllbyStatement(
         ajSqlcolumnToStr(sqlr, &label);
         ajSqlcolumnToDouble(sqlr, &score);
 
-        /* Need to get the internal Ensembl Sequence Region identifier. */
+        ensBaseadaptorRetrieveFeature(ba,
+                                      analysisid,
+                                      srid,
+                                      srstart,
+                                      srend,
+                                      srstrand,
+                                      am,
+                                      slice,
+                                      &feature);
 
-        srid = ensCoordsystemadaptorGetSeqregionidentifierInternal(csa, srid);
-
-        /*
-        ** Since the Ensembl SQL schema defines Sequence Region start and end
-        ** coordinates as unsigned integers for all Feature objects, the range
-        ** needs checking.
-        */
-
-        if(srstart <= INT_MAX)
-            slstart = (ajint) srstart;
-        else
-            ajFatal("simplefeatureadaptorFetchAllbyStatement got a "
-                    "Sequence Region start coordinate (%u) outside the "
-                    "maximum integer limit (%d).",
-                    srstart, INT_MAX);
-
-        if(srend <= INT_MAX)
-            slend = (ajint) srend;
-        else
-            ajFatal("simplefeatureadaptorFetchAllbyStatement got a "
-                    "Sequence Region end coordinate (%u) outside the "
-                    "maximum integer limit (%d).",
-                    srend, INT_MAX);
-
-        slstrand = srstrand;
-
-        /* Fetch a Slice spanning the entire Sequence Region. */
-
-        ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
-
-        /*
-        ** Obtain an Ensembl Assembly Mapper if none was defined, but a
-        ** destination Slice was.
-        */
-
-        if(am)
-            am = ensAssemblymapperNewRef(am);
-        else if(slice && (!ensCoordsystemMatch(
-                              ensSliceGetCoordsystemObject(slice),
-                              ensSliceGetCoordsystemObject(srslice))))
-            ensAssemblymapperadaptorFetchBySlices(ama, slice, srslice, &am);
-
-        /*
-        ** Remap the Feature coordinates to another Ensembl Coordinate System
-        ** if an Ensembl Assembly Mapper was provided.
-        */
-
-        if(am)
+        if (!feature)
         {
-            ensAssemblymapperFastmap(am,
-                                     ensSliceGetSeqregion(srslice),
-                                     slstart,
-                                     slend,
-                                     slstrand,
-                                     mrs);
+            ajStrDel(&label);
 
-            /*
-            ** The ensAssemblymapperFastmap function returns at best one
-            ** Ensembl Mapper Result.
-            */
-
-            ajListPop(mrs, (void**) &mr);
-
-            /*
-            ** Skip Ensembl Feature objects that map to gaps or
-            ** Coordinate System boundaries.
-            */
-
-            if(ensMapperresultGetType(mr) != ensEMapperresultTypeCoordinate)
-            {
-                /* Load the next Feature but destroy first! */
-
-                ajStrDel(&label);
-
-                ensSliceDel(&srslice);
-
-                ensAssemblymapperDel(&am);
-
-                ensMapperresultDel(&mr);
-
-                continue;
-            }
-
-            srid     = ensMapperresultGetObjectidentifier(mr);
-            slstart  = ensMapperresultGetCoordinateStart(mr);
-            slend    = ensMapperresultGetCoordinateEnd(mr);
-            slstrand = ensMapperresultGetCoordinateStrand(mr);
-
-            /*
-            ** Delete the Sequence Region Slice and fetch a Slice in the
-            ** Coordinate System we just mapped to.
-            */
-
-            ensSliceDel(&srslice);
-
-            ensSliceadaptorFetchBySeqregionIdentifier(sa,
-                                                      srid,
-                                                      0,
-                                                      0,
-                                                      0,
-                                                      &srslice);
-
-            ensMapperresultDel(&mr);
+            continue;
         }
-
-        /*
-        ** Convert Sequence Region Slice coordinates to destination Slice
-        ** coordinates, if a destination Slice has been provided.
-        */
-
-        if(slice)
-        {
-            /* Check that the length of the Slice is within range. */
-
-            if(ensSliceCalculateLength(slice) <= INT_MAX)
-                sllength = (ajint) ensSliceCalculateLength(slice);
-            else
-                ajFatal("simplefeatureadaptorFetchAllbyStatement got a Slice, "
-                        "which length (%u) exceeds the "
-                        "maximum integer limit (%d).",
-                        ensSliceCalculateLength(slice), INT_MAX);
-
-            /*
-            ** Nothing needs to be done if the destination Slice starts at 1
-            ** and is on the forward strand.
-            */
-
-            if((ensSliceGetStart(slice) != 1) ||
-               (ensSliceGetStrand(slice) < 0))
-            {
-                if(ensSliceGetStrand(slice) >= 0)
-                {
-                    slstart = slstart - ensSliceGetStart(slice) + 1;
-
-                    slend = slend - ensSliceGetStart(slice) + 1;
-                }
-                else
-                {
-                    slend = ensSliceGetEnd(slice) - slstart + 1;
-
-                    slstart = ensSliceGetEnd(slice) - slend + 1;
-
-                    slstrand *= -1;
-                }
-            }
-
-            /*
-            ** Throw away Feature objects off the end of the requested
-            ** Slice or on any other than the requested Slice.
-            */
-
-            if((slend < 1) ||
-               (slstart > sllength) ||
-               (srid != ensSliceGetSeqregionIdentifier(slice)))
-            {
-                /* Load the next Feature but destroy first! */
-
-                ajStrDel(&label);
-
-                ensSliceDel(&srslice);
-
-                ensAssemblymapperDel(&am);
-
-                continue;
-            }
-
-            /* Delete the Sequence Region Slice and set the requested Slice. */
-
-            ensSliceDel(&srslice);
-
-            srslice = ensSliceNewRef(slice);
-        }
-
-        ensAnalysisadaptorFetchByIdentifier(aa, analysisid, &analysis);
 
         /* Finally, create a new Ensembl Simple Feature. */
 
-        feature = ensFeatureNewIniS(analysis,
-                                    srslice,
-                                    slstart,
-                                    slend,
-                                    slstrand);
-
         sf = ensSimplefeatureNewIni(sfa, identifier, feature, label, score);
 
-        ajListPushAppend(sfs, (void*) sf);
+        ajListPushAppend(sfs, (void *) sf);
 
         ensFeatureDel(&feature);
-
-        ensAnalysisDel(&analysis);
-
-        ensAssemblymapperDel(&am);
-
-        ensSliceDel(&srslice);
 
         ajStrDel(&label);
     }
@@ -1308,99 +1427,7 @@ static AjBool simplefeatureadaptorFetchAllbyStatement(
 
     ensDatabaseadaptorSqlstatementDel(dba, &sqls);
 
-    ajListFree(&mrs);
-
     return ajTrue;
-}
-
-
-
-
-/* @funcstatic simplefeatureadaptorCacheReference *****************************
-**
-** Wrapper function to reference an Ensembl Simple Feature
-** from an Ensembl Cache.
-**
-** @param [r] value [void*] Ensembl Simple Feature
-**
-** @return [void*] Ensembl Simple Feature or NULL
-** @@
-******************************************************************************/
-
-static void* simplefeatureadaptorCacheReference(void* value)
-{
-    if(!value)
-        return NULL;
-
-    return (void*) ensSimplefeatureNewRef((EnsPSimplefeature) value);
-}
-
-
-
-
-/* @funcstatic simplefeatureadaptorCacheDelete ********************************
-**
-** Wrapper function to delete an Ensembl Simple Feature
-** from an Ensembl Cache.
-**
-** @param [r] value [void**] Ensembl Simple Feature address
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void simplefeatureadaptorCacheDelete(void** value)
-{
-    if(!value)
-        return;
-
-    ensSimplefeatureDel((EnsPSimplefeature*) value);
-
-    return;
-}
-
-
-
-
-/* @funcstatic simplefeatureadaptorCacheSize **********************************
-**
-** Wrapper function to determine the memory size of an Ensembl Simple Feature
-** from an Ensembl Cache.
-**
-** @param [r] value [const void*] Ensembl Simple Feature
-**
-** @return [size_t] Memory size in bytes or 0
-** @@
-******************************************************************************/
-
-static size_t simplefeatureadaptorCacheSize(const void* value)
-{
-    if(!value)
-        return 0;
-
-    return ensSimplefeatureCalculateMemsize((const EnsPSimplefeature) value);
-}
-
-
-
-
-/* @funcstatic simplefeatureadaptorGetFeature *********************************
-**
-** Wrapper function to get the Ensembl Feature of an Ensembl Simple Feature
-** from an Ensembl Feature Adaptor.
-**
-** @param [r] value [const void*] Ensembl Simple Feature
-**
-** @return [EnsPFeature] Ensembl Feature
-** @@
-******************************************************************************/
-
-static EnsPFeature simplefeatureadaptorGetFeature(const void* value)
-{
-    if(!value)
-        return NULL;
-
-    return ensSimplefeatureGetFeature((const EnsPSimplefeature) value);
 }
 
 
@@ -1419,7 +1446,7 @@ static EnsPFeature simplefeatureadaptorGetFeature(const void* value)
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @valrule * [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
+** @valrule * [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -1446,29 +1473,31 @@ static EnsPFeature simplefeatureadaptorGetFeature(const void* value)
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPSimplefeatureadaptor ensSimplefeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    if (!dba)
         return NULL;
 
     return ensFeatureadaptorNew(
         dba,
-        simplefeatureadaptorTables,
-        simplefeatureadaptorColumns,
-        (EnsPBaseadaptorLeftjoin) NULL,
-        (const char*) NULL,
-        (const char*) NULL,
-        simplefeatureadaptorFetchAllbyStatement,
-        (void* (*)(const void* key)) NULL,
-        simplefeatureadaptorCacheReference,
-        (AjBool (*)(const void* value)) NULL,
-        simplefeatureadaptorCacheDelete,
-        simplefeatureadaptorCacheSize,
-        simplefeatureadaptorGetFeature,
+        simplefeatureadaptorKTables,
+        simplefeatureadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        (const char *) NULL,
+        (const char *) NULL,
+        &simplefeatureadaptorFetchAllbyStatement,
+        (void *(*)(const void *)) NULL,
+        (void *(*)(void *)) &ensSimplefeatureNewRef,
+        (AjBool (*)(const void *)) NULL,
+        (void (*)(void **)) &ensSimplefeatureDel,
+        (size_t (*)(const void *)) &ensSimplefeatureCalculateMemsize,
+        (EnsPFeature (*)(const void *)) &ensSimplefeatureGetFeature,
         "Simple Feature");
 }
 
@@ -1477,15 +1506,15 @@ EnsPSimplefeatureadaptor ensSimplefeatureadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Simple Feature Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Simple Feature Adaptor object.
 **
 ** @fdata [EnsPSimplefeatureadaptor]
 **
-** @nam3rule Del Destroy (free) an Ensembl Simple Feature Adaptor object
+** @nam3rule Del Destroy (free) an Ensembl Simple Feature Adaptor
 **
-** @argrule * Psfa [EnsPSimplefeatureadaptor*] Ensembl Simple Feature Adaptor
-**                                             object address
+** @argrule * Psfa [EnsPSimplefeatureadaptor*]
+** Ensembl Simple Feature Adaptor address
 **
 ** @valrule * [void]
 **
@@ -1505,34 +1534,28 @@ EnsPSimplefeatureadaptor ensSimplefeatureadaptorNew(
 ** destroyed directly. Upon exit, the Ensembl Registry will call this function
 ** if required.
 **
-** @param [d] Psfa [EnsPSimplefeatureadaptor*] Ensembl Simple Feature Adaptor
-**                                             object address
+** @param [d] Psfa [EnsPSimplefeatureadaptor*]
+** Ensembl Simple Feature Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensSimplefeatureadaptorDel(EnsPSimplefeatureadaptor* Psfa)
+void ensSimplefeatureadaptorDel(EnsPSimplefeatureadaptor *Psfa)
 {
-    if(!Psfa)
-        return;
-
-    if(!*Psfa)
-        return;
-
     ensFeatureadaptorDel(Psfa);
 
-    *Psfa = NULL;
-
-    return;
+	return;
 }
 
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Simple Feature Adaptor object.
 **
 ** @fdata [EnsPSimplefeatureadaptor]
@@ -1553,21 +1576,20 @@ void ensSimplefeatureadaptorDel(EnsPSimplefeatureadaptor* Psfa)
 
 /* @func ensSimplefeatureadaptorGetDatabaseadaptor ****************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl Simple Feature Adaptor.
 **
 ** @param [u] sfa [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensSimplefeatureadaptorGetDatabaseadaptor(
     EnsPSimplefeatureadaptor sfa)
 {
-    if(!sfa)
-        return NULL;
-
     return ensFeatureadaptorGetDatabaseadaptor(sfa);
 }
 
@@ -1595,20 +1617,20 @@ EnsPDatabaseadaptor ensSimplefeatureadaptorGetDatabaseadaptor(
 ** @argrule * sfa [EnsPSimplefeatureadaptor] Ensembl Simple Feature Adaptor
 ** @argrule All aefs [AjPList] AJAX List of Ensembl Simple Feature objects
 ** @argrule AllbyAnalysisname anname [const AjPStr] Ensembl Analysis name
-** @argrule AllbyAnalysisname sfs [AjPList] AJAX List of Ensembl Simple
-**                                          Feature objects
+** @argrule AllbyAnalysisname sfs [AjPList]
+** AJAX List of Ensembl Simple Feature objects
 ** @argrule AllbySlice slice [EnsPSlice] Ensembl Slice
 ** @argrule AllbySlice anname [const AjPStr] Ensembl Analysis name
-** @argrule AllbySlice sfs [AjPList] AJAX List of Ensembl Simple
-**                                   Feature objects
+** @argrule AllbySlice sfs [AjPList]
+** AJAX List of Ensembl Simple Feature objects
 ** @argrule AllbySlicescore slice [EnsPSlice] Ensembl Slice
 ** @argrule AllbySlicescore score [double] Score
 ** @argrule AllbySlicescore anname [const AjPStr] Ensembl Analysis name
-** @argrule AllbySlicescore sfs [AjPList] AJAX List of Ensembl Simple
-**                                        Feature objects
+** @argrule AllbySlicescore sfs [AjPList]
+** AJAX List of Ensembl Simple Feature objects
 ** @argrule ByIdentifier identifier [ajuint] SQL database-internal identifier
-** @argrule ByIdentifier Psf [EnsPSimplefeature*] Ensembl Simple Feature
-**                                                address
+** @argrule ByIdentifier Psf [EnsPSimplefeature*]
+** Ensembl Simple Feature address
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -1628,6 +1650,8 @@ EnsPDatabaseadaptor ensSimplefeatureadaptorGetDatabaseadaptor(
 ** @param [u] sfs [AjPList] AJAX List of Ensembl Simple Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1636,13 +1660,13 @@ AjBool ensSimplefeatureadaptorFetchAllbyAnalysisname(
     const AjPStr anname,
     AjPList sfs)
 {
-    if(!sfa)
+    if (!sfa)
         return ajFalse;
 
-    if(!anname)
+    if (!anname)
         return ajFalse;
 
-    if(!sfs)
+    if (!sfs)
         return ajFalse;
 
     return ensFeatureadaptorFetchAllbyAnalysisname(sfa, anname, sfs);
@@ -1662,6 +1686,8 @@ AjBool ensSimplefeatureadaptorFetchAllbyAnalysisname(
 ** @param [u] sfs [AjPList] AJAX List of Ensembl Simple Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1670,13 +1696,13 @@ AjBool ensSimplefeatureadaptorFetchAllbySlice(EnsPSimplefeatureadaptor sfa,
                                               const AjPStr anname,
                                               AjPList sfs)
 {
-    if(!sfa)
+    if (!sfa)
         return ajFalse;
 
-    if(!slice)
+    if (!slice)
         return ajFalse;
 
-    if(!sfs)
+    if (!sfs)
         return ajFalse;
 
     return ensFeatureadaptorFetchAllbySlice(sfa,
@@ -1702,6 +1728,8 @@ AjBool ensSimplefeatureadaptorFetchAllbySlice(EnsPSimplefeatureadaptor sfa,
 ** @param [u] sfs [AjPList] AJAX List of Ensembl Simple Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1712,13 +1740,13 @@ AjBool ensSimplefeatureadaptorFetchAllbySlicescore(
     const AjPStr anname,
     AjPList sfs)
 {
-    if(!sfa)
+    if (!sfa)
         return ajFalse;
 
-    if(!slice)
+    if (!slice)
         return ajFalse;
 
-    if(!sfs)
+    if (!sfs)
         return ajFalse;
 
     return ensFeatureadaptorFetchAllbySlicescore(sfa,

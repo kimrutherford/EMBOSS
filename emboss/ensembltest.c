@@ -1,7 +1,10 @@
-/* @source ensembltest application
-** Test the Ensembl API to be.
-** @author Copyright (C) Michael K. Schuster
-** @version 1.0
+/* @source ensembltest ********************************************************
+**
+** Ensembl API test routines
+**
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.41 $
+** @modified $Date: 2012/07/10 09:24:50 $ by $Author: rice $
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -17,23 +20,39 @@
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+**
 ******************************************************************************/
+
+
+
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "emboss.h"
 
 #ifndef WIN32
+#include <limits.h>
+#include <stddef.h>
+#include <sys/time.h>
 #include <sys/resource.h>
+#include <sys/types.h>
 #endif
 
 
 
 
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
+
 /* @datastatic EnsembltestPProjections ****************************************
 **
-** Ensembl Test Slice Projections.
+** Ensembl Test Slice Projection data structure.
 **
-** @alias EnsembltestSProjections
-** @alias EnsembltestOProjections
+** @alias EnsembltestSProjection
+** @alias EnsembltestOProjection
 **
 ** @attr SliceName [const char*] Ensembl Slice name
 ** @attr CoordsystemName [const char*] Ensembl Coordinate System name
@@ -41,76 +60,117 @@
 ** @@
 ******************************************************************************/
 
-typedef struct EnsembltestSProjections
+typedef struct EnsembltestSProjection
 {
-    const char *SliceName;
-    const char *CoordsystemName;
-    const char *CoordsystemVersion;
-} EnsembltestOProjections;
+    const char* SliceName;
+    const char* CoordsystemName;
+    const char* CoordsystemVersion;
+} EnsembltestOProjection;
 
-#define EnsembltestPProjections EnsembltestOProjections*
-
-
+#define EnsembltestPProjection EnsembltestOProjection*
 
 
-static AjBool ensembltest_analyses(EnsPDatabaseadaptor dba,
-                                   AjPFile outfile);
 
-static AjBool ensembltest_assembly_exceptions(EnsPDatabaseadaptor dba,
-                                              AjPFile outfile);
+
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
+
+static AjBool ensembltest_analysis(EnsPDatabaseadaptor dba,
+                                   AjPFile aoutfile);
+
+static AjBool ensembltest_assembly_exception(EnsPDatabaseadaptor dba,
+                                             AjPFile aoutfile);
+
+static AjBool ensembltest_basealignfeature(EnsPDatabaseadaptor dba,
+                                           AjPFile aoutfile);
 
 static AjBool ensembltest_chromosome(EnsPDatabaseadaptor dba,
-                                     AjPSeqout outseq);
+                                     AjPSeqout aoutseqall);
 
-static AjBool ensembltest_constants(AjPFile outfile);
+static AjBool ensembltest_constants(AjPFile aoutfile);
 
-static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
-                                             AjPFile outfile);
+static AjBool ensembltest_coordinate_system(EnsPDatabaseadaptor dba,
+                                            AjPFile aoutfile);
 
-static AjBool ensembltest_ditags(EnsPDatabaseadaptor dba,
-                                 AjPFile outfile);
+static AjBool ensembltest_databaseentry(EnsPDatabaseadaptor dba,
+                                        AjPFile aoutfile);
+
+static AjBool ensembltest_datatypes(AjPFile aoutfile);
+
+static AjBool ensembltest_ditag(EnsPDatabaseadaptor dba,
+                                AjPFile aoutfile);
 
 static AjBool ensembltest_density(EnsPDatabaseadaptor dba,
-                                  AjPFile outfile);
+                                  AjPFile aoutfile);
 
-static AjBool ensembltest_features(EnsPDatabaseadaptor dba,
-                                   AjPFile outfile);
+static AjBool ensembltest_exon(EnsPDatabaseadaptor dba,
+                               AjPFile aoutfile);
+
+static AjBool ensembltest_feature(EnsPDatabaseadaptor dba,
+                                  AjPFile aoutfile);
 
 static AjBool ensembltest_genes(EnsPDatabaseadaptor dba);
 
-static AjBool ensembltest_markers(EnsPDatabaseadaptor dba,
-                                  AjPFile outfile);
+static AjBool ensembltest_marker(EnsPDatabaseadaptor dba,
+                                 AjPFile aoutfile);
 
 static AjBool ensembltest_masking(EnsPDatabaseadaptor dba,
-                                  AjPSeqout outseq);
+                                  AjPSeqout aoutseqall);
 
-static AjBool ensembltest_meta(EnsPDatabaseadaptor dba,
-                               AjPFile outfile);
+static AjBool ensembltest_meta_information(EnsPDatabaseadaptor dba,
+                                           AjPFile aoutfile);
 
-static AjBool ensembltest_registry(AjPFile outfile);
+static AjBool ensembltest_ontology(EnsPDatabaseadaptor dba,
+                                   AjPFile aoutfile);
 
-static AjBool ensembltest_sequence_regions(EnsPDatabaseadaptor dba,
-                                           AjPFile outfile);
+static AjBool ensembltest_miscellaneous(EnsPDatabaseadaptor dba,
+                                        AjPFile aoutfile);
 
-static AjBool ensembltest_slice_projections(EnsPDatabaseadaptor dba,
-                                            AjPFile outfile);
+static AjBool ensembltest_registry(AjPFile aoutfile);
+
+static AjBool ensembltest_sequence_region(EnsPDatabaseadaptor dba,
+                                          AjPFile aoutfile);
+
+static AjBool ensembltest_slice_projection(EnsPDatabaseadaptor dba,
+                                           AjPFile aoutfile);
 
 static AjBool ensembltest_sequence(EnsPDatabaseadaptor dba,
-                                   AjPSeqout outseq);
+                                   AjPSeqout aoutseqall);
+
+static AjBool ensembltest_transcript(EnsPDatabaseadaptor dba,
+                                     AjPFile aoutfile);
 
 static AjBool ensembltest_transformations(EnsPDatabaseadaptor dba,
-                                          AjPFile outfile);
+                                          AjPFile aoutfile);
+
+static AjBool ensembltest_translations(EnsPDatabaseadaptor dba,
+                                       AjPFile aoutfile);
 
 
 
 
 /* @prog ensembltest **********************************************************
 **
-** Demonstration of the Ensembl API to be.
+** Ensembl API test routines
 **
 ******************************************************************************/
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
 #ifndef WIN32
     struct rusage ru;
@@ -118,375 +178,148 @@ int main(int argc, char **argv)
 
     AjBool large = AJFALSE;
 
-    AjESqlconnectionClient client = ajESqlconnectionClientMySQL;
+    AjPFile aoutfile = NULL;
+
+    AjIList iterator = NULL;
+    AjPList svrnames = NULL;
+
+    AjPSeqout aoutseqall = NULL; /* Ensembl Slice sequences */
+
+    AjPStr species  = NULL;
+    AjPStr svrname  = NULL;
+    AjPStr svrvalue = NULL;
+    AjPStr svrurl   = NULL;
 
     EnsEDatabaseadaptorGroup group  = ensEDatabaseadaptorGroupCore;
-
-    AjPFile outfile = NULL;
-
-    AjIList iter        = NULL;
-    AjPList list        = NULL;
-    const AjPList exons = NULL;
-    AjPList mrlist      = NULL;
-
-    AjPSeq seq = NULL;
-
-    AjPSeqout outseq = NULL;
-
-    AjPStr user     = NULL;
-    AjPStr password = NULL;
-    AjPStr host     = NULL;
-    AjPStr port     = NULL;
-    AjPStr socketf  = NULL;
-    AjPStr dbname   = NULL;
-    AjPStr species  = NULL;
-    AjPStr srname   = NULL;
-    AjPStr tmpstr   = NULL;
 
     EnsPDatabaseadaptor dba = NULL;
 
     EnsPDatabaseconnection dbc = NULL;
 
-    EnsPExon exon      = NULL;
-    EnsPExonadaptor ea = NULL;
-
-    EnsPFeature feature = NULL;
-
-    EnsPMapperresult mr = NULL;
-
-    EnsPTranscript transcript = NULL;
-    EnsPTranscriptadaptor tca = NULL;
-
-    EnsPTranslation translation = NULL;
-    EnsPTranslationadaptor tla  = NULL;
-
     embInit("ensembltest", argc, argv);
 
-    list     = ajListNew();
-    user     = ajStrNew();
-    password = ajStrNew();
-    host     = ajStrNew();
-    port     = ajStrNew();
-    socketf  = ajStrNew();
-    dbname   = ajStrNew();
     species  = ajStrNewC("homo sapiens");
-    srname   = ajStrNew();
 
-    outfile = ajAcdGetOutfile("outfile");
+    aoutfile = ajAcdGetOutfile("aoutfile");
 
-    outseq = ajAcdGetSeqoutall("outseq");
+    aoutseqall = ajAcdGetSeqoutall("aoutseqall");
 
     large = ajAcdGetBoolean("large");
 
     ensInit();
 
-    /* Ensembl Registry Test */
+    /*
+    ** Ensembl Registry Test
+    **
+    ** Get all AJAX Server definitions and use the ones with
+    ** "method" "ensembl" to load the Ensembl Registry.
+    */
 
-    /* Ensembl Vertebrates */
+    svrurl   = ajStrNew();
+    svrvalue = ajStrNew();
 
-    ajStrAssignC(&user, "anonymous");
-    ajStrAssignC(&host, "ensembldb.ensembl.org");
-    ajStrAssignC(&port, "5306");
+    svrnames = ajListstrNew();
 
-    dbc = ensDatabaseconnectionNewIni(client,
-                                      user,
-                                      password,
-                                      host,
-                                      port,
-                                      socketf,
-                                      dbname,
-                                      0);
+    ajNamListListServers(svrnames);
 
-    if(!dbc)
-        ajFatal("main Could not connect as user '%S' to server '%S' "
-                "at port '%S' to database '%S'.", user, host, port, dbname);
+    iterator = ajListIterNewread(svrnames);
 
-    ensRegistryLoadDatabaseconnection(dbc);
+    while (!ajListIterDone(iterator))
+    {
+        svrname = ajListstrIterGet(iterator);
 
-    ensDatabaseconnectionDel(&dbc);
+        /* FIXME: Restrict to AJAX Server name ensembl only! */
+        if (!ajStrMatchC(svrname, "ensembl"))
+            continue;
 
-    /* Ensembl Genomes */
+        ajStrAssignClear(&svrvalue);
 
-    ajStrAssignC(&user, "anonymous");
-    ajStrAssignC(&host, "mysql.ebi.ac.uk");
-    ajStrAssignC(&port, "4157");
+        ajNamSvrGetAttrC(svrname, "method", &svrvalue);
 
-    dbc = ensDatabaseconnectionNewIni(client,
-                                      user,
-                                      password,
-                                      host,
-                                      port,
-                                      socketf,
-                                      dbname,
-                                      0);
+        if (ajStrMatchC(svrvalue, "ensembl"))
+        {
+            ajUser("Ensembl Registry load AJAX Server '%S'", svrname);
 
-    if(!dbc)
-        ajFatal("main Could not connect as user '%S' to server '%S' "
-                "at port '%S' to database '%S'.", user, host, port, dbname);
+            ajStrAssignClear(&svrurl);
 
-    ensRegistryLoadDatabaseconnection(dbc);
+            ajNamSvrGetUrl(svrname, &svrurl);
 
-    ensDatabaseconnectionDel(&dbc);
+            if (ajStrGetLen(svrurl) == 0)
+                ajFatal("Could not get a URL for AJAX server name '%S'.",
+                        svrname);
 
-    /* */
+            dbc = ensDatabaseconnectionNewUrl(svrurl);
+
+            if (!dbc)
+                ajFatal("Could not get an Ensembl Database Connection for "
+                        "URL '%S'.",
+                        svrurl);
+
+            ensRegistryLoadDatabaseconnection(dbc);
+
+            ensDatabaseconnectionDel(&dbc);
+        }
+    }
+
+    ajListIterDel(&iterator);
+
+    ajListFree(&svrnames);
+
+    ajStrDel(&svrurl);
+    ajStrDel(&svrvalue);
 
     dba = ensRegistryGetDatabaseadaptor(group, species);
 
-    /* Fetch Exon ENSE00001434436 */
-
-    ea = ensRegistryGetExonadaptor(dba);
-
-    tmpstr = ajStrNewC("ENSE00001191187");
-
-    ensExonadaptorFetchByStableidentifier(ea, tmpstr, 0, &exon);
-
-    ajFmtPrintF(outfile,
-                "Ensembl Exon '%S'\n",
-                ensExonGetStableidentifier(exon));
-
-    ensExonFetchSequenceSliceSeq(exon, &seq);
-
-    if(seq)
-        ajSeqoutWriteSeq(outseq, seq);
-    else
-        ajFatal("main could not get an AJAX sequence.\n");
-
-    ajSeqDel(&seq);
-
-    ensExonDel(&exon);
-
-    ajStrDel(&tmpstr);
-
-    /* Fetch Transcript ENST00000262160 SMAD2-001 */
-
-    tca = ensRegistryGetTranscriptadaptor(dba);
-
-    tmpstr = ajStrNewC("ENST00000262160");
-
-    ensTranscriptadaptorFetchByStableidentifier(tca, tmpstr, 0, &transcript);
-
-    ajStrDel(&tmpstr);
-
-    if(transcript)
-    {
-        feature = ensTranscriptGetFeature(transcript);
-
-        ajFmtPrintF(outfile,
-                    "Ensembl Transcript '%S' %S:%d:%d:%d\n",
-                    ensTranscriptGetStableidentifier(transcript),
-                    ensFeatureGetSeqregionName(feature),
-                    ensFeatureGetSeqregionStart(feature),
-                    ensFeatureGetSeqregionEnd(feature),
-                    ensFeatureGetSeqregionStrand(feature));
-
-        /* Transcript Mapper Test */
-
-        mrlist = ajListNew();
-
-        ensTranscriptMapperTranscriptToslice(transcript, 2, 3, mrlist);
-
-        while(ajListPop(mrlist, (void **) &mr))
-        {
-            switch(ensMapperresultGetType(mr))
-            {
-                case ensEMapperresultTypeCoordinate:
-
-                    ajFmtPrintF(outfile,
-                                "Ensembl Transcript Mapper map positions 2:3 "
-                                "to Slice %d:%d:%d\n",
-                                ensMapperresultGetCoordinateStart(mr),
-                                ensMapperresultGetCoordinateEnd(mr),
-                                ensMapperresultGetCoordinateStrand(mr));
-
-                    break;
-
-                case ensEMapperresultTypeGap:
-
-                    ajFmtPrintF(outfile,
-                                "Ensembl Transcript Mapper 2:3 to Slice got "
-                                "Mapper Result of type Gap %d:%d. \n",
-                                ensMapperresultGetGapStart(mr),
-                                ensMapperresultGetGapEnd(mr));
-
-                    break;
-
-                default:
-
-                    ajFmtPrintF(outfile,
-                                "Ensembl Transcript Mapper 2:3 to Slice got "
-                                "Mapper Result of unexpected type %d.\n",
-                                ensMapperresultGetType(mr));
-            }
-
-            ensMapperresultDel(&mr);
-        }
-
-        ajListFree(&mrlist);
-
-        /* Fetch the Transcript sequence. */
-
-        ensTranscriptFetchSequenceTranscriptSeq(transcript, &seq);
-
-        ajSeqoutWriteSeq(outseq, seq);
-
-        ajSeqDel(&seq);
-
-        /* Fetch the sequence for the canonical Translation. */
-
-        translation = ensTranscriptLoadTranslation(transcript);
-
-        ensTranscriptFetchSequenceTranslationSeq(transcript,
-                                                 translation,
-                                                 &seq);
-
-        if(seq)
-        {
-            ajSeqoutWriteSeq(outseq, seq);
-
-            ajSeqDel(&seq);
-        }
-
-        /*
-        ** Fetch all Exons of this Transcript and write out their
-        ** coordinates.
-        */
-
-        exons = ensTranscriptLoadExons(transcript);
-
-        iter = ajListIterNewread(exons);
-
-        while(!ajListIterDone(iter))
-        {
-            exon = (EnsPExon) ajListIterGet(iter);
-
-            feature = ensExonGetFeature(exon);
-
-            ajFmtPrintF(outfile,
-                        "  Ensembl Exon '%S'\n"
-                        "    Transcript %u:%u\n"
-                        "    Slice %d:%d:%d\n"
-                        "    Ensembl Translation\n"
-                        "      Transcript %u:%u\n"
-                        "      Slice %u:%u\n",
-                        ensExonGetStableidentifier(exon),
-                        ensExonCalculateTranscriptStart(exon,
-                                                        transcript),
-                        ensExonCalculateTranscriptEnd(exon,
-                                                      transcript),
-                        ensFeatureGetStart(feature),
-                        ensFeatureGetEnd(feature),
-                        ensFeatureGetStrand(feature),
-                        ensExonCalculateTranscriptCodingStart(exon,
-                                                              transcript,
-                                                              translation),
-                        ensExonCalculateTranscriptCodingEnd(exon,
-                                                            transcript,
-                                                            translation),
-                        ensExonCalculateSliceCodingStart(exon,
-                                                         transcript,
-                                                         translation),
-                        ensExonCalculateSliceCodingEnd(exon,
-                                                       transcript,
-                                                       translation));
-        }
-
-        ajListIterDel(&iter);
-    }
-
-    ensTranscriptDel(&transcript);
-
-    /* Fetch Translation ENSP00000349282 SMAD2-201 */
-
-    tla = ensRegistryGetTranslationadaptor(dba);
-
-    tmpstr = ajStrNewC("ENSP00000349282");
-
-    ensTranslationadaptorFetchByStableidentifier(tla, tmpstr, 0, &translation);
-
-    ajStrDel(&tmpstr);
-
-    if(translation)
-    {
-        /*
-        ** NOTE: Fetching the sequence directly from a Translation causes the
-        ** Transcript to be re-fetched from the database. Transcripts
-        ** have strong references for their Translations, but
-        ** Transaltions do not have any reference to their Transcript.
-        ** Use ensTranscriptFetchSequenceTranslationSeq if a Transcript is
-        ** already available.
-        */
-
-        ensTranslationFetchSequenceSeq(translation, &seq);
-
-        ajSeqoutWriteSeq(outseq, seq);
-
-        ajSeqDel(&seq);
-    }
-
-    ensTranslationDel(&translation);
-
-    ensembltest_constants(outfile);
-
-    ensembltest_registry(outfile);
-
-    ensembltest_analyses(dba, outfile);
-
-    ensembltest_meta(dba, outfile);
-
-    ensembltest_coordinate_systems(dba, outfile);
-
-    ensembltest_sequence_regions(dba, outfile);
-
-    ensembltest_assembly_exceptions(dba, outfile);
-
-    ensembltest_slice_projections(dba, outfile);
-
-    ensembltest_features(dba, outfile);
-
-    ensembltest_masking(dba, outseq);
-
-    ensembltest_sequence(dba, outseq);
-
-    ensembltest_markers(dba, outfile);
-
-    ensembltest_ditags(dba, outfile);
-
-    ensembltest_transformations(dba, outfile);
-
-    ensembltest_density(dba, outfile);
+    ensembltest_constants(aoutfile);
+    ensembltest_datatypes(aoutfile);
+    ensembltest_registry(aoutfile);
+    ensembltest_analysis(dba, aoutfile);
+    ensembltest_meta_information(dba, aoutfile);
+    ensembltest_coordinate_system(dba, aoutfile);
+    ensembltest_sequence_region(dba, aoutfile);
+    ensembltest_assembly_exception(dba, aoutfile);
+    ensembltest_slice_projection(dba, aoutfile);
+    ensembltest_masking(dba, aoutseqall);
+    ensembltest_sequence(dba, aoutseqall);
+    ensembltest_feature(dba, aoutfile);
+    ensembltest_exon(dba, aoutfile);
+    ensembltest_transcript(dba, aoutfile);
+    ensembltest_translations(dba, aoutfile);
+    ensembltest_ditag(dba, aoutfile);
+    ensembltest_density(dba, aoutfile);
+    ensembltest_marker(dba, aoutfile);
+    ensembltest_miscellaneous(dba, aoutfile);
+    ensembltest_transformations(dba, aoutfile);
+    ensembltest_ontology(dba, aoutfile);
+    ensembltest_databaseentry(dba, aoutfile);
+    ensembltest_basealignfeature(dba, aoutfile);
 
     /* Fetch larger data sets... */
 
-    if(large)
+    if (large)
     {
         ensembltest_genes(dba);
 
         /* Fetch sequence for human chromosome 21. */
-        if(AJFALSE)
-            ensembltest_chromosome(dba, outseq);
+
+        if (AJFALSE)
+            ensembltest_chromosome(dba, aoutseqall);
     }
 
     /* Clean up and exit. */
 
-    ajListFree(&list);
+    ajFileClose(&aoutfile);
 
-    ajFileClose(&outfile);
+    ajSeqoutClose(aoutseqall);
 
-    ajSeqoutClose(outseq);
+    ajSeqoutDel(&aoutseqall);
 
-    ajSeqoutDel(&outseq);
-
-    ajStrDel(&user);
-    ajStrDel(&password);
-    ajStrDel(&host);
-    ajStrDel(&port);
-    ajStrDel(&socketf);
-    ajStrDel(&dbname);
     ajStrDel(&species);
-    ajStrDel(&srname);
+
+#ifndef WIN32
 
     /* Get resource usage */
-#ifndef WIN32
+
     getrusage(RUSAGE_SELF, &ru);
 
     ajDebug("main resource usage\n"
@@ -526,6 +359,7 @@ int main(int argc, char **argv)
             ru.ru_nsignals,
             ru.ru_nvcsw,
             ru.ru_nivcsw);
+
 #endif
 
 
@@ -541,36 +375,36 @@ int main(int argc, char **argv)
 
     embExit();
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 
 
 
-/* @funcstatic ensembltest_slice_projections **********************************
+/* @funcstatic ensembltest_slice_projection ***********************************
 **
-** Project Ensembl Slices.
+** Ensembl Slice Projection.
 **
 ** Project the 'chromosome' X and Y PAR regions (1 - 2709520) into the 'clone'
 ** and 'contig' Coordinate System, which will use the Generic Assembly Mapper
 ** for the mapping path 'chromosome' <-> 'contig' and the Chained Assembly
 ** Mapper for the mapping path 'chromosome' <-> 'contig' <-> 'clone'.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool ensembltest_slice_projections(EnsPDatabaseadaptor dba,
-                                            AjPFile outfile)
+static AjBool ensembltest_slice_projection(EnsPDatabaseadaptor dba,
+                                           AjPFile aoutfile)
 {
-    ajint i = 0;
+    register ajuint i = 0U;
 
     AjBool debug = AJFALSE;
 
-    AjPList pslist = NULL;
+    AjPList pss = NULL;
 
     AjPStr slname    = NULL;
     AjPStr csname    = NULL;
@@ -580,13 +414,13 @@ static AjBool ensembltest_slice_projections(EnsPDatabaseadaptor dba,
 
     EnsPProjectionsegment ps = NULL;
 
-    EnsPSlice psslice    = NULL;
-    EnsPSlice slice      = NULL;
-    EnsPSliceadaptor sla = NULL;
+    EnsPSlice      psslice        = NULL;
+    EnsPSlice        slice        = NULL;
+    EnsPSliceadaptor sliceadaptor = NULL;
 
-    /* Perform the following Slice projections. */
+    /* Project the following Ensembl Slice objects. */
 
-    EnsembltestOProjections ensembltestProjections[] =
+    const EnsembltestOProjection ensembltestProjection[] =
         {
             /*
             ** Test the Ensembl Chained Assembly Mapper for the
@@ -600,6 +434,7 @@ static AjBool ensembltest_slice_projections(EnsPDatabaseadaptor dba,
             {"chromosome:GRCh37:X:1:3000000:1", "clone", ""},
             {"chromosome:GRCh37:Y:1:3000000:1", "contig", ""},
             {"chromosome:GRCh37:Y:1:3000000:1", "clone", ""},
+            {"chromosome:GRCh37:Y:0:0:0", "supercontig", ""},
             /* Test a Slice projection inside a HAP region. */
             {
                 "chromosome:GRCh37:HSCHR6_MHC_COX:29000000:32000000:1",
@@ -613,67 +448,69 @@ static AjBool ensembltest_slice_projections(EnsPDatabaseadaptor dba,
                 ""
             },
             /* Test for negative Slice coordinates. */
-            {"chromosome:GRCh37:22:-17000000:+18000000:1", "supercontig", ""},
-            {NULL, NULL, NULL}
+            {"chromosome:GRCh37:22:-17000000:18000000:1", "supercontig", ""},
+            /* Test centromer regions. */
+            {"chromosome:GRCh37:21:13200001:14600000:1", "contig", ""},
+            {(const char *) NULL, (const char *) NULL, (const char *) NULL}
         };
 
-    debug = ajDebugTest("ensembltest_slice_projections");
+    debug = ajDebugTest("ensembltest_slice_projection");
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "Ensembl Slice Projections\n");
+                "Ensembl Slice Projection\n");
 
-    ajUser("Ensembl Slice Projections");
+    ajUser("Ensembl Slice Projection");
 
-    sla = ensRegistryGetSliceadaptor(dba);
+    sliceadaptor = ensRegistryGetSliceadaptor(dba);
 
-    pslist = ajListNew();
+    pss = ajListNew();
 
     slname    = ajStrNew();
     csname    = ajStrNew();
     csversion = ajStrNew();
 
-    for(i = 0; ensembltestProjections[i].SliceName; i++)
+    for (i = 0U; ensembltestProjection[i].SliceName; i++)
     {
-        ajStrAssignC(&slname,    ensembltestProjections[i].SliceName);
-        ajStrAssignC(&csname,    ensembltestProjections[i].CoordsystemName);
-        ajStrAssignC(&csversion, ensembltestProjections[i].CoordsystemVersion);
+        ajStrAssignC(&slname,    ensembltestProjection[i].SliceName);
+        ajStrAssignC(&csname,    ensembltestProjection[i].CoordsystemName);
+        ajStrAssignC(&csversion, ensembltestProjection[i].CoordsystemVersion);
 
-        ensSliceadaptorFetchByName(sla, slname, &slice);
-
-        ensSliceFetchName(slice, &sename);
-
-        ajFmtPrintF(outfile,
+        ajFmtPrintF(aoutfile,
                     "\n"
                     "  Project Ensembl Slice '%S' into\n"
                     "  Ensembl Coordinate System '%S:%S'.\n",
-                    sename, csname, csversion);
+                    slname, csname, csversion);
 
-        if(debug)
-            ajDebug("ensembltest_slice_projections begin ensSliceProject "
+        ensSliceadaptorFetchByName(sliceadaptor, slname, &slice);
+
+        ensSliceFetchName(slice, &sename);
+
+        if (debug)
+            ajDebug("ensembltest_slice_projection begin ensSliceProject "
                     "for Ensembl Slice '%S' and "
                     "Ensembl Coordinate System '%S:%S'.\n",
                     sename, csname, csversion);
 
-        ensSliceProject(slice, csname, csversion, pslist);
+        ensSliceProject(slice, csname, csversion, pss);
 
-        if(debug)
-            ajDebug("ensembltest_slice_projections finished "
+        if (debug)
+            ajDebug("ensembltest_slice_projection finished "
                     "ensSliceProject.\n");
 
-        while(ajListPop(pslist, (void **) &ps))
+        while (ajListPop(pss, (void**) &ps))
         {
             psslice = ensProjectionsegmentGetTargetSlice(ps);
 
             ensSliceFetchName(psslice, &psname);
 
-            ajFmtPrintF(outfile,
+            ajFmtPrintF(aoutfile,
                         "\n"
                         "    '%S' %u:%u\n"
                         "    '%S'\n",
@@ -692,7 +529,7 @@ static AjBool ensembltest_slice_projections(EnsPDatabaseadaptor dba,
         ensSliceDel(&slice);
     }
 
-    ajListFree(&pslist);
+    ajListFree(&pss);
 
     ajStrDel(&slname);
     ajStrDel(&csname);
@@ -704,51 +541,164 @@ static AjBool ensembltest_slice_projections(EnsPDatabaseadaptor dba,
 
 
 
-/* @funcstatic ensembltest_analyses *******************************************
+/* @funcstatic ensembltest_basealignfeature ***********************************
 **
-** Ensembl Analysis tests.
+** Ensembl Base Align Feature tests.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool ensembltest_analyses(EnsPDatabaseadaptor dba,
-                                   AjPFile outfile)
+static AjBool ensembltest_basealignfeature(EnsPDatabaseadaptor dba,
+                                           AjPFile aoutfile)
 {
-    AjPList as = NULL;
+    AjPList bafs = NULL;
+
+    AjPStr hitname = NULL;
+    AjPStr anname  = NULL;
+
+    EnsPBasealignfeature baf = NULL;
+
+/*    EnsPDnaalignfeatureadaptor dafa = NULL;*/
+
+    EnsPFeature srcfeature = NULL;
+    EnsPFeature trgfeature = NULL;
+
+    EnsPFeaturepair fp = NULL;
+
+    EnsPProteinalignfeatureadaptor pafa = NULL;
+
+    if (!dba)
+        return ajFalse;
+
+    if (!aoutfile)
+        return ajFalse;
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "Ensembl Base Align Feature\n");
+
+    ajUser("Ensembl Base Align Feature");
+
+/*    dafa = ensRegistryGetDnaalignfeatureadaptor(dba);*/
+    pafa = ensRegistryGetProteinalignfeatureadaptor(dba);
+
+    bafs = ajListNew();
+
+    hitname = ajStrNewC("Q15796");
+    anname  = ajStrNewC("uniprot_mammal");
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Fetch all Ensembl Protein Align Feature objects by\n"
+                "  hitname '%S' and Ensembl Analysis name '%S'\n",
+                hitname, anname);
+
+    ensProteinalignfeatureadaptorFetchAllbyHitunversioned(pafa,
+                                                          hitname,
+                                                          anname,
+                                                          bafs);
+
+    ensListBasealignfeatureSortSourceStartAscending(bafs);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "    Found %Lu Ensembl Protein Align Feature objects for\n"
+                "    hitname '%S' and Ensembl Analysis name '%S'\n",
+                ajListGetLength(bafs),
+                hitname, anname);
+
+    while (ajListPop(bafs, (void **) &baf))
+    {
+        fp = ensBasealignfeatureGetFeaturepair(baf);
+
+        srcfeature = ensFeaturepairGetSourceFeature(fp);
+        trgfeature = ensFeaturepairGetTargetFeature(fp);
+
+        ajFmtPrintF(aoutfile,
+                    "\n"
+                    "    Ensembl Protein Align Feature\n"
+                    "      Identifier %u\n"
+                    /*  "      Type %d\n" */
+                    "      Cigar '%S'\n"
+                    "      Source Ensembl Feature %S:%d:%d:%d\n"
+                    "      Target Ensembl Feature %S:%d:%d:%d\n",
+                    ensBasealignfeatureGetIdentifier(baf),
+                    /* ensBasealignfeatureGetType(baf), */
+                    ensBasealignfeatureGetCigar(baf),
+                    ensFeatureGetSeqregionName(srcfeature),
+                    ensFeatureGetSeqregionStart(srcfeature),
+                    ensFeatureGetSeqregionEnd(srcfeature),
+                    ensFeatureGetSeqregionStrand(srcfeature),
+                    ensFeatureGetSequencename(trgfeature),
+                    ensFeatureGetStart(trgfeature),
+                    ensFeatureGetEnd(trgfeature),
+                    ensFeatureGetStrand(trgfeature));
+
+        ensBasealignfeatureDel(&baf);
+    }
+
+    ajListFree(&bafs);
+
+    ajStrDel(&hitname);
+    ajStrDel(&anname);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic ensembltest_analysis *******************************************
+**
+** Ensembl Analysis tests.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool ensembltest_analysis(EnsPDatabaseadaptor dba,
+                                   AjPFile aoutfile)
+{
+    AjPList analyses = NULL;
 
     AjPStr name = NULL;
 
-    EnsPAnalysis analysis  = NULL;
-    EnsPAnalysisadaptor aa = NULL;
+    EnsPAnalysis        analysis        = NULL;
+    EnsPAnalysisadaptor analysisadaptor = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
-    aa = ensRegistryGetAnalysisadaptor(dba);
+    analysisadaptor = ensRegistryGetAnalysisadaptor(dba);
 
-    ajFmtPrintF(outfile,
+    name = ajStrNew();
+
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "Ensembl Analyses\n");
+                "Ensembl Analysis\n");
 
-    ajUser("Ensembl Analyses");
+    ajUser("Ensembl Analysis");
 
     /* Fetch the Ensembl Analysis for identifier 1 */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "  Ensembl Analysis for identifier 1\n");
 
-    ensAnalysisadaptorFetchByIdentifier(aa, 1, &analysis);
+    ensAnalysisadaptorFetchByIdentifier(analysisadaptor, 1, &analysis);
 
-    ajFmtPrintF(outfile,
-                "    Ensembl Analyis %u name '%S'\n",
+    ajFmtPrintF(aoutfile,
+                "    Ensembl Analysis %u name '%S'\n",
                 ensAnalysisGetIdentifier(analysis),
                 ensAnalysisGetName(analysis));
 
@@ -756,63 +706,63 @@ static AjBool ensembltest_analyses(EnsPDatabaseadaptor dba,
 
     /* Fetch the Ensembl Analysis for name 'cpg' */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "  Ensembl Analysis for name 'cpg'\n");
 
-    name = ajStrNewC("cpg");
+    ajStrAssignC(&name, "cpg");
 
-    ensAnalysisadaptorFetchByName(aa, name, &analysis);
+    ensAnalysisadaptorFetchByName(analysisadaptor, name, &analysis);
 
-    ajFmtPrintF(outfile,
-                "    Ensembl Analyis %u name '%S'\n",
+    ajFmtPrintF(aoutfile,
+                "    Ensembl Analysis %u name '%S'\n",
                 ensAnalysisGetIdentifier(analysis),
                 ensAnalysisGetName(analysis));
 
     ensAnalysisDel(&analysis);
 
-    ajStrDel(&name);
+    /* Fetch all Ensembl Analysis objects */
 
-    /* Fetch all Ensembl Analyses */
-
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  All Ensembl Analyses\n");
+                "  All Ensembl Analysis objects\n");
 
-    as = ajListNew();
+    analyses = ajListNew();
 
-    ensAnalysisadaptorFetchAll(aa, as);
+    ensAnalysisadaptorFetchAll(analysisadaptor, analyses);
 
-    while(ajListPop(as, (void **) &analysis))
+    ensListAnalysisSortIdentifierAscending(analyses);
+
+    while (ajListPop(analyses, (void**) &analysis))
     {
-        ajFmtPrintF(outfile,
-                    "    Ensembl Analyis %u name '%S'\n",
+        ajFmtPrintF(aoutfile,
+                    "    Ensembl Analysis %u name '%S'\n",
                     ensAnalysisGetIdentifier(analysis),
                     ensAnalysisGetName(analysis));
 
         ensAnalysisDel(&analysis);
     }
 
-    ajListFree(&as);
+    ajListFree(&analyses);
 
     /* Test SQL escaping of "'" characters. */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "  Test SQL escaping of \"'\" characters.\n");
 
-    name = ajStrNewC("'test'");
+    ajStrAssignC(&name, "'test'");
 
-    ensAnalysisadaptorFetchByName(aa, name, &analysis);
+    ensAnalysisadaptorFetchByName(analysisadaptor, name, &analysis);
 
-    if(analysis)
-        ajFmtPrintF(outfile,
-                    "    Ensembl Analyis for name '%S' %u name '%S'\n",
+    if (analysis)
+        ajFmtPrintF(aoutfile,
+                    "    Ensembl Analysis for name '%S' %u name '%S'\n",
                     name,
                     ensAnalysisGetIdentifier(analysis),
                     ensAnalysisGetName(analysis));
     else
-        ajFmtPrintF(outfile,
+        ajFmtPrintF(aoutfile,
                     "    No Ensembl Analysis for name '%S', "
                     "which is the expected result.\n",
                     name);
@@ -827,27 +777,27 @@ static AjBool ensembltest_analyses(EnsPDatabaseadaptor dba,
 
 
 
-/* @funcstatic ensembltest_assembly_exceptions ********************************
+/* @funcstatic ensembltest_assembly_exception *********************************
 **
-** Project Ensembl Slices crossing Assembly Exceptions.
+** Project Ensembl Slices crossing Assembly Exception.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool ensembltest_assembly_exceptions(EnsPDatabaseadaptor dba,
-                                              AjPFile outfile)
+static AjBool ensembltest_assembly_exception(EnsPDatabaseadaptor dba,
+                                             AjPFile aoutfile)
 {
     AjBool debug        = AJFALSE;
     AjBool duplicates   = AJTRUE;
     AjBool nonreference = AJTRUE;
     AjBool lrg          = AJFALSE;
 
-    AjPList pslist = NULL;
-    AjPList sllist = NULL;
+    AjPList pss    = NULL;
+    AjPList slices = NULL;
 
     AjPStr csname    = NULL;
     AjPStr csversion = NULL;
@@ -856,73 +806,77 @@ static AjBool ensembltest_assembly_exceptions(EnsPDatabaseadaptor dba,
 
     EnsPProjectionsegment ps = NULL;
 
-    EnsPSlice psslice    = NULL;
-    EnsPSlice slice      = NULL;
-    EnsPSliceadaptor sla = NULL;
+    EnsPSlice      psslice        = NULL;
+    EnsPSlice        slice        = NULL;
+    EnsPSliceadaptor sliceadaptor = NULL;
 
-    debug = ajDebugTest("ensembltest_assembly_exceptions");
+    debug = ajDebugTest("ensembltest_assembly_exception");
 
-    if(debug)
-        ajDebug("ensembltest_assembly_exceptions start\n");
+    if (debug)
+        ajDebug("ensembltest_assembly_exception start\n");
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "Ensembl Assembly Exceptions\n");
+                "Ensembl Assembly Exception\n");
 
-    ajUser("Ensembl Assembly Exceptions");
+    ajUser("Ensembl Assembly Exception");
 
-    sla = ensRegistryGetSliceadaptor(dba);
+    sliceadaptor = ensRegistryGetSliceadaptor(dba);
 
     csname    = ajStrNewC("toplevel");
     csversion = ajStrNew();
 
-    pslist = ajListNew();
-    sllist = ajListNew();
+    pss    = ajListNew();
+    slices = ajListNew();
 
-    ensSliceadaptorFetchAll(sla,
+    ensSliceadaptorFetchAll(sliceadaptor,
                             csname,
                             csversion,
                             nonreference,
                             duplicates,
                             lrg,
-                            sllist);
+                            slices);
 
-    while(ajListPop(sllist, (void **) &slice))
+    ensListSliceSortIdentifierAscending(slices);
+
+    while (ajListPop(slices, (void**) &slice))
     {
         ensSliceFetchName(slice, &slname);
 
-        ajFmtPrintF(outfile,
+        ajFmtPrintF(aoutfile,
                     "\n"
                     "  Fetch normalised Slice Projections for Ensembl Slice\n"
                     "  '%S'\n"
                     "\n",
                     slname);
 
-        if(debug)
+        if (debug)
             ajDebug("ensembltest_assembly_exceptions begin "
                     "ensSliceadaptorRetrieveNormalisedprojection "
                     "for Ensembl Slice '%S'.\n",
                     slname);
 
-        ensSliceadaptorRetrieveNormalisedprojection(sla, slice, pslist);
+        ensSliceadaptorRetrieveNormalisedprojection(sliceadaptor,
+                                                    slice,
+                                                    pss);
 
-        if(debug)
+        if (debug)
             ajDebug("ensembltest_assembly_exceptions finished "
                     "ensSliceadaptorRetrieveNormalisedprojection.\n");
 
-        while(ajListPop(pslist, (void **) &ps))
+        while (ajListPop(pss, (void**) &ps))
         {
             psslice = ensProjectionsegmentGetTargetSlice(ps);
 
             ensSliceFetchName(psslice, &psname);
 
-            ajFmtPrintF(outfile,
+            ajFmtPrintF(aoutfile,
                         "    '%S' %u:%u\n"
                         "    '%S'\n"
                         "\n",
@@ -941,14 +895,14 @@ static AjBool ensembltest_assembly_exceptions(EnsPDatabaseadaptor dba,
         ensSliceDel(&slice);
     }
 
-    ajListFree(&pslist);
-    ajListFree(&sllist);
+    ajListFree(&pss);
+    ajListFree(&slices);
 
     ajStrDel(&csname);
     ajStrDel(&csversion);
 
-    if(debug)
-        ajDebug("ensembltest_assembly_exceptions end\n");
+    if (debug)
+        ajDebug("ensembltest_assembly_exception end\n");
 
     return ajTrue;
 }
@@ -960,32 +914,32 @@ static AjBool ensembltest_assembly_exceptions(EnsPDatabaseadaptor dba,
 **
 ** Ensembl constants tests.
 **
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool ensembltest_constants(AjPFile outfile)
+static AjBool ensembltest_constants(AjPFile aoutfile)
 {
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "Ensembl Constants\n");
 
     ajUser("Ensembl Constants");
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "  Ensembl Base Adaptor Maximum Identifiers %u\n",
-                ensBaseadaptorMaximumIdentifiers);
+                ensKBaseadaptorMaximumIdentifiers);
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "  Ensembl Software Version '%s'\n",
-                ensSoftwareVersion);
+                ensKSoftwareVersion);
 
     return ajTrue;
 }
@@ -993,97 +947,342 @@ static AjBool ensembltest_constants(AjPFile outfile)
 
 
 
-/* @funcstatic ensembltest_features *******************************************
+/* @funcstatic ensembltest_datatypes ******************************************
 **
-** Ensembl Feature tests.
+** Ensembl Data Type tests.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool ensembltest_features(EnsPDatabaseadaptor dba,
-                                   AjPFile outfile)
+static AjBool ensembltest_datatypes(AjPFile aoutfile)
 {
-    AjIList iter        = NULL;
+    ajulong maximum = 0;
+    ajulong size = 0;
+
+    if (!aoutfile)
+        return ajFalse;
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "Ensembl Data Types\n"
+                "\n");
+
+    ajUser("Ensembl Data Types");
+
+#ifndef WIN32
+    maximum = USHRT_MAX;
+    size = sizeof (unsigned short int);
+    ajFmtPrintF(aoutfile,
+                "  sizeof (unsigned short int) %Lu USHRT_MAX %Lx\n",
+                size, maximum);
+
+    maximum = UINT_MAX;
+    size = sizeof (unsigned int);
+    ajFmtPrintF(aoutfile,
+                "  sizeof (unsigned int) %Lu UINT_MAX %Lx\n",
+                size, maximum);
+
+    maximum = ULONG_MAX;
+    size = sizeof (unsigned long int);
+    ajFmtPrintF(aoutfile,
+                "  sizeof (unsigned long int) %Lu ULONG_MAX %Lx\n",
+                size, maximum);
+
+    /*
+    ** ULLONG_MAX is a C99 feature not available by default on the
+    ** Intel compiler implementation.
+    */
+#if AJFALSE
+    maximum = ULLONG_MAX;
+    size = sizeof (unsigned long long int);
+    ajFmtPrintF(aoutfile,
+                "  sizeof (unsigned long long int) %Lu ULLONG_MAX %Lx\n",
+                size, maximum);
+#endif /* AJFALSE */
+
+    maximum = 0;
+    size = sizeof (off_t);
+    ajFmtPrintF(aoutfile,
+                "  sizeof (off_t) %Lu\n",
+                size);
+
+    /* SIZE_T_MAX is a _DARWIN_C_SOURCE feature */
+#if AJFALSE
+    maximum = SIZE_T_MAX;
+    size = sizeof (size_t);
+    ajFmtPrintF(aoutfile,
+                "  sizeof (size_t) %Lu SIZE_T_MAX %Lx\n",
+                size, maximum);
+#endif /* AJFALSE */
+#endif /* !WIN32 */
+
+    size = sizeof (ajushort);
+    ajFmtPrintF(aoutfile,
+                "  sizeof (ajushort) %Lu\n",
+                size);
+
+    size = sizeof (ajuint);
+    ajFmtPrintF(aoutfile,
+                "  sizeof (ajuint) %Lu\n",
+                size);
+
+    size = sizeof (ajulong);
+    ajFmtPrintF(aoutfile,
+                "  sizeof (ajulong) %Lu\n",
+                size);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic ensembltest_databaseentry **************************************
+**
+** Ensembl Database Entry tests.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool ensembltest_databaseentry(EnsPDatabaseadaptor dba,
+                                        AjPFile aoutfile)
+{
+    AjPList dbes = NULL;
+
+    AjPStr name     = NULL;
+    AjPStr dbname   = NULL;
+    AjPStr stableid = NULL;
+
+    EnsPDatabaseentry        dbe  = NULL;
+    EnsPDatabaseentryadaptor dbea = NULL;
+
+    EnsPGene        gene  = NULL;
+    EnsPGeneadaptor ga    = NULL;
+
+    if (!dba)
+        return ajFalse;
+
+    if (!aoutfile)
+        return ajFalse;
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "Ensembl Database Entry\n");
+
+    ajUser("Ensembl Database Entry");
+
+    dbea = ensRegistryGetDatabaseentryadaptor(dba);
+    ga   = ensRegistryGetGeneadaptor(dba);
+
+    name = ajStrNewC("SMAD2");
+
+    dbname = ajStrNewC("HGNC");
+
+    dbes = ajListNew();
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Fetch all Ensembl Database Entry objects by\n"
+                "  name '%S' and dbname '%S'\n",
+                name, dbname);
+
+    ensDatabaseentryadaptorFetchAllbyName(dbea, name, dbname, dbes);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "    Found %Lu Ensembl Database Entry objects for\n"
+                "    name '%S' and dbname '%S'\n",
+                ajListGetLength(dbes), name, dbname);
+
+    while (ajListPop(dbes, (void **) &dbe))
+    {
+        ajFmtPrintF(aoutfile,
+                    "\n"
+                    "    Ensembl Database Entry %u\n"
+                    "      Database Display Name '%S'\n"
+                    "      Database Name '%S'\n"
+                    "      Database Release '%S'\n"
+                    "      Primary Identifier '%S'\n"
+                    "      Display Identifier '%S'\n"
+                    "      Version '%S'\n",
+                    ensDatabaseentryGetIdentifier(dbe),
+                    ensDatabaseentryGetDbDisplayname(dbe),
+                    ensDatabaseentryGetDbName(dbe),
+                    ensDatabaseentryGetDbRelease(dbe),
+                    ensDatabaseentryGetPrimaryidentifier(dbe),
+                    ensDatabaseentryGetDisplayidentifier(dbe),
+                    ensDatabaseentryGetVersion(dbe));
+
+        ensDatabaseentryDel(&dbe);
+    }
+
+    stableid = ajStrNewC("ENSG00000175387");
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Fetch all Ensembl Database Entry objects by\n"
+                "  Ensembl Gene '%S'\n",
+                stableid);
+
+    ensGeneadaptorFetchByStableidentifier(ga, stableid, 0U, &gene);
+
+    ensDatabaseentryadaptorFetchAllbyGene(dbea,
+                                          gene,
+                                          (const AjPStr) NULL,
+                                          ensEExternaldatabaseTypeNULL,
+                                          dbes);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "    Found %Lu Ensembl Database Entry objects for\n"
+                "    Ensembl Gene '%S'\n",
+                ajListGetLength(dbes),
+                stableid);
+
+    while (ajListPop(dbes, (void **) &dbe))
+    {
+        ajFmtPrintF(aoutfile,
+                    "\n"
+                    "    Ensembl Database Entry\n"
+                    "      Database Display Name '%S'\n"
+                    "      Database Name '%S'\n"
+                    "      Database Release '%S'\n"
+                    "      Primary Identifier '%S'\n"
+                    "      Display Identifier '%S'\n"
+                    "      Version '%S'\n",
+                    ensDatabaseentryGetDbDisplayname(dbe),
+                    ensDatabaseentryGetDbName(dbe),
+                    ensDatabaseentryGetDbRelease(dbe),
+                    ensDatabaseentryGetPrimaryidentifier(dbe),
+                    ensDatabaseentryGetDisplayidentifier(dbe),
+                    ensDatabaseentryGetVersion(dbe));
+
+        ensDatabaseentryDel(&dbe);
+    }
+
+    ensGeneDel(&gene);
+
+    ajStrDel(&stableid);
+
+    ajListFree(&dbes);
+
+    ajStrDel(&name);
+    ajStrDel(&dbname);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic ensembltest_feature ********************************************
+**
+** Ensembl Feature tests.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool ensembltest_feature(EnsPDatabaseadaptor dba,
+                                  AjPFile aoutfile)
+{
+    AjIList iterator    = NULL;
     AjPList exons       = NULL;
     AjPList genes       = NULL;
     AjPList transcripts = NULL;
-    const AjPList list  = NULL;
 
-    AjPStr slname = NULL;
+    const AjPList features = NULL;
 
-    EnsPExon exon      = NULL;
-    EnsPExonadaptor ea = NULL;
+    AjPStr fslname = NULL;
+    AjPStr oslname = NULL;
+
+    EnsPAnalysis analysis = NULL;
+
+    EnsPExon        exon        = NULL;
+    EnsPExonadaptor exonadaptor = NULL;
 
     EnsPFeature feature = NULL;
 
-    EnsPGene gene      = NULL;
-    EnsPGeneadaptor ga = NULL;
+    EnsPGene        gene        = NULL;
+    EnsPGeneadaptor geneadaptor = NULL;
 
-    EnsPSlice slice      = NULL;
-    EnsPSliceadaptor sla = NULL;
+    EnsPSlice        slice        = NULL;
+    EnsPSliceadaptor sliceadaptor = NULL;
 
-    EnsPTranscript transcript = NULL;
-    EnsPTranscriptadaptor tca = NULL;
+    EnsPTranscript        transcript        = NULL;
+    EnsPTranscriptadaptor transcriptadaptor = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "Ensembl Features\n");
+                "Ensembl Feature\n");
 
-    ajUser("Ensembl Features");
+    ajUser("Ensembl Feature");
 
-    sla = ensRegistryGetSliceadaptor(dba);
+    sliceadaptor = ensRegistryGetSliceadaptor(dba);
 
     /*
     ** Fetch an Ensembl Slice for chromosome:GRCh37:18:45300001:45500000:1,
     ** which is inside SMAD2.
     */
 
-    slname = ajStrNewC("chromosome:GRCh37:18:45300001:45500000:1");
+    oslname = ajStrNewC("chromosome:GRCh37:18:45300001:45500000:1");
 
-    ensSliceadaptorFetchByName(sla, slname, &slice);
+    ensSliceadaptorFetchByName(sliceadaptor, oslname, &slice);
 
-    ensSliceFetchName(slice, &slname);
+    /* Fetch all Exon objects on this Slice. */
 
-    /* Fetch all Exons on this Slice. */
-
-    ea = ensRegistryGetExonadaptor(dba);
+    exonadaptor = ensRegistryGetExonadaptor(dba);
 
     exons = ajListNew();
 
-    ensExonadaptorFetchAllbySlice(ea, slice, (AjPStr) NULL, exons);
+    ensExonadaptorFetchAllbySlice(exonadaptor, slice, (AjPStr) NULL, exons);
 
-    ajFmtPrintF(outfile,
+    ensListExonSortStartAscending(exons);
+
+    ensSliceFetchName(slice, &fslname);
+
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  Ensembl Slice '%S' %u Exons\n\n",
-                slname,
+                "  Ensembl Slice '%S' has %Lu "
+                "Ensembl Exon object(s)\n"
+                "\n",
+                fslname,
                 ajListGetLength(exons));
 
-    while(ajListPop(exons, (void **) &exon))
+    while (ajListPop(exons, (void**) &exon))
     {
         feature = ensExonGetFeature(exon);
 
-        ajFmtPrintF(outfile,
-                    "    Exon Feature Slice coordinates "
-                    "'%S:%d:%d:%d'\n",
+        ensSliceFetchName(ensFeatureGetSlice(feature), &fslname);
+
+        ajFmtPrintF(aoutfile,
+                    "    Ensembl Exon %u '%S'\n"
+                    "      Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                    "      Sequence Region coordinates '%S:%d:%d:%d'\n"
+                    "\n",
+                    ensExonGetIdentifier(exon),
                     ensExonGetStableidentifier(exon),
+                    fslname,
                     ensFeatureGetStart(feature),
                     ensFeatureGetEnd(feature),
-                    ensFeatureGetStrand(feature));
-
-        ajFmtPrintF(outfile,
-                    "    Exon Sequence Region coordinates "
-                    "'%S:%d:%d:%d'\n\n",
-                    ensExonGetStableidentifier(exon),
+                    ensFeatureGetStrand(feature),
+                    ensFeatureGetSeqregionName(feature),
                     ensFeatureGetSeqregionStart(feature),
                     ensFeatureGetSeqregionEnd(feature),
                     ensFeatureGetSeqregionStrand(feature));
@@ -1093,87 +1292,103 @@ static AjBool ensembltest_features(EnsPDatabaseadaptor dba,
 
     ajListFree(&exons);
 
-    /* Fetch all Transcripts on this Slice. */
+    /* Fetch all Ensembl Transcript objects on this Ensembl Slice. */
 
-    tca = ensRegistryGetTranscriptadaptor(dba);
+    transcriptadaptor = ensRegistryGetTranscriptadaptor(dba);
 
     transcripts = ajListNew();
 
-    ensTranscriptadaptorFetchAllbySlice(tca,
+    ensTranscriptadaptorFetchAllbySlice(transcriptadaptor,
                                         slice,
                                         (AjPStr) NULL,
                                         (AjPStr) NULL,
                                         ajTrue,
                                         transcripts);
 
-    ajFmtPrintF(outfile,
-                "  Ensembl Slice '%S' %u Transcripts\n\n",
-                slname,
+    ensListTranscriptSortStartAscending(transcripts);
+
+    ensSliceFetchName(slice, &fslname);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Ensembl Slice '%S' has %Lu "
+                "Ensembl Transcript object(s)\n"
+                "\n",
+                fslname,
                 ajListGetLength(transcripts));
 
-    while(ajListPop(transcripts, (void **) &transcript))
+    while (ajListPop(transcripts, (void**) &transcript))
     {
         feature = ensTranscriptGetFeature(transcript);
 
-        ajFmtPrintF(outfile,
-                    "    Transcript Feature Slice coordinates "
-                    "'%S:%d:%d:%d'\n",
+        analysis = ensFeatureGetAnalysis(feature);
+
+        ensSliceFetchName(ensFeatureGetSlice(feature), &fslname);
+
+        ajFmtPrintF(aoutfile,
+                    "    Ensembl Transcript %u '%S'\n"
+                    "      Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                    "      Sequence Region coordinates '%S:%d:%d:%d'\n"
+                    "      Ensembl Analysis %u name '%S'\n"
+                    "\n",
+                    ensTranscriptGetIdentifier(transcript),
                     ensTranscriptGetStableidentifier(transcript),
+                    fslname,
                     ensFeatureGetStart(feature),
                     ensFeatureGetEnd(feature),
-                    ensFeatureGetStrand(feature));
-
-        ajFmtPrintF(outfile,
-                    "    Transcript Sequence Region coordinates "
-                    "'%S:%d:%d:%d'\n\n",
-                    ensTranscriptGetStableidentifier(transcript),
+                    ensFeatureGetStrand(feature),
+                    ensFeatureGetSeqregionName(feature),
                     ensFeatureGetSeqregionStart(feature),
                     ensFeatureGetSeqregionEnd(feature),
-                    ensFeatureGetSeqregionStrand(feature));
+                    ensFeatureGetSeqregionStrand(feature),
+                    ensAnalysisGetIdentifier(analysis),
+                    ensAnalysisGetName(analysis));
 
-        list = ensTranscriptLoadExons(transcript);
+        features = ensTranscriptLoadExons(transcript);
 
-        iter = ajListIterNewread(list);
+        iterator = ajListIterNewread(features);
 
-        while(!ajListIterDone(iter))
+        while (!ajListIterDone(iterator))
         {
-            exon = (EnsPExon) ajListIterGet(iter);
+            exon = (EnsPExon) ajListIterGet(iterator);
 
             feature = ensExonGetFeature(exon);
 
-            ajFmtPrintF(outfile,
-                        "      Exon Feature Slice coordinates "
-                        "'%S:%d:%d:%d'\n",
+            ensSliceFetchName(ensFeatureGetSlice(feature), &fslname);
+
+            ajFmtPrintF(aoutfile,
+                        "      Ensembl Exon %u '%S'\n"
+                        "        Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                        "        Sequence Region coordinates '%S:%d:%d:%d'\n"
+                        "\n",
+                        ensExonGetIdentifier(exon),
                         ensExonGetStableidentifier(exon),
+                        fslname,
                         ensFeatureGetStart(feature),
                         ensFeatureGetEnd(feature),
-                        ensFeatureGetStrand(feature));
-
-            ajFmtPrintF(outfile,
-                        "      Exon Sequence Region coordinates "
-                        "'%S:%d:%d:%d'\n\n",
-                        ensExonGetStableidentifier(exon),
+                        ensFeatureGetStrand(feature),
+                        ensFeatureGetSeqregionName(feature),
                         ensFeatureGetSeqregionStart(feature),
                         ensFeatureGetSeqregionEnd(feature),
                         ensFeatureGetSeqregionStrand(feature));
         }
 
-        ajListIterDel(&iter);
+        ajListIterDel(&iterator);
 
-        /* TODO: List the Translations? */
+        /* TODO: List the Ensembl Translation objects */
 
         ensTranscriptDel(&transcript);
     }
 
     ajListFree(&transcripts);
 
-    /* Fetch all Genes on this Slice. */
+    /* Fetch all Ensembl Gene objects on this Ensembl Slice. */
 
-    ga = ensRegistryGetGeneadaptor(dba);
+    geneadaptor = ensRegistryGetGeneadaptor(dba);
 
     genes = ajListNew();
 
-    ensGeneadaptorFetchAllbySlice(ga,
+    ensGeneadaptorFetchAllbySlice(geneadaptor,
                                   slice,
                                   (AjPStr) NULL,
                                   (AjPStr) NULL,
@@ -1181,67 +1396,88 @@ static AjBool ensembltest_features(EnsPDatabaseadaptor dba,
                                   ajTrue,
                                   genes);
 
-    ajFmtPrintF(outfile,
-                "  Ensembl Slice '%S' %u Genes\n\n",
-                slname,
+    ensListGeneSortStartAscending(genes);
+
+    ensSliceFetchName(slice, &fslname);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Ensembl Slice '%S' has %Lu "
+                "Ensembl Gene object(s)\n"
+                "\n",
+                fslname,
                 ajListGetLength(genes));
 
-    while(ajListPop(genes, (void **) &gene))
+    while (ajListPop(genes, (void**) &gene))
     {
         feature = ensGeneGetFeature(gene);
 
-        ajFmtPrintF(outfile,
-                    "    Gene Feature Slice coordinates "
-                    "'%S:%d:%d:%d'\n",
+        analysis = ensFeatureGetAnalysis(feature);
+
+        ensSliceFetchName(ensFeatureGetSlice(feature), &fslname);
+
+        ajFmtPrintF(aoutfile,
+                    "    Ensembl Gene %u '%S'\n"
+                    "      Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                    "      Sequence Region coordinates '%S:%d:%d:%d'\n"
+                    "      Ensembl Analysis %u name '%S'\n"
+                    "\n",
+                    ensGeneGetIdentifier(gene),
                     ensGeneGetStableidentifier(gene),
+                    fslname,
                     ensFeatureGetStart(feature),
                     ensFeatureGetEnd(feature),
-                    ensFeatureGetStrand(feature));
-
-        ajFmtPrintF(outfile,
-                    "    Gene Sequence Region coordinates "
-                    "'%S:%d:%d:%d'\n\n",
-                    ensGeneGetStableidentifier(gene),
+                    ensFeatureGetStrand(feature),
+                    ensFeatureGetSeqregionName(feature),
                     ensFeatureGetSeqregionStart(feature),
                     ensFeatureGetSeqregionEnd(feature),
-                    ensFeatureGetSeqregionStrand(feature));
+                    ensFeatureGetSeqregionStrand(feature),
+                    ensAnalysisGetIdentifier(analysis),
+                    ensAnalysisGetName(analysis));
 
-        list = ensGeneLoadTranscripts(gene);
+        features = ensGeneLoadTranscripts(gene);
 
-        iter = ajListIterNewread(list);
+        iterator = ajListIterNewread(features);
 
-        while(!ajListIterDone(iter))
+        while (!ajListIterDone(iterator))
         {
-            transcript = (EnsPTranscript) ajListIterGet(iter);
+            transcript = (EnsPTranscript) ajListIterGet(iterator);
 
             feature = ensTranscriptGetFeature(transcript);
 
-            ajFmtPrintF(outfile,
-                        "      Transcript Feature Slice coordinates "
-                        "'%S:%d:%d:%d'\n",
+            analysis = ensFeatureGetAnalysis(feature);
+
+            ensSliceFetchName(ensFeatureGetSlice(feature), &fslname);
+
+            ajFmtPrintF(aoutfile,
+                        "      Ensembl Transcript %u '%S'\n"
+                        "        Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                        "        Sequence Region coordinates '%S:%d:%d:%d'\n"
+                        "        Ensembl Analysis %u name '%S'\n"
+                        "\n",
+                        ensTranscriptGetIdentifier(transcript),
                         ensTranscriptGetStableidentifier(transcript),
+                        fslname,
                         ensFeatureGetStart(feature),
                         ensFeatureGetEnd(feature),
-                        ensFeatureGetStrand(feature));
-
-            ajFmtPrintF(outfile,
-                        "      Transcript Sequence Region coordinates "
-                        "'%S:%d:%d:%d'\n\n",
-                        ensTranscriptGetStableidentifier(transcript),
+                        ensFeatureGetStrand(feature),
+                        ensFeatureGetSeqregionName(feature),
                         ensFeatureGetSeqregionStart(feature),
                         ensFeatureGetSeqregionEnd(feature),
-                        ensFeatureGetSeqregionStrand(feature));
-
+                        ensFeatureGetSeqregionStrand(feature),
+                        ensAnalysisGetIdentifier(analysis),
+                        ensAnalysisGetName(analysis));
         }
 
-        ajListIterDel(&iter);
+        ajListIterDel(&iterator);
 
         ensGeneDel(&gene);
     }
 
     ajListFree(&genes);
 
-    ajStrDel(&slname);
+    ajStrDel(&fslname);
+    ajStrDel(&oslname);
 
     ensSliceDel(&slice);
 
@@ -1253,16 +1489,17 @@ static AjBool ensembltest_features(EnsPDatabaseadaptor dba,
 
 /* @funcstatic ensembltest_genes **********************************************
 **
-** Fetch all Ensembl Genes and write sequences of Transcripts, Translations
-** and Exons to disk.
+** Fetch all Ensembl Gene objects and write sequences of Transcript,
+** Translation and Exon objects to disk.
 **
-** The number of genes processed can be configured by the maxnum ACD parameter
-** name. The sequences are written to FASTA files as specified by the
-** exons, transcripts and translations ACD parameter names.
+** The number of Ensembl Gene objects processed can be configured by the
+** maxnum ACD input parameter. The sequences of Exon, Transcript and
+** Translation objects are written to FASTA files specified by the
+** boutseqall, coutseqall and doutseqall ACD output parameters, respectively.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
@@ -1274,87 +1511,88 @@ static AjBool ensembltest_genes(EnsPDatabaseadaptor dba)
 
     AjBool debug = AJFALSE;
 
-    AjIList triter = NULL;
-    AjPList exons  = NULL;
-    AjPList genes  = NULL;
+    AjIList iterator = NULL;
+    AjPList exons    = NULL;
+    AjPList genes    = NULL;
 
-    const AjPList trlist = NULL;
+    const AjPList transcripts = NULL;
 
     AjPSeq seq = NULL;
 
-    AjPSeqout exnoutseq = NULL;
-    AjPSeqout trcoutseq = NULL;
-    AjPSeqout trloutseq = NULL;
+    AjPSeqout boutseqall = NULL; /* Ensembl Exon sequences */
+    AjPSeqout coutseqall = NULL; /* Ensembl Transcript sequences */
+    AjPSeqout doutseqall = NULL; /* Ensembl Translation sequences */
 
     EnsPExon exon = NULL;
 
-    EnsPGene gene      = NULL;
-    EnsPGeneadaptor ga = NULL;
-
-    EnsPTranslation translation = NULL;
+    EnsPGene        gene        = NULL;
+    EnsPGeneadaptor geneadaptor = NULL;
 
     EnsPTranscript transcript = NULL;
 
+    EnsPTranslation translation = NULL;
+
     debug = ajDebugTest("ensembltest_genes");
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
     maxnum = ajAcdGetInt("maxnum");
 
-    exnoutseq = ajAcdGetSeqoutall("exonsoutseq");
-    trcoutseq = ajAcdGetSeqoutall("transcriptsoutseq");
-    trloutseq = ajAcdGetSeqoutall("translationsoutseq");
+    boutseqall = ajAcdGetSeqoutall("boutseqall");
+    coutseqall = ajAcdGetSeqoutall("coutseqall");
+    doutseqall = ajAcdGetSeqoutall("doutseqall");
 
     ajUser("Ensembl Genes");
 
-    ga = ensRegistryGetGeneadaptor(dba);
+    geneadaptor = ensRegistryGetGeneadaptor(dba);
 
     /* Fetch all Genes. */
 
     exons = ajListNew();
     genes = ajListNew();
 
-    ensGeneadaptorFetchAll(ga, genes);
+    ensGeneadaptorFetchAll(geneadaptor, genes);
 
     /*
-    ** Although Genes have not been retrieved from a Slice, the following
-    ** function can still sort them by Slices and then Slice start coordinates.
+    ** Although Ensembl Gene objects have not been retrieved from an
+    ** Ensembl Slice, the following function can still sort them by
+    ** Slice objects and then Slice start coordinates.
     */
 
     ensListGeneSortStartAscending(genes);
 
-    while(ajListPop(genes, (void **) &gene))
+    while (ajListPop(genes, (void**) &gene))
     {
         /* Check if a limit has been set and if it has not been exceeded. */
 
-        if((maxnum < 0) || (i < maxnum))
+        if ((maxnum < 0) || (i < maxnum))
         {
-            if(debug)
+            if (debug)
                 ajDebug("ensembltest_genes "
-                        "Gene stable identifier: '%S'\n",
+                        "Gene stable identifier '%S'\n",
                         ensGeneGetStableidentifier(gene));
 
-            /* Get all Transcripts of this Gene. */
+            /* Get all Transcript objects of this Gene. */
 
-            trlist = ensGeneLoadTranscripts(gene);
+            transcripts = ensGeneLoadTranscripts(gene);
 
-            triter = ajListIterNewread(trlist);
+            iterator = ajListIterNewread(transcripts);
 
-            while(!ajListIterDone(triter))
+            while (!ajListIterDone(iterator))
             {
-                transcript = (EnsPTranscript) ajListIterGet(triter);
+                transcript = (EnsPTranscript) ajListIterGet(iterator);
 
-                if(debug)
+                if (debug)
                     ajDebug("ensembltest_genes "
-                            "Transcript stable identifier: '%S'\n",
+                            "Transcript stable identifier '%S'\n",
                             ensTranscriptGetStableidentifier(transcript));
 
                 /* Fetch and write the sequence of this Transcript. */
 
                 ensTranscriptFetchSequenceTranscriptSeq(transcript, &seq);
 
-                ajSeqoutWriteSeq(trcoutseq, seq);
+                ajSeqoutWriteSeq(coutseqall, seq);
 
                 ajSeqDel(&seq);
 
@@ -1369,42 +1607,42 @@ static AjBool ensembltest_genes(EnsPDatabaseadaptor dba)
                 ** defined.
                 */
 
-                if(translation)
+                if (translation)
                 {
-                    if(debug)
+                    if (debug)
                         ajDebug(
                             "ensembltest_genes "
-                            "Translation stable identifier: '%S'\n",
+                            "Translation stable identifier '%S'\n",
                             ensTranslationGetStableidentifier(translation));
 
                     /* Fetch and write the sequence of this Translation. */
 
                     ensTranslationFetchSequenceSeq(translation, &seq);
 
-                    ajSeqoutWriteSeq(trloutseq, seq);
+                    ajSeqoutWriteSeq(doutseqall, seq);
 
                     ajSeqDel(&seq);
                 }
             }
 
-            ajListIterDel(&triter);
+            ajListIterDel(&iterator);
 
-            /* Fetch all Exons of this Gene. */
+            /* Fetch all Exon objects of this Gene. */
 
             ensGeneFetchAllExons(gene, exons);
 
-            while(ajListPop(exons, (void **) &exon))
+            while (ajListPop(exons, (void**) &exon))
             {
-                if(debug)
+                if (debug)
                     ajDebug("ensembltest_genes "
-                            "Exon stable identifier: '%S'\n",
+                            "Exon stable identifier '%S'\n",
                             ensExonGetStableidentifier(exon));
 
                 /* Fetch and write the sequence of this Exon. */
 
                 ensExonFetchSequenceSliceSeq(exon, &seq);
 
-                ajSeqoutWriteSeq(exnoutseq, seq);
+                ajSeqoutWriteSeq(boutseqall, seq);
 
                 ajSeqDel(&seq);
 
@@ -1420,13 +1658,13 @@ static AjBool ensembltest_genes(EnsPDatabaseadaptor dba)
     ajListFree(&exons);
     ajListFree(&genes);
 
-    ajSeqoutClose(exnoutseq);
-    ajSeqoutClose(trcoutseq);
-    ajSeqoutClose(trloutseq);
+    ajSeqoutClose(boutseqall);
+    ajSeqoutClose(coutseqall);
+    ajSeqoutClose(doutseqall);
 
-    ajSeqoutDel(&exnoutseq);
-    ajSeqoutDel(&trcoutseq);
-    ajSeqoutDel(&trloutseq);
+    ajSeqoutDel(&boutseqall);
+    ajSeqoutDel(&coutseqall);
+    ajSeqoutDel(&doutseqall);
 
     return ajTrue;
 }
@@ -1434,23 +1672,24 @@ static AjBool ensembltest_genes(EnsPDatabaseadaptor dba)
 
 
 
-/* @funcstatic ensembltest_markers ********************************************
+/* @funcstatic ensembltest_marker *********************************************
 **
 ** Ensembl Marker and Ensembl Marker Feature tests.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool ensembltest_markers(EnsPDatabaseadaptor dba,
-                                  AjPFile outfile)
+static AjBool ensembltest_marker(EnsPDatabaseadaptor dba,
+                                 AjPFile aoutfile)
 {
-    AjPList mflist = NULL;
+    AjPList mfs = NULL;
 
-    AjPStr slname = NULL;
+    AjPStr fslname = NULL;
+    AjPStr oslname = NULL;
 
     EnsPAnalysis analysis = NULL;
 
@@ -1463,54 +1702,60 @@ static AjBool ensembltest_markers(EnsPDatabaseadaptor dba,
 
     EnsPMarkersynonym ms = NULL;
 
-    EnsPSlice slice      = NULL;
-    EnsPSliceadaptor sla = NULL;
+    EnsPSlice        slice        = NULL;
+    EnsPSliceadaptor sliceadaptor = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "Ensembl Marker Features\n");
+                "Ensembl Marker\n");
 
-    ajUser("Ensembl Marker Features");
+    ajUser("Ensembl Marker");
 
-    sla = ensRegistryGetSliceadaptor(dba);
+    sliceadaptor = ensRegistryGetSliceadaptor(dba);
 
     /*
     ** Fetch an Ensembl Slice for chromosome:GRCh37:18:45000001:46000000:1,
     ** which is around SMAD2.
     */
 
-    slname = ajStrNewC("chromosome:GRCh37:18:45000001:46000000:1");
+    oslname = ajStrNewC("chromosome:GRCh37:18:45000001:46000000:1");
 
-    ensSliceFetchName(slice, &slname);
+    ensSliceFetchName(slice, &oslname);
 
-    ensSliceadaptorFetchByName(sla, slname, &slice);
+    ensSliceadaptorFetchByName(sliceadaptor, oslname, &slice);
 
-    /* Fetch all Marker Features on this Slice. */
+    /* Fetch all Marker Feature objects on this Slice. */
 
     mfa = ensRegistryGetMarkerfeatureadaptor(dba);
 
-    mflist = ajListNew();
+    mfs = ajListNew();
 
     ensMarkerfeatureadaptorFetchAllbySlice(mfa,
                                            slice,
                                            0,
                                            0,
                                            (AjPStr) NULL,
-                                           mflist);
+                                           mfs);
 
-    ajFmtPrintF(outfile,
+    ensListMarkerfeatureSortStartAscending(mfs);
+
+    ensSliceFetchName(slice, &fslname);
+
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  Ensembl Slice '%S' %u Marker Features\n\n",
-                slname,
-                ajListGetLength(mflist));
+                "  Ensembl Slice '%S' has %Lu "
+                "Ensembl Marker Feature object(s)\n"
+                "\n",
+                fslname,
+                ajListGetLength(mfs));
 
-    while(ajListPop(mflist, (void **) &mf))
+    while (ajListPop(mfs, (void**) &mf))
     {
         feature = ensMarkerfeatureGetFeature(mf);
 
@@ -1520,37 +1765,43 @@ static AjBool ensembltest_markers(EnsPDatabaseadaptor dba,
 
         ms = ensMarkerGetDisplaysynonym(marker);
 
-        ajFmtPrintF(outfile,
-                    "    Ensembl Marker Feature '%u:%S'\n"
-                    "    Ensembl Marker         '%u:%s'\n"
-                    "    Ensembl Marker Synonym '%S:%S'\n",
+        ensSliceFetchName(ensFeatureGetSlice(feature), &fslname);
+
+        ajFmtPrintF(aoutfile,
+                    "    Ensembl Marker Feature %u mapweight %d\n"
+                    "      Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                    "      Sequence Region coordinates '%S:%d:%d:%d'\n"
+                    "      Ensembl Analysis %u name '%S'\n"
+                    "      Ensembl Marker %u type '%s'\n"
+                    "      Ensembl Marker Synonym %u name '%S' source '%S'\n"
+                    "\n",
                     ensMarkerfeatureGetIdentifier(mf),
+                    ensMarkerfeatureGetMapweight(mf),
+                    fslname,
+                    ensFeatureGetStart(feature),
+                    ensFeatureGetEnd(feature),
+                    /* ensFeatureGetStrand(feature) */
+                    0,
+                    ensFeatureGetSeqregionName(feature),
+                    ensFeatureGetSeqregionStart(feature),
+                    ensFeatureGetSeqregionEnd(feature),
+                    /* ensFeatureGetSeqregionStrand(feature) */
+                    0,
+                    ensAnalysisGetIdentifier(analysis),
                     ensAnalysisGetName(analysis),
                     ensMarkerGetIdentifier(marker),
                     ensMarkerTypeToChar(ensMarkerGetType(marker)),
+                    ensMarkersynonymGetIdentifier(ms),
                     ensMarkersynonymGetName(ms),
                     ensMarkersynonymGetSource(ms));
-
-        ajFmtPrintF(outfile,
-                    "    Marker Feature Slice coordinates "
-                    "'%d:%d:%d'\n",
-                    ensFeatureGetStart(feature),
-                    ensFeatureGetEnd(feature),
-                    ensFeatureGetStrand(feature));
-
-        ajFmtPrintF(outfile,
-                    "    Marker Sequence Region coordinates "
-                    "'%d:%d:%d'\n\n",
-                    ensFeatureGetSeqregionStart(feature),
-                    ensFeatureGetSeqregionEnd(feature),
-                    ensFeatureGetSeqregionStrand(feature));
 
         ensMarkerfeatureDel(&mf);
     }
 
-    ajListFree(&mflist);
+    ajListFree(&mfs);
 
-    ajStrDel(&slname);
+    ajStrDel(&fslname);
+    ajStrDel(&oslname);
 
     ensSliceDel(&slice);
 
@@ -1560,23 +1811,292 @@ static AjBool ensembltest_markers(EnsPDatabaseadaptor dba,
 
 
 
-/* @funcstatic ensembltest_ditags *********************************************
+/* @funcstatic ensembltest_ontology *******************************************
 **
-** Ensembl Ditag and Ensembl Ditag Feature tests.
+** Ensembl Ontology and Ensembl Ontology Term tests.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool ensembltest_ditags(EnsPDatabaseadaptor dba,
-                                 AjPFile outfile)
+static AjBool ensembltest_ontology(EnsPDatabaseadaptor dba,
+                                   AjPFile aoutfile)
+{
+    AjPList cots = NULL; /* Child Ontology Term objects */
+    AjPList pots = NULL; /* Parent Ontology Term objects */
+
+    AjPStr accession    = NULL;
+    AjPStr termname     = NULL;
+    AjPStr ontologyname = NULL;
+    AjPStr species      = NULL;
+
+    EnsPDatabaseadaptor eodba = NULL;
+
+    EnsPOntologyterm       cot  = NULL;
+    EnsPOntologyterm       pot  = NULL;
+    EnsPOntologytermadaptor ota = NULL;
+
+    if (!dba)
+        return ajFalse;
+
+    if (!aoutfile)
+        return ajFalse;
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "Ensembl Ontology\n");
+
+    ajUser("Ensembl Ontology");
+
+    species = ajStrNewC("default");
+
+    eodba = ensRegistryGetDatabaseadaptor(ensEDatabaseadaptorGroupOntology,
+                                          species);
+
+    ajStrDel(&species);
+
+    ota = ensRegistryGetOntologytermadaptor(eodba);
+
+    cots = ajListNew();
+    pots = ajListNew();
+
+    /* Fetch by an accession. */
+
+    accession = ajStrNewC("GO:0046332");
+
+    ensOntologytermadaptorFetchByAccession(ota, accession, &cot);
+
+    ajStrDel(&accession);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Fetch all by child Ensembl Ontology Term\n");
+
+    ensOntologytermadaptorFetchAllbyChild(ota, cot, pots);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Child Ensembl Ontology Term\n"
+                "    Accession '%S'\n"
+                "    Name '%S'\n"
+                "    Definition '%S'\n"
+                "    Ontology '%S'\n",
+                ensOntologytermGetAccession(cot),
+                ensOntologytermGetName(cot),
+                ensOntologytermGetDefinition(cot),
+                ensOntologyGetName(ensOntologytermGetOntology(cot)));
+
+    while (ajListPop(pots, (void**) &pot))
+    {
+        ajFmtPrintF(aoutfile,
+                    "\n"
+                    "    Parent Ensembl Ontology Term\n"
+                    "      Accession '%S'\n"
+                    "      Name '%S'\n"
+                    "      Definition '%S'\n"
+                    "      Ontology '%S'\n",
+                    ensOntologytermGetAccession(pot),
+                    ensOntologytermGetName(pot),
+                    ensOntologytermGetDefinition(pot),
+                    ensOntologyGetName(ensOntologytermGetOntology(pot)));
+
+        ensOntologytermDel(&pot);
+    }
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Fetch all by descendant Ensembl Ontology Term\n");
+
+    ensOntologytermadaptorFetchAllbyDescendant(ota,
+                                               cot,
+                                               (const AjPStr) NULL,
+                                               ajFalse,
+                                               pots);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Descendant Ensembl Ontology Term\n"
+                "    Accession '%S'\n"
+                "    Name '%S'\n"
+                "    Definition '%S'\n"
+                "    Ontology '%S'\n",
+                ensOntologytermGetAccession(cot),
+                ensOntologytermGetName(cot),
+                ensOntologytermGetDefinition(cot),
+                ensOntologyGetName(ensOntologytermGetOntology(cot)));
+
+    while (ajListPop(pots, (void**) &pot))
+    {
+        ajFmtPrintF(aoutfile,
+                    "\n"
+                    "    Ancestor Ensembl Ontology Term\n"
+                    "      Accession '%S'\n"
+                    "      Name '%S'\n"
+                    "      Definition '%S'\n"
+                    "      Ontology '%S'\n",
+                    ensOntologytermGetAccession(pot),
+                    ensOntologytermGetName(pot),
+                    ensOntologytermGetDefinition(pot),
+                    ensOntologyGetName(ensOntologytermGetOntology(pot)));
+
+        ensOntologytermDel(&pot);
+    }
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Fetch all by parent Ensembl Ontology Term\n");
+
+    ensOntologytermadaptorFetchAllbyParent(ota, cot, pots);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Parent Ensembl Ontology Term\n"
+                "    Accession '%S'\n"
+                "    Name '%S'\n"
+                "    Definition '%S'\n"
+                "    Ontology '%S'\n",
+                ensOntologytermGetAccession(cot),
+                ensOntologytermGetName(cot),
+                ensOntologytermGetDefinition(cot),
+                ensOntologyGetName(ensOntologytermGetOntology(cot)));
+
+    while (ajListPop(pots, (void**) &pot))
+    {
+        ajFmtPrintF(aoutfile,
+                    "\n"
+                    "    Child Ensembl Ontology Term\n"
+                    "      Accession '%S'\n"
+                    "      Name '%S'\n"
+                    "      Definition '%S'\n"
+                    "      Ontology '%S'\n",
+                    ensOntologytermGetAccession(pot),
+                    ensOntologytermGetName(pot),
+                    ensOntologytermGetDefinition(pot),
+                    ensOntologyGetName(ensOntologytermGetOntology(pot)));
+
+        ensOntologytermDel(&pot);
+    }
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Fetch all by ancestor Ensembl Ontology Term\n");
+
+    ensOntologytermadaptorFetchAllbyAncestor(ota, cot, pots);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Ancestor Ensembl Ontology Term\n"
+                "    Accession '%S'\n"
+                "    Name '%S'\n"
+                "    Definition '%S'\n"
+                "    Ontology '%S'\n",
+                ensOntologytermGetAccession(cot),
+                ensOntologytermGetName(cot),
+                ensOntologytermGetDefinition(cot),
+                ensOntologyGetName(ensOntologytermGetOntology(cot)));
+
+    while (ajListPop(pots, (void**) &pot))
+    {
+        ajFmtPrintF(aoutfile,
+                    "\n"
+                    "    Descendant Ensembl Ontology Term\n"
+                    "      Accession '%S'\n"
+                    "      Name '%S'\n"
+                    "      Definition '%S'\n"
+                    "      Ontology '%S'\n",
+                    ensOntologytermGetAccession(pot),
+                    ensOntologytermGetName(pot),
+                    ensOntologytermGetDefinition(pot),
+                    ensOntologyGetName(ensOntologytermGetOntology(pot)));
+
+        ensOntologytermDel(&pot);
+    }
+
+    ensOntologytermDel(&cot);
+
+    /* Fetch by a name. */
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Fetch all by Ensembl Ontology Term name\n");
+
+    termname     = ajStrNewC("%SMAD binding%");
+    ontologyname = ajStrNewC("GO");
+
+    ensOntologytermadaptorFetchAllbyName(ota,
+                                         termname,
+                                         ontologyname,
+                                         cots);
+
+    ajStrDel(&termname);
+    ajStrDel(&ontologyname);
+
+    while (ajListPop(cots, (void**) &cot))
+    {
+        ajFmtPrintF(aoutfile,
+                    "\n"
+                    "  Child Ensembl Ontology Term\n"
+                    "    Accession '%S'\n"
+                    "    Name '%S'\n"
+                    "    Definition '%S'\n"
+                    "    Ontology '%S'\n",
+                    ensOntologytermGetAccession(cot),
+                    ensOntologytermGetName(cot),
+                    ensOntologytermGetDefinition(cot),
+                    ensOntologyGetName(ensOntologytermGetOntology(cot)));
+
+        ensOntologytermadaptorFetchAllbyChild(ota, cot, pots);
+
+        while (ajListPop(pots, (void**) &pot))
+        {
+            ajFmtPrintF(aoutfile,
+                        "\n"
+                        "    Parent Ensembl Ontology Term\n"
+                        "      Accession '%S'\n"
+                        "      Name '%S'\n"
+                        "      Definition '%S'\n"
+                        "      Ontology '%S'\n",
+                        ensOntologytermGetAccession(pot),
+                        ensOntologytermGetName(pot),
+                        ensOntologytermGetDefinition(pot),
+                        ensOntologyGetName(ensOntologytermGetOntology(pot)));
+
+            ensOntologytermDel(&pot);
+        }
+
+        ensOntologytermDel(&cot);
+    }
+
+    ajListFree(&cots);
+    ajListFree(&pots);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic ensembltest_ditag **********************************************
+**
+** Ensembl Ditag and Ensembl Ditag Feature tests.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool ensembltest_ditag(EnsPDatabaseadaptor dba,
+                                AjPFile aoutfile)
 {
     AjPList dtfs = NULL;
 
-    AjPStr slname = NULL;
+    AjPStr fslname = NULL;
+    AjPStr oslname = NULL;
 
     EnsPAnalysis analysis = NULL;
 
@@ -1584,38 +2104,36 @@ static AjBool ensembltest_ditags(EnsPDatabaseadaptor dba,
 
     EnsPDitag dt = NULL;
 
-    EnsPDitagfeature dtf         = NULL;
+    EnsPDitagfeature        dtf  = NULL;
     EnsPDitagfeatureadaptor dtfa = NULL;
 
-    EnsPSlice slice      = NULL;
-    EnsPSliceadaptor sla = NULL;
+    EnsPSlice        slice        = NULL;
+    EnsPSliceadaptor sliceadaptor = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "Ensembl Ditag Features\n");
+                "Ensembl Ditag\n");
 
-    ajUser("Ensembl Ditag Features");
+    ajUser("Ensembl Ditag");
 
-    sla = ensRegistryGetSliceadaptor(dba);
+    sliceadaptor = ensRegistryGetSliceadaptor(dba);
 
     /*
     ** Fetch an Ensembl Slice for chromosome:GRCh37:18:45000001:46000000:1,
     ** which is around SMAD2.
     */
 
-    slname = ajStrNewC("chromosome:GRCh37:18:45000001:46000000:1");
+    oslname = ajStrNewC("chromosome:GRCh37:18:45000001:46000000:1");
 
-    ensSliceadaptorFetchByName(sla, slname, &slice);
+    ensSliceadaptorFetchByName(sliceadaptor, oslname, &slice);
 
-    ensSliceFetchName(slice, &slname);
-
-    /* Fetch all Marker Features on this Slice. */
+    /* Fetch all Ensembl Marker Feature objects on this Ensembl Slice. */
 
     dtfa = ensRegistryGetDitagfeatureadaptor(dba);
 
@@ -1627,13 +2145,19 @@ static AjBool ensembltest_ditags(EnsPDatabaseadaptor dba,
                                           (AjPStr) NULL,
                                           dtfs);
 
-    ajFmtPrintF(outfile,
+    ensListDitagfeatureSortStartAscending(dtfs);
+
+    ensSliceFetchName(slice, &fslname);
+
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  Ensembl Slice '%S' %u Ditag Features\n\n",
-                slname,
+                "  Ensembl Slice '%S' has %Lu "
+                "Ensembl Ditag Feature object(s)\n"
+                "\n",
+                fslname,
                 ajListGetLength(dtfs));
 
-    while(ajListPop(dtfs, (void **) &dtf))
+    while (ajListPop(dtfs, (void**) &dtf))
     {
         feature = ensDitagfeatureGetFeature(dtf);
 
@@ -1641,36 +2165,38 @@ static AjBool ensembltest_ditags(EnsPDatabaseadaptor dba,
 
         dt = ensDitagfeatureGetDitag(dtf);
 
-        ajFmtPrintF(outfile,
-                    "    Ensembl Ditag Feature '%u:%S:%s'\n"
-                    "    Ensembl Ditag         '%u:%S:%S'\n",
+        ensSliceFetchName(ensFeatureGetSlice(feature), &fslname);
+
+        ajFmtPrintF(aoutfile,
+                    "    Ensembl Ditag Feature %u side '%s'\n"
+                    "      Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                    "      Sequence Region coordinates '%S:%d:%d:%d'\n"
+                    "      Ensembl Analysis %u name '%S'\n"
+                    "      Ensembl Ditag %u name '%S' type '%S'\n"
+                    "\n",
                     ensDitagfeatureGetIdentifier(dtf),
-                    ensAnalysisGetName(analysis),
                     ensDitagfeatureSideToChar(ensDitagfeatureGetSide(dtf)),
+                    fslname,
+                    ensFeatureGetStart(feature),
+                    ensFeatureGetEnd(feature),
+                    ensFeatureGetStrand(feature),
+                    ensFeatureGetSeqregionName(feature),
+                    ensFeatureGetSeqregionStart(feature),
+                    ensFeatureGetSeqregionEnd(feature),
+                    ensFeatureGetSeqregionStrand(feature),
+                    ensAnalysisGetIdentifier(analysis),
+                    ensAnalysisGetName(analysis),
                     ensDitagGetIdentifier(dt),
                     ensDitagGetName(dt),
                     ensDitagGetType(dt));
-
-        ajFmtPrintF(outfile,
-                    "    Ditag Feature Slice coordinates "
-                    "'%d:%d:%d'\n",
-                    ensFeatureGetStart(feature),
-                    ensFeatureGetEnd(feature),
-                    ensFeatureGetStrand(feature));
-
-        ajFmtPrintF(outfile,
-                    "    Ditag Sequence Region coordinates "
-                    "'%d:%d:%d'\n\n",
-                    ensFeatureGetSeqregionStart(feature),
-                    ensFeatureGetSeqregionEnd(feature),
-                    ensFeatureGetSeqregionStrand(feature));
 
         ensDitagfeatureDel(&dtf);
     }
 
     ajListFree(&dtfs);
 
-    ajStrDel(&slname);
+    ajStrDel(&fslname);
+    ajStrDel(&oslname);
 
     ensSliceDel(&slice);
 
@@ -1687,15 +2213,15 @@ static AjBool ensembltest_ditags(EnsPDatabaseadaptor dba,
 **
 ** chromosome:GRCh37:22:16040001:16120000:1
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outseq [AjPSeqout] AJAX Sequence Output.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutseqall [AjPSeqout] AJAX Sequence Output
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 static AjBool ensembltest_masking(EnsPDatabaseadaptor dba,
-                                  AjPSeqout outseq)
+                                  AjPSeqout aoutseqall)
 {
     EnsERepeatMaskType mtype = ensERepeatMaskTypeSoft;
 
@@ -1707,26 +2233,26 @@ static AjBool ensembltest_masking(EnsPDatabaseadaptor dba,
 
     AjPTable masking = NULL;
 
-    EnsPSlice slice      = NULL;
-    EnsPSliceadaptor sla = NULL;
+    EnsPSlice        slice        = NULL;
+    EnsPSliceadaptor sliceadaptor = NULL;
 
     EnsPRepeatmaskedslice rmslice = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outseq)
+    if (!aoutseqall)
         return ajFalse;
 
     ajUser("Ensembl Repeat Masked Slice");
 
-    sla = ensRegistryGetSliceadaptor(dba);
+    sliceadaptor = ensRegistryGetSliceadaptor(dba);
 
     /* Fetch an Ensembl Slice for chromosome:GRCh37:22:16040001:16120000:1. */
 
     slname = ajStrNewC("chromosome:GRCh37:22:16040001:16120000:1");
 
-    ensSliceadaptorFetchByName(sla, slname, &slice);
+    ensSliceadaptorFetchByName(sliceadaptor, slname, &slice);
 
     ajStrDel(&slname);
 
@@ -1739,13 +2265,14 @@ static AjBool ensembltest_masking(EnsPDatabaseadaptor dba,
 
     ajSeqAssignDescC(seq, "Ensembl Slice");
 
-    ajSeqoutWriteSeq(outseq, seq);
+    ajSeqoutWriteSeq(aoutseqall, seq);
 
     ajSeqDel(&seq);
 
     /*
     ** Fetch the masked genome sequence for Ensembl Slice
-    ** chromosome:GRCh37:22:16040001:16120000:1 and all Analyses.
+    ** chromosome:GRCh37:22:16040001:16120000:1 and all
+    ** Ensembl Analysis objects.
     */
 
     rmslice = ensRepeatmaskedsliceNewIni(slice,
@@ -1754,9 +2281,9 @@ static AjBool ensembltest_masking(EnsPDatabaseadaptor dba,
 
     ensRepeatmaskedsliceFetchSequenceSeq(rmslice, mtype, &seq);
 
-    ajSeqAssignDescC(seq, "Ensembl Repeat Masked Slice all Analyses");
+    ajSeqAssignDescC(seq, "Ensembl Repeat Masked Slice all Analysis objects");
 
-    ajSeqoutWriteSeq(outseq, seq);
+    ajSeqoutWriteSeq(aoutseqall, seq);
 
     ajSeqDel(&seq);
 
@@ -1769,7 +2296,7 @@ static AjBool ensembltest_masking(EnsPDatabaseadaptor dba,
 
     names = ajListstrNew();
 
-    ajListPushAppend(names, (void *) ajStrNewC("RepeatMask"));
+    ajListPushAppend(names, (void*) ajStrNewC("repeatmask"));
 
     masking = ajTablestrNew(10);
 
@@ -1779,7 +2306,7 @@ static AjBool ensembltest_masking(EnsPDatabaseadaptor dba,
 
     ajSeqAssignDescC(seq, "Ensembl Repeat Masked Slice RepeatMasker Analysis");
 
-    ajSeqoutWriteSeq(outseq, seq);
+    ajSeqoutWriteSeq(aoutseqall, seq);
 
     ajSeqDel(&seq);
 
@@ -1810,38 +2337,52 @@ static AjBool ensembltest_masking(EnsPDatabaseadaptor dba,
 ** chromosome:GRCh37:21:9400001:9800000:1 and again, write a sub-sequence,
 ** which is longer than the Slice (i.e. -60 to +60).
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outseq [AjPSeqout] AJAX Sequence Output.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutseqall [AjPSeqout] AJAX Sequence Output
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 static AjBool ensembltest_sequence(EnsPDatabaseadaptor dba,
-                                   AjPSeqout outseq)
+                                   AjPSeqout aoutseqall)
 {
+    AjPFeature feature = NULL;
+
+    AjPList genes = NULL;
+
     AjPSeq seq = NULL;
 
     AjPStr slname = NULL;
+    AjPStr mvalue = NULL;
 
-    EnsPSlice slice      = NULL;
-    EnsPSliceadaptor sla = NULL;
+    EnsPGene        gene        = NULL;
+    EnsPGeneadaptor geneadaptor = NULL;
 
-    if(!dba)
+    EnsPMetainformationadaptor mia = NULL;
+
+    EnsPSlice        slice        = NULL;
+    EnsPSliceadaptor sliceadaptor = NULL;
+
+    if (!dba)
         return ajFalse;
 
-    if(!outseq)
+    if (!aoutseqall)
         return ajFalse;
 
     ajUser("Ensembl Sequence");
 
-    sla = ensRegistryGetSliceadaptor(dba);
+    geneadaptor = ensRegistryGetGeneadaptor(dba);
+
+    mia = ensRegistryGetMetainformationadaptor(dba);
+
+    sliceadaptor = ensRegistryGetSliceadaptor(dba);
 
     /* Fetch an Ensembl Slice covering the first contig on chromosome 21. */
 
     slname = ajStrNewC("contig::AP000522.1:0:0:1");
 
-    ensSliceadaptorFetchByName(sla, slname, &slice);
+    ensSliceadaptorFetchByName(sliceadaptor, slname, &slice);
 
     /*
     ** Fetch a sub-sequence of this Slice, which is actually larger than the
@@ -1854,7 +2395,7 @@ static AjBool ensembltest_sequence(EnsPDatabaseadaptor dba,
                                 +1,
                                 &seq);
 
-    ajSeqoutWriteSeq(outseq, seq);
+    ajSeqoutWriteSeq(aoutseqall, seq);
 
     ajSeqDel(&seq);
 
@@ -1862,12 +2403,12 @@ static AjBool ensembltest_sequence(EnsPDatabaseadaptor dba,
 
     /*
     ** Fetch a Slice covering a gap region on human chromosome 21.
-    ** chromosome:GRCh37:21:9400001:9800000:1
+    ** chromosome:GRCh37:21:9400001:10000000:1
     */
 
-    ajStrAssignC(&slname, "chromosome:GRCh37:21:9400001:9800000:1");
+    ajStrAssignC(&slname, "chromosome:GRCh37:21:9400001:10000000:1");
 
-    ensSliceadaptorFetchByName(sla, slname, &slice);
+    ensSliceadaptorFetchByName(sliceadaptor, slname, &slice);
 
     ajStrDel(&slname);
 
@@ -1877,7 +2418,101 @@ static AjBool ensembltest_sequence(EnsPDatabaseadaptor dba,
                                 +1,
                                 &seq);
 
-    ajSeqoutWriteSeq(outseq, seq);
+    /*
+    ** FIXME: Set seq->Molecule, seq->Class and seq->Division.
+    ** It does not seem that there are any public accessor functions.
+    ** At least the molecule type has to be EMBL/GenBank/DDBJ-specific,
+    ** but how could the code know at this point, in which format the
+    ** sequence object is going to be written?
+    ** The AjPSeqin object would specify whether sequence features are
+    ** requested an AjPSeqout object would specify teh output format?
+    ** Therefore, bot objects would need to be passed into Ensembl Sequence
+    ** functions.
+    */
+
+    if (!seq->Fttable)
+        seq->Fttable = ajFeattableNewSeq(seq);
+
+    mvalue = ajStrNewC("source");
+
+    feature = ajFeatNewNucFlags(
+        seq->Fttable,
+        (AjPStr) NULL,
+        mvalue,
+        1, /* Start */
+        ajSeqGetLen(seq), /* End */
+        0.0F, /* Score */
+        '\0', /* Strand */
+        0, /* Frame */
+        0, /* Exon number */
+        0, /* Start 2 */
+        0, /* End 2 */
+        (AjPStr) NULL, /* Remote Identifier */
+        (AjPStr) NULL, /* Label */
+        0); /* Flags */
+
+    ensMetainformationadaptorRetrieveSpeciesScientificname(mia, &mvalue);
+
+    ajFeatTagAddCS(feature, "organism", mvalue);
+
+    ensMetainformationadaptorRetrieveTaxonomyidentifier(mia, &mvalue);
+
+    ajStrInsertC(&mvalue, 0, "taxonomy:");
+
+    ajFeatTagAddCS(feature, "db_xref", mvalue);
+
+    ajFeatTagAddCC(feature, "mol_type", "genomic DNA");
+
+    ajStrDel(&mvalue);
+
+    /*
+    ** Fetch all Ensembl Gene objects on this Ensembl Slice and add them as
+    ** AJAX Feature objects into an AJAX Feature Table.
+    */
+
+    /*
+    ** TODO: Ensembl Feature objects are now converted into AJAX Feature
+    ** objects on the basis of an AJAX Sequence object. This ascertains that
+    ** Ensembl Feature objects are correctly transfered onto an Ensembl Slice
+    ** matching the AJAX Sequence object before the actual conversion.
+    ** Specififying an AJAX Sequence object also allows for setting the
+    ** Sequence Class, Molecule and Type members and initialising the
+    ** AJAX Feature Table if not defined. For all these, public AJAX functions
+    ** seem to be missing.
+    **
+    ** TODO: Maybe even better could be passing an AJAX Sequence Output object,
+    ** which would know about the requested formats, into the functions that
+    ** currently return AJAX Sequence objects. This would allow us to directly
+    ** assemble AJAX Feature Tables if required.
+    ** ensSliceFetchSequenceAllSeq(EnsPSlice slice,
+    **                             AjPSeqout seqout,
+    **                             AjPSeq* Psequence)
+    ** TODO: Maybe the ensSliceFetchSequenceAllSeqin should just accept an
+    ** Ensembl Slice, an AJAX Sequence and an AJAX Sequence Input object.
+    ** Rather than returning an new AJAX Sequence object, this could reassign
+    ** the relevant elements. This would move the sequence retrieval functions
+    ** closer to the EMBOSS standards.
+    */
+
+    genes = ajListNew();
+
+    ensGeneadaptorFetchAllbySlice(geneadaptor,
+                                  slice,
+                                  (AjPStr) NULL, /* Ensembl Analysis name */
+                                  (AjPStr) NULL, /* Ensembl Gene source */
+                                  (AjPStr) NULL, /* Ensembl Gene biotype */
+                                  ajTrue, /* load Transcript objects */
+                                  genes);
+
+    while (ajListPop(genes, (void**) &gene))
+    {
+        ensSequenceAddFeatureGene(seq, gene, &feature);
+        ensGeneDel(&gene);
+    }
+
+    ajListFree(&genes);
+
+    ajSeqoutWriteSeq(aoutseqall, seq);
 
     ajSeqDel(&seq);
 
@@ -1893,42 +2528,42 @@ static AjBool ensembltest_sequence(EnsPDatabaseadaptor dba,
 **
 ** Fetch a Slice for chromosome:GRCh37:21:0:0:0 and write its sequence to disk.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outseq [AjPSeqout] AJAX Sequence Output.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutseqall [AjPSeqout] AJAX Sequence Output
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 static AjBool ensembltest_chromosome(EnsPDatabaseadaptor dba,
-                                     AjPSeqout outseq)
+                                     AjPSeqout aoutseqall)
 {
     AjPSeq seq = NULL;
 
     AjPStr slname = NULL;
 
-    EnsPSlice slice      = NULL;
-    EnsPSliceadaptor sla = NULL;
+    EnsPSlice        slice        = NULL;
+    EnsPSliceadaptor sliceadaptor = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outseq)
+    if (!aoutseqall)
         return ajFalse;
 
     ajUser("Chromosome");
 
-    sla = ensRegistryGetSliceadaptor(dba);
+    sliceadaptor = ensRegistryGetSliceadaptor(dba);
 
     /* Fetch a Slice for human chromosome:GRCh37:21:0:0:0 */
 
     slname = ajStrNewC("chromosome:GRCh37:21:0:0:1");
 
-    ensSliceadaptorFetchByName(sla, slname, &slice);
+    ensSliceadaptorFetchByName(sliceadaptor, slname, &slice);
 
     ensSliceFetchSequenceAllSeq(slice, &seq);
 
-    ajSeqoutWriteSeq(outseq, seq);
+    ajSeqoutWriteSeq(aoutseqall, seq);
 
     ajSeqDel(&seq);
 
@@ -1944,15 +2579,15 @@ static AjBool ensembltest_chromosome(EnsPDatabaseadaptor dba,
 
       dba = ensRegistryGetDatabaseadaptor(group, species);
 
-      sla = ensRegistryGetSliceadaptor(dba);
+      sliceadaptor = ensRegistryGetSliceadaptor(dba);
 
       slname = ajStrAssignC(&slname, "chromosome:BROADO5:0:0:1");
 
-      ensSliceadaptorFetchByName(sla, name, &slice);
+      ensSliceadaptorFetchByName(sliceadaptor, name, &slice);
 
       ensSliceFetchSequenceAllSeq(slice, &seq);
 
-      ajSeqoutWriteSeq(outseq, seq);
+      ajSeqoutWriteSeq(aoutseqall, seq);
 
       ajSeqDel(&seq);
 
@@ -1967,31 +2602,31 @@ static AjBool ensembltest_chromosome(EnsPDatabaseadaptor dba,
 
 
 
-/* @funcstatic ensembltest_meta ***********************************************
+/* @funcstatic ensembltest_meta_information ***********************************
 **
 ** Ensembl Meta-Information tests.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool ensembltest_meta(EnsPDatabaseadaptor dba,
-                               AjPFile outfile)
+static AjBool ensembltest_meta_information(EnsPDatabaseadaptor dba,
+                                           AjPFile aoutfile)
 {
     AjPStr value = NULL;
 
     EnsPMetainformationadaptor mia = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "Ensembl Meta-Information\n");
 
@@ -2001,19 +2636,19 @@ static AjBool ensembltest_meta(EnsPDatabaseadaptor dba,
 
     value = ajStrNew();
 
-    if(ensMetainformationadaptorRetrieveGenebuildversion(mia, &value))
-        ajFmtPrintF(outfile,
+    if (ensMetainformationadaptorRetrieveGenebuildversion(mia, &value))
+        ajFmtPrintF(aoutfile,
                     "\n"
                     "  Ensembl Meta-Information Genebuild Version '%S'\n",
                     value);
 
-    if(ensMetainformationadaptorRetrieveSchemaversion(mia, &value))
-        ajFmtPrintF(outfile,
+    if (ensMetainformationadaptorRetrieveSchemaversion(mia, &value))
+        ajFmtPrintF(aoutfile,
                     "  Ensembl Meta-Information Schema Version '%S'\n",
                     value);
 
-    if(ensMetainformationadaptorRetrieveTaxonomyidentifier(mia, &value))
-        ajFmtPrintF(outfile,
+    if (ensMetainformationadaptorRetrieveTaxonomyidentifier(mia, &value))
+        ajFmtPrintF(aoutfile,
                     "  Ensembl Meta-Information "
                     "NCBI Taxonomy identifier '%S'\n",
                     value);
@@ -2026,24 +2661,24 @@ static AjBool ensembltest_meta(EnsPDatabaseadaptor dba,
 
 
 
-/* @funcstatic ensembltest_coordinate_systems *********************************
+/* @funcstatic ensembltest_coordinate_system **********************************
 **
 ** Ensembl Coordinate System tests.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
-                                             AjPFile outfile)
+static AjBool ensembltest_coordinate_system(EnsPDatabaseadaptor dba,
+                                            AjPFile aoutfile)
 {
-    AjIList iter   = NULL;
-    AjPList cslist = NULL;
+    AjIList iterator = NULL;
+    AjPList css      = NULL;
 
-    const AjPList mplist = NULL;
+    const AjPList mappath = NULL;
 
     AjPStr csname1 = NULL;
     AjPStr csname2 = NULL;
@@ -2060,31 +2695,31 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
 
     EnsPCoordsystemadaptor csa = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
     /* Ensembl Coordinate System tests. */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "Ensembl Coordinate Systems\n");
+                "Ensembl Coordinate System\n");
 
-    ajUser("Ensembl Coordinate Systems");
+    ajUser("Ensembl Coordinate System");
 
     csa = ensRegistryGetCoordsystemadaptor(dba);
 
     /* Fetch the top-level Ensembl Coordinate System. */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  Top-Level Coordinate System\n");
+                "  Top-Level Ensembl Coordinate System\n");
 
     ensCoordsystemadaptorFetchToplevel(csa, &cs);
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "    Ensembl Coordinate System %u rank %u '%S:%S'\n",
                 ensCoordsystemGetIdentifier(cs),
                 ensCoordsystemGetRank(cs),
@@ -2095,13 +2730,13 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
 
     /* Fetch the sequence-level Ensembl Coordinate System. */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  Sequence-Level Coordinate System\n");
+                "  Sequence-Level Ensembl Coordinate System\n");
 
     ensCoordsystemadaptorFetchSeqlevel(csa, &cs);
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "    Ensembl Coordinate System %u rank %u '%S:%S'\n",
                 ensCoordsystemGetIdentifier(cs),
                 ensCoordsystemGetRank(cs),
@@ -2112,19 +2747,22 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
 
     /* Fetch all Ensembl Coordinate Systems with name 'chromosome'. */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  Coordinate Systems with name 'chromosome'\n");
+                "  All Ensembl Coordinate System objects "
+                "with name 'chromosome'\n");
 
     csname1 = ajStrNewC("chromosome");
 
-    cslist = ajListNew();
+    css = ajListNew();
 
-    ensCoordsystemadaptorFetchAllbyName(csa, csname1, cslist);
+    ensCoordsystemadaptorFetchAllbyName(csa, csname1, css);
 
-    while(ajListPop(cslist, (void **) &cs))
+    ensListCoordsystemSortIdentifierAscending(css);
+
+    while (ajListPop(css, (void**) &cs))
     {
-        ajFmtPrintF(outfile,
+        ajFmtPrintF(aoutfile,
                     "    Ensembl Coordinate System %u rank %u '%S:%S'\n",
                     ensCoordsystemGetIdentifier(cs),
                     ensCoordsystemGetRank(cs),
@@ -2134,7 +2772,7 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
         ensCoordsystemDel(&cs);
     }
 
-    ajListFree(&cslist);
+    ajListFree(&css);
 
     ajStrDel(&csname1);
 
@@ -2143,17 +2781,17 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
     ** name 'chromosome' and version 'NCBI35'.
     */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  Coordinate Systems with name 'chromosome' "
-                "and version 'NCBI35'\n");
+                "  Ensembl Coordinate System with "
+                "name 'chromosome' and version 'NCBI35'\n");
 
     csname1    = ajStrNewC("chromosome");
     csversion1 = ajStrNewC("NCBI35");
 
     ensCoordsystemadaptorFetchByName(csa, csname1, csversion1, &cs);
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "    Ensembl Coordinate System %u rank %u '%S:%S'\n",
                 ensCoordsystemGetIdentifier(cs),
                 ensCoordsystemGetRank(cs),
@@ -2167,15 +2805,15 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
 
     /* Fetch the (default) Ensembl Coordinate System with name 'chromosome'. */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  Default Coordinate System with name 'chromosome'\n");
+                "  Default Ensembl Coordinate System with name 'chromosome'\n");
 
     csname1 = ajStrNewC("chromosome");
 
     ensCoordsystemadaptorFetchByName(csa, csname1, (AjPStr) NULL, &cs);
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "    Ensembl Coordinate System %u rank %u '%S:%S'\n",
                 ensCoordsystemGetIdentifier(cs),
                 ensCoordsystemGetRank(cs),
@@ -2188,17 +2826,19 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
 
     /* Fetch all Ensembl Coordinate Systems. */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  All Coordinate Systems\n");
+                "  All Ensembl Coordinate System objects\n");
 
-    cslist = ajListNew();
+    css = ajListNew();
 
-    ensCoordsystemadaptorFetchAll(csa, cslist);
+    ensCoordsystemadaptorFetchAll(csa, css);
 
-    while(ajListPop(cslist, (void **) &cs))
+    ensListCoordsystemSortIdentifierAscending(css);
+
+    while (ajListPop(css, (void**) &cs))
     {
-        ajFmtPrintF(outfile,
+        ajFmtPrintF(aoutfile,
                     "    Ensembl Coordinate System %u rank %u '%S:%S'\n",
                     ensCoordsystemGetIdentifier(cs),
                     ensCoordsystemGetRank(cs),
@@ -2208,12 +2848,12 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
         ensCoordsystemDel(&cs);
     }
 
-    ajListFree(&cslist);
+    ajListFree(&css);
 
     /* Fetch specific Ensembl Coordinate Systems. */
 
     csname1    = ajStrNewC("chromosome");
-    csversion1 = ajStrNewC("NCBI36");
+    csversion1 = ajStrNewC("GRCh37");
 
     csname2    = ajStrNewC("contig");
     csversion2 = ajStrNewC("");
@@ -2236,7 +2876,7 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
 
     /* Fetch Ensembl Coordinate System mapping paths cs1 - cs2. */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "  Ensembl Coordinate System Mapping path "
                 "'%S:%S' - '%S:%S'\n",
@@ -2245,15 +2885,15 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
                 ensCoordsystemGetName(cs2),
                 ensCoordsystemGetVersion(cs2));
 
-    mplist = ensCoordsystemadaptorGetMappingpath(csa, cs1, cs2);
+    mappath = ensCoordsystemadaptorGetMappingpath(csa, cs1, cs2);
 
-    iter = ajListIterNewread(mplist);
+    iterator = ajListIterNewread(mappath);
 
-    while(!ajListIterDone(iter))
+    while (!ajListIterDone(iterator))
     {
-        cs = (EnsPCoordsystem) ajListIterGet(iter);
+        cs = (EnsPCoordsystem) ajListIterGet(iterator);
 
-        ajFmtPrintF(outfile,
+        ajFmtPrintF(aoutfile,
                     "    Ensembl Coordinate System "
                     "%u rank %u '%S:%S'\n",
                     ensCoordsystemGetIdentifier(cs),
@@ -2262,11 +2902,11 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
                     ensCoordsystemGetVersion(cs));
     }
 
-    ajListIterDel(&iter);
+    ajListIterDel(&iterator);
 
-    /* cs1 - cs3 */
+    /* Fetch Ensembl Coordinate System mapping paths cs1 - cs3 */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "  Ensembl Coordinate System Mapping path "
                 "'%S:%S' - '%S:%S'\n",
@@ -2275,15 +2915,15 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
                 ensCoordsystemGetName(cs3),
                 ensCoordsystemGetVersion(cs3));
 
-    mplist = ensCoordsystemadaptorGetMappingpath(csa, cs1, cs3);
+    mappath = ensCoordsystemadaptorGetMappingpath(csa, cs1, cs3);
 
-    iter = ajListIterNewread(mplist);
+    iterator = ajListIterNewread(mappath);
 
-    while(!ajListIterDone(iter))
+    while (!ajListIterDone(iterator))
     {
-        cs = (EnsPCoordsystem) ajListIterGet(iter);
+        cs = (EnsPCoordsystem) ajListIterGet(iterator);
 
-        ajFmtPrintF(outfile,
+        ajFmtPrintF(aoutfile,
                     "    Ensembl Coordinate System "
                     "%u rank %u '%S:%S'\n",
                     ensCoordsystemGetIdentifier(cs),
@@ -2292,11 +2932,11 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
                     ensCoordsystemGetVersion(cs));
     }
 
-    ajListIterDel(&iter);
+    ajListIterDel(&iterator);
 
-    /* cs2 - cs3 */
+    /* Fetch Ensembl Coordinate System mapping paths cs2 - cs3 */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "  Ensembl Coordinate System Mapping path "
                 "'%S:%S' - '%S:%S'\n",
@@ -2305,15 +2945,15 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
                 ensCoordsystemGetName(cs3),
                 ensCoordsystemGetVersion(cs3));
 
-    mplist = ensCoordsystemadaptorGetMappingpath(csa, cs2, cs3);
+    mappath = ensCoordsystemadaptorGetMappingpath(csa, cs2, cs3);
 
-    iter = ajListIterNewread(mplist);
+    iterator = ajListIterNewread(mappath);
 
-    while(!ajListIterDone(iter))
+    while (!ajListIterDone(iterator))
     {
-        cs = (EnsPCoordsystem) ajListIterGet(iter);
+        cs = (EnsPCoordsystem) ajListIterGet(iterator);
 
-        ajFmtPrintF(outfile,
+        ajFmtPrintF(aoutfile,
                     "    Ensembl Coordinate System "
                     "%u rank %u '%S:%S'\n",
                     ensCoordsystemGetIdentifier(cs),
@@ -2322,7 +2962,7 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
                     ensCoordsystemGetVersion(cs));
     }
 
-    ajListIterDel(&iter);
+    ajListIterDel(&iterator);
 
     ensCoordsystemDel(&cs1);
     ensCoordsystemDel(&cs2);
@@ -2334,56 +2974,61 @@ static AjBool ensembltest_coordinate_systems(EnsPDatabaseadaptor dba,
 
 
 
-/* @funcstatic ensembltest_sequence_regions ***********************************
+/* @funcstatic ensembltest_sequence_region ************************************
 **
 ** Ensembl Sequence Region tests.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool ensembltest_sequence_regions(EnsPDatabaseadaptor dba,
-                                           AjPFile outfile)
+static AjBool ensembltest_sequence_region(EnsPDatabaseadaptor dba,
+                                          AjPFile aoutfile)
 {
-    AjIList iter       = NULL;
-    const AjPList list = NULL;
+    AjIList iterator = NULL;
+
+    const AjPList attributes = NULL;
+
+    AjPStr synonym = NULL;
 
     EnsPAttribute attribute = NULL;
 
     EnsPCoordsystem cs = NULL;
 
-    EnsPSeqregion sr         = NULL;
+    EnsPSeqregion        sr  = NULL;
     EnsPSeqregionadaptor sra = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
     /* Ensembl Sequence Region tests. */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "Ensembl Sequence Regions\n");
+                "Ensembl Sequence Region\n");
 
-    ajUser("Ensembl Sequence Regions");
+    ajUser("Ensembl Sequence Region");
 
     sra = ensRegistryGetSeqregionadaptor(dba);
 
     /*
-    ** Fetch the human chromosome 1 via its identifier 226034.
-    ** 223781 AC120349.5
+    ** Fetch the human chromosome 1 via its SQL table-internal identifier
+    ** seq_region.seq_region_id = 27511.
+    ** 42123 BAC clone AC120349.5
+    ** 14320 contig AC120349.5
     */
 
-    ensSeqregionadaptorFetchByIdentifier(sra, 226034U, &sr);
+    ensSeqregionadaptorFetchByIdentifier(sra, 27511U, &sr);
 
     cs = ensSeqregionGetCoordsystem(sr);
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "  Ensembl Sequence Region %u name '%S' length %u '%S:%S'\n",
                 ensSeqregionGetIdentifier(sr),
@@ -2392,24 +3037,439 @@ static AjBool ensembltest_sequence_regions(EnsPDatabaseadaptor dba,
                 ensCoordsystemGetName(cs),
                 ensCoordsystemGetVersion(cs));
 
-    list = ensSeqregionLoadAttributes(sr);
+    attributes = ensSeqregionLoadAttributes(sr);
 
-    iter = ajListIterNewread(list);
+    iterator = ajListIterNewread(attributes);
 
-    while(!ajListIterDone(iter))
+    while (!ajListIterDone(iterator))
     {
-        attribute = (EnsPAttribute) ajListIterGet(iter);
+        attribute = (EnsPAttribute) ajListIterGet(iterator);
 
-        ajFmtPrintF(outfile,
+        ajFmtPrintF(aoutfile,
                     "    Ensembl Attribute name '%S' code '%S' value '%S'\n",
                     ensAttributeGetName(attribute),
                     ensAttributeGetCode(attribute),
                     ensAttributeGetValue(attribute));
     }
 
-    ajListIterDel(&iter);
+    ajListIterDel(&iterator);
 
     ensSeqregionDel(&sr);
+
+    /* CRCh37 chromosome 1 */
+
+    synonym = ajStrNewC("CM000663.1");
+
+    ensSeqregionadaptorFetchBySynonym(sra, synonym, &sr);
+
+    cs = ensSeqregionGetCoordsystem(sr);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Ensembl Sequence Region %u name '%S' length %u '%S:%S'\n",
+                ensSeqregionGetIdentifier(sr),
+                ensSeqregionGetName(sr),
+                ensSeqregionGetLength(sr),
+                ensCoordsystemGetName(cs),
+                ensCoordsystemGetVersion(cs));
+
+    ensSeqregionDel(&sr);
+
+    ajStrDel(&synonym);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic ensembltest_exon ***********************************************
+**
+** Ensembl Exon tests.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool ensembltest_exon(EnsPDatabaseadaptor dba,
+                               AjPFile aoutfile)
+{
+#if AJFALSE
+    AjPSeq seq = NULL;
+#endif /* AJFALSE */
+
+    AjPStr slname = NULL;
+    AjPStr tmpstr = NULL;
+
+    EnsPExon exon      = NULL;
+    EnsPExonadaptor ea = NULL;
+
+    EnsPFeature feature = NULL;
+
+    if (!dba)
+        return ajFalse;
+
+    if (!aoutfile)
+        return ajFalse;
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "Ensembl Exon\n");
+
+    ajUser("Ensembl Exon");
+
+    ea = ensRegistryGetExonadaptor(dba);
+
+    /* Fetch Exon ENSE00001434436 */
+
+    tmpstr = ajStrNewC("ENSE00001191187");
+
+    ensExonadaptorFetchByStableidentifier(ea, tmpstr, 0, &exon);
+
+    ajStrDel(&tmpstr);
+
+    feature = ensExonGetFeature(exon);
+
+    ensSliceFetchName(ensFeatureGetSlice(feature), &slname);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Ensembl Exon %u '%S'\n"
+                "    Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                "    Sequence Region coordinates '%S:%d:%d:%d'\n",
+                ensExonGetIdentifier(exon),
+                ensExonGetStableidentifier(exon),
+                slname,
+                ensFeatureGetStart(feature),
+                ensFeatureGetEnd(feature),
+                ensFeatureGetStrand(feature),
+                ensFeatureGetSeqregionName(feature),
+                ensFeatureGetSeqregionStart(feature),
+                ensFeatureGetSeqregionEnd(feature),
+                ensFeatureGetSeqregionStrand(feature));
+
+#if AJFALSE
+    ensExonFetchSequenceSliceSeq(exon, &seq);
+
+    if (seq)
+    {
+        ajSeqoutWriteSeq(aoutseqall, seq);
+        ajSeqDel(&seq);
+    }
+    else
+        ajFatal("main could not get an AJAX sequence.\n");
+#endif /* AJFALSE */
+
+    ensExonDel(&exon);
+
+    ajStrDel(&slname);
+    ajStrDel(&tmpstr);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic ensembltest_transcript *****************************************
+**
+** Ensembl Transcript tests.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool ensembltest_transcript(EnsPDatabaseadaptor dba,
+                                     AjPFile aoutfile)
+{
+    ajuint trcstart = 2U;
+    ajuint trcend   = 3U;
+
+    AjIList iterator = NULL;
+    const AjPList exons = NULL;
+    AjPList mrs = NULL;
+
+#if AJFALSE
+    AjPSeq seq = NULL;
+#endif /* AJFALSE */
+
+    AjPStr slname = NULL;
+    AjPStr tmpstr = NULL;
+
+    EnsPAnalysis analysis = NULL;
+
+    EnsPExon exon = NULL;
+
+    EnsPFeature feature = NULL;
+
+    EnsPMapperresult mr = NULL;
+
+    EnsPTranscript transcript = NULL;
+    EnsPTranscriptadaptor tca = NULL;
+
+    EnsPTranslation translation = NULL;
+
+    if (!dba)
+        return ajFalse;
+
+    if (!aoutfile)
+        return ajFalse;
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "Ensembl Transcript\n");
+
+    ajUser("Ensembl Transcript");
+
+    /* Fetch Transcript ENST00000262160 SMAD2-001 */
+
+    tca = ensRegistryGetTranscriptadaptor(dba);
+
+    tmpstr = ajStrNewC("ENST00000262160");
+
+    ensTranscriptadaptorFetchByStableidentifier(tca, tmpstr, 0, &transcript);
+
+    ajStrDel(&tmpstr);
+
+    if (transcript)
+    {
+        feature = ensTranscriptGetFeature(transcript);
+
+        analysis = ensFeatureGetAnalysis(feature);
+
+        ensSliceFetchName(ensFeatureGetSlice(feature), &slname);
+
+        ajFmtPrintF(aoutfile,
+                    "\n"
+                    "  Ensembl Transcript %u '%S'\n"
+                    "    Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                    "    Sequence Region coordinates '%S:%d:%d:%d'\n"
+                    "    Ensembl Analysis %u name '%S'\n",
+                    ensTranscriptGetIdentifier(transcript),
+                    ensTranscriptGetStableidentifier(transcript),
+                    slname,
+                    ensFeatureGetStart(feature),
+                    ensFeatureGetEnd(feature),
+                    ensFeatureGetStrand(feature),
+                    ensFeatureGetSeqregionName(feature),
+                    ensFeatureGetSeqregionStart(feature),
+                    ensFeatureGetSeqregionEnd(feature),
+                    ensFeatureGetSeqregionStrand(feature),
+                    ensAnalysisGetIdentifier(analysis),
+                    ensAnalysisGetName(analysis));
+
+        /* Transcript Mapper Test */
+
+        mrs = ajListNew();
+
+        ensTranscriptMapperTranscriptToslice(transcript,
+                                             trcstart,
+                                             trcend,
+                                             mrs);
+
+        while (ajListPop(mrs, (void**) &mr))
+        {
+            switch(ensMapperresultGetType(mr))
+            {
+                case ensEMapperresultTypeCoordinate:
+
+                    ajFmtPrintF(aoutfile,
+                                "  Ensembl Transcript Mapper mapped positions "
+                                "%u:%u to Ensembl Slice '%S' coordinates "
+                                "'%d:%d:%d'.\n",
+                                trcstart, trcend, slname,
+                                ensMapperresultGetCoordinateStart(mr),
+                                ensMapperresultGetCoordinateEnd(mr),
+                                ensMapperresultGetCoordinateStrand(mr));
+
+                    break;
+
+                case ensEMapperresultTypeGap:
+
+                    ajFmtPrintF(aoutfile,
+                                "  Ensembl Transcript Mapper mapped positions "
+                                "%u:%u to Ensembl Slice '%S' gap "
+                                "'%d:%d'.\n",
+                                trcstart, trcend, slname,
+                                ensMapperresultGetGapStart(mr),
+                                ensMapperresultGetGapEnd(mr));
+
+                    break;
+
+                default:
+
+                    ajFmtPrintF(aoutfile,
+                                "  Ensembl Transcript Mapper %u:%u to Slice "
+                                "got Mapper Result of unexpected type %d.\n",
+                                trcstart, trcend,
+                                ensMapperresultGetType(mr));
+            }
+
+            ensMapperresultDel(&mr);
+        }
+
+        ajListFree(&mrs);
+
+        /* Fetch the Transcript sequence. */
+
+#if AJFALSE
+        ensTranscriptFetchSequenceTranscriptSeq(transcript, &seq);
+
+        if (seq)
+        {
+            ajSeqoutWriteSeq(aoutseqall, seq);
+            ajSeqDel(&seq);
+        }
+#endif /* AJFALSE */
+
+        /* Fetch the sequence for the canonical Translation. */
+
+        translation = ensTranscriptLoadTranslation(transcript);
+
+#if AJFALSE
+        ensTranscriptFetchSequenceTranslationSeq(transcript,
+                                                 translation,
+                                                 &seq);
+
+        if (seq)
+        {
+            ajSeqoutWriteSeq(aoutseqall, seq);
+            ajSeqDel(&seq);
+        }
+#endif /* AJFALSE */
+
+        /*
+        ** Fetch all Ensembl Exon objects of this Ensembl Transcript and
+        ** write out their coordinates.
+        */
+
+        exons = ensTranscriptLoadExons(transcript);
+
+        iterator = ajListIterNewread(exons);
+
+        while (!ajListIterDone(iterator))
+        {
+            exon = (EnsPExon) ajListIterGet(iterator);
+
+            feature = ensExonGetFeature(exon);
+
+            ensSliceFetchName(ensFeatureGetSlice(feature), &slname);
+
+            ajFmtPrintF(aoutfile,
+                        "\n"
+                        "  Ensembl Exon %u '%S'\n"
+                        "    Transcript %u '%S' coordinates '%u:%u'\n"
+                        "    Slice '%S' coordinates '%d:%d:%d'\n"
+                        "    Ensembl Translation %u '%S'\n"
+                        "      Transcript coordinates '%u:%u'\n"
+                        "      Slice coordinates '%u:%u'\n",
+                        ensExonGetIdentifier(exon),
+                        ensExonGetStableidentifier(exon),
+                        ensTranscriptGetIdentifier(transcript),
+                        ensTranscriptGetStableidentifier(transcript),
+                        ensExonCalculateTranscriptStart(exon, transcript),
+                        ensExonCalculateTranscriptEnd(exon, transcript),
+                        slname,
+                        ensFeatureGetStart(feature),
+                        ensFeatureGetEnd(feature),
+                        ensFeatureGetStrand(feature),
+                        ensTranslationGetIdentifier(translation),
+                        ensTranslationGetStableidentifier(translation),
+                        ensExonCalculateTranscriptCodingStart(exon,
+                                                              transcript,
+                                                              translation),
+                        ensExonCalculateTranscriptCodingEnd(exon,
+                                                            transcript,
+                                                            translation),
+                        ensExonCalculateSliceCodingStart(exon,
+                                                         transcript,
+                                                         translation),
+                        ensExonCalculateSliceCodingEnd(exon,
+                                                       transcript,
+                                                       translation));
+        }
+
+        ajListIterDel(&iterator);
+    }
+
+    ensTranscriptDel(&transcript);
+
+    ajStrDel(&slname);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic ensembltest_translations ***************************************
+**
+** Ensembl Translation tests.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool ensembltest_translations(EnsPDatabaseadaptor dba,
+                                       AjPFile aoutfile)
+{
+#if AJFALSE
+    AjPSeq seq = NULL;
+#endif /* AJFALSE */
+
+    AjPStr tmpstr = NULL;
+
+    EnsPTranslation translation = NULL;
+    EnsPTranslationadaptor tla  = NULL;
+
+    if (!dba)
+        return ajFalse;
+
+    if (!aoutfile)
+        return ajFalse;
+
+    /* Fetch Translation ENSP00000349282 SMAD2-201 */
+
+    tla = ensRegistryGetTranslationadaptor(dba);
+
+    tmpstr = ajStrNewC("ENSP00000349282");
+
+    ensTranslationadaptorFetchByStableidentifier(tla, tmpstr, 0, &translation);
+
+    ajStrDel(&tmpstr);
+
+    if (translation)
+    {
+        /*
+        ** NOTE: Fetching the sequence directly from a Translation causes the
+        ** Transcript to be re-fetched from the database. Transcript objects
+        ** have strong references for their Translation objects, but
+        ** Transaltion objects do not have any reference to their Transcript.
+        ** Use ensTranscriptFetchSequenceTranslationSeq if a Transcript is
+        ** already available.
+        */
+
+#if AJFALSE
+        ensTranslationFetchSequenceSeq(translation, &seq);
+
+        if (seq)
+        {
+            ajSeqoutWriteSeq(aoutseqall, seq);
+            ajSeqDel(&seq);
+        }
+#endif /* AJFALSE */
+    }
+
+    ensTranslationDel(&translation);
 
     return ajTrue;
 }
@@ -2421,21 +3481,22 @@ static AjBool ensembltest_sequence_regions(EnsPDatabaseadaptor dba,
 **
 ** Ensembl Feature transformation tests.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 static AjBool ensembltest_transformations(EnsPDatabaseadaptor dba,
-                                          AjPFile outfile)
+                                          AjPFile aoutfile)
 {
-    ajuint version = 0;
+    ajuint version = 0U;
 
     AjBool debug = AJFALSE;
 
-    AjPStr slname   = NULL;
+    AjPStr fslname  = NULL;
+    AjPStr oslname  = NULL;
     AjPStr stableid = NULL;
 
     EnsPFeature feature = NULL;
@@ -2444,26 +3505,26 @@ static AjBool ensembltest_transformations(EnsPDatabaseadaptor dba,
     EnsPGene newgene   = NULL;
     EnsPGeneadaptor ga = NULL;
 
-    EnsPSlice slice      = NULL;
-    EnsPSliceadaptor sla = NULL;
+    EnsPSlice        slice        = NULL;
+    EnsPSliceadaptor sliceadaptor = NULL;
 
     debug = ajDebugTest("ensembltest_transformations");
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
     /* Ensembl Feature transfer and transform tests. */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "Ensembl Feature transfer and transform\n");
 
     ajUser("Ensembl Feature transfer and transform");
 
-    if(debug)
+    if (debug)
         ajDebug("ensembltest_transformations\n");
 
     ga = ensRegistryGetGeneadaptor(dba);
@@ -2476,42 +3537,66 @@ static AjBool ensembltest_transformations(EnsPDatabaseadaptor dba,
 
     feature = ensGeneGetFeature(oldgene);
 
-    ajFmtPrintF(outfile,
+    ensSliceFetchName(ensFeatureGetSlice(feature), &fslname);
+
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  Ensembl Gene %S\n"
-                "    Ensembl Feature %S:%d:%d:%d\n",
+                "  Ensembl Gene %u '%S'\n"
+                "    Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                "    Sequence Region coordinates '%S:%d:%d:%d'\n",
+                ensGeneGetIdentifier(oldgene),
                 ensGeneGetStableidentifier(oldgene),
-                ensFeatureGetSeqregionName(feature),
+                fslname,
                 ensFeatureGetStart(feature),
                 ensFeatureGetEnd(feature),
-                ensFeatureGetStrand(feature));
+                ensFeatureGetStrand(feature),
+                ensFeatureGetSeqregionName(feature),
+                ensFeatureGetSeqregionStart(feature),
+                ensFeatureGetSeqregionEnd(feature),
+                ensFeatureGetSeqregionStrand(feature));
 
-    sla = ensRegistryGetSliceadaptor(dba);
+    sliceadaptor = ensRegistryGetSliceadaptor(dba);
 
-    slname = ajStrNewC("chromosome:GRCh37:18:40000000:50000000:1");
+    oslname = ajStrNewC("chromosome:GRCh37:18:40000000:50000000:1");
 
-    ensSliceadaptorFetchByName(sla, slname, &slice);
+    ensSliceadaptorFetchByName(sliceadaptor, oslname, &slice);
+
+    ensSliceFetchName(slice, &fslname);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Transform to Ensembl Slice '%S'\n",
+                fslname);
 
     newgene = ensGeneTransfer(oldgene, slice);
 
     feature = ensGeneGetFeature(newgene);
 
-    ajFmtPrintF(outfile,
+    ensSliceFetchName(ensFeatureGetSlice(feature), &fslname);
+
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  Ensembl Gene %S\n"
-                "    Ensembl Feature %S:%d:%d:%d\n",
+                "  Ensembl Gene %u '%S'\n"
+                "    Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                "    Sequence Region coordinates '%S:%d:%d:%d'\n",
+                ensGeneGetIdentifier(newgene),
                 ensGeneGetStableidentifier(newgene),
-                ensFeatureGetSeqregionName(feature),
+                fslname,
                 ensFeatureGetStart(feature),
                 ensFeatureGetEnd(feature),
-                ensFeatureGetStrand(feature));
+                ensFeatureGetStrand(feature),
+                ensFeatureGetSeqregionName(feature),
+                ensFeatureGetSeqregionStart(feature),
+                ensFeatureGetSeqregionEnd(feature),
+                ensFeatureGetSeqregionStrand(feature));
 
     ensSliceDel(&slice);
 
     ensGeneDel(&newgene);
     ensGeneDel(&oldgene);
 
-    ajStrDel(&slname);
+    ajStrDel(&fslname);
+    ajStrDel(&oslname);
     ajStrDel(&stableid);
 
     return ajTrue;
@@ -2524,15 +3609,15 @@ static AjBool ensembltest_transformations(EnsPDatabaseadaptor dba,
 **
 ** Ensembl Registry tests.
 **
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
-static AjBool ensembltest_registry(AjPFile outfile)
+static AjBool ensembltest_registry(AjPFile aoutfile)
 {
-    const char *identifiers[] =
+    const char* identifiers[] =
         {
             "ENSG00000175387",
             "ENST00000262160",
@@ -2550,19 +3635,19 @@ static AjBool ensembltest_registry(AjPFile outfile)
             (const char*) NULL
         };
 
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
     EnsEDatabaseadaptorGroup group = ensEDatabaseadaptorGroupNULL;
 
     AjPStr identifier = NULL;
     AjPStr species    = NULL;
 
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
     /* Ensembl Registry tests. */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "Ensembl Registry\n");
 
@@ -2572,7 +3657,7 @@ static AjBool ensembltest_registry(AjPFile outfile)
 
     ensRegistryIdentifierLoadFile((AjPStr) NULL);
 
-    for(i = 0; identifiers[i]; i++) {
+    for (i = 0U; identifiers[i]; i++) {
 
         identifier = ajStrNewC(identifiers[i]);
 
@@ -2580,7 +3665,7 @@ static AjBool ensembltest_registry(AjPFile outfile)
 
         ensRegistryIdentifierResolve(identifier, &species, &group);
 
-        ajFmtPrintF(outfile,
+        ajFmtPrintF(aoutfile,
                     "\n"
                     "  identifier '%S' species '%S' group '%s'\n",
                     identifier, species, ensDatabaseadaptorGroupToChar(group));
@@ -2599,48 +3684,49 @@ static AjBool ensembltest_registry(AjPFile outfile)
 **
 ** Ensembl Density Type and Ensembl Density Feature tests.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor.
-** @param [u] outfile [AjPFile] AJAX File.
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
 **
-** @return [AjBool] ajTrue upon success, ajFalse otherwise.
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
 ** @@
 ******************************************************************************/
 
 static AjBool ensembltest_density(EnsPDatabaseadaptor dba,
-                                  AjPFile outfile)
+                                  AjPFile aoutfile)
 {
-    float maxratio = 0;
+    float maxratio = 0.0F;
 
-    ajuint blocks = 100;
+    ajuint blocks = 100U;
 
     AjBool interpolate = AJFALSE;
 
     AjPList dfs = NULL;
 
-    AjPStr anname = NULL;
-    AjPStr slname = NULL;
+    AjPStr anname  = NULL;
+    AjPStr fslname = NULL;
+    AjPStr oslname = NULL;
 
     EnsPAnalysis analysis = NULL;
 
-    EnsPDensityfeature df         = NULL;
+    EnsPDensityfeature        df  = NULL;
     EnsPDensityfeatureadaptor dfa = NULL;
 
     EnsPDensitytype dt = NULL;
 
     EnsPFeature feature = NULL;
 
-    EnsPSlice slice      = NULL;
-    EnsPSliceadaptor sla = NULL;
+    EnsPSlice        slice        = NULL;
+    EnsPSliceadaptor sliceadaptor = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!outfile)
+    if (!aoutfile)
         return ajFalse;
 
     /* Ensembl Registry tests. */
 
-    ajFmtPrintF(outfile,
+    ajFmtPrintF(aoutfile,
                 "\n"
                 "Ensembl Density\n");
 
@@ -2650,28 +3736,26 @@ static AjBool ensembltest_density(EnsPDatabaseadaptor dba,
 
     dfa = ensRegistryGetDensityfeatureadaptor(dba);
 
-    sla = ensRegistryGetSliceadaptor(dba);
+    sliceadaptor = ensRegistryGetSliceadaptor(dba);
 
-    slname = ajStrNewC("toplevel::22:0:0:1");
+    oslname = ajStrNewC("toplevel::22:0:0:1");
 
-    ensSliceadaptorFetchByName(sla, slname, &slice);
-
-    ensSliceFetchName(slice, &slname);
+    ensSliceadaptorFetchByName(sliceadaptor, oslname, &slice);
 
     /*
-    ** PercentageRepeat
-    ** geneDensity
-    ** snpDensity
-    ** PercentageRepeat
-    ** knownGeneDensity
-    ** PercentGC
+    ** percentagerepeat
+    ** genedensity
+    ** snpdensity
+    ** percentagerepeat
+    ** knowngenedensity
+    ** percentgc
     */
 
-    anname = ajStrNewC("PercentGC");
+    anname = ajStrNewC("percentgc");
 
     interpolate = ajTrue;
 
-    maxratio = 5.0;
+    maxratio = 5.0F;
 
     dfs = ajListNew();
 
@@ -2683,13 +3767,17 @@ static AjBool ensembltest_density(EnsPDatabaseadaptor dba,
                                             maxratio,
                                             dfs);
 
-    ajFmtPrintF(outfile,
+    ensSliceFetchName(slice, &fslname);
+
+    ajFmtPrintF(aoutfile,
                 "\n"
-                "  Ensembl Slice '%S' %u Density Features\n\n",
-                slname,
+                "  Ensembl Slice '%S' has %Lu "
+                "Ensembl Density Feature object(s)\n"
+                "\n",
+                fslname,
                 ajListGetLength(dfs));
 
-    while(ajListPop(dfs, (void **) &df))
+    while (ajListPop(dfs, (void**) &df))
     {
         feature = ensDensityfeatureGetFeature(df);
 
@@ -2697,16 +3785,30 @@ static AjBool ensembltest_density(EnsPDatabaseadaptor dba,
 
         analysis = ensDensitytypeGetAnalysis(dt);
 
-        ajFmtPrintF(outfile,
-                    "    %u '%S' %u %S:%d:%d:%d value %f\n",
+        ensSliceFetchName(ensFeatureGetSlice(feature), &fslname);
+
+        ajFmtPrintF(aoutfile,
+                    "    Ensembl Density Feature %u value %.6f\n"
+                    "      Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                    "      Sequence Region coordinates '%S:%d:%d:%d'\n"
+                    "      Ensembl Analysis %u name '%S'\n"
+                    "      Ensembl Density Type %u size %u type '%s'\n"
+                    "\n",
                     ensDensityfeatureGetIdentifier(df),
-                    ensAnalysisGetName(analysis),
-                    ensDensitytypeGetSize(dt),
+                    ensDensityfeatureGetValue(df),
+                    fslname,
+                    ensFeatureGetStart(feature),
+                    ensFeatureGetEnd(feature),
+                    ensFeatureGetStrand(feature),
                     ensFeatureGetSeqregionName(feature),
                     ensFeatureGetSeqregionStart(feature),
                     ensFeatureGetSeqregionEnd(feature),
                     ensFeatureGetSeqregionStrand(feature),
-                    ensDensityfeatureGetValue(df));
+                    ensAnalysisGetIdentifier(analysis),
+                    ensAnalysisGetName(analysis),
+                    ensDensitytypeGetIdentifier(dt),
+                    ensDensitytypeGetSize(dt),
+                    ensDensitytypeTypeToChar(ensDensitytypeGetType(dt)));
 
         ensDensityfeatureDel(&df);
     }
@@ -2716,7 +3818,225 @@ static AjBool ensembltest_density(EnsPDatabaseadaptor dba,
     ensSliceDel(&slice);
 
     ajStrDel(&anname);
-    ajStrDel(&slname);
+    ajStrDel(&fslname);
+    ajStrDel(&oslname);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic ensembltest_miscellaneous **************************************
+**
+** Ensembl Miscellaneous Set and Ensembl Miscellaneous Feature tests.
+**
+** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] aoutfile [AjPFile] AJAX File
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+** @@
+******************************************************************************/
+
+static AjBool ensembltest_miscellaneous(EnsPDatabaseadaptor dba,
+                                        AjPFile aoutfile)
+{
+    AjIList iter = NULL;
+
+    const AjPList list = NULL;
+
+    AjPList codes = NULL;
+    AjPList mfs   = NULL;
+    AjPList mss   = NULL;
+
+    AjPStr fslname = NULL;
+    AjPStr oslname = NULL;
+
+    EnsPAnalysis analysis = NULL;
+
+    EnsPAttribute attribute = NULL;
+
+    EnsPFeature feature = NULL;
+
+    EnsPMiscellaneousfeature        mf  = NULL;
+    EnsPMiscellaneousfeatureadaptor mfa = NULL;
+
+    EnsPMiscellaneousset        ms  = NULL;
+    EnsPMiscellaneoussetadaptor msa = NULL;
+
+    EnsPSlice        slice = NULL;
+    EnsPSliceadaptor sla   = NULL;
+
+    if (!dba)
+        return ajFalse;
+
+    if (!aoutfile)
+        return ajFalse;
+
+    /* Ensembl Miscellaneous tests. */
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "Ensembl Miscellaneous\n");
+
+    ajUser("Ensembl Miscellaneous");
+
+    mfa = ensRegistryGetMiscellaneousfeatureadaptor(dba);
+    msa = ensRegistryGetMiscellaneoussetadaptor(dba);
+    sla = ensRegistryGetSliceadaptor(dba);
+
+    /* Fetch all Ensembl Miscellaneous Set objects */
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  All Ensembl Miscellaneous Set objects\n");
+
+    codes = ajListstrNew();
+
+    mss = ajListNew();
+
+    ensMiscellaneoussetadaptorFetchAll(msa, mss);
+
+    ensListMiscellaneoussetSortIdentifierAscending(mss);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  %Lu Ensembl Miscellaneous Set object(s)\n"
+                "\n",
+                ajListGetLength(mss));
+
+    while (ajListPop(mss, (void **) &ms))
+    {
+        ajFmtPrintF(aoutfile,
+                    "    Ensembl Miscellaneous Set %u code '%S' name '%S'\n",
+                    ensMiscellaneoussetGetIdentifier(ms),
+                    ensMiscellaneoussetGetCode(ms),
+                    ensMiscellaneoussetGetName(ms));
+
+        ajListstrPushAppend(codes, ajStrNewS(ensMiscellaneoussetGetCode(ms)));
+
+        ensMiscellaneoussetDel(&ms);
+    }
+
+    ajListFree(&mss);
+
+    /*
+    ** Fetch an Ensembl Slice for chromosome:GRCh37:18:45000001:46000000:1,
+    ** which is around SMAD2.
+    */
+
+    oslname = ajStrNewC("chromosome:GRCh37:18:45000001:46000000:1");
+
+    ensSliceadaptorFetchByName(sla, oslname, &slice);
+
+    /*
+    ** Fetch all Ensembl Miscellaneous Feature objects on this
+    ** Ensembl Slice for all Ensembl Miscellaneous Set codes.
+    */
+
+    mfs = ajListNew();
+
+    ensMiscellaneousfeatureadaptorFetchAllbySlicecodes(mfa,
+                                                       slice,
+                                                       codes,
+                                                       mfs);
+
+    ensListMiscellaneousfeatureSortStartAscending(mfs);
+
+    ensSliceFetchName(slice, &fslname);
+
+    ajFmtPrintF(aoutfile,
+                "\n"
+                "  Ensembl Slice '%S' has %Lu "
+                "Ensembl Miscellaneous Feature object(s)\n"
+                "\n",
+                fslname,
+                ajListGetLength(mfs));
+
+    while (ajListPop(mfs, (void **) &mf))
+    {
+        feature = ensMiscellaneousfeatureGetFeature(mf);
+
+        analysis = ensFeatureGetAnalysis(feature);
+
+        ensSliceFetchName(ensFeatureGetSlice(feature), &fslname);
+
+        ajFmtPrintF(aoutfile,
+                    "    Ensembl Miscellaneous Feature %u\n"
+                    "      Ensembl Slice '%S' coordinates '%d:%d:%d'\n"
+                    "      Sequence Region coordinates '%S:%d:%d:%d'\n"
+                    "      Ensembl Analysis %u name '%S'\n",
+                    ensMiscellaneousfeatureGetIdentifier(mf),
+                    fslname,
+                    ensFeatureGetStart(feature),
+                    ensFeatureGetEnd(feature),
+                    ensFeatureGetStrand(feature),
+                    ensFeatureGetSeqregionName(feature),
+                    ensFeatureGetSeqregionStart(feature),
+                    ensFeatureGetSeqregionEnd(feature),
+                    ensFeatureGetSeqregionStrand(feature),
+                    ensAnalysisGetIdentifier(analysis),
+                    ensAnalysisGetName(analysis));
+
+        /* List all Ensembl Attribute objects. */
+
+        list = ensMiscellaneousfeatureGetAttributes(mf);
+
+        ajFmtPrintF(aoutfile,
+                    "    %Lu Ensembl Attribute object(s)\n",
+                    ajListGetLength(list));
+
+        iter = ajListIterNewread(list);
+
+        while (!ajListIterDone(iter))
+        {
+            attribute = (EnsPAttribute) ajListIterGet(iter);
+
+            ajFmtPrintF(aoutfile,
+                        "      Ensembl Attribute code '%S' value '%S'\n",
+                        ensAttributeGetCode(attribute),
+                        ensAttributeGetValue(attribute));
+        }
+
+        ajListIterDel(&iter);
+
+        /* List all Ensembl Miscellaneous Set objects. */
+
+        list = ensMiscellaneousfeatureGetMiscellaneoussets(mf);
+
+        ajFmtPrintF(aoutfile,
+                    "    %Lu Ensembl Miscellaneous Set object(s)\n",
+                    ajListGetLength(list));
+
+        iter = ajListIterNewread(list);
+
+        while (!ajListIterDone(iter))
+        {
+            ms = (EnsPMiscellaneousset) ajListIterGet(iter);
+
+            ajFmtPrintF(aoutfile,
+                        "      Ensembl Miscellaneous Set %u "
+                        "code '%S' name '%S'\n",
+                        ensMiscellaneoussetGetIdentifier(ms),
+                        ensMiscellaneoussetGetCode(ms),
+                        ensMiscellaneoussetGetName(ms));
+        }
+
+        ajListIterDel(&iter);
+
+        ajFmtPrintF(aoutfile, "\n");
+
+        ensMiscellaneousfeatureDel(&mf);
+    }
+
+    ajListFree(&mfs);
+
+    ajListstrFreeData(&codes);
+
+    ensSliceDel(&slice);
+
+    ajStrDel(&fslname);
+    ajStrDel(&oslname);
 
     return ajTrue;
 }

@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Finds and extracts open reading frames (ORFs)
+   Find and extract open reading frames (ORFs)
 
 Description
 
@@ -33,7 +33,7 @@ Usage
 
 
 % getorf -minsize 300
-Finds and extracts open reading frames (ORFs)
+Find and extract open reading frames (ORFs)
 Input nucleotide sequence(s): tembl:v00294
 protein output sequence(s) [v00294.orf]:
 
@@ -43,8 +43,8 @@ protein output sequence(s) [v00294.orf]:
 
 Command line arguments
 
-Finds and extracts open reading frames (ORFs)
-Version: EMBOSS:6.4.0.0
+Find and extract open reading frames (ORFs)
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -130,7 +130,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -231,7 +234,6 @@ FT                   /transl_table=11
 FT                   /note="reading frame"
 FT                   /db_xref="GOA:P03023"
 FT                   /db_xref="InterPro:IPR000843"
-FT                   /db_xref="InterPro:IPR001761"
 FT                   /db_xref="InterPro:IPR010982"
 FT                   /db_xref="PDB:1CJG"
 FT                   /db_xref="PDB:1EFA"
@@ -535,8 +537,8 @@ Known bugs
 See also
 
    Program name     Description
-   checktrans       Reports STOP codons and ORF statistics of a protein
-   marscan          Finds matrix/scaffold recognition (MRS) signatures in DNA
+   checktrans       Report STOP codons and ORF statistics of a protein
+   marscan          Find matrix/scaffold recognition (MRS) signatures in DNA
                     sequences
    plotorf          Plot potential open reading frames in a nucleotide sequence
    showorf          Display a nucleotide sequence and translation in pretty format

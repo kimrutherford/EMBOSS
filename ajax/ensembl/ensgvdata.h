@@ -1,10 +1,37 @@
+/* @include ensgvdata *********************************************************
+**
+** Ensembl Genetic Variation Data functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.20 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/03/04 12:31:20 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSGVDATA_H
 #define ENSGVDATA_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensfeature.h"
 
@@ -13,9 +40,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 /* @const EnsPGvgenotypeadaptor ***********************************************
 **
@@ -27,6 +54,20 @@ AJ_BEGIN_DECLS
 ******************************************************************************/
 
 #define EnsPGvgenotypeadaptor EnsPDatabaseadaptor
+
+
+
+
+/* @const EnsPGvgenotypecodeadaptor *******************************************
+**
+** Ensembl Genetic Variation Genotype Code Adaptor.
+** Defined as an alias in EnsPGvbaseadaptor
+**
+** #alias EnsPGvbaseadaptor
+** ##
+******************************************************************************/
+
+#define EnsPGvgenotypecodeadaptor EnsPGvbaseadaptor
 
 
 
@@ -101,20 +142,6 @@ AJ_BEGIN_DECLS
 
 
 
-/* @const EnsPGvvariationadaptor **********************************************
-**
-** Ensembl Genetic Variation Variation Adaptor.
-** Defined as an alias in EnsPGvdatabaseadaptor
-**
-** #alias EnsPGvdatabaseadaptor
-** ##
-******************************************************************************/
-
-#define EnsPGvvariationadaptor EnsPGvdatabaseadaptor
-
-
-
-
 /* @const EnsPGvvariationsetadaptor *******************************************
 **
 ** Ensembl Genetic Variation Variation Set Adaptor.
@@ -129,10 +156,15 @@ AJ_BEGIN_DECLS
 
 
 
-/* @const EnsEGvindividualGender **********************************************
+/* @enum EnsEGvindividualGender ***********************************************
 **
-** Ensembl Genetic Variation Individual Gender enumeration.
+** Ensembl Genetic Variation Individual Gender enumeration
 **
+** @value ensEGvindividualGenderNULL Null
+** @value ensEGvindividualGenderMale Male
+** @value ensEGvindividualGenderFemale Female
+** @value ensEGvindividualGenderUnknown Unknown
+** @@
 ******************************************************************************/
 
 typedef enum EnsOGvindividualGender
@@ -146,10 +178,17 @@ typedef enum EnsOGvindividualGender
 
 
 
-/* @const EnsEGvindividualType ************************************************
+/* @enum EnsEGvindividualType *************************************************
 **
-** Ensembl Genetic Variation Individual Type enumeration.
+** Ensembl Genetic Variation Individual Type enumeration
 **
+** @value ensEGvindividualTypeNULL Null
+** @value ensEGvindividualTypeFullyInbred Fully inbred
+** @value ensEGvindividualTypePartlyInbred Partly inbred
+** @value ensEGvindividualTypeOutbred Outbred
+** @value ensEGvindividualTypeMutant Mutant
+** @value ensEGvindividualTypeUnknown Unknown
+** @@
 ******************************************************************************/
 
 typedef enum EnsOGvindividualType
@@ -165,10 +204,18 @@ typedef enum EnsOGvindividualType
 
 
 
-/* @const EnsEGvsampleDisplay *************************************************
+/* @enum EnsEGvsampleDisplay **************************************************
 **
-** Ensembl Genetic Variation Sample Display enumeration.
+** Ensembl Genetic Variation Sample Display enumeration
 **
+** @value ensEGvsampleDisplayNULL Null
+** @value ensEGvsampleDisplayReference Reference
+** @value ensEGvsampleDisplayDefault Default
+** @value ensEGvsampleDisplayDisplayable Displayable
+** @value ensEGvsampleDisplayUndisplayable Undisplayable
+** @value ensEGvsampleDisplayLD Linkage Disequilibrium
+** @value ensEGvsampleMartdisplayable Displayable in BioMart
+** @@
 ******************************************************************************/
 
 typedef enum EnsOGvsampleDisplay
@@ -178,16 +225,22 @@ typedef enum EnsOGvsampleDisplay
     ensEGvsampleDisplayDefault,
     ensEGvsampleDisplayDisplayable,
     ensEGvsampleDisplayUndisplayable,
-    ensEGvsampleDisplayLD
+    ensEGvsampleDisplayLD,
+    ensEGvsampleMartdisplayable
 } EnsEGvsampleDisplay;
 
 
 
 
-/* @const EnsEGvsourceSomatic *************************************************
+/* @enum EnsEGvsourceSomatic **************************************************
 **
-** Ensembl Genetic Variation Source Somatic enumeration.
+** Ensembl Genetic Variation Source Somatic enumeration
 **
+** @value ensEGvsourceSomaticNULL Null
+** @value ensEGvsourceSomaticGermline Germline
+** @value ensEGvsourceSomaticSomatic Somatic
+** @value ensEGvsourceSomaticMixed Mixed
+** @@
 ******************************************************************************/
 
 typedef enum EnsOGvsourceSomatic
@@ -201,10 +254,13 @@ typedef enum EnsOGvsourceSomatic
 
 
 
-/* @const EnsEGvsourceType ****************************************************
+/* @enum EnsEGvsourceType *****************************************************
 **
-** Ensembl Genetic Variation Source Type enumeration.
+** Ensembl Genetic Variation Source Type enumeration
 **
+** @value ensEGvsourceTypeNULL Null
+** @value ensEGvsourceTypeChip Chip
+** @@
 ******************************************************************************/
 
 typedef enum EnsOGvsourceType
@@ -216,32 +272,52 @@ typedef enum EnsOGvsourceType
 
 
 
-/* @const EnsEGvvariationClass ************************************************
+/* @enum EnsEGvvariationClass *************************************************
 **
-** Ensembl Genetic Variation Variation Class enumeration.
+** Ensembl Genetic Variation Variation Class enumeration
 **
+** @value ensEGvvariationClassNULL      Null
+** @value ensEGvvariationClassSO0001483 SNV
+** @value ensEGvvariationClassSO1000002 substitution
+** @value ensEGvvariationClassSO0000667 insertion
+** @value ensEGvvariationClassSO0000159 deletion
+** @value ensEGvvariationClassSO0000705 tandem_repeat
+** @value ensEGvvariationClassSO1000032 indel
+** @value ensEGvvariationClassSO0001059 sequence_alteration
+** @value ensEGvvariationClassSO0001019 copy_number_variation
+** @@
 ******************************************************************************/
 
 typedef enum EnsOGvvariationClass
 {
     ensEGvvariationClassNULL,
-    ensEGvvariationClassSO0001483, /* SNV */
-    ensEGvvariationClassSO1000002, /* substitution */
-    ensEGvvariationClassSO0000667, /* insertion */
-    ensEGvvariationClassSO0000159, /* deletion */
-    ensEGvvariationClassSO0000705, /* tandem_repeat */
-    ensEGvvariationClassSO1000032, /* indel */
-    ensEGvvariationClassSO0001059, /* sequence_alteration */
-    ensEGvvariationClassSO0001019  /* copy_number_variation */
+    ensEGvvariationClassSO0001483,
+    ensEGvvariationClassSO1000002,
+    ensEGvvariationClassSO0000667,
+    ensEGvvariationClassSO0000159,
+    ensEGvvariationClassSO0000705,
+    ensEGvvariationClassSO1000032,
+    ensEGvvariationClassSO0001059,
+    ensEGvvariationClassSO0001019
 } EnsEGvvariationClass;
 
 
 
 
-/* @const EnsEGvvariationValidation *******************************************
+/* @enum EnsEGvvariationValidation ********************************************
 **
-** Ensembl Genetic Variation Variation Validation enumeration.
+** Ensembl Genetic Variation Variation Validation enumeration
 **
+** @value ensEGvvariationValidationNULL Null
+** @value ensEGvvariationValidationCluster Cluster
+** @value ensEGvvariationValidationFrequency Frequency
+** @value ensEGvvariationValidationSubmitter Submitter
+** @value ensEGvvariationValidationDoublehit Double-hit
+** @value ensEGvvariationValidationHapMap HAP Map Project
+** @value ensEGvvariationValidation1000Genomes 1000 Genomes Project
+** @value ensEGvvariationValidationFailed Failed
+** @value ensEGvvariationValidationPrecious Precious
+** @@
 ******************************************************************************/
 
 typedef enum EnsOGvvariationValidation
@@ -260,9 +336,14 @@ typedef enum EnsOGvvariationValidation
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+struct EnsSGvsource;
+
+
+
 
 /* @data EnsPGvdatabaseadaptor ************************************************
 **
@@ -292,6 +373,29 @@ typedef struct EnsSGvdatabaseadaptor
 
 
 
+/* @data EnsPGvbaseadaptorLeftjoin ********************************************
+**
+** Ensembl Genetic Variation Base Adaptor Left Join conditions
+**
+** @alias EnsSGvbaseadaptorLeftjoin
+** @alias EnsOGvbaseadaptorLeftjoin
+**
+** @attr Table [char*] SQL table name
+** @attr Condition [char*] SQL LEFT JOIN condition
+** @@
+******************************************************************************/
+
+typedef struct EnsSGvbaseadaptorLeftjoin
+{
+    char *Table;
+    char *Condition;
+} EnsOGvbaseadaptorLeftjoin;
+
+#define EnsPGvbaseadaptorLeftjoin EnsOGvbaseadaptorLeftjoin*
+
+
+
+
 /* @data EnsPGvbaseadaptor ****************************************************
 **
 ** Ensembl Genetic Variation Base Adaptor.
@@ -307,6 +411,8 @@ typedef struct EnsSGvdatabaseadaptor
 ** Ensembl Genetic Variation Database Adaptor
 ** @attr Baseadaptor [EnsPBaseadaptor]
 ** Ensembl Base Adaptor
+** @attr Ploidy [ajuint] Ploidy
+** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -314,6 +420,8 @@ typedef struct EnsSGvbaseadaptor
 {
     EnsPGvdatabaseadaptor Adaptor;
     EnsPBaseadaptor Baseadaptor;
+    ajuint Ploidy;
+    ajuint Padding;
 } EnsOGvbaseadaptor;
 
 #define EnsPGvbaseadaptor EnsOGvbaseadaptor*
@@ -388,8 +496,8 @@ typedef struct EnsSGvattribute
 ** @attr Use [ajuint] Use counter
 ** @cc Bio::EnsEMBL::Storable
 ** @attr Identifier [ajuint] SQL database-internal identifier
-** @attr Adaptor [EnsPGvsampleadaptor] Ensembl Genetic Variation
-**                                     Sample Adaptor
+** @attr Adaptor [EnsPGvsampleadaptor]
+** Ensembl Genetic Variation Sample Adaptor
 ** @cc Bio::EnsEMBL::Variation::Sample
 ** @attr Name [AjPStr] Name
 ** @attr Description [AjPStr] Description
@@ -424,8 +532,8 @@ typedef struct EnsSGvsample
 ** @attr Use [ajuint] Use counter
 ** @cc Bio::EnsEMBL::Storable
 ** @attr Identifier [ajuint] SQL database-internal identifier
-** @attr Adaptor [EnsPGvindividualadaptor] Ensembl Genetic Variation
-**                                         Individual Adaptor
+** @attr Adaptor [EnsPGvindividualadaptor]
+** Ensembl Genetic Variation Individual Adaptor
 ** @cc Bio::EnsEMBL::Variation::Sample
 ** @attr Gvsample [EnsPGvsample] Sample
 ** @cc Bio::EnsEMBL::Variation::Individual
@@ -443,8 +551,8 @@ typedef struct EnsSGvindividual
     ajuint Identifier;
     EnsPGvindividualadaptor Adaptor;
     EnsPGvsample Gvsample;
-    struct EnsSGvindividual* Father;
-    struct EnsSGvindividual* Mother;
+    struct EnsSGvindividual *Father;
+    struct EnsSGvindividual *Mother;
     EnsEGvindividualGender Gender;
     EnsEGvindividualType Type;
     AjPStr Description;
@@ -465,13 +573,13 @@ typedef struct EnsSGvindividual
 ** @attr Use [ajuint] Use counter
 ** @cc Bio::EnsEMBL::Storable
 ** @attr Identifier [ajuint] SQL database-internal identifier
-** @attr Adaptor [EnsPGvpopulationadaptor] Ensembl Genetic Variation
-**                                         Population Adaptor
+** @attr Adaptor [EnsPGvpopulationadaptor]
+** Ensembl Genetic Variation Population Adaptor
 ** @cc Bio::EnsEMBL::Variation::Sample
 ** @attr Gvsample [EnsPGvsample] Sample
 ** @cc Bio::EnsEMBL::Variation::Population
-** @attr Subgvpopulations [AjPList] AJAX List of Ensembl Genetic Variation
-**                                  (Sub-) Population objects
+** @attr Subgvpopulations [AjPList]
+** AJAX List of (Sub-) Ensembl Genetic Variation Population objects
 ** @@
 ******************************************************************************/
 
@@ -530,13 +638,13 @@ typedef struct EnsSGvalleleadaptor
 ** @cc Bio::EnsEMBL::Variation::Allele
 ** @attr Gvpopulation [EnsPGvpopulation] Ensembl Genetic Variation Population
 ** @attr Allele [AjPStr] Allele
-** @attr SubSNPHandle [AjPStr] Sub SNP handle
+** @attr Subhandle [AjPStr] Subhandle
 ** @attr Faileddescriptions [AjPList]
 ** AJAX List of AJAX String (failed description) objects
 ** @attr Counter [ajuint] Counter
 ** @attr Gvvariationidentifier [ajuint]
 ** Ensembl Genetic Variation Variation identifier
-** @attr SubSNPIdentifier [ajuint] Sub SNP Identifier
+** @attr Subidentifier [ajuint] Subidentifier
 ** @attr Frequency [float] Frequency
 ** @@
 ******************************************************************************/
@@ -548,47 +656,15 @@ typedef struct EnsSGvallele
     EnsPGvalleleadaptor Adaptor;
     EnsPGvpopulation Gvpopulation;
     AjPStr Allele;
-    AjPStr SubSNPHandle;
+    AjPStr Subhandle;
     AjPList Faileddescriptions;
     ajuint Counter;
     ajuint Gvvariationidentifier;
-    ajuint SubSNPIdentifier;
+    ajuint Subidentifier;
     float Frequency;
 } EnsOGvallele;
 
 #define EnsPGvallele EnsOGvallele*
-
-
-
-
-/* @data EnsPGvgenotype *******************************************************
-**
-** Ensembl Genetic Variation Genotype.
-**
-** @alias EnsSGvgenotype
-** @alias EnsOGvgenotype
-**
-** @attr Use [ajuint] Use counter
-** @cc Bio::EnsEMBL::Storable
-** @attr Identifier [ajuint] SQL database-internal identifier
-** @attr Adaptor [EnsPGvgenotypeadaptor] Ensembl Genetic Variation
-**                                       Genotype Adaptor
-** @cc Bio::EnsEMBL::Variation::Genotype
-** @attr Allele1 [AjPStr] Allele 1
-** @attr Allele2 [AjPStr] Allele 2
-** @@
-******************************************************************************/
-
-typedef struct EnsSGvgenotype
-{
-    ajuint Use;
-    ajuint Identifier;
-    EnsPGvgenotypeadaptor Adaptor;
-    AjPStr Allele1;
-    AjPStr Allele2;
-} EnsOGvgenotype;
-
-#define EnsPGvgenotype EnsOGvgenotype*
 
 
 
@@ -603,7 +679,8 @@ typedef struct EnsSGvgenotype
 ** @attr Adaptor [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @attr CacheByIdentifier [AjPTable] Identifier cache
 ** @attr CacheByName [AjPTable] Name cache
-** @attr DefaultGvsource [void*] Default Ensembl Genetic Variation Source
+** @attr DefaultGvsource [struct EnsSGvsource*]
+** Default Ensembl Genetic Variation Source
 ** @@
 ******************************************************************************/
 
@@ -612,7 +689,7 @@ typedef struct EnsSGvsourceadaptor
     EnsPBaseadaptor Adaptor;
     AjPTable CacheByIdentifier;
     AjPTable CacheByName;
-    void* DefaultGvsource;
+    struct EnsSGvsource *DefaultGvsource;
 } EnsOGvsourceadaptor;
 
 #define EnsPGvsourceadaptor EnsOGvsourceadaptor*
@@ -679,7 +756,7 @@ typedef struct EnsSGvsource
 ** @attr Name [AjPStr] Name
 ** @attr Moleculetype [AjPStr] Molecule type
 ** @attr Gvvariationidentifier [ajuint] Ensembl Genetic Variation identifier
-** @attr Subidentifier [ajuint] Sub Identifier
+** @attr Subidentifier [ajuint] Subidentifier
 ** @@
 ******************************************************************************/
 
@@ -700,6 +777,41 @@ typedef struct EnsSGvsynonym
 
 
 
+/* @data EnsPGvvariationadaptor ***********************************************
+**
+** Ensembl Genetic Variation Variation Adaptor.
+**
+** @alias EnsOGvvariationadaptor
+** @alias EnsSGvvariationadaptor
+**
+** @attr Adaptor [EnsPGvbaseadaptor] Ensembl Genetic Variation Base Adaptor
+** @attr Tables [char**]  One-dimensional array of table name character
+**                        strings, which is dynamically assigned.
+** @attr Columns [char**] One-dimensional array of column name character
+**                        strings, which is dynamically assigned.
+** @attr Condition [char*] SQL SELECT default condition,
+**                         which is dynamically assigned.
+** @attr Leftjoin [EnsPGvbaseadaptorLeftjoin]
+** Ensembl Base Adaptor SQL LEFT JOIN conditions
+** @attr Defaultcondition [char*] SQL SELECT default condition
+** @@
+******************************************************************************/
+
+typedef struct EnsSGvvariationadaptor
+{
+    EnsPGvbaseadaptor Adaptor;
+    char **Tables;
+    char **Columns;
+    char *Condition;
+    EnsPGvbaseadaptorLeftjoin Leftjoin;
+    char *Defaultcondition;
+} EnsOGvvariationadaptor;
+
+#define EnsPGvvariationadaptor EnsOGvvariationadaptor*
+
+
+
+
 /* @data EnsPGvvariation ******************************************************
 **
 ** Ensembl Genetic Variation Variation.
@@ -715,10 +827,13 @@ typedef struct EnsSGvsynonym
 ** @cc Bio::EnsEMBL::Variation::Variation
 ** @attr Class [EnsPGvattribute]
 ** Class Ensembl Genetic Variation Attribute
+** @attr Clinical [EnsPGvattribute]
+** Clinical Significance Ensembl Genetic Variation Attribute
 ** @attr Gvsource [EnsPGvsource] Ensembl Genetic Variation Source
 ** @attr Name [AjPStr] Name
 ** @attr Handles [AjPTable] Handles
 ** @attr Ancestralallele [AjPStr] Ancestral allele
+** @attr MinoralleleAllele [AjPStr] Minor allele allele
 ** @attr Gvalleles [AjPList] AJAX List of
 ** Ensembl Genetic Variation Allele objects
 ** @attr Gvsynonyms [AjPList] AJAX List of
@@ -729,9 +844,11 @@ typedef struct EnsSGvsynonym
 ** @attr FlankFive [AjPStr] Five-prime flanking sequence
 ** @attr FlankThree [AjPStr] Three-prime flanking sequence
 ** @attr FlankExists [AjBool] A five-prime or three-prime flank exists
+** @attr Flipped [AjBool] Flipped
 ** @attr Somatic [AjBool] Somatic or germline flag
 ** @attr Validations [ajuint] Bit field of validation states
-** @attr Padding [ajuint] Padding to alignment boundary
+** @attr MinoralleleCount [ajuint] Minor allele count
+** @attr MinoralleleFrequency [float] Minor allele frequency
 ** @@
 ******************************************************************************/
 
@@ -741,10 +858,12 @@ typedef struct EnsSGvvariation
     ajuint Identifier;
     EnsPGvvariationadaptor Adaptor;
     EnsPGvattribute Class;
+    EnsPGvattribute Clinical;
     EnsPGvsource Gvsource;
     AjPStr Name;
     AjPTable Handles;
     AjPStr Ancestralallele;
+    AjPStr MinoralleleAllele;
     AjPList Gvalleles;
     AjPList Gvsynonyms;
     AjPList Faileddescriptions;
@@ -752,9 +871,11 @@ typedef struct EnsSGvvariation
     AjPStr FlankFive;
     AjPStr FlankThree;
     AjBool FlankExists;
+    AjBool Flipped;
     AjBool Somatic;
     ajuint Validations;
-    ajuint Padding;
+    ajuint MinoralleleCount;
+    float MinoralleleFrequency;
 } EnsOGvvariation;
 
 #define EnsPGvvariation EnsOGvvariation*
@@ -859,6 +980,7 @@ typedef struct EnsSGvvariationfeature
 ** @cc Bio::EnsEMBL::Variation::VariationSet
 ** @attr Name [AjPStr] Name
 ** @attr Description [AjPStr] Description
+** @attr Shortname [AjPStr] Short name
 ** @@
 ******************************************************************************/
 
@@ -869,9 +991,78 @@ typedef struct EnsSGvvariationset
     EnsPGvvariationsetadaptor Adaptor;
     AjPStr Name;
     AjPStr Description;
+    AjPStr Shortname;
 } EnsOGvvariationset;
 
 #define EnsPGvvariationset EnsOGvvariationset*
+
+
+
+
+/* @data EnsPGvgenotype *******************************************************
+**
+** Ensembl Genetic Variation Genotype.
+**
+** @alias EnsSGvgenotype
+** @alias EnsOGvgenotype
+**
+** @attr Use [ajuint] Use counter
+** @cc Bio::EnsEMBL::Storable
+** @attr Identifier [ajuint] SQL database-internal identifier
+** @attr Adaptor [EnsPGvgenotypeadaptor] Ensembl Genetic Variation
+**                                       Genotype Adaptor
+** @cc Bio::EnsEMBL::Variation::Genotype
+** @attr Gvvariation [EnsPGvvariation] Ensembl Genetic Variation Variation
+** @attr Alleles [AjPList] AJAX List of AJAX String objects
+** @attr Subhandle [AjPStr] Subhandle
+** @attr Subidentifier [ajuint] Subidentifier
+** @attr Padding [ajuint] Padding to alignment boundary
+** @@
+******************************************************************************/
+
+typedef struct EnsSGvgenotype
+{
+    ajuint Use;
+    ajuint Identifier;
+    EnsPGvgenotypeadaptor Adaptor;
+    EnsPGvvariation Gvvariation;
+    AjPList Alleles;
+    AjPStr Subhandle;
+    ajuint Subidentifier;
+    ajuint Padding;
+} EnsOGvgenotype;
+
+#define EnsPGvgenotype EnsOGvgenotype*
+
+
+
+
+/* @data EnsPGvgenotypecode ***************************************************
+**
+** Ensembl Genetic Variation Genotype Code.
+**
+** @alias EnsSGvgenotypecode
+** @alias EnsOGvgenotypecode
+**
+** @attr Use [ajuint] Use counter
+** @cc Bio::EnsEMBL::Storable
+** @attr Identifier [ajuint] SQL database-internal identifier
+** @attr Adaptor [EnsPGvgenotypecodeadaptor]
+** Ensembl Genetic Variation Genotype Code Adaptor
+** @cc Bio::EnsEMBL::Variation::GenotypeCode
+** @attr Alleles [AjPList] AJAX List of AJAX String (allele) objects
+** @@
+******************************************************************************/
+
+typedef struct EnsSGvgenotypecode
+{
+    ajuint Use;
+    ajuint Identifier;
+    EnsPGvgenotypecodeadaptor Adaptor;
+    AjPList Alleles;
+} EnsOGvgenotypecode;
+
+#define EnsPGvgenotypecode EnsOGvgenotypecode*
 
 
 
@@ -890,11 +1081,8 @@ typedef struct EnsSGvvariationset
 **                                       Variation Population Genotype Adaptor
 ** @cc Bio::EnsEMBL::Variation::PopulationGenotype
 ** @attr Gvpopulation [EnsPGvpopulation] Ensembl Genetic Variation Population
-** @attr Gvvariation [EnsPGvvariation] Ensembl Genetic Variation Variation
-** @attr Allele1 [AjPStr] Allele1
-** @attr Allele2 [AjPStr] Allele2
+** @attr Gvgenotype [EnsPGvgenotype] Ensembl Genetic Variation Genotype
 ** @attr Counter [ajuint] Counter
-** @attr Subidentifier [ajuint] Sub-Identifier
 ** @attr Frequency [float] Frequency
 ** @@
 ******************************************************************************/
@@ -905,11 +1093,8 @@ typedef struct EnsSGvpopulationgenotype
     ajuint Identifier;
     EnsPGvpopulationgenotypeadaptor Adaptor;
     EnsPGvpopulation Gvpopulation;
-    EnsPGvvariation Gvvariation;
-    AjPStr Allele1;
-    AjPStr Allele2;
+    EnsPGvgenotype Gvgenotype;
     ajuint Counter;
-    ajuint Subidentifier;
     float Frequency;
 } EnsOGvpopulationgenotype;
 
@@ -918,9 +1103,17 @@ typedef struct EnsSGvpopulationgenotype
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+/*
+** Prototype definitions
+*/
+
+/*
+** End of prototype definitions
+*/
 
 
 

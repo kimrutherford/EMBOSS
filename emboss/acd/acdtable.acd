@@ -3,6 +3,6 @@ application: acdtable [
                   ACD file"
   gui: "no"
   groups: "Acd, Data retrieval:Tool data"
-  relations: "EDAM:0000091 topic Data handling"
-  relations: "EDAM:0000515 operation Data retrieval (tool annotation)"
+  relations: "EDAM_topic:0091 Data handling"
+  relations: "EDAM_operation:0515 Data retrieval (tool metadata)"
 ]

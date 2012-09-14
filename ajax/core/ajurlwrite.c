@@ -1,28 +1,34 @@
-/******************************************************************************
-** @source AJAX url handling functions
+/* @source ajurlwrite *********************************************************
+**
+** AJAX url writing functions
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.12 $
 ** @modified Oct 25 2010 pmr First AJAX version
+** @modified $Date: 2011/10/19 14:52:22 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajurlwrite.h"
+#include "ajfile.h"
 
 static AjBool urloutWriteHtml(AjPFile outf, const AjPUrl url);
 static AjBool urloutWriteUrl(AjPFile outf, const AjPUrl url);
@@ -40,7 +46,7 @@ static AjBool urloutWriteUrl(AjPFile outf, const AjPUrl url);
 **
 ** @attr Name [const char*] Format name
 ** @attr Desc [const char*] Format description
-** @attr Write [(AjBool*)] Output function, returns ajTrue on success
+** @attr Write [AjBool function] Output function, returns ajTrue on success
 ** @@
 ******************************************************************************/
 
@@ -60,10 +66,10 @@ static UrlOOutFormat urloutFormatDef[] =
 /*     WriteFunction */
 
   {"url",         "URL",
-       urloutWriteUrl},
+       &urloutWriteUrl},
 
   {"html",        "HTML markup of URLs",
-       urloutWriteHtml},
+       &urloutWriteHtml},
 
   {NULL, NULL, NULL}
 };
@@ -123,6 +129,8 @@ static UrlOOutFormat urloutFormatDef[] =
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajUrloutWrite(AjPOutfile outf, const AjPUrl url)
@@ -130,14 +138,14 @@ AjBool ajUrloutWrite(AjPOutfile outf, const AjPUrl url)
     ajuint i = ajOutfileGetFormatindex(outf);
     AjPFile outfile = ajOutfileGetFile(outf);
 
-    return urloutFormatDef[i].Write(outfile, url);
+    return (*urloutFormatDef[i].Write)(outfile, url);
 }
 
 
 
 
 
-/* @funcstatic urloutWriteHtml ***********************************************
+/* @funcstatic urloutWriteHtml ************************************************
 **
 ** Write url data in HTML markup format
 **
@@ -146,6 +154,8 @@ AjBool ajUrloutWrite(AjPOutfile outf, const AjPUrl url)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool urloutWriteHtml(AjPFile outf, const AjPUrl url)
@@ -161,7 +171,7 @@ static AjBool urloutWriteHtml(AjPFile outf, const AjPUrl url)
 
 
 
-/* @funcstatic urloutWriteUrl ***********************************************
+/* @funcstatic urloutWriteUrl *************************************************
 **
 ** Write url data in simple URL format
 **
@@ -170,6 +180,8 @@ static AjBool urloutWriteHtml(AjPFile outf, const AjPUrl url)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool urloutWriteUrl(AjPFile outf, const AjPUrl url)
@@ -234,12 +246,14 @@ static AjBool urloutWriteUrl(AjPFile outf, const AjPUrl url)
 
 
 
-/* @func ajUrloutprintBook ***************************************************
+/* @func ajUrloutprintBook ****************************************************
 **
 ** Reports the url format internals as Docbook text
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -282,12 +296,14 @@ void ajUrloutprintBook(AjPFile outf)
 
 
 
-/* @func ajUrloutprintHtml ***************************************************
+/* @func ajUrloutprintHtml ****************************************************
 **
 ** Reports the internal data structures
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -322,13 +338,15 @@ void ajUrloutprintHtml(AjPFile outf)
 
 
 
-/* @func ajUrloutprintText ***************************************************
+/* @func ajUrloutprintText ****************************************************
 **
 ** Reports the internal data structures
 **
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -360,12 +378,14 @@ void ajUrloutprintText(AjPFile outf, AjBool full)
 
 
 
-/* @func ajUrloutprintWiki ***************************************************
+/* @func ajUrloutprintWiki ****************************************************
 **
 ** Reports the url output format internals as wikitext
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -454,6 +474,8 @@ void ajUrloutprintWiki(AjPFile outf)
 ** @param [r] format [const AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -499,6 +521,8 @@ AjBool ajUrloutformatFind(const AjPStr format, ajint* iformat)
 **
 ** @param [r] format [const AjPStr] Format
 ** @return [AjBool] ajTrue if formats was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -544,11 +568,13 @@ AjBool ajUrloutformatTest(const AjPStr format)
 
 
 
-/* @func ajUrloutExit ********************************************************
+/* @func ajUrloutExit *********************************************************
 **
 ** Cleans up url output internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

@@ -9,7 +9,7 @@ HTML>
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -121,7 +121,7 @@ Output report [l46634.fuzznuc]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Search for patterns in nucleotide sequences
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -173,7 +173,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -288,7 +291,7 @@ For example, [CG](5)TG{A}N(1,5)C</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -357,11 +360,35 @@ For example, [CG](5)TG{A}N(1,5)C</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -405,7 +432,7 @@ For example, [CG](5)TG{A}N(1,5)C</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-pattern" associated pattern qualifiers
+<td align="left" colspan=5>"-pattern" associated pattern qualifiers
 </td>
 </tr>
 
@@ -434,7 +461,7 @@ For example, [CG](5)TG{A}N(1,5)C</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated report qualifiers
+<td align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
@@ -803,7 +830,7 @@ stands for A or C or G.
 brackets `{ }' the nucleotides that are not accepted at a given
 position.  For example: {AG} stands for any nucleotides except A and G. 
 
-<li>Each element in a pattern is separated from its neighbor by a `-'. 
+<li>Each element in a pattern is separated from its neighbour by a `-'. 
 (Optional in fuzznuc). 
 
 <li>Repetition of an element of the pattern can be indicated by following
@@ -835,10 +862,10 @@ This searches for "C or G" 5 times, followed by T and G, then anything
 except A, then any base (1 to 5 times) before a C. 
 
 <p>
-You can use ambiguity codes for nucleic acid searches but not within []
-or {} as they expand to bracketed counterparts.  For example, "s" is
-expanded to "[GC]" therefore [S] would be expanded to [[GC]] which is
-illegal. 
+You can use ambiguity codes for nucleic acid searches but not within
+[] or {} as they expand to bracketed counterparts.  For example, "s"
+is expanded to "[GC]" therefore [S] would be expanded with a double
+set of brackets which is illegal.
 
 <p>
 Note the use of X is reserved for proteins.  You must use N for nucleic
@@ -886,7 +913,7 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern AAGCTT
@@ -906,9 +933,9 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End  Strand Pattern         Mismatch Sequence
-      1       6       + pattern: AAGCTT        . aagctt
-   1267    1272       + pattern: AAGCTT        . aagctt
+  Start     End  Strand Pattern        Mismatch Sequence
+      1       6       + pattern:AAGCTT        . aagctt
+   1267    1272       + pattern:AAGCTT        . aagctt
 
 #---------------------------------------
 #---------------------------------------
@@ -929,7 +956,7 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nucseq.pat
@@ -949,9 +976,9 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End  Strand Pattern                             Mismatch Sequence
-    429     448       + targetseq: cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
-    491     510       + targetseq: cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
+  Start     End  Strand Pattern                            Mismatch Sequence
+    429     448       + targetseq:cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
+    491     510       + targetseq:cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
 
 #---------------------------------------
 #---------------------------------------
@@ -972,7 +999,7 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzznuc
 #    -pname test
 #    -sequence tembl:L46634
@@ -994,20 +1021,20 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End  Strand Pattern              Mismatch Sequence
-    429     438       + test1: cg(2)c(3)taac        . cggccctaac
-    491     500       + test1: cg(2)c(3)taac        . cggccctaac
-    535     544       + test1: cg(2)c(3)taac        . cggccctaac
-    605     614       + test1: cg(2)c(3)taac        . cggccctaac
-    631     640       + test1: cg(2)c(3)taac        . cggccctaac
-    695     704       + test1: cg(2)c(3)taac        . cggccctaac
-    721     730       + test1: cg(2)c(3)taac        . cggccctaac
-    753     762       + test1: cg(2)c(3)taac        . cggccctaac
-    293     302       + test2: cctagc(3)ta          . cctagcccta
-    439     448       + test2: cctagc(3)ta          . cctagcccta
-    469     478       + test2: cctagc(3)ta          . cctagcccta
-    501     510       + test2: cctagc(3)ta          . cctagcccta
-    801     810       + test2: cctagc(3)ta          . cctagcccta
+  Start     End  Strand Pattern             Mismatch Sequence
+    429     438       + test1:cg(2)c(3)taac        . cggccctaac
+    491     500       + test1:cg(2)c(3)taac        . cggccctaac
+    535     544       + test1:cg(2)c(3)taac        . cggccctaac
+    605     614       + test1:cg(2)c(3)taac        . cggccctaac
+    631     640       + test1:cg(2)c(3)taac        . cggccctaac
+    695     704       + test1:cg(2)c(3)taac        . cggccctaac
+    721     730       + test1:cg(2)c(3)taac        . cggccctaac
+    753     762       + test1:cg(2)c(3)taac        . cggccctaac
+    293     302       + test2:cctagc(3)ta          . cctagcccta
+    439     448       + test2:cctagc(3)ta          . cctagcccta
+    469     478       + test2:cctagc(3)ta          . cctagcccta
+    501     510       + test2:cctagc(3)ta          . cctagcccta
+    801     810       + test2:cctagc(3)ta          . cctagcccta
 
 #---------------------------------------
 #---------------------------------------
@@ -1028,7 +1055,7 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: fuzznuc
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzznuc
 #    -sequence tembl:L46634
 #    -pattern @../../data/nuc.pat
@@ -1039,7 +1066,7 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 #=======================================
 #
 # Sequence: L46634     from: 1   to: 1272
-# HitCount: 19
+# HitCount: 27
 #
 # Pattern_name Mismatch Pattern
 # pat1                0 cggccctaaccctagcccta
@@ -1050,26 +1077,34 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 #
 #=======================================
 
-  Start     End  Strand Pattern                        Mismatch Sequence
-    429     448       + pat1: cggccctaaccctagcccta            . cggccctaaccctagcccta
-    491     510       + pat1: cggccctaaccctagcccta            . cggccctaaccctagcccta
-    429     448       + pat2: cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
-    491     510       + pat2: cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
-    535     554       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
-    605     624       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
-    631     650       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
-    695     714       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
-    721     740       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
-    753     772       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
-    791     810       + pat2: cg(2)c(3)taaccctagc(3)ta        1 cggcccgaaccctagcccta
-    753     764       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    721     732       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    695     706       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    631     642       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    605     616       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    535     546       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    491     502       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
-    429     440       + pat3: cggc(2,4)taac(2,5)              . cggccctaaccc
+  Start     End  Strand Pattern                       Mismatch Sequence
+    429     448       + pat1:cggccctaaccctagcccta            . cggccctaaccctagcccta
+    491     510       + pat1:cggccctaaccctagcccta            . cggccctaaccctagcccta
+    429     448       + pat2:cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
+    491     510       + pat2:cg(2)c(3)taaccctagc(3)ta        . cggccctaaccctagcccta
+    535     554       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
+    605     624       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
+    631     650       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
+    695     714       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
+    721     740       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
+    753     772       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggccctaaccctaacccta
+    791     810       + pat2:cg(2)c(3)taaccctagc(3)ta        1 cggcccgaaccctagcccta
+    753     763       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    753     764       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    721     731       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    721     732       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    695     705       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    695     706       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    631     641       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    631     642       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    605     615       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    605     616       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    535     545       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    535     546       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    491     501       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    491     502       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
+    429     439       + pat3:cggc(2,4)taac(2,5)              . cggccctaacc
+    429     440       + pat3:cggc(2,4)taac(2,5)              . cggccctaaccc
 
 #---------------------------------------
 #---------------------------------------
@@ -1078,7 +1113,7 @@ By default <b>fuzznuc</b> writes a 'seqtable' report file.
 # Total_sequences: 1
 # Total_length: 1272
 # Reported_sequences: 1
-# Reported_hitcount: 19
+# Reported_hitcount: 27
 #---------------------------------------
 </pre>
 </td></tr></table><p>

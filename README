@@ -86,6 +86,26 @@ the GNU Library license. We also intend separating graphics by making
 the applications produce XML output which can then be rendered using
 a separate OpenGL-based graphics engine.
 
+Third party applications
+------------------------
+
+A few applications are wrappers to third-party applications which must
+be installed and in one case customised.
+
+clustalw release 1.8.0 or later, or 2 or later, should be installed in
+the path with the name clustalw. EMBOSS application emma is a wrapper
+to launch clustalw.
+
+primer3 from the Whitehead institute must be installed in one or two versions.
+
+EMBOSS application eprimer3 launches primer3_core and expects this to
+be version 1.x of the program.
+
+EMBOSS application eprimer32 launches primer32_core and expects this
+to be a renamed primer3_core from version 2.x of the program.
+
+primer3's configuration files also need to be installed. The original
+application looks by default in /opt/primer3_config
 
 Installation.
 -------------
@@ -112,7 +132,7 @@ Compilation problems for the CVS developers version
 On some systems there may be compatibility problems with different
 automake, autoconf or libtool versions. Always make sure that you keep
 up to date with releases of these tools and let us know of any
-problems you experience (emboss-bug@embnet.org). If a libtool problem
+problems you experience (emboss-bug@emboss.open-bio.org). If a libtool problem
 does arise you can try deleting the following files:
 
    config.cache

@@ -25,9 +25,9 @@ Usage
    Here is a sample session with ontogetsibs
 
 
-% ontogetsibs edam:0000575
+% ontogetsibs edam:0575
 Get ontology term(s) by id with common parent
-Obo output file [0000575.obo]:
+Obo output file [0575.obo]:
 
 
    Go to the input files for this example
@@ -36,7 +36,7 @@ Obo output file [0000575.obo]:
 Command line arguments
 
 Get ontology term(s) by id with common parent
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-oboterms]          obo        Obo term filename and optional format, or
@@ -54,6 +54,8 @@ Version: EMBOSS:6.4.0.0
 
    "-oboterms" associated qualifiers
    -iformat1           string     Input obo format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -idbname1           string     User-provided database name
 
    "-outfile" associated qualifiers
@@ -90,17 +92,17 @@ Input file format
 
   Input files for usage example
 
-  Database entry: edam:0000575
+  Database entry: edam:0575
 
 [Term]
-id: EDAM:0000575
+id: EDAM_operation:0575
 name: Restriction map rendering
 namespace: operation
 def: Visualise restriction maps in DNA sequences.
-subset: operation
-is_a: EDAM:0000573 ! DNA map rendering
-is_a: EDAM:0000431 ! Restriction site recognition
-relationship: has_output EDAM:0001289 ! Restriction map
+subset: operations
+is_a: EDAM_operation:0573 ! Map rendering
+is_a: EDAM_operation:0431 ! Restriction site recognition
+relationship: has_output EDAM_data:1289 ! Restriction map
 
 
 Output file format
@@ -117,34 +119,34 @@ Output file format
 
   Output files for usage example
 
-  File: 0000575.obo
+  File: 0575.obo
 
 [Term]
-id: EDAM:0000578
-name: DNA circular map rendering
-namespace: operation
-def: Draw a circular maps of DNA, for example a plasmid map.
-subset: operation
-is_a: EDAM:0000573 ! DNA map rendering
-
-[Term]
-id: EDAM:0000575
+id: EDAM_operation:0575
 name: Restriction map rendering
 namespace: operation
 def: Visualise restriction maps in DNA sequences.
-subset: operation
-is_a: EDAM:0000573 ! DNA map rendering
-is_a: EDAM:0000431 ! Restriction site recognition
-relationship: has_output EDAM:0001289 ! Restriction map
+subset: operations
+is_a: EDAM_operation:0573 ! Map rendering
+is_a: EDAM_operation:0431 ! Restriction site recognition
+relationship: has_output EDAM_data:1289 ! Restriction map
 
 [Term]
-id: EDAM:0000579
+id: EDAM_operation:0578
+name: DNA circular map rendering
+namespace: operation
+def: Draw a circular maps of DNA, for example a plasmid map.
+subset: operations
+is_a: EDAM_operation:0573 ! Map rendering
+
+[Term]
+id: EDAM_operation:0579
 name: Operon rendering
 namespace: operation
 def: Visualise operon structure etc.
-subset: operation
-is_a: EDAM:0000573 ! DNA map rendering
-relationship: in_topic EDAM:0000109 ! Gene finding
+subset: operations
+is_a: EDAM_operation:0573 ! Map rendering
+relationship: has_topic EDAM_topic:0109 ! Gene finding
 
 
 Data files

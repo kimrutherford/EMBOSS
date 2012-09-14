@@ -1,0 +1,786 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: refseqget
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+refseqget
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+<H2>
+Wiki
+</H2>
+
+The master copies of EMBOSS documentation are available
+at <a href="http://emboss.open-bio.org/wiki/Appdocs">
+http://emboss.open-bio.org/wiki/Appdocs</a>
+on the EMBOSS Wiki.
+
+<p>
+Please help by correcting and extending the Wiki pages.
+
+<H2>
+    Function
+</H2>
+Get reference sequence
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<b>refseqget</b> reads a reference sequence and returns the data in
+one of the EMBOSS reference sequence formats.
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+Here is a sample session with <b>refseqget</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>refseqget -of embl </b>
+Get reference sequence
+-refsequence : enter refseq value: <b>tembl:em498477</b>
+Reference sequence output file [em498477.embl]: <b>test.out</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+Get reference sequence
+Version: EMBOSS:6.5.0.0
+
+   Standard (Mandatory) qualifiers:
+  [-refsequence]       refseq     (no help text) refseq value
+  [-outfile]           outrefseq  (no help text) outrefseq value
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-refsequence" associated qualifiers
+   -iformat1           string     Input reference sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
+   -idbname1           string     User-provided database name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+   -oformat2           string     Referece sequence output format
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write first file to standard output
+   -filter             boolean    Read first file from standard input, write
+                                  first file to standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
+   -version            boolean    Report version number and exit
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left">Qualifier</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Standard (Mandatory) qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-refsequence]<br>(Parameter 1)</td>
+<td>refseq</td>
+<td>(no help text) refseq value</td>
+<td>Reference sequence</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>outrefseq</td>
+<td>(no help text) outrefseq value</td>
+<td>Reference sequence</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Additional (Optional) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Advanced (Unprompted) qualifiers</th>
+</tr>
+
+<tr>
+<td colspan=5>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>Associated qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-refsequence" associated refseq qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iformat1<br>-iformat_refsequence</td>
+<td>string</td>
+<td>Input reference sequence format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_refsequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_refsequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -idbname1<br>-idbname_refsequence</td>
+<td>string</td>
+<td>User-provided database name</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-outfile" associated outrefseq qualifiers
+</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -odirectory2<br>-odirectory_outfile</td>
+<td>string</td>
+<td>Output directory</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -oformat2<br>-oformat_outfile</td>
+<td>string</td>
+<td>Referece sequence output format</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=5>General qualifiers</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -auto</td>
+<td>boolean</td>
+<td>Turn off prompts</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -stdout</td>
+<td>boolean</td>
+<td>Write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -filter</td>
+<td>boolean</td>
+<td>Read first file from standard input, write first file to standard output</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -options</td>
+<td>boolean</td>
+<td>Prompt for standard and additional values</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -debug</td>
+<td>boolean</td>
+<td>Write debug output to program.dbg</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -verbose</td>
+<td>boolean</td>
+<td>Report some/full command line options</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -help</td>
+<td>boolean</td>
+<td>Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -warning</td>
+<td>boolean</td>
+<td>Report warnings</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -error</td>
+<td>boolean</td>
+<td>Report errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -fatal</td>
+<td>boolean</td>
+<td>Report fatal errors</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -die</td>
+<td>boolean</td>
+<td>Report dying program messages</td>
+<td>Boolean value Yes/No</td>
+<td>Y</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -version</td>
+<td>boolean</td>
+<td>Report version number and exit</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+</table>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>refseqget</b> reads a reference sequence.
+<p>
+
+The input is a standard EMBOSS reference sequence query.
+
+<p> The major reference sequence sources are files in one of the
+common sequence formats, or remote files accessed by HTTP or FTP.
+
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:em498477' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:em498477</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   EM498477; SV 1; linear; genomic DNA; CON; ENV; 1791 BP.
+XX
+AC   EM498477; AACY020000000;
+XX
+PR   Project:PRJNA13694;
+XX
+DT   14-APR-2007 (Rel. 91, Created)
+DT   14-APR-2007 (Rel. 91, Last updated, Version 1)
+XX
+DE   marine metagenome JCVI_SCAF_1096627861213 genomic scaffold, whole genome
+DE   shotgun sequence.
+XX
+KW   .
+XX
+OS   marine metagenome
+OC   unclassified sequences; metagenomes; ecological metagenomes.
+XX
+RN   [1]
+RP   1-1791
+RX   DOI; 10.1371/journal.pbio.0050016.
+RX   PUBMED; 17355171.
+RA   Yooseph S., Sutton G., Rusch D.B., Halpern A.L., Williamson S.J.,
+RA   Remington K., Eisen J.A., Heidelberg K.B., Manning G., Li W.,
+RA   Jaroszewski L., Cieplak P., Miller C.S., Li H., Mashiyama S.T.,
+RA   Joachimiak M.P., van Belle C., Chandonia J.M., Soergel D.A., Zhai Y.,
+RA   Natarajan K., Lee S., Raphael B.J., Bafna V., Friedman R., Brenner S.E.,
+RA   Godzik A., Eisenberg D., Dixon J.E., Taylor S.S., Strausberg R.L.,
+RA   Frazier M., Venter J.C.;
+RT   "The Sorcerer II Global Ocean Sampling expedition: expanding the universe
+RT   of protein families";
+RL   PLoS Biol. 5(3):e16-e16(2007).
+XX
+RN   [2]
+RP   1-1791
+RX   DOI; 10.1371/journal.pbio.0050017.
+RX   PUBMED; 17355172.
+RA   Kannan N., Taylor S.S., Zhai Y., Venter J.C., Manning G.;
+RT   "Structural and functional diversity of the microbial kinome";
+RL   PLoS Biol. 5(3):e17-e17(2007).
+XX
+RN   [3]
+RP   1-1791
+RX   DOI; 10.1371/journal.pbio.0050077.
+RX   PUBMED; 17355176.
+RA   Rusch D.B., Halpern A.L., Sutton G., Heidelberg K.B., Williamson S.,
+RA   Yooseph S., Wu D., Eisen J.A., Hoffman J.M., Remington K., Beeson K.,
+RA   Tran B., Smith H., Baden-Tillson H., Stewart C., Thorpe J., Freeman J.,
+RA   Andrews-Pfannkoch C., Venter J.E., Li K., Kravitz S., Heidelberg J.F.,
+RA   Utterback T., Rogers Y.H., Falcon L.I., Souza V., Bonilla-Rosso G.,
+RA   Eguiarte L.E., Karl D.M., Sathyendranath S., Platt T., Bermingham E.,
+RA   Gallardo V., Tamayo-Castillo G., Ferrari M.R., Strausberg R.L., Nealson K.,
+RA   Friedman R., Frazier M., Venter J.C.;
+RT   "The Sorcerer II Global Ocean Sampling expedition: northwest Atlantic
+RT   through eastern tropical Pacific";
+RL   PLoS Biol. 5(3):e77-e77(2007).
+XX
+RN   [4]
+RP   1-1791
+RG   J. Craig Venter Institute
+RA   ;
+RT   ;
+RL   Submitted (02-MAR-2007) to the INSDC.
+RL   J. Craig Venter Institute, 9704 Medical Center Drive, Rockville, MD 20850,
+RL   USA
+XX
+CC   For complete environmental metadata relating to this record,
+CC   background on the Global Ocean Sampling expedition, as well as
+CC   additional analysis results, please visit the CAMERA website
+CC   (http://camera.calit2.net).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1791
+FT                   /organism="marine metagenome"
+FT                   /environmental_sample
+FT                   /mol_type="genomic DNA"
+FT                   /isolation_source="isolated as part of a large dataset
+FT                   composed predominantly from surface water marine samples
+FT                   collected along a voyage from Eastern North American coast
+FT                   to the Eastern Pacific Ocean, including locations in the
+FT                   Sargasso Sea, Panama Canal, and the Galapagos Islands"
+FT                   /note="metagenomic"
+FT                   /db_xref="taxon:408172"
+XX
+CO   join(AACY021843949.1:1..897,gap(51),complement(AACY020702065.1:1..843))
+//
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<b>refseqget</b> writes data in one of the reference sequence output formats.
+
+<p>
+
+The output is a standard EMBOSS reference sequence.
+
+<p> The major reference sequence formats are the most common sequence
+formats.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: test.out</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID   EM498477; SV 1; linear; unassigned DNA; STD; UNC; 1791 BP.
+XX
+DE   marine metagenome JCVI_SCAF_1096627861213 genomic scaffold, whole genome
+DE   shotgun sequence.
+XX
+SQ   Sequence 1791 BP; 583 A; 286 C; 326 G; 545 T; 51 other;
+     agtacacaat atcctacaaa ttttaatcca ggaacaagtt tctttttggc aaatagtttt        60
+     gcaagatcac aggcacaatt tttgggagat agcacaggta taacaattaa tgaagttaat       120
+     agaatatcta aagctactgg accacttact gctgccactg gtgaaacttc atcatcagat       180
+     ccacatgctg gatttcagct tggtgtatta aatccttatg cttatgaacc tgctgatatt       240
+     gatgaatgta gtttgttaag cacatgttat tttaaattag gagatgccac ggtagatacg       300
+     gttaataata caattgatgt tggatttcct catggcctta gtgatttagt tttaggtaga       360
+     gtttttccgg gggcaggtaa taccttacct actggattaa ctgaaagaaa ttattatata       420
+     caagttatca attcaacaac acttgcattt tctaccagaa aatcaggaac taccacattt       480
+     agagcaaatt tatctacttc tggtagtgat gcaggaatag caaaggtttg tattgcaaca       540
+     gggataacat gttattattt ccaaaccagt ggatatgtat attttaccag ggacactcgc       600
+     gctcatttta gttataataa taatattgca cgagcacatt tatcgccagt aacaagatgg       660
+     ggtttacata ctgcaaatac aactgcaagg tctagagttg ataatggatt taattcctta       720
+     ggaggtgctg atatacgtgc taatcctaat ggattaatgg atataccaga gggtggaaac       780
+     ggtggcaata atgcacattt atattatcct tatggtagta caagtagaac taataataca       840
+     aattatttat attatggtat gagattagct cgtactcaag atggtggcac aaattatNNN       900
+     NNNNNNNNNN NNNNNNNNNN NNNNNNNNNN NNNNNNNNNN NNNNNNNNta tgctagatta       960
+     ttctgaagat ggtaacgaag atgccgatca gtacgcatta tggcttgcat ataaagaagt      1020
+     ttccgaaccg aattcgttct acattgcaaa tcatggtttt acaacgggcg acattgtaac      1080
+     atatagttca actggaactc ttcctgctgg tctcaatggt tttacaacgg caactgctca      1140
+     aataacaagt gctaacagat ttaaatttaa tagaaatagt gcagcagtaa atattgaaag      1200
+     tgtaggagtt gctggccaag atattacatt tactgcagtt tcattaaatc cacttggaaa      1260
+     ttcaattaac ttagtaggaa attcattaac caatggtgaa caagtttcat atacaaataa      1320
+     tggcgcatca aatattggtg gtcttacaag tggcactagt tattttgttt ttgatagaac      1380
+     atctgataca attaaacttg ccacaacgtt aactggttat accggagatg aagttttagt      1440
+     tgatacagat gccacatcag caacaggtgc tgcagcattt attaactcaa caaatggtag      1500
+     aattcaaggt atttctagta cagcaggaat tgatacgttc caagatggaa gcattgtgca      1560
+     aatagaacaa gtatccggtt ccactgatca tggattaaaa aatggagcat ttttatttgt      1620
+     taataaaatt aattccaaaa ccttcgagct ttacccaacc gattctgata gagtggctac      1680
+     taccaatcaa tatgttccat cacgtacatc agttgatgga caagtaaaat taaaagaaac      1740
+     cacacttgtt gatttaacag catttgattc tggtacacat agtattacag c               1791
+//
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+
+        #include file="inc/localfiles.ihtml"
+   -->
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+<ol>
+
+<li>
+
+</ol>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th>
+<th>Description</th></tr>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Display the trace in an ABI sequencer file</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
+</tr>
+
+<tr>
+<td><a href="extractalign.html">extractalign</a></td>
+<td>Extract regions from a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Display basic information about a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Display basic information about sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqxref.html">seqxref</a></td>
+<td>Retrieve all database cross-references for a sequence entry</td>
+</tr>
+
+<tr>
+<td><a href="seqxrefget.html">seqxrefget</a></td>
+<td>Retrieve all cross-referenced data for a sequence entry</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Display a multiple sequence alignment in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="variationget.html">variationget</a></td>
+<td>Get sequence variations</td>
+</tr>
+
+<tr>
+<td><a href="whichdb.html">whichdb</a></td>
+<td>Search all sequence databases for an entry and retrieve it</td>
+</tr>
+
+</table>
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+<p>
+Please report all bugs to the EMBOSS bug team (emboss-bug&nbsp;&copy;&nbsp;emboss.open-bio.org) not to the original author.
+
+<H2>
+    History
+</H2>
+<!--
+        Date written and what changes have been made go in this file.
+   -->
+
+
+
+
+<H2>
+    Target users
+</H2>
+<!--
+        For general users, use this text
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+<H2>
+    Comments
+</H2>
+<!--
+        User/developer/other comments go in this file.
+   -->
+None
+
+
+</BODY>
+</HTML>
+

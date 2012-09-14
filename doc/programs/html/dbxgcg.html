@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -116,7 +116,7 @@ General log output file [outfile.dbxgcg]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Index a GCG formatted database using b+tree indices
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Basename for index files (Any string from 2
@@ -144,6 +144,8 @@ Version: EMBOSS:6.4.0.0
                                   characters)
    -date               string     [00/00/00] Index date (Date string dd/mm/yy)
    -exclude            string     Wildcard filename(s) to exclude (Any string)
+   -statistics         boolean    [N] Report I/O statistics for each input
+                                  file
    -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers:
@@ -291,6 +293,14 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td>-statistics</td>
+<td>boolean</td>
+<td>Report I/O statistics for each input file</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>-indexoutdir</td>
 <td>outdir</td>
 <td>Index file output directory</td>
@@ -303,7 +313,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-directory" associated directory qualifiers
+<td align="left" colspan=5>"-directory" associated directory qualifiers
 </td>
 </tr>
 
@@ -316,7 +326,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
+<td align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
 </td>
 </tr>
 
@@ -329,7 +339,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -509,16 +519,27 @@ structure of the ID name index.
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Processing directory: /homes/user/test/embl/
-Processing file: eem_ba1.seq entries: 10 (10) time: 0.0s (0.0s)
-Processing file: eem_est.seq entries: 11 (1) time: 0.0s (0.0s)
-Processing file: eem_fun.seq entries: 12 (1) time: 0.0s (0.0s)
-Processing file: eem_htginv1.seq entries: 17 (5) time: 0.0s (0.0s)
-Processing file: eem_hum1.seq entries: 32 (15) time: 0.0s (0.0s)
-Processing file: eem_in.seq entries: 34 (2) time: 0.0s (0.0s)
-Processing file: eem_ov.seq entries: 36 (2) time: 0.0s (0.0s)
-Processing file: eem_ro.seq entries: 39 (3) time: 0.0s (0.0s)
-Processing file: eem_vi.seq entries: 40 (1) time: 0.0s (0.0s)
+Processing file: eem_ba1.seq
+entries: 10 (10) time: 0.0s (0.0s)
+Processing file: eem_est.seq
+entries: 11 (1) time: 0.0s (0.0s)
+Processing file: eem_fun.seq
+entries: 12 (1) time: 0.0s (0.0s)
+Processing file: eem_htginv1.seq
+entries: 17 (5) time: 0.0s (0.0s)
+Processing file: eem_hum1.seq
+entries: 32 (15) time: 0.0s (0.0s)
+Processing file: eem_in.seq
+entries: 34 (2) time: 0.0s (0.0s)
+Processing file: eem_ov.seq
+entries: 36 (2) time: 0.0s (0.0s)
+Processing file: eem_ro.seq
+entries: 39 (3) time: 0.0s (0.0s)
+Processing file: eem_vi.seq
+entries: 40 (1) time: 0.0s (0.0s)
 Total time: 0.0s
+Entry idlen 15 OK. Maximum ID length was 8 for 'AB009602'.
+Field acc acclen 15 OK. Maximum acc term length was 8 for 'AB009602'.
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.ent</h3>
@@ -527,7 +548,7 @@ Total time: 0.0s
 # Number of files: 9
 # Release: 0.0
 # Date:    00/00/00
-Dual filename database
+Reference 2 filename database
 eem_ba1.seq eem_ba1.ref
 eem_est.seq eem_est.ref
 eem_fun.seq eem_fun.ref
@@ -542,37 +563,45 @@ eem_vi.seq eem_vi.ref
 <p><h3>File: embl.pxac</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     3
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     48
-Fullcount 48
-Kwlimit   15
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        71
+Fill         46
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       22
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        48
+Fullcount    48
+Kwlimit      15
+Reffiles     1
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.pxid</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Identifier
-Compress  Yes
-Pages     3
-Order     71
-Fill      46
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    99
-Fill2     101
-Count     40
-Fullcount 40
-Kwlimit   15
+Type         Identifier
+Compress     Yes
+Pages        3
+Secpages     0
+Order        71
+Fill         46
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       99
+Fill2        101
+Secpagesize  512
+Seccachesize 2000
+Count        40
+Fullcount    40
+Kwlimit      15
+Reffiles     1
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.xac</h3>

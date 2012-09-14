@@ -4,8 +4,8 @@ application: whichdb [
   gui: "yes"
   batch: "yes"
   cpu: "low"
-  relations: "EDAM:0000090 topic Data retrieval"
-  relations: "EDAM:0000344 operation Sequence retrieval (by code)"
+  relations: "EDAM_topic:0090 Data search and retrieval"
+  relations: "EDAM_operation:0344 Sequence retrieval (by code)"
 ]
 
 section: input [
@@ -17,7 +17,7 @@ section: input [
     parameter: "Y"
     information: "ID or Accession number"
     knowntype: "sequence id input"
-    relations: "EDAM:0001063 identifier Sequence identifier"
+    relations: "EDAM_identifier:1063 Sequence identifier"
   ]
 
 endsection: input
@@ -30,13 +30,13 @@ section: output [
   toggle: get [
     default: "N"
     information: "Retrieve sequences"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: showall [
     default: "N"
     information: "Show failed attempts"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   outfile: outfile [
@@ -44,7 +44,7 @@ section: output [
     nullok: "$(get)"
     nulldefault: "$(get)"
     knowntype: "whichdb output"
-    relations: "EDAM:0000957 data Database metadata"
+    relations: "EDAM_data:0957 Database metadata"
   ]
 
 endsection: output

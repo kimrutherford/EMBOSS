@@ -1,8 +1,8 @@
 application: domtesta [
-  documentation: "Reads an XML file into the DOM and writes it back out"
+  documentation: "Read an XML file into the DOM and writes it back out"
   groups: "Edit"
-    relations: "EDAM:0000220 topic File handling"
-    relations: "EDAM:0000336 operation File debugging"
+    relations: "EDAM_topic:0220 File handling"
+    relations: "EDAM_operation:0336 File debugging"
 ]
 
 section: input [

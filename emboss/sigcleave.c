@@ -232,7 +232,7 @@ int main(int argc, char **argv)
 
 	    ajFmtPrintS(&tmpStr, "*mature_peptide %S", stmp);
 
-	    ajFeatTagAdd(gf,  NULL, tmpStr);
+	    ajFeatTagAddSS(gf,  NULL, tmpStr);
 
 	    if(outf)
 		ajFmtPrintF(outf,"%s\n",ajStrGetPtr(stmp));
@@ -268,9 +268,11 @@ int main(int argc, char **argv)
 					"%d\n\n", xweight,isite+begin);
 
 
-			ajStrAssignSubC(&stmp,ajStrGetPtr(sstr),isite+pval,isite-1);
+			ajStrAssignSubC(&stmp,ajStrGetPtr(sstr),
+                                        isite+pval,isite-1);
 			if(outf)
-			    ajFmtPrintF(outf," Sequence:  %s-",ajStrGetPtr(stmp));
+			    ajFmtPrintF(outf," Sequence:  %s-",
+                                        ajStrGetPtr(stmp));
 			if(isite+49<len) se=isite+49;
 			else se = len-1;
 			gf = ajFeatNewProt(TabRpt, NULL, fthit,
@@ -280,7 +282,7 @@ int main(int argc, char **argv)
 			ajStrAssignSubC(&stmp,ajStrGetPtr(sstr),isite,se);
 			ajFmtPrintS(&tmpStr, "*mature_peptide %S", stmp);
 
-			ajFeatTagAdd(gf,  NULL, tmpStr);
+			ajFeatTagAddSS(gf,  NULL, tmpStr);
 
 			if(outf)
 			    ajFmtPrintF(outf,"%s\n",ajStrGetPtr(stmp));

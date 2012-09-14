@@ -1,32 +1,40 @@
-/******************************************************************************
-** @source AJAX ARRAY functions
+/* @source ajarr **************************************************************
+**
+** AJAX ARRAY functions
 **
 ** These functions control all aspects of AJAX array utilities
 **
 ** @author Copyright (C) 1999 Alan Bleasby
-** @version 1.0
+** @version $Revision: 1.37 $
 ** @modified Mar 12 1999 ajb First version
 ** @modified May 10 2000 ajb added dynamically allocated numeric arrays
+** @modified $Date: 2011/11/08 15:07:45 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajarr.h"
+#include "ajmath.h"
+#include "ajreg.h"
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <string.h>
@@ -98,6 +106,8 @@ static AjBool arrUint3dResize(AjPUint3d *thys, ajuint elem);
 **
 ** @return [AjPChar] Pointer to an empty character array structure
 ** @category new [AjPChar] Default constructor
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -127,6 +137,8 @@ AjPChar ajChararrNew(void)
 ** @return [AjPChar] Pointer to an empty character array struct
 **                   of specified size.
 ** @category new [AjPChar] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -150,17 +162,6 @@ AjPChar ajChararrNewRes(ajuint size)
 
 
 
-/* @obsolete ajChararrNewL
-** @rename ajChararrNewRes
-*/
-__deprecated AjPChar ajChararrNewL(ajuint size)
-{
-    return ajChararrNewRes(size);
-}
-
-
-
-
 /* @func ajChararrDel *********************************************************
 **
 ** Default destructor for AJAX character arrays.
@@ -171,6 +172,8 @@ __deprecated AjPChar ajChararrNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPChar] Default destructor
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -206,6 +209,8 @@ void ajChararrDel(AjPChar *thys)
 **
 ** @return [char] contents of array element
 ** @category cast [AjPChar] Retrieve a character from an array
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -234,6 +239,8 @@ char ajChararrGet(const AjPChar thys, ajuint elem)
 **
 ** @return [AjBool] true if the array was extended.
 ** @category modify [AjPChar] Load a character array element
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -270,6 +277,8 @@ AjBool ajChararrPut(AjPChar *thys, ajuint elem, char v)
 ** @param [r] thys [const AjPChar] Source array
 ** @return [char*] Current array pointer, or a null string if undefined.
 ** @category cast [AjPChar] Retrieve internal pointer
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -290,6 +299,8 @@ char* ajChararrChararr(const AjPChar thys)
 **
 ** @param [r] thys [const AjPChar] Source array
 ** @return [ajuint] length
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -307,6 +318,8 @@ ajuint ajChararrLen(const AjPChar thys)
 **
 ** @return [AjPInt] Pointer to an empty integer array structure
 ** @category new [AjPInt] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -335,6 +348,8 @@ AjPInt ajIntNew(void)
 ** @param [r] size [ajuint] Reserved size
 ** @return [AjPInt] Pointer to an empty integer array struct of specified size.
 ** @category new [AjPInt] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -361,17 +376,6 @@ AjPInt ajIntNewRes(ajuint size)
 
 
 
-/* @obsolete ajIntNewL
-** @rename ajIntNewRes
-*/
-__deprecated AjPInt ajIntNewL(ajuint size)
-{
-    return ajIntNewRes(size);
-}
-
-
-
-
 
 /* @func ajIntDel *************************************************************
 **
@@ -383,6 +387,8 @@ __deprecated AjPInt ajIntNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPInt] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -418,6 +424,8 @@ void ajIntDel(AjPInt *thys)
 **
 ** @return [ajint] contents of array element
 ** @category cast [AjPInt] Retrieve an integer from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -446,6 +454,8 @@ ajint ajIntGet(const AjPInt thys, ajuint elem)
 **
 ** @return [AjBool] true if the array was extended.
 ** @category modify [AjPInt] Load an integer array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -483,6 +493,8 @@ AjBool ajIntPut(AjPInt *thys, ajuint elem, ajint v)
 ** @param  [r] elem [ajuint] array element.
 **
 ** @return [void]
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -511,6 +523,8 @@ void ajIntInc(AjPInt *thys, ajuint elem)
 ** @param  [r] elem [ajuint] array element.
 **
 ** @return [void]
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -533,6 +547,8 @@ void ajIntDec(AjPInt *thys, ajuint elem)
 **
 ** @return [AjPUint] Pointer to an empty unsigned integer array structure
 ** @category new [AjPUint] Default constructor
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -562,6 +578,8 @@ AjPUint ajUintNew(void)
 ** @return [AjPUint] Pointer to an empty unsigned integer array struct
 **                   of specified size.
 ** @category new [AjPUint] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -588,17 +606,6 @@ AjPUint ajUintNewRes(ajuint size)
 
 
 
-/* @obsolete ajUintNewL
-** @rename ajUintNewRes
-*/
-__deprecated AjPUint ajUintNewL(ajuint size)
-{
-    return ajUintNewRes(size);
-}
-
-
-
-
 /* @func ajUintDel ************************************************************
 **
 ** Default destructor for AJAX integer integer arrays.
@@ -609,6 +616,8 @@ __deprecated AjPUint ajUintNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPUint] Default destructor
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -644,6 +653,8 @@ void ajUintDel(AjPUint *thys)
 **
 ** @return [ajuint] contents of array element
 ** @category cast [AjPUint] Retrieve an integer from an array
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -672,6 +683,8 @@ ajuint ajUintGet(const AjPUint thys, ajuint elem)
 **
 ** @return [AjBool] true if the array was extended.
 ** @category modify [AjPUint] Load an integer array element
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -709,6 +722,8 @@ AjBool ajUintPut(AjPUint *thys, ajuint elem, ajuint v)
 ** @param  [r] elem [ajuint] array element.
 **
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -737,6 +752,8 @@ void ajUintInc(AjPUint *thys, ajuint elem)
 ** @param  [r] elem [ajuint] array element.
 **
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -764,6 +781,8 @@ void ajUintDec(AjPUint *thys, ajuint elem)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -822,6 +841,8 @@ static AjBool arrChararrResize(AjPChar *thys, ajuint size)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -877,6 +898,8 @@ static AjBool arrIntResize(AjPInt *thys, ajuint size)
 ** @param [r] thys [const AjPInt] Source array
 ** @return [ajint*] Current array pointer, or a null string if undefined.
 ** @category cast [AjPInt] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -897,6 +920,8 @@ ajint* ajIntInt(const AjPInt thys)
 **
 ** @param [r] thys [const AjPInt] Source array
 ** @return [ajuint] length
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -919,6 +944,8 @@ ajuint ajIntLen(const AjPInt thys)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -974,6 +1001,8 @@ static AjBool arrUintResize(AjPUint *thys, ajuint size)
 ** @param [r] thys [const AjPUint] Source array
 ** @return [ajuint*] Current array pointer, or a null string if undefined.
 ** @category cast [AjPUint] Retrieve internal pointer
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -994,6 +1023,8 @@ ajuint* ajUintUint(const AjPUint thys)
 **
 ** @param [r] thys [const AjPUint] Source array
 ** @return [ajuint] length
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -1011,6 +1042,8 @@ ajuint ajUintLen(const AjPUint thys)
 **
 ** @return [AjPFloat] Pointer to an empty float array structure
 ** @category new [AjPFloat] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1039,6 +1072,8 @@ AjPFloat ajFloatNew(void)
 ** @param [r] size [ajuint] Reserved size
 ** @return [AjPFloat] Pointer to an empty float array struct of specified size.
 ** @category new [AjPFloat] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1062,17 +1097,6 @@ AjPFloat ajFloatNewRes(ajuint size)
 
 
 
-/* @obsolete ajFloatNewL
-** @rename ajFloatNewRes
-*/
-__deprecated AjPFloat ajFloatNewL(ajuint size)
-{
-    return ajFloatNewRes(size);
-}
-
-
-
-
 /* @func ajFloatDel ***********************************************************
 **
 ** Default destructor for AJAX float arrays.
@@ -1083,6 +1107,8 @@ __deprecated AjPFloat ajFloatNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPFloat] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1118,6 +1144,8 @@ void ajFloatDel(AjPFloat *thys)
 **
 ** @return [float] contents of array element
 ** @category cast [AjPFloat] Retrieve a float from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1146,6 +1174,8 @@ float ajFloatGet(const AjPFloat thys, ajuint elem)
 **
 ** @return [AjBool] true if the array was extended.
 ** @category modify [AjPFloat] Load a float array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1185,6 +1215,8 @@ AjBool ajFloatPut(AjPFloat *thys, ajuint elem, float v)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -1240,6 +1272,8 @@ static AjBool arrFloatResize(AjPFloat *thys, ajuint size)
 ** @param [r] thys [const AjPFloat] Source array
 ** @return [float*] Current array pointer, or a null string if undefined.
 ** @category cast [AjPFloat] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1260,6 +1294,8 @@ float* ajFloatFloat(const AjPFloat thys)
 **
 ** @param [r] thys [const AjPFloat] Source array
 ** @return [ajuint] length
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1277,6 +1313,8 @@ ajuint ajFloatLen(const AjPFloat thys)
 **
 ** @return [AjPDouble] Pointer to an empty double array structure
 ** @category new [AjPDouble] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1306,6 +1344,8 @@ AjPDouble ajDoubleNew(void)
 ** @return [AjPDouble] Pointer to an empty double array struct
 **                     of specified size.
 ** @category new [AjPDouble] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1329,17 +1369,6 @@ AjPDouble ajDoubleNewRes(ajuint size)
 
 
 
-/* @obsolete ajDoubleNewL
-** @rename ajDoubleNewRes
-*/
-__deprecated AjPDouble ajDoubleNewL(ajuint size)
-{
-    return ajDoubleNewRes(size);
-}
-
-
-
-
 /* @func ajDoubleDel **********************************************************
 **
 ** Default destructor for AJAX double arrays.
@@ -1350,6 +1379,8 @@ __deprecated AjPDouble ajDoubleNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPDouble] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1385,6 +1416,8 @@ void ajDoubleDel(AjPDouble *thys)
 **
 ** @return [double] contents of array element
 ** @category cast [AjPDouble] Retrieve a double from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1413,6 +1446,8 @@ double ajDoubleGet(const AjPDouble thys, ajuint elem)
 **
 ** @return [AjBool] true if the array was extended.
 ** @category modify [AjPDouble] Load a double array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1451,6 +1486,8 @@ AjBool ajDoublePut(AjPDouble *thys, ajuint elem, double v)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -1506,6 +1543,8 @@ static AjBool arrDoubleResize(AjPDouble *thys, ajuint size)
 ** @param [r] thys [const AjPDouble] Source array
 ** @return [double*] Current array pointer, or a null string if undefined.
 ** @category cast [AjPDouble] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1526,6 +1565,8 @@ double* ajDoubleDouble(const AjPDouble thys)
 **
 ** @param [r] thys [const AjPDouble] Source array
 ** @return [ajuint] length
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1543,6 +1584,8 @@ ajuint ajDoubleLen(const AjPDouble thys)
 **
 ** @return [AjPShort] Pointer to an empty short array structure
 ** @category new [AjPShort] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1571,6 +1614,8 @@ AjPShort ajShortNew(void)
 ** @param [r] size [ajuint] Reserved size
 ** @return [AjPShort] Pointer to an empty short array struct of specified size.
 ** @category new [AjPShort] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1594,17 +1639,6 @@ AjPShort ajShortNewRes(ajuint size)
 
 
 
-/* @obsolete ajShortNewL
-** @rename ajShortNewRes
-*/
-__deprecated AjPShort ajShortNewL(ajuint size)
-{
-    return ajShortNewRes(size);
-}
-
-
-
-
 /* @func ajShortDel ***********************************************************
 **
 ** Default destructor for AJAX short arrays.
@@ -1615,6 +1649,8 @@ __deprecated AjPShort ajShortNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPShort] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1650,6 +1686,8 @@ void ajShortDel(AjPShort *thys)
 **
 ** @return [short] contents of array element
 ** @category cast [AjPShort] Retrieve a short from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1678,6 +1716,8 @@ short ajShortGet(const AjPShort thys, ajuint elem)
 **
 ** @return [AjBool] true if the array was extended.
 ** @category modify [AjPShort] Load a short array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1716,6 +1756,8 @@ AjBool ajShortPut(AjPShort *thys, ajuint elem, short v)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -1771,6 +1813,8 @@ static AjBool arrShortResize(AjPShort *thys, ajuint size)
 ** @param [r] thys [const AjPShort] Source array
 ** @return [short*] Current array pointer, or a null string if undefined.
 ** @category cast [AjPShort] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1791,6 +1835,8 @@ short* ajShortShort(const AjPShort thys)
 **
 ** @param [r] thys [const AjPShort] Source array
 ** @return [ajuint] length
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1808,6 +1854,8 @@ ajuint ajShortLen(const AjPShort thys)
 **
 ** @return [AjPLong] Pointer to an empty ajlong array structure
 ** @category new [AjPLong] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1836,6 +1884,8 @@ AjPLong ajLongNew(void)
 ** @param [r] size [ajuint] Reserved size
 ** @return [AjPLong] Pointer to an empty ajlong array struct of specified size.
 ** @category new [AjPLong] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1859,17 +1909,6 @@ AjPLong ajLongNewRes(ajuint size)
 
 
 
-/* @obsolete ajLongNewL
-** @rename ajLongNewRes
-*/
-__deprecated AjPLong ajLongNewL(ajuint size)
-{
-    return ajLongNewRes(size);
-}
-
-
-
-
 /* @func ajLongDel ************************************************************
 **
 ** Default destructor for AJAX ajlong arrays.
@@ -1880,6 +1919,8 @@ __deprecated AjPLong ajLongNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPLong] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1915,6 +1956,8 @@ void ajLongDel(AjPLong *thys)
 **
 ** @return [ajlong] contents of array element
 ** @category cast [AjPLong] Retrieve a ajlong from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1943,6 +1986,8 @@ ajlong ajLongGet(const AjPLong thys, ajuint elem)
 **
 ** @return [AjBool] true if the array was extended.
 ** @category modify [AjPLong] Load a ajlong array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1982,6 +2027,8 @@ AjBool ajLongPut(AjPLong *thys, ajuint elem, ajlong v)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -2037,6 +2084,8 @@ static AjBool arrLongResize(AjPLong *thys, ajuint size)
 ** @param [r] thys [const AjPLong] Source array
 ** @return [ajlong*] Current array pointer, or a null string if undefined.
 ** @category cast [AjPLong] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2057,6 +2106,8 @@ ajlong* ajLongLong(const AjPLong thys)
 **
 ** @param [r] thys [const AjPLong] Source array
 ** @return [ajuint] length
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2077,6 +2128,8 @@ ajuint ajLongLen(const AjPLong thys)
 ** @param [r] str [const AjPStr] Input string
 ** @param [w] array [AjPFloat*] Array
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2125,6 +2178,8 @@ AjBool ajFloatParse (const AjPStr str, AjPFloat* array)
 ** @param [r] precision [ajint] floating point precision
 ** @param [w] str [AjPStr*] Output string
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2154,6 +2209,8 @@ void ajFloatStr (const AjPFloat array, ajint precision, AjPStr* str)
 ** @param [r] precision [ajint] floating point precision
 ** @param [r] text [const char*] Report title
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2182,6 +2239,8 @@ void ajFloatTrace (const AjPFloat array, ajint precision, const char* text)
 ** @param [w] a [AjPStr **] array pointer to create and load
 **
 ** @return [ajuint] number of array elements created
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 ajuint ajArrCommaList(const AjPStr s, AjPStr **a)
@@ -2227,6 +2286,8 @@ ajuint ajArrCommaList(const AjPStr s, AjPStr **a)
 ** @param [r] startcol [ajuint] Start token (1 to n)
 ** @param [r] endcol [ajuint] End token (1 to n)
 ** @return [double*] Allocated array of integers
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2279,6 +2340,8 @@ double* ajArrDoubleLine(const AjPStr line, const char *delim,
 ** @param [r] startcol [ajuint] Start token (1 to n)
 ** @param [r] endcol [ajuint] End token (1 to n)
 ** @return [ajint*] Allocated array of integers
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2332,6 +2395,8 @@ ajint* ajArrIntLine(const AjPStr line, const char *delim,
 ** @param [r] startcol [ajuint] Start token (1 to n)
 ** @param [r] endcol [ajuint] End token (1 to n)
 ** @return [float*] Allocated array of integers
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2388,6 +2453,8 @@ float* ajArrFloatLine(const AjPStr line, const char *delim,
 **
 ** @return [AjPInt2d] Pointer to an empty integer array structure
 ** @category new [AjPInt2d] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2422,6 +2489,8 @@ AjPInt2d ajInt2dNew(void)
 ** @return [AjPInt2d] Pointer to an empty integer 2d array struct of
 **                    specified size.
 ** @category new [AjPInt2d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2448,17 +2517,6 @@ AjPInt2d ajInt2dNewRes(ajuint size)
 
 
 
-/* @obsolete ajInt2dNewL
-** @rename ajInt2dNewRes
-*/
-__deprecated AjPInt2d ajInt2dNewL(ajuint size)
-{
-    return ajInt2dNewRes(size);
-}
-
-
-
-
 /* @func ajInt2dNewResRes2 ****************************************************
 **
 ** Constructor given an initial reserved size in both dimensions
@@ -2468,6 +2526,8 @@ __deprecated AjPInt2d ajInt2dNewL(ajuint size)
 ** @return [AjPInt2d] Pointer to an empty integer 2d array struct of
 **                    specified size.
 ** @category new [AjPInt2d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2498,17 +2558,6 @@ AjPInt2d ajInt2dNewResRes2(ajuint size, ajuint size2)
 
 
 
-/* @obsolete ajInt2dNewLL
-** @rename ajInt2dNewRes2
-*/
-__deprecated AjPInt2d ajInt2dNewLL(ajuint size, ajuint size2)
-{
-    return ajInt2dNewResRes2(size, size2);
-}
-
-
-
-
 /* @func ajInt2dDel ***********************************************************
 **
 ** Default destructor for AJAX integer arrays.
@@ -2519,6 +2568,8 @@ __deprecated AjPInt2d ajInt2dNewLL(ajuint size, ajuint size2)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPInt2d] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2561,6 +2612,8 @@ void ajInt2dDel(AjPInt2d *thys)
 **
 ** @return [ajint] contents of array element
 ** @category cast [AjPInt2d] Retrieve an integer from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2598,6 +2651,8 @@ ajint ajInt2dGet(const AjPInt2d thys, ajuint elem1, ajuint elem2)
 **
 ** @return [AjBool] true if any array was extended.
 ** @category modify [AjPInt2d] Load an integer array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2644,6 +2699,8 @@ AjBool ajInt2dPut(AjPInt2d *thys, ajuint elem1, ajuint elem2, ajint v)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -2712,6 +2769,8 @@ static AjBool arrInt2dResize(AjPInt2d *thys, ajuint size)
 ** @param  [w] len2 [ajuint*] Length of 2nd dim
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2741,6 +2800,8 @@ void ajInt2dLen(const AjPInt2d thys, ajuint* len1, ajuint* len2)
 **
 ** @return [ajint**] converted value.
 ** @category cast [AjPInt2d] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2776,6 +2837,8 @@ ajint** ajInt2dInt(const AjPInt2d thys)
 **
 ** @return [AjPInt3d] Pointer to an empty integer array structure
 ** @category new [AjPInt3d] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2807,6 +2870,8 @@ AjPInt3d ajInt3dNew(void)
 ** @return [AjPInt3d] Pointer to an empty integer 3d array struct of
 **                    specified size.
 ** @category new [AjPInt3d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2831,17 +2896,6 @@ AjPInt3d ajInt3dNewRes(ajuint size)
 
 
 
-/* @obsolete ajInt3dNewL
-** @rename ajInt3dNewRes
-*/
-__deprecated AjPInt3d ajInt3dNewL(ajuint size)
-{
-    return ajInt3dNewRes(size);
-}
-
-
-
-
 /* @func ajInt3dDel ***********************************************************
 **
 ** Default destructor for AJAX integer arrays.
@@ -2852,6 +2906,8 @@ __deprecated AjPInt3d ajInt3dNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPInt3d] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2895,6 +2951,8 @@ void ajInt3dDel(AjPInt3d *thys)
 **
 ** @return [ajint] contents of array element
 ** @category cast [AjPInt3d] Retrieve an integer from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2933,6 +2991,8 @@ ajint ajInt3dGet(const AjPInt3d thys, ajuint elem1, ajuint elem2, ajuint elem3)
 **
 ** @return [AjBool] true if any array was extended.
 ** @category modify [AjPInt3d] Load an integer array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2978,6 +3038,8 @@ AjBool ajInt3dPut(AjPInt3d *thys,
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3047,6 +3109,8 @@ static AjBool arrInt3dResize(AjPInt3d *thys, ajuint size)
 ** @param  [w] len3 [ajuint*] Length of 3rd dim
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3090,6 +3154,8 @@ void ajInt3dLen(const AjPInt3d thys, ajuint* len1, ajuint* len2, ajuint* len3)
 **
 ** @return [ajint***] converted values.
 ** @category cast [AjPInt3d] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3137,6 +3203,8 @@ ajint*** ajInt3dInt(const AjPInt3d thys)
 **
 ** @return [AjPUint2d] Pointer to an empty integer array structure
 ** @category new [AjPUint2d] Default constructor
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3171,6 +3239,8 @@ AjPUint2d ajUint2dNew(void)
 ** @return [AjPUint2d] Pointer to an empty integer 2d array struct of
 **                    specified size.
 ** @category new [AjPUint2d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3197,17 +3267,6 @@ AjPUint2d ajUint2dNewRes(ajuint size)
 
 
 
-/* @obsolete ajUint2dNewL
-** @rename ajUint2dNewRes
-*/
-__deprecated AjPUint2d ajUint2dNewL(ajuint size)
-{
-    return ajUint2dNewRes(size);
-}
-
-
-
-
 /* @func ajUint2dNewResRes2 ***************************************************
 **
 ** Constructor given an initial reserved size in both dimensions
@@ -3217,6 +3276,8 @@ __deprecated AjPUint2d ajUint2dNewL(ajuint size)
 ** @return [AjPUint2d] Pointer to an empty integer 2d array struct of
 **                    specified size.
 ** @category new [AjPUint2d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3246,17 +3307,6 @@ AjPUint2d ajUint2dNewResRes2(ajuint size, ajuint size2)
 
 
 
-/* @obsolete ajUint2dNewLL
-** @rename ajUint2dNewRes2
-*/
-__deprecated AjPUint2d ajUint2dNewLL(ajuint size, ajuint size2)
-{
-    return ajUint2dNewResRes2(size, size2);
-}
-
-
-
-
 /* @func ajUint2dDel **********************************************************
 **
 ** Default destructor for AJAX unsigned integer arrays.
@@ -3267,6 +3317,8 @@ __deprecated AjPUint2d ajUint2dNewLL(ajuint size, ajuint size2)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPUint2d] Default destructor
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3306,6 +3358,8 @@ void ajUint2dDel(AjPUint2d *thys)
 **
 ** @return [ajuint] contents of array element
 ** @category cast [AjPUint2d] Retrieve an integer from an array
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3343,6 +3397,8 @@ ajuint ajUint2dGet(const AjPUint2d thys, ajuint elem1, ajuint elem2)
 **
 ** @return [AjBool] true if any array was extended.
 ** @category modify [AjPUint2d] Load an integer array element
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3387,6 +3443,8 @@ AjBool ajUint2dPut(AjPUint2d *thys, ajuint elem1, ajuint elem2, ajuint v)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3455,6 +3513,8 @@ static AjBool arrUint2dResize(AjPUint2d *thys, ajuint size)
 ** @param  [w] len2 [ajuint*] Length of 2nd dim
 **
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3484,6 +3544,8 @@ void ajUint2dLen(const AjPUint2d thys, ajuint* len1, ajuint* len2)
 **
 ** @return [ajuint**] converted value.
 ** @category cast [AjPUint2d] Retrieve internal pointer
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3519,6 +3581,8 @@ ajuint** ajUint2dUint(const AjPUint2d thys)
 **
 ** @return [AjPUint3d] Pointer to an empty unsigned integer array structure
 ** @category new [AjPUint3d] Default constructor
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3550,6 +3614,8 @@ AjPUint3d ajUint3dNew(void)
 ** @return [AjPUint3d] Pointer to an empty unsigned integer 3d array struct of
 **                    specified size.
 ** @category new [AjPUint3d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3574,17 +3640,6 @@ AjPUint3d ajUint3dNewRes(ajuint size)
 
 
 
-/* @obsolete ajUint3dNewL
-** @rename ajUint3dNewRes
-*/
-__deprecated AjPUint3d ajUint3dNewL(ajuint size)
-{
-    return ajUint3dNewRes(size);
-}
-
-
-
-
 /* @func ajUint3dDel **********************************************************
 **
 ** Default destructor for AJAX unsigned integer arrays.
@@ -3595,6 +3650,8 @@ __deprecated AjPUint3d ajUint3dNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPUint3d] Default destructor
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3635,6 +3692,8 @@ void ajUint3dDel(AjPUint3d *thys)
 **
 ** @return [ajuint] contents of array element
 ** @category cast [AjPUint3d] Retrieve an integer from an array
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3674,6 +3733,8 @@ ajuint ajUint3dGet(const AjPUint3d thys,
 **
 ** @return [AjBool] true if any array was extended.
 ** @category modify [AjPUint3d] Load an integer array element
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3718,6 +3779,8 @@ AjBool ajUint3dPut(AjPUint3d *thys,
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3787,6 +3850,8 @@ static AjBool arrUint3dResize(AjPUint3d *thys, ajuint size)
 ** @param  [w] len3 [ajuint*] Length of 3rd dim
 **
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3831,6 +3896,8 @@ void ajUint3dLen(const AjPUint3d thys,
 **
 ** @return [ajuint***] converted values.
 ** @category cast [AjPUint3d] Retrieve internal pointer
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3881,6 +3948,8 @@ ajuint*** ajUint3dUint(const AjPUint3d thys)
 **
 ** @return [AjPFloat2d] Pointer to an empty float array structure
 ** @category new [AjPFloat2d] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3912,6 +3981,8 @@ AjPFloat2d ajFloat2dNew(void)
 ** @return [AjPFloat2d] Pointer to an empty float 2d array struct of
 **                    specified size.
 ** @category new [AjPFloat2d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3936,17 +4007,6 @@ AjPFloat2d ajFloat2dNewRes(ajuint size)
 
 
 
-/* @obsolete ajFloat2dNewL
-** @rename ajFloat2dNewRes
-*/
-__deprecated AjPFloat2d ajFloat2dNewL(ajuint size)
-{
-    return ajFloat2dNewRes(size);
-}
-
-
-
-
 /* @func ajFloat2dDel *********************************************************
 **
 ** Default destructor for AJAX float arrays.
@@ -3957,6 +4017,8 @@ __deprecated AjPFloat2d ajFloat2dNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPFloat2d] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3996,6 +4058,8 @@ void ajFloat2dDel(AjPFloat2d *thys)
 **
 ** @return [float] contents of array element
 ** @category cast [AjPFloat2d] Retrieve a float from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4033,6 +4097,8 @@ float ajFloat2dGet(const AjPFloat2d thys, ajuint elem1, ajuint elem2)
 **
 ** @return [AjBool] true if any array was extended.
 ** @category modify [AjPFloat2d] Load a float array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4075,6 +4141,8 @@ AjBool ajFloat2dPut(AjPFloat2d *thys, ajuint elem1, ajuint elem2, float v)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -4142,6 +4210,8 @@ static AjBool arrFloat2dResize(AjPFloat2d *thys, ajuint size)
 ** @param  [w] len2 [ajuint*] Length of 2nd dim
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4171,6 +4241,8 @@ void ajFloat2dLen(const AjPFloat2d thys, ajuint* len1, ajuint* len2)
 **
 ** @return [float**] converted values.
 ** @category cast [AjPFloat2d] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4206,6 +4278,8 @@ float** ajFloat2dFloat(const AjPFloat2d thys)
 **
 ** @return [AjPFloat3d] Pointer to an empty float array structure
 ** @category new [AjPFloat3d] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4237,6 +4311,8 @@ AjPFloat3d ajFloat3dNew(void)
 ** @return [AjPFloat3d] Pointer to an empty float 3d array struct of
 **                    specified size.
 ** @category new [AjPFloat3d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4261,17 +4337,6 @@ AjPFloat3d ajFloat3dNewRes(ajuint size)
 
 
 
-/* @obsolete ajFloat3dNewL
-** @rename ajFloat3dNewRes
-*/
-__deprecated AjPFloat3d ajFloat3dNewL(ajuint size)
-{
-    return ajFloat3dNewRes(size);
-}
-
-
-
-
 /* @func ajFloat3dDel *********************************************************
 **
 ** Default destructor for AJAX float arrays.
@@ -4282,6 +4347,8 @@ __deprecated AjPFloat3d ajFloat3dNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPFloat3d] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4322,6 +4389,8 @@ void ajFloat3dDel(AjPFloat3d *thys)
 **
 ** @return [float] contents of array element
 ** @category cast [AjPFloat3d] Retrieve a float from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4361,6 +4430,8 @@ float ajFloat3dGet(const AjPFloat3d thys,
 **
 ** @return [AjBool] true if any array was extended.
 ** @category modify [AjPFloat3d] Load a float array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4404,6 +4475,8 @@ AjBool ajFloat3dPut(AjPFloat3d *thys,
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -4472,6 +4545,8 @@ static AjBool arrFloat3dResize(AjPFloat3d *thys, ajuint size)
 ** @param  [w] len3 [ajuint*] Length of 3rd dim
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4516,6 +4591,8 @@ void ajFloat3dLen(const AjPFloat3d thys,
 **
 ** @return [float***] converted values.
 ** @category cast [AjPFloat3d] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4566,6 +4643,8 @@ float*** ajFloat3dFloat(const AjPFloat3d thys)
 **
 ** @return [AjPDouble2d] Pointer to an empty double array structure
 ** @category new [AjPDouble2d] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4597,6 +4676,8 @@ AjPDouble2d ajDouble2dNew(void)
 ** @return [AjPDouble2d] Pointer to an empty double 2d array struct of
 **                    specified size.
 ** @category new [AjPDouble2d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4621,17 +4702,6 @@ AjPDouble2d ajDouble2dNewRes(ajuint size)
 
 
 
-/* @obsolete ajDouble2dNewL
-** @rename ajDouble2dNewRes
-*/
-__deprecated AjPDouble2d ajDouble2dNewL(ajuint size)
-{
-    return ajDouble2dNewRes(size);
-}
-
-
-
-
 /* @func ajDouble2dDel ********************************************************
 **
 ** Default destructor for AJAX double arrays.
@@ -4642,6 +4712,8 @@ __deprecated AjPDouble2d ajDouble2dNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPDouble2d] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4681,6 +4753,8 @@ void ajDouble2dDel(AjPDouble2d *thys)
 **
 ** @return [double] contents of array element
 ** @category cast [AjPDouble2d] Retrieve a double from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4718,6 +4792,8 @@ double ajDouble2dGet(const AjPDouble2d thys, ajuint elem1, ajuint elem2)
 **
 ** @return [AjBool] true if any array was extended.
 ** @category modify [AjPDouble2d] Load a double array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4762,6 +4838,8 @@ AjBool ajDouble2dPut(AjPDouble2d *thys, ajuint elem1, ajuint elem2, double v)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -4829,6 +4907,8 @@ static AjBool arrDouble2dResize(AjPDouble2d *thys, ajuint size)
 ** @param  [w] len2 [ajuint*] Length of 2nd dim
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4858,6 +4938,8 @@ void ajDouble2dLen(const AjPDouble2d thys, ajuint* len1, ajuint* len2)
 **
 ** @return [double**] converted values.
 ** @category cast [AjPDouble2d] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4892,6 +4974,8 @@ double** ajDouble2dDouble(const AjPDouble2d thys)
 **
 ** @return [AjPDouble3d] Pointer to an empty double array structure
 ** @category new [AjPDouble3d] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4923,6 +5007,8 @@ AjPDouble3d ajDouble3dNew(void)
 ** @return [AjPDouble3d] Pointer to an empty double 3d array struct of
 **                    specified size.
 ** @category new [AjPDouble3d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4947,17 +5033,6 @@ AjPDouble3d ajDouble3dNewRes(ajuint size)
 
 
 
-/* @obsolete ajDouble3dNewL
-** @rename ajDouble3dNewRes
-*/
-__deprecated AjPDouble3d ajDouble3dNewL(ajuint size)
-{
-    return ajDouble3dNewRes(size);
-}
-
-
-
-
 /* @func ajDouble3dDel ********************************************************
 **
 ** Default destructor for AJAX double arrays.
@@ -4968,6 +5043,8 @@ __deprecated AjPDouble3d ajDouble3dNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPDouble3d] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5008,6 +5085,8 @@ void ajDouble3dDel(AjPDouble3d *thys)
 **
 ** @return [double] contents of array element
 ** @category cast [AjPDouble3d] Retrieve a double from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5047,6 +5126,8 @@ double ajDouble3dGet(const AjPDouble3d thys,
 **
 ** @return [AjBool] true if any array was extended.
 ** @category modify [AjPDouble3d] Load a double array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5092,6 +5173,8 @@ AjBool ajDouble3dPut(AjPDouble3d *thys,
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -5160,6 +5243,8 @@ static AjBool arrDouble3dResize(AjPDouble3d *thys, ajuint size)
 ** @param  [w] len3 [ajuint*] Length of 3rd dim
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5205,6 +5290,8 @@ void ajDouble3dLen(const AjPDouble3d thys,
 **
 ** @return [double***] converted values.
 ** @category cast [AjPDouble3d] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5256,6 +5343,8 @@ double*** ajDouble3dDouble(const AjPDouble3d thys)
 **
 ** @return [AjPShort2d] Pointer to an empty short array structure
 ** @category new [AjPShort2d] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5287,6 +5376,8 @@ AjPShort2d ajShort2dNew(void)
 ** @return [AjPShort2d] Pointer to an empty short 2d array struct of
 **                    specified size.
 ** @category new [AjPShort2d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5311,17 +5402,6 @@ AjPShort2d ajShort2dNewRes(ajuint size)
 
 
 
-/* @obsolete ajShort2dNewL
-** @rename ajShort2dNewRes
-*/
-__deprecated AjPShort2d ajShort2dNewL(ajuint size)
-{
-    return ajShort2dNewRes(size);
-}
-
-
-
-
 /* @func ajShort2dDel *********************************************************
 **
 ** Default destructor for AJAX short arrays.
@@ -5332,6 +5412,8 @@ __deprecated AjPShort2d ajShort2dNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPShort2d] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5371,6 +5453,8 @@ void ajShort2dDel(AjPShort2d *thys)
 **
 ** @return [short] contents of array element
 ** @category cast [AjPShort2d] Retrieve a short from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5408,6 +5492,8 @@ short ajShort2dGet(const AjPShort2d thys, ajuint elem1, ajuint elem2)
 **
 ** @return [AjBool] true if any array was extended.
 ** @category modify [AjPShort2d] Load a short array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5452,6 +5538,8 @@ AjBool ajShort2dPut(AjPShort2d *thys, ajuint elem1, ajuint elem2, short v)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -5519,6 +5607,8 @@ static AjBool arrShort2dResize(AjPShort2d *thys, ajuint size)
 ** @param  [w] len2 [ajuint*] Length of 2nd dim
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5548,6 +5638,8 @@ void ajShort2dLen(const AjPShort2d thys, ajuint* len1, ajuint* len2)
 **
 ** @return [short**] converted values
 ** @category cast [AjPShort2d] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5583,6 +5675,8 @@ short** ajShort2dShort(const AjPShort2d thys)
 **
 ** @return [AjPShort3d] Pointer to an empty short array structure
 ** @category new [AjPShort3d] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5614,6 +5708,8 @@ AjPShort3d ajShort3dNew(void)
 ** @return [AjPShort3d] Pointer to an empty short 3d array struct of
 **                    specified size.
 ** @category new [AjPShort3d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5638,17 +5734,6 @@ AjPShort3d ajShort3dNewRes(ajuint size)
 
 
 
-/* @obsolete ajShort3dNewL
-** @rename ajShort3dNewRes
-*/
-__deprecated AjPShort3d ajShort3dNewL(ajuint size)
-{
-    return ajShort3dNewRes(size);
-}
-
-
-
-
 /* @func ajShort3dDel *********************************************************
 **
 ** Default destructor for AJAX short arrays.
@@ -5659,6 +5744,8 @@ __deprecated AjPShort3d ajShort3dNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPShort3d] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5699,6 +5786,8 @@ void ajShort3dDel(AjPShort3d *thys)
 **
 ** @return [short] contents of array element
 ** @category cast [AjPShort3d] Retrieve a short from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5738,6 +5827,8 @@ short ajShort3dGet(const AjPShort3d thys,
 **
 ** @return [AjBool] true if any array was extended.
 ** @category modify [AjPShort3d] Load a short array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5783,6 +5874,8 @@ AjBool ajShort3dPut(AjPShort3d *thys,
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -5851,6 +5944,8 @@ static AjBool arrShort3dResize(AjPShort3d *thys, ajuint size)
 ** @param  [w] len3 [ajuint*] Length of 3rd dim
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5896,6 +5991,8 @@ void ajShort3dLen(const AjPShort3d thys,
 **
 ** @return [short***] converted values.
 ** @category cast [AjPShort3d] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5947,6 +6044,8 @@ short*** ajShort3dShort(const AjPShort3d thys)
 **
 ** @return [AjPLong2d] Pointer to an empty ajlong array structure
 ** @category new [AjPLong2d] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5978,6 +6077,8 @@ AjPLong2d ajLong2dNew(void)
 ** @return [AjPLong2d] Pointer to an empty ajlong 2d array struct of
 **                    specified size.
 ** @category new [AjPLong2d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6002,17 +6103,6 @@ AjPLong2d ajLong2dNewRes(ajuint size)
 
 
 
-/* @obsolete ajLong2dNewL
-** @rename ajLong2dNewRes
-*/
-__deprecated AjPLong2d ajLong2dNewL(ajuint size)
-{
-    return ajLong2dNewRes(size);
-}
-
-
-
-
 /* @func ajLong2dDel **********************************************************
 **
 ** Default destructor for AJAX ajlong arrays.
@@ -6023,6 +6113,8 @@ __deprecated AjPLong2d ajLong2dNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPLong2d] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6062,6 +6154,8 @@ void ajLong2dDel(AjPLong2d *thys)
 **
 ** @return [ajlong] contents of array element
 ** @category cast [AjPLong2d] Retrieve a ajlong from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6099,6 +6193,8 @@ ajlong ajLong2dGet(const AjPLong2d thys, ajuint elem1, ajuint elem2)
 **
 ** @return [AjBool] true if any array was extended.
 ** @category modify [AjPLong2d] Load a ajlong array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6143,6 +6239,8 @@ AjBool ajLong2dPut(AjPLong2d *thys, ajuint elem1, ajuint elem2, ajlong v)
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -6210,6 +6308,8 @@ static AjBool arrLong2dResize(AjPLong2d *thys, ajuint size)
 ** @param  [w] len2 [ajuint*] Length of 2nd dim
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6239,6 +6339,8 @@ void ajLong2dLen(const AjPLong2d thys, ajuint* len1, ajuint* len2)
 **
 ** @return [ajlong**] converted values.
 ** @category cast [AjPLong2d] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6274,6 +6376,8 @@ ajlong** ajLong2dLong(const AjPLong2d thys)
 **
 ** @return [AjPLong3d] Pointer to an empty ajlong array structure
 ** @category new [AjPLong3d] Default constructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6305,6 +6409,8 @@ AjPLong3d ajLong3dNew(void)
 ** @return [AjPLong3d] Pointer to an empty ajlong 3d array struct of
 **                    specified size.
 ** @category new [AjPLong3d] Constructor with reserved size
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6329,17 +6435,6 @@ AjPLong3d ajLong3dNewRes(ajuint size)
 
 
 
-/* @obsolete ajLong3dNewL
-** @rename ajLong3dNewRes
-*/
-__deprecated AjPLong3d ajLong3dNewL(ajuint size)
-{
-    return ajLong3dNewRes(size);
-}
-
-
-
-
 /* @func ajLong3dDel **********************************************************
 **
 ** Default destructor for AJAX ajlong arrays.
@@ -6350,6 +6445,8 @@ __deprecated AjPLong3d ajLong3dNewL(ajuint size)
 **         The pointer is always deleted.
 ** @return [void]
 ** @category delete [AjPLong3d] Default destructor
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6390,6 +6487,8 @@ void ajLong3dDel(AjPLong3d *thys)
 **
 ** @return [ajlong] contents of array element
 ** @category cast [AjPLong3d] Retrieve a ajlong from an array
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6429,6 +6528,8 @@ ajlong ajLong3dGet(const AjPLong3d thys,
 **
 ** @return [AjBool] true if any array was extended.
 ** @category modify [AjPLong3d] Load a ajlong array element
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6474,6 +6575,8 @@ AjBool ajLong3dPut(AjPLong3d *thys,
 ** @param  [r] size [ajuint] new size.
 **
 ** @return [AjBool] true if the array was extended.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -6542,6 +6645,8 @@ static AjBool arrLong3dResize(AjPLong3d *thys, ajuint size)
 ** @param  [w] len3 [ajuint*] Length of 3rd dim
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6586,6 +6691,8 @@ void ajLong3dLen(const AjPLong3d thys,
 **
 ** @return [ajlong***] converted values.
 ** @category cast [AjPLong3d] Retrieve internal pointer
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6630,11 +6737,13 @@ ajlong*** ajLong3dLong(const AjPLong3d thys)
 
 
 
-/* @func ajArrExit ***********************************************************
+/* @func ajArrExit ************************************************************
 **
 ** Cleanup of array handling internals, and debug report of memory use
 **
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 void ajArrExit(void)
@@ -6667,3 +6776,231 @@ void ajArrExit(void)
 
     return;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajChararrNewL
+** @rename ajChararrNewRes
+*/
+__deprecated AjPChar ajChararrNewL(ajuint size)
+{
+    return ajChararrNewRes(size);
+}
+
+
+
+
+/* @obsolete ajIntNewL
+** @rename ajIntNewRes
+*/
+__deprecated AjPInt ajIntNewL(ajuint size)
+{
+    return ajIntNewRes(size);
+}
+
+
+
+
+/* @obsolete ajUintNewL
+** @rename ajUintNewRes
+*/
+__deprecated AjPUint ajUintNewL(ajuint size)
+{
+    return ajUintNewRes(size);
+}
+
+
+
+
+/* @obsolete ajFloatNewL
+** @rename ajFloatNewRes
+*/
+__deprecated AjPFloat ajFloatNewL(ajuint size)
+{
+    return ajFloatNewRes(size);
+}
+
+
+
+
+/* @obsolete ajDoubleNewL
+** @rename ajDoubleNewRes
+*/
+__deprecated AjPDouble ajDoubleNewL(ajuint size)
+{
+    return ajDoubleNewRes(size);
+}
+
+
+
+
+/* @obsolete ajShortNewL
+** @rename ajShortNewRes
+*/
+__deprecated AjPShort ajShortNewL(ajuint size)
+{
+    return ajShortNewRes(size);
+}
+
+
+
+
+/* @obsolete ajLongNewL
+** @rename ajLongNewRes
+*/
+__deprecated AjPLong ajLongNewL(ajuint size)
+{
+    return ajLongNewRes(size);
+}
+
+
+
+
+/* @obsolete ajInt2dNewL
+** @rename ajInt2dNewRes
+*/
+__deprecated AjPInt2d ajInt2dNewL(ajuint size)
+{
+    return ajInt2dNewRes(size);
+}
+
+
+
+
+/* @obsolete ajInt2dNewLL
+** @rename ajInt2dNewRes2
+*/
+__deprecated AjPInt2d ajInt2dNewLL(ajuint size, ajuint size2)
+{
+    return ajInt2dNewResRes2(size, size2);
+}
+
+
+
+
+/* @obsolete ajInt3dNewL
+** @rename ajInt3dNewRes
+*/
+__deprecated AjPInt3d ajInt3dNewL(ajuint size)
+{
+    return ajInt3dNewRes(size);
+}
+
+
+
+
+/* @obsolete ajUint2dNewL
+** @rename ajUint2dNewRes
+*/
+__deprecated AjPUint2d ajUint2dNewL(ajuint size)
+{
+    return ajUint2dNewRes(size);
+}
+
+
+
+
+/* @obsolete ajUint2dNewLL
+** @rename ajUint2dNewRes2
+*/
+__deprecated AjPUint2d ajUint2dNewLL(ajuint size, ajuint size2)
+{
+    return ajUint2dNewResRes2(size, size2);
+}
+
+
+
+
+/* @obsolete ajUint3dNewL
+** @rename ajUint3dNewRes
+*/
+__deprecated AjPUint3d ajUint3dNewL(ajuint size)
+{
+    return ajUint3dNewRes(size);
+}
+
+
+
+
+/* @obsolete ajFloat2dNewL
+** @rename ajFloat2dNewRes
+*/
+__deprecated AjPFloat2d ajFloat2dNewL(ajuint size)
+{
+    return ajFloat2dNewRes(size);
+}
+
+
+
+
+/* @obsolete ajDouble2dNewL
+** @rename ajDouble2dNewRes
+*/
+__deprecated AjPDouble2d ajDouble2dNewL(ajuint size)
+{
+    return ajDouble2dNewRes(size);
+}
+
+
+
+
+/* @obsolete ajDouble3dNewL
+** @rename ajDouble3dNewRes
+*/
+__deprecated AjPDouble3d ajDouble3dNewL(ajuint size)
+{
+    return ajDouble3dNewRes(size);
+}
+
+
+
+
+/* @obsolete ajShort2dNewL
+** @rename ajShort2dNewRes
+*/
+__deprecated AjPShort2d ajShort2dNewL(ajuint size)
+{
+    return ajShort2dNewRes(size);
+}
+
+
+
+
+/* @obsolete ajShort3dNewL
+** @rename ajShort3dNewRes
+*/
+__deprecated AjPShort3d ajShort3dNewL(ajuint size)
+{
+    return ajShort3dNewRes(size);
+}
+
+
+
+
+/* @obsolete ajLong2dNewL
+** @rename ajLong2dNewRes
+*/
+__deprecated AjPLong2d ajLong2dNewL(ajuint size)
+{
+    return ajLong2dNewRes(size);
+}
+
+
+
+
+/* @obsolete ajLong3dNewL
+** @rename ajLong3dNewRes
+*/
+__deprecated AjPLong3d ajLong3dNewL(ajuint size)
+{
+    return ajLong3dNewRes(size);
+}
+#endif

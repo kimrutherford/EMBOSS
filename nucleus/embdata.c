@@ -1,24 +1,34 @@
-/* @source embdata.c
+/* @source embdata ************************************************************
 **
 ** General routines for data files
-** Copyright (c) 1999 Mark Faller
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** @author Copyright (c) 1999 Mark Faller
+** @version $Revision: 1.21 $
+** @modified $Date: 2011/10/18 14:24:24 $ by $Author: rice $
+** @@
 **
-** This program is distributed in the hope that it will be useful,
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "emboss.h"
+#include "embdata.h"
+#include "ajlib.h"
+#include "ajlist.h"
+#include "ajtable.h"
+#include "ajfileio.h"
 
 
 
@@ -34,7 +44,7 @@
 
 
 static AjBool dataListNextLine(AjPFile pfile, const char *commentLine,
-				 AjPStr * line);
+                               AjPStr * line);
 
 
 
@@ -47,6 +57,8 @@ static AjBool dataListNextLine(AjPFile pfile, const char *commentLine,
 ** @param [w] data [AjPList*] is the list of data tables to delete
 ** @return [void]
 **
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -84,6 +96,8 @@ void embDataListDel(AjPList* data)
 ** @return [AjBool] returns AjTrue if found another line of input otherwise
 **         returns AjFalse
 **
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -123,6 +137,8 @@ static AjBool dataListNextLine(AjPFile pfile, const char *commentLine,
 ** @param [u] pfile [AjPFile] pointer to the data file
 ** @return [void]
 **
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -244,6 +260,8 @@ void embDataListRead(AjPList data, AjPFile pfile)
 **        original list.
 ** @return [void]
 **
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -291,6 +309,8 @@ void embDataListGetTables(const AjPList fullList, AjPList returnList,
 **        a value of 14 returns the second table in the original list.
 ** @return [AjPTable] the data table. Key and value are stored as AjPStrs
 **
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 

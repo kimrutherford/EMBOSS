@@ -159,7 +159,7 @@ static void seqmatchall_matchListPrint(void *x,void *cl)
 
 static void seqmatchall_listPrint(AjPAlign align, const AjPList list)
 {
-    ajListMapread(list,seqmatchall_matchListPrint, align);
+    ajListMapread(list, &seqmatchall_matchListPrint, align);
 
     return;
 }

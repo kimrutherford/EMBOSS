@@ -1,10 +1,37 @@
+/* @include ensmapper *********************************************************
+**
+** Ensembl Mapper functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.25 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/04 10:30:23 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSMAPPER_H
 #define ENSMAPPER_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "enscoordsystem.h"
 
@@ -13,14 +40,18 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
-/* @const EnsEMapperunitType **************************************************
+/* @enum EnsEMapperunitType ***************************************************
 **
-** Ensembl Mapper Unit Type enumeration.
+** Ensembl Mapper Unit Type enumeration
 **
+** @value ensEMapperunitTypeNULL Null
+** @value ensEMapperunitTypeSource Source
+** @value ensEMapperunitTypeTarget Target
+** @@
 ******************************************************************************/
 
 typedef enum EnsOMapperunitType
@@ -33,10 +64,15 @@ typedef enum EnsOMapperunitType
 
 
 
-/* @const EnsEMapperresultType ************************************************
+/* @enum EnsEMapperresultType *************************************************
 **
-** Ensembl Mapper Result Type enumeration.
+** Ensembl Mapper Result Type enumeration
 **
+** @value ensEMapperresultTypeNULL Null
+** @value ensEMapperresultTypeCoordinate Coordinate
+** @value ensEMapperresultTypeGap Gap
+** @value ensEMapperresultTypeInDel Insertion or Deletion
+** @@
 ******************************************************************************/
 
 typedef enum EnsOMapperresultType
@@ -50,9 +86,9 @@ typedef enum EnsOMapperresultType
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPMapperunit *******************************************************
 **
@@ -253,14 +289,14 @@ typedef struct EnsSMapperrangeregistry
 ** @attr TypeTarget [AjPStr] Target type
 ** @attr CoordsystemSource [EnsPCoordsystem] Source Ensembl Coordinate System
 ** @attr CoordsystemTarget [EnsPCoordsystem] Target Ensembl Coordinate System
-** @attr Pairs [AjPTable] AJAX Table of AJAX Table objects with
+** @attr Mapperpairs [AjPTable] AJAX Table of AJAX Table objects with
 ** Ensembl Mapper Pair objects
 ** @attr Sorted [AjBool] Ensembl Mapper Pair objects are sorted
 ** @attr Count [ajuint] Number of Ensembl Mapper Pair objects
 ** @attr Use [ajuint] Use counter
 ** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
-** The AJAX Table Pairs forms the top hierarchy of an Ensembl Mapper Pair
+** The AJAX Table Mapperpairs forms the top hierarchy of an Ensembl Mapper Pair
 ** cache. The AJAX Table uses the contents of the TypeSource and TypeTarget
 ** strings as index and holds a second hierarchy of AJAX Table objects, which
 ** use Ensembl Object identifiers as index. Those second-level AJAX Table
@@ -274,7 +310,7 @@ typedef struct EnsSMapper
     AjPStr TypeTarget;
     EnsPCoordsystem CoordsystemSource;
     EnsPCoordsystem CoordsystemTarget;
-    AjPTable Pairs;
+    AjPTable Mapperpairs;
     AjBool Sorted;
     ajuint Count;
     ajuint Use;
@@ -286,9 +322,9 @@ typedef struct EnsSMapper
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -302,7 +338,7 @@ EnsPMapperunit ensMapperunitNewIni(ajuint oid, ajint start, ajint end);
 
 EnsPMapperunit ensMapperunitNewRef(EnsPMapperunit mu);
 
-void ensMapperunitDel(EnsPMapperunit* Pmu);
+void ensMapperunitDel(EnsPMapperunit *Pmu);
 
 ajint ensMapperunitGetEnd(const EnsPMapperunit mu);
 
@@ -340,7 +376,7 @@ EnsPMapperpair ensMapperpairNewUnit(EnsPMapperunit source,
                                     ajint ori,
                                     AjBool indel);
 
-void ensMapperpairDel(EnsPMapperpair* Pmp);
+void ensMapperpairDel(EnsPMapperpair *Pmp);
 
 AjBool ensMapperpairGetIndel(const EnsPMapperpair mp);
 
@@ -397,7 +433,7 @@ EnsPMapperresult ensMapperresultNewIni(EnsEMapperresultType type,
 
 EnsPMapperresult ensMapperresultNewRef(EnsPMapperresult mr);
 
-void ensMapperresultDel(EnsPMapperresult* Pmr);
+void ensMapperresultDel(EnsPMapperresult *Pmr);
 
 EnsPCoordsystem ensMapperresultGetCoordsystem(const EnsPMapperresult mr);
 
@@ -462,7 +498,7 @@ EnsPMapperrange ensMapperrangeNewIni(ajint start, ajint end);
 
 EnsPMapperrange ensMapperrangeNewRef(EnsPMapperrange mr);
 
-void ensMapperrangeDel(EnsPMapperrange* Pmr);
+void ensMapperrangeDel(EnsPMapperrange *Pmr);
 
 ajint ensMapperrangeGetEnd(const EnsPMapperrange mr);
 
@@ -481,7 +517,7 @@ EnsPMapperrangeregistry ensMapperrangeregistryNewRef(
 
 AjBool ensMapperrangeregistryClear(EnsPMapperrangeregistry mrr);
 
-void ensMapperrangeregistryDel(EnsPMapperrangeregistry* Pmrr);
+void ensMapperrangeregistryDel(EnsPMapperrangeregistry *Pmrr);
 
 AjBool ensMapperrangeregistryCheck(EnsPMapperrangeregistry mrr,
                                    ajuint oid,
@@ -512,7 +548,7 @@ EnsPMapper ensMapperNewRef(EnsPMapper mapper);
 
 AjBool ensMapperClear(EnsPMapper mapper);
 
-void ensMapperDel(EnsPMapper* Pmapper);
+void ensMapperDel(EnsPMapper *Pmapper);
 
 EnsPCoordsystem ensMapperGetCoordsystemSource(const EnsPMapper mapper);
 

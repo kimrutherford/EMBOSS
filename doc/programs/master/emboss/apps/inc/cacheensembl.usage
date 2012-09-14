@@ -50,6 +50,7 @@ equus_caballus_variation
 erinaceus_europaeus
 felis_catus
 felis_catus_variation
+gadus_morhua
 gallus_gallus
 gallus_gallus_otherfeatures
 gallus_gallus_variation
@@ -64,6 +65,8 @@ homo_sapiens_otherfeatures
 homo_sapiens_cdna
 homo_sapiens_variation
 homo_sapiens_funcgen
+latimeria_chalumnae
+latimeria_chalumnae_otherfeatures
 loxodonta_africana
 macaca_mulatta
 macaca_mulatta_otherfeatures
@@ -81,6 +84,7 @@ mus_musculus_cdna
 mus_musculus_variation
 mus_musculus_funcgen
 myotis_lucifugus
+myotis_lucifugus_otherfeatures
 nomascus_leucogenys
 nomascus_leucogenys_otherfeatures
 ochotona_princeps
@@ -93,10 +97,13 @@ oryctolagus_cuniculus_otherfeatures
 oryzias_latipes
 oryzias_latipes_otherfeatures
 otolemur_garnettii
+otolemur_garnettii_otherfeatures
 pan_troglodytes
 pan_troglodytes_otherfeatures
 pan_troglodytes_variation
 pan_troglodytes_funcgen
+petromyzon_marinus
+petromyzon_marinus_otherfeatures
 pongo_abelii
 pongo_abelii_otherfeatures
 pongo_abelii_variation
@@ -110,6 +117,8 @@ saccharomyces_cerevisiae
 saccharomyces_cerevisiae_otherfeatures
 saccharomyces_cerevisiae_variation
 saccharomyces_cerevisiae_funcgen
+sarcophilus_harrisii
+sarcophilus_harrisii_otherfeatures
 sorex_araneus
 spermophilus_tridecemlineatus
 sus_scrofa

@@ -1,3 +1,4 @@
+dnl                                            -*- Autoconf -*-
 ##### http://autoconf-archive.cryp.to/ax_lib_mysql.html
 #
 # SYNOPSIS
@@ -6,11 +7,11 @@
 #
 # DESCRIPTION
 #
-#   This macro provides tests of availability of MySQL client library
-#   of particular version or newer.
+#   This macro provides tests of availability of MySQL 'libmysqlclient'
+#   library of particular version or newer.
 #
-#   AX_LIB_MYSQL macro takes only one argument which is optional. If
-#   there is no required version passed, then macro does not run
+#   AX_LIB_MYSQL macro takes only one argument which is optional.
+#   If there is no required version passed, then macro does not run
 #   version test.
 #
 #   The --with-mysql option takes one of three possible values:
@@ -43,6 +44,7 @@
 #   2009-09-23 AJB: Checking for availability of both, include files and
 #                   library files.
 #   2010-06-14 MKS: Added MYSQL_CPPFLAGS
+#   2011-08-01 MKS: Made test constructs more portable
 #
 # COPYLEFT
 #
@@ -54,131 +56,132 @@
 
 AC_DEFUN([AX_LIB_MYSQL],
 [
-    AC_ARG_WITH([mysql],
-        [AS_HELP_STRING([--with-mysql=@<:@ARG@:>@],
-            [use MySQL client library @<:@default=yes@:>@, optionally specify path to mysql_config]
-        )],
-        [
-        if test "$withval" = "no"; then
-            want_mysql="no"
-        elif test "$withval" = "yes"; then
-            want_mysql="yes"
-        else
-            want_mysql="yes"
-            MYSQL_CONFIG="$withval"
-        fi
-        ],
-        [want_mysql="yes"]
-    )
+  MYSQL_CFLAGS=""
+  MYSQL_CPPFLAGS=""
+  MYSQL_LDFLAGS=""
+  MYSQL_CONFIG=""
+  MYSQL_VERSION=""
 
-    MYSQL_CFLAGS=""
-    MYSQL_CPPFLAGS=""
-    MYSQL_LDFLAGS=""
-    MYSQL_VERSION=""
+  AC_ARG_WITH([mysql],
+  [AS_HELP_STRING([--with-mysql@<:@=ARG@:>@],
+  [use MySQL client library @<:@default=yes@:>@, optionally specify path to mysql_config])],
+  [
+    AS_IF([test "x${withval}" = "xno"],
+    [want_mysql="no"],
+    [test "x${withval}" = "xyes"],
+    [want_mysql="yes"],
+    [
+      want_mysql="yes"
+      MYSQL_CONFIG="${withval}"
+    ])
+  ],
+  [want_mysql="yes"])
 
-    dnl
-    dnl Check MySQL libraries (libmysqlclient)
-    dnl
+  dnl
+  dnl Check MySQL libraries (libmysqlclient)
+  dnl
 
-    if test "$want_mysql" = "yes"; then
+  AS_IF([test "x${want_mysql}" = "xyes"],
+  [
+    AS_IF([test -z "${MYSQL_CONFIG}" -o test],
+    [AC_PATH_PROG([MYSQL_CONFIG], [mysql_config], [no])])
 
-        if test -z "$MYSQL_CONFIG" -o test; then
-            AC_PATH_PROG([MYSQL_CONFIG], [mysql_config], [no])
-        fi
+    AS_IF([test "x${MYSQL_CONFIG}" != "xno"],
+    [
+      AC_MSG_CHECKING([for MySQL libraries])
 
-        if test "$MYSQL_CONFIG" != "no"; then
-            AC_MSG_CHECKING([for MySQL libraries])
+      MYSQL_CFLAGS="`${MYSQL_CONFIG} --cflags`"
+      MYSQL_CPPFLAGS="`${MYSQL_CONFIG} --include`"
+      MYSQL_LDFLAGS="`${MYSQL_CONFIG} --libs`"
 
-            MYSQL_CFLAGS="`$MYSQL_CONFIG --cflags`"
-            MYSQL_CPPFLAGS="`$MYSQL_CONFIG --include`"
-            MYSQL_LDFLAGS="`$MYSQL_CONFIG --libs`"
+      MYSQL_VERSION=`${MYSQL_CONFIG} --version`
 
-            MYSQL_VERSION=`$MYSQL_CONFIG --version`
+      dnl It isn't enough to just test for mysql_config as Fedora
+      dnl provides it in the mysql RPM even though mysql-devel may
+      dnl not be installed
 
-dnl It isn't enough to just test for mysql_config as Fedora
-dnl provides it in the mysql RPM even though mysql-devel may
-dnl not be installed
+      EMBCPPFLAGS="${CPPFLAGS}"
+      EMBLDFLAGS="${LDFLAGS}"
 
-            EMBCPPFLAGS=$CPPFLAGS
-	    EMBLDFLAGS=$LDFLAGS
-            
-            CPPFLAGS="$MYSQL_CPPFLAGS $EMBCPPFLAGS"
-	    LDFLAGS="$MYSQL_LDFLAGS $EMBLDFLAGS"
+      CPPFLAGS="${MYSQL_CPPFLAGS} ${EMBCPPFLAGS}"
+      LDFLAGS="${MYSQL_LDFLAGS} ${EMBLDFLAGS}"
 
-            AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
-                                              #include "mysql.h"]],
-					    [[mysql_info(NULL)]])],
-			   [havemysql=yes],
-			   [havemysql=no])
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
+                                        #include "mysql.h"]],
+                                      [[mysql_info(NULL)]])],
+        [havemysql="yes"],
+        [havemysql="no"])
 
-	    CPPFLAGS=$EMBCPPFLAGS
-	    LDFLAGS=$EMBLDFLAGS
+      CPPFLAGS="${EMBCPPFLAGS}"
+      LDFLAGS="${EMBLDFLAGS}"
 
-            if test "$havemysql" = yes; then
-                AC_DEFINE([HAVE_MYSQL], [1],
-                    [Define to 1 if MySQL libraries are available.])
-                found_mysql="yes"
-                AC_MSG_RESULT([yes])
-            else
-	        MYSQL_CFLAGS=""
-                MYSQL_CPPFLAGS=""
-	        MYSQL_LDFLAGS=""
-                found_mysql="no"
-                AC_MSG_RESULT([no])
-            fi
-        else
-            found_mysql="no"
-            AC_MSG_RESULT([no])
-        fi
-    fi
+      AS_IF([test "x${havemysql}" = "xyes"],
+      [
+        AC_DEFINE([HAVE_MYSQL], [1],
+        [Define to 1 if MySQL libraries are available.])
+        found_mysql="yes"
+        AC_MSG_RESULT([yes])
+      ],
+      [
+        MYSQL_CFLAGS=""
+        MYSQL_CPPFLAGS=""
+        MYSQL_LDFLAGS=""
+        found_mysql="no"
+        AC_MSG_RESULT([no])
+      ])
+    ],
+    [
+      found_mysql="no"
+    ])
+  ])
 
-    dnl
-    dnl Check if required version of MySQL is available
-    dnl
+  dnl
+  dnl Check if required version of MySQL is available
+  dnl
 
+  mysql_version_req=ifelse([$1], [], [], [$1])
 
-    mysql_version_req=ifelse([$1], [], [], [$1])
+  AS_IF([test "x${found_mysql}" = "xyes" -a -n "${mysql_version_req}"],
+  [
+    AC_MSG_CHECKING([if MySQL version is >= ${mysql_version_req}])
 
-    if test "$found_mysql" = "yes" -a -n "$mysql_version_req"; then
+    dnl Decompose required version string of MySQL
+    dnl and calculate its number representation
 
-        AC_MSG_CHECKING([if MySQL version is >= $mysql_version_req])
+    mysql_version_req_major=`expr ${mysql_version_req} : '\([[0-9]]*\)'`
+    mysql_version_req_minor=`expr ${mysql_version_req} : '[[0-9]]*\.\([[0-9]]*\)'`
+    mysql_version_req_micro=`expr ${mysql_version_req} : '[[0-9]]*\.[[0-9]]*\.\([[0-9]]*\)'`
 
-        dnl Decompose required version string of MySQL
-        dnl and calculate its number representation
-        mysql_version_req_major=`expr $mysql_version_req : '\([[0-9]]*\)'`
-        mysql_version_req_minor=`expr $mysql_version_req : '[[0-9]]*\.\([[0-9]]*\)'`
-        mysql_version_req_micro=`expr $mysql_version_req : '[[0-9]]*\.[[0-9]]*\.\([[0-9]]*\)'`
-        if test "x$mysql_version_req_micro" = "x"; then
-            mysql_version_req_micro="0"
-        fi
+    AS_IF([test "x${mysql_version_req_micro}" = "x"],
+    [mysql_version_req_micro="0"])
 
-        mysql_version_req_number=`expr $mysql_version_req_major \* 1000000 \
-                                   \+ $mysql_version_req_minor \* 1000 \
-                                   \+ $mysql_version_req_micro`
+    mysql_version_req_number=`expr ${mysql_version_req_major} \* 1000000 \
+                             \+ ${mysql_version_req_minor} \* 1000 \
+                             \+ ${mysql_version_req_micro}`
 
-        dnl Decompose version string of installed MySQL
-        dnl and calculate its number representation
-        mysql_version_major=`expr $MYSQL_VERSION : '\([[0-9]]*\)'`
-        mysql_version_minor=`expr $MYSQL_VERSION : '[[0-9]]*\.\([[0-9]]*\)'`
-        mysql_version_micro=`expr $MYSQL_VERSION : '[[0-9]]*\.[[0-9]]*\.\([[0-9]]*\)'`
-        if test "x$mysql_version_micro" = "x"; then
-            mysql_version_micro="0"
-        fi
+    dnl Decompose version string of installed MySQL
+    dnl and calculate its number representation
 
-        mysql_version_number=`expr $mysql_version_major \* 1000000 \
-                                   \+ $mysql_version_minor \* 1000 \
-                                   \+ $mysql_version_micro`
+    mysql_version_major=`expr ${MYSQL_VERSION} : '\([[0-9]]*\)'`
+    mysql_version_minor=`expr ${MYSQL_VERSION} : '[[0-9]]*\.\([[0-9]]*\)'`
+    mysql_version_micro=`expr ${MYSQL_VERSION} : '[[0-9]]*\.[[0-9]]*\.\([[0-9]]*\)'`
 
-        mysql_version_check=`expr $mysql_version_number \>\= $mysql_version_req_number`
-        if test "$mysql_version_check" = "1"; then
-            AC_MSG_RESULT([yes])
-        else
-            AC_MSG_RESULT([no])
-        fi
-    fi
+    AS_IF([test "x${mysql_version_micro}" = "x"],
+    [mysql_version_micro="0"])
 
-    AC_SUBST([MYSQL_VERSION])
-    AC_SUBST([MYSQL_CFLAGS])
-    AC_SUBST([MYSQL_CPPFLAGS])
-    AC_SUBST([MYSQL_LDFLAGS])
+    mysql_version_number=`expr ${mysql_version_major} \* 1000000 \
+                         \+ ${mysql_version_minor} \* 1000 \
+                         \+ ${mysql_version_micro}`
+
+    mysql_version_check=`expr ${mysql_version_number} \>\= ${mysql_version_req_number}`
+
+    AS_IF([test "x${mysql_version_check}" = "x1"],
+    [AC_MSG_RESULT([yes])],
+    [AC_MSG_RESULT([no])])
+  ])
+
+  AC_SUBST([MYSQL_CFLAGS])
+  AC_SUBST([MYSQL_CPPFLAGS])
+  AC_SUBST([MYSQL_LDFLAGS])
+  AC_SUBST([MYSQL_VERSION])
 ])

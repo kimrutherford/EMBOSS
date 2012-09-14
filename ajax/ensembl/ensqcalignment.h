@@ -1,10 +1,37 @@
+/* @include ensqcalignment ****************************************************
+**
+** Ensembl Quality Check Alignment functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.19 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/04 10:30:24 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSQCALIGNMENT_H
 #define ENSQCALIGNMENT_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensanalysis.h"
 #include "ensqcsequence.h"
@@ -14,9 +41,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 /* @const EnsPQcalignmentadaptor **********************************************
 **
@@ -29,9 +56,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPQcalignment ******************************************************
 **
@@ -91,9 +118,9 @@ typedef struct EnsSQcalignment
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -122,7 +149,7 @@ EnsPQcalignment ensQcalignmentNewIni(EnsPQcalignmentadaptor qcaa,
 
 EnsPQcalignment ensQcalignmentNewRef(EnsPQcalignment qca);
 
-void ensQcalignmentDel(EnsPQcalignment* Pqca);
+void ensQcalignmentDel(EnsPQcalignment *Pqca);
 
 EnsPQcalignmentadaptor ensQcalignmentGetAdaptor(const EnsPQcalignment qca);
 
@@ -210,10 +237,10 @@ size_t ensQcalignmentCalculateMemsize(const EnsPQcalignment qca);
 
 AjBool ensQcalignmentCalculateQueryCoordinates(
     const EnsPQcalignment qca,
-    ajint* Pstart,
-    ajint* Pend,
-    ajint* Pstrand,
-    ajuint* Plength);
+    ajint *Pstart,
+    ajint *Pend,
+    ajint *Pstrand,
+    ajuint *Plength);
 
 AjBool ensQcalignmentCalculateQueryCoverageDnaDna(
     EnsPQcalignment qca,
@@ -237,7 +264,7 @@ AjBool ensQcalignmentCalculateQueryCoverageProteinProtein(
 AjBool ensQcalignmentCalculateQueryCoverageQueryQuery(
     const EnsPQcalignment qca1,
     const EnsPQcalignment qca2,
-    ajuint* Pscore);
+    ajuint *Pscore);
 
 AjBool ensQcalignmentCalculateQueryCoverageQueryTarget(
     EnsPQcalignment qca,
@@ -245,16 +272,16 @@ AjBool ensQcalignmentCalculateQueryCoverageQueryTarget(
     ajuint edge);
 
 AjBool ensQcalignmentCalculateTargetCoordinates(const EnsPQcalignment qca,
-                                                ajint* Pstart,
-                                                ajint* Pend,
-                                                ajint* Pstrand,
-                                                ajuint* Plength);
+                                                ajint *Pstart,
+                                                ajint *Pend,
+                                                ajint *Pstrand,
+                                                ajuint *Plength);
 
 AjBool ensQcalignmentCheckTargetOverlap(const EnsPQcalignment qca1,
                                         const EnsPQcalignment qca2);
 
 AjBool ensQcalignmentReport(const EnsPQcalignment qca,
-                            AjPStr* Pstr,
+                            AjPStr *Pstr,
                             AjBool internalquery,
                             AjBool internaltarget);
 
@@ -266,7 +293,7 @@ EnsPQcalignmentadaptor ensRegistryGetQcalignmentadaptor(
 EnsPQcalignmentadaptor ensQcalignmentadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensQcalignmentadaptorDel(EnsPQcalignmentadaptor* Pqcaa);
+void ensQcalignmentadaptorDel(EnsPQcalignmentadaptor *Pqcaa);
 
 EnsPBaseadaptor ensQcalignmentadaptorGetBaseadaptor(
     EnsPQcalignmentadaptor qcaa);
@@ -305,7 +332,7 @@ AjBool ensQcalignmentadaptorFetchAllbyQcdatabaseTarget(
 AjBool ensQcalignmentadaptorFetchByIdentifier(
     EnsPQcalignmentadaptor qcaa,
     ajuint identifier,
-    EnsPQcalignment* Pqca);
+    EnsPQcalignment *Pqca);
 
 AjBool ensQcalignmentadaptorFetchAllbyCoverage(
     EnsPQcalignmentadaptor qcaa,

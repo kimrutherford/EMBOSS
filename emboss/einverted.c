@@ -153,6 +153,10 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &sequence))
     {
+
+	jmax = 0;
+	lastReported = -1;
+
 	/* JISON */
 	listseq   = ajListstrNew();
 	liststart = ajIntNew();

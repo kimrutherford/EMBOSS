@@ -5,7 +5,7 @@ Here is a sample session with <b>lindna</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>lindna -graph cps </b>
-Draws linear maps of DNA constructs
+Draw linear maps of DNA constructs
 Commands to the lindna drawing program file [inputfile]: <b>data.linp</b>
 Draw a ruler [Y]: <b></b>
       Open : Open blocks

@@ -1,34 +1,36 @@
-/* @source Ensembl Exon functions
+/* @source ensexon ************************************************************
+**
+** Ensembl Exon functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.65 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
-** @version $Revision: 1.44 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensalign.h"
-#include "ensbaseadaptor.h"
 #include "ensexon.h"
 #include "enstable.h"
 #include "enstranscript.h"
@@ -36,23 +38,23 @@
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 /* @datastatic ExonPCoordinates ***********************************************
 **
@@ -89,40 +91,32 @@ typedef struct ExonSCoordinates
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-
-
-
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
-
-/* @conststatic exonadaptorTables *********************************************
+/* @conststatic exonadaptorKTables ********************************************
 **
 ** Array of Ensembl Exon Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* const exonadaptorTables[] =
+static const char *const exonadaptorKTables[] =
 {
     "exon",
-    "exon_stable_id",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic exonadaptorColumns ********************************************
+/* @conststatic exonadaptorKColumns *******************************************
 **
 ** Array of Ensembl Exon Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* const exonadaptorColumns[] =
+static const char *const exonadaptorKColumns[] =
 {
     "exon.exon_id",
     "exon.seq_region_id",
@@ -133,67 +127,51 @@ static const char* const exonadaptorColumns[] =
     "exon.end_phase",
     "exon.is_current",
     "exon.is_constitutive",
-    "exon_stable_id.stable_id",
-    "exon_stable_id.version",
-    "exon_stable_id.created_date",
-    "exon_stable_id.modified_date",
-    (const char*) NULL
+    "exon.stable_id",
+    "exon.version",
+    "exon.created_date",
+    "exon.modified_date",
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic exonadaptorLeftjoin *******************************************
-**
-** Array of Ensembl Exon Adaptor SQL left join conditions
-**
-******************************************************************************/
-
-static EnsOBaseadaptorLeftjoin exonadaptorLeftjoin[] =
-{
-    {"exon_stable_id", "exon_stable_id.exon_id = exon.exon_id"},
-    {(const char*) NULL, (const char*) NULL}
-};
-
-
-
-
-/* @conststatic exontranscriptadaptorTables ***********************************
+/* @conststatic exontranscriptadaptorKTables **********************************
 **
 ** Array of Ensembl Exon-Transcript Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* const exontranscriptadaptorTables[] =
+static const char *const exontranscriptadaptorKTables[] =
 {
     "exon",
-    "exon_stable_id",
     "exon_transcript",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic exontranscriptadaptorDefaultcondition *************************
+/* @conststatic exontranscriptadaptorKDefaultcondition ************************
 **
 ** Ensembl Exon-Transcript Adaptor default SQL condition
 **
 ******************************************************************************/
 
-static const char* exontranscriptadaptorDefaultcondition =
+static const char *exontranscriptadaptorKDefaultcondition =
     "exon.exon_id = exon_transcript.exon_id";
 
 
 
 
-/* @conststatic exontranscriptadaptorFinalcondition ***************************
+/* @conststatic exontranscriptadaptorKFinalcondition **************************
 **
 ** Ensembl Exon-Transcript Adaptor final SQL condition
 **
 ******************************************************************************/
 
-static const char* exontranscriptadaptorFinalcondition =
+static const char *exontranscriptadaptorKFinalcondition =
     "ORDER BY "
     "exon_transcript.transcript_id, "
     "exon_transcript.rank";
@@ -201,43 +179,58 @@ static const char* exontranscriptadaptorFinalcondition =
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
                                               EnsPTranscript transcript,
                                               EnsPTranslation translation);
 
-static void exonCoordinatesDel(ExonPCoordinates* Pec);
+static void exonCoordinatesDel(ExonPCoordinates *Pec);
 
 static AjBool exonMergeCoordinates(AjPList mrs);
 
-static int listExonCompareStartAscending(const void* P1, const void* P2);
+static int listExonCompareEndAscending(
+    const void *item1,
+    const void *item2);
 
-static int listExonCompareStartDescending(const void* P1, const void* P2);
+static int listExonCompareEndDescending(
+    const void *item1,
+    const void *item2);
+
+static int listExonCompareIdentifierAscending(
+    const void *item1,
+    const void *item2);
+
+static int listExonCompareStartAscending(
+    const void *item1,
+    const void *item2);
+
+static int listExonCompareStartDescending(
+    const void *item1,
+    const void *item2);
 
 static AjBool exonadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList exons);
 
-static void* exonadaptorCacheReference(void* value);
-
-static void exonadaptorCacheDelete(void** value);
-
-static size_t exonadaptorCacheSize(const void* value);
-
-static EnsPFeature exonadaptorGetFeature(const void* value);
 
 
 
-
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -269,6 +262,8 @@ static EnsPFeature exonadaptorGetFeature(const void* value);
 ** @param [uN] translation [EnsPTranslation] Ensembl Translation
 **
 ** @return [ExonPCoordinates] Exon Coordinates or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -276,11 +271,11 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
                                               EnsPTranscript transcript,
                                               EnsPTranslation translation)
 {
-    ajint  scstart = 0; /* Ensembl Slice coding start */
-    ajint  scend   = 0; /* Ensembl Slice coding end   */
+    ajint  scstart = 0;  /* Ensembl Slice coding start */
+    ajint  scend   = 0;  /* Ensembl Slice coding end   */
 
-    ajuint tcstart = 0; /* Ensembl Transcript coding start */
-    ajuint tcend   = 0; /* Ensembl Transcript coding end   */
+    ajuint tcstart = 0U; /* Ensembl Transcript coding start */
+    ajuint tcend   = 0U; /* Ensembl Transcript coding end   */
 
     AjBool debug = AJFALSE;
 
@@ -292,7 +287,7 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
 
     debug = ajDebugTest("exonCoordinatesNewIni");
 
-    if(debug)
+    if (debug)
         ajDebug("exonCoordinatesNewIni\n"
                 "  exon %p\n"
                 "  transcript %p\n"
@@ -301,10 +296,10 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
                 transcript,
                 translation);
 
-    if(!exon)
+    if (!exon)
         return NULL;
 
-    if(!transcript)
+    if (!transcript)
         return NULL;
 
     AJNEW0(ec);
@@ -322,7 +317,7 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
                                          ensFeatureGetStrand(exon->Feature),
                                          mrs);
 
-    if(!ajListGetLength(mrs))
+    if (!ajListGetLength(mrs))
     {
         ajDebug("exonCoordinatesNewIni cannot map Ensembl Exon %p from "
                 "its Slice onto Transcript %p.\n", exon);
@@ -332,16 +327,16 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
         ensTranscriptTrace(transcript, 1);
     }
 
-    ajListPeekFirst(mrs, (void**) &mr);
+    ajListPeekFirst(mrs, (void **) &mr);
 
-    switch(ensMapperresultGetType(mr))
+    switch (ensMapperresultGetType(mr))
     {
         case ensEMapperresultTypeCoordinate:
 
             ec->TranscriptStart = ensMapperresultGetCoordinateStart(mr);
             ec->TranscriptEnd   = ensMapperresultGetCoordinateEnd(mr);
 
-            if(debug)
+            if (debug)
                 ajDebug("exonCoordinatesNewIni Exon '%S' "
                         "Transcript '%S:%d:%d'.\n",
                         ensExonGetStableidentifier(exon),
@@ -353,7 +348,7 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
 
         case ensEMapperresultTypeGap:
 
-            if(debug)
+            if (debug)
             {
                 ajDebug("exonCoordinatesNewIni maps the first part of "
                         "Ensembl Exon %p into a gap %d:%d for "
@@ -376,7 +371,7 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
                    "unexpected type %d.", ensMapperresultGetType(mr));
     }
 
-    while(ajListPop(mrs, (void**) &mr))
+    while (ajListPop(mrs, (void **) &mr))
         ensMapperresultDel(&mr);
 
     ajListFree(&mrs);
@@ -386,7 +381,7 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
     ** in Ensembl Transcript coordinates.
     */
 
-    if(!translation)
+    if (!translation)
         return ec;
 
     tcstart = ensTranscriptCalculateTranscriptCodingStart(transcript,
@@ -395,11 +390,11 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
     tcend   = ensTranscriptCalculateTranscriptCodingEnd(transcript,
                                                         translation);
 
-    if(debug)
+    if (debug)
         ajDebug("exonCoordinatesNewIni Transcript Coding %d:%d\n",
                 tcstart, tcend);
 
-    if(!tcstart)
+    if (!tcstart)
     {
         /* This is a non-coding Transcript. */
 
@@ -408,11 +403,11 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
     }
     else
     {
-        if(tcstart < ec->TranscriptStart)
+        if (tcstart < ec->TranscriptStart)
         {
             /* The coding region starts up-stream of this Exon ... */
 
-            if(tcend < ec->TranscriptStart)
+            if (tcend < ec->TranscriptStart)
             {
                 /* ... and also ends up-stream of this Exon. */
 
@@ -425,7 +420,7 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
 
                 ec->TranscriptCodingStart = ec->TranscriptStart;
 
-                if(tcend < ec->TranscriptEnd)
+                if (tcend < ec->TranscriptEnd)
                 {
                     /* ... ends in this Exon. */
 
@@ -446,13 +441,13 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
             ** this Exon.
             */
 
-            if(tcstart <= ec->TranscriptEnd)
+            if (tcstart <= ec->TranscriptEnd)
             {
                 /* The coding region starts within this Exon ... */
 
                 ec->TranscriptCodingStart = tcstart;
 
-                if(tcend < ec->TranscriptEnd)
+                if (tcend < ec->TranscriptEnd)
                 {
                     /* ... and also ends within this Exon. */
 
@@ -486,7 +481,7 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
     scstart = ensTranscriptCalculateSliceCodingStart(transcript, translation);
     scend   = ensTranscriptCalculateSliceCodingEnd(transcript, translation);
 
-    if(!scstart)
+    if (!scstart)
     {
         /* This is a non-coding Transcript. */
 
@@ -497,11 +492,11 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
     {
         feature = ensExonGetFeature(exon);
 
-        if(scstart < ensFeatureGetStart(feature))
+        if (scstart < ensFeatureGetStart(feature))
         {
             /* The coding region starts up-stream of this Exon ... */
 
-            if(scend < ensFeatureGetStart(feature))
+            if (scend < ensFeatureGetStart(feature))
             {
                 /* ... and also ends up-stream of this Exon. */
 
@@ -514,7 +509,7 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
 
                 ec->SliceCodingStart = ensFeatureGetStart(feature);
 
-                if(scend < ensFeatureGetEnd(feature))
+                if (scend < ensFeatureGetEnd(feature))
                 {
                     /* ... ends in this Exon. */
 
@@ -536,13 +531,13 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
             ** this Exon.
             */
 
-            if(scstart <= ensFeatureGetEnd(feature))
+            if (scstart <= ensFeatureGetEnd(feature))
             {
                 /* The coding region starts within this Exon ... */
 
                 ec->SliceCodingStart = scstart;
 
-                if(scend < ensFeatureGetEnd(feature))
+                if (scend < ensFeatureGetEnd(feature))
                 {
                     /* ... and also ends within this Exon . */
 
@@ -581,26 +576,16 @@ static ExonPCoordinates exonCoordinatesNewIni(EnsPExon exon,
 ** @param [d] Pec [ExonPCoordinates*] Exon Coordinates address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-static void exonCoordinatesDel(ExonPCoordinates* Pec)
+static void exonCoordinatesDel(ExonPCoordinates *Pec)
 {
-    ExonPCoordinates pthis = NULL;
+    ajMemFree((void **) Pec);
 
-    if(!Pec)
-        return;
-
-    if(!*Pec)
-        return;
-
-    pthis = *Pec;
-
-    AJFREE(pthis);
-
-    *Pec = NULL;
-
-    return;
+	return;
 }
 
 
@@ -611,8 +596,8 @@ static void exonCoordinatesDel(ExonPCoordinates* Pec)
 ** @nam2rule Exon Functions for manipulating Ensembl Exon objects
 **
 ** @cc Bio::EnsEMBL::Exon
-** @cc CVS Revision: 1.177
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.182
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -647,7 +632,7 @@ static void exonCoordinatesDel(ExonPCoordinates* Pec)
 ** @argrule Ini mdate [AjPStr] Modification date
 ** @argrule Ref exon [EnsPExon] Ensembl Exon
 **
-** @valrule * [EnsPExon] Ensembl Exon
+** @valrule * [EnsPExon] Ensembl Exon or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -662,6 +647,8 @@ static void exonCoordinatesDel(ExonPCoordinates* Pec)
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
 ** @return [EnsPExon] Ensembl Exon or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -673,12 +660,12 @@ EnsPExon ensExonNewCpy(const EnsPExon exon)
 
     EnsPExon pthis = NULL;
 
-    if(!exon)
+    if (!exon)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use          = 1;
+    pthis->Use          = 1U;
     pthis->Identifier   = exon->Identifier;
     pthis->Adaptor      = exon->Adaptor;
     pthis->Feature      = ensFeatureNewRef(exon->Feature);
@@ -687,18 +674,18 @@ EnsPExon ensExonNewCpy(const EnsPExon exon)
     pthis->Current      = exon->Current;
     pthis->Constitutive = exon->Constitutive;
 
-    if(exon->Stableidentifier)
+    if (exon->Stableidentifier)
         pthis->Stableidentifier = ajStrNewRef(exon->Stableidentifier);
 
     pthis->Version = exon->Version;
 
-    if(exon->DateCreation)
+    if (exon->DateCreation)
         pthis->DateCreation = ajStrNewRef(exon->DateCreation);
 
-    if(exon->DateModification)
+    if (exon->DateModification)
         pthis->DateModification = ajStrNewRef(exon->DateModification);
 
-    if(exon->SequenceCache)
+    if (exon->SequenceCache)
         pthis->SequenceCache = ajStrNewRef(exon->SequenceCache);
 
     /*
@@ -706,19 +693,19 @@ EnsPExon ensExonNewCpy(const EnsPExon exon)
     ** Ensembl Base Align Feature objects.
     */
 
-    if(exon->Supportingfeatures &&
-       ajListGetLength(exon->Supportingfeatures))
+    if (exon->Supportingfeatures &&
+        ajListGetLength(exon->Supportingfeatures))
     {
         pthis->Supportingfeatures = ajListNew();
 
         iter = ajListIterNew(exon->Supportingfeatures);
 
-        while(!ajListIterDone(iter))
+        while (!ajListIterDone(iter))
         {
             baf = (EnsPBasealignfeature) ajListIterGet(iter);
 
             ajListPushAppend(pthis->Supportingfeatures,
-                             (void*) ensBasealignfeatureNewRef(baf));
+                             (void *) ensBasealignfeatureNewRef(baf));
         }
 
         ajListIterDel(&iter);
@@ -750,6 +737,8 @@ EnsPExon ensExonNewCpy(const EnsPExon exon)
 ** @param [u] mdate [AjPStr] Modification date
 **
 ** @return [EnsPExon] Ensembl Exon or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -767,7 +756,7 @@ EnsPExon ensExonNewIni(EnsPExonadaptor ea,
 {
     EnsPExon exon = NULL;
 
-    if(ajDebugTest("ensExonNewIni"))
+    if (ajDebugTest("ensExonNewIni"))
     {
         ajDebug("ensExonNewIni\n"
                 "  ea %p\n"
@@ -796,10 +785,10 @@ EnsPExon ensExonNewIni(EnsPExonadaptor ea,
         ensFeatureTrace(feature, 1);
     }
 
-    if(!feature)
+    if (!feature)
         return NULL;
 
-    if((sphase < -1) || (sphase > 2))
+    if ((sphase < -1) || (sphase > 2))
     {
         ajDebug("ensExonNewIni start phase must be 0, 1, 2 for coding regions "
                 "or -1 for non-coding regions, not %d.\n", sphase);
@@ -807,7 +796,7 @@ EnsPExon ensExonNewIni(EnsPExonadaptor ea,
         return NULL;
     }
 
-    if((ephase < -1) || (ephase > 2))
+    if ((ephase < -1) || (ephase > 2))
     {
         ajDebug("ensExonNewIni end phase must be 0, 1, 2 for coding regions "
                 "or -1 for non-coding regions, not %d.\n", ephase);
@@ -817,7 +806,7 @@ EnsPExon ensExonNewIni(EnsPExonadaptor ea,
 
     AJNEW0(exon);
 
-    exon->Use          = 1;
+    exon->Use          = 1U;
     exon->Identifier   = identifier;
     exon->Adaptor      = ea;
     exon->Feature      = ensFeatureNewRef(feature);
@@ -826,15 +815,15 @@ EnsPExon ensExonNewIni(EnsPExonadaptor ea,
     exon->Current      = current;
     exon->Constitutive = constitutive;
 
-    if(stableid)
+    if (stableid)
         exon->Stableidentifier = ajStrNewRef(stableid);
 
     exon->Version = version;
 
-    if(cdate)
+    if (cdate)
         exon->DateCreation = ajStrNewRef(cdate);
 
-    if(mdate)
+    if (mdate)
         exon->DateModification = ajStrNewRef(mdate);
 
     exon->SequenceCache      = NULL;
@@ -853,13 +842,15 @@ EnsPExon ensExonNewIni(EnsPExonadaptor ea,
 **
 ** @param [u] exon [EnsPExon] Ensembl Exon
 **
-** @return [EnsPExon] Ensembl Exon
+** @return [EnsPExon] Ensembl Exon or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPExon ensExonNewRef(EnsPExon exon)
 {
-    if(!exon)
+    if (!exon)
         return NULL;
 
     exon->Use++;
@@ -872,14 +863,14 @@ EnsPExon ensExonNewRef(EnsPExon exon)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Exon object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Exon object.
 **
 ** @fdata [EnsPExon]
 **
-** @nam3rule Del Destroy (free) an Exon object
+** @nam3rule Del Destroy (free) an Ensembl Exon
 **
-** @argrule * Pexon [EnsPExon*] Ensembl Exon object address
+** @argrule * Pexon [EnsPExon*] Ensembl Exon address
 **
 ** @valrule * [void]
 **
@@ -893,25 +884,25 @@ EnsPExon ensExonNewRef(EnsPExon exon)
 **
 ** Default destructor for an Ensembl Exon.
 **
-** @param [d] Pexon [EnsPExon*] Ensembl Exon object address
+** @param [d] Pexon [EnsPExon*] Ensembl Exon address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensExonDel(EnsPExon* Pexon)
+void ensExonDel(EnsPExon *Pexon)
 {
     EnsPBasealignfeature baf = NULL;
 
     EnsPExon pthis = NULL;
 
-    if(!Pexon)
+    if (!Pexon)
         return;
 
-    if(!*Pexon)
-        return;
-
-    if(ajDebugTest("ensExonDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensExonDel"))
     {
         ajDebug("ensExonDel\n"
                 "  *Pexon %p\n",
@@ -919,12 +910,16 @@ void ensExonDel(EnsPExon* Pexon)
 
         ensExonTrace(*Pexon, 1);
     }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pexon)
+        return;
 
     pthis = *Pexon;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pexon = NULL;
 
@@ -943,7 +938,7 @@ void ensExonDel(EnsPExon* Pexon)
     ** Ensembl Base Align Feature objects.
     */
 
-    while(ajListPop(pthis->Supportingfeatures, (void**) &baf))
+    while (ajListPop(pthis->Supportingfeatures, (void **) &baf))
         ensBasealignfeatureDel(&baf);
 
     ajListFree(&pthis->Supportingfeatures);
@@ -958,16 +953,16 @@ void ensExonDel(EnsPExon* Pexon)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Exon object.
+** Functions for returning members of an Ensembl Exon object.
 **
 ** @fdata [EnsPExon]
 **
 ** @nam3rule Get Return Exon attribute(s)
 ** @nam4rule Adaptor Return the Ensembl Exon Adaptor
-** @nam4rule Constitutive Return the constitutive element
-** @nam4rule Current Return the current element
+** @nam4rule Constitutive Return the constitutive flag
+** @nam4rule Current Return the current flag
 ** @nam4rule Date Return a date
 ** @nam5rule Creation Return the date of creation
 ** @nam5rule Modification Return the date of modification
@@ -987,11 +982,11 @@ void ensExonDel(EnsPExon* Pexon)
 ** @valrule DateCreation [AjPStr] Creation date or NULL
 ** @valrule DateModification [AjPStr] Modification date or NULL
 ** @valrule Feature [EnsPFeature] Ensembl Feature or NULL
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
 ** @valrule PhaseEnd [ajint] Phase at end or 0
 ** @valrule PhaseStart [ajint] Phase at start or 0
 ** @valrule Stableidentifier [AjPStr] Stable identifier or NULL
-** @valrule Version [ajuint] Version or 0
+** @valrule Version [ajuint] Version or 0U
 **
 ** @fcategory use
 ******************************************************************************/
@@ -1001,21 +996,20 @@ void ensExonDel(EnsPExon* Pexon)
 
 /* @func ensExonGetAdaptor ****************************************************
 **
-** Get the Ensembl Exon Adaptor element of an Ensembl Exon.
+** Get the Ensembl Exon Adaptor member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
 ** @return [EnsPExonadaptor] Ensembl Exon Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPExonadaptor ensExonGetAdaptor(const EnsPExon exon)
 {
-    if(!exon)
-        return NULL;
-
-    return exon->Adaptor;
+    return (exon) ? exon->Adaptor : NULL;
 }
 
 
@@ -1023,21 +1017,20 @@ EnsPExonadaptor ensExonGetAdaptor(const EnsPExon exon)
 
 /* @func ensExonGetConstitutive ***********************************************
 **
-** Get the constitutive element of an Ensembl Exon.
+** Get the constitutive flag member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::is_constitutive
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
 ** @return [AjBool] ajTrue if this Exon is constitutive
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonGetConstitutive(const EnsPExon exon)
 {
-    if(!exon)
-        return ajFalse;
-
-    return exon->Constitutive;
+    return (exon) ? exon->Constitutive : ajFalse;
 }
 
 
@@ -1045,22 +1038,21 @@ AjBool ensExonGetConstitutive(const EnsPExon exon)
 
 /* @func ensExonGetCurrent ****************************************************
 **
-** Get the current element of an Ensembl Exon.
+** Get the current flag member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::is_current
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
 ** @return [AjBool] ajTrue if this Exon reflects the current state of
 **                  annotation
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonGetCurrent(const EnsPExon exon)
 {
-    if(!exon)
-        return ajFalse;
-
-    return exon->Current;
+    return (exon) ? exon->Current : ajFalse;
 }
 
 
@@ -1068,21 +1060,20 @@ AjBool ensExonGetCurrent(const EnsPExon exon)
 
 /* @func ensExonGetDateCreation ***********************************************
 **
-** Get the date of creation element of an Ensembl Exon.
+** Get the date of creation member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::created_date
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
 ** @return [AjPStr] Creation date or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensExonGetDateCreation(const EnsPExon exon)
 {
-    if(!exon)
-        return NULL;
-
-    return exon->DateCreation;
+    return (exon) ? exon->DateCreation : NULL;
 }
 
 
@@ -1090,21 +1081,20 @@ AjPStr ensExonGetDateCreation(const EnsPExon exon)
 
 /* @func ensExonGetDateModification *******************************************
 **
-** Get the date of modification element of an Ensembl Exon.
+** Get the date of modification member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::modified_date
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
 ** @return [AjPStr] Modification date or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensExonGetDateModification(const EnsPExon exon)
 {
-    if(!exon)
-        return NULL;
-
-    return exon->DateModification;
+    return (exon) ? exon->DateModification : NULL;
 }
 
 
@@ -1112,7 +1102,7 @@ AjPStr ensExonGetDateModification(const EnsPExon exon)
 
 /* @func ensExonGetFeature ****************************************************
 **
-** Get the Ensembl Feature element of an Ensembl Exon.
+** Get the Ensembl Feature member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::slice
 ** @cc Bio::EnsEMBL::Exon::start
@@ -1121,15 +1111,14 @@ AjPStr ensExonGetDateModification(const EnsPExon exon)
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
 ** @return [EnsPFeature] Ensembl Feature or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPFeature ensExonGetFeature(const EnsPExon exon)
 {
-    if(!exon)
-        return NULL;
-
-    return exon->Feature;
+    return (exon) ? exon->Feature : NULL;
 }
 
 
@@ -1137,21 +1126,20 @@ EnsPFeature ensExonGetFeature(const EnsPExon exon)
 
 /* @func ensExonGetIdentifier *************************************************
 **
-** Get the SQL database-internal identifier element of an Ensembl Exon.
+** Get the SQL database-internal identifier member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensExonGetIdentifier(const EnsPExon exon)
 {
-    if(!exon)
-        return 0;
-
-    return exon->Identifier;
+    return (exon) ? exon->Identifier : 0U;
 }
 
 
@@ -1159,21 +1147,20 @@ ajuint ensExonGetIdentifier(const EnsPExon exon)
 
 /* @func ensExonGetPhaseEnd ***************************************************
 **
-** Get the phase at end element of an Ensembl Exon.
+** Get the phase at end member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::end_phase
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
 ** @return [ajint] End phase or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajint ensExonGetPhaseEnd(const EnsPExon exon)
 {
-    if(!exon)
-        return 0;
-
-    return exon->PhaseEnd;
+    return (exon) ? exon->PhaseEnd : 0;
 }
 
 
@@ -1181,12 +1168,14 @@ ajint ensExonGetPhaseEnd(const EnsPExon exon)
 
 /* @func ensExonGetPhaseStart *************************************************
 **
-** Get the phase at start element of an Ensembl Exon.
+** Get the phase at start member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::phase
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
 ** @return [ajint] Start phase or 0
+**
+** @release 6.4.0
 ** @@
 **
 ** Get or set the phase of the Exon, which tells the translation machinery,
@@ -1215,10 +1204,7 @@ ajint ensExonGetPhaseEnd(const EnsPExon exon)
 
 ajint ensExonGetPhaseStart(const EnsPExon exon)
 {
-    if(!exon)
-        return 0;
-
-    return exon->PhaseStart;
+    return (exon) ? exon->PhaseStart : 0;
 }
 
 
@@ -1226,21 +1212,20 @@ ajint ensExonGetPhaseStart(const EnsPExon exon)
 
 /* @func ensExonGetStableidentifier *******************************************
 **
-** Get the stable identifier element of an Ensembl Exon.
+** Get the stable identifier member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::stable_id
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
 ** @return [AjPStr] Stable identifier or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensExonGetStableidentifier(const EnsPExon exon)
 {
-    if(!exon)
-        return NULL;
-
-    return exon->Stableidentifier;
+    return (exon) ? exon->Stableidentifier : NULL;
 }
 
 
@@ -1248,21 +1233,20 @@ AjPStr ensExonGetStableidentifier(const EnsPExon exon)
 
 /* @func ensExonGetVersion ****************************************************
 **
-** Get the version element of an Ensembl Exon.
+** Get the version member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::version
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
-** @return [ajuint] Version or 0
+** @return [ajuint] Version or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensExonGetVersion(const EnsPExon exon)
 {
-    if(!exon)
-        return 0;
-
-    return exon->Version;
+    return (exon) ? exon->Version : 0U;
 }
 
 
@@ -1270,7 +1254,7 @@ ajuint ensExonGetVersion(const EnsPExon exon)
 
 /* @section load on demand ****************************************************
 **
-** Functions for returning elements of an Ensembl Exon object,
+** Functions for returning members of an Ensembl Exon object,
 ** which may need loading from an Ensembl SQL database on demand.
 **
 ** @fdata [EnsPExon]
@@ -1303,6 +1287,8 @@ ajuint ensExonGetVersion(const EnsPExon exon)
 **
 ** @return [const AjPList] AJAX List of Ensembl Base Align Feature objects
 ** or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1310,13 +1296,13 @@ const AjPList ensExonLoadSupportingfeatures(EnsPExon exon)
 {
     EnsPDatabaseadaptor dba = NULL;
 
-    if(!exon)
+    if (!exon)
         return NULL;
 
-    if(exon->Supportingfeatures)
+    if (exon->Supportingfeatures)
         return exon->Supportingfeatures;
 
-    if(!exon->Adaptor)
+    if (!exon->Adaptor)
     {
         ajDebug("ensExonLoadSupportingfeatures cannot fetch "
                 "Ensembl Base Align Features object for an Ensembl Exon "
@@ -1339,16 +1325,16 @@ const AjPList ensExonLoadSupportingfeatures(EnsPExon exon)
 
 
 
-/* @section element assignment ************************************************
+/* @section member assignment *************************************************
 **
-** Functions for assigning elements of an Ensembl Exon object.
+** Functions for assigning members of an Ensembl Exon object.
 **
 ** @fdata [EnsPExon]
 **
-** @nam3rule Set Set one element of an Ensembl Exon
+** @nam3rule Set Set one member of an Ensembl Exon
 ** @nam4rule Adaptor Set the Ensembl Exon Adaptor
-** @nam4rule Constitutive Set the constitutive element
-** @nam4rule Current Set the current element
+** @nam4rule Constitutive Set the constitutive flag
+** @nam4rule Current Set the current flag
 ** @nam4rule Date Set a date
 ** @nam5rule Creation Set the date of creation
 ** @nam5rule Modification Set the date of modification
@@ -1383,19 +1369,21 @@ const AjPList ensExonLoadSupportingfeatures(EnsPExon exon)
 
 /* @func ensExonSetAdaptor ****************************************************
 **
-** Set the Ensembl Exon Adaptor element of an Ensembl Exon.
+** Set the Ensembl Exon Adaptor member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [u] exon [EnsPExon] Ensembl Exon
 ** @param [u] ea [EnsPExonadaptor] Ensembl Exon Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonSetAdaptor(EnsPExon exon, EnsPExonadaptor ea)
 {
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
     exon->Adaptor = ea;
@@ -1408,19 +1396,21 @@ AjBool ensExonSetAdaptor(EnsPExon exon, EnsPExonadaptor ea)
 
 /* @func ensExonSetConstitutive ***********************************************
 **
-** Set the constitutive element of an Ensembl Exon.
+** Set the constitutive member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::is_constitutive
 ** @param [u] exon [EnsPExon] Ensembl Exon
 ** @param [r] constitutive [AjBool] Constitutive attribute
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonSetConstitutive(EnsPExon exon, AjBool constitutive)
 {
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
     exon->Constitutive = constitutive;
@@ -1433,19 +1423,21 @@ AjBool ensExonSetConstitutive(EnsPExon exon, AjBool constitutive)
 
 /* @func ensExonSetCurrent ****************************************************
 **
-** Set the current element of an Ensembl Exon.
+** Set the current member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::is_current
 ** @param [u] exon [EnsPExon] Ensembl Exon
 ** @param [r] current [AjBool] Current attribute
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonSetCurrent(EnsPExon exon, AjBool current)
 {
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
     exon->Current = current;
@@ -1458,19 +1450,21 @@ AjBool ensExonSetCurrent(EnsPExon exon, AjBool current)
 
 /* @func ensExonSetDateCreation ***********************************************
 **
-** Set the date of creation element of an Ensembl Exon.
+** Set the date of creation member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::created_date
 ** @param [u] exon [EnsPExon] Ensembl Exon
 ** @param [u] cdate [AjPStr] Creation date
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonSetDateCreation(EnsPExon exon, AjPStr cdate)
 {
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
     ajStrDel(&exon->DateCreation);
@@ -1485,19 +1479,21 @@ AjBool ensExonSetDateCreation(EnsPExon exon, AjPStr cdate)
 
 /* @func ensExonSetDateModification *******************************************
 **
-** Set the date of modification element of an Ensembl Exon.
+** Set the date of modification member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::modified_date
 ** @param [u] exon [EnsPExon] Ensembl Exon
 ** @param [u] mdate [AjPStr] Modification date
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonSetDateModification(EnsPExon exon, AjPStr mdate)
 {
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
     ajStrDel(&exon->DateModification);
@@ -1512,7 +1508,7 @@ AjBool ensExonSetDateModification(EnsPExon exon, AjPStr mdate)
 
 /* @func ensExonSetFeature ****************************************************
 **
-** Set the Ensembl Feature element of an Ensembl Exon.
+** Set the Ensembl Feature member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::slice
 ** @cc Bio::EnsEMBL::Exon::start
@@ -1523,6 +1519,8 @@ AjBool ensExonSetDateModification(EnsPExon exon, AjPStr mdate)
 ** @param [u] feature [EnsPFeature] Ensembl Feature
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1535,7 +1533,7 @@ AjBool ensExonSetFeature(EnsPExon exon, EnsPFeature feature)
 
     EnsPSlice eslice = NULL;
 
-    if(ajDebugTest("ensExonSetFeature"))
+    if (ajDebugTest("ensExonSetFeature"))
     {
         ajDebug("ensExonSetFeature\n"
                 "  exon %p\n"
@@ -1548,15 +1546,15 @@ AjBool ensExonSetFeature(EnsPExon exon, EnsPFeature feature)
         ensFeatureTrace(feature, 1);
     }
 
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
-    if(!feature)
+    if (!feature)
         return ajFalse;
 
     /* Replace the current Feature. */
 
-    if(exon->Feature)
+    if (exon->Feature)
         ensFeatureDel(&exon->Feature);
 
     exon->Feature = ensFeatureNewRef(feature);
@@ -1570,14 +1568,14 @@ AjBool ensExonSetFeature(EnsPExon exon, EnsPFeature feature)
     ** Feature Slice.
     */
 
-    if(!exon->Supportingfeatures)
+    if (!exon->Supportingfeatures)
         return ajTrue;
 
     eslice = ensFeatureGetSlice(exon->Feature);
 
     iter = ajListIterNew(exon->Supportingfeatures);
 
-    while(!ajListIterDone(iter))
+    while (!ajListIterDone(iter))
     {
         baf = (EnsPBasealignfeature) ajListIterGet(iter);
 
@@ -1585,7 +1583,7 @@ AjBool ensExonSetFeature(EnsPExon exon, EnsPFeature feature)
 
         nbaf = ensBasealignfeatureTransfer(baf, eslice);
 
-        if(!nbaf)
+        if (!nbaf)
         {
             ajDebug("ensExonSetFeature could not transfer Base Align Feature "
                     "onto new Ensembl Feature Slice.");
@@ -1593,7 +1591,7 @@ AjBool ensExonSetFeature(EnsPExon exon, EnsPFeature feature)
             ensBasealignfeatureTrace(baf, 1);
         }
 
-        ajListIterInsert(iter, (void*) nbaf);
+        ajListIterInsert(iter, (void *) nbaf);
 
         /* Advance the AJAX List Iterator after the insert. */
 
@@ -1612,19 +1610,21 @@ AjBool ensExonSetFeature(EnsPExon exon, EnsPFeature feature)
 
 /* @func ensExonSetIdentifier *************************************************
 **
-** Set the SQL database-internal identifier element of an Ensembl Exon.
+** Set the SQL database-internal identifier member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [u] exon [EnsPExon] Ensembl Exon
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonSetIdentifier(EnsPExon exon, ajuint identifier)
 {
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
     exon->Identifier = identifier;
@@ -1637,19 +1637,21 @@ AjBool ensExonSetIdentifier(EnsPExon exon, ajuint identifier)
 
 /* @func ensExonSetPhaseEnd ***************************************************
 **
-** Set the phase at end element of an Ensembl Exon.
+** Set the phase at end member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::end_phase
 ** @param [u] exon [EnsPExon] Ensembl Exon
 ** @param [r] ephase [ajint] End phase
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonSetPhaseEnd(EnsPExon exon, ajint ephase)
 {
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
     exon->PhaseEnd = ephase;
@@ -1662,19 +1664,21 @@ AjBool ensExonSetPhaseEnd(EnsPExon exon, ajint ephase)
 
 /* @func ensExonSetPhaseStart *************************************************
 **
-** Set the phase at start element of an Ensembl Exon.
+** Set the phase at start member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::phase
 ** @param [u] exon [EnsPExon] Ensembl Exon
 ** @param [r] sphase [ajint] Start phase
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonSetPhaseStart(EnsPExon exon, ajint sphase)
 {
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
     exon->PhaseStart = sphase;
@@ -1687,19 +1691,21 @@ AjBool ensExonSetPhaseStart(EnsPExon exon, ajint sphase)
 
 /* @func ensExonSetStableidentifier *******************************************
 **
-** Set the stable identifier element of an Ensembl Exon.
+** Set the stable identifier member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::stable_id
 ** @param [u] exon [EnsPExon] Ensembl Exon
 ** @param [u] stableid [AjPStr] Stable identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonSetStableidentifier(EnsPExon exon, AjPStr stableid)
 {
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
     ajStrDel(&exon->Stableidentifier);
@@ -1714,19 +1720,21 @@ AjBool ensExonSetStableidentifier(EnsPExon exon, AjPStr stableid)
 
 /* @func ensExonSetVersion ****************************************************
 **
-** Set the version element of an Ensembl Exon.
+** Set the version member of an Ensembl Exon.
 **
 ** @cc Bio::EnsEMBL::Exon::version
 ** @param [u] exon [EnsPExon] Ensembl Exon
 ** @param [r] version [ajuint] Version
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonSetVersion(EnsPExon exon, ajuint version)
 {
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
     exon->Version = version;
@@ -1743,7 +1751,7 @@ AjBool ensExonSetVersion(EnsPExon exon, ajuint version)
 **
 ** @fdata [EnsPExon]
 **
-** @nam3rule Trace Report Ensembl Exon elements to debug file
+** @nam3rule Trace Report Ensembl Exon members to debug file
 **
 ** @argrule Trace exon [const EnsPExon] Ensembl Exon
 ** @argrule Trace level [ajuint] Indentation level
@@ -1764,6 +1772,8 @@ AjBool ensExonSetVersion(EnsPExon exon, ajuint version)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1776,7 +1786,7 @@ AjBool ensExonTrace(const EnsPExon exon, ajuint level)
 
     EnsPBasealignfeature baf = NULL;
 
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1816,14 +1826,14 @@ AjBool ensExonTrace(const EnsPExon exon, ajuint level)
 
     ensFeatureTrace(exon->Feature, level + 1);
 
-    if(exon->SequenceCache)
+    if (exon->SequenceCache)
     {
         /*
         ** For sequences longer than 40 characters use a
         ** '20 ... 20' notation.
         */
 
-        if(ajStrGetLen(exon->SequenceCache) > 40)
+        if (ajStrGetLen(exon->SequenceCache) > 40)
         {
             tmpstr = ajStrNew();
 
@@ -1843,14 +1853,14 @@ AjBool ensExonTrace(const EnsPExon exon, ajuint level)
 
     /* Trace the AJAX List of supporting Ensembl Base Align Feature objects. */
 
-    if(exon->Supportingfeatures)
+    if (exon->Supportingfeatures)
     {
         ajDebug("%S    AJAX List %p of Ensembl Base Align Feature objects:\n",
                 indent, exon->Supportingfeatures);
 
         iter = ajListIterNewread(exon->Supportingfeatures);
 
-        while(!ajListIterDone(iter))
+        while (!ajListIterDone(iter))
         {
             baf = (EnsPBasealignfeature) ajListIterGet(iter);
 
@@ -1907,10 +1917,10 @@ AjBool ensExonTrace(const EnsPExon exon, ajuint level)
 ** @valrule Memsize [size_t] Memory size in bytes or 0
 ** @valrule SliceCodingEnd [ajint] End coordinate or 0
 ** @valrule SliceCodingStart [ajint] Start coordinate or 0
-** @valrule TranscriptCodingEnd [ajuint] End coordinate or 0
-** @valrule TranscriptCodingStart [ajuint] Start coordinate or 0
-** @valrule TranscriptEnd [ajuint] End coordinate or 0
-** @valrule TranscriptStart [ajuint] Start coordinate or 0
+** @valrule TranscriptCodingEnd [ajuint] End coordinate or 0U
+** @valrule TranscriptCodingStart [ajuint] Start coordinate or 0U
+** @valrule TranscriptEnd [ajuint] End coordinate or 0U
+** @valrule TranscriptStart [ajuint] Start coordinate or 0U
 **
 ** @fcategory misc
 ******************************************************************************/
@@ -1927,24 +1937,26 @@ AjBool ensExonTrace(const EnsPExon exon, ajuint level)
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
 ** @return [ajint] Coding frame or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajint ensExonCalculateFrame(const EnsPExon exon)
 {
-    if(!exon)
+    if (!exon)
         return 0;
 
-    if(exon->PhaseStart == -1)
+    if (exon->PhaseStart == -1)
         return -1;
 
-    if(exon->PhaseStart == 0)
+    if (exon->PhaseStart == 0)
         return (exon->Feature->Start % 3);
 
-    if(exon->PhaseStart == 1)
+    if (exon->PhaseStart == 1)
         return ((exon->Feature->Start + 2) % 3);
 
-    if(exon->PhaseStart == 2)
+    if (exon->PhaseStart == 2)
         return ((exon->Feature->Start + 1) % 3);
 
     ajDebug("ensExonCalculateFrame invalid start phase %d in exon %u.\n",
@@ -1963,6 +1975,8 @@ ajint ensExonCalculateFrame(const EnsPExon exon)
 ** @param [r] exon [const EnsPExon] Ensembl Exon
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1974,35 +1988,35 @@ size_t ensExonCalculateMemsize(const EnsPExon exon)
 
     EnsPBasealignfeature baf = NULL;
 
-    if(!exon)
+    if (!exon)
         return 0;
 
     size += sizeof (EnsOExon);
 
     size += ensFeatureCalculateMemsize(exon->Feature);
 
-    if(exon->Stableidentifier)
+    if (exon->Stableidentifier)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(exon->Stableidentifier);
     }
 
-    if(exon->DateCreation)
+    if (exon->DateCreation)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(exon->DateCreation);
     }
 
-    if(exon->DateModification)
+    if (exon->DateModification)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(exon->DateModification);
     }
 
-    if(exon->SequenceCache)
+    if (exon->SequenceCache)
     {
         size += sizeof (AjOStr);
 
@@ -2014,13 +2028,13 @@ size_t ensExonCalculateMemsize(const EnsPExon exon)
     ** Ensembl Base Align Feature objects.
     */
 
-    if(exon->Supportingfeatures)
+    if (exon->Supportingfeatures)
     {
         size += sizeof (AjOList);
 
         iter = ajListIterNewread(exon->Supportingfeatures);
 
-        while(!ajListIterDone(iter))
+        while (!ajListIterDone(iter))
         {
             baf = (EnsPBasealignfeature) ajListIterGet(iter);
 
@@ -2047,6 +2061,8 @@ size_t ensExonCalculateMemsize(const EnsPExon exon)
 ** @param [u] translation [EnsPTranslation] Ensembl Translation
 **
 ** @return [ajint] Coding end coordinate or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2058,15 +2074,15 @@ ajint ensExonCalculateSliceCodingEnd(EnsPExon exon,
 
     ExonPCoordinates ec = NULL;
 
-    if(!exon)
+    if (!exon)
         return 0;
 
-    if(!transcript)
+    if (!transcript)
         return 0;
 
     ec = exonCoordinatesNewIni(exon, transcript, translation);
 
-    if(ec)
+    if (ec)
         scend = ec->SliceCodingEnd;
 
     exonCoordinatesDel(&ec);
@@ -2088,6 +2104,8 @@ ajint ensExonCalculateSliceCodingEnd(EnsPExon exon,
 ** @param [u] translation [EnsPTranslation] Ensembl Translation
 **
 ** @return [ajint] Coding start coordinate or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2099,15 +2117,15 @@ ajint ensExonCalculateSliceCodingStart(EnsPExon exon,
 
     ExonPCoordinates ec = NULL;
 
-    if(!exon)
+    if (!exon)
         return 0;
 
-    if(!transcript)
+    if (!transcript)
         return 0;
 
     ec = exonCoordinatesNewIni(exon, transcript, translation);
 
-    if(ec)
+    if (ec)
         scstart = ec->SliceCodingStart;
 
     exonCoordinatesDel(&ec);
@@ -2128,7 +2146,9 @@ ajint ensExonCalculateSliceCodingStart(EnsPExon exon,
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
 ** @param [u] translation [EnsPTranslation] Ensembl Translation
 **
-** @return [ajuint] Coding end coordinate or 0
+** @return [ajuint] Coding end coordinate or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2136,19 +2156,19 @@ ajuint ensExonCalculateTranscriptCodingEnd(EnsPExon exon,
                                            EnsPTranscript transcript,
                                            EnsPTranslation translation)
 {
-    ajuint tcend = 0;
+    ajuint tcend = 0U;
 
     ExonPCoordinates ec = NULL;
 
-    if(!exon)
-        return 0;
+    if (!exon)
+        return 0U;
 
-    if(!transcript)
-        return 0;
+    if (!transcript)
+        return 0U;
 
     ec = exonCoordinatesNewIni(exon, transcript, translation);
 
-    if(ec)
+    if (ec)
         tcend = ec->TranscriptCodingEnd;
 
     exonCoordinatesDel(&ec);
@@ -2169,7 +2189,9 @@ ajuint ensExonCalculateTranscriptCodingEnd(EnsPExon exon,
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
 ** @param [u] translation [EnsPTranslation] Ensembl Translation
 **
-** @return [ajuint] Coding start coordinate or 0
+** @return [ajuint] Coding start coordinate or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2177,19 +2199,19 @@ ajuint ensExonCalculateTranscriptCodingStart(EnsPExon exon,
                                              EnsPTranscript transcript,
                                              EnsPTranslation translation)
 {
-    ajuint tcstart = 0;
+    ajuint tcstart = 0U;
 
     ExonPCoordinates ec = NULL;
 
-    if(!exon)
-        return 0;
+    if (!exon)
+        return 0U;
 
-    if(!transcript)
-        return 0;
+    if (!transcript)
+        return 0U;
 
     ec = exonCoordinatesNewIni(exon, transcript, translation);
 
-    if(ec)
+    if (ec)
         tcstart = ec->TranscriptCodingStart;
 
     exonCoordinatesDel(&ec);
@@ -2209,25 +2231,27 @@ ajuint ensExonCalculateTranscriptCodingStart(EnsPExon exon,
 ** @param [u] exon [EnsPExon] Ensembl Exon
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
 **
-** @return [ajuint] End coordinate or 0
+** @return [ajuint] End coordinate or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensExonCalculateTranscriptEnd(EnsPExon exon, EnsPTranscript transcript)
 {
-    ajuint tend = 0;
+    ajuint tend = 0U;
 
     ExonPCoordinates ec = NULL;
 
-    if(!exon)
-        return 0;
+    if (!exon)
+        return 0U;
 
-    if(!transcript)
-        return 0;
+    if (!transcript)
+        return 0U;
 
     ec = exonCoordinatesNewIni(exon, transcript, (EnsPTranslation) NULL);
 
-    if(ec)
+    if (ec)
         tend = ec->TranscriptEnd;
 
     exonCoordinatesDel(&ec);
@@ -2247,26 +2271,28 @@ ajuint ensExonCalculateTranscriptEnd(EnsPExon exon, EnsPTranscript transcript)
 ** @param [u] exon [EnsPExon] Ensembl Exon
 ** @param [u] transcript [EnsPTranscript] Ensembl Transcript
 **
-** @return [ajuint] Start coordinate or 0
+** @return [ajuint] Start coordinate or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensExonCalculateTranscriptStart(EnsPExon exon,
                                        EnsPTranscript transcript)
 {
-    ajuint tstart = 0;
+    ajuint tstart = 0U;
 
     ExonPCoordinates ec = NULL;
 
-    if(!exon)
-        return 0;
+    if (!exon)
+        return 0U;
 
-    if(!transcript)
-        return 0;
+    if (!transcript)
+        return 0U;
 
     ec = exonCoordinatesNewIni(exon, transcript, (EnsPTranslation) NULL);
 
-    if(ec)
+    if (ec)
         tstart = ec->TranscriptStart;
 
     exonCoordinatesDel(&ec);
@@ -2311,6 +2337,8 @@ ajuint ensExonCalculateTranscriptStart(EnsPExon exon,
 ** @see ensFeatureTransfer
 **
 ** @return [EnsPExon] Ensembl Exon or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2319,15 +2347,15 @@ EnsPExon ensExonTransfer(EnsPExon exon, EnsPSlice slice)
     EnsPExon newexon = NULL;
     EnsPFeature newfeature = NULL;
 
-    if(!exon)
+    if (!exon)
         return NULL;
 
-    if(!slice)
+    if (!slice)
         return NULL;
 
     newfeature = ensFeatureTransfer(exon->Feature, slice);
 
-    if(!newfeature)
+    if (!newfeature)
         return NULL;
 
     newexon = ensExonNewCpy(exon);
@@ -2359,6 +2387,8 @@ EnsPExon ensExonTransfer(EnsPExon exon, EnsPSlice slice)
 ** @see ensFeatureTransform
 **
 ** @return [EnsPExon] Ensembl Exon or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2369,13 +2399,13 @@ EnsPExon ensExonTransform(EnsPExon exon,
     EnsPExon nexon       = NULL;
     EnsPFeature nfeature = NULL;
 
-    if(!exon)
+    if (!exon)
         return NULL;
 
-    if(!csname)
+    if (!csname)
         return NULL;
 
-    if(!csversion)
+    if (!csversion)
         return NULL;
 
     nfeature = ensFeatureTransform(exon->Feature,
@@ -2383,7 +2413,7 @@ EnsPExon ensExonTransform(EnsPExon exon,
                                    csversion,
                                    (EnsPSlice) NULL);
 
-    if(!nfeature)
+    if (!nfeature)
         return NULL;
 
     nexon = ensExonNewCpy(exon);
@@ -2446,23 +2476,40 @@ EnsPExon ensExonTransform(EnsPExon exon,
 ** @param [wP] Pidentifier [AjPStr*] Display identifier address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjBool ensExonFetchDisplayidentifier(const EnsPExon exon, AjPStr* Pidentifier)
+AjBool ensExonFetchDisplayidentifier(const EnsPExon exon, AjPStr *Pidentifier)
 {
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
-    if(!Pidentifier)
+    if (!Pidentifier)
         return ajFalse;
 
-    if(exon->Stableidentifier && ajStrGetLen(exon->Stableidentifier))
-        *Pidentifier = ajStrNewS(exon->Stableidentifier);
-    else if(exon->Identifier)
-        *Pidentifier = ajFmtStr("%u", exon->Identifier);
+    if (exon->Stableidentifier && ajStrGetLen(exon->Stableidentifier))
+    {
+        if (*Pidentifier)
+            ajStrAssignS(Pidentifier, exon->Stableidentifier);
+        else
+            *Pidentifier = ajStrNewS(exon->Stableidentifier);
+    }
+    else if (exon->Identifier)
+    {
+        if (*Pidentifier)
+            *Pidentifier = ajFmtPrintS(Pidentifier, "%u", exon->Identifier);
+        else
+            *Pidentifier = ajFmtStr("%u", exon->Identifier);
+    }
     else
-        *Pidentifier = ajFmtStr("%p", exon);
+    {
+        if (*Pidentifier)
+            *Pidentifier = ajFmtPrintS(Pidentifier, "%p", exon);
+        else
+            *Pidentifier = ajFmtStr("%p", exon);
+    }
 
     return ajTrue;
 }
@@ -2482,25 +2529,39 @@ AjBool ensExonFetchDisplayidentifier(const EnsPExon exon, AjPStr* Pidentifier)
 ** @param [wP] Psequence [AjPSeq*] AJAX Sequence object address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjBool ensExonFetchSequenceSliceSeq(EnsPExon exon, AjPSeq* Psequence)
+AjBool ensExonFetchSequenceSliceSeq(EnsPExon exon, AjPSeq *Psequence)
 {
-    AjPStr name = NULL;
+    AjPStr name     = NULL;
     AjPStr sequence = NULL;
 
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
-    ensExonFetchSequenceSliceStr(exon, &sequence);
+    /*
+    ** It is sligtly more efficient, if undefined AJAX String objects are
+    ** directly allocated by the following functions to their final size.
+    */
 
     ensExonFetchDisplayidentifier(exon, &name);
+    ensExonFetchSequenceSliceStr(exon, &sequence);
 
-    *Psequence = ajSeqNewNameS(sequence, name);
+    if (*Psequence)
+    {
+        ajSeqClear(*Psequence);
+
+        ajSeqAssignNameS(*Psequence, name);
+        ajSeqAssignSeqS(*Psequence, sequence);
+    }
+    else
+        *Psequence = ajSeqNewNameS(sequence, name);
 
     ajSeqSetNuc(*Psequence);
 
@@ -2524,10 +2585,12 @@ AjBool ensExonFetchSequenceSliceSeq(EnsPExon exon, AjPSeq* Psequence)
 ** @param [wP] Psequence [AjPStr*] AJAX String object address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence)
+AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr *Psequence)
 {
     ajint mpoint = 0;
 
@@ -2540,15 +2603,15 @@ AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence)
 
     EnsPSlice slice = NULL;
 
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
     feature = exon->Feature;
 
-    if(!feature)
+    if (!feature)
     {
         ajWarn("ensExonFetchSequenceSliceStr cannot get sequence without an "
                "Ensembl Feature attached to the Ensembl Exon '%u:%S'.\n",
@@ -2559,7 +2622,7 @@ AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence)
 
     slice = ensFeatureGetSlice(feature);
 
-    if(!slice)
+    if (!slice)
     {
         ajWarn("ensExonFetchSequenceSliceStr cannot get sequence without an "
                "Ensembl Slice attached to the Ensembl Feature in the "
@@ -2569,17 +2632,21 @@ AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence)
         return ajFalse;
     }
 
-    if(!exon->SequenceCache)
-        exon->SequenceCache = ajStrNew();
+    /*
+    ** It is sligtly more efficient, if undefined AJAX String
+    ** objects are directly allocated by the following functions
+    ** to their final size.
+    */
 
-    if(!ajStrGetLen(exon->SequenceCache))
+    if ((exon->SequenceCache == NULL) ||
+        (ajStrGetLen(exon->SequenceCache) == 0))
     {
-        if(!ensSliceIsCircular(slice, &circular))
+        if (!ensSliceIsCircular(slice, &circular))
             return ajFalse;
 
-        if(circular == ajTrue)
+        if (circular == ajTrue)
         {
-            if(ensSliceGetStart(slice) > ensSliceGetEnd(slice))
+            if (ensSliceGetStart(slice) > ensSliceGetEnd(slice))
             {
                 /*
                 ** Normally, Ensembl Exon objects overlapping the chromosome
@@ -2594,8 +2661,11 @@ AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence)
                     - ensSliceGetStart(slice)
                     + 1;
 
-                sequence1 = ajStrNew();
-                sequence2 = ajStrNew();
+                /*
+                ** It is sligtly more efficient, if undefined AJAX String
+                ** objects are directly allocated by the following functions
+                ** to their final size.
+                */
 
                 ensSliceFetchSequenceSubStr(slice,
                                             ensFeatureGetStart(feature),
@@ -2609,7 +2679,7 @@ AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence)
                                             ensFeatureGetStrand(feature),
                                             &sequence2);
 
-                if(ensFeatureGetStrand(feature) >= 0)
+                if (ensFeatureGetStrand(feature) >= 0)
                 {
                     ajStrAppendS(&exon->SequenceCache, sequence1);
                     ajStrAppendS(&exon->SequenceCache, sequence2);
@@ -2623,8 +2693,8 @@ AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence)
                 ajStrDel(&sequence1);
                 ajStrDel(&sequence2);
             }
-            else if((ensFeatureGetStart(feature) < 0) ||
-                    (ensFeatureGetStart(feature) > ensFeatureGetEnd(feature)))
+            else if ((ensFeatureGetStart(feature) < 0) ||
+                     (ensFeatureGetStart(feature) > ensFeatureGetEnd(feature)))
             {
                 /*
                 ** Normally, Ensembl Exon objects overlapping the chromosome
@@ -2636,8 +2706,11 @@ AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence)
 
                 mpoint = ensSliceGetSeqregionLength(slice);
 
-                sequence1 = ajStrNew();
-                sequence2 = ajStrNew();
+                /*
+                ** It is sligtly more efficient, if undefined AJAX String
+                ** objects are directly allocated by the following functions
+                ** to their final size.
+                */
 
                 ensSliceFetchSequenceSubStr(slice,
                                             ensFeatureGetStart(feature),
@@ -2651,7 +2724,7 @@ AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence)
                                             ensFeatureGetStrand(feature),
                                             &sequence2);
 
-                if(ensFeatureGetStrand(feature) >= 0)
+                if (ensFeatureGetStrand(feature) >= 0)
                 {
                     ajStrAppendS(&exon->SequenceCache, sequence1);
                     ajStrAppendS(&exon->SequenceCache, sequence2);
@@ -2684,7 +2757,10 @@ AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence)
                                         &exon->SequenceCache);
     }
 
-    *Psequence = ajStrNewRef(exon->SequenceCache);
+    if (*Psequence)
+        ajStrAssignS(Psequence, exon->SequenceCache);
+    else
+        *Psequence = ajStrNewS(exon->SequenceCache);
 
     return ajTrue;
 }
@@ -2706,42 +2782,51 @@ AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence)
 ** @param [wP] Psequence [AjPSeq*] AJAX Sequence object address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonFetchSequenceTranslationSeq(EnsPExon exon,
                                           EnsPTranscript transcript,
                                           EnsPTranslation translation,
-                                          AjPSeq* Psequence)
+                                          AjPSeq *Psequence)
 {
     AjPStr name = NULL;
     AjPStr sequence = NULL;
 
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
-    if(!transcript)
+    if (!transcript)
         return ajFalse;
 
-    if(! translation)
+    if (!translation)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
-    sequence = ajStrNew();
-    name     = ajStrNew();
+    /*
+    ** It is sligtly more efficient, if undefined AJAX String objects are
+    ** directly allocated by the following functions to their final size.
+    */
 
+    ensExonFetchDisplayidentifier(exon, &name);
     ensExonFetchSequenceTranslationStr(exon,
                                        transcript,
                                        translation,
                                        &sequence);
 
-    ensExonFetchDisplayidentifier(exon, &name);
+    if (*Psequence)
+    {
+        ajSeqClear(*Psequence);
 
-    *Psequence = ajSeqNewNameS(sequence, name);
-
-    ajSeqSetProt(*Psequence);
+        ajSeqAssignNameS(*Psequence, name);
+        ajSeqAssignSeqS(*Psequence, sequence);
+    }
+    else
+        *Psequence = ajSeqNewNameS(sequence, name);
 
     ajStrDel(&name);
     ajStrDel(&sequence);
@@ -2763,6 +2848,8 @@ AjBool ensExonFetchSequenceTranslationSeq(EnsPExon exon,
 ** @param [u] mrs [AjPList] AJAX List of Ensembl Mapper Results
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2777,7 +2864,7 @@ static AjBool exonMergeCoordinates(AjPList mrs)
     EnsPMapperresult mr1 = NULL;
     EnsPMapperresult mr2 = NULL;
 
-    if(!mrs)
+    if (!mrs)
         return ajFalse;
 
     iter = ajListIterNew(mrs);
@@ -2786,19 +2873,19 @@ static AjBool exonMergeCoordinates(AjPList mrs)
     {
         mr1 = (EnsPMapperresult) ajListIterGet(iter);
 
-        if(ensMapperresultGetType(mr1) != ensEMapperresultTypeCoordinate)
+        if (ensMapperresultGetType(mr1) != ensEMapperresultTypeCoordinate)
             continue;
 
         lastend = ensMapperresultGetCoordinateEnd(mr1);
 
-        while(!ajListIterDone(iter))
+        while (!ajListIterDone(iter))
         {
             mr2 = (EnsPMapperresult) ajListIterGet(iter);
 
-            if(ensMapperresultGetType(mr2) != ensEMapperresultTypeCoordinate)
+            if (ensMapperresultGetType(mr2) != ensEMapperresultTypeCoordinate)
                 continue;
 
-            if((lastend + 1) >= ensMapperresultGetCoordinateStart(mr2))
+            if ((lastend + 1) >= ensMapperresultGetCoordinateStart(mr2))
                 lastend = ensMapperresultGetCoordinateEnd(mr2);
             else
             {
@@ -2808,13 +2895,13 @@ static AjBool exonMergeCoordinates(AjPList mrs)
             }
         }
 
-        if(merged == ajFalse)
+        if (merged == ajFalse)
             break;
     }
 
     ajListIterDel(&iter);
 
-    if(merged == ajTrue)
+    if (merged == ajTrue)
     {
         /*
         ** If all Ensembl Mapper Result objects could be merged successfuly,
@@ -2827,10 +2914,10 @@ static AjBool exonMergeCoordinates(AjPList mrs)
 
         ensMapperresultSetCoordinateEnd(mr2, lastend);
 
-        while(ajListPop(mrs, (void**) &mr1))
+        while (ajListPop(mrs, (void **) &mr1))
             ensMapperresultDel(&mr1);
 
-        ajListPushAppend(mrs, (void*) mr2);
+        ajListPushAppend(mrs, (void *) mr2);
     }
 
     return merged;
@@ -2853,15 +2940,17 @@ static AjBool exonMergeCoordinates(AjPList mrs)
 ** @param [wP] Psequence [AjPStr*] AJAX String object address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonFetchSequenceTranslationStr(EnsPExon exon,
                                           EnsPTranscript transcript,
                                           EnsPTranslation translation,
-                                          AjPStr* Psequence)
+                                          AjPStr *Psequence)
 {
-    const char* Ptr = NULL;
+    const char *Ptr = NULL;
 
     register ajint length = 0;
 
@@ -2882,19 +2971,19 @@ AjBool ensExonFetchSequenceTranslationStr(EnsPExon exon,
 
     EnsPSlice tslice = NULL;
 
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
-    if(!transcript)
+    if (!transcript)
         return ajFalse;
 
-    if(!translation)
+    if (!translation)
         return ajFalse;
 
-    if(!Psequence)
+    if (!Psequence)
         return ajFalse;
 
-    if(*Psequence)
+    if (*Psequence)
         ajStrAssignClear(Psequence);
     else
         *Psequence = ajStrNew();
@@ -2907,7 +2996,7 @@ AjBool ensExonFetchSequenceTranslationStr(EnsPExon exon,
 
     nexon = ensExonTransfer(exon, tslice);
 
-    if(!nexon)
+    if (!nexon)
         ajFatal("ensExonFetchSequenceTranslationStr could not transfer "
                 "Ensembl Exon to Ensembl Transcript Slice.");
 
@@ -2927,11 +3016,11 @@ AjBool ensExonFetchSequenceTranslationStr(EnsPExon exon,
 
     iter = ajListIterNew(mrs);
 
-    while(!ajListIterDone(iter))
+    while (!ajListIterDone(iter))
     {
         mr = (EnsPMapperresult) ajListIterGet(iter);
 
-        if(ensMapperresultGetType(mr) != ensEMapperresultTypeCoordinate)
+        if (ensMapperresultGetType(mr) != ensEMapperresultTypeCoordinate)
         {
             ajListIterRemove(iter);
 
@@ -2943,17 +3032,17 @@ AjBool ensExonFetchSequenceTranslationStr(EnsPExon exon,
 
     /* If this is UTR then the peptide will be empty string */
 
-    if(ajListGetLength(mrs) > 1)
+    if (ajListGetLength(mrs) > 1)
     {
-        if(!exonMergeCoordinates(mrs))
+        if (!exonMergeCoordinates(mrs))
             ajFatal("ensExonFetchSequenceTranslationStr got an Exon (%u), "
                     "which maps to multiple non-continuous locations in the "
                     "Ensembl Translation.",
                     exon->Identifier);
     }
-    else if(ajListGetLength(mrs) == 1)
+    else if (ajListGetLength(mrs) == 1)
     {
-        ajListPeekFirst(mrs, (void**) &mr);
+        ajListPeekFirst(mrs, (void **) &mr);
 
         sequence = ajStrNew();
 
@@ -2966,10 +3055,10 @@ AjBool ensExonFetchSequenceTranslationStr(EnsPExon exon,
         ** the sequence length needs to be determined here.
         */
 
-        for(length = 0, Ptr = ajStrGetPtr(sequence);
-            (Ptr && *Ptr);
-            length++, Ptr++)
-            if(length == INT_MAX)
+        for (length = 0, Ptr = ajStrGetPtr(sequence);
+             (Ptr && *Ptr);
+             length++, Ptr++)
+            if (length == INT_MAX)
                 ajFatal("ensExonFetchSequenceTranslationStr exeeded INT_MAX.");
 
         end = (ensMapperresultGetCoordinateEnd(mr) > length)
@@ -3020,6 +3109,8 @@ AjBool ensExonFetchSequenceTranslationStr(EnsPExon exon,
 ** @param [r] exon2 [const EnsPExon] Ensembl Exon
 **
 ** @return [AjBool] ajTrue if the Ensembl Exon objects are equal
+**
+** @release 6.4.0
 ** @@
 ** The comparison is based on an initial pointer equality test and if that
 ** fails, individual members are compared.
@@ -3027,55 +3118,55 @@ AjBool ensExonFetchSequenceTranslationStr(EnsPExon exon,
 
 AjBool ensExonMatch(const EnsPExon exon1, const EnsPExon exon2)
 {
-    if(!exon1)
+    if (!exon1)
         return ajFalse;
 
-    if(!exon2)
+    if (!exon2)
         return ajFalse;
 
-    if(exon1 == exon2)
+    if (exon1 == exon2)
         return ajTrue;
 
-    if(exon1->Identifier != exon2->Identifier)
+    if (exon1->Identifier != exon2->Identifier)
         return ajFalse;
 
-    if(exon1->Adaptor != exon2->Adaptor)
+    if (exon1->Adaptor != exon2->Adaptor)
         return ajFalse;
 
-    if(!ensFeatureMatch(exon1->Feature, exon2->Feature))
+    if (!ensFeatureMatch(exon1->Feature, exon2->Feature))
         return ajFalse;
 
-    if(exon1->PhaseStart != exon2->PhaseStart)
+    if (exon1->PhaseStart != exon2->PhaseStart)
         return ajFalse;
 
-    if(exon1->PhaseEnd != exon2->PhaseEnd)
+    if (exon1->PhaseEnd != exon2->PhaseEnd)
         return ajFalse;
 
-    if(exon1->Current != exon2->Current)
+    if (exon1->Current != exon2->Current)
         return ajFalse;
 
-    if(exon1->Constitutive != exon2->Constitutive)
+    if (exon1->Constitutive != exon2->Constitutive)
         return ajFalse;
 
     /* Stable identifiers are optional. */
 
-    if((exon1->Stableidentifier || exon2->Stableidentifier)
-       && (!ajStrMatchS(exon1->Stableidentifier, exon2->Stableidentifier)))
+    if ((exon1->Stableidentifier || exon2->Stableidentifier)
+        && (!ajStrMatchS(exon1->Stableidentifier, exon2->Stableidentifier)))
         return ajFalse;
 
-    if(exon1->Version != exon2->Version)
+    if (exon1->Version != exon2->Version)
         return ajFalse;
 
     /* Creation dates are optional. */
 
-    if((exon1->DateCreation || exon2->DateCreation)
-       && (!ajStrMatchS(exon1->DateCreation, exon2->DateCreation)))
+    if ((exon1->DateCreation || exon2->DateCreation)
+        && (!ajStrMatchS(exon1->DateCreation, exon2->DateCreation)))
         return ajFalse;
 
     /* Modification dates are optional. */
 
-    if((exon1->DateModification || exon2->DateModification)
-       && (!ajStrMatchS(exon1->DateModification, exon2->DateModification)))
+    if ((exon1->DateModification || exon2->DateModification)
+        && (!ajStrMatchS(exon1->DateModification, exon2->DateModification)))
         return ajFalse;
 
     /*
@@ -3098,6 +3189,8 @@ AjBool ensExonMatch(const EnsPExon exon1, const EnsPExon exon2)
 ** @param [r] exon2 [const EnsPExon] Ensembl Exon
 **
 ** @return [AjBool] ajTrue if the Ensembl Exon objects are similar
+**
+** @release 6.4.0
 ** @@
 ** NOTE: This function is similar to Bio::EnsEMBL::Exon::equals, but not
 ** completely identical.
@@ -3107,55 +3200,55 @@ AjBool ensExonMatch(const EnsPExon exon1, const EnsPExon exon2)
 
 AjBool ensExonSimilarity(const EnsPExon exon1, const EnsPExon exon2)
 {
-    if(!exon1)
+    if (!exon1)
         return ajFalse;
 
-    if(!exon2)
+    if (!exon2)
         return ajFalse;
 
-    if(exon1 == exon2)
+    if (exon1 == exon2)
         return ajTrue;
 
-    if(exon1->Identifier != exon2->Identifier)
+    if (exon1->Identifier != exon2->Identifier)
         return ajFalse;
 
-    if(exon1->Adaptor != exon2->Adaptor)
+    if (exon1->Adaptor != exon2->Adaptor)
         return ajFalse;
 
-    if(!ensFeatureSimilarity(exon1->Feature, exon2->Feature))
+    if (!ensFeatureSimilarity(exon1->Feature, exon2->Feature))
         return ajFalse;
 
-    if(exon1->PhaseStart != exon2->PhaseStart)
+    if (exon1->PhaseStart != exon2->PhaseStart)
         return ajFalse;
 
-    if(exon1->PhaseEnd != exon2->PhaseEnd)
+    if (exon1->PhaseEnd != exon2->PhaseEnd)
         return ajFalse;
 
-    if(exon1->Current != exon2->Current)
+    if (exon1->Current != exon2->Current)
         return ajFalse;
 
-    if(exon1->Constitutive != exon2->Constitutive)
+    if (exon1->Constitutive != exon2->Constitutive)
         return ajFalse;
 
     /* Stable identifiers are optional. */
 
-    if((exon1->Stableidentifier || exon2->Stableidentifier)
-       && (!ajStrMatchS(exon1->Stableidentifier, exon2->Stableidentifier)))
+    if ((exon1->Stableidentifier || exon2->Stableidentifier)
+        && (!ajStrMatchS(exon1->Stableidentifier, exon2->Stableidentifier)))
         return ajFalse;
 
-    if(exon1->Version != exon2->Version)
+    if (exon1->Version != exon2->Version)
         return ajFalse;
 
     /* Creation dates are optional. */
 
-    if((exon1->DateCreation || exon2->DateCreation)
-       && (!ajStrMatchS(exon1->DateCreation, exon2->DateCreation)))
+    if ((exon1->DateCreation || exon2->DateCreation)
+        && (!ajStrMatchS(exon1->DateCreation, exon2->DateCreation)))
         return ajFalse;
 
     /* Modification dates are optional. */
 
-    if((exon1->DateModification || exon2->DateModification)
-       && (!ajStrMatchS(exon1->DateModification, exon2->DateModification)))
+    if ((exon1->DateModification || exon2->DateModification)
+        && (!ajStrMatchS(exon1->DateModification, exon2->DateModification)))
         return ajFalse;
 
     /*
@@ -3178,26 +3271,161 @@ AjBool ensExonSimilarity(const EnsPExon exon1, const EnsPExon exon2)
 
 
 
-/* @section list **************************************************************
+/* @funcstatic listExonCompareEndAscending ************************************
 **
-** Functions for manipulating AJAX List objects.
+** AJAX List of Ensembl Exon objects comparison function to sort by
+** Ensembl Feature end coordinate in ascending order.
 **
-** @fdata [AjPList]
+** @param [r] item1 [const void*] Ensembl Exon address 1
+** @param [r] item2 [const void*] Ensembl Exon address 2
+** @see ajListSort
 **
-** @nam3rule Exon Functions for manipulating AJAX List objects of
-** Ensembl Exon objects
-** @nam4rule Sort Sort functions
-** @nam5rule Start Sort by Ensembl Feature start element
-** @nam6rule Ascending  Sort in ascending order
-** @nam6rule Descending Sort in descending order
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
 **
-** @argrule Ascending exons [AjPList] AJAX List of Ensembl Exon objects
-** @argrule Descending exons [AjPList] AJAX List of Ensembl Exon objects
-**
-** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @fcategory misc
+** @release 6.4.0
+** @@
 ******************************************************************************/
+
+static int listExonCompareEndAscending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPExon exon1 = *(EnsOExon *const *) item1;
+    EnsPExon exon2 = *(EnsOExon *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listExonCompareEndAscending"))
+        ajDebug("listExonCompareEndAscending\n"
+                "  exon1 %p\n"
+                "  exon2 %p\n",
+                exon1,
+                exon2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (exon1 && (!exon2))
+        return -1;
+
+    if ((!exon1) && (!exon2))
+        return 0;
+
+    if ((!exon1) && exon2)
+        return +1;
+
+    return ensFeatureCompareEndAscending(exon1->Feature, exon2->Feature);
+}
+
+
+
+
+/* @funcstatic listExonCompareEndDescending ***********************************
+**
+** AJAX List of Ensembl Exon objects comparison function to sort by
+** Ensembl Feature end coordinate in descending order.
+**
+** @param [r] item1 [const void*] Ensembl Exon address 1
+** @param [r] item2 [const void*] Ensembl Exon address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listExonCompareEndDescending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPExon exon1 = *(EnsOExon *const *) item1;
+    EnsPExon exon2 = *(EnsOExon *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listExonCompareEndDescending"))
+        ajDebug("listExonCompareEndDescending\n"
+                "  exon1 %p\n"
+                "  exon2 %p\n",
+                exon1,
+                exon2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (exon1 && (!exon2))
+        return -1;
+
+    if ((!exon1) && (!exon2))
+        return 0;
+
+    if ((!exon1) && exon2)
+        return +1;
+
+    return ensFeatureCompareEndDescending(exon1->Feature, exon2->Feature);
+}
+
+
+
+
+/* @funcstatic listExonCompareIdentifierAscending *****************************
+**
+** AJAX List of Ensembl Exon objects comparison function to sort by
+** identifier in ascending order.
+**
+** @param [r] item1 [const void*] Ensembl Exon address 1
+** @param [r] item2 [const void*] Ensembl Exon address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listExonCompareIdentifierAscending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPExon exon1 = *(EnsOExon *const *) item1;
+    EnsPExon exon2 = *(EnsOExon *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listExonCompareIdentifierAscending"))
+        ajDebug("listExonCompareIdentifierAscending\n"
+                "  exon1 %p\n"
+                "  exon2 %p\n",
+                exon1,
+                exon2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (exon1 && (!exon2))
+        return -1;
+
+    if ((!exon1) && (!exon2))
+        return 0;
+
+    if ((!exon1) && exon2)
+        return +1;
+
+    if (exon1->Identifier < exon2->Identifier)
+        return -1;
+
+    if (exon1->Identifier > exon2->Identifier)
+        return +1;
+
+    return 0;
+}
 
 
 
@@ -3207,44 +3435,207 @@ AjBool ensExonSimilarity(const EnsPExon exon1, const EnsPExon exon2)
 ** AJAX List of Ensembl Exon objects comparison function to sort by
 ** Ensembl Feature start coordinate in ascending order.
 **
-** @param [r] P1 [const void*] Ensembl Exon address 1
-** @param [r] P2 [const void*] Ensembl Exon address 2
+** @param [r] item1 [const void*] Ensembl Exon address 1
+** @param [r] item2 [const void*] Ensembl Exon address 2
 ** @see ajListSort
 **
 ** @return [int] The comparison function returns an integer less than,
 **               equal to, or greater than zero if the first argument is
 **               considered to be respectively less than, equal to, or
 **               greater than the second.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static int listExonCompareStartAscending(const void* P1, const void* P2)
+static int listExonCompareStartAscending(
+    const void *item1,
+    const void *item2)
 {
-    const EnsPExon exon1 = NULL;
-    const EnsPExon exon2 = NULL;
+    EnsPExon exon1 = *(EnsOExon *const *) item1;
+    EnsPExon exon2 = *(EnsOExon *const *) item2;
 
-    exon1 = *(EnsPExon const*) P1;
-    exon2 = *(EnsPExon const*) P2;
-
-    if(ajDebugTest("listExonCompareStartAscending"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listExonCompareStartAscending"))
         ajDebug("listExonCompareStartAscending\n"
                 "  exon1 %p\n"
                 "  exon2 %p\n",
                 exon1,
                 exon2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
 
     /* Sort empty values towards the end of the AJAX List. */
 
-    if(exon1 && (!exon2))
+    if (exon1 && (!exon2))
         return -1;
 
-    if((!exon1) && (!exon2))
+    if ((!exon1) && (!exon2))
         return 0;
 
-    if((!exon1) && exon2)
+    if ((!exon1) && exon2)
         return +1;
 
     return ensFeatureCompareStartAscending(exon1->Feature, exon2->Feature);
+}
+
+
+
+
+/* @funcstatic listExonCompareStartDescending *********************************
+**
+** AJAX List of Ensembl Exon objects comparison function to sort by
+** Ensembl Feature start coordinate in descending order.
+**
+** @param [r] item1 [const void*] Ensembl Exon address 1
+** @param [r] item2 [const void*] Ensembl Exon address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listExonCompareStartDescending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPExon exon1 = *(EnsOExon *const *) item1;
+    EnsPExon exon2 = *(EnsOExon *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listExonCompareStartDescending"))
+        ajDebug("listExonCompareStartDescending\n"
+                "  exon1 %p\n"
+                "  exon2 %p\n",
+                exon1,
+                exon2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (exon1 && (!exon2))
+        return -1;
+
+    if ((!exon1) && (!exon2))
+        return 0;
+
+    if ((!exon1) && exon2)
+        return +1;
+
+    return ensFeatureCompareStartDescending(exon1->Feature, exon2->Feature);
+}
+
+
+
+
+/* @section list **************************************************************
+**
+** Functions for manipulating AJAX List objects.
+**
+** @fdata [AjPList]
+**
+** @nam3rule Exon Functions for manipulating AJAX List objects of
+** Ensembl Exon objects
+** @nam4rule Sort       Sort functions
+** @nam5rule End        Sort by Ensembl Feature end member
+** @nam5rule Identifier Sort by Ensembl Exon identifier member
+** @nam5rule Start      Sort by Ensembl Feature start member
+** @nam6rule Ascending  Sort in ascending order
+** @nam6rule Descending Sort in descending order
+**
+** @argrule * exons [AjPList] AJAX List of Ensembl Exon objects
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensListExonSortEndAscending ******************************************
+**
+** Sort an AJAX List of Ensembl Exon objects by their
+** Ensembl Feature end coordinate in ascending order.
+**
+** @param [u] exons [AjPList] AJAX List of Ensembl Exon objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjBool ensListExonSortEndAscending(AjPList exons)
+{
+    if (!exons)
+        return ajFalse;
+
+    ajListSortTwoThree(exons,
+                       &listExonCompareEndAscending,
+                       &listExonCompareStartAscending,
+                       &listExonCompareIdentifierAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensListExonSortEndDescending *****************************************
+**
+** Sort an AJAX List of Ensembl Exon objects by their
+** Ensembl Feature end coordinate in descending order.
+**
+** @param [u] exons [AjPList] AJAX List of Ensembl Exon objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjBool ensListExonSortEndDescending(AjPList exons)
+{
+    if (!exons)
+        return ajFalse;
+
+    ajListSortTwoThree(exons,
+                       &listExonCompareEndDescending,
+                       &listExonCompareStartDescending,
+                       &listExonCompareIdentifierAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensListExonSortIdentifierAscending ***********************************
+**
+** Sort an AJAX List of Ensembl Exon objects by their
+** identifier in ascending order.
+**
+** @param [u] exons [AjPList] AJAX List of Ensembl Exon objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjBool ensListExonSortIdentifierAscending(AjPList exons)
+{
+    if (!exons)
+        return ajFalse;
+
+    ajListSort(exons, &listExonCompareIdentifierAscending);
+
+    return ajTrue;
 }
 
 
@@ -3258,65 +3649,22 @@ static int listExonCompareStartAscending(const void* P1, const void* P2)
 ** @param [u] exons [AjPList] AJAX List of Ensembl Exon objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensListExonSortStartAscending(AjPList exons)
 {
-    if(!exons)
+    if (!exons)
         return ajFalse;
 
-    ajListSort(exons, listExonCompareStartAscending);
+    ajListSortTwoThree(exons,
+                       &listExonCompareStartAscending,
+                       &listExonCompareEndAscending,
+                       &listExonCompareIdentifierAscending);
 
     return ajTrue;
-}
-
-
-
-
-/* @funcstatic listExonCompareStartDescending *********************************
-**
-** AJAX List of Ensembl Exon objects comparison function to sort by
-** Ensembl Feature start coordinate in descending order.
-**
-** @param [r] P1 [const void*] Ensembl Exon address 1
-** @param [r] P2 [const void*] Ensembl Exon address 2
-** @see ajListSort
-**
-** @return [int] The comparison function returns an integer less than,
-**               equal to, or greater than zero if the first argument is
-**               considered to be respectively less than, equal to, or
-**               greater than the second.
-** @@
-******************************************************************************/
-
-static int listExonCompareStartDescending(const void* P1, const void* P2)
-{
-    const EnsPExon exon1 = NULL;
-    const EnsPExon exon2 = NULL;
-
-    exon1 = *(EnsPExon const*) P1;
-    exon2 = *(EnsPExon const*) P2;
-
-    if(ajDebugTest("listExonCompareStartDescending"))
-        ajDebug("listExonCompareStartDescending\n"
-                "  exon1 %p\n"
-                "  exon2 %p\n",
-                exon1,
-                exon2);
-
-    /* Sort empty values towards the end of the AJAX List. */
-
-    if(exon1 && (!exon2))
-        return -1;
-
-    if((!exon1) && (!exon2))
-        return 0;
-
-    if((!exon1) && exon2)
-        return +1;
-
-    return ensFeatureCompareStartDescending(exon1->Feature, exon2->Feature);
 }
 
 
@@ -3330,15 +3678,175 @@ static int listExonCompareStartDescending(const void* P1, const void* P2)
 ** @param [u] exons [AjPList] AJAX List of Ensembl Exon objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensListExonSortStartDescending(AjPList exons)
 {
-    if(!exons)
+    if (!exons)
         return ajFalse;
 
-    ajListSort(exons, listExonCompareStartDescending);
+    ajListSortTwoThree(exons,
+                       &listExonCompareStartDescending,
+                       &listExonCompareEndDescending,
+                       &listExonCompareIdentifierAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @datasection [AjPSeq] AJAX Sequence ****************************************
+**
+** @nam2rule Sequence Functions for manipulating AJAX Sequence objects
+**
+******************************************************************************/
+
+
+
+
+/* @section add ***************************************************************
+**
+** Functions for manipulating AJAX Sequence objects.
+**
+** @fdata [AjPSeq]
+**
+** @nam3rule Add Add to an AJAX Sequence
+** @nam4rule Feature Add an AJAX Feature
+** @nam5rule Exon Convert an Ensembl Exon into an AJAX Feature
+**
+** @argrule * seq [AjPSeq] AJAX Sequence
+** @argrule Exon exon [EnsPExon] Ensembl Exon
+** @argrule Exon rank [ajint] Rank in an Ensembl Transcript
+** @argrule Exon Pfeature [AjPFeature*] AJAX Feature address
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensSequenceAddFeatureExon ********************************************
+**
+** Convert an Ensembl Exon into an AJAX Feature and add it to the
+** AJAX Feature Table of an AJAX Sequence.
+**
+** @param [u] seq [AjPSeq] AJAX Sequence
+** @param [u] exon [EnsPExon] Ensembl Exon
+** @param [rN] rank [ajint] Rank in an Ensembl Transcript
+** @param [wP] Pfeature [AjPFeature*] AJAX Feature address
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjBool ensSequenceAddFeatureExon(AjPSeq seq,
+                                 EnsPExon exon,
+                                 ajint rank,
+                                 AjPFeature *Pfeature)
+{
+    AjPStr label = NULL;
+    AjPStr type  = NULL;
+
+    EnsPDatabaseadaptor dba = NULL;
+
+    EnsPExon newexon = NULL;
+
+    EnsPSlice slice      = NULL;
+    EnsPSliceadaptor sla = NULL;
+
+    if (!seq)
+        return ajFalse;
+
+    if (!exon)
+        return ajFalse;
+
+    if (!Pfeature)
+        return ajFalse;
+
+    *Pfeature = NULL;
+
+    /*
+    ** NOTE: An AJAX Sequence accessor function returning the
+    ** AJAX Feature Table in modifiable form is missing.
+    */
+
+    if (!seq->Fttable)
+        return ajFalse;
+
+    /*
+    ** Get the Ensembl Slice covering the AJAX Sequence object and transfer
+    ** the Ensembl Exon object onto it.
+    */
+
+    dba = ensExonadaptorGetDatabaseadaptor(exon->Adaptor);
+
+    sla = ensRegistryGetSliceadaptor(dba);
+
+    ensSliceadaptorFetchByName(sla, ajSeqGetNameS(seq), &slice);
+
+    if (!slice)
+    {
+        ajDebug("ensSequenceAddFeatureExon could not fetch an "
+                "Ensembl Slice for AJAX Sequence name '%S'.\n",
+                ajSeqGetNameS(seq));
+
+        return ajFalse;
+    }
+
+    newexon = ensExonTransfer(exon, slice);
+
+    if (!newexon)
+    {
+        ajDebug("ensSequenceAddFeatureExon could not transfer "
+                "Ensembl Exon %p onto "
+                "Ensembl Slice %p.\n", exon, slice);
+
+        ensExonTrace(exon, 1);
+        ensSliceTrace(slice, 1);
+
+        ensSliceDel(&slice);
+
+        return ajFalse;
+    }
+
+    /* Convert the Ensembl Exon into an AJAX Feature. */
+
+    type = ajStrNewC("exon");
+
+    *Pfeature = ajFeatNewNucFlags(
+        seq->Fttable,
+        ensAnalysisGetName(ensFeatureGetAnalysis(newexon->Feature)),
+        type,
+        ensFeatureGetStart(newexon->Feature),
+        ensFeatureGetEnd(newexon->Feature),
+        0.0F,
+        ensFeatureCalculateStrand(newexon->Feature),
+        ensExonCalculateFrame(newexon),
+        rank,
+        0, /* Start 2 */
+        0, /* End 2 */
+        (AjPStr) NULL, /* Remote Identifier */
+        (AjPStr) NULL, /* Label */
+        0);
+
+    ensExonFetchDisplayidentifier(newexon, &label);
+
+    ajFeatTagAddCS(*Pfeature, "standard_name", label);
+
+    ajStrDel(&label);
+    ajStrDel(&type);
+
+    ensExonDel(&newexon);
+
+    ensSliceDel(&slice);
 
     return ajTrue;
 }
@@ -3352,8 +3860,8 @@ AjBool ensListExonSortStartDescending(AjPList exons)
 ** Ensembl Exon Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::ExonAdaptor
-** @cc CVS Revision: 1.113
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.120
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -3365,18 +3873,20 @@ AjBool ensListExonSortStartDescending(AjPList exons)
 ** Fetch all Ensembl Exon objects via an SQL statement.
 **
 ** @cc Bio::EnsEMBL::DBSQL::ExonAdaptor::_objs_from_sth
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] exons [AjPList] AJAX List of Ensembl Exon objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool exonadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -3385,25 +3895,16 @@ static AjBool exonadaptorFetchAllbyStatement(
     ajint sphase = 0;
     ajint ephase = 0;
 
-    ajuint identifier = 0;
-    ajuint version    = 0;
+    ajuint identifier = 0U;
+    ajuint version    = 0U;
 
-    ajint slstart  = 0;
-    ajint slend    = 0;
-    ajint slstrand = 0;
-    ajint sllength = 0;
-    ajint tmpstart = 0;
+    ajuint srid     = 0U;
+    ajuint srstart  = 0U;
+    ajuint srend    = 0U;
+    ajint  srstrand = 0;
 
-    ajuint srid    = 0;
-    ajuint srstart = 0;
-    ajuint srend   = 0;
-    ajint srstrand = 0;
-
-    AjBool circular     = AJFALSE;
     AjBool current      = AJFALSE;
     AjBool constitutive = AJFALSE;
-
-    AjPList mrs = NULL;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -3413,57 +3914,44 @@ static AjBool exonadaptorFetchAllbyStatement(
     AjPStr cdate    = NULL;
     AjPStr mdate    = NULL;
 
-    EnsPAssemblymapperadaptor ama = NULL;
-
-    EnsPCoordsystemadaptor csa = NULL;
+    EnsPDatabaseadaptor dba = NULL;
 
     EnsPExon exon      = NULL;
     EnsPExonadaptor ea = NULL;
 
     EnsPFeature feature = NULL;
-    EnsPMapperresult mr = NULL;
 
-    EnsPSlice srslice   = NULL;
-    EnsPSliceadaptor sa = NULL;
-
-    if(ajDebugTest("exonadaptorFetchAllbyStatement"))
+    if (ajDebugTest("exonadaptorFetchAllbyStatement"))
         ajDebug("exonadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  exons %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 exons);
 
-    if(!dba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!exons)
+    if (!exons)
         return ajFalse;
 
-    csa = ensRegistryGetCoordsystemadaptor(dba);
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
-    ea = ensRegistryGetExonadaptor(dba);
-
-    sa = ensRegistryGetSliceadaptor(dba);
-
-    if(slice)
-        ama = ensRegistryGetAssemblymapperadaptor(dba);
-
-    mrs = ajListNew();
+    ea  = ensRegistryGetExonadaptor(dba);
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier   = 0;
         srid         = 0;
@@ -3495,256 +3983,26 @@ static AjBool exonadaptorFetchAllbyStatement(
         ajSqlcolumnToStr(sqlr, &cdate);
         ajSqlcolumnToStr(sqlr, &mdate);
 
-        /* Need to get the internal Ensembl Sequence Region identifier. */
+        ensBaseadaptorRetrieveFeature(ba,
+                                      0U,
+                                      srid,
+                                      srstart,
+                                      srend,
+                                      srstrand,
+                                      am,
+                                      slice,
+                                      &feature);
 
-        srid = ensCoordsystemadaptorGetSeqregionidentifierInternal(csa, srid);
-
-        /*
-        ** Since the Ensembl SQL schema defines Sequence Region start and end
-        ** coordinates as unsigned integers for all Ensembl Feature objects,
-        ** the range needs checking.
-        */
-
-        if(srstart <= INT_MAX)
-            slstart = (ajint) srstart;
-        else
-            ajFatal("exonadaptorFetchAllbyStatement got a "
-                    "Sequence Region start coordinate (%u) outside the "
-                    "maximum integer limit (%d).",
-                    srstart, INT_MAX);
-
-        if(srend <= INT_MAX)
-            slend = (ajint) srend;
-        else
-            ajFatal("exonadaptorFetchAllbyStatement got a "
-                    "Sequence Region end coordinate (%u) outside the "
-                    "maximum integer limit (%d).",
-                    srend, INT_MAX);
-
-        slstrand = srstrand;
-
-        /* Fetch a Slice spanning the entire Sequence Region. */
-
-        ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
-
-        /*
-        ** Increase the reference counter of the Ensembl Assembly Mapper if
-        ** one has been specified, otherwise fetch it from the database if a
-        ** destination Slice has been specified.
-        */
-
-        if(am)
-            am = ensAssemblymapperNewRef(am);
-        else if(slice && (!ensCoordsystemMatch(
-                              ensSliceGetCoordsystemObject(slice),
-                              ensSliceGetCoordsystemObject(srslice))))
-            ensAssemblymapperadaptorFetchBySlices(ama, slice, srslice, &am);
-
-        /*
-        ** Remap the Feature coordinates to another Ensembl Coordinate System
-        ** if an Ensembl Assembly Mapper is defined at this point.
-        */
-
-        if(am)
+        if (!feature)
         {
-            ensAssemblymapperFastmap(am,
-                                     ensSliceGetSeqregion(srslice),
-                                     slstart,
-                                     slend,
-                                     slstrand,
-                                     mrs);
+            ajStrDel(&stableid);
+            ajStrDel(&cdate);
+            ajStrDel(&mdate);
 
-            /*
-            ** The ensAssemblymapperFastmap function returns at best one
-            ** Ensembl Mapper Result.
-            */
-
-            ajListPop(mrs, (void**) &mr);
-
-            /*
-            ** Skip Ensembl Feature objects that map to gaps or
-            ** Coordinate System boundaries.
-            */
-
-            if(ensMapperresultGetType(mr) != ensEMapperresultTypeCoordinate)
-            {
-                /* Load the next Feature but destroy first! */
-
-                ajStrDel(&stableid);
-                ajStrDel(&cdate);
-                ajStrDel(&mdate);
-
-                ensSliceDel(&srslice);
-
-                ensAssemblymapperDel(&am);
-
-                ensMapperresultDel(&mr);
-
-                continue;
-            }
-
-            srid     = ensMapperresultGetObjectidentifier(mr);
-            slstart  = ensMapperresultGetCoordinateStart(mr);
-            slend    = ensMapperresultGetCoordinateEnd(mr);
-            slstrand = ensMapperresultGetCoordinateStrand(mr);
-
-            /*
-            ** Delete the Sequence Region Slice and fetch a Slice in the
-            ** Coordinate System we just mapped to.
-            */
-
-            ensSliceDel(&srslice);
-
-            ensSliceadaptorFetchBySeqregionIdentifier(sa,
-                                                      srid,
-                                                      0,
-                                                      0,
-                                                      0,
-                                                      &srslice);
-
-            ensMapperresultDel(&mr);
-        }
-
-        /*
-        ** Convert Sequence Region Slice coordinates to destination Slice
-        ** coordinates, if a destination Slice has been provided.
-        */
-
-        if(slice)
-        {
-            /* Check that the length of the Slice is within range. */
-
-            if(ensSliceCalculateLength(slice) <= INT_MAX)
-                sllength = (ajint) ensSliceCalculateLength(slice);
-            else
-                ajFatal("exonadaptorFetchAllbyStatement got a Slice, "
-                        "which length (%u) exceeds the "
-                        "maximum integer limit (%d).",
-                        ensSliceCalculateLength(slice), INT_MAX);
-
-            ensSliceIsCircular(slice, &circular);
-
-            if(ensSliceGetStrand(slice) >= 0)
-            {
-                /* On the positive strand ... */
-
-                slstart = slstart - ensSliceGetStart(slice) + 1;
-                slend   = slend   - ensSliceGetStart(slice) + 1;
-
-                if(circular == ajTrue)
-                {
-                    if(slstart > slend)
-                    {
-                        /* A Feature overlapping the chromsome origin. */
-
-                        /* Region in the beginning of the chromosome. */
-                        if(slend > ensSliceGetStart(slice))
-                            slstart -= sllength;
-
-                        if(slend < 0)
-                            slend += sllength;
-                    }
-                    else
-                    {
-                        if((ensSliceGetStart(slice) > ensSliceGetEnd(slice))
-                           && (slend < 0))
-                        {
-                            /*
-                            ** A region overlapping the chromosome origin
-                            ** and a Feature, which is at the beginning of
-                            ** the chromosome.
-                            */
-
-                            slstart += sllength;
-                            slend   += sllength;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                /* On the negative strand ... */
-
-                if((circular == ajTrue) && (slstart > slend))
-                {
-                    /* Handle circular chromosomes. */
-
-                    if(ensSliceGetStart(slice) > ensSliceGetEnd(slice))
-                    {
-                        tmpstart = slstart;
-                        slstart = ensSliceGetEnd(slice) - slend + 1;
-                        slend   = ensSliceGetEnd(slice) + sllength
-                            - tmpstart + 1;
-                    }
-                    else
-                    {
-
-                        if(slend > ensSliceGetStart(slice))
-                        {
-                            /*
-                            ** Looking at the region in the beginning of the
-                            ** chromosome.
-                            */
-
-                            slstart = ensSliceGetEnd(slice) - slend + 1;
-                            slend   = slend - sllength - slstart + 1;
-                        }
-                        else
-                        {
-                            tmpstart = slstart;
-                            slstart  = ensSliceGetEnd(slice) - slend
-                                - sllength + 1;
-                            slend    = slend - tmpstart + 1;
-                        }
-                    }
-                }
-                else
-                {
-                    /* Non-circular Ensembl Slice objects... */
-
-                    slend   = ensSliceGetEnd(slice) - slstart + 1;
-                    slstart = ensSliceGetEnd(slice) - slend   + 1;
-                }
-
-                slstrand *= -1;
-            }
-
-            /*
-            ** Throw away Ensembl Feature objects off the end of the requested
-            ** Slice or on any other than the requested Slice.
-            */
-
-            if((slend < 1) ||
-               (slstart > sllength) ||
-               (srid != ensSliceGetSeqregionIdentifier(slice)))
-            {
-                /* Load the next Feature but destroy first! */
-
-                ajStrDel(&stableid);
-                ajStrDel(&cdate);
-                ajStrDel(&mdate);
-
-                ensSliceDel(&srslice);
-
-                ensAssemblymapperDel(&am);
-
-                continue;
-            }
-
-            /* Delete the Sequence Region Slice and set the requested Slice. */
-
-            ensSliceDel(&srslice);
-
-            srslice = ensSliceNewRef(slice);
+            continue;
         }
 
         /* Finally, create a new Ensembl Exon. */
-
-        feature = ensFeatureNewIniS((EnsPAnalysis) NULL,
-                                    srslice,
-                                    slstart,
-                                    slend,
-                                    slstrand);
 
         exon = ensExonNewIni(ea,
                              identifier,
@@ -3758,13 +4016,9 @@ static AjBool exonadaptorFetchAllbyStatement(
                              cdate,
                              mdate);
 
-        ajListPushAppend(exons, (void*) exon);
+        ajListPushAppend(exons, (void *) exon);
 
         ensFeatureDel(&feature);
-
-        ensAssemblymapperDel(&am);
-
-        ensSliceDel(&srslice);
 
         ajStrDel(&stableid);
         ajStrDel(&cdate);
@@ -3775,97 +4029,7 @@ static AjBool exonadaptorFetchAllbyStatement(
 
     ensDatabaseadaptorSqlstatementDel(dba, &sqls);
 
-    ajListFree(&mrs);
-
     return ajTrue;
-}
-
-
-
-
-/* @funcstatic exonadaptorCacheReference **************************************
-**
-** Wrapper function to reference an Ensembl Exon from an Ensembl Cache.
-**
-** @param [r] value [void*] Ensembl Exon
-**
-** @return [void*] Ensembl Exon or NULL
-** @@
-******************************************************************************/
-
-static void* exonadaptorCacheReference(void* value)
-{
-    if(!value)
-        return NULL;
-
-    return (void*) ensExonNewRef((EnsPExon) value);
-}
-
-
-
-
-/* @funcstatic exonadaptorCacheDelete *****************************************
-**
-** Wrapper function to delete an Ensembl Exon from an Ensembl Cache.
-**
-** @param [r] value [void**] Ensembl Exon address
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void exonadaptorCacheDelete(void** value)
-{
-    if(!value)
-        return;
-
-    ensExonDel((EnsPExon*) value);
-
-    return;
-}
-
-
-
-
-/* @funcstatic exonadaptorCacheSize *******************************************
-**
-** Wrapper function to determine the memory size of an Ensembl Exon
-** from an Ensembl Cache.
-**
-** @param [r] value [const void*] Ensembl Exon
-**
-** @return [size_t] Memory size in bytes or 0
-** @@
-******************************************************************************/
-
-static size_t exonadaptorCacheSize(const void* value)
-{
-    if(!value)
-        return 0;
-
-    return ensExonCalculateMemsize((const EnsPExon) value);
-}
-
-
-
-
-/* @funcstatic exonadaptorGetFeature ******************************************
-**
-** Wrapper function to get the Ensembl Feature of an Ensembl Exon
-** from an Ensembl Feature Adaptor.
-**
-** @param [r] value [const void*] Ensembl Exon
-**
-** @return [EnsPFeature] Ensembl Feature
-** @@
-******************************************************************************/
-
-static EnsPFeature exonadaptorGetFeature(const void* value)
-{
-    if(!value)
-        return NULL;
-
-    return ensExonGetFeature((const EnsPExon) value);
 }
 
 
@@ -3884,7 +4048,7 @@ static EnsPFeature exonadaptorGetFeature(const void* value)
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @valrule * [EnsPExonadaptor] Ensembl Exon Adaptor
+** @valrule * [EnsPExonadaptor] Ensembl Exon Adaptor or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -3911,6 +4075,8 @@ static EnsPFeature exonadaptorGetFeature(const void* value)
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPExonadaptor] Ensembl Exon Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3919,41 +4085,41 @@ EnsPExonadaptor ensExonadaptorNew(
 {
     EnsPExonadaptor ea = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     AJNEW0(ea);
 
     ea->Exonadaptor = ensFeatureadaptorNew(
         dba,
-        exonadaptorTables,
-        exonadaptorColumns,
-        exonadaptorLeftjoin,
-        (const char*) NULL,
-        (const char*) NULL,
-        exonadaptorFetchAllbyStatement,
-        (void* (*)(const void* key)) NULL,
-        exonadaptorCacheReference,
-        (AjBool (*)(const void* value)) NULL,
-        exonadaptorCacheDelete,
-        exonadaptorCacheSize,
-        exonadaptorGetFeature,
+        exonadaptorKTables,
+        exonadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        (const char *) NULL,
+        (const char *) NULL,
+        &exonadaptorFetchAllbyStatement,
+        (void *(*)(const void *)) NULL,
+        (void *(*)(void *)) &ensExonNewRef,
+        (AjBool (*)(const void *)) NULL,
+        (void (*)(void **)) &ensExonDel,
+        (size_t (*)(const void *)) &ensExonCalculateMemsize,
+        (EnsPFeature (*)(const void *)) &ensExonGetFeature,
         "Exon");
 
     ea->Exontranscriptadaptor = ensFeatureadaptorNew(
         dba,
-        exontranscriptadaptorTables,
-        exonadaptorColumns,
-        exonadaptorLeftjoin,
-        exontranscriptadaptorDefaultcondition,
-        exontranscriptadaptorFinalcondition,
-        exonadaptorFetchAllbyStatement,
-        (void* (*)(const void* key)) NULL,
-        exonadaptorCacheReference,
-        (AjBool (*)(const void* value)) NULL,
-        exonadaptorCacheDelete,
-        exonadaptorCacheSize,
-        exonadaptorGetFeature,
+        exontranscriptadaptorKTables,
+        exonadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        exontranscriptadaptorKDefaultcondition,
+        exontranscriptadaptorKFinalcondition,
+        &exonadaptorFetchAllbyStatement,
+        (void *(*)(const void *)) NULL,
+        (void *(*)(void *)) &ensExonNewRef,
+        (AjBool (*)(const void *)) NULL,
+        (void (*)(void **)) &ensExonDel,
+        (size_t (*)(const void *)) &ensExonCalculateMemsize,
+        (EnsPFeature (*)(const void *)) &ensExonGetFeature,
         "Exontranscript");
 
     return ea;
@@ -3964,14 +4130,14 @@ EnsPExonadaptor ensExonadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Exon Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Exon Adaptor object.
 **
 ** @fdata [EnsPExonadaptor]
 **
-** @nam3rule Del Destroy (free) an Ensembl Exon Adaptor object
+** @nam3rule Del Destroy (free) an Ensembl Exon Adaptor
 **
-** @argrule * Pea [EnsPExonadaptor*] Ensembl Exon Adaptor object address
+** @argrule * Pea [EnsPExonadaptor*] Ensembl Exon Adaptor address
 **
 ** @valrule * [void]
 **
@@ -3991,20 +4157,29 @@ EnsPExonadaptor ensExonadaptorNew(
 ** destroyed directly. Upon exit, the Ensembl Registry will call this function
 ** if required.
 **
-** @param [d] Pea [EnsPExonadaptor*] Ensembl Exon Adaptor object address
+** @param [d] Pea [EnsPExonadaptor*] Ensembl Exon Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensExonadaptorDel(EnsPExonadaptor* Pea)
+void ensExonadaptorDel(EnsPExonadaptor *Pea)
 {
     EnsPExonadaptor pthis = NULL;
 
-    if(!Pea)
+    if (!Pea)
         return;
 
-    if(!*Pea)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensExonadaptorDel"))
+        ajDebug("ensExonadaptorDel\n"
+                "  *Pea %p\n",
+                *Pea);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    if (!*Pea)
         return;
 
     pthis = *Pea;
@@ -4022,9 +4197,9 @@ void ensExonadaptorDel(EnsPExonadaptor* Pea)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Exon Adaptor object.
+** Functions for returning members of an Ensembl Exon Adaptor object.
 **
 ** @fdata [EnsPExonadaptor]
 **
@@ -4045,21 +4220,20 @@ void ensExonadaptorDel(EnsPExonadaptor* Pea)
 
 /* @func ensExonadaptorGetDatabaseadaptor *************************************
 **
-** Get the Ensembl Database Adaptor element of the
-** Ensembl Feature Adaptor element of an Ensembl Exon Adaptor.
+** Get the Ensembl Database Adaptor member of the
+** Ensembl Feature Adaptor member of an Ensembl Exon Adaptor.
 **
 ** @param [u] ea [EnsPExonadaptor] Ensembl Exon Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensExonadaptorGetDatabaseadaptor(EnsPExonadaptor ea)
 {
-    if(!ea)
-        return NULL;
-
-    return ensFeatureadaptorGetDatabaseadaptor(ea->Exonadaptor);
+    return (ea) ? ensFeatureadaptorGetDatabaseadaptor(ea->Exonadaptor) : NULL;
 }
 
 
@@ -4067,20 +4241,19 @@ EnsPDatabaseadaptor ensExonadaptorGetDatabaseadaptor(EnsPExonadaptor ea)
 
 /* @func ensExonadaptorGetFeatureadaptor **************************************
 **
-** Get the Ensembl Feature Adaptor element of an Ensembl Exon Adaptor.
+** Get the Ensembl Feature Adaptor member of an Ensembl Exon Adaptor.
 **
 ** @param [u] ea [EnsPExonadaptor] Ensembl Exon Adaptor
 **
 ** @return [EnsPFeatureadaptor] Ensembl Feature Adaptor
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPFeatureadaptor ensExonadaptorGetFeatureadaptor(EnsPExonadaptor ea)
 {
-    if(!ea)
-        return NULL;
-
-    return ea->Exonadaptor;
+    return (ea) ? ea->Exonadaptor : NULL;
 }
 
 
@@ -4140,6 +4313,8 @@ EnsPFeatureadaptor ensExonadaptorGetFeatureadaptor(EnsPExonadaptor ea)
 ** @param [u] exons [AjPList] AJAX List of Ensembl Exon objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4152,10 +4327,10 @@ AjBool ensExonadaptorFetchAll(EnsPExonadaptor ea,
 
     EnsPBaseadaptor ba = NULL;
 
-    if(!ea)
+    if (!ea)
         return ajFalse;
 
-    if(!exons)
+    if (!exons)
         return ajFalse;
 
     ba = ensFeatureadaptorGetBaseadaptor(ea->Exonadaptor);
@@ -4192,6 +4367,8 @@ AjBool ensExonadaptorFetchAll(EnsPExonadaptor ea,
 ** @param [u] exons [AjPList] AJAX List of Ensembl Exon objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4200,13 +4377,13 @@ AjBool ensExonadaptorFetchAllbySlice(EnsPExonadaptor ea,
                                      const AjPStr constraint,
                                      AjPList exons)
 {
-    if(!ea)
+    if (!ea)
         return ajFalse;
 
-    if(!slice)
+    if (!slice)
         return ajFalse;
 
-    if(!exons)
+    if (!exons)
         return ajFalse;
 
     ensFeatureadaptorFetchAllbySlice(ea->Exonadaptor,
@@ -4234,6 +4411,8 @@ AjBool ensExonadaptorFetchAllbySlice(EnsPExonadaptor ea,
 ** @param [u] exons [AjPList] AJAX List of Ensembl Exon objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4241,26 +4420,26 @@ AjBool ensExonadaptorFetchAllbyStableidentifier(EnsPExonadaptor ea,
                                                 const AjPStr stableid,
                                                 AjPList exons)
 {
-    char* txtstableid = NULL;
+    char *txtstableid = NULL;
 
     AjPStr constraint = NULL;
 
     EnsPBaseadaptor ba = NULL;
 
-    if(!ea)
+    if (!ea)
         return ajFalse;
 
-    if(!stableid)
+    if (!stableid)
         return ajFalse;
 
-    if(!exons)
+    if (!exons)
         return ajFalse;
 
     ba = ensFeatureadaptorGetBaseadaptor(ea->Exonadaptor);
 
     ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
 
-    constraint = ajFmtStr("exon_stable_id.stable_id = '%s'", txtstableid);
+    constraint = ajFmtStr("exon.stable_id = '%s'", txtstableid);
 
     ajCharDel(&txtstableid);
 
@@ -4291,6 +4470,8 @@ AjBool ensExonadaptorFetchAllbyStableidentifier(EnsPExonadaptor ea,
 ** @param [u] exons [AjPList] AJAX List of Ensembl Exon objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4315,7 +4496,7 @@ AjBool ensExonadaptorFetchAllbyTranscript(EnsPExonadaptor ea,
     EnsPSlice tslice    = NULL;
     EnsPSliceadaptor sa = NULL;
 
-    if(ajDebugTest("ensExonadaptorFetchAllbyTranscript"))
+    if (ajDebugTest("ensExonadaptorFetchAllbyTranscript"))
     {
         ajDebug("ensExonadaptorFetchAllbyTranscript\n"
                 "  ea %p\n"
@@ -4328,20 +4509,20 @@ AjBool ensExonadaptorFetchAllbyTranscript(EnsPExonadaptor ea,
         ensTranscriptTrace(transcript, 1);
     }
 
-    if(!ea)
+    if (!ea)
         return ajFalse;
 
-    if(!transcript)
+    if (!transcript)
         return ajFalse;
 
-    if(!exons)
+    if (!exons)
         return ajFalse;
 
     tfeature = ensTranscriptGetFeature(transcript);
 
     tslice = ensFeatureGetSlice(tfeature);
 
-    if(!tslice)
+    if (!tslice)
     {
         ajDebug("ensExonadaptorFetchAllbyTranscript cannot fetch Exon objects "
                 "for an Ensembl Transcript without an Ensembl Slice.\n");
@@ -4349,10 +4530,10 @@ AjBool ensExonadaptorFetchAllbyTranscript(EnsPExonadaptor ea,
         return ajFalse;
     }
 
-    if(ensSliceIsCircular(tslice, &circular) == ajFalse)
+    if (ensSliceIsCircular(tslice, &circular) == ajFalse)
         return ajFalse;
 
-    if(circular == ajTrue)
+    if (circular == ajTrue)
         eslice = ensSliceNewRef(tslice);
     else
     {
@@ -4390,11 +4571,11 @@ AjBool ensExonadaptorFetchAllbyTranscript(EnsPExonadaptor ea,
     ** pseudo-autosomal regions (PARs).
     */
 
-    if(!ensSliceMatch(eslice, tslice))
+    if (!ensSliceMatch(eslice, tslice))
     {
         iter = ajListIterNew(exons);
 
-        while(!ajListIterDone(iter))
+        while (!ajListIterDone(iter))
         {
             exon = (EnsPExon) ajListIterGet(iter);
 
@@ -4430,27 +4611,29 @@ AjBool ensExonadaptorFetchAllbyTranscript(EnsPExonadaptor ea,
 ** @param [wP] Pexon [EnsPExon*] Ensembl Exon address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonadaptorFetchByIdentifier(EnsPExonadaptor ea,
                                        ajuint identifier,
-                                       EnsPExon* Pexon)
+                                       EnsPExon *Pexon)
 {
     EnsPBaseadaptor ba = NULL;
 
-    if(!ea)
+    if (!ea)
         return ajFalse;
 
-    if(!identifier)
+    if (!identifier)
         return ajFalse;
 
-    if(!Pexon)
+    if (!Pexon)
         return ajFalse;
 
     ba = ensFeatureadaptorGetBaseadaptor(ea->Exonadaptor);
 
-    return ensBaseadaptorFetchByIdentifier(ba, identifier, (void**) Pexon);
+    return ensBaseadaptorFetchByIdentifier(ba, identifier, (void **) Pexon);
 }
 
 
@@ -4469,15 +4652,17 @@ AjBool ensExonadaptorFetchByIdentifier(EnsPExonadaptor ea,
 ** @param [wP] Pexon [EnsPExon*] Ensembl Exon address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExonadaptorFetchByStableidentifier(EnsPExonadaptor ea,
                                              const AjPStr stableid,
                                              ajuint version,
-                                             EnsPExon* Pexon)
+                                             EnsPExon *Pexon)
 {
-    char* txtstableid = NULL;
+    char *txtstableid = NULL;
 
     AjPList exons = NULL;
 
@@ -4487,29 +4672,29 @@ AjBool ensExonadaptorFetchByStableidentifier(EnsPExonadaptor ea,
 
     EnsPExon exon = NULL;
 
-    if(!ea)
+    if (!ea)
         return ajFalse;
 
-    if(!stableid)
+    if (!stableid)
         return ajFalse;
 
-    if(!Pexon)
+    if (!Pexon)
         return ajFalse;
 
     ba = ensFeatureadaptorGetBaseadaptor(ea->Exonadaptor);
 
     ensBaseadaptorEscapeC(ba, &txtstableid, stableid);
 
-    if(version)
+    if (version)
         constraint = ajFmtStr(
-            "exon_stable_id.stable_id = '%s' "
+            "exon.stable_id = '%s' "
             "AND "
-            "exon_stable_id.version = %u",
+            "exon.version = %u",
             txtstableid,
             version);
     else
         constraint = ajFmtStr(
-            "exon_stable_id.stable_id = '%s' "
+            "exon.stable_id = '%s' "
             "AND "
             "exon.is_current = 1",
             txtstableid);
@@ -4524,14 +4709,14 @@ AjBool ensExonadaptorFetchByStableidentifier(EnsPExonadaptor ea,
                                        (EnsPSlice) NULL,
                                        exons);
 
-    if(ajListGetLength(exons) > 1)
+    if (ajListGetLength(exons) > 1)
         ajDebug("ensExonadaptorFetchByStableId got more than one "
                 "Exon for stable identifier '%S' and version %u.\n",
                 stableid, version);
 
-    ajListPop(exons, (void**) Pexon);
+    ajListPop(exons, (void **) Pexon);
 
-    while(ajListPop(exons, (void**) &exon))
+    while (ajListPop(exons, (void **) &exon))
         ensExonDel(&exon);
 
     ajListFree(&exons);
@@ -4582,6 +4767,8 @@ AjBool ensExonadaptorFetchByStableidentifier(EnsPExonadaptor ea,
 ** @param [u] identifiers [AjPList] AJAX List of AJAX unsigned integers
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4594,10 +4781,10 @@ AjBool ensExonadaptorRetrieveAllIdentifiers(EnsPExonadaptor ea,
 
     EnsPBaseadaptor ba = NULL;
 
-    if(!ea)
+    if (!ea)
         return ajFalse;
 
-    if(!identifiers)
+    if (!identifiers)
         return ajFalse;
 
     ba = ensFeatureadaptorGetBaseadaptor(ea->Exonadaptor);
@@ -4629,6 +4816,8 @@ AjBool ensExonadaptorRetrieveAllIdentifiers(EnsPExonadaptor ea,
 ** @param [u] identifiers [AjPList] AJAX List of AJAX String objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4642,15 +4831,15 @@ AjBool ensExonadaptorRetrieveAllStableidentifiers(EnsPExonadaptor ea,
 
     EnsPBaseadaptor ba = NULL;
 
-    if(!ea)
+    if (!ea)
         return ajFalse;
 
-    if(!identifiers)
+    if (!identifiers)
         return ajFalse;
 
     ba = ensFeatureadaptorGetBaseadaptor(ea->Exonadaptor);
 
-    table   = ajStrNewC("exon_stable_id");
+    table   = ajStrNewC("exon");
     primary = ajStrNewC("stable_id");
 
     result = ensBaseadaptorRetrieveAllStrings(ba, table, primary, identifiers);
@@ -4670,8 +4859,8 @@ AjBool ensExonadaptorRetrieveAllStableidentifiers(EnsPExonadaptor ea,
 ** Ensembl Supporting Feature Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::SupportingFeatureAdaptor
-** @cc CVS Revision: 1.21
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.22
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -4716,6 +4905,8 @@ AjBool ensExonadaptorRetrieveAllStableidentifiers(EnsPExonadaptor ea,
 ** @param [u] bafs [AjPList] AJAX List of Ensembl Base Align Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4723,7 +4914,7 @@ AjBool ensSupportingfeatureadaptorFetchAllbyExon(EnsPDatabaseadaptor dba,
                                                  EnsPExon exon,
                                                  AjPList bafs)
 {
-    ajuint identifier = 0;
+    ajuint identifier = 0U;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
@@ -4744,16 +4935,16 @@ AjBool ensSupportingfeatureadaptorFetchAllbyExon(EnsPDatabaseadaptor dba,
 
     EnsPProteinalignfeatureadaptor pafa = NULL;
 
-    if(!dba)
+    if (!dba)
         return ajFalse;
 
-    if(!exon)
+    if (!exon)
         return ajFalse;
 
-    if(!bafs)
+    if (!bafs)
         return ajFalse;
 
-    if(ensExonGetIdentifier(exon) == 0)
+    if (ensExonGetIdentifier(exon) == 0)
     {
         ajDebug("ensSupportingfeatureadaptorFetchAllbyExon cannot get "
                 "supporting Ensembl Base Align Feature objects for an "
@@ -4783,7 +4974,7 @@ AjBool ensSupportingfeatureadaptorFetchAllbyExon(EnsPDatabaseadaptor dba,
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         type = ajStrNew();
         identifier = 0;
@@ -4793,11 +4984,11 @@ AjBool ensSupportingfeatureadaptorFetchAllbyExon(EnsPDatabaseadaptor dba,
         ajSqlcolumnToStr(sqlr, &type);
         ajSqlcolumnToUint(sqlr, &identifier);
 
-        if(ajStrMatchC(type, "dna_align_feature"))
+        if (ajStrMatchC(type, "dna_align_feature"))
             ensDnaalignfeatureadaptorFetchByIdentifier(dafa,
                                                        identifier,
                                                        &baf);
-        else if(ajStrMatchC(type, "protein_align_feature"))
+        else if (ajStrMatchC(type, "protein_align_feature"))
             ensProteinalignfeatureadaptorFetchByIdentifier(pafa,
                                                            identifier,
                                                            &baf);
@@ -4806,7 +4997,7 @@ AjBool ensSupportingfeatureadaptorFetchAllbyExon(EnsPDatabaseadaptor dba,
                    "unexpected value in supporting_feature.feature_type "
                    "'%S'.\n", type);
 
-        if(baf)
+        if (baf)
         {
             ofeature = ensFeaturepairGetSourceFeature(baf->Featurepair);
 
@@ -4816,7 +5007,7 @@ AjBool ensSupportingfeatureadaptorFetchAllbyExon(EnsPDatabaseadaptor dba,
 
             ensFeatureDel(&nfeature);
 
-            ajListPushAppend(bafs, (void*) baf);
+            ajListPushAppend(bafs, (void *) baf);
         }
         else
             ajDebug("ensSupportingfeatureadaptorFetchAllbyExon could not "

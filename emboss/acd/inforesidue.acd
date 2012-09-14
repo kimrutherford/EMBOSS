@@ -5,8 +5,8 @@ application: inforesidue
   gui: "yes"
   batch: "yes"
   cpu: "low"
-    relations: "EDAM:0000154 topic Small molecules"
-    relations: "EDAM:0002123 operation Small molecule property processing"
+    relations: "EDAM_topic:0154 Small molecules"
+    relations: "EDAM_operation:2420 Analysis and processing"
 ]
 
 
@@ -26,7 +26,7 @@ section: input
     help: "Enter IUPAC amino acids codes, e.g. A, C, D, E etc."
     knowntype: "protein codes"
     default: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    relations: "EDAM:0000994 identifier Amino acid identifier"
+    relations: "EDAM_identifier:0994 Amino acid identifier"
   ]
 
   datafile: aadata [
@@ -34,7 +34,7 @@ section: input
     help: "Amino acid properties"
     default: "Eamino.dat"
     knowntype: "amino acid properties"
-    relations: "EDAM:0001502 data Amino acid index (chemical classes)"
+    relations: "EDAM_data:1502 Amino acid index (chemical classes)"
   ]
 
   datafile: mwdata [
@@ -42,7 +42,7 @@ section: input
     help: "Molecular weight data for amino acids"
     default: "Emolwt.dat"
     knowntype: "molecular weights"
-    relations: "EDAM:0001505 data Amino acid index (molecular weight)"
+    relations: "EDAM_data:1505 Amino acid index (molecular weight)"
   ]
 
 endsection: input
@@ -94,7 +94,7 @@ section: output
   [
     parameter: "Y"
     knowntype: "inforesidue output"
-    relations: "EDAM:0000894 data Amino acid annotation"
+    relations: "EDAM_data:0894 Amino acid annotation"
   ]
   
 

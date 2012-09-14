@@ -4,7 +4,7 @@ Here is a sample session with <b>ontocount</b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontocount edam:0001234 </b>
+% <b>ontocount edam:1234 </b>
 Count ontology term(s)
 Output file [stdout]: <b></b>
 
@@ -20,11 +20,11 @@ Output file [stdout]: <b></b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontocount edam:0001234 -subclasses </b>
+% <b>ontocount edam:1234 -subclasses </b>
 Count ontology term(s)
 Output file [stdout]: <b></b>
 
-7
+5
 
 </pre></td></tr></table><p>
 <p>

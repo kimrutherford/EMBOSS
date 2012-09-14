@@ -1,8 +1,8 @@
 application: etandem [
-  documentation: "Finds tandem repeats in a nucleotide sequence"
+  documentation: "Find tandem repeats in a nucleotide sequence"
   groups: "Nucleic:Repeats"
-    relations: "EDAM:0000157 topic Sequence composition"
-    relations: "EDAM:0000379 operation Repeat sequence detection"
+    relations: "EDAM_topic:0157 Sequence composition analysis"
+    relations: "EDAM_operation:0379 Repeat sequence detection"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "dna"
-    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
+    relations: "EDAM_data:2887 Sequence record (nucleic acid)"
   ]
 
 endsection: input
@@ -29,7 +29,7 @@ section: required [
     minimum: "2"
     information: "Minimum repeat size"
     valid: "Integer, 2 or higher"
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
   integer: maxrepeat [
@@ -39,7 +39,7 @@ section: required [
     information: "Maximum repeat size"
     valid: "Integer, same as -minrepeat or higher"
     expected: "Same as -minrepeat"
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
 endsection: required
@@ -52,17 +52,17 @@ section: advanced [
   integer: threshold [
     default: "20"
     information: "Threshold score"
-    relations: "EDAM:0002146 data Threshold"
+    relations: "EDAM_data:2146 Threshold"
   ]
 
   boolean: mismatch [
     information: "Allow N as a mismatch"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: uniform [
     information: "Allow uniform consensus"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: advanced
@@ -79,7 +79,7 @@ section: output [
               float:identity=Identity str:consensus=Consensus"
     rextension: "tan"
     precision: "0"
-    relations: "EDAM:0001299 data Sequence features (repeats)"
+    relations: "EDAM_data:1299 Sequence features (repeats)"
   ]
 
   outfile: origfile [
@@ -90,7 +90,7 @@ section: output [
     knowntype: "tandem output"
     information: "Sanger Centre program tandem output file
                   (optional)"
-    relations: "EDAM:0001299 data Sequence features (repeats)"
+    relations: "EDAM_data:1299 Sequence features (repeats)"
   ]
 
 endsection: output

@@ -34,7 +34,7 @@ Output file [outfile.infobase]:
 Command line arguments
 
 Return information on a given nucleotide base
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-code]              string     [ABCDGHKMNRSTUVWXY] Enter IUPAC nucleotide

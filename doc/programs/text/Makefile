@@ -16,6 +16,7 @@
 
 
 
+pkgdatadir = $(datadir)/EMBOSS
 pkgincludedir = $(includedir)/EMBOSS
 pkglibdir = $(libdir)/EMBOSS
 pkglibexecdir = $(libexecdir)/EMBOSS
@@ -36,19 +37,18 @@ host_triplet = x86_64-unknown-linux-gnu
 subdir = doc/programs/text
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
-	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
-	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
-	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
-	$(top_srcdir)/configure.in
+am__aclocal_m4_deps = $(top_srcdir)/m4/axis2c.m4 \
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/idxdbs.m4 $(top_srcdir)/m4/java.m4 \
+	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pkg.m4 \
+	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
+	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/ajax/core/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
@@ -75,18 +75,19 @@ am__nobase_list = $(am__nobase_strip_setup); \
 am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(pkgdata2dir)"
-DATA = $(pkgdata_DATA) $(pkgdata2_DATA)
+am__installdirs = "$(DESTDIR)$(eprograms1dir)" \
+	"$(DESTDIR)$(eprograms2dir)"
+DATA = $(eprograms1_DATA) $(eprograms2_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-pkgdatadir = $(prefix)/share/$(PACKAGE)/doc/programs/text
-ACLOCAL = ${SHELL} /m1/emboss/emboss/missing --run aclocal-1.11
-AJAX_FIXED_ROOT = \"/m1/emboss/emboss/emboss\"
+ACLOCAL = ${SHELL} /home/pmr/embossdist/missing --run aclocal-1.11
+AJAX_FIXED_ROOT = \"/home/pmr/embossdist/emboss\"
 AJAX_SYSTEM = \"Linux\"
-AMTAR = ${SHELL} /m1/emboss/emboss/missing --run tar
+AMTAR = ${SHELL} /home/pmr/embossdist/missing --run tar
+ANT = 
 AR = ar
-AUTOCONF = ${SHELL} /m1/emboss/emboss/missing --run autoconf
-AUTOHEADER = ${SHELL} /m1/emboss/emboss/missing --run autoheader
-AUTOMAKE = ${SHELL} /m1/emboss/emboss/missing --run automake-1.11
+AUTOCONF = ${SHELL} /home/pmr/embossdist/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/pmr/embossdist/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/pmr/embossdist/missing --run automake-1.11
 AWK = gawk
 AXIS2C_CFLAGS = 
 AXIS2C_CPPFLAGS = 
@@ -94,9 +95,9 @@ AXIS2C_LDFLAGS =
 AXIS2C_LIBS = 
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS =   -O2  -DNO_AUTH -D__amd64__
+CFLAGS =   -O2 
 CPP = gcc -E
-CPPFLAGS = -DAJ_LinuxLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE 
+CPPFLAGS =  -DAJ_LinuxLF -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
@@ -112,9 +113,7 @@ ECHO_C =
 ECHO_N = -n
 ECHO_T = 
 EGREP = /bin/grep -E
-EHAVEANT = 
-EMBOSS_TOP = /m1/emboss/emboss
-ESYSTEMLIBS = 
+EMBOSS_TOP = /home/pmr/embossdist
 EXEEXT = 
 FGREP = /bin/grep -F
 GREP = /bin/grep
@@ -125,9 +124,12 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-ISAIXIA64 = 
-ISCYGWIN = 
-JAVA_OK = 
+JAR = 
+JAVA = 
+JAVAC = 
+JAVA_CFLAGS = 
+JAVA_CPPFLAGS =  -DNO_AUTH
+JAVA_LDFLAGS = 
 LD = /usr/bin/ld -m elf_x86_64
 LDFLAGS = 
 LIBOBJS = 
@@ -136,15 +138,14 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /m1/emboss/emboss/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/pmr/embossdist/missing --run makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
-MYSQL_CFLAGS = -I/usr/include/mysql -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -fno-strict-aliasing -fwrapv -fPIC  -fPIC -g -static-libgcc -fno-omit-frame-pointer -fno-strict-aliasing -DMY_PTHREAD_FASTMUTEX=1
+MYSQL_CFLAGS = -I/usr/include/mysql -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4  -m64 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -fno-strict-aliasing -fwrapv -fPIC  -fPIC -g -static-libgcc -fno-omit-frame-pointer -fno-strict-aliasing -DMY_PTHREAD_FASTMUTEX=1
 MYSQL_CONFIG = /usr/bin/mysql_config
 MYSQL_CPPFLAGS = -I/usr/include/mysql
 MYSQL_LDFLAGS = -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl
-MYSQL_VERSION = 5.5.13
-NEEDAJAX = 
+MYSQL_VERSION = 5.5.24
 NM = /usr/bin/nm -B
 NMEDIT = 
 OBJDUMP = objdump
@@ -154,10 +155,10 @@ OTOOL64 =
 PACKAGE = EMBOSS
 PACKAGE_BUGREPORT = emboss-bug@emboss.open-bio.org
 PACKAGE_NAME = EMBOSS
-PACKAGE_STRING = EMBOSS 6.4.0
+PACKAGE_STRING = EMBOSS 6.5.0
 PACKAGE_TARNAME = EMBOSS
-PACKAGE_URL = http://emboss.sourceforge.net/
-PACKAGE_VERSION = 6.4.0
+PACKAGE_URL = http://emboss.open-bio.org/
+PACKAGE_VERSION = 6.5.0
 PATH_SEPARATOR = :
 PCRE_DATE = 11-Apr-2009
 PCRE_LIB_VERSION = 0:1:0
@@ -165,21 +166,21 @@ PCRE_MAJOR = 7
 PCRE_MINOR = 9
 PCRE_POSIXLIB_VERSION = 0:0:0
 PCRE_VERSION = 7.9
-PG_CONFIG = /usr/bin/pg_config
 PKG_CONFIG = /usr/bin/pkg-config
 PKG_CONFIG_LIBDIR = 
 PKG_CONFIG_PATH = 
 POSIX_MALLOC_THRESHOLD = -DPOSIX_MALLOC_THRESHOLD=10
 POSTGRESQL_CFLAGS = -I/usr/include
+POSTGRESQL_CONFIG = /usr/bin/pg_config
 POSTGRESQL_CPPFLAGS = -I/usr/include
 POSTGRESQL_LDFLAGS = -L/usr/lib64 -lpq
-POSTGRESQL_VERSION = 9.0.4
+POSTGRESQL_VERSION = 9.1.4
 RANLIB = ranlib
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = strip
-VERSION = 6.4.0
+VERSION = 6.5.0
 WARN_CFLAGS = 
 XLIB =  -lX11 
 XMKMF = 
@@ -187,10 +188,10 @@ X_CFLAGS =
 X_EXTRA_LIBS = 
 X_LIBS = 
 X_PRE_LIBS =  -lSM -lICE
-abs_builddir = /m1/emboss/emboss/doc/programs/text
-abs_srcdir = /m1/emboss/emboss/doc/programs/text
-abs_top_builddir = /m1/emboss/emboss
-abs_top_srcdir = /m1/emboss/emboss
+abs_builddir = /home/pmr/embossdist/doc/programs/text
+abs_srcdir = /home/pmr/embossdist/doc/programs/text
+abs_top_builddir = /home/pmr/embossdist
+abs_top_srcdir = /home/pmr/embossdist
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -200,7 +201,6 @@ am__leading_dot = .
 am__quote = 
 am__tar = ${AMTAR} chof - "$$tardir"
 am__untar = ${AMTAR} xf -
-ant_in_path = true
 bindir = ${exec_prefix}/bin
 build = x86_64-unknown-linux-gnu
 build_alias = 
@@ -213,7 +213,6 @@ datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-havejavac = 
 host = x86_64-unknown-linux-gnu
 host_alias = 
 host_cpu = x86_64
@@ -222,8 +221,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /m1/emboss/emboss/install-sh
-javac_in_path = true
+install_sh = ${SHELL} /home/pmr/embossdist/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -243,87 +241,271 @@ target_alias =
 top_build_prefix = ../../../
 top_builddir = ../../..
 top_srcdir = ../../..
-pkgdata_DATA = aaindexextract.txt abiview.txt acdc.txt acdlog.txt \
-	acdpretty.txt acdtable.txt acdtrace.txt acdvalid.txt \
-	aligncopy.txt aligncopypair.txt antigenic.txt \
-	backtranambig.txt backtranseq.txt banana.txt biosed.txt \
-	btwisted.txt \
-	cai.txt cachedas.txt cachedbfetch.txt \
-	cacheebeyesearch.txt cacheensembl.txt \
-	chaos.txt charge.txt checktrans.txt chips.txt \
-	cirdna.txt codcmp.txt codcopy.txt coderet.txt complex.txt \
-	compseq.txt cons.txt consambig.txt cpgplot.txt cpgreport.txt \
-	cusp.txt cutgextract.txt cutseq.txt \
-	dan.txt dbiblast.txt dbifasta.txt dbiflat.txt dbigcg.txt \
-	dbtell.txt dbxcompress.txt dbxedam.txt dbxfasta.txt dbxflat.txt \
-	dbxgcg.txt dbxobo.txt dbxreport.txt \
-	dbxresource.txt dbxstat.txt dbxtax.txt dbxuncompress.txt \
-	degapseq.txt density.txt descseq.txt \
-	diffseq.txt distmat.txt \
-	dotmatcher.txt dotpath.txt dottup.txt dreg.txt \
-	drfinddata.txt drfindformat.txt drfindid.txt \
-	drfindresource.txt drget.txt drtext.txt \
-	edamdef.txt edamhasinput.txt \
-	edamhasoutput.txt edamisformat.txt edamisid.txt \
-	edamname.txt \
-	edialign.txt einverted.txt embossdata.txt embossversion.txt \
-	emma.txt emowse.txt entret.txt epestfind.txt \
-	eprimer3.txt eprimer32.txt \
-	equicktandem.txt est2genome.txt etandem.txt extractalign.txt \
-	extractfeat.txt extractseq.txt \
-	featcopy.txt featreport.txt feattext.txt \
-	findkm.txt freak.txt fuzznuc.txt fuzzpro.txt fuzztran.txt \
-	garnier.txt geecee.txt getorf.txt godef.txt goname.txt \
-	helixturnhelix.txt hmoment.txt \
-	iep.txt infoalign.txt infobase.txt inforesidue.txt \
-	infoseq.txt isochore.txt \
-	jaspextract.txt jaspscan.txt jembossctl.txt
+eprograms1dir = $(pkgdatadir)/doc/programs/text
+eprograms2dir = $(pkgdatadir)/doc/programs/text
+eprograms1_DATA = \
+aaindexextract.txt \
+abiview.txt \
+acdc.txt \
+acdlog.txt \
+acdpretty.txt \
+acdtable.txt \
+acdtrace.txt \
+acdvalid.txt \
+aligncopy.txt \
+aligncopypair.txt \
+antigenic.txt \
+assemblyget.txt \
+backtranambig.txt \
+backtranseq.txt \
+banana.txt \
+biosed.txt \
+btwisted.txt \
+cachedas.txt \
+cachedbfetch.txt \
+cacheebeyesearch.txt \
+cacheensembl.txt \
+cai.txt \
+chaos.txt \
+charge.txt \
+checktrans.txt \
+chips.txt \
+cirdna.txt \
+codcmp.txt \
+codcopy.txt \
+coderet.txt \
+complex.txt \
+compseq.txt \
+cons.txt \
+consambig.txt \
+cpgplot.txt \
+cpgreport.txt \
+cusp.txt \
+cutgextract.txt \
+cutseq.txt \
+dan.txt \
+dbiblast.txt \
+dbifasta.txt \
+dbiflat.txt \
+dbigcg.txt \
+dbtell.txt \
+dbxcompress.txt \
+dbxedam.txt \
+dbxfasta.txt \
+dbxflat.txt \
+dbxgcg.txt \
+dbxobo.txt \
+dbxreport.txt \
+dbxresource.txt \
+dbxstat.txt \
+dbxtax.txt \
+dbxuncompress.txt \
+degapseq.txt \
+density.txt \
+descseq.txt \
+diffseq.txt \
+distmat.txt \
+dotmatcher.txt \
+dotpath.txt \
+dottup.txt \
+dreg.txt \
+drfinddata.txt \
+drfindformat.txt \
+drfindid.txt \
+drfindresource.txt \
+drget.txt \
+drtext.txt \
+edamdef.txt \
+edamhasinput.txt \
+edamhasoutput.txt \
+edamisformat.txt \
+edamisid.txt \
+edamname.txt \
+edialign.txt \
+einverted.txt \
+embossdata.txt \
+embossupdate.txt \
+embossversion.txt \
+emma.txt \
+emowse.txt \
+entret.txt \
+epestfind.txt \
+eprimer3.txt \
+eprimer32.txt \
+equicktandem.txt \
+est2genome.txt \
+etandem.txt \
+extractalign.txt \
+extractfeat.txt \
+extractseq.txt \
+featcopy.txt \
+featmerge.txt \
+featreport.txt \
+feattext.txt \
+findkm.txt \
+freak.txt \
+fuzznuc.txt \
+fuzzpro.txt \
+fuzztran.txt \
+garnier.txt \
+geecee.txt \
+getorf.txt \
+godef.txt \
+goname.txt \
+helixturnhelix.txt \
+hmoment.txt \
+iep.txt \
+infoalign.txt \
+infoassembly.txt \
+infobase.txt \
+inforesidue.txt \
+infoseq.txt \
+isochore.txt \
+jaspextract.txt \
+jaspscan.txt \
+jembossctl.txt
 
-pkgdata2_DATA = lindna.txt listor.txt \
-	makenucseq.txt makeprotseq.txt marscan.txt \
-	maskambignuc.txt maskambigprot.txt maskfeat.txt \
-	maskseq.txt matcher.txt megamerger.txt merger.txt msbar.txt \
-	mwcontam.txt mwfilter.txt \
-	needle.txt needleall.txt newcpgreport.txt newcpgseek.txt newseq.txt \
-	nohtml.txt noreturn.txt nospace.txt notab.txt \
-	notseq.txt nthseq.txt nthseqset.txt \
-	octanol.txt oddcomp.txt \
-	ontocount.txt ontoget.txt ontogetcommon.txt \
-	ontogetdown.txt ontogetobsolete.txt ontogetroot.txt \
-	ontogetsibs.txt ontogetup.txt ontoisobsolete.txt ontotext.txt \
-	palindrome.txt pasteseq.txt patmatdb.txt patmatmotifs.txt \
-	pepcoil.txt pepdigest.txt pepinfo.txt \
-	pepnet.txt pepstats.txt pepwheel.txt \
-	pepwindow.txt pepwindowall.txt plotcon.txt plotorf.txt \
-	polydot.txt preg.txt prettyplot.txt prettyseq.txt \
-	primersearch.txt printsextract.txt profit.txt prophecy.txt \
-	prophet.txt prosextract.txt pscan.txt psiphi.txt \
-	rebaseextract.txt recoder.txt redata.txt remap.txt \
-	restover.txt restrict.txt revseq.txt \
-	seealso.txt seqcount.txt seqmatchall.txt \
-	seqret.txt seqretsetall.txt seqretsplit.txt seqxref.txt \
-	seqxrefget.txt servertell.txt \
-	showalign.txt showdb.txt showfeat.txt showorf.txt \
-	showpep.txt showseq.txt showserver.txt \
-	shuffleseq.txt sigcleave.txt silent.txt sirna.txt \
-	sixpack.txt sizeseq.txt skipredundant.txt \
-	skipseq.txt splitsource.txt splitter.txt stretcher.txt \
-	stssearch.txt supermatcher.txt syco.txt \
-	taxget.txt taxgetdown.txt taxgetrank.txt \
-	taxgetspecies.txt taxgetup.txt \
-	tcode.txt textget.txt textsearch.txt \
-	tfextract.txt tfm.txt tfscan.txt \
-	tmap.txt tranalign.txt transeq.txt trimest.txt trimseq.txt \
-	trimspace.txt twofeat.txt \
-	union.txt urlget.txt \
-	vectorstrip.txt \
-	water.txt whichdb.txt wobble.txt wordcount.txt \
-	wordfinder.txt wordmatch.txt wossdata.txt wossinput.txt \
-	wossname.txt wossoperation.txt wossoutput.txt \
-	wossparam.txt wosstopic.txt \
-	yank.txt
+eprograms2_DATA = \
+lindna.txt \
+listor.txt \
+makenucseq.txt \
+makeprotseq.txt \
+marscan.txt \
+maskambignuc.txt \
+maskambigprot.txt \
+maskfeat.txt \
+maskseq.txt \
+matcher.txt \
+megamerger.txt \
+merger.txt \
+msbar.txt \
+mwcontam.txt \
+mwfilter.txt \
+needle.txt \
+needleall.txt \
+newcpgreport.txt \
+newcpgseek.txt \
+newseq.txt \
+nohtml.txt \
+noreturn.txt \
+nospace.txt \
+notab.txt \
+notseq.txt \
+nthseq.txt \
+nthseqset.txt \
+octanol.txt \
+oddcomp.txt \
+ontocount.txt \
+ontoget.txt \
+ontogetcommon.txt \
+ontogetdown.txt \
+ontogetobsolete.txt \
+ontogetroot.txt \
+ontogetsibs.txt \
+ontogetup.txt \
+ontoisobsolete.txt \
+ontotext.txt \
+palindrome.txt \
+pasteseq.txt \
+patmatdb.txt \
+patmatmotifs.txt \
+pepcoil.txt \
+pepdigest.txt \
+pepinfo.txt \
+pepnet.txt \
+pepstats.txt \
+pepwheel.txt \
+pepwindow.txt \
+pepwindowall.txt \
+plotcon.txt \
+plotorf.txt \
+polydot.txt \
+preg.txt \
+prettyplot.txt \
+prettyseq.txt \
+primersearch.txt \
+printsextract.txt \
+profit.txt \
+prophecy.txt \
+prophet.txt \
+prosextract.txt \
+pscan.txt \
+psiphi.txt \
+rebaseextract.txt \
+recoder.txt \
+redata.txt \
+refseqget.txt \
+remap.txt \
+restover.txt \
+restrict.txt \
+revseq.txt \
+seealso.txt \
+seqcount.txt \
+seqmatchall.txt \
+seqret.txt \
+seqretsetall.txt \
+seqretsplit.txt \
+seqxref.txt \
+seqxrefget.txt \
+servertell.txt \
+showalign.txt \
+showdb.txt \
+showfeat.txt \
+showorf.txt \
+showpep.txt \
+showseq.txt \
+showserver.txt \
+shuffleseq.txt \
+sigcleave.txt \
+silent.txt \
+sirna.txt \
+sixpack.txt \
+sizeseq.txt \
+skipredundant.txt \
+skipseq.txt \
+splitsource.txt \
+splitter.txt \
+stretcher.txt \
+stssearch.txt \
+supermatcher.txt \
+syco.txt \
+taxget.txt \
+taxgetdown.txt \
+taxgetrank.txt \
+taxgetspecies.txt \
+taxgetup.txt \
+tcode.txt \
+textget.txt \
+textsearch.txt \
+tfextract.txt \
+tfm.txt \
+tfscan.txt \
+tmap.txt \
+tranalign.txt \
+transeq.txt \
+trimest.txt \
+trimseq.txt \
+trimspace.txt \
+twofeat.txt \
+union.txt \
+urlget.txt \
+variationget.txt \
+vectorstrip.txt \
+water.txt \
+whichdb.txt \
+wobble.txt \
+wordcount.txt \
+wordfinder.txt \
+wordmatch.txt \
+wossdata.txt \
+wossinput.txt \
+wossname.txt \
+wossoperation.txt \
+wossoutput.txt \
+wossparam.txt \
+wosstopic.txt \
+yank.txt
 
-pkgdata2dir = $(prefix)/share/$(PACKAGE)/doc/programs/text
 all: all-am
 
 .SUFFIXES:
@@ -363,46 +545,46 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-pkgdataDATA: $(pkgdata_DATA)
+install-eprograms1DATA: $(eprograms1_DATA)
 	@$(NORMAL_INSTALL)
-	test -z "$(pkgdatadir)" || $(MKDIR_P) "$(DESTDIR)$(pkgdatadir)"
-	@list='$(pkgdata_DATA)'; test -n "$(pkgdatadir)" || list=; \
+	test -z "$(eprograms1dir)" || $(MKDIR_P) "$(DESTDIR)$(eprograms1dir)"
+	@list='$(eprograms1_DATA)'; test -n "$(eprograms1dir)" || list=; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgdatadir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgdatadir)" || exit $$?; \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(eprograms1dir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(eprograms1dir)" || exit $$?; \
 	done
 
-uninstall-pkgdataDATA:
+uninstall-eprograms1DATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(pkgdata_DATA)'; test -n "$(pkgdatadir)" || list=; \
+	@list='$(eprograms1_DATA)'; test -n "$(eprograms1dir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(pkgdatadir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(pkgdatadir)" && rm -f $$files
-install-pkgdata2DATA: $(pkgdata2_DATA)
+	echo " ( cd '$(DESTDIR)$(eprograms1dir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(eprograms1dir)" && rm -f $$files
+install-eprograms2DATA: $(eprograms2_DATA)
 	@$(NORMAL_INSTALL)
-	test -z "$(pkgdata2dir)" || $(MKDIR_P) "$(DESTDIR)$(pkgdata2dir)"
-	@list='$(pkgdata2_DATA)'; test -n "$(pkgdata2dir)" || list=; \
+	test -z "$(eprograms2dir)" || $(MKDIR_P) "$(DESTDIR)$(eprograms2dir)"
+	@list='$(eprograms2_DATA)'; test -n "$(eprograms2dir)" || list=; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgdata2dir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgdata2dir)" || exit $$?; \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(eprograms2dir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(eprograms2dir)" || exit $$?; \
 	done
 
-uninstall-pkgdata2DATA:
+uninstall-eprograms2DATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(pkgdata2_DATA)'; test -n "$(pkgdata2dir)" || list=; \
+	@list='$(eprograms2_DATA)'; test -n "$(eprograms2dir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(pkgdata2dir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(pkgdata2dir)" && rm -f $$files
+	echo " ( cd '$(DESTDIR)$(eprograms2dir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(eprograms2dir)" && rm -f $$files
 tags: TAGS
 TAGS:
 
@@ -444,7 +626,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(pkgdata2dir)"; do \
+	for dir in "$(DESTDIR)$(eprograms1dir)" "$(DESTDIR)$(eprograms2dir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -492,7 +674,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-pkgdata2DATA install-pkgdataDATA
+install-data-am: install-eprograms1DATA install-eprograms2DATA
 
 install-dvi: install-dvi-am
 
@@ -536,7 +718,7 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-pkgdata2DATA uninstall-pkgdataDATA
+uninstall-am: uninstall-eprograms1DATA uninstall-eprograms2DATA
 
 .MAKE: install-am install-strip
 
@@ -544,14 +726,14 @@ uninstall-am: uninstall-pkgdata2DATA uninstall-pkgdataDATA
 	distclean distclean-generic distclean-libtool distdir dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-pkgdata2DATA install-pkgdataDATA \
+	install-eprograms1DATA install-eprograms2DATA install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-man install-pdf install-pdf-am \
 	install-ps install-ps-am install-strip installcheck \
 	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic \
 	mostlyclean-libtool pdf pdf-am ps ps-am uninstall uninstall-am \
-	uninstall-pkgdata2DATA uninstall-pkgdataDATA
+	uninstall-eprograms1DATA uninstall-eprograms2DATA
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

@@ -8,18 +8,18 @@
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   GCN4_YEAST              Reviewed;         281 AA.
-AC   P03069; P03068; Q70D88; Q70D91; Q70D96; Q70D99; Q70DA0; Q96UT3;
+AC   P03069; D3DLN9; P03068; Q70D88; Q70D91; Q70D96; Q70D99; Q70DA0;
+AC   Q96UT3;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   21-JUL-1986, sequence version 1.
-DT   15-JUN-2010, entry version 120.
+DT   13-JUN-2012, entry version 139.
 DE   RecName: Full=General control protein GCN4;
 DE   AltName: Full=Amino acid biosynthesis regulatory protein;
 GN   Name=GCN4; Synonyms=AAS3, ARG9; OrderedLocusNames=YEL009C;
-OS   Saccharomyces cerevisiae (Baker's yeast).
-OC   Eukaryota; Fungi; Dikarya; Ascomycota; Saccharomyceta;
-OC   Saccharomycotina; Saccharomycetes; Saccharomycetales;
-OC   Saccharomycetaceae; Saccharomyces.
-OX   NCBI_TaxID=4932;
+OS   Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast).
+OC   Eukaryota; Fungi; Dikarya; Ascomycota; Saccharomycotina;
+OC   Saccharomycetes; Saccharomycetales; Saccharomycetaceae; Saccharomyces.
+OX   NCBI_TaxID=559292;
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
 RX   MEDLINE=85038531; PubMed=6387704; DOI=10.1073/pnas.81.20.6442;

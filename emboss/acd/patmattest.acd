@@ -1,8 +1,8 @@
 application: patmattest [
   documentation: "Test of pattern matching"
   groups: "Test"
-    relations: "EDAM:0000220 topic File handling"
-    relations: "EDAM:0000336 operation File debugging"
+    relations: "EDAM_topic:0220 File handling"
+    relations: "EDAM_operation:0336 File debugging"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
   sequence: sequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   string: expression [
@@ -22,7 +22,7 @@ section: input [
     minlength: "2"
     information: "Regular expression to search sequence for."
     knowntype: "regular expression"
-    relations: "EDAM:0001352 data Regular expression"
+    relations: "EDAM_data:1352 Regular expression"
   ]
 
 endsection: input
@@ -36,7 +36,7 @@ section: output [
     parameter: "Y"
     default: "stdout"
     knowntype: "patmattest output"
-    relations: "EDAM:0000969 data Text"
+    relations: "EDAM_data:0969 Text"
   ]
 
 endsection: output

@@ -112,6 +112,14 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td>-statistics</td>
+<td>boolean</td>
+<td>Report I/O statistics for each input file</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td>-indexoutdir</td>
 <td>outdir</td>
 <td>Index file output directory</td>
@@ -124,7 +132,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-directory" associated directory qualifiers
+<td align="left" colspan=5>"-directory" associated directory qualifiers
 </td>
 </tr>
 
@@ -137,7 +145,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
+<td align="left" colspan=5>"-indexoutdir" associated outdir qualifiers
 </td>
 </tr>
 
@@ -150,7 +158,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 

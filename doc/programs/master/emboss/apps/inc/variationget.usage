@@ -1,0 +1,13 @@
+Here is a sample session with <b>variationget</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>variationget valid-4.0.vcf </b>
+Get sequence variations
+Variation output file [0.vcf]: <b>test.vcf</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

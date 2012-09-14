@@ -9,6 +9,7 @@ if ($ARGV[0]) {
 $infile =~ m"^([^.]+)"o;
 
 # $fpref = $1;
+$allsrc = "";
 
 open (IN, $infile) || die "Cannot open input file $infile";
 
@@ -20,14 +21,14 @@ print "\n";
 print "============================\n";
 print ".. File $infile\n";
 print "============================\n";
-@presrc = split (m"^[A-Za-z][^/\{\[;=]+[\)]\s*[\{]\s*$"osm, $allsrc);
+@presrc = split (/^[A-Za-z][^\/\{\[;=]+[\)]\s*[\{]\s*$/osm, $allsrc);
 $ip = 0;
 
-while ($allsrc =~ m"^([A-Za-z][^/\{\[;=]+[\)]\s*[\{])\s*$"gosm) {
+while ($allsrc =~ /^([A-Za-z][^\/\{\[;=]+[\)]\s*[\{])\s*$/gosm) {
   $proto = $1;
   $presrc = $presrc[$ip];
 
-  if ($proto =~ m"^(static\s+)?\s*([^()]*\S)\s+([^()]*\S)\s*[\(]\s*([^{]*)[)]\s*[\{]"osm) {
+  if ($proto =~ /^(static\s+)?\s*([^()]*\S)\s+([^()]*\S)\s*[\(]\s*([^{]*)[)]\s*[\{]/osm) {
     if (defined($2)){$ptyp = $2}
     else {$ptyp = ""}
     $pnam = $3;
@@ -41,8 +42,11 @@ while ($allsrc =~ m"^([A-Za-z][^/\{\[;=]+[\)]\s*[\{])\s*$"gosm) {
 ###  print "$ip $pnam\n";
 ###  print "============================\n";
 ###  print "$presrc\n";
-  if ($presrc !~ m"[\n][/][*]\s+([@]\S+)\s+(\S+)([^/*][^*]*[*]+)*[/]\s*$"osm) {
-    print "bad or missing docheader for $pnam\n$proto\n";
+
+  if($presrc =~ /^\#else\s*$/osm) {next}
+  elsif($presrc =~ /^\#if\s*AJFALSE\s*$/osm) {next}
+  elsif ($presrc !~ /[\n][\/][*]\s+([@]\S+)\s+(\S+)([^\/*][^*]*[*]+)*[\/]\s*$/osm) {
+    print "bad docheader bad or missing for $pnam\n$proto\n";
   }
   $ip++;
 }

@@ -1,9 +1,9 @@
 application: feattext [
   documentation: "Return a feature table original text"
   groups: "Edit"
-    relations: "EDAM:0000160 topic Sequence features"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0000254 operation Data retrieval (feature table)"
+    relations: "EDAM_topic:0160 Sequence sites and features"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:2422 Data retrieval"
 ]
 
 section: input [
@@ -15,7 +15,7 @@ section: input [
     parameter: "Y"
     type: "any"
     entry: "Y"
-    relations: "EDAM:0001270 data Feature table"
+    relations: "EDAM_data:1255 Feature record"
   ]
 
 endsection: input
@@ -27,8 +27,9 @@ section: output [
 
   outfile: outfile [
     parameter: "Y"
-    knowntype: "Full text output file"
-    relations: "EDAM:0001270 data Feature table"
+    knowntype: "Entry full text"
+    information: "Full text output file"
+    relations: "EDAM_data:1255 Feature record"
   ]
 
 endsection: output

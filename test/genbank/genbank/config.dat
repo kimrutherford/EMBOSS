@@ -1,0 +1,14 @@
+index	flat/1
+fileid_0	/homes/pmr/devemboss/test/genbank/gbbct1.seq	74333
+fileid_1	/homes/pmr/devemboss/test/genbank/gbest1.seq	4155
+fileid_2	/homes/pmr/devemboss/test/genbank/gbinv1.seq	98725
+fileid_3	/homes/pmr/devemboss/test/genbank/gbpln1.seq	2312
+fileid_4	/homes/pmr/devemboss/test/genbank/gbpln2.seq	6776
+fileid_5	/homes/pmr/devemboss/test/genbank/gbpri1.seq	3703254
+fileid_6	/homes/pmr/devemboss/test/genbank/gbrod1.seq	9958
+fileid_7	/homes/pmr/devemboss/test/genbank/gbsts1.seq	2194
+fileid_8	/homes/pmr/devemboss/test/genbank/gbvrl1.seq	3191
+fileid_9	/homes/pmr/devemboss/test/genbank/gbvrt.seq	19049
+primary_namespace	ID
+secondary_namespaces	ACC	VERSION
+format	genbank

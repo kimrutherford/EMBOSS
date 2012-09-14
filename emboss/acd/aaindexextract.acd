@@ -4,9 +4,9 @@ application: aaindexextract [
   gui: "no"
   batch: "no"
   cpu: "low"
-    relations: "EDAM:0000154 topic Small molecules"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0001812 operation Data loading"
+    relations: "EDAM_topic:0154 Small molecules"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:1812 Data loading"
 ]
 
 section: input [
@@ -18,7 +18,7 @@ section: input [
     information: "AAINDEX database file"
     parameter: "Y"
     knowntype: "aaindex database"
-    relations: "EDAM:0001501 data Amino acid index"
+    relations: "EDAM_data:1501 Amino acid index"
   ]
 
 endsection: input

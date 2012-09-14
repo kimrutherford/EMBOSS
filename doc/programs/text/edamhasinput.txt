@@ -38,7 +38,7 @@ Obo output file [edamhasinput.obo]:
 Command line arguments
 
 Find EDAM ontology terms by has_input relation
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-identifier]        string     Identifier(s) to search for in ontology (Any
@@ -115,118 +115,118 @@ Output file format
   File: edamhasinput.obo
 
 [Term]
-id: EDAM:0002403
+id: EDAM_operation:2403
 name: Sequence analysis
 namespace: operation
 def: Analyse one or more known molecular sequences.
-subset: operation
-is_a: EDAM:0002446 ! Sequence processing
-relationship: has_input EDAM:0002044 ! Sequence {minCardinality=1}
-relationship: has_output EDAM:0002955 ! Sequence report {minCardinality=1}
-relationship: in_topic EDAM:0000080 ! Sequence
+subset: operations
+synonym: "Sequence analysis (general)" EXACT [http://edamontology.org]
+is_a: EDAM_operation:2446 ! Sequence processing
+relationship: has_input EDAM_data:2044 {min_cardinality=1} ! Sequence
+relationship: has_output EDAM_data:2955 {min_cardinality=1} ! Sequence report
+relationship: has_topic EDAM_topic:0080 ! Sequence analysis
 
 [Term]
-id: EDAM:0001780
+id: EDAM_operation:0292
+name: Sequence alignment construction
+namespace: operation
+def: Align (identify equivalent sites within) molecular sequences.
+subset: operations
+synonym: "Sequence alignment" EXACT [http://edamontology.org]
+synonym: "Sequence alignment computation" EXACT [http://edamontology.org]
+synonym: "Sequence alignment generation" EXACT [http://edamontology.org]
+is_a: EDAM_operation:2463 ! Sequence alignment processing !(?)
+is_a: EDAM_operation:2451 ! Sequence comparison
+is_a: EDAM_operation:2928 ! Alignment construction
+relationship: has_input EDAM_data:2044 {minCardinality=2, note="Applies to both
+pure/raw sequences and sequence records. Indirectly also to sequence sets or IDs
+ (?)"} ! Sequence
+relationship: has_output EDAM_data:0863 {min_cardinality=1} ! Sequence alignment
+relationship: has_topic EDAM_topic:0182 ! Sequence alignment
+
+[Term]
+id: EDAM_operation:1780
 name: Sequence submission
 namespace: operation
 def: Submit a molecular sequence to a database.
-subset: operation
-is_a: EDAM:0002446 ! Sequence processing
-relationship: has_input EDAM:0002044 ! Sequence {minCardinality=1}
-relationship: in_topic EDAM:0000091 ! Data handling
+subset: operations
+is_a: EDAM_operation:2446 ! Sequence processing
+relationship: has_input EDAM_data:2044 {min_cardinality=1} ! Sequence
+relationship: has_topic EDAM_topic:3077 ! Data acquisition and deposition
 
 [Term]
-id: EDAM:0000564
-name: Sequence rendering
-namespace: operation
-def: Visualise, format or render a molecular sequence, possibly with sequence fe
-atures or properties shown.
-subset: operation
-is_a: EDAM:0000337 ! Plotting and rendering
-is_a: EDAM:0002446 ! Sequence processing
-relationship: has_input EDAM:0002044 ! Sequence {minCardinality=1}
-relationship: has_output EDAM:0002969 ! Sequence image or plot {minCardinality=1
-}
-
-[Term]
-id: EDAM:0002446
+id: EDAM_operation:2446
 name: Sequence processing
 namespace: operation
 def: Process (read and / or write) one or more molecular sequences and associate
 d annotation.
-subset: operation
-is_a: EDAM:0002503 ! Sequence data processing
-relationship: has_input EDAM:0002044 ! Sequence {minCardinality=0}
-relationship: has_output EDAM:0002044 ! Sequence {minCardinality=0}
+subset: operations
+synonym: "Sequence processing (general)" EXACT [http://edamontology.org]
+is_a: EDAM_operation:2420 ! Analysis and processing
+relationship: has_input EDAM_data:2044 {min_cardinality=0} ! Sequence
+relationship: has_output EDAM_data:2044 {min_cardinality=0} ! Sequence
+relationship: has_topic EDAM_topic:0080 ! Sequence analysis
 
-[Term]
-id: EDAM:0000346
-name: Sequence database search (by sequence)
-namespace: operation
-def: Search a sequence database and retrieve sequences that are similar to a que
-ry sequence.
-subset: operation
-synonym: "Sequence similarity search" EXACT []
-is_a: EDAM:0000338 ! Sequence database search
 
 
   [Part of this file has been deleted for brevity]
 
-namespace: operation
-def: Design and optimize oligonucleotide probes for DNA microarrays, for example
- for transcription profiling of genes, or for genomes and gene families.
-subset: operation
-is_a: EDAM:0002419 ! Primer and probe design
-relationship: has_input EDAM:0002977 ! Nucleic acid sequence
-relationship: has_output EDAM:0000932 ! Oligonucleotide probe data {minCardinali
-ty=1}
-relationship: in_topic EDAM:0000200 ! Microarrays
-relationship: in_topic EDAM:0000632 ! Molecular probes or primers
+synonym: "PCR primer prediction" EXACT [http://edamontology.org]
+is_a: EDAM_operation:2419 ! Primer and probe design
+relationship: has_input EDAM_data:2977 ! Nucleic acid sequence
+relationship: has_output EDAM_data:1240 {min_cardinality=0} ! PCR primers
+relationship: has_topic EDAM_topic:3032 ! Primer or probe design
 
 [Term]
-id: EDAM:0002478
-name: Sequence analysis (nucleic acid)
+id: EDAM_operation:2506
+name: Sequence alignment analysis (protein)
 namespace: operation
-def: Analyse a nucleic acid sequence (using methods that are only applicable to
-nucleic acid sequences).
-subset: operation
-is_a: EDAM:0002403 ! Sequence analysis
-is_a: EDAM:0002501 ! Nucleic acid data processing
-relationship: has_input EDAM:0002977 ! Nucleic acid sequence {minCardinality=1}
-relationship: in_topic EDAM:0000640 ! Nucleic acid sequences
+def: Analyse a protein sequence alignment, typically to detect features or make
+predictions.
+subset: operations
+is_a: EDAM_operation:0258 ! Sequence alignment analysis
+is_a: EDAM_operation:2502 ! Protein data processing
+is_a: EDAM_operation:3023 ! Prediction, detection and recognition (protein)
+relationship: has_input EDAM_data:1384 {min_cardinality=1} ! Sequence alignment
+(protein)
+relationship: has_topic EDAM_topic:0741 ! Protein sequence alignment
 
 [Term]
-id: EDAM:0002452
-name: Sequence cluster processing
+id: EDAM_operation:0361
+name: Sequence annotation
 namespace: operation
-def: Process (read and / or write) a sequence cluster.
-subset: operation
-is_a: EDAM:0002503 ! Sequence data processing
-relationship: has_input EDAM:0001235 ! Sequence cluster {minCardinality=0}
-relationship: has_output EDAM:0001235 ! Sequence cluster {minCardinality=0}
-relationship: in_topic EDAM:0000164 ! Sequence clustering
+def: Annotate a molecular sequence record with terms from a controlled vocabular
+y.
+subset: operations
+is_a: EDAM_operation:0226 ! Annotation
+relationship: has_input EDAM_data:0849 {min_cardinality=1} ! Sequence record
+relationship: has_output EDAM_data:0849 {min_cardinality=1} ! Sequence record
 
 [Term]
-id: EDAM:0000566
-name: Sequence cluster rendering
-namespace: operation
-def: Visualise, format or render sequence clusters.
-subset: operation
-is_a: EDAM:0000337 ! Plotting and rendering
-is_a: EDAM:0002452 ! Sequence cluster processing
-relationship: has_input EDAM:0001235 ! Sequence cluster {minCardinality=1}
-
-[Term]
-id: EDAM:0000368
+id: EDAM_operation:0368
 name: Sequence masking
 namespace: operation
 def: Mask characters in a molecular sequence (replacing those characters with a
 mask character).
 comment: For example, SNPs or repeats in a DNA sequence might be masked.
-subset: operation
-is_a: EDAM:0000231 ! Sequence editing
-relationship: has_input EDAM:0000851 ! Sequence mask character {minCardinality=1
-}
+subset: operations
+is_a: EDAM_operation:0231 ! Sequence editing
+relationship: has_input EDAM_data:0851 {min_cardinality=1} ! Sequence mask chara
+cter
+
+[Term]
+id: EDAM_operation:3180
+name: Sequence assembly evaluation
+namespace: operation
+def: Evaluate a DNA sequence assembly, typically for purposes of quality control
+.
+subset: operations
+is_a: EDAM_operation:2448 ! Sequence processing (nucleic acid)
+is_a: EDAM_operation:2478 ! Nucleic acid sequence analysis
+is_a: EDAM_operation:2425 ! Optimisation and refinement
+relationship: has_input EDAM_data:0925 ! Sequence assembly
+relationship: has_output EDAM_data:3181 ! Sequence assembly report
+relationship: has_topic EDAM_topic:0196 ! Sequence assembly
 
 
 Data files
@@ -280,12 +280,12 @@ See also
                     ontogetup       Get ontology term(s) by id of child
                     ontoisobsolete  Report whether an ontology term id is obsolete
                     ontotext        Get ontology term(s) original full text
-                    wossdata        Finds programs by EDAM data
-                    wossinput       Finds programs by EDAM input data
-                    wossoperation   Finds programs by EDAM operation
-                    wossoutput      Finds programs by EDAM output data
-                    wossparam       Finds programs by EDAM parameter
-                    wosstopic       Finds programs by EDAM topic
+                    wossdata        Find programs by EDAM data
+                    wossinput       Find programs by EDAM input data
+                    wossoperation   Find programs by EDAM operation
+                    wossoutput      Find programs by EDAM output data
+                    wossparam       Find programs by EDAM parameter
+                    wosstopic       Find programs by EDAM topic
 
 Author(s)
 

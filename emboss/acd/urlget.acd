@@ -1,8 +1,8 @@
 application: urlget [
   documentation: "Get URLs of data resources"
   groups: "Data retrieval:Url data"
-    relations: "EDAM:0000090 topic Data retrieval"
-    relations: "EDAM:0002422 operation Data retrieval"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:2422 Data retrieval"
 ]
 
 section: input [
@@ -12,7 +12,7 @@ section: input [
   url: url [
      default: ""
      parameter: "Y"
-     relations: "EDAM:0000957 data Database metadata"
+     relations: "EDAM_data:0957 Database metadata"
   ]
 
 endsection: input
@@ -50,7 +50,7 @@ section: output [
 
   outurl: outfile [
     parameter: "Y"
-    relations: "EDAM:0000957 data Database metadata"
+    relations: "EDAM_data:0957 Database metadata"
   ]
 
 endsection: output

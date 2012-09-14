@@ -1,28 +1,35 @@
-/******************************************************************************
-** @source AJAX data handling functions
+/* @source ajresourcewrite ****************************************************
+**
+** AJAX data resource handling functions
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.18 $
 ** @modified Oct 25 2010 pmr First AJAX version
+** @modified $Date: 2011/10/19 14:52:21 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajresourcewrite.h"
+#include "ajfile.h"
+
 
 static AjBool resourceoutWriteBasic(AjPFile outf,
                                     const AjPResource resource);
@@ -48,7 +55,7 @@ static AjBool resourceoutWriteWsbasic(AjPFile outf,
 **
 ** @attr Name [const char*] Format name
 ** @attr Desc [const char*] Format description
-** @attr Write [(AjBool*)] Output function, returns ajTrue on success
+** @attr Write [AjBool function] Output function, returns ajTrue on success
 ** @@
 ******************************************************************************/
 
@@ -68,19 +75,19 @@ static ResourceOOutFormat resourceoutFormatDef[] =
 /*     WriteFunction */
 
   {"drcat",         "Data resource catalogue entry format",
-       resourceoutWriteDrcat},
+       &resourceoutWriteDrcat},
 
   {"basic",         "Basic data resource catalogue entry format",
-       resourceoutWriteBasic},
+       &resourceoutWriteBasic},
 
   {"wsbasic",       "Webservice annotated data resource catalogue entry format",
-       resourceoutWriteWsbasic},
+       &resourceoutWriteWsbasic},
 
   {"list",          "List of resource ids",
-       resourceoutWriteList},
+       &resourceoutWriteList},
 
   {"webpage",       "DRCAT web page",
-       resourceoutWriteWebpage},
+       &resourceoutWriteWebpage},
 
   {NULL, NULL, NULL}
 };
@@ -138,6 +145,8 @@ static ResourceOOutFormat resourceoutFormatDef[] =
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajResourceoutWrite(AjPOutfile outf, const AjPResource resource)
@@ -145,7 +154,7 @@ AjBool ajResourceoutWrite(AjPOutfile outf, const AjPResource resource)
     ajuint i = ajOutfileGetFormatindex(outf);
     AjPFile outfile = ajOutfileGetFile(outf);
 
-    return resourceoutFormatDef[i].Write(outfile, resource);
+    return (*resourceoutFormatDef[i].Write)(outfile, resource);
 }
 
 
@@ -160,6 +169,8 @@ AjBool ajResourceoutWrite(AjPOutfile outf, const AjPResource resource)
 ** @param [u] outf [AjPFile] Output resource file
 ** @param [r] resource [const AjPResource] Resource object
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -269,6 +280,8 @@ static AjBool resourceoutWriteDrcat(AjPFile outf, const AjPResource resource)
 ** @param [u] outf [AjPFile] Output resource file
 ** @param [r] resource [const AjPResource] Resource object
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -297,6 +310,8 @@ static AjBool resourceoutWriteBasic(AjPFile outf, const AjPResource resource)
 ** @param [u] outf [AjPFile] Output resource file
 ** @param [r] resource [const AjPResource] Resource object
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -327,6 +342,8 @@ static AjBool resourceoutWriteList(AjPFile outf, const AjPResource resource)
 ** @param [u] outf [AjPFile] Output resource file
 ** @param [r] resource [const AjPResource] Resource object
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -773,6 +790,8 @@ static AjBool resourceoutWriteWebpage(AjPFile outf, const AjPResource resource)
 ** @param [u] outf [AjPFile] Output resource file
 ** @param [r] resource [const AjPResource] Resource object
 ** @return [AjBool] True on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -846,6 +865,8 @@ static AjBool resourceoutWriteWsbasic(AjPFile outf,
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -894,6 +915,8 @@ void ajResourceoutprintBook(AjPFile outf)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -935,6 +958,8 @@ void ajResourceoutprintHtml(AjPFile outf)
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -972,6 +997,8 @@ void ajResourceoutprintText(AjPFile outf, AjBool full)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1040,6 +1067,8 @@ void ajResourceoutprintWiki(AjPFile outf)
 ** Cleans up data output internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1093,6 +1122,8 @@ void ajResourceoutExit(void)
 ** @param [r] format [const AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1138,6 +1169,8 @@ AjBool ajResourceoutformatFind(const AjPStr format, ajint* iformat)
 **
 ** @param [r] format [const AjPStr] Format
 ** @return [AjBool] ajTrue if formats was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

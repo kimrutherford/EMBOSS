@@ -5,7 +5,7 @@ Here is a sample session with <b>chips</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>chips -sbeg 135 -send 1292 </b>
-Calculates Nc codon usage statistic
+Calculate Nc codon usage statistic
 Input nucleotide sequence(s): <b>tembl:x13776</b>
 Output file [x13776.chips]: <b></b>
 

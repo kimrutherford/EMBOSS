@@ -1,24 +1,44 @@
-/* @source embword.c
+/* @source embword ************************************************************
 **
 ** Wordmatch routines
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** @author Copyright (c) 1999 Gary Williams
+** @version $Revision: 1.65 $
+** @modified $Date: 2012/07/14 14:52:41 $ by $Author: rice $
+** @@
 **
-** This program is distributed in the hope that it will be useful,
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "emboss.h"
+#include "ajlib.h"
+
+#include "embword.h"
+#include "ajassert.h"
+#include "ajseq.h"
+#include "ajfeat.h"
+#include "ajfile.h"
+#include "ajlist.h"
+#include "ajtable.h"
+#include "ajutil.h"
+
 #include <math.h>
+
+
+
 
 /*
 ** current wordlength - this is an easily accessible copy of the value
@@ -63,7 +83,7 @@ static ajint    wordMatchCmpPos(const void* v1, const void* v2);
 static void     wordNewListTrace(ajint i, const AjPList newlist);
 static void     wordOrderPosMatchTable(AjPList unorderedList);
 
-static unsigned wordStrHash(const void *key, unsigned hashsize);
+static ajulong  wordStrHash(const void *key, ajulong hashsize);
 
 static void     wordVFreeLocs(void **value);
 static void     wordVFreeSeqlocs(void **value);
@@ -81,6 +101,8 @@ static ajulong  wordRabinKarpConstant(ajuint m);
 ** @param [r] x [const void *] First word
 ** @param [r] y [const void *] Second word
 ** @return [ajint] difference
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -97,14 +119,16 @@ static ajint wordCmpStr(const void *x, const void *y)
 ** Create hash value from key.
 **
 ** @param [r] key [const void *] key.
-** @param [r] hashsize [unsigned] Hash size
-** @return [unsigned] hash value
+** @param [r] hashsize [ajulong] Hash size
+** @return [ajulong] hash value
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
-static unsigned wordStrHash(const void *key, unsigned hashsize)
+static ajulong wordStrHash(const void *key, ajulong hashsize)
 {
-    unsigned hashval;
+    ajulong hashval;
     const char *s;
 
     ajuint i;
@@ -127,6 +151,8 @@ static unsigned wordStrHash(const void *key, unsigned hashsize)
 ** @param [r] x [const void *] First word
 ** @param [r] y [const void *] Second word
 ** @return [ajint] count difference for words.
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -157,6 +183,8 @@ static ajint wordCompare(const void *x, const void *y)
 **
 ** @param [r] wordlen [ajint] Word length
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -188,6 +216,8 @@ void embWordLength(ajint wordlen)
 ** If there is nothing else on the list, it frees the list.
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -230,6 +260,8 @@ void embWordClear(void)
 **
 ** @param [r] table [const AjPTable] table to be printed
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -241,7 +273,7 @@ void embWordPrintTable(const AjPTable table)
 
     ajTableToarrayValues(table, &valarray);
 
-    qsort(valarray, ajTableGetLength(table), sizeof (*valarray), wordCompare);
+    qsort(valarray, (size_t) ajTableGetLength(table), sizeof (*valarray), wordCompare);
 
     for(i = 0; valarray[i]; i++)
     {
@@ -265,6 +297,8 @@ void embWordPrintTable(const AjPTable table)
 ** @param [r] mincount [ajint] Minimum frequency to report
 ** @param [u] outf [AjPFile] Output file.
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -276,7 +310,7 @@ void embWordPrintTableFI(const AjPTable table, ajint mincount, AjPFile outf)
 
     if(!ajTableGetLength(table)) return;
 
-    i = ajTableToarrayValues(table, &valarray);
+    i = (ajuint) ajTableToarrayValues(table, &valarray);
 
     ajDebug("embWordPrintTableFI size %d mincount:%d\n", i, mincount);
 
@@ -287,7 +321,7 @@ void embWordPrintTableFI(const AjPTable table, ajint mincount, AjPFile outf)
 		i, wordLength, ajnew->fword,ajnew->count);
     }
 
-    qsort(valarray, ajTableGetLength(table), sizeof (*valarray), wordCompare);
+    qsort(valarray, (size_t) ajTableGetLength(table), sizeof (*valarray), wordCompare);
 
     for(i = 0; valarray[i]; i++)
     {
@@ -317,6 +351,8 @@ void embWordPrintTableFI(const AjPTable table, ajint mincount, AjPFile outf)
 ** @param [r] table [const AjPTable] table to be printed
 ** @param [u] outf [AjPFile] Output file.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -336,6 +372,8 @@ void embWordPrintTableF(const AjPTable table, AjPFile outf)
 **
 ** @param [d] value [void**] Data value for a table item
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -343,7 +381,7 @@ static void wordVFreeLocs(void **value)
 {
     AjPTable table = ((EmbPWord)*value)->seqlocs;
 
-    ajTableDelValdel(&table, wordVFreeSeqlocs);
+    ajTableDelValdel(&table, &wordVFreeSeqlocs);
 
     /* free the locations structure */
     AJFREE(*value);
@@ -360,6 +398,8 @@ static void wordVFreeLocs(void **value)
 **
 ** @param [d] value [void**] Data values as void**
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -385,6 +425,8 @@ static void wordVFreeSeqlocs(void **value)
 **
 ** @param [d] table [AjPTable*] table to be deleted
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -405,6 +447,8 @@ void embWordFreeTable(AjPTable *table)
 ** @param [d] x [void**] Data values as void**
 ** @param [r] cl [void*] Ignored user data, usually NULL.
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -431,6 +475,8 @@ static void wordMatchListDelete(void **x,void *cl)
 **
 ** @param [u] plist [AjPList*] list to be deleted.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -439,7 +485,7 @@ void embWordMatchListDelete(AjPList* plist)
     if(!*plist)
 	return;
 
-    ajListMap(*plist,wordMatchListDelete, NULL);
+    ajListMap(*plist, &wordMatchListDelete, NULL);
     ajListFree(plist);
 
     return;
@@ -455,6 +501,8 @@ void embWordMatchListDelete(AjPList* plist)
 ** @param [r] x [void*] List item (EmbPWordMatch*)
 ** @param [r] cl [void*] Output file AjPFile
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -484,12 +532,14 @@ static void wordMatchListPrint(void *x,void *cl)
 ** @param [u] file [AjPFile] Output file
 ** @param [r] list [const AjPList] list to be printed.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
 void embWordMatchListPrint(AjPFile file, const AjPList list)
 {
-    ajListMapread(list,wordMatchListPrint, file);
+    ajListMapread(list, &wordMatchListPrint, file);
 
     return;
 }
@@ -507,6 +557,8 @@ void embWordMatchListPrint(AjPFile file, const AjPList list)
 ** @param [r] seq1 [const AjPSeq] sequence
 ** @param [r] seq2 [const AjPSeq] second sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -572,6 +624,8 @@ void embWordMatchListConvToFeat(const AjPList list,
 ** @param [u] table [AjPTable*] table to be created or updated.
 ** @param [r] seq [const AjPSeq] Sequence to be "worded"
 ** @return [AjBool] ajTrue if successful
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -613,8 +667,8 @@ AjBool embWordGetTable(AjPTable *table, const AjPSeq seq)
     if(!*table)
     {
 	*table = ajTableNewFunctionLen(ajSeqGetLen(seq),
-				       wordCmpStr, wordStrHash,
-                                       ajMemFree, wordVFreeLocs);
+				       &wordCmpStr, &wordStrHash,
+                                       &ajMemFree, &wordVFreeLocs);
 	ajDebug("make new table\n");
     }
 
@@ -714,7 +768,7 @@ AjBool embWordGetTable(AjPTable *table, const AjPSeq seq)
 
     }
 
-    ajDebug("table done, size %d\n", ajTableGetLength(*table));
+    ajDebug("table done, size %Lu\n", ajTableGetLength(*table));
 
     return ajTrue;
 }
@@ -728,13 +782,15 @@ AjBool embWordGetTable(AjPTable *table, const AjPSeq seq)
 **
 ** @param [u] unorderedList [AjPList] Unsorted list
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
 static void wordOrderMatchTable(AjPList unorderedList)
 {
     ajDebug("wordOrderMatchTable size %d\n", ajListGetLength(unorderedList));
-    ajListSort(unorderedList, wordMatchCmp);
+    ajListSort(unorderedList, &wordMatchCmp);
 
     return;
 }
@@ -753,6 +809,8 @@ static void wordOrderMatchTable(AjPList unorderedList)
 ** @param [r] v2 [const void*] Comparison word
 ** @return [ajint] Comparison value. 0 if equal, -1 if first is lower,
 **               +1 if first is higher.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -810,12 +868,14 @@ static ajint wordMatchCmp(const void* v1, const void* v2)
 **
 ** @param [u] unorderedList [AjPList] Unsorted list
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
 static void wordOrderPosMatchTable(AjPList unorderedList)
 {
-    ajListSort(unorderedList, wordMatchCmpPos);
+    ajListSort(unorderedList, &wordMatchCmpPos);
 
     return;
 }
@@ -834,6 +894,8 @@ static void wordOrderPosMatchTable(AjPList unorderedList)
 ** @param [r] v2 [const void*] Comparison word
 ** @return [ajint] Comparison value. 0 if equal, -1 if first is lower,
 **               +1 if first is higher.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -894,6 +956,8 @@ static ajint wordMatchCmpPos(const void* v1, const void* v2)
 ** @param [r] orderit [ajint] 1 to sort results at end, else 0.
 ** @return [AjPList] List of matches.
 ** @error NULL table was not built due to an error.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1077,31 +1141,6 @@ AjPList embWordBuildMatchTable(const AjPTable seq1MatchTable,
 
 
 
-/* @obsolete embWordMatchListAppend
-** @remove use embWordMatchNew followed by a list append call
-*/
-__deprecated EmbPWordMatch embWordMatchListAppend(AjPList hitlist,
-                                                  const AjPSeq seq,
-                                                  const ajuint seq1start,
-                                                  ajuint seq2start,
-                                                  ajint length)
-{
-    EmbPWordMatch match;
-    AJNEW0(match);
-    match->sequence  = seq;
-    match->seq1start = seq1start;
-    match->seq2start = seq2start;
-    match->length = length;
-    ajDebug("new word match start1: %d start2: %d len: %d\n",
-            match->seq1start, match->seq2start,
-            match->length);
-    ajListPushAppend(hitlist, match);
-    return match;
-}
-
-
-
-
 /* @func embWordMatchNew ******************************************************
 **
 ** Creates and initialises a word match object
@@ -1111,6 +1150,8 @@ __deprecated EmbPWordMatch embWordMatchListAppend(AjPList hitlist,
 ** @param [r] seq2start [ajuint] Start position in query sequence
 ** @param [r] length [ajint] length of the word match
 ** @return [EmbPWordMatch] New word match object.
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1143,6 +1184,8 @@ EmbPWordMatch embWordMatchNew(const AjPSeq seq, ajuint seq1start,
 ** @param [r] i [ajint] Offset
 ** @param [r] newlist [const AjPList] word list.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1177,6 +1220,8 @@ static void wordNewListTrace(ajint i, const AjPList newlist)
 **
 ** @param [r] curlist [const AjPList] word list.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1217,6 +1262,8 @@ static void wordCurListTrace(const AjPList curlist)
 **
 ** @param [r] curiter [const AjIList] List iterator for the current word list
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1295,6 +1342,8 @@ static void wordCurIterTrace(const AjIList curiter)
 ** @param [r] deady2 [ajint] y position of end of live zone 2
 ** @param [r] minlength [ajint] minimum length of match
 ** @return [ajint] 0=in live zone, 1=in dead zone, 2=truncated
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -1397,6 +1446,8 @@ static ajint wordDeadZone(EmbPWordMatch match,
 ** @param [u] matchlist [AjPList] list of matches to reduce to
 **                                non-overlapping set
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -1501,6 +1552,8 @@ void embWordMatchMin(AjPList matchlist)
 **
 ** @param [r] matchlist [const AjPList] list of matches
 ** @return [EmbPWordMatch] maximum match
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1544,13 +1597,15 @@ EmbPWordMatch embWordMatchFirstMax(const AjPList matchlist)
 
 
 
-/* @funcstatic wordRabinKarpConstant *****************************************
+/* @funcstatic wordRabinKarpConstant ******************************************
 **
 ** Returns a value that helps recalculating consecutive hash values
 ** with less computation during Rabin-Karp search.
 **
 ** @param [r] m [ajuint] word length
 ** @return [ajulong] radix^(m-1) % modulus
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1570,7 +1625,7 @@ static ajulong wordRabinKarpConstant(ajuint m)
 
 
 
-/* @funcstatic wordRabinKarpCmp *********************************************
+/* @funcstatic wordRabinKarpCmp ***********************************************
 **
 ** Comparison function for EmbPWordRK objects, based on their hash values
 **
@@ -1578,6 +1633,8 @@ static ajulong wordRabinKarpConstant(ajuint m)
 ** @param [r] qryseq [const void *] Second EmbPWordRK object
 **
 ** @return [ajint] difference of hash values
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static ajint wordRabinKarpCmp(const void *trgseq, const void *qryseq)
@@ -1600,7 +1657,7 @@ static ajint wordRabinKarpCmp(const void *trgseq, const void *qryseq)
 
 
 
-/* @func embWordRabinKarpInit ************************************************
+/* @func embWordRabinKarpInit *************************************************
 **
 ** Scans word/pattern table and repackages the words in EmbPWordRK
 ** objects to improve access efficiency by Rabin-Karp search.
@@ -1613,6 +1670,8 @@ static ajint wordRabinKarpCmp(const void *trgseq, const void *qryseq)
 ** @param [r] seqset [const AjPSeqset] Sequence set, input patterns
 **                                     were derived from
 ** @return [ajuint] number of words
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1637,7 +1696,7 @@ ajuint embWordRabinKarpInit(const AjPTable table, EmbPWordRK** ewords,
     ajuint pos;
     
     nseqs = ajSeqsetGetSize(seqset);
-    nwords = ajTableToarrayValues(table, (void***)&words);
+    nwords = (ajuint) ajTableToarrayValues(table, (void***)&words);
     AJCNEW(*ewords, nwords);
 
     for(i=0; i<nwords; i++)
@@ -1654,9 +1713,9 @@ ajuint embWordRabinKarpInit(const AjPTable table, EmbPWordRK** ewords,
          *       as we do in the search function */
         for(j=0; j<wordlen; j++)
             patternHash = (RK_RADIX * patternHash +
-        	    toupper(word[j]))% RK_MODULUS;
+			   toupper((int)word[j]))% RK_MODULUS;
 
-        nseqlocs = ajTableToarrayValues(embword->seqlocs, (void***)&seqlocs);
+        nseqlocs = (ajuint) ajTableToarrayValues(embword->seqlocs, (void***)&seqlocs);
         newword->nseqs = nseqlocs;
         newword->hash  = patternHash;
         newword->word = embword;
@@ -1684,7 +1743,7 @@ ajuint embWordRabinKarpInit(const AjPTable table, EmbPWordRK** ewords,
 
             iterp = ajListIterNewread(seqlocs[j]->locs);
             k = 0;
-            newword->nnseqlocs[j]= ajListGetLength(seqlocs[j]->locs);
+            newword->nnseqlocs[j] = (ajuint) ajListGetLength(seqlocs[j]->locs);
             AJCNEW(newword->locs[j],newword->nnseqlocs[j]);
 
             while(!ajListIterDone(iterp))
@@ -1729,6 +1788,8 @@ ajuint embWordRabinKarpInit(const AjPTable table, EmbPWordRK** ewords,
 ** @param [r] checkmode [AjBool] If true, not writing features or alignments
 **                               but running to produce match statistics only
 ** @return [ajuint] total number of matches
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1768,7 +1829,7 @@ ajuint embWordRabinKarpSearch(const AjPStr sseq,
 
     for(i=0; i<plen; i++)
         textHash = (ajulong)(RK_RADIX * textHash   +
-        	toupper(text[i])) % RK_MODULUS;
+			     toupper((int)text[i])) % RK_MODULUS;
 
     /* Scan the input sequence sseq for all patterns */
     for (i=plen; i<=tlen; i++)
@@ -1803,8 +1864,8 @@ ajuint embWordRabinKarpSearch(const AjPStr sseq,
                          */
                         while(matchlen<plen)
                         {
-                            if(toupper(seq_[pos+matchlen]) !=
-                        	    toupper(text[ii++]))
+			  if(toupper((int)seq_[pos+matchlen]) !=
+			     toupper((int)text[ii++]))
                             {
                                 AJCNEW0(tmp,plen+1);
                                 tmp[plen] = '\0';
@@ -1827,8 +1888,8 @@ ajuint embWordRabinKarpSearch(const AjPStr sseq,
                         /* this is where we extend matches */
                         while(ii<tlen  && pos+matchlen<ajSeqGetLen(seq))
                         {
-                            if(toupper(seq_[pos+matchlen]) !=
-                        	    toupper(text[ii++]))
+			  if(toupper((int)seq_[pos+matchlen]) !=
+			     toupper((int)text[ii++]))
                                 break;
                             else
                                 ++matchlen;
@@ -1858,8 +1919,8 @@ ajuint embWordRabinKarpSearch(const AjPStr sseq,
             }
         }
 
-        textHash = ((textHash + toupper(text[i-plen]) * (RK_MODULUS-rm))
-        	* RK_RADIX + toupper(text[i])) % RK_MODULUS;
+        textHash = ((textHash + toupper((int)text[i-plen]) * (RK_MODULUS-rm))
+		    * RK_RADIX + toupper((int)text[i])) % RK_MODULUS;
     }
 
     AJFREE(cursor);
@@ -1882,6 +1943,8 @@ ajuint embWordRabinKarpSearch(const AjPStr sseq,
 ** @param [w] seq [const AjPSeq*] Pointer to sequence
 ** @return [AjBool] ajFalse if the iterator was exhausted
 **
+**
+** @release 2.4.0
 ******************************************************************************/
 
 AjBool embWordMatchIter(AjIList iter, ajint* start1, ajint* start2,
@@ -1913,6 +1976,8 @@ AjBool embWordMatchIter(AjIList iter, ajint* start1, ajint* start2,
 ** @param [u] iter [AjIList] List iterator.
 ** @param [r] x [void*] Data item to insert.
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -1960,6 +2025,8 @@ static void wordListInsertOld(AjIList iter, void* x)
 ** @param [u] pnode [AjPListNode*] Current node.
 ** @param [r] x [void*] Data item to insert.
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -1985,6 +2052,8 @@ static void wordListInsertNodeOld(AjPListNode* pnode, void* x)
 ** Unused functions. Here to keep compiler warnings away
 **
 ** @return [void]
+**
+** @release 2.0.0
 ******************************************************************************/
 
 void embWordUnused(void)
@@ -2005,6 +2074,8 @@ void embWordUnused(void)
 ** Cleanup word matching indexing internals on exit
 **
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 void embWordExit(void)
@@ -2014,3 +2085,36 @@ void embWordExit(void)
 
     return;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete embWordMatchListAppend
+** @remove use embWordMatchNew followed by a list append call
+*/
+__deprecated EmbPWordMatch embWordMatchListAppend(AjPList hitlist,
+                                                  const AjPSeq seq,
+                                                  const ajuint seq1start,
+                                                  ajuint seq2start,
+                                                  ajint length)
+{
+    EmbPWordMatch match;
+    AJNEW0(match);
+    match->sequence  = seq;
+    match->seq1start = seq1start;
+    match->seq2start = seq2start;
+    match->length = length;
+    ajDebug("new word match start1: %d start2: %d len: %d\n",
+            match->seq1start, match->seq2start,
+            match->length);
+    ajListPushAppend(hitlist, match);
+    return match;
+}
+#endif

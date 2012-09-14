@@ -43,7 +43,6 @@ FT                   /transl_table=11
 FT                   /note="reading frame"
 FT                   /db_xref="GOA:P03023"
 FT                   /db_xref="InterPro:IPR000843"
-FT                   /db_xref="InterPro:IPR001761"
 FT                   /db_xref="InterPro:IPR010982"
 FT                   /db_xref="PDB:1CJG"
 FT                   /db_xref="PDB:1EFA"

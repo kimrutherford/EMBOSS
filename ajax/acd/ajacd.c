@@ -1,4 +1,4 @@
-/* @source ********************************************************************
+/* @source ajacd **************************************************************
 **
 ** These functions control all aspects of AJAX command definition
 ** syntax, command line handling and prompting of the user.
@@ -11,30 +11,66 @@
 ** the ACD internal structures in a number of other interface formats.
 **
 ** @author Copyright (C) 1998 Peter Rice
-** @version 1.0
+** @version $Revision: 1.87 $
 ** @modified Jun 25 pmr First version
 ** @modified May 06 2004 Jon Ison Minor mods.
+** @modified $Date: 2012/07/14 14:52:39 $ by $Author: rice $
 ** @@
 **
-** this library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#ifdef WIN32
-#include "win32.h"
-#endif
+
+#include "ajlib.h"
+
+#include "ajacd.h"
+
+#include "ajnam.h"
+#include "ajfiledata.h"
+#include "ajutil.h"
+#include "ajfileio.h"
+#include "ajsys.h"
+
+#include "ajassem.h"
+#include "ajassemread.h"
+#include "ajassemwrite.h"
+#include "ajfeat.h"
+#include "ajfeatread.h"
+#include "ajfeatwrite.h"
+#include "ajobo.h"
+#include "ajoboread.h"
+#include "ajobowrite.h"
+#include "ajrefseqread.h"
+#include "ajrefseqwrite.h"
+#include "ajresourceread.h"
+#include "ajresourcewrite.h"
+#include "ajseq.h"
+#include "ajseqtype.h"
+#include "ajseqread.h"
+#include "ajseqread.h"
+#include "ajseqwrite.h"
+#include "ajtaxread.h"
+#include "ajtaxwrite.h"
+#include "ajtextread.h"
+#include "ajtextwrite.h"
+#include "ajurlread.h"
+#include "ajurlwrite.h"
+#include "ajvarread.h"
+#include "ajvarwrite.h"
 
 #include <stddef.h>
 #include <stdarg.h>
@@ -42,10 +78,12 @@
 #include <limits.h>
 #include <math.h>
 
-#include "ajax.h"
-#include "ajgraph.h"
-#include "ajacd.h"
-#include "ajseqdb.h"
+
+#ifdef WIN32
+#include "win32.h"
+#endif
+
+
 
 #define DEFDLIST  "."
 #define DEFBLOSUM "EBLOSUM62"
@@ -75,6 +113,8 @@ static AjBool acdDoTable = AJFALSE;
 static AjBool acdDoTrace = AJFALSE;
 static AjBool acdDoValid = AJFALSE;
 static AjBool acdDoGalaxy = AJFALSE;
+static AjBool acdDoGalaxyNuc = AJFALSE;
+static AjBool acdDoGalaxyProt = AJFALSE;
 static AjBool acdDoXsd = AJFALSE;
 static AjBool acdDoVersion = AJFALSE;
 static AjBool acdVerbose = AJFALSE;
@@ -84,6 +124,7 @@ static AjBool acdFilter = AJFALSE;
 static AjBool acdOptions = AJFALSE;
 static AjBool acdStdout = AJFALSE;
 static AjBool acdCodeSet = AJFALSE;
+static AjBool acdWrapper = AJFALSE;
 static AjPTable acdCodeTable = NULL;
 static AjBool acdKnowntypeSet = AJFALSE;
 static AjPTable acdKnowntypeTypeTable = NULL;
@@ -219,6 +260,9 @@ static AjBool acdRegVarInit  = AJFALSE;
 static AjPStr  acdEdamPath = NULL;
 static AjPFile acdEdamFile = NULL;
 static AjPOboData  acdEdam = NULL;
+
+static AjPStr acdGalaxyCmdStr = NULL;
+
 /*
 static ajint acdLineCount = 0;
 static AjPList acdListCount = NULL;
@@ -226,26 +270,60 @@ static AjPList acdListCount = NULL;
 
 /* keywords (other than qualifier types) */
 
+
+
+
+/* @enumstatic AcdEStage ******************************************************
+**
+** ACD level of parsing
+**
+** @value QUAL_STAGE Qualifier parsing
+** @value APPL_STAGE Application parsing
+** @value VAR_STAGE Variable parsing
+** @value REL_STAGE Relation parsing
+** @value SEC_STAGE Section parsing
+** @value ENDSEC_STAGE End section parsing
+** @value BAD_STAGE Stage parsing error
+** @value NO_STAGE  No parsing nstage defined
+******************************************************************************/
+
 typedef enum
 {
     QUAL_STAGE, APPL_STAGE, VAR_STAGE, REL_STAGE,
     SEC_STAGE, ENDSEC_STAGE, BAD_STAGE, NO_STAGE
-} AcdEStage ;
+} AcdEStage;
 
 static AcdEStage acdCurrentStage = NO_STAGE;
 
-/* Levels as defined in the ACD structure */
 
-enum AcdELevel
+
+
+/* @enumstatic AcdELevel ******************************************************
+**
+** ACD item level as defined in the ACD structure
+**
+** @value ACD_APPL     Application
+** @value ACD_PARAM    Positonal parameter
+** @value ACD_QUAL     Qualifier
+** @value ACD_VAR      Internal variable
+** @value ACD_RELATION Standalone relation
+** @value ACD_SEC      Section
+** @value ACD_ENDSEC   End of section
+******************************************************************************/
+
+typedef enum
 {
-    ACD_APPL,				/* application definition */
-    ACD_PARAM,				/* parameter */
-    ACD_QUAL,				/* qualifier */
-    ACD_VAR,				/* variable */
-    ACD_RELATION,			/* relation */
-    ACD_SEC,				/* start new section */
-    ACD_ENDSEC				/* end section */
-};
+    ACD_APPL,
+    ACD_PARAM,
+    ACD_QUAL,
+    ACD_VAR,
+    ACD_RELATION,
+    ACD_SEC,
+    ACD_ENDSEC
+}  AcdELevel;
+
+
+
 
 /* Levels as text, only for use in logging report */
 
@@ -278,7 +356,7 @@ enum AcdEReftype
 static const char* acdValNames[] =
 {
     "application", "string", "word",
-    "boolean", "integer", "float",
+    "boolean", "integer", "float", "character",
     NULL
 };
 
@@ -482,6 +560,7 @@ typedef struct AcdSXsdItem
 **
 ** @attr Qual [AjPStr] Qualifier name
 ** @attr Type [AjPStr] Qualifier type
+** @attr Prompt [AjPStr] Prompt text
 ** @attr Annotation [AjPStr] Annotation text
 ** @attr Relation [AjPStr] Relation attributes text
 ** @attr Valid [AjPStr] Valid input
@@ -495,6 +574,7 @@ typedef struct AcdSGalaxyItem
 {
     AjPStr Qual;
     AjPStr Type;
+    AjPStr Prompt;
     AjPStr Annotation;
     AjPStr Relation;
     AjPStr Valid;
@@ -532,7 +612,7 @@ typedef struct AcdSGalaxyItem
 ** @attr Name [AjPStr] ACD item name
 ** @attr Token [AjPStr] Command line qualifier (usually the same as Name)
 ** @attr PNum [ajint] Parameter number, or zero if not a parameter
-** @attr Level [enum AcdELevel] ACD type class (qual/param, var, appl, etc.)
+** @attr Level [AcdELevel] ACD type class (qual/param, var, appl, etc.)
 ** @attr Type [ajint] Index into acdType or acdKeywords
 ** @attr NAttr [ajint] Number of ACD type-specific attributes
 ** @attr AttrStr [AjPStr*] Definitions of ACD type-specific attributes
@@ -573,7 +653,7 @@ typedef struct AcdSAcd
     AjPStr Name;
     AjPStr Token;
     ajint PNum;
-    enum AcdELevel Level;
+    AcdELevel Level;
     ajint Type;
     ajint NAttr;
     AjPStr* AttrStr;
@@ -683,12 +763,12 @@ AcdPSection acdSections[] =
 ** @attr Section [AcdPSection] Expected section
 ** @attr Attr [AcdPAttr] Type-specific attributes
 ** @attr Quals [AcdPQual] Type-specific associated qualifiers
-** @attr TypeSet [(void*)] Function to set value and prompt user
-** @attr HelpSet [(void*)] Function to set help text
-** @attr TypeDel [(void*)] Function to delete value
+** @attr TypeSet [void function] Function to set value and prompt user
+** @attr HelpSet [void function] Function to set help text
+** @attr TypeDel [void function] Function to delete value
 ** @attr PassByRef [AjBool] Pass by reference - so caller owns the object
 ** @attr Stdprompt [AjBool] Expect a standard prompt
-** @attr Prompt [(const AjPStr*)] Function to set standard prompt
+** @attr Prompt [const AjPStr function] Function to set standard prompt
 ** @attr UseCount [ajint*] Number of times this type has been used
 ** @attr UseClassCount [ajint*] Number of times this class of types
 **                              has been used
@@ -860,7 +940,7 @@ static void      acdHelpAssoc(const AcdPAcd thys, AjPStr *str,
 static void      acdHelpAssocTable(const AcdPAcd thys, AjPList tablist);
 static AjBool    acdHelpCodeDef(const AcdPAcd thys, AjPStr *msg);
 static void      acdHelpExpect(const AcdPAcd thys, AjBool table, AjPStr *str);
-static void      acdHelpGalaxy(const AcdPAcd thys, AjPList tablist);
+static void      acdHelpGalaxy(AcdPAcd thys, AjPList tablist);
 static void      acdHelpGalaxyShow(const AjPList inlist, const AjPList outlist);
 static void      acdHelpShow(const AjPStr str, const char* title);
 static void      acdHelpTable(const AcdPAcd thys, AjPList tablist);
@@ -890,6 +970,7 @@ static AjBool    acdIsQtype(const AcdPAcd thys);
 static AjBool    acdIsRequired(const AcdPAcd thys);
 static AjBool    acdIsRightB(AjPStr* pstr, AjPList listwords);
 static AjBool    acdIsStype(const AcdPAcd thys);
+static AjBool    acdIsVtype(const AcdPAcd thys);
 static const AjPStr acdKnowntypeDesc(const AcdPAcd thys);
 static void      acdKnowntypeInit(void);
 static void      acdListAttr(const AcdPAttr attr, const AjPPStr valstr,
@@ -943,6 +1024,7 @@ static void      acdPrintCalcattr(AjPFile outf, const char* acdtype,
 static void      acdPrintUsed(void);
 static void      acdProcess(void);
 static const AjPStr acdPromptAlign(AcdPAcd thys);
+static const AjPStr acdPromptAssembly(AcdPAcd thys);
 static const AjPStr acdPromptCodon(AcdPAcd thys);
 static const AjPStr acdPromptCpdb(AcdPAcd thys);
 static const AjPStr acdPromptDatafile(AcdPAcd thys);
@@ -958,6 +1040,7 @@ static const AjPStr acdPromptGraph(AcdPAcd thys);
 static const AjPStr acdPromptInfile(AcdPAcd thys);
 static const AjPStr acdPromptMatrix(AcdPAcd thys);
 static const AjPStr acdPromptObo(AcdPAcd thys);
+static const AjPStr acdPromptOutassembly(AcdPAcd thys);
 static const AjPStr acdPromptOutcodon(AcdPAcd thys);
 static const AjPStr acdPromptOutcpdb(AcdPAcd thys);
 static const AjPStr acdPromptOutdata(AcdPAcd thys);
@@ -969,6 +1052,7 @@ static const AjPStr acdPromptOutfreq(AcdPAcd thys);
 static const AjPStr acdPromptOutmatrix(AcdPAcd thys);
 static const AjPStr acdPromptOutobo(AcdPAcd thys);
 static const AjPStr acdPromptOutproperties(AcdPAcd thys);
+static const AjPStr acdPromptOutrefseq(AcdPAcd thys);
 static const AjPStr acdPromptOutresource(AcdPAcd thys);
 static const AjPStr acdPromptOutscop(AcdPAcd thys);
 static const AjPStr acdPromptOuttaxon(AcdPAcd thys);
@@ -978,6 +1062,7 @@ static const AjPStr acdPromptOuturl(AcdPAcd thys);
 static const AjPStr acdPromptOutvariation(AcdPAcd thys);
 static const AjPStr acdPromptPattern(AcdPAcd thys);
 static const AjPStr acdPromptProperties(AcdPAcd thys);
+static const AjPStr acdPromptRefseq(AcdPAcd thys);
 static const AjPStr acdPromptRegexp(AcdPAcd thys);
 static const AjPStr acdPromptReport(AcdPAcd thys);
 static const AjPStr acdPromptResource(AcdPAcd thys);
@@ -1004,6 +1089,8 @@ static AjBool    acdQualToFloat(const AcdPAcd thys, const char *qual,
 				float *result, AjPStr* valstr);
 static AjBool    acdQualToInt(const AcdPAcd thys, const char *qual,
 			      ajint defval, ajint *result, AjPStr* valstr);
+static AjBool    acdQualToLong(const AcdPAcd thys, const char *qual,
+                               ajlong defval, ajlong *result, AjPStr* valstr);
 static AjBool    acdQualToSeqbegin(const AcdPAcd thys, const char *qual,
 				   ajint defval, ajint *result,
 				   AjPStr* valstr);
@@ -1042,11 +1129,7 @@ static AcdEStage acdStage(const AjPStr token);
 static AcdPAcd   acdTestAssoc(const AcdPAcd thys,
 			      const AjPStr name, const AjPStr altname);
 static void      acdTestAssocUnknown(const AjPStr name);
-static AjBool    acdTestDebugIsSet(void);
-static AjBool    acdTestDebug(void);
-static AjBool    acdTestFilter(void);
 static AjBool    acdTestQualC(const char *name);
-static AjBool    acdTestStdout(void);
 static void      acdTestUnknown(const AjPStr name, const AjPStr alias);
 static AjBool    acdTextFormat(AjPStr* text);
 static void      acdTextTrim(AjPStr* text);
@@ -1067,7 +1150,8 @@ static AjBool    acdValidSectionMatch(const char* secname);
 static void      acdValidQual(AcdPAcd thys);
 static AjBool    acdValIsBool(const char* arg);
 static AjBool    acdVarResolve(AjPStr* str);
-static AjBool    acdVarSimple(AjPStr var, AjPStr* varname);
+static AjBool    acdVarSimple(const AjPStr var, AjPStr* varname);
+static AjBool    acdVarSimpleResolve(const AjPStr var, AjPStr* newvar);
 static AjBool    acdVarSplit(const AjPStr var, AjPStr* name, AjPStr* attrname);
 static AjBool    acdVarTest(const AjPStr var);
 static AjBool    acdVarTestValid(const AjPStr var, AjBool* toggle);
@@ -1089,7 +1173,7 @@ static AjBool    acdWordNextName(AjPList listwords, AjPStr* pword);
 ** @alias AcdOExpList
 **
 ** @attr Name [const char*] Expression name
-** @attr Func [(AjBool*)] Function to evaluate expression
+** @attr Func [AjBool function] Function to evaluate expression
 ** @@
 ******************************************************************************/
 
@@ -1111,23 +1195,23 @@ typedef struct AcdSExpList
 
 static AcdOExpList explist[] =
 {
-    {"plus", acdExpPlus},
-    {"minus", acdExpMinus},
-    {"star", acdExpStar},
-    {"div", acdExpDiv},
-    {"not", acdExpNot},
-    {"equal", acdExpEqual},
-    {"notequal", acdExpNotEqual},
-    {"greater", acdExpGreater},
-    {"lesser", acdExpLesser},
-    {"or", acdExpOr},
-    {"and", acdExpAnd},
-    {"cond", acdExpCond},
-    {"oneof", acdExpOneof},
-    {"case", acdExpCase},
-    {"filename", acdExpFilename},
-    {"exists", acdExpExists},
-    {"value", acdExpValue},
+    {"plus", &acdExpPlus},
+    {"minus", &acdExpMinus},
+    {"star", &acdExpStar},
+    {"div", &acdExpDiv},
+    {"not", &acdExpNot},
+    {"equal", &acdExpEqual},
+    {"notequal", &acdExpNotEqual},
+    {"greater", &acdExpGreater},
+    {"lesser", &acdExpLesser},
+    {"or", &acdExpOr},
+    {"and", &acdExpAnd},
+    {"cond", &acdExpCond},
+    {"oneof", &acdExpOneof},
+    {"case", &acdExpCase},
+    {"filename", &acdExpFilename},
+    {"exists", &acdExpExists},
+    {"value", &acdExpValue},
     {NULL, NULL}
 };
 
@@ -1202,6 +1286,7 @@ static AjBool acdResourceList(const AcdPAcd thys,
 ** type requires one of these routines */
 
 static void acdDelAlign(void** PPval);
+static void acdDelAssembly(void** PPval);
 static void acdDelCod(void** PPval);
 static void acdDelDir(void** PPval);
 static void acdDelDirout(void** PPval);
@@ -1221,6 +1306,7 @@ static void acdDelPhyloProp(void** PPval);
 static void acdDelPhyloState(void** PPval);
 static void acdDelPhyloTree(void** PPval);
 static void acdDelRange(void** PPval);
+static void acdDelRefseq(void** PPval);
 static void acdDelReg(void** PPval);
 static void acdDelReport(void** PPval);
 static void acdDelResource(void** PPval);
@@ -1244,6 +1330,7 @@ static void acdSetSec(AcdPAcd thys);
 static void acdSetVar(AcdPAcd thys);
 static void acdSetAlign(AcdPAcd thys);
 static void acdSetArray(AcdPAcd thys);
+static void acdSetAssembly(AcdPAcd thys);
 static void acdSetBoolean(AcdPAcd thys);
 static void acdSetCodon(AcdPAcd thys);
 static void acdSetCpdb(AcdPAcd thys);
@@ -1265,6 +1352,7 @@ static void acdSetList(AcdPAcd thys);
 static void acdSetMatrix(AcdPAcd thys);
 static void acdSetMatrixf(AcdPAcd thys);
 static void acdSetObo(AcdPAcd thys);
+static void acdSetOutassembly(AcdPAcd thys);
 static void acdSetOutcodon(AcdPAcd thys);
 static void acdSetOutcpdb(AcdPAcd thys);
 static void acdSetOutdata(AcdPAcd thys);
@@ -1277,6 +1365,7 @@ static void acdSetOutmatrix(AcdPAcd thys);
 static void acdSetOutmatrixf(AcdPAcd thys);
 static void acdSetOutobo(AcdPAcd thys);
 static void acdSetOutproperties(AcdPAcd thys);
+static void acdSetOutrefseq(AcdPAcd thys);
 static void acdSetOutresource(AcdPAcd thys);
 static void acdSetOutscop(AcdPAcd thys);
 static void acdSetOuttaxon(AcdPAcd thys);
@@ -1287,6 +1376,7 @@ static void acdSetOutvariation(AcdPAcd thys);
 static void acdSetPattern(AcdPAcd thys);
 static void acdSetProperties(AcdPAcd thys);
 static void acdSetRange(AcdPAcd thys);
+static void acdSetRefseq(AcdPAcd thys);
 static void acdSetRegexp(AcdPAcd thys);
 /*static void acdSetRegions(AcdPAcd thys);*/
 static void acdSetReport(AcdPAcd thys);
@@ -1427,9 +1517,9 @@ AcdOAttr acdAttrAppl[] =
 	 "Standard application group(s) for wossname and GUIs"},
     {"keywords", VT_STR, AJTRUE, "",
 	 "Standard application keyword(s) for wossname and GUIs"},
-    {"gui", VT_STR, AJTRUE, "",
+    {"gui", VT_STR, AJFALSE, "",
 	 "Suitability for launching in a GUI"},
-    {"batch", VT_STR, AJTRUE,"",
+    {"batch", VT_STR, AJFALSE,"",
 	 "Suitability for running in batch"},
     {"obsolete", VT_STR, AJFALSE,"",
 	 "Reason for obsolete status"},
@@ -1437,6 +1527,8 @@ AcdOAttr acdAttrAppl[] =
 	 "EMBASSY package name"},
     {"external", VT_STR, AJTRUE, "",
 	 "Third party tool(s) required by this program"},
+    {"wrapper", VT_BOOL, AJFALSE, "N",
+	 "Wrapper around original command line"},
     {"cpu", VT_STR, AJFALSE, "",
 	 "Estimated maximum CPU usage"},
     {"supplier", VT_STR, AJFALSE, "",
@@ -1506,6 +1598,17 @@ AcdOAttr acdAttrArray[] =
 	 "Failure message if (calculated ranges) overlap"},
     {"tolerance", VT_FLOAT, AJFALSE, "0.01",
 	 "Tolerance (sum +/- tolerance) of the total"},
+    {NULL, VT_NULL, AJFALSE, NULL,
+	 NULL}
+};
+
+
+AcdOAttr acdAttrAssembly[] =
+{
+    {"entry", VT_BOOL, AJFALSE, "N",
+	 "Read whole entry text"},
+    {"nullok", VT_BOOL, AJFALSE, "N",
+	 "Can accept a null filename as 'no file'"},
     {NULL, VT_NULL, AJFALSE, NULL,
 	 NULL}
 };
@@ -1836,6 +1939,21 @@ AcdOAttr acdAttrObo[] =
 };
 
 
+AcdOAttr acdAttrOutassembly[] =
+{
+    {"name", VT_STR, AJFALSE, "",
+	 "Default file name"},
+    {"extension", VT_STR, AJFALSE, "",
+	 "Default file extension"},
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
+	 "Defaults to 'no file'"},
+    {"nullok", VT_BOOL, AJFALSE, "N",
+	 "Can accept a null filename as 'no file'"},
+    {NULL, VT_NULL, AJFALSE, NULL,
+	 NULL}
+};
+
+
 AcdOAttr acdAttrOutcodon[] =
 {
     {"name", VT_STR, AJFALSE, "",
@@ -1987,6 +2105,21 @@ AcdOAttr acdAttrOutobo[] =
 
 AcdOAttr acdAttrOutproperties[] =
 {
+    {"nulldefault", VT_BOOL, AJFALSE, "N",
+	 "Defaults to 'no file'"},
+    {"nullok", VT_BOOL, AJFALSE, "N",
+	 "Can accept a null filename as 'no file'"},
+    {NULL, VT_NULL, AJFALSE, NULL,
+	 NULL}
+};
+
+
+AcdOAttr acdAttrOutrefseq[] =
+{
+    {"name", VT_STR, AJFALSE, "",
+	 "Default file name"},
+    {"extension", VT_STR, AJFALSE, "",
+	 "Default file extension"},
     {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
     {"nullok", VT_BOOL, AJFALSE, "N",
@@ -2195,6 +2328,17 @@ AcdOAttr acdAttrReport[] =
 	 "Score precision"},
     {"nulldefault", VT_BOOL, AJFALSE, "N",
 	 "Defaults to 'no file'"},
+    {"nullok", VT_BOOL, AJFALSE, "N",
+	 "Can accept a null filename as 'no file'"},
+    {NULL, VT_NULL, AJFALSE, NULL,
+	 NULL}
+};
+
+
+AcdOAttr acdAttrRefseq[] =
+{
+    {"entry", VT_BOOL, AJFALSE, "N",
+	 "Read whole entry text"},
     {"nullok", VT_BOOL, AJFALSE, "N",
 	 "Can accept a null filename as 'no file'"},
     {NULL, VT_NULL, AJFALSE, NULL,
@@ -2738,7 +2882,7 @@ static AcdOAttr acdCalcTree[] =
 ** @attr Stage [AcdEStage] Enumerated stage 
 ** @attr Padding [ajint] Padding to alignment boundary
 ** @attr Attr [AcdPAttr] Type-specific attributes 
-** @attr KeySet [(void*)] Function to set value and prompt user
+** @attr KeySet [void function] Function to set value and prompt user
 ** @@
 ******************************************************************************/
 
@@ -2786,10 +2930,10 @@ AcdOKey acdKeywords[] =
 **
 ** @attr Name [const char*] Output type name
 ** @attr Format [const char*] Default format (needs to be stored elsewhere)
-** @attr Type [ajint] Enumerated type (see AjEOutfileType in ajfile.h)
+** @attr Type [AjEOutfileType] AJAX Output File enumeration
 ** @attr Padding [ajint] Padding to alignment boundary
-** @attr Prompt [(const AjPStr*)] Function to define standard prompt
-** @attr Outformat [(AjBool*)] Function to test output format
+** @attr Prompt [const AjPStr function] Function to define standard prompt
+** @attr Outformat [AjBool function] Function to test output format
 ** @@
 ******************************************************************************/
 
@@ -2797,7 +2941,7 @@ typedef struct AcdSOuttype
 {
     const char* Name;
     const char* Format;
-    ajint Type;
+    AjEOutfileType Type;
     ajint Padding;
     
     const AjPStr (*Prompt)(AcdPAcd thys);
@@ -2810,7 +2954,7 @@ typedef struct AcdSOuttype
 
 
 
-/* @funclist acdOuttype ******************************************************
+/* @funclist acdOuttype *******************************************************
 **
 ** Processing output types and their formats
 **
@@ -2820,41 +2964,45 @@ AcdOOuttype acdOuttype[] =
 {
 /*    Name             Format         Type              Padding
          Prompt                  Outformat */
-    {"outcodon",      "cut",           OUTFILE_CODON, 0,
+    {"outassembly",   "bam",           ajEOutfileTypeAssembly, 0,
+	 acdPromptOutassembly,   ajAssemoutformatFind},
+    {"outcodon",      "cut",           ajEOutfileTypeCodon, 0,
 	 acdPromptOutcodon,      ajCodoutformatFind},
-    {"outcpdb",       "cpdb",          OUTFILE_CPDB, 0,
+    {"outcpdb",       "cpdb",          ajEOutfileTypeCPDB, 0,
 	 acdPromptOutcpdb,       acdOutFormatCpdb},
-    {"outdata",       "text",          OUTFILE_UNKNOWN, 0,
+    {"outdata",       "text",          ajEOutfileTypeUnknown, 0,
 	 acdPromptOutdata,       acdOutFormatData},
-    {"outdiscrete",   "phylip",        OUTFILE_DISCRETE, 0,
+    {"outdiscrete",   "phylip",        ajEOutfileTypeDiscrete, 0,
 	 acdPromptOutdiscrete,   acdOutFormatDiscrete},
-    {"outdistance",   "phylip",        OUTFILE_DISTANCE, 0,
+    {"outdistance",   "phylip",        ajEOutfileTypeDistance, 0,
 	 acdPromptOutdistance,   acdOutFormatDistance},
-    {"outfreq",       "phylip",        OUTFILE_FREQ, 0,
+    {"outfreq",       "phylip",        ajEOutfileTypeFrequency, 0,
 	 acdPromptOutfreq,       acdOutFormatFreq},
-    {"outmatrix",     "emboss",        OUTFILE_MATRIX, 0,
+    {"outmatrix",     "emboss",        ajEOutfileTypeMatrix, 0,
 	 acdPromptOutmatrix,     acdOutFormatMatrix},
-    {"outmatrixf",    "emboss",        OUTFILE_MATRIXF, 0,
+    {"outmatrixf",    "emboss",        ajEOutfileTypeMatrixF, 0,
 	 acdPromptOutmatrix,     acdOutFormatMatrixf},
-    {"outobo",        "obo",           OUTFILE_OBO, 0,
+    {"outobo",        "obo",           ajEOutfileTypeOBO, 0,
 	 acdPromptOutobo,        ajObooutformatFind},
-    {"outproperties", "phylip",        OUTFILE_PROPERTIES, 0,
+    {"outproperties", "phylip",        ajEOutfileTypeProperties, 0,
 	 acdPromptOutproperties, acdOutFormatProperties},
-    {"outresource",   "drcat",         OUTFILE_RESOURCE, 0,
+    {"outrefseq",     "embl",          ajEOutfileTypeRefseq, 0,
+	 acdPromptOutrefseq,     ajRefseqoutformatFind},
+    {"outresource",   "drcat",         ajEOutfileTypeResource, 0,
 	 acdPromptOutresource,   ajResourceoutformatFind},
-    {"outscop",       "scop",          OUTFILE_SCOP, 0,
+    {"outscop",       "scop",          ajEOutfileTypeSCOP, 0,
 	 acdPromptOutscop,       acdOutFormatScop},
-    {"outtaxon",      "tax",           OUTFILE_TAXON, 0,
+    {"outtaxon",      "tax",           ajEOutfileTypeTaxon, 0,
 	 acdPromptOuttaxon,      ajTaxoutformatFind},
-    {"outtext",       "text",           OUTFILE_TEXT, 0,
+    {"outtext",       "text",           ajEOutfileTypeText, 0,
 	 acdPromptOuttext,       ajTextoutformatFind},
-    {"outtree",       "phylip",        OUTFILE_TREE, 0,
+    {"outtree",       "phylip",        ajEOutfileTypeTree, 0,
 	 acdPromptOuttree,       acdOutFormatTree},
-    {"outurl",        "url",           OUTFILE_URL, 0,
+    {"outurl",        "url",           ajEOutfileTypeURL, 0,
 	 acdPromptOuturl,        ajUrloutformatFind},
-    {"outvariation",  "variation",     OUTFILE_VARIATION, 0,
+    {"outvariation",  "vcf",           ajEOutfileTypeVariation, 0,
 	 acdPromptOutvariation,  ajVaroutformatFind},
-    {NULL, NULL, OUTFILE_UNKNOWN, 0, NULL, NULL}
+    {NULL, NULL, ajEOutfileTypeUnknown, 0, NULL, NULL}
 };
 
 
@@ -2911,6 +3059,18 @@ AcdOQual acdQualAlign[] =
 };
 
 
+AcdOQual acdQualAssembly[] =
+{
+    {"cbegin",     "0", "integer", "Start of the contig/consensus sequences"},
+    {"cend",       "0", "integer", "End of the contig/consensus sequences"},
+    {"iformat",    "",  "string",  "Input assembly format"},
+    {"iquery",     "",  "string",  "Input query fields or ID list"},
+    {"ioffset",    "",  "integer", "Input start position offset"},
+    {"idbname",    "",  "string",  "User-provided database name"},
+    {NULL, NULL, NULL, NULL}
+};
+
+
 AcdOQual acdQualCodon[] =
 {
     {"format",    "",  "string",   "Data format"},
@@ -2942,11 +3102,14 @@ AcdOQual acdQualDirlist[] =
 AcdOQual acdQualFeatures[] =
 {
     {"fformat",    "",  "string",  "Features format"},
+    {"iquery",     "",  "string",  "Input query fields or ID list"},
+    {"ioffset",    "",  "integer", "Input start position offset"},
     {"fopenfile",  "",  "string",  "Features file name"},
     {"fask",       "N", "boolean", "Prompt for begin/end/reverse"},
     {"fbegin",     "0", "integer", "Start of the features to be used"},
     {"fend",       "0", "integer", "End of the features to be used"},
     {"freverse",   "N", "boolean", "Reverse (if DNA)"},
+    {"fcircular",  "N", "boolean", "Circular sequence features"},
     {NULL, NULL, NULL, NULL}
 };
 
@@ -2994,7 +3157,17 @@ AcdOQual acdQualGraphxy[] =
 AcdOQual acdQualObo[] =
 {
     {"iformat",    "",  "string",  "Input obo format"},
+    {"iquery",     "",  "string",  "Input query fields or ID list"},
+    {"ioffset",    "",  "integer", "Input start position offset"},
     {"idbname",    "",  "string",  "User-provided database name"},
+    {NULL, NULL, NULL, NULL}
+};
+
+
+AcdOQual acdQualOutassembly[] =
+{
+    {"odirectory", "",  "string",  "Output directory"},
+    {"oformat",    "",  "string",  "Assembly output format"},
     {NULL, NULL, NULL, NULL}
 };
 
@@ -3093,6 +3266,14 @@ AcdOQual acdQualOutproperties[] =
 };
 
 
+AcdOQual acdQualOutrefseq[] =
+{
+    {"odirectory", "",  "string",  "Output directory"},
+    {"oformat",    "",  "string",  "Referece sequence output format"},
+    {NULL, NULL, NULL, NULL}
+};
+
+
 AcdOQual acdQualOutresource[] =
 {
     {"odirectory", "",  "string",  "Output directory"},
@@ -3158,6 +3339,16 @@ AcdOQual acdQualPattern[] =
 };
 
 
+AcdOQual acdQualRefseq[] =
+{
+    {"iformat",    "",  "string",  "Input reference sequence format"},
+    {"iquery",     "",  "string",  "Input query fields or ID list"},
+    {"ioffset",    "",  "integer", "Input start position offset"},
+    {"idbname",    "",  "string",  "User-provided database name"},
+    {NULL, NULL, NULL, NULL}
+};
+
+
 AcdOQual acdQualRegexp[] =
 {
     {"pformat",    "",  "string",  "File format"},
@@ -3186,6 +3377,8 @@ AcdOQual acdQualReport[] =
 AcdOQual acdQualResource[] =
 {
     {"iformat",    "",  "string",  "Input resource format"},
+    {"iquery",     "",  "string",  "Input query fields or ID list"},
+    {"ioffset",    "",  "integer", "Input start position offset"},
     {"idbname",    "",  "string",  "User-provided database name"},
     {NULL, NULL, NULL, NULL}
 };
@@ -3208,13 +3401,16 @@ AcdOQual acdQualSeq[] =
     {"sprotein",   "N", "boolean", "Sequence is protein"},
     {"slower",     "N", "boolean", "Make lower case"},
     {"supper",     "N", "boolean", "Make upper case"},
-    {"sformat",    "", "string",   "Input sequence format"},
+    {"scircular",  "N", "boolean", "Sequence is circular"},
+    {"sformat",    "",  "string",  "Input sequence format"},
 /*    {"sopenfile",  "", "string",   "Input filename"},*/ /* obsolete */
-    {"sdbname",    "", "string",   "Database name"},
-    {"sid",        "", "string",   "Entryname"},
-    {"ufo",        "", "string",   "UFO features"},
-    {"fformat",    "", "string",   "Features format"},
-    {"fopenfile",  "", "string",   "Features file name"},
+    {"iquery",     "",  "string",  "Input query fields or ID list"},
+    {"ioffset",    "",  "integer", "Input start position offset"},
+    {"sdbname",    "",  "string",  "Database name"},
+    {"sid",        "",  "string",  "Entryname"},
+    {"ufo",        "",  "string",  "UFO features"},
+    {"fformat",    "",  "string",  "Features format"},
+    {"fopenfile",  "",  "string",  "Features file name"},
     {NULL, NULL, NULL, NULL}
 };
 
@@ -3229,8 +3425,11 @@ AcdOQual acdQualSeqall[] =
     {"sprotein",   "N", "boolean", "Sequence is protein"},
     {"slower",     "N", "boolean", "Make lower case"},
     {"supper",     "N", "boolean", "Make upper case"},
+    {"scircular",  "N", "boolean", "Sequence is circular"},
     {"sformat",    "",  "string",  "Input sequence format"},
 /*    {"sopenfile",  "",  "string",  "Input filename"},*/ /* obsolete */
+    {"iquery",     "",  "string",  "Input query fields or ID list"},
+    {"ioffset",    "",  "integer", "Input start position offset"},
     {"sdbname",    "",  "string",  "Database name"},
     {"sid",        "",  "string",  "Entryname"},
     {"ufo",        "",  "string",  "UFO features"},
@@ -3250,8 +3449,11 @@ AcdOQual acdQualSeqset[] =
     {"sprotein",   "N", "boolean", "Sequence is protein"},
     {"slower",     "N", "boolean", "Make lower case"},
     {"supper",     "N", "boolean", "Make upper case"},
+    {"scircular",  "N", "boolean", "Sequence is circular"},
     {"sformat",    "",  "string",  "Input sequence format"},
 /*    {"sopenfile",  "",  "string",  "Input filename"},*/ /* obsolete */
+    {"iquery",     "",  "string",  "Input query fields or ID list"},
+    {"ioffset",    "",  "integer", "Input start position offset"},
     {"sdbname",    "",  "string",  "Database name"},
     {"sid",        "",  "string",  "Entryname"},
     {"ufo",        "",  "string",  "UFO features"},
@@ -3271,8 +3473,11 @@ AcdOQual acdQualSeqsetall[] =
     {"sprotein",   "N", "boolean", "Sequence is protein"},
     {"slower",     "N", "boolean", "Make lower case"},
     {"supper",     "N", "boolean", "Make upper case"},
+    {"scircular",  "N", "boolean", "Sequence is circular"},
     {"sformat",    "",  "string",  "Input sequence format"},
 /*    {"sopenfile",  "",  "string",  "Input filename"},*/ /* obsolete */
+    {"iquery",     "",  "string",  "Input query fields or ID list"},
+    {"ioffset",    "",  "integer", "Input start position offset"},
     {"sdbname",    "",  "string",  "Database name"},
     {"sid",        "",  "string",  "Entryname"},
     {"ufo",        "",  "string",  "UFO features"},
@@ -3332,6 +3537,8 @@ AcdOQual acdQualSeqoutall[] =
 AcdOQual acdQualTaxon[] =
 {
     {"iformat",    "",  "string",  "Input taxonomy format"},
+    {"iquery",     "",  "string",  "Input query fields or ID list"},
+    {"ioffset",    "",  "integer", "Input start position offset"},
     {"idbname",    "",  "string",  "User-provided database name"},
     {NULL, NULL, NULL, NULL}
 };
@@ -3340,6 +3547,8 @@ AcdOQual acdQualTaxon[] =
 AcdOQual acdQualText[] =
 {
     {"iformat",    "",  "string",  "Input text format"},
+    {"iquery",     "",  "string",  "Input query fields or ID list"},
+    {"ioffset",    "",  "integer", "Input start position offset"},
     {"idbname",    "",  "string",  "User-provided database name"},
     {NULL, NULL, NULL, NULL}
 };
@@ -3360,6 +3569,8 @@ AcdOQual acdQualUrl[] =
 AcdOQual acdQualVariation[] =
 {
     {"iformat",    "",  "string",  "Input variation format"},
+    {"iquery",     "",  "string",  "Input query fields or ID list"},
+    {"ioffset",    "",  "integer", "Input start position offset"},
     {"idbname",    "",  "string",  "User-provided database name"},
     {NULL, NULL, NULL, NULL}
 };
@@ -3395,92 +3606,97 @@ AcdOType acdType[] =
 **       Description of valid string for help */
     {"align",          "output",    acdSecOutput,
 	 acdAttrAlign,          acdQualAlign,
-	 acdSetAlign,           NULL,                  acdDelAlign,
-	 AJTRUE,  AJTRUE,  acdPromptAlign,     &acdUseAlign, &acdUseOut,
+	 &acdSetAlign,          NULL,                  &acdDelAlign,
+	 AJTRUE,  AJTRUE,  &acdPromptAlign,    &acdUseAlign, &acdUseOut,
 	 "Alignment output file" },
     {"array",          "simple",    NULL,
 	 acdAttrArray,          NULL,
-	 acdSetArray,           NULL,                  acdDelFloat,
+	 &acdSetArray,          NULL,                  &acdDelFloat,
 	 AJTRUE,  AJFALSE, NULL,               &acdUseMisc, &acdUseMisc,
 	 "List of floating point numbers" },
+    {"assembly",       "input",     acdSecInput,
+	 acdAttrAssembly,       acdQualAssembly,
+	 &acdSetAssembly,       NULL,                  &acdDelAssembly,
+	 AJTRUE,  AJTRUE,  &acdPromptAssembly, &acdUseData, &acdUseIn,
+	 "Assembly of sequence reads" },
     {"boolean",        "simple",    NULL,
 	 acdAttrBool,           NULL,
-	 acdSetBoolean,         NULL,                  acdFree,
+	 &acdSetBoolean,        NULL,                  &acdFree,
 	 AJFALSE, AJFALSE, NULL,               &acdUseMisc, &acdUseMisc,
 	 "Boolean value Yes/No" },
     {"codon",	       "input",     acdSecInput,
 	 acdAttrCodon,          acdQualCodon,
-	 acdSetCodon,           NULL,                  acdDelCod,
-	 AJTRUE,  AJTRUE,  acdPromptCodon,     &acdUseData, &acdUseIn,
+	 &acdSetCodon,          NULL,                  &acdDelCod,
+	 AJTRUE,  AJTRUE,  &acdPromptCodon,    &acdUseData, &acdUseIn,
 	 "Codon usage file in EMBOSS data path" },
     {"cpdb",           "input",     acdSecInput,
 	 acdAttrCpdb,           acdQualCpdb,
-	 acdSetCpdb,            NULL,                  acdDelFile,
+	 &acdSetCpdb,           NULL,                  &acdDelFile,
 	 AJTRUE,  AJTRUE,  acdPromptCpdb,      &acdUseInfile, &acdUseIn,
 	 "Clean PDB file" },
     {"datafile",       "input",     acdSecInput,
 	 acdAttrDatafile,       NULL,
-	 acdSetDatafile,        NULL,                  acdDelFile,
-	 AJTRUE,  AJTRUE,  acdPromptDatafile,  &acdUseData, &acdUseIn,
+	 &acdSetDatafile,       NULL,                  &acdDelFile,
+	 AJTRUE,  AJTRUE,  &acdPromptDatafile, &acdUseData, &acdUseIn,
 	 "Data file" },
     {"directory",      "input",     acdSecInput,
 	 acdAttrDirectory,      acdQualDirectory,
-	 acdSetDirectory,       NULL,                  acdDelDir,
-	 AJTRUE,  AJTRUE,  acdPromptDirectory, &acdUseMisc, &acdUseIn,
+	 &acdSetDirectory,      NULL,                  &acdDelDir,
+	 AJTRUE,  AJTRUE,  &acdPromptDirectory,&acdUseMisc, &acdUseIn,
 	 "Directory" },
     {"dirlist",	       "input",     acdSecInput,
 	 acdAttrDirlist,        acdQualDirlist,
-	 acdSetDirlist,         NULL,                  acdDelList,
-	 AJTRUE,  AJTRUE,  acdPromptDirlist,   &acdUseMisc, &acdUseIn,
+	 &acdSetDirlist,        NULL,                  &acdDelList,
+	 AJTRUE,  AJTRUE,  &acdPromptDirlist,  &acdUseMisc, &acdUseIn,
 	 "Directory with files" },
     {"discretestates", "input",     acdSecInput,
 	 acdAttrDiscretestates, NULL,
-	 acdSetDiscretestates,  NULL,                  acdDelPhyloState,
-	 AJTRUE,  AJTRUE,  acdPromptDiscretestates, &acdUseData, &acdUseIn,
+	 &acdSetDiscretestates, NULL,                  &acdDelPhyloState,
+	 AJTRUE,  AJTRUE,  &acdPromptDiscretestates, &acdUseData, &acdUseIn,
 	 "Discrete states file" },
     {"distances",      "input",     acdSecInput,
 	 acdAttrDistances,      NULL,
-	 acdSetDistances,       NULL,                  acdDelPhyloDist,
-	 AJTRUE,  AJTRUE,  acdPromptDistances, &acdUseData, &acdUseIn,
+	 &acdSetDistances,      NULL,                  &acdDelPhyloDist,
+	 AJTRUE,  AJTRUE,  &acdPromptDistances, &acdUseData, &acdUseIn,
 	 "Distance matrix" },
     {"featout",        "output",    acdSecOutput,
 	 acdAttrFeatout,        acdQualFeatout,
-	 acdSetFeatout,         NULL,                  acdDelFeattabOut,
-	 AJTRUE,  AJTRUE,  acdPromptFeatout,   &acdUseFeatout, &acdUseOut,
+	 &acdSetFeatout,        NULL,                  &acdDelFeattabOut,
+	 AJTRUE,  AJTRUE,  &acdPromptFeatout,  &acdUseFeatout, &acdUseOut,
 	 "Writeable feature table" },
     {"features",       "input",     acdSecInput,
 	 acdAttrFeatures,       acdQualFeatures,
-	 acdSetFeatures,        NULL,                  acdDelFeattable,
-	 AJTRUE,  AJTRUE,  acdPromptFeatures,  &acdUseFeatures, &acdUseIn,
+	 &acdSetFeatures,       NULL,                  &acdDelFeattable,
+	 AJTRUE,  AJTRUE,  &acdPromptFeatures, &acdUseFeatures, &acdUseIn,
 	 "Readable feature table" },
     {"filelist",       "input",     acdSecInput,
 	 acdAttrFilelist,       NULL,
-	 acdSetFilelist,        NULL,                  acdDelList,
-	 AJTRUE,  AJTRUE,  acdPromptFilelist,  &acdUseMisc, &acdUseIn,
+	 &acdSetFilelist,       NULL,                  &acdDelList,
+	 AJTRUE,  AJTRUE,  &acdPromptFilelist, &acdUseMisc, &acdUseIn,
 	 "Comma-separated file list" },
     {"float",          "simple",    NULL,
 	 acdAttrFloat,          NULL,
-	 acdSetFloat,           NULL,                  acdFree,
+	 &acdSetFloat,          NULL,                  &acdFree,
 	 AJFALSE, AJFALSE, NULL,               &acdUseMisc, &acdUseMisc,
 	 "Floating point number" },
     {"frequencies",    "input",     acdSecInput,
 	 acdAttrFrequencies,    NULL,
-	 acdSetFrequencies,     NULL,                  acdDelPhyloFreq,
-	 AJTRUE,  AJTRUE,  acdPromptFrequencies, &acdUseData, &acdUseIn,
+	 &acdSetFrequencies,    NULL,                  &acdDelPhyloFreq,
+	 AJTRUE,  AJTRUE,   &acdPromptFrequencies, &acdUseData, &acdUseIn,
 	 "Frequency value(s)" },
     {"graph",          "graph",     acdSecOutput,
 	 acdAttrGraph,          acdQualGraph,
-	 acdSetGraph,           NULL,                  acdFree,
-	 AJTRUE,  AJTRUE,  acdPromptGraph,     &acdUseGraph, &acdUseOut,
+	 &acdSetGraph,          NULL,                  &acdFree,
+	 AJTRUE,  AJTRUE,  &acdPromptGraph,    &acdUseGraph, &acdUseOut,
 	 "Graph device for a general graph" },
     {"infile",         "input",     acdSecInput,
 	 acdAttrInfile,         NULL,
-	 acdSetInfile,          NULL,                  acdDelFile,
-	 AJTRUE,  AJTRUE,  acdPromptInfile,    &acdUseInfile, &acdUseIn,
+	 &acdSetInfile,          NULL,                  &acdDelFile,
+	 AJTRUE,  AJTRUE,  &acdPromptInfile,   &acdUseInfile, &acdUseIn,
 	 "Input file" },
     {"integer",        "simple",    NULL,
 	 acdAttrInt,            NULL,
-	 acdSetInt,             NULL,                  acdFree,
+	 &acdSetInt,            NULL,                  &acdFree,
 	 AJFALSE, AJFALSE, NULL,               &acdUseMisc, &acdUseMisc,
 	 "Integer" },
     {"list",           "selection", NULL,
@@ -3490,188 +3706,203 @@ AcdOType acdType[] =
 	 "Choose from menu list of values" },
     {"matrix",         "input",     acdSecInput,
 	 acdAttrMatrix,         NULL,
-	 acdSetMatrix,          NULL,                  acdDelMatrix,
-	 AJTRUE,  AJFALSE, acdPromptMatrix,    &acdUseData, &acdUseIn,
+	 &acdSetMatrix,         NULL,                  &acdDelMatrix,
+	 AJTRUE,  AJFALSE, &acdPromptMatrix,   &acdUseData, &acdUseIn,
 	 "Comparison matrix file in EMBOSS data path" },
     {"matrixf",        "input",     acdSecInput,
 	 acdAttrMatrixf,        NULL,
-	 acdSetMatrixf,         NULL,                  acdDelMatrixf,
-	 AJTRUE,  AJFALSE, acdPromptMatrix,    &acdUseData, &acdUseIn,
+	 &acdSetMatrixf,        NULL,                  &acdDelMatrixf,
+	 AJTRUE,  AJFALSE, &acdPromptMatrix,   &acdUseData, &acdUseIn,
 	 "Comparison matrix file in EMBOSS data path" },
     {"obo",            "input",     acdSecInput,
 	 acdAttrObo,            acdQualObo,
-	 acdSetObo,             acdHelpTextObo,        acdDelObo,
-	 AJTRUE,  AJTRUE,  acdPromptObo,       &acdUseData, &acdUseIn,
+	 &acdSetObo,            &acdHelpTextObo,       &acdDelObo,
+	 AJTRUE,  AJTRUE,  &acdPromptObo,      &acdUseData, &acdUseIn,
 	 "OBO bio-ontology term(s)" },
+    {"outassembly",     "output",    acdSecOutput,
+	 acdAttrOutassembly,    acdQualOutassembly,
+	 &acdSetOutassembly,    NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutassembly, &acdUseOutfile, &acdUseOut,
+	 "Assembly of sequence reads" },
     {"outcodon",       "output",    acdSecOutput,
 	 acdAttrOutcodon,       acdQualOutcodon,
-	 acdSetOutcodon,        NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutcodon,  &acdUseOutfile, &acdUseOut,
+	 &acdSetOutcodon,       NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutcodon, &acdUseOutfile, &acdUseOut,
 	 "Codon usage file" },
     {"outcpdb",        "output",    acdSecOutput,
 	 acdAttrOutcpdb,        NULL,
-	 acdSetOutcpdb,         NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutcpdb,   &acdUseOutfile, &acdUseOut,
+	 &acdSetOutcpdb,        NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutcpdb,  &acdUseOutfile, &acdUseOut,
 	 "Cleaned PDB file" },
     {"outdata",        "output",    acdSecOutput,
 	 acdAttrOutdata,        acdQualOutdata,
-	 acdSetOutdata,         NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutdata,   &acdUseOutfile, &acdUseOut,
+	 &acdSetOutdata,        NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutdata,  &acdUseOutfile, &acdUseOut,
 	 "Formatted output file" },
     {"outdir",         "output",    acdSecOutput,
 	 acdAttrOutdir,         acdQualOutdir,
-	 acdSetOutdir,          NULL,                  acdDelDirout,
-	 AJTRUE,  AJTRUE,  acdPromptOutdir,    &acdUseMisc, &acdUseOut,
+	 &acdSetOutdir,         NULL,                  &acdDelDirout,
+	 AJTRUE,  AJTRUE,  &acdPromptOutdir,   &acdUseMisc, &acdUseOut,
 	 "Output directory" },
     {"outdiscrete",    "output",    acdSecOutput,
 	 acdAttrOutdiscrete,    acdQualOutdiscrete,
-	 acdSetOutdiscrete,     NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutdiscrete, &acdUseOutfile, &acdUseOut,
+	 &acdSetOutdiscrete,    NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutdiscrete, &acdUseOutfile, &acdUseOut,
 	 "Discrete states file" },
     {"outdistance",    "output",    acdSecOutput,
 	 acdAttrOutdistance,    NULL,
-	 acdSetOutdistance,     NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutdistance, &acdUseOutfile, &acdUseOut,
+	 &acdSetOutdistance,    NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutdistance, &acdUseOutfile, &acdUseOut,
 	 "Distance matrix" },
     {"outfile",        "output",     acdSecOutput,
 	 acdAttrOutfile,        acdQualOutfile,
-	 acdSetOutfile,         NULL,                  acdDelFile,
-	 AJTRUE,  AJTRUE,  acdPromptOutfile,     &acdUseOutfile, &acdUseOut,
+	 &acdSetOutfile,        NULL,                  &acdDelFile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutfile,    &acdUseOutfile, &acdUseOut,
 	 "Output file" },
     {"outfreq",        "output",    acdSecOutput,
 	 acdAttrOutfreq,        acdQualOutfreq,
-	 acdSetOutfreq,         NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutfreq,     &acdUseOutfile, &acdUseOut,
+	 &acdSetOutfreq,        NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutfreq,    &acdUseOutfile, &acdUseOut,
 	 "Frequency value(s)" },
     {"outmatrix",      "output",    acdSecOutput,
 	 acdAttrOutmatrix,      acdQualOutmatrix,
-	 acdSetOutmatrix,       NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutmatrix,   &acdUseOutfile, &acdUseOut,
+	 &acdSetOutmatrix,      NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutmatrix,  &acdUseOutfile, &acdUseOut,
 	 "Comparison matrix file" },
     {"outmatrixf",     "output",    acdSecOutput,
 	 acdAttrOutmatrixf,     acdQualOutmatrixf,
-	 acdSetOutmatrixf,      NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutmatrix,   &acdUseOutfile, &acdUseOut,
+	 &acdSetOutmatrixf,     NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutmatrix,  &acdUseOutfile, &acdUseOut,
 	 "Comparison matrix file" },
     {"outobo",         "output",    acdSecOutput,
          acdAttrOutobo,         acdQualOutobo,
-	 acdSetOutobo,          NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutobo,      &acdUseOutfile, &acdUseOut,
+	 &acdSetOutobo,         NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutobo,     &acdUseOutfile, &acdUseOut,
 	 "OBO ontology term(s)" },
     {"outproperties",  "output",    acdSecOutput,
 	 acdAttrOutproperties,  acdQualOutproperties,
-	 acdSetOutproperties,   NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutproperties, &acdUseOutfile, &acdUseOut,
+	 &acdSetOutproperties,  NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutproperties, &acdUseOutfile, &acdUseOut,
 	 "Property value(s)" },
+    {"outrefseq",       "output",    acdSecOutput,
+	 acdAttrOutrefseq,      acdQualOutrefseq,
+	 &acdSetOutrefseq,      NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutrefseq,   &acdUseOutfile, &acdUseOut,
+	 "Reference sequence" },
     {"outresource",    "output",    acdSecOutput,
          acdAttrOutresource,    acdQualOutresource,
-	 acdSetOutresource,     NULL,                  acdDelOutfile,
-         AJTRUE,  AJTRUE,  acdPromptOutresource, &acdUseOutfile, &acdUseOut,
+	 &acdSetOutresource,    NULL,                  &acdDelOutfile,
+         AJTRUE,  AJTRUE,  &acdPromptOutresource, &acdUseOutfile, &acdUseOut,
 	 "Data resource entry" },
     {"outscop",        "output",    acdSecOutput,
 	 acdAttrOutscop,        acdQualOutscop,
-	 acdSetOutscop,         NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutscop,     &acdUseOutfile, &acdUseOut,
+	 &acdSetOutscop,        NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutscop,    &acdUseOutfile, &acdUseOut,
 	 "Scop entry" },
     {"outtaxon",       "output",    acdSecOutput,
          acdAttrOuttaxon,       acdQualOuttaxon,
-	 acdSetOuttaxon,        NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOuttaxon,    &acdUseOutfile, &acdUseOut,
+	 &acdSetOuttaxon,       NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOuttaxon,   &acdUseOutfile, &acdUseOut,
 	 "NCBI taxonomy entries" },
     {"outtext",        "output",    acdSecOutput,
          acdAttrOuttext,        acdQualOuttext,
-	 acdSetOuttext,         NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOuttext,     &acdUseOutfile, &acdUseOut,
+	 &acdSetOuttext,        NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOuttext,    &acdUseOutfile, &acdUseOut,
 	 "Text entries" },
     {"outtree",        "output",    acdSecOutput,
 	 acdAttrOuttree,        acdQualOuttree,
-	 acdSetOuttree,         NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOuttree,     &acdUseOutfile, &acdUseOut,
+	 &acdSetOuttree,        NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOuttree,    &acdUseOutfile, &acdUseOut,
 	 "Phylogenetic tree" },
     {"outurl",         "output",    acdSecOutput,
          acdAttrOuturl,         acdQualOuturl,
-	 acdSetOuturl,          NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOuturl,      &acdUseOutfile, &acdUseOut,
+	 &acdSetOuturl,         NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOuturl,     &acdUseOutfile, &acdUseOut,
 	 "URL entries" },
     {"outvariation",   "output",    acdSecOutput,
          acdAttrOutvariation,   acdQualOutvariation,
-	 acdSetOutvariation,    NULL,                  acdDelOutfile,
-	 AJTRUE,  AJTRUE,  acdPromptOutvariation, &acdUseOutfile, &acdUseOut,
+	 &acdSetOutvariation,   NULL,                  &acdDelOutfile,
+	 AJTRUE,  AJTRUE,  &acdPromptOutvariation, &acdUseOutfile, &acdUseOut,
 	 "Variation entries" },
     {"pattern",       "input",     acdSecInput,
 	 acdAttrPattern,        acdQualPattern,
-	 acdSetPattern,         NULL,                  acdDelPatlist,
-	 AJTRUE,  AJTRUE,  acdPromptPattern,     &acdUseData, &acdUseIn,
+	 &acdSetPattern,        NULL,                  &acdDelPatlist,
+	 AJTRUE,  AJTRUE,  &acdPromptPattern,     &acdUseData, &acdUseIn,
 	 "Property value(s)" },
     {"properties",     "input",     acdSecInput,
 	 acdAttrProperties,     NULL,
-	 acdSetProperties,      NULL,                  acdDelPhyloProp,
-	 AJTRUE,  AJTRUE,  acdPromptProperties,  &acdUseData, &acdUseIn,
+	 &acdSetProperties,     NULL,                  &acdDelPhyloProp,
+	 AJTRUE,  AJTRUE,  &acdPromptProperties, &acdUseData, &acdUseIn,
 	 "Property value(s)" },
     {"range",	       "simple",    NULL,
 	 acdAttrRange,          NULL,
-	 acdSetRange,           NULL,                  acdDelRange,
+	 &acdSetRange,          NULL,                  &acdDelRange,
 	 AJTRUE,  AJFALSE, NULL,               &acdUseMisc, &acdUseMisc,
 	 "Sequence range" },
+    {"refseq",         "input",     acdSecInput,
+	 acdAttrRefseq,         acdQualRefseq,
+	 &acdSetRefseq,         NULL,                  &acdDelRefseq,
+	 AJTRUE,  AJTRUE,  &acdPromptRefseq, &acdUseData, &acdUseIn,
+	 "Reference sequence" },
     {"regexp",	       "input",     acdSecInput,
 	 acdAttrRegexp,         acdQualRegexp,
-	 acdSetRegexp,          NULL,                  acdDelReg,
-	 AJTRUE,  AJTRUE, acdPromptRegexp,     &acdUseMisc, &acdUseIn,
+	 &acdSetRegexp,         NULL,                  &acdDelReg,
+	 AJTRUE,  AJTRUE, &acdPromptRegexp,    &acdUseMisc, &acdUseIn,
 	 "Regular expression pattern" },
     {"report",         "output",    acdSecOutput,
 	 acdAttrReport,         acdQualReport,
-	 acdSetReport,          NULL,                  acdDelReport,
-	 AJTRUE,  AJTRUE,  acdPromptReport,    &acdUseReport, &acdUseOut,
+	 &acdSetReport,         NULL,                  &acdDelReport,
+	 AJTRUE,  AJTRUE,  &acdPromptReport,   &acdUseReport, &acdUseOut,
 	 "Report output file" },
     {"resource",       "input",     acdSecInput,
          acdAttrResource,       acdQualResource,
-	 acdSetResource,        acdHelpTextResource,   acdDelResource,
-	 AJTRUE,  AJTRUE,  acdPromptResource,  &acdUseData, &acdUseIn,
+	 &acdSetResource,       &acdHelpTextResource,  &acdDelResource,
+	 AJTRUE,  AJTRUE,  &acdPromptResource, &acdUseData, &acdUseIn,
 	 "Data resource catalogue entry(s)" },
     {"scop",           "input",     acdSecInput,
 	 acdAttrScop,           acdQualScop,
-	 acdSetScop,            NULL,                  acdDelFile,
-	 AJTRUE,  AJTRUE,  acdPromptScop,      &acdUseInfile, &acdUseIn,
+	 &acdSetScop,           NULL,                  &acdDelFile,
+	 AJTRUE,  AJTRUE,  &acdPromptScop,     &acdUseInfile, &acdUseIn,
 	 "Clean PDB file" },
     {"selection",      "selection", NULL,
 	 acdAttrSelect,         NULL,
-	 acdSetSelect,          NULL,                  acdDelStrArray,
+	 &acdSetSelect,         NULL,                  &acdDelStrArray,
 	 AJTRUE,  AJFALSE, NULL,               &acdUseMisc, &acdUseMisc,
 	 "Choose from selection list of values" },
     {"sequence",       "input",     acdSecInput,
 	 acdAttrSeq,            acdQualSeq,
-	 acdSetSeq,             acdHelpTextSeq,        acdDelSeq,
-	 AJTRUE,  AJTRUE,  acdPromptSeq,       &acdUseSeq, &acdUseIn,
+	 &acdSetSeq,            &acdHelpTextSeq,       &acdDelSeq,
+	 AJTRUE,  AJTRUE,  &acdPromptSeq,      &acdUseSeq, &acdUseIn,
 	 "Readable sequence" },
     {"seqall",         "input",     acdSecInput,
 	 acdAttrSeqall,         acdQualSeqall,
-	 acdSetSeqall,          acdHelpTextSeq,        acdDelSeqall,
-	 AJTRUE,  AJTRUE,  acdPromptSeq,       &acdUseSeq, &acdUseIn,
+	 &acdSetSeqall,         &acdHelpTextSeq,       &acdDelSeqall,
+	 AJTRUE,  AJTRUE,  &acdPromptSeq,      &acdUseSeq, &acdUseIn,
 	 "Readable sequence(s)" },
     {"seqout",         "output",    acdSecOutput,
 	 acdAttrSeqout,         acdQualSeqout,
-	 acdSetSeqout,          acdHelpTextSeqout,     acdDelSeqout, 
-	 AJTRUE,  AJTRUE,  acdPromptSeqout,    &acdUseSeqout, &acdUseOut,
+	 &acdSetSeqout,         &acdHelpTextSeqout,    &acdDelSeqout, 
+	 AJTRUE,  AJTRUE,  &acdPromptSeqout,   &acdUseSeqout, &acdUseOut,
 	 "Writeable sequence" },
     {"seqoutall",      "output",    acdSecOutput,
 	 acdAttrSeqoutall,      acdQualSeqoutall,
-	 acdSetSeqoutall,       acdHelpTextSeqout,     acdDelSeqout,
-	 AJTRUE,  AJTRUE,  acdPromptSeqout,    &acdUseSeqout, &acdUseOut,
+	 &acdSetSeqoutall,      &acdHelpTextSeqout,    &acdDelSeqout,
+	 AJTRUE,  AJTRUE,  &acdPromptSeqout,   &acdUseSeqout, &acdUseOut,
 	 "Writeable sequence(s)" },
     {"seqoutset",      "output",    acdSecOutput,
 	 acdAttrSeqoutset,      acdQualSeqoutset,
-	 acdSetSeqoutset,       acdHelpTextSeqout,     acdDelSeqout,
-	 AJTRUE,  AJTRUE,  acdPromptSeqout,    &acdUseSeqout, &acdUseOut,
+	 &acdSetSeqoutset,      &acdHelpTextSeqout,    &acdDelSeqout,
+	 AJTRUE,  AJTRUE,  &acdPromptSeqout,   &acdUseSeqout, &acdUseOut,
 	 "Writeable sequences" },
     {"seqset",         "input",     acdSecInput,
 	 acdAttrSeqset,         acdQualSeqset,
-	 acdSetSeqset,          acdHelpTextSeq,        acdDelSeqset,
-	 AJTRUE,  AJTRUE,  acdPromptSeq,       &acdUseSeq, &acdUseIn,
+	 &acdSetSeqset,         &acdHelpTextSeq,       &acdDelSeqset,
+	 AJTRUE,  AJTRUE,  &acdPromptSeq,      &acdUseSeq, &acdUseIn,
 	 "Readable set of sequences" },
     {"seqsetall",      "input",     acdSecInput,
 	 acdAttrSeqsetall,      acdQualSeqsetall,
-	 acdSetSeqsetall,       acdHelpTextSeq,        acdDelSeqsetArray,
-	 AJTRUE,  AJTRUE,  acdPromptSeq,       &acdUseSeq, &acdUseIn,
+	 &acdSetSeqsetall,      &acdHelpTextSeq,       &acdDelSeqsetArray,
+	 AJTRUE,  AJTRUE,  &acdPromptSeq,      &acdUseSeq, &acdUseIn,
 	 "Readable sets of sequences" },
     {"string",         "simple",    NULL,
 	 acdAttrString,          NULL,
@@ -3680,38 +3911,38 @@ AcdOType acdType[] =
 	 "String value" },
     {"taxon",          "input",     acdSecInput,
 	 acdAttrTaxon,           acdQualTaxon,
-	 acdSetTaxon,            acdHelpTextTaxon,     acdDelTaxon,
-	 AJTRUE,  AJTRUE,  acdPromptTaxon,       &acdUseData, &acdUseIn,
+	 &acdSetTaxon,           &acdHelpTextTaxon,    &acdDelTaxon,
+	 AJTRUE,  AJTRUE,  &acdPromptTaxon,      &acdUseData, &acdUseIn,
 	 "NCBI taxonomy entries" },
     {"text",           "input",     acdSecInput,
 	 acdAttrText,            acdQualText,
-	 acdSetText,             acdHelpTextText,      acdDelText,
-	 AJTRUE,  AJTRUE,  acdPromptText,        &acdUseData, &acdUseIn,
+	 &acdSetText,            &acdHelpTextText,     &acdDelText,
+	 AJTRUE,  AJTRUE,  &acdPromptText,       &acdUseData, &acdUseIn,
 	 "Text entries" },
     {"toggle",         "simple",     NULL,
 	 acdAttrToggle,          NULL,
-	 acdSetToggle,           NULL,                 acdFree,
+	 &acdSetToggle,          NULL,                 &acdFree,
 	 AJFALSE, AJFALSE, NULL,               &acdUseMisc, &acdUseMisc,
 	 "Toggle value Yes/No" },
     {"tree",           "input",      acdSecInput,
 	 acdAttrTree,            NULL,
-	 acdSetTree,             NULL,                 acdDelPhyloTree,
-	 AJTRUE,  AJTRUE,  acdPromptTree,      &acdUseData, &acdUseIn,
+	 &acdSetTree,            NULL,                 &acdDelPhyloTree,
+	 AJTRUE,  AJTRUE,  &acdPromptTree,     &acdUseData, &acdUseIn,
 	 "Phylogenetic tree" },
     {"url",            "input",     acdSecInput,
 	 acdAttrUrl,             acdQualUrl,
-	 acdSetUrl,              acdHelpTextUrl,       acdDelUrl,
-	 AJTRUE,  AJTRUE,  acdPromptUrl,         &acdUseData, &acdUseIn,
+	 &acdSetUrl,             &acdHelpTextUrl,       &acdDelUrl,
+	 AJTRUE,  AJTRUE,  &acdPromptUrl,        &acdUseData, &acdUseIn,
 	 "URL entries" },
     {"variation",      "input",     acdSecInput,
 	 acdAttrVariation,       acdQualVariation,
-	 acdSetVariation,        acdHelpTextVariation, acdDelVariation,
-	 AJTRUE,  AJTRUE,  acdPromptVariation,   &acdUseData, &acdUseIn,
+	 &acdSetVariation,       &acdHelpTextVariation, &acdDelVariation,
+	 AJTRUE,  AJTRUE,  &acdPromptVariation,  &acdUseData, &acdUseIn,
 	 "Variation entries" },
     {"xygraph",        "graph",      acdSecOutput,
 	 acdAttrGraphxy,         acdQualGraphxy,
-	 acdSetGraphxy,          NULL,                 acdFree,
-	 AJTRUE,  AJTRUE,  acdPromptGraph,     &acdUseGraph, &acdUseOut,
+	 &acdSetGraphxy,         NULL,                 &acdFree,
+	 AJTRUE,  AJTRUE,  &acdPromptGraph,    &acdUseGraph, &acdUseOut,
 	 "Graph device for a 2D graph" },
      {NULL, NULL, NULL,   NULL, NULL,   NULL, NULL, NULL,
 	  AJFALSE, AJFALSE, 0, NULL, NULL,    NULL}
@@ -3729,9 +3960,9 @@ AcdOType acdType[] =
 ** @alias AcdOValid
 **
 ** @attr Name [const char*] ACD type name
-** @attr Valid [(void*)] Function to report valid values in general
-** @attr Expect [(void*)] Function to report expected values
-**                        for this definition
+** @attr Valid [void function]  Function to report valid values in general
+** @attr Expect [void function] Function to report expected values
+**                              for this definition
 ** @@
 ******************************************************************************/
 
@@ -3836,6 +4067,8 @@ static const char* acdResource[] =
 **        usually passed as-is by the calling application.
 ** @param [r] argv [char* const[]] Actual arguments as an array of text.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3849,7 +4082,7 @@ void ajAcdInit(const char *pgm, ajint argc, char * const argv[])
 
 
 
-/* @func ajAcdInitPV ***********************************************************
+/* @func ajAcdInitPV **********************************************************
 **
 ** Initialises everything. Reads an ACD (AJAX Command Definition) file
 ** prompts the user for any missing information, reads all sequences
@@ -3863,6 +4096,8 @@ void ajAcdInit(const char *pgm, ajint argc, char * const argv[])
 ** @param [r] package [const char*] Package name, used to find the ACD file
 ** @param [r] packversion [const char*] Package version
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4026,7 +4261,7 @@ void ajAcdInitPV(const char *pgm, ajint argc, char * const argv[],
     while(ajReadlineTrim(acdFile, &acdLine))
     {
 	AJNEW0(k);
-	*k = ajListGetLength(acdListWords);
+	*k = (ajuint) ajListGetLength(acdListWords);
 	ajListPushAppend(acdListCount, k);
 	if(ajStrCutCommentsRestpos(&acdLine, &comment, &pos))
 	{
@@ -4053,7 +4288,7 @@ void ajAcdInitPV(const char *pgm, ajint argc, char * const argv[],
 	    ajListstrPushAppend(acdListComments, comment);
 	    comment = NULL;
 	    AJNEW(kc);
-	    *kc = ajListGetLength(acdListWords);
+	    *kc = (ajuint) ajListGetLength(acdListWords);
 	    ajListPushAppend(acdListCommentsCount, kc);
 	    kc = NULL;
 	    AJNEW(kp);
@@ -4066,7 +4301,7 @@ void ajAcdInitPV(const char *pgm, ajint argc, char * const argv[],
     ajStrDel(&acdLine);
     
     AJNEW0(k);
-    *k = ajListGetLength(acdListWords);
+    *k = (ajuint) ajListGetLength(acdListWords);
     ajListPushAppend(acdListCount, k);
     
     acdCodeInit();
@@ -4163,6 +4398,8 @@ void ajAcdInitPV(const char *pgm, ajint argc, char * const argv[],
 **
 ** @param [r] token [const AjPStr] Current token
 ** @return [AcdEStage] Stage enumerated code
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4241,6 +4478,8 @@ static AcdEStage acdStage(const AjPStr token)
 ** @see acdNewAppl
 ** @see acdNewQual
 ** @see acdNewVar
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4351,6 +4590,8 @@ static void acdParse(AjPList listwords, AjPList listcount)
 	    acdWordNum--;		/* not yet parsed '[' */
 	    
 	    acdParseAttributes(acdNewCurr, listwords);
+
+            acdAttrToBool(acdNewCurr, "wrapper", ajFalse, &acdWrapper);
 
 	    acdValidAppl(acdNewCurr);
 	    
@@ -4535,6 +4776,8 @@ static void acdParse(AjPList listwords, AjPList listcount)
 ** @param [u] listwords [AjPList] List of strings for each word
 **                                      to be parsed
 ** @return [AjPStr] String containing next value from list
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4613,6 +4856,8 @@ static AjPStr acdParseValue(AjPList listwords)
 ** @param [u] listwords [AjPList] List of words parsed from ACD file
 ** @param [w] pword [AjPStr*] Next word from the list
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -4640,6 +4885,8 @@ static AjBool acdWordNext(AjPList listwords, AjPStr* pword)
 ** @param [u] listwords [AjPList] List of words parsed from ACD file
 ** @param [w] pword [AjPStr*] Next word from the list
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -4661,7 +4908,7 @@ static AjBool acdWordNextLower(AjPList listwords, AjPStr* pword)
 
 
 
-/* @funcstatic acdWordNextName ***********************************************
+/* @funcstatic acdWordNextName ************************************************
 **
 ** Returns the next word from a list, in lower case
 **
@@ -4671,6 +4918,8 @@ static AjBool acdWordNextLower(AjPList listwords, AjPStr* pword)
 ** @param [u] listwords [AjPList] List of words parsed from ACD file
 ** @param [w] pword [AjPStr*] Next word from the list
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -4701,7 +4950,7 @@ static AjBool acdWordNextName(AjPList listwords, AjPStr* pword)
 
 
 
-/* @funcstatic acdParseName ***********************************************
+/* @funcstatic acdParseName ***************************************************
 **
 ** Returns the next word from a list, in lower case.
 **
@@ -4711,6 +4960,8 @@ static AjBool acdWordNextName(AjPList listwords, AjPStr* pword)
 ** @param [u] listwords [AjPList] List of words parsed from ACD file
 ** @param [w] pword [AjPStr*] Next word from the list
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -4739,6 +4990,8 @@ static void acdParseName(AjPList listwords, AjPStr* pword)
 ** @param [u] listwords [AjPList] List of words parsed from ACD file
 ** @param [w] pword [AjPStr*] Next word from the list
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -4766,6 +5019,8 @@ static void acdParseAlpha(AjPList listwords, AjPStr* pword)
 **
 ** @param [r] listwords [const AjPList] List of words parsed from ACD file
 ** @return [AjBool] ajTrue if start of string does not match '['
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -4796,6 +5051,8 @@ static AjBool acdNotLeftB(const AjPList listwords)
 **
 ** @param [u] listwords [AjPList] List of words parsed from ACD file
 ** @return [AjBool] ajTrue if start of string matches '['
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4841,6 +5098,8 @@ static AjBool acdIsLeftB(AjPList listwords)
 ** @param [w] pstr [AjPStr*] String which has a trailing ']' removed if found
 ** @param [u] listwords [AjPList] List of remaining words to be parsed
 ** @return [AjBool] ajTrue if end of string matches ']'
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4891,6 +5150,8 @@ static AjBool acdIsRightB(AjPStr* pstr, AjPList listwords)
 ** @param [r] acd [const AcdPAcd] Acd object
 ** @param [u] listwords [AjPList] List of parsed words
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -4964,6 +5225,8 @@ static void acdParseAttributes(const AcdPAcd acd, AjPList listwords)
 **
 ** @param [r] name [const AjPStr] Token name to be used by applications
 ** @return [AcdPAcd] ACD application object for name.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5025,6 +5288,8 @@ static AcdPAcd acdNewAppl(const AjPStr name)
 **
 ** @param [r] name [const AjPStr] Token name to be used by applications
 ** @return [AcdPAcd] ACD variable object for name.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5055,6 +5320,8 @@ static AcdPAcd acdNewVar(const AjPStr name)
 **
 ** @param [r] name [const AjPStr] Token name to be used by applications
 ** @return [AcdPAcd] ACD variable object for name.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -5087,6 +5354,8 @@ static AcdPAcd acdNewRel(const AjPStr name)
 **
 ** @param [r] name [const AjPStr] Token name to be used by applications
 ** @return [AcdPAcd] ACD variable object for name.
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -5136,6 +5405,8 @@ static AcdPAcd acdNewSec(const AjPStr name)
 **
 ** @param [r] name [const AjPStr] Token name to be used by applications
 ** @return [AcdPAcd] ACD variable object for name.
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -5194,6 +5465,8 @@ static AcdPAcd acdNewEndsec(const AjPStr name)
 ** @param [u] type [AjPStr*] Type of value to be defined. Expanded to full
 **                           type name.
 ** @return [AcdPAcd] ACD parameter object for name.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5256,7 +5529,8 @@ static AcdPAcd acdNewQual(const AjPStr name, const AjPStr token,
 	if((acdType[itype].Attr == acdAttrSeq) ||
 	   (acdType[itype].Attr == acdAttrSeqall) ||
 	   (acdType[itype].Attr == acdAttrSeqset) ||
-	   (acdType[itype].Attr == acdAttrSeqsetall))
+	   (acdType[itype].Attr == acdAttrSeqsetall) ||
+	   (acdType[itype].Attr == acdAttrFeatures))
 	{
 	    ajStrAssignC(&protName, "acdprotein");
 	    ajFmtPrintS(&acdVarAcdProtein, "$(%S.protein)", name);
@@ -5281,6 +5555,8 @@ static AcdPAcd acdNewQual(const AjPStr name, const AjPStr token,
 ** @param [u] type [AjPStr*] Type of value to be defined. Expanded to full
 **                           type name.
 ** @return [AcdPAcd] ACD parameter object for name.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5313,6 +5589,8 @@ static AcdPAcd acdNewQualQual(const AjPStr name, AjPStr* type)
 ** @param [r] itype [ajint] Integer type of value to be defined
 **        as defined in acdFindType
 ** @return [AcdPAcd] ACD parameter object for name.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5378,6 +5656,8 @@ static AcdPAcd acdNewAcd(const AjPStr name, const AjPStr token, ajint itype)
 ** @param [r] ikey [ajint] Integer type of value to be defined
 **        as defined in acdFindKey
 ** @return [AcdPAcd] ACD parameter object for name.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5448,6 +5728,8 @@ static AcdPAcd acdNewAcdKey(const AjPStr name, const AjPStr token, ajint ikey)
 **
 ** @param [d] Pacd [AcdPAcd*] Acd object
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -5497,7 +5779,7 @@ static void acdDel(AcdPAcd *Pacd)
 	{
 	    if(pa->RefPassed == REF_NONE)
 	    {
-		acdType[pa->Type].TypeDel(&pa->Value);
+		(*acdType[pa->Type].TypeDel)(&pa->Value);
 	    }
 	    else
 	    {
@@ -5531,6 +5813,8 @@ static void acdDel(AcdPAcd *Pacd)
 ** @param [r] name [const AjPStr] Token name to be used by applications
 ** @param [r] alias [const AjPStr] Qualifier name to be used on command line
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5544,12 +5828,12 @@ static void acdTestUnknown(const AjPStr name, const AjPStr alias)
       return;
 
     if(ajStrMatchS(name, alias))
-      acdErrorAcd(pa, "Name '%S' not unique\n",
-		  name);
+      acdErrorAcd(pa, "Name '%S' not unique at line %d\n",
+		  name, acdLineNum);
     else
       acdErrorAcd(pa,
-		  "Name/Alias '%S'/'%S' not unique\n",
-		  name, alias);
+		  "Name/Alias '%S'/'%S' not unique at line %d\n",
+		  name, alias, acdLineNum);
     return;
 }
 
@@ -5562,6 +5846,8 @@ static void acdTestUnknown(const AjPStr name, const AjPStr alias)
 **
 ** @param [r] type [const char*] ACD type
 ** @return [ajint] Number of qualifiers of this type
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -5593,6 +5879,8 @@ static ajint acdCountType(const char* type)
 **
 ** @param [r] name [const AjPStr] Name or token name
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -5635,6 +5923,8 @@ static void acdTestAssocUnknown(const AjPStr name)
 ** @param [r] name [const AjPStr] Token name to be used by applications
 ** @param [r] token [const AjPStr] Qualifier name to be used on command line
 ** @return [AcdPAcd] ACD object or NULL if not found
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5698,11 +5988,14 @@ static AcdPAcd acdFindAcd(const AjPStr name, const AjPStr token)
 ** @param [r] name [const AjPStr] Token name to be used by applications
 ** @param [r] token [const AjPStr] Qualifier name to be used on command line
 ** @return [AcdPAcd] ACD object or NULL if not found
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
 static AcdPAcd acdFindAcdTest(const AjPStr name, const AjPStr token)
 {
+    AcdPAcd savepa = NULL;
     AcdPAcd pa;
     AjBool usetoken = ajFalse;
 
@@ -5714,80 +6007,115 @@ static AcdPAcd acdFindAcdTest(const AjPStr name, const AjPStr token)
 
     if(usetoken)
     {
-      ajStrAssignSubS(&acdPrefToken, token, 0, minunique-1);
-      acdLog("acdFindAcdTest ('%S' ['%S'], '%S' ['%S'])\n",
-	     name, acdPrefName, token, acdPrefToken);
+        ajStrAssignSubS(&acdPrefToken, token, 0, minunique-1);
+        acdLog("acdFindAcdTest ('%S' ['%S'], '%S' ['%S'])\n",
+               name, acdPrefName, token, acdPrefToken);
     }
     else
     {
-      acdLog("acdFindAcdTest ('%S' ['%S'])\n",
-	     name, acdPrefName);
+        acdLog("acdFindAcdTest ('%S' ['%S'])\n",
+               name, acdPrefName);
     }
 
     for(pa=acdList; pa; pa=pa->Next)
     {
-      if(acdIsStype(pa) || acdIsAtype(pa))
-	continue;
+        if(acdIsStype(pa))
+        {
+            if(ajStrMatchS(pa->Name, name))
+                acdWarn("Qualifier '%S' matches known section '%S'",
+                        name, pa->Name);
+            continue;
+        }
 
-      if(ajStrPrefixS(pa->Name, acdPrefName))
-      {
-	if(ajStrMatchS(pa->Name, name))
-	{
-	  acdLog("..found '%S' %d\n", pa->Name, pa->PNum);
-	  return pa;
-	}
+        if(acdIsAtype(pa))
+        {
+            if(ajStrMatchS(pa->Name, name))
+                acdWarn("Qualifier '%S' matches application name '%S'",
+                        name, pa->Name);
+            continue;
+        }
 
-	if(ajStrGetLen(name) >= minunique)
-	  acdWarn("Qualifier '%S' matches start of '%S'",
-		  name, pa->Name);
-      }
+        if(acdIsVtype(pa))
+        {
+            if(ajStrMatchS(pa->Name, name))
+                acdWarn("Qualifier '%S' matches variable name '%S'",
+                        name, pa->Name);
+            continue;
+        }
 
-      if(!ajStrMatchS(pa->Token, pa->Name) &&
-	 ajStrPrefixS(pa->Token, acdPrefName))
-      {
-	if(ajStrMatchS(pa->Token, name))
-	{
-	  acdLog("..found '%S' %d\n", pa->Name, pa->PNum);
-	  return pa;
-	}
+        if(ajStrMatchS(pa->Name, name))
+        {
+            acdLog("..found '%S' %d\n", pa->Name, pa->PNum);
+            savepa = pa;
+        }
+        else if(ajStrPrefixS(pa->Name, acdPrefName))
+        {
+            if(!acdWrapper)
+                acdWarn("Qualifier '%S' matches start of known '%S'",
+                        name, pa->Name);
+        }
+        else if(ajStrPrefixS(acdPrefName, pa->Name))
+        {
+            if(!acdWrapper)
+                acdWarn("Known qualifier '%S' matches start of '%S'",
+                        pa->Name, name);
+        }
 
-	if(ajStrGetLen(name) >= minunique)
-	  acdWarn("Qualifier '%S' matches start of '%S'",
-		  name, pa->Token);
-      }
 
-      if(!usetoken)
-	continue;
+        if(!ajStrMatchS(pa->Token, pa->Name)) /* qualifier has a token */
+        {
+            if(ajStrMatchS(pa->Token, name))
+            {
+                acdLog("..found '%S' %d\n", pa->Name, pa->PNum);
+                savepa = pa;
+            }
+            else if(ajStrPrefixS(pa->Token, acdPrefName))
+            {
+                if(!acdWrapper)
+                    acdWarn("Qualifier '%S' matches start of known token '%S'",
+                            name, pa->Token);
+            }
+        }
 
-      if(ajStrPrefixS(pa->Name, acdPrefToken))
-      {
-	if(ajStrMatchS(pa->Name, token))
-	{
-	  acdLog("..found '%S' %d\n", pa->Name, pa->PNum);
-	  return pa;
-	}
+        if(!usetoken)
+            continue;
 
-	if(ajStrGetLen(token) >= minunique)
-	  acdWarn("Qualifier '%S' matches start of '%S'",
-		  token, pa->Name);
-      }
+        if(ajStrMatchS(pa->Name, token))
+        {
+            acdLog("..found '%S' %d\n", pa->Name, pa->PNum);
+            savepa = pa;
+        }
+        else if(ajStrPrefixS(acdPrefToken, pa->Name))
+        {
+            if(!acdWrapper)
+                acdWarn("Qualifier token '%S' matches start of known '%S'",
+                        token, pa->Name);
+        }
+        else if(ajStrPrefixS(pa->Name, acdPrefToken))
+        {
+            if(!acdWrapper)
+                acdWarn("Known qualifier '%S' matches start of token '%S'",
+                        pa->Name, token);
+        }
 
-      if(!ajStrMatchS(pa->Token, pa->Name) &&
-	 ajStrPrefixS(pa->Token, acdPrefToken))
-      {
-	if(ajStrMatchS(pa->Token, token))
-	{
-	  acdLog("..found '%S' %d\n", pa->Name, pa->PNum);
-	  return pa;
-	}
-
-	if(ajStrGetLen(token) >= minunique)
-	  acdWarn("Qualifier '%S' matches start of '%S'",
-		  token, pa->Token);
-      }
+        if(!ajStrMatchS(pa->Token, pa->Name)) /* qualifier has a token */
+        {
+            if(ajStrMatchS(pa->Token, token))
+            {
+                acdLog("..found '%S' %d\n", pa->Name, pa->PNum);
+                savepa = pa;
+            }
+            else if(ajStrPrefixS(pa->Token, acdPrefToken))
+            {
+                if(!acdWrapper)
+                    acdWarn("Qualifier token '%S' matches start of "
+                            "known token '%S'",
+                            token, pa->Token);
+            }
+        }
     }
 
-    return NULL;
+    return savepa;
 }
 
 
@@ -5806,6 +6134,8 @@ static AcdPAcd acdFindAcdTest(const AjPStr name, const AjPStr token)
 ** @param [r] noname [const AjPStr] Alternative token name (e.g. qualifier
 **            with "no" prefix removed)
 ** @return [AcdPAcd] ACD object for the selected qualifier
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5874,6 +6204,8 @@ static AcdPAcd acdFindAssoc(const AcdPAcd thys, const AjPStr name,
 ** @param [r] noname [const AjPStr] Alternative token name (e.g. qualifier
 **            with "no" prefix removed)
 ** @return [AcdPAcd] ACD object for the selected qualifier
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -5930,6 +6262,8 @@ static AcdPAcd acdTestAssoc(const AcdPAcd thys, const AjPStr name,
 **
 ** @param [r] name [const char*] Qualifier name
 ** @return [AjBool] ajTrue if
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6084,6 +6418,8 @@ static AjBool acdTestQualC(const char *name)
 **         used as position in the acdType array.
 ** @error If not found, the return value points to the maximum position in
 **        acdType which is set to NULL throughout.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6137,6 +6473,8 @@ static ajint acdFindType(const AjPStr type)
 **         used as position in the acdType array.
 ** @error If not found, the return value points to the maximum position in
 **        acdType which is set to NULL throughout.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6192,6 +6530,8 @@ static ajint acdFindTypeC(const char* type)
 **         used as position in the acdKeywords array.
 ** @error If not found, the return value points to the maximum position in
 **        acdKeywords which is set to NULL throughout.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6244,7 +6584,7 @@ static ajint acdFindKeyC(const char* key)
 
 
 
-/* @funcstatic acdReplyInitC ***************************************************
+/* @funcstatic acdReplyInitC **************************************************
 **
 ** Builds a default value for the reply first time around. Uses a default
 ** specially set in the ACD, or (if none) uses the default string passed in
@@ -6254,6 +6594,8 @@ static ajint acdFindKeyC(const char* key)
 ** @param [r] defval [const char*] Default value, as a C string
 ** @param [w] reply [AjPStr*] String containing default reply
 ** @return [AjBool] ajTrue if a value in the ACD was used.
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -6284,7 +6626,7 @@ static AjBool acdReplyInitC(const AcdPAcd thys, const char *defval,
 
 
 
-/* @funcstatic acdReplyInitS ***************************************************
+/* @funcstatic acdReplyInitS **************************************************
 **
 ** Builds a default value for the reply first time around. Uses a default
 ** specially set in the ACD, or (if none) uses the default string passed in
@@ -6294,6 +6636,8 @@ static AjBool acdReplyInitC(const AcdPAcd thys, const char *defval,
 ** @param [r] defval [const AjPStr] Default value, as a string object
 ** @param [w] reply [AjPStr*] String containing default reply
 ** @return [AjBool] ajTrue if a value in the ACD was used.
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -6330,6 +6674,8 @@ static AjBool acdReplyInitS(const AcdPAcd thys, const AjPStr defval,
 **
 ** @param [r] thys [const AcdPAcd] ACD object for current item.
 ** @return [AjBool] ajTrue if a value in the ACD was used but is empty
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -6370,6 +6716,8 @@ static AjBool acdDefinedEmpty (const AcdPAcd thys)
 ** @param [w] reply [AjPStr*] The user response, or
 **        the default value if accepted.
 ** @return [AjBool] ajTrue if reply contains any text.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6462,6 +6810,8 @@ static AjBool acdUserGet(AcdPAcd thys, AjPStr* reply)
 ** @param [w] reply [AjPStr*] The user response, or
 **        the default value if accepted.
 ** @return [AjBool] ajTrue if reply contains any text.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6505,6 +6855,8 @@ static AjBool acdUserGetPrompt(const AcdPAcd thys, const char* assocqual,
 ** @param [r] userset [AjBool] Reply set by user
 ** @param [r] reply [const AjPStr] Reply string
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdUserSavereply(const AcdPAcd thys, const char* assocqual,
@@ -6561,6 +6913,8 @@ static void acdUserSavereply(const AcdPAcd thys, const char* assocqual,
 **
 ** @param [r] thys [const AcdPAcd] ACD object.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6585,6 +6939,8 @@ static void acdBadRetry(const AcdPAcd thys)
 ** @param [r] fmt [const char*] Format with ajFmt extensions
 ** @param [v] [...] Optional arguments
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6629,6 +6985,7 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @nam3rule  Get    Get value
 ** @nam4rule  GetAlign    ACD alignment datatype
 ** @nam4rule  GetArray    ACD array datatype
+** @nam4rule  GetAssembly   ACD assembly datatype
 ** @nam4rule  GetBoolean  ACD boolean datatype
 ** @nam4rule  GetCodon    ACD codon usage datatype
 ** @nam4rule  GetCpdb    ACD clean PDB data datatype
@@ -6652,6 +7009,7 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @nam4rule  GetMatrixf    ACD floating point comparison matrix datatype
 ** @nam4rule  GetObo   ACD obo term datatype
 ** @nam4rule  GetOboall   ACD obo term stream datatype
+** @nam4rule  GetOutassembly   ACD assembly output datatype
 ** @nam4rule  GetOutcodon    ACD codon usage output datatype
 ** @nam4rule  GetOutcpdb    ACD clean PDB output datatype
 ** @nam4rule  GetOutdata    ACD output datafile datatype
@@ -6665,6 +7023,7 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 **                           datatype
 ** @nam4rule  GetOutobo   ACD OBO ontology term output datatype
 ** @nam4rule  GetOutproperties   ACD properties output datatype
+** @nam4rule  GetOutrefseq   ACD reference sequence output datatype
 ** @nam4rule  GetOutresource   ACD data resource output datatype
 ** @nam4rule  GetOutscop   ACD SCOP output datatype
 ** @nam4rule  GetOuttaxon  ACD taxon output datatype
@@ -6675,6 +7034,7 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @nam4rule  GetPattern   ACD prosite pattern datatype
 ** @nam4rule  GetProperties   ACD properties datatype
 ** @nam4rule  GetRange   ACD position ranges datatype
+** @nam4rule  GetRefseq   ACD reference sequence datatype
 ** @nam4rule  GetRegexp    ACD regular expression datatype
 ** @nam4rule  GetReport   ACD report output datatype
 ** @nam4rule  GetResource   ACD data resource datatype
@@ -6719,6 +7079,7 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 **
 ** @valrule   Align            [AjPAlign]
 ** @valrule   Array            [AjPFloat]
+** @valrule   Assembly         [AjPAssemload]
 ** @valrule   Boolean          [AjBool]
 ** @valrule   Codon            [AjPCod]
 ** @valrule   Cpdb             [AjPFile]
@@ -6747,6 +7108,7 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @valrule   Matrixf          [AjPMatrixf]
 ** @valrule   Obo              [AjPObo]
 ** @valrule   Oboall           [AjPOboall]
+** @valrule   Outassembly      [AjPOutfile]
 ** @valrule   Outcodon         [AjPOutfile]
 ** @valrule   Outcpdb          [AjPOutfile]
 ** @valrule   Outdata          [AjPOutfile]
@@ -6760,6 +7122,7 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @valrule   Outmatrixf       [AjPOutfile]
 ** @valrule   Outobo           [AjPOutfile]
 ** @valrule   Outproperties    [AjPOutfile]
+** @valrule   Outrefseq        [AjPOutfile]
 ** @valrule   Outresource      [AjPOutfile]
 ** @valrule   Outscop          [AjPOutfile]
 ** @valrule   Outtaxon         [AjPOutfile]
@@ -6770,6 +7133,7 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @valrule   Pattern          [AjPPatlistSeq]
 ** @valrule   Properties       [AjPPhyloProp]
 ** @valrule   Range            [AjPRange]
+** @valrule   Refseq           [AjPRefseq]
 ** @valrule   Regexp           [AjPPatlistRegex]
 ** @valrule   *RegexpSingle    [AjPRegexp]
 ** @valrule   Report           [AjPReport]
@@ -6796,7 +7160,7 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @valrule   *TreeSingle      [AjPPhyloTree]
 ** @valrule   Url              [AjPUrl]
 ** @valrule   Urlall           [AjPUrlall]
-** @valrule   Variation        [AjPVar]
+** @valrule   Variation        [AjPVarload]
 ** @valrule   Variationall     [AjPVarall]
 ** @valrule   Value            [const AjPStr]
 ** @valrule   *Name            [AjPStr]
@@ -6828,6 +7192,8 @@ static void acdBadVal(const AcdPAcd thys, AjBool required,
 ** @param [u] thys [AcdPAcd] ACD for current item (which is
 **        always of type Xxxx)
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6884,6 +7250,8 @@ static void acdSetXxxx(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] ACD for the application item.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6972,6 +7340,8 @@ static void acdSetAppl(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] ACD for the endsection item.
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -7002,6 +7372,8 @@ static void acdSetEndsec(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] ACD for the section item.
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -7086,6 +7458,8 @@ static void acdSetSec(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] ACD for the application item.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7112,6 +7486,8 @@ static void acdSetVar(AcdPAcd thys)
 ** @return [AjPAlign] Alignment output object. Already opened
 **                      by ajAlignOpent so this just returns the object
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -7141,6 +7517,8 @@ AjPAlign ajAcdGetAlign(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -7268,6 +7646,8 @@ static void acdSetAlign(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPFloat] Floating point array object
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7296,6 +7676,8 @@ AjPFloat ajAcdGetArray(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajStrToFloat
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7468,6 +7850,118 @@ static void acdSetArray(AcdPAcd thys)
 
 
 
+/* @func ajAcdGetAssembly *****************************************************
+**
+** Returns an item of type assembly as defined in a named ACD item.
+** Called by the application after all ACD values have been set,
+** and simply returns what the ACD item already has.
+**
+** @param [r] token [const char*] Text token name
+**
+** @return [AjPAssemload] Assembly object
+**
+** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjPAssemload ajAcdGetAssembly(const char *token)
+{
+    AjPAssemload val = acdGetValueRef(token, "assembly");
+
+    return val;
+}
+
+
+
+
+/* @funcstatic acdSetAssembly *************************************************
+**
+** Using the definition in the ACD file, and any values for the
+** item or its associated qualifiers provided on the command line,
+** prompts the user if necessary (and possible) and
+** sets the actual value for an ACD assembly input
+**
+** Understands all attributes and associated qualifiers for this item type.
+**
+** @param [u] thys [AcdPAcd] ACD item.
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void acdSetAssembly(AcdPAcd thys)
+{
+    AjPAssemload val;
+
+    AjBool required = ajFalse;
+    AjBool ok       = ajFalse;
+    AjBool nullok   = ajFalse;
+    ajint itry;
+
+    AjPStr infname = NULL;
+    AjPStr tmp = NULL;
+
+    val = ajAssemloadNew();        /* set the default value */
+
+    acdAttrToBool(thys, "nullok", ajFalse, &nullok);
+
+    acdInFilename(&infname);
+    required = acdIsRequired(thys);
+    acdReplyInitS(thys, infname, &acdReplyDef);
+    ajStrDel(&infname);
+
+    acdAttrToBool(thys, "entry", ajFalse, &val->Assemin->Input->Text);
+
+    acdGetValueAssoc(thys, "cbegin", &tmp);
+    ajStrToInt(tmp, &val->Assemin->cbegin);
+
+    acdGetValueAssoc(thys, "cend", &tmp);
+    ajStrToInt(tmp, &val->Assemin->cend);
+
+    for(itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;	   /* accept the default if nothing changes */
+
+	ajStrAssignS(&acdReply, acdReplyDef);
+
+	if(required)
+	    acdUserGet(thys, &acdReply);
+
+	if(!ajStrGetLen(acdReply) && nullok)
+        {
+            ajAssemloadDel(&val);
+	    break;
+	}
+
+	ajAsseminQryS(val->Assemin, acdReply);
+
+	acdGetValueAssoc(thys, "iformat", &val->Assemin->Input->Formatstr);
+	acdGetValueAssoc(thys, "iquery", &val->Assemin->Input->QryFields);
+	acdQualToLong(thys, "ioffset", 0L, &val->Assemin->Input->Fpos,
+                      &acdTmpStr);
+
+        ok = ajAsseminLoad(val->Assemin, val->Assem);
+    }
+
+    if(!ok)
+	acdBadRetry(thys);
+
+    acdInFileSave(acdReply, ajAssemGetId(val->Assem), ajTrue);
+
+    thys->Value = val;
+    ajStrAssignS(&thys->ValStr, acdReply);
+    
+    ajStrDel(&tmp);
+
+    return;
+}
+
+
+
+
 /* @func ajAcdGetBoolean ******************************************************
 **
 ** Returns an item of type Bool as defined in a named ACD item. Called by the
@@ -7477,6 +7971,8 @@ static void acdSetArray(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjBool] Boolean value from ACD item
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -7486,18 +7982,6 @@ AjBool ajAcdGetBoolean(const char *token)
 
     val = acdGetValue(token, "boolean");
     return *val;
-}
-
-
-
-
-/* @obsolete ajAcdGetBool
-** @rename ajAcdGetBoolean
-*/
-
-__deprecated AjBool ajAcdGetBool(const char *token)
-{
-    return ajAcdGetBoolean(token);
 }
 
 
@@ -7517,6 +8001,8 @@ __deprecated AjBool ajAcdGetBool(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajStrToBool
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -7580,6 +8066,8 @@ static void acdSetBoolean(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPCod] Codon object.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7602,6 +8090,8 @@ AjPCod ajAcdGetCodon(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7688,6 +8178,8 @@ static void acdSetCodon(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPFile] Cpdb input file.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -7710,6 +8202,8 @@ AjPFile ajAcdGetCpdb(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -7792,6 +8286,8 @@ static void acdSetCpdb(AcdPAcd thys)
 ** @return [AjPFile] File object. The file was already opened by
 **         ajDatafileNewInNameS so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7817,6 +8313,8 @@ AjPFile ajAcdGetDatafile(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajFileNewOut
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7905,6 +8403,8 @@ static void acdSetDatafile(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPDir] Directory object
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -7926,6 +8426,8 @@ AjPDir ajAcdGetDirectory(const char *token)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPStr] Directory path
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -7955,6 +8457,8 @@ AjPStr ajAcdGetDirectoryName(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8051,6 +8555,8 @@ static void acdSetDirectory(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPList] List of files.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.9.0
 ** @@
 ******************************************************************************/
 
@@ -8075,6 +8581,8 @@ AjPList ajAcdGetDirlist(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 1.9.0
 ** @@
 ******************************************************************************/
 
@@ -8151,11 +8659,11 @@ static void acdSetDirlist(AcdPAcd thys)
     ajFilelistAddPathWild(val, acdReply, t);
 
     /* Sort list so that list of files is system-independent */
-    ajListSort(val, ajStrVcmp);
+    ajListSort(val, &ajStrVcmp);
 	
 
 
-    n = ajListGetLength(val);
+    n = (ajuint) ajListGetLength(val);
 
     ajDebug("acdSetDirlist '%S' listlength %d\n",
 	    acdReply, n);
@@ -8192,36 +8700,14 @@ static void acdSetDirlist(AcdPAcd thys)
 **         The string was already set by
 **         acdSetDiscretestates so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
 AjPPhyloState* ajAcdGetDiscretestates(const char *token)
 {
     return acdGetValueRef(token, "discretestates");
-}
-
-
-
-
-/* @obsolete ajAcdGetDiscretestatesI
-** @replace ajAcdGetDiscretestatesSingle (1,2/1)
-*/
-
-__deprecated AjPPhyloState  ajAcdGetDiscretestatesI(const char *token,
-						   ajint num)
-{
-    AjPPhyloState* val;
-    ajint i;
-
-    val = acdGetValue(token, "discretestates");
-    for(i=0; val[i]; i++)
-	continue;
-
-    if(num > i)
-	ajWarn("value %d not found for %s, last value was %d",
-	       num, token, i-1);
-
-    return val[num-1];
 }
 
 
@@ -8238,6 +8724,8 @@ __deprecated AjPPhyloState  ajAcdGetDiscretestatesI(const char *token,
 ** @return [AjPPhyloState] Discrete states object. The data was already set by
 **         acdSetDiscretestates so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -8280,6 +8768,8 @@ AjPPhyloState ajAcdGetDiscretestatesSingle(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -8384,7 +8874,7 @@ static void acdSetDiscretestates(AcdPAcd thys)
 
 
 
-/* @func ajAcdGetDistances ***************************************************
+/* @func ajAcdGetDistances ****************************************************
 **
 ** Returns an item of type Distances as defined in a named ACD item.
 ** Called by the application after all ACD values have been set,
@@ -8394,6 +8884,8 @@ static void acdSetDiscretestates(AcdPAcd thys)
 ** @return [AjPPhyloDist*] Distances object. The string was already set by
 **         acdSetDistances so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -8415,6 +8907,8 @@ AjPPhyloDist* ajAcdGetDistances(const char *token)
 ** @return [AjPPhyloDist] Distances object. The string was already set by
 **         acdSetDistances so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 5.0.0
 ** @@
 ******************************************************************************/
 
@@ -8442,7 +8936,7 @@ AjPPhyloDist ajAcdGetDistancesSingle(const char *token)
 
 
 
-/* @funcstatic acdSetDistances ***********************************************
+/* @funcstatic acdSetDistances ************************************************
 **
 ** Using the definition in the ACD file, and any values for the
 ** item or its associated qualifiers provided on the command line,
@@ -8458,6 +8952,8 @@ AjPPhyloDist ajAcdGetDistancesSingle(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -8566,6 +9062,8 @@ static void acdSetDistances(AcdPAcd thys)
 ** @return [AjPFeattabOut] Feature Table output object. Already opened
 **                      by acdSetFeatout so this just returns the object
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8595,6 +9093,8 @@ AjPFeattabOut ajAcdGetFeatout(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajFeatTabOutOpen
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8731,6 +9231,8 @@ static void acdSetFeatout(AcdPAcd thys)
 ** @return [AjPFeattable] Feature Table object. The table was already loaded by
 **         acdSetFeat so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -8749,18 +9251,6 @@ AjPFeattable ajAcdGetFeatures(const char *token)
 
 
 
-/* @obsolete ajAcdGetFeat
-** @rename ajAcdGetFeatures
-*/
-
-__deprecated AjPFeattable ajAcdGetFeat(const char *token)
-{
-    return ajAcdGetFeatures(token);
-}
-
-
-
-
 /* @func ajAcdGetFeaturesall **************************************************
 **
 ** Returns an input stream of an item of type Features as defined in a
@@ -8772,6 +9262,8 @@ __deprecated AjPFeattable ajAcdGetFeat(const char *token)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPFeattaball] Features input stream
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -8789,7 +9281,7 @@ AjPFeattaball ajAcdGetFeaturesall(const char *token)
 
 
 
-/* @funcstatic acdSetFeatures ************************************************
+/* @funcstatic acdSetFeatures *************************************************
 **
 ** Using the definition in the ACD file, and any values for the
 ** item or its associated qualifiers provided on the command line,
@@ -8812,6 +9304,8 @@ AjPFeattaball ajAcdGetFeaturesall(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -8870,6 +9364,9 @@ static void acdSetFeatures(AcdPAcd thys)
 
 	acdGetValueAssoc(thys, "fformat", &val->Feattabin->Formatstr);
 	acdGetValueAssoc(thys, "fopenfile", &val->Feattabin->Filename);
+	acdGetValueAssoc(thys, "iquery", &val->Feattabin->Input->QryFields);
+	acdQualToLong(thys, "ioffset", 0L, &val->Feattabin->Input->Fpos,
+                      &acdTmpStr);
 
 	ajFeattabinQryS(val->Feattabin, acdReply);
 	ok = ajFeattabinRead(val->Feattabin, val->Feattable);
@@ -8974,6 +9471,7 @@ static void acdSetFeatures(AcdPAcd thys)
     ajStrAssignS(&thys->ValStr, acdReply);
 
     ajStrDel(&type);
+
     return;
 }
 
@@ -8989,6 +9487,8 @@ static void acdSetFeatures(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPList] List of files.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -9013,6 +9513,8 @@ AjPList ajAcdGetFilelist(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -9075,6 +9577,8 @@ static void acdSetFilelist(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [float] Floating point value from ACD item
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -9090,7 +9594,7 @@ float ajAcdGetFloat(const char *token)
 
 
 
-/* @func ajAcdGetFloatDouble****************************************************
+/* @func ajAcdGetFloatDouble***************************************************
 **
 ** Returns an item of type Float as defined in a named ACD item. Called by the
 ** application after all ACD values have been set, and simply returns
@@ -9099,6 +9603,8 @@ float ajAcdGetFloat(const char *token)
 ** @param [r] token [const char*] Text token name
 ** @return [double] Floating point value from ACD item
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -9131,6 +9637,8 @@ double ajAcdGetFloatDouble(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajStrToFloat
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -9271,6 +9779,8 @@ static void acdSetFloat(AcdPAcd thys)
 ** @return [AjPPhyloFreq] Frequencies object. The string was already set by
 **         acdSetFrequencies so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -9298,6 +9808,8 @@ AjPPhyloFreq ajAcdGetFrequencies(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -9409,6 +9921,8 @@ static void acdSetFrequencies(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPGraph] Graph object.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -9431,6 +9945,8 @@ AjPGraph ajAcdGetGraph(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -9447,6 +9963,7 @@ static void acdSetGraph(AcdPAcd thys)
     ajint itry;
     AjBool nullok;
     AjBool nulldefault;
+    AjBool hasseq   = ajFalse;
     
     acdAttrToBool(thys, "nullok", ajFalse, &nullok);
     acdAttrToBool(thys, "nulldefault", ajFalse, &nulldefault);
@@ -9538,6 +10055,8 @@ static void acdSetGraph(AcdPAcd thys)
 
     if(val)
     {
+        acdAttrToBool(thys, "sequence", ajFalse, &hasseq);
+
 	if(acdGetValueAssoc(thys, "gdesc", &title))
 	    ajGraphSetDescS(val,title);
     
@@ -9549,7 +10068,9 @@ static void acdSetGraph(AcdPAcd thys)
     
 	if(acdGetValueAssoc(thys, "gxtitle", &title))
 	    ajGraphSetXlabelS(val,title);
-    
+        else if(hasseq)
+            ajGraphSetXlabelS(val, acdInFName);
+
 	if(acdGetValueAssoc(thys, "gytitle", &title))
 	    ajGraphSetYlabelS(val,title);
     
@@ -9582,6 +10103,8 @@ static void acdSetGraph(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPGraph] Graph object.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -9604,6 +10127,8 @@ AjPGraph ajAcdGetGraphxy(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -9620,6 +10145,7 @@ static void acdSetGraphxy(AcdPAcd thys)
     AjBool nullok;
     AjBool nulldefault;
     ajint multi;
+    AjBool hasseq   = ajFalse;
 
     val = NULL;
 
@@ -9716,6 +10242,10 @@ static void acdSetGraphxy(AcdPAcd thys)
     
     if(val)
     {
+        acdAttrToBool(thys, "sequence", ajFalse, &hasseq);
+        if(hasseq)
+            ajGraphSetDatanameS(val, acdInFName);
+
 	if(acdGetValueAssoc(thys, "gdesc", &title))
 	    ajGraphSetDescS(val,title);
     
@@ -9727,6 +10257,8 @@ static void acdSetGraphxy(AcdPAcd thys)
 
 	if(acdGetValueAssoc(thys, "gxtitle", &title))
 	    ajGraphSetXlabelS(val,title);
+        else if(hasseq)
+            ajGraphSetXlabelS(val, acdInFName);
 
 	if(acdGetValueAssoc(thys, "gytitle", &title))
 	    ajGraphSetYlabelS(val,title);
@@ -9763,6 +10295,8 @@ static void acdSetGraphxy(AcdPAcd thys)
 ** @return [AjPFile] File object. The file was already opened by
 **         acdSetInfile so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -9793,6 +10327,8 @@ AjPFile ajAcdGetInfile(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajFileNewIn
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -9892,6 +10428,8 @@ static void acdSetInfile(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [ajint] Integer value from ACD item
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -9907,7 +10445,7 @@ ajint ajAcdGetInt(const char *token)
 
 
 
-/* @func ajAcdGetIntLong *******************************************************
+/* @func ajAcdGetIntLong ******************************************************
 **
 ** Returns an item of type ajlong as defined in a named ACD item. Called by the
 ** application after all ACD values have been set, and simply returns
@@ -9918,6 +10456,8 @@ ajint ajAcdGetInt(const char *token)
 ** @param [r] token [const char*] Text token name
 ** @return [ajlong] Integer value from ACD item
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -9949,6 +10489,8 @@ ajlong ajAcdGetIntLong(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajStrToInt
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10119,36 +10661,14 @@ static void acdSetInt(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPStr*] String array of values with NULL for last element.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
 AjPStr* ajAcdGetList(const char *token)
 {
     return acdGetValueRef(token, "list");
-}
-
-
-
-
-/* @obsolete ajAcdGetListI
-** @replace ajAcdGetListSingle (1,2/1)
-*/
-
-__deprecated AjPStr  ajAcdGetListI(const char *token, ajint num)
-{
-    AjPStr *val;
-    ajint i;
-
-    val = acdGetValue(token, "list");
-
-    for(i=0; val[i]; i++)
-	continue;
-
-    if(num > i)
-	ajWarn("value %d not found for %s, last value was %d",
-	       num, token, i-1);
-
-    return val[num-1];
 }
 
 
@@ -10164,6 +10684,8 @@ __deprecated AjPStr  ajAcdGetListI(const char *token, ajint num)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPStr] String array of values with NULL for last element.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -10206,6 +10728,8 @@ AjPStr ajAcdGetListSingle(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10280,6 +10804,8 @@ static void acdSetList(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPMatrix] Matrix object.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10300,6 +10826,8 @@ AjPMatrix ajAcdGetMatrix(const char *token)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPMatrixf] Float Matrix object.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10323,6 +10851,8 @@ AjPMatrixf ajAcdGetMatrixf(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajMatrixNewFile
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10410,6 +10940,8 @@ static void acdSetMatrix(AcdPAcd thys)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajMatrixfNewFile
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10496,6 +11028,8 @@ static void acdSetMatrixf(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPObo] Obo term object
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -10523,6 +11057,8 @@ AjPObo ajAcdGetObo(const char *token)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPOboall] Obo input stream
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -10550,6 +11086,8 @@ AjPOboall ajAcdGetOboall(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -10571,6 +11109,7 @@ static void acdSetObo(AcdPAcd thys)
     acdAttrToBool(thys, "nullok", ajFalse, &nullok);
     acdAttrToInt(thys, "maxreads", INT_MAX, &maxreads);
 
+    acdInFilename(&infname);
     required = acdIsRequired(thys);
     acdReplyInitS(thys, infname, &acdReplyDef);
     ajStrDel(&infname);
@@ -10593,6 +11132,11 @@ static void acdSetObo(AcdPAcd thys)
 	}
 
 	ajOboinQryS(val->Oboin, acdReply);
+
+	acdGetValueAssoc(thys, "iformat", &val->Oboin->Input->Formatstr);
+	acdGetValueAssoc(thys, "iquery", &val->Oboin->Input->QryFields);
+	acdQualToLong(thys, "ioffset", 0L, &val->Oboin->Input->Fpos,
+                      &acdTmpStr);
 
         ok = ajOboinRead(val->Oboin, val->Obo);
     }
@@ -10631,6 +11175,8 @@ static void acdSetObo(AcdPAcd thys)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @param [r] type [const char*] Standard output type name.
 ** @return [AjPOutfile] Output file object of the specified type
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10695,7 +11241,7 @@ static AjPOutfile acdSetOutType(AcdPAcd thys, const char* type)
     ajStrDel(&ext);
 
     if(acdOuttype[itype].Prompt)
-	acdOuttype[itype].Prompt(thys);
+	(*acdOuttype[itype].Prompt)(thys);
     
     for(itry=acdPromptTry; itry && !ok; itry--)
     {
@@ -10725,7 +11271,8 @@ static AjPOutfile acdSetOutType(AcdPAcd thys, const char* type)
 
 	    if(acdOuttype[itype].Outformat)
 	    {
-		if(!acdOuttype[itype].Outformat(fmt, &val->Format))
+		if(!(*acdOuttype[itype].Outformat)(val->Formatstr,
+                                                   &val->Format))
 		{			/* test acdc-outbadformat */
 		    ajDie("Output option -%S: "
 			  "Format validation failed for type '%s'",
@@ -10758,6 +11305,61 @@ static AjPOutfile acdSetOutType(AcdPAcd thys, const char* type)
 
 
 
+/* @func ajAcdGetOutassembly **************************************************
+**
+** Returns an item of type Outassembly as defined in a named ACD item.
+** Called by the application after all ACD values have been set,
+** and simply returns what the ACD item already has.
+**
+** @param [r] token [const char*] Text token name
+** @return [AjPOutfile] File object. The file was already opened by
+**         acdSetOut so this just returns the pointer.
+** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjPOutfile ajAcdGetOutassembly(const char *token)
+{
+    return acdGetValueRef(token, "outassembly");
+}
+
+
+
+
+/* @funcstatic acdSetOutassembly **********************************************
+**
+** Using the definition in the ACD file, and any values for the
+** item or its associated qualifiers provided on the command line,
+** prompts the user if necessary (and possible) and
+** sets the actual value for an ACD outassembly item.
+**
+** Understands all attributes and associated qualifiers for this item type.
+**
+** The default value (if no other available) is a null string, which
+** is invalid.
+**
+** Associated qualifiers "-oformat"
+** are stored in the object and applied to the data on output.
+**
+** @param [u] thys [AcdPAcd] ACD item.
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void acdSetOutassembly(AcdPAcd thys)
+{
+    acdSetOutType(thys, "outassembly");
+
+    return;
+}
+
+
+
+
 /* @func ajAcdGetOutcodon *****************************************************
 **
 ** Returns an item of type Outcodon as defined in a named ACD item.
@@ -10768,6 +11370,8 @@ static AjPOutfile acdSetOutType(AcdPAcd thys, const char* type)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10797,6 +11401,8 @@ AjPOutfile ajAcdGetOutcodon(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10819,6 +11425,8 @@ static void acdSetOutcodon(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10848,6 +11456,8 @@ AjPOutfile ajAcdGetOutcpdb(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10870,6 +11480,8 @@ static void acdSetOutcpdb(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10899,6 +11511,8 @@ AjPOutfile ajAcdGetOutdata(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10922,6 +11536,8 @@ static void acdSetOutdata(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPDirout] Output directory object
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10943,6 +11559,8 @@ AjPDirout ajAcdGetOutdir(const char *token)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPStr] String containing a directory name
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10973,6 +11591,8 @@ AjPStr ajAcdGetOutdirName(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11072,6 +11692,8 @@ static void acdSetOutdir(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11101,6 +11723,8 @@ AjPOutfile ajAcdGetOutdiscrete(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11123,6 +11747,8 @@ static void acdSetOutdiscrete(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11152,6 +11778,8 @@ AjPOutfile ajAcdGetOutdistance(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11174,6 +11802,8 @@ static void acdSetOutdistance(AcdPAcd thys)
 ** @return [AjPFile] File object. The file was already opened by
 **         acdSetOutfile so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -11197,6 +11827,8 @@ AjPFile ajAcdGetOutfile(const char *token)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPStr] Filename.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -11239,6 +11871,8 @@ AjPStr ajAcdGetOutfileName(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajFileNewOut
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -11349,6 +11983,8 @@ static void acdSetOutfile(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11378,6 +12014,8 @@ AjPOutfile ajAcdGetOutfreq(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11400,6 +12038,8 @@ static void acdSetOutfreq(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11429,6 +12069,8 @@ AjPOutfile ajAcdGetOutmatrix(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11452,6 +12094,8 @@ static void acdSetOutmatrix(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11481,6 +12125,8 @@ AjPOutfile ajAcdGetOutmatrixf(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11503,6 +12149,8 @@ static void acdSetOutmatrixf(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -11532,6 +12180,8 @@ AjPOutfile ajAcdGetOutobo(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -11555,6 +12205,8 @@ static void acdSetOutobo(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11584,12 +12236,69 @@ AjPOutfile ajAcdGetOutproperties(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
 static void acdSetOutproperties(AcdPAcd thys)
 {
     acdSetOutType(thys, "properties");
+
+    return;
+}
+
+
+
+
+/* @func ajAcdGetOutrefseq ****************************************************
+**
+** Returns an item of type Outrefseq as defined in a named ACD item.
+** Called by the application after all ACD values have been set,
+** and simply returns what the ACD item already has.
+**
+** @param [r] token [const char*] Text token name
+** @return [AjPOutfile] File object. The file was already opened by
+**         acdSetOut so this just returns the pointer.
+** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjPOutfile ajAcdGetOutrefseq(const char *token)
+{
+    return acdGetValueRef(token, "outrefseq");
+}
+
+
+
+
+/* @funcstatic acdSetOutrefseq **********************************************
+**
+** Using the definition in the ACD file, and any values for the
+** item or its associated qualifiers provided on the command line,
+** prompts the user if necessary (and possible) and
+** sets the actual value for an ACD outrefseq item.
+**
+** Understands all attributes and associated qualifiers for this item type.
+**
+** The default value (if no other available) is a null string, which
+** is invalid.
+**
+** Associated qualifiers "-oformat"
+** are stored in the object and applied to the data on output.
+**
+** @param [u] thys [AcdPAcd] ACD item.
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void acdSetOutrefseq(AcdPAcd thys)
+{
+    acdSetOutType(thys, "outrefseq");
 
     return;
 }
@@ -11607,6 +12316,8 @@ static void acdSetOutproperties(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -11636,6 +12347,8 @@ AjPOutfile ajAcdGetOutresource(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -11659,6 +12372,8 @@ static void acdSetOutresource(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11688,6 +12403,8 @@ AjPOutfile ajAcdGetOutscop(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11711,6 +12428,8 @@ static void acdSetOutscop(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -11740,6 +12459,8 @@ AjPOutfile ajAcdGetOuttaxon(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -11763,6 +12484,8 @@ static void acdSetOuttaxon(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -11792,6 +12515,8 @@ AjPOutfile ajAcdGetOuttext(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -11815,6 +12540,8 @@ static void acdSetOuttext(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11826,7 +12553,7 @@ AjPOutfile ajAcdGetOuttree(const char *token)
 
 
 
-/* @funcstatic acdSetOuttree ************************************************
+/* @funcstatic acdSetOuttree **************************************************
 **
 ** Using the definition in the ACD file, and any values for the
 ** item or its associated qualifiers provided on the command line,
@@ -11844,6 +12571,8 @@ AjPOutfile ajAcdGetOuttree(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -11867,6 +12596,8 @@ static void acdSetOuttree(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -11895,6 +12626,8 @@ AjPOutfile ajAcdGetOuturl(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -11918,6 +12651,8 @@ static void acdSetOuturl(AcdPAcd thys)
 ** @return [AjPOutfile] File object. The file was already opened by
 **         acdSetOut so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -11946,6 +12681,8 @@ AjPOutfile ajAcdGetOutvariation(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -11970,6 +12707,8 @@ static void acdSetOutvariation(AcdPAcd thys)
 **                     The original pattern string is available
 **                     through a call to ajAcdGetValue
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -11997,6 +12736,8 @@ AjPPatlistSeq ajAcdGetPattern(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -12122,6 +12863,8 @@ static void acdSetPattern(AcdPAcd thys)
 ** @return [AjPPhyloProp] Properties array. The data was already set by
 **         acdSetProperties so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -12149,6 +12892,8 @@ AjPPhyloProp ajAcdGetProperties(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -12253,6 +12998,8 @@ static void acdSetProperties(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPRange] Range object.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -12275,6 +13022,8 @@ AjPRange ajAcdGetRange(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -12362,6 +13111,111 @@ static void acdSetRange(AcdPAcd thys)
 
 
 
+/* @func ajAcdGetRefseq *******************************************************
+**
+** Returns an item of type reference sequence as defined in a named ACD item.
+** Called by the application after all ACD values have been set,
+** and simply returns what the ACD item already has.
+**
+** @param [r] token [const char*] Text token name
+** @return [AjPRefseq] Reference sequence object
+** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+AjPRefseq ajAcdGetRefseq(const char *token)
+{
+    AjPRefseq val = acdGetValueRef(token, "refseq");
+
+    return val;
+}
+
+
+
+
+/* @funcstatic acdSetRefseq ***************************************************
+**
+** Using the definition in the ACD file, and any values for the
+** item or its associated qualifiers provided on the command line,
+** prompts the user if necessary (and possible) and
+** sets the actual value for an ACD reference sequence input
+**
+** Understands all attributes and associated qualifiers for this item type.
+**
+** @param [u] thys [AcdPAcd] ACD item.
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void acdSetRefseq(AcdPAcd thys)
+{
+    AjPRefseq val;
+    AjPRefseqin refseqin;
+
+    AjBool required = ajFalse;
+    AjBool ok       = ajFalse;
+    AjBool nullok   = ajFalse;
+    ajint itry;
+
+    AjPStr infname = NULL;
+  
+    val = ajRefseqNew();        /* set the default value */
+    refseqin = ajRefseqinNew();  
+
+    acdAttrToBool(thys, "nullok", ajFalse, &nullok);
+
+    acdInFilename(&infname);
+    required = acdIsRequired(thys);
+    acdReplyInitS(thys, infname, &acdReplyDef);
+    ajStrDel(&infname);
+
+    acdAttrToBool(thys, "entry", ajFalse, &refseqin->Input->Text);
+
+    for(itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;	   /* accept the default if nothing changes */
+
+	ajStrAssignS(&acdReply, acdReplyDef);
+
+	if(required)
+	    acdUserGet(thys, &acdReply);
+
+	if(!ajStrGetLen(acdReply) && nullok)
+        {
+            ajRefseqinDel(&refseqin);
+	    break;
+	}
+
+	ajRefseqinQryS(refseqin, acdReply);
+
+	acdGetValueAssoc(thys, "iformat", &refseqin->Input->Formatstr);
+	acdGetValueAssoc(thys, "iquery", &refseqin->Input->QryFields);
+	acdQualToLong(thys, "ioffset", 0L, &refseqin->Input->Fpos,
+                      &acdTmpStr);
+
+        ok = ajRefseqinRead(refseqin, val);
+    }
+
+    if(!ok)
+	acdBadRetry(thys);
+
+    acdInFileSave(acdReply, ajRefseqGetId(val), ajTrue);
+
+    thys->Value = val;
+    ajStrAssignS(&thys->ValStr, acdReply);
+    
+    ajRefseqinDel(&refseqin);
+
+    return;
+}
+
+
+
+
 /* @func ajAcdGetRegexp *******************************************************
 **
 ** Returns an item of type Regexp as defined in a named ACD item.
@@ -12373,6 +13227,8 @@ static void acdSetRange(AcdPAcd thys)
 **                            The original pattern string is available
 **                            through a call to ajAcdGetValue
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -12395,6 +13251,8 @@ AjPPatlistRegex ajAcdGetRegexp(const char *token)
 **                     The original pattern string is available
 **                     through a call to ajAcdGetValue
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -12439,6 +13297,8 @@ AjPRegexp ajAcdGetRegexpSingle(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -12563,6 +13423,8 @@ static void acdSetRegexp(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] ACD for the application item.
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -12586,6 +13448,8 @@ static void acdSetRel(AcdPAcd thys)
 ** @return [AjPReport] Report output object. Already opened
 **                      by ajReportOpen so this just returns the object
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -12615,6 +13479,8 @@ AjPReport ajAcdGetReport(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -12690,9 +13556,9 @@ static void acdSetReport(AcdPAcd thys)
 			  &val->Showstrand, &acdReplyDef);
 	    acdQualToBool(thys, "rusashow", ajFalse,
 			  &val->Showusa, &acdReplyDef);
-	    acdQualToInt(thys, "rmaxall", ajFalse,
+	    acdQualToInt(thys, "rmaxall", 0,
 			  &val->MaxHitAll, &acdReplyDef);
-	    acdQualToInt(thys, "rmaxseq", ajFalse,
+	    acdQualToInt(thys, "rmaxseq", 0,
 			  &val->MaxHitSeq, &acdReplyDef);
     
 	    /* test acdc-reportbadtaglist */
@@ -12755,6 +13621,8 @@ static void acdSetReport(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPResource] Data resource object
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -12782,6 +13650,8 @@ AjPResource ajAcdGetResource(const char *token)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPResourceall] Data resource input stream
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -12810,6 +13680,8 @@ AjPResourceall ajAcdGetResourceall(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -12833,6 +13705,7 @@ static void acdSetResource(AcdPAcd thys)
 
     acdAttrToBool(thys, "entry", ajFalse, &val->Resourcein->Input->Text);
 
+    acdInFilename(&infname);
     required = acdIsRequired(thys);
     acdReplyInitS(thys, infname, &acdReplyDef);
     ajStrDel(&infname);
@@ -12853,6 +13726,11 @@ static void acdSetResource(AcdPAcd thys)
 	}
 
 	ajResourceinQryS(val->Resourcein, acdReply);
+
+	acdGetValueAssoc(thys, "iformat", &val->Resourcein->Input->Formatstr);
+	acdGetValueAssoc(thys, "iquery", &val->Resourcein->Input->QryFields);
+	acdQualToLong(thys, "ioffset", 0L, &val->Resourcein->Input->Fpos,
+                      &acdTmpStr);
 
         ok = ajResourceinRead(val->Resourcein, val->Resource);
     }
@@ -12883,6 +13761,8 @@ static void acdSetResource(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPFile] Scop input file.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -12905,6 +13785,8 @@ AjPFile ajAcdGetScop(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -12982,36 +13864,14 @@ static void acdSetScop(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPStr*] String array of values with NULL as last element.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
 AjPStr* ajAcdGetSelect(const char *token)
 {
     return acdGetValueRef(token, "selection");
-}
-
-
-
-
-/* @obsolete ajAcdGetSelectI
-** @replace ajAcdGetSelectSingle (1,2/1)
-*/
-
-__deprecated AjPStr  ajAcdGetSelectI(const char *token, ajint num)
-{
-    AjPStr* val;
-    ajint i;
-
-    val =  acdGetValue(token, "select");
-
-    for(i=0; val[i]; i++)
-	continue;
-
-    if(num > i)
-	ajWarn("value %d not found for %s, last value was %d",
-	       num, token, i-1);
-
-    return val[num-1];
 }
 
 
@@ -13027,6 +13887,8 @@ __deprecated AjPStr  ajAcdGetSelectI(const char *token, ajint num)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPStr] String array of values with NULL as last element.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -13066,6 +13928,8 @@ AjPStr ajAcdGetSelectSingle(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajFileNewOut
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -13138,6 +14002,8 @@ static void acdSetSelect(AcdPAcd thys)
 ** @return [AjPSeq] Sequence object. The sequence was already loaded by
 **         acdSetSeq so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -13175,6 +14041,8 @@ AjPSeq ajAcdGetSeq(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -13193,7 +14061,7 @@ static void acdSetSeq(AcdPAcd thys)
     ajint i;
     
     AjPStr infname = NULL;
-    
+
     ajint sqbegin = 0;
     ajint sqend   = 0;
 
@@ -13251,12 +14119,17 @@ static void acdSetSeq(AcdPAcd thys)
 	acdGetValueAssoc(thys, "sdbname", &seqin->Input->Db);
 /*	acdGetValueAssoc(thys, "sopenfile", &seqin->Filename);*/ /* obsolete */
 	acdGetValueAssoc(thys, "sid", &seqin->Entryname);
+	acdGetValueAssoc(thys, "iquery", &seqin->Input->QryFields);
+	acdQualToLong(thys, "ioffset", 0L, &seqin->Input->Fpos,
+                      &acdTmpStr);
 	
 	acdGetValueAssoc(thys, "ufo", &seqin->Ufo);
 	
 	acdGetValueAssoc(thys, "fformat", &seqin->Ftquery->Formatstr);
 	acdGetValueAssoc(thys, "fopenfile", &seqin->Ftquery->Filename);
 	
+	acdQualToBool(thys, "scircular", ajFalse,
+		      &seqin->Circular, &acdTmpStr);
 	acdQualToBool(thys, "supper", ajFalse,
 		      &seqin->Upper, &acdTmpStr);
 	acdQualToBool(thys, "slower", ajFalse,
@@ -13457,6 +14330,8 @@ static void acdSetSeq(AcdPAcd thys)
 ** @return [AjPSeqall] Sequence stream object. The sequence was already
 **         loaded by acdSetSeqall so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -13497,6 +14372,8 @@ AjPSeqall ajAcdGetSeqall(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -13516,7 +14393,7 @@ static void acdSetSeqall(AcdPAcd thys)
     AjBool nullok = ajFalse;
     
     AjPStr infname = NULL;
-    
+
     ajint sqbegin = 0;
     ajint sqend   = 0;
     AjBool sreverse = ajFalse;
@@ -13573,11 +14450,16 @@ static void acdSetSeqall(AcdPAcd thys)
 	acdGetValueAssoc(thys, "sdbname", &seqin->Input->Db);
 /*	acdGetValueAssoc(thys, "sopenfile", &seqin->Filename);*/ /* obsolete */
 	acdGetValueAssoc(thys, "sid", &seqin->Entryname);
+	acdGetValueAssoc(thys, "iquery", &seqin->Input->QryFields);
+	acdQualToLong(thys, "ioffset", 0L, &seqin->Input->Fpos,
+                      &acdTmpStr);
 	
 	acdGetValueAssoc(thys, "ufo", &seqin->Ufo);
 	acdGetValueAssoc(thys, "fformat", &seqin->Ftquery->Formatstr);
 	acdGetValueAssoc(thys, "fopenfile", &seqin->Ftquery->Filename);
 	
+	acdQualToBool(thys, "scircular", ajFalse,
+		      &seqin->Circular, &acdTmpStr);
 	acdQualToBool(thys, "supper", ajFalse,
 		      &seqin->Upper, &acdTmpStr);
 	acdQualToBool(thys, "slower", ajFalse,
@@ -13787,6 +14669,8 @@ static void acdSetSeqall(AcdPAcd thys)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -13806,7 +14690,7 @@ static void acdSetSeqsetall(AcdPAcd thys)
     ajint iattr;
     
     AjPStr infname = NULL;
-    
+
     ajint sqbegin = 0;
     ajint sqend   = 0;
     AjBool sreverse = ajFalse;
@@ -13868,11 +14752,16 @@ static void acdSetSeqsetall(AcdPAcd thys)
 	acdGetValueAssoc(thys, "sdbname", &seqin->Input->Db);
 /*	acdGetValueAssoc(thys, "sopenfile", &seqin->Filename);*/ /* obsolete */
 	acdGetValueAssoc(thys, "sid", &seqin->Entryname);
+	acdGetValueAssoc(thys, "iquery", &seqin->Input->QryFields);
+	acdQualToLong(thys, "ioffset", 0L, &seqin->Input->Fpos,
+                      &acdTmpStr);
 	
 	acdGetValueAssoc(thys, "ufo", &seqin->Ufo);
 	acdGetValueAssoc(thys, "fformat", &seqin->Ftquery->Formatstr);
 	acdGetValueAssoc(thys, "fopenfile", &seqin->Ftquery->Filename);
 	
+	acdQualToBool(thys, "scircular", ajFalse,
+		      &seqin->Circular, &acdTmpStr);
 	acdQualToBool(thys, "supper", ajFalse,
 		      &seqin->Upper, &acdTmpStr);
 	acdQualToBool(thys, "slower", ajFalse,
@@ -13903,7 +14792,7 @@ static void acdSetSeqsetall(AcdPAcd thys)
     if(!ok)
 	acdBadRetry(thys);
 
-    nsets = ajListToarray(seqlist,(void***) &sets);
+    nsets = (ajuint) ajListToarray(seqlist,(void***) &sets);
 
     if(!nsets)
     {
@@ -14107,6 +14996,8 @@ static void acdSetSeqsetall(AcdPAcd thys)
 ** @return [AjPSeqout] Sequence output object. The file was already opened by
 **         acdSetSeqout so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -14137,6 +15028,8 @@ AjPSeqout ajAcdGetSeqout(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajFileNewOut
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -14306,6 +15199,8 @@ static void acdSetSeqout(AcdPAcd thys)
 ** @return [AjPSeqout] Sequence output object. The file was already
 **         opened by acdSetSeqoutall so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -14334,6 +15229,8 @@ AjPSeqout ajAcdGetSeqoutall(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajFileNewOut
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -14498,6 +15395,8 @@ static void acdSetSeqoutall(AcdPAcd thys)
 ** @return [AjPSeqout] Sequence output object. The file was already
 **        opened by acdSetSeqoutset so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -14528,6 +15427,8 @@ AjPSeqout ajAcdGetSeqoutset(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajFileNewOut
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -14686,6 +15587,8 @@ static void acdSetSeqoutset(AcdPAcd thys)
 ** @return [AjPSeqset] Sequence set object. The sequence was already loaded by
 **         acdSetSeqset so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -14723,6 +15626,8 @@ AjPSeqset ajAcdGetSeqset(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajSeqRead
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -14741,7 +15646,7 @@ static void acdSetSeqset(AcdPAcd thys)
     ajint itry;
     
     AjPStr infname = NULL;
-    
+
     ajint sqbegin = 0;
     ajint sqend   = 0;
     AjBool sreverse = ajFalse;
@@ -14800,11 +15705,16 @@ static void acdSetSeqset(AcdPAcd thys)
 	acdGetValueAssoc(thys, "sdbname", &seqin->Input->Db);
 /*	acdGetValueAssoc(thys, "sopenfile", &seqin->Filename);*/ /* obsolete */
 	acdGetValueAssoc(thys, "sid", &seqin->Entryname);
+	acdGetValueAssoc(thys, "iquery", &seqin->Input->QryFields);
+	acdQualToLong(thys, "ioffset", 0L, &seqin->Input->Fpos,
+                      &acdTmpStr);
 
 	acdGetValueAssoc(thys, "ufo", &seqin->Ufo);
 	acdGetValueAssoc(thys, "fformat", &seqin->Ftquery->Formatstr);
 	acdGetValueAssoc(thys, "fopenfile", &seqin->Ftquery->Filename);
 
+	acdQualToBool(thys, "scircular", ajFalse,
+		      &seqin->Circular, &acdTmpStr);
 	acdQualToBool(thys, "supper", ajFalse,
 		      &seqin->Upper, &acdTmpStr);
 	acdQualToBool(thys, "slower", ajFalse,
@@ -15018,36 +15928,14 @@ static void acdSetSeqset(AcdPAcd thys)
 **         The sequence was already loaded by
 **         acdSetSeqset so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
 AjPSeqset* ajAcdGetSeqsetall(const char *token)
 {
     return acdGetValueRef(token, "seqsetall");
-}
-
-
-
-
-/* @obsolete ajAcdGetSeqsetallI
-** @replace ajAcdGetSeqsetallSingle (1,2/1)
-*/
-
-__deprecated AjPSeqset  ajAcdGetSeqsetallI(const char *token, ajint num)
-{
-    AjPSeqset *val;
-    ajint i;
-
-    val = acdGetValue(token, "seqsetall");
-
-    for(i=0; val[i]; i++)
-	continue;
-
-    if(num > i)
-	ajWarn("value %d not found for %s, last value was %d",
-	       num, token, i-1);
-
-    return val[num-1];
 }
 
 
@@ -15063,6 +15951,8 @@ __deprecated AjPSeqset  ajAcdGetSeqsetallI(const char *token, ajint num)
 ** @return [AjPSeqset] Sequence set object. The sequence was already loaded by
 **         acdSetSeqset so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -15100,6 +15990,8 @@ AjPSeqset ajAcdGetSeqsetallSingle(const char *token)
 ** @return [AjPStr] String object. The string was already set by
 **         acdSetString so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -15128,6 +16020,8 @@ AjPStr ajAcdGetString(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajFileNewOut
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -15248,6 +16142,8 @@ static void acdSetString(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPTax] Taxon object
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -15275,6 +16171,8 @@ AjPTax ajAcdGetTaxon(const char *token)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPTaxall] Taxon input stream
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -15302,6 +16200,8 @@ AjPTaxall ajAcdGetTaxonall(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -15317,12 +16217,14 @@ static void acdSetTaxon(AcdPAcd thys)
     ajint maxreads;
 
     AjPStr infname = NULL;
+    AjPStr tmp = NULL;
     
     val = ajTaxallNew();        /* set the default value */
 
     acdAttrToBool(thys, "nullok", ajFalse, &nullok);
     acdAttrToInt(thys, "maxreads", INT_MAX, &maxreads);
 
+    acdInFilename(&infname);
     required = acdIsRequired(thys);
     acdReplyInitS(thys, infname, &acdReplyDef);
     ajStrDel(&infname);
@@ -15344,6 +16246,11 @@ static void acdSetTaxon(AcdPAcd thys)
 
 	ajTaxinQryS(val->Taxin, acdReply);
 
+	acdGetValueAssoc(thys, "iformat", &val->Taxin->Input->Formatstr);
+	acdGetValueAssoc(thys, "iquery", &val->Taxin->Input->QryFields);
+	acdQualToLong(thys, "ioffset", 0L, &val->Taxin->Input->Fpos,
+                      &acdTmpStr);
+
         ok = ajTaxinRead(val->Taxin, val->Tax);
     }
 
@@ -15360,6 +16267,8 @@ static void acdSetTaxon(AcdPAcd thys)
     thys->Value = val;
     ajStrAssignS(&thys->ValStr, acdReply);
     
+    ajStrDel(&tmp);
+
     return;
 }
 
@@ -15375,6 +16284,8 @@ static void acdSetTaxon(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPText] Text object
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -15402,6 +16313,8 @@ AjPText ajAcdGetText(const char *token)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPTextall] Text input stream
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -15429,6 +16342,8 @@ AjPTextall ajAcdGetTextall(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -15444,12 +16359,14 @@ static void acdSetText(AcdPAcd thys)
     ajint maxreads;
 
     AjPStr infname = NULL;
-    
+    AjPStr tmp = NULL;
+
     val = ajTextallNew();        /* set the default value */
 
     acdAttrToBool(thys, "nullok", ajFalse, &nullok);
     acdAttrToInt(thys, "maxreads", INT_MAX, &maxreads);
 
+    acdInFilename(&infname);
     required = acdIsRequired(thys);
     acdReplyInitS(thys, infname, &acdReplyDef);
     ajStrDel(&infname);
@@ -15471,6 +16388,11 @@ static void acdSetText(AcdPAcd thys)
 
 	ajTextinQryS(val->Textin, acdReply);
 
+	acdGetValueAssoc(thys, "iformat", &val->Textin->Formatstr);
+	acdGetValueAssoc(thys, "iquery", &val->Textin->QryFields);
+	acdQualToLong(thys, "ioffset", 0L, &val->Textin->Fpos,
+                      &acdTmpStr);
+
         ok = ajTextinRead(val->Textin, val->Text);
     }
 
@@ -15487,6 +16409,8 @@ static void acdSetText(AcdPAcd thys)
     thys->Value = val;
     ajStrAssignS(&thys->ValStr, acdReply);
     
+    ajStrDel(&tmp);
+
     return;
 }
 
@@ -15504,6 +16428,8 @@ static void acdSetText(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjBool] Boolean value from ACD item
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -15533,6 +16459,8 @@ AjBool ajAcdGetToggle(const char *token)
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
 ** @see ajStrToBool
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -15596,36 +16524,14 @@ static void acdSetToggle(AcdPAcd thys)
 ** @return [AjPPhyloTree*] Tree object. The data was already set by
 **         acdSetTree so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
 AjPPhyloTree* ajAcdGetTree(const char *token)
 {
     return acdGetValueRef(token, "tree");
-}
-
-
-
-
-/* @obsolete ajAcdGetTreeI
-** @replace ajAcdGetTreeSingle (1,2/1)
-*/
-
-__deprecated AjPPhyloTree  ajAcdGetTreeI(const char *token, ajint num)
-{
-    AjPPhyloTree *val;
-    ajint i;
-
-    val = acdGetValue(token, "tree");
-
-    for(i=0; val[i]; i++)
-	continue;
-
-    if(num > i)
-	ajWarn("value %d not found for %s, last value was %d",
-	       num, token, i-1);
-
-    return val[num-1];
 }
 
 
@@ -15641,6 +16547,8 @@ __deprecated AjPPhyloTree  ajAcdGetTreeI(const char *token, ajint num)
 ** @return [AjPPhyloTree] Tree object. The data was already set by
 **         acdSetTree so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -15684,6 +16592,8 @@ AjPPhyloTree ajAcdGetTreeSingle(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -15787,6 +16697,8 @@ static void acdSetTree(AcdPAcd thys)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPUrl] URL object
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -15804,7 +16716,7 @@ AjPUrl ajAcdGetUrl(const char *token)
 
 
 
-/* @func ajAcdGetUrlall *****************************************************
+/* @func ajAcdGetUrlall *******************************************************
 **
 ** Returns an input stream of an item of type Taxon as defined in a
 ** named ACD item.
@@ -15814,6 +16726,8 @@ AjPUrl ajAcdGetUrl(const char *token)
 ** @param [r] token [const char*] Text token name
 ** @return [AjPUrlall] URL input stream
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -15841,6 +16755,8 @@ AjPUrlall ajAcdGetUrlall(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -15856,12 +16772,13 @@ static void acdSetUrl(AcdPAcd thys)
     ajint maxreads;
 
     AjPStr infname = NULL;
-    
+
     val = ajUrlallNew();        /* set the default value */
 
     acdAttrToBool(thys, "nullok", ajFalse, &nullok);
     acdAttrToInt(thys, "maxreads", INT_MAX, &maxreads);
 
+    acdInFilename(&infname);
     required = acdIsRequired(thys);
     acdReplyInitS(thys, infname, &acdReplyDef);
     ajStrDel(&infname);
@@ -15890,6 +16807,8 @@ static void acdSetUrl(AcdPAcd thys)
                       &acdTmpStr);
         acdGetValueAssoc(thys, "accession", &val->Urlin->Accession);
         acdGetValueAssoc(thys, "identifier", &val->Urlin->IdTypes);
+
+	acdGetValueAssoc(thys, "iformat", &val->Urlin->Input->Formatstr);
 
         ok = ajUrlinRead(val->Urlin, val->Url);
     }
@@ -15921,6 +16840,8 @@ static void acdSetUrl(AcdPAcd thys)
 ** @return [const AjPStr] String object. The string was already set by
 **         acdSetString so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -15932,25 +16853,15 @@ const AjPStr ajAcdGetValue(const char *token)
 
 
 
-/* @obsolete ajAcdValue
-** @rename ajAcdGetValue
-*/
-
-__deprecated const AjPStr  ajAcdValue(const char *token)
-{
-    return ajAcdGetValue(token);
-}
-
-
-
-
-/* @func ajAcdGetValueDefault **************************************************
+/* @func ajAcdGetValueDefault *************************************************
 **
 ** Returns the default value of any ACD item
 **
 ** @param [r] token [const char*] Text token name
 ** @return [const AjPStr] Default value.
 ** @cre failure to find an item with the right name and type returns NULL.
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -15964,50 +16875,27 @@ const AjPStr ajAcdGetValueDefault(const char *token)
 
 /* @func ajAcdGetVariation ****************************************************
 **
-** Returns an item of type Variation as defined in a named ACD item.
+** Returns an item of type variation loader as defined in a named ACD item.
 ** Called by the application after all ACD values have been set,
 ** and simply returns what the ACD item already has.
 **
 ** @param [r] token [const char*] Text token name
-** @return [AjPVar] Variation object
+** @return [AjPVarload] Variation loader object
 ** @cre failure to find an item with the right name and type aborts.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-AjPVar ajAcdGetVariation(const char *token)
+AjPVarload ajAcdGetVariation(const char *token)
 {
-    AjPVarall val = acdGetValue(token, "variation");
-    if(val->Multi)
+    AjPVarload val = acdGetValueRef(token, "variation");
+
+    /*if(val->Multi)
         ajWarn("ajAcdGetVariation request single variation but maxreads > 1");
+    */
 
     val->Returned = ajTrue;
-
-    return val->Var;
-}
-
-
-
-
-/* @func ajAcdGetVariationall **************************************************
-**
-** Returns an input stream of an item of type Variation as defined in a
-** named ACD item.
-** Called by the application after all ACD values have been set,
-** and simply returns what the ACD item already has.
-**
-** @param [r] token [const char*] Text token name
-** @return [AjPVarall] Variation input stream
-** @cre failure to find an item with the right name and type aborts.
-** @@
-******************************************************************************/
-
-AjPVarall ajAcdGetVariationall(const char *token)
-{
-    AjPVarall val = acdGetValueRef(token, "variation");
-
-    if(!val->Multi)
-        ajWarn("ajAcdGetVariationall request variation input stream "
-               "but maxreads is 1");
 
     return val;
 }
@@ -16015,7 +16903,7 @@ AjPVarall ajAcdGetVariationall(const char *token)
 
 
 
-/* @funcstatic acdSetVariation *************************************************
+/* @funcstatic acdSetVariation ************************************************
 **
 ** Using the definition in the ACD file, and any values for the
 ** item or its associated qualifiers provided on the command line,
@@ -16026,27 +16914,28 @@ AjPVarall ajAcdGetVariationall(const char *token)
 **
 ** @param [u] thys [AcdPAcd] ACD item.
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static void acdSetVariation(AcdPAcd thys)
 {
-    AjPVarall val;
+    AjPVarload val;
 
     AjBool required = ajFalse;
     AjBool ok       = ajFalse;
     AjBool nullok   = ajFalse;
     ajint itry;
 
-    ajint maxreads;
-
     AjPStr infname = NULL;
-    
-    val = ajVarallNew();        /* set the default value */
+    AjPStr tmp = NULL;
+
+    val = ajVarloadNew();        /* set the default value */
 
     acdAttrToBool(thys, "nullok", ajFalse, &nullok);
-    acdAttrToInt(thys, "maxreads", INT_MAX, &maxreads);
 
+    acdInFilename(&infname);
     required = acdIsRequired(thys);
     acdReplyInitS(thys, infname, &acdReplyDef);
     ajStrDel(&infname);
@@ -16062,28 +16951,32 @@ static void acdSetVariation(AcdPAcd thys)
 
 	if(!ajStrGetLen(acdReply) && nullok)
         {
-            ajVarallDel(&val);
+            ajVarloadDel(&val);
 	    break;
 	}
 
-	ajVarinQryS(val->Varin, acdReply);
+        ajVarinQryS(val->Varin, acdReply);
 
-        ok = ajVarinRead(val->Varin, val->Var);
+	acdGetValueAssoc(thys, "iformat", &val->Varin->Input->Formatstr);
+	acdGetValueAssoc(thys, "iquery", &val->Varin->Input->QryFields);
+	acdQualToLong(thys, "ioffset", 0L, &val->Varin->Input->Fpos,
+                      &acdTmpStr);
+
+        ok = ajVarinLoad(val->Varin, val->Var);
     }
 
     if(!ok)
 	acdBadRetry(thys);
 
-    if(maxreads > 1)
-        val->Multi = ajTrue;
-
     acdAttrToBool(thys, "entry", ajFalse, &val->Varin->Input->Text);
 
-    acdInFileSave(acdReply, ajVarallGetvarId(val), ajTrue);
+    acdInFileSave(acdReply, ajVarloadGetvarId(val), ajTrue);
 
     thys->Value = val;
     ajStrAssignS(&thys->ValStr, acdReply);
     
+    ajStrDel(&tmp);
+
     return;
 }
 
@@ -16099,6 +16992,8 @@ static void acdSetVariation(AcdPAcd thys)
 **
 ** @param [r] token [const char*] External application name
 ** @return [const AjPStr] Executable application name
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -16128,6 +17023,8 @@ const AjPStr ajAcdGetpathC(const char* token)
 **
 ** @param [r] strtoken [const AjPStr] External application name
 ** @return [const AjPStr] Executable application name
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -16155,6 +17052,8 @@ const AjPStr ajAcdGetpathS(const AjPStr strtoken)
 **
 ** @cre failure to find an item with the right name gives an error message
 ** and continues
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -16184,17 +17083,6 @@ AjBool ajAcdIsUserdefinedC(const char *token)
 
 
 
-/* @obsolete ajAcdIsUserdefined
-** @rename ajAcdIsUserdefinedC
-*/
-__deprecated AjBool ajAcdIsUserdefined(const char *token)
-{
-    return ajAcdIsUserdefinedC(token);
-}
-
-
-
-
 /* @func ajAcdIsUserdefinedS **************************************************
 **
 ** Tests whether an ACD item has a value set by the user.
@@ -16204,6 +17092,8 @@ __deprecated AjBool ajAcdIsUserdefined(const char *token)
 **
 ** @cre failure to find an item with the right name gives an error message
 ** and continues
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -16239,6 +17129,8 @@ AjBool ajAcdIsUserdefinedS(const AjPStr strtoken)
 **
 ** @param [r] itype [ajint] Numbered type as returned by acdFindType
 ** @return [ajint] number of attributes defined.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -16258,6 +17150,8 @@ static ajint acdAttrCount(ajint itype)
 **
 ** @param [r] ikey [ajint] Numbered type as returned by acdFindKey
 ** @return [ajint] number of attributes defined.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -16277,6 +17171,8 @@ static ajint acdAttrKeyCount(ajint ikey)
 **
 ** @param [r] attr [const AcdPAttr] Attribute list
 ** @return [ajint] number of attributes defined.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -16307,6 +17203,8 @@ static ajint acdAttrListCount(const AcdPAttr attr)
 ** @param [r] type [const char*] Type.
 ** @return [void*] Value.
 **
+**
+** @release 1.0.0
 ******************************************************************************/
 
 static void* acdGetValue(const char *token, const char* type)
@@ -16350,6 +17248,8 @@ static void* acdGetValue(const char *token, const char* type)
 ** @param [r] type [const char*] Type.
 ** @return [void*] Value.
 **
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void* acdGetValueRef(const char *token, const char* type)
@@ -16392,6 +17292,8 @@ static void* acdGetValueRef(const char *token, const char* type)
 ** @param [r] type [const char*] Type.
 ** @return [void*] Value.
 **
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void* acdGetValueSingle(const char *token, const char* type)
@@ -16427,6 +17329,8 @@ static void* acdGetValueSingle(const char *token, const char* type)
 **                                a numeric suffix.
 ** @return [const AjPStr] String.
 **
+**
+** @release 1.0.0
 ******************************************************************************/
 
 static const AjPStr acdGetValStr(const char *token)
@@ -16453,7 +17357,7 @@ static const AjPStr acdGetValStr(const char *token)
 
 
 
-/* @funcstatic acdGetValDefault ************************************************
+/* @funcstatic acdGetValDefault ***********************************************
 **
 ** Picks up a token by name and tests the type.
 ** The default string value is returned for any data type.
@@ -16462,6 +17366,8 @@ static const AjPStr acdGetValStr(const char *token)
 **                                a numeric suffix.
 ** @return [const AjPStr] String.
 **
+**
+** @release 6.0.0
 ******************************************************************************/
 
 static const AjPStr acdGetValDefault(const char *token)
@@ -16499,6 +17405,8 @@ static const AjPStr acdGetValDefault(const char *token)
 ** @return [AjBool] ajTrue if found.
 ** @cre Aborts if not found.
 **
+**
+** @release 1.0.0
 ******************************************************************************/
 
 static AjBool acdGetValueAssoc(const AcdPAcd thys, const char *token,
@@ -16536,7 +17444,7 @@ static AjBool acdGetValueAssoc(const AcdPAcd thys, const char *token,
 
 
 
-/* @funcstatic acdGetValueAssocDefault *****************************************
+/* @funcstatic acdGetValueAssocDefault ****************************************
 **
 ** Picks up the default value for an associated qualifier as a string.
 **
@@ -16547,6 +17455,8 @@ static AjBool acdGetValueAssoc(const AcdPAcd thys, const char *token,
 ** @return [AjBool] ajTrue if found.
 ** @cre Aborts if not found.
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool acdGetValueAssocDefault(const AcdPAcd thys, const char *token,
@@ -16599,6 +17509,8 @@ static AjBool acdGetValueAssocDefault(const AcdPAcd thys, const char *token,
 ** @return [void*] Value of unknown type.
 ** @cre Aborts if not found.
 **
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void* acdGetValueNumC(const char *token, const char* type,
@@ -16702,6 +17614,8 @@ static void* acdGetValueNumC(const char *token, const char* type,
 ** @return [void*] Value of unknown type.
 ** @cre Aborts if not found.
 **
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void* acdGetValueNumS(const AjPStr token, const char* type,
@@ -16720,6 +17634,8 @@ static void* acdGetValueNumS(const AjPStr token, const char* type,
 ** -help on the command line or by the prefix_HELP variable..
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -16865,10 +17781,14 @@ static void acdHelp(void)
 
                 if(acdDoGalaxy)
                 {
-                    ajUser("<tool id=\"EMBOSS: %S1\" name=\"%S\" version=\"%S\">\n"
-                           "<description>%S</description>\n"
-                           "<requirements><requirement type=\"package\" version=\"%S\">"
-                           "emboss</requirement></requirements>",
+                    ajUser("<tool id=\"EMBOSS64: %S1\" name=\"%S\" "
+                           "version=\"%S\">\n"
+                           "  <description>%S</description>\n"
+                           "  <requirements>"
+                           "<requirement type=\"package\" version=\"%S\">"
+                           "emboss</requirement></requirements>\n"
+                           "  <version_command>embossversion -auto"
+                           "</version_command>",
                            acdProgram, acdProgram,
                            ajNamValueVersion(), acdAppldoc,
                            ajNamValueVersion());
@@ -17053,6 +17973,8 @@ static void acdHelp(void)
 ** @param [u] str [AjPStr*] Help text being built
 ** @param [r] name [const char*] Single name to process
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17123,6 +18045,8 @@ static void acdHelpAssoc(const AcdPAcd thys, AjPStr *str, const char* name)
 **                         is used if the status (optional/required) is
 **                         uncertain.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17225,6 +18149,8 @@ static void acdHelpAppend(const AcdPAcd thys, AjPStr *str, char flag)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -17259,6 +18185,8 @@ static void acdHelpValidAlign(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -17293,6 +18221,8 @@ static void acdHelpValidReport(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17318,6 +18248,8 @@ static void acdHelpValidSeq(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17343,6 +18275,8 @@ static void acdHelpValidSeqout(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17368,6 +18302,8 @@ static void acdHelpValidOut(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17393,6 +18329,8 @@ static void acdHelpValidIn(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17418,6 +18356,8 @@ static void acdHelpValidData(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17471,6 +18411,8 @@ static void acdHelpValidInt(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17533,6 +18475,8 @@ static void acdHelpValidFloat(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17558,6 +18502,8 @@ static void acdHelpValidCodon(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.9.0
 ** @@
 ******************************************************************************/
 
@@ -17583,6 +18529,8 @@ static void acdHelpValidDirlist(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -17608,6 +18556,8 @@ static void acdHelpValidFilelist(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17633,6 +18583,8 @@ static void acdHelpValidMatrix(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17658,6 +18610,8 @@ static void acdHelpValidFeatout(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -17683,6 +18637,8 @@ static void acdHelpValidFeatures(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17708,6 +18664,8 @@ static void acdHelpValidRange(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17758,6 +18716,8 @@ static void acdHelpValidGraph(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17827,6 +18787,8 @@ static void acdHelpValidString(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17891,6 +18853,8 @@ static void acdHelpValidRegexp(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -17964,6 +18928,8 @@ static void acdHelpValidList(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18016,6 +18982,8 @@ static void acdHelpValidSelect(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [w] str [AjPStr*] Help text (if any) generated. Only written to if
 **                          initially empty
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18044,7 +19012,7 @@ static void acdHelpValid(const AcdPAcd thys, AjBool table, AjPStr* str)
 	{
 	    /* Calling funclist acdValue() */
 	    if(acdValue[i].Valid)
-		acdValue[i].Valid(thys, table, str);
+		(*acdValue[i].Valid)(thys, table, str);
 	    break;
 	}
 
@@ -18067,6 +19035,8 @@ static void acdHelpValid(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18092,6 +19062,8 @@ static void acdHelpExpectSeq(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18119,6 +19091,8 @@ static void acdHelpExpectSeqout(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18146,6 +19120,8 @@ static void acdHelpExpectOut(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18177,6 +19153,8 @@ static void acdHelpExpectInt(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18213,6 +19191,8 @@ static void acdHelpExpectFloat(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18238,6 +19218,8 @@ static void acdHelpExpectIn(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18263,6 +19245,8 @@ static void acdHelpExpectData(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18299,6 +19283,8 @@ static void acdHelpExpectCodon(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.9.0
 ** @@
 ******************************************************************************/
 
@@ -18341,6 +19327,8 @@ static void acdHelpExpectDirlist(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -18367,6 +19355,8 @@ static void acdHelpExpectFilelist(const AcdPAcd thys, AjBool table,
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18394,6 +19384,8 @@ static void acdHelpExpectMatrix(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18421,6 +19413,8 @@ static void acdHelpExpectFeatout(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -18446,6 +19440,8 @@ static void acdHelpExpectFeatures(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18473,6 +19469,8 @@ static void acdHelpExpectRange(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18513,6 +19511,8 @@ static void acdHelpExpectGraph(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18551,6 +19551,8 @@ static void acdHelpExpectRegexp(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18588,23 +19590,38 @@ static void acdHelpExpectString(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] table [AjBool] True if writing acdtable HTML table
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
 static void acdHelpExpect(const AcdPAcd thys, AjBool table, AjPStr* str)
 {
     ajint i;
+    AjPStr tmpstr = NULL;
 
     if(ajStrGetLen(*str))
 	return;
     
-    if(!thys->AssocQuals)
+    if(!thys->AssocQuals && !acdDoGalaxy)
 	if(acdAttrValueStr(thys, "expected", "", str))
 	    return;
     
     if(acdAttrValueStr(thys, "default", "", str))
-	return;
-    
+    {
+        if(acdDoGalaxy)
+        {
+            tmpstr = ajStrNewS(*str);
+
+            if(!acdVarSimpleResolve(tmpstr, str))
+                ajStrAssignS(str, tmpstr);
+
+            ajStrDel(&tmpstr);
+        }
+
+        return;
+    }
+
     /* special processing for sequences, outseq, outfile */
     
     for(i=0; acdValue[i].Name; i++)
@@ -18612,7 +19629,7 @@ static void acdHelpExpect(const AcdPAcd thys, AjBool table, AjPStr* str)
 	{
 	    /* Calling funclist acdValue() */
 	    if(acdValue[i].Expect)
-		acdValue[i].Expect(thys, table, str);
+		(*acdValue[i].Expect)(thys, table, str);
 	    break;
 	}
 
@@ -18642,6 +19659,8 @@ static void acdHelpExpect(const AcdPAcd thys, AjBool table, AjPStr* str)
 ** @param [r] thys [const AcdPAcd] ACD object
 ** @param [w] str [AjPStr*] Help text (if any) generated
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18669,7 +19688,7 @@ static void acdHelpText(const AcdPAcd thys, AjPStr* str)
 	else if(ajStrGetLen(prompt))
 	    ajStrAssignS(&msg, prompt);
 	else if(acdType[thys->Type].HelpSet)
-	    acdType[thys->Type].HelpSet(thys, &msg);
+	    (*acdType[thys->Type].HelpSet)(thys, &msg);
 	else
 	{
 	    if(!acdHelpCodeDef(thys, &msg))
@@ -18703,6 +19722,8 @@ static void acdHelpText(const AcdPAcd thys, AjPStr* str)
 ** @param [r] str [const AjPStr] Help text (if any)
 ** @param [r] title [const char*] Title line for this call
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18734,6 +19755,8 @@ static void acdHelpShow(const AjPStr str, const char* title)
 ** @param [r] tablist [const AjPList] Help text (if any).
 ** @param [r] title [const char*] Title line for this call
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -18772,7 +19795,7 @@ static void acdHelpTableShow(const AjPList tablist, const char* title)
         ajUserDumpC("<tr bgcolor=\"#FFFFCC\">");
         if(ajStrGetLen(item->Title))
         {
-            ajUser("<th align=\"left\" colspan=5>%S</td>", item->Title);
+            ajUser("<td align=\"left\" colspan=5>%S</td>", item->Title);
         }
         else
         {
@@ -18810,6 +19833,8 @@ static void acdHelpTableShow(const AjPList tablist, const char* title)
 ** @param [r] inlist [const AjPList] Help text (if any).
 ** @param [r] outlist [const AjPList] Help text (if any).
 ** @return [void]
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -19012,6 +20037,8 @@ static void acdHelpXsdShow(const AjPList inlist, const AjPList outlist)
 ** @param [r] inlist [const AjPList] Help text (if any).
 ** @param [r] outlist [const AjPList] Help text (if any).
 ** @return [void]
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -19019,15 +20046,57 @@ static void acdHelpGalaxyShow(const AjPList inlist, const AjPList outlist)
 {
     AcdPGalaxyItem item;
     AjIList iter = NULL;
-    AjPStrTok handle = NULL;
+/*    AjPStrTok handle = NULL;*/
     AjPStr rest = NULL;
     AjPStr word = NULL;
     AjPStr tmpstr = NULL;
+    AjPStr galaxyvar = NULL;
+    ajuint ninputs = 0;
+    ajuint noutputs = 0;
+    ajuint i;
+    AjPStrTok handle = NULL;
 
+    AjPStr galaxyin = NULL;
+    AjPStr galaxyout = NULL;
+    AjPStr fmtname = NULL;
+    AjPStr fmtdesc = NULL;
+
+    const char* acdinputs[] = {
+        "sequence", "seqall", "seqset", "seqsetall",
+        "features",
+        NULL
+    };
+    
+    const char* acdoutputs[] = {
+        "seqout", "seqoutall", "seqoutset",
+        "align", "report", "featout",
+        "graph", "xygraph",
+        NULL
+    };
+    
+    const char* acdoutformats[] = {
+        "seqout", "seqoutall", "seqoutset",
+        "align",
+        "gff:GFF,pir:PIR,swiss:SWISS,excel:Excel (TAB Delimited)",
+        "featout",
+        "png:PNG", "png:PNG",
+        NULL
+    };
+    
+    const char* acdoutfmtqual[] = {
+        "format", "format", "format",
+        "aformat",
+        "rformat",
+        "fformat",
+        "", "",
+        NULL
+    };
+    
     if(!acdDoGalaxy)
 	return;
 
-    ajUserDumpC("  <inputs>\n");
+    if(!acdGalaxyCmdStr)
+        acdGalaxyCmdStr = ajStrNewS(acdProgram);
 
     if(ajListGetLength(inlist))
     {
@@ -19036,7 +20105,8 @@ static void acdHelpGalaxyShow(const AjPList inlist, const AjPList outlist)
         {
             acdTextTrim(&item->Annotation);
 
-            ajUser("AcdSGalaxyItem input\n");
+/*
+            ajUser("AcdSGalaxyItem input");
             ajUser("        qual: '%S'", item->Qual);
             ajUser("        type: '%S'", item->Type);
             ajUser("  annotation: '%S'", item->Annotation);
@@ -19045,6 +20115,102 @@ static void acdHelpGalaxyShow(const AjPList inlist, const AjPList outlist)
             ajUser("      expect: '%S'", item->Expect);
             ajUser("    required: '%B'", item->Required);
             ajUser("    optional: '%B'", item->Optional);
+*/
+
+/*
+** test Type
+** use to select format, input1/output1 name, type
+** need for output format (note: this is an input!)
+** set size=4 for int or float
+** type text for string, integer for int, float for float
+*/
+            for(i=0; acdinputs[i]; i++)
+                if(ajStrMatchC(item->Type, acdinputs[i])) break;
+
+            if(acdinputs[i])
+            {
+                ajFmtPrintAppS(&galaxyin,
+                               "    <param format=\"data\" name=\"input%u\" "
+                               "type=\"data\">\n",
+                               ++ninputs);
+                ajFmtPrintAppS(&galaxyin,
+                               "      <label>On query</label>\n");
+                ajFmtPrintAppS(&galaxyin,
+                               "    </param>\n");
+                ajFmtPrintAppS(&acdGalaxyCmdStr,
+                               " -%S $input%u",
+                               item->Qual, ninputs);
+            }
+            else if(ajStrMatchC(item->Expect, "<b>Required</b>"))
+            {
+                ajFmtPrintAppS(&galaxyin,
+                               "    <param format=\"data\" name=\"%S\" "
+                               "type=\"data\">\n",
+                               item->Qual);
+                ajFmtPrintAppS(&galaxyin,
+                               "      <label>On query</label>\n");
+                ajFmtPrintAppS(&galaxyin,
+                               "    </param>\n");
+                ajFmtPrintAppS(&acdGalaxyCmdStr,
+                               " -%S $%S",
+                               item->Qual, item->Qual);
+            }
+            else
+            {
+                if(ajStrMatchC(item->Type, "string"))
+                    ajFmtPrintAppS(&galaxyin,
+                                   "    <param name=\"%S\" size=\"50\" "
+                                   "type=\"text\" value=\"%S\">\n",
+                                   item->Qual, item->Expect);
+                else if(ajStrMatchC(item->Type, "boolean") ||
+                        ajStrMatchC(item->Type, "toggle"))
+                {
+                     ajFmtPrintAppS(&galaxyin,
+                                       "    <param name=\"%S\" "
+                                       "type=\"boolean\" value=\"%S\">\n",
+                                       item->Qual, item->Expect);
+                }
+                else if(ajStrMatchC(item->Type, "float") ||
+                        ajStrMatchC(item->Type, "double"))
+                    ajFmtPrintAppS(&galaxyin,
+                                   "    <param name=\"%S\" "
+                                   "type=\"float\" value=\"%S\">\n",
+                                   item->Qual, item->Expect);
+                else if(ajStrMatchC(item->Type, "integer") ||
+                        ajStrMatchC(item->Type, "long"))
+                    ajFmtPrintAppS(&galaxyin,
+                                   "    <param name=\"%S\" "
+                                   "type=\"integer\" value=\"%S\">\n",
+                                   item->Qual, item->Expect);
+                else if(ajStrMatchC(item->Type, "select") ||
+                        ajStrMatchC(item->Type, "list"))
+                    ajFmtPrintAppS(&galaxyin,
+                                   "    <param name=\"%S\" "
+                                   "type=\"select\" value=\"%S\">\n",
+                                   item->Qual, item->Expect);
+                else
+                    ajFmtPrintAppS(&galaxyin,
+                                   "    <param name=\"%S\" size=\"50\" "
+                                   "type=\"text\" value=\"%S\">\n",
+                                   item->Qual, item->Expect);
+
+                ajFmtPrintAppS(&galaxyin,
+                               "      <label>%S</label>\n",
+                               item->Prompt);
+                ajFmtPrintAppS(&galaxyin,
+                               "    </param>\n");
+
+                ajStrDel(&galaxyvar);
+
+                if(!ajStrGetLen(galaxyvar))
+                    galaxyvar = item->Qual;
+
+                ajFmtPrintAppS(&acdGalaxyCmdStr,
+                               " -%S $%S",
+                               item->Qual, galaxyvar);
+            }
+
+
 
             /* Need specific strings for each datatype */
             /* add a block here as a temporary solution */
@@ -19054,6 +20220,7 @@ static void acdHelpGalaxyShow(const AjPList inlist, const AjPList outlist)
             ** others
             */            
 
+            /*
             if (ajStrMatchC(item->Type, "long"))
             {
                 ajUserDumpC("long");
@@ -19066,24 +20233,124 @@ static void acdHelpGalaxyShow(const AjPList inlist, const AjPList outlist)
                 ajUserDumpC("other");
             }
             ajUserDumpC("...initemdone");
+            */            
         }
     }
 
     ajListIterDel(&iter);
-    ajUserDumpC("  </inputs>");
-
-    ajUserDumpC("  <outputs>\n");
     if(ajListGetLength(outlist))
     {
         iter = ajListIterNewread(outlist);
 
         while((item = ajListIterGet(iter)))
         {
-            ajUser("    <param format=\"%S\" name=\"%S1\" type=\"%S\">\n"
-                   "      <label>%S</label>\n"
-                   "    </param>",
-                   item->Qual, item->Qual, item->Type, item->Annotation);
+            for(i=0; acdoutputs[i]; i++)
+                if(ajStrMatchC(item->Type, acdoutputs[i])) break;
 
+            if(acdoutputs[i])
+            {
+                if(ajCharMatchC(acdoutputs[i], "graph") ||
+                   ajCharMatchC(acdoutputs[i], "xygraph"))
+                {
+                    ajFmtPrintAppS(&acdGalaxyCmdStr,
+                                   " -%S png -goutfile $goutfile",
+                                   item->Qual);
+                    ajFmtPrintAppS(&galaxyout,
+                               "    <data format=\"%s\" "
+                                   "name=\"goutfile%u\"/>\n",
+                               acdoutformats[i], acdProgram, ++noutputs);
+                }
+                else if(ajCharMatchC(acdoutputs[i], "report"))
+                {
+                    ajFmtPrintAppS(&galaxyout,
+                               "    <data format=\"%S\" name=\"outfile%u\"/>\n",
+                               acdProgram, ++noutputs);
+                    if(ajCharMatchC(acdoutputs[i], "report"))
+                    {
+                        ajFmtPrintAppS(&galaxyin,
+                                       "    <param name=\"out_format%u\" "
+                                       "type=\"select\">\n",
+                                       noutputs);
+                        ajFmtPrintAppS(&galaxyin,
+                                       "      <label>Output format</label>\n");
+                        
+
+                        ajStrTokenAssigncharC(&handle, acdoutformats[i], ":,");
+                        while(ajStrTokenNextParse(&handle, &fmtname))
+                        {
+                            ajStrTokenNextParse(&handle, &fmtdesc);
+                            if(ajStrMatchC(fmtname, "gff2"))
+                                ajFmtPrintAppS(&galaxyin,
+                                               "      <option value=\"%S\" "
+                                               "selected=\"true\">%S</option>"
+                                               "\n",
+                                           fmtname, fmtdesc);
+                            else
+                                ajFmtPrintAppS(&galaxyin,
+                                               "      <option value=\"%S\">"
+                                               "%S</option>\n",
+                                               fmtname, fmtdesc);
+                        }
+
+                        ajFmtPrintAppS(&galaxyin,
+                                       "    </param>");
+                        ajFmtPrintAppS(&acdGalaxyCmdStr,
+                                       " -rformat $out_format%u",
+                                       noutputs);
+                    }
+                }
+                else
+                {
+                    ajFmtPrintAppS(&galaxyout,
+                               "    <data format=\"%S\" name=\"outfile%u\"/>\n",
+                               acdProgram, ++noutputs);
+                    if(ajCharMatchC(acdoutputs[i], "report"))
+                    {
+                        ajFmtPrintAppS(&galaxyin,
+                                       "    <param name=\"out_format%u\" "
+                                       "type=\"select\">\n",
+                                       noutputs);
+                        ajFmtPrintAppS(&galaxyin,
+                                       "      <label>Output format</label>\n");
+                        
+
+                        ajStrTokenAssigncharC(&handle, acdoutformats[i], ":,");
+                        while(ajStrTokenNextParse(&handle, &fmtname))
+                        {
+                            ajStrTokenNextParse(&handle, &fmtdesc);
+                            if(ajStrMatchS(fmtname, item->Expect))
+                                ajFmtPrintAppS(&galaxyin,
+                                               "      <option value=\"%s\" "
+                                               "selected=\"true\">%s</option>"
+                                               "\n",
+                                           fmtname, fmtdesc);
+                            else
+                                ajFmtPrintAppS(&galaxyin,
+                                               "      <option value=\"%s\">"
+                                               "%s</option>\n",
+                                               fmtname, fmtdesc);
+                        }
+
+                        ajFmtPrintAppS(&galaxyin,
+                                       "    </param>");
+                        ajFmtPrintAppS(&acdGalaxyCmdStr, " -%s $out_format%u",
+                                       acdoutfmtqual[i], noutputs);
+                    }
+                }
+            }
+            else 
+            {
+                /* use type=file or type=data (which?) */
+                ajFmtPrintAppS(&galaxyout,
+                               "    <param format=\"%S\" name=\"%S1\" "
+                               "type=\"file\">\n"
+                               "      <label>%S</label>\n"
+                               "    </param>\n",
+                               item->Qual, item->Qual,
+                               item->Annotation);
+            }
+
+/*
             ajUser("AcdSGalaxyItem output\n");
             ajUser("        qual: '%S'", item->Qual);
             ajUser("        type: '%S'", item->Type);
@@ -19093,7 +20360,9 @@ static void acdHelpGalaxyShow(const AjPList inlist, const AjPList outlist)
             ajUser("      expect: '%S'", item->Expect);
             ajUser("    required: '%B'", item->Required);
             ajUser("    optional: '%B'", item->Optional);
+*/
 
+/*
             if (ajStrMatchC(item->Type, "seqoutall"))
             {
                 ajUserDumpC("seqoutall");
@@ -19114,40 +20383,62 @@ static void acdHelpGalaxyShow(const AjPList inlist, const AjPList outlist)
                 ajStrTokenDel(&handle);
             }
             ajUserDumpC("...outitemdone");
+*/
         }
     }
 
+
+    ajUser("  <command>%S -auto</command>", acdGalaxyCmdStr);
+
+    ajUserDumpC("  <inputs>");
+    ajUserDumpS(galaxyin);
+    ajUserDumpC("  </inputs>");
+
+    ajUserDumpC("  <outputs>");
+    ajUserDumpS(galaxyout);
     ajUserDumpC("  </outputs>");
 
+    /*
     ajUser("  <tests>");
-
+    */
     /* for each QA test: */
-    ajUser("    <test>\n"
+
+    /*ajUser("    <test>\n"
            "      <param name=\"input1\" value=\"2.fasta\"/>\n"
            "      <param name=\"minlen\" value=\"6\"/>\n"
            "      <param name=\"out_format1\" value=\"excel\"/>\n"
-           "      <output name=\"out_file1\" file=\"emboss_antigenic_out.tabular\"/>\n"
+           "      <output name=\"out_file1\" "
+           "file=\"emboss_antigenic_out.tabular\"/>\n"
            "    </test>"
            );
-
+    */
+    
     /* end of QA tests */
 
-    ajUser("  </tests>\n");
+/*
+  ajUser("  </tests>\n");
+*/
 
-    ajUser("  <code file=\"emboss_format_corrector.py\" /\n"
+    ajUser("  <code file=\"emboss_format_corrector.py\" />\n"
            "  <help>\n"
            "\n"
            "    You can view the original documentation here_.\n"
            "\n"    
-           "    .. _here: http://emboss.sourceforge.net/apps/release/6.4/emboss/apps/%S.html\n"
+           "    .. _here: http://emboss.sourceforge.net/apps/release/6.4/"
+           "emboss/apps/%S.html\n"
            "  </help>\n"
            "</tool>",
            acdProgram);
 
     ajListIterDel(&iter);
+
     ajStrDel(&tmpstr);
     ajStrDel(&rest);
     ajStrDel(&word);
+    ajStrDel(&fmtname);
+    ajStrDel(&fmtdesc);
+
+    ajStrTokenDel(&handle);
 
     return;
 }
@@ -19162,6 +20453,8 @@ static void acdHelpGalaxyShow(const AjPList inlist, const AjPList outlist)
 ** @param [r] thys [const AcdPAcd]  ACD object
 ** @param [u] tablist [AjPList] Help text list being built
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -19230,6 +20523,8 @@ static void acdHelpAssocTable(const AcdPAcd thys, AjPList tablist)
 ** @param [r] thys [const AcdPAcd]  ACD object
 ** @param [u] tablist [AjPList] Help text list being built
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -19310,6 +20605,8 @@ static void acdHelpTable(const AcdPAcd thys, AjPList tablist)
 ** @param [r] thys [const AcdPAcd]  ACD object
 ** @param [u] tablist [AjPList] Xsd list being built
 ** @return [void]
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -19426,13 +20723,15 @@ static void acdHelpXsd(const AcdPAcd thys, AjPList tablist)
 **
 ** Appends a qualifier and its help text to the Galaxy list.
 **
-** @param [r] thys [const AcdPAcd]  ACD object
+** @param [u] thys [AcdPAcd]  ACD object, may have prompt set
 ** @param [u] tablist [AjPList] Galaxy list being built
 ** @return [void]
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
-static void acdHelpGalaxy(const AcdPAcd thys, AjPList tablist)
+static void acdHelpGalaxy(AcdPAcd thys, AjPList tablist)
 {    
     AcdPGalaxyItem item;
     
@@ -19441,9 +20740,16 @@ static void acdHelpGalaxy(const AcdPAcd thys, AjPList tablist)
     AjBool boolval;
     AjBool tmpBool;
     AjPStr helpStr = NULL;
-
+    const AjPStr prompt = NULL;
     AjPStr defstr = NULL;
     AjPStr* def = NULL;
+    ajuint itype;
+    AjPStr galaxyExpectStr = NULL;
+
+    ajint ipos;
+    ajint cpos;
+    ajint bpos;
+    ajint qpos;
 
     if(!acdDoGalaxy)
 	return;
@@ -19470,9 +20776,9 @@ static void acdHelpGalaxy(const AcdPAcd thys, AjPList tablist)
             if(ajStrToBool(defstr, &boolval))
             {
                 if(boolval)
-                    ajStrAssignC(&nostr, "no");
-
-                ajFmtPrintS(&item->Expect, "%B", boolval);
+                    ajStrAssignC(&item->Expect, "Yes");
+                else
+                    ajStrAssignC(&item->Expect, "No");
             }
             else
                 if(!ajStrGetLen(defstr))
@@ -19518,7 +20824,99 @@ static void acdHelpGalaxy(const AcdPAcd thys, AjPList tablist)
     ajStrAssignC(&item->Type, acdType[thys->Type].Name);
     ajStrAssignS(&item->Qual, thys->Name);
     acdHelpExpect(thys, ajTrue, &item->Expect);
-    
+
+    ipos = (ajint) ajStrFindC(item->Expect, " for protein<br>"); 
+
+    if(ipos >= 0)               /* matrix expected value */
+    {
+        ajStrExchangeCC(&item->Expect, " for DNA", "");
+        if(acdDoGalaxyProt)
+        {
+            ajStrAssignSubS(&galaxyExpectStr, item->Expect, 0, ipos-1);
+        }
+        else if(acdDoGalaxyNuc)
+        {
+            ajStrAssignSubS(&galaxyExpectStr, item->Expect, ipos+16, -1);
+        }
+        else
+        {
+            ajStrAssignSubS(&galaxyExpectStr, item->Expect, ipos+16, -1);
+        }
+        ajStrTrimWhite(&galaxyExpectStr);
+        ajStrAssignS(&item->Expect, galaxyExpectStr);
+    }
+
+    ajStrExchangeCC(&item->Expect, "&nbsp;", "");
+    ajStrExchangeCC(&item->Expect, " for any sequence type", "");
+    ajStrExchangeCC(&item->Expect, " for any sequence", "");
+    ajStrExchangeCC(&item->Expect, "<i>full sequence</i>", "");
+
+    if(ajStrFindC(item->Expect, ".end)") >= 0)
+        ajStrAssignC(&item->Expect, "-1");
+
+    if(ajStrFindC(item->Expect, ".begin)") >= 0)
+        ajStrAssignC(&item->Expect, "00");
+
+    if(ajStrFindC(item->Expect, "@($(acdprotein)") >= 0) 
+    {
+        qpos = (ajint) ajStrFindAnyK(item->Expect, '?');
+        cpos = (ajint) ajStrFindAnyK(item->Expect, ':');
+        bpos = (ajint) ajStrFindlastK(item->Expect, ')');
+        if(acdDoGalaxyProt)
+        {
+            ajStrAssignSubS(&galaxyExpectStr, item->Expect, qpos+1, cpos-1);
+        }
+        else if(acdDoGalaxyNuc)
+        {
+            ajStrAssignSubS(&galaxyExpectStr, item->Expect, cpos+1, bpos-1);
+        }
+        else
+        {
+            ajStrAssignSubS(&galaxyExpectStr, item->Expect, cpos+1, bpos-1);
+        }
+        ajStrTrimWhite(&galaxyExpectStr);
+        ajStrAssignS(&item->Expect, galaxyExpectStr);
+    }
+    else if(ajStrFindC(item->Expect, "@(!$(acdprotein)") >= 0) 
+    {
+        qpos = (ajint) ajStrFindAnyK(item->Expect, '?');
+        cpos = (ajint) ajStrFindAnyK(item->Expect, ':');
+        bpos = (ajint) ajStrFindlastK(item->Expect, ')');
+        if(acdDoGalaxyProt)
+        {
+            ajStrAssignSubS(&galaxyExpectStr, item->Expect, cpos+1, bpos-1);
+        }
+        else if(acdDoGalaxyNuc)
+        {
+            ajStrAssignSubS(&galaxyExpectStr, item->Expect, qpos+1, cpos-1);
+        }
+        else
+        {
+            ajStrAssignSubS(&galaxyExpectStr, item->Expect, qpos+1, cpos-1);
+        }
+        ajStrTrimWhite(&galaxyExpectStr);
+        ajStrAssignS(&item->Expect, galaxyExpectStr);
+    }
+
+    prompt = acdAttrValue(thys, "code");
+    if(!ajStrGetLen(prompt))
+        prompt = acdAttrValue(thys, "prompt");
+    if(!ajStrGetLen(prompt))
+        prompt = acdAttrValue(thys, "information");
+    if(!ajStrGetLen(prompt))
+    {
+        for (itype=0; acdType[itype].Name; itype++)
+            if (ajStrMatchC(item->Type, acdType[itype].Name))
+                break;
+        if(acdType[itype].Prompt)
+            (*acdType[itype].Prompt)(thys);
+        prompt = thys->StdPrompt;
+    }
+    if(!ajStrGetLen(prompt))
+        prompt = acdAttrValue(thys, "help");
+
+    ajStrAssignS(&item->Prompt, prompt);
+
     /*
      **  warning - don't try acdVarResolve here because we have not yet
      **  read in the data and things like calculated attributes do not exist
@@ -19543,6 +20941,8 @@ static void acdHelpGalaxy(const AcdPAcd thys, AjPList tablist)
 **
 ** @param [r] title [const char*] Title line for this call
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -19641,6 +21041,8 @@ static void acdListReport(const char* title)
 ** @param [r] valstr [const AjPPStr] Array of string attribute values
 ** @param [r] nattr [ajint] Number of attributes in list
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -19676,6 +21078,8 @@ static void acdListAttr(const AcdPAttr attr, const AjPPStr valstr, ajint nattr)
 ** @param [r] value [const AjPStr] Attribute value
 ** @return [AjBool] ajTrue if attribute is valid.
 ** @cre Aborts if attribute is not found.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -19781,6 +21185,8 @@ static AjBool acdSet(const AcdPAcd thys, AjPStr* attrib, const AjPStr value)
 ** @param [r] value [const AjPStr] Attribute value
 ** @return [AjBool] ajTrue if attribute is valid.
 ** @cre Aborts if attribute is not found.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -19845,6 +21251,8 @@ static AjBool acdSetKey(const AcdPAcd thys, AjPStr* attrib, const AjPStr value)
 ** @param [r] value [const AjPStr] Default value
 ** @return [AjBool] ajTrue always.
 ** @see acdSetDef
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -19870,6 +21278,8 @@ static AjBool acdDef(AcdPAcd thys, const AjPStr value)
 ** @param [u] thys [AcdPAcd] ACD item
 ** @param [r] value [const AjPStr] Default value
 ** @return [AjBool] ajTrue always.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -19897,6 +21307,8 @@ static AjBool acdSetDef(AcdPAcd thys, const AjPStr value)
 ** @param [u] thys [AcdPAcd] ACD item
 ** @param [r] value [const char *] Default value
 ** @return [AjBool] ajTrue always.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -19925,6 +21337,8 @@ static AjBool acdSetDefC(AcdPAcd thys, const char* value)
 ** @param [r] name [const char *] Qualifier name
 ** @param [r] value [AjBool] Default value
 ** @return [AjBool] ajTrue always.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -19966,6 +21380,8 @@ static AjBool acdSetQualDefBool(AcdPAcd thys,
 ** @param [r] name [const char *] Qualifier name
 ** @param [r] value [ajint] Default value
 ** @return [AjBool] ajTrue always.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20007,6 +21423,8 @@ static AjBool acdSetQualDefInt(AcdPAcd thys, const char* name,
 ** @param [u] thys [AcdPAcd] ACD item
 ** @param [r] value [const AjPStr] Default value
 ** @return [AjBool] ajTrue always.
+**
+** @release 1.0.0
 ** @@
 **
 ** Note: we have to set the ValStr directly as variables have no defstr.
@@ -20033,6 +21451,8 @@ static AjBool acdSetVarDef(AcdPAcd thys, const AjPStr value)
 ** @param [r] attrib [const AjPStr] Attribute name to be found
 ** @return [ajint] offset in "attr" if found
 ** @error -1 if not found.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20091,6 +21511,8 @@ static ajint acdFindAttr(const AcdPAttr attr, const AjPStr attrib)
 ** @param [r] attrib [const char*] Attribute name to be found
 ** @return [ajint] offset in "attr" if found
 ** @error -1 if not found.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20151,6 +21573,8 @@ static ajint acdFindAttrC(const AcdPAttr attr, const char* attrib)
 ** Associated qualifiers (if any) also get a copy of the parameter number.
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20180,8 +21604,8 @@ static void acdProcess(void)
 	acdLog("acdProcess '%S' defstr '%x' test parameter\n",
 	       pa->Name, pa->DefStr);
 
-	if(pa->DefStr && acdAttrToBoolTest(pa, "parameter",
-					   ajFalse, &isparam))
+	if(!pa->Assoc && pa->DefStr && acdAttrToBoolTest(pa, "parameter",
+                                                         ajFalse, &isparam))
 	{
 	    if(isparam)
 	    {
@@ -20224,6 +21648,8 @@ static void acdProcess(void)
 ** to check that all is OK.
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20256,12 +21682,13 @@ static void acdSetAll(void)
 	if(!pa->Assoc)
 	    acdMasterQual = pa;
 
-	if(acdIsStype(pa))
-	    ;
-	else if (acdIsQtype(pa))
-	    acdType[pa->Type].TypeSet(pa);
-	else
-	    acdKeywords[pa->Type].KeySet(pa);
+	if(!acdIsStype(pa))
+	{
+	    if (acdIsQtype(pa))
+		(*acdType[pa->Type].TypeSet)(pa);
+	    else
+		(*acdKeywords[pa->Type].KeySet)(pa);
+	}
 
 	if (acdDoTrace)
 	{
@@ -20313,11 +21740,13 @@ static void acdSetAll(void)
 ** Any variable references are resolved at this stage.
 **
 ** @param [r] thys [const AcdPAcd] ACD item of master parameter or qualifier.
-** @param [r] qual [const char*]Qualifier name
+** @param [r] qual [const char*] Qualifier name
 ** @param [r] defval [AjBool] default value
 ** @param [w] result [AjBool*] Resulting value.
 ** @param [w] valstr [AjPStr*] Resulting value as a string
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20363,12 +21792,14 @@ static AjBool acdQualToBool(const AcdPAcd thys, const char *qual,
 ** Any variable references are resolved at this stage.
 **
 ** @param [r] thys [const AcdPAcd] ACD item of master parameter or qualifier.
-** @param [r] qual [const char*]Qualifier name
+** @param [r] qual [const char*] Qualifier name
 ** @param [r] defval [float] default value
 ** @param [r] precision [ajint] floating point precision
 ** @param [w] result [float*] Resulting value.
 ** @param [w] valstr [AjPStr*] Resulting value as a string
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20422,6 +21853,8 @@ static AjBool acdQualToFloat(const AcdPAcd thys, const char *qual,
 ** @param [w] result [ajint*] Resulting value.
 ** @param [w] valstr [AjPStr*] Qualifier value as a string
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20463,6 +21896,60 @@ static AjBool acdQualToInt(const AcdPAcd thys, const char *qual,
 
 
 
+/* @funcstatic acdQualToLong **************************************************
+**
+** Converts an associated qualifier value into a long integer.
+** Any variable references are resolved at this stage.
+**
+** @param [r] thys [const AcdPAcd] ACD item of master parameter or qualifier.
+** @param [r] qual [const char*] Qualifier name
+** @param [r] defval [ajlong] default value
+** @param [w] result [ajlong*] Resulting value.
+** @param [w] valstr [AjPStr*] Qualifier value as a string
+** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
+** @@
+******************************************************************************/
+
+static AjBool acdQualToLong(const AcdPAcd thys, const char *qual,
+                            ajlong defval, ajlong *result, AjPStr* valstr)
+{
+    AjBool ret;
+
+    ret = acdGetValueAssoc(thys, qual, valstr);
+    acdLog("acdQualToLong item: %S qual: %s defval: %Ld str: '%S' ret: %B\n",
+	   thys->Name, qual, defval, *valstr, ret);
+
+    if(ret)
+    {
+	acdVarResolve(valstr);
+	acdLog("resolved to: '%S'\n", *valstr);
+
+	if(ajStrGetLen(*valstr))
+	{
+	    if(ajStrMatchC(*valstr, "default"))
+		ajStrAssignC(valstr, "0");
+
+	    if(!ajStrToLong(*valstr, result))
+		acdErrorAcd(thys,
+			    "%S: Bad associated qualifier "
+			    "long integer value -%s = %S\n",
+			    qual, *valstr);
+
+	    return ajTrue;
+	}
+    }
+
+    *result = defval;
+    ajStrFromLong(valstr, defval);
+
+    return ajFalse;
+}
+
+
+
+
 /* @funcstatic acdQualToSeqbegin **********************************************
 **
 ** Converts an associated qualifier value into an integer, or the
@@ -20476,6 +21963,8 @@ static AjBool acdQualToInt(const AcdPAcd thys, const char *qual,
 ** @param [w] result [ajint*] Resulting value.
 ** @param [w] valstr [AjPStr*] Qualifier value as a string
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20538,6 +22027,8 @@ static AjBool acdQualToSeqbegin(const AcdPAcd thys, const char *qual,
 ** @param [w] result [ajint*] Resulting value.
 ** @param [w] valstr [AjPStr*] Qualifier value as a string
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20600,6 +22091,8 @@ static AjBool acdQualToSeqend(const AcdPAcd thys, const char *qual,
 ** @param [w] result [AjBool*] Resulting value.
 ** @return [AjBool] ajTrue if a value was defined, ajFalse if the
 **         default value was used.
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -20631,6 +22124,8 @@ static AjBool acdAttrToBoolTest(const AcdPAcd thys,
 ** @param [w] result [AjBool*] Resulting value.
 ** @return [AjBool] ajTrue if a value was defined, ajFalse if the
 **         default value was used.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20688,6 +22183,8 @@ static AjBool acdAttrToBool(const AcdPAcd thys,
 ** @param [w] result [double*] Resulting value.
 ** @return [AjBool] ajTrue if a value was defined, ajFalse if the
 **         default value was used.
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -20732,6 +22229,8 @@ static AjBool acdAttrToDouble(const AcdPAcd thys,
 ** @param [w] result [float*] Resulting value.
 ** @return [AjBool] ajTrue if a value was defined, ajFalse if the
 **         default value was used.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20776,6 +22275,8 @@ static AjBool acdAttrToFloat(const AcdPAcd thys,
 ** @param [w] result [ajint*] Resulting value.
 ** @return [AjBool] ajTrue if a value was defined, ajFalse if the
 **         default value was used.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20817,6 +22318,8 @@ static AjBool acdAttrToInt(const AcdPAcd thys,
 ** @param [w] result [ajlong*] Resulting value.
 ** @return [AjBool] ajTrue if a value was defined, ajFalse if the
 **         default value was used.
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -20857,6 +22360,8 @@ static AjBool acdAttrToLong(const AcdPAcd thys,
 ** @param [w] result [AjPStr*] Resulting value.
 ** @return [AjBool] ajTrue if a value was defined, ajFalse if the
 **         default value was used.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20885,6 +22390,8 @@ static AjBool acdAttrToStr(const AcdPAcd thys,
 ** @param [w] result [char*] Resulting value.
 ** @return [AjBool] ajTrue if a value was defined, ajFalse if the
 **         default value was used.
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -20922,6 +22429,8 @@ static AjBool acdAttrToChar(const AcdPAcd thys,
 ** @param [w] result [ajuint*] Resulting value.
 ** @return [AjBool] ajTrue if a value was defined, ajFalse if the
 **         default value was used.
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -20961,6 +22470,8 @@ static AjBool acdAttrToUint(const AcdPAcd thys,
 ** @param [w] result [AjPStr*] Resulting value.
 ** @return [AjBool] ajTrue if a value was defined,
 **                  ajFalse if an empty string is returned.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -20988,6 +22499,8 @@ static AjBool acdAttrResolve(const AcdPAcd thys, const char *attr,
 **
 ** @param [r] var [const AjPStr] String value
 ** @return [AjBool] ajTrue if a variable was found
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -21015,6 +22528,8 @@ static AjBool acdVarTest(const AjPStr var)
 ** @param [w] toggle [AjBool*] ajTrue if the value is a simple true or false
 **                             test of a toggle variable
 ** @return [AjBool] ajTrue if a variable was found
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -21071,17 +22586,19 @@ static AjBool acdVarTestValid(const AjPStr var, AjBool* toggle)
 
 
 
-/* @funcstatic acdVarSimple **************************************************
+/* @funcstatic acdVarSimple ***************************************************
 **
 ** Tests a variable reference is non recursive
 **
-** @param [w] var [AjPStr] String value to be tested
+** @param [r] var [const AjPStr] String value to be tested
 ** @param [w] varname [AjPStr*] Variable name if found, else unchanged
 ** @return [AjBool] ajTrue if no further variable or function is found
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
-static AjBool acdVarSimple(AjPStr var, AjPStr* varname)
+static AjBool acdVarSimple(const AjPStr var, AjPStr* varname)
 {
     AjPStr attrname = NULL;
     AjPStr result   = NULL;
@@ -21114,7 +22631,7 @@ static AjBool acdVarSimple(AjPStr var, AjPStr* varname)
 	if(ajRegPost(acdRegVarname, &restvar)) /* any more? */
 	    ajStrAppendS(&newvar, restvar);
 
-	acdLog("acdVarSimple name %S resolaved to '%S'\n", *varname, newvar);
+	acdLog("acdVarSimple name %S resolved to '%S'\n", *varname, newvar);
 
 	if(ajRegExec(acdRegVarname, newvar))
 	    ret = ajFalse;
@@ -21137,6 +22654,88 @@ static AjBool acdVarSimple(AjPStr var, AjPStr* varname)
 
 
 
+/* @funcstatic acdVarSimpleResolve ********************************************
+**
+** Tests a variable reference is a simple copy and resolves
+**
+** @param [r] var [const AjPStr] String value to be tested
+** @param [w] newvar [AjPStr*] Substituted value if found, else unchanged
+** @return [AjBool] ajTrue if no further variable or function is found
+**
+** @release 2.8.0
+** @@
+******************************************************************************/
+
+static AjBool acdVarSimpleResolve(const AjPStr var, AjPStr* newvar)
+{
+    AjPStr attrname = NULL;
+    AjPStr result   = NULL;
+    AjPStr token    = NULL;
+    AjPStr varname  = NULL;
+    AjPStr restvar   = NULL;
+    AjBool ret = ajTrue;
+    AjPStr tmpvar = NULL;
+
+    if(!acdRegVarInit)
+        acdRegVarDefine();
+
+    if(ajRegExec(acdRegVarname, var))
+    {
+        tmpvar = ajStrNewS(*newvar);
+        
+	ajRegSubI(acdRegVarname, 2, &token);	/* variable name */
+	acdVarSplit(token, &varname, &attrname);
+
+	if(!ajStrGetLen(attrname))
+	    ajStrAssignC(&attrname, "default");
+
+	if(!acdGetAttr(&result, varname, attrname))
+	{
+	    acdLog("acdVarSimpleResolve failed to resolve '%S.%S\n",
+		   varname, attrname);
+            if(ajStrMatchC(attrname, "begin"))
+                ajStrAssignC(&result, "0");
+            else if(ajStrMatchC(attrname, "end"))
+                ajStrAssignC(&result, "0");
+            else
+                ajStrAssignClear(&result);
+	}
+
+	ajRegSubI(acdRegVarname, 1, newvar);
+	ajStrAppendS(newvar, result);
+
+	if(ajRegPost(acdRegVarname, &restvar)) /* any more? */
+	    ajStrAppendS(newvar, restvar);
+
+	acdLog("acdVarSimpleResolve name %S resolved to '%S'\n",
+               varname, *newvar);
+
+	if(ajRegExec(acdRegVarname, *newvar))
+	    ret = ajFalse;
+
+	else if(ajRegExec(acdRegFunction, *newvar))
+	    ret = ajFalse;
+
+        if(!ret)
+            ajStrAssignS(newvar, tmpvar);
+
+        ajStrDel(&tmpvar);
+    }
+
+    /* else no variable reference at found */
+
+    ajStrDel(&token);
+    ajStrDel(&attrname);
+    ajStrDel(&result);
+    ajStrDel(&varname);
+    ajStrDel(&restvar);
+
+    return ret;
+}
+
+
+
+
 /* @funcstatic acdVarResolve **************************************************
 **
 ** Resolves any variable or function references in a string.
@@ -21148,6 +22747,8 @@ static AjBool acdVarSimple(AjPStr var, AjPStr* varname)
 **
 ** @param [w] var [AjPStr*] String value
 ** @return [AjBool] Always ajTrue so far
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -21255,6 +22856,8 @@ static AjBool acdVarResolve(AjPStr* var)
 ** @param [w] str [AjPStr*] String value
 ** @param [r] var [const AjPStr] Source string value
 ** @return [AjBool] ajTrue if it could be resolved cleanly
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -21273,9 +22876,9 @@ static AjBool acdHelpVarResolve(AjPStr* str, const AjPStr var)
     /* reject variable references first to resolve internal parentheses */
     if(ajRegExec(acdRegVarname, var))
     {
-	ajStrAssignClear(str);
+        ajStrAssignClear(str);
 
-	return ajFalse;
+        return ajFalse;
     }
 
     /* reject any function */
@@ -21303,6 +22906,8 @@ static AjBool acdHelpVarResolve(AjPStr* str, const AjPStr var)
 ** @param [w] result [AjPStr*] Result returned
 ** @param [r] str [const AjPStr] Function statement input
 ** @return [AjBool] Always ajTrue so far
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -21316,7 +22921,7 @@ static AjBool acdFunResolve(AjPStr* result, const AjPStr str)
     {
 	/* Calling funclist acdexplist() */
 
-	if(explist[i].Func(result, str))
+	if((*explist[i].Func)(result, str))
 	{
 	    acdLog("resolved '%S' using '%s'\n", str, explist[i].Name);
 	    acdLog("  result '%S'\n", *result);
@@ -21342,6 +22947,8 @@ static AjBool acdFunResolve(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -21397,6 +23004,8 @@ static AjBool acdExpPlus(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -21452,6 +23061,8 @@ static AjBool acdExpMinus(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -21507,6 +23118,8 @@ static AjBool acdExpStar(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -21566,6 +23179,8 @@ static AjBool acdExpDiv(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -21611,6 +23226,8 @@ static AjBool acdExpNot(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -21699,6 +23316,8 @@ static AjBool acdExpEqual(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -21787,6 +23406,8 @@ static AjBool acdExpNotEqual(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -21875,6 +23496,8 @@ static AjBool acdExpGreater(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -21963,6 +23586,8 @@ static AjBool acdExpLesser(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -22055,6 +23680,8 @@ static AjBool acdExpOr(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -22146,6 +23773,8 @@ static AjBool acdExpAnd(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -22188,6 +23817,8 @@ static AjBool acdExpCond(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -22277,6 +23908,8 @@ static AjBool acdExpOneof(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -22391,6 +24024,8 @@ static AjBool acdExpCase(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -22426,6 +24061,8 @@ static AjBool acdExpFilename(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -22459,7 +24096,7 @@ static AjBool acdExpExists(AjPStr* result, const AjPStr str)
 
 
 
-/* @funcstatic acdExpValue ***************************************************
+/* @funcstatic acdExpValue ****************************************************
 **
 ** Looks for an expression \@(value string) and returns ajTrue
 ** if there is a value, and ajFalse if there is none
@@ -22467,6 +24104,8 @@ static AjBool acdExpExists(AjPStr* result, const AjPStr str)
 ** @param [w] result [AjPStr*] Expression result
 ** @param [r] str [const AjPStr] String with possible expression
 ** @return [AjBool] ajTrue if successfully resolved
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -22503,6 +24142,8 @@ static AjBool acdExpValue(AjPStr* result, const AjPStr str)
 ** @param [w] name [AjPStr*] Variable name
 ** @param [w] pattrname [AjPStr*] Attribute name, or "default" if not set.
 ** @return [AjBool] ajTrue if successfully split
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -22529,13 +24170,15 @@ static AjBool acdVarSplit(const AjPStr var, AjPStr* name, AjPStr* pattrname)
 
 
 
-/* @funcstatic acdAttrTest ***************************************************
+/* @funcstatic acdAttrTest ****************************************************
 **
 ** Tests for the existence of a named attribute
 **
 ** @param [r] thys [const AcdPAcd] ACD item
 ** @param [r] attrib [const char*] Attribute name
 ** @return [AjBool] ajTrue if the named attribute exists
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -22576,6 +24219,8 @@ static AjBool acdAttrTest(const AcdPAcd thys,const  char *attrib)
 ** @param [r] thys [const AcdPAcd] ACD item
 ** @param [r] attrib [const char*] Attribute name
 ** @return [AjBool] ajTrue if the named attribute exists
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -22633,6 +24278,8 @@ static AjBool acdAttrTestDefined(const AcdPAcd thys,const  char *attrib)
 ** @param [r] thys [const AcdPAcd] ACD item
 ** @param [r] attrib [const char*] Attribute name
 ** @return [AjBool] ajTrue if the named attribute exists
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -22691,6 +24338,8 @@ static AjBool acdAttrTestValue(const AcdPAcd thys,const  char *attrib)
 ** @param [r] attrib [const char*] Attribute name
 ** @return [const AjPStr] Attribute value.
 ** @cre Aborts if attribute is not found.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -22744,6 +24393,8 @@ static const AjPStr acdAttrValue(const AcdPAcd thys, const char *attrib)
 ** @param [w] str [AjPStr*] Attribute value
 ** @return [AjBool] ajTrue if success.
 ** @cre Aborts if attribute is not found.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -22834,11 +24485,16 @@ static AjBool acdAttrValueStr(const AcdPAcd thys,
 **
 ** @param [r] optionName [const char*] option name
 ** @return [AjBool] ajTrue if option was recognised
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
 AjBool ajAcdSetControl(const char* optionName)
 {
+    AcdPAcd vacd;
+    AjPStr varname = NULL;
+
     if(!ajCharCmpCase(optionName, "acdhelp"))
     {
 	acdDoHelp = ajTrue;
@@ -22901,6 +24557,30 @@ AjBool ajAcdSetControl(const char* optionName)
 
 	return ajTrue;
     }
+    if(!ajCharCmpCase(optionName, "acdgalaxynucleotide"))
+    {
+	acdDoGalaxyNuc = ajTrue;
+
+        ajStrAssignC(&varname, "acdprotein");
+        ajStrAssignC(&acdVarAcdProtein, "N");
+        vacd = acdNewVar(varname);
+        acdSetVarDef(vacd, acdVarAcdProtein);
+        ajStrDel(&varname);
+
+	return ajTrue;
+    }
+    if(!ajCharCmpCase(optionName, "acdgalaxyprotein"))
+    {
+	acdDoGalaxyProt = ajTrue;
+
+        ajStrAssignC(&varname, "acdprotein");
+        ajStrAssignC(&acdVarAcdProtein, "Y");
+        vacd = acdNewVar(varname);
+        acdSetVarDef(vacd, acdVarAcdProtein);
+        ajStrDel(&varname);
+
+	return ajTrue;
+    }
     if(!ajCharCmpCase(optionName, "acdxsd"))
     {
 	acdDoXsd = ajTrue;
@@ -22929,6 +24609,8 @@ AjBool ajAcdSetControl(const char* optionName)
 ** @param [r] argc [ajint] Number of arguments
 ** @param [r] argv [char* const[]] Actual arguments as a text array.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -23033,6 +24715,8 @@ static void acdArgsScan(ajint argc, char * const argv[])
 ** @param [r] argc [ajint] Number of arguments
 ** @param [r] argv [char* const[]] Actual arguments as a text array.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -23272,6 +24956,8 @@ static void acdArgsParse(ajint argc, char * const argv[])
 ** @param [r] pval [const AjPStr] Parameter value
 **
 ** @return [AjBool] ajFalse for a missing value.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -23294,6 +24980,8 @@ static AjBool acdIsParamValue(const AjPStr pval)
 ** @param [r] pnum [ajint] Current parameter number
 **
 ** @return [ajint] next undefined parameter
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -23328,6 +25016,8 @@ static ajint acdNextParam(ajint pnum)
 ** @return [AjBool] ajTrue if "arg" could be a parameter
 **         ajFalse if it appears to be a qualifier (starts with "-" and
 **         ends with a name)
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -23400,6 +25090,8 @@ static AjBool acdIsParam(const char* arg, AjPStr* param, ajint* iparam,
 ** @param [w] pmaster [AjPStr*] Named master qualifier
 ** @param [w] acd [AcdPAcd*] Qualifier data
 ** @return [ajint] Number of arguments consumed
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -23668,6 +25360,8 @@ static ajint acdIsQual(const char* arg, const char* arg2,
 ** @param [r] arg [const char*] COmmand live argument value
 ** @return [AjBool] ajTrue if the value is boolean,
 **                  but not whether it is true or false.
+**
+** @release 2.0.0
 ******************************************************************************/
 
 static AjBool acdValIsBool(const char* arg)
@@ -23741,6 +25435,8 @@ static AjBool acdValIsBool(const char* arg)
 ** @param [r] item [const AjPStr] Item name
 ** @param [r] number [ajint] Item number (zero if a general item)
 ** @return [AcdPAcd] ACD item required
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -23805,6 +25501,8 @@ static AcdPAcd acdFindItem(const AjPStr item, ajint number)
 **
 ** @param [u] pqual [AjPStr*] Qualifier name
 ** @return [AcdPAcd] ACD item for qualifier
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -23869,6 +25567,8 @@ static AcdPAcd acdFindQual(AjPStr *pqual)
 ** @param [r] PNum [ajint] Qualifier number (zero if a general qualifier)
 ** @param [u] iparam [ajint*]  Current parameter number
 ** @return [AcdPAcd] ACD item for qualifier
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -24017,6 +25717,8 @@ static AcdPAcd acdFindQualDetail(const AjPStr qual, const AjPStr noqual,
 ** @param [rN] master [const AjPStr] Master qualifier name
 ** @param [r] PNum [ajint] Qualifier number (zero if a general qualifier)
 ** @return [AcdPAcd] ACD item for qualifier
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -24221,6 +25923,8 @@ static AcdPAcd acdFindQualMaster(const AjPStr qual, const AjPStr noqual,
 ** @param [r] PNum [ajint] Qualifier number (zero if a general qualifier)
 ** @return [AcdPAcd] ACD item for associated qualifier
 ** @error NULL returned if not found.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -24309,6 +26013,8 @@ static AcdPAcd acdFindQualAssoc(const AcdPAcd thys,
 ** @param [r] PNum [ajint] Parameter number
 ** @return [AcdPAcd] ACD item for parameter number PNum
 ** @error NULL if not found
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -24347,6 +26053,8 @@ static AcdPAcd acdFindParam(ajint PNum)
 ** @param [r] name [const AjPStr] ACD item name
 ** @param [r] attrib [const AjPStr] attribute name
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -24391,11 +26099,12 @@ static AjBool acdGetAttr(AjPStr* presult,
 
     if(!pa->ValStr)
     {
-	if (!acdDoValid)
+	if (!acdDoValid && !acdDoGalaxy)
 	{
 	    if(!acdDoHelp)			/* test undefvar.acd */
 		acdError("Variable '%S' not yet defined\n", name);
-	    ajStrAssignC(presult, "...");    /* only for help - patch it up */
+
+            acdAttrValueStr(pa, "default", "...", presult);
 
 	    return ajTrue;
 	}
@@ -24403,7 +26112,7 @@ static AjBool acdGetAttr(AjPStr* presult,
     
     if(!ajStrGetLen(attrib))		/* just use valstr */
     {
-	if (!acdDoValid)
+	if (!acdDoValid && !acdDoGalaxy)
 	{
 	    ajStrAssignS(presult, pa->ValStr);
 	    acdLog("no attribute name, use valstr for %S '%S'\n",
@@ -24502,6 +26211,8 @@ static AjBool acdGetAttr(AjPStr* presult,
 ** @param [w] pqmaster [AjPStr*] Master name for associated qualifier
 ** @param [w] number [ajint*] Qualifier number suffix if any
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -24554,6 +26265,8 @@ static void acdQualParse(AjPStr* pqual, AjPStr* pnoqual, AjPStr* pqmaster,
 **        with number suffix removed
 ** @param [w] number [ajint*] Qualifier number suffix if any.
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -24598,6 +26311,8 @@ static void acdTokenToLowerS(AjPStr *ptoken, ajint* number)
 **
 ** @param [r] thys [const AcdPAcd] ACD item
 ** @return [AjBool] ajTrue if "thys" is required but no value set yet.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -24652,130 +26367,14 @@ static AjBool acdIsRequired(const AcdPAcd thys)
 
 
 
-/* @funcstatic acdTestDebug ***************************************************
-**
-** Tests whether debug messages are required by checking
-** internal variable 'acdDebug'
-**
-** @return [AjBool] Debugging status.
-** @@
-******************************************************************************/
-
-static AjBool acdTestDebug(void)
-{
-    ajDebug("acdDebug returning %B\n", acdDebug);
-    return acdDebug;
-}
-
-
-
-
-/* @obsolete ajAcdDebug
-** @remove No longer public
-*/
-
-__deprecated AjBool  ajAcdDebug(void)
-{
-    return acdTestDebug();
-}
-
-
-
-
-/* @funcstatic acdTestDebugIsSet **********************************************
-**
-** Tests whether the command line switch for debug messages has been set
-** by testing internal variable 'acdDebugSet'
-**
-** @return [AjBool] Debugging status.
-** @@
-******************************************************************************/
-
-static AjBool acdTestDebugIsSet(void)
-{
-    ajDebug("acdTestDebugIsSet returning %B\n", acdDebugSet);
-    return acdDebugSet;
-}
-
-
-
-
-/* @obsolete ajAcdDebugIsSet
-** @remove No longer public
-*/
-
-__deprecated AjBool  ajAcdDebugIsSet(void)
-{
-    return acdTestDebugIsSet();
-}
-
-
-
-
-/* @funcstatic acdTestFilter **************************************************
-**
-** Tests whether input and output use stdin and stdout as a filter
-** by returning internal variable 'acdFilter'
-**
-** @return [AjBool] Filter status.
-** @@
-******************************************************************************/
-
-static AjBool acdTestFilter(void)
-{
-    return acdFilter;
-}
-
-
-
-
-/* @obsolete ajAcdFilter
-** @remove No longer public
-*/
-
-__deprecated AjBool  ajAcdFilter(void)
-{
-    return acdTestFilter();
-}
-
-
-
-
-/* @funcstatic acdTestStdout **************************************************
-**
-** Tests whether output uses stdout for output by default
-** by returning internal variable 'acdStdout'
-**
-** @return [AjBool] Stdout status.
-** @@
-******************************************************************************/
-
-static AjBool acdTestStdout(void)
-{
-    return acdStdout;
-}
-
-
-
-
-/* @obsolete ajAcdStdout
-** @remove No longer public
-*/
-
-__deprecated AjBool  ajAcdStdout(void)
-{
-    return acdTestStdout();
-}
-
-
-
-
 /* @funcstatic acdPromptCodon *************************************************
 **
 ** Sets the default prompt for this ACD object to be a codon usage file
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -24806,12 +26405,14 @@ static const AjPStr acdPromptCodon(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptDirectory *******************************************
+/* @funcstatic acdPromptDirectory *********************************************
 **
 ** Sets the default prompt for this ACD object to be a directory
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -24849,6 +26450,8 @@ static const AjPStr acdPromptDirectory(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 1.9.0
 ** @@
 ******************************************************************************/
 
@@ -24886,6 +26489,8 @@ static const AjPStr acdPromptDirlist(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -24924,6 +26529,8 @@ static const AjPStr acdPromptFilelist(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -24968,6 +26575,8 @@ static const AjPStr acdPromptFeatures(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -25005,6 +26614,8 @@ static const AjPStr acdPromptCpdb(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 1.8.0
 ** @@
 ******************************************************************************/
 
@@ -25044,6 +26655,8 @@ static const AjPStr acdPromptScop(AcdPAcd thys)
 ** @param [r] thys [const AcdPAcd] Current ACD object.
 ** @param [w] Pstr [AjPStr*] Help text
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -25116,6 +26729,8 @@ static void acdHelpTextSeq(const AcdPAcd thys, AjPStr* Pstr)
 ** @param [r] thys [const AcdPAcd] Current ACD object.
 ** @param [w] Pstr [AjPStr*] Help text
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -25177,6 +26792,8 @@ static void acdHelpTextSeqout(const AcdPAcd thys, AjPStr* Pstr)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -25270,6 +26887,8 @@ static const AjPStr acdPromptSeq(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -25309,6 +26928,8 @@ static const AjPStr acdPromptTree(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -25347,6 +26968,8 @@ static const AjPStr acdPromptGraph(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -25386,6 +27009,8 @@ static const AjPStr acdPromptFeatout(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -25427,6 +27052,8 @@ static const AjPStr acdPromptAlign(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -25467,6 +27094,8 @@ static const AjPStr acdPromptReport(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -25559,6 +27188,8 @@ static const AjPStr acdPromptSeqout(AcdPAcd thys)
 ** @param [r] thys [const AcdPAcd] Current ACD object.
 ** @param [w] Pstr [AjPStr*] Help text
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -25593,6 +27224,8 @@ static void acdHelpTextObo(const AcdPAcd thys, AjPStr* Pstr)
 ** @param [r] thys [const AcdPAcd] Current ACD object.
 ** @param [w] Pstr [AjPStr*] Help text
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -25627,6 +27260,8 @@ static void acdHelpTextTaxon(const AcdPAcd thys, AjPStr* Pstr)
 ** @param [r] thys [const AcdPAcd] Current ACD object.
 ** @param [w] Pstr [AjPStr*] Help text
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -25661,6 +27296,8 @@ static void acdHelpTextText(const AcdPAcd thys, AjPStr* Pstr)
 ** @param [r] thys [const AcdPAcd] Current ACD object.
 ** @param [w] Pstr [AjPStr*] Help text
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -25688,13 +27325,15 @@ static void acdHelpTextUrl(const AcdPAcd thys, AjPStr* Pstr)
 
 
 
-/* @funcstatic acdHelpTextVariation ********************************************
+/* @funcstatic acdHelpTextVariation *******************************************
 **
 ** Sets the help text for this ACD object to be a variation data entry
 **
 ** @param [r] thys [const AcdPAcd] Current ACD object.
 ** @param [w] Pstr [AjPStr*] Help text
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -25722,6 +27361,59 @@ static void acdHelpTextVariation(const AcdPAcd thys, AjPStr* Pstr)
 
 
 
+/* @funcstatic acdPromptAssembly **********************************************
+**
+** Sets the default prompt for this ACD object to be an assembly
+** prompt with "first", "second" etc. added.
+**
+** @param [u] thys [AcdPAcd] Current ACD object.
+** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static const AjPStr acdPromptAssembly(AcdPAcd thys)
+{
+    static ajint count=0;
+    AjPStr assemPrompt = NULL;
+    AjPStr assemPromptAlt = NULL;
+    const AjPStr knowntype;
+
+    knowntype = acdKnowntypeDesc(thys);
+
+    assemPrompt = ajStrNewRes(32);
+    assemPromptAlt = ajStrNewRes(32);
+
+    if(ajStrGetLen(knowntype))
+	ajFmtPrintAppS(&assemPromptAlt, "%S ", knowntype);
+
+    ajFmtPrintAppS(&assemPromptAlt, "assembly");
+
+    ajFmtPrintS(&assemPrompt, "Input %S", assemPromptAlt);
+
+    if(knowntype)
+    {
+	count++;
+	acdPromptStandardS(thys, assemPromptAlt);
+    }
+    else
+	acdPromptStandardAlt(thys, ajStrGetPtr(assemPrompt),
+			     ajStrGetPtr(assemPromptAlt), &count);
+
+    if(!acdAttrTestDefined(thys, "default") &&
+       acdAttrTestDefined(thys, "nullok"))
+	acdPromptStandardAppend(thys, " (optional)");
+    
+    ajStrDel(&assemPrompt);
+    ajStrDel(&assemPromptAlt);
+
+    return thys->StdPrompt;
+}
+
+
+
+
 /* @funcstatic acdPromptObo ***************************************************
 **
 ** Sets the default prompt for this ACD object to be an obo term
@@ -25729,6 +27421,8 @@ static void acdHelpTextVariation(const AcdPAcd thys, AjPStr* Pstr)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -25779,6 +27473,45 @@ static const AjPStr acdPromptObo(AcdPAcd thys)
 
 
 
+/* @funcstatic acdPromptOutassembly *******************************************
+**
+** Sets the default prompt for this ACD object to be a simple
+** prompt with "second", "third" etc. added.
+**
+** @param [u] thys [AcdPAcd] Current ACD object.
+** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
+** @@
+******************************************************************************/
+
+static const AjPStr acdPromptOutassembly(AcdPAcd thys)
+{
+    static ajint count=0;
+
+    const AjPStr knowntype;
+
+    knowntype = acdKnowntypeDesc(thys);
+
+    if(ajStrGetLen(knowntype))
+    {
+	count++;
+	acdPromptStandardS(thys, knowntype);
+	acdPromptStandardAppend(thys, " output file");
+    }
+    else
+	acdPromptStandard(thys, "assembly output file", &count);
+
+    if(!acdAttrTestDefined(thys, "default") &&
+       acdAttrTestDefined(thys, "nullok"))
+	acdPromptStandardAppend(thys, " (optional)");
+    
+    return thys->StdPrompt;
+}
+
+
+
+
 /* @funcstatic acdPromptOutcodon **********************************************
 **
 ** Sets the default prompt for this ACD object to be a simple
@@ -25786,6 +27519,8 @@ static const AjPStr acdPromptObo(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -25816,13 +27551,15 @@ static const AjPStr acdPromptOutcodon(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptOutcpdb **********************************************
+/* @funcstatic acdPromptOutcpdb ***********************************************
 **
 ** Sets the default prompt for this ACD object to be a simple
 ** prompt with "second", "third" etc. added.
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -25853,13 +27590,15 @@ static const AjPStr acdPromptOutcpdb(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptOutdata **********************************************
+/* @funcstatic acdPromptOutdata ***********************************************
 **
 ** Sets the default prompt for this ACD object to be a simple
 ** prompt with "second", "third" etc. added.
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -25890,13 +27629,15 @@ static const AjPStr acdPromptOutdata(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptOutdir **********************************************
+/* @funcstatic acdPromptOutdir ************************************************
 **
 ** Sets the default prompt for this ACD object to be a simple
 ** prompt with "second", "third" etc. added.
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -25937,6 +27678,8 @@ static const AjPStr acdPromptOutdir(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -25974,6 +27717,8 @@ static const AjPStr acdPromptOutdiscrete(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -26003,13 +27748,15 @@ static const AjPStr acdPromptOutdistance(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptOutfreq **********************************************
+/* @funcstatic acdPromptOutfreq ***********************************************
 **
 ** Sets the default prompt for this ACD object to be a simple
 ** prompt with "second", "third" etc. added.
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -26047,6 +27794,8 @@ static const AjPStr acdPromptOutfreq(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -26083,6 +27832,8 @@ static const AjPStr acdPromptOutmatrix(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -26120,6 +27871,8 @@ static const AjPStr acdPromptOutobo(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -26150,6 +27903,45 @@ static const AjPStr acdPromptOutproperties(AcdPAcd thys)
 
 
 
+/* @funcstatic acdPromptOutrefseq *********************************************
+**
+** Sets the default prompt for this ACD object to be a simple
+** prompt with "second", "third" etc. added.
+**
+** @param [u] thys [AcdPAcd] Current ACD object.
+** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
+** @@
+******************************************************************************/
+
+static const AjPStr acdPromptOutrefseq(AcdPAcd thys)
+{
+    static ajint count=0;
+
+    const AjPStr knowntype;
+
+    knowntype = acdKnowntypeDesc(thys);
+
+    if(ajStrGetLen(knowntype))
+    {
+	count++;
+	acdPromptStandardS(thys, knowntype);
+	acdPromptStandardAppend(thys, " output file");
+    }
+    else
+	acdPromptStandard(thys, "reference sequence output file", &count);
+
+    if(!acdAttrTestDefined(thys, "default") &&
+       acdAttrTestDefined(thys, "nullok"))
+	acdPromptStandardAppend(thys, " (optional)");
+    
+    return thys->StdPrompt;
+}
+
+
+
+
 /* @funcstatic acdPromptOutresource *******************************************
 **
 ** Sets the default prompt for this ACD object to be a simple
@@ -26157,6 +27949,8 @@ static const AjPStr acdPromptOutproperties(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -26187,13 +27981,15 @@ static const AjPStr acdPromptOutresource(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptOutscop **********************************************
+/* @funcstatic acdPromptOutscop ***********************************************
 **
 ** Sets the default prompt for this ACD object to be a simple
 ** prompt with "second", "third" etc. added.
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -26231,6 +28027,8 @@ static const AjPStr acdPromptOutscop(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -26268,6 +28066,8 @@ static const AjPStr acdPromptOuttaxon(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -26298,13 +28098,15 @@ static const AjPStr acdPromptOuttext(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptOuttree **********************************************
+/* @funcstatic acdPromptOuttree ***********************************************
 **
 ** Sets the default prompt for this ACD object to be a simple
 ** prompt with "second", "third" etc. added.
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -26342,6 +28144,8 @@ static const AjPStr acdPromptOuttree(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -26379,6 +28183,8 @@ static const AjPStr acdPromptOuturl(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -26409,6 +28215,59 @@ static const AjPStr acdPromptOutvariation(AcdPAcd thys)
 
 
 
+/* @funcstatic acdPromptRefseq **********************************************
+**
+** Sets the default prompt for this ACD object to be a reference sequence
+** prompt with "first", "second" etc. added.
+**
+** @param [u] thys [AcdPAcd] Current ACD object.
+** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static const AjPStr acdPromptRefseq(AcdPAcd thys)
+{
+    static ajint count=0;
+    AjPStr refseqPrompt = NULL;
+    AjPStr refseqPromptAlt = NULL;
+    const AjPStr knowntype;
+
+    knowntype = acdKnowntypeDesc(thys);
+
+    refseqPrompt = ajStrNewRes(32);
+    refseqPromptAlt = ajStrNewRes(32);
+
+    if(ajStrGetLen(knowntype))
+	ajFmtPrintAppS(&refseqPromptAlt, "%S ", knowntype);
+
+    ajFmtPrintAppS(&refseqPromptAlt, "reference sequence");
+
+    ajFmtPrintS(&refseqPrompt, "Input %S", refseqPromptAlt);
+
+    if(knowntype)
+    {
+	count++;
+	acdPromptStandardS(thys, refseqPromptAlt);
+    }
+    else
+	acdPromptStandardAlt(thys, ajStrGetPtr(refseqPrompt),
+			     ajStrGetPtr(refseqPromptAlt), &count);
+
+    if(!acdAttrTestDefined(thys, "default") &&
+       acdAttrTestDefined(thys, "nullok"))
+	acdPromptStandardAppend(thys, " (optional)");
+    
+    ajStrDel(&refseqPrompt);
+    ajStrDel(&refseqPromptAlt);
+
+    return thys->StdPrompt;
+}
+
+
+
+
 /* @funcstatic acdPromptTaxon *************************************************
 **
 ** Sets the default prompt for this ACD object to be an NCBI taxonomy entry
@@ -26416,6 +28275,8 @@ static const AjPStr acdPromptOutvariation(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -26473,6 +28334,8 @@ static const AjPStr acdPromptTaxon(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -26530,6 +28393,8 @@ static const AjPStr acdPromptText(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -26580,13 +28445,15 @@ static const AjPStr acdPromptUrl(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptVariation **********************************************
+/* @funcstatic acdPromptVariation *********************************************
 **
 ** Sets the default prompt for this ACD object to be a variation entry
 ** prompt with "first", "second" etc. added.
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -26646,6 +28513,8 @@ static const AjPStr acdPromptVariation(AcdPAcd thys)
 ** @param [r] type [const char*] Data type for prompt
 ** @param [w] count [ajint*] count for number of calls
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -26734,6 +28603,8 @@ static void acdPromptStandard(AcdPAcd thys, const char* type, ajint* count)
 ** @param [r] type [const char*] Data type for prompt subsequent times
 ** @param [w] count [ajint*] count for number of calls
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -26820,6 +28691,8 @@ static void acdPromptStandardAlt(AcdPAcd thys, const char* firsttype,
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @param [r] str[const char*] Suffix to append to prompt
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -26831,13 +28704,15 @@ static void acdPromptStandardAppend(AcdPAcd thys, const char* str)
 
 
 
-/* @funcstatic acdPromptStandardS ****************************************
+/* @funcstatic acdPromptStandardS *********************************************
 **
 ** Appends to the default prompt for this ACD object
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @param [r] str [const AjPStr] Data type for prompt
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -26856,6 +28731,8 @@ static void acdPromptStandardS(AcdPAcd thys, const AjPStr str)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -26897,6 +28774,8 @@ static const AjPStr acdPromptOutfile(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -26936,6 +28815,8 @@ static const AjPStr acdPromptInfile(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -26970,13 +28851,15 @@ static const AjPStr acdPromptDatafile(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptMatrix *************************************************
+/* @funcstatic acdPromptMatrix ************************************************
 **
 ** Sets the default prompt for this ACD object to be an input data
 ** file with "first", "second" etc. added.
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -27032,6 +28915,8 @@ static const AjPStr acdPromptMatrix(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -27063,13 +28948,15 @@ static const AjPStr acdPromptDiscretestates(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptDistances ****************************************
+/* @funcstatic acdPromptDistances *********************************************
 **
 ** Sets the default prompt for this ACD object to be an input distances
 ** file with "first", "second" etc. added.
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -27102,13 +28989,15 @@ static const AjPStr acdPromptDistances(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptFrequencies ****************************************
+/* @funcstatic acdPromptFrequencies *******************************************
 **
 ** Sets the default prompt for this ACD object to be an input frequencies
 ** file with "first", "second" etc. added.
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -27141,13 +29030,15 @@ static const AjPStr acdPromptFrequencies(AcdPAcd thys)
 
 
 
-/* @funcstatic acdPromptProperties ****************************************
+/* @funcstatic acdPromptProperties ********************************************
 **
 ** Sets the default prompt for this ACD object to be an input properties
 ** file with "first", "second" etc. added.
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -27187,6 +29078,8 @@ static const AjPStr acdPromptProperties(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -27239,6 +29132,8 @@ static const AjPStr acdPromptPattern(AcdPAcd thys)
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -27294,6 +29189,8 @@ static const AjPStr acdPromptRegexp(AcdPAcd thys)
 ** @param [r] thys [const AcdPAcd] Current ACD object.
 ** @param [w] Pstr [AjPStr*] Help text
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -27321,13 +29218,15 @@ static void acdHelpTextResource(const AcdPAcd thys, AjPStr* Pstr)
 
 
 
-/* @funcstatic acdPromptResource ***********************************************
+/* @funcstatic acdPromptResource **********************************************
 **
 ** Sets the default prompt for this ACD object to be a data resource
 ** prompt with "first", "second" etc. added.
 **
 ** @param [u] thys [AcdPAcd] Current ACD object.
 ** @return [const AjPStr] Generated standard prompt
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -27386,6 +29285,8 @@ static const AjPStr acdPromptResource(AcdPAcd thys)
 ** @param [r] code [const AjPStr] Code name
 ** @param [w] msg [AjPStr*] Message text for this code in current language
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -27425,6 +29326,8 @@ static AjBool acdCodeGet(const AjPStr code, AjPStr *msg)
 ** @param [w] msg [AjPStr*] Message text for default message
 **                          in current language
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -27472,6 +29375,8 @@ static AjBool acdCodeDef(const AcdPAcd thys, AjPStr *msg)
 ** @param [r] thys [const AcdPAcd] Current ACD object
 ** @param [w] msg [AjPStr*] Help text in current language
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -27514,6 +29419,8 @@ static AjBool acdHelpCodeDef(const AcdPAcd thys, AjPStr *msg)
 ** Sets up the code file data for the current language when needed
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -27631,6 +29538,8 @@ static void acdCodeInit(void)
 ** Sets up the known type data
 **
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -27655,6 +29564,8 @@ static void acdKnowntypeInit(void)
 ** @param [r] thys [const AcdPAcd] ACD object
 ** @param [r] val [AjBool] Value
 ** @return [AjBool] ajTrue if this was an application-wide variable.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -27760,6 +29671,8 @@ static AjBool acdSetQualAppl(const AcdPAcd thys, AjBool val)
 **
 ** @param [r] thys [const AcdPAcd] ACD object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -27818,6 +29731,8 @@ static void acdSelectPrompt(const AcdPAcd thys)
 **
 ** @param [r] thys [const AcdPAcd] ACD object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -27922,6 +29837,8 @@ static void acdListPrompt(const AcdPAcd thys)
 ** @param [r] max [ajint] Maximum number of values required
 ** @param [r] reply [const AjPStr] Default value
 ** @return [AjPStr*] Array of accepted matches, ending with a NULL.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -28088,7 +30005,7 @@ static AjPStr* acdListValue(const AcdPAcd thys, ajint min, ajint max,
     ajStrTokenDel(&rephandle);
     ajStrDel(&repstr);
     
-    ilen = ajListstrGetLength(list);
+    ilen = (ajuint) ajListstrGetLength(list);
     acdLog("Found %d matches OK: %b min: %d max: %d\n",
 	   ilen, ok, min, max);
     if(ok)
@@ -28166,6 +30083,8 @@ static AjPStr* acdListValue(const AcdPAcd thys, ajint min, ajint max,
 ** @param [r] max [ajint] Maximum number of values required
 ** @param [r] reply [const AjPStr] Default value
 ** @return [AjPStr*] Array of accepted matches, ending with a NULL.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -28306,7 +30225,7 @@ static AjPStr* acdSelectValue(const AcdPAcd thys, ajint min, ajint max,
     ajStrTokenDel(&rephandle);
     ajStrDel(&repstr);
     
-    ilen = ajListstrGetLength(list);
+    ilen = (ajuint) ajListstrGetLength(list);
     
     if(ok)
     {
@@ -28366,6 +30285,8 @@ static AjPStr* acdSelectValue(const AcdPAcd thys, ajint min, ajint max,
 ** @param [w] pambigList [AjPStr*] List of tokens with ',' delimiter
 ** @param [r] str [const AjPStr] Latest token to add
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -28389,6 +30310,8 @@ static void acdAmbigApp(AjPStr* pambigList, const AjPStr str)
 ** @param [w] pambigList [AjPStr*] List of tokens with ',' delimiter
 ** @param [r] txt [const char*] Latest token to add
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -28415,6 +30338,8 @@ static void acdAmbigAppC(AjPStr* pambigList, const char* txt)
 ** @param [r] ext [const AjPStr] File extension
 ** @param [r] nullok [AjBool] Can set as an empty string if true
 ** @return [AjBool] ajTrue if a name was successfully set
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -28450,6 +30375,8 @@ static AjBool acdDataFilename(AjPStr* infname,
 **
 ** @param [w] infname [AjPStr*] Input file name
 ** @return [AjBool] ajTrue if a name was successfully set
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -28486,6 +30413,8 @@ static AjBool acdInFilename(AjPStr* infname)
 **
 ** @param [w] dir [AjPStr*] Specified directory
 ** @return [AjBool] ajTrue if a directory was successfully set
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -28553,6 +30482,8 @@ static AjBool acdOutDirectory(AjPStr* dir)
 ** @param [r] name [const AjPStr] Specified base file name
 ** @param [r] ext [const AjPStr] Specified extension
 ** @return [AjBool] ajTrue if a name was successfully set
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -28617,6 +30548,8 @@ static AjBool acdOutFilename(AjPStr* outfname,
 ** @param [r] reset [AjBool] Reset the saved name if this is the first time
 **                           a true value has been passed.
 ** @return [AjBool] ajTrue if a name was successfully set
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -28691,6 +30624,8 @@ static AjBool acdInFileSave(const AjPStr infname, const AjPStr objname,
 **
 ** @param [r] intype [const AjPStr] Input sequence type
 ** @return [AjBool] ajTrue if a type was successfully set
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -28732,12 +30667,14 @@ static AjBool acdInTypeSeqSave(const AjPStr intype)
 
 
 
-/* @funcstatic acdInTypeSeq **************************************************
+/* @funcstatic acdInTypeSeq ***************************************************
 **
 ** Returns the input sequence type (if known)
 **
 ** @param [w] typename [AjPStr*] Input sequence type
 ** @return [AjBool] ajTrue if a type was successfully set
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -28770,6 +30707,8 @@ static AjBool acdInTypeSeq(AjPStr* typename)
 **
 ** @param [r] intype [const AjPStr] Input feature type
 ** @return [AjBool] ajTrue if a type was successfully set
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -28806,6 +30745,8 @@ static AjBool acdInTypeFeatSave(const AjPStr intype)
 **
 ** @param [r] intype [const char*] Input feature type
 ** @return [AjBool] ajTrue if a type was successfully set
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -28830,6 +30771,8 @@ static AjBool acdInTypeFeatSaveC(const char* intype)
 **
 ** @param [w] typename [AjPStr*] Input feature type
 ** @return [AjBool] ajTrue if a type was successfully set
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -28863,6 +30806,8 @@ static AjBool acdInTypeFeat(AjPStr* typename)
 ** @param [r] fmt [const char*] Format with ajFmt extensions
 ** @param [v] [...] Optional arguments
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -28898,6 +30843,8 @@ static void acdLog(const char *fmt, ...)
 ** @param [r] fmt [const char*] Format with ajFmt extensions
 ** @param [v] [...] Optional arguments
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -29041,6 +30988,8 @@ static void acdPretty(const char *fmt, ...)
 ** Writes any remaining comments and closes the pretty output file
 **
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -29102,6 +31051,8 @@ static void acdPrettyClose(void)
 **
 ** @param [r] comment [const AjPStr] OComment to be printer
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -29162,6 +31113,8 @@ static void acdPrettyComment(const AjPStr comment)
 ** @param [r] fmt [const char*] Format with ajFmt extensions
 ** @param [v] [...] Optional arguments
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -29355,6 +31308,8 @@ static void acdPrettyWrap(ajint left, const char *fmt, ...)
 ** Right shifts (indents) acdpretty printing
 **
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -29373,6 +31328,8 @@ static void acdPrettyShift(void)
 ** Left shifts acdpretty printing
 **
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -29399,6 +31356,8 @@ static void acdPrettyUnShift(void)
 **
 ** @param [r] thys [const AcdPAcd] ACD object
 ** @return [AjBool] ajTrue if the object is a qualifier or parameter
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -29418,7 +31377,10 @@ static AjBool acdIsQtype(const AcdPAcd thys)
 ** Tests whether an ACD object is a section or endsection type.
 **
 ** @param [r] thys [const AcdPAcd] ACD object
-** @return [AjBool] ajTrue if the object is a qualifier or parameter
+** @return [AjBool] ajTrue if the object is a section or endsection
+**                  type definition
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -29438,7 +31400,9 @@ static AjBool acdIsStype(const AcdPAcd thys)
 ** Tests whether an ACD object is an application type.
 **
 ** @param [r] thys [const AcdPAcd] ACD object
-** @return [AjBool] ajTrue if the object is a qualifier or parameter
+** @return [AjBool] ajTrue if the object is an application type definition
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -29453,12 +31417,36 @@ static AjBool acdIsAtype(const AcdPAcd thys)
 
 
 
+/* @funcstatic acdIsVtype *****************************************************
+**
+** Tests whether an ACD object is a variable type.
+**
+** @param [r] thys [const AcdPAcd] ACD object
+** @return [AjBool] ajTrue if the object is a variable type definition
+**
+** @release 6.1.0
+** @@
+******************************************************************************/
+
+static AjBool acdIsVtype(const AcdPAcd thys)
+{
+    if(thys->Level == ACD_VAR)
+	return ajTrue;
+
+    return ajFalse;
+}
+
+
+
+
 /* @funcstatic acdTextFormat **************************************************
 **
 ** Converts backslash codes in a string into special characters
 **
 ** @param [u] text [AjPStr*] Text with backslash codes
 ** @return [AjBool] ajTrue if successful
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -29472,12 +31460,14 @@ static AjBool acdTextFormat(AjPStr* text)
 
 
 
-/* @funcstatic acdTextTrim**************************************************
+/* @funcstatic acdTextTrim*****************************************************
 **
 ** Trims white space. For HTML output, replaces angled brackets
 **
 ** @param [u] text [AjPStr*] Text to be processed
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -29528,6 +31518,8 @@ static void acdTextTrim(AjPStr* text)
 ** @param [r] full [AjBool] Full report - currently no extra details printed
 ** @return [void]
 **
+**
+** @release 4.0.0
 ******************************************************************************/
 
 void ajAcdPrintAppl(AjPFile outf, AjBool full)
@@ -29583,6 +31575,8 @@ void ajAcdPrintAppl(AjPFile outf, AjBool full)
 ** @param [r] full [AjBool] Full report - currently no extra details printed
 ** @return [void]
 **
+**
+** @release 2.8.0
 ******************************************************************************/
 
 void ajAcdPrintQual(AjPFile outf, AjBool full)
@@ -29635,6 +31629,8 @@ void ajAcdPrintQual(AjPFile outf, AjBool full)
 ** @param [r] full [AjBool] Full report
 ** @return [void]
 **
+**
+** @release 1.0.0
 ******************************************************************************/
 
 void ajAcdPrintType(AjPFile outf, AjBool full)
@@ -29765,6 +31761,8 @@ void ajAcdPrintType(AjPFile outf, AjBool full)
 ** @param [r] calcattr [const AcdOAttr[]] Acd calculated attributes
 ** @return [void]
 **
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdPrintCalcattr(AjPFile outf, const char* acdtype,
@@ -29815,6 +31813,8 @@ static void acdPrintCalcattr(AjPFile outf, const char* acdtype,
 ** @param [r] str [const AjPStr] Test string
 ** @param [r] vocab [const char**] Controlled vocabulary
 ** @return [AjBool] ajTrue if the string matched on of the words
+**
+** @release 2.0.0
 ******************************************************************************/
 
 static AjBool acdVocabCheck(const AjPStr str, const char** vocab)
@@ -29842,6 +31842,8 @@ static AjBool acdVocabCheck(const AjPStr str, const char** vocab)
 ** @param [r] fmt [const char*] Format string
 ** @param [v] [...] Format arguments.
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -29883,6 +31885,8 @@ __noreturn static void acdError(const char* fmt, ...)
 ** @param [r] fmt [const char*] Format string
 ** @param [v] [...] Format arguments.
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -29917,12 +31921,14 @@ static void acdErrorValid(const char* fmt, ...)
 
 
 
-/* @funcstatic acdWarnObsolete *************************************************
+/* @funcstatic acdWarnObsolete ************************************************
 **
 ** Warning about obsolete status of an application
 **
 ** @param [r] str [const AjPStr] Format string
 ** @return [void]
+**
+** @release 6.0.0
 ** @@
 ******************************************************************************/
 
@@ -29953,13 +31959,15 @@ static void acdWarnObsolete(const AjPStr str)
 
 
 
-/* @funcstatic acdWarn *******************************************************
+/* @funcstatic acdWarn ********************************************************
 **
 ** Formatted write as an error message.
 **
 ** @param [r] fmt [const char*] Format string
 ** @param [v] [...] Format arguments.
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -30003,6 +32011,8 @@ static void acdWarn(const char* fmt, ...)
 ** @param [r] fmt [const char*] Format string
 ** @param [v] [...] Format arguments.
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -30054,6 +32064,8 @@ __noreturn static void acdErrorAcd(const AcdPAcd thys, const char* fmt, ...)
 ** @param [r] silent [AjBool] Turn off messages (used when some messages
 **                            are expected but can be ignored).
 ** @return [void]
+**
+** @release 2.4.0
 ** @@
 ******************************************************************************/
 
@@ -30146,6 +32158,8 @@ void ajAcdExit(AjBool silent)
 ** Quick printoout of all qualifiers believed to have been used
 **
 ** @return [void]
+**
+** @release 6.0.0
 ******************************************************************************/
 
 static void acdPrintUsed(void)
@@ -30174,6 +32188,8 @@ static void acdPrintUsed(void)
 ** In future, we could consider removing them once they have been fetched.
 **
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdReset(void)
@@ -30304,6 +32320,7 @@ static void acdReset(void)
     acdStdout = AJFALSE;
     acdCodeSet = AJFALSE;
     acdKnowntypeSet = AJFALSE;
+    acdWrapper = AJFALSE;
 /*    acdQualTestSkip = AJFALSE; */
     acdInFile = 0;
     acdInFileSet = AJFALSE;
@@ -30348,6 +32365,8 @@ static void acdReset(void)
 **
 ** @param [r] thys [const AcdPAcd] ACD object
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -30438,6 +32457,11 @@ static void acdValidAppl(const AcdPAcd thys)
         ajStrTokenDel(&tokenhandle);
     }
     
+    /*
+    ** test for wrapper attribute
+    ** if true, we use the original command line
+    ** so we turn off EMBOSS validation of qualifier names
+    */
 
     return;
 }
@@ -30451,6 +32475,8 @@ static void acdValidAppl(const AcdPAcd thys)
 **
 ** @param [r] thys [const AcdPAcd] ACD object
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -30478,6 +32504,8 @@ static void acdValidRelation(const AcdPAcd thys)
 **
 ** @param [r] thys [const AcdPAcd] ACD object
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -30607,12 +32635,14 @@ static void acdValidSection(const AcdPAcd thys)
 
 
 
-/* @funcstatic acdValidQual ************************************************
+/* @funcstatic acdValidQual ***************************************************
 **
 ** Validation for a qualifier definition
 **
 ** @param [u] thys [AcdPAcd] ACD object
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -30860,7 +32890,7 @@ static void acdValidQual(AcdPAcd thys)
 
     if(acdType[thys->Type].Prompt)
     {
-	tmpstandard = acdType[thys->Type].Prompt(thys);
+	tmpstandard = (*acdType[thys->Type].Prompt)(thys);
 
 	if(ajStrGetLen(tmpstandard) &&
 	   acdKnowntypeDesc(thys))
@@ -30989,22 +33019,22 @@ static void acdValidQual(AcdPAcd thys)
 	{
 	    if(ajCharMatchC(acdType[thys->Type].Name, "seqall"))
 		acdWarn("Sequence qualifier '%S' is not 'sequence' "
-			"or '*sequence' or 'seqall'"
+			"or '*sequence' or 'seqall' "
 			"(should be '%Ssequence')",
 			thys->Token, thys->Token);
 	    else if(ajCharMatchC(acdType[thys->Type].Name, "seqset"))
 		acdWarn("Sequence qualifier '%S' is not 'sequence' "
-			"or '*sequence' or 'sequences'"
+			"or '*sequence' or 'sequences' "
 			"(should be '%Ssequence')",
 			thys->Token, thys->Token);
 	    else if(ajCharMatchC(acdType[thys->Type].Name, "seqsetall"))
 		acdWarn("Sequence qualifier '%S' is not 'sequence' "
-			"or '*sequence' or 'sequences'"
+			"or '*sequence' or 'sequences' "
 			"(should be '%Ssequence')",
 			thys->Token, thys->Token);
 	    else
 		acdWarn("Sequence qualifier '%S' is not 'sequence' "
-			"or '*sequence'"
+			"or '*sequence' "
 			"(should be '%Ssequence')",
 			thys->Token, thys->Token);
 	}
@@ -31072,7 +33102,7 @@ static void acdValidQual(AcdPAcd thys)
 	if(!(ajStrSuffixC(thys->Token, "feature")))
 	{
 	    acdWarn("Feature qualifier '%S' is not 'feature' "
-			"or '*feature'"
+			"or '*feature' "
 			"(should be '%Sfeature')",
 			thys->Token, thys->Token);
 	}
@@ -31142,7 +33172,7 @@ static void acdValidQual(AcdPAcd thys)
 	if(ajCharMatchC(acdType[thys->Type].Name, "infile"))
 	{
 	    if(!ajStrSuffixC(thys->Token, "file"))
-		acdWarn("Infile qualifier '%S' is not 'infile' or '*file'"
+		acdWarn("Infile qualifier '%S' is not 'infile' or '*file' "
 			"(should be '%Sfile')",
 			thys->Token, thys->Token);
 	    else
@@ -31151,7 +33181,7 @@ static void acdValidQual(AcdPAcd thys)
 		   !ajStrMatchC(thys->Token, "infile") &&
 		   !ajStrSuffixC(thys->Token, "file"))
 		    acdWarn("First input file qualifier '%S' is not "
-			    "'infile' or '*file'"
+			    "'infile' or '*file' "
 			    "(should be '%Sfile')",
 			    thys->Token, thys->Token);
 	    }
@@ -31174,7 +33204,7 @@ static void acdValidQual(AcdPAcd thys)
 		    !ajStrSuffixC(thys->Token, "path") &&
 		    !ajStrSuffixC(thys->Token, "directory"))
 		acdWarn("Directory qualifier '%S' is not '*directory or *dir'"
-			" or *path'"
+			" or *path' "
 			"(should be '%Sdir')",
 			thys->Token, thys->Token);
 	    /* no fixed qualifier name for first input directory */
@@ -31274,7 +33304,7 @@ static void acdValidQual(AcdPAcd thys)
 	       !ajStrMatchC(thys->Token, "outdir") &&
 	       !ajStrSuffixC(thys->Token, "outdir"))
 		acdWarn("First output directory qualifier '%S' "
-			"is not 'outdir' or '*outdir'"
+			"is not 'outdir' or '*outdir' "
 			"(should be '%Sfile')",
 			thys->Token, thys->Token);
 	}
@@ -31306,7 +33336,7 @@ static void acdValidQual(AcdPAcd thys)
 	qualCountOutfile++;
 
 	if(!ajStrSuffixC(thys->Token, "file"))
-	    acdWarn("Align qualifier '%S' is not 'outfile' or '*file'"
+	    acdWarn("Align qualifier '%S' is not 'outfile' or '*file' "
 		    "(should be '%Sfile')",
 		    thys->Token, thys->Token);
 	else
@@ -31337,7 +33367,7 @@ static void acdValidQual(AcdPAcd thys)
 	qualCountOut++;
 	qualCountOutfile++;
 	if(!ajStrSuffixC(thys->Token, "file"))
-	    acdWarn("Report qualifier '%S' is not 'outfile' or '*file'"
+	    acdWarn("Report qualifier '%S' is not 'outfile' or '*file' "
 		    "(should be '%Sfile')",
 		    thys->Token, thys->Token);
 	else
@@ -31507,6 +33537,8 @@ static void acdValidQual(AcdPAcd thys)
 **
 ** @param [r] thys [const AcdPAcd] Current ACD object
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -31675,6 +33707,8 @@ static void acdValidKnowntype(const AcdPAcd thys)
 **
 ** @param [r] thys [const AcdPAcd] Acd object
 ** @return [const AjPStr] Known type description or NULL if not defined.
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -31704,6 +33738,8 @@ static const AjPStr acdKnowntypeDesc(const AcdPAcd thys)
 ** @param [wN] typetable [AjPTable*] String table of section names and
 **                                 descriptions
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -31799,11 +33835,17 @@ static void acdReadKnowntype(AjPTable* desctable, AjPTable* typetable)
 		ajStrAssignS(&knownName2, knownName);
                 ajStrRemoveWhiteExcess(&knownEdam);
                 ajStrQuoteStrip(&knownEdam);
-                if(ajStrPrefixC(knownEdam, "EDAM:"))
-                    ajStrCutStart(&knownEdam, 6);
+                if(ajStrPrefixC(knownEdam, "EDAM_data: "))
+		{
+                    ajStrCutStart(&knownEdam, 11);
+		}
+                else if(ajStrPrefixC(knownEdam, "EDAM_data:"))
+		{
+                    ajStrCutStart(&knownEdam, 14);
+		}
                 else if(ajStrGetLen(knownEdam))
-		    ajWarn("Knowntype '%S' in file %S line %d - EDAM badly formatted",
-			   knownType, knownFName, iline);
+		    ajWarn("Knowntype '%S' in file %S line %d - EDAM badly formatted '%S'",
+			   knownType, knownFName, iline, knownEdam);
                 ajStrRemoveWhiteExcess(&knownDesc);
 		ajTablePut(*desctable, knownName2, knownDesc);
 
@@ -31844,6 +33886,8 @@ static void acdReadKnowntype(AjPTable* desctable, AjPTable* typetable)
 **
 ** @param [r] groups [const AjPStr] Group name(s)
 ** @return [void]
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -31892,6 +33936,8 @@ static void acdValidApplGroup(const AjPStr groups)
 **
 ** @param [r] keys [const AjPStr] Keyword(s)
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -31940,6 +33986,8 @@ static void acdValidApplKeywords(const AjPStr keys)
 ** Read standard table of application groups
 **
 ** @return [AjPTable] String table of group names and descriptions
+**
+** @release 2.7.0
 ** @@
 ******************************************************************************/
 
@@ -31991,7 +34039,7 @@ static AjPTable acdReadGroups(void)
     else
 	acdLog("Group file %F used\n", grpFile);
     
-    grpxp = ajRegCompC("^EDAM:\\d+\\s+([^ ]+) +([^ ].*)");
+    grpxp = ajRegCompC("^EDAM_[a-z]+:\\d+\\s+([^ ]+) +([^ ].*)");
 
     while(grpFile && ajReadlineTrim(grpFile, &grpLine))
     {
@@ -32039,6 +34087,8 @@ static AjPTable acdReadGroups(void)
 ** Read standard table of application keywords
 **
 ** @return [AjPTable] String table of keyword names and descriptions
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -32147,6 +34197,8 @@ static AjPTable acdReadKeywords(void)
 ** @param [wN] infotable [AjPTable*] String table of section names and
 **                                 descriptions
 ** @return [void]
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -32256,6 +34308,8 @@ static void acdReadSections(AjPTable* typetable, AjPTable* infotable)
 **
 ** @param [r] secname [const char*] Section name
 ** @return [AjBool] ajTrue if the named section was found
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -32289,13 +34343,15 @@ static AjBool acdValidSectionMatch(const char* secname)
 
 
 
-/* @funcstatic acdValidSectionFull *******************************************
+/* @funcstatic acdValidSectionFull ********************************************
 **
 ** Returns the full section name with the top level and any frame
 ** sub-sections
 **
 ** @param [w] secname [AjPStr*] Section name
 ** @return [void]
+**
+** @release 2.9.0
 ******************************************************************************/
 
 static void acdValidSectionFull(AjPStr* secname)
@@ -32328,13 +34384,15 @@ static void acdValidSectionFull(AjPStr* secname)
 
 
 
-/* @funcstatic acdOutFormatCpdb ********************************************
+/* @funcstatic acdOutFormatCpdb ***********************************************
 **
 ** Tests the output format for an outcpdb ACD type
 **
 ** @param [r] name [const AjPStr] Format name
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -32360,13 +34418,15 @@ static AjBool acdOutFormatCpdb(const AjPStr name, ajint* iformat)
 
 
 
-/* @funcstatic acdOutFormatData ********************************************
+/* @funcstatic acdOutFormatData ***********************************************
 **
 ** Tests the output format for an out ACD type
 **
 ** @param [r] name [const AjPStr] Format name
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -32399,6 +34459,8 @@ static AjBool acdOutFormatData(const AjPStr name, ajint* iformat)
 ** @param [r] name [const AjPStr] Format name
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -32431,6 +34493,8 @@ static AjBool acdOutFormatDiscrete(const AjPStr name, ajint* iformat)
 ** @param [r] name [const AjPStr] Format name
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -32456,13 +34520,15 @@ static AjBool acdOutFormatDistance(const AjPStr name, ajint* iformat)
 
 
 
-/* @funcstatic acdOutFormatFreq ********************************************
+/* @funcstatic acdOutFormatFreq ***********************************************
 **
 ** Tests the output format for an outfreq ACD type
 **
 ** @param [r] name [const AjPStr] Format name
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -32488,13 +34554,15 @@ static AjBool acdOutFormatFreq(const AjPStr name, ajint* iformat)
 
 
 
-/* @funcstatic acdOutFormatMatrix ********************************************
+/* @funcstatic acdOutFormatMatrix *********************************************
 **
 ** Tests the output format for an outmatrix ACD type
 **
 ** @param [r] name [const AjPStr] Format name
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -32527,6 +34595,8 @@ static AjBool acdOutFormatMatrix(const AjPStr name, ajint* iformat)
 ** @param [r] name [const AjPStr] Format name
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -32559,6 +34629,8 @@ static AjBool acdOutFormatMatrixf(const AjPStr name, ajint* iformat)
 ** @param [r] name [const AjPStr] Format name
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -32584,13 +34656,15 @@ static AjBool acdOutFormatProperties(const AjPStr name, ajint* iformat)
 
 
 
-/* @funcstatic acdOutFormatScop ********************************************
+/* @funcstatic acdOutFormatScop ***********************************************
 **
 ** Tests the output format for an outscop ACD type
 **
 ** @param [r] name [const AjPStr] Format name
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -32623,6 +34697,8 @@ static AjBool acdOutFormatScop(const AjPStr name, ajint* iformat)
 ** @param [r] name [const AjPStr] Format name
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -32656,6 +34732,8 @@ static AjBool acdOutFormatTree(const AjPStr name, ajint* iformat)
 ** @param [r] thys [const AcdPAcd] ACD object
 ** @param [w] value [AjPStr*] Standard value
 ** @return [AjBool] ajTrue if a value was set
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -32697,6 +34775,8 @@ static AjBool acdKnownValueList(const AcdPAcd thys, AjPStr* value)
 ** @param [r] thys [const AcdPAcd] ACD object
 ** @param [w] value [AjPStr*] Standard value
 ** @return [AjBool] ajTrue if a value was set
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -32730,7 +34810,7 @@ static AjBool acdKnownValueSelect(const AcdPAcd thys, AjPStr* value)
 
 
 
-/* @funcstatic acdResourceList **********************************************
+/* @funcstatic acdResourceList ************************************************
 **
 ** Finds a list value associated with a known type
 **
@@ -32738,6 +34818,8 @@ static AjBool acdKnownValueSelect(const AcdPAcd thys, AjPStr* value)
 ** @param [r] list [const AjPStr] Resource value
 ** @param [w] value [AjPStr*] Standard list value
 ** @return [AjBool] ajTrue if a value was set
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -32813,6 +34895,8 @@ static AjBool acdResourceList(const AcdPAcd thys,
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelAlign(void** PPval)
@@ -32828,12 +34912,38 @@ static void acdDelAlign(void** PPval)
 
 
 
+/* @funcstatic acdDelAssembly *************************************************
+**
+** Function with void** prototype to delete ACD assembly input data
+**
+** @param [d] PPval [void**] Value to be deleted
+** @return [void]
+**
+** @release 6.5.0
+**
+******************************************************************************/
+
+static void acdDelAssembly(void** PPval)
+{
+    if(!*PPval)
+        return;
+
+    ajAssemDel((AjPAssem*)PPval);
+
+    return;
+}
+
+
+
+
 /* @funcstatic acdDelCod ******************************************************
 **
 ** Function with void** prototype to delete ACD codon usage data
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelCod(void** PPval)
@@ -32855,6 +34965,8 @@ static void acdDelCod(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelDir(void** PPval)
@@ -32876,6 +34988,8 @@ static void acdDelDir(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 6.0.0
 ******************************************************************************/
 
 static void acdDelDirout(void** PPval)
@@ -32897,6 +35011,8 @@ static void acdDelDirout(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelFeattable(void** PPval)
@@ -32918,6 +35034,8 @@ static void acdDelFeattable(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelFeattabOut(void** PPval)
@@ -32939,6 +35057,8 @@ static void acdDelFeattabOut(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelFile(void** PPval)
@@ -32960,6 +35080,8 @@ static void acdDelFile(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelFloat(void** PPval)
@@ -32981,6 +35103,8 @@ static void acdDelFloat(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelList(void** PPval)
@@ -33002,6 +35126,8 @@ static void acdDelList(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelMatrix(void** PPval)
@@ -33024,6 +35150,8 @@ static void acdDelMatrix(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelMatrixf(void** PPval)
@@ -33045,6 +35173,8 @@ static void acdDelMatrixf(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void acdDelObo(void** PPval)
@@ -33066,6 +35196,8 @@ static void acdDelObo(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelOutfile(void** PPval)
@@ -33087,6 +35219,8 @@ static void acdDelOutfile(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelPatlist(void** PPval)
@@ -33108,6 +35242,8 @@ static void acdDelPatlist(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelPhyloDist(void** PPval)
@@ -33129,6 +35265,8 @@ static void acdDelPhyloDist(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelPhyloFreq(void** PPval)
@@ -33152,6 +35290,8 @@ static void acdDelPhyloFreq(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelPhyloProp(void** PPval)
@@ -33173,6 +35313,8 @@ static void acdDelPhyloProp(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelPhyloState(void** PPval)
@@ -33194,6 +35336,8 @@ static void acdDelPhyloState(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelPhyloTree(void** PPval)
@@ -33215,6 +35359,8 @@ static void acdDelPhyloTree(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelRange(void** PPval)
@@ -33230,12 +35376,38 @@ static void acdDelRange(void** PPval)
 
 
 
+/* @funcstatic acdDelRefseq ***************************************************
+**
+** Function with void** prototype to delete ACD reference sequence input data
+**
+** @param [d] PPval [void**] Value to be deleted
+** @return [void]
+**
+** @release 6.5.0
+**
+******************************************************************************/
+
+static void acdDelRefseq(void** PPval)
+{
+    if(!*PPval)
+        return;
+
+    ajRefseqDel((AjPRefseq*)PPval);
+
+    return;
+}
+
+
+
+
 /* @funcstatic acdDelReg ******************************************************
 **
 ** Function with void** prototype to delete ACD regular expression data
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelReg(void** PPval)
@@ -33257,6 +35429,8 @@ static void acdDelReg(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelReport(void** PPval)
@@ -33272,12 +35446,14 @@ static void acdDelReport(void** PPval)
 
 
 
-/* @funcstatic acdDelResource **************************************************
+/* @funcstatic acdDelResource *************************************************
 **
 ** Function with void** prototype to delete ACD data resource input data
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void acdDelResource(void** PPval)
@@ -33299,6 +35475,8 @@ static void acdDelResource(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelSeq(void** PPval)
@@ -33320,6 +35498,8 @@ static void acdDelSeq(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelSeqall(void** PPval)
@@ -33341,6 +35521,8 @@ static void acdDelSeqall(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelSeqout(void** PPval)
@@ -33362,6 +35544,8 @@ static void acdDelSeqout(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelSeqset(void** PPval)
@@ -33383,6 +35567,8 @@ static void acdDelSeqset(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelSeqsetArray(void** PPval)
@@ -33404,6 +35590,8 @@ static void acdDelSeqsetArray(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelStr(void** PPval)
@@ -33425,6 +35613,8 @@ static void acdDelStr(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdDelStrArray(void** PPval)
@@ -33446,6 +35636,8 @@ static void acdDelStrArray(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void acdDelTaxon(void** PPval)
@@ -33467,6 +35659,8 @@ static void acdDelTaxon(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void acdDelText(void** PPval)
@@ -33488,6 +35682,8 @@ static void acdDelText(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void acdDelUrl(void** PPval)
@@ -33509,6 +35705,8 @@ static void acdDelUrl(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static void acdDelVariation(void** PPval)
@@ -33516,7 +35714,7 @@ static void acdDelVariation(void** PPval)
     if(!*PPval)
         return;
 
-    ajVarallDel((AjPVarall*)PPval);
+    ajVarloadDel((AjPVarload*)PPval);
 
     return;
 }
@@ -33530,6 +35728,8 @@ static void acdDelVariation(void** PPval)
 **
 ** @param [d] PPval [void**] Value to be deleted
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void acdFree(void** PPval)
@@ -33567,6 +35767,8 @@ static void acdFree(void** PPval)
 **
 ** @return [void]
 **
+**
+** @release 4.0.0
 ******************************************************************************/
 
 void ajAcdUnused(void)
@@ -33594,7 +35796,6 @@ void ajAcdUnused(void)
 ** @fcategory misc
 **
 ** @nam3rule Graphics Graphics application
-** @nam4rule Init Initialise internals
 ** @suffix P Package name given
 ** @suffix V Package version given
 **
@@ -33610,123 +35811,6 @@ void ajAcdUnused(void)
 
 
 
-/* @func ajAcdGraphicsInit ****************************************************
-**
-** Initialises the graphics then everything else. Reads an ACD
-** (AJAX Command Definition) file,
-** prompts the user for any missing information, reads all sequences
-** and other input into local structures which applications can request.
-** Must be called in each EMBOSS program first.
-**
-** @param [r] pgm [const char*] Application name, used as the name of the
-**                              ACD file
-** @param [r] argc [ajint] Number of arguments provided on the command line,
-**        usually passed as-is by the calling application.
-** @param [r] argv [char* const[]] Actual arguments as an array of text.
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajAcdGraphicsInit(const char *pgm, ajint argc, char * const argv[])
-{
-    ajSeqdbInit();
-    ajNamInit("emboss");
-    ajAcdInit(pgm, argc, argv);
-
-    return;
-}
-
-
-
-
-/* @obsolete ajGraphicsInit
-** @rename ajAcdGraphicsInit
-*/
-__deprecated void ajGraphicsInit(const char *pgm,
-				 ajint argc, char * const argv[])
-{
-    ajAcdGraphicsInit(pgm, argc, argv);
-    return;
-}
-
-
-
-
-/* @obsolete ajGraphInit
-** @rename ajAcdGraphicsInit
-*/
-
-__deprecated void ajGraphInit(const char *pgm, ajint argc, char * const argv[])
-{
-    ajAcdGraphicsInit(pgm, argc, argv);
-    return;
-}
-
-
-
-
-/* @func ajAcdGraphicsInitPV *************************************************
-**
-** Initialises the graphics then everything else. Reads an ACD
-** (AJAX Command Definition) file,
-** prompts the user for any missing information, reads all sequences
-** and other input into local structures which applications can request.
-** Must be called in each EMBOSS program first.
-**
-** @param [r] pgm [const char*] Application name, used as the name of
-**                              the ACD file
-** @param [r] argc [ajint] Number of arguments provided on the command line,
-**        usually passed as-is by the calling application.
-** @param [r] argv [char* const[]] Actual arguments as an array of text.
-** @param [r] package [const char*] Package name, used to find the ACD file
-** @param [r] packversion [const char*] Package version
-** @return [void]
-** @@
-******************************************************************************/
-
-void ajAcdGraphicsInitPV(const char *pgm, ajint argc, char *const argv[],
-			 const char *package,const char *packversion)
-{
-    ajSeqdbInit();
-    ajNamInit("emboss");
-    ajAcdInitPV(pgm, argc, argv,package, packversion);
-
-    return;
-}
-
-
-
-
-/* @obsolete ajGraphicsInitPV
-** @rename ajAcdGraphicsInitPV
-*/
-
-__deprecated void ajGraphicsInitPV(const char *pgm,
-				   ajint argc, char *const argv[],
-				   const char *package,
-				   const char *packversion)
-{
-    ajAcdGraphicsInitPV(pgm, argc, argv, package, packversion);
-    return;
-}
-
-
-
-
-/* @obsolete ajGraphInitPV
-** @rename ajAcdGraphicsInitPV
-*/
-
-__deprecated void ajGraphInitPV(const char *pgm, ajint argc, char *const argv[],
-                                const char *package,const char *packversion)
-{
-    ajAcdGraphicsInitPV(pgm, argc, argv, package, packversion);
-    return;
-}
-
-
-
-
 /* @funcstatic acdRangeTestCalc ***********************************************
 **
 ** Tests for calculated minimum and maximum attributes. If found, requires
@@ -33736,6 +35820,8 @@ __deprecated void ajGraphInitPV(const char *pgm, ajint argc, char *const argv[],
 ** @param [r] thys [const AcdPAcd] Acd object
 ** @return [AjBool] True if a calculated value was found
 **
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static AjBool acdRangeTestCalc(const AcdPAcd thys)
@@ -33804,6 +35890,8 @@ static AjBool acdRangeTestCalc(const AcdPAcd thys)
 ** Define regular expressions for parsing variables and functions
 **
 ** @return [void]
+**
+** @release 6.3.0
 ******************************************************************************/
 
 static void acdRegVarDefine(void)
@@ -33854,12 +35942,12 @@ static void acdRegVarDefine(void)
 ** @param [r] relation [const AjPStr] Relation single attribute value
 ** @return [const AjPStr] Namespace
 **
+** @release 6.3.0
 ******************************************************************************/
 
 static const AjPStr acdEdamTest(const AjPStr relation)
 {
     AjPStr term = NULL;
-    AjPStr rest = NULL;
     AjPStr name = NULL;
     AjPStr id = NULL;
     AjPStrTok handle = NULL;
@@ -33873,14 +35961,14 @@ static const AjPStr acdEdamTest(const AjPStr relation)
     if(!acdEdam)
         return NULL;
 
-    if(!ajStrPrefixC(relation, "EDAM:"))
+    if(!ajStrPrefixC(relation, "EDAM"))
     {
         ajFmtPrintS(&namequery, "data:%S", relation);        
         obonameterm = ajObodataFetchName(acdEdam, namequery);
         if(obonameterm)
         {
             obonamefound = ajTrue;
-            acdErrorValid("Relation '%S' matches EDAM term EDAM:%S %S",
+            acdErrorValid("Relation '%S' matches EDAM term EDAM_data:%S %S",
                           relation, oboterm->Namespace, oboterm->Id);
         }
 
@@ -33889,7 +35977,7 @@ static const AjPStr acdEdamTest(const AjPStr relation)
         if(obonameterm)
         {
             obonamefound = ajTrue;
-            acdErrorValid("Relation '%S' matches EDAM term EDAM:%S %S",
+            acdErrorValid("Relation '%S' matches EDAM term EDAM_topic:%S %S",
                           relation, oboterm->Id, oboterm->Namespace);
         }
 
@@ -33898,7 +35986,7 @@ static const AjPStr acdEdamTest(const AjPStr relation)
         if(obonameterm)
         {
             obonamefound = ajTrue;
-            acdErrorValid("Relation '%S' matches EDAM term EDAM:%S %S",
+            acdErrorValid("Relation '%S' matches EDAM term EDAM_operation:%S %S",
                           relation, oboterm->Id, oboterm->Namespace);
         }
 
@@ -33908,25 +35996,28 @@ static const AjPStr acdEdamTest(const AjPStr relation)
         return NULL;
     }
 
-    ajStrExtractFirst(relation, &rest, &term);
+    ajStrExtractFirst(relation, &name, &term);
 
     handle = ajStrTokenNewC(term, ":");
-    if(!ajStrTokenNextParse(&handle, &token)) /* EDAM */
+    if(!ajStrTokenNextParse(&handle, &namespace)) /* EDAM */
         acdErrorValid("Bad relation term '%S'", term);
     else if(!ajStrTokenNextParse(&handle, &token)) /* ID */
         acdErrorValid("Bad relation term '%S'", term);
 
-    ajStrExtractFirst(rest, &name, &namespace);
+    if(ajStrPrefixC(namespace, "EDAM_"))
+        ajStrCutStart(&namespace, 5);
+
     if(!ajStrGetLen(namespace))
         acdErrorValid("Bad relation no namespace");
 
-    ajFmtPrintS(&id, "EDAM:%S", token);
+    ajFmtPrintS(&id, "EDAM_%S:%S", namespace, token);
 
     oboterm =  ajObodataFetchId(acdEdam, id);
 
     if(!oboterm)
     {
-        acdErrorValid("Unknown relation term '%S'", term);
+        acdErrorValid("Unknown relation term '%S' fetch failed for '%S'",
+                      term, id);
         return NULL;
     }
 
@@ -34030,6 +36121,8 @@ static const AjPStr acdEdamTest(const AjPStr relation)
 ** @param [w] name [AjPStr*] EDAM term name
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajAcdedamParse(const AjPStr relation, AjPStr* id,
@@ -34040,19 +36133,23 @@ AjBool ajAcdedamParse(const AjPStr relation, AjPStr* id,
     AjPStr rest = NULL;
     AjPStrTok handle = NULL;
 
-    if(!ajStrPrefixC(relation, "EDAM:"))
+    if(!ajStrPrefixC(relation, "EDAM_"))
         return ajFalse;
 
     ajStrExtractFirst(relation, &rest, &term);
 
-    handle = ajStrTokenNewC(term, ":");
+    handle = ajStrTokenNewC(term, ":_");
     if(!ajStrTokenNextParse(&handle, &token)) /* EDAM */
         return ajFalse;
-    else if(!ajStrTokenNextParse(&handle, &token)) /* ID */
+    else if(!ajStrTokenNextParse(&handle, namespace)) /* namespace */
         return ajFalse;
+    else if(!ajStrTokenNextParse(&handle, id)) /* ID */
+    {
+        ajStrSetClear(namespace);
+        return ajFalse;
+    }
 
-    ajStrAssignS(id, token);
-    ajStrExtractFirst(rest, name, namespace);
+    ajStrAssignS(name, rest);
 
     ajStrDel(&token);
     ajStrDel(&term);
@@ -34072,6 +36169,8 @@ AjBool ajAcdedamParse(const AjPStr relation, AjPStr* id,
 ** @param [r] type [const AjPStr] ACD type name
 ** @return [const char*] Group name
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const char* ajAcdtypeGetGroup(const AjPStr type)
@@ -34088,3 +36187,392 @@ const char* ajAcdtypeGetGroup(const AjPStr type)
 
     return NULL;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+#ifdef AJ_COMPILE_DEPRECATED
+static AjBool    acdTestDebugIsSet(void);
+static AjBool    acdTestDebug(void);
+static AjBool    acdTestFilter(void);
+static AjBool    acdTestStdout(void);
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @funcstatic acdTestDebugIsSet **********************************************
+**
+** Tests whether the command line switch for debug messages has been set
+** by testing internal variable 'acdDebugSet'
+**
+** @return [AjBool] Debugging status.
+**
+** @release 4.0.0
+** @@
+******************************************************************************/
+
+static AjBool acdTestDebugIsSet(void)
+{
+    ajDebug("acdTestDebugIsSet returning %B\n", acdDebugSet);
+    return acdDebugSet;
+}
+
+
+
+
+/* @funcstatic acdTestDebug ***************************************************
+**
+** Tests whether debug messages are required by checking
+** internal variable 'acdDebug'
+**
+** @return [AjBool] Debugging status.
+**
+** @release 4.0.0
+** @@
+******************************************************************************/
+
+static AjBool acdTestDebug(void)
+{
+    ajDebug("acdDebug returning %B\n", acdDebug);
+    return acdDebug;
+}
+
+
+
+
+/* @funcstatic acdTestFilter **************************************************
+**
+** Tests whether input and output use stdin and stdout as a filter
+** by returning internal variable 'acdFilter'
+**
+** @return [AjBool] Filter status.
+**
+** @release 4.0.0
+** @@
+******************************************************************************/
+
+static AjBool acdTestFilter(void)
+{
+    return acdFilter;
+}
+
+
+
+
+/* @funcstatic acdTestStdout **************************************************
+**
+** Tests whether output uses stdout for output by default
+** by returning internal variable 'acdStdout'
+**
+** @return [AjBool] Stdout status.
+**
+** @release 4.0.0
+** @@
+******************************************************************************/
+
+static AjBool acdTestStdout(void)
+{
+    return acdStdout;
+}
+
+
+
+
+/* @obsolete ajAcdGetDiscretestatesI
+** @replace ajAcdGetDiscretestatesSingle (1,2/1)
+*/
+
+__deprecated AjPPhyloState  ajAcdGetDiscretestatesI(const char *token,
+						   ajint num)
+{
+    AjPPhyloState* val;
+    ajint i;
+
+    val = acdGetValue(token, "discretestates");
+    for(i=0; val[i]; i++)
+	continue;
+
+    if(num > i)
+	ajWarn("value %d not found for %s, last value was %d",
+	       num, token, i-1);
+
+    return val[num-1];
+}
+
+
+
+
+/* @obsolete ajAcdGetFeat
+** @rename ajAcdGetFeatures
+*/
+
+__deprecated AjPFeattable ajAcdGetFeat(const char *token)
+{
+    return ajAcdGetFeatures(token);
+}
+
+
+
+
+/* @obsolete ajAcdGetListI
+** @replace ajAcdGetListSingle (1,2/1)
+*/
+
+__deprecated AjPStr  ajAcdGetListI(const char *token, ajint num)
+{
+    AjPStr *val;
+    ajint i;
+
+    val = acdGetValue(token, "list");
+
+    for(i=0; val[i]; i++)
+	continue;
+
+    if(num > i)
+	ajWarn("value %d not found for %s, last value was %d",
+	       num, token, i-1);
+
+    return val[num-1];
+}
+
+
+
+
+/* @obsolete ajAcdGetSelectI
+** @replace ajAcdGetSelectSingle (1,2/1)
+*/
+
+__deprecated AjPStr  ajAcdGetSelectI(const char *token, ajint num)
+{
+    AjPStr* val;
+    ajint i;
+
+    val =  acdGetValue(token, "select");
+
+    for(i=0; val[i]; i++)
+	continue;
+
+    if(num > i)
+	ajWarn("value %d not found for %s, last value was %d",
+	       num, token, i-1);
+
+    return val[num-1];
+}
+
+
+
+
+/* @obsolete ajAcdGetSeqsetallI
+** @replace ajAcdGetSeqsetallSingle (1,2/1)
+*/
+
+__deprecated AjPSeqset  ajAcdGetSeqsetallI(const char *token, ajint num)
+{
+    AjPSeqset *val;
+    ajint i;
+
+    val = acdGetValue(token, "seqsetall");
+
+    for(i=0; val[i]; i++)
+	continue;
+
+    if(num > i)
+	ajWarn("value %d not found for %s, last value was %d",
+	       num, token, i-1);
+
+    return val[num-1];
+}
+
+
+
+
+/* @obsolete ajAcdGetTreeI
+** @replace ajAcdGetTreeSingle (1,2/1)
+*/
+
+__deprecated AjPPhyloTree  ajAcdGetTreeI(const char *token, ajint num)
+{
+    AjPPhyloTree *val;
+    ajint i;
+
+    val = acdGetValue(token, "tree");
+
+    for(i=0; val[i]; i++)
+	continue;
+
+    if(num > i)
+	ajWarn("value %d not found for %s, last value was %d",
+	       num, token, i-1);
+
+    return val[num-1];
+}
+
+
+
+
+/* @obsolete ajAcdValue
+** @rename ajAcdGetValue
+*/
+
+__deprecated const AjPStr  ajAcdValue(const char *token)
+{
+    return ajAcdGetValue(token);
+}
+
+
+
+
+/* @obsolete ajAcdIsUserdefined
+** @rename ajAcdIsUserdefinedC
+*/
+__deprecated AjBool ajAcdIsUserdefined(const char *token)
+{
+    return ajAcdIsUserdefinedC(token);
+}
+
+
+
+
+/* @obsolete ajAcdDebug
+** @remove No longer public
+*/
+
+__deprecated AjBool  ajAcdDebug(void)
+{
+    return acdTestDebug();
+}
+
+
+
+
+/* @obsolete ajAcdDebugIsSet
+** @remove No longer public
+*/
+
+__deprecated AjBool  ajAcdDebugIsSet(void)
+{
+    return acdTestDebugIsSet();
+}
+
+
+
+
+/* @obsolete ajAcdStdout
+** @remove No longer public
+*/
+
+__deprecated AjBool  ajAcdStdout(void)
+{
+    return acdTestStdout();
+}
+
+
+
+
+/* @obsolete ajGraphicsInit
+** @rename ajAcdGraphicsInit
+*/
+__deprecated void ajGraphicsInit(const char *pgm,
+				 ajint argc, char * const argv[])
+{
+    ajAcdGraphicsInit(pgm, argc, argv);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphInit
+** @rename ajAcdGraphicsInit
+*/
+
+__deprecated void ajGraphInit(const char *pgm, ajint argc, char * const argv[])
+{
+    ajAcdGraphicsInit(pgm, argc, argv);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphicsInitPV
+** @rename ajAcdGraphicsInitPV
+*/
+
+__deprecated void ajGraphicsInitPV(const char *pgm,
+				   ajint argc, char *const argv[],
+				   const char *package,
+				   const char *packversion)
+{
+    ajAcdGraphicsInitPV(pgm, argc, argv, package, packversion);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphInitPV
+** @rename ajAcdGraphicsInitPV
+*/
+
+__deprecated void ajGraphInitPV(const char *pgm, ajint argc, char *const argv[],
+                                const char *package,const char *packversion)
+{
+    ajAcdGraphicsInitPV(pgm, argc, argv, package, packversion);
+    return;
+}
+
+
+
+
+/* @obsolete ajAcdGetBool
+** @rename ajAcdGetBoolean
+*/
+
+__deprecated AjBool ajAcdGetBool(const char *token)
+{
+    return ajAcdGetBoolean(token);
+}
+
+
+
+
+/*
+** @obsolete ajAcdGraphicsInit
+** @rename embInit
+*/
+
+__deprecated void ajAcdGraphicsInit(const char *pgm,
+                                    ajint argc, char * const argv[])
+{
+    ajSeqdbInit();
+    ajNamInit("emboss");
+    ajAcdInit(pgm, argc, argv);
+
+    return;
+}
+
+
+
+
+/*
+** @obsolete ajAcdGraphicsInitPV
+** @rename embInitPV
+*/
+
+__deprecated void ajAcdGraphicsInitPV(const char *pgm,
+                                      ajint argc, char *const argv[],
+                                      const char *package,
+                                      const char *packversion)
+{
+    ajSeqdbInit();
+    ajNamInit("emboss");
+    ajAcdInitPV(pgm, argc, argv,package, packversion);
+
+    return;
+}
+#endif

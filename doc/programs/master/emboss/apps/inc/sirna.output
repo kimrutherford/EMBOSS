@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: sirna
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: sirna
 #    -sequence tembl:x65923
 # Report_format: table
@@ -229,7 +229,7 @@ taaaaaagccacttagttcagtc
 <pre>
 ########################################
 # Program: sirna
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: sirna
 #    -context
 #    -sequence tembl:x65923

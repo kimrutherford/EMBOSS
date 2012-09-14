@@ -1,29 +1,42 @@
-/****************************************************************************
-**
-** @source embsig.c
+/* @source embsig *************************************************************
 **
 ** Data structures and algorithms for use with sparse sequence signatures.
 ** For use with the the Hit, Hitlist, Sigpos and Signature objects. 
 ** 
-** Copyright (c) 2004 Jon Ison
+** @author Copyright (c) 2004 Jon Ison
+** @version $Revision: 1.43 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @@
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
 **
-** This program is distributed in the hope that it will be useful,
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-****************************************************************************/
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+*****************************************************************************/
 
-#include "emboss.h"
+
+#include "ajlib.h"
+
+#include "embsig.h"
+#include "ajarr.h"
+#include "ajfile.h"
+#include "ajlist.h"
+#include "ajmatrices.h"
+#include "ajfileio.h"
+#include "ajseqwrite.h"
+
 #include <math.h>
+#include <string.h>
 
 
 
@@ -163,7 +176,7 @@ static AjBool       embHitlistReadFoldFasta(AjPFile scopf,
 
 
 
-/* @func embSigdatNew *******************************************************
+/* @func embSigdatNew *********************************************************
 **
 ** Sigdat object constructor. This is normally called by the 
 ** embSignatureReadNew function. Fore-knowledge of the number of empirical 
@@ -176,6 +189,8 @@ static AjBool       embHitlistReadFoldFasta(AjPFile scopf,
 ** @param [r] ngap [ajuint]   Number of emprical gaps.
 ** 
 ** @return [EmbPSigdat] Pointer to a Sigdat object
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -238,7 +253,7 @@ EmbPSigdat embSigdatNew(ajuint nres, ajuint ngap)
 
 
 
-/* @func embSigposNew *******************************************************
+/* @func embSigposNew *********************************************************
 **
 ** Sigpos object constructor. This is normally called by the
 ** embSignatureCompile function. Fore-knowledge of the number of permissible
@@ -247,6 +262,8 @@ EmbPSigdat embSigdatNew(ajuint nres, ajuint ngap)
 ** @param [r] ngap [ajuint]   Number of permissible gaps.
 ** 
 ** @return [EmbPSigpos] Pointer to a Sigpos object
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -268,13 +285,15 @@ EmbPSigpos embSigposNew(ajuint ngap)
 
 
 
-/* @func embSigposDel *******************************************************
+/* @func embSigposDel *********************************************************
 **
 ** Destructor for Sigpos object.
 **
 ** @param [w] pthis [EmbPSigpos*] Sigpos object pointer
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -293,13 +312,15 @@ void embSigposDel(EmbPSigpos *pthis)
 
 
 
-/* @func embSigdatDel *******************************************************
+/* @func embSigdatDel *********************************************************
 **
 ** Destructor for Sigdat object.
 **
 ** @param [w] pthis [EmbPSigdat*] Sigdat object pointer
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -337,6 +358,8 @@ void embSigdatDel(EmbPSigdat *pthis)
 ** embHitlistClassify function.
 **
 ** @return [EmbPHitidx] Pointer to a Hitidx object
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -356,13 +379,15 @@ static EmbPHitidx embHitidxNew(void)
 
 
 
-/* @funcstatic embHitidxDel **************************************************
+/* @funcstatic embHitidxDel ***************************************************
 **
 ** Destructor for Hitidx object.
 **
 ** @param [w] pthis [EmbPHitidx*] Hitidx object pointer
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -391,6 +416,8 @@ static void embHitidxDel(EmbPHitidx *pthis)
 **
 ** @return [ajint] Index of first Hitidx object found with an Id element 
 ** matching id, or -1 if id is not found.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -434,6 +461,8 @@ static ajint embHitidxBinSearch(const AjPStr id, EmbPHitidx const *arr,
 **
 ** @return [ajint] -1 if Id1 should sort before Id2, +1 if the Id2 should sort 
 ** first. 0 if they are identical in length and content. 
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -467,6 +496,8 @@ static ajint embHitidxMatchId(const void *hit1, const void *hit2)
 ** @param [w] list      [AjPList*]   A list of hitlist structures.
 ** 
 ** @return [AjBool] True on success (a file has been written)
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -531,6 +562,8 @@ static AjBool embHitlistReadFam(AjPFile scopf,
 ** @param [w] list      [AjPList*]     A list of hitlist structures.
 ** 
 ** @return [AjBool] True on success (a file has been written)
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -589,6 +622,8 @@ static AjBool embHitlistReadSfam(AjPFile scopf,
 ** @param [r] klass     [const AjPStr]       Class
 ** @param [w] list      [AjPList*]     A list of hitlist structures.
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -650,6 +685,8 @@ static AjBool embHitlistReadFold(AjPFile scopf,
 ** @param [w] list      [AjPList*]   A list of hitlist structures.
 ** 
 ** @return [AjBool] True on success (a file has been written)
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
@@ -715,6 +752,8 @@ static AjBool embHitlistReadFamFasta(AjPFile scopf,
 ** @param [w] list      [AjPList*]     A list of hitlist structures.
 ** 
 ** @return [AjBool] True on success (a file has been written)
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
@@ -774,6 +813,8 @@ static AjBool embHitlistReadSfamFasta(AjPFile scopf, const AjPStr fam,
 ** @param [r] klass     [const AjPStr]       Class
 ** @param [w] list      [AjPList*]     A list of hitlist structures.
 ** @return [AjBool] ajTrue on success
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
@@ -836,7 +877,7 @@ static AjBool embHitlistReadFoldFasta(AjPFile scopf, const AjPStr fam,
 
 
 
-/* @func embHitlistNew ******************************************************
+/* @func embHitlistNew ********************************************************
 **
 ** Hitlist object constructor. This is normally called by the embHitlistRead
 ** function. Fore-knowledge of the number of hits is required.
@@ -844,6 +885,8 @@ static AjBool embHitlistReadFoldFasta(AjPFile scopf, const AjPStr fam,
 ** @param [r] n [ajuint] Number of hits
 ** 
 ** @return [EmbPHitlist] Pointer to a hitlist object
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -879,12 +922,14 @@ EmbPHitlist embHitlistNew(ajuint n)
 
 
 
-/* @func embHitNew **********************************************************
+/* @func embHitNew ************************************************************
 **
 ** Hit object constructor. This is normally called by the embHitlistNew
 ** function.
 **
 ** @return [EmbPHit] Pointer to a hit object
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -919,7 +964,7 @@ EmbPHit embHitNew(void)
 
 
 
-/* @func embSignatureNew ****************************************************
+/* @func embSignatureNew ******************************************************
 **
 ** Signature object constructor. This is normally called by the
 ** embSignatureReadNew function. Fore-knowledge of the number of signature 
@@ -928,6 +973,8 @@ EmbPHit embHitNew(void)
 ** @param [r] n [ajuint]   Number of signature positions
 ** 
 ** @return [EmbPSignature] Pointer to a Signature object
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -981,13 +1028,15 @@ EmbPSignature embSignatureNew(ajuint n)
 
 
 
-/* @func embHitlistDel ******************************************************
+/* @func embHitlistDel ********************************************************
 **
 ** Destructor for hitlist object.
 **
 ** @param [w] ptr [EmbPHitlist*] Hitlist object pointer
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1041,13 +1090,15 @@ void embHitlistDel(EmbPHitlist *ptr)
 
 
 
-/* @func embHitDel **********************************************************
+/* @func embHitDel ************************************************************
 **
 ** Destructor for hit object.
 **
 ** @param [w] ptr [EmbPHit*] Hit object pointer
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1072,13 +1123,15 @@ void embHitDel(EmbPHit *ptr)
 
 
 
-/* @func embSignatureDel ****************************************************
+/* @func embSignatureDel ******************************************************
 **
 ** Destructor for Signature object.
 **
 ** @param [w] ptr [EmbPSignature*] Signature object pointer
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1163,7 +1216,7 @@ void embSignatureDel(EmbPSignature *ptr)
 
 
 
-/* @func embHitMerge ********************************************************
+/* @func embHitMerge **********************************************************
 **
 ** Creates a new Hit object which corresponds to a merging of the two 
 ** sequences from the Hit objects hit1 and hit2. 
@@ -1173,6 +1226,8 @@ void embSignatureDel(EmbPSignature *ptr)
 ** @param [r] hit2     [const EmbPHit]  Hit 2
 **
 ** @return [EmbPHit] Pointer to Hit object.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1316,7 +1371,7 @@ EmbPHit embHitMerge(const EmbPHit hit1, const EmbPHit hit2)
 
 
 
-/* @func embHitlistMatchFold ************************************************
+/* @func embHitlistMatchFold **************************************************
 **
 ** Function to sort Hitlist object by Fold element. 
 **
@@ -1325,6 +1380,8 @@ EmbPHit embHitMerge(const EmbPHit hit1, const EmbPHit hit2)
 **
 ** @return [ajint] -1 if Fold1 should sort before Fold2, +1 if the Fold2 
 ** should sort first. 0 if they are identical.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1342,7 +1399,7 @@ ajint embHitlistMatchFold(const void *hit1, const void *hit2)
 
 
 
-/* @func embMatchScore ******************************************************
+/* @func embMatchScore ********************************************************
 **
 ** Function to sort Hit objects by score record. Usually called by 
 ** ajListSort.
@@ -1351,6 +1408,8 @@ ajint embHitlistMatchFold(const void *hit1, const void *hit2)
 ** @param [r] hit2  [const void*] Pointer to Hit object 2
 **
 ** @return [ajint] 1 if score1<score2, 0 if score1==score2, else -1.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1373,7 +1432,7 @@ ajint embMatchScore(const void *hit1, const void *hit2)
 
 
 
-/* @func embMatchinvScore ***************************************************
+/* @func embMatchinvScore *****************************************************
 **
 ** Function to sort Hit objects by score record. Usually called by 
 ** ajListSort.  The sorting order is inverted - i.e. it returns -1 if score1 
@@ -1383,6 +1442,8 @@ ajint embMatchScore(const void *hit1, const void *hit2)
 ** @param [r] hit2  [const void*] Pointer to Hit object 2
 **
 ** @return [ajint] 1 if score1<score2, 0 if score1==score2, else -1.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1415,6 +1476,8 @@ ajint embMatchinvScore(const void *hit1, const void *hit2)
 **
 ** @return [ajint] -1 if Ligid1 should sort before Ligid2, +1 if the Ligid2 
 ** should sort first. 0 if they are identical.
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -1432,7 +1495,7 @@ ajint embMatchLigid(const void *hit1, const void *hit2)
 
 
 
-/* @func embMatchSN ******************************************************
+/* @func embMatchSN ***********************************************************
 **
 ** Function to sort Hit objects by sn element within Sig element. Usually
 ** called by ajListSort.
@@ -1441,6 +1504,8 @@ ajint embMatchLigid(const void *hit1, const void *hit2)
 ** @param [r] hit2  [const void*] Pointer to Hit object 2
 **
 ** @return [ajint] 1 if sn1<sn2, 0 if sn1==sn2, else -1.
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
@@ -1499,7 +1564,7 @@ ajint embMatchSN(const void *hit1, const void *hit2)
 
 
 
-/* @func embHitsOverlap *****************************************************
+/* @func embHitsOverlap *******************************************************
 **
 ** Checks for overlap between two hits.
 **
@@ -1509,6 +1574,8 @@ ajint embMatchSN(const void *hit1, const void *hit2)
 **
 ** @return [AjBool] True if the overlap between the sequences is at least as 
 ** long as the threshold. False otherwise.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1579,7 +1646,7 @@ AjBool embHitsOverlap(const EmbPHit hit1, const EmbPHit hit2, ajuint n)
 
 
 
-/* @func embHitReadFasta ****************************************************
+/* @func embHitReadFasta ******************************************************
 **
 ** Read a hit object from a file in extended FASTA format 
 ** (see documentation for the DOMAINATRIX "seqsearch" application). 
@@ -1589,6 +1656,8 @@ AjBool embHitsOverlap(const EmbPHit hit1, const EmbPHit hit2, ajuint n)
 ** @return [EmbPHit] Hit object, or NULL if the file was not in extended 
 ** FASTA (DHF) format (indicated by a token count of the the lines 
 ** beginning with '>').
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
@@ -1732,7 +1801,7 @@ EmbPHit embHitReadFasta(AjPFile inf)
 
 
 
-/* @func embHitlistRead *****************************************************
+/* @func embHitlistRead *******************************************************
 **
 ** Read a hitlist object from a file in embl-like format (see documentation
 ** for the DOMAINATRIX "seqsearch" application). 
@@ -1740,6 +1809,8 @@ EmbPHit embHitReadFasta(AjPFile inf)
 ** @param [u] inf      [AjPFile] Input file stream
 **
 ** @return [EmbPHitlist] Hitlist object
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -1868,9 +1939,9 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 	    (ret)->Sunid_Family = Sunid_Family;
 
 	    if(ajStrMatchC(type, "SCOP"))
-		(ret)->Type = ajSCOP;
+		(ret)->Type = embESignatureTypeSCOP;
 	    else if(ajStrMatchC(type, "CATH"))
-		(ret)->Type = ajCATH;
+		(ret)->Type = embESignatureTypeCATH;
 	}
 	else if(ajStrPrefixC(line,"NN"))
 	{
@@ -1946,7 +2017,7 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 
 
 
-/* @func embHitlistReadFasta ************************************************
+/* @func embHitlistReadFasta **************************************************
 **
 ** Read a hitlist object from a file in extended FASTA format 
 ** (see documentation for the DOMAINATRIX "seqsearch" application). 
@@ -1954,6 +2025,8 @@ EmbPHitlist embHitlistRead(AjPFile inf)
 ** @param [u] inf      [AjPFile] Input file stream
 **
 ** @return [EmbPHitlist] Hitlist object
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
@@ -2065,7 +2138,7 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
                 */
 		embHitDel(&hit);
 		
-		hitlist->N = ajListToarray(tmplist, (void ***)&hitlist->hits);
+		hitlist->N = (ajuint) ajListToarray(tmplist, (void ***)&hitlist->hits);
 		ajStrDel(&line);
 		ajStrDel(&subline);
 		ajStrDel(&type);
@@ -2086,9 +2159,9 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 		    hitlist->Sunid_Family = this_id;
 
 		    if(ajStrMatchC(type, "SCOP"))
-			hitlist->Type = ajSCOP;
+			hitlist->Type = embESignatureTypeSCOP;
 		    else if(ajStrMatchC(type, "CATH"))
-			hitlist->Type = ajCATH;
+			hitlist->Type = embESignatureTypeCATH;
 		}	
 
 		last_id = this_id;
@@ -2172,7 +2245,7 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
     {
 	ajStrRemoveWhite(&hit->Seq);
 	ajListPushAppend(tmplist, hit);
-	hitlist->N = ajListToarray(tmplist, (void ***)&hitlist->hits);
+	hitlist->N = (ajuint) ajListToarray(tmplist, (void ***)&hitlist->hits);
 	ajStrDel(&subline);
 	ajStrDel(&line);
 	ajStrDel(&type);
@@ -2196,7 +2269,7 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 
 
 
-/* @func embHitlistReadNode *************************************************
+/* @func embHitlistReadNode ***************************************************
 **
 ** Reads a scop families file (see documentation for the EMBASSY 
 ** DOMAINATRIX package) and writes a list of Hitlist objects containing 
@@ -2209,6 +2282,8 @@ EmbPHitlist embHitlistReadFasta(AjPFile inf)
 ** @param [r] klass  [const AjPStr]    Class.
 ** 
 ** @return [AjPList] List of Hitlist objects or NULL.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -2314,7 +2389,7 @@ AjPList embHitlistReadNode(AjPFile inf,
 
 
 
-/* @func embHitlistReadNodeFasta ********************************************
+/* @func embHitlistReadNodeFasta **********************************************
 **
 ** Reads a domain families file (see documentation for the EMBASSY 
 ** DOMAINATRIX package) and writes a list of Hitlist objects containing 
@@ -2327,6 +2402,8 @@ AjPList embHitlistReadNode(AjPFile inf,
 ** @param [r] klass  [const AjPStr]    Class.
 ** 
 ** @return [AjPList] List of Hitlist objects or NULL.
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
@@ -2434,7 +2511,7 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 
 
 
-/* @func embHitlistWrite ****************************************************
+/* @func embHitlistWrite ******************************************************
 **
 ** Write contents of a Hitlist object to an output file in embl-like format
 ** (see documentation for the DOMAINATRIX "seqsearch" application).
@@ -2445,6 +2522,8 @@ AjPList embHitlistReadNodeFasta(AjPFile inf,
 ** @param [r] obj [const EmbPHitlist] Hitlist object
 **
 ** @return [AjBool] True on success
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -2457,9 +2536,9 @@ AjBool embHitlistWrite(AjPFile outf, const EmbPHitlist obj)
 	return ajFalse;
 
 
-    if((obj->Type == ajSCOP))  
+    if((obj->Type == embESignatureTypeSCOP))  
 	ajFmtPrintF(outf, "TY   SCOP\nXX\n");
-    else if ((obj->Type == ajCATH))
+    else if ((obj->Type == embESignatureTypeCATH))
 	ajFmtPrintF(outf, "TY   CATH\nXX\n");
 
 
@@ -2552,7 +2631,7 @@ AjBool embHitlistWrite(AjPFile outf, const EmbPHitlist obj)
 
 
 
-/* @func embHitlistWriteSubset **********************************************
+/* @func embHitlistWriteSubset ************************************************
 **
 ** Write contents of a Hitlist object to an output file in embl-like format
 ** (see documentation for the DOMAINATRIX "seqsearch" application).
@@ -2566,6 +2645,8 @@ AjBool embHitlistWrite(AjPFile outf, const EmbPHitlist obj)
 ** @param [r] ok    [const AjPUint]     Whether hits are to be printed or not
 **
 ** @return [AjBool] True on success
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -2581,9 +2662,9 @@ AjBool embHitlistWriteSubset(AjPFile outf,
 	return ajFalse;
 
 
-    if((obj->Type == ajSCOP))  
+    if((obj->Type == embESignatureTypeSCOP))  
 	ajFmtPrintF(outf, "TY   SCOP\nXX\n");
-    else if ((obj->Type == ajCATH))
+    else if ((obj->Type == embESignatureTypeCATH))
 	ajFmtPrintF(outf, "TY   CATH\nXX\n");
 
     if(MAJSTRGETLEN(obj->Class))
@@ -2679,7 +2760,7 @@ AjBool embHitlistWriteSubset(AjPFile outf,
 
 
 
-/* @func embHitlistWriteFasta ***********************************************
+/* @func embHitlistWriteFasta *************************************************
 **
 ** Write contents of a Hitlist object to an output file in embl-like format
 ** (see documentation for the DOMAINATRIX "seqsearch" application).
@@ -2690,6 +2771,8 @@ AjBool embHitlistWriteSubset(AjPFile outf,
 ** @param [r] obj [const EmbPHitlist] Hitlist object
 **
 ** @return [AjBool] True on success
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
@@ -2716,9 +2799,9 @@ AjBool embHitlistWriteFasta(AjPFile outf, const  EmbPHitlist obj)
 
 	ajFmtPrintF(outf, "%u^%u^", obj->hits[x]->Start, obj->hits[x]->End);
 
-	if((obj->Type == ajSCOP))  
+	if((obj->Type == embESignatureTypeSCOP))  
 	    ajFmtPrintF(outf, "SCOP^");
-	else if ((obj->Type == ajCATH))
+	else if ((obj->Type == embESignatureTypeCATH))
 	    ajFmtPrintF(outf, "CATH^");
 	else
 	    ajFmtPrintF(outf, ".^");
@@ -2782,7 +2865,7 @@ AjBool embHitlistWriteFasta(AjPFile outf, const  EmbPHitlist obj)
 
 
 
-/* @func embHitlistWriteSubsetFasta *****************************************
+/* @func embHitlistWriteSubsetFasta *******************************************
 **
 ** Write contents of a Hitlist object to an output file in embl-like format
 ** (see documentation for the DOMAINATRIX "seqsearch" application).
@@ -2796,6 +2879,8 @@ AjBool embHitlistWriteFasta(AjPFile outf, const  EmbPHitlist obj)
 ** @param [r] ok    [const AjPUint]     Whether hits are to be printed or not
 **
 ** @return [AjBool] True on success
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
@@ -2826,9 +2911,9 @@ AjBool embHitlistWriteSubsetFasta(AjPFile outf,
 	    ajFmtPrintF(outf, "%u^%u^",
 			obj->hits[x]->Start, obj->hits[x]->End);
 
-	    if((obj->Type == ajSCOP))  
+	    if((obj->Type == embESignatureTypeSCOP))  
 		ajFmtPrintF(outf, "SCOP^");
-	    else if ((obj->Type == ajCATH))
+	    else if ((obj->Type == embESignatureTypeCATH))
 		ajFmtPrintF(outf, "CATH^");
 	    else
 		ajFmtPrintF(outf, ".^");
@@ -2902,6 +2987,8 @@ AjBool embHitlistWriteSubsetFasta(AjPFile outf,
 ** @param [r] obj [const EmbPHitlist] Hitlist object
 **
 ** @return [AjBool] True on success
+**
+** @release 3.0.0
 ** @@
 ****************************************************************************/
 
@@ -2929,9 +3016,9 @@ AjBool        embHitlistWriteHitFasta(AjPFile outf,
     
     ajFmtPrintF(outf, "%u^%u^", obj->hits[n]->Start, obj->hits[n]->End);
     
-    if((obj->Type == ajSCOP))  
+    if((obj->Type == embESignatureTypeSCOP))  
 	ajFmtPrintF(outf, "SCOP^");
-    else if ((obj->Type == ajCATH))
+    else if ((obj->Type == embESignatureTypeCATH))
 	ajFmtPrintF(outf, "CATH^");
     else
 	ajFmtPrintF(outf, ".^");
@@ -2993,7 +3080,7 @@ AjBool        embHitlistWriteHitFasta(AjPFile outf,
 
 
 
-/* @func embSignatureReadNew ************************************************
+/* @func embSignatureReadNew **************************************************
 **
 ** Read a Signature object from a file in embl-like format (see documentation
 ** for the DOMAINATRIX "sigscan" application).
@@ -3001,6 +3088,8 @@ AjBool        embHitlistWriteHitFasta(AjPFile outf,
 ** @param [u] inf [AjPFile] Input file stream
 **
 ** @return [EmbPSignature] Signature object
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -3188,16 +3277,16 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 	    (ret)=embSignatureNew(npos);
 
 	    if(ajStrMatchC(type, "SCOP"))
-		(ret)->Type = ajSCOP;
+		(ret)->Type = embESignatureTypeSCOP;
 	    else if(ajStrMatchC(type, "CATH"))
-		(ret)->Type = ajCATH;
+		(ret)->Type = embESignatureTypeCATH;
 	    else if(ajStrMatchC(type, "LIGAND"))
-		(ret)->Type = ajLIGAND;
+		(ret)->Type = embESignatureTypeLIGAND;
 
 	    if(ajStrMatchC(typesig, "1D"))
-		(ret)->Typesig = aj1D;
+		(ret)->Typesig = embESignatureTypesig1D;
 	    else if(ajStrMatchC(typesig, "3D"))
-		(ret)->Typesig = aj3D;
+		(ret)->Typesig = embESignatureTypesig3D;
 
 	    ajStrAssignS(&(ret)->Class, class);
 	    ajStrAssignS(&(ret)->Architecture, arch);
@@ -3252,13 +3341,13 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
                 if(!(ok = ajReadlineTrim(inf,&line)))
                     break;
 
-                if(ret->Typesig == aj1D)
+                if(ret->Typesig == embESignatureTypesig1D)
                 {
                     ajFmtScanS(line, "%*s %c %*c %u", &c1,&v2);
                     ajChararrPut(&(ret)->dat[n-1]->rids,i,c1);
                     ajUintPut(&(ret)->dat[n-1]->rfrq,i,v2);
                 }
-                else if(ret->Typesig == aj3D)
+                else if(ret->Typesig == embESignatureTypesig3D)
                 {
                     ajFmtScanS(line, "%*s %S %*c %u", &env,&v2);
                     ajStrAssignS(&(ret)->dat[n-1]->eids[i], env);
@@ -3325,7 +3414,7 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 
 
 
-/* @func embSignatureWrite **************************************************
+/* @func embSignatureWrite ****************************************************
 **
 ** Write contents of a Signature object to an output file in embl-like 
 ** format (see documentation for the DOMAINATRIX "sigscan" application). 
@@ -3334,6 +3423,8 @@ EmbPSignature embSignatureReadNew(AjPFile inf)
 ** @param [r] obj  [const EmbPSignature]  Signature object
 **
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
@@ -3344,17 +3435,17 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
     if(!outf || !obj)
 	return ajFalse;
 
-    if((obj->Type == ajSCOP))  
+    if((obj->Type == embESignatureTypeSCOP))  
 	ajFmtPrintF(outf, "TY   SCOP\nXX\n");
-    else if ((obj->Type == ajCATH))
+    else if ((obj->Type == embESignatureTypeCATH))
 	ajFmtPrintF(outf, "TY   CATH\nXX\n");
-    else if ((obj->Type == ajLIGAND))
+    else if ((obj->Type == embESignatureTypeLIGAND))
 	ajFmtPrintF(outf, "TY   LIGAND\nXX\n");
 
 
-    if((obj->Typesig == aj1D))  
+    if((obj->Typesig == embESignatureTypesig1D))  
 	ajFmtPrintF(outf, "TS   1D\nXX\n");
-    else if ((obj->Typesig == aj3D))
+    else if ((obj->Typesig == embESignatureTypesig3D))
 	ajFmtPrintF(outf, "TS   3D\nXX\n");
     else
     {
@@ -3418,8 +3509,8 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
 
 
 
-    /* Signatures of type ajLIGAND only */
-    if(obj->Type == ajLIGAND)
+    /* Signatures of type embESignatureTypeLIGAND only */
+    if(obj->Type == embESignatureTypeLIGAND)
     {
         ajFmtPrintF(outf, "%-5sPDB %S; DOM %S; LIG %S;\n", 
                     "ID", 
@@ -3456,7 +3547,7 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
 
 
 
-	if(obj->Typesig == aj1D)
+	if(obj->Typesig == embESignatureTypesig1D)
 	{
 	    ajFmtPrintF(outf,"XX\nIN   NRES %u ; NGAP %u ; WSIZ %u\nXX\n",
 			obj->dat[i]->nres, obj->dat[i]->ngap,
@@ -3467,7 +3558,7 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
 			    (char)  ajChararrGet(obj->dat[i]->rids, j),
 			    (ajint) ajUintGet(obj->dat[i]->rfrq, j));
 	}
-	else if (obj->Typesig == aj3D)
+	else if (obj->Typesig == embESignatureTypesig3D)
 	{
 	    ajFmtPrintF(outf,"XX\nIN   NRES %u ; NGAP %u ; WSIZ %u\nXX\n",
 			obj->dat[i]->nenv, obj->dat[i]->ngap,
@@ -3510,7 +3601,7 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
 
 
 
-/* @func embSignatureHitsRead ***********************************************
+/* @func embSignatureHitsRead *************************************************
 **
 ** Reads a signature hits file, allocates a Hitlist object and writes it 
 ** with hits from a signature hits file (see documentation for the 
@@ -3520,6 +3611,8 @@ AjBool embSignatureWrite(AjPFile outf, const EmbPSignature obj)
 ** @param [u] inf  [AjPFile]      Input file stream
 **
 ** @return [EmbPHitlist] Hitlist object that was allocated.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -3653,7 +3746,7 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
 	}
     }
 
-    ret = embHitlistNew(ajListGetLength(list));
+    ret = embHitlistNew((ajuint) ajListGetLength(list));
     ajStrAssignS(&ret->Class, class);
     ajStrAssignS(&ret->Architecture, arch);
     ajStrAssignS(&ret->Topology, top);
@@ -3663,13 +3756,13 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
     ret->Sunid_Family = Sunid_Family;
 
     if(ajStrMatchC(type, "SCOP"))
-	(ret)->Type = ajSCOP;
+	(ret)->Type = embESignatureTypeSCOP;
     else if(ajStrMatchC(type, "CATH"))
-	(ret)->Type = ajCATH;
+	(ret)->Type = embESignatureTypeCATH;
     else if(ajStrMatchC(type, "LIGAND"))
-      (ret)->Type = ajLIGAND;
+      (ret)->Type = embESignatureTypeLIGAND;
     
-    ret->N=ajListToarray(list, (void ***)&(ret->hits));
+    ret->N = (ajuint) ajListToarray(list, (void ***)&(ret->hits));
     
 
     ajListFree(&list);
@@ -3688,7 +3781,7 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
 
 
 
-/* @func embSignatureHitsWrite **********************************************
+/* @func embSignatureHitsWrite ************************************************
 **
 ** Writes a list of AjOHit objects to an output file (see documentation
 ** for the DOMAINATRIX "sigscan" application). This is intended for 
@@ -3703,6 +3796,8 @@ EmbPHitlist embSignatureHitsRead(AjPFile inf)
 ** @param [r] n       [ajuint]        Max. no. false hits to output
 **
 ** @return [AjBool] True if file was written
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -3723,11 +3818,11 @@ AjBool embSignatureHitsWrite(AjPFile outf, const EmbPSignature sig,
 
 
     /* Print SCOP classification records of signature */
-    if((sig->Type == ajSCOP))  
+    if((sig->Type == embESignatureTypeSCOP))  
 	ajFmtPrintF(outf, "TY   SCOP\nXX\n");
-    else if ((sig->Type == ajCATH))
+    else if ((sig->Type == embESignatureTypeCATH))
 	ajFmtPrintF(outf, "TY   CATH\nXX\n");
-    else if ((sig->Type == ajLIGAND))
+    else if ((sig->Type == embESignatureTypeLIGAND))
 	ajFmtPrintF(outf, "TY   LIGAND\nXX\n");
 
     if(MAJSTRGETLEN(sig->Class))
@@ -3833,7 +3928,7 @@ AjBool embSignatureHitsWrite(AjPFile outf, const EmbPSignature sig,
 
 
 
-/* @func embHitlistClassify *************************************************
+/* @func embHitlistClassify ***************************************************
 **
 ** Classifies a list of signature-sequence hits (held in a Hitlist object) 
 ** according to list of target sequences (a list of Hitlist objects).
@@ -3888,6 +3983,8 @@ AjBool embSignatureHitsWrite(AjPFile outf, const EmbPSignature sig,
 ** required for two hits with the same code to be counted as the same hit.
 **
 ** @return [AjBool] True on success, else False
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -3961,8 +4058,8 @@ AjBool embHitlistClassify(EmbPHitlist hitlist, const AjPList targets,
     
     /* Order the list of Hitidx structures by Id and transform 
        into an array */
-    ajListSort(idxlist, embHitidxMatchId);
-    idxsiz = ajListToarray(idxlist, (void ***) &idxarr);
+    ajListSort(idxlist, &embHitidxMatchId);
+    idxsiz = (ajuint) ajListToarray(idxlist, (void ***) &idxarr);
         
 
     /* Loop through list of hits */
@@ -4233,7 +4330,7 @@ AjBool embHitlistClassify(EmbPHitlist hitlist, const AjPList targets,
 
 
 
-/* @func embSignatureCompile ************************************************
+/* @func embSignatureCompile **************************************************
 **
 ** Function to compile a signature: calls embSigposNew to allocate an array
 ** of AjOSigpos objects within an AjOSignature object, and then writes this
@@ -4246,6 +4343,8 @@ AjBool embHitlistClassify(EmbPHitlist hitlist, const AjPList targets,
 ** @param [r] matrix [const AjPMatrixf]    Residue substitution matrix
 **
 ** @return [AjBool] True if array was written succesfully.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -4363,7 +4462,7 @@ AjBool embSignatureCompile(EmbPSignature *S, float gapo, float gape,
 	    }
 
 	/* CALCULATE RESIDUE MATCH VALUES */
-	if( (*S)->Typesig==aj1D)
+	if( (*S)->Typesig == embESignatureTypesig1D)
 	{
 	    for(z=0;z<26; z++)
 	    {
@@ -4383,7 +4482,7 @@ AjBool embSignatureCompile(EmbPSignature *S, float gapo, float gape,
 		(*S)->pos[x]->subs[z] /= divi;
 	    }
 	}
-	else if( (*S)->Typesig==aj3D)
+	else if( (*S)->Typesig == embESignatureTypesig3D)
 	{
 	    for(z=0;z<26; z++)
 	    {
@@ -4439,7 +4538,7 @@ AjBool embSignatureCompile(EmbPSignature *S, float gapo, float gape,
 
 
 
-/* @func embSignatureAlignSeq ***********************************************
+/* @func embSignatureAlignSeq *************************************************
 **
 ** Performs an alignment of a signature to a protein sequence. The signature
 ** must have first been compiled by calling the embSignatureCompile 
@@ -4455,6 +4554,8 @@ AjBool embSignatureCompile(EmbPSignature *S, float gapo, float gape,
 ** the Hit object was written.  Returns False if there was an internal error, 
 ** bad arg's etc. or in cases where a sequence is rejected because of 
 ** N-terminal matching options). 
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -4798,7 +4899,7 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 
 
 
-/* @func embSignatureAlignSeqall ********************************************
+/* @func embSignatureAlignSeqall **********************************************
 **
 ** Aligns a signature to a set of sequences and writes a Hitlist object with 
 ** the results. The top-scoring <n> hits are written. The signature must have 
@@ -4813,6 +4914,8 @@ AjBool embSignatureAlignSeq(const EmbPSignature S, const AjPSeq seq,
 ** @param [r] nterm    [ajuint]        N-terminal matching option
 **
 ** @return [AjBool] True if Hitlist object was written succesfully.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -4875,7 +4978,7 @@ AjBool embSignatureAlignSeqall(const EmbPSignature sig, AjPSeqall db,
 	if(hitcnt>n)
 	{	
 	    /* Sort list according to score, highest first */
-	    ajListSort(listhits, embMatchinvScore);
+	    ajListSort(listhits, &embMatchinvScore);
 	 
 
 	    /* Pop the hit (lowest scoring) from the bottom of the list */
@@ -4886,11 +4989,11 @@ AjBool embSignatureAlignSeqall(const EmbPSignature sig, AjPSeqall db,
     
 
     /* Sort list according to score, highest first */
-    ajListSort(listhits, embMatchinvScore);
+    ajListSort(listhits, &embMatchinvScore);
 
 
     /* Convert list to array within Hitlist object */
-    nhits=ajListToarray(listhits, (void ***)  &(*hitlist)->hits);
+    nhits = (ajuint) ajListToarray(listhits, (void ***)  &(*hitlist)->hits);
     (*hitlist)->N = nhits;
     
 
@@ -4903,11 +5006,13 @@ AjBool embSignatureAlignSeqall(const EmbPSignature sig, AjPSeqall db,
 
 
 
-/* @func embSigExit ************************************************************
+/* @func embSigExit ***********************************************************
 **
 ** Cleanup of signature function internals.
 **
 ** @return [void]
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 

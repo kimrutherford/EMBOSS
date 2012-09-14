@@ -7,7 +7,7 @@ Search for programs with 'codon' in their parameters:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>wossparam codon </b>
-Finds programs by EDAM parameter
+Find programs by EDAM parameter
 
 SEARCH FOR PARAM 'CODON'
 syco   Draw synonymous codon usage statistic plot for a nucleotide sequence

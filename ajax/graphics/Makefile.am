@@ -2,35 +2,31 @@
 
 lib_LTLIBRARIES = libajaxg.la
 
-AM_CFLAGS = $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
+libajaxg_la_CFLAGS = $(WARN_CFLAGS) $(DEVWARN_CFLAGS) $(JAVA_CFLAGS)
 
-if ISCYGWIN
-CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import
-CYGWIN_LDAJAXG = -L../../plplot -L../expat -L../pcre -L../core -lajax -leplplot -leexpat -lepcre
-endif
-
+libajaxg_la_CPPFLAGS  = -I$(top_srcdir)/ajax/pcre
 if !ESYSTEMLIBS
-EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat
+libajaxg_la_CPPFLAGS += -I$(top_srcdir)/ajax/expat
 endif
+libajaxg_la_CPPFLAGS += -I$(top_srcdir)/plplot
+libajaxg_la_CPPFLAGS += $(JAVA_CPPFLAGS)
 
-
-AM_CPPFLAGS = -I$(top_srcdir)/ajax/core \
--I$(top_srcdir)/plplot \
--I$(top_srcdir)/ajax/pcre \
-$(EXTRA_INCLUDES)
-
-AJAXGSRC = ajgraph.c ajhist.c
-
-include_HEADERS = ajgraph.h ajgraphstruct.h  ajhist.h
-
-libajaxg_la_SOURCES = $(AJAXGSRC)
-
-VERS_INF = -version-info 6:4:0
-
+libajaxg_la_LDFLAGS  = -version-info 6:4:0
 if ISCYGWIN
-LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LDAJAXG)
-else
-LINKFLAGS = $(VERS_INF)
+libajaxg_la_LDFLAGS += -no-undefined
+libajaxg_la_LDFLAGS += -Wl,--add-stdcall-alias
+libajaxg_la_LDFLAGS += -Wl,--export-all-symbols
+libajaxg_la_LDFLAGS += -Wl,--enable-auto-import
+libajaxg_la_LDFLAGS += -L../../plplot
+libajaxg_la_LDFLAGS += -L../expat
+libajaxg_la_LDFLAGS += -L../pcre
+libajaxg_la_LDFLAGS += -L../core
+libajaxg_la_LDFLAGS += -lajax
+libajaxg_la_LDFLAGS += -leplplot
+libajaxg_la_LDFLAGS += -leexpat
+libajaxg_la_LDFLAGS += -lepcre
 endif
 
-libajaxg_la_LDFLAGS = $(LINKFLAGS)
+libajaxg_la_SOURCES = ajgraph.c ajhist.c
+
+include_HEADERS = ajgraph.h ajgraphstruct.h ajhist.h

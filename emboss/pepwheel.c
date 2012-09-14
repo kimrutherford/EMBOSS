@@ -77,12 +77,13 @@ int main(int argc, char **argv)
     ajint j;
     ajint k;
 
+    ajint maxres = 0;
+
     float xmin = (float) -1.0;
     float xmax = (float)  1.0;
     float ymin = (float) -0.75;
     float ymax = (float)  0.75;
 
-    float minresplot = (float) 36.0;
     float resgap =     (float) 0.0533;
     float wheelgap =   (float) 0.00;
     float nresgap =    (float) 0.08;
@@ -147,16 +148,18 @@ int main(int argc, char **argv)
 
     first = ajTrue;
     angle = (float) 90.0 + ang;
-    if(end-begin > (ajint)minresplot)
-	wradius = (float) 0.2;
-    else
-	wradius = (float) 0.40;
+    maxres = 0;
+    for(i=0;i<len;i+=steps)
+        maxres++;
+
+    wradius = (float) 0.40 / maxres;
 
     for(i=0,lc=0,radius=wradius+wheelgap;i<len;i+=steps)
     {
 	wradius += wheelgap;
 	startloop = ajTrue;
 	k = AJMIN(i+steps, end);
+
 	for(j=i;j<k;++j)
 	{
 	    oldangle = angle;

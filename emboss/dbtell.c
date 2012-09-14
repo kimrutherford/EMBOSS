@@ -118,14 +118,12 @@ int main(int argc, char **argv)
         while(!ajListIterDone(iter))
         {
             tagval = ajListIterGet(iter);
-            space = 15 - ajStrGetLen(tagval->Tag);
+            space = 15 - ajStrGetLen(ajTagvalGetTag(tagval));
             ajFmtPrintF(outfile, "   %S:%.*s\"%S\"\n",
-                        tagval->Tag,
+                        ajTagvalGetTag(tagval),
                         space, "                    ",
-                        tagval->Value);
-            ajStrDel(&tagval->Tag);
-            ajStrDel(&tagval->Value);
-            AJFREE(tagval);
+                        ajTagvalGetValue(tagval));
+            ajTagvalDel(&tagval);
         }
         ajListIterDel(&iter);
         ajListFree(&list);

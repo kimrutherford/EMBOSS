@@ -1,10 +1,55 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajphylo ***********************************************************
+**
+** AJAX Phylogeny functions
+** These functions create and control linked lists.
+**
+** @author Copyright (C) 2003 Peter Rice
+** @version $Revision: 1.18 $
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajphylo_h
-#define ajphylo_h
+#ifndef AJPHYLO_H
+#define AJPHYLO_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -20,7 +65,7 @@ extern "C"
 ** S-format allows degree of replication for each distance (integer)
 ** we can check for this (twice as many numbers) otherwise we set the
 ** replicates to 1.
-** 
+**
 ** @alias AjSPhyloDist
 ** @alias AjOPhyloDist
 **
@@ -60,7 +105,7 @@ typedef struct AjSPhyloDist
 ** @alias AjSPhyloFreq
 ** @alias AjOPhyloFreq
 **
-** @attr Size [ajint] Number of rows 
+** @attr Size [ajint] Number of rows
 ** @attr Loci [ajint] Number of loci per name
 ** @attr Len [ajint] Number of values per name
 **                    may be more than 1 per locus
@@ -232,50 +277,58 @@ typedef struct AjSPhyloTree
 
 
 
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
+
 /*
 ** Prototype definitions
 */
 
-void           ajPhyloDistDel (AjPPhyloDist* pthis);
-AjPPhyloDist   ajPhyloDistNew (void);
-AjPPhyloDist*  ajPhyloDistRead (const AjPStr filename, ajint size,
-				AjBool missing);
-void           ajPhyloDistTrace (const AjPPhyloDist thys);
+void           ajPhyloDistDel(AjPPhyloDist* pthis);
+AjPPhyloDist   ajPhyloDistNew(void);
+AjPPhyloDist*  ajPhyloDistRead(const AjPStr filename, ajint size,
+                               AjBool missing);
+void           ajPhyloDistTrace(const AjPPhyloDist thys);
 
 void           ajPhyloExit(void);
 
-void           ajPhyloFreqDel (AjPPhyloFreq* pthis);
-AjPPhyloFreq   ajPhyloFreqNew (void);
-AjPPhyloFreq   ajPhyloFreqRead (const AjPStr filename, AjBool contchar,
-				AjBool genedata, AjBool indiv);
-void           ajPhyloFreqTrace (const AjPPhyloFreq thys);
+void           ajPhyloFreqDel(AjPPhyloFreq* pthis);
+AjPPhyloFreq   ajPhyloFreqNew(void);
+AjPPhyloFreq   ajPhyloFreqRead(const AjPStr filename, AjBool contchar,
+                               AjBool genedata, AjBool indiv);
+void           ajPhyloFreqTrace(const AjPPhyloFreq thys);
 
-void           ajPhyloPropDel (AjPPhyloProp* pthis);
-ajint          ajPhyloPropGetSize (const AjPPhyloProp thys);
-AjPPhyloProp   ajPhyloPropNew (void);
-AjPPhyloProp   ajPhyloPropRead (const AjPStr filename, const AjPStr propchars,
-				ajint len, ajint size);
-void           ajPhyloPropTrace (const AjPPhyloProp thys);
+void           ajPhyloPropDel(AjPPhyloProp* pthis);
+ajint          ajPhyloPropGetSize(const AjPPhyloProp thys);
+AjPPhyloProp   ajPhyloPropNew(void);
+AjPPhyloProp   ajPhyloPropRead(const AjPStr filename, const AjPStr propchars,
+                               ajint len, ajint size);
+void           ajPhyloPropTrace(const AjPPhyloProp thys);
 
-void           ajPhyloStateDel (AjPPhyloState* pthis);
+void           ajPhyloStateDel(AjPPhyloState* pthis);
 void           ajPhyloStateDelarray(AjPPhyloState** pthis);
-AjPPhyloState  ajPhyloStateNew (void);
-AjPPhyloState* ajPhyloStateRead (const AjPStr filename,
-				 const AjPStr statechars);
-void           ajPhyloStateTrace (const AjPPhyloState thys);
+AjPPhyloState  ajPhyloStateNew(void);
+AjPPhyloState* ajPhyloStateRead(const AjPStr filename,
+                                const AjPStr statechars);
+void           ajPhyloStateTrace(const AjPPhyloState thys);
 
-void           ajPhyloTreeDel (AjPPhyloTree* pthis);
+void           ajPhyloTreeDel(AjPPhyloTree* pthis);
 void           ajPhyloTreeDelarray(AjPPhyloTree** pthis);
-AjPPhyloTree   ajPhyloTreeNew (void);
-AjPPhyloTree*  ajPhyloTreeRead (const AjPStr filename, ajint size);
-void           ajPhyloTreeTrace (const AjPPhyloTree thys);
+AjPPhyloTree   ajPhyloTreeNew(void);
+AjPPhyloTree*  ajPhyloTreeRead(const AjPStr filename, ajint size);
+void           ajPhyloTreeTrace(const AjPPhyloTree thys);
 
 /*
 ** End of prototype definitions
 */
 
-#endif
 
-#ifdef __cplusplus
-}
-#endif
+
+
+AJ_END_DECLS
+
+#endif /* !AJPHYLO_H */

@@ -775,22 +775,22 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
 		case 'H':
 		    gf = ajFeatNewProt(TabRpt, NULL, strHelix, l0, ito, 0.0);
 		    ajFmtPrintS(&tmpStr, "*garnier H");
-		    ajFeatTagAdd(gf,  NULL, tmpStr);
+		    ajFeatTagAddSS(gf,  NULL, tmpStr);
 		    break;
 		case 'E':
 		    gf = ajFeatNewProt(TabRpt, NULL, strExtend, l0, ito, 0.0);
 		    ajFmtPrintS(&tmpStr, "*garnier E");
-		    ajFeatTagAdd(gf,  NULL, tmpStr);
+		    ajFeatTagAddSS(gf,  NULL, tmpStr);
 		    break;
 		case 'T':
 		    gf = ajFeatNewProt(TabRpt, NULL, strTurns, l0, ito, 0.0);
 		    ajFmtPrintS(&tmpStr, "*garnier T");
-		    ajFeatTagAdd(gf,  NULL, tmpStr);
+		    ajFeatTagAddSS(gf,  NULL, tmpStr);
 		    break;
 		case 'C':
 		    gf = ajFeatNewProt(TabRpt, NULL, strCoil, l0, ito, 0.0);
 		    ajFmtPrintS(&tmpStr, "*garnier C");
-		    ajFeatTagAdd(gf,  NULL, tmpStr);
+		    ajFeatTagAddSS(gf,  NULL, tmpStr);
 		    break;
 		default:
 		    break;

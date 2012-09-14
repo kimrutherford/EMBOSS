@@ -1,7 +1,57 @@
-#ifndef ajgraphstruct_h
-#define ajgraphstruct_h
+/* @include ajgraphstruct *****************************************************
+**
+** General Plot/Printing data structure
+**
+** @version $Revision: 1.10 $
+** @modified $Date: 2011/10/18 14:23:41 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
+
+#ifndef AJGRAPHSTRUCT_H
+#define AJGRAPHSTRUCT_H
 
 #define MAX_STRING 180
+
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajmess.h"
+#include "ajstr.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -53,6 +103,7 @@ typedef struct AjSGraphobj {
 ** @attr xaxis [AjPStr] Plot x axis title
 ** @attr yaxis [AjPStr] Plot y axis title
 ** @attr gtype [AjPStr] Graph type: 2D, Tick etc
+** @attr dataname [AjPStr] Source data name
 ** @attr xcalc [AjBool] if x calculated then delete after
 ** @attr ycalc [AjBool] as with x. So we do not delete data if it was
 **                      passed as a ptr
@@ -82,6 +133,7 @@ typedef struct AjSGraphdata {
   AjPStr xaxis;
   AjPStr yaxis;
   AjPStr gtype;
+  AjPStr dataname;
   AjBool xcalc;
   AjBool ycalc;
   AjBool truescale;
@@ -132,6 +184,7 @@ typedef struct AjSGraphdata {
 ** @attr xaxis [AjPStr] Plot x axis title
 ** @attr yaxis [AjPStr] Plot y axis title
 ** @attr outputfile [AjPStr] Output filename
+** @attr dataname [AjPStr] Data source name for datafile outputs
 ** @attr graphs [AjPGraphdata*] XY Data to plot for Graph(s)
 ** @attr Mainobj [AjPGraphobj] Objects to plot for single graph
 ** @@
@@ -163,6 +216,7 @@ typedef struct AjSGraph {
   AjPStr xaxis;
   AjPStr yaxis;
   AjPStr outputfile;
+  AjPStr dataname;
   AjPGraphdata *graphs;
   AjPGraphobj Mainobj;
 } AjOGraph;
@@ -175,4 +229,12 @@ enum AjEGraphColours {BLACK, RED, YELLOW, GREEN, AQUAMARINE,
 
 #define MAXCOL 15
 
-#endif /* ajgraphstruct_h */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
+AJ_END_DECLS
+
+#endif  /* !AJGRAPHSTRUCT_H */

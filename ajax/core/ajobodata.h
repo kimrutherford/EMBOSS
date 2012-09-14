@@ -1,14 +1,56 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajobodata *********************************************************
+**
+** AJAX OBO data structures
+**
+** @author Copyright (C) 2010 Peter Rice
+** @version $Revision: 1.8 $
+** @modified May 5 pmr 2010 First AJAX version
+** @modified Sep 8 2010 pmr Added query and reading functions
+** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajobodata_h
-#define ajobodata_h
+#ifndef AJOBODATA_H
+#define AJOBODATA_H
 
-#include "ajax.h"
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
-typedef struct AjSOboAccess AjSOboAccess;
+#include "ajdefine.h"
+#include "ajtextdata.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -61,8 +103,8 @@ typedef struct AjSOboin
 ** @other AjPOboin Obo input
 **
 ** @attr Name [const char*] Access method name used in emboss.default
-** @attr Access [(AjBool*)] Access function
-** @attr AccessFree [(AjBool*)] Access cleanup function
+** @attr Access [AjBool function] Access function
+** @attr AccessFree [AjBool function] Access cleanup function
 ** @attr Qlink [const char*] Supported query link operators
 ** @attr Desc [const char*] Description
 ** @attr Alias [AjBool] Alias for another name
@@ -70,14 +112,15 @@ typedef struct AjSOboin
 ** @attr Query [AjBool] Supports retrieval of selected entries
 ** @attr All [AjBool] Supports retrieval of all entries
 ** @attr Chunked [AjBool] Supports retrieval of entries in chunks
+** @attr Padding [AjBool] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
 typedef struct AjSOboAccess
 {
     const char *Name;
-    AjBool (*Access) (AjPOboin oboin);
-    AjBool (*AccessFree) (void* qry);
+    AjBool (*Access)(AjPOboin oboin);
+    AjBool (*AccessFree)(void* qry);
     const char* Qlink;
     const char* Desc;
     AjBool Alias;
@@ -85,6 +128,7 @@ typedef struct AjSOboAccess
     AjBool Query;
     AjBool All;
     AjBool Chunked;
+    AjBool Padding;
 } AjOOboAccess;
 
 #define AjPOboAccess AjOOboAccess*
@@ -116,6 +160,7 @@ typedef struct AjSOboData
     AjPTable Formulatable;
     AjPTable Misctable;
 } AjOOboData;
+
 #define AjPOboData AjOOboData*
 
 
@@ -146,6 +191,7 @@ typedef struct AjSObotag
     ajuint Linenumber;
     ajuint Padding;
 } AjOObotag;
+
 #define AjPObotag AjOObotag*
 
 
@@ -168,12 +214,13 @@ typedef struct AjSOboxref
     AjPStr Name;
     AjPStr Desc;
 } AjOOboxref;
+
 #define AjPOboxref AjOOboxref*
 
 
 
 
-/* @data AjPOboalias *********************************************************
+/* @data AjPOboalias **********************************************************
 **
 ** Alias name for an OBO identifier
 **
@@ -189,6 +236,7 @@ typedef struct AjSOboalias
     AjPStr  Alias;
     AjPStr  Id;
 } AjOOboalias;
+
 #define AjPOboalias AjOOboalias*
 
 
@@ -224,7 +272,7 @@ typedef struct AjSOboalias
 ** @attr TextPtr [AjPStr] Full text
 ** @attr Fpos [ajlong] File position (fseek) for Query
 ** @attr Format [AjEnum] Input format enum
-**
+** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -251,6 +299,7 @@ typedef struct AjSObo
     AjPStr  TextPtr;
     ajlong  Fpos;
     AjEnum  Format;
+    ajuint Padding;
 } AjOObo;
 
 #define AjPObo AjOObo*
@@ -294,12 +343,25 @@ typedef struct AjSOboall
 
 
 
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
+
+/*
+** Prototype definitions
+*/
+
 /*
 ** End of prototype definitions
 */
 
-#endif
 
-#ifdef __cplusplus
-}
-#endif
+
+
+AJ_END_DECLS
+
+#endif /* !AJOBODATA_H */

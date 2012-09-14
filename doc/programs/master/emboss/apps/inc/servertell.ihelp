@@ -1,14 +1,14 @@
 Display information about a public server
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
-  [-server]            string     The name of the database defined locally for
+  [-server]            string     The name of the server defined locally for
                                   use by EMBOSS. (Any string)
 
    Additional (Optional) qualifiers:
    -full               boolean    [N] The default behaviour is to report for
-                                  relevant databases only basic information
-                                  from the EMBOSS database definition
+                                  relevant servers only basic information from
+                                  the EMBOSS server definition
    -outfile            outfile    [stdout] Output file name
 
    Advanced (Unprompted) qualifiers: (none)

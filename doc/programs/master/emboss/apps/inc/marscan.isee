@@ -4,17 +4,17 @@
 <th>Description</th></tr>
 <tr>
 <td><a href="checktrans.html">checktrans</a></td>
-<td>Reports STOP codons and ORF statistics of a protein</td>
+<td>Report STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>
 <td><a href="getorf.html">getorf</a></td>
-<td>Finds and extracts open reading frames (ORFs)</td>
+<td>Find and extract open reading frames (ORFs)</td>
 </tr>
 
 <tr>
 <td><a href="jaspscan.html">jaspscan</a></td>
-<td>Scans DNA sequences for transcription factors</td>
+<td>Scan DNA sequences for transcription factors</td>
 </tr>
 
 <tr>
@@ -29,7 +29,7 @@
 
 <tr>
 <td><a href="sirna.html">sirna</a></td>
-<td>Finds siRNA duplexes in mRNA</td>
+<td>Find siRNA duplexes in mRNA</td>
 </tr>
 
 <tr>

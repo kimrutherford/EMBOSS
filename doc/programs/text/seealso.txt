@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Finds programs with similar function to a specified program
+   Find programs with similar function to a specified program
 
 Description
 
@@ -26,7 +26,7 @@ Usage
 
 
 % seealso
-Finds programs with similar function to a specified program
+Find programs with similar function to a specified program
 Program to search for: matcher
 
 SEE ALSO
@@ -39,14 +39,14 @@ supermatcher Calculate approximate local pair-wise alignments of larger sequence
 s
 water        Smith-Waterman local alignment of sequences
 wordfinder   Match large sequences against one or more other sequences
-wordmatch    Finds regions of identity (exact matches) of two sequences
+wordmatch    Find regions of identity (exact matches) of two sequences
 
 
 
 Command line arguments
 
-Finds programs with similar function to a specified program
-Version: EMBOSS:6.4.0.0
+Find programs with similar function to a specified program
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-search]            string     Enter the name of an EMBOSS program (Any
@@ -208,15 +208,15 @@ Known bugs
 
 See also
 
-                    Program name                       Description
-                    tfm           Displays full documentation for an application
-                    wossdata      Finds programs by EDAM data
-                    wossinput     Finds programs by EDAM input data
-                    wossname      Finds programs by keywords in their short description
-   wossoperation    Finds programs by EDAM operation
-                    wossoutput    Finds programs by EDAM output data
-                    wossparam     Finds programs by EDAM parameter
-                    wosstopic     Finds programs by EDAM topic
+                    Program name                      Description
+                    tfm           Display full documentation for an application
+                    wossdata      Find programs by EDAM data
+                    wossinput     Find programs by EDAM input data
+                    wossname      Find programs by keywords in their short description
+   wossoperation    Find programs by EDAM operation
+                    wossoutput    Find programs by EDAM output data
+                    wossparam     Find programs by EDAM parameter
+                    wosstopic     Find programs by EDAM topic
 
 Author(s)
 

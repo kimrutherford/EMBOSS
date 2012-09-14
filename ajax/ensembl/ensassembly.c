@@ -1,82 +1,85 @@
-/* @source Ensembl Assembly functions
+/* @source ensassembly ********************************************************
+**
+** Ensembl Assembly functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.26 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/02/26 11:57:21 $ by $Author: mks $
-** @version $Revision: 1.18 $
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensassembly.h"
 
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -138,6 +141,8 @@
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
 ** @return [EnsPAssembly] Ensembl Assembly or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -145,12 +150,12 @@ EnsPAssembly ensAssemblyNewCpy(const EnsPAssembly assembly)
 {
     EnsPAssembly pthis = NULL;
 
-    if(!assembly)
+    if (!assembly)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
+    pthis->Use = 1U;
 
     pthis->AssembledIdentifier = assembly->AssembledIdentifier;
     pthis->AssembledStart      = assembly->AssembledStart;
@@ -179,6 +184,8 @@ EnsPAssembly ensAssemblyNewCpy(const EnsPAssembly assembly)
 ** @param [r] orientation [ajint] Relative orientation
 **
 ** @return [EnsPAssembly] Ensembl Assembly or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -192,15 +199,15 @@ EnsPAssembly ensAssemblyNewIni(ajuint asmsrid,
 {
     EnsPAssembly assembly = NULL;
 
-    if(!asmsrid)
+    if (!asmsrid)
         return NULL;
 
-    if(!cmpsrid)
+    if (!cmpsrid)
         return NULL;
 
     AJNEW0(assembly);
 
-    assembly->Use = 1;
+    assembly->Use = 1U;
 
     assembly->AssembledIdentifier = asmsrid;
     assembly->AssembledStart      = asmstart;
@@ -224,12 +231,14 @@ EnsPAssembly ensAssemblyNewIni(ajuint asmsrid,
 ** @param [u] assembly [EnsPAssembly] Ensembl Assembly
 **
 ** @return [EnsPAssembly] Ensembl Assembly or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPAssembly ensAssemblyNewRef(EnsPAssembly assembly)
 {
-    if(!assembly)
+    if (!assembly)
         return NULL;
 
     assembly->Use++;
@@ -242,14 +251,14 @@ EnsPAssembly ensAssemblyNewRef(EnsPAssembly assembly)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Assembly object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Assembly object.
 **
 ** @fdata [EnsPAssembly]
 **
-** @nam3rule Del Destroy (free) an Ensembl Assembly object
+** @nam3rule Del Destroy (free) an Ensembl Assembly
 **
-** @argrule * Passembly [EnsPAssembly*] Ensembl Assembly object address
+** @argrule * Passembly [EnsPAssembly*] Ensembl Assembly address
 **
 ** @valrule * [void]
 **
@@ -266,24 +275,37 @@ EnsPAssembly ensAssemblyNewRef(EnsPAssembly assembly)
 ** @param [d] Passembly [EnsPAssembly*] Ensembl Assembly address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensAssemblyDel(EnsPAssembly* Passembly)
+void ensAssemblyDel(EnsPAssembly *Passembly)
 {
     EnsPAssembly pthis = NULL;
 
-    if(!Passembly)
+    if (!Passembly)
         return;
 
-    if(!*Passembly)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensAssemblyDel"))
+    {
+        ajDebug("ensAssemblyDel\n"
+                "  *Passembly %p\n",
+                *Passembly);
+
+        ensAssemblyTrace(*Passembly, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Passembly)
         return;
 
     pthis = *Passembly;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Passembly = NULL;
 
@@ -300,9 +322,9 @@ void ensAssemblyDel(EnsPAssembly* Passembly)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Assembly object.
+** Functions for returning members of an Ensembl Assembly object.
 **
 ** @fdata [EnsPAssembly]
 **
@@ -326,9 +348,9 @@ void ensAssemblyDel(EnsPAssembly* Passembly)
 **
 ** @argrule * assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @valrule Identifier [ajuint] Ensembl Sequence Region identifier or 0
-** @valrule Start [ajuint] Start or 0
-** @valrule End [ajuint] End or 0
+** @valrule Identifier [ajuint] Ensembl Sequence Region identifier or 0U
+** @valrule Start [ajuint] Start or 0U
+** @valrule End [ajuint] End or 0U
 ** @valrule Orientation [ajint] Orientation or 0
 **
 ** @fcategory use
@@ -339,21 +361,20 @@ void ensAssemblyDel(EnsPAssembly* Passembly)
 
 /* @func ensAssemblyGetAssembledEnd *******************************************
 **
-** Get the assembled Ensembl Sequence Region end element of an
+** Get the assembled Ensembl Sequence Region end member of an
 ** Ensembl Assembly.
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @return [ajuint] Assembled Ensembl Sequence Region end or 0
+** @return [ajuint] Assembled Ensembl Sequence Region end or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyGetAssembledEnd(const EnsPAssembly assembly)
 {
-    if(!assembly)
-        return 0;
-
-    return assembly->AssembledEnd;
+    return (assembly) ? assembly->AssembledEnd : 0U;
 }
 
 
@@ -361,21 +382,20 @@ ajuint ensAssemblyGetAssembledEnd(const EnsPAssembly assembly)
 
 /* @func ensAssemblyGetAssembledIdentifier ************************************
 **
-** Get the assembled Ensembl Sequence Region identifier element of an
+** Get the assembled Ensembl Sequence Region identifier member of an
 ** Ensembl Assembly.
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @return [ajuint] Assembled Ensembl Sequence Region identifier or 0
+** @return [ajuint] Assembled Ensembl Sequence Region identifier or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyGetAssembledIdentifier(const EnsPAssembly assembly)
 {
-    if(!assembly)
-        return 0;
-
-    return assembly->AssembledIdentifier;
+    return (assembly) ? assembly->AssembledIdentifier : 0U;
 }
 
 
@@ -383,21 +403,20 @@ ajuint ensAssemblyGetAssembledIdentifier(const EnsPAssembly assembly)
 
 /* @func ensAssemblyGetAssembledStart *****************************************
 **
-** Get the assembled Ensembl Sequence Region start element of an
+** Get the assembled Ensembl Sequence Region start member of an
 ** Ensembl Assembly.
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @return [ajuint] Assembled Ensembl Sequence Region start or 0
+** @return [ajuint] Assembled Ensembl Sequence Region start or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyGetAssembledStart(const EnsPAssembly assembly)
 {
-    if(!assembly)
-        return 0;
-
-    return assembly->AssembledStart;
+    return (assembly) ? assembly->AssembledStart : 0U;
 }
 
 
@@ -405,21 +424,20 @@ ajuint ensAssemblyGetAssembledStart(const EnsPAssembly assembly)
 
 /* @func ensAssemblyGetComponentEnd *******************************************
 **
-** Get the component Ensembl Sequence Region end element of an
+** Get the component Ensembl Sequence Region end member of an
 ** Ensembl Assembly.
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @return [ajuint] Component Ensembl Sequence Region end or 0
+** @return [ajuint] Component Ensembl Sequence Region end or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyGetComponentEnd(const EnsPAssembly assembly)
 {
-    if(!assembly)
-        return 0;
-
-    return assembly->ComponentEnd;
+    return (assembly) ? assembly->ComponentEnd : 0U;
 }
 
 
@@ -427,21 +445,20 @@ ajuint ensAssemblyGetComponentEnd(const EnsPAssembly assembly)
 
 /* @func ensAssemblyGetComponentIdentifier ************************************
 **
-** Get the component Ensembl Sequence Region identifier element of an
+** Get the component Ensembl Sequence Region identifier member of an
 ** Ensembl Assembly.
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @return [ajuint] Component Ensembl Sequence Region identifier or 0
+** @return [ajuint] Component Ensembl Sequence Region identifier or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyGetComponentIdentifier(const EnsPAssembly assembly)
 {
-    if(!assembly)
-        return 0;
-
-    return assembly->ComponentIdentifier;
+    return (assembly) ? assembly->ComponentIdentifier : 0U;
 }
 
 
@@ -449,21 +466,20 @@ ajuint ensAssemblyGetComponentIdentifier(const EnsPAssembly assembly)
 
 /* @func ensAssemblyGetComponentStart *****************************************
 **
-** Get the component Ensembl Sequence Region start element of an
+** Get the component Ensembl Sequence Region start member of an
 ** Ensembl Assembly.
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
-** @return [ajuint] Component Ensembl Sequence Region start or 0
+** @return [ajuint] Component Ensembl Sequence Region start or 0U
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 ajuint ensAssemblyGetComponentStart(const EnsPAssembly assembly)
 {
-    if(!assembly)
-        return 0;
-
-    return assembly->ComponentStart;
+    return (assembly) ? assembly->ComponentStart : 0U;
 }
 
 
@@ -472,20 +488,19 @@ ajuint ensAssemblyGetComponentStart(const EnsPAssembly assembly)
 /* @func ensAssemblyGetOrientation ********************************************
 **
 ** Get the releative orientation of assembled and component
-** Ensembl Sequence Regions element of an Ensembl Assembly.
+** Ensembl Sequence Regions member of an Ensembl Assembly.
 **
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
 ** @return [ajint] Orientation or 0
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajint ensAssemblyGetOrientation(const EnsPAssembly assembly)
 {
-    if(!assembly)
-        return 0;
-
-    return assembly->Orientation;
+    return (assembly) ? assembly->Orientation : 0;
 }
 
 
@@ -497,7 +512,7 @@ ajint ensAssemblyGetOrientation(const EnsPAssembly assembly)
 **
 ** @fdata [EnsPAssembly]
 **
-** @nam3rule Trace Report Ensembl Assembly elements to debug file
+** @nam3rule Trace Report Ensembl Assembly members to debug file
 **
 ** @argrule Trace assembly [const EnsPAssembly] Ensembl Assembly
 ** @argrule Trace level [ajuint] Indentation level
@@ -518,6 +533,8 @@ ajint ensAssemblyGetOrientation(const EnsPAssembly assembly)
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -525,7 +542,7 @@ AjBool ensAssemblyTrace(const EnsPAssembly assembly, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!assembly)
+    if (!assembly)
         return ajFalse;
 
     indent = ajStrNew();
@@ -585,6 +602,8 @@ AjBool ensAssemblyTrace(const EnsPAssembly assembly, ajuint level)
 ** @param [r] assembly [const EnsPAssembly] Ensembl Assembly
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -592,7 +611,7 @@ size_t ensAssemblyCalculateMemsize(const EnsPAssembly assembly)
 {
     size_t size = 0;
 
-    if(!assembly)
+    if (!assembly)
         return 0;
 
     size += sizeof (EnsOAssembly);

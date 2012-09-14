@@ -1,35 +1,46 @@
-/******************************************************************************
-** @source AJAX variation database functions
+/* @source ajvardb ************************************************************
+**
+** AJAX variation database functions
 **
 ** These functions control all aspects of AJAX variation database access
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.8 $
 ** @modified Oct 2010 pmr first version
+** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+
+#include "ajlib.h"
+
 #include "ajvardb.h"
+#include "ajvarread.h"
+#include "ajcall.h"
 
 #include <limits.h>
 #include <stdarg.h>
 #include <sys/types.h>
+
+#include <errno.h>
+#include <signal.h>
+
 #ifndef WIN32
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -43,13 +54,11 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #endif
-#include <errno.h>
-#include <signal.h>
 
 
 
 
-/* @funclist varAccess ******************************************************
+/* @funclist varAccess ********************************************************
 **
 ** Functions to access each database or variation access method
 **
@@ -57,26 +66,31 @@
 
 static AjOVarAccess varAccess[] =
 {
-  /* Name      AccessFunction   FreeFunction
-     Qlink    Description
-     Alias    Entry    Query    All      Chunk */
-    {NULL, NULL, NULL,
-     NULL, NULL,
-     AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE},
-
-    {NULL, NULL, NULL,
-     NULL, NULL,
-     AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE}
+  /*  Name      AccessFunction   FreeFunction
+      Qlink    Description
+      Alias    Entry    Query    All      Chunk   Padding */
+    {
+      NULL, NULL, NULL,
+      NULL, NULL,
+      AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE
+    },
+    {
+      NULL, NULL, NULL,
+      NULL, NULL,
+      AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE
+    }
 };
 
 
 
 
-/* @func ajVardbInit ********************************************************
+/* @func ajVardbInit **********************************************************
 **
 ** Initialise variation database internals
 **
 ** @return [void]
+**
+** @release 6.4.0
 ******************************************************************************/
 
 void ajVardbInit(void)
@@ -99,13 +113,15 @@ void ajVardbInit(void)
 
 
 
-/* @func ajVardbPrintAccess **************************************************
+/* @func ajVardbPrintAccess ***************************************************
 **
 ** Reports the internal data structures
 **
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -134,11 +150,13 @@ void ajVardbPrintAccess(AjPFile outf, AjBool full)
 
 
 
-/* @func ajVardbExit ********************************************************
+/* @func ajVardbExit **********************************************************
 **
 ** Cleans up variation database processing internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

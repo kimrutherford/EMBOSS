@@ -1,3 +1,32 @@
+/* @include ajseqbam **********************************************************
+**
+** AJAX BAM format sequence processing functions
+**
+** These functions control all aspects of AJAX BAM file processing
+**
+** @author Copyright (C) 2010 Peter Rice ported from samtools
+** @version $Revision: 1.21 $
+** @modified 2010-2011 Peter Rice
+** @modified $Date: 2012/07/02 17:24:52 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
+
 /* The MIT License
 **
 **   Copyright (c) 2008 Genome Research Ltd (GRL).
@@ -33,12 +62,8 @@
 ** fixed-length datatypes int32_t etc. changed to EMBOSS types
 */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifndef BAM_BAM_H
-#define BAM_BAM_H
+#ifndef AJSEQBAM_H
+#define AJSEQBAM_H
 
 /*
 **  BAM library provides I/O and various operations on manipulating files
@@ -50,7 +75,13 @@ extern "C" {
 **  copyright Genome Research Ltd.
 */
 
-#include "ajax.h"
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajlist.h"
+#include "ajtable.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -58,105 +89,21 @@ extern "C" {
 
 #include "zlib.h"
 
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
 #ifdef WIN32
 #define inline __inline
-#endif
-
-
-
-
-/* @data AjPSeqBamBgzf ********************************************************
-**
-** BGZF file handling object
-**
-** @alias AjOSeqBamBgzf
-** @alias AjSSeqBamBgzf
-**
-** @attr file [FILE*] File object
-** @attr cache [AjPTable] Block cache
-** @attr uncompressed_block [void*] Uncompressed block data
-** @attr compressed_block [void*] Compressed block data
-** @attr error [const char*] Error description
-** @attr block_address [ajlong] Block offset
-** @attr file_descriptor [int] File descriptor
-** @attr cache_size [int] Cache size
-** @attr uncompressed_block_size [int] Uncompressed block size
-** @attr compressed_block_size [int] Compressed block size
-** @attr block_length [int] Block length
-** @attr block_offset [int] Block offset
-** @attr open_mode [char] Open_mode 'r' or 'w'
-** @attr owned_file [char] Boolean
-** @attr is_uncompressed [char] Boolean
-** @attr Padding [char[5]] Padding 
-**
-******************************************************************************/
-
-typedef struct AjSSeqBamBgzf
-{
-    FILE* file;
-    AjPTable cache;
-    void* uncompressed_block;
-    void* compressed_block;
-    const char* error;
-    ajlong block_address;
-    int file_descriptor;
-    int cache_size;
-    int uncompressed_block_size;
-    int compressed_block_size;
-    int block_length;
-    int block_offset;
-    char open_mode;
-    char owned_file;
-    char is_uncompressed;
-    char Padding[5];
-} AjOSeqBamBgzf;
-
-#define AjPSeqBamBgzf AjOSeqBamBgzf*
-
-
-
-
-#define BAM_VIRTUAL_OFFSET16
-
-
-
-
-/* #abstract BAM file handler */
-
-/* @data AjPSeqBamHeader *******************************************************
-**
-** BAM alignment file header data
-**
-** @attr  target_name [char**] names of the reference sequences
-** @attr  target_len  [ajuint*] lengths of the reference sequences
-** @attr  dict        [AjPList] header dictionary
-** @attr  hash        [AjPTable] hash table for fast name lookup
-** @attr  rg2lib      [AjPTable] hash table for @RG-ID -> LB lookup
-** @attr  text        [char*] plain text
-** @attr  n_targets   [ajint] number of reference sequences
-** @attr  l_text      [ajint] length of the plain text in the header
-**
-** @@
-** discussion Field hash points to null by default. It is a private
-**  member.
-******************************************************************************/
-
-typedef struct AjSSeqBamheader
-{
-    char **target_name;
-    ajuint *target_len;
-    AjPList dict;
-    AjPTable hash;
-    AjPTable rg2lib;
-    char *text;
-    ajint n_targets;
-    ajint l_text;
-} AjOSeqBamHeader;
-
-#define AjPSeqBamHeader AjOSeqBamHeader*
-
-
-
+#endif /* WIN32 */
 
 /* The read is paired in sequencing, no matter whether it is mapped in a pair */
 #define BAM_FPAIRED        1
@@ -197,7 +144,7 @@ typedef struct AjSSeqBamheader
 #define BAM_OFSTR          2
 
 
-/* Defautl mask for pileup */
+/* Default mask for pileup */
 #define BAM_DEF_MASK (BAM_FUNMAP | BAM_FSECONDARY | BAM_FQCFAIL | BAM_FDUP)
 
 #define BAM_CORE_SIZE   sizeof(AjOSeqBamCore)
@@ -213,7 +160,7 @@ typedef struct AjSSeqBamheader
 **  CIGAR operations.
 */
 
-/* CIGAR: M match */
+/* CIGAR: M match or mismatch */
 #define BAM_CMATCH      0
 
 /* CIGAR: I insertion to the reference */
@@ -234,11 +181,115 @@ typedef struct AjSSeqBamheader
 /* CIGAR: P padding */
 #define BAM_CPAD        6
 
+/* CIGAR: = match */
+#define BAM_CEQUAL        7
 
+/* CIGAR: X mismatch */
+#define BAM_CDIFF        8
 
 
 extern const char* cigarcode;
 extern const char* bam_nt16_rev_table;
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* @data AjPSeqBamBgzf ********************************************************
+**
+** BGZF file handling object
+**
+** @alias AjOSeqBamBgzf
+** @alias AjSSeqBamBgzf
+**
+** @attr file [FILE*] File object
+** @attr cache [AjPTable] Block cache
+** @attr uncompressed_block [void*] Uncompressed block data
+** @attr compressed_block [void*] Compressed block data
+** @attr error [const char*] Error description
+** @attr block_address [ajlong] Block offset
+** @attr file_descriptor [int] File descriptor
+** @attr cache_size [int] Cache size
+** @attr uncompressed_block_size [int] Uncompressed block size
+** @attr compressed_block_size [int] Compressed block size
+** @attr block_length [int] Block length
+** @attr block_offset [int] Block offset
+** @attr open_mode [char] Open_mode 'r' or 'w'
+** @attr owned_file [char] Boolean
+** @attr is_uncompressed [char] Boolean
+** @attr Padding [char[5]] Padding
+**
+******************************************************************************/
+
+typedef struct AjSSeqBamBgzf
+{
+    FILE* file;
+    AjPTable cache;
+    void* uncompressed_block;
+    void* compressed_block;
+    const char* error;
+    ajlong block_address;
+    int file_descriptor;
+    int cache_size;
+    int uncompressed_block_size;
+    int compressed_block_size;
+    int block_length;
+    int block_offset;
+    char open_mode;
+    char owned_file;
+    char is_uncompressed;
+    char Padding[5];
+} AjOSeqBamBgzf;
+
+#define AjPSeqBamBgzf AjOSeqBamBgzf*
+
+
+
+
+#define BAM_VIRTUAL_OFFSET16
+
+
+
+
+/* #abstract BAM file handler */
+
+/* @data AjPSeqBamHeader ******************************************************
+**
+** BAM alignment file header data
+**
+** @attr  target_name [char**] names of the reference sequences
+** @attr  target_len  [ajuint*] lengths of the reference sequences
+** @attr  dict        [AjPList] header dictionary
+** @attr  hash        [AjPTable] hash table for fast name lookup
+** @attr  rg2lib      [AjPTable] hash table for @RG-ID -> LB lookup
+** @attr  text        [char*] plain text
+** @attr  n_targets   [ajint] number of reference sequences
+** @attr  l_text      [ajint] length of the plain text in the header
+**
+** @@
+** discussion Field hash points to null by default. It is a private
+**  member.
+******************************************************************************/
+
+typedef struct AjSSeqBamheader
+{
+    char **target_name;
+    ajuint *target_len;
+    AjPList dict;
+    AjPTable hash;
+    AjPTable rg2lib;
+    char *text;
+    ajint n_targets;
+    ajint l_text;
+} AjOSeqBamHeader;
+
+#define AjPSeqBamHeader AjOSeqBamHeader*
 
 
 
@@ -249,16 +300,16 @@ extern const char* bam_nt16_rev_table;
 **
 ** @attr  tid     [ajint]  read ID, defined by AjPSeqBamheader
 ** @attr  pos     [ajint]  0-based leftmost coordinate
-** @attr  bin     [ajushort]  bin calculated by bam_reg2bin()
+** @attr  bin     [ajushort]  bin calculated by ajSeqBamReg2bin()
 ** @attr  qual    [unsigned char]  mapping quality
 ** @attr  l_qname [unsigned char]  length of the query name
 ** @attr  flag    [ajushort]  bitwise flag
 ** @attr  n_cigar [ajushort]  number of CIGAR operations
 ** @attr  l_qseq  [ajint]  length of the query sequence (read)
-** @attr  mtid  [ajint]  paired read (mate) ID
-** @attr  mpos  [ajint]  paire read (mate) position
-** @attr  isize  [ajint]  insert size for paired reads
-*******************************************************************************/
+** @attr  mtid    [ajint]  paired read (mate) ID
+** @attr  mpos    [ajint]  paired read (mate) position
+** @attr  isize   [ajint]  insert size for paired reads
+******************************************************************************/
 
 typedef struct AjSBamSeqCore
 {
@@ -288,7 +339,7 @@ typedef struct AjSBamSeqCore
 ** @alias AjOSeqBam
 **
 ** @attr  core      [AjOSeqBamCore]  core information about the alignment
-** @attr   data    [unsigned char*]   all variable-length data, concatenated;
+** @attr  data      [unsigned char*] all variable-length data, concatenated;
 **                             structure: cigar-qname-seq-qual-aux
 ** @attr  l_aux      [int]  length of auxiliary data
 ** @attr  data_len   [int]  current length of data
@@ -318,6 +369,12 @@ typedef struct AjSSeqBam
 
 
 
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
 
 #define MAJSEQBAMSTRAND(b) (((b)->core.flag&BAM_FREVERSE) != 0)
 #define MAJSEQBAMMSTRAND(b) (((b)->core.flag&BAM_FMREVERSE) != 0)
@@ -333,7 +390,7 @@ typedef struct AjSSeqBam
 **  In the CIGAR array, each element is a 32-bit integer. The
 **  lower 4 bits gives a CIGAR operation and the higher 28 bits keep the
 **  length of a CIGAR.
- */
+*/
 #define MAJSEQBAMCIGAR(b) ((ajuint*)((b)->data + (b)->core.l_qname))
 
 
@@ -363,7 +420,7 @@ typedef struct AjSSeqBam
 **  param  b  pointer to an alignment
 **  return    pointer to quality string
 */
-#define MAJSEQBAMQUAL(b) ((b)->data + (b)->core.n_cigar*4 + \
+#define MAJSEQBAMQUAL(b) ((b)->data + (b)->core.n_cigar*4 +             \
                           (b)->core.l_qname + ((b)->core.l_qseq + 1)/2)
 
 /*
@@ -375,12 +432,13 @@ typedef struct AjSSeqBam
 #define MAJSEQBAMSEQI(s, i) ((s)[(i)/2] >> 4*(1-(i)%2) & 0xf)
 
 /*
-**  Get query sequence and quality
+**  Get pointer to the list of auxiliary data
 **  param  b  pointer to an alignment
 **  return    pointer to the concatenated auxiliary data
 */
-#define bam1_aux(b) ((b)->data + (b)->core.n_cigar*4 + (b)->core.l_qname + \
-                     (b)->core.l_qseq + ((b)->core.l_qseq + 1)/2)
+#define MAJSEQBAMAUX(b) ((b)->data + (b)->core.n_cigar*4 + \
+			 (b)->core.l_qname + \
+		         (b)->core.l_qseq + ((b)->core.l_qseq + 1)/2)
 
 #ifndef kroundup32
 /*
@@ -388,9 +446,9 @@ typedef struct AjSSeqBam
 **  param  x  integer to be rounded (in place)
 **  x will be modified.
 */
-#define kroundup32(x) (--(x), (x)|=(x)>>1, (x)|=(x)>>2, (x)|=(x)>>4, \
+#define kroundup32(x) (--(x), (x)|=(x)>>1, (x)|=(x)>>2, (x)|=(x)>>4,    \
                        (x)|=(x)>>8, (x)|=(x)>>16, ++(x))
-#endif
+#endif /* !kroundup32 */
 
 
 
@@ -399,33 +457,56 @@ typedef struct AjSSeqBam
 ** Prototype definitions
 */
 
+void ajSeqBamAuxAppend(AjPSeqBam b, const char tag[2],
+		       char type, int len, const unsigned char* data);
+
+AjPSeqBamBgzf ajSeqBamBgzfNew(FILE* file, const char* mode);
+
 AjPSeqBamBgzf ajSeqBamBgzfOpenfd(int fd, const char *mode);
 AjPSeqBamBgzf ajSeqBamBgzfOpenC(const char* path, const char *mode);
 
+ajuint ajSeqBamCalend(const AjPSeqBamCore c, const ajuint *cigar);
+
 int ajSeqBamBgzfClose(AjPSeqBamBgzf fp);
 int ajSeqBamBgzfEof(AjPSeqBamBgzf fp);
+int ajSeqBamBgzfFlush(AjPSeqBamBgzf fp);
 int ajSeqBamBgzfRead(AjPSeqBamBgzf fp, void* data, int length);
+ajlong ajSeqBamBgzfSeek(AjPSeqBamBgzf fp, ajlong pos, int where);
+AjBool ajSeqBamBgzfSetInfile(AjPSeqBamBgzf gzfile, AjPFile outf);
+AjBool ajSeqBamBgzfSetOutfile(AjPSeqBamBgzf gzfile, AjPFile outf);
 int ajSeqBamBgzfWrite(AjPSeqBamBgzf fp, const void* data, int length);
 
+void ajSeqBamDel(AjPSeqBam *Pbam);
+
 AjPSeqBamHeader ajSeqBamHeaderNew(void);
+AjPSeqBamHeader ajSeqBamHeaderNewN(ajint n);
 AjPSeqBamHeader ajSeqBamHeaderNewTextC(const char* txt);
-
+AjPSeqBamHeader ajSeqBamHeaderRead(AjPSeqBamBgzf gzfile);
 void ajSeqBamHeaderDel(AjPSeqBamHeader *Pheader);
-
 int ajSeqBamHeaderWrite(AjPSeqBamBgzf fp, const AjPSeqBamHeader header);
+AjPTable ajSeqBamHeaderGetRefseqTags(const AjPSeqBamHeader header);
+AjPTable ajSeqBamHeaderGetReadgroupTags(const AjPSeqBamHeader header);
+const char* ajSeqBamHeaderGetSortorder(const AjPSeqBamHeader header);
+void ajSeqBamHeaderSetTextC(AjPSeqBamHeader header, const char* txt);
 
 int ajSeqBamRead(AjPSeqBamBgzf fp, AjPSeqBam b);
 
+int ajSeqBamReg2bin(ajuint beg, ajuint end);
+
+int ajSeqBamValidate(const AjPSeqBamHeader header, const AjPSeqBam b);
 int ajSeqBamWrite(AjPSeqBamBgzf fp, const AjPSeqBam b);
 
 const char *ajSeqBamGetLibrary(AjPSeqBamHeader header, const AjPSeqBam b);
+
+AjPTable ajSeqBamHeaderLineParse(const char *headerLine);
 
 /*
 ** End of prototype definitions
 */
 
-#endif
 
-#ifdef __cplusplus
-}
-#endif
+
+
+AJ_END_DECLS
+
+#endif /* !AJSEQBAM_H */

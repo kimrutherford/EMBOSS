@@ -1,8 +1,8 @@
 application: embossversion [
-  documentation: "Reports the current EMBOSS version number"
+  documentation: "Report the current EMBOSS version number"
   groups: "Utils"
-    relations: "EDAM:0000088 topic Literature and documentation"
-    relations: "EDAM:0000515 operation Data retrieval (tool annotation)"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:0515 Data retrieval (tool metadata)"
 ]
 
 section: additional [
@@ -13,7 +13,7 @@ section: additional [
   boolean: full [
     additional: "Y"
     information: "Show all EMBOSS version information fields"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: additional
@@ -28,7 +28,7 @@ section: output [
     default: "stdout"
     knowntype: "embossversion output"
     information: "EMBOSS version output file"
-    relations: "EDAM:0001671 data Tool version information"
+    relations: "EDAM_data:1671 Tool version information"
   ]
 
 endsection: output

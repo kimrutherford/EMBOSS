@@ -1,8 +1,8 @@
 application: charge [
   documentation: "Draw a protein charge plot"
   groups: "Protein:Properties"
-    relations: "EDAM:0000137 topic Protein hydropathy"
-    relations: "EDAM:0000405 operation Protein hydrophobic region calculation"
+    relations: "EDAM_topic:0137 Protein hydropathy"
+    relations: "EDAM_operation:0405 Protein hydrophobic region calculation"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
   seqall: seqall [
     parameter: "Y"
     type: "protein"
-    relations: "EDAM:0002886 data Sequence record (protein)"
+    relations: "EDAM_data:2886 Sequence record (protein)"
   ]
 
   datafile: aadata [
@@ -21,7 +21,7 @@ section: input [
     information: "Amino acids properties and molecular weight
                   data file"
     knowntype: "amino acid properties"
-    relations: "EDAM:0001502 data Amino acid index (chemical classes)"
+    relations: "EDAM_data:1502 Amino acid index (chemical classes)"
   ]
 
 endsection: input
@@ -36,7 +36,7 @@ section: additional [
     minimum: "1"
     default: "5"
     information: "Window length"
-    relations: "EDAM:0001251 data Window size"
+    relations: "EDAM_data:1251 Window size"
   ]
 
 endsection: additional
@@ -49,12 +49,13 @@ section: output [
   toggle: plot [
     default: "N"
     information: "Produce graphic"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   xygraph: graph [
     standard: "$(plot)"
-    relations: "EDAM:0001523 data Protein charge plot"
+    relations: "EDAM_data:1523 Protein charge plot"
+    sequence: "Y"
   ]
 
   outfile: outfile [
@@ -62,7 +63,7 @@ section: output [
     knowntype: "charge output"
     nullok: "Y"
     nulldefault: "$(plot)"
-    relations: "EDAM:0001523 data Protein charge plot"
+    relations: "EDAM_data:1523 Protein charge plot"
   ]
 
 endsection: output

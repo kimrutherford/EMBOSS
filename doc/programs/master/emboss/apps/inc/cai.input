@@ -24,7 +24,7 @@ RN   [1]
 RP   1-561
 RA   Kawamukai M.;
 RT   ;
-RL   Submitted (07-DEC-1997) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (07-DEC-1997) to the INSDC.
 RL   Makoto Kawamukai, Shimane University, Life and Environmental Science; 1060
 RL   Nishikawatsu, Matsue, Shimane 690, Japan
 RL   (E-mail:kawamuka@life.shimane-u.ac.jp, Tel:0852-32-6587, Fax:0852-32-6499)
@@ -34,6 +34,11 @@ RP   1-561
 RA   Kawamukai M.;
 RT   "S.pmbe MET1 homolog";
 RL   Unpublished.
+XX
+DR   EnsemblGenomes; SPCC1739.06c; Schizosaccharomyces_pombe.
+DR   EnsemblGenomes; SPCC1739.06c.1; Schizosaccharomyces_pombe.
+DR   PomBase; SPCC1739.06c.
+DR   PomBase; SPCC1739.06c.1.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -46,12 +51,10 @@ FT   CDS             &lt;1..275
 FT                   /codon_start=3
 FT                   /transl_table=1
 FT                   /product="MET1 homolog"
-FT                   /db_xref="GENEDB:SPCC1739.06c"
 FT                   /db_xref="GOA:O74468"
 FT                   /db_xref="InterPro:IPR000878"
 FT                   /db_xref="InterPro:IPR003043"
 FT                   /db_xref="InterPro:IPR006366"
-FT                   /db_xref="InterPro:IPR006367"
 FT                   /db_xref="InterPro:IPR012066"
 FT                   /db_xref="InterPro:IPR014776"
 FT                   /db_xref="InterPro:IPR014777"

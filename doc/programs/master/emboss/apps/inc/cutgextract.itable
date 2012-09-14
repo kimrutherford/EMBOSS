@@ -84,7 +84,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-directory" associated dirlist qualifiers
+<td align="left" colspan=5>"-directory" associated dirlist qualifiers
 </td>
 </tr>
 
@@ -97,7 +97,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 

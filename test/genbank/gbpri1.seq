@@ -40,9 +40,10 @@ FEATURES             Location/Qualifiers
                      /db_xref="GDB:134230"
                      /db_xref="GOA:P33151"
                      /db_xref="HGNC:1764"
-                     /db_xref="HSSP:P09803"
                      /db_xref="InterPro:IPR000233"
                      /db_xref="InterPro:IPR002126"
+                     /db_xref="InterPro:IPR015919"
+                     /db_xref="InterPro:IPR020894"
                      /db_xref="UniProtKB/Swiss-Prot:P33151"
                      /translation="MMLLATSGACLGLLAVAAVAAAGANPAQRDTHSLLPTHRRQKRD
                      WIWNQMHIDEEKNTSLPHHVGKIKSSVSRKNAKYLLKGEYVGKVFRVDAETGDVFAIE
@@ -129,7 +130,7 @@ REFERENCE   1  (bases 1 to 781)
   TITLE     Construction of a yeast artificial chromosome contig encompassing
             the human acidic fibroblast growth factor (aFGF) gene: Toward the
             cloning of the ANLL/MDS tumor suppressor gene
-  JOURNAL   Unpublished (1993)
+  JOURNAL   Unpublished
 FEATURES             Location/Qualifiers
      source          1. .781
                      /organism="Homo sapiens"
@@ -307,8 +308,12 @@ FEATURES             Location/Qualifiers
                      /db_xref="GDB:135476"
                      /db_xref="GOA:P35544"
                      /db_xref="GOA:P62861"
-                     /db_xref="GOA:Q05472"
                      /db_xref="HGNC:3597"
+                     /db_xref="InterPro:IPR000626"
+                     /db_xref="InterPro:IPR006846"
+                     /db_xref="InterPro:IPR019954"
+                     /db_xref="InterPro:IPR019955"
+                     /db_xref="InterPro:IPR019956"
                      /db_xref="UniProtKB/Swiss-Prot:P35544"
                      /db_xref="UniProtKB/Swiss-Prot:P62861"
                      /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
@@ -388,8 +393,12 @@ FEATURES             Location/Qualifiers
                      /db_xref="GDB:135476"
                      /db_xref="GOA:P35544"
                      /db_xref="GOA:P62861"
-                     /db_xref="GOA:Q05472"
                      /db_xref="HGNC:3597"
+                     /db_xref="InterPro:IPR000626"
+                     /db_xref="InterPro:IPR006846"
+                     /db_xref="InterPro:IPR019954"
+                     /db_xref="InterPro:IPR019955"
+                     /db_xref="InterPro:IPR019956"
                      /db_xref="UniProtKB/Swiss-Prot:P35544"
                      /db_xref="UniProtKB/Swiss-Prot:P62861"
                      /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
@@ -691,6 +700,8 @@ FEATURES             Location/Qualifiers
                      /db_xref="InterPro:IPR005517"
                      /db_xref="InterPro:IPR009000"
                      /db_xref="InterPro:IPR009022"
+                     /db_xref="InterPro:IPR014721"
+                     /db_xref="InterPro:IPR020568"
                      /db_xref="UniProtKB/Swiss-Prot:P13639"
                      /translation="MVNFTVDQIRAIMDKKANIRNMSVIAHVDHGKSTLTDSLVCKAG
                      IIASARAGETRFTDTRKDEQERCITIKSTAISLFYELSENDLNFIKQSKDGAGFLINL
@@ -816,12 +827,21 @@ FEATURES             Location/Qualifiers
                      /db_xref="PDB:2IC4"
                      /db_xref="PDB:2JGW"
                      /db_xref="PDB:2JGX"
+                     /db_xref="PDB:2KMS"
                      /db_xref="PDB:2QFG"
                      /db_xref="PDB:2QFH"
                      /db_xref="PDB:2RLP"
                      /db_xref="PDB:2RLQ"
                      /db_xref="PDB:2UWN"
                      /db_xref="PDB:2V8E"
+                     /db_xref="PDB:2W80"
+                     /db_xref="PDB:2W81"
+                     /db_xref="PDB:2WII"
+                     /db_xref="PDB:3GAU"
+                     /db_xref="PDB:3GAV"
+                     /db_xref="PDB:3GAW"
+                     /db_xref="PDB:3KXV"
+                     /db_xref="PDB:3KZJ"
                      /db_xref="UniProtKB/Swiss-Prot:P08603"
                      /translation="MRLLAKIICLMLWAICVAEDCNELPPRRNTEILTGSWSDQTYPE
                      GTQAIYKCRPGYRSLGNVIMVCRKGEWVALNPLRKCQKRPCGHPGDTPFGTFTLTGGN
@@ -1346,7 +1366,7 @@ FEATURES             Location/Qualifiers
                      /clone="XX-CNFG9"
      misc_feature    333. .33760
                      /note="annotated region of clone"
-     gene            join(complement(904. .1015),
+     gene            order(complement(904. .1015),
                      complement(Z84723.1:8698. .15872))
                      /locus_tag="Z84723.2-001"
                      /pseudo
@@ -1364,7 +1384,7 @@ FEATURES             Location/Qualifiers
                      /pseudo
                      /codon_start=1
                      /product="interleukin 9 receptor (IL9R) pseudogene"
-     gene            complement(join(9101. .10251,14252. .14339,16170. .>16322))
+     gene            complement(order(9101. .10251,14252. .14339,16170. .>16322))
                      /gene="POLR3K"
                      /locus_tag="Z69719.1-001"
      mRNA            complement(join(9101. .10251,14252. .14339,16170. .>16322))
@@ -1382,7 +1402,7 @@ FEATURES             Location/Qualifiers
      polyA_site      complement(9743)
                      /gene="POLR3K"
                      /locus_tag="Z69719.1-001"
-     gene            complement(join(9930. .10251,14252. .14836))
+     gene            complement(order(9930. .10251,14252. .14836))
                      /gene="POLR3K"
                      /locus_tag="Z69719.1-002"
      mRNA            complement(join(9930. .10251,14252. .14836))
@@ -1403,15 +1423,15 @@ FEATURES             Location/Qualifiers
                      /db_xref="GI:66350794"
                      /db_xref="GOA:Q9Y2Y1"
                      /db_xref="HGNC:14121"
-                     /db_xref="HSSP:P23193"
                      /db_xref="InterPro:IPR001222"
                      /db_xref="InterPro:IPR001529"
+                     /db_xref="InterPro:IPR019761"
                      /db_xref="UniProtKB/Swiss-Prot:Q9Y2Y1"
                      /translation="MLLFCPGCGNGLIVEEGQRCHRFSCNTCPYVHNITRKVTNRKYP
                      KLKEVDDVLGGAAAWENVDSTAESCPKCEHPRAYFMQLQTRSADEPMTTFYKCCNAQC
                      GHRWRD"
-     gene            join(<15704. .16752,18153. .18243,18471. .18576,19233. .19307,
-                     19780. .20363)
+     gene            order(<15704. .16752,18153. .18243,18471. .18576,
+                     19233. .19307,19780. .20363)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-001"
      mRNA            join(<15704. .16752,18153. .18243,18471. .18576,19233. .19307,
@@ -1425,14 +1445,14 @@ FEATURES             Location/Qualifiers
                      match: ESTs: Em:BI252475.1 Em:BM006127.1 Em:BQ649836.1
                      Em:BQ686053.1 Em:BQ690019.1 Em:BU596584.1 Em:BU846188.1
                      Em:BU960195.1 Em:CB137383.1 Em:CB139779.1"
-     gene            join(16558. .16752,18460. .18576,19233. .19307,19780. .20161)
+     gene            order(16558. .16752,18460. .18576,19233. .19307,19780. .20161)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-003"
      mRNA            join(16558. .16752,18460. .18576,19233. .19307,19780. .20161)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-003"
                      /product="chromosome 16 open reading frame 33"
-     gene            join(16581. .16752,18153. .18243,18471. .18576,19015. .19114,
+     gene            order(16581. .16752,18153. .18243,18471. .18576,19015. .19114,
                      19233. .19307,19780. .20066)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-004"
@@ -1442,14 +1462,15 @@ FEATURES             Location/Qualifiers
                      /locus_tag="Z69719.2-004"
                      /product="chromosome 16 open reading frame 33"
                      /note="match: ESTs: Em:BU170293.1"
-     gene            join(16593. .16752,18153. .18236,18488. .18576,19233. .>19307)
+     gene            order(16593. .16752,18153. .18236,18488. .18576,
+                     19233. .>19307)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-006"
      mRNA            join(16593. .16752,18153. .18236,18488. .18576,19233. .>19307)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-006"
                      /product="chromosome 16 open reading frame 33"
-     gene            join(16593. .16752,18153. .18243,18488. .18565)
+     gene            order(16593. .16752,18153. .18243,18488. .18565)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-007"
      mRNA            join(16593. .16752,18153. .18243,18488. .18565)
@@ -1466,8 +1487,8 @@ FEATURES             Location/Qualifiers
                      /product="chromosome 16 open reading frame 33"
                      /protein_id="CAI95606.2"
                      /db_xref="GI:123237049"
-                     /db_xref="GOA:Q4TT61"
-                     /db_xref="InterPro:IPR000626"
+                     /db_xref="HGNC:14161"
+                     /db_xref="InterPro:IPR019955"
                      /db_xref="UniProtKB/TrEMBL:Q4TT61"
                      /translation="MVVQDPLLCDLPIQVTLEEVNSQIALEYGQAMTVRVCKMDGEVM
                      PVVVVQSATVLDLKKAIQRYVQLKQEREGGIQHISWSYVWRTYHLTSAGEKLTEDRKK
@@ -1480,9 +1501,11 @@ FEATURES             Location/Qualifiers
                      /product="chromosome 16 open reading frame 33"
                      /protein_id="CAX15111.1"
                      /db_xref="GI:220897509"
+                     /db_xref="HGNC:14161"
+                     /db_xref="UniProtKB/TrEMBL:B8ZZ06"
                      /translation="MVVQDPLLCDLPIQVTLEEVNSQIALEYGQAMTVRVCKMDGESA
                      TVLDLKKAIQRYVQLKQEREGGIQHISWSYVWRTYHLTSAGEKLTEDRKKLR"
-     gene            join(17654. .18243,18471. .18576,19233. .19307,19780. .20138)
+     gene            order(17654. .18243,18471. .18576,19233. .19307,19780. .20138)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-002"
      mRNA            join(17654. .18243,18471. .18576,19233. .19307,19780. .20138)
@@ -1490,7 +1513,7 @@ FEATURES             Location/Qualifiers
                      /locus_tag="Z69719.2-002"
                      /product="chromosome 16 open reading frame 33"
                      /note="match: cDNAs: Em:AF289572.1 Em:AF289607.1"
-     gene            join(18189. .18243,18471. .19307,19780. .20147)
+     gene            order(18189. .18243,18471. .19307,19780. .20147)
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-005"
      mRNA            join(18189. .18243,18471. .19307,19780. .20147)
@@ -1514,7 +1537,7 @@ FEATURES             Location/Qualifiers
      polyA_site      20363
                      /gene="C16orf33"
                      /locus_tag="Z69719.2-001"
-     gene            join(complement(Z69720.1:1552. .1670),
+     gene            order(complement(Z69720.1:1552. .1670),
                      complement(27591. .27731),complement(27391. .27521),
                      complement(26279. .26492),complement(25665. .25874),
                      complement(25467. .25589),complement(25230. .25387),
@@ -1547,7 +1570,7 @@ FEATURES             Location/Qualifiers
      polyA_site      complement(20752)
                      /gene="RHBDF1"
                      /locus_tag="Z69719.3-001"
-     gene            join(complement(Z69720.1:1552. .1634),
+     gene            order(complement(Z69720.1:1552. .1634),
                      complement(27624. .27731),complement(27391. .27521),
                      complement(26279. .26492),complement(25665. .25874),
                      complement(25467. .25589),complement(25230. .25387),
@@ -1572,7 +1595,7 @@ FEATURES             Location/Qualifiers
                      Em:BF812198.1 Em:BF812199.1 Em:BQ718791.1 Em:CF121195.1
                      Em:W69279.1;
                      match: cDNAs: Em:AK056708.1"
-     gene            complement(join(20755. .21452,21666. .21819,21941. .22041,
+     gene            complement(order(20755. .21452,21666. .21819,21941. .22041,
                      22111. .22186,22424. .22518,22908. .22971,23131. .23231,
                      23812. .23973,24077. .24151,24277. .24388,24490. .24744,
                      25230. .25387,25467. .25589,25665. .25755,26279. .26492,
@@ -1591,7 +1614,7 @@ FEATURES             Location/Qualifiers
      polyA_signal    complement(20786. .20791)
                      /gene="RHBDF1"
                      /locus_tag="Z69719.3-013"
-     gene            complement(join(20830. .21452,21666. .21785,21991. .22041,
+     gene            complement(order(20830. .21452,21666. .21785,21991. .22041,
                      22111. .22186,22424. .>22454))
                      /gene="RHBDF1"
                      /locus_tag="Z69719.3-008"
@@ -1617,6 +1640,8 @@ FEATURES             Location/Qualifiers
                      /db_xref="GOA:Q96CC6"
                      /db_xref="HGNC:20561"
                      /db_xref="InterPro:IPR002610"
+                     /db_xref="InterPro:IPR022241"
+                     /db_xref="InterPro:IPR022764"
                      /db_xref="UniProtKB/Swiss-Prot:Q96CC6"
                      /translation="MSEARRDSTSSLQRKKPPWLKLDIPSAVPLTAEEPSFLQPLRRQ
                      AFLRSVSMPAETAHISSPHHELRRPVLQRQTSITQTIRRGTADWFGVSKDSDSTQKWQ
@@ -1643,14 +1668,16 @@ FEATURES             Location/Qualifiers
                      /protein_id="CAI95607.1"
                      /db_xref="GI:66350796"
                      /db_xref="GOA:Q4TT60"
+                     /db_xref="HGNC:20561"
                      /db_xref="InterPro:IPR002610"
+                     /db_xref="InterPro:IPR022764"
                      /db_xref="UniProtKB/TrEMBL:Q4TT60"
                      /translation="RPCCIGTKGRCEITSREYCDFMRGYFHEEATLCSQVHCMDDVCG
                      LLPFLNPEMTVLRDLEKLAGWHRIAIIYLLSGVTGNLASAIFLPYRAEVGPAGSQFGI
                      LACLFVELFQSWQILARPWRAFFKLLAVVLFLFTFGLLPWIDNFAHISGFISGLFLSF
                      AFLPYISFGKFDLYRKRCQIIIFQVVFLGLLAGLVVLFYVYPVRCEWCEFLTCIPFTD
                      KFCEKYELDAQLH"
-     gene            complement(join(21666. .22041,22111. .22186,22424. .22885))
+     gene            complement(order(21666. .22041,22111. .22186,22424. .22885))
                      /gene="RHBDF1"
                      /locus_tag="Z69719.3-007"
      mRNA            complement(join(21666. .22041,22111. .22186,22424. .22885))
@@ -1658,7 +1685,7 @@ FEATURES             Location/Qualifiers
                      /locus_tag="Z69719.3-007"
                      /product="rhomboid 5 homolog 1 (Drosophila)"
                      /note="match: ESTs: Em:AW751627.1 Em:BF525962.1"
-     gene            complement(join(21925. .22186,22424. .22790,22908. .22971,
+     gene            complement(order(21925. .22186,22424. .22790,22908. .22971,
                      23131. .23372))
                      /gene="RHBDF1"
                      /locus_tag="Z69719.3-006"
@@ -1668,7 +1695,7 @@ FEATURES             Location/Qualifiers
                      /locus_tag="Z69719.3-006"
                      /product="rhomboid 5 homolog 1 (Drosophila)"
                      /note="match: ESTs: Em:BQ888992.1"
-     gene            complement(join(24117. .24151,24277. .24388,24490. .24898))
+     gene            complement(order(24117. .24151,24277. .24388,24490. .24898))
                      /gene="RHBDF1"
                      /locus_tag="Z69719.3-009"
      mRNA            complement(join(24117. .24151,24277. .24388,24490. .24898))
@@ -1676,7 +1703,7 @@ FEATURES             Location/Qualifiers
                      /locus_tag="Z69719.3-009"
                      /product="rhomboid 5 homolog 1 (Drosophila)"
                      /note="match: ESTs: Em:DA399443.1"
-     gene            complement(join(25665. .25874,26279. .26614,27391. .27521,
+     gene            complement(order(25665. .25874,26279. .26614,27391. .27521,
                      27591. .27729))
                      /gene="RHBDF1"
                      /locus_tag="Z69719.3-005"
@@ -1686,7 +1713,7 @@ FEATURES             Location/Qualifiers
                      /locus_tag="Z69719.3-005"
                      /product="rhomboid 5 homolog 1 (Drosophila)"
                      /note="match: ESTs: Em:BG324364.1 Em:BG425216.1"
-     gene            join(complement(Z69720.1:1552. .1660),
+     gene            order(complement(Z69720.1:1552. .1660),
                      complement(26279. .27731),complement(25729. .25874))
                      /gene="RHBDF1"
                      /locus_tag="Z69719.3-003"
@@ -1696,7 +1723,7 @@ FEATURES             Location/Qualifiers
                      /locus_tag="Z69719.3-003"
                      /product="rhomboid 5 homolog 1 (Drosophila)"
                      /note="match: ESTs: Em:BX439089.2 Em:BX451902.2"
-     gene            join(complement(Z69720.1:5293. .5395),
+     gene            order(complement(Z69720.1:5293. .5395),
                      complement(27591. .27731),complement(27391. .27521),
                      complement(26279. .26492),complement(<25849. .25874))
                      /gene="RHBDF1"
@@ -1718,12 +1745,14 @@ FEATURES             Location/Qualifiers
                      /product="rhomboid 5 homolog 1 (Drosophila)"
                      /protein_id="CAM26658.1"
                      /db_xref="GI:123237050"
+                     /db_xref="HGNC:20561"
+                     /db_xref="InterPro:IPR022241"
                      /db_xref="UniProtKB/TrEMBL:A2IDA2"
                      /translation="MSEARRDSTSSLQRKKPPWLKLDIPSAVPLTAEEPSFLQPLRRQ
                      AFLRSVSMPAETAHISSPHHELRRPVLQRQTSITQTIRRGTADWFGVSKDSDSTQKWQ
                      RKSIRHCSQRYGKLKPQVLRELDLPSQDNVSLTSTETPPPLYVGPCQLGMQKIIDPLA
                      RGR"
-     gene            join(complement(Z69720.1:1555. .1607),
+     gene            order(complement(Z69720.1:1555. .1607),
                      complement(27591. .27731),complement(27391. .27521),
                      complement(27025. .27132),complement(<26279. .26492))
                      /gene="RHBDF1"
@@ -1744,12 +1773,14 @@ FEATURES             Location/Qualifiers
                      /product="rhomboid 5 homolog 1 (Drosophila)"
                      /protein_id="CAI95609.1"
                      /db_xref="GI:66350798"
+                     /db_xref="HGNC:20561"
+                     /db_xref="InterPro:IPR022241"
                      /db_xref="UniProtKB/TrEMBL:Q4TT58"
                      /translation="MSEARRDSTSSLQRKKPPWLKLDIPSAVPLTAEEPSFLQPLRRQ
                      AFLRSVSMPAETAHISSPHHELRRPVLQRQTSITQTIRSSRQVRFGRVHTLPLLGPRA
                      ARRAFPQRQSLSWSLLRGTADWFGVSKDSDSTQKWQRKSIRHCSQRYGKLKPQVLREL
                      DLPSQDNVSLTSTETPPPLYVGPCQLGMQK"
-     gene            complement(join(<26435. .26492,27025. .27129,27391. .27521,
+     gene            complement(order(<26435. .26492,27025. .27129,27391. .27521,
                      27591. .>27731))
                      /gene="RHBDF1"
                      /locus_tag="Z69719.3-012"
@@ -1767,10 +1798,12 @@ FEATURES             Location/Qualifiers
                      /product="rhomboid 5 homolog 1 (Drosophila)"
                      /protein_id="CAX15112.1"
                      /db_xref="GI:220897510"
+                     /db_xref="HGNC:20561"
+                     /db_xref="UniProtKB/TrEMBL:B8ZZ07"
                      /translation="MSEARRDSTSSLQRKKPPWLKLDIPSAVPLTAEEPSFLQPLRRQ
                      AFLRSVSMPAETAHISSPHHELRRPVLQRQTSITQTIRSRQVRFGRVHTLPLLGPRAA
                      RRAFPQRQSLSWSLLRGTADWFGVSKDSDSTQKWQ"
-     gene            join(complement(Z69720.1:5293. .5381),
+     gene            order(complement(Z69720.1:5293. .5381),
                      complement(27244. .27731))
                      /gene="RHBDF1"
                      /locus_tag="Z69719.3-011"
@@ -2722,8 +2755,27 @@ FEATURES             Location/Qualifiers
                      /db_xref="GDB:120617"
                      /db_xref="GOA:P02794"
                      /db_xref="HGNC:3976"
+                     /db_xref="InterPro:IPR001519"
+                     /db_xref="InterPro:IPR008331"
+                     /db_xref="InterPro:IPR009040"
+                     /db_xref="InterPro:IPR009078"
+                     /db_xref="InterPro:IPR012347"
+                     /db_xref="InterPro:IPR014034"
                      /db_xref="PDB:1FHA"
+                     /db_xref="PDB:2CEI"
+                     /db_xref="PDB:2CHI"
+                     /db_xref="PDB:2CIH"
+                     /db_xref="PDB:2CLU"
+                     /db_xref="PDB:2CN6"
+                     /db_xref="PDB:2CN7"
                      /db_xref="PDB:2FHA"
+                     /db_xref="PDB:2IU2"
+                     /db_xref="PDB:2Z6M"
+                     /db_xref="PDB:3AJO"
+                     /db_xref="PDB:3AJP"
+                     /db_xref="PDB:3AJQ"
+                     /db_xref="PDB:3ERZ"
+                     /db_xref="PDB:3ES3"
                      /db_xref="UniProtKB/Swiss-Prot:P02794"
                      /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDR
                      DDVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAME
@@ -7444,7 +7496,6 @@ FEATURES             Location/Qualifiers
      exon            2016066. .2016137
                      /gene="HLA-70"
                      /number=1
-                     /pseudo
      gene            2016945. .2018004
                      /gene="HCGIV-06"
      mRNA            2016945. .2018004
@@ -7595,7 +7646,6 @@ FEATURES             Location/Qualifiers
      exon            2054741. .2054813
                      /gene="HLA-54"
                      /number=1
-                     /pseudo
      gene            2055554. .2056450
                      /gene="HCGIV-07"
                      /pseudo
@@ -50687,7 +50737,8 @@ FEATURES             Location/Qualifiers
                      /gene="HBG2"
                      /note="G-gamma globin"
                      /number=3
-     conflict        37486
+     misc_difference 37486
+                     /note="conflict"
                      /citation=[29]
                      /replace="t"
      variation       37657. .40179

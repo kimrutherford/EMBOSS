@@ -5,11 +5,10 @@ Here is a sample session with <b>patmatdb</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>patmatdb </b>
-Searches protein sequences with a sequence motif
+Search protein sequences with a sequence motif
 Input protein sequence(s): <b>tsw:*</b>
 Protein motif to search for: <b>st[ty]s</b>
-Output report [12s1_arath.patmatdb]: <b></b>
-ajSeqxrefNewDbS '1-I' 'FT025'
+Output report [cru4_arath.patmatdb]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

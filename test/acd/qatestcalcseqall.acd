@@ -3,40 +3,40 @@
 
 appl: qatestcalcseqall [ groups: "test" doc: "ACD file for QA testing" ]
 
-seqall: test [ param: Y ]
+seqall: testsequence [ param: Y ]
 
 string: testlength [
 	 standard: "Y"
 	 info: "Length"
-	 default: "$(test.length)"
+	 default: "$(testsequence.length)"
 ]
 
 string: testname [
 	 standard: "Y"
 	 info: "Name"
-	 default: "$(test.name)"
+	 default: "$(testsequence.name)"
 ]
 
 string: testbegin [
 	 standard: "Y"
 	 info: "Begin"
-	 default: "$(test.begin)"
+	 default: "$(testsequence.begin)"
 ]
 
 string: testend [
 	 standard: "Y"
 	 info: "End"
-	 default: "$(test.end)"
+	 default: "$(testsequence.end)"
 ]
 
 string: testprotein [
 	 standard: "Y"
 	 info: "Protein"
-	 default: "$(test.protein)"
+	 default: "$(testsequence.protein)"
 ]
 
 string: testnucleic [
 	 standard: "Y"
 	 info: "Nucleic"
-	 default: "$(test.nucleic)"
+	 default: "$(testsequence.nucleic)"
 ]

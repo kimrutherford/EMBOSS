@@ -1,31 +1,34 @@
-/* @source Ensembl Density functions
+/* @source ensdensity *********************************************************
+**
+** Ensembl Density functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.64 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:50:28 $ by $Author: mks $
-** @version $Revision: 1.46 $
+** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensdensity.h"
 #include "enstable.h"
@@ -34,23 +37,23 @@
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 /* @datastatic DensityPTypeRatio **********************************************
 **
@@ -104,11 +107,11 @@ typedef struct DensitySLengthValue
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic densitytypeType ***********************************************
+/* @conststatic densitytypeKType **********************************************
 **
 ** The Density Type type is enumerated in both, the SQL table definition
 ** and the data structure. The following strings are used for
@@ -120,73 +123,73 @@ typedef struct DensitySLengthValue
 **
 ******************************************************************************/
 
-static const char* const densitytypeType[] =
+static const char *const densitytypeKType[] =
 {
     "",
     "sum",
     "ratio",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic densitytypeadaptorTables **************************************
+/* @conststatic densitytypeadaptorKTables *************************************
 **
 ** Ensembl Density Type Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* const densitytypeadaptorTables[] =
+static const char *const densitytypeadaptorKTables[] =
 {
     "density_type",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic densitytypeadaptorColumns *************************************
+/* @conststatic densitytypeadaptorKColumns ************************************
 **
 ** Ensembl Density Type Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* const densitytypeadaptorColumns[] =
+static const char *const densitytypeadaptorKColumns[] =
 {
     "density_type.density_type_id",
     "density_type.analysis_id",
     "density_type.value_type",
     "density_type.block_size",
     "density_type.region_features",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic densityfeatureadaptorTables ***********************************
+/* @conststatic densityfeatureadaptorKTables **********************************
 **
 ** Ensembl Density Feature Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* const densityfeatureadaptorTables[] =
+static const char *const densityfeatureadaptorKTables[] =
 {
     "density_feature",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic densityfeatureadaptorColumns **********************************
+/* @conststatic densityfeatureadaptorKColumns *********************************
 **
 ** Ensembl Density Feature Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* const densityfeatureadaptorColumns[] =
+static const char *const densityfeatureadaptorKColumns[] =
 {
     "density_feature.density_feature_id",
     "density_feature.seq_region_id",
@@ -194,123 +197,126 @@ static const char* const densityfeatureadaptorColumns[] =
     "density_feature.seq_region_end",
     "density_feature.density_type_id",
     "density_feature.density_value",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
-static int densitytyperatioCompareRatioAscending(const void* P1,
-                                                 const void* P2);
+static int listDensitytyperatioCompareRatioAscending(
+    const void *item1,
+    const void *item2);
 
-static int listDensityfeatureCompareStartAscending(const void* P1,
-                                                   const void* P2);
+static int listDensityfeatureCompareEndAscending(
+    const void *item1,
+    const void *item2);
 
-static int listDensityfeatureCompareStartDescending(const void* P1,
-                                                    const void* P2);
+static int listDensityfeatureCompareEndDescending(
+    const void *item1,
+    const void *item2);
+
+static int listDensityfeatureCompareIdentifierAscending(
+    const void *item1,
+    const void *item2);
+
+static int listDensityfeatureCompareStartAscending(
+    const void *item1,
+    const void *item2);
+
+static int listDensityfeatureCompareStartDescending(
+    const void *item1,
+    const void *item2);
 
 static AjBool densitytypeadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList dts);
 
 static AjBool densitytypeadaptorCacheInsert(EnsPDensitytypeadaptor dta,
-                                            EnsPDensitytype* Pdt);
+                                            EnsPDensitytype *Pdt);
 
 static AjBool densitytypeadaptorCacheInit(EnsPDensitytypeadaptor dta);
 
-static void densitytypeadaptorCacheClearIdentifier(void** key,
-                                                   void** value,
-                                                   void* cl);
-
-static AjBool densitytypeadaptorCacheExit(EnsPDensitytypeadaptor dta);
-
-static void densitytypeadaptorFetchAll(const void* key,
-                                       void** value,
-                                       void* cl);
+static void densitytypeadaptorFetchAll(const void *key,
+                                       void **Pvalue,
+                                       void *cl);
 
 static AjBool densityfeatureadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList dfs);
 
-static void* densityfeatureadaptorCacheReference(void* value);
-
-static void densityfeatureadaptorCacheDelete(void** value);
-
-static size_t densityfeatureadaptorCacheSize(const void* value);
-
-static EnsPFeature densityfeatureadaptorGetFeature(const void* value);
 
 
 
-
-/* @funcstatic densitytyperatioCompareRatioAscending **************************
+/* @funcstatic listDensitytyperatioCompareRatioAscending **********************
 **
 ** Comparison function to sort Density Type Ratios by their ratio
 ** in ascending order.
 **
-** @param [r] P1 [const void*] Density Type Ratio address 1
-** @param [r] P2 [const void*] Density Type Ratio address 2
+** @param [r] item1 [const void*] Density Type Ratio address 1
+** @param [r] item2 [const void*] Density Type Ratio address 2
 ** @see ajListSort
 **
 ** @return [int] The comparison function returns an integer less than,
 **               equal to, or greater than zero if the first argument is
 **               considered to be respectively less than, equal to, or
 **               greater than the second.
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
-static int densitytyperatioCompareRatioAscending(const void* P1,
-                                                 const void* P2)
+static int listDensitytyperatioCompareRatioAscending(
+    const void *item1,
+    const void *item2)
 {
     int result = 0;
 
-    const DensityPTypeRatio dtr1 = NULL;
-    const DensityPTypeRatio dtr2 = NULL;
+    DensityPTypeRatio dtr1 = *(DensityOTypeRatio *const *) item1;
+    DensityPTypeRatio dtr2 = *(DensityOTypeRatio *const *) item2;
 
-    dtr1 = *(DensityPTypeRatio const*) P1;
-    dtr2 = *(DensityPTypeRatio const*) P2;
-
-    if(ajDebugTest("densitytyperatioCompareRatioAscending"))
-        ajDebug("densitytyperatioCompareRatioAscending\n"
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listDensitytyperatioCompareRatioAscending"))
+        ajDebug("listDensitytyperatioCompareRatioAscending\n"
                 "  dtr1 %p\n"
                 "  dtr2 %p\n",
                 dtr1,
                 dtr2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
 
     /* Sort empty values towards the end of the AJAX List. */
 
-    if(dtr1 && (!dtr2))
+    if (dtr1 && (!dtr2))
         return -1;
 
-    if((!dtr1) && (!dtr2))
+    if ((!dtr1) && (!dtr2))
         return 0;
 
-    if((!dtr1) && dtr2)
+    if ((!dtr1) && dtr2)
         return +1;
 
     /* Evaluate Density Type ratios. */
 
-    if(dtr1->Ratio < dtr2->Ratio)
+    if (dtr1->Ratio < dtr2->Ratio)
         result = -1;
 
-    if(dtr1->Ratio > dtr2->Ratio)
+    if (dtr1->Ratio > dtr2->Ratio)
         result = +1;
 
     return result;
@@ -319,9 +325,9 @@ static int densitytyperatioCompareRatioAscending(const void* P1,
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -341,8 +347,8 @@ static int densitytyperatioCompareRatioAscending(const void* P1,
 ** Ensembl Density Type objects.
 **
 ** @cc Bio::EnsEMBL::DensityType
-** @cc CVS Revision: 1.8
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.9
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -369,8 +375,8 @@ static int densitytyperatioCompareRatioAscending(const void* P1,
 ** @argrule Ini analysis [EnsPAnalysis] Ensembl Analysis
 ** @argrule Ini type [EnsEDensitytypeType] Type
 ** @argrule Ini size [ajuint] Block size
-** @argrule Ini features [ajuint] Number of Ensembl Density Feature objects per
-**                                Ensembl Sequence Region
+** @argrule Ini features [ajuint]
+** Number of Ensembl Density Feature objects per Ensembl Sequence Region
 ** @argrule Ref dt [EnsPDensitytype] Ensembl Density Type
 **
 ** @valrule * [EnsPDensitytype] Ensembl Density Type or NULL
@@ -388,6 +394,8 @@ static int densitytyperatioCompareRatioAscending(const void* P1,
 ** @param [r] dt [const EnsPDensitytype] Ensembl Density Type
 **
 ** @return [EnsPDensitytype] Ensembl Density Type or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -395,13 +403,12 @@ EnsPDensitytype ensDensitytypeNewCpy(const EnsPDensitytype dt)
 {
     EnsPDensitytype pthis = NULL;
 
-    if(!dt)
+    if (!dt)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
-
+    pthis->Use        = 1U;
     pthis->Identifier = dt->Identifier;
     pthis->Adaptor    = dt->Adaptor;
     pthis->Analysis   = ensAnalysisNewRef(dt->Analysis);
@@ -426,10 +433,12 @@ EnsPDensitytype ensDensitytypeNewCpy(const EnsPDensitytype dt)
 ** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
 ** @param [u] type [EnsEDensitytypeType] Type
 ** @param [r] size [ajuint] Block size
-** @param [r] features [ajuint] Number of Ensembl Density Feature objects per
-**                              Ensembl Sequence Region
+** @param [r] features [ajuint]
+** Number of Ensembl Density Feature objects per Ensembl Sequence Region
 **
 ** @return [EnsPDensitytype] Ensembl Density Type or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -442,13 +451,12 @@ EnsPDensitytype ensDensitytypeNewIni(EnsPDensitytypeadaptor dta,
 {
     EnsPDensitytype dt = NULL;
 
-    if(!analysis)
+    if (!analysis)
         return NULL;
 
     AJNEW0(dt);
 
-    dt->Use = 1;
-
+    dt->Use        = 1U;
     dt->Identifier = identifier;
     dt->Adaptor    = dta;
     dt->Analysis   = ensAnalysisNewRef(analysis);
@@ -470,12 +478,14 @@ EnsPDensitytype ensDensitytypeNewIni(EnsPDensitytypeadaptor dta,
 ** @param [u] dt [EnsPDensitytype] Ensembl Density Type
 **
 ** @return [EnsPDensitytype] Ensembl Density Type or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPDensitytype ensDensitytypeNewRef(EnsPDensitytype dt)
 {
-    if(!dt)
+    if (!dt)
         return NULL;
 
     dt->Use++;
@@ -488,14 +498,14 @@ EnsPDensitytype ensDensitytypeNewRef(EnsPDensitytype dt)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Density Type object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Density Type object.
 **
 ** @fdata [EnsPDensitytype]
 **
-** @nam3rule Del Destroy (free) an Ensembl Density Type object
+** @nam3rule Del Destroy (free) an Ensembl Density Type
 **
-** @argrule * Pdt [EnsPDensitytype*] Ensembl Density Type object address
+** @argrule * Pdt [EnsPDensitytype*] Ensembl Density Type address
 **
 ** @valrule * [void]
 **
@@ -509,27 +519,40 @@ EnsPDensitytype ensDensitytypeNewRef(EnsPDensitytype dt)
 **
 ** Default destructor for an Ensembl Density Type.
 **
-** @param [d] Pdt [EnsPDensitytype*] Ensembl Density Type object address
+** @param [d] Pdt [EnsPDensitytype*] Ensembl Density Type address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensDensitytypeDel(EnsPDensitytype* Pdt)
+void ensDensitytypeDel(EnsPDensitytype *Pdt)
 {
     EnsPDensitytype pthis = NULL;
 
-    if(!Pdt)
+    if (!Pdt)
         return;
 
-    if(!*Pdt)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensDensitytypeDel"))
+    {
+        ajDebug("ensDensitytypeDel\n"
+                "  *Pdt %p\n",
+                *Pdt);
+
+        ensDensitytypeTrace(*Pdt, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pdt)
         return;
 
     pthis = *Pdt;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pdt = NULL;
 
@@ -548,9 +571,9 @@ void ensDensitytypeDel(EnsPDensitytype* Pdt)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Density Type object.
+** Functions for returning members of an Ensembl Density Type object.
 **
 ** @fdata [EnsPDensitytype]
 **
@@ -567,9 +590,9 @@ void ensDensitytypeDel(EnsPDensitytype* Pdt)
 ** @valrule Adaptor [EnsPDensitytypeadaptor] Ensembl Density Type Adaptor
 ** or NULL
 ** @valrule Analysis [EnsPAnalysis] Ensembl Analysis or NULL
-** @valrule Features [ajuint] Number of Ensembl Density Feature objects or 0
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
-** @valrule Size [ajuint] Block size or 0
+** @valrule Features [ajuint] Number of Ensembl Density Feature objects or 0U
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
+** @valrule Size [ajuint] Block size or 0U
 ** @valrule Type [EnsEDensitytypeType] Type or ensEDensitytypeTypeNULL
 **
 ** @fcategory use
@@ -580,21 +603,20 @@ void ensDensitytypeDel(EnsPDensitytype* Pdt)
 
 /* @func ensDensitytypeGetAdaptor *********************************************
 **
-** Get the Ensembl Density Type Adaptor element of an Ensembl Density Type.
+** Get the Ensembl Density Type Adaptor member of an Ensembl Density Type.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] dt [const EnsPDensitytype] Ensembl Density Type
 **
 ** @return [EnsPDensitytypeadaptor] Ensembl Density Type Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPDensitytypeadaptor ensDensitytypeGetAdaptor(const EnsPDensitytype dt)
 {
-    if(!dt)
-        return NULL;
-
-    return dt->Adaptor;
+    return (dt) ? dt->Adaptor : NULL;
 }
 
 
@@ -602,21 +624,20 @@ EnsPDensitytypeadaptor ensDensitytypeGetAdaptor(const EnsPDensitytype dt)
 
 /* @func ensDensitytypeGetAnalysis ********************************************
 **
-** Get the Ensembl Analysis element of an Ensembl Density Type.
+** Get the Ensembl Analysis member of an Ensembl Density Type.
 **
 ** @cc Bio::EnsEMBL::DensityType::analysis
 ** @param [r] dt [const EnsPDensitytype] Ensembl Density Type
 **
 ** @return [EnsPAnalysis] Ensembl Analysis or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPAnalysis ensDensitytypeGetAnalysis(const EnsPDensitytype dt)
 {
-    if(!dt)
-        return NULL;
-
-    return dt->Analysis;
+    return (dt) ? dt->Analysis : NULL;
 }
 
 
@@ -624,22 +645,21 @@ EnsPAnalysis ensDensitytypeGetAnalysis(const EnsPDensitytype dt)
 
 /* @func ensDensitytypeGetFeatures ********************************************
 **
-** Get the number of Ensembl Density Feature objects element of an
+** Get the number of Ensembl Density Feature objects member of an
 ** Ensembl Density Type.
 **
 ** @cc Bio::EnsEMBL::DensityType::region_features
 ** @param [r] dt [const EnsPDensitytype] Ensembl Density Type
 **
-** @return [ajuint] Number of Ensembl Density Feature objects or 0
+** @return [ajuint] Number of Ensembl Density Feature objects or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensDensitytypeGetFeatures(const EnsPDensitytype dt)
 {
-    if(!dt)
-        return 0;
-
-    return dt->Features;
+    return (dt) ? dt->Features : 0U;
 }
 
 
@@ -647,22 +667,21 @@ ajuint ensDensitytypeGetFeatures(const EnsPDensitytype dt)
 
 /* @func ensDensitytypeGetIdentifier ******************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Density Type.
 **
 ** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [r] dt [const EnsPDensitytype] Ensembl Density Type
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensDensitytypeGetIdentifier(const EnsPDensitytype dt)
 {
-    if(!dt)
-        return 0;
-
-    return dt->Identifier;
+    return (dt) ? dt->Identifier : 0U;
 }
 
 
@@ -670,21 +689,20 @@ ajuint ensDensitytypeGetIdentifier(const EnsPDensitytype dt)
 
 /* @func ensDensitytypeGetSize ************************************************
 **
-** Get the block size element of an Ensembl Density Type.
+** Get the block size member of an Ensembl Density Type.
 **
 ** @cc Bio::EnsEMBL::DensityType::block_size
 ** @param [r] dt [const EnsPDensitytype] Ensembl Density Type
 **
-** @return [ajuint] Block size or 0
+** @return [ajuint] Block size or 0U
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 ajuint ensDensitytypeGetSize(const EnsPDensitytype dt)
 {
-    if(!dt)
-        return 0;
-
-    return dt->Size;
+    return (dt) ? dt->Size : 0U;
 }
 
 
@@ -692,33 +710,32 @@ ajuint ensDensitytypeGetSize(const EnsPDensitytype dt)
 
 /* @func ensDensitytypeGetType ************************************************
 **
-** Get the type element of an Ensembl Density Type.
+** Get the type member of an Ensembl Density Type.
 **
 ** @cc Bio::EnsEMBL::DensityType::value_type
 ** @param [r] dt [const EnsPDensitytype] Ensembl Density Type
 **
 ** @return [EnsEDensitytypeType] Type or ensEDensitytypeTypeNULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsEDensitytypeType ensDensitytypeGetType(const EnsPDensitytype dt)
 {
-    if(!dt)
-        return ensEDensitytypeTypeNULL;
-
-    return dt->Type;
+    return (dt) ? dt->Type : ensEDensitytypeTypeNULL;
 }
 
 
 
 
-/* @section element assignment ************************************************
+/* @section member assignment *************************************************
 **
-** Functions for assigning elements of an Ensembl Density Type object.
+** Functions for assigning members of an Ensembl Density Type object.
 **
 ** @fdata [EnsPDensitytype]
 **
-** @nam3rule Set Set one element of a Density Type
+** @nam3rule Set Set one member of a Density Type
 ** @nam4rule Adaptor Set the Ensembl Density Type Adaptor
 ** @nam4rule Analysis Set the Ensembl Analysis
 ** @nam4rule Features Set the number of Ensembl Density Feature objects
@@ -745,20 +762,22 @@ EnsEDensitytypeType ensDensitytypeGetType(const EnsPDensitytype dt)
 
 /* @func ensDensitytypeSetAdaptor *********************************************
 **
-** Set the Ensembl Density Type Adaptor element of an Ensembl Density Type.
+** Set the Ensembl Density Type Adaptor member of an Ensembl Density Type.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [u] dt [EnsPDensitytype] Ensembl Density Type
 ** @param [u] dta [EnsPDensitytypeadaptor] Ensembl Density Type Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDensitytypeSetAdaptor(EnsPDensitytype dt,
                                 EnsPDensitytypeadaptor dta)
 {
-    if(!dt)
+    if (!dt)
         return ajFalse;
 
     dt->Adaptor = dta;
@@ -771,20 +790,22 @@ AjBool ensDensitytypeSetAdaptor(EnsPDensitytype dt,
 
 /* @func ensDensitytypeSetAnalysis ********************************************
 **
-** Set the Ensembl Analysis element of an Ensembl Density Type.
+** Set the Ensembl Analysis member of an Ensembl Density Type.
 **
 ** @cc Bio::EnsEMBL::DensityType::analysis
 ** @param [u] dt [EnsPDensitytype] Ensembl Density Type
 ** @param [u] analysis [EnsPAnalysis] Ensembl Analysis
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDensitytypeSetAnalysis(EnsPDensitytype dt,
                                  EnsPAnalysis analysis)
 {
-    if(!dt)
+    if (!dt)
         return ajFalse;
 
     ensAnalysisDel(&dt->Analysis);
@@ -799,7 +820,7 @@ AjBool ensDensitytypeSetAnalysis(EnsPDensitytype dt,
 
 /* @func ensDensitytypeSetFeatures ********************************************
 **
-** Set the number of Ensembl Density Feature objects element of an
+** Set the number of Ensembl Density Feature objects member of an
 ** Ensembl Density Type.
 **
 ** @cc Bio::EnsEMBL::DensityType::region_features
@@ -807,13 +828,15 @@ AjBool ensDensitytypeSetAnalysis(EnsPDensitytype dt,
 ** @param [r] features [ajuint] Number of Ensembl Density Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDensitytypeSetFeatures(EnsPDensitytype dt,
                                  ajuint features)
 {
-    if(!dt)
+    if (!dt)
         return ajFalse;
 
     dt->Features = features;
@@ -826,7 +849,7 @@ AjBool ensDensitytypeSetFeatures(EnsPDensitytype dt,
 
 /* @func ensDensitytypeSetIdentifier ******************************************
 **
-** Set the SQL database-internal identifier element of an
+** Set the SQL database-internal identifier member of an
 ** Ensembl Density Type.
 **
 ** @cc Bio::EnsEMBL::Storable::dbID
@@ -834,13 +857,15 @@ AjBool ensDensitytypeSetFeatures(EnsPDensitytype dt,
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDensitytypeSetIdentifier(EnsPDensitytype dt,
                                    ajuint identifier)
 {
-    if(!dt)
+    if (!dt)
         return ajFalse;
 
     dt->Identifier = identifier;
@@ -853,20 +878,22 @@ AjBool ensDensitytypeSetIdentifier(EnsPDensitytype dt,
 
 /* @func ensDensitytypeSetSize ************************************************
 **
-** Set the block size element of an Ensembl Density Type.
+** Set the block size member of an Ensembl Density Type.
 **
 ** @cc Bio::EnsEMBL::DensityType::block_size
 ** @param [u] dt [EnsPDensitytype] Ensembl Density Type
 ** @param [r] size [ajuint] Block size
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDensitytypeSetSize(EnsPDensitytype dt,
                              ajuint size)
 {
-    if(!dt)
+    if (!dt)
         return ajFalse;
 
     dt->Size = size;
@@ -879,20 +906,22 @@ AjBool ensDensitytypeSetSize(EnsPDensitytype dt,
 
 /* @func ensDensitytypeSetType ************************************************
 **
-** Set the type element of an Ensembl Density Type.
+** Set the type member of an Ensembl Density Type.
 **
 ** @cc Bio::EnsEMBL::DensityType::value_type
 ** @param [u] dt [EnsPDensitytype] Ensembl Density Type
 ** @param [u] type [EnsEDensitytypeType] Type
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDensitytypeSetType(EnsPDensitytype dt,
                              EnsEDensitytypeType type)
 {
-    if(!dt)
+    if (!dt)
         return ajFalse;
 
     dt->Type = type;
@@ -909,7 +938,7 @@ AjBool ensDensitytypeSetType(EnsPDensitytype dt,
 **
 ** @fdata [EnsPDensitytype]
 **
-** @nam3rule Trace Report Ensembl Density Type elements to debug file
+** @nam3rule Trace Report Ensembl Density Type members to debug file
 **
 ** @argrule Trace dt [const EnsPDensitytype] Ensembl Density Type
 ** @argrule Trace level [ajuint] Indentation level
@@ -930,6 +959,8 @@ AjBool ensDensitytypeSetType(EnsPDensitytype dt,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -937,7 +968,7 @@ AjBool ensDensitytypeTrace(const EnsPDensitytype dt, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!dt)
+    if (!dt)
         return ajFalse;
 
     indent = ajStrNew();
@@ -997,6 +1028,8 @@ AjBool ensDensitytypeTrace(const EnsPDensitytype dt, ajuint level)
 ** @param [r] dt [const EnsPDensitytype] Ensembl Density Type
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1004,7 +1037,7 @@ size_t ensDensitytypeCalculateMemsize(const EnsPDensitytype dt)
 {
     size_t size = 0;
 
-    if(!dt)
+    if (!dt)
         return 0;
 
     size += sizeof (EnsODensitytype);
@@ -1057,6 +1090,8 @@ size_t ensDensitytypeCalculateMemsize(const EnsPDensitytype dt)
 **
 ** @return [EnsEDensitytypeType] Ensembl Density Type Type or
 **                                    ensEDensitytypeTypeNULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1066,13 +1101,13 @@ EnsEDensitytypeType ensDensitytypeTypeFromStr(const AjPStr type)
 
     EnsEDensitytypeType etype = ensEDensitytypeTypeNULL;
 
-    for(i = ensEDensitytypeTypeNULL;
-        densitytypeType[i];
-        i++)
-        if(ajStrMatchC(type, densitytypeType[i]))
+    for (i = ensEDensitytypeTypeNULL;
+         densitytypeKType[i];
+         i++)
+        if (ajStrMatchC(type, densitytypeKType[i]))
             etype = i;
 
-    if(!etype)
+    if (!etype)
         ajDebug("ensDensitytypeTypeFromStr encountered "
                 "unexpected string '%S'.\n", type);
 
@@ -1094,7 +1129,7 @@ EnsEDensitytypeType ensDensitytypeTypeFromStr(const AjPStr type)
 **
 ** @argrule To dtt [EnsEDensitytypeType] Ensembl Density Type Type enumeration
 **
-** @valrule Char [const char*] Ensembl Density Type type C-type (char*) string
+** @valrule Char [const char*] Ensembl Density Type type C-type (char *) string
 **
 ** @fcategory cast
 ******************************************************************************/
@@ -1105,11 +1140,13 @@ EnsEDensitytypeType ensDensitytypeTypeFromStr(const AjPStr type)
 /* @func ensDensitytypeTypeToChar *********************************************
 **
 ** Convert an Ensembl Density Type Type enumeration
-** into a C-type (char*) string.
+** into a C-type (char *) string.
 **
 ** @param [u] dtt [EnsEDensitytypeType] Ensembl Density Type Type enumeration
 **
-** @return [const char*] Ensembl Density Type type C-type (char*) string
+** @return [const char*] Ensembl Density Type type C-type (char *) string
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1117,17 +1154,17 @@ const char* ensDensitytypeTypeToChar(EnsEDensitytypeType dtt)
 {
     register EnsEDensitytypeType i = ensEDensitytypeTypeNULL;
 
-    for(i = ensEDensitytypeTypeNULL;
-        densitytypeType[i] && (i < dtt);
-        i++);
+    for (i = ensEDensitytypeTypeNULL;
+         densitytypeKType[i] && (i < dtt);
+         i++);
 
-    if(!densitytypeType[i])
+    if (!densitytypeKType[i])
         ajDebug("ensDensitytypeTypeToChar encountered an "
                 "out of boundary error on "
                 "Ensembl Density Type Type enumeration %d.\n",
                 dtt);
 
-    return densitytypeType[i];
+    return densitytypeKType[i];
 }
 
 
@@ -1139,8 +1176,8 @@ const char* ensDensitytypeTypeToChar(EnsEDensitytypeType dtt)
 ** Ensembl Density Type Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::DensityTypeAdaptor
-** @cc CVS Revision: 1.15
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.16
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -1152,27 +1189,29 @@ const char* ensDensitytypeTypeToChar(EnsEDensitytypeType dtt)
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl Density Type objects.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] dts [AjPList] AJAX List of Ensembl Density Types
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool densitytypeadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList dts)
 {
-    ajuint identifier = 0;
-    ajuint analysisid = 0;
-    ajuint size       = 0;
-    ajuint features   = 0;
+    ajuint identifier = 0U;
+    ajuint analysisid = 0U;
+    ajuint size       = 0U;
+    ajuint features   = 0U;
 
     EnsEDensitytypeType etype = ensEDensitytypeTypeNULL;
 
@@ -1185,40 +1224,43 @@ static AjBool densitytypeadaptorFetchAllbyStatement(
     EnsPAnalysis analysis  = NULL;
     EnsPAnalysisadaptor aa = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPDensitytype dt         = NULL;
     EnsPDensitytypeadaptor dta = NULL;
 
-    if(ajDebugTest("densitytypeadaptorFetchAllbyStatement"))
+    if (ajDebugTest("densitytypeadaptorFetchAllbyStatement"))
         ajDebug("densitytypeadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  dts %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 dts);
 
-    if(!dba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!dts)
+    if (!dts)
         return ajFalse;
 
-    aa = ensRegistryGetAnalysisadaptor(dba);
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
+    aa  = ensRegistryGetAnalysisadaptor(dba);
     dta = ensRegistryGetDensitytypeadaptor(dba);
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier = 0;
         analysisid = 0;
@@ -1246,7 +1288,7 @@ static AjBool densitytypeadaptorFetchAllbyStatement(
                                   size,
                                   features);
 
-        ajListPushAppend(dts, (void*) dt);
+        ajListPushAppend(dts, (void *) dt);
 
         ensAnalysisDel(&analysis);
 
@@ -1266,7 +1308,7 @@ static AjBool densitytypeadaptorFetchAllbyStatement(
 /* @funcstatic densitytypeadaptorCacheInsert **********************************
 **
 ** Insert an Ensembl Density Type into the Density Type Adaptor-internal cache.
-** If a Density Type with the same identifier element is already present in the
+** If a Density Type with the same identifier member is already present in the
 ** adaptor cache, the Density Type is deleted and a pointer to the cached
 ** Density Type is returned.
 **
@@ -1274,35 +1316,37 @@ static AjBool densitytypeadaptorFetchAllbyStatement(
 ** @param [u] Pdt [EnsPDensitytype*] Ensembl Density Type address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 static AjBool densitytypeadaptorCacheInsert(EnsPDensitytypeadaptor dta,
-                                            EnsPDensitytype* Pdt)
+                                            EnsPDensitytype *Pdt)
 {
-    ajuint* Pidentifier = NULL;
+    ajuint *Pidentifier = NULL;
 
     EnsPDensitytype dt = NULL;
 
-    if(!dta)
+    if (!dta)
         return ajFalse;
 
-    if(!dta->CacheByIdentifier)
+    if (!dta->CacheByIdentifier)
         return ajFalse;
 
-    if(!Pdt)
+    if (!Pdt)
         return ajFalse;
 
-    if(!*Pdt)
+    if (!*Pdt)
         return ajFalse;
 
     /* Search the identifier cache. */
 
     dt = (EnsPDensitytype) ajTableFetchmodV(
         dta->CacheByIdentifier,
-        (const void*) &((*Pdt)->Identifier));
+        (const void *) &((*Pdt)->Identifier));
 
-    if(dt)
+    if (dt)
     {
         ajDebug("densitytypeadaptorCacheInsert replaced Density Type %p with "
                 "one already cached %p.\n",
@@ -1323,8 +1367,8 @@ static AjBool densitytypeadaptorCacheInsert(EnsPDensitytypeadaptor dta,
         *Pidentifier = (*Pdt)->Identifier;
 
         ajTablePut(dta->CacheByIdentifier,
-                   (void*) Pidentifier,
-                   (void*) ensDensitytypeNewRef(*Pdt));
+                   (void *) Pidentifier,
+                   (void *) ensDensitytypeNewRef(*Pdt));
     }
 
     return ajTrue;
@@ -1341,6 +1385,8 @@ static AjBool densitytypeadaptorCacheInsert(EnsPDensitytypeadaptor dta,
 ** @param [u] dta [EnsPDensitytypeadaptor] Ensembl Density Type Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1350,18 +1396,24 @@ static AjBool densitytypeadaptorCacheInit(EnsPDensitytypeadaptor dta)
 
     EnsPDensitytype dt = NULL;
 
-    if(ajDebugTest("densitytypeadaptorCacheInit"))
+    if (ajDebugTest("densitytypeadaptorCacheInit"))
         ajDebug("densitytypeadaptorCacheInit\n"
                 "  dta %p\n",
                 dta);
 
-    if(!dta)
+    if (!dta)
         return ajFalse;
 
-    if(dta->CacheByIdentifier)
+    if (dta->CacheByIdentifier)
         return ajFalse;
     else
-        dta->CacheByIdentifier = ensTableuintNewLen(0);
+    {
+        dta->CacheByIdentifier = ajTableuintNew(0);
+
+        ajTableSetDestroyvalue(
+            dta->CacheByIdentifier,
+            (void (*)(void **)) &ensDensitytypeDel);
+    }
 
     dts = ajListNew();
 
@@ -1371,7 +1423,7 @@ static AjBool densitytypeadaptorCacheInit(EnsPDensitytypeadaptor dta)
                                        (EnsPSlice) NULL,
                                        dts);
 
-    while(ajListPop(dts, (void**) &dt))
+    while (ajListPop(dts, (void **) &dt))
     {
         densitytypeadaptorCacheInsert(dta, &dt);
 
@@ -1399,7 +1451,7 @@ static AjBool densitytypeadaptorCacheInit(EnsPDensitytypeadaptor dta)
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @valrule * [EnsPDensitytypeadaptor] Ensembl Density Type Adaptor
+** @valrule * [EnsPDensitytypeadaptor] Ensembl Density Type Adaptor or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -1425,6 +1477,8 @@ static AjBool densitytypeadaptorCacheInit(EnsPDensitytypeadaptor dta)
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPDensitytypeadaptor] Ensembl Density Type Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1433,10 +1487,10 @@ EnsPDensitytypeadaptor ensDensitytypeadaptorNew(
 {
     EnsPDensitytypeadaptor dta = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
-    if(ajDebugTest("ensDensitytypeadaptorNew"))
+    if (ajDebugTest("ensDensitytypeadaptorNew"))
         ajDebug("ensDensitytypeadaptorNew\n"
                 "  dba %p\n",
                 dba);
@@ -1445,12 +1499,12 @@ EnsPDensitytypeadaptor ensDensitytypeadaptorNew(
 
     dta->Adaptor = ensBaseadaptorNew(
         dba,
-        densitytypeadaptorTables,
-        densitytypeadaptorColumns,
-        (EnsPBaseadaptorLeftjoin) NULL,
-        (const char*) NULL,
-        (const char*) NULL,
-        densitytypeadaptorFetchAllbyStatement);
+        densitytypeadaptorKTables,
+        densitytypeadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        (const char *) NULL,
+        (const char *) NULL,
+        &densitytypeadaptorFetchAllbyStatement);
 
     /*
     ** NOTE: The cache cannot be initialised here because the
@@ -1472,92 +1526,17 @@ EnsPDensitytypeadaptor ensDensitytypeadaptorNew(
 
 
 
-/* @funcstatic densitytypeadaptorCacheClearIdentifier *************************
-**
-** An ajTableMapDel "apply" function to clear the Ensembl Density Type
-** Adaptor-internal Density Type cache. This function deletes the
-** unsigned integer identifier key and the Ensembl Density Type value data.
-**
-** @param [u] key [void**] AJAX unsigned integer key data address
-** @param [u] value [void**] Ensembl Density Type value data address
-** @param [u] cl [void*] Standard, passed in from ajTableMapDel
-** @see ajTableMapDel
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void densitytypeadaptorCacheClearIdentifier(void** key,
-                                                   void** value,
-                                                   void* cl)
-{
-    if(!key)
-        return;
-
-    if(!*key)
-        return;
-
-    if(!value)
-        return;
-
-    if(!*value)
-        return;
-
-    (void) cl;
-
-    AJFREE(*key);
-
-    ensDensitytypeDel((EnsPDensitytype*) value);
-
-    *key   = NULL;
-    *value = NULL;
-
-    return;
-}
-
-
-
-
-/* @funcstatic densitytypeadaptorCacheExit ************************************
-**
-** Clears the internal Density Type cache of an Ensembl Density Type Adaptor.
-**
-** @param [u] dta [EnsPDensitytypeadaptor] Ensembl Density Type Adaptor
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-static AjBool densitytypeadaptorCacheExit(EnsPDensitytypeadaptor dta)
-{
-    if(!dta)
-        return ajFalse;
-
-    /* Clear and delete the identifier cache. */
-
-    ajTableMapDel(dta->CacheByIdentifier,
-                  densitytypeadaptorCacheClearIdentifier,
-                  NULL);
-
-    ajTableFree(&dta->CacheByIdentifier);
-
-    return ajTrue;
-}
-
-
-
-
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Density Type Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Density Type Adaptor object.
 **
 ** @fdata [EnsPDensitytypeadaptor]
 **
-** @nam3rule Del Destroy (free) an Ensembl Density Type Adaptor object.
+** @nam3rule Del Destroy (free) an Ensembl Density Type Adaptor
 **
-** @argrule * Pdta [EnsPDensitytypeadaptor*] Ensembl Density Type Adaptor
-**                                           object address
+** @argrule * Pdta [EnsPDensitytypeadaptor*]
+** Ensembl Density Type Adaptor address
 **
 ** @valrule * [void]
 **
@@ -1579,31 +1558,35 @@ static AjBool densitytypeadaptorCacheExit(EnsPDensitytypeadaptor dta)
 ** destroyed directly. Upon exit, the Ensembl Registry will call this function
 ** if required.
 **
-** @param [d] Pdta [EnsPDensitytypeadaptor*] Ensembl Density Type Adaptor
-**                                           object address
+** @param [d] Pdta [EnsPDensitytypeadaptor*]
+** Ensembl Density Type Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensDensitytypeadaptorDel(EnsPDensitytypeadaptor* Pdta)
+void ensDensitytypeadaptorDel(EnsPDensitytypeadaptor *Pdta)
 {
     EnsPDensitytypeadaptor pthis = NULL;
 
-    if(!Pdta)
+    if (!Pdta)
         return;
 
-    if(!*Pdta)
-        return;
-
-    if(ajDebugTest("ensDensitytypeadaptorDel"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensDensitytypeadaptorDel"))
         ajDebug("ensDensitytypeadaptorDel\n"
                 "  Pdta %p\n",
                 Pdta);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pdta)
+        return;
 
     pthis = *Pdta;
 
-    densitytypeadaptorCacheExit(pthis);
+    ajTableDel(&pthis->CacheByIdentifier);
 
     ensBaseadaptorDel(&pthis->Adaptor);
 
@@ -1617,9 +1600,9 @@ void ensDensitytypeadaptorDel(EnsPDensitytypeadaptor* Pdta)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Density Type Adaptor object.
+** Functions for returning members of an Ensembl Density Type Adaptor object.
 **
 ** @fdata [EnsPDensitytypeadaptor]
 **
@@ -1641,21 +1624,20 @@ void ensDensitytypeadaptorDel(EnsPDensitytypeadaptor* Pdta)
 
 /* @func ensDensitytypeadaptorGetBaseadaptor **********************************
 **
-** Get the Ensembl Base Adaptor element of an Ensembl Density Type Adaptor.
+** Get the Ensembl Base Adaptor member of an Ensembl Density Type Adaptor.
 **
 ** @param [r] dta [const EnsPDensitytypeadaptor] Ensembl Density Type Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPBaseadaptor ensDensitytypeadaptorGetBaseadaptor(
     const EnsPDensitytypeadaptor dta)
 {
-    if(!dta)
-        return NULL;
-
-    return dta->Adaptor;
+    return (dta) ? dta->Adaptor : NULL;
 }
 
 
@@ -1663,21 +1645,20 @@ EnsPBaseadaptor ensDensitytypeadaptorGetBaseadaptor(
 
 /* @func ensDensitytypeadaptorGetDatabaseadaptor ******************************
 **
-** Get the Ensembl Database Adaptor element of an Ensembl Density Type Adaptor.
+** Get the Ensembl Database Adaptor member of an Ensembl Density Type Adaptor.
 **
 ** @param [r] dta [const EnsPDensitytypeadaptor] Ensembl Density Type Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensDensitytypeadaptorGetDatabaseadaptor(
     const EnsPDensitytypeadaptor dta)
 {
-    if(!dta)
-        return NULL;
-
-    return ensBaseadaptorGetDatabaseadaptor(dta->Adaptor);
+    return (dta) ? ensBaseadaptorGetDatabaseadaptor(dta->Adaptor) : NULL;
 }
 
 
@@ -1719,34 +1700,36 @@ EnsPDatabaseadaptor ensDensitytypeadaptorGetDatabaseadaptor(
 ** Ensembl Density Type Adaptor-internal cache.
 **
 ** @param [u] key [const void*] AJAX unsigned integer key data address
-** @param [u] value [void**] Ensembl Density Type value data address
+** @param [d] Pvalue [void**] Ensembl Density Type value data address
 ** @param [u] cl [void*] AJAX List of Ensembl Density Type objects,
 **                       passed in via ajTableMap
 ** @see ajTableMap
 **
 ** @return [void]
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
-static void densitytypeadaptorFetchAll(const void* key,
-                                       void** value,
-                                       void* cl)
+static void densitytypeadaptorFetchAll(const void *key,
+                                       void **Pvalue,
+                                       void *cl)
 {
-    if(!key)
+    if (!key)
         return;
 
-    if(!value)
+    if (!Pvalue)
         return;
 
-    if(!*value)
+    if (!*Pvalue)
         return;
 
-    if(!cl)
+    if (!cl)
         return;
 
     ajListPushAppend((AjPList) cl,
-                     (void*)
-                     ensDensitytypeNewRef(*((EnsPDensitytype*) value)));
+                     (void *)
+                     ensDensitytypeNewRef(*((EnsPDensitytype *) Pvalue)));
 
     return;
 }
@@ -1765,6 +1748,8 @@ static void densitytypeadaptorFetchAll(const void* key,
 ** @param [u] dts [AjPList] AJAX List of Ensembl Density Type objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1772,18 +1757,18 @@ AjBool ensDensitytypeadaptorFetchAll(
     EnsPDensitytypeadaptor dta,
     AjPList dts)
 {
-    if(!dta)
+    if (!dta)
         return ajFalse;
 
-    if(!dts)
+    if (!dts)
         return ajFalse;
 
-    if(!dta->CacheByIdentifier)
+    if (!dta->CacheByIdentifier)
         densitytypeadaptorCacheInit(dta);
 
     ajTableMap(dta->CacheByIdentifier,
-               densitytypeadaptorFetchAll,
-               (void*) dts);
+               &densitytypeadaptorFetchAll,
+               (void *) dts);
 
     return ajTrue;
 }
@@ -1803,6 +1788,8 @@ AjBool ensDensitytypeadaptorFetchAll(
 ** @param [u] dts [AjPList] AJAX List of Ensembl Density Type objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1811,34 +1798,34 @@ AjBool ensDensitytypeadaptorFetchAllbyAnalysisname(
     const AjPStr name,
     AjPList dts)
 {
-    void** keyarray = NULL;
-    void** valarray = NULL;
+    void **keyarray = NULL;
+    void **valarray = NULL;
 
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
     EnsPAnalysis analysis = NULL;
 
-    if(!dta)
+    if (!dta)
         return ajFalse;
 
-    if(!name)
+    if (!name)
         return ajFalse;
 
-    if(!dts)
+    if (!dts)
         return ajFalse;
 
-    if(!dta->CacheByIdentifier)
+    if (!dta->CacheByIdentifier)
         densitytypeadaptorCacheInit(dta);
 
     ajTableToarrayKeysValues(dta->CacheByIdentifier, &keyarray, &valarray);
 
-    for(i = 0; keyarray[i]; i++)
+    for (i = 0U; keyarray[i]; i++)
     {
         analysis = ensDensitytypeGetAnalysis((EnsPDensitytype) valarray[i]);
 
-        if(ajStrMatchS(name, ensAnalysisGetName(analysis)))
+        if (ajStrMatchS(name, ensAnalysisGetName(analysis)))
         {
-            ajListPushAppend(dts, (void*)
+            ajListPushAppend(dts, (void *)
                              ensDensitytypeNewRef((EnsPDensitytype)
                                                   valarray[i]));
         }
@@ -1863,13 +1850,15 @@ AjBool ensDensitytypeadaptorFetchAllbyAnalysisname(
 ** @param [wP] Pdt [EnsPDensitytype*] Ensembl Density Type address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDensitytypeadaptorFetchByIdentifier(
     EnsPDensitytypeadaptor dta,
     ajuint identifier,
-    EnsPDensitytype* Pdt)
+    EnsPDensitytype *Pdt)
 {
     AjPList dts = NULL;
 
@@ -1877,13 +1866,13 @@ AjBool ensDensitytypeadaptorFetchByIdentifier(
 
     EnsPDensitytype dt = NULL;
 
-    if(!dta)
+    if (!dta)
         return ajFalse;
 
-    if(!identifier)
+    if (!identifier)
         return ajFalse;
 
-    if(!Pdt)
+    if (!Pdt)
         return ajFalse;
 
     /*
@@ -1892,13 +1881,13 @@ AjBool ensDensitytypeadaptorFetchByIdentifier(
     ** to be incremented manually.
     */
 
-    if(!dta->CacheByIdentifier)
+    if (!dta->CacheByIdentifier)
         densitytypeadaptorCacheInit(dta);
 
     *Pdt = (EnsPDensitytype) ajTableFetchmodV(dta->CacheByIdentifier,
-                                              (const void*) &identifier);
+                                              (const void *) &identifier);
 
-    if(*Pdt)
+    if (*Pdt)
     {
         ensDensitytypeNewRef(*Pdt);
 
@@ -1917,16 +1906,16 @@ AjBool ensDensitytypeadaptorFetchByIdentifier(
                                        (EnsPSlice) NULL,
                                        dts);
 
-    if(ajListGetLength(dts) > 1)
+    if (ajListGetLength(dts) > 1)
         ajWarn("ensDensitytypeadaptorFetchByIdentifier got more than one "
                "Ensembl Density Type for (PRIMARY KEY) identifier %u.\n",
                identifier);
 
-    ajListPop(dts, (void**) Pdt);
+    ajListPop(dts, (void **) Pdt);
 
     densitytypeadaptorCacheInsert(dta, Pdt);
 
-    while(ajListPop(dts, (void**) &dt))
+    while (ajListPop(dts, (void **) &dt))
     {
         densitytypeadaptorCacheInsert(dta, &dt);
 
@@ -1949,8 +1938,8 @@ AjBool ensDensitytypeadaptorFetchByIdentifier(
 ** Ensembl Density Feature objects
 **
 ** @cc Bio::EnsEMBL::DensityFeature
-** @cc CVS Revision: 1.12
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.13
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -1994,6 +1983,8 @@ AjBool ensDensitytypeadaptorFetchByIdentifier(
 ** @param [r] df [const EnsPDensityfeature] Ensembl Density Feature
 **
 ** @return [EnsPDensityfeature] Ensembl Density Feature or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2001,13 +1992,12 @@ EnsPDensityfeature ensDensityfeatureNewCpy(const EnsPDensityfeature df)
 {
     EnsPDensityfeature pthis = NULL;
 
-    if(!df)
+    if (!df)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use = 1;
-
+    pthis->Use         = 1U;
     pthis->Identifier  = df->Identifier;
     pthis->Adaptor     = df->Adaptor;
     pthis->Feature     = ensFeatureNewRef(df->Feature);
@@ -2034,6 +2024,8 @@ EnsPDensityfeature ensDensityfeatureNewCpy(const EnsPDensityfeature df)
 ** @param [r] value [float] Density value
 **
 ** @return [EnsPDensityfeature] Ensembl Density Feature or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2045,13 +2037,12 @@ EnsPDensityfeature ensDensityfeatureNewIni(EnsPDensityfeatureadaptor dfa,
 {
     EnsPDensityfeature df = NULL;
 
-    if(!feature)
+    if (!feature)
         return NULL;
 
     AJNEW0(df);
 
-    df->Use = 1;
-
+    df->Use         = 1U;
     df->Identifier  = identifier;
     df->Adaptor     = dfa;
     df->Feature     = ensFeatureNewRef(feature);
@@ -2072,12 +2063,14 @@ EnsPDensityfeature ensDensityfeatureNewIni(EnsPDensityfeatureadaptor dfa,
 ** @param [u] df [EnsPDensityfeature] Ensembl Density Feature
 **
 ** @return [EnsPDensityfeature] Ensembl Density Feature or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPDensityfeature ensDensityfeatureNewRef(EnsPDensityfeature df)
 {
-    if(!df)
+    if (!df)
         return NULL;
 
     df->Use++;
@@ -2090,14 +2083,14 @@ EnsPDensityfeature ensDensityfeatureNewRef(EnsPDensityfeature df)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Density Feature object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Density Feature object.
 **
 ** @fdata [EnsPDensityfeature]
 **
-** @nam3rule Del Destroy (free) an Ensembl Density Feature object
+** @nam3rule Del Destroy (free) an Ensembl Density Feature
 **
-** @argrule * Pdf [EnsPDensityfeature*] Ensembl Density Feature object address
+** @argrule * Pdf [EnsPDensityfeature*] Ensembl Density Feature address
 **
 ** @valrule * [void]
 **
@@ -2111,27 +2104,40 @@ EnsPDensityfeature ensDensityfeatureNewRef(EnsPDensityfeature df)
 **
 ** Default destructor for an Ensembl Density Feature.
 **
-** @param [d] Pdf [EnsPDensityfeature*] Ensembl Density Feature object address
+** @param [d] Pdf [EnsPDensityfeature*] Ensembl Density Feature address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensDensityfeatureDel(EnsPDensityfeature* Pdf)
+void ensDensityfeatureDel(EnsPDensityfeature *Pdf)
 {
     EnsPDensityfeature pthis = NULL;
 
-    if(!Pdf)
+    if (!Pdf)
         return;
 
-    if(!*Pdf)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensDensityfeatureDel"))
+    {
+        ajDebug("ensDensityfeatureDel\n"
+                "  *Pdf %p\n",
+                *Pdf);
+
+        ensDensityfeatureTrace(*Pdf, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pdf)
         return;
 
     pthis = *Pdf;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pdf = NULL;
 
@@ -2152,9 +2158,9 @@ void ensDensityfeatureDel(EnsPDensityfeature* Pdf)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl Density Feature object.
+** Functions for returning members of an Ensembl Density Feature object.
 **
 ** @fdata [EnsPDensityfeature]
 **
@@ -2183,23 +2189,22 @@ void ensDensityfeatureDel(EnsPDensityfeature* Pdf)
 
 /* @func ensDensityfeatureGetAdaptor ******************************************
 **
-** Get the Ensembl Density Feature Adaptor element of an
+** Get the Ensembl Density Feature Adaptor member of an
 ** Ensembl Density Feature.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
 ** @param [r] df [const EnsPDensityfeature] Ensembl Density Feature
 **
 ** @return [EnsPDensityfeatureadaptor] Ensembl Density Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPDensityfeatureadaptor ensDensityfeatureGetAdaptor(
     const EnsPDensityfeature df)
 {
-    if(!df)
-        return NULL;
-
-    return df->Adaptor;
+    return (df) ? df->Adaptor : NULL;
 }
 
 
@@ -2207,21 +2212,23 @@ EnsPDensityfeatureadaptor ensDensityfeatureGetAdaptor(
 
 /* @func ensDensityfeatureGetDensitytype **************************************
 **
-** Get the Ensembl Density Type element of an Ensembl Density Feature.
+** Get the Ensembl Density Type member of an Ensembl Density Feature.
 **
 ** @cc Bio::EnsEMBL::DensityFeature::density_type
 ** @param [r] df [const EnsPDensityfeature] Ensembl Density Feature
 **
 ** @return [EnsPDensitytype] Ensembl Density Type or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPDensitytype ensDensityfeatureGetDensitytype(const EnsPDensityfeature df)
 {
-    if(!df)
+    if (!df)
         return NULL;
 
-    return df->Densitytype;
+    return (df) ? df->Densitytype : NULL;
 }
 
 
@@ -2229,20 +2236,19 @@ EnsPDensitytype ensDensityfeatureGetDensitytype(const EnsPDensityfeature df)
 
 /* @func ensDensityfeatureGetFeature ******************************************
 **
-** Get the Ensembl Feature element of an Ensembl Density Feature.
+** Get the Ensembl Feature member of an Ensembl Density Feature.
 **
 ** @param [r] df [const EnsPDensityfeature] Ensembl Density Feature
 **
 ** @return [EnsPFeature] Ensembl Feature or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPFeature ensDensityfeatureGetFeature(const EnsPDensityfeature df)
 {
-    if(!df)
-        return NULL;
-
-    return df->Feature;
+    return (df) ? df->Feature : NULL;
 }
 
 
@@ -2250,22 +2256,21 @@ EnsPFeature ensDensityfeatureGetFeature(const EnsPDensityfeature df)
 
 /* @func ensDensityfeatureGetIdentifier ***************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl Density Feature.
 **
 ** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [r] df [const EnsPDensityfeature] Ensembl Density Feature
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensDensityfeatureGetIdentifier(const EnsPDensityfeature df)
 {
-    if(!df)
-        return 0;
-
-    return df->Identifier;
+    return (df) ? df->Identifier : 0U;
 }
 
 
@@ -2273,33 +2278,32 @@ ajuint ensDensityfeatureGetIdentifier(const EnsPDensityfeature df)
 
 /* @func ensDensityfeatureGetValue ********************************************
 **
-** Get the value element of an Ensembl Density Feature.
+** Get the value member of an Ensembl Density Feature.
 **
 ** @cc Bio::EnsEMBL::DensityFeature::density_value
 ** @param [r] df [const EnsPDensityfeature] Ensembl Density Feature
 **
 ** @return [float] Value or 0.0F
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 float ensDensityfeatureGetValue(const EnsPDensityfeature df)
 {
-    if(!df)
-        return 0.0F;
-
-    return df->Value;
+    return (df) ? df->Value : 0.0F;
 }
 
 
 
 
-/* @section element assignment ************************************************
+/* @section member assignment *************************************************
 **
-** Functions for assigning elements of an Ensembl Density Feature object.
+** Functions for assigning members of an Ensembl Density Feature object.
 **
 ** @fdata [EnsPDensityfeature]
 **
-** @nam3rule Set Set one element of a Density Feature
+** @nam3rule Set Set one member of a Density Feature
 ** @nam4rule Adaptor Set the Ensembl Density Feature Adaptor
 ** @nam4rule Densitytype Set the Ensembl Density Type
 ** @nam4rule Feature Set the Ensembl Feature
@@ -2324,7 +2328,7 @@ float ensDensityfeatureGetValue(const EnsPDensityfeature df)
 
 /* @func ensDensityfeatureSetAdaptor ******************************************
 **
-** Set the Ensembl Density Feature Adaptor element of an
+** Set the Ensembl Density Feature Adaptor member of an
 ** Ensembl Density Feature.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
@@ -2332,13 +2336,15 @@ float ensDensityfeatureGetValue(const EnsPDensityfeature df)
 ** @param [u] dfa [EnsPDensityfeatureadaptor] Ensembl Density Feature Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDensityfeatureSetAdaptor(EnsPDensityfeature df,
                                    EnsPDensityfeatureadaptor dfa)
 {
-    if(!df)
+    if (!df)
         return ajFalse;
 
     df->Adaptor = dfa;
@@ -2351,20 +2357,22 @@ AjBool ensDensityfeatureSetAdaptor(EnsPDensityfeature df,
 
 /* @func ensDensityfeatureSetDensitytype **************************************
 **
-** Set the Ensembl Density Type element of an Ensembl Density Feature.
+** Set the Ensembl Density Type member of an Ensembl Density Feature.
 **
 ** @cc Bio::EnsEMBL::DensityFeature::density_type
 ** @param [u] df [EnsPDensityfeature] Ensembl Density Feature
 ** @param [u] dt [EnsPDensitytype] Ensembl Density Type
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDensityfeatureSetDensitytype(EnsPDensityfeature df,
                                        EnsPDensitytype dt)
 {
-    if(!df)
+    if (!df)
         return ajFalse;
 
     ensDensitytypeDel(&df->Densitytype);
@@ -2379,19 +2387,21 @@ AjBool ensDensityfeatureSetDensitytype(EnsPDensityfeature df,
 
 /* @func ensDensityfeatureSetFeature ******************************************
 **
-** Set the Ensembl Feature element of an Ensembl Density Feature.
+** Set the Ensembl Feature member of an Ensembl Density Feature.
 **
 ** @param [u] df [EnsPDensityfeature] Ensembl Density Feature
 ** @param [u] feature [EnsPFeature] Ensembl Feature
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDensityfeatureSetFeature(EnsPDensityfeature df,
                                    EnsPFeature feature)
 {
-    if(!df)
+    if (!df)
         return ajFalse;
 
     ensFeatureDel(&df->Feature);
@@ -2406,7 +2416,7 @@ AjBool ensDensityfeatureSetFeature(EnsPDensityfeature df,
 
 /* @func ensDensityfeatureSetIdentifier ***************************************
 **
-** Set the SQL database-internal identifier element of an
+** Set the SQL database-internal identifier member of an
 ** Ensembl Density Feature.
 **
 ** @cc Bio::EnsEMBL::Storable::dbID
@@ -2414,13 +2424,15 @@ AjBool ensDensityfeatureSetFeature(EnsPDensityfeature df,
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDensityfeatureSetIdentifier(EnsPDensityfeature df,
                                       ajuint identifier)
 {
-    if(!df)
+    if (!df)
         return ajFalse;
 
     df->Identifier = identifier;
@@ -2433,20 +2445,22 @@ AjBool ensDensityfeatureSetIdentifier(EnsPDensityfeature df,
 
 /* @func ensDensityfeatureSetValue ********************************************
 **
-** Set the value element of an Ensembl Density Feature.
+** Set the value member of an Ensembl Density Feature.
 **
 ** @cc Bio::EnsEMBL::DensityFeature::density_value
 ** @param [u] df [EnsPDensityfeature] Ensembl Density Feature
 ** @param [r] value [float] Value
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensDensityfeatureSetValue(EnsPDensityfeature df,
                                  float value)
 {
-    if(!df)
+    if (!df)
         return ajFalse;
 
     df->Value = value;
@@ -2463,7 +2477,7 @@ AjBool ensDensityfeatureSetValue(EnsPDensityfeature df,
 **
 ** @fdata [EnsPDensityfeature]
 **
-** @nam3rule Trace Report Ensembl Density Feature elements to debug file
+** @nam3rule Trace Report Ensembl Density Feature members to debug file
 **
 ** @argrule Trace df [const EnsPDensityfeature] Ensembl Density Feature
 ** @argrule Trace level [ajuint] Indentation level
@@ -2484,6 +2498,8 @@ AjBool ensDensityfeatureSetValue(EnsPDensityfeature df,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2491,7 +2507,7 @@ AjBool ensDensityfeatureTrace(const EnsPDensityfeature df, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!df)
+    if (!df)
         return ajFalse;
 
     indent = ajStrNew();
@@ -2551,6 +2567,8 @@ AjBool ensDensityfeatureTrace(const EnsPDensityfeature df, ajuint level)
 ** @param [r] df [const EnsPDensityfeature] Ensembl Density Feature
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -2558,7 +2576,7 @@ size_t ensDensityfeatureCalculateMemsize(const EnsPDensityfeature df)
 {
     size_t size = 0;
 
-    if(!df)
+    if (!df)
         return 0;
 
     size += sizeof (EnsODensityfeature);
@@ -2582,28 +2600,161 @@ size_t ensDensityfeatureCalculateMemsize(const EnsPDensityfeature df)
 
 
 
-/* @section list **************************************************************
+/* @funcstatic listDensityfeatureCompareEndAscending **************************
 **
-** Functions for manipulating AJAX List objects.
+** AJAX List of Ensembl Density Feature objects comparison function to sort by
+** Ensembl Feature end coordinate in ascending order.
 **
-** @fdata [AjPList]
+** @param [r] item1 [const void*] Ensembl Density Feature address 1
+** @param [r] item2 [const void*] Ensembl Density Feature address 2
+** @see ajListSort
 **
-** @nam3rule Densityfeature Functions for manipulating AJAX List objects of
-** Ensembl Density Feature objects
-** @nam4rule Sort Sort functions
-** @nam5rule Start Sort by Ensembl Feature start element
-** @nam6rule Ascending  Sort in ascending order
-** @nam6rule Descending Sort in descending order
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
 **
-** @argrule Ascending dfs [AjPList] AJAX List of Ensembl Density Feature
-**                                  objects
-** @argrule Descending dfs [AjPList] AJAX List of Ensembl Density Feature
-**                                   objects
-**
-** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
-**
-** @fcategory misc
+** @release 6.4.0
+** @@
 ******************************************************************************/
+
+static int listDensityfeatureCompareEndAscending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPDensityfeature df1 = *(EnsODensityfeature *const *) item1;
+    EnsPDensityfeature df2 = *(EnsODensityfeature *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listDensityfeatureCompareEndAscending"))
+        ajDebug("listDensityfeatureCompareEndAscending\n"
+                "  df1 %p\n"
+                "  df2 %p\n",
+                df1,
+                df2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (df1 && (!df2))
+        return -1;
+
+    if ((!df1) && (!df2))
+        return 0;
+
+    if ((!df1) && df2)
+        return +1;
+
+    return ensFeatureCompareEndAscending(df1->Feature, df2->Feature);
+}
+
+
+
+
+/* @funcstatic listDensityfeatureCompareEndDescending *************************
+**
+** AJAX List of Ensembl Density Feature objects comparison function to sort by
+** Ensembl Feature end coordinate in descending order.
+**
+** @param [r] item1 [const void*] Ensembl Density Feature address 1
+** @param [r] item2 [const void*] Ensembl Density Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listDensityfeatureCompareEndDescending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPDensityfeature df1 = *(EnsODensityfeature *const *) item1;
+    EnsPDensityfeature df2 = *(EnsODensityfeature *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listDensityfeatureCompareEndDescending"))
+        ajDebug("listDensityfeatureCompareEndDescending\n"
+                "  df1 %p\n"
+                "  df2 %p\n",
+                df1,
+                df2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (df1 && (!df2))
+        return -1;
+
+    if ((!df1) && (!df2))
+        return 0;
+
+    if ((!df1) && df2)
+        return +1;
+
+    return ensFeatureCompareEndDescending(df1->Feature, df2->Feature);
+}
+
+
+
+
+/* @funcstatic listDensityfeatureCompareIdentifierAscending *******************
+**
+** AJAX List of Ensembl Density Feature objects comparison function to sort by
+** identifier in ascending order.
+**
+** @param [r] item1 [const void*] Ensembl Density Feature address 1
+** @param [r] item2 [const void*] Ensembl Density Feature address 2
+** @see ajListSort
+**
+** @return [int] The comparison function returns an integer less than,
+**               equal to, or greater than zero if the first argument is
+**               considered to be respectively less than, equal to, or
+**               greater than the second.
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+static int listDensityfeatureCompareIdentifierAscending(
+    const void *item1,
+    const void *item2)
+{
+    EnsPDensityfeature df1 = *(EnsODensityfeature *const *) item1;
+    EnsPDensityfeature df2 = *(EnsODensityfeature *const *) item2;
+
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listDensityfeatureCompareIdentifierAscending"))
+        ajDebug("listDensityfeatureCompareIdentifierAscending\n"
+                "  df1 %p\n"
+                "  df2 %p\n",
+                df1,
+                df2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
+
+    /* Sort empty values towards the end of the AJAX List. */
+
+    if (df1 && (!df2))
+        return -1;
+
+    if ((!df1) && (!df2))
+        return 0;
+
+    if ((!df1) && df2)
+        return +1;
+
+    if (df1->Identifier < df2->Identifier)
+        return -1;
+
+    if (df1->Identifier > df2->Identifier)
+        return +1;
+
+    return 0;
+}
 
 
 
@@ -2613,69 +2764,47 @@ size_t ensDensityfeatureCalculateMemsize(const EnsPDensityfeature df)
 ** AJAX List of Ensembl Density Feature objects comparison function to sort by
 ** Ensembl Feature start coordinate in ascending order.
 **
-** @param [r] P1 [const void*] Ensembl Density Feature address 1
-** @param [r] P2 [const void*] Ensembl Density Feature address 2
+** @param [r] item1 [const void*] Ensembl Density Feature address 1
+** @param [r] item2 [const void*] Ensembl Density Feature address 2
 ** @see ajListSort
 **
 ** @return [int] The comparison function returns an integer less than,
 **               equal to, or greater than zero if the first argument is
 **               considered to be respectively less than, equal to, or
 **               greater than the second.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static int listDensityfeatureCompareStartAscending(const void* P1,
-                                                   const void* P2)
+static int listDensityfeatureCompareStartAscending(
+    const void *item1,
+    const void *item2)
 {
-    const EnsPDensityfeature df1 = NULL;
-    const EnsPDensityfeature df2 = NULL;
+    EnsPDensityfeature df1 = *(EnsODensityfeature *const *) item1;
+    EnsPDensityfeature df2 = *(EnsODensityfeature *const *) item2;
 
-    df1 = *(EnsPDensityfeature const*) P1;
-    df2 = *(EnsPDensityfeature const*) P2;
-
-    if(ajDebugTest("listDensityfeatureCompareStartAscending"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listDensityfeatureCompareStartAscending"))
         ajDebug("listDensityfeatureCompareStartAscending\n"
                 "  df1 %p\n"
                 "  df2 %p\n",
                 df1,
                 df2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
 
     /* Sort empty values towards the end of the AJAX List. */
 
-    if(df1 && (!df2))
+    if (df1 && (!df2))
         return -1;
 
-    if((!df1) && (!df2))
+    if ((!df1) && (!df2))
         return 0;
 
-    if((!df1) && df2)
+    if ((!df1) && df2)
         return +1;
 
     return ensFeatureCompareStartAscending(df1->Feature, df2->Feature);
-}
-
-
-
-
-/* @func ensListDensityfeatureSortStartAscending ******************************
-**
-** Sort an AJAX List of Ensembl Density Feature objects by their
-** Ensembl Feature start element in ascending order.
-**
-** @param [u] dfs [AjPList] AJAX List of Ensembl Density Feature objects
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-AjBool ensListDensityfeatureSortStartAscending(AjPList dfs)
-{
-    if(!dfs)
-        return ajFalse;
-
-    ajListSort(dfs, listDensityfeatureCompareStartAscending);
-
-    return ajTrue;
 }
 
 
@@ -2686,42 +2815,44 @@ AjBool ensListDensityfeatureSortStartAscending(AjPList dfs)
 ** AJAX List of Ensembl Density Feature objects comparison function to sort by
 ** Ensembl Feature start coordinate in descending order.
 **
-** @param [r] P1 [const void*] Ensembl Density Feature address 1
-** @param [r] P2 [const void*] Ensembl Density Feature address 2
+** @param [r] item1 [const void*] Ensembl Density Feature address 1
+** @param [r] item2 [const void*] Ensembl Density Feature address 2
 ** @see ajListSort
 **
 ** @return [int] The comparison function returns an integer less than,
 **               equal to, or greater than zero if the first argument is
 **               considered to be respectively less than, equal to, or
 **               greater than the second.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
-static int listDensityfeatureCompareStartDescending(const void* P1,
-                                                    const void* P2)
+static int listDensityfeatureCompareStartDescending(
+    const void *item1,
+    const void *item2)
 {
-    const EnsPDensityfeature df1 = NULL;
-    const EnsPDensityfeature df2 = NULL;
+    EnsPDensityfeature df1 = *(EnsODensityfeature *const *) item1;
+    EnsPDensityfeature df2 = *(EnsODensityfeature *const *) item2;
 
-    df1 = *(EnsPDensityfeature const*) P1;
-    df2 = *(EnsPDensityfeature const*) P2;
-
-    if(ajDebugTest("listDensityfeatureCompareStartDescending"))
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 2
+    if (ajDebugTest("listDensityfeatureCompareStartDescending"))
         ajDebug("listDensityfeatureCompareStartDescending\n"
                 "  df1 %p\n"
                 "  df2 %p\n",
                 df1,
                 df2);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 2 */
 
     /* Sort empty values towards the end of the AJAX List. */
 
-    if(df1 && (!df2))
+    if (df1 && (!df2))
         return -1;
 
-    if((!df1) && (!df2))
+    if ((!df1) && (!df2))
         return 0;
 
-    if((!df1) && df2)
+    if ((!df1) && df2)
         return +1;
 
     return ensFeatureCompareStartDescending(df1->Feature, df2->Feature);
@@ -2730,23 +2861,167 @@ static int listDensityfeatureCompareStartDescending(const void* P1,
 
 
 
-/* @func ensListDensityfeatureSortStartDescending *****************************
+/* @section list **************************************************************
+**
+** Functions for manipulating AJAX List objects.
+**
+** @fdata [AjPList]
+**
+** @nam3rule Densityfeature Functions for manipulating AJAX List objects of
+** Ensembl Density Feature objects
+** @nam4rule Sort       Sort functions
+** @nam5rule Start      Sort by Ensembl Feature start member
+** @nam5rule Identifier Sort by identifier member
+** @nam5rule End        Sort by Ensembl Feature end member
+** @nam6rule Ascending  Sort in ascending order
+** @nam6rule Descending Sort in descending order
+**
+** @argrule * dfs [AjPList]
+** AJAX List of Ensembl Density Feature objects
+**
+** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @fcategory misc
+******************************************************************************/
+
+
+
+
+/* @func ensListDensityfeatureSortEndAscending ********************************
 **
 ** Sort an AJAX List of Ensembl Density Feature objects by their
-** Ensembl Feature start element in descending order.
+** Ensembl Feature end member in ascending order.
 **
 ** @param [u] dfs [AjPList] AJAX List of Ensembl Density Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjBool ensListDensityfeatureSortEndAscending(AjPList dfs)
+{
+    if (!dfs)
+        return ajFalse;
+
+    ajListSortTwoThree(dfs,
+                       &listDensityfeatureCompareEndAscending,
+                       &listDensityfeatureCompareStartAscending,
+                       &listDensityfeatureCompareIdentifierAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensListDensityfeatureSortEndDescending *******************************
+**
+** Sort an AJAX List of Ensembl Density Feature objects by their
+** Ensembl Feature end member in descending order.
+**
+** @param [u] dfs [AjPList] AJAX List of Ensembl Density Feature objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjBool ensListDensityfeatureSortEndDescending(AjPList dfs)
+{
+    if (!dfs)
+        return ajFalse;
+
+    ajListSortTwoThree(dfs,
+                       &listDensityfeatureCompareEndDescending,
+                       &listDensityfeatureCompareStartDescending,
+                       &listDensityfeatureCompareIdentifierAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensListDensityfeatureSortIdentifierAscending *************************
+**
+** Sort an AJAX List of Ensembl Density Feature objects by their
+** identifier member in ascending order.
+**
+** @param [u] dfs [AjPList] AJAX List of Ensembl Density Feature objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjBool ensListDensityfeatureSortIdentifierAscending(AjPList dfs)
+{
+    if (!dfs)
+        return ajFalse;
+
+    ajListSort(dfs, &listDensityfeatureCompareIdentifierAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensListDensityfeatureSortStartAscending ******************************
+**
+** Sort an AJAX List of Ensembl Density Feature objects by their
+** Ensembl Feature start member in ascending order.
+**
+** @param [u] dfs [AjPList] AJAX List of Ensembl Density Feature objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
+** @@
+******************************************************************************/
+
+AjBool ensListDensityfeatureSortStartAscending(AjPList dfs)
+{
+    if (!dfs)
+        return ajFalse;
+
+    ajListSortTwoThree(dfs,
+                       &listDensityfeatureCompareStartAscending,
+                       &listDensityfeatureCompareEndAscending,
+                       &listDensityfeatureCompareIdentifierAscending);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ensListDensityfeatureSortStartDescending *****************************
+**
+** Sort an AJAX List of Ensembl Density Feature objects by their
+** Ensembl Feature start member in descending order.
+**
+** @param [u] dfs [AjPList] AJAX List of Ensembl Density Feature objects
+**
+** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensListDensityfeatureSortStartDescending(AjPList dfs)
 {
-    if(!dfs)
+    if (!dfs)
         return ajFalse;
 
-    ajListSort(dfs, listDensityfeatureCompareStartDescending);
+    ajListSortTwoThree(dfs,
+                       &listDensityfeatureCompareStartDescending,
+                       &listDensityfeatureCompareEndDescending,
+                       &listDensityfeatureCompareIdentifierAscending);
 
     return ajTrue;
 }
@@ -2760,8 +3035,8 @@ AjBool ensListDensityfeatureSortStartDescending(AjPList dfs)
 ** Ensembl Density Feature Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::DensityFeatureAdaptor
-** @cc CVS Revision: 1.26
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.27
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -2773,18 +3048,20 @@ AjBool ensListDensityfeatureSortStartDescending(AjPList dfs)
 ** Fetch all Ensembl Density Feature objects via an SQL statement.
 **
 ** @cc Bio::EnsEMBL::DBSQL::DensityFeatureAdaptor::_objs_from_sth
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] dfs [AjPList] AJAX List of Ensembl Density Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool densityfeatureadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -2792,27 +3069,19 @@ static AjBool densityfeatureadaptorFetchAllbyStatement(
 {
     float value = 0.0F;
 
-    ajuint identifier = 0;
-    ajuint dtid       = 0;
+    ajuint identifier = 0U;
+    ajuint dtid       = 0U;
 
-    ajuint srid    = 0;
-    ajuint srstart = 0;
-    ajuint srend   = 0;
-
-    ajint slstart  = 0;
-    ajint slend    = 0;
-    ajint slstrand = 0;
-    ajint sllength = 0;
-
-    AjPList mrs = NULL;
+    ajuint srid     = 0U;
+    ajuint srstart  = 0U;
+    ajuint srend    = 0U;
+    ajuint srstrand = 1;
 
     AjPSqlstatement sqls = NULL;
     AjISqlrow sqli       = NULL;
     AjPSqlrow sqlr       = NULL;
 
-    EnsPAssemblymapperadaptor ama = NULL;
-
-    EnsPCoordsystemadaptor csa = NULL;
+    EnsPDatabaseadaptor dba = NULL;
 
     EnsPFeature feature = NULL;
 
@@ -2822,51 +3091,38 @@ static AjBool densityfeatureadaptorFetchAllbyStatement(
     EnsPDensitytype dt         = NULL;
     EnsPDensitytypeadaptor dta = NULL;
 
-    EnsPMapperresult mr = NULL;
-
-    EnsPSlice srslice   = NULL;
-    EnsPSliceadaptor sa = NULL;
-
-    if(ajDebugTest("densityfeatureadaptorFetchAllbyStatement"))
+    if (ajDebugTest("densityfeatureadaptorFetchAllbyStatement"))
         ajDebug("densityfeatureadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement %p\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  dfs %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 dfs);
 
-    if(!dba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!dfs)
+    if (!dfs)
         return ajFalse;
 
-    csa = ensRegistryGetCoordsystemadaptor(dba);
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
     dfa = ensRegistryGetDensityfeatureadaptor(dba);
-
     dta = ensRegistryGetDensitytypeadaptor(dba);
-
-    sa = ensRegistryGetSliceadaptor(dba);
-
-    if(slice)
-        ama = ensRegistryGetAssemblymapperadaptor(dba);
-
-    mrs = ajListNew();
 
     sqls = ensDatabaseadaptorSqlstatementNew(dba, statement);
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier = 0;
         srid       = 0;
@@ -2884,297 +3140,37 @@ static AjBool densityfeatureadaptorFetchAllbyStatement(
         ajSqlcolumnToUint(sqlr, &dtid);
         ajSqlcolumnToFloat(sqlr, &value);
 
-        /* Need to get the internal Ensembl Sequence Region identifier. */
+        ensBaseadaptorRetrieveFeature(ba,
+                                      0U,
+                                      srid,
+                                      srstart,
+                                      srend,
+                                      srstrand,
+                                      am,
+                                      slice,
+                                      &feature);
 
-        srid = ensCoordsystemadaptorGetSeqregionidentifierInternal(csa, srid);
-
-        /*
-        ** Since the Ensembl SQL schema defines Sequence Region start and end
-        ** coordinates as unsigned integers for all Feature objects, the range
-        ** needs checking.
-        */
-
-        if(srstart <= INT_MAX)
-            slstart = (ajint) srstart;
-        else
-            ajFatal("densityfeatureadaptorFetchAllbyStatement got a "
-                    "Sequence Region start coordinate (%u) outside the "
-                    "maximum integer limit (%d).",
-                    srstart, INT_MAX);
-
-        if(srend <= INT_MAX)
-            slend = (ajint) srend;
-        else
-            ajFatal("densityfeatureadaptorFetchAllbyStatement got a "
-                    "Sequence Region end coordinate (%u) outside the "
-                    "maximum integer limit (%d).",
-                    srend, INT_MAX);
-
-        slstrand = 1;
-
-        /* Fetch a Slice spanning the entire Sequence Region. */
-
-        ensSliceadaptorFetchBySeqregionIdentifier(sa, srid, 0, 0, 0, &srslice);
-
-        /*
-        ** Obtain an Ensembl Assembly Mapper if none was defined, but a
-        ** destination Slice was.
-        */
-
-        if(am)
-            am = ensAssemblymapperNewRef(am);
-        else if(slice && (!ensCoordsystemMatch(
-                              ensSliceGetCoordsystemObject(slice),
-                              ensSliceGetCoordsystemObject(srslice))))
-            ensAssemblymapperadaptorFetchBySlices(ama, slice, srslice, &am);
-
-        /*
-        ** Remap the Feature coordinates to another Ensembl Coordinate System
-        ** if an Ensembl Assembly Mapper was provided.
-        */
-
-        if(am)
-        {
-            ensAssemblymapperFastmap(am,
-                                     ensSliceGetSeqregion(srslice),
-                                     slstart,
-                                     slend,
-                                     slstrand,
-                                     mrs);
-
-            /*
-            ** The ensAssemblymapperFastmap function returns at best one
-            ** Ensembl Mapper Result.
-            */
-
-            ajListPop(mrs, (void**) &mr);
-
-            /*
-            ** Skip Feature objects that map to gaps or
-            ** Coordinate System boundaries.
-            */
-
-            if(ensMapperresultGetType(mr) != ensEMapperresultTypeCoordinate)
-            {
-                /* Load the next Feature but destroy first! */
-
-                ensSliceDel(&srslice);
-
-                ensAssemblymapperDel(&am);
-
-                ensMapperresultDel(&mr);
-
-                continue;
-            }
-
-            srid     = ensMapperresultGetObjectidentifier(mr);
-            slstart  = ensMapperresultGetCoordinateStart(mr);
-            slend    = ensMapperresultGetCoordinateEnd(mr);
-            slstrand = ensMapperresultGetCoordinateStrand(mr);
-
-            /*
-            ** Delete the Sequence Region Slice and fetch a Slice in the
-            ** Coordinate System we just mapped to.
-            */
-
-            ensSliceDel(&srslice);
-
-            ensSliceadaptorFetchBySeqregionIdentifier(sa,
-                                                      srid,
-                                                      0,
-                                                      0,
-                                                      0,
-                                                      &srslice);
-
-            ensMapperresultDel(&mr);
-        }
-
-        /*
-        ** Convert Sequence Region Slice coordinates to destination Slice
-        ** coordinates, if a destination Slice has been provided.
-        */
-
-        if(slice)
-        {
-            /* Check that the length of the Slice is within range. */
-
-            if(ensSliceCalculateLength(slice) <= INT_MAX)
-                sllength = (ajint) ensSliceCalculateLength(slice);
-            else
-                ajFatal("densityfeatureadaptorFetchAllbyStatement got a "
-                        "Slice, which length (%u) exceeds the "
-                        "maximum integer limit (%d).",
-                        ensSliceCalculateLength(slice), INT_MAX);
-
-            /*
-            ** Nothing needs to be done if the destination Slice starts at 1
-            ** and is on the forward strand.
-            */
-
-            if((ensSliceGetStart(slice) != 1) ||
-               (ensSliceGetStrand(slice) < 0))
-            {
-                if(ensSliceGetStrand(slice) >= 0)
-                {
-                    slstart = slstart - ensSliceGetStart(slice) + 1;
-
-                    slend = slend - ensSliceGetStart(slice) + 1;
-                }
-                else
-                {
-                    slend = ensSliceGetEnd(slice) - slstart + 1;
-
-                    slstart = ensSliceGetEnd(slice) - slend + 1;
-
-                    slstrand *= -1;
-                }
-            }
-
-            /*
-            ** Throw away Feature objects off the end of the requested Slice or
-            ** on any other than the requested Slice.
-            */
-
-            if((slend < 1) ||
-               (slstart > sllength) ||
-               (srid != ensSliceGetSeqregionIdentifier(slice)))
-            {
-                /* Load the next Feature but destroy first! */
-
-                ensSliceDel(&srslice);
-
-                ensAssemblymapperDel(&am);
-
-                continue;
-            }
-
-            /* Delete the Sequence Region Slice and set the requested Slice. */
-
-            ensSliceDel(&srslice);
-
-            srslice = ensSliceNewRef(slice);
-        }
+        if (!feature)
+            continue;
 
         ensDensitytypeadaptorFetchByIdentifier(dta, dtid, &dt);
 
         /* Finally, create a new Ensembl Density Feature. */
 
-        feature = ensFeatureNewIniS((EnsPAnalysis) NULL,
-                                    srslice,
-                                    slstart,
-                                    slend,
-                                    1);
-
         df = ensDensityfeatureNewIni(dfa, identifier, feature, dt, value);
 
-        ajListPushAppend(dfs, (void*) df);
+        ajListPushAppend(dfs, (void *) df);
 
         ensDensitytypeDel(&dt);
 
         ensFeatureDel(&feature);
-
-        ensAssemblymapperDel(&am);
-
-        ensSliceDel(&srslice);
     }
 
     ajSqlrowiterDel(&sqli);
 
     ensDatabaseadaptorSqlstatementDel(dba, &sqls);
 
-    ajListFree(&mrs);
-
     return ajTrue;
-}
-
-
-
-
-/* @funcstatic densityfeatureadaptorCacheReference ****************************
-**
-** Wrapper function to reference an Ensembl Density Feature
-** from an Ensembl Cache.
-**
-** @param [r] value [void*] Ensembl Density Feature
-**
-** @return [void*] Ensembl Density Feature or NULL
-** @@
-******************************************************************************/
-
-static void* densityfeatureadaptorCacheReference(void* value)
-{
-    if(!value)
-        return NULL;
-
-    return (void*) ensDensityfeatureNewRef((EnsPDensityfeature) value);
-}
-
-
-
-
-/* @funcstatic densityfeatureadaptorCacheDelete *******************************
-**
-** Wrapper function to delete an Ensembl Density Feature
-** from an Ensembl Cache.
-**
-** @param [r] value [void**] Ensembl Density Feature address
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void densityfeatureadaptorCacheDelete(void** value)
-{
-    if(!value)
-        return;
-
-    ensDensityfeatureDel((EnsPDensityfeature*) value);
-
-    return;
-}
-
-
-
-
-/* @funcstatic densityfeatureadaptorCacheSize *********************************
-**
-** Wrapper function to determine the memory size of an Ensembl Density Feature
-** from an Ensembl Cache.
-**
-** @param [r] value [const void*] Ensembl Density Feature
-**
-** @return [size_t] Memory size in bytes or 0
-** @@
-******************************************************************************/
-
-static size_t densityfeatureadaptorCacheSize(const void* value)
-{
-    if(!value)
-        return 0;
-
-    return ensDensityfeatureCalculateMemsize((const EnsPDensityfeature) value);
-}
-
-
-
-
-/* @funcstatic densityfeatureadaptorGetFeature ********************************
-**
-** Wrapper function to get the Ensembl Feature of an Ensembl Density Feature
-** from an Ensembl Feature Adaptor.
-**
-** @param [r] value [const void*] Ensembl Density Feature
-**
-** @return [EnsPFeature] Ensembl Feature
-** @@
-******************************************************************************/
-
-static EnsPFeature densityfeatureadaptorGetFeature(const void* value)
-{
-    if(!value)
-        return NULL;
-
-    return ensDensityfeatureGetFeature((const EnsPDensityfeature) value);
 }
 
 
@@ -3193,7 +3189,8 @@ static EnsPFeature densityfeatureadaptorGetFeature(const void* value)
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @valrule * [EnsPDensityfeatureadaptor] Ensembl Density Feature Adaptor
+** @valrule * [EnsPDensityfeatureadaptor]
+** Ensembl Density Feature Adaptor or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -3220,29 +3217,31 @@ static EnsPFeature densityfeatureadaptorGetFeature(const void* value)
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
 ** @return [EnsPDensityfeatureadaptor] Ensembl Density Feature Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPDensityfeatureadaptor ensDensityfeatureadaptorNew(
     EnsPDatabaseadaptor dba)
 {
-    if(!dba)
+    if (!dba)
         return NULL;
 
     return ensFeatureadaptorNew(
         dba,
-        densityfeatureadaptorTables,
-        densityfeatureadaptorColumns,
-        (EnsPBaseadaptorLeftjoin) NULL,
-        (const char*) NULL,
-        (const char*) NULL,
-        densityfeatureadaptorFetchAllbyStatement,
-        (void* (*)(const void* key)) NULL,
-        densityfeatureadaptorCacheReference,
-        (AjBool (*)(const void* value)) NULL,
-        densityfeatureadaptorCacheDelete,
-        densityfeatureadaptorCacheSize,
-        densityfeatureadaptorGetFeature,
+        densityfeatureadaptorKTables,
+        densityfeatureadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        (const char *) NULL,
+        (const char *) NULL,
+        &densityfeatureadaptorFetchAllbyStatement,
+        (void *(*)(const void *)) NULL,
+        (void *(*)(void *)) &ensDensityfeatureNewRef,
+        (AjBool (*)(const void *)) NULL,
+        (void (*)(void **)) &ensDensityfeatureDel,
+        (size_t (*)(const void *)) &ensDensityfeatureCalculateMemsize,
+        (EnsPFeature (*)(const void *)) &ensDensityfeatureGetFeature,
         "Density Feature");
 }
 
@@ -3251,15 +3250,15 @@ EnsPDensityfeatureadaptor ensDensityfeatureadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl Density Feature Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl Density Feature Adaptor object.
 **
 ** @fdata [EnsPDensityfeatureadaptor]
 **
 ** @nam3rule Del Destroy (free) an Ensembl Density Feature Adaptor object
 **
-** @argrule * Pdfa [EnsPDensityfeatureadaptor*] Ensembl Density Feature Adaptor
-**                                              object address
+** @argrule * Pdfa [EnsPDensityfeatureadaptor*]
+** Ensembl Density Feature Adaptor address
 **
 ** @valrule * [void]
 **
@@ -3279,34 +3278,28 @@ EnsPDensityfeatureadaptor ensDensityfeatureadaptorNew(
 ** destroyed directly. Upon exit, the Ensembl Registry will call this function
 ** if required.
 **
-** @param [d] Pdfa [EnsPDensityfeatureadaptor*] Ensembl Density Feature Adaptor
-**                                              object address
+** @param [d] Pdfa [EnsPDensityfeatureadaptor*]
+** Ensembl Density Feature Adaptor address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensDensityfeatureadaptorDel(EnsPDensityfeatureadaptor* Pdfa)
+void ensDensityfeatureadaptorDel(EnsPDensityfeatureadaptor *Pdfa)
 {
-    if(!Pdfa)
-        return;
-
-    if(!*Pdfa)
-        return;
-
     ensFeatureadaptorDel(Pdfa);
 
-    *Pdfa = NULL;
-
-    return;
+	return;
 }
 
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an
+** Functions for returning members of an
 ** Ensembl Density Feature Adaptor object.
 **
 ** @fdata [EnsPDensityfeatureadaptor]
@@ -3327,22 +3320,21 @@ void ensDensityfeatureadaptorDel(EnsPDensityfeatureadaptor* Pdfa)
 
 /* @func ensDensityfeatureadaptorGetDatabaseadaptor ***************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl Density Feature Adaptor.
 **
 ** @param [u] dfa [EnsPDensityfeatureadaptor] Ensembl Density Feature Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensDensityfeatureadaptorGetDatabaseadaptor(
     EnsPDensityfeatureadaptor dfa)
 {
-    if(!dfa)
-        return NULL;
-
-    return ensFeatureadaptorGetDatabaseadaptor(dfa);
+    return (dfa) ? ensFeatureadaptorGetDatabaseadaptor(dfa) : NULL;
 }
 
 
@@ -3410,6 +3402,8 @@ EnsPDatabaseadaptor ensDensityfeatureadaptorGetDatabaseadaptor(
 ** @param [u] dfs [AjPList] AJAX List of Ensembl Density Feature objects
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -3428,12 +3422,12 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
     double ceitmp  = 0.0;
     float value    = 0.0F;
 
-    register ajuint i = 0;
+    register ajuint i = 0U;
 
     /* Block start and end */
     ajint bstart   = 0;
     ajint bend     = 0;
-    ajuint blength = 0;
+    ajuint blength = 0U;
 
     /* Feature start and end */
     ajint fstart = 0;
@@ -3471,7 +3465,7 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
 
     debug = ajDebugTest("ensDensityfeatureadaptorFetchAllbySlice");
 
-    if(debug)
+    if (debug)
         ajDebug("ensDensityfeatureadaptorFetchAllbySlice\n"
                 "  dfa %p\n"
                 "  slice %p\n"
@@ -3488,16 +3482,16 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
                 maxratio,
                 dfs);
 
-    if(!dfa)
+    if (!dfa)
         return ajFalse;
 
-    if(!slice)
+    if (!slice)
         return ajFalse;
 
-    if(!dfs)
+    if (!dfs)
         return ajFalse;
 
-    if(!blocks)
+    if (!blocks)
         blocks = 50U;
 
     /*
@@ -3513,13 +3507,13 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
 
     ensDensitytypeadaptorFetchAllbyAnalysisname(dta, anname, dts);
 
-    if(!ajListGetLength(dts))
+    if (!ajListGetLength(dts))
     {
         ensDensitytypeadaptorFetchAll(dta, dts);
 
         names = ajStrNew();
 
-        while(ajListPop(dts, (void**) &dt))
+        while (ajListPop(dts, (void **) &dt))
         {
             analysis = ensDensitytypeGetAnalysis(dt);
 
@@ -3555,9 +3549,9 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
 
     dtrs = ajListNew();
 
-    while(ajListPop(dts, (void**) &dt))
+    while (ajListPop(dts, (void **) &dt))
     {
-        if(ensDensitytypeGetSize(dt) > 0)
+        if (ensDensitytypeGetSize(dt) > 0)
             ratio = (double) bsize /
                 (double) (ajint) ensDensitytypeGetSize(dt);
         else
@@ -3579,7 +3573,7 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
         ** Give larger bits a disadvantage and make them comparable.
         */
 
-        if(ratio < 1.0)
+        if (ratio < 1.0)
             ratio = 5.0 / ratio;
 
         AJNEW0(dtr);
@@ -3588,7 +3582,7 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
 
         dtr->Ratio = (float) ratio;
 
-        ajListPushAppend(dtrs, (void*) dtr);
+        ajListPushAppend(dtrs, (void *) dtr);
     }
 
     ajListFree(&dts);
@@ -3598,13 +3592,13 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
     ** and get the best one.
     */
 
-    ajListSort(dtrs, densitytyperatioCompareRatioAscending);
+    ajListSort(dtrs, &listDensitytyperatioCompareRatioAscending);
 
-    ajListPeekFirst(dtrs, (void**) &dtr);
+    ajListPeekFirst(dtrs, (void **) &dtr);
 
-    if(debug)
+    if (debug)
     {
-        if(dtr)
+        if (dtr)
             ajDebug("ensDensityfeatureadaptorFetchAllbySlice got ratio %f "
                     "and maxratio %f.\n", dtr->Ratio, maxratio);
         else
@@ -3616,9 +3610,9 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
     ** in the 'density_type' table, return an empty list.
     */
 
-    if((!dtr) || (dtr->Ratio > maxratio))
+    if ((!dtr) || (dtr->Ratio > maxratio))
     {
-        while(ajListPop(dtrs, (void**) &dtr))
+        while (ajListPop(dtrs, (void **) &dtr))
         {
             ensDensitytypeDel(&dtr->Densitytype);
 
@@ -3641,9 +3635,9 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
 
     ajStrDel(&constraint);
 
-    if(!interpolate)
+    if (!interpolate)
     {
-        while(ajListPop(dtrs, (void**) &dtr))
+        while (ajListPop(dtrs, (void **) &dtr))
         {
             ensDensitytypeDel(&dtr->Densitytype);
 
@@ -3663,8 +3657,8 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
 
     dfeatures = ajListNew();
 
-    while(ajListPop(dfs, (void**) &df))
-        ajListPushAppend(dfeatures, (void*) df);
+    while (ajListPop(dfs, (void **) &df))
+        ajListPushAppend(dfeatures, (void *) df);
 
     ensListDensityfeatureSortStartAscending(dfeatures);
 
@@ -3687,11 +3681,11 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
 
     dlvs = ajListNew();
 
-    while(bstart < (ajint) ensSliceCalculateLength(slice))
+    while (bstart < (ajint) ensSliceCalculateLength(slice))
     {
         value = 0.0F;
 
-        if(debug)
+        if (debug)
             ajDebug("ensDensityfeatureadaptorFetchAllbySlice "
                     "bstart %d bend %d value %f\n",
                     bstart, bend, value);
@@ -3701,9 +3695,9 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
         ** Ensembl Density Feature objects that overlapped.
         */
 
-        while(ajListPeekNumber(dfeatures, i, (void**) &df) &&
-              (feature = ensDensityfeatureGetFeature(df)) &&
-              (ensFeatureGetStart(feature) < bend))
+        while (ajListPeekNumber(dfeatures, i, (void **) &df) &&
+               (feature = ensDensityfeatureGetFeature(df)) &&
+               (ensFeatureGetStart(feature) < bend))
         {
             /*
             ** What portion of this Feature is used
@@ -3725,14 +3719,14 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
             fend = (fend > (ajint) ensSliceCalculateLength(slice))
                 ? (ajint) ensSliceCalculateLength(slice) : fend;
 
-            if(debug)
+            if (debug)
                 ajDebug("ensDensityfeatureadaptorFetchAllbySlice "
                         "bstart %d bend %d fstart %d fend %d id %u value %f\n",
                         bstart, bend, fstart, fend,
                         ensDensityfeatureGetIdentifier(df),
                         ensDensityfeatureGetValue(df));
 
-            switch(ensDensitytypeGetType(newdt))
+            switch (ensDensitytypeGetType(newdt))
             {
                 case ensEDensitytypeTypeSum:
 
@@ -3762,7 +3756,7 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
 
                     dlv->Value = ensDensityfeatureGetValue(df);
 
-                    ajListPushAppend(dlvs, (void*) dlv);
+                    ajListPushAppend(dlvs, (void *) dlv);
 
                     break;
 
@@ -3778,13 +3772,13 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
             ** if only a part of this one has been used.
             */
 
-            if(fend < ensFeatureGetEnd(feature))
+            if (fend < ensFeatureGetEnd(feature))
                 break;
 
             i++;
         }
 
-        if(ensDensitytypeGetType(newdt) == ensEDensitytypeTypeRatio)
+        if (ensDensitytypeGetType(newdt) == ensEDensitytypeTypeRatio)
         {
             /*
             ** Take a weighted average of all the density values
@@ -3793,13 +3787,13 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
 
             blength = bend - bstart + 1;
 
-            while(ajListPop(dlvs, (void**) &dlv))
+            while (ajListPop(dlvs, (void **) &dlv))
             {
-                if(blength > 0)
+                if (blength > 0)
                     value += dlv->Value * (float) dlv->Length /
                         (float) blength;
 
-                if(debug)
+                if (debug)
                     ajDebug("ensDensityfeatureadaptorFetchAllbySlice "
                             "bstart %d bend %d blength %u "
                             "DLV Length %u DLV Value %f "
@@ -3828,13 +3822,13 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
                                         newdt,
                                         value);
 
-        ajListPushAppend(dfs, (void*) newdf);
+        ajListPushAppend(dfs, (void *) newdf);
 
         ensFeatureDel(&newfeature);
 
         /* Clear the AJAX List of remaining density length values. */
 
-        while(ajListPop(dlvs, (void**) &dlv))
+        while (ajListPop(dlvs, (void **) &dlv))
             AJFREE(dlv);
 
         /* Advance one block. */
@@ -3850,14 +3844,14 @@ AjBool ensDensityfeatureadaptorFetchAllbySlice(
 
     /* Clear the AJAX List of intermediary Ensembl Density Feature objects. */
 
-    while(ajListPop(dfeatures, (void**) &df))
+    while (ajListPop(dfeatures, (void **) &df))
         ensDensityfeatureDel(&df);
 
     ajListFree(&dfeatures);
 
     /* Clear the AJAX List of density type ratios. */
 
-    while(ajListPop(dtrs, (void**) &dtr))
+    while (ajListPop(dtrs, (void **) &dtr))
     {
         ensDensitytypeDel(&dtr->Densitytype);
 

@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -76,7 +76,7 @@ Created dotpath.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Draw a non-overlapping wordmatch dotplot of two sequences
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or
@@ -107,7 +107,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -123,7 +126,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein2          boolean    Sequence is protein
    -slower2            boolean    Make lower case
    -supper2            boolean    Make upper case
+   -scircular2         boolean    Sequence is circular
    -sformat2           string     Input sequence format
+   -iquery2            string     Input query fields or ID list
+   -ioffset2           integer    Input start position offset
    -sdbname2           string     Database name
    -sid2               string     Entryname
    -ufo2               string     UFO features
@@ -238,7 +244,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-asequence" associated sequence qualifiers
+<td align="left" colspan=5>"-asequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -307,11 +313,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_asequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_asequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_asequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_asequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -355,7 +385,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-bsequence" associated sequence qualifiers
+<td align="left" colspan=5>"-bsequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -424,11 +454,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular2<br>-scircular_bsequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat2<br>-sformat_bsequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery2<br>-iquery_bsequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset2<br>-ioffset_bsequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -472,7 +526,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-graph" associated graph qualifiers
+<td align="left" colspan=5>"-graph" associated graph qualifiers
 </td>
 </tr>
 
@@ -693,7 +747,7 @@ RN   [3]
 RP   1-184666
 RA   Rowen L.;
 RT   ;
-RL   Submitted (22-FEB-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (22-FEB-1999) to the INSDC.
 RL   Department of Molecular Biotechnology, Box 357730 University of Washington,
 RL   Seattle, WA 98195, USA
 XX
@@ -701,7 +755,7 @@ RN   [4]
 RP   1-184666
 RA   Rowen L.;
 RT   ;
-RL   Submitted (28-OCT-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (28-OCT-1999) to the INSDC.
 RL   Multimegabase Sequencing Center, University of Washington, PO Box 357730,
 RL   Seattle, WA 98195, USA
 
@@ -784,7 +838,7 @@ RN   [1]
 RP   1-2229817
 RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
 RT   ;
-RL   Submitted (21-AUG-2001) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (21-AUG-2001) to the INSDC.
 RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
 RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
 RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
@@ -805,15 +859,15 @@ DR   EPD; EP74203; HS_MRPS18B.
 DR   EPD; EP74346; HS_HLA-E.
 DR   EPD; EP74389; HS_BAT1.
 DR   EPD; EP74485; HS_IER3.
-DR   GDB; 11515913.
-DR   GOA; P59942.
-DR   HGNC; 20668; MCCD1.
-DR   IMGT/HLA; HLA02629; J*01:01:01:02.
-DR   IMGT/HLA; HLA02802; V*01:01:01:02.
-DR   RFAM; RF00017; SRP_euk_arch.
-DR   RFAM; RF00019; Y_RNA.
-DR   RFAM; RF00026; U6.
-DR   RFAM; RF00100; 7SK.
+DR   Ensembl-Gn; ENSG00000096155; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000096171; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000111971; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137310; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137312; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137313; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137331; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137332; Homo_sapiens.
+DR   Ensembl-Gn; ENSG00000137337; Homo_sapiens.
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -943,7 +997,7 @@ None
 
 <tr>
 <td><a href="dottup.html">dottup</a></td>
-<td>Displays a wordmatch dotplot of two sequences</td>
+<td>Display a wordmatch dotplot of two sequences</td>
 </tr>
 
 <tr>

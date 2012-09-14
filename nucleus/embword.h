@@ -1,10 +1,59 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include embword ***********************************************************
+**
+** Wordmatch routines
+**
+** @author Copyright (c) 1999 Gary Williams
+** @version $Revision: 1.32 $
+** @modified $Date: 2011/10/18 14:24:25 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef embWord_h
-#define embWord_h
+#ifndef EMBWORD_H
+#define EMBWORD_H
+
+
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
+#include "ajseqdata.h"
+#include "ajfeat.h"
+#include "ajfile.h"
+#include "ajlist.h"
+#include "ajtable.h"
+
+AJ_BEGIN_DECLS
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -118,6 +167,12 @@ typedef struct EmbSWordRK {
 
 
 
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
 /*
 ** Prototype definitions
 */
@@ -161,18 +216,25 @@ ajuint embWordRabinKarpInit(const AjPTable table,
 	                    EmbPWordRK** ewords, ajuint wordlen,
 	                    const AjPSeqset seqset);
 
-
-__deprecated EmbPWordMatch embWordMatchListAppend(AjPList hitlist,
-	const AjPSeq seq,const ajuint seq1start,ajuint seq2start,ajint length);
-
 /*
 ** End of prototype definitions
 */
 
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+#ifdef AJ_COMPILE_DEPRECATED
+
+__deprecated EmbPWordMatch embWordMatchListAppend(AjPList hitlist,
+                                                  const AjPSeq seq,
+                                                  const ajuint seq1start,
+                                                  ajuint seq2start,
+                                                  ajint length);
+
 #endif
 
-#ifdef __cplusplus
-}
-#endif
+AJ_END_DECLS
+
+#endif  /* !EMBWORD_H */
 
 

@@ -7,7 +7,7 @@ This makes two randomised copies of the input sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>shuffleseq -shuffle 2 </b>
-Shuffles a set of sequences maintaining composition
+Shuffle a set of sequences maintaining composition
 Input sequence(s): <b>tembl:L48662</b>
 output sequence(s) [l48662.fasta]: <b></b>
 

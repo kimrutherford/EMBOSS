@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -75,7 +75,7 @@ Created pepnet.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Draw a helical net for a protein sequence
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional
@@ -113,7 +113,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -225,7 +228,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated sequence qualifiers
+<td align="left" colspan=5>"-sequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -294,11 +297,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -342,7 +369,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-graph" associated graph qualifiers
+<td align="left" colspan=5>"-graph" associated graph qualifiers
 </td>
 </tr>
 
@@ -558,18 +585,18 @@ for further information on sequence formats.
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   GCN4_YEAST              Reviewed;         281 AA.
-AC   P03069; P03068; Q70D88; Q70D91; Q70D96; Q70D99; Q70DA0; Q96UT3;
+AC   P03069; D3DLN9; P03068; Q70D88; Q70D91; Q70D96; Q70D99; Q70DA0;
+AC   Q96UT3;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   21-JUL-1986, sequence version 1.
-DT   15-JUN-2010, entry version 120.
+DT   13-JUN-2012, entry version 139.
 DE   RecName: Full=General control protein GCN4;
 DE   AltName: Full=Amino acid biosynthesis regulatory protein;
 GN   Name=GCN4; Synonyms=AAS3, ARG9; OrderedLocusNames=YEL009C;
-OS   Saccharomyces cerevisiae (Baker's yeast).
-OC   Eukaryota; Fungi; Dikarya; Ascomycota; Saccharomyceta;
-OC   Saccharomycotina; Saccharomycetes; Saccharomycetales;
-OC   Saccharomycetaceae; Saccharomyces.
-OX   NCBI_TaxID=4932;
+OS   Saccharomyces cerevisiae (strain ATCC 204508 / S288c) (Baker's yeast).
+OC   Eukaryota; Fungi; Dikarya; Ascomycota; Saccharomycotina;
+OC   Saccharomycetes; Saccharomycetales; Saccharomycetaceae; Saccharomyces.
+OX   NCBI_TaxID=559292;
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
 RX   MEDLINE=85038531; PubMed=6387704; DOI=10.1073/pnas.81.20.6442;
@@ -760,12 +787,12 @@ None.
 
 <tr>
 <td><a href="cirdna.html">cirdna</a></td>
-<td>Draws circular maps of DNA constructs</td>
+<td>Draw circular map of DNA constructs</td>
 </tr>
 
 <tr>
 <td><a href="garnier.html">garnier</a></td>
-<td>Predicts protein secondary structure using GOR method</td>
+<td>Predict protein secondary structure using GOR method</td>
 </tr>
 
 <tr>
@@ -780,12 +807,12 @@ None.
 
 <tr>
 <td><a href="lindna.html">lindna</a></td>
-<td>Draws linear maps of DNA constructs</td>
+<td>Draw linear maps of DNA constructs</td>
 </tr>
 
 <tr>
 <td><a href="pepcoil.html">pepcoil</a></td>
-<td>Predicts coiled coil regions in protein sequences</td>
+<td>Predict coiled coil regions in protein sequences</td>
 </tr>
 
 <tr>
@@ -825,7 +852,7 @@ None.
 
 <tr>
 <td><a href="showpep.html">showpep</a></td>
-<td>Displays protein sequences with features in pretty format</td>
+<td>Display protein sequences with features in pretty format</td>
 </tr>
 
 <tr>

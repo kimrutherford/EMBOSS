@@ -1,24 +1,77 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include ajpat *************************************************************
+**
+** AJAX PATTERN (ajax pattern and patternlist) functions
+**
+** These functions allow handling of patternlists.
+**
+** @author Copyright (C) 2004 Henrikki Almusa, Medicel Oy, Finland
+** @version $Revision: 1.12 $
+** @modified Aug 10 Beta version
+** @modified 2004-2011 Peter Rice
+** @modified $Date: 2011/10/18 14:23:40 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef ajpat_h
-#define ajpat_h
+#ifndef AJPAT_H
+#define AJPAT_H
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
+#include "ajlist.h"
+#include "ajreg.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
 
 /*
- *  Defines for string search algorithms
- */
-#define AJALPHA  256			/* Alphabet			*/
+**  Defines for string search algorithms
+*/
+#define AJALPHA  256                    /* Alphabet                     */
 #define AJMOD256 0xff
-#define AJALPHA2 128			/* ASCII printable		*/
-#define AJWORD   32			/* Size of a word		*/
-#define AJBPS    1			/* Bits per state		*/
+#define AJALPHA2 128                    /* ASCII printable              */
+#define AJWORD   32                     /* Size of a word               */
+#define AJBPS    1                      /* Bits per state               */
 
 
 
 
-/* @data AjPPatBYPNode *******************************************************
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* @data AjPPatBYPNode ********************************************************
 **
 ** AJAX data structure for nodes in Baeza-Yates & Perleberg algorithm
 **
@@ -34,12 +87,13 @@ typedef struct AjSPatBYPNode
     ajint offset;
     char  Padding[4];
 } AjOPatBYPNode;
+
 #define AjPPatBYPNode AjOPatBYPNode*
 
 
 
 
-/* @data AjPPatComp **********************************************************
+/* @data AjPPatComp ***********************************************************
 **
 ** AJAX data structure that holds all needed data for compiling and
 ** searching. Not including mismatch number.
@@ -78,6 +132,7 @@ typedef struct AjSPatComp
     AjBool amino;
     AjBool carboxyl;
 } AjOPatComp;
+
 #define AjPPatComp AjOPatComp*
 
 
@@ -109,12 +164,13 @@ typedef struct AjSPatComp
 ** @@
 ******************************************************************************/
 
-typedef struct AjSPatternSeq {
-  AjPStr Name;
-  AjPStr Pattern;
-  void* Compiled;
-  AjBool Protein;
-  ajuint Mismatch;
+typedef struct AjSPatternSeq
+{
+    AjPStr Name;
+    AjPStr Pattern;
+    void* Compiled;
+    AjBool Protein;
+    ajuint Mismatch;
 } AjOPatternSeq;
 
 #define AjPPatternSeq AjOPatternSeq*
@@ -147,15 +203,19 @@ typedef struct AjSPatternSeq {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSPatternRegex {
-  AjPStr    Name;
-  AjPStr    Pattern;
-  AjPRegexp Compiled;
-  ajuint    Type;
-  char      Padding[4];
+typedef struct AjSPatternRegex
+{
+    AjPStr    Name;
+    AjPStr    Pattern;
+    AjPRegexp Compiled;
+    ajuint    Type;
+    char      Padding[4];
 } AjOPatternRegex;
 
 #define AjPPatternRegex AjOPatternRegex*
+
+
+
 
 /*
 ** type can be 0: string, 1: prosite (protein) 2: prosite like (nucleotide)
@@ -192,11 +252,12 @@ typedef struct AjSPatternRegex {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSPatlistSeq {
-  AjPList Patlist;
-  AjIList Iter;
-  AjBool Protein;
-  char   Padding[4];
+typedef struct AjSPatlistSeq
+{
+    AjPList Patlist;
+    AjIList Iter;
+    AjBool Protein;
+    char   Padding[4];
 } AjOPatlistSeq;
 
 #define AjPPatlistSeq AjOPatlistSeq*
@@ -229,81 +290,93 @@ typedef struct AjSPatlistSeq {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSPatlistRegex {
-  AjPList Patlist;
-  AjIList Iter;
-  ajuint Type;
-  char Padding[4];
+typedef struct AjSPatlistRegex
+{
+    AjPList Patlist;
+    AjIList Iter;
+    ajuint Type;
+    char Padding[4];
 } AjOPatlistRegex;
 
 #define AjPPatlistRegex AjOPatlistRegex*
+
+
+
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
 
 /*
 ** Prototype definitions
 */
 
-AjPPatternSeq ajPatternSeqNewList (AjPPatlistSeq plist, const AjPStr name,
-				   const AjPStr pat, ajuint mismatch);
-void ajPatternSeqDel (AjPPatternSeq* pthys);
-const AjPStr ajPatternSeqGetName (const AjPPatternSeq thys);
-const AjPStr ajPatternSeqGetPattern (const AjPPatternSeq thys);
-AjPPatComp ajPatternSeqGetCompiled (const AjPPatternSeq thys);
-AjBool ajPatternSeqGetProtein (const AjPPatternSeq thys);
-ajuint ajPatternSeqGetMismatch (const AjPPatternSeq thys);
-void ajPatternSeqSetCompiled (AjPPatternSeq thys, void* pat);
-void ajPatternSeqDebug (const AjPPatternSeq pat);
+AjPPatternSeq ajPatternSeqNewList(AjPPatlistSeq plist, const AjPStr name,
+                                  const AjPStr pat, ajuint mismatch);
+void ajPatternSeqDel(AjPPatternSeq* pthys);
+const AjPStr ajPatternSeqGetName(const AjPPatternSeq thys);
+const AjPStr ajPatternSeqGetPattern(const AjPPatternSeq thys);
+AjPPatComp ajPatternSeqGetCompiled(const AjPPatternSeq thys);
+AjBool ajPatternSeqGetProtein(const AjPPatternSeq thys);
+ajuint ajPatternSeqGetMismatch(const AjPPatternSeq thys);
+void ajPatternSeqSetCompiled(AjPPatternSeq thys, void* pat);
+void ajPatternSeqDebug(const AjPPatternSeq pat);
 
-AjPPatternRegex ajPatternRegexNewList (AjPPatlistRegex plist,
-				       const AjPStr name,
-				       const AjPStr pat);
-void ajPatternRegexDel (AjPPatternRegex* pthys);
-const AjPStr ajPatternRegexGetName (const AjPPatternRegex thys);
-const AjPStr ajPatternRegexGetPattern (const AjPPatternRegex thys);
-AjPRegexp ajPatternRegexGetCompiled (const AjPPatternRegex thys);
-ajuint ajPatternRegexGetType (const AjPPatternRegex thys);
-void ajPatternRegexSetCompiled (AjPPatternRegex thys, AjPRegexp pat);
-void ajPatternRegexDebug (const AjPPatternRegex pat);
+AjPPatternRegex ajPatternRegexNewList(AjPPatlistRegex plist,
+                                      const AjPStr name,
+                                      const AjPStr pat);
+void ajPatternRegexDel(AjPPatternRegex* pthys);
+const AjPStr ajPatternRegexGetName(const AjPPatternRegex thys);
+const AjPStr ajPatternRegexGetPattern(const AjPPatternRegex thys);
+AjPRegexp ajPatternRegexGetCompiled(const AjPPatternRegex thys);
+ajuint ajPatternRegexGetType(const AjPPatternRegex thys);
+void ajPatternRegexSetCompiled(AjPPatternRegex thys, AjPRegexp pat);
+void ajPatternRegexDebug(const AjPPatternRegex pat);
 
 /* Patlist handling functions */
-AjPPatlistSeq ajPatlistSeqNewType (AjBool Protein);
-AjPPatlistRegex ajPatlistRegexNewType (ajuint type);
-AjPPatlistRegex ajPatlistRegexNew (void);
-AjPPatlistSeq ajPatlistSeqNew (void);
-void ajPatlistSeqDel (AjPPatlistSeq* pthys);
-void ajPatlistRegexDel (AjPPatlistRegex* pthys);
+AjPPatlistSeq ajPatlistSeqNewType(AjBool Protein);
+AjPPatlistRegex ajPatlistRegexNewType(ajuint type);
+AjPPatlistRegex ajPatlistRegexNew(void);
+AjPPatlistSeq ajPatlistSeqNew(void);
+void ajPatlistSeqDel(AjPPatlistSeq* pthys);
+void ajPatlistRegexDel(AjPPatlistRegex* pthys);
 AjPPatlistRegex ajPatlistRegexRead(const AjPStr patspec,
-				   const AjPStr patname,
-				   const AjPStr fmt,
-				   ajuint type, AjBool upper, AjBool lower);
+                                   const AjPStr patname,
+                                   const AjPStr fmt,
+                                   ajuint type, AjBool upper, AjBool lower);
 AjPPatlistSeq ajPatlistSeqRead(const AjPStr patspec,
-			       const AjPStr patname,
-			       const AjPStr fmt,
-			       AjBool protein, ajuint mismatches);
-AjBool ajPatlistRegexGetNext (AjPPatlistRegex thys,
-			      AjPPatternRegex* pattern);
-AjBool ajPatlistSeqGetNext (AjPPatlistSeq thys,
-			    AjPPatternSeq* pattern);
-void ajPatlistSeqRewind (AjPPatlistSeq thys);
-void ajPatlistRegexRewind (AjPPatlistRegex thys);
-void ajPatlistSeqRemoveCurrent (AjPPatlistSeq thys);
-void ajPatlistRegexRemoveCurrent (AjPPatlistRegex thys);
-void ajPatlistAddRegex (AjPPatlistRegex thys, AjPPatternRegex pat);
-void ajPatlistAddSeq (AjPPatlistSeq thys, AjPPatternSeq pat);
+                               const AjPStr patname,
+                               const AjPStr fmt,
+                               AjBool protein, ajuint mismatches);
+AjBool ajPatlistRegexGetNext(AjPPatlistRegex thys,
+                             AjPPatternRegex* pattern);
+AjBool ajPatlistSeqGetNext(AjPPatlistSeq thys,
+                           AjPPatternSeq* pattern);
+void ajPatlistSeqRewind(AjPPatlistSeq thys);
+void ajPatlistRegexRewind(AjPPatlistRegex thys);
+void ajPatlistSeqRemoveCurrent(AjPPatlistSeq thys);
+void ajPatlistRegexRemoveCurrent(AjPPatlistRegex thys);
+void ajPatlistAddRegex(AjPPatlistRegex thys, AjPPatternRegex pat);
+void ajPatlistAddSeq(AjPPatlistSeq thys, AjPPatternSeq pat);
 ajuint ajPatlistSeqGetSize(const AjPPatlistSeq plist);
 ajuint ajPatlistRegexGetSize(const AjPPatlistRegex plist);
 ajuint ajPatlistRegexDoc(AjPPatlistRegex thys, AjPStr* pdoc);
 ajuint ajPatlistSeqDoc(AjPPatlistSeq thys, AjPStr* pdoc);
 
-AjPPatComp	ajPatCompNew (void);
-void		ajPatCompDel (AjPPatComp* pthys);
+AjPPatComp      ajPatCompNew(void);
+void            ajPatCompDel(AjPPatComp* pthys);
 ajuint ajPatternRegexType(const AjPStr type);
 
 /*
 ** End of prototype definitions
 */
 
-#endif
 
-#ifdef __cplusplus
-}
-#endif
+
+
+AJ_END_DECLS
+
+#endif /* !AJPAT_H */

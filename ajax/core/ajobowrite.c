@@ -1,29 +1,36 @@
-/******************************************************************************
-** @source AJAX OBO handling functions
+/* @source ajobowrite *********************************************************
+**
+** AJAX OBO writing functions
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.14 $
 ** @modified May 5 pmr 2010 First AJAX version
-** @modified Sep 8 2010 pmr Added query and reading functions
+** @modified Sep 8 2010 pmr Added output formats
+** @modified $Date: 2012/03/12 17:39:15 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajobowrite.h"
+#include "ajobo.h"
+#include "ajfileio.h"
 
 
 static AjBool oboWriteExcel(AjPFile outf, const AjPObo obo);
@@ -47,7 +54,7 @@ static AjBool oboWriteXml(AjPFile outf, const AjPObo obo);
 **
 ** @attr Name [const char*] Format name
 ** @attr Desc [const char*] Format description
-** @attr Write [(AjBool*)] Output function, returns ajTrue on success
+** @attr Write [AjBool function] Output function, returns ajTrue on success
 ** @@
 ******************************************************************************/
 
@@ -66,19 +73,19 @@ static OboOOutFormat obooutFormatDef[] =
 /* "Name",        "Description" */
 /*     WriteFunction */
   {"obo",         "OBO format",
-       oboWriteObo},
+       &oboWriteObo},
   {"brief",       "OBO format id, name and namespace only",
-       oboWriteObobrief},
+       &oboWriteObobrief},
   {"list",        "Identifier only",
-       oboWriteList},
+       &oboWriteList},
   {"html",        "HTML with markup",
-       oboWriteHtml},
+       &oboWriteHtml},
   {"xml",         "XML format",
-       oboWriteXml},
+       &oboWriteXml},
   {"json",        "JSON format",
-       oboWriteJson},
+       &oboWriteJson},
   {"excel",       "Tab-delimited file for import to Microsoft Excel",
-       oboWriteExcel},
+       &oboWriteExcel},
   {NULL, NULL, NULL}
 };
 
@@ -139,6 +146,8 @@ static OboOOutFormat obooutFormatDef[] =
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajObooutWrite(AjPOutfile outf, const AjPObo obo)
@@ -146,7 +155,7 @@ AjBool ajObooutWrite(AjPOutfile outf, const AjPObo obo)
     ajuint i = ajOutfileGetFormatindex(outf);
     AjPFile outfile = ajOutfileGetFile(outf);
 
-    return obooutFormatDef[i].Write(outfile, obo);
+    return (*obooutFormatDef[i].Write)(outfile, obo);
 }
 
 
@@ -162,6 +171,8 @@ AjBool ajObooutWrite(AjPOutfile outf, const AjPObo obo)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool oboWriteExcel(AjPFile outf, const AjPObo obo)
@@ -191,6 +202,8 @@ static AjBool oboWriteExcel(AjPFile outf, const AjPObo obo)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool oboWriteHtml(AjPFile outf, const AjPObo obo)
@@ -256,6 +269,8 @@ static AjBool oboWriteHtml(AjPFile outf, const AjPObo obo)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool oboWriteJson(AjPFile outf, const AjPObo obo)
@@ -386,6 +401,8 @@ static AjBool oboWriteJson(AjPFile outf, const AjPObo obo)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool oboWriteList(AjPFile outf, const AjPObo obo)
@@ -410,6 +427,8 @@ static AjBool oboWriteList(AjPFile outf, const AjPObo obo)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool oboWriteObo(AjPFile outf, const AjPObo obo)
@@ -425,9 +444,9 @@ static AjBool oboWriteObo(AjPFile outf, const AjPObo obo)
     if(ajStrGetLen(obo->Db))
     {
         if(ajStrGetLen(obo->Trueid))
-            ajFmtPrintF(outf, "id: %US:%S\n", obo->Db, obo->Trueid);
+            ajFmtPrintF(outf, "id: %S:%S\n", obo->Db, obo->Trueid);
         else
-            ajFmtPrintF(outf, "id: %US:%S\n", obo->Db, obo->Id);
+            ajFmtPrintF(outf, "id: %S:%S\n", obo->Db, obo->Id);
     }
     else
     {
@@ -484,6 +503,8 @@ static AjBool oboWriteObo(AjPFile outf, const AjPObo obo)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool oboWriteObobrief(AjPFile outf, const AjPObo obo)
@@ -518,6 +539,8 @@ static AjBool oboWriteObobrief(AjPFile outf, const AjPObo obo)
 **
 ** @return [AjBool] True on success
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 static AjBool oboWriteXml(AjPFile outf, const AjPObo obo)
@@ -692,6 +715,8 @@ static AjBool oboWriteXml(AjPFile outf, const AjPObo obo)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -740,6 +765,8 @@ void ajObooutprintBook(AjPFile outf)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -781,6 +808,8 @@ void ajObooutprintHtml(AjPFile outf)
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -818,6 +847,8 @@ void ajObooutprintText(AjPFile outf, AjBool full)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -906,6 +937,8 @@ void ajObooutprintWiki(AjPFile outf)
 ** @param [r] format [const AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -951,6 +984,8 @@ AjBool ajObooutformatFind(const AjPStr format, ajint* iformat)
 **
 ** @param [r] format [const AjPStr] Format
 ** @return [AjBool] ajTrue if formats was accepted
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1001,6 +1036,8 @@ AjBool ajObooutformatTest(const AjPStr format)
 ** Cleans up obo term outputinternal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

@@ -134,7 +134,7 @@ int main(int argc, char **argv)
                 if(subclasses)
                     ajOboGetTree(obo, obolist);
 
-                ajDebug("%S '%S' %u\n",
+                ajDebug("%S '%S' %lu\n",
                        qrystr, obo->Id, ajListGetLength(obolist));
                 while(ajListGetLength(obolist))
                 {
@@ -155,8 +155,9 @@ int main(int argc, char **argv)
                         {
                             if(!ajTableMatchS(foundtable, resource->Id))
                             {
-                                ajDebug("drcat id '%S' category '%S'\n",
-                                       resource->Id, resource->Cat);
+                                ajDebug("drcat id '%S' categories %Lu\n",
+                                        resource->Id,
+                                        ajListGetLength(resource->Cat));
                                 ajResourceoutWrite(outfile, resource);
                                 ajTablePut(foundtable, ajStrNewS(resource->Id),
                                            (void *) 1);

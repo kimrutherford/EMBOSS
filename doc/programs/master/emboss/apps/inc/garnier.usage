@@ -5,7 +5,7 @@ Here is a sample session with <b>garnier</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>garnier </b>
-Predicts protein secondary structure using GOR method
+Predict protein secondary structure using GOR method
 Input protein sequence(s): <b>tsw:amic_pseae</b>
 Output report [amic_pseae.garnier]: <b></b>
 

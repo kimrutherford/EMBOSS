@@ -43,7 +43,7 @@ Created tmap.ps
 Command line arguments
 
 Predict and plot transmembrane segments in protein sequences
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     File containing a protein sequence alignment
@@ -67,7 +67,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -222,7 +225,7 @@ Output file format
 
 ########################################
 # Program: tmap
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: tmap
 #    [-sequences] ../../data/opsd.msf
 #    -outfile tmap.res
@@ -355,7 +358,7 @@ Known bugs
 See also
 
                     Program name                      Description
-                    sigcleave    Reports on signal cleavage sites in a protein sequence
+                    sigcleave    Report on signal cleavage sites in a protein sequence
 
 Author(s)
 

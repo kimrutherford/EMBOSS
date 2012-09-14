@@ -1,37 +1,50 @@
-/******************************************************************************
-** @source AJAX REPORT (ajax feature reporting) functions
+/* @source ajreport ***********************************************************
+**
+** AJAX REPORT (ajax feature reporting) functions
 **
 ** These functions report AJAX sequence feature data in a variety
 ** of formats.
 **
 ** @author Copyright (C) 2000 Peter Rice, LION Bioscience Ltd.
-** @version 1.0
+** @version  $Revision: 1.107 $
 ** @modified Nov 10 First version
+** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
+
+#include "ajlib.h"
+
+#include "ajreport.h"
+#include "ajlist.h"
+#include "ajtable.h"
+#include "ajutil.h"
+#include "ajreg.h"
+#include "ajseq.h"
+#include "ajfeat.h"
+#include "ajfeatwrite.h"
+
 
 #include <stddef.h>
 #include <stdarg.h>
 #include <float.h>
 #include <limits.h>
 #include <math.h>
-
-#include "ajax.h"
 
 
 
@@ -48,7 +61,7 @@
 ** @attr Nucleotide [AjBool] ajTrue if format can work with nucleotide sequences
 ** @attr Protein [AjBool] ajTrue if format can work with protein sequences
 ** @attr Showheader [AjBool] ajTrue if header appears in output
-** @attr Write [(void*)] Function to write report
+** @attr Write [void function] Function to write report
 ******************************************************************************/
 
 typedef struct ReportSFormat
@@ -142,55 +155,55 @@ static ReportOFormat reportFormat[] =
 /*    {"unknown",   "Unknown feature format",
 	 AJFALSE, 0, AJFALSE, AJTRUE,  AJFALSE, AJFALSE, reportWriteSimple},*/
     {"simple",    "Simple report",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteSimple},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteSimple},
     {"embl",      "EMBL feature format",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJFALSE, AJFALSE, reportWriteEmbl},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJFALSE, AJFALSE, &reportWriteEmbl},
     {"genbank",   "Genbank feature format",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJFALSE, AJFALSE, reportWriteGenbank},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJFALSE, AJFALSE, &reportWriteGenbank},
     {"gff",       "GFF3 feature format",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, reportWriteGff},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, &reportWriteGff},
     {"gff3",       "GFF3 feature format (alias)",
-	 AJTRUE,  0, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, reportWriteGff},
+	 AJTRUE,  0, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, &reportWriteGff},
     {"pir",       "PIR feature format",
-	 AJFALSE, 0, AJFALSE, AJFALSE, AJTRUE,  AJFALSE, reportWritePir},
+	 AJFALSE, 0, AJFALSE, AJFALSE, AJTRUE,  AJFALSE, &reportWritePir},
     {"swiss",     "Swissprot feature format",
-	 AJFALSE, 0, AJFALSE, AJFALSE, AJTRUE,  AJFALSE, reportWriteSwiss},
+	 AJFALSE, 0, AJFALSE, AJFALSE, AJTRUE,  AJFALSE, &reportWriteSwiss},
     {"dasgff",    "DAS GFF feature format",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, reportWriteDasgff},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, &reportWriteDasgff},
     /* trace  for debug */
     {"debug",     "Debugging trace of full internal data content",
-	 AJFALSE, 0, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  reportWriteTrace},
+	 AJFALSE, 0, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteTrace},
     /* list file for input to other programs */
     {"listfile",  "EMBOSS list file of sequence USAs with ranges",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteListFile},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteListFile},
     /* feature reports */
     {"dbmotif",   "Motif database hits",
-	 AJFALSE, 0, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  reportWriteDbMotif},
+	 AJFALSE, 0, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteDbMotif},
     {"diffseq",   "Differences between a pair of sequences",
-	 AJFALSE, 7, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  reportWriteDiffseq},
+	 AJFALSE, 7, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteDiffseq},
 /*    cirdna/lindna input format - may need work */
     {"draw",      "lindna/cirdna input format",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteDraw},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteDraw},
     {"restrict",  "lindna/cirdna input format for restriction sites",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteRestrict},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteRestrict},
     {"excel",     "Tab-delimited file for import to Microsoft Excel",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, reportWriteExcel},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, &reportWriteExcel},
     {"feattable", "EMBL format feature table with internal tags",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, reportWriteFeatTable},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE, &reportWriteFeatTable},
     {"motif",     "Motif report",
-	 AJFALSE, 0, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  reportWriteMotif},
+	 AJFALSE, 0, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteMotif},
     {"nametable", "Simple table with sequence name",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteNameTable},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteNameTable},
     {"regions",   "Annotated sequence regions",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteRegions},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteRegions},
     {"seqtable",  "Simple table with sequence on each line",
-	 AJFALSE, 0, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  reportWriteSeqTable},
+	 AJFALSE, 0, AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteSeqTable},
     {"srs",       "Simple report format for SRS",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteSrs},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteSrs},
     {"table",     "Simple table",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteTable},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteTable},
     {"tagseq",    "Sequence with features marked below",
-	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  reportWriteTagseq},
+	 AJFALSE, 0, AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  &reportWriteTagseq},
     {NULL, NULL, AJFALSE, 0, AJFALSE, AJFALSE, AJFALSE, AJFALSE, NULL}
 };
 
@@ -205,6 +218,8 @@ static ReportOFormat reportFormat[] =
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -230,19 +245,19 @@ static void reportWriteTrace(AjPReport thys, const AjPFeattable ftable,
 
     ajFmtPrintF(thys->File, "Extension: '%S'\n", thys->Extension);
     ajFmtPrintF(thys->File, "File: '%F'\n", thys->File);
-    ajFmtPrintF(thys->File, "Tagnames: %u\n",
+    ajFmtPrintF(thys->File, "Tagnames: %Lu\n",
 		ajListGetLength(thys->Tagnames));
-    ajFmtPrintF(thys->File, "Tagprints: %u\n",
+    ajFmtPrintF(thys->File, "Tagprints: %Lu\n",
 		ajListGetLength(thys->Tagprints));
-    ajFmtPrintF(thys->File, "Tagtypes: %u\n",
+    ajFmtPrintF(thys->File, "Tagtypes: %Lu\n",
 		ajListGetLength(thys->Tagtypes));
 /*   ajFmtPrintF(thys->File, "Header: '%S'\n", thys->Header);*/
 /*   ajFmtPrintF(thys->File, "SubHeader: '%S'\n", thys->SubHeader);*/
 /*   ajFmtPrintF(thys->File, "Tail: '%S'\n", thys->Tail);*/
 /*   ajFmtPrintF(thys->File, "SubTail: '%S'\n", thys->SubTail);*/
-    ajFmtPrintF(thys->File, "FileNames: %u\n",
+    ajFmtPrintF(thys->File, "FileNames: %Lu\n",
 		ajListGetLength(thys->FileNames));
-    ajFmtPrintF(thys->File, "FileTypes: %u\n",
+    ajFmtPrintF(thys->File, "FileTypes: %Lu\n",
 		ajListGetLength(thys->FileTypes));
     ajFmtPrintF(thys->File, "Precision: %d\n", thys->Precision);
     ajFmtPrintF(thys->File, "Showacc: %B\n", thys->Showacc);
@@ -280,6 +295,8 @@ static void reportWriteTrace(AjPReport thys, const AjPFeattable ftable,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -309,6 +326,8 @@ static void reportWriteEmbl(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]const 
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -339,6 +358,8 @@ static void reportWriteGenbank(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -367,6 +388,8 @@ static void reportWriteGff(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -394,6 +417,8 @@ static void reportWritePir(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -421,6 +446,8 @@ static void reportWriteSwiss(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -471,6 +498,8 @@ static void reportWriteDasgff(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -625,6 +654,8 @@ static void reportWriteDbMotif(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -653,10 +684,11 @@ static void reportWriteDiffseq(AjPReport thys,
     AjPStr secondfeat = NULL;
     AjPStr tagval     = NULL;
     char strand;
+    char jstrand;
     const AjPStr seqalias;
 
     outf = thys->File;
-    
+
     if(ajSeqIsReversedTrue(seq))
     {
 	ajStrAssignS(&seqstr, ajSeqGetSeqS(seq));
@@ -666,7 +698,7 @@ static void reportWriteDiffseq(AjPReport thys,
     else
 	seqalias = ajSeqGetSeqS(seq);
 
-     ajReportWriteHeader(thys, ftable, seq);
+    ajReportWriteHeader(thys, ftable, seq);
     
     iterft = ajListIterNewread(ftable->Features);
 
@@ -677,7 +709,12 @@ static void reportWriteDiffseq(AjPReport thys,
 	istart  = feature->Start;
 	iend    = feature->End;
 	ilen    = iend - istart + 1;
-	ajStrAssignSubS(&subseq, seqalias, istart-1, iend-1);
+        if(ilen == 2 && (feature->Flags & AJFEATFLAG_BETWEEN_SEQ))
+            ilen = 0;
+        ajStrAssignSubS(&subseq, seqalias, istart-1, iend-1);
+        if(strand == '-')
+            ajSeqstrReverse(&subseq);
+
 	/* ajStrFmtUpper(&subseq); */
 	i++;
 	
@@ -696,6 +733,11 @@ static void reportWriteDiffseq(AjPReport thys,
 	    jlen = 0;
 	else
 	    ajStrToUint(tagval, &jlen);
+
+	if(!ajFeatGetNoteC(feature, "strand", &tagval))
+	    jstrand = '+';
+	else
+	    jstrand = ajStrGetCharFirst(tagval);
 	
 	if(!ajFeatGetNoteC(feature, "name", &jname))
 	    ajStrAssignClear(&jname);
@@ -744,7 +786,11 @@ static void reportWriteDiffseq(AjPReport thys,
 				  ifeat++, &secondfeat))
 		ajFmtPrintF(outf, "Feature: %S\n", secondfeat);
 
-	    ajFmtPrintF(outf, "%S %d-%d Length: %d\n",
+	    if(jstrand == '-')
+                ajFmtPrintF(outf, "%S %d-%d Length: %d (Reversed)\n",
+                            jname, jstart, jend, jlen);
+            else
+                ajFmtPrintF(outf, "%S %d-%d Length: %d\n",
 			jname, jstart, jend, jlen);
 	}
 	else
@@ -756,7 +802,11 @@ static void reportWriteDiffseq(AjPReport thys,
 				  ifeat++, &secondfeat))
 		ajFmtPrintF(outf, "Feature: %S\n", secondfeat);
 
-	    ajFmtPrintF(outf, "%S %d Length: %d\n",
+	   if(jstrand == '-')
+                ajFmtPrintF(outf, "%S %d Length: %d (Reversed)\n",
+                            jname, jstart, jlen);
+           else
+               ajFmtPrintF(outf, "%S %d Length: %d\n",
 			jname, jstart, jlen);
 	}
 	
@@ -807,6 +857,8 @@ static void reportWriteDiffseq(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -896,6 +948,8 @@ static void reportWriteDraw(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1053,6 +1107,8 @@ static void reportWriteRestrict(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -1175,6 +1231,8 @@ static void reportWriteExcel(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -1195,6 +1253,7 @@ static void reportWriteFeatTable(AjPReport thys,const  AjPFeattable ftable,
     static ajuint*  tagsizes = NULL;
     ajuint j = 0;
     AjPStr tagval = NULL;
+    AjBool isbetween;
 
     outf = thys->File;
     
@@ -1207,11 +1266,17 @@ static void reportWriteFeatTable(AjPReport thys,const  AjPFeattable ftable,
 	feature = (AjPFeature)ajListIterGet(iterft);
 	istart = feature->Start;
 	iend = feature->End;
-	ajStrAssignSubS(&subseq, ajSeqGetSeqS(seq), istart-1, iend-1);
+        isbetween = (feature->Flags & AJFEATFLAG_BETWEEN_SEQ);
+
+        ajStrAssignSubS(&subseq, ajSeqGetSeqS(seq), istart-1, iend-1);
 	/* ajStrFmtUpper(&subseq); */
 
 	if(feature->Strand == '-')
 	    ajFmtPrintF(outf, "FT   %-15.15S complement(%d..%d)\n",
+			ajFeatGetType(feature),
+			istart, iend);
+	else if(isbetween)
+	    ajFmtPrintF(outf, "FT   %-15.15S %d^%d\n",
 			ajFeatGetType(feature),
 			istart, iend);
 	else
@@ -1269,6 +1334,8 @@ static void reportWriteFeatTable(AjPReport thys,const  AjPFeattable ftable,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -1372,6 +1439,8 @@ static void reportWriteListFile(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -1600,6 +1669,8 @@ static void reportWriteMotif(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.4.0
 ** @@
 ******************************************************************************/
 
@@ -1623,6 +1694,7 @@ static void reportWriteNameTable(AjPReport thys, const AjPFeattable ftable,
     static AjPStr tmpstr = NULL;
     char strand;
     AjBool dostrand = ajFalse;
+    AjBool isbetween;
 
     outf = thys->File;
 
@@ -1677,6 +1749,14 @@ static void reportWriteNameTable(AjPReport thys, const AjPFeattable ftable,
 	iend   = feature->End;
 
 	score = feature->Score;
+        isbetween = (feature->Flags & AJFEATFLAG_BETWEEN_SEQ);
+
+        if(isbetween)
+        {
+            istart = feature->End;
+            iend = feature->Start;
+        }
+
 	ajStrAssignSubS(&subseq, ajSeqGetSeqS(seq), istart-1, iend-1);
 	/* ajStrFmtUpper(&subseq); */
 	
@@ -1742,6 +1822,8 @@ static void reportWriteNameTable(AjPReport thys, const AjPFeattable ftable,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -1852,6 +1934,8 @@ static void reportWriteRegions(AjPReport thys, const AjPFeattable ftable,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -1878,6 +1962,7 @@ static void reportWriteSeqTable(AjPReport thys, const AjPFeattable ftable,
     char strand = '+';
 /*    ajint seqlen; */
     const AjPStr seqalias;
+    AjBool isbetween;
 
     outf = thys->File;
 /*    seqlen = ajSeqGetLen(seq); */
@@ -1941,10 +2026,21 @@ static void reportWriteSeqTable(AjPReport thys, const AjPFeattable ftable,
 	strand = ajFeatGetStrand(feature);
 	istart = feature->Start;
 	iend   = feature->End;
-	ajStrAssignSubS(&subseq, seqalias,
-			istart-1, iend-1);
-	if(strand == '-')
-	    ajSeqstrReverse(&subseq);
+        isbetween = (feature->Flags & AJFEATFLAG_BETWEEN_SEQ);
+
+        if(isbetween)
+        {
+            istart = feature->End;
+            iend = feature->Start;
+            ajStrAssignC(&subseq, "");
+        }
+        else
+        {
+            ajStrAssignSubS(&subseq, seqalias,
+                            istart-1, iend-1);
+            if(strand == '-')
+                ajSeqstrReverse(&subseq);
+        }
 
 	/*ajDebug("%d..%d start: %d end: %d ajFeatGetStrand: '%c'\n",
 	       feature->Start, feature->End,
@@ -2020,6 +2116,8 @@ static void reportWriteSeqTable(AjPReport thys, const AjPFeattable ftable,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -2058,6 +2156,8 @@ static void reportWriteSimple(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -2097,6 +2197,8 @@ static void reportWriteSrs(AjPReport thys,
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @param [r] withSeq [AjBool] If ajTrue, includes the sequence in the output.
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -2220,6 +2322,8 @@ static void reportWriteSrsFlags(AjPReport thys, const AjPFeattable ftable,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -2243,6 +2347,7 @@ static void reportWriteTable(AjPReport thys,
     AjPStr tmpstr = NULL;
     char strand;
     AjBool dostrand = ajFalse;
+    AjBool isbetween;
 
     outf = thys->File;
     
@@ -2294,6 +2399,14 @@ static void reportWriteTable(AjPReport thys,
 	istart = feature->Start;
 	iend   = feature->End;
 	score = feature->Score;
+        isbetween = (feature->Flags & AJFEATFLAG_BETWEEN_SEQ);
+
+        if(isbetween)
+        {
+            istart = feature->End;
+            iend = feature->Start;
+        }
+
 	ajStrAssignSubS(&subseq, ajSeqGetSeqS(seq), istart-1, iend-1);
 	/* ajStrFmtUpper(&subseq); */
 
@@ -2363,6 +2476,8 @@ static void reportWriteTable(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -2594,6 +2709,8 @@ static void reportWriteTagseq(AjPReport thys,
 ** @param [d] pthys [AjPReport*] Report object reference
 ** @return [void]
 ** @category delete [AjPReport] Default destructor
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -2662,6 +2779,8 @@ void ajReportDel(AjPReport* pthys)
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] name [const AjPStr] File name
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -2687,6 +2806,8 @@ AjBool ajReportOpen(AjPReport thys, const AjPStr name)
 **
 ** @param [w] pformat [AjPStr*] Default format returned
 ** @return [AjBool] ajTrue is format was returned
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -2715,6 +2836,8 @@ AjBool ajReportFormatDefault(AjPStr* pformat)
 ** @param [r] format [const AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -2750,13 +2873,15 @@ AjBool ajReportFindFormat(const AjPStr format, ajint* iformat)
 
 
 
-/* @func ajReportSetTagsS ******************************************************
+/* @func ajReportSetTagsS *****************************************************
 **
 ** Sets the tag list for a report
 **
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] taglist [const AjPStr] Tag names list
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2824,19 +2949,6 @@ AjBool ajReportSetTagsS(AjPReport thys, const AjPStr taglist)
 
 
 
-/* @obsolete ajReportSetTags
-** @rename ajReportSetTagsS
-*/
-
-__deprecated AjBool ajReportSetTags(AjPReport thys, const AjPStr taglist)
-{
-
-    return ajReportSetTagsS(thys, taglist);
-}
-
-
-
-
 /* @func ajReportValid ********************************************************
 **
 ** Test for a report object.
@@ -2847,6 +2959,8 @@ __deprecated AjBool ajReportSetTags(AjPReport thys, const AjPStr taglist)
 **
 ** @param [u] thys [AjPReport] Report object
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -2866,7 +2980,7 @@ AjBool ajReportValid(AjPReport thys)
 
     if( reportFormat[thys->Format].Mintags > ajListGetLength(thys->Tagnames))
     {
-	ajErr("Report format '%s' needs %d tags, has only %d",
+	ajErr("Report format '%s' needs %d tags, has only %Lu",
 	      reportFormat[thys->Format].Name,
 	      reportFormat[thys->Format].Mintags,
 	      ajListGetLength(thys->Tagnames));
@@ -2886,6 +3000,8 @@ AjBool ajReportValid(AjPReport thys)
 **
 ** @return [AjPReport] New report object
 ** @category new [AjPReport] Default constructor
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -2924,6 +3040,8 @@ AjPReport ajReportNew(void)
 ** @return [AjBool] True if data was written
 **                  False if maximum output has already been reached.
 ** @category output [AjPReport] Master sequence output routine
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -3012,14 +3130,14 @@ AjBool ajReportWrite(AjPReport thys,
 	ajDebug("new subtail '%S'\n", tmpstr);
 	ajStrDel(&tmpstr);
 	ftcopy = ajFeattableNewFtableLimit(ftable, maxreport);
-	reportFormat[thys->Format].Write(thys, ftcopy, seq);
+	(*reportFormat[thys->Format].Write)(thys, ftcopy, seq);
 	ajFeattableDel(&ftcopy);
 	thys->CountHit += maxreport;
 	thys->TotHits += ajFeattableGetSize(ftable);
     }
     else
     {
-	reportFormat[thys->Format].Write(thys, ftable, seq);
+	(*reportFormat[thys->Format].Write)(thys, ftable, seq);
 	thys->CountHit += ajFeattableGetSize(ftable);
 	thys->TotHits += ajFeattableGetSize(ftable);
     }
@@ -3038,6 +3156,8 @@ AjBool ajReportWrite(AjPReport thys,
 **
 ** @param [u] thys [AjPReport] Report object
 ** @return [void]
+**
+** @release 2.0.0
 ** @@
 ******************************************************************************/
 
@@ -3062,6 +3182,9 @@ void ajReportClose(AjPReport thys)
 	ajReportWriteTail(thys, NULL, NULL);
     }
 
+    if(thys->File && !thys->CountHit)
+        ajWarn("No hits in output report file '%F'", thys->File);
+
     ajFeattabOutClear(&thys->Ftquery);
     ajFileClose(&thys->File);
 
@@ -3071,7 +3194,7 @@ void ajReportClose(AjPReport thys)
 
 
 
-/* @funcstatic reportGetTags ***************************************************
+/* @funcstatic reportGetTags **************************************************
 **
 ** Converts a report tagtypes definition (ACD taglist attribute)
 ** into arrays of tag types, names and printnames.
@@ -3082,14 +3205,16 @@ void ajReportClose(AjPReport thys)
 ** @param [w] prints [AjPStr**] Address of array of print names generated
 ** @param [w] sizes [ajuint**] Width needed to print heading
 ** @return [ajint] Number of tagtypes (size of arrays created)
+**
+** @release 6.2.0
 ******************************************************************************/
 
 static ajint reportGetTags(const AjPReport thys, AjPStr** types, AjPStr** names,
                            AjPStr** prints, ajuint** sizes)
 {
-    ajint ntags;
+    ajulong ntags;
     static ajuint jmin = 6;
-    ajint i;
+    ajulong i;
 
     if(!ajListGetLength(thys->Tagtypes))
 	return 0;
@@ -3100,30 +3225,15 @@ static ajint reportGetTags(const AjPReport thys, AjPStr** types, AjPStr** names,
 
     if(ntags)
     {
-	AJCRESIZE(*sizes, ntags);
+        AJCRESIZE(*sizes, (size_t) ntags);
 
-	for(i=0; i < ntags; i++)
+	for(i=0UL; i < ntags; i++)
 	    (*sizes)[i] = AJMAX(jmin, ajStrGetLen((*prints)[i]));
     }
     else
 	AJFREE(sizes);
 
-    return ntags;
-}
-
-
-
-
-/* @obsolete ajReportLists
-** @remove Made static
-*/
-
-__deprecated ajint ajReportLists(const AjPReport thys,
-                                 AjPStr** types, AjPStr** names,
-                                 AjPStr** prints, ajuint** sizes)
-{
-
-    return reportGetTags(thys, types, names, prints, sizes);
+    return (ajint) ntags;
 }
 
 
@@ -3137,6 +3247,8 @@ __deprecated ajint ajReportLists(const AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -3197,7 +3309,7 @@ void ajReportWriteHeader(AjPReport thys,
 	    i = 0;
 	    itername = ajListIterNewread(thys->FileNames);
 	    itertype = ajListIterNewread(thys->FileTypes);
-	    ajFmtPrintF(outf, "# Additional_files: %d\n",
+	    ajFmtPrintF(outf, "# Additional_files: %Lu\n",
 			ajListGetLength(thys->FileNames));
 	    while(!ajListIterDone(itername) && !ajListIterDone(itertype))
 	    {
@@ -3301,6 +3413,8 @@ void ajReportWriteHeader(AjPReport thys,
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -3387,13 +3501,15 @@ void ajReportWriteTail(AjPReport thys,
 
 
 
-/* @func ajReportSetHeaderS ****************************************************
+/* @func ajReportSetHeaderS ***************************************************
 **
 ** Defines a feature report header
 **
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] header [const AjPStr] Report header with embedded newlines
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3410,20 +3526,6 @@ void ajReportSetHeaderS(AjPReport thys, const AjPStr header)
 
 
 
-
-/* @obsolete ajReportSetHeader
-** @rename ajReportSetHeaderS
-*/
-
-__deprecated void ajReportSetHeader(AjPReport thys, const AjPStr header)
-{
-    ajReportSetHeaderS(thys, header);
-    return;
-}
-
-
-
-
 /* @func ajReportSetHeaderC ***************************************************
 **
 ** Defines a feature report header
@@ -3431,6 +3533,8 @@ __deprecated void ajReportSetHeader(AjPReport thys, const AjPStr header)
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] header [const char*] Report header with embedded newlines
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -3454,6 +3558,8 @@ void ajReportSetHeaderC(AjPReport thys, const char* header)
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] header [const char*] Report header with embedded newlines
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3474,13 +3580,15 @@ void ajReportAppendHeaderC(AjPReport thys, const char* header)
 
 
 
-/* @func ajReportAppendHeaderS *************************************************
+/* @func ajReportAppendHeaderS ************************************************
 **
 ** Defines a feature report header
 **
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] header [const AjPStr] Report header with embedded newlines
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3500,19 +3608,6 @@ void ajReportAppendHeaderS(AjPReport thys, const AjPStr header)
 
 
 
-/* @obsolete ajReportAppendHeader
-** @rename ajReportAppendHeaderS
-*/
-
-__deprecated void ajReportAppendHeader(AjPReport thys, const AjPStr header)
-{
-    ajReportAppendHeaderS(thys, header);
-    return;
-}
-
-
-
-
 /* @func ajReportSetSubheaderC ************************************************
 **
 ** Appends to a feature report subheader
@@ -3520,6 +3615,8 @@ __deprecated void ajReportAppendHeader(AjPReport thys, const AjPStr header)
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] header [const char*] Report header with embedded newlines
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3536,13 +3633,15 @@ void ajReportSetSubheaderC(AjPReport thys, const char* header)
 
 
 
-/* @func ajReportSetSubheaderS *************************************************
+/* @func ajReportSetSubheaderS ************************************************
 **
 ** Defines a feature report subheader
 **
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] header [const AjPStr] Report header with embedded newlines
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3559,26 +3658,15 @@ void ajReportSetSubheaderS(AjPReport thys, const AjPStr header)
 
 
 
-
-/* @obsolete ajReportSetSubHeader
-** @rename ajReportSetSubheaderS
-*/
-
-__deprecated void ajReportSetSubHeader(AjPReport thys, const AjPStr header)
-{
-    ajReportSetSubheaderS(thys,header);
-}
-
-
-
-
-/* @func ajReportAppendSubheaderC **********************************************
+/* @func ajReportAppendSubheaderC *********************************************
 **
 ** Appends to a feature report subheader
 **
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] header [const char*] Report header with embedded newlines
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3599,27 +3687,15 @@ void ajReportAppendSubheaderC(AjPReport thys, const char* header)
 
 
 
-
-/* @obsolete ajReportAppendSubHeaderC
-** @rename ajReportAppendSubheaderC
-*/
-
-__deprecated void ajReportAppendSubHeaderC(AjPReport thys, const char* header)
-{
-    ajReportAppendSubheaderC(thys, header);
-    return;
-}
-
-
-
-
-/* @func ajReportAppendSubheaderS **********************************************
+/* @func ajReportAppendSubheaderS *********************************************
 **
 ** Defines a feature report subheader
 **
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] header [const AjPStr] Report header with embedded newlines
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3640,26 +3716,15 @@ void ajReportAppendSubheaderS(AjPReport thys, const AjPStr header)
 
 
 
-/* @obsolete ajReportAppendSubHeader
-** @rename ajReportAppendSubheaderS
-*/
-
-__deprecated void ajReportAppendSubHeader(AjPReport thys, const AjPStr header)
-{
-    ajReportAppendSubheaderS(thys, header);
-    return;
-}
-
-
-
-
-/* @func ajReportSetSeqstats ***************************************************
+/* @func ajReportSetSeqstats **************************************************
 **
 ** Defines a feature report tail
 **
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] seqall [const AjPSeqall] Sequence stream object
 ** @return [void]
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -3677,13 +3742,15 @@ void ajReportSetSeqstats(AjPReport thys, const AjPSeqall seqall)
 
 
 
-/* @func ajReportSetSeqsetstats ************************************************
+/* @func ajReportSetSeqsetstats ***********************************************
 **
 ** Defines a feature report tail
 **
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] seqset [const AjPSeqset] Sequence set object
 ** @return [void]
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -3709,6 +3776,8 @@ void ajReportSetSeqsetstats(AjPReport thys, const AjPSeqset seqset)
 ** @param [r] totseqs [ajlong] Total number of sequences processed
 ** @param [r] totlength [ajlong] Total sequence length processed
 ** @return [void]
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -3733,6 +3802,8 @@ void ajReportSetStatistics(AjPReport thys, ajlong totseqs, ajlong totlength)
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] tail [const char*] Report tail with embedded newlines
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -3749,13 +3820,15 @@ void ajReportSetTailC(AjPReport thys, const char* tail)
 
 
 
-/* @func ajReportSetTailS ******************************************************
+/* @func ajReportSetTailS *****************************************************
 **
 ** Defines a feature report tail
 **
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] tail [const AjPStr] Report tail with embedded newlines
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3772,20 +3845,6 @@ void ajReportSetTailS(AjPReport thys, const AjPStr tail)
 
 
 
-
-/* @obsolete ajReportSetTail
-** @rename ajReportSetTailS
-*/
-
-__deprecated void ajReportSetTail(AjPReport thys, const AjPStr tail)
-{
-    ajReportSetTailS(thys, tail);
-    return;
-}
-
-
-
-
 /* @func ajReportAppendTailC **************************************************
 **
 ** Appends to a feature report tail
@@ -3793,6 +3852,8 @@ __deprecated void ajReportSetTail(AjPReport thys, const AjPStr tail)
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] tail [const char*] Report tail with embedded newlines
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -3813,13 +3874,15 @@ void ajReportAppendTailC(AjPReport thys, const char* tail)
 
 
 
-/* @func ajReportAppendTailS ***************************************************
+/* @func ajReportAppendTailS **************************************************
 **
 ** Appends to a feature report tail
 **
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] tail [const AjPStr] Report tail with embedded newlines
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3840,19 +3903,6 @@ void ajReportAppendTailS(AjPReport thys, const AjPStr tail)
 
 
 
-/* @obsolete ajReportAppendTail
-** @rename ajReportAppendTailS
-*/
-
-__deprecated void ajReportAppendTail(AjPReport thys, const AjPStr tail)
-{
-    ajReportAppendTailS(thys, tail);
-    return;
-}
-
-
-
-
 /* @func ajReportSetSubtailC **************************************************
 **
 ** Defines a feature report subtail
@@ -3860,6 +3910,8 @@ __deprecated void ajReportAppendTail(AjPReport thys, const AjPStr tail)
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] tail [const char*] Report tail with embedded newlines
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3876,27 +3928,15 @@ void ajReportSetSubtailC(AjPReport thys, const char* tail)
 
 
 
-
-/* @obsolete ajReportSetSubTailC
-** @rename ajReportSetSubtailC
-*/
-
-__deprecated void ajReportSetSubTailC(AjPReport thys, const char* tail)
-{
-    ajReportSetSubtailC(thys, tail);
-    return;
-}
-
-
-
-
-/* @func ajReportSetSubtailS ***************************************************
+/* @func ajReportSetSubtailS **************************************************
 **
 ** Defines a feature report subtail
 **
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] tail [const AjPStr] Report tail with embedded newlines
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3913,20 +3953,6 @@ void ajReportSetSubtailS(AjPReport thys, const AjPStr tail)
 
 
 
-
-/* @obsolete ajReportSetSubTail
-** @rename ajReportSetSubtailS
-*/
-
-__deprecated void ajReportSetSubTail(AjPReport thys, const AjPStr tail)
-{
-    ajReportSetSubtailS(thys, tail);
-    return;
-}
-
-
-
-
 /* @func ajReportAppendSubtailC ***********************************************
 **
 ** Appends to a feature report subtail
@@ -3934,6 +3960,8 @@ __deprecated void ajReportSetSubTail(AjPReport thys, const AjPStr tail)
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] tail [const char*] Report tail with embedded newlines
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3954,26 +3982,15 @@ void ajReportAppendSubtailC(AjPReport thys, const char* tail)
 
 
 
-/* @obsolete ajReportAppendSubTailC
-** @rename ajReportAppendSubtailC
-*/
-
-__deprecated void ajReportAppendSubTailC(AjPReport thys, const char* tail)
-{
-    ajReportAppendSubtailC(thys, tail);
-    return;
-}
-
-
-
-
-/* @func ajReportAppendSubtailS ************************************************
+/* @func ajReportAppendSubtailS ***********************************************
 **
 ** Appends to a feature report subtail
 **
 ** @param [u] thys [AjPReport] Report object
 ** @param [r] tail [const AjPStr] Report tail with embedded newlines
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3994,19 +4011,6 @@ void ajReportAppendSubtailS(AjPReport thys, const AjPStr tail)
 
 
 
-/* @obsolete ajReportAppendSubTail
-** @rename ajReportAppendSubtailS
-*/
-
-__deprecated void ajReportAppendSubTail(AjPReport thys, const AjPStr tail)
-{
-    ajReportAppendSubtailS(thys, tail);
-    return;
-}
-
-
-
-
 /* @func ajReportSetType ******************************************************
 **
 ** Sets the report type (if it is not set already)
@@ -4015,6 +4019,8 @@ __deprecated void ajReportAppendSubTail(AjPReport thys, const AjPStr tail)
 ** @param [r] ftable [const AjPFeattable] Feature table object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [void]
+**
+** @release 2.1.0
 ** @@
 ******************************************************************************/
 
@@ -4053,6 +4059,8 @@ void ajReportSetType(AjPReport thys,
 **
 ** @param [r] thys [const AjPReport] Report object
 ** @return [const char*] String to print the sequence character type
+**
+** @release 2.1.0
 ******************************************************************************/
 
 static const char* reportCharname(const AjPReport thys)
@@ -4078,7 +4086,7 @@ static const char* reportCharname(const AjPReport thys)
 
 
 
-/* @func ajReportGetSeqnameSeq *************************************************
+/* @func ajReportGetSeqnameSeq ************************************************
 **
 ** Returns the sequence name or USA depending on the setting in the
 ** report object (derived from the ACD and command line -rusa option)
@@ -4086,6 +4094,8 @@ static const char* reportCharname(const AjPReport thys)
 ** @param [r] thys [const AjPReport] Report object
 ** @param [r] seq [const AjPSeq] Sequence object
 ** @return [const AjPStr] Sequence name for this report
+**
+** @release 6.2.0
 ******************************************************************************/
 
 const AjPStr ajReportGetSeqnameSeq(const AjPReport thys, const AjPSeq seq)
@@ -4099,20 +4109,7 @@ const AjPStr ajReportGetSeqnameSeq(const AjPReport thys, const AjPSeq seq)
 
 
 
-/* @obsolete ajReportSeqName
-** @rename ajReportGetSeqnameSeq
-*/
-
-__deprecated const AjPStr ajReportSeqName(const AjPReport thys,
-                                          const AjPSeq seq)
-{
-    return ajReportGetSeqnameSeq(thys, seq);
-}
-
-
-
-
-/* @func ajReportAddFileF ******************************************************
+/* @func ajReportAddFileF *****************************************************
 **
 ** Adds an additional file name and description to the report.
 **
@@ -4123,6 +4120,8 @@ __deprecated const AjPStr ajReportSeqName(const AjPReport thys,
 ** @param [u] file [AjPFile] File
 ** @param [r] type [const AjPStr] Type (simple text description)
 ** @return [void]
+**
+** @release 6.2.0
 ******************************************************************************/
 
 void ajReportAddFileF(AjPReport thys, AjPFile file, const AjPStr type)
@@ -4148,20 +4147,6 @@ void ajReportAddFileF(AjPReport thys, AjPFile file, const AjPStr type)
 
 
 
-/* @obsolete ajReportFileAdd
-** @rename ajReportAddFile
-*/
-
-__deprecated void ajReportFileAdd(AjPReport thys,
-                                  AjPFile file, const AjPStr type)
-{
-    ajReportAddFileF(thys, file, type);
-    return;
-}
-
-
-
-
 /* @func ajReportPrintFormat **************************************************
 **
 ** Reports the internal data structures
@@ -4169,6 +4154,8 @@ __deprecated void ajReportFileAdd(AjPReport thys,
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -4218,6 +4205,8 @@ void ajReportPrintFormat(AjPFile outf, AjBool full)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -4260,6 +4249,8 @@ void ajReportPrinthtmlFormat(AjPFile outf)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4317,7 +4308,7 @@ void ajReportPrintbookFormat(AjPFile outf)
         }
     }
 
-    ajListSort(fmtlist, ajStrVcmp);
+    ajListSort(fmtlist, &ajStrVcmp);
     ajListstrToarray(fmtlist, &names);
 
     for(i=0; names[i]; i++)
@@ -4365,6 +4356,8 @@ void ajReportPrintbookFormat(AjPFile outf)
 **
 ** @param [u] outf [AjPFile] Output file
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4429,6 +4422,8 @@ void ajReportPrintwikiFormat(AjPFile outf)
 **
 ** @return [void]
 **
+**
+** @release 2.9.0
 ******************************************************************************/
 
 void ajReportDummyFunction(void)
@@ -4444,6 +4439,8 @@ void ajReportDummyFunction(void)
 ** Cleans up report processing internal memory
 **
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -4453,3 +4450,211 @@ void ajReportExit(void)
 
     return;
 }
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
+#endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajReportSetTags
+** @rename ajReportSetTagsS
+*/
+
+__deprecated AjBool ajReportSetTags(AjPReport thys, const AjPStr taglist)
+{
+
+    return ajReportSetTagsS(thys, taglist);
+}
+
+
+
+
+/* @obsolete ajReportLists
+** @remove Made static
+*/
+
+__deprecated ajint ajReportLists(const AjPReport thys,
+                                 AjPStr** types, AjPStr** names,
+                                 AjPStr** prints, ajuint** sizes)
+{
+
+    return reportGetTags(thys, types, names, prints, sizes);
+}
+
+
+
+
+/* @obsolete ajReportSetHeader
+** @rename ajReportSetHeaderS
+*/
+
+__deprecated void ajReportSetHeader(AjPReport thys, const AjPStr header)
+{
+    ajReportSetHeaderS(thys, header);
+    return;
+}
+
+
+
+
+/* @obsolete ajReportAppendHeader
+** @rename ajReportAppendHeaderS
+*/
+
+__deprecated void ajReportAppendHeader(AjPReport thys, const AjPStr header)
+{
+    ajReportAppendHeaderS(thys, header);
+    return;
+}
+
+
+
+
+/* @obsolete ajReportSetSubHeader
+** @rename ajReportSetSubheaderS
+*/
+
+__deprecated void ajReportSetSubHeader(AjPReport thys, const AjPStr header)
+{
+    ajReportSetSubheaderS(thys,header);
+}
+
+
+
+
+
+/* @obsolete ajReportAppendSubHeaderC
+** @rename ajReportAppendSubheaderC
+*/
+
+__deprecated void ajReportAppendSubHeaderC(AjPReport thys, const char* header)
+{
+    ajReportAppendSubheaderC(thys, header);
+    return;
+}
+
+
+
+
+/* @obsolete ajReportAppendSubHeader
+** @rename ajReportAppendSubheaderS
+*/
+
+__deprecated void ajReportAppendSubHeader(AjPReport thys, const AjPStr header)
+{
+    ajReportAppendSubheaderS(thys, header);
+    return;
+}
+
+
+
+
+
+/* @obsolete ajReportSetTail
+** @rename ajReportSetTailS
+*/
+
+__deprecated void ajReportSetTail(AjPReport thys, const AjPStr tail)
+{
+    ajReportSetTailS(thys, tail);
+    return;
+}
+
+
+
+
+/* @obsolete ajReportAppendTail
+** @rename ajReportAppendTailS
+*/
+
+__deprecated void ajReportAppendTail(AjPReport thys, const AjPStr tail)
+{
+    ajReportAppendTailS(thys, tail);
+    return;
+}
+
+
+
+
+
+/* @obsolete ajReportSetSubTailC
+** @rename ajReportSetSubtailC
+*/
+
+__deprecated void ajReportSetSubTailC(AjPReport thys, const char* tail)
+{
+    ajReportSetSubtailC(thys, tail);
+    return;
+}
+
+
+
+
+/* @obsolete ajReportSetSubTail
+** @rename ajReportSetSubtailS
+*/
+
+__deprecated void ajReportSetSubTail(AjPReport thys, const AjPStr tail)
+{
+    ajReportSetSubtailS(thys, tail);
+    return;
+}
+
+
+
+
+/* @obsolete ajReportAppendSubTailC
+** @rename ajReportAppendSubtailC
+*/
+
+__deprecated void ajReportAppendSubTailC(AjPReport thys, const char* tail)
+{
+    ajReportAppendSubtailC(thys, tail);
+    return;
+}
+
+
+
+
+/* @obsolete ajReportAppendSubTail
+** @rename ajReportAppendSubtailS
+*/
+
+__deprecated void ajReportAppendSubTail(AjPReport thys, const AjPStr tail)
+{
+    ajReportAppendSubtailS(thys, tail);
+    return;
+}
+
+
+
+
+/* @obsolete ajReportSeqName
+** @rename ajReportGetSeqnameSeq
+*/
+
+__deprecated const AjPStr ajReportSeqName(const AjPReport thys,
+                                          const AjPSeq seq)
+{
+    return ajReportGetSeqnameSeq(thys, seq);
+}
+
+
+
+
+/* @obsolete ajReportFileAdd
+** @rename ajReportAddFile
+*/
+
+__deprecated void ajReportFileAdd(AjPReport thys,
+                                  AjPFile file, const AjPStr type)
+{
+    ajReportAddFileF(thys, file, type);
+    return;
+}
+#endif

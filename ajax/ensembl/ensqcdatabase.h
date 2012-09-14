@@ -1,10 +1,37 @@
+/* @include ensqcdatabase *****************************************************
+**
+** Ensembl Quality Check Database functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.19 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/02/04 10:30:24 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSQCDATABASE_H
 #define ENSQCDATABASE_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensanalysis.h"
 
@@ -13,14 +40,21 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
-/* @const EnsEQcdatabaseClass *************************************************
+/* @enum EnsEQcdatabaseClass **************************************************
 **
 ** Ensembl Quality Check Database Class enumeration
 **
+** @value ensEQcdatabaseClassNULL Null
+** @value ensEQcdatabaseClassUnknown Unknown
+** @value ensEQcdatabaseClassReference Reference database
+** @value ensEQcdatabaseClassTest Test database
+** @value ensEQcdatabaseClassBoth Reference and test database
+** @value ensEQcdatabaseClassGenome Genome database
+** @@
 ******************************************************************************/
 
 typedef enum EnsOQcdatabaseClass
@@ -36,10 +70,15 @@ typedef enum EnsOQcdatabaseClass
 
 
 
-/* @const EnsEQcdatabaseType **************************************************
+/* @enum EnsEQcdatabaseType ***************************************************
 **
 ** Ensembl Quality Check Database Type enumeration
 **
+** @value ensEQcdatabaseTypeNULL Null
+** @value ensEQcdatabaseTypeUnknown Unknown sequence database
+** @value ensEQcdatabaseTypeDNA DNA sequence database
+** @value ensEQcdatabaseTypeProtein Protein sequence database
+** @@
 ******************************************************************************/
 
 typedef enum EnsOQcdatabaseType
@@ -53,9 +92,9 @@ typedef enum EnsOQcdatabaseType
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPQcdatabaseadaptor ************************************************
 **
@@ -141,9 +180,9 @@ typedef struct EnsSQcdatabase
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -171,7 +210,7 @@ EnsPQcdatabase ensQcdatabaseNewIni(EnsPQcdatabaseadaptor qcdba,
 
 EnsPQcdatabase ensQcdatabaseNewRef(EnsPQcdatabase qcdb);
 
-void ensQcdatabaseDel(EnsPQcdatabase* Pqcdb);
+void ensQcdatabaseDel(EnsPQcdatabase *Pqcdb);
 
 EnsPQcdatabaseadaptor ensQcdatabaseGetAdaptor(
     const EnsPQcdatabase qcdb);
@@ -278,11 +317,11 @@ AjBool ensQcdatabaseMatch(const EnsPQcdatabase qcdb1,
 
 EnsEQcdatabaseClass ensQcdatabaseClassFromStr(const AjPStr classstr);
 
-const char* ensQcdatabaseClassToChar(EnsEQcdatabaseClass qcdbc);
+const char *ensQcdatabaseClassToChar(EnsEQcdatabaseClass qcdbc);
 
 EnsEQcdatabaseType ensQcdatabaseTypeFromStr(const AjPStr typestr);
 
-const char* ensQcdatabaseTypeToChar(EnsEQcdatabaseType qcdbt);
+const char *ensQcdatabaseTypeToChar(EnsEQcdatabaseType qcdbt);
 
 /* Ensembl Quality Check Database Adaptor */
 
@@ -292,7 +331,7 @@ EnsPQcdatabaseadaptor ensRegistryGetQcdatabaseadaptor(
 EnsPQcdatabaseadaptor ensQcdatabaseadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensQcdatabaseadaptorDel(EnsPQcdatabaseadaptor* Pqcdba);
+void ensQcdatabaseadaptorDel(EnsPQcdatabaseadaptor *Pqcdba);
 
 EnsPBaseadaptor ensQcdatabaseadaptorGetBaseadaptor(
     EnsPQcdatabaseadaptor qcdba);
@@ -307,12 +346,12 @@ AjBool ensQcdatabaseadaptorFetchAllbyClasstype(EnsPQcdatabaseadaptor qcdba,
 
 AjBool ensQcdatabaseadaptorFetchByIdentifier(EnsPQcdatabaseadaptor qcdba,
                                              ajuint identifier,
-                                             EnsPQcdatabase* Pqcdb);
+                                             EnsPQcdatabase *Pqcdb);
 
 AjBool ensQcdatabaseadaptorFetchByName(EnsPQcdatabaseadaptor qcdba,
                                        const AjPStr name,
                                        const AjPStr release,
-                                       EnsPQcdatabase* Pqcdb);
+                                       EnsPQcdatabase *Pqcdb);
 
 AjBool ensQcdatabaseadaptorDelete(EnsPQcdatabaseadaptor qcdba,
                                   EnsPQcdatabase qcdb);

@@ -5,7 +5,7 @@ Here is a sample session with <b>sirna</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>sirna </b>
-Finds siRNA duplexes in mRNA
+Find siRNA duplexes in mRNA
 Input nucleotide sequence(s): <b>tembl:x65923</b>
 Output report [x65923.sirna]: <b></b>
 output sequence(s) [x65923.fasta]: <b></b>
@@ -23,7 +23,7 @@ Show the first two bases of the 23 base target region in brackets. These do not 
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>sirna -context </b>
-Finds siRNA duplexes in mRNA
+Find siRNA duplexes in mRNA
 Input nucleotide sequence(s): <b>tembl:x65923</b>
 Output report [x65923.sirna]: <b></b>
 output sequence(s) [x65923.fasta]: <b></b>

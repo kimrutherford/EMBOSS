@@ -1,15 +1,82 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include embshow ***********************************************************
+**
+** General routines for sequence display.
+**
+** @author Copyright (c) 2000 Gary Williams
+** @version $Revision: 1.21 $
+** @modified $Date: 2011/10/18 14:24:25 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+******************************************************************************/
 
-#ifndef embshow_h
-#define embshow_h
+#ifndef EMBSHOW_H
+#define EMBSHOW_H
 
 
-/********* Descriptor object types *****************/
 
-enum ShowEValtype
+
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
+#include "ajlist.h"
+#include "ajseqdata.h"
+#include "ajfeatdata.h"
+#include "ajrange.h"
+#include "ajtranslate.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
+
+
+
+/* @enum ShowEValtype *********************************************************
+**
+** Descriptor object types
+**
+** @value SH_SEQ Sequence
+** @value SH_BLANK Blank line
+** @value SH_TICK Tick marks
+** @value SH_TICKNUM Tick numbers
+** @value SH_COMP Complementary strand
+** @value SH_TRAN Protein translation
+** @value SH_RE Restriction enzyme cut sites
+** @value SH_FT Features
+** @value SH_NOTE Notes
+******************************************************************************/
+
+typedef enum
 {
     SH_SEQ,
     SH_BLANK,
@@ -20,7 +87,7 @@ enum ShowEValtype
     SH_RE,
     SH_FT,
     SH_NOTE
-};
+} ShowEValtype;
 
 
 
@@ -341,6 +408,12 @@ typedef struct EmbSShowREsite {
 
 
 
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
 /*
 ** Prototype definitions
 */
@@ -374,10 +447,8 @@ void     embShowColourRange (AjPStr *line,
 ** End of prototype definitions
 */
 
-#endif
+AJ_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif
+#endif  /* !EMBSHOW_H */
 
 

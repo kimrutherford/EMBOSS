@@ -1,5 +1,5 @@
 Draw Kyte-Doolittle hydropathy plot for a protein alignment
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     File containing a sequence alignment
@@ -10,7 +10,7 @@ Version: EMBOSS:6.4.0.0
 
    Additional (Optional) qualifiers:
    -datafile           datafile   [Enakai.dat] AAINDEX entry data file
-   -length             integer    [19] Window size (Integer from 1 to 200)
+   -window             integer    [19] Window size (Integer from 1 to 200)
    -normalize          boolean    [N] Normalize data values
 
    Advanced (Unprompted) qualifiers: (none)
@@ -25,7 +25,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features

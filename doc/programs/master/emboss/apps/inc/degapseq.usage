@@ -5,7 +5,7 @@ Here is a sample session with <b>degapseq</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>degapseq dnagap.fasta nogaps.seq </b>
-Removes non-alphabetic (e.g. gap) characters from sequences
+Remove non-alphabetic (e.g. gap) characters from sequences
 
 </pre></td></tr></table><p>
 <p>

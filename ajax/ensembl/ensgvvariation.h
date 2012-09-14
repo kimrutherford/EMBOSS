@@ -1,10 +1,37 @@
+/* @include ensgvvariation ****************************************************
+**
+** Ensembl Genetic Variation Variation functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.14 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSGVVARIATION_H
 #define ENSGVVARIATION_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensgvdata.h"
 
@@ -13,23 +40,23 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -41,7 +68,8 @@ EnsPGvvariation ensGvvariationNewCpy(const EnsPGvvariation gvv);
 
 EnsPGvvariation ensGvvariationNewIni(EnsPGvvariationadaptor gvva,
                                      ajuint identifier,
-                                     EnsPGvattribute classgva,
+                                     EnsPGvattribute gvaclass,
+                                     EnsPGvattribute gvaclinical,
                                      EnsPGvsource gvsource,
                                      AjPStr name,
                                      AjPStr ancestralallele,
@@ -52,11 +80,15 @@ EnsPGvvariation ensGvvariationNewIni(EnsPGvvariationadaptor gvva,
                                      AjPStr flankfive,
                                      AjPStr flankthree,
                                      AjBool flankexists,
-                                     AjBool somatic);
+                                     AjBool flipped,
+                                     AjBool somatic,
+                                     AjPStr maallele,
+                                     ajuint macount,
+                                     float mafrequency);
 
 EnsPGvvariation ensGvvariationNewRef(EnsPGvvariation gvv);
 
-void ensGvvariationDel(EnsPGvvariation* Pgvv);
+void ensGvvariationDel(EnsPGvvariation *Pgvv);
 
 EnsPGvvariationadaptor ensGvvariationGetAdaptor(const EnsPGvvariation gvv);
 
@@ -64,7 +96,11 @@ AjPStr ensGvvariationGetAncestralallele(const EnsPGvvariation gvv);
 
 EnsPGvattribute ensGvvariationGetClass(const EnsPGvvariation gvv);
 
+EnsPGvattribute ensGvvariationGetClinical(const EnsPGvvariation gvv);
+
 AjBool ensGvvariationGetFlankExists(const EnsPGvvariation gvv);
+
+AjBool ensGvvariationGetFlipped(const EnsPGvvariation gvv);
 
 const AjPList ensGvvariationGetGvalleles(const EnsPGvvariation gvv);
 
@@ -73,6 +109,12 @@ EnsPGvsource ensGvvariationGetGvsource(const EnsPGvvariation gvv);
 const AjPList ensGvvariationGetGvsynonyms(const EnsPGvvariation gvv);
 
 ajuint ensGvvariationGetIdentifier(const EnsPGvvariation gvv);
+
+AjPStr ensGvvariationGetMinoralleleAllele(const EnsPGvvariation gvv);
+
+ajuint ensGvvariationGetMinoralleleCount(const EnsPGvvariation gvv);
+
+float ensGvvariationGetMinoralleleFrequency(const EnsPGvvariation gvv);
 
 AjPStr ensGvvariationGetMoleculetype(const EnsPGvvariation gvv);
 
@@ -83,6 +125,8 @@ AjBool ensGvvariationGetSomatic(const EnsPGvvariation gvv);
 ajuint ensGvvariationGetValidations(const EnsPGvvariation gvv);
 
 const AjPList ensGvvariationLoadAllFaileddescriptions(EnsPGvvariation gvv);
+
+const AjPList ensGvvariationLoadAllGvalleles(EnsPGvvariation gvv);
 
 AjPStr ensGvvariationLoadFlankFive(EnsPGvvariation gvv);
 
@@ -95,7 +139,10 @@ AjBool ensGvvariationSetAncestralallele(EnsPGvvariation gvv,
                                         AjPStr ancestralallele);
 
 AjBool ensGvvariationSetClass(EnsPGvvariation gvv,
-                              EnsPGvattribute classgva);
+                              EnsPGvattribute gvaclass);
+
+AjBool ensGvvariationSetClinical(EnsPGvvariation gvv,
+                                 EnsPGvattribute gvaclinical);
 
 AjBool ensGvvariationSetFlankExists(EnsPGvvariation gvv,
                                     AjBool flankexists);
@@ -106,11 +153,23 @@ AjBool ensGvvariationSetFlankFive(EnsPGvvariation gvv,
 AjBool ensGvvariationSetFlankThree(EnsPGvvariation gvv,
                                    AjPStr flankthree);
 
+AjBool ensGvvariationSetFlipped(EnsPGvvariation gvv,
+                                AjBool flipped);
+
 AjBool ensGvvariationSetGvsource(EnsPGvvariation gvv,
                                  EnsPGvsource gvs);
 
 AjBool ensGvvariationSetIdentifier(EnsPGvvariation gvv,
                                    ajuint identifier);
+
+AjBool ensGvvariationSetMinoralleleAllele(EnsPGvvariation gvv,
+                                          AjPStr maallele);
+
+AjBool ensGvvariationSetMinoralleleCount(EnsPGvvariation gvv,
+                                         ajuint macount);
+
+AjBool ensGvvariationSetMinoralleleFrequency(EnsPGvvariation gvv,
+                                             float mafrequency);
 
 AjBool ensGvvariationSetMoleculetype(EnsPGvvariation gvv,
                                      AjPStr moltype);
@@ -151,34 +210,47 @@ AjBool ensGvvariationFetchAllGvsynonyms(const EnsPGvvariation gvv,
 AjBool ensGvvariationFetchAllGvvariationfeatures(EnsPGvvariation gvv,
                                                  AjPList gvvfs);
 
-AjBool ensGvvariationHasFailedgvalleles(EnsPGvvariation gvv, AjBool* Presult);
+AjBool ensGvvariationHasFailedgvalleles(EnsPGvvariation gvv, AjBool *Presult);
 
-AjBool ensGvvariationIsFailed(EnsPGvvariation gvv, AjBool* Presult);
+AjBool ensGvvariationIsFailed(EnsPGvvariation gvv, AjBool *Presult);
 
 EnsEGvvariationClass ensGvvariationClassFromStr(
     const AjPStr class);
 
-const char* ensGvvariationClassToChar(
+const char *ensGvvariationClassToChar(
     EnsEGvvariationClass gvvc);
 
 EnsEGvvariationValidation ensGvvariationValidationFromStr(
     const AjPStr validation);
 
-const char* ensGvvariationValidationToChar(
+const char *ensGvvariationValidationToChar(
     EnsEGvvariationValidation gvvv);
 
 ajuint ensGvvariationValidationsFromSet(const AjPStr gvvvset);
 
-AjBool ensGvvariationValidationsToSet(ajuint gvvvbf, AjPStr* Pgvvvset);
-
-AjBool ensTableGvvariationClear(AjPTable table);
-
-AjBool ensTableGvvariationDelete(AjPTable* Ptable);
+AjBool ensGvvariationValidationsToSet(ajuint gvvvbf, AjPStr *Pgvvvset);
 
 /* Ensembl Genetic Variation Variation Adaptor */
 
 EnsPGvvariationadaptor ensRegistryGetGvvariationadaptor(
     EnsPDatabaseadaptor dba);
+
+EnsPGvvariationadaptor ensGvvariationadaptorNew(
+    EnsPDatabaseadaptor dba);
+
+void ensGvvariationadaptorDel(EnsPGvvariationadaptor *Pgvva);
+
+EnsPDatabaseadaptor ensGvvariationadaptorGetDatabaseadaptor(
+    const EnsPGvvariationadaptor gvva);
+
+EnsPGvbaseadaptor ensGvvariationadaptorGetGvbaseadaptor(
+    const EnsPGvvariationadaptor gvva);
+
+EnsPGvdatabaseadaptor ensGvvariationadaptorGetGvdatabaseadaptor(
+    const EnsPGvvariationadaptor gvva);
+
+AjBool ensGvvariationadaptorFetchAll(EnsPGvvariationadaptor gvva,
+                                     AjPList gvvs);
 
 AjBool ensGvvariationadaptorFetchAllbyGvpopulation(
     EnsPGvvariationadaptor gvva,
@@ -216,21 +288,30 @@ AjBool ensGvvariationadaptorFetchAllbySource(
     AjBool primary,
     AjPList gvvs);
 
+AjBool ensGvvariationadaptorFetchAllsomatic(EnsPGvvariationadaptor gvva,
+                                            AjPList gvvs);
+
 AjBool ensGvvariationadaptorFetchByIdentifier(
     EnsPGvvariationadaptor gvva,
     ajuint identifier,
-    EnsPGvvariation* Pgvv);
+    EnsPGvvariation *Pgvv);
 
 AjBool ensGvvariationadaptorFetchByName(
     EnsPGvvariationadaptor gvva,
     const AjPStr name,
     const AjPStr source,
-    EnsPGvvariation* Pgvv);
+    EnsPGvvariation *Pgvv);
 
 AjBool ensGvvariationadaptorFetchBySubidentifier(
     EnsPGvvariationadaptor gvva,
     const AjPStr name,
-    EnsPGvvariation* Pgvv);
+    EnsPGvvariation *Pgvv);
+
+AjBool ensGvvariationadaptorFetchBySynonym(
+    EnsPGvvariationadaptor gvva,
+    const AjPStr synonym,
+    const AjPStr source,
+    EnsPGvvariation *Pgvv);
 
 AjBool ensGvvariationadaptorRetrieveAllFaileddescriptions(
     EnsPGvvariationadaptor gvva,
@@ -240,8 +321,8 @@ AjBool ensGvvariationadaptorRetrieveAllFaileddescriptions(
 AjBool ensGvvariationadaptorRetrieveFlank(
     EnsPGvvariationadaptor gvva,
     ajuint identifier,
-    AjPStr* Pfiveseq,
-    AjPStr* Pthreeseq);
+    AjPStr *Pfiveseq,
+    AjPStr *Pthreeseq);
 
 /* Ensembl Genetic Variation Variation Feature */
 
@@ -277,7 +358,7 @@ EnsPGvvariationfeature ensGvvariationfeatureNewIni(
 EnsPGvvariationfeature ensGvvariationfeatureNewRef(
     EnsPGvvariationfeature gvvf);
 
-void ensGvvariationfeatureDel(EnsPGvvariationfeature* Pgvvf);
+void ensGvvariationfeatureDel(EnsPGvvariationfeature *Pgvvf);
 
 EnsPGvvariationfeatureadaptor ensGvvariationfeatureGetAdaptor(
     const EnsPGvvariationfeature gvvf);
@@ -361,7 +442,15 @@ AjPStr ensGvvariationfeatureGetSourcename(
     const EnsPGvvariationfeature gvvf);
 
 AjBool ensGvvariationfeatureIsReference(EnsPGvvariationfeature gvvf,
-                                        AjBool* Presult);
+                                        AjBool *Presult);
+
+/* AJAX List of Ensembl Genetic Variation Variation Feature objects */
+
+AjBool ensListGvvariationfeatureSortEndAscending(AjPList gvvfs);
+
+AjBool ensListGvvariationfeatureSortEndDescending(AjPList gvvfs);
+
+AjBool ensListGvvariationfeatureSortIdentifierAscending(AjPList gvvfs);
 
 AjBool ensListGvvariationfeatureSortStartAscending(AjPList gvvfs);
 
@@ -375,7 +464,7 @@ EnsPGvvariationfeatureadaptor ensRegistryGetGvvariationfeatureadaptor(
 EnsPGvvariationfeatureadaptor ensGvvariationfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensGvvariationfeatureadaptorDel(EnsPGvvariationfeatureadaptor* Pgvvfa);
+void ensGvvariationfeatureadaptorDel(EnsPGvvariationfeatureadaptor *Pgvvfa);
 
 EnsPDatabaseadaptor ensGvvariationfeatureadaptorGetDatabaseadaptor(
     const EnsPGvvariationfeatureadaptor gvvfa);
@@ -428,7 +517,7 @@ AjBool ensGvvariationfeatureadaptorFetchAllbySliceGenotyped(
 AjBool ensGvvariationfeatureadaptorFetchByIdentifier(
     EnsPGvvariationfeatureadaptor gvvfa,
     ajuint identifier,
-    EnsPGvvariationfeature* Pgvvf);
+    EnsPGvvariationfeature *Pgvvf);
 
 AjBool ensGvvariationfeatureadaptorRetrieveAllIdentifiers(
     EnsPGvvariationfeatureadaptor gvvfa,
@@ -441,11 +530,12 @@ EnsPGvvariationset ensGvvariationsetNewCpy(const EnsPGvvariationset gvvs);
 EnsPGvvariationset ensGvvariationsetNewIni(EnsPGvvariationsetadaptor gvvsa,
                                            ajuint identifier,
                                            AjPStr name,
-                                           AjPStr description);
+                                           AjPStr description,
+                                           AjPStr shortname);
 
 EnsPGvvariationset ensGvvariationsetNewRef(EnsPGvvariationset gvvs);
 
-void ensGvvariationsetDel(EnsPGvvariationset* Pgvvs);
+void ensGvvariationsetDel(EnsPGvvariationset *Pgvvs);
 
 EnsPGvvariationsetadaptor ensGvvariationsetGetAdaptor(
     const EnsPGvvariationset gvvs);
@@ -459,6 +549,9 @@ ajuint ensGvvariationsetGetIdentifier(
 AjPStr ensGvvariationsetGetName(
     const EnsPGvvariationset gvvs);
 
+AjPStr ensGvvariationsetGetShortname(
+    const EnsPGvvariationset gvvs);
+
 AjBool ensGvvariationsetSetAdaptor(EnsPGvvariationset gvvs,
                                    EnsPGvvariationsetadaptor gvvsa);
 
@@ -470,6 +563,9 @@ AjBool ensGvvariationsetSetIdentifier(EnsPGvvariationset gvvs,
 
 AjBool ensGvvariationsetSetName(EnsPGvvariationset gvvs,
                                 AjPStr name);
+
+AjBool ensGvvariationsetSetShortname(EnsPGvvariationset gvvs,
+                                     AjPStr shortname);
 
 AjBool ensGvvariationsetTrace(const EnsPGvvariationset gvvs,
                               ajuint level);
@@ -496,7 +592,7 @@ EnsPGvvariationsetadaptor ensRegistryGetGvvariationsetadaptor(
 EnsPGvvariationsetadaptor ensGvvariationsetadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensGvvariationsetadaptorDel(EnsPGvvariationsetadaptor* Pgvvsa);
+void ensGvvariationsetadaptorDel(EnsPGvvariationsetadaptor *Pgvvsa);
 
 AjBool ensGvvariationsetadaptorFetchAllToplevel(
     EnsPGvvariationsetadaptor gvvsa,
@@ -522,12 +618,17 @@ AjBool ensGvvariationsetadaptorFetchAllbySuper(
 AjBool ensGvvariationsetadaptorFetchByIdentifier(
     EnsPGvvariationsetadaptor gvvsa,
     ajuint identifier,
-    EnsPGvvariationset* Pgvvs);
+    EnsPGvvariationset *Pgvvs);
 
 AjBool ensGvvariationsetadaptorFetchByName(
     EnsPGvvariationsetadaptor gvvsa,
     const AjPStr name,
-    EnsPGvvariationset* Pgvvs);
+    EnsPGvvariationset *Pgvvs);
+
+AjBool ensGvvariationsetadaptorFetchByShortname(
+    EnsPGvvariationsetadaptor gvvsa,
+    const AjPStr shortname,
+    EnsPGvvariationset *Pgvvs);
 
 /*
 ** End of prototype definitions

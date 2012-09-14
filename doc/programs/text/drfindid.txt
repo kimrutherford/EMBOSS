@@ -34,7 +34,7 @@ Usage
    Here is a sample session with drfindid
 
 
-% drfindid protein
+% drfindid "uniprot accession"
 Find public databases by identifier
 Data resource output file [drfindid.drcat]:
 
@@ -44,7 +44,7 @@ Data resource output file [drfindid.drcat]:
 Command line arguments
 
 Find public databases by identifier
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-query]             string     List of EDAM data keywords (Any string)
@@ -106,141 +106,153 @@ Output file format
 
   File: drfindid.drcat
 
-ID      CuticleDB
-Name    Structural proteins of the arthropod cuticle (CuticleDB)
-Desc    A relational database containing all structural proteins of Arthropod cu
-ticle identified to date. Many come from direct sequencing of proteins isolated
-from cuticle and from sequences from cDNAs that share common features with these
- authentic cuticular proteins. It also includes proteins from the Drosophila mel
-anogaster and the Anopheles gambiae genomes, that have been predicted to be cuti
-cular proteins, based on a Pfam motif responsible for chitin binding in Arthropo
-d cuticle.
-URL     http://biophysics.biol.uoa.gr/cuticleDB/
-Taxon   6656 | Arthropoda
-EDAMtpc 0000635 | Specific protein
-EDAMdat 0000896 | Protein report
-EDAMid  0002715 | Protein ID (CuticleDB)
-EDAMfmt 0002331 | HTML
-Query    Protein report | HTML | Protein ID (CuticleDB) | http://bioinformatics.
-biol.uoa.gr/cuticleDB/protview.jsp?id=%s
-Example Protein ID (CuticleDB) | 639
-
-ID      PIRSF
-Acc     DB-0079
-Name    PIRSF whole-protein classification database
-Desc    Non-overlapping clustering of UniProtKB sequences into a hierarchical or
-der to reflect their evolutionary relationships. The PIRSF classification system
- is based on whole proteins rather than on the component domains therefore, it a
-llows annotation of generic biochemical and specific biological functions, as we
-ll as classification of proteins without well-defined domains.
-URL     http://pir.georgetown.edu/pirsf/
-Cat     Family and domain databases
+ID      PRIDE
+Acc     DB-0130
+Name    PRIDE proteomics identifications database
+Desc    Standards compliant, public data repository for proteomics data, protein
+ and peptide identifications together with the evidence supporting these identif
+ications.
+URL     http://www.ebi.ac.uk/pride
+URLrest http://www.ebi.ac.uk/pride/prideMartWebService.do
+Cat     Proteomic databases
 Taxon   1 | all
-EDAMtpc 0000164 | Sequence clustering
-EDAMtpc 0000724 | Protein families
-EDAMdat 0000907 | Protein family annotation
-EDAMid  0001136 | PIRSF ID
-EDAMfmt 0002331 | HTML
-Xref    SP_explicit | PIRSF ID
-Query    Protein family annotation {PIRSF entry} | HTML | PIRSF ID | http://pir.
-georgetown.edu/cgi-bin/ipcSF?id=%s
-Example PIRSF ID | SF000186
+EDAMtpc 0767 | Protein and peptide identification
+EDAMtpc 0121 | Proteomics
+EDAMdat 2536 | Mass spectrometry data
+EDAMid  3021 | UniProt accession
+EDAMfmt 2331 | HTML
+Xref    SP_explicit | UniProt accession
+Query    Mass spectrometry data {PRIDE entry} | HTML | UniProt accession | http:
+//www.ebi.ac.uk/pride/searchSummary.do?queryTypeSelected=identification%20access
+ion%20number&identificationAccessionNumber=%s
+Example UniProt accession | P29375
 
-ID      Pfam
-Acc     DB-0073
-Name    Pfam protein domain database
-Desc    Large collection of protein families, each represented by multiple seque
-nce alignments and hidden Markov models (HMMs).
-URL     http://pfam.sanger.ac.uk/
-Cat     Family and domain databases
+ID      PhosSite
+Acc     DB-0076
+Name    Phosphorylation site database for Archaea and Bacteria
+Desc    Phosphorylation site database for Archaea and Bacteria
+URL     http://www.phosphorylation.biochem.vt.edu/
+Cat     PTM databases
+Taxon   2 | Bacteria
+Taxon   2157 | Archaea
+EDAMtpc 0751 | Phosphorylation sites
+EDAMdat 2071 | Sequence motif (protein)
+EDAMid  3021 | UniProt accession
+EDAMfmt 2331 | HTML
+Xref    SP_explicit | UniProt accession
+Query    Sequence motif (protein) {PhosSite entry} | HTML | UniProt accession |
+http://www.phosphorylation.biochem.vt.edu/xpd2.cfm?extf=uniprot&extref=%s
+Example UniProt accession | P36683
+
+ID      UniProtKB_Swiss-Prot
+IDalt   SwissProt
+Name    Universal protein resource knowledge base / Swiss-Prot
+Desc    Section of the UniProt knowledgebase, containing annotated records, whic
+h include curator-evaluated computational analysis, as well as, information extr
+acted from the literature
+URL     http://www.uniprot.org
 Taxon   1 | all
-EDAMtpc 0000741 | Protein sequence alignment
-EDAMtpc 0000188 | Sequence profiles and HMMs
-EDAMtpc 0000724 | Protein families
-EDAMtpc 0000736 | Protein domains
-EDAMdat 0000907 | Protein family annotation
-EDAMid  0001096 | Sequence accession (protein)
-EDAMid  0001138 | Pfam accession number
-EDAMid  0001179 | NCBI taxonomy ID
-EDAMid  0002758 | Pfam clan ID
-EDAMfmt 0002331 | HTML
-Xref    SP_explicit | Pfam accession number
-Xref    SP_FT | Pfam accession number
-Query    Protein family annotation {Pfam entry} | HTML | Sequence accession (pro
-tein) | http://pfam.sanger.ac.uk/protein/acc=%s
-Query    Protein family annotation {Pfam entry} | HTML | Pfam accession number |
- http://pfam.sanger.ac.uk/family?acc=%s
-Query    Protein family annotation {Pfam entry} | HTML | Pfam clan ID | http://p
-fam.sanger.ac.uk/clan?acc=%s
+EDAMtpc 0639 | Protein sequence analysis
+EDAMdat 2201 | Sequence record full
+EDAMid  3021 | UniProt accession
+EDAMfmt 1929 | FASTA format
+EDAMfmt 2376 | RDF
+EDAMfmt 2331 | HTML
+EDAMfmt 2332 | XML
+Xref    EMBL_explicit | UniProt accession
+Query    Sequence record full | HTML | UniProt accession | http://www.uniprot.or
+g/uniprot/%s
+Query    Sequence record full | Text | UniProt accession | http://www.uniprot.or
+g/uniprot/%s.txt
+Query    Sequence record full | XML | UniProt accession | http://www.uniprot.org
+/uniprot/%s.xml
 
 
   [Part of this file has been deleted for brevity]
 
+EDAMfmt 2331 | HTML
+Xref    SP_explicit | UniProt accession
+Query    2D PAGE spot annotation | HTML | UniProt accession | http://www.mpiib-b
+erlin.mpg.de/mpiib-cgi/RAT-HEART/get-2d-entry?%s
+Example UniProt accession | P62738
 
-ID      SCOWL
-Name    Structural characterization of water, ligands and proteins (SCOWL)
-Desc    PDB interface interactions at atom, residue and domain level. The databa
-se contains protein interfaces and residue-residue interactions formed by struct
-ural units and interacting solvent.
-URL     http://www.scowlp.org
+ID      PHCI-2DPAGE
+Acc     DB-0075
+Name    Parasite host cell interaction 2D-PAGE database (PHCI-2DPAGE)
+Desc    Two-dimensional polyacrylamide gel electrophoresis database.
+URL     http://www.gram.au.dk/2d/2d.html
+Cat     2D gel databases
 Taxon   1 | all
-EDAMtpc 0000128 | Protein interactions
-EDAMdat 0002359 | Domain-domain interaction
-EDAMid  0001127 | PDB ID
-EDAMid  0001042 | SCOP sunid
-EDAMfmt 0002331 | HTML
-Query    Domain-domain interaction | HTML | PDB ID | http://www.scowlp.org/scowl
-p/PDB.action?show=&PDBId=%s
-Query    Domain-domain interaction | HTML | SCOP sunid {SCOP family id} | http:/
-/www.scowlp.org/scowlp/Search.action?childs=&currentChoice=SCOP_FAMILY%s
-Example PDB ID | 1fxk
-Example SCOP sunid | 2381635
+EDAMtpc 0767 | Protein and peptide identification
+EDAMdat 2364 | Experiment annotation (2D PAGE)
+EDAMid  3021 | UniProt accession
+EDAMfmt 2331 | HTML
+Xref    SP_explicit | UniProt accession
+Query    Experiment annotation (2D PAGE) | HTML | UniProt accession | http://www
+.gram.au.dk/cgi-bin/get-2d-entry?%s
+Example UniProt accession | P17821
 
-ID      SCOP
-Name    Structural classification of proteins (SCOP) database
-Desc    The SCOP database, created by manual inspection and abetted by a battery
- of automated methods, aims to provide a detailed and comprehensive description
-of the structural and evolutionary relationships between all proteins whose stru
-cture is known. As such, it provides a broad survey of all known protein folds,
-detailed information about the close relatives of any particular protein, and a
-framework for future research and classification.
-URL     http://scop.mrc-lmb.cam.ac.uk/scop
+ID      Bgee
+Acc     DB-0133
+Name    Bgee database for gene expression evolution
+Desc    Bgee is a database to retrieve and compare gene expression patterns betw
+een animal species.  Bgee first maps heterogeneous expression data (currently ES
+T, Affymetrix, and in situ hybridization data) on anatomical and developmental o
+ntologies.  Then, in order to perform automated cross species comparisons, homol
+ogy relationships across anatomical ontologies, and comparison criteria between
+developmental ontologies, are designed.
+URL     http://bgee.unil.ch
+Cat     Gene expression databases
 Taxon   1 | all
-EDAMtpc 0000736 | Protein domains
-EDAMdat 0001554 | SCOP node
-EDAMdat 0002093 | Data reference
-EDAMid  0001042 | SCOP sunid
-EDAMid  0001127 | PDB ID
-EDAMid  0000842 | Identifier
-EDAMfmt 0002331 | HTML
-Query    SCOP node | HTML | SCOP sunid | http://scop.mrc-lmb.cam.ac.uk/scop/sear
-ch.cgi?sunid=%s
-Query    Data reference {PDB Entry search} | HTML | PDB ID | http://scop.mrc-lmb
-.cam.ac.uk/scop/search.cgi?PDB=%s
-Query    Data reference | HTML | Identifier {Keyword} | http://scop.mrc-lmb.cam.
-ac.uk/scop/search.cgi?key=%s
-Example SCOP sunid | 47718
-Example PDB ID | 1djh
-Example Identifier {Keyword} | immunoglobulin
-
-ID      BIPA
-Name    BIPA database for interaction between protein and nucleic acid
-Desc    Protein-nucleic acid interactions, with various features of protein-nule
-ic acid interfaces.
-URL     http://www-cryst.bioc.cam.ac.uk/bipa
-Taxon   1 | all
-EDAMtpc 0000149 | Protein-nucleic acid interactions
-EDAMdat 0001567 | Protein-nucleic acid interaction
-EDAMdat 0002358 | Domain-nucleic acid interaction
-EDAMid  0001042 | SCOP sunid
-EDAMid  0001127 | PDB ID
-EDAMfmt 0002331 | HTML
-Query    Protein-nucleic acid interaction | HTML | PDB ID | http://mordred.bioc.
-cam.ac.uk/bipa/structures/%s
-Query    Domain-nucleic acid interaction | HTML | SCOP sunid | http://mordred.bi
-oc.cam.ac.uk/bipa/scops/%s
-Example PDB ID | 10MH
-Example SCOP sunid | 120412
+EDAMtpc 0623 | Genes, gene family or system
+EDAMtpc 0197 | Gene expression resources
+EDAMtpc 0203 | Transcriptomics
+EDAMdat 0929 | Gene annotation (expression)
+EDAMdat 0928 | Gene expression profile
+EDAMdat 0916 | Gene annotation
+EDAMdat 2579 | Gene annotation (expressed gene list)
+EDAMid  3021 | UniProt accession
+EDAMid  1033 | Gene ID (Ensembl)
+EDAMfmt 2331 | HTML
+Xref    SP_explicit | UniProt accession
+Query    Gene annotation | HTML | UniProt accession | http://bgee.unil.ch/bgee/b
+gee?uniprot_id=%s
+Query    Gene annotation | HTML | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/b
+gee?page=gene&action=expression&gene_id=%s
+Query    Gene expression profile | HTML | Gene ID (Ensembl) | http://bgee.unil.c
+h/bgee/bgee?page=gene&action=expression&gene_id=%s
+Query    Gene annotation (expression) | HTML | Gene ID (Ensembl) | http://bgee.u
+nil.ch/bgee/bgee?page=expression&action=data&gene_id=%s
+Query    Gene annotation (expressed gene list) {Bgee ID file} | Text | Gene ID (
+Ensembl) | http://bgee.unil.ch/bgee/bgee?page=expression&action=genes&search_by=
+1&organ_children=on&gene_organ_stage_information=on&attribut_list=species_name&a
+ttribut_list=gene_name&attribut_list=gene_id&gene_id=%s&display_type=tsv
+Query    Gene annotation (expressed gene list) {Bgee ID file with expression dat
+a} | Text | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=expression&ac
+tion=genes&search_by=1&organ_children=on&gene_organ_stage_information=on&attribu
+t_list=species_name&attribut_list=gene_name&attribut_list=gene_id&gene_id=%s&dis
+play_type=tsv&gene_information=2
+Query    Gene annotation (expressed gene list) {Bgee ID file with expression dat
+a count} | Text | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=express
+ion&action=genes&search_by=1&organ_children=on&gene_organ_stage_information=on&a
+ttribut_list=species_name&attribut_list=gene_name&attribut_list=gene_id&gene_id=
+%s&display_type=tsv&gene_information=1
+Query    Gene annotation (expressed gene list) {Bgee ID file} | HTML | Gene ID (
+Ensembl) | http://bgee.unil.ch/bgee/bgee?page=expression&action=genes&search_by=
+1&organ_children=on&gene_organ_stage_information=on&attribut_list=species_name&a
+ttribut_list=gene_name&attribut_list=gene_id&gene_id=%s
+Query    Gene annotation (expressed gene list) {Bgee ID file with expression dat
+a} | HTML | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=expression&ac
+tion=genes&search_by=1&organ_children=on&gene_organ_stage_information=on&attribu
+t_list=species_name&attribut_list=gene_name&attribut_list=gene_id&gene_id=%s&gen
+e_information=2
+Query    Gene annotation (expressed gene list) {Bgee ID file with expression dat
+a count} | HTML | Gene ID (Ensembl) | http://bgee.unil.ch/bgee/bgee?page=express
+ion&action=genes&search_by=1&organ_children=on&gene_organ_stage_information=on&a
+ttribut_list=species_name&attribut_list=gene_name&attribut_list=gene_id&gene_id=
+%s&gene_information=1
+Example Gene ID (Ensembl) | ENSG00000091831
+Example UniProt accession | P32234
 
 
 Data files
@@ -286,12 +298,12 @@ See also
                     edamisformat   Find EDAM ontology terms by is_format_of relation
                     edamisid       Find EDAM ontology terms by is_identifier_of relation
                     edamname       Find EDAM ontology terms by name
-                    wossdata       Finds programs by EDAM data
-                    wossinput      Finds programs by EDAM input data
-                    wossoperation  Finds programs by EDAM operation
-                    wossoutput     Finds programs by EDAM output data
-                    wossparam      Finds programs by EDAM parameter
-                    wosstopic      Finds programs by EDAM topic
+                    wossdata       Find programs by EDAM data
+                    wossinput      Find programs by EDAM input data
+                    wossoperation  Find programs by EDAM operation
+                    wossoutput     Find programs by EDAM output data
+                    wossparam      Find programs by EDAM parameter
+                    wosstopic      Find programs by EDAM topic
 
 Author(s)
 

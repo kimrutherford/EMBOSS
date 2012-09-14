@@ -1,12 +1,12 @@
 application: aligncopy 
 [
-  documentation: "Reads and writes alignments"
+  documentation: "Read and write alignments"
   groups: "Edit"
   gui: "yes"
   batch: "yes"
   cpu: "low"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0002122 operation Sequence alignment editing"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:2122 Sequence alignment file processing"
 ]
 
 
@@ -25,7 +25,7 @@ seqset: sequences
     type: "gapany"
     aligned: "Y"
     help: "File containing a sequence alignment."
-    relations: "EDAM:0000863 data Sequence alignment"
+    relations: "EDAM_data:0863 Sequence alignment"
 ]
 
 endsection: input
@@ -56,7 +56,7 @@ section: additional
     default: ""
     information: "Name of the alignment"
     knowntype: "sequence id output"
-    relations: "EDAM:0001063 identifier Sequence identifier"
+    relations: "EDAM_identifier:1063 Sequence identifier"
   ]
 
   string: comment 
@@ -65,7 +65,7 @@ section: additional
     default: ""
     information: "Comment on the alignment"
     knowntype: "string"
-    relations: "EDAM:0000969 data Text"
+    relations: "EDAM_data:2048 Report"
   ]
 
   boolean: append
@@ -75,7 +75,7 @@ section: additional
     information: "Append to the existing alignment header"
     help: "This allows you to append the name and comments you have given 
            on to the end of the existing alignment header."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: additional
@@ -107,7 +107,7 @@ align: outfile
     minseqs: "$(sequences.count)" #limits choice of formats to match input
     maxseqs: "$(sequences.count)" #limits choice of formats to match input
     aformat: "simple"
-    relations: "EDAM:0000863 data Sequence alignment"
+    relations: "EDAM_data:0863 Sequence alignment"
 ]
 
 endsection: output

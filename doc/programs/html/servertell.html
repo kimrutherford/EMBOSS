@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -72,7 +72,7 @@ Display information about a public server
 # srs is defined in standard
 # access levels id: Yes query: Yes all: Yes
 # scope: text
-# cache file: /homes/pmr/local/share/EMBOSS/server.srs
+# cache file: /homes/user/local/share/EMBOSS/server.srs
 # databases: 21
 
 SERVER srs [
@@ -81,7 +81,7 @@ SERVER srs [
    cachefile:      "server.srs"
    comment:        "SRS from EBI"
    serverversion:  "7.1.3"
-   url:            "http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz"
+   url:            "http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz"
 ]
 
 </pre></td></tr></table><p>
@@ -97,16 +97,16 @@ SERVER srs [
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Display information about a public server
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
-  [-server]            string     The name of the database defined locally for
+  [-server]            string     The name of the server defined locally for
                                   use by EMBOSS. (Any string)
 
    Additional (Optional) qualifiers:
    -full               boolean    [N] The default behaviour is to report for
-                                  relevant databases only basic information
-                                  from the EMBOSS database definition
+                                  relevant servers only basic information from
+                                  the EMBOSS server definition
    -outfile            outfile    [stdout] Output file name
 
    Advanced (Unprompted) qualifiers: (none)
@@ -151,7 +151,7 @@ Version: EMBOSS:6.4.0.0
 <tr bgcolor="#FFFFCC">
 <td>[-server]<br>(Parameter 1)</td>
 <td>string</td>
-<td>The name of the database defined locally for use by EMBOSS.</td>
+<td>The name of the server defined locally for use by EMBOSS.</td>
 <td>Any string</td>
 <td>&nbsp;</td>
 </tr>
@@ -163,7 +163,7 @@ Version: EMBOSS:6.4.0.0
 <tr bgcolor="#FFFFCC">
 <td>-full</td>
 <td>boolean</td>
-<td>The default behaviour is to report for relevant databases only basic information from the EMBOSS database definition</td>
+<td>The default behaviour is to report for relevant servers only basic information from the EMBOSS server definition</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
@@ -189,7 +189,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -481,22 +481,22 @@ None.
 <th>Description</th></tr>
 <tr>
 <td><a href="cachedas.html">cachedas</a></td>
-<td>Generates server cache file for DAS servers or for the DAS registry</td>
+<td>Generate server cache file for DAS servers or for the DAS registry</td>
 </tr>
 
 <tr>
 <td><a href="cachedbfetch.html">cachedbfetch</a></td>
-<td>Generates server cache file for Dbfetch/WSDbfetch data sources</td>
+<td>Generate server cache file for Dbfetch/WSDbfetch data sources</td>
 </tr>
 
 <tr>
 <td><a href="cacheebeyesearch.html">cacheebeyesearch</a></td>
-<td>Generates server cache file for EB-eye search domains</td>
+<td>Generate server cache file for EB-eye search domains</td>
 </tr>
 
 <tr>
 <td><a href="cacheensembl.html">cacheensembl</a></td>
-<td>Generates server cache file for an Ensembl server</td>
+<td>Generate server cache file for an Ensembl server</td>
 </tr>
 
 <tr>
@@ -506,12 +506,12 @@ None.
 
 <tr>
 <td><a href="showdb.html">showdb</a></td>
-<td>Displays information on configured databases</td>
+<td>Display information on configured databases</td>
 </tr>
 
 <tr>
 <td><a href="showserver.html">showserver</a></td>
-<td>Displays information on configured servers</td>
+<td>Display information on configured servers</td>
 </tr>
 
 </table>

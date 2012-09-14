@@ -1,28 +1,36 @@
-/****************************************************************************
-**
-** @source embdomain.c
+/* @source embdomain **********************************************************
 **
 ** Algorithms for handling protein domain data.
 ** For use with Scop and Cath objects defined in ajdomain.h
 ** 
-** Copyright (c) 2004 Jon Ison (jison@hgmp.mrc.ac.uk) 
+** @author Copyright (c) 2004 Jon Ison (jison@hgmp.mrc.ac.uk) 
+** @version $Revision: 1.10 $
+** @modified $Date: 2011/10/18 14:24:24 $ by $Author: rice $
+** @@
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
 **
-** This program is distributed in the hope that it will be useful,
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ****************************************************************************/
 
-#include "emboss.h"
+#include "embdomain.h"
+#include "embpdb.h"
+
+#include "ajlib.h"
+#include "ajdomain.h"
+#include "ajlist.h"
 
 
 
@@ -135,7 +143,7 @@
 
 
 
-/* @func embScopToPdbid *****************************************************
+/* @func embScopToPdbid *******************************************************
 **
 ** Read a scop identifier code and writes the equivalent pdb identifier code
 **
@@ -143,6 +151,8 @@
 ** @param [w] pdb  [AjPStr*]  Pdb identifier code
 **
 ** @return [AjPStr] Pointer to pdb identifier code.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -156,7 +166,7 @@ AjPStr embScopToPdbid(const AjPStr scop, AjPStr *pdb)
 
 
 
-/* @func embScopToSp ********************************************************
+/* @func embScopToSp **********************************************************
 **
 ** Read a scop identifier code and writes the equivalent swissprot 
 ** identifier code.  Relies on a list of Pdbtosp objects sorted by PDB
@@ -168,6 +178,8 @@ AjPStr embScopToPdbid(const AjPStr scop, AjPStr *pdb)
 **
 ** @return [AjBool]  True if a swissprot identifier code was
 **                   found for the Scop code.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 
@@ -192,7 +204,7 @@ AjBool embScopToSp(const AjPStr scop, AjPStr *spr, const AjPList list)
 
 
 
-/* @func embScopToAcc *******************************************************
+/* @func embScopToAcc *********************************************************
 **
 ** Read a scop identifier code and writes the equivalent accession number.
 ** Relies on a list of Pdbtosp objects sorted by PDB code, which is usually
@@ -204,6 +216,8 @@ AjBool embScopToSp(const AjPStr scop, AjPStr *spr, const AjPList list)
 **
 ** @return [AjBool]  True if a swissprot identifier code was found for the
 **                   Scop code.
+**
+** @release 2.9.0
 ** @@
 ****************************************************************************/
 

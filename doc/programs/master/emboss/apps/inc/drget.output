@@ -10,14 +10,14 @@ Name    Universal protein resource
 Desc    A comprehensive, high-quality and freely accessible resource of protein sequence and functional information.
 URL     http://www.uniprot.org/
 Taxon   1 | all
-EDAMtpc 0000639 | Protein sequences
-EDAMdat 0002201 | Sequence record full
-EDAMid  0003021 | UniProt accession
-EDAMfmt 0001929 | FASTA format
-EDAMfmt 0002376 | RDF
-EDAMfmt 0002188 | uniprot
-EDAMfmt 0002331 | HTML
-EDAMfmt 0002332 | XML
+EDAMtpc 0639 | Protein sequence analysis
+EDAMdat 2201 | Sequence record full
+EDAMid  3021 | UniProt accession
+EDAMfmt 1929 | FASTA format
+EDAMfmt 2376 | RDF
+EDAMfmt 2188 | uniprot
+EDAMfmt 2331 | HTML
+EDAMfmt 2332 | XML
 Xref    SP_FT | None
 Query    Sequence record full | HTML | UniProt accession | http://www.uniprot.org/uniprot/%s
 Query    Sequence record full | uniprot | UniProt accession | http://www.uniprot.org/uniprot/%s.txt

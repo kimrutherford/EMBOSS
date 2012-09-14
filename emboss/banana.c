@@ -86,8 +86,8 @@ int main(int argc, char **argv)
     ajint ixoff;
     ajint iyoff;
     float ystart;
-    float defheight;
-    float currentheight;
+    float defheight = 0.0;
+    float currentheight = 0.0;
     ajint count;
     ajint portrait = 0;
     ajint title    = 0;

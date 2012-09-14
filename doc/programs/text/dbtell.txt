@@ -33,9 +33,9 @@ Display information about a public database
 DBNAME tsw [
    format:         "swiss"
    method:         "emblcd"
-   type:           "Protein"
+   type:           "Protein protfeatures"
    comment:        "Swissprot native format with EMBL CD-ROM index"
-   directory:      "/homes/pmr/local/share/EMBOSS/test/swiss"
+   directory:      "/homes/user/local/share/EMBOSS/test/swiss"
    field:          "id"
    field:          "acc"
    field:          "sv"
@@ -43,7 +43,7 @@ DBNAME tsw [
    field:          "org"
    field:          "key"
    release:        "36"
-   edamdat:        "0001230 UniProt protein sequence record"
+   edamdat:        "1230 UniProt protein sequence record"
    taxon:          "1 all"
 ]
 
@@ -53,7 +53,7 @@ DBNAME tsw [
 Command line arguments
 
 Display information about a public database
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-database]          string     The name of the database defined locally for
@@ -136,15 +136,15 @@ Known bugs
 See also
 
    Program name     Description
-   cachedas         Generates server cache file for DAS servers or for the DAS
+   cachedas         Generate server cache file for DAS servers or for the DAS
                     registry
-   cachedbfetch     Generates server cache file for Dbfetch/WSDbfetch data
+   cachedbfetch     Generate server cache file for Dbfetch/WSDbfetch data
                     sources
-   cacheebeyesearch Generates server cache file for EB-eye search domains
-   cacheensembl     Generates server cache file for an Ensembl server
+   cacheebeyesearch Generate server cache file for EB-eye search domains
+   cacheensembl     Generate server cache file for an Ensembl server
    servertell       Display information about a public server
-   showdb           Displays information on configured databases
-   showserver       Displays information on configured servers
+   showdb           Display information on configured databases
+   showserver       Display information on configured servers
 
 Author(s)
 

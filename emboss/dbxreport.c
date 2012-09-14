@@ -33,7 +33,7 @@
 ** @alias DbxreportOData
 **
 ** @attr cache [AjPBtcache] Index cache
-** @attr refs [ajulong*] Reference count
+** @attr refs [ajulong*] Page reference count
 ** @attr nroot [ajuint] Number of root pages
 ** @attr nnroot [ajuint] Number of numeric root pages
 ** @attr ninternal [ajuint] Number of internal node pages
@@ -105,7 +105,7 @@ typedef struct DbxreportSData
 
 
 
-/* @datastatic DbxreportNames *************************************************
+/* @datastatic DbxreportPNames ************************************************
 **
 ** Index file names
 **
@@ -171,8 +171,11 @@ int main(int argc, char **argv)
     ajulong *pagepos = NULL;
     ajulong *pageindex = NULL;
     AjPTable newpostable;
-    ajuint pagesize;
+    ajuint pagesize = 0;
+    ajuint pripagesize;
+    ajuint secpagesize;
     const AjPStr fieldext = NULL;
+    ajuint refcount;
 
     embInit("dbxreport", argc, argv);
     
@@ -189,7 +192,7 @@ int main(int argc, char **argv)
     ajStrDel(&tmpstr);
     ajStrTokenDel(&handle);
 
-    nindex = ajListstrToarray(fieldlist, &field);
+    nindex = (ajuint) ajListstrToarray(fieldlist, &field);
     AJCNEW0(dbxdata, nindex);
 
     ajListFree(&fieldlist);
@@ -222,51 +225,69 @@ int main(int argc, char **argv)
                     "Index '%S' (.%S)\n",
                     field[i], fieldext);
         ajFmtPrintF(outf,
-                    " compressed: %4B (Compressed)\n",
+                    "  compressed: %4B (Compressed)\n",
                     dbxdata[i].cache->compressed);
         ajFmtPrintF(outf,
-                    "  cachesize: %4u (Size of cache)\n",
-                    dbxdata[i].cache->cachesize);
+                    "   cachesize: %4u (Size of primary cache)\n",
+                    dbxdata[i].cache->pricachesize);
         ajFmtPrintF(outf,
-                    "   pagesize: %4u (Page size)\n",
-                    dbxdata[i].cache->pagesize);
+                    "seccachesize: %4u (Size of secondary cache)\n",
+                    dbxdata[i].cache->seccachesize);
         ajFmtPrintF(outf,
-                    "  pagecount: %4Lu (Page count)\n",
-                    dbxdata[i].cache->pagecount);
+                    "    pagesize: %4u (Page size)\n",
+                    dbxdata[i].cache->pripagesize);
         ajFmtPrintF(outf,
-                    "      order: %4u (Tree order)\n",
-                    dbxdata[i].cache->order);
+                    " secpagesize: %4u (Secondary page size)\n",
+                    dbxdata[i].cache->secpagesize);
         ajFmtPrintF(outf,
-                    "     sorder: %4u (Order of secondary tree)\n",
+                    "   pagecount: %4Lu (Primary page count)\n",
+                    dbxdata[i].cache->pripagecount);
+        ajFmtPrintF(outf,
+                    "   pagecount: %4Lu (Secondary page count)\n",
+                    dbxdata[i].cache->secpagecount);
+        ajFmtPrintF(outf,
+                    "    refcount: %4u (Number of reference files)\n",
+                    dbxdata[i].cache->refcount);
+        ajFmtPrintF(outf,
+                    "       order: %4u (Tree order)\n",
+                    dbxdata[i].cache->porder);
+        ajFmtPrintF(outf,
+                    "      sorder: %4u (Order of secondary tree)\n",
                     dbxdata[i].cache->sorder);
         ajFmtPrintF(outf,
-                    "      level: %4u (Level of tree)\n",
-                    dbxdata[i].cache->level);
+                    "       level: %4u (Level of tree)\n",
+                    dbxdata[i].cache->plevel);
         ajFmtPrintF(outf,
-                    "     slevel: %4u (Level of secondary tree)\n",
+                    "      slevel: %4u (Level of secondary tree)\n",
                     dbxdata[i].cache->slevel);
         ajFmtPrintF(outf,
-                    "       fill: %4u (Entries per bucket)\n",
-                    dbxdata[i].cache->nperbucket);
+                    "        fill: %4u (Entries per bucket)\n",
+                    dbxdata[i].cache->pnperbucket);
         ajFmtPrintF(outf,
-                    "      sfill: %4u (Entries per secondary bucket)\n",
+                    "       sfill: %4u (Entries per secondary bucket)\n",
                     dbxdata[i].cache->snperbucket);
         ajFmtPrintF(outf,
-                    "    kwlimit: %4u (Max key size)\n",
-                    dbxdata[i].cache->kwlimit);
+                    "    keylimit: %4u (Max key size)\n",
+                    dbxdata[i].cache->keylimit);
         ajFmtPrintF(outf,
-                    "      count: %4Lu (Unique entries in index)\n",
+                    "     idlimit: %4u (Max secondary id size)\n",
+                    dbxdata[i].cache->idlimit);
+        ajFmtPrintF(outf,
+                    "       count: %4Lu (Unique entries in index)\n",
                     dbxdata[i].cache->countunique);
         ajFmtPrintF(outf,
-                    "  fullcount: %4Lu (Total entries in index)\n",
+                    "   fullcount: %4Lu (Total entries in index)\n",
                     dbxdata[i].cache->countall);
 
-        pagecount = dbxdata[i].cache->pagecount;
-        totsize = ajBtreeGetTotsize(dbxdata[i].cache);
-        pagesize = dbxdata[i].cache->pagesize;
-        compressed = dbxdata[i].cache->compressed;
+        pagecount = ajBtreeCacheGetPagecount(dbxdata[i].cache);
+        totsize = ajBtreeCacheGetTotsize(dbxdata[i].cache);
+        pripagesize = ajBtreeCacheGetPripagesize(dbxdata[i].cache);
+        secpagesize = ajBtreeCacheGetSecpagesize(dbxdata[i].cache);
+        compressed = ajBtreeCacheIsCompressed(dbxdata[i].cache);
         dbxdata[i].pagecount = pagecount;
         dbxdata[i].totsize = totsize;
+
+        refcount = dbxdata[i].cache->refcount;
 
         AJCNEW0(dbxdata[i].refs,pagecount);
         AJCNEW0(pagepos,pagecount);
@@ -285,9 +306,11 @@ int main(int argc, char **argv)
             ajTablePut(newpostable, &pagepos[ipage],
                        &pageindex[ipage]);
             if(compressed)
-                pageoffset += ajBtreePageGetSize(page);
+                pageoffset += ajBtreePageGetSize(page, refcount);
+            else if(ajBtreePageIsPrimary(page))
+                pageoffset += pripagesize;
             else
-                pageoffset += pagesize;
+                pageoffset += secpagesize;
         }
 
         if(!ajBtreeCacheIsSecondary(dbxdata[i].cache))
@@ -298,6 +321,159 @@ int main(int argc, char **argv)
             for(ipage=0L; ipage < pagecount; ipage++)
             {
                 page = ajBtreeCacheRead(dbxdata[i].cache, pagepos[ipage]);
+                if(ajBtreePageIsPrimary(page))
+                    pagesize = pripagesize;
+                else
+                    pagesize = secpagesize;
+                nodetype = ajBtreePageGetTypename(page);
+                GBT_TOTLEN(page->buf,&totlen);
+                switch((int) *nodetype)
+                {
+                    case 'f':   /* free */
+                        dbxdata[i].nunused++;
+                        ajFmtPrintF(outf,
+                                    "Freed page type for page %Lu at %Lu",
+                                    ipage, ipage * pagesize);
+                        break;
+                    case 'r':   /* root */
+                        if(totlen)
+                            dbxdata[i].nroot++;
+                        else
+                            dbxdata[i].nnroot++;
+                        ajBtreeStatNode(dbxdata[i].cache, page, full,
+                                        &nkeys, &nover, &freespace,
+                                        dbxdata[i].refs, newpostable);
+                        dbxdata[i].nkeys += nkeys;
+                        dbxdata[i].freespace += (ajulong) freespace;
+                        dbxdata[i].nover += nover;
+                        break;
+                    case 'i':   /* internal */
+                        dbxdata[i].ninternal++;
+                        ajBtreeStatNode(dbxdata[i].cache, page, full,
+                                        &nkeys, &nover, &freespace,
+                                        dbxdata[i].refs, newpostable);
+                        dbxdata[i].nkeys += nkeys;
+                        dbxdata[i].freespace += (ajulong) freespace;
+                        dbxdata[i].nover += nover;
+                        break;
+                    case 'l':   /* leaf */
+                        dbxdata[i].nleaf++;
+                        ajBtreeStatNode(dbxdata[i].cache, page, full,
+                                        &nkeys, &nover, &freespace,
+                                        dbxdata[i].refs, newpostable);
+                        dbxdata[i].nlkeys += nkeys;
+                        dbxdata[i].freespace += (ajulong) freespace;
+                        dbxdata[i].nlover += nover;
+                        break;
+                    case 'b':   /* (id)bucket */
+                        dbxdata[i].nbucket++;
+                        ajBtreeStatIdbucket(dbxdata[i].cache, page, full,
+                                            &nkeys, &ndups, &nextra,
+                                            &nover, &freespace,
+                                            dbxdata[i].refs, newpostable);
+                        dbxdata[i].nbkeys += nkeys;
+                        dbxdata[i].nbdups += ndups;
+                        dbxdata[i].nbxtra += nextra;
+                        dbxdata[i].freespace += (ajulong) freespace;
+                        dbxdata[i].nbover += nover;
+                        break;
+                    case 'o':   /* overflow */
+                        dbxdata[i].noverflow++;
+                        ajFmtPrintF(outf,
+                                    "Overflow page type for page %Lu at %Lu",
+                                    ipage, ipage * pagesize);
+                        break;
+                    case 'p':   /* pribucket */
+                        dbxdata[i].npribucket++;
+                        ajBtreeStatPribucket(dbxdata[i].cache, page, full,
+                                             &nkeys, &nover, &freespace,
+                                             dbxdata[i].refs, newpostable);
+                        dbxdata[i].npkeys += nkeys;
+                        dbxdata[i].freespace += (ajulong) freespace;
+                        dbxdata[i].npover += nover;
+                        break;
+                    case 's':   /* sec... */
+                        switch((int) nodetype[3])
+                        {
+                            case 'b': /* secbucket */
+                                dbxdata[i].nsecbucket++;
+                                ajBtreeStatSecbucket(dbxdata[i].cache,
+                                                     page, full,
+                                                     &nkeys, &nover,
+                                                     &freespace);
+                                dbxdata[i].nskeys += nkeys;
+                                dbxdata[i].freespace += (ajulong) freespace;
+                                dbxdata[i].nsover += nover;
+                                break;
+                            case 'f':   /* secfree */
+                                dbxdata[i].nunused++;
+                                ajFmtPrintF(outf,
+                                            "Freed page type for page %Lu "
+                                            "at %Lu",
+                                            ipage, ipage * pagesize);
+                                break;
+                            case 'r':   /* secroot */
+                                if(totlen)
+                                    dbxdata[i].nroot++;
+                                else
+                                    dbxdata[i].nnroot++;
+                                ajBtreeStatNode(dbxdata[i].cache, page, full,
+                                                &nkeys, &nover, &freespace,
+                                                dbxdata[i].refs, newpostable);
+                                dbxdata[i].nkeys += nkeys;
+                                dbxdata[i].freespace += (ajulong) freespace;
+                                dbxdata[i].nover += nover;
+                                break;
+                            case 'i':   /* secinternal */
+                                dbxdata[i].ninternal++;
+                                ajBtreeStatNode(dbxdata[i].cache, page, full,
+                                                &nkeys, &nover, &freespace,
+                                                dbxdata[i].refs, newpostable);
+                                dbxdata[i].nkeys += nkeys;
+                                dbxdata[i].freespace += (ajulong) freespace;
+                                dbxdata[i].nover += nover;
+                                break;
+                            case 'l':   /* secleaf */
+                                dbxdata[i].nleaf++;
+                                ajBtreeStatNode(dbxdata[i].cache, page, full,
+                                                &nkeys, &nover, &freespace,
+                                                dbxdata[i].refs, newpostable);
+                                dbxdata[i].nlkeys += nkeys;
+                                dbxdata[i].freespace += (ajulong) freespace;
+                                dbxdata[i].nlover += nover;
+                                break;
+                          }
+                        break;
+                    case 'n':
+                        dbxdata[i].nnumbucket++;
+                        ajBtreeStatNumbucket(dbxdata[i].cache, page, full,
+                                             &nkeys, &nover, &freespace);
+                        dbxdata[i].nnkeys += nkeys;
+                        dbxdata[i].freespace += (ajulong) freespace;
+                        dbxdata[i].nnover += nover;
+                        break;
+                    case 'u':
+                    default:
+                        dbxdata[i].nunknown++;
+                        ajFmtPrintF(outf,
+                                    "Unknown page type for page %Lu at %Lu\n",
+                                    ipage, ipage * pagesize);
+                        break;
+                }
+            }
+        }
+        else
+        {
+            ajFmtPrintF(outf,
+                        "Secondary index '%S' index found with %Lu pages\n",
+                        field[i], pagecount);
+            for(ipage=0L; ipage < pagecount; ipage++)
+            {
+                page = ajBtreeCacheRead(dbxdata[i].cache, pagepos[ipage]);
+                if(ajBtreePageIsPrimary(page))
+                    pagesize = pripagesize;
+                else
+                    pagesize = secpagesize;
                 nodetype = ajBtreePageGetTypename(page);
                 GBT_TOTLEN(page->buf,&totlen);
                 switch((int) *nodetype)
@@ -340,10 +516,10 @@ int main(int argc, char **argv)
                         break;
                     case 'b':
                         dbxdata[i].nbucket++;
-                        ajBtreeStatBucket(dbxdata[i].cache, page, full,
-                                          &nkeys, &ndups, &nextra,
-                                          &nover, &freespace,
-                                          dbxdata[i].refs, newpostable);
+                        ajBtreeStatIdbucket(dbxdata[i].cache, page, full,
+                                            &nkeys, &ndups, &nextra,
+                                            &nover, &freespace,
+                                            dbxdata[i].refs, newpostable);
                         dbxdata[i].nbkeys += nkeys;
                         dbxdata[i].nbdups += ndups;
                         dbxdata[i].nbxtra += nextra;
@@ -366,113 +542,56 @@ int main(int argc, char **argv)
                         dbxdata[i].npover += nover;
                         break;
                     case 's':
-                        dbxdata[i].nsecbucket++;
-                        ajBtreeStatSecbucket(dbxdata[i].cache, page, full,
-                                             &nkeys, &nover, &freespace);
-                        dbxdata[i].nskeys += nkeys;
-                        dbxdata[i].freespace += (ajulong) freespace;
-                        dbxdata[i].nsover += nover;
-                        break;
-                    case 'n':
-                        dbxdata[i].nnumbucket++;
-                        ajBtreeStatNumbucket(dbxdata[i].cache, page, full,
-                                             &nkeys, &nover, &freespace);
-                        dbxdata[i].nnkeys += nkeys;
-                        dbxdata[i].freespace += (ajulong) freespace;
-                        dbxdata[i].nnover += nover;
-                        break;
-                    case 'u':
-                    default:
-                        dbxdata[i].nunknown++;
-                        ajFmtPrintF(outf,
-                                    "Unknown page type for page %Lu at %Lu\n",
-                                    ipage, ipage * pagesize);
-                        break;
-                }
-            }
-        }
-        else
-        {
-            ajFmtPrintF(outf,
-                        "Secondary index '%S' index found with %Lu pages\n",
-                        field[i], pagecount);
-            for(ipage=0L; ipage < pagecount; ipage++)
-            {
-                page = ajBtreeCacheRead(dbxdata[i].cache, pagepos[ipage]);
-                nodetype = ajBtreePageGetTypename(page);
-
-                switch((int) *nodetype)
-                {
-                    case 'f':
-                        dbxdata[i].nunused++;
-                        ajFmtPrintF(outf,
-                                    "Freed page type for page %Lu at %Lu",
-                                    ipage, ipage * pagesize);
-                        break;
-                    case 'r':
-                        if(totlen)
-                            dbxdata[i].nroot++;
-                        else
-                            dbxdata[i].nnroot++;
-                        ajBtreeStatNode(dbxdata[i].cache, page, full,
-                                        &nkeys, &nover, &freespace,
-                                        dbxdata[i].refs, newpostable);
-                        dbxdata[i].nkeys += nkeys;
-                        dbxdata[i].freespace += (ajulong) freespace;
-                        dbxdata[i].nover += nover;
-                        break;
-                    case 'i':
-                        dbxdata[i].ninternal++;
-                        ajBtreeStatNode(dbxdata[i].cache, page, full,
-                                        &nkeys, &nover, &freespace,
-                                        dbxdata[i].refs, newpostable);
-                        dbxdata[i].nkeys += nkeys;
-                        dbxdata[i].freespace += (ajulong) freespace;
-                        dbxdata[i].nover += nover;
-                        break;
-                    case 'l':
-                        dbxdata[i].nleaf++;
-                        ajBtreeStatNode(dbxdata[i].cache, page, full,
-                                        &nkeys, &nover, &freespace,
-                                        dbxdata[i].refs, newpostable);
-                        dbxdata[i].nlkeys += nkeys;
-                        dbxdata[i].freespace += (ajulong) freespace;
-                        dbxdata[i].nlover += nover;
-                        break;
-                    case 'b':
-                        dbxdata[i].nbucket++;
-                        ajBtreeStatBucket(dbxdata[i].cache, page, full,
-                                          &nkeys, &ndups, &nextra,
-                                          &nover, &freespace,
-                                          dbxdata[i].refs, newpostable);
-                        dbxdata[i].nbkeys += nkeys;
-                        dbxdata[i].nbdups += ndups;
-                        dbxdata[i].nbxtra += nextra;
-                        dbxdata[i].freespace += (ajulong) freespace;
-                        dbxdata[i].nbover += nover;
-                        break;
-                    case 'o':
-                        dbxdata[i].noverflow++;
-                        ajFmtPrintF(outf,
-                                    "Overflow page type for page %Lu at %Lu",
-                                    ipage, ipage * pagesize);
-                        break;
-                    case 'p':
-                        dbxdata[i].npribucket++;
-                        ajBtreeStatPribucket(dbxdata[i].cache, page, full,
-                                             &nkeys, &nover, &freespace,
-                                             dbxdata[i].refs, newpostable);
-                        dbxdata[i].npkeys += nkeys;
-                        dbxdata[i].freespace += (ajulong) freespace;
-                        dbxdata[i].npover += nover;
-                        break;
-                    case 's':
-                        dbxdata[i].nsecbucket++;
-                        ajBtreeStatSecbucket(dbxdata[i].cache, page, full,
-                                             &nkeys, &nover, &freespace);
-                        dbxdata[i].nskeys += nkeys;
-                        dbxdata[i].freespace += (ajulong) freespace;
-                        dbxdata[i].nsover += nover;
+                        switch((int) nodetype[3])
+                        {
+                            case 'b': /* secbucket */
+                                dbxdata[i].nsecbucket++;
+                                ajBtreeStatSecbucket(dbxdata[i].cache,
+                                                     page, full,
+                                                     &nkeys, &nover,
+                                                     &freespace);
+                                dbxdata[i].nskeys += nkeys;
+                                dbxdata[i].freespace += (ajulong) freespace;
+                                dbxdata[i].nsover += nover;
+                                break;
+                            case 'f':   /* secfree */
+                                dbxdata[i].nunused++;
+                                ajFmtPrintF(outf,
+                                            "Freed page type for page %Lu "
+                                            "at %Lu",
+                                            ipage, ipage * pagesize);
+                                break;
+                            case 'r':   /* secroot */
+                                if(totlen)
+                                    dbxdata[i].nroot++;
+                                else
+                                    dbxdata[i].nnroot++;
+                                ajBtreeStatNode(dbxdata[i].cache, page, full,
+                                                &nkeys, &nover, &freespace,
+                                                dbxdata[i].refs, newpostable);
+                                dbxdata[i].nkeys += nkeys;
+                                dbxdata[i].freespace += (ajulong) freespace;
+                                dbxdata[i].nover += nover;
+                                break;
+                            case 'i':   /* secinternal */
+                                dbxdata[i].ninternal++;
+                                ajBtreeStatNode(dbxdata[i].cache, page, full,
+                                                &nkeys, &nover, &freespace,
+                                                dbxdata[i].refs, newpostable);
+                                dbxdata[i].nkeys += nkeys;
+                                dbxdata[i].freespace += (ajulong) freespace;
+                                dbxdata[i].nover += nover;
+                                break;
+                            case 'l':   /* secleaf */
+                                dbxdata[i].nleaf++;
+                                ajBtreeStatNode(dbxdata[i].cache, page, full,
+                                                &nkeys, &nover, &freespace,
+                                                dbxdata[i].refs, newpostable);
+                                dbxdata[i].nlkeys += nkeys;
+                                dbxdata[i].freespace += (ajulong) freespace;
+                                dbxdata[i].nlover += nover;
+                                break;
+                          }
                         break;
                     case 'n':
                         dbxdata[i].nnumbucket++;
@@ -562,10 +681,14 @@ int main(int argc, char **argv)
             ajFmtPrintF(outf, "...   total_size: %Lu\n",
                         dbxdata[i].totsize);
         if(dbxdata[i].freespace)
-            ajFmtPrintF(outf, "...    freespace: %Lu, %.1f of uncompressed\n",
+        {
+            totsize = ajBtreeCacheGetTotsize(dbxdata[i].cache);
+            ajFmtPrintF(outf, "...    freespace: %Lu, %.1f%% of uncompressed %Lu\n",
                         dbxdata[i].freespace,
                         100.0 * (float)dbxdata[i].freespace/
-                        (float)(pagesize*pagecount));
+                        (float)(totsize), totsize);
+        }
+
         if(!ajBtreeCacheIsSecondary(dbxdata[i].cache))
         {
             nfound = dbxdata[i].nbkeys;

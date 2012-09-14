@@ -1,31 +1,39 @@
-/******************************************************************************
-** @source AJAX taxonomy functions
+/* @source ajtax **************************************************************
+**
+** AJAX taxonomy functions
 **
 ** These functions control all aspects of AJAX taxonomy
 ** parsing and include simple utilities.
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version 1.0
+** @version $Revision: 1.15 $
 ** @modified Oct 5 pmr First version
+** @modified $Date: 2012/07/02 17:36:59 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "ajax.h"
+#include "ajlib.h"
+
+#include "ajtax.h"
+#include "ajlist.h"
+#include "ajtaxread.h"
+#include "ajtaxwrite.h"
 
 static AjPStr taxTempQry = NULL;
 
@@ -75,11 +83,13 @@ static void taxMakeQry(const AjPTax thys, AjPStr* qry);
 
 
 
-/* @func ajTaxNew ************************************************************
+/* @func ajTaxNew *************************************************************
 **
 ** Tax data constructor
 **
 ** @return [AjPTax] New object
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -104,6 +114,8 @@ AjPTax ajTaxNew(void)
 **
 ** @param [r] tax [const AjPTax] Taxon
 ** @return [AjPTax] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -186,12 +198,14 @@ AjPTax ajTaxNewTax(const AjPTax tax)
 
 
 
-/* @func ajTaxDel ************************************************************
+/* @func ajTaxDel *************************************************************
 **
 ** Taxonomy data destructor
 **
 ** @param [d] Ptax       [AjPTax*] Taxonomy data object to delete
 ** @return [void] 
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -293,6 +307,8 @@ void ajTaxDel(AjPTax *Ptax)
 **
 ** @return [const AjPStr] Database name
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajTaxGetDb(const AjPTax tax)
@@ -311,6 +327,8 @@ const AjPStr ajTaxGetDb(const AjPTax tax)
 **
 ** @return [const AjPStr] Returned id
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajTaxGetId(const AjPTax tax)
@@ -329,6 +347,8 @@ const AjPStr ajTaxGetId(const AjPTax tax)
 **
 ** @return [const AjPStr] Returned name
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajTaxGetName(const AjPTax tax)
@@ -347,6 +367,8 @@ const AjPStr ajTaxGetName(const AjPTax tax)
 **
 ** @return [ajuint] Parent id
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 ajuint ajTaxGetParent(const AjPTax tax)
@@ -357,7 +379,7 @@ ajuint ajTaxGetParent(const AjPTax tax)
 
 
 
-/* @func ajTaxGetQryC ********************************************************
+/* @func ajTaxGetQryC *********************************************************
 **
 ** Returns the query string of a taxonomy data object.
 ** Because this is a pointer to the real internal string
@@ -367,6 +389,8 @@ ajuint ajTaxGetParent(const AjPTax tax)
 **
 ** @param [r] tax [const AjPTax] Taxonomy data object.
 ** @return [const char*] Query as a character string.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -378,7 +402,7 @@ const char* ajTaxGetQryC(const AjPTax tax)
 
 
 
-/* @func ajTaxGetQryS ********************************************************
+/* @func ajTaxGetQryS *********************************************************
 **
 ** Returns the query string of a taxonomy data object.
 ** Because this is a pointer to the real internal string
@@ -388,6 +412,8 @@ const char* ajTaxGetQryC(const AjPTax tax)
 **
 ** @param [r] tax [const AjPTax] Taxonomy data object.
 ** @return [const AjPStr] Query as a string.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -414,6 +440,8 @@ const AjPStr ajTaxGetQryS(const AjPTax tax)
 **
 ** @return [const AjPStr] Returned rank
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 const AjPStr ajTaxGetRank(const AjPTax tax)
@@ -433,6 +461,8 @@ const AjPStr ajTaxGetRank(const AjPTax tax)
 **
 ** @return [ajuint] Number of taxons returned
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 ajuint ajTaxGetTree(const AjPTax tax, AjPList taxlist)
@@ -463,19 +493,21 @@ ajuint ajTaxGetTree(const AjPTax tax, AjPList taxlist)
 
     depth--;
 
-    return ajListGetLength(taxlist);
+    return (ajuint) ajListGetLength(taxlist);
 }
 
 
 
 
-/* @funcstatic taxMakeQry ***************************************************
+/* @funcstatic taxMakeQry *****************************************************
 **
 ** Sets the query for a taxonomy data object.
 **
 ** @param [r] thys [const AjPTax] Taxonomy data object
 ** @param [w] qry [AjPStr*] Query string in full
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -513,6 +545,8 @@ static void taxMakeQry(const AjPTax thys, AjPStr* qry)
 **
 ** @return [AjBool] True if node is hidden in GenBank taxonomy record
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajTaxIsHidden(const AjPTax tax)
@@ -526,7 +560,7 @@ AjBool ajTaxIsHidden(const AjPTax tax)
 
 
 
-/* @func ajTaxIsSpecies ********************************************************
+/* @func ajTaxIsSpecies *******************************************************
 **
 ** Tests whether a taxon is at the rank of 'species'
 **
@@ -534,6 +568,8 @@ AjBool ajTaxIsHidden(const AjPTax tax)
 **
 ** @return [AjBool] True if taxon is a species
 **
+**
+** @release 6.4.0
 ******************************************************************************/
 
 AjBool ajTaxIsSpecies(const AjPTax tax)
@@ -566,12 +602,14 @@ AjBool ajTaxIsSpecies(const AjPTax tax)
 
 
 
-/* @func ajTaxClear **********************************************************
+/* @func ajTaxClear ***********************************************************
 **
 ** Resets all data for a taxonomy data object so that it can be reused.
 **
 ** @param [u] tax [AjPTax] Taxonomy data object
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -657,6 +695,8 @@ void ajTaxClear(AjPTax tax)
 ** Taxonomy citation constructor
 **
 ** @return [AjPTaxcit] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -698,6 +738,8 @@ AjPTaxcit ajTaxcitNew(void)
 **
 ** @param [d] Pcit [AjPTaxcit*] Taxon citation object
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -756,6 +798,8 @@ void ajTaxcitDel(AjPTaxcit *Pcit)
 ** Taxonomy genetic code constructor
 **
 ** @return [AjPTaxcode] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -804,6 +848,8 @@ AjPTaxcode ajTaxcodeNew(void)
 ** Taxonomy deleted id constructor
 **
 ** @return [AjPTaxdel] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -852,6 +898,8 @@ AjPTaxdel ajTaxdelNew(void)
 ** Taxonomy division constructor
 **
 ** @return [AjPTaxdiv] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -900,6 +948,8 @@ AjPTaxdiv ajTaxdivNew(void)
 ** Taxonomy merged id  constructor
 **
 ** @return [AjPTaxmerge] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -946,11 +996,13 @@ AjPTaxmerge ajTaxmergeNew(void)
 
 
 
-/* @func ajTaxnameNew **********************************************************
+/* @func ajTaxnameNew *********************************************************
 **
 ** Taxonomy names constructor
 **
 ** @return [AjPTaxname] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -972,6 +1024,8 @@ AjPTaxname ajTaxnameNew(void)
 **
 ** @param [r] name [const AjPTaxname] Name
 ** @return [AjPTaxname] New object
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1014,12 +1068,14 @@ AjPTaxname ajTaxnameNewName(const AjPTaxname name)
 
 
 
-/* @func ajTaxnameDel **********************************************************
+/* @func ajTaxnameDel *********************************************************
 **
 ** Taxonomy names destructor
 **
 ** @param [d] Pname [AjPTaxname*] Taxon name object
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1074,11 +1130,13 @@ void ajTaxnameDel(AjPTaxname *Pname)
 
 
 
-/* @func ajTaxExit ***********************************************************
+/* @func ajTaxExit ************************************************************
 **
 ** Cleans up taxonomy processing internal memory
 **
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 

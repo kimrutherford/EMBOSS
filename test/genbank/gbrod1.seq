@@ -8,7 +8,7 @@ SOURCE      Mus musculus (house mouse)
   ORGANISM  Mus musculus
             Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
             Mammalia; Eutheria; Euarchontoglires; Glires; Rodentia;
-            Sciurognathi; Muroidea; Muridae; Murinae; Mus.
+            Sciurognathi; Muroidea; Muridae; Murinae; Mus; Mus.
 REFERENCE   1  (bases 1 to 366)
   AUTHORS   Wloch,M.K., Alexander,A.L., Pippen,A.M., Pisetsky,D.S. and
             Gilkeson,G.S.
@@ -75,6 +75,11 @@ FEATURES             Location/Qualifiers
                      /protein_id="CAA87081.1"
                      /db_xref="GI:603875"
                      /db_xref="GOA:P51489"
+                     /db_xref="InterPro:IPR000276"
+                     /db_xref="InterPro:IPR000732"
+                     /db_xref="InterPro:IPR001760"
+                     /db_xref="InterPro:IPR017452"
+                     /db_xref="InterPro:IPR019477"
                      /db_xref="UniProtKB/Swiss-Prot:P51489"
                      /translation="MNGTEGPNFYVPFSNITGVVRSPFEQPQYYLAEPWQFSMLAAYM
                      FLLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGY

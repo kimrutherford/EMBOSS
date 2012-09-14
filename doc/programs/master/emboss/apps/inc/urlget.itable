@@ -48,7 +48,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-url" associated url qualifiers
+<td align="left" colspan=5>"-url" associated url qualifiers
 </td>
 </tr>
 
@@ -101,7 +101,7 @@
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outurl qualifiers
+<td align="left" colspan=5>"-outfile" associated outurl qualifiers
 </td>
 </tr>
 

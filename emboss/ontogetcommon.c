@@ -184,7 +184,7 @@ int main(int argc, char **argv)
         if(iterms)
             ajTableMergeAnd(alltable, newtable);
 
-        ajDebug("id: '%S' saved %u\n",
+        ajDebug("id: '%S' saved %Lu\n",
                ajOboGetId(obo),
                ajTableGetLength(alltable));
 

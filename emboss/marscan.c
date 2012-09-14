@@ -261,12 +261,12 @@ int main(int argc, char **argv)
 	if(hits8 || hits8rev)
 	{
 	    ajListPushlist(l8, &l8rev);
-	    ajListSort(l8, embPatRestrictStartCompare);
+	    ajListSort(l8, &embPatRestrictStartCompare);
 	}
 	if((hits16 || hits16rev))
 	{
 	    ajListPushlist(l16, &l16rev);
-	    ajListSort(l16, embPatRestrictStartCompare);
+	    ajListSort(l16, &embPatRestrictStartCompare);
 	}
 
 
@@ -708,19 +708,19 @@ static void marscan_output_stored_match(AjBool stored_match,
 
 
     ajFmtPrintS(&tmp, "*type MAR/SAR recognition site (MRS)");
-    ajFeatTagAdd(feature, NULL, tmp);
+    ajFeatTagAddSS(feature, NULL, tmp);
 
     ajFmtPrintS(&tmp, "*start8bp %d", s8);
-    ajFeatTagAdd(feature, NULL, tmp);
+    ajFeatTagAddSS(feature, NULL, tmp);
 
     ajFmtPrintS(&tmp, "*end8bp %d", e8);
-    ajFeatTagAdd(feature, NULL, tmp);
+    ajFeatTagAddSS(feature, NULL, tmp);
 
     ajFmtPrintS(&tmp, "*start16bp %d", s16);
-    ajFeatTagAdd(feature, NULL, tmp);
+    ajFeatTagAddSS(feature, NULL, tmp);
 
     ajFmtPrintS(&tmp, "*end16bp %d", e16);
-    ajFeatTagAdd(feature, NULL, tmp);
+    ajFeatTagAddSS(feature, NULL, tmp);
 
     ajStrDel(&source);
     ajStrDel(&type);

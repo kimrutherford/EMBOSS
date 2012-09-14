@@ -62,7 +62,7 @@ print HTMLB  "<html><head><title>$title</title></head><body bgcolor=\"#ffffff\">
 print HTML  "<h1>$pubout</h1>\n";
 print HTMLB  "<h1>$pubout</h1>\n";
 
-foreach $x ("alias", "attr", "cc", "iterator", "other") {
+foreach $x ("alias", "attr", "cc", "iterator", "other", "value") {
     $tables{$x} = 3;
 }
 
@@ -75,7 +75,7 @@ foreach $x ("del", "ass", "set", "mod") {
     $tables{$x} = 2;
 }
 
-foreach $x ("author", "version", "modified", "source", "plus", "funclist",
+foreach $x ("source", "plus", "funclist",
 	    "prog", "macro", "func", "funcstatic", "param", "return",
 	    "see", "error", "cre", "ure", "exception", "cc",
 	    "category", "fcategory", "filesection", "suffix", "datasection",
@@ -98,6 +98,8 @@ foreach $x ("author", "version", "modified", "source", "plus", "funclist",
 ##############################################################
 
 while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
+    $partnum=0;
+    $mastertoken="undefined";
     $ccfull = $&;
     $rest = $POSTMATCH;
 
@@ -114,11 +116,14 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	$data = $1;
 	$token = $2;
 
+	if(!$partnum) {$mastertoken = $token}
+	$partnum++;
+
 	if (defined($tables{$token}) && $tables{$token} == 2) {
 	    print "Obsolete token $lasttoken - use $obsolete{$token}\n";
 	}
 	if ($token ne $lasttoken) {
-	    if ($tables{$lasttoken}) {print $OFILE "</table>\n"}
+	    if ($intable && $tables{$lasttoken}) {print $OFILE "</table>\n"}
 	    $intable = 0;
 	}
 
@@ -127,6 +132,9 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	    $OFILE = HTML;
 	    $countglobal++;
 	    $type = $token;
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
 	    if(!defined($name)) {
 		print "bad data definition: not parsed\n";
@@ -167,6 +175,7 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 ###	    print STDERR "old dattrs '$dattrs'\n";
 	    $dattrs =~ s/struct\s+[\{][^\}]+[\}]\s+[^;]+;\s+//g;
 	    $dattrs =~ s/union\s+[\{][^\}]+[\}]/union /g;
+	    $delse = 0;
 ###	    print STDERR "mod dattrs '$dattrs'\n";
 	    while ($dattrs =~ /([^;]+)[;]\s*([\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/][^\n]*[\n])?/gos) {
 		$dattr = $1;
@@ -175,9 +184,10 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 		$dattr =~ s/\s+$//gos;
 		$dattr =~ s/\s+/ /gos;
 		$dattr =~ s/ ([*]+)/$1 /gos;
-		if($dattr =~ /^[\#]else /gos) {next}
-		$dattr =~ s/^[\#]endif //gos;
+		if($dattr =~ s/^[\#]endif //gos) {$delse = 0}
+		if($dattr =~ /^[\#]else /gos) {$delse = 1}
 		$dattr =~ s/^[\#]ifn?def \S+ //gos;
+		if($delse) {next}
 		push @lattrs, $dattr;
 		if (defined($dcc) && $dcc ne "") {
 		    $icc++;
@@ -189,9 +199,19 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	}
 
 	elsif ($token eq "conststatic")  {
+	    while($rest =~ /^(\s*\n)*?static\s+const\s+[^*=;\(\)]*\s([^*]\S+)\s*[=]([^;]+);\s*?$/gosm) {
+		$cvar = $2;
+		push @lattrs, $cvar;
+		$rest = $POSTMATCH;
+}
 	}
 
 	elsif ($token eq "const")  {
+	    while($rest =~ /^(\s*\n)*?static\s+const\s+[^*=;\(\)]*\s([^*]\S+)\s*[=]([^;]+);\s*?$/gosm) {
+		$cvar = $2;
+		push @lattrs, $cvar;
+		$rest = $POSTMATCH;
+}
 	}
 
 	elsif ($token eq "datastatic")  {
@@ -199,6 +219,9 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	    $OFILE = HTMLB;
 	    $countstatic++;
 	    $type = $token;
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
 	    print "Static data type $name\n";
 	    if(!defined($name)) {
@@ -257,6 +280,9 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	    $OFILE = HTMLB;
 	    $countstatic++;
 	    $type = $token;
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
 	    if(!defined($name)) {
 		print "bad datatype definition: not parsed\n";
@@ -267,8 +293,12 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	    $dtypeb = "";
 	    $ddefine = "";
 	    ($dattrtype, $dtypedefname) =
-		$rest =~ /^\s*typedef\s*([^\;]+\S)\s+(\S+)\s*[;]/os;
+		$rest =~ /^\s*typedef\s*([^\(\;]+[^\(\)\s])\s+[\(][\*]([^\)]+)[\)]\s*[\(][^\)]+[\)]\s*[;]/os;
 
+	    if(!defined($dtypedefname)){
+		($dattrtype, $dtypedefname) =
+		    $rest =~ /^\s*typedef\s*([^\;]+[^\(\)\s])\s+(\S+)\s*[;]/os;
+	    }
 	    print "Typedef data type $name\n";
 	    print $OFILE "<h2>Typedef data type $name</h2>\n";
 	    $srest = $frest;
@@ -299,6 +329,126 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	    print SRS "DE $srest";
 	    print SRS "XX\n";
 
+	}
+
+	elsif ($token eq "enum")  {
+	    $nattr = 0;
+	    $OFILE = HTML;
+	    $countglobal++;
+	    $type = $token;
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
+	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
+	    if(!defined($name)) {
+		print "bad data definition: not parsed\n";
+		$name = "";
+		next;
+	    }
+	    $etype = "";
+	    $etypeb = "";
+	    ($etype, $eattrs, $etypeb) =
+		$rest =~ /^\s*([^\{]*)\{(.*?)\n[\}]([^;]*)[;]\s*/os;
+
+	    print "Enumeration $name\n";
+	    print $OFILE "<hr><h2>Enum ".srsdref($name)."</h2>\n";
+	    $srest = $frest;
+	    if($frest =~ /<(.*)>/) {print "bad HTML tag <$1>\n"}
+	    $frest =~ s/\n\n/\n<p>\n/gos;
+	    print $OFILE "$frest\n";
+
+	    print SRS "ID $name\n";
+	    print SRS "TY public\n";
+	    print SRS "MO $pubout\n";
+	    print SRS "LB $lib\n";
+	    print SRS "XX\n";
+
+	    if ($exttype ne "include") {
+		print "bad scope 'enum' in $exttype file\n";
+	    }
+	    if (!$frest) {print "bad data type '$name', no description\n"}
+
+	    $srest =~ s/\n\n+$/\n/gos;
+	    $srest =~ s/\n\n\n+/\n\n/gos;
+	    $srest =~ s/\n([^\n])/\nDE $1/gos;
+	    $srest =~ s/\n\n/\nDE\n/gos;
+	    print SRS "DE $srest";
+	    print SRS "XX\n";
+
+	    $icc=0;
+	    @lattrs = ();
+	    while ($eattrs =~ /([^,]+)[,]?\s*([\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/][^\n]*[\n])?/gos) {
+		$eattr = $1;
+		$ecc = $2;
+		$eattr =~ s/\s+//gos;
+		push @lattrs, $eattr;
+		if (defined($ecc) && $ecc ne "") {
+		    $icc++;
+		}
+	    }
+	    if ($icc) {
+		print "bad enum definition $name, has $icc comments\n";
+	    }
+	}
+
+	elsif ($token eq "enumstatic")  {
+	    $nattr = 0;
+	    $OFILE = HTML;
+	    $countglobal++;
+	    $type = $token;
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
+	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
+	    if(!defined($name)) {
+		print "bad data definition: not parsed\n";
+		$name = "";
+		next;
+	    }
+	    $etype = "";
+	    $etypeb = "";
+	    ($etype, $eattrs, $etypeb) =
+		$rest =~ /^\s*([^\{]*)\{(.*?)\n[\}]([^;]*)[;]\s*/os;
+
+	    print "Enumeration $name\n";
+	    print $OFILE "<hr><h2>Enum ".srsdref($name)."</h2>\n";
+	    $srest = $frest;
+	    if($frest =~ /<(.*)>/) {print "bad HTML tag <$1>\n"}
+	    $frest =~ s/\n\n/\n<p>\n/gos;
+	    print $OFILE "$frest\n";
+
+	    print SRS "ID $name\n";
+	    print SRS "TY public\n";
+	    print SRS "MO $pubout\n";
+	    print SRS "LB $lib\n";
+	    print SRS "XX\n";
+
+	    if ($exttype ne "source") {
+		print "bad scope 'enumstatic' in $exttype file\n";
+	    }
+	    if (!$frest) {print "bad data type '$name', no description\n"}
+
+	    $srest =~ s/\n\n+$/\n/gos;
+	    $srest =~ s/\n\n\n+/\n\n/gos;
+	    $srest =~ s/\n([^\n])/\nDE $1/gos;
+	    $srest =~ s/\n\n/\nDE\n/gos;
+	    print SRS "DE $srest";
+	    print SRS "XX\n";
+
+	    $icc=0;
+	    @lattrs = ();
+	    while ($eattrs =~ /([^,]+)[,]?\s*([\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/][^\n]*[\n])?/gos) {
+		$eattr = $1;
+		$ecc = $2;
+		$eattr =~ s/\s+//gos;
+		push @lattrs, $eattr;
+		if (defined($ecc) && $ecc ne "") {
+		    $icc++;
+		}
+	    }
+	    if ($icc) {
+		print "bad enumstatic definition $name, has $icc comments\n";
+	    }
 	}
 
 	elsif (defined($tables{$token}) && $tables{$token} == 1) {
@@ -573,8 +723,12 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	    if (!$intable) {
 		print $OFILE "<h3>Alias name(s)</h3>\n";
 		print $OFILE "<p><table border=3>\n";
-		print $OFILE "<tr><th>Name</th><th>Description</th></tr>\n";
+#		print $OFILE "<tr><th>Name</th><th>Description</th></tr>\n";
+		print $OFILE "<tr><th>Name</th></tr>\n";
 		$intable = 1;
+	    }
+	    if($partnum == 1) {
+		print "bad syntax \@$token cannot be the start\n";
 	    }
 	    ($fname,$prest) = ($data =~ m/\S+\s*(\S*)\s*(.*)/gos);
 
@@ -589,7 +743,8 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	    print SRS "TX\n";
 
 	    ###if (!$prest) {print "bad alias spec '$fname', no description\n"}
-	    print $OFILE "<tr><td>".srsdrefa($fname)."</td><td>$prest</td></tr>\n";
+#	    print $OFILE "<tr><td>".srsdrefa($fname)."</td><td>$prest</td></tr>\n";
+	    print $OFILE "<tr><td>".srsdrefa($fname)."</td></tr>\n";
 	}
 
 	elsif ($token eq "iterator")  {
@@ -598,6 +753,9 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 		print $OFILE "<p><table border=3>\n";
 		print $OFILE "<tr><th>Name</th><th>Description</th></tr>\n";
 		$intable = 1;
+	    }
+	    if($partnum == 1) {
+		print "bad syntax \@$token cannot be the start\n";
 	    }
 	    ($fname,$prest) = ($data =~ m/\S+\s*(\S*)\s*(.*)/gos);
 
@@ -622,6 +780,9 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 		print $OFILE "<p><table border=3>\n";
 		print $OFILE "<tr><th>Name</th><th>Type</th><th>Description</th></tr>\n";
 		$intable = 1;
+	    }
+	    if($partnum == 1) {
+		print "bad syntax \@$token cannot be the start\n";
 	    }
 	    ($aname,$atype, $prest) = ($data =~ m/\S+\s*(\S*)\s*[\[]([\[\]A-Za-z0-9_* \(\)]+)[\]]\s*(.*)/gos);
 
@@ -649,7 +810,7 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 ###	    print STDERR "dattr: '$dattr'\n";
 		if ($dattr =~ /.*[\(][*]+[^\)]+\)/) {
 		    ($dattrtype,$dattrname) = $dattr =~ /(.*\S)\s*[\(][*]+([^\)]+)\)/;
-		    $dattrtype="(".$dattrtype."*)";
+		    $dattrtype="$dattrtype function";
 		}
 		else {
 		    ($dattrtype,$dattrname) = $dattr =~ /(.*\S)\s+(\S+)$/;
@@ -673,13 +834,83 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 ###	    print "attr: '$dattrname' type: '$dattrtype'\n";
 
 	    if ($atype ne $dattrtype) {
-		print "bad cast <$atype> <$dattrtype>\n";
+		print "bad cast <$atype> <$dattrtype> for '$dattrname'\n";
 	    }
 	    if ($aname ne $dattrname) {
 		print "bad attribute  <$aname> <$dattrname>\n";
 	    }
 
-	    print $OFILE "<tr><td>".srsdref($aname)."</td><td>$prest</td></tr>\n";
+	    print $OFILE "<tr><td>$aname</td><td>".srsdref($atype)."</td><td>$prest</td></tr>\n";
+	}
+
+	elsif ($token eq "value")  {
+	    $nattr++;
+	    if (!$intable) {
+		print $OFILE "<h3>Enumerated value(s)</h3>\n";
+		print $OFILE "<p><table border=3>\n";
+#		print $OFILE "<tr><th>Name</th><th>Description</th></tr>\n";
+		print $OFILE "<tr><th>Name</th></tr>\n";
+		$intable = 1;
+	    }
+	    if($partnum == 1) {
+		print "bad syntax \@$token cannot be the start\n";
+	    }
+	    ($vname,$prest) = ($data =~ m/\S+\s*(\S*)\s*(.*)/gos);
+
+	    $vrest = $prest;
+	    $vrest =~ s/\n\n+$/\n/gos;
+	    $vrest =~ s/\n\n\n+/\n\n/gos;
+	    $vrest =~ s/\n([^\n])/\nTD $1/gos;
+	    $vrest =~ s/\n\n/\nTD\n/gos;
+	    $vrest =~ s/^$/\n/gos;
+	    print SRS "VN $vname\n";
+	    print SRS "VD $vrest";
+	    print SRS "VX\n";
+
+	    if ($#lattrs >= 0) {
+		$vattr = shift @lattrs;
+###	    print STDERR "dattr: '$dattr'\n";
+		($vattrname, $vattrvalue) = $vattr =~ /^([^=]+)[=]?(\S*)$/;
+	    }
+	    else {
+		$vattrname = "unknown";
+		if(defined($vattrvalue)){undefine $vattrvalue}
+	    }
+###	    print "value: '$dattrname'\n";
+
+	    if ($vname ne $vattrname) {
+		print "bad value  <$vname> <$vattrname>\n";
+	    }
+
+	    print $OFILE "<tr><td>$vname</td><td>$prest</td></tr>\n";
+	}
+
+	elsif ($token eq "include")  {
+	    if($partnum != 1) {
+		print "bad syntax \@$token must be at start\n";
+	    }
+	    next;
+	}
+
+	elsif ($token eq "author")  {
+	    if($mastertoken ne "include" && $mastertoken ne "source") {
+		print "bad syntax \@$token must be in \@include or \@source\n";
+	    }
+	    next;
+	}
+
+	elsif ($token eq "version")  {
+	    if($mastertoken ne "include" && $mastertoken ne "source") {
+		print "bad syntax \@$token must be in \@include or \@source\n";
+	    }
+	    next;
+	}
+
+	elsif ($token eq "modified")  {
+	    if($mastertoken ne "include" && $mastertoken ne "source") {
+		print "bad syntax \@$token must be in \@include or \@source\n";
+	    }
+	    next;
 	}
 
 	elsif ($token eq "section")  {

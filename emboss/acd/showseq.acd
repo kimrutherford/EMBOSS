@@ -1,12 +1,12 @@
 application: showseq [
-  documentation: "Displays sequences with features in pretty format"
+  documentation: "Display sequences with features in pretty format"
   groups: "Nucleic:Translation, Nucleic:Restriction"
-  relations: "EDAM:0000108 topic Translation"
-  relations: "EDAM:0000100 topic Nucleic acid restriction"
-  relations: "EDAM:0000092 topic Data rendering and visualisation"
-  relations: "EDAM:0000371 operation DNA translation"
-  relations: "EDAM:0000575 operation Restriction map rendering"
-  relations: "EDAM:0000564 operation Sequence rendering"
+  relations: "EDAM_topic:0108 Translation"
+  relations: "EDAM_topic:0100 Nucleic acid restriction"
+  relations: "EDAM_topic:0092 Data visualisation"
+  relations: "EDAM_operation:0371 DNA translation"
+  relations: "EDAM_operation:0575 Restriction map rendering"
+  relations: "EDAM_operation:0564 Sequence rendering"
 ]
 
 section: input [
@@ -18,14 +18,14 @@ section: input [
     parameter: "Y"
     features: "Y"
     type: "gapdna"
-    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
+    relations: "EDAM_data:2887 Sequence record (nucleic acid)"
   ]
 
   datafile: mfile [
     default: "Emethylsites.dat"
     information: "Restriction enzyme methylation data file"
     knowntype: "restriction enzyme methylation data"
-    relations: "EDAM:0001517 data Protein report (restriction enzyme)"
+    relations: "EDAM_data:1517 Restriction enzyme property"
   ]
 
 endsection: input
@@ -48,7 +48,7 @@ section: required [
     delimiter: ","
     codedelimiter: ":"
     information: "Display format"
-    relations: "EDAM:0002152 data Rendering parameter"
+    relations: "EDAM_data:2152 Rendering parameter"
   ]
 
   list: things [
@@ -72,7 +72,7 @@ section: required [
            the page. For example if you wish to see things displayed in the
            order: sequence, complement sequence, ticks line, frame 1
            translation, blank line; then you should enter 'S,C,T,1,B'."
-    relations: "EDAM:0002152 data Rendering parameter"
+    relations: "EDAM_data:2152 Rendering parameter"
   ]
 
 endsection: required
@@ -96,7 +96,7 @@ section: additional [
            1:45, 67=99;765..888"
     expected: "If this is left blank the complete sequence is
                translated."
-    relations: "EDAM:0001017 data Sequence range"
+    relations: "EDAM_data:1017 Sequence range"
   ]
 
   range: revtranslate [
@@ -113,7 +113,7 @@ section: additional [
            888..765, 99=67; 45:1"
     expected: "If this is left blank the complete reverse sequence is
                translated."
-    relations: "EDAM:0001017 data Sequence range"
+    relations: "EDAM_data:1017 Sequence range"
   ]
 
   range: uppercase [
@@ -131,7 +131,7 @@ section: additional [
            1,5,8,10,23,45,57,99"
     expected: "If this is left blank, then the sequence case is
                left alone."
-    relations: "EDAM:0001017 data Sequence range"
+    relations: "EDAM_data:1017 Sequence range"
   ]
 
   range: highlight [
@@ -149,7 +149,7 @@ section: additional [
            1-100 green 120-156 red \
            A file of ranges to colour (one range per line) can be specified
            as '@filename'."
-    relations: "EDAM:0001017 data Sequence range"
+    relations: "EDAM_data:1017 Sequence range"
   ]
 
   range: annotation [
@@ -171,7 +171,7 @@ section: additional [
            as '@filename'."
     expected: "If this is left blank, then no annotation is
                added."
-    relations: "EDAM:0001017 data Sequence range"
+    relations: "EDAM_data:1017 Sequence range"
   ]
 
   string: enzymes [
@@ -197,7 +197,7 @@ section: additional [
            HinfI \
            PpiI"
     knowntype: "enzyme list"
-    relations: "EDAM:0001013 identifier Restriction enzyme name"
+    relations: "EDAM_identifier:1013 Restriction enzyme name"
   ]
 
   list: table [
@@ -219,7 +219,7 @@ section: additional [
     delimiter: ";"
     codedelimiter: ":"
     information: "Genetic code to use"
-    relations: "EDAM:0002128 identifier Genetic code name"
+    relations: "EDAM_identifier:2128 Genetic code name"
   ]
 
   section: featuresection [
@@ -242,7 +242,7 @@ section: additional [
              with the character '|', eg: \
              gene* | embl"
       knowntype: "feature source list"
-    relations: "EDAM:0000856 data Sequence feature source"
+    relations: "EDAM_data:0856 Sequence feature source"
     ]
 
     string: typematch [
@@ -261,7 +261,7 @@ section: additional [
              with the character '|', eg: \
              *UTR | intron"
       knowntype: "feature key list"
-    relations: "EDAM:0001020 data Sequence feature key"
+    relations: "EDAM_data:1020 Sequence feature key"
     ]
 
     integer: sensematch [
@@ -275,7 +275,7 @@ section: additional [
       help: "By default any feature type in the feature table is
              shown. You can set this to match any feature sense you wish to
              show. 0 - any sense, 1 - forward sense, -1 - reverse sense"
-    relations: "EDAM:0000853 data DNA sense specification"
+    relations: "EDAM_data:0853 DNA sense specification"
     ]
 
     float: minscore [
@@ -283,7 +283,7 @@ section: additional [
       default: "0.0"
       information: "Minimum score of feature to display"
       help: "Minimum score of feature to display (see also maxscore)"
-    relations: "EDAM:0001772 data Score or penalty"
+    relations: "EDAM_data:1772 Score or penalty"
     ]
 
     float: maxscore [
@@ -293,7 +293,7 @@ section: additional [
       help: "Maximum score of feature to display. \
              If both minscore and maxscore are zero (the default),
              then any score is ignored"
-    relations: "EDAM:0001772 data Score or penalty"
+    relations: "EDAM_data:1772 Score or penalty"
     ]
 
     string: tagmatch [
@@ -316,7 +316,7 @@ section: additional [
              the character '|', eg: \
              gene | label"
       knowntype: "feature tag list"
-    relations: "EDAM:0001021 data Sequence feature qualifier"
+    relations: "EDAM_data:1021 Sequence feature qualifier"
     ]
 
     string: valuematch [
@@ -340,7 +340,7 @@ section: additional [
              names with the character '|', eg: \
              pax* | 10"
       knowntype: "feature tagvalue list"
-    relations: "EDAM:0001021 data Sequence feature qualifier"
+    relations: "EDAM_data:1021 Sequence feature qualifier"
     ]
 
     boolean: stricttags [
@@ -352,7 +352,7 @@ section: additional [
              feature will be displayed. If this is set to be true, then only
              those tag/value pairs in a feature that match the specified tag
              and value will be displayed."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
   endsection: featuresection
@@ -376,7 +376,7 @@ section: advanced [
              recognition site is indicated by a row of '===' characters and
              the cut site is pointed to by a '>' character in the forward
              sense, or a '<' in the reverse sense strand."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     integer: mincuts [
@@ -387,7 +387,7 @@ section: advanced [
       help: "This sets the minimum number of cuts for any restriction
              enzyme that will be considered. Any enzymes that cut fewer times
              than this will be ignored."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     integer: maxcuts [
@@ -397,7 +397,7 @@ section: advanced [
       help: "This sets the maximum number of cuts for any restriction
              enzyme that will be considered. Any enzymes that cut more times
              than this will be ignored."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     integer: sitelen [
@@ -408,7 +408,7 @@ section: advanced [
       help: "This sets the minimum length of the restriction enzyme
              recognition site. Any enzymes with sites shorter than this will
              be ignored."
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
     ]
 
     boolean: single [
@@ -417,7 +417,7 @@ section: advanced [
       help: "If this is set then this forces the values of the mincuts
              and maxcuts qualifiers to both be 1. Any other value you may
              have set them to will be ignored."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     boolean: blunt [
@@ -425,7 +425,7 @@ section: advanced [
       information: "Allow blunt end RE cutters"
       help: "This allows those enzymes which cut at the same position
              on the forward and reverse strands to be considered."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     boolean: sticky [
@@ -434,7 +434,7 @@ section: advanced [
       help: "This allows those enzymes which cut at different
              positions on the forward and reverse strands, leaving an
              overhang, to be considered."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     boolean: ambiguity [
@@ -442,7 +442,7 @@ section: advanced [
       information: "Allow ambiguous RE matches"
       help: "This allows those enzymes which have one or more 'N'
              ambiguity codes in their pattern to be considered"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     boolean: plasmid [
@@ -451,7 +451,7 @@ section: advanced [
       help: "If this is set then this allows searches for restriction
              enzyme recognition site and cut positions that span the end of
              the sequence to be considered."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     boolean: methylation [
@@ -459,7 +459,7 @@ section: advanced [
       information: "Use methylation data"
       help: "If this is set then RE recognition sites will not match
              methylated bases."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     boolean: commercial [
@@ -475,7 +475,7 @@ section: advanced [
              enzymes names that you have asked to be searched for, and which
              cut, will be reported whether or not they have a commercial
              supplier."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
     boolean: limit [
@@ -491,7 +491,7 @@ section: advanced [
              will be reported. You might like to set this to false if you are
              supplying an explicit set of enzymes rather than searching
              'all' of them."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
     ]
 
   endsection: remapsection
@@ -503,41 +503,41 @@ section: advanced [
     help: "This sets the minimum size of Open Reading Frames (ORFs) to
            display in the translations. All other translation regions are
            masked by changing the amino acids to '-' characters."
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
   boolean: threeletter [
     default: "N"
     information: "Display protein sequences in three-letter
                   code"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: number [
     default: "N"
     information: "Number the sequences"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   integer: width [
     default: "60"
     minimum: "1"
     information: "Width of sequence to display"
-    relations: "EDAM:0002152 data Rendering parameter"
+    relations: "EDAM_data:2152 Rendering parameter"
   ]
 
   integer: length [
     default: "0"
     minimum: "0"
     information: "Line length of page (0 for indefinite)"
-    relations: "EDAM:0002152 data Rendering parameter"
+    relations: "EDAM_data:2152 Rendering parameter"
   ]
 
   integer: margin [
     default: "10"
     minimum: "0"
     information: "Margin around sequence for numbering"
-    relations: "EDAM:0002152 data Rendering parameter"
+    relations: "EDAM_data:2152 Rendering parameter"
   ]
 
   boolean: name [
@@ -545,7 +545,7 @@ section: advanced [
     information: "Show sequence ID"
     help: "Set this to be false if you do not wish to display the ID
            name of the sequence"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: description [
@@ -553,20 +553,20 @@ section: advanced [
     information: "Show description"
     help: "Set this to be false if you do not wish to display the
            description of the sequence"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   integer: offset [
     default: "1"
     information: "Offset to start numbering the sequence from"
-    relations: "EDAM:0002145 data Sequence offset"
+    relations: "EDAM_data:2145 Sequence offset"
   ]
 
   boolean: html [
     default: "N"
     information: "Use HTML formatting"
     outputmodifier: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: advanced
@@ -579,7 +579,7 @@ section: output [
   outfile: outfile [
     parameter: "Y"
     knowntype: "showseq output"
-    relations: "EDAM:0001276 data Nucleic acid features"
+    relations: "EDAM_data:1276 Nucleic acid features"
   ]
 
 endsection: output

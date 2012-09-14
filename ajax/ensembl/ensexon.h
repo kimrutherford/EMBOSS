@@ -1,10 +1,37 @@
+/* @include ensexon ***********************************************************
+**
+** Ensembl Exon functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.25 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSEXON_H
 #define ENSEXON_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensfeature.h"
 
@@ -13,23 +40,23 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -53,7 +80,7 @@ EnsPExon ensExonNewIni(EnsPExonadaptor ea,
 
 EnsPExon ensExonNewRef(EnsPExon exon);
 
-void ensExonDel(EnsPExon* Pexon);
+void ensExonDel(EnsPExon *Pexon);
 
 EnsPExonadaptor ensExonGetAdaptor(const EnsPExon exon);
 
@@ -135,29 +162,42 @@ EnsPExon ensExonTransform(EnsPExon exon,
                           const AjPStr csname,
                           const AjPStr csversion);
 
-AjBool ensExonFetchDisplayidentifier(const EnsPExon exon, AjPStr* Pidentifier);
+AjBool ensExonFetchDisplayidentifier(const EnsPExon exon, AjPStr *Pidentifier);
 
-AjBool ensExonFetchSequenceSliceSeq(EnsPExon exon, AjPSeq* Psequence);
+AjBool ensExonFetchSequenceSliceSeq(EnsPExon exon, AjPSeq *Psequence);
 
-AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr* Psequence);
+AjBool ensExonFetchSequenceSliceStr(EnsPExon exon, AjPStr *Psequence);
 
 AjBool ensExonFetchSequenceTranslationSeq(EnsPExon exon,
                                           EnsPTranscript transcript,
                                           EnsPTranslation translation,
-                                          AjPSeq* Psequence);
+                                          AjPSeq *Psequence);
 
 AjBool ensExonFetchSequenceTranslationStr(EnsPExon exon,
                                           EnsPTranscript transcript,
                                           EnsPTranslation translation,
-                                          AjPStr* Psequence);
+                                          AjPStr *Psequence);
 
 AjBool ensExonMatch(const EnsPExon exon1, const EnsPExon exon2);
 
 AjBool ensExonSimilarity(const EnsPExon exon1, const EnsPExon exon2);
 
+/* AJAX List of Ensembl Exon objects */
+
+AjBool ensListExonSortEndAscending(AjPList exons);
+
+AjBool ensListExonSortEndDescending(AjPList exons);
+
+AjBool ensListExonSortIdentifierAscending(AjPList exons);
+
 AjBool ensListExonSortStartAscending(AjPList exons);
 
 AjBool ensListExonSortStartDescending(AjPList exons);
+
+AjBool ensSequenceAddFeatureExon(AjPSeq seq,
+                                 EnsPExon exon,
+                                 ajint rank,
+                                 AjPFeature *Pfeature);
 
 /* Ensembl Exon Adaptor */
 
@@ -167,7 +207,7 @@ EnsPExonadaptor ensRegistryGetExonadaptor(
 EnsPExonadaptor ensExonadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensExonadaptorDel(EnsPExonadaptor* Pea);
+void ensExonadaptorDel(EnsPExonadaptor *Pea);
 
 EnsPDatabaseadaptor ensExonadaptorGetDatabaseadaptor(EnsPExonadaptor ea);
 
@@ -191,12 +231,12 @@ AjBool ensExonadaptorFetchAllbyTranscript(EnsPExonadaptor ea,
 
 AjBool ensExonadaptorFetchByIdentifier(EnsPExonadaptor ea,
                                        ajuint identifier,
-                                       EnsPExon* Pexon);
+                                       EnsPExon *Pexon);
 
 AjBool ensExonadaptorFetchByStableidentifier(EnsPExonadaptor ea,
                                              const AjPStr stableid,
                                              ajuint version,
-                                             EnsPExon* Pexon);
+                                             EnsPExon *Pexon);
 
 AjBool ensExonadaptorRetrieveAllIdentifiers(EnsPExonadaptor ea,
                                             AjPList identifiers);

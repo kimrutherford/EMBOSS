@@ -1,10 +1,37 @@
+/* @include ensdensity ********************************************************
+**
+** Ensembl Density functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.21 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSDENSITY_H
 #define ENSDENSITY_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensfeature.h"
 
@@ -13,9 +40,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 /* @const EnsPDensityfeatureadaptor *******************************************
 **
@@ -33,10 +60,14 @@ AJ_BEGIN_DECLS
 
 
 
-/* @const EnsEDensitytypeType *************************************************
+/* @enum EnsEDensitytypeType **************************************************
 **
-** Ensembl Density Type type enumeration.
+** Ensembl Density Type type enumeration
 **
+** @value ensEDensitytypeTypeNULL Null
+** @value ensEDensitytypeTypeSum Sum
+** @value ensEDensitytypeTypeRatio Ratio
+** @@
 ******************************************************************************/
 
 typedef enum EnsODensitytypeType
@@ -49,9 +80,9 @@ typedef enum EnsODensitytypeType
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPDensitytypeadaptor ***********************************************
 **
@@ -150,9 +181,9 @@ typedef struct EnsSDensityfeature
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -171,7 +202,7 @@ EnsPDensitytype ensDensitytypeNewIni(EnsPDensitytypeadaptor dta,
 
 EnsPDensitytype ensDensitytypeNewRef(EnsPDensitytype dt);
 
-void ensDensitytypeDel(EnsPDensitytype* Pdt);
+void ensDensitytypeDel(EnsPDensitytype *Pdt);
 
 EnsPDensitytypeadaptor ensDensitytypeGetAdaptor(const EnsPDensitytype dt);
 
@@ -209,7 +240,7 @@ size_t ensDensitytypeCalculateMemsize(const EnsPDensitytype dt);
 
 EnsEDensitytypeType ensDensitytypeTypeFromStr(const AjPStr type);
 
-const char* ensDensitytypeTypeToChar(const EnsEDensitytypeType dtt);
+const char *ensDensitytypeTypeToChar(const EnsEDensitytypeType dtt);
 
 /* Ensembl Density Type Adaptor */
 
@@ -219,7 +250,7 @@ EnsPDensitytypeadaptor ensRegistryGetDensitytypeadaptor(
 EnsPDensitytypeadaptor ensDensitytypeadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensDensitytypeadaptorDel(EnsPDensitytypeadaptor* Pdta);
+void ensDensitytypeadaptorDel(EnsPDensitytypeadaptor *Pdta);
 
 EnsPBaseadaptor ensDensitytypeadaptorGetBaseadaptor(
     const EnsPDensitytypeadaptor dta);
@@ -239,7 +270,7 @@ AjBool ensDensitytypeadaptorFetchAllbyAnalysisname(
 AjBool ensDensitytypeadaptorFetchByIdentifier(
     EnsPDensitytypeadaptor dta,
     ajuint identifier,
-    EnsPDensitytype* Pdt);
+    EnsPDensitytype *Pdt);
 
 /* Ensembl Density Feature */
 
@@ -253,7 +284,7 @@ EnsPDensityfeature ensDensityfeatureNewIni(EnsPDensityfeatureadaptor dfa,
 
 EnsPDensityfeature ensDensityfeatureNewRef(EnsPDensityfeature df);
 
-void ensDensityfeatureDel(EnsPDensityfeature* Pdf);
+void ensDensityfeatureDel(EnsPDensityfeature *Pdf);
 
 EnsPDensityfeatureadaptor ensDensityfeatureGetAdaptor(
     const EnsPDensityfeature df);
@@ -285,6 +316,14 @@ AjBool ensDensityfeatureTrace(const EnsPDensityfeature df, ajuint level);
 
 size_t ensDensityfeatureCalculateMemsize(const EnsPDensityfeature df);
 
+/* AJAX List of Ensembl Density Feature objects */
+
+AjBool ensListDensityfeatureSortEndAscending(AjPList dfs);
+
+AjBool ensListDensityfeatureSortEndDescending(AjPList dfs);
+
+AjBool ensListDensityfeatureSortIdentifierAscending(AjPList dfs);
+
 AjBool ensListDensityfeatureSortStartAscending(AjPList dfs);
 
 AjBool ensListDensityfeatureSortStartDescending(AjPList dfs);
@@ -297,7 +336,7 @@ EnsPDensityfeatureadaptor ensRegistryGetDensityfeatureadaptor(
 EnsPDensityfeatureadaptor ensDensityfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensDensityfeatureadaptorDel(EnsPDensityfeatureadaptor* Pdfa);
+void ensDensityfeatureadaptorDel(EnsPDensityfeatureadaptor *Pdfa);
 
 EnsPDatabaseadaptor ensDensityfeatureadaptorGetDatabaseadaptor(
     EnsPDensityfeatureadaptor dfa);

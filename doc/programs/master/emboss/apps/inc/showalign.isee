@@ -24,7 +24,7 @@
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Retrieves sequence entries from flatfile databases and files</td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -53,6 +53,11 @@
 </tr>
 
 <tr>
+<td><a href="refseqget.html">refseqget</a></td>
+<td>Get reference sequence</td>
+</tr>
+
+<tr>
 <td><a href="seqxref.html">seqxref</a></td>
 <td>Retrieve all database cross-references for a sequence entry</td>
 </tr>
@@ -65,6 +70,11 @@
 <tr>
 <td><a href="tranalign.html">tranalign</a></td>
 <td>Generate an alignment of nucleic coding regions from aligned proteins</td>
+</tr>
+
+<tr>
+<td><a href="variationget.html">variationget</a></td>
+<td>Get sequence variations</td>
 </tr>
 
 <tr>

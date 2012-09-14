@@ -1,174 +1,384 @@
-pkgdata_DATA =  abiview.1.abiview.gif \
-	banana.1.banana.gif \
-	chaos.1.chaos.gif cirdna.1.cirdna.gif cpgplot.1.cpgplot.gif \
-	dan.2.dan.gif density.1.density.gif density.2.density.gif \
-	density.3.density.gif dotmatcher.1.dotmatcher.gif \
-	dotpath.1.dotpath.gif dottup.1.dottup.gif \
-	emboss_icon.gif epestfind.1.epestfind.gif \
-	findkm.1.findkm.gif \
-	isochore.1.isochore.gif \
-	lindna.1.lindna.gif \
-	octanol.1.octanol.gif \
-	pepinfo.1.pepinfo.gif pepnet.1.pepnet.gif \
-	pepwheel.1.pepwheel.gif pepwindow.1.pepwindow.gif \
-	pepwindowall.1.pepwindowall.gif plotcon.1.plotcon.gif \
-	plotorf.1.plotorf.gif plotorf.2.plotorf.gif \
-	polydot.1.polydot.gif prettyplot.1.prettyplot.gif \
-	prettyplot.2.prettyplot.gif \
-	syco.1.syco.gif \
-	tcode.2.tcode.gif tmap.1.tmap.gif \
-	wobble.1.wobble.gif \
-	groups.html \
-	acd_group.html alignment_group.html alignment_consensus_group.html \
-	alignment_differences_group.html \
-	alignment_dot_plots_group.html alignment_global_group.html \
-	alignment_local_group.html alignment_multiple_group.html \
-	assembly_fragment_assembly_group.html \
-	data_resources_group.html  \
-	data_retrieval_chemistry_data_group.html \
-	data_retrieval_feature_data_group.html \
-	data_retrieval_group.html \
-	data_retrieval_ontology_data_group.html \
-	data_retrieval_resource_data_group.html \
-	data_retrieval_sequence_data_group.html \
-	data_retrieval_text_data_group.html \
-	data_retrieval_tool_data_group.html \
-	data_retrieval_url_data_group.html \
-	display_group.html \
-	documentation_group.html \
-	edit_group.html enzyme_kinetics_group.html \
-	feature_tables_group.html \
-	hmm_group.html \
-	information_group.html \
-	menus_group.html \
-	nucleic_2d_structure_group.html \
-	nucleic_codon_usage_group.html \
-	nucleic_codon_usage_nucleic_gene_finding_group.html \
-	nucleic_composition_group.html \
-	nucleic_cpg_islands_group.html \
-	nucleic_functional_sites_group.html \
-	nucleic_gene_finding_group.html nucleic_motifs_group.html \
-	nucleic_mutation_group.html nucleic_primers_group.html \
-	nucleic_profiles_group.html nucleic_repeats_group.html \
-	nucleic_properties_group.html \
-	nucleic_restriction_group.html \
-	nucleic_rna_folding_group.html \
-	nucleic_transcription_group.html \
-	nucleic_translation_group.html \
-	ontology_group.html \
-	ontology_go_group.html \
-	ontology_edam_group.html \
-	ontology_taxonomy_group.html \
-	phylogeny_consensus_group.html \
-	phylogeny_continuous_characters_group.html \
-	phylogeny_discrete_characters_group.html \
-	phylogeny_distance_matrix_group.html \
-	phylogeny_gene_frequencies_group.html phylogeny_group.html \
-	phylogeny_molecular_sequence_group.html \
-	phylogeny_tree_drawing_group.html \
-	protein_2d_structure_group.html \
-	protein_3d_structure_group.html \
-	protein_composition_group.html \
-	protein_domains_group.html \
-	protein_functional_sites_group.html \
-	protein_modifications_group.html \
-	protein_motifs_group.html \
-	protein_mutation_group.html \
-	protein_profiles_group.html \
-	protein_properties_group.html \
-	protein_sequence_alignment_group.html \
-	test_group.html \
-	utils_group.html \
-	utils_database_creation_group.html \
-	utils_database_indexing_group.html utils_misc_group.html \
-	aaindexextract.html abiview.html \
-	acdc.html acdlog.html acdpretty.html acdtable.html \
-	acdtrace.html acdvalid.html \
-	aligncopy.html aligncopypair.html antigenic.html \
-	backtranambig.html backtranseq.html banana.html \
-	biosed.html btwisted.html \
-	cai.html cachedas.html cachedbfetch.html \
-	cacheebeyesearch.html cacheensembl.html \
-	chaos.html charge.html checktrans.html chips.html \
-	cirdna.html codcmp.html codcopy.html coderet.html \
-	complex.html compseq.html cons.html consambig.html \
-	cpgplot.html cpgreport.html cusp.html \
-	cutgextract.html cutseq.html \
-	dan.html dbiblast.html dbifasta.html dbiflat.html dbigcg.html \
-	dbtell.html \
-	dbxcompress.html dbxedam.html dbxfasta.html dbxflat.html \
-	dbxgcg.html dbxobo.html dbxreport.html dbxresource.html \
-	dbxstat.html dbxtax.html dbxuncompress.html \
-	degapseq.html density.html descseq.html \
-	diffseq.html distmat.html \
-	dotmatcher.html dotpath.html dottup.html \
-	dreg.html \
-	drfinddata.html drfindformat.html drfindid.html drfindresource.html \
-	drget.html drtext.html \
-	edamdef.html edamhasinput.html edamhasoutput.html \
-	edamisformat.html edamisid.html edamname.html \
-	edialign.html einverted.html \
-	embossdata.html embossversion.html emma.html \
-	emowse.html entret.html epestfind.html \
-	eprimer3.html eprimer32.html equicktandem.html \
-	est2genome.html etandem.html extractalign.html \
-	extractfeat.html extractseq.html \
-	featcopy.html featreport.html feattext.html \
-	findkm.html freak.html \
-	fuzznuc.html fuzzpro.html fuzztran.html \
-	garnier.html geecee.html getorf.html godef.html goname.html \
-	helixturnhelix.html hmoment.html \
-	iep.html index.html infoalign.html infobase.html \
-	inforesidue.html infoseq.html \
-	isochore.html \
-	jaspextract.html jaspscan.html
-pkgdata2_DATA = libscan.html lindna.html listor.html \
-	makenucseq.html makeprotseq.html marscan.html \
-	maskambignuc.html maskambigprot.html maskfeat.html maskseq.html \
-	matcher.html megamerger.html merger.html msbar.html \
-	mwcontam.html mwfilter.html \
-	needle.html needleall.html newcpgreport.html newcpgseek.html \
-	newseq.html nohtml.html noreturn.html nospace.html \
-	notab.html notseq.html nthseq.html nthseqset.html \
-	octanol.html oddcomp.html \
-	ontocount.html ontoget.html ontogetcommon.html \
-	ontogetdown.html ontogetobsolete.html \
-	ontogetroot.html ontogetsibs.html ontogetup.html \
-	ontoisobsolete.html ontotext.html \
-	palindrome.html pasteseq.html patmatdb.html patmatmotifs.html \
-	pepcoil.html pepdigest.html pepinfo.html pepnet.html \
-	pepstats.html pepwheel.html pepwindow.html pepwindowall.html \
-	plotcon.html plotorf.html \
-	polydot.html preg.html prettyplot.html prettyseq.html \
-	primersearch.html printsextract.html profit.html \
-	prophecy.html prophet.html prosextract.html \
-	pscan.html psiphi.html \
-	rebaseextract.html recoder.html redata.html remap.html \
-	restover.html restrict.html revseq.html \
-	seealso.html seqcount.html seqmatchall.html seqret.html \
-	seqretsetall.html seqretsplit.html \
-	seqxref.html seqxrefget.html \
-	servertell.html \
-	showalign.html showdb.html showfeat.html showorf.html \
-	showpep.html showseq.html showserver.html \
-	shuffleseq.html sigcleave.html silent.html \
-	sirna.html sixpack.html sizeseq.html skipredundant.html \
-	skipseq.html splitsource.html splitter.html stretcher.html \
-	stssearch.html supermatcher.html syco.html \
-	taxget.html taxgetdown.html taxgetrank.html \
-	taxgetspecies.html taxgetup.html \
-	tcode.html template.html \
-	textget.html textsearch.html tfextract.html \
-	tfm.html tfscan.html tmap.html tranalign.html transeq.html \
-	trimest.html trimseq.html trimspace.html twofeat.html \
-	union.html urlget.html \
-	vectorstrip.html \
-	water.html whichdb.html wobble.html wordcount.html \
-	wordfinder.html wordmatch.html \
-	wossdata.html wossinput.html wossname.html wossoperation.html \
-	wossoutput.html wossparam.html wosstopic.html \
-	yank.html \
-	emboss_icon.jpg
+## Process this file with automake to produce Makefile.in
 
-pkgdatadir=$(prefix)/share/$(PACKAGE)/doc/programs/html
-pkgdata2dir=$(prefix)/share/$(PACKAGE)/doc/programs/html
+eimagesdir    = $(pkgdatadir)/doc/programs/html
+egroupsdir    = $(pkgdatadir)/doc/programs/html
+eprograms1dir = $(pkgdatadir)/doc/programs/html
+eprograms2dir = $(pkgdatadir)/doc/programs/html
+
+eimages_DATA = \
+emboss_icon.jpg \
+abiview.1.abiview.gif \
+banana.1.banana.gif \
+chaos.1.chaos.gif \
+cirdna.1.cirdna.gif \
+cpgplot.1.cpgplot.gif \
+dan.2.dan.gif \
+density.1.density.gif \
+density.2.density.gif \
+density.3.density.gif \
+dotmatcher.1.dotmatcher.gif \
+dotpath.1.dotpath.gif \
+dottup.1.dottup.gif \
+emboss_icon.gif \
+epestfind.1.epestfind.gif \
+findkm.1.findkm.gif \
+isochore.1.isochore.gif \
+lindna.1.lindna.gif \
+octanol.1.octanol.gif \
+pepinfo.1.pepinfo.gif \
+pepnet.1.pepnet.gif \
+pepwheel.1.pepwheel.gif \
+pepwindow.1.pepwindow.gif \
+pepwindowall.1.pepwindowall.gif \
+plotcon.1.plotcon.gif \
+plotorf.1.plotorf.gif \
+plotorf.2.plotorf.gif \
+polydot.1.polydot.gif \
+prettyplot.1.prettyplot.gif \
+prettyplot.2.prettyplot.gif \
+syco.1.syco.gif \
+tcode.2.tcode.gif \
+tmap.1.tmap.gif \
+wobble.1.wobble.gif
+
+egroups_DATA = \
+groups.html \
+acd_group.html \
+alignment_group.html \
+alignment_consensus_group.html \
+alignment_differences_group.html \
+alignment_dot_plots_group.html \
+alignment_global_group.html \
+alignment_local_group.html \
+alignment_multiple_group.html \
+assembly_fragment_assembly_group.html \
+data_resources_group.html \
+data_retrieval_group.html \
+data_retrieval_chemistry_data_group.html \
+data_retrieval_feature_data_group.html \
+data_retrieval_ontology_data_group.html \
+data_retrieval_resource_data_group.html \
+data_retrieval_sequence_data_group.html \
+data_retrieval_sequence_data_assembly_data_group.html \
+data_retrieval_text_data_group.html \
+data_retrieval_tool_data_group.html \
+data_retrieval_url_data_group.html \
+display_group.html \
+documentation_group.html \
+edit_group.html \
+enzyme_kinetics_group.html \
+feature_tables_group.html \
+hmm_group.html \
+information_group.html \
+menus_group.html \
+nucleic_2d_structure_group.html \
+nucleic_codon_usage_group.html \
+nucleic_codon_usage_nucleic_gene_finding_group.html \
+nucleic_composition_group.html \
+nucleic_cpg_islands_group.html \
+nucleic_functional_sites_group.html \
+nucleic_gene_finding_group.html \
+nucleic_motifs_group.html \
+nucleic_mutation_group.html \
+nucleic_primers_group.html \
+nucleic_profiles_group.html \
+nucleic_properties_group.html \
+nucleic_repeats_group.html \
+nucleic_restriction_group.html \
+nucleic_rna_folding_group.html \
+nucleic_transcription_group.html \
+nucleic_translation_group.html \
+ontology_group.html \
+ontology_edam_group.html \
+ontology_go_group.html \
+ontology_taxonomy_group.html \
+phylogeny_group.html \
+phylogeny_consensus_group.html \
+phylogeny_continuous_characters_group.html \
+phylogeny_discrete_characters_group.html \
+phylogeny_distance_matrix_group.html \
+phylogeny_gene_frequencies_group.html \
+phylogeny_molecular_sequence_group.html \
+phylogeny_tree_drawing_group.html \
+protein_2d_structure_group.html \
+protein_3d_structure_group.html \
+protein_composition_group.html \
+protein_domains_group.html \
+protein_functional_sites_group.html \
+protein_modifications_group.html \
+protein_motifs_group.html \
+protein_mutation_group.html \
+protein_profiles_group.html \
+protein_properties_group.html \
+protein_sequence_alignment_group.html \
+test_group.html \
+utils_group.html \
+utils_database_creation_group.html \
+utils_database_indexing_group.html \
+utils_misc_group.html
+
+eprograms1_DATA = \
+aaindexextract.html \
+abiview.html \
+acdc.html \
+acdlog.html \
+acdpretty.html \
+acdtable.html \
+acdtrace.html \
+acdvalid.html \
+aligncopy.html \
+aligncopypair.html \
+antigenic.html \
+assemblyget.html \
+backtranambig.html \
+backtranseq.html \
+banana.html \
+biosed.html \
+btwisted.html \
+cachedas.html \
+cachedbfetch.html \
+cacheebeyesearch.html \
+cacheensembl.html \
+cai.html \
+chaos.html \
+charge.html \
+checktrans.html \
+chips.html \
+cirdna.html \
+codcmp.html \
+codcopy.html \
+coderet.html \
+complex.html \
+compseq.html \
+cons.html \
+consambig.html \
+cpgplot.html \
+cpgreport.html \
+cusp.html \
+cutgextract.html \
+cutseq.html \
+dan.html \
+dbiblast.html \
+dbifasta.html \
+dbiflat.html \
+dbigcg.html \
+dbtell.html \
+dbxcompress.html \
+dbxedam.html \
+dbxfasta.html \
+dbxflat.html \
+dbxgcg.html \
+dbxobo.html \
+dbxreport.html \
+dbxresource.html \
+dbxstat.html \
+dbxtax.html \
+dbxuncompress.html \
+degapseq.html \
+density.html \
+descseq.html \
+diffseq.html \
+distmat.html \
+dotmatcher.html \
+dotpath.html \
+dottup.html \
+dreg.html \
+drfinddata.html \
+drfindformat.html \
+drfindid.html \
+drfindresource.html \
+drget.html \
+drtext.html \
+edamdef.html \
+edamhasinput.html \
+edamhasoutput.html \
+edamisformat.html \
+edamisid.html \
+edamname.html \
+edialign.html \
+einverted.html \
+embossdata.html \
+embossupdate.html \
+embossversion.html \
+emma.html \
+emowse.html \
+entret.html \
+epestfind.html \
+eprimer3.html \
+eprimer32.html \
+equicktandem.html \
+est2genome.html \
+etandem.html \
+extractalign.html \
+extractfeat.html \
+extractseq.html \
+featcopy.html \
+featmerge.html \
+featreport.html \
+feattext.html \
+findkm.html \
+freak.html \
+fuzznuc.html \
+fuzzpro.html \
+fuzztran.html \
+garnier.html \
+geecee.html \
+getorf.html \
+godef.html \
+goname.html \
+helixturnhelix.html \
+hmoment.html \
+iep.html \
+index.html \
+infoalign.html \
+infoassembly.html \
+infobase.html \
+inforesidue.html \
+infoseq.html \
+isochore.html \
+jaspextract.html \
+jaspscan.html \
+jembossctl.html
+
+eprograms2_DATA = \
+libscan.html \
+lindna.html \
+listor.html \
+makenucseq.html \
+makeprotseq.html \
+marscan.html \
+maskambignuc.html \
+maskambigprot.html \
+maskfeat.html \
+maskseq.html \
+matcher.html \
+megamerger.html \
+merger.html \
+msbar.html \
+mwcontam.html \
+mwfilter.html \
+needle.html \
+needleall.html \
+newcpgreport.html \
+newcpgseek.html \
+newseq.html \
+nohtml.html \
+noreturn.html \
+nospace.html \
+notab.html \
+notseq.html \
+nthseq.html \
+nthseqset.html \
+octanol.html \
+oddcomp.html \
+ontocount.html \
+ontoget.html \
+ontogetcommon.html \
+ontogetdown.html \
+ontogetobsolete.html \
+ontogetroot.html \
+ontogetsibs.html \
+ontogetup.html \
+ontoisobsolete.html \
+ontotext.html \
+palindrome.html \
+pasteseq.html \
+patmatdb.html \
+patmatmotifs.html \
+pepcoil.html \
+pepdigest.html \
+pepinfo.html \
+pepnet.html \
+pepstats.html \
+pepwheel.html \
+pepwindow.html \
+pepwindowall.html \
+plotcon.html \
+plotorf.html \
+polydot.html \
+preg.html \
+prettyplot.html \
+prettyseq.html \
+primersearch.html \
+printsextract.html \
+profit.html \
+prophecy.html \
+prophet.html \
+prosextract.html \
+pscan.html \
+psiphi.html \
+rebaseextract.html \
+recoder.html \
+redata.html \
+refseqget.html \
+remap.html \
+restover.html \
+restrict.html \
+revseq.html \
+seealso.html \
+seqcount.html \
+seqmatchall.html \
+seqret.html \
+seqretsetall.html \
+seqretsplit.html \
+seqxref.html \
+seqxrefget.html \
+servertell.html \
+showalign.html \
+showdb.html \
+showfeat.html \
+showorf.html \
+showpep.html \
+showseq.html \
+showserver.html \
+shuffleseq.html \
+sigcleave.html \
+silent.html \
+sirna.html \
+sixpack.html \
+sizeseq.html \
+skipredundant.html \
+skipseq.html \
+splitsource.html \
+splitter.html \
+stretcher.html \
+stssearch.html \
+supermatcher.html \
+syco.html \
+taxget.html \
+taxgetdown.html \
+taxgetrank.html \
+taxgetspecies.html \
+taxgetup.html \
+tcode.html \
+template.html \
+textget.html \
+textsearch.html \
+tfextract.html \
+tfm.html \
+tfscan.html \
+tmap.html \
+tranalign.html \
+transeq.html \
+trimest.html \
+trimseq.html \
+trimspace.html \
+twofeat.html \
+union.html \
+urlget.html \
+variationget.html \
+vectorstrip.html \
+water.html \
+whichdb.html \
+wobble.html \
+wordcount.html \
+wordfinder.html \
+wordmatch.html \
+wossdata.html \
+wossinput.html \
+wossname.html \
+wossoperation.html \
+wossoutput.html \
+wossparam.html \
+wosstopic.html \
+yank.html

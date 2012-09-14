@@ -8,9 +8,8 @@ embossdocreport.pl $name.outdata
 mv embossdocreport.log datadocsingle.report
 
 rm $name\_static.html
-rm $name.srs
+rm $name.srsdata
 rm $name.outdata
-rm $name.log
+# rm $name.log
 rm $name.html
-rm $name.book
-
+# rm $name.book

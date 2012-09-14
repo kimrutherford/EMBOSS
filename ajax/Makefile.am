@@ -1,6 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-if !ESYSTEMLIBS
-EXTRA_DIRS = expat zlib
-endif
 
-SUBDIRS = pcre $(EXTRA_DIRS) core graphics ensembl ajaxdb acd
+SUBDIRS  = pcre
+if !ESYSTEMLIBS
+SUBDIRS += expat zlib
+endif
+SUBDIRS += core graphics ensembl ajaxdb acd

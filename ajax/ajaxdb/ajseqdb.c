@@ -1,36 +1,32 @@
-/******************************************************************************
-** @Source AJAX SEQDB (database) functions
+/* @source ajseqdb ************************************************************
+**
+** AJAX SEQDB (database) functions
 **
 ** These functions control all aspects of AJAX sequence database access
 **
 ** @author Copyright (C) 1998 Peter Rice
 ** @author Copyright (C) 2005 Alan Bleasby
-** @version 2.0
+** @version $Revision: 1.87 $
 ** @modified Jun 25 pmr First version
 ** @modified Apr 2005 ajb B+tree code addition
+** @modified $Date: 2012/07/14 14:52:39 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
 ******************************************************************************/
-
-#include "ajax.h"
-#include "ajdas.h"
-#include "ajseqdb.h"
-#include "ajmart.h"
-#include "ensembl.h"
 
 #include <limits.h>
 #include <stdarg.h>
@@ -52,6 +48,11 @@
 #include <signal.h>
 
 
+#include "ajdas.h"
+#include "ajseqdb.h"
+#include "ajmart.h"
+#include "ensembl.h"
+
 
 
 
@@ -69,7 +70,6 @@ static AjPRegexp seqRegEntrezCount = NULL;
 static AjPRegexp seqRegEntrezId = NULL;
 
 static AjPRegexp seqRegGcgRefId = NULL;
-static AjPRegexp seqRegGi = NULL;
 
 static char* seqCdName = NULL;
 static ajuint seqCdMaxNameSize = 0;
@@ -371,17 +371,17 @@ typedef struct SeqSCdQry
 ** @attr idcache [AjPBtcache] ID cache
 ** @attr Caches [AjPList] Caches for each query field
 ** @attr files [AjPStr*] database filenames
-** @attr reffiles [AjPStr*] database reference filenames
+** @attr reffiles [AjPStr**] database reference filenames
 ** @attr Skip [AjBool*] files numbers to exclude
 ** @attr List [AjPList] List of files
 ** @attr libs [AjPFile] Primary (database source) file
 ** @attr libr [AjPFile] Secondary (database bibliographic source) file
 ** @attr div [ajuint] division number of currently open database file
+** @attr refcount [ajuint] number of reference file(s) per entry
 ** @attr nentries [ajint] number of entries in the filename array(s)
 **                        -1 when done
 ** @attr Samefile [AjBool] true if the same file is passed to
 **                         ajFilebuffReopenFile
-** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -391,7 +391,7 @@ typedef struct SeqSEmbossQry
     AjPList Caches;
 
     AjPStr *files;
-    AjPStr *reffiles;
+    AjPStr **reffiles;
     AjBool *Skip;
 
     AjPList List;
@@ -400,10 +400,10 @@ typedef struct SeqSEmbossQry
     AjPFile libr;
 
     ajuint div;
+    ajuint refcount;
     ajint nentries;
 
     AjBool Samefile;
-    char Padding[4];
 } SeqOEmbossQry;
 
 #define SeqPEmbossQry SeqOEmbossQry*
@@ -411,11 +411,15 @@ typedef struct SeqSEmbossQry
 
 
 
-
-/* @const SeqEEnsemblType *****************************************************
+/* @enumstatic SeqEEnsemblType ************************************************
 **
 ** Ensembl Object Type enumeration
 **
+** @value seqEEnsemblTypeNULL        Null
+** @value seqEEnsemblTypeExon        Exon
+** @value seqEEnsemblTypeGene        Gene
+** @value seqEEnsemblTypeTranscript  Transcript
+** @value seqEEnsemblTypeTranslation Translation
 ******************************************************************************/
 
 typedef enum SeqOEnsemblType
@@ -446,6 +450,7 @@ typedef enum SeqOEnsemblType
 ** Ensembl stable identifier
 ** @attr Databaseadaptor [EnsPDatabaseadaptor] Ensembl Database Adaptor
 ** @attr EnsemblType [SeqEEnsemblType] Ensembl Object Type enumeration
+** @attr Padding [ajuint] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -458,6 +463,7 @@ typedef struct SeqSEnsembl
     AjPStr Species;
     EnsPDatabaseadaptor Databaseadaptor;
     SeqEEnsemblType EnsemblType;
+    ajuint Padding;
 } SeqOEnsembl;
 
 #define SeqPEnsembl SeqOEnsembl*
@@ -532,6 +538,7 @@ static AjBool     seqEmbossQryClose(AjPQuery qry);
 static AjBool     seqEmbossQryEntry(AjPQuery qry);
 static AjBool     seqEmbossQryNext(AjPQuery qry);
 static AjBool     seqEmbossQryOpen(AjPQuery qry);
+static AjBool     seqEmbossQryOrganisms(AjPQuery qry);
 static AjBool     seqEmbossQryQuery(AjPQuery qry);
 static AjBool     seqEmbossQryReuse(AjPQuery qry);
 
@@ -559,63 +566,74 @@ static AjBool     seqGcgReadSeq(AjPSeqin seqin);
 
 static AjOSeqAccess seqAccess[] =
 {
-    /* Name      AccessFunction   FreeFunction
-       Qlink,   Description
-       Alias    Entry    Query    All      Chunk */
-/*
-  {"dbfetch", seqAccessDbfetch, NULL,
-  "retrieve in text format from EBI dbfetch REST services",
-  AJFALSE, AJTRUE,  AJFALSE, AJFALSE, AJFALSE
-  },
-*/
-    /* {"asis",  ajTextAccessAsis, NULL,
-       "",
-       AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE
-       }, */        /* called by seqUsaProcess */
-    /* {"file",  ajTextAccessFile, NULL,
-       "",
-       AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE
-       }, */        /* called by seqUsaProcess */
-    /* {"offset",        ajTextAccessOffset, NULL,
-       "",
-       AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE
-       }, */    /* called by seqUsaProcess */
-
-    {"gcg",      seqAccessGcg, NULL,
-     "|&!^=",  "emboss dbigcg indexed",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    /* Name     AccessFunction   FreeFunction
+       Qlink    Description
+       Alias    Entry    Query    All      Chunk  Padding */
+    /* {
+        "dbfetch", seqAccessDbfetch, NULL,
+        "",      "retrieve in text format from EBI dbfetch REST services",
+	AJFALSE, AJTRUE,  AJFALSE, AJFALSE, AJFALSE, AJFALSE
+	}, */
+    /* {
+       "asis",  &ajTextAccessAsis, NULL,
+       "",      "",
+       AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE, AJFALSE
+       }, */ /* called by seqUsaProcess */
+    /* {
+       "file",  &ajTextAccessFile, NULL,
+       "",      "",
+       AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE, AJFALSE
+       }, */ /* called by seqUsaProcess */
+    /* {
+       "offset", &ajTextAccessOffset, NULL,
+       "",      "",
+       AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE, AJFALSE
+       }, */ /* called by seqUsaProcess */
+    {
+      "gcg",   &seqAccessGcg, NULL,
+      "|&!^=", "emboss dbigcg indexed",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {"embossgcg",        seqAccessEmbossGcg, NULL,
-     "|&!^=", "emboss dbxgcg indexed",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "embossgcg", &seqAccessEmbossGcg, NULL,
+      "|&!^=", "emboss dbxgcg indexed",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {"blast",    seqAccessBlast, NULL,
-     "",      "blast database format version 2 or 3",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE
+    {
+      "blast",    &seqAccessBlast, NULL,
+      "",      "blast database format version 2 or 3",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE, AJFALSE
     },
-    {"biomart",  seqAccessMart, NULL,
-     "",      "retrieve a single entry from a BioMart server",
-     AJFALSE, AJTRUE,  AJFALSE,  AJFALSE, AJFALSE
+    {
+      "biomart",  &seqAccessMart, NULL,
+      "",      "retrieve a single entry from a BioMart server",
+      AJFALSE, AJTRUE,  AJFALSE,  AJFALSE, AJFALSE, AJFALSE
     },
-    {"sql",      seqAccessSql, NULL,
-     "",      "retrieve from a SQL server",
-     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE
+    {
+      "sql",      &seqAccessSql, NULL,
+      "",      "retrieve from a SQL server",
+      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE, AJFALSE, AJFALSE
     },
-    {"ensembl",  seqAccessEnsembl, NULL,
-     "",      "retrieve a single entry from an Ensembl Database server",
-     AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE
+    {
+      "ensembl",  &seqAccessEnsembl, NULL,
+      "",      "retrieve a single entry from an Ensembl Database server",
+      AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE, AJFALSE
     },
-    {"ensemblgenomes", seqAccessEnsembl, NULL,
-     "",      "retrieve a single entry from an Ensemblgenomes Database server",
-     AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE
+    {
+      "ensemblgenomes", &seqAccessEnsembl, NULL,
+      "",      "retrieve a single entry from an Ensemblgenomes Database server",
+      AJFALSE, AJTRUE, AJFALSE, AJFALSE, AJFALSE, AJFALSE
     },
-    {"das",      seqAccessDAS, NULL,
-     "|",      "retrieve sequence entries from a DAS source",
-     AJFALSE, AJTRUE,  AJFALSE,  AJFALSE, AJFALSE
+    {
+      "das",      &seqAccessDAS, NULL,
+      "|",     "retrieve sequence entries from a DAS source",
+      AJFALSE, AJTRUE,  AJFALSE,  AJFALSE, AJFALSE, AJFALSE
     },
-    {NULL, NULL, NULL,
-     NULL, NULL,
-     AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE},
+    {
+      NULL, NULL, NULL,
+      NULL, NULL,
+      AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE, AJFALSE
+    },
 
 /* after the NULL access method, and so unreachable.
 ** seqhound requires a username and password which it prompts for
@@ -634,6 +652,8 @@ static char aa_btoa2[27]= {"-ABCDEFGHIKLMNPQRSTVWXYZ*"};
 ** Initialise sequence database internals
 **
 ** @return [void]
+**
+** @release 6.2.0
 ******************************************************************************/
 
 void ajSeqdbInit(void)
@@ -687,6 +707,8 @@ void ajSeqdbInit(void)
 ** @param [r] dir [const AjPStr] Directory
 ** @param [r] name [const AjPStr] File name.
 ** @return [AjPFile] file object.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -715,6 +737,8 @@ static AjPFile seqBlastFileOpen(const AjPStr dir, const AjPStr name)
 ** @param [r] name [const char*] File name.
 ** @param [w] fullname [AjPStr*] Full file name with directory path
 ** @return [SeqPCdFile] EMBL CD-ROM index file object.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -761,6 +785,8 @@ static SeqPCdFile seqCdFileOpen(const AjPStr dir, const char* name,
 ** @param [u] fil [SeqPCdFile] EMBL CD-ROM index file object.
 ** @param [r] ipos [ajuint] Offset.
 ** @return [ajint] Return value from the seek operation.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -790,6 +816,8 @@ static ajint seqCdFileSeek(SeqPCdFile fil, ajuint ipos)
 **
 ** @param [d] pthis [SeqPCdFile*] EMBL CD-ROM index file.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -822,6 +850,8 @@ static void seqCdFileClose(SeqPCdFile* pthis)
 ** @param [r] entry [const AjPStr] Entry name to search for.
 ** @param [u] fil [SeqPCdFile] EMBL CD-ROM index file.
 ** @return [ajuint] Record number on success, -1 on failure.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -884,6 +914,8 @@ static ajuint seqCdIdxSearch(SeqPCdIdx idxLine, const AjPStr entry,
 ** @param [u] qry [AjPQuery] Sequence query object.
 ** @param [r] idqry [const AjPStr] ID Query
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1083,6 +1115,8 @@ static AjBool seqCdIdxQuery(AjPQuery qry, const AjPStr idqry)
 ** @param [r] entry [const AjPStr] Entry name or accession number.
 ** @param [u] fp [SeqPCdFile] EMBL CD-ROM target file
 ** @return [ajuint] Record number, or -1 on failure.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1161,6 +1195,8 @@ static ajuint seqCdTrgSearch(SeqPCdTrg trgLine, const AjPStr entry,
 ** @param [r] ipos [ajuint] Record number.
 ** @param [u] fil [SeqPCdFile] EMBL CD-ROM index file.
 ** @return [char*] Name read from file.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1195,6 +1231,8 @@ static char* seqCdIdxName(ajuint ipos, SeqPCdFile fil)
 ** @param [r] ipos [ajuint] Record number.
 ** @param [u] fil [SeqPCdFile] EMBL CD-ROM index file.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1242,6 +1280,8 @@ static void seqCdIdxLine(SeqPCdIdx idxLine, ajuint ipos, SeqPCdFile fil)
 ** @param [r] ipos [ajuint] Record number.
 ** @param [u] fil [SeqPCdFile] EMBL CD-ROM index target file.
 ** @return [char*] Name.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1284,6 +1324,8 @@ static char* seqCdTrgName(ajuint ipos, SeqPCdFile fil)
 ** @param [r] ipos [ajuint] Record number.
 ** @param [u] fil [SeqPCdFile] EMBL CD-ROM index target file.
 ** @return [void].
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1326,6 +1368,8 @@ static void seqCdTrgLine(SeqPCdTrg trgLine, ajuint ipos, SeqPCdFile fil)
 **
 ** @param [u] fil [SeqPCdFile] EMBL CD-ROM index file.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1376,6 +1420,8 @@ static AjBool seqCdReadHeader(SeqPCdFile fil)
 ** @param [w] trgfil [SeqPCdFile*] Target file.
 ** @param [w] hitfil [SeqPCdFile*] Hit file.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1416,6 +1462,8 @@ static AjBool seqCdTrgOpen(const AjPStr dir, const char* name,
 ** @param [w] ptrgfil [SeqPCdFile*] Target file.
 ** @param [w] phitfil [SeqPCdFile*] Hit file.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1439,7 +1487,7 @@ static AjBool seqCdTrgClose(SeqPCdFile* ptrgfil, SeqPCdFile* phitfil)
 
 
 
-/* @funcstatic seqEmbossQryReuse *********************************************
+/* @funcstatic seqEmbossQryReuse **********************************************
 **
 ** Tests whether the B+tree index query data can be reused or it's finished.
 **
@@ -1448,6 +1496,8 @@ static AjBool seqCdTrgClose(SeqPCdFile* ptrgfil, SeqPCdFile* phitfil)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if reusable,
 **                  ajFalse if finished.
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -1464,8 +1514,6 @@ static AjBool seqEmbossQryReuse(AjPQuery qry)
     if(!qry->ResultsList)
     {
         ajDebug("seqEmbossQryReuse: query data all finished\n");
-        AJFREE(qry->QryData);
-        qryd = NULL;
 
         return ajFalse;
     }
@@ -1486,13 +1534,15 @@ static AjBool seqEmbossQryReuse(AjPQuery qry)
 
 
 
-/* @funcstatic seqEmbossQryOpen **********************************************
+/* @funcstatic seqEmbossQryOpen ***********************************************
 **
 ** Open caches (etc) for B+tree search
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -1536,7 +1586,7 @@ static AjBool seqEmbossQryOpen(AjPQuery qry)
     ajListIterDel(&iter);
 
 
-    ajDebug("directory '%S'fields: %u hasacc:%B\n",
+    ajDebug("directory '%S'fields: %Lu hasacc:%B\n",
             qry->IndexDir, ajListGetLength(qry->QueryFields), qry->HasAcc);
 
 
@@ -1562,7 +1612,7 @@ static AjBool seqEmbossQryOpen(AjPQuery qry)
 
 
 
-/* @funcstatic seqEmbossOpenCache ********************************************
+/* @funcstatic seqEmbossOpenCache *********************************************
 **
 ** Create primary B+tree index cache
 **
@@ -1570,6 +1620,8 @@ static AjBool seqEmbossQryOpen(AjPQuery qry)
 ** @param [r] ext [const char*] Index file extension
 ** @param [w] cache [AjPBtcache*] cache
 ** @return [AjBool] True on success
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -1578,8 +1630,6 @@ static AjBool seqEmbossOpenCache(AjPQuery qry, const char *ext,
 {
     SeqPEmbossQry qryd;
     AjPStr indexextname = NULL;
-
-    AjPBtpage page   = NULL;
 
     qryd = qry->QryData;
 
@@ -1601,10 +1651,8 @@ static AjBool seqEmbossOpenCache(AjPQuery qry, const char *ext,
                                              qry->IndexDir,
                                              qry->Directory,
                                              &qryd->files,
-                                             &qryd->reffiles);
-
-    page = ajBtreeCacheRead(*cache,0L);
-    page->dirty = BT_LOCK;
+                                             &qryd->reffiles,
+                                             &qryd->refcount);
 
     return ajTrue;
 }
@@ -1613,19 +1661,21 @@ static AjBool seqEmbossOpenCache(AjPQuery qry, const char *ext,
 
 
 
-/* @funcstatic seqEmbossQryEntry *********************************************
+/* @funcstatic seqEmbossQryEntry **********************************************
 **
 ** Queries for a single entry in a B+tree index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if can continue,
 **                  ajFalse if all is done.
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
 static AjBool seqEmbossQryEntry(AjPQuery qry)
 {
-    AjPBtId entry  = NULL;
+    AjPBtHitref newhit  = NULL;
     SeqPEmbossQry qryd;
     const AjPList fdlist;
     const AjPList cachelist;
@@ -1633,8 +1683,10 @@ static AjBool seqEmbossQryEntry(AjPQuery qry)
     AjIList icache;
     AjPBtcache cache;
     AjPQueryField fd;
+    AjPBtHitref *allhits = NULL;
+    ajuint i;
 
-    ajDebug("seqEmbossQryEntry fields: %u hasacc:%B\n",
+    ajDebug("seqEmbossQryEntry fields: %Lu hasacc:%B\n",
             ajListGetLength(qry->QueryFields), qry->HasAcc);
 
     qryd = qry->QryData;
@@ -1655,32 +1707,33 @@ static AjBool seqEmbossQryEntry(AjPQuery qry)
         if((fd->Link == AJQLINK_ELSE) && ajListGetLength(qry->ResultsList))
             continue;
 
-        if(ajBtreeCacheIsSecondary(cache))
+        if(!ajBtreeCacheIsSecondary(cache))
         {
-
-        }
-        else
-        {
-            entry = ajBtreeIdFromKey(cache,fd->Wildquery);
-            ajDebug("id '%S' entry: %p\n", fd->Wildquery, entry);
-            if(entry)
-            {
-                ajDebug("entry id: '%S' dups: %u offset: %Ld\n",
-                        entry->id, entry->dups, entry->offset);
-                if(!entry->dups)
-                    ajListPushAppend(qry->ResultsList,(void *)entry);
-                else
-                {
-                    ajBtreeHybLeafList(cache,entry->offset,
-                                       entry->id,qry->ResultsList);
-                    ajBtreeIdDel(&entry);
-                }
-            }
+            ajBtreeIdentFetchHitref(cache,fd->Wildquery,
+                                    qry->ResultsList);
         }
     }
 
     ajListIterDel(&iter);
     ajListIterDel(&icache);
+
+    if(ajStrGetLen(qry->Organisms))
+    {
+        ajTableSetDestroy(qry->ResultsTable, NULL, &ajBtreeHitrefDelVoid);
+        ajTableSettypeUser(qry->ResultsTable,
+                           &ajBtreeHitrefCmp, &ajBtreeHitrefHash);
+
+        while(ajListPop(qry->ResultsList, (void**)&newhit))
+            ajTablePutClean(qry->ResultsTable, newhit, newhit,
+                            NULL, &ajBtreeHitrefDelVoid);
+
+         seqEmbossQryOrganisms(qry);
+
+         ajTableToarrayValues(qry->ResultsTable, (void***)&allhits);
+
+         for(i=0; allhits[i]; i++)
+             ajListPushAppend(qry->ResultsList, (void*) allhits[i]);
+    }
 
     if(!ajListGetLength(qry->ResultsList))
         return ajFalse;
@@ -1694,18 +1747,20 @@ static AjBool seqEmbossQryEntry(AjPQuery qry)
 
 
 
-/* @funcstatic seqEmbossQryNext **********************************************
+/* @funcstatic seqEmbossQryNext ***********************************************
 **
 ** Processes the next query for a B+tree index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if successful
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
 static AjBool seqEmbossQryNext(AjPQuery qry)
 {
-    AjPBtId entry;
+    AjPBtHitref entry;
     SeqPEmbossQry qryd;
     void* item;
     AjBool ok = ajFalse;
@@ -1722,7 +1777,7 @@ static AjBool seqEmbossQryNext(AjPQuery qry)
     if(!qryd->Skip)
     {
         ajListPop(qry->ResultsList, &item);
-        entry = (AjPBtId) item;
+        entry = (AjPBtHitref) item;
     }
     else
     {
@@ -1731,13 +1786,13 @@ static AjBool seqEmbossQryNext(AjPQuery qry)
         while(!ok)
         {
             ajListPop(qry->ResultsList, &item);
-            entry = (AjPBtId) item;
+            entry = (AjPBtHitref) item;
 
             if(!qryd->Skip[entry->dbno])
                 ok = ajTrue;
             else
             {
-                ajBtreeIdDel(&entry);
+                ajBtreeHitrefDel(&entry);
 
                 if(!ajListGetLength(qry->ResultsList))
                     return ajFalse;
@@ -1763,7 +1818,7 @@ static AjBool seqEmbossQryNext(AjPQuery qry)
 
         if(!qryd->libs)
         {
-            ajBtreeIdDel(&entry);
+            ajBtreeHitrefDel(&entry);
 
             return ajFalse;
         }
@@ -1772,11 +1827,11 @@ static AjBool seqEmbossQryNext(AjPQuery qry)
     if(qryd->reffiles && !qryd->libr)
     {
         ajFileClose(&qryd->libr);
-        qryd->libr = ajFileNewInNameS(qryd->reffiles[entry->dbno]);
+        qryd->libr = ajFileNewInNameS(qryd->reffiles[0][entry->dbno]);
 
         if(!qryd->libr)
         {
-            ajBtreeIdDel(&entry);
+            ajBtreeHitrefDel(&entry);
 
             return ajFalse;
         }
@@ -1787,7 +1842,7 @@ static AjBool seqEmbossQryNext(AjPQuery qry)
     if(qryd->reffiles)
         ajFileSeek(qryd->libr, (ajlong) entry->refoffset, 0);
 
-    ajBtreeIdDel(&entry);
+    ajBtreeHitrefDel(&entry);
 
     if(!qry->CaseId)
         qry->QryDone = ajTrue;
@@ -1798,13 +1853,15 @@ static AjBool seqEmbossQryNext(AjPQuery qry)
 
 
 
-/* @funcstatic seqEmbossQryClose *********************************************
+/* @funcstatic seqEmbossQryClose **********************************************
 **
 ** Closes query data for a B+tree index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -1813,6 +1870,7 @@ static AjBool seqEmbossQryClose(AjPQuery qry)
     SeqPEmbossQry qryd;
     void* item;
     ajint i;
+    ajuint iref;
 
     if(!qry)
         return ajFalse;
@@ -1849,7 +1907,10 @@ static AjBool seqEmbossQryClose(AjPQuery qry)
             ajStrDel(&qryd->files[i]);
 
             if(qryd->reffiles)
-                ajStrDel(&qryd->reffiles[i]);
+            {
+                for(iref=0; iref < qryd->refcount; iref++)
+                    ajStrDel(&qryd->reffiles[iref][i]);
+            }
 
             ++i;
         }
@@ -1858,7 +1919,12 @@ static AjBool seqEmbossQryClose(AjPQuery qry)
     }
 
     if(qryd->reffiles)
+    {
+        for(iref=0; iref < qryd->refcount; iref++)
+                    AJFREE(qryd->reffiles[iref]);
+        
         AJFREE(qryd->reffiles);
+    }
 
     qryd->files = NULL;
     qryd->reffiles = NULL;
@@ -1872,24 +1938,101 @@ static AjBool seqEmbossQryClose(AjPQuery qry)
 
 
 
-/* @funcstatic seqEmbossQryQuery *********************************************
+/* @funcstatic seqEmbossQryOrganisms ******************************************
+**
+** Restricts results to matches to organism(s) in database
+**
+** @param [u] qry [AjPQuery] Query data
+** @return [AjBool] ajTrue on success.
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static AjBool seqEmbossQryOrganisms(AjPQuery qry)
+{
+    SeqPEmbossQry qryd;
+    AjPBtcache orgcache;
+    AjPStr orgqry = NULL;
+    AjPStrTok orghandle = NULL;
+    AjPTable orgtable = NULL;
+    AjPList orglist = NULL;
+    AjPBtHitref newhit;
+    ajulong fdhits = 0UL;
+
+    if(!ajStrGetLen(qry->Organisms))
+        return ajTrue;
+
+    qryd = qry->QryData;
+
+    seqEmbossOpenCache(qry, "org", &orgcache);
+    orglist = ajListNew();
+    orghandle = ajStrTokenNewC(qry->Organisms, "\t,;|");
+    while(ajStrTokenNextParse(&orghandle, &orgqry))
+    {
+        if(ajBtreeCacheIsSecondary(orgcache))
+        {
+            if(!qry->Wild)
+            {
+                ajBtreeKeyFetchHitref(orgcache,qryd->idcache,
+                                      orgqry, orglist);
+
+            }
+            else
+            {
+               ajBtreeKeyFetchwildHitref(orgcache, qryd->idcache,
+                                         orgqry, orglist);
+            }
+        }
+        else
+        {
+            ajBtreeIdentFetchwildHitref(orgcache,
+                                        orgqry, orglist);
+        }
+
+        fdhits += ajListGetLength(orglist);
+        ajDebug("Organisms list orgqry '%S' list '%Lu'", orgqry, fdhits);
+
+    }
+
+    orgtable = ajTableNewFunctionLen(fdhits,
+				     &ajBtreeHitrefCmp,
+                                     &ajBtreeHitrefHash,
+				     NULL, &ajBtreeHitrefDelVoid);
+    while(ajListPop(orglist, (void**)&newhit))
+        ajTablePutClean(orgtable, newhit, newhit,
+                        NULL, &ajBtreeHitrefDelVoid);
+
+    ajStrTokenDel(&orghandle);
+
+    ajTableMergeAnd(qry->ResultsTable, orgtable);
+    ajListFree(&orglist);
+    ajBtreeCacheDel(&orgcache);
+    ajTableFree(&orgtable);
+    ajStrDel(&orgqry);
+
+    return ajTrue;
+}
+
+
+
+
+/* @funcstatic seqEmbossQryQuery **********************************************
 **
 ** Queries for one or more entries in an EMBOSS B+tree index
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
 static AjBool seqEmbossQryQuery(AjPQuery qry)
 {
     SeqPEmbossQry qryd;
-    AjPBtId   id   = NULL;
 
-    AjPList  tlist = NULL;
-    AjPStr   kwid  = NULL;
-    ajulong treeblock = 0L;
     const AjPList fdlist;
     const AjPList cachelist;
     AjIList iter;
@@ -1897,13 +2040,13 @@ static AjBool seqEmbossQryQuery(AjPQuery qry)
     AjPBtcache cache;
     AjPQueryField fd;
 
-    AjPBtId newhit;
-    AjPBtId *allhits = NULL;
+    AjPBtHitref newhit;
+    AjPBtHitref *allhits = NULL;
     AjPTable newtable = NULL;
 
     ajuint i;
-    ajuint lasthits = 0;
-    ajuint fdhits = 0;
+    ajulong lasthits = 0UL;
+    ajulong fdhits = 0UL;
 
     if(!qry->CaseId)
         qry->QryDone = ajTrue;
@@ -1912,8 +2055,9 @@ static AjBool seqEmbossQryQuery(AjPQuery qry)
 
     cachelist = qryd->Caches;
 
-    ajTableSetDestroy(qry->ResultsTable, NULL, ajBtreeIdDelVoid);
-    ajTableSettypeUser(qry->ResultsTable, ajBtreeIdCmp, ajBtreeIdHash);
+    ajTableSetDestroy(qry->ResultsTable, NULL, &ajBtreeHitrefDelVoid);
+    ajTableSettypeUser(qry->ResultsTable,
+                       &ajBtreeHitrefCmp, &ajBtreeHitrefHash);
 
     fdlist = ajQueryGetallFields(qry);
 
@@ -1937,55 +2081,19 @@ static AjBool seqEmbossQryQuery(AjPQuery qry)
         {
             if(!qry->Wild)
             {
-                if(ajBtreePriFindKeywordLen(cache, fd->Wildquery,
-                                            &treeblock))
-                {
-                    tlist = ajBtreeSecLeafList(cache, treeblock);
-                    ajDebug("ajBtreeSecLeafList(%Ld)  results:%u\n",
-                            treeblock, ajListGetLength(tlist));
-
-                    while(ajListPop(tlist,(void **)&kwid))
-                    {
-                        ajStrFmtLower(&kwid);
-                        id = ajBtreeIdFromKey(qryd->idcache, kwid);
-                        ajDebug("ajBtreeIdFromKey id:%x\n",
-                                id);
-
-                        if(id)
-                        {
-                            if(!id->dups)
-                                ajListPushAppend(qry->ResultsList,(void *)id);
-                            else
-                            {
-                                ajBtreeHybLeafList(qryd->idcache,id->offset,
-                                                   id->id,qry->ResultsList);
-                                ajBtreeIdDel(&id);
-                            }
-                        }
-
-                        ajStrDel(&kwid);
-                    }
-
-                    ajListFree(&tlist);
-                }
-
-                ajListIterDel(&iter);
-                ajListIterDel(&icache);
-                return ajTrue;
+                ajBtreeKeyFetchHitref(cache, qryd->idcache,
+                                      fd->Wildquery, qry->ResultsList);
             }
             else
             {
-                ajBtreeListFromKeywordW(cache,fd->Wildquery,
-                                        qryd->idcache, qry->ResultsList);
-                ajListIterDel(&iter);
-                ajListIterDel(&icache);
-                return ajTrue;
+                ajBtreeKeyFetchwildHitref(cache, qryd->idcache,
+                                          fd->Wildquery, qry->ResultsList);
             }
         }
         else
         {
-            ajBtreeListFromKeyW(cache,fd->Wildquery,qry->ResultsList);
-            ajDebug("ajBtreeListFromKeyW results:%u\n",
+            ajBtreeIdentFetchwildHitref(cache,fd->Wildquery,qry->ResultsList);
+            ajDebug("ajBtreeIdentFetchwild results:%Lu\n",
                     ajListGetLength(qry->ResultsList));
         }
 
@@ -1996,16 +2104,17 @@ static AjBool seqEmbossQryQuery(AjPQuery qry)
             case AJQLINK_INIT:
                 while(ajListPop(qry->ResultsList, (void**)&newhit))
                     ajTablePutClean(qry->ResultsTable, newhit, newhit,
-                                    NULL, ajBtreeIdDelVoid);
+                                    NULL, &ajBtreeHitrefDelVoid);
                 break;
 
             case AJQLINK_OR:
                 newtable = ajTableNewFunctionLen(fdhits,
-                                                 ajBtreeIdCmp, ajBtreeIdHash,
-                                                 NULL, ajBtreeIdDelVoid);
+                                                 &ajBtreeHitrefCmp,
+                                                 &ajBtreeHitrefHash,
+                                                 NULL, &ajBtreeHitrefDelVoid);
                 while(ajListPop(qry->ResultsList, (void**)&newhit))
                     ajTablePutClean(newtable, newhit, newhit,
-                                    NULL, ajBtreeIdDelVoid);
+                                    NULL, &ajBtreeHitrefDelVoid);
 
                 ajTableMergeOr(qry->ResultsTable, newtable);
                 ajTableDel(&newtable);
@@ -2013,11 +2122,12 @@ static AjBool seqEmbossQryQuery(AjPQuery qry)
 
             case AJQLINK_AND:
                 newtable = ajTableNewFunctionLen(fdhits,
-                                                 ajBtreeIdCmp, ajBtreeIdHash,
-                                                 NULL, ajBtreeIdDelVoid);
+                                                 &ajBtreeHitrefCmp,
+                                                 &ajBtreeHitrefHash,
+                                                 NULL, &ajBtreeHitrefDelVoid);
                 while(ajListPop(qry->ResultsList, (void**)&newhit))
                     ajTablePutClean(newtable, newhit, newhit,
-                                    NULL, ajBtreeIdDelVoid);
+                                    NULL, &ajBtreeHitrefDelVoid);
 
                 ajTableMergeAnd(qry->ResultsTable, newtable);
                 ajTableDel(&newtable);
@@ -2026,11 +2136,12 @@ static AjBool seqEmbossQryQuery(AjPQuery qry)
             case AJQLINK_EOR:
             case AJQLINK_ELSE:
                 newtable = ajTableNewFunctionLen(fdhits,
-                                                 ajBtreeIdCmp, ajBtreeIdHash,
-                                                 NULL, ajBtreeIdDelVoid);
+                                                 &ajBtreeHitrefCmp,
+                                                 &ajBtreeHitrefHash,
+                                                 NULL, ajBtreeHitrefDelVoid);
                 while(ajListPop(qry->ResultsList, (void**)&newhit))
                     ajTablePutClean(newtable, newhit, newhit,
-                                    NULL, ajBtreeIdDelVoid);
+                                    NULL, &ajBtreeHitrefDelVoid);
 
                 ajTableMergeEor(qry->ResultsTable, newtable);
                 ajTableDel(&newtable);
@@ -2038,11 +2149,12 @@ static AjBool seqEmbossQryQuery(AjPQuery qry)
 
             case AJQLINK_NOT:
                 newtable = ajTableNewFunctionLen(fdhits,
-                                                 ajBtreeIdCmp, ajBtreeIdHash,
-                                                 NULL, ajBtreeIdDelVoid);
+                                                 &ajBtreeHitrefCmp,
+                                                 &ajBtreeHitrefHash,
+                                                 NULL, &ajBtreeHitrefDelVoid);
                 while(ajListPop(qry->ResultsList, (void**)&newhit))
                     ajTablePutClean(newtable, newhit, newhit,
-                                    NULL, ajBtreeIdDelVoid);
+                                    NULL, &ajBtreeHitrefDelVoid);
 
                 ajTableMergeNot(qry->ResultsTable, newtable);
                 ajTableDel(&newtable);
@@ -2059,6 +2171,10 @@ static AjBool seqEmbossQryQuery(AjPQuery qry)
 
     ajListIterDel(&iter);
     ajListIterDel(&icache);
+
+    if(ajStrGetLen(qry->Organisms))
+        seqEmbossQryOrganisms(qry);
+
     ajTableToarrayValues(qry->ResultsTable, (void***)&allhits);
     for(i=0; allhits[i]; i++)
         ajListPushAppend(qry->ResultsList, (void*) allhits[i]);
@@ -2085,7 +2201,7 @@ static AjBool seqEmbossQryQuery(AjPQuery qry)
 
 
 
-/* @funcstatic seqAccessEmbossGcg ********************************************
+/* @funcstatic seqAccessEmbossGcg *********************************************
 **
 ** Reads sequence(s) from a GCG formatted database, using B+tree index
 ** files. Returns with the file pointer set to the position in the
@@ -2093,6 +2209,8 @@ static AjBool seqEmbossQryQuery(AjPQuery qry)
 **
 ** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -2171,12 +2289,14 @@ static AjBool seqAccessEmbossGcg(AjPSeqin seqin)
 
 
 
-/* @funcstatic seqEmbossGcgAll ***********************************************
+/* @funcstatic seqEmbossGcgAll ************************************************
 **
 ** Opens the first or next GCG file for further reading
 **
 ** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -2185,6 +2305,7 @@ static AjBool seqEmbossGcgAll(AjPSeqin seqin)
     AjPQuery qry;
     SeqPEmbossQry qryd;
     static ajint i   = 0;
+    ajuint iref;
     AjPStr name      = NULL;
     AjBool ok        = ajFalse;
 /*
@@ -2208,7 +2329,9 @@ static AjBool seqEmbossGcgAll(AjPSeqin seqin)
         i = -1;
         ajBtreeReadEntriesS(qry->DbAlias,qry->IndexDir,
                             qry->Directory,
-                            &qryd->files,&qryd->reffiles);
+                            &qryd->files,
+                            &qryd->reffiles,
+                            &qryd->refcount);
 
         seqin->Input->Single = ajTrue;
     }
@@ -2269,7 +2392,13 @@ static AjBool seqEmbossGcgAll(AjPSeqin seqin)
             while(qryd->files[i])
             {
                 ajStrDel(&qryd->files[i]);
-                ajStrDel(&qryd->reffiles[i]);
+
+                if(qryd->reffiles)
+                {
+                    for(iref=0; iref < qryd->refcount; iref++)
+                        ajStrDel(&qryd->reffiles[iref][i]);
+                }
+
                 ++i;
             }
 
@@ -2293,7 +2422,8 @@ static AjBool seqEmbossGcgAll(AjPSeqin seqin)
         }
 
 
-        qryd->libr = ajFileNewInNameS(qryd->reffiles[i]);
+        if(qryd->reffiles)
+            qryd->libr = ajFileNewInNameS(qryd->reffiles[0][i]);
 
         if(!qryd->libr)
         {
@@ -2314,13 +2444,15 @@ static AjBool seqEmbossGcgAll(AjPSeqin seqin)
 
 
 
-/* @funcstatic seqEmbossGcgLoadBuff ******************************************
+/* @funcstatic seqEmbossGcgLoadBuff *******************************************
 **
 ** Copies text data to a buffered file, and sequence data for an
 ** AjPSeqin internal data structure for reading later
 **
 ** @param [u] seqin [AjPSeqin] Sequence input object
 ** @return [void]
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -2355,12 +2487,14 @@ static void seqEmbossGcgLoadBuff(AjPSeqin seqin)
 
 
 
-/* @funcstatic seqEmbossGcgReadRef *******************************************
+/* @funcstatic seqEmbossGcgReadRef ********************************************
 **
 ** Copies text data to a buffered file for reading later
 **
 ** @param [u] seqin [AjPSeqin] Sequence input object
 ** @return [AjBool] ajTrue on success
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -2488,13 +2622,15 @@ static AjBool seqEmbossGcgReadRef(AjPSeqin seqin)
 
 
 
-/* @funcstatic seqEmbossGcgReadSeq *******************************************
+/* @funcstatic seqEmbossGcgReadSeq ********************************************
 **
 ** Copies sequence data with a reformatted sequence to the "Inseq"
 ** data structure of the AjPSeqin object for later reuse.
 **
 ** @param [u] seqin [AjPSeqin] Sequence input object
 ** @return [AjBool] ajTrue on success
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -2721,6 +2857,8 @@ static AjBool seqEmbossGcgReadSeq(AjPSeqin seqin)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2746,7 +2884,7 @@ static AjBool seqCdQryReuse(AjPQuery qry)
     else
     {
         ajDebug("reusing data from previous call %x\n", qry->QryData);
-        ajDebug("listlen  %d\n", ajListGetLength(qry->ResultsList));
+        ajDebug("listlen  %Lu\n", ajListGetLength(qry->ResultsList));
         ajDebug("divfile '%S'\n", qryd->divfile);
         ajDebug("idxfile '%S'\n", qryd->idxfile);
         ajDebug("datfile '%S'\n", qryd->datfile);
@@ -2771,6 +2909,8 @@ static AjBool seqCdQryReuse(AjPQuery qry)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -2791,7 +2931,7 @@ static AjBool seqCdQryOpen(AjPQuery qry)
         return ajFalse;
     }
 
-    ajDebug("directory '%S' fields: %u hasacc:%B\n",
+    ajDebug("directory '%S' fields: %Lu hasacc:%B\n",
             qry->IndexDir, ajListGetLength(qry->QueryFields), qry->HasAcc);
 
     qry->QryData = AJNEW0(qryd);
@@ -2833,7 +2973,8 @@ static AjBool seqCdQryOpen(AjPQuery qry)
 
     if(!qryd->ifp)
     {
-        ajErr("Cannot open index file '%S'", qryd->idxfile);
+        ajErr("Cannot open index file '%S' for database '%S'",
+	      qryd->idxfile, qry->DbName);
 
         return ajFalse;
     }
@@ -2854,6 +2995,8 @@ static AjBool seqCdQryOpen(AjPQuery qry)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3044,6 +3187,8 @@ static AjBool seqCdQryEntry(AjPQuery qry)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3059,8 +3204,8 @@ static AjBool seqCdQryQuery(AjPQuery qry)
     AjPTable newtable = NULL;
 
     ajuint i;
-    ajuint lasthits = 0;
-    ajuint fdhits = 0;
+    ajulong lasthits = 0UL;
+    ajulong fdhits = 0UL;
 
     ajulong *ikey = NULL;
 
@@ -3089,7 +3234,7 @@ static AjBool seqCdQryQuery(AjPQuery qry)
         else
             seqCdTrgQuery(qry, field->Field, field->Wildquery);
 
-        fdhits = ajListGetLength(qry->ResultsList);
+        fdhits = (ajuint) ajListGetLength(qry->ResultsList);
 
         ajDebug("seqCdQryQuery hits: %u link: %u\n",
                 fdhits, field->Link);
@@ -3103,7 +3248,7 @@ static AjBool seqCdQryQuery(AjPQuery qry)
                     *ikey = (((ajulong)newhit->div) << ishift) +
                         (ajulong)newhit->annoff;
                     ajTablePutClean(qry->ResultsTable, ikey, newhit,
-                                    ajMemFree, ajMemFree);
+                                    &ajMemFree, &ajMemFree);
                     ikey = NULL;
                 }
 
@@ -3116,7 +3261,7 @@ static AjBool seqCdQryQuery(AjPQuery qry)
                     *ikey = (((ajulong)newhit->div) << ishift) +
                         (ajulong)newhit->annoff;
                     ajTablePutClean(qry->ResultsTable, ikey, newhit,
-                                    ajMemFree, ajMemFree);
+                                    &ajMemFree, &ajMemFree);
                     ikey = NULL;
                 }
                 break;
@@ -3130,11 +3275,11 @@ static AjBool seqCdQryQuery(AjPQuery qry)
                     *ikey = (((ajulong)newhit->div) << ishift) +
                         (ajulong)newhit->annoff;
                     ajTablePutClean(newtable, ikey, newhit,
-                                    ajMemFree, ajMemFree);
+                                    &ajMemFree, &ajMemFree);
                     ikey = NULL;
                 }
                 ajTableMergeAnd(qry->ResultsTable, newtable);
-                ajTableDelValdel(&newtable, ajMemFree);
+                ajTableDelValdel(&newtable, &ajMemFree);
                 break;
 
             case AJQLINK_EOR:
@@ -3146,12 +3291,12 @@ static AjBool seqCdQryQuery(AjPQuery qry)
                     AJNEW(ikey);
                     *ikey = (((ajulong)newhit->div) << ishift) + newhit->annoff;
                     ajTablePutClean(newtable, ikey, newhit,
-                                    ajMemFree, ajMemFree);
+                                    &ajMemFree, &ajMemFree);
                     ikey = NULL;
                 }
 
                 ajTableMergeEor(qry->ResultsTable, newtable);
-                ajTableDelValdel(&newtable, ajMemFree);
+                ajTableDelValdel(&newtable, &ajMemFree);
                 break;
 
             case AJQLINK_NOT:
@@ -3162,11 +3307,11 @@ static AjBool seqCdQryQuery(AjPQuery qry)
                     AJNEW(ikey);
                     *ikey = (((ajulong)newhit->div) << ishift) + newhit->annoff;
                     ajTablePutClean(newtable, ikey, newhit,
-                                    ajMemFree, ajMemFree);
+                                    &ajMemFree, &ajMemFree);
                     ikey = NULL;
                 }
                 ajTableMergeNot(qry->ResultsTable, newtable);
-                ajTableDelValdel(&newtable, ajMemFree);
+                ajTableDelValdel(&newtable, &ajMemFree);
                 break;
 
             default:
@@ -3189,10 +3334,10 @@ static AjBool seqCdQryQuery(AjPQuery qry)
     }
     AJFREE(keys);
 
-    ajDebug("ajListSortUnique len:%u\n",
+    ajDebug("ajListSortUnique len:%Lu\n",
             ajListGetLength(qry->ResultsList));
     ajListSortUnique(qry->ResultsList,
-                     seqCdEntryCmp, seqCdEntryDel);
+                     &seqCdEntryCmp, &seqCdEntryDel);
 
     AJFREE(allhits);
 
@@ -3216,6 +3361,8 @@ static AjBool seqCdQryQuery(AjPQuery qry)
 ** @param [r] pb [const void*] SeqPEntry object
 ** @return [int] -1 if first entry should sort before second, +1 if the
 **         second entry should sort first. 0 if they are identical
+**
+** @release 2.4.0
 ** @@
 ******************************************************************************/
 static int seqCdEntryCmp(const void* pa, const void* pb)
@@ -3247,6 +3394,8 @@ static int seqCdEntryCmp(const void* pa, const void* pb)
 ** @param [r] pentry [void**] Address of a SeqPCdEntry object
 ** @param [r] cl [void*] Standard unused argument, usually NULL.
 ** @return [void]
+**
+** @release 2.4.0
 ** @@
 ******************************************************************************/
 static void seqCdEntryDel(void** pentry, void* cl)
@@ -3267,6 +3416,8 @@ static void seqCdEntryDel(void** pentry, void* cl)
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if successful
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3281,7 +3432,7 @@ static AjBool seqCdQryNext(AjPQuery qry)
     if(!ajListGetLength(qry->ResultsList))
         return ajFalse;
 
-    ajDebug("qry->ResultsList (b) length %d\n",
+    ajDebug("qry->ResultsList (b) length %Lu\n",
             ajListGetLength(qry->ResultsList));
     /*ajListTrace(qry->ResultsList);*/
     ajListPop(qry->ResultsList, &item);
@@ -3334,6 +3485,8 @@ static AjBool seqCdQryNext(AjPQuery qry)
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if successful
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3348,7 +3501,7 @@ static AjBool seqBlastQryNext(AjPQuery qry)
     if(!ajListGetLength(qry->ResultsList))
         return ajFalse;
 
-    ajDebug("seqBlastQryNext qryd %x qry->ResultsList (c) length: %d\n",
+    ajDebug("seqBlastQryNext qryd %x qry->ResultsList (c) length: %Lu\n",
             qryd, ajListGetLength(qry->ResultsList));
 
     /* ajListTrace(qry->ResultsList);*/
@@ -3390,6 +3543,8 @@ static AjBool seqBlastQryNext(AjPQuery qry)
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if all is done
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3443,6 +3598,8 @@ static AjBool seqCdQryClose(AjPQuery qry)
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
 **                  ajFalse if all is done.
+**
+** @release 3.0.0
 ** @@
 ******************************************************************************/
 
@@ -3501,6 +3658,8 @@ static AjBool seqBlastQryClose(AjPQuery qry)
 **
 ** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3549,7 +3708,7 @@ static AjBool seqAccessGcg(AjPSeqin seqin)
 
         if(qry->QueryType == AJQUERY_ENTRY)
         {
-            ajDebug("entry fields: %u hasacc:%B\n",
+            ajDebug("entry fields: %Lu hasacc:%B\n",
                     ajListGetLength(qry->QueryFields), qry->HasAcc);
 
             if(!seqCdQryEntry(qry))
@@ -3558,7 +3717,7 @@ static AjBool seqAccessGcg(AjPSeqin seqin)
 
         if(qry->QueryType == AJQUERY_QUERY)
         {
-            ajDebug("query fields: %u hasacc:%B\n",
+            ajDebug("query fields: %Lu hasacc:%B\n",
                     ajListGetLength(qry->QueryFields), qry->HasAcc);
             if(!seqCdQryQuery(qry))
                 ajDebug("GCG Query failed\n");
@@ -3598,6 +3757,8 @@ static AjBool seqAccessGcg(AjPSeqin seqin)
 **
 ** @param [u] seqin [AjPSeqin] Sequence input object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3639,6 +3800,8 @@ static void seqGcgLoadBuff(AjPSeqin seqin)
 **
 ** @param [u] seqin [AjPSeqin] Sequence input object
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3772,6 +3935,8 @@ static AjBool seqGcgReadRef(AjPSeqin seqin)
 **
 ** @param [u] seqin [AjPSeqin] Sequence input object
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -3996,6 +4161,8 @@ static AjBool seqGcgReadSeq(AjPSeqin seqin)
 ** @param [u] pthis [AjPStr*] Binary string
 ** @param [r] sqlen [ajuint] Expected sequence length
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4043,6 +4210,8 @@ static void seqGcgBinDecode(AjPStr *pthis, ajuint sqlen)
 **
 ** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4123,6 +4292,8 @@ static AjBool seqGcgAll(AjPSeqin seqin)
 **
 ** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4166,7 +4337,7 @@ static AjBool seqAccessBlast(AjPSeqin seqin)
 
         if(qry->QueryType == AJQUERY_ENTRY)
         {
-            ajDebug("entry fields: %u hasacc:%B\n",
+            ajDebug("entry fields: %Lu hasacc:%B\n",
                     ajListGetLength(qry->QueryFields), qry->HasAcc);
 
             if(!seqCdQryEntry(qry))
@@ -4177,7 +4348,7 @@ static AjBool seqAccessBlast(AjPSeqin seqin)
 
         if(qry->QueryType == AJQUERY_QUERY)
         {
-            ajDebug("query fields: %u hasacc:%B\n",
+            ajDebug("query fields: %Lu hasacc:%B\n",
                     ajListGetLength(qry->QueryFields), qry->HasAcc);
 
             if(!seqCdQryQuery(qry))
@@ -4227,6 +4398,8 @@ static AjBool seqAccessBlast(AjPSeqin seqin)
 ** @param [u] qry [AjPQuery] Sequence query object
 ** @param [r] next [AjBool] Skip to next file (when reading all entries)
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4360,7 +4533,8 @@ static AjBool seqBlastOpen(AjPQuery qry, AjBool next)
     if(rdtmp)
     {
         if(!ajReadbinBinary(qryd->libt,
-                            (size_t)rdtmp, (size_t)1, ajStrGetuniquePtr(&Title)))
+                            (size_t)rdtmp, (size_t)1,
+                            ajStrGetuniquePtr(&Title)))
             ajFatal("error reading file %F", qryd->libt);
     }
     else
@@ -4498,6 +4672,8 @@ static AjBool seqBlastOpen(AjPQuery qry, AjBool next)
 **
 ** @param [u] qry [AjPQuery] sequence query object.
 ** @return [ajuint] File number (starting at 1) or zero if all files are done.
+**
+** @release 2.4.0
 ** @@
 ******************************************************************************/
 
@@ -4535,6 +4711,8 @@ static ajuint seqCdDivNext(AjPQuery qry)
 **
 ** @param [u] seqin [AjPSeqin] AjPSeqin sequence input object.
 ** @return [AjBool] true if text data loaded.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4572,6 +4750,8 @@ static AjBool seqBlastLoadBuff(AjPSeqin seqin)
 **
 ** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4655,6 +4835,8 @@ static AjBool seqBlastAll(AjPSeqin seqin)
 **
 ** @param [u] qry [AjPQuery] Query data
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4698,8 +4880,8 @@ static AjBool seqCdQryFile(AjPQuery qry)
 
     if(!qryd->libr)
     {
-        ajDebug("Cannot open database file '%S'\n", qryd->datfile);
-        ajErr("Cannot open database file '%S'", qryd->datfile);
+        ajErr("Cannot open database file '%S' for database '%S'",
+	      qryd->datfile, qry->DbName);
 
         return ajFalse;
     }
@@ -4711,8 +4893,8 @@ static AjBool seqCdQryFile(AjPQuery qry)
 
         if(!qryd->libs)
         {
-            ajDebug("Cannot open sequence file '%S'\n", qryd->seqfile);
-            ajErr("Cannot open sequence file '%S'", qryd->seqfile);
+            ajErr("Cannot open sequence file '%S' for database '%S'",
+		  qryd->seqfile, qry->DbName);
 
             return ajFalse;
         }
@@ -4734,6 +4916,8 @@ static AjBool seqCdQryFile(AjPQuery qry)
 **
 ** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -4799,7 +4983,7 @@ static AjBool seqAccessMart(AjPSeqin seqin)
         ajStrAssignS(&searchdb, qry->DbName);
     }
 
-    ajDebug("seqAccessMart %S fields: %u field: '%S' returns: '%S' "
+    ajDebug("seqAccessMart %S fields: %Lu field: '%S' returns: '%S' "
             "identifier: '%S' accession: '%S' sequence: '%S'\n",
             qry->DbAlias,
             ajListGetLength(qry->QueryFields),
@@ -4976,6 +5160,8 @@ static AjBool seqAccessMart(AjPSeqin seqin)
 **
 ** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5067,6 +5253,8 @@ static AjBool seqAccessDAS(AjPSeqin seqin)
 **
 ** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -5120,7 +5308,7 @@ static AjBool seqAccessSql(AjPSeqin seqin)
         ajStrAssignS(&searchtab, qry->DbName);
     }
 
-    ajDebug("seqAccessSql %S fields: %u\n",
+    ajDebug("seqAccessSql %S fields: %Lu\n",
             qry->DbAlias, ajListGetLength(qry->QueryFields));
 
     url = ajStrNew();
@@ -5264,12 +5452,14 @@ static AjBool seqAccessSql(AjPSeqin seqin)
 **
 ** @param [u] seqin [AjPSeqin] Sequence input.
 ** @return [AjBool] ajTrue on success.
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 static AjBool seqAccessEnsembl(AjPSeqin seqin)
 {
-    AjPSeq seq = NULL;
+    AjBool debug = AJFALSE;
 
     AjPQuery qry = NULL;
 
@@ -5286,26 +5476,31 @@ static AjBool seqAccessEnsembl(AjPSeqin seqin)
 
     SeqPEnsembl se = NULL;
 
+    debug = ajDebugTest("seqAccessEnsembl");
+
+    if(debug)
+    {
+        ajDebug("seqAccessEnsembl\n"
+                "  seqin %p\n",
+                seqin);
+
+        ensTraceSeqin(seqin, 1);
+    }
+
     if(!seqin)
         return ajFalse;
 
-    ajDebug("seqAccessEnsembl\n"
-            "  seqin %p\n",
-            seqin);
+    /* The seqRead function insists on an AJAX File Buffer. */
 
-    ensTraceSeqin(seqin, 1);
-
-    /* The seqRead function insists on a file buffer. */
-
-    /* ajFilebuffDel(&seqin->Input->Filebuff); */
     if(seqin->Input->Filebuff == NULL)
         seqin->Input->Filebuff = ajFilebuffNewNofile();
 
     qry = seqin->Input->Query;
 
+    /* Run the inital query and then return. */
+
     if(qry->QryDone == ajFalse)
-        if(seqEnsemblQryFirst(qry) == ajFalse)
-            return ajFalse;
+        return seqEnsemblQryFirst(qry);
 
     se = (SeqPEnsembl) qry->QryData;
 
@@ -5323,6 +5518,10 @@ static AjBool seqAccessEnsembl(AjPSeqin seqin)
     /*
     ** Retrieve individual sequences from the AJAX List of
     ** stable Ensembl identifiers.
+    **
+    ** Use the SeqData member of the AJAX Sequence Input structure
+    ** to pass the AJAX Sequence object between the AJAX Sequence Reading
+    ** (seqReadEnsembl) and AJAX Sequence Database (seqAccessEnsembl) modules.
     */
 
     switch(se->EnsemblType)
@@ -5347,7 +5546,9 @@ static AjBool seqAccessEnsembl(AjPSeqin seqin)
 
             if(exon)
             {
-                ensExonFetchSequenceSliceSeq(exon, &seq);
+                ensExonFetchSequenceSliceSeq(
+                    exon,
+                    (AjPSeq*) &seqin->SeqData);
 
                 ensExonDel(&exon);
             }
@@ -5374,7 +5575,9 @@ static AjBool seqAccessEnsembl(AjPSeqin seqin)
 
             if(translation)
             {
-                ensTranslationFetchSequenceSeq(translation, &seq);
+                ensTranslationFetchSequenceSeq(
+                    translation,
+                    (AjPSeq*) &seqin->SeqData);
 
                 ensTranslationDel(&translation);
             }
@@ -5387,9 +5590,6 @@ static AjBool seqAccessEnsembl(AjPSeqin seqin)
                 se->Databaseadaptor);
 
             ajListstrPop(se->Stableidentifiers, &stableidentifier);
-
-            ajDebug("seqAccessEnsembl got Transcript stable identifier '%S'\n",
-                    stableidentifier);
 
             if(stableidentifier)
             {
@@ -5404,7 +5604,9 @@ static AjBool seqAccessEnsembl(AjPSeqin seqin)
 
             if(transcript)
             {
-                ensTranscriptFetchSequenceTranscriptSeq(transcript, &seq);
+                ensTranscriptFetchSequenceTranscriptSeq(
+                    transcript,
+                    (AjPSeq*) &seqin->SeqData);
 
                 ensTranscriptDel(&transcript);
             }
@@ -5417,21 +5619,7 @@ static AjBool seqAccessEnsembl(AjPSeqin seqin)
                     "Ensembl Object Type %u.\n", se->EnsemblType);
     }
 
-    if(seq)
-    {
-        /*
-        ** Use the Data member of the AJAX Sequence Input structure
-        ** to pass the AJAX Sequence object into the AJAX
-        ** Sequence Reading module.
-        */
-
-        if(seqin->SeqData)
-            ajSeqDel((AjPSeq*) &seqin->SeqData);
-
-        seqin->SeqData = (void*) seq;
-
-        seqin->Input->Count++;
-    }
+    seqin->Input->Count++;
 
     return ajTrue;
 }
@@ -5445,6 +5633,8 @@ static AjBool seqAccessEnsembl(AjPSeqin seqin)
 **
 ** @param [u] Pse [SeqPEnsembl*] Ensembl attribute
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -5483,11 +5673,16 @@ static void seqEnsemblDel(SeqPEnsembl* Pse)
 **
 ** @param [u] qry [AjPQuery] AJAX Query
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool seqEnsemblQryFirst(AjPQuery qry)
 {
+    ajuint dbas = 0U;
+
+    AjBool debug  = AJFALSE;
     AjBool result = AJFALSE;
 
     AjIList iter = NULL;
@@ -5502,18 +5697,19 @@ static AjBool seqEnsemblQryFirst(AjPQuery qry)
 
     SeqPEnsembl se = NULL;
 
+    debug = ajDebugTest("seqEnsemblQryFirst");
+
+    if(debug)
+        ajDebug("seqEnsemblQryFirst\n"
+                "  qry %p\n",
+                qry);
+
     if(!qry)
         return ajFalse;
 
-#if AJFALSE
-    ajDebug("seqEnsemblQryFirst\n"
-            "  qry %p\n",
-            qry);
-#endif
-
     ensInit();
 
-    if((qry->SvrName != NULL) && (ajStrGetLen(qry->SvrName) > 0))
+    if(qry->SvrName && ajStrGetLen(qry->SvrName))
     {
         /*
         ** Since the AJAX Query object supplied a server name, use it to
@@ -5524,10 +5720,12 @@ static AjBool seqEnsemblQryFirst(AjPQuery qry)
         ajDebug("seqEnsemblQryFirst got AJAX server name '%S'.\n",
                 qry->SvrName);
 
-        if(ensRegistryLoadServername(qry->SvrName) == ajFalse)
+        dbas = ensRegistryLoadServername(qry->SvrName);
+        
+        if(!dbas)
             return ajFalse;
     }
-    else if((qry->DbName != NULL) && (ajStrGetLen(qry->DbName) > 0))
+    else if(qry->DbName && ajStrGetLen(qry->DbName))
     {
         /*
         ** Since the AJAX Query object supplied a database name, use it to
@@ -5536,8 +5734,9 @@ static AjBool seqEnsemblQryFirst(AjPQuery qry)
         ** Ensembl Registry.
         */
 
-        ajDebug("seqEnsemblQryFirst got AJAX database name '%S'.\n",
-                qry->DbName);
+        if(debug)
+            ajDebug("seqEnsemblQryFirst got AJAX database name '%S'.\n",
+                    qry->DbName);
 
         urlstr = ajStrNew();
 
@@ -5551,15 +5750,19 @@ static AjBool seqEnsemblQryFirst(AjPQuery qry)
             return ajFalse;
         }
 
-        ajDebug("seqEnsemblQryFirst got URL '%S'.\n", urlstr);
+        if(debug)
+            ajDebug("seqEnsemblQryFirst got URL '%S'.\n", urlstr);
 
         dbc = ensDatabaseconnectionNewUrl(urlstr);
 
         ajStrDel(&urlstr);
 
-        ensRegistryLoadDatabaseconnection(dbc);
+        dbas = ensRegistryLoadDatabaseconnection(dbc);
 
         ensDatabaseconnectionDel(&dbc);
+
+        if(!dbas)
+            return ajFalse;
     }
     else
     {
@@ -5710,12 +5913,14 @@ static AjBool seqEnsemblQryFirst(AjPQuery qry)
 
     /* The query stage has finished at this point. */
 
-    qry->TotalEntries = ajListGetLength(se->Stableidentifiers);
+    qry->TotalEntries = (ajuint) ajListGetLength(se->Stableidentifiers);
 
     qry->QryDone = ajTrue;
 
-    ajDebug("seqEnsemblQryFirst finished the query stage with %u %s.\n",
-            qry->TotalEntries, (qry->TotalEntries == 1) ? "entry" : "entries");
+    if(debug)
+        ajDebug("seqEnsemblQryFirst finished the query stage with %u %s.\n",
+                qry->TotalEntries,
+                (qry->TotalEntries == 1) ? "entry" : "entries");
 
     return ajTrue;
 }
@@ -5729,11 +5934,15 @@ static AjBool seqEnsemblQryFirst(AjPQuery qry)
 **
 ** @param [u] qry [AjPQuery] AJAX Query
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool seqEnsemblQryFirstExon(AjPQuery qry)
 {
+    AjBool debug = AJFALSE;
+
     AjPList stableidentifiers = NULL;
 
     AjPStr stableidentifier = NULL;
@@ -5742,14 +5951,14 @@ static AjBool seqEnsemblQryFirstExon(AjPQuery qry)
 
     SeqPEnsembl se = NULL;
 
-    if(!qry)
-        return ajFalse;
+    debug = ajDebugTest("seqEnsemblQryFirstExon");
 
-#if AJFALSE
     ajDebug("seqEnsemblQryFirstExon\n"
             "  qry %p\n",
             qry);
-#endif
+
+    if(!qry)
+        return ajFalse;
 
     se = (SeqPEnsembl) qry->QryData;
 
@@ -5759,8 +5968,9 @@ static AjBool seqEnsemblQryFirstExon(AjPQuery qry)
     {
         case AJQUERY_ENTRY:
 
-            ajDebug("seqEnsemblQryFirstExon got Sequence Query type "
-                    "'entry'.\n");
+            if(debug)
+                ajDebug("seqEnsemblQryFirstExon got Sequence Query type "
+                        "'entry'.\n");
 
             ajListstrPushAppend(se->Stableidentifiers,
                                 ajStrNewS(se->Wildquery));
@@ -5769,8 +5979,9 @@ static AjBool seqEnsemblQryFirstExon(AjPQuery qry)
 
         case AJQUERY_QUERY:
 
-            ajDebug("seqEnsemblQryFirstExon got Sequence Query type "
-                    "'query'.\n");
+            if(debug)
+                ajDebug("seqEnsemblQryFirstExon got Sequence Query type "
+                        "'query'.\n");
 
             stableidentifiers = ajListstrNew();
 
@@ -5792,8 +6003,9 @@ static AjBool seqEnsemblQryFirstExon(AjPQuery qry)
 
         case AJQUERY_ALL:
 
-            ajDebug("seqEnsemblQryFirstExon got Sequence Query type "
-                    "'all'.\n");
+            if(debug)
+                ajDebug("seqEnsemblQryFirstExon got Sequence Query type "
+                        "'all'.\n");
 
             ensExonadaptorRetrieveAllStableidentifiers(
                 exonadaptor,
@@ -5820,11 +6032,15 @@ static AjBool seqEnsemblQryFirstExon(AjPQuery qry)
 **
 ** @param [u] qry [AjPQuery] AJAX Query
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool seqEnsemblQryFirstGeneric(AjPQuery qry)
 {
+    AjBool debug = AJFALSE;
+
     AjPList dbas = NULL;
 
     AjPRegexp rp = NULL;
@@ -5846,14 +6062,14 @@ static AjBool seqEnsemblQryFirstGeneric(AjPQuery qry)
 
     SeqPEnsembl se = NULL;
 
-    if(!qry)
-        return ajFalse;
+    debug = ajDebugTest("seqEnsemblQryFirstGeneric");
 
-#if AJFALSE
     ajDebug("seqEnsemblQryFirstGeneric\n"
             "  qry %p\n",
             qry);
-#endif
+
+    if(!qry)
+        return ajFalse;
 
     se = (SeqPEnsembl) qry->QryData;
 
@@ -5914,8 +6130,9 @@ static AjBool seqEnsemblQryFirstGeneric(AjPQuery qry)
         if(!expression)
             continue;
 
-        ajDebug("seqEnsemblQryFirstGeneric will test expression '%S' against "
-                "identifier '%S'.\n", expression, se->Wildquery);
+        if(debug)
+            ajDebug("seqEnsemblQryFirstGeneric will test expression '%S' "
+                    "against identifier '%S'.\n", expression, se->Wildquery);
 
         rp = ajRegCompC(ajStrGetPtr(expression));
 
@@ -6055,11 +6272,15 @@ static AjBool seqEnsemblQryFirstGeneric(AjPQuery qry)
 **
 ** @param [u] qry [AjPQuery] AJAX Query
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool seqEnsemblQryFirstTranscript(AjPQuery qry)
 {
+    AjBool debug = AJFALSE;
+
     AjPList stableidentifiers = NULL;
 
     AjPStr stableidentifier = NULL;
@@ -6068,14 +6289,15 @@ static AjBool seqEnsemblQryFirstTranscript(AjPQuery qry)
 
     SeqPEnsembl se = NULL;
 
+    debug = ajDebugTest("seqEnsemblQryFirstTranscript");
+
+    if(debug)
+        ajDebug("seqEnsemblQryFirstTranscript\n"
+                "  qry %p\n",
+                qry);
+
     if(!qry)
         return ajFalse;
-
-#if AJFALSE
-    ajDebug("seqEnsemblQryFirstTranscript\n"
-            "  qry %p\n",
-            qry);
-#endif
 
     se = (SeqPEnsembl) qry->QryData;
 
@@ -6085,8 +6307,9 @@ static AjBool seqEnsemblQryFirstTranscript(AjPQuery qry)
     {
         case AJQUERY_ENTRY:
 
-            ajDebug("seqEnsemblQryFirstTranscript got Sequence Query type "
-                    "'entry'.\n");
+            if(debug)
+                ajDebug("seqEnsemblQryFirstTranscript got Sequence Query "
+                        "type 'entry'.\n");
 
             ajListstrPushAppend(se->Stableidentifiers,
                                 ajStrNewS(se->Wildquery));
@@ -6095,8 +6318,9 @@ static AjBool seqEnsemblQryFirstTranscript(AjPQuery qry)
 
         case AJQUERY_QUERY:
 
-            ajDebug("seqEnsemblQryFirstTranscript got Sequence Query type "
-                    "'query'.\n");
+            if(debug)
+                ajDebug("seqEnsemblQryFirstTranscript got Sequence Query "
+                        "type 'query'.\n");
 
             stableidentifiers = ajListstrNew();
 
@@ -6119,8 +6343,9 @@ static AjBool seqEnsemblQryFirstTranscript(AjPQuery qry)
 
         case AJQUERY_ALL:
 
-            ajDebug("seqEnsemblQryFirstTranscript got Sequence Query type "
-                    "'all'.\n");
+            if(debug)
+                ajDebug("seqEnsemblQryFirstTranscript got Sequence Query "
+                        "type 'all'.\n");
 
             ensTranscriptadaptorRetrieveAllStableidentifiers(
                 transcriptadaptor,
@@ -6147,11 +6372,15 @@ static AjBool seqEnsemblQryFirstTranscript(AjPQuery qry)
 **
 ** @param [u] qry [AjPQuery] AJAX Query
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool seqEnsemblQryFirstTranslation(AjPQuery qry)
 {
+    AjBool debug = AJFALSE;
+
     AjPList stableidentifiers = NULL;
 
     AjPStr stableidentifier = NULL;
@@ -6160,12 +6389,15 @@ static AjBool seqEnsemblQryFirstTranslation(AjPQuery qry)
 
     SeqPEnsembl se = NULL;
 
+    debug = ajDebugTest("seqEnsemblQryFirstTranslation");
+
+    if(debug)
+        ajDebug("seqEnsemblQryFirstTranslation\n"
+                "  qry %p\n",
+                qry);
+
     if(!qry)
         return ajFalse;
-
-    ajDebug("seqEnsemblQryFirstTranslation\n"
-            "  qry %p\n",
-            qry);
 
     se = (SeqPEnsembl) qry->QryData;
 
@@ -6175,8 +6407,9 @@ static AjBool seqEnsemblQryFirstTranslation(AjPQuery qry)
     {
         case AJQUERY_ENTRY:
 
-            ajDebug("seqEnsemblQryFirstTranslation got Sequence Query type "
-                    "'entry'.\n");
+            if(debug)
+                ajDebug("seqEnsemblQryFirstTranslation got Sequence Query "
+                        "type 'entry'.\n");
 
             ajListstrPushAppend(se->Stableidentifiers,
                                 ajStrNewS(se->Wildquery));
@@ -6185,8 +6418,9 @@ static AjBool seqEnsemblQryFirstTranslation(AjPQuery qry)
 
         case AJQUERY_QUERY:
 
-            ajDebug("seqEnsemblQryFirstTranslation got Sequence Query type "
-                    "'query'.\n");
+            if(debug)
+                ajDebug("seqEnsemblQryFirstTranslation got Sequence Query "
+                        "type 'query'.\n");
 
             stableidentifiers = ajListstrNew();
 
@@ -6209,8 +6443,9 @@ static AjBool seqEnsemblQryFirstTranslation(AjPQuery qry)
 
         case AJQUERY_ALL:
 
-            ajDebug("seqEnsemblQryFirstTranslation got Sequence Query type "
-                    "'all'.\n");
+            if(debug)
+                ajDebug("seqEnsemblQryFirstTranslation got Sequence Query "
+                        "type 'all'.\n");
 
             ensTranslationadaptorRetrieveAllStableidentifiers(
                 translationadaptor,
@@ -6241,6 +6476,8 @@ static AjBool seqEnsemblQryFirstTranslation(AjPQuery qry)
 ** @param [w] hline [AjPStr*] header line.
 ** @param [w] sline [AjPStr*] sequence line.
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6398,8 +6635,11 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
             if(tmpbyte)
                 ajErr(" phase error: %d:%d found\n",qryd->idnum,(ajint)tmpbyte);
 
-            if((tmp=ajReadbinBinary(qryd->libs,(size_t)seq_len,(size_t)1,
-                                    ajStrGetuniquePtr(sline))) != (size_t)seq_len)
+            if((size_t)seq_len !=
+               (tmp=ajReadbinBinary(qryd->libs,
+                                    (size_t)seq_len,
+                                    (size_t)1,
+                                    ajStrGetuniquePtr(sline))))
             {
                 ajErr(" could not read sequence record (a): %d %d != %d\n",
                       start,tmp,seq_len);
@@ -6448,8 +6688,9 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 
             seqcnt = c_len;
 
-            if((tmp=ajReadbinBinary(qryd->libs,(size_t)seqcnt,(size_t)1,
-                                    ajStrGetuniquePtr(sline))) != (size_t)seqcnt)
+            if((size_t)seqcnt !=
+               (tmp=ajReadbinBinary(qryd->libs,(size_t)seqcnt,(size_t)1,
+                                    ajStrGetuniquePtr(sline))))
             {
                 ajErr(" could not read sequence record (c): %d %d != %d: %d\n",
                       qryd->idnum,tmp,seqcnt,*seq);
@@ -6464,7 +6705,8 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 
             c_pad = *(sptr-1);
             c_pad &= 0x3;                  /* get the last (low) 2 bits */
-            seq_len -= (4 - c_pad); /* if the last 2 bits are 0, its a NULL byte */
+            seq_len -= (4 - c_pad); /* if the last 2 bits are 0,
+                                       its a NULL byte */
             ajDebug("(a) c_pad %d seq_len %d seqcnt %d\n",
                     c_pad, seq_len, seqcnt);
 
@@ -6633,7 +6875,8 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
                             (ajint)nt_magic_byte);
                     ajDebug(" error reading seq at %d\n",start);
                     ajErr(" phase error: %d:%d (%d/%d) found\n",
-                          qryd->idnum,seq_len,(ajint)tmpbyte,(ajint)nt_magic_byte);
+                          qryd->idnum,seq_len,(ajint)tmpbyte,
+                          (ajint)nt_magic_byte);
                     ajErr(" error reading seq at %d\n",start);
 
                     return ajFalse;
@@ -6644,8 +6887,9 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
                 if(seqcnt==0)
                     seqcnt++;
 
-                if((tmp=ajReadbinBinary(qryd->libs,(size_t)seqcnt,(size_t)1,
-                                        ajStrGetuniquePtr(sline))) != (size_t)seqcnt)
+                if((size_t)seqcnt !=
+                   (tmp=ajReadbinBinary(qryd->libs,(size_t)seqcnt,(size_t)1,
+                                        ajStrGetuniquePtr(sline))))
                 {
                     ajDebug(
                         " could not read sequence record (e): %S %d %d"
@@ -6672,7 +6916,8 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
                             (ajint)nt_magic_byte);
                     ajDebug(" error reading seq at %d\n",start);
                     ajErr(" phase2 error: %d:%d (%d/%d) next ",
-                          qryd->idnum,seqcnt,(ajint)tmpbyte,(ajint)nt_magic_byte);
+                          qryd->idnum,seqcnt,(ajint)tmpbyte,
+                          (ajint)nt_magic_byte);
                     ajErr(" error reading seq at %d\n",start);
 
                     return ajFalse;
@@ -6738,6 +6983,8 @@ static AjBool seqBlastReadTable(AjPSeqin seqin, AjPStr* hline,
 **
 ** @param [u] line [AjPStr*] Input line
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6770,6 +7017,8 @@ static void seqBlastStripNcbi(AjPStr* line)
 ** @param [r] field [const AjPStr] Query field
 ** @param [r] wildqry [const AjPStr] Query string
 ** @return [AjBool] ajTrue on success.
+**
+** @release 1.13.0
 ** @@
 ******************************************************************************/
 
@@ -6806,7 +7055,7 @@ static AjBool seqCdTrgQuery(AjPQuery qry, const AjPStr field,
 
 
 
-/* @funcstatic seqCdTrgFind **************************************************
+/* @funcstatic seqCdTrgFind ***************************************************
 **
 ** Binary search of an EMBL CD-ROM index file for entries matching a
 ** wildcard query.
@@ -6818,6 +7067,8 @@ static AjBool seqCdTrgQuery(AjPQuery qry, const AjPStr field,
 ** @param [r] indexname [const char*] Index name.
 ** @param [r] queryName [const AjPStr] Query string.
 ** @return [ajuint] Number of matches found
+**
+** @release 2.6.0
 ** @@
 ******************************************************************************/
 
@@ -7023,7 +7274,7 @@ static ajuint seqCdTrgFind(AjPQuery qry, const char* indexname,
     ajStrDel(&fdstr);
     ajStrDel(&fdprefix);
 
-    return ajListGetLength(l);
+    return (ajuint) ajListGetLength(l);
 }
 
 
@@ -7036,6 +7287,8 @@ static ajuint seqCdTrgFind(AjPQuery qry, const char* indexname,
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -7070,6 +7323,8 @@ void ajSeqdbPrintAccess(AjPFile outf, AjBool full)
 **
 ** @param [d] pthys [SeqPCdIdx*] Cd index object
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void seqCdIdxDel(SeqPCdIdx* pthys)
@@ -7094,6 +7349,8 @@ static void seqCdIdxDel(SeqPCdIdx* pthys)
 **
 ** @param [d] pthys [SeqPCdTrg*] Cd index target object
 ** @return [void]
+**
+** @release 4.0.0
 ******************************************************************************/
 
 static void seqCdTrgDel(SeqPCdTrg* pthys)
@@ -7117,6 +7374,8 @@ static void seqCdTrgDel(SeqPCdTrg* pthys)
 ** Cleans up sequence database processing internal memory
 **
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -7134,9 +7393,7 @@ void ajSeqDbExit(void)
     ajRegFree(&seqRegEntrezId);
     ajRegFree(&seqRegGcgRefId);
 
-    ajRegFree(&seqRegGi);
-
-    ensExit();
+   ensExit();
 
     return;
 }

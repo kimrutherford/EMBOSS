@@ -4,9 +4,9 @@ Here is a sample session with <b>ontotext</b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontotext edam:0001234 </b>
+% <b>ontotext edam:1234 </b>
 Get ontology term(s) original full text
-Output file [0001234.ontotext]: <b></b>
+Full text output file [1234.ontotext]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -18,9 +18,9 @@ Output file [0001234.ontotext]: <b></b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontotext edam:0000850 -subclasses </b>
+% <b>ontotext edam:0850 -subclasses </b>
 Get ontology term(s) original full text
-Output file [0000850.ontotext]: <b></b>
+Full text output file [0850.ontotext]: <b></b>
 
 </pre></td></tr></table><p>
 <p>

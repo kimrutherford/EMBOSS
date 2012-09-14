@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: antigenic
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: antigenic
 #    -sequence tsw:actb1_takru
 # Report_format: motif
@@ -119,26 +119,26 @@ Max_score_pos at "*"
 <pre>
 ##gff-version 3
 ##sequence-region ACTB1_TAKRU 1 375
-#!Date 2011-07-15
+#!Date 2012-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.4.0.0
-ACTB1_TAKRU	antigenic	epitope	214	222	1.207	+	.	ID=ACTB1_TAKRU.1;note=*pos 218
-ACTB1_TAKRU	antigenic	epitope	131	145	1.187	+	.	ID=ACTB1_TAKRU.2;note=*pos 137
-ACTB1_TAKRU	antigenic	epitope	5	12	1.166	+	.	ID=ACTB1_TAKRU.3;note=*pos 8
-ACTB1_TAKRU	antigenic	epitope	27	38	1.164	+	.	ID=ACTB1_TAKRU.4;note=*pos 32
-ACTB1_TAKRU	antigenic	epitope	160	183	1.136	+	.	ID=ACTB1_TAKRU.5;note=*pos 173
-ACTB1_TAKRU	antigenic	epitope	367	372	1.135	+	.	ID=ACTB1_TAKRU.6;note=*pos 372
-ACTB1_TAKRU	antigenic	epitope	93	108	1.116	+	.	ID=ACTB1_TAKRU.7;note=*pos 103
-ACTB1_TAKRU	antigenic	epitope	295	301	1.113	+	.	ID=ACTB1_TAKRU.8;note=*pos 296
-ACTB1_TAKRU	antigenic	epitope	256	266	1.110	+	.	ID=ACTB1_TAKRU.9;note=*pos 264
-ACTB1_TAKRU	antigenic	epitope	336	352	1.107	+	.	ID=ACTB1_TAKRU.10;note=*pos 347
-ACTB1_TAKRU	antigenic	epitope	62	76	1.102	+	.	ID=ACTB1_TAKRU.11;note=*pos 68
-ACTB1_TAKRU	antigenic	epitope	232	250	1.086	+	.	ID=ACTB1_TAKRU.12;note=*pos 245
-ACTB1_TAKRU	antigenic	epitope	327	332	1.083	+	.	ID=ACTB1_TAKRU.13;note=*pos 330
-ACTB1_TAKRU	antigenic	epitope	317	323	1.074	+	.	ID=ACTB1_TAKRU.14;note=*pos 320
-ACTB1_TAKRU	antigenic	epitope	186	192	1.068	+	.	ID=ACTB1_TAKRU.15;note=*pos 191
-ACTB1_TAKRU	antigenic	epitope	40	46	1.066	+	.	ID=ACTB1_TAKRU.16;note=*pos 43
-ACTB1_TAKRU	antigenic	epitope	269	275	1.045	+	.	ID=ACTB1_TAKRU.17;note=*pos 269
-ACTB1_TAKRU	antigenic	epitope	51	57	1.034	+	.	ID=ACTB1_TAKRU.18;note=*pos 52
+#!Source-version EMBOSS 6.5.0.0
+ACTB1_TAKRU	antigenic	epitope	214	222	1.207	.	.	ID=ACTB1_TAKRU.1;note=*pos 218
+ACTB1_TAKRU	antigenic	epitope	131	145	1.187	.	.	ID=ACTB1_TAKRU.2;note=*pos 137
+ACTB1_TAKRU	antigenic	epitope	5	12	1.166	.	.	ID=ACTB1_TAKRU.3;note=*pos 8
+ACTB1_TAKRU	antigenic	epitope	27	38	1.164	.	.	ID=ACTB1_TAKRU.4;note=*pos 32
+ACTB1_TAKRU	antigenic	epitope	160	183	1.136	.	.	ID=ACTB1_TAKRU.5;note=*pos 173
+ACTB1_TAKRU	antigenic	epitope	367	372	1.135	.	.	ID=ACTB1_TAKRU.6;note=*pos 372
+ACTB1_TAKRU	antigenic	epitope	93	108	1.116	.	.	ID=ACTB1_TAKRU.7;note=*pos 103
+ACTB1_TAKRU	antigenic	epitope	295	301	1.113	.	.	ID=ACTB1_TAKRU.8;note=*pos 296
+ACTB1_TAKRU	antigenic	epitope	256	266	1.11	.	.	ID=ACTB1_TAKRU.9;note=*pos 264
+ACTB1_TAKRU	antigenic	epitope	336	352	1.107	.	.	ID=ACTB1_TAKRU.10;note=*pos 347
+ACTB1_TAKRU	antigenic	epitope	62	76	1.102	.	.	ID=ACTB1_TAKRU.11;note=*pos 68
+ACTB1_TAKRU	antigenic	epitope	232	250	1.086	.	.	ID=ACTB1_TAKRU.12;note=*pos 245
+ACTB1_TAKRU	antigenic	epitope	327	332	1.083	.	.	ID=ACTB1_TAKRU.13;note=*pos 330
+ACTB1_TAKRU	antigenic	epitope	317	323	1.074	.	.	ID=ACTB1_TAKRU.14;note=*pos 320
+ACTB1_TAKRU	antigenic	epitope	186	192	1.068	.	.	ID=ACTB1_TAKRU.15;note=*pos 191
+ACTB1_TAKRU	antigenic	epitope	40	46	1.066	.	.	ID=ACTB1_TAKRU.16;note=*pos 43
+ACTB1_TAKRU	antigenic	epitope	269	275	1.045	.	.	ID=ACTB1_TAKRU.17;note=*pos 269
+ACTB1_TAKRU	antigenic	epitope	51	57	1.034	.	.	ID=ACTB1_TAKRU.18;note=*pos 52
 </pre>
 </td></tr></table><p>

@@ -35,23 +35,29 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@ESYSTEMLIBS_FALSE@am__append_1 = -I$(top_srcdir)/ajax/expat \
+@ESYSTEMLIBS_FALSE@	-I$(top_srcdir)/ajax/zlib
+@ISCYGWIN_TRUE@am__append_2 = -no-undefined -Wl,--add-stdcall-alias \
+@ISCYGWIN_TRUE@	-Wl,--export-all-symbols \
+@ISCYGWIN_TRUE@	-Wl,--enable-auto-import -L../../plplot \
+@ISCYGWIN_TRUE@	-L../core -L../expat -L../pcre -lajax -leplplot \
+@ISCYGWIN_TRUE@	-leexpat -lepcre
 subdir = ajax/ensembl
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
-	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
-	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
-	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
-	$(top_srcdir)/configure.in
+am__aclocal_m4_deps = $(top_srcdir)/m4/axis2c.m4 \
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/idxdbs.m4 $(top_srcdir)/m4/java.m4 \
+	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pkg.m4 \
+	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
+	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/ajax/core/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
@@ -79,29 +85,49 @@ am__base_list = \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libensembl_la_LIBADD =
-am__objects_1 = ensalign.lo ensanalysis.lo ensassembly.lo \
-	ensassemblyexception.lo ensassemblymapper.lo ensattribute.lo \
-	ensbaseadaptor.lo enscache.lo enscoordsystem.lo \
-	ensdatabaseadaptor.lo ensdatabaseconnection.lo \
-	ensdatabaseentry.lo ensdensity.lo ensditag.lo ensexon.lo \
-	ensexternaldatabase.lo ensfeature.lo ensgene.lo ensgvallele.lo \
-	ensgvattribute.lo ensgvbaseadaptor.lo ensgvdatabaseadaptor.lo \
-	ensgvgenotype.lo ensgvindividual.lo ensgvpopulation.lo \
-	ensgvsample.lo ensgvsource.lo ensgvsynonym.lo \
-	ensgvvariation.lo ensintron.lo enskaryotype.lo ensmapper.lo \
-	ensmarker.lo ensmetacoordinate.lo ensmetainformation.lo \
-	ensmiscellaneous.lo ensprediction.lo ensprojectionsegment.lo \
-	ensprotein.lo ensqc.lo ensqcalignment.lo ensqcdasfeature.lo \
-	ensqcdatabase.lo ensqcsequence.lo ensqcsubmission.lo \
-	ensqcvariation.lo ensregistry.lo ensrepeat.lo ensseqregion.lo \
-	enssequence.lo enssequenceedit.lo enssimple.lo ensslice.lo \
-	enssoftware.lo ensstorable.lo enstable.lo enstranscript.lo \
-	enstranslation.lo ensutility.lo ensvariation.lo
-am_libensembl_la_OBJECTS = $(am__objects_1)
+am_libensembl_la_OBJECTS = libensembl_la-ensalign.lo \
+	libensembl_la-ensanalysis.lo libensembl_la-ensassembly.lo \
+	libensembl_la-ensassemblyexception.lo \
+	libensembl_la-ensassemblymapper.lo \
+	libensembl_la-ensattribute.lo libensembl_la-ensbaseadaptor.lo \
+	libensembl_la-enscache.lo libensembl_la-enscoordsystem.lo \
+	libensembl_la-ensdatabaseadaptor.lo \
+	libensembl_la-ensdatabaseconnection.lo \
+	libensembl_la-ensdatabaseentry.lo libensembl_la-ensdensity.lo \
+	libensembl_la-ensditag.lo libensembl_la-ensexon.lo \
+	libensembl_la-ensexternaldatabase.lo \
+	libensembl_la-ensfeature.lo libensembl_la-ensgene.lo \
+	libensembl_la-ensgvallele.lo libensembl_la-ensgvattribute.lo \
+	libensembl_la-ensgvbaseadaptor.lo \
+	libensembl_la-ensgvdatabaseadaptor.lo \
+	libensembl_la-ensgvgenotype.lo \
+	libensembl_la-ensgvindividual.lo \
+	libensembl_la-ensgvpopulation.lo libensembl_la-ensgvsample.lo \
+	libensembl_la-ensgvsource.lo libensembl_la-ensgvsynonym.lo \
+	libensembl_la-ensgvvariation.lo libensembl_la-ensintron.lo \
+	libensembl_la-enskaryotype.lo libensembl_la-ensmapper.lo \
+	libensembl_la-ensmarker.lo libensembl_la-ensmetacoordinate.lo \
+	libensembl_la-ensmetainformation.lo \
+	libensembl_la-ensmiscellaneous.lo libensembl_la-ensontology.lo \
+	libensembl_la-ensprediction.lo \
+	libensembl_la-ensprojectionsegment.lo \
+	libensembl_la-ensprotein.lo libensembl_la-ensqc.lo \
+	libensembl_la-ensqcalignment.lo \
+	libensembl_la-ensqcdasfeature.lo \
+	libensembl_la-ensqcdatabase.lo libensembl_la-ensqcsequence.lo \
+	libensembl_la-ensqcsubmission.lo \
+	libensembl_la-ensqcvariation.lo libensembl_la-ensregistry.lo \
+	libensembl_la-ensrepeat.lo libensembl_la-ensseqregion.lo \
+	libensembl_la-enssequence.lo libensembl_la-enssequenceedit.lo \
+	libensembl_la-enssimple.lo libensembl_la-ensslice.lo \
+	libensembl_la-enssoftware.lo libensembl_la-ensstorable.lo \
+	libensembl_la-enstable.lo libensembl_la-enstranscript.lo \
+	libensembl_la-enstranslation.lo libensembl_la-ensutility.lo \
+	libensembl_la-ensvariation.lo
 libensembl_la_OBJECTS = $(am_libensembl_la_OBJECTS)
 libensembl_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(libensembl_la_LDFLAGS) $(LDFLAGS) -o $@
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libensembl_la_CFLAGS) \
+	$(CFLAGS) $(libensembl_la_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/ajax/core
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -125,6 +151,7 @@ ACLOCAL = @ACLOCAL@
 AJAX_FIXED_ROOT = @AJAX_FIXED_ROOT@
 AJAX_SYSTEM = @AJAX_SYSTEM@
 AMTAR = @AMTAR@
+ANT = @ANT@
 AR = @AR@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
@@ -154,9 +181,7 @@ ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
-EHAVEANT = @EHAVEANT@
 EMBOSS_TOP = @EMBOSS_TOP@
-ESYSTEMLIBS = @ESYSTEMLIBS@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
@@ -167,9 +192,12 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-ISAIXIA64 = @ISAIXIA64@
-ISCYGWIN = @ISCYGWIN@
-JAVA_OK = @JAVA_OK@
+JAR = @JAR@
+JAVA = @JAVA@
+JAVAC = @JAVAC@
+JAVA_CFLAGS = @JAVA_CFLAGS@
+JAVA_CPPFLAGS = @JAVA_CPPFLAGS@
+JAVA_LDFLAGS = @JAVA_LDFLAGS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -186,7 +214,6 @@ MYSQL_CONFIG = @MYSQL_CONFIG@
 MYSQL_CPPFLAGS = @MYSQL_CPPFLAGS@
 MYSQL_LDFLAGS = @MYSQL_LDFLAGS@
 MYSQL_VERSION = @MYSQL_VERSION@
-NEEDAJAX = @NEEDAJAX@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -207,12 +234,12 @@ PCRE_MAJOR = @PCRE_MAJOR@
 PCRE_MINOR = @PCRE_MINOR@
 PCRE_POSIXLIB_VERSION = @PCRE_POSIXLIB_VERSION@
 PCRE_VERSION = @PCRE_VERSION@
-PG_CONFIG = @PG_CONFIG@
 PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POSIX_MALLOC_THRESHOLD = @POSIX_MALLOC_THRESHOLD@
 POSTGRESQL_CFLAGS = @POSTGRESQL_CFLAGS@
+POSTGRESQL_CONFIG = @POSTGRESQL_CONFIG@
 POSTGRESQL_CPPFLAGS = @POSTGRESQL_CPPFLAGS@
 POSTGRESQL_LDFLAGS = @POSTGRESQL_LDFLAGS@
 POSTGRESQL_VERSION = @POSTGRESQL_VERSION@
@@ -242,7 +269,6 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
-ant_in_path = @ant_in_path@
 bindir = @bindir@
 build = @build@
 build_alias = @build_alias@
@@ -255,7 +281,6 @@ datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
-havejavac = @havejavac@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -265,7 +290,6 @@ htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-javac_in_path = @javac_in_path@
 libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
@@ -286,16 +310,11 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libensembl.la
-AM_CFLAGS = $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
-@ISCYGWIN_TRUE@CYGWIN_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import
-@ISCYGWIN_TRUE@CYGWIN_LDENSEMBL = -L../../plplot -L../expat -L../pcre -L../core -lajax -leplplot -leexpat -lepcre
-@ESYSTEMLIBS_FALSE@EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat
-AM_CPPFLAGS = -I$(top_srcdir)/ajax/core \
--I$(top_srcdir)/plplot \
-$(EXTRA_INCLUDES) \
--I$(top_srcdir)/ajax/pcre
-
-ENSEMBLSRC = \
+libensembl_la_CFLAGS = $(WARN_CFLAGS) $(DEVWARN_CFLAGS) $(JAVA_CFLAGS)
+libensembl_la_CPPFLAGS = -I$(top_srcdir)/ajax/pcre $(am__append_1) \
+	-I$(top_srcdir)/plplot $(JAVA_CPPFLAGS)
+libensembl_la_LDFLAGS = -version-info 6:4:0 $(am__append_2)
+libensembl_la_SOURCES = \
 ensalign.c \
 ensanalysis.c \
 ensassembly.c \
@@ -332,6 +351,7 @@ ensmarker.c \
 ensmetacoordinate.c \
 ensmetainformation.c \
 ensmiscellaneous.c \
+ensontology.c \
 ensprediction.c \
 ensprojectionsegment.c \
 ensprotein.c \
@@ -397,6 +417,7 @@ ensmarker.h \
 ensmetacoordinate.h \
 ensmetainformation.h \
 ensmiscellaneous.h \
+ensontology.h \
 ensprediction.h \
 ensprojectionsegment.h \
 ensprotein.h \
@@ -422,11 +443,6 @@ enstranslation.h \
 ensutility.h \
 ensvariation.h
 
-libensembl_la_SOURCES = $(ENSEMBLSRC)
-VERS_INF = -version-info 6:4:0
-@ISCYGWIN_FALSE@LINKFLAGS = $(VERS_INF)
-@ISCYGWIN_TRUE@LINKFLAGS = $(VERS_INF) $(CYGWIN_LDFLAGS) $(CYGWIN_LDENSEMBL)
-libensembl_la_LDFLAGS = $(LINKFLAGS)
 all: all-am
 
 .SUFFIXES:
@@ -501,66 +517,67 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensalign.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensanalysis.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensassembly.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensassemblyexception.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensassemblymapper.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensattribute.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensbaseadaptor.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enscache.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enscoordsystem.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensdatabaseadaptor.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensdatabaseconnection.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensdatabaseentry.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensdensity.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensditag.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensexon.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensexternaldatabase.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensfeature.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgene.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvallele.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvattribute.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvbaseadaptor.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvdatabaseadaptor.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvgenotype.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvindividual.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvpopulation.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvsample.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvsource.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvsynonym.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensgvvariation.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensintron.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enskaryotype.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensmapper.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensmarker.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensmetacoordinate.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensmetainformation.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensmiscellaneous.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensprediction.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensprojectionsegment.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensprotein.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqc.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqcalignment.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqcdasfeature.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqcdatabase.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqcsequence.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqcsubmission.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensqcvariation.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensregistry.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensrepeat.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensseqregion.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enssequence.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enssequenceedit.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enssimple.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensslice.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enssoftware.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensstorable.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enstable.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enstranscript.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enstranslation.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensutility.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ensvariation.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensalign.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensanalysis.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensassembly.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensassemblyexception.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensassemblymapper.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensattribute.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensbaseadaptor.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-enscache.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-enscoordsystem.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensdatabaseadaptor.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensdatabaseconnection.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensdatabaseentry.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensdensity.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensditag.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensexon.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensexternaldatabase.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensfeature.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensgene.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensgvallele.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensgvattribute.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensgvbaseadaptor.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensgvdatabaseadaptor.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensgvgenotype.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensgvindividual.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensgvpopulation.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensgvsample.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensgvsource.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensgvsynonym.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensgvvariation.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensintron.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-enskaryotype.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensmapper.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensmarker.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensmetacoordinate.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensmetainformation.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensmiscellaneous.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensontology.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensprediction.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensprojectionsegment.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensprotein.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensqc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensqcalignment.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensqcdasfeature.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensqcdatabase.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensqcsequence.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensqcsubmission.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensqcvariation.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensregistry.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensrepeat.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensseqregion.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-enssequence.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-enssequenceedit.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-enssimple.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensslice.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-enssoftware.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensstorable.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-enstable.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-enstranscript.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-enstranslation.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensutility.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libensembl_la-ensvariation.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -582,6 +599,433 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+libensembl_la-ensalign.lo: ensalign.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensalign.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensalign.Tpo -c -o libensembl_la-ensalign.lo `test -f 'ensalign.c' || echo '$(srcdir)/'`ensalign.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensalign.Tpo $(DEPDIR)/libensembl_la-ensalign.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensalign.c' object='libensembl_la-ensalign.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensalign.lo `test -f 'ensalign.c' || echo '$(srcdir)/'`ensalign.c
+
+libensembl_la-ensanalysis.lo: ensanalysis.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensanalysis.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensanalysis.Tpo -c -o libensembl_la-ensanalysis.lo `test -f 'ensanalysis.c' || echo '$(srcdir)/'`ensanalysis.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensanalysis.Tpo $(DEPDIR)/libensembl_la-ensanalysis.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensanalysis.c' object='libensembl_la-ensanalysis.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensanalysis.lo `test -f 'ensanalysis.c' || echo '$(srcdir)/'`ensanalysis.c
+
+libensembl_la-ensassembly.lo: ensassembly.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensassembly.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensassembly.Tpo -c -o libensembl_la-ensassembly.lo `test -f 'ensassembly.c' || echo '$(srcdir)/'`ensassembly.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensassembly.Tpo $(DEPDIR)/libensembl_la-ensassembly.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensassembly.c' object='libensembl_la-ensassembly.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensassembly.lo `test -f 'ensassembly.c' || echo '$(srcdir)/'`ensassembly.c
+
+libensembl_la-ensassemblyexception.lo: ensassemblyexception.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensassemblyexception.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensassemblyexception.Tpo -c -o libensembl_la-ensassemblyexception.lo `test -f 'ensassemblyexception.c' || echo '$(srcdir)/'`ensassemblyexception.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensassemblyexception.Tpo $(DEPDIR)/libensembl_la-ensassemblyexception.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensassemblyexception.c' object='libensembl_la-ensassemblyexception.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensassemblyexception.lo `test -f 'ensassemblyexception.c' || echo '$(srcdir)/'`ensassemblyexception.c
+
+libensembl_la-ensassemblymapper.lo: ensassemblymapper.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensassemblymapper.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensassemblymapper.Tpo -c -o libensembl_la-ensassemblymapper.lo `test -f 'ensassemblymapper.c' || echo '$(srcdir)/'`ensassemblymapper.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensassemblymapper.Tpo $(DEPDIR)/libensembl_la-ensassemblymapper.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensassemblymapper.c' object='libensembl_la-ensassemblymapper.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensassemblymapper.lo `test -f 'ensassemblymapper.c' || echo '$(srcdir)/'`ensassemblymapper.c
+
+libensembl_la-ensattribute.lo: ensattribute.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensattribute.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensattribute.Tpo -c -o libensembl_la-ensattribute.lo `test -f 'ensattribute.c' || echo '$(srcdir)/'`ensattribute.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensattribute.Tpo $(DEPDIR)/libensembl_la-ensattribute.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensattribute.c' object='libensembl_la-ensattribute.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensattribute.lo `test -f 'ensattribute.c' || echo '$(srcdir)/'`ensattribute.c
+
+libensembl_la-ensbaseadaptor.lo: ensbaseadaptor.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensbaseadaptor.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensbaseadaptor.Tpo -c -o libensembl_la-ensbaseadaptor.lo `test -f 'ensbaseadaptor.c' || echo '$(srcdir)/'`ensbaseadaptor.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensbaseadaptor.Tpo $(DEPDIR)/libensembl_la-ensbaseadaptor.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensbaseadaptor.c' object='libensembl_la-ensbaseadaptor.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensbaseadaptor.lo `test -f 'ensbaseadaptor.c' || echo '$(srcdir)/'`ensbaseadaptor.c
+
+libensembl_la-enscache.lo: enscache.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-enscache.lo -MD -MP -MF $(DEPDIR)/libensembl_la-enscache.Tpo -c -o libensembl_la-enscache.lo `test -f 'enscache.c' || echo '$(srcdir)/'`enscache.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-enscache.Tpo $(DEPDIR)/libensembl_la-enscache.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='enscache.c' object='libensembl_la-enscache.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-enscache.lo `test -f 'enscache.c' || echo '$(srcdir)/'`enscache.c
+
+libensembl_la-enscoordsystem.lo: enscoordsystem.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-enscoordsystem.lo -MD -MP -MF $(DEPDIR)/libensembl_la-enscoordsystem.Tpo -c -o libensembl_la-enscoordsystem.lo `test -f 'enscoordsystem.c' || echo '$(srcdir)/'`enscoordsystem.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-enscoordsystem.Tpo $(DEPDIR)/libensembl_la-enscoordsystem.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='enscoordsystem.c' object='libensembl_la-enscoordsystem.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-enscoordsystem.lo `test -f 'enscoordsystem.c' || echo '$(srcdir)/'`enscoordsystem.c
+
+libensembl_la-ensdatabaseadaptor.lo: ensdatabaseadaptor.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensdatabaseadaptor.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensdatabaseadaptor.Tpo -c -o libensembl_la-ensdatabaseadaptor.lo `test -f 'ensdatabaseadaptor.c' || echo '$(srcdir)/'`ensdatabaseadaptor.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensdatabaseadaptor.Tpo $(DEPDIR)/libensembl_la-ensdatabaseadaptor.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensdatabaseadaptor.c' object='libensembl_la-ensdatabaseadaptor.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensdatabaseadaptor.lo `test -f 'ensdatabaseadaptor.c' || echo '$(srcdir)/'`ensdatabaseadaptor.c
+
+libensembl_la-ensdatabaseconnection.lo: ensdatabaseconnection.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensdatabaseconnection.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensdatabaseconnection.Tpo -c -o libensembl_la-ensdatabaseconnection.lo `test -f 'ensdatabaseconnection.c' || echo '$(srcdir)/'`ensdatabaseconnection.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensdatabaseconnection.Tpo $(DEPDIR)/libensembl_la-ensdatabaseconnection.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensdatabaseconnection.c' object='libensembl_la-ensdatabaseconnection.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensdatabaseconnection.lo `test -f 'ensdatabaseconnection.c' || echo '$(srcdir)/'`ensdatabaseconnection.c
+
+libensembl_la-ensdatabaseentry.lo: ensdatabaseentry.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensdatabaseentry.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensdatabaseentry.Tpo -c -o libensembl_la-ensdatabaseentry.lo `test -f 'ensdatabaseentry.c' || echo '$(srcdir)/'`ensdatabaseentry.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensdatabaseentry.Tpo $(DEPDIR)/libensembl_la-ensdatabaseentry.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensdatabaseentry.c' object='libensembl_la-ensdatabaseentry.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensdatabaseentry.lo `test -f 'ensdatabaseentry.c' || echo '$(srcdir)/'`ensdatabaseentry.c
+
+libensembl_la-ensdensity.lo: ensdensity.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensdensity.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensdensity.Tpo -c -o libensembl_la-ensdensity.lo `test -f 'ensdensity.c' || echo '$(srcdir)/'`ensdensity.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensdensity.Tpo $(DEPDIR)/libensembl_la-ensdensity.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensdensity.c' object='libensembl_la-ensdensity.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensdensity.lo `test -f 'ensdensity.c' || echo '$(srcdir)/'`ensdensity.c
+
+libensembl_la-ensditag.lo: ensditag.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensditag.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensditag.Tpo -c -o libensembl_la-ensditag.lo `test -f 'ensditag.c' || echo '$(srcdir)/'`ensditag.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensditag.Tpo $(DEPDIR)/libensembl_la-ensditag.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensditag.c' object='libensembl_la-ensditag.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensditag.lo `test -f 'ensditag.c' || echo '$(srcdir)/'`ensditag.c
+
+libensembl_la-ensexon.lo: ensexon.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensexon.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensexon.Tpo -c -o libensembl_la-ensexon.lo `test -f 'ensexon.c' || echo '$(srcdir)/'`ensexon.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensexon.Tpo $(DEPDIR)/libensembl_la-ensexon.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensexon.c' object='libensembl_la-ensexon.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensexon.lo `test -f 'ensexon.c' || echo '$(srcdir)/'`ensexon.c
+
+libensembl_la-ensexternaldatabase.lo: ensexternaldatabase.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensexternaldatabase.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensexternaldatabase.Tpo -c -o libensembl_la-ensexternaldatabase.lo `test -f 'ensexternaldatabase.c' || echo '$(srcdir)/'`ensexternaldatabase.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensexternaldatabase.Tpo $(DEPDIR)/libensembl_la-ensexternaldatabase.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensexternaldatabase.c' object='libensembl_la-ensexternaldatabase.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensexternaldatabase.lo `test -f 'ensexternaldatabase.c' || echo '$(srcdir)/'`ensexternaldatabase.c
+
+libensembl_la-ensfeature.lo: ensfeature.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensfeature.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensfeature.Tpo -c -o libensembl_la-ensfeature.lo `test -f 'ensfeature.c' || echo '$(srcdir)/'`ensfeature.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensfeature.Tpo $(DEPDIR)/libensembl_la-ensfeature.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensfeature.c' object='libensembl_la-ensfeature.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensfeature.lo `test -f 'ensfeature.c' || echo '$(srcdir)/'`ensfeature.c
+
+libensembl_la-ensgene.lo: ensgene.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensgene.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensgene.Tpo -c -o libensembl_la-ensgene.lo `test -f 'ensgene.c' || echo '$(srcdir)/'`ensgene.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensgene.Tpo $(DEPDIR)/libensembl_la-ensgene.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensgene.c' object='libensembl_la-ensgene.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensgene.lo `test -f 'ensgene.c' || echo '$(srcdir)/'`ensgene.c
+
+libensembl_la-ensgvallele.lo: ensgvallele.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensgvallele.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensgvallele.Tpo -c -o libensembl_la-ensgvallele.lo `test -f 'ensgvallele.c' || echo '$(srcdir)/'`ensgvallele.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensgvallele.Tpo $(DEPDIR)/libensembl_la-ensgvallele.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensgvallele.c' object='libensembl_la-ensgvallele.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensgvallele.lo `test -f 'ensgvallele.c' || echo '$(srcdir)/'`ensgvallele.c
+
+libensembl_la-ensgvattribute.lo: ensgvattribute.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensgvattribute.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensgvattribute.Tpo -c -o libensembl_la-ensgvattribute.lo `test -f 'ensgvattribute.c' || echo '$(srcdir)/'`ensgvattribute.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensgvattribute.Tpo $(DEPDIR)/libensembl_la-ensgvattribute.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensgvattribute.c' object='libensembl_la-ensgvattribute.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensgvattribute.lo `test -f 'ensgvattribute.c' || echo '$(srcdir)/'`ensgvattribute.c
+
+libensembl_la-ensgvbaseadaptor.lo: ensgvbaseadaptor.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensgvbaseadaptor.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensgvbaseadaptor.Tpo -c -o libensembl_la-ensgvbaseadaptor.lo `test -f 'ensgvbaseadaptor.c' || echo '$(srcdir)/'`ensgvbaseadaptor.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensgvbaseadaptor.Tpo $(DEPDIR)/libensembl_la-ensgvbaseadaptor.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensgvbaseadaptor.c' object='libensembl_la-ensgvbaseadaptor.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensgvbaseadaptor.lo `test -f 'ensgvbaseadaptor.c' || echo '$(srcdir)/'`ensgvbaseadaptor.c
+
+libensembl_la-ensgvdatabaseadaptor.lo: ensgvdatabaseadaptor.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensgvdatabaseadaptor.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensgvdatabaseadaptor.Tpo -c -o libensembl_la-ensgvdatabaseadaptor.lo `test -f 'ensgvdatabaseadaptor.c' || echo '$(srcdir)/'`ensgvdatabaseadaptor.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensgvdatabaseadaptor.Tpo $(DEPDIR)/libensembl_la-ensgvdatabaseadaptor.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensgvdatabaseadaptor.c' object='libensembl_la-ensgvdatabaseadaptor.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensgvdatabaseadaptor.lo `test -f 'ensgvdatabaseadaptor.c' || echo '$(srcdir)/'`ensgvdatabaseadaptor.c
+
+libensembl_la-ensgvgenotype.lo: ensgvgenotype.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensgvgenotype.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensgvgenotype.Tpo -c -o libensembl_la-ensgvgenotype.lo `test -f 'ensgvgenotype.c' || echo '$(srcdir)/'`ensgvgenotype.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensgvgenotype.Tpo $(DEPDIR)/libensembl_la-ensgvgenotype.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensgvgenotype.c' object='libensembl_la-ensgvgenotype.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensgvgenotype.lo `test -f 'ensgvgenotype.c' || echo '$(srcdir)/'`ensgvgenotype.c
+
+libensembl_la-ensgvindividual.lo: ensgvindividual.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensgvindividual.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensgvindividual.Tpo -c -o libensembl_la-ensgvindividual.lo `test -f 'ensgvindividual.c' || echo '$(srcdir)/'`ensgvindividual.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensgvindividual.Tpo $(DEPDIR)/libensembl_la-ensgvindividual.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensgvindividual.c' object='libensembl_la-ensgvindividual.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensgvindividual.lo `test -f 'ensgvindividual.c' || echo '$(srcdir)/'`ensgvindividual.c
+
+libensembl_la-ensgvpopulation.lo: ensgvpopulation.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensgvpopulation.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensgvpopulation.Tpo -c -o libensembl_la-ensgvpopulation.lo `test -f 'ensgvpopulation.c' || echo '$(srcdir)/'`ensgvpopulation.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensgvpopulation.Tpo $(DEPDIR)/libensembl_la-ensgvpopulation.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensgvpopulation.c' object='libensembl_la-ensgvpopulation.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensgvpopulation.lo `test -f 'ensgvpopulation.c' || echo '$(srcdir)/'`ensgvpopulation.c
+
+libensembl_la-ensgvsample.lo: ensgvsample.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensgvsample.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensgvsample.Tpo -c -o libensembl_la-ensgvsample.lo `test -f 'ensgvsample.c' || echo '$(srcdir)/'`ensgvsample.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensgvsample.Tpo $(DEPDIR)/libensembl_la-ensgvsample.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensgvsample.c' object='libensembl_la-ensgvsample.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensgvsample.lo `test -f 'ensgvsample.c' || echo '$(srcdir)/'`ensgvsample.c
+
+libensembl_la-ensgvsource.lo: ensgvsource.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensgvsource.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensgvsource.Tpo -c -o libensembl_la-ensgvsource.lo `test -f 'ensgvsource.c' || echo '$(srcdir)/'`ensgvsource.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensgvsource.Tpo $(DEPDIR)/libensembl_la-ensgvsource.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensgvsource.c' object='libensembl_la-ensgvsource.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensgvsource.lo `test -f 'ensgvsource.c' || echo '$(srcdir)/'`ensgvsource.c
+
+libensembl_la-ensgvsynonym.lo: ensgvsynonym.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensgvsynonym.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensgvsynonym.Tpo -c -o libensembl_la-ensgvsynonym.lo `test -f 'ensgvsynonym.c' || echo '$(srcdir)/'`ensgvsynonym.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensgvsynonym.Tpo $(DEPDIR)/libensembl_la-ensgvsynonym.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensgvsynonym.c' object='libensembl_la-ensgvsynonym.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensgvsynonym.lo `test -f 'ensgvsynonym.c' || echo '$(srcdir)/'`ensgvsynonym.c
+
+libensembl_la-ensgvvariation.lo: ensgvvariation.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensgvvariation.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensgvvariation.Tpo -c -o libensembl_la-ensgvvariation.lo `test -f 'ensgvvariation.c' || echo '$(srcdir)/'`ensgvvariation.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensgvvariation.Tpo $(DEPDIR)/libensembl_la-ensgvvariation.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensgvvariation.c' object='libensembl_la-ensgvvariation.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensgvvariation.lo `test -f 'ensgvvariation.c' || echo '$(srcdir)/'`ensgvvariation.c
+
+libensembl_la-ensintron.lo: ensintron.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensintron.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensintron.Tpo -c -o libensembl_la-ensintron.lo `test -f 'ensintron.c' || echo '$(srcdir)/'`ensintron.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensintron.Tpo $(DEPDIR)/libensembl_la-ensintron.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensintron.c' object='libensembl_la-ensintron.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensintron.lo `test -f 'ensintron.c' || echo '$(srcdir)/'`ensintron.c
+
+libensembl_la-enskaryotype.lo: enskaryotype.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-enskaryotype.lo -MD -MP -MF $(DEPDIR)/libensembl_la-enskaryotype.Tpo -c -o libensembl_la-enskaryotype.lo `test -f 'enskaryotype.c' || echo '$(srcdir)/'`enskaryotype.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-enskaryotype.Tpo $(DEPDIR)/libensembl_la-enskaryotype.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='enskaryotype.c' object='libensembl_la-enskaryotype.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-enskaryotype.lo `test -f 'enskaryotype.c' || echo '$(srcdir)/'`enskaryotype.c
+
+libensembl_la-ensmapper.lo: ensmapper.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensmapper.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensmapper.Tpo -c -o libensembl_la-ensmapper.lo `test -f 'ensmapper.c' || echo '$(srcdir)/'`ensmapper.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensmapper.Tpo $(DEPDIR)/libensembl_la-ensmapper.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensmapper.c' object='libensembl_la-ensmapper.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensmapper.lo `test -f 'ensmapper.c' || echo '$(srcdir)/'`ensmapper.c
+
+libensembl_la-ensmarker.lo: ensmarker.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensmarker.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensmarker.Tpo -c -o libensembl_la-ensmarker.lo `test -f 'ensmarker.c' || echo '$(srcdir)/'`ensmarker.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensmarker.Tpo $(DEPDIR)/libensembl_la-ensmarker.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensmarker.c' object='libensembl_la-ensmarker.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensmarker.lo `test -f 'ensmarker.c' || echo '$(srcdir)/'`ensmarker.c
+
+libensembl_la-ensmetacoordinate.lo: ensmetacoordinate.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensmetacoordinate.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensmetacoordinate.Tpo -c -o libensembl_la-ensmetacoordinate.lo `test -f 'ensmetacoordinate.c' || echo '$(srcdir)/'`ensmetacoordinate.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensmetacoordinate.Tpo $(DEPDIR)/libensembl_la-ensmetacoordinate.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensmetacoordinate.c' object='libensembl_la-ensmetacoordinate.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensmetacoordinate.lo `test -f 'ensmetacoordinate.c' || echo '$(srcdir)/'`ensmetacoordinate.c
+
+libensembl_la-ensmetainformation.lo: ensmetainformation.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensmetainformation.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensmetainformation.Tpo -c -o libensembl_la-ensmetainformation.lo `test -f 'ensmetainformation.c' || echo '$(srcdir)/'`ensmetainformation.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensmetainformation.Tpo $(DEPDIR)/libensembl_la-ensmetainformation.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensmetainformation.c' object='libensembl_la-ensmetainformation.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensmetainformation.lo `test -f 'ensmetainformation.c' || echo '$(srcdir)/'`ensmetainformation.c
+
+libensembl_la-ensmiscellaneous.lo: ensmiscellaneous.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensmiscellaneous.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensmiscellaneous.Tpo -c -o libensembl_la-ensmiscellaneous.lo `test -f 'ensmiscellaneous.c' || echo '$(srcdir)/'`ensmiscellaneous.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensmiscellaneous.Tpo $(DEPDIR)/libensembl_la-ensmiscellaneous.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensmiscellaneous.c' object='libensembl_la-ensmiscellaneous.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensmiscellaneous.lo `test -f 'ensmiscellaneous.c' || echo '$(srcdir)/'`ensmiscellaneous.c
+
+libensembl_la-ensontology.lo: ensontology.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensontology.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensontology.Tpo -c -o libensembl_la-ensontology.lo `test -f 'ensontology.c' || echo '$(srcdir)/'`ensontology.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensontology.Tpo $(DEPDIR)/libensembl_la-ensontology.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensontology.c' object='libensembl_la-ensontology.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensontology.lo `test -f 'ensontology.c' || echo '$(srcdir)/'`ensontology.c
+
+libensembl_la-ensprediction.lo: ensprediction.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensprediction.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensprediction.Tpo -c -o libensembl_la-ensprediction.lo `test -f 'ensprediction.c' || echo '$(srcdir)/'`ensprediction.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensprediction.Tpo $(DEPDIR)/libensembl_la-ensprediction.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensprediction.c' object='libensembl_la-ensprediction.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensprediction.lo `test -f 'ensprediction.c' || echo '$(srcdir)/'`ensprediction.c
+
+libensembl_la-ensprojectionsegment.lo: ensprojectionsegment.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensprojectionsegment.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensprojectionsegment.Tpo -c -o libensembl_la-ensprojectionsegment.lo `test -f 'ensprojectionsegment.c' || echo '$(srcdir)/'`ensprojectionsegment.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensprojectionsegment.Tpo $(DEPDIR)/libensembl_la-ensprojectionsegment.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensprojectionsegment.c' object='libensembl_la-ensprojectionsegment.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensprojectionsegment.lo `test -f 'ensprojectionsegment.c' || echo '$(srcdir)/'`ensprojectionsegment.c
+
+libensembl_la-ensprotein.lo: ensprotein.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensprotein.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensprotein.Tpo -c -o libensembl_la-ensprotein.lo `test -f 'ensprotein.c' || echo '$(srcdir)/'`ensprotein.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensprotein.Tpo $(DEPDIR)/libensembl_la-ensprotein.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensprotein.c' object='libensembl_la-ensprotein.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensprotein.lo `test -f 'ensprotein.c' || echo '$(srcdir)/'`ensprotein.c
+
+libensembl_la-ensqc.lo: ensqc.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensqc.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensqc.Tpo -c -o libensembl_la-ensqc.lo `test -f 'ensqc.c' || echo '$(srcdir)/'`ensqc.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensqc.Tpo $(DEPDIR)/libensembl_la-ensqc.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensqc.c' object='libensembl_la-ensqc.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensqc.lo `test -f 'ensqc.c' || echo '$(srcdir)/'`ensqc.c
+
+libensembl_la-ensqcalignment.lo: ensqcalignment.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensqcalignment.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensqcalignment.Tpo -c -o libensembl_la-ensqcalignment.lo `test -f 'ensqcalignment.c' || echo '$(srcdir)/'`ensqcalignment.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensqcalignment.Tpo $(DEPDIR)/libensembl_la-ensqcalignment.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensqcalignment.c' object='libensembl_la-ensqcalignment.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensqcalignment.lo `test -f 'ensqcalignment.c' || echo '$(srcdir)/'`ensqcalignment.c
+
+libensembl_la-ensqcdasfeature.lo: ensqcdasfeature.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensqcdasfeature.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensqcdasfeature.Tpo -c -o libensembl_la-ensqcdasfeature.lo `test -f 'ensqcdasfeature.c' || echo '$(srcdir)/'`ensqcdasfeature.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensqcdasfeature.Tpo $(DEPDIR)/libensembl_la-ensqcdasfeature.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensqcdasfeature.c' object='libensembl_la-ensqcdasfeature.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensqcdasfeature.lo `test -f 'ensqcdasfeature.c' || echo '$(srcdir)/'`ensqcdasfeature.c
+
+libensembl_la-ensqcdatabase.lo: ensqcdatabase.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensqcdatabase.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensqcdatabase.Tpo -c -o libensembl_la-ensqcdatabase.lo `test -f 'ensqcdatabase.c' || echo '$(srcdir)/'`ensqcdatabase.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensqcdatabase.Tpo $(DEPDIR)/libensembl_la-ensqcdatabase.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensqcdatabase.c' object='libensembl_la-ensqcdatabase.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensqcdatabase.lo `test -f 'ensqcdatabase.c' || echo '$(srcdir)/'`ensqcdatabase.c
+
+libensembl_la-ensqcsequence.lo: ensqcsequence.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensqcsequence.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensqcsequence.Tpo -c -o libensembl_la-ensqcsequence.lo `test -f 'ensqcsequence.c' || echo '$(srcdir)/'`ensqcsequence.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensqcsequence.Tpo $(DEPDIR)/libensembl_la-ensqcsequence.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensqcsequence.c' object='libensembl_la-ensqcsequence.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensqcsequence.lo `test -f 'ensqcsequence.c' || echo '$(srcdir)/'`ensqcsequence.c
+
+libensembl_la-ensqcsubmission.lo: ensqcsubmission.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensqcsubmission.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensqcsubmission.Tpo -c -o libensembl_la-ensqcsubmission.lo `test -f 'ensqcsubmission.c' || echo '$(srcdir)/'`ensqcsubmission.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensqcsubmission.Tpo $(DEPDIR)/libensembl_la-ensqcsubmission.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensqcsubmission.c' object='libensembl_la-ensqcsubmission.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensqcsubmission.lo `test -f 'ensqcsubmission.c' || echo '$(srcdir)/'`ensqcsubmission.c
+
+libensembl_la-ensqcvariation.lo: ensqcvariation.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensqcvariation.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensqcvariation.Tpo -c -o libensembl_la-ensqcvariation.lo `test -f 'ensqcvariation.c' || echo '$(srcdir)/'`ensqcvariation.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensqcvariation.Tpo $(DEPDIR)/libensembl_la-ensqcvariation.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensqcvariation.c' object='libensembl_la-ensqcvariation.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensqcvariation.lo `test -f 'ensqcvariation.c' || echo '$(srcdir)/'`ensqcvariation.c
+
+libensembl_la-ensregistry.lo: ensregistry.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensregistry.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensregistry.Tpo -c -o libensembl_la-ensregistry.lo `test -f 'ensregistry.c' || echo '$(srcdir)/'`ensregistry.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensregistry.Tpo $(DEPDIR)/libensembl_la-ensregistry.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensregistry.c' object='libensembl_la-ensregistry.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensregistry.lo `test -f 'ensregistry.c' || echo '$(srcdir)/'`ensregistry.c
+
+libensembl_la-ensrepeat.lo: ensrepeat.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensrepeat.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensrepeat.Tpo -c -o libensembl_la-ensrepeat.lo `test -f 'ensrepeat.c' || echo '$(srcdir)/'`ensrepeat.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensrepeat.Tpo $(DEPDIR)/libensembl_la-ensrepeat.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensrepeat.c' object='libensembl_la-ensrepeat.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensrepeat.lo `test -f 'ensrepeat.c' || echo '$(srcdir)/'`ensrepeat.c
+
+libensembl_la-ensseqregion.lo: ensseqregion.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensseqregion.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensseqregion.Tpo -c -o libensembl_la-ensseqregion.lo `test -f 'ensseqregion.c' || echo '$(srcdir)/'`ensseqregion.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensseqregion.Tpo $(DEPDIR)/libensembl_la-ensseqregion.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensseqregion.c' object='libensembl_la-ensseqregion.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensseqregion.lo `test -f 'ensseqregion.c' || echo '$(srcdir)/'`ensseqregion.c
+
+libensembl_la-enssequence.lo: enssequence.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-enssequence.lo -MD -MP -MF $(DEPDIR)/libensembl_la-enssequence.Tpo -c -o libensembl_la-enssequence.lo `test -f 'enssequence.c' || echo '$(srcdir)/'`enssequence.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-enssequence.Tpo $(DEPDIR)/libensembl_la-enssequence.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='enssequence.c' object='libensembl_la-enssequence.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-enssequence.lo `test -f 'enssequence.c' || echo '$(srcdir)/'`enssequence.c
+
+libensembl_la-enssequenceedit.lo: enssequenceedit.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-enssequenceedit.lo -MD -MP -MF $(DEPDIR)/libensembl_la-enssequenceedit.Tpo -c -o libensembl_la-enssequenceedit.lo `test -f 'enssequenceedit.c' || echo '$(srcdir)/'`enssequenceedit.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-enssequenceedit.Tpo $(DEPDIR)/libensembl_la-enssequenceedit.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='enssequenceedit.c' object='libensembl_la-enssequenceedit.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-enssequenceedit.lo `test -f 'enssequenceedit.c' || echo '$(srcdir)/'`enssequenceedit.c
+
+libensembl_la-enssimple.lo: enssimple.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-enssimple.lo -MD -MP -MF $(DEPDIR)/libensembl_la-enssimple.Tpo -c -o libensembl_la-enssimple.lo `test -f 'enssimple.c' || echo '$(srcdir)/'`enssimple.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-enssimple.Tpo $(DEPDIR)/libensembl_la-enssimple.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='enssimple.c' object='libensembl_la-enssimple.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-enssimple.lo `test -f 'enssimple.c' || echo '$(srcdir)/'`enssimple.c
+
+libensembl_la-ensslice.lo: ensslice.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensslice.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensslice.Tpo -c -o libensembl_la-ensslice.lo `test -f 'ensslice.c' || echo '$(srcdir)/'`ensslice.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensslice.Tpo $(DEPDIR)/libensembl_la-ensslice.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensslice.c' object='libensembl_la-ensslice.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensslice.lo `test -f 'ensslice.c' || echo '$(srcdir)/'`ensslice.c
+
+libensembl_la-enssoftware.lo: enssoftware.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-enssoftware.lo -MD -MP -MF $(DEPDIR)/libensembl_la-enssoftware.Tpo -c -o libensembl_la-enssoftware.lo `test -f 'enssoftware.c' || echo '$(srcdir)/'`enssoftware.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-enssoftware.Tpo $(DEPDIR)/libensembl_la-enssoftware.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='enssoftware.c' object='libensembl_la-enssoftware.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-enssoftware.lo `test -f 'enssoftware.c' || echo '$(srcdir)/'`enssoftware.c
+
+libensembl_la-ensstorable.lo: ensstorable.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensstorable.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensstorable.Tpo -c -o libensembl_la-ensstorable.lo `test -f 'ensstorable.c' || echo '$(srcdir)/'`ensstorable.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensstorable.Tpo $(DEPDIR)/libensembl_la-ensstorable.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensstorable.c' object='libensembl_la-ensstorable.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensstorable.lo `test -f 'ensstorable.c' || echo '$(srcdir)/'`ensstorable.c
+
+libensembl_la-enstable.lo: enstable.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-enstable.lo -MD -MP -MF $(DEPDIR)/libensembl_la-enstable.Tpo -c -o libensembl_la-enstable.lo `test -f 'enstable.c' || echo '$(srcdir)/'`enstable.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-enstable.Tpo $(DEPDIR)/libensembl_la-enstable.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='enstable.c' object='libensembl_la-enstable.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-enstable.lo `test -f 'enstable.c' || echo '$(srcdir)/'`enstable.c
+
+libensembl_la-enstranscript.lo: enstranscript.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-enstranscript.lo -MD -MP -MF $(DEPDIR)/libensembl_la-enstranscript.Tpo -c -o libensembl_la-enstranscript.lo `test -f 'enstranscript.c' || echo '$(srcdir)/'`enstranscript.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-enstranscript.Tpo $(DEPDIR)/libensembl_la-enstranscript.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='enstranscript.c' object='libensembl_la-enstranscript.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-enstranscript.lo `test -f 'enstranscript.c' || echo '$(srcdir)/'`enstranscript.c
+
+libensembl_la-enstranslation.lo: enstranslation.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-enstranslation.lo -MD -MP -MF $(DEPDIR)/libensembl_la-enstranslation.Tpo -c -o libensembl_la-enstranslation.lo `test -f 'enstranslation.c' || echo '$(srcdir)/'`enstranslation.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-enstranslation.Tpo $(DEPDIR)/libensembl_la-enstranslation.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='enstranslation.c' object='libensembl_la-enstranslation.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-enstranslation.lo `test -f 'enstranslation.c' || echo '$(srcdir)/'`enstranslation.c
+
+libensembl_la-ensutility.lo: ensutility.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensutility.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensutility.Tpo -c -o libensembl_la-ensutility.lo `test -f 'ensutility.c' || echo '$(srcdir)/'`ensutility.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensutility.Tpo $(DEPDIR)/libensembl_la-ensutility.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensutility.c' object='libensembl_la-ensutility.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensutility.lo `test -f 'ensutility.c' || echo '$(srcdir)/'`ensutility.c
+
+libensembl_la-ensvariation.lo: ensvariation.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -MT libensembl_la-ensvariation.lo -MD -MP -MF $(DEPDIR)/libensembl_la-ensvariation.Tpo -c -o libensembl_la-ensvariation.lo `test -f 'ensvariation.c' || echo '$(srcdir)/'`ensvariation.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libensembl_la-ensvariation.Tpo $(DEPDIR)/libensembl_la-ensvariation.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ensvariation.c' object='libensembl_la-ensvariation.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libensembl_la_CPPFLAGS) $(CPPFLAGS) $(libensembl_la_CFLAGS) $(CFLAGS) -c -o libensembl_la-ensvariation.lo `test -f 'ensvariation.c' || echo '$(srcdir)/'`ensvariation.c
 
 mostlyclean-libtool:
 	-rm -f *.lo

@@ -36,6 +36,12 @@ binding_site SO:0000409 SO:0100018_np_bind SO:0100020_zn_fing
 	/note
 	/comment
 
+# SO:
+# A region defined by its disposition to be involved in a biological process
+# used as a general feature by EMBOSS
+
+biological_region SO:0001411
+
 epitope SO:0001018
 	/note
 	/comment
@@ -193,7 +199,7 @@ lipoconjugated_residue MOD:01155
 
 # METAL - Binding site for a metal ion.
 
-metal_binding SO:0001092 SO:0001092_metal
+polypeptide_metal_contact SO:0001092 SO:0001092_metal
 	/note
 	/comment
 
@@ -215,11 +221,7 @@ metal_binding SO:0001092 SO:0001092_metal
 #                            internal cyclic lactam
 #SULFATATION                 Generally of tyrosine
 
-protein_modification_categorized_by_chemical_process MOD:01156
-	/note
-	/comment
-
-post_translational_modification SO:0001089
+post_translationally_modified_region SO:0001089 MOD:01156
 	/note
 	/comment
 
@@ -351,7 +353,7 @@ transmembrane SO:0001077 SO:0001077_transmem
 
 # TURN -  DSSP secondary structure
 
-turn SO:0001128
+polypeptide_turn_motif SO:0001128
 	/note
 	/comment
 
@@ -371,7 +373,7 @@ sequence_uncertainty SO:0001086
 #	/comment
 	/ftid
 
-natural_variant SO:0001147 SO:0001147_variant
+natural_variant_site SO:0001147 SO:0001147_variant
 	/note
 	/comment
 	/ftid

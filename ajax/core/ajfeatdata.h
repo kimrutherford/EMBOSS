@@ -1,46 +1,83 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-/*
+/* @include ajfeatdata ********************************************************
 **
-** ajfeatdata.h - AJAX Sequence Feature include file
-**            Version 1.0 - March 2001
+** AJAX feature data include file
 **
-*/
+** @author Copyright (C) 1999 Richard Bruskiewich
+** @version $Revision: 1.34 $
+** @modified 2000 Ian Longden.
+** @modified 2001 Peter Rice.
+** @modified $Date: 2012/04/26 17:36:15 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+******************************************************************************/
 
-#ifndef ajfeatdata_h
-#define ajfeatdata_h
+#ifndef AJFEATDATA_H
+#define AJFEATDATA_H
 
-typedef struct AjSFeattabAccess AjSFeattabAccess;
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
+#include "ajlist.h"
+#include "ajtextdata.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
 
 #define DEFAULT_GFF_VERSION 3
 
-    /*
-    ** some featflag values are retained for reading in old output files
-    */
+/*
+** some featflag values are retained for reading in old output files
+*/
 
-#define FEATFLAG_START_BEFORE_SEQ 0x0001 /* <start */
-#define FEATFLAG_END_AFTER_SEQ    0x0002 /* >end */
-#define FEATFLAG_CHILD            0x0004 /* exon for join() */
-#define FEATFLAG_BETWEEN_SEQ      0x0008  /* x^y */
-#define FEATFLAG_START_TWO        0x0010  /* x.y.. */
-#define FEATFLAG_END_TWO          0x0020  /* ..x.y */
-#define FEATFLAG_POINT            0x0040  /* x */
-#define FEATFLAG_COMPLEMENT_MAIN  0x0080  /* complement around the join */
-#define FEATFLAG_MULTIPLE         0x0100  /* part of a multiple i.e. join*/
-#define FEATFLAG_GROUP            0x0200  /* group */
-#define FEATFLAG_ORDER            0x0400  /* order */
-#define FEATFLAG_ONEOF            0x0800  /* one_of */
-#define FEATFLAG_REMOTEID         0x1000  /* AB012345.6: */
-#define FEATFLAG_LABEL            0x2000  /* label as location */
-#define FEATFLAG_START_UNSURE     0x4000  /* unsure position - SwissProt '?' */
-#define FEATFLAG_END_UNSURE       0x8000  /* unsure position - SwissProt '?' */
+#define AJFEATFLAG_START_BEFORE_SEQ 0x0001  /* <start */
+#define AJFEATFLAG_END_AFTER_SEQ    0x0002  /* >end */
+#define AJFEATFLAG_GENERATED        0x0004  /* generated for GFF3 */
+#define AJFEATFLAG_BETWEEN_SEQ      0x0008  /* x^y */
+#define AJFEATFLAG_START_TWO        0x0010  /* x.y.. */
+#define AJFEATFLAG_END_TWO          0x0020  /* ..x.y */
+#define AJFEATFLAG_POINT            0x0040  /* x */
+#define AJFEATFLAG_COMPLEMENT_MAIN  0x0080  /* complement around the join */
+#define AJFEATFLAG_MULTIPLE         0x0100  /* part of a multiple i.e. join*/
+#define AJFEATFLAG_GROUP            0x0200  /* group */
+#define AJFEATFLAG_ORDER            0x0400  /* order */
+#define AJFEATFLAG_ONEOF            0x0800  /* one_of */
+#define AJFEATFLAG_REMOTEID         0x1000  /* AB012345.6: */
+#define AJFEATFLAG_LABEL            0x2000  /* label as location */
+#define AJFEATFLAG_START_UNSURE     0x4000  /* unsure position: SwissProt '?' */
+#define AJFEATFLAG_END_UNSURE       0x8000  /* unsure position: SwissProt '?' */
 
-/******************************************************************************
-** Table Classes  *************************************************************
-******************************************************************************/
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
@@ -66,6 +103,7 @@ typedef struct AjSFeattabAccess AjSFeattabAccess;
 ** @attr Len [ajuint] Maximum length
 ** @attr Offset [ajuint] Offset when trimmed
 ** @attr Groups [ajuint] Number of current group being added
+** @attr Padding [ajuint] Padding to alignment boundary
 ** @attr Db [AjPStr] Database name from input
 ** @attr Setdb [AjPStr] Database name from command line
 ** @attr Full [AjPStr] Full name
@@ -75,6 +113,7 @@ typedef struct AjSFeattabAccess AjSFeattabAccess;
 ** @attr TextPtr [AjPStr] Full text
 ** @attr Fpos [ajlong] File position (fseek) for Query
 ** @attr Format [AjEnum] Input format enum
+** @attr Circular [AjBool] true: circular nucleotide molecule
 ** @@
 ******************************************************************************/
 
@@ -88,6 +127,7 @@ typedef struct AjSFeattable
     ajuint  Len;
     ajuint  Offset;
     ajuint  Groups;
+    ajuint  Padding;
     AjPStr  Db;
     AjPStr  Setdb;
     AjPStr  Full;
@@ -97,9 +137,12 @@ typedef struct AjSFeattable
     AjPStr  TextPtr;
     ajlong  Fpos;
     AjEnum  Format;
+    AjBool Circular;
 }  AjOFeattable;
 
 #define AjPFeattable AjOFeattable*
+
+
 
 
 /* @data AjPFeattabin *********************************************************
@@ -108,6 +151,7 @@ typedef struct AjSFeattable
 **
 ** @alias AjSFeattabin
 ** @alias AjOFeattabin
+** @alias AjPFeattabIn
 **
 ** @new    ajFeattabinNew Constructor
 ** @new    ajFeattabinNewSS Constructor with format, name and type
@@ -125,10 +169,13 @@ typedef struct AjSFeattable
 ** @attr Rev       [AjBool]    Reverse/complement if true
 ** @attr Start     [ajint]     Start position
 ** @attr End       [ajint]     End position
+** @attr Circular [AjBool] true: circular nucleotide molecule
+** @attr Padding [char[4]] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
-typedef struct AjSFeattabin {
+typedef struct AjSFeattabin
+{
     AjPTextin     Input;
     AjPStr        Ufo;
     AjPStr        Formatstr;
@@ -140,6 +187,8 @@ typedef struct AjSFeattabin {
     AjBool        Rev;
     ajint         Start;
     ajint         End;
+    AjBool        Circular;
+    char Padding[4];
 }  AjOFeattabin;
 
 #define AjPFeattabin AjOFeattabin*
@@ -204,8 +253,8 @@ typedef struct AjSFeattaball
 ** @alias AjOFeattabAccess
 **
 ** @attr Name [const char*] Access method name used in emboss.default
-** @attr Access [(AjBool*)] Access function
-** @attr AccessFree [(AjBool*)] Access cleanup function
+** @attr Access [AjBool function] Access function
+** @attr AccessFree [AjBool function] Access cleanup function
 ** @attr Qlink [const char*] Supported query link operators
 ** @attr Desc [const char*] Description
 ** @attr Alias [AjBool] Alias for another name
@@ -213,6 +262,7 @@ typedef struct AjSFeattaball
 ** @attr Query [AjBool] Supports retrieval of selected entries
 ** @attr All [AjBool] Supports retrieval of all entries
 ** @attr Chunked [AjBool] Supports retrieval of entries in chunks
+** @attr Padding [AjBool] Padding to alignment boundary
 ** @@
 ******************************************************************************/
 
@@ -228,6 +278,7 @@ typedef struct AjSFeattabAccess
     AjBool Query;
     AjBool All;
     AjBool Chunked;
+    AjBool Padding;
 } AjOFeattabAccess;
 
 #define AjPFeattabAccess AjOFeattabAccess*
@@ -260,7 +311,7 @@ typedef struct AjSFeattabAccess
 ** @attr Local [AjBool] Opened as a local file if ajTrue
 ** @attr Count [ajuint] Number of feature tables written
 ** @attr Padding [char[4]] Padding to alignment boundary
-** @attr Cleanup [(void*)] Function to write remaining lines on closing
+** @attr Cleanup [void function] Function to write remaining lines on closing
 ** @@
 ******************************************************************************/
 
@@ -283,13 +334,6 @@ typedef struct AjSFeattabOut
 }  AjOFeattabOut;
 
 #define AjPFeattabOut AjOFeattabOut*
-
-
-
-
-/******************************************************************************
-** Feature Classes  ***********************************************************
-******************************************************************************/
 
 
 
@@ -349,7 +393,8 @@ typedef struct AjSFeattabOut
 ** @@
 ******************************************************************************/
 
-typedef struct AjSFeature {
+typedef struct AjSFeature
+{
     AjPStr            Source;
     AjPStr            Type;
     AjPList           Subfeatures;
@@ -398,7 +443,8 @@ typedef struct AjSFeature {
 ** @@
 ******************************************************************************/
 
-typedef struct AjSFeatGfftags {
+typedef struct AjSFeatGfftags
+{
     AjPStr            Id;
     AjPStr            Name;
     AjPStr            Alias;
@@ -415,8 +461,26 @@ typedef struct AjSFeatGfftags {
 #define AjPFeatGfftags AjOFeatGfftags*
 
 
-#endif /* ajfeatdata_h */
 
-#ifdef __cplusplus
-}
-#endif
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
+
+
+/*
+** Prototype definitions
+*/
+
+/*
+** End of prototype definitions
+*/
+
+
+
+
+AJ_END_DECLS
+
+#endif /* !AJFEATDATA_H */

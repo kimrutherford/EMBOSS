@@ -1,121 +1,408 @@
+## Process this file with automake to produce Makefile.in
 
 SUBDIRS = acd data index
 
-EXTRA_DIST = emboss.default.template emboss.standard \
-	server.biomart server.dasregistry server.dbfetch server.dkfz \
-	server.ebeye server.entrez \
-	server.ensembl server.ensemblgenomes \
-	server.mrs server.mrs3 server.mrs4 \
-	server.srs server.wsdbfetch
-
+AM_CFLAGS  = $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
 if ISSHARED
 if ISAIXIA64
-AIX_CFLAGS = -Wl,-bdynamic -Wl,-brtl -L../ajax/pcre/.libs \
--L../ajax/expat/.libs -L../ajax/zlib/.libs -L../ajax/core/.libs \
--L../ajax/graphics/.libs -L../ajax/ensembl/.libs -L../ajax/ajaxdb/.libs \
--L../ajax/acd/.libs \
- -lacd -lajaxdb -lensembl -lajaxg -lajax -leexpat -lepcre -lezlib
+AM_CFLAGS += -Wl,-bdynamic
+AM_CFLAGS += -Wl,-brtl
+AM_CFLAGS += -L../ajax/pcre/.libs
+AM_CFLAGS += -L../ajax/expat/.libs
+AM_CFLAGS += -L../ajax/zlib/.libs
+AM_CFLAGS += -L../ajax/core/.libs
+AM_CFLAGS += -L../ajax/graphics/.libs
+AM_CFLAGS += -L../ajax/ensembl/.libs
+AM_CFLAGS += -L../ajax/ajaxdb/.libs
+AM_CFLAGS += -L../ajax/acd/.libs
+AM_CFLAGS += -lacd
+AM_CFLAGS += -lajaxdb
+AM_CFLAGS += -lensembl
+AM_CFLAGS += -lajaxg
+AM_CFLAGS += -lajax
+AM_CFLAGS += -leexpat
+AM_CFLAGS += -lepcre
+AM_CFLAGS += -lezlib
 endif
 endif
 
-AM_CFLAGS =  $(AIX_CFLAGS) $(WARN_CFLAGS) $(DEVWARN_CFLAGS)
+AM_CPPFLAGS  = -I$(top_srcdir)/ajax/acd
+AM_CPPFLAGS += -I$(top_srcdir)/ajax/ajaxdb
+AM_CPPFLAGS += -I$(top_srcdir)/ajax/ensembl
+AM_CPPFLAGS += -I$(top_srcdir)/ajax/graphics
+AM_CPPFLAGS += -I$(top_srcdir)/ajax/pcre
+if !ESYSTEMLIBS
+AM_CPPFLAGS += -I$(top_srcdir)/ajax/expat
+AM_CPPFLAGS += -I$(top_srcdir)/ajax/zlib
+endif
+AM_CPPFLAGS += -I$(top_srcdir)/nucleus
+AM_CPPFLAGS += -I$(top_srcdir)/plplot
+AM_CPPFLAGS += $(AXIS2C_CPPFLAGS)
+AM_CPPFLAGS += $(JAVA_CPPFLAGS)
 
-check_PROGRAMS = acdgalaxy acdlog acdrelations acdxsd ajtest \
-complex corbatest \
-dastest dbfetchtest \
-domtesta domtestb domtestc domtestd \
-edamclean ensembltest \
-entrails entrailsbook entrailshtml entrailswiki histogramtest intconv \
-origsplitter origunion \
-martattributes martdatasets martfilters martquery martregistry martseqs \
+LDADD  = ../nucleus/libnucleus.la
+LDADD += ../ajax/acd/libacd.la
+LDADD += ../ajax/ajaxdb/libajaxdb.la
+LDADD += ../ajax/ensembl/libensembl.la
+LDADD += ../ajax/graphics/libajaxg.la
+LDADD += ../ajax/core/libajax.la
+if !ESYSTEMLIBS
+LDADD += ../ajax/zlib/libezlib.la
+LDADD += ../ajax/expat/libeexpat.la
+endif
+LDADD += ../ajax/pcre/libepcre.la
+LDADD += ../plplot/libeplplot.la
+LDADD += $(XLIB)
+
+#if PURIFY
+#LINK = purify $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -o $@
+#endif
+
+# Applications, which are not built.
+#
+# dbget
+# dbgeturl
+# dbshowdat
+# dbshowquery
+# dbtellquery
+# docxmlvalid
+# docxmlwell
+# entrygo
+# entrytax
+# goseq
+# isdbdata
+# isdbname
+# seqgo
+# seqtax
+# taxseq
+# template ###
+# texttotext
+# texttoxml
+# textvalid
+# xmltotext
+# xmltoxml
+# xmltransform
+
+check_PROGRAMS = \
+acdrelations \
+acdxsd \
+ajtest \
+complex \
+corbatest \
+dastest \
+dbfetchtest \
+domtesta \
+domtestb \
+domtestc \
+domtestd \
+edamclean \
+ensembltest \
+entrails \
+entrailsbook \
+entrailshtml \
+entrailswiki \
+histogramtest \
+intconv \
+martattributes \
+martdatasets \
+martfilters \
+martquery \
+martregistry \
+martseqs \
 newcoils \
+origsplitter \
+origunion \
 patmattest \
-prima primers \
-seqinfo seqretall seqretallfeat \
-seqretset seqretsingle seqrettype sqltest \
-testplot treetypedisplay
+prima \
+primers \
+seqinfo \
+seqretall \
+seqretallfeat \
+seqretset \
+seqretsingle \
+seqrettype \
+sqltest \
+testplot \
+treetypedisplay
 
-bin_PROGRAMS = aaindexextract abiview \
-acdc acdgalaxy acdpretty acdtable acdtrace acdvalid \
-aligncopy aligncopypair antigenic \
-backtranambig backtranseq banana biosed btwisted \
-cachedas cachedbfetch cacheebeyesearch cacheensembl \
-cai chaos charge checktrans chips \
-cirdna codcmp codcopy coderet \
-compseq cons consambig cpgplot cpgreport \
-cusp cutgextract cutseq \
+bin_PROGRAMS = \
+aaindexextract \
+abiview \
+acdc \
+acdgalaxy \
+acdlog \
+acdpretty \
+acdtable \
+acdtrace \
+acdvalid \
+aligncopy \
+aligncopypair \
+antigenic \
+assemblyget \
+backtranambig \
+backtranseq \
+banana \
+biosed \
+btwisted \
+cachedas \
+cachedbfetch \
+cacheebeyesearch \
+cacheensembl \
+cai \
+chaos \
+charge \
+checktrans \
+chips \
+cirdna \
+codcmp \
+codcopy \
+coderet \
+compseq \
+cons \
+consambig \
+cpgplot \
+cpgreport \
+cusp \
+cutgextract \
+cutseq \
 dan \
-dbiblast dbifasta dbiflat dbigcg \
+dbiblast \
+dbifasta \
+dbiflat \
+dbigcg \
 dbtell \
-dbxcompress dbxedam dbxfasta dbxflat dbxgcg dbxobo \
-dbxreport dbxresource dbxstat dbxtax dbxuncompress \
-degapseq density descseq diffseq distmat \
-dotmatcher dotpath dottup dreg \
-drfinddata drfindformat drfindid drfindresource \
-drget drtext \
-edamdef edamhasinput edamhasoutput \
-edamisformat edamisid edamname \
-edialign einverted embossdata embossversion emma \
-emowse entret epestfind eprimer3 eprimer32 \
-equicktandem est2genome etandem \
-extractalign extractfeat extractseq \
-featcopy featreport feattext findkm freak fuzznuc fuzzpro fuzztran \
-garnier geecee getorf godef goname \
-helixturnhelix hmoment \
-iep infoalign infobase inforesidue infoseq isochore \
-jaspextract jaspscan jembossctl lindna listor \
-makenucseq makeprotseq marscan \
-maskambignuc maskambigprot maskfeat maskseq \
-matcher megamerger merger msbar \
-mwcontam mwfilter \
-needle needleall newcpgreport newcpgseek newseq \
-nohtml noreturn nospace notab notseq nthseq nthseqset \
-octanol oddcomp \
-ontocount ontoget ontogetcommon ontogetdown \
-ontogetobsolete ontogetroot \
-ontogetsibs ontogetup ontoisobsolete ontotext \
-palindrome pasteseq patmatdb patmatmotifs \
-pepcoil pepdigest pepinfo pepnet pepstats \
-pepwheel pepwindow pepwindowall \
-plotcon plotorf polydot preg \
-prettyplot prettyseq primersearch printsextract \
-profit prophecy prophet \
-prosextract pscan psiphi \
-rebaseextract recoder redata remap  \
-restover restrict revseq \
-seealso seqcount seqmatchall seqret seqretsetall seqretsplit \
-seqxref seqxrefget \
+dbxcompress \
+dbxedam \
+dbxfasta \
+dbxflat \
+dbxgcg \
+dbxobo \
+dbxreport \
+dbxresource \
+dbxstat \
+dbxtax \
+dbxuncompress \
+degapseq \
+density \
+descseq \
+diffseq \
+distmat \
+dotmatcher \
+dotpath \
+dottup \
+dreg \
+drfinddata \
+drfindformat \
+drfindid \
+drfindresource \
+drget \
+drtext \
+edamdef \
+edamhasinput \
+edamhasoutput \
+edamisformat \
+edamisid \
+edamname \
+edialign \
+einverted \
+embossdata \
+embossupdate \
+embossversion \
+emma \
+emowse \
+entret \
+epestfind \
+eprimer3 \
+eprimer32 \
+equicktandem \
+est2genome \
+etandem \
+extractalign \
+extractfeat \
+extractseq \
+featcopy \
+featmerge \
+featreport \
+feattext \
+findkm \
+freak \
+fuzznuc \
+fuzzpro \
+fuzztran \
+garnier \
+geecee \
+getorf \
+godef \
+goname \
+helixturnhelix \
+hmoment \
+iep \
+infoalign \
+infoassembly \
+infobase \
+inforesidue \
+infoseq \
+isochore \
+jaspextract \
+jaspscan \
+jembossctl \
+lindna \
+listor \
+makenucseq \
+makeprotseq \
+marscan \
+maskambignuc \
+maskambigprot \
+maskfeat \
+maskseq \
+matcher \
+megamerger \
+merger \
+msbar \
+mwcontam \
+mwfilter \
+needle \
+needleall \
+newcpgreport \
+newcpgseek \
+newseq \
+nohtml \
+noreturn \
+nospace \
+notab \
+notseq \
+nthseq \
+nthseqset \
+octanol \
+oddcomp \
+ontocount \
+ontoget \
+ontogetcommon \
+ontogetdown \
+ontogetobsolete \
+ontogetroot \
+ontogetsibs \
+ontogetup \
+ontoisobsolete \
+ontotext \
+palindrome \
+pasteseq \
+patmatdb \
+patmatmotifs \
+pepcoil \
+pepdigest \
+pepinfo \
+pepnet \
+pepstats \
+pepwheel \
+pepwindow \
+pepwindowall \
+plotcon \
+plotorf \
+polydot \
+preg \
+prettyplot \
+prettyseq \
+primersearch \
+printsextract \
+profit \
+prophecy \
+prophet \
+prosextract \
+pscan \
+psiphi \
+rebaseextract \
+recoder \
+redata \
+refseqget \
+remap \
+restover \
+restrict \
+revseq \
+seealso \
+seqcount \
+seqmatchall \
+seqret \
+seqretsetall \
+seqretsplit \
+seqxref \
+seqxrefget \
 servertell \
-showalign showdb showfeat showorf showpep showseq showserver \
-shuffleseq sigcleave silent sirna sixpack sizeseq \
-skipredundant skipseq splitsource splitter stretcher \
-stssearch supermatcher syco \
-taxget taxgetdown taxgetrank taxgetspecies taxgetup \
-tcode textget textsearch tfextract tfm tfscan \
-tmap tranalign transeq \
-trimest trimseq trimspace twofeat \
-union urlget \
+showalign \
+showdb \
+showfeat \
+showorf \
+showpep \
+showseq \
+showserver \
+shuffleseq \
+sigcleave \
+silent \
+sirna \
+sixpack \
+sizeseq \
+skipredundant \
+skipseq \
+splitsource \
+splitter \
+stretcher \
+stssearch \
+supermatcher \
+syco \
+taxget \
+taxgetdown \
+taxgetrank \
+taxgetspecies \
+taxgetup \
+tcode \
+textget \
+textsearch \
+tfextract \
+tfm \
+tfscan \
+tmap \
+tranalign \
+transeq \
+trimest \
+trimseq \
+trimspace \
+twofeat \
+union \
+urlget \
+variationget \
 vectorstrip \
-water whichdb wobble \
-wordcount wordfinder wordmatch \
-wossdata wossinput wossname wossoperation wossoutput wossparam wosstopic \
+water \
+whichdb \
+wobble \
+wordcount \
+wordfinder \
+wordmatch \
+wossdata \
+wossinput \
+wossname \
+wossoperation \
+wossoutput \
+wossparam \
+wosstopic \
 yank
 
-if !ESYSTEMLIBS
-EXTRA_INCLUDES = -I$(top_srcdir)/ajax/expat -I$(top_srcdir)/ajax/zlib
-endif
+dist_pkgdata_DATA = \
+emboss.default.template \
+emboss.standard \
+server.biomart \
+server.dasregistry \
+server.dbfetch server.dkfz \
+server.ebeye \
+server.entrez \
+server.ensembl \
+server.ensemblgenomes \
+server.mrs \
+server.mrs3 \
+server.mrs4 \
+server.srs \
+server.wsdbfetch
 
-AM_CPPFLAGS =  -I$(top_srcdir)/ajax/core \
-	-I$(top_srcdir)/nucleus \
-	-I$(top_srcdir)/ajax/pcre \
-	$(EXTRA_INCLUDES) \
-	$(AXIS2C_CPPFLAGS) \
-	-I$(top_srcdir)/ajax/graphics \
-	-I$(top_srcdir)/ajax/ensembl \
-	-I$(top_srcdir)/ajax/ajaxdb \
-	-I$(top_srcdir)/ajax/acd \
-	-I$(top_srcdir)/plplot
-
+# EMBOSS bin application SOURCES
 
 aaindexextract_SOURCES = aaindexextract.c
 abiview_SOURCES = abiview.c
@@ -125,11 +412,10 @@ acdpretty_SOURCES = acdpretty.c
 acdtable_SOURCES = acdtable.c
 acdtrace_SOURCES = acdtrace.c
 acdvalid_SOURCES = acdvalid.c
-acdrelations_SOURCES = acdrelations.c
-acdxsd_SOURCES = acdxsd.c
 aligncopy_SOURCES = aligncopy.c
 aligncopypair_SOURCES = aligncopypair.c
 antigenic_SOURCES = antigenic.c
+assemblyget_SOURCES = assemblyget.c
 backtranambig_SOURCES = backtranambig.c
 backtranseq_SOURCES = backtranseq.c
 banana_SOURCES = banana.c
@@ -139,13 +425,14 @@ cachedas_SOURCES = cachedas.c
 cachedbfetch_SOURCES = cachedbfetch.c
 cacheebeyesearch_SOURCES = cacheebeyesearch.c
 cacheensembl_SOURCES = cacheensembl.c
-chaos_SOURCES = chaos.c
 cai_SOURCES = cai.c
+chaos_SOURCES = chaos.c
 charge_SOURCES = charge.c
 checktrans_SOURCES = checktrans.c
 chips_SOURCES = chips.c
 cirdna_SOURCES = cirdna.c
 codcmp_SOURCES = codcmp.c
+codcopy_SOURCES = codcopy.c
 coderet_SOURCES = coderet.c
 compseq_SOURCES = compseq.c
 cons_SOURCES = cons.c
@@ -156,8 +443,6 @@ cusp_SOURCES = cusp.c
 cutgextract_SOURCES = cutgextract.c
 cutseq_SOURCES = cutseq.c
 dan_SOURCES = dan.c
-dastest_SOURCES = dastest.c
-dbfetchtest_SOURCES = dbfetchtest.c
 dbiblast_SOURCES = dbiblast.c
 dbifasta_SOURCES = dbifasta.c
 dbiflat_SOURCES = dbiflat.c
@@ -198,6 +483,7 @@ edamname_SOURCES = edamname.c
 edialign_SOURCES = edialign.c
 einverted_SOURCES = einverted.c
 embossdata_SOURCES = embossdata.c
+embossversion_SOURCES = embossversion.c
 emma_SOURCES = emma.c
 emowse_SOURCES = emowse.c
 entret_SOURCES = entret.c
@@ -207,11 +493,11 @@ eprimer32_SOURCES = eprimer32.c
 equicktandem_SOURCES = equicktandem.c
 est2genome_SOURCES = est2genome.c
 etandem_SOURCES = etandem.c
-embossversion_SOURCES = embossversion.c
 extractalign_SOURCES = extractalign.c
 extractfeat_SOURCES = extractfeat.c
 extractseq_SOURCES = extractseq.c
 featcopy_SOURCES = featcopy.c
+featmerge_SOURCES = featmerge.c
 featreport_SOURCES = featreport.c
 feattext_SOURCES = feattext.c
 findkm_SOURCES = findkm.c
@@ -228,6 +514,7 @@ helixturnhelix_SOURCES = helixturnhelix.c
 hmoment_SOURCES = hmoment.c
 iep_SOURCES = iep.c
 infoalign_SOURCES = infoalign.c
+infoassembly_SOURCES = infoassembly.c
 infobase_SOURCES = infobase.c
 inforesidue_SOURCES = inforesidue.c
 infoseq_SOURCES = infoseq.c
@@ -237,21 +524,17 @@ jaspscan_SOURCES = jaspscan.c
 jembossctl_SOURCES = jembossctl.c
 lindna_SOURCES = lindna.c
 listor_SOURCES = listor.c
+makenucseq_SORCES = makenucseq.c
+makeprotseq_SOURCES = makeprotseq.c
 marscan_SOURCES = marscan.c
-martattributes_SOURCES = martattributes.c
-martdatasets_SOURCES = martdatasets.c
-martfilters_SOURCES = martfilters.c
-martquery_SOURCES = martquery.c
-martregistry_SOURCES = martregistry.c
-martseqs_SOURCES = martseqs.c
 maskambignuc_SOURCES = maskambignuc.c
 maskambigprot_SOURCES = maskambigprot.c
 maskfeat_SOURCES = maskfeat.c
 maskseq_SOURCES = maskseq.c
 matcher_SOURCES = matcher.c
-msbar_SOURCES = msbar.c
 megamerger_SOURCES = megamerger.c
 merger_SOURCES = merger.c
+msbar_SOURCES = msbar.c
 mwcontam_SOURCES = mwcontam.c
 mwfilter_SOURCES = mwfilter.c
 needle_SOURCES = needle.c
@@ -307,6 +590,7 @@ psiphi_SOURCES = psiphi.c
 rebaseextract_SOURCES = rebaseextract.c
 recoder_SOURCES = recoder.c
 redata_SOURCES = redata.c
+refseqget_SOURCES = refseqget.c
 remap_SOURCES = remap.c
 restover_SOURCES = restover.c
 restrict_SOURCES = restrict.c
@@ -326,6 +610,7 @@ showfeat_SOURCES = showfeat.c
 showorf_SOURCES = showorf.c
 showpep_SOURCES = showpep.c
 showseq_SOURCES = showseq.c
+showserver_SOURCES = showserver.c
 shuffleseq_SOURCES = shuffleseq.c
 sigcleave_SOURCES = sigcleave.c
 silent_SOURCES = silent.c
@@ -334,6 +619,7 @@ sixpack_SOURCES = sixpack.c
 sizeseq_SOURCES = sizeseq.c
 skipredundant_SOURCES = skipredundant.c
 skipseq_SOURCES = skipseq.c
+splitsource_SOURCES = splitsource.c
 splitter_SOURCES = splitter.c
 stretcher_SOURCES = stretcher.c
 stssearch_SOURCES = stssearch.c
@@ -345,6 +631,7 @@ taxgetrank_SOURCES = taxgetrank.c
 taxgetspecies_SOURCES = taxgetspecies.c
 taxgetup_SOURCES = taxgetup.c
 tcode_SOURCES = tcode.c
+textget_SOURCE = textget.c
 textsearch_SOURCES = textsearch.c
 tfextract_SOURCES = tfextract.c
 tfm_SOURCES = tfm.c
@@ -358,6 +645,7 @@ trimspace_SOURCES = trimspace.c
 twofeat_SOURCES = twofeat.c
 union_SOURCES = union.c
 urlget_SOURCES = urlget.c
+variationget_SOURCES = variationget.c
 vectorstrip_SOURCES = vectorstrip.c
 water_SOURCES = water.c
 whichdb_SOURCES = whichdb.c
@@ -365,15 +653,29 @@ wobble_SOURCES = wobble.c
 wordcount_SOURCES = wordcount.c
 wordfinder_SOURCES = wordfinder.c
 wordmatch_SOURCES = wordmatch.c
+wossdata_SOURCES = wossdata.c
+wossinput_SOURCES = wossinput.c
 wossname_SOURCES = wossname.c
+wossoperation_SOURCES = wossoperation.c
+wossoutput_SOURCES = wossoutput.c
+wossparam_SOURCES = wossparam.c
 wosstopic_SOURCES = wosstopic.c
 yank_SOURCES = yank.c
 
+# EMBOSS check application SOURCES
 
 acdlog_SOURCES = acdlog.c
+acdrelations_SOURCES = acdrelations.c
+acdxsd_SOURCES = acdxsd.c
 ajtest_SOURCES = ajtest.c
 complex_SOURCES = complex.c
 corbatest_SOURCES = corbatest.c
+dastest_SOURCES = dastest.c
+dbfetchtest_SOURCES = dbfetchtest.c
+domtesta_SOURCES = domtesta.c
+domtestb_SOURCES = domtestb.c
+domtestc_SOURCES = domtestc.c
+domtestd_SOURCES = domtestd.c
 edamclean_SOURCES = edamclean.c
 ensembltest_SOURCES = ensembltest.c
 entrails_SOURCES = entrails.c
@@ -382,9 +684,15 @@ entrailshtml_SOURCES = entrailshtml.c
 entrailswiki_SOURCES = entrailswiki.c
 histogramtest_SOURCES = histogramtest.c
 intconv_SOURCES = intconv.c
+martattributes_SOURCES = martattributes.c
+martdatasets_SOURCES = martdatasets.c
+martfilters_SOURCES = martfilters.c
+martquery_SOURCES = martquery.c
+martregistry_SOURCES = martregistry.c
+martseqs_SOURCES = martseqs.c
+newcoils_SOURCES = newcoils.c
 origsplitter_SOURCES = origsplitter.c
 origunion_SOURCES = origunion.c
-newcoils_SOURCES = newcoils.c
 patmattest_SOURCES = patmattest.c
 prima_SOURCES = prima.c
 primers_SOURCES = primers.c
@@ -397,23 +705,3 @@ seqrettype_SOURCES = seqrettype.c
 sqltest_SOURCES = sqltest.c
 testplot_SOURCES = testplot.c
 treetypedisplay_SOURCES = treetypedisplay.c
-
-if !ESYSTEMLIBS
-EXTRA_LDS = ../ajax/zlib/libezlib.la ../ajax/expat/libeexpat.la
-endif
-
-LDADD = ../nucleus/libnucleus.la ../ajax/acd/libacd.la \
-	../ajax/ajaxdb/libajaxdb.la ../ajax/ensembl/libensembl.la \
-	../ajax/graphics/libajaxg.la ../ajax/core/libajax.la \
-	$(EXTRA_LDS) \
-	../ajax/pcre/libepcre.la ../plplot/libeplplot.la \
-	$(XLIB)
-
-pkgdata_DATA = $(EXTRA_DIST)
-pkgdatadir=$(prefix)/share/$(PACKAGE)
-
-#if PURIFY
-#  LINK = purify $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -o $@
-#else
-#
-#endif

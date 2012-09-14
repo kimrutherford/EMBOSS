@@ -1,0 +1,48 @@
+application: featmerge [
+  documentation: "Merge two overlapping feature tables"
+  groups: "Data retrieval:Feature data, Edit"
+    relations: "EDAM_topic:0160 Sequence sites and features"
+    relations: "EDAM_topic:0090 Data search and retrieval"
+    relations: "EDAM_operation:2422 Data retrieval"
+]
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  features: afeatures [
+    parameter: "Y"
+    type: "any"
+    maxreads: "1"
+    relations: "EDAM_data:1255 Feature record"
+  ]
+
+   features: bfeatures [
+    parameter: "Y"
+    type: "@($(acdprotein) ? protein : nucleotide)"
+    maxreads: "1"
+    relations: "EDAM_data:1255 Feature record"
+  ]
+
+endsection: input
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+endsection: additional
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  featout: outfeat [
+    parameter: "Y"
+    type: "$(afeatures.type)"
+    relations: "EDAM_data:1255 Feature record"
+  ]
+
+endsection: output

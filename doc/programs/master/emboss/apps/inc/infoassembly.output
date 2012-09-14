@@ -1,0 +1,41 @@
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: qualsdist.txt</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+#QUALITY: Phred quality score
+#BASES: Number of bases with the quality score
+
+QUALITY	#BASES
+5	1
+11	2
+14	1
+17	2
+21	1
+22	2
+24	1
+25	2
+26	5
+27	53
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: gcbias.txt</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+# GC bias metrics as described in GcBiasDetailMetrics class
+# in picard  project (picard.sf.net).
+# The mean base quality are determined via the error rate
+# of all bases of all reads that are assigned to windows of a GC.
+GC	WINDOWS	READ_STARTS	MEAN_BASE_QUALITY	NORMALIZED_COVERAGE
+20	5	1	8	1.13333
+30	5	2	10	2.26667
+40	4	0	0	0
+50	11	1	0	0.515152
+60	4	1	0	1.41667
+70	5	0	0	0
+</pre>
+</td></tr></table><p>

@@ -1,5 +1,5 @@
-/******************************************************************************
-** @source sqltest application
+/* @source sqltest application
+**
 ** Test AJAX SQL library routines by connecting to a particular SQL instance
 ** and running a "SHOW PROCESSLIST" statement.
 ** @author Copyright (C) 2006 Michael K. Schuster

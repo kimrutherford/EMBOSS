@@ -36,19 +36,18 @@ host_triplet = x86_64-unknown-linux-gnu
 subdir = doc
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/amd64.m4 \
-	$(top_srcdir)/m4/axis2c.m4 $(top_srcdir)/m4/general.m4 \
-	$(top_srcdir)/m4/hpdf.m4 $(top_srcdir)/m4/idxdbs.m4 \
-	$(top_srcdir)/m4/java.m4 $(top_srcdir)/m4/lf_x11.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/mysql.m4 \
-	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/pngdriver.m4 \
-	$(top_srcdir)/m4/postgresql.m4 $(top_srcdir)/m4/sgi.m4 \
-	$(top_srcdir)/configure.in
+am__aclocal_m4_deps = $(top_srcdir)/m4/axis2c.m4 \
+	$(top_srcdir)/m4/general.m4 $(top_srcdir)/m4/hpdf.m4 \
+	$(top_srcdir)/m4/idxdbs.m4 $(top_srcdir)/m4/java.m4 \
+	$(top_srcdir)/m4/lf_x11.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/mysql.m4 $(top_srcdir)/m4/pkg.m4 \
+	$(top_srcdir)/m4/pngdriver.m4 $(top_srcdir)/m4/postgresql.m4 \
+	$(top_srcdir)/m4/sgi.m4 $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/ajax/core/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
@@ -95,14 +94,15 @@ am__relativize = \
     dir1=`echo "$$dir1" | sed -e "$$sed_rest"`; \
   done; \
   reldir="$$dir2"
-ACLOCAL = ${SHELL} /m1/emboss/emboss/missing --run aclocal-1.11
-AJAX_FIXED_ROOT = \"/m1/emboss/emboss/emboss\"
+ACLOCAL = ${SHELL} /home/pmr/embossdist/missing --run aclocal-1.11
+AJAX_FIXED_ROOT = \"/home/pmr/embossdist/emboss\"
 AJAX_SYSTEM = \"Linux\"
-AMTAR = ${SHELL} /m1/emboss/emboss/missing --run tar
+AMTAR = ${SHELL} /home/pmr/embossdist/missing --run tar
+ANT = 
 AR = ar
-AUTOCONF = ${SHELL} /m1/emboss/emboss/missing --run autoconf
-AUTOHEADER = ${SHELL} /m1/emboss/emboss/missing --run autoheader
-AUTOMAKE = ${SHELL} /m1/emboss/emboss/missing --run automake-1.11
+AUTOCONF = ${SHELL} /home/pmr/embossdist/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/pmr/embossdist/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/pmr/embossdist/missing --run automake-1.11
 AWK = gawk
 AXIS2C_CFLAGS = 
 AXIS2C_CPPFLAGS = 
@@ -110,9 +110,9 @@ AXIS2C_LDFLAGS =
 AXIS2C_LIBS = 
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS =   -O2  -DNO_AUTH -D__amd64__
+CFLAGS =   -O2 
 CPP = gcc -E
-CPPFLAGS = -DAJ_LinuxLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE 
+CPPFLAGS =  -DAJ_LinuxLF -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
@@ -128,9 +128,7 @@ ECHO_C =
 ECHO_N = -n
 ECHO_T = 
 EGREP = /bin/grep -E
-EHAVEANT = 
-EMBOSS_TOP = /m1/emboss/emboss
-ESYSTEMLIBS = 
+EMBOSS_TOP = /home/pmr/embossdist
 EXEEXT = 
 FGREP = /bin/grep -F
 GREP = /bin/grep
@@ -141,9 +139,12 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-ISAIXIA64 = 
-ISCYGWIN = 
-JAVA_OK = 
+JAR = 
+JAVA = 
+JAVAC = 
+JAVA_CFLAGS = 
+JAVA_CPPFLAGS =  -DNO_AUTH
+JAVA_LDFLAGS = 
 LD = /usr/bin/ld -m elf_x86_64
 LDFLAGS = 
 LIBOBJS = 
@@ -152,15 +153,14 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /m1/emboss/emboss/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/pmr/embossdist/missing --run makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
-MYSQL_CFLAGS = -I/usr/include/mysql -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -fno-strict-aliasing -fwrapv -fPIC  -fPIC -g -static-libgcc -fno-omit-frame-pointer -fno-strict-aliasing -DMY_PTHREAD_FASTMUTEX=1
+MYSQL_CFLAGS = -I/usr/include/mysql -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4  -m64 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -fno-strict-aliasing -fwrapv -fPIC  -fPIC -g -static-libgcc -fno-omit-frame-pointer -fno-strict-aliasing -DMY_PTHREAD_FASTMUTEX=1
 MYSQL_CONFIG = /usr/bin/mysql_config
 MYSQL_CPPFLAGS = -I/usr/include/mysql
 MYSQL_LDFLAGS = -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl
-MYSQL_VERSION = 5.5.13
-NEEDAJAX = 
+MYSQL_VERSION = 5.5.24
 NM = /usr/bin/nm -B
 NMEDIT = 
 OBJDUMP = objdump
@@ -170,10 +170,10 @@ OTOOL64 =
 PACKAGE = EMBOSS
 PACKAGE_BUGREPORT = emboss-bug@emboss.open-bio.org
 PACKAGE_NAME = EMBOSS
-PACKAGE_STRING = EMBOSS 6.4.0
+PACKAGE_STRING = EMBOSS 6.5.0
 PACKAGE_TARNAME = EMBOSS
-PACKAGE_URL = http://emboss.sourceforge.net/
-PACKAGE_VERSION = 6.4.0
+PACKAGE_URL = http://emboss.open-bio.org/
+PACKAGE_VERSION = 6.5.0
 PATH_SEPARATOR = :
 PCRE_DATE = 11-Apr-2009
 PCRE_LIB_VERSION = 0:1:0
@@ -181,21 +181,21 @@ PCRE_MAJOR = 7
 PCRE_MINOR = 9
 PCRE_POSIXLIB_VERSION = 0:0:0
 PCRE_VERSION = 7.9
-PG_CONFIG = /usr/bin/pg_config
 PKG_CONFIG = /usr/bin/pkg-config
 PKG_CONFIG_LIBDIR = 
 PKG_CONFIG_PATH = 
 POSIX_MALLOC_THRESHOLD = -DPOSIX_MALLOC_THRESHOLD=10
 POSTGRESQL_CFLAGS = -I/usr/include
+POSTGRESQL_CONFIG = /usr/bin/pg_config
 POSTGRESQL_CPPFLAGS = -I/usr/include
 POSTGRESQL_LDFLAGS = -L/usr/lib64 -lpq
-POSTGRESQL_VERSION = 9.0.4
+POSTGRESQL_VERSION = 9.1.4
 RANLIB = ranlib
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = strip
-VERSION = 6.4.0
+VERSION = 6.5.0
 WARN_CFLAGS = 
 XLIB =  -lX11 
 XMKMF = 
@@ -203,10 +203,10 @@ X_CFLAGS =
 X_EXTRA_LIBS = 
 X_LIBS = 
 X_PRE_LIBS =  -lSM -lICE
-abs_builddir = /m1/emboss/emboss/doc
-abs_srcdir = /m1/emboss/emboss/doc
-abs_top_builddir = /m1/emboss/emboss
-abs_top_srcdir = /m1/emboss/emboss
+abs_builddir = /home/pmr/embossdist/doc
+abs_srcdir = /home/pmr/embossdist/doc
+abs_top_builddir = /home/pmr/embossdist
+abs_top_srcdir = /home/pmr/embossdist
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -216,7 +216,6 @@ am__leading_dot = .
 am__quote = 
 am__tar = ${AMTAR} chof - "$$tardir"
 am__untar = ${AMTAR} xf -
-ant_in_path = true
 bindir = ${exec_prefix}/bin
 build = x86_64-unknown-linux-gnu
 build_alias = 
@@ -229,7 +228,6 @@ datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-havejavac = 
 host = x86_64-unknown-linux-gnu
 host_alias = 
 host_cpu = x86_64
@@ -238,8 +236,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /m1/emboss/emboss/install-sh
-javac_in_path = true
+install_sh = ${SHELL} /home/pmr/embossdist/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale

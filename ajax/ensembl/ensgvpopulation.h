@@ -1,10 +1,37 @@
+/* @include ensgvpopulation ***************************************************
+**
+** Ensembl Genetic Variation Population functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.21 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/03/04 12:32:43 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSGVPOPULATION_H
 #define ENSGVPOPULATION_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensgvdata.h"
 
@@ -13,23 +40,23 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -46,7 +73,7 @@ EnsPGvpopulation ensGvpopulationNewIni(EnsPGvpopulationadaptor gvpa,
 
 EnsPGvpopulation ensGvpopulationNewRef(EnsPGvpopulation gvp);
 
-void ensGvpopulationDel(EnsPGvpopulation* Pgvp);
+void ensGvpopulationDel(EnsPGvpopulation *Pgvp);
 
 EnsPGvpopulationadaptor ensGvpopulationGetAdaptor(const EnsPGvpopulation gvp);
 
@@ -77,10 +104,6 @@ AjBool ensGvpopulationFetchAllSynonyms(EnsPGvpopulation gvp,
                                        const AjPStr source,
                                        AjPList synonyms);
 
-AjBool ensTableGvpopulationClear(AjPTable table);
-
-AjBool ensTableGvpopulationDelete(AjPTable* Ptable);
-
 /* Ensembl Genetic Variation Population Adaptor */
 
 EnsPGvpopulationadaptor ensRegistryGetGvpopulationadaptor(
@@ -89,7 +112,7 @@ EnsPGvpopulationadaptor ensRegistryGetGvpopulationadaptor(
 EnsPGvpopulationadaptor ensGvpopulationadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensGvpopulationadaptorDel(EnsPGvpopulationadaptor* Pgvpa);
+void ensGvpopulationadaptorDel(EnsPGvpopulationadaptor *Pgvpa);
 
 EnsPGvsampleadaptor ensGvpopulationadaptorGetBaseadaptor(
     EnsPGvpopulationadaptor gvpa);
@@ -105,6 +128,16 @@ AjBool ensGvpopulationadaptorFetchAllLd(
     EnsPGvpopulationadaptor gvpa,
     AjPList gvps);
 
+AjBool ensGvpopulationadaptorFetchAllTagged(
+    EnsPGvpopulationadaptor gvpa,
+    const EnsPGvvariationfeature gvvf,
+    AjPList gvps);
+
+AjBool ensGvpopulationadaptorFetchAllTags(
+    EnsPGvpopulationadaptor gvpa,
+    const EnsPGvvariationfeature gvvf,
+    AjPList gvps);
+
 AjBool ensGvpopulationadaptorFetchAllThousandgenomes(
     EnsPGvpopulationadaptor gvpa,
     AjPList gvps);
@@ -112,6 +145,11 @@ AjBool ensGvpopulationadaptorFetchAllThousandgenomes(
 AjBool ensGvpopulationadaptorFetchAllbyGvindividual(
     EnsPGvpopulationadaptor gvpa,
     const EnsPGvindividual gvi,
+    AjPList gvps);
+
+AjBool ensGvpopulationadaptorFetchAllbyGvindividuals(
+    EnsPGvpopulationadaptor gvpa,
+    AjPList gvis,
     AjPList gvps);
 
 AjBool ensGvpopulationadaptorFetchAllbyGvpopulationSub(
@@ -142,16 +180,16 @@ AjBool ensGvpopulationadaptorFetchAllbySynonym(
 AjBool ensGvpopulationadaptorFetchByIdentifier(
     EnsPGvpopulationadaptor gvpa,
     ajuint identifier,
-    EnsPGvpopulation* Pgvp);
+    EnsPGvpopulation *Pgvp);
 
 AjBool ensGvpopulationadaptorFetchByName(
     EnsPGvpopulationadaptor gvpa,
     const AjPStr name,
-    EnsPGvpopulation* Pgvp);
+    EnsPGvpopulation *Pgvp);
 
 AjBool ensGvpopulationadaptorFetchDefaultld(
     EnsPGvpopulationadaptor gvpa,
-    EnsPGvpopulation* Pgvp);
+    EnsPGvpopulation *Pgvp);
 
 /* Ensembl Genetic Variation Population Genotype */
 
@@ -162,24 +200,16 @@ EnsPGvpopulationgenotype ensGvpopulationgenotypeNewIni(
     EnsPGvpopulationgenotypeadaptor gvpga,
     ajuint identifier,
     EnsPGvpopulation gvp,
-    EnsPGvvariation gvv,
-    AjPStr allele1,
-    AjPStr allele2,
+    EnsPGvgenotype gvg,
     ajuint counter,
     float frequency);
 
 EnsPGvpopulationgenotype ensGvpopulationgenotypeNewRef(
     EnsPGvpopulationgenotype gvpg);
 
-void ensGvpopulationgenotypeDel(EnsPGvpopulationgenotype* Pgvpg);
+void ensGvpopulationgenotypeDel(EnsPGvpopulationgenotype *Pgvpg);
 
 EnsPGvpopulationgenotypeadaptor ensGvpopulationgenotypeGetAdaptor(
-    const EnsPGvpopulationgenotype gvpg);
-
-AjPStr ensGvpopulationgenotypeGetAllele1(
-    const EnsPGvpopulationgenotype gvpg);
-
-AjPStr ensGvpopulationgenotypeGetAllele2(
     const EnsPGvpopulationgenotype gvpg);
 
 ajuint ensGvpopulationgenotypeGetCounter(
@@ -188,29 +218,18 @@ ajuint ensGvpopulationgenotypeGetCounter(
 float ensGvpopulationgenotypeGetFrequency(
     const EnsPGvpopulationgenotype gvpg);
 
-EnsPGvpopulation ensGvpopulationgenotypeGetGvpopulation(
+EnsPGvgenotype ensGvpopulationgenotypeGetGvgenotype(
     const EnsPGvpopulationgenotype gvpg);
 
-EnsPGvvariation ensGvpopulationgenotypeGetGvvariation(
+EnsPGvpopulation ensGvpopulationgenotypeGetGvpopulation(
     const EnsPGvpopulationgenotype gvpg);
 
 ajuint ensGvpopulationgenotypeGetIdentifier(
     const EnsPGvpopulationgenotype gvpg);
 
-ajuint ensGvpopulationgenotypeGetSubidentifier(
-    const EnsPGvpopulationgenotype gvpg);
-
 AjBool ensGvpopulationgenotypeSetAdaptor(
     EnsPGvpopulationgenotype gvpg,
     EnsPGvpopulationgenotypeadaptor gvpga);
-
-AjBool ensGvpopulationgenotypeSetAllele1(
-    EnsPGvpopulationgenotype gvpg,
-    AjPStr allele1);
-
-AjBool ensGvpopulationgenotypeSetAllele2(
-    EnsPGvpopulationgenotype gvpg,
-    AjPStr allele2);
 
 AjBool ensGvpopulationgenotypeSetCounter(
     EnsPGvpopulationgenotype gvpg,
@@ -220,24 +239,26 @@ AjBool ensGvpopulationgenotypeSetFrequency(
     EnsPGvpopulationgenotype gvpg,
     float frequency);
 
+AjBool ensGvpopulationgenotypeSetGvgenotype(
+    EnsPGvpopulationgenotype gvpg,
+    EnsPGvgenotype gvg);
+
 AjBool ensGvpopulationgenotypeSetGvpopulation(
     EnsPGvpopulationgenotype gvpg,
     EnsPGvpopulation gvp);
-
-AjBool ensGvpopulationgenotypeSetGvvariation(
-    EnsPGvpopulationgenotype gvpg,
-    EnsPGvvariation gvv);
 
 AjBool ensGvpopulationgenotypeSetIdentifier(
     EnsPGvpopulationgenotype gvpg,
     ajuint identifier);
 
-AjBool ensGvpopulationgenotypeSetSubidentifier(
-    EnsPGvpopulationgenotype gvpg,
-    ajuint subidentifier);
-
 AjBool ensGvpopulationgenotypeTrace(const EnsPGvpopulationgenotype gvpg,
                                     ajuint level);
+
+AjPStr ensGvpopulationgenotypeGetSubhandle(
+    const EnsPGvpopulationgenotype gvpg);
+
+ajuint ensGvpopulationgenotypeGetSubidentifier(
+    const EnsPGvpopulationgenotype gvpg);
 
 size_t ensGvpopulationgenotypeCalculateMemsize(
     const EnsPGvpopulationgenotype gvpg);
@@ -251,7 +272,7 @@ EnsPGvpopulationgenotypeadaptor ensGvpopulationgenotypeadaptorNew(
     EnsPDatabaseadaptor dba);
 
 void ensGvpopulationgenotypeadaptorDel(
-    EnsPGvpopulationgenotypeadaptor* Pgvpga);
+    EnsPGvpopulationgenotypeadaptor *Pgvpga);
 
 AjBool ensGvpopulationgenotypeadaptorFetchAllbyGvpopulation(
     EnsPGvpopulationgenotypeadaptor gvpga,

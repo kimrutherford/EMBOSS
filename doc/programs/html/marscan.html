@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -35,7 +35,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
+Find matrix/scaffold recognition (MRS) signatures in DNA sequences
 
 <H2>
     Description
@@ -64,7 +64,7 @@ Here is a sample session with <b>marscan</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>marscan </b>
-Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
+Find matrix/scaffold recognition (MRS) signatures in DNA sequences
 Input nucleotide sequence(s): <b>tembl:u01317</b>
 Output report [u01317.marscan]: <b></b>
 
@@ -77,8 +77,8 @@ Output report [u01317.marscan]: <b></b>
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Finds matrix/scaffold recognition (MRS) signatures in DNA sequences
-Version: EMBOSS:6.4.0.0
+Find matrix/scaffold recognition (MRS) signatures in DNA sequences
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -105,7 +105,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -195,7 +198,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -264,11 +267,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -312,7 +339,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated report qualifiers
+<td align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
@@ -545,7 +572,7 @@ OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
 RN   [1]
-RP   62409-62631, 63482-63610
+RP   62409-62631,63482-63610
 RX   DOI; 10.1073/pnas.71.6.2300.
 RX   PUBMED; 4135409.
 RA   Marotta C.A., Forget B.G., Weissman S.M., Verma I.M., McCaffrey R.P.,
@@ -672,9 +699,9 @@ By default <b>marscan</b> writes a GFF (Gene Feature Format) report file.
 <pre>
 ##gff-version 3
 ##sequence-region U01317 1 65963
-#!Date 2011-07-15
+#!Date 2012-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.4.0.0
+#!Source-version EMBOSS 6.5.0.0
 U01317	marscan	regulatory_region	2242	2458	.	+	.	ID=U01317.1;note=*type MAR/SAR recognition site (MRS);note=*start8bp 2451;note=*end8bp 2458;note=*start16bp 2242;note=*end16bp 2257
 U01317	marscan	regulatory_region	17654	17730	.	+	.	ID=U01317.2;note=*type MAR/SAR recognition site (MRS);note=*start8bp 17723;note=*end8bp 17730;note=*start16bp 17654;note=*end16bp 17669
 U01317	marscan	regulatory_region	40956	41123	.	+	.	ID=U01317.3;note=*type MAR/SAR recognition site (MRS);note=*start8bp 40956;note=*end8bp 40963;note=*start16bp 41108;note=*end16bp 41123
@@ -769,17 +796,17 @@ None.
 <th>Description</th></tr>
 <tr>
 <td><a href="checktrans.html">checktrans</a></td>
-<td>Reports STOP codons and ORF statistics of a protein</td>
+<td>Report STOP codons and ORF statistics of a protein</td>
 </tr>
 
 <tr>
 <td><a href="getorf.html">getorf</a></td>
-<td>Finds and extracts open reading frames (ORFs)</td>
+<td>Find and extract open reading frames (ORFs)</td>
 </tr>
 
 <tr>
 <td><a href="jaspscan.html">jaspscan</a></td>
-<td>Scans DNA sequences for transcription factors</td>
+<td>Scan DNA sequences for transcription factors</td>
 </tr>
 
 <tr>
@@ -794,7 +821,7 @@ None.
 
 <tr>
 <td><a href="sirna.html">sirna</a></td>
-<td>Finds siRNA duplexes in mRNA</td>
+<td>Find siRNA duplexes in mRNA</td>
 </tr>
 
 <tr>

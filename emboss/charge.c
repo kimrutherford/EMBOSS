@@ -102,6 +102,7 @@ int main(int argc, char **argv)
     {
         ajGraphSetTitleS(graph, title);
         ajGraphAppendTitleS(graph, ajSeqGetUsaS(seq));
+        ajGraphSetDatanameS(graph, ajSeqGetNameS(seq));
 
 	beg = ajSeqallGetseqBegin(seqall);
 	end = ajSeqallGetseqEnd(seqall);

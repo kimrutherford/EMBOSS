@@ -192,6 +192,7 @@ int main(int argc, char **argv)
 	{
 	    this = ajGraphdataNewI(npoints);
 	    ajGraphdataSetTypeC(this,"2D plot");
+	    ajGraphdataSetDatanameS(this,ajSeqGetNameS(seq));
 
 	    for(i=0;i<npoints;++i)
 	    {
@@ -732,7 +733,7 @@ static void tcode_report(AjPReport report, const AjPInt from, const AjPInt to,
 	else
 	    ajFmtPrintS(&coding,"*Estimation No opinion");
 	
-	ajFeatTagAdd(feat,NULL,coding);
+	ajFeatTagAddSS(feat,NULL,coding);
     }
 
 

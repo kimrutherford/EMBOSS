@@ -25,13 +25,15 @@
 
 static AjPRegexp dbxflat_wrdexp = NULL;
 
+static AjPStr dbxflatRdline = NULL;
+static AjPStr dbxflatSumline = NULL;
 
-static ajuint maxidlen = 0;
-static ajuint idtrunc  = 0;
+static AjPStr swissAccstr = NULL;
 
 static AjBool dbxflat_ParseFastq(EmbPBtreeEntry entry, AjPFile inf);
 static AjBool dbxflat_ParseEmbl(EmbPBtreeEntry entry, AjPFile inf);
 static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf);
+static AjBool dbxflat_ParseSwiss(EmbPBtreeEntry entry, AjPFile inf);
 
 static AjBool dbxflat_NextEntry(EmbPBtreeEntry entry, AjPFile inf);
 
@@ -59,7 +61,7 @@ ajuint keytot = 0;
 ** @alias DbxflatOParser
 **
 ** @attr Name [const char*] Parser name
-** @attr Parser [(AjBool*)] Parser function
+** @attr Parser [AjBool function] Parser function
 ** @@
 ******************************************************************************/
 
@@ -76,7 +78,7 @@ typedef struct DbxflatSParser
 static DbxflatOParser parser[] =
 {
     {"EMBL",   dbxflat_ParseEmbl},
-    {"SWISS",  dbxflat_ParseEmbl},
+    {"SWISS",  dbxflat_ParseSwiss},
     {"GB",     dbxflat_ParseGenbank},
     {"REFSEQ", dbxflat_ParseGenbank},
     {"FASTQ",  dbxflat_ParseFastq},
@@ -122,12 +124,6 @@ int main(int argc, char **argv)
     ajint i;
     AjPFile inf = NULL;
 
-    AjPStr word = NULL;
-    
-    AjPBtId  idobj  = NULL;
-    AjPBtPri priobj = NULL;
-    AjPBtHybrid hyb = NULL;
-    
     ajulong nentries = 0L;
     ajulong ientries = 0L;
     AjPTime starttime = NULL;
@@ -137,12 +133,25 @@ int main(int argc, char **argv)
     ajlong beginclock = 0;
     ajlong nowclock = 0;
     
-    ajulong idcache=0L, idread = 0L, idwrite = 0L, idsize= 0L;
-    ajulong accache=0L, acread = 0L, acwrite = 0L, acsize= 0L;
-    ajulong svcache=0L, svread = 0L, svwrite = 0L, svsize= 0L;
-    ajulong kwcache=0L, kwread = 0L, kwwrite = 0L, kwsize= 0L;
-    ajulong decache=0L, deread = 0L, dewrite = 0L, desize= 0L;
-    ajulong txcache=0L, txread = 0L, txwrite = 0L, txsize= 0L;
+    ajulong idpricache=0L, idpriread = 0L, idpriwrite = 0L, idprisize= 0L;
+    ajulong idseccache=0L, idsecread = 0L, idsecwrite = 0L, idsecsize= 0L;
+    ajulong acpricache=0L, acpriread = 0L, acpriwrite = 0L, acprisize= 0L;
+    ajulong acseccache=0L, acsecread = 0L, acsecwrite = 0L, acsecsize= 0L;
+    ajulong svpricache=0L, svpriread = 0L, svpriwrite = 0L, svprisize= 0L;
+    ajulong svseccache=0L, svsecread = 0L, svsecwrite = 0L, svsecsize= 0L;
+    ajulong kwpricache=0L, kwpriread = 0L, kwpriwrite = 0L, kwprisize= 0L;
+    ajulong kwseccache=0L, kwsecread = 0L, kwsecwrite = 0L, kwsecsize= 0L;
+    ajulong depricache=0L, depriread = 0L, depriwrite = 0L, deprisize= 0L;
+    ajulong deseccache=0L, desecread = 0L, desecwrite = 0L, desecsize= 0L;
+    ajulong txpricache=0L, txpriread = 0L, txpriwrite = 0L, txprisize= 0L;
+    ajulong txseccache=0L, txsecread = 0L, txsecwrite = 0L, txsecsize= 0L;
+
+    ajulong splitrootid =0l, splitrootnum=0L;
+    ajulong splitrootkey=0L, splitrootsec=0L;
+    ajulong splitleafid =0L, splitleafnum=0L;
+    ajulong splitleafkey=0L, splitleafsec=0L;
+    ajulong reorderid   =0L, reordernum  =0L;
+    ajulong reorderkey  =0L, reordersec  =0L;
 
     double tdiff = 0.0;
     ajint days = 0;
@@ -165,17 +174,12 @@ int main(int argc, char **argv)
     statistics = ajAcdGetBoolean("statistics");
     compressed = ajAcdGetBoolean("compressed");
 
-    entry = embBtreeEntryNew();
+    entry = embBtreeEntryNew(0);
     if(compressed)
         embBtreeEntrySetCompressed(entry);
 
     tmpstr = ajStrNew();
     
-    idobj   = ajBtreeIdNew();
-    priobj  = ajBtreePriNew();
-    hyb     = ajBtreeHybNew();
-    
-
     nfields = embBtreeSetFields(entry,fieldarray);
     embBtreeSetDbInfo(entry,dbname,dbrs,datestr,release,dbtype,directory,
 		      indexdir);
@@ -242,7 +246,7 @@ int main(int argc, char **argv)
 	if(!(inf=ajFileNewInNameS(tmpstr)))
 	    ajFatal("Cannot open input file %S\n",tmpstr);
 	ajFilenameTrimPath(&tmpstr);
-	ajFmtPrintF(outf,"Processing file: %S",tmpstr);
+	ajFmtPrintF(outf,"Processing file: %S\n",tmpstr);
 
 	ientries = 0L;
 
@@ -252,130 +256,93 @@ int main(int argc, char **argv)
 
 	    if(entry->do_id)
 	    {
-                if(ajStrGetLen(entry->id) > entry->idlen)
-                {
-                    if(ajStrGetLen(entry->id) > maxidlen)
-                    {
-                        ajWarn("id '%S' too long, truncating to idlen %d",
-                               entry->id, entry->idlen);
-                        maxidlen = ajStrGetLen(entry->id);
-                    }
-                    idtrunc++;
-                    ajStrKeepRange(&entry->id,0,entry->idlen-1);
-                }
-    
-		ajStrFmtLower(&entry->id);
-		ajStrAssignS(&hyb->key1,entry->id);
-		hyb->dbno = i;
-		hyb->offset = entry->fpos;
-		hyb->dups = 0;
-		ajBtreeHybInsertId(entry->idcache,hyb);
+		embBtreeIndexEntry(entry, i);
                 ++idtot;
 	    }
 
 	    if(accfield)
 	    {
-                while(ajListPop(accfield->data,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-                    ajStrAssignS(&hyb->key1,word);
-                    hyb->dbno = i;
-		    hyb->offset = entry->fpos;
-		    hyb->dups = 0;
-		    ajBtreeHybInsertId(accfield->cache,hyb);
-                    ++acctot;
-		    ajStrDel(&word);
-                }
+                acctot += embBtreeIndexPrimary(accfield, entry, i);
 	    }
 
 	    if(svfield)
 	    {
-                while(ajListPop(svfield->data,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-                    ajStrAssignS(&hyb->key1,word);
-                    hyb->dbno = i;
-		    hyb->offset = entry->fpos;
-		    hyb->dups = 0;
-		    ajBtreeHybInsertId(svfield->cache,hyb);
-                    ++svtot;
-		    ajStrDel(&word);
-                }
+                svtot += embBtreeIndexPrimary(svfield, entry, i);
 	    }
 
 	    if(keyfield)
 	    {
-                while(ajListPop(keyfield->data,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-		    ajStrAssignS(&priobj->id,entry->id);
-                    ajStrAssignS(&priobj->keyword,word);
-                    priobj->treeblock = 0;
-                    ajBtreeInsertKeyword(keyfield->cache, priobj);
-                    ++keytot;
-		    ajStrDel(&word);
-                }
+                keytot += embBtreeIndexSecondary(keyfield, entry);
 	    }
 
 	    if(desfield)
 	    {
-                while(ajListPop(desfield->data,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-		    ajStrAssignS(&priobj->id,entry->id);
-                    ajStrAssignS(&priobj->keyword,word);
-                    priobj->treeblock = 0;
-                    if(ajBtreeInsertKeyword(desfield->cache, priobj))
-                        ++destot;
-		    ajStrDel(&word);
-                }
+                destot += embBtreeIndexSecondary(desfield, entry);
 	    }
 
 	    if(orgfield)
 	    {
-                while(ajListPop(orgfield->data,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-		    ajStrAssignS(&priobj->id,entry->id);
-                    ajStrAssignS(&priobj->keyword,word);
-                    priobj->treeblock = 0;
-                    ajBtreeInsertKeyword(orgfield->cache, priobj);
-                    ++orgtot;
-		    ajStrDel(&word);
-                }
-	    }
+                orgtot += embBtreeIndexSecondary(orgfield, entry);
+            }
 	}
 	
 	ajFileClose(&inf);
 	nentries += ientries;
 	nowtime = ajTimeNewToday();
         nowclock = ajClockNow();
-	ajFmtPrintF(outf, " entries: %Lu (%Lu) time: %.1f/%.1fs (%.1f/%.1fs)\n",
+	ajFmtPrintF(outf, "entries: %Lu (%Lu) time: %.1f/%.1fs (%.1f/%.1fs)\n",
 		    nentries, ientries,
 		    ajClockDiff(startclock,nowclock),
                     ajTimeDiff(starttime, nowtime),
 		    ajClockDiff(beginclock,nowclock),
                     ajTimeDiff(begintime, nowtime));
+
         if(statistics)
         {
+            ajBtreeStatsOut(outf,
+                            &splitrootid, &splitrootnum,
+                            &splitrootkey, &splitrootsec,
+                            &splitleafid, &splitleafnum,
+                            &splitleafkey, &splitleafsec,
+                            &reorderid, &reordernum,
+                            &reorderkey, &reordersec);
+
             if(entry->do_id)
                 ajBtreeCacheStatsOut(outf, entry->idcache,
-                                     &idcache, &idread, &idwrite, &idsize);
+                                     &idpricache, &idseccache,
+                                     &idpriread, &idsecread,
+                                     &idpriwrite, &idsecwrite,
+                                     &idprisize, &idsecsize);
             if(accfield)
                 ajBtreeCacheStatsOut(outf, accfield->cache,
-                                     &accache, &acread, &acwrite, &acsize);
+                                     &acpricache, &acseccache,
+                                     &acpriread,  &acsecread,
+                                     &acpriwrite, &acsecwrite,
+                                     &acprisize, &acsecsize);
             if(svfield)
                 ajBtreeCacheStatsOut(outf, svfield->cache,
-                                     &svcache, &svread, &svwrite, &svsize);
+                                     &svpricache, &svseccache,
+                                     &svpriread, &svsecread,
+                                     &svpriwrite, &svsecwrite,
+                                     &svprisize, &svsecsize);
             if(keyfield)
                 ajBtreeCacheStatsOut(outf, keyfield->cache,
-                                     &kwcache, &kwread, &kwwrite, &kwsize);
+                                     &kwpricache, &kwseccache,
+                                     &kwpriread, &kwsecread,
+                                     &kwpriwrite, &kwsecwrite,
+                                     &kwprisize, &kwsecsize);
             if(desfield)
                 ajBtreeCacheStatsOut(outf, desfield->cache,
-                                     &decache, &deread, &dewrite, &desize);
+                                     &depricache, &deseccache,
+                                     &depriread, &desecread,
+                                     &depriwrite, &desecwrite,
+                                     &deprisize, &desecsize);
             if(orgfield)
                 ajBtreeCacheStatsOut(outf, orgfield->cache,
-                                     &txcache, &txread, &txwrite, &txsize);
+                                     &txpricache, &txseccache,
+                                     &txpriread, &txsecread,
+                                     &txpriwrite, &txsecwrite,
+                                     &txprisize, &txsecsize);
         }
 
 	ajTimeDel(&begintime);
@@ -407,15 +374,18 @@ int main(int argc, char **argv)
     ajTimeDel(&nowtime);
     ajTimeDel(&starttime);
 
-    if(maxidlen)
-    {
-        ajFmtPrintF(outf,
-                    "Resource idlen truncated %u IDs. "
-                    "Maximum ID length was %u.",
-                    idtrunc, maxidlen);
-        ajWarn("Resource idlen truncated %u IDs. Maximum ID length was %u.",
-               idtrunc, maxidlen);
-    }
+    embBtreeReportEntry(outf, entry);
+
+    if(accfield)
+        embBtreeReportField(outf, accfield);
+    if(svfield)
+        embBtreeReportField(outf, svfield);
+    if(orgfield)
+        embBtreeReportField(outf, orgfield);
+    if(desfield)
+        embBtreeReportField(outf, desfield);
+    if(keyfield)
+        embBtreeReportField(outf, keyfield);
 
     ajFileClose(&outf);
     embBtreeEntryDel(&entry);
@@ -435,12 +405,11 @@ int main(int argc, char **argv)
 	ajStrDel(&fieldarray[nfields++]);
     AJFREE(fieldarray);
 
-
-    ajBtreeIdDel(&idobj);
-    ajBtreePriDel(&priobj);
-    ajBtreeHybDel(&hyb);
-
     ajRegFree(&dbxflat_wrdexp);
+    ajStrDel(&dbxflatRdline);
+    ajStrDel(&dbxflatSumline);
+    ajStrDel(&swissAccstr);
+
     embExit();
 
     return 0;
@@ -464,59 +433,53 @@ int main(int argc, char **argv)
 
 static AjBool dbxflat_ParseEmbl(EmbPBtreeEntry entry, AjPFile inf)
 {
-    AjPStr line = NULL;
     ajlong pos  = 0L;
     
-    line = ajStrNewC("");
+    ajStrAssignC(&dbxflatRdline, "");
     
-    while(!ajStrPrefixC(line,"//"))
+    while(!ajStrPrefixC(dbxflatRdline, "//"))
     {
 	pos = ajFileResetPos(inf);
 	
-	if(!ajReadlineTrim(inf,&line))
+	if(!ajReadlineTrim(inf,&dbxflatRdline))
 	{
-	    ajStrDel(&line);
+	    ajStrDel(&dbxflatRdline);
 	    return ajFalse;
 	}
-	if(ajStrPrefixC(line,"ID"))
+
+	if(ajStrPrefixC(dbxflatRdline,"ID"))
 	{
 	    entry->fpos = pos;
-	    ajFmtScanS(line,"%*S%S",&entry->id);
+	    ajFmtScanS(dbxflatRdline,"%*S%S",&entry->id);
 	    ajStrTrimEndC(&entry->id, ";");
-/*
-	    ++global;
-	    printf("%d. %s\n",global,ajStrGetPtr(entry->id));
-*/
 	    if(svfield)
-		embBtreeEmblSV(line,svfield->data);
+		embBtreeParseEmblSv(dbxflatRdline,svfield);
 	}
 
 
 	if(svfield)
-	    if(ajStrPrefixC(line,"SV") ||
-	       ajStrPrefixC(line,"IV"))	/* emblcds database format */
-		embBtreeEmblAC(line,svfield->data);
+	    if(ajStrPrefixC(dbxflatRdline,"SV") ||
+	       ajStrPrefixC(dbxflatRdline,"IV"))  /* emblcds database format */
+		embBtreeParseEmblAc(dbxflatRdline,svfield);
 
 	if(accfield)
-	    if(ajStrPrefixC(line,"AC") ||
-	       ajStrPrefixC(line,"PA"))	/* emblcds database format */
-		embBtreeEmblAC(line,accfield->data);
+	    if(ajStrPrefixC(dbxflatRdline,"AC") ||
+	       ajStrPrefixC(dbxflatRdline,"PA"))  /* emblcds database format */
+		embBtreeParseEmblAc(dbxflatRdline,accfield);
 	
 	if(keyfield)
-	    if(ajStrPrefixC(line,"KW"))
-		embBtreeEmblKW(line,keyfield->data,keyfield->len);
+	    if(ajStrPrefixC(dbxflatRdline,"KW"))
+		embBtreeParseEmblKw(dbxflatRdline,keyfield);
 
 	if(desfield)
-	    if(ajStrPrefixC(line,"DE"))
-		embBtreeEmblDE(line,desfield->data,desfield->len);
+	    if(ajStrPrefixC(dbxflatRdline,"DE"))
+		embBtreeParseEmblDe(dbxflatRdline,desfield);
 
 	if(orgfield)
-	    if(ajStrPrefixC(line,"OC") || ajStrPrefixC(line,"OS"))
-		embBtreeEmblTX(line,orgfield->data,orgfield->len);
+	    if(ajStrPrefixC(dbxflatRdline,"OC") ||
+               ajStrPrefixC(dbxflatRdline,"OS"))
+		embBtreeParseEmblTx(dbxflatRdline,orgfield);
     }
-    
-
-    ajStrDel(&line);
     
     return ajTrue;
 }
@@ -537,88 +500,82 @@ static AjBool dbxflat_ParseEmbl(EmbPBtreeEntry entry, AjPFile inf)
 
 static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf)
 {
-    AjPStr line = NULL;
     ajlong pos  = 0L;
     AjBool ret = ajTrue;
     
-    AjPStr sumline = NULL;
+    ajStrAssignC(&dbxflatRdline, "");
+    ajStrAssignC(&dbxflatSumline, "");
     
-    line = ajStrNewC("");
-    sumline = ajStrNew();
-
-    
-    while(!ajStrPrefixC(line,"//") && ret)
+    while(!ajStrPrefixC(dbxflatRdline,"//") && ret)
     {
-	if(ajStrPrefixC(line,"LOCUS"))
+	if(ajStrPrefixC(dbxflatRdline,"LOCUS"))
 	{
 	    entry->fpos = pos;
-	    ajFmtScanS(line,"%*S%S",&entry->id);
+	    ajFmtScanS(dbxflatRdline,"%*S%S",&entry->id);
 	}
 	
 	if(svfield)
-	    if(ajStrPrefixC(line,"VERSION"))
-		embBtreeGenBankAC(line,svfield->data);
+	    if(ajStrPrefixC(dbxflatRdline,"VERSION"))
+		embBtreeParseGenbankAc(dbxflatRdline,svfield);
 	
 	if(accfield)
-	    if(ajStrPrefixC(line,"ACCESSION"))
-		embBtreeGenBankAC(line,accfield->data);
+	    if(ajStrPrefixC(dbxflatRdline,"ACCESSION"))
+		embBtreeParseGenbankAc(dbxflatRdline,accfield);
 	
 	if(keyfield)
-	    if(ajStrPrefixC(line,"KEYWORDS"))
+	    if(ajStrPrefixC(dbxflatRdline,"KEYWORDS"))
 	    {
-		ajStrAssignS(&sumline,line);
-		ret = ajReadlineTrim(inf,&line);
-                while(ret && *MAJSTRGETPTR(line)==' ')
+		ajStrAssignS(&dbxflatSumline,dbxflatRdline);
+		ret = ajReadlineTrim(inf,&dbxflatRdline);
+                while(ret && *MAJSTRGETPTR(dbxflatRdline)==' ')
 		{
-		    ajStrAppendS(&sumline,line);
-		    ret = ajReadlineTrim(inf,&line);
+		    ajStrAppendS(&dbxflatSumline,dbxflatRdline);
+		    ret = ajReadlineTrim(inf,&dbxflatRdline);
 		}
-		ajStrRemoveWhiteExcess(&sumline);
-		embBtreeGenBankKW(sumline,keyfield->data,keyfield->len);
+		ajStrRemoveWhiteExcess(&dbxflatSumline);
+		embBtreeParseGenbankKw(dbxflatSumline,keyfield);
 		continue;
 	    }
 
 	if(desfield)
-	    if(ajStrPrefixC(line,"DEFINITION"))
+	    if(ajStrPrefixC(dbxflatRdline,"DEFINITION"))
 	    {
-		ajStrAssignS(&sumline,line);
-		ret = ajReadlineTrim(inf,&line);
-		while(ret && *MAJSTRGETPTR(line)==' ')
+		ajStrAssignS(&dbxflatSumline,dbxflatRdline);
+		ret = ajReadlineTrim(inf,&dbxflatRdline);
+		while(ret && *MAJSTRGETPTR(dbxflatRdline)==' ')
 		{
-		    ajStrAppendS(&sumline,line);
-		    ret = ajReadlineTrim(inf,&line);
+		    ajStrAppendS(&dbxflatSumline,dbxflatRdline);
+		    ret = ajReadlineTrim(inf,&dbxflatRdline);
 		}
-		ajStrRemoveWhiteExcess(&sumline);
-		embBtreeGenBankDE(sumline,desfield->data,desfield->len);
+		ajStrRemoveWhiteExcess(&dbxflatSumline);
+		embBtreeParseGenbankDe(dbxflatSumline,desfield);
 		continue;
 	    }
 	
 
 	if(orgfield)
-	    if(ajStrPrefixC(line,"SOURCE"))
+	    if(ajStrPrefixC(dbxflatRdline,"SOURCE"))
 	    {
-		ret = ajReadlineTrim(inf,&line);
-		ajStrAppendC(&line,";");
-		while(ret && *MAJSTRGETPTR(line)==' ')
+		ajStrAssignC(&dbxflatSumline,"");
+		ret = ajReadlineTrim(inf,&dbxflatRdline);
+                ajStrAppendC(&dbxflatRdline, ";");
+		while(ret && *MAJSTRGETPTR(dbxflatRdline)==' ')
 		{
-		    ajStrAppendS(&sumline,line);
-		    ret = ajReadlineTrim(inf,&line);
+		    ajStrAppendS(&dbxflatSumline,dbxflatRdline);
+		    ret = ajReadlineTrim(inf,&dbxflatRdline);
 		}
-		ajStrRemoveWhiteExcess(&sumline);
-		embBtreeGenBankTX(sumline,orgfield->data,orgfield->len);
+		ajStrRemoveWhiteExcess(&dbxflatSumline);
+		embBtreeParseGenbankTx(dbxflatSumline,orgfield);
 		continue;
 	    }
 	
 
 	pos = ajFileResetPos(inf);
 
-	if(!ajReadlineTrim(inf,&line))
+	if(!ajReadlineTrim(inf,&dbxflatRdline))
 	    ret = ajFalse;
     }
 
-    ajStrDel(&line);
-    ajStrDel(&sumline);
-    
     return ret;
 }
 
@@ -640,7 +597,6 @@ static AjBool dbxflat_ParseGenbank(EmbPBtreeEntry entry, AjPFile inf)
 
 static AjBool dbxflat_ParseFastq(EmbPBtreeEntry entry, AjPFile inf)
 {
-    AjPStr line = NULL;
     ajlong pos  = 0L;
     ajuint seqlen = 0;
     ajuint qlen = 0;
@@ -652,24 +608,24 @@ static AjBool dbxflat_ParseFastq(EmbPBtreeEntry entry, AjPFile inf)
     if(!dbxflat_wrdexp)
 	dbxflat_wrdexp = ajRegCompC("([A-Za-z0-9.:=]+)");
 
-    line = ajStrNewC("");
+    ajStrAssignC(&dbxflatRdline, "");
     
     pos = ajFileResetPos(inf);
 
-    if(!ajReadlineTrim(inf,&line))
+    if(!ajReadlineTrim(inf,&dbxflatRdline))
     {
-        ajStrDel(&line);
+        ajStrDel(&dbxflatRdline);
         return ajFalse;
     }
 
     /* first line of entry */
 
-    if(!ajStrPrefixC(line,"@"))
+    if(!ajStrPrefixC(dbxflatRdline,"@"))
         return ajFalse;
 
     entry->fpos = pos;
-    ajStrCutStart(&line, 1);
-    ajStrExtractFirst(line, &de, &entry->id);
+    ajStrCutStart(&dbxflatRdline, 1);
+    ajStrExtractFirst(dbxflatRdline, &de, &entry->id);
 
     if(desfield && ajStrGetLen(de))
     {
@@ -678,40 +634,163 @@ static AjBool dbxflat_ParseFastq(EmbPBtreeEntry entry, AjPFile inf)
 	    ajRegSubI(dbxflat_wrdexp, 1, &tmpfd);
 	    str = ajStrNew();
 	    ajStrAssignS(&str,tmpfd);
-	    ajListPush(desfield->data,(void *)str);
+	    ajListstrPushAppend(desfield->data, str);
 	    ajRegPost(dbxflat_wrdexp, &de);
 	}
     }
 
 /* now read sequence */
-    ok = ajReadlineTrim(inf,&line);
-    while(ok && !ajStrPrefixC(line, "+"))
+    ok = ajReadlineTrim(inf,&dbxflatRdline);
+    while(ok && !ajStrPrefixC(dbxflatRdline, "+"))
     {
-        ajStrRemoveWhite(&line);
-        seqlen += MAJSTRGETLEN(line);
-        ok = ajReadlineTrim(inf,&line);
+        ajStrRemoveWhite(&dbxflatRdline);
+        seqlen += MAJSTRGETLEN(dbxflatRdline);
+        ok = ajReadlineTrim(inf,&dbxflatRdline);
     }
 
     if(!ok)
         return ajFalse;
 
-    ok = ajReadlineTrim(inf,&line);
+    ok = ajReadlineTrim(inf,&dbxflatRdline);
     while(ok)
     {
-        qlen += MAJSTRGETLEN(line);
+        qlen += MAJSTRGETLEN(dbxflatRdline);
         if(qlen < seqlen)
-            ok = ajReadlineTrim(inf,&line);
+            ok = ajReadlineTrim(inf,&dbxflatRdline);
         else
             ok = ajFalse;
     }
 
     ajStrDel(&de);
     ajStrDel(&tmpfd);
-    ajStrDel(&line);
     
     return ajTrue;
 }
 
+
+
+
+
+/* @funcstatic dbxflat_ParseSwiss *********************************************
+**
+** Parse the ID, accession from a SwissProt or UniProtKB entry.
+**
+** Reads to the end of the entry and then returns.
+**
+** @param [w] entry [EmbPBtreeEntry] entry
+** @param [u] inf [AjPFile] Input file
+**
+** @return [AjBool] ajTrue on success.
+** @@
+******************************************************************************/
+
+static AjBool dbxflat_ParseSwiss(EmbPBtreeEntry entry, AjPFile inf)
+{
+    ajlong pos  = 0L;
+    const char* swissprefix[] = {
+        "RecName: ", "AltName: ", "SubName: ",
+        "Includes:", "Contains:", "Flags: ",
+        "Full=", "Short=", "EC=",
+        "Allergen=", "Biotech=", "CD_antigen=", "INN=",
+        NULL
+    };
+    ajuint swisslen[] = {
+        9, 9, 9,
+        9, 9, 7,
+        5, 6, 3,
+        9, 8, 11, 4,
+        0
+    };
+
+    ajuint i;
+
+    if(!dbxflat_wrdexp)
+	dbxflat_wrdexp = ajRegCompC("([A-Za-z0-9_-]+)");
+
+    ajStrAssignC(&dbxflatRdline, "");
+    
+    while(!ajStrPrefixC(dbxflatRdline,"//"))
+    {
+	pos = ajFileResetPos(inf);
+	
+	if(!ajReadlineTrim(inf,&dbxflatRdline))
+	{
+            if(svfield)
+                ajStrDel(&swissAccstr);
+
+	    return ajFalse;
+	}
+
+	if(ajStrPrefixC(dbxflatRdline,"ID"))
+	{
+	    entry->fpos = pos;
+	    ajFmtScanS(dbxflatRdline,"%*S%S",&entry->id);
+	    ajStrTrimEndC(&entry->id, ";");
+	}
+
+
+	if(svfield)
+        {
+	    if(ajStrPrefixC(dbxflatRdline,"SV") ||
+	       ajStrPrefixC(dbxflatRdline,"IV"))  /* emblcds database format */
+		embBtreeParseEmblAc(dbxflatRdline,svfield);
+
+            if(!MAJSTRGETLEN(swissAccstr) && ajStrPrefixC(dbxflatRdline,"AC"))
+                embBtreeFindEmblAc(dbxflatRdline, svfield, &swissAccstr);
+
+            if(MAJSTRGETLEN(swissAccstr) &&
+               ajStrMatchWildC(dbxflatRdline,
+                               "DT   \?\?-\?\?\?-\?\?\?\?, sequence version *"))
+            {
+                ajStrAppendK(&swissAccstr, '.');
+                ajStrAppendSubS(&swissAccstr, dbxflatRdline, 35, -3);
+                ajStrTrimEndC(&swissAccstr, ".\n\r"); /* in case of \n\r */
+                ajListstrPushAppend(svfield->data, swissAccstr);
+                swissAccstr = NULL;
+            }
+        }
+
+	if(accfield)
+	    if(ajStrPrefixC(dbxflatRdline,"AC") ||
+	       ajStrPrefixC(dbxflatRdline,"PA"))  /* emblcds database format */
+		embBtreeParseEmblAc(dbxflatRdline,accfield);
+	
+	if(keyfield)
+	    if(ajStrPrefixC(dbxflatRdline,"KW"))
+		embBtreeParseEmblKw(dbxflatRdline,keyfield);
+
+	if(desfield)
+	    if(ajStrPrefixC(dbxflatRdline,"DE"))
+            {
+                ajStrCutStart(&dbxflatRdline, 5);
+                ajStrTrimWhiteStart(&dbxflatRdline);
+
+                /*
+                ** trim prefixes
+                ** can be multiple
+                ** e.g. SubName: Full=
+                */
+
+                for(i=0; swissprefix[i]; i++)
+                {
+                    if(ajStrPrefixC(dbxflatRdline, swissprefix[i]))
+                        ajStrCutStart(&dbxflatRdline, swisslen[i]);
+                }
+
+		embBtreeParseField(dbxflatRdline,dbxflat_wrdexp, desfield);
+            }
+        
+	if(orgfield)
+	    if(ajStrPrefixC(dbxflatRdline,"OC") ||
+               ajStrPrefixC(dbxflatRdline,"OS"))
+		embBtreeParseEmblTx(dbxflatRdline,orgfield);
+    }
+
+    if(svfield)
+        ajStrDel(&swissAccstr);
+
+    return ajTrue;
+}
 
 
 
@@ -745,7 +824,7 @@ static AjBool dbxflat_NextEntry(EmbPBtreeEntry entry, AjPFile inf)
     }
     
 
-    if(!parser[nparser].Parser(entry,inf))
+    if(!(*parser[nparser].Parser)(entry,inf))
 	return ajFalse;
     
 

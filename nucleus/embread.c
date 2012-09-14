@@ -1,24 +1,38 @@
-/* @source embread.c
+/* @source embread ************************************************************
 **
 ** Data file reading routines
-** Copyright (c) 1999 Alan Bleasby
 **
-** This program is free software; you can redistribute it and/or
-** modify it under the terms of the GNU General Public License
-** as published by the Free Software Foundation; either version 2
-** of the License, or (at your option) any later version.
+** @author Copyright (c) 1999 Alan Bleasby
+** @version $Revision: 1.18 $
+** @modified $Date: 2011/11/08 15:12:52 $ by $Author: rice $
+** @@
 **
-** This program is distributed in the hope that it will be useful,
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#include "emboss.h"
+
+#include "ajlib.h"
+
+#include "embread.h"
+#include "ajfiledata.h"
+#include "ajfileio.h"
+#include "ajsys.h"
+#include "ajbase.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +50,8 @@
 ** @param [r] fill [double] initialisation value
 **
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -125,6 +141,8 @@ AjBool embReadAminoDataDoubleC(const char *s, double **a, double fill)
 ** @param [r] fill [float] initialisation value
 **
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -214,6 +232,8 @@ AjBool embReadAminoDataFloatC(const char *s, float **a, float fill)
 ** @param [r] fill [ajint] initialisation value
 **
 ** @return [AjBool] ajTrue on success
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 

@@ -1,8 +1,8 @@
 application: tfscan [
   documentation: "Identify transcription factor binding sites in DNA sequences"
   groups: "Nucleic:Transcription"
-    relations: "EDAM:0000110 topic Transcription"
-    relations: "EDAM:0000445 operation Transcription factor binding site prediction"
+    relations: "EDAM_topic:0110 Transcription"
+    relations: "EDAM_operation:0445 Transcription factor binding site prediction"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
+    relations: "EDAM_data:2887 Sequence record (nucleic acid)"
   ]
 
   list: menu [
@@ -27,7 +27,7 @@ section: input [
     header: "Transcription Factor Class"
     information: "Select class"
     button: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   datafile: custom [
@@ -36,7 +36,7 @@ section: input [
     nullok: "@($(menu)!=C)"
     knowntype: "transfac data"
     default: ""
-    relations: "EDAM:0002147 data Protein report (transcription factor)"
+    relations: "EDAM_data:0896 Protein report"
   ]
 
 endsection: input
@@ -51,7 +51,7 @@ section: required [
     default: "0"
     minimum: "0"
     information: "Number of mismatches"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: required
@@ -67,7 +67,7 @@ section: additional [
     minimum: "1"
     information: "Display matches equal to or above this
                   length"
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
 endsection: additional
@@ -81,7 +81,7 @@ section: output [
     parameter: "Y"
     rformat: "seqtable"
     taglist: "str:acc=Accession str:factor=Factor"
-    relations: "EDAM:0001315 data Gene features (TFBS)"
+    relations: "EDAM_data:1315 Gene features (TFBS)"
   ]
 
 endsection: output

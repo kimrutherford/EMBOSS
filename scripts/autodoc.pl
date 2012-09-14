@@ -189,7 +189,7 @@ sub usage () {
 sub htmlsource ( $$ ) {
     my($tfile, $edir) = @_;
     @giffiles = ();
-    open (X, ">x.x") || die "Cannot upen temporary file x.x";
+    open (X, ">x.x") || die "Cannot open temporary file x.x";
 
     open (H, "$edir/$tfile") ||
 	die "Cannot open HTML template file '$edir/$tfile'";
@@ -1192,7 +1192,9 @@ $progs{$thisprogram}
 # edit the HTML file
 # change ../emboss_icon.jpg and ../index.html to current directory
 	    system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' x.x";
-	    system "perl -p -i -e 's#/images/emboss_icon.jpg#emboss_icon.jpg#g;' x.x";
+	    if ($embassy ne "") {
+		system "perl -p -i -e 's#/images/emboss_icon.jpg#emboss_icon.jpg#g;' x.x";
+	    }
 	    $diff = filediff ("$dochtml/$thisprogram.html", "x.x");
 	}
 
@@ -1223,7 +1225,9 @@ $progs{$thisprogram}
 	    else {
 # change ../emboss_icon.jpg and ../index.html to current directory
 		system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' x.x";
-		system "perl -p -i -e 's#/images/emboss_icon.jpg#emboss_icon.jpg#g;' x.x";
+		if ($embassy ne "") {
+		    system "perl -p -i -e 's#/images/emboss_icon.jpg#emboss_icon.jpg#g;' x.x";
+		}
 		filediff ("$dochtml/index.html", "x.x");
 	    }
 	}
@@ -1384,7 +1388,9 @@ $progs{$p}
     else {
 # change ../emboss_icon.jpg and ../index.html to current directory
 	system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' x.x";
-	system "perl -p -i -e 's#\/images/emboss_icon.jpg#emboss_icon.jpg#g;' x.x";
+	if ($embassy ne "") {
+	    system "perl -p -i -e 's#\/images/emboss_icon.jpg#emboss_icon.jpg#g;' x.x";
+	}
 	filediff ("$cvsdoc/html/$filename\_group.html", "x.x");
     }
 }

@@ -1,5 +1,5 @@
-Generates server cache file for Dbfetch/WSDbfetch data sources
-Version: EMBOSS:6.4.0.0
+Generate server cache file for Dbfetch/WSDbfetch data sources
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-servername]        string     [dbfetch] Name of the ws/dbfetch server

@@ -25,17 +25,21 @@
 
 #define FASTATYPE_SIMPLE    1
 #define FASTATYPE_IDACC     2
-#define FASTATYPE_GCGID     3
-#define FASTATYPE_GCGIDACC 4
-#define FASTATYPE_NCBI      5
-#define FASTATYPE_DBID      6
-#define FASTATYPE_ACCID     7
-#define FASTATYPE_GCGACCID  8
+#define FASTATYPE_IDSV      3
+#define FASTATYPE_GCGID     4
+#define FASTATYPE_GCGIDACC  5
+#define FASTATYPE_NCBI      6
+#define FASTATYPE_DBID      7
+#define FASTATYPE_ACCID     8
+#define FASTATYPE_GCGACCID  9
 
 static AjPRegexp dbxfasta_wrdexp = NULL;
 
-static ajuint maxidlen = 0;
-static ajuint idtrunc  = 0;
+static AjPStr dbxfastaac  = NULL;
+static AjPStr dbxfastasv  = NULL;
+static AjPStr dbxfastagi  = NULL;
+static AjPStr dbxfastadb  = NULL;
+static AjPStr dbxfastade  = NULL;
 
 static AjBool dbxfasta_NextEntry(EmbPBtreeEntry entry, AjPFile inf,
 				 AjPRegexp typeexp, ajint idtype);
@@ -46,6 +50,11 @@ static AjPRegexp dbxfasta_getExpr(const AjPStr idformat, ajint *type);
 EmbPBtreeField accfield = NULL;
 EmbPBtreeField svfield = NULL;
 EmbPBtreeField desfield = NULL;
+
+ajuint idtot = 0;
+ajuint acctot = 0;
+ajuint svtot = 0;
+ajuint destot = 0;
 
 
 
@@ -64,6 +73,7 @@ int main(int argc, char **argv)
     AjPStr dbrs     = NULL;
     AjPStr release  = NULL;
     AjPStr datestr  = NULL;
+    AjBool statistics;
     AjBool compressed;
 
     AjPStr directory;
@@ -84,12 +94,6 @@ int main(int argc, char **argv)
     ajint i;
     AjPFile inf = NULL;
 
-    AjPStr word = NULL;
-    
-    AjPBtId  idobj  = NULL;
-    AjPBtPri priobj = NULL;
-    AjPBtHybrid hyb = NULL;
-    
     ajulong nentries = 0L;
     ajulong ientries = 0L;
     AjPTime starttime = NULL;
@@ -98,6 +102,15 @@ int main(int argc, char **argv)
 
     AjPRegexp typeexp = NULL;
     ajint idtype = 0;
+
+    ajulong idpricache=0L, idpriread = 0L, idpriwrite = 0L, idprisize= 0L;
+    ajulong idseccache=0L, idsecread = 0L, idsecwrite = 0L, idsecsize= 0L;
+    ajulong acpricache=0L, acpriread = 0L, acpriwrite = 0L, acprisize= 0L;
+    ajulong acseccache=0L, acsecread = 0L, acsecwrite = 0L, acsecsize= 0L;
+    ajulong svpricache=0L, svpriread = 0L, svpriwrite = 0L, svprisize= 0L;
+    ajulong svseccache=0L, svsecread = 0L, svsecwrite = 0L, svsecsize= 0L;
+    ajulong depricache=0L, depriread = 0L, depriwrite = 0L, deprisize= 0L;
+    ajulong deseccache=0L, desecread = 0L, desecwrite = 0L, desecsize= 0L;
 
     embInit("dbxfasta", argc, argv);
 
@@ -112,18 +125,14 @@ int main(int argc, char **argv)
     dbrs       = ajAcdGetString("dbresource");
     release    = ajAcdGetString("release");
     datestr    = ajAcdGetString("date");
+    statistics = ajAcdGetBoolean("statistics");
     compressed = ajAcdGetBoolean("compressed");
 
-    entry = embBtreeEntryNew();
+    entry = embBtreeEntryNew(0);
     if(compressed)
         embBtreeEntrySetCompressed(entry);
     tmpstr = ajStrNew();
     
-    idobj   = ajBtreeIdNew();
-    priobj  = ajBtreePriNew();
-    hyb     = ajBtreeHybNew();
-    
-
     nfields = embBtreeSetFields(entry,fieldarray);
     embBtreeSetDbInfo(entry,dbname,dbrs,datestr,release,dbtype,directory,
 		      indexdir);
@@ -180,78 +189,71 @@ int main(int argc, char **argv)
 	    ajFatal("Cannot open input file %S\n",tmpstr);
 	
 	ajFilenameTrimPath(&tmpstr);
-	ajFmtPrintF(outf,"Processing file: %S",tmpstr);
+	ajFmtPrintF(outf,"Processing file: %S\n",tmpstr);
 
 	ientries = 0L;
 
 	while(dbxfasta_NextEntry(entry,inf,typeexp,idtype))
 	{
 	    ++ientries;
+
 	    if(entry->do_id)
 	    {
-                if(ajStrGetLen(entry->id) > entry->idlen)
-                {
-                    if(ajStrGetLen(entry->id) > maxidlen)
-                    {
-                        ajWarn("id '%S' too long, truncating to idlen %d",
-                               entry->id, entry->idlen);
-                        maxidlen = ajStrGetLen(entry->id);
-                    }
-                    idtrunc++;
-                    ajStrKeepRange(&entry->id,0,entry->idlen-1);
-                }
-    
-		ajStrFmtLower(&entry->id);
-		ajStrAssignS(&hyb->key1,entry->id);
-		hyb->dbno = i;
-		hyb->offset = entry->fpos;
-		hyb->dups = 0;
-		ajBtreeHybInsertId(entry->idcache,hyb);
+		embBtreeIndexEntry(entry, i);
+                ++idtot;
 	    }
 
 	    if(accfield)
-                while(ajListPop(accfield->data,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-                    ajStrAssignS(&hyb->key1,word);
-                    hyb->dbno = i;
-		    hyb->offset = entry->fpos;
-		    hyb->dups = 0;
-		    ajBtreeHybInsertId(accfield->cache,hyb);
-		    ajStrDel(&word);
-                }
+	    {
+                acctot += embBtreeIndexPrimary(accfield, entry, i);
+	    }
 
 	    if(svfield)
-                while(ajListPop(svfield->data,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-                    ajStrAssignS(&hyb->key1,word);
-                    hyb->dbno = i;
-		    hyb->offset = entry->fpos;
-		    hyb->dups = 0;
-		    ajBtreeHybInsertId(svfield->cache,hyb);
-		    ajStrDel(&word);
-                }
+	    {
+                svtot += embBtreeIndexPrimary(svfield, entry, i);
+	    }
 
 	    if(desfield)
-                while(ajListPop(desfield->data,(void **)&word))
-                {
-		    ajStrFmtLower(&word);
-		    ajStrAssignS(&priobj->id,entry->id);
-                    ajStrAssignS(&priobj->keyword,word);
-                    priobj->treeblock = 0;
-                    ajBtreeInsertKeyword(desfield->cache, priobj);
-		    ajStrDel(&word);
-                }
+	    {
+                destot += embBtreeIndexSecondary(desfield, entry);
+	    }
 	}
 	
 	ajFileClose(&inf);
 	nentries += ientries;
 	nowtime = ajTimeNewToday();
-	ajFmtPrintF(outf, " entries: %Lu (%Lu) time: %.1fs (%.1fs)\n",
+	ajFmtPrintF(outf, "entries: %Lu (%Lu) time: %.1fs (%.1fs)\n",
 		    nentries, ientries,
 		    ajTimeDiff(starttime, nowtime),
 		    ajTimeDiff(begintime, nowtime));
+        if(statistics)
+        {
+            if(entry->do_id)
+                ajBtreeCacheStatsOut(outf, entry->idcache,
+                                     &idpricache, &idseccache,
+                                     &idpriread, &idsecread,
+                                     &idpriwrite, &idsecwrite,
+                                     &idprisize, &idsecsize);
+            if(accfield)
+                ajBtreeCacheStatsOut(outf, accfield->cache,
+                                     &acpricache, &acseccache,
+                                     &acpriread, &acsecread,
+                                     &acpriwrite, &acsecwrite,
+                                     &acprisize, &acsecsize);
+            if(svfield)
+                ajBtreeCacheStatsOut(outf, svfield->cache,
+                                     &svpricache, &svseccache,
+                                     &svpriread, &svsecread,
+                                     &svpriwrite, &svsecwrite,
+                                     &svprisize, &svsecsize);
+            if(desfield)
+                ajBtreeCacheStatsOut(outf, desfield->cache,
+                                     &depricache, &deseccache,
+                                     &depriread, &desecread,
+                                     &depriwrite, &desecwrite,
+                                     &deprisize, &desecsize);
+        }
+
 	ajTimeDel(&begintime);
 	ajTimeDel(&nowtime);
     }
@@ -265,15 +267,14 @@ int main(int argc, char **argv)
     ajTimeDel(&nowtime);
     ajTimeDel(&starttime);
 
-    if(maxidlen)
-    {
-        ajFmtPrintF(outf,
-                    "Resource idlen truncated %u IDs. "
-                    "Maximum ID length was %u.",
-                    idtrunc, maxidlen);
-        ajWarn("Resource idlen truncated %u IDs. Maximum ID length was %u.",
-               idtrunc, maxidlen);
-    }
+    embBtreeReportEntry(outf, entry);
+
+    if(accfield)
+        embBtreeReportField(outf, accfield);
+    if(svfield)
+        embBtreeReportField(outf, svfield);
+    if(desfield)
+        embBtreeReportField(outf, desfield);
 
     ajFileClose(&outf);
     embBtreeEntryDel(&entry);
@@ -288,16 +289,16 @@ int main(int argc, char **argv)
     ajStrDel(&indexdir);
     ajStrDel(&dbtype);
     
+    ajStrDel(&dbxfastaac);
+    ajStrDel(&dbxfastasv);
+    ajStrDel(&dbxfastagi);
+    ajStrDel(&dbxfastade);
+    ajStrDel(&dbxfastadb);
 
     nfields = 0;
     while(fieldarray[nfields])
 	ajStrDel(&fieldarray[nfields++]);
     AJFREE(fieldarray);
-
-
-    ajBtreeIdDel(&idobj);
-    ajBtreePriDel(&priobj);
-    ajBtreeHybDel(&hyb);
 
     ajRegFree(&dbxfasta_wrdexp);
     ajRegFree(&typeexp);
@@ -382,6 +383,11 @@ static AjPRegexp dbxfasta_getExpr(const AjPStr idformat, ajint *type)
 	*type = FASTATYPE_IDACC;
 	exp   = ajRegCompC("^>([.A-Za-z0-9_-]+)+[ \t]+\\(?([A-Za-z0-9_-]+)\\)?");
     }
+    else if(ajStrMatchC(idformat,"idsv"))
+    {
+	*type = FASTATYPE_IDSV;
+	exp   = ajRegCompC("^>([.A-Za-z0-9_-]+)+[ \t]+\\(?(([A-Za-z0-9_-]+).[0-9]+)\\)?");
+    }
     else if(ajStrMatchC(idformat,"accid"))
     {
 	*type = FASTATYPE_ACCID;
@@ -415,7 +421,7 @@ static AjPRegexp dbxfasta_getExpr(const AjPStr idformat, ajint *type)
 	*type = FASTATYPE_DBID;
     }
     else
-	return NULL;
+        return NULL;
 
     return exp;
 }
@@ -438,17 +444,6 @@ static AjPRegexp dbxfasta_getExpr(const AjPStr idformat, ajint *type)
 static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
 				  ajint idtype, const AjPStr line)
 {
-    AjPStr ac  = NULL;
-    AjPStr sv  = NULL;
-    AjPStr gi  = NULL;
-    AjPStr db  = NULL;
-    AjPStr de  = NULL;
-
-    AjPStr tmpfd  = NULL;
-
-    AjPStr str = NULL;
-    
-
 
     if(!dbxfasta_wrdexp)
 	dbxfasta_wrdexp = ajRegCompC("([A-Za-z0-9]+)");
@@ -456,7 +451,6 @@ static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
 
     if(!ajRegExec(typeexp,line))
     {
-	ajStrDel(&ac);
 	ajDebug("Invalid ID line [%S]",line);
 	return ajFalse;
     }
@@ -466,95 +460,82 @@ static AjBool dbxfasta_ParseFasta(EmbPBtreeEntry entry, AjPRegexp typeexp,
     ** using empty values if they are not found
     */
     
-    ajStrAssignC(&sv, "");
-    ajStrAssignC(&gi, "");
-    ajStrAssignC(&db, "");
-    ajStrAssignC(&de, "");
-    ajStrAssignC(&ac, "");
+    ajStrAssignC(&dbxfastasv, "");
+    ajStrAssignC(&dbxfastagi, "");
+    ajStrAssignC(&dbxfastadb, "");
+    ajStrAssignC(&dbxfastade, "");
+    ajStrAssignC(&dbxfastaac, "");
     ajStrAssignC(&entry->id, "");
 
     switch(idtype)
     {
     case FASTATYPE_SIMPLE:
 	ajRegSubI(typeexp,1,&entry->id);
-	ajStrAssignS(&ac,entry->id);
-	ajRegPost(typeexp, &de);
+	ajStrAssignS(&dbxfastaac,entry->id);
+	ajRegPost(typeexp, &dbxfastade);
 	break;
     case FASTATYPE_DBID:
 	ajRegSubI(typeexp,1,&entry->id);
-	ajStrAssignS(&ac,entry->id);
-	ajRegPost(typeexp, &de);
+	ajStrAssignS(&dbxfastaac,entry->id);
+	ajRegPost(typeexp, &dbxfastade);
 	break;
     case FASTATYPE_GCGID:
 	ajRegSubI(typeexp,1,&entry->id);
-	ajStrAssignS(&ac,entry->id);
-	ajRegPost(typeexp, &de);
+	ajStrAssignS(&dbxfastaac,entry->id);
+	ajRegPost(typeexp, &dbxfastade);
 	break;
     case FASTATYPE_NCBI:
-	if(!ajSeqParseNcbi(line,&entry->id,&ac,&sv,&gi,&db,
-			   &de))
+	if(!ajSeqParseNcbi(line,&entry->id,&dbxfastaac,&dbxfastasv,
+                           &dbxfastagi,&dbxfastadb,&dbxfastade))
 	    return ajFalse;
 	break;
     case FASTATYPE_GCGIDACC:
 	ajRegSubI(typeexp,1,&entry->id);
-	ajRegSubI(typeexp,2,&ac);
-	ajRegPost(typeexp, &de);
+	ajRegSubI(typeexp,2,&dbxfastaac);
+	ajRegPost(typeexp, &dbxfastade);
 	break;
     case FASTATYPE_GCGACCID:
-	ajRegSubI(typeexp,1,&ac);
+	ajRegSubI(typeexp,1,&dbxfastaac);
 	ajRegSubI(typeexp,2,&entry->id);
-	ajRegPost(typeexp, &de);
+	ajRegPost(typeexp, &dbxfastade);
 	break;
     case FASTATYPE_IDACC:
 	ajRegSubI(typeexp,1,&entry->id);
-	ajRegSubI(typeexp,2,&ac);
-	ajRegPost(typeexp, &de);
+	ajRegSubI(typeexp,2,&dbxfastaac);
+	ajRegPost(typeexp, &dbxfastade);
+	break;
+    case FASTATYPE_IDSV:
+	ajRegSubI(typeexp,1,&entry->id);
+	ajRegSubI(typeexp,2,&dbxfastasv);
+	ajRegSubI(typeexp,3,&dbxfastaac);
+	ajRegPost(typeexp, &dbxfastade);
 	break;
     case FASTATYPE_ACCID:
-	ajRegSubI(typeexp,1,&ac);
+	ajRegSubI(typeexp,1,&dbxfastaac);
 	ajRegSubI(typeexp,2,&entry->id);
-	ajRegPost(typeexp, &de);
+	ajRegPost(typeexp, &dbxfastade);
 	break;
     default:
 	return ajFalse;
     }
 
-    ajStrFmtLower(&entry->id);
-
-    if(accfield && ajStrGetLen(ac))
+    if(accfield && ajStrGetLen(dbxfastaac))
     {
-	str = ajStrNew();
-	ajStrAssignS(&str,ac);
-	ajListPush(accfield->data,(void *)str);
+        embBtreeParseFastaAc(dbxfastaac, accfield);
     }
 
-    if(ajStrGetLen(gi))
-	ajStrAssignS(&sv,gi);
+    if(ajStrGetLen(dbxfastagi))
+	ajStrAssignS(&dbxfastasv,dbxfastagi);
 
-    if(svfield && ajStrGetLen(sv))
+    if(svfield && ajStrGetLen(dbxfastasv))
     {
-	str = ajStrNew();
-	ajStrAssignS(&str,sv);
-	ajListPush(svfield->data,(void *)str);
+        embBtreeParseFastaSv(dbxfastasv, svfield);
     }
     
-    if(desfield && ajStrGetLen(de))
-	while(ajRegExec(dbxfasta_wrdexp,de))
-	{
-	    ajRegSubI(dbxfasta_wrdexp, 1, &tmpfd);
-	    str = ajStrNew();
-	    ajStrAssignS(&str,tmpfd);
-	    ajListPush(desfield->data,(void *)str);
-	    ajRegPost(dbxfasta_wrdexp, &de);
-	}
-
-
-    ajStrDel(&de);
-    ajStrDel(&ac);
-    ajStrDel(&sv);
-    ajStrDel(&gi);
-    ajStrDel(&db);
-    ajStrDel(&tmpfd);
+    if(desfield && ajStrGetLen(dbxfastade))
+    {
+        embBtreeParseFastaDe(dbxfastade, desfield);
+    }
 
     return ajTrue;
 }

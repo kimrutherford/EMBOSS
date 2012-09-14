@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -100,7 +100,7 @@ Output report [z46957.fuzztran]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Search for patterns in protein sequences (translated)
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -171,7 +171,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -294,7 +297,7 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -363,11 +366,35 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -411,7 +438,7 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-pattern" associated pattern qualifiers
+<td align="left" colspan=5>"-pattern" associated pattern qualifiers
 </td>
 </tr>
 
@@ -440,7 +467,7 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated report qualifiers
+<td align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
@@ -701,13 +728,13 @@ RX   PUBMED; 8662634.
 RA   Huber A., Sander P.H., Paulsen R.;
 RT   "Phosphorylation of the InaD gene product, a photoreceptor membrane protein
 RT   required for recovery of visual excitation";
-RL   J. Biol. Chem. 271(20):11710-11717(1996).
+RL   J Biol Chem 271(20):11710-11717(1996).
 XX
 RN   [2]
 RP   1-1493
 RA   Huber A.;
 RT   ;
-RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (20-DEC-1994) to the INSDC.
 RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
 RL   Karlsruhe, Germany
 XX
@@ -812,7 +839,7 @@ The PROSITE pattern definition from the PROSITE documentation follows.
       except Ala and Met.
 
 <li>
-      Each element in a pattern is separated from its neighbor by a
+      Each element in a pattern is separated from its neighbour by a
       `-'.  (Optional in fuzztran).
 
 <li>
@@ -889,7 +916,7 @@ By default <b>fuzztran</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: fuzztran
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzztran
 #    -options
 #    -sequence tembl:Z46957
@@ -911,16 +938,16 @@ By default <b>fuzztran</b> writes a 'table' report file.
 #
 #=======================================
 
-  Start     End  Strand   Score Pattern     Mismatch  Frame PStart   PEnd Translation
-     97     102       +       2 pattern: RA        .      1     33     34 RA         
-    133     138       +       2 pattern: RA        .      1     45     46 RA         
-    421     426       +       2 pattern: RA        .      1    141    142 RA         
-    625     630       +       2 pattern: RA        .      1    209    210 RA         
-    835     840       +       2 pattern: RA        .      1    279    280 RA         
-    919     924       +       2 pattern: RA        .      1    307    308 RA         
-    227     232       +       2 pattern: RA        .      2     76     77 RA         
-    752     757       +       2 pattern: RA        .      2    251    252 RA         
-     72      77       +       2 pattern: RA        .      3     24     25 RA         
+  Start     End  Strand   Score Pattern    Mismatch  Frame PStart   PEnd Translation
+     97     102       +       2 pattern:RA        .      1     33     34 RA         
+    133     138       +       2 pattern:RA        .      1     45     46 RA         
+    421     426       +       2 pattern:RA        .      1    141    142 RA         
+    625     630       +       2 pattern:RA        .      1    209    210 RA         
+    835     840       +       2 pattern:RA        .      1    279    280 RA         
+    919     924       +       2 pattern:RA        .      1    307    308 RA         
+    227     232       +       2 pattern:RA        .      2     76     77 RA         
+    752     757       +       2 pattern:RA        .      2    251    252 RA         
+     72      77       +       2 pattern:RA        .      3     24     25 RA         
 
 #---------------------------------------
 #---------------------------------------
@@ -1135,7 +1162,7 @@ None.
 <th>Description</th></tr>
 <tr>
 <td><a href="antigenic.html">antigenic</a></td>
-<td>Finds antigenic sites in proteins</td>
+<td>Find antigenic sites in proteins</td>
 </tr>
 
 <tr>
@@ -1145,7 +1172,7 @@ None.
 
 <tr>
 <td><a href="epestfind.html">epestfind</a></td>
-<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
+<td>Find PEST motifs as potential proteolytic cleavage sites</td>
 </tr>
 
 <tr>
@@ -1160,7 +1187,7 @@ None.
 
 <tr>
 <td><a href="patmatdb.html">patmatdb</a></td>
-<td>Searches protein sequences with a sequence motif</td>
+<td>Search protein sequences with a sequence motif</td>
 </tr>
 
 <tr>
@@ -1175,12 +1202,12 @@ None.
 
 <tr>
 <td><a href="pscan.html">pscan</a></td>
-<td>Scans protein sequence(s) with fingerprints from the PRINTS database</td>
+<td>Scan protein sequence(s) with fingerprints from the PRINTS database</td>
 </tr>
 
 <tr>
 <td><a href="sigcleave.html">sigcleave</a></td>
-<td>Reports on signal cleavage sites in a protein sequence</td>
+<td>Report on signal cleavage sites in a protein sequence</td>
 </tr>
 
 </table>

@@ -1,10 +1,37 @@
+/* @include ensmarker *********************************************************
+**
+** Ensembl Marker functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.24 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/04/12 20:34:16 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSMARKER_H
 #define ENSMARKER_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensfeature.h"
 
@@ -13,9 +40,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 /* @const EnsPMarkeradaptor ***************************************************
 **
@@ -49,10 +76,14 @@ AJ_BEGIN_DECLS
 
 
 
-/* @const EnsEMarkerType ******************************************************
+/* @enum EnsEMarkerType *******************************************************
 **
-** Ensembl Marker Type enumeration.
+** Ensembl Marker Type enumeration
 **
+** @value ensEMarkerTypeNULL Null
+** @value ensEMarkerTypeEST Expressed Sequence Tag
+** @value ensEMarkerTypeMicroSatellite Micro-Satellite
+** @@
 ******************************************************************************/
 
 typedef enum EnsOMarkerType
@@ -65,9 +96,9 @@ typedef enum EnsOMarkerType
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPMarkersynonym ****************************************************
 **
@@ -210,9 +241,9 @@ typedef struct EnsSMarkerfeature
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -228,7 +259,7 @@ EnsPMarkersynonym ensMarkersynonymNewIni(ajuint identifier,
 
 EnsPMarkersynonym ensMarkersynonymNewRef(EnsPMarkersynonym ms);
 
-void ensMarkersynonymDel(EnsPMarkersynonym* Pms);
+void ensMarkersynonymDel(EnsPMarkersynonym *Pms);
 
 ajuint ensMarkersynonymGetIdentifier(const EnsPMarkersynonym ms);
 
@@ -256,7 +287,7 @@ AjBool ensMarkersynonymadaptorFetchAllbyMarkeridentifier(
 AjBool ensMarkersynonymadaptorFetchByIdentifier(
     EnsPDatabaseadaptor dba,
     ajuint identifier,
-    EnsPMarkersynonym* Pms);
+    EnsPMarkersynonym *Pms);
 
 /* Ensembl Marker Map Location */
 
@@ -271,7 +302,7 @@ EnsPMarkermaplocation ensMarkermaplocationNewIni(EnsPMarkersynonym ms,
 
 EnsPMarkermaplocation ensMarkermaplocationNewRef(EnsPMarkermaplocation mml);
 
-void ensMarkermaplocationDel(EnsPMarkermaplocation* Pmml);
+void ensMarkermaplocationDel(EnsPMarkermaplocation *Pmml);
 
 AjPStr ensMarkermaplocationGetChromosomename(const EnsPMarkermaplocation mml);
 
@@ -329,7 +360,7 @@ EnsPMarker ensMarkerNewIni(EnsPMarkeradaptor adaptor,
 
 EnsPMarker ensMarkerNewRef(EnsPMarker marker);
 
-void ensMarkerDel(EnsPMarker* Pmarker);
+void ensMarkerDel(EnsPMarker *Pmarker);
 
 EnsPMarkeradaptor ensMarkerGetAdaptor(const EnsPMarker marker);
 
@@ -396,11 +427,7 @@ AjBool ensMarkerClearMarkersynonyms(EnsPMarker marker);
 
 EnsEMarkerType ensMarkerTypeFromStr(const AjPStr type);
 
-const char* ensMarkerTypeToChar(EnsEMarkerType type);
-
-AjBool ensTableMarkerClear(AjPTable table);
-
-AjBool ensTableMarkerDelete(AjPTable* Ptable);
+const char *ensMarkerTypeToChar(EnsEMarkerType type);
 
 /* Ensembl Marker Adaptor */
 
@@ -410,7 +437,7 @@ EnsPMarkeradaptor ensRegistryGetMarkeradaptor(
 EnsPMarkeradaptor ensMarkeradaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensMarkeradaptorDel(EnsPMarkeradaptor* Pma);
+void ensMarkeradaptorDel(EnsPMarkeradaptor *Pma);
 
 EnsPBaseadaptor ensMarkeradaptorGetBaseadaptor(EnsPMarkeradaptor ma);
 
@@ -426,10 +453,7 @@ AjBool ensMarkeradaptorFetchAllbySynonym(EnsPMarkeradaptor ma,
 
 AjBool ensMarkeradaptorFetchByIdentifier(EnsPMarkeradaptor ma,
                                          ajuint identifier,
-                                         EnsPMarker* Pmarker);
-
-__deprecated AjBool ensMarkeradaptorFetchAttributes(EnsPMarkeradaptor ma,
-                                                    EnsPMarker marker);
+                                         EnsPMarker *Pmarker);
 
 /* Ensembl Marker Feature */
 
@@ -443,7 +467,7 @@ EnsPMarkerfeature ensMarkerfeatureNewIni(EnsPMarkerfeatureadaptor mfa,
 
 EnsPMarkerfeature ensMarkerfeatureNewRef(EnsPMarkerfeature mf);
 
-void ensMarkerfeatureDel(EnsPMarkerfeature* Pmf);
+void ensMarkerfeatureDel(EnsPMarkerfeature *Pmf);
 
 EnsPMarkerfeatureadaptor ensMarkerfeatureGetAdaptor(
     const EnsPMarkerfeature mf);
@@ -471,6 +495,14 @@ AjBool ensMarkerfeatureTrace(const EnsPMarkerfeature mf, ajuint level);
 
 size_t ensMarkerfeatureCalculateMemsize(const EnsPMarkerfeature mf);
 
+/* AJAX List of Ensembl Marker Feature objects */
+
+AjBool ensListMarkerfeatureSortEndAscending(AjPList mfs);
+
+AjBool ensListMarkerfeatureSortEndDescending(AjPList mfs);
+
+AjBool ensListMarkerfeatureSortIdentifierAscending(AjPList mfs);
+
 AjBool ensListMarkerfeatureSortStartAscending(AjPList mfs);
 
 AjBool ensListMarkerfeatureSortStartDescending(AjPList mfs);
@@ -483,7 +515,7 @@ EnsPMarkerfeatureadaptor ensRegistryGetMarkerfeatureadaptor(
 EnsPMarkerfeatureadaptor ensMarkerfeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensMarkerfeatureadaptorDel(EnsPMarkerfeatureadaptor* Pmfa);
+void ensMarkerfeatureadaptorDel(EnsPMarkerfeatureadaptor *Pmfa);
 
 EnsPDatabaseadaptor ensMarkerfeatureadaptorGetDatabaseadaptor(
     EnsPMarkerfeatureadaptor mfa);

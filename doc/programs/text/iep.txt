@@ -51,7 +51,7 @@ Output file [ifna2_human.iep]:
 Command line arguments
 
 Calculate the isoelectric point of proteins
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -88,7 +88,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -158,7 +161,7 @@ ID   LACI_ECOLI              Reviewed;         360 AA.
 AC   P03023; O09196; P71309; Q2MC79; Q47338;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   19-JUL-2003, sequence version 3.
-DT   15-JUN-2010, entry version 117.
+DT   13-JUN-2012, entry version 136.
 DE   RecName: Full=Lactose operon repressor;
 GN   Name=lacI; OrderedLocusNames=b0345, JW0336;
 OS   Escherichia coli (strain K12).
@@ -268,7 +271,7 @@ ID   IFNA2_HUMAN             Reviewed;         188 AA.
 AC   P01563; P01564; Q14606; Q96KI6;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   21-JUL-1986, sequence version 1.
-DT   23-MAR-2010, entry version 109.
+DT   16-MAY-2012, entry version 128.
 DE   RecName: Full=Interferon alpha-2;
 DE            Short=IFN-alpha-2;
 DE   AltName: Full=Interferon alpha-A;
@@ -318,13 +321,15 @@ RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
 
   [Part of this file has been deleted for brevity]
 
-DR   GO; GO:0006917; P:induction of apoptosis; TAS:ProtInc.
-DR   GO; GO:0006954; P:inflammatory response; TAS:ProtInc.
+DR   GO; GO:0060338; P:regulation of type I interferon-mediated signaling pathwa
+y; TAS:Reactome.
 DR   GO; GO:0009615; P:response to virus; IEA:UniProtKB-KW.
+DR   GO; GO:0060337; P:type I interferon-mediated signaling pathway; TAS:Reactom
+e.
+DR   Gene3D; G3DSA:1.20.1250.10; 4_helix_cytokine_core; 1.
 DR   InterPro; IPR009079; 4_helix_cytokine-like_core.
-DR   InterPro; IPR000471; IInterferon_alpha/beta/delta.
-DR   InterPro; IPR015589; Interferon_alpha.
-DR   PANTHER; PTHR11691:SF9; IFNa; 1.
+DR   InterPro; IPR012351; 4_helix_cytokine_core.
+DR   InterPro; IPR000471; Interferon_alpha/beta/delta.
 DR   PANTHER; PTHR11691; Interferon_abd; 1.
 DR   Pfam; PF00143; Interferon; 1.
 DR   PRINTS; PR00266; INTERFERONAB.
@@ -334,7 +339,7 @@ DR   PROSITE; PS00252; INTERFERON_A_B_D; 1.
 PE   1: Evidence at protein level;
 KW   3D-structure; Antiviral defense; Complete proteome; Cytokine;
 KW   Direct protein sequencing; Disulfide bond; Glycoprotein;
-KW   Pharmaceutical; Polymorphism; Secreted; Signal.
+KW   Pharmaceutical; Polymorphism; Reference proteome; Secreted; Signal.
 FT   SIGNAL        1     23
 FT   CHAIN        24    188       Interferon alpha-2.
 FT                                /FTId=PRO_0000016360.
@@ -552,13 +557,13 @@ See also
    Program name     Description
    abiview          Display the trace in an ABI sequencer file
    charge           Draw a protein charge plot
-   cirdna           Draws circular maps of DNA constructs
+   cirdna           Draw circular map of DNA constructs
    hmoment          Calculate and plot hydrophobic moment for protein sequence(s)
-   lindna           Draws linear maps of DNA constructs
+   lindna           Draw linear maps of DNA constructs
    octanol          Draw a White-Wimley protein hydropathy plot
    pepinfo          Plot amino acid properties of a protein sequence in parallel
    pepnet           Draw a helical net for a protein sequence
-   pepstats         Calculates statistics of protein properties
+   pepstats         Calculate statistics of protein properties
    pepwheel         Draw a helical wheel diagram for a protein sequence
    pepwindow        Draw a hydropathy plot for a protein sequence
    pepwindowall     Draw Kyte-Doolittle hydropathy plot for a protein
@@ -568,7 +573,7 @@ See also
    prettyseq        Write a nucleotide sequence and its translation to file
    remap            Display restriction enzyme binding sites in a nucleotide sequence
    showfeat         Display features of a sequence in pretty format
-   showpep          Displays protein sequences with features in pretty format
+   showpep          Display protein sequences with features in pretty format
    sixpack          Display a DNA sequence with 6-frame translation and ORFs
 
 Author(s)

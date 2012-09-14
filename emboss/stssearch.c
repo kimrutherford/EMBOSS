@@ -137,7 +137,7 @@ int main(int argc, char **argv)
 	ajSeqstrReverse(&revstr);
 	ajDebug("Testing: %s\n", ajSeqGetNameC(seq));
 	ntests = 0;
-	ajListMap(primList, stssearch_primTest, NULL);
+	ajListMap(primList, &stssearch_primTest, NULL);
     }
 
     ajFileClose(&out);
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
     ajStrDel(&revstr);
     ajStrDel(&seqstr);
     ajFileClose(&primfile);
-    ajListMap(primList, stssearch_primDel, NULL);
+    ajListMap(primList, &stssearch_primDel, NULL);
     ajListFree(&primList);
     ajStrDel(&rdline);
 

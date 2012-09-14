@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -110,7 +110,7 @@ Output file [embl.dbxcompress]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Compress an uncompressed dbx index
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     EMBOSS database name (Any string from 2 to
@@ -213,7 +213,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-indexdir" associated directory qualifiers
+<td align="left" colspan=5>"-indexdir" associated directory qualifiers
 </td>
 </tr>
 
@@ -226,7 +226,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -399,19 +399,23 @@ uncompressed with <b>dbxuncompress</b>.
 <p><h3>File: embl.pxde</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Type      Secondary
-Compress  Yes
-Pages     647
-Order     60
-Fill      41
-Pagesize  2048
-Level     0
-Cachesize 100
-Order2    71
-Fill2     101
-Count     213
-Fullcount 417
-Kwlimit   20
+Type         Secondary
+Compress     Yes
+Pages        21
+Secpages     225
+Order        22
+Fill         21
+Level        0
+Pagesize     2048
+Cachesize    2000
+Order2       16
+Fill2        24
+Secpagesize  512
+Seccachesize 2000
+Count        223
+Fullcount    445
+Kwlimit      75
+Idlimit      15
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.xde</h3>

@@ -1,37 +1,50 @@
-/******************************************************************************
-** @source AJAX GRAPH (ajax graphics) functions
-** @author Ian Longden
+/* @source ajgraph ************************************************************
+**
+** AJAX GRAPH (ajax graphics) functions
+**
 ** These functions control all aspects of AJAX graphics.
 **
-** @version 1.0
+** @author Copyright (C) 1999 Ian Longden
+** @version $Revision: 1.134 $
 ** @modified 1988-11-12 pmr First version
 ** @modified 1999 ajb ANSI
+** @modified 2000-2011 Peter Rice
+** @modified $Date: 2011/11/08 15:12:19 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-#define GRAPHMAIN 1
 
-#include "ajax.h"
+#include "ajlib.h"
+
 #include "ajgraph.h"
+#include "ajseq.h"
+#include "ajmath.h"
+#include "ajutil.h"
 
 #include <math.h>
 #include <limits.h>
 #include <float.h>
+
+
+
+#define GRAPHMAIN 1
+
 #define AZ 28
 
 #define GRAPH_DEBUG 1
@@ -83,12 +96,16 @@ static void     GraphSymbols(float *xx1, float *yy1, ajuint numofdots,
 static void     GraphText(float xx1, float yy1, float xx2, float yy2,
 			  float just, const char *text);
 static void     GraphWind(float xmin, float xmax, float ymin, float ymax);
+static void     GraphxyDisplayToBedgraph(AjPGraph thys, AjBool closeit,
+                                         const char *ext);
 static void     GraphxyDisplayToDas(AjPGraph thys, AjBool closeit,
 				     const char *ext);
 static void     GraphxyDisplayToData(AjPGraph thys, AjBool closeit,
 				     const char *ext);
 static void     GraphxyDisplayToFile(AjPGraph thys, AjBool closeit,
 				     const char *ext);
+static void     GraphxyDisplayToWiggle(AjPGraph thys, AjBool closeit,
+                                       const char *ext);
 static void     GraphxyDisplayXwin(AjPGraph thys, AjBool closeit,
 				   const char *ext);
 static void     GraphxyGeneral(AjPGraph thys, AjBool closeit);
@@ -156,8 +173,8 @@ struct graphSData
 ** @attr Fixedsize [AjBool] true if plplot fixes the plot window size,
 **                          ignoring user settings
 ** @attr Interactive [AjBool] true if plplot can interact with the device
-** @attr XYDisplay [(void*)] Function to display an XY graph
-** @attr GOpen [(void*)] Function to display a general graph
+** @attr XYDisplay [void function] Function to display an XY graph
+** @attr GOpen [void function] Function to display a general graph
 ** @attr Desc [const char*] Description
 ** @@
 ******************************************************************************/
@@ -199,111 +216,121 @@ static GraphOType graphType[] =
      Description*/
     {"ps",         "ps",      ".ps",   720,  540,
      AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayToFile, GraphOpenFile,
+     &GraphxyDisplayToFile, &GraphOpenFile,
      "Postscript"},
     {"postscript", "ps",      ".ps",    720,  540,
      AJTRUE,  AJTRUE,  AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayToFile, GraphOpenFile,
+     &GraphxyDisplayToFile, &GraphOpenFile,
      "Postscript"},
 
 #ifndef WIN32
     {"hpgl",       "lj_hpgl", ".hpgl",  11000,7200,
      AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayToFile, GraphOpenFile,
+     &GraphxyDisplayToFile, &GraphOpenFile,
      "HPGL general"},
 
     {"hp7470",     "hp7470",  ".hpgl",  10300,7650,
      AJTRUE,  AJFALSE,  AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayToFile, GraphOpenFile,
+     &GraphxyDisplayToFile, &GraphOpenFile,
      "HPGL 7470 pen plotter"},
 
     {"hp7580",     "hp7580",  ".hpgl",  9000, 5580,
      AJTRUE,  AJFALSE,  AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayToFile, GraphOpenFile,
+     &GraphxyDisplayToFile, &GraphOpenFile,
      "HPGL 7580 pen plotter"},
 #endif
 
     {"meta",       "plmeta",  ".meta",  0,    0,
      AJTRUE,  AJFALSE,  AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayToFile, GraphOpenFile,
+     &GraphxyDisplayToFile, &GraphOpenFile,
      "Metafile"},
 
     {"cps",        "psc",     ".ps",    720,  540,
      AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayToFile, GraphOpenFile,
+     &GraphxyDisplayToFile, &GraphOpenFile,
      "Colour postscript"},
 
     {"colourps",   "psc",     ".ps",    720,  540,
      AJTRUE,  AJTRUE,  AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayToFile, GraphOpenFile,
+     &GraphxyDisplayToFile, &GraphOpenFile,
      "Colour postscript"},
 
 #ifndef WIN32
 #ifndef X_DISPLAY_MISSING /* X11 is  available */
     {"x11",        "xwin",    "null",   1440, 900,
      AJTRUE,  AJFALSE, AJTRUE,  AJTRUE,  AJFALSE,  AJTRUE,
-     GraphxyDisplayXwin,   GraphOpenXwin,
+     &GraphxyDisplayXwin,   &GraphOpenXwin,
      "X11 in new window"},
 
     {"xwindows",   "xwin",    "null",   1440, 900,
      AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE,  AJTRUE,
-     GraphxyDisplayXwin,   GraphOpenXwin,
+     &GraphxyDisplayXwin,   &GraphOpenXwin,
      "X11 in new window"},
 #endif
 
     {"tek",        "tek4107t","null",   1024, 780,
      AJTRUE,  AJFALSE, AJTRUE,  AJTRUE,  AJFALSE,  AJTRUE,
-     GraphxyDisplayXwin,   GraphOpenSimple,
+     &GraphxyDisplayXwin,   &GraphOpenSimple,
      "Tektronix screen graphics"},
 
     {"tek4107t",   "tek4107t","null",   1024, 780,
      AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE,  AJTRUE,
-     GraphxyDisplayXwin,   GraphOpenSimple,
+     &GraphxyDisplayXwin,   &GraphOpenSimple,
      "Tektronix model 4107 screen graphics"},
 
     {"tekt",       "tekt",    "null",   1024, 780,
      AJTRUE,  AJFALSE, AJTRUE,  AJTRUE,  AJFALSE,  AJTRUE,
-     GraphxyDisplayXwin,   GraphOpenSimple,
+     &GraphxyDisplayXwin,   &GraphOpenSimple,
      "Tektronix screen graphics"},
 
     {"tektronics", "tekt",    "null",   1024, 780,
      AJTRUE,  AJTRUE,  AJTRUE,  AJTRUE,  AJFALSE,  AJTRUE,
-     GraphxyDisplayXwin,   GraphOpenSimple,
+     &GraphxyDisplayXwin,   &GraphOpenSimple,
      "Tektronix screen graphics"},
 
 #endif
 
     {"none",       "null",    "null",  0,    0,
      AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayXwin,   GraphOpenSimple,
+     &GraphxyDisplayXwin,   &GraphOpenSimple,
      "No output"},
 
     {"null",       "null",    "null",  0,    0,
      AJTRUE,  AJTRUE,  AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayXwin,   GraphOpenSimple,
+     &GraphxyDisplayXwin,   &GraphOpenSimple,
      "No output"},
 
     {"text",       "null",    "null",  0,    0,
      AJTRUE,  AJTRUE,  AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayXwin,   GraphOpenSimple,
+     &GraphxyDisplayXwin,   &GraphOpenSimple,
      "Text file"},
 /* data file output */
   
     {"data",       "data",    ".dat",  960,  768,
      AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE,
-     GraphxyDisplayToData, GraphOpenData,
+     &GraphxyDisplayToData, &GraphOpenData,
      "Data file for Staden package"},
 
     {"das",        "das",     ".das",  0,    0,
      AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayToDas,  NULL,
+     &GraphxyDisplayToDas,  NULL,
      "Data file for DAS server"},
+
+    {"wig",        "wig",     ".wig",  0,    0,
+     AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
+     GraphxyDisplayToWiggle,  NULL,
+     "Wiggle data for genome browsers"},
+
+    {"bedgraph",   "bedgraph", ".bedgraph",  0,    0,
+     AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
+     &GraphxyDisplayToBedgraph,  NULL,
+     "BedGraph data for genome browsers"},
 
 #ifndef WIN32
 #ifndef X_DISPLAY_MISSING /* X11 is available */
     {"xterm",      "xterm",   "null",   1024, 780,
      AJTRUE,  AJFALSE, AJTRUE,  AJTRUE,  AJFALSE,  AJTRUE,
-     GraphxyDisplayXwin,   GraphOpenXwin,
+     &GraphxyDisplayXwin,   &GraphOpenXwin,
      "Xterm screen graphics"},
 #endif
 #endif
@@ -311,12 +338,12 @@ static GraphOType graphType[] =
 #ifdef PLD_png          /* if png/gd/zlib libraries available for png driver */
     {"png",        "png",     ".png",   800,  600,
      AJTRUE,  AJFALSE, AJFALSE, AJFALSE, AJFALSE,  AJFALSE,
-     GraphxyDisplayToFile, GraphOpenFile,
+     &GraphxyDisplayToFile, &GraphOpenFile,
      "PNG graphics files"},
 #ifndef WIN32
     {"gif",        "gif",     ".gif",   640,  480,
      AJTRUE,  AJFALSE, AJFALSE, AJFALSE, AJFALSE,  AJFALSE,
-     GraphxyDisplayToFile, GraphOpenFile,
+     &GraphxyDisplayToFile, &GraphOpenFile,
      "GIF graphics files"},
 #endif
 #endif
@@ -324,20 +351,20 @@ static GraphOType graphType[] =
 #ifdef WIN32
     {"win3",        "win3",     "null", 720,  540,
      AJTRUE, AJFALSE, AJTRUE,  AJTRUE,  AJFALSE,  AJTRUE,
-     GraphxyDisplayXwin,     GraphOpenXwin,
+     &GraphxyDisplayXwin,     &GraphOpenXwin,
      "Windows screen graphics"},
 #endif
 
 #ifdef PLD_pdf          /* if png/gd/zlib libraries available for png driver */
     {"pdf",        "pdf",     ".pdf",   1683,  1190,
      AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayToFile, GraphOpenFile,
+     &GraphxyDisplayToFile, &GraphOpenFile,
      "PDF graphics files"},
 #endif
 
     {"svg",        "svg",     ".svg",   720,  540,
      AJTRUE,  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,  AJFALSE,
-     GraphxyDisplayToFile, GraphOpenFile,
+     &GraphxyDisplayToFile, &GraphOpenFile,
      "SVG graphics files"},
     
     {NULL, NULL, NULL, 0, 0,
@@ -470,11 +497,13 @@ PLPLOT CALLS *START*
 
 
 
-/* @func ajGraphicsClose *******************************************************
+/* @func ajGraphicsClose ******************************************************
 **
 ** Close current Plot.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -489,24 +518,13 @@ void ajGraphicsClose(void)
 
 
 
-/* @obsolete ajGraphClose
-** @rename ajGraphicsClose
-*/
-__deprecated void ajGraphClose(void)
-{
-    GraphClose();
-
-    return;
-}
-
-
-
-
-/* @func ajGraphicsCloseWin ****************************************************
+/* @func ajGraphicsCloseWin ***************************************************
 **
 ** Close current window Plot
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -521,20 +539,7 @@ void ajGraphicsCloseWin(void)
 
 
 
-/* @obsolete ajGraphCloseWin
-** @rename ajGraphicsClose
-*/
-__deprecated void ajGraphCloseWin(void)
-{
-    GraphClose();
-
-    return;
-}
-
-
-
-
-/* @func ajGraphicsPlenv *******************************************************
+/* @func ajGraphicsPlenv ******************************************************
 **
 ** Defines a plot environment. i.e. tells plplot whether the graph is boxed,
 ** whether it has tick marks, whether it has labels etc. These should already
@@ -546,6 +551,8 @@ __deprecated void ajGraphCloseWin(void)
 ** @param [r] ymax [float] Y axis end
 ** @param [r] flags [ajint] flag bit settings
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -631,25 +638,14 @@ void ajGraphicsPlenv(float xmin, float xmax, float ymin, float ymax,
 
 
 
-/* @obsolete ajGraphPlenv
-** @rename ajGraphicsPlenv
-*/
-__deprecated void ajGraphPlenv(float xmin, float xmax, float ymin, float ymax,
-		  ajint flags)
-{
-    ajGraphicsPlenv(xmin, xmax, ymin, ymax, flags);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsResetBgcolour ***********************************************
+/* @func ajGraphicsResetBgcolour **********************************************
 **
 ** Reset the background colour to either black or white depending on the
 ** current settings.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -662,24 +658,13 @@ void ajGraphicsResetBgcolour(void)
 
 
 
-/* @obsolete ajGraphColourBack
-** @rename ajGraphicsResetBgcolour
-*/
-
-__deprecated void ajGraphColourBack(void)
-{
-    GraphColourBack();
-    return;
-}
-
-
-
-
-/* @func ajGraphicsResetFgcolour ***********************************************
+/* @func ajGraphicsResetFgcolour **********************************************
 **
 ** Reset the foreground plotting colour using current stored colour.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -692,24 +677,13 @@ void ajGraphicsResetFgcolour(void)
 
 
 
-/* @obsolete ajGraphColourFore
-** @rename ajGraphicsResetFgcolour
-*/
-
-__deprecated void ajGraphColourFore(void)
-{
-    GraphColourFore();
-    return;
-}
-
-
-
-
-/* @func ajGraphicsSetBgcolourBlack ********************************************
+/* @func ajGraphicsSetBgcolourBlack *******************************************
 **
 ** Set the background colour to black
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -737,24 +711,13 @@ void ajGraphicsSetBgcolourBlack(void)
 
 
 
-/* @obsolete ajGraphSetBackBlack
-** @rename ajGraphicsSetBgcolourBlack
-*/
-
-__deprecated void ajGraphSetBackBlack(void)
-{
-    ajGraphicsSetBgcolourBlack();
-    return;
-}
-
-
-
-
-/* @func ajGraphicsSetBgcolourWhite ********************************************
+/* @func ajGraphicsSetBgcolourWhite *******************************************
 **
 ** Set the background colour to white (the default colour)
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -782,25 +745,14 @@ void ajGraphicsSetBgcolourWhite(void)
 
 
 
-/* @obsolete ajGraphSetBackWhite
-** @rename ajGraphicsSetBgcolourkWhite
-*/
-
-__deprecated void ajGraphSetBackWhite(void)
-{
-    ajGraphicsSetBgcolourWhite();
-    return;
-}
-
-
-
-
-/* @func ajGraphicsSetCharscale ************************************************
+/* @func ajGraphicsSetCharscale ***********************************************
 **
 ** Set the character scale factor
 **
 ** @param [r] scale [float]  character scale.
 ** @return [float] the previous character scale factor.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -822,24 +774,14 @@ float ajGraphicsSetCharscale(float scale)
 
 
 
-/* @obsolete ajGraphSetCharScale
-** @rename ajGraphicsSetCharscale
-*/
-
-__deprecated float ajGraphSetCharScale(float scale)
-{
-    return ajGraphicsSetCharscale(scale);
-}
-
-
-
-
-/* @func ajGraphicsSetCharsize *************************************************
+/* @func ajGraphicsSetCharsize ************************************************
 **
 ** Set the character size factor
 **
 ** @param [r] size [float]  character size.
 ** @return [float] the previous character size factor.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -865,48 +807,26 @@ float ajGraphicsSetCharsize(float size)
 
 
 
-/* @obsolete ajGraphSetCharSize
-** @rename ajGraphicsSetCharsize
-*/
-
-__deprecated float ajGraphSetCharSize(float size)
-{
-    return ajGraphicsSetCharsize(size);
-}
-
-
-
-
-/* @func ajGraphicsSetDefcharsize **********************************************
+/* @func ajGraphicsSetDefcharsize *********************************************
 **
 ** Set the default character size in mm.
 **
 ** @param [r] size [float]  character size in mm.
 ** @return [float] the previous character size in mm.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 float ajGraphicsSetDefcharsize(float size)
 {
-    float oldsize;
-    float oldscale;
+    float oldsize = 0.0;
+    float oldscale = 0.0;
 
     ajGraphicsGetCharsize(&oldsize, &oldscale);
     GraphDefCharSize((PLFLT)size);
 
     return oldsize;
-}
-
-
-
-
-/* @obsolete ajGraphSetDefCharSize
-** @rename ajGraphicsSetDefcharsize
-*/
-
-__deprecated float ajGraphSetDefCharSize(float size)
-{
-    return ajGraphicsSetDefcharsize(size);
 }
 
 
@@ -919,6 +839,8 @@ __deprecated float ajGraphSetDefCharSize(float size)
 ** @param [r] graph [const AjPGraph] Graph object with display type set
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -939,26 +861,14 @@ void ajGraphicsSetDevice(const AjPGraph graph)
 
 
 
-/* @obsolete ajGraphSetDevice
-   @rename ajGraphicsSetDevice
-*/
-
-__deprecated void ajGraphSetDevice(const AjPGraph thys)
-{
-    ajGraphicsSetDevice(thys);
-
-    return;
-}
-
-
-
-
 /* @func ajGraphicsSetFgcolour ************************************************
 **
 ** Set the foreground plotting colour
 **
 ** @param [r] colour [ajint]  colour to set drawing to.
 ** @return [ajint] the previous colour.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1008,25 +918,14 @@ ajint ajGraphicsSetFgcolour(ajint colour)
 
 
 
-/* @obsolete ajGraphSetFore
-** @rename ajGraphicsSetFgcolour
-*/
-
-__deprecated ajint ajGraphSetFore(ajint colour)
-{
-
-    return ajGraphicsSetFgcolour(colour);
-}
-
-
-
-
 /* @funcstatic GraphDefCharSize ***********************************************
 **
 ** Set the default char size in mm.
 **
 ** @param [r] size [float] Character size in mm. See PLPLOT.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1054,6 +953,8 @@ static void GraphDefCharSize(float size)
 ** @param [r] ext [const char*] extension for files
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1079,13 +980,15 @@ static void GraphSetName(const AjPGraph thys,
 
 
 
-/* @func ajGraphicsSetFilename *************************************************
+/* @func ajGraphicsSetFilename ************************************************
 **
 ** set BaseName and extension.
 **
 ** @param [r] graph [const AjPGraph] Graph object.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1101,24 +1004,14 @@ void ajGraphicsSetFilename(const AjPGraph graph)
 
 
 
-/* @obsolete ajGraphSetName
-** @rename ajGraphicsSetFilename
-*/
-__deprecated void ajGraphSetName(const AjPGraph thys)
-{
-    ajGraphicsSetFilename(thys);
-    return;
-}
-
-
-
-
 /* @func ajGraphicsSetFillpat *************************************************
 **
 ** Set the Fill Pattern type.
 **
 ** @param [r] patstyle [ajint]  line style to set drawing to.
 ** @return [ajint] the previous line style.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1139,18 +1032,7 @@ ajint ajGraphicsSetFillpat(ajint patstyle)
 
 
 
-/* @obsolete ajGraphSetFillPat
-** @rename ajGraphicsSetFillpat
-*/
-__deprecated ajint ajGraphSetFillPat(ajint style)
-{
-    return ajGraphicsSetFillpat(style);
-}
-
-
-
-
-/* @func ajGraphicsSetLabelsC **************************************************
+/* @func ajGraphicsSetLabelsC *************************************************
 **
 ** Label current Plot.
 **
@@ -1159,6 +1041,8 @@ __deprecated ajint ajGraphSetFillPat(ajint style)
 ** @param [r] title [const char*]    text for title of plot.
 ** @param [r] subtitle [const char*] text for subtitle of plot.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1204,7 +1088,7 @@ void ajGraphicsSetLabelsC(const char *x, const char *y,
 
 
 
-/* @func ajGraphicsSetLabelsS **************************************************
+/* @func ajGraphicsSetLabelsS *************************************************
 **
 ** Label current Plot.
 **
@@ -1213,6 +1097,8 @@ void ajGraphicsSetLabelsC(const char *x, const char *y,
 ** @param [r] strtitle [const AjPStr]    text for title of plot.
 ** @param [r] strsubtitle [const AjPStr] text for subtitle of plot.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1261,26 +1147,14 @@ void ajGraphicsSetLabelsS(const AjPStr strx, const AjPStr stry,
 
 
 
-/* @obsolete ajGraphLabel
-** @rename ajGraphicsSetLabelsC
-*/
-
-__deprecated void ajGraphLabel(const char *x, const char *y,
-                               const char *title, const char *subtitle)
-{
-    ajGraphicsSetLabelsC(x, y, title, subtitle);
-    return;
-}
-
-
-
-
 /* @func ajGraphicsSetLinestyle ***********************************************
 **
 ** Set the line style.
 **
 ** @param [r] linestyle [ajint]  line style to set drawing to.
 ** @return [ajint] the previous line style.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1301,17 +1175,6 @@ ajint ajGraphicsSetLinestyle(ajint linestyle)
 
 
 
-/* @obsolete ajGraphSetLineStyle
-** @rename ajGraphicsSetLinestyle
-*/
-__deprecated ajint ajGraphSetLineStyle(ajint style)
-{
-    return ajGraphicsSetLinestyle(style);
-}
-
-
-
-
 /* @func ajGraphicsSetPagesize ************************************************
 **
 ** Set the width and height of the plot page.
@@ -1322,6 +1185,8 @@ __deprecated ajint ajGraphSetLineStyle(ajint style)
 ** @param [r] plotheight [ajuint] Page height in pixels or mm
 ** @return [void]
 **
+**
+** @release 6.2.0
 ******************************************************************************/
 
 void ajGraphicsSetPagesize(ajuint plotwidth, ajuint plotheight)
@@ -1334,24 +1199,14 @@ void ajGraphicsSetPagesize(ajuint plotwidth, ajuint plotheight)
 
 
 
-/* @obsolete ajGraphSetPage
-** @rename ajGraphicsSetPagesize
-*/
-__deprecated void ajGraphSetPage(ajuint width, ajuint height)
-{
-    ajGraphicsSetPagesize(width, height);
-    return;
-}
-
-
-
-
 /* @func ajGraphicsSetPenwidth ************************************************
 **
 ** Set the current pen width.
 **
 ** @param [r] penwidth [float] width for the pen.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1369,25 +1224,15 @@ void ajGraphicsSetPenwidth(float penwidth)
 
 
 
-/* @obsolete ajGraphSetPenWidth
-** @rename ajGraphicsSetPenwidth
-*/
-__deprecated void ajGraphSetPenWidth(float penwidth)
-{
-    ajGraphicsSetPenwidth(penwidth);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsSetPortrait *************************************************
+/* @func ajGraphicsSetPortrait ************************************************
 **
 ** Set graph orientation
 **
 ** @param [r] set [AjBool] portrait orientation if true, else landscape
 ** @return [void]
 **@@
+**
+** @release 6.2.0
 ******************************************************************************/
 
 void ajGraphicsSetPortrait(AjBool set)
@@ -1407,25 +1252,14 @@ void ajGraphicsSetPortrait(AjBool set)
 
 
 
-/* @obsolete ajGraphSetOri
-** @rename ajGraphicsSetPortrait
-*/
-
-__deprecated void ajGraphSetOri(ajint ori)
-{
-    ajGraphicsSetPortrait(ori);
-    return;
-}
-
-
-
-
 /* @func ajGraphicsSetRlabelC *************************************************
 **
 ** Label the right hand y axis.
 **
 ** @param [r] txt [const char*] text for label of right y axis.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 void ajGraphicsSetRlabelC(const char *txt)
@@ -1449,6 +1283,8 @@ void ajGraphicsSetRlabelC(const char *txt)
 **
 ** @param [r] str [const AjPStr] text for label of right y axis.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 void ajGraphicsSetRlabelS(const AjPStr str)
@@ -1466,23 +1302,12 @@ void ajGraphicsSetRlabelS(const AjPStr str)
 
 
 
-/* @obsolete ajGraphLabelYRight
-** @rename ajGraphicsSetRlabelC
-*/
-
-__deprecated void ajGraphLabelYRight(const char *text)
-{
-    ajGraphicsSetRlabelC(text);
-    return;
-}
-
-
-
-
 /* @funcstatic GraphColourFore ************************************************
 **
 ** Set the foreground plotting colour using current stored colour.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1519,6 +1344,8 @@ static void GraphColourFore(void)
 **
 ** @param [u] txt [const char*] text string
 ** @return [float] The length of the string in user coordinates
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1537,6 +1364,8 @@ static float GraphTextLength(const char *txt)
 ** @param [r] pat [ajint] Pattern code. See PLPLOT.
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1561,6 +1390,8 @@ static void GraphFillPat(ajint pat)
 ** @param [r] style [ajint] Line style. See PLPLOT.
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1585,6 +1416,8 @@ static void GraphLineStyle(ajint style)
 ** @param [r] scale [float] Character scale factor. See PLPLOT.
 **
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -1614,6 +1447,8 @@ static void GraphCharScale(float scale)
 ** @param [r] title [const char*]    text for title of plot.
 ** @param [r] subtitle [const char*] text for subtitle of plot.
 ** @return [void]
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -1695,6 +1530,8 @@ static void GraphLabelTitle(const char *title, const char *subtitle)
 ** @param [r] colour [ajint] Pen colour (see PLPLOT)
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1719,6 +1556,8 @@ static void GraphSetPen(ajint colour)
 ** @param [r] numofsubpages [ajuint] Number of subpages
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -1756,13 +1595,15 @@ static void GraphSetNumSubPage(ajuint numofsubpages)
 
 
 
-/* @func ajGraphicsBasecolourNewNuc ********************************************
+/* @func ajGraphicsBasecolourNewNuc *******************************************
 **
 ** Initialise a base colours array for a string of nucleotide
 ** sequence characters
 **
 ** @param [r] codes [const AjPStr] Residue codes for each numbered position
 ** @return [ajint*] Array of colours (see PLPLOT)
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1812,19 +1653,7 @@ ajint* ajGraphicsBasecolourNewNuc(const AjPStr codes)
 
 
 
-/* @obsolete ajGraphGetBaseColourNuc
-** @rename ajGraphicsBasecolourNewNuc
-*/
-
-__deprecated ajint* ajGraphGetBaseColourNuc(const AjPStr codes)
-{
-    return ajGraphicsBasecolourNewNuc(codes);
-}
-
-
-
-
-/* @func ajGraphicsBasecolourNewProt *******************************************
+/* @func ajGraphicsBasecolourNewProt ******************************************
 **
 ** Initialize a base colours array for a string of protein sequence characters
 ** according to the following colour scheme designed by Toby Gibson (EMBL
@@ -1844,6 +1673,8 @@ __deprecated ajint* ajGraphGetBaseColourNuc(const AjPStr codes)
 **
 ** @param [r] codes [const AjPStr] Residue codes for each numbered position
 ** @return [ajint*] Array of colours (see PLPLOT)
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1892,63 +1723,6 @@ ajint* ajGraphicsBasecolourNewProt(const AjPStr codes)
 
 
 
-/* @obsolete ajGraphGetBaseColourProt
-** @rename ajGraphicsBasecolourNewProt
-*/
-
-__deprecated ajint* ajGraphGetBaseColourProt(const AjPStr codes)
-{
-    return ajGraphicsBasecolourNewProt(codes);
-}
-
-
-
-
-/* @obsolete ajGraphGetBaseColour
-** @remove Use ajGraphicsBasecolourNewNuc or ajGraphicsBasecolourNewProt
-*/
-
-__deprecated ajint* ajGraphGetBaseColour(void)
-{
-    ajint *ret;
-
-    ret = (ajint *) AJALLOC0(sizeof(ajint)*AZ);
-
-    ret[0] = BLACK;			/* A */
-    ret[1] = BLACK;			/* B */
-    ret[2] = YELLOW;			/* C */
-    ret[3] = RED;			/* D */
-    ret[4] = RED;			/* E */
-    ret[5] = WHEAT;			/* F */
-    ret[6] = GREY;			/* G */
-    ret[7] = BLUE;			/* H */
-    ret[8] = BLACK;			/* I */
-    ret[9] = BLACK;			/* J */
-    ret[10] = BLUE;			/* K */
-    ret[11] = BLACK;			/* L */
-    ret[12] = YELLOW;			/* M */
-    ret[13] = GREEN;			/* N */
-    ret[14] = BLACK;			/* O */
-    ret[15] = BLUEVIOLET;		/* P */
-    ret[16] = GREEN;			/* Q */
-    ret[17] = BLUE;			/* R */
-    ret[18] = CYAN;			/* S */
-    ret[19] = CYAN;			/* T */
-    ret[20] = BLACK;			/* U */
-    ret[21] = BLACK;			/* V */
-    ret[22] = WHEAT;			/* W */
-    ret[23] = BLACK;			/* X */
-    ret[24] = WHEAT;			/* Y */
-    ret[25] = BLACK;			/* Z */
-    ret[26] = BLACK;			/* ? */
-    ret[27] = BLACK;			/* ?*/
-
-    return ret;
-}
-
-
-
-
 /* @section Queries ***********************************************************
 **
 ** Querying and reporting internal values
@@ -1988,12 +1762,14 @@ __deprecated ajint* ajGraphGetBaseColour(void)
 
 
 
-/* @func ajGraphicsCheckColourC ************************************************
+/* @func ajGraphicsCheckColourC ***********************************************
 **
 ** Find if the colour is on the list
 **
 ** @param [r] txt [const char*] colour name.
 ** @return [ajint] the colour number if found else -1.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2011,12 +1787,14 @@ ajint ajGraphicsCheckColourC(const char* txt)
 
 
 
-/* @func ajGraphicsCheckColourS ************************************************
+/* @func ajGraphicsCheckColourS ***********************************************
 **
 ** Find if the colour is on the list
 **
 ** @param [r] str [const AjPStr]  colour name.
 ** @return [ajint] the colour number if found else -1.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2034,19 +1812,7 @@ ajint ajGraphicsCheckColourS(const AjPStr str)
 
 
 
-/* @obsolete ajGraphCheckColour
-** @rename ajGraphicsCheckColourS
-*/
-
-__deprecated ajint ajGraphCheckColour(const AjPStr colour)
-{
-    return ajGraphicsCheckColourS(colour);
-}
-
-
-
-
-/* @func ajGraphicsGetCharsize *************************************************
+/* @func ajGraphicsGetCharsize ************************************************
 **
 ** Get the char size.
 **
@@ -2055,6 +1821,8 @@ __deprecated ajint ajGraphCheckColour(const AjPStr colour)
 **                                    character height
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2086,6 +1854,8 @@ void ajGraphicsGetCharsize(float *defheight, float *currentscale)
 ** Return current foreground colour
 **
 ** @return [ajint] colour.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2097,19 +1867,7 @@ ajint ajGraphicsGetFgcolour(void)
 
 
 
-/* @obsolete ajGraphGetColour
-** @rename ajGraphicsGetFgcolour
-*/
-
-__deprecated ajint ajGraphGetColour(void)
-{
-    return ajGraphicsGetFgcolour();
-}
-
-
-
-
-/* @func ajGraphicsGetParamsPage ***********************************************
+/* @func ajGraphicsGetParamsPage **********************************************
 **
 ** Get the output page parameters for plplot internal use. These can be set by
 ** the user and used by some device drivers.
@@ -2124,6 +1882,8 @@ __deprecated ajint ajGraphGetColour(void)
 ** @param [u] yoff [ajint *] where to store the y offset
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2150,35 +1910,6 @@ void ajGraphicsGetParamsPage(float *xp,float *yp, ajint *xleng, ajint *yleng,
 		 *xp, *yp, *xleng, *yleng, *xoff, *yoff);
     }
 
-    return;
-}
-
-
-
-
-/* @obsolete ajGraphGetOut
-** @rename ajGraphicsGetParamsPage
-*/
-
-__deprecated void ajGraphGetOut(float *xp,float *yp, ajint *xleng, ajint *yleng,
-		   ajint *xoff, ajint *yoff)
-
-{
-
-    ajGraphicsGetParamsPage(xp, yp, xleng, yleng, xoff, yoff);
-    return;
-}
-
-
-
-
-/* @obsolete ajGraphGetCharSize
-** @rename ajGraphicsGetCharsize
-*/
-
-__deprecated void ajGraphGetCharSize(float *defheight, float *currentheight)
-{
-    ajGraphicsGetCharsize(defheight, currentheight);
     return;
 }
 
@@ -2280,6 +2011,8 @@ __deprecated void ajGraphGetCharSize(float *defheight, float *currentheight)
 ** @param  [r] startangle [PLFLT] angle of the start of the arc.
 ** @param  [r] endangle [PLFLT] angle of the end of the arc.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 **
 ** FIXME: Due to x and y not the same length this produces an oval!!
@@ -2324,21 +2057,6 @@ void ajGraphicsDrawarcArc(PLFLT xcentre, PLFLT ycentre, PLFLT radius,
 
 
 
-/* @obsolete ajGraphPartCircle
-** @rename ajGraphicsDrawarcArc
-*/
-
-__deprecated void ajGraphPartCircle(PLFLT xcentre, PLFLT ycentre, PLFLT Radius,
-		       PLFLT StartAngle, PLFLT EndAngle)
-{
-    
-    ajGraphicsDrawarcArc(xcentre, ycentre, Radius, StartAngle, EndAngle);
-    return;
-}
-
-
-
-
 
 /* @func ajGraphicsDrawarcRect ************************************************
 **
@@ -2351,6 +2069,8 @@ __deprecated void ajGraphPartCircle(PLFLT xcentre, PLFLT ycentre, PLFLT Radius,
 ** @param  [r] endangle [PLFLT] angle of the end of the rectangle.
 ** @param  [r] height [PLFLT] Height of the rectangle in user coordinates.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2386,23 +2106,6 @@ void ajGraphicsDrawarcRect(PLFLT xcentre, PLFLT ycentre, PLFLT radius,
 
 
 
-/* @obsolete ajGraphRectangleOnCurve
-** @replace ajGraphicsDrawarcRect (1,2,3,4,5,6/1,2,3,5,6,4)
-*/
-
-__deprecated void ajGraphRectangleOnCurve(PLFLT xcentre, PLFLT ycentre,
-                                          PLFLT Radius, PLFLT BoxHeight,
-                                          PLFLT StartAngle, PLFLT EndAngle)
-{
-
-    ajGraphicsDrawarcRect(xcentre, ycentre, Radius,
-                          StartAngle, EndAngle, BoxHeight);
-    return;
-}
-
-
-
-
 /* @func ajGraphicsDrawarcRectFill ********************************************
 **
 ** Draw a rectangle along a curve and fill it with the current pen
@@ -2415,6 +2118,8 @@ __deprecated void ajGraphRectangleOnCurve(PLFLT xcentre, PLFLT ycentre,
 ** @param  [r] endangle [PLFLT] angle of the end of the rectangle.
 ** @param  [r] height [PLFLT] Height of the rectangle in user coordinates.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2472,24 +2177,6 @@ void ajGraphicsDrawarcRectFill(PLFLT xcentre, PLFLT ycentre, PLFLT radius,
 
 
 
-/* @obsolete ajGraphFillRectangleOnCurve
-** @replace ajGraphicsDrawarcRectFill (1,2,3,4,5,6/1,2,3,5,6,4)
-*/
-
-__deprecated void ajGraphFillRectangleOnCurve(PLFLT xcentre, PLFLT ycentre,
-                                              PLFLT Radius,
-                                              PLFLT BoxHeight, PLFLT StartAngle,
-                                              PLFLT EndAngle)
-{
-
-    ajGraphicsDrawarcRectFill(xcentre, ycentre, Radius,
-                              StartAngle, EndAngle, BoxHeight);
-    return;
-}
-
-
-
-
 /* @func ajGraphicsDrawarcTextJustify *****************************************
 **
 ** Draw text along a curve (i.e., an arc of a circle).  The text is
@@ -2505,6 +2192,8 @@ __deprecated void ajGraphFillRectangleOnCurve(PLFLT xcentre, PLFLT ycentre,
 ** @param  [r] just [PLFLT] justification of the string.
 **                          (0=left,1=right,0.5=middle etc)
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2533,25 +2222,7 @@ void ajGraphicsDrawarcTextJustify(PLFLT xcentre, PLFLT ycentre, PLFLT radius,
 
 
 
-/* @obsolete ajGraphDrawTextOnCurve
-** @rename ajGraphicsDrawarcTextJustify
-*/
-
-__deprecated void ajGraphDrawTextOnCurve(PLFLT xcentre, PLFLT ycentre,
-                                         PLFLT Radius, PLFLT StartAngle,
-                                         PLFLT EndAngle,
-                                         const char *Text, PLFLT just)
-
-{
-    ajGraphicsDrawarcTextJustify(xcentre, ycentre, Radius,
-                                 StartAngle, EndAngle, Text, just);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawbarsHoriz ***********************************************
+/* @func ajGraphicsDrawbarsHoriz **********************************************
 **
 ** Draw Horizontal Error Bars.
 **
@@ -2561,6 +2232,8 @@ __deprecated void ajGraphDrawTextOnCurve(PLFLT xcentre, PLFLT ycentre,
 ** @param [r] xmax [CONST PLFLT*] x positions to end at.
 ** @return [void]
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 void ajGraphicsDrawbarsHoriz(ajuint num,
@@ -2584,21 +2257,7 @@ void ajGraphicsDrawbarsHoriz(ajuint num,
 
 
 
-/* @obsolete ajGraphHoriBars
-** @rename ajGraphicsDrawbarsHoriz
-*/
-
-__deprecated void ajGraphHoriBars(ajuint numofpoints,
-                                  PLFLT *y, PLFLT *xmin, PLFLT *xmax)
-{
-    ajGraphicsDrawbarsHoriz(numofpoints,y, xmin, xmax);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawbarsVert ************************************************
+/* @func ajGraphicsDrawbarsVert ***********************************************
 **
 ** Draw vertical Error Bars.
 **
@@ -2608,6 +2267,8 @@ __deprecated void ajGraphHoriBars(ajuint numofpoints,
 ** @param [r] ymax [CONST PLFLT*] y positions to end at.
 ** @return [void]
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2632,21 +2293,7 @@ void ajGraphicsDrawbarsVert(ajuint num,
 
 
 
-/* @obsolete ajGraphVertBars
-** @rename ajGraphicsDrawbarsVert
-*/
-
-__deprecated void ajGraphVertBars(ajuint numofpoints,
-                                  PLFLT *x, PLFLT *ymin, PLFLT *ymax)
-{
-    ajGraphicsDrawbarsVert(numofpoints, x, ymin, ymax);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposBox ************************************************
+/* @func ajGraphicsDrawposBox *************************************************
 **
 ** Draw a box to the plotter device at point xx0,yy0 size big.
 **
@@ -2654,6 +2301,8 @@ __deprecated void ajGraphVertBars(ajuint numofpoints,
 ** @param [r] y [PLFLT] y position to draw the box.
 ** @param [r] size [PLFLT]  how big to draw the box.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2690,20 +2339,7 @@ void ajGraphicsDrawposBox(PLFLT x, PLFLT y,PLFLT size)
 
 
 
-/* @obsolete ajGraphBox
-** @rename ajGraphicsDrawposBox
-*/
-
-__deprecated void ajGraphBox(PLFLT xx0, PLFLT yy0,PLFLT size)
-{
-    ajGraphicsDrawposBox(xx0, yy0, size);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposBoxFill **********************************************
+/* @func ajGraphicsDrawposBoxFill *********************************************
 **
 ** Draw a box to the plotter device at point xx0,yy0 size big and
 ** fill it in.
@@ -2712,6 +2348,8 @@ __deprecated void ajGraphBox(PLFLT xx0, PLFLT yy0,PLFLT size)
 ** @param [r] y [PLFLT] y position to draw the box.
 ** @param [r] size [PLFLT]  how big to draw the box.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2746,19 +2384,6 @@ void ajGraphicsDrawposBoxFill(PLFLT x, PLFLT y, PLFLT size)
 
 
 
-/* @obsolete ajGraphBoxFill
-** @rename ajGraphicsDrawposBoxFill
-*/
-
-__deprecated void ajGraphBoxFill(PLFLT xx0, PLFLT yy0, PLFLT size)
-{
-    ajGraphicsDrawposBoxFill(xx0, yy0, size);
-    return;
-}
-
-
-
-
 /* @func ajGraphicsDrawposCircle **********************************************
 **
 ** Draw a circle.
@@ -2767,6 +2392,8 @@ __deprecated void ajGraphBoxFill(PLFLT xx0, PLFLT yy0, PLFLT size)
 ** @param  [r] y [PLFLT] y coord for centre.
 ** @param  [r] radius  [float] radius of the circle.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 **
 ** FIXME: Due to x and y not the same length this produces an oval!!
@@ -2800,19 +2427,6 @@ void ajGraphicsDrawposCircle(PLFLT x, PLFLT y, float radius)
 
 
 
-/* @obsolete ajGraphCircle
-** @rename ajGraphicsDrawposCircle
-*/
-
-__deprecated void ajGraphCircle(PLFLT xcentre, PLFLT ycentre, float radius)
-{
-    ajGraphicsDrawposCircle(xcentre, ycentre, radius);
-    return;
-}
-
-
-
-
 /* @func ajGraphicsDrawposDia *************************************************
 **
 ** Draw a diamond to the plotter device at point xx0,yy0 size big.
@@ -2821,6 +2435,8 @@ __deprecated void ajGraphCircle(PLFLT xcentre, PLFLT ycentre, float radius)
 ** @param [r] y [PLFLT] y position to draw the diamond.
 ** @param [r] size [PLFLT]  how big to draw the diamond.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2852,20 +2468,7 @@ void ajGraphicsDrawposDia(PLFLT x, PLFLT y, PLFLT size)
 
 
 
-/* @obsolete ajGraphDia
-** @rename ajGraphicsDrawposDia
-*/
-
-__deprecated void ajGraphDia(PLFLT xx0, PLFLT yy0, PLFLT size)
-{
-    ajGraphicsDrawposDia(xx0, yy0, size);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposDiaFill **********************************************
+/* @func ajGraphicsDrawposDiaFill *********************************************
 **
 ** Draw a diamond to the plotter device at point xx0,yy0 size big and
 ** fill it in.
@@ -2874,6 +2477,8 @@ __deprecated void ajGraphDia(PLFLT xx0, PLFLT yy0, PLFLT size)
 ** @param [r] y [PLFLT] y position to draw the diamond.
 ** @param [r] size [PLFLT]  how big to draw the diamond.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2902,20 +2507,7 @@ void ajGraphicsDrawposDiaFill(PLFLT x, PLFLT y, PLFLT size)
 
 
 
-/* @obsolete ajGraphDiaFill
-** @rename ajGraphicsDrawposDiaFill
-*/
-
-__deprecated void ajGraphDiaFill(PLFLT xx0, PLFLT yy0, PLFLT size)
-{
-    ajGraphicsDrawposDiaFill(xx0, yy0, size);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposLine *************************************************
+/* @func ajGraphicsDrawposLine ************************************************
 **
 ** Draw line between 2 points.
 **
@@ -2924,6 +2516,8 @@ __deprecated void ajGraphDiaFill(PLFLT xx0, PLFLT yy0, PLFLT size)
 ** @param [r] x2 [PLFLT]  x end position.
 ** @param [r] y2 [PLFLT]  y end position.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -2952,20 +2546,7 @@ void ajGraphicsDrawposLine(PLFLT x, PLFLT y, PLFLT x2, PLFLT y2)
 
 
 
-/* @obsolete ajGraphLine
-** @rename ajGraphicsDrawposLine
-*/
-
-__deprecated void ajGraphLine(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2)
-{
-    ajGraphicsDrawposLine(xx1, yy1, xx2, yy2);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposRect *************************************************
+/* @func ajGraphicsDrawposRect ************************************************
 **
 ** Draw a rectangle with the current pen colour/style.
 **
@@ -2975,6 +2556,8 @@ __deprecated void ajGraphLine(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2)
 ** @param [r] y2 [PLFLT] yy1 coord.
 ** @return [void]
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3011,20 +2594,7 @@ void ajGraphicsDrawposRect(PLFLT x, PLFLT y,PLFLT x2, PLFLT y2)
 
 
 
-/* @obsolete ajGraphRect
-** @rename ajGraphicsDrawposRect
-*/
-
-__deprecated void ajGraphRect(PLFLT xx0, PLFLT yy0,PLFLT xx1, PLFLT yy1)
-{
-    ajGraphicsDrawposRect(xx0, yy0, xx1, yy1);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposRectFill *********************************************
+/* @func ajGraphicsDrawposRectFill ********************************************
 **
 ** Draw a rectangle and fill it with the current pen colour/style.
 **
@@ -3034,6 +2604,8 @@ __deprecated void ajGraphRect(PLFLT xx0, PLFLT yy0,PLFLT xx1, PLFLT yy1)
 ** @param [r] y2 [PLFLT] yy1 coord.
 ** @return [void]
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3068,20 +2640,7 @@ void ajGraphicsDrawposRectFill(PLFLT x, PLFLT y, PLFLT x2, PLFLT y2)
 
 
 
-/* @obsolete ajGraphRectFill
-** @rename ajGraphicsDrawposRectFill
-*/
-
-__deprecated void ajGraphRectFill(PLFLT xx0, PLFLT yy0, PLFLT xx1, PLFLT yy1)
-{
-    ajGraphicsDrawposRectFill(xx0, yy0, xx1, yy1);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposTextAtend ********************************************
+/* @func ajGraphicsDrawposTextAtend *******************************************
 **
 ** Draw text ending at position (xx1,yy1)
 **
@@ -3090,6 +2649,8 @@ __deprecated void ajGraphRectFill(PLFLT xx0, PLFLT yy0, PLFLT xx1, PLFLT yy1)
 ** @param [r] txt [const char*] The text to be displayed.
 ** @return [void]
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3112,20 +2673,7 @@ void ajGraphicsDrawposTextAtend(PLFLT x, PLFLT y, const char *txt)
 
 
 
-/* @obsolete ajGraphTextEnd
-** @rename ajGraphicsDrawposTextAtend
-*/
-
-__deprecated void ajGraphTextEnd(PLFLT x, PLFLT y, const char *text)
-{
-    ajGraphicsDrawposTextAtend(x,y,text);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposTextAtlineJustify ************************************
+/* @func ajGraphicsDrawposTextAtlineJustify ***********************************
 **
 ** Draw text along a line.
 **
@@ -3138,6 +2686,8 @@ __deprecated void ajGraphTextEnd(PLFLT x, PLFLT y, const char *text)
 **                         (0=left,1=right,0.5=middle etc)
 ** @return [void]
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3161,21 +2711,7 @@ void ajGraphicsDrawposTextAtlineJustify(PLFLT x, PLFLT y, PLFLT x2, PLFLT y2,
 
 
 
-/* @obsolete ajGraphTextLine
-** @rename ajGraphicsDrawposTextAtlineJustify
-*/
-
-__deprecated void ajGraphTextLine(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
-		     const char *text, PLFLT just)
-{
-    ajGraphicsDrawposTextAtlineJustify(xx1, yy1, xx2, yy2, text, just);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposTextAtmid ********************************************
+/* @func ajGraphicsDrawposTextAtmid *******************************************
 **
 ** Draw text with Mid point of text at (xx1,yy1).
 **
@@ -3186,6 +2722,8 @@ __deprecated void ajGraphTextLine(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
 ** @param [r] txt [const char*] The text to be displayed.
 ** @return [void]
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3208,20 +2746,7 @@ void ajGraphicsDrawposTextAtmid(PLFLT x, PLFLT y, const char *txt)
 
 
 
-/* @obsolete ajGraphTextMid
-** @rename ajGraphicsDrawposTextAtmid
-*/
-
-__deprecated void ajGraphTextMid(PLFLT xx1, PLFLT yy1, const char *text)
-{
-    ajGraphicsDrawposTextAtmid(xx1,yy1,text);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposTextAtstart ******************************************
+/* @func ajGraphicsDrawposTextAtstart *****************************************
 **
 ** Draw text starting at position (xx1,yy1)
 **
@@ -3230,6 +2755,8 @@ __deprecated void ajGraphTextMid(PLFLT xx1, PLFLT yy1, const char *text)
 ** @param [r] txt [const char*] The text to be displayed.
 ** @return [void]
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3252,20 +2779,7 @@ void ajGraphicsDrawposTextAtstart(PLFLT x, PLFLT y, const char *txt)
 
 
 
-/* @obsolete ajGraphTextStart
-** @rename ajGraphicsDrawposTextAtstart
-*/
-
-__deprecated void ajGraphTextStart(PLFLT xx1, PLFLT yy1, const char *text)
-{
-    ajGraphicsDrawposTextAtstart(xx1,yy1,text);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposTextJustify ******************************************
+/* @func ajGraphicsDrawposTextJustify *****************************************
 **
 ** Draw text, positioning with respect to (xx1,yy1) by justified as
 ** defined by just.
@@ -3277,6 +2791,8 @@ __deprecated void ajGraphTextStart(PLFLT xx1, PLFLT yy1, const char *text)
 **                         (0=left,1=right,0.5=middle etc)
 ** @return [void]
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3299,21 +2815,7 @@ void ajGraphicsDrawposTextJustify(PLFLT x, PLFLT y, const char *txt,
 
 
 
-/* @obsolete ajGraphText
-** @rename ajGraphicsDrawposTextJustify
-*/
-
-__deprecated void ajGraphText(PLFLT xx1, PLFLT yy1,
-                              const char *text, PLFLT just)
-{
-    ajGraphicsDrawposTextJustify(xx1,yy1,text,just);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposTri **************************************************
+/* @func ajGraphicsDrawposTri *************************************************
 **
 ** Draw a Triangle.
 **
@@ -3324,6 +2826,8 @@ __deprecated void ajGraphText(PLFLT xx1, PLFLT yy1,
 ** @param [r] x3 [PLFLT] x3 coord of point 3.
 ** @param [r] y3 [PLFLT] y3 coord of point 3.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3344,21 +2848,7 @@ void ajGraphicsDrawposTri(PLFLT x, PLFLT y, PLFLT x2, PLFLT y2,
 
 
 
-/* @obsolete ajGraphTri
-** @rename ajGraphicsDrawposTri
-*/
-
-__deprecated void ajGraphTri(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
-		PLFLT x3, PLFLT y3)
-{
-    ajGraphicsDrawposTri(xx1,yy1,xx2,yy2,x3,y3);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawposTriFill **********************************************
+/* @func ajGraphicsDrawposTriFill *********************************************
 **
 ** Draw a Triangle and fill it in.
 **
@@ -3369,6 +2859,8 @@ __deprecated void ajGraphTri(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
 ** @param [r] x3 [PLFLT] x3 coord of point 3.
 ** @param [r] y3 [PLFLT] y3 coord of point 3.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3389,21 +2881,7 @@ void ajGraphicsDrawposTriFill(PLFLT x, PLFLT y, PLFLT x2, PLFLT y2,
 
 
 
-/* @obsolete ajGraphTriFill
-** @rename ajGraphicsDrawposTriFill
-*/
-
-__deprecated void ajGraphTriFill(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
-                                 PLFLT x3, PLFLT y3)
-{
-    ajGraphicsDrawposTriFill(xx1,yy1,xx2,yy2,x3,y3);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawsetDots *************************************************
+/* @func ajGraphicsDrawsetDots ************************************************
 **
 ** Draw a set of dots.
 **
@@ -3412,6 +2890,8 @@ __deprecated void ajGraphTriFill(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
 ** @param [r] yy [CONST PLFLT*] yy1 coord.
 ** @return [void]
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3426,19 +2906,6 @@ void ajGraphicsDrawsetDots(ajuint num, PLFLT *xx, PLFLT *yy)
 
 
 
-/* @obsolete ajGraphDots
-** @replace ajGraphicsDrawsetDots (1,2,3/3,1,2)
-*/
-
-__deprecated void ajGraphDots(PLFLT *xx1, PLFLT *yy1, ajuint numofdots)
-{
-    ajGraphicsDrawsetDots(numofdots,xx1,yy1);
-    return;
-}
-
-
-
-
 /* @funcstatic GraphDrawsetLines **********************************************
 **
 ** Draw a number of lines. The points are stored in two array.
@@ -3447,6 +2914,8 @@ __deprecated void ajGraphDots(PLFLT *xx1, PLFLT *yy1, ajuint numofdots)
 ** @param [r] xx [CONST PLFLT*] pointer to x coordinates.
 ** @param [r] yy [CONST PLFLT*] pointer to y coordinates.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3473,7 +2942,7 @@ static void GraphDrawsetLines(ajuint num, PLFLT *xx, PLFLT *yy)
 
 
 
-/* @func ajGraphicsDrawsetLines ************************************************
+/* @func ajGraphicsDrawsetLines ***********************************************
 **
 ** Draw a set of lines.
 **
@@ -3484,6 +2953,8 @@ static void GraphDrawsetLines(ajuint num, PLFLT *xx, PLFLT *yy)
 ** @param [u] yy2 [CONST PLFLT*] y end coordinates
 ** @return [void]
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3498,7 +2969,8 @@ void ajGraphicsDrawsetLines(ajuint num, PLFLT *xx, PLFLT *yy,
 
     /* graphdata : calls ajGraphLine */
 
-    /*ajDebug("=g= ajGraphicsDrawsetLines(... %d) [xx1,xx2,yy1,yy2,numoflines]\n",
+    /*ajDebug("=g= ajGraphicsDrawsetLines(... %d) "
+      "[xx1,xx2,yy1,yy2,numoflines]\n",
       num);*/
 
     for(i=0; i<num; i++)
@@ -3510,22 +2982,7 @@ void ajGraphicsDrawsetLines(ajuint num, PLFLT *xx, PLFLT *yy,
 
 
 
-/* @obsolete ajGraphLines
-** @replace ajGraphicsDrawsetLines (1,2,3,4,5/5,1,2,3,4)
-*/
-
-__deprecated void ajGraphLines(PLFLT *xx1, PLFLT *yy1, PLFLT *xx2, PLFLT *yy2,
-                               ajuint numoflines)
-
-{
-    ajGraphicsDrawsetLines(numoflines, xx1, yy1, xx2, yy2);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawsetPoly *************************************************
+/* @func ajGraphicsDrawsetPoly ************************************************
 **
 ** Draw a polygon.
 **
@@ -3533,6 +2990,8 @@ __deprecated void ajGraphLines(PLFLT *xx1, PLFLT *yy1, PLFLT *xx2, PLFLT *yy2,
 ** @param [r] xx [CONST PLFLT *] x coord of points
 ** @param [r] yy [CONST PLFLT *] y coord of points
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3548,20 +3007,7 @@ void ajGraphicsDrawsetPoly(ajuint num, PLFLT *xx, PLFLT *yy)
 
 
 
-/* @obsolete ajGraphPoly
-** @rename ajGraphicsDrawsetPoly
-*/
-
-__deprecated void ajGraphPoly(ajuint n, PLFLT *x, PLFLT *y)
-{
-    ajGraphicsDrawsetPoly(n, x, y);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawsetPolyFill *********************************************
+/* @func ajGraphicsDrawsetPolyFill ********************************************
 **
 ** Draw a polygon and fill it in.
 **
@@ -3569,6 +3015,8 @@ __deprecated void ajGraphPoly(ajuint n, PLFLT *x, PLFLT *y)
 ** @param [r] xx [CONST PLFLT *] x coord of points
 ** @param [r] yy [CONST PLFLT *] y coord of points
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3582,20 +3030,7 @@ void ajGraphicsDrawsetPolyFill(ajuint num, PLFLT *xx, PLFLT *yy)
 
 
 
-/* @obsolete ajGraphPolyFill
-** @rename ajGraphicsDrawsetPolyFill
-*/
-
-__deprecated void ajGraphPolyFill(ajuint n, PLFLT *x, PLFLT *y)
-{
-    ajGraphicsDrawsetPolyFill(n, x, y);
-    return;
-}
-
-
-
-
-/* @func ajGraphicsDrawsetSymbols **********************************************
+/* @func ajGraphicsDrawsetSymbols *********************************************
 **
 ** Draw a set of dots.
 **
@@ -3605,6 +3040,8 @@ __deprecated void ajGraphPolyFill(ajuint n, PLFLT *x, PLFLT *y)
 ** @param [r] symbol [ajuint] Symbol code.
 ** @return [void]
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3614,20 +3051,6 @@ void ajGraphicsDrawsetSymbols(ajuint num, PLFLT *xx, PLFLT *yy,
     GraphSymbols(xx, yy, num, symbol);
 
     /* see xx06c in examples for codes e.g. 17 is a dot*/
-    return;
-}
-
-
-
-
-/* @obsolete ajGraphSymbols
-** @rename ajGraphicsDrawsetSymbols
-*/
-
-__deprecated void ajGraphSymbols( ajuint numofdots, PLFLT *xx1,PLFLT *yy1,
-                                  ajuint symbol)
-{
-    ajGraphicsDrawsetSymbols(numofdots,xx1,yy1,symbol);
     return;
 }
 
@@ -3703,6 +3126,8 @@ __deprecated void ajGraphSymbols( ajuint numofdots, PLFLT *xx1,PLFLT *yy1,
 ** @return [PLFLT] The character size (in mm) that fits the specified
 **                 height and length.
 **
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3710,12 +3135,12 @@ PLFLT ajGraphicsCalcCharsize(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
 			   const char *text,
 			   PLFLT TextHeight)
 {
-    PLFLT origStringHeight;
-    PLFLT origStringLength;
-    PLFLT distpts;
-    PLFLT origcharsize;
-    PLFLT origcharht;
-    PLFLT newcharsize;
+    PLFLT origStringHeight = 0.0;
+    PLFLT origStringLength = 0.0;
+    PLFLT distpts = 0.0;
+    PLFLT origcharsize = 0.0;
+    PLFLT origcharht = 0.0;
+    PLFLT newcharsize = 0.0;
     PLFLT wx1 = 0.0;
     PLFLT wx2 = 0.0;
     PLFLT wy1 = 0.0;
@@ -3752,21 +3177,7 @@ PLFLT ajGraphicsCalcCharsize(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
 
 
 
-/* @obsolete ajGraphFitTextAtline
-** @rename ajGraphicsCalcCharsize
-*/
-__deprecated PLFLT ajGraphFitTextAtline(PLFLT xx1, PLFLT yy1,
-                                        PLFLT xx2, PLFLT yy2,
-                                        const char *text,
-                                        PLFLT TextHeight)
-{
-    return ajGraphicsCalcCharsize(xx1,yy1,xx2,yy2,text,TextHeight);
-}
-
-
-
-
-/* @func ajGraphicsCalcCoord ***************************************************
+/* @func ajGraphicsCalcCoord **************************************************
 **
 ** compute the coordinates of a point on a circle knowing the angle.
 **
@@ -3775,6 +3186,8 @@ __deprecated PLFLT ajGraphFitTextAtline(PLFLT xx1, PLFLT yy1,
 ** @param  [r] radius  [PLFLT] Radius of the circle.
 ** @param  [r] angle [PLFLT] angle at which the point is.
 ** @return [PLFLT*] The x and y coordinates of the point.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3792,18 +3205,6 @@ PLFLT* ajGraphicsCalcCoord(PLFLT x, PLFLT y, PLFLT radius, PLFLT angle)
 
 
 
-/* @obsolete ajComputeCoord
-** @rename ajGraphicsCalcCoord
-*/
-__deprecated PLFLT* ajComputeCoord(PLFLT xcentre, PLFLT ycentre,
-                                   PLFLT Radius, PLFLT Angle)
-{
-    return ajGraphicsCalcCoord(xcentre, ycentre, Radius, Angle);
-}
-
-
-
-
 /* @func ajGraphicsCalcDistance ***********************************************
 **
 ** Compute the distance between 2 points in user coordinates.
@@ -3814,21 +3215,12 @@ __deprecated PLFLT* ajComputeCoord(PLFLT xcentre, PLFLT ycentre,
 ** @param [r] yy2 [PLFLT] y coord of point 2
 **
 ** @return [PLFLT] The distance between the 2 points in user coordinates.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 PLFLT ajGraphicsCalcDistance(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2)
-{
-    return GraphDistPts(xx1, yy1, xx2, yy2);
-}
-
-
-
-
-/* @obsolete ajGraphDistPts
-** @rename ajGraphicsCalcDistance
-*/
-__deprecated PLFLT ajGraphDistPts(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2)
 {
     return GraphDistPts(xx1, yy1, xx2, yy2);
 }
@@ -3845,6 +3237,8 @@ __deprecated PLFLT ajGraphDistPts(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2)
 ** @param [w] min [float*]  min.
 ** @param [w] max [float*]  max.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3874,24 +3268,13 @@ void ajGraphicsCalcRange(const float *array,
 
 
 
-/* @obsolete ajGraphArrayMaxMin
-** @rename ajGraphicsCalcRange
-*/
-__deprecated void ajGraphArrayMaxMin(const float *array,
-                                     ajint npoints, float *min, float *max)
-{
-    ajGraphicsCalcRange(array, npoints, min, max);
-    return;
-}
-
-
-
-
 /* @func ajGraphicsCalcTextheight *********************************************
 **
 ** Compute the height of a character in millimetres.
 **
 ** @return [PLFLT] The height of the character in user coordinates.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3903,29 +3286,15 @@ PLFLT ajGraphicsCalcTextheight(void)
 
 
 
-/* @obsolete ajGraphTextHeight
-** @rename ajGraphicsCalcTextheight
-*/
-__deprecated PLFLT ajGraphTextHeight(PLFLT xx1, PLFLT yy1,
-                                     PLFLT xx2, PLFLT yy2)
-{
-    (void) xx1;
-    (void) yy1;
-    (void) xx2;
-    (void) yy2;
-    return currentcharsize;
-}
-
-
-
-
-/* @func ajGraphicsCalcTextlengthC *********************************************
+/* @func ajGraphicsCalcTextlengthC ********************************************
 **
 ** Compute the length of a string in millimetres.
 **
 ** @param [r] txt [const char*] Text
 **
 ** @return [PLFLT] The length of the string in user coordinates.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -3937,35 +3306,21 @@ PLFLT ajGraphicsCalcTextlengthC(const char *txt)
 
 
 
-/* @func ajGraphicsCalcTextlengthS *********************************************
+/* @func ajGraphicsCalcTextlengthS ********************************************
 **
 ** Compute the length of a string in millimetres.
 **
 ** @param [r] str [const AjPStr] Text
 **
 ** @return [PLFLT] The length of the string in user coordinates.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 PLFLT ajGraphicsCalcTextlengthS(const AjPStr str)
 {
     return GraphTextLength(MAJSTRGETPTR(str));
-}
-
-
-
-
-/* @obsolete ajGraphTextLength
-** @rename ajGraphicsCalcTextlengthC
-*/
-__deprecated PLFLT ajGraphTextLength(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
-                                     const char *text)
-{
-    (void) xx1;
-    (void) yy1;
-    (void) xx2;
-    (void) yy2;
-    return GraphTextLength(text);
 }
 
 
@@ -3986,11 +3341,13 @@ __deprecated PLFLT ajGraphTextLength(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
 
 
 
-/* @func ajGraphicsUnused ******************************************************
+/* @func ajGraphicsUnused *****************************************************
 **
 ** Unused functions to avoid compiler warnings
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4029,11 +3386,13 @@ void ajGraphicsUnused(void)
 
 
 
-/* @func ajGraphicsExit ********************************************************
+/* @func ajGraphicsExit *******************************************************
 **
 ** Cleans up graphics internal memory
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4080,6 +3439,8 @@ void ajGraphicsExit(void)
 ** Create a structure to hold a general graph.
 **
 ** @return [AjPGraph] multiple graph structure.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4145,6 +3506,8 @@ AjPGraph ajGraphNew(void)
 ** @param [u] thys [AjPGraph] Graph
 ** @param [r] seq [const AjPSeq] Sequence
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4171,6 +3534,8 @@ void ajGraphInitSeq(AjPGraph thys, const AjPSeq seq)
 ** @param [w] thys [AjPGraph] Graph object
 ** @param [r] resetdefaults [AjBool] reset page setting?
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4230,18 +3595,6 @@ void ajGraphNewpage(AjPGraph thys, AjBool resetdefaults)
 
 
 
-/* @obsolete ajGraphNewPage
-** @rename ajGraphNewpage
-*/
-__deprecated void ajGraphNewPage(AjPGraph thys, AjBool resetdefaults)
-{
-    ajGraphNewpage(thys, resetdefaults);
-    return;
-}
-
-
-
-
 /* @func ajGraphOpenFlags *****************************************************
 **
 ** Open a window whose view is defined by the x's and y's min and max
@@ -4255,6 +3608,8 @@ __deprecated void ajGraphNewPage(AjPGraph thys, AjBool resetdefaults)
 ** @param [r] flags [ajint] flag bit settings
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4267,8 +3622,8 @@ void ajGraphOpenFlags(AjPGraph thys, PLFLT xmin, PLFLT xmax,
 
     /* Calling funclist graphType() */
     if(thys)
-        graphType[thys->displaytype].GOpen(thys,
-                                       graphType[thys->displaytype].Ext);
+        (*graphType[thys->displaytype].GOpen)(thys,
+                                              graphType[thys->displaytype].Ext);
 
     if( ajStrGetLen(thys->title) <=1)
     {
@@ -4296,20 +3651,7 @@ void ajGraphOpenFlags(AjPGraph thys, PLFLT xmin, PLFLT xmax,
 
 
 
-/* @obsolete ajGraphOpen
-** @rename ajGraphOpenFlags
-*/
-__deprecated void ajGraphOpen(AjPGraph thys, PLFLT xmin, PLFLT xmax,
-                              PLFLT ymin, PLFLT ymax, ajint flags)
-{
-    ajGraphOpenFlags(thys, xmin, xmax, ymin, ymax, flags);
-    return;
-}
-
-
-
-
-/* @func ajGraphOpenMm ******************************************************
+/* @func ajGraphOpenMm ********************************************************
 **
 ** Open a window whose view is defined by x and y's size in millimetres
 ** to allow easy scaling of characters and strings whose sizes are always
@@ -4320,6 +3662,8 @@ __deprecated void ajGraphOpen(AjPGraph thys, PLFLT xmin, PLFLT xmax,
 ** @param [w] ymm [float*] y length in millimetres
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4337,8 +3681,8 @@ void ajGraphOpenMm(AjPGraph thys, float * xmm, float * ymm)
     if (thys)
     {
 	/* Calling funclist graphType() */
-	graphType[thys->displaytype].GOpen(thys,
-			     graphType[thys->displaytype].Ext);
+	(*graphType[thys->displaytype].GOpen)(thys,
+                                              graphType[thys->displaytype].Ext);
 
 	if(!ajStrGetLen(thys->title))
 	{
@@ -4398,6 +3742,8 @@ void ajGraphOpenMm(AjPGraph thys, float * xmm, float * ymm)
 ** @param [r] numofsets [ajuint] number of plots in set.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4415,18 +3761,6 @@ void ajGraphOpenPlotset(AjPGraph thys, ajuint numofsets)
 
 
 
-/* @obsolete ajGraphOpenPlot
-** @rename ajGraphOpenPlotset
-*/
-__deprecated void ajGraphOpenPlot(AjPGraph thys, ajuint numofsets)
-{
-    ajGraphOpenPlotset(thys, numofsets);
-    return;
-}
-
-
-
-
 /* @func ajGraphOpenWin *******************************************************
 **
 ** Open a window whose view is defined by x and y's min and max.
@@ -4438,6 +3772,8 @@ __deprecated void ajGraphOpenPlot(AjPGraph thys, ajuint numofsets)
 ** @param [r] ymax [float] maximum y value.
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4451,8 +3787,8 @@ void ajGraphOpenWin(AjPGraph thys, float xmin, float xmax,
     if (thys)
     {
 	/* Calling funclist graphType() */
-	graphType[thys->displaytype].GOpen(thys,
-			     graphType[thys->displaytype].Ext);
+	(*graphType[thys->displaytype].GOpen)(thys,
+                                              graphType[thys->displaytype].Ext);
 
 	if(!ajStrGetLen(thys->title))
 	{
@@ -4503,6 +3839,7 @@ void ajGraphOpenWin(AjPGraph thys, float xmin, float xmax,
 ** @nam3rule Set Set internal value(s)
 ** @nam3rule Show Set flag to show element of graph
 **
+** @nam4rule Dataname Data source name
 ** @nam4rule Desc Plot description
 ** @nam4rule Devicetype Plplot device by name
 ** @nam4rule Flag Set or unset a plplot flag
@@ -4541,6 +3878,8 @@ void ajGraphOpenWin(AjPGraph thys, float xmin, float xmax,
 ** @param [u] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] txt [const char*]  Title.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4575,6 +3914,8 @@ void ajGraphAppendTitleC(AjPGraph thys, const char* txt)
 ** @param [u] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] str [const AjPStr]  Title.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4601,25 +3942,15 @@ void ajGraphAppendTitleS(AjPGraph thys, const AjPStr str)
 
 
 
-/* @obsolete ajGraphSetTitlePlus
-** @rename ajGraphAppendTitle
-*/
-__deprecated void ajGraphSetTitlePlus(AjPGraph thys, const AjPStr title)
-{
-    ajGraphAppendTitleS(thys, title);
-    return;
-}
-
-
-
-
-/* @func ajGraphClear **************************************************
+/* @func ajGraphClear *********************************************************
 **
 **  Delete all the drawable objects connected to the graph object.
 **
 ** @param [u] thys [AjPGraph] Graph object
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -4652,7 +3983,57 @@ void ajGraphClear(AjPGraph thys)
 
 
 
-/* @func ajGraphSetDescC *******************************************************
+/* @func ajGraphSetDatanameC **************************************************
+**
+** Set the graph data source name.
+**
+** @param [u] thys [AjPGraph] Graph structure to store info in.
+** @param [r] txt [const char*]  Data source name.
+**
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+void ajGraphSetDatanameC(AjPGraph thys, const char* txt)
+{
+    ajDebug("ajGraphSetDatanameC '%s'\n", txt);
+
+    ajStrAssignC(&thys->dataname,txt);
+
+    return;
+}
+
+
+
+
+/* @func ajGraphSetDatanameS **************************************************
+**
+** Set the graph data source name.
+**
+** @param [u] thys [AjPGraph] Graph structure to store info in.
+** @param [r] str [const AjPStr]  Data source name.
+**
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+void ajGraphSetDatanameS(AjPGraph thys, const AjPStr str)
+{
+    ajDebug("ajGraphSetDatanameS '%S'\n", str);
+
+    ajStrAssignS(&thys->dataname,str);
+
+    return;
+}
+
+
+
+
+/* @func ajGraphSetDescC ******************************************************
 **
 ** Set the graph description.
 **
@@ -4660,6 +4041,8 @@ void ajGraphClear(AjPGraph thys)
 ** @param [r] txt [const char*]  Title.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4675,7 +4058,7 @@ void ajGraphSetDescC(AjPGraph thys, const char* txt)
 
 
 
-/* @func ajGraphSetDescS *******************************************************
+/* @func ajGraphSetDescS ******************************************************
 **
 ** Set the graph description.
 **
@@ -4683,6 +4066,8 @@ void ajGraphSetDescC(AjPGraph thys, const char* txt)
 ** @param [r] str [const AjPStr]  Title.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4698,20 +4083,6 @@ void ajGraphSetDescS(AjPGraph thys, const AjPStr str)
 
 
 
-/* @obsolete ajGraphSetDesc
-** @rename ajGraphSetDescS
-*/
-
-__deprecated void ajGraphSetDesc(AjPGraph thys, const AjPStr title)
-{
-    ajGraphSetDescS(thys, title);
-
-    return;
-}
-
-
-
-
 /* @func ajGraphSetDevicetype *************************************************
 **
 ** Initialize options for a general graph object
@@ -4719,6 +4090,8 @@ __deprecated void ajGraphSetDesc(AjPGraph thys, const AjPStr title)
 ** @param [u] thys [AjPGraph] Graph object
 ** @param [r] devicetype [const AjPStr] Graph type
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4783,18 +4156,7 @@ AjBool ajGraphSetDevicetype(AjPGraph thys, const AjPStr devicetype)
 
 
 
-/* @obsolete ajGraphSet
-** @rename ajGraphSetDevicetype
-*/
-__deprecated AjBool ajGraphSet(AjPGraph thys, const AjPStr type)
-{
-    return ajGraphSetDevicetype(thys, type);
-}
-
-
-
-
-/* @func ajGraphSetFlag *****************************************************
+/* @func ajGraphSetFlag *******************************************************
 **
 ** Set the flags for the graph to add or subtract "flag" depending on set
 **
@@ -4802,6 +4164,8 @@ __deprecated AjBool ajGraphSet(AjPGraph thys, const AjPStr type)
 ** @param [r] flag   [ajint]  flag to be set.
 ** @param [r] set [AjBool]    whether to set the flag or remove it.
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -4834,6 +4198,8 @@ void ajGraphSetFlag(AjPGraph thys, ajint flag, AjBool set)
 ** @param [w] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] numsets [ajuint] maximum number of graphs that can be stored.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -4860,7 +4226,7 @@ void ajGraphSetMulti(AjPGraph thys, ajuint numsets)
 
 
 
-/* @func ajGraphSetOutdirS **************************************************
+/* @func ajGraphSetOutdirS ****************************************************
 **
 ** Set the directory of the output file. Only used later if the device
 ** plotter is capable of writing to a file (e.g. postscript or png)
@@ -4868,6 +4234,8 @@ void ajGraphSetMulti(AjPGraph thys, ajuint numsets)
 ** @param [u] thys [AjPGraph] Graph structure to update file name
 ** @param [r] str [const AjPStr] Name of the file.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4889,19 +4257,6 @@ void ajGraphSetOutdirS(AjPGraph thys, const AjPStr str)
 
 
 
-/* @obsolete ajGraphSetDir
-** @rename ajGraphSetOutdirS
-*/
-
-__deprecated void ajGraphSetDir(AjPGraph thys, const AjPStr txt)
-{
-    ajGraphSetOutdirS(thys, txt);
-    return;
-}
-
-
-
-
 /* @func ajGraphSetOutfileC ***************************************************
 **
 ** Set the name of the output file. Only used later if the device
@@ -4910,6 +4265,8 @@ __deprecated void ajGraphSetDir(AjPGraph thys, const AjPStr txt)
 ** @param [u] thys [AjPGraph] Graph structure to write file name to.
 ** @param [r] txt [const char*] Name of the file.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4929,18 +4286,6 @@ void ajGraphSetOutfileC(AjPGraph thys, const char* txt)
 
 
 
-/* @obsolete ajGraphSetOutC
-** @rename ajGraphSetOutfileC
-*/
-__deprecated void ajGraphSetOutC(AjPGraph thys, const char* txt)
-{
-    ajGraphSetOutfileC(thys, txt);
-    return;
-}
-
-
-
-
 /* @func ajGraphSetOutfileS ***************************************************
 **
 ** Set the name of the output file. Only used later if the device
@@ -4949,6 +4294,8 @@ __deprecated void ajGraphSetOutC(AjPGraph thys, const char* txt)
 ** @param [u] thys [AjPGraph] Graph structure to write file name to.
 ** @param [r] str [const AjPStr] Name of the file.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -4968,19 +4315,6 @@ void ajGraphSetOutfileS(AjPGraph thys, const AjPStr str)
 
 
 
-/* @obsolete ajGraphSetOut
-** @rename ajGraphSetOutfileS
-*/
-__deprecated void ajGraphSetOut(AjPGraph thys, const AjPStr txt)
-{
-
-    ajGraphSetOutfileS(thys, txt);
-    return;
-}
-
-
-
-
 /* @func ajGraphSetSubtitleC **************************************************
 **
 ** Set the graph subtitle.
@@ -4988,6 +4322,8 @@ __deprecated void ajGraphSetOut(AjPGraph thys, const AjPStr txt)
 ** @param [u] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] txt [const char*]  Subtitle.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5001,26 +4337,15 @@ void ajGraphSetSubtitleC(AjPGraph thys, const char* txt)
 
 
 
-/* @obsolete ajGraphSetSubTitleC
-** @rename ajGraphSetSubtitleC
-*/
-
-__deprecated void ajGraphSetSubTitleC(AjPGraph thys, const char* title)
-{
-    ajGraphSetSubtitleC(thys, title);
-    return;
-}
-
-
-
-
-/* @func ajGraphSetSubtitleS ***************************************************
+/* @func ajGraphSetSubtitleS **************************************************
 **
 **  Set the title for the Y axis.
 **
 ** @param [u] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] str [const AjPStr] Subtitle
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5034,26 +4359,15 @@ void ajGraphSetSubtitleS(AjPGraph thys, const AjPStr str)
 
 
 
-/* @obsolete ajGraphSetSubTitle
-** @rename ajGraphSetSubtitleS
-*/
-
-__deprecated void ajGraphSetSubTitle(AjPGraph thys, const AjPStr title)
-{
-    ajGraphSetSubtitleS(thys, title);
-    return;
-}
-
-
-
-
-/* @func ajGraphSetTitleC ***************************************************
+/* @func ajGraphSetTitleC *****************************************************
 **
 ** Set the graph Title.
 **
 ** @param [u] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] txt [const char*]  title.
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -5069,13 +4383,15 @@ void ajGraphSetTitleC(AjPGraph thys, const char* txt)
 
 
 
-/* @func ajGraphSetTitleS ******************************************************
+/* @func ajGraphSetTitleS *****************************************************
 **
 ** Set the graph title.
 **
 ** @param [u] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] str [const AjPStr]  Title.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5091,19 +4407,6 @@ void ajGraphSetTitleS(AjPGraph thys, const AjPStr str)
 
 
 
-/* @obsolete ajGraphSetTitle
-** @rename ajGraphSetTitleS
-*/
-
-__deprecated void ajGraphSetTitle(AjPGraph thys, const AjPStr title)
-{
-    ajGraphSetTitleS(thys, title);
-    return;
-}
-
-
-
-
 /* @func ajGraphSetXlabelC ****************************************************
 **
 ** Set the title for the X axis for multiple plot on one graph.
@@ -5111,6 +4414,8 @@ __deprecated void ajGraphSetTitle(AjPGraph thys, const AjPStr title)
 ** @param [u] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] txt [const char*] title for the x axis.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5124,26 +4429,15 @@ void ajGraphSetXlabelC(AjPGraph thys, const char* txt)
 
 
 
-/* @obsolete ajGraphSetXTitleC
-** @rename ajGraphSetXlabelC
-*/
-
-__deprecated void ajGraphSetXTitleC(AjPGraph thys, const char* title)
-{
-    ajGraphSetXlabelC(thys, title);
-    return;
-}
-
-
-
-
-/* @func ajGraphSetXlabelS *****************************************************
+/* @func ajGraphSetXlabelS ****************************************************
 **
 ** Set the title for the X axis for multiple plots on one graph.
 **
 ** @param [u] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] str [const AjPStr] title for the x axis.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5157,19 +4451,6 @@ void ajGraphSetXlabelS(AjPGraph thys, const AjPStr str)
 
 
 
-/* @obsolete ajGraphSetXTitle
-** @rename ajGraphSetXlabelS
-*/
-
-__deprecated void ajGraphSetXTitle(AjPGraph thys, const AjPStr title)
-{
-    ajGraphSetXlabelS(thys, title);
-    return;
-}
-
-
-
-
 /* @func ajGraphSetYlabelC ****************************************************
 **
 ** Set the title for the Y axis for multiple plots on one graph.
@@ -5177,6 +4458,8 @@ __deprecated void ajGraphSetXTitle(AjPGraph thys, const AjPStr title)
 ** @param [u] thys  [AjPGraph] Graph structure to store info in.
 ** @param [r] txt [const char*] title for the y axis.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5190,26 +4473,15 @@ void ajGraphSetYlabelC(AjPGraph thys, const char* txt)
 
 
 
-/* @obsolete ajGraphSetYTitleC
-** @rename ajGraphSetYlabelC
-*/
-
-__deprecated void ajGraphSetYTitleC(AjPGraph thys, const char* title)
-{
-    ajGraphSetYlabelC(thys, title);
-    return;
-}
-
-
-
-
-/* @func ajGraphSetYlabelS *****************************************************
+/* @func ajGraphSetYlabelS ****************************************************
 **
 ** Set the title for the Y axis for multiple plots on one graph.
 **
 ** @param [u] thys  [AjPGraph] Graph structure to store info in.
 ** @param [r] str [const AjPStr] title for the y axis.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5223,19 +4495,6 @@ void ajGraphSetYlabelS(AjPGraph thys, const AjPStr str)
 
 
 
-/* @obsolete ajGraphSetYTitle
-** @rename ajGraphSetYlabelS
-*/
-
-__deprecated void ajGraphSetYTitle(AjPGraph thys, const AjPStr title)
-{
-    ajGraphSetYlabelS(thys, title);
-    return;
-}
-
-
-
-
 /* @func ajGraphShowSubtitle **************************************************
 **
 ** Set whether the graph is to display the subtitle.
@@ -5243,6 +4502,8 @@ __deprecated void ajGraphSetYTitle(AjPGraph thys, const AjPStr title)
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5256,19 +4517,6 @@ void ajGraphShowSubtitle(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphSetSubTitleDo
-** @rename ajGraphShowSubtitle
-*/
-
-__deprecated void ajGraphSetSubTitleDo(AjPGraph thys, AjBool set)
-{
-    ajGraphShowSubtitle(thys, set);
-    return;
-}
-
-
-
-
 /* @func ajGraphShowTitle *****************************************************
 **
 ** Set whether the graph is to display the title.
@@ -5276,24 +4524,12 @@ __deprecated void ajGraphSetSubTitleDo(AjPGraph thys, AjBool set)
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 void ajGraphShowTitle(AjPGraph thys, AjBool set)
-{
-    ajGraphSetFlag(thys, AJGRAPH_TITLE, set);
-
-    return;
-}
-
-
-
-
-/* @obsolete ajGraphSetTitleDo
-** @rename ajGraphShowTitle
-*/
-
-__deprecated void ajGraphSetTitleDo(AjPGraph thys, AjBool set)
 {
     ajGraphSetFlag(thys, AJGRAPH_TITLE, set);
 
@@ -5340,7 +4576,7 @@ __deprecated void ajGraphSetTitleDo(AjPGraph thys, AjBool set)
 
 
 
-/* @func ajGraphGetParamsPage **************************************************
+/* @func ajGraphGetParamsPage *************************************************
 **
 ** Get the output page parameters stored in a graph object
 **
@@ -5355,6 +4591,8 @@ __deprecated void ajGraphSetTitleDo(AjPGraph thys, AjBool set)
 ** @param [u] yoff [ajint *] where to store the y offset
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5398,6 +4636,8 @@ void ajGraphGetParamsPage(const AjPGraph thys,
 **
 ** @param [r] thys [const AjPGraph] Graph object.
 ** @return [const char*] Subtitle
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5412,23 +4652,14 @@ const char* ajGraphGetSubtitleC(const AjPGraph thys)
 
 
 
-/* @obsolete ajGraphGetSubTitleC
-** @rename ajGraphGetSubtitleC
-*/
-__deprecated const char* ajGraphGetSubTitleC(const AjPGraph thys)
-{
-    return ajGraphGetSubtitleC(thys);
-}
-
-
-
-
 /* @func ajGraphGetSubtitleS **************************************************
 **
 ** Return plot subtitle
 **
 ** @param [r] thys [const AjPGraph] Graph object.
 ** @return [const AjPStr] Subtitle
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5441,23 +4672,14 @@ const AjPStr ajGraphGetSubtitleS(const AjPGraph thys)
 
 
 
-/* @obsolete ajGraphGetSubTitle
-** @rename ajGraphGetSubtitleS
-*/
-__deprecated const AjPStr ajGraphGetSubTitle(const AjPGraph thys)
-{
-    return ajGraphGetSubtitleS(thys);
-}
-
-
-
-
 /* @func ajGraphGetTitleC *****************************************************
 **
 ** Return plot title
 **
 ** @param [r] thys [const AjPGraph] Graph object.
 ** @return [const char*] Title
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -5478,21 +4700,12 @@ const char* ajGraphGetTitleC(const AjPGraph thys)
 **
 ** @param [r] thys [const AjPGraph] Graph object.
 ** @return [const AjPStr] Title
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 const AjPStr ajGraphGetTitleS(const AjPGraph thys)
-{
-    return thys->title;
-}
-
-
-
-
-/* @obsolete ajGraphGetTitle
-** @rename ajGraphGetTitleS
-*/
-__deprecated const AjPStr ajGraphGetTitle(const AjPGraph thys)
 {
     return thys->title;
 }
@@ -5506,6 +4719,8 @@ __deprecated const AjPStr ajGraphGetTitle(const AjPGraph thys)
 **
 ** @param [r] thys [const AjPGraph] Graph object.
 ** @return [const char*] Title of x-axis
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5520,23 +4735,14 @@ const char* ajGraphGetXlabelC(const AjPGraph thys)
 
 
 
-/* @obsolete ajGraphGetXTitleC
-** @rename ajGraphGetXlabelC
-*/
-__deprecated const char* ajGraphGetXTitleC(const AjPGraph thys)
-{
-    return ajGraphGetXlabelC(thys);
-}
-
-
-
-
-/* @func ajGraphGetXlabelS *****************************************************
+/* @func ajGraphGetXlabelS ****************************************************
 **
 ** Return plot x-axis label
 **
 ** @param [r] thys [const AjPGraph] Graph object.
 ** @return [const AjPStr] Title of x-axis
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5548,23 +4754,14 @@ const AjPStr ajGraphGetXlabelS(const AjPGraph thys)
 
 
 
-/* @obsolete ajGraphGetXTitle
-** @rename ajGraphGetXlabelS
-*/
-__deprecated const AjPStr ajGraphGetXTitle(const AjPGraph thys)
-{
-    return thys->xaxis;
-}
-
-
-
-
-/* @func ajGraphGetYlabelC ************************************************
+/* @func ajGraphGetYlabelC ****************************************************
 **
 ** Return plot y-axis label
 **
 ** @param [r] thys [const AjPGraph] Graph object.
 ** @return [const char*] Title of y-axis
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5579,24 +4776,14 @@ const char* ajGraphGetYlabelC(const AjPGraph thys)
 
 
 
-/* @obsolete ajGraphGetYTitleC
-** @rename ajGraphGetYlabelC
-*/
-__deprecated const char* ajGraphGetYTitleC(const AjPGraph thys)
-{
-    return  ajGraphGetYlabelC(thys);
-}
-
-
-
-
-
-/* @func ajGraphGetYlabelS *****************************************************
+/* @func ajGraphGetYlabelS ****************************************************
 **
 ** Return plot y-axis label
 **
 ** @param [r] thys [const AjPGraph] Graph object.
 ** @return [const AjPStr] Title of y-axis
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5608,24 +4795,15 @@ const AjPStr ajGraphGetYlabelS(const AjPGraph thys)
 
 
 
-/* @obsolete ajGraphGetYTitle
-** @rename ajGraphGetYlabelS
-*/
-__deprecated const AjPStr ajGraphGetYTitle(const AjPGraph thys)
-{
-    return thys->yaxis;
-}
 
-
-
-
-
-/* @func ajGraphIsData **************************************************
+/* @func ajGraphIsData ********************************************************
 **
 ** returns ajTrue if the graph is creating a data file
 **
 ** @param [r] thys [const AjPGraph] Graph object
 ** @return [AjBool] ajTrue if the graph is of type data
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -5684,6 +4862,8 @@ AjBool ajGraphIsData(const AjPGraph thys)
 ** @param [r] colour [ajint] Colour code (see PLPLOT)
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -5725,7 +4905,7 @@ void ajGraphAddLine(AjPGraph thys, float x, float y,
 
 
 
-/* @func ajGraphAddRect ****************************************************
+/* @func ajGraphAddRect *******************************************************
 **
 ** Add a Rectangle to be drawn when the graph is plotted, fill states whether
 ** the rectangle should be filled in.
@@ -5739,6 +4919,8 @@ void ajGraphAddLine(AjPGraph thys, float x, float y,
 ** @param [r] fill [ajint] Fill code (see PLPLOT)
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -5796,6 +4978,8 @@ void ajGraphAddRect(AjPGraph thys, float x, float y,
 ** @param [r] txt [const char*] Text
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5837,19 +5021,6 @@ void ajGraphAddTextC(AjPGraph thys, float x, float y,
 
 
 
-/* @obsolete ajGraphAddText
-** @rename ajGraphAddTextC
-*/
-__deprecated void ajGraphAddText(AjPGraph thys, float x, float y,
-		       ajint colour, const char *txt)
-{
-    ajGraphAddTextC(thys, x, y, colour, txt);
-    return;
-}
-
-
-
-
 /* @func ajGraphAddTextS ******************************************************
 **
 ** Add text to be drawn when the graph is plotted.
@@ -5861,6 +5032,8 @@ __deprecated void ajGraphAddText(AjPGraph thys, float x, float y,
 ** @param [r] str [const AjPStr] Text
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5914,6 +5087,8 @@ void ajGraphAddTextS(AjPGraph thys, float x, float y,
 ** @param [r] txt [const char*] Text
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -5957,21 +5132,6 @@ void ajGraphAddTextScaleC(AjPGraph thys, float x, float y,
 
 
 
-/* @obsolete ajGraphAddTextScale
-** @rename ajGraphAddTextScaleC
-*/
-__deprecated void ajGraphAddTextScale(AjPGraph thys, float xx1, float yy1,
-                                      ajint colour, float scale,
-                                      const char *txt)
-{
-
-    ajGraphAddTextScaleC(thys, xx1, yy1, colour, scale, txt);
-    return;
-}
-
-
-
-
 /* @func ajGraphAddTextScaleS *************************************************
 **
 ** Add text to be drawn when the graph is plotted.
@@ -5984,6 +5144,8 @@ __deprecated void ajGraphAddTextScale(AjPGraph thys, float xx1, float yy1,
 ** @param [r] str [const AjPStr] Text
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6027,13 +5189,15 @@ void ajGraphAddTextScaleS(AjPGraph thys, float x, float y,
 
 
 
-/* @funcstatic GraphDraw ***************************************************
+/* @funcstatic GraphDraw ******************************************************
 **
 ** Display the drawable objects connected to this graph.
 **
 ** @param [r] thys [const AjPGraph] Graph object
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -6119,13 +5283,15 @@ static void GraphDraw(const AjPGraph thys)
 
 
 
-/* @funcstatic GraphPrint **************************************************
+/* @funcstatic GraphPrint *****************************************************
 **
 ** Print all the drawable objects in readable form.
 **
 ** @param [r] thys [const AjPGraph] Graph object
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -6178,6 +5344,8 @@ static void GraphPrint(const AjPGraph thys)
 **
 ** @param [r] thys [const AjPGraph] Graph object
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6261,7 +5429,7 @@ void ajGraphTrace(const AjPGraph thys)
 
 
 
-/* @func ajGraphDataAdd ****************************************************
+/* @func ajGraphDataAdd *******************************************************
 **
 ** Add another graph structure to the multiple graph structure.
 **
@@ -6271,6 +5439,8 @@ void ajGraphTrace(const AjPGraph thys)
 ** @param [u] thys [AjPGraph] multiple graph structure.
 ** @param [u] graphdata [AjPGraphdata] graph to be added.
 ** @return [AjBool] True if graph added successfully
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -6296,7 +5466,7 @@ AjBool ajGraphDataAdd(AjPGraph thys, AjPGraphdata graphdata)
 
 
 
-/* @func ajGraphDataReplace ************************************************
+/* @func ajGraphDataReplace ***************************************************
 **
 ** Replace graph structure into the multiple graph structure.
 **
@@ -6306,6 +5476,8 @@ AjBool ajGraphDataAdd(AjPGraph thys, AjPGraphdata graphdata)
 ** @param [u] thys [AjPGraph] multiple graph structure.
 ** @param [u] graphdata [AjPGraphdata] graph to be added.
 ** @return [AjBool] True if graph added successfully
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -6323,7 +5495,7 @@ AjBool ajGraphDataReplace(AjPGraph thys, AjPGraphdata graphdata)
 
 
 
-/* @func ajGraphDataReplaceI ************************************************
+/* @func ajGraphDataReplaceI **************************************************
 **
 ** Replace one of the graph structures in the multiple graph structure.
 **
@@ -6334,6 +5506,8 @@ AjBool ajGraphDataReplace(AjPGraph thys, AjPGraphdata graphdata)
 ** @param [u] graphdata [AjPGraphdata] graph to be added.
 ** @param [r] num [ajuint] number within multiple graph.
 ** @return [AjBool] True if graph added successfully
+**
+** @release 4.1.0
 ** @@
 ******************************************************************************/
 
@@ -6394,6 +5568,8 @@ AjBool ajGraphDataReplaceI(AjPGraph thys, AjPGraphdata graphdata, ajuint num)
 **
 ** @param [r] numsets [ajuint] maximum number of graphs that can be stored.
 ** @return [AjPGraph] multiple graph structure.
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6436,6 +5612,8 @@ AjPGraph ajGraphxyNewI(ajuint numsets)
 **
 ** @param [w] pthis [AjPGraph*] Graph structure to store info in.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6470,8 +5648,6 @@ void ajGraphxyDel(AjPGraph* pthis)
                 AJFREE(graphdata->x);
             if(!graphdata->ycalc)
                 AJFREE(graphdata->y);
-            if(!graphdata->gtype)
-                ajStrDel(&graphdata->gtype);
             ajGraphdataDel(&graphdata);
         }
     }
@@ -6481,6 +5657,7 @@ void ajGraphxyDel(AjPGraph* pthis)
     ajStrDel(&thys->subtitle);
     ajStrDel(&thys->xaxis);
     ajStrDel(&thys->yaxis);
+    ajStrDel(&thys->dataname);
     ajStrDel(&thys->outputfile);
 
     ajGraphClear(thys);
@@ -6523,6 +5700,8 @@ void ajGraphxyDel(AjPGraph* pthis)
 ** @param [u] thys [AjPGraph] Multiple graph pointer.
 ** @param [r] closeit [AjBool]   Whether to close graph at the end.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -6608,6 +5787,8 @@ void ajGraphxyDisplay(AjPGraph thys, AjBool closeit)
 ** @param [u] thys [AjPGraph] Graph object
 ** @param [r] devicetype [const AjPStr] Device type
 ** @return [AjBool] ajTrue on success
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6675,17 +5856,6 @@ AjBool ajGraphxySetDevicetype(AjPGraph thys, const AjPStr devicetype)
 
 
 
-/* @obsolete ajGraphxySet
-** @rename ajGraphxySetDevicetype
-*/
-__deprecated AjBool ajGraphxySet(AjPGraph thys, const AjPStr type)
-{
-    return ajGraphxySetDevicetype(thys, type);
-}
-
-
-
-
 /* @func ajGraphxySetMinmax ***************************************************
 **
 ** Set the max and min of the data points for all graphs.
@@ -6696,6 +5866,8 @@ __deprecated AjBool ajGraphxySet(AjPGraph thys, const AjPStr type)
 ** @param [r] ymin [float]  y min.
 ** @param [r] ymax [float]  y max.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6728,19 +5900,6 @@ void ajGraphxySetMinmax(AjPGraph thys,float xmin,float xmax,
 
 
 
-/* @obsolete ajGraphxySetMaxMin
-** @rename ajGraphxySetMinmax
-*/
-__deprecated void ajGraphxySetMaxMin(AjPGraph thys,float xmin,float xmax,
-                                     float ymin,float ymax)
-{
-    ajGraphxySetMinmax(thys, xmin, xmax, ymin, ymax);
-    return;
-}
-
-
-
-
 /* @func ajGraphxySetRanges ***************************************************
 **
 ** Calculate the max and min of the data points and store them.
@@ -6749,6 +5908,8 @@ __deprecated void ajGraphxySetMaxMin(AjPGraph thys,float xmin,float xmax,
 **
 ** @param [u] thys [AjPGraph] multiple graph structure.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6851,25 +6012,15 @@ void ajGraphxySetRanges(AjPGraph thys)
 
 
 
-/* @obsolete ajGraphxyCheckMaxMin
-** @rename ajGraphxySetRanges
-*/
-__deprecated void ajGraphxyCheckMaxMin(AjPGraph thys)
-{
-    ajGraphxySetRanges(thys);
-    return;
-}
-
-
-
-
-/* @func ajGraphxySetXendF *****************************************************
+/* @func ajGraphxySetXendF ****************************************************
 **
 ** Set the end position for X in the graph.
 **
 ** @param [u] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] val  [float]  The end value for x graph coord
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6886,19 +6037,6 @@ void ajGraphxySetXendF(AjPGraph thys, float val)
 
 
 
-/* @obsolete ajGraphxySetXEnd
-** @rename ajGraphxySetXendF
-*/
-
-__deprecated void ajGraphxySetXEnd(AjPGraph thys, float val)
-{
-    ajGraphxySetXendF(thys, val);
-    return;
-}
-
-
-
-
 /* @func ajGraphxySetXrangeII *************************************************
 **
 ** Sets the X axis range with integers
@@ -6907,6 +6045,8 @@ __deprecated void ajGraphxySetXEnd(AjPGraph thys, float val)
 ** @param [r] start [ajint] start position
 ** @param [r] end [ajint] end position
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6924,27 +6064,15 @@ void ajGraphxySetXrangeII(AjPGraph thys, ajint start, ajint end)
 
 
 
-/* @obsolete ajGraphxySetXRangeII
-** @rename ajGraphxySetXrangeII
-*/
-
-__deprecated void ajGraphxySetXRangeII(AjPGraph thys, ajint start, ajint end)
-{
-    ajGraphxySetXrangeII(thys, start, end);
-
-    return;
-}
-
-
-
-
-/* @func ajGraphxySetXstartF ***************************************************
+/* @func ajGraphxySetXstartF **************************************************
 **
 ** Set the start position for X in the graph.
 **
 ** @param [u] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] val  [float] The start value for x graph coord.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6961,26 +6089,15 @@ void ajGraphxySetXstartF(AjPGraph thys, float val)
 
 
 
-/* @obsolete ajGraphxySetXStart
-** @rename ajGraphxySetXstartF
-*/
-
-__deprecated void ajGraphxySetXStart(AjPGraph thys, float val)
-{
-    ajGraphxySetXstartF(thys, val);
-    return;
-}
-
-
-
-
-/* @func ajGraphxySetYendF *****************************************************
+/* @func ajGraphxySetYendF ****************************************************
 **
 ** Set the end position for Y in the graph.
 **
 ** @param [u] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] val  [float] The start value for y graph coord.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -6997,19 +6114,6 @@ void ajGraphxySetYendF(AjPGraph thys, float val)
 
 
 
-/* @obsolete ajGraphxySetYEnd
-** @rename ajGraphxySetYendF
-*/
-
-__deprecated void ajGraphxySetYEnd(AjPGraph thys, float val)
-{
-    ajGraphxySetYendF(thys, val);
-    return;
-}
-
-
-
-
 /* @func ajGraphxySetYrangeII *************************************************
 **
 ** Sets the Y axis range with integers
@@ -7018,6 +6122,8 @@ __deprecated void ajGraphxySetYEnd(AjPGraph thys, float val)
 ** @param [r] start [ajint] start position
 ** @param [r] end [ajint] end position
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7035,27 +6141,15 @@ void ajGraphxySetYrangeII(AjPGraph thys, ajint start, ajint end)
 
 
 
-/* @obsolete ajGraphxySetYRangeII
-** @rename ajGraphxySetYrangeII
-*/
-
-__deprecated void ajGraphxySetYRangeII(AjPGraph thys, ajint start, ajint end)
-
-{
-    ajGraphxySetYrangeII(thys, start, end);
-    return;
-}
-
-
-
-
-/* @func ajGraphxySetYstartF ***************************************************
+/* @func ajGraphxySetYstartF **************************************************
 **
 ** Set the start position for Y in the graph.
 **
 ** @param [u] thys [AjPGraph] Graph structure to store info in.
 ** @param [r] val  [float] The end value for y graph coord.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7072,19 +6166,6 @@ void ajGraphxySetYstartF(AjPGraph thys, float val)
 
 
 
-/* @obsolete ajGraphxySetYStart
-** @rename ajGraphxySetYstartF
-*/
-
-__deprecated void ajGraphxySetYStart(AjPGraph thys, float val)
-{
-    ajGraphxySetYstartF(thys, val);
-    return;
-}
-
-
-
-
 /* @func ajGraphxySetflagGaps *************************************************
 **
 ** Set whether the graphs should enable gaps.
@@ -7092,6 +6173,8 @@ __deprecated void ajGraphxySetYStart(AjPGraph thys, float val)
 ** @param [u] thys [AjPGraph] Multiple graph object
 ** @param [r] set [AjBool] if true allow gaps else do not.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7117,18 +6200,6 @@ void ajGraphxySetflagGaps(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetGaps
-** @rename ajGraphxySetflagGaps
-*/
-__deprecated void ajGraphxySetGaps(AjPGraph thys, AjBool set)
-{
-    ajGraphxySetflagGaps(thys, set);
-    return;
-}
-
-
-
-
 /* @func ajGraphxySetflagOverlay **********************************************
 **
 ** Set whether the graphs should lay on top of each other.
@@ -7136,6 +6207,8 @@ __deprecated void ajGraphxySetGaps(AjPGraph thys, AjBool set)
 ** @param [u] thys [AjPGraph] Multiple graph object
 ** @param [r] set [AjBool] if true overlap else do not.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7161,25 +6234,15 @@ void ajGraphxySetflagOverlay(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetOverLap
-** @rename ajGraphxySetflagOverlay
-*/
-__deprecated void ajGraphxySetOverLap(AjPGraph thys, AjBool overlap)
-{
-    ajGraphxySetflagOverlay(thys, overlap);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowPointsCircle *********************************************
+/* @func ajGraphxyShowPointsCircle ********************************************
 **
 ** Set the graph to draw circles at the points.
 **
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7193,25 +6256,15 @@ void ajGraphxyShowPointsCircle(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetCirclePoints
-** @rename ajGraphxyShowPointsCircle
-*/
-__deprecated void ajGraphxySetCirclePoints(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowPointsCircle(thys, set);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowPointsJoin ***********************************************
+/* @func ajGraphxyShowPointsJoin **********************************************
 **
 ** Set the graph to draw lines between the points.
 **
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7225,26 +6278,15 @@ void ajGraphxyShowPointsJoin(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetJoinPoints
-** @rename ajGraphxyShowPointsJoin
-*/
-__deprecated void ajGraphxySetJoinPoints(AjPGraph thys, AjBool set)
-{
-    ajGraphSetFlag(thys, AJGRAPH_JOINPOINTS, set);
-
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowRaxis ****************************************************
+/* @func ajGraphxyShowRaxis ***************************************************
 **
 ** Set the graph is to display a right hand Y axis.
 **
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7258,26 +6300,15 @@ void ajGraphxyShowRaxis(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetYRight
-** @rename ajGraphxyShowRaxis
-*/
-
-__deprecated void ajGraphxySetYRight(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowRaxis(thys, set);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowUaxis ****************************************************
+/* @func ajGraphxyShowUaxis ***************************************************
 **
 ** Set whether the graph is to display the left X axis at the top.
 **
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7291,26 +6322,15 @@ void ajGraphxyShowUaxis(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetXTop
-** @rename ajGraphxyShowUaxis
-*/
-
-__deprecated void ajGraphxySetXTop(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowUaxis(thys,set);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowUnum *****************************************************
+/* @func ajGraphxyShowUnum ****************************************************
 **
 ** Set whether the graph is to display the labels on the upper x axis.
 **
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7324,26 +6344,15 @@ void ajGraphxyShowUnum(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetXLabelTop
-** @rename ajGraphxyShowUnum
-*/
-
-__deprecated void ajGraphxySetXLabelTop(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowUnum(thys, set);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowXaxis ****************************************************
+/* @func ajGraphxyShowXaxis ***************************************************
 **
 ** Set whether the graph is to display a bottom x axis.
 **
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7357,26 +6366,15 @@ void ajGraphxyShowXaxis(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetXBottom
-** @rename ajGraphxyShowXaxis
-*/
-
-__deprecated void ajGraphxySetXBottom(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowXaxis(thys,set);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowXgrid ****************************************************
+/* @func ajGraphxyShowXgrid ***************************************************
 **
 ** Set whether the graph is to grid the tick marks on the x axis.
 **
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7390,20 +6388,7 @@ void ajGraphxyShowXgrid(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetXGrid
-** @rename ajGraphxyShowXgrid
-*/
-
-__deprecated void ajGraphxySetXGrid(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowXgrid(thys, set);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowXinvert **************************************************
+/* @func ajGraphxyShowXinvert *************************************************
 **
 ** Set whether the graph is to display the tick marks inside the plot on
 ** the x axis.
@@ -7411,6 +6396,8 @@ __deprecated void ajGraphxySetXGrid(AjPGraph thys, AjBool set)
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7424,26 +6411,15 @@ void ajGraphxyShowXinvert(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetXInvTicks
-** @rename ajGraphxyShowXinvert
-*/
-
-__deprecated void ajGraphxySetXInvTicks(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowXinvert(thys, set);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowXlabel ***************************************************
+/* @func ajGraphxyShowXlabel **************************************************
 **
 ** Set whether the graph is to label the x axis.
 **
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7457,26 +6433,15 @@ void ajGraphxyShowXlabel(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetXLabel
-** @rename  ajGraphxyShowXlabel
-*/
-
-__deprecated void ajGraphxySetXLabel(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowXlabel(thys, set);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowXtick *************************************************
+/* @func ajGraphxyShowXtick ***************************************************
 **
 ** Set whether the graph is to display tick marks on the x axis.
 **
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7490,26 +6455,15 @@ void ajGraphxyShowXtick(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetXTick
-** @rename ajGraphxyShowXtick
-*/
-
-__deprecated void ajGraphxySetXTick(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowXtick(thys, set);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowYaxis ****************************************************
+/* @func ajGraphxyShowYaxis ***************************************************
 **
 ** Set whether the graph is to display the left Y axis.
 **
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7523,25 +6477,15 @@ void ajGraphxyShowYaxis(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetYLeft
-** @rename ajGraphxyShowYaxis
-*/
-__deprecated void ajGraphxySetYLeft(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowYaxis(thys, set);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowYgrid ****************************************************
+/* @func ajGraphxyShowYgrid ***************************************************
 **
 ** Set whether the graph is to grid the tick marks on the x axis.
 **
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7555,20 +6499,7 @@ void ajGraphxyShowYgrid(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetYGrid
-** @rename ajGraphxyShowYgrid
-*/
-
-__deprecated void ajGraphxySetYGrid(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowYgrid(thys, set);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowYinvert **************************************************
+/* @func ajGraphxyShowYinvert *************************************************
 **
 ** Set whether the graph is to display the tick marks inside the plot
 ** on the y axis.
@@ -7576,6 +6507,8 @@ __deprecated void ajGraphxySetYGrid(AjPGraph thys, AjBool set)
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7589,19 +6522,6 @@ void ajGraphxyShowYinvert(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetYInvTicks
-** @rename ajGraphxyShowYinvert
-*/
-
-__deprecated void ajGraphxySetYInvTicks(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowYinvert(thys,set);
-    return;
-}
-
-
-
-
 /* @func ajGraphxyShowYlabel **************************************************
 **
 ** Set whether the graph is to label the y axis.
@@ -7609,6 +6529,8 @@ __deprecated void ajGraphxySetYInvTicks(AjPGraph thys, AjBool set)
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7622,19 +6544,6 @@ void ajGraphxyShowYlabel(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetYLabel
-** @rename ajGraphxyShowYlabel
-*/
-
-__deprecated void ajGraphxySetYLabel(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowYlabel(thys, set);
-    return;
-}
-
-
-
-
 /* @func ajGraphxyShowYnum ****************************************************
 **
 ** Set whether the graph is to display the numbers on the left Y axis.
@@ -7642,6 +6551,8 @@ __deprecated void ajGraphxySetYLabel(AjPGraph thys, AjBool set)
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7655,26 +6566,15 @@ void ajGraphxyShowYnum(AjPGraph thys, AjBool set)
 
 
 
-/* @obsolete ajGraphxySetYLabelLeft
-** @rename ajGraphxyShowYnum
-*/
-
-__deprecated void ajGraphxySetYLabelLeft(AjPGraph thys, AjBool set)
-{
-    ajGraphxyShowYnum(thys, set);
-    return;
-}
-
-
-
-
-/* @func ajGraphxyShowYtick ****************************************************
+/* @func ajGraphxyShowYtick ***************************************************
 **
 ** Set the graph is to display tick marks on the y axis.
 **
 ** @param [u] thys [AjPGraph] graph to have flag altered
 ** @param [r]  set    [AjBool]   whether to set or turn off.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7682,20 +6582,6 @@ void ajGraphxyShowYtick(AjPGraph thys, AjBool set)
 {
     ajGraphSetFlag(thys, AJGRAPH_Y_TICK, set);
 
-    return;
-}
-
-
-
-
-/* @obsolete ajGraphxySetYTick
-** @rename ajGrapxyhShowYtick
-*/
-
-__deprecated void ajGraphxySetYTick(AjPGraph thys, AjBool set)
-{
-
-    ajGraphxyShowYtick(thys, set);
     return;
 }
 
@@ -7730,11 +6616,13 @@ __deprecated void ajGraphxySetYTick(AjPGraph thys, AjBool set)
 
 
 
-/* @func ajGraphdataNew ****************************************************
+/* @func ajGraphdataNew *******************************************************
 **
 ** Creates a new empty graph
 **
 ** @return [AjPGraphdata] New empty graph
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7751,13 +6639,15 @@ AjPGraphdata ajGraphdataNew(void)
 
 
 
-/* @func ajGraphdataNewI ***************************************************
+/* @func ajGraphdataNewI ******************************************************
 **
 ** Create and initialise the data structure for the graph with a defined
 ** number of data points.
 **
 ** @param [r] numofpoints [ajuint] Number of points
 ** @return [AjPGraphdata] Pointer to new graph structure.
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7800,12 +6690,14 @@ AjPGraphdata ajGraphdataNewI(ajuint numofpoints)
 
 
 
-/* @func ajGraphdataDel ****************************************************
+/* @func ajGraphdataDel *******************************************************
 **
 ** Destructor for a graph data object
 **
 ** @param [d] pthys [AjPGraphdata*] Graph data object
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7839,6 +6731,7 @@ void ajGraphdataDel(AjPGraphdata *pthys)
     ajStrDel(&thys->xaxis);
     ajStrDel(&thys->yaxis);
     ajStrDel(&thys->gtype);
+    ajStrDel(&thys->dataname);
     AJFREE(thys->x);
     AJFREE(thys->y);
     thys->numofobjects = 0;
@@ -7861,7 +6754,8 @@ void ajGraphdataDel(AjPGraphdata *pthys)
 ** @nam3rule Set Set internal values
 ** @nam3rule Setflag Set internal boolean flag
 ** @nam3rule Show Set whether to display an xy graph element
-** @nam4rule Colour colour [ajint] Colour code (see PLPLOT)
+** @nam4rule Colour Colour code (see PLPLOT)
+** @nam4rule Dataname Data source name
 ** @nam4rule Linetype Set the line type for this graph.
 ** @nam4rule Minmax Set min and max values
 ** @nam4rule Subtitle Graph subtitle
@@ -7895,13 +6789,15 @@ void ajGraphdataDel(AjPGraphdata *pthys)
 
 
 
-/* @func ajGraphdataSetColour **********************************************
+/* @func ajGraphdataSetColour *************************************************
 **
 ** Set the colour for the plot on one graph.
 **
 ** @param [u] graphdata [AjPGraphdata] Graph structure to store info in.
 ** @param [r] colour [ajint] colour for this plot.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7915,13 +6811,59 @@ void ajGraphdataSetColour(AjPGraphdata graphdata, ajint colour)
 
 
 
-/* @func ajGraphdataSetLinetype ********************************************
+/* @func ajGraphdataSetDatanameC **********************************************
+**
+**  Set the Subtitle.
+**
+** @param [u] graphdata  [AjPGraphdata] Graph structure to store info in.
+** @param [r] txt [const char*] Data source name
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+void ajGraphdataSetDatanameC(AjPGraphdata graphdata, const char *txt)
+{
+    ajStrAssignEmptyC(&graphdata->dataname,txt);
+
+    return;
+}
+
+
+
+
+/* @func ajGraphdataSetDatanameS **********************************************
+**
+**  Set the Subtitle.
+**
+** @param [u] graphdata  [AjPGraphdata] Graph structure to store info in.
+** @param [r] str [const AjPStr] Data source name
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+void ajGraphdataSetDatanameS(AjPGraphdata graphdata, const AjPStr str)
+{
+    ajStrAssignEmptyS(&graphdata->dataname,str);
+
+    return;
+}
+
+
+
+
+/* @func ajGraphdataSetLinetype ***********************************************
 **
 ** Set the line type for this graph.
 **
 ** @param [u] graphdata [AjPGraphdata] Graph structure to store info in.
 ** @param [r] type [ajint] Set the line type.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7935,19 +6877,7 @@ void ajGraphdataSetLinetype(AjPGraphdata graphdata, ajint type)
 
 
 
-/* @obsolete ajGraphdataSetLineType
-** @rename ajGraphdataSetLinetype
-*/
-__deprecated void ajGraphdataSetLineType(AjPGraphdata graphdata, ajint type)
-{
-    ajGraphdataSetLinetype(graphdata, type);
-    return;
-}
-
-
-
-
-/* @func ajGraphdataSetMinmax **********************************************
+/* @func ajGraphdataSetMinmax *************************************************
 **
 ** Set the max and min of the data points you wish to display.
 **
@@ -7957,6 +6887,8 @@ __deprecated void ajGraphdataSetLineType(AjPGraphdata graphdata, ajint type)
 ** @param [r] ymin [float]  y min.
 ** @param [r] ymax [float]  y max.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -7974,27 +6906,15 @@ void ajGraphdataSetMinmax(AjPGraphdata graphdata, float xmin, float xmax,
 
 
 
-/* @obsolete ajGraphdataSetMaxMin
-** @rename ajGraphdataSetMinmax
-*/
-__deprecated void ajGraphdataSetMaxMin(AjPGraphdata graphdata,
-                                       float xmin, float xmax,
-                                       float ymin, float ymax)
-{
-    ajGraphdataSetMinmax(graphdata, xmin, xmax, ymin, ymax);
-    return;
-}
-
-
-
-
-/* @func ajGraphdataSetSubtitleC *******************************************
+/* @func ajGraphdataSetSubtitleC **********************************************
 **
 **  Set the subtitle.
 **
 ** @param [u] graphdata  [AjPGraphdata] Graph structure to store info in.
 ** @param [r] txt [const char*] Sub Title
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8008,27 +6928,15 @@ void ajGraphdataSetSubtitleC(AjPGraphdata graphdata, const char *txt)
 
 
 
-/* @obsolete ajGraphdataSetSubTitleC
-** @rename ajGraphdataSetSubtitleC
-*/
-__deprecated void ajGraphdataSetSubTitleC(AjPGraphdata graphdata,
-                                          const char *title)
-{
-    ajStrAssignEmptyC(&graphdata->subtitle,title);
-
-    return;
-}
-
-
-
-
-/* @func ajGraphdataSetSubtitleS ********************************************
+/* @func ajGraphdataSetSubtitleS **********************************************
 **
 **  Set the Subtitle.
 **
 ** @param [u] graphdata  [AjPGraphdata] Graph structure to store info in.
 ** @param [r] str [const AjPStr] Sub Title
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8042,20 +6950,7 @@ void ajGraphdataSetSubtitleS(AjPGraphdata graphdata, const AjPStr str)
 
 
 
-/* @obsolete ajGraphdataSetSubTitle
-** @rename ajGraphdataSetSubtitleS
-*/
-__deprecated void ajGraphdataSetSubTitle(AjPGraphdata graphdata,
-                                         const AjPStr title)
-{
-    ajGraphdataSetSubtitleS(graphdata, title);
-    return;
-}
-
-
-
-
-/* @func ajGraphdataSetTitleC **********************************************
+/* @func ajGraphdataSetTitleC *************************************************
 **
 **  Set the title.
 **
@@ -8063,6 +6958,8 @@ __deprecated void ajGraphdataSetSubTitle(AjPGraphdata graphdata,
 ** @param [u] graphdata  [AjPGraphdata] Graph structure to store info in.
 ** @param [r] txt [const char*] Title
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8076,7 +6973,7 @@ void ajGraphdataSetTitleC(AjPGraphdata graphdata, const char *txt)
 
 
 
-/* @func ajGraphdataSetTitleS ***********************************************
+/* @func ajGraphdataSetTitleS *************************************************
 **
 **  Set the title.
 **
@@ -8084,6 +6981,8 @@ void ajGraphdataSetTitleC(AjPGraphdata graphdata, const char *txt)
 ** @param [u] graphdata  [AjPGraphdata] Graph structure to store info in.
 ** @param [r] str [const AjPStr] Title
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8091,19 +6990,6 @@ void ajGraphdataSetTitleS(AjPGraphdata graphdata, const AjPStr str)
 {
     ajStrAssignEmptyS(&graphdata->title,str);
 
-    return;
-}
-
-
-
-
-/* @obsolete ajGraphdataSetTitle
-** @rename ajGraphdataSetTitleS
-*/
-__deprecated void ajGraphdataSetTitle(AjPGraphdata graphdata,
-                                      const AjPStr title)
-{
-    ajGraphdataSetTitleS(graphdata, title);
     return;
 }
 
@@ -8120,6 +7006,8 @@ __deprecated void ajGraphdataSetTitle(AjPGraphdata graphdata,
 ** @param [r] ymin [float]  true y min.
 ** @param [r] ymax [float]  true y max.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8139,27 +7027,15 @@ void ajGraphdataSetTruescale(AjPGraphdata graphdata, float xmin, float xmax,
 
 
 
-/* @obsolete ajGraphdataSetMaxima
-** @rename ajGraphdataSetTruescale
-*/
-__deprecated void ajGraphdataSetMaxima(AjPGraphdata graphdata,
-                                       float xmin, float xmax,
-                                       float ymin, float ymax)
-{
-    ajGraphdataSetTruescale(graphdata, xmin, xmax, ymin, ymax);
-    return;
-}
-
-
-
-
-/* @func ajGraphdataSetTypeC ***********************************************
+/* @func ajGraphdataSetTypeC **************************************************
 **
 ** Set the type of the graph for data output.
 **
 ** @param [u] graphdata [AjPGraphdata] multiple graph structure.
 ** @param [r] txt [const char*]  Type e.g. "2D Plot", "Histogram".
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8173,13 +7049,15 @@ void ajGraphdataSetTypeC(AjPGraphdata graphdata,const  char* txt)
 
 
 
-/* @func ajGraphdataSetTypeS ***********************************************
+/* @func ajGraphdataSetTypeS **************************************************
 **
 ** Set the type of the graph for data output.
 **
 ** @param [u] graphdata [AjPGraphdata] multiple graph structure.
 ** @param [r] str [const AjPStr]  Type e.g. "2D Plot", "Histogram".
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8193,13 +7071,15 @@ void ajGraphdataSetTypeS(AjPGraphdata graphdata,const AjPStr str)
 
 
 
-/* @func ajGraphdataSetXlabelC *********************************************
+/* @func ajGraphdataSetXlabelC ************************************************
 **
 ** Set the title for the X axis.
 **
 ** @param [u] graphdata  [AjPGraphdata] Graph structure to store info in.
 ** @param [r] txt[const char*] title for the X axis.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8213,26 +7093,15 @@ void ajGraphdataSetXlabelC(AjPGraphdata graphdata, const char* txt)
 
 
 
-/* @obsolete ajGraphdataSetXTitleC
-** @rename ajGraphdataSetXlabelC
-*/
-__deprecated void ajGraphdataSetXTitleC(AjPGraphdata graphdata,
-                                        const char* title)
-{
-    ajGraphdataSetXlabelC(graphdata, title);
-    return;
-}
-
-
-
-
-/* @func ajGraphdataSetXlabelS **********************************************
+/* @func ajGraphdataSetXlabelS ************************************************
 **
 ** Set the title for the X axis.
 **
 ** @param [u] graphdata  [AjPGraphdata] Graph structure to store info in.
 ** @param [r] str [const AjPStr] title for the X axis.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8246,27 +7115,15 @@ void ajGraphdataSetXlabelS(AjPGraphdata graphdata, const AjPStr str)
 
 
 
-/* @obsolete ajGraphdataSetXTitle
-** @rename ajGraphdataSetXlabelS
-*/
-__deprecated void ajGraphdataSetXTitle(AjPGraphdata graphdata,
-                                       const AjPStr title)
-{
-    ajStrAssignEmptyS(&graphdata->xaxis,title);
-
-    return;
-}
-
-
-
-
-/* @func ajGraphdataSetYlabelC *********************************************
+/* @func ajGraphdataSetYlabelC ************************************************
 **
 ** Set the title for the Y axis.
 **
 ** @param [u] graphdata  [AjPGraphdata] Graph structure to store info in.
 ** @param [r] txt [const char*] title for the Y axis.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8280,26 +7137,15 @@ void ajGraphdataSetYlabelC(AjPGraphdata graphdata, const char* txt)
 
 
 
-/* @obsolete ajGraphdataSetYTitleC
-** @rename ajGraphdataSetYlabelC
-*/
-__deprecated void ajGraphdataSetYTitleC(AjPGraphdata graphdata,
-                                        const char* title)
-{
-    ajGraphdataSetYlabelC(graphdata, title);
-    return;
-}
-
-
-
-
-/* @func ajGraphdataSetYlabelS **********************************************
+/* @func ajGraphdataSetYlabelS ************************************************
 **
 ** Set the title for the Y axis.
 **
 ** @param [u] graphdata  [AjPGraphdata] Graph structure to store info in.
 ** @param [r] str [const AjPStr] title for the Y axis.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8313,26 +7159,14 @@ void ajGraphdataSetYlabelS(AjPGraphdata graphdata, const AjPStr str)
 
 
 
-/* @obsolete ajGraphdataSetYTitle
-** @rename ajGraphdataSetYlabelS
-*/
-__deprecated void ajGraphdataSetYTitle(AjPGraphdata graphdata,
-                                       const AjPStr title)
-{
-    ajStrAssignEmptyS(&graphdata->yaxis,title);
-
-    return;
-}
-
-
-
-
 /* @funcstatic GraphInit ******************************************************
 **
 ** calls plinit.
 **
 ** @param [w] thys [AjPGraph] Graph object.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8370,6 +7204,8 @@ static void GraphInit(AjPGraph thys)
 ** @param [r] page [ajint] Page number
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8397,6 +7233,8 @@ static void GraphSubPage(ajint page)
 ** @param [r] ymax [float] Maximum y axis value
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8425,6 +7263,8 @@ static void GraphWind(float xmin, float xmax, float ymin, float ymax)
 ** @param [r] ymax [float] Maximum y axis value
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8480,6 +7320,8 @@ static void GraphSetWin(float xmin, float xmax, float ymin, float ymax)
 ** @param [r] ymax [float] Maximum y axis value
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8509,6 +7351,8 @@ static void GraphSetWin2(float xmin, float xmax, float ymin, float ymax)
 ** @param [r] y [CONST float*] Array of y axis values
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8562,6 +7406,8 @@ static void GraphArray(ajuint numofpoints, float *x, float *y)
 ** @param [r] y [CONST float*] Array of y axis values
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8609,6 +7455,8 @@ static void GraphArrayGaps(ajuint numofpoints, float *x, float *y)
 ** @param [r] y [CONST ajint*] Array of y axis values
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8656,6 +7504,8 @@ static void GraphArrayGapsI(ajuint numofpoints, ajint *x, ajint *y)
 ** @param [r] y [CONST float*] Array of y axis values
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8689,6 +7539,8 @@ static void GraphFill(ajuint numofpoints, float *x, float *y)
 ** @param [r] blue [ajint] Blue value (see PLPLOT)
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8712,6 +7564,8 @@ static void GraphPen(ajint pen, ajint red, ajint green, ajint blue)
 ** Close the graph with the plplot plend command.
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -8817,7 +7671,7 @@ static void GraphClose(void)
 
 
 
-/* @func ajGraphdataAddXY ***********************************************
+/* @func ajGraphdataAddXY *****************************************************
 **
 ** Adds (x,y) data points defined in two floating point arrays
 **
@@ -8825,6 +7679,8 @@ static void GraphClose(void)
 ** @param [r] xx [const float*] X coordinates
 ** @param [r] yy [const float*] Y coordinates
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8845,19 +7701,6 @@ void ajGraphdataAddXY(AjPGraphdata graphdata,
 
 
 
-/* @obsolete ajGraphdataSetXY
-** @rename ajGraphdataAddXY
-*/
-__deprecated void ajGraphdataSetXY(AjPGraphdata graphdata,
-                                   const float *x,const float *y)
-{
-    ajGraphdataAddXY(graphdata, x, y);
-    return;
-}
-
-
-
-
 /* @func ajGraphdataAddposLine ************************************************
 **
 ** Add a line to be drawn when the graph is plotted.
@@ -8870,6 +7713,8 @@ __deprecated void ajGraphdataSetXY(AjPGraphdata graphdata,
 ** @param [r] colour [ajint] Colour code (see PLPLOT)
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8911,19 +7756,6 @@ void ajGraphdataAddposLine(AjPGraphdata graphdata, float x, float y,
 
 
 
-/* @obsolete ajGraphdataAddLine
-** @rename ajGraphdataAddposLine
-*/
-__deprecated void ajGraphdataAddLine(AjPGraphdata graphdata, float x, float y,
-			   float x2, float y2, ajint colour)
-{
-    ajGraphdataAddposLine(graphdata, x, y, x2, y2, colour);
-    return;
-}
-
-
-
-
 /* @func ajGraphdataAddposRect ************************************************
 **
 ** Add a Rectangle to be drawn when the graph is plotted, fill states whether
@@ -8938,6 +7770,8 @@ __deprecated void ajGraphdataAddLine(AjPGraphdata graphdata, float x, float y,
 ** @param [r] fill [ajint] Fill code (see PLPLOT)
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -8986,21 +7820,6 @@ void ajGraphdataAddposRect(AjPGraphdata graphdata,
 
 
 
-/* @obsolete ajGraphdataAddRect
-** @rename ajGraphdataAddposRect
-*/
-__deprecated void ajGraphdataAddRect(AjPGraphdata graphdata,
-			   float x, float y,
-			   float x2, float y2,
-			   ajint colour, ajint fill)
-{
-    ajGraphdataAddposRect(graphdata, x, y, x2, y2, colour, fill);
-    return;
-}
-
-
-
-
 /* @func ajGraphdataAddposTextC ***********************************************
 **
 ** Add Text to be drawn when the graph is plotted.
@@ -9012,6 +7831,8 @@ __deprecated void ajGraphdataAddRect(AjPGraphdata graphdata,
 ** @param [r] txt [const char*] Text to add
 1**
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -9056,20 +7877,6 @@ void ajGraphdataAddposTextC(AjPGraphdata graphdata, float x, float y,
 
 
 
-/* @obsolete ajGraphdataAddText
-** @rename ajGraphdataAddposTextC
-*/
-
-__deprecated void ajGraphdataAddText(AjPGraphdata graphdata, float x, float y,
-			   ajint colour, const char *txt)
-{
-    ajGraphdataAddposTextC(graphdata, x, y, colour, txt);
-    return;
-}
-
-
-
-
 /* @func ajGraphdataAddposTextS ***********************************************
 **
 ** Add Text to be drawn when the graph is plotted.
@@ -9081,6 +7888,8 @@ __deprecated void ajGraphdataAddText(AjPGraphdata graphdata, float x, float y,
 ** @param [r] str [const AjPStr] Text to add
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -9137,6 +7946,8 @@ void ajGraphdataAddposTextS(AjPGraphdata graphdata, float x, float y,
 ** @param [r] txt [const char*] Text to add
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -9182,20 +7993,6 @@ void ajGraphdataAddposTextScaleC(AjPGraphdata graphdata,
 
 
 
-/* @obsolete ajGraphdataAddTextScale
-** @rename ajGraphdataAddposTextScaleC
-*/
-__deprecated void ajGraphdataAddTextScale(AjPGraphdata graphdata,
-				float xx1, float yy1,
-				ajint colour, float scale, const char *txt)
-{
-    ajGraphdataAddposTextScaleC(graphdata, xx1, yy1, colour, scale, txt);
-    return;
-}
-
-
-
-
 /* @func ajGraphdataAddposTextScaleS ******************************************
 **
 ** Add Text to be drawn when the graph is plotted.
@@ -9208,6 +8005,8 @@ __deprecated void ajGraphdataAddTextScale(AjPGraphdata graphdata,
 ** @param [r] str [const AjPStr] Text to add
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -9253,7 +8052,7 @@ void ajGraphdataAddposTextScaleS(AjPGraphdata graphdata,
 
 
 
-/* @func ajGraphdataCalcXY **********************************************
+/* @func ajGraphdataCalcXY ****************************************************
 **
 ** Adds (x,y) data points defined by an x-axis start and increment
 ** and a floating point array of y-axis values.
@@ -9264,6 +8063,8 @@ void ajGraphdataAddposTextScaleS(AjPGraphdata graphdata,
 ** @param [r] incr [float] Increment
 ** @param [r] y [const float*] Y coordinates
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -9300,12 +8101,14 @@ void ajGraphdataCalcXY(AjPGraphdata graphdata, ajuint numofpoints,
 
 
 
-/* @funcstatic GraphdataInit ***********************************************
+/* @funcstatic GraphdataInit **************************************************
 **
 ** Initialise the contents of a graph object
 **
 ** @param [w] graphdata  [AjPGraphdata] Graph structure to store info in.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -9354,12 +8157,14 @@ static void GraphdataInit(AjPGraphdata graphdata)
 
 
 
-/* @func ajGraphdataTrace **************************************************
+/* @func ajGraphdataTrace *****************************************************
 **
 ** Writes debug messages to trace the contents of a graphdata object.
 **
 ** @param [r] thys [const AjPGraphdata] Graphdata object
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -9461,11 +8266,13 @@ PLPLOT CALLS *END*
 
 
 
-/* @func ajGraphicsDumpDevices *************************************************
+/* @func ajGraphicsDumpDevices ************************************************
 **
 ** Dump device options for a graph object
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -9512,12 +8319,14 @@ void ajGraphicsDumpDevices(void)
 
 
 
-/* @func ajGraphicsGetOutfiles *************************************************
+/* @func ajGraphicsGetOutfiles ************************************************
 **
 ** Information on files created for graph output
 **
 ** @param [w] files [AjPList*] List of graph files
 ** @return [ajuint] Number of files (will match length of list)
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -9574,24 +8383,14 @@ ajuint ajGraphicsGetOutfiles(AjPList* files)
 
 
 
-/* @obsolete ajGraphInfo
-** @rename ajGraphicsGetOutfiles
-*/
-
-__deprecated ajint ajGraphInfo(AjPList* files)
-{
-    return ajGraphicsGetOutfiles(files);
-}
-
-
-
-
-/* @func ajGraphicsListDevices *************************************************
+/* @func ajGraphicsListDevices ************************************************
 **
 ** Store device names for a graph object in a list
 **
 ** @param [w] list [AjPList] List to write device names to.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -9618,18 +8417,6 @@ void ajGraphicsListDevices (AjPList list)
 
 
 
-/* @obsolete ajGraphListDevices
-** @rename ajGraphicsListDevices
-*/
-__deprecated void ajGraphListDevices (AjPList list)
-{
-    ajGraphicsListDevices(list);
-    return;
-}
-
-
-
-
 /* @func ajGraphicsPrintType **************************************************
 **
 ** Print graph types
@@ -9637,6 +8424,8 @@ __deprecated void ajGraphListDevices (AjPList list)
 ** @param [u] outf [AjPFile] Output file
 ** @param [r] full [AjBool] Full report (usually ajFalse)
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 void ajGraphicsPrintType(AjPFile outf, AjBool full)
@@ -9678,18 +8467,6 @@ void ajGraphicsPrintType(AjPFile outf, AjBool full)
 
 
 
-/* @obsolete ajGraphPrintType
-** @rename ajGraphicsPrintType
-*/
-__deprecated void ajGraphPrintType(AjPFile outf, AjBool full)
-{
-    ajGraphicsPrintType(outf, full);
-    return;
-}
-
-
-
-
 /* @datasection [none] Reporting internals ************************************
 **
 ** Reporting internal values for sequence-based XY graphs
@@ -9719,11 +8496,13 @@ __deprecated void ajGraphPrintType(AjPFile outf, AjBool full)
 
 
 
-/* @func ajGraphicsxyDumpDevices ***********************************************
+/* @func ajGraphicsxyDumpDevices **********************************************
 **
 ** Dump device options for a graph object
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -9770,24 +8549,14 @@ void ajGraphicsxyDumpDevices(void)
 
 
 
-/* @obsolete ajGraphxyDumpDevices
-** @rename ajGraphicsxyDumpDevices
-*/
-__deprecated void ajGraphxyDumpDevices(void)
-{
-    ajGraphicsxyDumpDevices();
-    return;
-}
-
-
-
-
 /* @func ajGraphicsxyListDevices **********************************************
 **
 ** Store device names for a graph object in a list
 **
 ** @param [w] list [AjPList] List to write device names to.
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -9814,24 +8583,14 @@ void ajGraphicsxyListDevices (AjPList list)
 
 
 
-/* @obsolete ajGraphxyListDevices
-** @rename ajGraphicsxyListDevices
-*/
-__deprecated void ajGraphxyListDevices (AjPList list)
-{
-    ajGraphicsxyListDevices(list);
-    return;
-}
-
-
-
-
 /* @funcstatic GraphCheckFlags ************************************************
 **
 ** Prints the flags defined by bits in the input integer value.
 **
 ** @param [r] flags [ajint] flag bits
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -9903,6 +8662,8 @@ static void GraphCheckFlags(ajint flags)
 ** @param [r] x [const PLFLT*] X coordinates
 ** @param [r] y [const PLFLT*] Y coordinates
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -9926,6 +8687,8 @@ static void GraphCheckPoints(ajint n, const PLFLT *x, const PLFLT *y)
 ** @param [u] thys [AjPGraph] Multiple graph pointer.
 ** @param [r] ext [const char*] file extension
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -9949,6 +8712,8 @@ static void GraphOpenFile(AjPGraph thys, const char *ext)
 ** @param [u] thys [AjPGraph] Multiple graph pointer.
 ** @param [r] ext [const char*] file extension
 ** @return [void]
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -9986,6 +8751,8 @@ static void GraphOpenData(AjPGraph thys, const char *ext)
 ** @param [u] thys [AjPGraph] Multiple graph pointer.
 ** @param [r] ext [const char*] file extension
 ** @return [void]
+**
+** @release 4.0.0
 ** @@
 ******************************************************************************/
 
@@ -10008,6 +8775,8 @@ static void GraphOpenSimple(AjPGraph thys, const char *ext )
 ** @param [u] thys [AjPGraph] Multiple graph pointer.
 ** @param [r] ext [const char*] file extension
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10055,6 +8824,8 @@ static void GraphOpenXwin(AjPGraph thys, const char *ext )
 ** @param [r] closeit [AjBool] Close file if true
 ** @param [r] ext [const char*] file extension
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10081,6 +8852,8 @@ static void GraphxyDisplayToFile(AjPGraph thys, AjBool closeit,
 ** @param [r] closeit [AjBool] Close file if true
 ** @param [r] ext [const char*] file extension
 ** @return [void]
+**
+** @release 6.1.0
 ** @@
 ******************************************************************************/
 
@@ -10130,6 +8903,9 @@ static void GraphxyDisplayToDas(AjPGraph thys, AjBool closeit,
 	maxya = (maxya>graphdata->maxY) ? maxya : graphdata->maxY;
     }
     
+    temp = ajFmtStr("%S%s",thys->outputfile,ext);
+    outf = ajFileNewOutNameS(temp);
+
     ajFmtPrintF(outf,"<DASGFF>\n");
     ajFmtPrintF(outf,"  <GFF version=\"1.0\" href=\"url\">\n");
     ajFmtPrintF(outf,"<!DOCTYPE DASGFF SYSTEM "
@@ -10146,9 +8922,6 @@ static void GraphxyDisplayToDas(AjPGraph thys, AjBool closeit,
     {
 	graphdata = (thys->graphs)[i];
 	
-	/* open a file for dumping the data points */
-	temp = ajFmtStr("%S%d%s",thys->outputfile,i+1,ext);
-	outf = ajFileNewOutNameS(temp);
 	ajListstrPushAppend(graphData->List, temp);
 	if(!outf)
 	{
@@ -10220,6 +8993,244 @@ static void GraphxyDisplayToDas(AjPGraph thys, AjBool closeit,
 
 
 
+/* @funcstatic GraphxyDisplayToWiggle *****************************************
+**
+** A general routine for drawing graphs to wiggle output file as points.
+**
+** @param [u] thys [AjPGraph] Multiple graph pointer.
+** @param [r] closeit [AjBool] Close file if true
+** @param [r] ext [const char*] file extension
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void GraphxyDisplayToWiggle(AjPGraph thys, AjBool closeit,
+                                   const char *ext)
+{
+    AjPFile outf    = NULL;
+    AjPGraphdata graphdata  = NULL;
+    AjPStr temp;
+    AjPTime ajtime;
+    ajuint i,j;
+    float minxa = 64000.;
+    float minya = 64000.;
+    float maxxa = -64000.;
+    float maxya = -64000.;
+    ajint istart;
+    ajint iend;
+
+     ajDebug("GraphxyDisplayToWiggle '%S' '%s' %d graphs\n",
+	     thys->outputfile, ext, thys->numofgraphs);
+        
+    if(!graphData)
+    {
+	AJNEW0(graphData);
+	graphData->List = ajListstrNew();
+    }
+
+    /* Calculate maxima and minima */
+    for(i=0;i<thys->numofgraphs;i++)
+    {
+	graphdata = (thys->graphs)[i];
+	minxa = (minxa<graphdata->minX) ? minxa : graphdata->minX;
+	minya = (minya<graphdata->minY) ? minya : graphdata->minY;
+	maxxa = (maxxa>graphdata->maxX) ? maxxa : graphdata->maxX;
+	maxya = (maxya>graphdata->maxY) ? maxya : graphdata->maxY;
+    }
+    
+    temp = ajFmtStr("%S%s",thys->outputfile,ext);
+    outf = ajFileNewOutNameS(temp);
+
+    for(i=0;i<thys->numofgraphs;i++)
+    {
+	graphdata = (thys->graphs)[i];
+	
+	/* open a file for dumping the data points */
+	ajListstrPushAppend(graphData->List, temp);
+	if(!outf)
+	{
+	    ajErr("Could not open graph file %S\n",temp);
+	    return;
+	}
+	else
+	    ajDebug("Writing graph %d data to %S\n",i+1,temp);
+
+	if( ajStrGetLen(thys->title) <=1)
+	{
+	    ajFmtPrintAppS(&thys->title,"%S",
+			   ajUtilGetProgram());
+	}
+	if( ajStrGetLen(thys->subtitle) <=1)
+	{
+	    ajtime = ajTimeNewTodayFmt("report");
+	    ajFmtPrintAppS(&thys->subtitle,"%D",
+			   ajtime);
+	    ajTimeDel(&ajtime);
+	}
+
+        istart = (ajint) graphdata->minX;
+        if(istart < 1)
+            istart = 1;
+        iend = (ajint) graphdata->maxX;
+        if(iend < istart)
+            iend = istart;
+	
+	/* Dump out the data points graphdata->x[j] graphdata->y[j] */
+	for(j=0;j<graphdata->numofpoints;j++)
+        {
+ 	}
+        
+    }
+    
+    ajFileClose(&outf);
+
+    if(closeit)
+	GraphClose();
+
+    return;
+}
+
+
+
+
+/* @funcstatic GraphxyDisplayToBedgraph ***************************************
+**
+** A general routine for drawing graphs to bedgraph output file as points.
+**
+** @param [u] thys [AjPGraph] Multiple graph pointer.
+** @param [r] closeit [AjBool] Close file if true
+** @param [r] ext [const char*] file extension
+** @return [void]
+**
+** @release 6.5.0
+** @@
+******************************************************************************/
+
+static void GraphxyDisplayToBedgraph(AjPGraph thys, AjBool closeit,
+                                     const char *ext)
+{
+    AjPFile outf    = NULL;
+    AjPGraphdata graphdata  = NULL;
+    AjPStr temp;
+    AjPTime ajtime;
+    ajuint i,j;
+    float minxa = 64000.;
+    float minya = 64000.;
+    float maxxa = -64000.;
+    float maxya = -64000.;
+    ajint istart;
+    ajint iend;
+    ajint ipos;
+
+     ajDebug("GraphxyDisplayToBedgraph '%S' '%s' %d graphs\n",
+	     thys->outputfile, ext, thys->numofgraphs);
+        
+    if(!graphData)
+    {
+	AJNEW0(graphData);
+	graphData->List = ajListstrNew();
+    }
+
+    /* Calculate maxima and minima */
+    for(i=0;i<thys->numofgraphs;i++)
+    {
+	graphdata = (thys->graphs)[i];
+	minxa = (minxa<graphdata->minX) ? minxa : graphdata->minX;
+	minya = (minya<graphdata->minY) ? minya : graphdata->minY;
+	maxxa = (maxxa>graphdata->maxX) ? maxxa : graphdata->maxX;
+	maxya = (maxya>graphdata->maxY) ? maxya : graphdata->maxY;
+    }
+    
+    temp = ajFmtStr("%S%s",thys->outputfile,ext);
+    outf = ajFileNewOutNameS(temp);
+
+    ajFmtPrintF(outf, "track type=bedGraph graphType=points\n");
+    /* can also document:
+  name              trackLabel           # default is "User Track"
+  description       centerlabel          # default is "User Supplied Track"
+  visibility        full|dense|hide      # default is hide (also values 2|1|0)
+  color             RRR,GGG,BBB          # default is 255,255,255
+  altColor          RRR,GGG,BBB          # default is 128,128,128
+  priority          N                    # default is 100
+  autoScale         on|off               # default is on
+  alwaysZero        on|off               # default is off
+  gridDefault       on|off               # default is off
+  maxHeightPixels   max:default:min      # default is 128:128:11
+  graphType         bar|points           # default is bar
+  viewLimits        lower:upper          # default is range found in data
+  yLineMark         real-value           # default is 0.0
+  yLineOnOff        on|off               # default is off
+  windowingFunction maximum|mean|minimum # default is maximum
+  smoothingWindow   off|[2-16]           # default is off
+    */
+
+    for(i=0;i<thys->numofgraphs;i++)
+    {
+	graphdata = (thys->graphs)[i];
+	
+	/* open a file for dumping the data points */
+	ajListstrPushAppend(graphData->List, temp);
+	if(!outf)
+	{
+	    ajErr("Could not open graph file %S\n",temp);
+	    return;
+	}
+	else
+	    ajDebug("Writing graph %d data to %S\n",i+1,temp);
+
+	if( ajStrGetLen(thys->title) <=1)
+	{
+	    ajFmtPrintAppS(&thys->title,"%S",
+			   ajUtilGetProgram());
+	}
+	if( ajStrGetLen(thys->subtitle) <=1)
+	{
+	    ajtime = ajTimeNewTodayFmt("report");
+	    ajFmtPrintAppS(&thys->subtitle,"%D",
+			   ajtime);
+	    ajTimeDel(&ajtime);
+	}
+
+        istart = (ajint) graphdata->minX;
+        if(istart < 1)
+            istart = 1;
+        iend = (ajint) graphdata->maxX;
+        if(iend < istart)
+            iend = istart;
+	
+	/* Dump out the data points graphdata->x[j] graphdata->y[j] */
+	for(j=0;j<graphdata->numofpoints;j++)
+        {
+            ipos = ((int) graphdata->x[j]) - 1;
+            if(ajStrGetLen(graphdata->dataname))
+                ajFmtPrintF(outf, "%S %d %d %f\n",
+                            graphdata->dataname, ipos, ipos,
+                            graphdata->y[j]);
+            else if(ajStrGetLen(thys->dataname))
+                ajFmtPrintF(outf, "%S %d %d %f\n",
+                            thys->dataname, ipos, ipos,
+                            graphdata->y[j]);
+            else
+                ajFmtPrintF(outf, "%s %d %d %f\n",
+                            "unknown", ipos, ipos,
+                            graphdata->y[j]);
+ 	}
+
+    }
+    
+    ajFileClose(&outf);
+
+    if(closeit)
+	GraphClose();
+
+    return;
+}
+
+
+
+
 /* @funcstatic GraphxyDisplayToData *******************************************
 **
 ** A general routine for drawing graphs to file as points.
@@ -10228,6 +9239,8 @@ static void GraphxyDisplayToDas(AjPGraph thys, AjBool closeit,
 ** @param [r] closeit [AjBool] Close file if true
 ** @param [r] ext [const char*] file extension
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10433,6 +9446,8 @@ static void GraphxyDisplayToData(AjPGraph thys, AjBool closeit,
 ** @param [r] closeit [AjBool] Close file if true
 ** @param [r] ext [const char*] file extension
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10455,6 +9470,8 @@ static void GraphxyDisplayXwin(AjPGraph thys, AjBool closeit, const char *ext )
 **
 ** @param [w] graph [AjPGraph] multiple graph structure.
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10482,6 +9499,8 @@ static void GraphNewPlplot(AjPGraph graph)
 **
 ** @param [w] thys [AjPGraph] Empty graph object
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10515,6 +9534,8 @@ static void GraphxyNewPlplot(AjPGraph thys)
 ** @param [u] thys [AjPGraph] Multiple graph pointer.
 ** @param [r] closeit [AjBool] Close at end if true.
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10681,13 +9702,15 @@ static void GraphxyGeneral(AjPGraph thys, AjBool closeit)
 
 
 
-/* @funcstatic GraphDataPrint **********************************************
+/* @funcstatic GraphDataPrint *************************************************
 **
 ** Print all the drawable objects in readable form.
 **
 ** @param [r] graphdata [const AjPGraphdata] Graph data object
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10734,13 +9757,15 @@ static void GraphDataPrint(const AjPGraphdata graphdata)
 
 
 
-/* @funcstatic GraphDataDraw ***********************************************
+/* @funcstatic GraphDataDraw **************************************************
 **
 ** Display the drawable objects connected to this graph.
 **
 ** @param [r] graphdata [const AjPGraphdata] Graph data object
 **
 ** @return [void]
+**
+** @release 2.9.0
 ** @@
 ******************************************************************************/
 
@@ -10813,6 +9838,8 @@ static void GraphDataDraw(const AjPGraphdata graphdata)
 ** @param [r] yy2 [float] y coord of point 2
 **
 ** @return [float] The distance between the 2 points in user coordinates
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10844,6 +9871,8 @@ static float GraphDistPts(float xx1, float yy1, float xx2, float yy2)
 ** @param  [r] just [PLFLT] justification of the string.
 **                          (0=left,1=right,0.5=middle etc)
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -10890,6 +9919,8 @@ static void GraphDrawarcText(PLFLT xcentre, PLFLT ycentre,
 ** @param [r] symbol [ajint] Symbol number (see PLPLOT)
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10923,6 +9954,8 @@ static void GraphSymbols(float *xx1, float *yy1, ajuint numofdots,
 ** @param [r] txt [const char*] Text
 **
 ** @return [void]
+**
+** @release 1.0.0
 ** @@
 ******************************************************************************/
 
@@ -10948,6 +9981,8 @@ static void GraphText(float xx1, float yy1, float xx2, float yy2,
 ** Opens the first or next graphData file
 **
 ** return [void]
+**
+** @release 2.8.0
 ** @@
 ******************************************************************************/
 
@@ -10996,12 +10031,14 @@ static void GraphDatafileNext(void)
 
 
 
-/* @funcstatic GraphColourBack *************************************************
+/* @funcstatic GraphColourBack ************************************************
 **
 ** Set the background colour to either black or white depending on the
 ** current settings.
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -11025,4 +10062,1777 @@ static void GraphColourBack(void)
 }
 
 
+
+
+#ifdef AJ_COMPILE_DEPRECATED_BOOK
 #endif
+
+
+
+
+#ifdef AJ_COMPILE_DEPRECATED
+/* @obsolete ajGraphClose
+** @rename ajGraphicsClose
+*/
+__deprecated void ajGraphClose(void)
+{
+    GraphClose();
+
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphCloseWin
+** @rename ajGraphicsClose
+*/
+__deprecated void ajGraphCloseWin(void)
+{
+    GraphClose();
+
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphPlenv
+** @rename ajGraphicsPlenv
+*/
+__deprecated void ajGraphPlenv(float xmin, float xmax, float ymin, float ymax,
+		  ajint flags)
+{
+    ajGraphicsPlenv(xmin, xmax, ymin, ymax, flags);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphColourBack
+** @rename ajGraphicsResetBgcolour
+*/
+
+__deprecated void ajGraphColourBack(void)
+{
+    GraphColourBack();
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphColourFore
+** @rename ajGraphicsResetFgcolour
+*/
+
+__deprecated void ajGraphColourFore(void)
+{
+    GraphColourFore();
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetBackBlack
+** @rename ajGraphicsSetBgcolourBlack
+*/
+
+__deprecated void ajGraphSetBackBlack(void)
+{
+    ajGraphicsSetBgcolourBlack();
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetBackWhite
+** @rename ajGraphicsSetBgcolourkWhite
+*/
+
+__deprecated void ajGraphSetBackWhite(void)
+{
+    ajGraphicsSetBgcolourWhite();
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetCharScale
+** @rename ajGraphicsSetCharscale
+*/
+
+__deprecated float ajGraphSetCharScale(float scale)
+{
+    return ajGraphicsSetCharscale(scale);
+}
+
+
+
+
+/* @obsolete ajGraphSetCharSize
+** @rename ajGraphicsSetCharsize
+*/
+
+__deprecated float ajGraphSetCharSize(float size)
+{
+    return ajGraphicsSetCharsize(size);
+}
+
+
+
+
+/* @obsolete ajGraphSetDefCharSize
+** @rename ajGraphicsSetDefcharsize
+*/
+
+__deprecated float ajGraphSetDefCharSize(float size)
+{
+    return ajGraphicsSetDefcharsize(size);
+}
+
+
+
+
+/* @obsolete ajGraphSetDevice
+   @rename ajGraphicsSetDevice
+*/
+
+__deprecated void ajGraphSetDevice(const AjPGraph thys)
+{
+    ajGraphicsSetDevice(thys);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetFore
+** @rename ajGraphicsSetFgcolour
+*/
+
+__deprecated ajint ajGraphSetFore(ajint colour)
+{
+
+    return ajGraphicsSetFgcolour(colour);
+}
+
+
+
+
+/* @obsolete ajGraphSetName
+** @rename ajGraphicsSetFilename
+*/
+__deprecated void ajGraphSetName(const AjPGraph thys)
+{
+    ajGraphicsSetFilename(thys);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetFillPat
+** @rename ajGraphicsSetFillpat
+*/
+__deprecated ajint ajGraphSetFillPat(ajint style)
+{
+    return ajGraphicsSetFillpat(style);
+}
+
+
+
+
+/* @obsolete ajGraphLabel
+** @rename ajGraphicsSetLabelsC
+*/
+
+__deprecated void ajGraphLabel(const char *x, const char *y,
+                               const char *title, const char *subtitle)
+{
+    ajGraphicsSetLabelsC(x, y, title, subtitle);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetLineStyle
+** @rename ajGraphicsSetLinestyle
+*/
+__deprecated ajint ajGraphSetLineStyle(ajint style)
+{
+    return ajGraphicsSetLinestyle(style);
+}
+
+
+
+
+/* @obsolete ajGraphSetPage
+** @rename ajGraphicsSetPagesize
+*/
+__deprecated void ajGraphSetPage(ajuint width, ajuint height)
+{
+    ajGraphicsSetPagesize(width, height);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetPenWidth
+** @rename ajGraphicsSetPenwidth
+*/
+__deprecated void ajGraphSetPenWidth(float penwidth)
+{
+    ajGraphicsSetPenwidth(penwidth);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetOri
+** @rename ajGraphicsSetPortrait
+*/
+
+__deprecated void ajGraphSetOri(ajint ori)
+{
+    ajGraphicsSetPortrait(ori);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphLabelYRight
+** @rename ajGraphicsSetRlabelC
+*/
+
+__deprecated void ajGraphLabelYRight(const char *text)
+{
+    ajGraphicsSetRlabelC(text);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphGetBaseColourNuc
+** @rename ajGraphicsBasecolourNewNuc
+*/
+
+__deprecated ajint* ajGraphGetBaseColourNuc(const AjPStr codes)
+{
+    return ajGraphicsBasecolourNewNuc(codes);
+}
+
+
+
+
+/* @obsolete ajGraphGetBaseColourProt
+** @rename ajGraphicsBasecolourNewProt
+*/
+
+__deprecated ajint* ajGraphGetBaseColourProt(const AjPStr codes)
+{
+    return ajGraphicsBasecolourNewProt(codes);
+}
+
+
+
+
+/* @obsolete ajGraphGetBaseColour
+** @remove Use ajGraphicsBasecolourNewNuc or ajGraphicsBasecolourNewProt
+*/
+
+__deprecated ajint* ajGraphGetBaseColour(void)
+{
+    ajint *ret;
+
+    ret = (ajint *) AJALLOC0(sizeof(ajint)*AZ);
+
+    ret[0] = BLACK;			/* A */
+    ret[1] = BLACK;			/* B */
+    ret[2] = YELLOW;			/* C */
+    ret[3] = RED;			/* D */
+    ret[4] = RED;			/* E */
+    ret[5] = WHEAT;			/* F */
+    ret[6] = GREY;			/* G */
+    ret[7] = BLUE;			/* H */
+    ret[8] = BLACK;			/* I */
+    ret[9] = BLACK;			/* J */
+    ret[10] = BLUE;			/* K */
+    ret[11] = BLACK;			/* L */
+    ret[12] = YELLOW;			/* M */
+    ret[13] = GREEN;			/* N */
+    ret[14] = BLACK;			/* O */
+    ret[15] = BLUEVIOLET;		/* P */
+    ret[16] = GREEN;			/* Q */
+    ret[17] = BLUE;			/* R */
+    ret[18] = CYAN;			/* S */
+    ret[19] = CYAN;			/* T */
+    ret[20] = BLACK;			/* U */
+    ret[21] = BLACK;			/* V */
+    ret[22] = WHEAT;			/* W */
+    ret[23] = BLACK;			/* X */
+    ret[24] = WHEAT;			/* Y */
+    ret[25] = BLACK;			/* Z */
+    ret[26] = BLACK;			/* ? */
+    ret[27] = BLACK;			/* ?*/
+
+    return ret;
+}
+
+
+
+
+/* @obsolete ajGraphCheckColour
+** @rename ajGraphicsCheckColourS
+*/
+
+__deprecated ajint ajGraphCheckColour(const AjPStr colour)
+{
+    return ajGraphicsCheckColourS(colour);
+}
+
+
+
+
+/* @obsolete ajGraphGetColour
+** @rename ajGraphicsGetFgcolour
+*/
+
+__deprecated ajint ajGraphGetColour(void)
+{
+    return ajGraphicsGetFgcolour();
+}
+
+
+
+
+/* @obsolete ajGraphGetOut
+** @rename ajGraphicsGetParamsPage
+*/
+
+__deprecated void ajGraphGetOut(float *xp,float *yp, ajint *xleng, ajint *yleng,
+		   ajint *xoff, ajint *yoff)
+
+{
+
+    ajGraphicsGetParamsPage(xp, yp, xleng, yleng, xoff, yoff);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphGetCharSize
+** @rename ajGraphicsGetCharsize
+*/
+
+__deprecated void ajGraphGetCharSize(float *defheight, float *currentheight)
+{
+    ajGraphicsGetCharsize(defheight, currentheight);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphPartCircle
+** @rename ajGraphicsDrawarcArc
+*/
+
+__deprecated void ajGraphPartCircle(PLFLT xcentre, PLFLT ycentre, PLFLT Radius,
+		       PLFLT StartAngle, PLFLT EndAngle)
+{
+    
+    ajGraphicsDrawarcArc(xcentre, ycentre, Radius, StartAngle, EndAngle);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphRectangleOnCurve
+** @replace ajGraphicsDrawarcRect (1,2,3,4,5,6/1,2,3,5,6,4)
+*/
+
+__deprecated void ajGraphRectangleOnCurve(PLFLT xcentre, PLFLT ycentre,
+                                          PLFLT Radius, PLFLT BoxHeight,
+                                          PLFLT StartAngle, PLFLT EndAngle)
+{
+
+    ajGraphicsDrawarcRect(xcentre, ycentre, Radius,
+                          StartAngle, EndAngle, BoxHeight);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphFillRectangleOnCurve
+** @replace ajGraphicsDrawarcRectFill (1,2,3,4,5,6/1,2,3,5,6,4)
+*/
+
+__deprecated void ajGraphFillRectangleOnCurve(PLFLT xcentre, PLFLT ycentre,
+                                              PLFLT Radius,
+                                              PLFLT BoxHeight, PLFLT StartAngle,
+                                              PLFLT EndAngle)
+{
+
+    ajGraphicsDrawarcRectFill(xcentre, ycentre, Radius,
+                              StartAngle, EndAngle, BoxHeight);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphDrawTextOnCurve
+** @rename ajGraphicsDrawarcTextJustify
+*/
+
+__deprecated void ajGraphDrawTextOnCurve(PLFLT xcentre, PLFLT ycentre,
+                                         PLFLT Radius, PLFLT StartAngle,
+                                         PLFLT EndAngle,
+                                         const char *Text, PLFLT just)
+
+{
+    ajGraphicsDrawarcTextJustify(xcentre, ycentre, Radius,
+                                 StartAngle, EndAngle, Text, just);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphHoriBars
+** @rename ajGraphicsDrawbarsHoriz
+*/
+
+__deprecated void ajGraphHoriBars(ajuint numofpoints,
+                                  PLFLT *y, PLFLT *xmin, PLFLT *xmax)
+{
+    ajGraphicsDrawbarsHoriz(numofpoints,y, xmin, xmax);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphVertBars
+** @rename ajGraphicsDrawbarsVert
+*/
+
+__deprecated void ajGraphVertBars(ajuint numofpoints,
+                                  PLFLT *x, PLFLT *ymin, PLFLT *ymax)
+{
+    ajGraphicsDrawbarsVert(numofpoints, x, ymin, ymax);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphBox
+** @rename ajGraphicsDrawposBox
+*/
+
+__deprecated void ajGraphBox(PLFLT xx0, PLFLT yy0,PLFLT size)
+{
+    ajGraphicsDrawposBox(xx0, yy0, size);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphBoxFill
+** @rename ajGraphicsDrawposBoxFill
+*/
+
+__deprecated void ajGraphBoxFill(PLFLT xx0, PLFLT yy0, PLFLT size)
+{
+    ajGraphicsDrawposBoxFill(xx0, yy0, size);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphCircle
+** @rename ajGraphicsDrawposCircle
+*/
+
+__deprecated void ajGraphCircle(PLFLT xcentre, PLFLT ycentre, float radius)
+{
+    ajGraphicsDrawposCircle(xcentre, ycentre, radius);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphDia
+** @rename ajGraphicsDrawposDia
+*/
+
+__deprecated void ajGraphDia(PLFLT xx0, PLFLT yy0, PLFLT size)
+{
+    ajGraphicsDrawposDia(xx0, yy0, size);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphDiaFill
+** @rename ajGraphicsDrawposDiaFill
+*/
+
+__deprecated void ajGraphDiaFill(PLFLT xx0, PLFLT yy0, PLFLT size)
+{
+    ajGraphicsDrawposDiaFill(xx0, yy0, size);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphLine
+** @rename ajGraphicsDrawposLine
+*/
+
+__deprecated void ajGraphLine(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2)
+{
+    ajGraphicsDrawposLine(xx1, yy1, xx2, yy2);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphRect
+** @rename ajGraphicsDrawposRect
+*/
+
+__deprecated void ajGraphRect(PLFLT xx0, PLFLT yy0,PLFLT xx1, PLFLT yy1)
+{
+    ajGraphicsDrawposRect(xx0, yy0, xx1, yy1);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphRectFill
+** @rename ajGraphicsDrawposRectFill
+*/
+
+__deprecated void ajGraphRectFill(PLFLT xx0, PLFLT yy0, PLFLT xx1, PLFLT yy1)
+{
+    ajGraphicsDrawposRectFill(xx0, yy0, xx1, yy1);
+    return;
+}
+
+
+
+
+
+/* @obsolete ajGraphTextEnd
+** @rename ajGraphicsDrawposTextAtend
+*/
+
+__deprecated void ajGraphTextEnd(PLFLT x, PLFLT y, const char *text)
+{
+    ajGraphicsDrawposTextAtend(x,y,text);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphTextLine
+** @rename ajGraphicsDrawposTextAtlineJustify
+*/
+
+__deprecated void ajGraphTextLine(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
+		     const char *text, PLFLT just)
+{
+    ajGraphicsDrawposTextAtlineJustify(xx1, yy1, xx2, yy2, text, just);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphTextMid
+** @rename ajGraphicsDrawposTextAtmid
+*/
+
+__deprecated void ajGraphTextMid(PLFLT xx1, PLFLT yy1, const char *text)
+{
+    ajGraphicsDrawposTextAtmid(xx1,yy1,text);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphTextStart
+** @rename ajGraphicsDrawposTextAtstart
+*/
+
+__deprecated void ajGraphTextStart(PLFLT xx1, PLFLT yy1, const char *text)
+{
+    ajGraphicsDrawposTextAtstart(xx1,yy1,text);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphText
+** @rename ajGraphicsDrawposTextJustify
+*/
+
+__deprecated void ajGraphText(PLFLT xx1, PLFLT yy1,
+                              const char *text, PLFLT just)
+{
+    ajGraphicsDrawposTextJustify(xx1,yy1,text,just);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphTri
+** @rename ajGraphicsDrawposTri
+*/
+
+__deprecated void ajGraphTri(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
+		PLFLT x3, PLFLT y3)
+{
+    ajGraphicsDrawposTri(xx1,yy1,xx2,yy2,x3,y3);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphTriFill
+** @rename ajGraphicsDrawposTriFill
+*/
+
+__deprecated void ajGraphTriFill(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
+                                 PLFLT x3, PLFLT y3)
+{
+    ajGraphicsDrawposTriFill(xx1,yy1,xx2,yy2,x3,y3);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphDots
+** @replace ajGraphicsDrawsetDots (1,2,3/3,1,2)
+*/
+
+__deprecated void ajGraphDots(PLFLT *xx1, PLFLT *yy1, ajuint numofdots)
+{
+    ajGraphicsDrawsetDots(numofdots,xx1,yy1);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphLines
+** @replace ajGraphicsDrawsetLines (1,2,3,4,5/5,1,2,3,4)
+*/
+
+__deprecated void ajGraphLines(PLFLT *xx1, PLFLT *yy1, PLFLT *xx2, PLFLT *yy2,
+                               ajuint numoflines)
+
+{
+    ajGraphicsDrawsetLines(numoflines, xx1, yy1, xx2, yy2);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphPoly
+** @rename ajGraphicsDrawsetPoly
+*/
+
+__deprecated void ajGraphPoly(ajuint n, PLFLT *x, PLFLT *y)
+{
+    ajGraphicsDrawsetPoly(n, x, y);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphPolyFill
+** @rename ajGraphicsDrawsetPolyFill
+*/
+
+__deprecated void ajGraphPolyFill(ajuint n, PLFLT *x, PLFLT *y)
+{
+    ajGraphicsDrawsetPolyFill(n, x, y);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSymbols
+** @rename ajGraphicsDrawsetSymbols
+*/
+
+__deprecated void ajGraphSymbols( ajuint numofdots, PLFLT *xx1,PLFLT *yy1,
+                                  ajuint symbol)
+{
+    ajGraphicsDrawsetSymbols(numofdots,xx1,yy1,symbol);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphFitTextAtline
+** @rename ajGraphicsCalcCharsize
+*/
+__deprecated PLFLT ajGraphFitTextAtline(PLFLT xx1, PLFLT yy1,
+                                        PLFLT xx2, PLFLT yy2,
+                                        const char *text,
+                                        PLFLT TextHeight)
+{
+    return ajGraphicsCalcCharsize(xx1,yy1,xx2,yy2,text,TextHeight);
+}
+
+
+
+
+/* @obsolete ajComputeCoord
+** @rename ajGraphicsCalcCoord
+*/
+__deprecated PLFLT* ajComputeCoord(PLFLT xcentre, PLFLT ycentre,
+                                   PLFLT Radius, PLFLT Angle)
+{
+    return ajGraphicsCalcCoord(xcentre, ycentre, Radius, Angle);
+}
+
+
+
+
+/* @obsolete ajGraphDistPts
+** @rename ajGraphicsCalcDistance
+*/
+__deprecated PLFLT ajGraphDistPts(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2)
+{
+    return GraphDistPts(xx1, yy1, xx2, yy2);
+}
+
+
+
+
+/* @obsolete ajGraphArrayMaxMin
+** @rename ajGraphicsCalcRange
+*/
+__deprecated void ajGraphArrayMaxMin(const float *array,
+                                     ajint npoints, float *min, float *max)
+{
+    ajGraphicsCalcRange(array, npoints, min, max);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphTextHeight
+** @rename ajGraphicsCalcTextheight
+*/
+__deprecated PLFLT ajGraphTextHeight(PLFLT xx1, PLFLT yy1,
+                                     PLFLT xx2, PLFLT yy2)
+{
+    (void) xx1;
+    (void) yy1;
+    (void) xx2;
+    (void) yy2;
+    return currentcharsize;
+}
+
+
+
+
+/* @obsolete ajGraphTextLength
+** @rename ajGraphicsCalcTextlengthC
+*/
+__deprecated PLFLT ajGraphTextLength(PLFLT xx1, PLFLT yy1, PLFLT xx2, PLFLT yy2,
+                                     const char *text)
+{
+    (void) xx1;
+    (void) yy1;
+    (void) xx2;
+    (void) yy2;
+    return GraphTextLength(text);
+}
+
+
+
+
+/* @obsolete ajGraphNewPage
+** @rename ajGraphNewpage
+*/
+__deprecated void ajGraphNewPage(AjPGraph thys, AjBool resetdefaults)
+{
+    ajGraphNewpage(thys, resetdefaults);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphOpen
+** @rename ajGraphOpenFlags
+*/
+__deprecated void ajGraphOpen(AjPGraph thys, PLFLT xmin, PLFLT xmax,
+                              PLFLT ymin, PLFLT ymax, ajint flags)
+{
+    ajGraphOpenFlags(thys, xmin, xmax, ymin, ymax, flags);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphOpenPlot
+** @rename ajGraphOpenPlotset
+*/
+__deprecated void ajGraphOpenPlot(AjPGraph thys, ajuint numofsets)
+{
+    ajGraphOpenPlotset(thys, numofsets);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetTitlePlus
+** @rename ajGraphAppendTitle
+*/
+__deprecated void ajGraphSetTitlePlus(AjPGraph thys, const AjPStr title)
+{
+    ajGraphAppendTitleS(thys, title);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetDesc
+** @rename ajGraphSetDescS
+*/
+
+__deprecated void ajGraphSetDesc(AjPGraph thys, const AjPStr title)
+{
+    ajGraphSetDescS(thys, title);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSet
+** @rename ajGraphSetDevicetype
+*/
+__deprecated AjBool ajGraphSet(AjPGraph thys, const AjPStr type)
+{
+    return ajGraphSetDevicetype(thys, type);
+}
+
+
+
+
+/* @obsolete ajGraphSetDir
+** @rename ajGraphSetOutdirS
+*/
+
+__deprecated void ajGraphSetDir(AjPGraph thys, const AjPStr txt)
+{
+    ajGraphSetOutdirS(thys, txt);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetOutC
+** @rename ajGraphSetOutfileC
+*/
+__deprecated void ajGraphSetOutC(AjPGraph thys, const char* txt)
+{
+    ajGraphSetOutfileC(thys, txt);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetOut
+** @rename ajGraphSetOutfileS
+*/
+__deprecated void ajGraphSetOut(AjPGraph thys, const AjPStr txt)
+{
+
+    ajGraphSetOutfileS(thys, txt);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetSubTitleC
+** @rename ajGraphSetSubtitleC
+*/
+
+__deprecated void ajGraphSetSubTitleC(AjPGraph thys, const char* title)
+{
+    ajGraphSetSubtitleC(thys, title);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetSubTitle
+** @rename ajGraphSetSubtitleS
+*/
+
+__deprecated void ajGraphSetSubTitle(AjPGraph thys, const AjPStr title)
+{
+    ajGraphSetSubtitleS(thys, title);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetTitle
+** @rename ajGraphSetTitleS
+*/
+
+__deprecated void ajGraphSetTitle(AjPGraph thys, const AjPStr title)
+{
+    ajGraphSetTitleS(thys, title);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetXTitleC
+** @rename ajGraphSetXlabelC
+*/
+
+__deprecated void ajGraphSetXTitleC(AjPGraph thys, const char* title)
+{
+    ajGraphSetXlabelC(thys, title);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetXTitle
+** @rename ajGraphSetXlabelS
+*/
+
+__deprecated void ajGraphSetXTitle(AjPGraph thys, const AjPStr title)
+{
+    ajGraphSetXlabelS(thys, title);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetYTitleC
+** @rename ajGraphSetYlabelC
+*/
+
+__deprecated void ajGraphSetYTitleC(AjPGraph thys, const char* title)
+{
+    ajGraphSetYlabelC(thys, title);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetYTitle
+** @rename ajGraphSetYlabelS
+*/
+
+__deprecated void ajGraphSetYTitle(AjPGraph thys, const AjPStr title)
+{
+    ajGraphSetYlabelS(thys, title);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetSubTitleDo
+** @rename ajGraphShowSubtitle
+*/
+
+__deprecated void ajGraphSetSubTitleDo(AjPGraph thys, AjBool set)
+{
+    ajGraphShowSubtitle(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphSetTitleDo
+** @rename ajGraphShowTitle
+*/
+
+__deprecated void ajGraphSetTitleDo(AjPGraph thys, AjBool set)
+{
+    ajGraphSetFlag(thys, AJGRAPH_TITLE, set);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphGetSubTitleC
+** @rename ajGraphGetSubtitleC
+*/
+__deprecated const char* ajGraphGetSubTitleC(const AjPGraph thys)
+{
+    return ajGraphGetSubtitleC(thys);
+}
+
+
+
+
+/* @obsolete ajGraphGetSubTitle
+** @rename ajGraphGetSubtitleS
+*/
+__deprecated const AjPStr ajGraphGetSubTitle(const AjPGraph thys)
+{
+    return ajGraphGetSubtitleS(thys);
+}
+
+
+
+
+/* @obsolete ajGraphGetTitle
+** @rename ajGraphGetTitleS
+*/
+__deprecated const AjPStr ajGraphGetTitle(const AjPGraph thys)
+{
+    return thys->title;
+}
+
+
+
+
+/* @obsolete ajGraphGetXTitleC
+** @rename ajGraphGetXlabelC
+*/
+__deprecated const char* ajGraphGetXTitleC(const AjPGraph thys)
+{
+    return ajGraphGetXlabelC(thys);
+}
+
+
+
+
+/* @obsolete ajGraphGetXTitle
+** @rename ajGraphGetXlabelS
+*/
+__deprecated const AjPStr ajGraphGetXTitle(const AjPGraph thys)
+{
+    return thys->xaxis;
+}
+
+
+
+
+/* @obsolete ajGraphGetYTitleC
+** @rename ajGraphGetYlabelC
+*/
+__deprecated const char* ajGraphGetYTitleC(const AjPGraph thys)
+{
+    return  ajGraphGetYlabelC(thys);
+}
+
+
+
+
+/* @obsolete ajGraphGetYTitle
+** @rename ajGraphGetYlabelS
+*/
+__deprecated const AjPStr ajGraphGetYTitle(const AjPGraph thys)
+{
+    return thys->yaxis;
+}
+
+
+
+
+/* @obsolete ajGraphAddText
+** @rename ajGraphAddTextC
+*/
+__deprecated void ajGraphAddText(AjPGraph thys, float x, float y,
+		       ajint colour, const char *txt)
+{
+    ajGraphAddTextC(thys, x, y, colour, txt);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphAddTextScale
+** @rename ajGraphAddTextScaleC
+*/
+__deprecated void ajGraphAddTextScale(AjPGraph thys, float xx1, float yy1,
+                                      ajint colour, float scale,
+                                      const char *txt)
+{
+
+    ajGraphAddTextScaleC(thys, xx1, yy1, colour, scale, txt);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySet
+** @rename ajGraphxySetDevicetype
+*/
+__deprecated AjBool ajGraphxySet(AjPGraph thys, const AjPStr type)
+{
+    return ajGraphxySetDevicetype(thys, type);
+}
+
+
+
+
+/* @obsolete ajGraphxySetMaxMin
+** @rename ajGraphxySetMinmax
+*/
+__deprecated void ajGraphxySetMaxMin(AjPGraph thys,float xmin,float xmax,
+                                     float ymin,float ymax)
+{
+    ajGraphxySetMinmax(thys, xmin, xmax, ymin, ymax);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxyCheckMaxMin
+** @rename ajGraphxySetRanges
+*/
+__deprecated void ajGraphxyCheckMaxMin(AjPGraph thys)
+{
+    ajGraphxySetRanges(thys);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetXEnd
+** @rename ajGraphxySetXendF
+*/
+
+__deprecated void ajGraphxySetXEnd(AjPGraph thys, float val)
+{
+    ajGraphxySetXendF(thys, val);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetXRangeII
+** @rename ajGraphxySetXrangeII
+*/
+
+__deprecated void ajGraphxySetXRangeII(AjPGraph thys, ajint start, ajint end)
+{
+    ajGraphxySetXrangeII(thys, start, end);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetXStart
+** @rename ajGraphxySetXstartF
+*/
+
+__deprecated void ajGraphxySetXStart(AjPGraph thys, float val)
+{
+    ajGraphxySetXstartF(thys, val);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetYEnd
+** @rename ajGraphxySetYendF
+*/
+
+__deprecated void ajGraphxySetYEnd(AjPGraph thys, float val)
+{
+    ajGraphxySetYendF(thys, val);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetYRangeII
+** @rename ajGraphxySetYrangeII
+*/
+
+__deprecated void ajGraphxySetYRangeII(AjPGraph thys, ajint start, ajint end)
+
+{
+    ajGraphxySetYrangeII(thys, start, end);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetYStart
+** @rename ajGraphxySetYstartF
+*/
+
+__deprecated void ajGraphxySetYStart(AjPGraph thys, float val)
+{
+    ajGraphxySetYstartF(thys, val);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetGaps
+** @rename ajGraphxySetflagGaps
+*/
+__deprecated void ajGraphxySetGaps(AjPGraph thys, AjBool set)
+{
+    ajGraphxySetflagGaps(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetOverLap
+** @rename ajGraphxySetflagOverlay
+*/
+__deprecated void ajGraphxySetOverLap(AjPGraph thys, AjBool overlap)
+{
+    ajGraphxySetflagOverlay(thys, overlap);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetCirclePoints
+** @rename ajGraphxyShowPointsCircle
+*/
+__deprecated void ajGraphxySetCirclePoints(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowPointsCircle(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetJoinPoints
+** @rename ajGraphxyShowPointsJoin
+*/
+__deprecated void ajGraphxySetJoinPoints(AjPGraph thys, AjBool set)
+{
+    ajGraphSetFlag(thys, AJGRAPH_JOINPOINTS, set);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetYRight
+** @rename ajGraphxyShowRaxis
+*/
+
+__deprecated void ajGraphxySetYRight(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowRaxis(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetXTop
+** @rename ajGraphxyShowUaxis
+*/
+
+__deprecated void ajGraphxySetXTop(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowUaxis(thys,set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetXLabelTop
+** @rename ajGraphxyShowUnum
+*/
+
+__deprecated void ajGraphxySetXLabelTop(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowUnum(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetXBottom
+** @rename ajGraphxyShowXaxis
+*/
+
+__deprecated void ajGraphxySetXBottom(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowXaxis(thys,set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetXGrid
+** @rename ajGraphxyShowXgrid
+*/
+
+__deprecated void ajGraphxySetXGrid(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowXgrid(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetXInvTicks
+** @rename ajGraphxyShowXinvert
+*/
+
+__deprecated void ajGraphxySetXInvTicks(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowXinvert(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetXLabel
+** @rename  ajGraphxyShowXlabel
+*/
+
+__deprecated void ajGraphxySetXLabel(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowXlabel(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetXTick
+** @rename ajGraphxyShowXtick
+*/
+
+__deprecated void ajGraphxySetXTick(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowXtick(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetYLeft
+** @rename ajGraphxyShowYaxis
+*/
+__deprecated void ajGraphxySetYLeft(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowYaxis(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetYGrid
+** @rename ajGraphxyShowYgrid
+*/
+
+__deprecated void ajGraphxySetYGrid(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowYgrid(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetYInvTicks
+** @rename ajGraphxyShowYinvert
+*/
+
+__deprecated void ajGraphxySetYInvTicks(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowYinvert(thys,set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetYLabel
+** @rename ajGraphxyShowYlabel
+*/
+
+__deprecated void ajGraphxySetYLabel(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowYlabel(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetYLabelLeft
+** @rename ajGraphxyShowYnum
+*/
+
+__deprecated void ajGraphxySetYLabelLeft(AjPGraph thys, AjBool set)
+{
+    ajGraphxyShowYnum(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxySetYTick
+** @rename ajGrapxyhShowYtick
+*/
+
+__deprecated void ajGraphxySetYTick(AjPGraph thys, AjBool set)
+{
+
+    ajGraphxyShowYtick(thys, set);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataSetLineType
+** @rename ajGraphdataSetLinetype
+*/
+__deprecated void ajGraphdataSetLineType(AjPGraphdata graphdata, ajint type)
+{
+    ajGraphdataSetLinetype(graphdata, type);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataSetMaxMin
+** @rename ajGraphdataSetMinmax
+*/
+__deprecated void ajGraphdataSetMaxMin(AjPGraphdata graphdata,
+                                       float xmin, float xmax,
+                                       float ymin, float ymax)
+{
+    ajGraphdataSetMinmax(graphdata, xmin, xmax, ymin, ymax);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataSetSubTitleC
+** @rename ajGraphdataSetSubtitleC
+*/
+__deprecated void ajGraphdataSetSubTitleC(AjPGraphdata graphdata,
+                                          const char *title)
+{
+    ajStrAssignEmptyC(&graphdata->subtitle,title);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataSetSubTitle
+** @rename ajGraphdataSetSubtitleS
+*/
+__deprecated void ajGraphdataSetSubTitle(AjPGraphdata graphdata,
+                                         const AjPStr title)
+{
+    ajGraphdataSetSubtitleS(graphdata, title);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataSetTitle
+** @rename ajGraphdataSetTitleS
+*/
+__deprecated void ajGraphdataSetTitle(AjPGraphdata graphdata,
+                                      const AjPStr title)
+{
+    ajGraphdataSetTitleS(graphdata, title);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataSetMaxima
+** @rename ajGraphdataSetTruescale
+*/
+__deprecated void ajGraphdataSetMaxima(AjPGraphdata graphdata,
+                                       float xmin, float xmax,
+                                       float ymin, float ymax)
+{
+    ajGraphdataSetTruescale(graphdata, xmin, xmax, ymin, ymax);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataSetXTitleC
+** @rename ajGraphdataSetXlabelC
+*/
+__deprecated void ajGraphdataSetXTitleC(AjPGraphdata graphdata,
+                                        const char* title)
+{
+    ajGraphdataSetXlabelC(graphdata, title);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataSetXTitle
+** @rename ajGraphdataSetXlabelS
+*/
+__deprecated void ajGraphdataSetXTitle(AjPGraphdata graphdata,
+                                       const AjPStr title)
+{
+    ajStrAssignEmptyS(&graphdata->xaxis,title);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataSetYTitleC
+** @rename ajGraphdataSetYlabelC
+*/
+__deprecated void ajGraphdataSetYTitleC(AjPGraphdata graphdata,
+                                        const char* title)
+{
+    ajGraphdataSetYlabelC(graphdata, title);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataSetYTitle
+** @rename ajGraphdataSetYlabelS
+*/
+__deprecated void ajGraphdataSetYTitle(AjPGraphdata graphdata,
+                                       const AjPStr title)
+{
+    ajStrAssignEmptyS(&graphdata->yaxis,title);
+
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataSetXY
+** @rename ajGraphdataAddXY
+*/
+__deprecated void ajGraphdataSetXY(AjPGraphdata graphdata,
+                                   const float *x,const float *y)
+{
+    ajGraphdataAddXY(graphdata, x, y);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataAddLine
+** @rename ajGraphdataAddposLine
+*/
+__deprecated void ajGraphdataAddLine(AjPGraphdata graphdata, float x, float y,
+			   float x2, float y2, ajint colour)
+{
+    ajGraphdataAddposLine(graphdata, x, y, x2, y2, colour);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataAddRect
+** @rename ajGraphdataAddposRect
+*/
+__deprecated void ajGraphdataAddRect(AjPGraphdata graphdata,
+			   float x, float y,
+			   float x2, float y2,
+			   ajint colour, ajint fill)
+{
+    ajGraphdataAddposRect(graphdata, x, y, x2, y2, colour, fill);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataAddText
+** @rename ajGraphdataAddposTextC
+*/
+
+__deprecated void ajGraphdataAddText(AjPGraphdata graphdata, float x, float y,
+			   ajint colour, const char *txt)
+{
+    ajGraphdataAddposTextC(graphdata, x, y, colour, txt);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphdataAddTextScale
+** @rename ajGraphdataAddposTextScaleC
+*/
+__deprecated void ajGraphdataAddTextScale(AjPGraphdata graphdata,
+				float xx1, float yy1,
+				ajint colour, float scale, const char *txt)
+{
+    ajGraphdataAddposTextScaleC(graphdata, xx1, yy1, colour, scale, txt);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphInfo
+** @rename ajGraphicsGetOutfiles
+*/
+
+__deprecated ajint ajGraphInfo(AjPList* files)
+{
+    return ajGraphicsGetOutfiles(files);
+}
+
+
+
+
+/* @obsolete ajGraphListDevices
+** @rename ajGraphicsListDevices
+*/
+__deprecated void ajGraphListDevices (AjPList list)
+{
+    ajGraphicsListDevices(list);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphPrintType
+** @rename ajGraphicsPrintType
+*/
+__deprecated void ajGraphPrintType(AjPFile outf, AjBool full)
+{
+    ajGraphicsPrintType(outf, full);
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxyDumpDevices
+** @rename ajGraphicsxyDumpDevices
+*/
+__deprecated void ajGraphxyDumpDevices(void)
+{
+    ajGraphicsxyDumpDevices();
+    return;
+}
+
+
+
+
+/* @obsolete ajGraphxyListDevices
+** @rename ajGraphicsxyListDevices
+*/
+__deprecated void ajGraphxyListDevices (AjPList list)
+{
+    ajGraphicsxyListDevices(list);
+    return;
+}
+#endif
+
+
+#endif /* !NO_PLOT */

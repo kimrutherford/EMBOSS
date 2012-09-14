@@ -4,7 +4,7 @@ Here is a sample session with <b>ontoisobsolete</b>
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontoisobsolete edam:0000181 </b>
+% <b>ontoisobsolete edam:0195 </b>
 Report whether an ontology term id is obsolete
 Output file [stdout]: <b></b>
 
@@ -20,11 +20,11 @@ Obsolete
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>ontoisobsolete edam:0000575 </b>
+% <b>ontoisobsolete edam:0575 </b>
 Report whether an ontology term id is obsolete
 Output file [stdout]: <b></b>
 
-edam:0000575 OK
+EDAM_operation:0575 OK
 
 </pre></td></tr></table><p>
 <p>

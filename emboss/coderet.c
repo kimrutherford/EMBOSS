@@ -137,8 +137,6 @@ int main(int argc, char **argv)
             while(!ajListIterDone(iter))
             {
                 gf = ajListIterGet(iter);
-                if(ajFeatIsChild(gf))
-                    continue;
                 if(seqoutcds && ajFeatTypeMatchC(gf, "CDS"))
                 {
                     icds++;
@@ -315,7 +313,7 @@ static void coderet_put_rest(const AjPSeq seq, const AjPStr copyseq,
 
     while(*cp)
     {
-	if(islower(*cp))
+      if(islower((int)*cp))
 	{
 	    if(isup)
 	    {

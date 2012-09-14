@@ -3,6 +3,7 @@
 %author = ("ableasby" => "Bleasby",
 	   "price" => "Rice",
 	   "ilongden" => "Longden",
+	   "mschuster" => "Schuster",
     );
 
 %types = ("Ione" => "Short",
@@ -17,13 +18,39 @@
     );
 
 %names = ("Alignformats" => "AlignFormats",
-	  "Reportformats" => "ReportFormats",
-	  "Seqformats" => "SeqFormats",
-	  "Taxformats" => "TaxFormats",
-	  "Resourceformats" => "ResourceFormats",
+	  "Assemblyformats" => "AssemblyFormats",
+	  "Codonformats" => "CodonFormats",
+	  "Featformats" => "FeatFormats",
 	  "Ontologyformats" => "OntologyFormats",
+	  "Reportformats" => "ReportFormats",
+	  "Resourceformats" => "ResourceFormats",
+	  "Seqformats" => "SeqFormats",
+	  "Seqfeatformats" => "SeqfeatFormats",
+	  "Taxonformats" => "TaxonFormats",
+	  "Textformats" => "TextFormats",
+	  "Urlformats" => "UrlFormats",
+	  "Variationformats" => "VariationFormats",
+	  "Assemblyinformats" => "AssemblyInFormats",
+	  "Codoninformats" => "CodonInFormats",
+	  "Featinformats" => "FeatInFormats",
+	  "Ontologyinformats" => "OntologyInFormats",
+	  "Resourceinformats" => "ResourceInFormats",
 	  "Seqinformats" => "SeqInFormats",
-	  "Localfiles" => "LocalFiles"
+	  "Seqfeatinformats" => "SeqfeatInFormats",
+	  "Taxoninformats" => "TaxonInFormats",
+	  "Textinformats" => "TextInFormats",
+	  "Urlinformats" => "UrlInFormats",
+	  "Variationformats" => "VariationFormats",
+	  "Gcfiles" => "GeneticCodeFiles",
+	  "Localfiles" => "LocalFiles",
+	  "Graphicsdevices" => "GraphicsDevices",
+	  "Drcat" => "Drcat",
+	  "Edam" => "Edam",
+	  "Go" => "Go",
+	  "Taxon" => "Taxon",
+	  "Jaspfiles" => "JasparFiles",
+	  "Refiles" => "RebaseFiles",
+	  "Jison-programs" => "JonIsonPrograms",
     );
 
 use English;
@@ -38,6 +65,7 @@ $text =~ s/^.*BEGIN MAIN CONTENT[^>]+>//gosm;
 $text =~ s/(<\/?[Hh][Tt][Mm][Ll]>)//gosm;
 $text =~ s/(<\/?[Bb][Oo][Dd][Yy][^>]*?>)//gosm;
 $text =~ s/(<[Aa]\s+name\s*=\s*\"([^\"]+)[^>]+>)[^<]*<\/[Aa]>//gosm;
+$text =~ s/<[Aa]\s+href\s*=\s*\"([^\".]+\.html)[^>]+>([^<]+)<\/[Aa]>/[http:\/\/evolution.genetics.washington.edu\/phylip\/doc\/$1 $2]/gosm;
 $text =~ s/<[Aa]\s+href\s*=\s*\"([^\"]+)[^>]+>([^<]+)<\/[Aa]>/[$1| $2]/gosm;
 $text =~ s/(<[Hh]\d>)\s*\n\s*/$1/gosm;
 $text =~ s/\n(<\/[Hh]\d>)/$1/gosm;

@@ -1,8 +1,8 @@
 application: restover [
   documentation: "Find restriction enzymes producing a specific overhang"
   groups: "Nucleic:Restriction"
-    relations: "EDAM:0000100 topic Nucleic acid restriction"
-    relations: "EDAM:0000431 operation Restriction site recognition"
+    relations: "EDAM_topic:0100 Nucleic acid restriction"
+    relations: "EDAM_operation:0431 Restriction site recognition"
 ]
 
 section: input [
@@ -13,7 +13,7 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "DNA"
-    relations: "EDAM:0002887 data Sequence record (nucleic acid)"
+    relations: "EDAM_data:2887 Sequence record (nucleic acid)"
   ]
 
   datafile: datafile [
@@ -21,14 +21,14 @@ section: input [
     information: "Restriction enzyme data file (optional)"
     knowntype: "restriction enzyme data"
     nullok: "Y"
-    relations: "EDAM:0001518 data Restriction enzyme pattern data"
+    relations: "EDAM_data:1517 Restriction enzyme property"
   ]
 
   datafile: mfile [
     default: "Emethylsites.dat"
     information: "Restriction enzyme methylation data file"
     knowntype: "restriction enzyme methylation data"
-    relations: "EDAM:0001517 data Protein report (restriction enzyme)"
+    relations: "EDAM_data:1517 Restriction enzyme property"
   ]
 
 endsection: input
@@ -42,7 +42,7 @@ section: required [
     parameter: "Y"
     information: "Overlap sequence"
     knowntype: "nucleotide sequence"
-    relations: "EDAM:0001210 format pure nucleotide"
+    relations: "EDAM_format:1210 pure nucleotide"
   ]
 
 endsection: required
@@ -57,51 +57,51 @@ section: advanced [
     maximum: "1000"
     default: "1"
     information: "Minimum cuts per RE"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   integer: max [
     minimum: "$(min)"
     default: "2000000000"
     information: "Maximum cuts per RE"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: single [
     default: "N"
     information: "Force single site only cuts"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: threeprime [
     default: "N"
     information: "Use 3' overhang e.g. BamHI has CTAG as a 5'
                   overhang, and ApaI has CCGG as 3' overhang."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: blunt [
     default: "Y"
     information: "Allow blunt end cutters"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: sticky [
     default: "Y"
     information: "Allow sticky end cutters"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: ambiguity [
     default: "Y"
     information: "Allow ambiguous matches"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: plasmid [
     default: "N"
     information: "Allow circular DNA"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: methylation [
@@ -109,13 +109,13 @@ section: advanced [
     information: "Use methylation data"
     help: "If this is set then RE recognition sites will not match
            methylated bases."
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: commercial [
     default: "Y"
     information: "Only enzymes with suppliers"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: advanced
@@ -129,31 +129,31 @@ section: output [
     default: "N"
     information: "Create HTML output"
     outputmodifier: "Y"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: limit [
     default: "Y"
     information: "Limits reports to one isoschizomer"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: alphabetic [
     default: "N"
     information: "Sort output alphabetically"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: fragments [
     default: "N"
     information: "Show fragment lengths"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   outfile: outfile [
     parameter: "Y"
     knowntype: "restover output"
-    relations: "EDAM:0001305 data Nucleic acid features (restriction sites)"
+    relations: "EDAM_data:1305 Nucleic acid features (restriction sites)"
   ]
 
 endsection: output

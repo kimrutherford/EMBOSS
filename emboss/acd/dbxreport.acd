@@ -4,8 +4,8 @@ application: dbxreport [
   gui: "no"
   batch: "no"
   cpu: "medium"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0000228 operation Data index analysis"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:0228 Data index analysis"
 ]
 
 section: input [
@@ -20,7 +20,7 @@ section: input [
     information: "EMBOSS database name"
     knowntype: "emboss database name"
     pattern: "[A-z][A-z0-9_]+"
-    relations: "EDAM:0001056 identifier Database name"
+    relations: "EDAM_identifier:1056 Database name"
   ]
 
   string: fields [
@@ -29,14 +29,14 @@ section: input [
     information: "Index fields"
     knowntype: "emboss database field"
     help: "A list of index fields separated by spaces or commas."
-    relations: "EDAM:0002219 identifier Database field name"
+    relations: "EDAM_identifier:2219 Database field name"
   ]
 
   directory: indexdir [
     default: ""
     information: "Index directory (optional)"
     knowntype: "emboss database index"
-    relations: "EDAM:0001049 identifier Directory name"
+    relations: "EDAM_identifier:1049 Directory name"
     nullok: "Y"
     nulldefault: "Y"
   ]
@@ -58,7 +58,7 @@ section: advanced [
   boolean: fullreport [
     information: "Write full details to debug file"
     default: "N"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 
@@ -73,7 +73,7 @@ section: output [
     standard: "y"
     name: "$(dbname)"
     knowntype: "dbxreport output"
-    relations: "EDAM:0000969 data Text"
+    relations: "EDAM_data:2048 Report"
   ]
 
 endsection: output

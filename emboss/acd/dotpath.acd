@@ -4,9 +4,9 @@ application: dotpath [
   gui: "yes"
   batch: "yes"
   cpu: "high"
-    relations: "EDAM:0000159 topic Sequence comparison"
-    relations: "EDAM:0000288 operation Sequence word comparison"
-    relations: "EDAM:0000490 operation Dotplot plotting"
+    relations: "EDAM_topic:0159 Sequence comparison"
+    relations: "EDAM_operation:0288 Sequence word comparison"
+    relations: "EDAM_operation:0490 Dotplot plotting"
 ]
 
 section: input [
@@ -17,13 +17,13 @@ section: input [
   sequence: asequence [
     parameter: "y"
     type: "any"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   sequence: bsequence [
     parameter: "y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -38,7 +38,7 @@ section: required [
     default: "4"
     minimum: "2"
     information: "Word size"
-    relations: "EDAM:0001250 data Word size"
+    relations: "EDAM_data:1250 Word size"
   ]
 
 endsection: required
@@ -54,14 +54,14 @@ section: output [
     information: "Display the overlapping matches"
     help: "Displays the overlapping matches (in red) as well as the
            minimal set of non-overlapping matches"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: boxit [
     default: "Y"
     additional: "Y"
     information: "Draw a box around dotplot"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   graph: graph [
@@ -69,7 +69,7 @@ section: output [
     gtitle: "Dotpath: $(asequence.usa) vs $(bsequence.usa)"
     gxtitle: "$(bsequence.name)"
     gytitle: "$(asequence.name)"
-    relations: "EDAM:0000862 data Dotplot"
+    relations: "EDAM_data:0862 Dotplot"
   ]
 
 endsection: output

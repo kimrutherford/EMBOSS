@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -35,7 +35,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Plots isochores in DNA sequences
+Plot isochores in DNA sequences
 
 <H2>
     Description
@@ -53,7 +53,7 @@ Here is a sample session with <b>isochore</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>isochore tembl:AF129756  -graph cps </b>
-Plots isochores in DNA sequences
+Plot isochores in DNA sequences
 Output file [af129756.iso]: <b></b>
 
 Created isochore.ps
@@ -68,8 +68,8 @@ Created isochore.ps
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Plots isochores in DNA sequences
-Version: EMBOSS:6.4.0.0
+Plot isochores in DNA sequences
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional
@@ -96,7 +96,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -207,7 +210,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated sequence qualifiers
+<td align="left" colspan=5>"-sequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -276,11 +279,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -324,7 +351,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -337,7 +364,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-graph" associated xygraph qualifiers
+<td align="left" colspan=5>"-graph" associated xygraph qualifiers
 </td>
 </tr>
 
@@ -564,7 +591,7 @@ RN   [3]
 RP   1-184666
 RA   Rowen L.;
 RT   ;
-RL   Submitted (22-FEB-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (22-FEB-1999) to the INSDC.
 RL   Department of Molecular Biotechnology, Box 357730 University of Washington,
 RL   Seattle, WA 98195, USA
 XX
@@ -572,7 +599,7 @@ RN   [4]
 RP   1-184666
 RA   Rowen L.;
 RT   ;
-RL   Submitted (28-OCT-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (28-OCT-1999) to the INSDC.
 RL   Multimegabase Sequencing Center, University of Washington, PO Box 357730,
 RL   Seattle, WA 98195, USA
 
@@ -845,7 +872,7 @@ None.
 
 <tr>
 <td><a href="dan.html">dan</a></td>
-<td>Calculates nucleic acid melting temperature</td>
+<td>Calculate nucleic acid melting temperature</td>
 </tr>
 
 <tr>

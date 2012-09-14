@@ -9,14 +9,14 @@ Name    DPVweb database of plant viruses
 Desc    Information about viruses, viroids and satellites of plants, fungi and protozoa, with some additional data on related animal viruses.
 URL     http://www.dpvweb.net/
 Taxon   10239 | Viruses
-EDAMtpc 0000781 | Virus
-EDAMtpc 0000780 | Plant
-EDAMdat 0002307 | Virus annotation
-EDAMdat 0002308 | Virus annotation (taxonomy)
-EDAMid  0002733 | Genus name (virus)
-EDAMid  0002734 | Family name (virus)
-EDAMid  0002836 | DPVweb ID
-EDAMfmt 0002331 | HTML
+EDAMtpc 0781 | Viruses
+EDAMtpc 0780 | Plants
+EDAMdat 2307 | Virus annotation
+EDAMdat 2308 | Virus annotation (taxonomy)
+EDAMid  2733 | Genus name (virus)
+EDAMid  2734 | Family name (virus)
+EDAMid  2836 | DPVweb ID
+EDAMfmt 2331 | HTML
 Query    Virus annotation | HTML | DPVweb ID | http://www.dpvweb.net/dpv/showdpv.php?dpvno=%s
 Query    Virus annotation (taxonomy) | HTML | Family name (virus) | http://www.dpvweb.net/notes/showfamily.php?family=%s
 Query    Virus annotation (taxonomy) | HTML | Genus name (virus) | http://www.dpvweb.net/notes/showgenus.php?genus=%s
@@ -29,11 +29,10 @@ Name    RNA virus genome database (RNAVirusDB)
 Desc    RNA virus genome database.
 URL     http://tree.bio.ed.ac.uk/rnavirusdb
 Taxon   10239 | Viruses
-EDAMtpc 0000781 | Virus
-EDAMtpc 0000643 | Genomes
-EDAMdat 0002307 | Virus annotation
-EDAMid  0002784 | RNAVirusDB ID
-EDAMfmt 0002331 | HTML
+EDAMtpc 0781 | Viruses
+EDAMdat 2307 | Virus annotation
+EDAMid  2784 | RNAVirusDB ID
+EDAMfmt 2331 | HTML
 Query    Virus annotation | HTML | RNAVirusDB ID | http://tree.bio.ed.ac.uk/rnavirusdb/virus.php?id=%s
 Example RNAVirusDB ID | 56486
 

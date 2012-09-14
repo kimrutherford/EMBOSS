@@ -1,8 +1,499 @@
-	Version 6.4.0 15-Jul-2011
+Version 6.5.0 15-Jul-2012
+	Database definitions with multiple types and formats now check
+	that there is at least one valid format defined for each type of
+	data.
 
-	DBXFLAT can index FASTQ format short
-	read sequence files, allowing individual sequences to be rapidly
-	retrieved by name.
+	The qatest.pl script handles references to the user's home
+	directory on Windows. "~/" is replaced with the user's home
+	directory, with the full path or filename enclosed in quotes.
+
+	The qatest.pl script has a new qualifier -debug which runs the
+	test with -debug on the command line. For ACD utility tests the
+	application name is taken from the first command line parameter
+	and will not match the debug file so these will give an error for
+	an unknown .dbg file. For all other tests this is a simple way to
+	obtain debug output for a problematic test result.
+
+	EMBOSS supports soap protocol access using the Apache axis2c
+	library.  We use version 1.6.0 for testing. Installation can be
+	tricky on some systems. We are happy to help with anyone who finds
+	problems. A copy of the library is included in the initial 6.5.0.0
+	mEMBOSS build.
+
+	Date parsing for EMBL, GenBank, SwissProt, Refseq and related
+	formats has been made more robust.
+
+	New application embossupdate checks for the availability of an
+	updated EMBOSS distribution or patches from the EMBOSS website and
+	FTP server. Embossupdate can be run at the end of a successful
+	installation or reinstallation. We hope this will help our
+	users to keep their versions up to date more easily.
+
+	Feature data can be read from PIR and GCG formatted databases.
+
+	EDAM is updated to release 1.1. EDAM is used to define EMBOSS and
+	EMBASSY applications, to describe EMBOSS defined databases and
+	entries in the DRCAT data resource catalogue. This is a prerelease
+	from the EDAM team to ensure EMBOSS has the most recent set of
+	terms.
+
+	Lists and tables now support very large numbers, requiring long
+	integers (datatype ajulong) to represent the return values from
+	ajListGetLength, ajtableGetLength and ajTableGetSize. Further
+	extensions are planned in future releases.
+
+	Directory inputs now interpret ~/ or ~user/ in the user response
+	in the same way as file inputs.
+
+	Application embossversion -full now reports the versions of all
+	libraries, and all configuration settings used to compile EMBOSS,
+	plus the sizes of standard data types.
+
+	Dbxfasta has a new format "idsv" which finds sequence version
+	values if the accession number has a .number suffix.
+
+	Dbxflat creates a sequence version for UniProt entries using the
+	accession number and the sequence version from the DT records.
+
+	Dbx indexing stores secondary reference file positions only if the
+	database has more than one data file per entry. The entries file
+	records the number of files in the database and can if needed
+	store more than one reference file. Identifiers indexes can store
+	more entries per page for databases with one file (embl, uniprot),
+	but support reference files for gcg, pir and taxonomy indexing.
+
+	Dbx indexing supports separate caches for primary and secondary
+	pages. Larger caches can reduce the number of physical reads and
+	writes at the cost of a small increase in CPU time.  The organism
+	and description indexes for large databases can have terms that
+	appear in a very large numbe rof entries (e.g. 'protein' in
+	UniProt or 'bacteria' in EMBL). Secondary cache sizes up to 100k
+	can be used to try to reduce the physical page rewrites needed as
+	these indexes grow.
+
+	Dbx indexing supports a smaller size for secondary index
+	pages. These hold the lists of entry ids for indexed strings, and
+	the file offsets for non-unique identifiers (e.g. secondary
+	accession numbers). The environment variable EMBOSS_SECPAGESIZE
+	defaults to 512, a quarter of the EMBOSS_PAGESIZE value of 2048.
+	Resource definitions can specify field-specific secondary page
+	sizes using, for example accsecpagesize: "256"
+
+	Dbx indexing applications (dbxflat, dbxfasta, dbxgcg, dbxedam,
+	dbxobo, dbxresource, dbxtax) secondary index files (e.g. keyword,
+	taxonomy and description indexes) are more compact. The entry ids
+	for each keyword are stored as a simple list unless more than one
+	index page is needed. As most indexed tokens are in only a few
+	entries this saves many pages while the index is being built. The
+	compressed index size is also smaller.
+
+	Dbxflat, dbxfasta and dbxgcg now report index terms that exceed the
+	maximum length (attributes idlen, acclen, deslen, orglen, keylen,
+	svlen, gilen). Each term beyond the current maximum is
+	reported. When the run is completed, the longest term length for
+	each index field is reported so that excessively large values can
+	be reduced.
+
+	Dbxflat dbxfasta and dbxgcg have improved memory efficiency on
+	large indexing runs. Many more internal data structures are reused
+	in the parsers.
+
+	Window length options are renamed to -window consistently across
+	all EMBOSS applications. The change applies to pepwindow and
+	pepwindowall
+
+	Multiple inputs to einverted gave inconsistent results as two
+	internal variables were not reset for each new sequence.
+
+	Resource definitions for uniprot (swissresource) and embl
+	(emblresource) are updated to allow the maximum size for database
+	index keys. If the database contains longer values in future they
+	will be truncated and the maximum size found by the parser will be
+	reported by dbxflat.
+
+	New resource definitions chebiresource and sworesource are
+	provided in emboss.standard to index ontologies with
+	exceptionally large index keys.
+
+	Ontologies CHEBI, ECO, GO, PW, RO, SO are updated.
+
+	Ontology SWO is added. This is the software ontology, in its OBO
+	format. Some identifiers are really URLs.
+
+	Sequence and other databases with an organism ('org') or taxonomy
+	('tax') index can restrict retrieval to one or more indexed
+	organism names or any other indexed level in the
+	taxonomy. Examples include EMBL or UniProt whether indexed locally
+	with dbxflat or accessed through the EBI's SRS server as srs:embl
+	or srs:uniprot. A new database attribute 'organisms' can be used
+	to define one or more organisms or taxonomy levels to restrict
+	data retrieval from the master index of the complete file. A value
+	using EMBOSS query syntax of "rattus|mus" will allow data from
+	both genera to be retrieved. Values can also be separated by tabs,
+	commas ',' or semicolons ';' As organisms can include spaces we
+	chose not to allow space as a delimiter. The organisms attribute
+	is implemented for method "emboss" and "srswww" to allow remote
+	retrieval. We can implement organisms for other access methods if
+	there is a demand from the user community,
+
+	Ontology databases can combine more than one branch of an ontology
+	in a single file. Examples include the Gene Ontology (GO) with
+	namespaces for cellular_location molecular_function and
+	biological_process and EDAM with data, format, identifier,
+	operation and topic. A new database attribute 'namespace' can be
+	used to define one or more namespaces to restrict data retrieval
+	from the master index of the complete file. This is tricky for
+	EDAM data which is in the data or identifier namespaces. A value
+	using EMBOSS query syntax of "data|identifier" or spaced with
+	"data identifier" will allow data from both namespaces to be
+	retrieved. The namespace attribute is implemented for method
+	"emboss" (how the ontologies are indexed in the distribution) and
+	"srswww" to allow remote retrieval. We can implement namespace for
+	other access methods if there is a demand from the user community,
+
+	EDAM release 1.0 is included. Major changes were needed to EMBOSS
+	internals as the identifiers are all changed (different term ID
+	number and different prefix). ACD files and the DRCAT data
+	resource catalogue are updated with the nearest equivalent terms
+	from EDAM 1.0.
+
+	Assembly data is now loaded a few records at a time using a new
+	"loader" object. This allows very large files to be processed in
+	chunks.
+
+	Variation data is now loaded a few records at a time using a new
+	"loader" object. This allows very large files to be processed in
+	chunks.
+
+	Support for BioPerl/Open-Bio OBDA flatfile indexes is included as
+	database access method 'obda'. The indexing in BioPerl 1.6 is
+	broken for EMBL as the semicolon is not removed from
+	identifiers. The secondary index files have duplicated
+	records. Both problems should be fixed in a future BioPerl
+	release. Note also that OBDA indexing parses only the primary
+	accession number so that other accessions are not retrievable from
+	OBDA index files.
+
+	EMBL entries with a single (source) feature could ignore the
+	feature.
+
+	Output files for fuzznuc, fuzzpro, fuzztran, dreg and preg
+	included the pattern name and the pattern string in the last
+	release. The output format is changed to remove the space between
+	the pattern name and string so that parsers see the expected number
+	of space-delimited fields in the output.
+
+	The query language parser has been rewritten to handle the new
+	-iquery and -ioffset qualifiers. Badly formed queries may now
+	produce different error messages.
+
+	Any input type that uses queries, with the exception or URL
+	inputs, can use two new associated qualifiers. -ioffset is the
+	initial non-zero offset when reading from a file or a
+	URL. -iquery if the query field which can be applied to an FTP or
+	HTTP URL or to any query in a list file. These names also apply to
+	sequence and feature input where other qualifiers begin with 's'
+	and 'f' respectively.
+
+	FTP and HTTP URLs can now be used directly as input queries for
+	all data types in place of file names. EMBOSS automatically
+	detects the ftp:// or http:// prefix and uses the appropriate
+	protocol. Any query or offset is ignored as there is no way to
+	distinguish these from a genuine part of the URL.
+
+	Patterns for fuzznuc, fuzzpro and fuzztran can include escaped
+	codes to skip the expansion of ambiguity codes and look for them
+	explicitly in the input. A backslash (shells may need two) before
+	the code specifies an exact match, for example \S will only match
+	S in the input.
+
+	Patterns for fuzznuc with ambiguity codes are now expanded to
+	include the ambiguity code (and any overlapped ambiguity
+	codes). For example, S matches [GCS] and B (not A) matches
+	[TGCBSYK]
+
+	A new AJAX source file ajtagval.c handles general tag-value pairs
+	of strings which have uses beyond feature internals.
+
+	Pepwheel can plot up to 5 sets of residues, with a total of
+	"steps" at each level. Leucine zipper plots with a step of 7 and 2
+	turns required more residues to be visible. The updated pepwheel
+	rescales the size of the inner wheel to allow more residues to be
+	displayed.
+
+	Sequence and assembly reading in BAM format always fails if no
+	match as found in the first pass - attempting to read again could
+	loop with the same result as the file is rewound. Rereading is
+	intended for text formats such as FASTA where the next entry may
+	match.
+
+	Header files in AJAX and NUCLEUS have been cleaned to remove
+	redundant references. A new include file ajlib.h includes the core
+	set of ajdefine, ajarch, ajmem, ajmess, ajfmt and ajstr which were
+	almost universally included. Applications are expected to use
+	emboss.h as their only include, but references to ajax.h and
+	emboss.h in the libraries are now all replaced with the minimally
+	required set of include files.
+
+	The server.entrez file has been updated using a script
+	serverentrez.pl which queries Eutils to obtain a list of database
+	names and fields. An internal array is used to define the
+	datatypes and formats for each database as these are defined only
+	in a series of HTML tables in other pages.
+
+	Reading from the NCBI Entrez server failed. The cause was trimming
+	newlines from a reference-counted string where the data returned
+	has CR-LF format but only one character was removed.
+
+	New xygraph output device support for datafile formats. "bedgraph"
+	outputs in BedGraph format. "wig" outputs in Wiggle format.
+
+	The "sequence" attribute is implemented for xygraph outputs.  If
+	set true, the X-axis label defaults to the name of the first input
+	and the source name used in datafile outputs is also the name of
+	the first input.
+
+	Dottup and dotmatcher now have the first sequence on the X axis
+	and the second on the Y axis. This follows standards for datafile
+	output of graphical data which default to the X axis relating to
+	the first input sequence.
+
+	Dbx index files from earlier releases defaulted to "secondary"
+	indexes. The test for an index with no "Type" parameter defined
+	now picks up the standard Identifier indexed fields (id, acc, sv
+	and gi) correctly. The files were identified by field name, but
+	the test was using the file extension.
+
+	Fuzznuc, fuzzpro, fuzztran, dreg and preg when searching with a
+	regular expression found only the largest possible match at each
+	start position. A new function in recent releases of the PCRE
+	regular expression library supports searching for all matches
+	using function ajRegExecallC instead of ajRegExecC. These
+	applications can now find all overlapping matches to a pattern
+	using a regular expression.
+
+	The PCRE library is updated to include the pcre_dfa_exec
+	function. This is called by ajRegExecall and ajRegExecallC. The
+	regular expression can be compiled as usual. The new calls set an
+	internal value to the number of matches found, retrievable by
+	ajRegGetMatches. Offsets (ajRegOffsetI) and substrings (ajRegSubI)
+	return these matches, starting at zero which is the longest match
+	(the same as in ajRegExec). Any shorter matches with the same
+	start are stored in place of bracketed substrings.
+
+	Prettyplot options are changed to remove dependencies on other
+	options. Option -plurality (which depended on the sequence
+	alignment weight or the number of input sequences) is now -ratio
+	with a default of 0.5. This is exactly equivalent to the default
+	-plurality value or half the total weight. Option -resbreak is
+	replaced by -blocksperline with a default value of 1. This has the
+	same default output as the -resbreak option which defaulted to the
+	-residuesperline value.
+
+	All header files now have an @include comment block which includes
+	the LGPL licence and RCS tags. Header files are commented in
+	consistent sections. The C++ compile extern wrapper for C
+	declarations is now a macro to avoid indentation issues in emacs
+	and other editors.
+
+	All obsolete functions are moved to the end of source files and
+	wrapped in an #ifdef AJ__COMPILE_DEPRECATED block. The configure
+	option --enable-buildalldeprecated includes these functions in
+	compilation. Functions described in the 6.2.0 books are included
+	in a similar AJ__COMPILE_DEPRECATED_BOOK block and built with the
+	--enable-buildbookdeprecated configure option.
+
+	Diffseq produced incorrect results when reporting an insertion in
+	the second sequence. The error was introduced in release 6.0.0. It
+	is fixed by defining a "between" location for the insert site in
+	the first sequence, and by adding support for "between" features
+	to diffseq and other report formats. A new constructor
+	ajFeatNewBetween with one position makes creating such features
+	easier.
+
+	New function ajListDrop removes a node from a list by searching
+	for its address.
+
+	Test data includes a new EMBL data file syn.dat containing a
+	circular sequence.
+
+	GFF3 input combines features with the same ID under a generated
+	parent so that features can be linked as subfeatures and sorted
+	together. These features are identified by the Flags attribute and
+	excluded from GFF3 output.
+
+	GFF3 output is required to use different feature types for
+	parent and child. This is broken by the annotated parent feature
+	we need to represent EMBL/GenBank/DDBJ joins. For these, the
+	parent has a new type of biological_region with a new featflag
+	type=CDS (for example) so we can restore the correct internal
+	representation when reading the GFF3 file.
+
+	A new sequence associated qualifier -scircular defines a sequence
+	input as a circular molecule where this is not defined in the
+	input format, for example EMBL/Genbank and GFF3 have the
+	information but FASTA input does not. For feature input there is a
+	new -fcircular qualifier. Any circular definition in a sequence
+	format overrides this qualifier. Sequences with features are set
+	circular if the feature table input is defined as circular.
+
+	GFF3 format has been corrected using the online GFF3
+	validator. Protein feature type names are corrected to use the
+	current SO term name. Tags are converted to lower case on output
+	and back to standard case on input, for example /EC_number in EMBL
+	format, as GFF tags must start in lower case.
+
+	In GFF3 protein features now always use '.' for the
+	strand. Previous releases could also write '+'. Both are
+	acceptable as input.
+
+	GFF3 and GFF2 scores now use a general floating point format to
+	write 4 significant figures (rather than 3 decimal places) to cope
+	with very large and very small score values. Trailing zeroes
+	after the decimal point are omitted in this format. A score of
+	zero is written as a dot (missing value).
+
+	Sequence queries can use two alternative syntaxes for sequence
+	ranges.  Appending :start:end allows a syntax similar to DAS
+	queries. Appending :start..end allows a syntax similar to
+	EMBL/GenBank locations in other entries. Both can be followed by
+	:r to reverse the sequence region.
+
+	Sequences and reference sequences can be read from EMBL CON
+	division entries by using the same database with an SV (sequence
+	version) index to read the sequence fragments from the CO
+	record(s).
+
+	New code added to handle reference sequences in ajrefseq* source
+	files. The AjPRefseq object will hold large reference sequence data
+	in managed memory buffers.
+
+	Database definitions can use a new attribute "special" to give a
+	name=value definition for any attribute specific to one access
+	method. The first instances are SpeciesIdentifier for
+	ensemblgenomes databases, and tags for processing assembled entries
+	in CON (constructed) entries in EMBL. ConDatabase is the database
+	name used, ConField is the index field. By default CON entries use
+	the SV field of the same database.
+
+	Standardized all licensing references in the libraries to GNU Lesser
+	GPL version 2.1. Added CVS keywords to record the CVS file
+	version, and the date and user of the latest commit.
+
+	Microbial genomes in ensemblgenomes have an enumerated species
+	code which must be included in an data retrieval request. The
+	codes are temporarily added to the comment attribute of the
+	databases in the server cache file. This will be replaced by a
+	more complete solution in the next release.
+
+	The DRCAT.dat file has a new set of lines to handle Nucleic Acids
+	Research classifications. A new NARCat line code is now separately
+	parsed by dbxresource into the NAR category name and the URI.
+
+	Long tag values in GFF3 format could exceed limits in the regular
+	expression. This is fixed by first testing for and replacing
+	escaped quotes and then using a simpler expression to extract
+	quoted string values.
+
+	When reading ranges from a file the strings were overwritten by
+	the parser.
+
+	Application tcode results disagreed with the original
+	publication. The calculation parameters have been corrected.
+
+	EDAM.obo is updated. 28 terms were added. Descriptions were
+	updated and names changed.
+
+	Short descriptions of EMBOSS and EMBASSY applications have been
+	updated to use consistent terminology and grammar rules.
+
+	Dbxflat failed to parse the organism ('org') field of a GenBank
+	entry when another secondary field (keyword or description) was
+	also parsed in the same run.
+
+	Dbxflat and dbiflat now use a separate parser for SwissProt format
+	data files. Previous releases used the EMBL parser which failed to
+	identify the first word in the specially formatted SwissProt
+	description records. The change only affects the 'des" index
+	field.
+
+	Reading ABI format failed to read the sample name field and
+	machine name. The sample name is now correctly parsed. The sample
+	name is used by EMBOSS as the sequence identifier.
+
+	Formats specified on the command line were ignored by database
+	queries. This behaviour was correct in previous releases where
+	only one format was permitted, but is required from 6.4.0 where a
+	database may have multiple possible formats. Any format defined
+	elsewhere on the command line is now used if there is no format in
+	the query string.
+
+	ACD files are stricter in checking ambiguous qualifiers. Options
+	that are also a short form of another qualifier now generate
+	warnings. These can be turned off with the application attribute
+	wrapper: "Y" where a third party command line is wrapped.
+
+	Showfeat had an option -type which was ambiguous. Changed the
+	options so those with a match option (-typematch) have a show
+	equivalent -typeshow to display the column.
+
+	Emma had options -dend and -slow which were short forms of other
+	qualifiers. They are renamed -dendreuse and -slowalign. The old
+	qualifier name will now give an "ambiguous qualifier" error
+	message and report the new name.
+
+	Eprimer3 and eprimer32 had options -otm and -osize which were
+	short forms of other qualifiers, and could cause confusion
+	between optimum and oligo values. They are renamed -opttm and
+	-optsize.
+
+	Helixturnhelix had an advanced option -sd which was a short form
+	of sequence qualifier -sdbname. It is renamed to -sdvalue.
+
+	Prettyplot had an option -box which was a short form of other
+	qualifiers. It has been renamed -doboxes to match the related
+	qualifier -docolour.
+
+	Showserver had an option -server which was a short form of
+	-serverversion (itself named to avoid a clash with -version). This
+	option is now renamed -servername.
+
+	Supermatcher and wordfinder had an option -errorfile which was a
+	longer form of the standard qualifier -error which can suppress
+	the reporting of error messages. The -errorfile qualifiers are
+	renamed -errfile.
+
+	Revseq added 'Reversed:' to the sequence description. For use
+	cases where the original sequence description is preferred
+	(e.g. FASTQ format formatted descriptions) a new -notag option
+	retains the original description.
+
+	Cirdna prints text inside solid blocks invisibly. When printed
+	outside the text scaling was too small. The text scale is now
+	adjusted for the radius and sequence length so that labels should
+	be readable outside the box.
+
+	Fuzznuc, fuzzpro and fuzztran using a pattern file ignored the
+	command line -mismatch qualifier for the first pattern. The
+	default mismatch is now set to this value at the start of the
+	pattern matching loop in the library.
+
+	qatest.pl which runs the QA tests now checks for a qatest.dat file
+	in the EMBOSS source directory and additional qatest.dat files in
+	the test subdirectory for all EMBASSY packages found under the
+	source embassy/ directory. By providing individual qatest.dat
+	files for each package we can simplify testing for a core
+	distribution. Some of the older EMBASSY packages derived from
+	domainatrix have cross-dependencies where one test uses the output
+	of an application from another package. New AX and AY lines define
+	foreign tests which are executed even where a single EMBASSY
+	package has been specified with the -embassy=package qualifier on
+	the command line.
+
+Version 6.4.0 15-Jul-2011
+
+	DBXFLAT can index FASTQ format short read sequence files, allowing
+	individual sequences to be rapidly retrieved by name.
 
 	Genpept format has changed since we last tested it. The LOCUS line
 	is simpler. EMBOSS now supports GenPept as documented and
@@ -33,7 +524,7 @@
 
 	Application tcode failed to plot results for more than one
 	sequence.  It also reported a plplot error when reading random
-	noncoding input. It also failed to report the threshold lines
+	non-coding input. It also failed to report the threshold lines
 	when they were outside the range of observed scores.
 
 	Four new functions combine tables where the keys and values are of
@@ -48,6 +539,9 @@
 	match. All remaining keys and values are deleted using the tables
 	built-in destructor functions.
 
+	Some data resource catalogue applications failed when run with the
+	-debug option. Their debug calls have been updated.
+
 	New application dbtell reports the attributes for a database.
 
 	All messages written to the user are also logged to the debug file
@@ -55,6 +549,18 @@
 
 	Applications showfeat, extractfeat and coderet are updated to
 	follow the new features /subfeatures data structures.
+
+	When using a simple numeric database identifier, the SV field is
+	only searched if it is defined.
+
+	Access to local SRS databases created an invalid command line for
+	getz with a stray '+' character needed only in the web version.
+
+	Nexus format input can now handle a missing taxlabels block by
+	using the matrix block to read sequence names.
+
+	GFF3 tag names are automatically converted to lower case unless
+	they match a known GFF3 "special" tag name.
 
 	GFF3 format has been rewritten to comply strictly with the GFF3
 	standard on the sequence ontology website. Characters are now
@@ -65,6 +571,11 @@
 	stored separately. The ID and Parent tags are used in
 	post-processing to build subfeatures which are stored under the
 	feature with an ID matching their first Parent tag.
+
+	GFF3 input requires the optional EMBOSS type comment to identify a
+	protein GFF3 file as there is currently no safe way to distinguish
+	protein from nucleotide features using only the standard GFF3
+	format.
 
 	GFF3 format sequence format failed to read files with additional
 	## comment records after the header block. These comments are now
@@ -230,7 +741,7 @@
 	methods) are moved to a new source file ajtextdb.c and use a new
 	AjPTextin input object which is included within AjPSeqin for
 	sequence input and AjPOboin for OBO term input. These functions
-	are generalised for any input data in some text-based file
+	are generalized for any input data in some text-based file
 	format. Sequence access will first check for a text-based access
 	method, and then for a sequence-specific method (e.g. ensembl).
 	Other input datatypes can do the same. The code for OBO ontology
@@ -698,7 +1209,7 @@ Version 6.2.0 15-Jan-2010
 	command line options. This is excluded from the text
 	documentation, where the format of the help output is improved.
 
-	Function names standardised for ajcod.c ajrange.c ajtranslate.c
+	Function names standardized for ajcod.c ajrange.c ajtranslate.c
 	ajgraph.c ajhist.c and a few other functions renamed. The old
 	names continue to work as "deprecated" functions although these
 	will generate warning messages with the gcc compiler.
@@ -1195,7 +1706,7 @@ Version 6.0.0 15-Jul-2008
 	from wossname can now be 90 characters wide. Interfaces that use
 	the description in menus may need to allow some extra space.
 
-	Function names in ajfile.c have been standardised. Old names are
+	Function names in ajfile.c have been standardized. Old names are
 	still accepted but are marked as "deprecated" and will generate
 	warnings with the gcc compiler (see ajstr below). Other compilers
 	will see no difference. New source files ajfiledata.c and
@@ -1579,7 +2090,7 @@ Version 5.0.0 15-jul-2007
 	A new function ajSystemOut calls a system command, and redirects
 	standard output to a named file.
 
-	Function names are standardised for the ajsys, ajtime and ajutil
+	Function names are standardized for the ajsys, ajtime and ajutil
 	functions.
 
 	New function ajStrTableFreeKey frees only the key from tables
@@ -1739,7 +2250,7 @@ Version 4.1.0 04-mar-2007
 	comparisons, potential loss of precision in casts, use of global
 	names (index for example) as variables.
 
-	Function names in ajseqwrite.c have been standardised. Old names are
+	Function names in ajseqwrite.c have been standardized. Old names are
 	still accepted but are marked as "deprecated" and will generate
 	warnings with the gcc compiler (see ajstr below). Other compilers
 	will see no difference.
@@ -1951,7 +2462,7 @@ Version 4.1.0 04-mar-2007
 	still having the db part trimmed. This will still be trimmed from
 	fasta or ncbi format.
 
-	The report for digest has Cterm and Nterm columns capitalised to
+	The report for digest has Cterm and Nterm columns capitalized to
 	match the rest of the report. Sequence ranges now give correct
 	cterm and nterm results.
 
@@ -2249,7 +2760,7 @@ Version 4.0.0 15-jul-2006
 	HMMERNEW embassy packages, have been corrected for a few cases
 	where automatic format detection generated errors.
 
-	Function names in ajseq.c have been standardised. Old names are
+	Function names in ajseq.c have been standardized. Old names are
 	still accepted but are marked as "deprecated" and will generate
 	warnings with the gcc compiler (see ajstr below). Other compilers
 	will see no difference.
@@ -2407,7 +2918,7 @@ Version 4.0.0 15-jul-2006
 
 Version 3.0.0 15-jul-2005
 
-	Gap penalty qualifiers were standardised for all programs.
+	Gap penalty qualifiers were standardized for all programs.
 
 	water, needle and other alignment programs occasionally could
 	report suboptimal alignments (off by the gap extension penalty
@@ -2809,7 +3320,7 @@ Version 2.9.0 15-Jul-2004
 	the appropriate section.
 
 	Acdvalid now checks that qualifiers are in the expected
-	section. All input qualifiers (including cfile and datafile) aer
+	section. All input qualifiers (including cfile and datafile) are
 	now in the input section, all output qualifiers are in the output
 	section. All (remaining) standard, additional and advanced
 	qualifiers are in the "required" "additional" and "advanced"
@@ -3540,7 +4051,7 @@ Version 2.4.1 14-may-2002
 
 Version 2.4.0 11-Apr-2002
 
-	New Jemboss authorising server code. This uses a new set-uid
+	New Jemboss authorizing server code. This uses a new set-uid
 	program (jembossctl) to perform tasks as the user.
 
 	New alignment output format "match" for wordmatch, reports the
@@ -3942,7 +4453,7 @@ Version 1.4.1 25-aug-2000
 
 Version 1.4.0 20-aug-2000
 
-	New applications silent and restrict.
+	New application silent
 
 Version 1.3.1 18-aug-2000
 

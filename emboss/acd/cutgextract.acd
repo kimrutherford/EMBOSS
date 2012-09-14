@@ -4,9 +4,9 @@ application: cutgextract [
   gui: "no"
   batch: "no"
   cpu: "medium"
-    relations: "EDAM:0000107 topic Codon usage"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0001812 operation Data loading"
+    relations: "EDAM_topic:0107 Codon usage analysis"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:1812 Data loading"
 ]
 
 section: input [
@@ -18,7 +18,7 @@ section: input [
     parameter: "Y"
     information: "Codon usage directories"
     knowntype: "codon usage"
-    relations: "EDAM:0001597 data Codon usage table"
+    relations: "EDAM_data:1597 Codon usage table"
   ]
 
 endsection: input
@@ -39,28 +39,28 @@ section: advanced [
     default: ""
     information: "CUTG release"
     knowntype: "database release"
-    relations: "EDAM:0001670 data Database version information"
+    relations: "EDAM_data:1670 Database version information"
   ]
 
   string: wildspec [
     default: "*.codon"
     information: "Type of codon file"
     knowntype: "filename wildcard"
-    relations: "EDAM:0001050 identifier File name"
+    relations: "EDAM_identifier:1050 File name"
   ]
 
   string: species [
     default: "*"
     information: "Species wildcard"
     knowntype: "wildcard string"
-    relations: "EDAM:0000968 data Keyword"
+    relations: "EDAM_data:0968 Keyword"
   ]
 
   boolean: allrecords [
     default: "N"
     information: "Include all records, including those with
                   warnings"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: advanced
@@ -74,7 +74,7 @@ section: output [
     parameter: "Y"
     knowntype: "log"
     information: "General log output file"
-    relations: "EDAM:0001678 data Tool log"
+    relations: "EDAM_data:1678 Tool log"
   ]
 
   string: filename [
@@ -84,7 +84,7 @@ section: output [
            each species. Leave blank to generate the filenames. Specify a
            filename to combine several species into one file."
     knowntype: "output filename"
-    relations: "EDAM:0001050 identifier File name"
+    relations: "EDAM_identifier:1050 File name"
   ]
 
 endsection: output

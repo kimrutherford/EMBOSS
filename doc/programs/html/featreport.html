@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -35,7 +35,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Reads and writes a feature table
+Read and write a feature table
 <!--
 DON'T WRITE ANYTHING HERE.
 IT IS DONE FOR YOU.
@@ -74,7 +74,7 @@ Here is a sample session with <b>featreport</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>featreport </b>
-Reads and writes a feature table
+Read and write a feature table
 Input sequence: <b>paamir.fasta</b>
 Input feature table: <b>paamir.gff</b>
 Output report [x13776.featreport]: <b>test.out</b>
@@ -91,8 +91,8 @@ Output report [x13776.featreport]: <b>test.out</b>
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Reads and writes a feature table
-Version: EMBOSS:6.4.0.0
+Read and write a feature table
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence filename and optional format, or
@@ -114,7 +114,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -123,11 +126,14 @@ Version: EMBOSS:6.4.0.0
 
    "-features" associated qualifiers
    -fformat2           string     Features format
+   -iquery2            string     Input query fields or ID list
+   -ioffset2           integer    Input start position offset
    -fopenfile2         string     Features file name
    -fask2              boolean    Prompt for begin/end/reverse
    -fbegin2            integer    Start of the features to be used
    -fend2              integer    End of the features to be used
    -freverse2          boolean    Reverse (if DNA)
+   -fcircular2         boolean    Circular sequence features
 
    "-outfile" associated qualifiers
    -rformat3           string     Report format
@@ -220,7 +226,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated sequence qualifiers
+<td align="left" colspan=5>"-sequence" associated sequence qualifiers
 </td>
 </tr>
 
@@ -289,11 +295,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -337,7 +367,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-features" associated features qualifiers
+<td align="left" colspan=5>"-features" associated features qualifiers
 </td>
 </tr>
 
@@ -347,6 +377,22 @@ Version: EMBOSS:6.4.0.0
 <td>Features format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery2<br>-iquery_features</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset2<br>-ioffset_features</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -390,7 +436,15 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated report qualifiers
+<td> -fcircular2<br>-fcircular_features</td>
+<td>boolean</td>
+<td>Circular sequence features</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
@@ -758,9 +812,9 @@ By default the report is in 'gff' feature format.
 <pre>
 ##gff-version 3
 ##sequence-region PAAMIR 1 2167
-#!Date 2011-07-15
+#!Date 2012-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.4.0.0
+#!Source-version EMBOSS 6.5.0.0
 PAAMIR	EMBL	databank_entry	1	2167	.	+	.	ID=PAAMIR.1;db_xref=taxon:287;organism=Pseudomonas aeruginosa;strain=PAC;isolate=PAC 1;map=38 min
 PAAMIR	EMBL	CDS	1289	1879	.	+	0	ID=PAAMIR.2;db_xref=SWISS-PROT:P10932;note=aliphatic amidase regulator%2C positive regulator of amiE;transl_table=11;gene=amiR;protein_id=CAA32023.1;translation=MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDEREAHQHLSREAMKRREPILKIAQELLGNEPSA
 PAAMIR	EMBL	CDS	135	1292	.	+	0	ID=PAAMIR.3;db_xref=SWISS-PROT:P27017;note=negative regulator of amiR;transl_table=11;gene=amiC;protein_id=CAA32024.1;translation=MGSHQERPLIGLLFSETGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLSSRIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP
@@ -904,12 +958,12 @@ None.
 <th>Description</th></tr>
 <tr>
 <td><a href="aligncopy.html">aligncopy</a></td>
-<td>Reads and writes alignments</td>
+<td>Read and write alignments</td>
 </tr>
 
 <tr>
 <td><a href="aligncopypair.html">aligncopypair</a></td>
-<td>Reads and writes pairs from alignments</td>
+<td>Read and write pairs from alignments</td>
 </tr>
 
 <tr>
@@ -924,12 +978,12 @@ None.
 
 <tr>
 <td><a href="cutseq.html">cutseq</a></td>
-<td>Removes a section from a sequence</td>
+<td>Remove a section from a sequence</td>
 </tr>
 
 <tr>
 <td><a href="degapseq.html">degapseq</a></td>
-<td>Removes non-alphabetic (e.g. gap) characters from sequences</td>
+<td>Remove non-alphabetic (e.g. gap) characters from sequences</td>
 </tr>
 
 <tr>
@@ -939,7 +993,7 @@ None.
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Retrieves sequence entries from flatfile databases and files</td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -959,7 +1013,12 @@ None.
 
 <tr>
 <td><a href="featcopy.html">featcopy</a></td>
-<td>Reads and writes a feature table</td>
+<td>Read and write a feature table</td>
+</tr>
+
+<tr>
+<td><a href="featmerge.html">featmerge</a></td>
+<td>Merge two overlapping feature tables</td>
 </tr>
 
 <tr>
@@ -984,12 +1043,12 @@ None.
 
 <tr>
 <td><a href="maskambignuc.html">maskambignuc</a></td>
-<td>Masks all ambiguity characters in nucleotide sequences with N</td>
+<td>Mask all ambiguity characters in nucleotide sequences with N</td>
 </tr>
 
 <tr>
 <td><a href="maskambigprot.html">maskambigprot</a></td>
-<td>Masks all ambiguity characters in protein sequences with X</td>
+<td>Mask all ambiguity characters in protein sequences with X</td>
 </tr>
 
 <tr>
@@ -1039,7 +1098,7 @@ None.
 
 <tr>
 <td><a href="nthseqset.html">nthseqset</a></td>
-<td>Reads and writes (returns) one set of sequences from many</td>
+<td>Read and write (return) one set of sequences from many</td>
 </tr>
 
 <tr>
@@ -1054,22 +1113,22 @@ None.
 
 <tr>
 <td><a href="seqcount.html">seqcount</a></td>
-<td>Reads and counts sequences</td>
+<td>Read and count sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqret.html">seqret</a></td>
-<td>Reads and writes (returns) sequences</td>
+<td>Read and write (return) sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqretsetall.html">seqretsetall</a></td>
-<td>Reads and writes (returns) many sets of sequences</td>
+<td>Read and write (return) many sets of sequences</td>
 </tr>
 
 <tr>
 <td><a href="seqretsplit.html">seqretsplit</a></td>
-<td>Reads sequences and writes them to individual files</td>
+<td>Read sequences and write them to individual files</td>
 </tr>
 
 <tr>
@@ -1084,7 +1143,7 @@ None.
 
 <tr>
 <td><a href="skipseq.html">skipseq</a></td>
-<td>Reads and writes (returns) sequences, skipping first few</td>
+<td>Read and write (return) sequences, skipping first few</td>
 </tr>
 
 <tr>
@@ -1119,7 +1178,7 @@ None.
 
 <tr>
 <td><a href="vectorstrip.html">vectorstrip</a></td>
-<td>Removes vectors from the ends of nucleotide sequence(s)</td>
+<td>Remove vectors from the ends of nucleotide sequence(s)</td>
 </tr>
 
 <tr>

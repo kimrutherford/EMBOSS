@@ -1,0 +1,21 @@
+application: embossupdate [
+  documentation: "Checks for more recent updates to EMBOSS"
+  groups: "Utils"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:0515 Data retrieval (tool metadata)"
+]
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile [
+    additional: "Y"
+    default: "stdout"
+    knowntype: "embossupdate output"
+    information: "EMBOSS update output file"
+    relations: "EDAM_data:1671 Tool version information"
+  ]
+
+endsection: output

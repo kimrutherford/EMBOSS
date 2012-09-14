@@ -5,8 +5,8 @@ application: seqxref
   gui: "yes"
   batch: "yes"
   cpu: "low"
-  relations: "EDAM:0000090 topic Data retrieval"
-  relations: "EDAM:0000225 operation Data retrieval (database cross-reference)"
+  relations: "EDAM_topic:0090 Data search and retrieval"
+  relations: "EDAM_operation:2422 Data retrieval"
 ]
 
 
@@ -24,7 +24,7 @@ section: input
     parameter: "Y"
     type: "any"
     features: "Y"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
 endsection: input
@@ -76,7 +76,7 @@ section: output
   [
     parameter: "Y"
     knowntype: "seqxref output"
-    relations: "EDAM:0002093 data Data reference"
+    relations: "EDAM_data:2093 Data reference"
   ]
 
 endsection: output

@@ -1,32 +1,37 @@
-/******************************************************************************
-** @source AJAX Java Native Interface (JNI) functions
+/* @source ajjava *************************************************************
+**
+** AJAX Java Native Interface (JNI) functions
 **
 ** @author Copyright (C) 2001 Alan Bleasby
-** @version 1.0
-** @version 2.0 Added Jemboss suid authorisation functions
+** @version $Revision: 1.83 $
 ** @modified Jul 07 2001 ajb First version
-** @modified Mar 02 2002 ajb First version
+** @modified Mar 02 2002 ajb Added Jemboss suid authorisation functions
+** @modified $Date: 2011/10/19 10:54:59 $ by $Author: ajb $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #ifdef HAVE_JAVA
 
-#include "ajax.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,7 +39,7 @@
 #ifndef WIN32
 #include <strings.h>
 #include <unistd.h>
-#endif
+#endif /* !WIN32 */
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -46,36 +51,45 @@
 #include <sys/param.h>
 #include <sys/wait.h>
 #include <sys/ioctl.h>
-#endif
+#endif /* !WIN32 */
 
 #include <errno.h>
 #include <fcntl.h>
 #include <ctype.h>
 
-#ifdef HAVE_JAVA
-
 #ifdef __hpux
 #include <signal.h>
 #include <stropts.h>
-#endif
+#endif /* __hpux */
 
 #if defined (__SVR4) && defined (__sun)
 #include <signal.h>
-#endif
+#endif /* __SVR4 && __sun */
 
 #ifdef linux
 #include <signal.h>
-#endif
+#endif /* linux */
 
 #if defined(__CYGWIN__)
 #include <sys/termios.h>
-#endif
+#endif /* __CYGWIN__ */
 
-
-#ifdef HAVE_POLL		/* Only for OSs without FD macros */
+#ifdef HAVE_POLL
+/* Only for OSs without FD macros */
 #include <poll.h>
-#endif
+#endif /* HAVE_POLL */
 
+#include "ajjava.h"
+#include "ajstr.h"
+#include "ajnam.h"
+#include "ajseqdata.h"
+#include "ajseq.h"
+#include "ajseqread.h"
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 #define UIDLIMIT 100		/* Minimum acceptable uid and gid     */
 #define GIDLIMIT 1		/* Alter these to suit security prefs */
@@ -87,74 +101,74 @@
 
 #if defined (__SVR4) && defined (__sun)
 #include <sys/filio.h>
-#endif
+#endif /* __SVR4 && __sun */
 
 #ifndef WIN32
 #include <pwd.h>
-#endif
+#endif /* !WIN32 */
 
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE
-#endif
+#endif /* !_XOPEN_SOURCE */
 
 #if !defined(__ppc__) && !defined(__APPLE__)
 #if !defined(__FreeBSD__) && !defined(WIN32)
 #include <crypt.h>
-#endif
-#endif
-
-
+#endif /* !__FreeBSD__ && !WIN32 */
+#endif /* !__ppc__ && !__APPLE__ */
 
 #ifdef N_SHADOW
 #include <shadow.h>
-#endif
+#endif /* N_SHADOW */
+
 #ifdef R_SHADOW
 #include <shadow.h>
-#endif
+#endif /* R_SHADOW */
+
 #ifdef HPUX_SHADOW
 #include <shadow.h>
-#endif
+#endif /* HPUX_SHADOW */
 
 #ifdef PAM
 #if defined(__ppc__) || defined(__APPLE__)
 #include <pam/pam_appl.h>
-#else
+#else /* !(__ppc__ || __APPLE__) */
 #include <security/pam_appl.h>
-#endif
-#endif
+#endif /* __ppc__ || __APPLE__ */
+#endif /* PAM */
 
 #ifdef AIX_SHADOW
 #include <userpw.h>
-#endif
+#endif /* AIX_SHADOW */
 
 #ifdef HPUX_SHADOW
 #include <prot.h>
-#endif
+#endif /* HPUX_SHADOW */
 
 
 /*
- *  The following prototypes are used by the root tomcat authorisation
- *  system.
- */
+**  The following prototypes are used by the root tomcat authorisation
+**  system.
+**/
 
 static void java_core_dump(void);
 #ifndef NO_AUTH
 static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 			 ajint *gid, AjPStr *home);
-#endif
+#endif /* !NO_AUTH */
 
 
 #ifdef PAM
 static int PAM_conv(int num_msg, struct pam_message **msg,
 		    struct pam_response **resp, void *appdata_ptr);
-#endif
+#endif /* PAM */
 
 
 
 /*
- *  The following prototypes are used by the jembossctl authorisation
- *  system
- */
+**  The following prototypes are used by the jembossctl authorisation
+**  system
+**/
 static char **make_array(const AjPStr str);
 static void java_tidy_command(AjPStr *str1, AjPStr *str2, AjPStr *str3,
 			      AjPStr *str4, AjPStr *str5, AjPStr *str6);
@@ -253,6 +267,8 @@ static int java_block(int chan, unsigned long flag);
 ** @param [r] usa [jstring] usa
 **
 ** @return [jboolean] true if the sequence exists
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -315,6 +331,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_seqType
 ** @param [r] usa [jstring] usa
 **
 ** @return [jboolean] true if the sequences exist
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -374,6 +392,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_seqsetType
 ** @param [r] thys [const AjPStr] usa
 ** @param [w] seq [AjPSeq*] sequence
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static AjBool ajJavaGetSeqFromUsa(const AjPStr thys, AjPSeq *seq)
@@ -407,6 +427,8 @@ static AjBool ajJavaGetSeqFromUsa(const AjPStr thys, AjPSeq *seq)
 ** @param [r] thys [const AjPStr] usa
 ** @param [w] seq [AjPSeqset*] seqset
 ** @return [AjBool] ajTrue on success
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static AjBool ajJavaGetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq)
@@ -445,9 +467,10 @@ static AjBool ajJavaGetSeqsetFromUsa(const AjPStr thys, AjPSeqset *seq)
 ** @param [r] key [jstring] password
 **
 ** @return [jboolean] true if the username/password are valid
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
-
 
 JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_userInfo
 (JNIEnv *env, jobject obj, jstring door, jstring key)
@@ -514,7 +537,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_userInfo
 
 #ifndef NO_AUTH
     ok = java_pass(username,password,&uid,&gid,&home);
-#endif
+#endif /* !NO_AUTH */
 
     field = (*env)->GetStaticFieldID(env,jvc,"uid","I");
     (*env)->SetStaticIntField(env,jvc,field,uid);
@@ -551,6 +574,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_userInfo
 ** Set process coredump size to be zero
 **
 ** @return [void]
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -604,7 +629,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 
     return ajFalse;
 }
-#endif
+#endif /* N_SHADOW */
 
 
 
@@ -625,7 +650,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
     char *buf  = NULL;
 #ifdef _POSIX_C_SOURCE
     int ret=0;
-#endif
+#endif /* _POSIX_C_SOURCE */
 
     if(!(buf=(char*)malloc(R_BUFFER)) || !(sbuf=(char*)malloc(R_BUFFER)))
 	return ajFalse;
@@ -649,7 +674,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 	AJFREE(sbuf);
         return ajFalse;
     }
-#else
+#else /* !_POSIX_C_SOURCE */
     pwd = getpwnam_r(ajStrGetPtr(username),&presult,buf,R_BUFFER);
 
     if(!pwd)
@@ -658,7 +683,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 	AJFREE(sbuf);
         return ajFalse;
     }
-#endif
+#endif /* _POSIX_C_SOURCE */
 
     *uid = pwd->pw_uid;
     *gid = pwd->pw_gid;
@@ -679,7 +704,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 
     return ajFalse;
 }
-#endif
+#endif /* R_SHADOW */
 
 
 
@@ -715,7 +740,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 
     return ajFalse;
 }
-#endif
+#endif /* AIX_SHADOW */
 
 
 
@@ -792,7 +817,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 
     return ajFalse;
 }
-#endif
+#endif /* HPUX_SHADOW */
 
 
 
@@ -823,7 +848,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 
     return ajFalse;
 }
-#endif
+#endif /* NO_SHADOW */
 
 
 
@@ -841,7 +866,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
     char *buf = NULL;
 #if defined(_OSF_SOURCE) || defined(__FreeBSD__)
     int ret=0;
-#endif
+#endif /* _OSF_SOURCE || __FreeBSD__ */
 
     if(!(buf=(char *)malloc(R_BUFFER)))
 	return ajFalse;
@@ -854,7 +879,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 
 	return ajFalse;
     }
-#else
+#else /* !(_OSF_SOURCE || __FreeBSD__) */
     pwd = getpwnam_r(ajStrGetPtr(username),&result,buf,R_BUFFER);
     if(!pwd)		 /* No such username */
     {
@@ -862,7 +887,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 
 	return ajFalse;
     }
-#endif
+#endif /* _OSF_SOURCE || __FreeBSD__ */
 
     *uid = pwd->pw_uid;
     *gid = pwd->pw_gid;
@@ -882,7 +907,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 
     return ajFalse;
 }
-#endif
+#endif /* RNO_SHADOW */
 
 
 
@@ -994,10 +1019,10 @@ static AjBool java_pass(AjPStr username,AjPStr password,ajint *uid,
 #ifndef DEBIAN
     retval = pam_start("login",ajStrGetPtr(username),
 		       (struct pam_conv*)&conv,&pamh);
-#else
+#else /* !DEBIAN */
     retval = pam_start("ssh",ajStrGetPtr(username),
 		       (struct pam_conv*)&conv,&pamh);
-#endif
+#endif /* DEBIAN */
 
     if (retval == PAM_SUCCESS)
 	retval= pam_authenticate(pamh,PAM_SILENT);
@@ -1017,7 +1042,7 @@ static AjBool java_pass(AjPStr username,AjPStr password,ajint *uid,
 
     return ajFalse;
 }
-#endif
+#endif /* PAM */
 
 
 
@@ -1031,6 +1056,8 @@ static AjBool java_pass(AjPStr username,AjPStr password,ajint *uid,
 ** @param [r] uid [jint] uid
 **
 ** @return [jint] 0 on success, -1 if failure
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -1055,6 +1082,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_setuid
 ** @param [r] uid [jint] uid
 **
 ** @return [jint] 0 on success, -1 if failure
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -1065,10 +1094,10 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_seteuid
     (void) j;
 #ifndef __hpux
     return((jint)seteuid((uid_t)uid));
-#else
+#else /* !__hpux */
     (void) uid;
     return -1;
-#endif
+#endif /* __hpux */
 }
 
 
@@ -1083,6 +1112,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_seteuid
 ** @param [r] gid [jint] gid
 **
 ** @return [jint] 0 on success, -1 if failure
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -1107,6 +1138,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_setgid
 ** @param [r] gid [jint] gid
 **
 ** @return [jint] 0 on success, -1 if failure
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -1117,10 +1150,10 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_setegid
     (void) j;
 #ifndef __hpux
     return((jint)setegid((gid_t)gid));
-#else
+#else /* !__hpux */
     (void) gid;
     return -1;
-#endif
+#endif /* __hpux */
 }
 
 
@@ -1134,6 +1167,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_setegid
 ** @param [r] j [jclass] java class
 **
 ** @return [jint] uid
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -1157,6 +1192,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_getuid
 ** @param [r] j [jclass] java class
 **
 ** @return [jint] gid
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -1180,6 +1217,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_getgid
 ** @param [r] j [jclass] java class
 **
 ** @return [jint] uid
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -1203,6 +1242,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_geteuid
 ** @param [r] j [jclass] java class
 **
 ** @return [jint] gid
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -1232,6 +1273,8 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_server_Ajax_getegid
 ** @param [r] gid [jint] gid for setgid
 **
 ** @return [jboolean] true if success
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -1264,10 +1307,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_fork
 #ifdef HAVE_POLL
     struct pollfd ufds[2];
     unsigned int nfds;
-#else
+#else /* !HAVE_POLL */
     fd_set rec;
     struct timeval t;
-#endif
+#endif /* HAVE_POLL */
 
     int nread = 0;
     char *buf;
@@ -1345,9 +1388,9 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_fork
 
 #if defined (__SVR4) && defined (__sun)
     pid = fork1();
-#else
+#else /* !(__SVR4 && __sun) */
     pid = fork();
-#endif
+#endif/* __SVR4 && __sun */
 
     if(pid == -1)
     {
@@ -1462,7 +1505,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_fork
 	    buf[nread]='\0';
 	    ajStrAppendC(&errstd,buf);
 	}
-#else
+#else /* !HAVE_POLL */
     while((retval=waitpid(pid,&status,WNOHANG))!=pid)
     {
 	if(retval==-1)
@@ -1525,7 +1568,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_fork
 	buf[nread]='\0';
 	ajStrAppendC(&errstd,buf);
     }
-#endif
+#endif /* HAVE_POLL */
 
     field = (*env)->GetFieldID(env,jvc,"outStd","Ljava/lang/String;");
     ostr = (*env)->NewStringUTF(env,ajStrGetPtr(outstd));
@@ -1578,6 +1621,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_fork
 ** @param [r] str [const AjPStr] space separated tokens
 **
 ** @return [char**] env or argv array
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static char** make_array(const AjPStr str)
@@ -1624,6 +1669,8 @@ static char** make_array(const AjPStr str)
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static ajint java_send_auth(int tchan, int rchan,
@@ -1684,6 +1731,8 @@ static ajint java_send_auth(int tchan, int rchan,
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static ajint java_emboss_fork(int tchan, const char *cuser, const char *cpass,
@@ -1731,6 +1780,8 @@ static ajint java_emboss_fork(int tchan, const char *cuser, const char *cpass,
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.4.0
 ******************************************************************************/
 
 static ajint java_batch_fork(int tchan, const char *cuser,const char *cpass,
@@ -1776,6 +1827,8 @@ static ajint java_batch_fork(int tchan, const char *cuser,const char *cpass,
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static ajint java_make_dir(int tchan,const char *cuser,const char *cpass,
@@ -1816,6 +1869,8 @@ static ajint java_make_dir(int tchan,const char *cuser,const char *cpass,
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static ajint java_delete_file(int tchan,const char *cuser,const char *cpass,
@@ -1857,6 +1912,8 @@ static ajint java_delete_file(int tchan,const char *cuser,const char *cpass,
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.5.0
 ******************************************************************************/
 
 static ajint java_rename_file(int tchan,const char *cuser,const char *cpass,
@@ -1899,6 +1956,8 @@ static ajint java_rename_file(int tchan,const char *cuser,const char *cpass,
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static ajint java_delete_dir(int tchan,const char *cuser,const char *cpass,
@@ -1939,6 +1998,8 @@ static ajint java_delete_dir(int tchan,const char *cuser,const char *cpass,
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static ajint java_list_files(int tchan,const char *cuser,const char *cpass,
@@ -1979,6 +2040,8 @@ static ajint java_list_files(int tchan,const char *cuser,const char *cpass,
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static ajint java_list_dirs(int tchan,const char *cuser,const char *cpass,
@@ -2022,6 +2085,8 @@ static ajint java_list_dirs(int tchan,const char *cuser,const char *cpass,
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static ajint java_get_file(int tchan,int rchan,
@@ -2105,6 +2170,8 @@ static ajint java_get_file(int tchan,int rchan,
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static ajint java_put_file(int tchan,int rchan,
@@ -2212,6 +2279,8 @@ static ajint java_put_file(int tchan,int rchan,
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.5.0
 ******************************************************************************/
 
 static ajint java_seq_attrib(int tchan,const char *cuser,const char *cpass,
@@ -2252,6 +2321,8 @@ static ajint java_seq_attrib(int tchan,const char *cuser,const char *cpass,
 ** @param [w] errstd [AjPStr*] stderr from jembossctl
 **
 ** @return [ajint] 0=success -1=failure
+**
+** @release 2.5.0
 ******************************************************************************/
 
 static ajint java_seqset_attrib(int tchan,const char *cuser,const char *cpass,
@@ -2292,6 +2363,8 @@ static ajint java_seqset_attrib(int tchan,const char *cuser,const char *cpass,
 ** @param [w] buf [char*] pipe buffer
 **
 ** @return [void]
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
@@ -2300,10 +2373,10 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 #ifdef HAVE_POLL
     struct pollfd ufds[2];
     unsigned int  nfds;
-#else
+#else /* !HAVE_POLL */
     fd_set rec;
     struct timeval t;
-#endif
+#endif /* HAVE_POLL */
 
     int nread  = 0;
     int  status;
@@ -2396,7 +2469,7 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 	    buf[nread]='\0';
 	    ajStrAppendC(errstd,buf);
 	}
-#else
+#else /* !HAVE_POLL */
     while((retval=waitpid(pid,&status,WNOHANG))!=pid)
     {
 	if(retval==-1)
@@ -2486,7 +2559,7 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 	    ajStrAppendC(errstd,buf);
 	}
     }
-#endif
+#endif /* HAVE_POLL */
 
     block = 0;
 
@@ -2524,6 +2597,8 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 ** @param [r] size [int] size of file to receive
 **
 ** @return [void]
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static void java_wait_for_file(int pid, AjPStr *errstd,
@@ -2533,10 +2608,10 @@ static void java_wait_for_file(int pid, AjPStr *errstd,
 #ifdef HAVE_POLL
     struct pollfd ufds[2];
     unsigned int  nfds;
-#else
+#else /* !HAVE_POLL */
     fd_set rec;
     struct timeval t;
-#endif
+#endif /* HAVE_POLL */
 
     int nread  = 0;
     int  status;
@@ -2644,7 +2719,7 @@ static void java_wait_for_file(int pid, AjPStr *errstd,
 		ajStrAppendC(errstd,buf);
 	    }
 	}
-#else
+#else /* !HAVE_POLL */
     while((retval=waitpid(pid,&status,WNOHANG))!=pid)
     {
 	if(retval==-1)
@@ -2733,7 +2808,7 @@ static void java_wait_for_file(int pid, AjPStr *errstd,
 	    ajStrAppendC(errstd,buf);
 	}
     }
-#endif
+#endif /* HAVE_POLL */
 
     if(size)
 	if(ptr-fbuf != size)
@@ -2777,6 +2852,8 @@ static void java_wait_for_file(int pid, AjPStr *errstd,
 ** @param [w] fsize [int*] file size
 **
 ** @return [int] 0=success -1=failure
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static int java_jembossctl(ajint command,
@@ -2877,9 +2954,9 @@ static int java_jembossctl(ajint command,
 
 #if defined (__SVR4) && defined (__sun)
     pid = fork1();
-#else
+#else /* !(__SVR4 && __sun) */
     pid = fork();
-#endif
+#endif /* __SVR4 && __sun */
     if(pid == -1)
     {
 	ajStrAppendC(errstd,"Fork error\n");
@@ -3040,13 +3117,13 @@ static int java_jembossctl(ajint command,
 	    ajStrAppendC(errstd,"Error receiving (java_batch)\n");
 #ifdef __hpux
 	signal(SIGCLD,SIG_IGN);
-#endif
+#endif /* __hpux */
 #ifdef linux
 	signal(SIGCLD,SIG_IGN);
-#endif
+#endif /* linux */
 #if defined (__SVR4) && defined (__sun)
 	signal(SIGCHLD,SIG_IGN);
-#endif
+#endif /* __SVR4 && __sun */
 	break;
 
     case SEQ_ATTRIB:
@@ -3088,6 +3165,8 @@ static int java_jembossctl(ajint command,
 ** @param [w] str6 [AjPStr*] any string
 **
 ** @return [void]
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static void java_tidy_command(AjPStr *str1, AjPStr *str2, AjPStr *str3,
@@ -3120,6 +3199,8 @@ static void java_tidy_command(AjPStr *str1, AjPStr *str2, AjPStr *str3,
 ** @param [w] buf [char*] socket buffer
 **
 ** @return [void]
+**
+** @release 2.3.0
 ******************************************************************************/
 
 static void java_tidy_command2(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
@@ -3152,6 +3233,8 @@ static void java_tidy_command2(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
 ** @param [u] errpipe [int*] stderr pipe
 **
 ** @return [void]
+**
+** @release 2.9.0
 ******************************************************************************/
 
 static void java_tidy_command3(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
@@ -3188,6 +3271,8 @@ static void java_tidy_command3(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
 ** @param [r] environment [jstring] environment
 **
 ** @return [jboolean] true if success
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -3326,6 +3411,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_userAuth
 ** @param [r] direct [jstring] directory to create
 **
 ** @return [jboolean] true if success
+**
+** @release 2.4.0
 ** @@
 ******************************************************************************/
 
@@ -3508,6 +3595,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_forkBatch
 ** @param [r] direct [jstring] directory to create
 **
 ** @return [jboolean] true if success
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -3690,6 +3779,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_forkEmboss
 ** @param [r] direct [jstring] directory to create
 **
 ** @return [jboolean] true if success
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -3843,6 +3934,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_makeDir
 ** @param [r] filename [jstring] file to delete
 **
 ** @return [jboolean] true if success
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -4002,6 +4095,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_delFile
 ** @param [r] filename2 [jstring] new filename
 **
 ** @return [jboolean] true if success
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -4181,6 +4276,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_renameFile
 ** @param [r] direct [jstring] directory to delete
 **
 ** @return [jboolean] true if success
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -4339,6 +4436,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_delDir
 ** @param [r] direct [jstring] directory to scan
 **
 ** @return [jboolean] true if success
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -4497,6 +4596,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_listFiles
 ** @param [r] direct [jstring] directory to scan
 **
 ** @return [jboolean] true if success
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -4657,6 +4758,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_listDirs
 ** @param [r] filename [jstring] filename to get
 **
 ** @return [jbyteArray] contents of file
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -4836,6 +4939,8 @@ JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_server_Ajax_getFile
 ** @param [r] arr [jbyteArray] contents for the file
 **
 ** @return [jboolean] true if the file was written
+**
+** @release 2.3.0
 ** @@
 ******************************************************************************/
 
@@ -5026,6 +5131,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_putFile
 ** @param [r] filename [jstring] file to delete
 **
 ** @return [jboolean] true if success
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -5202,6 +5309,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_seqAttrib
 ** @param [r] filename [jstring] usa
 **
 ** @return [jboolean] true if success
+**
+** @release 2.5.0
 ** @@
 ******************************************************************************/
 
@@ -5378,6 +5487,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_server_Ajax_seqsetAttrib
 ** @param [w] errstd [AjPStr*] stderr
 **
 ** @return [int] 0=success  -1=failure
+**
+** @release 2.4.0
 ** @@
 ******************************************************************************/
 
@@ -5387,11 +5498,11 @@ static int java_pipe_write(int tchan, const char *buf, int n, int seconds,
 #ifdef HAVE_POLL
     struct pollfd ufds;
     unsigned int  nfds;
-#else
+#else /* !HAVE_POLL */
     fd_set fdr;
     fd_set fdw;
     struct timeval tfd;
-#endif
+#endif /* HAVE_POLL */
 
     int  written;
     int  sent = 0;
@@ -5456,7 +5567,7 @@ static int java_pipe_write(int tchan, const char *buf, int n, int seconds,
 	    then = tv.tv_sec;
 	}
     }
-#else
+#else /* !HAVE_POLL */
     while(written!=n)
     {
 	gettimeofday(&tv,NULL);
@@ -5495,7 +5606,7 @@ static int java_pipe_write(int tchan, const char *buf, int n, int seconds,
 	    then = tv.tv_sec;
 	}
     }
-#endif
+#endif /* HAVE_POLL */
 
     block = 0;
 
@@ -5523,6 +5634,8 @@ static int java_pipe_write(int tchan, const char *buf, int n, int seconds,
 ** @param [w] errstd [AjPStr*] stderr
 **
 ** @return [int] 0=success  -1=failure
+**
+** @release 2.4.0
 ** @@
 ******************************************************************************/
 
@@ -5532,11 +5645,11 @@ static int java_pipe_read(int rchan, char *buf, int n, int seconds,
 #ifdef HAVE_POLL
     struct pollfd ufds;
     unsigned int  nfds;
-#else
+#else /* !HAVE_POLL */
     fd_set fdr;
     fd_set fdw;
     struct timeval tfd;
-#endif
+#endif /* HAVE_POLL */
 
     int  sum;
     int  got = 0;
@@ -5604,7 +5717,7 @@ static int java_pipe_read(int rchan, char *buf, int n, int seconds,
 	}
 
     }
-#else
+#else /* !HAVE_POLL */
     while(sum!=n)
     {
 	gettimeofday(&tv,NULL);
@@ -5643,7 +5756,7 @@ static int java_pipe_read(int rchan, char *buf, int n, int seconds,
 	    then = tv.tv_sec;
 	}
     }
-#endif
+#endif /* HAVE_POLL */
 
     block = 0;
 
@@ -5670,6 +5783,8 @@ static int java_pipe_read(int rchan, char *buf, int n, int seconds,
 ** @param [w] errstd [AjPStr*] stderr
 **
 ** @return [int] 0=success  -1=failure
+**
+** @release 2.4.0
 ** @@
 ******************************************************************************/
 
@@ -5705,6 +5820,8 @@ static int java_snd(int tchan,const char *buf,int len,AjPStr *errstd)
 ** @param [w] errstd [AjPStr*] stderr
 **
 ** @return [int] 0=success  -1=failure
+**
+** @release 2.4.0
 ** @@
 ******************************************************************************/
 
@@ -5740,6 +5857,8 @@ static int java_rcv(int rchan, char *buf, AjPStr *errstd)
 ** @param [r] flag [unsigned long] block=1 unblock=0
 **
 ** @return [int] 0=success  -1=failure
+**
+** @release 2.4.0
 ** @@
 ******************************************************************************/
 
@@ -5751,19 +5870,17 @@ static int java_block(int chan, unsigned long flag)
 #ifdef __sgi
 	if(errno==ENOSYS)
 	    return 0;
-#endif
+#endif /* __sgi */
 #ifdef __hpux
 	if(errno==ENOTTY)
 	    return 0;
-#endif
+#endif /* __hpux */
 	return -1;
     }
 
     return 0;
 }
 
-#endif /* WIN32 */
-
-#endif
+#endif /* !WIN32 */
 
 #endif /* HAVE_JAVA */

@@ -75,7 +75,7 @@ Output report [z46957.fuzztran]:
 Command line arguments
 
 Search for patterns in protein sequences (translated)
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -146,7 +146,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -240,13 +243,13 @@ RX   PUBMED; 8662634.
 RA   Huber A., Sander P.H., Paulsen R.;
 RT   "Phosphorylation of the InaD gene product, a photoreceptor membrane protein
 RT   required for recovery of visual excitation";
-RL   J. Biol. Chem. 271(20):11710-11717(1996).
+RL   J Biol Chem 271(20):11710-11717(1996).
 XX
 RN   [2]
 RP   1-1493
 RA   Huber A.;
 RT   ;
-RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (20-DEC-1994) to the INSDC.
 RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
 RL   Karlsruhe, Germany
 XX
@@ -335,7 +338,7 @@ SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
        brackets `{ }' the amino acids that are not accepted at a given
        position. For example: {AM} stands for any amino acid except Ala
        and Met.
-     * Each element in a pattern is separated from its neighbor by a `-'.
+     * Each element in a pattern is separated from its neighbour by a `-'.
        (Optional in fuzztran).
      * Repetition of an element of the pattern can be indicated by
        following that element with a numerical value or a numerical range
@@ -380,7 +383,7 @@ Output file format
 
 ########################################
 # Program: fuzztran
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: fuzztran
 #    -options
 #    -sequence tembl:Z46957
@@ -402,25 +405,25 @@ Output file format
 #
 #=======================================
 
-  Start     End  Strand   Score Pattern     Mismatch  Frame PStart   PEnd Transl
-ation
-     97     102       +       2 pattern: RA        .      1     33     34 RA
+  Start     End  Strand   Score Pattern    Mismatch  Frame PStart   PEnd Transla
+tion
+     97     102       +       2 pattern:RA        .      1     33     34 RA
 
-    133     138       +       2 pattern: RA        .      1     45     46 RA
+    133     138       +       2 pattern:RA        .      1     45     46 RA
 
-    421     426       +       2 pattern: RA        .      1    141    142 RA
+    421     426       +       2 pattern:RA        .      1    141    142 RA
 
-    625     630       +       2 pattern: RA        .      1    209    210 RA
+    625     630       +       2 pattern:RA        .      1    209    210 RA
 
-    835     840       +       2 pattern: RA        .      1    279    280 RA
+    835     840       +       2 pattern:RA        .      1    279    280 RA
 
-    919     924       +       2 pattern: RA        .      1    307    308 RA
+    919     924       +       2 pattern:RA        .      1    307    308 RA
 
-    227     232       +       2 pattern: RA        .      2     76     77 RA
+    227     232       +       2 pattern:RA        .      2     76     77 RA
 
-    752     757       +       2 pattern: RA        .      2    251    252 RA
+    752     757       +       2 pattern:RA        .      2    251    252 RA
 
-     72      77       +       2 pattern: RA        .      3     24     25 RA
+     72      77       +       2 pattern:RA        .      3     24     25 RA
 
 
 #---------------------------------------
@@ -599,18 +602,18 @@ Known bugs
 See also
 
    Program name     Description
-   antigenic        Finds antigenic sites in proteins
+   antigenic        Find antigenic sites in proteins
    dreg             Regular expression search of nucleotide sequence(s)
-   epestfind        Finds PEST motifs as potential proteolytic cleavage sites
+   epestfind        Find PEST motifs as potential proteolytic cleavage sites
    fuzznuc          Search for patterns in nucleotide sequences
    fuzzpro          Search for patterns in protein sequences
-   patmatdb         Searches protein sequences with a sequence motif
+   patmatdb         Search protein sequences with a sequence motif
    patmatmotifs     Scan a protein sequence with motifs from the PROSITE
                     database
    preg             Regular expression search of protein sequence(s)
-   pscan            Scans protein sequence(s) with fingerprints from the PRINTS
+   pscan            Scan protein sequence(s) with fingerprints from the PRINTS
                     database
-   sigcleave        Reports on signal cleavage sites in a protein sequence
+   sigcleave        Report on signal cleavage sites in a protein sequence
 
 Author(s)
 

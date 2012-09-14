@@ -6,7 +6,7 @@
 <pre>
 ########################################
 # Program: preg
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: preg
 #    -sequence "tsw:*_rat"
 #    -pattern "IA[QWF]A"
@@ -29,22 +29,22 @@
 #---------------------------------------
 #=======================================
 #
-# Sequence: UBR5_RAT     from: 1   to: 920
+# Sequence: UBR5_RAT     from: 1   to: 2788
 # HitCount: 1
 #
 # Pattern: IA[QWF]A
 #
 #=======================================
 
-  Start     End Pattern         Sequence
-    421     424 regex: IA[QWF]A IAQA
+  Start     End Pattern        Sequence
+   2289    2292 regex:IA[QWF]A IAQA
 
 #---------------------------------------
 #---------------------------------------
 
 #---------------------------------------
 # Total_sequences: 2
-# Total_length: 1101
+# Total_length: 2969
 # Reported_sequences: 2
 # Reported_hitcount: 1
 #---------------------------------------

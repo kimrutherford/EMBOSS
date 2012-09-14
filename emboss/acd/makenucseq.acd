@@ -1,8 +1,8 @@
 application: makenucseq [
   documentation: "Create random nucleotide sequences"
   groups: "Edit"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0000364 operation Random sequence generation"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:0364 Random sequence generation"
 ]
 
 section: input [
@@ -18,7 +18,7 @@ section: input [
            end trimmed to be in the correct reading frame."
     nullok: "Y"
     knowntype: "codon usage"
-    relations: "EDAM:0001597 data Codon usage table"
+    relations: "EDAM_data:1597 Codon usage table"
   ]
 
 endsection: input
@@ -33,7 +33,7 @@ section: required [
     default: "100"
     minimum: "1"
     information: "Number of sequences created"
-    relations: "EDAM:0001694 data Number of output entities"
+    relations: "EDAM_data:1694 Number of output entities"
   ]
 
   integer: length [
@@ -41,14 +41,14 @@ section: required [
     default: "100"
     minimum: "1"
     information: "Length of each sequence"
-    relations: "EDAM:0001249 data Sequence length"
+    relations: "EDAM_data:1249 Sequence length"
   ]
 
   toggle: useinsert [
     additional: "Y"
     information: "Do you want to make an insert"
     default: "N"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   string: insert [
@@ -56,7 +56,7 @@ section: required [
     information: "Inserted string"
     help: "String that is inserted into sequence"
     knowntype: "sequence"
-    relations: "EDAM:0000848 data Raw sequence"
+    relations: "EDAM_data:0848 Raw sequence"
   ]
 
   integer: start [
@@ -64,7 +64,7 @@ section: required [
     information: "Start point of inserted sequence"
     minimum: "1"
     default: "1"
-    relations: "EDAM:0001016 data Sequence position"
+    relations: "EDAM_data:1016 Sequence position"
   ]
 
 endsection: required
@@ -78,8 +78,8 @@ section: output [
     parameter: "Y"
     type: "nucleotide"
     name: "makeseq"
-    relations: "EDAM:0000849 data Sequence record"
-    relations: "EDAM:0001210 format pure nucleotide"
+    relations: "EDAM_data:0849 Sequence record"
+    relations: "EDAM_format:1210 pure nucleotide"
 
   ]
 

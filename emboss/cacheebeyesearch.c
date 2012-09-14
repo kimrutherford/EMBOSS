@@ -24,17 +24,28 @@
 #include "ajsoap.h"
 
 
+/* @datastatic ebeyePdbinfo ***************************************************
+**
+** Database information for cacheebeyesearch
+**
+** @attr name [AjPStr] Name on server
+** @attr searchableFields [AjPStr] Searchable fields
+** @attr retrievableFields [AjPStr] Retrievable fields
+** @attr description [AjPStr] Description
+** @attr dbalias [AjPStr] Database alias
+******************************************************************************/
+
 typedef struct dbinfo
 {
     AjPStr name;
     AjPStr searchableFields;
     AjPStr retrievableFields;
-    AjPStr description; /* todo:available through getDomainsHierarchy() call */
+    AjPStr description;
     AjPStr dbalias;
 } ebeyeOdbinfo;
-
 #define ebeyePdbinfo ebeyeOdbinfo*
 
+/* todo: description available through getDomainsHierarchy() call */
 
 
 
@@ -376,6 +387,7 @@ static void cacheebeyesearch_GetFields(axiom_node_t *wsResult,
 			if(ajStrGetLen(dbInfo->retrievableFields)>0)
 			    ajStrAppendC(&dbInfo->retrievableFields, ", ");
 			ajStrAppendS(&dbInfo->retrievableFields,field);
+			retrievable = ajFalse;
 		    }
 
 		    ajStrDel(&field);

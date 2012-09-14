@@ -7,12 +7,12 @@ Search for programs with 'codon' in their input, output or parameters
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>wossdata codon </b>
-Finds programs by EDAM data
+Find programs by EDAM data
 
 SEARCH FOR DATA 'CODON'
 backtranseq Back-translate a protein sequence to a nucleotide sequence
 cai         Calculate codon adaptation index
-chips       Calculates Nc codon usage statistic
+chips       Calculate Nc codon usage statistic
 codcmp      Codon usage table comparison
 codcopy     Copy and reformat a codon usage table
 cusp        Create a codon usage table from nucleotide sequence(s)

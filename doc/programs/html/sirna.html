@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -35,7 +35,7 @@ Please help by correcting and extending the Wiki pages.
 <H2>
     Function
 </H2>
-Finds siRNA duplexes in mRNA
+Find siRNA duplexes in mRNA
 
 <H2>
     Description
@@ -100,7 +100,7 @@ Here is a sample session with <b>sirna</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>sirna </b>
-Finds siRNA duplexes in mRNA
+Find siRNA duplexes in mRNA
 Input nucleotide sequence(s): <b>tembl:x65923</b>
 Output report [x65923.sirna]: <b></b>
 output sequence(s) [x65923.fasta]: <b></b>
@@ -118,7 +118,7 @@ Show the first two bases of the 23 base target region in brackets. These do not 
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>sirna -context </b>
-Finds siRNA duplexes in mRNA
+Find siRNA duplexes in mRNA
 Input nucleotide sequence(s): <b>tembl:x65923</b>
 Output report [x65923.sirna]: <b></b>
 output sequence(s) [x65923.fasta]: <b></b>
@@ -134,8 +134,8 @@ output sequence(s) [x65923.fasta]: <b></b>
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-Finds siRNA duplexes in mRNA
-Version: EMBOSS:6.4.0.0
+Find siRNA duplexes in mRNA
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
@@ -214,7 +214,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -360,7 +363,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-sequence" associated seqall qualifiers
+<td align="left" colspan=5>"-sequence" associated seqall qualifiers
 </td>
 </tr>
 
@@ -429,11 +432,35 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
+<td> -scircular1<br>-scircular_sequence</td>
+<td>boolean</td>
+<td>Sequence is circular</td>
+<td>Boolean value Yes/No</td>
+<td>N</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <td> -sformat1<br>-sformat_sequence</td>
 <td>string</td>
 <td>Input sequence format</td>
 <td>Any string</td>
 <td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -iquery1<br>-iquery_sequence</td>
+<td>string</td>
+<td>Input query fields or ID list</td>
+<td>Any string</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td> -ioffset1<br>-ioffset_sequence</td>
+<td>integer</td>
+<td>Input start position offset</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -477,7 +504,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated report qualifiers
+<td align="left" colspan=5>"-outfile" associated report qualifiers
 </td>
 </tr>
 
@@ -570,7 +597,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outseq" associated seqoutall qualifiers
+<td align="left" colspan=5>"-outseq" associated seqoutall qualifiers
 </td>
 </tr>
 
@@ -819,7 +846,7 @@ RN   [1]
 RP   1-518
 RA   Michiels L.M.R.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
 RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -831,7 +858,15 @@ RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
 RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
-DR   H-InvDB; HIT000322806.
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -851,12 +886,14 @@ FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
 FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="H-InvDB:HIT000322806.14"
 FT                   /db_xref="HGNC:3597"
 FT                   /db_xref="InterPro:IPR000626"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="InterPro:IPR019954"
 FT                   /db_xref="InterPro:IPR019955"
 FT                   /db_xref="InterPro:IPR019956"
+FT                   /db_xref="PDB:2L7R"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
@@ -925,7 +962,7 @@ outputs a report format file. The default format is 'table'.
 <pre>
 ########################################
 # Program: sirna
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: sirna
 #    -sequence tembl:x65923
 # Report_format: table
@@ -1148,7 +1185,7 @@ taaaaaagccacttagttcagtc
 <pre>
 ########################################
 # Program: sirna
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: sirna
 #    -context
 #    -sequence tembl:x65923
@@ -1389,12 +1426,12 @@ None.
 
 <tr>
 <td><a href="einverted.html">einverted</a></td>
-<td>Finds inverted repeats in nucleotide sequences</td>
+<td>Find inverted repeats in nucleotide sequences</td>
 </tr>
 
 <tr>
 <td><a href="marscan.html">marscan</a></td>
-<td>Finds matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
+<td>Find matrix/scaffold recognition (MRS) signatures in DNA sequences</td>
 </tr>
 
 <tr>

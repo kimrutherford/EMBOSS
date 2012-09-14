@@ -1,9 +1,9 @@
 application: cachedbfetch [
-  documentation: "Generates server cache file for Dbfetch/WSDbfetch data sources"
+  documentation: "Generate server cache file for Dbfetch/WSDbfetch data sources"
   groups: "Data resources"
   gui: "no"
-  relations: "EDAM:0000091 topic Data handling"
-  relations: "EDAM:0000516 operation Data retrieval (database annotation)"
+  relations: "EDAM_topic:0091 Data handling"
+  relations: "EDAM_operation:0516 Data retrieval (database metadata)"
 ]
 
 section: input [
@@ -16,7 +16,7 @@ section: input [
     default: "dbfetch"
     information: "Name of the ws/dbfetch server defined in EMBOSS resource files"
     knowntype: "emboss server name"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
   
 endsection: input
@@ -31,7 +31,7 @@ section: output [
     additional: "Y"
     default: "stdout"
     knowntype: "cachedbfetch output"
-    relations: "EDAM:0000969 data Text"
+    relations: "EDAM_data:2048 Report"
   ]
 
   outfile: cachefile [
@@ -39,7 +39,7 @@ section: output [
     default:   "server.$(servername)"
     information: "Server cache output file"
     knowntype: "emboss server cache file"
-    relations: "EDAM:0000969 data Text"
+    relations: "EDAM_data:2048 Report"
   ]
 
 endsection: output

@@ -2,8 +2,8 @@ application: edamclean
 [
   documentation: "Validate and fix EDAM OBO ontology"
   groups: "Ontology:EDAM"
-    relations: "EDAM:0000220 topic Data file processing"
-    relations: "EDAM:0000336 operation File validation"
+    relations: "EDAM_topic:0220 Data file processing"
+    relations: "EDAM_operation:0336 File validation"
 ]
 
 
@@ -85,7 +85,7 @@ section: output
   [
     parameter: "Y"
     information: "General log output file"
-    relations: "EDAM:0001678 data Tool log"
+    relations: "EDAM_data:1678 Tool log"
     default: "EDAM_out.log"
     knowntype: "log"
   ]
@@ -107,7 +107,7 @@ section: output
     parameter: "Y"
     information: "XML file output directory"
     knowntype: "emboss database directory"
-    relations:  "EDAM:0001049 identifier Directory name"
+    relations:  "EDAM_identifier:1049 Directory name"
   ]
 
 endsection: output

@@ -11,7 +11,7 @@ Wiki
 
 Function
 
-   Finds neighbouring pairs of features in sequence(s)
+   Find neighbouring pairs of features in sequence(s)
 
 Description
 
@@ -67,7 +67,7 @@ Usage
 
 
 % twofeat tembl:x65923
-Finds neighbouring pairs of features in sequence(s)
+Find neighbouring pairs of features in sequence(s)
 Type of first feature [*]: polyA_signal
 Type of second feature [*]: polyA_site
 The minimum distance between the features [0]: 10
@@ -86,7 +86,7 @@ Output report [x65923.twofeat]:
 
 
 % twofeat -twoout -rformat gff tembl:x65923
-Finds neighbouring pairs of features in sequence(s)
+Find neighbouring pairs of features in sequence(s)
 Type of first feature [*]: polyA_signal
 Type of second feature [*]: polyA_site
 The minimum distance between the features [0]: 10
@@ -98,8 +98,8 @@ Output report [x65923.twofeat]:
 
 Command line arguments
 
-Finds neighbouring pairs of features in sequence(s)
-Version: EMBOSS:6.4.0.0
+Find neighbouring pairs of features in sequence(s)
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or
@@ -336,7 +336,10 @@ Version: EMBOSS:6.4.0.0
    -sprotein1          boolean    Sequence is protein
    -slower1            boolean    Make lower case
    -supper1            boolean    Make upper case
+   -scircular1         boolean    Sequence is circular
    -sformat1           string     Input sequence format
+   -iquery1            string     Input query fields or ID list
+   -ioffset1           integer    Input start position offset
    -sdbname1           string     Database name
    -sid1               string     Entryname
    -ufo1               string     UFO features
@@ -430,7 +433,7 @@ RN   [1]
 RP   1-518
 RA   Michiels L.M.R.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   Submitted (29-APR-1992) to the INSDC.
 RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
 RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
 XX
@@ -442,7 +445,15 @@ RT   "fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
 RT   an antisense sequence in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8(9):2537-2546(1993).
 XX
-DR   H-InvDB; HIT000322806.
+DR   Ensembl-Gn; ENSG00000149806; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000279259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000434372; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000525297; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000526555; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000527548; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529259; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000529639; Homo_sapiens.
+DR   Ensembl-Tr; ENST00000531743; Homo_sapiens.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -462,12 +473,14 @@ FT                   /gene="fau"
 FT                   /db_xref="GDB:135476"
 FT                   /db_xref="GOA:P35544"
 FT                   /db_xref="GOA:P62861"
+FT                   /db_xref="H-InvDB:HIT000322806.14"
 FT                   /db_xref="HGNC:3597"
 FT                   /db_xref="InterPro:IPR000626"
 FT                   /db_xref="InterPro:IPR006846"
 FT                   /db_xref="InterPro:IPR019954"
 FT                   /db_xref="InterPro:IPR019955"
 FT                   /db_xref="InterPro:IPR019956"
+FT                   /db_xref="PDB:2L7R"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P35544"
 FT                   /db_xref="UniProtKB/Swiss-Prot:P62861"
 FT                   /protein_id="CAA46716.1"
@@ -515,7 +528,7 @@ Output file format
 
 ########################################
 # Program: twofeat
-# Rundate: Fri 15 Jul 2011 12:00:00
+# Rundate: Sun 15 Jul 2012 12:00:00
 # Commandline: twofeat
 #    [-sequence] tembl:x65923
 #    -atype polyA_signal
@@ -551,9 +564,9 @@ Output file format
 
 ##gff-version 3
 ##sequence-region X65923 1 518
-#!Date 2011-07-15
+#!Date 2012-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.4.0.0
+#!Source-version EMBOSS 6.5.0.0
 X65923  EMBL    polyA_signal_sequence   484     489     .       +       .
 ID=X65923.6
 X65923  EMBL    polyA_site      509     509     .       +       .       ID=X6592

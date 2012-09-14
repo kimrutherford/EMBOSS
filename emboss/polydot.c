@@ -294,7 +294,7 @@ static void polydot_drawPlotlines(void *x, void *cl)
 
 static void polydot_plotMatches(const AjPList list)
 {
-    ajListMapread(list,polydot_drawPlotlines, NULL);
+    ajListMapread(list, &polydot_drawPlotlines, NULL);
 
     return;
 }

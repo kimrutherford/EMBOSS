@@ -1,10 +1,60 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* @include embindex **********************************************************
+**
+** B+ Tree Indexing plus Disc Cache.
+**
+** @author Copyright (c) 2003 Alan Bleasby
+** @version $Revision: 1.34 $
+** @modified $Date: 2012/05/24 16:57:10 $ by $Author: rice $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
-#ifndef embindex_h
-#define embindex_h
+#ifndef EMBINDEX_H
+#define EMBINDEX_H
+
+
+
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
+
+#include "ajdefine.h"
+#include "ajstr.h"
+#include "ajlist.h"
+#include "ajindex.h"
+#include "ajreg.h"
+
+AJ_BEGIN_DECLS
+
+
+
+
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
+
+
+
+
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
+
 
 
 
@@ -25,27 +75,29 @@ extern "C"
 ** @attr idextension [AjPStr] Id index extension
 ** @attr maxid [AjPStr] Longest id in data
 ** @attr files [AjPList] List of data filenames
-** @attr reffiles [AjPList] List of data reference filenames
+** @attr reffiles [AjPList*] Lists of data reference filenames
 ** @attr fields [AjPList] EMBOSS index field structures
 ** @attr id [AjPStr] Entry identifier
 ** @attr idcache [AjPBtcache] Id cache structure
-** @attr idpagecount [ajlong] Cache page count
+** @attr pripagecount [ajlong] Cache primary page count
+** @attr secpagecount [ajlong] Cache secondary page count
 ** @attr do_id [AjBool] If true, build id index
 ** @attr compressed [AjBool] If true, compress id index
 ** @attr nfiles [ajuint] Data file count
-** @attr cachesize [ajuint] Defalt cache size
-** @attr pagesize [ajuint] Default page size
+** @attr refcount [ajuint] Reference file(s) for each entry
 ** @attr idlen [ajuint] Maximum id length in index
 ** @attr idmaxlen [ajuint] Maximum id length in data
 ** @attr idtruncate [ajuint] Number of ids truncated
-** @attr idpagesize [ajuint] Id index page size
-** @attr idcachesize [ajuint] Id index cache size
+** @attr pripagesize [ajuint] Default page size
+** @attr pricachesize [ajuint] Defalt cache size
 ** @attr idorder [ajuint] Id index primary order
 ** @attr idfill [ajuint] Id index primary fill count
+** @attr secpagesize [ajuint] Default page size
+** @attr seccachesize [ajuint] Defalt cache size
 ** @attr idsecorder [ajuint] Id index secondary order
 ** @attr idsecfill [ajuint] Id index secondary fill count
 ** @attr fpos [ajlong] Input file position
-** @attr reffpos [ajlong] Input second (reference) file position
+** @attr reffpos [ajlong*] Input extra (reference) file positions
 ******************************************************************************/
 
 typedef struct EmbSBtreeEntry
@@ -62,34 +114,40 @@ typedef struct EmbSBtreeEntry
     AjPStr maxid;
 
     AjPList files;
-    AjPList reffiles;
+    AjPList *reffiles;
     AjPList fields;
 
     AjPStr id;
     AjPBtcache idcache;
-    ajlong idpagecount;
+    ajlong pripagecount;
+    ajlong secpagecount;
 
     AjBool do_id;
     AjBool compressed;
 
     ajuint nfiles;
-    ajuint cachesize;
-    ajuint pagesize;
+
+    ajuint refcount;
 
     ajuint idlen;
     ajuint idmaxlen;
     ajuint idtruncate;
 
-    ajuint idpagesize;
-    ajuint idcachesize;
+    ajuint pripagesize;
+    ajuint pricachesize;
+
     ajuint idorder;
     ajuint idfill;
+
+    ajuint secpagesize;
+    ajuint seccachesize;
+
     ajuint idsecorder;
     ajuint idsecfill;
     
 
     ajlong fpos;
-    ajlong reffpos;
+    ajlong *reffpos;
     
 } EmbOBtreeEntry;
 #define EmbPBtreeEntry EmbOBtreeEntry*
@@ -107,19 +165,27 @@ typedef struct EmbSBtreeEntry
 ** @attr name      [AjPStr] File basename
 ** @attr extension [AjPStr] File extension
 ** @attr maxkey    [AjPStr] Longest keyword found
-** @attr pagecount [ajulong] Index page count
-** @attr pagesize  [ajuint] Index page size
-** @attr cachesize [ajuint] Index cache size
+** @attr freelist  [AjPStr*] Free data elements for reuse
+** @attr pripagecount [ajulong] Index primary page count
+** @attr secpagecount [ajulong] Index secondary page count
+** @attr pripagesize  [ajuint] Index primary page size
+** @attr secpagesize  [ajuint] Index secondary page size
+** @attr pricachesize [ajuint] Index primary cache size
+** @attr seccachesize [ajuint] Index secondary cache size
 ** @attr order     [ajuint] Primary page order
 ** @attr fill      [ajuint] Primary page fill count
 ** @attr secorder  [ajuint] Secondary page order
 ** @attr secfill   [ajuint] Secondary page fill count
+** @attr refcount  [ajuint] Number of reference file(s) per entry
 ** @attr len       [ajuint] Maximum keyword length in index
+** @attr idlen     [ajuint] Maximum id length in index
 ** @attr maxlen    [ajuint] Maximum keyword length in data
 ** @attr truncate  [ajuint] Number of keywords truncated
+** @attr freecount [ajuint] Free list used
+** @attr freesize  [ajuint] Free list size
 ** @attr secondary [AjBool] Secondary index if true
 ** @attr compressed [AjBool] Compress index if true
-** @attr Padding   [char[4]] Padding to alignment boundary
+** @attr Padding [char[4]] Padding to alignment boundary
 ******************************************************************************/
     
 typedef struct EmbSBtreeField
@@ -129,21 +195,35 @@ typedef struct EmbSBtreeField
     AjPStr name;
     AjPStr extension;
     AjPStr maxkey;
-    ajulong pagecount;
-    ajuint pagesize;
-    ajuint cachesize;
+    AjPStr *freelist;
+    ajulong pripagecount;
+    ajulong secpagecount;
+    ajuint pripagesize;
+    ajuint secpagesize;
+    ajuint pricachesize;
+    ajuint seccachesize;
     ajuint order;
     ajuint fill;
     ajuint secorder;
     ajuint secfill;
+    ajuint refcount;
     ajuint len;
+    ajuint idlen;
     ajuint maxlen;
     ajuint truncate;
+    ajuint freecount;
+    ajuint freesize;
     AjBool secondary;
     AjBool compressed;
     char   Padding[4];
 } EmbOBtreeField;
 #define EmbPBtreeField EmbOBtreeField*
+
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
+
+
 
 /*
 ** Prototype definitions
@@ -154,6 +234,27 @@ void   embBtreeIndexEntry(EmbPBtreeEntry entry,
 void   embBtreeIndexField(EmbPBtreeField field,
                           const EmbPBtreeEntry entry,
                           ajuint dbno);
+ajuint embBtreeIndexPrimary(EmbPBtreeField field,
+                            const EmbPBtreeEntry entry,
+                            ajuint dbno);
+ajuint embBtreeIndexSecondary(EmbPBtreeField field,
+                              const EmbPBtreeEntry entry);
+
+void   embBtreeFindEmblAc(const AjPStr readline, EmbPBtreeField field,
+                          AjPStr *Pstr);
+void   embBtreeParseEmblAc(const AjPStr readline, EmbPBtreeField field);
+void   embBtreeParseEmblDe(const AjPStr readline, EmbPBtreeField field);
+void   embBtreeParseEmblKw(const AjPStr readline, EmbPBtreeField field);
+void   embBtreeParseEmblSv(const AjPStr readline, EmbPBtreeField field);
+void   embBtreeParseEmblTx(const AjPStr readline, EmbPBtreeField field);
+void   embBtreeParseFastaAc(const AjPStr readline, EmbPBtreeField field);
+void   embBtreeParseFastaDe(const AjPStr readline, EmbPBtreeField field);
+void   embBtreeParseFastaSv(const AjPStr readline, EmbPBtreeField field);
+void   embBtreeParseGenbankAc(const AjPStr readline, EmbPBtreeField field);
+void   embBtreeParseGenbankDe(const AjPStr readline, EmbPBtreeField field);
+void   embBtreeParseGenbankKw(const AjPStr readline, EmbPBtreeField field);
+void   embBtreeParseGenbankTx(const AjPStr readline, EmbPBtreeField field);
+
 void   embBtreeParseEntry(const AjPStr readline, AjPRegexp regexp,
                           EmbPBtreeEntry entry);
 void   embBtreeParseField(const AjPStr readline, AjPRegexp regexp,
@@ -182,7 +283,7 @@ void   embBtreeFastaSV(const AjPStr kwline, AjPList kwlist, ajuint maxlen);
 
 ajuint  embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
 		       const AjPStr files, const AjPStr exclude);
-EmbPBtreeEntry embBtreeEntryNew(void);
+EmbPBtreeEntry embBtreeEntryNew(ajuint refcount);
 void           embBtreeEntrySetCompressed(EmbPBtreeEntry entry);
 ajuint         embBtreeSetFields(EmbPBtreeEntry entry, AjPStr const * fields);
 void           embBtreeEntryDel(EmbPBtreeEntry *thys);
@@ -200,8 +301,9 @@ AjBool         embBtreeCloseCaches(EmbPBtreeEntry entry);
 AjBool         embBtreeDumpParameters(EmbPBtreeEntry entry);
 
 EmbPBtreeField embBtreeFieldNewC(const char* nametxt);
-EmbPBtreeField embBtreeFieldNewS(const AjPStr name);
+EmbPBtreeField embBtreeFieldNewS(const AjPStr name, ajuint refcount);
 void           embBtreeFieldDel(EmbPBtreeField *Pthis);
+AjBool         embBtreeFieldGetdataS(EmbPBtreeField field, AjPStr *Pstr);
 void           embBtreeFieldSetCompressed(EmbPBtreeField field);
 void           embBtreeFieldSetSecondary(EmbPBtreeField field);
 void           embBtreeFieldSetIdtype(EmbPBtreeField field);
@@ -218,8 +320,8 @@ void           embIndexExit(void);
 AjBool         embBtreeProbeCaches(EmbPBtreeEntry entry);
 #endif
 
-#endif
 
-#ifdef __cplusplus
-}
-#endif
+AJ_END_DECLS
+
+#endif  /* !EMBINDEX_H */
+

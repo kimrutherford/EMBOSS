@@ -1,10 +1,37 @@
+/* @include enssimple *********************************************************
+**
+** Ensembl Simple Feature functions
+**
+** @author Copyright (C) 1999 Ensembl Developers
+** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.7 $
+** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
+** @modified $Date: 2012/04/12 20:34:17 $ by $Author: mks $
+** @@
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Lesser General Public
+** License as published by the Free Software Foundation; either
+** version 2.1 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Lesser General Public License for more details.
+**
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
+******************************************************************************/
 
 #ifndef ENSSIMPLE_H
 #define ENSSIMPLE_H
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensfeature.h"
 
@@ -13,9 +40,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 /* @const EnsPSimplefeatureadaptor ********************************************
 **
@@ -32,9 +59,9 @@ AJ_BEGIN_DECLS
 
 
 
-/* ==================================================================== */
-/* ========================== public data ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================== public data ============================== */
+/* ========================================================================= */
 
 /* @data EnsPSimplefeature ****************************************************
 **
@@ -70,9 +97,9 @@ typedef struct EnsSSimplefeature
 
 
 
-/* ==================================================================== */
-/* ======================= public functions =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== public functions ============================ */
+/* ========================================================================= */
 
 /*
 ** Prototype definitions
@@ -90,7 +117,7 @@ EnsPSimplefeature ensSimplefeatureNewIni(EnsPSimplefeatureadaptor pfa,
 
 EnsPSimplefeature ensSimplefeatureNewRef(EnsPSimplefeature sf);
 
-void ensSimplefeatureDel(EnsPSimplefeature* Psf);
+void ensSimplefeatureDel(EnsPSimplefeature *Psf);
 
 EnsPSimplefeatureadaptor ensSimplefeatureGetAdaptor(
     const EnsPSimplefeature sf);
@@ -122,6 +149,14 @@ AjBool ensSimplefeatureTrace(const EnsPSimplefeature sf, ajuint level);
 
 size_t ensSimplefeatureCalculateMemsize(const EnsPSimplefeature sf);
 
+/* AJAX List of Ensembl Simple Feature objects */
+
+AjBool ensListSimplefeatureSortEndAscending(AjPList sfs);
+
+AjBool ensListSimplefeatureSortEndDescending(AjPList sfs);
+
+AjBool ensListSimplefeatureSortIdentifierAscending(AjPList sfs);
+
 AjBool ensListSimplefeatureSortStartAscending(AjPList sfs);
 
 AjBool ensListSimplefeatureSortStartDescending(AjPList sfs);
@@ -134,7 +169,7 @@ EnsPSimplefeatureadaptor ensRegistryGetSimplefeatureadaptor(
 EnsPSimplefeatureadaptor ensSimplefeatureadaptorNew(
     EnsPDatabaseadaptor dba);
 
-void ensSimplefeatureadaptorDel(EnsPSimplefeatureadaptor* Psfa);
+void ensSimplefeatureadaptorDel(EnsPSimplefeatureadaptor *Psfa);
 
 EnsPDatabaseadaptor ensSimplefeatureadaptorGetDatabaseadaptor(
     EnsPSimplefeatureadaptor sfa);

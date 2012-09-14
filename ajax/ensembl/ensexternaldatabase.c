@@ -1,31 +1,34 @@
-/* @source Ensembl External Database functions
+/* @source ensexternaldatabase ************************************************
+**
+** Ensembl External Database functions
 **
 ** @author Copyright (C) 1999 Ensembl Developers
 ** @author Copyright (C) 2006 Michael K. Schuster
+** @version $Revision: 1.55 $
 ** @modified 2009 by Alan Bleasby for incorporation into EMBOSS core
-** @modified $Date: 2011/07/06 21:52:56 $ by $Author: mks $
-** @version $Revision: 1.35 $
+** @modified $Date: 2012/04/26 06:37:49 $ by $Author: mks $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
-** modify it under the terms of the GNU Library General Public
+** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2.1 of the License, or (at your option) any later version.
 **
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-** Library General Public License for more details.
+** Lesser General Public License for more details.
 **
-** You should have received a copy of the GNU Library General Public
-** License along with this library; if not, write to the
-** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-** Boston, MA  02111-1307, USA.
+** You should have received a copy of the GNU Lesser General Public
+** License along with this library; if not, write to the Free Software
+** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+** MA  02110-1301,  USA.
+**
 ******************************************************************************/
 
-/* ==================================================================== */
-/* ========================== include files =========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= include files ============================= */
+/* ========================================================================= */
 
 #include "ensbaseadaptor.h"
 #include "ensexternaldatabase.h"
@@ -34,32 +37,32 @@
 
 
 
-/* ==================================================================== */
-/* ============================ constants ============================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =============================== constants =============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== global variables ========================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== global variables ============================ */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ========================== private data ============================ */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ============================= private data ============================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private constants ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private constants =========================== */
+/* ========================================================================= */
 
-/* @conststatic externaldatabaseStatus ****************************************
+/* @conststatic externaldatabaseKStatus ***************************************
 **
 ** The Ensembl External Database status is enumerated in both, the SQL table
 ** definition and the data structure. The following strings are used for
@@ -75,7 +78,7 @@
 **
 ******************************************************************************/
 
-static const char* externaldatabaseStatus[] =
+static const char *externaldatabaseKStatus[] =
 {
     "",
     "KNOWNXREF",
@@ -84,13 +87,13 @@ static const char* externaldatabaseStatus[] =
     "PRED",
     "ORTH",
     "PSEUDO",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic externaldatabaseType ******************************************
+/* @conststatic externaldatabaseKType *****************************************
 **
 ** The Ensembl External Database type is enumerated in both, the SQL table
 ** definition and the data structure. The following strings are used for
@@ -103,46 +106,49 @@ static const char* externaldatabaseStatus[] =
 ** LIT:
 ** PRIMARY_DB_SYNONYM:
 ** ENSEMBL:
+** IGNORE: This is in the Ensembl Genomes schema only.
 **
 ******************************************************************************/
 
-static const char* externaldatabaseType[] =
+static const char *externaldatabaseKType[] =
 {
     "",
     "ARRAY",
     "ALT_TRANS",
+    "ALT_GENE",
     "MISC",
     "LIT",
     "PRIMARY_DB_SYNONYM",
     "ENSEMBL",
-    (const char*) NULL
+    "IGNORE",
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic externaldatabaseadaptorTables *********************************
+/* @conststatic externaldatabaseadaptorKTables ********************************
 **
 ** Array of Ensembl External Database Adaptor SQL table names
 **
 ******************************************************************************/
 
-static const char* externaldatabaseadaptorTables[] =
+static const char *externaldatabaseadaptorKTables[] =
 {
     "external_db",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* @conststatic externaldatabaseadaptorColumns ********************************
+/* @conststatic externaldatabaseadaptorKColumns *******************************
 **
 ** Array of Ensembl External Database Adaptor SQL column names
 **
 ******************************************************************************/
 
-static const char* externaldatabaseadaptorColumns[] =
+static const char *externaldatabaseadaptorKColumns[] =
 {
     "external_db.external_db_id",
     "external_db.db_name",
@@ -154,25 +160,25 @@ static const char* externaldatabaseadaptorColumns[] =
     "external_db.priority",
     "external_db.status",
     "external_db.type",
-    (const char*) NULL
+    (const char *) NULL
 };
 
 
 
 
-/* ==================================================================== */
-/* ======================== private variables ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private variables =========================== */
+/* ========================================================================= */
 
 
 
 
-/* ==================================================================== */
-/* ======================== private functions ========================= */
-/* ==================================================================== */
+/* ========================================================================= */
+/* =========================== private functions =========================== */
+/* ========================================================================= */
 
 static AjBool externaldatabaseadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
@@ -180,32 +186,23 @@ static AjBool externaldatabaseadaptorFetchAllbyStatement(
 
 static AjBool externaldatabaseadaptorCacheInsert(
     EnsPExternaldatabaseadaptor edba,
-    EnsPExternaldatabase* Pedb);
+    EnsPExternaldatabase *Pedb);
+
+static void externaldatabaseadaptorCacheByNameValdel(void **Pvalue);
 
 static AjBool externaldatabaseadaptorCacheInit(
     EnsPExternaldatabaseadaptor edba);
 
-static void externaldatabaseadaptorCacheClearIdentifier(void** key,
-                                                        void** value,
-                                                        void* cl);
-
-static void externaldatabaseadaptorCacheClearName(void** key,
-                                                  void** value,
-                                                  void* cl);
-
-static AjBool externaldatabaseadaptorCacheExit(
-    EnsPExternaldatabaseadaptor edba);
-
-static void externaldatabaseadaptorFetchAll(const void* key,
-                                            void** value,
-                                            void* cl);
+static void externaldatabaseadaptorFetchAll(const void *key,
+                                            void **Pvalue,
+                                            void *cl);
 
 
 
 
-/* ==================================================================== */
-/* ===================== All functions by section ===================== */
-/* ==================================================================== */
+/* ========================================================================= */
+/* ======================= All functions by section ======================== */
+/* ========================================================================= */
 
 
 
@@ -225,8 +222,8 @@ static void externaldatabaseadaptorFetchAll(const void* key,
 ** Ensembl External Database objects
 **
 ** @cc Bio::EnsEMBL::DBEntry
-** @cc CVS Revision: 1.49
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.51
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -276,6 +273,8 @@ static void externaldatabaseadaptorFetchAll(const void* key,
 ** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
 **
 ** @return [EnsPExternaldatabase] Ensembl External Database or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -284,31 +283,31 @@ EnsPExternaldatabase ensExternaldatabaseNewCpy(
 {
     EnsPExternaldatabase pthis = NULL;
 
-    if(!edb)
+    if (!edb)
         return NULL;
 
     AJNEW0(pthis);
 
-    pthis->Use        = 1;
+    pthis->Use        = 1U;
     pthis->Identifier = edb->Identifier;
     pthis->Adaptor    = edb->Adaptor;
 
-    if(edb->Name)
+    if (edb->Name)
         pthis->Name = ajStrNewRef(edb->Name);
 
-    if(edb->Release)
+    if (edb->Release)
         pthis->Release = ajStrNewRef(edb->Release);
 
-    if(edb->Displayname)
+    if (edb->Displayname)
         pthis->Displayname = ajStrNewRef(edb->Displayname);
 
-    if(edb->Secondaryname)
+    if (edb->Secondaryname)
         pthis->Secondaryname = ajStrNewRef(edb->Secondaryname);
 
-    if(edb->Secondarytable)
+    if (edb->Secondarytable)
         pthis->Secondarytable = ajStrNewRef(edb->Secondarytable);
 
-    if(edb->Description)
+    if (edb->Description)
         pthis->Description = ajStrNewRef(edb->Description);
 
     pthis->Status = edb->Status;
@@ -341,6 +340,8 @@ EnsPExternaldatabase ensExternaldatabaseNewCpy(
 ** @param [r] priority [ajint] Display priority
 **
 ** @return [EnsPExternaldatabase] Ensembl External Database or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -359,31 +360,31 @@ EnsPExternaldatabase ensExternaldatabaseNewIni(
 {
     EnsPExternaldatabase edb = NULL;
 
-    if(!name)
+    if (!name)
         return NULL;
 
     AJNEW0(edb);
 
-    edb->Use        = 1;
+    edb->Use        = 1U;
     edb->Identifier = identifier;
     edb->Adaptor    = edba;
 
-    if(name)
+    if (name)
         edb->Name = ajStrNewRef(name);
 
-    if(release)
+    if (release)
         edb->Release = ajStrNewRef(release);
 
-    if(displayname)
+    if (displayname)
         edb->Displayname = ajStrNewRef(displayname);
 
-    if(secondaryname)
+    if (secondaryname)
         edb->Secondaryname = ajStrNewRef(secondaryname);
 
-    if(secondarytable)
+    if (secondarytable)
         edb->Secondarytable = ajStrNewRef(secondarytable);
 
-    if(description)
+    if (description)
         edb->Description = ajStrNewRef(description);
 
     edb->Status   = status;
@@ -403,13 +404,15 @@ EnsPExternaldatabase ensExternaldatabaseNewIni(
 **
 ** @param [u] edb [EnsPExternaldatabase] Ensembl External Database
 **
-** @return [EnsPExternaldatabase] Ensembl External Database
+** @return [EnsPExternaldatabase] Ensembl External Database or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPExternaldatabase ensExternaldatabaseNewRef(EnsPExternaldatabase edb)
 {
-    if(!edb)
+    if (!edb)
         return NULL;
 
     edb->Use++;
@@ -422,15 +425,14 @@ EnsPExternaldatabase ensExternaldatabaseNewRef(EnsPExternaldatabase edb)
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl External Database object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl External Database object.
 **
 ** @fdata [EnsPExternaldatabase]
 **
-** @nam3rule Del Destroy (free) an Ensembl External Database object
+** @nam3rule Del Destroy (free) an Ensembl External Database
 **
-** @argrule * Pedb [EnsPExternaldatabase*] Ensembl External Database
-**                                         object address
+** @argrule * Pedb [EnsPExternaldatabase*] Ensembl External Database address
 **
 ** @valrule * [void]
 **
@@ -444,28 +446,40 @@ EnsPExternaldatabase ensExternaldatabaseNewRef(EnsPExternaldatabase edb)
 **
 ** Default destructor for an Ensembl External Database.
 **
-** @param [d] Pedb [EnsPExternaldatabase*] Ensembl External Database
-**                                         object address
+** @param [d] Pedb [EnsPExternaldatabase*] Ensembl External Database address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
-void ensExternaldatabaseDel(EnsPExternaldatabase* Pedb)
+void ensExternaldatabaseDel(EnsPExternaldatabase *Pedb)
 {
     EnsPExternaldatabase pthis = NULL;
 
-    if(!Pedb)
+    if (!Pedb)
         return;
 
-    if(!*Pedb)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensExternaldatabaseDel"))
+    {
+        ajDebug("ensExternaldatabaseDel\n"
+                "  *Pedb %p\n",
+                *Pedb);
+
+        ensExternaldatabaseTrace(*Pedb, 1);
+    }
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pedb)
         return;
 
     pthis = *Pedb;
 
     pthis->Use--;
 
-    if(pthis->Use)
+    if (pthis->Use)
     {
         *Pedb = NULL;
 
@@ -489,9 +503,9 @@ void ensExternaldatabaseDel(EnsPExternaldatabase* Pedb)
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl External Database object.
+** Functions for returning members of an Ensembl External Database object.
 **
 ** @fdata [EnsPExternaldatabase]
 **
@@ -514,7 +528,7 @@ void ensExternaldatabaseDel(EnsPExternaldatabase* Pedb)
 ** Ensembl External Database Adaptor or NULL
 ** @valrule Description [AjPStr] Description or NULL
 ** @valrule Displayname [AjPStr] Display name or NULL
-** @valrule Identifier [ajuint] SQL database-internal identifier or 0
+** @valrule Identifier [ajuint] SQL database-internal identifier or 0U
 ** @valrule Name [AjPStr] Name or NULL
 ** @valrule Priority [ajint] Priority or 0
 ** @valrule Release [AjPStr] Release or NULL
@@ -533,7 +547,7 @@ void ensExternaldatabaseDel(EnsPExternaldatabase* Pedb)
 
 /* @func ensExternaldatabaseGetAdaptor ****************************************
 **
-** Get the Ensembl External Database Adaptor element of an
+** Get the Ensembl External Database Adaptor member of an
 ** Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
@@ -541,16 +555,15 @@ void ensExternaldatabaseDel(EnsPExternaldatabase* Pedb)
 **
 ** @return [EnsPExternaldatabaseadaptor] Ensembl External Database Adaptor
 **                                       or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsPExternaldatabaseadaptor ensExternaldatabaseGetAdaptor(
     const EnsPExternaldatabase edb)
 {
-    if(!edb)
-        return NULL;
-
-    return edb->Adaptor;
+    return (edb) ? edb->Adaptor : NULL;
 }
 
 
@@ -558,22 +571,21 @@ EnsPExternaldatabaseadaptor ensExternaldatabaseGetAdaptor(
 
 /* @func ensExternaldatabaseGetDescription ************************************
 **
-** Get the description element of an Ensembl External Database.
+** Get the description member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::description
 ** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
 **
 ** @return [AjPStr] Description or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensExternaldatabaseGetDescription(
     const EnsPExternaldatabase edb)
 {
-    if(!edb)
-        return NULL;
-
-    return edb->Description;
+    return (edb) ? edb->Description : NULL;
 }
 
 
@@ -581,22 +593,21 @@ AjPStr ensExternaldatabaseGetDescription(
 
 /* @func ensExternaldatabaseGetDisplayname ************************************
 **
-** Get the display name element of an Ensembl External Database.
+** Get the display name member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::db_display_name
 ** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
 **
 ** @return [AjPStr] Display name or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensExternaldatabaseGetDisplayname(
     const EnsPExternaldatabase edb)
 {
-    if(!edb)
-        return ajFalse;
-
-    return edb->Displayname;
+    return (edb) ? edb->Displayname : NULL;
 }
 
 
@@ -604,23 +615,22 @@ AjPStr ensExternaldatabaseGetDisplayname(
 
 /* @func ensExternaldatabaseGetIdentifier *************************************
 **
-** Get the SQL database-internal identifier element of an
+** Get the SQL database-internal identifier member of an
 ** Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::Storable::dbID
 ** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
 **
-** @return [ajuint] SQL database-internal identifier or 0
+** @return [ajuint] SQL database-internal identifier or 0U
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajuint ensExternaldatabaseGetIdentifier(
     const EnsPExternaldatabase edb)
 {
-    if(!edb)
-        return 0;
-
-    return edb->Identifier;
+    return (edb) ? edb->Identifier : 0U;
 }
 
 
@@ -628,22 +638,21 @@ ajuint ensExternaldatabaseGetIdentifier(
 
 /* @func ensExternaldatabaseGetName *******************************************
 **
-** Get the name element of an Ensembl External Database.
+** Get the name member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::dbname
 ** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
 **
 ** @return [AjPStr] Name or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensExternaldatabaseGetName(
     const EnsPExternaldatabase edb)
 {
-    if(!edb)
-        return NULL;
-
-    return edb->Name;
+    return (edb) ? edb->Name : NULL;
 }
 
 
@@ -651,22 +660,21 @@ AjPStr ensExternaldatabaseGetName(
 
 /* @func ensExternaldatabaseGetPriority ***************************************
 **
-** Get the priority element of an Ensembl External Database.
+** Get the priority member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::priority
 ** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
 **
 ** @return [ajint] Priority or 0
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 ajint ensExternaldatabaseGetPriority(
     const EnsPExternaldatabase edb)
 {
-    if(!edb)
-        return 0;
-
-    return edb->Priority;
+    return (edb) ? edb->Priority : 0;
 }
 
 
@@ -674,22 +682,21 @@ ajint ensExternaldatabaseGetPriority(
 
 /* @func ensExternaldatabaseGetRelease ****************************************
 **
-** Get the release element of an Ensembl External Database.
+** Get the release member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::release
 ** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
 **
 ** @return [AjPStr] Release or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensExternaldatabaseGetRelease(
     const EnsPExternaldatabase edb)
 {
-    if(!edb)
-        return NULL;
-
-    return edb->Release;
+    return (edb) ? edb->Release : NULL;
 }
 
 
@@ -697,22 +704,21 @@ AjPStr ensExternaldatabaseGetRelease(
 
 /* @func ensExternaldatabaseGetSecondaryname **********************************
 **
-** Get the secondary name element of an Ensembl External Database.
+** Get the secondary name member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::secondary_db_name
 ** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
 **
 ** @return [AjPStr] Secondary name or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensExternaldatabaseGetSecondaryname(
     const EnsPExternaldatabase edb)
 {
-    if(!edb)
-        return NULL;
-
-    return edb->Secondaryname;
+    return (edb) ? edb->Secondaryname : NULL;
 }
 
 
@@ -720,22 +726,21 @@ AjPStr ensExternaldatabaseGetSecondaryname(
 
 /* @func ensExternaldatabaseGetSecondarytable *********************************
 **
-** Get the secondary table element of an Ensembl External Database.
+** Get the secondary table member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::secondary_db_table
 ** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
 **
 ** @return [AjPStr] Secondary table or NULL
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjPStr ensExternaldatabaseGetSecondarytable(
     const EnsPExternaldatabase edb)
 {
-    if(!edb)
-        return NULL;
-
-    return edb->Secondarytable;
+    return (edb) ? edb->Secondarytable : NULL;
 }
 
 
@@ -743,23 +748,22 @@ AjPStr ensExternaldatabaseGetSecondarytable(
 
 /* @func ensExternaldatabaseGetStatus *****************************************
 **
-** Get the status element of an Ensembl External Database.
+** Get the status member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::status
 ** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
 **
 ** @return [EnsEExternaldatabaseStatus] Status or
 **                                      ensEExternaldatabaseStatusNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsEExternaldatabaseStatus ensExternaldatabaseGetStatus(
     const EnsPExternaldatabase edb)
 {
-    if(!edb)
-        return ensEExternaldatabaseStatusNULL;
-
-    return edb->Status;
+    return (edb) ? edb->Status : ensEExternaldatabaseStatusNULL;
 }
 
 
@@ -767,34 +771,33 @@ EnsEExternaldatabaseStatus ensExternaldatabaseGetStatus(
 
 /* @func ensExternaldatabaseGetType *******************************************
 **
-** Get the type element of an Ensembl External Database.
+** Get the type member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::type
 ** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
 **
 ** @return [EnsEExternaldatabaseType] Type or ensEExternaldatabaseTypeNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 EnsEExternaldatabaseType ensExternaldatabaseGetType(
     const EnsPExternaldatabase edb)
 {
-    if(!edb)
-        return ensEExternaldatabaseTypeNULL;
-
-    return edb->Type;
+    return (edb) ? edb->Type : ensEExternaldatabaseTypeNULL;
 }
 
 
 
 
-/* @section element assignment ************************************************
+/* @section member assignment *************************************************
 **
-** Functions for assigning elements of an Ensembl External Database object.
+** Functions for assigning members of an Ensembl External Database object.
 **
 ** @fdata [EnsPExternaldatabase]
 **
-** @nam3rule Set Set one element of an Ensembl External Database
+** @nam3rule Set Set one member of an Ensembl External Database
 ** @nam4rule Adaptor Set the Ensembl External Database Adaptor
 ** @nam4rule Description Set the description
 ** @nam4rule Displayname Set the display name
@@ -830,7 +833,7 @@ EnsEExternaldatabaseType ensExternaldatabaseGetType(
 
 /* @func ensExternaldatabaseSetAdaptor ****************************************
 **
-** Set the Ensembl External Database Adaptor element of an
+** Set the Ensembl External Database Adaptor member of an
 ** Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::Storable::adaptor
@@ -839,13 +842,15 @@ EnsEExternaldatabaseType ensExternaldatabaseGetType(
 **                                               Database Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseSetAdaptor(EnsPExternaldatabase edb,
                                      EnsPExternaldatabaseadaptor edba)
 {
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
     edb->Adaptor = edba;
@@ -858,20 +863,22 @@ AjBool ensExternaldatabaseSetAdaptor(EnsPExternaldatabase edb,
 
 /* @func ensExternaldatabaseSetDescription ************************************
 **
-** Set the description element of an Ensembl External Database.
+** Set the description member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::description
 ** @param [u] edb [EnsPExternaldatabase] Ensembl External Database
 ** @param [u] description [AjPStr] Description
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseSetDescription(EnsPExternaldatabase edb,
                                          AjPStr description)
 {
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
     ajStrDel(&edb->Description);
@@ -886,20 +893,22 @@ AjBool ensExternaldatabaseSetDescription(EnsPExternaldatabase edb,
 
 /* @func ensExternaldatabaseSetDisplayname ************************************
 **
-** Set the display name element of an Ensembl External Database.
+** Set the display name member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::db_display_name
 ** @param [u] edb [EnsPExternaldatabase] Ensembl External Database
 ** @param [u] displayname [AjPStr] Display name
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseSetDisplayname(EnsPExternaldatabase edb,
                                          AjPStr displayname)
 {
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
     ajStrDel(&edb->Displayname);
@@ -914,7 +923,7 @@ AjBool ensExternaldatabaseSetDisplayname(EnsPExternaldatabase edb,
 
 /* @func ensExternaldatabaseSetIdentifier *************************************
 **
-** Set the SQL database-internal identifier element of an
+** Set the SQL database-internal identifier member of an
 ** Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::Storable::dbID
@@ -922,13 +931,15 @@ AjBool ensExternaldatabaseSetDisplayname(EnsPExternaldatabase edb,
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseSetIdentifier(EnsPExternaldatabase edb,
                                         ajuint identifier)
 {
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
     edb->Identifier = identifier;
@@ -941,20 +952,22 @@ AjBool ensExternaldatabaseSetIdentifier(EnsPExternaldatabase edb,
 
 /* @func ensExternaldatabaseSetName *******************************************
 **
-** Set the name element of an Ensembl External Database.
+** Set the name member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::dbname
 ** @param [u] edb [EnsPExternaldatabase] Ensembl External Database
 ** @param [u] name [AjPStr] Name
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseSetName(EnsPExternaldatabase edb,
                                   AjPStr name)
 {
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
     ajStrDel(&edb->Name);
@@ -969,20 +982,22 @@ AjBool ensExternaldatabaseSetName(EnsPExternaldatabase edb,
 
 /* @func ensExternaldatabaseSetPriority ***************************************
 **
-** Set the priority element of an Ensembl External Database.
+** Set the priority member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::priority
 ** @param [u] edb [EnsPExternaldatabase] Ensembl External Database
 ** @param [r] priority [ajint] Priority
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseSetPriority(EnsPExternaldatabase edb,
                                       ajint priority)
 {
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
     edb->Priority = priority;
@@ -995,20 +1010,22 @@ AjBool ensExternaldatabaseSetPriority(EnsPExternaldatabase edb,
 
 /* @func ensExternaldatabaseSetRelease ****************************************
 **
-** Set the release element of an Ensembl External Database.
+** Set the release member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::release
 ** @param [u] edb [EnsPExternaldatabase] Ensembl External Database
 ** @param [u] release [AjPStr] Release
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseSetRelease(EnsPExternaldatabase edb,
                                      AjPStr release)
 {
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
     ajStrDel(&edb->Release);
@@ -1023,20 +1040,22 @@ AjBool ensExternaldatabaseSetRelease(EnsPExternaldatabase edb,
 
 /* @func ensExternaldatabaseSetSecondaryname **********************************
 **
-** Set the secondary name element of an Ensembl External Database.
+** Set the secondary name member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::secondary_db_name
 ** @param [u] edb [EnsPExternaldatabase] Ensembl External Database
 ** @param [u] secondaryname [AjPStr] Secondary name
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseSetSecondaryname(EnsPExternaldatabase edb,
                                            AjPStr secondaryname)
 {
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
     ajStrDel(&edb->Secondaryname);
@@ -1051,20 +1070,22 @@ AjBool ensExternaldatabaseSetSecondaryname(EnsPExternaldatabase edb,
 
 /* @func ensExternaldatabaseSetSecondarytable *********************************
 **
-** Set the secondary table element of an Ensembl External Database.
+** Set the secondary table member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::secondary_db_table
 ** @param [u] edb [EnsPExternaldatabase] Ensembl External Database
 ** @param [u] secondarytable [AjPStr] Secondary table
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseSetSecondarytable(EnsPExternaldatabase edb,
                                             AjPStr secondarytable)
 {
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
     ajStrDel(&edb->Secondarytable);
@@ -1079,20 +1100,22 @@ AjBool ensExternaldatabaseSetSecondarytable(EnsPExternaldatabase edb,
 
 /* @func ensExternaldatabaseSetStatus *****************************************
 **
-** Set the status element of an Ensembl External Database.
+** Set the status member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::status
 ** @param [u] edb [EnsPExternaldatabase] Ensembl External Database
 ** @param [u] status [EnsEExternaldatabaseStatus] Status
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseSetStatus(EnsPExternaldatabase edb,
                                     EnsEExternaldatabaseStatus status)
 {
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
     edb->Status = status;
@@ -1105,20 +1128,22 @@ AjBool ensExternaldatabaseSetStatus(EnsPExternaldatabase edb,
 
 /* @func ensExternaldatabaseSetType *******************************************
 **
-** Set the type element of an Ensembl External Database.
+** Set the type member of an Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBEntry::type
 ** @param [u] edb [EnsPExternaldatabase] Ensembl External Database
 ** @param [u] type [EnsEExternaldatabaseType] Type
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseSetType(EnsPExternaldatabase edb,
                                   EnsEExternaldatabaseType type)
 {
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
     edb->Type = type;
@@ -1135,7 +1160,7 @@ AjBool ensExternaldatabaseSetType(EnsPExternaldatabase edb,
 **
 ** @fdata [EnsPExternaldatabase]
 **
-** @nam3rule Trace Report Ensembl External Database elements to debug file
+** @nam3rule Trace Report Ensembl External Database members to debug file
 **
 ** @argrule Trace edb [const EnsPExternaldatabase] Ensembl External Database
 ** @argrule Trace level [ajuint] Indentation level
@@ -1156,6 +1181,8 @@ AjBool ensExternaldatabaseSetType(EnsPExternaldatabase edb,
 ** @param [r] level [ajuint] Indentation level
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1163,7 +1190,7 @@ AjBool ensExternaldatabaseTrace(const EnsPExternaldatabase edb, ajuint level)
 {
     AjPStr indent = NULL;
 
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
     indent = ajStrNew();
@@ -1229,6 +1256,8 @@ AjBool ensExternaldatabaseTrace(const EnsPExternaldatabase edb, ajuint level)
 ** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
 **
 ** @return [size_t] Memory size in bytes or 0
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
@@ -1236,47 +1265,47 @@ size_t ensExternaldatabaseCalculateMemsize(const EnsPExternaldatabase edb)
 {
     size_t size = 0;
 
-    if(!edb)
+    if (!edb)
         return 0;
 
     size += sizeof (EnsOExternaldatabase);
 
-    if(edb->Name)
+    if (edb->Name)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(edb->Name);
     }
 
-    if(edb->Release)
+    if (edb->Release)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(edb->Release);
     }
 
-    if(edb->Displayname)
+    if (edb->Displayname)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(edb->Displayname);
     }
 
-    if(edb->Secondaryname)
+    if (edb->Secondaryname)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(edb->Secondaryname);
     }
 
-    if(edb->Secondarytable)
+    if (edb->Secondarytable)
     {
         size += sizeof (AjOStr);
 
         size += ajStrGetRes(edb->Secondarytable);
     }
 
-    if(edb->Description)
+    if (edb->Description)
     {
         size += sizeof (AjOStr);
 
@@ -1312,8 +1341,9 @@ size_t ensExternaldatabaseCalculateMemsize(const EnsPExternaldatabase edb)
 **
 ** @argrule  Str  status  [const AjPStr] Status string
 **
-** @valrule * [EnsEExternaldatabaseStatus] Ensembl External Database Status
-** enumeration or ensEExternaldatabaseStatusNULL
+** @valrule * [EnsEExternaldatabaseStatus]
+** Ensembl External Database Status enumeration or
+** ensEExternaldatabaseStatusNULL
 **
 ** @fcategory misc
 ******************************************************************************/
@@ -1327,8 +1357,11 @@ size_t ensExternaldatabaseCalculateMemsize(const EnsPExternaldatabase edb)
 **
 ** @param [r] status [const AjPStr] Status string
 **
-** @return [EnsEExternaldatabaseStatus] Ensembl External Database Status
-** enumeration or ensEExternaldatabaseStatusNULL
+** @return [EnsEExternaldatabaseStatus]
+** Ensembl External Database Status enumeration or
+** ensEExternaldatabaseStatusNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1339,13 +1372,13 @@ EnsEExternaldatabaseStatus ensExternaldatabaseStatusFromStr(
 
     EnsEExternaldatabaseStatus estatus = ensEExternaldatabaseStatusNULL;
 
-    for(i = ensEExternaldatabaseStatusNULL;
-        externaldatabaseStatus[i];
-        i++)
-        if(ajStrMatchC(status, externaldatabaseStatus[i]))
+    for (i = ensEExternaldatabaseStatusNULL;
+         externaldatabaseKStatus[i];
+         i++)
+        if (ajStrMatchC(status, externaldatabaseKStatus[i]))
             estatus = i;
 
-    if(!estatus)
+    if (!estatus)
         ajDebug("ensExternaldatabaseStatusFromStr encountered "
                 "unexpected string '%S'.\n", status);
 
@@ -1365,8 +1398,8 @@ EnsEExternaldatabaseStatus ensExternaldatabaseStatusFromStr(
 ** @nam4rule To   Cast an Ensembl External Database Status enumeration
 ** @nam5rule Char Return C character string value
 **
-** @argrule To edbs [EnsEExternaldatabaseStatus] Ensembl External Database
-**                                               Status enumeration
+** @argrule To edbs [EnsEExternaldatabaseStatus]
+** Ensembl External Database Status enumeration
 **
 ** @valrule Char [const char*] Ensembl External Database Status
 **
@@ -1378,13 +1411,16 @@ EnsEExternaldatabaseStatus ensExternaldatabaseStatusFromStr(
 
 /* @func ensExternaldatabaseStatusToChar **************************************
 **
-** Convert an Ensembl External Database status element into a
-** C-type (char*) string.
+** Convert an Ensembl External Database status member into a
+** C-type (char *) string.
 **
-** @param [u] edbs [EnsEExternaldatabaseStatus] Ensembl External Database
-**                                              Status enumeration
+** @param [u] edbs [EnsEExternaldatabaseStatus]
+** Ensembl External Database Status enumeration
 **
-** @return [const char*] Ensembl External Database Status C-type (char*) string
+** @return [const char*]
+** Ensembl External Database Status C-type (char *) string
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1392,17 +1428,17 @@ const char* ensExternaldatabaseStatusToChar(EnsEExternaldatabaseStatus edbs)
 {
     register EnsEExternaldatabaseStatus i = ensEExternaldatabaseStatusNULL;
 
-    for(i = ensEExternaldatabaseStatusNULL;
-        externaldatabaseStatus[i] && (i < edbs);
-        i++);
+    for (i = ensEExternaldatabaseStatusNULL;
+         externaldatabaseKStatus[i] && (i < edbs);
+         i++);
 
-    if(!externaldatabaseStatus[i])
+    if (!externaldatabaseKStatus[i])
         ajDebug("ensExternaldatabaseStatusToChar encountered an "
                 "out of boundary error on "
                 "Ensembl External Database Status enumeration %d.\n",
                 edbs);
 
-    return externaldatabaseStatus[i];
+    return externaldatabaseKStatus[i];
 }
 
 
@@ -1431,8 +1467,8 @@ const char* ensExternaldatabaseStatusToChar(EnsEExternaldatabaseStatus edbs)
 **
 ** @argrule  Str  type  [const AjPStr] Type string
 **
-** @valrule * [EnsEExternaldatabaseType] Ensembl External Database Type
-** enumeration or ensEExternaldatabaseTypeNULL
+** @valrule * [EnsEExternaldatabaseType]
+** Ensembl External Database Type enumeration or ensEExternaldatabaseTypeNULL
 **
 ** @fcategory misc
 ******************************************************************************/
@@ -1446,8 +1482,10 @@ const char* ensExternaldatabaseStatusToChar(EnsEExternaldatabaseStatus edbs)
 **
 ** @param [r] type [const AjPStr] Type string
 **
-** @return [EnsEExternaldatabaseType] Ensembl External Database Type
-** enumeration or ensEExternaldatabaseTypeNULL
+** @return [EnsEExternaldatabaseType]
+** Ensembl External Database Type enumeration or ensEExternaldatabaseTypeNULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1458,13 +1496,13 @@ EnsEExternaldatabaseType ensExternaldatabaseTypeFromStr(
 
     EnsEExternaldatabaseType etype = ensEExternaldatabaseTypeNULL;
 
-    for(i = ensEExternaldatabaseTypeNULL;
-        externaldatabaseType[i];
-        i++)
-        if(ajStrMatchC(type, externaldatabaseType[i]))
+    for (i = ensEExternaldatabaseTypeNULL;
+         externaldatabaseKType[i];
+         i++)
+        if (ajStrMatchC(type, externaldatabaseKType[i]))
             etype = i;
 
-    if(!etype)
+    if (!etype)
         ajDebug("ensExternaldatabaseTypeFromStr encountered "
                 "unexpected string '%S'.\n", type);
 
@@ -1484,8 +1522,8 @@ EnsEExternaldatabaseType ensExternaldatabaseTypeFromStr(
 ** @nam4rule To   Cast an Ensembl External Database Type enumeration
 ** @nam5rule Char Return C character string value
 **
-** @argrule To edbt [EnsEExternaldatabaseType] Ensembl External Database
-**                                             Type enumeration
+** @argrule To edbt [EnsEExternaldatabaseType]
+** Ensembl External Database Type enumeration
 **
 ** @valrule Char [const char*] Ensembl External Database Type or NULL
 **
@@ -1497,14 +1535,16 @@ EnsEExternaldatabaseType ensExternaldatabaseTypeFromStr(
 
 /* @func ensExternaldatabaseTypeToChar ****************************************
 **
-** Convert an Ensembl External Database type element into a
-** C-type (char*) string.
+** Convert an Ensembl External Database type member into a
+** C-type (char *) string.
 **
-** @param [u] edbt [EnsEExternaldatabaseType] Ensembl External Database Type
-** enumeration
+** @param [u] edbt [EnsEExternaldatabaseType]
+** Ensembl External Database Type enumeration
 **
-** @return [const char*] Ensembl External Database Type C-type (char*) string
-** or NULL
+** @return [const char*]
+** Ensembl External Database Type C-type (char *) string or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1512,17 +1552,17 @@ const char* ensExternaldatabaseTypeToChar(EnsEExternaldatabaseType edbt)
 {
     register EnsEExternaldatabaseType i = ensEExternaldatabaseTypeNULL;
 
-    for(i = ensEExternaldatabaseTypeNULL;
-        externaldatabaseType[i] && (i < edbt);
-        i++);
+    for (i = ensEExternaldatabaseTypeNULL;
+         externaldatabaseKType[i] && (i < edbt);
+         i++);
 
-    if(!externaldatabaseType[i])
+    if (!externaldatabaseKType[i])
         ajDebug("ensExternaldatabaseTypeToChar encountered an "
                 "out of boundary error on "
                 "Ensembl External Database Type enumeration %d.\n",
                 edbt);
 
-    return externaldatabaseType[i];
+    return externaldatabaseKType[i];
 }
 
 
@@ -1534,8 +1574,8 @@ const char* ensExternaldatabaseTypeToChar(EnsEExternaldatabaseType edbt)
 ** Ensembl External Database Adaptor objects
 **
 ** @cc Bio::EnsEMBL::DBSQL::DBEntryAdaptor
-** @cc CVS Revision: 1.161
-** @cc CVS Tag: branch-ensembl-62
+** @cc CVS Revision: 1.165
+** @cc CVS Tag: branch-ensembl-66
 **
 ******************************************************************************/
 
@@ -1555,7 +1595,8 @@ const char* ensExternaldatabaseTypeToChar(EnsEExternaldatabaseType edbt)
 **
 ** @argrule New dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @valrule * [EnsPExternaldatabaseadaptor] Ensembl External Database Adaptor
+** @valrule * [EnsPExternaldatabaseadaptor]
+** Ensembl External Database Adaptor or NULL
 **
 ** @fcategory new
 ******************************************************************************/
@@ -1568,25 +1609,27 @@ const char* ensExternaldatabaseTypeToChar(EnsEExternaldatabaseType edbt)
 ** Run a SQL statement against an Ensembl Database Adaptor and consolidate the
 ** results into an AJAX List of Ensembl External Database objects.
 **
-** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
+** @param [u] ba [EnsPBaseadaptor] Ensembl Base Adaptor
 ** @param [r] statement [const AjPStr] SQL statement
 ** @param [uN] am [EnsPAssemblymapper] Ensembl Assembly Mapper
 ** @param [uN] slice [EnsPSlice] Ensembl Slice
 ** @param [u] edbs [AjPList] AJAX List of Ensembl External Databases
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.4.0
 ** @@
 ******************************************************************************/
 
 static AjBool externaldatabaseadaptorFetchAllbyStatement(
-    EnsPDatabaseadaptor dba,
+    EnsPBaseadaptor ba,
     const AjPStr statement,
     EnsPAssemblymapper am,
     EnsPSlice slice,
     AjPList edbs)
 {
     ajint priority    = 0;
-    ajuint identifier = 0;
+    ajuint identifier = 0U;
 
     EnsEExternaldatabaseStatus estatus = ensEExternaldatabaseStatusNULL;
     EnsEExternaldatabaseType etype     = ensEExternaldatabaseTypeNULL;
@@ -1604,30 +1647,34 @@ static AjBool externaldatabaseadaptorFetchAllbyStatement(
     AjPStr status         = NULL;
     AjPStr type           = NULL;
 
+    EnsPDatabaseadaptor dba = NULL;
+
     EnsPExternaldatabase edb         = NULL;
     EnsPExternaldatabaseadaptor edba = NULL;
 
-    if(ajDebugTest("externaldatabaseadaptorFetchAllbyStatement"))
+    if (ajDebugTest("externaldatabaseadaptorFetchAllbyStatement"))
         ajDebug("externaldatabaseadaptorFetchAllbyStatement\n"
-                "  dba %p\n"
+                "  ba %p\n"
                 "  statement '%S'\n"
                 "  am %p\n"
                 "  slice %p\n"
                 "  edbs %p\n",
-                dba,
+                ba,
                 statement,
                 am,
                 slice,
                 edbs);
 
-    if(!edba)
+    if (!ba)
         return ajFalse;
 
-    if(!statement)
+    if (!statement)
         return ajFalse;
 
-    if(!edbs)
+    if (!edbs)
         return ajFalse;
+
+    dba = ensBaseadaptorGetDatabaseadaptor(ba);
 
     edba = ensRegistryGetExternaldatabaseadaptor(dba);
 
@@ -1635,7 +1682,7 @@ static AjBool externaldatabaseadaptorFetchAllbyStatement(
 
     sqli = ajSqlrowiterNew(sqls);
 
-    while(!ajSqlrowiterDone(sqli))
+    while (!ajSqlrowiterDone(sqli))
     {
         identifier      = 0;
         name            = ajStrNew();
@@ -1665,14 +1712,14 @@ static AjBool externaldatabaseadaptorFetchAllbyStatement(
 
         estatus = ensExternaldatabaseStatusFromStr(status);
 
-        if(!estatus)
+        if (!estatus)
             ajFatal("externaldatabaseadaptorFetchAllbyStatement encountered "
                     "unexpected string '%S' in the "
                     "'external_db.status' field.\n", status);
 
         etype = ensExternaldatabaseTypeFromStr(type);
 
-        if(!etype)
+        if (!etype)
             ajFatal("externaldatabaseadaptorFetchAllbyStatement encountered "
                     "unexpected string '%S' in the "
                     "'external_db.type' field.\n", type);
@@ -1689,7 +1736,7 @@ static AjBool externaldatabaseadaptorFetchAllbyStatement(
                                         etype,
                                         priority);
 
-        ajListPushAppend(edbs, (void*) edb);
+        ajListPushAppend(edbs, (void *) edb);
 
         ajStrDel(&name);
         ajStrDel(&release);
@@ -1715,55 +1762,78 @@ static AjBool externaldatabaseadaptorFetchAllbyStatement(
 **
 ** Insert an Ensembl External Database into the External Database
 ** Adaptor-internal cache.
-** If an External Database with the same name element is already present in the
+** If an External Database with the same name member is already present in the
 ** adaptor cache, the External Database is deleted and a pointer to the
 ** cached External Database is returned.
 **
-** @param [u] edba [EnsPExternaldatabaseadaptor] Ensembl External
-**                                               Database Adaptor
+** @param [u] edba [EnsPExternaldatabaseadaptor]
+** Ensembl External Database Adaptor
 ** @param [u] Pedb [EnsPExternaldatabase*] Ensembl External Database address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 static AjBool externaldatabaseadaptorCacheInsert(
     EnsPExternaldatabaseadaptor edba,
-    EnsPExternaldatabase* Pedb)
+    EnsPExternaldatabase *Pedb)
 {
-    ajuint* Pidentifier = NULL;
+    ajuint *Pidentifier = NULL;
 
+    AjIList iter = NULL;
+    AjPList list = NULL;
+
+    EnsPExternaldatabase edb0 = NULL;
     EnsPExternaldatabase edb1 = NULL;
     EnsPExternaldatabase edb2 = NULL;
 
-    if(!edba)
+    if (!edba)
         return ajFalse;
 
-    if(!edba->CacheByIdentifier)
+    if (!edba->CacheByIdentifier)
         return ajFalse;
 
-    if(!edba->CacheByName)
+    if (!edba->CacheByName)
         return ajFalse;
 
-    if(!Pedb)
+    if (!Pedb)
         return ajFalse;
 
-    if(!*Pedb)
+    if (!*Pedb)
         return ajFalse;
 
     /* Search the identifer cache. */
 
     edb1 = (EnsPExternaldatabase) ajTableFetchmodV(
         edba->CacheByIdentifier,
-        (const void*) &((*Pedb)->Identifier));
+        (const void *) &((*Pedb)->Identifier));
 
     /* Search the name cache. */
 
-    edb2 = (EnsPExternaldatabase) ajTableFetchmodV(
-        edba->CacheByName,
-        (const void*) (*Pedb)->Name);
+    list = (AjPList) ajTableFetchmodS(edba->CacheByName, (*Pedb)->Name);
 
-    if((!edb1) && (!edb2))
+    if (list)
+    {
+        iter = ajListIterNewread(list);
+
+        while (!ajListIterDone(iter))
+        {
+            edb0 = (EnsPExternaldatabase) ajListIterGet(iter);
+
+            if (ajStrMatchS(edb0->Release, (*Pedb)->Release))
+            {
+                edb2 = edb0;
+
+                break;
+            }
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    if ((!edb1) && (!edb2))
     {
         /* Insert into the identifier cache. */
 
@@ -1772,17 +1842,25 @@ static AjBool externaldatabaseadaptorCacheInsert(
         *Pidentifier = (*Pedb)->Identifier;
 
         ajTablePut(edba->CacheByIdentifier,
-                   (void*) Pidentifier,
-                   (void*) ensExternaldatabaseNewRef(*Pedb));
+                   (void *) Pidentifier,
+                   (void *) ensExternaldatabaseNewRef(*Pedb));
 
         /* Insert into the name cache. */
 
-        ajTablePut(edba->CacheByName,
-                   (void*) ajStrNewS((*Pedb)->Name),
-                   (void*) ensExternaldatabaseNewRef(*Pedb));
+        if (!list)
+        {
+            list = ajListNew();
+
+            ajTablePut(edba->CacheByName,
+                       (void *) ajStrNewS((*Pedb)->Name),
+                       (void *) list);
+        }
+
+        ajListPushAppend(list,
+                         (void *) ensExternaldatabaseNewRef(*Pedb));
     }
 
-    if(edb1 && edb2 && (edb1 == edb2))
+    if (edb1 && edb2 && (edb1 == edb2))
     {
         ajDebug("externaDatabaseadaptorCacheInsert replaced External Database "
                 "%p with one already cached %p\n", *Pedb, edb1);
@@ -1792,22 +1870,27 @@ static AjBool externaldatabaseadaptorCacheInsert(
         Pedb = &edb1;
     }
 
-    if(edb1 && edb2 && (edb1 != edb2))
+    if (edb1 && edb2 && (edb1 != edb2))
         ajDebug("externaldatabaseadaptorCacheInsert detected External "
-                "Databases in the identifier and name cache with identical "
-                "names ('%S' and '%S') but differnt addresses "
-                "(%p and %p).\n",
-                edb1->Name, edb2->Name, edb1, edb2);
+                "Databases (%u and %u) in the identifier and name cache with "
+                "identical names ('%S' and '%S') and releases ('%S' and '%S') "
+                "but differnt addresses (%p and %p).\n",
+                edb1->Identifier, edb2->Identifier,
+                edb1->Name, edb2->Name,
+                edb1->Release, edb2->Release,
+                edb1, edb2);
 
-    if(edb1 && (!edb2))
-        ajDebug("externaldatabaseadaptorCacheInsert detected an "
-                "Ensembl External Database "
-                "in the identifier, but not in the name cache.\n");
+    if (edb1 && (!edb2))
+        ajDebug("externaldatabaseadaptorCacheInsert detected "
+                "Ensembl External Database %u name '%S' release '%S' "
+                "in the identifier, but not in the name cache.\n",
+                edb1->Identifier, edb1->Name, edb1->Release);
 
-    if((!edb1) && edb2)
-        ajDebug("externaldatabaseadaptorCacheInsert detected and "
-                "Ensembl External Database "
-                "in the name, but not in the identifier cache.\n");
+    if ((!edb1) && edb2)
+        ajDebug("externaldatabaseadaptorCacheInsert detected "
+                "Ensembl External Database %u name '%S' release '%S' "
+                "in the name, but not in the identifier cache.\n",
+                edb2->Identifier, edb2->Name, edb2->Release);
 
     return ajTrue;
 }
@@ -1821,11 +1904,14 @@ static AjBool externaldatabaseadaptorCacheInsert(
 ** Remove an Ensembl External database from an
 ** External Database Adaptor-internal cache.
 **
-** @param [u] edba [EnsPExternaldatabaseadaptor] Ensembl External
-**                                               Database Adaptor
-** @param [r] edb [const EnsPExternaldatabase] Ensembl External Database
+** @param [u] edba [EnsPExternaldatabaseadaptor]
+** Ensembl External Database Adaptor
+** @param [r] edb [const EnsPExternaldatabase]
+** Ensembl External Database
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1833,46 +1919,67 @@ static AjBool externaldatabaseadaptorCacheRemove(
     EnsPExternaldatabaseadaptor edba,
     const EnsPExternaldatabase edb)
 {
-    ajuint* Pidentifier = NULL;
+    AjIList iter = NULL;
+    AjPList list = NULL;
 
-    AjPStr key = NULL;
-
+    EnsPExternaldatabase ebd0 = NULL;
     EnsPExternaldatabase edb1 = NULL;
     EnsPExternaldatabase edb2 = NULL;
 
-    if(!edba)
+    if (!edba)
         return ajFalse;
 
-    if(!edb)
+    if (!edb)
         return ajFalse;
 
-    /* Remove the table nodes. */
-
-    edb1 = (EnsPExternaldatabase) ajTableRemoveKey(
+    edb1 = (EnsPExternaldatabase) ajTableRemove(
         edba->CacheByIdentifier,
-        (const void*) &edb->Identifier,
-        (void**) &Pidentifier);
+        (const void *) &edb->Identifier);
 
-    edb2 = (EnsPExternaldatabase) ajTableRemoveKey(
-        edba->CacheByName,
-        (const void*) edb->Name,
-        (void**) &key);
+    list = (AjPList) ajTableFetchmodS(edba->CacheByName, edb->Name);
 
-    if(edb1 && (!edb2))
+    if (list)
+    {
+        iter = ajListIterNew(list);
+
+        while (!ajListIterDone(iter))
+        {
+            edb0 = (EnsPExternaldatabase) ajListIterGet(iter);
+
+            if (ajStrMatchS(edb0->Release, edb->Release))
+            {
+                edb2 = edb0;
+
+                ajListIterRemove(iter);
+
+                break;
+            }
+        }
+
+        ajListIterDel(&iter);
+
+        /* If the AJAX List is now empty, remove it from the AJAX Table. */
+
+        if (!ajListGetLength(list))
+        {
+            ajTableRemove(edba->CacheByName, edb->Name);
+
+            ajListFreeData(&list);
+        }
+
+    }
+
+    if (edb1 && (!edb2))
         ajWarn("externaldatabaseadaptorCacheRemove could remove "
                "External Database with identifier %u '%S' "
                "only from the identifier cache.\n",
                edb->Identifier, edb->Name);
 
-    if((!edb1) && edb2)
+    if ((!edb1) && edb2)
         ajWarn("externaldatabaseadaptorCacheRemove could remove "
                "External Database with identifier %u '%S' "
                "only from the name cache.\n",
                edb->Identifier, edb->Name);
-
-    AJFREE(Pidentifier);
-
-    ajStrDel(&key);
 
     ensExternaldatabaseDel(&edb1);
     ensExternaldatabaseDel(&edb2);
@@ -1880,7 +1987,43 @@ static AjBool externaldatabaseadaptorCacheRemove(
     return ajTrue;
 }
 
-#endif
+#endif /* AJFALSE */
+
+
+
+
+/* @funcstatic externaldatabaseadaptorCacheByNameValdel ***********************
+**
+** An ajTableSetDestroyvalue "valdel" function to clear AJAX Table value data.
+** This function removes and deletes Ensembl External Database objects
+** from an AJAX List object, before deleting the AJAX List object.
+**
+** @param [d] Pvalue [void**] AJAX List address
+** @see ajTableSetDestroyvalue
+**
+** @return [void]
+**
+** @release 6.3.0
+** @@
+******************************************************************************/
+
+static void externaldatabaseadaptorCacheByNameValdel(void **Pvalue)
+{
+    EnsPExternaldatabase edb = NULL;
+
+    if (!Pvalue)
+        return;
+
+    if (!*Pvalue)
+        return;
+
+    while (ajListPop(*((AjPList *) Pvalue), (void **) &edb))
+        ensExternaldatabaseDel(&edb);
+
+    ajListFree((AjPList *) Pvalue);
+
+    return;
+}
 
 
 
@@ -1890,10 +2033,12 @@ static AjBool externaldatabaseadaptorCacheRemove(
 ** Initialise the internal External Database cache of an
 ** Ensembl External Database Adaptor.
 **
-** @param [u] edba [EnsPExternaldatabaseadaptor] Ensembl External
-**                                               Database Adaptor
+** @param [u] edba [EnsPExternaldatabaseadaptor]
+** Ensembl External Database Adaptor
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -1904,28 +2049,36 @@ static AjBool externaldatabaseadaptorCacheInit(
 
     EnsPExternaldatabase edb = NULL;
 
-    if(!edba)
+    if (!edba)
         return ajFalse;
 
-    if(edba->CacheByIdentifier)
+    if (edba->CacheByIdentifier)
         return ajFalse;
     else
-        edba->CacheByIdentifier = ensTableuintNewLen(0);
+    {
+        edba->CacheByIdentifier = ajTableuintNew(0);
 
-    if(edba->CacheByName)
+        ajTableSetDestroyvalue(
+            edba->CacheByIdentifier,
+            (void (*)(void **)) &ensExternaldatabaseDel);
+    }
+
+    if (edba->CacheByName)
         return ajFalse;
     else
-        edba->CacheByName = ensTablestrNewLen(0);
+    {
+        edba->CacheByName = ajTablestrNew(0);
+
+        ajTableSetDestroyvalue(
+            edba->CacheByName,
+            (void (*)(void **)) &externaldatabaseadaptorCacheByNameValdel);
+    }
 
     edbs = ajListNew();
 
-    ensBaseadaptorFetchAllbyConstraint(edba->Adaptor,
-                                       (AjPStr) NULL,
-                                       (EnsPAssemblymapper) NULL,
-                                       (EnsPSlice) NULL,
-                                       edbs);
+    ensBaseadaptorFetchAll(edba->Adaptor, edbs);
 
-    while(ajListPop(edbs, (void**) &edb))
+    while (ajListPop(edbs, (void **) &edb))
     {
         externaldatabaseadaptorCacheInsert(edba, &edb);
 
@@ -1962,8 +2115,10 @@ static AjBool externaldatabaseadaptorCacheInit(
 **
 ** @param [u] dba [EnsPDatabaseadaptor] Ensembl Database Adaptor
 **
-** @return [EnsPExternaldatabaseadaptor] Ensembl External Database Adaptor
-**                                       or NULL
+** @return [EnsPExternaldatabaseadaptor]
+** Ensembl External Database Adaptor or NULL
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
@@ -1972,19 +2127,19 @@ EnsPExternaldatabaseadaptor ensExternaldatabaseadaptorNew(
 {
     EnsPExternaldatabaseadaptor edba = NULL;
 
-    if(!dba)
+    if (!dba)
         return NULL;
 
     AJNEW0(edba);
 
     edba->Adaptor = ensBaseadaptorNew(
         dba,
-        externaldatabaseadaptorTables,
-        externaldatabaseadaptorColumns,
-        (EnsPBaseadaptorLeftjoin) NULL,
-        (const char*) NULL,
-        (const char*) NULL,
-        externaldatabaseadaptorFetchAllbyStatement);
+        externaldatabaseadaptorKTables,
+        externaldatabaseadaptorKColumns,
+        (const EnsPBaseadaptorLeftjoin) NULL,
+        (const char *) NULL,
+        (const char *) NULL,
+        &externaldatabaseadaptorFetchAllbyStatement);
 
     /*
     ** NOTE: The cache cannot be initialised here because the
@@ -2008,152 +2163,20 @@ EnsPExternaldatabaseadaptor ensExternaldatabaseadaptorNew(
 
 /* @section destructors *******************************************************
 **
-** Destruction destroys all internal data structures and frees the
-** memory allocated for an Ensembl External Database Adaptor object.
+** Destruction destroys all internal data structures and frees the memory
+** allocated for an Ensembl External Database Adaptor object.
 **
 ** @fdata [EnsPExternaldatabaseadaptor]
 **
-** @nam3rule Del Destroy (free) an Ensembl External Database Adaptor object
+** @nam3rule Del Destroy (free) an Ensembl External Database Adaptor
 **
-** @argrule * Pedba [EnsPExternaldatabaseadaptor*] Ensembl External Database
-**                                                 Adaptor object address
+** @argrule * Pedba [EnsPExternaldatabaseadaptor*]
+** Ensembl External Database Adaptor address
 **
 ** @valrule * [void]
 **
 ** @fcategory delete
 ******************************************************************************/
-
-
-
-
-/* @funcstatic externaldatabaseadaptorCacheClearIdentifier ********************
-**
-** An ajTableMapDel "apply" function to clear the Ensembl External Database
-** Adaptor-internal External Database cache. This function deletes the unsigned
-** integer identifier key and the Ensembl External Database value data.
-**
-** @param [u] key [void**] AJAX unsigned integer key data address
-** @param [u] value [void**] Ensembl External Database value data address
-** @param [u] cl [void*] Standard, passed in from ajTableMapDel
-** @see ajTableMapDel
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void externaldatabaseadaptorCacheClearIdentifier(void** key,
-                                                        void** value,
-                                                        void* cl)
-{
-    if(!key)
-        return;
-
-    if(!*key)
-        return;
-
-    if(!value)
-        return;
-
-    if(!*value)
-        return;
-
-    (void) cl;
-
-    AJFREE(*key);
-
-    ensExternaldatabaseDel((EnsPExternaldatabase*) value);
-
-    *key   = NULL;
-    *value = NULL;
-
-    return;
-}
-
-
-
-
-/* @funcstatic externaldatabaseadaptorCacheClearName **************************
-**
-** An ajTableMapDel "apply" function to clear the Ensembl External Database
-** Adaptor-internal External Database cache. This function deletes the name
-** AJAX String key data and the Ensembl External Database value data.
-**
-** @param [u] key [void**] AJAX String key data address
-** @param [u] value [void**] Ensembl External Database value data address
-** @param [u] cl [void*] Standard, passed in from ajTableMapDel
-** @see ajTableMapDel
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void externaldatabaseadaptorCacheClearName(void** key,
-                                                  void** value,
-                                                  void* cl)
-{
-    if(!key)
-        return;
-
-    if(!*key)
-        return;
-
-    if(!value)
-        return;
-
-    if(!*value)
-        return;
-
-    (void) cl;
-
-    ajStrDel((AjPStr*) key);
-
-    ensExternaldatabaseDel((EnsPExternaldatabase*) value);
-
-    *key   = NULL;
-    *value = NULL;
-
-    return;
-}
-
-
-
-
-/* @funcstatic externaldatabaseadaptorCacheExit *******************************
-**
-** Clears the internal External Database cache of an
-** Ensembl External Database Adaptor.
-**
-** @param [u] edba [EnsPExternaldatabaseadaptor] Ensembl External
-**                                               Database Adaptor
-**
-** @return [AjBool] ajTrue upon success, ajFalse otherwise
-** @@
-******************************************************************************/
-
-static AjBool externaldatabaseadaptorCacheExit(
-    EnsPExternaldatabaseadaptor edba)
-{
-    if(!edba)
-        return ajFalse;
-
-    /* Clear and delete the identifier cache. */
-
-    ajTableMapDel(edba->CacheByIdentifier,
-                  externaldatabaseadaptorCacheClearIdentifier,
-                  NULL);
-
-    ajTableFree(&edba->CacheByIdentifier);
-
-    /* Clear and delete the name cache. */
-
-    ajTableMapDel(edba->CacheByName,
-                  externaldatabaseadaptorCacheClearName,
-                  NULL);
-
-    ajTableFree(&edba->CacheByName);
-
-    return ajTrue;
-}
 
 
 
@@ -2174,23 +2197,33 @@ static AjBool externaldatabaseadaptorCacheExit(
 **                                                 Adaptor object address
 **
 ** @return [void]
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 void ensExternaldatabaseadaptorDel(
-    EnsPExternaldatabaseadaptor* Pedba)
+    EnsPExternaldatabaseadaptor *Pedba)
 {
     EnsPExternaldatabaseadaptor pthis = NULL;
 
-    if(!Pedba)
+    if (!Pedba)
         return;
 
-    if(!*Pedba)
+#if defined(AJ_DEBUG) && AJ_DEBUG >= 1
+    if (ajDebugTest("ensExternaldatabaseadaptorDel"))
+        ajDebug("ensExternaldatabaseadaptorDel\n"
+                "  *Pedba %p\n",
+                *Pedba);
+#endif /* defined(AJ_DEBUG) && AJ_DEBUG >= 1 */
+
+    if (!*Pedba)
         return;
 
     pthis = *Pedba;
 
-    externaldatabaseadaptorCacheExit(pthis);
+    ajTableDel(&pthis->CacheByIdentifier);
+    ajTableDel(&pthis->CacheByName);
 
     ensBaseadaptorDel(&pthis->Adaptor);
 
@@ -2204,9 +2237,9 @@ void ensExternaldatabaseadaptorDel(
 
 
 
-/* @section element retrieval *************************************************
+/* @section member retrieval **************************************************
 **
-** Functions for returning elements of an Ensembl External Database Adaptor
+** Functions for returning members of an Ensembl External Database Adaptor
 ** object.
 **
 ** @fdata [EnsPExternaldatabaseadaptor]
@@ -2230,23 +2263,22 @@ void ensExternaldatabaseadaptorDel(
 
 /* @func ensExternaldatabaseadaptorGetBaseadaptor *****************************
 **
-** Get the Ensembl Base Adaptor element of an
+** Get the Ensembl Base Adaptor member of an
 ** Ensembl External Database Adaptor.
 **
 ** @param [r] edba [const EnsPExternaldatabaseadaptor] Ensembl External
 **                                                     Database Adaptor
 **
 ** @return [EnsPBaseadaptor] Ensembl Base Adaptor or NULL
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 EnsPBaseadaptor ensExternaldatabaseadaptorGetBaseadaptor(
     const EnsPExternaldatabaseadaptor edba)
 {
-    if(!edba)
-        return NULL;
-
-    return edba->Adaptor;
+    return (edba) ? edba->Adaptor : NULL;
 }
 
 
@@ -2254,23 +2286,22 @@ EnsPBaseadaptor ensExternaldatabaseadaptorGetBaseadaptor(
 
 /* @func ensExternaldatabaseadaptorGetDatabaseadaptor *************************
 **
-** Get the Ensembl Database Adaptor element of an
+** Get the Ensembl Database Adaptor member of an
 ** Ensembl External Database Adaptor.
 **
 ** @param [r] edba [const EnsPExternaldatabaseadaptor] Ensembl External
 **                                                     Database Adaptor
 **
 ** @return [EnsPDatabaseadaptor] Ensembl Database Adaptor or NULL
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 EnsPDatabaseadaptor ensExternaldatabaseadaptorGetDatabaseadaptor(
     const EnsPExternaldatabaseadaptor edba)
 {
-    if(!edba)
-        return NULL;
-
-    return ensBaseadaptorGetDatabaseadaptor(edba->Adaptor);
+    return (edba) ? ensBaseadaptorGetDatabaseadaptor(edba->Adaptor) : NULL;
 }
 
 
@@ -2292,15 +2323,16 @@ EnsPDatabaseadaptor ensExternaldatabaseadaptorGetDatabaseadaptor(
 ** @nam5rule Identifier Fetch by an SQL database-internal identifier
 ** @nam5rule Name  Fetch by a name
 **
-** @argrule * edba [EnsPExternaldatabaseadaptor] Ensembl External
-**                                               Database Adaptor
+** @argrule * edba [EnsPExternaldatabaseadaptor]
+** Ensembl External Database Adaptor
 ** @argrule All edbs [AjPList] AJAX List of Ensembl External Database objects
 ** @argrule ByIdentifier identifier [ajuint] SQL database-internal identifier
-** @argrule ByIdentifier Pedb [EnsPExternaldatabase*] Ensembl External Database
-**                                                    address
-** @argrule ByName name [const AjPStr] Name
-** @argrule ByName Pedb [EnsPExternaldatabase*] Ensembl External Database
-**                                              address
+** @argrule ByIdentifier Pedb [EnsPExternaldatabase*]
+** Ensembl External Database address
+** @argrule ByName name [const AjPStr] Database name
+** @argrule ByName release [const AjPStr] Database release
+** @argrule ByName Pedb [EnsPExternaldatabase*]
+** Ensembl External Database address
 **
 ** @valrule * [AjBool] ajTrue upon success, ajFalse otherwise
 **
@@ -2316,35 +2348,37 @@ EnsPDatabaseadaptor ensExternaldatabaseadaptorGetDatabaseadaptor(
 ** the Ensembl External Database Adaptor-internal cache.
 **
 ** @param [u] key [const void*] AJAX unsigned integer key data address
-** @param [u] value [void**] Ensembl External Database value data address
+** @param [u] Pvalue [void**] Ensembl External Database value data address
 ** @param [u] cl [void*] AJAX List of Ensembl External Database objects,
 **                       passed in via ajTableMap
 ** @see ajTableMap
 **
 ** @return [void]
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
-static void externaldatabaseadaptorFetchAll(const void* key,
-                                            void** value,
-                                            void* cl)
+static void externaldatabaseadaptorFetchAll(const void *key,
+                                            void **Pvalue,
+                                            void *cl)
 {
-    if(!key)
+    if (!key)
         return;
 
-    if(!value)
+    if (!Pvalue)
         return;
 
-    if(!*value)
+    if (!*Pvalue)
         return;
 
-    if(!cl)
+    if (!cl)
         return;
 
     ajListPushAppend(
         (AjPList) cl,
-        (void*) ensExternaldatabaseNewRef(
-            *((EnsPExternaldatabase*) value)));
+        (void *) ensExternaldatabaseNewRef(
+            *((EnsPExternaldatabase *) Pvalue)));
 
     return;
 }
@@ -2365,6 +2399,8 @@ static void externaldatabaseadaptorFetchAll(const void* key,
 ** @param [u] edbs [AjPList] AJAX List of Ensembl External Databases
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
@@ -2372,18 +2408,18 @@ AjBool ensExternaldatabaseadaptorFetchAll(
     EnsPExternaldatabaseadaptor edba,
     AjPList edbs)
 {
-    if(!edba)
+    if (!edba)
         return ajFalse;
 
-    if(!edbs)
+    if (!edbs)
         return ajFalse;
 
-    if(!edba->CacheByIdentifier)
+    if (!edba->CacheByIdentifier)
         externaldatabaseadaptorCacheInit(edba);
 
     ajTableMap(edba->CacheByIdentifier,
-               externaldatabaseadaptorFetchAll,
-               (void*) edbs);
+               &externaldatabaseadaptorFetchAll,
+               (void *) edbs);
 
     return ajTrue;
 }
@@ -2398,19 +2434,21 @@ AjBool ensExternaldatabaseadaptorFetchAll(
 ** The caller is responsible for deleting the Ensembl External Database.
 **
 ** @cc Bio::EnsEMBL::DBSQL::BaseAdaptor::fetch_by_dbID
-** @param [u] edba [EnsPExternaldatabaseadaptor] Ensembl External Database
-**                                               Adaptor
+** @param [u] edba [EnsPExternaldatabaseadaptor]
+** Ensembl External Database Adaptor
 ** @param [r] identifier [ajuint] SQL database-internal identifier
 ** @param [wP] Pedb [EnsPExternaldatabase*] Ensembl External Database address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.2.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseadaptorFetchByIdentifier(
     EnsPExternaldatabaseadaptor edba,
     ajuint identifier,
-    EnsPExternaldatabase* Pedb)
+    EnsPExternaldatabase *Pedb)
 {
     AjPList edbs = NULL;
 
@@ -2418,14 +2456,23 @@ AjBool ensExternaldatabaseadaptorFetchByIdentifier(
 
     EnsPExternaldatabase edb = NULL;
 
-    if(!edba)
+    if (!edba)
         return ajFalse;
 
-    if(!identifier)
+    if (!identifier)
         return ajFalse;
 
-    if(!Pedb)
+    if (!Pedb)
         return ajFalse;
+
+    if (ajDebugTest("ensExternaldatabaseadaptorFetchByIdentifier"))
+        ajDebug("ensExternaldatabaseadaptorFetchByIdentifier\n"
+                "  edba %p\n"
+                "  identifier %u\n"
+                "  Pedb %p\n",
+                edba,
+                identifier,
+                Pedb);
 
     /*
     ** Initially, search the identifier cache.
@@ -2433,14 +2480,14 @@ AjBool ensExternaldatabaseadaptorFetchByIdentifier(
     ** to be incremented manually.
     */
 
-    if(!edba->CacheByIdentifier)
+    if (!edba->CacheByIdentifier)
         externaldatabaseadaptorCacheInit(edba);
 
     *Pedb = (EnsPExternaldatabase) ajTableFetchmodV(
         edba->CacheByIdentifier,
-        (const void*) &identifier);
+        (const void *) &identifier);
 
-    if(*Pedb)
+    if (*Pedb)
     {
         ensExternaldatabaseNewRef(*Pedb);
 
@@ -2459,16 +2506,16 @@ AjBool ensExternaldatabaseadaptorFetchByIdentifier(
                                        (EnsPSlice) NULL,
                                        edbs);
 
-    if(ajListGetLength(edbs) > 1)
+    if (ajListGetLength(edbs) > 1)
         ajWarn("ensExternaldatabaseadaptorFetchByIdentifier got more "
                "than one Ensembl External Database for (PRIMARY KEY) "
                "identifier %u.\n", identifier);
 
-    ajListPop(edbs, (void**) Pedb);
+    ajListPop(edbs, (void **) Pedb);
 
     externaldatabaseadaptorCacheInsert(edba, Pedb);
 
-    while(ajListPop(edbs, (void**) &edb))
+    while (ajListPop(edbs, (void **) &edb))
     {
         externaldatabaseadaptorCacheInsert(edba, &edb);
 
@@ -2494,33 +2541,45 @@ AjBool ensExternaldatabaseadaptorFetchByIdentifier(
 ** @param [u] edba [EnsPExternaldatabaseadaptor] Ensembl External Database
 **                                               Adaptor
 ** @param [r] name [const AjPStr] Database name
+** @param [r] release [const AjPStr] Database release
 ** @param [wP] Pedb [EnsPExternaldatabase*] Ensembl External Database address
 **
 ** @return [AjBool] ajTrue upon success, ajFalse otherwise
+**
+** @release 6.3.0
 ** @@
 ******************************************************************************/
 
 AjBool ensExternaldatabaseadaptorFetchByName(
     EnsPExternaldatabaseadaptor edba,
     const AjPStr name,
-    EnsPExternaldatabase* Pedb)
+    const AjPStr release,
+    EnsPExternaldatabase *Pedb)
 {
-    char* txtname = NULL;
+    char *txtname    = NULL;
+    char *txtrelease = NULL;
 
+    AjIList iter = NULL;
     AjPList edbs = NULL;
+    AjPList list = NULL;
 
     AjPStr constraint = NULL;
 
     EnsPExternaldatabase edb = NULL;
 
-    if(!edba)
+    if (!edba)
         return ajFalse;
 
-    if(!(name && ajStrGetLen(name)))
+    if (!(name && ajStrGetLen(name)))
         return ajFalse;
 
-    if(!Pedb)
+    if (!(release && ajStrGetLen(release)))
         return ajFalse;
+
+    if (!Pedb)
+        return ajFalse;
+
+    *Pedb = (EnsPExternaldatabase) NULL;
 
     /*
     ** Initially, search the name cache.
@@ -2528,13 +2587,31 @@ AjBool ensExternaldatabaseadaptorFetchByName(
     ** to be incremented manually.
     */
 
-    if(!edba->CacheByName)
+    if (!edba->CacheByName)
         externaldatabaseadaptorCacheInit(edba);
 
-    *Pedb = (EnsPExternaldatabase) ajTableFetchmodV(edba->CacheByName,
-                                                    (const void*) name);
+    list = (AjPList) ajTableFetchmodS(edba->CacheByName, name);
 
-    if(*Pedb)
+    if (list)
+    {
+        iter = ajListIterNew(list);
+
+        while (!ajListIterDone(iter))
+        {
+            edb = (EnsPExternaldatabase) ajListIterGet(iter);
+
+            if (ajStrMatchS(edb->Release, release))
+            {
+                *Pedb = edb;
+
+                break;
+            }
+        }
+
+        ajListIterDel(&iter);
+    }
+
+    if (*Pedb)
     {
         ensExternaldatabaseNewRef(*Pedb);
 
@@ -2544,10 +2621,16 @@ AjBool ensExternaldatabaseadaptorFetchByName(
     /* In case of a cache miss, re-query the database. */
 
     ensBaseadaptorEscapeC(edba->Adaptor, &txtname, name);
+    ensBaseadaptorEscapeC(edba->Adaptor, &txtrelease, release);
 
-    constraint = ajFmtStr("external_db.db_name = '%s'", txtname);
+    constraint = ajFmtStr("external_db.db_name = '%s' "
+                          "AND "
+                          "external_db.db_release = '%s'",
+                          txtname,
+                          txtrelease);
 
     ajCharDel(&txtname);
+    ajCharDel(&txtrelease);
 
     edbs = ajListNew();
 
@@ -2557,16 +2640,17 @@ AjBool ensExternaldatabaseadaptorFetchByName(
                                        (EnsPSlice) NULL,
                                        edbs);
 
-    if(ajListGetLength(edbs) > 1)
+    if (ajListGetLength(edbs) > 1)
         ajWarn("ensExternaldatabaseadaptorFetchByName got more "
-               "than one Ensembl External Database for name '%S'.\n",
-               name);
+               "than one Ensembl External Database for name '%S' "
+               "and release '%S'.\n",
+               name, release);
 
-    ajListPop(edbs, (void**) Pedb);
+    ajListPop(edbs, (void **) Pedb);
 
     externaldatabaseadaptorCacheInsert(edba, Pedb);
 
-    while(ajListPop(edbs, (void**) &edb))
+    while (ajListPop(edbs, (void **) &edb))
     {
         externaldatabaseadaptorCacheInsert(edba, &edb);
 

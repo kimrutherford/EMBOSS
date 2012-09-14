@@ -1,8 +1,8 @@
 application: noreturn [
   documentation: "Remove carriage return from ASCII files"
   groups: "Edit"
-    relations: "EDAM:0000091 topic Data handling"
-    relations: "EDAM:0000335 operation File reformatting"
+    relations: "EDAM_topic:0091 Data handling"
+    relations: "EDAM_operation:0335 File reformatting"
 ]
 
 section: input [
@@ -14,7 +14,7 @@ section: input [
     parameter: "Y"
     knowntype: "ascii text"
     information: "ASCII text file"
-    relations: "EDAM:0000969 data Text"
+    relations: "EDAM_data:2048 Report"
   ]
 
 endsection: input
@@ -32,7 +32,7 @@ section: advanced [
     default: "unix"
     minimum: "1"
     maximum: "1"
-    relations: "EDAM:0002131 identifier Operating system name"
+    relations: "EDAM_identifier:2131 Operating system name"
   ]
 
 endsection: advanced
@@ -46,7 +46,7 @@ section: output [
     parameter: "Y"
     knowntype: "ascii text"
     information: "ASCII text output file"
-    relations: "EDAM:0000969 data Text"
+    relations: "EDAM_data:2048 Report"
   ]
 
 endsection: output

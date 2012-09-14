@@ -8,7 +8,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -69,7 +69,7 @@ Output file [outfile.whichdb]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
 Search all sequence databases for an entry and retrieve it
-Version: EMBOSS:6.4.0.0
+Version: EMBOSS:6.5.0.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-entry]             string     ID or Accession number (Any string)
@@ -167,7 +167,7 @@ Version: EMBOSS:6.4.0.0
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=5>"-outfile" associated outfile qualifiers
+<td align="left" colspan=5>"-outfile" associated outfile qualifiers
 </td>
 </tr>
 
@@ -300,6 +300,8 @@ None.
 <p><h3>File: outfile.whichdb</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+# Trying 'bpgb:x65921'
+bpgb:x65921
 # Trying 'qaxpir:x65921'
 # Failed 'qaxpir:x65921'
 # Trying 'qanxgcgexc:x65921'
@@ -328,6 +330,8 @@ temblvrt:x65921
 # Failed 'qapirinc:x65921'
 # Trying 'qapfasta:x65921'
 # Failed 'qapfasta:x65921'
+# Trying 'qaxembl:x65921'
+qaxembl:x65921
 # Trying 'tgenedashuman:x65921'
 # Failed 'tgenedashuman:x65921'
 # Trying 'qasrswww:x65921'
@@ -344,20 +348,12 @@ temblall:x65921
 qanxflatexc:x65921
 # Trying 'qanxflat:x65921'
 # Failed 'qanxflat:x65921'
-# Trying 'qanxfasta:x65921'
-# Failed 'qanxfasta:x65921'
-# Trying 'qapflat:x65921'
-# Failed 'qapflat:x65921'
-# Trying 'qanxflatinc:x65921'
-# Failed 'qanxflatinc:x65921'
+# Trying 'bpembl:x65921'
+bpembl:x65921
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-# Failed 'qapir:x65921'
-# Trying 'qangcgexc:x65921'
-# Failed 'qangcgexc:x65921'
-# Trying 'qapxfasta:x65921'
 # Failed 'qapxfasta:x65921'
 # Trying 'qanfasta:x65921'
 # Failed 'qanfasta:x65921'
@@ -383,6 +379,8 @@ qanxflatexc:x65921
 qanflatexc:x65921
 # Trying 'tsw:x65921'
 # Failed 'tsw:x65921'
+# Trying 'bpworm:x65921'
+# Failed 'bpworm:x65921'
 # Trying 'temblrest:x65921'
 # Failed 'temblrest:x65921'
 # Trying 'qapirall:x65921'
@@ -391,6 +389,8 @@ qanflatexc:x65921
 # Failed 'qanfastaall:x65921'
 # Trying 'qanflatinc:x65921'
 # Failed 'qanflatinc:x65921'
+# Trying 'bpsw:x65921'
+# Failed 'bpsw:x65921'
 # Trying 'tgb:x65921'
 tgb:x65921
 # Trying 'qapblastsplitexc:x65921'
@@ -515,7 +515,7 @@ None.
 
 <tr>
 <td><a href="entret.html">entret</a></td>
-<td>Retrieves sequence entries from flatfile databases and files</td>
+<td>Retrieve sequence entries from flatfile databases and files</td>
 </tr>
 
 <tr>
@@ -534,6 +534,11 @@ None.
 </tr>
 
 <tr>
+<td><a href="refseqget.html">refseqget</a></td>
+<td>Get reference sequence</td>
+</tr>
+
+<tr>
 <td><a href="seqxref.html">seqxref</a></td>
 <td>Retrieve all database cross-references for a sequence entry</td>
 </tr>
@@ -546,6 +551,11 @@ None.
 <tr>
 <td><a href="showalign.html">showalign</a></td>
 <td>Display a multiple sequence alignment in pretty format</td>
+</tr>
+
+<tr>
+<td><a href="variationget.html">variationget</a></td>
+<td>Get sequence variations</td>
 </tr>
 
 </table>

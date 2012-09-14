@@ -115,7 +115,7 @@ static void mwcontam_readdata(AjPList files, AjPList **lists,
     double  val = 0.;
     char    c;
 
-    nfiles = *n = ajListGetLength(files);
+    nfiles = *n = (ajuint) ajListGetLength(files);
 
     if(!nfiles)
 	ajFatal("No input files were specified");
@@ -189,8 +189,8 @@ static void mwcontam_complists(AjPList one, AjPList *two, float tolerance)
     result = ajListNew();
 
 
-    len1 = ajListGetLength(one);
-    len2 = ajListGetLength(*two);
+    len1 = (ajuint) ajListGetLength(one);
+    len2 = (ajuint) ajListGetLength(*two);
 
     for(i=0;i<len1;++i)
     {

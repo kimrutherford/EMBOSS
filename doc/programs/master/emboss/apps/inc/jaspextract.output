@@ -99,16 +99,16 @@
 <p><h3>File: JASPAR_CORE/matrix_list.txt</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-MA0071.1	13.1897301896459	RORA_1	Zinc-coordinating	; acc "NP_599023" ; collection "CORE" ; comment "isoform type" ; family "Hormone-nuclear Receptor" ; medline "7926749" ; pazar_tf_id "TF0000047" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
-MA0077.1	9.07881462267178	SOX9	Other Alpha-Helix	; acc "P48436" ; collection "CORE" ; comment "-" ; family "High Mobility Group" ; medline "9973626" ; pazar_tf_id "TF0000053" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
-MA0075.1	9.06306510239134	Prrx2	Helix-Turn-Helix	; acc "Q06348" ; collection "CORE" ; comment "-" ; family "Homeo" ; medline "7901837" ; pazar_tf_id "TF0000051" ; species "10090" ; tax_group "vertebrates" ; type "SELEX" 
-MA0070.1	14.6408952002356	PBX1	Helix-Turn-Helix	; acc "Q5T486" ; collection "CORE" ; comment "-" ; family "Homeo" ; medline "7910944" ; pazar_tf_id "TF0000046" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
-MA0079.1	9.7185757452318	SP1	Zinc-coordinating	; acc "P08047" ; collection "CORE" ; comment "-" ; family "BetaBetaAlpha-zinc finger" ; medline "2192357" ; pazar_tf_id "TF0000055" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
-MA0073.1	22.2782723704014	RREB1	Zinc-coordinating	; acc "Q92766" ; collection "CORE" ; comment "-" ; family "BetaBetaAlpha-zinc finger" ; medline "8816445" ; pazar_tf_id "TF0000049" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
-MA0079.2	11.1288626921664	SP1	Zinc-coordinating	; acc "P08047" ; collection "CORE" ; comment "Annotations from PAZAR SP1 + SP1_MOUSE + SP1_HUMAN + SP1_RAT in the pleiades genes project (TF0000105, TF0000121, TF0000137, TF0000146)." ; family "BetaBetaAlpha-zinc finger" ; medline "17916232" ; pazar_tf_id "TF0000055" ; species "9606,10090,10116" ; tax_group "vertebrates" ; type "COMPILED" 
-MA0078.1	10.5018372361999	Sox17	Other Alpha-Helix	; acc "Q61473" ; collection "CORE" ; comment "-" ; family "High Mobility Group" ; medline "8636240" ; pazar_tf_id "TF0000054" ; species "10090" ; tax_group "vertebrates" ; type "SELEX" 
 MA0072.1	17.4248426117905	RORA_2	Zinc-coordinating	; acc "NP_599022" ; collection "CORE" ; comment "isoform type" ; family "Hormone-nuclear Receptor" ; medline "7926749" ; pazar_tf_id "TF0000048" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
+MA0075.1	9.06306510239134	Prrx2	Helix-Turn-Helix	; acc "Q06348" ; collection "CORE" ; comment "-" ; family "Homeo" ; medline "7901837" ; pazar_tf_id "TF0000051" ; species "10090" ; tax_group "vertebrates" ; type "SELEX" 
+MA0071.1	13.1897301896459	RORA_1	Zinc-coordinating	; acc "NP_599023" ; collection "CORE" ; comment "isoform type" ; family "Hormone-nuclear Receptor" ; medline "7926749" ; pazar_tf_id "TF0000047" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
+MA0073.1	22.2782723704014	RREB1	Zinc-coordinating	; acc "Q92766" ; collection "CORE" ; comment "-" ; family "BetaBetaAlpha-zinc finger" ; medline "8816445" ; pazar_tf_id "TF0000049" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
+MA0070.1	14.6408952002356	PBX1	Helix-Turn-Helix	; acc "Q5T486" ; collection "CORE" ; comment "-" ; family "Homeo" ; medline "7910944" ; pazar_tf_id "TF0000046" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
 MA0074.1	20.4511671987138	RXRA::VDR	Zinc-coordinating	; acc "P19793,P11473" ; collection "CORE" ; comment "heterodimer between RXRA and VDR" ; family "Hormone-nuclear Receptor" ; medline "8674817" ; pazar_tf_id "TF0000050" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
+MA0078.1	10.5018372361999	Sox17	Other Alpha-Helix	; acc "Q61473" ; collection "CORE" ; comment "-" ; family "High Mobility Group" ; medline "8636240" ; pazar_tf_id "TF0000054" ; species "10090" ; tax_group "vertebrates" ; type "SELEX" 
+MA0079.1	9.7185757452318	SP1	Zinc-coordinating	; acc "P08047" ; collection "CORE" ; comment "-" ; family "BetaBetaAlpha-zinc finger" ; medline "2192357" ; pazar_tf_id "TF0000055" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
+MA0079.2	11.1288626921664	SP1	Zinc-coordinating	; acc "P08047" ; collection "CORE" ; comment "Annotations from PAZAR SP1 + SP1_MOUSE + SP1_HUMAN + SP1_RAT in the pleiades genes project (TF0000105, TF0000121, TF0000137, TF0000146)." ; family "BetaBetaAlpha-zinc finger" ; medline "17916232" ; pazar_tf_id "TF0000055" ; species "9606,10090,10116" ; tax_group "vertebrates" ; type "COMPILED" 
+MA0077.1	9.07881462267178	SOX9	Other Alpha-Helix	; acc "P48436" ; collection "CORE" ; comment "-" ; family "High Mobility Group" ; medline "9973626" ; pazar_tf_id "TF0000053" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
 MA0076.1	14.123230134165	ELK4	Winged Helix-Turn-Helix	; acc "P28324" ; collection "CORE" ; comment "-" ; family "Ets" ; medline "8524663" ; pazar_tf_id "TF0000052" ; species "9606" ; tax_group "vertebrates" ; type "SELEX" 
 </pre>
 </td></tr></table><p>

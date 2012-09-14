@@ -4,8 +4,8 @@ application: dbxobo [
   gui: "no"
   batch: "yes"
   cpu: "medium"
-  relations: "EDAM:0000091 topic Data handling"
-  relations: "EDAM:0000227 operation Data indexing"
+  relations: "EDAM_topic:0091 Data handling"
+  relations: "EDAM_operation:0227 Data indexing"
 ]
 
 section: input [
@@ -20,7 +20,7 @@ section: input [
     information: "Basename for index files"
     knowntype: "emboss database name"
     pattern: "[A-z][A-z0-9_]+"
-    relations:  "EDAM:0001056 identifier Database name"
+    relations:  "EDAM_identifier:1056 Database name"
   ]
 
   string: standardname [
@@ -31,7 +31,7 @@ section: input [
     information: "Standard database name"
     knowntype: "emboss database name"
     pattern: "[A-z][A-z0-9_]+"
-    relations:  "EDAM:0001056 identifier Database name"
+    relations:  "EDAM_identifier:1056 Database name"
   ]
 
   string: dbresource [
@@ -42,7 +42,7 @@ section: input [
     information: "Resource name"
     knowntype: "emboss resource name"
     pattern: "[A-z][A-z0-9_]+"
-    relations:  "EDAM:0002527 data Parameter or primitive"
+    relations:  "EDAM_data:2527 Parameter"
   ]
 
   directory: directory [
@@ -50,7 +50,7 @@ section: input [
     default: "."
     information: "Database directory"
     knowntype: "emboss database directory"
-    relations:  "EDAM:0001049 identifier Directory name"
+    relations:  "EDAM_identifier:1049 Directory name"
   ]
 
   string: filenames [
@@ -58,7 +58,7 @@ section: input [
     default: "*.obo"
     information: "Wildcard database filename"
     knowntype: "emboss database wildcard filename"
-    relations:  "EDAM:0001050 identifier File name"                          
+    relations:  "EDAM_identifier:1050 File name"                          
   ]
 
 endsection: input
@@ -76,14 +76,14 @@ section: required [
     minimum: "1"
     maximum: "6"
     default: "*"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
   boolean: compressed [
     standard: "Y"
     default: "Y"
     information: "Compressed index files"
-    relations: "EDAM:0002527 data Parameter or primitive"
+    relations: "EDAM_data:2527 Parameter"
   ]
 
 endsection: required
@@ -98,7 +98,7 @@ section: advanced [
     maxlength: "9"
     information: "Release number"
     knowntype: "emboss database release"
-    relations:  "EDAM:0001670 data Database version information"    
+    relations:  "EDAM_data:1670 Database version information"    
   ]
 
   string: date [
@@ -107,13 +107,13 @@ section: advanced [
     information: "Index date"
     pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
     knowntype: "date"
-    relations:  "EDAM:0002156 data Date"   
+    relations:  "EDAM_data:2156 Date"   
   ]
 
   string: exclude [
     information: "Wildcard filename(s) to exclude"
     knowntype: "filename wildcard"
-    relations:  "EDAM:0001050 identifier File name"
+    relations:  "EDAM_identifier:1050 File name"
   ]
 
 endsection: advanced
@@ -127,14 +127,14 @@ section: output [
     default: "."
     information: "Index file output directory"
     knowntype: "emboss database index"
-    relations:  "EDAM:0001049 identifier Directory name"
+    relations:  "EDAM_identifier:1049 Directory name"
   ]
 
   outfile: outfile [
     standard: "Y"
     knowntype: "log"
     information: "General log output file"
-    relations:  "EDAM:0001678 data Tool log"
+    relations:  "EDAM_data:1678 Tool log"
   ]
 
 endsection: output

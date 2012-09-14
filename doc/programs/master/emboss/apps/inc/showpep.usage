@@ -5,7 +5,7 @@ Here is a sample session with <b>showpep</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -27,7 +27,7 @@ The standard list of output formats are only a small selection of the possible w
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 120 </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -57,7 +57,7 @@ Display only the sequence:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
 </pre></td></tr></table><p>
@@ -73,7 +73,7 @@ Protein sequence can be displayed in three-letter codes. (The codes are displaye
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:rs24_takru -three -format 2 </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [rs24_takru.showpep]: <b></b>
 
 </pre></td></tr></table><p>
@@ -89,7 +89,7 @@ Number the sequence lines in the margin:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -number </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
 </pre></td></tr></table><p>
@@ -105,7 +105,7 @@ Start the numbering at a specified value ('123' in this case):
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -number -offset 123 </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
 </pre></td></tr></table><p>
@@ -121,7 +121,7 @@ Make selected regions uppercase. (Use '-slower' to force the rest of the sequenc
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 1 -slower -upper "17-17,22-22" </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
 </pre></td></tr></table><p>
@@ -137,7 +137,7 @@ Add your own annotation to the display:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>showpep tsw:laci_ecoli -sbeg 1 -send 100 -format 2 -send 120 -annotation "6-25 binding site 17-17 SNP 22-22 SNP" </b>
-Displays protein sequences with features in pretty format
+Display protein sequences with features in pretty format
 Output file [laci_ecoli.showpep]: <b></b>
 
 </pre></td></tr></table><p>

@@ -1,8 +1,8 @@
 application: ajtest [
   documentation: "Test file for ACD parsing"
   groups: "Test"
-    relations: "EDAM:0000220 topic File handling"
-    relations: "EDAM:0000336 operation File debugging"
+    relations: "EDAM_topic:0220 File handling"
+    relations: "EDAM_operation:0336 File debugging"
 ]
 
 section: input [
@@ -13,14 +13,14 @@ section: input [
   seqall: sequence [
     parameter: "Y"
     type: "any"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   seqset: bsequence [
     parameter: "Y"
     type: "any"
     aligned: "N"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   string: idresource [
@@ -48,7 +48,7 @@ section: output [
     nulldefault: "Y"
     extension: "nulloutfile"
     knowntype: "ajtest output"
-    relations: "EDAM:0000969 data Text"
+    relations: "EDAM_data:0969 Text"
   ]
 
   seqout: outseq [
@@ -56,7 +56,7 @@ section: output [
     nullok: "Y"
     nulldefault: "Y"
     type: "any"
-    relations: "EDAM:0000849 data Sequence record"
+    relations: "EDAM_data:0849 Sequence record"
   ]
 
   featout: outfeat [
@@ -71,7 +71,7 @@ section: output [
     information: "Temporary working file output directory"
     default: "/tmp"
     knowntype: "temporary"
-    relations: "EDAM:0001049 identifier Directory name"
+    relations: "EDAM_identifier:1049 Directory name"
   ]
 
 endsection: output

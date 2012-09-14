@@ -113,7 +113,7 @@ int main(int argc, char **argv)
     seqall = ajAcdGetSeqall("sequence");
     report = ajAcdGetReport("outfile");
     mean   = ajAcdGetFloat("mean");
-    sd     = ajAcdGetFloat("sd");
+    sd     = ajAcdGetFloat("sdvalue");
     minsd  = ajAcdGetFloat("minsd");
 
     /* obsolete. Can be uncommented in acd file and here to reuse */
@@ -511,7 +511,7 @@ static void helixturnhelix_report_hits(AjPList ajb,
     hp  = ajUintNew();
     hsd = ajFloatNew();
 
-    n = ajListToarray(ajb, (void***) &lp);
+    n = (ajuint) ajListToarray(ajb, (void***) &lp);
 
     if(!n)
     {
@@ -535,9 +535,9 @@ static void helixturnhelix_report_hits(AjPList ajb,
 			   lp[ajUintGet(hp,i)]->pos+lastcol-1,
 			   (float) lp[ajUintGet(hp,i)]->wt);
 	ajFmtPrintS(&tmpStr, "*pos %d", lp[ajUintGet(hp,i)]->pos);
-	ajFeatTagAdd(gf, NULL, tmpStr);
+	ajFeatTagAddSS(gf, NULL, tmpStr);
 	ajFmtPrintS(&tmpStr, "*sd %.2f", lp[ajUintGet(hp,i)]->sd);
-	ajFeatTagAdd(gf, NULL, tmpStr);
+	ajFeatTagAddSS(gf, NULL, tmpStr);
 
     }
 

@@ -5,7 +5,7 @@ Here is a sample session with <b>antigenic</b>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>antigenic </b>
-Finds antigenic sites in proteins
+Find antigenic sites in proteins
 Input protein sequence(s): <b>tsw:actb1_takru</b>
 Minimum length of antigenic region [6]: <b></b>
 Output report [actb1_takru.antigenic]: <b></b>
@@ -23,7 +23,7 @@ By using the '-rformat gff' qualifier, a GFF file of the predicted regions can b
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>antigenic -rformat gff </b>
-Finds antigenic sites in proteins
+Find antigenic sites in proteins
 Input protein sequence(s): <b>tsw:actb1_takru</b>
 Minimum length of antigenic region [6]: <b></b>
 Output report [actb1_takru.antigenic]: <b></b>
