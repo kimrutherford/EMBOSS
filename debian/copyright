@@ -244,6 +244,14 @@ License: LGPL-2.1+ and MIT
     SOFTWARE.
  */
 
+Files: emboss/data/TAXONOMY/*.dmp
+Homepage: http://www.ncbi.nlm.nih.gov/taxonomy
+Copyright: Probably public domain (under investigation).
+
+Files: emboss/data/OBO/*.obo
+Comment: see http://www.obofoundry.org to find home pages.
+
+
 Files: debian/*
 Copyright: the developers
 License: unclear
