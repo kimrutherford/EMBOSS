@@ -73,7 +73,6 @@ information_group.html \
 menus_group.html \
 nucleic_2d_structure_group.html \
 nucleic_codon_usage_group.html \
-nucleic_codon_usage_nucleic_gene_finding_group.html \
 nucleic_composition_group.html \
 nucleic_cpg_islands_group.html \
 nucleic_functional_sites_group.html \
@@ -110,12 +109,10 @@ protein_motifs_group.html \
 protein_mutation_group.html \
 protein_profiles_group.html \
 protein_properties_group.html \
-protein_sequence_alignment_group.html \
 test_group.html \
 utils_group.html \
 utils_database_creation_group.html \
-utils_database_indexing_group.html \
-utils_misc_group.html
+utils_database_indexing_group.html
 
 eprograms1_DATA = \
 aaindexextract.html \
@@ -382,3 +379,4 @@ wossoutput.html \
 wossparam.html \
 wosstopic.html \
 yank.html
+

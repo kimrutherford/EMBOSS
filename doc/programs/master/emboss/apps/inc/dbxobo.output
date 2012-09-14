@@ -82,8 +82,8 @@ Fill         56
 Level        0
 Pagesize     2048
 Cachesize    2000
-Order2       99
-Fill2        169
+Order2       22
+Fill2        41
 Secpagesize  512
 Seccachesize 2000
 Count        143

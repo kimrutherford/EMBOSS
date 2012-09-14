@@ -52,7 +52,7 @@ Output report [cru4_arath.patmatdb]:
 Command line arguments
 
 Search protein sequences with a sequence motif
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional

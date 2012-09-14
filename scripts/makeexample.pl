@@ -832,6 +832,7 @@ sub writeUsage {
     $usage =~ s/\/homes\/pmr/\/homes\/user/go;
     $usage =~ s/\/home\/pmr/\/homes\/user/go;
     $usage =~ s/\/data\/pmr/\/homes\/user/go;
+    $usage =~ s/\/home\/user\/local\/bin/\/shared\/software\/bin/go;
     $usage =~ s/\/homes\/user\/local\/bin/\/shared\/software\/bin/go;
     $usage =~ s/(Guide tree +file created: +)\[[A-Z0-9]+\]/$1\[12345678A]/go;
     $usage =~ s/(GCG-Alignment file created +)\[[A-Z0-9]+\]/$1\[12345678A]/go;
@@ -845,8 +846,8 @@ sub writeUsage {
     $usage =~ s/ehmmalign\-[0-9]+[.][0-9]+/ehmmalign-1234567890.1234/go;
     $usage =~ s/hmmpfam\-[0-9]+[.][0-9]+/hmmpfam-1234567890.1234/go;
     $usage =~ s/ehmmpfam\-[0-9]+[.][0-9]+/ehmmpfam-1234567890.1234/go;
-    $usage =~ s/Localtime: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/Localtime: Fri Jul 15 12:00:00 2011/gom;
-    $usage =~ s/SUBMITTED iprscan-\d+-\d+/SUBMITTED-iprscan-20110715-12345678/go;
+    $usage =~ s/Localtime: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/Localtime: Sun Jul 15 12:00:00 2012/gom;
+    $usage =~ s/SUBMITTED iprscan-\d+-\d+/SUBMITTED-iprscan-20120715-12345678/go;
     print OUT $usage;
     close(OUT);
     chmod 0664, $out;	# rw-rw-r--
@@ -863,7 +864,9 @@ sub writeInput {
 
     my $out = "$incdir/$application.input";
     open (OUT, "> $out") || die "Can't open $out";
-    $input =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 20[01][0-9]/DATE  Fri Jul 15 12:00:00 2011/go;
+    $input =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 20[01][0-9]/DATE  Sun Jul 15 12:00:00 2012/go;
+    $input =~ s/\/home\/user\/local\/bin/\/shared\/software\/bin/go;
+    $input =~ s/\/homes\/user\/local\/bin/\/shared\/software\/bin/go;
     print OUT $input;
     close(OUT);
     chmod 0664, $out;	# rw-rw-r--
@@ -889,11 +892,11 @@ sub writeOutput {
     $output =~ s/\/homes\/pmr/\/homes\/user/go;
     $output =~ s/\/home\/pmr/\/homes\/user/go;
     $output =~ s/\/data\/pmr/\/homes\/user/go;
-    $output =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 20[01][0-9]/DATE  Fri Jul 15 12:00:00 2011/go;
-    $output =~ s/CreationDate: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/CreationDate: Fri Jul 15 12:00:00 2011/gom;
-    $output =~ s/Rundate: ... ... +\d+ 2[0-9][0-9][0-9] [0-9:]+$/Rundate: Fri Jul 15 2011 12:00:00/gom;
-    $output =~ s/Localtime: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/Localtime: Fri Jul 15 12:00:00 2011/gom;
-    $output =~ s/\#\#date 2[0-9][0-9][0-9][-][0-9][0-9][-][0-9][0-9]$/\#\#date 2011-07-15/gom;
+    $output =~ s/DATE  [A-Z][a-z][a-z] [A-Z][a-z][a-z] +[0-9]+ [0-9:]+ 20[01][0-9]/DATE  Sun Jul 15 12:00:00 2012/go;
+    $output =~ s/CreationDate: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/CreationDate: Sun Jul 15 12:00:00 2012/gom;
+    $output =~ s/Rundate: ... ... +\d+ 2[0-9][0-9][0-9] [0-9:]+$/Rundate: Sun Jul 15 2012 12:00:00/gom;
+    $output =~ s/Localtime: ... ... +\d+ [0-9:]+ 2[0-9][0-9][0-9]$/Localtime: Sun Jul 15 12:00:00 2012/gom;
+    $output =~ s/\#\#date 2[0-9][0-9][0-9][-][0-9][0-9][-][0-9][0-9]$/\#\#date 2012-07-15/gom;
     $output =~ s/domainalign\-[0-9]+[.][0-9]+[.]/domainalign-1234567890.1234./go;
     $output =~ s/domainrep\-[0-9]+[.][0-9]+[.]/domainrep-1234567890.1234./go;
     $output =~ s/seqalign\-[0-9]+[.][0-9]+[.]/seqalign-1234567890.1234./go;
@@ -904,9 +907,9 @@ sub writeOutput {
     $output =~ s/Time  0\.[0-9][0-9] secs\./Time  0.50 secs./go;
     $output =~ s/Time  [1-5]\.[0-9][0-9] secs\./Time  1.50 secs./go;
     $output =~ s/Time 1[0-9]\.[0-9][0-9] secs\./Time 11.50 secs./go;
-    $output =~ s/\%\%Creator: (\S+ [\d.]+) 2[0-9][0-9][0-9]\/[0-9[0-9]\/[0-9[0-9]/Creator: $1 2011\/07\/15/go;
+    $output =~ s/\%\%Creator: (\S+ [\d.]+) 2[0-9][0-9][0-9]\/[0-9[0-9]\/[0-9[0-9]/Creator: $1 2012\/07\/15/go;
     $output =~ s/mse\.msf MSF: 120 Type: N \d+\/\d+\/\d+ CompCheck: 2784/mse.msf MSF: 120 Type: N 15\/07\/10 CompCheck: 2784/go;
-    $output =~ s/   \d+-[A-Z][a-z][a-z]-2[01][0-9][0-9]   /   15-Jul-2011   /go;
+    $output =~ s/   \d+-[A-Z][a-z][a-z]-2[01][0-9][0-9]   /   15-Jul-2012   /go;
     print OUT $output;
     close(OUT);
     chmod 0664, $out;	# rw-rw-r--

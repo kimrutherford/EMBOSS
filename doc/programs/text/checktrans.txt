@@ -43,7 +43,7 @@ Features output [paamir_1.gff]:
 Command line arguments
 
 Report STOP codons and ORF statistics of a protein
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional
@@ -199,7 +199,7 @@ DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
 ##sequence-region PAAMIR_1 1 634
 #!Date 2012-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.5.0.0
+#!Source-version EMBOSS 6.5.6.0
 PAAMIR_1        checktrans      polypeptide_region      278     634     .
 .       .       ID=PAAMIR_1.1
 

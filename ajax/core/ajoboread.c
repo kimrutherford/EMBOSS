@@ -3,10 +3,10 @@
 ** AJAX OBO reading functions
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.41 $
+** @version $Revision: 1.42 $
 ** @modified May 5 pmr 2010 First AJAX version
 ** @modified Sep 8 2010 pmr Added query and reading functions
-** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1940,8 +1940,12 @@ static AjBool oboinformatFind(const AjPStr format, ajint* iformat)
 
     for(i=0; oboinFormatDef[i].Name; i++)
     {
-	/* ajDebug("test %d '%s' \n", i, oboinFormatDef[i].Name); */
-	if(ajStrMatchCaseC(tmpformat, oboinFormatDef[i].Name))
+	/* ajDebug("test %d '%s' \n",
+           i, oboinFormatDef[i].Name,
+           oboinFormatDef[i].Obo,
+           oboinFormatDef[i].Desc); */
+	if(ajStrMatchC(tmpformat, oboinFormatDef[i].Name) ||
+           ajStrMatchC(format, oboinFormatDef[i].Obo))
 	{
 	    *iformat = i;
 	    ajStrDel(&tmpformat);
@@ -1976,7 +1980,7 @@ AjBool ajOboinformatTerm(const AjPStr term)
     ajuint i;
 
     for(i=0; oboinFormatDef[i].Name; i++)
-	if(ajStrMatchCaseC(term, oboinFormatDef[i].Obo))
+	if(ajStrMatchC(term, oboinFormatDef[i].Obo))
 	    return ajTrue;
 
     return ajFalse;
@@ -2001,8 +2005,12 @@ AjBool ajOboinformatTest(const AjPStr format)
     ajuint i;
 
     for(i=0; oboinFormatDef[i].Name; i++)
+    {
 	if(ajStrMatchCaseC(format, oboinFormatDef[i].Name))
 	    return ajTrue;
+	if(ajStrMatchC(format, oboinFormatDef[i].Obo))
+	    return ajTrue;
+    }
 
     return ajFalse;
 }

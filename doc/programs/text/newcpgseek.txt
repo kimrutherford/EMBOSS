@@ -54,7 +54,7 @@ Output file [u68037.newcpgseek]:
 Command line arguments
 
 Identify and report CpG-rich regions in nucleotide sequence(s)
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional

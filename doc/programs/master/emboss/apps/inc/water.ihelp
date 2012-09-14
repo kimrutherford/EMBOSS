@@ -1,5 +1,5 @@
 Smith-Waterman local alignment of sequences
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence filename and optional format, or

@@ -37,7 +37,7 @@ Output file [u68037.wordcount]:
 Command line arguments
 
 Count and extract unique words in molecular sequence(s)
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence(s) filename and optional format, or

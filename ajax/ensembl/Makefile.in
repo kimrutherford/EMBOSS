@@ -456,9 +456,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu ajax/ensembl/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnits ajax/ensembl/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu ajax/ensembl/Makefile
+	  $(AUTOMAKE) --gnits ajax/ensembl/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

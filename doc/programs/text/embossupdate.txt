@@ -37,13 +37,13 @@ Usage
 % embossupdate
 Checks for more recent updates to EMBOSS
 
-EMBOSS 6.5.0.0 is the latest version (6.5.0.0)
+EMBOSS 6.5.6.0 is the latest version (6.5.0.0)
 
 
 Command line arguments
 
 Checks for more recent updates to EMBOSS
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:

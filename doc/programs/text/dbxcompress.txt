@@ -51,7 +51,7 @@ Output file [embl.dbxcompress]:
 Command line arguments
 
 Compress an uncompressed dbx index
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     EMBOSS database name (Any string from 2 to

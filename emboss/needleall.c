@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 
 
             if(lenb > (LONG_MAX/(size_t)(lena+1)))
-                ajFatal("Sequences too big.");
+                ajDie("Sequences too big.");
 
             len = (size_t)lena*(size_t)lenb;
 

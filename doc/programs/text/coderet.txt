@@ -66,7 +66,7 @@ Messenger RNA nucleotide output sequence(s) (optional) [x03487.mrna]:
 Command line arguments
 
 Extract CDS, mRNA and translations from feature tables
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional

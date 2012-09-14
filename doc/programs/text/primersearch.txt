@@ -67,7 +67,7 @@ Whitehead primer3_core program output file [z52466.primersearch]:
 Command line arguments
 
 Search DNA sequences for matches with primer pairs
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Nucleotide sequence(s) filename and optional

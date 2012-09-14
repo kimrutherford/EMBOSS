@@ -34,6 +34,4 @@ dist-hook:
 	tar cBf - jemboss | ( cd $(distdir); tar xBf - ; find jemboss -name CVS | xargs rm -rf; find jemboss -name Makefile | xargs rm -rf; find jemboss -name .cvsignore | xargs rm -rf )
 
 install-exec-hook:
-	echo ""
-	echo "Running $(bindir)/embossupdate"
 	$(bindir)/embossupdate

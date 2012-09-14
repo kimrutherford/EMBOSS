@@ -1,5 +1,5 @@
 Get assembly of sequence reads
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-assembly]          assembly   (no help text) assembly value

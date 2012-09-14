@@ -47,7 +47,7 @@ Molecular weights output file [molwts.mwfilter]:
 Command line arguments
 
 Filter noisy data from molecular weights file
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Molecular weights file

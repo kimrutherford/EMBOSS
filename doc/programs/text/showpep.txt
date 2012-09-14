@@ -153,7 +153,7 @@ Output file [laci_ecoli.showpep]:
 Command line arguments
 
 Display protein sequences with features in pretty format
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) protein sequence(s) filename and

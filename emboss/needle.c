@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 	lenb = ajSeqGetLen(b);
 
 	if(lenb > (LONG_MAX/(size_t)(lena+1)))
-	   ajFatal("Sequences too big. Try 'stretcher'");
+	   ajDie("Sequences too big. Try 'stretcher'");
 
 	len = (size_t)lena*(size_t)lenb;
 

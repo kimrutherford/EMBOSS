@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX taxonomy reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.26 $
+** @version $Revision: 1.27 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -2449,8 +2449,9 @@ static AjBool taxinformatFind(const AjPStr format, ajint* iformat)
 
     for(i=0; taxinFormatDef[i].Name; i++)
     {
-	/* ajDebug("test %d '%s' \n", i, taxinFormatDef[i].Name); */
-	if(ajStrMatchCaseC(tmpformat, taxinFormatDef[i].Name))
+	/* ajDebug("test %d '%s'\n",
+           i, taxinFormatDef[i].Name); */
+	if(ajStrMatchC(tmpformat, taxinFormatDef[i].Name))
 	{
 	    *iformat = i;
 	    ajStrDel(&tmpformat);

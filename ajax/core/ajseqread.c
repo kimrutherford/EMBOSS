@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX sequence reading
 **
 ** @author Copyright (C) 2001 Peter Rice
-** @version $Revision: 1.322 $
+** @version $Revision: 1.323 $
 ** @modified 2001-2011 pmr
-** @modified $Date: 2012/07/15 17:38:50 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -890,11 +890,11 @@ static SeqOInFormat seqinFormatDef[] =
      AJFALSE, AJTRUE,  &seqReadGcg, AJFALSE, AJFALSE}, /* alias for gcg
                                                          (8.x too) */
     {"embl",
-     "1927", "EMBL entry format",
+     "1927", "EMBL format",
      AJFALSE, AJTRUE,  AJTRUE,  AJFALSE,
      AJTRUE,  AJTRUE,  &seqReadEmbl, AJFALSE, AJFALSE},
     {"em",
-     "1927", "EMBL entry format (alias)",
+     "1927", "EMBL format (alias)",
      AJTRUE,  AJFALSE, AJTRUE,  AJFALSE,
      AJTRUE,  AJTRUE,  &seqReadEmbl, AJFALSE, AJFALSE}, /* alias for embl */
     {"swiss",
@@ -15249,7 +15249,7 @@ static AjBool seqinFormatFind(const AjPStr format, ajint* iformat)
     AjPStr tmpformat = NULL;
     ajuint i = 0;
 
-    /* ajDebug("seqinFormatFind '%S'\n", format); */
+     ajDebug("seqinFormatFind '%S'\n", format); 
     if(!ajStrGetLen(format))
         return ajFalse;
 
@@ -15258,12 +15258,16 @@ static AjBool seqinFormatFind(const AjPStr format, ajint* iformat)
 
     for(i=0; seqinFormatDef[i].Name; i++)
     {
-        /* ajDebug("test %d '%s' \n", i, seqinFormatDef[i].Name); */
-        if(ajStrMatchC(tmpformat, seqinFormatDef[i].Name))
+        /*ajDebug("test %d '%s' '%s' '%s' \n",
+                i, seqinFormatDef[i].Name,
+                seqinFormatDef[i].Obo,
+                seqinFormatDef[i].Desc);*/
+        if(ajStrMatchC(tmpformat, seqinFormatDef[i].Name) ||
+           ajStrMatchC(format, seqinFormatDef[i].Obo))
         {
             *iformat = i;
             ajStrDel(&tmpformat);
-            /* ajDebug("found '%s' at %d\n", seqinFormatDef[i].Name, i); */
+            /*ajDebug("found '%s' at %d\n", seqinFormatDef[i].Name, i);*/
             return ajTrue;
         }
     }
@@ -15292,9 +15296,13 @@ AjBool ajSeqFormatTest(const AjPStr format)
     ajuint i;
 
     for(i=0; seqinFormatDef[i].Name; i++)
+    {
         if(ajStrMatchCaseC(format, seqinFormatDef[i].Name))
             return ajTrue;
-
+        if(ajStrMatchC(format, seqinFormatDef[i].Obo))
+            return ajTrue;
+    }
+    
     return ajFalse;
 }
 
@@ -18692,7 +18700,7 @@ AjBool ajSeqaccessMethodTest(const AjPStr method)
 
 /* @func ajSeqinformatTerm ****************************************************
 **
-** Tests whether a data input format termis known
+** Tests whether a data input format term is known
 **
 ** @param [r] term [const AjPStr] Format term EDAM ID
 ** @return [AjBool] ajTrue if term was accepted
@@ -18706,7 +18714,7 @@ AjBool ajSeqinformatTerm(const AjPStr term)
     ajuint i;
 
     for(i=0; seqinFormatDef[i].Name; i++)
-        if(ajStrMatchCaseC(term, seqinFormatDef[i].Obo))
+        if(ajStrMatchC(term, seqinFormatDef[i].Obo))
             return ajTrue;
 
     return ajFalse;

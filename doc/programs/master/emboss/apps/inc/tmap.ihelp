@@ -1,5 +1,5 @@
 Predict and plot transmembrane segments in protein sequences
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     File containing a protein sequence alignment

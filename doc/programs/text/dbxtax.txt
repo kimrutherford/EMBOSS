@@ -47,7 +47,7 @@ General log output file [outfile.dbxtax]:
 Command line arguments
 
 Index NCBI taxonomy using b+tree indices
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     [taxon] Basename for index files (Any string
@@ -192,8 +192,8 @@ Fill         56
 Level        0
 Pagesize     2048
 Cachesize    2000
-Order2       99
-Fill2        101
+Order2       22
+Fill2        24
 Secpagesize  512
 Seccachesize 2000
 Count        41

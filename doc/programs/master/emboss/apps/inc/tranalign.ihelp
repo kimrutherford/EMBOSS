@@ -1,5 +1,5 @@
 Generate an alignment of nucleic coding regions from aligned proteins
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-asequence]         seqall     Nucleotide sequence(s) filename and optional

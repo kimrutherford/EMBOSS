@@ -328,9 +328,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu ajax/ajaxdb/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnits ajax/ajaxdb/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu ajax/ajaxdb/Makefile
+	  $(AUTOMAKE) --gnits ajax/ajaxdb/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

@@ -6629,7 +6629,7 @@ FZ = 282
 FP 1 /^Count        6\n/
 FP 1 /^Fullcount    6\n/
 FI emrod.pxid
-FZ = 283
+FZ = 282
 FP 1 /^Count        6\n/
 FP 1 /^Fullcount    6\n/
 FI emrod.xac
@@ -6679,7 +6679,7 @@ FZ = 285
 FP 1 /^Count        37\n/
 FP 1 /^Fullcount    58\n/
 FI emrod.pxid
-FZ = 283
+FZ = 282
 FP 1 /^Count        6\n/
 FP 1 /^Fullcount    6\n/
 FI emrod.pxsv
@@ -6796,7 +6796,7 @@ FZ = 282
 FP 1 /^Count        9\n/
 FP 1 /^Fullcount    9\n/
 FI swnew.pxid
-FZ = 283
+FZ = 282
 FP 1 /^Count        9\n/
 FP 1 /^Fullcount    9\n/
 FI swnew.xac
@@ -6901,7 +6901,7 @@ FZ = 284
 FP 1 /^Count        66\n/
 FP 1 /^Fullcount    66\n/
 FI worm.pxid
-FZ = 285
+FZ = 284
 FP 1 /^Count        66\n/
 FP 1 /^Fullcount    66\n/
 FI worm.xid
@@ -7010,7 +7010,7 @@ FZ = 282
 FP /^Count        7\n/
 FP /^Fullcount    9\n/
 FI embl.pxid
-FZ = 283
+FZ = 282
 FP /^Count        6\n/
 FP /^Fullcount    6\n/
 FI embl.xac
@@ -7140,7 +7140,7 @@ FZ = 289
 FP 1 /^Count        223\n/
 FP 1 /^Fullcount    445\n/
 FI embl.pxid
-FZ = 285
+FZ = 284
 FP 1 /^Count        53\n/
 FP 1 /^Fullcount    53\n/
 FI embl.pxkw
@@ -7374,7 +7374,7 @@ FZ = 282
 FP 1 /^Count        9\n/
 FP 1 /^Fullcount    9\n/
 FI swnew.pxid
-FZ = 283
+FZ = 282
 FP 1 /^Count        9\n/
 FP 1 /^Fullcount    9\n/
 //
@@ -7474,7 +7474,7 @@ FZ = 284
 FP 1 /^Count        48\n/
 FP 1 /^Fullcount    48\n/
 FI embl.pxid
-FZ = 285
+FZ = 284
 FP 1 /^Count        40\n/
 FP 1 /^Fullcount    40\n/
 FI embl.xac
@@ -7706,7 +7706,7 @@ FZ = 289
 FP 1 /^Count        202\n/
 FP 1 /^Fullcount    381\n/
 FI embl.pxid
-FZ = 285
+FZ = 284
 FP 1 /^Count        40\n/
 FP 1 /^Fullcount    40\n/
 FI embl.pxkw
@@ -8052,7 +8052,7 @@ FZ = 285
 FP 1 /^Count        78\n/
 FP 1 /^Fullcount    93\n/
 FI pir.pxid
-FZ = 285
+FZ = 284
 FP 1 /^Count        60\n/
 FP 1 /^Fullcount    60\n/
 FI pir.xac
@@ -8242,7 +8242,7 @@ FZ = 287
 FP 1 /^Count        136\n/
 FP 1 /^Fullcount    319\n/
 FI pir.pxid
-FZ = 285
+FZ = 284
 FP 1 /^Count        60\n/
 FP 1 /^Fullcount    60\n/
 FI pir.pxkw
@@ -12106,6 +12106,7 @@ CC for jemboss installations
 CC can only be run through tomcat so simply exits here
 AP jembossctl
 CL jctl.file
+ER 255
 FI stderr
 FC = 0
 FP 0 /Warning: /
@@ -14788,7 +14789,7 @@ FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
 
 ID seq-innuc-fasta
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/dna.fasta -snuc -sf fasta -outfile test.out
 FI test.out
 FC = 2
@@ -14797,7 +14798,7 @@ FP /^fasta::\S+\t-\tFASTA\tF10002\tN\t100\t/
 
 ID seq-inprot-fasta
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/prot.fasta -sprot -sf fasta -outfile test.out
 FI test.out
 FC = 2
@@ -14878,7 +14879,7 @@ FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
 
 ID seq-innuc-gcg
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/dna.gcg -snuc -sf gcg -outfile test.out
 FI test.out
 FC = 2
@@ -14887,7 +14888,7 @@ FP /^gcg::\S+\t-\tGCG\t-\tN\t100\t/
 
 ID seq-inprot-gcg
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/prot.gcg -sf gcg -outfile test.out
 FI test.out
 FC = 2
@@ -14979,7 +14980,7 @@ FP /^SQ   SEQUENCE   8 AA;  950 MW;  61E059CB04176058 CRC64;/
 
 ID seq-innuc-gifasta
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/ncbinuc.gifasta -snuc -sf gifasta -outfile test.out
 FI test.out
 FC = 2
@@ -14988,7 +14989,7 @@ FP /^gifasta::\S+\t-\t123456\t-\tN\t8\t/
 
 ID seq-inprot-gifasta
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/ncbi.gifasta -sprot -sf gifasta -outfile test.out
 FI test.out
 FC = 2
@@ -15075,7 +15076,7 @@ FP /^SQ   SEQUENCE   90 AA;  9685 MW;  5B548D9C397EC1FE CRC64;/
 
 ID seq-innuc-nbrf
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/dna.nbrf -snuc -sf nbrf -outfile test.out
 FI test.out
 FC = 2
@@ -15084,7 +15085,7 @@ FP /^nbrf::\S+\t-\tGENBANK\t-\tN\t100\t/
 
 ID seq-inprot-nbrf
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/prot.nbrf -sprot -sf nbrf -outfile test.out
 FI test.out
 FC = 2
@@ -15193,7 +15194,7 @@ FP /^SQ   SEQUENCE   8 AA;  950 MW;  61E059CB04176058 CRC64;/
 
 ID seq-innuc-pearson
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/ncbinuc.gifasta -snuc -sf pearson -outfile test.out
 FI test.out
 FC = 2
@@ -15202,7 +15203,7 @@ FP /^pearson::\S+\t-\tgi\|123456\t-\tN\t8\t/
 
 ID seq-inprot-pearson
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/ncbi.gifasta -sprot -sf pearson -outfile test.out
 FI test.out
 FC = 2
@@ -15279,7 +15280,7 @@ FP /^SQ   Sequence 35 BP; 6 A; 9 C; 8 G; 12 T; 0 other;\n/
 
 ID seq-innuc-sam
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/xxx.sam -sf sam -outfile test.out
 FI test.out
 FC = 3
@@ -15429,7 +15430,7 @@ FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
 
 ID seq-innuc-unknown
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/dna.text -snuc -outfile test.out -sf unknown
 FI test.out
 FC = 2
@@ -15438,7 +15439,7 @@ FP /^raw::\S+\t-\t-\t-\tN\t100\t/
 
 ID seq-inprot-unknown
 AP infoseq
-CL -nocolumn -delimiter '\t'
+CL -nocolumn -delimiter "\t"
 CL -auto ../../data/prot.text -sprot -outfile test.out -sf unknown
 FI test.out
 FC = 2
@@ -25273,7 +25274,7 @@ FP 1 /^>M11904/
 ID chado-genedb-chromosome
 RQ postgresql
 AP featcopy
-CL tgenedb:'NCLIV_chrIb' -auto
+CL tgenedb:NCLIV_chrIb -auto
 FI ncliv_chrib.gff
 FP 2285 /^NCLIV_chrIb/
 ## sequence-region range: 1 1908326
@@ -25283,7 +25284,7 @@ FP 1 /^##sequence-region NCLIV_chrIb/
 ID chado-genedb-gene
 RQ postgresql
 AP featcopy
-CL tgenedb:'LinJ.18.0820' stdout -auto
+CL tgenedb:LinJ.18.0820 stdout -auto
 FI stdout
 FP 4 /^LinJ.18/
 ## sequence-region range: 329420	337405
@@ -25293,7 +25294,7 @@ FP 1 /^##sequence-region LinJ.18/
 ID chado-flybase-transcript
 RQ postgresql
 AP featcopy
-CL tflybase:'FBtr0076663' -auto
+CL tflybase:FBtr0076663 -auto
 FI 3l.gff
 FP /^3L/
 ## sequence-region range: 8400369 8404675
@@ -25305,7 +25306,7 @@ FC < 5
 ID chado-flybase-gene
 RQ postgresql
 AP featcopy
-CL tflybase:'FBgn0030105' FBgn0030105.gff -auto
+CL tflybase:FBgn0030105 FBgn0030105.gff -auto
 FI FBgn0030105.gff
 FP /^X/
 ## sequence-region range: 9110926 9111401

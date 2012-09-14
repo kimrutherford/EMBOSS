@@ -37,7 +37,7 @@ Output report [laci_ecoli.hth]:
 Command line arguments
 
 Identify nucleic acid-binding motifs in protein sequences
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional

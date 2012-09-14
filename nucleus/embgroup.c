@@ -3,8 +3,8 @@
 ** Group Routines.
 **
 ** @author Copyright (c) 1999 Alan Bleasby
-** @version $Revision: 1.58 $
-** @modified $Date: 2012/07/14 14:52:40 $ by $Author: rice $
+** @version $Revision: 1.59 $
+** @modified $Date: 2012/07/17 15:06:23 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -1823,6 +1823,10 @@ void embGrpOutputProgsList(AjPFile outfile, const AjPList progslist,
     AjIList piter;			/* 'progslist' iterator */
     AjPStr keystr = NULL;
     ajint maxwidth = 6;
+    AjBool isembassy = ajFalse;
+
+    if(ajStrGetLen(package))
+        isembassy = ajTrue;
 
     /* output the programs for each group */
     if(!html)
@@ -1865,13 +1869,17 @@ void embGrpOutputProgsList(AjPFile outfile, const AjPList progslist,
 		ajFmtPrintF(outfile,
 			    "<td><a href=\"%S.html\">%S</a></td>\n",
 			    pl->name, pl->name);
+	    else if(isembassy && ajStrGetLen(pl->package))
+		ajFmtPrintF(outfile,
+			    "<td><a href=\"../%S/%S.html\">%S</a></td>\n",
+			    pl->package, pl->name, pl->name);
 	    else if(ajStrGetLen(pl->package))
 		ajFmtPrintF(outfile,
 			    "<td><a href=\"/embassy/%S/%S.html\">%S</a></td>\n",
 			    pl->package, pl->name, pl->name);
 	    else
 		ajFmtPrintF(outfile,
-			    "<td><a href=\"/emboss/apps/%S.html\">%S"
+			    "<td><a href=\"../../emboss/apps/%S.html\">%S"
                             "</a></td>\n",
 			    pl->name, pl->name);
 	    ajFmtPrintF(outfile,

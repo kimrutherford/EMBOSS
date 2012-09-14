@@ -53,7 +53,7 @@ Output report [ach2_drome.sig]:
 Command line arguments
 
 Report on signal cleavage sites in a protein sequence
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional

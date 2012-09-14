@@ -41,7 +41,7 @@ Created pepwindowall.ps
 Command line arguments
 
 Draw Kyte-Doolittle hydropathy plot for a protein alignment
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequences]         seqset     File containing a sequence alignment

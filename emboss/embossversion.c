@@ -238,7 +238,7 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outfile, "AJ_MACOSXLF\n");
 #endif
 #ifdef AJ_FreeBSDLF
-	ajFmtPrintF(outfile, AJ_FreeBSDLF"\n");
+	ajFmtPrintF(outfile, "AJ_FreeBSDLF\n");
 #endif
 #ifdef __CYGWIN__
 	ajFmtPrintF(outfile, "__CYGWIN__\n");

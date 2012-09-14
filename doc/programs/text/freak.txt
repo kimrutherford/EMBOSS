@@ -43,7 +43,7 @@ Output file [x65923.freak]:
 Command line arguments
 
 Generate residue/base frequency table or plot
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Sequence(s) filename and optional format, or

@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX data resource reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.34 $
+** @version $Revision: 1.35 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/07/10 09:27:41 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -2730,8 +2730,9 @@ static AjBool resourceinformatFind(const AjPStr format, ajint* iformat)
 
     for(i=0; resourceinFormatDef[i].Name; i++)
     {
-	/* ajDebug("test %d '%s' \n", i, resourceinFormatDef[i].Name); */
-	if(ajStrMatchCaseC(tmpformat, resourceinFormatDef[i].Name))
+	/* ajDebug("test %d '%s'\n",
+           i, resourceinFormatDef[i].Name); */
+	if(ajStrMatchC(tmpformat, resourceinFormatDef[i].Name))
 	{
 	    *iformat = i;
 	    ajStrDel(&tmpformat);

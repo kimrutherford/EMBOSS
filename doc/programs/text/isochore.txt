@@ -40,7 +40,7 @@ Created isochore.ps
 Command line arguments
 
 Plot isochores in DNA sequences
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Nucleotide sequence filename and optional

@@ -82,7 +82,7 @@ ACLOCAL = ${SHELL} /home/pmr/embossdist/missing --run aclocal-1.11
 AJAX_FIXED_ROOT = \"/home/pmr/embossdist/emboss\"
 AJAX_SYSTEM = \"Linux\"
 AMTAR = ${SHELL} /home/pmr/embossdist/missing --run tar
-ANT = 
+ANT = /usr/bin/ant
 AR = ar
 AUTOCONF = ${SHELL} /home/pmr/embossdist/missing --run autoconf
 AUTOHEADER = ${SHELL} /home/pmr/embossdist/missing --run autoheader
@@ -123,11 +123,11 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-JAR = 
-JAVA = 
-JAVAC = 
+JAR = /usr/bin/jar
+JAVA = /usr/bin/java
+JAVAC = /usr/bin/javac
 JAVA_CFLAGS = 
-JAVA_CPPFLAGS =  -DNO_AUTH
+JAVA_CPPFLAGS = -I/usr/lib/jvm/java/include -I/usr/lib/jvm/java/include/linux -DNO_AUTH
 JAVA_LDFLAGS = 
 LD = /usr/bin/ld -m elf_x86_64
 LDFLAGS = 
@@ -144,7 +144,7 @@ MYSQL_CFLAGS = -I/usr/include/mysql -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexception
 MYSQL_CONFIG = /usr/bin/mysql_config
 MYSQL_CPPFLAGS = -I/usr/include/mysql
 MYSQL_LDFLAGS = -L/usr/lib64/mysql -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl
-MYSQL_VERSION = 5.5.24
+MYSQL_VERSION = 5.5.25a
 NM = /usr/bin/nm -B
 NMEDIT = 
 OBJDUMP = objdump
@@ -154,10 +154,10 @@ OTOOL64 =
 PACKAGE = EMBOSS
 PACKAGE_BUGREPORT = emboss-bug@emboss.open-bio.org
 PACKAGE_NAME = EMBOSS
-PACKAGE_STRING = EMBOSS 6.5.0
+PACKAGE_STRING = EMBOSS 6.5.7
 PACKAGE_TARNAME = EMBOSS
 PACKAGE_URL = http://emboss.open-bio.org/
-PACKAGE_VERSION = 6.5.0
+PACKAGE_VERSION = 6.5.7
 PATH_SEPARATOR = :
 PCRE_DATE = 11-Apr-2009
 PCRE_LIB_VERSION = 0:1:0
@@ -179,7 +179,7 @@ SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = strip
-VERSION = 6.5.0
+VERSION = 6.5.7
 WARN_CFLAGS = 
 XLIB =  -lX11 
 XMKMF = 
@@ -259,9 +259,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu test/embl/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnits test/embl/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu test/embl/Makefile
+	  $(AUTOMAKE) --gnits test/embl/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

@@ -47,7 +47,7 @@ Output file [hbb_human.hmoment]:
 Command line arguments
 
 Calculate and plot hydrophobic moment for protein sequence(s)
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Protein sequence(s) filename and optional

@@ -6,9 +6,9 @@
 ** via the routines ajNamDatabase and ajNamGetValueS.
 **
 ** @author Copyright (C) 1998 Ian Longden
-** @version $Revision: 1.184 $
+** @version $Revision: 1.185 $
 ** @modified 2000-2011 Peter Rice
-** @modified $Date: 2012/07/15 18:36:14 $ by $Author: rice $
+** @modified $Date: 2012/07/22 10:58:42 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -5756,7 +5756,8 @@ static AjBool namProcessFile(AjPFile file, const AjPStr shortname)
 void ajNamInit(const char* prefix)
 {
     const char *prefixRoot;
-    AjPFile prefixRootFile;
+    char *prefixHomedir = NULL;
+    AjPFile prefixRootFile = NULL;
     AjPStr prefixRootStr = NULL;
     AjPStr prefixStr     = NULL;
     AjPStr prefixCap     = NULL;
@@ -6009,7 +6010,7 @@ void ajNamInit(const char* prefix)
        <install-prefix>/share/PREFIX/emboss.default
     **
     */
-    
+
     ajFmtPrintS(&namRootStr, "%s%sshare%s%S%s%s.default",
 		 namInstallRoot, SLASH_STRING, SLASH_STRING,
                 prefixCap, SLASH_STRING, prefix);
@@ -6082,9 +6083,9 @@ void ajNamInit(const char* prefix)
     ** no concept of HOME
     */
     
-    prefixRoot = ajSysGetHomedir();
+    prefixHomedir = ajSysGetHomedir();
     
-    ajStrAssignC(&namUserDir, prefixRoot);
+    ajStrAssignC(&namUserDir, prefixHomedir);
     ajStrAppendC(&namUserDir, SLASH_STRING);
     ajStrAppendC(&namUserDir, ".embossdata");
     ajStrAppendC(&namUserDir, SLASH_STRING);
@@ -6098,9 +6099,9 @@ void ajNamInit(const char* prefix)
 
     ajStrDel(&homercVal);
     
-    if(namDoHomeRc && prefixRoot)
+    if(namDoHomeRc && prefixHomedir)
     {
-	ajStrAssignC(&namRootStr, prefixRoot);
+	ajStrAssignC(&namRootStr, prefixHomedir);
 	ajStrAppendC(&namRootStr, SLASH_STRING);
 	ajStrAppendC(&namRootStr, ".");
 	ajStrAppendC(&namRootStr, prefix);
@@ -6126,6 +6127,7 @@ void ajNamInit(const char* prefix)
     
     namUser("Files processed: %S\n", namFileOrig);
 
+    ajCharDel(&prefixHomedir);
     ajStrDel(&prefixRootStr);
     ajStrDel(&basename);
     ajStrDel(&prefixStr);

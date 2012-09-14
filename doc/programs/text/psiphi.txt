@@ -40,7 +40,7 @@ Output report [1hmp_a.psiphi]:
 Command line arguments
 
 Calculates phi and psi torsion angles from protein coordinates
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Clean protein structure coordinates file

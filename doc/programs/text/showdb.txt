@@ -947,7 +947,7 @@ swo               Obo        OK  OK  OK  emboss    id,acc,nam,isa,des
 Command line arguments
 
 Display information on configured databases
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:

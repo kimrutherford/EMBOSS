@@ -3,11 +3,11 @@
 ** AJAX range functions
 **
 ** @author Copyright (C) 1999 Alan Bleasby
-** @version $Revision: 1.42 $
+** @version $Revision: 1.43 $
 ** @modified Aug 21 ajb First version
 ** @modified 7 Sept 1999 GWW - String range edit functions added
 ** @modified 5 Nov 1999 GWW - store text after pairs of numbers
-** @modified $Date: 2012/07/02 17:22:05 $ by $Author: rice $
+** @modified $Date: 2012/07/17 12:45:26 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -188,7 +188,7 @@ AjPRange ajRangeNewFilenameLimits(const AjPStr name, ajuint imin, ajuint imax,
     AjPRange ret = NULL;
     AjPFile infile = NULL;
     AjPStr line   = NULL;
-    char whiteSpace[] = " \t\n\r";
+    char whiteSpace[] = "- \t\n\r";
     char notSpace[]   = "\n\r";
     AjPStrTok tokens;
     ajuint n = 0U;                       /* ranges found so far */

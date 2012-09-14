@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX variation data reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.24 $
+** @version $Revision: 1.25 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/07/14 14:52:39 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -4369,8 +4369,12 @@ static AjBool varinformatFind(const AjPStr format, ajint* iformat)
 
     for(i=0; varinFormatDef[i].Name; i++)
     {
-	/* ajDebug("test %d '%s' \n", i, varinFormatDef[i].Name); */
-	if(ajStrMatchCaseC(tmpformat, varinFormatDef[i].Name))
+	/* ajDebug("test %d '%s' '%s' '%s'\n",
+           i, varinFormatDef[i].Name,
+           varinFormatDef[i].Obo,
+           varinFormatDef[i].Desc); */
+	if(ajStrMatchCaseC(tmpformat, varinFormatDef[i].Name) ||
+            ajStrMatchC(format, varinFormatDef[i].Obo))
 	{
 	    *iformat = i;
 	    ajStrDel(&tmpformat);
@@ -4405,7 +4409,7 @@ AjBool ajVarinformatTerm(const AjPStr term)
     ajuint i;
 
     for(i=0; varinFormatDef[i].Name; i++)
-	if(ajStrMatchCaseC(term, varinFormatDef[i].Obo))
+	if(ajStrMatchC(term, varinFormatDef[i].Obo))
 	    return ajTrue;
 
     return ajFalse;
@@ -4430,8 +4434,12 @@ AjBool ajVarinformatTest(const AjPStr format)
     ajuint i;
 
     for(i=0; varinFormatDef[i].Name; i++)
+    {
 	if(ajStrMatchCaseC(format, varinFormatDef[i].Name))
 	    return ajTrue;
+	if(ajStrMatchC(format, varinFormatDef[i].Obo))
+	    return ajTrue;
+    }
 
     return ajFalse;
 }

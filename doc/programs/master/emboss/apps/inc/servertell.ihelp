@@ -1,5 +1,5 @@
 Display information about a public server
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-server]            string     The name of the server defined locally for

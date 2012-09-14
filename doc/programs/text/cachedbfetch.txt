@@ -175,7 +175,7 @@ Warning: No dbtype found supporting format seqxml
 Command line arguments
 
 Generate server cache file for Dbfetch/WSDbfetch data sources
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-servername]        string     [dbfetch] Name of the ws/dbfetch server

@@ -101,7 +101,8 @@ sub runtest ($) {
 	    if(-e "stdin") { $infile = "< stdin" }
 	    $status = 0;
 	    alarm($timeout);
-	    $sysstat = system ("EMBOSSRC=../.. ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;valgrind $valgopts $myvalgpath$tests{$name} $infile 9> ../valgrind/$name.valgrind 2> stderr > stdout" );
+	    if($dodebug) {$debugstr = "EMBOSS_DEBUG=Y ;export EMBOSS_DEBUG"}
+	    $sysstat = system ("$debugstr EMBOSSRC=../.. ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;valgrind $valgopts $myvalgpath$tests{$name} $infile 9> ../valgrind/$name.valgrind 2> stderr > stdout" );
 	    alarm(0);
 	    $status = $sysstat >> 8;
 	    ($enduser, $endsys, $enduserc, $endsysc) =times();
@@ -204,6 +205,8 @@ $dolist=0;
 $doall = 0;
 $dokeep=0;
 $dorunning = 1;
+$dodebug=0;
+$debugstr = "";
 
 open (VERSION, "embossversion -full -filter|") ||
     die "Cannot run embossversion";
@@ -233,6 +236,7 @@ foreach $test (@ARGV) {
 	elsif ($arg eq "all") {$doall=1;}
 	elsif ($arg eq "keep") {$dokeep=1;}
 	elsif ($arg eq "quiet") {$dorunning = 0;}
+	elsif ($arg eq "debug") {$dodebug = 1;}
 	elsif ($arg =~ /block=(\d+)/) {
 	    $block=$1;
 	    $i=0;

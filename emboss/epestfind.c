@@ -580,7 +580,7 @@ int main(int argc, char **argv)
     
     if(ajListGetLength(reslst) > 1)
     {
-	ajFmtPrintF(outf, "%6u PEST motifs were identified in %s\n",
+	ajFmtPrintF(outf, "%6Lu PEST motifs were identified in %s\n",
 		    ajListGetLength(reslst), ajSeqGetNameC(seq));
 	ajFmtPrintF(outf, "       from positions %d to %d and sorted by "
 		    "%S.\n\n", begin, end, sorder);

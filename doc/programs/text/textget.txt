@@ -34,7 +34,7 @@ Text output file [outfile.text]:
 Command line arguments
 
 Get text data entries
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-text]              text       Text filename and optional format, or

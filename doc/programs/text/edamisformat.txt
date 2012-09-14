@@ -38,7 +38,7 @@ Obo output file [edamisformat.obo]:
 Command line arguments
 
 Find EDAM ontology terms by is_format_of relation
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-identifier]        string     Identifier(s) to search for in ontology (Any

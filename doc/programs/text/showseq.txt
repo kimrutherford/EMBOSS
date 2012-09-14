@@ -172,7 +172,7 @@ Output file [x13776.showseq]:
 Command line arguments
 
 Display sequences with features in pretty format
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     (Gapped) nucleotide sequence(s) filename and

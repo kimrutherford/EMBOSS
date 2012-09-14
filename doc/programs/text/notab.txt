@@ -34,7 +34,7 @@ ASCII text output file [tabfile.notab]:
 Command line arguments
 
 Replace tabs with spaces in an ASCII text file
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     ASCII text file

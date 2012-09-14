@@ -41,7 +41,7 @@ Output report [gcn4_yeast.pepcoil]:
 Command line arguments
 
 Predict coiled coil regions in protein sequences
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Protein sequence(s) filename and optional

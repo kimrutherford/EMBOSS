@@ -5,9 +5,9 @@
 ** These functions control all aspects of AJAX text data reading
 **
 ** @author Copyright (C) 2010 Peter Rice
-** @version $Revision: 1.36 $
+** @version $Revision: 1.37 $
 ** @modified Oct 5 pmr First version
-** @modified $Date: 2012/07/12 12:10:00 $ by $Author: rice $
+** @modified $Date: 2012/07/17 15:04:04 $ by $Author: rice $
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -3220,7 +3220,7 @@ static AjBool textinformatFind(const AjPStr format, ajint* iformat)
     AjPStr tmpformat = NULL;
     ajuint i = 0;
 
-    /* ajDebug("textinformatFind '%S'\n", format); */
+    ajDebug("textinformatFind '%S'\n", format);
     if(!ajStrGetLen(format))
 	return ajFalse;
 
@@ -3229,12 +3229,16 @@ static AjBool textinformatFind(const AjPStr format, ajint* iformat)
 
     for(i=0; textinFormatDef[i].Name; i++)
     {
-	/* ajDebug("test %d '%s' \n", i, textinFormatDef[i].Name); */
-	if(ajStrMatchCaseC(tmpformat, textinFormatDef[i].Name))
+	ajDebug("test %d '%s' '%s' '%s'\n",
+                i, textinFormatDef[i].Name,
+                textinFormatDef[i].Obo,
+                textinFormatDef[i].Desc);
+	if(ajStrMatchC(tmpformat, textinFormatDef[i].Name) ||
+           ajStrMatchC(format, textinFormatDef[i].Obo))
 	{
 	    *iformat = i;
 	    ajStrDel(&tmpformat);
-	    /* ajDebug("found '%s' at %d\n", textinFormatDef[i].Name, i); */
+	    ajDebug("found '%s' at %d\n", textinFormatDef[i].Name, i);
 	    return ajTrue;
 	}
     }
@@ -3263,7 +3267,7 @@ AjBool ajTextinformatTerm(const AjPStr term)
     ajuint i;
 
     for(i=0; textinFormatDef[i].Name; i++)
-	if(ajStrMatchCaseC(term, textinFormatDef[i].Obo))
+	if(ajStrMatchC(term, textinFormatDef[i].Obo))
 	    return ajTrue;
 
     return ajFalse;
@@ -3288,8 +3292,12 @@ AjBool ajTextinformatTest(const AjPStr format)
     ajuint i;
 
     for(i=0; textinFormatDef[i].Name; i++)
+    {
 	if(ajStrMatchCaseC(format, textinFormatDef[i].Name))
 	    return ajTrue;
+	if(ajStrMatchC(format, textinFormatDef[i].Obo))
+	    return ajTrue;
+    }
 
     return ajFalse;
 }

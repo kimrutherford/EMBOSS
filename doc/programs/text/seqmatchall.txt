@@ -43,7 +43,7 @@ Output alignment [j01636.seqmatchall]:
 Command line arguments
 
 All-against-all word comparison of a sequence set
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     Sequence set filename and optional format,

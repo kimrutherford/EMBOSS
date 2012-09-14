@@ -44,7 +44,7 @@ Created pepinfo.ps
 Command line arguments
 
 Plot amino acid properties of a protein sequence in parallel.
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence filename and optional

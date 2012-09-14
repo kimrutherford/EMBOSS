@@ -350,7 +350,7 @@ sub cleantext ( $ ) {
 ######################################################################
 sub filediff ( $$ ) {
     my ($afile, $bfile) = @_;
-    my $s = 0;
+ $s = 0;
     my $action = "";
 
     if(-e $afile) {
@@ -382,7 +382,7 @@ sub filediff ( $$ ) {
 	print LOG "$afile *$action*\n";
 	$cvsdochtmlcommit .= " $afile";
     }
-    return;
+    return $s;
 }
 
 
@@ -1025,6 +1025,7 @@ $progs{$thisprogram}
 		    $s = (-s "z.z");
 		    if ($s) {
 			print LOG "** $sfprogdocdir/$thisprogram.html differences ** size:$s ($cvsdoc/html/$thisprogram.html)\n";
+			print "cp  $cvsdoc/html/$thisprogram.html $sfprogdocdir/$thisprogram.html (differences)\n";
 			system "cp  $cvsdoc/html/$thisprogram.html $sfprogdocdir/$thisprogram.html";
 			chmod 0664, "$sfprogdocdir/$thisprogram.html";
 		    }
@@ -1054,6 +1055,7 @@ $progs{$thisprogram}
 		    $s = (-s "z.z");
 		    if ($s) {
 			print LOG "** $sfedir/$thisprogram.html differences ** size:$s ($edir/$thisprogram.html)\n";
+			print "cp  $edir/$thisprogram.html $sfedir/$thisprogram.html (differences)\n";
 			system "cp  $edir/$thisprogram.html $sfedir/$thisprogram.html";
 			chmod 0664, "$sfedir/$thisprogram.html";
 		    }
@@ -1196,6 +1198,52 @@ $progs{$thisprogram}
 		system "perl -p -i -e 's#/images/emboss_icon.jpg#emboss_icon.jpg#g;' x.x";
 	    }
 	    $diff = filediff ("$dochtml/$thisprogram.html", "x.x");
+	    if($diff)
+	    {
+		if (!defined($embassyprogs{$thisprogram})) {
+		    if (-e "$cvsdoc/master/emboss/apps/$thisprogram.html") {
+###	  print "$progdocdir/$thisprogram.html found\n";
+			if (-e "$sfprogdocdir/$thisprogram.html") {
+			    system("diff -b $cvsdoc/html/$thisprogram.html $sfprogdocdir/$thisprogram.html > z.z");
+			    $s = (-s "z.z");
+			    if ($s) {
+				print LOG "** $sfprogdocdir/$thisprogram.html differences ** size:$s ($cvsdoc/html/$thisprogram.html)\n";
+				print "cp  $cvsdoc/html/$thisprogram.html $sfprogdocdir/$thisprogram.html (differences)\n";
+				system "cp  $cvsdoc/html/$thisprogram.html $sfprogdocdir/$thisprogram.html";
+				chmod 0664, "$sfprogdocdir/$thisprogram.html";
+			    }
+			}
+			else {
+			    print LOG "** $sfprogdocdir/$thisprogram.html copied\n";
+			    system "cp  $cvsdoc/html/$thisprogram.html $sfprogdocdir/$thisprogram.html";
+			    chmod 0664, "$sfprogdocdir/$thisprogram.html";
+			}
+		    }
+		}
+		else {
+		    $progdir{$thisprogram} = $embassyprogs{$thisprogram};
+		    $edir = "$cvsedoc/$progdir{$thisprogram}/emboss_doc/html";
+		    $sfedir = "$sfdoctop/embassy/$progdir{$thisprogram}";
+		    if(-e "$edir/$thisprogram.html") {
+###	  print "$edir/$thisprogram.html found\n";
+			if (-e "$sfedir/$thisprogram.html") {
+			    system("diff -b $edir/$thisprogram.html $sfedir/$thisprogram.html > z.z");
+			    $s = (-s "z.z");
+			    if ($s) {
+				print LOG "** $sfedir/$thisprogram.html differences ** size:$s ($edir/$thisprogram.html)\n";
+				print "cp  $edir/$thisprogram.html $sfedir/$thisprogram.html (differences)\n";
+				system "cp  $edir/$thisprogram.html $sfedir/$thisprogram.html";
+				chmod 0664, "$sfedir/$thisprogram.html";
+			    }
+			}
+			else {
+			    print LOG "** $edir/$thisprogram.html copied\n";
+			    system "cp  $edir/$thisprogram.html $sfedir/$thisprogram.html";
+			    chmod 0664, "$sfedir/$thisprogram.html";
+			}
+		    }
+		}
+	    }
 	}
 
 # check to see if the CVS tree copy of the text documentation needs updating

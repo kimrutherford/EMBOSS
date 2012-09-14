@@ -35,7 +35,7 @@ Features output [x13776.gff]:
 Command line arguments
 
 Read and write a feature table
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-features]          features   (no help text) features value
@@ -144,7 +144,7 @@ Output file format
 ##sequence-region X13776 1 2167
 #!Date 2012-07-15
 #!Type DNA
-#!Source-version EMBOSS 6.5.0.0
+#!Source-version EMBOSS 6.5.6.0
 X13776  EMBL    databank_entry  1       2167    .       +       .       ID=X1377
 6.1;organism=Pseudomonas aeruginosa;map=38 min;strain=PAC;isolate=PAC 1;mol_type
 =genomic DNA;db_xref=taxon:287

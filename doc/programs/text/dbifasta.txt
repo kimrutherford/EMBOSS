@@ -50,7 +50,7 @@ General log output file [outfile.dbifasta]:
 Command line arguments
 
 Index a fasta file database
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-dbname]            string     Database name (Any string from 2 to 19

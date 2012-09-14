@@ -121,7 +121,7 @@ Max_score_pos at "*"
 ##sequence-region ACTB1_TAKRU 1 375
 #!Date 2012-07-15
 #!Type Protein
-#!Source-version EMBOSS 6.5.0.0
+#!Source-version EMBOSS 6.5.6.0
 ACTB1_TAKRU	antigenic	epitope	214	222	1.207	.	.	ID=ACTB1_TAKRU.1;note=*pos 218
 ACTB1_TAKRU	antigenic	epitope	131	145	1.187	.	.	ID=ACTB1_TAKRU.2;note=*pos 137
 ACTB1_TAKRU	antigenic	epitope	5	12	1.166	.	.	ID=ACTB1_TAKRU.3;note=*pos 8

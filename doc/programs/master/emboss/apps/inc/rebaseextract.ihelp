@@ -1,5 +1,5 @@
 Process the REBASE database for use by restriction enzyme applications
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     REBASE database withrefm file

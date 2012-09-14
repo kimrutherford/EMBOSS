@@ -55,7 +55,7 @@ Remove poly-A tails from nucleotide sequences
 Command line arguments
 
 Remove poly-A tails from nucleotide sequences
-Version: EMBOSS:6.5.0.0
+Version: EMBOSS:6.5.6.0
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Nucleotide sequence(s) filename and optional
